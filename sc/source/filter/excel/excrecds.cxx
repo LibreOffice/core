@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:15:38 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,9 +134,6 @@
 #ifndef SC_XELINK_HXX
 #include "xelink.hxx"
 #endif
-#ifndef SC_XESTYLE_HXX
-#include "xestyle.hxx"
-#endif
 #ifndef SC_XECONTENT_HXX
 #include "xecontent.hxx"
 #endif
@@ -201,12 +198,6 @@ const BYTE      ExcDummy_02a::pMyData[] = {
     0x5f, 0x00, 0x02, 0x00, 0x01, 0x00                      // SAVERECALC
 };
 const ULONG ExcDummy_02a::nMyLen = sizeof( ExcDummy_02a::pMyData );
-
-//-------------------------------------------------------- class ExcDummy_02b -
-const BYTE      ExcDummy_02b::pMyData[] = {
-    0x82, 0x00, 0x02, 0x00, 0x01, 0x00                      // GRIDSET
-};
-const ULONG ExcDummy_02b::nMyLen = sizeof( ExcDummy_02b::pMyData );
 
 //-------------------------------------------------------- class ExcDummy_02c -
 const BYTE      ExcDummy_02c::pMyData[] = {
@@ -538,17 +529,6 @@ ULONG ExcDummy_02a::GetLen( void ) const
 }
 
 const BYTE* ExcDummy_02a::GetData( void ) const
-{
-    return pMyData;
-}
-//--------------------------------------------------------- class ExcDummy_02 -
-
-ULONG ExcDummy_02b::GetLen( void ) const
-{
-    return nMyLen;
-}
-
-const BYTE* ExcDummy_02b::GetData( void ) const
 {
     return pMyData;
 }
@@ -1813,7 +1793,7 @@ void ExcName::SetUniqueName( const String& rRangeName )
 
 BOOL ExcName::SetBuiltInName( const String& rName, UINT8 nKey )
 {
-    if( XclTools::IsBuiltInName( nTabNum, rName, nKey ) )
+    if( XclTools::IsBuiltInDefName( nTabNum, rName, nKey ) )
     {
         nBuiltInKey = nKey;
         bDummy = TRUE;
@@ -1824,7 +1804,7 @@ BOOL ExcName::SetBuiltInName( const String& rName, UINT8 nKey )
 
 BOOL ExcName::IsBuiltInAFName( const String& rName, UINT8 nKey )
 {
-    if( XclTools::IsBuiltInName( nTabNum, rName, nKey ) ||
+    if( XclTools::IsBuiltInDefName( nTabNum, rName, nKey ) ||
         (rName == ScGlobal::GetRscString( STR_DB_NONAME )))
     {
         bDummy = TRUE;
@@ -2556,13 +2536,13 @@ ULONG ExcSelection::GetLen( void ) const
 
 // XclExpWsbool ===============================================================
 
-XclExpWsbool::XclExpWsbool( RootData& rRootData ) :
+XclExpWsbool::XclExpWsbool( bool bFitToPages ) :
     XclExpUInt16Record( EXC_ID_WSBOOL, EXC_WSBOOL_DEFAULTFLAGS )
 {
-    SfxItemSet* pItemSet = rRootData.pStyleSheetItemSet;
-    if( pItemSet && (pItemSet->GetItemState( ATTR_PAGE_SCALETOPAGES, FALSE ) == SFX_ITEM_SET) )
+    if( bFitToPages )
         SetValue( GetValue() | EXC_WSBOOL_FITTOPAGE );
 }
+
 
 // XclExpWindowProtection ===============================================================
 
@@ -2578,291 +2558,8 @@ XclExpDocProtection::XclExpDocProtection(bool bValue) :
 {
 }
 
-//------------------------------------------------------------ class ExcSetup -
-
-ExcSetup::ExcSetup( RootData* pExcRoot ) :
-    nPaperSize( 0 ),
-    nScale( 100 ),
-    nPageStart( 1 ),
-    nGrbit( 0x0001 ),
-    nHeaderMargin( 0 ),
-    nFooterMargin( 0 )
-{
-    SfxStyleSheet*          pStSh = pExcRoot->pStyleSheet;
-
-    if( pStSh )
-    {
-        SfxItemSet&         rSet = *pExcRoot->pStyleSheetItemSet;
-        const SvxPageItem&  rItem = ( const SvxPageItem& ) rSet.Get( ATTR_PAGE );
-        const BOOL          bLandscape = rItem.IsLandscape();
-
-        nGrbit = bLandscape? 0 : 0x0002;    // !fLandscape / fLandscape
-
-#define TWIPS_FROM_INCH( v )    ((sal_Int32)((v)*72.0*TWIPS_PER_POINT+0.5))
-#define TWIPS_FROM_CM( v )      ((sal_Int32)((v)*72.0*TWIPS_PER_POINT/CM_PER_INCH+0.5))
-
-        struct PAPER_SIZE
-        {
-            INT32                   nH;
-            INT32                   nW;
-        };
-        static const                nAnzSizes = 42;
-        static const PAPER_SIZE     pPS[ nAnzSizes ] =
-        {
-            { 0,                        0                           },  // undefined
-            { TWIPS_FROM_INCH( 8.5 ),   TWIPS_FROM_INCH( 11 )       },  // Letter 8 1/2 x 11 in
-            { TWIPS_FROM_INCH( 8.5 ),   TWIPS_FROM_INCH( 11 )       },  // Letter Small 8 1/2 x 11 in
-            { TWIPS_FROM_INCH( 11 ),    TWIPS_FROM_INCH( 17 )       },  // Tabloid 11 x 17 in
-            { TWIPS_FROM_INCH( 17 ),    TWIPS_FROM_INCH( 11 )       },  // Ledger 17 x 11 in
-            { TWIPS_FROM_INCH( 8.5 ),   TWIPS_FROM_INCH( 14 )       },  // Legal 8 1/2 x 14 in
-            { TWIPS_FROM_INCH( 5.5 ),   TWIPS_FROM_INCH( 8.5 )      },  // Statement 5 1/2 x 8 1/2 in
-            { TWIPS_FROM_INCH( 7.25 ),  TWIPS_FROM_INCH( 10.5 )     },  // Executive 7 1/4 x 10 1/2 in
-            { TWIPS_FROM_CM( 29.7 ),    TWIPS_FROM_CM( 42.0 )       },  // A3 297 x 420 mm
-            { TWIPS_FROM_CM( 21.0 ),    TWIPS_FROM_CM( 29.7 )       },  // A4 210 x 297 mm
-            { TWIPS_FROM_CM( 21.0 ),    TWIPS_FROM_CM( 29.7 )       },  // A4 Small 210 x 297 mm
-            { TWIPS_FROM_CM( 14.8 ),    TWIPS_FROM_CM( 21.0 )       },  // A5 148 x 210 mm
-            { TWIPS_FROM_CM( 25.0 ),    TWIPS_FROM_CM( 35.4 )       },  // B4 250 x 354
-            { TWIPS_FROM_CM( 18.2 ),    TWIPS_FROM_CM( 25.7 )       },  // B5 182 x 257 mm
-            { TWIPS_FROM_INCH( 8.5 ),   TWIPS_FROM_INCH( 13 )       },  // Folio 8 1/2 x 13 in
-            { TWIPS_FROM_CM( 21.5 ),    TWIPS_FROM_CM( 27.5 )       },  // Quarto 215 x 275 mm
-            { TWIPS_FROM_INCH( 10 ),    TWIPS_FROM_INCH( 14 )       },  // 10x14 in
-            { TWIPS_FROM_INCH( 11 ),    TWIPS_FROM_INCH( 17 )       },  // 11x17 in
-            { TWIPS_FROM_INCH( 8.5 ),   TWIPS_FROM_INCH( 11 )       },  // Note 8 1/2 x 11 in
-            { TWIPS_FROM_INCH( 3.875 ), TWIPS_FROM_INCH( 8.875 )    },  // Envelope #9 3 7/8 x 8 7/8
-            { TWIPS_FROM_INCH( 4.125 ), TWIPS_FROM_INCH( 9.5 )      },  // Envelope #10 4 1/8 x 9 1/2
-            { TWIPS_FROM_INCH( 4.5 ),   TWIPS_FROM_INCH( 10.375 )   },  // Envelope #11 4 1/2 x 10 3/8
-            { TWIPS_FROM_INCH( 4.03 ),  TWIPS_FROM_INCH( 11 )       },  // Envelope #12 4 \276 x 11
-            { TWIPS_FROM_INCH( 14.5 ),  TWIPS_FROM_INCH( 11.5 )     },  // Envelope #14 5 x 11 1/2
-            { 0,                        0                           },  // C size sheet
-            { 0,                        0                           },  // D size sheet
-            { 0,                        0                           },  // E size sheet
-            { TWIPS_FROM_CM( 11.0 ),    TWIPS_FROM_CM( 22.0 )       },  // Envelope DL 110 x 220mm
-            { TWIPS_FROM_CM( 16.2 ),    TWIPS_FROM_CM( 22.9 )       },  // Envelope C5 162 x 229 mm
-            { TWIPS_FROM_CM( 32.4 ),    TWIPS_FROM_CM( 45.8 )       },  // Envelope C3  324 x 458 mm
-            { TWIPS_FROM_CM( 22.9 ),    TWIPS_FROM_CM( 32.4 )       },  // Envelope C4  229 x 324 mm
-            { TWIPS_FROM_CM( 11.4 ),    TWIPS_FROM_CM( 16.2 )       },  // Envelope C6  114 x 162 mm
-            { TWIPS_FROM_CM( 11.4 ),    TWIPS_FROM_CM( 22.9 )       },  // Envelope C65 114 x 229 mm
-            { TWIPS_FROM_CM( 25.0 ),    TWIPS_FROM_CM( 35.3 )       },  // Envelope B4  250 x 353 mm
-            { TWIPS_FROM_CM( 17.6 ),    TWIPS_FROM_CM( 25.0 )       },  // Envelope B5  176 x 250 mm
-            { TWIPS_FROM_CM( 17.6 ),    TWIPS_FROM_CM( 12.5 )       },  // Envelope B6  176 x 125 mm
-            { TWIPS_FROM_CM( 11.0 ),    TWIPS_FROM_CM( 23.0 )       },  // Envelope 110 x 230 mm
-            { TWIPS_FROM_INCH( 3.875 ), TWIPS_FROM_INCH( 7.5 )      },  // Envelope Monarch 3.875 x 7.5 in
-            { TWIPS_FROM_INCH( 3.625 ), TWIPS_FROM_INCH( 6.5 )      },  // 6 3/4 Envelope 3 5/8 x 6 1/2 in
-            { TWIPS_FROM_INCH( 14.875 ),TWIPS_FROM_INCH( 11 )       },  // US Std Fanfold 14 7/8 x 11 in
-            { TWIPS_FROM_INCH( 8.5 ),   TWIPS_FROM_INCH( 12 )       },  // German Std Fanfold 8 1/2 x 12 in
-            { TWIPS_FROM_INCH( 8.5 ),   TWIPS_FROM_INCH( 13 )       }   // German Legal Fanfold 8 1/2 x 13 in
-        };
-
-        UINT16              n = 0;
-        const PAPER_SIZE*   pAct = pPS;
-        Size                aSize( ( ( const SvxSizeItem& ) rSet.Get( ATTR_PAGE_SIZE ) ).GetSize() );
-        const long          nH = bLandscape? aSize.nB : aSize.nA;
-        const long          nW = bLandscape? aSize.nA : aSize.nB;
-
-        long                nMaxDH = 50;
-        long                nMinDH = -nMaxDH;
-        long                nMaxDW = 80;
-        long                nMinDW = -nMaxDW;
-        long                nDH, nDW;
-
-        nPaperSize = 0;
-
-        while( nPaperSize < nAnzSizes )
-        {
-            nDH = pAct->nH - nH;
-            nDW = pAct->nW - nW;
-            if( nDH >= nMinDH && nDH <= nMaxDH && nDW >= nMinDW && nDW <= nMaxDW )
-                break;
-            nPaperSize++;
-            pAct++;
-        }
-
-        if( nPaperSize >= nAnzSizes )
-            nPaperSize = 0;     // default if size doesn't match Excel sizes
-
-        nScale = ( UINT16 ) ( ( const SfxUInt16Item& ) rSet.Get( ATTR_PAGE_SCALE ) ).GetValue();
-        nFitToPages = static_cast< sal_uInt16 >( ((const SfxUInt16Item&) rSet.Get( ATTR_PAGE_SCALETOPAGES )).GetValue() );
-
-        nPageStart = ( UINT16 ) ( ( const SfxUInt16Item& ) rSet.Get( ATTR_PAGE_FIRSTPAGENO ) ).GetValue();
-
-        const UINT16    nTab = pExcRoot->pER->GetScTab();
-
-        if( nPageStart )
-        {
-            if( nTab == 0 || pExcRoot->pDoc->NeedPageResetAfterTab( nTab - 1 ) )
-                nGrbit |= 0x0080;   // fUsePage
-        }
-
-        if( !( ( const SfxBoolItem& ) rSet.Get( ATTR_PAGE_TOPDOWN ) ).GetValue() )
-            nGrbit |= 0x0001;   // ffLeftToRight
-
-        // set the Comments/Notes to "At end of sheet" if Print Notes is true.
-        // We don't currently support "as displayed on sheet". Thus this value
-        // will be re-interpreted to "At end of sheet".
-        if( ( ( const SfxBoolItem& ) rSet.Get( ATTR_PAGE_NOTES ) ).GetValue() )
-            nGrbit |= 0x0220;   // fNotes
-
-        const SfxItemSet& rHeaderSet = ((const SvxSetItem&) rSet.Get( ATTR_PAGE_HEADERSET )).GetItemSet();
-        nHeaderMargin = ((const SvxULSpaceItem&) rHeaderSet.Get( ATTR_ULSPACE )).GetLower();
-        const SfxItemSet& rFooterSet = ((const SvxSetItem&) rSet.Get( ATTR_PAGE_FOOTERSET )).GetItemSet();
-        nFooterMargin = ((const SvxULSpaceItem&) rFooterSet.Get( ATTR_ULSPACE )).GetUpper();
-    }
-}
-
-
-void ExcSetup::SaveCont( XclExpStream& rStrm )
-{
-    rStrm   << nPaperSize << nScale << nPageStart
-            << (UINT16) 1 << nFitToPages                // FitWidth / FitHeight
-            << nGrbit
-            << ( UINT16 ) 0x012C << ( UINT16 ) 0x012C   // Res / VRes
-            << XclTools::GetInchFromTwips( nHeaderMargin )
-            << XclTools::GetInchFromTwips( nFooterMargin )
-            << ( UINT16 ) 1;                            // num of copies
-}
-
-
-UINT16 ExcSetup::GetNum( void ) const
-{
-    return 0x00A1;
-}
-
-
-ULONG ExcSetup::GetLen( void ) const
-{
-    return 0x0022;
-}
-
-
-
-// Header/Footer ==============================================================
-
-XclExpHeaderFooter::XclExpHeaderFooter(
-        sal_uInt16 nRecId,
-        RootData& rRootData,
-        sal_uInt16 nHFSetWhichId,
-        sal_uInt16 nHFTextWhichId ) :
-    XclExpRecord( nRecId ),
-    ExcRoot( &rRootData ),
-    mbUnicode( rRootData.eDateiTyp >= Biff8 )
-{
-    SfxItemSet* pItemSet = rRootData.pStyleSheetItemSet;
-    if( pItemSet )
-    {
-        const SvxSetItem& rSetItem = (const SvxSetItem&) pItemSet->Get( nHFSetWhichId );
-        if( ((const SfxBoolItem&) rSetItem.GetItemSet().Get( ATTR_PAGE_ON )).GetValue() )
-        {
-            GetFormatString( maFormatString, rRootData, nHFTextWhichId );
-            // set record size, for Biff8 only a prediction, assuming 8-bit string
-            SetRecSize( mbUnicode ?
-                3 + Min( static_cast< sal_uInt32 >( maFormatString.Len() ), 0xFFFFUL ) :
-                1 + Min( static_cast< sal_uInt32 >( maFormatString.Len() ), 0xFFUL ) );
-        }
-    }
-}
-
-void XclExpHeaderFooter::GetFormatString( String& rString, RootData& rRootData, sal_uInt16 nWhich )
-{
-    SfxItemSet* pItemSet = rRootData.pStyleSheetItemSet;
-    if( !pItemSet )
-        return;
-
-    const ScPageHFItem& rHFItem = (const ScPageHFItem&) pItemSet->Get( nWhich );
-
-    XclExpHFConverter aHFConv( *rRootData.pER );
-    rString = aHFConv.GenerateString( rHFItem.GetLeftArea(), rHFItem.GetCenterArea(), rHFItem.GetRightArea() );
-}
-
-void XclExpHeaderFooter::WriteBody( XclExpStream& rStrm )
-{
-    if( mbUnicode )
-        // normal unicode string
-        rStrm << XclExpUniString( maFormatString );
-    else
-        // 8 bit length, max 255 chars
-        rStrm.WriteByteString( ByteString( maFormatString, *pExcRoot->pCharset ), 255 );
-}
-
-void XclExpHeaderFooter::Save( XclExpStream& rStrm )
-{
-    if( maFormatString.Len() )
-        XclExpRecord::Save( rStrm );
-}
-
-
-// ----------------------------------------------------------------------------
-
-XclExpHeader::XclExpHeader( RootData& rRootData ) :
-    XclExpHeaderFooter( EXC_ID_HEADER, rRootData, ATTR_PAGE_HEADERSET, ATTR_PAGE_HEADERRIGHT )
-{
-}
-
-
-// ----------------------------------------------------------------------------
-
-XclExpFooter::XclExpFooter( RootData& rRootData ) :
-    XclExpHeaderFooter( EXC_ID_FOOTER, rRootData, ATTR_PAGE_FOOTERSET, ATTR_PAGE_FOOTERRIGHT )
-{
-}
-
 
 // ============================================================================
-//----------------------------------------------------- class ExcPrintheaders -
-
-ExcPrintheaders::ExcPrintheaders( SfxItemSet* p ) : ExcBoolRecord( p, ATTR_PAGE_HEADERS, TRUE )
-{
-}
-
-
-UINT16 ExcPrintheaders::GetNum( void ) const
-{
-    return 0x002A;
-}
-
-
-
-//--------------------------------------------------- class ExcPrintGridlines -
-
-ExcPrintGridlines::ExcPrintGridlines( SfxItemSet* p ) : ExcBoolRecord( p, ATTR_PAGE_GRID, TRUE )
-{
-}
-
-
-UINT16 ExcPrintGridlines::GetNum( void ) const
-{
-    return 0x002B;
-}
-
-
-
-//---------------------------------------------------------- class ExcHcenter -
-
-ExcHcenter::ExcHcenter( SfxItemSet* p ) : ExcBoolRecord( p, ATTR_PAGE_HORCENTER, FALSE )
-{
-}
-
-
-UINT16 ExcHcenter::GetNum( void ) const
-{
-    return 0x0083;
-}
-
-
-
-//---------------------------------------------------------- class ExcVcenter -
-
-ExcVcenter::ExcVcenter( SfxItemSet* p ) : ExcBoolRecord( p, ATTR_PAGE_VERCENTER, FALSE )
-{
-}
-
-
-UINT16 ExcVcenter::GetNum( void ) const
-{
-    return 0x0084;
-}
-
-
-
 //---------------------------------------------------------------- AutoFilter -
 
 UINT16 ExcFilterMode::GetNum() const
@@ -3239,88 +2936,6 @@ void ExcAutoFilterRecs::Save( XclExpStream& rStrm )
     for( ExcAutoFilter* pFilter = _First(); pFilter; pFilter = _Next() )
         pFilter->Save( rStrm );
 }
-
-
-
-// ----------------------------------------------------------------------------
-
-XclExpMargin::XclExpMargin( sal_Int32 nMargin, XclMarginType eSide ) :
-    XclExpDoubleRecord( EXC_ID_UNKNOWN, 0.0 )
-{
-    switch( eSide )
-    {
-        case xlLeftMargin:      SetRecId( EXC_ID_LEFTMARGIN );      break;
-        case xlRightMargin:     SetRecId( EXC_ID_RIGHTMARGIN );     break;
-        case xlTopMargin:       SetRecId( EXC_ID_TOPMARGIN );       break;
-        case xlBottomMargin:    SetRecId( EXC_ID_BOTTOMMARGIN );    break;
-    }
-
-    SetValue( static_cast< double >( Max( nMargin, 0L ) ) / EXC_TWIPS_PER_INCH );
-}
-
-
-// Manual page breaks =========================================================
-
-XclExpPagebreaks::XclExpPagebreaks( RootData& rRootData, sal_uInt16 nScTab, XclPBOrientation eOrient ) :
-    XclExpRecord( (eOrient == xlPBHorizontal) ? EXC_ID_HORPAGEBREAKS : EXC_ID_VERTPAGEBREAKS )
-{
-    sal_uInt8 nFlags;
-    if( eOrient == xlPBHorizontal )
-    {
-        for( sal_uInt16 nIndex = 0; nIndex <= MAXROW; ++nIndex )
-        {
-            nFlags = rRootData.pDoc->GetRowFlags( nIndex, nScTab );
-            if( nFlags & CR_MANUALBREAK )
-                maPagebreaks.Append( nIndex );
-        }
-    }
-    else
-    {
-        for( sal_uInt16 nIndex = 0; nIndex <= MAXCOL; ++nIndex )
-        {
-            nFlags = rRootData.pDoc->GetColFlags( nIndex, nScTab );
-            if( nFlags & CR_MANUALBREAK )
-                maPagebreaks.Append( nIndex );
-        }
-    }
-    SetRecSize( 2 + 2 * maPagebreaks.Count() );
-}
-
-void XclExpPagebreaks::Save( XclExpStream& rStrm )
-{
-    if( !maPagebreaks.Empty() )
-        XclExpRecord::Save( rStrm );
-}
-
-void XclExpPagebreaks::WriteBody( XclExpStream& rStrm )
-{
-    sal_uInt16 nCount = static_cast< sal_uInt16 >( Min( maPagebreaks.Count(), 0xFFFFUL ) );
-    rStrm << nCount;
-    for( sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex )
-        rStrm << maPagebreaks.GetValue( nIndex );
-}
-
-
-// ----------------------------------------------------------------------------
-
-XclExpPagebreaks8::XclExpPagebreaks8( RootData& rRootData, sal_uInt16 nScTab, XclPBOrientation eOrient ) :
-    XclExpPagebreaks( rRootData, nScTab, eOrient ),
-    mnRangeMax( (eOrient == xlPBHorizontal) ? rRootData.nColMax : rRootData.nRowMax )
-{
-    SetRecSize( 2 + 6 * maPagebreaks.Count() );
-}
-
-void XclExpPagebreaks8::WriteBody( XclExpStream& rStrm )
-{
-    sal_uInt16 nCount = static_cast< sal_uInt16 >( Min( maPagebreaks.Count(), 0xFFFFUL ) );
-    rStrm << nCount;
-    rStrm.SetSliceSize( 6 );
-    for( sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex )
-        rStrm << maPagebreaks.GetValue( nIndex ) << static_cast< sal_uInt16 >( 0 ) << mnRangeMax;
-}
-
-
-// ============================================================================
 
 
 //------------------------ class ExcArray, class ExcArrays, class ExcShrdFmla -
