@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 10:49:29 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,10 @@
 // OD 28.02.2003 #b4779636#, #107692#
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
+#endif
+// OD 02.07.2003 #108784#
+#ifndef _SVDOGRP_HXX
+#include <svx/svdogrp.hxx>
 #endif
 
 #define GETOBJSHELL()       ((SfxObjectShell*)rSh.GetDoc()->GetDocShell())
@@ -2655,6 +2659,14 @@ BOOL SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
                     if ( !bTableHack &&
                          !pPage->Frm().IsOver( pObj->GetBoundRect() ) )
                         pAnch = 0;
+                }
+            }
+            else
+            {
+                // OD 02.07.2003 #108784# - debug assert
+                if ( !pObj->ISA(SdrObjGroup) )
+                {
+                    ASSERT( false, "<SwFlyFrm::IsPaint(..)> - paint of drawing object without anchor frame!?" );
                 }
             }
         }
