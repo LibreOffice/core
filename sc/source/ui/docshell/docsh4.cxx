@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:58:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@
 
 //------------------------------------------------------------------
 
-BOOL ScDocShell::GetTabParam( const SfxItemSet* pArgs, USHORT nId, USHORT& rTab )
+BOOL ScDocShell::GetTabParam( const SfxItemSet* pArgs, USHORT nId, SCTAB& rTab )
 {
     BOOL bOk = TRUE;
     rTab = 0;                   // zur Sicherheit...
@@ -182,8 +182,8 @@ BOOL ScDocShell::GetTabParam( const SfxItemSet* pArgs, USHORT nId, USHORT& rTab 
     if ( pArgs && pArgs->GetItemState( nId, TRUE, &pTabItem ) == SFX_ITEM_SET )
     {
         //  Parameter sind 1-based !!!
-        USHORT nItemTab = ((const SfxUInt16Item*)pTabItem)->GetValue();
-        USHORT nTabCount = aDocument.GetTableCount();
+        SCTAB nItemTab = ((const SfxUInt16Item*)pTabItem)->GetValue();
+        SCTAB nTabCount = aDocument.GetTableCount();
         if (nItemTab>0 && nItemTab<=nTabCount)
             rTab = nItemTab-1;
         else
@@ -228,12 +228,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             IS_AVAILABLE( SID_SC_SETTEXT, &pTextItem ) )
             {
                 //  Parameter sind 1-based !!!
-                USHORT nCol = ((SfxUInt16Item*)pColItem)->GetValue() - 1;
-                USHORT nRow = ((SfxUInt16Item*)pRowItem)->GetValue() - 1;
-                USHORT nTab = ((SfxUInt16Item*)pTabItem)->GetValue() - 1;
+                SCCOL nCol = ((SfxInt16Item*)pColItem)->GetValue() - 1;
+                SCROW nRow = ((SfxInt32Item*)pRowItem)->GetValue() - 1;
+                SCTAB nTab = ((SfxInt16Item*)pTabItem)->GetValue() - 1;
 
-                USHORT nTabCount = aDocument.GetTableCount();
-                if ( nCol <= MAXCOL && nRow <= MAXROW && nTab < nTabCount )
+                SCTAB nTabCount = aDocument.GetTableCount();
+                if ( ValidCol(nCol) && ValidRow(nRow) && ValidTab(nTab,nTabCount) )
                 {
                     if ( aDocument.IsBlockEditable( nTab, nCol,nRow, nCol, nRow ) )
                     {
@@ -416,11 +416,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     Window* pParent = pViewSh->GetDialogParent();
                     Window* pDataWin = pViewSh->GetActiveWin();
 
-                    USHORT nCol1 = aSingleRange.aStart.Col();
-                    USHORT nRow1 = aSingleRange.aStart.Row();
-                    USHORT nCol2 = aSingleRange.aEnd.Col();
-                    USHORT nRow2 = aSingleRange.aEnd.Row();
-                    USHORT nTab = aSingleRange.aStart.Tab();
+                    SCCOL nCol1 = aSingleRange.aStart.Col();
+                    SCROW nRow1 = aSingleRange.aStart.Row();
+                    SCCOL nCol2 = aSingleRange.aEnd.Col();
+                    SCROW nRow2 = aSingleRange.aEnd.Row();
+                    SCTAB nTab = aSingleRange.aStart.Tab();
 
                     //! immer oder gar nicht begrenzen ???
                     if (!bMultiRange)
@@ -431,15 +431,18 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if ( !bAddRange && ( !bColInit || !bRowInit ) )
                     {
                                                 // Spalten/Zeilenkoepfe testen wie in chartarr
-                        USHORT i;
                         if (!bColInit)
-                            for (i=nCol1; i<=nCol2 && bColHeaders; i++)
+                        {
+                            for (SCCOL i=nCol1; i<=nCol2 && bColHeaders; i++)
                                 if (aDocument.HasValueData( i, nRow1, nTab ))
                                     bColHeaders = FALSE;
+                        }
                         if (!bRowInit)
-                            for (i=nRow1; i<=nRow2 && bRowHeaders; i++)
+                        {
+                            for (SCROW i=nRow1; i<=nRow2 && bRowHeaders; i++)
                                 if (aDocument.HasValueData( nCol1, i, nTab ))
                                     bRowHeaders = FALSE;
+                        }
 
                         //CHINA001 ScColRowLabelDlg aDlg( pParent, bRowHeaders, bColHeaders );
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -895,7 +898,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if ( pItem->ISA(SfxStringItem) )
                     {
                         String aName = ((const SfxStringItem*)pItem)->GetValue();
-                        USHORT nTab;
+                        SCTAB nTab;
                         if (aDocument.GetTable( aName, nTab ))
                         {
                             //  DeleteTable von viewfunc nach docfunc verschieben!
@@ -904,7 +907,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             if ( pSh )
                             {
                                 //! SetTabNo in DeleteTable weglassen?
-                                USHORT nDispTab = pSh->GetViewData()->GetTabNo();
+                                SCTAB nDispTab = pSh->GetViewData()->GetTabNo();
                                 pSh->DeleteTable( nTab );
                                 pSh->SetTabNo(nDispTab);
                                 rReq.Done();
@@ -923,7 +926,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if ( pItem->ISA(SfxStringItem) )
                     {
                         String aName = ((const SfxStringItem*)pItem)->GetValue();
-                        USHORT nTab;
+                        SCTAB nTab;
                         if (aDocument.GetTable( aName, nTab ))
                         {
                             if (aDocument.IsScenario(nTab))
@@ -936,7 +939,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 // Determine if the Sheet that the Scenario was created on
                                 // is protected. But first we need to find that Sheet.
                                 // Rewind back to the actual sheet.
-                                USHORT nActualTab = nTab;
+                                SCTAB nActualTab = nTab;
                                 do
                                 {
                                     nActualTab--;
@@ -1150,11 +1153,11 @@ void ScDocShell::DoAutoStyle( const ScRange& rRange, const String& rStyle )
     {
         DBG_ASSERT(rRange.aStart.Tab() == rRange.aEnd.Tab(),
                         "DoAutoStyle mit mehreren Tabellen");
-        USHORT nTab = rRange.aStart.Tab();
-        USHORT nStartCol = rRange.aStart.Col();
-        USHORT nStartRow = rRange.aStart.Row();
-        USHORT nEndCol = rRange.aEnd.Col();
-        USHORT nEndRow = rRange.aEnd.Row();
+        SCTAB nTab = rRange.aStart.Tab();
+        SCCOL nStartCol = rRange.aStart.Col();
+        SCROW nStartRow = rRange.aStart.Row();
+        SCCOL nEndCol = rRange.aEnd.Col();
+        SCROW nEndRow = rRange.aEnd.Row();
         aDocument.ApplyStyleAreaTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, *pStyleSheet );
         aDocument.ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nTab );
         PostPaint( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab, PAINT_GRID );
@@ -1185,8 +1188,8 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
             if ( aNewName != aOldName )
                 aDocument.RenamePageStyleInUse( aOldName, aNewName );
 
-            USHORT nTabCount = aDocument.GetTableCount();
-            for (USHORT nTab=0; nTab<nTabCount; nTab++)
+            SCTAB nTabCount = aDocument.GetTableCount();
+            for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                 if (aDocument.GetPageStyle(nTab) == aNewName)   // schon auf neu angepasst
                 {
                     aDocument.PageStyleModified( nTab, aNewName );
@@ -1217,7 +1220,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 //  wie in printfun.cxx
 #define ZOOM_MIN    10
 
-void ScDocShell::SetPrintZoom( USHORT nTab, USHORT nScale, USHORT nPages )
+void ScDocShell::SetPrintZoom( SCTAB nTab, USHORT nScale, USHORT nPages )
 {
     BOOL bUndo(aDocument.IsUndoEnabled());
     String aStyleName = aDocument.GetPageStyle( nTab );
@@ -1253,7 +1256,7 @@ void ScDocShell::SetPrintZoom( USHORT nTab, USHORT nScale, USHORT nPages )
 BOOL ScDocShell::AdjustPrintZoom( const ScRange& rRange )
 {
     BOOL bChange = FALSE;
-    USHORT nTab = rRange.aStart.Tab();
+    SCTAB nTab = rRange.aStart.Tab();
 
     String aStyleName = aDocument.GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
@@ -1271,37 +1274,42 @@ BOOL ScDocShell::AdjustPrintZoom( const ScRange& rRange )
         //  benoetigte Skalierung fuer Selektion ausrechnen
 
         USHORT nNewScale = nOldScale;
-        USHORT i;
 
         long nBlkTwipsX = 0;
         if (bHeaders)
             nBlkTwipsX += (long) PRINT_HEADER_WIDTH;
-        USHORT nStartCol = rRange.aStart.Col();
-        USHORT nEndCol = rRange.aEnd.Col();
+        SCCOL nStartCol = rRange.aStart.Col();
+        SCCOL nEndCol = rRange.aEnd.Col();
         if ( pRepeatCol && nStartCol >= pRepeatCol->aStart.Col() )
         {
-            for ( i=pRepeatCol->aStart.Col(); i<=pRepeatCol->aEnd.Col(); i++ )
+            for (SCCOL i=pRepeatCol->aStart.Col(); i<=pRepeatCol->aEnd.Col(); i++ )
                 nBlkTwipsX += aDocument.GetColWidth( i, nTab );
             if ( nStartCol <= pRepeatCol->aEnd.Col() )
                 nStartCol = pRepeatCol->aEnd.Col() + 1;
         }
-        for ( i=nStartCol; i<=nEndCol; i++ )
-            nBlkTwipsX += aDocument.GetColWidth( i, nTab );
+        // legacy compilers' own scope for i
+        {
+            for ( SCCOL i=nStartCol; i<=nEndCol; i++ )
+                nBlkTwipsX += aDocument.GetColWidth( i, nTab );
+        }
 
         long nBlkTwipsY = 0;
         if (bHeaders)
             nBlkTwipsY += (long) PRINT_HEADER_HEIGHT;
-        USHORT nStartRow = rRange.aStart.Row();
-        USHORT nEndRow = rRange.aEnd.Row();
+        SCROW nStartRow = rRange.aStart.Row();
+        SCROW nEndRow = rRange.aEnd.Row();
         if ( pRepeatRow && nStartRow >= pRepeatRow->aStart.Row() )
         {
-            for ( i=pRepeatRow->aStart.Row(); i<=pRepeatRow->aEnd.Row(); i++ )
+            for (SCROW i=pRepeatRow->aStart.Row(); i<=pRepeatRow->aEnd.Row(); i++ )
                 nBlkTwipsY += aDocument.FastGetRowHeight( i, nTab );
             if ( nStartRow <= pRepeatRow->aEnd.Row() )
                 nStartRow = pRepeatRow->aEnd.Row() + 1;
         }
-        for ( i=nStartRow; i<=nEndRow; i++ )
-            nBlkTwipsY += aDocument.FastGetRowHeight( i, nTab );
+        // legacy compilers' own scope for i
+        {
+            for (SCROW i=nStartRow; i<=nEndRow; i++ )
+                nBlkTwipsY += aDocument.FastGetRowHeight( i, nTab );
+        }
 
         Size aPhysPage;
         long nHdr, nFtr;
@@ -1334,15 +1342,15 @@ void ScDocShell::PageStyleModified( const String& rStyleName, BOOL bApi )
 
     BOOL bWarn = FALSE;
 
-    USHORT nTabCount = aDocument.GetTableCount();
-    USHORT nUseTab = MAXTAB+1;
-    for (USHORT nTab=0; nTab<nTabCount && nUseTab>MAXTAB; nTab++)
+    SCTAB nTabCount = aDocument.GetTableCount();
+    SCTAB nUseTab = MAXTAB+1;
+    for (SCTAB nTab=0; nTab<nTabCount && nUseTab>MAXTAB; nTab++)
         if ( aDocument.GetPageStyle(nTab) == rStyleName &&
                 ( !bApi || aDocument.GetPageSize(nTab).Width() ) )
             nUseTab = nTab;
                                 // bei bApi nur, wenn Umbrueche schon angezeigt
 
-    if (nUseTab<=MAXTAB)        // nicht verwendet -> nichts zu tun
+    if (ValidTab(nUseTab))      // nicht verwendet -> nichts zu tun
     {
         ScPrintFunc aPrintFunc( this, GetPrinter(), nUseTab );  //! ohne CountPages auskommen
         if (!aPrintFunc.UpdatePages())                          //  setzt Umbrueche auf allen Tabs
@@ -1370,7 +1378,7 @@ void ScDocShell::PageStyleModified( const String& rStyleName, BOOL bApi )
 
 void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                                    SfxRequest&   rReq,
-                                   USHORT        nCurTab )
+                                   SCTAB         nCurTab )
 {
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
@@ -1598,7 +1606,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
 
 void ScDocShell::GetStatePageStyle( SfxViewShell&   rCaller,
                                     SfxItemSet&     rSet,
-                                    USHORT          nCurTab )
+                                    SCTAB           nCurTab )
 {
     SfxWhichIter aIter(rSet);
     USHORT nWhich = aIter.FirstWhich();
@@ -1658,10 +1666,10 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
         aOptions = SC_MOD()->GetPrintOptions();     // use configuration
 
     BOOL bAllTabs = TRUE;
-    USHORT nTabCount = aDocument.GetTableCount();
-    USHORT nTab;
+    SCTAB nTabCount = aDocument.GetTableCount();
+    SCTAB nTab;
     long nTotalPages = 0;                       // alle Seiten
-    long aPageArr[MAXTAB+1];                    // Seiten pro Tabelle
+    long aPageArr[MAXTABCOUNT];                 // Seiten pro Tabelle
     for ( nTab=0; nTab<nTabCount; nTab++ )      // nPages und nTotalPages ermitteln
     {
         ScPrintFunc aPrintFunc( this, pPrinter, nTab, 0,0,NULL, &aOptions );
@@ -1723,13 +1731,13 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
     }
 }
 
-BOOL lcl_HasTransparent( ScDocument* pDoc, USHORT nTab, const ScRange* pRange )
+BOOL lcl_HasTransparent( ScDocument* pDoc, SCTAB nTab, const ScRange* pRange )
 {
     BOOL bFound = FALSE;
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     if (pDrawLayer)
     {
-        SdrPage* pPage = pDrawLayer->GetPage(nTab);
+        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         DBG_ASSERT(pPage,"Page ?");
         if (pPage)
         {
@@ -1785,10 +1793,10 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
         aOptions = SC_MOD()->GetPrintOptions();     // use configuration
 
     BOOL bAllTabs = TRUE;
-    USHORT nTabCount = aDocument.GetTableCount();
-    USHORT nTab;
+    SCTAB nTabCount = aDocument.GetTableCount();
+    SCTAB nTab;
     long nTotalPages = 0;                       // alle Seiten
-    long aPageArr[MAXTAB+1];                    // Seiten pro Tabelle
+    long aPageArr[MAXTABCOUNT];                 // Seiten pro Tabelle
     for ( nTab=0; nTab<nTabCount; nTab++ )      // nPages und nTotalPages ermitteln
     {
         ScPrintFunc aPrintFunc( this, pPrinter, nTab, 0,0,NULL, &aOptions );
@@ -1897,7 +1905,7 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
                     if(pModel)
                     {
                         pDrawView = new FmFormView( pModel, pPrinter );
-                        pDrawView->ShowPagePgNum( nTab, Point() );
+                        pDrawView->ShowPagePgNum( static_cast<sal_uInt16>(nTab), Point() );
                         pDrawView->SetPrintPreview( TRUE );
                     }
 
@@ -1989,7 +1997,7 @@ void ScDocShell::GetState( SfxItemSet &rSet )
 //              break;
 
             case SID_TABLES_COUNT:
-                rSet.Put( SfxUInt16Item( nWhich, aDocument.GetTableCount() ) );
+                rSet.Put( SfxInt16Item( nWhich, aDocument.GetTableCount() ) );
                 break;
 
             case SID_ATTR_YEAR2000 :
@@ -2024,7 +2032,7 @@ void __EXPORT ScDocShell::Draw( OutputDevice* pDev, const JobSetup & rSetup, USH
 {
 //  bIsOle = TRUE;      // jetzt ueber den CreateMode
 
-    USHORT nVisTab = aDocument.GetVisibleTab();
+    SCTAB nVisTab = aDocument.GetVisibleTab();
     if (!aDocument.HasTable(nVisTab))
         return;
 
@@ -2077,15 +2085,17 @@ Rectangle __EXPORT ScDocShell::GetVisArea( USHORT nAspect ) const
     {
         //  Visarea holen wie nach Load
 
-        USHORT nVisTab = aDocument.GetVisibleTab();
+        SCTAB nVisTab = aDocument.GetVisibleTab();
         if (!aDocument.HasTable(nVisTab))
         {
             nVisTab = 0;
             ((ScDocShell*)this)->aDocument.SetVisibleTab(nVisTab);
         }
-        USHORT nStartCol,nStartRow;
+        SCCOL nStartCol;
+        SCROW nStartRow;
         aDocument.GetDataStart( nVisTab, nStartCol, nStartRow );
-        USHORT nEndCol,nEndRow;
+        SCCOL nEndCol;
+        SCROW nEndRow;
         aDocument.GetPrintArea( nVisTab, nEndCol, nEndRow );
         if (nStartCol>nEndCol)
             nStartCol = nEndCol;
@@ -2101,7 +2111,7 @@ Rectangle __EXPORT ScDocShell::GetVisArea( USHORT nAspect ) const
 }
 
 void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
-                                            USHORT            nCurTab,
+                                            SCTAB             nCurTab,
                                             BOOL&             rbHeader,
                                             BOOL&             rbFooter )
 {
@@ -2265,13 +2275,13 @@ ScViewData* ScDocShell::GetViewData()
 
 //------------------------------------------------------------------
 
-USHORT ScDocShell::GetCurTab()
+SCTAB ScDocShell::GetCurTab()
 {
     //! this must be made non-static and use a ViewShell from this document!
 
     ScViewData* pViewData = GetViewData();
 
-    return pViewData ? pViewData->GetTabNo() : 0;
+    return pViewData ? pViewData->GetTabNo() : static_cast<SCTAB>(0);
 }
 
 ScTabViewShell* ScDocShell::GetBestViewShell()
