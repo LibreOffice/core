@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:24:31 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,22 +129,23 @@
 #ifndef SC_FPROGRESSBAR_HXX
 #include "fprogressbar.hxx"
 #endif
-
 #ifndef SC_XLOCX_HXX
 #include "xlocx.hxx"
 #endif
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
 #endif
-
-#ifndef SC_XIESCHER_HXX
-#include "xiescher.hxx"
+#ifndef SC_XIPAGE_HXX
+#include "xipage.hxx"
+#endif
+#ifndef SC_XICONTENT_HXX
+#include "xicontent.hxx"
 #endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
-#ifndef SC_XICONTENT_HXX
-#include "xicontent.hxx"
+#ifndef SC_XIESCHER_HXX
+#include "xiescher.hxx"
 #endif
 #ifndef SC_XIPIVOT_HXX
 #include "xipivot.hxx"
@@ -222,23 +223,22 @@ void ImportExcel8:: WinProtection( void )
 
 void ImportExcel8::Note( void )
 {
-    UINT16  nCol, nRow, nFlags, nId;
+    XclAddress aXclPos;
+    sal_uInt16 nFlags, nObjId;
+    aIn >> aXclPos >> nFlags >> nObjId;
 
-    aIn >> nRow >> nCol >> nFlags >> nId;
-
+    ScAddress aScNotePos( ScAddress::UNINITIALIZED );
     SCTAB nScTab = GetCurrScTab();
-    if( nRow <= static_cast<sal_uInt16>(MAXROW) && nCol <= static_cast<sal_uInt16>(MAXCOL) )
+    if( GetAddressConverter().ConvertAddress( aScNotePos, aXclPos, nScTab, true ) )
     {
-        if( nId )
+        if( nObjId != EXC_OBJ_INVALID_ID )
         {
             XclImpObjectManager& rObjManager = GetObjectManager();
-            if( XclImpEscherObj* pEscherObj = rObjManager.GetEscherObjAcc( nScTab, nId ) )
+            if( XclImpEscherObj* pEscherObj = rObjManager.GetEscherObjAcc( nScTab, nObjId ) )
             {
                 if( XclImpEscherNote* pNoteObj = PTR_CAST( XclImpEscherNote, pEscherObj ) )
                 {
-                    pNoteObj->SetCol(nCol);
-                    pNoteObj->SetRow(nRow);
-
+                    pNoteObj->SetScPos( aScNotePos );
                     if( const XclImpString* pString = pNoteObj->GetString() )
                     {
                         ::std::auto_ptr< EditTextObject > pEditObj(
@@ -246,20 +246,14 @@ void ImportExcel8::Note( void )
                         bool bVisible = ::get_flag( nFlags, EXC_NOTE_VISIBLE );
 
                         ScDocument* pDoc = GetDocPtr();
-                        ScPostIt aNote( pEditObj.get(), pDoc);
+                        ScPostIt aNote( pEditObj.get(), pDoc );
                         aNote.SetShown( bVisible );
-                        GetDoc().SetNote( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nScTab, aNote );
+                        GetDoc().SetNote( aScNotePos.Col(), aScNotePos.Row(), nScTab, aNote );
                     }
                 }
             }
         }
     }
-    else
-    {
-        bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow( nScTab, nRow, MAXROW );
-        }
-
     pLastFormCell = NULL;
 }
 
@@ -511,7 +505,7 @@ void ImportExcel8::ApplyEscherObjects()
     XclImpObjectManager& rObjManager = GetObjectManager();
 
     ScfProgressBar aProgress( GetDocShell(), STR_PROGRESS_CALCULATING );
-    sal_Int32 nSegApply = aProgress.AddSegment( 2000 );
+    sal_Int32 nSegApply = aProgress.AddSegment( 1000 );
 
     if( rObjManager.HasEscherStream() )
     {
@@ -520,7 +514,7 @@ void ImportExcel8::ApplyEscherObjects()
         {
             if( USHORT nInfoCount = pShapeInfos->Count() )
             {
-                sal_Int32 nSegSetObj = aProgress.AddSegment( 1000 );
+                sal_Int32 nSegSetObj = aProgress.AddSegment( 200 );
 
                 ScfProgressBar& rSubProgress = aProgress.GetSegmentProgressBar( nSegSetObj );
                 sal_Int32 nSubSeg = rSubProgress.AddSegment( nInfoCount );
