@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-09 07:40:23 $
+ *  last change: $Author: cl $ $Date: 2002-04-12 11:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,6 +743,9 @@ FloatingWindow RID_SVXDLG_IMAP
         Pos = MAP_APPFONT ( 39 , 23 ) ;
         Size = MAP_APPFONT ( 225 , 69 ) ;
         TabStop = TRUE ;
+        DropDown = TRUE ;
+        AutoSize = TRUE ;
+        AutoHScroll = TRUE ;
     };
     FixedText FT_TEXT
     {
@@ -802,6 +805,24 @@ FloatingWindow RID_SVXDLG_IMAP
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Editor ImageMap";
     Text[ finnish ] = "Kuvakartan editori";
+
+    FixedText RID_SVXCTL_FT_TARGET
+    {
+        Pos = MAP_APPFONT ( 188 , 43 ) ;
+        Size = MAP_APPFONT ( 22 , 12 ) ;
+        Text = "Frame: " ;
+    };
+     // nur temporaer
+    ComboBox RID_SVXCTL_CBB_TARGET
+    {
+        Border = TRUE ;
+        Sort = TRUE ;
+        Pos = MAP_APPFONT ( 213 , 41 ) ;
+        Size = MAP_APPFONT ( 51 , 50 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        HScroll = TRUE ;
+    };
 };
 Control RID_SVXCTL_IMAP
 {
@@ -809,27 +830,8 @@ Control RID_SVXCTL_IMAP
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 6 , 56 ) ;
     HelpId = HID_IMAPDLG_GRAPHWND ;
-    TabStop = TRUE ;
 };
 
- // nur temporaer
-FixedText RID_SVXCTL_FT_TARGET
-{
-    Pos = MAP_APPFONT ( 188 , 43 ) ;
-    Size = MAP_APPFONT ( 22 , 12 ) ;
-    Text = "Frame: " ;
-};
- // nur temporaer
-ComboBox RID_SVXCTL_CBB_TARGET
-{
-    Border = TRUE ;
-    Sort = TRUE ;
-    Pos = MAP_APPFONT ( 213 , 41 ) ;
-    Size = MAP_APPFONT ( 51 , 50 ) ;
-    TabStop = TRUE ;
-    DropDown = TRUE ;
-    HScroll = TRUE ;
-};
 /******************************************************************************/
 Menu RID_SVXMN_IMAP
 {

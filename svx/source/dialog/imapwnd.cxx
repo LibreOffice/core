@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-09 07:27:37 $
+ *  last change: $Author: cl $ $Date: 2002-04-12 11:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,6 +1104,7 @@ void IMapWindow::CreateDefaultObject()
         pView->InsertObject(pObj, *pPageView, 0);
         SdrObjCreated( *pObj );
         SetCurrentObjState( true );
+        pView->MarkObj( pObj, pPageView );
     }
 }
 
@@ -1114,6 +1115,32 @@ void IMapWindow::KeyInput( const KeyEvent& rKEvt )
 /*
     switch(aCode.GetCode())
     {
+        case KEY_ESCAPE:
+        {
+            if ( pView->IsAction() )
+            {
+                pView->BrkAction();
+                return;
+            }
+            else if ( pView->HasMarkedObj() )
+            {
+                const SdrHdlList& rHdlList = pView->GetHdlList();
+                SdrHdl* pHdl = rHdlList.GetFocusHdl();
+
+                if(pHdl)
+                {
+                    ((SdrHdlList&)rHdlList).ResetFocusHdl();
+                }
+                else
+                {
+                    pView->UnmarkAllObj();
+                    ((Dialog*)GetParent())->GrabFocusToFirstControl();
+                }
+
+                return;
+            }
+        }
+        break;
 
     }
 */
@@ -1128,5 +1155,21 @@ void IMapWindow::SelectFirstObject()
         GrabFocus();
         pView->UnmarkAllObj();
         pView->MarkNextObj(TRUE);
+    }
+}
+
+void IMapWindow::StartPolyEdit()
+{
+    GrabFocus();
+
+    if( !pView->HasMarkedObj() )
+        pView->MarkNextObj(TRUE);
+
+    const SdrHdlList& rHdlList = pView->GetHdlList();
+    SdrHdl* pHdl = rHdlList.GetFocusHdl();
+
+    if(!pHdl)
+    {
+        ((SdrHdlList&)rHdlList).TravelFocusHdl(true);
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-09 07:21:15 $
+ *  last change: $Author: cl $ $Date: 2002-04-12 11:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,22 +246,21 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
                         Window* pParent, const ResId& rResId ) :
         SfxFloatingWindow   ( pBindings, pCW, pParent, rResId ),
         aIMapItem           ( SID_IMAP_EXEC, *this, *pBindings ),
-        pOwnData            ( new IMapOwnData( this ) ),
-
         aTbxIMapDlg1        ( this, SVX_RES( TBX_IMAPDLG1 ) ),
         aStbStatus          ( this, WB_BORDER | WB_3DLOOK | WB_LEFT ),
-        pIMapWnd            ( new IMapWindow( this, SVX_RES( RID_SVXCTL_IMAP ) ) ),
         pCheckObj           ( NULL ),
         aFtURL              ( this, SVX_RES( FT_URL ) ),
+        maURLBox            ( this, SVX_RES( CBB_URL ) ),
         aFtText             ( this, SVX_RES( FT_TEXT ) ),
-        maURLBox            ( this, SVX_RES( CBB_URL ), INET_PROT_NOT_VALID ),
         aEdtText            ( this, SVX_RES( EDT_TEXT ) ),
         maFtTarget          ( this, SVX_RES( RID_SVXCTL_FT_TARGET ) ),
         maCbbTarget         ( this, SVX_RES( RID_SVXCTL_CBB_TARGET ) )
 {
+    pIMapWnd = new IMapWindow( this, SVX_RES( RID_SVXCTL_IMAP ) );
+
     FreeResource();
 
-    maURLBox.DisableHistory();
+    pOwnData = new IMapOwnData( this );
 
     pIMapWnd->SetInfoLink( LINK( this, SvxIMapDlg, InfoHdl ) );
     pIMapWnd->SetMousePosLink( LINK( this, SvxIMapDlg, MousePosHdl ) );
@@ -548,8 +547,13 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
         {
             pTbx->CheckItem( nNewItemId, TRUE );
             pIMapWnd->SetEditMode( TRUE );
-            if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
-                pIMapWnd->SelectFirstObject();
+            if( pTbx->IsKeyEvent() )
+            {
+                if((pTbx->GetKeyModifier() & KEY_MOD1) != 0)
+                    pIMapWnd->SelectFirstObject();
+                else
+                    pIMapWnd->GrabFocus();
+            }
         }
         break;
 
@@ -558,7 +562,10 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
             pTbx->CheckItem( nNewItemId, TRUE );
             pIMapWnd->SetObjKind( OBJ_RECT );
             if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
+            {
                 pIMapWnd->CreateDefaultObject();
+                pIMapWnd->GrabFocus();
+            }
         }
         break;
 
@@ -567,7 +574,10 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
             pTbx->CheckItem( nNewItemId, TRUE );
             pIMapWnd->SetObjKind( OBJ_CIRC );
             if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
+            {
                 pIMapWnd->CreateDefaultObject();
+                pIMapWnd->GrabFocus();
+            }
         }
         break;
 
@@ -576,7 +586,10 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
             pTbx->CheckItem( nNewItemId, TRUE );
             pIMapWnd->SetObjKind( OBJ_POLY );
             if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
+            {
                 pIMapWnd->CreateDefaultObject();
+                pIMapWnd->GrabFocus();
+            }
         }
         break;
 
@@ -585,7 +598,10 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
             pTbx->CheckItem( nNewItemId, TRUE );
             pIMapWnd->SetObjKind( OBJ_FREEFILL );
             if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
+            {
                 pIMapWnd->CreateDefaultObject();
+                pIMapWnd->GrabFocus();
+            }
         }
         break;
 
@@ -608,8 +624,8 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
         case( TBI_POLYEDIT ):
             pIMapWnd->SetPolyEditMode( pTbx->IsItemChecked( TBI_POLYEDIT ) ? SID_BEZIER_MOVE : 0 );
-            if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
-                pIMapWnd->SelectFirstObject();
+            if( pTbx->IsKeyEvent() && pTbx->IsItemChecked( TBI_POLYEDIT ) )
+                pIMapWnd->StartPolyEdit();
         break;
 
         case( TBI_POLYMOVE ):

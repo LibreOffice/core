@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-09 07:17:14 $
+ *  last change: $Author: cl $ $Date: 2002-04-12 11:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,7 +444,6 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                     }
                     else
                     {
-                        pView->UnmarkAll();
                         ((Dialog*)GetParent())->GrabFocusToFirstControl();
                     }
 
@@ -463,84 +462,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 {
                     bool bForward = !aCode.IsShift();
                     // select next object
-                    if( !pView->MarkNextObj( bForward ) )
-                    {
-                        // if we can't select the next object, we give
-                        // the focus to the next or previous ctrl
-
-                        Window* pParent = GetParent();          // this is our parent dialog
-                        Window* pWindow;                        // used for iterations
-                        Window* pFocusWindow = NULL;            // this window will get the focus
-
-                        int nCount = (int)pParent->GetChildCount();
-                        int nChild;
-
-                        // iterate over our parents children to find our own index
-                        for( nChild = 0; nChild < nCount; nChild ++ )
-                        {
-                            pWindow = pParent->GetChild(nChild);
-                            if( pWindow == this || pWindow->IsChild( this ) )
-                                break;
-                        }
-
-                        DBG_ASSERT( nChild < nCount, "Fatal: GraphCtrl is not child of its parent?" );
-
-                        if( nChild < nCount )
-                        {
-                            if( bForward )
-                            {
-                                while( true )
-                                {
-                                    nChild++;
-
-                                    // if where at the end, skip to the first control
-                                    if( nChild >= nCount )
-                                        nChild = 0;
-
-                                    pWindow = pParent->GetChild( nChild );
-
-                                    // since we may skip at the end, we break if we found us again
-                                    if( pWindow == this || pWindow->IsChild( this ) )
-                                        break;
-
-                                    if ( pWindow->IsEnabled() && ((pWindow->GetStyle() & WB_TABSTOP) != 0) )
-                                    {
-                                        pFocusWindow = pWindow;
-                                        break;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                while( true )
-                                {
-                                    nChild--;
-
-                                    // if where at the begin, skip to the last control
-                                    if( nChild < 0 )
-                                        nChild = nCount - 1;
-
-                                    pWindow = pParent->GetChild( nChild );
-
-                                    // since we may skip at the begin, we break if we found us again
-                                    if( pWindow == this || pWindow->IsChild( this ) )
-                                        break;
-
-                                    if ( pWindow->IsEnabled() && ((pWindow->GetStyle() & WB_TABSTOP) != 0) )
-                                    {
-                                        pFocusWindow = pWindow;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if( pFocusWindow )
-                            {
-                                        pFocusWindow->GrabFocus();
-                            }
-                        }
-
-                    }
+                    pView->MarkNextObj( bForward );
                     bProc = TRUE;
                 }
                 else if(aCode.IsMod1())
@@ -713,6 +635,66 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 }
 
                 bProc = true;
+            }
+        }
+        break;
+
+        case KEY_SPACE:
+        {
+            const SdrHdlList& rHdlList = pView->GetHdlList();
+            SdrHdl* pHdl = rHdlList.GetFocusHdl();
+
+            if(pHdl)
+            {
+                if(pHdl->GetKind() == HDL_POLY)
+                {
+                    // rescue ID of point with focus
+                    sal_uInt16 nPol(pHdl->GetPolyNum());
+                    sal_uInt16 nPnt(pHdl->GetPointNum());
+
+                    if(pView->IsPointMarked(*pHdl))
+                    {
+                        if(rKEvt.GetKeyCode().IsShift())
+                        {
+                            pView->UnmarkPoint(*pHdl);
+                        }
+                    }
+                    else
+                    {
+                        if(!rKEvt.GetKeyCode().IsShift())
+                        {
+                            pView->UnmarkAllPoints();
+                        }
+
+                        pView->MarkPoint(*pHdl);
+                    }
+
+                    if(0L == rHdlList.GetFocusHdl())
+                    {
+                        // restore point with focus
+                        SdrHdl* pNewOne = 0L;
+
+                        for(sal_uInt32 a(0); !pNewOne && a < rHdlList.GetHdlCount(); a++)
+                        {
+                            SdrHdl* pAct = rHdlList.GetHdl(a);
+
+                            if(pAct
+                                && pAct->GetKind() == HDL_POLY
+                                && pAct->GetPolyNum() == nPol
+                                && pAct->GetPointNum() == nPnt)
+                            {
+                                pNewOne = pAct;
+                            }
+                        }
+
+                        if(pNewOne)
+                        {
+                            ((SdrHdlList&)rHdlList).SetFocusHdl(pNewOne);
+                        }
+                    }
+
+                    bProc = TRUE;
+                }
             }
         }
         break;
@@ -927,7 +909,7 @@ String GraphCtrl::GetStringFromDouble( const double& rDouble )
 
 
 /*************************************************************************
-|*
+www|*
 |*
 |*
 \************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-09 07:25:54 $
+ *  last change: $Author: cl $ $Date: 2002-04-12 11:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,7 @@ public:
 
     void                CreateDefaultObject();
     void                SelectFirstObject();
+    void                StartPolyEdit();
 
     virtual void        KeyInput( const KeyEvent& rKEvt );
 };
