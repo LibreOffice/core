@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-30 12:08:43 $
+ *  last change: $Author: cmc $ $Date: 2002-11-15 14:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,25 +461,25 @@ void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
         else if( 0 != ( pItem = rPool.GetPoolDefaultItem( nWhich )) )
             pOut = aRTFAttrFnTab[ nWhich - RES_CHRATR_BEGIN];
         else
+            pOut = 0;
+
+        if (!pOut && bDeep)
+        {
             switch( nWhich )
             {
-            case RES_CHRATR_FONTSIZE:
-            case RES_CHRATR_CJK_FONTSIZE:
-            case RES_CHRATR_CTL_FONTSIZE:
-
-            case RES_CHRATR_LANGUAGE:
-            case RES_CHRATR_CJK_LANGUAGE:
-            case RES_CHRATR_CTL_LANGUAGE:
-
-//          case RES_PARATR_WIDOWS:
-//          case RES_PARATR_HYPHENZONE:
-                pItem = &rPool.GetDefaultItem( nWhich );
-                pOut = aRTFAttrFnTab[ nWhich - RES_CHRATR_BEGIN];
-                break;
-
-            default:
-                pOut = 0;
+                case RES_CHRATR_FONTSIZE:
+                case RES_CHRATR_CJK_FONTSIZE:
+                case RES_CHRATR_CTL_FONTSIZE:
+                case RES_CHRATR_LANGUAGE:
+                case RES_CHRATR_CJK_LANGUAGE:
+                case RES_CHRATR_CTL_LANGUAGE:
+                    pItem = &rPool.GetDefaultItem( nWhich );
+                    pOut = aRTFAttrFnTab[ nWhich - RES_CHRATR_BEGIN];
+                    break;
+                default:
+                    break;
             }
+        }
 
         if( pOut )
         {
