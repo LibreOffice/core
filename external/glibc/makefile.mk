@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: svesik $ $Date: 2000-11-21 10:22:34 $
+#   last change: $Author: mh $ $Date: 2003-06-18 12:44:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,10 +62,9 @@
 
 MAKEFILERC=yes
 
-.IF "$(OS)" == "WNT"
+.IF "$(USE_SHELL)" == "4nt"
 patchsuffix=btm
-.ENDIF
-.IF "$(GUI)" == "UNX"
+.ELSE
 patchsuffix=sh
 .ENDIF
 
