@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:39:24 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
