@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2002-07-10 09:53:15 $
+#   last change: $Author: hjs $ $Date: 2002-07-17 10:52:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -138,10 +138,10 @@ APP1STDLIBS=\
 .INCLUDE :  target.mk
 
 $(MISC)$/stripped_scanner.ll : scanner.ll
-.IF "$(GUI)"=="WNT"
-    +cat scanner.ll > $(MISC)$/stripped_scanner.ll
-.ELSE
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)" != "4nt"
     +tr -d "\015" < scanner.ll > $(MISC)$/stripped_scanner.ll
+.ELSE
+    +cat scanner.ll > $(MISC)$/stripped_scanner.ll
 .ENDIF
 
 $(MISC)$/scanner.cxx:	$(MISC)$/stripped_scanner.ll
