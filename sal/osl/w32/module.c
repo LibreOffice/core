@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-09-04 11:17:45 $
+ *  last change: $Author: hro $ $Date: 2001-11-16 12:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,9 +224,79 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_Windows( void *pv, rtl_uString
     return  bSuccess;
 }
 
-/*****************************************************************************/
-/* Implementation for Windows 95, 98 and Me */
-/*****************************************************************************/
+/***************************************************************************************/
+/* Implementation for Windows NT, 2K and XP (2K and XP could use the above method too) */
+/***************************************************************************************/
+
+#include <imagehlp.h>
+
+typedef BOOL (WINAPI *SymInitialize_PROC)(
+    HANDLE   hProcess,
+    LPSTR    UserSearchPath,
+    BOOL     fInvadeProcess
+    );
+
+typedef BOOL (WINAPI *SymCleanup_PROC)(
+    HANDLE hProcess
+    );
+
+typedef BOOL (WINAPI *SymGetModuleInfo_PROC)(
+    HANDLE              hProcess,
+    DWORD               dwAddr,
+    PIMAGEHLP_MODULE  ModuleInfo
+    );
+
+/* Seems that IMAGEHLP.DLL is always availiable on NT 4. But MSDN from Platform SDK says Win 2K is required. MSDN from VS 6.0a says
+    it's O.K on NT 4 ???!!!
+    BTW: We are using ANSI function because not all version of IMAGEHLP.DLL contain Unicode support
+*/
+
+static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT4( void *pv, rtl_uString **pustrURL )
+{
+    sal_Bool    bSuccess    = sal_False;    /* Assume failure */
+    HMODULE     hModImageHelp = LoadLibrary( "IMAGEHLP.DLL" );
+
+    if ( hModImageHelp )
+    {
+        SymGetModuleInfo_PROC   lpfnSymGetModuleInfo;
+        SymInitialize_PROC      lpfnSymInitialize;
+        SymCleanup_PROC         lpfnSymCleanup;
+
+
+        lpfnSymInitialize = (SymInitialize_PROC)GetProcAddress( hModImageHelp, "SymInitialize" );
+        lpfnSymCleanup = (SymCleanup_PROC)GetProcAddress( hModImageHelp, "SymCleanup" );
+        lpfnSymGetModuleInfo = (SymGetModuleInfo_PROC)GetProcAddress( hModImageHelp, "SymGetModuleInfo" );
+
+
+        if ( lpfnSymInitialize && lpfnSymCleanup && lpfnSymGetModuleInfo )
+        {
+            IMAGEHLP_MODULE ModuleInfo;
+
+            lpfnSymInitialize( GetCurrentProcess(), NULL, TRUE );
+
+            ZeroMemory( &ModuleInfo, sizeof(ModuleInfo) );
+            ModuleInfo.SizeOfStruct = sizeof(ModuleInfo);
+
+            bSuccess = lpfnSymGetModuleInfo( GetCurrentProcess(), (DWORD)pv, &ModuleInfo );
+
+            if ( bSuccess )
+            {
+                rtl_uString *ustrSysPath = NULL;
+
+                rtl_string2UString( &ustrSysPath, ModuleInfo.LoadedImageName, strlen(ModuleInfo.LoadedImageName), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+                osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );
+                rtl_uString_release( ustrSysPath );
+            }
+
+            lpfnSymCleanup( GetCurrentProcess() );
+        }
+
+        FreeLibrary( hModImageHelp );
+    }
+
+    return bSuccess;
+}
+
 
 typedef struct _MODULEINFO {
     LPVOID lpBaseOfDll;
@@ -249,6 +319,8 @@ typedef BOOL (WINAPI *GetModuleInformation_PROC)(
 );
 
 #define bufsizeof(buffer) (sizeof(buffer) / sizeof((buffer)[0]))
+
+/* This version can fail because PSAPI.DLL is not always part of NT 4 despite MSDN Libary 6.0a say so */
 
 static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT( void *pv, rtl_uString **pustrURL )
 {
@@ -307,8 +379,9 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT( void *pv, rtl_uString **pu
 
 sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL )
 {
+    /* Use ..._NT first because ..._NT4 is much slower */
     if ( IS_NT )
-        return _osl_addressGetModuleURL_NT( pv, pustrURL );
+        return _osl_addressGetModuleURL_NT( pv, pustrURL ) || _osl_addressGetModuleURL_NT4( pv, pustrURL );
     else
         return _osl_addressGetModuleURL_Windows( pv, pustrURL );
 }
