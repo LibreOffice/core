@@ -15,6 +15,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\sheet
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\table
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\i18n
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\chart
+mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\form
 mkdir: %COMMON_DEST%\idl%_EXT%\com
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star
@@ -151,6 +152,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 ..\drafts\com\sun\star\script\framework\scripturi\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script\framework\provider
 ..\drafts\com\sun\star\script\framework\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script\framework
 ..\drafts\com\sun\star\chart\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\chart
+..\drafts\com\sun\star\form\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\form
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
