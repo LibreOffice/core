@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-19 09:28:41 $
+ *  last change: $Author: pb $ $Date: 2001-10-22 12:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
 
 #include <svtools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
@@ -174,6 +177,38 @@ void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark )
     rURL += String( aLocaleStr );
     rURL += DEFINE_CONST_UNICODE("&System=");
     rURL += SvtHelpOptions().GetSystem();
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
+{
+    sal_Bool bRet = sal_False;
+    ::rtl::OUString sAnchor;
+
+    try
+    {
+        ::ucb::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
+                             Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        if ( ( aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "AnchorName" ) ) >>= sAnchor ) )
+        {
+
+            if ( sAnchor.getLength() > 0 )
+            {
+                _rAnchor = String( sAnchor );
+                bRet = sal_True;
+            }
+        }
+        else
+        {
+            DBG_ERRORFILE( "Property 'AnchorName' is missing" );
+        }
+    }
+    catch( ::com::sun::star::uno::Exception& )
+    {
+    }
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
@@ -315,8 +350,7 @@ String SfxHelp_Impl::GetHelpText( ULONG nHelpId, const String& rModule )
     // create help url
     String aHelpURL = SfxHelp::CreateHelpURL( nHelpId, rModule );
     // added 'active' parameter
-    aHelpURL += '&';
-    aHelpURL += DEFINE_CONST_UNICODE("Active=true");
+    aHelpURL.Insert( String( DEFINE_CONST_UNICODE("&Active=true") ), aHelpURL.SearchBackward( '#' ) );
     // load help string
     return SfxContentHelper::GetActiveHelpString( aHelpURL );
 }
@@ -499,20 +533,30 @@ String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
     }
     else
     {
+        sal_Bool bHasAnchor = sal_False;
+        String aAnchor;
         aHelpURL = String::CreateFromAscii("vnd.sun.star.help://");
         aHelpURL += aModuleName;
 
         if ( !nHelpId )
-        {
-            aHelpURL += String( DEFINE_CONST_UNICODE("/start") );
-        }
+            aHelpURL += String::CreateFromAscii("/start");
         else
         {
             aHelpURL += '/';
             aHelpURL += String::CreateFromInt64( nHelpId );
+
+            String aTempURL = aHelpURL;
+            AppendConfigToken_Impl( aTempURL, sal_True );
+            bHasAnchor = GetHelpAnchor_Impl( aTempURL, aAnchor );
         }
 
         AppendConfigToken_Impl( aHelpURL, sal_True );
+
+        if ( bHasAnchor )
+        {
+            aHelpURL += '#';
+            aHelpURL += aAnchor;
+        }
     }
 
     return aHelpURL;
