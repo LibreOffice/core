@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:39:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,11 +577,11 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
     // Parameter substituieren (AssignValues und Kriterien):
     if (!m_xParamColumns->empty())
     {
-        // Zunächst AssignValues
+        // Zunaechst AssignValues
         USHORT nParaCount=0; // gibt die aktuelle Anzahl der bisher gesetzen Parameter an
 
         // Nach zu substituierenden Parametern suchen:
-        UINT16 nCount = m_aAssignValues.isValid() ? m_aAssignValues->size() : 1; // 1 ist wichtig für die Kriterien
+        UINT16 nCount = m_aAssignValues.isValid() ? m_aAssignValues->size() : 1; // 1 ist wichtig fuer die Kriterien
         for (UINT16 j = 1; j < nCount; j++)
         {
             UINT32 nParameter = (*m_aAssignValues).getParameterIndex(j);
