@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-30 16:29:20 $
+ *  last change: $Author: vg $ $Date: 2001-09-13 08:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3160,7 +3160,7 @@ SvXMLImportContext *SmXMLImport::CreateActionContext(sal_uInt16 nPrefix,
         return new SmXMLActionContext_Impl(*this,nPrefix,rLocalName);
 }
 
-SmXMLImport::~SmXMLImport()
+SmXMLImport::~SmXMLImport() throw ()
 {
     delete pMathElemTokenMap;
     delete pPresLayoutElemTokenMap;

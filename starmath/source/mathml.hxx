@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-28 07:47:20 $
+ *  last change: $Author: vg $ $Date: 2001-09-13 08:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ public:
     const SvXMLTokenMap &GetPresScriptEmptyElemTokenMap();
     const SvXMLTokenMap &GetPresTableElemTokenMap();
     const SvXMLTokenMap &GetColorTokenMap();
-    virtual ~SmXMLImport();
+    virtual ~SmXMLImport() throw ();
     SmNodeStack & GetNodeStack() {return aNodeStack;}
     SmNode *GetTree() { return aNodeStack.Pop();}
     sal_Bool GetSuccess() { return bSuccess; }
