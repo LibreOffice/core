@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdffilter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-22 14:21:27 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#endif
 
 #include <osl/diagnose.h>
 #include <rtl/process.h>
@@ -112,6 +115,7 @@
 #include <unotools/streamwrap.hxx>
 
 using namespace ::rtl;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
