@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gradtrns.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:32:56 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #include <tools/gen.hxx>
 #endif
 
-#ifndef _SV_VECTOR2D_HXX
-#include <vcl/vector2d.hxx>
+#ifndef _VECTOR2D_HXX
+#include <tools/vector2d.hxx>
 #endif
 
 class SdrObject;
