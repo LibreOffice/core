@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:50:50 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,12 +488,12 @@ Any SAL_CALL ORowSet::queryInterface( const Type & rType ) throw (RuntimeExcepti
     return ORowSet_BASE1::queryInterface( rType);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSet::acquire() throw(RuntimeException)
+void SAL_CALL ORowSet::acquire() throw()
 {
     ORowSet_BASE1::acquire();
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSet::release() throw(RuntimeException)
+void SAL_CALL ORowSet::release() throw()
 {
     ORowSet_BASE1::release();
 }
@@ -692,7 +692,8 @@ void SAL_CALL ORowSet::disposing( const ::com::sun::star::lang::EventObject& Sou
         close();
         {
             MutexGuard aGuard( m_aMutex );
-            setActiveConnection( Reference< XConnection >() );
+            Reference< XConnection > xXConnection;
+            setActiveConnection( xXConnection );
         }
     }
 }
@@ -1346,9 +1347,11 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
         freeResources();
 
         // calc the connection to be used
-        if (m_xActiveConnection.is() && m_bRebuildConnOnExecute)
+        if (m_xActiveConnection.is() && m_bRebuildConnOnExecute) {
             // there was a setProperty(ActiveConnection), but a setProperty(DataSource) _after_ that, too
-            setActiveConnection(Reference< XConnection >());
+            Reference< XConnection > xXConnection;
+            setActiveConnection( xXConnection );
+        }
         calcConnection(_rxHandler);
         m_bRebuildConnOnExecute = sal_False;
         ::dbtools::askForParameters(xComposer,this,m_xActiveConnection,_rxHandler);
@@ -1398,9 +1401,11 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
     freeResources();
 
     // calc the connection to be used
-    if (m_xActiveConnection.is() && m_bRebuildConnOnExecute)
+    if (m_xActiveConnection.is() && m_bRebuildConnOnExecute) {
         // there was a setProperty(ActiveConnection), but a setProperty(DataSource) _after_ that, too
-        setActiveConnection(Reference< XConnection>());
+        Reference< XConnection> xXConnection;
+        setActiveConnection( xXConnection );
+    }
 
     calcConnection(NULL);
     m_bRebuildConnOnExecute = sal_False;
@@ -2281,13 +2286,13 @@ Any ORowSetClone::queryInterface( const Type & rType ) throw (RuntimeException)
     return aRet;
 }
 //------------------------------------------------------------------------------
-void ORowSetClone::acquire() throw(RuntimeException)
+void ORowSetClone::acquire() throw()
 {
     OSubComponent::acquire();
 }
 
 //------------------------------------------------------------------------------
-void ORowSetClone::release() throw(RuntimeException)
+void ORowSetClone::release() throw()
 {
     OSubComponent::release();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 10:30:55 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,13 +189,13 @@ Any OResultSet::queryInterface( const Type & rType ) throw (RuntimeException)
 }
 
 //--------------------------------------------------------------------------
-void OResultSet::acquire() throw (RuntimeException)
+void OResultSet::acquire() throw ()
 {
     OResultSetBase::acquire();
 }
 
 //--------------------------------------------------------------------------
-void OResultSet::release() throw (RuntimeException)
+void OResultSet::release() throw ()
 {
     OResultSetBase::release();
 }

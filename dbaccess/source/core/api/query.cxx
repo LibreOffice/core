@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,13 +176,13 @@ OQuery::~OQuery()
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OQuery::acquire(  ) throw(RuntimeException)
+void SAL_CALL OQuery::acquire(  ) throw()
 {
     OQueryDescriptor::acquire();
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OQuery::release(  ) throw(RuntimeException)
+void SAL_CALL OQuery::release(  ) throw()
 {
     OQueryDescriptor::release();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 11:02:53 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -880,12 +880,12 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
     m_bInDrop = sal_False;
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OTableContainer::acquire() throw(RuntimeException)
+void SAL_CALL OTableContainer::acquire() throw()
 {
     m_rParent.acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OTableContainer::release() throw(RuntimeException)
+void SAL_CALL OTableContainer::release() throw()
 {
     m_rParent.release();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 12:52:27 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,13 +182,13 @@ Any OColumn::queryInterface( const Type & rType ) throw (RuntimeException)
 }
 
 //--------------------------------------------------------------------------
-void OColumn::acquire() throw(RuntimeException)
+void OColumn::acquire() throw()
 {
     OColumnBase::acquire();
 }
 
 //--------------------------------------------------------------------------
-void OColumn::release() throw(RuntimeException)
+void OColumn::release() throw()
 {
     OColumnBase::release();
 }

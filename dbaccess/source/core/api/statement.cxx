@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statement.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 13:21:39 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,13 +156,13 @@ Any OStatementBase::queryInterface( const Type & rType ) throw (RuntimeException
 }
 
 //--------------------------------------------------------------------------
-void OStatementBase::acquire() throw (RuntimeException)
+void OStatementBase::acquire() throw ()
 {
     OSubComponent::acquire();
 }
 
 //--------------------------------------------------------------------------
-void OStatementBase::release() throw (RuntimeException)
+void OStatementBase::release() throw ()
 {
     OSubComponent::release();
 }
@@ -465,13 +465,13 @@ Any OStatement::queryInterface( const Type & rType ) throw (RuntimeException)
 }
 
 //--------------------------------------------------------------------------
-void OStatement::acquire() throw (RuntimeException)
+void OStatement::acquire() throw ()
 {
     OStatementBase::acquire();
 }
 
 //--------------------------------------------------------------------------
-void OStatement::release() throw (RuntimeException)
+void OStatement::release() throw ()
 {
     OStatementBase::release();
 }

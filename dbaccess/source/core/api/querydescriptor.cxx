@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,13 +243,13 @@ Sequence< sal_Int8 > OQueryDescriptor::getUnoTunnelImplementationId()
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OQueryDescriptor::acquire(  ) throw(RuntimeException)
+void SAL_CALL OQueryDescriptor::acquire(  ) throw()
 {
     OQueryDescriptor_Base::acquire();
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OQueryDescriptor::release(  ) throw(RuntimeException)
+void SAL_CALL OQueryDescriptor::release(  ) throw()
 {
     OQueryDescriptor_Base::release();
 }

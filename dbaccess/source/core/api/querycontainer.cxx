@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,13 +174,13 @@ OQueryContainer::~OQueryContainer()
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OQueryContainer::acquire() throw(RuntimeException)
+void SAL_CALL OQueryContainer::acquire() throw()
 {
     m_rParent.acquire();
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OQueryContainer::release() throw(RuntimeException)
+void SAL_CALL OQueryContainer::release() throw()
 {
     m_rParent.release();
 }

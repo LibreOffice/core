@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preparedstatement.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 10:12:41 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,13 +169,13 @@ Any OPreparedStatement::queryInterface( const Type & rType ) throw (RuntimeExcep
 }
 
 //--------------------------------------------------------------------------
-void OPreparedStatement::acquire() throw (RuntimeException)
+void OPreparedStatement::acquire() throw ()
 {
     OStatementBase::acquire();
 }
 
 //--------------------------------------------------------------------------
-void OPreparedStatement::release() throw (RuntimeException)
+void OPreparedStatement::release() throw ()
 {
     OStatementBase::release();
 }

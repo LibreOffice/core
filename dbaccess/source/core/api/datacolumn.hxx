@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datacolumn.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,8 @@ namespace dbaccess
 
     // com::sun::star::uno::XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException) { OResultColumn::acquire(); }
-        virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException) { OResultColumn::release(); }
+        virtual void SAL_CALL acquire() throw() { OResultColumn::acquire(); }
+        virtual void SAL_CALL release() throw() { OResultColumn::release(); }
 
     // ::com::sun::star::lang::XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);

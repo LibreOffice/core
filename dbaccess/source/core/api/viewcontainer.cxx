@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,12 +170,12 @@ OViewContainer::~OViewContainer()
     DBG_DTOR(OViewContainer, NULL);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OViewContainer::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OViewContainer::acquire() throw()
 {
     m_rParent.acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OViewContainer::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OViewContainer::release() throw()
 {
     m_rParent.release();
 }

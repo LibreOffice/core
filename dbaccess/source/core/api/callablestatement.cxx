@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callablestatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 10:12:41 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,13 +127,13 @@ Any OCallableStatement::queryInterface( const Type & rType ) throw (RuntimeExcep
 }
 
 //--------------------------------------------------------------------------
-void OCallableStatement::acquire() throw (RuntimeException)
+void OCallableStatement::acquire() throw ()
 {
     OPreparedStatement::acquire();
 }
 
 //--------------------------------------------------------------------------
-void OCallableStatement::release() throw (RuntimeException)
+void OCallableStatement::release() throw ()
 {
     OPreparedStatement::release();
 }

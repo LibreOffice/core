@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:50:50 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1254,12 +1254,12 @@ Reference< XIndexAccess > SAL_CALL OQueryComposer::getParameters(  ) throw(Runti
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void SAL_CALL OQueryComposer::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OQueryComposer::acquire() throw()
 {
     OSubComponent::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OQueryComposer::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OQueryComposer::release() throw()
 {
     OSubComponent::release();
 }

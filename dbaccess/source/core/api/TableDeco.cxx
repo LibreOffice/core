@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 14:15:28 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,12 +721,12 @@ Reference< XPropertySet > ODBTableDecorator::createEmptyObject()
     return xRet;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODBTableDecorator::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODBTableDecorator::acquire() throw()
 {
     OTableDescriptor_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODBTableDecorator::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODBTableDecorator::release() throw()
 {
     OTableDescriptor_BASE::release();
 }
