@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 08:56:33 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,6 +918,7 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
         }
     }
 
+    // Cut, copy, and delete page are disabled when there is no selection.
     if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_CUT)  ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_COPY) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_DELETE_PAGE))
@@ -931,10 +932,13 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
         if (bDisable)
         {
             rSet.DisableItem(SID_CUT);
+            rSet.DisableItem(SID_COPY);
             rSet.DisableItem(SID_DELETE_PAGE);
         }
         else if (mrController.GetModel().GetPageCount() < 2)
         {
+            // Do not delete the last slide of a document.
+            //af: Do we really need this?
             rSet.DisableItem(SID_CUT);
             rSet.DisableItem(SID_DELETE_PAGE);
         }
