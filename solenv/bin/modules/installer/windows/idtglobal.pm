@@ -2,9 +2,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-06-17 10:29:34 $
+#   last change: $Author: kz $ $Date: 2004-07-02 13:46:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -589,7 +589,7 @@ sub get_licensefilesource
 {
     my ($language, $filesref) = @_;
 
-    my $licensefilename = "license" . $language . ".txt";
+    my $licensefilename = "license_" . $language . ".txt";
     my $sourcepath = "";
     my $foundlicensefile = 0;
 
