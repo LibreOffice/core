@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-10 14:55:26 $
+ *  last change: $Author: bm $ $Date: 2003-12-10 17:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,11 +667,9 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_STAT_REGRESSTYPE:
         {
             SvxChartRegress eRegress = CHREGRESS_NONE;
-            if( lcl_getRegressType( uno::Reference< chart2::XRegressionCurveContainer >(
-                                        GetPropertySet(), uno::UNO_QUERY ), eRegress ) )
-            {
-                rOutItemSet.Put( SvxChartRegressItem( eRegress ));
-            }
+            lcl_getRegressType( uno::Reference< chart2::XRegressionCurveContainer >(
+                                    GetPropertySet(), uno::UNO_QUERY ), eRegress );
+            rOutItemSet.Put( SvxChartRegressItem( eRegress ));
         }
         break;
 
