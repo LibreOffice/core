@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:39 $
+ *  last change: $Author: os $ $Date: 2002-06-11 08:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@
 #define CB_DOCONLY                     102
 #define ST_SCRIPT_WESTERN              103
 #define ST_SCRIPT_ASIAN                104
+#define ST_SCRIPT_CTL                  105
 
 //Tabpage Tabelle
 #define CB_HEADER           101

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:39 $
+ *  last change: $Author: os $ $Date: 2002-06-11 08:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,6 +647,7 @@ SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
     aStandardPB (this, SW_RES(PB_STANDARD)),
     sScriptWestern(ResId(ST_SCRIPT_WESTERN)),
     sScriptAsian(ResId(ST_SCRIPT_ASIAN)),
+    sScriptComplex(ResId(ST_SCRIPT_CTL)),
     pPrt(0),
     pFontConfig(0),
     pWrtShell(0),
@@ -657,7 +658,7 @@ SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
     bSetIdxDefault(TRUE),
     bIdxDefault(FALSE),
     bDeletePrinter(FALSE),
-    bCJKMode(FALSE),
+    nFontGroup(FONT_GROUP_DEFAULT),
     eLanguage( GetAppLanguage() )
 {
     FreeResource();
@@ -734,18 +735,19 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& rSet )
 
     if(bNotDocOnly)
     {
-        pFontConfig->SetFontStandard(sStandard, bCJKMode);
-        pFontConfig->SetFontOutline(sTitle, bCJKMode);
-        pFontConfig->SetFontList(sList, bCJKMode);
-        pFontConfig->SetFontCaption(sLabel, bCJKMode);
-        pFontConfig->SetFontIndex(sIdx, bCJKMode);
+        pFontConfig->SetFontStandard(sStandard, nFontGroup);
+        pFontConfig->SetFontOutline(sTitle, nFontGroup);
+        pFontConfig->SetFontList(sList, nFontGroup);
+        pFontConfig->SetFontCaption(sLabel, nFontGroup);
+        pFontConfig->SetFontIndex(sIdx, nFontGroup);
     }
     if(pWrtShell)
     {
         pWrtShell->StartAllAction();
         SfxPrinter* pPrt = pWrtShell->GetPrt();
         BOOL bMod = FALSE;
-        USHORT nFontWhich = bCJKMode ? RES_CHRATR_CJK_FONT : RES_CHRATR_FONT;
+        USHORT nFontWhich = nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONT :
+            FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONT : RES_CHRATR_CTL_FONT;
         if(sStandard != sShellStd)
         {
             BOOL bDelete = FALSE;
@@ -801,12 +803,21 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& rSet )
 void SwStdFontTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pLang;
-    if( SFX_ITEM_SET == rSet.GetItemState(
-        bCJKMode ? SID_ATTR_CHAR_CJK_LANGUAGE : SID_ATTR_LANGUAGE, FALSE, &pLang))
+    USHORT nLangSlot = nFontGroup == FONT_GROUP_DEFAULT  ? SID_ATTR_LANGUAGE :
+        FONT_GROUP_CJK == nFontGroup ? SID_ATTR_CHAR_CJK_LANGUAGE : SID_ATTR_CHAR_CTL_LANGUAGE;
+
+
+    if( SFX_ITEM_SET == rSet.GetItemState(nLangSlot, FALSE, &pLang))
         eLanguage = ((const SvxLanguageItem*)pLang)->GetValue();
 
     String sTmp(aStdChrFL.GetText());
-    sTmp.SearchAndReplaceAscii("%1", bCJKMode ? sScriptAsian : sScriptWestern);
+    String sToReplace = sScriptWestern;
+    if(FONT_GROUP_CJK == nFontGroup )
+        sToReplace = sScriptAsian;
+    else if(FONT_GROUP_CTL == nFontGroup )
+        sToReplace = sScriptComplex;
+
+    sTmp.SearchAndReplaceAscii("%1", sToReplace);
     aStdChrFL.SetText(sTmp);
     const SfxPoolItem* pItem;
 
@@ -850,37 +861,43 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet )
 
     if(!pWrtShell)
     {
-       sStdBackup = pFontConfig->GetFontStandard(bCJKMode);
-       sOutBackup = pFontConfig->GetFontOutline(bCJKMode);
-       sListBackup= pFontConfig->GetFontList(bCJKMode);
-       sCapBackup = pFontConfig->GetFontCaption(bCJKMode);
-       sIdxBackup = pFontConfig->GetFontIndex(bCJKMode);
+       sStdBackup = pFontConfig->GetFontStandard(nFontGroup);
+       sOutBackup = pFontConfig->GetFontOutline(nFontGroup);
+       sListBackup= pFontConfig->GetFontList(nFontGroup);
+       sCapBackup = pFontConfig->GetFontCaption(nFontGroup);
+       sIdxBackup = pFontConfig->GetFontIndex(nFontGroup);
        aDocOnlyCB.Enable(FALSE);
     }
     else
     {
         SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
-        const SvxFontItem& rFont = bCJKMode ? pColl->GetCJKFont() : pColl->GetFont();
+        const SvxFontItem& rFont = !nFontGroup ? pColl->GetFont() :
+                FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellStd = sStdBackup =  rFont.GetFamilyName();
 
         pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_HEADLINE_BASE);
-        const SvxFontItem& rFontHL = bCJKMode ? pColl->GetCJKFont() : pColl->GetFont();
+        const SvxFontItem& rFontHL = !nFontGroup ? pColl->GetFont() :
+                FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellTitle = sOutBackup = rFontHL.GetFamilyName();
 
-        USHORT nFontWhich = bCJKMode ? RES_CHRATR_CJK_FONT : RES_CHRATR_FONT;
+        USHORT nFontWhich = nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONT :
+            FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONT : RES_CHRATR_CTL_FONT;
         pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_NUMBUL_BASE);
-        const SvxFontItem& rFontLS = bCJKMode ? pColl->GetCJKFont() : pColl->GetFont();
+        const SvxFontItem& rFontLS = !nFontGroup ? pColl->GetFont() :
+                FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         bListDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, FALSE);
         sShellList = sListBackup = rFontLS.GetFamilyName();
 
         pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_LABEL);
         bLabelDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, FALSE);
-        const SvxFontItem& rFontCP = bCJKMode ? pColl->GetCJKFont() : pColl->GetFont();
+        const SvxFontItem& rFontCP = !nFontGroup ? pColl->GetFont() :
+                FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellLabel = sCapBackup = rFontCP.GetFamilyName();
 
         pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_REGISTER_BASE);
         bIdxDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, FALSE);
-        const SvxFontItem& rFontIDX = bCJKMode ? pColl->GetCJKFont() : pColl->GetFont();
+        const SvxFontItem& rFontIDX = !nFontGroup ? pColl->GetFont() :
+                FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellIndex = sIdxBackup = rFontIDX.GetFamilyName();
     }
     aStandardBox.SetText(sStdBackup );
@@ -903,19 +920,12 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet )
 
 IMPL_LINK( SwStdFontTabPage, StandardHdl, PushButton *, EMPTYARG )
 {
-    static USHORT aIdArr[5][2] = {
-        { FONT_STANDARD,    FONT_STANDARD_CJK },
-        { FONT_OUTLINE,     FONT_OUTLINE_CJK },
-        { FONT_LIST,        FONT_LIST_CJK },
-        { FONT_CAPTION,     FONT_CAPTION_CJK },
-        { FONT_INDEX,       FONT_INDEX_CJK }
-    };
-    USHORT nOff = bCJKMode ? 1 : 0;
-    aStandardBox.SetText(SwStdFontConfig::GetDefaultFor(aIdArr[0][nOff], eLanguage));
-    aTitleBox   .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[1][nOff], eLanguage));
-    aListBox    .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[2][nOff], eLanguage));
-    aLabelBox   .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[3][nOff], eLanguage));
-    aIdxBox     .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[4][nOff], eLanguage));
+    sal_uInt8 nFontOffset = nFontGroup * FONT_PER_GROUP;
+    aStandardBox.SetText(SwStdFontConfig::GetDefaultFor(FONT_STANDARD + nFontOffset, eLanguage));
+    aTitleBox   .SetText(SwStdFontConfig::GetDefaultFor(FONT_OUTLINE  + nFontOffset, eLanguage));
+    aListBox    .SetText(SwStdFontConfig::GetDefaultFor(FONT_LIST     + nFontOffset, eLanguage));
+    aLabelBox   .SetText(SwStdFontConfig::GetDefaultFor(FONT_CAPTION  + nFontOffset, eLanguage));
+    aIdxBox     .SetText(SwStdFontConfig::GetDefaultFor(FONT_INDEX    + nFontOffset, eLanguage));
 
     aStandardBox.SaveValue();
     aTitleBox   .SaveValue();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:18:57 $
+ *  last change: $Author: os $ $Date: 2002-06-11 08:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,13 @@ Sequence<OUString> SwStdFontConfig::GetPropertyNames()
         "DefaultFontCJK/List",     // 7
         "DefaultFontCJK/Caption",  // 8
         "DefaultFontCJK/Index",    // 9
+        "DefaultFontCTL/Standard", // 10
+        "DefaultFontCTL/Heading",  // 11
+        "DefaultFontCTL/List",     // 12
+        "DefaultFontCTL/Caption",  // 13
+        "DefaultFontCTL/Index",    // 14
     };
-    const int nCount = 10;
+    const int nCount = 15;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -178,6 +183,7 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
     LanguageType eLang = GetAppLanguage();
     String sDefFont(GetDefaultFor(FONT_STANDARD, eLang));
     String sDefFontCJK(GetDefaultFor(FONT_STANDARD_CJK, eLang));
+    String sDefFontCTL(GetDefaultFor(FONT_STANDARD_CTL, eLang));
     switch( nFontType )
     {
         case FONT_STANDARD:
@@ -186,8 +192,12 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
         case FONT_STANDARD_CJK:
             bSame = sDefaultFonts[nFontType] == sDefFontCJK;
         break;
+        case FONT_STANDARD_CTL:
+            bSame = sDefaultFonts[nFontType] == sDefFontCTL;
+        break;
         case FONT_OUTLINE :
         case FONT_OUTLINE_CJK :
+        case FONT_OUTLINE_CTL :
             bSame = sDefaultFonts[nFontType] ==
                 GetDefaultFor(nFontType, eLang);
         break;
@@ -203,6 +213,14 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
         {
             BOOL b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCJK;
             bSame = b1 && sDefaultFonts[nFontType] == sDefFontCJK;
+        }
+        break;
+        case FONT_LIST_CTL    :
+        case FONT_CAPTION_CTL :
+        case FONT_INDEX_CTL   :
+        {
+            BOOL b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCTL;
+            bSame = b1 && sDefaultFonts[nFontType] == sDefFontCTL;
         }
         break;
     }
@@ -224,11 +242,20 @@ String  SwStdFontConfig::GetDefaultFor(USHORT nFontType, LanguageType eLang)
         case FONT_OUTLINE_CJK :
             nFontId = DEFAULTFONT_CJK_HEADING;
         break;
+        case FONT_OUTLINE_CTL :
+            nFontId = DEFAULTFONT_CTL_HEADING;
+        break;
         case FONT_STANDARD_CJK:
         case FONT_LIST_CJK    :
         case FONT_CAPTION_CJK :
         case FONT_INDEX_CJK   :
             nFontId = DEFAULTFONT_CJK_TEXT;
+        break;
+        case FONT_STANDARD_CTL:
+        case FONT_LIST_CTL    :
+        case FONT_CAPTION_CTL :
+        case FONT_INDEX_CTL   :
+            nFontId = DEFAULTFONT_CTL_TEXT;
         break;
 //        case FONT_STANDARD:
 //        case FONT_LIST    :

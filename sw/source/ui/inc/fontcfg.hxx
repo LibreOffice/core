@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-08-15 09:50:39 $
+ *  last change: $Author: os $ $Date: 2002-06-11 08:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,18 @@
 #define FONT_LIST_CJK       7
 #define FONT_CAPTION_CJK    8
 #define FONT_INDEX_CJK      9
-#define DEF_FONT_COUNT      10
+#define FONT_STANDARD_CTL   10
+#define FONT_OUTLINE_CTL    11
+#define FONT_LIST_CTL       12
+#define FONT_CAPTION_CTL    13
+#define FONT_INDEX_CTL      14
+#define DEF_FONT_COUNT      15
 
+#define FONT_PER_GROUP      5
+
+#define FONT_GROUP_DEFAULT  0
+#define FONT_GROUP_CJK      1
+#define FONT_GROUP_CTL      2
 
 class SwStdFontConfig : public utl::ConfigItem
 {
@@ -104,26 +114,26 @@ public:
 
     virtual void    Commit();
 
-    const String&   GetFontStandard(sal_Bool bCJK) const {return sDefaultFonts[bCJK ? FONT_STANDARD_CJK : FONT_STANDARD];}
-    const String&   GetFontOutline(sal_Bool bCJK)  const {return sDefaultFonts[bCJK ? FONT_OUTLINE_CJK : FONT_OUTLINE];}
-    const String&   GetFontList   (sal_Bool bCJK)  const {return sDefaultFonts[bCJK ? FONT_LIST_CJK : FONT_LIST];}
-    const String&   GetFontCaption(sal_Bool bCJK)  const {return sDefaultFonts[bCJK ? FONT_CAPTION_CJK : FONT_CAPTION];}
-    const String&   GetFontIndex  (sal_Bool bCJK)  const {return sDefaultFonts[bCJK ? FONT_INDEX_CJK : FONT_INDEX];}
+    const String&   GetFontStandard(sal_uInt8 nFontGroup) const {return sDefaultFonts[FONT_STANDARD + FONT_PER_GROUP * nFontGroup];}
+    const String&   GetFontOutline(sal_uInt8 nFontGroup)  const {return sDefaultFonts[FONT_OUTLINE + FONT_PER_GROUP * nFontGroup];}
+    const String&   GetFontList   (sal_uInt8 nFontGroup)  const {return sDefaultFonts[FONT_LIST + FONT_PER_GROUP * nFontGroup];}
+    const String&   GetFontCaption(sal_uInt8 nFontGroup)  const {return sDefaultFonts[FONT_CAPTION + FONT_PER_GROUP * nFontGroup];}
+    const String&   GetFontIndex  (sal_uInt8 nFontGroup)  const {return sDefaultFonts[FONT_INDEX + FONT_PER_GROUP * nFontGroup];}
 
     const String&   GetFontFor(USHORT nFontType)  const {return sDefaultFonts[nFontType];}
     BOOL            IsFontDefault(USHORT nFontType) const;
 
-    void     SetFontStandard(const String& rSet, sal_Bool bCJK)
-                    {ChangeString(bCJK ? FONT_STANDARD_CJK : FONT_STANDARD, rSet);}
+    void     SetFontStandard(const String& rSet, sal_uInt8 nFontGroup)
+                    {ChangeString(FONT_STANDARD + FONT_PER_GROUP * nFontGroup, rSet);}
 
-    void     SetFontOutline(const String& rSet, sal_Bool bCJK)
-                    {    ChangeString(bCJK ? FONT_OUTLINE_CJK : FONT_OUTLINE, rSet);}
-    void     SetFontList   (const String& rSet, sal_Bool bCJK)
-                    {    ChangeString(bCJK ? FONT_LIST_CJK : FONT_LIST, rSet);}
-    void     SetFontCaption(const String& rSet, sal_Bool bCJK)
-                    {    ChangeString(bCJK ? FONT_CAPTION_CJK : FONT_CAPTION, rSet);}
-    void     SetFontIndex  (const String& rSet, sal_Bool bCJK)
-                    {    ChangeString(bCJK ? FONT_INDEX_CJK : FONT_INDEX, rSet);}
+    void     SetFontOutline(const String& rSet, sal_uInt8 nFontGroup)
+                    {    ChangeString(FONT_OUTLINE + FONT_PER_GROUP * nFontGroup, rSet);}
+    void     SetFontList   (const String& rSet, sal_uInt8 nFontGroup)
+                    {    ChangeString(FONT_LIST + FONT_PER_GROUP * nFontGroup, rSet);}
+    void     SetFontCaption(const String& rSet, sal_uInt8 nFontGroup)
+                    {    ChangeString(FONT_CAPTION + FONT_PER_GROUP * nFontGroup, rSet);}
+    void     SetFontIndex  (const String& rSet, sal_uInt8 nFontGroup)
+                    {    ChangeString(FONT_INDEX + FONT_PER_GROUP * nFontGroup, rSet);}
 
     static String   GetDefaultFor(USHORT nFontType, LanguageType eLang);
 };

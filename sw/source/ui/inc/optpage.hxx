@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:51:50 $
+ *  last change: $Author: os $ $Date: 2002-06-11 08:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,9 @@
 #ifndef _SVX_FNTCTRL_HXX //autogen
 #include <svx/fntctrl.hxx>
 #endif
-
+#ifndef _FONTCFG_HXX
+#include <fontcfg.hxx>
+#endif
 class SvStringsDtor;
 class SfxPrinter;
 class SwStdFontConfig;
@@ -246,10 +248,12 @@ class SwStdFontTabPage : public SfxTabPage
     BOOL    bIdxDefault     :1;
     BOOL    bSetIdxDefault  :1;
     BOOL    bDeletePrinter :1;
-    BOOL    bCJKMode : 1;
+
+    sal_uInt8 nFontGroup; //fontcfg.hxx: FONT_GROUP_[STANDARD|CJK|CTL]
 
     String sScriptWestern;
     String sScriptAsian;
+    String sScriptComplex;
 
     DECL_LINK( StandardHdl, PushButton * );
     DECL_LINK( ModifyHdl, ComboBox * );
@@ -265,7 +269,7 @@ public:
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
-    void    SetCJKMode() {bCJKMode = TRUE;}
+    void    SetFontMode(sal_uInt8 nGroup) {nFontGroup = nGroup;}
 };
 
 /*-----------------18.01.97 12.10-------------------

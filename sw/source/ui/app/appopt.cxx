@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
+ *  last change: $Author: os $ $Date: 2002-06-11 08:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,9 +600,11 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
         break;
         case RID_SW_TP_STD_FONT:
         case RID_SW_TP_STD_FONT_CJK:
+        case RID_SW_TP_STD_FONT_CTL:
             pRet = SwStdFontTabPage::Create(pParent, rSet);
-            if(RID_SW_TP_STD_FONT_CJK == nId)
-                ((SwStdFontTabPage*)pRet)->SetCJKMode();
+            if(RID_SW_TP_STD_FONT != nId)
+                ((SwStdFontTabPage*)pRet)->SetFontMode(
+                        RID_SW_TP_STD_FONT_CJK == nId ? FONT_GROUP_CJK : FONT_GROUP_CTL);
         break;
         case RID_SW_TP_HTML_OPTPRINT_PAGE:
         case RID_SW_TP_OPTPRINT_PAGE:
