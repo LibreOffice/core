@@ -21360,3 +21360,11 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ??0?$pair@PBV?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VSvxAccessibleEditableTextPara@@@@PAV1@@_STL@@QAE@ABQBV?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VSvxAccessibleEditableTextPara@@@@ABQAV2@@Z
 ?copy@_STL@@YAPAV?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VSvxAccessibleEditableTextPara@@@@PBV2@0PAV2@@Z
 ?erase@?$vector@V?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VSvxAccessibleEditableTextPara@@@@V?$allocator@V?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VSvxAccessibleEditableTextPara@@@@@_STL@@@_STL@@QAEPAV?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VSvxAccessibleEditableTextPara@@@@PAV3@0@Z
+?GetFocusHdl@SdrHdlList@@QBEPAVSdrHdl@@XZ
+?GetNextBigger@SdrHdl@@IBE?AW4BitmapMarkerKind@@W42@@Z
+?GetView@SdrHdlList@@QBEPAVSdrMarkView@@XZ
+?IsFocusHdl@SdrHdl@@UBEEXZ
+?ResetFocusHdl@SdrHdlList@@QAEXXZ
+?SetFocusHdl@SdrHdlList@@QAEXPAVSdrHdl@@@Z
+?TravelFocusHdl@SdrHdlList@@QAEXE@Z
+?StateChanged@FmFormNavigationDispatcher@@MAEXGGPBVSfxPoolItem@@@Z
