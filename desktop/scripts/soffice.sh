@@ -65,10 +65,6 @@
 # export SAL_ENABLE_FILE_LOCKING
 #
 
-# uncomment this to remote start soffice on hostname
-# SO_REMOTE_START=rsh
-# SO_REMOTE_APPLICATION=hostname:/fully_quallified_path/soffice
-
 # set -x
 
 # resolve installation directory
@@ -76,10 +72,6 @@ sd_cwd="`pwd`"
 if [ -h "$0" ] ; then
     sd_basename=`basename "$0"`
      sd_script=`ls -l "$0" | sed "s/.*${sd_basename} -> //g"`
-     sd_sub=`echo $sd_script | cut -f1 -d/`
-    if [ "$sd_sub" = ".." -a "$SO_MODE" = "" ]; then
-        SO_MODE="remote"
-    fi
     cd "`dirname "$0"`"
     cd "`dirname "$sd_script"`"
 else
@@ -87,12 +79,6 @@ else
 fi
 
 sd_prog="`pwd`"
-if [ "$SO_MODE" = "" ]; then
-    SO_MODE="local";
-fi
-export SO_MODE
-
-sd_progsub=$sd_prog/$SO_MODE
 
 cd ..
 sd_binary=`basename "$0"`".bin"
@@ -112,33 +98,53 @@ fi
 # set search path for shared libraries
 sd_platform=`uname -s`
 case $sd_platform in
-  SunOS)
-    LD_LIBRARY_PATH="$sd_progsub":"$sd_prog":/usr/openwin/lib:/usr/dt/lib:$LD_LIBRARY_PATH
-    export LD_LIBRARY_PATH
-    ;;
-
   AIX)
-    LIBPATH="$sd_progsub":"$sd_prog":$LIBPATH
+    # this is a temporary hack until we can live with the default search paths
+    if [ $LIBPATH ]; then
+      SYSTEM_LIBPATH=$LIBPATH
+      export SYSTEM_LIBPATH
+    fi
+    LIBPATH="$sd_prog":$LIBPATH
     export LIBPATH
     ;;
 
   Darwin)
-    DYLD_LIBRARY_PATH="$sd_progsub":"$sd_prog":$DYLD_LIBRARY_PATH
+    # this is a temporary hack until we can live with the default search paths
+    if [ $DYLD_LIBRARY_PATH ]; then
+      SYSTEM_DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH
+      export SYSTEM_DYLD_LIBRARY_PATH
+    fi
+    DYLD_LIBRARY_PATH="$sd_prog":$DYLD_LIBRARY_PATH
     export DYLD_LIBRARY_PATH
     ;;
 
   HP-UX)
-    SHLIB_PATH="$sd_progsub":"$sd_prog":/usr/openwin/lib:$SHLIB_PATH
+    # this is a temporary hack until we can live with the default search paths
+    if [ $SHLIB_PATH ]; then
+      SYSTEM_SHLIB_PATH=$SHLIB_PATH
+      export SYSTEM_SHLIB_PATH
+    fi
+    SHLIB_PATH="$sd_prog":/usr/openwin/lib:$SHLIB_PATH
     export SHLIB_PATH
     ;;
 
   IRIX*)
-    LD_LIBRARYN32_PATH=:"$sd_progsub":"$sd_prog":$LD_LIBRARYN32_PATH
+    # this is a temporary hack until we can live with the default search paths
+    if [ $LD_LIBRARYN32_PATH ]; then
+       SYSTEM_LD_LIBRARYN32_PATH=$LD_LIBRARYN32_PATH
+       export SYSTEM_LD_LIBRARYN32_PATH
+    fi
+    LD_LIBRARYN32_PATH=:"$sd_prog":$LD_LIBRARYN32_PATH
     export LD_LIBRARYN32_PATH
     ;;
 
   *)
-    LD_LIBRARY_PATH="$sd_progsub":"$sd_prog":$LD_LIBRARY_PATH
+    # this is a temporary hack until we can live with the default search paths
+    if [ $LD_LIBRARY_PATH ]; then
+      SYSTEM_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+      export SYSTEM_LD_LIBRARY_PATH
+    fi
+    LD_LIBRARY_PATH="$sd_prog":$LD_LIBRARY_PATH
     export LD_LIBRARY_PATH
     ;;
 esac
@@ -167,9 +173,6 @@ if [ -x "$sd_prog/javaldx" ] ; then
     fi
 fi
 
-# set java environment variables
-THREADS_TYPE=native_threads
-
 # misc. environment variables
 OPENOFFICE_MOZILLA_FIVE_HOME="$sd_inst/program"
 export OPENOFFICE_MOZILLA_FIVE_HOME
@@ -178,31 +181,6 @@ unset XENVIRONMENT
 
 # uncomment line below to disable anti aliasing of fonts
 # SAL_ANTIALIAS_DISABLE=true; export SAL_ANTIALIAS_DISABLE
-
-# error message function
-err () {
-    echo "`basename $0`: $@" 1>&2
-    exit 1
-}
-
-# start soffice by remote shell
-if [ "X${SO_REMOTE_START}" = "Xrsh" ]; then
-    remote_server=`echo ${SO_REMOTE_APPLICATION} | sed 's/:.*//g'`
-    remote_path=`echo ${SO_REMOTE_APPLICATION} | sed 's/.*://g'`
-    echo remote_server=\"${remote_server}\" remote_path=\"${remote_path}\"
-    if [ "X${DISPLAY}" = "X" ]; then
-        local_display=`uname -n`:0
-    else
-        local_display=${DISPLAY}
-    fi
-
-    if [ "X${remote_server}" != "X" -a "X${remote_path}" != "X" ]; then
-        rsh ${remote_server} ${remote_path} -norsh -display ${local_display}
-        exit 0
-    else
-        err "invalid rsh arguments host=\"$remote_server\", command=\"${remote_path}\""
-    fi
-fi
 
 # pagein
 for sd_arg in ${1+"$@"} ; do
