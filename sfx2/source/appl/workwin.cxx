@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:53:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1449,7 +1449,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
             {
                 // Wenn der Focus auf dem Childwindow sitzt, mu\s er auf das aktuelle
                 // Dokument gesetzt werden
-                // Nein !! Das führt gerne mal zu Rekursionen, da im GetFocus-Notify erneut ein Update ausgel"ost wird!
+                // Nein !! Das fuehrt gerne mal zu Rekursionen, da im GetFocus-Notify erneut ein Update ausgel"ost wird!
                 // ->#66426#
                 // SfxViewFrame *pView = SfxViewFrame::Current();
                 // if ( pView )
@@ -2113,7 +2113,7 @@ void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId, BOOL bSetFocus)
                 {
                     // Wenn der Focus auf dem Childwindow sitzt, mu\s er auf das aktuelle
                     // Dokument gesetzt werden
-                    // Nein !! Das führt gerne mal zu Rekursionen, da im GetFocus-Notify erneut ein Update ausgel"ost wird!
+                    // Nein !! Das fuehrt gerne mal zu Rekursionen, da im GetFocus-Notify erneut ein Update ausgel"ost wird!
                 // ->#66426#
                     // SfxViewFrame *pView = SfxViewFrame::Current();
                     // if ( pView )
