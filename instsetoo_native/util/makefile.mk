@@ -2,9 +2,6 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
-#
-#   last change: $Author: rt $ $Date: 2004-11-16 13:32:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,12 +57,14 @@
 #
 #*************************************************************************
 PRJ=..
-PRJNAME=OpenOffice
+PRJNAME=instsetoo_native
 TARGET=util
 GEN_HID2=TRUE
 
 .INCLUDE:  settings.mk
 .EXPORT: LAST_MINOR
+.EXPORT: PRJ
+.EXPORT: PRJNAME
 
 SHARED_COM_SDK_PATH*:=.
 
@@ -73,6 +72,26 @@ INSTALLDIR=$(OUT)
 
 .INCLUDE: target.mk
 
+.IF "$(OS)" == "LINUX"
+FORMAT*=-format rpm
+.ENDIF
+
+.IF "$(OS)" == "SOLARIS"
+FORMAT*=-format pkg
+.ENDIF
+
+# epm supports the following formats:
+# aix - AIX software distribution
+# bsd - FreeBSD, NetBSD, or OpenBSD software distribution
+# depot or swinstall - HP-UX software distribution
+# dpkg - Debian software distribution
+# inst or tardist - IRIX software distribution
+# osx - MacOS X software distribution
+# pkg - Solaris software distribution
+# rpm - RedHat software distribution
+# setld - Tru64 (setld) software distribution
+# native - "Native" software distribution for the platform
+# portable - Portable software distribution
 
 .IF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : openoffice
@@ -98,10 +117,10 @@ openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
 ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
 
 openoffice_%:
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f openoffice.lst -l $(@:s/openoffice_//) -p OpenOffice -packagelist ..$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate ..$/inc_openoffice$/windows$/msi_templates -msilanguage $(COMMONMISC)$/win_ulffiles -rpm
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/openoffice_//) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(PRJ)$/inc_openoffice$/windows$/msi_templates -msilanguage $(COMMONMISC)$/win_ulffiles $(FORMAT)
 
 ooolanguagepack_%:
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f openoffice.lst -l $(@:s/ooolanguagepack_//) -p OpenOffice -packagelist ..$/inc_openoffice$/unix$/packagelist_language.txt -u $(OUT) -buildid $(BUILD) -msitemplate ..$/inc_ooolangpack$/windows$/msi_templates -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack -rpm
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/ooolanguagepack_//) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist_language.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(PRJ)$/inc_ooolangpack$/windows$/msi_templates -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack $(FORMAT)
 
 .ELSE			# "$(alllangiso)"!=""
 openoffice:
