@@ -2,7 +2,7 @@
 
 .IF "$(APP1LINKTYPE)" != ""
 #darf nur STATIC oder SHARED sein
-APP_LINKTYPE=$(APPLINK$(APP1LINKTYPE))
+APP1LINKTYPEFLAG=$(APPLINK$(APP1LINKTYPE))
 .ENDIF
 
 .IF "$(APP1STACK)" != ""
@@ -68,7 +68,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP1STDLIBS) $(STDLIB) $(STDLIB1)` \
-    $(APP_LINKTYPE) $(APP1STDLIBS) $(STDLIB) $(STDLIB1) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP1LINKTYPEFLAG) $(APP1STDLIBS) $(STDLIB) $(STDLIB1) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -94,7 +94,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP1OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP1LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(STDLIB) $(STDLIB1) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP1LINKTYPEFLAG) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(STDLIB) $(STDLIB1) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -180,7 +180,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 
 .IF "$(APP2LINKTYPE)" != ""
 #darf nur STATIC oder SHARED sein
-APP_LINKTYPE=$(APPLINK$(APP2LINKTYPE))
+APP2LINKTYPEFLAG=$(APPLINK$(APP2LINKTYPE))
 .ENDIF
 
 .IF "$(APP2STACK)" != ""
@@ -246,7 +246,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP2STDLIBS) $(STDLIB) $(STDLIB2)` \
-    $(APP_LINKTYPE) $(APP2STDLIBS) $(STDLIB) $(STDLIB2) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP2LINKTYPEFLAG) $(APP2STDLIBS) $(STDLIB) $(STDLIB2) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -272,7 +272,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP2OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP2LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(STDLIB) $(STDLIB2) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP2LINKTYPEFLAG) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(STDLIB) $(STDLIB2) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -358,7 +358,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 
 .IF "$(APP3LINKTYPE)" != ""
 #darf nur STATIC oder SHARED sein
-APP_LINKTYPE=$(APPLINK$(APP3LINKTYPE))
+APP3LINKTYPEFLAG=$(APPLINK$(APP3LINKTYPE))
 .ENDIF
 
 .IF "$(APP3STACK)" != ""
@@ -424,7 +424,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP3STDLIBS) $(STDLIB) $(STDLIB3)` \
-    $(APP_LINKTYPE) $(APP3STDLIBS) $(STDLIB) $(STDLIB3) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP3LINKTYPEFLAG) $(APP3STDLIBS) $(STDLIB) $(STDLIB3) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -450,7 +450,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP3OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP3LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(STDLIB) $(STDLIB3) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP3LINKTYPEFLAG) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(STDLIB) $(STDLIB3) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -536,7 +536,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 
 .IF "$(APP4LINKTYPE)" != ""
 #darf nur STATIC oder SHARED sein
-APP_LINKTYPE=$(APPLINK$(APP4LINKTYPE))
+APP4LINKTYPEFLAG=$(APPLINK$(APP4LINKTYPE))
 .ENDIF
 
 .IF "$(APP4STACK)" != ""
@@ -602,7 +602,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP4STDLIBS) $(STDLIB) $(STDLIB4)` \
-    $(APP_LINKTYPE) $(APP4STDLIBS) $(STDLIB) $(STDLIB4) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP4LINKTYPEFLAG) $(APP4STDLIBS) $(STDLIB) $(STDLIB4) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -628,7 +628,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP4OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP4LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(STDLIB) $(STDLIB4) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP4LINKTYPEFLAG) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(STDLIB) $(STDLIB4) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -714,7 +714,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 
 .IF "$(APP5LINKTYPE)" != ""
 #darf nur STATIC oder SHARED sein
-APP_LINKTYPE=$(APPLINK$(APP5LINKTYPE))
+APP5LINKTYPEFLAG=$(APPLINK$(APP5LINKTYPE))
 .ENDIF
 
 .IF "$(APP5STACK)" != ""
@@ -780,7 +780,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP5STDLIBS) $(STDLIB) $(STDLIB5)` \
-    $(APP_LINKTYPE) $(APP5STDLIBS) $(STDLIB) $(STDLIB5) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP5LINKTYPEFLAG) $(APP5STDLIBS) $(STDLIB) $(STDLIB5) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -806,7 +806,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP5OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP5LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(STDLIB) $(STDLIB5) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP5LINKTYPEFLAG) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(STDLIB) $(STDLIB5) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -892,7 +892,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 
 .IF "$(APP6LINKTYPE)" != ""
 #darf nur STATIC oder SHARED sein
-APP_LINKTYPE=$(APPLINK$(APP6LINKTYPE))
+APP6LINKTYPEFLAG=$(APPLINK$(APP6LINKTYPE))
 .ENDIF
 
 .IF "$(APP6STACK)" != ""
@@ -958,7 +958,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP6STDLIBS) $(STDLIB) $(STDLIB6)` \
-    $(APP_LINKTYPE) $(APP6STDLIBS) $(STDLIB) $(STDLIB6) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP6LINKTYPEFLAG) $(APP6STDLIBS) $(STDLIB) $(STDLIB6) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -984,7 +984,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP6OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP6LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(STDLIB) $(STDLIB6) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP6LINKTYPEFLAG) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(STDLIB) $(STDLIB6) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1070,7 +1070,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 
 .IF "$(APP7LINKTYPE)" != ""
 #darf nur STATIC oder SHARED sein
-APP_LINKTYPE=$(APPLINK$(APP7LINKTYPE))
+APP7LINKTYPEFLAG=$(APPLINK$(APP7LINKTYPE))
 .ENDIF
 
 .IF "$(APP7STACK)" != ""
@@ -1136,7 +1136,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP7STDLIBS) $(STDLIB) $(STDLIB7)` \
-    $(APP_LINKTYPE) $(APP7STDLIBS) $(STDLIB) $(STDLIB7) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP7LINKTYPEFLAG) $(APP7STDLIBS) $(STDLIB) $(STDLIB7) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1162,7 +1162,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP7OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP7LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(STDLIB) $(STDLIB7) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP7LINKTYPEFLAG) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(STDLIB) $(STDLIB7) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1248,7 +1248,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 
 .IF "$(APP8LINKTYPE)" != ""
 #darf nur STATIC oder SHARED sein
-APP_LINKTYPE=$(APPLINK$(APP8LINKTYPE))
+APP8LINKTYPEFLAG=$(APPLINK$(APP8LINKTYPE))
 .ENDIF
 
 .IF "$(APP8STACK)" != ""
@@ -1314,7 +1314,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP8STDLIBS) $(STDLIB) $(STDLIB8)` \
-    $(APP_LINKTYPE) $(APP8STDLIBS) $(STDLIB) $(STDLIB8) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP8LINKTYPEFLAG) $(APP8STDLIBS) $(STDLIB) $(STDLIB8) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1340,7 +1340,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP8OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP8LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(STDLIB) $(STDLIB8) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP8LINKTYPEFLAG) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(STDLIB) $(STDLIB8) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1426,7 +1426,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 
 .IF "$(APP9LINKTYPE)" != ""
 #darf nur STATIC oder SHARED sein
-APP_LINKTYPE=$(APPLINK$(APP9LINKTYPE))
+APP9LINKTYPEFLAG=$(APPLINK$(APP9LINKTYPE))
 .ENDIF
 
 .IF "$(APP9STACK)" != ""
@@ -1492,7 +1492,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP9STDLIBS) $(STDLIB) $(STDLIB9)` \
-    $(APP_LINKTYPE) $(APP9STDLIBS) $(STDLIB) $(STDLIB9) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP9LINKTYPEFLAG) $(APP9STDLIBS) $(STDLIB) $(STDLIB9) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1518,7 +1518,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP9OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP9LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(STDLIB) $(STDLIB9) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP9LINKTYPEFLAG) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(STDLIB) $(STDLIB9) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1604,7 +1604,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 
 .IF "$(APP10LINKTYPE)" != ""
 #darf nur STATIC oder SHARED sein
-APP_LINKTYPE=$(APPLINK$(APP10LINKTYPE))
+APP10LINKTYPEFLAG=$(APPLINK$(APP10LINKTYPE))
 .ENDIF
 
 .IF "$(APP10STACK)" != ""
@@ -1670,7 +1670,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP10STDLIBS) $(STDLIB) $(STDLIB10)` \
-    $(APP_LINKTYPE) $(APP10STDLIBS) $(STDLIB) $(STDLIB10) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP10LINKTYPEFLAG) $(APP10STDLIBS) $(STDLIB) $(STDLIB10) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1696,7 +1696,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP10OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP10LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(STDLIB) $(STDLIB10) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP10LINKTYPEFLAG) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(STDLIB) $(STDLIB10) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
