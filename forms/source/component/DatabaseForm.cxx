@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:36:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,6 +479,8 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
     {
         m_aFilterManager.initialize( this, m_xAggregateSet );
         m_aParameterManager.initialize( this, m_xAggregate );
+
+        declareForwardedProperty( PROPERTY_ID_ACTIVE_CONNECTION );
     }
 
     decrement(m_refCount);
@@ -1557,9 +1559,6 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
         case PROPERTY_ID_DATASOURCE:
             rValue = m_xAggregateSet->getPropertyValue( PROPERTY_DATASOURCE );
             break;
-        case PROPERTY_ID_ACTIVE_CONNECTION:
-            rValue = m_xAggregateSet->getPropertyValue( PROPERTY_ACTIVE_CONNECTION );
-            break;
 
         case PROPERTY_ID_TARGET_URL:
             rValue <<= m_aTargetURL;
@@ -1612,6 +1611,9 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
         case PROPERTY_ID_CONTROL_BORDER_COLOR_INVALID:
             rValue = m_aControlBorderColorInvalid;
             break;
+        default:
+            OPropertySetAggregationHelper::getFastPropertyValue( rValue, nHandle );
+            break;
     }
 }
 
@@ -1642,12 +1644,10 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
         }
         break;
         case PROPERTY_ID_ACTIVE_CONNECTION:
-        {
-            Any aAggregateProperty;
-            getFastPropertyValue(aAggregateProperty, PROPERTY_ID_ACTIVE_CONNECTION);
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, aAggregateProperty, ::getCppuType(static_cast<const Reference<XConnection>*>(NULL)));
-        }
-        break;
+            if ( m_bInContext )
+                throw PropertyVetoException();
+            bModified = OPropertySetAggregationHelper::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
+            break;
         case PROPERTY_ID_TARGET_URL:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aTargetURL);
             break;
@@ -1697,7 +1697,8 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
             bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aControlBorderColorInvalid, getCppuType( static_cast< sal_Int32* >( NULL ) ) );
             break;
         default:
-            DBG_ERROR("ODatabaseForm::convertFastPropertyValue : unknown property !");
+            bModified = OPropertySetAggregationHelper::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
+            break;
     }
     return bModified;
 }
@@ -1737,21 +1738,6 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
             try
             {
                 m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCE, rValue);
-            }
-            catch(Exception&) { }
-            break;
-
-        case PROPERTY_ID_ACTIVE_CONNECTION:
-            if ( m_bInContext )
-                throw PropertyVetoException();
-            try
-            {
-                if ( m_bSharingConnection )
-                    stopSharingConnection( );
-
-                m_bForwardingConnection = sal_True;
-                m_xAggregateSet->setPropertyValue(PROPERTY_ACTIVE_CONNECTION, rValue);
-                m_bForwardingConnection = sal_False;
             }
             catch(Exception&) { }
             break;
@@ -1806,7 +1792,30 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
             m_aControlBorderColorInvalid = rValue;
             break;
         default:
-            DBG_ERROR("ODatabaseForm::setFastPropertyValue_NoBroadcast : unknown property !");
+            OPropertySetAggregationHelper::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+            break;
+    }
+}
+
+//------------------------------------------------------------------
+void SAL_CALL ODatabaseForm::forwardingPropertyValue( sal_Int32 _nHandle )
+{
+    OSL_ENSURE( _nHandle == PROPERTY_ID_ACTIVE_CONNECTION, "ODatabaseForm::forwardingPropertyValue: unexpected property!" );
+    if ( _nHandle == PROPERTY_ID_ACTIVE_CONNECTION )
+    {
+        if ( m_bSharingConnection )
+            stopSharingConnection( );
+        m_bForwardingConnection = sal_True;
+    }
+}
+
+//------------------------------------------------------------------
+void SAL_CALL ODatabaseForm::forwardedPropertyValue( sal_Int32 _nHandle, bool _bSuccess )
+{
+    OSL_ENSURE( _nHandle == PROPERTY_ID_ACTIVE_CONNECTION, "ODatabaseForm::forwardedPropertyValue: unexpected property!" );
+    if ( _nHandle == PROPERTY_ID_ACTIVE_CONNECTION )
+    {
+        m_bForwardingConnection = sal_False;
     }
 }
 
@@ -2371,7 +2380,7 @@ void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt) throw( Runt
 {
     if ((0 == evt.PropertyName.compareToAscii(PROPERTY_ACTIVE_CONNECTION)) && !m_bForwardingConnection)
     {
-        // the rowset changed it's active connection itself (without interaction from our side), so
+        // the rowset changed its active connection itself (without interaction from our side), so
         // we need to fire this event, too
         sal_Int32 nHandle = PROPERTY_ID_ACTIVE_CONNECTION;
         fire(&nHandle, &evt.NewValue, &evt.OldValue, 1, sal_False);
