@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:54:27 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ xmlNode* findChildNode(const xmlNode * pParent, const xmlChar* pName);
 
 /** gets the value of the updated element from the javavendors.xml.
  */
-javaFrameworkError getElementUpdated(rtl::OString & sValue);
+rtl::OString getElementUpdated();
 
 /** creates the user directory, if it does not exist already.
 
@@ -97,11 +97,9 @@ bool createUserDirectory();
     <java xmlns:="http://openoffice.org/2004/java/framework/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     </java>
 
-    @return
-    JFW_E_NONE
-    JFW_E_ERROR
+
  */
-javaFrameworkError createUserSettingsDocument();
+void createUserSettingsDocument();
 
 /** create the child elements within the root structure for each platform.
 
@@ -109,20 +107,20 @@ javaFrameworkError createUserSettingsDocument();
     [out]If true then the respective structure of elements was added and the
     document needs to be saved.
  */
-javaFrameworkError createSettingsStructure(
+void createSettingsStructure(
     xmlDoc * document, bool * bNeedsSave);
 
-/** copies share settings to user settings.
+/** copies shared settings to user settings.
 
     This must only occur the first time when the javasettings.xml is
-    prepared for the user.
+    prepared for the user. The shared settings shall be provided as bootstrap
+    parameters.
 
     @param userParent
-    The node under which the values are to be copied. For example if classesDirectory is
-    copied, then it is copied to userParent/classesDirectory
+    The node under which the values are to be copied.
 
  */
-javaFrameworkError copyShareSettings(xmlDoc * userDoc, xmlNode* userParent);
+void copyShareSettings(xmlDoc * userDoc, xmlNode* userParent);
 
 /** creates the structure of the documend.
 
@@ -137,7 +135,7 @@ javaFrameworkError copyShareSettings(xmlDoc * userDoc, xmlNode* userParent);
     @return
     JFW_E_CONFIG_READWRITE
  */
-javaFrameworkError prepareSettingsDocument();
+void prepareSettingsDocument();
 
 class CXmlCharPtr;
 class CNodeJavaInfo
@@ -183,12 +181,12 @@ public:
         If javaInfo@xsi:nil = true then member bNil is set to true
         an no further elements are read.
      */
-    javaFrameworkError loadFromNode(xmlDoc * pDoc,xmlNode * pJavaInfo);
+    void loadFromNode(xmlDoc * pDoc,xmlNode * pJavaInfo);
     /** Only writes user settings. The attribut nil always gets the value
         false. The function gets the value javaSettings/updated from the
         javavendors.xml and writes it to javaInfo@vendorUpdate in javasettings.xml
      */
-    javaFrameworkError writeToNode(xmlDoc * pDoc, xmlNode * pJavaInfo) const;
+    void writeToNode(xmlDoc * pDoc, xmlNode * pJavaInfo) const;
 
     /** returns NULL if javaInfo is nil in both, user and share, settings.
      */
@@ -200,14 +198,16 @@ public:
 class CNodeJava
 {
     /** Share settings are a special case. Per default
-        there are only user settings.
+        there are only user settings. Currently there need not be
+        a share settings file. In that case the function returns
+        without throwing an exception.
      */
-    javaFrameworkError loadShareSettings();
+    void loadShareSettings();
     /** This function is called after loadShareSettings. Elements which have been
         modified by the user, that is, the attribute xsi:nil = false, overwrite the
         values which have been retrieved with loadShareSettings.
     */
-    javaFrameworkError loadUserSettings();
+    void loadUserSettings();
 
     /** User configurable option.  /java/enabled
         The value is valid after loadFromSettings has been called
@@ -259,13 +259,6 @@ class CNodeJava
     bool m_bJRELocationsModified;
 
 public:
-
-
-
-    // Preset element (cannot be changed.  /java/classesDirectory
-    rtl::OUString m_sClassesDirectory;
-
-
     CNodeJava();
     /** sets m_bEnabled. It also sets a flag, that the value has been
         modified. This will cause that /java/enabled[@xsi:nil] will be
@@ -289,10 +282,11 @@ public:
      */
     void setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect);
     /** returns a JavaInfo structure representing the node
-        /java/javaInfo
+        /java/javaInfo. Every time a new JavaInfo structure is created
+        which needs to be freed by the caller.
         If both, user and share settings are nil, then NULL is returned.
     */
-    JavaInfo * getJavaInfo() const;
+    JavaInfo * createJavaInfo() const;
     /** returns the value of the attribute /java/javaInfo[@vendorUpdate].
      */
     rtl::OString const & getJavaInfoAttrVendorUpdate() const;
@@ -344,10 +338,10 @@ public:
         If the user has not changed them then the nil attribute is
         set to true;
      */
-    javaFrameworkError loadFromSettings();
+    void loadFromSettings();
     /** writes the data to user settings.
      */
-    javaFrameworkError writeSettings() const;
+    void writeSettings() const;
 
 
 };
@@ -379,6 +373,13 @@ public:
 
 struct PluginLibrary
 {
+    PluginLibrary()
+    {
+    }
+    PluginLibrary(rtl::OUString vendor, rtl::OUString path) :
+        sVendor(vendor), sPath(path)
+    {
+    }
     /** contains the vendor string which is later userd in the xml API
      */
     rtl::OUString sVendor;
