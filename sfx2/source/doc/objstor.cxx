@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 12:40:13 $
+ *  last change: $Author: rt $ $Date: 2004-07-20 07:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,7 +913,7 @@ sal_Bool SfxObjectShell::IsOwnStorageFormat_Impl(const SfxMedium &rMedium) const
 {
     return !rMedium.GetFilter() || // Embedded
            ( rMedium.GetFilter()->IsOwnFormat() &&
-             !rMedium.GetFilter()->IsAlienFormat() &&
+             rMedium.GetFilter()->GetVersion() >= SOFFICE_FILEFORMAT_60 &&
              rMedium.GetFilter()->UsesStorage() );
 }
 
