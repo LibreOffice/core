@@ -17,7 +17,5 @@ mkdir: %_DEST%\par%_EXT%\omc
 ..\%__SRC%\par\adm\*.par %_DEST%\par%_EXT%\adm\*.par
 ..\%__SRC%\par\omc\*.par %_DEST%\par%_EXT%\omc\*.par
 
-mkdir: %_DEST%\inc%_EXT%\scp
-
 ..\inc\macros.inc %_DEST%\inc%_EXT%\macros.inc
 ..\%__SRC%\inc\langmacros.inc %_DEST%\inc%_EXT%\langmacros.inc
