@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-19 13:35:16 $
+ *  last change: $Author: fs $ $Date: 2002-07-19 15:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1387,8 +1387,7 @@ void SwContentTree::Display( sal_Bool bActive )
 {
     if(!bIsImageListInitialized)
     {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        USHORT nResId = rStyleSettings.GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        USHORT nResId = GetDisplayBackground().GetColor().IsDark() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
         aEntryImages = ImageList(SW_RES(nResId));
         bIsImageListInitialized = sal_True;
     }
@@ -3242,8 +3241,7 @@ void    SwContentTree::DataChanged( const DataChangedEvent& rDCEvt )
   if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        USHORT nResId = rStyleSettings.GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        USHORT nResId = GetDisplayBackground().GetColor().IsDark() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
         aEntryImages = ImageList(SW_RES(nResId));
         FindActiveTypeAndRemoveUserData();
         Display(sal_True);

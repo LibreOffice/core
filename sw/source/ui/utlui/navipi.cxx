@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-06-25 08:56:11 $
+ *  last change: $Author: fs $ $Date: 2002-07-19 15:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1411,9 +1411,8 @@ void SwNavigationPI::SetRegionDropMode(USHORT nNewMode)
     else if(nRegionMode == REGION_MODE_EMBEDDED)
         nId = FN_DROP_REGION_COPY;
 
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    ImageList& rImgLst = rStyleSettings.GetHighContrastMode() ?
-                aContentImageListH : aContentImageList;
+    ImageList& rImgLst = aContentToolBox.GetDisplayBackground().GetColor().IsDark()
+                ? aContentImageListH : aContentImageList;
 
     aContentToolBox.SetItemImage( FN_DROP_REGION,
                                     rImgLst.GetImage(nId));
@@ -1566,8 +1565,7 @@ void SwNavigationPI::DataChanged( const DataChangedEvent& rDCEvt )
  ---------------------------------------------------------------------------*/
 void SwNavigationPI::InitImageList()
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    ImageList& rImgLst = rStyleSettings.GetHighContrastMode() ?
+    ImageList& rImgLst = aContentToolBox.GetDisplayBackground().GetColor().IsDark() ?
                 aContentImageListH : aContentImageList;
     for(USHORT k = 0; k < aContentToolBox.GetItemCount(); k++)
             aContentToolBox.SetItemImage(aContentToolBox.GetItemId(k),

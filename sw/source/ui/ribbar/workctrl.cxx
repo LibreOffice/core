@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-07-05 07:56:41 $
+ *  last change: $Author: fs $ $Date: 2002-07-19 15:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,7 +542,7 @@ void SwScrollNaviPopup::DataChanged( const DataChangedEvent& rDCEvt )
  ---------------------------------------------------------------------------*/
 void SwScrollNaviPopup::ApplyImageList()
 {
-    ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?
+    ImageList& rImgLst = aToolBox.GetDisplayBackground().GetColor().IsDark() ?
         aIListH : aIList;
     for(USHORT i = 0; i < NID_COUNT; i++)
     {

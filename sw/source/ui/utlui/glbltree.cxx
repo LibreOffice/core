@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-06-25 08:56:47 $
+ *  last change: $Author: fs $ $Date: 2002-07-19 15:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,8 +805,7 @@ void    SwGlobalTree::Display(BOOL bOnlyUpdateUserData)
 {
     if(!bIsImageListInitialized)
     {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        USHORT nResId = rStyleSettings.GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        USHORT nResId = GetDisplayBackground().GetColor().IsDark() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
         aEntryImages = ImageList(SW_RES(nResId));
         bIsImageListInitialized = TRUE;
     }
@@ -1507,8 +1506,7 @@ void    SwGlobalTree::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        USHORT nResId = rStyleSettings.GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        USHORT nResId = GetDisplayBackground().GetColor().IsDark() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
         aEntryImages = ImageList(SW_RES(nResId));
         Update(sal_True);
     }
