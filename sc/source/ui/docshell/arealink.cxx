@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:22:20 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svx/linkmgr.hxx>
 #include <svtools/stritem.hxx>
 #include <vcl/msgbox.hxx>
@@ -94,7 +95,7 @@
 
 #include "sc.hrc" //CHINA001
 #include "scabstdlg.hxx" //CHINA001
-TYPEINIT1(ScAreaLink,::so3::SvBaseLink);
+TYPEINIT1(ScAreaLink,::sfx2::SvBaseLink);
 
 //------------------------------------------------------------------------
 
@@ -102,7 +103,7 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
                         const String& rFilter, const String& rOpt,
                         const String& rArea, const ScRange& rDest,
                         ULONG nRefresh ) :
-    ::so3::SvBaseLink(so3::LINKUPDATE_ONCALL,FORMAT_FILE),
+    ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,FORMAT_FILE),
     ScRefreshTimer  ( nRefresh ),
     pDocShell       ((ScDocShell*)pShell),
     aFileName       (rFile),
@@ -145,7 +146,7 @@ BOOL __EXPORT ScAreaLink::Edit(Window* pParent)
 
         //  copy source data from members (set in Refresh) into link name for dialog
         String aLinkName;
-        so3::MakeLnkName( aLinkName, NULL, aFileName, aSourceArea, &aFilterName );
+        sfx2::MakeLnkName( aLinkName, NULL, aFileName, aSourceArea, &aFilterName );
         SetName( aLinkName );
     }
     delete pDlg;
@@ -181,7 +182,7 @@ void __EXPORT ScAreaLink::DataChanged( const String&,
 
             // adjust in dialog:
             String aLinkName;
-            so3::MakeLnkName( aLinkName, NULL, aFile, aArea, &aFilter );
+            sfx2::MakeLnkName( aLinkName, NULL, aFile, aArea, &aFilter );
             SetName( aLinkName );
         }
 
@@ -222,7 +223,7 @@ void ScAreaLink::SetSource(const String& rDoc, const String& rFlt, const String&
 
     //  also update link name for dialog
     String aLinkName;
-    so3::MakeLnkName( aLinkName, NULL, aFileName, aSourceArea, &aFilterName );
+    sfx2::MakeLnkName( aLinkName, NULL, aFileName, aSourceArea, &aFilterName );
     SetName( aLinkName );
 }
 
@@ -301,7 +302,8 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, FALSE, pFilter);
 
     ScDocShell* pSrcShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
-    SvEmbeddedObjectRef aRef = pSrcShell;
+//REMOVE        SvEmbeddedObjectRef aRef = pSrcShell;
+    SfxObjectShellRef aRef = pSrcShell;
     pSrcShell->DoLoad(pMed);
 
     ScDocument* pSrcDoc = pSrcShell->GetDocument();
