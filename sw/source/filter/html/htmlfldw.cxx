@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfldw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
+ *  last change: $Author: er $ $Date: 2001-07-20 18:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld )
             sOut = HTMLOutFuncs::CreateTableDataOptionsValNum( sOut,
                         bNumValue, dNumValue, nFmt,
                         *rHTMLWrt.pDoc->GetNumberFormatter(),
-                        rHTMLWrt.eDestEnc );
+                        rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 
         }
         if( bFixed )
@@ -549,11 +549,14 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfldw.cxx,v 1.3 2001-07-03 07:49:47 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfldw.cxx,v 1.4 2001-07-20 18:33:22 er Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/07/03 07:49:47  mib
+      #88156#: warning for unconvertable chars
+
       Revision 1.2  2000/12/08 15:14:18  mib
       #75662#: Don't add blanks to comments
 

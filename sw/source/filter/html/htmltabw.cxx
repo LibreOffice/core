@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltabw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
+ *  last change: $Author: er $ $Date: 2001-07-20 18:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,7 +575,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if( bNumFmt || bValue )
         sOut = HTMLOutFuncs::CreateTableDataOptionsValNum( sOut,
                     bValue, nValue, nNumFmt, *rWrt.pDoc->GetNumberFormatter(),
-                    rWrt.eDestEnc );
+                    rWrt.eDestEnc, &rWrt.aNonConvertableCharacters );
     sOut += '>';
     rWrt.Strm() << sOut.GetBuffer();
     rWrt.bLFPossible = sal_True;
@@ -1374,11 +1374,14 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmltabw.cxx,v 1.2 2001-07-03 07:49:47 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmltabw.cxx,v 1.3 2001-07-20 18:33:22 er Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/07/03 07:49:47  mib
+      #88156#: warning for unconvertable chars
+
       Revision 1.1.1.1  2000/09/18 17:14:56  hr
       initial import
 
