@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageList.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $  $Date: 2005-02-21 14:05:10 $
+ *  last change: $Author: kz $  $Date: 2005-03-18 16:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  */package com.sun.star.wizards.ui;
 import com.sun.star.awt.*;
 import com.sun.star.lang.EventObject;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.Renderer;
@@ -86,7 +87,7 @@ import javax.swing.event.ListDataListener;
     private XFixedText lblCounter;
     private XControl images[];
     private boolean benabled = true;
-
+    private UnoDialog2 oUnoDialog;
     private Size gap = new Size(4, 4);
     private int cols = 4;
     private int rows = 3;
@@ -144,13 +145,12 @@ import javax.swing.event.ListDataListener;
     }
 
     public void create(UnoDialog2 dialog) {
-
+        oUnoDialog = dialog;
         dialogModel = dialog.xDialogModel;
 
         int imageTextHeight = imageTextLines * LINE_HEIGHT;
 
-
-        PeerConfig opeerConfig = new PeerConfig(dialog.xWindow);
+        PeerConfig opeerConfig = new PeerConfig(dialog);
 
         MOVE_SELECTION_VALS[2] = step;
 
@@ -271,11 +271,17 @@ import javax.swing.event.ListDataListener;
                 setVisible(images[i], false);
         boolean focusable = true;
         for (int i = 0; i < images.length; i++) {
-            Helper.setUnoPropertyValue(images[i].getModel(), "ImageURL", renderer.getImageUrl(getObjectFor(i)));
-            Helper.setUnoPropertyValue(images[i].getModel(), "Tabstop" , focusable ? Boolean.TRUE : Boolean.FALSE);
-            if (refreshOverNull)
-                setVisible(images[i], true);
-            focusable = false;
+            Object[] oResources = renderer.getImageUrls(getObjectFor(i));
+            if (oResources != null) {
+                if (oResources.length == 1)
+                    Helper.setUnoPropertyValue(images[i].getModel(), "ImageURL", (String) oResources[0]);
+                else if (oResources.length == 2)
+                    oUnoDialog.getPeerConfiguration().setImageUrl(images[i].getModel(), oResources[0], oResources[1]);
+                Helper.setUnoPropertyValue(images[i].getModel(), "Tabstop" , focusable ? Boolean.TRUE : Boolean.FALSE);
+                if (refreshOverNull)
+                    setVisible(images[i], true);
+                focusable = false;
+            }
         }
         refreshSelection();
     }
@@ -695,10 +701,10 @@ import javax.swing.event.ListDataListener;
         /**
          *
          * @param listItem
-         * @return an url for the image of the given item,
-         * or an empty string if the given argument is null.
+         * @return two resource ids for an image referenced in the imaglist resourcefile of the
+         * wizards project; The second one of them is designed to be used for High Contrast Mode.
          */
-        public String getImageUrl(Object listItem);
+        public Object[] getImageUrls(Object listItem);
     }
 
     private static class SimpleCounterRenderer implements Renderer {
