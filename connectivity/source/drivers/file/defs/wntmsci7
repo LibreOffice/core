@@ -2171,3 +2171,4 @@ __CTA2?AVIllegalArgumentException@lang@star@sun@com@@
 ?dropColumn@OFileTable@file@connectivity@@UAEXJ@Z
 ??1OSQLAnalyzer@file@connectivity@@QAE@XZ
 ??1?$_Vector_base@U?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_N_Tr@U?$pair@$$CBJJ@_STL@@@2@@_STL@@V?$allocator@U?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_N_Tr@U?$pair@$$CBJJ@_STL@@@2@@_STL@@@2@@_STL@@QAE@XZ
+?equal_range@?$_Rb_tree@JU?$pair@$$CBJJ@_STL@@U?$_S1st@U?$pair@$$CBJJ@_STL@@@2@U?$less@J@2@V?$allocator@U?$pair@$$CBJJ@_STL@@@2@@_STL@@QAE?AU?$pair@U?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_N_Tr@U?$pair@$$CBJJ@_STL@@@2@@_STL@@U12@@2@ABJ@Z
