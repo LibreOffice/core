@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-06 10:37:04 $
+ *  last change: $Author: fs $ $Date: 2002-11-22 14:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,13 +822,50 @@ namespace xmloff
     }
 
     //=====================================================================
+    //= OURLReferenceImport
+    //=====================================================================
+    OURLReferenceImport::OURLReferenceImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const Reference< XNameContainer >& _rxParentContainer,
+            OControlElement::ElementType _eType)
+        :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
+    {
+    }
+
+    //---------------------------------------------------------------------
+    void OURLReferenceImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    {
+        static const sal_Char* s_pTargetLocationAttributeName   = getCommonControlAttributeName( CCA_TARGET_LOCATION );
+        static const sal_Char* s_pImageDataAttributeName        = getCommonControlAttributeName( CCA_IMAGE_DATA );
+
+        // need to make the URL absolute if
+        // * it's the image-data attribute
+        // * it's the target-location attribute, and we're dealign with an object which has the respective property
+        sal_Bool bMakeAbsolute =
+                ( 0 == _rLocalName.compareToAscii( s_pImageDataAttributeName ) )
+            ||  (   ( 0 == _rLocalName.compareToAscii( s_pTargetLocationAttributeName ) )
+                &&  (   ( OControlElement::BUTTON == m_eElementType )
+                    ||  ( OControlElement::IMAGE == m_eElementType )
+                    )
+                );
+
+        if ( bMakeAbsolute )
+        {
+            // make a global URL out of the local one
+            ::rtl::OUString sAdjustedValue = m_rContext.getGlobalContext().GetAbsoluteReference( _rValue );
+            OControlImport::handleAttribute( _nNamespaceKey, _rLocalName, sAdjustedValue );
+        }
+        else
+            OControlImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
+    }
+
+    //=====================================================================
     //= OButtonImport
     //=====================================================================
     //---------------------------------------------------------------------
     OButtonImport::OButtonImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType)
-        :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
+        :OURLReferenceImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
     {
         enableTrackAttributes();
     }
@@ -840,21 +877,6 @@ namespace xmloff
 
         // handle the target-frame attribute
         simluateDefaultedAttribute(getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
-    }
-
-    //---------------------------------------------------------------------
-    void OButtonImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
-    {
-        static const ::rtl::OUString s_sTargetLocationAttributeName = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_TARGET_LOCATION));
-        static const ::rtl::OUString s_sImageDataAttributeName      = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_IMAGE_DATA));
-        if ( (s_sTargetLocationAttributeName == _rLocalName) || (s_sImageDataAttributeName == _rLocalName) )
-        {
-            // make a global URL out of the local one
-            ::rtl::OUString sAdjustedValue = m_rContext.getGlobalContext().GetAbsoluteReference(_rValue);
-            OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, sAdjustedValue);
-        }
-        else
-            OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
     }
 
     //=====================================================================
@@ -1216,6 +1238,9 @@ namespace xmloff
             case OControlElement::IMAGE:
                 return new OButtonImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
 
+            case OControlElement::IMAGE_FRAME:
+                return new OURLReferenceImport( m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType );
+
             case OControlElement::COMBOBOX:
             case OControlElement::LISTBOX:
                 return new OListAndComboImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
@@ -1429,6 +1454,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.32  2002/11/06 10:37:04  fs
+ *  #102407# (on behalf of BerryJia@openoffice.org) when importing a control model which can be ALIGNed, initialize this property to the XML default
+ *
  *  Revision 1.31  2002/10/25 13:14:15  fs
  *  #104402# importing grid column styles now
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-06 10:37:03 $
+ *  last change: $Author: fs $ $Date: 2002-11-22 14:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,12 +368,34 @@ namespace xmloff
     };
 
     //=====================================================================
+    //= OURLReferenceImport
+    //=====================================================================
+    /** a specialized version of the <type>OControlImport</type> class, which is able
+        to handle attributes which denote URLs (and stored relative)
+    */
+    class OURLReferenceImport : public OControlImport
+    {
+    public:
+        OURLReferenceImport(
+            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
+            OControlElement::ElementType _eType
+        );
+
+    protected:
+        // OPropertyImport overridables
+        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
+            const ::rtl::OUString& _rLocalName,
+            const ::rtl::OUString& _rValue);
+    };
+
+    //=====================================================================
     //= OButtonImport
     //=====================================================================
     /** A specialized version of the <type>OControlImport</type> class, which handles
-        some specialities of buttons and imagebuttons (namely the target frame)
+        the target frame for image and command buttons
     */
-    class OButtonImport : public OControlImport
+    class OButtonImport : public OURLReferenceImport
     {
     public:
         OButtonImport(
@@ -386,11 +408,6 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual void StartElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-
-        // OPropertyImport overridables
-        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
-            const ::rtl::OUString& _rLocalName,
-            const ::rtl::OUString& _rValue);
     };
 
     //=====================================================================
@@ -661,6 +678,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2002/11/06 10:37:03  fs
+ *  #102407# (on behalf of BerryJia@openoffice.org) when importing a control model which can be ALIGNed, initialize this property to the XML default
+ *
  *  Revision 1.16  2002/10/25 13:14:15  fs
  *  #104402# importing grid column styles now
  *
