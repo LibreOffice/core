@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:58:59 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,9 +678,9 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 if( pDoc->GetMasterPageCount() )
                 {
                     SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-                    SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
+                    SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                     aVisibleLayers.Set(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE), bVisible);
-                    pPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
+                    pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }
             }
             break;
@@ -698,9 +698,9 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 if( pDoc->GetMasterPageCount() )
                 {
                     SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-                    SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
+                    SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                     aVisibleLayers.Set(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE), bVisible);
-                    pPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
+                    pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }
             }
 
@@ -958,7 +958,7 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
             if( pDoc->GetMasterPageCount() )
             {
                 SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-                SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
+                SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                 aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE));
             }
             else
@@ -977,7 +977,7 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
             if( pDoc->GetMasterPageCount() )
             {
                 SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-                SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
+                SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                 aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
             }
             else
@@ -1256,7 +1256,7 @@ uno::Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const uno
     pView->CombineMarkedObjects( sal_False );
 
     pView->AdjustMarkHdl();
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
@@ -1311,7 +1311,7 @@ uno::Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const uno::R
     pView->CombineMarkedObjects( sal_True );
 
     pView->AdjustMarkHdl();
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
@@ -2005,8 +2005,11 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getMasterPage(  )
         uno::Reference< drawing::XDrawPages >   xPages( mpModel->getMasterPages() );
         uno::Reference< drawing::XDrawPage >    xPage;
 
-        if( pPage->GetMasterPageCount() )
-            xPage = uno::Reference< drawing::XDrawPage >( (pPage->GetMasterPage(0))->getUnoPage(), uno::UNO_QUERY );
+        if(pPage->TRG_HasMasterPage())
+        {
+            SdrPage& rMasterPage = pPage->TRG_GetMasterPage();
+            xPage = uno::Reference< drawing::XDrawPage >( rMasterPage.getUnoPage(), uno::UNO_QUERY );
+        }
 
         return xPage;
     }
@@ -2027,11 +2030,10 @@ void SAL_CALL SdDrawPage::setMasterPage( const uno::Reference< drawing::XDrawPag
         SdMasterPage* pMasterPage = SdMasterPage::getImplementation( xMasterPage );
         if( pMasterPage && pMasterPage->isValid() )
         {
-            pPage->RemoveMasterPage(0);
+            pPage->TRG_ClearMasterPage();
 
             SdPage* pSdPage = (SdPage*) pMasterPage->GetSdrPage();
-            sal_uInt16 nPos = pSdPage->GetPageNum();
-            pPage->InsertMasterPage(nPos);
+            pPage->TRG_SetMasterPage(*pSdPage);
 
             pPage->SetBorder(pSdPage->GetLftBorder(),pSdPage->GetUppBorder(),
                               pSdPage->GetRgtBorder(),pSdPage->GetLwrBorder() );
@@ -2043,9 +2045,9 @@ void SAL_CALL SdDrawPage::setMasterPage( const uno::Reference< drawing::XDrawPag
             // set notes master also
             SdPage* pNotesPage = mpModel->GetDoc()->GetSdPage( (pPage->GetPageNum()-1)>>1, PK_NOTES );
 
-            pNotesPage->RemoveMasterPage(0);
-            USHORT nNum = pPage->GetMasterPageNum(0) + 1;
-            pNotesPage->InsertMasterPage(nNum);
+            pNotesPage->TRG_ClearMasterPage();
+            sal_uInt16 nNum = (pPage->TRG_GetMasterPage()).GetPageNum() + 1;
+            pNotesPage->TRG_SetMasterPage(*pPage->GetModel()->GetMasterPage(nNum));
             pNotesPage->SetLayoutName( ( (SdPage*)pSdPage )->GetLayoutName() );
 
             mpModel->SetModified();
