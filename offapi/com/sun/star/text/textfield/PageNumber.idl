@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageNumber.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-12-21 10:52:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module text { module textfield {
 /** specifies service of a page number text field.
     @see com::sun::star::text::TextField
 */
-service PageNumber
+published service PageNumber
 {
     service  com::sun::star::text::TextField;
 

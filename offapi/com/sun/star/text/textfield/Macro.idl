@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Macro.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-01-09 08:20:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com { module sun { module star { module text { module textfield {
 /** specifies service of a macro text field.
     @see com::sun::star::text::TextField
 */
-service Macro
+published service Macro
 {
     service  com::sun::star::text::TextField;
     /** contains a tip that is displayed at the user interface.
