@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hdu $ $Date: 2001-03-08 12:20:26 $
+ *  last change: $Author: hdu $ $Date: 2001-03-12 13:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,10 +138,6 @@
 
 #ifdef USE_BUILTIN_RASTERIZER
 static X11GlyphPeer aX11GlyphPeer;
-//### HACK, the clip region is needed in lower levels now
-// because XRender reimplements GC clipping but cannot
-// be satisfied with a GC
-static XLIB_Region tmpClipRegion = 0;
 #endif // USE_BUILTIN_RASTERIZER
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -484,9 +480,9 @@ SalGraphicsData::SelectFont()
     }
 #else
             pFontGC_ = XCreateGC( pDisplay, hDrawable_,
-                                                            GCSubwindowMode | GCFillRule
-                                                          | GCGraphicsExposures | GCForeground,
-                                                          &values );
+                    GCSubwindowMode | GCFillRule
+                    | GCGraphicsExposures | GCForeground,
+                    &values );
         }
 #endif
     if( !bFontGC_ )
@@ -800,18 +796,19 @@ DrawVerticalTextItem( Display *pDisplay, Drawable nDrawable, GC nGC,
 #ifdef USE_BUILTIN_RASTERIZER
 #ifdef USE_XRENDER
 
-static void DrawServerAAFontString( ServerFont* pServerFont,
-    Display *pDisplay, Drawable nDrawable,
-    GC nGC, int nX, int nY, const sal_Unicode *pStr, int nLength )
+void SalGraphicsData::DrawServerAAFontString( int nX, int nY,
+    const sal_Unicode *pStr, int nLength )
 {
     // translate unicode to glyph ids and make sure they are already on the server
-     /*Glyph*/unsigned short* pGlyphString = (unsigned short*)alloca( 2*nLength );
+    unsigned short* pGlyphString = (unsigned short*)alloca( 2*nLength );
     for( int i = 0; i < nLength; ++i )
     {
-        const int nGlyphIndex = pServerFont->GetGlyphIndex( pStr[i] );
-        pGlyphString[ i ] = aX11GlyphPeer.GetGlyphId( *pServerFont, nGlyphIndex );
+        const int nGlyphIndex = mpServerSideFont->GetGlyphIndex( pStr[i] );
+        pGlyphString[ i ] = aX11GlyphPeer.GetGlyphId( *mpServerSideFont, nGlyphIndex );
     }
 
+
+    Display* pDisplay = GetXDisplay();
     Visual* pVisual = DefaultVisual( pDisplay, 0 );
     XRenderPictFormat* pVisualFormat = (*aX11GlyphPeer.pXRenderFindVisualFormat)( pDisplay, pVisual );
 
@@ -822,9 +819,9 @@ static void DrawServerAAFontString( ServerFont* pServerFont,
         int iDummy;
         unsigned uDummy, nDepth;
         XLIB_Window wDummy;
-        XGetGeometry( pDisplay, nDrawable, &wDummy, &iDummy, &iDummy,
+        XGetGeometry( pDisplay, hDrawable_, &wDummy, &iDummy, &iDummy,
             &uDummy, &uDummy, &uDummy, &nDepth );
-        aPixmap = XCreatePixmap( pDisplay, nDrawable, 1, 1, nDepth );
+        aPixmap = XCreatePixmap( pDisplay, hDrawable_, 1, 1, nDepth );
 
         XRenderPictureAttributes aAttr;
         aAttr.repeat = true;
@@ -832,6 +829,8 @@ static void DrawServerAAFontString( ServerFont* pServerFont,
     }
 
     // set foreground
+    GC nGC = SelectFont();
+
     XGCValues aGCVal;
     XGetGCValues( pDisplay, nGC, GCForeground, &aGCVal );
     aGCVal.clip_mask = None;
@@ -841,14 +840,14 @@ static void DrawServerAAFontString( ServerFont* pServerFont,
 
     // notify xrender of target drawable
     XRenderPictureAttributes aAttr;
-    Picture aDst = (*aX11GlyphPeer.pXRenderCreatePicture)( pDisplay, nDrawable, pVisualFormat, 0, &aAttr );
+    Picture aDst = (*aX11GlyphPeer.pXRenderCreatePicture)( pDisplay, hDrawable_, pVisualFormat, 0, &aAttr );
 
     // set clipping
-    if( tmpClipRegion && !XEmptyRegion( tmpClipRegion ) )
-        (*aX11GlyphPeer.pXRenderSetPictureClipRegion)( pDisplay, aDst, tmpClipRegion );
+    if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
+        (*aX11GlyphPeer.pXRenderSetPictureClipRegion)( pDisplay, aDst, pClipRegion_ );
 
     // draw the string
-    GlyphSet aGlyphSet = aX11GlyphPeer.GetGlyphSet( *pServerFont );
+    GlyphSet aGlyphSet = aX11GlyphPeer.GetGlyphSet( *mpServerSideFont );
     (*aX11GlyphPeer.pXRenderCompositeString16)( pDisplay, PictOpOver,
         aSrc, aDst, 0, aGlyphSet, 0, 0, nX, nY, pGlyphString, nLength );
 
@@ -856,34 +855,35 @@ static void DrawServerAAFontString( ServerFont* pServerFont,
     (*aX11GlyphPeer.pXRenderFreePicture)( pDisplay, aDst );
 }
 
-#endif
+#endif // USE_XRENDER
 
-static void DrawServerFontString( ServerFont* pServerFont,
-    Display *pDisplay, Drawable nDrawable,
-    GC nGC, int nX, int nY, const sal_Unicode *pStr, int nLength )
+void SalGraphicsData::DrawServerFontString(
+    int nX, int nY, const sal_Unicode *pStr, int nLength )
 {
 #ifdef USE_XRENDER
-    if( aX11GlyphPeer.GetGlyphSet( *pServerFont ) )
+    if( aX11GlyphPeer.GetGlyphSet( *mpServerSideFont ) )
     {
-        DrawServerAAFontString( pServerFont, pDisplay, nDrawable, nGC, nX, nY, pStr, nLength );
+        DrawServerAAFontString( nX, nY, pStr, nLength );
         return;
     }
 #endif // USE_XRENDER
 
-    Point aPos( nX, nY );
+    Display* pDisplay   = GetXDisplay();
+    GC nGC = SelectFont();
 
     XGCValues aGCVal;
     aGCVal.fill_style = FillStippled;
     aGCVal.line_width = 0;
-    GC tmpGC = XCreateGC( pDisplay, nDrawable, GCFillStyle|GCLineWidth, &aGCVal );
+    GC tmpGC = XCreateGC( pDisplay, hDrawable_, GCFillStyle|GCLineWidth, &aGCVal );
     XCopyGC( pDisplay, nGC, (1<<GCLastBit)-(1+GCFillStyle+GCLineWidth), tmpGC );
 
+    Point aPos( nX, nY );
     for( int i = 0; i < nLength; ++i )
     {
-        const int nGlyphIndex = pServerFont->GetGlyphIndex( pStr[i] );
+        const int nGlyphIndex = mpServerSideFont->GetGlyphIndex( pStr[i] );
 
-        Pixmap aStipple = aX11GlyphPeer.GetPixmap( *pServerFont, nGlyphIndex );
-        const GlyphMetric& rGM  = pServerFont->GetGlyphMetric( nGlyphIndex );
+        Pixmap aStipple = aX11GlyphPeer.GetPixmap( *mpServerSideFont, nGlyphIndex );
+        const GlyphMetric& rGM  = mpServerSideFont->GetGlyphMetric( nGlyphIndex );
 
         if( aStipple != None )
         {
@@ -897,7 +897,7 @@ static void DrawServerFontString( ServerFont* pServerFont,
 
             const int nWidth    = rGM.GetSize().Width();
             const int nHeight   = rGM.GetSize().Height();
-            XFillRectangle( pDisplay, nDrawable, tmpGC, nDestX, nDestY, nWidth, nHeight );
+            XFillRectangle( pDisplay, hDrawable_, tmpGC, nDestX, nDestY, nWidth, nHeight );
         }
 #if 1
         aPos += rGM.GetDelta();
@@ -916,37 +916,35 @@ static void DrawServerFontString( ServerFont* pServerFont,
 
 // draw string in one of the fonts / encodings that are available in the
 // extended font
-static void
-DrawUnicodeString( ServerFont* pServerFont, Display *pDisplay, Drawable nDrawable, GC nGC,
-        int nX, int nY, const sal_Unicode *pStr, int nLength, int nAngle, BOOL bVertical,
-        SalConverterCache *pCvt, ExtendedFontStruct *pFont )
+void SalGraphicsData::DrawUnicodeString( int nX, int nY,
+        const sal_Unicode* pStr, int nLength )
 {
 #ifdef USE_BUILTIN_RASTERIZER
-    if( pServerFont != NULL )
+    if( mpServerSideFont != NULL )
     {
-        DrawServerFontString( pServerFont, pDisplay, nDrawable, nGC, nX, nY, pStr, nLength );
+        DrawServerFontString( nX, nY, pStr, nLength );
         return;
     }
 #endif
 
     // sanity check
-    if ( pFont == NULL || nLength == 0 )
+    if ( xFont_ == NULL || nLength == 0 )
         return;
 
-    rtl_TextEncoding nAsciiEnc = pFont->GetAsciiEncoding();
+    Display* pDisplay   = GetXDisplay();
+    GC  nGC             = SelectFont();
 
+    rtl_TextEncoding nAsciiEnc = xFont_->GetAsciiEncoding();
     if ( nAsciiEnc == RTL_TEXTENCODING_UNICODE )
     {
-        if ( bVertical )
-            DrawVerticalString( pDisplay, nDrawable, nGC, nX, nY, pStr, nLength, pFont );
+        if ( bFontVertical_ )
+            DrawVerticalString( pDisplay, hDrawable_, nGC, nX, nY, pStr, nLength, xFont_ );
         else
         {
-
             // plain Unicode, can handle all chars and can be handled straight forward
-            XFontStruct* pFontStruct = pFont->GetFontStruct( nAsciiEnc );
+            XFontStruct* pFontStruct = xFont_->GetFontStruct( nAsciiEnc );
 
             if ( pFontStruct == NULL )
-
                 return;
 
             XSetFont( pDisplay, nGC, pFontStruct->fid );
@@ -959,7 +957,7 @@ DrawUnicodeString( ServerFont* pServerFont, Display *pDisplay, Drawable nDrawabl
             sal_Unicode *pBuffer = const_cast<sal_Unicode*>(pStr);
             #endif
 
-            XDrawString16( pDisplay, nDrawable, nGC, nX, nY, (XChar2b*)pBuffer, nLength );
+            XDrawString16( pDisplay, hDrawable_, nGC, nX, nY, (XChar2b*)pBuffer, nLength );
         }
     }
     else
@@ -971,19 +969,20 @@ DrawUnicodeString( ServerFont* pServerFont, Display *pDisplay, Drawable nDrawabl
         memcpy( pMBChar, pStr, nLength * sizeof(XChar2b) );
 
         rtl_TextEncoding nEncoding   = nAsciiEnc;
-        XFontStruct*     pFontStruct = pFont->GetFontStruct( nEncoding );
+        XFontStruct*     pFontStruct = xFont_->GetFontStruct( nEncoding );
 
         if ( pFontStruct == NULL )
             return;
 
         VTextItemExt* pVTextItemExt;
-        if ( bVertical )
+        if ( bFontVertical_ )
             pVTextItemExt = (VTextItemExt*)alloca( nLength * sizeof(VTextItemExt) );
 
+        SalConverterCache* pCvt = GetDisplay()->GetConverter();
         for ( int nChar = 0, nItem = -1; nChar < nLength; nChar++ )
         {
             rtl_TextEncoding nOldEnc = nEncoding;
-            pFont->GetFontStruct( pStr[nChar], &nEncoding, &pFontStruct, pCvt );
+            xFont_->GetFontStruct( pStr[nChar], &nEncoding, &pFontStruct, pCvt );
 
             if ( pFontStruct == NULL )
                 continue;
@@ -1004,7 +1003,7 @@ DrawUnicodeString( ServerFont* pServerFont, Display *pDisplay, Drawable nDrawabl
                 pTextItem[ nItem ].font   = pFontStruct->fid;
                 pTextItem[ nItem ].nchars = 1;
 
-                if ( bVertical )
+                if ( bFontVertical_ )
                 {
                     pVTextItemExt[ nItem ].mnEncoding = nEncoding;
                     pVTextItemExt[ nItem ].mpString = pStr + nChar;
@@ -1014,11 +1013,11 @@ DrawUnicodeString( ServerFont* pServerFont, Display *pDisplay, Drawable nDrawabl
         ConvertTextItem16( &pTextItem[ nItem ], pCvt, nEncoding );
         ++nItem;
 
-        if ( bVertical )
+        if ( bFontVertical_ )
         {
             pVTextItemExt[ nItem - 1 ].mnEncoding = nEncoding;
-            DrawVerticalTextItem( pDisplay, nDrawable, nGC, nX, nY,
-                          pTextItem, nItem, pVTextItemExt, pFont );
+            DrawVerticalTextItem( pDisplay, hDrawable_, nGC, nX, nY,
+                          pTextItem, nItem, pVTextItemExt, xFont_ );
         }
         else
         {
@@ -1026,10 +1025,10 @@ DrawUnicodeString( ServerFont* pServerFont, Display *pDisplay, Drawable nDrawabl
             if ( XSalIsDisplay( pDisplay ) )
                 XDrawText16( pDisplay, nDrawable, nGC, nX, nY, pTextItem, nItem );
             else
-                XPrinterDrawText16( pDisplay, nDrawable, nGC, nX, nY, nAngle,
-                        pTextItem, nItem );
+                XPrinterDrawText16( pDisplay, hDrawable_, nGC, nX, nY,
+                        nFontOrientation_ * 64 / 10, pTextItem, nItem );
 #else
-                XDrawText16( pDisplay, nDrawable, nGC, nX, nY, pTextItem, nItem );
+                XDrawText16( pDisplay, hDrawable_, nGC, nX, nY, pTextItem, nItem );
 #endif
         }
     }
@@ -1088,15 +1087,7 @@ SalGraphicsData::DrawText( long nX, long nY,
 
 #endif /* __notdef__ */
 
-    Display             *pDisplay = GetXDisplay();
-    SalConverterCache   *pCvt     = GetDisplay()->GetConverter();
-    GC                  pGC       = SelectFont();
-
-#ifdef USE_XRENDER
-    tmpClipRegion = pClipRegion_;
-#endif //USE_XRENDER
-    DrawUnicodeString( mpServerSideFont, pDisplay, hDrawable_, pGC, nX, nY,
-            pStr, nLen, nFontOrientation_ * 64 / 10, bFontVertical_, pCvt, xFont_ );
+    DrawUnicodeString( nX, nY, pStr, nLen );
 }
 
 void
@@ -1139,13 +1130,9 @@ CheckNoNegativeCoordinateWorkaround()
     return nCheck ? TRUE : FALSE;
 }
 
-void
-SalGraphicsData::DrawText(
-        long nX, long nY,
+void SalGraphicsData::DrawText( long nX, long nY,
         const sal_Unicode* pStr, USHORT nLen, const long* pDXAry )
 {
-    GC pGC = SelectFont();
-
     // workaround for problems with negative coordinates
     long* pTmpAry = NULL;
     if( nX < 0 && CheckNoNegativeCoordinateWorkaround() )
@@ -1165,31 +1152,18 @@ SalGraphicsData::DrawText(
     }
 
     // draw every single character
-    SalConverterCache *pCvt = GetDisplay()->GetConverter();
-    int angle = nFontOrientation_ * 64 / 10;
-    BOOL bVertical = bFontVertical_;
+    DrawUnicodeString( nX, nY, pStr, 1 );
+
     Polygon aPolygon(1);
     Point   aOrigin( nX, nY );
-    Point   aCharPos;
-
-#ifdef USE_XRENDER
-    tmpClipRegion = pClipRegion_;
-#endif //USE_XRENDER
-    DrawUnicodeString( mpServerSideFont, GetXDisplay(), hDrawable_, pGC,
-            aOrigin.X(), aOrigin.Y(), pStr, 1, angle, bVertical, pCvt, xFont_ );
-
     for( int i = 1; i < nLen ; i++ )
     {
-        aCharPos = Point( aOrigin.X() + pDXAry[ i - 1 ], aOrigin.Y() );
+        Point aCharPos( aOrigin.X() + pDXAry[ i - 1 ], aOrigin.Y() );
         aPolygon.SetPoint( aCharPos, 0 );
         aPolygon.Rotate( aOrigin, nFontOrientation_ );
         aCharPos = aPolygon.GetPoint( 0 );
 
-#ifdef USE_XRENDER
-        tmpClipRegion = pClipRegion_;
-#endif // USE_XRENDER
-        DrawUnicodeString( mpServerSideFont, GetXDisplay(), hDrawable_, pGC,
-                aCharPos.X(), aCharPos.Y(), pStr + i, 1, angle, bVertical, pCvt, xFont_ );
+        DrawUnicodeString( aCharPos.X(), aCharPos.Y(), pStr+i, 1 );
     }
 
     if( pTmpAry )

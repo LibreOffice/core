@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-02 14:23:27 $
+ *  last change: $Author: hdu $ $Date: 2001-03-12 13:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.7 $  $Author: pl $  $Date: 2001-03-02 14:23:27 $   //
+// $Revision: 1.8 $  $Author: hdu $  $Date: 2001-03-12 13:21:29 $   //
 //                                                                            //
 // $Workfile:   salgdi.h  $                                                   //
 //  $Modtime:   10 Sep 1997 11:55:36  $                                       //
@@ -240,6 +240,16 @@ class SalGraphicsData
                                       long nY,
                                       const xub_Unicode* pStr,
                                       USHORT nLen );
+
+            void            DrawUnicodeString( int nX, int nY,
+                                const sal_Unicode* pStr, int nLength );
+
+            void            DrawServerFontString( int nX, int nY,
+                                const sal_Unicode* pStr, int nLength );
+
+            void            DrawServerAAFontString( int nX, int nY,
+                                const sal_Unicode* pStr, int nLength );
+
 #endif
 public:
                             SalGraphicsData();
