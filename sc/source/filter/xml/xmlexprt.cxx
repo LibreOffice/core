@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
+ *  last change: $Author: sab $ $Date: 2000-11-15 16:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,12 @@ SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
 
 ScXMLExport::~ScXMLExport()
 {
+}
+
+void ScXMLExport::_ExportMeta()
+{
+    SvXMLExport::_ExportMeta();
+
 }
 
 table::CellRangeAddress ScXMLExport::GetEndAddress(uno::Reference<sheet::XSpreadsheet>& xTable,const sal_Int16 nTable)
@@ -1430,6 +1436,7 @@ void ScXMLExport::_ExportAutoStyles()
                 GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
             GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE,
                 GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
+            exportAutoDataStyles();
             GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_CELL,
                 GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
             GetTextParagraphExport()->exportTextAutoStyles();
@@ -1751,8 +1758,10 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
         {
             SvXMLElementExport aElemC(*this, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
             rtl::OUString sOUText;
+            sal_Bool bPrevCharWasSpace(sal_True);
               if (GetCellText(aCell.xCell, sOUText))
-                GetDocHandler()->characters(sOUText);
+                GetTextParagraphExport()->exportText(sOUText, bPrevCharWasSpace);
+                //GetDocHandler()->characters(sOUText);
         }
     }
     WriteShapes(aCell);
