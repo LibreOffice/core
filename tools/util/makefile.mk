@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:10 $
+#   last change: $Author: vg $ $Date: 2000-12-21 13:26:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,7 @@ HXX1FILES=	$(INC)$/debug.hxx		\
             $(INC)$/ref.hxx 		\
             $(INC)$/tools.h
 HXX2FILES=	$(INC)$/solar.h
-HXX4FILES=	$(INC)$/stdstrm.hxx
+#HXX4FILES=	$(INC)$/stdstrm.hxx
 HXX5FILES=	$(INC)$/ref.hxx
 HXX6FILES=	$(INC)$/pstm.hxx  \
             $(INC)$/globname.hxx
