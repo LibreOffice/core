@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_graphicfilter.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:14:00 $
+ *  last change: $Author: kz $ $Date: 2004-07-01 13:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,4 @@ STD_RES_FILE( gid_File_Res_Egi, egi )
 STD_RES_FILE( gid_File_Res_Ept, ept )
 
 STD_RES_FILE( gid_File_Res_Eme, eme )
-
-STD_RES_FILE( gid_File_Res_Epn, epn )
 
