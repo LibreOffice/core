@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 16:31:04 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,11 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
+#define LOAD_CHARACTER_BREAKITERATOR    0
+#define LOAD_WORD_BREAKITERATOR         1
+#define LOAD_SENTENCE_BREAKITERATOR     2
+#define LOAD_LINE_BREAKITERATOR         3
+
 //  ----------------------------------------------------
 //  class BreakIterator_Unicode
 //  ----------------------------------------------------
@@ -111,21 +116,24 @@ protected:
     const sal_Char *cBreakIterator;
     Boundary result; // for word break iterator
 
+    rtl::OUString characterText, editWordText, dictWordText, countWordText, sentenceText, lineText;
     icu::BreakIterator *characterBreak, *editWordBreak, *dictWordBreak,
                 *countWordBreak, *sentenceBreak, *lineBreak;
-    virtual icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const com::sun::star::lang::Locale& rLocale,
-    sal_Int16 rWordType) throw( com::sun::star::uno::RuntimeException);
+    virtual icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const rtl::OUString& Text, sal_Int32 nStartPos,
+        const com::sun::star::lang::Locale& rLocale, sal_Int16 rWordType) throw( com::sun::star::uno::RuntimeException);
+    icu::BreakIterator* SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::lang::Locale& rLocale,
+        sal_Int16 which) throw(com::sun::star::uno::RuntimeException);
 };
 
 class BreakIterator_ca : public BreakIterator_Unicode
 {
-    icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const com::sun::star::lang::Locale& rLocale,
+    icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const rtl::OUString& Text, sal_Int32 nStartPos, const com::sun::star::lang::Locale& rLocale,
     sal_Int16 rWordType) throw( com::sun::star::uno::RuntimeException);
 };
 
 class BreakIterator_hu : public BreakIterator_Unicode
 {
-    icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const com::sun::star::lang::Locale& rLocale,
+    icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const rtl::OUString& Text, sal_Int32 nStartPos, const com::sun::star::lang::Locale& rLocale,
     sal_Int16 rWordType) throw( com::sun::star::uno::RuntimeException);
 };
 
