@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:29:17 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:54:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,7 @@
 #define SC_UNONAME_FORMULA1         "Formula1"
 #define SC_UNONAME_FORMULA2         "Formula2"
 #define SC_UNONAME_SOURCEPOS        "SourcePosition"
+#define SC_UNONAME_SOURCESTR        "SourcePositionAsString" // only for use in XML filter
 #define SC_UNONAME_STYLENAME        "StyleName"
 
 //  validation
