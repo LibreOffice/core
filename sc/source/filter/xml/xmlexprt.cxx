@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-10 17:17:59 $
+ *  last change: $Author: sab $ $Date: 2000-11-14 12:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1143,6 +1143,7 @@ void ScXMLExport::_ExportAutoStyles()
                                                     ScRange aRange = pDoc->GetRange(nTable, aRectangle);
                                                     ScMyShape aMyShape;
                                                     aMyShape.aAddress = aRange.aStart;
+                                                    aMyShape.aEndAddress = aRange.aEnd;
                                                     aMyShape.nIndex = nShape;
                                                     aShapesContainer.AddNewShape(aMyShape);
                                                     SetLastColumn(nTable, aRange.aStart.Col());
@@ -1695,33 +1696,12 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
         }
         break;
     }
+    rtl::OUString sCellType;
     if (aCell.bIsCovered)
-    {
-        SvXMLElementExport aElemC(*this, XML_NAMESPACE_TABLE, sXML_covered_table_cell, sal_True, sal_True);
-        CheckAttrList();
-        WriteAreaLink(aCell);
-        WriteAnnotation(aCell);
-        WriteDetective(aCell);
-        if (!bIsEmpty)
-        {
-            if (IsEditCell(aCell.xCell))
-            {
-                uno::Reference<text::XText> xText(aCell.xCell, uno::UNO_QUERY);
-                if ( xText.is())
-                    GetTextParagraphExport()->exportText(xText);
-            }
-            else
-            {
-                SvXMLElementExport aElemC(*this, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
-                OUString sOUText;
-                if (GetCellText(aCell.xCell, sOUText))
-                    GetDocHandler()->characters(sOUText);
-            }
-        }
-        WriteShapes(aCell);
-    }
+        sCellType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_covered_table_cell));
     else
     {
+        sCellType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_table_cell));
         if (aCell.bIsMergedBase)
         {
             sal_Int32 nColumns = aCell.aMergeRange.EndColumn - aCell.aMergeRange.StartColumn + 1;
@@ -1733,30 +1713,29 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
             AddAttribute(XML_NAMESPACE_TABLE, sXML_number_columns_spanned, sColumns.makeStringAndClear());
             AddAttribute(XML_NAMESPACE_TABLE, sXML_number_rows_spanned, sRows.makeStringAndClear());
         }
-        SvXMLElementExport aElemC(*this, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True);
-        CheckAttrList();
-        WriteAreaLink(aCell);
-        WriteAnnotation(aCell);
-        WriteDetective(aCell);
-        if (!bIsEmpty)
-        {
-            if (IsEditCell(aCell.xCell))
-            {
-                uno::Reference<text::XText> xText(aCell.xCell, uno::UNO_QUERY);
-                OUString sOUText = xText->getString();
-                if ( xText.is())
-                    GetTextParagraphExport()->exportText(xText);
-            }
-            else
-            {
-                SvXMLElementExport aElemC(*this, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
-                rtl::OUString sOUText;
-                  if (GetCellText(aCell.xCell, sOUText))
-                    GetDocHandler()->characters(sOUText);
-            }
-        }
-        WriteShapes(aCell);
     }
+    SvXMLElementExport aElemC(*this, XML_NAMESPACE_TABLE, sCellType, sal_True, sal_True);
+    CheckAttrList();
+    WriteAreaLink(aCell);
+    WriteAnnotation(aCell);
+    WriteDetective(aCell);
+    if (!bIsEmpty)
+    {
+        if (IsEditCell(aCell.xCell))
+        {
+            uno::Reference<text::XText> xText(aCell.xCell, uno::UNO_QUERY);
+            if ( xText.is())
+                GetTextParagraphExport()->exportText(xText);
+        }
+        else
+        {
+            SvXMLElementExport aElemC(*this, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
+            rtl::OUString sOUText;
+              if (GetCellText(aCell.xCell, sOUText))
+                GetDocHandler()->characters(sOUText);
+        }
+    }
+    WriteShapes(aCell);
 }
 
 void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
@@ -1775,7 +1754,26 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
             uno::Any aAny = xCurrentShapes->getByIndex(aItr->nIndex);
             uno::Reference<drawing::XShape> xShape;
             if (aAny >>= xShape)
-                GetShapeExport()->exportShape(xShape/*, pPoint*/);
+            {
+                awt::Point aEndPoint;
+                Rectangle aEndRec = pDoc->GetMMRect(aItr->aEndAddress.Col(), aItr->aEndAddress.Row(),
+                    aItr->aEndAddress.Col(), aItr->aEndAddress.Row(), aItr->aEndAddress.Tab());
+                rtl::OUString sEndAddress;
+                ScXMLConverter::GetStringFromAddress(sEndAddress, aItr->aEndAddress, pDoc);
+                AddAttribute(XML_NAMESPACE_TABLE, sXML_end_cell_address, sEndAddress);
+                aEndPoint.X = aEndRec.Left();
+                aEndPoint.Y = aEndRec.Top();
+                awt::Point aStartPoint = xShape->getPosition();
+                awt::Size aSize = xShape->getSize();
+                sal_Int32 nEndX = aStartPoint.X + aSize.Width - aEndPoint.X;
+                sal_Int32 nEndY = aStartPoint.Y + aSize.Height - aEndPoint.Y;
+                rtl::OUStringBuffer sBuffer;
+                GetMM100UnitConverter().convertMeasure(sBuffer, nEndX);
+                AddAttribute(XML_NAMESPACE_TABLE, sXML_end_x, sBuffer.makeStringAndClear());
+                GetMM100UnitConverter().convertMeasure(sBuffer, nEndY);
+                AddAttribute(XML_NAMESPACE_TABLE, sXML_end_y, sBuffer.makeStringAndClear());
+                GetShapeExport()->exportShape(xShape, SEF_DEFAULT, pPoint);
+            }
             aItr++;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 09:57:28 $
+ *  last change: $Author: sab $ $Date: 2000-11-14 12:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ public:
 struct ScMyShape
 {
     ScAddress   aAddress;
+    ScAddress   aEndAddress;
     sal_Int32   nIndex;
 };
 
