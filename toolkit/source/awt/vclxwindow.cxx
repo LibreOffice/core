@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:02:21 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,6 +753,7 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XView*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::accessibility::XAccessible*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::lang::XEventListener*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XWindow2*, this ),
                                            SAL_STATIC_CAST( ::com::sun::star::awt::XDockableWindow*, this ) );
     return (aRet.hasValue() ? aRet : VCLXDevice::queryInterface( rType ));
 }
@@ -764,6 +765,7 @@ IMPL_XUNOTUNNEL2( VCLXWindow, VCLXDevice )
 IMPL_XTYPEPROVIDER_START( VCLXWindow )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XLayoutConstrains>* ) NULL ),
@@ -1962,20 +1964,71 @@ void SAL_CALL VCLXWindow::unlock(  ) throw (::com::sun::star::uno::RuntimeExcept
 }
 void SAL_CALL VCLXWindow::startPopupMode( const ::com::sun::star::awt::Rectangle& WindowRect ) throw (::com::sun::star::uno::RuntimeException)
 {
+    // TODO: remove interface in the next incompatible build
     ::vos::OGuard aGuard( GetMutex() );
 
-    Window* pWindow = GetWindow();
-    if( pWindow )
-        Window::GetDockingManager()->StartPopupMode( pWindow, VCLRectangle( WindowRect ) );
 }
 
 sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (::com::sun::star::uno::RuntimeException)
 {
+    // TODO: remove interface in the next incompatible build
     ::vos::OGuard aGuard( GetMutex() );
+    return FALSE;
+}
 
-    Window* pWindow = GetWindow();
-    if( pWindow )
-        return Window::GetDockingManager()->IsInPopupMode( pWindow );
+
+// ::com::sun::star::awt::XWindow2
+
+void SAL_CALL VCLXWindow::setOutputSize( const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    if( GetWindow() )
+        GetWindow()->SetOutputSizePixel( VCLSize( aSize ) );
+}
+
+::com::sun::star::awt::Size SAL_CALL VCLXWindow::getOutputSize(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    if( GetWindow() )
+        return AWTSize( GetWindow()->GetOutputSizePixel() );
+    else
+        return ::com::sun::star::awt::Size();
+}
+
+sal_Bool SAL_CALL VCLXWindow::isVisible(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    if( GetWindow() )
+        return GetWindow()->IsVisible();
     else
         return FALSE;
 }
+
+sal_Bool SAL_CALL VCLXWindow::isActive(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    if( GetWindow() )
+        return GetWindow()->IsActive();
+    else
+        return FALSE;
+
+}
+
+sal_Bool SAL_CALL VCLXWindow::isEnabled(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    if( GetWindow() )
+        return GetWindow()->IsEnabled();
+    else
+        return FALSE;
+}
+
+sal_Bool SAL_CALL VCLXWindow::hasFocus(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    if( GetWindow() )
+        return GetWindow()->HasFocus();
+    else
+        return FALSE;
+}
+
