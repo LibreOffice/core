@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-15 17:19:31 $
+ *  last change: $Author: dvo $ $Date: 2001-01-23 15:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2915,7 +2915,9 @@ void XMLDdeFieldDeclImportContext::StartElement(
             if( xIfc.is() )
             {
                 Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
-                if (xPropSet.is())
+                if (xPropSet.is() &&
+                    xPropSet->getPropertySetInfo()->hasPropertyByName(
+                        sPropertyDDECommandType))
                 {
                     Any aAny;
 
@@ -2936,7 +2938,8 @@ void XMLDdeFieldDeclImportContext::StartElement(
                     xPropSet->setPropertyValue(sPropertyIsAutomaticUpdate,
                                                aAny);
                 }
-                // else: ignore
+                // else: ignore (can't get XPropertySet, or DDE
+                //               properties are not supported)
             }
             // else: ignore
         }
