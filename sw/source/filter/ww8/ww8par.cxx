@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:29:52 $
+ *  last change: $Author: hbrinkm $ $Date: 2004-03-11 12:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3572,8 +3572,8 @@ void SwWW8ImplReader::SetOutLineStyles()
         {
             SwWW8StyInf& rSI = pCollA[ nI ];
             if (
-                 (MAXLEVEL > rSI.nOutlineLevel) && rSI.pOutlineNumrule &&
-                 rSI.pFmt
+                (MAXLEVEL > rSI.nOutlineLevel) && rSI.pOutlineNumrule &&
+                rSI.pFmt
                )
             {
                 myIter aIter = aRuleMap.find(rSI.pOutlineNumrule);
@@ -3591,7 +3591,23 @@ void SwWW8ImplReader::SetOutLineStyles()
             if (aIter->second > nMax)
             {
                 nMax = aIter->second;
-                pChosenRule = aIter->first;
+                mpChosenOutlineNumRule = aIter->first;
+            }
+        }
+
+        ASSERT(mpChosenOutlineNumRule, "Impossible");
+        if (mpChosenOutlineNumRule)
+            aOutlineRule = *mpChosenOutlineNumRule;
+
+        if (mpChosenOutlineNumRule != &aOutlineRule)
+        {
+            myiter aEnd = aOutLined.end();
+            for (myiter aIter = aOutLined.begin(); aIter < aEnd; ++aIter)
+            {
+                if ((*aIter)->GetOutlineLevel() < MAXLEVEL)
+                    (*aIter)->SetOutlineLevel(NO_NUMBERING);
+                else
+                    break;
             }
         }
     }
@@ -3605,10 +3621,9 @@ void SwWW8ImplReader::SetOutLineStyles()
         if (rSI.IsOutlineNumbered())
         {
             USHORT nAktFlags = 1 << rSI.nOutlineLevel;
-
             if (
                  (nAktFlags & nFlagsStyleOutlLevel) ||
-                 (rSI.pOutlineNumrule != pChosenRule)
+                 (rSI.pOutlineNumrule != mpChosenOutlineNumRule)
                )
             {
                 /*
@@ -3656,9 +3671,7 @@ void SwWW8ImplReader::SetOutLineStyles()
                 BYTE nFromLevel = rSI.nListLevel;
                 BYTE nToLevel = rSI.nOutlineLevel;
                 const SwNumFmt& rRule=rSI.pOutlineNumrule->Get(nFromLevel);
-                ASSERT(pChosenRule, "Impossible");
-                if (pChosenRule)
-                    pChosenRule->Set(nToLevel, rRule);
+                aOutlineRule.Set(nToLevel, rRule);
                 // Set my outline level
                 ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(nToLevel);
                 // If there are more styles on this level ignore them
@@ -3666,8 +3679,8 @@ void SwWW8ImplReader::SetOutLineStyles()
             }
         }
     }
-    if ((nOldFlags != nFlagsStyleOutlLevel) && (pChosenRule))
-        rDoc.SetOutlineNumRule(*pChosenRule);
+    if (nOldFlags != nFlagsStyleOutlLevel)
+        rDoc.SetOutlineNumRule(aOutlineRule);
 }
 
 const String* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
