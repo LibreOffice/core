@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-09 12:24:27 $
+ *  last change: $Author: oj $ $Date: 2000-11-10 15:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,51 +664,13 @@ String RID_STR_LISTSOURCETYPE
 };
 String RID_STR_CURSORSOURCE
 {
-    Text = "Datenquelle" ;
-    Text [ English ] = "Datasource" ;
-    Text [ portuguese ] = "Fonte de dados" ;
-    Text [ english_us ] = "Data source" ;
-    Text [ portuguese_brazilian ] = "Datenquelle" ;
-    Text [ swedish ] = "Datakälla" ;
-    Text [ danish ] = "Datakilde" ;
-    Text [ italian ] = "Sorgente dati" ;
-    Text [ spanish ] = "Fuente de datos" ;
-    Text [ french ] = "Source de données" ;
-    Text [ dutch ] = "Gegevensbron" ;
-    Text[ chinese_simplified ] = "Êı¾İÔ´";
-    Text[ russian ] = "Èñòî÷íèê äàííûõ";
-    Text[ polish ] = "ród³o danych";
-    Text[ japanese ] = "ÃŞ°À¿°½";
-    Text[ chinese_traditional ] = "¸ê®Æ·½";
-    Text[ greek ] = "Ğñïİëåõóç äåäïìİíùí";
-    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º";
-    Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
-    Text[ turkish ] = "Veri kaynağı";
-    Text[ language_user1 ] = " ";
+    Text = "Inhalt" ;
+    Text [ English ] = "Content" ;
 };
 String RID_STR_CURSORSOURCETYPE
 {
-    Text = "Art der Datenquelle" ;
-    Text [ English ] = "Type of Datasource" ;
-    Text [ portuguese ] = "Tipo da fonte de dados" ;
-    Text [ english_us ] = "Type of data source" ;
-    Text [ portuguese_brazilian ] = "Typ der Datenquelle" ;
-    Text [ swedish ] = "Typ av datakälla" ;
-    Text [ danish ] = "Datakildetype" ;
-    Text [ italian ] = "Tipo della sorgente dati" ;
-    Text [ spanish ] = "Tipo de fuente de datos" ;
-    Text [ french ] = "Type de la source de données" ;
-    Text [ dutch ] = "Type gegevensbron" ;
-    Text[ chinese_simplified ] = "Êı¾İÔ´µÄÀàĞÍ";
-    Text[ russian ] = "Òèï èñòî÷íèêà äàííûõ";
-    Text[ polish ] = "Typ Ÿród³a danych";
-    Text[ japanese ] = "ÃŞ°À¿°½‚Ìí—Ş";
-    Text[ chinese_traditional ] = "¸ê®Æ·½Ãş«¬";
-    Text[ greek ] = "Ôığïò ğñïİëåõóçò äåäïìİíùí";
-    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½ºÀÇ À¯Çü";
-    Text[ arabic ] = "äæÚ ãÕÏÑ ÇáÈíÇäÇÊ";
-    Text[ turkish ] = "Veri kaynağı türü";
-    Text[ language_user1 ] = " ";
+    Text = "Art des Inhaltes" ;
+    Text [ English ] = "Type of Content" ;
 };
 String RID_STR_ALLOW_ADDITIONS
 {
@@ -808,27 +770,8 @@ String RID_STR_DATAENTRY
 };
 String RID_STR_DATASOURCE
 {
-    Text = "Datenbank" ;
-    Text [ English ] = "Database" ;
-    Text [ portuguese ] = "Base de dados" ;
-    Text [ english_us ] = "Database" ;
-    Text [ portuguese_brazilian ] = "Datenbank" ;
-    Text [ swedish ] = "Databas" ;
-    Text [ danish ] = "Database" ;
-    Text [ italian ] = "Database" ;
-    Text [ spanish ] = "Base de datos" ;
-    Text [ french ] = "Base de données" ;
-    Text [ dutch ] = "Database" ;
-    Text[ chinese_simplified ] = "Êı¾İ¿â";
-    Text[ russian ] = "Áàçà äàííûõ";
-    Text[ polish ] = "Baza danych";
-    Text[ japanese ] = "ÃŞ°ÀÍŞ°½";
-    Text[ chinese_traditional ] = "¸ê®Æ®w";
-    Text[ greek ] = "ÂÜóç äåäïìİíùí";
-    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º";
-    Text[ arabic ] = "ŞÇÚÏÉ ÇáÈíÇäÇÊ";
-    Text[ turkish ] = "Veritabanı";
-    Text[ language_user1 ] = " ";
+    Text = "Datenquelle" ;
+    Text [ English ] = "Data Source" ;
 };
 String RID_STR_LOCKED
 {
