@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mtg $ $Date: 2000-11-24 10:34:27 $
+#   last change: $Author: mtg $ $Date: 2000-11-24 11:16:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,6 @@ UNOUCRDEP=  $(SOLARBINDIR)$/applicat.rdb
 UNOUCRRDB=  $(SOLARBINDIR)$/applicat.rdb
 
 UNOTYPES=\
-    com.sun.star.package.* \
     com.sun.star.io.XSeekable \
     com.sun.star.io.XOutputStream \
     com.sun.star.lang.XInitialization \
