@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-12 10:24:10 $
+ *  last change: $Author: hr $ $Date: 2001-07-12 10:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,9 +132,6 @@
 #endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _IODLG_HXX
-#include <sfx2/iodlg.hxx>
 #endif
 #ifndef _SFXECODE_HXX //autogen
 #include <svtools/sfxecode.hxx>
