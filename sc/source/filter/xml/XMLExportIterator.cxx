@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-14 10:28:06 $
+ *  last change: $Author: sab $ $Date: 2001-05-16 07:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,7 +621,6 @@ void ScMyNotEmptyCellsIterator::SetMatrixCellData( ScMyCell& rMyCell )
     rMyCell.bIsMatrixCovered = sal_False;
     rMyCell.bIsMatrixBase = sal_False;
 
-    uno::Reference< table::XCellRange > xCellRange( xTable, uno::UNO_QUERY );
     if( xCellRange.is() )
     {
         sal_Bool bIsMatrixBase(sal_False);
@@ -637,7 +636,6 @@ void ScMyNotEmptyCellsIterator::SetMatrixCellData( ScMyCell& rMyCell )
 void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
 {
     aCell.bHasAnnotation = sal_False;
-    uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY);
     if (xCellRange.is())
     {
         aCell.xCell = xCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row);
@@ -677,6 +675,7 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const sal_Int32 nTable)
                 {
                     uno::Any aTable = xIndex->getByIndex(nCurrentTable);
                     aTable>>=xTable;
+                    xCellRange = uno::Reference<table::XCellRange>(xTable, uno::UNO_QUERY);
                 }
             }
         }

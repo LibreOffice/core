@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-14 10:28:06 $
+ *  last change: $Author: sab $ $Date: 2001-05-16 07:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,6 +346,7 @@ struct ScMyCell
 class ScMyNotEmptyCellsIterator
 {
     com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet> xTable;
+    com::sun::star::uno::Reference<com::sun::star::table::XCellRange> xCellRange;
 
     ScMyShapesContainer*                pShapes;
     ScMyEmptyDatabaseRangesContainer*   pEmptyDatabaseRanges;
