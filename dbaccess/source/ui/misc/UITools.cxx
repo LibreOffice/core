@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 13:03:22 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,20 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef _DBACCESS_UI_CALLBACKS_HXX_
+#include "callbacks.hxx"
+#endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
+#endif
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+#ifndef DBAUI_DLGSAVE_HXX
+#include "dlgsave.hxx"
+#endif
+#ifndef DBAUI_DBTREELISTBOX_HXX
+#include "dbtreelistbox.hxx"
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -83,11 +95,26 @@
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
+#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
+#include <com/sun/star/sdbcx/XAppend.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
+#include <com/sun/star/ucb/XContent.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
@@ -97,6 +124,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
@@ -112,6 +142,15 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
+#include <com/sun/star/container/XContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMECONTAINER_HPP_
+#include <com/sun/star/container/XHierarchicalNameContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -158,6 +197,12 @@
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
 #endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
 #ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
 #include <svtools/itemset.hxx>
 #endif
@@ -194,9 +239,6 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -243,7 +285,18 @@
 #ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
 #endif
-
+#ifndef _DBAUI_DSNTYPES_HXX_
+#include "dsntypes.hxx"
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef SVTOOLS_FILENOTATION_HXX_
+#include <svtools/filenotation.hxx>
+#endif
+#ifndef _SVT_FILEVIEW_HXX
+#include <svtools/fileview.hxx>
+#endif
 // .........................................................................
 namespace dbaui
 {
@@ -255,55 +308,41 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
-
-
+using namespace ::svt;
 
 // -----------------------------------------------------------------------------
-void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
-                        const Reference< XPropertySet >& _rxTable,
-                        ::rtl::OUString& _rComposedName,
-                        sal_Bool _bQuote,
-                        EComposeRule _eRule)
-{
-    OSL_ENSURE(_rxTable.is(),"Table can not be null!");
-    if(_rxTable.is())
-    {
-        Reference< XPropertySetInfo > xInfo = _rxTable->getPropertySetInfo();
-        if(xInfo->hasPropertyByName(PROPERTY_CATALOGNAME) && xInfo->hasPropertyByName(PROPERTY_SCHEMANAME) && xInfo->hasPropertyByName(PROPERTY_NAME))
-        {
-            ::rtl::OUString aCatalog,aSchema,aTable;
-            _rxTable->getPropertyValue(PROPERTY_CATALOGNAME)>>= aCatalog;
-            _rxTable->getPropertyValue(PROPERTY_SCHEMANAME) >>= aSchema;
-            _rxTable->getPropertyValue(PROPERTY_NAME)       >>= aTable;
-
-            ::dbtools::composeTableName(_rxMetaData,aCatalog,aSchema,aTable,_rComposedName,_bQuote,_eRule);
-        }
-    }
-}
-// -----------------------------------------------------------------------------
-
 SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
                                      const Reference< ::com::sun::star::container::XNameAccess >& _xDatabaseContext,
                                     const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF,
                                     Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
                                     Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection )
 {
-    Any aValue;
+    Reference<XPropertySet> xProp;
     try
     {
-        aValue = _xDatabaseContext->getByName(_rsDataSourceName);
+        xProp.set(_xDatabaseContext->getByName(_rsDataSourceName),UNO_QUERY);
     }
     catch(Exception&)
     {
     }
     SQLExceptionInfo aInfo;
-    Reference<XPropertySet> xProp;
-    aValue >>= xProp;
-    if (!xProp.is())
+
+    return createConnection(xProp,_rMF,_rEvtLst,_rOUTConnection);
+}
+// -----------------------------------------------------------------------------
+SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XPropertySet>& _xDataSource,
+                                    const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF,
+                                    Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
+                                    Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection )
+{
+    SQLExceptionInfo aInfo;
+    if ( !_xDataSource.is() )
     {
         OSL_ENSURE(0,"createConnection: coult not retrieve the data source!");
         return aInfo;
@@ -313,9 +352,9 @@ SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
     sal_Bool bPwdReq = sal_False;
     try
     {
-        xProp->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
-        bPwdReq = ::cppu::any2bool(xProp->getPropertyValue(PROPERTY_ISPASSWORDREQUIRED));
-        xProp->getPropertyValue(PROPERTY_USER) >>= sUser;
+        _xDataSource->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
+        bPwdReq = ::cppu::any2bool(_xDataSource->getPropertyValue(PROPERTY_ISPASSWORDREQUIRED));
+        _xDataSource->getPropertyValue(PROPERTY_USER) >>= sUser;
     }
     catch(Exception&)
     {
@@ -327,7 +366,7 @@ SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
     {
         if(bPwdReq && !sPwd.getLength())
         {   // password required, but empty -> connect using an interaction handler
-            Reference<XCompletedConnection> xConnectionCompletion(xProp, UNO_QUERY);
+            Reference<XCompletedConnection> xConnectionCompletion(_xDataSource, UNO_QUERY);
             if (!xConnectionCompletion.is())
             {
                 OSL_ENSURE(0,"createConnection: missing an interface ... need an error message here!");
@@ -347,7 +386,7 @@ SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
         }
         else
         {
-            Reference<XDataSource> xDataSource(xProp,UNO_QUERY);
+            Reference<XDataSource> xDataSource(_xDataSource,UNO_QUERY);
             _rOUTConnection = xDataSource->getConnection(sUser, sPwd);
         }
         // be notified when connection is in disposing
@@ -407,6 +446,7 @@ void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< 
 TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                                sal_Int32 _nType,
                                const ::rtl::OUString& _sTypeName,
+                               const ::rtl::OUString& _sCreateParams,
                                sal_Int32 _nPrecision,
                                sal_Int32 _nScale,
                                sal_Bool _bAutoIncrement,
@@ -428,12 +468,21 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             sal_Int32       nDBTypeScale        = aIter->second->nMaximumScale;
             sal_Bool        bDBAutoIncrement    = aIter->second->bAutoIncrement;
     #endif
-            if  (   (   !_sTypeName.getLength()
+            if  (   (
+                        !_sTypeName.getLength()
                     ||  (aIter->second->aTypeName.equalsIgnoreAsciiCase(_sTypeName))
                     )
-                &&  (aIter->second->nPrecision      >= _nPrecision)
-                &&  (aIter->second->nMaximumScale   >= _nScale)
-                &&  (aIter->second->bAutoIncrement  == _bAutoIncrement)
+                &&  (
+                        (
+                                !aIter->second->aCreateParams.getLength()
+                            &&  !_sCreateParams.getLength()
+                        )
+                    ||  (
+                                (aIter->second->nPrecision      >= _nPrecision)
+                            &&  (aIter->second->nMaximumScale   >= _nScale)
+                            &&  (aIter->second->bAutoIncrement  == _bAutoIncrement)
+                        )
+                    )
                 )
                 break;
         }
@@ -515,6 +564,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                     pTypeInfo = getTypeInfoFromType(_rTypeInfo,
                                    _nType,
                                    _sTypeName,
+                                   _sCreateParams,
                                    _nPrecision,
                                    _nScale,
                                    sal_False,
@@ -719,7 +769,8 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
     if ( _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISCURRENCY) && _pFieldDesc->IsCurrency() )
         _rxColumn->setPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(_pFieldDesc->IsCurrency()));
     // set autoincrement value when available
-    if ( _pFieldDesc->IsAutoIncrement() && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) )
+    // and only set when the entry is not empty, that lets the value in the column untouched
+    if ( _pFieldDesc->IsAutoIncrement() && _pFieldDesc->GetAutoIncrementValue().getLength() && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) )
         _rxColumn->setPropertyValue(PROPERTY_AUTOINCREMENTCREATION,makeAny(_pFieldDesc->GetAutoIncrementValue()));
 }
 // -----------------------------------------------------------------------------
@@ -770,8 +821,20 @@ sal_Bool checkDataSourceAvailable(const ::rtl::OUString& _sDataSourceName,const 
 {
     sal_Bool bRet = sal_False;
     Reference< XNameAccess > xDataBaseContext(_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-    if(xDataBaseContext.is())
+    if ( xDataBaseContext.is() )
+    {
         bRet = xDataBaseContext->hasByName(_sDataSourceName);
+        if ( !bRet )
+        { // try if this one is a URL
+            try
+            {
+                bRet = xDataBaseContext->getByName(_sDataSourceName).hasValue();
+            }
+            catch(Exception)
+            {
+            }
+        }
+    }
     return bRet;
 }
 // -----------------------------------------------------------------------------
@@ -806,13 +869,13 @@ SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment)
 // -----------------------------------------------------------------------------
 void setColumnUiProperties( const Reference< XPropertySet>& _rxColumn,const OFieldDescription* _pFieldDesc)
 {
-    if ( _pFieldDesc->GetFormatKey() != ::com::sun::star::util::NumberFormat::UNDEFINED && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY) )
+    if ( _pFieldDesc->GetFormatKey() != NumberFormat::ALL && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY) )
         _rxColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(_pFieldDesc->GetFormatKey()));
-    if ( _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN) )
+    if ( _pFieldDesc->GetHorJustify() != SVX_HOR_JUSTIFY_STANDARD && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN) )
         _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(_pFieldDesc->GetHorJustify())));
-    if ( _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT) )
+    if ( _pFieldDesc->GetDescription().getLength() && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT) )
         _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(_pFieldDesc->GetDescription()));
-    if ( _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
+    if ( _pFieldDesc->GetControlDefault().hasValue() && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
         _rxColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,_pFieldDesc->GetControlDefault());
 }
 // -----------------------------------------------------------------------------
@@ -1096,9 +1159,6 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
                     aFilter.realloc(aFilter.getLength()+1);
                     aFilter.getArray()[aFilter.getLength()-1] = _sName;
                     xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aFilter));
-                    Reference< ::com::sun::star::util::XFlushable> xFlush(xProp,UNO_QUERY);
-                    if(xFlush.is())
-                        xFlush->flush();
                 }
             }
         }
@@ -1147,8 +1207,7 @@ sal_Bool isHiContrast(Window* _pWindow)
     //  while( pIter &&  pIter->GetBackground().GetColor().GetColor() == COL_TRANSPARENT )
     while( pIter )
     {
-        const Color& aColor = pIter->GetBackground().GetColor();
-        if ( aColor.GetColor() == COL_TRANSPARENT )
+        if ( pIter->GetBackground().GetColor().GetColor() == COL_TRANSPARENT )
             pIter = pIter->GetParent();
         else
             break;
@@ -1189,41 +1248,14 @@ void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId
 // check if SQL92 name checking is enabled
 sal_Bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
 {
-    return isDataSourcePropertyEnabled(_xConnection,PROPERTY_ENABLESQL92CHECK);
+    return ::dbtools::isDataSourcePropertyEnabled(_xConnection,PROPERTY_ENABLESQL92CHECK);
 }
 // -----------------------------------------------------------------------------
 sal_Bool isAppendTableAliasEnabled(const Reference<XConnection>& _xConnection)
 {
-    return isDataSourcePropertyEnabled(_xConnection,PROPERTY_ENABLETABLEALIAS,sal_True);
+    return ::dbtools::isDataSourcePropertyEnabled(_xConnection,PROPERTY_ENABLETABLEALIAS,sal_True);
 }
-// -----------------------------------------------------------------------------
-sal_Bool isDataSourcePropertyEnabled(const Reference<XConnection>& _xConnection,const ::rtl::OUString& _sProperty,sal_Bool _bDefault)
-{
-    sal_Bool bEnabled = _bDefault;
-    try
-    {
-        Reference< XChild> xChild(_xConnection, UNO_QUERY);
-        if ( xChild.is() )
-        {
-            Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
-            if ( xProp.is() )
-            {
-                Sequence< PropertyValue > aInfo;
-                xProp->getPropertyValue(PROPERTY_INFO) >>= aInfo;
-                const PropertyValue* pValue =::std::find_if(aInfo.getConstArray(),
-                                                    aInfo.getConstArray() + aInfo.getLength(),
-                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),_sProperty));
-                if ( pValue && pValue != (aInfo.getConstArray() + aInfo.getLength()) )
-                    pValue->Value >>= bEnabled;
-            }
-        }
-    }
-    catch(SQLException&)
-    {
-        OSL_ASSERT(!"isDataSourcePropertyEnabled");
-    }
-    return bEnabled;
-}
+
 // -----------------------------------------------------------------------------
 void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
                             sal_Bool& _rAutoIncrementValueEnabled,
@@ -1259,6 +1291,25 @@ void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
         Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
         fillAutoIncrementValue(xProp,_rAutoIncrementValueEnabled,_rsAutoIncrementValue);
     }
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString getStrippedDatabaseName(const Reference<XPropertySet>& _xDataSource,::rtl::OUString& _rsDatabaseName)
+{
+    if ( !_rsDatabaseName.getLength() && _xDataSource.is() )
+    {
+        try
+        {
+            _xDataSource->getPropertyValue(PROPERTY_NAME) >>= _rsDatabaseName;
+        }
+        catch(Exception)
+        {
+        }
+    }
+    ::rtl::OUString sName = _rsDatabaseName;
+    INetURLObject aURL(sName);
+    if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+        sName = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
+    return sName;
 }
 // -----------------------------------------------------------------------------
 namespace
@@ -1320,7 +1371,9 @@ namespace
 
         return bRet;
     }
-}
+// .........................................................................
+} // annonymous
+// .........................................................................
 // -----------------------------------------------------------------------------
 ::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const sal_Int32 _nHelpId)
 {
@@ -1417,7 +1470,322 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     return s_sNodeName;
 }
 // -----------------------------------------------------------------------------
-
-// .........................................................................
+sal_Int32 askForUserAction(Window* _pParent,USHORT _nTitle,USHORT _nText,sal_Bool _bAll,const ::rtl::OUString& _sName)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+    String aMsg = String(ModuleRes(_nText));
+    aMsg.SearchAndReplace(String::CreateFromAscii("%1"),String(_sName));
+    OSQLMessageBox aAsk(_pParent,String(ModuleRes(_nTitle )),aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
+    if ( _bAll )
+    {
+        aAsk.AddButton(String(ModuleRes(STR_BUTTON_TEXT_ALL)), RET_ALL, 0);
+        aAsk.GetPushButton(RET_ALL)->SetHelpId(HID_CONFIRM_DROP_BUTTON_ALL);
+    }
+    return aAsk.Execute();
 }
+// -----------------------------------------------------------------------------
+Reference<XPropertySet> createView( const ::rtl::OUString& _sName
+                                   ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
+                                   ,const Reference<XPropertySet>& _xSourceObject)
+{
+    Reference<XViewsSupplier> xSup(_xConnection,UNO_QUERY);
+    Reference< XNameAccess > xViews;
+    if(xSup.is())
+        xViews = xSup->getViews();
+    Reference<XDataDescriptorFactory> xFact(xViews,UNO_QUERY);
+    OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
+    if(!xFact.is())
+        return NULL;
+
+    Reference<XPropertySet> xView = xFact->createDataDescriptor();
+    if ( !xView.is() )
+        return NULL;
+
+    ::rtl::OUString sCatalog,sSchema,sTable;
+    ::dbtools::qualifiedNameComponents(_xConnection->getMetaData(),
+                                        _sName,
+                                        sCatalog,
+                                        sSchema,
+                                        sTable,
+                                        ::dbtools::eInDataManipulation);
+
+    xView->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
+    xView->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
+    xView->setPropertyValue(PROPERTY_NAME,makeAny(sTable));
+
+    ::rtl::OUString sCommand;
+    if(_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND))
+    {
+        _xSourceObject->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
+    }
+    else
+    {
+        sCommand = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM "));
+        sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(_xConnection,PROPERTY_USECATALOGINSELECT,sal_True);
+        sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(_xConnection,PROPERTY_USESCHEMAINSELECT,sal_True);
+        sCommand += ::dbaui::composeTableName(_xConnection->getMetaData(),_xSourceObject,sal_True,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+    }
+    xView->setPropertyValue(PROPERTY_COMMAND,makeAny(sCommand));
+
+    Reference<XAppend> xAppend(xViews,UNO_QUERY);
+    if(xAppend.is())
+        xAppend->appendByDescriptor(xView);
+
+    xView = NULL;
+    // we need to reget the view because after appending it it is no longer valid
+    // but this time it isn't a view object it is a table object with type "VIEW"
+    Reference<XTablesSupplier> xTabSup(_xConnection,UNO_QUERY);
+    Reference< XNameAccess > xTables;
+    if ( xTabSup.is() )
+    {
+        xTables = xTabSup->getTables();
+        if ( xTables.is() && xTables->hasByName(_sName) )
+            xTables->getByName(_sName) >>= xView;
+    }
+
+    return xView;
+}
+// -----------------------------------------------------------------------------
+String convertURLtoUI(sal_Bool _bPrefix,ODsnTypeCollection* _pCollection,const ::rtl::OUString& _sURL)
+{
+    ODsnTypeCollection* pCollection = _pCollection;
+    if ( pCollection == NULL )
+    {
+        static ODsnTypeCollection s_TypeCollection;
+        pCollection = &s_TypeCollection;
+    }
+
+    String sURL( _sURL );
+    DATASOURCE_TYPE eType = pCollection->getType( sURL );
+
+    if ( pCollection->isFileSystemBased( eType ) )
+    {
+        // get the tow parts: prefix and file URL
+        String sTypePrefix, sFileURLEncoded;
+        if ( _bPrefix )
+        {
+            sTypePrefix = pCollection->getDatasourcePrefix( eType );
+            sFileURLEncoded = pCollection->cutPrefix( sURL );
+        }
+        else
+        {
+            sFileURLEncoded = sURL;
+        }
+
+        // substitute any variables
+        sFileURLEncoded = SvtPathOptions().SubstituteVariable( sFileURLEncoded );
+
+        // decode the URL
+        sURL = sTypePrefix;
+        if ( sFileURLEncoded.Len() )
+        {
+            OFileNotation aFileNotation(sFileURLEncoded);
+            // set this decoded URL as text
+            sURL += String(aFileNotation.get(OFileNotation::N_SYSTEM));
+        }
+    }
+    return sURL;
+}
+// -----------------------------------------------------------------------------
+void fillTreeListNames(const Reference< XNameAccess >& _xContainer,DBTreeListBox& _rList,USHORT _nImageId,SvLBoxEntry* _pParent,IContainerFoundListener* _pContainerFoundListener)
+{
+    OSL_ENSURE(_xContainer.is(),"Data source is NULL! -> GPF");
+
+    if ( _xContainer.is() && _xContainer->hasElements() )
+    {
+        Sequence< ::rtl::OUString> aSeq = _xContainer->getElementNames();
+        const ::rtl::OUString* pIter = aSeq.getConstArray();
+        const ::rtl::OUString* pEnd  = pIter + aSeq.getLength();
+        for(;pIter != pEnd;++pIter)
+        {
+            SvLBoxEntry* pEntry = NULL;
+            Reference<XNameAccess> xSubElements(_xContainer->getByName(*pIter),UNO_QUERY);
+            if ( xSubElements.is() )
+            {
+                pEntry = _rList.InsertEntry(*pIter,_pParent,FALSE,LIST_APPEND,reinterpret_cast<void*>(FOLDER_TYPE));
+                if ( _pContainerFoundListener )
+                {
+                    Reference<XContainer> xCont(xSubElements,UNO_QUERY);
+                    _pContainerFoundListener->containerFound(xCont);
+                }
+                fillTreeListNames(xSubElements,_rList,_nImageId,pEntry,_pContainerFoundListener);
+            }
+            else
+            {
+                Image aBmp = Image(ModuleRes(_nImageId));
+                pEntry = _rList.InsertEntry(*pIter,aBmp,aBmp,_pParent);
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+sal_Bool insertHierachyElement(Window* _pParent
+                           ,const Reference<XHierarchicalNameContainer>& _xNames
+                           ,const String& _sParentFolder
+                           ,sal_Bool _bForm
+                           ,sal_Bool _bCollection
+                           ,const Reference<XContent>& _xContent
+                           ,sal_Bool _bMove)
+{
+    if ( _xNames.is() )
+    {
+        Reference<XNameAccess> xNameAccess(_xNames,UNO_QUERY);
+        ::rtl::OUString sName = _sParentFolder;
+        if ( _xNames->hasByHierarchicalName(sName) )
+        {
+            Reference<XChild> xChild(_xNames->getByHierarchicalName(sName),UNO_QUERY);
+            xNameAccess.set(xChild,UNO_QUERY);
+            if ( !xNameAccess.is() && xChild.is() )
+                xNameAccess.set(xChild->getParent(),UNO_QUERY);
+        }
+
+        if ( xNameAccess.is() )
+        {
+            ::rtl::OUString sNewName;
+            Reference<XPropertySet> xProp(_xContent,UNO_QUERY);
+            if ( xProp.is() )
+                xProp->getPropertyValue(PROPERTY_NAME) >>= sNewName;
+
+            if ( !_bMove || !sNewName.getLength() )
+            {
+                String sTargetName,sLabel;
+                if ( !sNewName.getLength() || xNameAccess->hasByName(sNewName) )
+                {
+                    if ( sNewName.getLength() )
+                        sTargetName = sNewName;
+                    else
+                        sTargetName = String(ModuleRes( _bCollection ? STR_NEW_FOLDER : ((_bForm) ? RID_STR_FORM : RID_STR_REPORT)));
+                    sLabel = String(ModuleRes( _bCollection ? STR_FOLDER_LABEL  : ((_bForm) ? STR_FRM_LABEL : STR_RPT_LABEL)));
+                    sTargetName = ::dbtools::createUniqueName(xNameAccess,sTargetName);
+
+
+                    // here we have everything needed to create a new query object ...
+                    // ... ehm, except a new name
+                    OSaveAsDlg aAskForName( _pParent,
+                                            _xNames.get(),
+                                            sTargetName,
+                                            sLabel,
+                                            sName,
+                                            SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS);
+                    if ( RET_OK != aAskForName.Execute() )
+                        // cancelled by the user
+                        return sal_False;
+
+                    sNewName = aAskForName.getName();
+                }
+            }
+            else if ( xNameAccess->hasByName(sNewName) )
+            {
+                String sError(ModuleRes(STR_OBJECT_ALREADY_EXISTS));
+                sError.SearchAndReplaceAscii("#",sNewName);
+                throw SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
+            }
+
+            if ( sNewName.getLength() )
+            {
+                try
+                {
+                    Reference<XMultiServiceFactory> xORB(xNameAccess,UNO_QUERY);
+                    OSL_ENSURE(xORB.is(),"No service factory given");
+                    if ( xORB.is() )
+                    {
+                        Sequence< Any > aArguments(3);
+                        PropertyValue aValue;
+                        // set as folder
+                        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
+                        aValue.Value <<= sNewName;
+                        aArguments[0] <<= aValue;
+                        //parent
+                        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent"));
+                        aValue.Value <<= xNameAccess;
+                        aArguments[1] <<= aValue;
+
+                        aValue.Name = PROPERTY_EMBEDDEDOBJECT;
+                        aValue.Value <<= _xContent;
+                        aArguments[2] <<= aValue;
+
+                        ::rtl::OUString sServiceName =
+                            (_bCollection ? ((_bForm) ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION) : SERVICE_SDB_DOCUMENTDEFINITION);
+
+                        Reference<XContent > xNew(xORB->createInstanceWithArguments(sServiceName,aArguments),UNO_QUERY);
+                        Reference<XNameContainer> xNameContainer(xNameAccess,UNO_QUERY);
+                        if ( xNameContainer.is() )
+                            xNameContainer->insertByName(sNewName,makeAny(xNew));
+                    }
+                }
+                catch(Exception&)
+                {
+                    OSL_ENSURE(0,"OApplicationController::OApplicationController -> exception catched");
+                    return sal_False;
+                }
+            }
+        }
+    }
+    return sal_True;
+}
+// -----------------------------------------------------------------------------
+void deleteObjects(Window* _pParent
+                   ,const Reference< XMultiServiceFactory >& _xFactory
+                   ,const Reference<XNameContainer>& _xNames
+                   ,const ::std::vector< ::rtl::OUString>& _rList
+                   ,sal_uInt16 _nTextResource
+                   ,sal_Bool _bConfirm)
+{
+
+    Reference<XHierarchicalNameContainer> xHierarchyName(_xNames, UNO_QUERY);
+    if ( _xNames.is() )
+    {
+        bool bConfirm = true;
+        ByteString sDialogPosition;
+        svtools::QueryDeleteResult_Impl eResult = _bConfirm ? svtools::QUERYDELETE_YES : svtools::QUERYDELETE_ALL;
+        ::std::vector< ::rtl::OUString>::const_iterator aEnd = _rList.end();
+        for (::std::vector< ::rtl::OUString>::const_iterator aIter = _rList.begin(); aIter != aEnd && ( eResult != svtools::QUERYDELETE_CANCEL ); ++aIter)
+        {
+            if ( eResult != svtools::QUERYDELETE_ALL )
+            {
+                svtools::QueryDeleteDlg_Impl aDlg(_pParent,*aIter);
+                if ( sDialogPosition.Len() )
+                    aDlg.SetWindowState( sDialogPosition );
+                if ( _rList.size() > 1 && (aIter+1) != _rList.end() )
+                    aDlg.EnableAllButton();
+                if ( aDlg.Execute() == RET_OK )
+                    eResult = aDlg.GetResult();
+                else
+                    eResult = svtools::QUERYDELETE_CANCEL;
+
+                sDialogPosition = aDlg.GetWindowState( );
+            }
+
+            if ( ( eResult == svtools::QUERYDELETE_ALL ) ||
+                 ( eResult == svtools::QUERYDELETE_YES ) )
+            {
+                try
+                {
+                    if ( xHierarchyName.is() )
+                        xHierarchyName->removeByHierarchicalName(*aIter);
+                    else
+                        _xNames->removeByName(*aIter);
+                }
+                catch(SQLException& e)
+                {
+                    showError(SQLExceptionInfo(e),_pParent,_xFactory);
+                }
+                catch(WrappedTargetException& e)
+                {
+                    SQLException aSql;
+                    if(e.TargetException >>= aSql)
+                        showError(SQLExceptionInfo(aSql),_pParent,_xFactory);
+                    else
+                        OSL_ENSURE(sal_False, "UITOOLS::deleteQueries: something strange happended!");
+                }
+                catch(Exception&)
+                {
+                    DBG_ERROR("UITOOLS::deleteQueries: caught a generic exception!");
+                }
+            }
+        }
+    }
+}
+// .........................................................................
+} // dbaui
 // .........................................................................
