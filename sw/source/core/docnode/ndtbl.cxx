@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: jp $ $Date: 2000-10-26 17:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,13 +244,7 @@ class lcl_DelRedlines
 {
     SwDoc* pDoc;
 public:
-    lcl_DelRedlines( const SwTableNode& rNd )
-        : pDoc( (SwDoc*)rNd.GetNodes().GetDoc() )
-    {
-        pDoc->StartUndo();
-        if( !pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() )
-            pDoc->DeleteRedline( rNd );
-    }
+    lcl_DelRedlines( const SwTableNode& rNd, BOOL bCheckForOwnRedline );
     lcl_DelRedlines( SwPaM& rPam )
         : pDoc( rPam.GetDoc() )
     {
@@ -1136,7 +1130,7 @@ BOOL SwDoc::TableToText( const SwTableNode* pTblNd, sal_Unicode cCh )
     if( !pTblNd )
         return FALSE;
 
-    lcl_DelRedlines aDelRedl( *pTblNd );
+    lcl_DelRedlines aDelRedl( *pTblNd, FALSE );
 
     SwNodeRange aRg( *pTblNd, 0, *pTblNd->EndOfSectionNode() );
     SwUndoTblToTxt* pUndo = 0;
@@ -1397,7 +1391,7 @@ BOOL SwDoc::InsertCol( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
     if( rTbl.ISA( SwDDETable ))
         return FALSE;
 
-    lcl_DelRedlines aDelRedl( *pTblNd );
+    lcl_DelRedlines aDelRedl( *pTblNd, TRUE );
 
     SwTableSortBoxes aTmpLst( 0, 5 );
     SwUndoTblNdsChg* pUndo = 0;
@@ -1459,7 +1453,7 @@ BOOL SwDoc::InsertRow( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
     if( rTbl.ISA( SwDDETable ))
         return FALSE;
 
-    lcl_DelRedlines aDelRedl( *pTblNd );
+    lcl_DelRedlines aDelRedl( *pTblNd, TRUE );
 
     SwTableSortBoxes aTmpLst( 0, 5 );
     SwUndoTblNdsChg* pUndo = 0;
@@ -1640,7 +1634,7 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes )
 
     ::ClearFEShellTabCols();
 
-    lcl_DelRedlines aDelRedl( *pTblNd );
+    lcl_DelRedlines aDelRedl( *pTblNd, TRUE );
 
     // soll die gesamte Tabelle geloescht werden ??
     const ULONG nTmpIdx1 = pTblNd->GetIndex();
@@ -1806,7 +1800,7 @@ BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, BOOL bVert, USHORT nCnt )
     if( rTbl.ISA( SwDDETable ))
         return FALSE;
 
-    lcl_DelRedlines aDelRedl( *pTblNd );
+    lcl_DelRedlines aDelRedl( *pTblNd, TRUE );
 
     SvULongs aNdsCnts;
     SwTableSortBoxes aTmpLst( 0, 5 );
@@ -3821,4 +3815,45 @@ BOOL SwDoc::GCTableBorder( const SwPosition& rPos )
 
     return TRUE;
 }
+
+lcl_DelRedlines::lcl_DelRedlines( const SwTableNode& rNd,
+                                    BOOL bCheckForOwnRedline )
+    : pDoc( (SwDoc*)rNd.GetNodes().GetDoc() )
+{
+    pDoc->StartUndo();
+    const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
+    if( !pDoc->IsIgnoreRedline() && rTbl.Count() )
+    {
+        BOOL bDelete = TRUE;
+        if( bCheckForOwnRedline )
+        {
+            sal_uInt16 nRedlPos = pDoc->GetRedlinePos( rNd );
+            sal_uInt32 nSttNd = rNd.GetIndex(),
+                       nEndNd = rNd.EndOfSectionIndex();
+
+            for ( ; nRedlPos < rTbl.Count(); ++nRedlPos )
+            {
+                const SwRedline* pRedline = rTbl[ nRedlPos ];
+                const SwPosition* pStt = pRedline->Start(),
+                                  * pEnd = pStt == pRedline->GetPoint()
+                                                      ? pRedline->GetMark()
+                                                    : pRedline->GetPoint();
+                if( pStt->nNode <= nSttNd )
+                {
+                    if( pEnd->nNode >= nEndNd &&
+                        pRedline->GetAuthor() == pDoc->GetRedlineAuthor() )
+                    {
+                        bDelete = FALSE;
+                        break;
+                    }
+                }
+                else
+                    break;
+            }
+        }
+        if( bDelete )
+           pDoc->DeleteRedline( rNd );
+    }
+}
+
 
