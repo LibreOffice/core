@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:37:09 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,15 +116,12 @@
 #ifndef _EXPFLD_HXX //autogen
 #include <expfld.hxx>
 #endif
-#ifndef _INSDLG_HXX //autogen
-#include <so3/insdlg.hxx>
-#endif
-#ifndef _OUTPLACE_HXX //autogen
-#include <so3/outplace.hxx>
-#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
+
+#include <svtools/insdlg.hxx>
+#include <sot/clsids.hxx>
 
 #ifndef _SWDOCSH_HXX //autogen
 #include <docsh.hxx>
@@ -630,7 +627,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     {
         const SvGlobalName &rOleId = aObjS[i].GetClassName();
         const String *pClassName = &aObjS[i].GetHumanName();
-        if (rOleId == *SvOutPlaceObject::ClassFactory())
+        if (rOleId == SvGlobalName(SO3_OUT_CLASSID))
             pClassName = &sOLE;
         aCheckLB.InsertEntry(*pClassName);
         SetOptions(nPos++, OLE_CAP, &rOleId);
