@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:07:10 $
+ *  last change: $Author: rt $ $Date: 2004-02-10 15:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,11 @@
 #ifndef _ACCESSIBILITYOPTIONS_HXX
 #include <accessibilityoptions.hxx>
 #endif
+#ifndef _SCRIPTINFO_HXX
+#include <scriptinfo.hxx>
+#endif
+
+#include <unicode/ubidi.h>
 
 using namespace ::com::sun::star;
 
@@ -163,7 +168,7 @@ void SwFldPortion::TakeNextOffset( const SwFldPortion* pFld )
 }
 
 SwFldPortion::SwFldPortion( const XubString &rExpand, SwFont *pFnt )
-    : aExpand(rExpand), pFnt(pFnt), nViewWidth(0), nNextOffset(0),
+    : aExpand(rExpand), pFnt(pFnt), nViewWidth(0), nNextOffset(0), nNextScriptChg(STRING_LEN),
       bFollow( sal_False ), bHasFollow( sal_False )
 {
     SetWhichPor( POR_FLD );
@@ -176,7 +181,8 @@ SwFldPortion::SwFldPortion( const SwFldPortion& rFld )
       bHasFollow( rFld.HasFollow() ),
       bHide( rFld.IsHide() ),
       bLeft( rFld.IsLeft() ),
-      nNextOffset( rFld.GetNextOffset() )
+      nNextOffset( rFld.GetNextOffset() ),
+      nNextScriptChg( rFld.GetNextScriptChg() )
 {
     if ( rFld.HasFont() )
         pFnt = new SwFont( *rFld.GetFont() );
@@ -275,40 +281,6 @@ SwFldSlot::~SwFldSlot()
     }
 }
 
-BYTE SwFldPortion::ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull )
-{
-    BYTE nRet = 0;
-    const String& rTxt = rInf.GetTxt();
-    rFull += rInf.GetIdx();
-    if( rFull > rTxt.Len() )
-        rFull = rTxt.Len();
-    if( rFull && pBreakIt->xBreak.is() )
-    {
-        BYTE nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
-        xub_StrLen nChg = rInf.GetIdx();
-        USHORT nScript;
-        {
-            nScript = i18n::ScriptType::LATIN;
-            if( nActual )
-                nScript = nActual == SW_CJK ? i18n::ScriptType::ASIAN
-                                            : i18n::ScriptType::COMPLEX;
-            nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript(rTxt,nChg,nScript);
-        }
-        if( rFull > nChg )
-        {
-            nRet = nActual;
-            nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
-            if( i18n::ScriptType::ASIAN == nScript )
-                nRet += SW_CJK;
-            else if( i18n::ScriptType::COMPLEX == nScript )
-                nRet += SW_CTL;
-            rFull = nChg;
-        }
-    }
-    rFull -= rInf.GetIdx();
-    return nRet;
-}
-
 void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
 {
     String aTxt;
@@ -326,6 +298,15 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
                 if( nChg < aTxt.Len() )
                     nScript = pBreakIt->xBreak->getScriptType( aTxt, nChg );
             }
+
+            //
+            // nNextScriptChg will be evaluated during SwFldPortion::Format()
+            //
+            if ( nChg < aTxt.Len() )
+                nNextScriptChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( aTxt, nChg, nScript );
+            else
+                nNextScriptChg = aTxt.Len();
+
         }
         BYTE nTmp;
         switch ( nScript ) {
@@ -334,7 +315,28 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
             case i18n::ScriptType::COMPLEX : nTmp = SW_CTL; break;
             default: nTmp = nActual;
         }
-        if( nTmp != nActual )
+
+        // #i16354# Change script type for RTL text to CTL.
+        const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
+        const BYTE nFldDir = rSI.DirType( IsFollow() ? rInf.GetIdx() - 1 : rInf.GetIdx() );
+        if ( UBIDI_RTL == nFldDir )
+        {
+            UErrorCode nError = U_ZERO_ERROR;
+            UBiDi* pBidi = ubidi_openSized( aTxt.Len(), 0, &nError );
+            ubidi_setPara( pBidi, aTxt.GetBuffer(), aTxt.Len(), nFldDir, NULL, &nError );
+            int32_t nEnd;
+            UBiDiLevel nCurrDir;
+            ubidi_getLogicalRun( pBidi, 0, &nEnd, &nCurrDir );
+            ubidi_close( pBidi );
+            const xub_StrLen nNextDirChg = (xub_StrLen)nEnd;
+            nNextScriptChg = Min( nNextScriptChg, nNextDirChg );
+            if ( nCurrDir == UBIDI_RTL )
+                nTmp = SW_CTL;
+        }
+
+        // for footnote portions, assignment of the font is
+        // done in SwFtnPortion::Format()
+        if( !IsFtnPortion() && nTmp != nActual )
         {
             if( !pFnt )
                 pFnt = new SwFont( *rInf.GetFont() );
@@ -370,7 +372,8 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
              rInf.SetUnderScorePos( rInf.GetIdx() );
 
         // field portion has to break if script changes
-        BYTE nScriptChg = ScriptChange( rInf, nFullLen );
+        nFullLen = Min( nFullLen, nNextScriptChg );
+
         rInf.SetLen( nFullLen );
         if( pFnt )
             pFnt->GoMagic( rInf.GetVsh(), pFnt->GetActual() );
@@ -628,10 +631,12 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
         // fieser Sonderfall: FlyFrm liegt in dem Bereich,
         // den wir uns gerade unter den Nagel reissen wollen.
         // Die NumberPortion wird als verborgen markiert.
+        const sal_Bool bFly = rInf.GetFly() ||
+            ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() );
         if( nDiff > rInf.Width() )
         {
             nDiff = rInf.Width();
-            if ( rInf.GetFly() || ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() ) )
+            if ( bFly )
                 SetHide( sal_True );
         }
 
