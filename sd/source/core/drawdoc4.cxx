@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-16 15:35:52 $
+ *  last change: $Author: cl $ $Date: 2002-01-22 16:25:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1244,7 +1244,9 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
 {
     String aOldName(rOldLayoutName);
     USHORT nPos = aOldName.SearchAscii( SD_LT_SEPARATOR );
-    aOldName.Erase(nPos);
+
+    // erase everything after '~LT~'
+    aOldName.Erase(nPos + sizeof(SD_LT_SEPARATOR) - 1 );
     USHORT nLen = aOldName.Len();
 
     List aReplList;
@@ -1255,10 +1257,10 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
     {
         String aSheetName = pSheet->GetName();
 
-        // wenn aSheetName mit aOldName beginnt
+        // if the sheetname starts with aOldName + "~LT~"
         if (aSheetName.Match(aOldName) == nLen)
         {
-            aSheetName.Erase(0, nLen);
+            aSheetName.Erase(0, nLen - sizeof(SD_LT_SEPARATOR) + 1 );
             aSheetName.Insert(rNewName, 0);
 
             StyleReplaceData* pReplData = new StyleReplaceData;
