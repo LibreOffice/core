@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTransliteration.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:32 $
+ *  last change:$Date: 2003-09-08 10:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,13 @@
 
 package ifc.i18n;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.i18n.TransliterationModules;
 import com.sun.star.i18n.TransliterationModulesNew;
 import com.sun.star.i18n.TransliterationType;
 import com.sun.star.i18n.XTransliteration;
 import com.sun.star.lang.Locale;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.i18n.XTransliteration</code>
@@ -145,7 +146,7 @@ public class _XTransliteration extends MultiMethodTest {
             {TransliterationModulesNew.LOWERCASE_UPPERCASE}, loc);
 
         String name = oObj.getName();
-        boolean res = name.equals("lower_to_upper(generic)");
+        result = name.equals("lower_to_upper(generic)");
         log.println("getName return: " + name);
 
         tRes.tested("loadModuleNew()", result);
@@ -400,39 +401,6 @@ public class _XTransliteration extends MultiMethodTest {
             str1 + "', " + p1 + ", " + len1 + ")");
 
         return ret ;
-    }
-
-    /**
-     * Performs tesing of two substrings, where parameters are wrong
-     * (pos and length of substring are out of bounds). Also testing
-     * of opposite agruments order performed.
-     * @return <code>true</code> if none 0 value returned for both
-     * orders.
-     */
-    private boolean testErrSubstring(String str1, int p1, int len1,
-        String str2, int p2, int len2) {
-
-        boolean bOK = true ;
-        int res ;
-        res = oObj.compareSubstring(str1, p1, len1, str2, p2, len2) ;
-        bOK &= res != 0 ;
-
-        if (res == 0) {
-            log.println("Comparing with wrong arguments return 0 :");
-            log.println("('" + str1 + "', " + p1 + ", " + len1 + ", '" +
-                str2 + "', " + p2 + ", " + len2 + ")");
-        }
-
-        res = oObj.compareSubstring(str2, p2, len2, str1, p1, len1) ;
-        bOK &= res != 0 ;
-
-        if (res == 0) {
-            log.println("Comparing with wrong arguments return 0 :");
-            log.println("('" + str2 + "', " + p2 + ", " + len2 + ", '" +
-                str1 + "', " + p1 + ", " + len1 + ")");
-        }
-
-        return bOK ;
     }
 
     /**

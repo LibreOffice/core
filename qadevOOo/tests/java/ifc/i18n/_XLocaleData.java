@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XLocaleData.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:33 $
+ *  last change:$Date: 2003-09-08 10:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 package ifc.i18n;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.i18n.Calendar;
 import com.sun.star.i18n.Currency;
 import com.sun.star.i18n.ForbiddenCharacters;
@@ -70,7 +72,6 @@ import com.sun.star.i18n.LanguageCountryInfo;
 import com.sun.star.i18n.LocaleDataItem;
 import com.sun.star.i18n.XLocaleData;
 import com.sun.star.lang.Locale;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.i18n.XLocaleData</code>
@@ -377,7 +378,6 @@ public class _XLocaleData extends MultiMethodTest {
     */
     public void _getForbiddenCharacters() {
         boolean res = true;
-        boolean printit = false;
         ForbiddenCharacters fc = null;
 
         //the forbidden characters are only available for the asian languages

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XNumberFormatCode.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:33 $
+ *  last change:$Date: 2003-09-08 10:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,14 @@
 
 package ifc.i18n;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.i18n.KNumberFormatType;
 import com.sun.star.i18n.KNumberFormatUsage;
 import com.sun.star.i18n.NumberFormatCode;
 import com.sun.star.i18n.NumberFormatIndex;
 import com.sun.star.i18n.XNumberFormatCode;
 import com.sun.star.lang.Locale;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.i18n.XNumberFormatCode</code>
