@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: pb $ $Date: 2001-04-23 12:01:47 $
+#   last change: $Author: mba $ $Date: 2001-05-03 17:02:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ OBJFILES =	\
         $(OBJ)$/appctor.obj
 
 SLOFILES =  \
+                $(SLO)$/imagemgr.obj\
         $(SLO)$/rmacceptor.obj\
         $(SLO)$/appuno.obj \
         $(SLO)$/applicat.obj \
@@ -135,6 +136,7 @@ SLOFILES =  \
         $(SLO)$/helpinterceptor.obj
 
 EXCEPTIONSFILES=\
+                $(SLO)$/imagemgr.obj\
     $(SLO)$/appmain.obj			\
     $(SLO)$/appmisc.obj			\
     $(SLO)$/frstinit.obj		\
