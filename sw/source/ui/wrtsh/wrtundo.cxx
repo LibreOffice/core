@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtundo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 14:57:42 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-22 15:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@
 
 void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
 {
+    // #105332# save current state of DoesUndo() and disable undo.
+    sal_Bool bSaveDoesUndo = DoesUndo();
+
+    DoUndo(sal_False);
     StartAllAction();
     switch( eDoType )
     {
@@ -117,6 +121,8 @@ void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
             break;
     }
     EndAllAction();
+    // #105332# restore undo state
+    DoUndo(bSaveDoesUndo);
 
     BOOL bCreateXSelection = FALSE;
     const FASTBOOL bFrmSelected = IsFrmSelected() || IsObjSelected();
@@ -225,6 +231,9 @@ String SwWrtShell::GetRepeatString() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/09/11 14:57:42  jp
+      Task #91678#: 'selection clipbord' implemented
+
       Revision 1.2  2001/04/09 07:28:55  tl
       Undo/Redo controller modifications
 
