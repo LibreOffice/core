@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontact.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:46:53 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,8 +297,16 @@ namespace sdr
                 delete pCandidate;
             }
 
-            // Use ActionChanged here since this has changed this object, too
-            ActionChanged();
+            // #116168# get rid of animation info, too
+            if(HasAnimationInfo())
+            {
+                DeleteAnimationInfo();
+            }
+
+            // #116168# Do not call ActionChanged(), this would again initialize e.g.
+            // the AnimationInfo. Just do what ActionChanged() does.
+            // Invalidate the PaintRectangle, this has changed now, too.
+            InvalidatePaintRectangle();
         }
 
         // React on insertion of the object of this ViewContact,
