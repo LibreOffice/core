@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cd $ $Date: 2002-12-10 13:43:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,7 @@ void Help::HideTip( ULONG nId )
 
 HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT nHelpWinStyle, USHORT nStyle ) :
     //FloatingWindow( pParent->ImplGetFrameWindow(), WB_SYSTEMWINDOW ),
-    FloatingWindow( pParent, WB_SYSTEMWINDOW ), // #105827# if we change the parent, mirroring will not work correctly when positioning this window
+    FloatingWindow( pParent, WB_SYSTEMWINDOW|WB_TOOLTIPWIN ), // #105827# if we change the parent, mirroring will not work correctly when positioning this window
     maHelpText( rText )
 {
     SetType( WINDOW_HELPTEXTWINDOW );
