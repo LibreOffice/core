@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:10:27 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,7 +581,7 @@ void ScXMLExportDataPilot::WriteMembers(ScDPSaveDimension* pDim)
             SvXMLUnitConverter::convertBool(sBuffer, ((ScDPSaveMember*)aMembers.GetObject(nMember))->GetIsVisible());
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, sBuffer.makeStringAndClear());
             SvXMLUnitConverter::convertBool(sBuffer, ((ScDPSaveMember*)aMembers.GetObject(nMember))->GetShowDetails());
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_DETAILS, sBuffer.makeStringAndClear());
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_DETAILS, sBuffer.makeStringAndClear());
             SvXMLElementExport aElemDPM(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBER, sal_True, sal_True);
             rExport.CheckAttrList();
         }
@@ -592,7 +592,7 @@ void ScXMLExportDataPilot::WriteLevels(ScDPSaveDimension* pDim)
 {
     rtl::OUStringBuffer sBuffer;
     SvXMLUnitConverter::convertBool(sBuffer, pDim->GetShowEmpty());
-    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_EMPTY, sBuffer.makeStringAndClear());
+    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_EMPTY, sBuffer.makeStringAndClear());
     SvXMLElementExport aElemDPL(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_LEVEL, sal_True, sal_True);
 
     WriteSubTotals(pDim);
@@ -923,7 +923,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rtl::OUString(pServSource->aServiceName));
                             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_NAME, rtl::OUString(pServSource->aParSource));
                             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OBJECT_NAME, rtl::OUString(pServSource->aParName));
-                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_USERNAME, rtl::OUString(pServSource->aParUser));
+                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_USER_NAME, rtl::OUString(pServSource->aParUser));
                             // How to write the Passwort? We must know, whether the passwort shoulb be written encrypted and how or not
                             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_PASSWORT, rtl::OUString(pServSource->aParPass));
                             SvXMLElementExport aElemSD(rExport, XML_NAMESPACE_TABLE, XML_SOURCE_SERVICE, sal_True, sal_True);
