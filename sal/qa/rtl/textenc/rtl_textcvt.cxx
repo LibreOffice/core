@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_textcvt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 14:13:27 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 13:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1503,7 +1503,7 @@ void enc::test_textenc()
               8,
               false,
               true,
-              false,
+              true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
             { RTL_TEXTENCODING_ISO_2022_JP,
@@ -1512,7 +1512,7 @@ void enc::test_textenc()
               8,
               false,
               true,
-              true,
+              false,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
             { RTL_TEXTENCODING_ISO_2022_JP,
