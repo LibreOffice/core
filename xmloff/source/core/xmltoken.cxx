@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:13:02 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2375,9 +2375,16 @@ namespace xmloff { namespace token {
 
         TOKEN( "symbol-color"),                     // XML_SYMBOL_COLOR
 
-        TOKEN( "3d" ),                          // XML_3D
-        TOKEN( "image-position" ),              // XML_IMAGE_POSITION
-        TOKEN( "image-align" ),                 // XML_IMAGE_ALIGN
+        TOKEN( "3d" ),                              // XML_3D
+        TOKEN( "image-position" ),                  // XML_IMAGE_POSITION
+        TOKEN( "image-align" ),                     // XML_IMAGE_ALIGN
+
+        TOKEN( "diagonal-bltr"),                    // XML_DIAGONAL_BLTR
+        TOKEN( "diagonal-bltr-width"),              // XML_DIAGONAL_BLTR_WIDTH
+        TOKEN( "diagonal-tlbr"),                    // XML_DIAGONAL_TLBR
+        TOKEN( "diagonal-tlbr-width"),              // XML_DIAGONAL_TLBR_WIDTH
+        TOKEN( "repeat-content"),                   // XML_REPEAT_CONTENT
+        TOKEN( "shrink-to-fit"),                    // XML_SHRINK_TO_FIT
 
         // OD 2004-05-05 #i28701#
         TOKEN( "wrap-influence-on-position" ),      // XML_WRAP_INFLUENCE_ON_POSITION
