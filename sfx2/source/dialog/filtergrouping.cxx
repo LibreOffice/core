@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-01 16:32:30 $
+ *  last change: $Author: fs $ $Date: 2001-10-02 12:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #endif
 #ifndef _MAP_
 #include <map>
+#endif
+#ifndef _ALGORITHM_
+#include <algorithm>
 #endif
 
 //........................................................................
@@ -725,6 +728,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/10/01 16:32:30  fs
+ *  initial checkin - helpers for grouping and classifying filters in the file open dialog
+ *
  *
  *  Revision 1.0 01.10.01 10:28:28  fs
  ************************************************************************/
