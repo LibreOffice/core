@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,8 @@ TabPage TP_CONTENT_OPT
         Text [ french ] = "~Images et objets" ;
         Text [ dutch ] = "~Afbeeldingen en objecten" ;
         Text [ spanish ] = "~Imágenes y objetos" ;
-        Text [ danish ] = "Billeder og objekter" ;
-        Text [ swedish ] = "~Grafiker och objekt" ;
+        Text [ danish ] = "Grafik og objekter" ;
+        Text [ swedish ] = "~Grafik och objekt" ;
         Text [ finnish ] = "Gra~phics and Objects" ;
         Text [ english_us ] = "~Graphics and objects" ;
         TabStop = TRUE ;
@@ -292,7 +292,7 @@ TabPage TP_CONTENT_OPT
         Text [ danish ] = "Indekselementer" ;
         Text [ french ] = "E~ntrées d'index" ;
         Text [ swedish ] = "Förte~ckningsposter" ;
-        Text [ dutch ] = "Inde~xgegevens" ;
+        Text [ dutch ] = "Inde~xitems" ;
         Text [ spanish ] = "~Entradas al índice" ;
         Text [ english_us ] = "~Index entries" ;
         Text[ chinese_simplified ] = "Ä¿Â¼ÌõÄ¿(~I)";
@@ -463,7 +463,7 @@ TabPage TP_CONTENT_OPT
         Text [ spanish ] = "G~uiones opcionales" ;
         Text [ english_us ] = "Optional h~yphens" ;
         Text[ chinese_simplified ] = "ÈíĞÔÁ¬×Ö·û(~Y)";
-        Text[ russian ] = "Ìÿãêèé ïåğåíîñ";
+        Text[ russian ] = "Ìÿãêèå ïåğåíîñû";
         Text[ polish ] = "Miêkkie znaki podzia³u";
         Text[ japanese ] = "—áŠO‚ÌÊ²Ìİ(~Y)";
         Text[ chinese_traditional ] = "¥i¿ï¥Îªº³s¦r²Å(~Y)";
@@ -752,7 +752,7 @@ TabPage TP_LAYOUT_OPT
         Text[ swedish ] = "Områdesbegränsningar";
         Text[ polish ] = "Ograniczenie obszaru";
         Text[ portuguese_brazilian ] = "~Section boundaries";
-        Text[ japanese ] = "¾¸¼®İ‹æØ‚è(~S)";
+        Text[ japanese ] = "”ÍˆÍ‚Ì‹æØ‚è(~S)";
         Text[ chinese_simplified ] = "ÇøÓò±ß½ç(~S)";
         Text[ chinese_traditional ] = "°Ï°ìÃä¬É(~S)";
         Text[ arabic ] = "ÍÏæÏ ÇáäØÇŞ";
@@ -1413,9 +1413,9 @@ TabPage TP_OPTPRINT_PAGE
         Text [ portuguese_brazilian ] = "~Gráficos" ;
         Text [ portuguese ] = "~Imagens" ;
         Text [ finnish ] = "~Kuvat" ;
-        Text [ danish ] = "Billeder" ;
+        Text [ danish ] = "Grafik" ;
         Text [ french ] = "~Images" ;
-        Text [ swedish ] = "~Grafiker" ;
+        Text [ swedish ] = "~Grafik" ;
         Text [ dutch ] = "A~fbeeldingen" ;
         Text [ spanish ] = "~Imágenes" ;
         Text [ english_us ] = "~Graphics" ;
