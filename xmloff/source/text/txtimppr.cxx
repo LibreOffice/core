@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:45 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,7 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pVertOrientRelAsChar = 0;
     XMLPropertyState* pBackTransparency = NULL; // transparency in %
     XMLPropertyState* pBackTransparent = NULL;  // transparency as boolean
+    sal_uInt16 i; // for the "for" loop
 
     for( ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
          property != rProperties.end();
@@ -432,7 +433,7 @@ void XMLTextImportPropertyMapper::finished(
         FontFinished( pFontFamilyNameCTL, pFontStyleNameCTL, pFontFamilyCTL,
                       pFontPitchCTL, pFontCharSetCTL );
 
-    for( sal_uInt16 i=0; i<4; i++ )
+    for( i = 0; i < 4; i++ )
     {
         if( pAllBorderDistance && !pBorderDistances[i] )
         {
