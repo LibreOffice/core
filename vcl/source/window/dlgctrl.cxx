@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-31 08:40:21 $
+ *  last change: $Author: ssa $ $Date: 2002-10-14 14:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,9 +706,10 @@ BOOL Window::ImplDlgCtrl( const KeyEvent& rKEvt, BOOL bKeyInput )
 
                 if ( !bFormular )
                 {
-                    // Nur mit Ctrl+Tab zwischen Controls springen, wenn
-                    // es erlaubt wurde
-                    if ( !aKeyCode.IsMod1() || (nDlgCtrlFlags & WINDOW_DLGCTRL_MOD1TAB) )
+                    // Only use Ctrl-TAB if it was allowed for the whole
+                    // dialog or for the current control (#103667#)
+                    if ( !aKeyCode.IsMod1() || (nDlgCtrlFlags & WINDOW_DLGCTRL_MOD1TAB) ||
+                        ( pSWindow->GetStyle() & WINDOW_DLGCTRL_MOD1TAB) )
                     {
                         if ( aKeyCode.IsShift() )
                         {
