@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uicommanddescription.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:31:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,7 @@ class ConfigurationAccess_UICommand : // interfaces
         Sequence< rtl::OUString > getAllCommands();
         void                      resetCache();
         sal_Bool                  fillCache();
+        sal_Bool                  addGenericInfoToCache();
 
     private:
         typedef ::std::hash_map< ::rtl::OUString,
@@ -282,6 +283,7 @@ class ConfigurationAccess_UICommand : // interfaces
         CommandToInfoCache                m_aCmdInfoCache;
         sal_Bool                          m_bConfigAccessInitialized;
         sal_Bool                          m_bCacheFilled;
+        sal_Bool                          m_bGenericDataRetrieved;
 };
 
 //*****************************************************************************************************************
@@ -311,6 +313,7 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const rtl::OUStrin
     m_aPropUIContextLabel( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_PROPERTY_CONTEXT_LABEL )),
     m_bConfigAccessInitialized( sal_False ),
     m_bCacheFilled( sal_False ),
+    m_bGenericDataRetrieved( sal_False ),
     m_aConfigCmdAccess( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_ROOT_ACCESS )),
     m_aConfigPopupAccess( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_ROOT_ACCESS )),
     m_aPropLabel( RTL_CONSTASCII_USTRINGPARAM( PROPSET_LABEL )),
@@ -372,6 +375,8 @@ throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         // special keys to retrieve information about a set of commands
         // SAFE
+        addGenericInfoToCache();
+
         if ( rCommandURL.equalsIgnoreAsciiCaseAscii( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST ))
             return makeAny( m_aCommandImageList );
         else if ( rCommandURL.equalsIgnoreAsciiCaseAscii( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST ))
@@ -461,6 +466,7 @@ void ConfigurationAccess_UICommand::resetCache()
 {
     m_aCmdInfoCache.clear();
     m_bCacheFilled = sal_False;
+    m_bGenericDataRetrieved = sal_False;
 }
 
 sal_Bool ConfigurationAccess_UICommand::fillCache()
@@ -554,7 +560,14 @@ sal_Bool ConfigurationAccess_UICommand::fillCache()
     m_aCommandRotateImageList = comphelper::containerToSequence< rtl::OUString >( aImageRotateVector );
     m_aCommandMirrorImageList = comphelper::containerToSequence< rtl::OUString >( aImageMirrorVector );
 
-    if ( m_xGenericUICommands.is() )
+    m_bCacheFilled = sal_True;
+
+    return sal_True;
+}
+
+sal_Bool ConfigurationAccess_UICommand::addGenericInfoToCache()
+{
+    if ( m_xGenericUICommands.is() && !m_bGenericDataRetrieved )
     {
         Sequence< rtl::OUString > aCommandNameSeq;
         try
@@ -562,6 +575,10 @@ sal_Bool ConfigurationAccess_UICommand::fillCache()
             if ( m_xGenericUICommands->getByName(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST ))) >>= aCommandNameSeq )
                 m_aCommandRotateImageList = comphelper::concatSequences< rtl::OUString >( m_aCommandRotateImageList, aCommandNameSeq );
+        }
+        catch ( RuntimeException& e )
+        {
+            throw e;
         }
         catch ( Exception& )
         {
@@ -573,12 +590,16 @@ sal_Bool ConfigurationAccess_UICommand::fillCache()
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST ))) >>= aCommandNameSeq )
                 m_aCommandMirrorImageList = comphelper::concatSequences< rtl::OUString >( m_aCommandMirrorImageList, aCommandNameSeq );
         }
+        catch ( RuntimeException& e )
+        {
+            throw e;
+        }
         catch ( Exception& )
         {
         }
-    }
 
-    m_bCacheFilled = sal_True;
+        m_bGenericDataRetrieved = sal_True;
+    }
 
     return sal_True;
 }
