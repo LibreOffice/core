@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 18:56:40 $
+ *  last change: $Author: sab $ $Date: 2000-12-20 13:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,6 +413,10 @@ void SvXMLExport::ImplExportContent()
 {
     CheckAttrList();
 
+    _ExportChangeTracking();
+
+    CheckAttrList();
+
     {
         // <office:body ...>
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_body,
@@ -685,6 +689,10 @@ void SvXMLExport::_ExportStyles( sal_Bool bUsed )
         catch( lang::ServiceNotRegisteredException& )
         {}
     }
+}
+
+void SvXMLExport::_ExportChangeTracking()
+{
 }
 
 XMLTextParagraphExport* SvXMLExport::CreateTextParagraphExport()
