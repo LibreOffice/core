@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_resource_ooo.scp,v $
 *
-*  $Revision: 1.12 $
+*  $Revision: 1.13 $
 *
-*  last change: $Author: rt $ $Date: 2004-09-17 13:58:36 $
+*  last change: $Author: hr $ $Date: 2004-11-26 21:52:22 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -156,8 +156,6 @@ STD_RES_FILE( gid_File_Res_Bf_Sfx, bf_sfx )
 
 STD_RES_FILE( gid_File_Res_Sd, sd )
 
-STD_SETUPZIP_RES_FILE( gid_File_Res_Set, set )
-
 STD_RES_FILE( gid_File_Res_Sfx, sfx )
 
 #ifdef UNX
@@ -180,8 +178,6 @@ STD_RES_FILE( gid_File_Res_Sw, sw )
 STD_SETUPZIP_RES_FILE( gid_File_Res_Tk, tk )
 
 STD_RES_FILE( gid_File_Res_Tpl, tpl )
-
-STD_SETUPZIP_RES_FILE( gid_File_Res_Tplx, tplx )
 
 STD_SETUPZIP_RES_FILE( gid_File_Res_Uui, uui )
 
