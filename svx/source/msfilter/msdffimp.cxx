@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-15 09:27:19 $
+ *  last change: $Author: sj $ $Date: 2001-01-26 15:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3029,7 +3029,7 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
         if ( aObjData.nSpFlags & SP_FBACKGROUND )
             aBoundRect = Rectangle( Point(), Size( 1, 1 ) );
 
-        Rectangle aTextRect( aBoundRect );
+        Rectangle aTextRect;
         if ( !aBoundRect.IsEmpty() )
         {   // Rotation auf BoundingBox anwenden, BEVOR ien Objekt generiert wurde
             rSt.Seek( nFPosMerk );
@@ -3047,6 +3047,7 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                     aBoundRect = aNewRect;
                 }
             }
+            aTextRect = aBoundRect;
             FASTBOOL bGraphic = IsProperty( DFF_Prop_pib ) ||
                                 IsProperty( DFF_Prop_pibName ) ||
                                 IsProperty( DFF_Prop_pibFlags );
