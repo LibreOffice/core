@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-17 10:39:17 $
+ *  last change: $Author: gt $ $Date: 2000-11-17 13:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,6 +659,8 @@ class ImportExcel8 : public ImportExcel
                                                     const String& rURL );
         String                  ReadWString( UINT16 nAnzBytes, const BOOL bDecBytesLeft = FALSE );
         String                  ReadCString( UINT16 nAnzBytes, const BOOL bDecBytesLeft = FALSE );
+        void                    CreateTmpCtrlStorage( void );
+                                    // if possible generate a SvxMSConvertOCXControls compatibel storage
         inline ExcChart*        GetActChartData( void );
     public:
                                 ImportExcel8(

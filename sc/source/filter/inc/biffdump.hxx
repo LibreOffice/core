@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+ *  last change: $Author: gt $ $Date: 2000-11-17 13:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 
 
 #ifdef DEBUG
-#define DEBUGGING__________
+#define DEBUGGING_________
 #endif
 
 #ifdef DEBUGGING
@@ -210,6 +210,7 @@ protected:
     void                        ObjDump( const UINT16 nL );
     void                        ContDump( const UINT16 nL );
     void                        FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT );
+    void                        ControlsDump( SvStream& rIn );
     static const sal_Char*      GetBlanks( const UINT16 nNumOfBlanks );
     static BOOL                 IsLineEnd( const sal_Char c, sal_Char& rNext, SvStream& rIn, INT32& rLeft );
     void                        Init( void );

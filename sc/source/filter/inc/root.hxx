@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: gt $ $Date: 2000-11-17 13:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #endif
 #ifndef _EXCDEFS_HXX
 #include "excdefs.hxx"
+#endif
+
+#ifndef _SVSTOR_HXX
+#include <so3\svstor.hxx>
 #endif
 
 class SvStorage;
@@ -161,6 +165,9 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 
     SvStorage*          pPivotCacheStorage;
     PivotCacheList*     pImpPivotCacheList;     // pivot caches for import
+
+    SvStorageRef        xCtrlStorage;           // SvxMSConvertOCXControls compatibel storage
+//  SvStorage*          pCtrlStorage;           // SvxMSConvertOCXControls compatibel storage
 
     ScEditEngineDefaulter&  GetEdEng( void );       // -> exctools.cxx
     ScEditEngineDefaulter&  GetEdEngForHF( void );  // -> exctools.cxx

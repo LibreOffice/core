@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-10-26 11:23:33 $
+ *  last change: $Author: gt $ $Date: 2000-11-17 13:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1271,6 +1271,20 @@ public:
 };
 
 
+
+
+class XclBGPic : public ExcRecord
+{
+private:
+    const Graphic*              pGr;
+    virtual void                _Save( SvStream& );
+public:
+                                XclBGPic( RootData& );
+    virtual                     ~XclBGPic();
+
+    virtual UINT16              GetNum() const;
+    virtual UINT16              GetLen() const;
+};
 
 
 #endif // _XCL97REC_HXX
