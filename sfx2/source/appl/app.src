@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:11:26 $
+ *  last change: $Author: pb $ $Date: 2000-11-17 11:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3012,11 +3012,11 @@ ToolBox RID_ENVTOOLBOX
     Align = BOXALIGN_TOP ;
     ItemList =
     {
-        ToolBoxItem
+/*      ToolBoxItem
         {
             Identifier = SID_TOPDOC ;
         };
-/*      ToolBoxItem
+        ToolBoxItem
         {
             Identifier = SID_OPENURL ;
         };*/
@@ -3140,14 +3140,14 @@ ToolBox RID_ENVTOOLBOX
         {
             Type = TOOLBOXITEM_SEPARATOR ;
         };
-/*      ToolBoxItem
+        ToolBoxItem
         {
-            Identifier = SID_INTERNET_ONLINE ;
+            Identifier = SID_GALLERY ;
         };
         ToolBoxItem
         {
             Type = TOOLBOXITEM_SEPARATOR ;
-        };*/
+        };
         ToolBoxItem
         {
             Identifier = SID_CLOSEDOC;
