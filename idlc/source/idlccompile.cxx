@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 13:03:26 $
+ *  last change: $Author: rt $ $Date: 2001-08-20 10:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 #if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD)
 #include <sys/wait.h>
 #else
-#include <wait.h
+#include <wait.h>
 #endif
 #endif
 
