@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_merge.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:13:04 $
+#   last change: $Author: rt $ $Date: 2004-07-23 10:24:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,11 @@ $(foreach,i,$(XMLPROPERTIES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sd
 # *.xrm merge
 .IF "$(READMEFILES)"!=""
 $(foreach,i,$(READMEFILES) $(COMMONMISC)$/$(TARGET)$/$(i:b).xrm) : $$(@:f) localize.sdf 
+.ENDIF          # "$(ULFFILES)"!=""
+
+# *.xcu merge
+.IF "$(LOCALIZEDFILES)"!=""
+$(foreach,i,$(LOCALIZEDFILES) $(MISC)$/merge$/{$(subst,.,$/ $(PACKAGE))}$/$(i:b).xcu) : $$(@:f) localize.sdf 
 .ENDIF          # "$(ULFFILES)"!=""
 
 
