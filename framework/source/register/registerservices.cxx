@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-02-01 16:17:58 $
+ *  last change: $Author: as $ $Date: 2001-02-16 12:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,40 +118,8 @@
 #include <services/frame.hxx>
 #endif
 
-
-#ifdef TF_FILTER//MUSTFILTER
-    #ifndef __FRAMEWORK_SERVICES_FILTERFACTORY_HXX_
-    #include <services/filterfactory.hxx>
-    #endif
-
-    #ifndef __FRAMEWORK_SERVICES_TYPEDETECTION_HXX_
-    #include <services/typedetection.hxx>
-    #endif
-#endif//MUSTFILTER
-
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-#ifdef TF_FILTER//MUSTFILTER
-COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              )
-                        COMPONENTINFO( ::framework::PlugInFrame                 )
-                        COMPONENTINFO( ::framework::Desktop                     )
-                        COMPONENTINFO( ::framework::Task                        )
-                        COMPONENTINFO( ::framework::Frame                       )
-                        COMPONENTINFO( ::framework::FilterFactory               )
-                        COMPONENTINFO( ::framework::TypeDetection               )
-                        COMPONENTINFO( ::framework::DocumentProperties          )
-                    )
-
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
-                        IFFACTORY( ::framework::PlugInFrame                     )   else
-                        IFFACTORY( ::framework::Desktop                         )   else
-                        IFFACTORY( ::framework::Task                            )   else
-                        IFFACTORY( ::framework::Frame                           )   else
-                        IFFACTORY( ::framework::FilterFactory                   )   else
-                        IFFACTORY( ::framework::TypeDetection                   )   else
-                        IFFACTORY( ::framework::DocumentProperties              )
-                    )
-#else//MUSTFILTER
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              )
                         COMPONENTINFO( ::framework::PlugInFrame                 )
                         COMPONENTINFO( ::framework::Desktop                     )
@@ -167,4 +135,3 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::Frame                           )   else
                         IFFACTORY( ::framework::DocumentProperties              )
                     )
-#endif//MUSTFILTER

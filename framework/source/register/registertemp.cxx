@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registertemp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-01-26 08:39:47 $
+ *  last change: $Author: as $ $Date: 2001-02-16 12:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,31 @@
 #include <services/frameloaderfactory.hxx>
 #endif
 
+#ifdef TF_FILTER
+#ifndef __FRAMEWORK_SERVICES_FILTERFACTORY_HXX_
+#include <services/filterfactory.hxx>
+#endif
+
+#ifndef __FRAMEWORK_SERVICES_TYPEDETECTION_HXX_
+#include <services/typedetection.hxx>
+#endif
+#endif // TF_FILTER
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
+#ifdef TF_FILTER
+COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
+                        COMPONENTINFO( ::framework::FrameLoaderFactory          )
+                        COMPONENTINFO( ::framework::FilterFactory               )
+                        COMPONENTINFO( ::framework::TypeDetection               )
+                    )
 
+COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )   else
+                        IFFACTORY( ::framework::FrameLoaderFactory              )   else
+                        IFFACTORY( ::framework::FilterFactory                   )   else
+                        IFFACTORY( ::framework::TypeDetection                   )
+                    )
+#else // TF_FILTER
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
                         COMPONENTINFO( ::framework::FrameLoaderFactory          )
                     )
@@ -109,3 +131,4 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )   else
                         IFFACTORY( ::framework::FrameLoaderFactory              )
                     )
+#endif // TF_FILTER
