@@ -204,7 +204,11 @@ Dim SelYear as String
 		iMonth = DlgCalModel.lstMonth.SelectedItems(0) + 1
 		oSheets.RemovebyName(oSheets.GetbyIndex(1).Name)
 		oSheet = oSheets.GetbyIndex(0)
-		oSheet.Name = sMonthTitle$ + &quot; &quot; + cCalLongMonthNames(iMonth-1)
+		If sMonthTitle = &quot;&quot; Then
+			oSheet.Name = cCalLongMonthNames(iMonth-1)
+		Else
+			oSheet.Name = sMonthTitle + &quot; &quot; + cCalLongMonthNames(iMonth-1)
+		End If
 		oDocument.AddActionLock
 		Call CalCreateMonthTable(iSelYear, iMonth)
 	End If
