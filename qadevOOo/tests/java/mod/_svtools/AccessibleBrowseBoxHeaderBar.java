@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleBrowseBoxHeaderBar.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:32:57 $
+ *  last change:$Date: 2004-11-02 12:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
 
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE);
 
-        //at.printAccessibleTree(log,xRoot);
+            at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
