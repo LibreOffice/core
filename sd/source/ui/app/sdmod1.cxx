@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-08 14:45:31 $
+ *  last change: $Author: aw $ $Date: 2002-02-04 16:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,6 +752,13 @@ void SdModule::Execute(SfxRequest& rReq)
                                 }
                             }
                         }
+
+                        // #97231# Undo-Stack needs to be cleared, else the user may remove the
+                        // only drawpage and this is a state we cannot handle ATM.
+                        SfxUndoManager* pUndoManager = pDocSh->GetUndoManager();
+                        DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
+                        if(pUndoManager->GetUndoActionCount())
+                            pUndoManager->Clear();
                     }
                 }
             }
