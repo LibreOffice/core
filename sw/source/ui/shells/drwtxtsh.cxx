@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-06-27 14:12:19 $
+ *  last change: $Author: vg $ $Date: 2002-07-02 16:54:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 #include <svx/xftsfit.hxx>
 #endif
 #ifndef _MyEDITENG_HXX
-#include <O:/SRX643/wntmsci7/inc/svx/editeng.hxx>
+#include <svx/editeng.hxx>
 #endif
 #ifndef _MyEDITVIEW_HXX
 #include <svx/editview.hxx>
