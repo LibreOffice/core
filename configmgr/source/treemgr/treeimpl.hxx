@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2000-11-09 15:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include "nodefactory.hxx"
 #include "configpath.hxx"
 #include "template.hxx"
+#include "treeaccess.hxx"
 
 #include <vos/ref.hxx>
 #include <vos/refernce.hxx>
@@ -96,6 +97,7 @@ namespace configmgr
 
         class Node;
         class NodeRef;
+        class NodeID;
         class Tree;
         class TreeImpl;
         struct NodeFactory;
@@ -174,7 +176,7 @@ namespace configmgr
             <p> Also provides for navigation to the context this tree is located in
             </p>
         */
-        class TreeImpl : public vos::OReference , public ISynchronizedData
+        class TreeImpl : public vos::OReference, private ISynchronizedData
         {
         public:
             /// the type of the internal list of <type>Node</type>
@@ -306,7 +308,17 @@ namespace configmgr
 
             ElementTreeImpl     * asElementTree();
             ElementTreeImpl const* asElementTree() const;
-            virtual ISynchronizedData* getRootLock() = 0;
+
+        // synchronization
+            ISynchronizedData* getRootLock();
+            ISynchronizedData const* getRootLock() const;
+
+        private:
+            // ISynchronizedData
+            void acquireReadAccess() const;
+            void releaseReadAccess() const;
+            void acquireWriteAccess();
+            void releaseWriteAccess();
         private:
             virtual RootTreeImpl const* doCastToRootTree() const = 0;
             virtual ElementTreeImpl const* doCastToElementTree() const = 0;
@@ -319,6 +331,8 @@ namespace configmgr
         private:
             void implCollectChangesFrom(NodeOffset nNode, NodeChanges& rChanges) const;
             void implCommitChangesFrom(NodeOffset nNode);
+
+            mutable OTreeAccessor m_aOwnLock;
 
             NodeList        m_aNodes;
             AbsolutePath    m_aContextPath;
@@ -384,19 +398,12 @@ namespace configmgr
             /// set no-parent context for this tree
             void detachTree();
 
-        // ISynchronizedData
-            void acquireReadAccess() const;
-            void releaseReadAccess() const;
-            void acquireWriteAccess();
-            void releaseWriteAccess();
-            ISynchronizedData* getRootLock();
         private:
             virtual RootTreeImpl const* doCastToRootTree() const;
             virtual ElementTreeImpl const* doCastToElementTree() const;
         private:
             TemplateHolder  const m_aInstanceInfo;
             INode* m_pOwnedNode;
-            ISynchronizedData* m_pLockImpl;
         };
 //-----------------------------------------------------------------------------
         inline
@@ -476,6 +483,12 @@ namespace configmgr
 
         static
         NodeOffset offset(NodeRef const& aNode);
+
+        static
+        TreeImpl* tree(NodeID const& aNodeID);
+
+        static
+        NodeOffset offset(NodeID const& aNodeID);
 
     };
 //-----------------------------------------------------------------------------

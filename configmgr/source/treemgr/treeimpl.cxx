@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2000-11-09 15:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,8 +518,49 @@ NodeOffset TreeImpl::findChild(NodeOffset nParent, Name const& aName) const
     }
     return 0;
 }
+
+//-----------------------------------------------------------------------------
+// locking
+//-----------------------------------------------------------------------------
+ISynchronizedData* TreeImpl::getRootLock()
+{
+    if ( m_pParentTree )
+        return m_pParentTree->getRootLock();
+    else
+        return this;
+}
+
+ISynchronizedData const* TreeImpl::getRootLock() const
+{
+    if ( m_pParentTree )
+        return m_pParentTree->getRootLock();
+    else
+        return this;
+}
+
 //-----------------------------------------------------------------------------
 
+void TreeImpl::acquireReadAccess() const
+{
+    m_aOwnLock.acquireReadAccess();
+}
+//-----------------------------------------------------------------------------
+void TreeImpl::releaseReadAccess() const
+{
+    m_aOwnLock.releaseReadAccess();
+}
+//-----------------------------------------------------------------------------
+void TreeImpl::acquireWriteAccess()
+{
+    m_aOwnLock.acquireWriteAccess();
+}
+//-----------------------------------------------------------------------------
+void TreeImpl::releaseWriteAccess()
+{
+    m_aOwnLock.releaseWriteAccess();
+}
+
+//-----------------------------------------------------------------------------
 // dynamic-casting
 //-----------------------------------------------------------------------------
 
@@ -590,37 +631,9 @@ RootTreeImpl::RootTreeImpl( NodeFactory& rNodeFactory,
                         ISubtree& rCacheNode, TreeDepth nDepth,
                         NodeOffset nRoot)
 : TreeImpl(aContextPath,nRoot)
-, m_aTreeLock()
 {
     TreeImpl::build(rNodeFactory,rCacheNode,nDepth);
 }
-//-----------------------------------------------------------------------------
-
-void RootTreeImpl::acquireReadAccess() const
-{
-    m_aTreeLock.acquireReadAccess();
-}
-//-----------------------------------------------------------------------------
-void RootTreeImpl::releaseReadAccess() const
-{
-    m_aTreeLock.releaseReadAccess();
-}
-//-----------------------------------------------------------------------------
-void RootTreeImpl::acquireWriteAccess()
-{
-    m_aTreeLock.acquireWriteAccess();
-}
-//-----------------------------------------------------------------------------
-void RootTreeImpl::releaseWriteAccess()
-{
-    m_aTreeLock.releaseWriteAccess();
-}
-//-----------------------------------------------------------------------------
-ISynchronizedData* RootTreeImpl::getRootLock()
-{
-    return this;
-}
-
 //-----------------------------------------------------------------------------
 // class ElementTreeImpl
 //-----------------------------------------------------------------------------
@@ -736,10 +749,6 @@ void ElementTreeImpl::renameTree(Name const& aNewName)
 void ElementTreeImpl::moveTree(TreeImpl* pParentTree, NodeOffset nParentNode)
 {
     TreeImpl::setContext(pParentTree,nParentNode);
-    if (pParentTree)
-    {
-        m_pLockImpl = pParentTree->getRootLock();
-    }
 }
 //-----------------------------------------------------------------------------
 
@@ -747,36 +756,6 @@ void ElementTreeImpl::detachTree()
 {
     TreeImpl::clearContext();
 }
-//-----------------------------------------------------------------------------
-void ElementTreeImpl::acquireReadAccess() const
-{
-    m_pLockImpl->acquireReadAccess();
-}
-//-----------------------------------------------------------------------------
-void ElementTreeImpl::releaseReadAccess() const
-{
-    m_pLockImpl->releaseReadAccess();
-}
-//-----------------------------------------------------------------------------
-void ElementTreeImpl::acquireWriteAccess()
-{
-    m_pLockImpl->acquireWriteAccess();
-}
-//-----------------------------------------------------------------------------
-void ElementTreeImpl::releaseWriteAccess()
-{
-    m_pLockImpl->releaseWriteAccess();
-}
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-ISynchronizedData* ElementTreeImpl::getRootLock()
-{
-    return m_pLockImpl;
-}
-//void ElementTreeImpl::commit()
-//{
-//}
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

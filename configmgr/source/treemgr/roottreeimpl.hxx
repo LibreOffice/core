@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottreeimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2000-11-09 15:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 
 #include "treeimpl.hxx"
 
-#include "treeaccess.hxx"
 #include "synchronize.hxx"
 
 namespace configmgr
@@ -90,18 +89,9 @@ namespace configmgr
                             ISubtree& rCacheTree, TreeDepth nDepth,
                             NodeOffset nRoot = 1);
 
-        // ISynchronizedData
-            void acquireReadAccess() const;
-            void releaseReadAccess() const;
-            void acquireWriteAccess();
-            void releaseWriteAccess();
-
-            ISynchronizedData* getRootLock();
         private:
             virtual RootTreeImpl const* doCastToRootTree() const;
             virtual ElementTreeImpl const* doCastToElementTree() const;
-        private:
-            mutable OTreeAccessor m_aTreeLock;
         };
 //-----------------------------------------------------------------------------
     }
