@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labimp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-14 16:34:12 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,208 +257,208 @@ public:
  --------------------------------------------------*/
 SV_DECL_PTRARR_DEL( SwLabRecs, SwLabRec*, 110, 10 );
 
-class SwLabPage : public SfxTabPage
-{
-    SwNewDBMgr*   pNewDBMgr;
-    String        sActDBName;
-    SwLabItem     aItem;
-
-    FixedText     aWritingText;
-    CheckBox      aAddrBox;
-    MultiLineEdit aWritingEdit;
-    FixedText     aDatabaseFT;
-    ListBox       aDatabaseLB;
-    FixedText     aTableFT;
-    ListBox       aTableLB;
-    ImageButton   aInsertBT;
-    FixedText     aDBFieldFT;
-    ListBox       aDBFieldLB;
-//  PushButton    aDatabaseButton;
-    FixedLine     aWritingFL;
-
-    RadioButton   aContButton;
-    RadioButton   aSheetButton;
-    FixedText     aMakeText;
-    ListBox       aMakeBox;
-    FixedText     aTypeText;
-    ListBox       aTypeBox;
-    ListBox       aHiddenSortTypeBox;
-    FixedInfo     aFormatInfo;
-    FixedLine     aFormatFL;
-
-    sal_Bool        m_bLabel;
-
-     SwLabPage(Window* pParent, const SfxItemSet& rSet);
-    ~SwLabPage();
-
-    DECL_LINK( AddrHdl, Button * );
-    DECL_LINK( DatabaseHdl, ListBox *pListBox );
-//    DECL_LINK( DatabaseButtonHdl, Button * );
-    DECL_LINK( FieldHdl, Button * );
-    DECL_LINK( PageHdl, Button * );
-    DECL_LINK( MakeHdl, ListBox * );
-    DECL_LINK( TypeHdl, ListBox * );
-
-    void DisplayFormat  ();
-    SwLabRec* GetSelectedEntryPos();
-
-public:
-    static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
-
-    virtual void ActivatePage(const SfxItemSet& rSet);
-    virtual int  DeactivatePage(SfxItemSet* pSet = 0);
-            void FillItem(SwLabItem& rItem);
-    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
-    virtual void Reset(const SfxItemSet& rSet);
-
-    SwLabDlg* GetParent() {return (SwLabDlg*) SfxTabPage::GetParent()->GetParent();}
-
-    void    SetToBusinessCard();
-
-    void InitDatabaseBox();
-    inline void SetNewDBMgr(SwNewDBMgr* pDBMgr) { pNewDBMgr = pDBMgr; }
-    inline SwNewDBMgr* GetNewDBMgr() const { return pNewDBMgr; }
-};
-
-/* -----------------08.07.99 13:48-------------------
-
- --------------------------------------------------*/
-class SwOneExampleFrame;
-class SwVisitingCardPage : public SfxTabPage
-{
-    SvTreeListBox   aAutoTextLB;
-    FixedText       aAutoTextGroupFT;
-    ListBox         aAutoTextGroupLB;
-
-    FixedLine       aContentFL;
-
-    Window          aExampleWIN;
-
-    String          sVisCardGroup;
-    String          sTempURL;
-
-    SwLabItem       aLabItem;
-
-    SwOneExampleFrame*  pExampleFrame;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    _xAutoText;
-
-
-    DECL_LINK( AutoTextSelectHdl, void* );
-    DECL_LINK( FrameControlInitializedHdl, void* );
-
-    void            InitFrameControl();
-    void            UpdateFields();
-
-    void            ClearUserData();
-    void            SetUserData( sal_uInt32 nCnt,
-                                    const rtl::OUString* pNames,
-                                    const rtl::OUString* pValues );
-
-    SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet);
-    ~SwVisitingCardPage();
-
-public:
-    static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
-
-    virtual void ActivatePage(const SfxItemSet& rSet);
-    virtual int  DeactivatePage(SfxItemSet* pSet = 0);
-    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
-    virtual void Reset(const SfxItemSet& rSet);
-};
-/* -----------------29.09.99 08:51-------------------
-
- --------------------------------------------------*/
-class SwPrivateDataPage : public SfxTabPage
-{
-    FixedLine       aDataFL;
-
-    FixedText       aNameFT;
-    Edit            aFirstNameED;
-    Edit            aNameED;
-    Edit            aShortCutED;
-
-    FixedText       aName2FT;
-    Edit            aFirstName2ED;
-    Edit            aName2ED;
-    Edit            aShortCut2ED;
-
-    FixedText       aStreetFT;
-    Edit            aStreetED;
-    FixedText       aZipCityFT;
-    Edit            aZipED;
-    Edit            aCityED;
-    FixedText       aCountryStateFT;
-    Edit            aCountryED;
-    Edit            aStateED;
-    FixedText       aTitleProfessionFT;
-    Edit            aTitleED;
-    Edit            aProfessionED;
-    FixedText       aPhoneFT;
-    Edit            aPhoneED;
-    Edit            aMobilePhoneED;
-    FixedText       aFaxFT;
-    Edit            aFaxED;
-    FixedText       aWWWMailFT;
-    Edit            aHomePageED;
-    Edit            aMailED;
-
-    SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet);
-    ~SwPrivateDataPage();
-
-public:
-    static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
-
-    virtual void ActivatePage(const SfxItemSet& rSet);
-    virtual int  DeactivatePage(SfxItemSet* pSet = 0);
-    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
-    virtual void Reset(const SfxItemSet& rSet);
-};
-/* -----------------29.09.99 08:51-------------------
-
- --------------------------------------------------*/
-class SwBusinessDataPage : public SfxTabPage
-{
-    FixedLine       aDataFL;
-    FixedText       aCompanyFT;
-    Edit            aCompanyED;
-    FixedText       aCompanyExtFT;
-    Edit            aCompanyExtED;
-    FixedText       aSloganFT;
-    Edit            aSloganED;
-
-    FixedText       aStreetFT;
-    Edit            aStreetED;
-    FixedText       aZipCityFT;
-    Edit            aZipED;
-    Edit            aCityED;
-    FixedText       aCountryStateFT;
-    Edit            aCountryED;
-    Edit            aStateED;
-
-    FixedText       aPositionFT;
-    Edit            aPositionED;
-
-    FixedText       aPhoneFT;
-    Edit            aPhoneED;
-    Edit            aMobilePhoneED;
-    FixedText       aFaxFT;
-    Edit            aFaxED;
-
-    FixedText       aWWWMailFT;
-    Edit            aHomePageED;
-    Edit            aMailED;
-
-    SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet);
-    ~SwBusinessDataPage();
-
-public:
-    static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
-
-    virtual void ActivatePage(const SfxItemSet& rSet);
-    virtual int  DeactivatePage(SfxItemSet* pSet = 0);
-    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
-    virtual void Reset(const SfxItemSet& rSet);
-};
+//CHINA001 class SwLabPage : public SfxTabPage
+//CHINA001 {
+//CHINA001 SwNewDBMgr*   pNewDBMgr;
+//CHINA001 String        sActDBName;
+//CHINA001 SwLabItem      aItem;
+//CHINA001
+//CHINA001 FixedText      aWritingText;
+//CHINA001 CheckBox   aAddrBox;
+//CHINA001 MultiLineEdit aWritingEdit;
+//CHINA001 FixedText      aDatabaseFT;
+//CHINA001 ListBox    aDatabaseLB;
+//CHINA001 FixedText      aTableFT;
+//CHINA001 ListBox    aTableLB;
+//CHINA001 ImageButton   aInsertBT;
+//CHINA001 FixedText      aDBFieldFT;
+//CHINA001 ListBox    aDBFieldLB;
+//CHINA001 //   PushButton    aDatabaseButton;
+//CHINA001 FixedLine     aWritingFL;
+//CHINA001
+//CHINA001 RadioButton   aContButton;
+//CHINA001 RadioButton   aSheetButton;
+//CHINA001 FixedText      aMakeText;
+//CHINA001 ListBox    aMakeBox;
+//CHINA001 FixedText      aTypeText;
+//CHINA001 ListBox    aTypeBox;
+//CHINA001 ListBox       aHiddenSortTypeBox;
+//CHINA001 FixedInfo     aFormatInfo;
+//CHINA001 FixedLine     aFormatFL;
+//CHINA001
+//CHINA001 sal_Bool     m_bLabel;
+//CHINA001
+//CHINA001 SwLabPage(Window* pParent, const SfxItemSet& rSet);
+//CHINA001 ~SwLabPage();
+//CHINA001
+//CHINA001 DECL_LINK( AddrHdl, Button * );
+//CHINA001 DECL_LINK( DatabaseHdl, ListBox *pListBox );
+//CHINA001 //    DECL_LINK( DatabaseButtonHdl, Button * );
+//CHINA001 DECL_LINK( FieldHdl, Button * );
+//CHINA001 DECL_LINK( PageHdl, Button * );
+//CHINA001 DECL_LINK( MakeHdl, ListBox * );
+//CHINA001 DECL_LINK( TypeHdl, ListBox * );
+//CHINA001
+//CHINA001 void DisplayFormat   ();
+//CHINA001 SwLabRec* GetSelectedEntryPos();
+//CHINA001
+//CHINA001 public:
+//CHINA001 static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
+//CHINA001
+//CHINA001 virtual void ActivatePage(const SfxItemSet& rSet);
+//CHINA001 virtual int  DeactivatePage(SfxItemSet* pSet = 0);
+//CHINA001 void FillItem(SwLabItem& rItem);
+//CHINA001 virtual sal_Bool FillItemSet(SfxItemSet& rSet);
+//CHINA001 virtual void Reset(const SfxItemSet& rSet);
+//CHINA001
+//CHINA001 SwLabDlg* GetParent() {return (SwLabDlg*) SfxTabPage::GetParent()->GetParent();}
+//CHINA001
+//CHINA001 void     SetToBusinessCard();
+//CHINA001
+//CHINA001 void InitDatabaseBox();
+//CHINA001 inline void SetNewDBMgr(SwNewDBMgr* pDBMgr) { pNewDBMgr = pDBMgr; }
+//CHINA001 inline SwNewDBMgr* GetNewDBMgr() const { return pNewDBMgr; }
+//CHINA001 };
+//CHINA001
+//CHINA001 /* -----------------08.07.99 13:48-------------------
+//CHINA001
+//CHINA001 --------------------------------------------------*/
+//CHINA001 class SwOneExampleFrame;
+//CHINA001 class SwVisitingCardPage : public SfxTabPage
+//CHINA001 {
+//CHINA001 SvTreeListBox    aAutoTextLB;
+//CHINA001 FixedText        aAutoTextGroupFT;
+//CHINA001 ListBox          aAutoTextGroupLB;
+//CHINA001
+//CHINA001 FixedLine       aContentFL;
+//CHINA001
+//CHINA001 Window           aExampleWIN;
+//CHINA001
+//CHINA001 String           sVisCardGroup;
+//CHINA001 String           sTempURL;
+//CHINA001
+//CHINA001 SwLabItem        aLabItem;
+//CHINA001
+//CHINA001 SwOneExampleFrame*   pExampleFrame;
+//CHINA001 ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >     _xAutoText;
+//CHINA001
+//CHINA001
+//CHINA001 DECL_LINK( AutoTextSelectHdl, void* );
+//CHINA001 DECL_LINK( FrameControlInitializedHdl, void* );
+//CHINA001
+//CHINA001 void         InitFrameControl();
+//CHINA001 void         UpdateFields();
+//CHINA001
+//CHINA001 void         ClearUserData();
+//CHINA001 void         SetUserData( sal_uInt32 nCnt,
+//CHINA001 const rtl::OUString* pNames,
+//CHINA001 const rtl::OUString* pValues );
+//CHINA001
+//CHINA001 SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet);
+//CHINA001 ~SwVisitingCardPage();
+//CHINA001
+//CHINA001 public:
+//CHINA001 static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
+//CHINA001
+//CHINA001 virtual void ActivatePage(const SfxItemSet& rSet);
+//CHINA001 virtual int  DeactivatePage(SfxItemSet* pSet = 0);
+//CHINA001 virtual sal_Bool FillItemSet(SfxItemSet& rSet);
+//CHINA001 virtual void Reset(const SfxItemSet& rSet);
+//CHINA001 };
+//CHINA001 /* -----------------29.09.99 08:51-------------------
+//CHINA001
+//CHINA001 --------------------------------------------------*/
+//CHINA001 class SwPrivateDataPage : public SfxTabPage
+//CHINA001 {
+//CHINA001 FixedLine       aDataFL;
+//CHINA001
+//CHINA001 FixedText        aNameFT;
+//CHINA001 Edit         aFirstNameED;
+//CHINA001 Edit         aNameED;
+//CHINA001 Edit         aShortCutED;
+//CHINA001
+//CHINA001 FixedText        aName2FT;
+//CHINA001 Edit         aFirstName2ED;
+//CHINA001 Edit         aName2ED;
+//CHINA001 Edit         aShortCut2ED;
+//CHINA001
+//CHINA001 FixedText        aStreetFT;
+//CHINA001 Edit         aStreetED;
+//CHINA001 FixedText        aZipCityFT;
+//CHINA001 Edit         aZipED;
+//CHINA001 Edit         aCityED;
+//CHINA001 FixedText        aCountryStateFT;
+//CHINA001 Edit         aCountryED;
+//CHINA001 Edit         aStateED;
+//CHINA001 FixedText        aTitleProfessionFT;
+//CHINA001 Edit         aTitleED;
+//CHINA001 Edit         aProfessionED;
+//CHINA001 FixedText        aPhoneFT;
+//CHINA001 Edit         aPhoneED;
+//CHINA001 Edit             aMobilePhoneED;
+//CHINA001 FixedText        aFaxFT;
+//CHINA001 Edit         aFaxED;
+//CHINA001 FixedText        aWWWMailFT;
+//CHINA001 Edit         aHomePageED;
+//CHINA001 Edit         aMailED;
+//CHINA001
+//CHINA001 SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet);
+//CHINA001 ~SwPrivateDataPage();
+//CHINA001
+//CHINA001 public:
+//CHINA001 static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
+//CHINA001
+//CHINA001 virtual void ActivatePage(const SfxItemSet& rSet);
+//CHINA001 virtual int  DeactivatePage(SfxItemSet* pSet = 0);
+//CHINA001 virtual sal_Bool FillItemSet(SfxItemSet& rSet);
+//CHINA001 virtual void Reset(const SfxItemSet& rSet);
+//CHINA001 };
+//CHINA001 /* -----------------29.09.99 08:51-------------------
+//CHINA001
+//CHINA001 --------------------------------------------------*/
+//CHINA001 class SwBusinessDataPage : public SfxTabPage
+//CHINA001 {
+//CHINA001 FixedLine       aDataFL;
+//CHINA001 FixedText        aCompanyFT;
+//CHINA001 Edit         aCompanyED;
+//CHINA001 FixedText        aCompanyExtFT;
+//CHINA001 Edit         aCompanyExtED;
+//CHINA001 FixedText        aSloganFT;
+//CHINA001 Edit         aSloganED;
+//CHINA001
+//CHINA001 FixedText        aStreetFT;
+//CHINA001 Edit         aStreetED;
+//CHINA001 FixedText        aZipCityFT;
+//CHINA001 Edit         aZipED;
+//CHINA001 Edit         aCityED;
+//CHINA001 FixedText        aCountryStateFT;
+//CHINA001 Edit         aCountryED;
+//CHINA001 Edit         aStateED;
+//CHINA001
+//CHINA001 FixedText        aPositionFT;
+//CHINA001 Edit         aPositionED;
+//CHINA001
+//CHINA001 FixedText        aPhoneFT;
+//CHINA001 Edit         aPhoneED;
+//CHINA001 Edit             aMobilePhoneED;
+//CHINA001 FixedText        aFaxFT;
+//CHINA001 Edit         aFaxED;
+//CHINA001
+//CHINA001 FixedText        aWWWMailFT;
+//CHINA001 Edit         aHomePageED;
+//CHINA001 Edit         aMailED;
+//CHINA001
+//CHINA001 SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet);
+//CHINA001 ~SwBusinessDataPage();
+//CHINA001
+//CHINA001 public:
+//CHINA001 static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
+//CHINA001
+//CHINA001 virtual void ActivatePage(const SfxItemSet& rSet);
+//CHINA001 virtual int  DeactivatePage(SfxItemSet* pSet = 0);
+//CHINA001 virtual sal_Bool FillItemSet(SfxItemSet& rSet);
+//CHINA001 virtual void Reset(const SfxItemSet& rSet);
+//CHINA001 };
 
 #endif
 
