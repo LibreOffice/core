@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-10 14:13:55 $
+ *  last change: $Author: dvo $ $Date: 2001-04-17 15:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1177,13 +1177,15 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
                 break;
             }
             if(pType)
+            {
                 pType->Add(this);
+                m_bIsDescriptor = sal_False;
+            }
             else
                 throw uno::RuntimeException();
         }
 
         DBG_ASSERT(pType, "kein FieldType gefunden!" );
-        pType->Add(this);
     }
     else
     {
