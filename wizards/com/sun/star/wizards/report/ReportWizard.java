@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bc $ $Date: 2002-06-12 09:04:53 $
+ *  last change: $Author: bc $ $Date: 2002-06-12 10:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1221,8 +1221,8 @@ public class ReportWizard {
                             new Object[] {new Integer(14), "HID:34321", new Integer(6), new Integer(190), new Short((short)com.sun.star.awt.PushButtonType.CANCEL_value), new Integer(0), new Short((short) 60), new Integer(53), scmdCancel});
 
     InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdHelp", SOCMDHELP,
-                            new String[] {"Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Integer(14), new Integer(63), new Integer(190), new Integer(0), new Short((short) 61), new Integer(53), scmdHelp});
+                            new String[] {"Height", "PositionX", "PositionY", "PushButtonType", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Integer(14), new Integer(63), new Integer(190), new Short((short)com.sun.star.awt.PushButtonType.HELP_value), new Integer(0), new Short((short) 61), new Integer(53), scmdHelp});
 
         InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdBack", SOCMDBACK,
                             new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
@@ -1404,7 +1404,7 @@ public class ReportWizard {
         slblTables = tools.getResText(xResInvoke, RID_FORM + 6);
     slblDatabases = tools.getResText(xResInvoke, RID_FORM + 11);
         slblFields = tools.getResText(xResInvoke, RID_FORM + 12);
-        slblSelFields = tools.getResText(xResInvoke, RID_FORM + 13);
+        slblSelFields = tools.getResText(xResInvoke, RID_REPORT + 9);
         slblDataStructure = tools.getResText(xResInvoke, RID_REPORT + 15);
         slblPageLayout = tools.getResText(xResInvoke, RID_REPORT + 16);
         sOrganizeFields = tools.getResText(xResInvoke, RID_REPORT + 19);
