@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-09 17:03:21 $
+ *  last change: $Author: pl $ $Date: 2002-04-18 18:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #endif
 #ifndef _SV_TASKPANELIST_HXX
 #include <taskpanelist.hxx>
+#endif
+#ifndef _SV_WINDOW_H
+#include <window.h>
 #endif
 #pragma hdrstop
 
@@ -3473,7 +3476,7 @@ void MenuBarWindow::PopupClosed( Menu* pPopup )
     if ( pPopup == pActivePopup )
     {
         KillActivePopup();
-        ChangeHighlightItem( ITEMPOS_INVALID, FALSE );
+        ChangeHighlightItem( ITEMPOS_INVALID, FALSE, ImplGetFrameWindow()->ImplGetFrameData()->mbHasFocus );
     }
 }
 

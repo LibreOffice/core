@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: cp $ $Date: 2002-04-16 17:28:03 $
+ *  last change: $Author: pl $ $Date: 2002-04-18 18:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2178,6 +2178,32 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
         // let mouse events reach the correct window
         if( nVisibleFloats < 1 )
             XUngrabPointer( GetXDisplay(), CurrentTime );
+        else if( pEvent->type == ButtonPress )
+        {
+            // see if the user clicks outside all of the floats
+            // if yes release the grab
+            bool bInside = false;
+             for( SalFrame* pFrame = GetSalData()->pFirstFrame_; pFrame; pFrame = pFrame->maFrameData.pNextFrame_ )
+            {
+                if( ( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT )                     &&
+                    pFrame->maFrameData.bMapped_                                                &&
+                    pEvent->xbutton.x_root >= pFrame->maGeometry.nX                             &&
+                    pEvent->xbutton.x_root < pFrame->maGeometry.nX + pFrame->maGeometry.nWidth  &&
+                    pEvent->xbutton.y_root >= pFrame->maGeometry.nY                             &&
+                    pEvent->xbutton.y_root < pFrame->maGeometry.nY + pFrame->maGeometry.nHeight )
+                {
+                    bInside = true;
+                    break;
+                }
+            }
+            if( ! bInside )
+            {
+                // need not take care of the XUngrabPointer in Show( FALSE )
+                // because XUngrabPointer does not produce errors if pointer
+                // is not grabbed
+                XUngrabPointer( GetXDisplay(), CurrentTime );
+            }
+        }
 
         if( pEvent->xbutton.button == Button1 ||
             pEvent->xbutton.button == Button2 ||
