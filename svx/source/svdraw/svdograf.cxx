@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-11 11:56:32 $
+ *  last change: $Author: ka $ $Date: 2000-12-19 14:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,7 @@ void SdrGrafObj::SetGraphicObject( const GraphicObject& rGrfObj )
 {
     *pGraphic = rGrfObj;
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), Application::IsRemoteServer() ? 60000 : 20000 );
+    pGraphic->SetUserData();
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     SetChanged();
     SendRepaintBroadcast();
@@ -359,6 +360,7 @@ const GraphicObject& SdrGrafObj::GetGraphicObject() const
 void SdrGrafObj::SetGraphic( const Graphic& rGrf )
 {
     pGraphic->SetGraphic( rGrf );
+    pGraphic->SetUserData();
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     SetChanged();
     SendRepaintBroadcast();
@@ -448,6 +450,24 @@ const MapMode& SdrGrafObj::GetGrafPrefMapMode() const
 const Size& SdrGrafObj::GetGrafPrefSize() const
 {
     return pGraphic->GetPrefSize();
+}
+
+// -----------------------------------------------------------------------------
+
+void SdrGrafObj::SetGrafStreamURL( const String& rGraphicStreamURL )
+{
+    if( pModel->IsSwapGraphics() && ( pModel->GetSwapGraphicsMode() & SDR_SWAPGRAPHICSMODE_DOC ) )
+    {
+        pGraphic->SetUserData( rGraphicStreamURL );
+        nGrafStreamPos = GRAFSTREAMPOS_INVALID;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+String SdrGrafObj::GetGrafStreamURL() const
+{
+    return pGraphic->GetUserData();
 }
 
 // -----------------------------------------------------------------------------
@@ -1260,9 +1280,10 @@ void SdrGrafObj::SetModel( SdrModel* pNewModel )
 
     if( bChg )
     {
-        if( GRAFSTREAMPOS_INVALID != nGrafStreamPos )
+        if( ( GRAFSTREAMPOS_INVALID != nGrafStreamPos ) || pGraphic->HasUserData() )
         {
             ForceSwapIn();
+            pGraphic->SetUserData();
             nGrafStreamPos = GRAFSTREAMPOS_INVALID;
         }
 
@@ -1374,7 +1395,10 @@ void SdrGrafObj::WriteData(SvStream& rOut) const
 #endif
 
         if(pModel->IsSwapGraphics() && (pModel->GetSwapGraphicsMode() & SDR_SWAPGRAPHICSMODE_DOC))
+        {
+            ((SdrGrafObj*)this)->pGraphic->SetUserData();
             ((SdrGrafObj*)this)->nGrafStreamPos = rOut.Tell();
+        }
 
         if(bZCompr)
             nNewComprMode |= COMPRESSMODE_ZBITMAP;
@@ -1515,6 +1539,7 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
     aCompat.SetID("SdrGrafObj");
 #endif
 
+    pGraphic->SetUserData();
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
 
     if( rHead.GetVersion() < 11 )
@@ -2055,7 +2080,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
             {
                 const ULONG nSwapMode = pModel->GetSwapGraphicsMode();
 
-                if( ( ( GRAFSTREAMPOS_INVALID != nGrafStreamPos ) || pGraphicLink ) &&
+                if( ( ( GRAFSTREAMPOS_INVALID != nGrafStreamPos ) || pGraphic->HasUserData() || pGraphicLink ) &&
                     ( nSwapMode & SDR_SWAPGRAPHICSMODE_PURGE ) )
                 {
                     pRet = NULL;
@@ -2063,6 +2088,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                 else if( nSwapMode & SDR_SWAPGRAPHICSMODE_TEMP )
                 {
                     pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
+                    pGraphic->SetUserData();
                     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
                 }
             }
@@ -2073,12 +2099,12 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
         // kann aus dem original Doc-Stream nachgeladen werden...
         if( pModel != NULL )
         {
-            if( GRAFSTREAMPOS_INVALID != nGrafStreamPos )
+            if( ( GRAFSTREAMPOS_INVALID != nGrafStreamPos ) || pGraphic->HasUserData() )
             {
                 SdrDocumentStreamInfo aStreamInfo;
 
                 aStreamInfo.mbDeleteAfterUse = FALSE;
-                aStreamInfo.maUserData = String();
+                aStreamInfo.maUserData = pGraphic->GetUserData();
 
                 SvStream* pStream = pModel->GetDocumentStream( aStreamInfo );
 
@@ -2086,9 +2112,17 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                 {
                     Graphic aGraphic;
 
-                    pStream->Seek( nGrafStreamPos );
-                    *pStream >> aGraphic;
-                    pGraphic->SetGraphic( aGraphic );
+#ifndef SVX_LIGHT
+                    if( pGraphic->HasUserData() )
+                        GetGrfFilter()->ImportGraphic( aGraphic, String(), *pStream );
+                    else
+#endif
+                    {
+                        pStream->Seek( nGrafStreamPos );
+                        *pStream >> aGraphic;
+                        pGraphic->SetGraphic( aGraphic );
+                    }
+
                     pStream->ResetError();
 
                     if( aStreamInfo.mbDeleteAfterUse )
