@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:56:14 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ inline sal_Bool Any::operator != ( const Any & rAny ) const SAL_THROW( () )
 template< class C >
 inline Any SAL_CALL makeAny( const C & value ) SAL_THROW( () )
 {
-    return Any( &value, ::getCppuType( &value ) );
+    return Any( &value, getCppuType( &value ) );
 }
 
 // additionally specialized for C++ bool
@@ -207,7 +207,7 @@ inline Any SAL_CALL makeAny( bool const & value ) SAL_THROW( () )
 template< class C >
 inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW( () )
 {
-    const Type & rType = ::getCppuType( &value );
+    const Type & rType = getCppuType( &value );
     ::uno_type_any_assign(
         &rAny, const_cast< C * >( &value ), rType.getTypeLibType(),
         (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
@@ -216,7 +216,7 @@ inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW( () 
 template< class C >
 inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, C & value ) SAL_THROW( () )
 {
-    const Type & rType = ::getCppuType( &value );
+    const Type & rType = getCppuType( &value );
     return ::uno_type_assignData(
         &value, rType.getTypeLibType(),
         rAny.pData, rAny.pType,
@@ -537,7 +537,7 @@ inline sal_Bool SAL_CALL operator == ( const Any & rAny, const BaseReference & v
 template< class C >
 inline sal_Bool SAL_CALL operator == ( const Any & rAny, const C & value ) SAL_THROW( () )
 {
-    const Type & rType = ::getCppuType( &value );
+    const Type & rType = getCppuType( &value );
     return ::uno_type_equalData(
         rAny.pData, rAny.pType,
         const_cast< C * >( &value ), rType.getTypeLibType(),
