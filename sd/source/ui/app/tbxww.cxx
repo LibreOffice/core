@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:44:21 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,9 @@
 #endif
 
 #include "sddll.hxx"
-#include "grdocsh.hxx"
+#ifndef SD_GRAPHIC_DOC_SHELL_HXX
+#include "GraphicDocShell.hxx"
+#endif
 
 #include "app.hxx"
 #include "app.hrc"
