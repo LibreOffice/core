@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:05:16 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ ENGLISH ] = "Indent and Spacing" ;
                 Text [ norwegian ] = "Indent and Spacing" ;
                 Text [ italian ] = "Rientro e spaziatura" ;
-                Text [ portuguese_brazilian ] = "Recuos & Afastamentos" ;
+                Text [ portuguese_brazilian ] = "Recuo & Afastamento" ;
                 Text [ portuguese ] = "AvanÁos e espaÁamento" ;
                 Text [ finnish ] = "Sisennykset ja v‰lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -529,7 +529,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ ENGLISH ] = "Indent and Spacing" ;
                 Text [ norwegian ] = "Indent and Spacing" ;
                 Text [ italian ] = "Rientro e spaziatura" ;
-                Text [ portuguese_brazilian ] = "Recuos & Afastamento" ;
+                Text [ portuguese_brazilian ] = "Recuo & Afastamento" ;
                 Text [ portuguese ] = "AvanÁos e espaÁamento" ;
                 Text [ finnish ] = "Sisennykset ja v‰lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -607,7 +607,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ polish ] = "Typ numeracji";
                 Text[ japanese ] = "Áï™Âè∑‰ªò„Åë„ÅÆÁ®ÆÈ°û";
                 Text[ chinese_traditional ] = "Á∑®ËôüÈ°ûÂûã";
-                Text[ language_user1 ] = "MS Word";
+                Text[ language_user1 ] = "; MS Word";
                 Text[ arabic ] = "ÿ—Ìﬁ… «· —ﬁÌ„";
                 Text[ greek ] = "”ÙıÎ ·ÒﬂËÏÁÛÁÚ";
                 Text[ korean ] = "Î≤àÌò∏ Îß§Í∏∞Í∏∞ Ïú†Ìòï";
@@ -687,6 +687,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
         };
     };
 };
+
 
 
 
