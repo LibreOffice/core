@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 15:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,8 @@
 #ifndef _COM_SUN_STAR_SDBCX_COMPAREBOOKMARK_HPP_
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #endif
+
+#include <algorithm>
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -897,7 +899,7 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos
             m_bRowCountFinal = sal_True;
         }
         else
-           m_nRowCount = max(i,m_nRowCount);
+           m_nRowCount = std::max(i,m_nRowCount);
 
     }
     return bCheck;
@@ -1028,7 +1030,7 @@ sal_Bool ORowSetCache::moveWindow()
                     // we have to read one row forward to enshure that we know when we are on last row
                     // but only when we don't know it already
                     if(!m_bRowCountFinal && (bOk = m_pCacheSet->absolute(m_nPosition+1)))
-                        m_nRowCount = max(sal_Int32(m_nPosition+1),m_nRowCount);
+                        m_nRowCount = std::max(sal_Int32(m_nPosition+1),m_nRowCount);
                 }
                 if(!bOk)
                 {
@@ -1061,7 +1063,7 @@ sal_Bool ORowSetCache::moveWindow()
             }
             // we know that this is the current maximal rowcount here
             if(!m_bRowCountFinal)
-                m_nRowCount = max(nPos,m_nRowCount);
+                m_nRowCount = std::max(nPos,m_nRowCount);
             // we have to read one row forward to enshure that we know when we are on last row
             // but only when we don't know it already
             sal_Bool bOk = sal_True;
@@ -1082,7 +1084,7 @@ sal_Bool ORowSetCache::moveWindow()
                     m_bRowCountFinal = sal_True;
                 }
                 else if(!m_bRowCountFinal)
-                    m_nRowCount = max(++nPos,m_nRowCount);
+                    m_nRowCount = std::max(++nPos,m_nRowCount);
             }
             else
             {   // the end was reached before end() so we can set the start before nNewStartPos
@@ -1095,7 +1097,7 @@ sal_Bool ORowSetCache::moveWindow()
                 if(!m_bRowCountFinal)
                 {
                     m_pCacheSet->previous();                                    // because we stand after the last row
-                    m_nRowCount      = max(m_nRowCount,m_pCacheSet->getRow());  // here we have the row count
+                    m_nRowCount      = std::max(m_nRowCount,m_pCacheSet->getRow()); // here we have the row count
                     m_bRowCountFinal = sal_True;
                 }
                 // TODO check
@@ -1130,7 +1132,7 @@ sal_Bool ORowSetCache::moveWindow()
     }
 
     if(!m_bRowCountFinal)
-       m_nRowCount = max(m_nPosition,m_nRowCount);
+       m_nRowCount = std::max(m_nPosition,m_nRowCount);
     OSL_ENSURE(m_nStartPos >= 0,"ORowSetCache::moveWindow: m_nStartPos is less than 0!");
 
     return bRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 10:49:57 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 15:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+
+#include <algorithm>
 
 
 using namespace dbaui;
@@ -276,7 +278,7 @@ void DlgOrderCrit::SetOrderList( const String& _rOrderList )
     }
 
     // die nicht gesetzten auf 'kein' 'aufsteigend'
-    xub_StrLen nItemsSet = min(nLen, xub_StrLen(DOG_ROWS));
+    xub_StrLen nItemsSet = std::min(nLen, xub_StrLen(DOG_ROWS));
     for (i=0 ; i<DOG_ROWS-nItemsSet; ++i)
     {
         arrLbFields[2-i]->SelectEntryPos( 0 );
