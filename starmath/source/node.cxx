@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-18 14:57:19 $
+ *  last change: $Author: tl $ $Date: 2001-03-23 10:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,8 +369,8 @@ void SmNode::Prepare(const SmFormat &rFormat)
     GetFont().SetItalic(ITALIC_NONE);
 
     SmNode *pNode;
-    int     nSize = GetNumSubNodes();
-    for (int i = 0; i < nSize; i++)
+    USHORT      nSize = GetNumSubNodes();
+    for (USHORT i = 0; i < nSize; i++)
         if (pNode = GetSubNode(i))
             pNode->Prepare(rFormat);
 }
@@ -385,8 +385,8 @@ void  SmNode::ToggleDebug() const
     pThis->bIsDebug = bIsDebug ? FALSE : TRUE;
 
     SmNode *pNode;
-    int     nSize = GetNumSubNodes();
-    for (int i = 0; i < nSize; i++)
+    USHORT      nSize = GetNumSubNodes();
+    for (USHORT i = 0; i < nSize; i++)
         if (pNode = pThis->GetSubNode(i))
             pNode->ToggleDebug();
 #endif
@@ -441,28 +441,14 @@ void SmNode::CreateTextFromNode(String &rText)
     }
 }
 
-void SmExpressionNode::CreateTextFromNode(String &rText)
-{
-    SmNode *pNode;
-    USHORT  nSize = GetNumSubNodes();
-    if (nSize > 1)
-        rText.Append('{');
-    for (USHORT i = 0;  i < nSize;  i++)
-        if (pNode = GetSubNode(i))
-        {
-            pNode->CreateTextFromNode(rText);
-            //Just a bit of foo to make unary +asd -asd +-asd -+asd look nice
-            if (pNode->GetType() == NMATH)
-                if ((nSize != 2) || ((rText.GetChar(rText.Len()-1) != '+') &&
-                    (rText.GetChar(rText.Len()-1) != '-')))
-                    rText.Append(' ');
-        }
 
-    if (nSize > 1)
-    {
-        rText.EraseTrailingChars();
-        APPEND(rText,"} ");
-    }
+void SmNode::AdaptToX(const OutputDevice &rDev, ULONG nWidth)
+{
+}
+
+
+void SmNode::AdaptToY(const OutputDevice &rDev, ULONG nHeight)
+{
 }
 
 
@@ -554,7 +540,7 @@ const SmNode * SmNode::FindRectClosestTo(const Point &rPoint) const
 }
 
 
-/**************************************************************************/
+///////////////////////////////////////////////////////////////////////////
 
 
 SmStructureNode::~SmStructureNode()
@@ -584,7 +570,74 @@ void SmStructureNode::SetSubNodes(const SmNodeArray &rNodeArray)
 }
 
 
-/**************************************************************************/
+BOOL SmStructureNode::IsVisible() const
+{
+    return FALSE;
+}
+
+
+USHORT SmStructureNode::GetNumSubNodes() const
+{
+    return (USHORT) aSubNodes.GetSize();
+}
+
+
+SmNode * SmStructureNode::GetSubNode(USHORT nIndex)
+{
+    return aSubNodes.Get(nIndex);
+}
+
+
+///////////////////////////////////////////////////////////////////////////
+
+
+BOOL SmVisibleNode::IsVisible() const
+{
+    return TRUE;
+}
+
+
+USHORT SmVisibleNode::GetNumSubNodes() const
+{
+    return 0;
+}
+
+
+SmNode * SmVisibleNode::GetSubNode(USHORT nIndex)
+{
+    return NULL;
+}
+
+
+///////////////////////////////////////////////////////////////////////////
+
+
+void SmExpressionNode::CreateTextFromNode(String &rText)
+{
+    SmNode *pNode;
+    USHORT  nSize = GetNumSubNodes();
+    if (nSize > 1)
+        rText.Append('{');
+    for (USHORT i = 0;  i < nSize;  i++)
+        if (pNode = GetSubNode(i))
+        {
+            pNode->CreateTextFromNode(rText);
+            //Just a bit of foo to make unary +asd -asd +-asd -+asd look nice
+            if (pNode->GetType() == NMATH)
+                if ((nSize != 2) || ((rText.GetChar(rText.Len()-1) != '+') &&
+                    (rText.GetChar(rText.Len()-1) != '-')))
+                    rText.Append(' ');
+        }
+
+    if (nSize > 1)
+    {
+        rText.EraseTrailingChars();
+        APPEND(rText,"} ");
+    }
+}
+
+
+///////////////////////////////////////////////////////////////////////////
 
 
 void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
@@ -633,6 +686,12 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
             ExtendBy(rNodeRect, nSize > 1 ? RCP_NONE : RCP_ARG);
         }
     }
+}
+
+
+SmNode * SmTableNode::GetLeftMost()
+{
+    return this;
 }
 
 
@@ -968,6 +1027,12 @@ void SmBinVerNode::CreateTextFromNode(String &rText)
 }
 
 
+SmNode * SmBinVerNode::GetLeftMost()
+{
+    return this;
+}
+
+
 /**************************************************************************/
 
 
@@ -1029,8 +1094,8 @@ USHORT GetLineIntersectionPoint(Point &rResult,
         double fLambda = (    (rPoint1.Y() - rPoint2.Y()) * rHeading2.X()
                             - (rPoint1.X() - rPoint2.X()) * rHeading2.Y())
                          / fDet;
-        rResult = Point(rPoint1.X() + fLambda * rHeading1.X(),
-                        rPoint1.Y() + fLambda * rHeading1.Y());
+        rResult = Point(rPoint1.X() + (long) (fLambda * rHeading1.X()),
+                        rPoint1.Y() + (long) (fLambda * rHeading1.Y()));
     }
 
     return nRes;
@@ -1061,7 +1126,8 @@ void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
             nRectBottom = GetBottom();
     Point   aRightHdg     (100, 0),
             aDownHdg      (0, 100),
-            aDiagHdg      (100.0 * cos(fAngleRad), -100.0 * sin(fAngleRad));
+            aDiagHdg      ( (long)(100.0 * cos(fAngleRad)),
+                            (long)(-100.0 * sin(fAngleRad)) );
 
     long  nLeft, nRight, nTop, nBottom;     // Ränder des Rechtecks für die
                                             // Diagonale
@@ -2109,7 +2175,7 @@ void SmPolygonNode::Draw(OutputDevice &rDev, const Point &rPosition) const
 void SmRootSymbolNode::DrawBar(OutputDevice &rDev, const Point &rPosition) const
 {
     // get polygon and rectangle
-    SmPolygon  aBarPoly = SmPolygon(MS_BAR);
+    SmPolygon  aBarPoly = SmPolygon( (char) MS_BAR );
 
     // extra length to close small (wedge formed) gap between root-sign and
     // horizontal bar
@@ -2162,6 +2228,12 @@ void SmRootSymbolNode::Draw(OutputDevice &rDev, const Point &rPosition) const
     int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
     SmRect::Draw(rDev, rPosition, nRFlags);
 #endif
+}
+
+
+void SmRootSymbolNode::AdaptToX(const OutputDevice &rDev, ULONG nWidth)
+{
+    nBodyWidth = nWidth;
 }
 
 
@@ -2344,6 +2416,7 @@ void SmMatrixNode::CreateTextFromNode(String &rText)
     APPEND(rText,"} ");
 }
 
+
 void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
     Point   aPosition,
@@ -2448,6 +2521,12 @@ void SmMatrixNode::SetRowCol(USHORT nMatrixRows, USHORT nMatrixCols)
 {
     nNumRows = nMatrixRows;
     nNumCols = nMatrixCols;
+}
+
+
+SmNode * SmMatrixNode::GetLeftMost()
+{
+    return this;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-18 14:55:58 $
+ *  last change: $Author: tl $ $Date: 2001-03-23 10:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,8 +190,8 @@ public:
     SmScaleMode     GetScaleMode() const { return eScaleMode; }
     void            SetScaleMode(SmScaleMode eMode) { eScaleMode = eMode; }
 
-    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth) {};
-    virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight) {};
+    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
+    virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
     SmNodeType      GetType() const  { return eType; }
     const SmToken & GetToken() const { return aNodeToken; }
@@ -219,12 +219,12 @@ protected:
 public:
     virtual ~SmStructureNode();
 
-    virtual BOOL        IsVisible() const { return FALSE; }
+    virtual BOOL        IsVisible() const;
 
-    virtual USHORT      GetNumSubNodes() const { return aSubNodes.GetSize(); }
+    virtual USHORT      GetNumSubNodes() const;
             void        SetNumSubNodes(USHORT nSize) { aSubNodes.SetSize(nSize); }
 
-    virtual SmNode *    GetSubNode(USHORT nIndex) { return aSubNodes.Get(nIndex); }
+    virtual SmNode *    GetSubNode(USHORT nIndex);
             void SetSubNodes(SmNode *pFirst, SmNode *pSecond,
                                 SmNode *pThird = NULL);
             void SetSubNodes(const SmNodeArray &rNodeArray);
@@ -243,9 +243,9 @@ protected:
 
 public:
 
-    virtual BOOL        IsVisible() const { return TRUE; }
-    virtual USHORT      GetNumSubNodes() const { return 0; }
-    virtual SmNode *    GetSubNode(USHORT nIndex) { return NULL; }
+    virtual BOOL        IsVisible() const;
+    virtual USHORT      GetNumSubNodes() const;
+    virtual SmNode *    GetSubNode(USHORT nIndex);
 };
 
 
@@ -316,13 +316,13 @@ class SmPolygonNode : public SmGraphicNode
 protected:
     SmPolygonNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     :   SmGraphicNode(eNodeType, rNodeToken),
-        aPolygon(rNodeToken.cMathChar)
+        aPolygon( (char) rNodeToken.cMathChar )
     {}
 
 public:
     SmPolygonNode(const SmToken &rNodeToken)
     :   SmGraphicNode(NPOLYGON, rNodeToken),
-        aPolygon(rNodeToken.cMathChar)
+        aPolygon( (char) rNodeToken.cMathChar )
     {}
 
     SmPolygon &                 GetPolygon() { return aPolygon; }
@@ -356,7 +356,7 @@ public:
     {}
 
 
-    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth) { nBodyWidth = nWidth; }
+    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
     virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
@@ -499,7 +499,7 @@ public:
     :   SmStructureNode(NTABLE, rNodeToken)
     {}
 
-    virtual SmNode * GetLeftMost() { return this; }
+    virtual SmNode * GetLeftMost();
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
 };
@@ -590,8 +590,6 @@ public:
         SetNumSubNodes(3);
     }
 
-
-
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
 };
 
@@ -608,7 +606,7 @@ public:
         SetNumSubNodes(3);
     }
 
-    virtual SmNode * GetLeftMost() { return this; }
+    virtual SmNode * GetLeftMost();
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
@@ -722,8 +720,8 @@ public:
 };
 
 
-inline SmBracebodyNode::SmBracebodyNode(const SmToken &rNodeToken)
-:   SmStructureNode(NBRACEBODY, rNodeToken)
+inline SmBracebodyNode::SmBracebodyNode(const SmToken &rNodeToken) :
+    SmStructureNode(NBRACEBODY, rNodeToken)
 {
     nBodyHeight = 0;
 }
@@ -741,8 +739,8 @@ public:
 };
 
 
-SmVerticalBraceNode::SmVerticalBraceNode(const SmToken &rNodeToken)
-:   SmStructureNode(NVERTICAL_BRACE, rNodeToken)
+inline SmVerticalBraceNode::SmVerticalBraceNode(const SmToken &rNodeToken) :
+    SmStructureNode(NVERTICAL_BRACE, rNodeToken)
 {
     SetNumSubNodes(3);
 }
@@ -845,7 +843,7 @@ public:
     USHORT GetNumCols() const {return nNumCols;}
     void SetRowCol(USHORT nMatrixRows, USHORT nMatrixCols);
 
-    virtual SmNode * GetLeftMost() { return this; }
+    virtual SmNode * GetLeftMost();
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
