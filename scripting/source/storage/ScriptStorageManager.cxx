@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.17 $
+*  $Revision: 1.18 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-01-28 17:09:27 $
+*  last change: $Author: toconnor $ $Date: 2003-01-29 12:58:10 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -542,7 +542,28 @@ extern "C"
      */
     sal_Bool SAL_CALL component_writeInfo( lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
     {
-        return ::cppu::component_writeInfoHelper( pServiceManager, pRegistryKey, ::scripting_impl::s_entries );
+        if (::cppu::component_writeInfoHelper( pServiceManager, pRegistryKey,
+            ::scripting_impl::s_entries ))
+        {
+            try
+            {
+                // register singleton
+                registry::XRegistryKey * pKey =
+                    reinterpret_cast< registry::XRegistryKey * >(pRegistryKey);
+
+                Reference< registry::XRegistryKey > xKey(
+                    pKey->createKey(
+
+                    OUSTR("drafts.com.sun.star.script.framework.storage.ScriptStorageManager/UNO/SINGLETONS/drafts.com.sun.star.script.framework.storage.theScriptStorageManager")));
+                    xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.storage.ScriptStorageManager") );
+
+                return sal_True;
+            }
+            catch (Exception & exc)
+            {
+            }
+        }
+        return sal_False;
     }
 
     /**

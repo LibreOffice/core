@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: npower $ $Date: 2003-01-28 11:52:17 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-29 12:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
         if (docSid != scriptingConstantsPool.USER_STORAGE_ID &&
             docSid != scriptingConstantsPool.SHARED_STORAGE_ID)
         {
-            LanguageType nLang = LANGUAGE_SYSTEM;
+            /* LanguageType nLang = LANGUAGE_SYSTEM;
             ResMgr *pResMgr = ResMgr::SearchCreateResMgr( "scripting" MAKE_NUMSTR(SUPD), nLang );
             QueryBox aBox( NULL, ResId(DLG_SCRIPTEXEC, pResMgr));
             sal_Int32 res = aBox.Execute();
@@ -246,7 +246,7 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
             if (res == RET_NO)
             {
                 return results;
-            }
+            } */
         }
 
         // modifying the XPropertySet on the resolved Context to contain the
@@ -479,8 +479,28 @@ extern "C"
     sal_Bool SAL_CALL component_writeInfo( lang::XMultiServiceFactory * pServiceManager,
         registry::XRegistryKey * pRegistryKey )
     {
-        return ::cppu::component_writeInfoHelper( pServiceManager, pRegistryKey,
-            ::scripting_runtimemgr::s_entries );
+        if (::cppu::component_writeInfoHelper( pServiceManager, pRegistryKey,
+            ::scripting_runtimemgr::s_entries ))
+        {
+            try
+            {
+                // register singleton
+                registry::XRegistryKey * pKey =
+                    reinterpret_cast< registry::XRegistryKey * >(pRegistryKey);
+
+                Reference< registry::XRegistryKey > xKey(
+                    pKey->createKey(
+
+                    OUSTR("drafts.com.sun.star.script.framework.ScriptRuntimeManager/UNO/SINGLETONS/drafts.com.sun.star.script.framework.theScriptRuntimeManager")));
+                    xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.ScriptRuntimeManager") );
+
+                return sal_True;
+            }
+            catch (Exception & exc)
+            {
+            }
+        }
+        return sal_False;
     }
 
     /**

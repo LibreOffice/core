@@ -105,10 +105,10 @@ public class Register{
         return false;
         }
 
-            if ( !regSingletons( path, progpath, opSys, statusLabel ) )
-        {
-                return false;
-            }
+            // if ( !regSingletons( path, progpath, opSys, statusLabel ) )
+        // {
+            //     return false;
+            // }
             // updating ProtocolHandler
             statusLabel.setText("Updating ProtocolHandler...");
             if(!FileUpdater.updateProtocolHandler(path, statusLabel)) {
