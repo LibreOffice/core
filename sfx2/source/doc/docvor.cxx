@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-24 13:03:02 $
+ *  last change: $Author: mh $ $Date: 2000-11-28 19:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include <stdio.h>
 
 #ifndef _SV_PRNSETUP_HXX //autogen
 #include <svtools/prnsetup.hxx>
