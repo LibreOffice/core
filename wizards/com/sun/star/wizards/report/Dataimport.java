@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: bc $ $Date: 2002-10-21 13:42:34 $
+ *  last change: $Author: bc $ $Date: 2002-10-31 15:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,11 +280,12 @@ public class Dataimport extends ReportWizard{
 
     public void createReport(final XMultiServiceFactory xMSF){
     try{
-        ReportDocument CurReportDocument;
-        CurReportDocument = new ReportDocument(xMSF, false, true);
-        int iWidth = CurReportDocument.Frame.getComponentWindow().getPosSize().Width;
-        CurUNOProgressDialog = showProgressDisplay(xMSF, CurReportDocument, true);
-        importReportData(xMSF, CurReportDocument, CurUNOProgressDialog);
+    ReportDocument CurReportDocument;
+    CurReportDocument = new ReportDocument(xMSF, false, true);
+    int iWidth = CurReportDocument.Frame.getComponentWindow().getPosSize().Width;
+    CurUNOProgressDialog = showProgressDisplay(xMSF, CurReportDocument, true);
+    importReportData(xMSF, CurReportDocument, CurUNOProgressDialog);
+    CurReportDocument.CurDBMetaData.disposeDBMetaData();
     }
     catch(java.lang.Exception jexception ){
     jexception.printStackTrace(System.out);
@@ -411,12 +412,7 @@ public class Dataimport extends ReportWizard{
         if (CurDBMetaData.getcurrentRecordData(ColIndex, FieldCount, RecordFieldCount, SelColIndices, iCommandType, DataVector, sMsgQueryCreationImpossible) == true){
         int RowIndex = 1;
         bStopProcess = false;
-        while (CurDBMetaData.ResultSet.next() == true){
-            if (bStopProcess == true){
-            insertDataToRecordTable(CurReportDocument, xTextCursor, DataVector, RecordFieldCount);
-            xTextDocument.unlockControllers();
-            return;
-            }
+        while ((CurDBMetaData.ResultSet.next() == true) && (bStopProcess == false)){
             RowIndex += 1;
             breset = false;
             for (ColIndex = 0; ColIndex < GroupFieldCount; ColIndex++){
@@ -454,7 +450,8 @@ public class Dataimport extends ReportWizard{
     catch(java.lang.Exception javaexception ){
         javaexception.printStackTrace(System.out);
     }
-    CurReportDocument.ReportTextDocument.unlockControllers();
+    if (CurReportDocument.ReportTextDocument.hasControllersLocked())
+        CurReportDocument.ReportTextDocument.unlockControllers();
     }
 
 
@@ -500,35 +497,6 @@ public class Dataimport extends ReportWizard{
     catch( com.sun.star.uno.Exception exception ){
     exception.printStackTrace(System.out);
      }}
-
-
-/*    public void addDBRecordstoReportDocument(ReportDocument CurReportDocument, XResultSet xResultSet, String[] FieldNames)
-    throws com.sun.star.sdbc.SQLException, com.sun.star.container.NoSuchElementException, com.sun.star.lang.IllegalArgumentException,
-        com.sun.star.lang.WrappedTargetException{
-    int iColIndex;
-    int FieldCount = tools.getArraylength(FieldNames);
-    com.sun.star.sdbc.XRow xResultSetRow;
-    String sValue;
-    String sResultSet = null;
-    CurReportDocument.ReportTextDocument.lockControllers();
-    xResultSetRow = (com.sun.star.sdbc.XRow) UnoRuntime.queryInterface(com.sun.star.sdbc.XRow.class, xResultSet);
-    XTextCursor xTextCursor = CurReportDocument.createTextCursor(CurReportDocument.ReportTextDocument.getText());
-    while (xResultSet.next() == true){
-        sResultSet = "";
-        for (int i=0; i<FieldCount;i++){
-        sValue = xResultSetRow.getString(i+1);
-        if (xResultSetRow.wasNull() == false){
-            sResultSet += sValue;
-        }
-        if (i < FieldCount-1)
-            sResultSet += (char) (9);
-        }
-        xTextCursor.setString(sResultSet);
-        xTextCursor.collapseToEnd();
-        CurReportDocument.ReportTextDocument.getText().insertControlCharacter(xTextCursor, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, false);
-    }
-       CurReportDocument.ReportTextDocument.unlockControllers();
-    } */
 
 
     public void updateProgressDisplay(int iCounter, UNODialogs CurUNOProgressDialog){

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: bc $ $Date: 2002-10-21 13:42:35 $
+ *  last change: $Author: bc $ $Date: 2002-10-31 15:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,7 @@ public class ReportWizard {
      ReportDocument CurReportDocument;
      ReportPaths CurReportPaths;
      String DefaultName;
+     String OldDefaultName;
      java.util.Vector GroupFieldVector;
      String TemplatePath;
      String[] SavePath = new String[2];
@@ -498,11 +499,11 @@ public class ReportWizard {
             if (iPos != iOldContentPos){
             iOldContentPos = iPos;
             tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(false));
-//          CurReportDocument.ReportTextDocument.lockControllers();
+            CurReportDocument.ReportTextDocument.lockControllers();
             CurReportDocument.loadSectionsfromTemplate(CurReportPaths.ContentFiles[0][iPos]);
             CurReportDocument.loadStyleTemplates(CurReportPaths.ContentFiles[0][iPos], "LoadTextStyles");
             CurReportDocument.setTableColumnSeparators();
-//          CurReportDocument.ReportTextDocument.unlockControllers();
+            CurReportDocument.ReportTextDocument.unlockControllers();
             CurReportDocument.selectFirstPage();
             tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(true));
             }
@@ -642,6 +643,9 @@ public class ReportWizard {
             }
             catch( Exception exception ){
                exception.printStackTrace(System.out);
+        if (CurReportDocument.ReportTextDocument.hasControllersLocked())
+            CurReportDocument.ReportTextDocument.unlockControllers();
+        tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(true));
             }
         }
     }
@@ -959,20 +963,24 @@ public class ReportWizard {
 
     public void assignDocumentPathstoTextControl(XMultiServiceFactory xMSF){
     String DefaultPath;
+    String CurPath = (String) CurUNODialog.getPropertyOfDialogControl("txtSavePath_1", "Text");
     DefaultName = "Report_" + CurReportDocument.CurDBMetaData.DataSourceName + "_" + CurReportDocument.CurDBMetaData.MainCommandName;
-    CurReportPaths.UserTemplatePath = tools.getOfficePath(xMSF, "Template","user");
-    DefaultPath = CurReportPaths.UserTemplatePath + "/" + DefaultName + ".stw";
-    DefaultPath = tools.convertfromURLNotation(DefaultPath);
-    CurUNODialog.assignPropertyToDialogControl("txtSavePath_1", "Text", DefaultPath);
-    baskbeforeOverwrite[0] = true;
-    bmodifiedbySaveAsDialog[0] = false;
+    if (DefaultName.equals(OldDefaultName) == false){
+        OldDefaultName = DefaultName;
+        CurReportPaths.UserTemplatePath = tools.getOfficePath(xMSF, "Template","user");
+        DefaultPath = CurReportPaths.UserTemplatePath + "/" + DefaultName + ".stw";
+        DefaultPath = tools.convertfromURLNotation(DefaultPath);
+        CurUNODialog.assignPropertyToDialogControl("txtSavePath_1", "Text", DefaultPath);
+        baskbeforeOverwrite[0] = true;
+        bmodifiedbySaveAsDialog[0] = false;
 
-    CurReportPaths.WorkPath = tools.getOfficePath(xMSF, "Work","");
-    DefaultPath = CurReportPaths.WorkPath + "/" + DefaultName + ".sxw";
-    DefaultPath = tools.convertfromURLNotation(DefaultPath);
-    CurUNODialog.assignPropertyToDialogControl("txtSavePath_2", "Text", DefaultPath);
-    baskbeforeOverwrite[1] = true;
-    bmodifiedbySaveAsDialog[1] = false;
+        CurReportPaths.WorkPath = tools.getOfficePath(xMSF, "Work","");
+        DefaultPath = CurReportPaths.WorkPath + "/" + DefaultName + ".sxw";
+        DefaultPath = tools.convertfromURLNotation(DefaultPath);
+        CurUNODialog.assignPropertyToDialogControl("txtSavePath_2", "Text", DefaultPath);
+        baskbeforeOverwrite[1] = true;
+        bmodifiedbySaveAsDialog[1] = false;
+    }
     }
 
 
@@ -1168,7 +1176,7 @@ public class ReportWizard {
         CurReportDocument.removeAllTextSections();
         CurReportDocument.removeAllTextTables();
         CurDBMetaData.OldFieldNames = CurDBMetaData.FieldNames;
-        // Todo: Nur ausführen, when FieldNames anders als vorher-> dann muss auch Selektionslistbox leer gemacht werden.
+        // Todo: Nur ausf?ren, when FieldNames anders als vorher-> dann muss auch Selektionslistbox leer gemacht werden.
         CurUNODialog.assignPropertyToDialogControl("lstGroup", "StringItemList", CurDBMetaData.FieldNames);
         xSelGroupListBox.removeItems((short) 0, xSelGroupListBox.getItemCount());
         GroupFieldVector = new java.util.Vector(CurDBMetaData.FieldNames.length);
@@ -1403,6 +1411,7 @@ public class ReportWizard {
             if (bCloseDocument == true){
             CurUNODialog.xComponent.dispose();
             CurReportDocument.Component.dispose();
+            CurReportDocument.CurDBMetaData.disposeDBMetaData();
             return;
             }
             if ((buseTemplate == true) || (bcreateTemplate == false)){
@@ -1413,6 +1422,13 @@ public class ReportWizard {
                 CurUNOProgressDialog = CurDataimport.showProgressDisplay(xMSF, CurReportDocument, false);  // CurReportDocument.Frame.getComponentWindow().getPosSize().Width);
                 importReportData(xMSF, CurReportDocument, CurUNOProgressDialog, CurDataimport);
             }
+            else{
+                CurUNODialog.xComponent.dispose();
+                CurReportDocument.CurDBMetaData.disposeDBMetaData();
+            }
+            }
+            else{
+            CurReportDocument.CurDBMetaData.disposeDBMetaData();
             }
             break;
         case 1:
@@ -1421,8 +1437,6 @@ public class ReportWizard {
         if (bdisposeDialog == true)
         if (CurReportDocument.ReportTextDocument.hasControllersLocked())
             CurReportDocument.ReportTextDocument.unlockControllers();
-        System.out.println("WizardDialog wird weggeschmissen!");
-        CurUNODialog.xComponent.dispose();
     }
     else{
         int iMsg = UNODialogs.showMessageBox(xMSF, CurReportDocument.Frame, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sMsgNoDatabaseAvailable);
@@ -1448,13 +1462,13 @@ public class ReportWizard {
         if (bcreateLink && bDocisStored)
             CurReportDocument.CurDBMetaData.createDBLink(CurReportDocument.CurDBMetaData.DataSource, StorePath);
         }
-        System.out.println("Fortschrittsdialog wird weggeschmissen!");
-        CurUNOProgressDialog.xComponent.dispose();
     }
     catch (ThreadDeath td){
         System.out.println("could not stop thread");
         CurUNOProgressDialog.xComponent.dispose();
     }
+    CurReportDocument.CurDBMetaData.disposeDBMetaData();
+    CurUNOProgressDialog.xComponent.dispose();
     }
         });
     ProgressThread.start();
