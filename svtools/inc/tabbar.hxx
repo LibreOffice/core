@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-06 12:30:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,7 +568,7 @@ public:
     const Link&     GetEndRenamingHdl() const { return maEndRenamingHdl; }
 
     // accessibility
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
 #endif  // _TABBAR_HXX
