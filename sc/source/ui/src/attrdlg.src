@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:12:12 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ TabDialog RID_SCDLG_ATTR
     Text [ ENGLISH ] = "Cell Attributes" ;
     Text [ norwegian ] = "Cell Attributes" ;
     Text [ italian ] = "Attributi cella" ;
-    Text [ portuguese_brazilian ] = "Atributos da Célula" ;
+    Text [ portuguese_brazilian ] = "Atributos da C?lula" ;
     Text [ portuguese ] = "Atributos de célula" ;
     Text [ finnish ] = "Solun määritteet" ;
     Text [ danish ] = "Celleattributter" ;
@@ -100,7 +100,7 @@ TabDialog RID_SCDLG_ATTR
                 Text [ ENGLISH ] = "Number" ;
                 Text [ norwegian ] = "Number" ;
                 Text [ italian ] = "Numeri" ;
-                Text [ portuguese_brazilian ] = "Número" ;
+                Text [ portuguese_brazilian ] = "N?ero" ;
                 Text [ portuguese ] = "Números" ;
                 Text [ finnish ] = "Luvut" ;
                 Text [ danish ] = "Tal" ;
@@ -299,7 +299,7 @@ TabDialog RID_SCDLG_ATTR
                 Text [ ENGLISH ] = "Protection" ;
                 Text [ norwegian ] = "Protection" ;
                 Text [ italian ] = "Protezione" ;
-                Text [ portuguese_brazilian ] = "Proteção" ;
+                Text [ portuguese_brazilian ] = "Prote??o" ;
                 Text [ portuguese ] = "Protecção de célula" ;
                 Text [ finnish ] = "Solun suojaus" ;
                 Text [ danish ] = "Cellebeskyttelse" ;
@@ -383,7 +383,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ ENGLISH ] = "Hide ~Formulas" ;
         Text [ norwegian ] = "Hide ~Formulas" ;
         Text [ italian ] = "Nascondi ~formule" ;
-        Text [ portuguese_brazilian ] = "Ocultar ~Fórmulas" ;
+        Text [ portuguese_brazilian ] = "Ocultar ~F?mulas" ;
         Text [ portuguese ] = "Ocultar ~fórmulas" ;
         Text [ finnish ] = "~Piilota kaava" ;
         Text [ danish ] = "Skjul ~formel" ;
@@ -450,7 +450,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ norwegian ] =
         "To activate cell protection, you have to protect the active table.\n\nChoose 'Protect Document' from menu 'Extras' and the command 'Table' afterwards." ;
         Text [ italian ] = "Per attivare la protezione cella, è necessario proteggere la tabella attiva.\n\nScegliete 'Proteggi documento' dal menu 'Strumenti' e quindi il comando 'Tabella'." ;
-        Text [ portuguese_brazilian ] = "Para ativar a proteção da célula, , preciso proteger a tabelaativa.\n\nEscolha 'Proteger Documento' no menu 'Extras' e,em seguida, o comando 'Tabela'." ;
+        Text [ portuguese_brazilian ] = "Para ativar a prote??o da c?lula, , preciso proteger a tabelaativa.\n\nEscolha 'Proteger Documento' no menu 'Extras' e,em seguida, o comando 'Tabela'." ;
         Text [ portuguese ] = "Para activar a protecção da célula, é necessário proteger a tabela activa.\n\nSeleccione 'Proteger documento' no menu 'Ferramentas' e em seguida o comando 'Tabela'." ;
         Text [ finnish ] ="Solun suojaus on voimassa vasta, kun käsiteltävänä oleva lomake on suojattu. \n\nValitse Työkalut-valikosta Suojaa asiakirja ja määritä sitten Lomake." ;
         Text [ danish ] = "Cellebeskyttelsen er kun effektiv, når det aktive regneark er beskyttet.\n\nVælg 'Bekyt dokument' i menuen 'Funktioner'og derefter 'Regneark' for at beskytte regnearket." ;
@@ -460,12 +460,12 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ spanish ] = "La protección de celdas es efectiva solamente si la hoja activa está protegida.\n\nSeleccione en 'Herramientas' la instrucción 'Proteger documento' y luego 'Hoja'." ;
         Text [ english_us ] = "Cell protection is only effective after the current sheet has been protected. \n\nSelect 'Protect Document' from the 'Tools' menu, and specify 'Sheet'." ;
         Text[ chinese_simplified ] = "Ö»ÓĞÔÚÄú¼¤»î±£»¤¹¤×÷±íºó£¬µ¥Ôª¸ñ²Å»áÊÜµ½±£»¤¡£\n\nÇëÄú°´»÷²Ëµ¥ÃüÁî¡°¹¤¾ß¡±£¬¡°±£»¤ÎÄµµ¡±£¬¡°¹¤×÷±í¡±¡£";
-        Text[ russian ] = "Çàùèòà ÿ÷åéêè äåéñòâóåò òîëüêî ïîñëå çàùèòû òåêóùåãî ëèñòà.\n\nÄëÿ çàùèòû ëèñòà âûáåğèòå â ìåíş 'Ñåğâèñ' êîìàíäó 'Çàùèòà äîêóìåíòà', à çàòåì êîìàíäó 'Òàáëèöà'.";
+        Text[ russian ] = "Çàùèòà ÿ÷åéêè äåéñòâóåò òîëüêî ïîñëå çàùèòû òåêóùåãî ëèñòà.\n\nÄëÿ çàùèòû ëèñòà âûáåğèòå â ìåíş 'Ñåğâèñ' êîìàíäó 'Çàùèòà äîêóìåíòà', à çàòåì ê";
         Text[ polish ] = "Ochrona komórek aktywna bêdzie dopiero po zabezpieczeniu aktualnego arkusza.\n\nNale¿y wybraæ w tym celu z menu 'Narzêdzia' polecenie 'Chroñ dokument', a nastêpnie polecenie 'Arkusz'.";
         Text[ japanese ] = "¾Ù‚Ì•ÛŒì‚ÍŒ»İ‚Ì•\\‚ª•ÛŒì‚³‚ê‚Ä‚¢‚é‚Ì‚İ—LŒø‚Å‚·B\n\n•\\‚ğ•ÛŒì‚·‚é‚É‚ÍAÒÆ­°‚ÅÂ°Ù¨ÄŞ·­ÒİÄ‚Ì•ÛŒì¨•\\‚ğ‘I‘ğ‚µ‚Ü‚·B";
         Text[ chinese_traditional ] = "¥u¦³¦b±z±Ò°Ê«OÅ@¤u§@ªí«á¡AÀx¦s®æ¤~·|¨ü¨ì«OÅ@¡C\n\n½Ğ±z«ö¤@¤U³o­Ó¥\\¯àªí«ü¥O¡G\"«OÅ@¤å¥ó\"¡A\"¤u§@ªí\"¡C";
-        Text[ arabic ] = "áÇ ÊÕÈÍ ÍãÇíÉ ÇáÎáÇíÇ İÚøÇáÉ¡ ÅáÇ ÚäÏãÇ íßæä ÇáÌÏæá ÇáÍÇáí ãÍãí.\n\náÊäİíĞ Ğáß ÇáÑÌÇÁ ÇÎÊíÇÑ ÇáÃãÑ 'ÍãÇíÉ ÇáãÓÊäÏ' ãä ÇáŞÇÆãÉ 'ÃÏæÇÊ'¡ Ëã ÇáÃãÑ 'ÌÏæá'.";
-        Text[ greek ] = "Ç ğñïóôáóßá êåëéşí éó÷ıåé ìüíï åöüóïí ôåèåß ï ôñİ÷ùí ğßíáêáò õğü ğñïóôáóßá.\n\nÃéá íá åğéôåõ÷èåß áõôü åğéëİîôå óôï ìåíïı 'Åñãáëåßá' ôçí åíôïëŞ 'Ğñïóôáóßá åããñÜöïõ' êáé óôç óõíİ÷åéá 'Ğßíáêáò'.";
+        Text[ arabic ] = "áÇ ÊÕÈÍ ÍãÇíÉ ÇáÎáÇíÇ İÚøÇáÉ¡ ÅáÇ ÚäÏãÇ íßæä ÇáÌÏæá ÇáÍÇáí ãÍãí.\n\náÊäİíĞ Ğáß ÇáÑÌÇÁ ÇÎÊíÇÑ ÇáÃãÑ 'ÍãÇíÉ ÇáãÓÊäÏ' ãä ÇáŞÇÆãÉ 'ÃÏæÇÊ'¡ Ëã ÇáÃã?";
+        Text[ greek ] = "Ç ğñïóôáóßá êåëéşí éó÷ıåé ìüíï åöüóïí ôåèåß ï ôñİ÷ùí ğßíáêáò õğü ğñïóôáóßá.\n\nÃéá íá åğéôåõ÷èåß áõôü åğéëİîôå óôï ìåíïı 'Åñãáëåßá' ôçí åíôïë";
         Text[ korean ] = "¼¿ º¸È£´Â ÇöÀçÀÇ ½ÃÆ®°¡ º¸È£µÇ¾úÀ»¶§¸¸ À¯È¿ÇÕ´Ï´Ù.  \n\n'µµ±¸'¸Ş´º¿¡¼­ '¹®¼­º¸È£'¸¦ ¼±ÅÃÇÑ ´ÙÀ½, '½ÃÆ®'¸¦ ÁöÁ¤ÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "Hücre koruması, yalnızca aktif tablo da korunmuşsa etkindir.\n\nBunun için 'Araçlar' mönüsünden önce 'belgeyi koru' sonra 'Tablo' komutunu seçin.";
         Text[ language_user1 ] = " ";
@@ -479,7 +479,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ ENGLISH ] = "Protection" ;
         Text [ norwegian ] = "Protection" ;
         Text [ italian ] = "Protezione" ;
-        Text [ portuguese_brazilian ] = "Proteção" ;
+        Text [ portuguese_brazilian ] = "Prote??o" ;
         Text [ portuguese ] = "Protecção" ;
         Text [ finnish ] = "Suojaus" ;
         Text [ danish ] = "Beskyttelse" ;
@@ -508,7 +508,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ ENGLISH ] = "Hide for ~Printing" ;
         Text [ norwegian ] = "Hide for ~Printing" ;
         Text [ italian ] = "Non ~stampare" ;
-        Text [ portuguese_brazilian ] = "Ocultar para ~Impressão" ;
+        Text [ portuguese_brazilian ] = "Ocultar para ~Impress?o" ;
         Text [ portuguese ] = "Ocultar para ~impressão" ;
         Text [ finnish ] = "~Piilota tulostettaessa" ;
         Text [ danish ] = "Skjul ved udskrivning" ;
@@ -539,7 +539,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ ENGLISH ] = "Cells of current selection will be omitted for printing." ;
         Text [ norwegian ] = "Cells of current selection will be omitted for printing." ;
         Text [ italian ] = "Le celle della selezione corrente\nnon verranno stampate." ;
-        Text [ portuguese_brazilian ] = "As células na seleção atual serão omitidas na impressão." ;
+        Text [ portuguese_brazilian ] = "As c?lulas na sele??o atual ser?o omitidas na impress?o." ;
         Text [ portuguese ] = "As células da selecção actual serão omitidas na impressão." ;
         Text [ finnish ] = "Valitut solut ohitetaan tulostettaessa." ;
         Text [ danish ] = "De markerede celler udskrives ikke." ;
@@ -568,7 +568,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ ENGLISH ] = "Printing" ;
         Text [ norwegian ] = "Printing" ;
         Text [ italian ] = "Stampa" ;
-        Text [ portuguese_brazilian ] = "Impressão" ;
+        Text [ portuguese_brazilian ] = "Impress?o" ;
         Text [ portuguese ] = "Impressão" ;
         Text [ finnish ] = "Tulosta" ;
         Text [ danish ] = "Udskrivning" ;
