@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 08:30:47 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 15:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,7 @@
 //  document settings
 #define SC_UNO_CALCASSHOWN          "CalcAsShown"
 #define SC_UNO_DEFTABSTOP           "DefaultTabStop"
+#define SC_UNO_TABSTOPDIS           "TabStopDistance" // is the same like the before, but only the writer name
 #define SC_UNO_IGNORECASE           "IgnoreCase"
 #define SC_UNO_ITERCOUNT            "IterationCount"
 #define SC_UNO_ITERENABLED          "IsIterationEnabled"
@@ -443,6 +444,8 @@
 #define SC_UNO_RASTERSUBX           "RasterSubdivisionX"
 #define SC_UNO_RASTERSUBY           "RasterSubdivisionY"
 #define SC_UNO_RASTERSYNC           "IsRasterAxisSynchronized"
+#define SC_UNO_AUTOCALC             "AutoCalculate"
+#define SC_UNO_PRINTERNAME          "PrinterName"
 
 //  old (5.2) property names for view options - for compatibility only!
 #define OLD_UNO_COLROWHDR           "ColumnRowHeaders"
