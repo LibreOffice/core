@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:55:17 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,12 +174,12 @@ ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
                 {
                     const ScCondFormatEntry* pFormatEntry = pFormat->GetEntry(i);
                     ScConditionMode eMode = pFormatEntry->GetOperation();
-                    ScAddress aPos = pFormatEntry->GetSrcPos();
+                    ScAddress aPos = pFormatEntry->GetValidSrcPos();    // #b4974740# valid pos for expressions
                     String aExpr1 = pFormatEntry->GetExpression( aPos, 0, 0, bEnglish, bCompileXML );
                     String aExpr2 = pFormatEntry->GetExpression( aPos, 1, 0, bEnglish, bCompileXML );
                     String aStyle = pFormatEntry->GetStyle();
 
-                    AddEntry_Impl( eMode, aExpr1, aExpr2, aPos, aStyle );
+                    AddEntry_Impl( eMode, aExpr1, aExpr2, aPos, EMPTY_STRING, aStyle );
                 }
             }
         }
@@ -199,11 +199,13 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
         if (pEntry)
         {
             USHORT nMode;
-            String aExpr1, aExpr2, aStyle;
+            String aExpr1, aExpr2, aStyle, aPosStr;
             ScAddress aPos;
-            pEntry->GetData( nMode, aExpr1, aExpr2, aPos, aStyle );
+            pEntry->GetData( nMode, aExpr1, aExpr2, aPos, aPosStr, aStyle );
             ScCondFormatEntry aCoreEntry( (ScConditionMode)nMode,
                                 aExpr1, aExpr2, pDoc, aPos, aStyle, bEnglish, bCompileXML );
+            if ( aPosStr.Len() )
+                aCoreEntry.SetSrcString( aPosStr );
             rFormat.AddEntry( aCoreEntry );
         }
     }
@@ -219,10 +221,10 @@ ScTableConditionalFormat::~ScTableConditionalFormat()
 
 void ScTableConditionalFormat::AddEntry_Impl( USHORT nMode,
                         const String& rExpr1, const String& rExpr2,
-                        const ScAddress& rPos, const String& rStyle )
+                        const ScAddress& rPos, const String& rPosStr, const String& rStyle )
 {
     ScTableConditionalEntry* pNew = new ScTableConditionalEntry(
-                                        this, nMode, rExpr1, rExpr2, rPos, rStyle );
+                                        this, nMode, rExpr1, rExpr2, rPos, rPosStr, rStyle );
     pNew->acquire();
     aEntries.Insert( pNew, LIST_APPEND );
 }
@@ -248,6 +250,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
     String aExpr1;
     String aExpr2;
     ScAddress aPos;
+    String aPosStr;
     String aStyle;
 
     const beans::PropertyValue* pPropArray = aConditionalEntry.getConstArray();
@@ -281,6 +284,12 @@ void SAL_CALL ScTableConditionalFormat::addNew(
             if ( rProp.Value >>= aAddress )
                 aPos = ScAddress( (SCCOL)aAddress.Column, (SCROW)aAddress.Row, aAddress.Sheet );
         }
+        else if ( aPropName.EqualsAscii( SC_UNONAME_SOURCESTR ) )
+        {
+            rtl::OUString aStrVal;
+            if ( rProp.Value >>= aStrVal )
+                aPosStr = String( aStrVal );
+        }
         else if ( aPropName.EqualsAscii( SC_UNONAME_STYLENAME ) )
         {
             rtl::OUString aStrVal;
@@ -295,7 +304,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         }
     }
 
-    AddEntry_Impl( eMode, aExpr1, aExpr2, aPos, aStyle );
+    AddEntry_Impl( eMode, aExpr1, aExpr2, aPos, aPosStr, aStyle );
     DataChanged();
 }
 
@@ -477,12 +486,13 @@ ScTableConditionalEntry::ScTableConditionalEntry() :
 
 ScTableConditionalEntry::ScTableConditionalEntry( ScTableConditionalFormat* pPar,
                              USHORT nM, const String& rEx1, const String& rEx2,
-                             const ScAddress& rPos, const String& rSt ) :
+                             const ScAddress& rPos, const String& rPosStr, const String& rSt ) :
     pParent( pPar ),
     nMode( nM ),
     aExpr1( rEx1 ),
     aExpr2( rEx2 ),
     aSrcPos( rPos ),
+    aPosString( rPosStr ),
     aStyle( rSt )
 {
     if (pParent)
@@ -496,12 +506,13 @@ ScTableConditionalEntry::~ScTableConditionalEntry()
 }
 
 void ScTableConditionalEntry::GetData( USHORT& rM, String& rEx1, String& rEx2,
-                                        ScAddress& rPos, String& rSt ) const
+                                        ScAddress& rPos, String& rPosStr, String& rSt ) const
 {
     rM   = nMode;
     rEx1 = aExpr1;
     rEx2 = aExpr2;
     rPos = aSrcPos;
+    rPosStr = aPosString;
     rSt  = aStyle;
 }
 
@@ -609,7 +620,7 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
         if (pData)
         {
             nMode = pData->GetOperation();
-            aSrcPos = pData->GetSrcPos();
+            aSrcPos = pData->GetValidSrcPos();  // #b4974740# valid pos for expressions
             aExpr1 = pData->GetExpression( aSrcPos, 0, 0, bEnglish, bCompileXML );
             aExpr2 = pData->GetExpression( aSrcPos, 1, 0, bEnglish, bCompileXML );
             nValMode = pData->GetDataMode();
@@ -646,6 +657,9 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
     pRet->SetError( aErrorTitle, aErrorMessage, (ScValidErrorStyle)nErrorStyle );
     if (!bShowError)
         pRet->ResetError();
+
+    if ( aPosString.Len() )
+        pRet->SetSrcString( aPosString );
 
     return pRet;
 }
@@ -813,6 +827,14 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
             case sheet::ValidationAlertStyle_INFO:    nErrorStyle = SC_VALERR_INFO;    break;
             case sheet::ValidationAlertStyle_MACRO:   nErrorStyle = SC_VALERR_MACRO;   break;
         }
+    }
+    else if ( aString.EqualsAscii( SC_UNONAME_SOURCESTR ) )
+    {
+        // internal - only for XML filter, not in PropertySetInfo, only set
+
+        rtl::OUString aStrVal;
+        if ( aValue >>= aStrVal )
+            aPosString = String( aStrVal );
     }
 
     DataChanged();
