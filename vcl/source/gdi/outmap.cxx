@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:46:17 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #include <tools/debug.hxx>
 #endif
 
+#ifndef _SV_VIRDEV_HXX
+#include <virdev.hxx>
+#endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
 #endif
@@ -811,6 +814,16 @@ Region OutputDevice::ImplPixelToDevicePixel( const Region& rRegion ) const
 
 // -----------------------------------------------------------------------
 
+void OutputDevice::EnableMapMode( BOOL bEnable )
+{
+    mbMap = (bEnable != 0);
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->EnableMapMode( bEnable );
+}
+
+// -----------------------------------------------------------------------
+
 void OutputDevice::SetMapMode()
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -836,6 +849,9 @@ void OutputDevice::SetMapMode()
         mnOutOffLogicX = mnOutOffOrigX; // no mapping -> equal offsets
         mnOutOffLogicY = mnOutOffOrigY;
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetMapMode();
 }
 
 // -----------------------------------------------------------------------
@@ -858,6 +874,9 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     // Ist der MapMode der gleiche wie vorher, dann mache nichts
     if ( maMapMode == rNewMapMode )
         return;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetMapMode( rNewMapMode );
 
     // Ist Default-MapMode, dann bereche nichts
     BOOL bOldMap = mbMap;
@@ -999,6 +1018,9 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
     mnOutOffLogicY = ImplPixelToLogic( mnOutOffOrigY, mnDPIY,
                                        maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
                                        maThresRes.mnThresPixToLogY );
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetRelativeMapMode( rNewMapMode );
 }
 
 // -----------------------------------------------------------------------
@@ -2113,6 +2135,9 @@ void OutputDevice::SetPixelOffset( const Size& rOffset )
     mnOutOffLogicY = ImplPixelToLogic( mnOutOffOrigY, mnDPIY,
                                        maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
                                        maThresRes.mnThresPixToLogY );
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetPixelOffset( rOffset );
 }
 
 // -----------------------------------------------------------------------
