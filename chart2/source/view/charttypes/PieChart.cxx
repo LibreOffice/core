@@ -66,6 +66,7 @@ public:
 private: //member
     double      m_fDepth;
 
+public:
     //Radius Offset for all rings in absolute logic values (1.0 == 1 category)
     double      m_fRingOffset;
 
@@ -320,6 +321,12 @@ void PieChart::createShapes()
         createGroupShape( m_xLogicTarget,rtl::OUString() ));
     uno::Reference< drawing::XShapes > xTextTarget(
         createGroupShape( m_xLogicTarget,rtl::OUString() ));
+
+    if( this->isSingleRingChart() )
+    {
+        m_pPosHelper->m_fRingOffset = 0.0;
+        m_pPosHelper->m_fRingDistance = 0.0;
+    }
 
     //---------------------------------------------
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
