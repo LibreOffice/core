@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbregister.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:33:45 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 09:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,11 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
     m_aDelete.SetClickHdl( LINK( this, DbRegistrationOptionsPage, DeleteHdl ) );
 
     Size aBoxSize = aPathCtrl.GetOutputSizePixel();
+
+
+    WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
+    pPathBox = new ::svx::OptHeaderTabListBox( &aPathCtrl, nBits );
+
     pHeaderBar = new HeaderBar( &aPathCtrl, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
     pHeaderBar->SetPosSizePixel( Point( 0, 0 ), Size( aBoxSize.Width(), 16 ) );
     pHeaderBar->SetSelectHdl( LINK( this, DbRegistrationOptionsPage, HeaderSelect_Impl ) );
@@ -185,8 +190,6 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
     static long nTabs[] = {3, 0, TAB_WIDTH1, TAB_WIDTH1 + TAB_WIDTH2 };
     Size aHeadSize = pHeaderBar->GetSizePixel();
 
-    WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
-    pPathBox = new ::svx::OptHeaderTabListBox( &aPathCtrl, nBits );
     aPathCtrl.SetFocusControl( pPathBox );
     pPathBox->SetWindowBits( nBits );
     pPathBox->SetDoubleClickHdl( LINK( this, DbRegistrationOptionsPage, EditHdl ) );
