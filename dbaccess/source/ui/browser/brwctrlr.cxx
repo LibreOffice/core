@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 15:52:33 $
+ *  last change: $Author: oj $ $Date: 2001-01-11 09:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,9 +875,17 @@ void SbaXDataBrowserController::dispose()
     // (see ::suspend)
     if (!PendingLoad())
     {
-        Reference< ::com::sun::star::lang::XComponent >  xDataSourceComponent(m_xRowSet, UNO_QUERY);
-        if (xDataSourceComponent.is())
-            xDataSourceComponent->dispose();
+        try
+        {
+            ::comphelper::disposeComponent(m_xRowSet);
+//      Reference< ::com::sun::star::lang::XComponent >  xDataSourceComponent(m_xRowSet, UNO_QUERY);
+//      if (xDataSourceComponent.is())
+//          xDataSourceComponent->dispose();
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(0,"Exception thrown by dispose");
+        }
     }
 }
 //------------------------------------------------------------------------------
