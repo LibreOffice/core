@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-06 12:15:31 $
+ *  last change: $Author: ab $ $Date: 2001-05-16 11:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,6 +486,8 @@ void SbiRuntime::StepREDIMP()
                     pNewArray->GetDim( i, lBoundNew, uBoundNew );
                     pOldArray->GetDim( i, lBoundOld, uBoundOld );
 
+                    /* #69094 Allow all dimensions to be changed
+                       although Visual Basic is not able to do so.
                     // All bounds but the last have to be the same
                     if( i < nDims && ( lBoundNew != lBoundOld || uBoundNew != uBoundOld ) )
                     {
@@ -493,8 +495,9 @@ void SbiRuntime::StepREDIMP()
                         break;
                     }
                     else
+                    */
                     {
-                        if( i == nDims )
+                        // #69094: if( i == nDims )
                         {
                             lBoundNew = std::max( lBoundNew, lBoundOld );
                             uBoundNew = std::min( uBoundNew, uBoundOld );
