@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideTransitionPane.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:56:48 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ private:
     DECL_LINK( ApplyToAllButtonClicked, void * );
     DECL_LINK( PlayButtonClicked, void * );
     DECL_LINK( SlideShowButtonClicked, void * );
+    DECL_LINK( AutoPreviewClicked, void * );
 
     DECL_LINK( TransitionSelected, void * );
     DECL_LINK( AdvanceSlideRadioButtonToggled, void * );
