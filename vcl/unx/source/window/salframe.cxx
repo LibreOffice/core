@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-30 18:40:10 $
+ *  last change: $Author: cp $ $Date: 2001-06-08 10:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1505,8 +1505,18 @@ void SalFrame::SetPointer( PointerStyle ePointerStyle )
 void SalFrame::CaptureMouse( BOOL bCapture )
 { maFrameData.CaptureMouse( bCapture ); }
 
-void SalFrame::SetPointerPos( long nX, long nY )
-{ XWarpPointer( _GetXDisplay(), None, maFrameData.GetShellWindow(), 0, 0, 0, 0, nX, nY ); }
+void SalFrame::SetPointerPos(long nX, long nY)
+{
+    /* #87921# when the application tries to center the mouse in the dialog the
+     * window isn't mapped already. So use coordinates relative to the root window.
+     * Please note that the window isn't reparented yet and still will be moved out of
+     * center */
+    unsigned int nWindowLeft = maFrameData.aPosSize_.Left() + maFrameData.nLeft_;
+    unsigned int nWindowTop  = maFrameData.aPosSize_.Top()  + maFrameData.nTop_;
+
+    XWarpPointer( _GetXDisplay(), None, maFrameData.pDisplay_->GetRootWindow(),
+            0, 0, 0, 0, nWindowLeft + nX, nWindowTop + nY);
+}
 
 // delay handling of extended text input
 #if !defined(__synchronous_extinput__)
