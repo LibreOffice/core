@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:11:50 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -814,12 +814,13 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
                     SVXRULER_SUPPORT_TABS |
                     SVXRULER_SUPPORT_PARAGRAPH_MARGINS |
                     SVXRULER_SUPPORT_BORDERS |
-                    SVXRULER_SUPPORT_NEGATIVE_MARGINS,
+                    SVXRULER_SUPPORT_NEGATIVE_MARGINS|
+                    SVXRULER_SUPPORT_REDUCED_METRIC,
                     GetViewFrame()->GetBindings(),
                     WB_STDRULER | WB_EXTRAFIELD | WB_BORDER)),
     pVRuler(new SvxRuler(&GetViewFrame()->GetWindow(), pEditWin,
                             SVXRULER_SUPPORT_TABS | SVXRULER_SUPPORT_PARAGRAPH_MARGINS_VERTICAL|
-                                SVXRULER_SUPPORT_BORDERS,
+                                SVXRULER_SUPPORT_BORDERS | SVXRULER_SUPPORT_REDUCED_METRIC,
                             GetViewFrame()->GetBindings(),
                             WB_VSCROLL |  WB_EXTRAFIELD | WB_BORDER )),
     pTogglePageBtn(0),
