@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-04 09:08:18 $
+ *  last change: $Author: pb $ $Date: 2001-05-16 09:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,6 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId, const Window* pWindow )
     String aHelpModuleName = GetHelpModuleName( nHelpId );
 
     // build up the help URL
-    sal_Bool bNewWin = !( xFrame.is() );
     String aHelpURL;
     if ( aTicket.Len() )
     {
@@ -363,7 +362,7 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId, const Window* pWindow )
         aHelpURL = DEFINE_CONST_UNICODE("vnd.sun.star.cmd:help?");
         aHelpURL += DEFINE_CONST_UNICODE("HELP_Request_Mode=contextIndex&HELP_Session_Mode=context&HELP_CallMode=portal&HELP_Device=html");
 
-        if ( !nHelpId || bNewWin )
+        if ( !nHelpId )
         {
             aHelpURL += DEFINE_CONST_UNICODE("&startId=go");
         }
@@ -394,7 +393,7 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId, const Window* pWindow )
         aHelpURL = String::CreateFromAscii("vnd.sun.star.help://");
         aHelpURL += aHelpModuleName;
 
-        if ( !nHelpId || bNewWin )
+        if ( !nHelpId )
         {
             aHelpURL += String( DEFINE_CONST_UNICODE("/start") );
         }
