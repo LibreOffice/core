@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UniversalContentBroker.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
+ *  last change: $Author: kso $ $Date: 2001-01-31 08:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,6 @@
 #include <com/sun/star/ucb/XContentIdentifierFactory.idl>
 #endif
 
-#ifndef __com_sun_star_ucb_XContentCreator_idl__
-#include <com/sun/star/ucb/XContentCreator.idl>
-#endif
-
 #ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
 #endif
@@ -144,20 +140,6 @@ service UniversalContentBroker
         This interface is required.
       */
     interface com::sun::star::ucb::XContentIdentifierFactory;
-
-    //-------------------------------------------------------------------------
-    /** creates new root contents (i.e. a new POP3-Account object). A content
-        is "new", if it does not physically exist before creating it using
-        this interface. A root object is an object which is no child of
-        another content. The implementation of this interface must be able
-        to provide information about all root objects creatable by the
-        registered content providers and must be able to create all root
-        objects creatable by the registered content providers. Usually this
-        will be done by delegating calls to the matching provider.
-
-        This interface is required.
-     */
-    interface com::sun::star::ucb::XContentCreator;
 
     //-------------------------------------------------------------------------
     /** supports the configuration of a newly created broker.
