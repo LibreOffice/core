@@ -1,5 +1,8 @@
 ### 114242 ### -o sc.ScPageObj
 ### 111147 ### -o sc.AccessibleEditableTextPara_PreviewNote
+-o sc.ScIndexEnumeration_DataPilotItemsEnumeration
+-o sc.ScDataPilotItemsObj
+-o sc.ScDataPilotItemObj
 -o sc.ScSpreadsheetSettings
 -o sc.ScTabViewObj
 -o sc.ScAccessibleCell
