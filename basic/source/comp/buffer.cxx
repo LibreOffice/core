@@ -2,9 +2,9 @@
  *
  *  $RCSfile: buffer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:34 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ BOOL SbiBuffer::Check( USHORT n )
     if( !n ) return TRUE;
     if( ((long) nOff + n ) > (long) nSize )
     {
+        if( nInc == 0 )
+            return FALSE;
         USHORT nn = 0;
         while( nn < n ) nn += nInc;
         char* p;
