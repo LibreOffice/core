@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTitle.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-25 13:08:01 $
+ *  last change: $Author: iha $ $Date: 2003-12-12 20:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,12 +108,13 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::chart2;
 
-VTitle::VTitle( const uno::Reference< XTitle > & xTitle )
+VTitle::VTitle( const uno::Reference< XTitle > & xTitle
+               , double fAdditionalRotationAngleDegree )
                 : m_xTarget(NULL)
                 , m_xShapeFactory(NULL)
                 , m_xTitle(xTitle)
                 , m_xShape(NULL)
-                , m_fRotationAngleDegree(0.0)
+                , m_fRotationAngleDegree(fAdditionalRotationAngleDegree)
                 , m_nXPos(0)
                 , m_nYPos(0)
 {
@@ -328,7 +329,9 @@ void VTitle::createShapes(
 
         try
         {
-            xTitleProperties->getPropertyValue( C2U( "TextRotation" ) ) >>= m_fRotationAngleDegree;
+            double fAngleDegree;
+            xTitleProperties->getPropertyValue( C2U( "TextRotation" ) ) >>= fAngleDegree;
+            m_fRotationAngleDegree += fAngleDegree;
         }
         catch( uno::Exception& e )
         {

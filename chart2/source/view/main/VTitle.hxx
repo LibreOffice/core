@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTitle.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-04 15:42:15 $
+ *  last change: $Author: iha $ $Date: 2003-12-12 20:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,8 @@ class VTitle
 {
 public:
     VTitle( const ::com::sun::star::uno::Reference<
-                  ::drafts::com::sun::star::chart2::XTitle > & xTitle );
+                  ::drafts::com::sun::star::chart2::XTitle > & xTitle
+                  , double fAdditionalRotationAngleDegree=0.0 ); //the shape will be rotated by the sum of this value and the rotation given by the title model
     virtual ~VTitle();
 
     void SAL_CALL init( const ::com::sun::star::uno::Reference<
