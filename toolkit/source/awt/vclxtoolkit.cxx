@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: ts $ $Date: 2001-02-05 09:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,12 @@
  *
  *
  ************************************************************************/
-
+#ifdef WNT
+#ifndef _SVWIN_HXX
+#include <tools/svwin.h>
+#endif
+#include <stdio.h>
+#endif
 
 #ifndef _COM_SUN_STAR_AWT_WINDOWATTRIBUTE_HPP_
 #include <com/sun/star/awt/WindowAttribute.hpp>
@@ -69,10 +74,14 @@
 #ifndef _COM_SUN_STAR_AWT_WINDOWCLASS_HPP_
 #include <com/sun/star/awt/WindowClass.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_SYSTEMDEPENDENT_HPP_
+#include <com/sun/star/lang/SystemDependent.hpp>
+#endif
 
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
+#include <rtl/process.h>
 
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/awt/vclxsystemdependentwindow.hxx>
@@ -117,6 +126,9 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 
+
+#include <vcl/sysdata.hxx>
+
 #include <tools/debug.hxx>
 
 
@@ -124,6 +136,13 @@
 #define VCLWINDOW_FRAMEWINDOW               0x1000
 #define VCLWINDOW_SYSTEMCHILDWINDOW         0x1001
 
+#ifdef UNX
+#define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW
+#elif (defined WNT)
+#define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32
+#elif (defined OS2)
+#define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_OS2
+#endif
 
 sal_uInt32 ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType )
 {
@@ -359,7 +378,9 @@ IMPL_XTYPEPROVIDER_END
     if ( rDescriptor.Parent.is() )
     {
         VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( rDescriptor.Parent );
+
         DBG_ASSERT( pParentComponent, "ParentComponent not valid" );
+
         if ( pParentComponent )
             pParent = pParentComponent->GetWindow();
     }
@@ -706,7 +727,52 @@ Window* VCLXToolkit::CreateComponent( VCLXWindow** ppNewComp,
                     if (nType == WINDOW_DOCKINGWINDOW )
                         pNewWindow = new DockingWindow( pParent, nWinBits );
                     else
-                        pNewWindow = new WorkWindow( pParent, nWinBits );
+                    {
+                        if ((pParent == NULL) && rDescriptor.Parent.is())
+                        {
+                            // try to get a system dependent window handle
+                            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSystemDependentWindowPeer > xSystemDepParent(rDescriptor.Parent, ::com::sun::star::uno::UNO_QUERY);
+
+                            if (xSystemDepParent.is())
+                            {
+                                sal_Int8 processID[16];
+
+                                rtl_getGlobalProcessId( (sal_uInt8*)processID );
+
+                                ::com::sun::star::uno::Sequence<sal_Int8> processIdSeq(processID, 16);
+
+                                ::com::sun::star::uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SYSTEM_DEPENDENT_TYPE);
+
+#if defined UNX
+                                sal_Int32 x11_id;
+
+                                            if (anyHandle >>= x11_id)
+                                            {
+                                                            printf("x11_id = %ld\n", x11_id);
+                                                            SystemParentData aParentData;
+                                                            aParentData.nSize   = sizeof( aParentData );
+                                                            aParentData.aWindow = x11_id;
+                                                            pNewWindow = new WorkWindow( &aParentData );
+                                            }
+#elif defined WNT
+
+                                sal_Int32 hWnd;
+
+                                            if (anyHandle >>= hWnd)
+                                            {
+                                                            printf("hWnd = %ld\n", hWnd);
+                                                            SystemParentData aParentData;
+                                                            aParentData.nSize   = sizeof( aParentData );
+                                                            aParentData.hWnd    = (HWND)hWnd;
+                                                            pNewWindow = new WorkWindow( &aParentData );
+                                            }
+#endif
+                            }
+                        }
+
+                        if (!pNewWindow)
+                            pNewWindow = new WorkWindow( pParent, nWinBits );
+                    }
                     *ppNewComp = new VCLXTopWindow;
                 }
                 else if ( rDescriptor.Type == ::com::sun::star::awt::WindowClass_CONTAINER )
