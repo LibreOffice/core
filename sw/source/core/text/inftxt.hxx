@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-03 10:17:21 $
+ *  last change: $Author: fme $ $Date: 2001-05-07 11:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,6 +560,9 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     sal_Bool bNoEndHyph  : 1;  // Trennung am Zeilenende abgeschaltet wg. MaxHyphens
     sal_Bool bNoMidHyph  : 1;  // Trennung vor Flies abgeschaltet wg. MaxHyphens
     sal_Bool bIgnoreFly: 1;    // FitToContent ignoriert Flies
+    sal_Bool bFakeLineStart: 1; // String has been replaced by field portion
+                                // info structure only pretends that we are at
+                                // the beginning of a line
 
     xub_Unicode   cTabDecimal;  // das _aktuelle_ Dezimalzeichen
     xub_Unicode   cHookChar;    // fuer Tabs in Feldern etc.
@@ -622,6 +625,8 @@ public:
           bNoMidHyph = (nMaxHyph && bMid >= nMaxHyph); }
     inline sal_Bool IsIgnoreFly() const { return bIgnoreFly; }
     inline void SetIgnoreFly( const sal_Bool bNew ) { bIgnoreFly = bNew; }
+    inline sal_Bool IsFakeLineStart() const { return bFakeLineStart; }
+    inline void SetFakeLineStart( const sal_Bool bNew ) { bFakeLineStart = bNew; }
     inline sal_Bool IsStop() const { return bStop; }
     inline void SetStop( const sal_Bool bNew ) { bStop = bNew; }
     inline SwLinePortion *GetRest() { return pRest; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-03 13:33:31 $
+ *  last change: $Author: fme $ $Date: 2001-05-07 11:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1029,6 +1029,7 @@ void SwTxtFormatInfo::CtorInit( SwTxtFrm *pNewFrm, const sal_Bool bNewInterHyph,
     bAutoHyph = InitHyph();
 
     bIgnoreFly = sal_False;
+    bFakeLineStart = sal_False;
     bShift = sal_False;
     bDropInit = sal_False;
     bTestFormat = bTst;
@@ -1164,6 +1165,7 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     bNoEndHyph  = FALSE;
     bNoMidHyph  = FALSE;
     bIgnoreFly = FALSE;
+    bFakeLineStart = FALSE;
 
     cTabDecimal = 0;
     cHookChar = 0;
