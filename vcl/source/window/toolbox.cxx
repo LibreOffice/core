@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 17:27:14 $
+ *  last change: $Author: obo $ $Date: 2004-07-07 08:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2242,7 +2242,6 @@ USHORT ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, BOOL bCalcHorz
 }
 
 // -----------------------------------------------------------------------
-
 namespace
 {
     BOOL ImplFollowedByVisibleButton( std::vector< ImplToolItem >::iterator _aSeparator, std::vector< ImplToolItem >::iterator _aEnd )
@@ -3713,30 +3712,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
         }
         if( bHighlight || (pItem->meState == STATE_CHECK) )
         {
-            DrawSelectionBackground( aClearRect, bHighlight, pItem->meState == STATE_CHECK, FALSE, FALSE );
-            if( bHighContrastWhite )
-                bColTransform = TRUE;
-        }
-
-        BOOL bBlack = FALSE;
-
-        if ( !pItem->mbEnabled || !IsEnabled() )
-            SetFillColor( rStyleSettings.GetShadowColor() );
-        else
-        {
-            Color aFillColor( COL_LIGHTGREEN );
-            if ( rStyleSettings.IsHighContrastBlackAndWhite() )
-            {
-                if ( rStyleSettings.GetFaceColor().GetColor() == COL_WHITE )
-                    aFillColor = Color( COL_BLACK );
-                else
-                    aFillColor = Color( COL_WHITE );
-
-            }
-            SetFillColor( aFillColor );
-            bBlack = TRUE;
-            //docking1
-            //DrawSelectionBackground( aDropDownRect, bHighlight, pItem->meState == STATE_CHECK, TRUE, FALSE );
+            DrawSelectionBackground( aDropDownRect, bHighlight, pItem->meState == STATE_CHECK, TRUE, FALSE );
         }
 
         ImplDrawDropdownArrow( this, aDropDownRect, bSetColor, bRotate );
@@ -5244,7 +5220,7 @@ Size ToolBox::CalcPopupWindowSizePixel() const
     else
     {
         // no breaks found: use quadratic layout
-        nLines = (USHORT) ceil( sqrt( GetItemCount() ) );
+        nLines = (USHORT) ceil( sqrt( (double) GetItemCount() ) );
     }
 
     return CalcFloatingWindowSizePixel( nLines );
