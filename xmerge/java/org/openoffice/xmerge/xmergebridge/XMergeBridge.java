@@ -124,6 +124,7 @@ public class XMergeBridge {
     private static String offMime=null;
     private static String sdMime=null;
     private static String sFileName=null;
+    private static String sURL=null;
 
     //private static FileOutputStream adaptedStream =null;
 
@@ -271,7 +272,8 @@ public class XMergeBridge {
                 xParser.setDocumentHandler ( xDocHandler );
 
         xParser.parseStream ( aInput );
-
+        xOutStream.closeOutput();
+        xInStream.closeInput();
 
         }
         catch (IOException e){
@@ -299,7 +301,7 @@ public class XMergeBridge {
         System.out.println("\n"+msUserData[5]);
         */
         sFileName=null;
-        String sURL=null;
+        sURL=null;
         String sDirectory = null;
         String title=null;
         String udConvertClass=msUserData[0];
@@ -333,8 +335,8 @@ public class XMergeBridge {
         }
 
 
-        if (sFileName==null){
-        sFileName="";
+        if (sURL==null){
+        sURL="";
         }
          try{
 
@@ -368,7 +370,7 @@ public class XMergeBridge {
     public void endDocument()
     {
         try{
-        convert (xInStream,xos,true,udJarPath,sFileName,offMime,sdMime);
+        convert (xInStream,xos,true,udJarPath,sURL,offMime,sdMime);
         }
         catch (IOException e){
         System.out.println("Exception "+e);
