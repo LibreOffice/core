@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:47:43 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3602,9 +3602,9 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
 
             sOut.AppendAscii( sCSS1_url );
             sOut.Append( '(' );
-            sOut.Append( INetURLObject::AbsToRel( *pLink,
+            sOut.Append( String(INetURLObject::AbsToRel( *pLink,
                                     INetURLObject::WAS_ENCODED,
-                                    INetURLObject::DECODE_UNAMBIGUOUS));
+                                    INetURLObject::DECODE_UNAMBIGUOUS)));
             sOut.Append( ')' );
 
             if( pRepeat )
