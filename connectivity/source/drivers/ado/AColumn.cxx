@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumn.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:36:12 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,19 +202,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 {
                     sal_Int32 nVal=0;
                     rValue >>= nVal;
-                    sal_Bool bForceTo;
-                    const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
-                    const OExtendedTypeInfo* pTypeInfo = OConnection::getTypeInfoFromType(  *m_pConnection->getTypeInfo()
-                                                                                            ,nVal
-                                                                                            ,m_TypeName
-                                                                                            ,m_Precision
-                                                                                            ,m_Scale
-                                                                                            ,ADOS::MapJdbc2ADOType(nVal,m_pConnection->getEngineType())
-                                                                                            ,bForceTo);
-                    if ( pTypeInfo )
-                        m_aColumn.put_Type(static_cast<DataTypeEnum>(pTypeInfo->eType));
-                    else
-                        m_aColumn.put_Type(ADOS::MapJdbc2ADOType(nVal,m_pConnection->getEngineType()));
+                    m_aColumn.put_Type(ADOS::MapJdbc2ADOType(nVal,m_pConnection->getEngineType()));
                 }
                 break;
             case PROPERTY_ID_TYPENAME:
@@ -268,20 +256,55 @@ void OAdoColumn::fillPropertyValues()
 {
     if(m_aColumn.IsValid())
     {
-        m_IsAscending = m_aColumn.get_SortOrder() == adSortAscending;
-        m_ReferencedColumn = m_aColumn.get_RelatedColumn();
-        m_Name = m_aColumn.get_Name();
-        m_Precision     = m_aColumn.get_Precision();
-        m_Scale         = m_aColumn.get_NumericScale();
-        m_IsNullable    = ((m_aColumn.get_Attributes() & adColNullable) == adColNullable) ? ColumnValue::NULLABLE : ColumnValue::NO_NULLS;
-        m_IsCurrency    = (m_aColumn.get_Type() == adCurrency);
-        m_Type = ADOS::MapADOType2Jdbc(m_aColumn.get_Type());
+        m_IsAscending       = m_aColumn.get_SortOrder() == adSortAscending;
+        m_ReferencedColumn  = m_aColumn.get_RelatedColumn();
+        m_Name              = m_aColumn.get_Name();
+        m_Precision         = m_aColumn.get_Precision();
+        m_Scale             = m_aColumn.get_NumericScale();
+        m_IsNullable        = ((m_aColumn.get_Attributes() & adColNullable) == adColNullable) ? ColumnValue::NULLABLE : ColumnValue::NO_NULLS;
+
+        DataTypeEnum eType  = m_aColumn.get_Type();
+        m_IsCurrency        = (eType == adCurrency);
+        m_Type              = ADOS::MapADOType2Jdbc(eType);
 
         sal_Bool bForceTo = sal_True;
         const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
-        const OExtendedTypeInfo* pTypeInfo = OConnection::getTypeInfoFromType(*m_pConnection->getTypeInfo(),m_Type,::rtl::OUString(),m_Precision,m_Scale,m_aColumn.get_Type(),bForceTo);
+        const OExtendedTypeInfo* pTypeInfo = OConnection::getTypeInfoFromType(*m_pConnection->getTypeInfo(),eType,::rtl::OUString(),m_Precision,m_Scale,bForceTo);
         if ( pTypeInfo )
+            m_TypeName = pTypeInfo->aSimpleType.aTypeName;
+        else if ( eType == adVarBinary && ADOS::isJetEngine(m_pConnection->getEngineType()) )
+        {
+            ::comphelper::TStringMixEqualFunctor aCase(sal_False);
+            OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
+                                                            pTypeInfoMap->end(),
+                                                            ::std::compose1(
+                                                            ::std::bind2nd(aCase, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VarBinary"))),
+                                                                ::std::compose1(
+                                                                    ::std::mem_fun(&OExtendedTypeInfo::getDBName),
+                                                                    ::std::select2nd<OTypeInfoMap::value_type>())
+                                                                )
+
+                                                    );
+
+            if ( aFind != pTypeInfoMap->end() ) // change column type if necessary
+            {
+                eType = aFind->first;
+                pTypeInfo = aFind->second;
+            }
+
+            if ( !pTypeInfo )
+            {
+                pTypeInfo = OConnection::getTypeInfoFromType(*m_pConnection->getTypeInfo(),adBinary,::rtl::OUString(),m_Precision,m_Scale,bForceTo);
+                eType = adBinary;
+            }
+
+            if ( pTypeInfo )
+            {
                 m_TypeName = pTypeInfo->aSimpleType.aTypeName;
+                m_Type  = ADOS::MapADOType2Jdbc(eType);
+            }
+        }
+
 
         // fill some specific props
         {
