@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderArea.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-02 14:08:15 $
+ *  last change: $Author: sab $ $Date: 2002-10-14 10:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,18 +345,18 @@ rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName(void)
 Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen(void) const
     throw(::com::sun::star::uno::RuntimeException)
 {
-    Rectangle aCellRect(GetBoundingBox());
-    if (mpViewShell)
+    Rectangle aRect;
+    if (mxParent.is())
     {
-        Window* pWindow = mpViewShell->GetWindow();
-        if (pWindow)
+        uno::Reference<XAccessibleContext> xContext = mxParent->getAccessibleContext();
+        uno::Reference<XAccessibleComponent> xComp(xContext, uno::UNO_QUERY);
+        if (xComp.is())
         {
-            Rectangle aRect = pWindow->GetWindowExtentsRelative(NULL);
-            aCellRect.setX(aCellRect.getX() + aRect.getX());
-            aCellRect.setY(aCellRect.getY() + aRect.getY());
+            // has the same size and position on screen like the parent
+            aRect = Rectangle(VCLPoint(xComp->getLocationOnScreen()), VCLRectangle(xComp->getBounds()).GetSize());
         }
     }
-    return aCellRect;
+    return aRect;
 }
 
 Rectangle ScAccessiblePageHeaderArea::GetBoundingBox(void) const
