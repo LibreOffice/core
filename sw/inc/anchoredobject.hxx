@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:00:41 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,18 @@ class SwAnchoredObject
         bool mbConsiderForTextWrap;
         bool mbPositionLocked;
         bool mbRestartLayoutProcess;
+        // <--
+
+        // --> OD 2004-08-25 #i3317# - boolean, indicating that temporarly
+        // the wrapping style influence of the anchored object has to be
+        // considered during its positioning.
+        // This boolean is used, if compatibility option 'Consider wrapping style
+        // influence on object positioning' is OFF and a positioning loop is
+        // detected in method <SwFlyAtCntFrm::MakeAll()> or method
+        // <SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()>.
+        // The boolean is reset to <false>, when the layout process for a
+        // page frame starts - see class <NotifyLayoutOfPageInProgress>.
+        bool mbTmpConsiderWrapInfluence;
         // <--
 
         /** method to indicate, that positioning of anchored object is in progress
@@ -416,12 +428,30 @@ class SwAnchoredObject
         /** method to determine, if a format on the anchored object is possible
 
             OD 2004-07-23 #i28701#
-            A format is possible, if anchored object is in an invisible layer.
+            A format isn't possible, if anchored object is in an invisible layer.
             Note: method is virtual to refine the conditions for the sub-classes.
 
             @author OD
         */
         virtual bool IsFormatPossible() const;
+
+        // --> OD 2004-08-25 #i3317# - accessors to member <mbTmpConsiderWrapInfluence>
+        void SetTmpConsiderWrapInfluence( const bool _bTmpConsiderWrapInfluence );
+        bool IsTmpConsiderWrapInfluence() const;
+        // <--
+
+        /** method to determine, if the anchored object is overlapping with a
+            previous column
+
+            OD 2004-08-25 #i3317#
+            overlapping with a previous column means, that the object overlaps
+            with a column, which is a previous one of the column its anchor
+            frame is in.
+            Only applied for at-paragraph and at-character anchored objects.
+
+            @author OD
+        */
+        bool OverlapsPrevColumn() const;
 };
 
 // ============================================================================
