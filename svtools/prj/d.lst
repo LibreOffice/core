@@ -294,6 +294,9 @@ hedabu: ..\inc\searchopt.hxx %_DEST%\inc%_EXT%\svtools\searchopt.hxx
 
 hedabu: ..\inc\PasswordHelper.hxx %_DEST%\inc%_EXT%\svtools\PasswordHelper.hxx
 
+hedabu: ..\inc\unoimap.hxx %_DEST%\inc%_EXT%\svtools\unoimap.hxx
+hedabu: ..\inc\unoevent.hxx %_DEST%\inc%_EXT%\svtools\unoevent.hxx
+
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\bin%_EXT%\bmp=%__PRJROOT%\%__SRC%\bin%_EXT%; fi"
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib

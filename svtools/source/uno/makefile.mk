@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: mt $ $Date: 2001-03-09 10:19:07 $
+#   last change: $Author: cl $ $Date: 2001-03-14 16:07:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -235,6 +235,8 @@ SRC1FILES=  unoifac2.src
 .ENDIF
 
 SLOFILES= \
+            $(SLO)$/unoevent.obj\
+            $(SLO)$/unoimap.obj\
             $(SLO)$/addrtempuno.obj	\
             $(SLO)$/genericunodialog.obj \
             $(SLO)$/registerservices.obj \
@@ -244,6 +246,8 @@ SLOFILES= \
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1OBJFILES=  \
+            $(SLO)$/unoevent.obj \
+            $(SLO)$/unoimap.obj \
             $(SLO)$/addrtempuno.obj	\
             $(SLO)$/genericunodialog.obj \
             $(SLO)$/registerservices.obj \
