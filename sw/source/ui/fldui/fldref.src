@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldref.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:01:21 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 20:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ TabPage TP_FLD_REF
         Text[ chinese_traditional ] = "¤º¤å¼ĞÅÒ";
         Text[ arabic ] = "ÅÔÇÑÇÊ ãÑÌÚíÉ";
         Text[ greek ] = "ÓçìÜäéá êåéìİíïõ";
-        Text[ korean ] = "Ã¥ °¥ÇÇ";
+        Text[ korean ] = "Ã¥°¥ÇÇ";
         Text[ turkish ] = "Metin işareti";
         Text[ language_user1 ] = " ";
     };
