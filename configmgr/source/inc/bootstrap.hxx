@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:28:01 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,6 @@ namespace configmgr
 
     class ArgumentHelper
     {
-        bool m_bHasBackendArguments;
     public:
         typedef uno::Reference< uno::XComponentContext > Context;
 
@@ -265,6 +264,7 @@ namespace configmgr
         static beans::NamedValue makeAdminServiceOverride(sal_Bool bAdmin);
     private:
         Context m_context; // context used to strip identical arguments
+        bool m_bHasBackendArguments;
     };
 // -----------------------------------------------------------------------------------
 
