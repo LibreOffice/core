@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: mav $ $Date: 2002-07-17 14:18:39 $
+#   last change: $Author: tl $ $Date: 2002-11-14 16:09:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ IDLFILES=\
     MacroExecMode.idl\
     OfficeDocument.idl\
     RedlineDisplayType.idl \
+        Settings.idl \
     StandaloneDocumentInfo.idl\
     TypeDetection.idl\
     XActionLockable.idl\
