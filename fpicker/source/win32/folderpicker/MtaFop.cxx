@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaFop.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:15:52 $
+ *  last change: $Author: tra $ $Date: 2001-07-10 13:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,16 @@ CMtaFolderPicker::CMtaFolderPicker( sal_uInt32 Flags ) :
     m_dialogTitle = ResProvider.getResString( 500 );
     m_Description = ResProvider.getResString( 501 );
 
+#pragma message( "###############################" )
+#pragma message( "fix this" )
+#pragma message( "###############################" )
+
+    /*
+        !!! this has to be fixed, we should connect
+            the class instances with the window using
+            SetProp
+        !!!
+
     // signals that the thread was
     // successfully set up
     m_hEvtThrdReady  = CreateEventA(
@@ -170,6 +180,7 @@ CMtaFolderPicker::CMtaFolderPicker( sal_uInt32 Flags ) :
     m_hStaThread = (HANDLE)_beginthreadex(
         NULL, 0, CMtaFolderPicker::oleThreadProc, this, 0, &m_uStaThreadId );
     OSL_ASSERT( NULL != m_hStaThread );
+    */
 }
 
 //--------------------------------------------------------------------
@@ -178,6 +189,7 @@ CMtaFolderPicker::CMtaFolderPicker( sal_uInt32 Flags ) :
 
 CMtaFolderPicker::~CMtaFolderPicker( )
 {
+    /*
     // block calling threads out
     if ( NULL != m_hEvtThrdReady )
         ResetEvent( m_hEvtThrdReady );
@@ -205,6 +217,7 @@ CMtaFolderPicker::~CMtaFolderPicker( )
 
     if ( NULL != m_hEvtThrdReady )
         CloseHandle( m_hEvtThrdReady );
+    */
 
     if ( m_MtaFolderPickerReqWndClassAtom )
         UnregisterClassA( g_szWndClsName, NULL );
