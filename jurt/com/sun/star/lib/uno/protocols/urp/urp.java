@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:20:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 14:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 package com.sun.star.lib.uno.protocols.urp;
 
 import java.lang.reflect.Array;
@@ -75,10 +74,8 @@ import com.sun.star.container.NoSuchElementException;
 
 import com.sun.star.uno.IBridge;
 
-import com.sun.star.lib.uno.environments.remote.IMarshal;
 import com.sun.star.lib.uno.environments.remote.IMessage;
 import com.sun.star.lib.uno.environments.remote.Protocol;
-import com.sun.star.lib.uno.environments.remote.IUnmarshal;
 import com.sun.star.lib.uno.environments.remote.ThreadId;
 
 import com.sun.star.uno.IMethodDescription;
@@ -94,12 +91,10 @@ import com.sun.star.uno.Type;
 
 /**
  * This class implements the complete urp protocol
- * from uno. The functionality is reachable through
- * the <code>IProtocol</code> interface.
+ * from uno.
  * <p>
- * @version     $Revision: 1.14 $ $ $Date: 2004-03-30 16:20:55 $
+ * @version     $Revision: 1.15 $ $ $Date: 2004-06-03 14:35:50 $
  * @author      Kay Ramme
- * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
  */
 public class urp extends Protocol {
@@ -164,13 +159,12 @@ public class urp extends Protocol {
      * Gets the name of the protocol.
      * <p>
      * @result  the name of the protocol (iiop)
-     * @see     com.sun.star.lib.uno.environments.remote.IProtocol#getName
      */
     public String getName() {
         return "urp";
     }
 
-    private Object readReply(byte header, boolean exception[]) {
+    private Object readReply(int header, boolean exception[]) {
         if((header & NEWTID) != 0) // new thread id ?
             _in_threadId = _unmarshal.readThreadId();
 
@@ -178,7 +172,7 @@ public class urp extends Protocol {
         Object objects[] = (Object[])removePendingRequest(_in_threadId);
         Object param[] = (Object[])objects[0];
         ITypeDescription signature[] = (ITypeDescription[])objects[1];
-        ITypeDescription resultType = (ITypeDescription)objects[2];
+        TypeDescription resultType = (TypeDescription)objects[2];
 
         exception[0] = (header & EXCEPTION) != 0;
         if(exception[0]) {// Exception? So the reply has an any as the result
@@ -193,12 +187,15 @@ public class urp extends Protocol {
         // read the result object
         Object result = null;
         if(resultType != null)
-            result = _unmarshal.readObject(resultType);
+            result = _unmarshal.readValue(resultType);
 
         // read the out parameters
         for(int i = 0; i < signature.length; ++ i) {
             if(signature[i] != null) // is this an out parameter
-                Array.set(param[i], 0, _unmarshal.readObject(signature[i].getComponentType()));
+                Array.set(
+                    param[i], 0,
+                    _unmarshal.readValue(
+                        (TypeDescription) signature[i].getComponentType()));
         }
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readReply:" + result);
@@ -217,11 +214,15 @@ public class urp extends Protocol {
             if(in_sig[i] != null) // is it an in parameter?
                 if(out_sig[i] != null) {// is it also an out -> inout?
                     Object inout = Array.newInstance(out_sig[i].getComponentType().getZClass(), 1);
-                    Array.set(inout, 0, _unmarshal.readObject(out_sig[i].getComponentType()));
+                    Array.set(
+                        inout, 0,
+                        _unmarshal.readValue(
+                            (TypeDescription) out_sig[i].getComponentType()));
                     params[i] = inout;
                 }
                 else  // it is only an in parameter
-                    params[i] = _unmarshal.readObject(in_sig[i]);
+                    params[i] = _unmarshal.readValue(
+                        (TypeDescription) in_sig[i]);
             else // it is only an out parameter, so provide the holder
                 params[i] = Array.newInstance(out_sig[i].getComponentType().getZClass(), 1);
         }
@@ -230,12 +231,12 @@ public class urp extends Protocol {
     }
 
 
-    private void readShortRequest(byte header, String operation[], Object param[][], boolean synchron[]) {
+    private void readShortRequest(int header, String operation[], Object param[][], boolean synchron[]) {
         ++ _requestsRecieved;
 
         int methodId;
         if ((header & DIR_MID) != 0) {
-            methodId = ((header & 0x3F) << 8) | (_unmarshal.readbyte() & 0xFF);
+            methodId = ((header & 0x3F) << 8) | _unmarshal.read8Bit();
         } else {
             methodId = header & 0x3F;
         }
@@ -254,12 +255,12 @@ public class urp extends Protocol {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readShortRequest:" + _in_oid + " " + operation[0] + " " + synchron[0]);
     }
 
-    private void readLongRequest(byte header, String operation[], Object param[][], boolean synchron[], boolean mustReply[]) {
+    private void readLongRequest(int header, String operation[], Object param[][], boolean synchron[], boolean mustReply[]) {
         ++ _requestsRecieved;
 
         // read the extended flags
         if((header & MOREFLAGS) != 0) {// is there an extended flags byte?
-            byte exFlags = _unmarshal.readbyte();
+            int exFlags = _unmarshal.read8Bit();
 
             mustReply[0] = (exFlags & MUSTREPLY) != 0;
             synchron[0]  = (exFlags & SYNCHRONOUSE) != 0;
@@ -267,13 +268,13 @@ public class urp extends Protocol {
 
         int methodId;
         if ((header & LONGMETHODID) != 0) {
-            methodId = _unmarshal.readshort() & 0xFFFF;
+            methodId = _unmarshal.read16Bit();
         } else {
-            methodId = _unmarshal.readbyte() & 0xFF;
+            methodId = _unmarshal.read8Bit();
         }
 
         if((header & NEWTYPE) != 0)
-            _in_interface = _unmarshal.readTypeDescription();
+            _in_interface = _unmarshal.readType();
 
         IMethodDescription iMethodDescription = _in_interface.getMethodDescription(methodId);
 
@@ -281,7 +282,7 @@ public class urp extends Protocol {
             synchron[0] = !iMethodDescription.isOneway();
 
         if((header & NEWOID) != 0) // new oid?
-            _in_oid = _unmarshal.readOid();
+            _in_oid = _unmarshal.readObjectId();
 
         if((header & NEWTID) != 0) // new thread id ?
             _in_threadId = _unmarshal.readThreadId();
@@ -299,7 +300,7 @@ public class urp extends Protocol {
     }
 
     private Object readMessage(String operation[], Object param[], boolean synchron[], boolean mustReply[], boolean exception[]) {
-        byte header = _unmarshal.readbyte();
+        int header = _unmarshal.read8Bit();
 
         Class signature[];
         Object result = null;
@@ -323,7 +324,7 @@ public class urp extends Protocol {
     }
 
     public void writeRequest(String oid,
-                             ITypeDescription zInterface,
+                             TypeDescription zInterface,
                              String operation,
                              ThreadId threadId,
                              Object params[],
@@ -408,7 +409,7 @@ public class urp extends Protocol {
             if(methodId > 255)
                 header |= LONGMETHODID;
 
-            _marshal.writebyte(header);
+            _marshal.write8Bit(header);
 
             if(hasExFlags) {// are there extended flags to write?
                 byte exFlags = 0;
@@ -416,33 +417,33 @@ public class urp extends Protocol {
                 exFlags |= synchron[0].booleanValue() ? SYNCHRONOUSE : 0;
                 exFlags |= mustReply[0].booleanValue() ? MUSTREPLY : 0;
 
-                _marshal.writebyte(exFlags);
+                _marshal.write8Bit(exFlags);
             }
 
             // write the method id
             if(methodId > 255)
-                _marshal.writeshort((short)methodId);
+                _marshal.write16Bit(methodId);
             else
-                _marshal.writebyte((byte)methodId);
+                _marshal.write8Bit(methodId);
 
             if(zInterface != null) // has the interface changed? -> write it
-                _marshal.writeTypeDescrption(zInterface);
+                _marshal.writeType(zInterface);
 
             if(oid != null) // has the oid changed? -> write it
-                _marshal.writeOid(_out_oid);
+                _marshal.writeObjectId(_out_oid);
 
             if(threadId != null) // has the thread id changed? -> write it
                 _marshal.writeThreadId(threadId);
         }
         else { // simple request
             if(methodId <= 0x2f) // does the method id fit in the header?
-                _marshal.writebyte((byte)methodId);
+                _marshal.write8Bit(methodId);
             else { // no
                 header |= DIR_MID;
                 header |= methodId >> 8;
 
-                _marshal.writebyte(header);
-                _marshal.writebyte((byte)(methodId & 0xff));
+                _marshal.write8Bit(header);
+                _marshal.write8Bit(methodId);
             }
         }
 
@@ -452,9 +453,11 @@ public class urp extends Protocol {
         for(int i = 0; i < in_sig.length; ++ i) {
             if(in_sig[i] != null) { // is it an in parameter?
                 if(out_sig[i] != null)  // is it also an out parameter?
-                    _marshal.writeObject(out_sig[i].getComponentType(), ((Object [])params[i])[0]);
+                    _marshal.writeValue(
+                        (TypeDescription) out_sig[i].getComponentType(),
+                        ((Object[]) params[i])[0]);
                 else // in only
-                    _marshal.writeObject(in_sig[i], params[i]);
+                    _marshal.writeValue((TypeDescription) in_sig[i], params[i]);
             }
         }
 
@@ -470,7 +473,7 @@ public class urp extends Protocol {
         Object objects[] = (Object[])removePendingReply(threadId);
         Object params[] = (Object[])objects[0];
         ITypeDescription signature[] = (ITypeDescription[])objects[1];
-        ITypeDescription resType     = (ITypeDescription)objects[2];
+        TypeDescription resType     = (TypeDescription)objects[2];
 
         byte header = BIG_HEADER; // big header
 
@@ -493,18 +496,20 @@ public class urp extends Protocol {
         else
             threadId = null;
 
-        _marshal.writebyte(header);
+        _marshal.write8Bit(header);
 
         if(threadId != null) // has the thread id changed? -> write it
             _marshal.writeThreadId(threadId);
 
         // write the result
-        _marshal.writeObject(resType, result);
+        _marshal.writeValue(resType, result);
 
         // write the out parameters
         for(int i = 0; i < signature.length; ++ i)
             if(signature[i] != null)
-                _marshal.writeObject(signature[i].getComponentType(), Array.get(params[i], 0));
+                _marshal.writeValue(
+                    (TypeDescription) signature[i].getComponentType(),
+                    Array.get(params[i], 0));
     }
 
 
@@ -601,19 +606,18 @@ public class urp extends Protocol {
      * <p>
      * @return  thread read job.
      * @see     com.sun.star.lib.uno.environments.remote.Job
-     * @see                  com.sun.star.lib.uno.environments.remote.IProtocol#readJob
      */
     public IMessage readMessage(InputStream inputStream) throws IOException {
         IMessage iMessage = null;
 
         DataInput dataInput = new DataInputStream( inputStream );
           while(iMessage == null) { // try hard to get a message
-            if(_unmarshal.bytesLeft() <= 0) { // the last block is empty, get a new one
+            if(!_unmarshal.hasMore()) { // the last block is empty, get a new one
                 byte bytes[] = readBlock(dataInput);
                 _unmarshal.reset(bytes);
             }
 
-            if(_unmarshal.bytesLeft() == 0) // we already got a new block and there are still no bytes left? -> a close message
+            if(!_unmarshal.hasMore()) // we already got a new block and there are still no bytes left? -> a close message
                 throw new java.io.IOException("connection close message received");
 
             else {
@@ -660,17 +664,6 @@ public class urp extends Protocol {
 
             _message_count = 0;
         }
-    }
-
-    public IMarshal createMarshal() {
-        return new Marshal(_iBridge, __cache_size);
-    }
-
-    public IUnmarshal createUnmarshal(byte bytes[]) {
-        Unmarshal unmarshal =  new Unmarshal(_iBridge, __cache_size);
-        unmarshal.reset(bytes);
-
-        return unmarshal;
     }
 }
 
