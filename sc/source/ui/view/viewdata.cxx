@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:55:14 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2498,7 +2498,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
 
             // cursor position
             const ScAddress& rCursor = rTabSett.maCursor;
-            if( (rCursor.Col() >= 0) && (rCursor.Row() >= 0) )
+            if( rCursor.IsValid() )
             {
                 rViewTab.nCurX = rCursor.Col();
                 rViewTab.nCurY = rCursor.Row();
