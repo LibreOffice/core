@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:47:56 $
+ *  last change: $Author: hr $ $Date: 2004-12-14 14:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1923,7 +1923,7 @@ void SwHTMLParser::InsertLink()
                     sRel = pOption->GetString();
                     break;
                 case HTML_O_HREF:
-                    ASSERT( INetURLObject::GetBaseURL() == sBaseURL,
+                    ASSERT( String(INetURLObject::GetBaseURL()) == sBaseURL,
                             "<LINK>: Base URL ist zerschossen" );
                     sHRef = INetURLObject::RelToAbs( pOption->GetString() );
                     break;

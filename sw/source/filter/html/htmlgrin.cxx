@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:42:48 $
+ *  last change: $Author: hr $ $Date: 2004-12-14 14:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,7 @@ void SwHTMLParser::InsertImage()
                 aClass = pOption->GetString();
                 break;
             case HTML_O_SRC:
-                ASSERT( INetURLObject::GetBaseURL() == sBaseURL,
+                ASSERT( String(INetURLObject::GetBaseURL()) == sBaseURL,
                         "<IMG>: Base URL ist zerschossen" );
                 sGrfNm = pOption->GetString();
                 if( !InternalImgToPrivateURL(sGrfNm) )
@@ -1071,7 +1071,7 @@ void SwHTMLParser::InsertBodyOptions()
     if( aBackGround.Len() && !pCSS1Parser->IsBodyBackgroundSet() )
     {
         // Hintergrundgrafik aus "BACKGROUND"
-        ASSERT( INetURLObject::GetBaseURL() == sBaseURL,
+        ASSERT( String(INetURLObject::GetBaseURL()) == sBaseURL,
                 "<BODY>: Base URL ist zerschossen" );
         aBrushItem.SetGraphicLink( INetURLObject::RelToAbs( aBackGround ) );
         aBrushItem.SetGraphicPos( GPOS_TILED );
@@ -1332,7 +1332,7 @@ ANCHOR_SETEVENT:
     {
         if( sHRef.Len() )
         {
-            ASSERT( INetURLObject::GetBaseURL() == sBaseURL,
+            ASSERT( String(INetURLObject::GetBaseURL()) == sBaseURL,
                     "<A>: Base URL ist zerschossen" );
             sHRef = INetURLObject::RelToAbs( sHRef );
         }
