@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-18 11:44:44 $
+ *  last change: $Author: os $ $Date: 2001-12-12 16:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3580,7 +3580,10 @@ IMPL_STATIC_LINK( SvxBrushItem, DoneHdl_Impl, void*, EMPTYARG )
             pThis->pImpl->pGraphicObject->SetGraphic( aGraphic );
     }
     else
+    {
+        DELETEZ( pThis->pImpl->pGraphicObject );
         pThis->bLoadAgain = sal_False;
+    }
 
     pThis->pImpl->xMedium.Clear();
     pThis->pImpl->aDoneLink.Call( pThis );
