@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 19:56:34 $
+ *  last change: $Author: sj $ $Date: 2001-03-28 15:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,7 @@ sal_Bool FilterConfigCache::ImplAddFilterEntry( const Sequence< PropertyValue >&
     static OUString sTemplateName       ( RTL_CONSTASCII_USTRINGPARAM( "TemplateName" ) );
 
     static OUString sExtensions         ( RTL_CONSTASCII_USTRINGPARAM( "Extensions" ) );
+    static OUString sMediaType          ( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
 
     static OUString sTrue               ( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
 
@@ -237,39 +238,37 @@ sal_Bool FilterConfigCache::ImplAddFilterEntry( const Sequence< PropertyValue >&
                 aTypePropertySet >>= lProperties;
                 sal_Int32 j, nCount = lProperties.getLength();
 
-                // searching index for extension property
+                Sequence< OUString > lExtensionList;
 
                 for ( j = 0; j < nCount; j++ )
                 {
-                    if ( lProperties[ j ].Name.equals( sExtensions ) )
-                        break;
+                    PropertyValue aPropValue( lProperties[ j ] );
+                    if ( aPropValue.Name.equals( sExtensions ) )
+                        aPropValue.Value >>= lExtensionList;
+                    else if ( aPropValue.Name.equals( sMediaType ) )
+                        aPropValue.Value >>= aEntry.sMediaType;
                 }
-                if ( j < nCount )
+                sal_Int32 nExtensionCount = lExtensionList.getLength();
+                if ( nExtensionCount )
                 {
-                    Sequence< OUString > lExtensionList;
-                    lProperties[ j ].Value >>= lExtensionList;
-                    sal_Int32 nExtensionCount = lExtensionList.getLength();
-                    if ( nExtensionCount )
+                    // The first extension will be used
+                    // to generate our internal FilterType ( BMP, WMF ... )
+
+                    String aExtension( lExtensionList[ 0 ] );
+                    if ( aExtension.SearchAscii( "*.", 0 ) == 0 )
+                        aExtension.Erase( 0, 2 );
+
+                    if ( aExtension.Len() == 3 )
                     {
-                        // The first extension will be used
-                        // to generate our internal FilterType ( BMP, WMF ... )
+                        aEntry.sExtension = aExtension;
+                        aEntry.sType = aExtension;
 
-                        String aExtension( lExtensionList[ 0 ] );
-                        if ( aExtension.SearchAscii( "*.", 0 ) == 0 )
-                            aExtension.Erase( 0, 2 );
-
-                        if ( aExtension.Len() == 3 )
-                        {
-                            aEntry.sExtension = aExtension;
-                            aEntry.sType = aExtension;
-
-                            if ( aEntry.nFlags & 1 )
-                                aImport.push_back( aEntry );
-                            if ( aEntry.nFlags & 2 )
-                                aExport.push_back( aEntry );
-                            if ( aEntry.nFlags & 3 )
-                                bFilterEntryCreated = sal_True;
-                        }
+                        if ( aEntry.nFlags & 1 )
+                            aImport.push_back( aEntry );
+                        if ( aEntry.nFlags & 2 )
+                            aExport.push_back( aEntry );
+                        if ( aEntry.nFlags & 3 )
+                            bFilterEntryCreated = sal_True;
                     }
                 }
             }
@@ -331,6 +330,18 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumber( const String& rFormatName )
     return aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin();
 }
 
+sal_uInt16 FilterConfigCache::GetImportFormatNumberForMediaType( const String& rMediaType )
+{
+    CacheVector::iterator aIter( aImport.begin() );
+    while ( aIter != aImport.end() )
+    {
+        if ( aIter->sMediaType.equalsIgnoreCase( rMediaType ) )
+            break;
+        aIter++;
+    }
+    return aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin();
+}
+
 sal_uInt16 FilterConfigCache::GetImportFormatNumberForShortName( const String& rShortName )
 {
     CacheVector::iterator aIter( aImport.begin() );
@@ -350,6 +361,15 @@ String FilterConfigCache::GetImportFormatName( sal_uInt16 nFormat )
     if ( aIter < aImport.end() )
         aUIName = aIter->sUIName;
     return aUIName;
+}
+
+String FilterConfigCache::GetImportFormatMediaType( sal_uInt16 nFormat )
+{
+    CacheVector::iterator aIter( aImport.begin() + nFormat );
+    String aMediaType;
+    if ( aIter < aImport.end() )
+        aMediaType = aIter->sMediaType;
+    return aMediaType;
 }
 
 String FilterConfigCache::GetImportFormatShortName( sal_uInt16 nFormat )
@@ -416,6 +436,18 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumber( const String& rFormatName )
     return aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin();
 }
 
+sal_uInt16 FilterConfigCache::GetExportFormatNumberForMediaType( const String& rMediaType )
+{
+    CacheVector::iterator aIter( aExport.begin() );
+    while ( aIter != aExport.end() )
+    {
+        if ( aIter->sMediaType.equalsIgnoreCase( rMediaType ) )
+            break;
+        aIter++;
+    }
+    return aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin();
+}
+
 sal_uInt16 FilterConfigCache::GetExportFormatNumberForShortName( const String& rShortName )
 {
     CacheVector::iterator aIter( aExport.begin() );
@@ -435,6 +467,15 @@ String FilterConfigCache::GetExportFormatName( sal_uInt16 nFormat )
     if ( aIter < aExport.end() )
         aUIName = aIter->sUIName;
     return aUIName;
+}
+
+String FilterConfigCache::GetExportFormatMediaType( sal_uInt16 nFormat )
+{
+    CacheVector::iterator aIter( aExport.begin() + nFormat );
+    String aMediaType;
+    if ( aIter < aExport.end() )
+        aMediaType = aIter->sMediaType;
+    return aMediaType;
 }
 
 String FilterConfigCache::GetExportFormatShortName( sal_uInt16 nFormat )

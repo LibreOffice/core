@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 19:56:55 $
+ *  last change: $Author: sj $ $Date: 2001-03-28 15:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@ class FilterConfigCache
             ::rtl::OUString sFilterService;
             ::rtl::OUString sTemplateName;
 
+            ::rtl::OUString sMediaType;
+
             sal_Int32       nFlags;
             sal_Int32       nFileFormatVersion;
 
@@ -124,10 +126,12 @@ class FilterConfigCache
 
         sal_uInt16  GetImportFormatCount() const { return aImport.size(); };
         sal_uInt16  GetImportFormatNumber( const String& rFormatName );
+        sal_uInt16  GetImportFormatNumberForMediaType( const String& rMediaType );
         sal_uInt16  GetImportFormatNumberForShortName( const String& rShortName );
         String      GetImportFilterName( sal_uInt16 nFormat );
         String      GetImportFormatName( sal_uInt16 nFormat );
         String      GetImportFormatExtension( sal_uInt16 nFormat );
+        String      GetImportFormatMediaType( sal_uInt16 nFormat );
         String      GetImportFormatShortName( sal_uInt16 nFormat );
         String      GetImportWildcard( sal_uInt16 nFormat );
 
@@ -137,10 +141,12 @@ class FilterConfigCache
 
         sal_uInt16  GetExportFormatCount() const { return aExport.size(); };
         sal_uInt16  GetExportFormatNumber( const String& rFormatName );
+        sal_uInt16  GetExportFormatNumberForMediaType( const String& rMediaType );
         sal_uInt16  GetExportFormatNumberForShortName( const String& rShortName );
         String      GetExportFilterName( sal_uInt16 nFormat );
         String      GetExportFormatName( sal_uInt16 nFormat );
         String      GetExportFormatExtension( sal_uInt16 nFormat );
+        String      GetExportFormatMediaType( sal_uInt16 nFormat );
         String      GetExportFormatShortName( sal_uInt16 nFormat );
         String      GetExportWildcard( sal_uInt16 nFormat );
 
