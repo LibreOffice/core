@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:18:06 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,12 @@
 #ifndef _NODE_HXX
 #include <node.hxx>
 #endif
-
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
+#ifndef _PARATR_HXX
+#include <paratr.hxx>
+#endif
 
 TYPEINIT1( SwTxtFmtColl, SwFmtColl );
 TYPEINIT1( SwGrfFmtColl, SwFmtColl );
@@ -459,6 +464,31 @@ void SwConditionTxtFmtColl::SetConditions( const SwFmtCollConditions& rCndClls )
         aCondColls.Insert( pNew, n );
     }
 }
+
+void SwTxtFmtColl::SetOutlineLevel( BYTE nLevel )
+{
+    ASSERT( nLevel < MAXLEVEL || nLevel == NO_NUMBERING ,
+                            "SwTxtFmtColl: Level too low" );
+    nOutlineLevel = nLevel;
+
+    SwNumRuleItem aNumRuleItem(GetNumRule());
+
+    if (aNumRuleItem.GetValue().Len() > 0)
+    {
+        String sNumRuleName = aNumRuleItem.GetValue();
+        SwNumRule * pNumRule = GetDoc()->FindNumRulePtr(sNumRuleName);
+
+        if (! pNumRule || !pNumRule->IsOutlineRule())
+        {
+            String aTmp(SwNumRule::GetOutlineRuleName(),
+                        RTL_TEXTENCODING_ASCII_US);
+            SwNumRuleItem aItem(aTmp);
+
+            GetDoc()->SetAttr(aItem, *this);
+        }
+    }
+}
+
 
 //FEATURE::CONDCOLL
 
