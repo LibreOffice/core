@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:36:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,8 +556,7 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
         if(pDocShell->HasName())
         {
             USHORT nPos = 0;
-            const String rName = URIHelper::SmartRelToAbs(
-                                    pDocShell->GetMedium()->GetURLObject().GetURLNoMark());
+            const String rName = pDocShell->GetMedium()->GetURLObject().GetURLNoMark();
 
             if(COMPARE_EQUAL == sURL.CompareTo(rName, rName.Len()))
                 sURL.Erase(0, rName.Len());
