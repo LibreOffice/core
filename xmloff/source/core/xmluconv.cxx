@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 17:41:08 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 06:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1401,12 +1401,12 @@ const
       0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
 
 
-void ThreeByteToFourByte (const sal_uInt8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, rtl::OUStringBuffer& sBuffer)
+void ThreeByteToFourByte (const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, rtl::OUStringBuffer& sBuffer)
 {
     sal_Int32 nLen(nFullLen - nStart);
     if (nLen > 3)
         nLen = 3;
-    if ((nLen == 0))
+    if (nLen == 0)
     {
         sBuffer.setLength(0);
         return;
@@ -1417,20 +1417,20 @@ void ThreeByteToFourByte (const sal_uInt8* pBuffer, const sal_Int32 nStart, cons
     {
         case 1:
         {
-            nBinaer = pBuffer[nStart + 0] << 16;
+            nBinaer = ((sal_uInt8)pBuffer[nStart + 0]) << 16;
         }
         break;
         case 2:
         {
-            nBinaer = (pBuffer[nStart + 0] << 16) +
-                    (pBuffer[nStart + 1] <<  8);
+            nBinaer = (((sal_uInt8)pBuffer[nStart + 0]) << 16) +
+                    (((sal_uInt8)pBuffer[nStart + 1]) <<  8);
         }
         break;
         default:
         {
-            nBinaer = (pBuffer[nStart + 0] << 16) +
-                    (pBuffer[nStart + 1] <<  8) +
-                    pBuffer[nStart + 2];
+            nBinaer = (((sal_uInt8)pBuffer[nStart + 0]) << 16) +
+                    (((sal_uInt8)pBuffer[nStart + 1]) <<  8) +
+                    ((sal_uInt8)pBuffer[nStart + 2]);
         }
         break;
     }
@@ -1454,11 +1454,11 @@ void ThreeByteToFourByte (const sal_uInt8* pBuffer, const sal_Int32 nStart, cons
     sBuffer.setCharAt(3, aBase64EncodeTable [nIndex]);
 }
 
-void SvXMLUnitConverter::encodeBase64(rtl::OUStringBuffer& aStrBuffer, const uno::Sequence<sal_uInt8>& aPass)
+void SvXMLUnitConverter::encodeBase64(rtl::OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
 {
     sal_Int32 i(0);
     sal_Int32 nBufferLength(aPass.getLength());
-    const sal_uInt8* pBuffer = aPass.getConstArray();
+    const sal_Int8* pBuffer = aPass.getConstArray();
     while (i < nBufferLength)
     {
         rtl::OUStringBuffer sBuffer;
@@ -1471,7 +1471,7 @@ void SvXMLUnitConverter::encodeBase64(rtl::OUStringBuffer& aStrBuffer, const uno
 const rtl::OUString s2equal(RTL_CONSTASCII_USTRINGPARAM("=="));
 const rtl::OUString s1equal(RTL_CONSTASCII_USTRINGPARAM("="));
 
-void FourByteToThreeByte (sal_uInt8* pBuffer, sal_Int32& nLength, const sal_Int32 nStart, const rtl::OUString& sString)
+void FourByteToThreeByte (sal_Int8* pBuffer, sal_Int32& nLength, const sal_Int32 nStart, const rtl::OUString& sString)
 {
     nLength = 0;
     sal_Int32 nLen (sString.getLength());
@@ -1496,25 +1496,25 @@ void FourByteToThreeByte (sal_uInt8* pBuffer, sal_Int32& nLength, const sal_Int3
             (aBase64DecodeTable [sString [3]]));
 
     sal_uInt8 OneByte ((nBinaer & 0xFF0000) >> 16);
-    pBuffer[nStart + 0] = OneByte;
+    pBuffer[nStart + 0] = (sal_Int8)OneByte;
 
     if (nLength == 1)
         return;
 
     OneByte = (nBinaer & 0xFF00) >> 8;
-    pBuffer[nStart + 1] = OneByte;
+    pBuffer[nStart + 1] = (sal_Int8)OneByte;
 
     if (nLength == 2)
         return;
 
     OneByte = nBinaer & 0xFF;
-    pBuffer[nStart + 2] = OneByte;
+    pBuffer[nStart + 2] = (sal_Int8)OneByte;
 }
 
-void SvXMLUnitConverter::decodeBase64(uno::Sequence<sal_uInt8>& aBuffer, const rtl::OUString& sBuffer)
+void SvXMLUnitConverter::decodeBase64(uno::Sequence<sal_Int8>& aBuffer, const rtl::OUString& sBuffer)
 {
     sal_Int32 nFirstLength((sBuffer.getLength() / 4) * 3);
-    sal_uInt8* pBuffer = new sal_uInt8[nFirstLength];
+    sal_Int8* pBuffer = new sal_Int8[nFirstLength];
     sal_Int32 nSecondLength(0);
     sal_Int32 nLength(0);
     sal_Int32 i = 0;
@@ -1527,7 +1527,7 @@ void SvXMLUnitConverter::decodeBase64(uno::Sequence<sal_uInt8>& aBuffer, const r
         i += 4;
         k += 3;
     }
-    aBuffer = uno::Sequence<sal_uInt8>(pBuffer, nSecondLength);
+    aBuffer = uno::Sequence<sal_Int8>(pBuffer, nSecondLength);
     delete[] pBuffer;
 }
 
