@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:25:01 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include "docsh.hxx"
 #include "globstr.hrc"
 
+
+#include "sc.hrc" //CHINA001
+#include "scabstdlg.hxx" //CHINA001
 using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
@@ -191,7 +194,11 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         if ( xInputStream.is() )
             pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
 
-        ScImportAsciiDlg* pDlg = new ScImportAsciiDlg( NULL, aPrivDatName, pInStream, cAsciiDel );
+        //CHINA001 ScImportAsciiDlg* pDlg = new ScImportAsciiDlg( NULL, aPrivDatName, pInStream, cAsciiDel );
+        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+        AbstractScImportAsciiDlg* pDlg = pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream,ResId(RID_SCDLG_ASCII), cAsciiDel);
+        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
         if ( pDlg->Execute() == RET_OK )
         {
             ScAsciiOptions aOptions;
@@ -270,10 +277,17 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         }
 
         ScImportOptions aOptions( cAsciiDel, cStrDel, eEncoding);
-        ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL, bAscii,
-                                    &aOptions, &aTitle, bMultiByte, bDBEnc,
-                                    !bExport );
+//CHINA001      ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL, bAscii,
+//CHINA001      &aOptions, &aTitle, bMultiByte, bDBEnc,
+//CHINA001      !bExport );
+//CHINA001
+        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
+        AbstractScImportOptionsDlg* pDlg = pFact->CreateScImportOptionsDlg( NULL, ResId(RID_SCDLG_IMPORTOPT),
+                                                                            bAscii, &aOptions, &aTitle, bMultiByte, bDBEnc,
+                                                                            !bExport);
+        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
         if ( pDlg->Execute() == RET_OK )
         {
             pDlg->GetImportOptions( aOptions );
