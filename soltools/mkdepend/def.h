@@ -49,6 +49,14 @@ in this Software without prior written authorization from the X Consortium.
 #include <fcntl.h>
 #include <sys/stat.h>
 
+#ifndef S_IFDIR
+#define        S_IFDIR  0040000
+#endif
+
+#ifndef S_IFREG
+#define        S_IFREG  0100000
+#endif
+
 #define MAXDEFINES  512
 #define MAXFILES    2048  /* Increased from 512. -mcafee */
                           /* Increased from 1024. -mh */
