@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-16 12:52:13 $
+ *  last change: $Author: sb $ $Date: 2001-06-18 13:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,14 +75,38 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTIESCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SYSTEM_XPROXYSETTINGS_HPP_
+#include <com/sun/star/system/XProxySettings.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
+#include <com/sun/star/uno/Exception.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
+#endif
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.h>
 #endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -447,6 +471,86 @@ SvtInetOptions::SvtInetOptions()
     if (!m_pImpl)
         m_pImpl = new Impl;
     m_pImpl->acquire();
+
+    // HACK to read system proxy settings on first office start (this should
+    // go into setup once it is easy to start SystemProxySettings service from
+    // setup; the "Automatic" value for the proxy type can be removed then):
+    sal_Int32 nProxyType;
+    if ((m_pImpl->getProperty(Impl::INDEX_PROXY_TYPE) >>= nProxyType)
+        && nProxyType == 1) // 1 means "Automatic"
+    {
+        uno::Reference< system::XProxySettings > xProxySettings;
+        uno::Reference< lang::XMultiServiceFactory >
+            xServiceFactory(utl::getProcessServiceFactory());
+        if (xServiceFactory.is())
+            try
+            {
+                xProxySettings
+                    = uno::Reference< system::XProxySettings >(
+                          xServiceFactory->
+                              createInstance(
+                                  rtl::OUString(
+                                      RTL_CONSTASCII_USTRINGPARAM(
+                                 "com.sun.star.system.SystemProxySettings"))),
+                          uno::UNO_QUERY);
+            }
+            catch (uno::Exception &)
+            {}
+        try
+        {
+            if (xProxySettings.is() && xProxySettings->isProxyEnabled())
+            {
+                m_pImpl->
+                    setProperty(Impl::INDEX_PROXY_HTTP_NAME,
+                                uno::makeAny(xProxySettings->
+                                                 getHttpProxyAddress()),
+                                false);
+                m_pImpl->
+                    setProperty(Impl::INDEX_PROXY_HTTP_PORT,
+                                uno::makeAny(xProxySettings->
+                                                 getHttpProxyPort().
+                                                     toInt32()),
+                                false);
+                m_pImpl->
+                    setProperty(Impl::INDEX_PROXY_FTP_NAME,
+                                uno::makeAny(xProxySettings->
+                                                 getFtpProxyAddress()),
+                                false);
+                m_pImpl->
+                    setProperty(Impl::INDEX_PROXY_FTP_PORT,
+                                uno::makeAny(xProxySettings->
+                                                 getFtpProxyPort().toInt32()),
+                                false);
+                m_pImpl->
+                    setProperty(Impl::INDEX_PROXY_SOCKS_NAME,
+                                uno::makeAny(xProxySettings->
+                                                 getSocksProxyAddress()),
+                                false);
+                m_pImpl->
+                    setProperty(Impl::INDEX_PROXY_SOCKS_PORT,
+                                uno::makeAny(xProxySettings->
+                                                 getSocksProxyPort().
+                                                     toInt32()),
+                                false);
+                m_pImpl->
+                    setProperty(Impl::INDEX_PROXY_NO_PROXY,
+                                uno::makeAny(xProxySettings->
+                                                 getProxyBypassAddress()),
+                                false);
+                m_pImpl->
+                    setProperty(Impl::INDEX_PROXY_TYPE,
+                                uno::makeAny(static_cast< sal_Int32 >(2)),
+                                false); // 2 means "Manual"
+                m_pImpl->flush();
+                return;
+            }
+        }
+        catch (uno::RuntimeException &)
+        {}
+        m_pImpl->setProperty(Impl::INDEX_PROXY_TYPE,
+                             uno::makeAny(static_cast< sal_Int32 >(0)),
+                             true); // 0 means "None"
+    }
 }
 
 //============================================================================
