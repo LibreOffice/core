@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-30 22:37:02 $
+ *  last change: $Author: os $ $Date: 2001-03-07 13:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,6 +616,7 @@ IMPL_LINK( SwView, TimeoutHdl, Timer *, EMPTYARG )
 
     SelectShell();
     bAttrChgNotified = sal_False;
+    GetViewImpl()->GetUNOObject_Impl()->NotifySelChanged();
 
     DBG_PROFSTOP(viewhdl);
     return 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-11-07 14:41:19 $
+ *  last change: $Author: os $ $Date: 2001-03-07 13:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,15 +67,16 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTOR_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #endif
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONCHANGELISTENER_HPP_
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
+#include <list>
 
 class SwView;
 //---------------------------------------------------------------------------------------------------------------------
@@ -92,9 +93,7 @@ class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper2
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>           m_xSlaveDispatcher;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>           m_xMasterDispatcher;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch>           m_xFormLetterDispatch;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch>           m_xInsertContentDispatch;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch>           m_xInsertColumnsDispatch;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch>                   m_xDispatch;
 
     SwView& m_rView;
 
@@ -116,21 +115,35 @@ public:
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 };
 //---------------------------------------------------------------------------------------------------------------------
-class SwXDispatch : public cppu::WeakImplHelper1
+struct StatusStruct_Impl
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener> xListener;
+    ::com::sun::star::util::URL                                                 aURL;
+};
+typedef std::list< StatusStruct_Impl > StatusListenerList;
+class SwXDispatch : public cppu::WeakImplHelper2
 <
-    ::com::sun::star::frame::XDispatch
+    ::com::sun::star::frame::XDispatch,
+    ::com::sun::star::view::XSelectionChangeListener
 >
 {
-    SwView&     m_rView;
-    sal_uInt16  m_nSlot;
-
+    SwView&             m_rView;
+    StatusListenerList  m_aListenerList;
+    sal_Bool            m_bOldEnable;
+    sal_Bool            m_bListenerAdded;
 public:
-    SwXDispatch(SwView& rView, sal_uInt16 nSlotId);
+    SwXDispatch(SwView& rView);
     ~SwXDispatch();
 
     virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException);
+
+    //XSelectionChangeListener
+    virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException);
+
+    //XEventListener
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 #endif

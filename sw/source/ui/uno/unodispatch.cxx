@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 08:34:02 $
+ *  last change: $Author: os $ $Date: 2001-03-07 13:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,16 @@
 #include "wrtsh.hxx"
 #include "dbmgr.hxx"
 
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::view;
 using namespace rtl;
 using namespace vos;
 
@@ -137,23 +141,13 @@ Reference< XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
     // create some dispatch ...
     if(!aURL.Complete.compareToAscii(cURLStart, 23))
     {
-        if(!aURL.Complete.compareToAscii(cURLFormLetter))
+        if(!aURL.Complete.compareToAscii(cURLFormLetter) ||
+            !aURL.Complete.compareToAscii(cURLInsertContent) ||
+                !aURL.Complete.compareToAscii(cURLInsertColumns))
         {
-            if(!m_xFormLetterDispatch.is())
-                m_xFormLetterDispatch = new SwXDispatch(m_rView, FN_DB_FORM_LETTER    );
-            xResult = m_xFormLetterDispatch;
-        }
-        else if(!aURL.Complete.compareToAscii(cURLInsertContent))
-        {
-            if(!m_xInsertContentDispatch.is())
-                m_xInsertContentDispatch = new SwXDispatch(m_rView, FN_DB_INSERT_CONTENT);
-            xResult = m_xInsertContentDispatch;
-        }
-        else if(!aURL.Complete.compareToAscii(cURLInsertColumns))
-        {
-            if(!m_xInsertColumnsDispatch.is())
-                m_xInsertColumnsDispatch = new SwXDispatch(m_rView, FN_DB_INSERT_COLUMNS);
-            xResult = m_xInsertColumnsDispatch;
+            if(!m_xDispatch.is())
+                m_xDispatch = new SwXDispatch(m_rView);
+            xResult = m_xDispatch;
         }
     }
 
@@ -229,18 +223,17 @@ void SwXDispatchProviderInterceptor::disposing( const EventObject& Source )
         Reference< XComponent> xInterceptedComponent(m_xIntercepted, UNO_QUERY);
         if (xInterceptedComponent.is())
             xInterceptedComponent->removeEventListener((XEventListener*)this);
-        m_xFormLetterDispatch       = 0;
-        m_xInsertContentDispatch    = 0;
-        m_xInsertColumnsDispatch    = 0;
+        m_xDispatch       = 0;
     }
     m_xIntercepted = NULL;
 }
 /* -----------------------------07.11.00 14:26--------------------------------
 
  ---------------------------------------------------------------------------*/
-SwXDispatch::SwXDispatch(SwView& rVw, sal_uInt16 nSlotId) :
+SwXDispatch::SwXDispatch(SwView& rVw) :
     m_rView(rVw),
-    m_nSlot(nSlotId)
+    m_bOldEnable(sal_False),
+    m_bListenerAdded(sal_False)
 {
 }
 /*-- 07.11.00 14:26:13---------------------------------------------------
@@ -248,6 +241,12 @@ SwXDispatch::SwXDispatch(SwView& rVw, sal_uInt16 nSlotId) :
   -----------------------------------------------------------------------*/
 SwXDispatch::~SwXDispatch()
 {
+    if(m_bListenerAdded)
+    {
+        Reference<XSelectionSupplier> xSupplier = m_rView.GetUNOObject();
+        Reference<XSelectionChangeListener> xThis = this;
+        xSupplier->removeSelectionChangeListener(xThis);
+    }
 }
 /*-- 07.11.00 14:26:13---------------------------------------------------
 
@@ -279,19 +278,32 @@ void SwXDispatch::dispatch(
 void SwXDispatch::addStatusListener(
     const Reference< XStatusListener >& xControl, const URL& aURL ) throw(RuntimeException)
 {
+    ShellModes eMode = m_rView.GetShellMode();
+    sal_Bool bEnable = SEL_TEXT == eMode  ||
+                       SEL_LIST_TEXT == eMode  ||
+                       SEL_TABLE_TEXT == eMode  ||
+                       SEL_TABLE_LIST_TEXT == eMode;
+
+    m_bOldEnable = bEnable;
     FeatureStateEvent aEvent;
-    aEvent.IsEnabled = sal_True;
+    aEvent.IsEnabled = bEnable;
     aEvent.Source = *(cppu::OWeakObject*)this;
     aEvent.FeatureURL = aURL;
     xControl->statusChanged( aEvent );
-#ifdef DBG_UTIL
-    static BOOL bShowError = TRUE;
-    if(bShowError)
+
+    StatusListenerList::iterator aListIter = m_aListenerList.begin();
+    StatusStruct_Impl aStatus;
+    aStatus.xListener = xControl;
+    aStatus.aURL = aURL;
+    m_aListenerList.insert(aListIter, aStatus);
+
+    if(!m_bListenerAdded)
     {
-        DBG_ERROR("void SwXDispatch::addStatusListener: not implemented")
-        bShowError=FALSE;
+        Reference<XSelectionSupplier> xSupplier = m_rView.GetUNOObject();
+        Reference<XSelectionChangeListener> xThis = this;
+        xSupplier->addSelectionChangeListener(xThis);
+        m_bListenerAdded = sal_True;
     }
-#endif
 }
 /*-- 07.11.00 14:26:15---------------------------------------------------
 
@@ -299,12 +311,59 @@ void SwXDispatch::addStatusListener(
 void SwXDispatch::removeStatusListener(
     const Reference< XStatusListener >& xControl, const URL& aURL ) throw(RuntimeException)
 {
-#ifdef DBG_UTIL
-    static BOOL bShowError = TRUE;
-    if(bShowError)
+    StatusListenerList::iterator aListIter = m_aListenerList.begin();
+    for(aListIter = m_aListenerList.begin(); aListIter != m_aListenerList.end(); ++aListIter)
     {
-        DBG_ERROR("void SwXDispatch::removeStatusListener: not implemented")
-        bShowError=FALSE;
+        StatusStruct_Impl aStatus = *aListIter;
+        if(aStatus.xListener.get() == xControl.get())
+        {
+            m_aListenerList.erase(aListIter);
+            break;
+        }
     }
-#endif
+    if(m_aListenerList.empty())
+    {
+        Reference<XSelectionSupplier> xSupplier = m_rView.GetUNOObject();
+        Reference<XSelectionChangeListener> xThis = this;
+        xSupplier->removeSelectionChangeListener(xThis);
+        m_bListenerAdded = sal_False;
+    }
 }
+/* -----------------------------07.03.01 10:27--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXDispatch::selectionChanged( const EventObject& aEvent ) throw(RuntimeException)
+{
+    ShellModes eMode = m_rView.GetShellMode();
+    sal_Bool bEnable = SEL_TEXT == eMode  ||
+                       SEL_LIST_TEXT == eMode  ||
+                       SEL_TABLE_TEXT == eMode  ||
+                       SEL_TABLE_LIST_TEXT == eMode;
+    if(bEnable != m_bOldEnable)
+    {
+        m_bOldEnable = bEnable;
+        FeatureStateEvent aEvent;
+        aEvent.IsEnabled = bEnable;
+        sal_Bool Requery = FALSE;
+        aEvent.Source = *(cppu::OWeakObject*)this;
+
+        StatusListenerList::iterator aListIter = m_aListenerList.begin();
+        for(aListIter = m_aListenerList.begin(); aListIter != m_aListenerList.end(); ++aListIter)
+        {
+            StatusStruct_Impl aStatus = *aListIter;
+            aEvent.FeatureURL = aStatus.aURL;
+            aStatus.xListener->statusChanged( aEvent );
+        }
+    }
+}
+/* -----------------------------07.03.01 10:46--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXDispatch::disposing( const EventObject& rSource ) throw(RuntimeException)
+{
+    Reference<XSelectionSupplier> xSupplier(rSource.Source, UNO_QUERY);
+    Reference<XSelectionChangeListener> xThis = this;
+    xSupplier->removeSelectionChangeListener(xThis);
+    m_bListenerAdded = sal_False;
+}
+

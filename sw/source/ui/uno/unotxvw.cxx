@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-19 07:28:26 $
+ *  last change: $Author: os $ $Date: 2001-03-07 13:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,9 +268,22 @@ SwXTextView::~SwXTextView()
     }
     if(pxTextViewCursor)
     {
-     text::XTextViewCursor* pCrsr = pxTextViewCursor->get();
+        text::XTextViewCursor* pCrsr = pxTextViewCursor->get();
         ((SwXTextViewCursor*)pCrsr)->Invalidate();
         delete pxTextViewCursor;
+    }
+    sal_uInt16 nCount = aSelChangedListeners.Count();
+    if(nCount)
+    {
+        m_refCount++; //prevent second d'tor call
+        Reference< uno::XInterface >  xInt = (cppu::OWeakObject*)(SfxBaseController*)this;
+        lang::EventObject aEvent(xInt);
+        for ( sal_uInt16 i = nCount; i--; )
+        {
+            Reference< view::XSelectionChangeListener >  *pObj = aSelChangedListeners[i];
+            (*pObj)->disposing(aEvent);
+        }
+        m_refCount--;
     }
 }
 /* -----------------------------18.05.00 10:18--------------------------------
