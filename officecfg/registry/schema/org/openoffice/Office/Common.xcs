@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:40:52 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 23:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -11326,7 +11326,7 @@
 							</info>
 						</enumeration>
 					</constraints>
-					<value>0</value>
+					<value>1</value>
 				</prop>
 				<prop oor:name="ExecutePlugins" oor:type="xs:boolean">
 					<info>
