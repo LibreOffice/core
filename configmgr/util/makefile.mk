@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dg $ $Date: 2001-02-08 11:39:26 $
+#   last change: $Author: ganaya $ $Date: 2001-02-14 17:55:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 SHL1TARGET=	$(CFGMGR_TARGET)$(CFGMGR_MAJOR)
 .IF "$(OS)"=="MACOSX"
-SHL1VERSIONMAP= $(TARGET).$(DLLPOSTFIX).map
+#SHL1VERSIONMAP= $(TARGET).$(DLLPOSTFIX).map
 .ELSE
 SHL1VERSIONMAP= $(TARGET).map
 .ENDIF
