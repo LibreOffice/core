@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:32:06 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@ String RID_SVXSTR_INSERT_TEXT
     Text[ hebrew ] = "‮INSRT‬";
     Text[ hindi ] = "INSRT";
     Text[ slovak ] = "INSRT";
+    Text[ hungarian ] = "BESZÚR";
+    Text[ slovenian ] = "VSTA";
 };
 String RID_SVXSTR_OVERWRITE_TEXT
 {
@@ -134,6 +136,8 @@ String RID_SVXSTR_OVERWRITE_TEXT
     Text[ hebrew ] = "‮OVER‬";
     Text[ hindi ] = "OVER";
     Text[ slovak ] = "OVER";
+    Text[ hungarian ] = "ÁTÍR";
+    Text[ slovenian ] = "PREP";
 };
 String RID_SVXSTR_SELMODE_STD
 {
@@ -168,6 +172,8 @@ String RID_SVXSTR_SELMODE_STD
     Text[ hebrew ] = "‮STD‬";
     Text[ hindi ] = "STD";
     Text[ slovak ] = "STD";
+    Text[ hungarian ] = "Egyszeres";
+    Text[ slovenian ] = "STA";
 };
 String RID_SVXSTR_SELMODE_ER
 {
@@ -203,6 +209,8 @@ String RID_SVXSTR_SELMODE_ER
     TEXT[ hebrew ] = "‮EXT‬";
     TEXT[ hindi ] = "EXT";
     TEXT[ slovak ] = "EXT";
+    TEXT[ hungarian ] = "Bővítés";
+    TEXT[ slovenian ] = "RAZ";
 };
 String RID_SVXSTR_SELMODE_ERG
 {
@@ -238,6 +246,8 @@ String RID_SVXSTR_SELMODE_ERG
     TEXT[ hebrew ] = "‮ADD‬";
     TEXT[ hindi ] = "ADD";
     TEXT[ slovak ] = "ADD";
+    TEXT[ hungarian ] = "Többszörös";
+    TEXT[ slovenian ] = "DOD";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_SVXMNU_ZOOM
@@ -308,6 +318,8 @@ Menu RID_SVXMNU_ZOOM
             Text[ hebrew ] = "‮אופטימלי‬";
             Text[ hindi ] = "योग्य";
             Text[ slovak ] = "Optimálne";
+            Text[ hungarian ] = "Optimális";
+            Text[ slovenian ] = "Optimalno";
         };
         MenuItem
         {
@@ -344,6 +356,8 @@ Menu RID_SVXMNU_ZOOM
             Text[ hebrew ] = "‮רוחב הדף‬";
             Text[ hindi ] = "पृष्ठ चौड़ाई";
             Text[ slovak ] = "Šírka strany";
+            Text[ hungarian ] = "Oldalszélesség";
+            Text[ slovenian ] = "Širina strani";
         };
         MenuItem
         {
@@ -380,6 +394,8 @@ Menu RID_SVXMNU_ZOOM
             Text[ hebrew ] = "‮דף שלם‬";
             Text[ hindi ] = "सम्पूर्ण पृष्ठ";
             Text[ slovak ] = "Celá strana";
+            Text[ hungarian ] = "Teljes oldal";
+            Text[ slovenian ] = "Cela stran";
         };
     };
 };
@@ -422,6 +438,8 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ hebrew ] = "‮ממוצא‬";
             Text[ hindi ] = "माध्य";
             Text[ slovak ] = "Priemer";
+            Text[ hungarian ] = "Átlag";
+            Text[ slovenian ] = "Povprečje";
         };
         MenuItem
         {
@@ -457,6 +475,8 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ hebrew ] = "‮מונה ב'‬";
             Text[ hindi ] = "गिनतीA";
             Text[ slovak ] = "PočetA";
+            Text[ hungarian ] = "CountA";
+            Text[ slovenian ] = "SeštevekA";
         };
         MenuItem
         {
@@ -492,6 +512,8 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ hebrew ] = "‮מונה‬";
             Text[ hindi ] = "गिनती";
             Text[ slovak ] = "Počet";
+            Text[ hungarian ] = "Számmezők";
+            Text[ slovenian ] = "Seštevek";
         };
         MenuItem
         {
@@ -527,6 +549,8 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ hebrew ] = "‮מירבי‬";
             Text[ hindi ] = "अधिकतम";
             Text[ slovak ] = "Maximum";
+            Text[ hungarian ] = "Maximum";
+            Text[ slovenian ] = "Največ";
         };
         MenuItem
         {
@@ -562,6 +586,8 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ hebrew ] = "‮מזערי‬";
             Text[ hindi ] = "न्यूनतम";
             Text[ slovak ] = "Minimum";
+            Text[ hungarian ] = "Minimum";
+            Text[ slovenian ] = "Najmanj";
         };
         MenuItem
         {
@@ -597,6 +623,8 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ hebrew ] = "‮סכום‬";
             Text[ hindi ] = "कुलजोड";
             Text[ slovak ] = "Celkom";
+            Text[ hungarian ] = "Összeg";
+            Text[ slovenian ] = "Vsota";
         };
         MenuItem
         {
@@ -632,6 +660,8 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ hebrew ] = "‮ללא‬";
             Text[ hindi ] = "कोई नहीं";
             Text[ slovak ] = "Žiadne";
+            Text[ hungarian ] = "Nincs";
+            Text[ slovenian ] = "Brez";
         };
     };
 };
@@ -662,6 +692,8 @@ Image RID_SVXBMP_SIZE
         Blue = 0xFFFF ;
     };
 };
+
+
 
 
 
