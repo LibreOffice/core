@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 22:32:24 $
+ *  last change: $Author: os $ $Date: 2002-05-02 12:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,12 @@ String STR_STANDARD
     Text[ turkish ] = "Standart";
     Text[ catalan ] = "Predeterminado";
     Text[ finnish ] = "Vakio";
+};
+String STR_STANDARD_SHORTCUT
+{
+    Text = "~Standard" ;
+    Text [ English ] = "~Standard" ;
+    Text [ english_us ] = "~Standard" ;
 };
 
 String STR_FILTERNAME_ALL

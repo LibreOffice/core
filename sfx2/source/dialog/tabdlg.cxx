@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-19 12:02:22 $
+ *  last change: $Author: os $ $Date: 2002-05-02 12:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,8 +621,7 @@ void SfxTabDialog::Init_Impl( BOOL bFmt, const String* pUserButtonText )
 
     if ( bFmt )
     {
-        String aStd( SfxResId( STR_STANDARD ) );
-        aStd.Insert( '~', 0 );
+        String aStd( SfxResId( STR_STANDARD_SHORTCUT ) );
         aBaseFmtBtn.SetText( aStd );
         aBaseFmtBtn.SetClickHdl( LINK( this, SfxTabDialog, BaseFmtHdl ) );
         aBaseFmtBtn.SetHelpId( HID_TABDLG_STANDARD_BTN );
