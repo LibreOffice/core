@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:05:23 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3697,6 +3697,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 aContextMenu.EnableItem(ID_DOCUMENT_CREATE_REPWIZ,  etQuery == eType);
                 aContextMenu.EnableItem(ID_FORM_NEW_PILOT,          bIsWriterInstalled && etQuery == eType);
                 aContextMenu.EnableItem(ID_DOCUMENT_CREATE_REPWIZ,  bIsWriterInstalled && etQuery == eType);
+                aContextMenu.EnableItem(ID_NEW_QUERY_WIZARD,        bIsWriterInstalled );
             }
             break;
 
@@ -3828,6 +3829,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
         case ID_FORM_NEW_PILOT:
         case ID_FORM_NEW_TEMPLATE:
         case ID_DOCUMENT_CREATE_REPWIZ:
+        case ID_NEW_QUERY_WIZARD:
             handleLinkContextMenu(nPos,pEntry,eType,pDSEntry);
         break;
     }
@@ -3883,6 +3885,7 @@ void SbaTableQueryBrowser::handleLinkContextMenu(USHORT _nPos,SvLBoxEntry* pEntr
 
         case ID_FORM_NEW_PILOT:
         case ID_DOCUMENT_CREATE_REPWIZ:
+        case ID_NEW_QUERY_WIZARD:
         {
             // the type of the object to initially select
             sal_Int32 nObjectType = -1;
@@ -3902,8 +3905,10 @@ void SbaTableQueryBrowser::handleLinkContextMenu(USHORT _nPos,SvLBoxEntry* pEntr
             {
                 if ( ID_FORM_NEW_PILOT == _nPos )
                     aHelper.newFormWithPilot(GetEntryText(pDSEntry), nObjectType, sObjectName, xConn);
-                else
+                else if ( ID_DOCUMENT_CREATE_REPWIZ == _nPos )
                     aHelper.newReportWithPilot(GetEntryText(pDSEntry), nObjectType, sObjectName, xConn);
+                else
+                    aHelper.newQueryWithPilot(GetEntryText(pDSEntry), nObjectType, sObjectName, xConn);
             }
         }
             break;
