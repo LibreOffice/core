@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-18 11:44:05 $
+ *  last change: $Author: nn $ $Date: 2001-05-18 18:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,6 +596,13 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "Satýr son~u";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Salto de ~línea";
+    };
+    TriStateBox BTN_HYPH
+    {
+        Pos = MAP_APPFONT ( 12 , 172 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "Silben~trennung aktiv" ;
+        Text [ ENGLISH ] = "Hyphenation active" ;
     };
     ImageList IL_LOCK_BMPS
     {

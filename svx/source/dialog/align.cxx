@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-16 11:52:02 $
+ *  last change: $Author: nn $ $Date: 2001-05-18 18:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ static USHORT pRanges[] =
     SID_ATTR_ALIGN_INDENT,SID_ATTR_ALIGN_INDENT,
     SID_ATTR_ALIGN_DEGREES,SID_ATTR_ALIGN_DEGREES,
     SID_ATTR_ALIGN_LOCKPOS,SID_ATTR_ALIGN_LOCKPOS,
+    SID_ATTR_ALIGN_HYPHENATION,SID_ATTR_ALIGN_HYPHENATION,
     0
 };
 
@@ -136,10 +137,13 @@ SvxAlignmentTabPage::SvxAlignmentTabPage( Window* pParent,
     aEdBottomSpace  ( this, ResId( ED_BOTTOMSPACE ) ),
 
     aFlWrap         ( this, ResId( FL_WRAP ) ),
-    aBtnWrap        ( this, ResId( BTN_WRAP ) )
+    aBtnWrap        ( this, ResId( BTN_WRAP ) ),
+    aBtnHyphen      ( this, ResId( BTN_HYPH ) ),
 
+    bHyphenDisabled ( FALSE )
 {
     aLbHorAlign.SetSelectHdl( LINK( this, SvxAlignmentTabPage, HorAlignSelectHdl_Impl ) );
+    aBtnWrap.SetClickHdl( LINK( this, SvxAlignmentTabPage, WrapClickHdl_Impl ) );
 
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
@@ -328,6 +332,26 @@ void SvxAlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
         aBtnWrap.SetState( TriState( STATE_DONTKNOW ) );
     }
 
+    if (rCoreAttrs.GetItemState(GetWhich(SID_ATTR_ALIGN_HYPHENATION),TRUE) == SFX_ITEM_UNKNOWN)
+        bHyphenDisabled = TRUE;
+    else
+    {
+        pItem = GetItem( rCoreAttrs, SID_ATTR_ALIGN_HYPHENATION );
+
+        if ( pItem )
+        {
+            aBtnHyphen.EnableTriState( FALSE );
+            aBtnHyphen.SetState( ( (const SfxBoolItem*)pItem )->GetValue()
+                               ? TriState( STATE_CHECK )
+                               : TriState( STATE_NOCHECK ) );
+        }
+        else
+        {
+            aBtnHyphen.EnableTriState();
+            aBtnHyphen.SetState( TriState( STATE_DONTKNOW ) );
+        }
+    }
+
     HorAlignSelectHdl_Impl( NULL );
 
     aBtnWrap.SaveValue();  // TriStateButton
@@ -497,6 +521,21 @@ BOOL SvxAlignmentTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     }
     else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
         rCoreAttrs.ClearItem( nWhich );
+
+    // Hyphenation
+    nWhich = GetWhich( SID_ATTR_ALIGN_HYPHENATION );
+    eState = aBtnHyphen.GetState();
+    pOld = GetOldItem( rCoreAttrs, SID_ATTR_ALIGN_HYPHENATION );
+
+    if ( !pOld || ( (const SfxBoolItem*)pOld )->GetValue()
+                  != ( eState == STATE_CHECK ) )
+    {
+        rCoreAttrs.Put( SfxBoolItem( nWhich, (eState == STATE_CHECK) ) );
+        bAttrsChanged = TRUE;
+    }
+    else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
+        rCoreAttrs.ClearItem( nWhich );
+
     return bAttrsChanged;
 }
 
@@ -516,7 +555,26 @@ IMPL_LINK( SvxAlignmentTabPage, HorAlignSelectHdl_Impl, ListBox *, EMPTYARG )
     BOOL bChecked = (aLbHorAlign.GetSelectEntryPos() == ALIGNDLG_HORALIGN_LEFT);
     aFtIndent.Enable( bChecked );
     aEdIndent.Enable( bChecked );
+    EnableHyphen_Impl();
     return 0;
+}
+
+//------------------------------------------------------------------------
+
+IMPL_LINK( SvxAlignmentTabPage, WrapClickHdl_Impl, TriStateBox *, EMPTYARG )
+{
+    EnableHyphen_Impl();
+    return 0;
+}
+
+//------------------------------------------------------------------------
+
+void SvxAlignmentTabPage::EnableHyphen_Impl()
+{
+    BOOL bWrap = (aBtnWrap.GetState() == STATE_CHECK);
+    BOOL bBlock = (aLbHorAlign.GetSelectEntryPos() == ALIGNDLG_HORALIGN_BLOCK);
+    BOOL bEnable = ( ( bWrap || bBlock ) && !bHyphenDisabled );
+    aBtnHyphen.Enable( bEnable );
 }
 
 //------------------------------------------------------------------------
@@ -538,6 +596,14 @@ void SvxAlignmentTabPage::SetFlags( USHORT nFlags )
     {
         aFlWrap.Disable();
         aBtnWrap.Disable();
+    }
+
+    if ( nFlags & ( WBA_NO_LINEBREAK | WBA_NO_HYPHENATION ) )
+    {
+        //  WBA_NO_LINEBREAK also disables hyphenation
+
+        bHyphenDisabled = TRUE;
+        aBtnHyphen.Disable();
     }
 
     if ( ( nFlags & WBA_NO_HORIZONTAL ) == WBA_NO_HORIZONTAL )
