@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pspgraphics.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:25:37 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ namespace psp { struct JobData; class PrinterGfx; }
 #endif
 
 class ServerFont;
+class ImplDevFontAttributes;
 
 class PspGraphics : public SalGraphics
 {
@@ -111,7 +112,8 @@ public:
     static const void* DoGetEmbedFontData( psp::fontID aFont, const sal_Unicode* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen );
     static void DoFreeEmbedFontData( const void* pData, long nLen );
     static const std::map< sal_Unicode, sal_Int32 >* DoGetFontEncodingVector( psp::fontID aFont, const std::map< sal_Unicode, rtl::OString >** pNonEncoded );
-    static void SetImplFontData( const psp::FastPrintFontInfo& aInfo, ImplFontData& rData );
+    static ImplDevFontAttributes Info2DevFontAttributes( const psp::FastPrintFontInfo& );
+    static void AnnounceFonts( ImplDevFontList*, const psp::FastPrintFontInfo& );
     static FontWidth    ToFontWidth (psp::width::type eWidth);
     static FontWeight   ToFontWeight (psp::weight::type eWeight);
     static FontPitch    ToFontPitch (psp::pitch::type ePitch);
@@ -132,22 +134,19 @@ public:
     virtual void            SetLineColor();
     virtual void            SetLineColor( SalColor nSalColor );
     virtual void            SetFillColor();
-
     virtual void            SetFillColor( SalColor nSalColor );
-
     virtual void            SetXORMode( BOOL bSet );
-
     virtual void            SetROPLineColor( SalROPColor nROPColor );
     virtual void            SetROPFillColor( SalROPColor nROPColor );
 
     virtual void            SetTextColor( SalColor nSalColor );
-    virtual USHORT         SetFont( ImplFontSelectData*, int nFallbackLevel );
+    virtual USHORT          SetFont( ImplFontSelectData*, int nFallbackLevel );
     virtual void            GetFontMetric( ImplFontMetricData* );
     virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
-    virtual ULONG           GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
+    virtual ImplFontCharMap* GetImplFontCharMap() const;
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void            GetDevFontSubstList( OutputDevice* );
-    virtual ImplFontData*   AddTempDevFont( const String& rFileURL, const String& rFontName );
+    virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
     virtual BOOL            CreateFontSubset( const rtl::OUString& rToFile,
                                               ImplFontData* pFont,
                                               sal_Int32* pGlyphIDs,
