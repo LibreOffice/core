@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 19:11:00 $
+ *  last change: $Author: rt $ $Date: 2000-11-28 16:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef _SDPAGE_HXX
 #define _SDPAGE_HXX
 
+#include <com/sun/star/uno/XInterface.hpp>
 #ifndef _COM_SUN_STAR_PRESENTATION_FADEEFFECT_HPP_
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #endif
@@ -144,7 +145,9 @@ protected:
     Rectangle   GetTitleRect() const;
     Rectangle   GetLayoutRect() const;
 
+#ifndef SVX_LIGHT
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
+#endif
 
 public:
     TYPEINFO();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 19:17:35 $
+ *  last change: $Author: rt $ $Date: 2000-11-28 16:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2785,17 +2785,13 @@ String SdPage::GetPresObjText(PresObjKind eObjKind)
 
 #ifndef SVX_LIGHT
 extern uno::Reference< uno::XInterface > createUnoPageImpl( SdPage* pPage );
-#endif
 
 uno::Reference< uno::XInterface > SdPage::createUnoPage()
 {
-#ifndef SVX_LIGHT
-    return createUnoPageImpl( this );
-#else
     uno::Reference< uno::XInterface > xInt;
     return xInt;
-#endif
 }
+#endif
 
 #endif // !SVX_LIGHT
 
