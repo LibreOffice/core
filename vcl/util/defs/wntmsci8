@@ -8110,3 +8110,4 @@ _real@3fd3333333333333
 ?SetRangeMax@SpinButton@@QAEXJ@Z
 ?SetRangeMin@SpinButton@@QAEXJ@Z
 ?SetValue@SpinButton@@QAEXJ@Z
+?EraseAllMnemonicChars@MnemonicGenerator@@SA?AVString@@ABV2@@Z
