@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:41:38 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1109,7 +1109,7 @@ void SetNodeImpl::convertChanges(NodeChangesInformation& rLocalChanges, data::Ac
 
         CollectChanges aCollector(rLocalChanges, _accessor, *pParentTree, nNode, getElementTemplate(), nDepth);
 
-        aCollector.collectFrom(rExternalChange);
+        aCollector.collectFromChildren(rExternalChange);
     }
     else
         OSL_ENSURE(false, "Missing context tree in Set");
