@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontentcaps.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-09-06 10:37:56 $
+ *  last change: $Author: kso $ $Date: 2002-08-29 09:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,6 @@ uno::Sequence< beans::Property > Content::getProperties(
     }
     catch ( DAVException const & e )
     {
-#if 1
         if ( ( e.getStatus() == 404 /* not found */ ) ||
              ( e.getError() == DAVException::DAV_HTTP_LOOKUP ) )
         {
@@ -377,7 +376,6 @@ uno::Sequence< beans::Property > Content::getProperties(
             aProperties[ 0 ] = aProp;
             return aProperties;
         }
-#endif
     }
 
     sal_Int32 nTotal = aProps.size();

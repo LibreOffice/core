@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-21 07:34:52 $
+ *  last change: $Author: kso $ $Date: 2002-08-29 09:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,13 @@ public:
     PROPPATCH( const std::vector< ProppatchValue > & rValues,
                const com::sun::star::uno::Reference<
                    com::sun::star::ucb::XCommandEnvironment >& xEnv )
+        throw( DAVException );
+
+    void
+    HEAD( const std::vector< rtl::OUString > & rHeaderNames, // empty == 'all'
+          std::vector< DAVResource > & rResources,
+          const com::sun::star::uno::Reference<
+            com::sun::star::ucb::XCommandEnvironment >& xEnv )
         throw( DAVException );
 
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream >

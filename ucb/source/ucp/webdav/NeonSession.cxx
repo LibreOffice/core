@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-22 14:44:27 $
+ *  last change: $Author: kso $ $Date: 2002-08-29 09:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 #ifndef _NEONPROPFINDREQUEST_HXX_
 #include "NeonPropFindRequest.hxx"
+#endif
+#ifndef _NEONHEADREQUEST_HXX_
+#include "NeonHeadRequest.hxx"
 #endif
 #ifndef _NEONURI_HXX_
 #include "NeonUri.hxx"
@@ -640,6 +643,29 @@ void NeonSession::PROPPATCH( const rtl::OUString &                   inPath,
         free( (void *)pItems[ n ].value );
     }
 
+    HandleError( theRetVal );
+}
+
+// -------------------------------------------------------------------
+// HEAD
+// -------------------------------------------------------------------
+void NeonSession::HEAD( const ::rtl::OUString &  inPath,
+                        const std::vector< ::rtl::OUString > & inHeaderNames,
+                        std::vector< DAVResource > & ioResources,
+                        const uno::Reference<
+                            ucb::XCommandEnvironment >& inEnv )
+    throw( DAVException )
+{
+    osl::Guard< osl::Mutex > theGuard( m_aMutex );
+
+    m_xEnv = inEnv;
+
+    int theRetVal = NE_OK;
+    NeonHeadRequest theRequest( m_pHttpSession,
+                                inPath,
+                                inHeaderNames,
+                                ioResources,
+                                theRetVal );
     HandleError( theRetVal );
 }
 

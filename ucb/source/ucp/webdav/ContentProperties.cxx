@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-10-25 13:47:41 $
+ *  last change: $Author: kso $ $Date: 2002-08-29 09:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,41 @@
 using namespace com::sun::star;
 using namespace webdav_ucp;
 
+/*
+=============================================================================
+
+                            Property Mapping
+
+=============================================================================
+HTTP (entity header)    WebDAV (property)   UCB (property)
+=============================================================================
+
+Allow
+Content-Encoding
+Content-Language        getcontentlanguage
+Content-Length          getcontentlength    Size
+Content-Location
+Content-MD5
+Content-Range
+Content-Type            getcontenttype      MediaType
+Expires
+Last-Modified           getlastmodified     DateModified
+                        creationdate        DateCreated
+                        resourcetype        IsFolder,IsDocument,ContentType
+                        displayname
+ETag (actually          getetag
+a response header )
+                        lockdiscovery
+                        supportedlock
+                        source
+                                            Title (always taken from URI)
+
+=============================================================================
+
+Important: HTTP headers with not be mapped to DAV properties; only to UCB
+           properties. (Content-Length,Content-Type,Last-Modified)
+*/
+
 //=========================================================================
 //=========================================================================
 //
@@ -104,6 +139,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
   pSize( 0 ),
   pDateCreated( 0 ),
   pDateModified( 0 ),
+  pMediaType( 0 ),
   pgetcontenttype( 0 ),
   pcreationdate( 0 ),
   pdisplayname( 0 ),
@@ -159,16 +195,60 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
               aProp.Value >>= *pgetcontentlength;
 
               // Map the DAV:getcontentlength to UCP:Size
-            pSize = new sal_Int64;
+            if ( !pSize )
+                pSize = new sal_Int64;
+
               *pSize = pgetcontentlength->toInt64();
+        }
+        else if ( aProp.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "Content-Length" ) ) )
+        {
+            // Do not map Content-Lenght entity header to DAV:getcontentlength!
+
+            // No extra member for this. Store with "other" props.
+            if ( !pOtherProps )
+                pOtherProps = new PropertyValueMap;
+
+            rtl::OUString aValue;
+            aProp.Value >>= aValue;
+            (*pOtherProps)[ aProp.Name ] = aProp.Value;
+
+            // Map the Content-Length entity header to UCP:Size
+            if ( !pSize )
+                pSize = new sal_Int64;
+
+            *pSize = aValue.toInt64();
         }
         else if ( aProp.Name.equals( DAVProperties::GETCONTENTTYPE ) )
         {
             pgetcontenttype = new rtl::OUString;
               aProp.Value >>= *pgetcontenttype;
 
-              // DAV:getcontenttype is equal to UCP:MediaType. So there is
-            // no extra member for media type.
+            // Map the DAV:getcontenttype to UCP:MediaType
+            if ( !pMediaType )
+                pMediaType = new rtl::OUString;
+
+            *pMediaType = *pgetcontenttype;
+        }
+        else if ( aProp.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "Content-Type" ) ) )
+        {
+            // Do not map Content-Type entity header to DAV:getcontenttype!
+
+            // No extra member for this. Store with "other" props.
+            if ( !pOtherProps )
+                pOtherProps = new PropertyValueMap;
+
+            (*pOtherProps)[ aProp.Name ] = aProp.Value;
+
+            // Map the Content-Type entity header to UCP:Size
+            rtl::OUString aValue;
+            aProp.Value >>= aValue;
+
+            if ( !pMediaType )
+                pMediaType = new rtl::OUString;
+
+            *pMediaType = aValue;
         }
         else if ( aProp.Name.equals( DAVProperties::GETETAG ) )
         {
@@ -181,9 +261,31 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
               aProp.Value >>= *pgetlastmodified;
 
               // Map the DAV:getlastmodified to UCP:DateModified
-            pDateModified = new util::DateTime;
+            if ( !pDateModified )
+                pDateModified = new util::DateTime;
+
             DateTimeHelper::convert( *pgetlastmodified, *pDateModified );
         }
+        else if ( aProp.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "Last-Modified" ) ) )
+        {
+            // Do not map Last-Modified entity header to DAV:getlastmodified!
+
+            // No extra member for this. Store with "other" props.
+            if ( !pOtherProps )
+                pOtherProps = new PropertyValueMap;
+
+            rtl::OUString aValue;
+            aProp.Value >>= aValue;
+            (*pOtherProps)[ aProp.Name ] = aProp.Value;
+
+            // Map the Content-Length entity header to UCP:Size
+            if ( !pDateModified )
+                pDateModified = new util::DateTime;
+
+            DateTimeHelper::convert( aValue, *pDateModified );
+        }
+
         else if ( aProp.Name.equals( DAVProperties::LOCKDISCOVERY ) )
         {
             plockdiscovery = new uno::Sequence< ucb::Lock >;
@@ -243,6 +345,7 @@ ContentProperties::ContentProperties(
   pSize( 0 ),
   pDateCreated( 0 ),
   pDateModified( 0 ),
+  pMediaType( 0 ),
   pgetcontenttype( 0 ),
   pcreationdate( 0 ),
   pdisplayname( 0 ),
@@ -267,6 +370,7 @@ ContentProperties::ContentProperties( const rtl::OUString & rTitle )
   pSize( 0 ),
   pDateCreated( 0 ),
   pDateModified( 0 ),
+  pMediaType( 0 ),
   pgetcontenttype( 0 ),
   pcreationdate( 0 ),
   pdisplayname( 0 ),
@@ -286,11 +390,12 @@ ContentProperties::ContentProperties( const rtl::OUString & rTitle )
 // static
 void ContentProperties::UCBNamesToDAVNames(
                             const uno::Sequence< beans::Property > & rProps,
-                            std::vector< rtl::OUString > & propertyNames )
+                            std::vector< rtl::OUString > & propertyNames,
+                            bool bIncludeUnmatched /* = true */ )
 {
     //////////////////////////////////////////////////////////////
     // Assemble list of DAV properties to obtain from server.
-    // Append DAV properties needed to fill requested UCB props.
+    // Append DAV properties needed to obtain requested UCB props.
     //////////////////////////////////////////////////////////////
 
     //       DAV              UCB
@@ -384,8 +489,57 @@ void ContentProperties::UCBNamesToDAVNames(
         }
         else
         {
-            propertyNames.push_back( rProp.Name );
+            if ( bIncludeUnmatched )
+                propertyNames.push_back( rProp.Name );
         }
     }
 }
 
+//=========================================================================
+// static
+void ContentProperties::UCBNamesToHTTPNames(
+                            const uno::Sequence< beans::Property > & rProps,
+                            std::vector< rtl::OUString > & propertyNames,
+                            bool bIncludeUnmatched /* = true */ )
+{
+    //////////////////////////////////////////////////////////////
+    // Assemble list of HTTP header names to obtain from server.
+    // Append HTTP headers needed to obtain requested UCB props.
+    //////////////////////////////////////////////////////////////
+
+    //       HTTP              UCB
+    // Last-Modified  <- DateModified
+    // Content-Type   <- MediaType
+    // Content-Length <- Size
+
+    sal_Int32 nCount = rProps.getLength();
+    for ( sal_Int32 n = 0; n < nCount; ++n )
+    {
+        const beans::Property & rProp = rProps[ n ];
+
+        if ( rProp.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
+        {
+            propertyNames.push_back(
+                rtl::OUString::createFromAscii( "Last-Modified" ) );
+        }
+        else if ( rProp.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+        {
+            propertyNames.push_back(
+                rtl::OUString::createFromAscii( "Content-Type" ) );
+        }
+        else if ( rProp.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+        {
+            propertyNames.push_back(
+                rtl::OUString::createFromAscii( "Content-Length" ) );
+        }
+        else
+        {
+            if ( bIncludeUnmatched )
+                propertyNames.push_back( rProp.Name );
+        }
+    }
+
+}

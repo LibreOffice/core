@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSession.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-15 10:05:25 $
+ *  last change: $Author: kso $ $Date: 2002-08-29 09:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,13 @@ public:
                              const std::vector< ProppatchValue > & inValues,
                                const com::sun::star::uno::Reference<
                                  com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        throw( DAVException ) = 0;
+
+    virtual void HEAD( const ::rtl::OUString &  inPath,
+                       const std::vector< ::rtl::OUString > & inHeaderNames,
+                       std::vector< DAVResource > & ioResources,
+                       const com::sun::star::uno::Reference<
+                            com::sun::star::ucb::XCommandEnvironment >& inEnv )
         throw( DAVException ) = 0;
 
     virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >

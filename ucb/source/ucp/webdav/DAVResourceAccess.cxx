@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-21 07:34:52 $
+ *  last change: $Author: kso $ $Date: 2002-08-29 09:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,6 +286,33 @@ void DAVResourceAccess::PROPPATCH( const std::vector< ProppatchValue >& rValues,
         try
         {
             m_xSession->PROPPATCH( m_aPath, rValues, xEnv );
+        }
+        catch ( DAVException & e )
+        {
+            bRetry = handleException( e );
+            if ( !bRetry )
+                throw;
+        }
+    }
+    while ( bRetry );
+}
+
+//=========================================================================
+void DAVResourceAccess::HEAD( const std::vector< rtl::OUString > & rHeaderNames,
+                              std::vector< DAVResource > & rResources,
+                              const uno::Reference<
+                                ucb::XCommandEnvironment >& xEnv )
+    throw( DAVException )
+{
+    initialize();
+
+    sal_Bool bRetry;
+    do
+    {
+        bRetry = sal_False;
+        try
+        {
+            m_xSession->HEAD( m_aPath, rHeaderNames, rResources, xEnv );
         }
         catch ( DAVException & e )
         {

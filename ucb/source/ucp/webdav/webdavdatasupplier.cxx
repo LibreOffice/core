@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavdatasupplier.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-10-25 13:47:41 $
+ *  last change: $Author: kso $ $Date: 2002-08-29 09:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,9 +216,11 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
             aId += rtl::OUString::createFromAscii( "/" );
 
-        aId += props.aEscapedTitle;
+        rtl::OUString aTitle;
+        props.queryEscapedTitle( aTitle );
+        aId += aTitle;
 
-        if ( props.bTrailingSlash )
+        if ( props.isTrailingSlash() )
             aId += rtl::OUString::createFromAscii( "/" );
 
         m_pImpl->m_aResults[ nIndex ]->aId = aId;
@@ -483,22 +485,28 @@ sal_Bool DataSupplier::getData()
             switch ( m_pImpl->m_nOpenMode )
             {
                 case com::sun::star::ucb::OpenMode::FOLDERS:
-                    if ( !( pContentProperties->pIsFolder
-                                && *pContentProperties->pIsFolder ) )
+                {
+                    sal_Bool bFolder;
+                    if ( !( pContentProperties->queryIsFolder( bFolder )
+                                && bFolder ) )
                     {
                         // Entry is not a folder.
                         continue;
                     }
                     break;
+                }
 
                 case com::sun::star::ucb::OpenMode::DOCUMENTS:
-                    if ( !( pContentProperties->pIsDocument
-                                && *pContentProperties->pIsDocument ) )
+                {
+                    sal_Bool bDocument;
+                    if ( !( pContentProperties->queryIsDocument( bDocument )
+                                && bDocument ) )
                     {
                         // Entry is not a document.
                         continue;
                     }
                     break;
+                }
 
                 case com::sun::star::ucb::OpenMode::ALL:
                 default:

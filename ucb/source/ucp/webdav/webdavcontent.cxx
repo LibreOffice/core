@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-21 07:34:54 $
+ *  last change: $Author: kso $ $Date: 2002-08-29 09:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1161,94 +1161,70 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
               // Process Core properties.
 
-#if 0
               if ( rProp.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
                {
-                if ( rData.pIsFolder && *rData.pIsFolder )
+                sal_Bool bFolder, bDocument;
+                if ( rData.queryIsFolder( bFolder ) && bFolder )
                     xRow->appendString( rProp, rtl::OUString::createFromAscii(
-                                                      WEBDAV_COLLECTION_TYPE ) );
-                else
+                                                    WEBDAV_COLLECTION_TYPE ) );
+                else if ( rData.queryIsDocument( bDocument ) && bDocument )
                     xRow->appendString( rProp, rtl::OUString::createFromAscii(
-                                                      WEBDAV_CONTENT_TYPE ) );
-            }
-              else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
-            {
-                  xRow->appendString ( rProp, rData.aTitle );
-            }
-              else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
-            {
-                if ( rData.pIsDocument )
-                      xRow->appendBoolean( rProp, *rData.pIsDocument );
-                else
-                      xRow->appendBoolean( rProp, sal_True );
-            }
-              else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
-            {
-                if ( rData.pIsFolder )
-                      xRow->appendBoolean( rProp, *rData.pIsFolder );
-                else
-                      xRow->appendBoolean( rProp, sal_False );
-            }
-#else
-              if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
-               {
-                if ( rData.pIsFolder && *rData.pIsFolder )
-                    xRow->appendString( rProp, rtl::OUString::createFromAscii(
-                                                      WEBDAV_COLLECTION_TYPE ) );
-                else if ( rData.pIsDocument && *rData.pIsDocument )
-                    xRow->appendString( rProp, rtl::OUString::createFromAscii(
-                                                      WEBDAV_CONTENT_TYPE ) );
+                                                    WEBDAV_CONTENT_TYPE ) );
                 else
                     xRow->appendVoid( rProp );
             }
               else if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
             {
-                  xRow->appendString ( rProp, rData.aTitle );
+                rtl::OUString aTitle;
+                if ( rData.queryTitle( aTitle ) )
+                    xRow->appendString ( rProp, aTitle );
+                else
+                    xRow->appendVoid( rProp );
             }
               else if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
             {
-                if ( rData.pIsDocument )
-                      xRow->appendBoolean( rProp, *rData.pIsDocument );
+                sal_Bool bDocument;
+                if ( rData.queryIsDocument( bDocument ) )
+                    xRow->appendBoolean( rProp, bDocument );
                 else
                     xRow->appendVoid( rProp );
             }
               else if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
             {
-                if ( rData.pIsFolder )
-                      xRow->appendBoolean( rProp, *rData.pIsFolder );
+                sal_Bool bFolder;
+                if ( rData.queryIsFolder( bFolder ) )
+                    xRow->appendBoolean( rProp, bFolder );
                 else
                     xRow->appendVoid( rProp );
             }
-#endif
               else if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
               {
-                if ( rData.pSize )
-                      xRow->appendLong( rProp, *rData.pSize );
+                sal_Int64 nSize;
+                if ( rData.querySize( nSize) )
+                    xRow->appendLong( rProp, nSize );
                 else
                     xRow->appendVoid( rProp );
             }
               else if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) )
               {
-                if ( rData.pDateCreated )
-                      xRow->appendTimestamp( rProp, *rData.pDateCreated );
+                util::DateTime aDateCreated;
+                if ( rData.queryDateCreated( aDateCreated ) )
+                    xRow->appendTimestamp( rProp, aDateCreated );
                 else
                     xRow->appendVoid( rProp );
             }
               else if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
               {
-                if ( rData.pDateModified )
-                      xRow->appendTimestamp( rProp, *rData.pDateModified );
+                util::DateTime aDateModified;
+                if ( rData.queryDateModified( aDateModified ) )
+                    xRow->appendTimestamp( rProp, aDateModified );
                 else
                     xRow->appendVoid( rProp );
 
@@ -1256,108 +1232,120 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
               else if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
             {
-                if ( rData.pgetcontenttype )
-                      xRow->appendString( rProp, *rData.pgetcontenttype );
+                rtl::OUString aType;
+                if ( rData.queryMediaType( aType ) )
+                    xRow->appendString( rProp, aType );
                 else
                     xRow->appendVoid( rProp );
             }
               else if ( rProp.Name.equals( DAVProperties::CREATIONDATE ) )
             {
-                if ( rData.pcreationdate )
-                    xRow->appendString( rProp, *rData.pcreationdate );
+                rtl::OUString aCreateionDate;
+                if ( rData.queryDAVCreationDate( aCreateionDate ) )
+                    xRow->appendString( rProp, aCreateionDate );
                 else
                     xRow->appendVoid( rProp );
               }
               else if ( rProp.Name.equals( DAVProperties::DISPLAYNAME ) )
             {
-                if ( rData.pdisplayname )
-                    xRow->appendString( rProp, *rData.pdisplayname );
+                rtl::OUString aDisplayName;
+                if ( rData.queryDAVDisplayName( aDisplayName ) )
+                    xRow->appendString( rProp, aDisplayName );
                 else
                     xRow->appendVoid( rProp );
               }
               else if ( rProp.Name.equals( DAVProperties::GETCONTENTLANGUAGE ) )
             {
-                if ( rData.pgetcontentlanguage )
-                    xRow->appendString( rProp, *rData.pgetcontentlanguage );
+                rtl::OUString aLanguage;
+                if ( rData.queryDAVContentLanguage( aLanguage ) )
+                    xRow->appendString( rProp, aLanguage );
                 else
                     xRow->appendVoid( rProp );
               }
               else if ( rProp.Name.equals( DAVProperties::GETCONTENTLENGTH ) )
             {
-                if ( rData.pgetcontentlength )
-                    xRow->appendString( rProp, *rData.pgetcontentlength );
+                rtl::OUString aLength;
+                if ( rData.queryDAVContentLength( aLength ) )
+                    xRow->appendString( rProp, aLength );
                 else
                     xRow->appendVoid( rProp );
               }
               else if ( rProp.Name.equals( DAVProperties::GETCONTENTTYPE ) )
             {
-                if ( rData.pgetcontenttype )
-                    xRow->appendString( rProp, *rData.pgetcontenttype );
+                rtl::OUString aType;
+                if ( rData.queryDAVContentType( aType ) )
+                    xRow->appendString( rProp, aType );
                 else
                     xRow->appendVoid( rProp );
               }
               else if ( rProp.Name.equals( DAVProperties::GETETAG ) )
             {
-                if ( rData.pgetetag )
-                    xRow->appendString( rProp, *rData.pgetetag );
+                rtl::OUString aTag;
+                if ( rData.queryDAVETag( aTag ) )
+                    xRow->appendString( rProp, aTag );
                 else
                     xRow->appendVoid( rProp );
               }
               else if ( rProp.Name.equals( DAVProperties::GETLASTMODIFIED ) )
             {
-                if ( rData.pgetlastmodified )
-                    xRow->appendString( rProp, *rData.pgetlastmodified );
+                rtl::OUString aDate;
+                if ( rData.queryDAVLastModified( aDate ) )
+                    xRow->appendString( rProp, aDate );
                 else
                     xRow->appendVoid( rProp );
               }
               else if ( rProp.Name.equals( DAVProperties::LOCKDISCOVERY ) )
             {
-                if ( rData.plockdiscovery )
-                    xRow->appendObject( rProp,
-                                        uno::makeAny( *rData.plockdiscovery ) );
+                uno::Sequence< star::ucb::Lock > aLocks;
+                if ( rData.queryDAVLockDiscovery( aLocks ) )
+                    xRow->appendObject( rProp, uno::makeAny( aLocks ) );
                 else
                     xRow->appendVoid( rProp );
               }
               else if ( rProp.Name.equals( DAVProperties::RESOURCETYPE ) )
             {
-                if ( rData.presourcetype )
-                    xRow->appendObject( rProp,
-                                        uno::makeAny( *rData.presourcetype ) );
+                rtl::OUString aType;
+                if ( rData.queryDAVResourceType( aType ) )
+                    xRow->appendString( rProp, aType );
                 else
                     xRow->appendVoid( rProp );
               }
               else if ( rProp.Name.equals( DAVProperties::SOURCE ) )
             {
-                if ( rData.psource )
-                    xRow->appendObject( rProp, uno::makeAny( *rData.psource ) );
+                uno::Sequence< star::ucb::Link > aSource;
+                if ( rData.queryDAVSource( aSource ) )
+                    xRow->appendObject( rProp, uno::makeAny( aSource ) );
                 else
                     xRow->appendVoid( rProp );
               }
               else if ( rProp.Name.equals( DAVProperties::SUPPORTEDLOCK ) )
             {
-                if ( rData.psupportedlock )
+                uno::Sequence< star::ucb::LockEntry > aLockEntries;
+                if ( rData.queryDAVSupportedLock( aLockEntries ) )
                     xRow->appendObject( rProp,
-                                        uno::makeAny( *rData.psupportedlock ) );
+                                        uno::makeAny( aLockEntries ) );
                 else
                     xRow->appendVoid( rProp );
               }
             else
             {
-                sal_Bool bAppened = sal_False;
+                sal_Bool bAppended = sal_False;
 
-                if ( rData.pOtherProps )
+                const PropertyValueMap * pOtherProps
+                    = rData.getOtherProperties();
+                if ( pOtherProps )
                 {
                     // Process additional properties (DAV "dead" properties).
                     const PropertyValueMap::const_iterator it
-                        = rData.pOtherProps->find( rProp.Name );
-                    if ( it != rData.pOtherProps->end() )
+                        = pOtherProps->find( rProp.Name );
+                    if ( it != pOtherProps->end() )
                     {
                         xRow->appendObject( rProp, (*it).second );
-                        bAppened = sal_True;
+                        bAppended = sal_True;
                     }
                 }
 
-                if ( !bAppened )
+                if ( !bAppended )
                 {
                     // Process local additional properties.
                       if ( !bTriedToGetAdditonalPropSet
@@ -1375,11 +1363,11 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     {
                           if ( xRow->appendPropertySetValue(
                                          xAdditionalPropSet, rProp ) )
-                            bAppened = sal_True;
+                            bAppended = sal_True;
                     }
                 }
 
-                if ( !bAppened )
+                if ( !bAppended )
                 {
                       // Append empty entry.
                       xRow->appendVoid( rProp );
@@ -1394,174 +1382,150 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             = static_cast< ContentProvider * >( rProvider.get() );
         beans::Property aProp;
 
-#if 0
-        pProvider->getProperty(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ), aProp );
-        if ( rData.pIsFolder && *rData.pIsFolder )
-            xRow->appendString( aProp, rtl::OUString::createFromAscii(
-                                                    WEBDAV_COLLECTION_TYPE ) );
-        else
-            xRow->appendString( aProp, rtl::OUString::createFromAscii(
-                                                      WEBDAV_CONTENT_TYPE ) );
-        pProvider->getProperty(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aProp );
-          xRow->appendString( aProp, rData.aTitle );
-
-        pProvider->getProperty(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ), aProp );
-        if ( rData.pIsDocument )
-              xRow->appendBoolean( aProp, *rData.pIsDocument );
-        else
-              xRow->appendBoolean( aProp, sal_True );
-
-        pProvider->getProperty(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ), aProp );
-        if ( rData.pIsFolder )
-              xRow->appendBoolean( aProp,   *rData.pIsFolder );
-        else
-              xRow->appendBoolean( aProp, sal_False );
-#else
-        pProvider->getProperty(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aProp );
-          xRow->appendString( aProp, rData.aTitle );
-
-        if ( rData.pIsFolder && *rData.pIsFolder )
+        rtl::OUString aString;
+        if ( rData.queryTitle( aString ) )
         {
             pProvider->getProperty(
                 rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ), aProp );
-            xRow->appendString( aProp, rtl::OUString::createFromAscii(
-                                                    WEBDAV_COLLECTION_TYPE ) );
+                    RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aProp );
+            xRow->appendString( aProp, aString );
         }
-        else if ( rData.pIsDocument && *rData.pIsDocument )
+
+        sal_Bool bBool;
+        if ( rData.queryIsDocument( bBool ) && bBool )
         {
             pProvider->getProperty(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ), aProp );
             xRow->appendString( aProp, rtl::OUString::createFromAscii(
                                                     WEBDAV_CONTENT_TYPE ) );
-        }
-
-        if ( rData.pIsDocument )
-        {
             pProvider->getProperty(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ), aProp );
-              xRow->appendBoolean( aProp, *rData.pIsDocument );
+            xRow->appendBoolean( aProp, bBool );
         }
 
-        if ( rData.pIsFolder )
+        if ( rData.queryIsFolder( bBool ) && bBool )
         {
             pProvider->getProperty(
                 rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ), aProp );
+            xRow->appendString( aProp, rtl::OUString::createFromAscii(
+                                                    WEBDAV_COLLECTION_TYPE ) );
+            pProvider->getProperty(
+                rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ), aProp );
-              xRow->appendBoolean( aProp,   *rData.pIsFolder );
+            xRow->appendBoolean( aProp, bBool );
         }
-#endif
-        if ( rData.pSize )
+
+        sal_Int64 nInt64;
+        if ( rData.querySize( nInt64 ) )
         {
             pProvider->getProperty(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ), aProp );
-              xRow->appendLong( aProp, *rData.pSize );
+            xRow->appendLong( aProp, nInt64 );
         }
 
-        if ( rData.pDateCreated )
+        util::DateTime aDateTime;
+        if ( rData.queryDateCreated( aDateTime ) )
         {
             pProvider->getProperty(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ) ),
                 aProp );
-              xRow->appendTimestamp( aProp, *rData.pDateCreated );
+            xRow->appendTimestamp( aProp, aDateTime );
         }
 
-        if ( rData.pDateModified )
+        if ( rData.queryDateModified( aDateTime ) )
         {
             pProvider->getProperty(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ),
                 aProp );
-              xRow->appendTimestamp( aProp, *rData.pDateModified );
+            xRow->appendTimestamp( aProp, aDateTime );
         }
 
-        if ( rData.pgetcontenttype )
+        if ( rData.queryMediaType( aString ) )
         {
             pProvider->getProperty(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ), aProp );
-              xRow->appendString( aProp, *rData.pgetcontenttype );
+            xRow->appendString( aProp, aString );
         }
 
-        if ( rData.pcreationdate )
+        if ( rData.queryDAVCreationDate( aString ) )
         {
             pProvider->getProperty( DAVProperties::CREATIONDATE, aProp );
-              xRow->appendString( aProp, *rData.pcreationdate );
+            xRow->appendString( aProp, aString );
         }
 
-        if ( rData.pdisplayname )
+        if ( rData.queryDAVDisplayName( aString ) )
         {
             pProvider->getProperty( DAVProperties::DISPLAYNAME, aProp );
-              xRow->appendString( aProp, *rData.pdisplayname );
+            xRow->appendString( aProp, aString );
         }
 
-        if ( rData.pgetcontentlanguage )
+        if ( rData.queryDAVContentLanguage( aString ) )
         {
             pProvider->getProperty( DAVProperties::GETCONTENTLANGUAGE, aProp );
-              xRow->appendString( aProp, *rData.pgetcontentlanguage );
+            xRow->appendString( aProp, aString );
         }
 
-        if ( rData.pgetcontentlength )
+        if ( rData.queryDAVContentLength( aString ) )
         {
             pProvider->getProperty( DAVProperties::GETCONTENTLENGTH, aProp );
-              xRow->appendString( aProp, *rData.pgetcontentlength );
+            xRow->appendString( aProp, aString );
         }
 
-        if ( rData.pgetcontenttype )
+        if ( rData.queryDAVContentType( aString ) )
         {
             pProvider->getProperty( DAVProperties::GETCONTENTTYPE, aProp );
-              xRow->appendString( aProp, *rData.pgetcontenttype );
+            xRow->appendString( aProp, aString );
         }
 
-        if ( rData.pgetetag )
+        if ( rData.queryDAVETag( aString ) )
         {
             pProvider->getProperty( DAVProperties::GETETAG, aProp );
-              xRow->appendString( aProp, *rData.pgetetag );
+            xRow->appendString( aProp, aString );
         }
 
-        if ( rData.pgetlastmodified )
+        if ( rData.queryDAVLastModified( aString ) )
         {
             pProvider->getProperty( DAVProperties::GETLASTMODIFIED, aProp );
-              xRow->appendString( aProp, *rData.pgetlastmodified );
+            xRow->appendString( aProp, aString );
         }
 
-        if ( rData.plockdiscovery )
+        uno::Sequence< star::ucb::Lock > aLocks;
+        if ( rData.queryDAVLockDiscovery( aLocks ) )
         {
             pProvider->getProperty( DAVProperties::LOCKDISCOVERY, aProp );
-            xRow->appendObject( aProp, uno::makeAny( *rData.plockdiscovery ) );
+            xRow->appendObject( aProp, uno::makeAny( aLocks ) );
         }
 
-        if ( rData.presourcetype )
+        if ( rData.queryDAVResourceType( aString ) )
         {
             pProvider->getProperty( DAVProperties::RESOURCETYPE, aProp );
-              xRow->appendString( aProp, *rData.presourcetype );
+            xRow->appendString( aProp, aString );
         }
 
-        if ( rData.psource )
+        uno::Sequence< star::ucb::Link > aLinks;
+        if ( rData.queryDAVSource( aLinks ) )
         {
             pProvider->getProperty( DAVProperties::SOURCE, aProp );
-            xRow->appendObject( aProp, uno::makeAny( *rData.psource ) );
+            xRow->appendObject( aProp, uno::makeAny( aLinks ) );
         }
 
-        if ( rData.psupportedlock )
+        uno::Sequence< star::ucb::LockEntry > aLockEntries;
+        if ( rData.queryDAVSupportedLock( aLockEntries ) )
         {
             pProvider->getProperty( DAVProperties::SUPPORTEDLOCK, aProp );
-            xRow->appendObject( aProp, uno::makeAny( *rData.psupportedlock ) );
+            xRow->appendObject( aProp, uno::makeAny( aLockEntries ) );
         }
 
         // Process additional properties (DAV "dead" properties).
-        if ( rData.pOtherProps )
+        const PropertyValueMap * pOtherProps = rData.getOtherProperties();
+        if ( pOtherProps )
         {
-            PropertyValueMap::const_iterator it  = rData.pOtherProps->begin();
-            PropertyValueMap::const_iterator end = rData.pOtherProps->end();
+            PropertyValueMap::const_iterator it  = pOtherProps->begin();
+            PropertyValueMap::const_iterator end = pOtherProps->end();
 
             beans::Property aProp;
             while ( it != end )
@@ -1633,7 +1597,6 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         }
         catch ( DAVException const & e )
         {
-#if 1
             if ( ( e.getStatus() == 404 /* not found */ ) ||
                  ( e.getError() == DAVException::DAV_HTTP_LOOKUP ) )
             {
@@ -1646,11 +1609,38 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                                           rtl::Reference<
                                             ::ucb::ContentProviderImplHelper >(
                                                 m_xProvider.getBodyPtr() ),
-                                        m_xIdentifier->getContentIdentifier() );
+                                          m_xIdentifier
+                                            ->getContentIdentifier() );
             }
-#endif
 
               bSuccess = false;
+        }
+    }
+
+    if ( !bSuccess )
+    {
+        // PROPFIND failed. Try a HEAD request; possibly the requested
+        // properties can by obtained this way.
+
+        // Note: I set bIncludeUnmatched to false, because I want to avoid
+        // every HEAD request not really needed.
+
+        std::vector< rtl::OUString > aHeaderNames;
+        ContentProperties::UCBNamesToHTTPNames( rProperties,
+                                                aHeaderNames,
+                                                false /* bIncludeUnmatched */ );
+        if ( aHeaderNames.size() > 0 )
+        {
+            try
+            {
+                resources.clear();
+                m_xResAccess->HEAD( aHeaderNames, resources, xEnv );
+                bSuccess = true;
+            }
+            catch ( DAVException const & )
+            {
+                bSuccess = false;
+            }
         }
     }
 
@@ -2635,8 +2625,8 @@ sal_Bool Content::isFolder(
             return sal_False;
 
         ContentProperties aContentProperties( resources[ 0 ] );
-        return ( aContentProperties.pIsFolder
-                    && *aContentProperties.pIsFolder );
+        sal_Bool bFolder;
+        return ( aContentProperties.queryIsFolder( bFolder ) && bFolder );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-22 11:37:32 $
+ *  last change: $Author: kso $ $Date: 2002-08-29 09:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,13 @@ class NeonSession : public DAVSession
                                    const com::sun::star::uno::Reference<
                                      com::sun::star::ucb::XCommandEnvironment >& inEnv )
         throw( DAVException );
+
+        virtual void HEAD( const ::rtl::OUString &  inPath,
+                           const std::vector< ::rtl::OUString > & inHeaderNames,
+                           std::vector< DAVResource > & ioResources,
+                           const com::sun::star::uno::Reference<
+                            com::sun::star::ucb::XCommandEnvironment >& inEnv )
+            throw( DAVException );
 
         virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
                         GET( const ::rtl::OUString & inPath,
