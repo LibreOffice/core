@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-16 21:58:34 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ String SCSTR_APPLICATION
     Text[ arabic ] = "%PRODUCTNAME Calc 6.0";
     Text[ catalan ] = "%PRODUCTNAME Calc 6.0";
     Text[ finnish ] = "StarCalc  5.0";
+    Text[ language_user1 ] = " ";
 };
 String SCSTR_50_APPLICATION
 {
@@ -207,6 +208,7 @@ String SCSTR_LONG_SCDOC_NAME
     Text[ arabic ] = "ΜΟζα %PRODUCTNAME 6.0";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Hoja de cαlculo";
     Text[ finnish ] = "%PRODUCTNAME 5.0 Spreadsheet";
+    Text[ language_user1 ] = " ";
 };
 String SCSTR_50_LONG_DOCNAME
 {
@@ -254,7 +256,7 @@ String SCSTR_40_LONG_DOCNAME
     Text[ chinese_traditional ] = "%PRODUCTNAME 4.0 ¤u§@ªν";
     Text[ arabic ] = "ΜΟζα %PRODUCTNAME 4.0";
     Text[ greek ] = "%PRODUCTNAME 4.0 - Πίνακας";
-    Text[ korean ] = "PRODUCTNAME 4.0 ½ΊΗΑ·Ήµε½ΓΖ®";
+    Text[ korean ] = "%PRODUCTNAME 4.0 ½ΊΗΑ·Ήµε½ΓΖ®";
     Text[ turkish ] = "StarCalc 4.0 tablosu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 4.0 Hoja de cαlculo";
@@ -706,7 +708,7 @@ String SCSTR_PIVOTSHELL
     Text [ portuguese ] = "Tabelas do Piloto de Dados" ;
     Text [ finnish ] = "Tietotaulukoiden ohjaus" ;
     Text [ danish ] = "DataPilot-tabeller" ;
-    Text [ french ] = "Tables du DataPilote" ;
+    Text [ french ] = "Tables du pilote de donnιes" ;
     Text [ swedish ] = "Datapilottabeller" ;
     Text [ dutch ] = "DataPiloot-tabellen" ;
     Text [ spanish ] = "Tablas del piloto de datos" ;
@@ -995,7 +997,7 @@ String SCSTR_UNDEFINED
     Text[ chinese_traditional ] = "- ¥Ό©wΈqªΊ -";
     Text[ arabic ] = "- ΫνΡ γυΪΡψέ -";
     Text[ greek ] = "- μη ορισμένο -";
-    Text[ korean ] = "- Α¤ΐΗµΗΑφ ΎΚΎÒΐ½ -";
+    Text[ korean ] = "- Α¤ΐΗµΗΑφ ΎΚΐ½ -";
     Text[ turkish ] = "- tanύmlanmamύώ -";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "- no definido -";
@@ -1770,7 +1772,7 @@ String SCSTR_HOR_JUSTIFY_BLOCK
     Text = "Blockausrichtung" ;
     Text [ ENGLISH ] = "Block" ;
     Text [ norwegian ] = "Datablokk " ;
-    Text [ italian ] = "Allineamento blocco" ;
+    Text [ italian ] = "Giustificato" ;
     Text [ portuguese_brazilian ] = "Bloco" ;
     Text [ portuguese ] = "Justificar" ;
     Text [ finnish ] = "Tasaa" ;
@@ -1878,7 +1880,7 @@ String SCSTR_VER_JUSTIFY_CENTER
     Text = "Vertikal zentriert" ;
     Text [ ENGLISH ] = "Center vertically" ;
     Text [ norwegian ] = "Midtstill vertikal " ;
-    Text [ italian ] = "Centra verticalmente" ;
+    Text [ italian ] = "Centra in verticale" ;
     Text [ portuguese_brazilian ] = "Centrar verticalmente" ;
     Text [ portuguese ] = "Centrado na vertical" ;
     Text [ finnish ] = "Keskitetty pystytasossa" ;
@@ -2266,13 +2268,13 @@ String SCSTR_CHG_PROTECT
     Text [ portuguese ] = "Proteger histσrico" ;
     Text [ portuguese_brazilian ] = "Protect trace" ;
     Text[ chinese_simplified ] = "±£»¤ΌΗΒΌ";
-    Text[ russian ] = "Protect trace";
-    Text[ polish ] = "Chroρ historiκ";
+    Text[ russian ] = "Ηΰωθςΰ ηΰοθρθ θροπΰβλενθι";
+    Text[ polish ] = "Chroρ zapis";
     Text[ japanese ] = "‹L^‚Μ•Ϋμ";
     Text[ chinese_traditional ] = "«OΕ@°OΏύ";
     Text[ arabic ] = "Protect trace";
     Text[ greek ] = "Προστασία καταγραφών";
-    Text[ korean ] = "Protect trace";
+    Text[ korean ] = "±β·Ο ΊΈΘ£";
     Text[ turkish ] = "Protect trace";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Protect trace";
@@ -2292,13 +2294,13 @@ String SCSTR_CHG_UNPROTECT
     Text [ portuguese ] = "Desactivar protecηγo do histσrico" ;
     Text [ portuguese_brazilian ] = "Unprotect trace" ;
     Text[ chinese_simplified ] = "Θ΅Οϋ±£»¤ΌΗΒΌ";
-    Text[ russian ] = "Unprotect trace";
+    Text[ russian ] = "Ρνÿςό ηΰωθςσ ρ ηΰοθρθ θροπΰβλενθι";
     Text[ polish ] = "Anuluj ochronκ historii";
     Text[ japanese ] = "‹L^‚Μ•Ϋμ‚π‰π";
     Text[ chinese_traditional ] = "¨ϊ®ψ«OΕ@°OΏύ";
     Text[ arabic ] = "Unprotect trace";
     Text[ greek ] = "Κατάργηση προστασίας καταγραφών";
-    Text[ korean ] = "Unprotect trace";
+    Text[ korean ] = "±β·Ο ΊΈΘ£ ΓλΌÒ";
     Text[ turkish ] = "Unprotect trace";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Unprotect trace";
@@ -2409,7 +2411,7 @@ String SCSTR_END
     Text[ chinese_traditional ] = "µ²§τ(~E)";
     Text[ arabic ] = "ΗαδεΗνΙ";
     Text[ greek ] = "Τέλος";
-    Text[ korean ] = "³΅(~E)";
+    Text[ korean ] = "ΑΎ·α(~E)";
     Text[ turkish ] = "~Son";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Fin";
@@ -2847,7 +2849,7 @@ String SCSTR_COLUMN_USER
     Text[ chinese_traditional ] = "ΌΠ·Η;¤ε¦r;¤ι΄Α(DMY);¤ι΄Α(MDY);¤ι΄Α(YMD);¬ό»y;Ατ¤J";
     Text[ arabic ] = "ήνΗΣνΊδΥΊΚΗΡνΞ (DMY)ΊΚΗΡνΞ (MDY)Ί ΚΗΡνΞ (YMD)Ί ΕδίανÒν ΗαζαΗνΗΚ ΗαγΚΝΟΙΊΕΞέΗΑ";
     Text[ greek ] = "Προεπιλογή;Κείμενο;Ημερομηνία (ΗΜΕ);Ημερομηνία (ΜΗΕ);Ημερομηνία (ΕΜΗ);Αγγλικά (Η.Π.Α.);Απόκρυψη";
-    Text[ korean ] = "Η¥ΑΨ;ΕΨ½ΊΖ®;³―Β¥ (DMY);³―Β¥(MDY);³―Β¥ (YMD);US-English;Όϋ±β±β";
+    Text[ korean ] = "Η¥ΑΨ;ΕΨ½ΊΖ®;³―Β¥(DMY);³―Β¥(MDY);³―Β¥(YMD);ΉΜ±Ή ΏµΎξ;Όϋ±β±β";
     Text[ turkish ] = "Standart;Metin;Tarih (GAY);Tarih (AGY);Tarih(YAG);έngilizce (ABD);gizle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estαndar;Texto;Fecha (DMA);Fecha (MDA);Fecha (AMD);Inglιs (US);Ocultar";
@@ -2907,7 +2909,7 @@ String SCSTR_FORMULA_AUTOCORRECTION
     Text[ chinese_traditional ] = "%PRODUCTNAME Calc µo²{Ώι¤JªΊ¤½¦΅§t¦³¤@­ΣΏω»~΅C\n±z±µ¨ό¤U­±ªΊ­Χ§ο«ΨΔ³΅H\n\n";
     Text[ arabic ] = "%PRODUCTNAME Calc ζΜΟ ΞΨΓ έν ΗαΥνΫΙ ΗαΚν ήγΚ ΘΕΟΞΗαεΗ.\nεα ΚΡνΟ ήΘζα ΗαΚΥΝνΝ ΗαγρήΚΡΝ ΓΟδΗεΏ\n\n";
     Text[ greek ] = "Το %PRODUCTNAME Calc εντόπισε ένα σφάλμα στον τύπο που εισάγατε.\nΘέλετε να γίνει η αποδοχή της προτεινόμενης διόρθωσης που αναφέρεται παρακάτω;\n\n";
-    Text[ korean ] = "%PRODUCTNAME Calc°΅, ΐΤ·ΒµΘ Όφ½ΔΏ΅Ό­ Ώΐ·ωΈ¦ Γ£ΎΖ³Β½ΐ΄Ο΄Ω.\n΄Ωΐ½°ϊ °°ΐΊ Α¦ΎΘµΘ ΌφΑ¤ΐ» ΉήΎΖµιΐΜ½Γ°Ϊ½ΐ΄Ο±ξ?\n\n";
+    Text[ korean ] = "%PRODUCTNAME Calc°΅ ΐΤ·ΒµΘ Όφ½ΔΏ΅Ό­ Ώΐ·ωΈ¦ Γ£ΎΖ³Β½ΐ΄Ο΄Ω.\n΄Ωΐ½ΐΗ Α¦ΎΘµΘ ΌφΑ¤ΐ» ΐϋΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n\n";
     Text[ turkish ] = "%PRODUCTNAME Calc, girilen formόlde bir hata buldu.\nAώaπύda φnerilen dόzeltmeyi kabul etmek istiyor musunuz?\n\n";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME Calc encontrσ un error en la fσrmula dada.\nΏDesea aceptar la correcciσn sugerida abajo?\n\n";
@@ -2940,7 +2942,7 @@ String SCSTR_GRFILTER_OPENERROR
     Text[ dutch ] = "Grafisch bestand kan niet worden geopend";
     Text[ chinese_simplified ] = "Ξή·¨΄ςΏªΝΌΠΞΞΔΌώ";
     Text[ greek ] = "Δεν είναι δυνατόν να ανοιχθεί το αρχείο γραφικών";
-    Text[ korean ] = "±Χ·΅ΗΘ ΖΔΐΟΐ» Ώ­Όφ΅΅Ύψ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "±Χ·΅ΗΘ ΖΔΐΟΐ» Ώ­ Όφ Ύψ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Grafik dosyasύ aηύlamύyor";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No es posible abrir el archivo grαfico";
@@ -2969,7 +2971,7 @@ String SCSTR_GRFILTER_IOERROR
     Text[ dutch ] = "Grafisch bestand kan niet worden gelezen";
     Text[ chinese_simplified ] = "Ξή·¨¶ΑΘ΅ΝΌΠΞΞΔΌώ";
     Text[ greek ] = "Δεν είναι δυνατή η ανάγνωση του αρχείου γραφικών";
-    Text[ korean ] = "±Χ·΅ΗΘ ΖΔΐΟΐ» ΐΠΐ»Όφ Ύψ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "±Χ·΅ΗΘ ΖΔΐΟΐ» ΐΠΐ» Όφ Ύψ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Grafik dosyasύ okunamύyor";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No es posible leer el archivo grαfico";
@@ -3115,6 +3117,7 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ catalan ] = "Filtro de imagen";
     Text[ finnish ] = "Grafiikkasuodatin";
 };
+
 
 
 
