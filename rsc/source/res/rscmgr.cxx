@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:55:25 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,32 +295,6 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
     ERRTYPE         aError;
     ObjNode *       pObjNode = NULL;
 
-    /*
-     *  #90692# madness lies beyond...
-     *  instead of fixing src files, fix rsc syntax
-     */
-    bool bMadness = false;
-    LanguageType aOldDefLanguage = LANGUAGE_DONTKNOW;
-    if( pTC && rInst.IsInst() )
-    {
-        /*
-         *  if language is different than german and rInst
-         *  is of type Accelerator then tweak the default
-         *  to english_us instead of the default
-         */
-        if( rInst.pClass->GetId() == pTC->nAcceleratorType &&
-            pTC->GetLanguage() != LANGUAGE_GERMAN
-            )
-        {
-            bMadness = true;
-            aOldDefLanguage = pTC->ChangeDefLanguage( LANGUAGE_ENGLISH_US );
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "entering madness, changing def language from %d to %d\n", aOldDefLanguage, LANGUAGE_ENGLISH_US );
-#endif
-        }
-    }
-
-
     pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
 
     if( pClassData->aRefId.IsId() )
@@ -397,14 +371,6 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
             rMem.PutAt( nOldSize +6, (USHORT)(nLocalSize - nOldSize) );
         };
     };
-
-    if( bMadness && pTC )
-    {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "leaving madness\n" );
-#endif
-        pTC->ChangeDefLanguage( aOldDefLanguage );
-    }
 
     return( aError );
 }
