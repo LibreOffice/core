@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 17:51:21 $
+ *  last change: $Author: af $ $Date: 2002-04-22 08:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,13 @@ namespace accessibility {
 
 
 /** @descr
-        This class implements the UAA for views of Draw and Impress
-        documents.
+        Base class for the various document views of the Draw and
+        Impress applications.
+    The different view modes of the Draw and Impress applications
+    are made accessible by derived classes.  When the view mode is
+    changed than the object representing the document view is
+    deleted and replaced by a new instance of the then appropriate
+    derived class.
 */
 class AccessibleDocumentViewBase
     :   public AccessibleContextBase,
@@ -113,18 +118,42 @@ class AccessibleDocumentViewBase
 {
 public:
     //=====  internal  ========================================================
-    AccessibleDocumentViewBase (SdWindow* pSdWindow,
+
+    /** Create a new object.  Note that the caller has to call the
+        Init method directly after this constructor has finished.
+    @param pSdWindow
+        The window whose content is to be made accessible.
+    @param pViewShell
+        The view shell associated with the given window.
+    @param rxController
+        The controller from which to get the model.
+    @param rxParent
+        The accessible parent of the new object.  Note that this parent does
+        not necessarily correspond with the parent of the given window.
+     */
+    AccessibleDocumentViewBase (
+        SdWindow* pSdWindow,
         SdViewShell* pViewShell,
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XController>& rxController,
+            ::com::sun::star::frame::XController>& rxController,
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent);
+            ::drafts::com::sun::star::accessibility::XAccessible>& rxParent);
 
     virtual ~AccessibleDocumentViewBase (void);
 
-    void Init (void);
+    /** Initialize a new object.  Call this method directly after creating a
+        new object.  It finished the initialization begun in the constructor
+        but which needs a fully created object.
+     */
+    virtual void Init (void);
 
     //=====  IAccessibleViewForwarderListener  ================================
+
+    /** A view forwarder change is signalled for instance when any of the
+        window events is recieved.  Thus, instead of overloading the four
+        windowResized... methods it will be sufficient in most cases just to
+        overload this method.
+     */
     virtual void ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder);
 
@@ -207,6 +236,7 @@ public:
 
 
     //=====  XWindowListener  =================================================
+
     virtual void SAL_CALL
         windowResized (const ::com::sun::star::awt::WindowEvent& e)
         throw (::com::sun::star::uno::RuntimeException);
@@ -230,6 +260,7 @@ protected:
     /// The API window that is made accessible.
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>
          mxWindow;
+
     /// The controller of the window in which this view is displayed.
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>
          mxController;
