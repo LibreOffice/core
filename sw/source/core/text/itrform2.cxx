@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-26 10:37:23 $
+ *  last change: $Author: fme $ $Date: 2001-04-26 12:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1479,25 +1479,35 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
         }
 
         // bBuild entscheidet, ob noch eine Ehrenrunde gedreht wird
-        bBuild = pCurr->GetRealHeight() > GetInfo().GetLineHeight() &&
-                ( GetInfo().GetTxtFly()->IsOn() && ChkFlyUnderflow( GetInfo() )
-                || GetInfo().CheckFtnPortion( pCurr ) );
-        if( bBuild )
+        if ( pCurr->GetRealHeight() <= GetInfo().GetLineHeight() )
         {
-            GetInfo().SetNumDone( bOldNumDone );
-            GetInfo().ResetMaxWidthDiff();
+            pCurr->SetRealHeight( GetInfo().GetLineHeight() );
+            bBuild = sal_False;
+        }
+        else
+        {
+            bBuild = ( GetInfo().GetTxtFly()->IsOn() && ChkFlyUnderflow( GetInfo() )
+                     || GetInfo().CheckFtnPortion( pCurr ) );
+            if( bBuild )
+            {
+                GetInfo().SetNumDone( bOldNumDone );
+                GetInfo().ResetMaxWidthDiff();
 
-            // delete old rest
-            if ( GetInfo().GetRest() )
-                delete GetInfo().GetRest();
+                // delete old rest
+                if ( GetInfo().GetRest() )
+                {
+                    delete GetInfo().GetRest();
+                    GetInfo().SetRest( 0 );
+                }
 
-            // set original rest portion
-            if ( pSaveFld )
-                GetInfo().SetRest( new SwFldPortion( *pSaveFld ) );
+                // set original rest portion
+                if ( pSaveFld )
+                    GetInfo().SetRest( new SwFldPortion( *pSaveFld ) );
 
-            pCurr->SetLen( 0 );
-            pCurr->Width(0);
-            pCurr->Truncate();
+                pCurr->SetLen( 0 );
+                pCurr->Width(0);
+                pCurr->Truncate();
+            }
         }
     }
 
