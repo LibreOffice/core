@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envimg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:33:58 $
+ *  last change: $Author: os $ $Date: 2000-11-13 11:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ using namespace com::sun::star::uno;
 // --------------------------------------------------------------------------
 String MakeSender()
 {
-    SvxAddressItem aAdr( *SFX_APP()->GetIniManager() );
+    SvxAddressItem aAdr;
 
     String sRet;
     String sSenderToken(SW_RES(STR_SENDER_TOKENS));
@@ -133,7 +133,7 @@ String MakeSender()
         if(sToken.EqualsAscii("COMPANY"))
         {
             xub_StrLen nOldLen = sRet.Len();
-            sRet += aAdr.GetToken( ADDRESS_COMPANY );
+            sRet += aAdr.GetToken( POS_COMPANY );
             bLastLength = sRet.Len() != nOldLen;
         }
         else if(sToken.EqualsAscii("CR"))
@@ -147,15 +147,15 @@ String MakeSender()
         else if(sToken.EqualsAscii("LASTNAME"))
             sRet += aAdr.GetName();
         else if(sToken.EqualsAscii("ADDRESS"))
-            sRet += aAdr.GetToken( ADDRESS_STREET );
+            sRet += aAdr.GetToken( POS_STREET );
         else if(sToken.EqualsAscii("COUNTRY"))
-            sRet += aAdr.GetToken( ADDRESS_COUNTRY );
+            sRet += aAdr.GetToken( POS_COUNTRY );
         else if(sToken.EqualsAscii("POSTALCODE"))
-            sRet += aAdr.GetToken( ADDRESS_PLZ );
+            sRet += aAdr.GetToken( POS_PLZ );
         else if(sToken.EqualsAscii("CITY"))
-            sRet += aAdr.GetToken( ADDRESS_CITY );
+            sRet += aAdr.GetToken( POS_CITY );
         else if(sToken.EqualsAscii("STATEPROV"))
-            sRet += aAdr.GetToken( ADDRESS_STATE );
+            sRet += aAdr.GetToken( POS_STATE );
         else if(sToken.Len()) //spaces
             sRet += sToken;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:03:03 $
+ *  last change: $Author: os $ $Date: 2000-11-13 11:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,7 +508,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
             break;
             case SID_ATTR_ADDRESS:
             {
-                SvxAddressItem aAddress( *SFX_APP()->GetIniManager() );
+                SvxAddressItem aAddress;
                 aAddress.SetWhich( nWhich );
                 rSet.Put( aAddress );
             }
@@ -862,7 +862,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
         {
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(nWhich, sal_False, &pItem))
             {
-                ((SvxAddressItem*)pItem)->Store( *SFX_APP()->GetIniManager() );
+                ((SvxAddressItem*)pItem)->Store();
             }
         }
         break;
