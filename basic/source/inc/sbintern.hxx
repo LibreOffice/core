@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbintern.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:56:34 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ struct SbiGlobals
     SbErrorStack*   pErrStack;      // Stack fuer die im Fehlerfall abgebaute SbiRuntime Kette
     ::utl::TransliterationWrapper* pTransliterationWrapper;    // For StrComp
     BOOL            bBlockCompilerError;
+    BasicManager*   pAppBasMgr;
 
     SbiGlobals();
     ~SbiGlobals();
