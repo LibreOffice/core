@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:26:44 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:46:47 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -50,12 +50,12 @@ include $(SETTINGS)/dk.mk
 # Define non-platform/compiler specific settings
 COMPONENT_NAME=FlatXmlFilter_java
 OUT_COMP_CLASS = $(OUT_CLASS)/$(COMPONENT_NAME)
-COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).uno.zip
-COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).uno.zip")
+COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOPKG_EXT)
+COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOPKG_EXT)")
 COMPONENT_JAR_NAME = $(COMPONENT_NAME).uno.jar
-COMPONENT_JAR = $(OUT_CLASS)/$(COMPONENT_JAR_NAME)
+COMPONENT_JAR = $(OUT_COMP_CLASS)/$(COMPONENT_JAR_NAME)
 COMPONENT_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
-
+COMPONENT_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT_NAME)/META-INF/manifest.xml
 REGISTERFLAG = $(OUT_MISC)$(PS)devguide_$(COMPONENT_NAME)_register_component.flag
 
 JAVAFILES  = \
@@ -87,20 +87,36 @@ $(CLASSFILES) : $(JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES)
 
+# rule for component jar file
 $(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(CLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
-$(COMPONENT_PACKAGE) : TypeDetection.xcu $(COMPONENT_JAR)
+# rule for component package manifest
+$(OUT_COMP_CLASS)/%/manifest.xml :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(COPY) $< $(subst /,$(PS),$(OUT_CLASS))
-	cd $(subst /,$(PS),$(OUT_CLASS)) && $(SDK_JAR) cvfM ../bin/$(@F) $(^F)
-	$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_CLASS)/$<))
+	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
+	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
+	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)FlatXmlFilter_java.xcu$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
+	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
+
+# rule for component package file
+$(COMPONENT_PACKAGE) : $(COMPONENT_JAR) FlatXmlFilter_java.xcu $(COMPONENT_UNOPKG_MANIFEST)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(SDK_ZIP) $@ FlatXmlFilter_java.xcu
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
-	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
@@ -113,8 +129,9 @@ endif
 
 FlatXmlFilterJavaExample : $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
-	@echo The Java FlatXmlFilter component was installed if SDK_AUTO_DEPLOYMENT = YES.
-	@echo You can use this filter component inside your office installation. 
+	@echo The Java FlatXmlFilter component is installed if SDK_AUTO_DEPLOYMENT = YES.
+	@echo You can use the filters "$(QM)DevGuide FlatXML ...$(QM)" inside your office installation
+	@echo after you have installed the "$(QM)FlatXmlTypeDetection.uno.pkg"$(QM) as well.
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_COMP_CLASS)/%.class
@@ -127,5 +144,4 @@ FlatXmlFilterJavaExample : $(REGISTERFLAG)
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_JAR)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
