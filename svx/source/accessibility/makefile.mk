@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-26 09:05:33 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:37:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,40 +68,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES =								\
-    charmapacc.cxx						\
-    svxrectctaccessiblecontext.cxx		\
-    DescriptionGenerator.cxx			\
-    GraphCtlAccessibleContext.cxx		\
-    ChildrenManager.cxx					\
-    ChildrenManagerImpl.cxx				\
-    DescriptionGenerator.cxx			\
-    AccessibleShape.cxx					\
-    AccessibleGraphicShape.cxx			\
-    AccessibleOLEShape.cxx				\
-    AccessibleContextBase.cxx			\
-    AccessibleComponentBase.cxx			\
-    AccessibleSelectionBase.cxx			\
-    AccessibleShapeTreeInfo.cxx			\
-    AccessibleTextHelper.cxx			\
-    AccessibleEmptyEditSource.cxx		\
-    AccessibleTextEventQueue.cxx		\
-    AccessibleStaticTextBase.cxx		\
-    AccessibleParaManager.cxx			\
-    AccessibleEditableTextPara.cxx		\
-    AccessibleStringWrap.cxx			\
-    AccessibleImageBullet.cxx			\
-    ShapeTypeHandler.cxx				\
-    SvxShapeTypes.cxx					\
-    AccessibleControlShape.cxx			\
-    DGColorNameLookUp.cxx
 
 SLOFILES =	\
     $(SLO)$/charmapacc.obj						\
