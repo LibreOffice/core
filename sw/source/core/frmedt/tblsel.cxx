@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:26:38 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
-#endif
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
 #endif
@@ -2845,6 +2842,7 @@ void _FndBox::RestoreChartData( const SwTable &rTable )
                     rStr += pEndBox->GetName(); rStr += '>';
                     pData->SomeData3().Erase(); pData->SomeData4().Erase();
                     SchDLL::Update( rOObj.GetOleRef(), pData );
+                    rOObj.GetObject().UpdateReplacement();
                 }
             }
         } while ( 0 != (pCli = aIter.Next()) );
