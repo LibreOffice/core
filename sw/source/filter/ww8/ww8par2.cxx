@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-30 11:58:56 $
+ *  last change: $Author: cmc $ $Date: 2002-10-30 15:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,7 +779,8 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     return pStyles->pStyRule;
 }
 
-void SwWW8ImplReader::Read_ANLevelNo( USHORT, const BYTE* pData, short nLen ) // Sprm 13
+// Sprm 13
+void SwWW8ImplReader::Read_ANLevelNo( USHORT, const BYTE* pData, short nLen )
 {
     nSwNumLevel = 0xff; // Default: ungueltig
 
@@ -789,15 +790,16 @@ void SwWW8ImplReader::Read_ANLevelNo( USHORT, const BYTE* pData, short nLen ) //
     // StyleDef ?
     if( pAktColl )
     {
-        if(      pCollA[nAktColl].bColl     // nur fuer SwTxtFmtColl, nicht CharFmt
-                && *pData                                       // WW: 0 = no Numbering
-                && !( nIniFlags & WW8FL_NO_OUTLINE ) )
+        // nur fuer SwTxtFmtColl, nicht CharFmt
+        // WW: 0 = no Numbering
+        if (pCollA[nAktColl].bColl && *pData)
         {
-        if(      *pData <= MAXLEVEL     // Bereich WW:1..9 -> SW:0..8
-                    && *pData <= 9 )                // keine Aufzaehlung / Nummerierung
+            // Bereich WW:1..9 -> SW:0..8 keine Aufzaehlung / Nummerierung
+
+            if (*pData <= MAXLEVEL && *pData <= 9)
             {
                 nSwNumLevel = *pData - 1;
-                if( !bNoAttrImport )
+                if (!bNoAttrImport)
                     ((SwTxtFmtColl*)pAktColl)->SetOutlineLevel( nSwNumLevel );
                     // Bei WW-NoNumbering koennte auch NO_NUMBERING gesetzt
                     // werden. ( Bei normaler Nummerierung muss NO_NUM gesetzt
@@ -807,17 +809,17 @@ void SwWW8ImplReader::Read_ANLevelNo( USHORT, const BYTE* pData, short nLen ) //
             }
             else if( *pData == 10 || *pData == 11 )
             {
-                pStyles->nWwNumLevel = *pData;      // Typ merken, der Rest
-                                                                                    // geschieht bei Sprm 12
+                // Typ merken, der Rest geschieht bei Sprm 12
+                pStyles->nWwNumLevel = *pData;
             }
         }
     }
     else
-    {                               // !StyleDef
-        if( !bAnl && !( nIniFlags & WW8FL_NO_NUMRULE ) )
-        {
-            StartAnl( pData );      // Anfang der Gliederung / Aufzaehlung
-        }
+    {
+        //Not StyleDef
+        if (!bAnl && !(nIniFlags & WW8FL_NO_NUMRULE))
+            StartAnl(pData);        // Anfang der Gliederung / Aufzaehlung
+        NextAnlLine(pData);
     }
 }
 
@@ -943,79 +945,85 @@ void SwWW8ImplReader::StartAnl( const BYTE* pSprm13 )
             else
             {
                 // this is ROW numbering ?
-                pS12 = pPlcxMan->HasParaSprm( 12 ); // sprmAnld
-                if( pS12 && 0 != SVBT8ToByte( ((WW8_ANLD*)pS12)->fNumberAcross) )
+                pS12 = pPlcxMan->HasParaSprm(12);   // sprmAnld
+                if (pS12 && 0 != SVBT8ToByte(((WW8_ANLD*)pS12)->fNumberAcross))
                     sNumRule.Erase();
             }
         }
     }
-    if( !sNumRule.Len() )
+
+    if (!sNumRule.Len() && pCollA[nAktColl].bHasStyNumRule)
     {
-        //sNumRule = rDoc.GetUniqueNumRuleName();
-        pNumRule = rDoc.GetNumRuleTbl()[ rDoc.MakeNumRule( sNumRule ) ];
+        sNumRule = pCollA[nAktColl].pFmt->GetNumRule().GetValue();
+        pNumRule = rDoc.FindNumRulePtr(sNumRule);
+        if (!pNumRule)
+            sNumRule.Erase();
+    }
+
+    if (!sNumRule.Len())
+    {
+        if (!pNumRule)
+            pNumRule = rDoc.GetNumRuleTbl()[rDoc.MakeNumRule(sNumRule)];
         if( pTableDesc )
         {
-            if( !pS12 )
-                pS12 = pPlcxMan->HasParaSprm( 12 ); // sprmAnld
-            if( !pS12 || !SVBT8ToByte( ((WW8_ANLD*)pS12)->fNumberAcross ) )
+            if (!pS12)
+                pS12 = pPlcxMan->HasParaSprm(12);   // sprmAnld
+            if (!pS12 || !SVBT8ToByte( ((WW8_ANLD*)pS12)->fNumberAcross))
                 pTableDesc->SetNumRuleName( pNumRule->GetName() );
         }
     }
 
     bAnl = true;
 
-    NextAnlLine( pSprm13, pS12 );                       // Einstellungen fuer 1. Zeile
-
-                                                // NumRules ueber Stack setzen
-    pCtrlStck->NewAttr( *pPaM->GetPoint(),
-            SfxStringItem( RES_FLTR_NUMRULE, pNumRule->GetName() ) );
+    // NumRules ueber Stack setzen
+    pCtrlStck->NewAttr(*pPaM->GetPoint(),
+            SfxStringItem(RES_FLTR_NUMRULE, pNumRule->GetName()));
 }
 
 
 // NextAnlLine() wird fuer jede Zeile einer
 // Gliederung / Nummerierung / Aufzaehlung einmal gerufen
-void SwWW8ImplReader::NextAnlLine( const BYTE* pSprm13, const BYTE* pS12 )
+void SwWW8ImplReader::NextAnlLine(const BYTE* pSprm13)
 {
-    if( !bAnl )
-        return;         // pNd->UpdateNum ohne Regelwerk gibt GPF spaetestens
-                        // beim Speichern als sdw3
+    if (!bAnl)
+        return;
 
-    if( *pSprm13 == 10 || *pSprm13 == 11 )      // WW:10 = Nummerierung -> SW:0
-                                                // WW:11 = Auffzaehlung -> SW:0
+    // pNd->UpdateNum ohne Regelwerk gibt GPF spaetestens beim Speichern als
+    // sdw3
+
+    // WW:10 = Nummerierung -> SW:0 & WW:11 = Auffzaehlung -> SW:0
+    if (*pSprm13 == 10 || *pSprm13 == 11)
     {
         nSwNumLevel = 0;
-        if( !pNumRule->GetNumFmt( nSwNumLevel ) )
-        {                                               // noch nicht definiert
-            if( !pS12 )
-                pS12 = pPlcxMan->HasParaSprm( 12 ); // sprmAnld o. 0
-            SetAnld( pNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
+        if (!pNumRule->GetNumFmt(nSwNumLevel))
+        {
+            // noch nicht definiert
+            const BYTE* pS12 = pPlcxMan->HasParaSprm(12);       // sprmAnld o. 0
+            SetAnld(pNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
         }
     }
-    else if( *pSprm13 <= MAXLEVEL )             // Bereich WW:1..9 -> SW:0..8
+    else if (*pSprm13 <= MAXLEVEL)          // Bereich WW:1..9 -> SW:0..8
     {
         nSwNumLevel = *pSprm13 - 1;             // Gliederung
-        if( !pNumRule->GetNumFmt( nSwNumLevel ) )           // noch nicht definiert
+        // noch nicht definiert
+        if (!pNumRule->GetNumFmt(nSwNumLevel))
         {
-            if( pNumOlst )                      // es gab ein OLST
-            {
-                SetNumOlst( pNumRule, pNumOlst , nSwNumLevel );
-            }
+            if (pNumOlst)                       // es gab ein OLST
+                SetNumOlst(pNumRule, pNumOlst , nSwNumLevel);
             else                                // kein Olst, nimm Anld
             {
-                if( !pS12 )
-                    pS12 = pPlcxMan->HasParaSprm( 12 ); // sprmAnld
+                const BYTE* pS12 = pPlcxMan->HasParaSprm(12);   // sprmAnld
                 SetAnld(pNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
             }
         }
     }
     else
-    {
         nSwNumLevel = 0xff;                 // keine Nummer
-    }
-    BYTE nLevel = ( nSwNumLevel < MAXLEVEL ) ? nSwNumLevel : NO_NUM;
-    SwNodeNum aNum( nLevel );
+
+    BYTE nLevel = (nSwNumLevel < MAXLEVEL) ? nSwNumLevel : NO_NUM;
+    SwNodeNum aNum(nLevel);
     SwTxtNode* pNd = pPaM->GetNode()->GetTxtNode();
-    pNd->UpdateNum( aNum );
+    pNd->UpdateNum(aNum);
 }
 
 // StopAnl() wird am Ende des Zeilenbereiches gerufen

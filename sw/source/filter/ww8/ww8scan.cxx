@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-29 13:18:43 $
+ *  last change: $Author: cmc $ $Date: 2002-10-30 15:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5960,14 +5960,15 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                  the font, e.g load the doc in 97 and save to see the unicode
                  ver of the asian fontnames in that example to confirm.
                  */
-                p->sFontname = String(pVer6->szFfn,
-                    WW8Fib::GetFIBCharset(p->chs));
+                rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(p->chs);
+                if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
+                    eEnc = RTL_TEXTENCODING_MS_1252;
+                p->sFontname = String(pVer6->szFfn, eEnc);
 //              p->sFontname = String(pVer6->szFfn, RTL_TEXTENCODING_MS_1252);
                 if (p->ibszAlt)
                 {
                     p->sFontname.Append(';');
-                    p->sFontname += String(pVer6->szFfn+p->ibszAlt,
-                        WW8Fib::GetFIBCharset(p->chs));
+                    p->sFontname += String(pVer6->szFfn+p->ibszAlt, eEnc);
 //                      RTL_TEXTENCODING_MS_1252 );
                 }
                 pVer6 = (WW8_FFN_Ver6*)( ((BYTE*)pVer6) + pVer6->cbFfnM1 + 1 );

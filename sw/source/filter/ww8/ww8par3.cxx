@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:12:00 $
+ *  last change: $Author: cmc $ $Date: 2002-10-30 15:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1403,7 +1403,7 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
                 RegisterNumFmtOnTxtNode(rStyleInfo.nLFOIndex,
                     rStyleInfo.nListLevel, false);
             }
-#if 0       //Assume that style knows best, and allows #99950# to
+#if 0       //Assume that style knows best, and allows #99550# to
             //work correctly
             else
                 pTxtNode->UpdateNum( SwNodeNum(NO_NUMBERING) );

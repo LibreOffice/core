@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-25 16:41:28 $
+ *  last change: $Author: cmc $ $Date: 2002-10-30 15:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1031,8 +1031,8 @@ friend class WW8FormulaControl;
     void SetNumOlst( SwNumRule* pNumR, WW8_OLST* pO, BYTE nSwLevel );
     SwNumRule* GetStyRule();
 
-    void StartAnl( const BYTE* pSprm13 );
-    void NextAnlLine( const BYTE* pSprm13, const BYTE* pS12 = 0 );
+    void StartAnl(const BYTE* pSprm13);
+    void NextAnlLine(const BYTE* pSprm13);
     void StopAnl(bool bGoBack = true);
 
 // GrafikLayer
