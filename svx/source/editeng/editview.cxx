@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-17 10:29:05 $
+ *  last change: $Author: mt $ $Date: 2001-08-20 12:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,25 +526,25 @@ sal_uInt32 EditView::Write( SvStream& rOutput, EETextFormat eFormat )
 void EditView::Cut()
 {
     DBG_CHKTHIS( EditView, 0 );
-    pImpEditView->CutCopy( sal_True );
+    pImpEditView->CutCopy( GetWindow()->GetClipboard(), sal_True );
 }
 
 void EditView::Copy()
 {
     DBG_CHKTHIS( EditView, 0 );
-    pImpEditView->CutCopy( sal_False );
+    pImpEditView->CutCopy( GetWindow()->GetClipboard(), sal_False );
 }
 
 void EditView::Paste()
 {
     DBG_CHKTHIS( EditView, 0 );
-    pImpEditView->Paste( sal_False );
+    pImpEditView->Paste( GetWindow()->GetClipboard(), sal_False );
 }
 
 void EditView::PasteSpecial()
 {
     DBG_CHKTHIS( EditView, 0 );
-    pImpEditView->Paste( sal_True );
+    pImpEditView->Paste( GetWindow()->GetClipboard(), sal_True );
 }
 
 void EditView::EnablePaste( sal_Bool bEnable )

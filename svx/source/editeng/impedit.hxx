@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-17 10:51:35 $
+ *  last change: $Author: mt $ $Date: 2001-08-20 12:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,14 @@ class SvxLRSpaceItem;
 class TextRanger;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
+
+namespace com {
+namespace sun {
+namespace star {
+namespace datatransfer {
+namespace clipboard {
+    class XClipboard;
+}}}}}
 
 
 struct DragAndDropInfo
@@ -302,8 +310,8 @@ public:
     BOOL            MouseMove( const MouseEvent& rMouseEvent );
     void            Command( const CommandEvent& rCEvt );
 
-    void            CutCopy( sal_Bool bCut );
-    void            Paste( sal_Bool bUseSpecial = sal_False );
+    void            CutCopy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, sal_Bool bCut );
+    void            Paste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, sal_Bool bUseSpecial = sal_False );
 
     void            SetVisDocStartPos( const Point& rPos ) { aVisDocStartPos = rPos; }
     const Point&    GetVisDocStartPos() const { return aVisDocStartPos; }

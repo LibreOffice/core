@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-17 10:51:35 $
+ *  last change: $Author: mt $ $Date: 2001-08-20 12:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,14 +976,14 @@ sal_Bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent )
             {
                 if ( !bReadOnly )
                 {
-                    CutCopy( sal_True );
+                    CutCopy( GetWindow()->GetClipboard(), sal_True );
                     bDone = sal_True;
                 }
             }
             break;
             case KEYFUNC_COPY:
             {
-                CutCopy( sal_False );
+                CutCopy( GetWindow()->GetClipboard(), sal_False );
                 bDone = TRUE;
             }
             break;
@@ -992,7 +992,7 @@ sal_Bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent )
                 if ( !bReadOnly && IsPasteEnabled() )
                 {
                     pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_PASTE );
-                    Paste( pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
+                    Paste( GetWindow()->GetClipboard(), pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
                     pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_PASTE );
                     bDone = sal_True;
                 }
@@ -1019,6 +1019,17 @@ sal_Bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
     }
     nTravelXPos = TRAVEL_X_DONTKNOW;
     bClickedInSelection = sal_False;
+
+    if ( rMouseEvent.IsMiddle() && !bReadOnly &&
+         ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION ) )
+    {
+        Paste( GetWindow()->GetSelection() );
+    }
+    else if ( rMouseEvent.IsLeft() && GetEditSelection().HasRange() )
+    {
+        CutCopy( GetWindow()->GetSelection(), FALSE );
+    }
+
     return pEditEngine->pImpEditEngine->MouseButtonUp( rMouseEvent, GetEditViewPtr() );
 }
 
@@ -1201,81 +1212,74 @@ BOOL ImpEditView::IsBulletArea( const Point& rPos, sal_uInt16* pPara )
     return FALSE;
 }
 
-void ImpEditView::CutCopy( BOOL bCut )
+void ImpEditView::CutCopy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, BOOL bCut )
 {
-    if ( GetEditSelection().HasRange() )
+    if ( rxClipboard.is() && GetEditSelection().HasRange() )
     {
-        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetWindow()->GetClipboard();
-        if( xClipboard.is() )
+        uno::Reference< datatransfer::XTransferable > xData = pEditEngine->pImpEditEngine->CreateTransferable( GetEditSelection() );
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        rxClipboard->setContents( xData, NULL );
+
+        // #87756# FlushClipboard, but it would be better to become a TerminateListener to the Desktop and flush on demand...
+        uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
+        if( xFlushableClipboard.is() )
+            xFlushableClipboard->flushClipboard();
+
+        Application::AcquireSolarMutex( nRef );
+
+        if ( bCut )
         {
-            uno::Reference< datatransfer::XTransferable > xData = pEditEngine->pImpEditEngine->CreateTransferable( GetEditSelection() );
-            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-            xClipboard->setContents( xData, NULL );
+            pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_CUT );
+            DeleteSelected();
+            pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_CUT );
 
-            // #87756# FlushClipboard, but it would be better to become a TerminateListener to the Desktop and flush on demand...
-            uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
-            if( xFlushableClipboard.is() )
-                xFlushableClipboard->flushClipboard();
-
-            Application::AcquireSolarMutex( nRef );
-
-            if ( bCut )
-            {
-                pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_CUT );
-                DeleteSelected();
-                pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_CUT );
-
-            }
         }
     }
 }
 
-void ImpEditView::Paste( BOOL bUseSpecial )
+void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, BOOL bUseSpecial )
 {
-    uno::Reference< datatransfer::XTransferable > xDataObj;
-    uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetWindow()->GetClipboard();
-
-    if ( xClipboard.is() )
+    if ( rxClipboard.is() )
     {
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        xDataObj = xClipboard->getContents();
+        uno::Reference< datatransfer::XTransferable > xDataObj = rxClipboard->getContents();
         Application::AcquireSolarMutex( nRef );
-    }
 
-    if ( xDataObj.is() && EditEngine::HasValidData( xDataObj ) )
-    {
-        pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_PASTE );
-
-        EditSelection aSel( GetEditSelection() );
-        if ( aSel.HasRange() )
+        if ( xDataObj.is() && EditEngine::HasValidData( xDataObj ) )
         {
-            DrawSelection();
-            aSel = pEditEngine->pImpEditEngine->ImpDeleteSelection( aSel );
-        }
+            pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_PASTE );
 
-        if ( DoSingleLinePaste() )
-        {
-            datatransfer::DataFlavor aFlavor;
-            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
-            if ( xDataObj->isDataFlavorSupported( aFlavor ) )
+            EditSelection aSel( GetEditSelection() );
+            if ( aSel.HasRange() )
             {
-                uno::Any aData = xDataObj->getTransferData( aFlavor );
-                ::rtl::OUString aTmpText;
-                aData >>= aTmpText;
-                String aText( aTmpText );
-                aText.ConvertLineEnd( LINEEND_LF );
-                aText.SearchAndReplaceAll( LINE_SEP, ' ' );
-                aSel = pEditEngine->pImpEditEngine->ImpInsertText( aSel, aText );
+                DrawSelection();
+                aSel = pEditEngine->pImpEditEngine->ImpDeleteSelection( aSel );
             }
+
+            if ( DoSingleLinePaste() )
+            {
+                datatransfer::DataFlavor aFlavor;
+                SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+                if ( xDataObj->isDataFlavorSupported( aFlavor ) )
+                {
+                    uno::Any aData = xDataObj->getTransferData( aFlavor );
+                    ::rtl::OUString aTmpText;
+                    aData >>= aTmpText;
+                    String aText( aTmpText );
+                    aText.ConvertLineEnd( LINEEND_LF );
+                    aText.SearchAndReplaceAll( LINE_SEP, ' ' );
+                    aSel = pEditEngine->pImpEditEngine->ImpInsertText( aSel, aText );
+                }
+            }
+            else
+            {
+                aSel = pEditEngine->pImpEditEngine->InsertText( xDataObj, aSel.Min(), pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
+            }
+            pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_PASTE );
+            SetEditSelection( aSel );
+            pEditEngine->pImpEditEngine->UpdateSelections();
+            pEditEngine->pImpEditEngine->FormatAndUpdate( GetEditViewPtr() );
         }
-        else
-        {
-            aSel = pEditEngine->pImpEditEngine->InsertText( xDataObj, aSel.Min(), pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
-        }
-        pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_PASTE );
-        SetEditSelection( aSel );
-        pEditEngine->pImpEditEngine->UpdateSelections();
-        pEditEngine->pImpEditEngine->FormatAndUpdate( GetEditViewPtr() );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-17 10:51:35 $
+ *  last change: $Author: mt $ $Date: 2001-08-20 12:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,6 +802,10 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                 if ( !rKeyEvent.GetKeyCode().IsMod2() )
                 {
                     aCurSel = pImpEditEngine->MoveCursor( rKeyEvent, pEditView );
+
+                    if ( aCurSel.HasRange() )
+                        pEditView->pImpEditView->CutCopy( pEditView->GetWindow()->GetSelection(), FALSE );
+
                     bMoved = sal_True;
                     if ( nCode == KEY_END )
                         bEndKey = sal_True;
