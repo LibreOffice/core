@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:07:31 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using namespace ::drafts::com::sun::star::form;
 
 //==================================================================
 //= OCheckBoxControl
@@ -131,111 +132,44 @@ InterfaceRef SAL_CALL OCheckBoxModel_CreateInstance(const Reference<XMultiServic
 DBG_NAME( OCheckBoxModel )
 //------------------------------------------------------------------
 OCheckBoxModel::OCheckBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_CONTROL_CHECKBOX, sal_False, sal_False)
+    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_CONTROL_CHECKBOX, sal_False, sal_True )
                     // use the old control name for compytibility reasons
-    ,OPropertyChangeListener(m_aMutex)
-    ,m_bInReset(sal_False)
-    ,m_pAggregatePropertyMultiplexer(NULL)
 {
     DBG_CTOR( OCheckBoxModel, NULL );
-    implConstruct();
 
     m_nClassId = FormComponentType::CHECKBOX;
     m_nDefaultChecked = CB_NOCHECK;
-    m_sDataFieldConnectivityProperty = PROPERTY_STATE;
+    initValueProperty( PROPERTY_STATE, PROPERTY_ID_STATE );
 }
 
 //------------------------------------------------------------------
 OCheckBoxModel::OCheckBoxModel( const OCheckBoxModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
-    :OBoundControlModel( _pOriginal, _rxFactory, sal_False, sal_False )
-    ,OPropertyChangeListener( m_aMutex )
-    ,m_bInReset( sal_False )
-    ,m_pAggregatePropertyMultiplexer( NULL )
+    :OBoundControlModel( _pOriginal, _rxFactory )
 {
     DBG_CTOR( OCheckBoxModel, NULL );
-    implConstruct();
 
     m_nDefaultChecked = _pOriginal->m_nDefaultChecked;
     m_sReferenceValue = _pOriginal->m_sReferenceValue;
 }
 
 //------------------------------------------------------------------------------
-void OCheckBoxModel::implConstruct()
-{
-    increment( m_refCount );
-    if ( m_xAggregateSet.is() )
-    {
-        m_pAggregatePropertyMultiplexer = new OPropertyChangeMultiplexer( this, m_xAggregateSet, sal_False );
-        m_pAggregatePropertyMultiplexer->acquire();
-        m_pAggregatePropertyMultiplexer->addProperty( PROPERTY_STATE );
-    }
-    decrement( m_refCount );
-
-    doSetDelegator();
-}
-
-//------------------------------------------------------------------------------
 OCheckBoxModel::~OCheckBoxModel()
 {
-    doResetDelegator();
-
-    if (m_pAggregatePropertyMultiplexer)
-    {
-        m_pAggregatePropertyMultiplexer->dispose();
-        m_pAggregatePropertyMultiplexer->release();
-        m_pAggregatePropertyMultiplexer = NULL;
-    }
     DBG_DTOR( OCheckBoxModel, NULL );
 }
 
 //------------------------------------------------------------------------------
 IMPLEMENT_DEFAULT_CLONING( OCheckBoxModel )
 
-//------------------------------------------------------------------------------
-void SAL_CALL OCheckBoxModel::disposing()
-{
-    if (m_pAggregatePropertyMultiplexer)
-        m_pAggregatePropertyMultiplexer->dispose();
-
-    OBoundControlModel::disposing();
-}
-
-//------------------------------------------------------------------------------
-void OCheckBoxModel::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(RuntimeException)
-{
-    // as we aren't commitable we have to take care of the field we are bound to ourself
-    osl::MutexGuard aGuard(m_aMutex);
-    if (getField().is() && !m_bInReset)
-    {
-
-        sal_uInt16 nState;
-        _rEvent.NewValue >>= nState;
-        switch (nState)
-        {
-            case CB_DONTKNOW:
-                m_xColumnUpdate->updateNull();
-                break;
-            case CB_CHECK:
-                m_xColumnUpdate->updateBoolean(sal_True);
-                break;
-            case CB_NOCHECK:
-                m_xColumnUpdate->updateBoolean(sal_False);
-                break;
-            default:
-                DBG_ERROR("OCheckBoxModel::_commit : invalid value !");
-        }
-    }
-}
-
-
 // XServiceInfo
 //------------------------------------------------------------------------------
 StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 2);
+    aSupported.realloc(aSupported.getLength() + 3);
 
     ::rtl::OUString* pArray = aSupported.getArray();
+    pArray[aSupported.getLength()-3] = FRM_SUN_COMPONENT_BINDDB_CHECKBOX;
     pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_CHECKBOX;
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_CHECKBOX;
     return aSupported;
@@ -266,7 +200,7 @@ void OCheckBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
         case PROPERTY_ID_DEFAULTCHECKED :
             DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_SHORT, "OCheckBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_nDefaultChecked;
-            _reset();
+            resetNoBroadcast();
             break;
 
         default:
@@ -386,109 +320,133 @@ void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& 
     // Nach dem Lesen die Defaultwerte anzeigen
     if (m_aControlSource.getLength())
         // (not if we don't have a control source - the "State" property acts like it is persistent, then
-        _reset();
+        resetNoBroadcast();
 }
 
 //------------------------------------------------------------------------------
-void OCheckBoxModel::_loaded(const EventObject& rEvent)
+void OCheckBoxModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
-    OBoundControlModel::_loaded(rEvent);
+    OBoundControlModel::onConnectedDbColumn( _rxForm );
 }
 
 //------------------------------------------------------------------------------
-void OCheckBoxModel::_onValueChanged()
-{
-    //////////////////////////////////////////////////////////////////
-    // Wert an ControlModel setzen
-    if (m_xAggregateSet.is())
-    {
-        Any aValue;
-        sal_Bool bValue = m_xColumn->getBoolean();
-        if (m_xColumn->wasNull())
-        {
-            sal_Bool bTriState;
-            m_xAggregateSet->getPropertyValue(PROPERTY_TRISTATE) >>= bTriState;
-            aValue <<= (sal_Int16)(bTriState ? CB_DONTKNOW : m_nDefaultChecked);
-        }
-        else
-            aValue <<= ( bValue ? (sal_Int16)CB_CHECK : (sal_Int16)CB_NOCHECK );
-        m_bInReset = sal_True;
-        {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-            // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-            // our own mutex locked
-            // FS - 72451 - 31.01.00
-            MutexRelease aRelease(m_aMutex);
-            m_xAggregateSet->setPropertyValue(PROPERTY_STATE, aValue);
-        }
-        m_bInReset = sal_False;
-    }
-}
-
-//------------------------------------------------------------------------------
-Any OCheckBoxModel::_getControlValue() const
-{
-    return m_xAggregateSet->getPropertyValue(PROPERTY_STATE);
-}
-
-//------------------------------------------------------------------------------
-void OCheckBoxModel::_reset( void )
+Any OCheckBoxModel::translateDbColumnToControlValue()
 {
     Any aValue;
-    aValue <<= (sal_Int16)m_nDefaultChecked;
-    {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-        // our own mutex locked
-        // FS - 72451 - 31.01.00
-        MutexRelease aRelease(m_aMutex);
-        m_xAggregateSet->setPropertyValue(PROPERTY_STATE, aValue);
+
+    //////////////////////////////////////////////////////////////////
+    // Wert an ControlModel setzen
+    sal_Bool bValue = m_xColumn->getBoolean();
+    if ( m_xColumn->wasNull() )
+    {
+        sal_Bool bTriState = sal_True;
+        if ( m_xAggregateSet.is() )
+            m_xAggregateSet->getPropertyValue( PROPERTY_TRISTATE ) >>= bTriState;
+        aValue <<= (sal_Int16)( bTriState ? CB_DONTKNOW : m_nDefaultChecked );
     }
+    else
+        aValue <<= ( bValue ? (sal_Int16)CB_CHECK : (sal_Int16)CB_NOCHECK );
+
+    return aValue;
+}
+
+//------------------------------------------------------------------------------
+Any OCheckBoxModel::getDefaultForReset() const
+{
+    return makeAny( (sal_Int16)m_nDefaultChecked );
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool OCheckBoxModel::_commit()
+sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool _bPostReset )
 {
-    if (!m_bInReset)
-        // normally we don't have a commit as we forward all state changes immediately to our field we're bound to
-        return sal_True;
-
-    // we're in reset, so this commit means "put the value into the field you're bound to"
-    // 72769 - 08.02.00 - FS
-    DBG_ASSERT(getField().is(), "OCheckBoxModel::_commit : committing while resetting, but not bound ?");
-    if (getField().is())
+    OSL_PRECOND( m_xColumnUpdate.is(), "OCheckBoxModel::commitControlValueToDbColumn: not bound!" );
+    if ( m_xColumnUpdate.is() )
     {
+        Any aControlValue( m_xAggregateSet->getPropertyValue( PROPERTY_STATE ) );
         try
         {
-            sal_Int16 nValue;
-            m_xAggregateSet->getPropertyValue(PROPERTY_STATE) >>= nValue;
+            sal_Int16 nValue = CB_DONTKNOW;
+            aControlValue >>= nValue;
             switch (nValue)
             {
                 case CB_DONTKNOW:
                     m_xColumnUpdate->updateNull();
                     break;
                 case CB_CHECK:
-                    m_xColumnUpdate->updateBoolean(sal_True);
+                    m_xColumnUpdate->updateBoolean( sal_True );
                     break;
                 case CB_NOCHECK:
-                    m_xColumnUpdate->updateBoolean(sal_False);
+                    m_xColumnUpdate->updateBoolean( sal_False );
                     break;
                 default:
-                    DBG_ERROR("OCheckBoxModel::_commit : invalid value !");
+                    DBG_ERROR("OCheckBoxModel::commitControlValueToDbColumn: invalid value !");
             }
         }
         catch(Exception&)
         {
-            DBG_ERROR("OCheckBoxModel::_commit : could not commit !");
+            DBG_ERROR("OCheckBoxModel::commitControlValueToDbColumn: could not commit !");
         }
     }
     return sal_True;
 }
 
 //-----------------------------------------------------------------------------
-void OCheckBoxModel::reset(void) throw (com::sun::star::uno::RuntimeException)
+sal_Bool OCheckBoxModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
 {
-    m_bInReset = sal_True;
-    OBoundControlModel::reset();
-    m_bInReset = sal_False;
+    OSL_PRECOND( _rxBinding.is(), "OCheckBoxModel::approveValueBinding: invalid binding!" );
+
+    // only strings are accepted for simplicity
+    return  _rxBinding.is()
+        &&  _rxBinding->supportsType( ::getCppuType( static_cast< sal_Bool* >( NULL ) ) );
+}
+
+//-----------------------------------------------------------------------------
+Any OCheckBoxModel::translateExternalValueToControlValue( )
+{
+    OSL_PRECOND( m_xExternalBinding.is(), "OCheckBoxModel::commitControlValueToExternalBinding: no active binding!" );
+
+    sal_Int16 nState = CB_DONTKNOW;
+    if ( m_xExternalBinding.is() )
+    {
+        Any aExternalValue;
+        try
+        {
+            aExternalValue = m_xExternalBinding->getValue( ::getCppuType( static_cast< sal_Bool* >( NULL ) ) );
+        }
+        catch( const IncompatibleTypesException& )
+        {
+            OSL_ENSURE( sal_False, "OCheckBoxModel::translateExternalValueToControlValue: caught an exception!" );
+        }
+
+        sal_Bool bState = sal_False;
+        if ( aExternalValue >>= bState )
+            nState = bState ? CB_CHECK : CB_NOCHECK;
+    }
+
+    return makeAny( nState );
+}
+
+//-----------------------------------------------------------------------------
+Any OCheckBoxModel::translateControlValueToExternalValue( )
+{
+    // translate the control value into a value appropriate for the external binding
+    // Basically, this means translating the INT16-State into a boolean
+    Any aControlValue( m_xAggregateSet->getPropertyValue( PROPERTY_STATE ) );
+    Any aExternalValue;
+
+    sal_Int16 nControlValue = CB_DONTKNOW;
+    aControlValue >>= nControlValue;
+
+    switch( nControlValue )
+    {
+        case CB_CHECK:
+            aExternalValue <<= (sal_Bool)sal_True;
+            break;
+        case CB_NOCHECK:
+            aExternalValue <<= (sal_Bool)sal_False;
+            break;
+    }
+    return aExternalValue;
 }
 
 //.........................................................................
