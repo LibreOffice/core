@@ -181,10 +181,10 @@ Sub InitializeResources()
 			FilterNames(6,1) = &quot;*.sdc&quot;
 			FilterNames(7,0) = &quot;Star Calc 3.0 Vorlage&quot;
 			FilterNames(7,1) = &quot;*.vor&quot;	
-			.optSingleFile.Label = &quot;Einzelnes Tabellen- oder Textdokument&quot;&apos;GetResText(1201)
+			.optSingleFile.Label = GetResText(1201) &apos;&quot;Einzelnes StarOffice -Dokument&quot;&apos;GetResText(1201)
  			.optWholeDir.Label = GetResText(1202)
  			.chkProtect.Label = GetResText(1207)
- 			.chkTextDocuments.Label = &quot;Auch Feldbefehle und Tabellen in Textdokumenten konvertieren&quot;
+ 			.chkTextDocuments.Label = GetResText(1210) 	&apos; &quot;Auch Feldbefehle und Tabellen in Textdokumenten konvertieren&quot;
 			sSOURCEFILE = GetResText(1203)
 			sSOURCEDIR = GetResText(1204)
  			.lblSource.Label = sSOURCEDIR

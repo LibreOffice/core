@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 00:06:37 $
+ *  last change: $Author: bc $ $Date: 2001-06-25 09:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,9 +565,9 @@ Text[ english_us ] = "Extent";
 
 String STEP_AUTOPILOT + 1
 {
-Text = "~Einzelnes %PRODUCTNAME Calc-Dokument";
+Text = "~Einzelnes %PRODUCTNAME -Dokument";
 Text[English] = "~Single File";
-Text[ english_us ] = "~Single %PRODUCTNAME Calc Document";
+Text[ english_us ] = "~Single %PRODUCTNAME Document";
     Text[ portuguese ] = "~Documento único do %PRODUCTNAME Calc";
     Text[ russian ] = "~Îäèí äîêóìåíò %PRODUCTNAME Calc";
     Text[ greek ] = "Ì~åìïíùìİíï İããñáöï ôïõ %PRODUCTNAME Calc";
@@ -744,6 +744,15 @@ Text[ english_us ] = "Temporarily unprotect sheet without query";
     Text[ arabic ] = "ÅáÛÇÁ ÍãÇíÉ ÇáÌÏæá ÈÕİÉ ãÄŞÊÉ ÈÏæä ÇÓÊİÓÇÑ";
     Text[ finnish ] = "Poista lomakkeiden suojaus väliaikaisesti ilman kyselyä";
     Text[ catalan ] = "Desproteger hoja provisionalmente sin preguntar";
+};
+
+
+String STEP_AUTOPILOT + 10
+{
+Text = "Auch Feldbefehle und Tabellen in Textdokumenten konvertieren";
+Text[ English ] = "Also convert Fields and Tables in Text Documents";
+Text[ english_us ] = "Also convert Fields and Tables in Text Documents";
+Text[ language_user1 ] = "Label einer Checkbox";
 };
 
 
