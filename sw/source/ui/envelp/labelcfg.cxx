@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labelcfg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-01-15 13:48:58 $
+ *  last change: $Author: os $ $Date: 2001-01-16 10:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLab
         Sequence<OUString> aPropNames = lcl_CreatePropertyNames(sPrefix);
         Sequence<Any>   aValues = GetProperties(aPropNames);
         SwLabRec* pNewRec = lcl_CreateSwLabRec(aValues, rManufacturer);
-        rLabArr.Insert(pNewRec, rLabArr.Count());
+        rLabArr.C40_INSERT( SwLabRec, pNewRec, rLabArr.Count() );
     }
 }
 
