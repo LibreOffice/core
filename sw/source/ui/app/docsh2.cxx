@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: os $ $Date: 2002-06-24 08:57:02 $
+ *  last change: $Author: mib $ $Date: 2002-06-24 12:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1774,8 +1774,6 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
         if( pFlt->GetUserData().EqualsAscii( FILTER_SWG ) ||
             pFlt->GetUserData().EqualsAscii( FILTER_SWGV ))
             pRead = ReadSwg;
-        else if( pFlt->GetUserData().EqualsAscii( FILTER_XMLP ))
-            pRead = ReadXML;
         pReader = new SwReader( aMed, rURL, pDoc );
     }
 

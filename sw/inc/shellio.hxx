@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-14 14:20:24 $
+ *  last change: $Author: mib $ $Date: 2002-06-24 12:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,7 +703,6 @@ extern sal_Char __FAR_DATA FILTER_SWW4V[];  // SW/Web Storage Vorlagen Filter
 extern sal_Char __FAR_DATA FILTER_SWW5V[];  // SW/Web Storage Vorlagen Filter
 extern sal_Char __FAR_DATA FILTER_TEXT_DLG[];   // text filter with encoding dialog
 extern sal_Char __FAR_DATA FILTER_XML[];    // XML filter
-extern sal_Char __FAR_DATA FILTER_XMLP[];   // XML filter
 extern sal_Char __FAR_DATA FILTER_XMLV[];   // XML filter
 extern sal_Char __FAR_DATA FILTER_XMLVW[];  // XML filter
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-22 10:30:16 $
+ *  last change: $Author: mib $ $Date: 2002-06-24 12:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,6 @@ void _InitFilter()
     _SetFltPtr( nCnt, pWW8Rd, sWW5 );
     _SetFltPtr( nCnt, ReadSwg, sSwg1 );
     _SetFltPtr( nCnt, (ReadXML = new XMLReader), FILTER_XML );
-    _SetFltPtr( nCnt, ReadXML, FILTER_XMLP );
 
 #ifdef NEW_WW97_EXPORT
     aReaderWriter[ 9 ].fnGetWriter =  &::GetWW8Writer;
