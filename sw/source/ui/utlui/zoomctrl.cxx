@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoomctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:57:43 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,10 @@
 SFX_IMPL_STATUSBAR_CONTROL( SwZoomControl, SvxZoomItem );
 
 
-SwZoomControl::SwZoomControl( USHORT nId,
-                                  StatusBar& rStb,
-                                  SfxBindings& rBind ) :
-    SvxZoomStatusBarControl( nId, rStb, rBind )
+SwZoomControl::SwZoomControl( USHORT nSlotId,
+                              USHORT nId,
+                              StatusBar& rStb ) :
+    SvxZoomStatusBarControl( nSlotId, nId, rStb )
 {
 }
 
