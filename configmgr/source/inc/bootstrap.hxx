@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-01 14:08:58 $
+ *  last change: $Author: tlx $ $Date: 2000-12-07 12:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ namespace configmgr
         }
 
         // check setting existence
+        sal_Bool            hasRegistryRC() const { return m_pSRegistry != 0; }
         sal_Bool            hasUser() const;
         sal_Bool            hasPassword() const;
         sal_Bool            hasServer() const;
