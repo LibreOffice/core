@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-29 08:26:44 $
+ *  last change: $Author: dvo $ $Date: 2001-03-29 16:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #endif
 #ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
 #include "XMLEventsImportContext.hxx"
+#endif
+#ifndef _XMLOFF_XMLIMAGEMAPCONTEXT_HXX_
+#include "XMLImageMapContext.hxx"
 #endif
 
 #ifndef _XMLTEXTLISTBLOCKCONTEXT_HXX
@@ -868,6 +871,13 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                 pContext = new XMLTextFrameContourContext_Impl( GetImport(),
                                               nPrefix, rLocalName,
                                                xAttrList, xPropSet, sal_True );
+            else if ( rLocalName.equalsAsciiL( sXML_image_map,
+                                               sizeof(sXML_image_map)-1) &&
+                      ( nType == XML_TEXT_FRAME_TEXTBOX ||
+                        nType == XML_TEXT_FRAME_GRAPHIC ||
+                        nType == XML_TEXT_FRAME_OBJECT_OLE ) )
+                pContext = new XMLImageMapContext( GetImport(), nPrefix,
+                                                   rLocalName, xPropSet );
         }
     }
     else if( (XML_NAMESPACE_OFFICE == nPrefix) &&

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-23 16:30:35 $
+ *  last change: $Author: dvo $ $Date: 2001-03-29 16:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,10 @@
 #ifndef _XMLOFF_TXTPRMAP_HXX
 #include "txtprmap.hxx"
 #endif
+#ifndef _XMLOFF_XMLIMAGEMAPEXPORT_HXX_
+#include "XMLImageMapExport.hxx"
+#endif
+
 #ifndef _XMLOFF_XMLTEXTNUMRULEINFO_HXX
 #include "XMLTextNumRuleInfo.hxx"
 #endif
@@ -1828,6 +1832,9 @@ void XMLTextParagraphExport::_exportTextFrame(
     Reference<XEventsSupplier> xEventsSupp( xTxtFrame, UNO_QUERY );
     GetExport().GetEventExport().Export(xEventsSupp);
 
+    // image map
+    GetExport().GetImageMapExport().Export( rPropSet );
+
     exportText( xTxt, sal_False, bProgress, sal_True );
 }
 
@@ -2031,6 +2038,9 @@ void XMLTextParagraphExport::_exportTextGraphic(
     }
     */
 
+    // image map
+    GetExport().GetImageMapExport().Export( rPropSet );
+
     // draw:contour
     exportContour( rPropSet, rPropSetInfo );
 }
@@ -2099,6 +2109,11 @@ void XMLTextParagraphExport::exportEvents( const Reference < XPropertySet > & rP
     // script:events
     Reference<XEventsSupplier> xEventsSupp( rPropSet, UNO_QUERY );
     GetExport().GetEventExport().Export(xEventsSupp);
+
+    // image map
+    OUString sImageMap(RTL_CONSTASCII_USTRINGPARAM("ImageMap"));
+    if (rPropSet->getPropertySetInfo()->hasPropertyByName(sImageMap))
+        GetExport().GetImageMapExport().Export( rPropSet );
 }
 void XMLTextParagraphExport::exportAlternativeText(
         const Reference < XPropertySet > & rPropSet,
