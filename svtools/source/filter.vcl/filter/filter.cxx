@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-06 12:15:59 $
+ *  last change: $Author: sj $ $Date: 2000-12-08 12:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,6 +453,16 @@ static BOOL ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, B
     ULONG nStreamLen = rStream.Tell() - nStreamPos;
     rStream.Seek( nStreamPos );
 
+    if ( !nStreamLen )
+    {
+        SvLockBytes* pLockBytes = rStream.GetLockBytes();
+        if ( pLockBytes  )
+            pLockBytes->SetSynchronMode( TRUE );
+
+        rStream.Seek( STREAM_SEEK_TO_END );
+        nStreamLen = rStream.Tell() - nStreamPos;
+        rStream.Seek( nStreamPos );
+    }
     // Die ersten 256 Bytes in einen Buffer laden:
     if( nStreamLen >= 256 )
         rStream.Read( sFirstBytes, 256 );
