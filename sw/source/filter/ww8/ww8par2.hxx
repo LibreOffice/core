@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:45:12 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,6 @@ struct WW8SwFlyPara
     INT16 nUpMgn, nLoMgn;       // Raender
     INT16 nWidth, nHeight;      // Groesse
     INT16 nNettoWidth;
-    INT16 nInnerMgn;            // Rand innen
 
     SwFrmSize eHeightFix;       // Hoehe Fix oder Min
     RndStdIds eAnchor;          // Bindung
@@ -159,8 +158,6 @@ struct WW8SwFlyPara
         short nPgLeft, short nPgWidth, INT32 nIniFlyDx, INT32 nIniFlyDy);
 
     void BoxUpWidth( long nWidth );
-    const SwPosition* GetMainTextPos() const    // Fuer PageDesc aus Apo
-                { return pMainTextPos; };
     SwWW8FltAnchorStack *pOldAnchorStck;
 };
 
