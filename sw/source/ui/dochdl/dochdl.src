@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:56:43 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,14 +158,14 @@ String STR_NO_TABLE
     Text [ swedish ] = "En tabell kan inte infogas i en annan tabell. Men du kan klistra in data i dokumentet om mark�ren inte �r placerad i en tabell." ;
     Text [ dutch ] = "Tabel kan op dit ogenblik niet worden ingevoegd." ;
     Text [ spanish ] = "No se puede insertar una tabla dentro de otra. Sin embargo, puede pegar los datos en el documento cuando el cursor no est� en la tabla." ;
-    Text[ chinese_simplified ] = "在一个表格之内无法插入表格。如果鼠标不是位于一个表格之内，您也还是能够插入数据。";
+    Text[ chinese_simplified ] = "无法将表格插入其他表格。但是，光标不在表格中时可以将数据粘贴到文档中";
     Text[ russian ] = "������ ���������� �������� �������";
     Text[ polish ] = "Obecnie wstawienie tabeli jest niemo�liwe.";
     Text[ japanese ] = "表を別の表に挿入することはできません。ただし、表以外の場所にカーソルを置けば、ドキュメントに表のデータを貼り付けることができます。";
     Text[ chinese_traditional ] = "表格無法插入其他表格中。但是當游標不在表格中時，您可以將資料貼到文件中。";
     Text[ arabic ] = "����� ���� ��� ���� ������.";
     Text[ dutch ] = "Tabel kan op dit ogenblik niet worden ingevoegd.";
-    Text[ chinese_simplified ] = "在一个表格之内无法插入表格。如果鼠标不是位于一个表格之内，您也还是能够插入数据。";
+    Text[ chinese_simplified ] = "无法将表格插入其他表格。但是，光标不在表格中时可以将数据粘贴到文档中";
     Text[ greek ] = "���� �� ����� ����� �������� �� �������� �������.";
     Text[ korean ] = "표 안에 또 다른 표를 삽입할 수는 없으나 커서가 표 안에 놓여있지 않은 한 데이터는 표문서 안으로 삽입할 수 있습니다.";
     Text[ turkish ] = "Bir tablo ba�ka bir tablo i�ine eklenemez. Ancak, fare imle�i tablo i�inde olmad��� zaman verileri belgeye yapi�t�rabilirsiniz.";
