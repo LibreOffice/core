@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_uriproc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 18:31:46 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uri/XUriReference.hpp"
 #include "com/sun/star/uri/XUriReferenceFactory.hpp"
-#include "com/sun/star/uri/XVndSunStarScriptUrl.hpp"
+#include "com/sun/star/uri/XVndSunStarScriptUrlReference.hpp"
 #include "cppuhelper/servicefactory.hxx"
 #include "cppunit/simpleheader.hxx"
 #include "osl/thread.h"
@@ -792,12 +792,12 @@ void Test::testVndSunStarScript() {
             "testVndSunStarScript", i, data[i].uriReference, data[i].name != 0,
             uriRef.is());
         if (uriRef.is()) {
-            css::uno::Reference< css::uri::XVndSunStarScriptUrl > scriptUrl(
-                uriRef, css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::uri::XVndSunStarScriptUrlReference >
+                scriptUrl(uriRef, css::uno::UNO_QUERY_THROW);
             TEST_ASSERT_EQUAL(
                 "testVndSunStarScript", i, data[i].uriReference,
                 rtl::OUString::createFromAscii(data[i].uriReference),
-                uriRef->getUriReference());
+                scriptUrl->getUriReference());
             TEST_ASSERT_EQUAL(
                 "testVndSunStarScript", i, data[i].uriReference,
                 rtl::OUString::createFromAscii(data[i].name),
