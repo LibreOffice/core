@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:23:40 $
+ *  last change:$Date: 2003-09-08 12:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,15 @@ package mod._sd;
 import java.io.PrintWriter;
 import java.util.Comparator;
 
+import lib.Status;
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.DesktopTools;
+import util.SOfficeFactory;
+import util.utils;
+
 import com.sun.star.awt.XWindow;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.drawing.XDrawPage;
@@ -77,20 +86,11 @@ import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XModifiable;
-import lib.Status;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.DesktopTools;
-import util.SOfficeFactory;
-import util.utils;
-
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
 
 /**
 * Test for object which is represented by service
