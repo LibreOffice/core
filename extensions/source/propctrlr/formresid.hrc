@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:24:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,13 +273,12 @@
 #define RID_STR_SHOW_RECORDACTIONS          ( RID_FORMBROWSER_START + 211 )
 #define RID_STR_SHOW_FILTERSORT             ( RID_FORMBROWSER_START + 212 )
 #define RID_STR_TEXTTYPE                    ( RID_FORMBROWSER_START + 213 )
-#define RID_STR_AUTOLINEBREAK               ( RID_FORMBROWSER_START + 214 )
-#define RID_STR_LINEEND_FORMAT              ( RID_FORMBROWSER_START + 215 )
-#define RID_STR_TOGGLE                      ( RID_FORMBROWSER_START + 216 )
-#define RID_STR_FOCUSONCLICK                ( RID_FORMBROWSER_START + 217 )
-#define RID_STR_HIDEINACTIVESELECTION       ( RID_FORMBROWSER_START + 218 )
-#define RID_STR_VISUALEFFECT                ( RID_FORMBROWSER_START + 219 )
-#define RID_STR_BORDERCOLOR                 ( RID_FORMBROWSER_START + 220 )
+#define RID_STR_LINEEND_FORMAT              ( RID_FORMBROWSER_START + 214 )
+#define RID_STR_TOGGLE                      ( RID_FORMBROWSER_START + 215 )
+#define RID_STR_FOCUSONCLICK                ( RID_FORMBROWSER_START + 216 )
+#define RID_STR_HIDEINACTIVESELECTION       ( RID_FORMBROWSER_START + 217 )
+#define RID_STR_VISUALEFFECT                ( RID_FORMBROWSER_START + 218 )
+#define RID_STR_BORDERCOLOR                 ( RID_FORMBROWSER_START + 219 )
 
 // -----------------------------------------------------------------------
 // - dialogs
