@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-07 10:34:01 $
+ *  last change: $Author: sab $ $Date: 2000-12-08 12:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1433,6 +1433,7 @@ SvXMLImportContext *ScXMLImport::CreateBodyContext(const NAMESPACE_RTL(OUString)
 {
     ((XMLTableStylesContext *)&xStyles)->CopyStylesToDoc(sal_True);
     GetShapeImport()->SetAutoStylesContext((XMLTableStylesContext *)&xAutoStyles);
+    GetChartImport()->SetAutoStylesContext((XMLTableStylesContext *)&xAutoStyles);
 
     SvXMLImportContext *pContext = 0;
     pContext = new ScXMLBodyContext(*this, XML_NAMESPACE_OFFICE, rLocalName);
