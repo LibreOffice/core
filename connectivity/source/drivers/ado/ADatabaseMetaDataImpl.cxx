@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataImpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:16:18 $
+ *  last change: $Author: oj $ $Date: 2001-09-17 14:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,7 +517,7 @@ void OAdoKey::fillPropertyValues()
     }
 }
 // -------------------------------------------------------------------------
-sal_Int32 OAdoKey::MapRule(const RuleEnum& _eNum) const
+sal_Int32 OAdoKey::MapRule(const RuleEnum& _eNum)
 {
         sal_Int32 eNum = KeyRule::NO_ACTION;
     switch(_eNum)
@@ -538,7 +538,7 @@ sal_Int32 OAdoKey::MapRule(const RuleEnum& _eNum) const
     return eNum;
 }
 // -------------------------------------------------------------------------
-RuleEnum OAdoKey::Map2Rule(const sal_Int32& _eNum) const
+RuleEnum OAdoKey::Map2Rule(const sal_Int32& _eNum)
 {
     RuleEnum eNum = adRINone;
     switch(_eNum)
@@ -559,7 +559,7 @@ RuleEnum OAdoKey::Map2Rule(const sal_Int32& _eNum) const
     return eNum;
 }
 // -------------------------------------------------------------------------
-sal_Int32 OAdoKey::MapKeyRule(const KeyTypeEnum& _eNum) const
+sal_Int32 OAdoKey::MapKeyRule(const KeyTypeEnum& _eNum)
 {
     sal_Int32 nKeyType = KeyType::PRIMARY;
     switch(_eNum)
@@ -577,7 +577,7 @@ sal_Int32 OAdoKey::MapKeyRule(const KeyTypeEnum& _eNum) const
     return nKeyType;
 }
 // -------------------------------------------------------------------------
-KeyTypeEnum OAdoKey::Map2KeyRule(const sal_Int32& _eNum) const
+KeyTypeEnum OAdoKey::Map2KeyRule(const sal_Int32& _eNum)
 {
     KeyTypeEnum eNum;
     switch(_eNum)

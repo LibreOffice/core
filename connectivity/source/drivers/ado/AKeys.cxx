@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKeys.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:07 $
+ *  last change: $Author: oj $ $Date: 2001-09-17 14:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,14 @@
 #ifndef _COM_SUN_STAR_SDBC_KEYRULE_HPP_
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #endif
-#ifndef CONNECTIVITY_CONNECTION_HXX
-#include "TConnection.hxx"
+#ifndef _CONNECTIVITY_ADO_ACONNECTION_HXX_
+#include "ado/AConnection.hxx"
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
+#include "ado/Awrapado.hxx"
 #endif
 
 using namespace ::comphelper;
@@ -129,10 +132,11 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
         {
             // To pass as column parameter to Key's Apppend method
             OLEVariant vOptional;
-            vOptional.vt = VT_ERROR;
-            vOptional.scode = DISP_E_PARAMNOTFOUND;
+//          vOptional.vt = VT_ERROR;
+//          vOptional.scode = DISP_E_PARAMNOTFOUND;
 
-            m_pCollection->Append(OLEVariant(pKey->getImpl()),(KeyTypeEnum)getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))),vOptional);
+            m_pCollection->Append(OLEVariant(pKey->getImpl()),OAdoKey::Map2KeyRule(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)))),vOptional);
+            ADOS::ThrowException(*m_pConnection->getConnection(),*this);
         }
         else
             throw SQLException(::rtl::OUString::createFromAscii("Could not append key!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
@@ -147,6 +151,7 @@ void SAL_CALL OKeys::dropByName( const ::rtl::OUString& elementName ) throw(SQLE
     ::osl::MutexGuard aGuard(m_rMutex);
 
     m_pCollection->Delete(OLEVariant(elementName));
+    ADOS::ThrowException(*m_pConnection->getConnection(),*this);
 
     OCollection_TYPE::dropByName(elementName);
 }
@@ -158,6 +163,7 @@ void SAL_CALL OKeys::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOut
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
     m_pCollection->Delete(OLEVariant(index));
+    ADOS::ThrowException(*m_pConnection->getConnection(),*this);
 
     OCollection_TYPE::dropByIndex(index);
 }
