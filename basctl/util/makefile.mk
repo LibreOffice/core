@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: tbe $ $Date: 2001-06-20 14:35:19 $
+#   last change: $Author: kz $ $Date: 2001-08-15 09:30:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,11 +105,6 @@ SHL1STDLIBS= \
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=\
             $(SHELLLIB)
-.ENDIF
-
-.IF "$(TF_UCB)" == ""
-SHL1STDLIBS+=\
-        $(CHAOSLIB)
 .ENDIF
 
 .IF "$(SOLAR_JAVA)" != ""
