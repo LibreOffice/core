@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 13:00:39 $
+ *  last change: $Author: as $ $Date: 2001-05-04 13:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,14 @@ namespace framework{
 //  exported definitions
 //_________________________________________________________________________________________________________________
 
+enum EModifyState
+{
+    E_UNTOUCHED ,
+    E_ADDED     ,
+    E_CHANGED   ,
+    E_REMOVED
+};
+
 //*****************************************************************************************************************
 // Hash code function for using in all hash maps of follow implementation.
 struct StringHashFunction
@@ -308,13 +316,13 @@ struct Filter
 
         inline void impl_clear()
         {
-            sName               = ::rtl::OUString()                                 ;
-            sType               = ::rtl::OUString()                                 ;
-            sDocumentService    = ::rtl::OUString()                                 ;
-            sFilterService      = ::rtl::OUString()                                 ;
-            nFlags              = 0                                                 ;
-            nFileFormatVersion  = 0                                                 ;
-            sTemplateName       = ::rtl::OUString()                                 ;
+            sName               = ::rtl::OUString();
+            sType               = ::rtl::OUString();
+            sDocumentService    = ::rtl::OUString();
+            sFilterService      = ::rtl::OUString();
+            nFlags              = 0                ;
+            nFileFormatVersion  = 0                ;
+            sTemplateName       = ::rtl::OUString();
             lUINames.free   ();
             lUserData.free  ();
         }
@@ -380,8 +388,8 @@ struct Detector
 
         inline Detector& impl_copy( const Detector& rCopy )
         {
-            sName   = rCopy.sName   ;
-            lTypes  = rCopy.lTypes  ;
+            sName  = rCopy.sName  ;
+            lTypes = rCopy.lTypes ;
             return (*this);
         }
 
@@ -390,8 +398,8 @@ struct Detector
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        ::rtl::OUString     sName   ;
-        StringList          lTypes  ;
+        ::rtl::OUString     sName       ;
+        StringList          lTypes      ;
 };
 
 //*****************************************************************************************************************
@@ -443,6 +451,40 @@ struct Loader
 };
 
 //*****************************************************************************************************************
+// This struct is used to collect informations about added, changed or removed cache entries.
+//*****************************************************************************************************************
+class ModifiedList
+{
+    public:
+        //---------------------------------------------------------------------------------------------------------
+        inline void append( const ::rtl::OUString& sName, EModifyState eState )
+        {
+            switch( eState )
+            {
+                case E_ADDED   :  lAddedItems.push_back  ( sName );
+                                  break;
+                case E_CHANGED :  lChangedItems.push_back( sName );
+                                  break;
+                case E_REMOVED :  lRemovedItems.push_back( sName );
+                                  break;
+            }
+        }
+
+        //---------------------------------------------------------------------------------------------------------
+        inline void free()
+        {
+            lAddedItems.free  ();
+            lChangedItems.free();
+            lRemovedItems.free();
+        }
+
+    public:
+        StringList  lAddedItems    ;
+        StringList  lChangedItems  ;
+        StringList  lRemovedItems  ;
+};
+
+//*****************************************************************************************************************
 // We need different hash maps for different tables of our configuration management.
 // Follow maps convert <names> to <properties> of type, filter, detector, loader
 //*****************************************************************************************************************
@@ -456,9 +498,14 @@ class FileTypeHash  :   public  ::std::hash_map<    ::rtl::OUString             
         {
             erase( begin(), end() );
             clear();
+            lModifiedTypes.free();
         }
+
+    public:
+        ModifiedList    lModifiedTypes;
 };
 
+//*****************************************************************************************************************
 class FilterHash    :   public  ::std::hash_map<    ::rtl::OUString                     ,
                                                     Filter                              ,
                                                     StringHashFunction                  ,
@@ -469,9 +516,14 @@ class FilterHash    :   public  ::std::hash_map<    ::rtl::OUString             
         {
             erase( begin(), end() );
             clear();
+            lModifiedFilters.free();
         }
+
+    public:
+        ModifiedList    lModifiedFilters;
 };
 
+//*****************************************************************************************************************
 class DetectorHash  :   public  ::std::hash_map<    ::rtl::OUString                     ,
                                                     Detector                            ,
                                                     StringHashFunction                  ,
@@ -482,9 +534,14 @@ class DetectorHash  :   public  ::std::hash_map<    ::rtl::OUString             
         {
             erase( begin(), end() );
             clear();
+            lModifiedDetectors.free();
         }
+
+    public:
+        ModifiedList    lModifiedDetectors;
 };
 
+//*****************************************************************************************************************
 class LoaderHash    :   public  ::std::hash_map<    ::rtl::OUString                     ,
                                                     Loader                              ,
                                                     StringHashFunction                  ,
@@ -495,7 +552,11 @@ class LoaderHash    :   public  ::std::hash_map<    ::rtl::OUString             
         {
             erase( begin(), end() );
             clear();
+            lModifiedLoaders.free();
         }
+
+    public:
+        ModifiedList    lModifiedLoaders;
 };
 
 //*****************************************************************************************************************
@@ -888,15 +949,13 @@ class FilterCache   :   private FairRWLockBase
 
         /*-****************************************************************************************************//**
             @short      fill our cache with values from configuration
-            @descr      We cache the complete type and filter information from our configuration as readonly values.
-                        These helper method read the values and fill our static member with it.
+            @descr      We cache the complete type and filter information from our configuration.
+                        These helper method can be used to read and write values.
                         The different fill-methods are specialized for the different lists of right configuration package!
 
             @seealso    structure of package "org.openoffice.Office.TypeDetection.xml"
 
-            @param      "xRootKey"  , start point if actual list
-            @param      "rCache"    , reference to our static member to fill it values
-            @param      "rFastCache", we hold some tables for faster search - fill it too!
+            @param      -
             @return     -
 
             @onerror    If an configuration item couldn't read we ignore it and warn programmer with an assertion.
@@ -917,21 +976,21 @@ class FilterCache   :   private FairRWLockBase
         void impl_saveLoaders       ();
         void impl_saveDefaults      ();
 
-        void impl_addType           (   const   FileType&           aType       );
-        void impl_replaceType       (   const   FileType&           aType       );
-        void impl_removeType        (   const   ::rtl::OUString&    sName       );
+        void impl_addType           (   const   FileType&           aType       , sal_Bool bIgnoreModify = sal_False );
+        void impl_replaceType       (   const   FileType&           aType       , sal_Bool bIgnoreModify = sal_False );
+        void impl_removeType        (   const   ::rtl::OUString&    sName       , sal_Bool bIgnoreModify = sal_False );
 
-        void impl_addFilter         (   const   Filter&             aFilter     );
-        void impl_replaceFilter     (   const   Filter&             aFilter     );
-        void impl_removeFilter      (   const   ::rtl::OUString&    sName       );
+        void impl_addFilter         (   const   Filter&             aFilter     , sal_Bool bIgnoreModify = sal_False );
+        void impl_replaceFilter     (   const   Filter&             aFilter     , sal_Bool bIgnoreModify = sal_False );
+        void impl_removeFilter      (   const   ::rtl::OUString&    sName       , sal_Bool bIgnoreModify = sal_False );
 
-        void impl_addDetector       (   const   Detector&           aDetector   );
-        void impl_replaceDetector   (   const   Detector&           aDetector   );
-        void impl_removeDetector    (   const   ::rtl::OUString&    sName       );
+        void impl_addDetector       (   const   Detector&           aDetector   , sal_Bool bIgnoreModify = sal_False );
+        void impl_replaceDetector   (   const   Detector&           aDetector   , sal_Bool bIgnoreModify = sal_False );
+        void impl_removeDetector    (   const   ::rtl::OUString&    sName       , sal_Bool bIgnoreModify = sal_False );
 
-        void impl_addLoader         (   const   Loader&             aLoader     );
-        void impl_replaceLoader     (   const   Loader&             aLoader     );
-        void impl_removeLoader      (   const   ::rtl::OUString&    sName       );
+        void impl_addLoader         (   const   Loader&             aLoader     , sal_Bool bIgnoreModify = sal_False );
+        void impl_replaceLoader     (   const   Loader&             aLoader     , sal_Bool bIgnoreModify = sal_False );
+        void impl_removeLoader      (   const   ::rtl::OUString&    sName       , sal_Bool bIgnoreModify = sal_False );
 
         /*-****************************************************************************************************//**
             @short      support query mode
