@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-06 10:05:25 $
+ *  last change: $Author: oj $ $Date: 2001-02-16 15:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,15 @@
 #ifndef _DTRANS_HXX //autogen
 #include <so3/dtrans.hxx>
 #endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
+#ifndef DBAUI_TOKENWRITER_HXX
+#include "TokenWriter.hxx"
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 
 namespace dbaui
 {
@@ -96,7 +105,38 @@ namespace dbaui
     };
 
     SV_DECL_IMPL_REF( ODataExchange );
+
+    class OHTMLImportExport;
+    class ORTFImportExport;
+    class ODataClipboard : public TransferableHelper
+    {
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aSeq;
+        ::std::auto_ptr<OHTMLImportExport>      m_pHtml;
+        ::std::auto_ptr<ORTFImportExport>       m_pRtf;
+    public:
+        ODataClipboard(::std::auto_ptr<OHTMLImportExport>   _pHtml,::std::auto_ptr<ORTFImportExport>    _pRtf)
+            :m_pHtml(_pHtml)
+            ,m_pRtf(_pRtf)
+        {}
+        ODataClipboard(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aSeq)
+            :m_aSeq(_aSeq)
+            ,m_pHtml(NULL)
+            ,m_pRtf(NULL)
+        {
+        }
+    protected:
+        virtual void        AddSupportedFormats();
+        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void        ObjectReleased();
+        virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    };
 }
 
-#endif //
+#endif //  DBAUI_DBEXCHANGE_HXX
+
+
+
+
+
+
 

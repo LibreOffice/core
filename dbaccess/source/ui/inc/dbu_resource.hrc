@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:39:23 $
+ *  last change: $Author: oj $ $Date: 2001-02-16 15:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,6 +314,10 @@
 #define STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE  RID_STRING_START + 103
 #define STR_TBL_COLUMN_IS_KEYCOLUMN         RID_STRING_START + 104
 #define STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE   RID_STRING_START + 105
+#define STR_COLUMN_NAME                     RID_STRING_START + 106
+#define STR_QRY_CONTINUE                    RID_STRING_START + 107
+#define STR_STAT_WARNING                    RID_STRING_START + 108
+
 //========================================================================
 // untyped resources
 
@@ -326,6 +330,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2001/02/14 14:39:23  oj
+ *  some changes
+ *
  *  Revision 1.23  2001/02/06 08:07:55  oj
  *  new querybox
  *

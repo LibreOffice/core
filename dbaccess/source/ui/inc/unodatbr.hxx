@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 14:13:56 $
+ *  last change: $Author: oj $ $Date: 2001-02-16 15:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,8 @@ namespace dbaui
             this container entry
         */
         SvLBoxEntry* getNameAccessFromEntry(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxNameAccess);
+        // return true when there is connection available
+        sal_Bool secureConnection(SvLBoxEntry* _pDSEntry,void * pDSData,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
         // is called when a table or a query was selected
         DECL_LINK( OnSelectEntry, SvLBoxEntry* );
