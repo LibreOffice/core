@@ -4,6 +4,7 @@ mkdir: %_DEST%\idl%_EXT%\drafts\com\sun
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\sync
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\frame
+mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\formula
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\accessibility
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\awt
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\configuration
@@ -120,6 +121,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 ..\com\sun\star\ui\dialogs\*.idl %_DEST%\idl%_EXT%\com\sun\star\ui\dialogs\*.idl
 
 ..\drafts\com\sun\star\frame\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\frame\*.idl
+..\drafts\com\sun\star\formula\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\formula\*.idl
 ..\drafts\com\sun\star\accessibility\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\accessibility\*.idl
 ..\drafts\com\sun\star\awt\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\awt\*.idl
 ..\drafts\com\sun\star\configuration\backend\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\configuration\backend\*.idl
