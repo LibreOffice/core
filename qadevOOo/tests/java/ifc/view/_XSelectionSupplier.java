@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSelectionSupplier.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-27 12:51:30 $
+ *  last change:$Date: 2003-09-08 11:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,15 @@
 
 package ifc.view;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.drawing.XShape;
-import com.sun.star.drawing.XShapes;
+import java.util.Comparator;
+
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.lang.EventObject;
-import com.sun.star.text.XTextFrame;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.view.XSelectionChangeListener;
 import com.sun.star.view.XSelectionSupplier;
-import lib.MultiMethodTest;
-import util.ValueComparer;
-import lib.StatusException;
-import lib.Status;
-import java.util.Comparator;
 
 /**
 * Testing <code>com.sun.star.view.XSelectionSupplier</code>
