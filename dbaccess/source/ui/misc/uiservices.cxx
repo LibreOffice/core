@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-04 13:12:38 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@ extern "C" void SAL_CALL createRegistryInfo_OTableControl();
 extern "C" void SAL_CALL createRegistryInfo_ORelationControl();
 extern "C" void SAL_CALL createRegistryInfo_ORowsetFilterDialog();
 extern "C" void SAL_CALL createRegistryInfo_ORowsetOrderDialog();
+extern "C" void SAL_CALL createRegistryInfo_OColumnControlModel();
+extern "C" void SAL_CALL createRegistryInfo_OColumnControl();
 
 //***************************************************************************************
 extern "C" void SAL_CALL createRegistryInfo_DBU()
@@ -112,6 +114,8 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
         createRegistryInfo_ORelationControl();
         createRegistryInfo_ORowsetFilterDialog();
         createRegistryInfo_ORowsetOrderDialog();
+        createRegistryInfo_OColumnControlModel();
+        createRegistryInfo_OColumnControl();
         bInit = sal_True;
     }
 }
