@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:24:14 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 14:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,12 @@
 
 #define RID_WEBWIZARDDIALOG_START           4000
 #define RID_WEBWIZARDDIALOG_FTP         4200
+
+// agenda wizard
+
+#define RID_AGENDAWIZARDDIALOG_START              5000
+
+
 
 // ============================================================================
 
@@ -604,6 +610,12 @@ String RID_COMMON_START + 19
 {
     Text [ de ] = "Die Datei existiert bereits. Möchten Sie sie Überschreiben?";
     Text [ en-US] = "The file already exists. Do you want to overwrite it?";
+};
+
+String RID_COMMON_START + 20
+{
+    Text [ de ] = "Vorlage am <current_date> mit dem <wizard_name> erstellt.";
+    Text [ en-US] = "Template created via <wizard_name> on <current_date>.";
 };
 
 
@@ -8415,7 +8427,7 @@ String RID_LETTERWIZARDDIALOG_START + 2
 String RID_LETTERWIZARDDIALOG_START + 3
 {
     Text [ de ] = "Geschäftsbrief";
-    Text [ en-US] = "~Business Letter";
+    Text [ en-US] = "~Business letter";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 4
@@ -8445,13 +8457,13 @@ String RID_LETTERWIZARDDIALOG_START + 7
 String RID_LETTERWIZARDDIALOG_START + 8
 {
     Text [ de ] = "Eigene Adresse";
-    Text [ en-US] = "Own Address";
+    Text [ en-US] = "Return address";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 9
 {
-    Text [ de ] = "Fußzeile";
-    Text [ en-US] = "~Footer";
+    Text [ de ] = "Fußzeile ";
+    Text [ en-US] = "~Include footer";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 10
@@ -8666,8 +8678,8 @@ String RID_LETTERWIZARDDIALOG_START + 44
 
 String RID_LETTERWIZARDDIALOG_START + 45
 {
-    Text [ de ] = "PLZ/Stadt:";
-    Text [ en-US] = "Postcode/State/City:";
+    Text [ de ] = "PLZ/Bundesland/Stadt:";
+    Text [ en-US] = "ZIP code/State/City:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 46
@@ -8752,13 +8764,13 @@ String RID_LETTERWIZARDDIALOG_START + 58
 String RID_LETTERWIZARDSALUTATION_START + 1
 {
     Text [ de ] = "Sehr geehrte Damen und Herren";
-    Text [ en-US] = "Dear Ladies and Gentlemen";
+    Text [ en-US] = "To Whom it May Concern";
 };
 
 String RID_LETTERWIZARDSALUTATION_START + 2
 {
     Text [ de ] = "Meine lieben Damen und Herren";
-    Text [ en-US] = "Dir Sir or Madam";
+    Text [ en-US] = "Dear Sir or Madam";
 };
 
 String RID_LETTERWIZARDSALUTATION_START + 3
@@ -8770,20 +8782,20 @@ String RID_LETTERWIZARDSALUTATION_START + 3
 //====================== Letter Wizard Greeting Start
 String RID_LETTERWIZARDGREETING_START + 1
 {
-    Text [ de ] = "Gruß,";
-    Text [ en-US] = "Sincerely,";
+    Text [ de ] = "Gruß";
+    Text [ en-US] = "Sincerely";
 };
 
 String RID_LETTERWIZARDGREETING_START + 2
 {
-    Text [ de ] = "Mit freundlichen Grüßen,";
-    Text [ en-US] = "Best Regards,";
+    Text [ de ] = "Mit freundlichen Grüßen";
+    Text [ en-US] = "Best regards";
 };
 
 String RID_LETTERWIZARDGREETING_START + 3
 {
-    Text [ de ] = "Tschüß,";
-    Text [ en-US] = "Cheers,";
+    Text [ de ] = "Tschüß";
+    Text [ en-US] = "Cheers";
 };
 
 
@@ -8821,7 +8833,7 @@ String RID_LETTERWIZARDROADMAP_START + 5
 String RID_LETTERWIZARDROADMAP_START + 6
 {
     Text [ de ] = "Name und Speicherort";
-    Text [ en-US] = "Name and Location";
+    Text [ en-US] = "Name and location";
 };
 
 
@@ -8837,7 +8849,6 @@ String RID_LETTERWIZARDLANGUAGE_START + 2
     Text [ de ] = "German";
     Text [ en-US] = "German";
 };
-
 
 
 // ============================================================================
@@ -9135,26 +9146,26 @@ String RID_FAXWIZARDSALUTATION_START + 4
 //====================== Fax Wizard Greeting Start
 String RID_FAXWIZARDGREETING_START + 1
 {
-    Text [ de ] = "Viele Grüße,";
-    Text [ en-US] = "Sincerely,";
+    Text [ de ] = "Viele Grüße";
+    Text [ en-US] = "Sincerely";
 };
 
 String RID_FAXWIZARDGREETING_START + 2
 {
-    Text [ de ] = "Mit freundlichen Grüßen,";
-    Text [ en-US] = "Yours faithfully,";
+    Text [ de ] = "Mit freundlichen Grüßen";
+    Text [ en-US] = "Yours faithfully";
 };
 
 String RID_FAXWIZARDGREETING_START + 3
 {
-    Text [ de ] = "Alles Gute,";
-    Text [ en-US] = "Regards,";
+    Text [ de ] = "Alles Gute";
+    Text [ en-US] = "Regards";
 };
 
 String RID_FAXWIZARDGREETING_START + 4
 {
-    Text [ de ] = "Liebe Grüße,";
-    Text [ en-US] = "Love,";
+    Text [ de ] = "Liebe Grüße";
+    Text [ en-US] = "Love";
 };
 
 
@@ -9186,7 +9197,7 @@ String RID_FAXWIZARDROADMAP_START + 4
 String RID_FAXWIZARDROADMAP_START + 5
 {
     Text [ de ] = "Name und Speicherort";
-    Text [ en-US] = "Name and Location";
+    Text [ en-US] = "Name and location";
 };
 
 
@@ -9201,871 +9212,1313 @@ String RID_FAXWIZARDROADMAP_START + 5
 
 String RID_WEBWIZARDDIALOG_START +1
 {
-    Text [ en-US] = "Web Wizard";
+    Text [ en-US  ] = "Web Wizard";
     Text [ de ] = "Web-Assistent";
 };
 
 String RID_WEBWIZARDDIALOG_START +2
 {
-    Text [ en-US] = "This Web Wizard is to aid you in publishing documents on the Internet.\n\nIt will convert the documents so that they can be viewed by a web browser. In addition, it will generate a Table of Contents page with links for easy access to the documents. The Web Wizard will also allow you to customize the design and layout of your web site.\n\nYou will be able to keep the documents you have published on the web up-to-date and add or remove documents at any time.";
-    Text [ de ] = "Der Web-Assistent hilft Ihnen  Dokumente im Internet zu publizieren. \n\nIhre Dokumente werden so konvertiert, dass sie in einem Internet-Browser angezeigt werden können. Weiterhin wird  ein Inhaltsverzeichnis erstellt, das Verknüpfungen auf Ihre einzelnen Dokumente enthält und einen einfachen Zugriff auf diese  ermöglicht.\n\nDer Web-Assistent gibt Ihnen weiterhin die Möglichkeit, das Layout und Design der Webseite zu ändern.\n\nSie werden jederzeit in der Lage sein, die Dokumente, die Sie im Internet veröffentlicht haben, zu pflegen und auf Stand zu halten sowie Dokumente    hinzuzufügen oder zu entfernen.";
-};
-
-String RID_WEBWIZARDDIALOG_START +3
-{
-    Text [ en-US] = "~Load";
-    Text [ de ] = "~Öffnen";
+    Text [ en-US  ] = "This Web Wizard is to aid you in publishing documents on the Internet.\n\nIt will convert the documents so that they can be viewed by a web browser. In addition, it will generate a Table of Contents page with links for easy access to the documents. The Web Wizard will also allow you to customize the design and layout of your web site.\n\nYou will be able to keep the documents you have published on the web up-to-date and add or remove documents at any time.";
+    Text [ de ] = "Der Web-Assistent hilft Ihnen Dokumente im Internet zu publizieren. \n\nIhre Dokumente werden so konvertiert, dass sie in einem Internet-Browser angezeigt werden können. Weiterhin wird  ein Inhaltsverzeichnis erstellt, das Verknüpfungen auf Ihre einzelnen Dokumente enthält und einen einfachen Zugriff auf diese  ermöglicht.\n\nDer Web-Assistent gibt Ihnen weiterhin die Möglichkeit, das Layout und Design der Webseite zu ändern.\n\nSie werden jederzeit in der Lage sein, die Dokumente, die Sie im Internet veröffentlicht haben, zu pflegen und auf Stand zu halten sowie Dokumente hinzuzufügen oder zu entfernen.";
 };
 
 String RID_WEBWIZARDDIALOG_START +4
 {
-    Text [ en-US] = "~Delete";
+    Text [ en-US  ] = "~Delete";
     Text [ de ] = "~Löschen";
 };
 
 String RID_WEBWIZARDDIALOG_START +5
 {
-    Text [ en-US] = "Introduction";
+    Text [ en-US  ] = "Introduction";
     Text [ de ] = "Einleitung";
 };
 
 String RID_WEBWIZARDDIALOG_START +6
 {
-    Text [ en-US] = "Select the documents you want to publish";
+    Text [ en-US  ] = "Select the documents you want to publish";
     Text [ de ] = "Wählen Sie die Dokumente aus, die Sie veröffentlichen wollen";
-};
-
-String RID_WEBWIZARDDIALOG_START +7
-{
-    Text [ en-US] = "~Documents:";
-    Text [ de ] = "~Dokumente:";
 };
 
 String RID_WEBWIZARDDIALOG_START +8
 {
-    Text [ en-US] = "Document information ";
+    Text [ en-US  ] = "Document information ";
     Text [ de ] = "Dokumentinformation";
 };
 
 String RID_WEBWIZARDDIALOG_START +9
 {
-    Text [ en-US] = "~Title:";
+    Text [ en-US  ] = "~Title:";
     Text [ de ] = "~Titel:";
 };
 
 String RID_WEBWIZARDDIALOG_START +10
 {
-    Text [ en-US] = "~Summary: ";
+    Text [ en-US  ] = "~Summary: ";
     Text [ de ] = "~Zusammenfassung: ";
 };
 
 String RID_WEBWIZARDDIALOG_START +11
 {
-    Text [ en-US] = "Au~thor:";
+    Text [ en-US  ] = "Au~thor:";
     Text [ de ] = "Au~tor:";
 };
 
 String RID_WEBWIZARDDIALOG_START +12
 {
-    Text [ en-US] = "~Export to file format:";
+    Text [ en-US  ] = "~Export to file format:";
     Text [ de ] = "~Exportieren im Dateiformat:";
 };
 
 String RID_WEBWIZARDDIALOG_START +13
 {
-    Text [ en-US] = "Enter general information for your web site";
+    Text [ en-US  ] = "Enter general information for your web site";
     Text [ de ] = "Geben Sie allgemeine Informationen über Ihre Webseite ein";
 };
 
 String RID_WEBWIZARDDIALOG_START +14
 {
-    Text [ en-US] = "Title:";
+    Text [ en-US  ] = "Title:";
     Text [ de ] = "~Titel:";
-};
-
-String RID_WEBWIZARDDIALOG_START +15
-{
-    Text [ en-US] = "Icon:";
-    Text [ de ] = "Symbol:";
 };
 
 String RID_WEBWIZARDDIALOG_START +16
 {
-    Text [ en-US] = "Description:";
+    Text [ en-US  ] = "Description:";
     Text [ de ] = "~Beschreibung:";
-};
-
-String RID_WEBWIZARDDIALOG_START +17
-{
-    Text [ en-US] = "Keywords:";
-    Text [ de ] = "~Schlüsselwörter:";
 };
 
 String RID_WEBWIZARDDIALOG_START +18
 {
-    Text [ en-US] = "Created:";
+    Text [ en-US  ] = "Created:";
     Text [ de ] = "Erstellt am:";
-};
-
-String RID_WEBWIZARDDIALOG_START +19
-{
-    Text [ en-US] = "Revisit after:";
-    Text [ de ] = "Erneut ~besuchen nach:";
 };
 
 String RID_WEBWIZARDDIALOG_START +20
 {
-    Text [ en-US] = "E-mail:";
+    Text [ en-US  ] = "E-mail:";
     Text [ de ] = "~E-Mail:";
 };
 
 String RID_WEBWIZARDDIALOG_START +21
 {
-    Text [ en-US] = "Copyright notice:";
+    Text [ en-US  ] = "Copyright notice:";
     Text [ de ] = "Co~pyright-Hinweis:";
 };
 
 String RID_WEBWIZARDDIALOG_START +22
 {
-    Text [ en-US] = "Modified:";
+    Text [ en-US  ] = "Modified:";
     Text [ de ] = "Geändert am:";
 };
 
-String RID_WEBWIZARDDIALOG_START +23
-{
-    Text [ en-US] = "days";
-    Text [ de ] = "~Tage";
-};
 
 String RID_WEBWIZARDDIALOG_START +24
 {
-    Text [ en-US] = "~Preview";
+    Text [ en-US  ] = "~Preview";
     Text [ de ] = "~Vorschau";
 };
 
 String RID_WEBWIZARDDIALOG_START +25
 {
-    Text [ en-US] = "Where do you want to publish your web site?";
+    Text [ en-US  ] = "Where do you want to publish your web site?";
     Text [ de ] = "Wo wollen Sie ihre Webseite veröffentlichen?";
 };
 
 String RID_WEBWIZARDDIALOG_START +26
 {
-    Text [ en-US] = "Publish the new web site:";
+    Text [ en-US  ] = "Publish the new web site:";
     Text [ de ] = "Neue Webseite veröffentlichen:";
 };
 
 String RID_WEBWIZARDDIALOG_START +27
 {
-    Text [ en-US] = "To a ~local folder";
+    Text [ en-US  ] = "To a ~local folder";
     Text [ de ] = "In einen ~lokalen Ordner";
 };
 
 String RID_WEBWIZARDDIALOG_START +28
 {
-    Text [ en-US] = "...";
+    Text [ en-US  ] = "...";
     Text [ de ] = "...";
 };
 
 String RID_WEBWIZARDDIALOG_START +29
 {
-    Text [ en-US] = "To a ~web server via FTP";
+    Text [ en-US  ] = "To a ~web server via FTP";
     Text [ de ] = "Auf einen ~Webserver per FTP";
 };
 
 String RID_WEBWIZARDDIALOG_START +31
 {
-    Text [ en-US] = "~Configure...";
+    Text [ en-US  ] = "~Configure...";
     Text [ de ] = "~Einstellen...";
 };
 
 String RID_WEBWIZARDDIALOG_START +32
 {
-    Text [ en-US] = "To a ZIP ~archive";
+    Text [ en-US  ] = "To a ZIP ~archive";
     Text [ de ] = "In ein ~ZIP-Archiv";
 };
 
 String RID_WEBWIZARDDIALOG_START +33
 {
-    Text [ en-US] = "...";
+    Text [ en-US  ] = "...";
     Text [ de ] = "...";
 };
 
 String RID_WEBWIZARDDIALOG_START +34
 {
-    Text [ en-US] = "~Save settings  (recommended)";
+    Text [ en-US  ] = "~Save settings  (recommended)";
     Text [ de ] = "~Einstellungen speichern (empfohlen)";
 };
 
 String RID_WEBWIZARDDIALOG_START +35
 {
-    Text [ en-US] = "Save ~as:";
+    Text [ en-US  ] = "Save ~as:";
     Text [ de ] = "Speichern ~als:";
 };
 
 String RID_WEBWIZARDDIALOG_START +36
 {
-    Text [ en-US] = "~Existing Web Wizard settings";
-    Text [ de ] = "~Vorhandene Einstellungen für den Web-Assistenten";
+    Text [ en-US  ] = "~Choose settings for the Web Wizard";
+    Text [ de ] = "Wählen Sie die ~Einstellungen für den Web-Assistenten aus";
 };
 
 String RID_WEBWIZARDDIALOG_START +37
 {
-    Text [ en-US] = "Web site content ";
+    Text [ en-US  ] = "Web site content ";
     Text [ de ] = "Webseite-Inhalt";
 };
 
 String RID_WEBWIZARDDIALOG_START +38
 {
-    Text [ en-US] = "~Add...";
+    Text [ en-US  ] = "~Add...";
     Text [ de ] = "~Hinzufügen...";
 };
 
 String RID_WEBWIZARDDIALOG_START +39
 {
-    Text [ en-US] = "Remo~ve";
+    Text [ en-US  ] = "Remo~ve";
     Text [ de ] = "Entfer~nen";
 };
 
 String RID_WEBWIZARDDIALOG_START +40
 {
-    Text [ en-US] = "Choose a layout for the table of contents of your web site";
+    Text [ en-US  ] = "Choose a layout for the table of contents of your web site";
     Text [ de ] = "Wählen Sie ein Layout für das Inhaltsverzeichnis Ihrer Webseite";
 };
 
 String RID_WEBWIZARDDIALOG_START +41
 {
-    Text [ en-US] = "Select a style for the table of contents page";
+    Text [ en-US  ] = "Select a style for the table of contents page";
     Text [ de ] = "Wählen Sie eine Formatvorlage für die Seite mit dem Inhaltsverzeichnis";
 };
 
 String RID_WEBWIZARDDIALOG_START +42
 {
-    Text [ en-US] = "~Style:";
+    Text [ en-US  ] = "~Style:";
     Text [ de ] = "~Formatvorlage:";
-};
-
-String RID_WEBWIZARDDIALOG_START +43
-{
-    Text [ en-US] = "Back~ground...";
-    Text [ de ] = "Hinter~grund...";
-};
-
-String RID_WEBWIZARDDIALOG_START +44
-{
-    Text [ en-US] = "~Icon Set...";
-    Text [ de ] = "~Symbolsatz...";
 };
 
 String RID_WEBWIZARDDIALOG_START +48
 {
-    Text [ en-US] = "~Layouts: ";
+    Text [ en-US  ] = "~Layouts: ";
     Text [ de ] = "~Layouts: ";
 };
 
 String RID_WEBWIZARDDIALOG_START +50
 {
-    Text [ en-US] = "~Description";
+    Text [ en-US  ] = "~Description";
     Text [ de ] = "~Beschreibung";
 };
 
 String RID_WEBWIZARDDIALOG_START +51
 {
-    Text [ en-US] = "~Author";
+    Text [ en-US  ] = "~Author";
     Text [ de ] = "~Autor";
 };
 
 String RID_WEBWIZARDDIALOG_START +52
 {
-    Text [ en-US] = "Cr~eation date";
+    Text [ en-US  ] = "Cr~eation date";
     Text [ de ] = "~Erstellungsdatum";
 };
 
 String RID_WEBWIZARDDIALOG_START +53
 {
-    Text [ en-US] = "~Last change date";
+    Text [ en-US  ] = "~Last change date";
     Text [ de ] = "Datum der letzten ~Änderung";
 };
 
 String RID_WEBWIZARDDIALOG_START +54
 {
-    Text [ en-US] = "~File name";
+    Text [ en-US  ] = "~File name";
     Text [ de ] = "~Dateiname";
 };
 
 String RID_WEBWIZARDDIALOG_START +55
 {
-    Text [ en-US] = "File forma~t";
+    Text [ en-US  ] = "File forma~t";
     Text [ de ] = "Datei~format";
 };
 
 String RID_WEBWIZARDDIALOG_START +56
 {
-    Text [ en-US] = "File format ~icon";
+    Text [ en-US  ] = "File format ~icon";
     Text [ de ] = "Dateiformatsymbol";
 };
 
 String RID_WEBWIZARDDIALOG_START +57
 {
-    Text [ en-US] = "N~o. of pages";
+    Text [ en-US  ] = "N~o. of pages";
     Text [ de ] = "N~r. der Seiten";
 };
 
 String RID_WEBWIZARDDIALOG_START +58
 {
-    Text [ en-US] = "~Size in KB";
+    Text [ en-US  ] = "~Size in KB";
     Text [ de ] = "~Größe in KB";
 };
 
 String RID_WEBWIZARDDIALOG_START +59
 {
-    Text [ en-US] = "Click 'Preview' to see a preview in your default browser:";
+    Text [ en-US  ] = "Click 'Preview' to see a preview in your default browser:";
     Text [ de ] = "Klicken Sie auf 'Vorschau', um eine Vorschau des Inhaltverzeichnises in Ihrem Standard-Browser zu sehen:";
 };
 
 String RID_WEBWIZARDDIALOG_START +60
 {
-    Text [ en-US] = "Customize the selected layout";
+    Text [ en-US  ] = "Customize the selected layout";
     Text [ de ] = "Anpassen des selektierten Layouts";
 };
 
 String RID_WEBWIZARDDIALOG_START +61
 {
-    Text [ en-US] = "Include the following information for each document in the table of contents:";
+    Text [ en-US  ] = "Include the following information for each document in the table of contents:";
     Text [ de ] = "Aufnehmen der folgenden  Elemente in das Inhaltsverzeichnisses eines Dokumentes:";
 };
 
 String RID_WEBWIZARDDIALOG_START +62
 {
-    Text [ en-US] = "Optimize the layout for screen resolution:";
-    Text [ de ] = "Layout optimieren für     Bildschirmauflösung:";
-};
-
-String RID_WEBWIZARDDIALOG_START +63
-{
-    Text [ en-US] = "...";
-    Text [ de ] = "...";
+    Text [ en-US  ] = "Optimize the layout for screen resolution:";
+    Text [ de ] = "Layout optimieren für Bildschirmauflösung:";
 };
 
 String RID_WEBWIZARDDIALOG_START +64
 {
-    Text [ en-US] = "~640x480";
+    Text [ en-US  ] = "~640x480";
     Text [ de ] = "~640x480";
 };
 
 String RID_WEBWIZARDDIALOG_START +65
 {
-    Text [ en-US] = "~800x600";
+    Text [ en-US  ] = "~800x600";
     Text [ de ] = "~800x600";
 };
 
 String RID_WEBWIZARDDIALOG_START +66
 {
-    Text [ en-US] = "~1024x768";
+    Text [ en-US  ] = "~1024x768";
     Text [ de ] = "~1024x768";
 };
 
 String RID_WEBWIZARDDIALOG_START +70
 {
-    Text [ en-US] = "Generating Your Web Site";
+    Text [ en-US  ] = "Generating Your Web Site";
     Text [ de ] = "Ihre Webseite wird erzeugt";
 };
 
 String RID_WEBWIZARDDIALOG_START +71
 {
-    Text [ en-US] = "%START..%END/%TOTAL";
-    Text [ de ] = "%START..%END/%TOTAL";
+    Text [ en-US  ] = "%START - %END/%TOTAL";
+    Text [ de ] = "%START - %END/%TOTAL";
 };
 
 String RID_WEBWIZARDDIALOG_START +72
 {
-    Text [ en-US] = "myWebsite";
-    Text [ de ] = " meineWebseite";
+    Text [ en-US  ] = "myWebsite";
+    Text [ de ] = "meineWebseite";
 };
 
 String RID_WEBWIZARDDIALOG_START +73
 {
-    Text [ en-US] = "FTP target is a file.";
-    Text [ de ] = "FTP Ziel ist eine Datei.";
+    Text [ en-US  ] = "FTP target '%FILENAME' is a file.";
+    Text [ de ] = "Das FTP Ziel '%FILENAME' ist eine Datei.";
 };
 
 String RID_WEBWIZARDDIALOG_START +74
 {
-    Text [ en-US] = "Local target is a file.";
-    Text [ de ] = "Lokales Ziel ist eine Datei.";
+    Text [ en-US  ] = "The local target '%FILENAME' is a file.";
+    Text [ de ] = "Das lokale Ziel '%FILENAME' ist eine Datei.";
 };
 
 String RID_WEBWIZARDDIALOG_START +75
 {
-    Text [ en-US] = "The ZIP target already exists. Do you want to overwrite the existing target? ";
-    Text [ de ] = "Das ZIP-Ziel existiert bereits. Möchten Sie es Überschreiben?";
+    Text [ en-US  ] = "The ZIP target '%FILENAME' already exists. Do you want to overwrite the existing target? ";
+    Text [ de ] = "Das ZIP-Ziel '%FILENAME' existiert bereits. Möchten Sie es Überschreiben?";
 };
 
 String RID_WEBWIZARDDIALOG_START +76
 {
-    Text [ en-US] = "The FTP target directory is not empty. Do you want to delete the content? ";
-    Text [ de ] = "Das FTP-Zielverzeichnis ist nicht leer.  Möchten Sie den Inhalt löschen?";
+    Text [ en-US  ] = "The FTP target directory '%FILENAME' is not empty. Some files might be overwritten. Do you want to continue?";
+    Text [ de ] = "Das FTP-Zielverzeichnis '%FILENAME' ist nicht leer.  Einige Dateien können überschrieben werden. Möchten Sie fortfahren?";
 };
 
 String RID_WEBWIZARDDIALOG_START +77
 {
-    Text [ en-US] = "The local target directory is not empty. Do you want to delete the content? ";
-    Text [ de ] = "Das lokale Verzeichnis ist nicht leer.  Möchten Sie den Inhalt löschen?";
+    Text [ en-US  ] = "The local target directory '%FILENAME' is not empty. Some files might be overwritten. Do you want to continue?";
+    Text [ de ] = "Das lokale Verzeichnis '%FILENAME' ist nicht leer.  Einige Dateien können überschrieben werden. Möchten Sie fortfahren?";
 };
 
 String RID_WEBWIZARDDIALOG_START +78
 {
-    Text [ en-US] = "Settings already exist under the given name. Do you want to overwrite the existing settings? ";
+    Text [ en-US  ] = "Settings already exist under the given name. Do you want to overwrite the existing settings? ";
     Text [ de ] = "Einstellungen mit diesem Namen existieren bereits.  Möchten Sie diese Überschreiben?";
 };
 
 String RID_WEBWIZARDDIALOG_START +79
 {
-    Text [ en-US] = "Exporting documents...";
+    Text [ en-US  ] = "Exporting documents...";
     Text [ de ] = "Dokumente werden exportiert...";
 };
 
 String RID_WEBWIZARDDIALOG_START +80
 {
-    Text [ en-US] = "Preparing export...";
+    Text [ en-US  ] = "Preparing export...";
     Text [ de ] = "Export word vorbereitet...";
 };
 
 String RID_WEBWIZARDDIALOG_START +81
 {
-    Text [ en-US] = "Copying layout files...";
+    Text [ en-US  ] = "Copying layout files...";
     Text [ de ] = "Layout Dateien werden kopiert...";
 };
 
 String RID_WEBWIZARDDIALOG_START +82
 {
-    Text [ en-US] = "Preparing table of contents generation...";
-    Text [ de ] = " Inhaltsverzeichnis-Erzeugung wird vorbereitet...";
+    Text [ en-US  ] = "Preparing table of contents generation...";
+    Text [ de ] = "Inhaltsverzeichnis-Erzeugung wird vorbereitet...";
 };
 
 String RID_WEBWIZARDDIALOG_START +83
 {
-    Text [ en-US] = "Generating table of contents...";
+    Text [ en-US  ] = "Generating table of contents...";
     Text [ de ] = "Das Inhaltsverzeichnis wird generiert...";
 };
 
 String RID_WEBWIZARDDIALOG_START +84
 {
-    Text [ en-US] = "Initializing...";
+    Text [ en-US  ] = "Initializing...";
     Text [ de ] = "Initialisieren...";
 };
 
 String RID_WEBWIZARDDIALOG_START +86
 {
-    Text [ en-US] = "Preparing to publish...";
+    Text [ en-US  ] = "Preparing to publish...";
     Text [ de ] = "Veröffentlichung vorbereiten...";
 };
 
 String RID_WEBWIZARDDIALOG_START +87
 {
-    Text [ en-US] = "Publishing to local directory...";
+    Text [ en-US  ] = "Publishing to local directory...";
     Text [ de ] = "In lokales Verzeichnis veröffentlichen...";
 };
 
 String RID_WEBWIZARDDIALOG_START +88
 {
-    Text [ en-US] = "Publishing to FTP destination...";
+    Text [ en-US  ] = "Publishing to FTP destination...";
     Text [ de ] = "Veröffentlichen per  FTP...";
 };
 
 String RID_WEBWIZARDDIALOG_START +89
 {
-    Text [ en-US] = "Publishing to a ZIP archive...";
+    Text [ en-US  ] = "Publishing to a ZIP archive...";
     Text [ de ] = "In ein ZIP-Archiv veröffentlichen...";
 };
 
-String RID_WEBWIZARDDIALOG_START +90
+String RID_WEBWIZARDDIALOG_START + 90
 {
-    Text [ en-US] = "Finishing...";
+    Text [ en-US  ] = "Finishing...";
     Text [ de ] = "Fertig stellen...";
 };
 
-String RID_WEBWIZARDDIALOG_START +92
+String RID_WEBWIZARDDIALOG_START + 94
 {
-    Text [ en-US] = "%PRODNAME documents";
-    Text [ de ] = "%PRODNAME-Dokumente";
-};
-
-String RID_WEBWIZARDDIALOG_START +93
-{
-    Text [ en-US] = "Microsoft Office documents";
-    Text [ de ] = "Microsoft Office-Dokumente";
-};
-
-String RID_WEBWIZARDDIALOG_START +94
-{
-    Text [ en-US] = "Graphics files";
+    Text [ en-US  ] = "Graphic files";
     Text [ de ] = "Grafikdateien";
 };
 
-String RID_WEBWIZARDDIALOG_START +95
+String RID_WEBWIZARDDIALOG_START + 95
 {
-    Text [ en-US] = "All files";
+    Text [ en-US  ] = "All files";
     Text [ de ] = "Alle Dateien";
 };
 
-String RID_WEBWIZARDDIALOG_START +96
+String RID_WEBWIZARDDIALOG_START + 96
 {
-    Text [ en-US] = "~ZIP archive files";
+    Text [ en-US  ] = "~ZIP archive files";
     Text [ de ] = "~ZIP-Archiv Dateien";
 };
 
-String RID_WEBWIZARDDIALOG_START +97
+String RID_WEBWIZARDDIALOG_START + 98
 {
-    Text [ en-US] = "Icon Files ";
-    Text [ de ] = "Symboldateien";
-};
-
-String RID_WEBWIZARDDIALOG_START +98
-{
-    Text [ en-US] = "Background images";
+    Text [ en-US  ] = "Background images";
     Text [ de ] = "Hintergrundbilder";
 };
 
-String RID_WEBWIZARDDIALOG_START +99
+String RID_WEBWIZARDDIALOG_START + 99
 {
-    Text [ en-US] = "Choose a background image: ";
+    Text [ en-US  ] = "Choose a background image: ";
     Text [ de ] = "Wählen Sie ein Hintergrundbild:";
 };
 
-String RID_WEBWIZARDDIALOG_START +100
+String RID_WEBWIZARDDIALOG_START + 100
 {
-    Text [ en-US] = "Icon sets";
+    Text [ en-US  ] = "Icon sets";
     Text [ de ] = "Symbolsätze";
 };
 
-String RID_WEBWIZARDDIALOG_START +101
+String RID_WEBWIZARDDIALOG_START + 101
 {
-    Text [ en-US] = "Choose an icon set:";
+    Text [ en-US  ] = "Choose an icon set:";
     Text [ de ] = "Wählen Sie einen Symbolsatz:";
 };
 
 String RID_WEBWIZARDDIALOG_START +102
 {
-    Text [ en-US] = "Other...";
+    Text [ en-US  ] = "Other...";
     Text [ de ] = "~Andere...";
 };
 
 String RID_WEBWIZARDDIALOG_START +103
 {
-    Text [ en-US] = "None";
+    Text [ en-US  ] = "None";
     Text [ de ] = "~Keine";
 };
 
 String RID_WEBWIZARDDIALOG_START +104
 {
-    Text [ en-US] = "Your web site was generated successfully.";
-    Text [ de ] = "Ihre Webseite wurde erfolgreich erstellt.";
+    Text [ en-US  ] = "Your web site was created successfully ino: %FILENAME";
+    Text [ de ] = "Ihre Webseite wurde erfolgreich erstellt in: %FILENAME";
 };
 
 String RID_WEBWIZARDDIALOG_START +105
 {
-    Text [ en-US] = "One or more errors occurred when generating the web site.";
+    Text [ en-US  ] = "One or more errors occurred when generating the web site.";
     Text [ de ] = "Einer oder mehrere Fehler traten beim Generieren der Webseite auf. ";
 };
 
 String RID_WEBWIZARDDIALOG_START +106
 {
-    Text [ en-US] = "An error occurred while generating the table of contents page(s). ";
+    Text [ en-US  ] = "An error occurred while generating the table of contents page(s). ";
     Text [ de ] = "Ein Fehler ist beim Erzeugen des Inhaltsverzeichnises aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +107
 {
-    Text [ en-US] = "An error occurred while copying the layout files. ";
-    Text [ de ] = "Ein Fehler ist beim Kopieren der Laayoutdateien aufgetreten.";
+    Text [ en-US  ] = "An error occurred while copying the layout files. ";
+    Text [ de ] = "Ein Fehler ist beim Kopieren der Layoutdateien aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +108
 {
-    Text [ en-US] = "An error occurred while gathering document information for '%FILENAME'. ";
+    Text [ en-US  ] = "An error occurred while gathering document information for '%FILENAME'. ";
     Text [ de ] = "Ein Fehler ist beim Zusammenstellen der Dokumentinfo für  '%FILENAME' aufgetreten. ";
 };
 
 String RID_WEBWIZARDDIALOG_START +109
 {
-    Text [ en-US] = "An error occurred while exporting the document '%FILENAME'.";
+    Text [ en-US  ] = "An error occurred while exporting the document '%FILENAME'.";
     Text [ de ] = "Ein Fehler ist beim Exportieren des Dokumentes '%FILENAME' aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +110
 {
-    Text [ en-US] = "An error occurred while creating a directory for exporting '%FILENAME'.";
+    Text [ en-US  ] = "An error occurred while creating a directory for exporting '%FILENAME'.";
     Text [ de ] = "Ein Fehler ist beim Erzeugen des Exportverzeichnisses '%FILENAME' aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +111
 {
-    Text [ en-US] = "A security error acoccurred while exporting the document '%FILENAME'.";
+    Text [ en-US  ] = "A security error acoccurred while exporting the document '%FILENAME'.";
     Text [ de ] = "Eine Sicherheitsverletzung ist beim Exportieren des Dokuments '%FILENAME' aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +112
 {
-    Text [ en-US] = "An input/output error occurred while exporting the document '%FILENAME'.";
+    Text [ en-US  ] = "An input/output error occurred while exporting the document '%FILENAME'.";
     Text [ de ] = "Ein/Ausgabe-Fehler ist beim Exportieren des Dokuments '%FILENAME' aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +113
 {
-    Text [ en-US] = "An error occurred while copying media files to the temporary directory.";
+    Text [ en-US  ] = "An error occurred while copying media files to the temporary directory.";
     Text [ de ] = "Ein Fehler ist beim Kopieren der Dateien ins temporäre Verzeichnis aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +114
 {
-    Text [ en-US] = "The web site could not be copied to the following destination: %URL";
+    Text [ en-US  ] = "The web site could not be copied to the following destination: %URL";
     Text [ de ] = "Ein Fehler ist beim Kopieren der Webseite an folgende Stelle aufgetreten: %URL";
 };
 
 String RID_WEBWIZARDDIALOG_START +115
 {
-    Text [ en-US] = "An unexpected error occurred: %ERROR";
+    Text [ en-US  ] = "An unexpected error occurred: %ERROR";
     Text [ de ] = "Ein unerwarteter Fehler ist aufgetreten: %ERROR";
 };
 
 String RID_WEBWIZARDDIALOG_START +116
 {
-    Text [ en-US] = "An unexpected error occurred while validating the file: '%FILENAME'";
-    Text [ de ] = "Ein uUnerwarteter Fehler ist beim Überprüfen folgender Datei aufgetreten: '%FILENAME'";
+    Text [ en-US  ] = "An unexpected error occurred while validating the file: '%FILENAME'";
+    Text [ de ] = "Ein unerwarteter Fehler ist beim Überprüfen folgender Datei aufgetreten: '%FILENAME'";
 };
 
 String RID_WEBWIZARDDIALOG_START +117
 {
-    Text [ en-US] = "%FILENAME' is a folder.";
+    Text [ en-US  ] = "%FILENAME' is a folder.";
     Text [ de ] = "%FILENAME' ist ein Ordner.";
 };
 
 String RID_WEBWIZARDDIALOG_START +118
 {
-    Text [ en-US] = "Loading settings...";
-    Text [ de ] = "Einstellungen werden geladen...";
+    Text [ en-US  ] = "Loading Web Wizard Settings...";
+    Text [ de ] = "Einstellungen des Web-Assistents werden geladen...";
 };
 
 String RID_WEBWIZARDDIALOG_START +119
 {
-    Text [ en-US] = "An unexpected error occurred.";
+    Text [ en-US  ] = "An unexpected error occurred.";
     Text [ de ] = "Ein unerwarteter Fehler ist aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +120
 {
-    Text [ en-US] = "Validating documents...";
+    Text [ en-US  ] = "Validating documents...";
     Text [ de ] = "Dokumente überprüfen...";
 };
 
 String RID_WEBWIZARDDIALOG_START +121
 {
-    Text [ en-US] = "MyArchive";
+    Text [ en-US  ] = "MyArchive";
     Text [ de ] = "MeineArchive";
 };
 
 String RID_WEBWIZARDDIALOG_START +122
 {
-    Text [ en-US] = "Introduction ";
+    Text [ en-US  ] = "Introduction ";
     Text [ de ] = "Einleitung";
 };
 
 String RID_WEBWIZARDDIALOG_START +123
 {
-    Text [ en-US] = "Documents ";
+    Text [ en-US  ] = "Documents ";
     Text [ de ] = "Dokumente";
 };
 
 String RID_WEBWIZARDDIALOG_START +124
 {
-    Text [ en-US] = "Main layout";
+    Text [ en-US  ] = "Main layout";
     Text [ de ] = "Hauptlayout";
 };
 
 String RID_WEBWIZARDDIALOG_START +125
 {
-    Text [ en-US] = "Layout details";
+    Text [ en-US  ] = "Layout details";
     Text [ de ] = "Layoutdetails";
 };
 
 String RID_WEBWIZARDDIALOG_START +126
 {
-    Text [ en-US] = "Style";
+    Text [ en-US  ] = "Style";
     Text [ de ] = "Formatvorlage";
 };
 
 String RID_WEBWIZARDDIALOG_START +127
 {
-    Text [ en-US] = "Web site information";
+    Text [ en-US  ] = "Web site information";
     Text [ de ] = "Informationen zur Webseite";
 };
 
 String RID_WEBWIZARDDIALOG_START +128
 {
-    Text [ en-US] = "Preview";
+    Text [ en-US  ] = "Preview";
     Text [ de ] = "Vorschau";
-};
-
-String RID_WEBWIZARDDIALOG_START +129
-{
-    Text [ en-US] = "An FTP Proxy is set. This mode does not allow all FTP commands. Click 'OK' to start the wizard without FTP support, or 'Cancel' to abort the wizard.";
-    Text [ de ] = "Ein FTP-Proxy ist eingerichtet. Dieser Modus schränkt die FTP-Funktionalität ein. Klicken Sie auf 'OK', um den Assistenten ohne FTP-Unterstützung zu starten, oder 'Abbrechen' um den Assistenten zu verlassen.";
 };
 
 String RID_WEBWIZARDDIALOG_START +130
 {
-    Text [ en-US] = "The selected settings will be deleted.\n\nDo you really want to delete these settings? ";
+    Text [ en-US  ] = "The selected settings will be deleted.\n\nDo you really want to delete these settings? ";
     Text [ de ] = "Die ausgewählten Einstellungen werden gelöscht.\n\nMöchten Sie diese Einstellungen wirklich löschen?";
 };
 
 String RID_WEBWIZARDDIALOG_START +131
 {
-    Text [ en-US] = "%NUMBER pages";
+    Text [ en-US  ] = "%NUMBER pages";
     Text [ de ] = "%NUMBER Seiten";
 };
 
 String RID_WEBWIZARDDIALOG_START +132
 {
-    Text [ en-US] = "%NUMBER slides";
+    Text [ en-US  ] = "%NUMBER slides";
     Text [ de ] = "%NUMBER Folien";
 };
 
 String RID_WEBWIZARDDIALOG_START +133
 {
-    Text [ en-US] = "Created: %DATE";
+    Text [ en-US  ] = "Created: %DATE";
     Text [ de ] = "Erstellt am: %DATE";
 };
 
 String RID_WEBWIZARDDIALOG_START +134
 {
-    Text [ en-US] = "Last modified: %DATE";
+    Text [ en-US  ] = "Last modified: %DATE";
     Text [ de ] = "Letzte Änderung: %DATE";
 };
 
 String RID_WEBWIZARDDIALOG_START +135
 {
-    Text [ en-US] = "Web Wizard Settings";
+    Text [ en-US  ] = "Web Wizard Settings";
     Text [ de ] = "Web Wizard Einstellungen";
 };
+
+String RID_WEBWIZARDDIALOG_START +136
+{
+    Text [ en-US  ] = "Background image:";
+    Text [ de ] = "Hintergrundgrafik:";
+};
+
+String RID_WEBWIZARDDIALOG_START +137
+{
+    Text [ en-US  ] = "Icon set:";
+    Text [ de ] = "Symbolsatz:";
+};
+
+String RID_WEBWIZARDDIALOG_START +138
+{
+    Text [ en-US  ] = "The icon set is used for presentations in HTML format.";
+    Text [ de ] = "Der Symbolsatz wird für Präsentationen im HTML-Format verwendet.";
+};
+
+String RID_WEBWIZARDDIALOG_START +139
+{
+    Text [ en-US  ] = "HTML Metadata";
+    Text [ de ] = "HTML-Metadaten";
+};
+
+String RID_WEBWIZARDDIALOG_START +140
+{
+    Text [ en-US  ] = "Choose...";
+    Text [ de ] = "Auswählen...";
+};
+
+String RID_WEBWIZARDDIALOG_START +141
+{
+    Text [ en-US  ] = "Choose...";
+    Text [ de ] = "Auswählen...";
+};
+
+String RID_WEBWIZARDDIALOG_START +142
+{
+    Text [ en-US  ] = "<default>";
+    Text [ de ] = "<standard>";
+};
+
+String RID_WEBWIZARDDIALOG_START +143
+{
+    Text [ en-US  ] = "Publishing via FTP proxy is not supported.";
+    Text [ de ] = "Das Veröffentlichen mittels eines FTP-Proxys wird nicht unterstützt.";
+};
+
+String RID_WEBWIZARDDIALOG_START +144
+{
+    Text [ en-US  ] = "<no background image>";
+    Text [ de ] = "<keine Hintergrundgrafik>";
+};
+
+String RID_WEBWIZARDDIALOG_START +145
+{
+    Text [ en-US  ] = "<no icon set>";
+    Text [ de ] = "<kein Symbolsatz>";
+};
+
+String RID_WEBWIZARDDIALOG_START +146
+{
+    Text [ en-US  ] = "The FTP directory '%FILENAME' could not be created.";
+    Text [ de ] = "Das FTP-Verzeichnis '%FILENAME' konnte nicht erstellt werden.";
+};
+
+String RID_WEBWIZARDDIALOG_START +147
+{
+    Text [ en-US  ] = "The FTP directory '%FILENAME' does not exist. \nCreate the directory now?";
+    Text [ de ] = "Das FTP-Verzeichnis '%FILENAME' existiert nicht. \nSoll das Verzeichnis erstellt werden?";
+};
+
+String RID_WEBWIZARDDIALOG_START +148
+{
+    Text [ en-US  ] = "The Zip file '%FILENAME' cannot be created: a directory of the same name already exists.";
+    Text [ de ] = "Die Zip-Datei '%FILENAME' kann nicht erstellt werden: Ein Verzeichnis mit dem gleichen Namen existiert bereits.";
+};
+
+String RID_WEBWIZARDDIALOG_START +149
+{
+    Text [ en-US  ] = "The local directory '%FILENAME' cannot be created. \nPlease check your write-access.";
+    Text [ de ] = "Das lokale verzeichnis '%FILENAME' kann nicht erstellt werden.\nÜberprüffen Sie bitte Ihre Schreibrechte.";
+};
+
+String RID_WEBWIZARDDIALOG_START +150
+{
+    Text [ en-US  ] = "The local directory '%FILENAME' does not exist. \nCreate the directory now?";
+    Text [ de ] = "Das lokale Verzeichnis '%FILENAME' existiert nicht. Soll das Verzeichnis erstellt werden?";
+};
+
+String RID_WEBWIZARDDIALOG_START +151
+{
+    Text [ en-US  ] = "Size: %NUMBERKB";
+    Text [ de ] = "Größe: %NUMBERKB";
+};
+
 
 // ============================================================================
 // =================         WEB WIZARD FTP DIALOG RESOURCES      =============
 // ============================================================================
 
 
+
+
 String RID_WEBWIZARDDIALOG_FTP +0
 {
-    Text [ en-US] = "FTP Connection";
+    Text [ en-US  ] = "FTP Connection";
     Text [ de ] = "FTP-Verbindung";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +1
 {
-    Text [ en-US] = "~User name:";
+    Text [ en-US  ] = "~User name:";
     Text [ de ] = "~Benutzername:";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +2
 {
-    Text [ en-US] = "~Password:";
+    Text [ en-US  ] = "~Password:";
     Text [ de ] = "~Kennwort:";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +3
 {
-    Text [ en-US] = "Connect";
+    Text [ en-US  ] = "Connect";
     Text [ de ] = "Verbinden";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +4
 {
-    Text [ en-US] = "1. Enter FTP connection information.";
+    Text [ en-US  ] = "1. Enter FTP connection information.";
     Text [ de ] = "1. Geben Sie FTP-Verbindungsinformation ein.";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +5
 {
-    Text [ en-US] = "~Server name or IP address:";
+    Text [ en-US  ] = "~Server name or IP address:";
     Text [ de ] = "~Servername oder IP Adresse:   ";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +6
 {
-    Text [ en-US] = "2. Connect to the server.";
+    Text [ en-US  ] = "2. Connect to the server.";
     Text [ de ] = "2. Stellen Sie eine Verbindung zum Server her.";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +7
 {
-    Text [ en-US] = "3. ~Choose a remote directory (optional).";
+    Text [ en-US  ] = "3. ~Choose a remote directory (optional).";
     Text [ de ] = "3. ~Wählen Sie ein Verzeichnis auf dem Server aus (optional).";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +8
 {
-    Text [ en-US] = "...";
+    Text [ en-US  ] = "...";
     Text [ de ] = "...";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +9
 {
-    Text [ en-US] = "Connection status is unknown";
+    Text [ en-US  ] = "Connection status is unknown";
     Text [ de ] = "Verbindungsstatus ist unbekannt";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +10
 {
-    Text [ en-US] = "Connection was established successfully";
+    Text [ en-US  ] = "Connection was established successfully";
     Text [ de ] = "Verbindung wurde erfolgreich hergestellt";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +11
 {
-    Text [ en-US] = "Username or password is wrong";
+    Text [ en-US  ] = "Username or password is wrong";
     Text [ de ] = "Benutzername oder Kennwort ist falsch";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +12
 {
-    Text [ en-US] = "Could not resolve server name";
+    Text [ en-US  ] = "Could not resolve server name";
     Text [ de ] = "Servername kann nicht aufgelöst werden";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +13
 {
-    Text [ en-US] = "You do not have sufficient user rights";
+    Text [ en-US  ] = "You do not have sufficient user rights";
     Text [ de ] = "Sie haben keine ausreichende Zugangsrechte.";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +14
 {
-    Text [ en-US] = "Cannot connect to server";
+    Text [ en-US  ] = "Cannot connect to server";
     Text [ de ] = "Server nicht erreichbar";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +15
 {
-    Text [ en-US] = "Unexpected error";
+    Text [ en-US  ] = "Unexpected error";
     Text [ de ] = "Unerwarteter Fehler";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +16
 {
-    Text [ en-US] = "FTP publishing directory";
+    Text [ en-US  ] = "FTP publishing directory";
     Text [ de ] = "FTP-Veröffentlichungsverzeichnis";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +17
 {
-    Text [ en-US] = "This is not an FTP folder";
+    Text [ en-US  ] = "This is not an FTP folder";
     Text [ de ] = "Dies ist kein FTP-Ordner";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +18
 {
-    Text [ en-US] = "Connecting...";
+    Text [ en-US  ] = "Connecting...";
     Text [ de ] = "Die Verbindung wird hergestellt...";
 };
 
+
+// ============================================================================
+// ============================                       ======================
+// ======================        AGENDA WIZARD RESOURCES         ================
+// ============================                       ======================
+// ============================================================================
+
+String RID_AGENDAWIZARDDIALOG_START +1
+{
+    Text [en-US ] = "Agenda  Wizard";
+    Text [ de ] = "Tagesordnungsassistent";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +2
+{
+    Text [en-US ] = "Make ~manual changes to this agenda template";
+    Text [ de ] = "Eingene  Veränderungen an der Dokumentvorlage vornehmen";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +3
+{
+    Text [en-US ] = "Template name:";
+    Text [ de ] = "Name der Dokumentvorlage:";
+};
+
+String RID_AGENDAWIZARDDIALOG_START + 4
+{
+    Text [en-US ] = "Location and file name:";
+    Text [ de ] = "Ordner und Dateiname:";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +5
+{
+    Text [en-US ] = "What do you want to do next?";
+    Text [ de ] = "Was möchten Sie als nächstes tun?";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +6
+{
+    Text [en-US ] = "Please choose the page design for the agenda";
+    Text [ de ] = "Bitte wählen Sie das Seitendesign der Tagesordnung";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +7
+{
+    Text [en-US ] = "Please select the  headings you wish to include in your agenda template";
+    Text [ de ] = "Bitte wählen Sie die Überschriften aus, die die Tagesordnung beinhalten soll";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +8
+{
+    Text [en-US ] = "Please enter general information for the event";
+    Text [ de ] = "Bitte tragen Sie allgemeine Informationen über das Ereignis ein";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +9
+{
+    Text [en-US ] = "Please specify items for the agenda";
+    Text [ de ] = "Bitte tragen Sie die Tagesordnungspunkte ein";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +10
+{
+    Text [en-US ] = "Please select the names you wish to include in your agenda template";
+    Text [ de ] = "Bitte wählen Sie die Namen aus, die die Tagesordnung beinhalten soll";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +11
+{
+    Text [en-US ] = "Choose a name and save the template";
+    Text [ de ] = "Bitte gvereben Sie einen Namen für die Dokumentvorlage und speichern Sie sie ab";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +12
+{
+    Text [en-US ] = "Include form for recording minutes";
+    Text [ de ] = "Formular für Protokollbericht einfügen";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +13
+{
+    Text [en-US ] = "This wizard helps you to create an agenda template. The template can then be used to create an agenda whenever needed.";
+    Text [ de ] = "Dieser Assistent hilft Ihnen eine Dokumentvorlage für Tagesordnungen zu erstellen.  Diese Vorlage kann als Basis für Tagesordnungen, wann immer benötigt, benutzt werden.";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +14
+{
+    Text [en-US ] = "Time:";
+    Text [ de ] = "Uhrzeit:";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +15
+{
+    Text [en-US ] = "Name:";
+    Text [ de ] = "Name:";
+};
+
+String RID_AGENDAWIZARDDIALOG_START + 16
+{
+    Text [en-US ] = "Location:";
+    Text [ de ] = "Ort:";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +17
+{
+    Text [en-US ] = "Placeholders will be used in empty fields. You can replace placeholders with text later.";
+    Text [ de ] = "Für leere Felder werden Platzhalter  verwendet. Sie können sie später durch Text ersetzen.";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +18
+{
+    Text [en-US ] = "...";
+    Text [ de ] = "...";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +19
+{
+    Text [en-US ] = "Create an ~agenda from this template";
+    Text [ de ] = "Eine Tagesordnung aus dieser Dokumentvorlage erstellen";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +20
+{
+    Text [en-US ] = "To create a new agenda out of the template, go to the location where you saved the template and double-click the file.";
+    Text [ de ] = "Um eine neue Tagesordnung mit dieser Dokumentvorlage zu erstellen, wechseln Sie in den Ordner, in dem sich die Dokumentvorlage befindet und doppelklicken Sie auf die Datei.";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +21
+{
+    Text [en-US ] = "Agenda item";
+    Text [ de ] = "Tagesordnungspunkt";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +22
+{
+    Text [en-US ] = "Responsible";
+    Text [ de ] = "Verantwortlich";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +23
+{
+    Text [en-US ] = "Duration";
+    Text [ de ] = "Dauer";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +24
+{
+    Text [en-US ] = "Meeting called by";
+    Text [ de ] = "Einberufen von ";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +25
+{
+    Text [en-US ] = "Chairperson";
+    Text [ de ] = "Vorsitz";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +26
+{
+    Text [en-US ] = "Minute keeper";
+    Text [ de ] = "Protokollführer";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +27
+{
+    Text [en-US ] = "Moderator";
+    Text [ de ] = "Moderator";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +28
+{
+    Text [en-US ] = "Attendees";
+    Text [ de ] = "Teilnehmer";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +29
+{
+    Text [en-US ] = "Observers";
+    Text [ de ] = "Beobachter";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +30
+{
+    Text [en-US ] = "Facility personnel";
+    Text [ de ] = "Fachpersonal";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +31
+{
+    Text [en-US ] = "The  agenda template will include placeholders for the names of the selected people. When creating an agenda from the template, you can replace these placeholder with the appropriate names.";
+    Text [ de ] = "Die Vorlage wird Platzhalter für alle ausgewählten Namen beinhalten.  Beim Erstellen einer Tagesordnung von der Vorlage, können sie die Platzhalter durch entsprechende Namen ersetzen ";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +32
+{
+    Text [en-US ] = "Type of meeting";
+    Text [ de ] = "Art der Besprechung";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +33
+{
+    Text [en-US ] = "Please read";
+    Text [ de ] = "Bitte lesen";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +34
+{
+    Text [en-US ] = "Please bring";
+    Text [ de ] = "Bitte mitbringen";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +35
+{
+    Text [en-US ] = "Notes";
+    Text [ de ] = "Notizen";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +36
+{
+    Text [en-US ] = "The agenda template will include placeholders for the selected items.";
+    Text [ de ] = "Die Vorlage wird Platzhalter für alle ausgewählten Punkte erstellen.";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +38
+{
+    Text [en-US ] = "Date:";
+    Text [ de ] = "Datum:";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +39
+{
+    Text [en-US ] = "This wizard creates an agenda template which enables you to create multiple agendas with the same layout and settings.";
+    Text [ de ] = "Dieser Assistent erstellt eine Dokumentvorlage. Sie können Sie verwenden , um mehrere Tagesordnungen mit demselben Layout zu erstellen.";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +40
+{
+    Text [en-US ] = "Page design:";
+    Text [ de ] = "Seitendesign:";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +41
+{
+    Text [en-US ] = "myAgendaTemplate.stw";
+    Text [ de ] = "meineTagesordnungsVorlage.stw";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +42
+{
+    Text [en-US ] = "My Agenda Template";
+    Text [ de ] = "Meine Tagesordnungsvorlage";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +43
+{
+    Text [en-US ] = "An unexpected error occurred while saving the agenda template.";
+    Text [ de ] = "Es ist ein unerwarteter Fehler beim Speichern aufgetreten.";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +44
+{
+    Text [en-US ] = "Name";
+    Text [ de ] = "Name";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +45
+{
+    Text [en-US ] = "Date";
+    Text [ de ] = "Datum";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +46
+{
+    Text [en-US ] = "Time";
+    Text [ de ] = "Uhrzeit";
+};
+
+String RID_AGENDAWIZARDDIALOG_START + 47
+{
+    Text [en-US ] = "Location";
+    Text [ de ] = "Ort";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +48
+{
+    Text [en-US ] = "Click to replace this text";
+    Text [ de ] = "Anklicken, um Text zu ersetzen";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +50
+{
+    Text [en-US ] = "Page design";
+    Text [ de ] = "Seitendesign";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +51
+{
+    Text [en-US ] = "General information";
+    Text [ de ] = "Allgemeine Informationen";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +52
+{
+    Text [en-US ] = "Headings to include";
+    Text [ de ] = "Bestandteile";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +53
+{
+    Text [en-US ] = "Names";
+    Text [ de ] = "Namen";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +54
+{
+    Text [en-US ] = "Agenda items";
+    Text [ de ] = "Tagesordnungspunkte";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +55
+{
+    Text [en-US ] = "Name and location";
+    Text [ de ] = "Name und Ordnert";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +56
+{
+    Text [en-US ] = "An unexpected error occurred while opening the agenda template.";
+    Text [ de ] = "Es ist ein unerwarteter Fehler beim Öffnen der Tagesordnungsvorlage aufgetreten.";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +57
+{
+    Text [en-US ] = "Type of meeting";
+    Text [ de ] = "Art der Besprechung";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +58
+{
+    Text [en-US ] = "Please bring";
+    Text [ de ] = "Bitte mitbringen";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +59
+{
+    Text [en-US ] = "Please read";
+    Text [ de ] = "Bitte lesen";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +60
+{
+    Text [en-US ] = "Notes";
+    Text [ de ] = "Notizen";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +61
+{
+    Text [en-US ] = "Meeting called by";
+    Text [ de ] = "Einberufen von";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +62
+{
+    Text [en-US ] = "Chairperson";
+    Text [ de ] = "Vorsitz";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +63
+{
+    Text [en-US ] = "Attendees";
+    Text [ de ] = "Teilnehmer";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +64
+{
+    Text [en-US ] = "Minute keeper";
+    Text [ de ] = "Protokollführer";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +65
+{
+    Text [en-US ] = "Moderator";
+    Text [ de ] = "Moderator";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +66
+{
+    Text [en-US ] = "Observers";
+    Text [ de ] = "Beobachter";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +67
+{
+    Text [en-US ] = "Facility personnel";
+    Text [ de ] = "Fachpersonal";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +68
+{
+    Text [en-US ] = "Insert";
+    Text [ de ] = "Hinzufügen";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +69
+{
+    Text [en-US ] = "Remove";
+    Text [ de ] = "Entfernen";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +70
+{
+    Text [en-US ] = "Move up";
+    Text [ de ] = "Nach oben";
+};
+
+String RID_AGENDAWIZARDDIALOG_START +71
+{
+    Text [en-US ] = "Move down";
+    Text [ de ] = "Nach unten";
+};
 
