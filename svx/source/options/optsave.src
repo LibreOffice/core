@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:31:55 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,12 @@ TabPage RID_SFXPAGE_SAVE
         Text[ slovak ] = "~Upraviť vlastnosti dokumentu pred uložením";
         Text[ hungarian ] = "~Dokumentumjellemzők szerkesztése mentés előtt";
         Text[ slovenian ] = "~Uredi lastnosti dokumenta, preden jih shraniš";
+    };
+    FixedImage FI_BACKUP
+    {
+        Pos = MAP_APPFONT ( 5, 51 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
     };
     CheckBox BTN_BACKUP
     {
@@ -918,6 +924,12 @@ TabPage RID_SFXPAGE_SAVE
             < "Risba" ;        APP_DRAW      ; > ;
             < "Formula" ;           APP_MATH      ; > ;
         };
+    };
+    FixedImage FI_FILTER
+    {
+        Pos = MAP_APPFONT ( 129, 150 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
     };
     ListBox LB_FILTER
     {
