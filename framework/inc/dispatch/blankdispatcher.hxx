@@ -2,9 +2,9 @@
  *
  *  $RCSfile: blankdispatcher.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-07-06 13:24:29 $
+ *  last change: $Author: as $ $Date: 2001-07-20 08:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,11 +135,13 @@ class BlankDispatcher   :   // -interfaces  ... are supported by our BaseDispatc
         virtual void SAL_CALL reactForLoadingState ( const css::util::URL&                                        aURL        ,
                                                      const css::uno::Sequence< css::beans::PropertyValue >&       lDescriptor ,
                                                      const css::uno::Reference< css::frame::XFrame >&             xTarget     ,
-                                                           sal_Bool                                               bState      );
+                                                           sal_Bool                                               bState      ,
+                                                     const css::uno::Any&                                         aAsyncInfo  );
 
         virtual void SAL_CALL reactForHandlingState( const css::util::URL&                                        aURL        ,
                                                      const css::uno::Sequence< css::beans::PropertyValue >&       lDescriptor ,
-                                                           sal_Bool                                               bState      );
+                                                           sal_Bool                                               bState      ,
+                                                     const css::uno::Any&                                         aAsyncInfo  );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods

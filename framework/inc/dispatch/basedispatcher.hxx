@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedispatcher.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-07-11 09:39:17 $
+ *  last change: $Author: as $ $Date: 2001-07-20 08:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,11 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
 #endif
+/*DRAFT
+#ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
+#include <svtools/historyoptions.hxx>
+#endif
+*/
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -204,12 +209,14 @@ struct LoadBinding
         // use to initialize struct for asynchronous dispatching by using handler
         inline LoadBinding( const css::util::URL&                                   aNewURL         ,
                             const css::uno::Sequence< css::beans::PropertyValue >   lNewDescriptor  ,
-                            const css::uno::Reference< css::frame::XDispatch >&     xNewHandler     )
+                            const css::uno::Reference< css::frame::XDispatch >&     xNewHandler     ,
+                            const css::uno::Any&                                    aNewAsyncInfo   )
         {
             free();
             xHandler    = xNewHandler   ;
             aURL        = aNewURL       ;
             lDescriptor = lNewDescriptor;
+            aAsyncInfo  = aNewAsyncInfo ;
         }
 
         //---------------------------------------------------------------------------------------------------------
@@ -217,13 +224,15 @@ struct LoadBinding
         inline LoadBinding( const css::util::URL&                                   aNewURL         ,
                             const css::uno::Sequence< css::beans::PropertyValue >   lNewDescriptor  ,
                             const css::uno::Reference< css::frame::XFrame >&        xNewFrame       ,
-                            const css::uno::Reference< css::frame::XFrameLoader >&  xNewLoader      )
+                            const css::uno::Reference< css::frame::XFrameLoader >&  xNewLoader      ,
+                            const css::uno::Any&                                    aNewAsyncInfo   )
         {
             free();
             xLoader     = xNewLoader    ;
             xFrame      = xNewFrame     ;
             aURL        = aNewURL       ;
             lDescriptor = lNewDescriptor;
+            aAsyncInfo  = aNewAsyncInfo ;
         }
 
         //---------------------------------------------------------------------------------------------------------
@@ -241,6 +250,7 @@ struct LoadBinding
             xFrame      = css::uno::Reference< css::frame::XFrame >()      ;
             aURL        = css::util::URL()                                 ;
             lDescriptor = css::uno::Sequence< css::beans::PropertyValue >();
+            aAsyncInfo  = css::uno::Any()                                  ;
         }
 
     //-------------------------------------------------------------------------------------------------------------
@@ -249,7 +259,8 @@ struct LoadBinding
         css::uno::Reference< css::frame::XFrameLoader >     xLoader     ;   // if loader was used, this reference will be valid
         css::uno::Reference< css::frame::XFrame >           xFrame      ;   // Target of loading
         css::util::URL                                      aURL        ;   // dispatched URL - neccessary to find listener for status event!
-        css::uno::Sequence< css::beans::PropertyValue >     lDescriptor ;   // dispatzched arguments - neccessary for "reactForLoadingState()"!
+        css::uno::Sequence< css::beans::PropertyValue >     lDescriptor ;   // dispatched arguments - neccessary for "reactForLoadingState()"!
+        css::uno::Any                                       aAsyncInfo  ;   // superclasses could use them to save her own user specific data for these asynchron call-info
 };
 
 //*****************************************************************************************************************
@@ -427,11 +438,13 @@ class BaseDispatcher    :   // interfaces
         virtual void SAL_CALL reactForLoadingState ( const css::util::URL&                                  aURL          ,
                                                      const css::uno::Sequence< css::beans::PropertyValue >& lDescriptor   ,
                                                      const css::uno::Reference< css::frame::XFrame >&       xTarget       ,
-                                                           sal_Bool                                         bState        ) = 0;
+                                                           sal_Bool                                         bState        ,
+                                                     const css::uno::Any&                                   aAsyncInfo    ) = 0;
 
         virtual void SAL_CALL reactForHandlingState( const css::util::URL&                                  aURL          ,
                                                      const css::uno::Sequence< css::beans::PropertyValue >& lDescriptor   ,
-                                                           sal_Bool                                         bState        ) = 0;
+                                                           sal_Bool                                         bState        ,
+                                                     const css::uno::Any&                                   aAsyncInfo    ) = 0;
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -443,11 +456,13 @@ class BaseDispatcher    :   // interfaces
         ::rtl::OUString implts_askType              (       css::uno::Sequence< css::beans::PropertyValue >&  lDescriptor     );
         sal_Bool        implts_handleIt             ( const css::util::URL&                                   aURL            ,
                                                             css::uno::Sequence< css::beans::PropertyValue >&  lDescriptor     ,
-                                                      const ::rtl::OUString&                                  sTypeName       );
+                                                      const ::rtl::OUString&                                  sTypeName       ,
+                                                      const css::uno::Any&                                    aAsyncInfo      = css::uno::Any() );
         sal_Bool        implts_loadIt               ( const css::util::URL&                                   aURL            ,
                                                             css::uno::Sequence< css::beans::PropertyValue >&  lDescriptor     ,
                                                       const ::rtl::OUString&                                  sTypeName       ,
-                                                      const css::uno::Reference< css::frame::XFrame >&        xTarget         );
+                                                      const css::uno::Reference< css::frame::XFrame >&        xTarget         ,
+                                                      const css::uno::Any&                                    aAsyncInfo      = css::uno::Any() );
         void            implts_enableFrame          ( const css::uno::Reference< css::frame::XFrame >&        xFrame          ,
                                                       const css::uno::Sequence< css::beans::PropertyValue >&  lDescriptor     );
         void            implts_disableFrame         ( const css::uno::Reference< css::frame::XFrame >&        xFrame          );
@@ -456,6 +471,8 @@ class BaseDispatcher    :   // interfaces
         void            implts_sendStatusEvent      ( const css::uno::Reference< css::frame::XFrame >&        xEventSource    ,
                                                       const ::rtl::OUString&                                  sURL            ,
                                                             sal_Bool                                          bLoadState      );
+/*DRAFT void            implts_updateHistory        ( const SvtHistoryItem&                                   rItem           ,
+                                                            sal_Bool                                          bChange         );*/
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods

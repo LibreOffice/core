@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:52:33 $
+ *  last change: $Author: as $ $Date: 2001-07-20 08:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,8 +217,9 @@ class DispatchProvider  :   // interfaces
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
-        css::uno::Reference< css::frame::XDispatchProvider > implts_getOrCreateAppDispatchProvider(                         );
-        css::uno::Reference< css::frame::XDispatch >         implts_getOrCreateDispatchHelper     ( EDispatchHelper eHelper );
+        css::uno::Reference< css::frame::XDispatchProvider > implts_getOrCreateAppDispatchProvider(                                     );
+        css::uno::Reference< css::frame::XDispatch >         implts_getOrCreateDispatchHelper     ( EDispatchHelper         eHelper     ,
+                                                                                                    const css::uno::Any&    aParameters = css::uno::Any() );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
@@ -246,7 +247,6 @@ class DispatchProvider  :   // interfaces
         css::uno::Reference< css::frame::XDispatch >                m_xMenuDispatcher           ;   /// different dispatcher to handle special dispatch calls, protocols or URLs
         css::uno::Reference< css::frame::XDispatch >                m_xHelpAgentDispatcher      ;
         css::uno::Reference< css::frame::XDispatch >                m_xMailToDispatcher         ;
-        css::uno::Reference< css::frame::XDispatch >                m_xCreateDispatcher         ;
         css::uno::Reference< css::frame::XDispatch >                m_xBlankDispatcher          ;
         css::uno::Reference< css::frame::XDispatch >                m_xSelfDispatcher           ;
         css::uno::Reference< css::frame::XDispatch >                m_xPlugInDispatcher         ;
