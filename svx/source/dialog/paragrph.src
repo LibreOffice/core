@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-11 23:08:43 $
+ *  last change: $Author: nf $ $Date: 2000-12-12 09:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1980,10 +1980,10 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ english_us ] = "Options";
         Text[ portuguese ] = "Options";
         Text[ russian ] = "Οΰπΰμεςπϋ";
-        Text[ greek ] = "Options";
+        Text[ greek ] = "Επιλογές";
         Text[ dutch ] = "Options";
         Text[ french ] = "Options";
-        Text[ spanish ] = "Options";
+        Text[ spanish ] = "Opciones";
         Text[ italian ] = "Options";
         Text[ danish ] = "Options";
         Text[ swedish ] = "Options";
@@ -2005,10 +2005,10 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ english_us ] = "Allow hanging punctuation";
         Text[ portuguese ] = "Hanging punctuation";
         Text[ russian ] = "Βθρÿχΰÿ οσνκςσΰφθÿ";
-        Text[ greek ] = "Hanging punctuation";
+        Text[ greek ] = "Επιτρέπονται τα προεξέχοντα σημεία στίξης";
         Text[ dutch ] = "Hanging punctuation";
         Text[ french ] = "Permettre la ponctuation nιgative";
-        Text[ spanish ] = "Hanging punctuation";
+        Text[ spanish ] = "Permitir puntuaciσn libre";
         Text[ italian ] = "Hanging punctuation";
         Text[ danish ] = "Hanging punctuation";
         Text[ swedish ] = "Hanging punctuation";
@@ -2030,10 +2030,10 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ english_us ] = "Apply spacing between Asian, Latin and Complex text";
         Text[ portuguese ] = "Apply distance between asian, latin and complex text";
         Text[ russian ] = "Οπθμενθςό θνςεπβΰλ μεζδσ ΰηθΰςρκθμ, λΰςθνρκθμ θ ρλξζνϋμ ςεκρςξμ";
-        Text[ greek ] = "Apply distance between asian, latin and complex text";
+        Text[ greek ] = "Εφαρμογή απόστασης μεταξύ ασιάτικου, λατινικού και πολύπλοκου κειμένου";
         Text[ dutch ] = "Apply distance between asian, latin and complex text";
         Text[ french ] = "Appliquer l'espacement entre les textes asiatiques, latins et complexes.";
-        Text[ spanish ] = "Apply distance between asian, latin and complex text";
+        Text[ spanish ] = "Aplicar espacio entre texto asiαtico, latino y complejo.";
         Text[ italian ] = "Apply distance between asian, latin and complex text";
         Text[ danish ] = "Apply distance between asian, latin and complex text";
         Text[ swedish ] = "Apply distance between asian, latin and complex text";
@@ -2055,10 +2055,10 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ english_us ] = "Apply list of forbidden characters to the beginning and end of lines.";
         Text[ portuguese ] = "Apply list of forbidden characters at line end and line start";
         Text[ russian ] = "Σχθςϋβΰςό ροθρξκ ηΰοπεωεννϋυ ηνΰκξβ β νΰχΰλε θ κξνφε ρςπξκθ";
-        Text[ greek ] = "Apply list of forbidden characters at line end and line start";
+        Text[ greek ] = "Να ληφθεί υπόψη η λίστα των μη επιτρεπόμενων χαρακτήρων στην αρχή και στο τέλος της γραμμής";
         Text[ dutch ] = "Apply list of forbidden characters at line end and line start";
         Text[ french ] = "Tenir compte de la liste des caractθres interdits en dιbut et en fin de ligne";
-        Text[ spanish ] = "Apply list of forbidden characters at line end and line start";
+        Text[ spanish ] = "Considerar lista de caracteres no aceptables a comienzo y fin de lνnea.";
         Text[ italian ] = "Apply list of forbidden characters at line end and line start";
         Text[ danish ] = "Apply list of forbidden characters at line end and line start";
         Text[ swedish ] = "Apply list of forbidden characters at line end and line start";
@@ -2069,15 +2069,15 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ chinese_simplified ] = "ΉΛΌ°ΠΠΚΧΠΠΔ©½ϋΦΉΚΉΣΓΧΦ·ϋµΔΗεµ¥";
         Text[ chinese_traditional ] = "ΕU¤Ξ¦ζ­Ί¦ζ¥½ΈT¤ξ¨Ο¥Ξ¦r¤ΈªΊ²M³ζ";
         Text[ turkish ] = "Apply list of forbidden characters at line end and line start";
-        Text[ arabic ] = "Apply list of forbidden characters at line end and line start";
+        Text[ arabic ] = "ΚΨΘνή ήΗΖγΙ ΗαΓΝΡέ ΗαγγδζΪΙ Ϊαμ ΘΟΗνΙ ΗαΓΣΨΡ ζδεΗνΚεΗ";
     };
     Text[ english_us ] = "Asian Typography";
     Text[ portuguese ] = "Asian typography";
     Text[ russian ] = "Asian typography";
-    Text[ greek ] = "Asian typography";
+    Text[ greek ] = "Ασιατική τυπογραφία";
     Text[ dutch ] = "Asian typography";
     Text[ french ] = "Typographie asiatique";
-    Text[ spanish ] = "Asian typography";
+    Text[ spanish ] = "Tipografνa asiαtica";
     Text[ italian ] = "Asian typography";
     Text[ danish ] = "Asian typography";
     Text[ swedish ] = "Asian typography";
