@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:44 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ void XMLTextParagraphExport::exportTextFootnote(
             if( sStyle.getLength() )
             {
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                                          sStyle );
+                                          GetExport().EncodeStyleName( sStyle ) );
                 SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
                                           XML_SPAN, sal_False, sal_False );
                 exportTextFootnoteHelper(xFootnote, xText, sText,
@@ -273,10 +273,12 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
         aBuf.append(nNumber);
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_ID,
                                  aBuf.makeStringAndClear());
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NOTE_CLASS,
+                                 GetXMLToken( bIsEndnote ? XML_ENDNOTE
+                                                          : XML_FOOTNOTE ) );
 
         SvXMLElementExport aNote(GetExport(), XML_NAMESPACE_TEXT,
-                                 (bIsEndnote ? XML_ENDNOTE : XML_FOOTNOTE),
-                                 sal_False, sal_False);
+                                 XML_NOTE, sal_False, sal_False);
         {
             // handle label vs. automatic numbering
             OUString sLabel = rFootnote->getLabel();
@@ -288,17 +290,13 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
             // else: automatic numbering -> no attribute
 
             SvXMLElementExport aCite(GetExport(), XML_NAMESPACE_TEXT,
-                                     (bIsEndnote ? XML_ENDNOTE_CITATION :
-                                                   XML_FOOTNOTE_CITATION),
-                                     sal_False, sal_False);
+                                     XML_NOTE_CITATION, sal_False, sal_False);
             GetExport().Characters(sText);
         }
 
         {
             SvXMLElementExport aBody(GetExport(), XML_NAMESPACE_TEXT,
-                                     (bIsEndnote ? XML_ENDNOTE_BODY :
-                                                   XML_FOOTNOTE_BODY),
-                                     sal_False, sal_False);
+                                     XML_NOTE_BODY, sal_False, sal_False);
             exportText(rText, bAutoStyles, bProgress, sal_True );
         }
     }
@@ -329,7 +327,8 @@ void lcl_exportString(
     const OUString& sProperty,
     sal_uInt16 nPrefix,
     enum XMLTokenEnum eElement,
-    sal_Bool bOmitIfEmpty = sal_True)
+    sal_Bool bEncodeName,
+    sal_Bool bOmitIfEmpty)
 {
     DBG_ASSERT( eElement != XML_TOKEN_INVALID, "need element token");
 
@@ -338,6 +337,8 @@ void lcl_exportString(
     aAny >>= sTmp;
     if (!bOmitIfEmpty || (sTmp.getLength() > 0))
     {
+        if( bEncodeName )
+            sTmp = rExport.EncodeStyleName( sTmp );
         rExport.AddAttribute(nPrefix, eElement, sTmp);
     }
 }
@@ -346,30 +347,40 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     const Reference<XPropertySet> & rFootnoteConfig,
     sal_Bool bIsEndnote)
 {
+    GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NOTE_CLASS,
+                             GetXMLToken( bIsEndnote ? XML_ENDNOTE
+                                                     : XML_FOOTNOTE ) );
     // default/paragraph style
-    lcl_exportString( GetExport(), rFootnoteConfig, sParaStyleName,
-                      XML_NAMESPACE_TEXT, XML_DEFAULT_STYLE_NAME, sal_True);
+    lcl_exportString( GetExport(), rFootnoteConfig,
+                      sParaStyleName,
+                      XML_NAMESPACE_TEXT, XML_DEFAULT_STYLE_NAME,
+                      sal_True, sal_True);
 
     // citation style
-    lcl_exportString( GetExport(), rFootnoteConfig, sCharStyleName,
-                      XML_NAMESPACE_TEXT, XML_CITATION_STYLE_NAME, sal_True);
+    lcl_exportString( GetExport(), rFootnoteConfig,
+                      sCharStyleName,
+                      XML_NAMESPACE_TEXT, XML_CITATION_STYLE_NAME,
+                      sal_True, sal_True);
 
     // citation body style
-    lcl_exportString( GetExport(), rFootnoteConfig, sAnchorCharStyleName,
+    lcl_exportString( GetExport(), rFootnoteConfig,
+                      sAnchorCharStyleName,
                       XML_NAMESPACE_TEXT, XML_CITATION_BODY_STYLE_NAME,
-                      sal_True);
+                      sal_True, sal_True);
 
     // page style
-    lcl_exportString( GetExport(), rFootnoteConfig, sPageStyleName,
-                      XML_NAMESPACE_TEXT, XML_MASTER_PAGE_NAME, sal_True);
+    lcl_exportString( GetExport(), rFootnoteConfig,
+                      sPageStyleName,
+                      XML_NAMESPACE_TEXT, XML_MASTER_PAGE_NAME,
+                      sal_True, sal_True );
 
     // prefix
     lcl_exportString( GetExport(), rFootnoteConfig, sPrefix,
-                      XML_NAMESPACE_STYLE, XML_NUM_PREFIX, sal_True);
+                      XML_NAMESPACE_STYLE, XML_NUM_PREFIX, sal_False, sal_True);
 
     // suffix
     lcl_exportString( GetExport(), rFootnoteConfig, sSuffix,
-                      XML_NAMESPACE_STYLE, XML_NUM_SUFFIX, sal_True);
+                      XML_NAMESPACE_STYLE, XML_NUM_SUFFIX, sal_False, sal_True);
 
 
 
@@ -432,7 +443,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     // element
     SvXMLElementExport aFootnoteConfigElement(
         GetExport(), XML_NAMESPACE_TEXT,
-        ( bIsEndnote ? XML_ENDNOTES_CONFIGURATION:XML_FOOTNOTES_CONFIGURATION),
+        XML_NOTES_CONFIGURATION,
         sal_True, sal_True);
 
     // two element for footnote content
