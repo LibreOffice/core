@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:40:15 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1543,21 +1543,21 @@ public:
 
        FALSE: do not propagate
     */
-    const SwTable* InsertTable( const SwPosition& rPos, sal_uInt16 nRows,
+    const SwTable* InsertTable( const SwInsertTableOptions& rInsTblOpts,  // HEADLINE_NO_BORDER
+                                const SwPosition& rPos, sal_uInt16 nRows,
                                 sal_uInt16 nCols, SwHoriOrient eAdjust,
-                                sal_uInt16 nInsert = HEADLINE_NO_BORDER,
                                 const SwTableAutoFmt* pTAFmt = 0,
                                 const SvUShorts* pColArr = 0,
                                 BOOL bCalledFromShell = FALSE );
 
-        // steht der Index in einer Tabelle, dann returne den TableNode sonst 0
+    // steht der Index in einer Tabelle, dann returne den TableNode sonst 0
                  SwTableNode* IsIdxInTbl( const SwNodeIndex& rIdx );
     inline const SwTableNode* IsIdxInTbl( const SwNodeIndex& rIdx ) const;
 
         // erzeuge aus dem makierten Bereich eine ausgeglichene Tabelle
-    const SwTable* TextToTable( const SwPaM& rRange, sal_Unicode cCh,
+    const SwTable* TextToTable( const SwInsertTableOptions& rInsTblOpts, // HEADLINE_NO_BORDER,
+                                const SwPaM& rRange, sal_Unicode cCh,
                                 SwHoriOrient eAdjust,
-                                sal_uInt16 nInsert = HEADLINE_NO_BORDER,
                                 const SwTableAutoFmt* = 0 );
         // erzeuge aus der Tabelle wieder normalen Text
     sal_Bool TableToText( const SwTableNode* pTblNd, sal_Unicode cCh );
@@ -1599,7 +1599,8 @@ public:
     void SetTabCols(SwTable& rTab, const SwTabCols &rNew, SwTabCols &rOld,
                                     const SwTableBox *pStart, sal_Bool bCurRowOnly);
 
-    void SetHeadlineRepeat( SwTable &rTable, sal_Bool bSet );
+    void SetRowsToRepeat( SwTable &rTable, USHORT nSet );
+
         // AutoFormat fuer die Tabelle/TabellenSelection
     sal_Bool SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNew );
         // Erfrage wie attributiert ist
