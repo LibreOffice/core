@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 11:51:34 $
+ *  last change: $Author: hr $ $Date: 2001-09-13 10:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1224,7 +1224,8 @@ namespace dbaccess
         const ::rtl::OUString* pTableBegin  = aTableNames.getConstArray();
         const ::rtl::OUString* pTableEnd    = pTableBegin + aTableNames.getLength();
 
-        ::comphelper::UStringMixEqual bCase(static_cast< ::comphelper::UStringMixLess*>(&_rColumnNames.key_comp())->isCaseSensitive());
+        ::comphelper::UStringMixLess aTmp(_rColumnNames.key_comp());
+        ::comphelper::UStringMixEqual bCase(static_cast< ::comphelper::UStringMixLess*>(&aTmp)->isCaseSensitive());
 
         for(sal_Int32 nPos = 1;pSelBegin != pSelEnd;++pSelBegin,++nPos)
         {
@@ -1253,6 +1254,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.24  2001/08/14 11:51:34  oj
+    #91006# check index values as well
+
     Revision 1.23  2001/07/24 13:25:25  oj
     #89430# move ORowSetValue into dbtools
 
