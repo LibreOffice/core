@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:33:24 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 07:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                         SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL) ) )
                 {
                     SfxAllItemSet aSet( pShell->GetPool() );
-                    TransformParameters( GetId(), lNewArgs, aSet );
+                    TransformParameters( GetId(), lNewArgs, aSet, pSlot );
                     if ( aSet.Count() )
                     {
                         // execute with arguments - call directly
