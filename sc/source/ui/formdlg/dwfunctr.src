@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:01:25 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 15:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ DockingWindow FID_FUNCTION_BOX
     ImageButton IMB_INSERT
     {
         Pos = MAP_APPFONT ( 3 , 4 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Size = MAP_APPFONT ( 13 , 13 ) ;
         TabStop = TRUE ;
         ButtonImage = Image
         {
