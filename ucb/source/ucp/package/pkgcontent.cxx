@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kso $ $Date: 2001-10-11 14:18:56 $
+ *  last change: $Author: mtg $ $Date: 2001-10-18 14:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1388,7 +1388,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             // (all non-root folders of a package have the same encryption key).
             if ( m_aUri.isRootFolder() || m_aProps.bIsDocument )
             {
-                rtl::OUString aNewValue;
+                uno::Sequence < sal_Int8 > aNewValue;
                 if ( rValue.Value >>= aNewValue )
                 {
                     if ( aNewValue != m_aProps.aEncryptionKey )

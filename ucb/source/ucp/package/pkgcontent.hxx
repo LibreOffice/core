@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kso $ $Date: 2001-10-11 14:18:56 $
+ *  last change: $Author: mtg $ $Date: 2001-10-18 14:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ struct ContentProperties
     sal_Bool         bIsDocument;           // IsDocument
     sal_Bool         bIsFolder;             // IsFolder
     ::rtl::OUString  aMediaType;            // MediaType
-    ::rtl::OUString  aEncryptionKey;        // EncryptionKey
+    com::sun::star::uno::Sequence < sal_Int8 >   aEncryptionKey;        // EncryptionKey
     sal_Int64        nSize;                 // Size
     sal_Int32        nSegmentSize;          // SegmentSize
     sal_Bool         bCompressed;           // Compressed
