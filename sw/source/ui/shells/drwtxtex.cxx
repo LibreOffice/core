@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-21 11:22:53 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,9 +216,9 @@
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
 #endif
-#ifndef _CHRDLG_HXX
-#include <chrdlg.hxx>
-#endif
+//CHINA001 #ifndef _CHRDLG_HXX
+//CHINA001 #include <chrdlg.hxx>
+//CHINA001 #endif
 #ifndef _PARDLG_HXX
 #include <pardlg.hxx>
 #endif
@@ -248,6 +248,8 @@
 #include <shells.hrc>
 #endif
 
+#include "swabstdlg.hxx" //CHINA001
+#include "chrdlg.hrc" //CHINA001
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
@@ -379,7 +381,12 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aDlgAttr.Put( aEditAttr );
                 aDlgAttr.Put( SvxKerningItem() );
 
-                SwCharDlg* pDlg = new SwCharDlg(pView->GetWindow(), *pView, aDlgAttr, 0, sal_True);
+                //CHINA001 SwCharDlg* pDlg = new SwCharDlg(pView->GetWindow(), *pView, aDlgAttr, 0, sal_True);
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+                SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( pView->GetWindow(), *pView, aDlgAttr,ResId( DLG_CHAR ),0, sal_True );
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 USHORT nRet = pDlg->Execute();
                 if(RET_OK == nRet )
                 {
@@ -424,8 +431,13 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aDlgAttr.Put( SvxWidowsItem() );
                 aDlgAttr.Put( SvxOrphansItem() );
 
-                SwParaDlg* pDlg = new SwParaDlg(GetView().GetWindow(), GetView(), aDlgAttr, DLG_STD, 0, sal_True);
+                //CHINA001 SwParaDlg* pDlg = new SwParaDlg(GetView().GetWindow(), GetView(), aDlgAttr, DLG_STD, 0, sal_True);
 
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+                SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr,DLG_STD,ResId( DLG_PARA ), 0, sal_True );
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 USHORT nRet = pDlg->Execute();
                 if(RET_OK == nRet)
                 {
