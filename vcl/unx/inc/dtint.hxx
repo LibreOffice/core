@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-20 11:05:08 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ inline void* _LoadSymbol( void* pLibrary, char* pSymbolname )
     void *pRet = dlsym( pLibrary, pSymbolname );
     if( ! pRet )
     {
-        fprintf( stderr, "Could not load symbol %s: %s\n",
+        std::fprintf( stderr, "Could not load symbol %s: %s\n",
                  pSymbolname, dlerror() );
         bSymbolLoadFailed = TRUE;
     }
@@ -224,7 +224,7 @@ inline void* _LoadLibrary( char* pLibname )
     if( ! pRet )
     {
 #ifdef DEBUG
-        fprintf( stderr, "%s could not be opened: %s\n",
+        std::fprintf( stderr, "%s could not be opened: %s\n",
                  pLibname, dlerror() );
 #endif
         bSymbolLoadFailed = TRUE;
