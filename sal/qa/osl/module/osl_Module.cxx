@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Module.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $  $Date: 2003-11-18 16:39:02 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@ using namespace rtl;
 */
 inline void printBool( sal_Bool bOk )
 {
-    printf( "#printBool# " );
-    ( sal_True == bOk ) ? printf( "TRUE!\n" ): printf( "FALSE!\n" );
+    t_print("#printBool# " );
+    ( sal_True == bOk ) ? t_print("TRUE!\n" ): t_print("FALSE!\n" );
 }
 
 /** print a UNI_CODE String.
@@ -89,9 +89,9 @@ inline void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    printf( "#printUString_u# " );
+    t_print("#printUString_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    printf( "%s\n", aString.getStr( ) );
+    t_print("%s\n", aString.getStr( ) );
 }
 
 /** get dll file URL.
@@ -118,9 +118,9 @@ inline void printFileName( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    printf( "#printFileName_u# " );
+    t_print("#printFileName_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    printf( "%s\n", aString.getStr( ) );
+    t_print("%s\n", aString.getStr( ) );
 }
 
 inline sal_Bool isURL( const ::rtl::OUString pathname )
@@ -213,7 +213,7 @@ namespace osl_Module
     public:
         static void myFunc()
         {
-            printf("#Sun Microsystem\n");
+            t_print("#Sun Microsystem\n");
         };
     };
 
@@ -294,6 +294,9 @@ namespace osl_Module
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: load an external library, get its function address and get its URL.",
                                     sal_True == bRes && 0 < aFileURL.lastIndexOf('/') && aFileURL.equalsIgnoreAsciiCase( getDllURL( ) ) );
         }
+
+        /* tester comments: another case is getFunctionSymbol_001*/
+
         CPPUNIT_TEST_SUITE( getUrlFromAddress );
         CPPUNIT_TEST( getUrlFromAddress_001 );
         CPPUNIT_TEST( getUrlFromAddress_002 );
@@ -458,7 +461,7 @@ namespace osl_Module
 
 
     /** testing the methods:
-        void* SAL_CALL getSymbol( const ::rtl::OUString& strSymbolName)
+        operator oslModule() const
     */
     class optr_oslModule : public CppUnit::TestFixture
     {
@@ -501,6 +504,32 @@ namespace osl_Module
         CPPUNIT_TEST_SUITE_END( );
     }; // class optr_oslModule
 
+    /** testing the methods:
+        oslGenericFunction SAL_CALL getFunctionSymbol( const ::rtl::OUString& ustrFunctionSymbolName )
+    */
+    class getFunctionSymbol : public CppUnit::TestFixture
+    {
+    public:
+        sal_Bool bRes, bRes1;
+
+        void getFunctionSymbol_001( )
+        {
+            ::osl::Module aMod( getDllURL( ) );
+            oslGenericFunction oslFunc = aMod.getFunctionSymbol( rtl::OUString::createFromAscii( "firstfunc" ) );
+            ::rtl::OUString aLibraryURL;
+            bRes = ::osl::Module::getUrlFromAddress( oslFunc, aLibraryURL);
+            aMod.unload();
+            printFileName( aLibraryURL );
+
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: load a dll and get its function addr and get its URL.",
+                 sal_True == bRes && aLibraryURL.equalsIgnoreAsciiCase( getDllURL() ) );
+        }
+
+        CPPUNIT_TEST_SUITE( getFunctionSymbol );
+        CPPUNIT_TEST( getFunctionSymbol_001 );
+        //CPPUNIT_TEST( getFunctionSymbol_002 );
+        CPPUNIT_TEST_SUITE_END( );
+    }; // class getFunctionSymbol
 
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::ctors, "osl_Module");
@@ -510,10 +539,10 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::unload, "osl_Module");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::is, "osl_Module");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::getSymbol, "osl_Module");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::optr_oslModule, "osl_Module");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::getFunctionSymbol, "osl_Module");
 // -----------------------------------------------------------------------------
 
 } // namespace osl_Module
-
 
 // -----------------------------------------------------------------------------
 
