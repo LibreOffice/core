@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-22 07:08:22 $
+ *  last change: $Author: mt $ $Date: 2004-07-22 09:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,25 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
     ,maLowRB            ( this, ResId( RB_LOW ) )
 {
     FreeResource();
+
+    // Don't use the default v-center here...
+/*
+    WinBits nStyle = maVeryHighRB.GetStyle();
+    nStyle |= WB_TOP;
+    maVeryHighRB.SetStyle( nStyle );
+
+    nStyle = maHighRB.GetStyle();
+    nStyle |= WB_TOP;
+    maHighRB.SetStyle( nStyle );
+
+    nStyle = maMediumRB.GetStyle();
+    nStyle |= WB_TOP;
+    maMediumRB.SetStyle( nStyle );
+
+    nStyle = maLowRB.GetStyle();
+    nStyle |= WB_TOP;
+    maLowRB.SetStyle( nStyle );
+*/
 }
 
 void MacroSecurityLevelTP::ActivatePage()

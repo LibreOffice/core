@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-20 05:32:07 $
+ *  last change: $Author: mt $ $Date: 2004-07-22 09:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@
 #define SL_COL_0                        TD_SP_INNERBORDER_LEFT
 #define SL_COL_1                        (SL_COL_0+RSC_SP_FLGR_SPACE_X)
 #define SL_COL_3                        (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)
-#define SL_COL_2                        ((SL_COL_3-SL_COL_1)*80/100)
+#define SL_COL_2                        ((SL_COL_3-SL_COL_1)*90/100)
 #define SL_ROW_0                        RSC_SP_TBPG_INNERBORDER_TOP
 #define SL_ROW_1                        (SL_ROW_0+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
 #define SL_ROW_2                        (SL_ROW_1+SL_RB_DIST_Y)

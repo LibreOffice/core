@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-16 06:27:47 $
+ *  last change: $Author: mt $ $Date: 2004-07-22 09:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,38 +131,39 @@ TabPage RID_XMLSECTP_SECLEVEL
         Size = MAP_APPFONT( SL_COL_3-SL_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
         Text = "Sicherheitseinstufung";
         Text [ en-US ] = "Security Level";
+        Hide = TRUE;
     };
     RadioButton RB_VERYHIGH
     {
         Pos = MAP_APPFONT( SL_COL_1, SL_ROW_1 );
-        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, 2*RSC_CD_RADIOBUTTON_HEIGHT );
+        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, 3*RSC_CD_RADIOBUTTON_HEIGHT );
         WordBreak = TRUE;
-        Text = "Sehr hoch. Nur Makros aus vertrauenswürdigen Dateiquellen werden ausgeführt. Alle anderen Makros, unabhängig ob signiert oder nicht, werden nicht ausgeführt.";
-        Text [ en-US ] = "Very high. Only macros from trusted file locations are allowed to run. All other macros, regardless if signed or not, are disabled.";
+        Text = "Sehr hoch.\nNur Makros aus vertrauenswürdigen Dateiquellen werden ausgeführt. Alle anderen Makros, unabhängig ob signiert oder nicht, werden nicht ausgeführt.";
+        Text [ en-US ] = "Very high.\nOnly macros from trusted file locations are allowed to run. All other macros, regardless if signed or not, are disabled.";
     };
     RadioButton RB_HIGH
     {
         Pos = MAP_APPFONT( SL_COL_1, SL_ROW_2 );
-        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, 2*RSC_CD_RADIOBUTTON_HEIGHT );
+        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, 3*RSC_CD_RADIOBUTTON_HEIGHT );
         WordBreak = TRUE;
-        Text = "Hoch. Nur signierte Makros aus vertrauenswürdigen Quellen werden ausgeführt. Nicht signierte Makros werden nicht ausgeführt.";
-        Text [ en-US ] = "High. Only signed macros from trusted sources are allowed to run. Unsigned macros are disabled.";
+        Text = "Hoch.\nNur signierte Makros aus vertrauenswürdigen Quellen werden ausgeführt. Nicht signierte Makros werden nicht ausgeführt.";
+        Text [ en-US ] = "High.\nOnly signed macros from trusted sources are allowed to run. Unsigned macros are disabled.";
     };
     RadioButton RB_MEDIUM
     {
         Pos = MAP_APPFONT( SL_COL_1, SL_ROW_3 );
-        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, 2*RSC_CD_RADIOBUTTON_HEIGHT );
+        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, 3*RSC_CD_RADIOBUTTON_HEIGHT );
         WordBreak = TRUE;
-        Text = "Mittel. Manuelles Akzeptieren vor dem Ausführen von nicht vertrauenswürdigen Makros.";
-        Text [ en-US ] = "Medium. Manual confirmation before executing macros from untrusted sources.";
+        Text = "Mittel.\nManuelles Akzeptieren vor dem Ausführen von nicht vertrauenswürdigen Makros.";
+        Text [ en-US ] = "Medium.\nManual confirmation before executing macros from untrusted sources.";
     };
     RadioButton RB_LOW
     {
         Pos = MAP_APPFONT( SL_COL_1, SL_ROW_4 );
         Size = MAP_APPFONT( SL_COL_2-SL_COL_1, 3*RSC_CD_RADIOBUTTON_HEIGHT );
         WordBreak = TRUE;
-        Text = "Niedrig (nicht empfehlenswert). Alle Makros werden ohne Nachfrage ausgeführt. Diese Einstellung sollte nur benutzt werden, wenn sichergestellt werden kann, dass nur sichere Dokumente geladen werden.";
-        Text [ en-US ] = "Low (not recommended). Macros are being executed without any confirmation. Use this setting only if it is guaranteed that all documents beeing opened are save.";
+        Text = "Niedrig (nicht empfehlenswert).\nAlle Makros werden ohne Nachfrage ausgeführt. Diese Einstellung sollte nur benutzt werden, wenn sichergestellt werden kann, dass nur sichere Dokumente geladen werden.";
+        Text [ en-US ] = "Low (not recommended).\nMacros are being executed without any confirmation. Use this setting only if it is guaranteed that all documents beeing opened are save.";
     };
 };
 
