@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-31 10:22:56 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 21:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,7 +933,7 @@ TabDialog SID_DOCINFO
     Text [ portuguese ] = "Propriedades de " ;
     Text[ chinese_simplified ] = "ÊôĞÔ£º ";
     Text[ russian ] = "Ñâîéñòâà ";
-    Text[ polish ] = "W³a?ciwo?ci   ";
+    Text[ polish ] = "W³aœciwoœci   ";
     Text[ japanese ] = "ÌßÛÊßÃ¨ ";
     Text[ chinese_traditional ] = "Äİ©Ê¡G ";
     Text[ greek ] = "Éäéüôçôåò ôïõ ";
@@ -1060,4 +1060,5 @@ TabDialog SID_DOCINFO
         };
     };
 };
+
 
