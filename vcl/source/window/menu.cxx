@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-03 17:13:26 $
+ *  last change: $Author: ssa $ $Date: 2002-05-16 11:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2252,7 +2252,7 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     }
     else if ( pSVData->maAppData.mbAutoMnemonics && !( nMenuFlags & MENU_FLAG_NOAUTOMNEMONICS ) )
     {
-        ImplMnemonicGenerator aMnemonicGenerator;
+        MnemonicGenerator aMnemonicGenerator;
         ULONG n;
         for ( n = 0; n < pItemList->Count(); n++ )
             aMnemonicGenerator.RegisterMnemonic( pItemList->GetDataFromPos(n)->aText );

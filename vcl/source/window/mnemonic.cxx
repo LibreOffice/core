@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-26 11:58:46 $
+ *  last change: $Author: ssa $ $Date: 2002-05-16 11:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,14 +77,14 @@ using namespace ::com::sun::star;
 
 // =======================================================================
 
-ImplMnemonicGenerator::ImplMnemonicGenerator()
+MnemonicGenerator::MnemonicGenerator()
 {
     memset( maMnemonics, 1, sizeof( maMnemonics ) );
 }
 
 // -----------------------------------------------------------------------
 
-USHORT ImplMnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
+USHORT MnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
 {
     static USHORT const aImplMnemonicRangeTab[MNEMONIC_RANGES*2] =
     {
@@ -109,7 +109,7 @@ USHORT ImplMnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
 
 // -----------------------------------------------------------------------
 
-sal_Unicode ImplMnemonicGenerator::ImplFindMnemonic( const XubString& rKey )
+sal_Unicode MnemonicGenerator::ImplFindMnemonic( const XubString& rKey )
 {
     xub_StrLen nIndex = 0;
     while ( (nIndex = rKey.Search( MNEMONIC_CHAR, nIndex )) != STRING_NOTFOUND )
@@ -125,7 +125,7 @@ sal_Unicode ImplMnemonicGenerator::ImplFindMnemonic( const XubString& rKey )
 
 // -----------------------------------------------------------------------
 
-void ImplMnemonicGenerator::RegisterMnemonic( const XubString& rKey )
+void MnemonicGenerator::RegisterMnemonic( const XubString& rKey )
 {
     const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
@@ -164,7 +164,7 @@ void ImplMnemonicGenerator::RegisterMnemonic( const XubString& rKey )
 
 // -----------------------------------------------------------------------
 
-BOOL ImplMnemonicGenerator::CreateMnemonic( XubString& rKey )
+BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
 {
     if ( !rKey.Len() || ImplFindMnemonic( rKey ) )
         return FALSE;
@@ -340,7 +340,7 @@ BOOL ImplMnemonicGenerator::CreateMnemonic( XubString& rKey )
 
 // -----------------------------------------------------------------------
 
-uno::Reference< i18n::XCharacterClassification > ImplMnemonicGenerator::GetCharClass()
+uno::Reference< i18n::XCharacterClassification > MnemonicGenerator::GetCharClass()
 {
     if ( !xCharClass.is() )
         xCharClass = vcl::unohelper::CreateCharacterClassification();

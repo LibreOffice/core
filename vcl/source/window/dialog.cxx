@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ssa $ $Date: 2001-12-10 13:36:20 $
+ *  last change: $Author: ssa $ $Date: 2002-05-16 11:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ static BOOL ImplIsMnemonicCtrl( Window* pWindow )
 
 void ImplWindowAutoMnemonic( Window* pWindow )
 {
-    ImplMnemonicGenerator   aMnemonicGenerator;
+    MnemonicGenerator   aMnemonicGenerator;
     Window*                 pGetChild;
     Window*                 pChild;
 
@@ -322,6 +322,7 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
 
     // Now, all Dialogs are per default system windows !!!
     nStyle |= WB_SYSTEMWINDOW;
+
 
     if ( !pParent )
     {
