@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:59:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ BOOL FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
             pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
             bReturn = TRUE;
         }
-        else if ( pView->HasMarkedObj() )
+        else if ( pView->AreObjectsMarked() )
         {
             pView->UnmarkAll();
             bReturn = TRUE;
@@ -263,7 +263,7 @@ BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
         USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
         SdrHdl* pHdl = pView->HitHandle(aPnt, *pWindow);
 
-        if ( !pView->HasMarkedObj() )
+        if ( !pView->AreObjectsMarked() )
         {
             SdrObject* pObj;
             SdrPageView* pPV;
@@ -285,11 +285,11 @@ BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
             * Toggle zw. Selektion und Rotation
             **************************************************************/
             SdrObject* pSingleObj = NULL;
-            ULONG nMarkCount = pView->GetMarkList().GetMarkCount();
+            ULONG nMarkCount = pView->GetMarkedObjectList().GetMarkCount();
 
             if (nMarkCount==1)
             {
-                pSingleObj = pView->GetMarkList().GetMark(0)->GetObj();
+                pSingleObj = pView->GetMarkedObjectList().GetMark(0)->GetObj();
             }
 
             if (pView->GetDragMode() == SDRDRAG_MOVE && pView->IsRotateAllowed() &&
