@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:42:07 $
+ *  last change: $Author: fs $ $Date: 2001-07-16 14:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,6 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_bErrorOccured(false)
     ,m_sStateSaveRecord(ModuleRes(RID_STR_SAVE_CURRENT_RECORD))
     ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
-    ,m_aAsynClose(LINK(this, SbaXDataBrowserController, OnAsyncClose))
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
     ,m_pFormControllerImpl(NULL)
 {
@@ -1158,7 +1157,6 @@ sal_Bool SbaXDataBrowserController::suspend(sal_Bool bSuspend) throw( RuntimeExc
     }
     DBG_ASSERT(m_nPendingLoadFinished == 0, "SbaXDataBrowserController::suspend : there shouldn't be a pending load !");
 
-    m_aAsynClose.CancelCall();
     m_aAsyncGetCellFocus.CancelCall();
     m_aAsyncInvalidateAll.CancelCall();
 
@@ -2419,10 +2417,6 @@ void SbaXDataBrowserController::FormLoaded(sal_Bool /*bWasSynch*/)
         m_aInvalidateClipboard.SetTimeoutHdl(LINK(this, SbaXDataBrowserController, OnInvalidateClipboard));
 
         m_aAsyncGetCellFocus.Call();
-    }
-    else
-    {
-        m_aAsynClose.Call();
     }
 }
 //------------------------------------------------------------------------------

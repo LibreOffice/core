@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-21 17:49:24 $
+ *  last change: $Author: fs $ $Date: 2001-07-16 14:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,6 @@ namespace dbaui
         sal_uInt32              m_nPendingLoadFinished; // the event used to tell ourself that the load is finished
         sal_Bool                m_bClosingKillOpen;     // are we killing the load thread because we are to be suspended ?
 
-        OAsyncronousLink        m_aAsynClose;
         OAsyncronousLink        m_aAsyncGetCellFocus;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        m_xParser;              // for sorting 'n filtering
