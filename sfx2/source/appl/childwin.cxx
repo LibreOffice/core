@@ -2,9 +2,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-19 11:35:46 $
+ *  last change: $Author: mba $ $Date: 2001-10-12 16:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 #include "appdata.hxx"
 #include <workwin.hxx>
 
-static const sal_uInt16 nVersion = 1;
+static const sal_uInt16 nVersion = 2;
 
 DBG_NAME(SfxChildWindow)
 
@@ -254,9 +254,14 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     }
 
     SvtViewOptions aWinOpt( E_WINDOW, String::CreateFromInt32( GetType() ) );
-    aWinOpt.SetPosition( rInfo.aPos.X(), rInfo.aPos.Y() );
-    aWinOpt.SetSize( rInfo.aSize.Width(), rInfo.aSize.Height() );
-    aWinOpt.SetUserData( aWinData );
+//    aWinOpt.SetPosition( rInfo.aPos.X(), rInfo.aPos.Y() );
+//    aWinOpt.SetSize( rInfo.aSize.Width(), rInfo.aSize.Height() );
+    aWinOpt.SetWindowState( String( rInfo.aWinState, RTL_TEXTENCODING_UTF8 ) );
+
+    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
+    aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Data") );
+    aSeq[0].Value <<= ::rtl::OUString( aWinData );
+    aWinOpt.SetUserData( aSeq );
 
     pImp->pFact->aInfo = rInfo;
 }
@@ -285,6 +290,8 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
     SfxChildWinInfo aInfo;
     aInfo.aPos  = pWindow->GetPosPixel();
     aInfo.aSize = pWindow->GetSizePixel();
+    if ( pWindow->IsSystemWindow() )
+        aInfo.aWinState = ((SystemWindow*)pWindow)->GetWindowState();
     aInfo.bVisible = pImp->bVisible;
     aInfo.nFlags = 0;
     return aInfo;
@@ -296,12 +303,54 @@ sal_uInt16 SfxChildWindow::GetPosition()
     return pImp->pFact->nPos;
 }
 
+static void ImplWindowStateFromStr( Point rPos, Size rSize, const ByteString& rStr )
+{
+    ULONG       nValidMask  = 0;
+    xub_StrLen  nIndex      = 0;
+    ByteString  aTokenStr;
+
+    aTokenStr = rStr.GetToken( 0, ',', nIndex );
+    if ( aTokenStr.Len() )
+    {
+        rPos.X() = aTokenStr.ToInt32();
+        nValidMask |= WINDOWSTATE_MASK_X;
+    }
+
+    aTokenStr = rStr.GetToken( 0, ',', nIndex );
+    if ( aTokenStr.Len() )
+    {
+        rPos.Y() = aTokenStr.ToInt32();
+        nValidMask |= WINDOWSTATE_MASK_Y;
+    }
+
+    aTokenStr = rStr.GetToken( 0, ',', nIndex );
+    if ( aTokenStr.Len() )
+    {
+        rSize.Width() = aTokenStr.ToInt32();
+        nValidMask |= WINDOWSTATE_MASK_WIDTH;
+    }
+
+    aTokenStr = rStr.GetToken( 0, ';', nIndex );
+    if ( aTokenStr.Len() )
+    {
+        rSize.Height() = aTokenStr.ToInt32();
+        nValidMask |= WINDOWSTATE_MASK_HEIGHT;
+    }
+}
+
 //-------------------------------------------------------------------------
 void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWinInfo& rInfo )
 {
     // load configuration
     SvtViewOptions aWinOpt( E_WINDOW, String::CreateFromInt32( nId ) );
-    String aWinData = aWinOpt.GetUserData();
+    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt.GetUserData();
+    ::rtl::OUString aTmp;
+    if ( aSeq.getLength() )
+        aSeq[0].Value >>= aTmp;
+
+    String aWinData( aTmp );
+    String aWinState = aWinOpt.GetWindowState();
+    ImplWindowStateFromStr( rInfo.aPos, rInfo.aSize, ByteString( aWinState, RTL_TEXTENCODING_UTF8 ) );
 
     if ( aWinData.Len() )
     {
@@ -316,11 +365,14 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
         // Version lesen
         char cToken = ',';
         sal_uInt16 nPos = aWinData.Search( cToken );
-        sal_uInt16 nVersion = (sal_uInt16)aWinData.Copy( 0, nPos + 1 ).ToInt32();
+        sal_uInt16 nActVersion = (sal_uInt16)aWinData.Copy( 0, nPos + 1 ).ToInt32();
+        if ( nActVersion != nVersion )
+            return;
+
         aWinData.Erase(0,nPos+1);
 
-        aWinOpt.GetPosition( rInfo.aPos.X(), rInfo.aPos.Y() );
-        aWinOpt.GetSize( rInfo.aSize.Width(), rInfo.aSize.Height() );
+        //aWinOpt.GetPosition( rInfo.aPos.X(), rInfo.aPos.Y() );
+        //aWinOpt.GetSize( rInfo.aSize.Width(), rInfo.aSize.Height() );
 
         // Sichtbarkeit laden: ist als ein char codiert
         rInfo.bVisible = (aWinData.Copy(0,1) == 0x0056); // 'V' = 56h
