@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:12:43 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,6 @@
 #endif
 #ifndef SD_PRESENTATION_VIEW_SHELL_HXX
 #include "PresentationViewShell.hxx"
-#endif
-#ifndef SD_PREVIEW_VIEW_SHELL_HXX
-#include "PreviewViewShell.hxx"
 #endif
 #include "sdpage.hxx"
 #include "unolayer.hxx"
@@ -375,7 +372,6 @@ OUString SAL_CALL SdUnoDrawView::getImplementationName (void)
 
 static sal_Char pImplSdUnoDrawViewService[sizeof("com.sun.star.drawing.DrawingDocumentDrawView")] = "com.sun.star.drawing.DrawingDocumentDrawView";
 static sal_Char pImplSdUnoSlideViewService[sizeof("com.sun.star.presentation.SlidesView")] = "com.sun.star.presentation.SlidesView";
-static sal_Char pImplSdUnoPreviewViewService[sizeof("com.sun.star.presentation.PreviewView")] = "com.sun.star.presentation.PreviewView";
 static sal_Char pImplSdUnoNotesViewService[sizeof("com.sun.star.presentation.NotesView")] = "com.sun.star.presentation.NotesView";
 static sal_Char pImplSdUnoHandoutViewService[sizeof("com.sun.star.presentation.HandoutView")] = "com.sun.star.presentation.HandoutView";
 
@@ -389,10 +385,6 @@ sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName )
 
     switch (meViewShellType)
     {
-        case ViewShell::ST_PREVIEW:
-            bServiceIsSupported = ServiceName.equalsAscii(pImplSdUnoPreviewViewService);
-            break;
-
         case ViewShell::ST_NOTES:
             bServiceIsSupported = ServiceName.equalsAscii(pImplSdUnoNotesViewService)
                 || ServiceName.equalsAscii( pImplSdUnoDrawViewService );
@@ -431,11 +423,6 @@ Sequence<OUString> SAL_CALL SdUnoDrawView::getSupportedServiceNames (void)
     int nIndex = 0;
     switch (meViewShellType)
     {
-        case ViewShell::ST_PREVIEW:
-            pServices[nIndex++] = OUString(
-                RTL_CONSTASCII_USTRINGPARAM(pImplSdUnoPreviewViewService));
-        break;
-
         case ViewShell::ST_NOTES:
             pServices[nIndex++] = OUString(
                 RTL_CONSTASCII_USTRINGPARAM(pImplSdUnoNotesViewService));
