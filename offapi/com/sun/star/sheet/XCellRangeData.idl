@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCellRangeData.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: tl $ $Date: 2002-04-29 10:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 //=============================================================================
 
 /** allows to get and set an array of data from a cell range.
+ *
+ * <p>The outer sequence represents the rows and the inner sequence
+ * the columns of the array.</p>
  */
 
 interface XCellRangeData: com::sun::star::uno::XInterface
@@ -90,6 +93,10 @@ interface XCellRangeData: com::sun::star::uno::XInterface
         the cell range.
         Each element of the array must contain a <atom>double</atom>
         or a <atom>string</atom>.</p>
+
+        <p>If the size of the array is different from the current
+        size a <type scope="com::sun::star::uno">RuntimeException</type>
+        is thrown.</p>
      */
     void setDataArray( [in] sequence< sequence< any > > aArray );
 };
