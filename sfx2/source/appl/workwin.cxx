@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *  last change: $Author: mba $ $Date: 2000-10-25 13:18:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,6 +371,19 @@ SfxWorkWindow::~SfxWorkWindow()
 {
     DBG_DTOR(SfxWorkWindow, 0);
 
+    // SplitWindows l"oschen
+    for ( USHORT n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
+    {
+        SfxSplitWindow *p = pSplit[n];
+        if (p->GetWindowCount())
+            ReleaseChild_Impl(*p);
+        delete p;
+    }
+
+    // ObjectBars werden alle auf einmal released, da sie einen
+    // festen zusammenh"angenden  Bereich im Array pChilds belegen
+    pChilds->Remove(0, SFX_OBJECTBAR_MAX);
+
     // Hilfsstruktur f"ur Child-Windows l"oschen
     DBG_ASSERT( pChilds->Count() == 0, "dangling childs" );
     delete pChilds;
@@ -444,15 +457,6 @@ void SfxWorkWindow::DeleteControllers_Impl()
 
     pChildWins->Remove((USHORT)0, nCount);
 
-    // SplitWindows l"oschen
-    for ( n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
-    {
-        SfxSplitWindow *p = pSplit[n];
-        if (p->GetWindowCount())
-            ReleaseChild_Impl(*p);
-        delete p;
-    }
-
     // StatusBar l"oschen
     if ( aStatBar.pStatusBar )
     {
@@ -478,9 +482,6 @@ void SfxWorkWindow::DeleteControllers_Impl()
         }
     }
 
-    // ObjectBars werden alle auf einmal released, da sie einen
-    // festen zusammenh"angenden  Bereich im Array pChilds belegen
-    pChilds->Remove(0, SFX_OBJECTBAR_MAX);
     nChilds = 0;
 }
 
@@ -1037,6 +1038,9 @@ Window* SfxWorkWindow::GetObjectBar_Impl( USHORT nPos, ResId& rResId )
 //------------------------------------------------------------------------
 void SfxFrameWorkWin_Impl::UpdateObjectBars_Impl()
 {
+    if ( pFrame->IsClosing_Impl() )
+        return;
+
     SfxWorkWindow *pWork = pParent;
     while ( pWork )
     {
