@@ -51,7 +51,7 @@
    Contributor(s): _______________________________________
    
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:office="http://openoffice.org/2000/office" xmlns:meta="http://openoffice.org/2000/meta" xmlns:dc="http://purl.org/dc/elements/1.1/" exclude-result-prefixes="dc meta office">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:office="http://openoffice.org/2000/office" xmlns:table="http://openoffice.org/2000/table" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:dc="http://purl.org/dc/elements/1.1/"   xmlns:config="http://openoffice.org/2001/config"  xmlns:draw="http://openoffice.org/2000/drawing" xmlns:svg="http://www.w3.org/2000/svg"  xmlns:v="urn:schemas-microsoft-com:vml"  xmlns:w10="urn:schemas-microsoft-com:office:word"  xmlns:fo="http://www.w3.org/1999/XSL/Format"  xmlns:xlink="http://www.w3.org/1999/xlink"   xmlns:meta="http://openoffice.org/2000/meta" exclude-result-prefixes="office table style text draw svg  fo dc config xlink meta">
     <xsl:template match="office:meta">
         <o:DocumentProperties>
             <o:Title>
