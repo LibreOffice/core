@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jsc $ $Date: 2001-08-17 13:15:48 $
+#   last change: $Author: obo $ $Date: 2004-06-04 03:14:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,9 +79,11 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGSNOOPT+=-Ob0
 .ENDIF
 
-OBJFILES=   $(OBJ)$/javamaker.obj	\
-            $(OBJ)$/javaoptions.obj	\
-            $(OBJ)$/javatype.obj			
+OBJFILES = \
+    $(OBJ)$/classfile.obj \
+    $(OBJ)$/javamaker.obj \
+    $(OBJ)$/javaoptions.obj \
+    $(OBJ)$/javatype.obj
 
 NOOPTFILES= \
             $(OBJ)$/javatype.obj
@@ -89,9 +91,7 @@ NOOPTFILES= \
 
 APP1TARGET= $(TARGET)
 
-APP1OBJS= $(OBJ)$/javamaker.obj	\
-          $(OBJ)$/javaoptions.obj	\
-          $(OBJ)$/javatype.obj			
+APP1OBJS = $(OBJFILES)
 
 APP1STDLIBS= \
              $(SALLIB) \
