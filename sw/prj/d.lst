@@ -7,6 +7,9 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\sglobal
 mkdir: %_DEST%\xml%_EXT%\uiconfig\swriter\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\sweb\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\sglobal\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\swriter\toolbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\sweb\toolbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\sglobal\toolbar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
@@ -23,3 +26,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\sglobal\menubar
 ..\uiconfig\swriter\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\swriter\menubar\*.xml
 ..\uiconfig\sweb\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\sweb\menubar\*.xml
 ..\uiconfig\sglobal\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\sglobal\menubar\*.xml
+..\uiconfig\swriter\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\swriter\toolbar\*.xml
+..\uiconfig\sweb\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\sweb\toolbar\*.xml
+..\uiconfig\sglobal\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\sglobal\toolbar\*.xml
