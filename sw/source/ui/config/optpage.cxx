@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:28:06 $
+ *  last change: $Author: os $ $Date: 2001-04-05 05:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1448,18 +1448,6 @@ static CharAttr __FAR_DATA aInsertAttr[] =
     SID_ATTR_CHAR_POSTURE,      ITALIC_NORMAL,
     SID_ATTR_CHAR_UNDERLINE,    UNDERLINE_SINGLE,
     SID_ATTR_CHAR_UNDERLINE,    UNDERLINE_DOUBLE,
-    SID_ATTR_CHAR_CASEMAP,      SVX_CASEMAP_VERSALIEN,
-    SID_ATTR_CHAR_CASEMAP,      SVX_CASEMAP_GEMEINE,
-    SID_ATTR_CHAR_CASEMAP,      SVX_CASEMAP_KAPITAELCHEN,
-    SID_ATTR_CHAR_CASEMAP,      SVX_CASEMAP_TITEL,
-    SID_ATTR_BRUSH,             0,
-};
-
-static CharAttr __FAR_DATA aDeletedAttr[] =
-{
-    SID_ATTR_CHAR_CASEMAP,      SVX_CASEMAP_NOT_MAPPED,
-    SID_ATTR_CHAR_WEIGHT,       WEIGHT_BOLD,
-    SID_ATTR_CHAR_POSTURE,      ITALIC_NORMAL,
     SID_ATTR_CHAR_STRIKEOUT,    STRIKEOUT_SINGLE,
     SID_ATTR_CHAR_CASEMAP,      SVX_CASEMAP_VERSALIEN,
     SID_ATTR_CHAR_CASEMAP,      SVX_CASEMAP_GEMEINE,
@@ -1468,19 +1456,6 @@ static CharAttr __FAR_DATA aDeletedAttr[] =
     SID_ATTR_BRUSH,             0,
 };
 
-static CharAttr __FAR_DATA aChangedAttr[] =
-{
-    SID_ATTR_CHAR_CASEMAP,      SVX_CASEMAP_NOT_MAPPED,
-    SID_ATTR_CHAR_WEIGHT,       WEIGHT_BOLD,
-    SID_ATTR_CHAR_POSTURE,      ITALIC_NORMAL,
-    SID_ATTR_CHAR_UNDERLINE,    UNDERLINE_SINGLE,
-    SID_ATTR_CHAR_UNDERLINE,    UNDERLINE_DOUBLE,
-    SID_ATTR_CHAR_CASEMAP,      SVX_CASEMAP_VERSALIEN,
-    SID_ATTR_CHAR_CASEMAP,      SVX_CASEMAP_GEMEINE,
-    SID_ATTR_CHAR_CASEMAP,      SVX_CASEMAP_KAPITAELCHEN,
-    SID_ATTR_CHAR_CASEMAP,      SVX_CASEMAP_TITEL,
-    SID_ATTR_BRUSH,             0,
-};
 
 /*-----------------------------------------------------------------------
     Beschreibung: Markierungsvorschau
@@ -1941,23 +1916,27 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet& rSet )
             aInsertLB.SelectEntryPos(i);
     }
 
-    nNum = sizeof(aDeletedAttr) / sizeof(CharAttr);
     for (i = 0; i < nNum; i++)
     {
-        aDeletedLB.SetEntryData(i, &aDeletedAttr[i]);
-        if (aDeletedAttr[i].nItemId == rDeletedAttr.nItemId &&
-            aDeletedAttr[i].nAttr == rDeletedAttr.nAttr)
+        aDeletedLB.SetEntryData(i, &aInsertAttr[i]);
+        if (aInsertAttr[i].nItemId == rDeletedAttr.nItemId &&
+            aInsertAttr[i].nAttr == rDeletedAttr.nAttr)
             aDeletedLB.SelectEntryPos(i);
     }
 
-    nNum = sizeof(aChangedAttr) / sizeof(CharAttr);
     for (i = 0; i < nNum; i++)
     {
-        aChangedLB.SetEntryData(i, &aChangedAttr[i]);
-        if (aChangedAttr[i].nItemId == rChangedAttr.nItemId &&
-            aChangedAttr[i].nAttr == rChangedAttr.nAttr)
+        aChangedLB.SetEntryData(i, &aInsertAttr[i]);
+        if (aInsertAttr[i].nItemId == rChangedAttr.nItemId &&
+            aInsertAttr[i].nAttr == rChangedAttr.nAttr)
             aChangedLB.SelectEntryPos(i);
     }
+    //remove strikethrough from insert and delete and underline+double underline from delete
+    aInsertLB.RemoveEntry(5);
+    aChangedLB.RemoveEntry(5);
+    aDeletedLB.RemoveEntry(4);
+    aDeletedLB.RemoveEntry(3);
+
 
     USHORT nPos = 0;
     switch (pOpt->GetMarkAlignMode())

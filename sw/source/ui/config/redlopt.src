@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:35:11 $
+ *  last change: $Author: os $ $Date: 2001-04-05 05:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ TabPage TP_REDLINE_OPT
             < "Kursiv" ; > ;
             < "Unterstrichen" ; > ;
             < "Doppelt unterstrichen" ; > ;
+            < "Durchstreichen" ; > ;
             < "Versalien" ; > ;
             < "Gemeine" ; > ;
             < "Kapitälchen" ; > ;
@@ -156,6 +157,7 @@ TabPage TP_REDLINE_OPT
             < "Kursiv" ; > ;
             < "Unterstrichen" ; > ;
             < "Doppelt unterstrichen" ; > ;
+            < "Strikethrough" ; > ;
             < "Versalien" ; > ;
             < "Gemeine" ; > ;
             < "Kapitälchen" ; > ;
@@ -167,248 +169,15 @@ TabPage TP_REDLINE_OPT
             < "[None]" ; > ;
             < "Bold" ; > ;
             < "Italic" ; > ;
-            < "Underlined" ; > ;
-            < "Underlined: double" ; > ;
-            < "Uppercase" ; > ;
-            < "Lowercase" ; > ;
+            < "Underline" ; > ;
+            < "Underline: double" ; > ;
+            < "Strikethrough" ; > ;
+            < "Caps" ; > ;
+            < "Lower case" ; > ;
             < "Small caps" ; > ;
             < "Title font" ; > ;
             < "Background color" ; > ;
         };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "[Keine]" ; > ;
-            < "Fett" ; > ;
-            < "Kursiv" ; > ;
-            < "Unterstrichen" ; > ;
-            < "Doppelt unterstrichen" ; > ;
-            < "Versalien" ; > ;
-            < "Gemeine" ; > ;
-            < "Kapitälchen" ; > ;
-            < "Titelschrift" ; > ;
-            < "Hintergrundfarbe" ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "[Inget]" ; > ;
-            < "Fet" ; > ;
-            < "Kursiv" ; > ;
-            < "Understruken" ; > ;
-            < "Dubbelt understruken" ; > ;
-            < "Versaler" ; > ;
-            < "Gemener" ; > ;
-            < "Kapitäler" ; > ;
-            < "Titel" ; > ;
-            < "Bakgrundsfärg" ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "[Ingen]" ; > ;
-            < "Fed" ; > ;
-            < "Kursiv" ; > ;
-            < "Understreget" ; > ;
-            < "Dobbelt understreget" ; > ;
-            < "Store bogstaver" ; > ;
-            < "Små bogstaver" ; > ;
-            < "Kapitæler" ; > ;
-            < "Titelskrift" ; > ;
-            < "Baggrundsfarve" ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "[nessuno]" ; > ;
-            < "Grassetto" ; > ;
-            < "Corsivo" ; > ;
-            < "Sottolineato" ; > ;
-            < "Sottolineatura doppia" ; > ;
-            < "Maiuscolo" ; > ;
-            < "Minuscolo" ; > ;
-            < "Maiuscoletto" ; > ;
-            < "Carattere del titolo" ; > ;
-            < "Colore di sfondo" ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "[Ninguno]" ; > ;
-            < "Negrita" ; > ;
-            < "Cursiva" ; > ;
-            < "Subrayado" ; > ;
-            < "Subrayado doble" ; > ;
-            < "Mayúsculas" ; > ;
-            < "Minúsculas" ; > ;
-            < "Versalitas" ; > ;
-            < "Caracteres del título" ; > ;
-            < "Color de fondo" ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "[Aucun(e)]" ; > ;
-            < "Gras" ; > ;
-            < "Italique" ; > ;
-            < "Soulignage" ; > ;
-            < "Soulignage : double" ; > ;
-            < "Majuscules" ; > ;
-            < "Minuscules" ; > ;
-            < "Petites majuscules" ; > ;
-            < "Caractères du titre" ; > ;
-            < "Couleur d'arrière-plan" ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "[Geen]" ; > ;
-            < "Vet" ; > ;
-            < "Cursief" ; > ;
-            < "Onderstrepen" ; > ;
-            < "Dubbel onderstrepen" ; > ;
-            < "Hoofdletters" ; > ;
-            < "Kleine letters" ; > ;
-            < "Kapitalen" ; > ;
-            < "Titelschrift" ; > ;
-            < "Achtergrondkleur" ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "[nenhum]" ; > ;
-            < "Negrito" ; > ;
-            < "Itálico" ; > ;
-            < "Sublinhado" ; > ;
-            < "Sublinhado duplo" ; > ;
-            < "Maiúsculas" ; > ;
-            < "Minúsculas" ; > ;
-            < "Versaletes" ; > ;
-            < "Caracteres do título" ; > ;
-            < "Cor do plano de fundo" ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "[ÎÞ]" ; > ;
-        < "´ÖÌå" ; > ;
-        < "Ð±Ìå" ; > ;
-        < "ÏÂ»®Ïß" ; > ;
-        < "Ë«ÏÂ»®Ïß" ; > ;
-        < "´óÐ´×ÖÄ¸" ; > ;
-        < "Ð¡Ð´×ÖÄ¸" ; > ;
-        < "Ð¡ÐÍ´óÐ´×ÖÄ¸" ; > ;
-        < "±êÌâ×ÖÌå" ; > ;
-        < "±³¾°ÑÕÉ«" ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "[Áåç]" ; > ;
-        < "Æèðíûé" ; > ;
-        < "Êóðñèâ" ; > ;
-        < "Ïîä÷åðêíóòûé" ; > ;
-        < "Äâîéíîå ïîä÷åðêèâàíèå" ; > ;
-        < "Ïðîïèñíûå" ; > ;
-        < "Ñòðî÷íûå" ; > ;
-        < "Êàïèòåëü" ; > ;
-        < "Òèòóëüíûé øðèôò" ; > ;
-        < "Öâåò ôîíà" ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "[Brak]" ; > ;
-        < "Pogrubienie" ; > ;
-        < "Kursywa" ; > ;
-        < "Podkreœlenie" ; > ;
-        < "Podwójne podkreœlenie" ; > ;
-        < "Wersaliki" ; > ;
-        < "Ma³e litery" ; > ;
-        < "Kapitaliki" ; > ;
-        < "Czcionka tytu³owa" ; > ;
-        < "Kolor t³a" ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "[‚È‚µ]" ; > ;
-        < "‘¾Žš" ; > ;
-        < "ŽÎ‘Ì" ; > ;
-        < "‰ºü" ; > ;
-        < "“ñd‰ºü" ; > ;
-        < "‘å•¶Žš" ; > ;
-        < "¬•¶Žš" ; > ;
-        < "¬Œ^‘å•¶Žš" ; > ;
-        < "À²ÄÙ•¶Žš" ; > ;
-        < "”wŒiF" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "[µL]" ; > ;
-        < "²ÊÅé" ; > ;
-        < "±×Åé" ; > ;
-        < "©³½u" ; > ;
-        < "Âù©³½u" ; > ;
-        < "¤j¼g¦r¥À" ; > ;
-        < "¤p¼g¦r¥À" ; > ;
-        < "¤p«¬¤j¼g¦r¥À" ; > ;
-        < "¼ÐÃD¦r«¬" ; > ;
-        < "­I´ºÃC¦â" ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "[ÈÏæä]" ; > ;
-        < "ÚÑíÖ" ; > ;
-        < "ãÇÆá" ; > ;
-        < "ÊÍÊå ÎØ" ; > ;
-        < "ÎØ ÊÍÊí ãÒÏæÌ" ; > ;
-        < "ÃÍÑÝ ßÈíÑÉ" ; > ;
-        < "ÃÍÑÝ ÕÛíÑÉ" ; > ;
-        < "ÍÑÝ ÈÏÇíÉ ÃßÈÑ" ; > ;
-        < "ÎØ ÇáÚäæÇä" ; > ;
-        < "áæä ÇáÎáÝíÉ" ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "[ÊáíÝíá]" ; > ;
-        < "¸íôïíï" ; > ;
-        < "ÐëÜãéá" ; > ;
-        < "ÕðïãñÜììéóç" ; > ;
-        < "ÄéðëÞ õðïãñÜììéóç" ; > ;
-        < "Êåöáëáßá" ; > ;
-        < "Ðåæïß ÷áñáêôÞñåò" ; > ;
-        < "ÌéêñÜ êåöáëáßá" ; > ;
-        < "ÃñáììáôïóåéñÜ ôßôëïõ" ; > ;
-        < "×ñþìá öüíôïõ" ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "[¾øÀ½]" ; > ;
-        < "±½°Ô" ; > ;
-        < "ÀÌÅÅ¸¯Ã¼" ; > ;
-        < "¹ØÁÙ" ; > ;
-        < "ÀÌÁß ¹ØÁÙ" ; > ;
-        < "´ë¹®ÀÚ" ; > ;
-        < "¼Ò¹®ÀÚ" ; > ;
-        < "½º¸ôÄ¸" ; > ;
-        < "Á¦¸ñ ±Û²Ã" ; > ;
-        < "¹è°æ»ö" ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "[Yok]" ; > ;
-        < "Kalýn" ; > ;
-        < "Ýtalik" ; > ;
-        < "Altý çizili" ; > ;
-        < "Altý çift çizili" ; > ;
-        < "Büyük harflerle" ; > ;
-        < "Küçük harflerle" ; > ;
-        < "Küçük büyük harf" ; > ;
-        < "Baþlýk yazýtipi" ; > ;
-        < "Artalan rengi" ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-    };
     };
     FixedText FT_INS_COL
     {
