@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 11:37:37 $
+ *  last change: $Author: mba $ $Date: 2001-06-08 08:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1921,9 +1921,6 @@ void SfxMedium::ReOpen()
 SfxMedium::SfxMedium
 (
     const String &rName, StreamMode nOpenMode,  sal_Bool bDirectP,
-#if SUPD<609
-    sal_Bool bDownLoadP,
-#endif
     const SfxFilter *pFlt, SfxItemSet *pInSet
 )
 :   IMPL_CTOR(),
@@ -2454,7 +2451,7 @@ void SfxMedium::CreateTempFile()
 
     StreamMode nOpenMode = nStorOpenMode;
     GetInStream();
-    BOOL bCopy = ( nStorOpenMode == nOpenMode );
+    BOOL bCopy = ( nStorOpenMode == nOpenMode && ! ( nOpenMode & STREAM_TRUNC ) );
     nStorOpenMode = nOpenMode;
     ResetError();
 
