@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-28 14:50:57 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 09:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,18 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
 #endif
 #include <tools/urlobj.hxx>
 #pragma hdrstop
+
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNOTOOLS_INTLWRAPPER_HXX
+#include <unotools/intlwrapper.hxx>
+#endif
 
 #include "app.hxx"
 #include "objsh.hxx"
@@ -96,7 +100,7 @@ struct _FileListEntry
 {
     String aFileName;           // Dateiname mit komplettem Pfad
     String aBaseName;           // Dateiname
-    International aInter;
+    const CollatorWrapper* pCollator;
     SfxObjectShellLock aDocShell; // ObjectShell als Ref-Klasse
     SvStorageRef aStor;         // Referenz auf Storage, wenn wir diesen geoeffnet haben
     BOOL bFile;                 // als Datei auf Platte
@@ -106,7 +110,7 @@ struct _FileListEntry
     BOOL bNoName;
 
     _FileListEntry( const String& rFileName,
-                    const International& rInter, const String* pTitle = NULL );
+                    const CollatorWrapper* pColl, const String* pTitle = NULL );
     ~_FileListEntry();
 
     int operator==( const _FileListEntry &rCmp) const;
@@ -118,23 +122,25 @@ struct _FileListEntry
 
 inline int _FileListEntry::operator==(const _FileListEntry &rCmp) const
 {
-    return COMPARE_EQUAL == aInter.Compare(aBaseName, rCmp.aBaseName);
+    DBG_ASSERT( pCollator, "invalid CollatorWrapper" );
+    return COMPARE_EQUAL == pCollator->compareString(aBaseName, rCmp.aBaseName);
 }
 
 //-------------------------------------------------------------------------
 
 inline int _FileListEntry::operator< (const _FileListEntry &rCmp) const
 {
-    return COMPARE_LESS == aInter.Compare(aBaseName, rCmp.aBaseName);
+    DBG_ASSERT( pCollator, "invalid CollatorWrapper" );
+    return COMPARE_LESS == pCollator->compareString(aBaseName, rCmp.aBaseName);
 }
 
 //-------------------------------------------------------------------------
 
 _FileListEntry::_FileListEntry( const String& rFileName,
-                                const International& rInter, const String* pTitle ) :
+                                const CollatorWrapper* pColl, const String* pTitle ) :
 
     aFileName   ( rFileName ),
-    aInter      ( rInter ),
+    pCollator   ( pColl ),
     bFile       ( FALSE ),
     bOwner      ( FALSE ),
     bNoName     ( TRUE )
@@ -257,7 +263,8 @@ SfxOrganizeMgr::SfxOrganizeMgr( SfxOrganizeListBox_Impl *pLeft,
 
 */
 {
-    const International aInter( GetpApp()->GetAppInternational() );
+    IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
     for ( SfxObjectShell* pTmp = SfxObjectShell::GetFirst(); pTmp; pTmp = SfxObjectShell::GetNext(*pTmp) )
     {
         if ( pTmp->GetCreateMode() != SFX_CREATE_MODE_STANDARD ||
@@ -266,7 +273,7 @@ SfxOrganizeMgr::SfxOrganizeMgr( SfxOrganizeListBox_Impl *pLeft,
         _FileListEntry* pNewEntry = NULL;
         BOOL bHasLongName = pTmp->GetMedium()->GetLongName().Len() != 0;
         String aTitle = pTmp->GetTitle( SFX_TITLE_TITLE );
-        pNewEntry = new _FileListEntry( pTmp->GetMedium()->GetName(), aInter, &aTitle );
+        pNewEntry = new _FileListEntry( pTmp->GetMedium()->GetName(), pCollator, &aTitle );
         pNewEntry->aDocShell = pTmp;
 #if defined( SOLARIS )
         pDocList->Insert( (_FileListEntry const *)pNewEntry );
@@ -723,8 +730,9 @@ BOOL SfxOrganizeMgr::InsertFile( SfxOrganizeListBox_Impl* pCaller, const String&
 */
 
 {
-    const International aInter( GetpApp()->GetAppInternational() );
-    _FileListEntry* pEntry = new _FileListEntry( rFileName, aInter );
+    IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
+    _FileListEntry* pEntry = new _FileListEntry( rFileName, pCollator );
 #if defined( SOLARIS )
     if ( pDocList->Insert( (_FileListEntry const *)pEntry ) )
 #else
