@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-01-26 17:22:23 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 17:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1202,6 +1202,16 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
                 nIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_DMMMYYYY, nFormatLang );
             else if ( eOffset == NF_DATE_SYS_DMMMMYYYY )
                 nIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_DMMMMYYYY, nFormatLang );
+        }
+
+        if ((nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND) && sFormatTitle.getLength())
+        {
+            SvNumberformat* pFormat = const_cast<SvNumberformat*>(pFormatter->GetEntry( nIndex ));
+            if (pFormat)
+            {
+                String sTitle (sFormatTitle);
+                pFormat->SetComment(sTitle);
+            }
         }
 
         pData->AddKey( nIndex, GetName() );
