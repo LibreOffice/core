@@ -2,9 +2,9 @@
 #
 #   $RCSfile: logger.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-18 08:35:55 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:46:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,32 @@ sub include_timestamp_into_logfile
     my $timestring = get_time_string();
     $infoline = "$message\t$timestring";
     push( @installer::globals::logfileinfo, $infoline);
+}
+
+####################################################
+# Writing all variables content into the log file
+####################################################
+
+sub log_hashref
+{
+    my ($hashref) = @_;
+
+    my $infoline = "\nLogging variable settings:\n";
+    push(@installer::globals::globallogfileinfo, $infoline);
+
+    my $itemkey;
+
+    foreach $itemkey ( keys %{$hashref} )
+    {
+        my $line = "";
+        my $itemvalue = "";
+        if ( $hashref->{$itemkey} ) { $itemvalue = $hashref->{$itemkey}; }
+        $line = $itemkey . "=" . $itemvalue . "\n";
+        push(@installer::globals::globallogfileinfo, $line);
+    }
+
+    $infoline = "\n";
+    push(@installer::globals::globallogfileinfo, $infoline);
 }
 
 #########################################################
