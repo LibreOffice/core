@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:56:30 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,78 +474,54 @@ static BOOL ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
         // signature and size must fit to avoid using
         // JobSetups from a wrong system
 
-        BOOL bCheckdmSpec = FALSE;
-
-        // initialize dmSpecVersion with version from jobsetup
-        // this will be overwritten with driver's version if checking enabled
+        // initialize versions from jobsetup
+        // those will be overwritten with driver's version
         DEVMODE *pDevMode = SAL_DEVMODE( pSetupData );
         LONG dmSpecVersion = pDevMode->dmSpecVersion;
+        LONG dmDriverVersion = pDevMode->dmDriverVersion;
 
         if( pPrinter )
         {
-            // #110800#, Fujitsu-Xerox ART driver crashes on Win98 when feeding a DEVMODE structure from the corresponding XP driver
-            // to workaround we have to check for the filename of the driver because multiple driver names are exported
+            // just too many driver crashes in that area -> check the dmSpecVersion and dmDriverVersion fields always !!!
+            // this prevents using the jobsetup between different Windows versions (eg from XP to 9x) but we
+            // can avoid potential driver crashes as their jobsetups are often not compatible
+            // #110800#, #111151#, #112381#, #i16580#, #i14173# and perhaps #112375#
             HANDLE hPrn;
             if ( !OpenPrinterA( (LPSTR)ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ).GetBuffer(), &hPrn, NULL ) )
                 return FALSE;
 
-            DWORD nRet;
-            DRIVER_INFO_2 *aDriverInfo;
-            DWORD bNeeded;
-            DWORD bReceived;
-            nRet = GetPrinterDriverA(hPrn, NULL, 2, NULL, 0, &bNeeded);
-            if( !nRet && GetLastError() == ERROR_INSUFFICIENT_BUFFER )
-                aDriverInfo = (DRIVER_INFO_2*) _alloca( bNeeded );
-            else
+            long nSysJobSize = DocumentPropertiesA( 0, hPrn,
+                                                    (LPSTR)ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ).GetBuffer(),
+                                                    NULL, NULL, 0 );
+            if( nSysJobSize < 0 )
+            {
+                ClosePrinter( hPrn );
+                return FALSE;
+            }
+            DEVMODE *pBuffer = (DEVMODE*) _alloca( nSysJobSize );
+            DWORD nRet = DocumentPropertiesA( 0, hPrn,
+                                            (LPSTR)ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ).GetBuffer(),
+                                            pBuffer, NULL, DM_OUT_BUFFER );
+            if( nRet < 0 )
             {
                 ClosePrinter( hPrn );
                 return FALSE;
             }
 
-            nRet = GetPrinterDriverA(hPrn, NULL, 2, (LPBYTE)aDriverInfo, bNeeded, &bReceived);
-            if( nRet )
-            {
-                // #110800#, the buggy driver is called fxart4.drv (98) or fxart.dll (xp/2k) so fxart should be sufficient
-                if( strstr( strlwr(aDriverInfo->pDriverPath), "fxart" ) )
-                    bCheckdmSpec = TRUE;
-            }
-            else
-            {
-                ClosePrinter( hPrn );
-                return FALSE;
-            }
-
-            if( bCheckdmSpec )
-            {
-                long nSysJobSize = DocumentPropertiesA( 0, hPrn,
-                                                        (LPSTR)ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ).GetBuffer(),
-                                                        NULL, NULL, 0 );
-                if( nSysJobSize < 0 )
-                {
-                    ClosePrinter( hPrn );
-                    return FALSE;
-                }
-                DEVMODE *pBuffer = (DEVMODE*) _alloca( nSysJobSize );
-                nRet = DocumentPropertiesA( 0, hPrn,
-                                                (LPSTR)ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ).GetBuffer(),
-                                                pBuffer, NULL, DM_OUT_BUFFER );
-                if( nRet < 0 )
-                {
-                    ClosePrinter( hPrn );
-                    return FALSE;
-                }
-
-                // the spec version differs between the windows platforms, ie 98,NT,2000/XP
-                // this allows us to throw away printer settings from other platforms that might crash a buggy driver
-                dmSpecVersion = pBuffer->dmSpecVersion;
-            }
+            // the spec version differs between the windows platforms, ie 98,NT,2000/XP
+            // this allows us to throw away printer settings from other platforms that might crash a buggy driver
+            // we check the driver version as well
+            dmSpecVersion = pBuffer->dmSpecVersion;
+            dmDriverVersion = pBuffer->dmDriverVersion;
 
             ClosePrinter( hPrn );
         }
 
         if ( (pSetupData->mnSystem == JOBSETUP_SYSTEM_WINDOWS) &&
+             (pPrinter->maDriverName == pSetupData->maDriver) &&
              (pSetupData->mnDriverDataLen > sizeof( SalDriverData )) &&
              (dmSpecVersion == pDevMode->dmSpecVersion) &&
+             (dmDriverVersion == pDevMode->dmDriverVersion) &&
              (((SalDriverData*)(pSetupData->mpDriverData))->mnSysSignature == SAL_DRIVERDATA_SYSSIGN) )
             return TRUE;
         else if ( bDelete )
@@ -616,6 +592,7 @@ static BOOL ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     ULONG nMutexCount=0;
     if ( pVisibleDlgParent )
         nMutexCount = ImplSalReleaseYieldMutex();
+
     nRet = DocumentPropertiesA( hWnd, hPrn,
                                 (LPSTR)ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ).GetBuffer(),
                                 pOutDevBuffer, pInDevBuffer, nMode );
