@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:27:06 $
+ *  last change: $Author: sb $ $Date: 2002-12-06 16:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3447,6 +3447,10 @@ Menu RID_BASICMENU
                     };
                     MenuItem
                     {
+                        ITEM_VIEW_TOGGLEIMESTATUSWINDOW
+                    };
+                    MenuItem
+                    {
                         Separator = TRUE ;
                     };
                     MenuItem
@@ -3863,6 +3867,10 @@ Menu RID_BASICPLUGINMENU
                     MenuItem
                     {
                         ITEM_VIEW_TOGGLESTATUSBAR
+                    };
+                    MenuItem
+                    {
+                        ITEM_VIEW_TOGGLEIMESTATUSWINDOW
                     };
                     MenuItem
                     {
