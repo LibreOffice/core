@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:55:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,10 +137,11 @@ public:
     const SvXMLTokenMap& GetFtnConfigAttrTokenMap();
 
     /// set configuration at document; calls ProcessSettings
-    /// Uses CreateAndInsertLate() to ensure that all styles it references
-    /// have been set.
-    virtual void XMLFootnoteConfigurationImportContext::CreateAndInsertLate(
+    // --> OD 2005-01-31 #i40579# - move code from <CreateAndInsertLate(..)>
+    // to <Finish(..)>, because at this time all styles it references have been set.
+    virtual void XMLFootnoteConfigurationImportContext::Finish(
         sal_Bool bOverwrite );
+    // <--
 
     /// set configuration at document
     void ProcessSettings(
