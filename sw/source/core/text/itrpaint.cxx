@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-02 13:48:52 $
+ *  last change: $Author: fme $ $Date: 2001-10-02 14:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,7 +673,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
         {
             if ( pPor->IsFlyPortion() || pPor->IsFlyCntPortion() ||
                 pPor->IsBreakPortion() || pPor->IsMultiPortion() ||
-                pPor->IsHolePortion() )
+                pPor->IsHolePortion() || pPor->IsMarginPortion() )
                 break;
 
             aIter.SeekAndChg( nTmpIdx, pOut );
