@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-27 14:38:14 $
+ *  last change: $Author: tl $ $Date: 2001-02-28 13:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,17 +486,18 @@ OptionsUserData::OptionsUserData( USHORT nEID,
 
 void OptionsUserData::SetChecked( BOOL bVal )
 {
-    if (IsCheckable())
+    if (IsCheckable()  &&  (IsChecked() != bVal))
     {
         nVal &= ~(1UL << 8);
         nVal |=  (ULONG)(bVal ? 1 : 0) << 8;
+        SetModified();
     }
 }
 
 void OptionsUserData::SetNumericValue( BYTE nNumVal )
 {
     DBG_ASSERT( nNumVal < 256, "value out of range" );
-    if (HasNumericValue())
+    if (HasNumericValue()  &&  (GetNumericValue() != nNumVal))
     {
         nVal &= 0xffffff00;
         nVal |= (nNumVal);
@@ -1087,6 +1088,8 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
     }
 
 
+    BOOL bCheckAllLangChanged = FALSE;
+
     SvtLinguConfig aLngCfg;
     USHORT nEntries = (USHORT) aLinguOptionsCLB.GetEntryCount();
     for (USHORT j = 0;  j < nEntries;  ++j)
@@ -1095,6 +1098,11 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
         OptionsUserData aData( (ULONG)pEntry->GetUserData() );
         String aPropName( lcl_GetPropertyName( (EID_OPTIONS) aData.GetEntryId() ) );
+
+        if (EID_ALL_LANGUAGES == (EID_OPTIONS) aData.GetEntryId())
+        {
+            bCheckAllLangChanged = aData.IsChecked() != aLinguOptionsCLB.IsChecked( j );
+        }
 
         Any aAny;
         if (aData.IsCheckable())
@@ -1113,24 +1121,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         aLngCfg.SetProperty( aPropName, aAny );
     }
 
-#ifdef NOT_YET_IMPLEMENTED
-    //!!! functionality needs to be implemented via XPropertySet listeners!
-
-    sal_Bool bSpellAllAgain   = sal_False;
-    sal_Bool bSpellWrongAgain = sal_False;
-    if( aAllLangBtn.IsChecked() != aAllLangBtn.GetSavedValue() )
-    {
-        if( aAllLangBtn.IsChecked() )
-            bSpellWrongAgain = sal_True;
-        else
-            bSpellAllAgain = sal_True;
-    }
-    pSpell->SetSpellWrongAgain( bSpellWrongAgain );
-    pSpell->SetSpellAllAgain( bSpellAllAgain );
-#endif //NOT_YET_IMPLEMENTED
-
-    // erstmal immer putten!
-    rCoreSet.Put( SfxBoolItem( SID_SPELL_MODIFIED, bModified ) );
+    rCoreSet.Put( SfxBoolItem( SID_SPELL_MODIFIED, bCheckAllLangChanged ) );
 
     SvLBoxEntry *pPreBreakEntry  = aLinguOptionsCLB.GetEntry( (USHORT) EID_NUM_PRE_BREAK );
     SvLBoxEntry *pPostBreakEntry = aLinguOptionsCLB.GetEntry( (USHORT) EID_NUM_POST_BREAK );
