@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2002-09-06 13:46:20 $
+ *  last change: $Author: os $ $Date: 2002-09-10 14:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,34 @@
     Text[ catalan ] = "O~cult"; \
     Text[ thai ] = "‡∏ã‡πà~‡∏≠‡∏ô";
 
+#define FL_HIDE_TEXT \
+    Text = "Ausblenden" ; \
+    Text [ English ] = "Hidden" ; \
+    Text [ norwegian ] = "Hidden" ; \
+    Text [ italian ] = "Nascondi" ; \
+    Text [ portuguese_brazilian ] = "Oculto" ; \
+    Text [ portuguese ] = "Ocultar" ; \
+    Text [ finnish ] = "Piilotettu" ; \
+    Text [ danish ] = "Skjul" ; \
+    Text [ french ] = "Masquer" ; \
+    Text [ swedish ] = "Dˆlj" ; \
+    Text [ dutch ] = "Verbergen" ; \
+    Text [ spanish ] = "Ocultar" ; \
+    Text [ english_us ] = "Hide" ; \
+    Text[ chinese_simplified ] = "ÈöêÂÖ•";  \
+    Text[ russian ] = "—Í˚Ú¸"; \
+    Text[ polish ] = "Ukryj";   \
+    Text[ japanese ] = "ÈùûË°®Á§∫"; \
+    Text[ chinese_traditional ] = "Èö±ÂÖ•"; \
+    Text[ arabic ] = "„Œ›Ì";    \
+    Text[ greek ] = "¡¸ÍÒı¯Á";    \
+    Text[ korean ] = "Ïà®Í∏∞Í∏∞";   \
+    Text[ turkish ] = "Gizle";  \
+    Text[ catalan ] = "Ocult"; \
+    Text[ thai ] = "‡∏ã‡πà‡∏≠‡∏ô";
+
 #define CB_CONDITION_TEXT  \
-    Text = "M~it Bedingung" ; \
+    Text = "Mi~t Bedingung" ; \
     Text [ English ] = "~With condition" ; \
     Text [ english_us ] = "~With condition" ; \
     Text [ italian ] = "Con condizione" ; \
@@ -348,7 +374,7 @@
     Text[ thai ] = "‡∏õ‡πâ‡∏≠‡∏á‡∏Å‡∏±‡∏ô‡∏Å‡∏≤‡∏£‡πÄ‡∏Ç‡∏µ‡∏¢‡∏ô";
 
 #define CB_PASSWD_TEXT\
-        Text = "~Mit Kennwort" ;\
+        Text = "Mit Kenn~wort" ;\
         Text[English] = "With password" ;   \
     Text[ english_us ] = "Wit~h password";  \
     Text[ portuguese ] = "Com ~senha";  \
@@ -568,7 +594,7 @@ ModalDialog MD_EDIT_REGION
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 92 , 116 ) ;
         Size = MAP_APPFONT ( 162 , 8 ) ;
-        CB_HIDE_TEXT
+        FL_HIDE_TEXT
     };
     TriStateBox CB_HIDE
     {
@@ -1195,7 +1221,7 @@ TabPage TP_INSERT_SECTION
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 90 , 117 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
-        CB_HIDE_TEXT
+        FL_HIDE_TEXT
     };
     CheckBox CB_HIDE
     {

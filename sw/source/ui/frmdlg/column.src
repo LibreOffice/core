@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: os $ $Date: 2002-06-19 14:09:47 $
+ *  last change: $Author: os $ $Date: 2002-09-10 14:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ TabPage TP_COLUMN
         Text[ spanish ] = "~Columnas";
         Text[ finnish ] = "Sarakkeet";
         Text[ italian ] = "~Colonne";
-        Text[ danish ] = "Antal";
+        Text[ danish ] = "~Kolonner";
         Text[ swedish ] = "~Kolumner";
         Text[ polish ] = "Kolumny";
         Text[ portuguese_brazilian ] = "~N?m.";
@@ -110,7 +110,7 @@ TabPage TP_COLUMN
         Text[ chinese_traditional ] = "Ê¨Ñ";
         Text[ turkish ] = "S~ay˝";
         Text[ arabic ] = "«·⁄œœ";
-        Text[ catalan ] = "~Cantidad";
+        Text[ catalan ] = "~Quantitat";
         Text[ thai ] = "‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå";
     };
     NumericField ED_NUMBER
@@ -139,7 +139,7 @@ TabPage TP_COLUMN
     {
         Pos = MAP_APPFONT ( 7 , 46 ) ;
         Size = MAP_APPFONT ( 163 , 10 ) ;
-        Text = "Inhalt ¸ber alle ~Spalten gleichm‰ﬂig verteilen" ;
+        Text = "~Inhalt ¸ber alle Spalten gleichm‰ﬂig verteilen" ;
         Text [ ENGLISH ] = "Balance columns" ;
         Hide = TRUE;
         Text[ english_us ] = "Evenly distribute contents to all columns";
@@ -150,7 +150,7 @@ TabPage TP_COLUMN
         Text[ french ] = "RÈpartition rÈguliËre du contenu sur toutes les ~colonnes";
         Text[ spanish ] = "DistribuciÛn uniforme del contenido sobre todas las columnas";
         Text[ italian ] = "Distribuisci in modo uniforme il contenuto di tutte le colonne.";
-        Text[ danish ] = "UdjÊvn kolonner";
+        Text[ danish ] = "Fordel indholdet jÊvnt over alle k~olonner";
         Text[ swedish ] = "Fˆrdela innehÂll j‰mnt ˆver ~alla kolumner";
         Text[ polish ] = "Roz≥Ûø zawartoúÊ rÛwnomiernie we wszystkich kolumnach";
         Text[ portuguese_brazilian ] = "Balance columns";
@@ -160,7 +160,7 @@ TabPage TP_COLUMN
         Text[ chinese_traditional ] = "Â∞çÁ®±Ë™øÊï¥Ê¨ÑÂØ¨";
         Text[ arabic ] = " Ê“Ì⁄ «·„Õ ÊÌ«  ⁄·Ï ﬂ· «·√⁄„œ… »«· ”«ÊÌ";
         Text[ turkish ] = "S~¸tunlar˝ dengele";
-        Text[ catalan ] = "~Optimar columnas";
+        Text[ catalan ] = "Distribueix el contingut uniformement a totes les columnes";
         Text[ finnish ] = "Jaa sis‰ltˆ tasaisesti kaikkiin sarakkeisiin";
         Text[ thai ] = "‡πÅ‡∏à‡∏Å‡πÅ‡∏à‡∏á‡πÄ‡∏ô‡∏∑‡πâ‡∏≠‡∏´‡∏≤‡πÄ‡∏î‡∏µ‡∏¢‡∏ß‡∏Å‡∏±‡∏ô‡πÑ‡∏õ‡∏¢‡∏±‡∏á‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå‡∏ó‡∏±‡πâ‡∏á‡∏´‡∏°‡∏î";
     };
@@ -180,7 +180,7 @@ TabPage TP_COLUMN
         Text[ spanish ] = "Columnas";
         Text[ finnish ] = "Asetukset";
         Text[ italian ] = "Preimpostazioni";
-        Text[ danish ] = "Kolonner";
+        Text[ danish ] = "Forudindstillinger";
         Text[ swedish ] = "Fˆrinst‰llningar";
         Text[ polish ] = "Ustawienia domyúlne";
         Text[ portuguese_brazilian ] = "Colunas";
@@ -190,7 +190,7 @@ TabPage TP_COLUMN
         Text[ chinese_traditional ] = "È†êË®≠";
         Text[ turkish ] = "S¸tun";
         Text[ arabic ] = "«·√⁄„œ…";
-        Text[ catalan ] = "Columnas";
+        Text[ catalan ] = "Columnes";
         Text[ thai ] = "‡∏Å‡∏≥‡∏´‡∏ô‡∏î";
     };
     FixedText FT_COLUMN
@@ -209,7 +209,7 @@ TabPage TP_COLUMN
         Text[ spanish ] = "Columna";
         Text[ finnish ] = "Sarake";
         Text[ italian ] = "Colonna";
-        Text[ danish ] = "Column";
+        Text[ danish ] = "Kolonne";
         Text[ swedish ] = "Kolumn";
         Text[ polish ] = "Kolumna";
         Text[ portuguese_brazilian ] = "Column";
@@ -219,7 +219,7 @@ TabPage TP_COLUMN
         Text[ chinese_traditional ] = "Ê¨Ñ";
         Text[ turkish ] = "Column";
         Text[ arabic ] = "Column";
-        Text[ catalan ] = "Column";
+        Text[ catalan ] = "Columna";
         Text[ thai ] = "‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå";
     };
     Window WN_BSP
@@ -292,7 +292,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "ÎÑàÎπÑ";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Geni˛lik";
-        Text[ catalan ] = "Ancho";
+        Text[ catalan ] = "Amplada";
         Text[ finnish ] = "Leveys";
         Text[ thai ] = "‡∏Ñ‡∏ß‡∏≤‡∏°‡∏Å‡∏ß‡πâ‡∏≤‡∏á";
     };
@@ -378,7 +378,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "Í∞ÑÍ≤©";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Aral˝k";
-        Text[ catalan ] = "Espacio";
+        Text[ catalan ] = "Espaiat";
         Text[ finnish ] = "Objektiv‰lit";
         Text[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á";
     };
@@ -448,7 +448,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "ÏûêÎèô ÎÑàÎπÑ(~W)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "O~tomatik geni˛lik";
-        Text[ catalan ] = "Ancho ~autom·tico";
+        Text[ catalan ] = "Llargada ~autom‡tica";
         Text[ thai ] = "‡∏Ñ‡∏ß‡∏≤‡∏°~‡∏Å‡∏ß‡πâ‡∏≤‡∏á‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥";
     };
     FixedLine FL_LAYOUT
@@ -467,7 +467,7 @@ TabPage TP_COLUMN
         Text[ spanish ] = "Ancho y espacio";
         Text[ finnish ] = "Leveys ja v‰lit";
         Text[ italian ] = "Larghezza e distanza";
-        Text[ danish ] = "Kolonnebredde";
+        Text[ danish ] = "Bredde og afstand";
         Text[ swedish ] = "Bredd och avstÂnd";
         Text[ polish ] = "SzerokoúÊ i odstÍp";
         Text[ portuguese_brazilian ] = "Largura da coluna";
@@ -477,7 +477,7 @@ TabPage TP_COLUMN
         Text[ chinese_traditional ] = "Ê¨ÑÂØ¨ÂèäÈñìÈöî";
         Text[ turkish ] = "S¸tun geni˛lii";
         Text[ arabic ] = "⁄—÷ «·⁄„Êœ";
-        Text[ catalan ] = "Ancho de columna";
+        Text[ catalan ] = "Amplada de la columna";
         Text[ thai ] = "‡∏Ñ‡∏ß‡∏≤‡∏°‡∏Å‡∏ß‡πâ‡∏≤‡∏á‡πÅ‡∏•‡∏∞‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á";
     };
 
@@ -511,7 +511,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "Ï¢ÖÎ•ò(~L)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "T~¸r";
-        Text[ catalan ] = "~Tipo";
+        Text[ catalan ] = "~Tipus";
         Text[ thai ] = "~‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
     ListBox LB_STYLE
@@ -622,7 +622,7 @@ TabPage TP_COLUMN
         };
         StringList [ catalan ] =
         {
-             < "Ninguno" ; Default ; > ;
+             < "Cap" ; Default ; > ;
         };
     StringList [ thai ] =
     {
@@ -659,7 +659,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "ÎÜíÏù¥(~E)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Y¸ks.";
-        Text[ catalan ] = "A~ltura";
+        Text[ catalan ] = "A~lÁada";
         Text[ thai ] = "‡∏Ñ‡∏ß‡∏≤‡∏°‡∏™‡∏π~‡∏á";
     };
     MetricField ED_HEIGHT
@@ -707,7 +707,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "ÏúÑÏπò(~P)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Konum";
-        Text[ catalan ] = "~PosiciÛn";
+        Text[ catalan ] = "~PosiciÛ";
         Text[ finnish ] = "~Sijainti";
         Text[ thai ] = "~‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á";
     };
@@ -869,9 +869,9 @@ TabPage TP_COLUMN
         };
         StringList [ catalan ] =
         {
-            < "Arriba" ; Default ; > ;
-            < "Centrado" ; Default ; > ;
-            < "Abajo" ; Default ; > ;
+            < "Superior" ; Default ; > ;
+            < "Centrat" ; Default ; > ;
+            < "Part inferior" ; Default ; > ;
         };
     StringList [ thai ] =
     {
@@ -891,7 +891,7 @@ TabPage TP_COLUMN
         Text [ portuguese_brazilian ] = "Linhas entre" ;
         Text [ portuguese ] = "Linha de separaÁ„o" ;
         Text [ finnish ] = "Erotinviiva" ;
-        Text [ danish ] = "Separator" ;
+        Text [ danish ] = "Skillelinje" ;
         Text [ french ] = "Trait de sÈparation" ;
         Text [ swedish ] = "Skiljelinje" ;
         Text [ dutch ] = "Scheidingslijn" ;
@@ -909,7 +909,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "Íµ¨Î∂ÑÏÑ†";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Ay˝rma Áizgisi";
-        Text[ catalan ] = "LÌnea de separaciÛn";
+        Text[ catalan ] = "LÌnia de separaciÛ";
         Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÅ‡∏¢‡∏Å‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
     FixedLine  FL_VERT
@@ -926,6 +926,26 @@ TabPage TP_COLUMN
         Hide = TRUE ;
         Text = "Eigenschaften" ;
         Text [ ENGLISH ] = "Properties" ;
+        Text[ english_us ] = "Properties";
+        Text[ portuguese ] = "Properties";
+        Text[ russian ] = "Properties";
+        Text[ greek ] = "Properties";
+        Text[ dutch ] = "Properties";
+        Text[ french ] = "PropriÈtÈs";
+        Text[ spanish ] = "Propiedades";
+        Text[ finnish ] = "Properties";
+        Text[ italian ] = "Propriet‡";
+        Text[ danish ] = "Properties";
+        Text[ swedish ] = "Egenskaper";
+        Text[ polish ] = "Properties";
+        Text[ japanese ] = "Â±ûÊÄß";
+        Text[ korean ] = "Îì±Î°ù Ï†ïÎ≥¥";
+        Text[ chinese_simplified ] = "Â±ûÊÄß";
+        Text[ chinese_traditional ] = "Â±¨ÊÄß";
+        Text[ turkish ] = "Properties";
+        Text[ arabic ] = "Properties";
+        Text[ catalan ] = "Opcions";
+        Text[ thai ] = "‡∏Ñ‡∏∏‡∏ì‡∏™‡∏°‡∏ö‡∏±‡∏ï‡∏¥";
     };
     FixedText   FT_TEXTDIRECTION
     {
@@ -934,6 +954,24 @@ TabPage TP_COLUMN
         Hide = TRUE ;
         Text = "~Textfluss" ;
         Text [ ENGLISH ] = "Text ~direction" ;
+        Text[ english_us ] = "Text ~direction";
+        Text[ portuguese ] = "Text ~direction";
+        Text[ russian ] = "Text ~direction";
+        Text[ greek ] = "Text ~direction";
+        Text[ dutch ] = "Text ~direction";
+        Text[ french ] = "EnchaÓnements";
+        Text[ spanish ] = "~DirecciÛn del texto";
+        Text[ finnish ] = "Text ~direction";
+        Text[ italian ] = "Testo";
+        Text[ danish ] = "Text ~direction";
+        Text[ swedish ] = "Text~riktning";
+        Text[ polish ] = "Text ~direction";
+        Text[ japanese ] = "ÊñáÂ≠óÊñπÂêë";
+        Text[ korean ] = "ÌÖçÏä§Ìä∏ Î∞©Ìñ•";
+        Text[ chinese_simplified ] = "ÊñáÂ≠óÊñπÂêë";
+        Text[ chinese_traditional ] = "ÊñáÂ≠óÊñπÂêë";
+        Text[ turkish ] = "Text ~direction";
+        Text[ arabic ] = "Text ~direction";
     };
     ListBox     LB_TEXTDIRECTION
     {
@@ -944,8 +982,8 @@ TabPage TP_COLUMN
         Hide = TRUE ;
         StringList =
         {
-            < "Links nach rechts" ; 0; > ;
-            < "Rechts nach links" ; 1; > ;
+            < "Links-nach-rechts" ; 0; > ;
+            < "Rechts-nach-links" ; 1; > ;
             < "Einstellungen des ¸bergeordneten Objektes verwenden" ; 4; > ;
         };
         StringList [ ENGLISH ] =
@@ -954,6 +992,60 @@ TabPage TP_COLUMN
             < "Right-to-left" ; 1; > ;
             < "Use superordinate settings" ; 4; > ;
         };
+    StringList [ english_us ] =
+    {
+         < "Left-to-right" ; 0; > ;
+        < "Right-to-left" ; 1; > ;
+        < "Use superordinate object settings" ; 4; > ;
+    };
+    StringList [ japanese ] =
+    {
+         < "Â∑¶„Åã„ÇâÂè≥„Å∏" ; 0; > ;
+        < "Âè≥„Åã„ÇâÂ∑¶„Å∏" ; 1; > ;
+        < "Âë®„Çä„ÅÆ„ÉÜ„Ç≠„Çπ„Éà„ÅÆÊñáÂ≠óÊñπÂêë„Å´Âêà„Çè„Åõ„Çã" ; 4; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des ¸bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ korean ] =
+    {
+         < "ÏôºÏ™ΩÏóêÏÑú Ïò§Î•∏Ï™ΩÏúºÎ°ú" ; 0; > ;
+        < "Ïò§Î•∏Ï™ΩÏóêÏÑú ÏôºÏ™ΩÏúºÎ°ú" ; 1; > ;
+            < "ÏÉÅÏúÑ Í∞úÏ≤¥Ïùò ÏÑ§Ï†ï Ï†ÅÏö©" ; 4; > ;
+        };
+    StringList [ chinese_traditional ] =
+    {
+         < "ÂæûÂ∑¶ÂêëÂè≥" ; 0; > ;
+        < "ÂæûÂè≥ÂêëÂ∑¶" ; 1; > ;
+        < "Ê≤øÁî®ÁèæÊúâÁöÑÊñáÂ≠óÊñπÂêëÁöÑË®≠ÂÆö" ; 4; > ;
+    };
+    StringList [ french ] =
+    {
+         < "De gauche ‡ droite" ; 0; > ;
+        < "De droite ‡ gauche" ; 1; > ;
+        < "Utiliser les paramËtres de l'objet supÈrieur" ; 4; > ;
+    };
+    StringList [ italian ] =
+    {
+         < "Da sinistra a destra" ; 0; > ;
+        < "Da destra a sinistra" ; 1; > ;
+        < "Usa le impostazioni dell'oggetto superiore" ; 4; > ;
+    };
+    StringList [ swedish ] =
+    {
+         < "V‰nster-till-hˆger" ; 0; > ;
+        < "Hˆger-till-v‰nster" ; 1; > ;
+        < "Anv‰nd det ˆverordnade objektets inst‰llningar" ; 4; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+         < "‰ªéÂ∑¶ÂêëÂè≥" ; 0; > ;
+        < "‰ªéÂè≥ÂêëÂ∑¶" ; 1; > ;
+        < "Ê≤øÁî®Áé∞ÊúâÁöÑÊñáÂ≠óÊñπÂêëÁöÑËÆæÂÆö" ; 4; > ;
+    };
     };
     Text[ chinese_simplified ] = "Ê†è";
     Text[ russian ] = " ÓÎÓÌÍË";
@@ -967,7 +1059,7 @@ TabPage TP_COLUMN
     Text[ korean ] = "Îã®";
     Text[ language_user1 ] = " ";
     Text[ turkish ] = "S¸tun";
-    Text[ catalan ] = "Columnas";
+    Text[ catalan ] = "Columnes";
     Text[ thai ] = "‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå";
 };
 
@@ -1014,7 +1106,7 @@ ModalDialog DLG_COLUMN
         Text[ swedish ] = "~Anv‰nd pÂ";
         Text[ russian ] = "œËÏÂÌËÚ¸ Í:";
         Text[ italian ] = "~Applica a";
-        Text[ danish ] = "Anvend pÂ:";
+        Text[ danish ] = "~Anvend pÂ";
         Text[ polish ] = "Zastosuj w";
         Text[ portuguese_brazilian ] = "~Apply to:";
         Text[ japanese ] = "Ë®≠ÂÆöÂØæË±°(~A):";
@@ -1024,7 +1116,7 @@ ModalDialog DLG_COLUMN
         Text[ arabic ] = " ÿ»Ìﬁ ⁄·Ï:";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Uygulanaca˝ yer:";
-        Text[ catalan ] = "~Aplicar a:";
+        Text[ catalan ] = "~Aplica a:";
         Text[ finnish ] = "~K‰yt‰:";
         Text[ thai ] = "‡πÉ~‡∏ä‡πâ‡∏Å‡∏±‡∏ö";
     };
@@ -1204,11 +1296,11 @@ ModalDialog DLG_COLUMN
         };
         StringList [ catalan ] =
         {
-            < "SelecciÛn" ;             LISTBOX_SELECTION; > ;
-            < "¡rea actual" ;   LISTBOX_SECTION     ; > ;
-            < "¡reas seleccionadas" ;  LISTBOX_SECTIONS ; > ;
-            < "Marco" ;                 LISTBOX_FRAME       ; > ;
-            < "Estilo de p·gina: " ;        LISTBOX_PAGE        ; > ;
+            < "SelecciÛ" ;              LISTBOX_SELECTION; > ;
+            < "¿rea actual" ;   LISTBOX_SECTION     ; > ;
+            < "¿rees seleccionades" ;  LISTBOX_SECTIONS ; > ;
+            < "Marc" ;                  LISTBOX_FRAME       ; > ;
+            < "Estil de p‡gina: " ;         LISTBOX_PAGE        ; > ;
         };
         StringList [ finnish ] =
         {
@@ -1246,7 +1338,7 @@ ModalDialog DLG_COLUMN
     Text[ arabic ] = "√⁄„œ…";
     Text[ language_user1 ] = " ";
     Text[ turkish ] = "S¸tun";
-    Text[ catalan ] = "Columnas";
+    Text[ catalan ] = "Columnes";
     Text[ finnish ] = "Sarakkeet";
     Text[ thai ] = "‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå";
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:49:28 $
+ *  last change: $Author: os $ $Date: 2002-09-10 14:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2639,7 +2639,7 @@ TabPage TP_OPTSHDWCRSR
     {
         Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "Ta~bulatoren" ;
+        Text = "Tabulat~oren" ;
         Text [ ENGLISH ] = "~Tabs" ;
         Text [ norwegian ] = "~Tabs" ;
         Text [ italian ] = "~Tabulazioni" ;
