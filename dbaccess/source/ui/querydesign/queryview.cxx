@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:32 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,6 @@
  ************************************************************************/
 #ifndef DBAUI_QUERYVIEW_HXX
 #include "queryview.hxx"
-#endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
 #endif
 #ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
