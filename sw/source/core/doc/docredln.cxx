@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-23 15:58:36 $
+ *  last change: $Author: jp $ $Date: 2001-09-20 12:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2134,6 +2134,7 @@ void SwDoc::SetRedlinePasswd(
             const ::com::sun::star::uno::Sequence <sal_Int8>& rNew )
 {
     aRedlinePasswd = rNew;
+    SetModified();
 }
 
 /*  */
