@@ -6707,8 +6707,8 @@ echo "${ECHO_T}checked (JDK $_jdk)" >&6
         JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*java,,p"`
       fi
    else
-      { { echo "$as_me:$LINENO: error: JAVA not found. You need at least jdk-1.3, Kaffee 1.01, or gcj" >&5
-echo "$as_me: error: JAVA not found. You need at least jdk-1.3, Kaffee 1.01, or gcj" >&2;}
+      { { echo "$as_me:$LINENO: error: JAVA not found. You need at least jdk-1.3, Kaffee 1.01, or gcj-4" >&5
+echo "$as_me: error: JAVA not found. You need at least jdk-1.3, Kaffee 1.01, or gcj-4" >&2;}
    { (exit 1); exit 1; }; }
    fi
 else
@@ -6903,6 +6903,159 @@ echo "$as_me: WARNING: in case JAVA_HOME is incorrectly set, some projects with 
       fi
     fi
 fi
+
+if test "$JDK" == "gcj"; then
+   save_CFLAGS=$CFLAGS
+   CFLAGS="$CFLAGS -I$JAVA_HOME/include"
+   if test "${ac_cv_header_jni_h+set}" = set; then
+  echo "$as_me:$LINENO: checking for jni.h" >&5
+echo $ECHO_N "checking for jni.h... $ECHO_C" >&6
+if test "${ac_cv_header_jni_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_jni_h" >&5
+echo "${ECHO_T}$ac_cv_header_jni_h" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking jni.h usability" >&5
+echo $ECHO_N "checking jni.h usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <jni.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking jni.h presence" >&5
+echo $ECHO_N "checking jni.h presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <jni.h>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_cxx_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_cxx_werror_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: jni.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: jni.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: jni.h: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: jni.h: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: jni.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: jni.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: jni.h:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: jni.h:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: jni.h: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: jni.h: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: jni.h:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: jni.h:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: jni.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: jni.h: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: jni.h: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: jni.h: in the future, the compiler will take precedence" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------------ ##
+## Report this to the AC_PACKAGE_NAME lists.  ##
+## ------------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for jni.h" >&5
+echo $ECHO_N "checking for jni.h... $ECHO_C" >&6
+if test "${ac_cv_header_jni_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_jni_h=$ac_header_preproc
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_jni_h" >&5
+echo "${ECHO_T}$ac_cv_header_jni_h" >&6
+
+fi
+if test $ac_cv_header_jni_h = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: jni.h could not be found. Mismatch between gcc and libgcj or libgcj-devel missing?" >&5
+echo "$as_me: error: jni.h could not be found. Mismatch between gcc and libgcj or libgcj-devel missing?" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+
+   CFLAGS=$save_CFLAGS
+fi
+
 
 
 
@@ -15978,8 +16131,9 @@ cat > conftest.xml << EOF
 	</target>
     </project>
 EOF
-
+  oldJAVA_HOME=$JAVA_HOME
   if test "$JDK" = "gcj"; then
+    JAVA_HOME=; export JAVA_HOME
     ant_cmd="$ANT -Dbuild.compiler=gcj -buildfile conftest.xml 1>&2"
   else
     ant_cmd="$ANT -buildfile conftest.xml 1>&2"
@@ -16006,7 +16160,7 @@ echo "$as_me: WARNING: Ant does not work - Some Java projects will not build!" >
     ANT_HOME=""
     echo "Ant does not work - Some Java projects will not build!" >>warn
   fi
-
+  JAVA_HOME=$oldJAVA_HOME
   rm -f conftest* core core.* *.core
 fi
 if test -z "$ANT_HOME"; then
