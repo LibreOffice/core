@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-02 13:55:52 $
+#   last change: $Author: hjs $ $Date: 2001-02-09 11:22:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1001,6 +1001,16 @@ UNOIDLINC+=-I. -I.. -I$(PRJ) -I$(PRJ)$/inc -I$(PRJ)$/$(INPATH)$/idl -I$(OUT)$/in
 CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME) -D$(REMOTEDEF)
 .ELSE
 CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
+.ENDIF
+
+#to be removed soon!!!
+.IF "$(BUILD_SOSL)" == ""
+.IF "$(USE_XPRINTER)" == ""
+.IF "$(OS)" != "MACOSX"
+CDEFS += -DUSE_PSPRINT
+PSPRINT=true
+.ENDIF
+.ENDIF
 .ENDIF
 
 #to be removed soon!!!
