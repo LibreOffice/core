@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabbtmp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:10:22 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,8 +341,8 @@ BOOL XBitmapList::Load()
 
         aURL.Append( aName );
 
-        if( !aURL.getExtension().Len() )
-            aURL.setExtension( String( pszExtBitmap, 3 ) );
+        if( !aURL.getExtension().getLength() )
+            aURL.setExtension( rtl::OUString( pszExtBitmap, 3 ) );
 
 //BFS01     // check if file exists, SfxMedium shows an errorbox else
 //BFS01     {
@@ -405,8 +405,8 @@ BOOL XBitmapList::Save()
 
     aURL.Append( aName );
 
-    if( !aURL.getExtension().Len() )
-        aURL.setExtension( String( pszExtBitmap, 3 ) );
+    if( !aURL.getExtension().getLength() )
+        aURL.setExtension( rtl::OUString( pszExtBitmap, 3 ) );
 
     uno::Reference< container::XNameContainer > xTable( SvxUnoXBitmapTable_createInstance( this ), uno::UNO_QUERY );
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
