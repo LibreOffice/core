@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-23 09:30:31 $
+ *  last change: $Author: rt $ $Date: 2001-04-24 10:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1105,7 +1105,8 @@ void OQueryController::executeQuery()
         for(;bAllEmpty && aIter != m_vTableFieldDesc.end();++aIter)
             bAllEmpty = (*aIter)->IsEmpty();
 
-        ErrorBox(getQueryView(), ModuleRes(bAllEmpty ? ERR_QRY_NOCRITERIA : ERR_QRY_NOSTATEMENT)).Execute();
+        ErrorBox aBox(getQueryView(), ModuleRes(bAllEmpty ? ERR_QRY_NOCRITERIA : ERR_QRY_NOSTATEMENT));
+        aBox.Execute();
     }
 }
 // -----------------------------------------------------------------------------
