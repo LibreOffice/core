@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:55:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-15 21:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ TabPage TP_CONFIG_MENU
         Text = "Menьeintrдge" ;
         Text [ ENGLISH ] = "Menu entries" ;
         Text[ english_us ] = "Menu entries";
-        Text[ portuguese ] = "Menu entries";
+        Text[ portuguese ] = "Entradas de menu";
         Text[ russian ] = "Пункты меню";
         Text[ greek ] = "Menu entries";
         Text[ dutch ] = "Menu entries";
@@ -539,7 +539,7 @@ TabPage TP_CONFIG_ACCEL
         Text [ ENGLISH ] = "Keyboard shortcuts" ;
         Group = TRUE ;
         Text[ english_us ] = "Shortcut keys";
-        Text[ portuguese ] = "Keyboard shortcuts";
+        Text[ portuguese ] = "Teclas de atalho";
         Text[ russian ] = "Комбинации клавиш";
         Text[ greek ] = "Keyboard shortcuts";
         Text[ dutch ] = "Keyboard shortcuts";
@@ -1587,5 +1587,6 @@ String STR_MENU
     Text[ finnish ] = "Valikko";
 };
  // ********************************************************************** EOF
+
 
 
