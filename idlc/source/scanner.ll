@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.ll,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:11:09 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 09:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 
 #ifndef _IDLC_IDLC_HXX_
 #include <idlc/idlc.hxx>
+#endif
+#ifndef _IDLC_ERRORHANDLER_HXX_
+#include <idlc/errorhandler.hxx>
 #endif
 #ifndef _IDLC_FEHELPER_HXX_
 #include <idlc/fehelper.hxx>
@@ -395,35 +398,52 @@ oneway		return IDL_ONEWAY;
 
 <DOCU>[^*\n]+	{
 				docu += ::rtl::OString(yytext);
-			} 
+			}
+
 <DOCU>"\n"[ \t]*"*"{1} 	{
+				idlc()->setLineNumber( idlc()->getLineNumber()  + 1);
 				docu += ::rtl::OString("\n");
 			}
 
 <DOCU>"\n"	{
+				idlc()->setLineNumber( idlc()->getLineNumber()  + 1);
 				docu += ::rtl::OString(yytext);
 			}
 
-<DOCU>"*"[^*/\n]+ 	{
+<DOCU>"*"[^*^/\n]* 	{
 				docu += ::rtl::OString(yytext);
 			}
 
 <DOCU>"\n"[ \t]*"*/" 	{
 				docu = docu.trim();
-                sal_Int32 nIndex = 0;
-                int count = 0;
-                do { docu.getToken( 0, '\n', nIndex ); count++; } while( nIndex != -1 );
-				idlc()->setLineNumber( beginLine + count - 1);
+				sal_Int32 nIndex = 0;
+				int count = 0;
+				do { docu.getToken( 0, '\n', nIndex ); count++; } while( nIndex != -1 );
+				idlc()->setLineNumber( beginLine + count - 1);                
+				if ( (nIndex = docu.indexOf("/*")) >= 0 || (nIndex = docu.indexOf("///")) >= 0 )
+				{
+                    if ( 0 != nIndex &&
+                         (docu.getStr()[nIndex - 1] != '"' && docu.getStr()[nIndex - 1] != ':') )
+                        idlc()->error()->syntaxError(PS_NoState, idlc()->getLineNumber(),
+                                                     "nested documentation strings are not allowed!");
+				}
 				idlc()->setDocumentation(docu);
 			  	BEGIN( INITIAL );
 			}
 
 <DOCU>"*/"	{
 				docu = docu.trim();
-                sal_Int32 nIndex = 0;
-                int count = 0;
-                do { docu.getToken( 0, '\n', nIndex ); count++; } while( nIndex != -1 );
+				sal_Int32 nIndex = 0;
+				int count = 0;
+				do { docu.getToken( 0, '\n', nIndex ); count++; } while( nIndex != -1 );
 				idlc()->setLineNumber( beginLine + count - 1);
+				if ( docu.indexOf("/*") >= 0 || docu.indexOf("//") >= 0 )
+				{
+                    if ( 0 != nIndex &&
+                         (docu.getStr()[nIndex - 1] != '"' && docu.getStr()[nIndex - 1] != ':') )
+                        idlc()->error()->syntaxError(PS_NoState, idlc()->getLineNumber(),
+                                                     "nested documentation strings are not allowed!");
+				}
 				idlc()->setDocumentation(docu);
 			  	BEGIN( INITIAL );
 			}
