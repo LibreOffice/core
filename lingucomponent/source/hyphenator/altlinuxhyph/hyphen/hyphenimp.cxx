@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:02:08 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:04:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,28 +408,42 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
             lcword = new char[wordlen+1];
         hyphens = new char[wordlen+5];
             enmkallsmall(lcword,encWord.getStr(),dict->cset);
+            // now strip off any ending periods
+            int n = wordlen-1;
+        while((n >=0) && (lcword[n] == '.')) n--;
+            n++;
+            // fprintf(stderr,"hyphenate... %s\n",lcword); fflush(stderr);
+            if (n > 0) {
+           if (hnj_hyphen_hyphenate(dict, lcword, n, hyphens))
+           {
+              //whoops something did not work
+              delete[] hyphens;
+                  delete[] lcword;
+              return NULL;
+           }
+            }
+            // now backfill hyphens[] for any removed trailing periods
+            for (int c = n; c < wordlen; c++) hyphens[c] = '0';
+            hyphens[wordlen] = '\0';
 
-        if (hnj_hyphen_hyphenate(dict, lcword, wordlen, hyphens))
-        {
-          //whoops something did not work
-            delete[] hyphens;
-                delete[] lcword;
-            return NULL;
-        }
-
-        OUStringBuffer  hyphenatedWord;
+            // fprintf(stderr,"... %s\n",hyphens); fflush(stderr);
+        OUStringBuffer  hyphenatedWordBuffer;
+            OUString hyphenatedWord;
         INT32 Leading =  GetPosInWordToCheck( aWord, nMaxLeading );
 
         for (INT32 i = 0; i < encWord.getLength(); i++)
         {
-            hyphenatedWord.append(aWord[i]);
+            hyphenatedWordBuffer.append(aWord[i]);
             if ((hyphens[i]&1)  && (i < Leading))
             {
             nHyphenationPos = i;
-            hyphenatedWord.append(sal_Unicode('='));
+            hyphenatedWordBuffer.append(sal_Unicode('='));
             }
          }
 
+            hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
+        fprintf(stderr,"result is %s\n",OU2A(hyphenatedWord));
+            fflush(stderr);
          if (nHyphenationPos  == -1)
              xRes = NULL;
          else
@@ -531,13 +545,23 @@ Reference< XPossibleHyphens > SAL_CALL
       lcword = new char[wordlen+1];
       hyphens = new char[wordlen+5];
       enmkallsmall(lcword,encWord.getStr(),dict->cset);
-
-      if (hnj_hyphen_hyphenate(dict, lcword, wordlen, hyphens))
-      {
-          delete[] hyphens;
-          delete[] lcword;
-          return NULL;
+      // first remove any trailing periods
+      int n = wordlen-1;
+      while((n >=0) && (lcword[n] == '.')) n--;
+      n++;
+      // fprintf(stderr,"hyphenate... %s\n",lcword); fflush(stderr);
+      if (n > 0) {
+     if (hnj_hyphen_hyphenate(dict, lcword, n, hyphens))
+         {
+             delete[] hyphens;
+             delete[] lcword;
+             return NULL;
+         }
       }
+      // now backfill hyphens[] for any removed periods
+      for (int c = n; c < wordlen; c++) hyphens[c] = '0';
+      hyphens[wordlen] = '\0';
+      // fprintf(stderr,"... %s\n",hyphens); fflush(stderr);
 
       INT16 nHyphCount = 0;
 
@@ -563,6 +587,8 @@ Reference< XPossibleHyphens > SAL_CALL
       }
 
       hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
+      fprintf(stderr,"result is %s\n",OU2A(hyphenatedWord));
+      fflush(stderr);
 
       xRes = new PossibleHyphens( aWord, LocaleToLanguage( aLocale ),
                 hyphenatedWord, aHyphPos );
