@@ -54,7 +54,7 @@ Public Const cYOffset = 700
 &apos; This is the viewed space that we lose because of the symbol bars
 Public Const cSymbolMargin = 2000
 Public Const MaxFieldIndex = 200
-   
+
 Public Const cControlCollectionCount = 9
 Public Const cLabel 		= 1
 Public Const cTextBox 		= 2
@@ -66,7 +66,7 @@ Public Const cCurrencyBox 	= 7
 Public Const cGridControl	= 8
 Public Const cImageControl	= 9
 
-Public Styles(50, 8) as String
+Public Styles(100, 8) as String
 
 Public CurControlType as Integer
 Public CurFieldlength as Double
