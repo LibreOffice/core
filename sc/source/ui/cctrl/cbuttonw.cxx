@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cbuttonw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-29 14:17:38 $
+ *  last change: $Author: dr $ $Date: 2002-08-01 14:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ void ScDDComboBoxButton::ImpDrawArrow( const Rectangle& rRect,
     Rectangle aTempRect = aPixRect;
 
     const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
-    Color aColor( bState ? COL_LIGHTBLUE : rSett.GetButtonTextColor() );
+    Color aColor( bState ? COL_LIGHTBLUE : rSett.GetButtonTextColor().GetColor() );
     pOut->SetFillColor( aColor );
     pOut->SetLineColor( aColor );
 
