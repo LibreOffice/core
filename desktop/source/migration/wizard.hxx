@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizard.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:50:22 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ public:
     FirstStartWizard(Window* pParent);
 
     virtual short Execute();
+    virtual long PreNotify( NotifyEvent& rNEvt );
 
     static rtl::OUString getLicensePath();
 
