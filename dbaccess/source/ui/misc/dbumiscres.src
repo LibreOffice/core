@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:18:04 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ String STR_GENERAL_SDB_ERROR
     Text[ japanese ] = "ÃŞ°À¿°½‚ÖÚ‘±‚Ì´×°";
     Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º¿¡ ¿¬°á½Ã¿¡ ¿À·ù";
     Text[ chinese_simplified ] = "ÔÚºÍÊı¾İÔ´Á¬½ÓÊ±·¢ÉúÒ»¸ö´íÎó";
-    Text[ chinese_traditional ] = "³s½u¨ì¸ê®Æ¨Ó·½®Éµo¥Í¤@­Ó¿ù»~";
+    Text[ chinese_traditional ] = "³s½u¨ì¸ê®Æ·½®Éµo¥Í¤@­Ó¿ù»~";
     Text[ turkish ] = "Error while connecting to the data source";
     Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÇáÇÊÕÇá ÈãÕÏÑ ÇáÈíÇäÇÊ";
     Text[ finnish ] = "On ilmennyt virhe muodostettaessa yhteyttä tietolähteeseen";
@@ -294,9 +294,9 @@ String STR_BUTTON_TEXT_ALL
     Text[ polish ] = "~Wszystkie";
     Text[ portuguese_brazilian ] = "~All";
     Text[ japanese ] = "‚·‚×‚Ä(~A)";
-    Text[ korean ] = "ÀüÃ¼";
-    Text[ chinese_simplified ] = "È«²¿";
-    Text[ chinese_traditional ] = "¥ş³¡";
+    Text[ korean ] = "ÀüÃ¼(~A)";
+    Text[ chinese_simplified ] = "È«²¿(~A)";
+    Text[ chinese_traditional ] = "¥ş³¡(~A)";
     Text[ turkish ] = "~All";
     Text[ arabic ] = "~All";
     Text[ catalan ] = "~All";
@@ -305,6 +305,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29  2001/07/03 22:18:04  kz
+ *  Merge SRC633: 04.07.01 - 00:16:38
+ *
  *  Revision 1.28  2001/06/13 22:18:58  kz
  *  Merge SRC633: 14.06.01 - 00:19:49
  *
@@ -349,6 +352,7 @@ String STR_BUTTON_TEXT_ALL
  *
  *  Revision 1.0 26.09.00 08:26:13  fs
  ************************************************************************/
+
 
 
 
