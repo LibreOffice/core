@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 16:33:39 $
+#   last change: $Author: ganaya $ $Date: 2001-02-13 04:40:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -164,7 +164,12 @@ SLOFILES+=$(SLO)$/staticmbodbc.obj
 .ENDIF
 
 
-SHL1VERSIONMAP= $(JDBC_TARGET).map
+.IF "$(OS)"=="MACOSX"
+SHL1VERSIONMAP=$(JDBC_TARGET).$(DLLPOSTFIX).map
+.ELSE      
+SHL1VERSIONMAP=$(JDBC_TARGET).map
+.ENDIF
+
 # --- Library -----------------------------------
 
 SHL1TARGET=	$(JDBC_TARGET)$(JDBC_MAJOR)
