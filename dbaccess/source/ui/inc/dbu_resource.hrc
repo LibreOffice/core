@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:13:54 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,8 @@
 #define MENU_BROWSER_QUERYCONTEXT       RID_MENU_START + 15
 #define MENU_BROWSER_BOOKMARKCONTEXT    RID_MENU_START + 16
 #define MENU_BROWSER_DEFAULTCONTEXT     RID_MENU_START + 17
+#define MENU_BROWSER_VIEWCONTEXT        RID_MENU_START + 18
+
 
 //========================================================================
 // controls
@@ -428,6 +430,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.43  2001/05/10 12:13:54  fs
+ *  #86223# +STR_MISSING_TABLES_XDROP / +STR_BUTTON_TEXT_ALL / +QUERY_NEED_TO_SAVE_FILTER / +ERR_CANTDOTABLEACTION
+ *
  *  Revision 1.42  2001/05/08 12:09:00  fs
  *  #86224# new strings
  *

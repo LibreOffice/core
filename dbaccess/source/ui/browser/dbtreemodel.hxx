@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:36:16 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
+#ifndef _SBA_UNODATBR_HXX_
+#include "unodatbr.hxx"
+#endif
 
 // syntax of the tree                   userdata
 // datasource                           holds the connection
@@ -95,22 +98,16 @@ namespace dbaui
     class DBTreeListModel : public SvLBoxTreeList
     {
     public:
-        enum EntryType
-        {
-            etQuery,
-            etTable,
-            etBookmark
-        };
         struct DBTreeListUserData
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         xObject;
-            EntryType   eType;
+            SbaTableQueryBrowser::EntryType eType;
 
             DBTreeListUserData();
         };
 
-        static sal_uInt16 getImageResId(EntryType _eType);
+        static sal_uInt16 getImageResId(SbaTableQueryBrowser::EntryType _eType);
     };
 }
 

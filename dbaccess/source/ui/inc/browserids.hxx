@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:11:23 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,11 @@
 #define ID_EDIT_TABLE                       26
 #define ID_DROP_TABLE                       27
 #define ID_NEW_VIEW_DESIGN                  28
+#define ID_DROP_VIEW                        29
+#define ID_TREE_VIEW_COPY                   30
+#define ID_TREE_VIEW_PASTE                  31
+
+
 
 #define ID_BROWSER_QUERY_EXECUTE            SID_FM_EXECUTE
 #define ID_BROWSER_CLEAR_QUERY              SID_SBA_CLEAR_QUERY

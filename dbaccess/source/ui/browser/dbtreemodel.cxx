@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:37:51 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,20 +76,22 @@ namespace dbaui
     //========================================================================
     //------------------------------------------------------------------------
     DBTreeListModel::DBTreeListUserData::DBTreeListUserData()
-        :eType(etQuery)
+        :eType(SbaTableQueryBrowser::etQuery)
     {
     }
 
     //------------------------------------------------------------------------
-    sal_uInt16 DBTreeListModel::getImageResId(EntryType _eType)
+    sal_uInt16 DBTreeListModel::getImageResId(SbaTableQueryBrowser::EntryType _eType)
     {
         switch (_eType)
         {
-            case etTable:
+            case SbaTableQueryBrowser::etTable:
                 return TABLE_TREE_ICON;
-            case etQuery:
+            case SbaTableQueryBrowser::etView:
+                return VIEW_TREE_ICON;
+            case SbaTableQueryBrowser::etQuery:
                 return QUERY_TREE_ICON;
-            case etBookmark:
+            case SbaTableQueryBrowser::etBookmark:
                 return BOOKMARK_TREE_ICON;
         }
         OSL_ENSURE(sal_False, "DBTreeListModel::getImageResId: invalid entry type!");
@@ -101,6 +103,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/04/26 11:37:51  fs
+ *  file is alive, again - added support for data source associated bookmarks
+ *
  *
  *  Revision 1.0 25.04.01 14:00:45  fs
  ************************************************************************/

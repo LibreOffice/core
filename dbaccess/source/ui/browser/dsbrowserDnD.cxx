@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:24:47 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void SbaTableQueryBrowser::implPasteQuery( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rPasteData )
     {
-        DBG_ASSERT(ET_QUERY_CONTAINER == getEntryType(_pApplyTo), "SbaTableQueryBrowser::implPasteQuery: invalid target entry!");
+        DBG_ASSERT(etQueryContainer == getEntryType(_pApplyTo), "SbaTableQueryBrowser::implPasteQuery: invalid target entry!");
         try
         {
             sal_Bool bQueryDescriptor = _rPasteData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
@@ -672,13 +672,13 @@ namespace dbaui
                 case SOT_FORMAT_RTF:                    // RTF data descriptions
                 case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
                 case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
-                    if (ET_TABLE_CONTAINER == eEntryType)
+                    if (etTableContainer == eEntryType)
                         return DND_ACTION_COPY;
                     break;
 
                 case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
                 case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command
-                    if (ET_QUERY_CONTAINER == eEntryType)
+                    if (etQueryContainer == eEntryType)
                         return DND_ACTION_COPY;
                     break;
             }
@@ -739,13 +739,13 @@ namespace dbaui
                 case SOT_FORMAT_RTF:                    // RTF data descriptions
                 case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
                 case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
-                    bDoDrop = (ET_TABLE_CONTAINER == eEntryType);
+                    bDoDrop = (etTableContainer == eEntryType);
                     break;
 
                 case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command
                 case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
-                    bDoDrop =   (ET_QUERY_CONTAINER == eEntryType)
-                            ||  (ET_TABLE_CONTAINER == eEntryType);
+                    bDoDrop =   (etQueryContainer == eEntryType)
+                            ||  (etTableContainer == eEntryType);
                     break;
             }
             if (bDoDrop)
@@ -756,7 +756,7 @@ namespace dbaui
         {
             m_aAsyncDrop.aDroppedData   = aDroppedData;
             m_aAsyncDrop.pDroppedAt     = pHitEntry;
-            m_aAsyncDrop.bTable         = (ET_TABLE_CONTAINER == eEntryType);
+            m_aAsyncDrop.bTable         = (etTableContainer == eEntryType);
 
             m_nAsyncDrop = Application::PostUserEvent(LINK(this, SbaTableQueryBrowser, OnAsyncDrop));
             return DND_ACTION_COPY;
@@ -780,7 +780,7 @@ namespace dbaui
         if (!isObject(eEntryType))
             return DND_ACTION_NONE;
 
-        TransferableHelper* pTransfer = implCopyObject( pHitEntry, (ET_TABLE == eEntryType) ? CommandType::TABLE : CommandType::QUERY);
+        TransferableHelper* pTransfer = implCopyObject( pHitEntry, (etTable == eEntryType || etView == eEntryType) ? CommandType::TABLE : CommandType::QUERY);
         Reference< XTransferable> xEnsureDelete = pTransfer;
 
         if (pTransfer)
@@ -792,7 +792,7 @@ namespace dbaui
     sal_Bool SbaTableQueryBrowser::isTableFormat()
     {
         sal_Bool bTableFormat = sal_False;
-#if SUPD<631
+#if SUPD < 631
         TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
 #else
         TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
@@ -801,6 +801,7 @@ namespace dbaui
                     ||  aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
                     ||  aTransferData.HasFormat(SOT_FORMAT_RTF)
                     ||  aTransferData.HasFormat(SOT_FORMATSTR_ID_HTML);
+
         return bTableFormat;
     }
 
@@ -811,6 +812,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/05/10 12:24:47  fs
+ *  the clipboard changes are SUPD-dependent
+ *
  *  Revision 1.10  2001/05/07 14:09:00  fs
  *  MUST changes regarding the system clipboard access
  *

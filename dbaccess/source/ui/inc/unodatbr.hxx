@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:49:58 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,9 @@ class SvLBoxEntry;
 class Splitter;
 struct SvSortData;
 
-#define CONTAINER_QUERIES       sal_Int32(ET_QUERY - ET_BOOKMARK)
-#define CONTAINER_TABLES        sal_Int32(ET_TABLE - ET_BOOKMARK)
-#define CONTAINER_BOOKMARKS     sal_Int32(ET_BOOKMARK - ET_BOOKMARK)
+#define CONTAINER_QUERIES       sal_Int32(etQuery - etBookmark)
+#define CONTAINER_TABLES        sal_Int32(etTable - etBookmark)
+#define CONTAINER_BOOKMARKS     sal_Int32(etBookmark - etBookmark)
 
 // .........................................................................
 namespace dbaui
@@ -150,6 +150,19 @@ namespace dbaui
     public:
         SbaTableQueryBrowser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
         ~SbaTableQueryBrowser();
+
+        enum EntryType
+        {
+            etDatasource,
+            etBookmarkContainer,
+            etQueryContainer,
+            etTableContainer,
+            etBookmark,
+            etQuery,
+            etTable,
+            etView,
+            etUnknown
+        };
 
         // need by registration
         static ::rtl::OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
@@ -255,7 +268,7 @@ namespace dbaui
         */
         void closeConnection(SvLBoxEntry* _pEntry,sal_Bool _bDisposeConnection = sal_True);
 
-        sal_Bool    populateTree(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, const Image& _rImage);
+        sal_Bool    populateTree(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, const EntryType& _rEntryType);
         void        initializeTreeModel();
 
         /** search in the tree for query- or tablecontainer equal to this interface and return
@@ -277,21 +290,10 @@ namespace dbaui
         TransferableHelper*
                 implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection = sal_True );
 
-        enum EntryType
-        {
-            ET_DATASOURCE,
-            ET_BOOKMARK_CONTAINER,
-            ET_QUERY_CONTAINER,
-            ET_TABLE_CONTAINER,
-            ET_BOOKMARK,
-            ET_QUERY,
-            ET_TABLE,
-            ET_UNKNOWN
-        };
         EntryType   getEntryType( SvLBoxEntry* _pEntry );
         EntryType   getChildType( SvLBoxEntry* _pEntry );
-        sal_Bool    isObject( EntryType _eType ) { return (ET_TABLE == _eType) || (ET_QUERY == _eType) || (ET_BOOKMARK == _eType); }
-        sal_Bool    isContainer( EntryType _eType ) { return (ET_TABLE_CONTAINER == _eType) || (ET_QUERY_CONTAINER == _eType) || (ET_BOOKMARK_CONTAINER == _eType); }
+        sal_Bool    isObject( EntryType _eType ) { return (etTable == _eType) || (etView == _eType) || (etQuery == _eType) || (etBookmark == _eType); }
+        sal_Bool    isContainer( EntryType _eType ) { return (etTableContainer == _eType) || (etQueryContainer == _eType) || (etBookmarkContainer == _eType); }
         sal_Bool    isContainer( SvLBoxEntry* _pEntry ) { return isContainer( getEntryType( _pEntry ) ); }
 
         // ensure that the xObject for the given entry is set on the user data

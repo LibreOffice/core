@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-11 05:15:44 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,7 +704,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ turkish ] = "administrate ~data sources ..."; \
     Text[ arabic ] = "≈œ«—… „’«œ— «·»Ì«‰« ..."; \
     Text[ finnish ] = "~Datenquellen verwalten ...";    \
-    Text[ catalan ] = "Administrate ~Data Sources...";
+    Text[ catalan ] = "Administrate ~Data Sources..."; \
     Text[ catalan ] = "Administrate ~Data Sources...";
 
 #define MID_CLOSECONN   \
@@ -731,7 +731,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ turkish ] = "~close connection";  \
     Text[ arabic ] = "ﬁÿ⁄ «·« ’«·"; \
     Text[ finnish ] = "Verbindung s~chlieﬂen";  \
-    Text[ catalan ] = "Disco~nnect";
+    Text[ catalan ] = "Disco~nnect";            \
     Text[ catalan ] = "Disco~nnect";
 
 #define MID_REFRESHCONN \
@@ -758,7 +758,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ turkish ] = "~refresh connection";    \
     Text[ arabic ] = " ÕœÌÀ «·« ’«·";   \
     Text[ finnish ] = "Verbindung e~rneuern";   \
-    Text[ catalan ] = "~Refresh Connection";
+    Text[ catalan ] = "~Refresh Connection";    \
     Text[ catalan ] = "~Refresh Connection";
 
 #define MITEMS_DEFAULT  \
@@ -985,6 +985,67 @@ Menu MENU_BROWSER_TABLECONTEXT
         };
     };
 };
+Menu MENU_BROWSER_VIEWCONTEXT
+{
+    ItemList =
+    {
+        MITEMS_DEFAULT
+
+        MenuItem { MID_NEW_TABLE_DESIGN };
+        MenuItem { MID_NEW_VIEW_DESIGN  };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem { MID_DBAUI_DROP_VIEW };
+        MenuItem
+        {
+            Identifier = ID_TREE_VIEW_COPY ;
+            HelpId = HID_BROWSER_VIEW_COPY ;
+            Text = "Ansicht ~kopieren" ;
+            Text [ english ] = "c~opy view" ;
+            Text [ english_us ] = "C~opy View" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_VIEW_PASTE ;
+            HelpId = HID_BROWSER_VIEW_PASTE ;
+            Text = "Ansicht e~inf¸gen" ;
+            Text [ english ] = "~insert view" ;
+            Text [ english_us ] = "~Insert View" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_RELATION_DESIGN ;
+            HelpId = HID_BROWSER_RELATION_DESIGN ;
+            Text = "Relatio~nenentwurf" ;
+            Text [ english ] = "relatio~n design" ;
+            Text [ english_us ] = "Rel~ation Design" ;
+            Text[ portuguese ] = "Es~boÁar relaÁ„o";
+            Text[ russian ] = "œÓÂÍÚ Ò‚ˇÁÂÈ";
+            Text[ greek ] = "”˜Â‰È·ÛÏ¸Ú ÂÓ‹ÒÙÁÛÁÚ";
+            Text[ dutch ] = "~ontwerp voor verbinding";
+            Text[ french ] = "…bauche de relatio~n";
+            Text[ spanish ] = "DiseÒo de relaciones";
+            Text[ italian ] = "Struttura r~elazione";
+            Text[ danish ] = "relatio~n design";
+            Text[ swedish ] = "Relatio~nsutkast";
+            Text[ polish ] = "Projekt relacji";
+            Text[ portuguese_brazilian ] = "relatio~n design";
+            Text[ japanese ] = "ÿ⁄∞ºÆ›ÇÃ√ﬁªﬁ≤›(~A)";
+            Text[ korean ] = "rel~ation design";
+            Text[ chinese_simplified ] = "πÿ¡™…Ëº∆(~A)";
+            Text[ chinese_traditional ] = "√ˆ¡p≥]≠p(~A)";
+            Text[ turkish ] = "relatio~n design";
+            Text[ arabic ] = " ’„Ì„ ⁄·«ﬁ« ";
+        };
+    };
+};
+
 
 String STR_TITLE_CONFIRM_DELETION
 {
