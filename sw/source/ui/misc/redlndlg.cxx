@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 12:05:10 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 13:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,8 +610,9 @@ void SwRedlineAcceptDlg::InitAuthors()
         if( bOnlyFormatedRedlines && REDLINE_FORMAT != rRedln.GetType() )
             bOnlyFormatedRedlines = FALSE;
 
-        if( !bHasReadonlySel && rRedln.HasReadonlySel() )
-            bHasReadonlySel = TRUE;
+//JP 27.9.2001: make no sense if we handle readonly sections
+//      if( !bHasReadonlySel && rRedln.HasReadonlySel() )
+//          bHasReadonlySel = TRUE;
 
         String *pAuthor = new String(rRedln.GetAuthorString());
         if (!aStrings.Insert(pAuthor))
@@ -1320,8 +1321,9 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
             const SwRedline& rRedln = pSh->GetRedline( nPos );
             bIsNotFormated |= REDLINE_FORMAT != rRedln.GetType();
 
-            if( !bReadonlySel && rRedln.HasReadonlySel() )
-                bReadonlySel = TRUE;
+//JP 27.9.2001: make no sense if we handle readonly sections
+//          if( !bReadonlySel && rRedln.HasReadonlySel() )
+//              bReadonlySel = TRUE;
 
             if (pSh->GotoRedline(nPos, TRUE))
             {
@@ -1380,8 +1382,10 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
 
             aPopup.EnableItem( MN_EDIT_COMMENT, pEntry && pRed &&
                                             !pTable->GetParent(pEntry) &&
-                                            !pTable->NextSelected(pEntry) &&
-                                            !pRed->HasReadonlySel() );
+                                            !pTable->NextSelected(pEntry)
+//JP 27.9.2001: make no sense if we handle readonly sections
+//                                          && pRed->HasReadonlySel()
+                                            );
 
             aPopup.EnableItem( MN_SUB_SORT, pTable->First() != 0 );
             USHORT nColumn = pTable->GetSortedCol();
@@ -1557,188 +1561,4 @@ void SwRedlineAcceptDlg::FillInfo(String &rExtraData) const
     rExtraData += ')';
 }
 
-/*------------------------------------------------------------------------
 
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/02/14 09:58:12  jp
-    changes: international -> localdatawrapper
-
-    Revision 1.4  2000/12/21 16:15:31  jp
-    FillInfo: store TabDistance as string
-
-    Revision 1.3  2000/12/07 11:47:55  os
-    #81429# String::CreateFromInt32()
-
-    Revision 1.2  2000/10/25 19:14:21  jp
-    Select the current/next/prev redline if the dialog starts
-
-    Revision 1.1.1.1  2000/09/18 17:14:45  hr
-    initial import
-
-    Revision 1.54  2000/09/18 16:05:59  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.53  2000/09/07 15:59:26  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.52  2000/06/14 09:06:30  os
-    #75451# enabling of buttons corrected
-
-    Revision 1.51  2000/04/18 15:08:17  os
-    UNICODE
-
-    Revision 1.50  2000/02/25 08:56:58  hr
-    #73447#: removed temporary
-
-    Revision 1.49  2000/02/11 14:56:07  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.48  1999/09/10 13:19:27  os
-    Chg: resource types removed
-
-    Revision 1.47  1999/07/08 14:31:40  MA
-    Use internal object to toggle wait cursor
-
-
-      Rev 1.46   08 Jul 1999 16:31:40   MA
-   Use internal object to toggle wait cursor
-
-      Rev 1.45   22 Jan 1999 11:51:20   JP
-   Task #58677#: Crsr in Readonly Bereichen zulassen
-
-      Rev 1.44   12 Jan 1999 14:37:10   OS
-   #60805# ChildWindow darf kein Show rufen
-
-      Rev 1.43   18 Nov 1998 15:44:28   OM
-   #59103# Redlines nach Kommentaren filtern
-
-      Rev 1.42   13 Nov 1998 16:41:08   OM
-   #59103# Autofmt-Redlines: zusammengehoerige filtern
-
-      Rev 1.41   13 Nov 1998 15:35:18   OM
-   #59103# Autofmt-Redlines: zusammengehoerige filtern
-
-      Rev 1.40   21 Oct 1998 10:56:34   OM
-   #57586# Redlining nach Autoformat
-
-      Rev 1.39   20 Oct 1998 17:52:22   OM
-   #57586# Redlining nach Autoformat
-
-      Rev 1.38   20 Oct 1998 11:39:04   OM
-   #57586# Redlining nach Autoformat
-
-      Rev 1.37   13 Oct 1998 16:09:38   OM
-   #57859# Redline-Dlg: Spaltenbreite merken
-
-      Rev 1.36   09 Oct 1998 17:05:22   JP
-   Bug #57741#: neue ResourceIds
-
-      Rev 1.35   18 Aug 1998 11:46:48   OM
-   #54866# Nach Aktionen filtern
-
-      Rev 1.34   28 Jul 1998 13:04:14   JP
-   Bug #53951#: Selektionen nicht aufheben, wenn keine Selektion in der Listbox ist
-
-      Rev 1.33   14 Jul 1998 14:19:54   OM
-   #52859# Autor-Button nicht anzeigen
-
-      Rev 1.32   13 Jul 1998 11:32:58   OM
-   #51840# HelpId fuer Redline-Control
-
-      Rev 1.31   10 Jun 1998 17:14:18   OM
-   WaitCursor
-
-      Rev 1.30   08 Jun 1998 17:58:16   OM
-   Ohne Redlines kein GPF
-
-      Rev 1.29   08 Jun 1998 15:04:22   OM
-   Optimiert
-
-      Rev 1.28   05 Jun 1998 17:13:16   OM
-   Optimiert
-
-      Rev 1.27   05 Jun 1998 10:46:00   OM
-   Optimierungen
-
-      Rev 1.26   03 Jun 1998 17:27:54   OM
-   Performance Optimierungen
-
-      Rev 1.25   03 Jun 1998 12:17:08   OM
-   Performance Optimierungen
-
-      Rev 1.24   07 Apr 1998 14:21:34   OM
-   RedlinData nicht mehr selber loeschen
-
-      Rev 1.23   07 Apr 1998 08:47:10   OM
-   Linien anzeigen
-
-      Rev 1.22   03 Apr 1998 13:05:30   OM
-   Kein Absturz bei fehlender SwView
-
-      Rev 1.21   01 Apr 1998 13:09:20   OM
-   Rekursion vermieden
-
-      Rev 1.20   31 Mar 1998 13:01:32   OM
-   Redline-Kommentare in schreibgeschuetzten bereichen nicht editierbar
-
-      Rev 1.19   27 Mar 1998 14:14:42   OM
-   ChildWindows im Modified-Hdl updaten
-
-      Rev 1.18   26 Mar 1998 21:48:36   JP
-   CallAcceptReject: wenn Pos am Ende steht, dann sollte der letzte Eintrag wieder selektiert werden
-
-      Rev 1.17   26 Mar 1998 15:30:16   JP
-   optimiert und Accept/Reject - behalten ihre Position in der Liste
-
-      Rev 1.16   24 Mar 1998 13:45:02   JP
-   neu: Redline fuer harte Attributierung
-
-      Rev 1.15   18 Mar 1998 18:30:46   OM
-   #48735# GPF im Redlining behoben
-
-      Rev 1.14   18 Mar 1998 11:34:10   OM
-   Resize der Basisklasse rufen
-
-      Rev 1.13   17 Mar 1998 09:36:22   OM
-   Groesse korrekt initialisieren
-
-      Rev 1.12   16 Mar 1998 19:10:42   OM
-   Zugriff auf Ini optimiert
-
-      Rev 1.11   16 Mar 1998 11:00:38   OM
-   Autoren vom Dokument zusammensuchen
-
-      Rev 1.10   16 Mar 1998 09:35:42   OM
-   4 Spalten
-
-      Rev 1.9   15 Mar 1998 16:20:36   OM
-   Groesse merken
-
-      Rev 1.8   10 Mar 1998 12:52:26   OM
-   Keine Sortierung per Default
-
-      Rev 1.7   09 Mar 1998 12:59:24   OM
-   Sortieren und filtern
-
-      Rev 1.6   09 Mar 1998 11:52:06   OM
-   Sortieren und filtern
-
-      Rev 1.5   07 Mar 1998 14:33:36   OM
-   Filtern und sortieren
-
-      Rev 1.4   03 Mar 1998 16:03:00   OM
-   Aufgeraeumt
-
-      Rev 1.3   03 Mar 1998 10:42:50   OM
-   Redline-Browser
-
-      Rev 1.2   28 Feb 1998 15:21:02   OM
-   Author vorselektieren
-
-      Rev 1.1   28 Feb 1998 15:12:06   OM
-   Accept / reject changes
-
-      Rev 1.0   27 Feb 1998 18:22:16   OM
-   Initial revision.
-
-------------------------------------------------------------------------*/
