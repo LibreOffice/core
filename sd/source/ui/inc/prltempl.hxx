@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 09:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,7 @@ public:
     SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, Window* pParent, SdResId DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool );
     ~SdPresLayoutTemplateDlg();
 
-    const SfxItemSet* GetOutputItemSet();
-
+    const SfxItemSet* GetOutputItemSet() const;
 };
 
 
