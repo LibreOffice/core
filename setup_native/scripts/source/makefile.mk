@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-18 08:21:01 $
+#   last change: $Author: vg $ $Date: 2005-02-24 16:18:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,15 +75,25 @@ TARGET=getuid
 # no 'lib' prefix
 DLLPRE=
 
-.IF "$(OS)" == "SOLARIS"
+# no _version.o
+VERSIONOBJ=
 
+.IF "$(OS)" == "LINUX" || "$(OS)" == "SOLARIS"
+
+.IF "$(OS)" == "LINUX" 
+CFLAGS+=-D_GNU_SOURCE
+.ENDIF
+
+.IF "$(OS)" == "SOLARIS"
 .IF "$(CPU)" == "I"
 CFLAGS+=-D_KERNEL
+.ENDIF
 .ENDIF
 
 SLOFILES = $(SLO)$/getuid.obj
 
 SHL1OBJS=$(SLOFILES)
+SHL1DESCRIPTIONOBJ=
 SHL1TARGET=$(TARGET)
 SHL1STDLIBS=-ldl
 
