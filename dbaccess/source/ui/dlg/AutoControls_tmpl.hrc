@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AutoControls_tmpl.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:46:45 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@
 #define AUTO_PORTCONTROLGROUP(AUTO_Y, AUTO_HID)                                                     \
     FixedText FT_AUTOPORTNUMBER                                                                     \
     {                                                                                               \
-        Pos = MAP_APPFONT (START_X , AUTO_Y )  ;                                                    \
+        Pos = MAP_APPFONT (START_X , AUTO_Y +2)  ;                                                    \
         Size = MAP_APPFONT ( EDIT_X - START_X - UNRELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;           \
         Text[ de ] = "~Portnummer";                                                                 \
         Text [ en-US ]  = "~Port number" ;                                                          \
@@ -262,7 +262,7 @@
     NumericField NF_AUTOPORTNUMBER                                                                  \
     {                                                                                               \
         HelpId = AUTO_HID ;                                                                         \
-        Pos = MAP_APPFONT (EDIT_X, AUTO_Y - 2)  ;                                                   \
+        Pos = MAP_APPFONT (EDIT_X, AUTO_Y )  ;                                                  \
         Size = MAP_APPFONT ( 22 , EDIT_HEIGHT ) ;                                                   \
         TabStop = TRUE ;                                                                            \
         Border = TRUE ;                                                                             \
@@ -271,7 +271,7 @@
     FixedText FT_AUTOPORTNUMBERDEFAULT                                                              \
     {                                                                                               \
         HelpId = AUTO_HID + 1 ;                                                                     \
-        Pos = MAP_APPFONT (EDIT_X + 22 + UNRELATED_CONTROLS, AUTO_Y )  ;                            \
+        Pos = MAP_APPFONT (EDIT_X + 22 + UNRELATED_CONTROLS, AUTO_Y +2)  ;                              \
         Size = MAP_APPFONT ( WIZARD_PAGE_X - EDIT_X - 22 - UNRELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ; \
         Text[ de ] = "";                                                                            \
         Text[ en-US ]   = "" ;                                                                      \
