@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:57:41 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:15:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1244,7 +1244,6 @@ FltError ImportExcel8::Read( void )
                         case 0x00EC:    Msodrawing();           break;  // MSODRAWING
                         case 0x00ED:    Msodrawingselection();  break;  // MSODRAWINGSELECTION
                         case 0x00FD:    Labelsst();             break;  // LABELSST     [      8 ]
-                        case 0x01B0:    Condfmt();              break;  // CONDFMT
                         case 0x01B6:    Txo();                  break;  // TXO
                         case 0x0201:    Blank34();              break;  // BLANK        [  34    ]
                         case 0x0203:    Number34();             break;  // NUMBER       [  34    ]
@@ -1256,8 +1255,12 @@ FltError ImportExcel8::Read( void )
 
                         case EXC_ID_HLINK:          XclImpHyperlink::ReadHlink( maStrm );           break;
                         case EXC_ID_LABELRANGES:    XclImpLabelranges::ReadLabelranges( maStrm );   break;
+
+                        case EXC_ID_CONDFMT:        GetCondFormatManager().ReadCondfmt( maStrm );   break;
+                        case EXC_ID_CF:             GetCondFormatManager().ReadCF( maStrm );        break;
+
                         case EXC_ID_DVAL:           XclImpValidation::ReadDval( maStrm );           break;
-                        case EXC_ID_DV:             XclImpValidation::ReadDv( maStrm );             break;
+                        case EXC_ID_DV:             XclImpValidation::ReadDV( maStrm );             break;
 
                         case EXC_ID_QSI:            GetWebQueryBuffer().ReadQsi( maStrm );          break;
                         case EXC_ID_SXSTRING:       GetWebQueryBuffer().ReadSxstring( maStrm );     break;
@@ -1293,7 +1296,6 @@ FltError ImportExcel8::Read( void )
                         case 0x00F2:    SXFilt();               break;  // SXFILT
                         case 0x00F7:    SXSelect();             break;  // SXSELECT
                         case 0x0100:    SXVdex();               break;  // SXVDEX
-                        case 0x01B1:    Cf();                   break;  // CF
                         case 0x0207:    RecString();            break;  // STRING       [ 2345   ]
                         case 0x0809:                                    // BOF          [    5   ]
                         {
