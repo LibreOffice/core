@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-10 14:14:35 $
+ *  last change: $Author: hro $ $Date: 2001-05-16 12:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,6 @@ oslFileError SAL_CALL osl_openDirectory( rtl_uString *strDirectoryPath, oslDirec
     @see osl_acquireDirectoryItem
     @see osl_getDirectoryItem
     @see osl_getFileStatus
-    @see osl_createDirectoryItemFromHandle
 */
 
 oslFileError SAL_CALL osl_getNextDirectoryItem(
@@ -283,7 +282,6 @@ oslFileError SAL_CALL osl_closeDirectory(
     @see osl_acquireDirectoryItem
     @see osl_getFileStatus
     @see osl_getNextDirectoryItem
-    @see osl_createDirectoryItemFromHandle
 */
 
 oslFileError SAL_CALL osl_getDirectoryItem(
@@ -294,8 +292,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(
 
 /** Increases the refcount of a directory item handle
 
-    @param  Item [in] a handle received by a call to <code>osl_getDirectoryItem</code>, <code>osl_getNextDirectoryItem</code> or
-    <code>osl_createDirectoryItemFromHandle</code>.
+    @param  Item [in] a handle received by a call to <code>osl_getDirectoryItem</code>, <code>osl_getNextDirectoryItem</code>.
 
     @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
     osl_File_E_NOMEM        not enough memory for allocating structures <br>
@@ -303,7 +300,6 @@ oslFileError SAL_CALL osl_getDirectoryItem(
 
     @see osl_getDirectoryItem
     @see osl_getNextDirectoryItem
-    @see osl_createDirectoryItemFromHandle
     @see osl_releaseDirectoryItem
 */
 
@@ -312,8 +308,7 @@ oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item );
 /** Decreases the refcount of a directory item handle and releases the data if the
     refcount reaches 0.
 
-    @param  Item [in] a handle received by a call to <code>osl_getDirectoryItem</code>, <code>osl_getNextDirectoryItem</code> or
-    <code>osl_createDirectoryItemFromHandle</code>.
+    @param  Item [in] a handle received by a call to <code>osl_getDirectoryItem</code>, <code>osl_getNextDirectoryItem</code>.
 
     @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
     osl_File_E_NOMEM        not enough memory for allocating structures <br>
@@ -321,7 +316,7 @@ oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item );
 
     @see osl_getDirectoryItem
     @see osl_getNextDirectoryItem
-    @see osl_acquireDirectoryItemosl_createDirectoryItemFromHandle
+    @see osl_acquireDirectoryItem
     @see osl_acquireDirectoryItem
 */
 
@@ -411,7 +406,7 @@ struct _oslFileStatus {
 /** Retrieves information about a single file or directory
 
     @param  Item [in] a handle received by a previous call to <code>osl_getDirectoryItem</code>,
-    <code>osl_getNextDirectoryItem</code> or <code>osl_createDirectoryItemFromHandle</code>.
+    <code>osl_getNextDirectoryItem</code>.
     @param  pStatus [in/out] points to a structure which receives the information of the file or directory
     represented by the handle <code>Item</code>. The member <code>uStructSize</code> has to be initialized to
     <code>sizeof(oslFileStatus)</code> before calling this function.
@@ -442,7 +437,6 @@ struct _oslFileStatus {
 
     @see osl_getDirectoryItem
     @see osl_getNextDirectoryItem
-    @see osl_createDirectoryItemFromHandle
     @see oslFileStatus
 */
 
@@ -614,7 +608,6 @@ typedef void *oslFileHandle;
     @see    osl_readFile
     @see    osl_writeFile
     @see    osl_setFileSize
-    @see    osl_createDirectoryItemFromHandle
 */
 
 oslFileError SAL_CALL osl_openFile( rtl_uString *strPath, oslFileHandle *pHandle, sal_uInt32 uFlags );
@@ -772,21 +765,6 @@ oslFileError SAL_CALL osl_readLine( oslFileHandle Handle, sal_Sequence** ppSeque
 
 oslFileError SAL_CALL osl_closeFile( oslFileHandle Handle );
 
-
-/** Get a directory item handle from an open file with an initial refcount of 1.
-    @param  Handle [in] A Hdnale to an open file.
-    @param  pItem [out] On success it receives a handle to a directory item which can be used
-    in subsequent calls to <code>osl_getFileStatus</code>.
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<p>
-
-    @see    osl_openFile
-    @see    osl_getFileStatus
-    @see    osl_acquireDirectoryItem
-    @see    osl_releaseDirectoryItem
-*/
-
-oslFileError SAL_CALL osl_createDirectoryItemFromHandle( oslFileHandle Handle, oslDirectoryItem *pItem );
 
 
 /** Creates a directory.
