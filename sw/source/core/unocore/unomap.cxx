@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-25 09:02:10 $
+ *  last change: $Author: tl $ $Date: 2002-07-10 11:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1990,7 +1990,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 {
                     {SW_PROP_NMID(UNO_NAME_CONDITION)   ,     FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
@@ -2003,7 +2003,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 {
                     {SW_PROP_NMID(UNO_NAME_CONDITION),        FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_BASE_NAME   ), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_TABLE_NAME  ), FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_SET_NUMBER       ), FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,  0},
                     {0,0,0,0}
@@ -2016,7 +2016,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 static SfxItemPropertyMap aDBSetNumFieldPropMap [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_NUMBERING_TYPE),       FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,  0},
                     {SW_PROP_NMID(UNO_NAME_SET_NUMBER       ), FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,  0},
@@ -2043,7 +2043,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 static SfxItemPropertyMap aDBNameFieldPropMap       [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
@@ -2207,7 +2207,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 static SfxItemPropertyMap aDBFieldTypePropMap           [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_DATA_BASE_NAME   ), FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_TABLE_NAME  ), FIELD_PROP_PAR4, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_COLUMN_NAME ), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DEPENDENT_TEXT_FIELDS),  FIELD_PROP_PROP_SEQ,    CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
