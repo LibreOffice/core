@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdmailsuppl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-26 08:49:11 $
+ *  last change: $Author: obr $ $Date: 2001-06-26 16:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,9 +349,8 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
                     }  // xFormatStringAccess.is() && xDelimiterAccess.is() && xMessageAccess()
 
                     // split up parameters
-                    Sequence< OUString > aArgumentList( 2 );
-                    aArgumentList[0] = aProgram;
-                    sal_Int32 nArguments = 2;
+                    Sequence< OUString > aArgumentList( 1 );
+                    sal_Int32 nArguments = 1;
 
                     sal_Bool  bInQuote = sal_False;
                     sal_Int32 nLastIndex = 0;
@@ -386,7 +385,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
                     oslProcess aProcess;
                     rtl_uString **pArgumentArray = (rtl_uString **) aArgumentList.getArray();
 
-                    osl_executeProcess( NULL,
+                    osl_executeProcess( aProgram.pData,
                         pArgumentArray,
                         nArguments,
                         osl_Process_DETACHED | osl_Process_SEARCHPATH,
