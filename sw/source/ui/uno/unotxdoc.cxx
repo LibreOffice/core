@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:34:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 10:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2668,13 +2668,16 @@ void SAL_CALL SwXTextDocument::render(
 
     uno::Reference< awt::XDevice >  xRenderDevice;
     bool bFirstPage = false;
-    const sal_Int32                 nPageNumber = nRenderer + 1;
+    bool bLastPage = false;
+    const sal_Int32 nPageNumber = nRenderer + 1;
     for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
         if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
             rxOptions[ nProperty].Value >>= xRenderDevice;
         else if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ) )
             rxOptions[ nProperty].Value >>= bFirstPage;
+        else if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPage" ) ) )
+            rxOptions[ nProperty].Value >>= bLastPage;
     }
     OutputDevice*   pOut = 0;
     if (xRenderDevice.is())
@@ -2727,6 +2730,19 @@ void SAL_CALL SwXTextDocument::render(
         // <--
 
         pVwSh->Prt( aOptions, aProgress, pOut );
+
+        // --> FME 2004-10-08 #i35176#
+        //
+        // After printing the last page, we take care for the links coming
+        // from the EditEngine. The links are generated during the painting
+        // process, but the destinations are still missing.
+        //
+        if ( bLastPage && pWrtShell )
+        {
+            SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, sal_True );
+        }
+        // <--
+
         pVwSh->SetPDFExportOption( sal_False );
         delete pViewOptionAdjust;
     }
