@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-07 14:49:32 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/transfer.hxx>
+#include <rtl/logfile.hxx>
 
 //________________________________________________________________________________________________________
 //  includes of my own project
@@ -1980,6 +1981,8 @@ void SAL_CALL SfxBaseModel::storeSelf( const    SEQUENCE< PROPERTYVALUE >&  aSeq
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aPerfLog, "PERFORMANCE - SfxBaseModel::storeSelf" );
+
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
@@ -2062,6 +2065,8 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUSTRING&                   rURL
                                         const   SEQUENCE< PROPERTYVALUE >&  rArgs   )
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aPerfLog, "PERFORMANCE - SfxBaseModel::storeAsURL" );
+
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
