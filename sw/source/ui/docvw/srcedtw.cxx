@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-09-03 07:38:29 $
+ *  last change: $Author: mt $ $Date: 2002-09-11 12:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,8 +630,8 @@ void SwSrcEditWindow::SetScrollBarRanges()
 {
     // Extra-Methode, nicht InitScrollBars, da auch fuer TextEngine-Events.
 
-    pHScrollbar->SetRange( Range( 0, nCurTextWidth ) );
-    pVScrollbar->SetRange( Range(0, pTextEngine->GetTextHeight()) );
+    pHScrollbar->SetRange( Range( 0, nCurTextWidth-1 ) );
+    pVScrollbar->SetRange( Range(0, pTextEngine->GetTextHeight()-1) );
 }
 
 /*--------------------------------------------------------------------
