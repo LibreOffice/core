@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-02 12:11:23 $
+ *  last change: $Author: hdu $ $Date: 2002-08-07 13:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.7 2002-08-02 12:11:23 pl Exp $ */
+/* $Id: sft.h,v 1.8 2002-08-07 13:13:02 hdu Exp $ */
 
 /**
 
@@ -143,6 +143,7 @@ extern "C" {
         SF_FONTNO                           /**< incorrect logical font number of a TTC font  */
     };
 
+#ifndef FW_THIN // WIN32 compilation would conflict
 /** Value of the weight member of the TTGlobalFontInfo struct */
     enum WeightClass {
         FW_THIN = 100,                      /**< Thin                               */
@@ -168,10 +169,10 @@ extern "C" {
         FWIDTH_EXTRA_EXPANDED = 8,          /**< 150% of normal                     */
         FWIDTH_ULTRA_EXPANDED = 9           /**< 200% of normal                     */
     };
+#endif // FW_THIN
 
 /** Type of the 'kern' table, stored in _TrueTypeFont::kerntype */
     enum KernType {
-
         KT_NONE         = 0,                /**< no kern table                      */
         KT_APPLE_NEW    = 1,                /**< new Apple kern table               */
         KT_MICROSOFT    = 2                 /**< Microsoft table                    */
