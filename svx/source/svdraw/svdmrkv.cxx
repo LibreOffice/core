@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-11 10:15:22 $
+ *  last change: $Author: aw $ $Date: 2001-08-14 15:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,8 +159,16 @@ void __EXPORT SdrMarkView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType
             }
             if (bMLChgd) MarkListHasChanged();
         }
-        if (eKind==HINT_OBJCHG || eKind==HINT_OBJINSERTED || eKind==HINT_OBJREMOVED) {
-            if (bHdlShown) HideMarkHdl(NULL);
+        if (eKind==HINT_OBJCHG || eKind==HINT_OBJINSERTED || eKind==HINT_OBJREMOVED)
+        {
+            if(bHdlShown
+                // #75438# do not hide handles if no repaint will be triggered
+                // since the repaint will show handles again later
+                && pSdrHint->IsNeedRepaint())
+            {
+                HideMarkHdl(NULL);
+            }
+
             bMarkedObjRectDirty=TRUE;
             bMarkedPointsRectsDirty=TRUE;
         }
