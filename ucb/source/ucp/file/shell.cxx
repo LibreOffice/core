@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-07 18:12:18 $
+ *  last change: $Author: mfe $ $Date: 2000-12-12 17:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
 
+extern "C" void debug_ustring(rtl_uString*);
 
 shell::UnqPathData::UnqPathData()
     : properties( 0 ),
@@ -2473,6 +2474,8 @@ shell::remove( sal_Int32 CommandId,
                const rtl::OUString& aUnqPath,
                sal_Int32 IsWhat )
 {
+    fprintf(stderr,"Enter - shell::remove\n");
+
     sal_Int32 nMask = FileStatusMask_Type | FileStatusMask_FilePath;
     osl::DirectoryItem aItem;
     osl::FileStatus aStatus( nMask );
@@ -2491,6 +2494,7 @@ shell::remove( sal_Int32 CommandId,
             IsWhat = +1;
     }
 
+
     if( IsWhat == -1 )
     {
         osl::File::remove( aUnqPath );
@@ -2502,30 +2506,82 @@ shell::remove( sal_Int32 CommandId,
     {
         sal_Int32 recurse;
         rtl::OUString name;
-        osl::Directory aFolder( aUnqPath );
-        aFolder.open();
 
-        osl::FileBase::RC rcError = aFolder.getNextItem( aItem );
-        while( osl::FileBase::E_None == rcError )
+        fprintf(stderr,"shell::remove : create ");
+        debug_ustring(aUnqPath.pData);
+        fprintf(stderr,"RefCount == '%i'\n",aUnqPath.pData->refCount);
+//          osl::Directory aFolder( aUnqPath );
+
+        oslDirectory pDir=0;
+
+        oslFileError tErr;
+        oslDirectoryItem pItem=0;
+
+        tErr = osl_openDirectory(aUnqPath.pData,&pDir);
+
+        fprintf(stderr,"shell::remove : open ");
+        debug_ustring(aUnqPath.pData);
+//        fprintf(stderr,"RefCount == '%i'\n",aUnqPath.pData->refCount);
+//      aFolder.open();
+
+//        fprintf(stderr,"RefCount == '%i'\n",aUnqPath.pData->refCount);
+
+
+//          osl::FileBase::RC rcError = aFolder.getNextItem( aItem );
+//          while( osl::FileBase::E_None == rcError )
+        tErr = osl_getNextDirectoryItem(pDir,&pItem,0);
+        while ( tErr == osl_File_E_None )
         {
-            aItem.getFileStatus( aStatus );
+            oslFileStatus aStat;
 
-            if(  aStatus.isValid( nMask ) &&
-                 aStatus.getFileType() == osl::FileStatus::Regular )
+            memset(&aStat,0,sizeof(aStat));
+            rtl::OUString sFilePath;
+            rtl::OUString sNativePath;
+
+            aStat.uStructSize=sizeof(aStat);
+            aStat.pstrFilePath=&sFilePath.pData;
+            aStat.pstrNativePath=&sNativePath.pData;
+
+//              aItem.getFileStatus( aStatus );
+
+            osl_getFileStatus(pItem,&aStat,FileStatusMask_Type | FileStatusMask_FilePath);
+
+
+//              if(  aStatus.isValid( nMask ) &&
+//                   aStatus.getFileType() == osl::FileStatus::Regular ||
+//                   aStatus.getFileType() == osl::FileStatus::Link )
+//                  recurse = -1;
+//              else if( aStatus.isValid( nMask ) &&
+//                       ( aStatus.getFileType() == osl::FileStatus::Directory ||
+//                         aStatus.getFileType() == osl::FileStatus::Volume ) )
+//                  recurse = +1;
+
+            if ( aStat.uValidFields & osl_FileStatus_Mask_Type && ( aStat.eType == osl_File_Type_Regular || aStat.eType == osl_File_Type_Link ) )
+            {
                 recurse = -1;
-            else if( aStatus.isValid( nMask ) &&
-                     ( aStatus.getFileType() == osl::FileStatus::Directory ||
-                       aStatus.getFileType() == osl::FileStatus::Volume ) )
+            }
+            else if ( aStat.uValidFields & osl_FileStatus_Mask_Type && ( aStat.eType == osl_File_Type_Directory || aStat.eType == osl_File_Type_Volume ) )
+            {
                 recurse = +1;
+            }
 
-            name = aStatus.getFilePath();
+//              name = aStatus.getFilePath();
+            name = rtl::OUString(*aStat.pstrFilePath);
+
             remove( CommandId,
                     name,
                     recurse );
 
-            rcError = aFolder.getNextItem( aItem );
+//              rcError = aFolder.getNextItem( aItem );
+            osl_releaseDirectoryItem(pItem);
+            pItem=0;
+
+            tErr = osl_getNextDirectoryItem(pDir,&pItem,0);
         }
-        aFolder.close();
+
+//          aFolder.close();
+        osl_closeDirectory(pDir);
+
         osl::FileBase::RC err = osl::Directory::remove( aUnqPath );
         if( ! err )
         {
@@ -2533,6 +2589,7 @@ shell::remove( sal_Int32 CommandId,
             erasePersistentSet( aUnqPath );
         }
     }
+    fprintf(stderr,"Leave - shell::remove\n");
 }
 
 
