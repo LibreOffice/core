@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptElement.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dsherwin $ $Date: 2002-10-17 14:58:00 $
+ *  last change: $Author: dsherwin $ $Date: 2002-10-17 14:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,6 @@
 #include "ScriptData.hxx"
 
 #include "XMLElement.hxx"
-
-#include "ScriptInfoImpl.hxx"
 
 namespace scripting_impl
 {
