@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:30 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 17:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,8 +182,7 @@ void OMergeTreeAction::handle(ValueChange& _rChange)
             const ValueNode* pValueNode = pChild ? pChild->asValueNode() : NULL;
             OSL_ENSURE(pValueNode, "OBuildChangeTree::handle : node must be a value node!");
 
-            // DEFAULT-TODO
-            if (pValueNode && _rChange.getNewValue() != pValueNode->getValue())
+            if (pValueNode && _rChange.isChange())
             {
                 ValueChange* pChange = new ValueChange(_rChange);
                 m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
@@ -276,39 +275,13 @@ void OMergeTreeAction::handle(AddNode& _rChange)
         // We need to find the element in the tree
         const INode* pChild = m_pRefTree->getChild(_rChange.getNodeName());
 
-        // if the node exists, this must be a ValueNode,
-        // otherwise we are not able to clone
-        if (pChild && pChild->ISA(ValueNode))
+        std::auto_ptr<INode> aNewNode = _rChange.releaseAddedNode();
+        AddNode* pChange = new AddNode(aNewNode,_rChange.getNodeName(),_rChange.isToDefault());
+        if (pChild != NULL)
         {
-            // DEFAULT-TODO
-            const ValueNode* pValueNode = pChild->asValueNode();
-
-            std::auto_ptr<INode> aNewNode = _rChange.releaseAddedNode();
-            OSL_ENSURE(pValueNode && aNewNode.get() && aNewNode.get()->asValueNode(), "OMergeTreeAction::handle : node must be a value node!");
-            if (!pValueNode || !aNewNode.get() || !aNewNode.get()->asValueNode())
-                return;
-
-            ValueNode* pNewValueNode = aNewNode.get()->asValueNode();
-            if (pNewValueNode->getValue() != pValueNode->getValue())
-            {
-                ValueChange* pChange = new ValueChange(_rChange.getNodeName(),
-                                                       pNewValueNode->getAttributes(),
-                                                       pNewValueNode->isDefault() ? ValueChange::setToDefault : ValueChange::changeValue,
-                                                       pNewValueNode->getValue(),
-                                                       pValueNode->getValue());
-                m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
-            }
+            pChange->setReplacing();
         }
-        else
-        {
-            std::auto_ptr<INode> aNewNode = _rChange.releaseAddedNode();
-            AddNode* pChange = new AddNode(aNewNode,_rChange.getNodeName(),_rChange.isToDefault());
-            if (pChild != NULL)
-            {
-                pChange->setReplacing();
-            }
-            m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
-        }
+        m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
     }
 }
 
@@ -361,14 +334,14 @@ std::auto_ptr<ISubtree>  ONodeConverter::createCorrespondingNode(SubtreeChange c
 std::auto_ptr<ValueNode> ONodeConverter::createCorrespondingNode(ValueChange const&  _rChange, OTreeNodeFactory& _rFactory)
 {
    // DEFAULT-TODO
-    OSL_ENSURE(_rChange.getNewValue().hasValue() || _rChange.getOldValue().hasValue(), "Losing type information converting change to value");
+    OSL_ENSURE(_rChange.getValueType().getTypeClass() != uno::TypeClass_VOID, "Losing type information converting change to value");
 
     std::auto_ptr<ValueNode> aRet;
     if (_rChange.getNewValue().hasValue())
        aRet = _rFactory.createValueNode(_rChange.getNodeName(), _rChange.getNewValue(), _rChange.getAttributes());
 
     else
-       aRet = _rFactory.createNullValueNode(_rChange.getNodeName(), _rChange.getOldValue().getValueType(), _rChange.getAttributes());
+       aRet = _rFactory.createNullValueNode(_rChange.getNodeName(), _rChange.getValueType(), _rChange.getAttributes());
 
     OSL_ENSURE(aRet.get() && aRet->isValid(), "Could not create corresponding value node");
 
