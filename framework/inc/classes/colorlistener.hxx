@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colorlistener.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:32 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@
 #include <svtools/colorcfg.hxx>
 #endif
 
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
+
 //__________________________________________
 // definition
 
@@ -133,6 +137,8 @@ class ColorListener : public  css::lang::XEventListener
         /** we must know, if we already registered as listener or not. */
         sal_Bool m_bListen;
 
+        long m_nColor;
+
     //______________________________________
     // interface
 
@@ -149,12 +155,14 @@ class ColorListener : public  css::lang::XEventListener
         // SfxListener
         virtual void Notify( SfxBroadcaster& rBroadCaster, const SfxHint& rHint );
 
+        DECL_LINK( impl_SettingsChanged, void* );
+
     //______________________________________
     // helper
 
     private:
 
-        void impl_applyColor    ();
+        void impl_applyColor    ( sal_Bool bInvalidate );
         void impl_startListening();
         void impl_stopListening ();
         void impl_die           ();
