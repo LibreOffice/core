@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:31:14 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 21:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModelessDialog RID_SCDLG_FILTER
     Text [ italian ] = "Filtro standard" ;
     Text [ portuguese_brazilian ] = "Filtro Padr?o" ;
     Text [ portuguese ] = "Filtro padrão" ;
-    Text [ finnish ] = "Vakiosuodatin" ;
+    Text [ finnish ] = "Vakiosuodatus" ;
     Text [ danish ] = "Standardfilter" ;
     Text [ french ] = "Filtre standard" ;
     Text [ swedish ] = "Standardfilter" ;
@@ -122,7 +122,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ italian ] = "Nome di campo" ;
         Text [ portuguese_brazilian ] = "Nome de campo" ;
         Text [ portuguese ] = "Nome do campo" ;
-        Text [ finnish ] = "Kentän nimi" ;
+        Text [ finnish ] = "Kent?n nimi" ;
         Text [ danish ] = "Feltnavn" ;
         Text [ french ] = "Nom de champ" ;
         Text [ swedish ] = "Fältnamn" ;
@@ -1466,7 +1466,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ italian ] = "~Maiuscole/minuscole" ;
         Text [ portuguese_brazilian ] = "~Sens?vel a mai?culas/min?culas" ;
         Text [ portuguese ] = "~Maiúsculas/minúsculas" ;
-        Text [ finnish ] = "~Kirjainkoon erottelu" ;
+        Text [ finnish ] = "Kirjainkoon ~erottelu" ;
         Text [ danish ] = "Store og små bogstaver" ;
         Text [ french ] = "~Respecter la casse" ;
         Text [ swedish ] = "Versalkänsli~g" ;
@@ -1498,7 +1498,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ italian ] = "Espressione ~regolare" ;
         Text [ portuguese_brazilian ] = "~Express?o regular" ;
         Text [ portuguese ] = "~Expressão regular" ;
-        Text [ finnish ] = "~Säännöllinen lauseke" ;
+        Text [ finnish ] = "~S??nn?linen lauseke" ;
         Text [ danish ] = "Regulært udtryk" ;
         Text [ french ] = "Caractère ~générique" ;
         Text [ swedish ] = "~Reguljärt uttryck" ;
@@ -1530,7 +1530,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ italian ] = "L'area ~contiene intestazioni colonna" ;
         Text [ portuguese_brazilian ] = "A ?rea ~cont?m cabe?alhos de colunas" ;
         Text [ portuguese ] = "A área ~contém cabeçalhos de colunas" ;
-        Text [ finnish ] = "~Alue sisältää sarakkeen otsikot" ;
+        Text [ finnish ] = "~Alue sis?lt?? sarakkeen otsikot" ;
         Text [ danish ] = "Område indholder kolonneoverskrifter" ;
         Text [ french ] = "La plage contient des en-têtes de ~colonnes" ;
         Text [ swedish ] = "Område ~innehåller kolumnhuvuden" ;
@@ -1592,7 +1592,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ italian ] = "Scrivere il ~risultato del filtro in" ;
         Text [ portuguese_brazilian ] = "Gravar ~resultado em" ;
         Text [ portuguese ] = "Gravar ~resultado em" ;
-        Text [ finnish ] = "~Kopioi tulokset kohteeseen" ;
+        Text [ finnish ] = "~Kopioi tulokset kohteeseen..." ;
         Text [ danish ] = "Filterresultat-output til" ;
         Text [ french ] = "Copier le ~résultat vers" ;
         Text [ swedish ] = "Skriv ~resultat till" ;
@@ -1640,7 +1640,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ turkish ] = "~Filtre ölçütlerini koru";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ma~ntener criterios";
-        Text[ finnish ] = "~Säilytä suodatusehto";
+        Text[ finnish ] = "~S?ilyt? suodatusehto";
     };
     ListBox LB_COPY_AREA
     {
@@ -1687,7 +1687,7 @@ ModelessDialog RID_SCDLG_FILTER
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä";
+        QuickHelpText[ finnish ] = "Kutista!";
     };
     FixedLine FL_OPTIONS
     {
@@ -1730,7 +1730,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ italian ] = "fittizio" ;
         Text [ portuguese_brazilian ] = "falso" ;
         Text [ portuguese ] = "Simulador" ;
-        Text [ finnish ] = "tyhjä" ;
+        Text [ finnish ] = "tyhj?" ;
         Text [ danish ] = "dummy" ;
         Text [ french ] = "factice" ;
         Text [ swedish ] = "dummy" ;
@@ -1833,7 +1833,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     Text [ italian ] = "Filtro speciale" ;
     Text [ portuguese_brazilian ] = "Filtro Especial" ;
     Text [ portuguese ] = "Filtro especial" ;
-    Text [ finnish ] = "Lisäsuodatin" ;
+    Text [ finnish ] = "Lis?suodatin" ;
     Text [ danish ] = "Specialfilter" ;
     Text [ french ] = "Filtre spécial" ;
     Text [ swedish ] = "Specialfilter" ;
@@ -1914,7 +1914,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä";
+        QuickHelpText[ finnish ] = "Kutista!";
     };
     CheckBox BTN_CASE
     {
@@ -1960,7 +1960,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ italian ] = "Espressione ~regolare" ;
         Text [ portuguese_brazilian ] = "~Express?o regular" ;
         Text [ portuguese ] = "~Expressão regular" ;
-        Text [ finnish ] = "~Säännölliset lausekkeet" ;
+        Text [ finnish ] = "~S??nn?liset lausekkeet" ;
         Text [ danish ] = "Regulært udtryk" ;
         Text [ french ] = "Caractère ~générique" ;
         Text [ swedish ] = "~Reguljärt uttryck" ;
@@ -1992,7 +1992,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ italian ] = "L'area ~contiene intestazioni colonna" ;
         Text [ portuguese_brazilian ] = "A ?rea ~cont?m cabe?alhos de colunas" ;
         Text [ portuguese ] = "Contém ~cabeçalhos para colunas" ;
-        Text [ finnish ] = "~Sisältää sarakkeen otsikot" ;
+        Text [ finnish ] = "~Sis?lt?? sarakkeen otsikot" ;
         Text [ danish ] = "Indeholder kolonneoverskrifter" ;
         Text [ french ] = "La plage contient des en-têtes de ~colonnes" ;
         Text [ swedish ] = "Område ~innehåller kolumnhuvuden" ;
@@ -2102,7 +2102,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ turkish ] = "~Filtre ölçütlerini koru";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ma~ntener criterios";
-        Text[ finnish ] = "~Säilytä suodatusehto";
+        Text[ finnish ] = "~S?ilyt? suodatusehto";
     };
     ListBox LB_COPY_AREA
     {
@@ -2149,7 +2149,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä";
+        QuickHelpText[ finnish ] = "Kutista!";
     };
     FixedLine FL_OPTIONS
     {
@@ -2192,7 +2192,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ italian ] = "fittizio" ;
         Text [ portuguese_brazilian ] = "falso" ;
         Text [ portuguese ] = "Simulador" ;
-        Text [ finnish ] = "tyhjä" ;
+        Text [ finnish ] = "tyhj?" ;
         Text [ danish ] = "dummy" ;
         Text [ french ] = "factice" ;
         Text [ swedish ] = "dummy" ;
@@ -2344,7 +2344,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ italian ] = "Nome di campo" ;
         Text [ portuguese_brazilian ] = "Nome de campo" ;
         Text [ portuguese ] = "Nome de campo" ;
-        Text [ finnish ] = "Kentän nimi" ;
+        Text [ finnish ] = "Kent?n nimi" ;
         Text [ danish ] = "Feltnavn" ;
         Text [ french ] = "Nom de champ" ;
         Text [ swedish ] = "Fältnamn" ;
@@ -3465,7 +3465,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ italian ] = "Espressione ~regolare" ;
         Text [ portuguese_brazilian ] = "~Express?o regular" ;
         Text [ portuguese ] = "~Expressão regular" ;
-        Text [ finnish ] = "~Säännöllinen lauseke" ;
+        Text [ finnish ] = "~S??nn?linen lauseke" ;
         Text [ danish ] = "Regulært udtryk" ;
         Text [ french ] = "Caractère ~générique" ;
         Text [ swedish ] = "~Reguljärt uttryck" ;
@@ -3557,7 +3557,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ italian ] = "dummy" ;
         Text [ portuguese_brazilian ] = "falso" ;
         Text [ portuguese ] = "Simulador" ;
-        Text [ finnish ] = "tyhjä" ;
+        Text [ finnish ] = "tyhj?" ;
         Text [ danish ] = "dummy" ;
         Text [ french ] = "factice" ;
         Text [ swedish ] = "dummy" ;
@@ -3646,6 +3646,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filtro";
 };
+
 
 
 
