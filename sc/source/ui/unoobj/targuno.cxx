@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 03:25:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,15 +155,10 @@ uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const rtl::OUString& aName)
 {
     if (pDocShell)
     {
-        String aNameStr = aName;
+        String aNameStr(aName);
         for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
             if ( aNames[i] == aNameStr )
-            {
-                uno::Reference< beans::XPropertySet >  xInt = new ScLinkTargetTypeObj( pDocShell, i );
-                uno::Any aRet;
-                aRet <<= xInt;
-                return aRet;
-            }
+                return uno::makeAny(uno::Reference< beans::XPropertySet >(new ScLinkTargetTypeObj( pDocShell, i )));
     }
 
     throw container::NoSuchElementException();
@@ -233,13 +228,13 @@ uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks
         switch ( nType )
         {
             case SC_LINKTARGETTYPE_SHEET:
-                xCollection = new ScTableSheetsObj(pDocShell);
+                xCollection.set(new ScTableSheetsObj(pDocShell));
                 break;
             case SC_LINKTARGETTYPE_RANGENAME:
-                xCollection = new ScNamedRangesObj(pDocShell);
+                xCollection.set(new ScNamedRangesObj(pDocShell));
                 break;
             case SC_LINKTARGETTYPE_DBAREA:
-                xCollection = new ScDatabaseRangesObj(pDocShell);
+                xCollection.set(new ScDatabaseRangesObj(pDocShell));
                 break;
             default:
                 DBG_ERROR("invalid type");
@@ -258,7 +253,7 @@ uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks
 uno::Reference< beans::XPropertySetInfo > SAL_CALL  ScLinkTargetTypeObj::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
     ScUnoGuard aGuard;
-    static uno::Reference< beans::XPropertySetInfo >  aRef = new SfxItemPropertySetInfo( lcl_GetLinkTargetMap() );
+    static uno::Reference< beans::XPropertySetInfo >  aRef(new SfxItemPropertySetInfo( lcl_GetLinkTargetMap() ));
     return aRef;
 }
 
@@ -295,9 +290,7 @@ void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType 
         BOOL bHighContrast = Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark();
         ImageList aEntryImages( ScResId( bHighContrast ? RID_IMAGELIST_H_NAVCONT : RID_IMAGELIST_NAVCONT ) );
         const Image& rImage = aEntryImages.GetImage( nImgId );
-        BitmapEx aBitmapEx( rImage.GetBitmapEx() );
-        uno::Reference< awt::XBitmap > xBmp = VCLUnoHelper::CreateBitmap( aBitmapEx );
-        rRet <<= xBmp;
+        rRet <<= uno::Reference< awt::XBitmap > (VCLUnoHelper::CreateBitmap( rImage.GetBitmapEx() ));
     }
 }
 
@@ -305,7 +298,7 @@ uno::Any SAL_CALL ScLinkTargetTypeObj::getPropertyValue(const rtl::OUString& Pro
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     uno::Any aRet;
-    String aNameStr = PropertyName;
+    String aNameStr(PropertyName);
     if ( aNameStr.EqualsAscii( SC_UNO_LINKDISPBIT ) )
         SetLinkTargetBitmap( aRet, nType );
     else if ( aNameStr.EqualsAscii( SC_UNO_LINKDISPNAME ) )
@@ -333,14 +326,9 @@ ScLinkTargetsObj::~ScLinkTargetsObj()
 uno::Any SAL_CALL ScLinkTargetsObj::getByName(const rtl::OUString& aName)
         throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    uno::Reference< uno::XInterface >  xInt = ScUnoHelpFunctions::AnyToInterface( xCollection->getByName(aName) );
-    uno::Reference< beans::XPropertySet >  xProp( xInt, uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet >  xProp( ScUnoHelpFunctions::AnyToInterface( xCollection->getByName(aName) ), uno::UNO_QUERY );
     if (xProp.is())
-    {
-        uno::Any aRet;
-        aRet <<= xProp;
-        return aRet;
-    }
+        return uno::makeAny(xProp);
 
     throw container::NoSuchElementException();
     return uno::Any();
