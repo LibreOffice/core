@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-29 15:04:19 $
+ *  last change: $Author: mav $ $Date: 2002-05-13 08:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,9 +744,13 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
         aZipOut.write( aType, 0, nBufferLength );
         aZipOut.closeEntry();
     }
-    catch (::com::sun::star::io::IOException & )
+    catch ( ::com::sun::star::io::IOException & r )
     {
         VOS_ENSURE( 0, "Error adding mimetype to the ZipOutputStream" );
+        throw WrappedTargetException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM ( "Error adding mimetype to the ZipOutputStream!" ) ),
+                static_cast < OWeakObject * > ( this ),
+                makeAny( r ) );
     }
 }
 
@@ -864,20 +868,37 @@ sal_Bool ZipPackage::writeFileIsTemp()
             aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
             aZipOut.closeEntry();
         }
-        catch (::com::sun::star::io::IOException & )
+        catch (::com::sun::star::io::IOException & r )
         {
             VOS_ENSURE( 0, "Error adding META-INF/manifest.xml to the ZipOutputStream" );
+            throw WrappedTargetException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM ( "Error adding META-INF/manifest.xml to the ZipOutputStream!" ) ),
+                    static_cast < OWeakObject * > ( this ),
+                    makeAny( r ) );
+
         }
     }
     else
+    {
         VOS_ENSURE ( 0, "Couldn't get a ManifestWriter!" );
+        IOException aException;
+        throw WrappedTargetException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM ( "Couldn't get a ManifestWriter!" ) ),
+                static_cast < OWeakObject * > ( this ),
+                makeAny( aException ) );
+    }
+
     try
     {
         aZipOut.finish();
     }
-    catch (::com::sun::star::io::IOException & )
+    catch (::com::sun::star::io::IOException & r )
     {
         VOS_ENSURE( 0, "Error writing ZIP file to disk" );
+        throw WrappedTargetException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM ( "Error writing ZIP file to disk!" ) ),
+                static_cast < OWeakObject * > ( this ),
+                makeAny( r ) );
     }
 
     if ( eMode == e_IMode_XStream )
