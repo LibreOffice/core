@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-24 07:55:54 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
