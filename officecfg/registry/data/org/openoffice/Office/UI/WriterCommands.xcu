@@ -10545,6 +10545,12 @@
                     <value xml:lang="pt">Índ~ices</value>
                 </prop>
             </node>
+            <node oor:name=".uno:WordCountDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Wortanzahl</value>
+                    <value xml:lang="en-US">~Word Count</value>
+                </prop>
+            </node>
         </node>
     </node>
 </oor:component-data>
