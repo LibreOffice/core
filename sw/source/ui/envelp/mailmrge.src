@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:47:47 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_traditional ] = "¿ï¨úªº¸ê®Æ±ø¥Ø(~S)";
         Text[ arabic ] = "ÇáÓÌáÇÊ ÇáãÍÏÏÉ";
         Text[ greek ] = "Åğéëåãìİíåò åããñáöİò";
-        Text[ korean ] = "¼±ÅÃÇ¥½ÃµÈ ·¹ÄÚµå(~S)";
+        Text[ korean ] = "¸¶Å·Ç¥½ÃµÈ µ¥ÀÌÅÍ ·¹ÄÚµå(~S)";
         Text[ turkish ] = "Seçili veri kümeleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Registros seleccionados";
@@ -213,7 +213,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_traditional ] = "¦Ü(~T)¡G";
         Text[ arabic ] = "Åáì:";
         Text[ greek ] = "Ğñïò:";
-        Text[ korean ] = "±îÁö:(~T)";
+        Text[ korean ] = "±îÁö(~T):";
         Text[ turkish ] = "Son:";
         Text[ language_user1 ] = "RB: SW Datei - Serienbrief";
         Text[ catalan ] = "~al:";
@@ -441,7 +441,7 @@ ModalDialog DLG_MAILMERGE
         Text[ russian ] = "Ïîëå áàçû äàííûõ";
         Text[ polish ] = "Pole bazy danych";
         Text[ japanese ] = "ÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚©‚ç";
-        Text[ chinese_traditional ] = "¸ê®Æ®wÄæ";
+        Text[ chinese_traditional ] = "¸ê®Æ®wÄæ¦ì";
         Text[ arabic ] = "ÍŞá ŞÇÚÏÉ ÇáÈíÇäÇÊ";
         Text[ greek ] = "Ğåäßï âÜóçò äåäïìİíùí";
         Text[ korean ] = "Å×ÀÌÅÍº£ÀÌ½º ÇÊµå";
@@ -664,10 +664,10 @@ ModalDialog DLG_MAILMERGE
         Text [ danish ] = "Mail-format" ;
         Text [ italian ] = "Formato mail" ;
         Text [ spanish ] = "Formato de correo" ;
-        Text [ french ] = "Format de message" ;
+        Text [ french ] = "Format de courrier" ;
         Text [ dutch ] = "Mail-formaat" ;
         Text [ portuguese ] = "Formato da mensagem" ;
-        Text[ chinese_simplified ] = "ÓÊ¼ş¸ñÊ½";
+        Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş¸ñÊ½";
         Text[ russian ] = "Ôîğìàò Mail";
         Text[ polish ] = "Format wiadomoœci";
         Text[ japanese ] = "Ò°Ù‘®";
@@ -788,7 +788,7 @@ ModalDialog DLG_MAILMERGE
         Text [ swedish ] = "Utdata" ;
         Text [ danish ] = "Output" ;
         Text [ portuguese_brazilian ] = "Ausgabe" ;
-        Text [ portuguese ] = "Destino" ;
+        Text [ portuguese ] = "Saída" ;
         Text[ chinese_simplified ] = "Êä³ö";
         Text[ russian ] = "Âûâîä";
         Text[ polish ] = "Wyjœcie";
@@ -830,6 +830,7 @@ ModalDialog DLG_MAILMERGE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Carta en serie";
 };
+
 
 
 
