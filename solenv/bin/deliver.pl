@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: er $ $Date: 2002-03-28 02:25:34 $
+#   last change: $Author: hr $ $Date: 2002-04-09 14:59:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.23 $ ';
+$id_str = ' $Revision: 1.24 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -94,6 +94,7 @@ print "$script_name -- version: $script_rev\n";
                         'hedabu',
                         'linklib',
                         'mkdir',
+                        'symlink',
                         'touch'
                         );
 
@@ -145,7 +146,8 @@ exit(0);
 
 #### implemented actions #####
 
-sub do_copy {
+sub do_copy
+{
     # we need to copy twice: once from the platform dependent output tree
     # and once from the common output tree, in this order
     my ($dependent, $common, $from, $to, $file_list);
@@ -164,7 +166,8 @@ sub do_copy {
     glob_and_copy($from, $to, $touch);
 }
 
-sub do_dos {
+sub do_dos
+{
     my $line = shift;
 
     expand_macros($line);
@@ -180,7 +183,8 @@ sub do_dos {
     }
 }
 
-sub do_hedabu {
+sub do_hedabu
+{
     # just collect all hedabu files, actual filtering is done later
     my $line = shift;
     my ($from, $to);
@@ -192,7 +196,8 @@ sub do_hedabu {
     push( @hedabu_list, @{glob_line($from, $to)});
 }
 
-sub do_linklib {
+sub do_linklib
+{
     my ($lib_base, $lib_major,$from_dir, $to_dir);
     my $lib = shift;
     my @globbed_files = ();
@@ -245,7 +250,7 @@ sub do_linklib {
                 print "REMOVE: $to_dir/$lib_base\n";
                 unlink "$to_dir/$lib_major";
                 unlink "$to_dir/$lib_base";
-                return ;
+                return;
             }
             my $symlib;
             my @symlibs = ("$to_dir/$lib_major", "$to_dir/$lib_base");
@@ -264,7 +269,8 @@ sub do_linklib {
     }
 }
 
-sub do_mkdir {
+sub do_mkdir
+{
     my $path = expand_macros(shift);
     if ( $opt_check ) {
         print "MKDIR: $path\n";
@@ -274,7 +280,52 @@ sub do_mkdir {
     }
 }
 
-sub do_touch {
+sub do_symlink
+{
+    my $line = shift;
+
+    $line = expand_macros($line);
+    ($from, $to) = split(' ',$line);
+    if ( dirname($from) eq dirname($to) ) {
+        $from = basename($from);
+    }
+    elsif ( dirname($from) eq '.' ) {
+        # nothing to do
+    }
+    else {
+        print_error("symlink: link must be in the same directory as file",0);
+        return 0;
+    }
+
+    print "symlink: $from, to: $to\n" if $is_debug;
+
+    return unless $has_symlinks;
+
+    if ( $opt_check ) {
+        if ( $opt_delete ) {
+            print "REMOVE: $to\n";
+        }
+        else {
+            print "SYMLINK $from -> $to\n";
+        }
+    }
+    else {
+        print "REMOVE: $to\n";
+        unlink $to;
+        return if $opt_delete;
+
+        print "SYMLIB: $from -> $to\n";
+        if ( !symlink("$from", "$to") ) {
+            print_error("can't symlink $from -> $to: $!",0);
+        }
+        else {
+            push_on_ziplist($symlib) if $opt_zip;
+        }
+    }
+}
+
+sub do_touch
+{
     my ($from, $to);
     my $line = shift;
     my $touch = 1;
@@ -287,7 +338,8 @@ sub do_touch {
 
 #### subroutines #####
 
-sub parse_options {
+sub parse_options
+{
     my $arg;
     while ( $arg = shift @ARGV ) {
         $arg =~ /^-force$/  and $opt_force  = 1 and next;
@@ -311,7 +363,8 @@ sub parse_options {
     $opt_force = 1 if $opt_delete;
 }
 
-sub init_globals {
+sub init_globals
+{
     my $ext;
     ($module, $base_dir, $dlst_file) =  get_base();
     print "Module=$module, Base_Diri=$base_dir, d.lst=$dlst_file\n" if $is_debug;
@@ -392,7 +445,8 @@ sub init_globals {
     $has_symlinks = eval { symlink("",""); 1 };
 }
 
-sub get_base {
+sub get_base
+{
     # a module base dir contains a subdir 'prj'
     # which in turn contains a file 'd.lst'
     my (@field, $base, $dlst);
@@ -416,7 +470,8 @@ sub get_base {
     }
 }
 
-sub parse_dlst {
+sub parse_dlst
+{
     my $line_cnt = 0;
     open(DLST, "<$dlst_file") or die "can't open d.lst";
     while(<DLST>) {
@@ -441,14 +496,15 @@ sub parse_dlst {
     close(DLST);
 }
 
-sub expand_macros {
+sub expand_macros
+{
     # expand all macros and change backslashes to slashes
     my $line        = shift;
     my $line_cnt    = shift;
     my $i;
 
     for ($i=0; $i<=$#macros; $i++)  {
-        $line =~ s/$macros[$i][0]/$macros[$i][1]/i
+        $line =~ s/$macros[$i][0]/$macros[$i][1]/gi
     }
     if ( $line =~ /(%\w+%)/ ) {
         if ( $1 ne '%OS%' ) {   # %OS% looks like a macro but is not ...
@@ -460,7 +516,8 @@ sub expand_macros {
     return $line;
 }
 
-sub walk_action_data {
+sub walk_action_data
+{
     # all actions have to be excuted relative to the prj directory
     chdir("$base_dir/prj");
     # dispatch depending on action type
@@ -471,7 +528,8 @@ sub walk_action_data {
     system("create-libstatic-link", expand_macros("%_DEST%/lib%_EXT%")) if ( $^O eq 'darwin' );
 }
 
-sub glob_line {
+sub glob_line
+{
     my $from = shift;
     my $to = shift;
     my $to_dir = shift;
@@ -503,7 +561,8 @@ sub glob_line {
 }
 
 
-sub glob_and_copy {
+sub glob_and_copy
+{
     my $from = shift;
     my $to = shift;
     my $touch = shift;
@@ -517,7 +576,8 @@ sub glob_and_copy {
     }
 }
 
-sub copy_if_newer {
+sub copy_if_newer
+{
     # return 0 if file is unchanged ( for whatever reason )
     # return 1 if file has been copied
     my $from = shift;
@@ -570,7 +630,8 @@ sub copy_if_newer {
     }
 }
 
-sub is_newer {
+sub is_newer
+{
         # returns whole stat buffer if newer
         my $from = shift;
         my $to = shift;
@@ -615,7 +676,8 @@ sub filter_out
     return 0;
 }
 
-sub fix_file_permissions {
+sub fix_file_permissions
+{
     my $mode = shift;
     my $file = shift;
 
@@ -628,7 +690,8 @@ sub fix_file_permissions {
     chmod($mode, $file);
 }
 
-sub get_latest_patchlevel {
+sub get_latest_patchlevel
+{
     # note: feed only well formed library names to this function
     # of the form libfoo.so.x.y.z with x,y,z numbers
 
@@ -660,7 +723,8 @@ sub get_latest_patchlevel {
 
 }
 
-sub push_default_actions {
+sub push_default_actions
+{
     # any default action (that is an action which must be done even without
     # a corresponding d.lst entry) should be pushed here on the
     # @action_data list.
@@ -694,7 +758,8 @@ sub push_default_actions {
     }
 }
 
-sub walk_hedabu_list {
+sub walk_hedabu_list
+{
     my (@hedabu_headers);
     return if $#hedabu_list == -1;
 
@@ -711,7 +776,8 @@ sub walk_hedabu_list {
     }
 }
 
-sub hedabu_if_newer {
+sub hedabu_if_newer
+{
     my $from = shift;
     my $to = shift;
     my $hedabu_headers_ref = shift;
@@ -801,7 +867,8 @@ sub zip_files
     close(ZIP)
 }
 
-sub print_error {
+sub print_error
+{
     my $message = shift;
     my $line = shift;
 
@@ -815,7 +882,8 @@ sub print_error {
     print STDERR "ERROR: $message\n";
 }
 
-sub print_stats {
+sub print_stats
+{
     print "Statistics:\n";
     if ( $opt_delete ) {
         print "Files removed $files_copied\n";
@@ -826,7 +894,8 @@ sub print_stats {
     print "Files unchanged/not matching: $files_unchanged\n";
 }
 
-sub usage {
+sub usage
+{
     print STDERR "Usage:\ndeliver [-force] [-minor] [-check] [-zip] [-delete] [destination-path]\n";
     print STDERR "Options:\n  -force\tcopy even if not newer\n";
     print STDERR "  -minor\tdeliver into minor\n";
