@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-23 07:54:45 $
+ *  last change: $Author: fs $ $Date: 2002-05-24 12:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,8 @@ namespace dbaui
         void                        SetRowVisible(sal_uInt16 _nWhich, sal_Bool _bVis);
 
         void                        SetReadOnly(sal_Bool bRO);
+        // calculate an optimal size. Basically, this takes into account the number of visible rows.
+        Size                        CalcOptimalSize( const Size& _rAvailable );
 
         // can the current content be cut
         sal_Bool                    isCutAllowed();
@@ -185,6 +187,7 @@ namespace dbaui
 
         void                        Fill();
         void                        PreFill();
+
         /** GetCellText returns the text at the given position
             @param  _nRow
                 the number of the row
@@ -240,8 +243,6 @@ namespace dbaui
 
         virtual sal_uInt16          GetDefaultColumnWidth(const String& rName) const;
 
-
-
         void                        stopTimer();
         void                        startTimer();
 
@@ -264,6 +265,8 @@ namespace dbaui
         void            setTextCellContext(const OTableFieldDescRef& _rEntry,const String& _sText,ULONG _nHelpId);
         void            invalidateUndoRedo();
         OTableFieldDescRef getEntry(OTableFields::size_type _nPos);
+
+        void            adjustSelectionMode( sal_Bool _bClickedOntoHeader, sal_Bool _bClickedOntoHandleCol );
     };
 }
 #endif // DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX

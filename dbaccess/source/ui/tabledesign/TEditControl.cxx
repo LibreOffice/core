@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 11:28:20 $
+ *  last change: $Author: fs $ $Date: 2002-05-24 12:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #endif
 #ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 
 using namespace ::dbaui;
@@ -1522,22 +1525,52 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
     {
         case COMMAND_CONTEXTMENU:
         {
-            //////////////////////////////////////////////////////////////
-            // Falls kein MouseEvent, an Basisklasse weiterleiten
+            Point aMenuPos( rEvt.GetMousePosPixel() );
             if (!rEvt.IsMouseEvent())
             {
-                OTableRowView::Command(rEvt);
-                return;
+                if  ( 1 == GetSelectColumnCount() )
+                {
+                    sal_uInt16 nSelId = GetColumnId( FirstSelectedColumn() );
+                    ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, sal_False ) );
+
+                    aMenuPos = aColRect.TopCenter();
+                }
+                else
+                {
+                    OTableRowView::Command(rEvt);
+                    return;
+                }
             }
 
             //////////////////////////////////////////////////////////////
             // Kontextmenu einblenden
             if( !IsReadOnly() )
             {
-                sal_uInt16 nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
-                long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
+                sal_uInt16 nColId = GetColumnAtXPosPixel(aMenuPos.X());
+                long   nRow = GetRowAtYPosPixel(aMenuPos.Y());
 
-                if ( nColId == HANDLE_ID )
+                if ( HANDLE_ID != nColId )
+                {
+                    if ( nRow < 0 )
+                    {   // hit the header
+                        if ( 3 != nColId )
+                        {   // 3 would mean the last column, and this last column is auto-sized
+                            if ( !IsColumnSelected( nColId ) )
+                                SelectColumnId( nColId );
+
+                            PopupMenu aContextMenu( ModuleRes( RID_QUERYCOLPOPUPMENU ) );
+                            aContextMenu.EnableItem( SID_DELETE, sal_False );
+                            aContextMenu.RemoveDisabledEntries(sal_True, sal_True);
+                            switch ( aContextMenu.Execute( this, aMenuPos ) )
+                            {
+                                case ID_BROWSER_COLWIDTH:
+                                    adjustBrowseBoxColumnWidth( this, nColId );
+                                    break;
+                            }
+                        }
+                    }
+                }
+                else
                 {
                     PopupMenu aContextMenu(ModuleRes(RID_TABLEDESIGNROWPOPUPMENU));
                     long nSelectRowCount = GetSelectRowCount();
@@ -1558,7 +1591,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                     // Alle Aktionen, die die Zeilenzahl veraendern, muessen asynchron
                     // ausgefuehrt werden->sonst Probleme zwischen Kontextmenu u. Browser
                     m_nDataPos = GetCurRow();
-                    switch (aContextMenu.Execute(this, rEvt.GetMousePosPixel()))
+                    switch (aContextMenu.Execute(this, aMenuPos))
                     {
                         case SID_CUT:
                             Cut();

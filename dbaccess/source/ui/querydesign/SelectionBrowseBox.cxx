@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-23 07:54:45 $
+ *  last change: $Author: fs $ $Date: 2002-05-24 12:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 #endif
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 
 using namespace ::svt;
@@ -1130,35 +1133,43 @@ void OSelectionBrowseBox::RemoveField(sal_uInt16 nId, sal_Bool bActivate)
 }
 
 //------------------------------------------------------------------------------
+void OSelectionBrowseBox::adjustSelectionMode( sal_Bool _bClickedOntoHeader, sal_Bool _bClickedOntoHandleCol )
+{
+    // wenn ein Header selectiert wird, muﬂ die selection angezeigt werden, sonst nicht)
+    if ( _bClickedOntoHeader )
+    {
+        if (0 == GetSelectColumnCount() )
+            // wenn es schon eine selektierte Spalte gibt, bin ich schon im richtigen Modus
+            if ( BROWSER_HIDESELECT == ( m_nMode & BROWSER_HIDESELECT ) )
+            {
+                m_nMode &= ~BROWSER_HIDESELECT;
+                m_nMode |= BROWSER_MULTISELECTION;
+                SetMode( m_nMode );
+            }
+    }
+    else if ( BROWSER_HIDESELECT != ( m_nMode & BROWSER_HIDESELECT ) )
+    {
+        if ( GetSelectColumnCount() != 0 )
+            SetNoSelection();
+
+        if ( _bClickedOntoHandleCol )
+        {
+            m_nMode |= BROWSER_HIDESELECT;
+            m_nMode &= ~BROWSER_MULTISELECTION;
+            SetMode( m_nMode );
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
 void OSelectionBrowseBox::MouseButtonDown(const BrowserMouseEvent& rEvt)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     if( rEvt.IsLeft() )
     {
-        sal_Bool bOnHeader = rEvt.GetRow() < 0 && rEvt.GetColumnId() != HANDLE_ID;
-        // wenn ein Header selectiert wird, muﬂ die selection angezeigt werden, sonst nicht)
-        if (bOnHeader)
-        {
-            if (GetSelectColumnCount() == 0)
-                // wenn es schon eine selektierte Spalte gibt, bin ich schon im richtigen Modus
-                if ((m_nMode & BROWSER_HIDESELECT) == BROWSER_HIDESELECT)
-                {
-                    m_nMode &= ~BROWSER_HIDESELECT;
-                    m_nMode |= BROWSER_MULTISELECTION;
-                    SetMode(m_nMode);
-                }
-        }
-        else if (!((m_nMode & BROWSER_HIDESELECT) == BROWSER_HIDESELECT))
-        {
-            if (GetSelectColumnCount() != 0)
-                SetNoSelection();
-            if (rEvt.GetColumnId() == HANDLE_ID)
-            {
-                m_nMode |= BROWSER_HIDESELECT;
-                m_nMode &= ~BROWSER_MULTISELECTION;
-                SetMode(m_nMode);
-            }
-        }
+        sal_Bool bOnHandle = HANDLE_ID == rEvt.GetColumnId();
+        sal_Bool bOnHeader = ( rEvt.GetRow() < 0 ) && !bOnHandle;
+        adjustSelectionMode( bOnHeader, bOnHandle );
     }
     EditBrowseBox::MouseButtonDown(rEvt);
 }
@@ -1696,6 +1707,17 @@ void OSelectionBrowseBox::Fill()
 }
 
 //------------------------------------------------------------------------------
+Size OSelectionBrowseBox::CalcOptimalSize( const Size& _rAvailable )
+{
+    Size aReturn( _rAvailable.Width(), GetTitleHeight() );
+
+    aReturn.Height() += ( m_nVisibleCount ? m_nVisibleCount : 15 ) * GetDataRowHeight();
+    aReturn.Height() += 40; // just some space
+
+    return aReturn;
+}
+
+//------------------------------------------------------------------------------
 void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
@@ -1703,27 +1725,46 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
     {
         case COMMAND_CONTEXTMENU:
         {
+            Point aMenuPos( rEvt.GetMousePosPixel() );
+
             if (!rEvt.IsMouseEvent())
             {
-                EditBrowseBox::Command(rEvt);
-                return;
+                if  ( 1 == GetSelectColumnCount() )
+                {
+                    sal_uInt16 nSelId = GetColumnId( FirstSelectedColumn() );
+                    ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, sal_False ) );
+
+                    aMenuPos = aColRect.TopCenter();
+                }
+                else
+                {
+                    EditBrowseBox::Command(rEvt);
+                    return;
+                }
             }
 
-            Point aPoint(rEvt.GetMousePosPixel());
-            sal_uInt16 nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
-            long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
+            sal_uInt16 nColId = GetColumnAtXPosPixel( aMenuPos.X() );
+            long   nRow = GetRowAtYPosPixel( aMenuPos.Y() );
 
-            if (nRow < 0 && nColId > HANDLE_ID && IsColumnSelected(nColId) )
+            if (nRow < 0 && nColId > HANDLE_ID )
             {
+                if ( !IsColumnSelected( nColId ) )
+                {
+                    adjustSelectionMode( sal_True /* clicked onto a header */ , sal_False /* not onto the handle col */ );
+                    SelectColumnId( nColId );
+                }
+
                 if (!static_cast<OQueryController*>(getDesignView()->getController())->isReadOnly())
                 {
-                    PopupMenu aContextMenu(ModuleRes(RID_QUERYCOLPOPUPMENU));
-                    aContextMenu.EnableItem(ID_QUERY_EDIT_JOINCONNECTION,FALSE);
-                    aContextMenu.RemoveDisabledEntries();
-                    switch (aContextMenu.Execute(this, aPoint))
+                    PopupMenu aContextMenu( ModuleRes( RID_QUERYCOLPOPUPMENU ) );
+                    switch (aContextMenu.Execute(this, aMenuPos))
                     {
-                        case SID_DELETE:                // Aussch
+                        case SID_DELETE:
                             RemoveField(nColId);
+                            break;
+
+                        case ID_BROWSER_COLWIDTH:
+                            adjustBrowseBoxColumnWidth( this, nColId );
                             break;
                     }
                 }
@@ -1738,7 +1779,7 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
                     aContextMenu.CheckItem( ID_QUERY_ALIASNAME, m_bVisibleRow[BROW_COLUMNALIAS_ROW]);
                     aContextMenu.CheckItem( ID_QUERY_DISTINCT, static_cast<OQueryController*>(getDesignView()->getController())->isDistinct());
 
-                    switch (aContextMenu.Execute(this, aPoint))
+                    switch (aContextMenu.Execute(this, aMenuPos))
                     {
                         case ID_QUERY_FUNCTION:
                             SetRowVisible(BROW_FUNCTION_ROW, !IsRowVisible(BROW_FUNCTION_ROW));
