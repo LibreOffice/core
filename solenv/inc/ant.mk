@@ -10,8 +10,15 @@ J2EE_HOME=$(SOLARROOT)$/j2sdkee1.2
 
 # --- ANT build environment  ---------------------------------------
 
-.IF "$(ANT_CLASSPATH)" ==""
-ANT_CLASSPATH:=$(SOLARBINDIR)$/ant.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$/$(SOLARBINDIR)$/xerces.jar
+.IF "$(ANT_OPTIONAL)" ==""
+ANT_OPTIONAL=$(SOLARBINDIR)$/jakarta-ant-1.3-optional.jar
+.ENDIF
+
+.IF "$(ANT_CLASSPATH)"==""
+ANT_CLASSPATH:=$(SOLARBINDIR)$/ant.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$/$(SOLARBINDIR)$/xerces.jar$(PATH_SEPERATOR)$(ANT_OPTIONAL)
+.IF "$(ANTPRJ_BOOTSTRAP)"==""
+ANT_CLASSPATH!:=$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/antprj.jar
+.ENDIF
 .ENDIF
 
 ANT=java -Xmx1024m org.apache.tools.ant.Main -Djava.home=$(JAVA_HOME)
