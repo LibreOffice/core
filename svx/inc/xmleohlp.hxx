@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmleohlp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $
+ *  last change: $Author: kz $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,12 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #include <map>
 
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDOBJECTRESOLVER_HPP_
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #endif
@@ -94,7 +95,7 @@ enum SvXMLEmbeddedObjectHelperMode
 // - SvXMLEmbeddedObjectHelper -
 // -----------------------------
 
-class SvPersist;
+class SfxObjectShell;
 class SvGlobalName;
 struct OUStringLess;
 class OutputStorageWrapper_Impl;
@@ -113,11 +114,10 @@ private:
     ::rtl::OUString             maCurContainerStorageName;
 
 
-    SvStorage*                  mpRootStorage;  // package
-    SvPersist*                  mpDocPersist;
-    SvStorageRef                mxContainerStorage; // container sub package for
+    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxRootStorage;  // package
+    SfxObjectShell*             mpDocPersist;
+    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxContainerStorage; // container sub package for
                                                 // objects
-
     SvXMLEmbeddedObjectHelperMode       meCreateMode;
     SvXMLEmbeddedObjectHelper_Impl      *mpStreamMap;
     void*                       mpDummy2;
@@ -128,19 +128,15 @@ private:
                                     ::rtl::OUString& rObjectStorageName,
                                     sal_Bool bInternalToExternal ) const;
 
-    SvStorageRef                ImplGetContainerStorage(
+    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > ImplGetContainerStorage(
                                     const ::rtl::OUString& rStorageName );
-    SvStorageRef                ImplGetObjectStorage(
-                                    const ::rtl::OUString& rContainerStorageName,
-                                    const ::rtl::OUString& rObjectStorageName,
-                                    sal_Bool bUCBStorage );
-    String                      ImplGetUniqueName( SvStorage* pStg,
-                                                     const sal_Char* p ) const;
+
+    String                      ImplGetUniqueName( SfxObjectShell*, const sal_Char* p ) const;
     sal_Bool                    ImplReadObject(
                                     const ::rtl::OUString& rContainerStorageName,
                                     ::rtl::OUString& rObjName,
                                     const SvGlobalName *pClassId,
-                                    SvStorage *pTempStor );
+                                    SvStream* pTemp );
 
     ::rtl::OUString             ImplInsertEmbeddedObjectURL(
                                     const ::rtl::OUString& rURLStr );
@@ -149,24 +145,24 @@ protected:
 
                                 SvXMLEmbeddedObjectHelper();
                                 ~SvXMLEmbeddedObjectHelper();
-    void                        Init( SvStorage *pRootStorage,
-                                      SvPersist& rDocPersist,
+    void                        Init( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
+                                      SfxObjectShell& rDocPersist,
                                       SvXMLEmbeddedObjectHelperMode eCreateMode );
 
     virtual void SAL_CALL       disposing();
 
 public:
                                 SvXMLEmbeddedObjectHelper(
-                                    SvPersist& rDocPersist,
+                                    SfxObjectShell& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode );
 
     static SvXMLEmbeddedObjectHelper*   Create(
-                                    SvStorage& rRootStorage,
-                                    SvPersist& rDocPersist,
+                                    const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
+                                    SfxObjectShell& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode,
                                     sal_Bool bDirect = sal_True );
     static SvXMLEmbeddedObjectHelper*   Create(
-                                    SvPersist& rDocPersist,
+                                    SfxObjectShell& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode );
     static void                 Destroy( SvXMLEmbeddedObjectHelper* pSvXMLEmbeddedObjectHelper );
 
