@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-02 15:30:58 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,12 +554,13 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
 SFX_IMPL_XSERVICEINFO( SfxGlobalEvents_Impl, "com.sun.star.frame.GlobalEventBroadcaster", "com.sun.star.comp.sfx2.GlobalEventBroadcaster" )
 SFX_IMPL_ONEINSTANCEFACTORY( SfxGlobalEvents_Impl );
 
-SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& )
+SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xSmgr )
     : m_aInterfaceContainer( m_aMutex )
 {
     m_refCount++;
     pImp = new SfxEvents_Impl( NULL, this );
     m_xEvents = pImp;
+    m_xJobsBinding = REFERENCE< XJOBEXECUTOR >(xSmgr->createInstance(OUSTRING::createFromAscii("com.sun.star.task.JobExecutor")), UNO_QUERY);
     m_refCount--;
     StartListening(*SFX_APP());
 }
@@ -596,6 +597,16 @@ void SfxGlobalEvents_Impl::Notify( SfxBroadcaster& aBC, const SfxHint& aHint )
 //          xSup = (XEVENTSSUPPLIER*) this;
 
         DOCEVENTOBJECT aEvent( xSup, aName );
+
+        // Attention: This listener is a special one. It binds the global document events
+        // to the generic job execution framework. It's a loose binding (using weak references).
+        // So we hold this listener outside our normal listener container.
+        // The implementation behind this job executor can be replaced ...
+        // but we check for this undocumented interface!
+        REFERENCE< XDOCEVENTLISTENER > xJobExecutor(m_xJobsBinding.get(), UNO_QUERY);
+        if (xJobExecutor.is())
+            xJobExecutor->notifyEvent(aEvent);
+
         ::cppu::OInterfaceIteratorHelper aIt( m_aInterfaceContainer );
         while( aIt.hasMoreElements() )
         {
