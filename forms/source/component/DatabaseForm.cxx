@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:13:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,6 +656,18 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
 }
 
 //------------------------------------------------------------------------
+namespace
+{
+    static void appendDigits( sal_Int32 _nNumber, sal_Int8 nDigits, ::rtl::OUStringBuffer& _rOut )
+    {
+        sal_Int32 nCurLen = _rOut.getLength();
+        _rOut.append( _nNumber );
+        while ( _rOut.getLength() - nCurLen < nDigits )
+            _rOut.insert( nCurLen, (sal_Unicode)'0' );
+    }
+}
+
+//------------------------------------------------------------------------
 void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Reference<XPropertySet>& xComponentSet, const ::rtl::OUString& rNamePrefix,
                      const Reference<XControl>& rxSubmitButton, const MouseEvent& MouseEvt)
 {
@@ -837,14 +849,14 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 sal_Int32 nInt32Val;
                 if (aVal >>= nInt32Val)
                 {
-                    ::Date aDate(nInt32Val);
-                    char s[11];
-                    sprintf(s,"%02d-%02d-%04d",
-                    (int)aDate.GetMonth(),
-                    (int)aDate.GetDay(),
-                    (int)aDate.GetYear());
-                    s[10] = 0;
-                    aText = ::rtl::OUString::createFromAscii(s);
+                    ::Date aDate( nInt32Val );
+                    ::rtl::OUStringBuffer aBuffer;
+                    appendDigits( aDate.GetMonth(), 2, aBuffer );
+                    aBuffer.append( (sal_Unicode)'-' );
+                    appendDigits( aDate.GetDay(), 2, aBuffer );
+                    aBuffer.append( (sal_Unicode)'-' );
+                    appendDigits( aDate.GetYear(), 4, aBuffer );
+                    aText = aBuffer.makeStringAndClear();
                 }
                 rList.push_back( HtmlSuccessfulObj(aName, aText) );
             }
@@ -861,13 +873,13 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 if (aVal >>= nInt32Val)
                 {
                     ::Time aTime(nInt32Val);
-                    char s[10];
-                    sprintf(s,"%02d:%02d:%02d",
-                    (int)aTime.GetHour(),
-                    (int)aTime.GetMin(),
-                    (int)aTime.GetSec());
-                    s[8] = 0;
-                    aText = ::rtl::OUString::createFromAscii(s);
+                    ::rtl::OUStringBuffer aBuffer;
+                    appendDigits( aTime.GetHour(), 2, aBuffer );
+                    aBuffer.append( (sal_Unicode)'-' );
+                    appendDigits( aTime.GetMin(), 2, aBuffer );
+                    aBuffer.append( (sal_Unicode)'-' );
+                    appendDigits( aTime.GetSec(), 2, aBuffer );
+                    aText = aBuffer.makeStringAndClear();
                 }
                 rList.push_back( HtmlSuccessfulObj(aName, aText) );
             }
@@ -3076,14 +3088,26 @@ void SAL_CALL ODatabaseForm::removeRowSetApproveListener(const Reference<XRowSet
 //==============================================================================
 // com::sun:star::form::XDatabaseParameterBroadcaster
 //------------------------------------------------------------------------------
-void SAL_CALL ODatabaseForm::addParameterListener(const Reference<XDatabaseParameterListener>& _rListener) throw( RuntimeException )
+void SAL_CALL ODatabaseForm::addDatabaseParameterListener(const Reference<XDatabaseParameterListener>& _rListener) throw( RuntimeException )
 {
     m_aParameterManager.addParameterListener( _rListener );
 }
 //------------------------------------------------------------------------------
-void SAL_CALL ODatabaseForm::removeParameterListener(const Reference<XDatabaseParameterListener>& _rListener) throw( RuntimeException )
+void SAL_CALL ODatabaseForm::removeDatabaseParameterListener(const Reference<XDatabaseParameterListener>& _rListener) throw( RuntimeException )
 {
     m_aParameterManager.removeParameterListener( _rListener );
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseForm::addParameterListener(const Reference<XDatabaseParameterListener>& _rListener) throw( RuntimeException )
+{
+    ODatabaseForm::addDatabaseParameterListener( _rListener );
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseForm::removeParameterListener(const Reference<XDatabaseParameterListener>& _rListener) throw( RuntimeException )
+{
+    ODatabaseForm::removeDatabaseParameterListener( _rListener );
 }
 
 //==============================================================================
