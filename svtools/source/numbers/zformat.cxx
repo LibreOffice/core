@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: er $ $Date: 2002-05-31 16:20:33 $
+ *  last change: $Author: er $ $Date: 2002-05-31 18:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ BYTE SvNumberNatNum::MapDBNumToNatNum( BYTE nDBNum, LanguageType eLang )
         case 3:
             switch ( eLang )
             {
-                case (LANGUAGE_CHINESE  & 0x03FF) : nNatNum = 3; break;
+                case (LANGUAGE_CHINESE  & 0x03FF) : nNatNum = 6; break;
                 case (LANGUAGE_JAPANESE & 0x03FF) : nNatNum = 5; break;
                 case (LANGUAGE_KOREAN   & 0x03FF) : nNatNum = 3; break;
             }
@@ -259,8 +259,8 @@ BYTE SvNumberNatNum::MapDBNumToNatNum( BYTE nDBNum, LanguageType eLang )
         case 4:
             switch ( eLang )
             {
-                case (LANGUAGE_JAPANESE & 0x03FF) : nNatNum = 6; break;
-                case (LANGUAGE_KOREAN   & 0x03FF) : nNatNum = 8; break;
+                case (LANGUAGE_JAPANESE & 0x03FF) : nNatNum = 7; break;
+                case (LANGUAGE_KOREAN   & 0x03FF) : nNatNum = 9; break;
             }
             break;
     }
@@ -454,6 +454,31 @@ String SvNumberNatNum::MapNatNumToModule( BYTE nNatNum, LanguageType eLang )
             }
             break;
         case 6:
+            switch ( eLang )
+            {
+                case LANGUAGE_CHINESE_SIMPLIFIED :
+                    aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                "NumToTextFullwidth_zh_CN" ) );
+                    break;
+                case LANGUAGE_CHINESE_TRADITIONAL :
+                    aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                "NumToTextFullwidth_zh_TW" ) );
+                    break;
+                default:
+                    switch ( eLang & 0x03FF )
+                    {
+                        case (LANGUAGE_JAPANESE & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToTextFullwidth_ja_JP" ) );
+                            break;
+                        case (LANGUAGE_KOREAN   & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToTextFullwidth_ko" ) );
+                            break;
+                    }
+            }
+            break;
+        case 7:
                     switch ( eLang & 0x03FF )
                     {
                         case (LANGUAGE_JAPANESE & 0x03FF) :
@@ -466,7 +491,7 @@ String SvNumberNatNum::MapNatNumToModule( BYTE nNatNum, LanguageType eLang )
                             break;
                     }
             break;
-        case 7:
+        case 8:
                     switch ( eLang & 0x03FF )
                     {
                         case (LANGUAGE_JAPANESE & 0x03FF) :
@@ -479,7 +504,7 @@ String SvNumberNatNum::MapNatNumToModule( BYTE nNatNum, LanguageType eLang )
                             break;
                     }
             break;
-        case 8:
+        case 9:
                     switch ( eLang & 0x03FF )
                     {
                         case (LANGUAGE_KOREAN   & 0x03FF) :
@@ -488,7 +513,7 @@ String SvNumberNatNum::MapNatNumToModule( BYTE nNatNum, LanguageType eLang )
                             break;
                     }
             break;
-        case 9:
+        case 10:
                     switch ( eLang & 0x03FF )
                     {
                         case (LANGUAGE_KOREAN   & 0x03FF) :
@@ -497,7 +522,7 @@ String SvNumberNatNum::MapNatNumToModule( BYTE nNatNum, LanguageType eLang )
                             break;
                     }
             break;
-        case 10:
+        case 11:
                     switch ( eLang & 0x03FF )
                     {
                         case (LANGUAGE_KOREAN   & 0x03FF) :
