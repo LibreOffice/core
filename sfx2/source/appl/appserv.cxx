@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:30:58 $
+ *  last change: $Author: fs $ $Date: 2000-12-07 10:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _SVT_DOC_ADDRESSTEMPLATE_HXX_
+#include <svtools/addresstemplate.hxx>
 #endif
 
 #ifndef _SV_CONFIG_HXX
@@ -905,6 +908,14 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 new SfxTemplateOrganizeDlg(GetTopWindow());
             pDlg->Execute();
             delete pDlg;
+            bDone = TRUE;
+            break;
+        }
+
+        case SID_TEMPLATE_ADDRESSBOKSOURCE:
+        {
+            svt::AddressBookSourceDialog aDialog(GetTopWindow(), ::comphelper::getProcessServiceFactory());
+            aDialog.Execute();
             bDone = TRUE;
             break;
         }
