@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:16:52 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,9 @@
 #include <svtools/prgsbar.hxx>
 #endif
 
-class SdDrawDocShell;
+namespace sd {
+class DrawDocShell;
+}
 
 /******************************************************************************
 |*
@@ -98,7 +100,7 @@ class SdDrawDocShell;
 
 class SdVectorizeDlg : public ModalDialog
 {
-    SdDrawDocShell *    pDocSh;
+    ::sd::DrawDocShell *    pDocSh;
     FixedLine           aGrpSettings;
     FixedText           aFtLayers;
     NumericField        aNmLayers;
@@ -145,7 +147,7 @@ class SdVectorizeDlg : public ModalDialog
 
 public:
 
-                        SdVectorizeDlg( Window* pParent, const Bitmap& rBmp, SdDrawDocShell* pDocShell );
+                        SdVectorizeDlg( Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell );
                         ~SdVectorizeDlg();
 
     const GDIMetaFile&  GetGDIMetaFile() const { return aMtf; }
