@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:38:25 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@
 #include <tools/gen.hxx>
 #endif
 
+#include <algorithm>
+
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
 
@@ -114,17 +116,27 @@ ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
     ScAccessibleTableBase (rxParent, GetDocument(pViewShell),
         ScRange(ScAddress(0, 0, nTab),ScAddress(MAXCOL, MAXROW, nTab))),
     mpViewShell(pViewShell),
-    meSplitPos(eSplitPos)
+    mpMarkedRanges(NULL),
+    mpSortedMarkedCells(NULL),
+    meSplitPos(eSplitPos),
+    mbHasSelection(sal_False)
 {
     if (pViewShell)
     {
         maActiveCell = pViewShell->GetViewData()->GetCurPos();
         mpViewShell->AddAccessibilityObject(*this);
+        mbHasSelection = mpViewShell->GetViewData()->GetMarkData().GetTableSelect(maActiveCell.Tab()) &&
+                    (mpViewShell->GetViewData()->GetMarkData().IsMarked() ||
+                    mpViewShell->GetViewData()->GetMarkData().IsMultiMarked());
     }
 }
 
 ScAccessibleSpreadsheet::~ScAccessibleSpreadsheet()
 {
+    if (mpMarkedRanges)
+        delete mpMarkedRanges;
+    if (mpSortedMarkedCells)
+        delete mpSortedMarkedCells;
     if (mpViewShell)
         mpViewShell->RemoveAccessibilityObject(*this);
 }
@@ -144,20 +156,47 @@ void ScAccessibleSpreadsheet::SetDefunc()
 
 void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA( ScAccActiveCellChangeHint ) )
+    if (rHint.ISA( SfxSimpleHint ) )
     {
-        const ScAccActiveCellChangeHint& rRef = (const ScAccActiveCellChangeHint&)rHint;
-        ScAddress aNewCell(rRef.GetNewCellAddress());
-        if (aNewCell != maActiveCell)
+        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
+        // only notify if child exist, otherwise it is not necessary
+        if ((rRef.GetId() == SC_HINT_ACC_CURSORCHANGED))
         {
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
-            aEvent.OldValue <<= getAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
-            aEvent.NewValue <<= getAccessibleCellAt(aNewCell.Row(), aNewCell.Col());
+            if (mpViewShell)
+            {
+                ScAddress aNewCell = mpViewShell->GetViewData()->GetCurPos();
+                sal_Bool bNewMarked(mpViewShell->GetViewData()->GetMarkData().GetTableSelect(aNewCell.Tab()) &&
+                    (mpViewShell->GetViewData()->GetMarkData().IsMarked() ||
+                    mpViewShell->GetViewData()->GetMarkData().IsMultiMarked()));
+                sal_Bool bNewCellSelected(isAccessibleSelected(aNewCell.Row(), aNewCell.Col()));
+                if ((bNewMarked != mbHasSelection) ||
+                    (!bNewCellSelected && bNewMarked) ||
+                    (bNewCellSelected && mbHasSelection))
+                {
+                    if (mpMarkedRanges)
+                        DELETEZ(mpMarkedRanges);
+                    if (mpSortedMarkedCells)
+                        DELETEZ(mpSortedMarkedCells);
+                    AccessibleEventObject aEvent;
+                    aEvent.EventId = AccessibleEventId::ACCESSIBLE_SELECTION_EVENT;
 
-            maActiveCell = aNewCell;
+                    mbHasSelection = bNewMarked;
 
-            CommitChange(aEvent);
+                    CommitChange(aEvent);
+                }
+
+                if (aNewCell != maActiveCell)
+                {
+                    AccessibleEventObject aEvent;
+                    aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
+                    aEvent.OldValue <<= getAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
+                    aEvent.NewValue <<= getAccessibleCellAt(aNewCell.Row(), aNewCell.Col());
+
+                    maActiveCell = aNewCell;
+
+                    CommitChange(aEvent);
+                }
+            }
         }
     }
 }
@@ -249,7 +288,9 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCel
     ScAddress aCellAddress(static_cast<sal_uInt16>(maRange.aStart.Col() + nColumn),
         static_cast<sal_uInt16>(maRange.aStart.Row() + nRow), maRange.aStart.Tab());
     ScAccessibleCell* pAccessibleCell = new ScAccessibleCell(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn), meSplitPos);
-    return pAccessibleCell;
+    uno::Reference < XAccessible > xAccessible = pAccessibleCell;
+    pAccessibleCell->Init();
+    return xAccessible;
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
@@ -322,6 +363,181 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     if (isVisible())
         pStateSet->AddState(AccessibleStateType::VISIBLE);
     return pStateSet;
+}
+
+    ///=====  XAccessibleSelection  ===========================================
+
+void SAL_CALL
+        ScAccessibleSpreadsheet::selectAccessibleChild( sal_Int32 nChildIndex )
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (mpViewShell)
+    {
+        sal_Int32 nCol(getAccessibleColumn(nChildIndex));
+        sal_Int32 nRow(getAccessibleRow(nChildIndex));
+
+        SelectCell(nRow, nCol);
+    }
+}
+
+void SAL_CALL
+        ScAccessibleSpreadsheet::clearAccessibleSelection(  )
+        throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (mpViewShell)
+    {
+        mpViewShell->Unmark();
+    }
+}
+
+void SAL_CALL
+        ScAccessibleSpreadsheet::selectAllAccessible(  )
+        throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (mpViewShell)
+    {
+        mpViewShell->SelectAll();
+    }
+}
+
+sal_Int32 SAL_CALL
+        ScAccessibleSpreadsheet::getSelectedAccessibleChildCount(  )
+        throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    sal_Int32 nResult(0);
+    if (mpViewShell)
+    {
+        if (!mpMarkedRanges)
+        {
+            mpMarkedRanges = new ScRangeList();
+            mpViewShell->GetViewData()->GetMarkData().FillRangeListWithMarks(mpMarkedRanges, sal_False);
+        }
+        // is possible, because there shouldn't be overlapped ranges in it
+        if (mpMarkedRanges)
+            nResult = mpMarkedRanges->GetCellCount();
+    }
+    return nResult;
+}
+
+uno::Reference<XAccessible > SAL_CALL
+        ScAccessibleSpreadsheet::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    uno::Reference < XAccessible > xAccessible;
+    if (mpViewShell)
+    {
+        if (!mpMarkedRanges)
+        {
+            mpMarkedRanges = new ScRangeList();
+            mpViewShell->GetViewData()->GetMarkData().FillRangeListWithMarks(mpMarkedRanges, sal_False);
+        }
+        if (mpMarkedRanges)
+        {
+            if (!mpSortedMarkedCells)
+                CreateSortedMarkedCells();
+            if (mpSortedMarkedCells)
+            {
+                if ((nSelectedChildIndex < 0) ||
+                    (mpSortedMarkedCells->size() <= static_cast<sal_uInt32>(nSelectedChildIndex)))
+                    throw lang::IndexOutOfBoundsException();
+                else
+                    xAccessible = getAccessibleCellAt((*mpSortedMarkedCells)[nSelectedChildIndex].Row(), (*mpSortedMarkedCells)[nSelectedChildIndex].Col());
+            }
+        }
+    }
+    return xAccessible;
+}
+
+void SAL_CALL
+        ScAccessibleSpreadsheet::deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (mpViewShell)
+    {
+        if (!mpMarkedRanges)
+        {
+            mpMarkedRanges = new ScRangeList();
+            mpViewShell->GetViewData()->GetMarkData().FillRangeListWithMarks(mpMarkedRanges, sal_False);
+        }
+        if (mpMarkedRanges)
+        {
+            if (!mpSortedMarkedCells)
+                CreateSortedMarkedCells();
+            if (mpSortedMarkedCells)
+            {
+                if ((nSelectedChildIndex < 0) ||
+                    (mpSortedMarkedCells->size() <= static_cast<sal_uInt32>(nSelectedChildIndex)))
+                    throw lang::IndexOutOfBoundsException();
+                else
+                {
+                    mpViewShell->GetViewData()->GetMarkData().SetMarkNegative(!mpViewShell->GetViewData()->GetMarkData().IsMarkNegative());
+                    SelectCell((*mpSortedMarkedCells)[nSelectedChildIndex].Row(), (*mpSortedMarkedCells)[nSelectedChildIndex].Col());
+                    mpViewShell->GetViewData()->GetMarkData().SetMarkNegative(!mpViewShell->GetViewData()->GetMarkData().IsMarkNegative());
+                }
+            }
+        }
+    }
+}
+
+void ScAccessibleSpreadsheet::SelectCell(sal_Int32 nRow, sal_Int32 nCol)
+{
+    mpViewShell->SetTabNo( maRange.aStart.Tab() );
+
+    mpViewShell->DoneBlockMode( sal_True ); // continue selecting
+    mpViewShell->InitBlockMode( static_cast<sal_uInt16>(nCol), static_cast<sal_uInt16>(nRow), maRange.aStart.Tab() );
+
+    mpViewShell->SelectionChanged();
+}
+
+void ScAccessibleSpreadsheet::CreateSortedMarkedCells()
+{
+    mpSortedMarkedCells = new std::vector<ScMyAddress>();
+    mpSortedMarkedCells->reserve(mpMarkedRanges->GetCellCount());
+    ScRange* pRange = mpMarkedRanges->First();
+    while (pRange)
+    {
+        if (pRange->aStart.Tab() != pRange->aEnd.Tab())
+        {
+            if ((maActiveCell.Tab() >= pRange->aStart.Tab()) ||
+                maActiveCell.Tab() <= pRange->aEnd.Tab())
+            {
+                ScRange aRange(*pRange);
+                aRange.aStart.SetTab(maActiveCell.Tab());
+                aRange.aEnd.SetTab(maActiveCell.Tab());
+                AddMarkedRange(aRange);
+            }
+            else
+                DBG_ERROR("Range of wrong table");
+        }
+        else if(pRange->aStart.Tab() == maActiveCell.Tab())
+            AddMarkedRange(*pRange);
+        else
+            DBG_ERROR("Range of wrong table");
+        pRange = mpMarkedRanges->Next();
+    }
+    std::sort(mpSortedMarkedCells->begin(), mpSortedMarkedCells->end());
+}
+
+void ScAccessibleSpreadsheet::AddMarkedRange(const ScRange& rRange)
+{
+    sal_uInt32 nCount((rRange.aEnd.Col() - rRange.aStart.Col() + 1) * (rRange.aEnd.Row() - rRange.aStart.Row() + 1));
+    sal_uInt32 nPos(0);
+    for (sal_uInt16 nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+    {
+        for (sal_uInt16 nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+        {
+            ScMyAddress aCell(nCol, nRow, maActiveCell.Tab());
+            mpSortedMarkedCells->push_back(aCell);
+            ++nPos;
+        }
+    }
+    DBG_ASSERT(nCount == nPos, "something wents wrong");
 }
 
     //=====  XServiceInfo  ====================================================

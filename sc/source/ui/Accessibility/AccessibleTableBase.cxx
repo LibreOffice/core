@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:38:25 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ uno::Any SAL_CALL
     throw(uno::RuntimeException)
 {
     SC_QUERYINTERFACE( XAccessibleTable )
+    SC_QUERYINTERFACE( XAccessibleSelection )
 
     return ScAccessibleContextBase::queryInterface( rType );
 }
@@ -307,8 +308,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildInde
 {
     ScUnoGuard aGuard;
     sal_Int32 nRow(-1);
-    if (maRange.aEnd.Col() > 0)
-        nRow = nChildIndex / (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
+    nRow = nChildIndex / (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
     return nRow;
 }
 
@@ -317,8 +317,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildI
 {
     ScUnoGuard aGuard;
     sal_Int32 nColumn(-1);
-    if (maRange.aEnd.Col() > 0)
-        nColumn = nChildIndex % (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
+    nColumn = nChildIndex % (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
     return nColumn;
 }
 
@@ -329,7 +328,7 @@ sal_Int32 SAL_CALL
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-/*  return (maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
+/*  return (maRange.aEnd.Row() - maRange.aStart.Row() + 1)
             (maRange.aEnd.Col() - maRange.aStart.Col() + 1);*/
     return 1;
 }
@@ -384,6 +383,55 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     return xAccessibleStateSet;
 }
 
+    ///=====  XAccessibleSelection  ===========================================
+
+void SAL_CALL
+        ScAccessibleTableBase::selectAccessibleChild( sal_Int32 nChildIndex )
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+}
+
+sal_Bool SAL_CALL
+        ScAccessibleTableBase::isAccessibleChildSelected( sal_Int32 nChildIndex )
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    return isAccessibleSelected(getAccessibleRow(nChildIndex), getAccessibleColumn(nChildIndex));
+}
+
+void SAL_CALL
+        ScAccessibleTableBase::clearAccessibleSelection(  )
+        throw (uno::RuntimeException)
+{
+}
+
+void SAL_CALL
+        ScAccessibleTableBase::selectAllAccessible(  )
+        throw (uno::RuntimeException)
+{
+}
+
+sal_Int32 SAL_CALL
+        ScAccessibleTableBase::getSelectedAccessibleChildCount(  )
+        throw (uno::RuntimeException)
+{
+    sal_Int32 nResult(0);
+    return nResult;
+}
+
+uno::Reference<XAccessible > SAL_CALL
+        ScAccessibleTableBase::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    uno::Reference < XAccessible > xAccessible;
+    return xAccessible;
+}
+
+void SAL_CALL
+        ScAccessibleTableBase::deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+}
+
     //=====  XServiceInfo  ====================================================
 
 ::rtl::OUString SAL_CALL ScAccessibleTableBase::getImplementationName(void)
@@ -401,11 +449,13 @@ uno::Sequence< uno::Type> SAL_CALL ScAccessibleTableBase::getTypes(void)
     uno::Sequence< uno::Type>
         aTypeSequence = ScAccessibleContextBase::getTypes();
     sal_Int32 nOldSize(aTypeSequence.getLength());
-    aTypeSequence.realloc(nOldSize + 1);
+    aTypeSequence.realloc(nOldSize + 2);
     uno::Type* pTypes = aTypeSequence.getArray();
 
     pTypes[nOldSize] = ::getCppuType((const uno::Reference<
             XAccessibleTable>*)0);
+    pTypes[nOldSize + 1] = ::getCppuType((const uno::Reference<
+            XAccessibleSelection>*)0);
 
     return aTypeSequence;
 }
