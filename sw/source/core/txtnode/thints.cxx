@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-12 14:55:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,7 +826,7 @@ BOOL SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,
 
 BOOL lcl_Included( const USHORT nWhich, const SwTxtAttr *pAttr )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     static long nTest = 0;
     ++nTest;
 #endif
