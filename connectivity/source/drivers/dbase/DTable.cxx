@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-13 15:18:25 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 15:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,7 +764,7 @@ sal_Bool ODbaseTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,
         {
             char cLast = pData[nLen];
             pData[nLen] = 0;
-            String aStr(pData,getConnection()->getTextEncoding());
+            String aStr(pData,nLen,getConnection()->getTextEncoding());
             aStr.EraseTrailingChars();
 
             if (!aStr.Len())                // keine StringLaenge, dann NULL
