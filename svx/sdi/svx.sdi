@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svx.sdi,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 16:12:46 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -12854,10 +12854,10 @@ SfxVoidItem FontworkCharacterSpacingDialog SID_FONTWORK_CHARACTER_SPACING_DIALOG
     SlotType = SfxInt32Item
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_DRAWING;
 ]
 
@@ -13268,7 +13268,7 @@ SfxBoolItem BasicShapes SID_DRAWTBX_CS_BASIC
     Synchron;
 
     /* status: */
-    SlotType = SfxStringItem
+    SlotType = SfxBoolItem
 
     /* config: */
     AccelConfig = TRUE,
@@ -13296,7 +13296,7 @@ SfxBoolItem SymbolShapes SID_DRAWTBX_CS_SYMBOL
     Synchron;
 
     /* status: */
-    SlotType = SfxStringItem
+    SlotType = SfxBoolItem
 
     /* config: */
     AccelConfig = TRUE,
@@ -13324,7 +13324,7 @@ SfxBoolItem ArrowShapes SID_DRAWTBX_CS_ARROW
     Synchron;
 
     /* status: */
-    SlotType = SfxStringItem
+    SlotType = SfxBoolItem
 
     /* config: */
     AccelConfig = TRUE,
@@ -13352,7 +13352,7 @@ SfxBoolItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART
     Synchron;
 
     /* status: */
-    SlotType = SfxStringItem
+    SlotType = SfxBoolItem
 
     /* config: */
     AccelConfig = TRUE,
@@ -13380,7 +13380,7 @@ SfxBoolItem CalloutShapes SID_DRAWTBX_CS_CALLOUT
     Synchron;
 
     /* status: */
-    SlotType = SfxStringItem
+    SlotType = SfxBoolItem
 
     /* config: */
     AccelConfig = TRUE,
@@ -13408,7 +13408,7 @@ SfxBoolItem StarShapes SID_DRAWTBX_CS_STAR
     Synchron;
 
     /* status: */
-    SlotType = SfxStringItem
+    SlotType = SfxBoolItem
 
     /* config: */
     AccelConfig = TRUE,
