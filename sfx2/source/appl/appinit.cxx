@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-16 15:09:41 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,6 @@
 #include "viewsh.hxx"
 #include "eacopier.hxx"
 #include "nochaos.hxx"
-#include "ucbhelp.hxx"
 #include "fcontnr.hxx"
 #include "helper.hxx"   // SfxContentHelper::Kill()
 #include "sfxpicklist.hxx"

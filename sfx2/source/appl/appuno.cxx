@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 08:59:39 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,6 @@ using namespace ::rtl;
 #include "msgpool.hxx"
 #include "request.hxx"
 #include "module.hxx"
-#include "ucbhelp.hxx"
 #include "fcontnr.hxx"
 #include "frmload.hxx"
 #include "frame.hxx"

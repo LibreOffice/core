@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dv $ $Date: 2001-07-09 15:32:57 $
+#   last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,6 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
-        $(SLO)$/ucbhelp.obj		\
         $(SLO)$/nochaos.obj		\
         $(SLO)$/exptypes.obj	\
         $(SLO)$/infodlgs.obj	\
@@ -87,9 +86,6 @@ SLOFILES = \
 CXXFILES += goffline.cxx
 SLOFILES += $(SLO)$/goffline.obj
 .ENDIF
-
-EXCEPTIONSFILES = \
-        $(SLO)$/ucbhelp.obj
 
 SRCFILES = \
         explorer.src

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-27 16:51:29 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ using namespace ::com::sun::star::ucb;
 #endif
 
 #include <svtools/pathoptions.hxx>
+#include <unotools/ucbhelper.hxx>
 
 #include "appdata.hxx"
 #include "request.hxx"
@@ -163,10 +164,6 @@ using namespace ::com::sun::star::ucb;
 #include "module.hxx"
 #include "macrconf.hxx"
 #include "docfac.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
-#include "ucbhelp.hxx"
 #include "helper.hxx"
 
 // class SfxHeaderAttributes_Impl ----------------------------------------
@@ -1465,15 +1462,11 @@ sal_Bool SfxObjectShell::IsSecure()
     }
 
     INetURLObject aURL( "macro:" );
-#if SUPD<613//MUSTINI
-    if ( SFX_APP()->IsSecureURL( aURL, &aReferer ) )
-#else
     if ( SvtSecurityOptions().IsSecureURL( aURL.GetMainURL(), aReferer ) )
-#endif
     {
         if ( GetMedium()->GetContent().is() )
         {
-            Any aAny( UCB_Helper::GetProperty( GetMedium()->GetContent(), WID_IS_PROTECTED ) );
+            Any aAny( ::utl::UCBContentHelper::GetProperty( aURL.GetMainURL(), String( RTL_CONSTASCII_USTRINGPARAM("IsProtected")) ) );
             sal_Bool bIsProtected = FALSE;
             if ( ( aAny >>= bIsProtected ) && bIsProtected )
                 return sal_False;

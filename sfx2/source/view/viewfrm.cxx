@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-06 10:15:54 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 16:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,6 @@ using namespace ::com::sun::star::frame;
 #include <frmdescr.hxx>
 #include "appdata.hxx"
 #include "sfxuno.hxx"
-#include "ucbhelp.hxx"
 #include "progress.hxx"
 #include "workwin.hxx"
 #include "helper.hxx"
@@ -2274,20 +2273,6 @@ void SfxViewFrame::Show()
     }
     else
         UpdateTitle();
-
-    // Anchor auf gelesen setzen
-    Reference < XContent > xContent( GetObjectShell()->GetMedium()->GetContent() );
-    if ( xContent.is() )
-    {
-        Any aAny( UCB_Helper::GetProperty( xContent, WID_FLAG_IS_FOLDER ) );
-        sal_Bool bIsFolder = FALSE;
-        if ( !( aAny >>= bIsFolder ) || !bIsFolder )
-        {
-            Any aSet;
-            aSet <<= sal_True;
-            UCB_Helper::SetProperty( xContent, WID_IS_READ, aSet );
-        }
-    }
 
     // Frame-Window anzeigen, aber nur wenn der ViewFrame kein eigenes Window
     // hat oder wenn er keine Component enth"alt

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-04 10:29:42 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,6 @@
 #include <svtools/ehdl.hxx>
 #endif
 
-#include "ucbhelp.hxx"                  // just for Init/DeInit
 #include <svtools/svdde.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
@@ -485,6 +484,7 @@ SfxApplication::SfxApplication()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} precreate svtools options objects" );
 #endif
 
+/*
 #if SUPD>637
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ UCB_Helper::Initialize" );
 #endif
@@ -492,7 +492,7 @@ SfxApplication::SfxApplication()
 #if SUPD>637
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} UCB_Helper::Initialize" );
 #endif
-
+*/
     pImp = new SfxApplication_Impl;
     pImp->bConfigLoaded = sal_False;
     pImp->pEmptyMenu = 0;
@@ -592,7 +592,7 @@ SfxApplication::~SfxApplication()
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
     SfxObjectFactory::RemoveAll_Impl();
 
-    UCB_Helper::Deinitialize();
+//    UCB_Helper::Deinitialize();
 
     delete pCfgMgr;
     delete pImp;

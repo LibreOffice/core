@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-10 14:09:36 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #include "helper.hxx"
 #include "msgpool.hxx"
 #include "app.hxx"
-#include "ucbhelp.hxx"
 #include "sfxtypes.hxx"
 
 #include "app.hrc"
@@ -142,7 +141,7 @@
 #endif
 #include <ucbhelper/content.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/cntwids.hrc> // WID_TARGET_URL
+#include <unotools/ucbhelper.hxx>
 
 using namespace ::ucb;
 using namespace ::com::sun::star::beans;
@@ -354,7 +353,7 @@ void ContentListBox_Impl::RequestingChilds( SvLBoxEntry* pParent )
                 else
                 {
                     pEntry = InsertEntry( aTitle, aDocumentImage, aDocumentImage, pParent );
-                    Any aAny( UCB_Helper::GetProperty( aURL, WID_TARGET_URL ) );
+                    Any aAny( ::utl::UCBContentHelper::GetProperty( aURL, String(RTL_CONSTASCII_USTRINGPARAM("TargetURL" ) ) ) );
                     rtl::OUString aTargetURL;
                     if ( aAny >>=  aTargetURL )
                         pEntry->SetUserData( new ContentEntry_Impl( aTargetURL, sal_False ) );

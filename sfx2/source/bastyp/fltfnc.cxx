@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-04 10:30:50 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,6 @@ using namespace ::vos;
 #include "appdata.hxx"
 #include "appuno.hxx"
 #include "viewfrm.hxx"
-#include "ucbhelp.hxx"
 
 #define SFX_STR_OVERRIDE "Override"
 

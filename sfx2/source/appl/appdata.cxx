@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 07:44:08 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,6 @@
 #include "app.hrc"
 #include "sfxresid.hxx"
 #include "objshimp.hxx"
-#include "ucbhelp.hxx"
 #include "appuno.hxx"
 
 SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-10 15:14:24 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,6 @@
 #include "referers.hxx"
 #include "sfxtypes.hxx"
 #include "helper.hxx"
-#include "ucbhelp.hxx"
 
 //***************************************************************************
 // SfxURLToolBoxControl_Impl
