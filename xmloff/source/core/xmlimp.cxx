@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-20 15:10:06 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 18:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,8 @@ SvXMLImport::SvXMLImport( sal_uInt16 nImportFlags ) throw () :
     pNumImport( NULL ),
     pProgressBarHelper( NULL ),
     pEventImportHelper( NULL ),
-    mnImportFlags( nImportFlags )
+    mnImportFlags( nImportFlags ),
+    mbIsFormsSupported( sal_True )
 {
     _InitCtor();
 }
@@ -248,7 +249,13 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
     pEventImportHelper( NULL ),
+<<<<<<< xmlimp.cxx
+    pImageMapImportHelper( NULL ),
+    mnImportFlags( IMPORT_ALL ),
+    mbIsFormsSupported( sal_True )
+=======
     mnImportFlags( IMPORT_ALL )
+>>>>>>> 1.34
 {
     _InitCtor();
 }
@@ -265,7 +272,13 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel,
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
     pEventImportHelper( NULL ),
+<<<<<<< xmlimp.cxx
+    pImageMapImportHelper( NULL ),
+    mnImportFlags( IMPORT_ALL ),
+    mbIsFormsSupported( sal_True )
+=======
     mnImportFlags( IMPORT_ALL )
+>>>>>>> 1.34
 {
     _InitCtor();
 }
