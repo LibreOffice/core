@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 11:48:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 08:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1011,16 +1011,16 @@ public:
         }
         while ( nIndex >= 0 );
 
-      @param    token       the number of the token to return. The number
-                            must be greater or equal as 0.
+      @param    token       the number of the token to return
       @param    cTok        the character which seperate the tokens.
       @param    index       the position at which the token is searched in the
                             string.
-                            The index must be greater or equal as 0 and
-                            less or equal as the length of the string.
+                            The index must not be greater than the length of the
+                            string.
                             This param is set to the position of the
                             next token or to -1, if it is the last token.
-      @return   the token
+      @return   the token; if either token or index is negative, an empty token
+                is returned (and index is set to -1)
     */
     OUString getToken( sal_Int32 token, sal_Unicode cTok, sal_Int32& index ) const SAL_THROW(())
     {
