@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:06 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ namespace basegfx
     public:
         B2DPolyPolygon();
         B2DPolyPolygon(const B2DPolyPolygon& rPolyPolygon);
+        explicit B2DPolyPolygon(const B2DPolygon& rPolygon);
         ~B2DPolyPolygon();
 
         // assignment operator
