@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapeTypes.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-03-06 16:01:35 $
+ *  last change: $Author: af $ $Date: 2002-03-18 10:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,15 +73,13 @@
 
 namespace accessibility {
 
-::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::accessibility::XAccessible>
-    createSvxAccessibleShape (const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShape>& rxShape,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::document::XEventBroadcaster>& rxBroadcaster,
-        ShapeTypeId nId)
+AccessibleShape* CreateSvxAccessibleShape (
+    const ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XShape>& rxShape,
+    AccessibleShapeTreeInfo& rShapeTreeInfo,
+    ShapeTypeId nId)
 {
     switch (nId)
     {
@@ -108,17 +106,17 @@ namespace accessibility {
         case DRAWING_3D_LATHE:
         case DRAWING_3D_EXTRUDE:
         case DRAWING_3D_POLYGON:
-            return new AccessibleShape (rxShape, rxParent, rxBroadcaster);
+            return new AccessibleShape (rxShape, rxParent, rShapeTreeInfo);
 
         case DRAWING_GRAPHIC_OBJECT:
-            return new AccessibleGraphicShape (rxShape, rxParent);
+            return new AccessibleGraphicShape (rxShape, rxParent, rShapeTreeInfo);
 
         case DRAWING_OLE:
         case DRAWING_CAPTION:
         case DRAWING_FRAME:
         case DRAWING_PLUGIN:
         case DRAWING_APPLET:
-            return new AccessibleOLEShape (rxShape, rxParent);
+            return new AccessibleOLEShape (rxShape, rxParent, rShapeTreeInfo);
 
         default:
             return NULL;
@@ -130,98 +128,98 @@ namespace accessibility {
 ShapeTypeDescriptor aSvxShapeTypeList[] = {
     ShapeTypeDescriptor (DRAWING_TEXT,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.TextShape"),
-        createSvxAccessibleShape),
+        CreateSvxAccessibleShape),
     ShapeTypeDescriptor (DRAWING_RECTANGLE,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.RectangleShape"),
-        createSvxAccessibleShape),
+        CreateSvxAccessibleShape),
     ShapeTypeDescriptor (   DRAWING_ELLIPSE,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.EllipseShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_CONTROL,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.ControlShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_CONNECTOR,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.ConnectorShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_MEASURE,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.MeasureShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_LINE,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.LineShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_POLY_POLYGON,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.PolyPolygonShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_POLY_LINE,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.PolyLineShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_OPEN_BEZIER,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.OpenBezierShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_CLOSED_BEZIER,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.ClosedBezierShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_OPEN_FREEHAND,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.OpenFreeHandShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_CLOSED_FREEHAND,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.ClosedFreeHandShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_POLY_POLYGON_PATH,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.PolyPolygonPathShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_POLY_LINE_PATH,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.PolyLinePathShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_GRAPHIC_OBJECT,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.GraphicObjectShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_GROUP,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.GroupShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_OLE,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.OLE2Shape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_PAGE,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.PageShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_CAPTION,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.CaptionShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_FRAME,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.FrameShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_PLUGIN,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.PluginShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_APPLET,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.AppletShape"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_3D_SCENE,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.Shape3DSceneObject"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_3D_CUBE,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.Shape3DCubeObject"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_3D_SPHERE,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.Shape3DSphereObject"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_3D_LATHE,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.Shape3DLatheObject"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_3D_EXTRUDE,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.Shape3DExtrudeObject"),
-        createSvxAccessibleShape ),
+        CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_3D_POLYGON,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.Shape3DPolygonObject"),
-        createSvxAccessibleShape )
+        CreateSvxAccessibleShape )
 };
 
 
 void RegisterDrawShapeTypes (void)
 {
-    ShapeTypeHandler::Instance().addShapeTypeList (
-        DRAWING_3D_POLYGON - DRAWING_TEXT + 1,
+    ShapeTypeHandler::Instance().AddShapeTypeList (
+        DRAWING_3D_POLYGON - DRAWING_RECTANGLE + 1,
         aSvxShapeTypeList);
 }
 
