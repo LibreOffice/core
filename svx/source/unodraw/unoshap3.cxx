@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:27:55 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,10 +425,12 @@ void SAL_CALL Svx3DSceneObject::setPropertyValue( const OUString& aPropertyName,
             const Volume3D& rVolume = pScene->GetBoundVolume();
             double fW = rVolume.GetWidth();
             double fH = rVolume.GetHeight();
+
+            const SfxItemSet& rSceneSet = pScene->GetMergedItemSet();
             double fCamPosZ =
-                (double)((const SfxUInt32Item&)pScene->GetItem(SDRATTR_3DSCENE_DISTANCE)).GetValue();
+                (double)((const SfxUInt32Item&)rSceneSet.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue();
             double fCamFocal =
-                (double)((const SfxUInt32Item&)pScene->GetItem(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
+                (double)((const SfxUInt32Item&)rSceneSet.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
 
             aCam.SetAutoAdjustProjection(FALSE);
             aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
@@ -879,7 +881,7 @@ void SAL_CALL Svx3DLatheObject::setPropertyValue( const OUString& aPropertyName,
         if(nPrevVerticalSegs != nPostVerticalSegs)
         {
             // restore the vertical segment count
-            ((E3dLatheObj*)pObj)->SetItem(Svx3DVerticalSegmentsItem(nPrevVerticalSegs));
+            ((E3dLatheObj*)pObj)->SetMergedItem(Svx3DVerticalSegmentsItem(nPrevVerticalSegs));
         }
     }
     else
