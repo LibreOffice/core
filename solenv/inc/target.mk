@@ -5,8 +5,8 @@
 #*	  Beschreibung		TARGET-Rules
 #*
 #*	  Ersterstellung	TH 28.03.94
-#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-09-22 10:48:26 $
-#*	  $Revision: 1.4 $
+#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-09-28 11:33:46 $
+#*	  $Revision: 1.5 $
 #*
 #*	  $Logfile:   T:/solar/inc/target.mkv  $
 #*
@@ -568,16 +568,17 @@ JARTARGETDEPN=$(MISC)$/$(JARTARGET).dep
 .ENDIF
 
 .IF "$(RCFILES)"!=""
+RESNAME*=$(TARGET)
 .IF "$(solarlang)" == "deut"
-RCTARGET=$(RES)$/$(TARGET).res
+RCTARGET=$(RES)$/$(RESNAME).res
 .IF "$(NO_REC_RES)"!=""
-RCTARGET!:=$(foreach,i,$(alllangext) $(RES)$/$i$/$(TARGET).res)
+RCTARGET!:=$(foreach,i,$(alllangext) $(RES)$/$i$/$(RESNAME).res)
 .ENDIF
 .ELSE
 .IF "$(RCFILES)" != "verinfo.rc"
-RCTARGET=$(RES)$/$(TARGET).res
+RCTARGET=$(RES)$/$(RESNAME).res
 .IF "$(NO_REC_RES)"!=""
-RCTARGET!:=$(foreach,i,$(alllangext) $(RES)$/$i$/$(TARGET).res)
+RCTARGET!:=$(foreach,i,$(alllangext) $(RES)$/$i$/$(RESNAME).res)
 .ENDIF
 .ELSE
 RCFILES=
