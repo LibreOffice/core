@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.26 2001-05-30 13:37:50 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.27 2001-06-05 13:17:11 fs Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-05-30 13:37:50 $ $Revision: 1.26 $
+//	$Author: fs $ $Date: 2001-06-05 13:17:11 $ $Revision: 1.27 $
 //
 // Description:
 //
@@ -3281,6 +3281,7 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 //-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParser::RuleIDToStr(sal_uInt32 nRuleID)
 {
+	OSL_ENSURE(nRuleID < (sizeof yytname/sizeof yytname[0]), "OSQLParser::RuleIDToStr: Invalid nRuleId!");
 	return ::rtl::OUString::createFromAscii(yytname[nRuleID]);
 }
 
