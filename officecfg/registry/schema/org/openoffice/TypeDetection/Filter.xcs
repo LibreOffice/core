@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Filter.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:31:57 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,24 +74,31 @@
 			</prop>
             <prop oor:name="Type" oor:type="xs:string">
                 <info><desc xml:lang="en-US">Supported content type of this filter. Must be an internal type name.</desc></info>
+				<value/>
             </prop>
             <prop oor:name="DocumentService" oor:type="xs:string">
                 <info><desc xml:lang="en-US">The uno service name of the supported office document type.</desc></info>
+				<value/>
             </prop>
             <prop oor:name="UIComponent" oor:type="xs:string">
                 <info><desc xml:lang="en-US">The uno implementation name a dialog, which is used to ask an user for special filter parameter (e.g. for csv).</desc></info>
+				<value/>
             </prop>
             <prop oor:name="UserData" oor:type="oor:string-list">
                 <info><desc xml:lang="en-US">Filter specific data.</desc></info>
+				<value/>
             </prop>
             <prop oor:name="FilterService" oor:type="xs:string">
                 <info><desc xml:lang="en-US">The uno implementation name of the filter service.</desc></info>
+				<value/>
             </prop>
             <prop oor:name="TemplateName" oor:type="xs:string">
                 <info><desc xml:lang="en-US">Name of a corresponding template, which is merged together with the style seets of the loaded document.</desc></info>
+				<value/>
             </prop>
             <prop oor:name="Flags" oor:type="oor:string-list">
                 <info><desc xml:lang="en-US">Specify the filter in some further properties (e.g. import/export/..).</desc></info>
+				<value/>
             </prop>
             <prop oor:name="UIName" oor:localized="true" oor:type="xs:string">
                 <info><desc xml:lang="en-US">Localized name of the filter, whch can be shown at the UI.</desc></info>
