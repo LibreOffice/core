@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleViewForwarder.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: af $ $Date: 2002-04-12 14:47:45 $
+ *  last change: $Author: af $ $Date: 2002-04-22 14:41:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ protected:
 
 private:
     AccessibleViewForwarder (AccessibleViewForwarder&);
-    operator= (AccessibleViewForwarder&);
+    AccessibleViewForwarder& operator= (AccessibleViewForwarder&);
 };
 
 } // end of namespace accessibility
