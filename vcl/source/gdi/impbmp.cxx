@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impbmp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@
 #endif
 #include <impbmp.hxx>
 #include <bitmap.hxx>
+#include <svdata.hxx>
+#include <salinst.hxx>
 
 // --------------
 // - ImpBitmap  -
@@ -88,11 +90,7 @@ ImpBitmap::ImpBitmap() :
             mnRefCount  ( 1UL ),
             mnChecksum  ( 0UL ),
             mpRMBitmap  ( NULL ),
-#ifndef REMOTE_APPSERVER
-            mpSalBitmap ( new SalBitmap )
-#else
-            mpSalBitmap ( new ImplServerBitmap )
-#endif
+            mpSalBitmap ( ImplGetSVData()->mpDefInst->CreateSalBitmap() )
 {
 }
 
