@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 13:40:27 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,26 +260,26 @@ void SAL_CALL Calendar_gregorian::mapToGregorian() throw(RuntimeException)
         }
 }
 
-static icu::Calendar::EDateFields fieldNameConverter(sal_Int16 fieldIndex) throw(RuntimeException)
+static UCalendarDateFields fieldNameConverter(sal_Int16 fieldIndex) throw(RuntimeException)
 {
-        icu::Calendar::EDateFields f;
+        UCalendarDateFields f;
 
         switch (fieldIndex) {
-            case CalendarFieldIndex::AM_PM:             f = icu::Calendar::AM_PM; break;
-            case CalendarFieldIndex::DAY_OF_MONTH:      f = icu::Calendar::DAY_OF_MONTH; break;
-            case CalendarFieldIndex::DAY_OF_WEEK:       f = icu::Calendar::DAY_OF_WEEK; break;
-            case CalendarFieldIndex::DAY_OF_YEAR:       f = icu::Calendar::DAY_OF_YEAR; break;
-            case CalendarFieldIndex::DST_OFFSET:        f = icu::Calendar::DST_OFFSET; break;
-            case CalendarFieldIndex::ZONE_OFFSET:       f = icu::Calendar::ZONE_OFFSET; break;
-            case CalendarFieldIndex::HOUR:              f = icu::Calendar::HOUR_OF_DAY; break;
-            case CalendarFieldIndex::MINUTE:    f = icu::Calendar::MINUTE; break;
-            case CalendarFieldIndex::SECOND:    f = icu::Calendar::SECOND; break;
-            case CalendarFieldIndex::MILLISECOND:       f = icu::Calendar::MILLISECOND; break;
-            case CalendarFieldIndex::WEEK_OF_MONTH:     f = icu::Calendar::WEEK_OF_MONTH; break;
-            case CalendarFieldIndex::WEEK_OF_YEAR:      f = icu::Calendar::WEEK_OF_YEAR; break;
-            case CalendarFieldIndex::YEAR:              f = icu::Calendar::YEAR; break;
-            case CalendarFieldIndex::MONTH:             f = icu::Calendar::MONTH; break;
-            case CalendarFieldIndex::ERA:               f = icu::Calendar::ERA; break;
+            case CalendarFieldIndex::AM_PM:             f = UCAL_AM_PM; break;
+            case CalendarFieldIndex::DAY_OF_MONTH:      f = UCAL_DATE; break;
+            case CalendarFieldIndex::DAY_OF_WEEK:       f = UCAL_DAY_OF_WEEK; break;
+            case CalendarFieldIndex::DAY_OF_YEAR:       f = UCAL_DAY_OF_YEAR; break;
+            case CalendarFieldIndex::DST_OFFSET:        f = UCAL_DST_OFFSET; break;
+            case CalendarFieldIndex::ZONE_OFFSET:       f = UCAL_ZONE_OFFSET; break;
+            case CalendarFieldIndex::HOUR:              f = UCAL_HOUR_OF_DAY; break;
+            case CalendarFieldIndex::MINUTE:    f = UCAL_MINUTE; break;
+            case CalendarFieldIndex::SECOND:    f = UCAL_SECOND; break;
+            case CalendarFieldIndex::MILLISECOND:       f = UCAL_MILLISECOND; break;
+            case CalendarFieldIndex::WEEK_OF_MONTH:     f = UCAL_WEEK_OF_MONTH; break;
+            case CalendarFieldIndex::WEEK_OF_YEAR:      f = UCAL_WEEK_OF_YEAR; break;
+            case CalendarFieldIndex::YEAR:              f = UCAL_YEAR; break;
+            case CalendarFieldIndex::MONTH:             f = UCAL_MONTH; break;
+            case CalendarFieldIndex::ERA:               f = UCAL_ERA; break;
             default: throw ERROR;
         }
         return f;
