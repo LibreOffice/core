@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:53:02 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 07:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ QueryBox DLG_WRAP
     MESSAGE [ finnish ] = "Jatketaanko tarkistamista asiakirjan alusta?" ;
     MESSAGE [ danish ] = "Vil du fortsætte kontrollen fra dokumentets start?" ;
     MESSAGE [ french ] = "Voulez-vous continuer la vérification depuis le début du document?" ;
-    MESSAGE [ swedish ] = "Vill Du fortsätta kontrollen i början på dokumentet?" ;
+    MESSAGE [ swedish ] = "Vill du fortsätta kontrollen i början på dokumentet?" ;
     MESSAGE [ dutch ] = "Wilt u dat de spellingcontrole wordt voortgezet bij het begin van het document?" ;
     MESSAGE [ spanish ] = "¿Desea continuar la revisión desde el comienzo del documento?" ;
     MESSAGE [ english_us ] = "Do you want to continue checking at the beginning of the document?" ;
@@ -208,7 +208,7 @@ QueryBox DLG_THESAURUS
     MESSAGE [ finnish ] = "Vältä tätä sanaa! Käytetäänkö synonyymisanastoa?" ;
     MESSAGE [ danish ] = "Undgå venligst dette ord! Vil du bruge synonymordbogen?" ;
     MESSAGE [ french ] = "Il vaudrait mieux éviter d'employer ce mot ! Souhaitez-vous consulter le dictionnaire des synonymes ?" ;
-    MESSAGE [ swedish ] = "Undvik detta ord! Starta synonymordlista?" ;
+    MESSAGE [ swedish ] = "Undvik det här ordet! Starta synonymordlista?" ;
     MESSAGE [ dutch ] = "Dit woord niet gebruiken! Thesaurus starten?" ;
     MESSAGE [ spanish ] = "¡Debería evitar esta palabra! ¿Iniciar búsqueda de sinónimos?" ;
     MESSAGE [ english_us ] = "This word appears in the list of words you want to avoid! Start thesaurus?" ;
@@ -508,7 +508,7 @@ InfoBox MSG_SCAN_NOSOURCE
     Message = "Quelle nicht gesetzt." ;
     Message [ ENGLISH ] = "Source not set." ;
     Message [ english_us ] = "Source not specified." ;
-    Message [ swedish ] = "Källa ej specificerad." ;
+    Message [ swedish ] = "Källa är inte specificerad." ;
     Message [ danish ] = "Kilden er ikke specifiseret." ;
     Message [ italian ] = "Sorgente non specificata." ;
     Message [ spanish ] = "No se especificó la fuente." ;
@@ -538,7 +538,7 @@ String STR_NOGLOS1
     TEXT [ finnish ] = "Automaattitekstiä lyhenteelle '" ;
     TEXT [ danish ] = "AutoTekst til genvej '" ;
     TEXT [ french ] = "AutoTexte pour raccourci ' " ;
-    TEXT [ swedish ] = "Genväg AutoText '" ;
+    TEXT [ swedish ] = "AutoText för genväg '" ;
     TEXT [ dutch ] = "AutoTekst voor afkortingen '" ;
     TEXT [ spanish ] = "AutoTexto para la abreviatura '" ;
     TEXT [ english_us ] = "AutoText for Shortcut '" ;
@@ -794,7 +794,7 @@ String STR_PRINT_TITLE
     Text[ portuguese ] = "A imprimir selecção";
     Text[ danish ] = "Udskriv det markerede";
     Text[ french ] = "Imprimer la sélection";
-    Text[ swedish ] = "Skriv ut markeringen";
+    Text[ swedish ] = "Skriv ut det markerade";
     Text[ dutch ] = "Afdrukken van de selectie";
     Text[ spanish ] = "Imprimir la selección";
     Text[ english_us ] = "Printing selection";
@@ -818,7 +818,7 @@ String STR_PRINT_MSG
     Text[ portuguese ] = "Deseja imprimir a selecção ou o documento inteiro?";
     Text[ danish ] = "Vil du udskrive det markerede eller hele dokumentet?";
     Text[ french ] = "Souhaitez vous imprimer uniquement la sélection ou bien le document entier ?";
-    Text[ swedish ] = "Vill Du skriva ut det markerade eller hela dokumentet?";
+    Text[ swedish ] = "Vill du skriva ut det markerade eller hela dokumentet?";
     Text[ dutch ] = "Wilt u de selectie of het hele document afdrukken?";
     Text[ spanish ] = "¿Desea imprimir solo la selección o todo el documento?";
     Text[ english_us ] = "Do you wish to print the selection or the entire document?";
