@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtswtbl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-24 10:16:47 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,6 @@
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
-
-#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -133,12 +131,11 @@ SwVertOrient SwWriteTableCell::GetVertOri() const
 //-----------------------------------------------------------------------
 
 SwWriteTableRow::SwWriteTableRow( long nPosition, BOOL bUseLayoutHeights )
-    : nPos(nPosition), mbUseLayoutHeights(bUseLayoutHeights), pBackground( 0 ),
-    bTopBorder(TRUE), bBottomBorder(TRUE),
-    nTopBorder(USHRT_MAX), nBottomBorder(USHRT_MAX)
+    : pBackground(0), nPos(nPosition), mbUseLayoutHeights(bUseLayoutHeights),
+    nTopBorder(USHRT_MAX), nBottomBorder(USHRT_MAX), bTopBorder(true),
+    bBottomBorder(true)
 {
 }
-
 
 SwWriteTableCell *SwWriteTableRow::AddCell( const SwTableBox *pBox,
                                 USHORT nRow, USHORT nCol,
@@ -156,11 +153,9 @@ SwWriteTableCell *SwWriteTableRow::AddCell( const SwTableBox *pBox,
 
 //-----------------------------------------------------------------------
 
-SwWriteTableCol::SwWriteTableCol( USHORT nPosition )
-    : nPos(nPosition),
-    bLeftBorder(TRUE), bRightBorder(TRUE),
-    nWidthOpt( 0 ), bRelWidthOpt( FALSE ),
-    bOutWidth( TRUE )
+SwWriteTableCol::SwWriteTableCol(USHORT nPosition)
+    : nPos(nPosition), nWidthOpt(0), bRelWidthOpt(false), bOutWidth(true),
+    bLeftBorder(true), bRightBorder(true)
 {
 }
 
@@ -254,7 +249,6 @@ const SvxBrushItem *SwWriteTable::GetLineBrush( const SwTableBox *pBox,
         const SfxPoolItem* pItem;
         const SfxItemSet& rItemSet = pLineFrmFmt->GetAttrSet();
 
-        const SvxBrushItem *pBrushItem = 0;
         if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, FALSE,
                                                    &pItem ) )
         {
@@ -318,8 +312,6 @@ USHORT SwWriteTable::MergeBoxBorders( const SwTableBox *pBox,
 
     const SwFrmFmt *pFrmFmt = pBox->GetFrmFmt();
     const SvxBoxItem& rBoxItem = (const SvxBoxItem&)pFrmFmt->GetAttr( RES_BOX );
-
-    USHORT nWidth = 0;
 
     if( rBoxItem.GetTop() )
     {
@@ -476,11 +468,8 @@ long SwWriteTable::GetAbsHeight( long nRawHeight, USHORT nRow,
     return nRawHeight > 0 ? nRawHeight : 0;
 }
 
-
-
-BOOL SwWriteTable::ShouldExpandSub( const SwTableBox *pBox,
-                                      BOOL bExpandedBefore,
-                                      USHORT nDepth ) const
+BOOL SwWriteTable::ShouldExpandSub(const SwTableBox *pBox, BOOL bExpandedBefore,
+    USHORT nDepth) const
 {
     return !pBox->GetSttNd() && nDepth > 0;
 }
@@ -714,33 +703,40 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
 
                 if( pBox->GetSttNd() )
                 {
-                    // Wegen OS/2 schon hier, sonst gibt es einen
-                    // Optimierungs-Fehler!!!!
-                    SwWriteTableCol *pCol = aCols[nOldCol];
-
                     USHORT nTopBorder = USHRT_MAX, nBottomBorder = USHRT_MAX;
-                    USHORT nBorderMask = MergeBoxBorders( pBox, nOldRow, nOldCol,
-                                                          nRowSpan, nColSpan,
-                                                          nTopBorder,
-                                                          nBottomBorder );
+                    USHORT nBorderMask = MergeBoxBorders(pBox, nOldRow, nOldCol,
+                        nRowSpan, nColSpan, nTopBorder, nBottomBorder);
 
-                    if( !(nBorderMask & 4) )
-                        pCol->bLeftBorder = FALSE;
+                    if (!(nBorderMask & 4))
+                    {
+                        SwWriteTableCol *pCol = aCols[nOldCol];
+                        ASSERT(pCol, "No TableCol found, panic!");
+                        if (pCol)
+                            pCol->bLeftBorder = FALSE;
+                    }
 
-                    pCol = aCols[nCol];
-                    if( !(nBorderMask & 8) )
-                        pCol->bRightBorder = FALSE;
+                    if (!(nBorderMask & 8))
+                    {
+                        SwWriteTableCol *pCol = aCols[nCol];
+                        ASSERT(pCol, "No TableCol found, panic!");
+                        if (pCol)
+                            pCol->bRightBorder = FALSE;
+                    }
 
-                    if( !(nBorderMask & 1) )
+                    if (!(nBorderMask & 1))
                         pRow->bTopBorder = FALSE;
-                    else if( !pRow->nTopBorder || nTopBorder < pRow->nTopBorder )
+                    else if (!pRow->nTopBorder || nTopBorder < pRow->nTopBorder)
                         pRow->nTopBorder = nTopBorder;
 
-                    if( !(nBorderMask & 2) )
+                    if (!(nBorderMask & 2))
                         pEndRow->bBottomBorder = FALSE;
-                    else if( !pEndRow->nBottomBorder ||
-                             nBottomBorder < pEndRow->nBottomBorder )
+                    else if (
+                                !pEndRow->nBottomBorder ||
+                                nBottomBorder < pEndRow->nBottomBorder
+                            )
+                    {
                         pEndRow->nBottomBorder = nBottomBorder;
+                    }
                 }
 //              MIB: 13.12.2000: Why should a cell that contains a subtable
 //              not have borders? Moreover, switching them, off switches off
@@ -769,27 +765,17 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
     }
 }
 
-SwWriteTable::SwWriteTable( const SwTableLines& rLines, long nWidth,
-                                USHORT nBWidth, BOOL bRel, USHORT nMaxDepth,
-                                USHORT nLSub, USHORT nRSub )
-    : nBorderColor( (UINT32)-1 ),
-    nBorder( 0 ),
-    nInnerBorder( 0 ),
-    nCellPadding( 0 ),
-    nCellSpacing( 0 ),
-    nTabWidth( nWidth ),
-    nBaseWidth( nBWidth ),
-    nLeftSub( nLSub ), nRightSub( nRSub ),
-    bRelWidths( bRel ),
-    bUseLayoutHeights( TRUE ),
+SwWriteTable::SwWriteTable(const SwTableLines& rLines, long nWidth,
+    USHORT nBWidth, BOOL bRel, USHORT nMaxDepth, USHORT nLSub, USHORT nRSub)
+    : nBorderColor((UINT32)-1), nCellSpacing(0), nCellPadding(0), nBorder(0),
+    nInnerBorder(0), nBaseWidth(nBWidth), nHeadEndRow(USHRT_MAX),
+     nLeftSub(nLSub), nRightSub(nRSub), nTabWidth(nWidth), bRelWidths(bRel),
+    bUseLayoutHeights(true),
 #ifndef PRODUCT
-    bGetLineHeightCalled( FALSE ),
+    bGetLineHeightCalled(false),
 #endif
-    nHeadEndRow( USHRT_MAX ),
-    bColsOption( FALSE ),
-    bColTags( TRUE ),
-    bLayoutExport( FALSE ),
-    bCollectBorderWidth( TRUE )
+    bColsOption(false), bColTags(true), bLayoutExport(false),
+    bCollectBorderWidth(true)
 {
     USHORT nParentWidth = nBaseWidth + nLeftSub + nRightSub;
 
@@ -807,27 +793,17 @@ SwWriteTable::SwWriteTable( const SwTableLines& rLines, long nWidth,
         nBorder = nInnerBorder;
 }
 
-
-
 SwWriteTable::SwWriteTable( const SwHTMLTableLayout *pLayoutInfo )
-    : nBorderColor( (UINT32)-1 ),
-    nBorder( 0 ),
-    nInnerBorder( 0 ),
-    nCellPadding( 0 ),
-    nCellSpacing( 0 ),
-    nTabWidth( pLayoutInfo->GetWidthOption() ),
-    nBaseWidth( pLayoutInfo->GetWidthOption() ),
-    nLeftSub( 0 ), nRightSub( 0 ),
-    bRelWidths( pLayoutInfo->HasPrcWidthOption() ),
-    bUseLayoutHeights( FALSE ),
+    : nBorderColor((UINT32)-1), nCellSpacing(0), nCellPadding(0), nBorder(0),
+    nInnerBorder(0), nBaseWidth(pLayoutInfo->GetWidthOption()), nHeadEndRow(0),
+    nLeftSub(0), nRightSub(0), nTabWidth(pLayoutInfo->GetWidthOption()),
+    bRelWidths(pLayoutInfo->HasPrcWidthOption()), bUseLayoutHeights(false),
 #ifndef PRODUCT
-    bGetLineHeightCalled( FALSE ),
+    bGetLineHeightCalled(false),
 #endif
-    nHeadEndRow( 0 ),
-    bColsOption( pLayoutInfo->HasColsOption() ),
-    bColTags( pLayoutInfo->HasColTags() ),
-    bLayoutExport( TRUE ),
-    bCollectBorderWidth( pLayoutInfo->HaveBordersChanged() )
+    bColsOption(pLayoutInfo->HasColsOption()),
+    bColTags(pLayoutInfo->HasColTags()), bLayoutExport(true),
+    bCollectBorderWidth(pLayoutInfo->HaveBordersChanged())
 {
     if( !bCollectBorderWidth )
     {
@@ -936,3 +912,6 @@ SwWriteTable::SwWriteTable( const SwHTMLTableLayout *pLayoutInfo )
         nBorder = nInnerBorder;
 }
 
+SwWriteTable::~SwWriteTable()
+{
+}
