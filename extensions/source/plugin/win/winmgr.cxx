@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-29 15:55:15 $
+ *  last change: $Author: dbo $ $Date: 2002-03-06 09:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,19 @@ using namespace com::sun::star::plugin;
 typedef map< OString, OUString, less< OString > > PluginLocationMap;
 
 
+#ifdef DEBUG
+static void logPlugin(
+    OUString const & name_, OUString const & path_ )
+{
+    OString name( OUStringToOString( name_, RTL_TEXTENCODING_ASCII_US ) );
+    OString path( OUStringToOString( path_, RTL_TEXTENCODING_ASCII_US ) );
+    static FILE * s_file = 0;
+    if (s_file)
+        s_file = fopen( "f:\\plugins.log" );
+    fprintf( s_file, "%s[ $s ]\n", name.getStr(), path.getStr() );
+}
+#endif
+
 //__________________________________________________________________________________________________
 static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & rPlugins )
 {
@@ -158,10 +171,13 @@ static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & 
             ::lstrcat( arComplete, aFindData.cFileName );
 
 #ifdef UNICODE
-            rPlugins[aName] = OUString( arComplete );
+            OUString item( arComplete );
 #else
-            OUString aStr( OStringToOUString( arComplete, RTL_TEXTENCODING_MS_1252 ) );
-            rPlugins[aName] = OUString( aStr.getStr() );
+            OUString item( OStringToOUString( arComplete, RTL_TEXTENCODING_MS_1252 ) );
+#endif
+            rPlugins[ aName ] = item;
+#ifdef DEBUG
+            logPlugin( aName, item );
 #endif
         }
 
@@ -212,62 +228,82 @@ static void add_IE_Plugins( PluginLocationMap & rPlugins )
     }
 }
 
+//--------------------------------------------------------------------------------------------------
+static void add_NS_keys( HKEY hKey, PluginLocationMap & rPlugins )
+{
+    TCHAR value[MAX_PATH];
+    DWORD dwType, size = sizeof(value);
+
+    // 4.7
+    size = sizeof(value);
+    if (::RegQueryValueEx(
+        hKey, _T("Plugins Directory"), NULL, &dwType,
+        (LPBYTE)value, &size ) == ERROR_SUCCESS &&
+        (dwType == REG_SZ || dwType == REG_EXPAND_SZ))
+    {
+        addPluginsFromPath( value, rPlugins );
+    }
+    // 6
+    size = sizeof(value);
+    if (::RegQueryValueEx(
+        hKey, _T("Install Directory"), NULL, &dwType,
+        (LPBYTE)value, &size ) == ERROR_SUCCESS &&
+        (dwType == REG_SZ || dwType == REG_EXPAND_SZ))
+    {
+        int n = size / sizeof (TCHAR);
+        if ('\\' != value[ n -2 ])
+        {
+            value[ n -1 ] = '\\';
+            value[ n ] = 0;
+        }
+        addPluginsFromPath( ::lstrcat( value, _T("Plugins") ), rPlugins );
+    }
+    size = sizeof(value);
+    if (::RegQueryValueEx(
+        hKey, _T("Plugins"), NULL, &dwType,
+        (LPBYTE)value, &size ) == ERROR_SUCCESS &&
+        (dwType == REG_SZ || dwType == REG_EXPAND_SZ))
+    {
+        addPluginsFromPath( value, rPlugins );
+    }
+}
+//--------------------------------------------------------------------------------------------------
+static void add_NS_lookupRecursive( HKEY hKey, PluginLocationMap & rPlugins )
+{
+    TCHAR keyName[MAX_PATH];
+    DWORD dwIndex = 0, size = sizeof (keyName);
+
+    while (::RegEnumKeyEx( hKey, dwIndex, keyName, &size, NULL, NULL, NULL, NULL ) == ERROR_SUCCESS)
+    {
+        size = sizeof (keyName);
+        HKEY hSubKey;
+        if (::RegOpenKeyEx( hKey, keyName, 0, KEY_READ, &hSubKey ) == ERROR_SUCCESS)
+        {
+            add_NS_keys( hSubKey, rPlugins );
+            ::RegCloseKey( hSubKey );
+        }
+        ++dwIndex;
+    }
+}
 //__________________________________________________________________________________________________
 static void add_NS_Plugins( PluginLocationMap & rPlugins )
 {
-    HKEY hKey1, hKey2;
-    TCHAR arCurrent[MAX_PATH];
-    DWORD dwType, dwCurrentSize = sizeof(arCurrent);
-
-    // 4.7
-    if (::RegOpenKeyEx( HKEY_LOCAL_MACHINE, _T("Software\\Netscape\\Netscape Navigator"),
-                        0, KEY_READ, &hKey1 ) == ERROR_SUCCESS)
+    HKEY hKey;
+    // Netscape
+    if (::RegOpenKeyEx(
+        HKEY_LOCAL_MACHINE, _T("Software\\Netscape"),
+        0, KEY_READ, &hKey ) == ERROR_SUCCESS)
     {
-        if (::RegQueryValueEx( hKey1, _T("CurrentVersion"), NULL, &dwType,
-                               (LPBYTE)arCurrent, &dwCurrentSize ) == ERROR_SUCCESS &&
-            (dwType == REG_SZ || dwType == REG_EXPAND_SZ) &&
-            ::RegOpenKeyEx( hKey1, ::lstrcat( arCurrent, _T("\\Main") ),
-                            0, KEY_READ, &hKey2 ) == ERROR_SUCCESS)
-        {
-            dwCurrentSize = sizeof(arCurrent);
-            if (::RegQueryValueEx( hKey2, _T("Plugins Directory"), NULL, &dwType,
-                                   (LPBYTE)arCurrent, &dwCurrentSize ) == ERROR_SUCCESS &&
-                (dwType == REG_SZ || dwType == REG_EXPAND_SZ))
-            {
-                addPluginsFromPath( arCurrent, rPlugins );
-            }
-            ::RegCloseKey( hKey2 );
-        }
-        ::RegCloseKey( hKey1 );
+        add_NS_lookupRecursive( hKey, rPlugins );
+        ::RegCloseKey( hKey );
     }
-
-    // 6
-    dwCurrentSize = sizeof(arCurrent);
-    if (::RegOpenKeyEx( HKEY_LOCAL_MACHINE, _T("Software\\Netscape\\Netscape 6"),
-                        0, KEY_READ, &hKey1 ) == ERROR_SUCCESS)
+    // Mozilla
+    if (::RegOpenKeyEx(
+        HKEY_LOCAL_MACHINE, _T("Software\\Mozilla"),
+        0, KEY_READ, &hKey ) == ERROR_SUCCESS)
     {
-        if (::RegQueryValueEx( hKey1, _T("CurrentVersion"), NULL, &dwType,
-                               (LPBYTE)arCurrent, &dwCurrentSize ) == ERROR_SUCCESS &&
-            (dwType == REG_SZ || dwType == REG_EXPAND_SZ) &&
-            ::RegOpenKeyEx( hKey1, ::lstrcat( arCurrent, _T("\\Main") ),
-                            0, KEY_READ, &hKey2 ) == ERROR_SUCCESS)
-        {
-            dwCurrentSize = sizeof(arCurrent);
-            if (::RegQueryValueEx( hKey2, _T("Install Directory"), NULL, &dwType,
-                                   (LPBYTE)arCurrent, &dwCurrentSize ) == ERROR_SUCCESS &&
-                (dwType == REG_SZ || dwType == REG_EXPAND_SZ))
-            {
-                int n = dwCurrentSize / sizeof (TCHAR);
-                if ('\\' != arCurrent[ n -2 ])
-                {
-                    arCurrent[ n -1 ] = '\\';
-                    arCurrent[ n ] = 0;
-                }
-                addPluginsFromPath( ::lstrcat( arCurrent, _T("Plugins") ), rPlugins );
-            }
-            ::RegCloseKey( hKey2 );
-        }
-        ::RegCloseKey( hKey1 );
+        add_NS_lookupRecursive( hKey, rPlugins );
+        ::RegCloseKey( hKey );
     }
 }
 
