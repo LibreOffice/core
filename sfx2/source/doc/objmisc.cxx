@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:37:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -856,7 +856,7 @@ String SfxObjectShell::GetTitle
         if ( !pImp->aTitle.Len() )
         {
             if ( nMaxLength == SFX_TITLE_FILENAME )
-                return X( aURL.getBase( INetURLObject::LAST_SEGMENT,
+                return X( aURL.getName( INetURLObject::LAST_SEGMENT,
                                         true, INetURLObject::DECODE_WITH_CHARSET ) );
 
             // sonst Titel aus Dateiname generieren
@@ -990,6 +990,10 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
     {
         if (pImp->nEventId)
         {
+            if ( pFrame && !pFrame->GetFrame()->GetWindow().IsReallyShown() && !pImp->bHidden )
+                // not event before the document has become visible!
+                return;
+
             sal_uInt16 nId = pImp->nEventId;
             pImp->nEventId = 0;
             SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
