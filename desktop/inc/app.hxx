@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 16:16:45 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,8 +206,6 @@ class Desktop : public Application
         static sal_Bool _bTasksSaved;
 
         // on-demand acceptors
-        static AcceptorMap                  m_acceptorMap;
-        static osl::Mutex                   m_mtxAccMap;
         static void                         createAcceptor(const OUString& aDescription);
         static void                         enableAcceptors();
         static void                         destroyAcceptor(const OUString& aDescription);
