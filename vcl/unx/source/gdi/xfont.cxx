@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:57:57 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@ ExtendedFontStruct::ExtendedFontStruct( Display* pDisplay, const Size& rPixelSiz
         maPixelSize( rPixelSize ),
         mfXScale(1.0), mfYScale(1.0),
         mbVertical( bVertical ),
-        mpXlfd( pXlfd ),
         mnCachedEncoding( RTL_TEXTENCODING_DONTKNOW ),
+        mpXlfd( pXlfd ),
         mpRangeCodes(NULL),
         mnRangeCount(-1)
 {
