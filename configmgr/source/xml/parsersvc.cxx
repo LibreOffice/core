@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsersvc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 12:42:04 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,10 +257,11 @@ AsciiServiceName const aSchemaParserServices[] =
     "com.sun.star.configuration.backend.xml.SchemaParser",
     0
 };
-const ServiceInfo aSchemaParserSI =
+const ServiceImplementationInfo aSchemaParserSI =
 {
     "com.sun.star.comp.configuration.backend.xml.SchemaParser",
-    aSchemaParserServices
+    aSchemaParserServices,
+    0
 };
 // -----------------------------------------------------------------------------
 AsciiServiceName const aLayerParserServices[] =
@@ -268,10 +269,11 @@ AsciiServiceName const aLayerParserServices[] =
     "com.sun.star.configuration.backend.xml.LayerParser",
     0
 };
-const ServiceInfo aLayerParserSI =
+const ServiceImplementationInfo aLayerParserSI =
 {
     "com.sun.star.comp.configuration.backend.xml.LayerParser",
-    aLayerParserServices
+    aLayerParserServices,
+    0
 };
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -280,7 +282,7 @@ struct ParserServiceTraits< backenduno::XSchema >
 {
     typedef backenduno::XSchemaHandler Handler;
 
-    static ServiceInfo const * getServiceInfo()
+    static ServiceImplementationInfo const * getServiceInfo()
     { return & aSchemaParserSI; }
 };
 // -----------------------------------------------------------------------------
@@ -289,7 +291,7 @@ struct ParserServiceTraits< backenduno::XLayer >
 {
     typedef backenduno::XLayerHandler Handler;
 
-    static ServiceInfo const * getServiceInfo()
+    static ServiceImplementationInfo const * getServiceInfo()
     { return & aLayerParserSI; }
 };
 // -----------------------------------------------------------------------------
@@ -345,10 +347,10 @@ uno::Reference< uno::XInterface > SAL_CALL instantiateLayerParser( CreationConte
     return * new LayerParserService(rServiceManager);
 }
 // -----------------------------------------------------------------------------
-const ServiceInfo* getSchemaParserServiceInfo()
-{ return & aSchemaParserSI; }
-const ServiceInfo* getLayerParserServiceInfo()
-{ return & aLayerParserSI; }
+const ServiceRegistrationInfo* getSchemaParserServiceInfo()
+{ return getRegistrationInfo(& aSchemaParserSI); }
+const ServiceRegistrationInfo* getLayerParserServiceInfo()
+{ return getRegistrationInfo(& aLayerParserSI); }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 void SAL_CALL SchemaParserService::readSchema( uno::Reference< backenduno::XSchemaHandler > const & aHandler )

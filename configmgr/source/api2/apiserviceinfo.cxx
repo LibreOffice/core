@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiserviceinfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-05 09:57:27 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,93 +256,93 @@ const AsciiServiceName c_aRootSetUpdateServices[] =
 };
 //-----------------------------------------------------------------------------
 
-ServiceInfo const aInnerGroupInfoSI =
+ServiceImplementationInfo const aInnerGroupInfoSI =
 {
     "com.sun.star.comp.configuration.OInnerGroupInfoAccess",
     c_aInnerGroupAccessServices
 };
-ServiceInfo const aInnerGroupUpdateSI =
+ServiceImplementationInfo const aInnerGroupUpdateSI =
 {
     "com.sun.star.comp.configuration.OInnerGroupUpdateAccess",
     c_aInnerGroupUpdateServices
 };
-ServiceInfo const aInnerSetInfoSI =
+ServiceImplementationInfo const aInnerSetInfoSI =
 {
     "com.sun.star.comp.configuration.OInnerSetInfoAccess",
     c_aInnerSetAccessServices
 };
-ServiceInfo const aInnerTreeSetSI =
+ServiceImplementationInfo const aInnerTreeSetSI =
 {
     "com.sun.star.comp.configuration.OInnerTreeSetUpdateAccess",
     c_aInnerSetUpdateServices
 };
-ServiceInfo const aInnerValueSetSI =
+ServiceImplementationInfo const aInnerValueSetSI =
 {
     "com.sun.star.comp.configuration.OInnerValueSetUpdateAccess",
     c_aInnerSetUpdateServices
 };
 //-----------------------------------------------------------------------------
 
-ServiceInfo const aSetElementGroupInfoSI =
+ServiceImplementationInfo const aSetElementGroupInfoSI =
 {
     "com.sun.star.comp.configuration.OSetElementGroupInfoAccess",
     c_aSetElementGroupUpdateServices
 };
-ServiceInfo const aSetElementGroupUpdateSI =
+ServiceImplementationInfo const aSetElementGroupUpdateSI =
 {
     "com.sun.star.comp.configuration.OSetElementGroupUpdateAccess",
     c_aSetElementGroupUpdateServices
 };
-ServiceInfo const aSetElementSetInfoSI =
+ServiceImplementationInfo const aSetElementSetInfoSI =
 {
     "com.sun.star.comp.configuration.OSetElementSetInfoAccess",
     c_aSetElementSetAccessServices
 };
-ServiceInfo const aSetElementTreeSetSI =
+ServiceImplementationInfo const aSetElementTreeSetSI =
 {
     "com.sun.star.comp.configuration.OSetElementTreeSetUpdateAccess",
     c_aSetElementSetUpdateServices
 };
-ServiceInfo const aSetElementValueSetSI =
+ServiceImplementationInfo const aSetElementValueSetSI =
 {
     "com.sun.star.comp.configuration.OSetElementValueSetUpdateAccess",
     c_aSetElementSetUpdateServices
 };
 //-----------------------------------------------------------------------------
 
-ServiceInfo const aRootElementGroupInfoSI =
+ServiceImplementationInfo const aRootElementGroupInfoSI =
 {
     "com.sun.star.comp.configuration.ORootElementGroupInfoAccess",
     c_aRootGroupAccessServices
 };
-ServiceInfo const aRootElementGroupUpdateSI =
+ServiceImplementationInfo const aRootElementGroupUpdateSI =
 {
     "com.sun.star.comp.configuration.ORootElementGroupUpdateAccess",
     c_aRootGroupUpdateServices
 };
-ServiceInfo const aRootElementSetInfoSI =
+ServiceImplementationInfo const aRootElementSetInfoSI =
 {
     "com.sun.star.comp.configuration.ORootElementSetInfoAccess",
     c_aRootSetAccessServices
 };
-ServiceInfo const aRootElementTreeSetUpdateSI =
+ServiceImplementationInfo const aRootElementTreeSetUpdateSI =
 {
     "com.sun.star.comp.configuration.ORootElementTreeSetUpdateAccess",
     c_aRootSetUpdateServices
 };
-ServiceInfo const aRootElementValueSetUpdateSI =
+ServiceImplementationInfo const aRootElementValueSetUpdateSI =
 {
     "com.sun.star.comp.configuration.ORootElementValueSetUpdateAccess",
     c_aRootSetUpdateServices
 };
 //-----------------------------------------------------------------------------
 
-ServiceInfo const aCreateReadAccessSI =
+ServiceRegistrationInfo const aCreateReadAccessSI =
 {
     NULL, //"com.sun.star.comp.configuration.ORootElementReadAccess",
     c_aCreateAccessServiceNames
 };
-ServiceInfo const aCreateUpdateAccessSI =
+ServiceRegistrationInfo const aCreateUpdateAccessSI =
 {
     NULL, //"com.sun.star.comp.configuration.ORootElementUpdateAccess",
     c_aCreateUpdateServiceNames

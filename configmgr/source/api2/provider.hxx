@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-22 09:19:52 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ namespace configmgr
         static void SAL_CALL operator delete( void * pMem ) throw()
             { ServiceComponentImpl::operator delete( pMem ); }
 
-        OProvider(const uno::Reference< lang::XMultiServiceFactory >& xServiceFactory, ServiceInfo const* pInfo);
+        OProvider(const uno::Reference< lang::XMultiServiceFactory >& xServiceFactory, ServiceImplementationInfo const* pInfo);
         virtual ~OProvider();
 
         /// XTypeOProvider
@@ -155,7 +155,7 @@ namespace configmgr
             OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, rValue);
         }
 
-        static sal_Int32 countServices(ServiceInfo const* aInfo) { return ServiceInfoHelper(aInfo).countServices(); }
+        static sal_Int32 countServices(ServiceRegistrationInfo const* aInfo) { return ServiceRegistrationHelper(aInfo).countServices(); }
 
     protected:
         // creates a new session

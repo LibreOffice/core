@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiaccessobj.inl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-30 13:39:46 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,14 +112,14 @@ UnoInterface* OInnerElement<NodeClass>::doGetUnoInstance() const
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-ServiceInfo const* OInnerElement<NodeClass>::doGetServiceInfo() const
+ServiceImplementationInfo const* OInnerElement<NodeClass>::doGetServiceInfo() const
 {
     return s_pServiceInfo;
 }
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-ServiceInfo const* OInnerElement<NodeClass>::getStaticServiceInfo()
+ServiceImplementationInfo const* OInnerElement<NodeClass>::getStaticServiceInfo()
 {
     return s_pServiceInfo;
 }
@@ -151,14 +151,14 @@ UnoInterface* OSetElement<NodeClass>::doGetUnoInstance() const
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-ServiceInfo const* OSetElement<NodeClass>::doGetServiceInfo() const
+ServiceImplementationInfo const* OSetElement<NodeClass>::doGetServiceInfo() const
 {
     return s_pServiceInfo;
 }
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-ServiceInfo const* OSetElement<NodeClass>::getStaticServiceInfo()
+ServiceImplementationInfo const* OSetElement<NodeClass>::getStaticServiceInfo()
 {
     return s_pServiceInfo;
 }
@@ -197,14 +197,14 @@ UnoInterface* OReadRootElement<NodeClass>::doGetUnoInstance() const
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-ServiceInfo const* OReadRootElement<NodeClass>::doGetServiceInfo() const
+ServiceImplementationInfo const* OReadRootElement<NodeClass>::doGetServiceInfo() const
 {
     return s_pServiceInfo;
 }
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-ServiceInfo const* OReadRootElement<NodeClass>::getStaticServiceInfo()
+ServiceImplementationInfo const* OReadRootElement<NodeClass>::getStaticServiceInfo()
 {
     return s_pServiceInfo;
 }
@@ -243,14 +243,14 @@ UnoInterface* OUpdateRootElement<NodeClass>::doGetUnoInstance() const
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-ServiceInfo const* OUpdateRootElement<NodeClass>::doGetServiceInfo() const
+ServiceImplementationInfo const* OUpdateRootElement<NodeClass>::doGetServiceInfo() const
 {
     return s_pServiceInfo;
 }
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-ServiceInfo const* OUpdateRootElement<NodeClass>::getStaticServiceInfo()
+ServiceImplementationInfo const* OUpdateRootElement<NodeClass>::getStaticServiceInfo()
 {
     return s_pServiceInfo;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-12 16:28:27 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ namespace configmgr
     //= OProvider
     //=============================================================================
     //-----------------------------------------------------------------------------
-    OProvider::OProvider(const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory, ServiceInfo const* pInfo)
+    OProvider::OProvider(const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory, ServiceImplementationInfo const* pInfo)
               :ServiceComponentImpl(pInfo)
               ,OPropertyContainer(ServiceComponentImpl::rBHelper)
               ,m_xServiceFactory(_xServiceFactory)

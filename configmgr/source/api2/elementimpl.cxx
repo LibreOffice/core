@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-22 09:19:52 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,7 @@ uno::Sequence<sal_Int8> implGetImplementationId(NodeAccess& rNode, NodeElement& 
     throw(uno::RuntimeException)
 {
     DisposeGuard aLock(rNode);
-    ServiceInfo const* pInfo = rElement.getServiceInfo();
+    ServiceImplementationInfo const* pInfo = rElement.getServiceInfo();
 
     OSL_ENSURE(pInfo, "Configuration: Object has no implementation (service) info - cannot get implementation id");
     if (!pInfo)
@@ -444,47 +444,27 @@ uno::Sequence<sal_Int8> implGetImplementationId(NodeAccess& rNode, NodeElement& 
 OUString implGetImplementationName( NodeAccess& rNode, NodeElement& rElement ) throw(uno::RuntimeException)
 {
     DisposeGuard aLock(rNode);
-    ServiceInfo const* pInfo = rElement.getServiceInfo();
+    ServiceImplementationInfo const* pInfo = rElement.getServiceInfo();
     OSL_ENSURE(pInfo, "Configuration: Object has no service info");
 
-    if (pInfo != 0)
-    {
-        if (AsciiServiceName  p= pInfo->implementationName)
-        {
-            return OUString::createFromAscii(p);
-        }
-    }
-    return OUString();
+    return ServiceInfoHelper(pInfo).getImplementationName();
 }
 //-----------------------------------------------------------------------------
 
 sal_Bool implSupportsService( NodeAccess& rNode, NodeElement& rElement, const OUString& ServiceName ) throw(uno::RuntimeException)
 {
     DisposeGuard aLock(rNode);
-    ServiceInfo const* pInfo = rElement.getServiceInfo();
+    ServiceImplementationInfo const* pInfo = rElement.getServiceInfo();
     OSL_ENSURE(pInfo, "Configuration: Object has no service info");
 
-    if (pInfo != 0)
-    {
-        if (AsciiServiceName const* p= pInfo->serviceNames)
-        {
-            while (*p != 0)
-            {
-                if (0 == ServiceName.compareToAscii(*p))
-                    return true;
-                ++p;
-            }
-        }
-    }
-
-    return false;
+    return ServiceInfoHelper(pInfo).supportsService(ServiceName);
 }
 //-----------------------------------------------------------------------------
 
 uno::Sequence< OUString > implGetSupportedServiceNames( NodeAccess& rNode, NodeElement& rElement ) throw(uno::RuntimeException)
 {
     DisposeGuard aLock(rNode);
-    ServiceInfo const* pInfo = rElement.getServiceInfo();
+    ServiceImplementationInfo const* pInfo = rElement.getServiceInfo();
     OSL_ENSURE(pInfo, "Configuration: Object has no service info");
 
     return ServiceInfoHelper(pInfo).getSupportedServiceNames();

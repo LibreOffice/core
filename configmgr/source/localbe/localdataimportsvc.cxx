@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localdataimportsvc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 12:47:57 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,18 +94,20 @@ AsciiServiceName const aLocalDataImportServices[] =
 {
     "com.sun.star.configuration.backend.local.DataImporter",
     "com.sun.star.configuration.backend.LocalDataImporter",
+    0,
     "com.sun.star.configuration.backend.DataImporter",
     0
 };
-const ServiceInfo aLocalDataImportSI =
+const ServiceImplementationInfo aLocalDataImportSI =
 {
     "com.sun.star.comp.configuration.backend.local.DataImporter",
-    aLocalDataImportServices
+    aLocalDataImportServices,
+    aLocalDataImportServices + 3
 };
 // -----------------------------------------------------------------------------
 
-const ServiceInfo* getLocalDataImportServiceInfo()
-{ return & aLocalDataImportSI; }
+const ServiceRegistrationInfo* getLocalDataImportServiceInfo()
+{ return getRegistrationInfo(& aLocalDataImportSI); }
 // -----------------------------------------------------------------------------
 
 inline

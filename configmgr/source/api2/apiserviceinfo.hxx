@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiserviceinfo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-22 09:19:52 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,26 +77,25 @@ namespace configmgr
  extern const AsciiServiceName c_aGroupAdministrationServices[];
 
 //-----------------------------------------------------------------------------
- extern ServiceInfo const aInnerGroupInfoSI;
- extern ServiceInfo const aInnerGroupUpdateSI;
- extern ServiceInfo const aInnerSetInfoSI;
- extern ServiceInfo const aInnerTreeSetSI;
- extern ServiceInfo const aInnerValueSetSI;
- extern ServiceInfo const aSetElementGroupInfoSI;
- extern ServiceInfo const aSetElementGroupUpdateSI;
- extern ServiceInfo const aSetElementSetInfoSI;
- extern ServiceInfo const aSetElementTreeSetSI;
- extern ServiceInfo const aSetElementValueSetSI;
- extern ServiceInfo const aRootElementGroupInfoSI;
- extern ServiceInfo const aRootElementGroupUpdateSI;
- extern ServiceInfo const aRootElementSetInfoSI;
- extern ServiceInfo const aRootElementTreeSetUpdateSI;
- extern ServiceInfo const aRootElementValueSetUpdateSI;
+ extern ServiceImplementationInfo const aInnerGroupInfoSI;
+ extern ServiceImplementationInfo const aInnerGroupUpdateSI;
+ extern ServiceImplementationInfo const aInnerSetInfoSI;
+ extern ServiceImplementationInfo const aInnerTreeSetSI;
+ extern ServiceImplementationInfo const aInnerValueSetSI;
+ extern ServiceImplementationInfo const aSetElementGroupInfoSI;
+ extern ServiceImplementationInfo const aSetElementGroupUpdateSI;
+ extern ServiceImplementationInfo const aSetElementSetInfoSI;
+ extern ServiceImplementationInfo const aSetElementTreeSetSI;
+ extern ServiceImplementationInfo const aSetElementValueSetSI;
+ extern ServiceImplementationInfo const aRootElementGroupInfoSI;
+ extern ServiceImplementationInfo const aRootElementGroupUpdateSI;
+ extern ServiceImplementationInfo const aRootElementSetInfoSI;
+ extern ServiceImplementationInfo const aRootElementTreeSetUpdateSI;
+ extern ServiceImplementationInfo const aRootElementValueSetUpdateSI;
 
 //-----------------------------------------------------------------------------
- extern ServiceInfo const aCreateReadAccessSI;
- extern ServiceInfo const aCreateUpdateAccessSI;
-// extern ServiceInfo const aRootElementAdminAccessSI;
+ extern ServiceRegistrationInfo const aCreateReadAccessSI;
+ extern ServiceRegistrationInfo const aCreateUpdateAccessSI;
 
 //-----------------------------------------------------------------------------
     }

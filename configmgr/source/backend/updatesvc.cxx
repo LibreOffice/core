@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatesvc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 12:49:12 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,15 +92,16 @@ AsciiServiceName const aUpdateMergerServices[] =
     "com.sun.star.configuration.backend.LayerUpdateMerger",
     0
 };
-const ServiceInfo aUpdateMergerSI =
+const ServiceImplementationInfo aUpdateMergerSI =
 {
     "com.sun.star.comp.configuration.backend.LayerUpdateMerger",
-    aUpdateMergerServices
+    aUpdateMergerServices,
+    0
 };
 // -----------------------------------------------------------------------------
 
-const ServiceInfo* getUpdateMergerServiceInfo()
-{ return & aUpdateMergerSI; }
+const ServiceRegistrationInfo* getUpdateMergerServiceInfo()
+{ return getRegistrationInfo(& aUpdateMergerSI); }
 // -----------------------------------------------------------------------------
 
 inline

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-28 14:43:35 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ namespace configmgr
         typedef uno::Reference< uno::XInterface > (OConfigurationProviderImpl::*CreatorFunc)(const uno::Sequence< uno::Any >& aArguments);
         struct ServiceCreationInfo
         {
-            ServiceInfo const* info;
+            ServiceRegistrationInfo const* info;
             CreatorFunc create;
         };
 
@@ -124,14 +124,16 @@ namespace configmgr
             "com.sun.star.configuration.AdministrationProvider",
             0
         };
-        ServiceInfo const aProviderInfo =
+        ServiceImplementationInfo const aProviderInfo =
         {
             "com.sun.star.comp.configuration.ConfigurationProvider",
-            aProviderServices
+            aProviderServices,
+            0
         };
-        ServiceInfo const aLocalAdminProviderInfo =
+        ServiceImplementationInfo const aLocalAdminProviderInfo =
         {
             "com.sun.star.comp.configuration.LocalAdministrationProvider",
+            aLocalAdminProviderServices,
             aProviderServices
         };
 
@@ -159,7 +161,7 @@ namespace configmgr
         {
             ServiceCreationInfo const& rCreationInfo = getCreateServiceData()[i];
 
-            ServiceInfo const* pInfo = rCreationInfo.info;
+            ServiceRegistrationInfo const* pInfo = rCreationInfo.info;
             if (!pInfo)
                 continue;
 
@@ -169,7 +171,7 @@ namespace configmgr
                     return &rCreationInfo;
             }
 
-            if (AsciiServiceName const* pNames = pInfo->serviceNames)
+            if (AsciiServiceName const* pNames = pInfo->registeredServiceNames)
             {
                 while(*pNames)
                 {
@@ -190,14 +192,14 @@ namespace configmgr
     //= OConfigurationProvider
     //=============================================================================
     // service info export
-    const ServiceInfo* getConfigurationProviderServices()
+    const ServiceRegistrationInfo* getConfigurationProviderServices()
     {
-        return &aProviderInfo;
+        return getRegistrationInfo(&aProviderInfo);
     }
 
-    const ServiceInfo* getLocalAdminProviderServices()
+    const ServiceRegistrationInfo* getLocalAdminProviderServices()
     {
-        return &aLocalAdminProviderInfo;
+        return getRegistrationInfo(&aLocalAdminProviderInfo);
     }
 
     //-----------------------------------------------------------------------------
@@ -233,7 +235,7 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     OConfigurationProvider::OConfigurationProvider(
         const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory,
-        const ServiceInfo* pServices
+        const ServiceImplementationInfo* pServices
         )
                            :OProvider(_xServiceFactory,pServices)
                            ,m_pImpl(NULL)
@@ -315,8 +317,8 @@ namespace configmgr
             sal_Int32 n = 0;
             for (int i= 0; i<getCreateServiceDataCount(); ++i)
             {
-                ServiceInfo const* pInfo = getCreateServiceData()[i].info;
-                AsciiServiceName const* pNames = pInfo ? pInfo->serviceNames : 0;
+                ServiceRegistrationInfo const* pInfo = getCreateServiceData()[i].info;
+                AsciiServiceName const* pNames = pInfo ? pInfo->registeredServiceNames : 0;
 
                 if (pNames)
                 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confsvccomponent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-22 09:19:51 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,10 +101,10 @@ namespace configmgr
         : public ServiceImplBase
     {
     protected:
-        ::osl::Mutex                m_aMutex;
-        ServiceInfo const*const     m_info;
+        ::osl::Mutex m_aMutex;
+        ServiceImplementationInfo const*const     m_info;
     public:
-        ServiceComponentImpl(ServiceInfo const* aInfo);
+        ServiceComponentImpl(ServiceImplementationInfo const* aInfo);
 
         // XTypeProvider
         virtual uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(uno::RuntimeException);
@@ -124,7 +124,7 @@ namespace configmgr
         void checkAlive(OUString const& message) throw (uno::RuntimeException);
 
         // Extra helpers
-        static uno::Sequence<sal_Int8> getStaticImplementationId(ServiceInfo const* pServiceInfo) throw(uno::RuntimeException);
+        static uno::Sequence<sal_Int8> getStaticImplementationId(ServiceImplementationInfo const* pServiceInfo) throw(uno::RuntimeException);
 
     private: // no implementation
         ServiceComponentImpl(ServiceComponentImpl&);

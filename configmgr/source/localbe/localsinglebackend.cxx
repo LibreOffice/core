@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 09:05:17 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,10 +523,11 @@ static const sal_Char * const kBackendService =
 static const sal_Char * const kLocalService =
                 "com.sun.star.configuration.backend.LocalSingleBackend" ;
 
-static AsciiServiceName kServiceNames [] = { kLocalService, kBackendService, 0 } ;
-static const ServiceInfo kServiceInfo = { kImplementation, kServiceNames } ;
+static AsciiServiceName kServiceNames [] = { kLocalService, 0, kBackendService, 0 } ;
+static const ServiceImplementationInfo kServiceInfo = { kImplementation, kServiceNames, kServiceNames + 2 } ;
 
-const ServiceInfo *getLocalBackendServiceInfo(void) { return &kServiceInfo ; }
+const ServiceRegistrationInfo *getLocalBackendServiceInfo()
+{ return getRegistrationInfo(&kServiceInfo) ; }
 
 uno::Reference<uno::XInterface> SAL_CALL
 instantiateLocalBackend(const CreationContext& aServiceManager) {
@@ -545,7 +546,7 @@ rtl::OUString SAL_CALL LocalSingleBackend::getName(void) {
 rtl::OUString SAL_CALL LocalSingleBackend::getImplementationName(void)
     throw (uno::RuntimeException)
 {
-    return getName() ;
+    return ServiceInfoHelper(&kServiceInfo).getImplementationName() ;
 }
 //------------------------------------------------------------------------------
 
@@ -553,16 +554,13 @@ sal_Bool SAL_CALL LocalSingleBackend::supportsService(
                                         const rtl::OUString& aServiceName)
     throw (uno::RuntimeException)
 {
-    return  aServiceName.equalsAscii(kLocalService) ||
-            aServiceName.equalsAscii(kBackendService);
+    return  ServiceInfoHelper(&kServiceInfo).supportsService(aServiceName);
 }
 //------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString> SAL_CALL LocalSingleBackend::getServices(void) {
-    uno::Sequence< OUString > ret(2);
-    ret[0] = OUString::createFromAscii(kLocalService);
-    ret[1] = OUString::createFromAscii(kBackendService);
-    return ret;
+uno::Sequence<rtl::OUString> SAL_CALL LocalSingleBackend::getServices(void)
+{
+    return ServiceInfoHelper(&kServiceInfo).getSupportedServiceNames() ;
 }
 //------------------------------------------------------------------------------
 
@@ -570,7 +568,7 @@ uno::Sequence<rtl::OUString>
 SAL_CALL LocalSingleBackend::getSupportedServiceNames(void)
     throw (uno::RuntimeException)
 {
-    return getServices() ;
+    return ServiceInfoHelper(&kServiceInfo).getSupportedServiceNames() ;
 }
 //------------------------------------------------------------------------------
 

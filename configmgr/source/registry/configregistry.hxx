@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configregistry.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-27 10:43:16 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ class OConfigurationRegistry
         ,public OConfigurationRegistry_Base
 {
 public:
-    static const ServiceInfo s_aServiceInfo;
+    static const ServiceImplementationInfo s_aServiceInfo;
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confsvccomponent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-22 09:19:51 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,14 +72,12 @@
 #include <osl/mutex.hxx>
 #endif
 
-#ifndef __SGI_STL_MAP
 #include <map>
-#endif
 
 namespace configmgr {
 
 
-    ServiceComponentImpl::ServiceComponentImpl(ServiceInfo const* aInfo)
+    ServiceComponentImpl::ServiceComponentImpl(ServiceImplementationInfo const* aInfo)
         : ServiceImplBase(m_aMutex)
         , m_aMutex()
         , m_info(aInfo)
@@ -101,11 +99,11 @@ namespace configmgr {
     }
 
     // XTypeProvider
-    uno::Sequence<sal_Int8> ServiceComponentImpl::getStaticImplementationId(ServiceInfo const* pServiceInfo)
+    uno::Sequence<sal_Int8> ServiceComponentImpl::getStaticImplementationId(ServiceImplementationInfo const* pServiceInfo)
         throw(uno::RuntimeException)
     {
         static osl::Mutex aMapMutex;
-        static std::map<ServiceInfo const*, ::cppu::OImplementationId> aIdMap;
+        static std::map<ServiceImplementationInfo const*, ::cppu::OImplementationId> aIdMap;
 
         osl::MutexGuard aMapGuard(aMapMutex);
         return aIdMap[pServiceInfo].getImplementationId();

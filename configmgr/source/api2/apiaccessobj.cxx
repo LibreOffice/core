@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiaccessobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 13:22:09 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,23 +213,23 @@ ServiceInfo const aRootElementAdminAccessSI =
 //-----------------------------------------------------------------------------
 
 template <>
-ServiceInfo const *
+ServiceImplementationInfo const *
 const OInnerElement<NodeGroupInfoAccess>::s_pServiceInfo = &aInnerGroupInfoSI;
 
 template <>
-ServiceInfo const *
+ServiceImplementationInfo const *
 const OInnerElement<NodeGroupAccess>::s_pServiceInfo = &aInnerGroupUpdateSI;
 
 template <>
-ServiceInfo const *
+ServiceImplementationInfo const *
 const OInnerElement<NodeSetInfoAccess>::s_pServiceInfo = &aInnerSetInfoSI;
 
 template <>
-ServiceInfo const *
+ServiceImplementationInfo const *
 const OInnerElement<NodeTreeSetAccess>::s_pServiceInfo = &aInnerTreeSetSI;
 
 template <>
-ServiceInfo const *
+ServiceImplementationInfo const *
 const OInnerElement<NodeValueSetAccess>::s_pServiceInfo = &aInnerValueSetSI;
 
 
@@ -238,23 +238,23 @@ const OInnerElement<NodeValueSetAccess>::s_pServiceInfo = &aInnerValueSetSI;
 //-----------------------------------------------------------------------------
 
 template <>
-ServiceInfo const *
+ServiceImplementationInfo const *
 const OSetElement<NodeGroupInfoAccess>::s_pServiceInfo = &aSetElementGroupInfoSI;
 
 template <>
-ServiceInfo const *
+ServiceImplementationInfo const *
 const OSetElement<NodeGroupAccess>::s_pServiceInfo = &aSetElementGroupUpdateSI;
 
 template <>
-ServiceInfo const *
+ServiceImplementationInfo const *
 const OSetElement<NodeSetInfoAccess>::s_pServiceInfo = &aSetElementSetInfoSI;
 
 template <>
-ServiceInfo const *
+ServiceImplementationInfo const *
 const OSetElement<NodeTreeSetAccess>::s_pServiceInfo = &aSetElementTreeSetSI;
 
 template <>
-ServiceInfo const *
+ServiceImplementationInfo const *
 const OSetElement<NodeValueSetAccess>::s_pServiceInfo = &aSetElementValueSetSI;
 
 //-----------------------------------------------------------------------------
@@ -262,23 +262,23 @@ const OSetElement<NodeValueSetAccess>::s_pServiceInfo = &aSetElementValueSetSI;
 //-----------------------------------------------------------------------------
 
 template <>
-ServiceInfo const *
+ServiceImplementationInfo const *
 const OReadRootElement<NodeGroupInfoAccess>::s_pServiceInfo = &aRootElementGroupInfoSI;
 
 template <>
-ServiceInfo const *
+ServiceImplementationInfo const *
 const OUpdateRootElement<NodeGroupAccess>::s_pServiceInfo = &aRootElementGroupUpdateSI;
 
 template <>
-ServiceInfo const *
+ServiceImplementationInfo const *
 const OReadRootElement<NodeSetInfoAccess>::s_pServiceInfo = &aRootElementSetInfoSI;
 
 template <>
-ServiceInfo const *
+ServiceImplementationInfo const *
 const OUpdateRootElement<NodeTreeSetAccess>::s_pServiceInfo = &aRootElementTreeSetUpdateSI;
 
 template <>
-ServiceInfo const *
+ServiceImplementationInfo const *
 const OUpdateRootElement<NodeValueSetAccess>::s_pServiceInfo = &aRootElementValueSetUpdateSI;
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:31:26 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ namespace configmgr
         uno::Sequence< ::rtl::OUString >    m_aPrefetchNodes;
 
     protected:
-        OConfigurationProvider(const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory, ServiceInfo const* pServices);
+        OConfigurationProvider(const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory, ServiceImplementationInfo const* pServices);
         void connect(const ConnectionSettings& _rSettings) throw (uno::Exception);
 
         friend uno::Reference< uno::XInterface > SAL_CALL instantiateConfigProvider( uno::Reference< lang::XMultiServiceFactory > const& rServiceManager, ConnectionSettings const& _aSettings );

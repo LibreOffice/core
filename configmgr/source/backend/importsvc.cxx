@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importsvc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 09:05:12 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,18 +93,19 @@ namespace configmgr
 AsciiServiceName const aMergeImporterServices[] =
 {
     "com.sun.star.configuration.backend.MergeImporter",
+    0,
     "com.sun.star.configuration.backend.Importer",
     0
 };
-const ServiceInfo aMergeImporterSI =
+const ServiceImplementationInfo aMergeImporterSI =
 {
     "com.sun.star.comp.configuration.backend.MergeImporter",
-    aMergeImporterServices
+    aMergeImporterServices, aMergeImporterServices + 2
 };
 // -----------------------------------------------------------------------------
 
-const ServiceInfo* getMergeImportServiceInfo()
-{ return & aMergeImporterSI; }
+const ServiceRegistrationInfo* getMergeImportServiceInfo()
+{ return getRegistrationInfo(& aMergeImporterSI); }
 // -----------------------------------------------------------------------------
 
 MergeImportService::MergeImportService(CreationArg _xServiceFactory)
@@ -138,18 +139,19 @@ MergeImportService::InputHandler MergeImportService::createImportHandler(Backend
 AsciiServiceName const aCopyImporterServices[] =
 {
     "com.sun.star.configuration.backend.CopyImporter",
+    0,
     "com.sun.star.configuration.backend.Importer",
     0
 };
-const ServiceInfo aCopyImporterSI =
+const ServiceImplementationInfo aCopyImporterSI =
 {
     "com.sun.star.comp.configuration.backend.CopyImporter",
-    aCopyImporterServices
+    aCopyImporterServices, aCopyImporterServices + 2
 };
 // -----------------------------------------------------------------------------
 
-const ServiceInfo* getCopyImportServiceInfo()
-{ return & aCopyImporterSI; }
+const ServiceRegistrationInfo* getCopyImportServiceInfo()
+{ return getRegistrationInfo(& aCopyImporterSI); }
 // -----------------------------------------------------------------------------
 
 CopyImportService::CopyImportService(CreationArg _xServiceFactory)

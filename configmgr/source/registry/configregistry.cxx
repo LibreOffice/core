@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configregistry.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 17:14:44 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,27 +119,25 @@ namespace beans = ::com::sun::star::beans;
     }
 
 
-    static const AsciiServiceName aConfigRegistryServices[] =
+    // #99130# Don't export SimpleRegistry service
+    static const AsciiServiceName aExportedConfigRegistryServices[] =
     {
-        "com.sun.star.registry.SimpleRegistry",
         "com.sun.star.configuration.ConfigurationRegistry",
         NULL
     };
-    // #99130# Don't export SimpleRegistry service
-    const AsciiServiceName * const aExportedConfigRegistryServices = aConfigRegistryServices + 1;
+    static const AsciiServiceName aAdditionalConfigRegistryServices[] =
+    {
+        "com.sun.star.registry.SimpleRegistry",
+        NULL
+    };
 
     const AsciiServiceName aConfigRegistryImplementationName = "com.sun.star.configuration.configmgr.OConfigurationRegistry";
 
-    const ServiceInfo OConfigurationRegistry::s_aServiceInfo =
+    const ServiceImplementationInfo OConfigurationRegistry::s_aServiceInfo =
     {
         aConfigRegistryImplementationName,
-        aConfigRegistryServices
-    };
-
-    const ServiceInfo s_aExportedConfigurationRegistryServiceInfo =
-    {
-        aConfigRegistryImplementationName,
-        aExportedConfigRegistryServices
+        aExportedConfigRegistryServices,
+        aAdditionalConfigRegistryServices
     };
 
     Reference< XInterface > SAL_CALL instantiateConfigRegistry(Reference< XMultiServiceFactory > const& _rServiceManager )
@@ -147,9 +145,9 @@ namespace beans = ::com::sun::star::beans;
         return static_cast< ::cppu::OWeakObject* >(new OConfigurationRegistry(_rServiceManager));
     }
 
-    const ServiceInfo* getConfigurationRegistryServiceInfo()
+    const ServiceRegistrationInfo* getConfigurationRegistryServiceInfo()
     {
-        return &s_aExportedConfigurationRegistryServiceInfo;
+        return getRegistrationInfo(& OConfigurationRegistry::s_aServiceInfo);
     }
 
 //--------------------------------------------------------------------------

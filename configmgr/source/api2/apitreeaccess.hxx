@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeaccess.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ namespace osl { class Mutex; }
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-    struct ServiceInfo;
+    struct ServiceImplementationInfo;
 //-----------------------------------------------------------------------------
     namespace memory
     {
@@ -117,6 +117,8 @@ namespace configmgr
         // A common base class for 'element' classes
         class NodeElement : NotCopyable
         {
+        public:
+            typedef ServiceImplementationInfo ServiceInfo;
         public:
             virtual ~NodeElement() {}
 

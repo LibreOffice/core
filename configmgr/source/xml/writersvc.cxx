@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writersvc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 16:12:47 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,10 +244,11 @@ AsciiServiceName const aLayerWriterServices[] =
     "com.sun.star.configuration.backend.xml.LayerWriter",
     0
 };
-const ServiceInfo aLayerWriterSI =
+const ServiceImplementationInfo aLayerWriterSI =
 {
     "com.sun.star.comp.configuration.backend.xml.LayerWriter",
-    aLayerWriterServices
+    aLayerWriterServices,
+    0
 };
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -256,13 +257,13 @@ struct WriterServiceTraits< backenduno::XLayerHandler >
 {
     typedef backenduno::XLayerHandler Handler;
 
-    static ServiceInfo const * getServiceInfo()
-    { return getLayerWriterServiceInfo(); }
+    static ServiceImplementationInfo const * getServiceInfo()
+    { return & aLayerWriterSI; }
 };
 // -----------------------------------------------------------------------------
 
-const ServiceInfo* getLayerWriterServiceInfo()
-{ return & aLayerWriterSI; }
+const ServiceRegistrationInfo* getLayerWriterServiceInfo()
+{ return getRegistrationInfo(& aLayerWriterSI); }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 

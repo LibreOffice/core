@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localhierarchybrowsersvc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 09:41:16 $
+ *  last change: $Author: jb $ $Date: 2002-12-06 13:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,18 +94,20 @@ AsciiServiceName const aLocalHierarchyBrowserServices[] =
 {
     "com.sun.star.configuration.backend.local.HierarchyBrowser",
     "com.sun.star.configuration.backend.LocalHierarchyBrowser",
+    0,
     "com.sun.star.configuration.backend.HierarchyBrowser",
     0
 };
-const ServiceInfo aLocalHierarchyBrowserSI =
+const ServiceImplementationInfo aLocalHierarchyBrowserSI =
 {
     "com.sun.star.comp.configuration.backend.local.LocalHierarchyBrowser",
-    aLocalHierarchyBrowserServices
+    aLocalHierarchyBrowserServices,
+    aLocalHierarchyBrowserServices + 3
 };
 // -----------------------------------------------------------------------------
 
-const ServiceInfo* getLocalHierarchyBrowserServiceInfo()
-{ return & aLocalHierarchyBrowserSI; }
+const ServiceRegistrationInfo* getLocalHierarchyBrowserServiceInfo()
+{ return getRegistrationInfo(& aLocalHierarchyBrowserSI); }
 // -----------------------------------------------------------------------------
 
 inline
