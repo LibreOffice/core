@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: hdu $ $Date: 2002-06-13 19:23:25 $
+ *  last change: $Author: hdu $ $Date: 2002-06-19 16:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5705,7 +5705,7 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
         nTextWidth *= pSalLayout->GetUnitsPerPixel();
         if( mbMap )
             nTextWidth = ImplLogicWidthToDevicePixel( nTextWidth );
-        nTextWidth += nExtraWidth;
+        nTextWidth -= nExtraWidth;
         nRetVal = pSalLayout->GetTextBreak( nTextWidth );
 
         // calculate rExtraCharPos
