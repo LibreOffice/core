@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gluepts.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-27 10:42:32 $
+ *  last change: $Author: hr $ $Date: 2000-10-31 12:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_GLUEPOINT2_HDL_
-#include <com/sun/star/drawing/GluePoint2.hdl>
+#include <com/sun/star/drawing/GluePoint2.hpp>
 #endif
 
 #include <cppuhelper/implbase1.hxx>
