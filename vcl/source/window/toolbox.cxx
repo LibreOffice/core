@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:51:02 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 14:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2138,8 +2138,11 @@ void ToolBox::ImplFormat( BOOL bResize )
             // For items not visible, release resources only needed during
             // painting the items (on Win98, for example, these are system-wide
             // resources that are easily exhausted, so be nice):
-            it->maImage.ClearCaches();
-            it->maHighImage.ClearCaches();
+
+            /* !!!
+                it->maImage.ClearCaches();
+                it->maHighImage.ClearCaches();
+            */
 
             ++it;
         }
@@ -2424,8 +2427,11 @@ void ToolBox::ImplFormat( BOOL bResize )
                 // For items not visible, release resources only needed during
                 // painting the items (on Win98, for example, these are system-
                 // wide resources that are easily exhausted, so be nice):
+
+                /* !!!
                 it->maImage.ClearCaches();
                 it->maHighImage.ClearCaches();
+                */
             }
             ++it;
         }
@@ -2983,6 +2989,8 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
             {
                 nTempOffX++;
                 nTempOffY++;
+
+                /* !!!
                 if( pImage->HasMaskBitmap() )
                 {
                     Color aMaskCol = GetpApp()->GetSettings().GetStyleSettings().GetHighlightColor();
@@ -2993,6 +3001,8 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
                     aMaskCol = ImplHSBtoRGB( h, s, b );
                     DrawMask( Point( nTempOffX, nTempOffY ), pImage->GetMaskBitmap(), aMaskCol );
                 }
+                */
+
                 nTempOffX-=2;
                 nTempOffY-=2;
             }
@@ -3543,7 +3553,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
             {
                 ImplDrawItem( mnCurPos );
-                ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, (void*) mnCurPos );
+                ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( mnCurPos ) );
             }
 
             mnCurPos = nNewPos;
@@ -3637,7 +3647,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                                     ImplHideFocus();
                                     USHORT nPos = GetItemPos( mnHighItemId );
                                     ImplDrawItem( nPos );
-                                    ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, (void*) nPos );
+                                    ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nPos ) );
                                 }
                                 mnHighItemId = it->mnId;
                                 ImplDrawItem( nTempPos, 2 );
@@ -3663,7 +3673,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             {
                 ImplDrawItem( nClearPos, (nClearPos == mnCurPos) ? TRUE : FALSE );
                 if( nClearPos != mnCurPos )
-                    ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, (void*) nClearPos );
+                    ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nClearPos ) );
             }
             ImplHideFocus();
             mnHighItemId = 0;
@@ -5113,7 +5123,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
         ImplHideFocus();
         USHORT nPos = GetItemPos( mnHighItemId );
         ImplDrawItem( nPos, FALSE );
-        ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, (void*) nPos );
+        ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nPos ) );
         pOldItem = ImplGetItem( mnHighItemId );
         oldPos = ImplFindItemPos( pOldItem, mpData->m_aItems );
     }
