@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdrw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-04-29 11:26:26 $
+ *  last change: $Author: os $ $Date: 2002-04-29 12:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
     SdrView *pSdrView = rSh.GetDrawView();
 
     // OBJ_FM_BUTTON
+    pSdrView->SetDesignMode(TRUE);
     pSdrView->SetCurrentObj(OBJ_FM_BUTTON);
     pSdrView->SetEditMode(sal_False);
 
