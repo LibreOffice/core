@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:44:26 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,23 +143,23 @@ TabPage TP_COLUMN
         Text = "Inhalt über alle ~Spalten gleichmäßig verteilen" ;
         Text [ ENGLISH ] = "Balance columns" ;
         Hide = TRUE;
-        Text[ english_us ] = "~Balance columns";
+        Text[ english_us ] = "Evenly distribute contents to all columns";
         Text[ portuguese ] = "Optimizar ~colunas";
-        Text[ russian ] = "Âûğîâíÿòü êîëîíêè";
-        Text[ greek ] = "Åîé~óïññüğçóç óôçëşí";
+        Text[ russian ] = "Ğàñïğåäåëèòü ğàâíîìåğíî ñîäåğæèìîå âî âñåõ êîëîíêàõ";
+        Text[ greek ] = "ºóç êáôáíïìŞ ôïõ ğåñéå÷ïìİíïõ óå üëåò ôéò óôŞëåò";
         Text[ dutch ] = "~Kolommen uitbalanceren";
         Text[ french ] = "Optimiser les ~colonnes";
         Text[ spanish ] = "~Optimar columnas";
         Text[ italian ] = "Ottimizza colonne";
         Text[ danish ] = "Udjævn kolonner";
-        Text[ swedish ] = "~Jämna ut kolumner";
-        Text[ polish ] = "~Wyrównaj kolumny";
+        Text[ swedish ] = "Fördela innehåll jämnt över ~alla kolumner";
+        Text[ polish ] = "Roz³ó¿ zawartoœæ równomiernie na wszystkie kolumny";
         Text[ portuguese_brazilian ] = "Balance columns";
-        Text[ japanese ] = "’i‚Ì•‚ğ‚·‚×‚Ä“¯‚¶‚É‚·‚é(~B)";
+        Text[ japanese ] = "“à—e‚ğ’i‘g‚İ‘S‘Ì‚Å‹Ï“™‚É”z•ª‚·‚é";
         Text[ korean ] = "´Ü ±æÀÌ Á¶Á¤(~B)";
-        Text[ chinese_simplified ] = "Ğ­µ÷À¸(~B)";
+        Text[ chinese_simplified ] = "¶Ô³Æµ÷ÕûÀ¸¿í";
         Text[ chinese_traditional ] = "¹ïºÙ½Õ¾ãÄæ¼e";
-        Text[ arabic ] = "ÃÚãÏÉ ãÊÓÇæíÉ";
+        Text[ arabic ] = "ÊæÒíÚ ÇáãÍÊæíÇÊ Úáì ßá ÇáÃÚãÏÉ ÈÇáÊÓÇæí";
         Text[ turkish ] = "S~ütunları dengele";
     };
     FixedLine FL_COLUMNS
@@ -864,7 +864,7 @@ TabPage TP_COLUMN
         Text [ swedish ] = "Skiljelinje" ;
         Text [ dutch ] = "Scheidingslijn" ;
         Text [ spanish ] = "Línea de separación" ;
-        Text [ english_us ] = "Separator" ;
+        Text [ english_us ] = "Separator line" ;
         Text[ chinese_simplified ] = "·Ö¸ôÏß";
         Text[ russian ] = "Ğàçäåëèòåëüíàÿ ëèíèÿ";
         Text[ polish ] = "Separator";
