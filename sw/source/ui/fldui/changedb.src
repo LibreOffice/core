@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:54:39 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ ModalDialog DLG_CHANGE_DB
     Text [ french ] = "Changer de base de donn�es" ;
     Text [ dutch ] = "Database wisselen" ;
     Text [ swedish ] = "Byt databas" ;
-    Text [ danish ] = "Udskift database" ;
+    Text [ danish ] = "Udskift databaser" ;
     Text [ portuguese_brazilian ] = "Trocar de banco de dados" ;
     Text [ portuguese ] = "Substituir base de dados" ;
     Moveable = TRUE ;
@@ -94,7 +94,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ spanish ] = "Intercambiar bases de datos" ;
         Text [ french ] = "Changer de base de donn�es" ;
         Text [ swedish ] = "Byt databas" ;
-        Text [ danish ] = "Udskift database" ;
+        Text [ danish ] = "Udskift databaser" ;
         Text [ portuguese_brazilian ] = "Trocar de banco de dados" ;
         Text [ portuguese ] = "Substituir base de dados" ;
         Text[ chinese_simplified ] = "更换数据库";
@@ -116,6 +116,8 @@ ModalDialog DLG_CHANGE_DB
         Text[ hebrew ] = "‮החלפת מסד נתונים‬";
         Text[ hindi ] = "लेखासंचयों को अदला-बदला करो ";
         Text[ slovak ] = "Vymeniť databázy";
+        Text[ hungarian ] = "Adatbázisok kiválasztása";
+        Text[ slovenian ] = "Zamenjaj zbirke podatkov";
     };
     FixedText FT_USEDDB
     {
@@ -152,6 +154,8 @@ ModalDialog DLG_CHANGE_DB
         Text[ hebrew ] = "‮מסדי נתונים בשימוש‬";
         Text[ hindi ] = "लेखासंचय उपयोग में है";
         Text[ slovak ] = "Používaná databáza";
+        Text[ hungarian ] = "Használt adatbázisok";
+        Text[ slovenian ] = "Uporabljene zbirke podatkov";
     };
     FixedText FT_AVAILDB
     {
@@ -189,6 +193,8 @@ ModalDialog DLG_CHANGE_DB
         Text[ hebrew ] = "‮מסדי נתונים זמינים‬";
         Text[ hindi ] = "उपलब्ध लेखासंचय";
         Text[ slovak ] = "Dostupné databázy";
+        Text[ hungarian ] = "Elérhető adatbázisok";
+        Text[ slovenian ] = "Zbirke podatkov na voljo";
     };
     Control TLB_USEDDB
     {
@@ -219,7 +225,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ french ] = "Utilisez cette bo�te de dialogue pour �changer les bases de donn�es auxquelles vous acc�dez dans vos documents via des champs de formulaire. Vous ne pouvez ex�cuter qu'une seule modification � la fois. La liste de gauche permet une s�lection multiple." ;
         Text [ dutch ] = "In dit dialoogvenster kunt u een database waarop de databasevelden in uw document betrekking hebben, vervangen door een andere database. U kunt slechts ��n wijziging tegelijk aanbrengen. In de linkerlijst is ook een meervoudige keuze mogelijk." ;
         Text [ swedish ] = "I den h�r dialogrutan kan du byta ut databaser, som du kan n� via databasf�lt i ditt dokument, mot andra databaser. Du kan bara g�ra en �ndring �t g�ngen. I den v�nstra listan g�r det att g�ra multimarkering." ;
-        Text [ danish ] = "I denne dialog kan du udskifte databaser, som du har adgang til i et dokument via databasefelter, med andre databaser. Du kan kun foretage �n �ndring pr. arbejdsdag. P� venstre liste er det muligt at foretage multimarkeringer." ;
+        Text [ danish ] = "I denne dialog kan du udskifte databaser, som du har adgang til i et dokument via databasefelter, med andre databaser. Du kan kun foretage �n �ndring ad gangen. P� venstre liste er det muligt at foretage multimarkeringer." ;
         Text [ portuguese_brazilian ] = "Use esta caixa de di�logo para substituir o banco de dados acessado pelo seu documento atrav�s de campos, por outros bancos de dados. S� � poss�vel uma altera��o de cada vez. Na lista da esquerda � poss�vel a sele��o m�ltipla." ;
         Text [ portuguese ] = "Nesta caixa de di�logo poder� substituir bases de dados por outras, tendo acesso a elas no seu documento atrav�s dos campos da base de dados. � apenas poss�vel uma altera��o por cada opera��o. Na lista da esquerda poder� seleccionar v�rias op��es." ;
         Text[ chinese_simplified ] = "在这个对话框内您能够使用另一个数据库来代替当前编辑的文档读取的数据库。每次编辑文档时只能一次替换数据库。在左方的列单内可以执行多重选择的功能。";
@@ -241,6 +247,8 @@ ModalDialog DLG_CHANGE_DB
         Text[ hebrew ] = "‮מסך זה נועד לשינוי מסד הנתונים הנגיש למםמך דרך שדות מסדי נתונים. ניתן לבצע רק שינוי אחד בכל פעם. בחירה מרובה אפשרית מהרשימה שבשמאל.‬";
         Text[ hindi ] = "अन्य लेखासंचयों सहित, लेखासंचय क्षेत्रों द्वारा इस डयलॉग को आपके लेखपत्र में प्रवेश किये जानेवाले लेखासंचय को प्रतिस्थापित करने केलिए उपयोग कीजिए । आप एक समय में केवल एक परिवर्तन कर सकते है । बायाँ ओर की सूची में अनेक चुनाव संभव है ।";
         Text[ slovak ] = "V tomto dialógu môžete zmeniť databázu, ku ktorej pristupujete z dokumentu pomocou databázových polí. Naraz môžete vykonať len jednu zmenu. Viacnásobný výber je možný v zozname naľavo.";
+        Text[ hungarian ] = "A dokumentum adatbázismezőin keresztül elért adatbázisokat e párbeszédablakban cserélheti más adatbázisokra. Egyszerre csak egyetlen cserét végezhet. A bal oldali listán többszörös kijelölés is lehetséges.";
+        Text[ slovenian ] = "S pomočjo tega okna zamenjate zbirke podatkov, do katerih dostopate v dokumentih preko polj zbirke podatkov, z drugimi zbirkami podatkov. Naenkrat lahko opravite samo eno spremembo. Na levem seznamu pa je možen tudi večkraten izbor.";
     };
     /*  MultiListBox LB_USEDDB {
             Sort = TRUE;
@@ -292,6 +300,8 @@ ModalDialog DLG_CHANGE_DB
         Text[ hebrew ] = "‮מסד הנתונים הנוכחי הנגיש מהמסמך‬";
         Text[ hindi ] = "लेखपत्र केलिए लागू किया हुआ लेखासंचय:";
         Text[ slovak ] = "Databáza použitá v dokumente:";
+        Text[ hungarian ] = "A dokumentumban használt adatbázis:";
+        Text[ slovenian ] = "V dokumentu uporabljena zbirka podatkov:";
     };
     FixedText FT_DOCDBNAME
     {
@@ -328,6 +338,8 @@ ModalDialog DLG_CHANGE_DB
         Text[ hebrew ] = "Adressen.Adressen";
         Text[ hindi ] = "Addresses.Addresses";
         Text[ slovak ] = "Adresy.Adresy";
+        Text[ hungarian ] = "Addresses.Addresses";
+        Text[ slovenian ] = "Naslovi.naslovi";
     };
 /*  PushButton BT_CHANGEDB
     {
@@ -393,6 +405,8 @@ ModalDialog DLG_CHANGE_DB
         Text[ hebrew ] = "‮בצוע החלפה‬";
         Text[ hindi ] = "परिभाषा दो";
         Text[ slovak ] = "Definovať";
+        Text[ hungarian ] = "OK";
+        Text[ slovenian ] = "Določi";
     };
     CancelButton BT_CANCEL
     {
@@ -427,6 +441,8 @@ ModalDialog DLG_CHANGE_DB
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
         Text[ slovak ] = "~Zavrieť";
+        Text[ hungarian ] = "~Bezárás";
+        Text[ slovenian ] = "~Zapri";
     };
     HelpButton BT_HELP
     {
@@ -453,7 +469,10 @@ ModalDialog DLG_CHANGE_DB
     Text[ hebrew ] = "!";
     Text[ hindi ] = "लेखासंचयों को अदला-बदला करो";
     Text[ slovak ] = "Vymeniť databázy";
+    Text[ hungarian ] = "Adatbázisok kiválasztása";
+    Text[ slovenian ] = "Zamenjaj zbirke podatkov";
 };
+
 
 
 
