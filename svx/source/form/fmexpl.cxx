@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 15:55:07 $
+ *  last change: $Author: fs $ $Date: 2001-05-17 13:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1313,7 +1313,7 @@ FmEntryData* FmExplorerModel::FindData( const ::rtl::OUString& rText, FmFormData
         pEntryData = pDataList->GetObject(i);
         aEntryText = pEntryData->GetText();
 
-        if( aEntryText.equalsIgnoreAsciiCase(rText))
+        if (rText == aEntryText)
             return pEntryData;
 
         if( bRecurs && pEntryData->ISA(FmFormData) )
@@ -1559,8 +1559,9 @@ sal_Bool FmExplorerModel::CheckEntry( FmEntryData* pEntryData )
 
         //////////////////////////////////////////////////////////////////////
         // Gleichen Eintrag gefunden
-        if( aChildText.equalsIgnoreAsciiCase(pEntryData->GetText()) &&
-            (pEntryData!=pChildData) )
+        if  (   (aChildText == pEntryData->GetText())
+            &&  (pEntryData!=pChildData)
+            )
         {
             SvxDBMsgBox aErrorBox( GetpApp()->GetAppWindow(), SVX_RES(RID_ERR_CONTEXT_ADDFORM),
                 SVX_RES(RID_ERR_DUPLICATE_NAME), WB_OK | WB_DEF_OK, SvxDBMsgBox::Error );
