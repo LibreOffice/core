@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-07 08:19:43 $
+ *  last change: $Author: fs $ $Date: 2001-03-12 16:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,9 +658,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
             xCurrentCol->setPropertyValue(PROPERTY_WIDTH, xColumn->getPropertyValue(PROPERTY_WIDTH));
 
             // ... horizontal justify
-            sal_Int32 nAlign;
-            xColumn->getPropertyValue(PROPERTY_ALIGN) >>= nAlign;
-            xCurrentCol->setPropertyValue(PROPERTY_ALIGN, makeAny(sal_Int16(nAlign)));
+            xCurrentCol->setPropertyValue(PROPERTY_ALIGN, xColumn->getPropertyValue(PROPERTY_ALIGN));
 
             // ... the 'comment' property as helptext (will usually be shown as header-tooltip)
 
