@@ -2,3 +2,11 @@
 #include "resource.h"
 #include "winres.h"
 
+#ifdef FONTSIZE
+#undef FONTSIZE
+#endif
+#define LANG_KOREAN 82
+#define LANG_CHINESE 86
+#define LANG_JAPANESE 81
+#define PLACEHOLDER LANGUAGE
+
