@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YDriver.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-26 14:40:46 $
+ *  last change: $Author: oj $ $Date: 2002-11-27 08:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,17 @@ namespace connectivity
     //--------------------------------------------------------------------
     ODriverDelegator::~ODriverDelegator()
     {
-        ::comphelper::disposeComponent(m_xODBCDriver);
-        ::comphelper::disposeComponent(m_xJDBCDriver);
+        try
+        {
+            ::comphelper::disposeComponent(m_xODBCDriver);
+            TJDBCDrivers::iterator aIter = m_aJdbcDrivers.begin();
+            TJDBCDrivers::iterator aEnd = m_aJdbcDrivers.end();
+            for ( ;aIter != aEnd;++aIter )
+                ::comphelper::disposeComponent(aIter->second);
+        }
+        catch(const Exception&)
+        {
+        }
     }
 
     // --------------------------------------------------------------------------------
@@ -135,14 +144,28 @@ namespace connectivity
 
     namespace
     {
-        sal_Bool isOdbcPropertySet(const Sequence< PropertyValue >& info)
+        ::rtl::OUString getDriverClass(const Sequence< PropertyValue >& info)
         {
-            const static ::rtl::OUString sPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsMyODBCDriver"));
+            ::rtl::OUString sRet;
             const PropertyValue* pSupported = info.getConstArray();
             const PropertyValue* pEnd = pSupported + info.getLength();
-            for (;pSupported != pEnd && !pSupported->Name.equals(sPropName); ++pSupported)
-                ;
-            return pSupported != pEnd && ::comphelper::getBOOL(pSupported->Value);
+            for (;pSupported != pEnd; ++pSupported)
+                if ( !pSupported->Name.compareToAscii("JavaDriverClass") )
+                {
+                    pSupported->Value >>= sRet;
+                    break;
+                }
+            return sRet;
+        }
+        //--------------------------------------------------------------------
+        ::rtl::OUString getCutUrl(const ::rtl::OUString& _sUrl)
+        {
+            return _sUrl.copy(11);
+        }
+        //--------------------------------------------------------------------
+        sal_Bool isOdbcUrl(const ::rtl::OUString& _sUrl)
+        {
+            return _sUrl.copy(0,16).equalsAscii("sdbc:mysql:odbc:");
         }
         //--------------------------------------------------------------------
         Reference< XDriver > lcl_loadDriver(const Reference< XMultiServiceFactory >& _rxFactory,const ::rtl::OUString& _sUrl)
@@ -155,44 +178,37 @@ namespace connectivity
             return xDriver;
         }
         //--------------------------------------------------------------------
-        Sequence< PropertyValue > lcl_convertProperties(const Sequence< PropertyValue >& info)
+        Sequence< PropertyValue > lcl_convertProperties(sal_Bool _bOdbc,const Sequence< PropertyValue >& info)
         {
-            const static ::rtl::OUString sPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsMyODBCDriver"));
-
             ::std::vector<PropertyValue> aProps;
             const PropertyValue* pSupported = info.getConstArray();
             const PropertyValue* pEnd = pSupported + info.getLength();
             for (;pSupported != pEnd; ++pSupported)
+                aProps.push_back( *pSupported );
+
+            if ( _bOdbc )
             {
-                if ( pSupported->Name.equals(sPropName) && ::comphelper::getBOOL(pSupported->Value) )
-                {
-                    // here we know that we will connect to MyODBC,
-                    // so we have to add the fetch auto increments things
-                    aProps.push_back( PropertyValue(
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled"))
-                                        ,0
-                                        ,makeAny(sal_True)
-                                        ,PropertyState_DIRECT_VALUE) );
-                    aProps.push_back( PropertyValue(
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"))
-                                        ,0
-                                        ,makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("select last_id()")))
-                                        ,PropertyState_DIRECT_VALUE) );
-                    // and some more info
-                    aProps.push_back( PropertyValue(
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Silent"))
-                                        ,0
-                                        ,makeAny(sal_True)
-                                        ,PropertyState_DIRECT_VALUE) );
-                    aProps.push_back( PropertyValue(
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParameterNameSubstitution"))
-                                        ,0
-                                        ,makeAny(sal_True)
-                                        ,PropertyState_DIRECT_VALUE) );
-                }
-                else
-                    aProps.push_back( *pSupported );
+                aProps.push_back( PropertyValue(
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Silent"))
+                                    ,0
+                                    ,makeAny(sal_True)
+                                    ,PropertyState_DIRECT_VALUE) );
             }
+            aProps.push_back( PropertyValue(
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled"))
+                                ,0
+                                ,makeAny(sal_True)
+                                ,PropertyState_DIRECT_VALUE) );
+            aProps.push_back( PropertyValue(
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"))
+                                ,0
+                                ,makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("select last_id()")))
+                                ,PropertyState_DIRECT_VALUE) );
+            aProps.push_back( PropertyValue(
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParameterNameSubstitution"))
+                                ,0
+                                ,makeAny(sal_True)
+                                ,PropertyState_DIRECT_VALUE) );
             return Sequence< PropertyValue >(aProps.begin(),aProps.size());
         }
     }
@@ -200,24 +216,28 @@ namespace connectivity
     Reference< XDriver > ODriverDelegator::loadDriver( const ::rtl::OUString& url, const Sequence< PropertyValue >& info )
     {
         Reference< XDriver > xDriver;
-        ::rtl::OUString sCuttedUrl = url.copy(11);
-        if ( isOdbcPropertySet(info ) )
+        ::rtl::OUString sCuttedUrl = getCutUrl(url);
+        sal_Bool bIsODBC = isOdbcUrl( url );
+        if ( bIsODBC )
         {
             if ( !m_xODBCDriver.is() )
             {
-                sCuttedUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:odbc:")) + sCuttedUrl;
+                sCuttedUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:")) + sCuttedUrl;
                 m_xODBCDriver = lcl_loadDriver(m_xFactory,sCuttedUrl);
             }
             xDriver = m_xODBCDriver;
         }
         else
         {
-            if ( !m_xJDBCDriver.is() )
+            ::rtl::OUString sDriverClass = getDriverClass(info);
+            if ( !sDriverClass.getLength() )
+                throw SQLException();
+            TJDBCDrivers::iterator aFind = m_aJdbcDrivers.find(sDriverClass);
+            if ( aFind == m_aJdbcDrivers.end() )
             {
-                sCuttedUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jdbc:")) + sCuttedUrl;
-                m_xJDBCDriver = lcl_loadDriver(m_xFactory,sCuttedUrl);
+                aFind = m_aJdbcDrivers.insert(TJDBCDrivers::value_type(sDriverClass,lcl_loadDriver(m_xFactory,sCuttedUrl))).first;
             }
-            xDriver = m_xJDBCDriver;
+            xDriver = aFind->second;
         }
 
         return xDriver;
@@ -233,13 +253,12 @@ namespace connectivity
             xDriver = loadDriver(url,info);
             if ( xDriver.is() )
             {
-                ::rtl::OUString sCuttedUrl = url.copy(11);
-                if ( isOdbcPropertySet(info ) )
-                    sCuttedUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:odbc:")) + sCuttedUrl;
-                else
-                    sCuttedUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jdbc:")) + sCuttedUrl;
+                ::rtl::OUString sCuttedUrl = getCutUrl(url);
+                sal_Bool bIsODBC = isOdbcUrl( url );
+                if ( bIsODBC )
+                    sCuttedUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:")) + sCuttedUrl;
 
-                Sequence< PropertyValue > aConvertedProperties = lcl_convertProperties(info);
+                Sequence< PropertyValue > aConvertedProperties = lcl_convertProperties(bIsODBC,info);
 
                 xConnection = xDriver->connect( sCuttedUrl, aConvertedProperties );
                 if ( xConnection.is() )
@@ -261,7 +280,11 @@ namespace connectivity
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const ::rtl::OUString& url ) throw (SQLException, RuntimeException)
     {
-        return (!url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:")),11));
+        ::rtl::OUString sPrefix = url.copy(0,16);
+        sal_Bool bOK = sPrefix.equalsAscii("sdbc:mysql:odbc:");
+        if ( !bOK )
+            bOK = sPrefix.equalsAscii("sdbc:mysql:jdbc:");
+        return bOK;
     }
 
     //--------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YCatalog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-11 08:30:22 $
+ *  last change: $Author: oj $ $Date: 2002-11-27 08:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,10 +130,29 @@ void OMySQLCatalog::refreshTables()
 // -------------------------------------------------------------------------
 void OMySQLCatalog::refreshViews()
 {
-    TStringVector aVector;
     Sequence< ::rtl::OUString > aTypes(1);
     aTypes[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
-    refreshObjects(aTypes,aVector);
+
+    sal_Bool bSupportsViews = sal_False;
+    try
+    {
+        Reference<XResultSet> xRes = m_xMetaData->getTableTypes();
+        Reference<XRow> xRow(xRes,UNO_QUERY);
+        while ( xRow.is() && xRes->next() )
+        {
+            if ( bSupportsViews = xRow->getString(1).equalsIgnoreAsciiCase(aTypes[0]) )
+            {
+                break;
+            }
+        }
+    }
+    catch(const SQLException&)
+    {
+    }
+
+    TStringVector aVector;
+    if ( bSupportsViews )
+        refreshObjects(aTypes,aVector);
 
     if ( m_pViews )
         m_pViews->reFill(aVector);
