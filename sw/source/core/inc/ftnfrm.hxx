@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:12:50 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ public:
     SwFtnContFrm( SwFrmFmt* );
 
     const SwFtnFrm* FindFootNote() const;
-    const SwFtnFrm* FindEndNote() const;
 
     virtual SwTwips ShrinkFrm( SwTwips, SZPTR
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );
