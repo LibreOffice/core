@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: as $ $Date: 2004-09-24 09:18:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@
 
 #ifndef __FRAMEWORK_TARGETS_H_
 #include <targets.h>
+#endif
+
+#ifndef __FRAMEWORK_PROPERTIES_H_
+#include <properties.h>
 #endif
 
 #ifndef __FRAMEWORK_SERVICES_H_
@@ -184,6 +188,14 @@
 
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
+#endif
+
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
+
+#ifndef _UTL_BOOTSTRAP_HXX_
+#include <unotools/bootstrap.hxx>
 #endif
 
 namespace framework
@@ -627,9 +639,19 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY);
     if (xPropSet.is())
     {
-        css::uno::Any aTitle;
-        aTitle <<= ::rtl::OUString(Application::GetDisplayName());
-        xPropSet->setPropertyValue(DECLARE_ASCII("Title"), aTitle);
+        ::rtl::OUString sProductName;
+        ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= sProductName;
+
+        ::rtl::OUStringBuffer sTitle;
+        sTitle.append(sProductName);
+#ifndef PRODUCT
+        sTitle.appendAscii(" ["                                             );
+        sTitle.append     (utl::Bootstrap::getBuildIdData(::rtl::OUString()));
+        sTitle.appendAscii("]"                                              );
+#endif
+        xPropSet->setPropertyValue(
+            FRAME_PROPNAME_TITLE,
+            css::uno::makeAny(sTitle.makeStringAndClear()));
     }
 
     // create the menu bar for the backing component
