@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-12 15:23:13 $
+ *  last change: $Author: tl $ $Date: 2001-06-27 12:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,14 @@ void SAL_CALL SmModel::release() throw(uno::RuntimeException)
 uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    return SfxBaseModel::getTypes();
+    uno::Sequence< uno::Type > aTypes = SfxBaseModel::getTypes();
+    sal_Int32 nLen = aTypes.getLength();
+    aTypes.realloc(nLen + 2);
+    uno::Type* pTypes = aTypes.getArray();
+    pTypes[nLen++] = ::getCppuType((Reference<XServiceInfo>*)0);
+    pTypes[nLen++] = ::getCppuType((Reference<XUnoTunnel>*)0);
+
+    return aTypes;
 }
 /* -----------------------------28.03.00 14:23--------------------------------
 
