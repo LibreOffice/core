@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
+ *  last change: $Author: mtg $ $Date: 2001-04-30 18:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,11 +240,12 @@ void ZipPackage::getZipFileContents()
             Reference < XManifestReader > xReader (xFactory->createInstance( sManifestReader ), UNO_QUERY );
             if ( xReader.is() )
             {
-                const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
-                const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
-                const OUString sInitialisationVector ( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
-                const OUString sSalt ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
-                const OUString sIterationCount ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
+                const OUString sPropFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
+                const OUString sPropMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
+                const OUString sPropInitialisationVector ( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
+                const OUString sPropSalt ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
+                const OUString sPropIterationCount ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
+
                 Sequence < Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
                 sal_Int32 nLength = aManifestSequence.getLength();
                 const Sequence < PropertyValue > *pSequence = aManifestSequence.getConstArray();
@@ -258,9 +259,9 @@ void ZipPackage::getZipFileContents()
                     const PropertyValue *pValue = pSequence->getConstArray();
                     for (sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
                     {
-                        if (pValue[j].Name.equals( sFullPath ) )
+                        if (pValue[j].Name.equals( sPropFullPath ) )
                             pValue[j].Value >>= sPath;
-                        else if (pValue[j].Name.equals( sMediaType ) )
+                        else if (pValue[j].Name.equals( sPropMediaType ) )
                             pValue[j].Value >>= sMediaType;
                     }
                     if (sPath.getLength() && hasByHierarchicalName ( sPath ) )
@@ -283,19 +284,19 @@ void ZipPackage::getZipFileContents()
                             for (sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
                             {
                                 Sequence < sal_Int8 > aSequence;
-                                if (pValue[j].Name.equals( sSalt ) )
+                                if (pValue[j].Name.equals( sPropSalt ) )
                                 {
                                     pValue[j].Value >>= aSequence;
                                     pStream->setSalt ( aSequence );
                                     bSetEncrypted = sal_True;
                                 }
-                                else if (pValue[j].Name.equals( sInitialisationVector ) )
+                                else if (pValue[j].Name.equals( sPropInitialisationVector ) )
                                 {
                                     pValue[j].Value >>= aSequence;
                                     pStream->setInitialisationVector ( aSequence );
                                     bSetEncrypted = sal_True;
                                 }
-                                else if (pValue[j].Name.equals( sIterationCount ) )
+                                else if (pValue[j].Name.equals( sPropIterationCount ) )
                                 {
                                     sal_Int64 nCount;
                                     pValue[j].Value >>= nCount;
@@ -583,7 +584,11 @@ void SAL_CALL ZipPackage::commitChanges(  )
         xManOutStream = Reference < XOutputStream > (*pBuffer, UNO_QUERY);
 
         pEntry->sName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml") );
-        pEntry->nMethod = STORED;
+        pEntry->nMethod = DEFLATED;
+        pEntry->nCrc = -1;
+        pEntry->nSize = -1;
+        pEntry->nCompressedSize = -1;
+        pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
         Sequence < Sequence < PropertyValue > > aManifestSequence ( aManList.size());
         Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
@@ -593,17 +598,14 @@ void SAL_CALL ZipPackage::commitChanges(  )
             *pSequence= (*aIter);
         xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
 
-        pEntry->nSize = pEntry->nCompressedSize = static_cast < sal_Int32 > (pBuffer->getPosition());
-        pBuffer->aBuffer.realloc(pEntry->nSize);
-        CRC32 aCRC;
-        aCRC.update(pBuffer->aBuffer);
-        pEntry->nCrc = aCRC.getValue();
+        sal_Int32 nBufferLength = static_cast < sal_Int32 > (pBuffer->getPosition());
+        pBuffer->aBuffer.realloc( nBufferLength );
 
         try
         {
             vos::ORef < EncryptionData > xEmpty;
             aZipOut.putNextEntry(*pEntry, xEmpty);
-            aZipOut.write(pBuffer->aBuffer, 0, pEntry->nSize);
+            aZipOut.write(pBuffer->aBuffer, 0, nBufferLength);
             aZipOut.closeEntry();
         }
         catch (::com::sun::star::io::IOException & )
