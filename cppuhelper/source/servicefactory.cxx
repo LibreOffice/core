@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-25 09:36:50 $
+ *  last change: $Author: dbo $ $Date: 2002-03-01 14:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,8 @@ Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
     UNO_AC_SINGLEUSER=<user-id|nothing> [optional]
       -- run with this user id or with default user policy (<nothing>)
          set UNO_AC=single-[default-]user
+    UNO_AC_USERCACHE_SIZE=<cache_size>
+      -- number of user permission sets to be cached
 
     UNO_AC_POLICYSERVICE=<service_name> [optional]
       -- override policy singleton service name
@@ -278,11 +280,26 @@ static void add_access_control_entries(
             }
         }
     }
+
     OUString ac_service;
     if (! bootstrap.getFrom( OUSTR("UNO_AC_SERVICE"), ac_service )) // override service name
     {
         ac_service = OUSTR("com.sun.star.security.AccessController"); // default
 //          ac = OUSTR("com.sun.star.security.comp.stoc.AccessController");
+    }
+
+    // - ac prop: user-cache-size
+    OUString ac_cache;
+    if (bootstrap.getFrom( OUSTR("UNO_AC_USERCACHE_SIZE"), ac_cache )) // ac cache size
+    {
+        sal_Int32 n = ac_cache.toInt32();
+        if (0 < n)
+        {
+            entry.bLateInitService = false;
+            entry.name = OUSTR("/services/com.sun.star.security.AccessController/user-cache-size");
+            entry.value <<= n;
+            context_values.push_back( entry );
+        }
     }
 
     // - ac prop: mode { "off", "on", "dynamic-only", "single-user", "single-default-user" }
