@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:21:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:19:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,9 @@ public:
     {
         return mnShadowPxWidth;
     }
+
+    // OD 22.09.2003 #110978#
+    const SwRect PrtWithoutHeaderAndFooter() const;
 };
 
 inline SwCntntFrm *SwPageFrm::FindFirstBodyCntnt()
