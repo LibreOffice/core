@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 10:23:27 $
+ *  last change: $Author: os $ $Date: 2002-06-17 11:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #endif
 #ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 #ifndef _SVX_NUMINF_HXX //autogen
 #include <svx/numinf.hxx>
@@ -303,6 +306,7 @@ const USHORT __FAR_DATA aUITableAttrRange[] =
     RES_KEEP,                       RES_KEEP,
     RES_LAYOUT_SPLIT,               RES_LAYOUT_SPLIT,
     FN_TABLE_SET_VERT_ALIGN,        FN_TABLE_SET_VERT_ALIGN,
+    RES_FRAMEDIR,                   RES_FRAMEDIR,
     0
 };
 
@@ -330,6 +334,8 @@ SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     rSet.Put( SfxBoolItem( FN_PARAM_TABLE_HEADLINE, rSh.IsHeadlineRepeat()) );
     rSet.Put( pFmt->GetShadow() );
     rSet.Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, rSh.GetBoxAlign()));
+    rSet.Put( pFmt->GetFrmDir() );
+
     SvxULSpaceItem aULSpace( pFmt->GetULSpace() );
     rSet.Put( aULSpace );
 
@@ -558,12 +564,17 @@ void lcl_ItemSetToTableParam( const SfxItemSet& rSet,
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, FALSE, &pItem ))
         rSh.SetTableName( *pFmt, ((const SfxStringItem*)pItem)->GetValue() );
 
+
     // kopiere die ausgesuchten Attribute in den ItemSet
     static USHORT __READONLY_DATA aIds[] =
         {
-            RES_PAGEDESC,       RES_BREAK,
-            RES_KEEP,           RES_LAYOUT_SPLIT,
-            RES_UL_SPACE,       RES_SHADOW,
+            RES_PAGEDESC,
+            RES_BREAK,
+            RES_KEEP,
+            RES_LAYOUT_SPLIT,
+            RES_UL_SPACE,
+            RES_SHADOW,
+            RES_FRAMEDIR,
             0
         };
     for( const USHORT* pIds = aIds; *pIds; ++pIds )
