@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.8 2002-08-14 15:10:23 hr Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.9 2002-10-01 11:12:53 jbu Exp $
 #
-#     $Date: 2002-08-14 15:10:23 $
-#     $Author: hr $
-#     $Revision: 1.8 $
+#     $Date: 2002-10-01 11:12:53 $
+#     $Author: jbu $
+#     $Revision: 1.9 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -75,7 +75,7 @@ LIBTARGET=NO
 
 # --- Types -------------------------------------
 
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb $(BIN)$/analysisadd.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/types.rdb $(BIN)$/analysisadd.rdb
 UNOUCRDEP=$(UNOUCRRDB)
 
 UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)

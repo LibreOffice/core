@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.7 2002-06-11 15:16:43 hjs Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.8 2002-10-01 11:12:03 jbu Exp $
 #
-#     $Date: 2002-06-11 15:16:43 $
-#     $Author: hjs $
-#     $Revision: 1.7 $
+#     $Date: 2002-10-01 11:12:03 $
+#     $Author: jbu $
+#     $Revision: 1.8 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -75,7 +75,7 @@ LIBTARGET=NO
 
 # --- Types -------------------------------------
 
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb $(BIN)$/dateadd.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/types.rdb $(BIN)$/dateadd.rdb
 UNOUCRDEP=$(UNOUCRRDB)
 
 UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)
