@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rcontrol.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 11:12:07 $
+ *  last change: $Author: gh $ $Date: 2002-12-02 10:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,18 +158,19 @@
 #define C_PatternBox        60
 #define C_ToolBox           61
 #define C_ValueSet          62
-#define C_Control           63  // Für das schmutzige Rummachen auf Treelist Boxen ...
+#define C_Control           63
+#define C_TreeListBox       64  // Hurray the TreeListBox finally got its own Window Type
 
-#define C_OkButton          64
-#define C_CancelButton      65
-#define C_ButtonDialog      66
+#define C_OkButton          65
+#define C_CancelButton      66
+#define C_ButtonDialog      67
 
 
 // Some new Elements for Mozilla
-#define C_Anchor            67
-#define C_FormElement       68
-#define C_DOMText           69
-#define C_Image             70
+#define C_Anchor            68
+#define C_FormElement       69
+#define C_DOMText           70
+#define C_Image             71
 
 
 

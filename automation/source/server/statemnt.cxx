@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2002-11-27 12:39:13 $
+ *  last change: $Author: gh $ $Date: 2002-12-02 10:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#include <vcl/wintypes.hxx>
 #ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
 #endif
@@ -496,6 +497,7 @@ static short ImpGetRType( Window *pWin, ULONG nUId )
         case WINDOW_OKBUTTON:           nRT = C_OkButton;       break;
         case WINDOW_CANCELBUTTON:       nRT = C_CancelButton;   break;
         case WINDOW_BUTTONDIALOG:       nRT = C_ButtonDialog;   break;
+        case WINDOW_TREELISTBOX:        nRT = C_TreeListBox;    break;
     }
 #ifdef DBG_UTIL
     // Die Werte n sind bei den WindowTypen nicht mehr vergeben, werden aber in der AutoID noch verwendet
@@ -4676,6 +4678,7 @@ BOOL StatementControl::Execute()
                                     else
                                     {
                                         ListBox *pLB = ((ListBox*)pControl);
+                                        pLB = static_cast<ListBox*>(pControl);
                                         if ( ValueOK(nUId, MethodString( nMethodId ),nNr1,pLB->GetEntryCount()) )
                                         {
                                             if ( bUnselectBeforeSelect )
@@ -5139,19 +5142,9 @@ BOOL StatementControl::Execute()
                             break;
                     }
                     break;
-                case C_Control:
+                case C_TreeListBox:
                     switch( nMethodId )
                     {
-                        case M_AnimateMouse :
-                            AnimateMouse( pControl, MitteOben);
-                            break;
-                        default:
-                            switch( nControlType )
-                            {
-                                case CONST_CTTreeListBox:
-                                    switch( nMethodId )
-                                    {
-
 
 
 
@@ -5193,153 +5186,149 @@ USHORT nValidTextItemCount = 0;\
     }\
 }
 
-                                        case M_GetText :    // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                                            // aber WP hat gesagt!
-                                            {
-                                                SvTreeListBox *pTree = (SvTreeListBox*)pControl;
-                                                SvLBoxEntry *pThisEntry = pTree->GetCurEntry();
-                                                if ( ! (nParams & PARAM_USHORT_1) )
-                                                    nNr1 = 1;
-                                                if ( pThisEntry )
-                                                {
-                                                    GetFirstValidTextItem( pThisEntry, nNr1 );
-                                                    if ( ValueOK( nUId, CUniString("GetText"), nNr1, nValidTextItemCount ) )
-                                                        pRet->GenReturn ( RET_Value, nUId, pItem->GetText() );
-                                                }
-                                                else
-                                                    ReportError( nUId, GEN_RES_STR2c2( S_NO_SELECTED_ENTRY, MethodString( nMethodId ), "TreeListBox" ) );
-                                            }
-                                            break;
-                                        case M_GetSelCount :    // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                                                // aber WP hat gesagt!
-                                            pRet->GenReturn ( RET_Value, nUId, ULONG(((SvLBox*)pControl)->GetSelectionCount()));
-                                            break;
-                                        case M_GetSelIndex :    // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                                                // aber WP hat gesagt!
-                                            if ( ! (nParams & PARAM_USHORT_1) )
-                                                nNr1 = 1;
-                                            if ( ValueOK(nUId, CUniString("GetSelIndex"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
-                                            {
-                                                nNr1--;
-                                                COUNT_LBOX( FirstSelected, NextSelected, nNr1);
-                                                pRet->GenReturn ( RET_Value, nUId, ULONG( ((SvTreeListBox*)pControl)->GetVisiblePos( pThisEntry )) +1 );
-                                            }
-                                            break;
-                                        case M_GetSelText : // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                                            // aber WP hat gesagt!
-                                            if ( ! (nParams & PARAM_USHORT_1) )
-                                                nNr1 = 1;
-                                            if ( ! (nParams & PARAM_USHORT_2) )
-                                                nNr2 = 1;
-                                            if ( ValueOK(nUId, CUniString("GetSelText"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
-                                            {
-                                                nNr1--;
-                                                COUNT_LBOX( FirstSelected, NextSelected, nNr1);
-                                                GetFirstValidTextItem( pThisEntry, nNr2 );
-                                                if ( ValueOK( nUId, CUniString("GetSelText"), nNr2, nValidTextItemCount ) )
-                                                    pRet->GenReturn ( RET_Value, nUId, pItem->GetText() );
-                                            }
-                                            break;
-                                        case M_GetItemCount :   // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                                                // aber WP hat gesagt!
-                                            pRet->GenReturn ( RET_Value, nUId, ULONG(((SvLBox*)pControl)->GetVisibleCount()) );
-                                            break;
-                                        case M_GetItemText :    // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                                                // aber WP hat gesagt!
-                                            if ( ValueOK(nUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
-                                            {
-                                                SvLBoxEntry *pEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
-                                                if ( ! (nParams & PARAM_USHORT_2) )
-                                                    nNr2 = 1;
-                                                GetFirstValidTextItem( pEntry, nNr2 );
-                                                if ( ValueOK( nUId, CUniString("GetItemText"), nNr2, nValidTextItemCount ) )
-                                                    pRet->GenReturn ( RET_Value, nUId, pItem->GetText() );
-                                            }
-                                            break;
-                                        case M_Select : // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                                        // aber WP hat gesagt!
-                                            if ( ! (nParams & PARAM_BOOL_1) )
-                                                bBool1 = TRUE;
-                                            if( nParams & PARAM_STR_1 )
-                                            {
-            /*                                  ListBox *pLB = ((ListBox*)pControl);
-                                                if ( pLB->GetEntryPos( aString1 ) == LISTBOX_ENTRY_NOTFOUND )
-                                                    ReportError( nUId, GEN_RES_STR2( S_ENTRY_NOT_FOUND, MethodString( nMethodId ), aString1 ) );
-                                                else
-                                                {
-                                                    pLB->SelectEntry( aString1, bBool1 );
-                                                    if ( pLB->IsEntrySelected( aString1 ) ? !bBool1 : bBool1 )  // XOR rein mit BOOL
-                                                        ReportError( nUId, GEN_RES_STR2( S_METHOD_FAILED, MethodString( nMethodId ), aString1 ) );
-                                                }
-            */                                  ReportError( nUId, GEN_RES_STR1( S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED, MethodString( nMethodId ) ) );
-                                            }
-                                            else
-                                            {
-                                                if ( ValueOK(nUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
-                                                {
-                                                    SvLBoxEntry *pEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
-                                                    ((SvTreeListBox*)pControl)->Select ( pEntry, bBool1 );
-                                                }
-                                            }
-                                            break;
-                                        case M_IsChecked :  // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                        case M_IsTristate : // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                        case M_GetState :
-                                        case M_Check :  // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                        case M_UnCheck :    // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                        case M_TriState :   // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                                            // aber WP hat gesagt!
-                                            {
-                                                SvTreeListBox *pTree = (SvTreeListBox*)pControl;
-                                                SvLBoxEntry *pThisEntry = pTree->GetCurEntry();
-                                                if ( !pThisEntry )
-                                                    ReportError( nUId, GEN_RES_STR2c2( S_NO_SELECTED_ENTRY, MethodString( nMethodId ), "TreeListBox" ) );
-                                                else
-                                                {
-                                                    SvLBoxButton* pItem = (SvLBoxButton*)(pThisEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
-                                                    if(!pItem)
-                                                        ReportError( nUId, GEN_RES_STR1( S_NO_LIST_BOX_BUTTON, MethodString( nMethodId ) ) );
-                                                    else
-                                                        switch( nMethodId )
-                                                        {
-                                                            case M_IsChecked :  // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                                                                // aber WP hat gesagt!
-                                                                pRet->GenReturn ( RET_Value, nUId, BOOL( pItem->IsStateChecked() ) );
-                                                                break;
-                                                            case M_IsTristate : // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                                                                // aber WP hat gesagt!
-                                                                pRet->GenReturn ( RET_Value, nUId, BOOL( pItem->IsStateTristate() ) );
-                                                                break;
-                                                            case M_GetState :
-                                                                pRet->GenReturn ( RET_Value, nUId, ULONG( pItem->GetButtonFlags() & ~SV_STATE_MASK ));
-                                                                break;
-                                                            case M_Check :  // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                                                            // aber WP hat gesagt!
-                                                                pItem->SetStateChecked();
-                                                                pTree->InvalidateEntry( pThisEntry );
-                                                                break;
-                                                            case M_UnCheck :    // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                                                                // aber WP hat gesagt!
-                                                                pItem->SetStateUnchecked();
-                                                                pTree->InvalidateEntry( pThisEntry );
-                                                                break;
-                                                            case M_TriState :   // TreeListBox wird angenommen! (Das kann ja nur schief gehen)
-                                                                                // aber WP hat gesagt!
-                                                                pItem->SetStateTristate();
-                                                                pTree->InvalidateEntry( pThisEntry );
-                                                                break;
-                                                            default:
-                                                                ReportError( nUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
-                                                                break;
-                                                        }
-                                                }
-                                            }
-                                            break;
-                                        default:
-                                            ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "TreeListBox" ) );
-                                            break;
-                                    }
-                                    break;
+                        case M_GetText :
+                            {
+                                SvTreeListBox *pTree = (SvTreeListBox*)pControl;
+                                SvLBoxEntry *pThisEntry = pTree->GetCurEntry();
+                                if ( ! (nParams & PARAM_USHORT_1) )
+                                    nNr1 = 1;
+                                if ( pThisEntry )
+                                {
+                                    GetFirstValidTextItem( pThisEntry, nNr1 );
+                                    if ( ValueOK( nUId, CUniString("GetText"), nNr1, nValidTextItemCount ) )
+                                        pRet->GenReturn ( RET_Value, nUId, pItem->GetText() );
+                                }
+                                else
+                                    ReportError( nUId, GEN_RES_STR2c2( S_NO_SELECTED_ENTRY, MethodString( nMethodId ), "TreeListBox" ) );
+                            }
+                            break;
+                        case M_GetSelCount :
+                            pRet->GenReturn ( RET_Value, nUId, ULONG(((SvLBox*)pControl)->GetSelectionCount()));
+                            break;
+                        case M_GetSelIndex :
+                            if ( ! (nParams & PARAM_USHORT_1) )
+                                nNr1 = 1;
+                            if ( ValueOK(nUId, CUniString("GetSelIndex"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
+                            {
+                                nNr1--;
+                                COUNT_LBOX( FirstSelected, NextSelected, nNr1);
+                                pRet->GenReturn ( RET_Value, nUId, ULONG( ((SvTreeListBox*)pControl)->GetVisiblePos( pThisEntry )) +1 );
+                            }
+                            break;
+                        case M_GetSelText :
+                            if ( ! (nParams & PARAM_USHORT_1) )
+                                nNr1 = 1;
+                            if ( ! (nParams & PARAM_USHORT_2) )
+                                nNr2 = 1;
+                            if ( ValueOK(nUId, CUniString("GetSelText"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
+                            {
+                                nNr1--;
+                                COUNT_LBOX( FirstSelected, NextSelected, nNr1);
+                                GetFirstValidTextItem( pThisEntry, nNr2 );
+                                if ( ValueOK( nUId, CUniString("GetSelText"), nNr2, nValidTextItemCount ) )
+                                    pRet->GenReturn ( RET_Value, nUId, pItem->GetText() );
+                            }
+                            break;
+                        case M_GetItemCount :
+                            pRet->GenReturn ( RET_Value, nUId, ULONG(((SvLBox*)pControl)->GetVisibleCount()) );
+                            break;
+                        case M_GetItemText :
+                            if ( ValueOK(nUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
+                            {
+                                SvLBoxEntry *pEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
+                                if ( ! (nParams & PARAM_USHORT_2) )
+                                    nNr2 = 1;
+                                GetFirstValidTextItem( pEntry, nNr2 );
+                                if ( ValueOK( nUId, CUniString("GetItemText"), nNr2, nValidTextItemCount ) )
+                                    pRet->GenReturn ( RET_Value, nUId, pItem->GetText() );
+                            }
+                            break;
+                        case M_Select :
+                            if ( ! (nParams & PARAM_BOOL_1) )
+                                bBool1 = TRUE;
+                            if( nParams & PARAM_STR_1 )
+                            {
+/*                                  ListBox *pLB = ((ListBox*)pControl);
+                                if ( pLB->GetEntryPos( aString1 ) == LISTBOX_ENTRY_NOTFOUND )
+                                    ReportError( nUId, GEN_RES_STR2( S_ENTRY_NOT_FOUND, MethodString( nMethodId ), aString1 ) );
+                                else
+                                {
+                                    pLB->SelectEntry( aString1, bBool1 );
+                                    if ( pLB->IsEntrySelected( aString1 ) ? !bBool1 : bBool1 )  // XOR rein mit BOOL
+                                        ReportError( nUId, GEN_RES_STR2( S_METHOD_FAILED, MethodString( nMethodId ), aString1 ) );
+                                }
+*/                                  ReportError( nUId, GEN_RES_STR1( S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED, MethodString( nMethodId ) ) );
+                            }
+                            else
+                            {
+                                if ( ValueOK(nUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
+                                {
+                                    SvLBoxEntry *pEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
+                                    ((SvTreeListBox*)pControl)->Select ( pEntry, bBool1 );
+                                }
+                            }
+                            break;
+                        case M_IsChecked :
+                        case M_IsTristate :
+                        case M_GetState :
+                        case M_Check :
+                        case M_UnCheck :
+                        case M_TriState :
+                            {
+                                SvTreeListBox *pTree = (SvTreeListBox*)pControl;
+                                SvLBoxEntry *pThisEntry = pTree->GetCurEntry();
+                                if ( !pThisEntry )
+                                    ReportError( nUId, GEN_RES_STR2c2( S_NO_SELECTED_ENTRY, MethodString( nMethodId ), "TreeListBox" ) );
+                                else
+                                {
+                                    SvLBoxButton* pItem = (SvLBoxButton*)(pThisEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
+                                    if(!pItem)
+                                        ReportError( nUId, GEN_RES_STR1( S_NO_LIST_BOX_BUTTON, MethodString( nMethodId ) ) );
+                                    else
+                                        switch( nMethodId )
+                                        {
+                                            case M_IsChecked :
+                                                pRet->GenReturn ( RET_Value, nUId, BOOL( pItem->IsStateChecked() ) );
+                                                break;
+                                            case M_IsTristate :
+                                                pRet->GenReturn ( RET_Value, nUId, BOOL( pItem->IsStateTristate() ) );
+                                                break;
+                                            case M_GetState :
+                                                pRet->GenReturn ( RET_Value, nUId, ULONG( pItem->GetButtonFlags() & ~SV_STATE_MASK ));
+                                                break;
+                                            case M_Check :
+                                                pItem->SetStateChecked();
+                                                pTree->InvalidateEntry( pThisEntry );
+                                                break;
+                                            case M_UnCheck :
+                                                pItem->SetStateUnchecked();
+                                                pTree->InvalidateEntry( pThisEntry );
+                                                break;
+                                            case M_TriState :
+                                                pItem->SetStateTristate();
+                                                pTree->InvalidateEntry( pThisEntry );
+                                                break;
+                                            default:
+                                                ReportError( nUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
+                                                break;
+                                        }
+                                }
+                            }
+                            break;
+                        default:
+                            ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "TreeListBox" ) );
+                            break;
+                    }
+                    break;
+            case C_Control:
+                    switch( nMethodId )
+                    {
+                        case M_AnimateMouse :
+                            AnimateMouse( pControl, MitteOben);
+                            break;
+                        default:
+                            switch( nControlType )
+                            {
                                 case CONST_CTBrowseBox:
 
                                     switch( nMethodId )
