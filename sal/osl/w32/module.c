@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hro $ $Date: 2002-05-16 12:10:29 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 11:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/file.h>
-#include <systools/win32/kernel9x.h>
 
 /*
     under WIN32, we use the void* oslModule

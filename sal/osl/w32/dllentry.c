@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mhu $ $Date: 2001-10-15 06:47:34 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 11:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,18 +64,9 @@
 #include <osl/diagnose.h>
 #include <sal/types.h>
 
-#include <systools/win32/advapi9x.h>
-#include <systools/win32/kernel9x.h>
-#include <systools/win32/shell9x.h>
-#include <systools/win32/comdlg9x.h>
-#include <systools/win32/user9x.h>
-
 #include <osl/diagnose.h>
 #include <osl/mutex.h>
 #include <sal/types.h>
-
-#define _DIRW9X_INITIALIZE_
-#include "dirW9X.h"
 
 //------------------------------------------------------------------------------
 // externals
@@ -229,16 +220,6 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
                 {
                     if ( VER_PLATFORM_WIN32_NT == aInfo.dwPlatformId )
                     {
-                        lpfnFindFirstFile             = FindFirstFileW;
-                        lpfnFindNextFile              = FindNextFileW;
-                        lpfnSetFileAttributes         = SetFileAttributesW;
-                        lpfnSearchPath                = SearchPathW;
-                        lpfnWNetAddConnection2        = WNetAddConnection2W;
-                        lpfnWNetCancelConnection2     = WNetCancelConnection2W;
-                        lpfnWNetGetUser               = WNetGetUserW;
-                        lpfnGetWindowsDirectory       = GetWindowsDirectoryW;
-                        lpfnWritePrivateProfileString = WritePrivateProfileStringW;
-                        lpfnGetPrivateProfileString   = GetPrivateProfileStringW;
                     }
 
                     g_dwPlatformId = aInfo.dwPlatformId;

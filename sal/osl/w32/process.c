@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hro $ $Date: 2001-10-19 14:29:10 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 11:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,7 @@
 
 #define UNICODE
 #include "system.h"
-#include <systools/win32/kernel9x.h>
-#include <systools/win32/shell9x.h>
+#include <shellapi.h>
 
 #include <osl/diagnose.h>
 #include <osl/security.h>
@@ -72,7 +71,6 @@
 #include "procimpl.h"
 #include "sockimpl.h"
 #include "secimpl.h"
-// #include "dirW9X.h"
 #include <rtl/ustrbuf.h>
 #include <rtl/alloc.h>
 

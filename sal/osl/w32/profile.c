@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obr $ $Date: 2001-11-21 14:59:37 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 11:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include <osl/file.h>
 #include <osl/util.h>
 #include <rtl/alloc.h>
-#include <systools/win32/kernel9x.h>
 
 #define LINES_INI       32
 #define LINES_ADD       10
@@ -1063,7 +1062,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
         else if ((rtl_ustr_ascii_compare_WithLength(pPath, RTL_CONSTASCII_LENGTH(STR_INI_METASYS), STR_INI_METASYS) == 0) &&
             ((nLen == RTL_CONSTASCII_LENGTH(STR_INI_METASYS)) || (pPath[RTL_CONSTASCII_LENGTH(STR_INI_METASYS)] == '/')))
         {
-            if (((nPathLen = lpfnGetWindowsDirectory(wcsPath, MAX_PATH)) == 0) || (nPathLen >= MAX_PATH))
+            if (((nPathLen = GetWindowsDirectory(wcsPath, MAX_PATH)) == 0) || (nPathLen >= MAX_PATH))
                 return (sal_False);
 
             if (nLen > RTL_CONSTASCII_LENGTH(STR_INI_METASYS))

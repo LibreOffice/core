@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-05 07:51:56 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 11:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/file.h>
-
-#include "dirW9X.h"
-
 #include "secimpl.h"
-#include <systools/win32/kernel9x.h>
 
 
 /*****************************************************************************/
@@ -154,7 +150,6 @@ oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *
         sal_Unicode*    strUser;
         sal_Unicode*    strDomain = _wcsdup(rtl_uString_getStr(strUserName));
         HANDLE  hUserToken;
-        LUID    luid;
 
         if (strUser = wcschr(strDomain, L'/'))
             *strUser++ = L'\0';
@@ -433,7 +428,7 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
             needed = max( 16 , needed );
             Ident=malloc(needed*sizeof(sal_Unicode));
 
-            if (lpfnWNetGetUser(NULL, Ident, &needed) != NO_ERROR)
+            if (WNetGetUserW(NULL, Ident, &needed) != NO_ERROR)
             {
                 wcscpy(Ident, L"unknown");
                 Ident[7] = L'\0';
@@ -548,7 +543,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
 
                 if ( !GetSpecialFolder( &ustrFile, CSIDL_APPDATA) )
                 {
-                    OSL_VERIFY(lpfnGetWindowsDirectory(sFile, _MAX_DIR) > 0);
+                    OSL_VERIFY(GetWindowsDirectoryW(sFile, _MAX_DIR) > 0);
 
                     rtl_uString_newFromStr( &ustrFile, sFile);
                 }
@@ -1043,10 +1038,10 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
             DWORD needed=0;
             sal_Unicode         *pNameW=NULL;
 
-            lpfnWNetGetUser(NULL, NULL, &needed);
+            WNetGetUserW(NULL, NULL, &needed);
             pNameW = malloc (needed*sizeof(sal_Unicode));
 
-            if (lpfnWNetGetUser(NULL, pNameW, &needed) == NO_ERROR)
+            if (WNetGetUserW(NULL, pNameW, &needed) == NO_ERROR)
             {
                 rtl_uString_newFromStr( strName, pNameW);
 
