@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:16:39 $
+ *  last change: $Author: tl $ $Date: 2001-06-11 07:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include "dialogs.hrc"
  // pragma -------------------------------------------------------------------
 
-// RID_SFXPAGE_LINGU --------------------------------------------------------
+// RID_SVXDLG_EDIT_MODULES ---------------------------------------------------
 
 ModalDialog RID_SVXDLG_EDIT_MODULES
 {
@@ -110,7 +110,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 
-    FixedLine GB_EDIT_MODULES_OPTIONS
+    FixedLine FL_EDIT_MODULES_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 237 , 8 ) ;
@@ -176,13 +176,13 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     Control CLB_EDIT_MODULES_MODULES
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
-        Size = MAP_APPFONT ( 170 , 63 ) ;
+        Size = MAP_APPFONT ( 170 , 136 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
     PushButton PB_EDIT_MODULES_PRIO_UP
     {
-        Pos = MAP_APPFONT ( 187 , 30 ) ;
+        Pos = MAP_APPFONT ( 187 , 32 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text = "Prio +" ;
@@ -210,7 +210,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     };
     PushButton PB_EDIT_MODULES_PRIO_DOWN
     {
-        Pos = MAP_APPFONT ( 187 , 47 ) ;
+        Pos = MAP_APPFONT ( 187 , 49 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text = "Prio -" ;
@@ -238,7 +238,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     };
     PushButton PB_EDIT_MODULES_PRIO_BACK
     {
-        Pos = MAP_APPFONT ( 187 , 64 ) ;
+        Pos = MAP_APPFONT ( 187 , 66 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text = "~Zur¸ck" ;
@@ -263,125 +263,6 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ arabic ] = "«·”«»ﬁ";
         Text[ catalan ] = "~Regresar";
         Text[ finnish ] = "Back";
-    };
-
-    FixedLine GB_EDIT_MODULES_DICS
-    {
-        Pos = MAP_APPFONT ( 6 , 100 ) ;
-        Size = MAP_APPFONT ( 237 , 8 ) ;
-        Text = "Benutzerwˆrterb¸cher" ;
-        Text [ ENGLISH ] = "Personal dictionaries" ;
-        Text[ english_us ] = "User-defined dictionaries";
-        Text[ portuguese ] = "Dicion·rios do utilizador";
-        Text[ russian ] = "—ÎÓ‚‡Ë ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ";
-        Text[ greek ] = "–ÒÔÛ˘ÈÍ‹ ÎÂÓÈÍ‹";
-        Text[ dutch ] = "Gebruikerswoordenboeken";
-        Text[ french ] = "Dictionnaires de l'utilisateur";
-        Text[ spanish ] = "Diccionarios de usuario";
-        Text[ italian ] = "Dizionari utente";
-        Text[ danish ] = "Personal dictionaries";
-        Text[ swedish ] = "Anv‰ndarordlistor";
-        Text[ polish ] = "S≥owniki uøytkownika";
-        Text[ portuguese_brazilian ] = "Personal dictionaries";
-        Text[ japanese ] = "’∞ªﬁ∞é´èë";
-        Text[ korean ] = "ªÁøÎ¿⁄ ªÁ¿¸";
-        Text[ chinese_simplified ] = "”√ªß◊÷µ‰";
-        Text[ chinese_traditional ] = "¶€≠q¶r®Â";
-        Text[ turkish ] = "Personal dictionaries";
-        Text[ arabic ] = "ﬁÊ«„Ì” «·„” Œœ„";
-        Text[ catalan ] = "Diccionarios de usuario";
-        Text[ finnish ] = "K‰ytt‰j‰n m‰‰ritt‰m‰t sanastot";
-    };
-    Control CLB_EDIT_MODULES_DICS
-    {
-        Pos = MAP_APPFONT ( 12 , 110 ) ;
-        Size = MAP_APPFONT ( 170 , 58 ) ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-    };
-    PushButton PB_EDIT_MODULES_NEW_DIC
-    {
-        Pos = MAP_APPFONT ( 187 , 110 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Text = "~Neu..." ;
-        Text [ English ] = "~New..." ;
-        Text[ english_us ] = "~New...";
-        Text[ portuguese ] = "~Novo...";
-        Text[ russian ] = "—ÓÁ‰‡Ú¸...";
-        Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ·...";
-        Text[ dutch ] = "~Nieuw...";
-        Text[ french ] = "~Nouveau...";
-        Text[ spanish ] = "~Nuevo...";
-        Text[ italian ] = "Nuovo...";
-        Text[ danish ] = "New";
-        Text[ swedish ] = "~Ny";
-        Text[ polish ] = "Nowy...";
-        Text[ portuguese_brazilian ] = "New";
-        Text[ japanese ] = "êVãKçÏê¨(~N)...";
-        Text[ korean ] = "ªı(~N)";
-        Text[ chinese_simplified ] = "–¬Ω®(~N)...";
-        Text[ chinese_traditional ] = "∑s™∫¶r®Â(~N)...";
-        Text[ turkish ] = "New";
-        Text[ arabic ] = "ÃœÌœ...";
-        Text[ catalan ] = "~Nuevo...";
-        Text[ finnish ] = "New";
-    };
-    PushButton PB_EDIT_MODULES_PRIO_EDIT_DIC
-    {
-        Pos = MAP_APPFONT ( 187 , 127 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Text = "~Bearbeiten..." ;
-        Text [ English ] = "Edit..." ;
-        Text[ english_us ] = "~Edit...";
-        Text[ portuguese ] = "~Editar...";
-        Text[ russian ] = "œ‡‚Í‡...";
-        Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ·...";
-        Text[ dutch ] = "~Bewerken...";
-        Text[ french ] = "~…diter...";
-        Text[ spanish ] = "~Editar...";
-        Text[ italian ] = "Modifica...";
-        Text[ danish ] = "Edit";
-        Text[ swedish ] = "~Redigera";
-        Text[ polish ] = "Edytuj...";
-        Text[ portuguese_brazilian ] = "Edit";
-        Text[ japanese ] = "ï“èW(~E)...";
-        Text[ korean ] = "∆Ì¡˝(~E)";
-        Text[ chinese_simplified ] = "±‡º≠(~E)...";
-        Text[ chinese_traditional ] = "ΩsøË(~E)...";
-        Text[ turkish ] = "Edit";
-        Text[ arabic ] = " Õ—Ì—...";
-        Text[ catalan ] = "~Editar...";
-        Text[ finnish ] = "Edit";
-    };
-    PushButton PB_EDIT_MODULES_PRIO_DEL_DIC
-    {
-        Pos = MAP_APPFONT ( 187 , 144 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Text = "~Lˆschen" ;
-        Text [ English ] = "Delete" ;
-        Text[ english_us ] = "Dele~te";
-        Text[ portuguese ] = "E~liminar";
-        Text[ russian ] = "”‰‡ÎËÚ¸";
-        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
-        Text[ dutch ] = "~Wissen";
-        Text[ french ] = "~Supprimer";
-        Text[ spanish ] = "~Eliminar";
-        Text[ italian ] = "Elimina";
-        Text[ danish ] = "Delete";
-        Text[ swedish ] = "Radera";
-        Text[ polish ] = "UsuÒ";
-        Text[ portuguese_brazilian ] = "Delete";
-        Text[ japanese ] = "çÌèú(~T)";
-        Text[ korean ] = "ªË¡¶(~T)";
-        Text[ chinese_simplified ] = "…æ≥˝(~T)";
-        Text[ chinese_traditional ] = "ßR∞£(~T)";
-        Text[ turkish ] = "Delete";
-        Text[ arabic ] = "Õ–›";
-        Text[ catalan ] = "~Eliminar";
-        Text[ finnish ] = "Delete";
     };
 
     Bitmap BMP_CHKBUT_UNCHECKED
@@ -517,7 +398,7 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
     Text[ chinese_traditional ] = "≥s¶r≤≈";
     Text[ turkish ] = "Hyphenation";
     Text[ arabic ] = "›’· «·„ﬁ«ÿ⁄";
-    FixedLine GB_NUMVAL_PREBREAK
+    FixedLine FL_NUMVAL_PREBREAK
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 87 , 8 ) ;
@@ -635,7 +516,7 @@ TabPage RID_SFXPAGE_LINGU
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    FixedLine GB_LINGUISTIC
+    FixedLine FL_LINGUISTIC
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
@@ -693,7 +574,7 @@ TabPage RID_SFXPAGE_LINGU
     Control CLB_LINGU_MODULES
     {
         Pos = MAP_APPFONT ( 12 , 25 ) ;
-        Size = MAP_APPFONT ( 183 , 35 ) ;
+        Size = MAP_APPFONT ( 183 , 30 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
@@ -725,10 +606,129 @@ TabPage RID_SFXPAGE_LINGU
         Text[ catalan ] = "~Editar...";
         Text[ finnish ] = "~Muokkaa";
     };
+    FixedText FT_LINGU_DICS
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Size = MAP_APPFONT ( 175 , 8 ) ;
+        Text = "Benutzerwˆrterb¸cher" ;
+        Text [ ENGLISH ] = "Personal dictionaries" ;
+        Text[ english_us ] = "User-defined dictionaries";
+        Text[ portuguese ] = "Dicion·rios do utilizador";
+        Text[ russian ] = "—ÎÓ‚‡Ë ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ";
+        Text[ greek ] = "–ÒÔÛ˘ÈÍ‹ ÎÂÓÈÍ‹";
+        Text[ dutch ] = "Gebruikerswoordenboeken";
+        Text[ french ] = "Dictionnaires de l'utilisateur";
+        Text[ spanish ] = "Diccionarios de usuario";
+        Text[ italian ] = "Dizionari utente";
+        Text[ danish ] = "Personal dictionaries";
+        Text[ swedish ] = "Anv‰ndarordlistor";
+        Text[ polish ] = "S≥owniki uøytkownika";
+        Text[ portuguese_brazilian ] = "Personal dictionaries";
+        Text[ japanese ] = "’∞ªﬁ∞é´èë";
+        Text[ korean ] = "ªÁøÎ¿⁄ ªÁ¿¸";
+        Text[ chinese_simplified ] = "”√ªß◊÷µ‰";
+        Text[ chinese_traditional ] = "¶€≠q¶r®Â";
+        Text[ turkish ] = "Personal dictionaries";
+        Text[ arabic ] = "ﬁÊ«„Ì” «·„” Œœ„";
+        Text[ catalan ] = "Diccionarios de usuario";
+        Text[ finnish ] = "K‰ytt‰j‰n m‰‰ritt‰m‰t sanastot";
+    };
+    Control CLB_LINGU_DICS
+    {
+        Pos = MAP_APPFONT ( 12 , 70 ) ;
+        Size = MAP_APPFONT ( 183 , 48 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_LINGU_DICS_NEW_DIC
+    {
+        Pos = MAP_APPFONT ( 198 , 70 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "~Neu..." ;
+        Text [ English ] = "~New..." ;
+        Text[ english_us ] = "~New...";
+        Text[ portuguese ] = "~Novo...";
+        Text[ russian ] = "—ÓÁ‰‡Ú¸...";
+        Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ·...";
+        Text[ dutch ] = "~Nieuw...";
+        Text[ french ] = "~Nouveau...";
+        Text[ spanish ] = "~Nuevo...";
+        Text[ italian ] = "Nuovo...";
+        Text[ danish ] = "New";
+        Text[ swedish ] = "~Ny";
+        Text[ polish ] = "Nowy...";
+        Text[ portuguese_brazilian ] = "New";
+        Text[ japanese ] = "êVãKçÏê¨(~N)...";
+        Text[ korean ] = "ªı(~N)";
+        Text[ chinese_simplified ] = "–¬Ω®(~N)...";
+        Text[ chinese_traditional ] = "∑s™∫¶r®Â(~N)...";
+        Text[ turkish ] = "New";
+        Text[ arabic ] = "ÃœÌœ...";
+        Text[ catalan ] = "~Nuevo...";
+        Text[ finnish ] = "New";
+    };
+    PushButton PB_LINGU_DICS_EDIT_DIC
+    {
+        Pos = MAP_APPFONT ( 198 , 87 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "~Bearbeiten..." ;
+        Text [ English ] = "Edit..." ;
+        Text[ english_us ] = "~Edit...";
+        Text[ portuguese ] = "~Editar...";
+        Text[ russian ] = "œ‡‚Í‡...";
+        Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ·...";
+        Text[ dutch ] = "~Bewerken...";
+        Text[ french ] = "~…diter...";
+        Text[ spanish ] = "~Editar...";
+        Text[ italian ] = "Modifica...";
+        Text[ danish ] = "Edit";
+        Text[ swedish ] = "~Redigera";
+        Text[ polish ] = "Edytuj...";
+        Text[ portuguese_brazilian ] = "Edit";
+        Text[ japanese ] = "ï“èW(~E)...";
+        Text[ korean ] = "∆Ì¡˝(~E)";
+        Text[ chinese_simplified ] = "±‡º≠(~E)...";
+        Text[ chinese_traditional ] = "ΩsøË(~E)...";
+        Text[ turkish ] = "Edit";
+        Text[ arabic ] = " Õ—Ì—...";
+        Text[ catalan ] = "~Editar...";
+        Text[ finnish ] = "Edit";
+    };
+    PushButton PB_LINGU_DICS_DEL_DIC
+    {
+        Pos = MAP_APPFONT ( 198 , 104 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "~Lˆschen" ;
+        Text [ English ] = "Delete" ;
+        Text[ english_us ] = "Dele~te";
+        Text[ portuguese ] = "E~liminar";
+        Text[ russian ] = "”‰‡ÎËÚ¸";
+        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
+        Text[ dutch ] = "~Wissen";
+        Text[ french ] = "~Supprimer";
+        Text[ spanish ] = "~Eliminar";
+        Text[ italian ] = "Elimina";
+        Text[ danish ] = "Delete";
+        Text[ swedish ] = "Radera";
+        Text[ polish ] = "UsuÒ";
+        Text[ portuguese_brazilian ] = "Delete";
+        Text[ japanese ] = "çÌèú(~T)";
+        Text[ korean ] = "ªË¡¶(~T)";
+        Text[ chinese_simplified ] = "…æ≥˝(~T)";
+        Text[ chinese_traditional ] = "ßR∞£(~T)";
+        Text[ turkish ] = "Delete";
+        Text[ arabic ] = "Õ–›";
+        Text[ catalan ] = "~Eliminar";
+        Text[ finnish ] = "Delete";
+    };
     FixedText FT_LINGU_OPTIONS
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 64 ) ;
+        Pos = MAP_APPFONT ( 12 , 122 ) ;
         Size = MAP_APPFONT ( 175 , 8 ) ;
         Text = "Optionen:" ;
         Text [ English ] = "Options:" ;
@@ -755,14 +755,14 @@ TabPage RID_SFXPAGE_LINGU
     };
     Control CLB_LINGU_OPTIONS
     {
-        Pos = MAP_APPFONT ( 12 , 75 ) ;
-        Size = MAP_APPFONT ( 183 , 104 ) ;
+        Pos = MAP_APPFONT ( 12 , 133 ) ;
+        Size = MAP_APPFONT ( 183 , 46 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
     PushButton PB_LINGU_OPTIONS_EDIT
     {
-        Pos = MAP_APPFONT ( 198 , 75 ) ;
+        Pos = MAP_APPFONT ( 198 , 133 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text = "B~earbeiten..." ;
