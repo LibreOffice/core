@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:14:39 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ japanese ] = "γƒ•γƒªγƒΌγƒ•γ‚©γƒΌγƒ γ®ε¤θ§’ε½Ά";
                 Text[ chinese_traditional ] = "θ‡ªη”±ε¤ι‚ε½Ά";
                 Text[ arabic ] = "γΦαΪ ΝΡ";
-                Text[ greek ] = "Πολύγονο ελεύθερης σχεδίασης";
+                Text[ greek ] = "Πολύγωνο ελεύθερης σχεδίασης";
                 Text[ korean ] = "μμ  λ‹¤κ°ν•";
                 Text[ turkish ] = "Serbest ηokgen";
                 Text[ language_user1 ] = " ";
@@ -464,7 +464,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ japanese ] = "ε¶εΎ΅η‚Ήγ®ζΏε…¥";
                 Text[ chinese_traditional ] = "ζ’ε…¥ζ¥ι»";
                 Text[ arabic ] = "ΕΦΗέΙ δήΗΨ";
-                Text[ greek ] = "Προσθήκη σημείων";
+                Text[ greek ] = "Εισαγωγή σημείων";
                 Text[ korean ] = "μ  μ‚½μ…";
                 Text[ turkish ] = "Nokta ekle";
                 Text[ language_user1 ] = " ";
@@ -570,7 +570,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ japanese ] = "γ‚„γ‚η›΄γ— ";
                 Text[ chinese_traditional ] = "ζΆεΎ© ";
                 Text[ arabic ] = "ΕΪΗΟΙ";
-                Text[ greek ] = "Επαναφορά ";
+                Text[ greek ] = "Επανεκτέλεση ";
                 Text[ korean ] = "λ‹¤μ‹ μ‹¤ν–‰";
                 Text[ turkish ] = "Tekrar Yap";
                 Text[ language_user1 ] = " ";
@@ -787,7 +787,7 @@ ModelessDialog RID_SVXDLG_IMAP
         Left = TRUE ;
     };
     Text [ english_us ] = "ImageMap Editor" ;
-    Text [ portuguese_brazilian ] = "Editor de mapa de imagens" ;
+    Text [ portuguese_brazilian ] = "Editor de imagens" ;
     Text [ swedish ] = "Image map-redigerare" ;
     Text [ danish ] = "ImageMap-redigering" ;
     Text [ italian ] = "Editor ImageMap" ;
@@ -1268,7 +1268,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ chinese_traditional ] = "ζ›Ώδ»£ζ–‡ε­—(~T)";
         Text[ arabic ] = ":δΥ ΘΟνα";
         Text[ language_user1 ] = " ";
-        Text[ greek ] = "Εναλλακτικό κείμενο:";
+        Text[ greek ] = "Εναλλακτικό κείμε~νο";
         Text[ korean ] = "λ€μ²΄ ν…μ¤νΈ(~T):";
         Text[ turkish ] = "Alternatif ~metin";
         Text[ catalan ] = "Text alternatiu:";
@@ -1308,7 +1308,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ japanese ] = "~URL";
         Text[ chinese_traditional ] = "~URL";
         Text[ arabic ] = ":URL δΥ";
-        Text[ greek ] = "URL:";
+        Text[ greek ] = "~URL";
         Text[ korean ] = "~URL ν…μ¤νΈ:";
         Text[ turkish ] = "~URL";
         Text[ language_user1 ] = " ";
@@ -1362,7 +1362,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ japanese ] = "γƒγ‚¤γƒ‘γƒΌγƒªγƒ³γ‚―";
         Text[ chinese_traditional ] = "θ¶…ι€£ηµ";
         Text[ arabic ] = "ΗΡΚΘΗΨ ΚΤΪΘν";
-        Text[ greek ] = "Υπερ-σύνδεση";
+        Text[ greek ] = "~Υπερ-σύνδεση";
         Text[ korean ] = "ν•μ΄νΌλ§ν¬";
         Text[ turkish ] = "Hiperlink";
         Text[ language_user1 ] = " ";
@@ -1395,7 +1395,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ japanese ] = "γƒ•γƒ¬γƒΌγƒ (~R)";
         Text[ chinese_traditional ] = "θ¨ζ΅†(~R)";
         Text[ arabic ] = "ΕΨΗΡ:";
-        Text[ greek ] = "Πλαίσιο:";
+        Text[ greek ] = "~Πλαίσιο";
         Text[ korean ] = "ν”„λ μ„(~R):";
         Text[ turkish ] = "Ηerηeve:";
         Text[ language_user1 ] = " ";
@@ -1438,7 +1438,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ japanese ] = "εε‰(~N)";
         Text[ chinese_traditional ] = "εη¨±(~N)";
         Text[ arabic ] = ":ΗαΗΣγ";
-        Text[ greek ] = "Όνομα:";
+        Text[ greek ] = "Όνο~μα";
         Text[ korean ] = "μ΄λ¦„(~N):";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
@@ -1499,7 +1499,7 @@ String STR_IMAPDLG_SAVE
     Text = "Die ImageMap wurde geδndert.\nSollen die Δnderungen gespeichert werden?" ;
     Text [ swedish ] = "Image map har δndrats.\nSkall δndringarna sparas?" ;
     Text [ danish ] = "ImageMap er blevet ζndret.\nVil du gemme ζndringerne?" ;
-    Text [ portuguese_brazilian ] = "O ImageMap foi modificado.\nDeseja salvar as modificaηυes?" ;
+    Text [ portuguese_brazilian ] = "O editor de imagens foi modificado.\nDeseja salvar as modificaηυes?" ;
     Text [ portuguese ] = "O ImageMap foi modificado.\nDeseja guardar as modificaηυes?" ;
     Text[ greek ] = "Το ImageMap τροποποιήθηκε.\nΘέλετε να αποθηκευτούν οι αλλαγές;";
     Text[ korean ] = "μ΄λ―Έμ§€ λ§µμ΄ μμ •λμ—μµλ‹λ‹¤.\nλ³€κ²½λ λ‚΄μ©μ„ μ €μ¥ν•κ² μµλ‹κΉ?";
@@ -1526,7 +1526,7 @@ String STR_IMAPDLG_MODIFY
     Text [ spanish ] = "El mapa de imαgenes se ha modificado.\nΏDesea guardar las modificaciones?" ;
     Text [ french ] = "L'Image Map a ιtι modifiιe.\nAppliquer les modifications ?" ;
     Text [ dutch ] = "De ImageMap is gewijzigd.\nWilt u de wijzigingen overnemen?" ;
-    Text [ portuguese_brazilian ] = "O ImageMap foi modificado.\nDeseja salvar as modificaηυes?" ;
+    Text [ portuguese_brazilian ] = "O editor de imagens foi modificado.\nDeseja salvar as modificaηυes?" ;
     Text [ portuguese ] = "O ImageMap foi modificado.\nDeseja aplicar as modificaηυes?" ;
     Text[ chinese_simplified ] = "ε›Ύεƒζ ε°„ε·²η»θΆ«ζ”Ήε¨γ€‚\nζ‚¨θ¦ζ¥ε—ζ›΄ζ”Ήε—οΌ";
     Text[ russian ] = "Ρενρξπνξε θηξαπΰζενθε θημενενξ.\nΟπθνÿςό ύςθ θημενενθÿ?";
@@ -1547,6 +1547,7 @@ String STR_IMAPDLG_MODIFY
     Text[ slovak ] = "TΓ΅to obrΓ΅zkovΓ΅ mapa bola zmenenΓ΅.\nPrajete si uloΕΎiΕ¥ zmeny?";
 };
 /******************************************************************************/
+
 
 
 
