@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-08 15:55:43 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1129,25 +1129,28 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
     String aLastInRangeString;
     if (!bLessEqual)
         aLastInRangeString.Assign( sal_Unicode(0xFFFF));
-    pCell = pItems[nLastInRange].pCell;
-    if (pCell->HasStringData())
+    if (nLastInRange < pCol->nCount)
     {
-        ULONG nFormat = pCol->GetNumberFormat( pItems[nLastInRange].nRow);
-        ScCellFormat::GetInputString( pCell, nFormat, aLastInRangeString,
-                rFormatter);
-    }
-    else
-    {
-        switch ( pCell->GetCellType() )
+        pCell = pItems[nLastInRange].pCell;
+        if (pCell->HasStringData())
         {
-            case CELLTYPE_VALUE :
-                fLastInRangeValue =
-                    static_cast<ScValueCell*>(pCell)->GetValue();
-                break;
-            case CELLTYPE_FORMULA :
-                fLastInRangeValue =
-                    static_cast<ScFormulaCell*>(pCell)->GetValue();
-                break;
+            ULONG nFormat = pCol->GetNumberFormat( pItems[nLastInRange].nRow);
+            ScCellFormat::GetInputString( pCell, nFormat, aLastInRangeString,
+                    rFormatter);
+        }
+        else
+        {
+            switch ( pCell->GetCellType() )
+            {
+                case CELLTYPE_VALUE :
+                    fLastInRangeValue =
+                        static_cast<ScValueCell*>(pCell)->GetValue();
+                    break;
+                case CELLTYPE_FORMULA :
+                    fLastInRangeValue =
+                        static_cast<ScFormulaCell*>(pCell)->GetValue();
+                    break;
+            }
         }
     }
 
