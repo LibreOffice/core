@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-16 12:50:09 $
+ *  last change: $Author: hdu $ $Date: 2002-08-19 08:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,17 +192,14 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         nGcpOption |= GCP_USEKERNING;
 
     // apply reordering if requested
-    char *pGcpClass = NULL;
+    char pGcpClass[2];
     if( 0 == (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG) )
     {
         if( nMaxGlyphCount > 1 )
             aGCP.lpOrder = mpGlyphs2Chars = new UINT[ nMaxGlyphCount ];
 
-        // LLA: #100683# gpf in setup, looks like memory overwriter
-        //      we set lpClass to size of nMaxGlyphCount
-        pGcpClass = new char[ nMaxGlyphCount+1 ];
         aGCP.lpClass = pGcpClass;
-        nGcpOption  |= (GCP_REORDER | GCP_CLASSIN);
+        nGcpOption  |= GCP_REORDER;
         if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL )
         {
             pGcpClass[0] = GCPCLASS_PREBOUNDRTL;
@@ -236,11 +233,14 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
             WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
             rArgs.mpStr + rArgs.mnFirstCharIndex, nMaxGlyphCount,
             pMBStr, nMBLen, NULL, NULL );
-        // note: because aGCP.lpOutString==NULL GCP_RESULTSA is compatible with GCP_RESULTSW
+        if( !mbEnableGlyphs )
+            aGCP.nGlyphs *= 2;  // ascii length = 2 * unicode length
+        // note: GCP_RESULTSA is compatible with GCP_RESULTSW except for
+        // the aGCP.lpOutString pointer, for <=WME it is consistently treated
+        // as byte pointer, so this doesn't hurt us
         nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
                     0, (GCP_RESULTSA*)&aGCP, nGcpOption );
     }
-    delete[] pGcpClass;
 
     // cache essential layout properties
     mnGlyphCount = mbEnableGlyphs ? aGCP.nGlyphs : aGCP.nMaxFit;
