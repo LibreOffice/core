@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.13 2001-01-30 16:04:46 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.14 2001-02-01 13:42:35 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-01-30 16:04:46 $ $Revision: 1.13 $
+//	$Author: oj $ $Date: 2001-02-01 13:42:35 $ $Revision: 1.14 $
 //
 // Description:
 //
@@ -2666,9 +2666,9 @@ derived_column:
 	;
 /* Tabellenname */
 table_node:
-		catalog_name
+		table_name
 	|	schema_name
-	|	table_name
+	|	catalog_name
 ;
 catalog_name:
 		SQL_TOKEN_NAME '.' schema_name
@@ -2732,12 +2732,19 @@ column_ref:
 			column
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);}
-	|       table_node '.' column_val %prec '.'
+/*	|       table_node '.' column_val %prec '.'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($3);}
-/*	|       SQL_TOKEN_NAME '.' SQL_TOKEN_NAME '.' column_val %prec '.'
+*/	
+	|       SQL_TOKEN_NAME '.' column_val %prec '.'
+			{$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+			}
+	|       SQL_TOKEN_NAME '.' SQL_TOKEN_NAME '.' column_val %prec '.'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
