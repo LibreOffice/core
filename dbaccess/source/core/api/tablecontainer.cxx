@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
+ *  last change: $Author: oj $ $Date: 2001-10-19 14:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,9 @@
 #ifndef _DBA_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
 #endif
-
+#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
+#include <com/sun/star/util/XFlushable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -140,6 +142,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::util;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
@@ -809,6 +812,10 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
                     pTable->setConfigurationNode( aTableConfig.cloneAsRoot() );
             }
         }
+        // we must the table here because otherwise the ui information are lost
+        Reference<XFlushable> xFlush(descriptor,UNO_QUERY);
+        if(xFlush.is())
+            xFlush->flush();
     }
 }
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 06:50:04 $
+ *  last change: $Author: oj $ $Date: 2001-10-19 14:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
+#include <com/sun/star/sdbcx/XRename.hpp>
 #endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
@@ -693,6 +696,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
             const ::rtl::OUString* pBegin       = aNames.getConstArray();
             const ::rtl::OUString* pEnd         = pBegin + aNames.getLength();
 
+            ::rtl::OUString sPropertyName;
             Reference<XPropertySet> xColumn;
             for (sal_uInt16 i=0; pBegin != pEnd; ++i,++pBegin)
             {
@@ -713,12 +717,14 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     // TODO : die Strings fuer die Column-Typen irgendwo richtig platzieren
                     case DataType::BIT:
                         aCurrentModelType = ::rtl::OUString::createFromAscii("CheckBox");
+                        sPropertyName = PROPERTY_DEFAULTSTATE;
                         break;
 
                     case DataType::BINARY:
                     case DataType::VARBINARY:
                     case DataType::LONGVARBINARY:
                         aCurrentModelType = ::rtl::OUString::createFromAscii("TextField");
+                        sPropertyName = PROPERTY_DEFAULTTEXT;
                         break;
 
                     case DataType::VARCHAR:
@@ -729,6 +735,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     default:
                         aCurrentModelType = ::rtl::OUString::createFromAscii("FormattedField");
                         bIsFormatted = sal_True;
+                        sPropertyName = PROPERTY_EFFECTIVEDEFAULT;
                         break;
                 }
 
@@ -743,14 +750,22 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     xCurrentCol->setPropertyValue(::rtl::OUString::createFromAscii("TreatAsNumber"), ::cppu::bool2any(bFormattedIsNumeric));
                 }
 
+                Any aDefault;
+                sal_Bool bDefault = xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT);
+                if(bDefault)
+                    aDefault = xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT);
+
                 // default value
                 if (nType == DataType::BIT)
                 {
-                    Any aDefault; aDefault <<= ((sal_Int16)STATE_DONTKNOW);
-                    if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-                        aDefault <<= (comphelper::getString(xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE)).toInt32() == 0) ? (sal_Int16)STATE_NOCHECK : (sal_Int16)STATE_CHECK;
-                    xCurrentCol->setPropertyValue(PROPERTY_DEFAULTSTATE, aDefault);
+                    if(bDefault)
+                        aDefault <<= (comphelper::getString(xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT)).toInt32() == 0) ? (sal_Int16)STATE_NOCHECK : (sal_Int16)STATE_CHECK;
+                    else
+                        aDefault <<= ((sal_Int16)STATE_DONTKNOW);
+
                 }
+
+                xCurrentCol->setPropertyValue(sPropertyName, aDefault);
 
                 // transfer properties from the definition to the UNO-model :
                 // ... the hidden flag
@@ -3585,10 +3600,18 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 sal_Bool bPasteAble = isTableFormat();
                 aContextMenu.EnableItem(ID_TREE_TABLE_PASTE, bIsConnectionWriteAble && bPasteAble);
 
+                Reference<XRename> xRename;
+                if(bIsConnectionWriteAble)
+                {
+                    ensureObjectExists(pEntry);
+                    DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntry->GetUserData());
+                    if(pData && pData->xObject.is())
+                        xRename = Reference<XRename>(pData->xObject,UNO_QUERY);
+                }
                 // 1.3 actions on existing tables
                 aContextMenu.EnableItem(ID_EDIT_TABLE,      etTable == eType && bIsConnectionWriteAble);
                 aContextMenu.EnableItem(ID_DROP_TABLE,      etTable == eType && bIsConnectionWriteAble);
-                aContextMenu.EnableItem(ID_RENAME_ENTRY,    etTable == eType && bIsConnectionWriteAble);
+                aContextMenu.EnableItem(ID_RENAME_ENTRY,    etTable == eType && bIsConnectionWriteAble && xRename.is());
                 aContextMenu.EnableItem(ID_TREE_TABLE_COPY, etTable == eType);
                 // these have to be disabled if the connection is readonly
                 if(!bIsConnectionWriteAble)

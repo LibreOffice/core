@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-19 14:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
@@ -126,6 +129,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace ::comphelper;
+using namespace ::dbtools;
 using namespace ::cppu;
 using namespace ::utl;
 
@@ -390,6 +394,8 @@ void ODBTableDecorator::construct()
 // -----------------------------------------------------------------------------
 void ODBTableDecorator::setTable(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     m_xTable = _rxTable;
 }
 // -----------------------------------------------------------------------------
@@ -446,6 +452,8 @@ void ODBTableDecorator::flush_NoBroadcast_NoCommit()
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTableDecorator::rename( const ::rtl::OUString& _rNewName ) throw(SQLException, ElementExistException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     Reference<XRename> xRename(m_xTable,UNO_QUERY);
     if(xRename.is())
     {
@@ -463,6 +471,8 @@ void SAL_CALL ODBTableDecorator::rename( const ::rtl::OUString& _rNewName ) thro
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTableDecorator::alterColumnByName( const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxDescriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
     if(xAlter.is())
     {
@@ -471,17 +481,21 @@ void SAL_CALL ODBTableDecorator::alterColumnByName( const ::rtl::OUString& _rNam
     else
         // not supported
         throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
-    m_pColumns->refresh();
+    if(m_pColumns)
+        m_pColumns->refresh();
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTableDecorator::alterColumnByIndex( sal_Int32 _nIndex, const Reference< XPropertySet >& _rxDescriptor ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
     if(xAlter.is())
     {
         xAlter->alterColumnByIndex(_nIndex,_rxDescriptor);
-        m_pColumns->refresh();
+        if(m_pColumns)
+            m_pColumns->refresh();
     }
     else // not supported
         throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
@@ -489,50 +503,33 @@ void SAL_CALL ODBTableDecorator::alterColumnByIndex( sal_Int32 _nIndex, const Re
 // -----------------------------------------------------------------------------
 Reference< XNameAccess> ODBTableDecorator::getIndexes() throw (RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     return Reference< XIndexesSupplier>(m_xTable,UNO_QUERY)->getIndexes();
 }
 // -------------------------------------------------------------------------
 Reference< XIndexAccess> ODBTableDecorator::getKeys() throw (RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     return Reference< XKeysSupplier>(m_xTable,UNO_QUERY)->getKeys();
 }
 // -------------------------------------------------------------------------
 Reference< XNameAccess> ODBTableDecorator::getColumns() throw (RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
+
     if(!m_pColumns)
-    {
-        ::std::vector< ::rtl::OUString> aVector;
-
-        Reference<XNameAccess> xNames;
-        if(m_xTable.is())
-        {
-            xNames = m_xTable->getColumns();
-            if(xNames.is())
-            {
-                Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
-                const ::rtl::OUString* pBegin   = aNames.getConstArray();
-                const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-                for(;pBegin != pEnd;++pBegin)
-                    aVector.push_back(*pBegin);
-            }
-        }
-        OColumns* pCol = new OColumns(*this,m_aMutex,xNames,m_xMetaData->storesMixedCaseQuotedIdentifiers(),aVector,
-                                    this,this,
-                                    m_xMetaData->supportsAlterTableWithAddColumn(),
-                                    m_xMetaData->supportsAlterTableWithDropColumn());
-        //  pCol->setParent(this);
-        m_pColumns  = pCol;
-
-        // load the UI settings of the columns
-        if (m_aConfigurationNode.isValid())
-            pCol->loadSettings( m_aConfigurationNode.openNode( CONFIGKEY_QRYDESCR_COLUMNS ), m_xNumberFormats );
-    }
+        refreshColumns();
 
     return m_pColumns;
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODBTableDecorator::getName() throw(RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     Reference<XNamed> xName(m_xTable,UNO_QUERY);
     OSL_ENSURE(xName.is(),"Table should support the XNamed interface");
     return xName->getName();
@@ -636,6 +633,9 @@ void ODBTableDecorator::fillPrivileges() const
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > SAL_CALL ODBTableDecorator::createDataDescriptor(  ) throw (RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
+
     Reference< XDataDescriptorFactory > xFactory( m_xTable, UNO_QUERY );
     DBG_ASSERT( xFactory.is(), "ODBTableDecorator::createDataDescriptor: invalid table!" );
     Reference< XColumnsSupplier > xColsSupp;
@@ -657,11 +657,15 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL ODBTableDecorato
 // -----------------------------------------------------------------------------
 void ODBTableDecorator::refreshColumns()
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
+
     ::std::vector< ::rtl::OUString> aVector;
 
+    Reference<XNameAccess> xNames;
     if(m_xTable.is())
     {
-        Reference<XNameAccess> xNames = m_xTable->getColumns();
+        xNames = m_xTable->getColumns();
         if(xNames.is())
         {
             Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
@@ -671,7 +675,21 @@ void ODBTableDecorator::refreshColumns()
                 aVector.push_back(*pBegin);
         }
     }
-    m_pColumns->reFill(aVector);
+    if(!m_pColumns)
+    {
+        OColumns* pCol = new OColumns(*this,m_aMutex,xNames,m_xMetaData->storesMixedCaseQuotedIdentifiers(),aVector,
+                                    this,this,
+                                    m_xMetaData->supportsAlterTableWithAddColumn(),
+                                    m_xMetaData->supportsAlterTableWithDropColumn());
+        //  pCol->setParent(this);
+        m_pColumns  = pCol;
+
+        // load the UI settings of the columns
+        if (m_aConfigurationNode.isValid())
+            pCol->loadSettings( m_aConfigurationNode.openNode( CONFIGKEY_QRYDESCR_COLUMNS ), m_xNumberFormats );
+    }
+    else
+        m_pColumns->reFill(aVector);
 }
 // -----------------------------------------------------------------------------
 OColumn* ODBTableDecorator::createColumn(const ::rtl::OUString& _rName) const
@@ -724,4 +742,6 @@ void ODBTableDecorator::setContext( const ::utl::OConfigurationTreeRoot& _rNode,
     OConfigurationFlushable::setConfigurationNode( _rNode );
     m_xNumberFormats = _rxNumberFormats;
 }
+// -----------------------------------------------------------------------------
+
 

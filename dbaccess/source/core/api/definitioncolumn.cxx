@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 12:52:27 $
+ *  last change: $Author: oj $ $Date: 2001-10-19 14:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,8 +409,8 @@ Sequence< ::rtl::OUString > OTableColumn::getSupportedServiceNames(  ) throw (Ru
 {
     BEGIN_PROPERTY_HELPER(19)
         DECL_PROP2(ALIGN,               sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP1_IFACE(CONTROLMODEL,  XPropertySet ,      BOUND);
         DECL_PROP0(CONTROLDEFAULT,      ::rtl::OUString     );
+        DECL_PROP1_IFACE(CONTROLMODEL,  XPropertySet ,      BOUND);
         DECL_PROP1(DEFAULTVALUE,        ::rtl::OUString,    READONLY);
         DECL_PROP1(DESCRIPTION,         ::rtl::OUString,    READONLY);
         DECL_PROP2(NUMBERFORMAT,        sal_Int32,          BOUND, MAYBEVOID);
