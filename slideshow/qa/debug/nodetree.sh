@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 #
-#  Last changes: $Author: rt $ $Date: 2004-11-26 18:43:10 $
+#  Last changes: $Author: kz $ $Date: 2005-01-21 16:54:21 $
 #
 #  Generate node tree from verbose logfile
 #
@@ -21,8 +21,15 @@
 #  the bare minimum (to reproduce your bug, or whatever you need this
 #  for).
 #
-#  The generated output will have all nodes color-coded with their state at the
-#  point when the tree was dumped
+#  The generated output will have all nodes color-coded with their state
+#  at the point when the tree was dumped (see colors.sh for the color
+#  codes)
+#
+#  When looking for the mechanics that generate the relevant output,
+#  grep for the DEBUG_NODES_SHOWTREE macros in the slideshow source:
+#  Each such place dumps the current node tree to the trace output. Thus,
+#  if you need to check the tree state at other places or times, just add
+#  a DEBUG_NODES_SHOWTREE (or DEBUG_NODES_SHOWTREE_WITHIN, that is).
 #
 
 ###################################################
