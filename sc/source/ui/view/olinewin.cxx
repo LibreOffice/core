@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinewin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:02:47 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,17 +78,16 @@
 
 // ============================================================================
 
-const sal_Int32 SC_OL_BITMAPSIZE            = 12;
-const sal_Int32 SC_OL_POSOFFSET             = 2;
+const long SC_OL_BITMAPSIZE                 = 12;
+const long SC_OL_POSOFFSET                  = 2;
 
-const sal_uInt16 SC_OL_NOLEVEL              = 0xFFFF;
-const sal_uInt16 SC_OL_HEADERENTRY          = 0xFFFF;
+const size_t SC_OL_NOLEVEL                  = static_cast< size_t >( -1 );
+const size_t SC_OL_HEADERENTRY              = static_cast< size_t >( -1 );
 
-const sal_uInt16 SC_OL_IMAGE_PLUS           = 9;
-const sal_uInt16 SC_OL_IMAGE_MINUS          = SC_OL_IMAGE_PLUS + 1;
-const sal_uInt16 SC_OL_IMAGE_NOTPRESSED     = SC_OL_IMAGE_MINUS + 1;
-const sal_uInt16 SC_OL_IMAGE_PRESSED        = SC_OL_IMAGE_NOTPRESSED + 1;
-
+const USHORT SC_OL_IMAGE_PLUS               = 9;
+const USHORT SC_OL_IMAGE_MINUS              = SC_OL_IMAGE_PLUS + 1;
+const USHORT SC_OL_IMAGE_NOTPRESSED         = SC_OL_IMAGE_MINUS + 1;
+const USHORT SC_OL_IMAGE_PRESSED            = SC_OL_IMAGE_NOTPRESSED + 1;
 
 // ============================================================================
 
@@ -131,7 +130,7 @@ ScOutlineWindow::~ScOutlineWindow()
             pTaskPaneList->RemoveWindow( this );
 }
 
-void ScOutlineWindow::SetHeaderSize( sal_Int32 nNewSize )
+void ScOutlineWindow::SetHeaderSize( long nNewSize )
 {
     BOOL bLayoutRTL = GetDoc().IsLayoutRTL( GetTab() );
     mbMirrorEntries = bLayoutRTL && mbHoriz;
@@ -146,23 +145,23 @@ void ScOutlineWindow::SetHeaderSize( sal_Int32 nNewSize )
         Invalidate();
 }
 
-sal_Int32 ScOutlineWindow::GetDepthSize() const
+long ScOutlineWindow::GetDepthSize() const
 {
-    sal_Int32 nSize = GetLevelCount() * SC_OL_BITMAPSIZE;
+    long nSize = GetLevelCount() * SC_OL_BITMAPSIZE;
     if ( nSize > 0 )
         nSize += 2 * SC_OL_POSOFFSET + 1;
     return nSize;
 }
 
-void ScOutlineWindow::ScrollPixel( sal_Int32 nDiff )
+void ScOutlineWindow::ScrollPixel( long nDiff )
 {
     HideFocus();
     mbDontDrawFocus = true;
 
-    sal_Int32 nStart = mnMainFirstPos;
-    sal_Int32 nEnd = mnMainLastPos;
+    long nStart = mnMainFirstPos;
+    long nEnd = mnMainLastPos;
 
-    sal_Int32 nInvStart, nInvEnd;
+    long nInvStart, nInvEnd;
     if (nDiff < 0)
     {
         nStart -= nDiff;
@@ -187,7 +186,7 @@ void ScOutlineWindow::ScrollPixel( sal_Int32 nDiff )
     ShowFocus();
 }
 
-void ScOutlineWindow::ScrollRel( sal_Int32 nEntryDiff )
+void ScOutlineWindow::ScrollRel( long nEntryDiff )
 {
     if ( mbHoriz )
         Scroll( nEntryDiff, 0 );
@@ -195,7 +194,7 @@ void ScOutlineWindow::ScrollRel( sal_Int32 nEntryDiff )
         Scroll( 0, nEntryDiff );
 }
 
-void ScOutlineWindow::ScrollRel( sal_Int32 nEntryDiff, sal_Int32 nEntryStart, sal_Int32 nEntryEnd )
+void ScOutlineWindow::ScrollRel( long nEntryDiff, long nEntryStart, long nEntryEnd )
 {
     Rectangle aRect( GetRectangle( 0, nEntryStart, GetOutputSizeLevel() - 1, nEntryEnd ) );
     if ( mbHoriz )
@@ -203,7 +202,6 @@ void ScOutlineWindow::ScrollRel( sal_Int32 nEntryDiff, sal_Int32 nEntryStart, sa
     else
         Scroll( 0, nEntryDiff, aRect );
 }
-
 
 // internal -------------------------------------------------------------------
 
@@ -223,7 +221,7 @@ const ScOutlineArray* ScOutlineWindow::GetOutlineArray() const
     return mbHoriz ? pTable->GetColArray() : pTable->GetRowArray();
 }
 
-const ScOutlineEntry* ScOutlineWindow::GetOutlineEntry( sal_uInt16 nLevel, sal_uInt16 nEntry ) const
+const ScOutlineEntry* ScOutlineWindow::GetOutlineEntry( size_t nLevel, size_t nEntry ) const
 {
     const ScOutlineArray* pArray = GetOutlineArray();
     return pArray ? pArray->GetEntry( nLevel, nEntry ) : NULL;
@@ -269,71 +267,66 @@ void ScOutlineWindow::GetVisibleRange( SCCOLROW& rnColRowStart, SCCOLROW& rnColR
         --rnColRowStart;
 }
 
-Point ScOutlineWindow::GetPoint( sal_Int32 nLevelPos, sal_Int32 nEntryPos ) const
+Point ScOutlineWindow::GetPoint( long nLevelPos, long nEntryPos ) const
 {
     return mbHoriz ? Point( nEntryPos, nLevelPos ) : Point( nLevelPos, nEntryPos );
 }
 
 Rectangle ScOutlineWindow::GetRectangle(
-        sal_Int32 nLevelStart, sal_Int32 nEntryStart,
-        sal_Int32 nLevelEnd, sal_Int32 nEntryEnd ) const
+        long nLevelStart, long nEntryStart, long nLevelEnd, long nEntryEnd ) const
 {
     return Rectangle( GetPoint( nLevelStart, nEntryStart ), GetPoint( nLevelEnd, nEntryEnd ) );
 }
 
-sal_Int32 ScOutlineWindow::GetOutputSizeLevel() const
+long ScOutlineWindow::GetOutputSizeLevel() const
 {
     Size aSize( GetOutputSizePixel() );
     return mbHoriz ? aSize.Height() : aSize.Width();
 }
 
-sal_Int32 ScOutlineWindow::GetOutputSizeEntry() const
+long ScOutlineWindow::GetOutputSizeEntry() const
 {
     Size aSize( GetOutputSizePixel() );
     return mbHoriz ? aSize.Width() : aSize.Height();
 }
 
-sal_uInt16 ScOutlineWindow::GetLevelCount() const
+size_t ScOutlineWindow::GetLevelCount() const
 {
     const ScOutlineArray* pArray = GetOutlineArray();
     return pArray ? (pArray->GetDepth() + 1) : 0;
 }
 
-sal_Int32 ScOutlineWindow::GetLevelPos( sal_uInt16 nLevel ) const
+long ScOutlineWindow::GetLevelPos( size_t nLevel ) const
 {
-    if ( mbMirrorLevels )
-        return SC_OL_POSOFFSET + 1 + ( GetLevelCount() - 1 - nLevel ) * SC_OL_BITMAPSIZE;
-    else
-        return SC_OL_POSOFFSET + nLevel * SC_OL_BITMAPSIZE;
+    long nPos = static_cast< long >( SC_OL_POSOFFSET + nLevel * SC_OL_BITMAPSIZE );
+    return mbMirrorLevels ? (GetOutputSizeLevel() - nPos - 1) : nPos;
 }
 
-sal_uInt16 ScOutlineWindow::GetLevelFromPos( sal_Int32 nLevelPos ) const
+size_t ScOutlineWindow::GetLevelFromPos( long nLevelPos ) const
 {
-    sal_Int32 nStart = SC_OL_POSOFFSET + ( mbMirrorLevels ? 1 : 0 );    // 1 for the border
+    if( mbMirrorLevels ) nLevelPos = GetOutputSizeLevel() - nLevelPos - 1;
+    long nStart = SC_OL_POSOFFSET;
     if ( nLevelPos < nStart ) return SC_OL_NOLEVEL;
-    sal_uInt16 nLevel = static_cast< sal_uInt16 >( (nLevelPos - nStart) / SC_OL_BITMAPSIZE );
-    sal_uInt16 nLevelCount = GetLevelCount();
-    return (nLevel < nLevelCount) ?
-        ( mbMirrorLevels ? ( nLevelCount - 1 - nLevel ) : nLevel ) :
-        SC_OL_NOLEVEL;
+    size_t nLevel = static_cast< size_t >( (nLevelPos - nStart) / SC_OL_BITMAPSIZE );
+    return (nLevel < GetLevelCount()) ? nLevel : SC_OL_NOLEVEL;
 }
 
-sal_Int32 ScOutlineWindow::GetColRowPos( SCCOLROW nColRowIndex ) const
+long ScOutlineWindow::GetColRowPos( SCCOLROW nColRowIndex ) const
 {
-    sal_Int32 nDocPos = mbHoriz ?
+    long nDocPos = mbHoriz ?
         mrViewData.GetScrPos( static_cast<SCCOL>(nColRowIndex), 0, meWhich, TRUE ).X() :
         mrViewData.GetScrPos( 0, static_cast<SCROW>(nColRowIndex), meWhich, TRUE ).Y();
     return mnMainFirstPos + nDocPos;
 }
 
-sal_Int32 ScOutlineWindow::GetHeaderEntryPos() const
+long ScOutlineWindow::GetHeaderEntryPos() const
 {
     return mnHeaderPos + (mnHeaderSize - SC_OL_BITMAPSIZE) / 2;
 }
 
 bool ScOutlineWindow::GetEntryPos(
-        sal_uInt16 nLevel, sal_uInt16 nEntry,
-        sal_Int32& rnStartPos, sal_Int32& rnEndPos, sal_Int32& rnImagePos ) const
+        size_t nLevel, size_t nEntry,
+        long& rnStartPos, long& rnEndPos, long& rnImagePos ) const
 {
     const ScOutlineEntry* pEntry = GetOutlineEntry( nLevel, nEntry );
     if ( !pEntry || !pEntry->IsVisible() )
@@ -342,7 +335,7 @@ bool ScOutlineWindow::GetEntryPos(
     SCCOLROW nStart = pEntry->GetStart();
     SCCOLROW nEnd = pEntry->GetEnd();
 
-    sal_Int32 nEntriesSign = mbMirrorEntries ? -1 : 1;
+    long nEntriesSign = mbMirrorEntries ? -1 : 1;
 
     // --- common calculation ---
 
@@ -353,7 +346,7 @@ bool ScOutlineWindow::GetEntryPos(
     rnImagePos = bHidden ?
                 (rnStartPos - ( SC_OL_BITMAPSIZE / 2 ) * nEntriesSign) :
                 rnStartPos + nEntriesSign;
-    sal_Int32 nCenter = (rnStartPos + rnEndPos - SC_OL_BITMAPSIZE * nEntriesSign +
+    long nCenter = (rnStartPos + rnEndPos - SC_OL_BITMAPSIZE * nEntriesSign +
                         ( mbMirrorEntries ? 1 : 0 )) / 2L;
     rnImagePos = mbMirrorEntries ? Max( rnImagePos, nCenter ) : Min( rnImagePos, nCenter );
 
@@ -379,8 +372,8 @@ bool ScOutlineWindow::GetEntryPos(
     }
 
     // restrict rnStartPos...rnEndPos to valid area
-    rnStartPos = Max( rnStartPos, mnMainFirstPos );
-    rnEndPos = Max( rnEndPos, mnMainFirstPos );
+    rnStartPos = std::max( rnStartPos, mnMainFirstPos );
+    rnEndPos = std::max( rnEndPos, mnMainFirstPos );
 
     if ( mbMirrorEntries )
         rnImagePos -= SC_OL_BITMAPSIZE - 1;     // start pos aligns with right edge of bitmap
@@ -397,17 +390,17 @@ bool ScOutlineWindow::GetEntryPos(
     return bVisible;
 }
 
-bool ScOutlineWindow::GetImagePos( sal_uInt16 nLevel, sal_uInt16 nEntry, Point& rPos ) const
+bool ScOutlineWindow::GetImagePos( size_t nLevel, size_t nEntry, Point& rPos ) const
 {
     bool bRet = nLevel < GetLevelCount();
     if ( bRet )
     {
-        sal_Int32 nLevelPos = GetLevelPos( nLevel );
+        long nLevelPos = GetLevelPos( nLevel );
         if ( nEntry == SC_OL_HEADERENTRY )
             rPos = GetPoint( nLevelPos, GetHeaderEntryPos() );
         else
         {
-            sal_Int32 nStartPos, nEndPos, nImagePos;
+            long nStartPos, nEndPos, nImagePos;
             bRet = GetEntryPos( nLevel, nEntry, nStartPos, nEndPos, nImagePos );
             rPos = GetPoint( nLevelPos, nImagePos );
         }
@@ -415,7 +408,7 @@ bool ScOutlineWindow::GetImagePos( sal_uInt16 nLevel, sal_uInt16 nEntry, Point& 
     return bRet;
 }
 
-bool ScOutlineWindow::IsButtonVisible( sal_uInt16 nLevel, sal_uInt16 nEntry ) const
+bool ScOutlineWindow::IsButtonVisible( size_t nLevel, size_t nEntry ) const
 {
     bool bRet = false;
     if ( nEntry == SC_OL_HEADERENTRY )
@@ -433,7 +426,7 @@ bool ScOutlineWindow::IsButtonVisible( sal_uInt16 nLevel, sal_uInt16 nEntry ) co
     return bRet;
 }
 
-bool ScOutlineWindow::ItemHit( const Point& rPos, sal_uInt16& rnLevel, sal_uInt16& rnEntry, bool& rbButton ) const
+bool ScOutlineWindow::ItemHit( const Point& rPos, size_t& rnLevel, size_t& rnEntry, bool& rbButton ) const
 {
     const ScOutlineArray* pArray = GetOutlineArray();
     if ( !pArray ) return false;
@@ -441,18 +434,18 @@ bool ScOutlineWindow::ItemHit( const Point& rPos, sal_uInt16& rnLevel, sal_uInt1
     SCCOLROW nStartIndex, nEndIndex;
     GetVisibleRange( nStartIndex, nEndIndex );
 
-    sal_uInt16 nLevel = GetLevelFromPos( mbHoriz ? rPos.Y() : rPos.X() );
+    size_t nLevel = GetLevelFromPos( mbHoriz ? rPos.Y() : rPos.X() );
     if ( nLevel == SC_OL_NOLEVEL )
         return false;
 
-    sal_Int32 nLevelPos = GetLevelPos( nLevel );
-    sal_Int32 nEntryMousePos = mbHoriz ? rPos.X() : rPos.Y();
+    long nLevelPos = GetLevelPos( nLevel );
+    long nEntryMousePos = mbHoriz ? rPos.X() : rPos.Y();
 
     // --- level buttons ---
 
     if ( mnHeaderSize > 0 )
     {
-        sal_Int32 nImagePos = GetHeaderEntryPos();
+        long nImagePos = GetHeaderEntryPos();
         if ( (nImagePos <= nEntryMousePos) && (nEntryMousePos < nImagePos + SC_OL_BITMAPSIZE) )
         {
             rnLevel = nLevel;
@@ -465,7 +458,7 @@ bool ScOutlineWindow::ItemHit( const Point& rPos, sal_uInt16& rnLevel, sal_uInt1
     // --- expand/collapse buttons and expanded lines ---
 
     // search outline entries backwards
-    sal_uInt16 nEntry = pArray->GetCount( nLevel );
+    size_t nEntry = pArray->GetCount( nLevel );
     while ( nEntry )
     {
         --nEntry;
@@ -476,7 +469,7 @@ bool ScOutlineWindow::ItemHit( const Point& rPos, sal_uInt16& rnLevel, sal_uInt1
 
         if ( (nEnd >= nStartIndex) && (nStart <= nEndIndex) )
         {
-            sal_Int32 nStartPos, nEndPos, nImagePos;
+            long nStartPos, nEndPos, nImagePos;
             if ( GetEntryPos( nLevel, nEntry, nStartPos, nEndPos, nImagePos ) )
             {
                 rnLevel = nLevel;
@@ -504,21 +497,21 @@ bool ScOutlineWindow::ItemHit( const Point& rPos, sal_uInt16& rnLevel, sal_uInt1
     return false;
 }
 
-bool ScOutlineWindow::ButtonHit( const Point& rPos, sal_uInt16& rnLevel, sal_uInt16& rnEntry ) const
+bool ScOutlineWindow::ButtonHit( const Point& rPos, size_t& rnLevel, size_t& rnEntry ) const
 {
     bool bButton;
     bool bRet = ItemHit( rPos, rnLevel, rnEntry, bButton );
     return bRet && bButton;
 }
 
-bool ScOutlineWindow::LineHit( const Point& rPos, sal_uInt16& rnLevel, sal_uInt16& rnEntry ) const
+bool ScOutlineWindow::LineHit( const Point& rPos, size_t& rnLevel, size_t& rnEntry ) const
 {
     bool bButton;
     bool bRet = ItemHit( rPos, rnLevel, rnEntry, bButton );
     return bRet && !bButton;
 }
 
-void ScOutlineWindow::DoFunction( sal_uInt16 nLevel, sal_uInt16 nEntry ) const
+void ScOutlineWindow::DoFunction( size_t nLevel, size_t nEntry ) const
 {
     ScDBFunc& rFunc = *mrViewData.GetView();
     if ( nEntry == SC_OL_HEADERENTRY )
@@ -536,14 +529,14 @@ void ScOutlineWindow::DoFunction( sal_uInt16 nLevel, sal_uInt16 nEntry ) const
     }
 }
 
-void ScOutlineWindow::DoExpand( sal_uInt16 nLevel, sal_uInt16 nEntry ) const
+void ScOutlineWindow::DoExpand( size_t nLevel, size_t nEntry ) const
 {
     const ScOutlineEntry* pEntry = GetOutlineEntry( nLevel, nEntry );
     if ( pEntry && pEntry->IsHidden() )
         DoFunction( nLevel, nEntry );
 }
 
-void ScOutlineWindow::DoCollapse( sal_uInt16 nLevel, sal_uInt16 nEntry ) const
+void ScOutlineWindow::DoCollapse( size_t nLevel, size_t nEntry ) const
 {
     const ScOutlineEntry* pEntry = GetOutlineEntry( nLevel, nEntry );
     if ( pEntry && !pEntry->IsHidden() )
@@ -572,7 +565,6 @@ void ScOutlineWindow::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
 }
 
-
 // drawing --------------------------------------------------------------------
 
 void ScOutlineWindow::SetEntryAreaClipRegion()
@@ -583,20 +575,18 @@ void ScOutlineWindow::SetEntryAreaClipRegion()
 }
 
 void ScOutlineWindow::DrawLineRel(
-        sal_Int32 nLevelStart, sal_Int32 nEntryStart,
-        sal_Int32 nLevelEnd, sal_Int32 nEntryEnd )
+        long nLevelStart, long nEntryStart, long nLevelEnd, long nEntryEnd )
 {
     DrawLine( GetPoint( nLevelStart, nEntryStart ), GetPoint( nLevelEnd, nEntryEnd ) );
 }
 
 void ScOutlineWindow::DrawRectRel(
-        sal_Int32 nLevelStart, sal_Int32 nEntryStart,
-        sal_Int32 nLevelEnd, sal_Int32 nEntryEnd )
+        long nLevelStart, long nEntryStart, long nLevelEnd, long nEntryEnd )
 {
     DrawRect( GetRectangle( nLevelStart, nEntryStart, nLevelEnd, nEntryEnd ) );
 }
 
-void ScOutlineWindow::DrawImageRel( sal_Int32 nLevelPos, sal_Int32 nEntryPos, sal_uInt16 nId )
+void ScOutlineWindow::DrawImageRel( long nLevelPos, long nEntryPos, USHORT nId )
 {
     DBG_ASSERT( mpSymbols, "ScOutlineWindow::DrawImageRel - no images" );
     const Image& rImage = mpSymbols->GetImage( nId );
@@ -607,13 +597,13 @@ void ScOutlineWindow::DrawImageRel( sal_Int32 nLevelPos, sal_Int32 nEntryPos, sa
     DrawImage( aPos, rImage );
 }
 
-void ScOutlineWindow::DrawBorderRel( sal_uInt16 nLevel, sal_uInt16 nEntry, bool bPressed )
+void ScOutlineWindow::DrawBorderRel( size_t nLevel, size_t nEntry, bool bPressed )
 {
     Point aPos;
     if ( GetImagePos( nLevel, nEntry, aPos ) )
     {
         DBG_ASSERT( mpSymbols, "ScOutlineWindow::DrawBorderRel - no images" );
-        sal_uInt16 nId = bPressed ? SC_OL_IMAGE_PRESSED : SC_OL_IMAGE_NOTPRESSED;
+        USHORT nId = bPressed ? SC_OL_IMAGE_PRESSED : SC_OL_IMAGE_NOTPRESSED;
         bool bClip = (nEntry != SC_OL_HEADERENTRY);
         if ( bClip )
             SetEntryAreaClipRegion();
@@ -665,32 +655,32 @@ void ScOutlineWindow::HideFocus()
 
 void ScOutlineWindow::Paint( const Rectangle& rRect )
 {
-    sal_Int32 nEntriesSign = mbMirrorEntries ? -1 : 1;
-    sal_Int32 nLevelsSign  = mbMirrorLevels  ? -1 : 1;
+    long nEntriesSign = mbMirrorEntries ? -1 : 1;
+    long nLevelsSign  = mbMirrorLevels  ? -1 : 1;
 
     Size aSize = GetOutputSizePixel();
-    sal_Int32 nLevelEnd = (mbHoriz ? aSize.Height() : aSize.Width()) - 1;
-    sal_Int32 nEntryEnd = (mbHoriz ? aSize.Width() : aSize.Height()) - 1;
+    long nLevelEnd = (mbHoriz ? aSize.Height() : aSize.Width()) - 1;
+    long nEntryEnd = (mbHoriz ? aSize.Width() : aSize.Height()) - 1;
 
     SetLineColor( maLineColor );
-    sal_Int32 nBorderPos = mbMirrorLevels ? 0 : nLevelEnd;
+    long nBorderPos = mbMirrorLevels ? 0 : nLevelEnd;
     DrawLineRel( nBorderPos, 0, nBorderPos, nEntryEnd );
 
     const ScOutlineArray* pArray = GetOutlineArray();
     if ( !pArray ) return;
 
-    sal_uInt16 nLevelCount = GetLevelCount();
+    size_t nLevelCount = GetLevelCount();
 
     // --- draw header images ---
 
     if ( mnHeaderSize > 0 )
     {
-        sal_Int32 nEntryPos = GetHeaderEntryPos();
-        for ( sal_uInt16 nLevel = 0; nLevel < nLevelCount; ++nLevel )
-            DrawImageRel( GetLevelPos( nLevel ), nEntryPos, nLevel + 1 );
+        long nEntryPos = GetHeaderEntryPos();
+        for ( size_t nLevel = 0; nLevel < nLevelCount; ++nLevel )
+            DrawImageRel( GetLevelPos( nLevel ), nEntryPos, static_cast< USHORT >( nLevel + 1 ) );
 
         SetLineColor( maLineColor );
-        sal_Int32 nLinePos = mnHeaderPos + (mbMirrorEntries ? 0 : (mnHeaderSize - 1));
+        long nLinePos = mnHeaderPos + (mbMirrorEntries ? 0 : (mnHeaderSize - 1));
         DrawLineRel( 0, nLinePos, nLevelEnd, nLinePos );
     }
 
@@ -701,13 +691,13 @@ void ScOutlineWindow::Paint( const Rectangle& rRect )
     SCCOLROW nStartIndex, nEndIndex;
     GetVisibleRange( nStartIndex, nEndIndex );
 
-    for ( sal_uInt16 nLevel = 0; nLevel < nLevelCount - 1; ++nLevel )
+    for ( size_t nLevel = 0; nLevel + 1 < nLevelCount; ++nLevel )
     {
-        sal_Int32 nLevelPos = GetLevelPos( nLevel );
-        sal_Int32 nEntryPos1, nEntryPos2, nImagePos;
+        long nLevelPos = GetLevelPos( nLevel );
+        long nEntryPos1, nEntryPos2, nImagePos;
 
-        sal_uInt16 nEntryCount = pArray->GetCount( nLevel );
-        sal_uInt16 nEntry;
+        size_t nEntryCount = pArray->GetCount( nLevel );
+        size_t nEntry;
 
         // first draw all lines in the current level
         SetLineColor();
@@ -729,7 +719,7 @@ void ScOutlineWindow::Paint( const Rectangle& rRect )
                 if ( nStart >= nStartIndex )
                     nEntryPos1 += nEntriesSign;
                 nEntryPos2 -= 2 * nEntriesSign;
-                sal_Int32 nLinePos = nLevelPos;
+                long nLinePos = nLevelPos;
                 if ( mbMirrorLevels )
                     nLinePos += SC_OL_BITMAPSIZE - 1;   // align with right edge of bitmap
                 DrawRectRel( nLinePos, nEntryPos1, nLinePos + nLevelsSign, nEntryPos2 );
@@ -758,7 +748,7 @@ void ScOutlineWindow::Paint( const Rectangle& rRect )
             // draw, if not hidden by higher levels
             if ( bDraw )
             {
-                sal_uInt16 nImageId = pEntry->IsHidden() ? SC_OL_IMAGE_PLUS : SC_OL_IMAGE_MINUS;
+                USHORT nImageId = pEntry->IsHidden() ? SC_OL_IMAGE_PLUS : SC_OL_IMAGE_MINUS;
                 DrawImageRel( nLevelPos, nImagePos, nImageId );
             }
         }
@@ -770,13 +760,14 @@ void ScOutlineWindow::Paint( const Rectangle& rRect )
         ShowFocus();
 }
 
-
 // focus ----------------------------------------------------------------------
 
 /** Increments or decrements a value and wraps at the specified limits.
     @return  true = value wrapped. */
-bool lcl_RotateValue( sal_uInt16& rnValue, sal_uInt16 nMin, sal_uInt16 nMax, bool bForward )
+bool lcl_RotateValue( size_t& rnValue, size_t nMin, size_t nMax, bool bForward )
 {
+    DBG_ASSERT( nMin <= nMax, "lcl_RotateValue - invalid range" );
+    DBG_ASSERT( nMax < static_cast< size_t >( -1 ), "lcl_RotateValue - range overflow" );
     bool bWrap = false;
     if ( bForward )
     {
@@ -813,8 +804,11 @@ bool ScOutlineWindow::ImplMoveFocusByEntry( bool bForward, bool bFindVisible )
         return false;
 
     bool bWrapped = false;
-    sal_uInt16 nEntryCount = pArray->GetCount( mnFocusLevel );
-    sal_uInt16 nOldEntry = mnFocusEntry;
+    size_t nEntryCount = pArray->GetCount( mnFocusLevel );
+    // #i29530# entry count may be decreased after changing active sheet
+    if( mnFocusEntry >= nEntryCount )
+        mnFocusEntry = SC_OL_HEADERENTRY;
+    size_t nOldEntry = mnFocusEntry;
 
     do
     {
@@ -852,7 +846,7 @@ bool ScOutlineWindow::ImplMoveFocusByLevel( bool bForward )
         return false;
 
     bool bWrapped = false;
-    sal_uInt16 nLevelCount = GetLevelCount();
+    size_t nLevelCount = GetLevelCount();
 
     if ( mnFocusEntry == SC_OL_HEADERENTRY )
     {
@@ -866,21 +860,27 @@ bool ScOutlineWindow::ImplMoveFocusByLevel( bool bForward )
         {
             SCCOLROW nStart = pEntry->GetStart();
             SCCOLROW nEnd = pEntry->GetEnd();
-            sal_uInt16 nNewLevel = mnFocusLevel;
-            sal_uInt16 nNewEntry;
+            size_t nNewLevel = mnFocusLevel;
+            size_t nNewEntry;
 
             bool bFound = false;
             if ( bForward && (mnFocusLevel + 2 < nLevelCount) )
             {
                 // next level -> find first child entry
                 nNewLevel = mnFocusLevel + 1;
-                bFound = !!pArray->GetEntryIndexInRange( nNewLevel, nStart, nEnd, nNewEntry );
+                // TODO - change ScOutlineArray interface to size_t usage
+                USHORT nTmpEntry = 0;
+                bFound = pArray->GetEntryIndexInRange( nNewLevel, nStart, nEnd, nTmpEntry );
+                nNewEntry = nTmpEntry;
             }
             else if ( !bForward && (mnFocusLevel > 0) )
             {
                 // previous level -> find parent entry
                 nNewLevel = mnFocusLevel - 1;
-                bFound = !!pArray->GetEntryIndex( nNewLevel, nStart, nNewEntry );
+                // TODO - change ScOutlineArray interface to size_t usage
+                USHORT nTmpEntry = 0;
+                bFound = pArray->GetEntryIndex( nNewLevel, nStart, nTmpEntry );
+                nNewEntry = nTmpEntry;
             }
 
             if ( bFound && IsButtonVisible( nNewLevel, nNewEntry ) )
@@ -897,8 +897,8 @@ bool ScOutlineWindow::ImplMoveFocusByLevel( bool bForward )
 bool ScOutlineWindow::ImplMoveFocusByTabOrder( bool bForward, bool bFindVisible )
 {
     bool bRet = false;
-    sal_uInt16 nOldLevel = mnFocusLevel;
-    sal_uInt16 nOldEntry = mnFocusEntry;
+    size_t nOldLevel = mnFocusLevel;
+    size_t nOldEntry = mnFocusEntry;
 
     do
     {
@@ -965,7 +965,7 @@ void ScOutlineWindow::LoseFocus()
 
 // mouse ----------------------------------------------------------------------
 
-void ScOutlineWindow::StartMouseTracking( sal_uInt16 nLevel, sal_uInt16 nEntry )
+void ScOutlineWindow::StartMouseTracking( size_t nLevel, size_t nEntry )
 {
     mbMTActive = true;
     mnMTLevel = nLevel;
@@ -984,7 +984,7 @@ void ScOutlineWindow::MouseMove( const MouseEvent& rMEvt )
 {
     if ( IsMouseTracking() )
     {
-        sal_uInt16 nLevel, nEntry;
+        size_t nLevel, nEntry;
         bool bHit = false;
 
         if ( ButtonHit( rMEvt.GetPosPixel(), nLevel, nEntry ) )
@@ -1001,7 +1001,7 @@ void ScOutlineWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         EndMouseTracking();
 
-        sal_uInt16 nLevel, nEntry;
+        size_t nLevel, nEntry;
         if ( ButtonHit( rMEvt.GetPosPixel(), nLevel, nEntry ) )
             if ( (nLevel == mnMTLevel) && (nEntry == mnMTEntry) )
                 DoFunction( nLevel, nEntry );
@@ -1010,7 +1010,7 @@ void ScOutlineWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 void ScOutlineWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    sal_uInt16 nLevel, nEntry;
+    size_t nLevel, nEntry;
     bool bHit = ButtonHit( rMEvt.GetPosPixel(), nLevel, nEntry );
     if ( bHit )
         StartMouseTracking( nLevel, nEntry );
@@ -1041,7 +1041,7 @@ void ScOutlineWindow::KeyInput( const KeyEvent& rKEvt )
     bool bShift = (rKCode.GetModifier() == KEY_SHIFT);
     bool bCtrl = (rKCode.GetModifier() == KEY_MOD1);
 
-    sal_uInt16 nCode = rKCode.GetCode();
+    USHORT nCode = rKCode.GetCode();
     bool bUpDownKey = (nCode == KEY_UP) || (nCode == KEY_DOWN);
     bool bLeftRightKey = (nCode == KEY_LEFT) || (nCode == KEY_RIGHT);
 
@@ -1056,16 +1056,16 @@ void ScOutlineWindow::KeyInput( const KeyEvent& rKEvt )
         bool bForward = (nCode == KEY_DOWN) || (nCode == KEY_RIGHT);
         if ( mbHoriz == bLeftRightKey )
             // move inside level with LEFT/RIGHT in horizontal and with UP/DOWN in vertical
-            MoveFocusByEntry( mbMirrorEntries ? !bForward : bForward );
+            MoveFocusByEntry( bForward != mbMirrorEntries );
         else
             // move to next/prev level with LEFT/RIGHT in vertical and with UP/DOWN in horizontal
-            MoveFocusByLevel( mbMirrorLevels ? !bForward : bForward );
+            MoveFocusByLevel( bForward != mbMirrorLevels );
     }
 
     // CTRL + number
     else if ( bCtrl && (nCode >= KEY_1) && (nCode <= KEY_9) )
     {
-        sal_uInt16 nLevel = nCode - KEY_1;
+        size_t nLevel = static_cast< size_t >( nCode - KEY_1 );
         if ( nLevel < GetLevelCount() )
             DoFunction( nLevel, SC_OL_HEADERENTRY );
     }
