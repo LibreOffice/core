@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:46:33 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,10 @@ void FtFontFile::Unmap()
 // =======================================================================
 
 FtFontInfo::FtFontInfo( const ImplFontData& rFontData,
-    const ::rtl::OString& rNativeFileName, int nFaceNum, int nFontId, int nSynthetic )
+                        const ::rtl::OString& rNativeFileName,
+                        int nFaceNum, int nFontId, int nSynthetic,
+                        const unicodeKernMap* pKern
+                        )
 :
     maFontData( rFontData ),
     mpFontFile( FtFontFile::FindFontFile( rNativeFileName ) ),
@@ -262,6 +265,9 @@ FtFontInfo::FtFontInfo( const ImplFontData& rFontData,
     maFaceFT( NULL ),
     mnRefCount( 0 )
 {
+    if( pKern )
+        maUnicodeKernPairs = *pKern;
+
     maFontData.mpSysData = (void*)nFontId;
     maFontData.mpNext    = NULL;
 
@@ -335,6 +341,43 @@ void FtFontInfo::ReleaseFaceFT( FT_FaceRec_* pFaceFT )
         FT_Done_Face( pFaceFT );
         maFaceFT = NULL;
         mpFontFile->Unmap();
+    }
+}
+
+void FtFontInfo::CacheGlyphIndex( sal_Unicode cChar, int nGI ) const
+{
+    maGlyphMap[ cChar ] = nGI;
+
+    if( maUnicodeKernPairs.size() != maGlyphKernPairs.size() )
+    {
+        // move kerning to glyph kerning map
+        unicodeKernMap::const_iterator left_it =
+            maUnicodeKernPairs.find( cChar );
+        std::map< sal_Unicode, int >::const_iterator right_it;
+        for( left_it = maUnicodeKernPairs.begin(); left_it != maUnicodeKernPairs.end(); ++left_it )
+        {
+            if( left_it->first == cChar )
+            {
+                for( right_it = left_it->second.begin(); right_it != left_it->second.end(); ++right_it )
+                {
+                    int nRightGlyph = GetGlyphIndex( right_it->first );
+                    if( nRightGlyph != -1 )
+                        maGlyphKernPairs[ nGI ][ nRightGlyph ] = right_it->second;
+                }
+            }
+            else
+            {
+                int nLeftGlyph = GetGlyphIndex( left_it->first );
+                if( nLeftGlyph != -1 )
+                {
+                    for( right_it = left_it->second.begin(); right_it != left_it->second.end(); ++right_it )
+                    {
+                        if( right_it->first == cChar )
+                            maGlyphKernPairs[ nLeftGlyph ][ nGI ] = right_it->second;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -450,7 +493,10 @@ void* FreetypeManager::GetFontHandle( int nFontId )
 // -----------------------------------------------------------------------
 
 void FreetypeManager::AddFontFile( const rtl::OString& rNormalizedName,
-    int nFaceNum, int nFontId, const ImplFontData* pData )
+                                   int nFaceNum, int nFontId,
+                                   const ImplFontData* pData,
+                                   const unicodeKernMap* pKern
+                                   )
 {
     if( !rNormalizedName.getLength() )
         return;
@@ -458,7 +504,7 @@ void FreetypeManager::AddFontFile( const rtl::OString& rNormalizedName,
     if( maFontList.find( nFontId ) != maFontList.end() )
         return;
 
-    FtFontInfo* pFI = new FtFontInfo( *pData, rNormalizedName, nFaceNum, nFontId, 0 );
+    FtFontInfo* pFI = new FtFontInfo( *pData, rNormalizedName, nFaceNum, nFontId, 0, pKern );
     maFontList[ nFontId ] = pFI;
     if( mnMaxFontId < nFontId )
         mnMaxFontId = nFontId;
@@ -483,8 +529,8 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
         rcOSL = aDirItem.getFileStatus( aFileStatus );
 
         ::rtl::OUString aUSytemPath;
-        OSL_VERIFY(  osl_File_E_None
-            == ::osl::FileBase::getSystemPathFromFileURL( aFileStatus.getFileURL(), aUSytemPath ));
+        OSL_VERIFY(  osl::FileBase::E_None
+            == osl::FileBase::getSystemPathFromFileURL( aFileStatus.getFileURL(), aUSytemPath ));
         ::rtl::OString aCFileName = rtl::OUStringToOString( aUSytemPath, theEncoding );
         const char* pszFontFileName = aCFileName.getStr();
 
@@ -595,7 +641,7 @@ FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD 
     if( it != maFontList.end() )
     {
         FtFontInfo* pFI = it->second;
-        FreetypeServerFont* pFont = new FreetypeServerFont( rFSD, pFI );
+        FreetypeServerFont* pFont = new FreetypeServerFont( rFSD, pFI, pFI->GetGlyphKernMap(), pFI->GetUnicodeKernMap() );
         return pFont;
     }
 
@@ -606,8 +652,8 @@ FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD 
 // FreetypeServerFont
 // =======================================================================
 
-FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontInfo* pFI )
-:   ServerFont( rFSD ),
+FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontInfo* pFI, const glyphKernMap* pKern, const unicodeKernMap* pUniKern )
+:   ServerFont( rFSD, pKern, pUniKern ),
     mpFontInfo( pFI ),
     maFaceFT( NULL ),
     maSizeFT( NULL ),
@@ -836,7 +882,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 
             // #110641# external leading for Asian fonts.
             // The factor 0.3 has been verified during experiments.
-            const long nCJKExtLeading = 0.30 * (rTo.mnAscent + rTo.mnDescent);
+            const long nCJKExtLeading = (long)(0.30 * (double)(rTo.mnAscent + rTo.mnDescent));
 
             if ( nCJKExtLeading > rTo.mnExtLeading )
                 rTo.mnExtLeading = nCJKExtLeading - rTo.mnExtLeading;
@@ -892,23 +938,23 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGly
     case GF_ROTL:    // left
         nAngle += 900;
         bStretched = (mfStretch != 1.0);
-        aVector.x = +rMetrics.descender * mfStretch;
+        aVector.x = (long)((double)+rMetrics.descender * mfStretch);
         aVector.y = -rMetrics.ascender;
-        aMatrix.xx = -nSin / mfStretch;
-        aMatrix.yy = -nSin * mfStretch;
-        aMatrix.xy = -nCos * mfStretch;
-        aMatrix.yx = +nCos / mfStretch;
+        aMatrix.xx = (long)((double)-nSin / mfStretch);
+        aMatrix.yy = (long)((double)-nSin * mfStretch);
+        aMatrix.xy = (long)((double)-nCos * mfStretch);
+        aMatrix.yx = (long)((double)+nCos / mfStretch);
         break;
     case GF_ROTR:    // right
         nAngle -= 900;
         bStretched = (mfStretch != 1.0);
         aVector.x = -maFaceFT->glyph->metrics.horiAdvance;
-        aVector.x += (rMetrics.descender * nSin/65536.0);
-        aVector.y = -(rMetrics.descender * mfStretch * nCos/65536.0);
-        aMatrix.xx = +nSin / mfStretch;
-        aMatrix.yy = +nSin * mfStretch;
-        aMatrix.xy = +nCos * mfStretch;
-        aMatrix.yx = -nCos / mfStretch;
+        aVector.x += (long)((double)rMetrics.descender * nSin/65536.0);
+        aVector.y = -(long)((double)rMetrics.descender * mfStretch * nCos/65536.0);
+        aMatrix.xx = (long)((double)+nSin / mfStretch);
+        aMatrix.yy = (long)((double)+nSin * mfStretch);
+        aMatrix.xy = (long)((double)+nCos * mfStretch);
+        aMatrix.yx = (long)((double)-nCos / mfStretch);
         break;
     }
 
@@ -1085,9 +1131,9 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     if( nGlyphFlags & GF_ROTMASK ) {  // for bVertical rotated glyphs
         const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
 #if (FTVERSION < 2000)
-        nCharWidth = (rMetrics.height - rMetrics.descender) * mfStretch;
+        nCharWidth = (long)((double)(rMetrics.height - rMetrics.descender) * mfStretch);
 #else
-        nCharWidth = (rMetrics.height + rMetrics.descender) * mfStretch;
+        nCharWidth = (long)((double)(rMetrics.height + rMetrics.descender) * mfStretch);
 #endif
     }
     rGD.SetCharWidth( (nCharWidth + 32) >> 6 );
@@ -1426,7 +1472,10 @@ ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
 int FreetypeServerFont::GetGlyphKernValue( int nGlyphLeft, int nGlyphRight ) const
 {
     if( maSizeFT )
+
         pFTActivateSize( maSizeFT );
+    if( !FT_HAS_KERNING( maFaceFT ) || !FT_IS_SFNT( maFaceFT ) )
+        return ServerFont::GetGlyphKernValue( nGlyphLeft, nGlyphRight );
 
     FT_Vector aKernVal;
     FT_Error rcFT = FT_Get_Kerning( maFaceFT, nGlyphLeft, nGlyphRight,
@@ -1444,7 +1493,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
 
     *ppKernPairs = NULL;
     if( !FT_HAS_KERNING( maFaceFT ) || !FT_IS_SFNT( maFaceFT ) )
-        return 0;
+        return ServerFont::GetKernPairs( ppKernPairs );
 
     // first figure out which glyph pairs are involved in kerning
     ULONG nKernLength = 0;
