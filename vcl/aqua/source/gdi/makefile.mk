@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: patrick.luby $ $Date: 2000-09-22 04:26:34 $
+#   last change: $Author: pluby $ $Date: 2000-11-01 22:12:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,8 +82,6 @@ dummy:
 .ELSE		# "$(OS)"!="MACOSX"
 
 SLOFILES=	$(SLO)$/salgdi.obj	\
-            $(SLO)$/salgdi2.obj	\
-            $(SLO)$/salgdi3.obj	\
             $(SLO)$/salvd.obj	\
             $(SLO)$/salprn.obj	\
             $(SLO)$/salbmp.obj	\
@@ -91,8 +89,6 @@ SLOFILES=	$(SLO)$/salgdi.obj	\
 
 .IF "$(UPDATER)"=="YES"
 OBJFILES=	$(OBJ)$/salgdi.obj	\
-            $(OBJ)$/salgdi2.obj	\
-            $(OBJ)$/salgdi3.obj	\
             $(OBJ)$/salvd.obj	\
             $(OBJ)$/salprn.obj	\
             $(OBJ)$/salbmp.obj	\

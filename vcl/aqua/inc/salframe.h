@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:44 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,10 @@
 // - SalFrameData -
 // ----------------
 
-class SalFrameData
+struct SalFrameData
 {
 public:
-    VCLWINDOW                   mhWnd;                  // Window handle
-    HCURSOR                 mhCursor;               // cursor handle
-    HIMC                    mhDefIMEContext;        // default IME-Context
+    VCLWINDOW               mhWnd;                  // Window handle
     SalGraphics*            mpGraphics;             // current frame graphics
     SalFrame*               mpNextFrame;            // pointer to next frame
     void*                   mpInst;                 // instance handle for callback
@@ -95,10 +93,9 @@ public:
     int                     mnShowState;            // show state
     long                    mnWidth;                // client width in pixeln
     long                    mnHeight;               // client height in pixeln
-    RECT                    maFullScreenRect;       // fullscreen rect
     int                     mnFullScreenShowState;  // fullscreen restore show state
-    UINT                    mnInputLang;            // current Input Language
-    UINT                    mnInputCodePage;        // current Input CodePage
+    UINT32                  mnInputLang;            // current Input Language
+    UINT32                  mnInputCodePage;        // current Input CodePage
     USHORT                  mnStyle;                // style
     BOOL                    mbGraphics;             // is Graphics used
     BOOL                    mbCaption;              // has window a caption

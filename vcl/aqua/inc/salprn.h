@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:44 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,19 +66,13 @@
 #include <sv.h>
 #endif
 
+
 class SalGraphics;
 class SalInfoPrinter;
 
-// -----------------
+// -------------------
 // - SalDriverData -
-// -----------------
-
-// WNT3
-#define SAL_DRIVERDATA_SYSSIGN              ((ULONG)0x574E5433)
-#define SAL_DRIVERDATA_VERSION              1
-#define SAL_DEVMODE( pSetupData )           ((LPDEVMODE)((pSetupData->mpDriverData) + (((SalDriverData*)(pSetupData->mpDriverData))->mnDriverOffset)))
-
-#pragma pack( 1 )
+// -------------------
 
 struct SalDriverData
 {
@@ -87,8 +81,6 @@ struct SalDriverData
     USHORT                  mnDriverOffset;
     BYTE                    maDriverData[1];
 };
-
-#pragma pack()
 
 // -------------------
 // - SalSysQueueData -
@@ -109,9 +101,8 @@ struct SalSysQueueData
 // - SalInfoPrinterData -
 // ----------------------
 
-class SalInfoPrinterData
+struct SalInfoPrinterData
 {
-public:
     SalGraphics*            mpGraphics;             // current Printer graphics
     XubString               maDriverName;           // printer driver name
     XubString               maDeviceName;           // printer device name
@@ -119,7 +110,7 @@ public:
     ByteString              maDriverNameA;          // printer driver name
     ByteString              maDeviceNameA;          // printer device name
     ByteString              maPortNameA;            // printer port name
-    VCLVIEW                     mhDC;                   // printer hdc
+    VCLVIEW                 mhDC;                   // printer hdc
     BOOL                    mbGraphics;             // is Graphics used
     BOOL                    mbAnsi;
 };
@@ -128,13 +119,12 @@ public:
 // - SalPrinterData -
 // ------------------
 
-class SalPrinterData
+struct SalPrinterData
 {
-public:
     SalGraphics*            mpGraphics;             // current Printer graphics
     SalInfoPrinter*         mpInfoPrinter;          // pointer to the compatible InfoPrinter
     SalPrinter*             mpNextPrinter;          // next printing printer
-    VCLVIEW                     mhDC;                   // printer hdc
+    VCLVIEW                 mhDC;                   // printer hdc
     ULONG                   mnError;                // Error Code
     ULONG                   mnCopies;               // Kopien
     BOOL                    mbCollate;              // Sortierte Kopien

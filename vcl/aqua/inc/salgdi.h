@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:44 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,47 +70,18 @@
 #include <VCLWindow.h>
 #endif
 
-// -----------
-// - Defines -
-// -----------
-
-#define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
-#define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
-
 // -------------------
 // - SalGraphicsData -
 // -------------------
 
-class SalGraphicsData
+struct SalGraphicsData
 {
 public:
-    VCLVIEW                     mhDC;               // VCLVIEW
-    VCLWINDOW                   mhWnd;              // Window-Handle, when Window-Graphics
-    HPEN                    mhPen;              // Pen
-    HBRUSH                  mhBrush;            // Brush
-    HFONT                   mhFont;             // Font
-    HRGN                    mhRegion;           // Region Handle
-    HPEN                    mhDefPen;           // DefaultPen
-    HBRUSH                  mhDefBrush;         // DefaultBrush
-    HFONT                   mhDefFont;          // DefaultFont
-    HPALETTE                mhDefPal;           // DefaultPalette
-    COLORREF                mnPenColor;         // PenColor
-    COLORREF                mnBrushColor;       // BrushColor
-    COLORREF                mnTextColor;        // TextColor
-#ifdef WIN
-    RGNDATA*                mpClipRgnData;      // ClipRegion-Data
-    RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
-#endif
-    RECT*                   mpNextClipRect;     // Naechstes ClipRegion-Rect
+    VCLVIEW                 mhDC;               // VCLVIEW
+    VCLWINDOW               mhWnd;              // Window-Handle, when Window-Graphics
     BOOL                    mbFirstClipRect;    // Flag for first cliprect to insert
-#ifdef WIN
-    LOGFONTA*               mpLogFont;          // LOG-Font which is currently selected (only W9x)
-#endif
     BYTE*                   mpFontCharSets;     // All Charsets for the current font
     BYTE                    mnFontCharSetCount; // Number of Charsets of the current font; 0 - if not queried
-#ifdef WIN
-    KERNINGPAIR*            mpFontKernPairs;    // Kerning Pairs of the current Font
-#endif
     ULONG                   mnFontKernPairCount;// Number of Kerning Pairs of the current Font
     BOOL                    mbFontKernInit;     // FALSE: FontKerns must be queried
     int                     mnFontOverhang;     // Font-Overhang
@@ -126,17 +97,5 @@ public:
     BOOL                    mbXORMode;          // _every_ output with RasterOp XOR
     BOOL                    mbCalcOverhang;     // calc overhang
 };
-
-// Init/Deinit Graphics
-void    ImplSalInitGraphics( SalGraphicsData* mpData );
-void    ImplSalDeInitGraphics( SalGraphicsData* mpData );
-void    ImplUpdateSysColorEntries();
-int     ImplIsSysColorEntry( SalColor nSalColor );
-
-// -----------
-// - Defines -
-// -----------
-
-#define MAX_64KSALPOINTS    ((((USHORT)0xFFFF)-4)/sizeof(POINT))
 
 #endif // _SV_SALGDI_H

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salsys.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:26 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,12 @@
 #include <sv.h>
 #endif
 
-class SalFrame;
 
 // -----------------
 // - SalSystemData -
 // -----------------
 
-class SalSystemData
+struct SalSystemData
 {
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:44 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ class SalObject;
 // - SalInstanceData -
 // -------------------
 
-class SalInstanceData
+struct SalInstanceData
 {
 public:
     VCLWINDOW           mhComWnd;               // window, for communication (between threads and the main thread)
@@ -100,15 +100,6 @@ public:
 #endif
     USHORT              mnYieldWaitCount;       // Wait-Count
 };
-
-// --------------
-// - Prototypen -
-// --------------
-
-SalFrame* ImplSalCreateFrame( SalInstance* pInst, VCLWINDOW hWndParent, ULONG nSalFrameStyle );
-SalObject* ImplSalCreateObject( SalInstance* pInst, SalFrame* pParent );
-void ImplSalStartTimer( ULONG nMS, BOOL bMutex = FALSE );
-void ImplSalPrinterAbortJobAsync( VCLVIEW hPrnDC );
 
 #endif // __cplusplus
 

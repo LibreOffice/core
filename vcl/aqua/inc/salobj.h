@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:44 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,11 @@
 #ifndef _SV_SV_H
 #include <sv.h>
 #endif
+
+#ifndef _SV_VCLWINDOW_H
+#include <VCLWindow.h>
+#endif
+
 #ifndef _SV_SYSDATA_HXX
 #include <sysdata.hxx>
 #endif
@@ -73,18 +78,12 @@
 // - SalObjectData -
 // -----------------
 
-class SalObjectData
+struct SalObjectData
 {
-public:
-    VCLWINDOW                   mhWnd;                  // Window handle
-    VCLWINDOW                   mhWndChild;             // Child Window handle
-    VCLWINDOW                   mhLastFocusWnd;         // Child-Window, welches als letztes den Focus hatte
+    VCLWINDOW               mhWnd;                  // Window handle
+    VCLWINDOW               mhWndChild;             // Child Window handle
+    VCLWINDOW               mhLastFocusWnd;         // Child-Window, welches als letztes den Focus hatte
     SystemChildData         maSysData;              // SystemEnvData
-#ifdef WIN
-    RGNDATA*                mpClipRgnData;          // ClipRegion-Data
-    RGNDATA*                mpStdClipRgnData;       // Cache Standard-ClipRegion-Data
-#endif
-    RECT*                   mpNextClipRect;         // Naechstes ClipRegion-Rect
     BOOL                    mbFirstClipRect;        // Flag for first cliprect to insert
     SalObject*              mpNextObject;           // pointer to next object
     void*                   mpInst;                 // instance handle for callback
