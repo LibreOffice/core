@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:29:50 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,8 @@ class Desktop : public Application
             BE_UNO_SERVICEMANAGER,
             BE_UNO_SERVICE_CONFIG_MISSING,
             BE_PATHINFO_MISSING,
-            BE_USERINSTALL_FAILED
+            BE_USERINSTALL_FAILED,
+            BE_LANGUAGE_MISSING
         };
 
                                 Desktop();
@@ -154,6 +155,10 @@ class Desktop : public Application
         {
             if ( m_aBootstrapError == BE_OK )
                 m_aBootstrapError = nError;
+        }
+        BootstrapError          GetBootstrapError() const
+        {
+            return m_aBootstrapError;
         }
 
         DECL_STATIC_LINK( Desktop, AsyncTerminate, void*);
