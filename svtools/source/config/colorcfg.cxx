@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colorcfg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 11:48:12 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #ifndef _SV_EVENT_HXX
 #include <vcl/event.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 //-----------------------------------------------------------------------------
 using namespace utl;
@@ -125,7 +128,12 @@ namespace svtools
 static const sal_Char cColor[] = "/Color";
 static const sal_Char cColorSchemes[] = "ColorSchemes/";
 sal_Int32            nColorRefCount_Impl = 0;
-::osl::Mutex         aColorMutex_Impl;
+namespace
+{
+    struct ColorMutex_Impl
+        : public rtl::Static< ::osl::Mutex, ColorMutex_Impl > {};
+}
+
 ColorConfig_Impl*    ColorConfig::m_pImpl = NULL;
 
 /* -----------------------------16.01.01 15:36--------------------------------
@@ -532,7 +540,7 @@ void ColorConfig_Impl::ImplUpdateApplicationSettings()
 
 ColorConfig::ColorConfig()
 {
-    ::osl::MutexGuard aGuard( aColorMutex_Impl );
+    ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
     if ( !m_pImpl )
         m_pImpl = new ColorConfig_Impl;
     ++nColorRefCount_Impl;
@@ -543,7 +551,7 @@ ColorConfig::ColorConfig()
  ---------------------------------------------------------------------------*/
 ColorConfig::~ColorConfig()
 {
-    ::osl::MutexGuard aGuard( aColorMutex_Impl );
+    ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
     EndListening( *m_pImpl);
     if(!--nColorRefCount_Impl)
     {
