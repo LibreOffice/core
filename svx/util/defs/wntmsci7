@@ -23421,3 +23421,7 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?ForceAutoColor@Outliner@@QAEXE@Z
 ?IsForceAutoColor@Outliner@@QBEEXZ
 ?for_each@_STL@@YA?AVAccessibleTextHelper_UpdateChildBounds@accessibility@@PAU?$pair@V?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VAccessibleEditableTextPara@2@@accessibility@@URectangle@awt@star@sun@com@@@1@0V23@@Z
+?PutValue@SvxColumnItem@@MAEEABVAny@uno@star@sun@com@@E@Z
+?PutValue@SvxObjectItem@@MAEEABVAny@uno@star@sun@com@@E@Z
+?QueryValue@SvxColumnItem@@MBEEAAVAny@uno@star@sun@com@@E@Z
+?QueryValue@SvxObjectItem@@MBEEAAVAny@uno@star@sun@com@@E@Z
