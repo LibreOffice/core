@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-24 07:58:21 $
+ *  last change: $Author: mba $ $Date: 2001-08-27 07:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,19 +185,6 @@ SfxIFConfig_Impl::SfxIFConfig_Impl() :
     pObjectBars(0)
 {
     pObjectBars = new SfxObjectUIArr_Impl;
-    SfxInterface* pIFace = SFX_APP()->SfxApplication::GetInterface();
-    for (nCount=0; nCount < pIFace->pImpData->pObjectBars->Count(); nCount++)
-    {
-        SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(
-            pIFace->GetObjectBarPos(nCount),
-            pIFace->GetObjectBarResId(nCount),
-            pIFace->IsObjectBarVisible(nCount),
-            pIFace->GetObjectBarFeature(nCount),
-            SFX_INTERFACE_SFXAPP );
-
-        pObjectBars->Append(pUI);
-        pUI->pName = new String(*pIFace->GetObjectBarName(nCount));
-    }
 }
 
 //-------------------------------------------------------------------------
@@ -215,28 +202,28 @@ SfxIFConfig_Impl::~SfxIFConfig_Impl()
 //-------------------------------------------------------------------------
 void SfxIFConfig_Impl::RegisterObjectBar( USHORT nPos, const ResId& rResId, ULONG nFeature, const String *pStr )
 {
-    SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl( nPos, rResId, nFeature, pStr, SFX_INTERFACE_SFXAPP );
+    SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl( nPos, rResId, nFeature, pStr, SFX_INTERFACE_OFA_START );
     if ( pUI )
         pObjectBars->Append(pUI);
 }
 
 USHORT SfxIFConfig_Impl::GetType()
 {
-    return SFX_ITEMTYPE_INTERFACE_START + SFX_INTERFACE_SFXAPP;
+    return SFX_ITEMTYPE_INTERFACE_START + SFX_INTERFACE_OFA_START;
 }
 
 BOOL SfxIFConfig_Impl::Store(SvStream& rStream)
 {
-    rStream << nVersion;
-    rStream << pObjectBars->Count();
+    rStream << (USHORT) nVersion;
+    rStream << (USHORT) pObjectBars->Count();
     for (USHORT i=0; i<pObjectBars->Count(); i++)
     {
-        rStream << ((*pObjectBars)[i]->nPos)
-                << (*pObjectBars)[i]->aResId.GetId()
-                << (*pObjectBars)[i]->nInterfaceId
+        rStream << (USHORT) ((*pObjectBars)[i]->nPos)
+                << (USHORT) (*pObjectBars)[i]->aResId.GetId()
+                << (USHORT) (*pObjectBars)[i]->nInterfaceId
                 << (USHORT) (*pObjectBars)[i]->bVisible;
-        rStream.WriteByteString(*(*pObjectBars)[i]->pName);
-        rStream << (*pObjectBars)[i]->nFeature;
+        rStream.WriteByteString(*(*pObjectBars)[i]->pName, RTL_TEXTENCODING_UTF8 );
+        rStream << (ULONG) (*pObjectBars)[i]->nFeature;
     }
 
     return TRUE;
