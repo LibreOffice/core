@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wincomp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,241 +186,69 @@ inline HFONT GetWindowFont( HWND hWnd )
     return (HFONT)(UINT)SendMessage( hWnd, WM_GETFONT, 0, 0 );
 }
 
-// ---------------------
-// - Windows/Window NT -
-// ---------------------
-
-// Anpassung fuer Unterschiede zwischen 3.x und NT
-
 inline void SetClassCursor( HWND hWnd, HCURSOR hCursor )
 {
-#ifndef WNT
-    SetClassWord( hWnd, GCW_HCURSOR, (WORD)hCursor );
-#else
     SetClassLong( hWnd, GCL_HCURSOR, (DWORD)hCursor );
-#endif
 }
 
 inline HCURSOR GetClassCursor( HWND hWnd )
 {
-#ifndef WNT
-    return (HCURSOR)GetClassWord( hWnd, GCW_HCURSOR );
-#else
     return (HCURSOR)GetClassLong( hWnd, GCL_HCURSOR );
-#endif
 }
 
 inline void SetClassIcon( HWND hWnd, HICON hIcon )
 {
-#ifndef WNT
-    SetClassWord( hWnd, GCW_HICON, (WORD)hIcon );
-#else
     SetClassLong( hWnd, GCL_HICON, (DWORD)hIcon );
-#endif
 }
 
 inline HICON GetClassIcon( HWND hWnd )
 {
-#ifndef WNT
-    return (HICON)GetClassWord( hWnd, GCW_HICON );
-#else
     return (HICON)GetClassLong( hWnd, GCL_HICON );
-#endif
 }
 
 inline HBRUSH SetClassBrush( HWND hWnd, HBRUSH hBrush )
 {
-#ifndef WNT
-    return (HBRUSH)SetClassWord( hWnd, GCW_HBRBACKGROUND, (WORD)hBrush );
-#else
     return (HBRUSH)SetClassLong( hWnd, GCL_HBRBACKGROUND, (DWORD)hBrush );
-#endif
 }
 
 inline HBRUSH GetClassBrush( HWND hWnd )
 {
-#ifndef WNT
-    return (HBRUSH)GetClassWord( hWnd, GCW_HBRBACKGROUND );
-#else
     return (HBRUSH)GetClassLong( hWnd, GCL_HBRBACKGROUND );
-#endif
 }
 
 inline HINSTANCE GetWindowInstance( HWND hWnd )
 {
-#ifndef WNT
-    return (HINSTANCE)GetWindowWord( hWnd, GWW_HINSTANCE );
-#else
     return (HINSTANCE)GetWindowLong( hWnd, GWL_HINSTANCE );
-#endif
 }
-
-#ifndef WNT
-inline UINT CharLowerBuff( LPSTR lpStr, UINT nLen )
-{
-    return AnsiLowerBuff( lpStr, nLen );
-}
-#endif
-
-#ifndef WNT
-inline UINT CharUpperBuff( LPSTR lpStr, UINT nLen )
-{
-    return AnsiUpperBuff( lpStr, nLen );
-}
-#endif
-
-#ifndef WNT
-inline void OemToChar( LPCSTR lpStr1, LPSTR lpStr2 )
-{
-    OemToAnsi( lpStr1, lpStr2 );
-}
-#endif
-
-
-// -----------------------------------
-// - Unterschiede zwischen 16/32-Bit -
-// -----------------------------------
-
-#ifdef WIN
-#define SVWINAPI    WINAPI
-#else
-#define SVWINAPI    APIENTRY
-#endif
-
-#ifdef WIN
-#define NEARDATA    _near
-#else
-#define NEARDATA
-#endif
-
-// Zum kopieren von mehr als 64 KB
-#ifdef WIN
-inline void lmemcpy( void* pDst, const void* pSrc, ULONG nSize )
-{
-    hmemcpy( pDst, pSrc, nSize );
-}
-#else
-inline void lmemcpy( void* pDst, const void* pSrc, ULONG nSize )
-{
-    memcpy( pDst, pSrc, nSize );
-}
-#endif
-
-#ifdef WNT
-typedef LONG    WinWeight;
-#else
-typedef int     WinWeight;
-#endif
-
-
-// ----------------------------------------------------
-// - Steuerungen fuer Versionen und Laufzeit-Abfragen -
-// ----------------------------------------------------
-
-#if defined( WNT )
-#define W95_VERSION         400
-#else
-#define W95_VERSION         395
-#endif
-
-// Wenn eine 32-Bit SV Version die nur unter W95 laeuft gebildet werden soll,
-// muss nur dieses Define W40ONLY definiert werden
-#if ( WINVER >= 0x0400 )
-#define W40ONLY
-#endif
-
-// Wenn wir sowieso erst ab W95 laufen, brauchen wir auch keine
-// Laufzeit-Abfragen
-#ifdef W40ONLY
-#define W40IF
-#define W40NIF
-#define W40ELSE
-
-#else
-
-// Nur ein 32-Bit-SDK definiert WINVER >= 0x0400 und somit brauchen wir
-// diese W40-Abfragen auch nur hier. Die Abfragen, die sowohl fuer 3.1
-// als auch fuer NT gelten sind als normale if-Abfragen kodiert
-#ifdef WIN
-#define W40NIF
-#else
-#define W40IF               if ( aSalShlData.mbW40 )
-#define W40NIF              if ( !aSalShlData.mbW40 )
-#define W40ELSE             else
-#endif
-
-#endif
-
-/****************************
-
-Beispiel fuer Klammerung:
-
-#if ( WINVER >= 0x0400 )
-    W40IF
-    {
-    ... W40-Code
-    }
-    W40ELSE
-#endif
-#ifndef W40ONLY
-    {
-    ... Normaler 3.1 und NT 3.5(1)-Code
-    }
-#endif
-
-*****************************/
-
 
 // ------------------------
 // - ZMouse Erweiterungen -
 // ------------------------
 
-#if defined( WNT )
-
-#ifdef UNICODE
-#define MSH_MOUSEWHEEL L"MSWHEEL_ROLLMSG"
-#else
 #define MSH_MOUSEWHEEL "MSWHEEL_ROLLMSG"
-#endif
 
-// Default value for rolling one notch
-#ifndef WHEEL_DELTA
-#define WHEEL_DELTA      120
-#endif
-
-#ifndef WM_MOUSEWHEEL
-#define WM_MOUSEWHEEL                   0x020A
-#endif
-
-#ifndef  WHEEL_PAGESCROLL
-// signifies to scroll a page, also defined in winuser.h in the NT4.0 SDK
-#define WHEEL_PAGESCROLL  (UINT_MAX)
-#endif
-
-#ifdef UNICODE
-#define MOUSEZ_CLASSNAME  L"MouseZ"           // wheel window class
-#define MOUSEZ_TITLE      L"Magellan MSWHEEL" // wheel window title
-#else
 #define MOUSEZ_CLASSNAME  "MouseZ"            // wheel window class
 #define MOUSEZ_TITLE      "Magellan MSWHEEL"  // wheel window title
-#endif
 
 #define MSH_WHEELMODULE_CLASS (MOUSEZ_CLASSNAME)
 #define MSH_WHEELMODULE_TITLE (MOUSEZ_TITLE)
 
-#ifdef UNICODE
-#define MSH_SCROLL_LINES L"MSH_SCROLL_LINES_MSG"
-#else
 #define MSH_SCROLL_LINES "MSH_SCROLL_LINES_MSG"
-#endif
 
+#ifndef WHEEL_DELTA
+#define WHEEL_DELTA                 120
+#endif
+#ifndef WM_MOUSEWHEEL
+#define WM_MOUSEWHEEL               0x020A
+#endif
 #ifndef SPI_GETWHEELSCROLLLINES
-#define SPI_GETWHEELSCROLLLINES   104
+#define SPI_GETWHEELSCROLLLINES     104
 #endif
 #ifndef SPI_SETWHEELSCROLLLINES
-#define SPI_SETWHEELSCROLLLINES   105
+#define SPI_SETWHEELSCROLLLINES     105
 #endif
-
+#ifndef WHEEL_PAGESCROLL
+#define WHEEL_PAGESCROLL            (UINT_MAX)
 #endif
 
 
@@ -428,26 +256,46 @@ Beispiel fuer Klammerung:
 // - SystemAgent Erweiterungen -
 // -----------------------------
 
-#if ( WINVER >= 0x0400 )
 #define ENABLE_AGENT            1
 #define DISABLE_AGENT           2
 #define GET_AGENT_STATUS        3
-
-typedef int (SVWINAPI* SysAgt_Enable_PROC)( int );
-#endif
+typedef int (APIENTRY* SysAgt_Enable_PROC)( int );
 
 // ---------------------
 // - 5.0-Erweiterungen -
 // ---------------------
 
-#ifndef COLOR_HOTLIGHT
-#define COLOR_HOTLIGHT                  26
-#endif
 #ifndef COLOR_GRADIENTACTIVECAPTION
 #define COLOR_GRADIENTACTIVECAPTION     27
 #endif
 #ifndef COLOR_GRADIENTINACTIVECAPTION
 #define COLOR_GRADIENTINACTIVECAPTION   28
+#endif
+
+#ifndef SPI_GETFLATMENU
+#define SPI_GETFLATMENU     0x1022
+#endif
+#ifndef COLOR_MENUBAR
+#define COLOR_MENUBAR       30
+#endif
+#ifndef COLOR_MENUHILIGHT
+#define COLOR_MENUHILIGHT   29
+#endif
+
+#ifndef CS_DROPSHADOW
+#define CS_DROPSHADOW       0x00020000
+#endif
+
+// -------------------------------------------------------
+// MT 12/03: From winuser.h, only needed in salframe.cxx
+// Better change salframe.cxx to include winuser.h
+// -------------------------------------------------------
+
+#define WS_EX_LAYERED           0x00080000
+
+#ifndef WM_UNICHAR
+#define WM_UNICHAR              0x0109
+#define UNICODE_NOCHAR          0xFFFF
 #endif
 
 #endif // _SV_WINCOMP_HXX
