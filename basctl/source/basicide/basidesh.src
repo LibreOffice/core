@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-08 16:39:23 $
+ *  last change: $Author: kz $ $Date: 2002-05-16 14:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1251,7 +1251,7 @@ String RID_STR_COLUMN
     Text[ dutch ] = "Kol";
     Text[ chinese_simplified ] = "ε—";
     Text[ greek ] = "Στ";
-    Text[ korean ] = "μ—΄";
+    Text[ korean ] = "λ‹¨";
     Text[ turkish ] = "Sό.";
     Text[ catalan ] = "Col";
     Text[ finnish ] = "Sar";
