@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 14:08:49 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,18 @@ IMPL_IMPLEMENTATION_ID( ClassName ) \
 
 #define DECL_LISTENERMULTIPLEXER_START( ClassName, InterfaceName ) \
 class ClassName : public ListenerMultiplexerBase, public InterfaceName \
+{ \
+public: \
+    ClassName( ::cppu::OWeakObject& rSource ); \
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException); \
+    void                        SAL_CALL acquire() throw()  { ListenerMultiplexerBase::acquire(); } \
+    void                        SAL_CALL release() throw()  { ListenerMultiplexerBase::release(); } \
+    void                        SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+
+// -------------------------------------------------------------------------------------
+
+#define DECL_LISTENERMULTIPLEXER_START_DLLPUB( ClassName, InterfaceName ) \
+class TOOLKIT_DLLPUBLIC ClassName : public ListenerMultiplexerBase, public InterfaceName \
 { \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
