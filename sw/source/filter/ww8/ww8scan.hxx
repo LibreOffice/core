@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-22 16:52:06 $
+ *  last change: $Author: cmc $ $Date: 2002-11-26 12:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,7 +1059,8 @@ public:
     BYTE fLoadOverridePage :1;
     BYTE fFuturesavedUndo  :1;
     BYTE fWord97Saved      :1;
-    BYTE :3;
+    BYTE fWord2000Saved    :1;
+    BYTE :2;
 
     UINT16 chse;        // 0x14 default extended character set id for text in document stream. (overidden by chp.chse)
                         //      0 = ANSI  / 256 Macintosh character set.
@@ -1652,6 +1653,8 @@ public:
     /* Constructs default DOP suitable for exporting */
     WW8Dop();
     bool Write(SvStream& rStrm, WW8Fib& rFib) const;
+private:
+    UINT32 GetCompatabilityOptions() const;
 };
 
 class WW8PLCF_HdFt

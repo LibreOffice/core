@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-22 16:52:06 $
+ *  last change: $Author: cmc $ $Date: 2002-11-26 12:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5342,6 +5342,7 @@ WW8Fib::WW8Fib( SvStream& rSt, BYTE nWantedVersion,UINT32 nOffset )
           fLoadOverridePage = ( aVer8Bits1  & 0x04 ) >> 2;
           fFuturesavedUndo  = ( aVer8Bits1  & 0x08 ) >> 3;
           fWord97Saved      = ( aVer8Bits1  & 0x10 ) >> 4;
+          fWord2000Saved    = ( aVer8Bits1  & 0x20 ) >> 5;
 
             /*
                 speziell fuer WW8:
@@ -5390,19 +5391,20 @@ WW8Fib::WW8Fib(BYTE nVer)
     {
         fcMin = 0x400;
         wIdent = 0xa5ec;
-        nFib = nFibBack = 0xc1;
-        nProduct = 0x49;
+        nFib = 0xc2;
+        nFibBack = 0xbf;
+        nProduct = 0x204D;
 
         csw = 0x0e;     // muss das sein ???
         cfclcb = 0x6c;  //      -""-
         clw = 0x16;     //      -""-
         pnFbpChpFirst = pnFbpPapFirst = pnFbpLvcFirst = 0x000fffff;
         fExtChar = true;
+        fWord97Saved = fWord2000Saved = true;
 
         // diese Flags muessen nicht gesetzt werden; koennen aber.
         //  wMagicCreated = wMagicRevised = 0x6a62;
         //  wMagicCreatedPrivate = wMagicRevisedPrivate = 0xb3b2;
-        //  fWord97Saved = true;
     }
     else
     {
@@ -5412,7 +5414,7 @@ WW8Fib::WW8Fib(BYTE nVer)
         nProduct = 0xc02d;
     }
 
-    lid = 0x407;
+    lid = lidFE = 0x407;
 }
 
 bool WW8Fib::Write(SvStream& rStrm)
@@ -5457,6 +5459,7 @@ bool WW8Fib::Write(SvStream& rStrm)
         if( fLoadOverridePage )     nBits8 |= 0x0004;
         if( fFuturesavedUndo )      nBits8 |= 0x0008;
         if( fWord97Saved )          nBits8 |= 0x0010;
+        if( fWord2000Saved )        nBits8 |= 0x0020;
     }
     // unter Ver67 these are only reserved
     Set_UInt8( pData, nBits8  );
@@ -6404,18 +6407,41 @@ WW8Dop::WW8Dop()
     cDBCFtnEdn = /**!!**/ 0;
 }
 
+UINT32 WW8Dop::GetCompatabilityOptions() const
+{
+    UINT32 a32Bit = 0;
+    if (fNoTabForInd)                   a32Bit |= 0x00000001;
+    if (fNoSpaceRaiseLower)             a32Bit |= 0x00000002;
+    if (fSupressSpbfAfterPageBreak)     a32Bit |= 0x00000004;
+    if (fWrapTrailSpaces)               a32Bit |= 0x00000008;
+    if (fMapPrintTextColor)             a32Bit |= 0x00000010;
+    if (fNoColumnBalance)               a32Bit |= 0x00000020;
+    if (fConvMailMergeEsc)              a32Bit |= 0x00000040;
+    if (fSupressTopSpacing)             a32Bit |= 0x00000080;
+    if (fOrigWordTableRules)            a32Bit |= 0x00000100;
+    if (fTransparentMetafiles)          a32Bit |= 0x00000200;
+    if (fShowBreaksInFrames)            a32Bit |= 0x00000400;
+    if (fSwapBordersFacingPgs)          a32Bit |= 0x00000800;
+    if (fSuppressTopSpacingMac5)        a32Bit |= 0x00010000;
+    if (fTruncDxaExpand)                a32Bit |= 0x00020000;
+    if (fPrintBodyBeforeHdr)            a32Bit |= 0x00040000;
+    if (fNoLeading)                     a32Bit |= 0x00080000;
+    if (fMWSmallCaps)                   a32Bit |= 0x00200000;
+    if (fUsePrinterMetrics)             a32Bit |= 0x80000000;
+    return a32Bit;
+}
+
 bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
 {
-    INT32 nLen = 8 == rFib.nVersion ? 500 : 84;
+    INT32 nLen = 8 == rFib.nVersion ? 0x220 : 84;
     rFib.fcDop =  rStrm.Tell();
     rFib.lcbDop = nLen;
 
-    BYTE aData[ 500 ];
-    memset( aData, 0, 500 );
+    BYTE aData[ 0x220 ];
+    memset( aData, 0, 0x220 );
     BYTE* pData = aData;
 
     // dann mal die Daten auswerten
-    UINT32 a32Bit;
     UINT16 a16Bit;
     BYTE   a8Bit;
 
@@ -6539,26 +6565,7 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
 
     if( 8 == rFib.nVersion )
     {
-        a32Bit = 0;
-        if( fNoTabForInd )                  a32Bit |= 0x00000001;
-        if( fNoSpaceRaiseLower )            a32Bit |= 0x00000002;
-        if( fSupressSpbfAfterPageBreak )    a32Bit |= 0x00000004;
-        if( fWrapTrailSpaces )              a32Bit |= 0x00000008;
-        if( fMapPrintTextColor )            a32Bit |= 0x00000010;
-        if( fNoColumnBalance )              a32Bit |= 0x00000020;
-        if( fConvMailMergeEsc )             a32Bit |= 0x00000040;
-        if( fSupressTopSpacing )            a32Bit |= 0x00000080;
-        if( fOrigWordTableRules )           a32Bit |= 0x00000100;
-        if( fTransparentMetafiles )         a32Bit |= 0x00000200;
-        if( fShowBreaksInFrames )           a32Bit |= 0x00000400;
-        if( fSwapBordersFacingPgs )         a32Bit |= 0x00000800;
-        if( fSuppressTopSpacingMac5 )       a32Bit |= 0x00010000;
-        if( fTruncDxaExpand )               a32Bit |= 0x00020000;
-        if( fPrintBodyBeforeHdr )           a32Bit |= 0x00040000;
-        if( fNoLeading )                    a32Bit |= 0x00080000;
-        if( fMWSmallCaps )                  a32Bit |= 0x00200000;
-        if (fUsePrinterMetrics)             a32Bit |= 0x80000000;
-        Set_UInt32( pData, a32Bit );
+        Set_UInt32(pData, GetCompatabilityOptions());
 
         Set_UInt16( pData, adt );
 
@@ -6598,6 +6605,10 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         Set_UInt16( pData, nfcEdnRef );
         Set_UInt16( pData, hpsZoonFontPag );
         Set_UInt16( pData, dywDispPag );
+
+        //500 -> 508, Appear to be repeated here in 2000+
+        pData += 8;
+        Set_UInt32(pData, GetCompatabilityOptions());
     }
     rStrm.Write( aData, nLen );
     return 0 == rStrm.GetError();
