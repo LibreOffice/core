@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:12:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ protected:
         sal_Int32 nNum);            /// attribute value
 
     /// export an integer attribute, omit if default
-    void ProcessInteger(
+    void ProcessIntegerDef(
         enum ::xmloff::token::XMLTokenEnum eXmlName,    /// attribute token (namespace text)
         sal_Int32 nNum,             /// attribute value
         sal_Int32 nDefault);        /// default value
@@ -322,9 +322,26 @@ protected:
         sal_Bool bOmitEmpty = sal_False, /// omit attribute, if value is empty
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
+    /// export a string attribute taht gets a QName value
+    void ProcessString(
+        enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
+        sal_uInt16 nValuePrefix,
+        const ::rtl::OUString& sValue,  /// attribute value
+        sal_Bool bOmitEmpty = sal_False, /// omit attribute, if value is empty
+        sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
+
+
     /// export a string attribute, omit if default
     void ProcessString(
         enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
+        const ::rtl::OUString& sValue,  /// attribute value
+        const ::rtl::OUString& sDefault, /// default value; omit if equal
+        sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
+
+    /// export a string attribute, omit if default
+    void ProcessString(
+        enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
+        sal_uInt16 nValuePrefix,
         const ::rtl::OUString& sValue,  /// attribute value
         const ::rtl::OUString& sDefault, /// default value; omit if equal
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
