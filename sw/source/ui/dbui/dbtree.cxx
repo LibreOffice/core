@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-08-08 10:11:56 $
+ *  last change: $Author: os $ $Date: 2001-08-15 08:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,6 @@ using namespace com::sun::star::beans;
 struct SwConnectionData
 {
     OUString                sSourceName;
-    Reference<XDataSource>  xSource;
     Reference<XConnection>  xConnection;
 };
 
@@ -177,8 +176,11 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
 {
     Reference< XNameAccess > xDBContext;
     SwConnectionArr aConnections;
+    SwWrtShell& rWrtSh;
+
     public:
-        SwDBTreeList_Impl(){}
+        SwDBTreeList_Impl(SwWrtShell& rShell) :
+            rWrtSh(rShell) {}
         ~SwDBTreeList_Impl();
 
     virtual void SAL_CALL elementInserted( const ContainerEvent& Event ) throw (RuntimeException);
@@ -195,13 +197,6 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
  ---------------------------------------------------------------------------*/
 SwDBTreeList_Impl::~SwDBTreeList_Impl()
 {
-    for(USHORT i = 0; i < aConnections.Count(); i++)
-    {
-        SwConnectionDataPtr pPtr = aConnections[i];
-        Reference<XComponent> xComp(pPtr->xConnection, UNO_QUERY);
-        if(xComp.is())
-            xComp->dispose();
-    }
     Reference<XContainer> xContainer(xDBContext, UNO_QUERY);
     if(xContainer.is())
     {
@@ -235,9 +230,9 @@ void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (Ru
         if(pPtr->sSourceName == sSource)
         {
             SwConnectionDataPtr pPtr = aConnections[i];
-            Reference<XComponent> xComp(pPtr->xConnection, UNO_QUERY);
-            if(xComp.is())
-                xComp->dispose();
+//            Reference<XComponent> xComp(pPtr->xConnection, UNO_QUERY);
+//            if(xComp.is())
+//                xComp->dispose();
             aConnections.DeleteAndDestroy(i);
             break;
         }
@@ -297,23 +292,7 @@ Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const rtl::OUString& rS
     {
         SwConnectionDataPtr pPtr = new SwConnectionData();
         pPtr->sSourceName = rSourceName;
-        Reference<XConnection> xConnection;
-        try
-        {
-            Any aDBSource = xDBContext->getByName(rSourceName);
-            Reference<XCompletedConnection> xComplConnection;
-            aDBSource >>= xComplConnection;
-            pPtr->xSource = Reference<XDataSource>(xComplConnection, UNO_QUERY);
-
-            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            Reference< XInteractionHandler > xHandler(
-                xMgr->createInstance( C2U( "com.sun.star.sdb.InteractionHandler" )), UNO_QUERY);
-            pPtr->xConnection = xComplConnection->connectWithCompletion( xHandler );
-            xRet = pPtr->xConnection;
-        }
-        catch(Exception&)
-        {
-        }
+        xRet = rWrtSh.GetNewDBMgr()->RegisterConnection(pPtr->sSourceName);
         aConnections.Insert(pPtr, aConnections.Count());
     }
     return xRet;
@@ -321,7 +300,9 @@ Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const rtl::OUString& rS
 /*------------------------------------------------------------------------
  Beschreibung:
 ------------------------------------------------------------------------*/
-SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId, const String& rDefDBName, const BOOL bShowCol):
+SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId,
+                        SwWrtShell& rSh,
+                        const String& rDefDBName, const BOOL bShowCol):
 
     SvTreeListBox   (pParent, rResId),
 
@@ -333,7 +314,7 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId, const String& r
 
     sDefDBName      (rDefDBName),
     bShowColumns    (bShowCol),
-    pImpl(new SwDBTreeList_Impl),
+    pImpl(new SwDBTreeList_Impl(rSh)),
     bInitialized    (FALSE)
 {
     SetHelpId(HID_DB_SELECTION_TLB);

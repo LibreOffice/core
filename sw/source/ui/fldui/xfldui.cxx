@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfldui.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-07-18 13:24:40 $
+ *  last change: $Author: os $ $Date: 2001-08-15 08:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,18 @@
 #ifndef _FLDMGR_HXX
 #include <fldmgr.hxx>
 #endif
+#ifndef _DBMGR_HXX
+#include <dbmgr.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>        // Actives Fenster
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
 
 
 using namespace com::sun::star::uno;
@@ -126,21 +138,18 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
                             BOOL bIsTable, const String& rFldName)
 {
     BOOL bNumeric = TRUE;
-    if( !GetDBContext().is() || !xDBContext->hasByName(rDBName) )
+
+    SwNewDBMgr* pDBMgr = pWrtShell ? pWrtShell->GetNewDBMgr() :
+                            ::GetActiveView()->GetWrtShell().GetNewDBMgr();
+
+    ::rtl::OUString sSource(rDBName);
+    Reference< XConnection> xConnection =
+                    pDBMgr->RegisterConnection(sSource);
+
+    if( !xConnection.is() )
         return bNumeric;
 
-    Any aDBSource = xDBContext->getByName(rDBName);
-    Reference<XDataSource>* pxSource = (Reference<XDataSource>*)aDBSource.getValue();
-    Reference<XConnection> xConnection;
-    try
-    {
-        rtl::OUString sDummy;
-        xConnection = (*pxSource)->getConnection(sDummy, sDummy);
-    }
-    catch(Exception&)
-    {}
     Reference<XColumnsSupplier> xColsSupplier;
-
     if(bIsTable)
     {
         Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 13:49:54 $
+ *  last change: $Author: os $ $Date: 2001-08-15 08:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,7 @@ class SwNewDBMgr
     SwMailMergeDlg*     pMergeDialog;
 
     SwDSParam*          FindDSData(const SwDBData& rData, BOOL bCreate);
+    SwDSParam*          FindDSConnection(const ::rtl::OUString& rSource, BOOL bCreate);
 
 
     DECL_LINK( PrtCancelHdl, Button * );
@@ -301,6 +302,10 @@ public:
     BOOL            GetColumnCnt(const String& rSourceName, const String& rTableName,
                             const String& rColumnName, sal_uInt32 nAbsRecordId, long nLanguage,
                             String& rResult, double* pNumber);
+    //create and store or find an already stored connection to a data source for use
+    //in SwFldMgr and SwDBTreeList
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
+                    RegisterConnection(::rtl::OUString& rSource);
 
     const SwDSParam* CreateDSData(const SwDBData& rData)
                         {return FindDSData(rData, TRUE);}

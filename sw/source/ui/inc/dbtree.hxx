@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-07-17 12:34:53 $
+ *  last change: $Author: os $ $Date: 2001-08-15 08:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ namespace com{namespace sun{namespace star{namespace container{
 #include <swunodef.hxx>
 #endif
 class SwDBTreeList_Impl;
+class SwWrtShell;
 class SwDBTreeList : public SvTreeListBox
 {
     Bitmap          aRootOpened;
@@ -103,7 +104,8 @@ class SwDBTreeList : public SvTreeListBox
 
 public:
      SwDBTreeList( Window* pParent, const ResId& rResId,
-                     const String& rDefDBName = aEmptyStr,
+                    SwWrtShell& rSh,
+                    const String& rDefDBName = aEmptyStr,
                     const BOOL bShowCol = FALSE );
     virtual ~SwDBTreeList();
 

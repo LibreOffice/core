@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: os $ $Date: 2001-08-02 08:30:38 $
+ *  last change: $Author: os $ $Date: 2001-08-15 08:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,7 +726,12 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
     String sOldTableName(pListBox->GetSelectEntry());
     pListBox->Clear();
     Reference< XDataSource> xSource;
-    Reference< XConnection> xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
+    SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
+    Reference< XConnection> xConnection;
+    if(pParam && pParam->xConnection.is())
+        xConnection = pParam->xConnection;
+    else
+        xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
     if(xConnection.is())
     {
         Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
@@ -769,7 +774,12 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
     if (!bAppend)
         pListBox->Clear();
     Reference< XDataSource> xSource;
-    Reference< XConnection> xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
+    SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
+    Reference< XConnection> xConnection;
+    if(pParam && pParam->xConnection.is())
+        xConnection = pParam->xConnection;
+    else
+        xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
     Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
     if(xColsSupp.is())
     {
@@ -823,6 +833,23 @@ SwNewDBMgr::SwNewDBMgr() :
  ---------------------------------------------------------------------------*/
 SwNewDBMgr::~SwNewDBMgr()
 {
+    for(USHORT nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
+    {
+        SwDSParam* pParam = aDataSourceParams[nPos];
+        if(pParam->xConnection.is())
+        {
+            try
+            {
+                Reference<XComponent> xComp(pParam->xConnection, UNO_QUERY);
+                if(xComp.is())
+                    xComp->dispose();
+            }
+            catch(RuntimeException& rEx)
+            {
+                //may be disposed already since multiple entries may have used the same connection
+            }
+        }
+    }
 }
 /*--------------------------------------------------------------------
     Beschreibung:   Serienbrief drucken
@@ -1266,7 +1293,11 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
         }
         if(!xConnection.is() || !xSource.is())
         {
-            xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
+            SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
+            if(pParam && pParam->xConnection.is())
+                xConnection = pParam->xConnection;
+            else
+                xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
             if(bUseMergeData)
                 pMergeData->xConnection = xConnection;
         }
@@ -1381,7 +1412,12 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
 {
     sal_Int32 nRet = DataType::SQLNULL;
     Reference< XDataSource> xSource;
-    Reference< XConnection> xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
+    SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
+    Reference< XConnection> xConnection;
+    if(pParam && pParam->xConnection.is())
+        xConnection = pParam->xConnection;
+    else
+        xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
     Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
     if(xColsSupp.is())
     {
@@ -1783,7 +1819,12 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
     Reference< XDataSource> xSource;
     if(pFound->xResultSet.is())
         return TRUE;
-    pFound->xConnection = SwNewDBMgr::GetConnection(rDataSource, xSource );
+    SwDSParam* pParam = FindDSConnection(rDataSource, FALSE);
+    Reference< XConnection> xConnection;
+    if(pParam && pParam->xConnection.is())
+        pFound->xConnection = pParam->xConnection;
+    else
+        pFound->xConnection = SwNewDBMgr::GetConnection(rDataSource, xSource );
     if(pFound->xConnection.is())
     {
         try
@@ -1814,6 +1855,17 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
         }
     }
     return pFound->xResultSet.is();
+}
+/* -----------------------------14.08.2001 10:26------------------------------
+
+ ---------------------------------------------------------------------------*/
+Reference< XConnection> SwNewDBMgr::RegisterConnection(OUString& rDataSource)
+{
+    SwDSParam* pFound = SwNewDBMgr::FindDSConnection(rDataSource, TRUE);
+    Reference< XDataSource> xSource;
+    if(!pFound->xConnection.is())
+        pFound->xConnection = SwNewDBMgr::GetConnection(rDataSource, xSource );
+    return pFound->xConnection;
 }
 /* -----------------------------17.07.00 15:55--------------------------------
 
@@ -1852,16 +1904,17 @@ sal_uInt32      SwNewDBMgr::GetSelectedRecordId(
  ---------------------------------------------------------------------------*/
 void    SwNewDBMgr::CloseAll(BOOL bIncludingMerge)
 {
-    for(USHORT nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
-    {
-        SwDSParam* pParam = aDataSourceParams[nPos];
-        if(bIncludingMerge || pParam != pMergeData)
-          {
-            pParam->xResultSet = 0;
-            pParam->xStatement = 0;
-            pParam->xConnection = 0;
-        }
-    }
+    //do nothing - keep all connections until the destructor
+//    for(USHORT nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
+//    {
+//        SwDSParam* pParam = aDataSourceParams[nPos];
+//        if(bIncludingMerge || pParam != pMergeData)
+//        {
+//            pParam->xResultSet = 0;
+//            pParam->xStatement = 0;
+//            pParam->xConnection = 0;
+//        }
+//    }
 }
 /* -----------------------------17.07.00 14:54--------------------------------
 
@@ -1890,6 +1943,31 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, BOOL bCreate)
     }
     return pFound;
 }
+/* -----------------------------14.08.2001 10:27------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwDSParam*  SwNewDBMgr::FindDSConnection(const OUString& rDataSource, BOOL bCreate)
+{
+    SwDSParam* pFound = 0;
+    for(USHORT nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
+    {
+        SwDSParam* pParam = aDataSourceParams[nPos];
+        if(rDataSource == pParam->sDataSource)
+        {
+            pFound = pParam;
+            break;
+        }
+    }
+    if(bCreate && !pFound)
+    {
+        SwDBData aData;
+        aData.sDataSource = rDataSource;
+        pFound = new SwDSParam(aData);
+        aDataSourceParams.Insert(pFound, aDataSourceParams.Count());
+    }
+    return pFound;
+}
+
 /* -----------------------------17.07.00 14:31--------------------------------
     rDBName: <Source> + DB_DELIM + <Table>; + <Statement>
  ---------------------------------------------------------------------------*/

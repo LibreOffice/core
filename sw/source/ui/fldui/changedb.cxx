@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-21 12:27:13 $
+ *  last change: $Author: os $ $Date: 2001-08-15 08:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aUsedDBFT   (this, SW_RES(FT_USEDDB     )),
     aAvailDBFT  (this, SW_RES(FT_AVAILDB    )),
     aUsedDBTLB  (this, SW_RES(TLB_USEDDB    )),
-    aAvailDBTLB (this, SW_RES(TLB_AVAILDB   )),
+    aAvailDBTLB (this, SW_RES(TLB_AVAILDB   ), rVw.GetWrtShell()),
     aDescFT     (this, SW_RES(FT_DESC       )),
     aDocDBTextFT(this, SW_RES(FT_DOCDBTEXT  )),
     aDocDBNameFT(this, SW_RES(FT_DOCDBNAME  )),

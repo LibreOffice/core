@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: os $ $Date: 2001-08-15 08:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,30 +73,6 @@
 #include <vcl/fixed.hxx>
 #endif
 
-#include "dbtree.hxx"
-#include "swtypes.hxx"
-
-class SwWrtShell;
-class SbaObject;
-
-class SwDBSelect : public SvxStandardDialog
-{
-    SwDBTreeList    aTree;
-
-    OKButton        aOkBTN;
-    CancelButton    aCancelBTN;
-    HelpButton      aHelpBTN;
-
-    DECL_LINK(TreeSelectHdl, SvTreeListBox* pBox);
-
-    virtual void    Apply();
-
-public:
-     SwDBSelect(Window* pParent, SwWrtShell* pSh, const String& rDefDBName = aEmptyStr);
-    ~SwDBSelect();
-
-    String GetDBName() const;
-};
 
 class PrintMonitor: public ModelessDialog
 {

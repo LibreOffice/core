@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-07-18 13:24:40 $
+ *  last change: $Author: os $ $Date: 2001-08-15 08:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aTypeFT     (this, SW_RES(FT_DBTYPE)),
     aTypeLB     (this, SW_RES(LB_DBTYPE)),
     aSelectionFT(this, SW_RES(FT_DBSELECTION)),
-    aDatabaseTLB(this, SW_RES(TLB_DBLIST), aEmptyStr, FALSE),
+    aDatabaseTLB(this, SW_RES(TLB_DBLIST), ::GetActiveView()->GetWrtShell(),aEmptyStr, FALSE),
     aConditionFT(this, SW_RES(FT_DBCONDITION)),
     aConditionED(this, SW_RES(ED_DBCONDITION)),
     aValueFT    (this, SW_RES(FT_DBSETNUMBER)),
