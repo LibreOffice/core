@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 09:00:20 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ extern "C"
     {
         Bool bRet = False;
         if( (pEvent->type == GraphicsExpose || pEvent->type == NoExpose) &&
-            pEvent->xnoexpose.drawable == (XLIB_Window)pFrameWindow )
+            pEvent->xnoexpose.drawable == (Drawable)pFrameWindow )
         {
             bRet = True;
         }
@@ -414,18 +414,20 @@ extern "C"
 }
 
 
-static void YieldGraphicsExpose( Display* pDisplay, SalFrame* pFrame, XLIB_Window aWindow )
+void X11SalGraphics::YieldGraphicsExpose( Display* pDisplay, SalFrame* pFrame, Drawable aWindow )
 {
     XEvent aEvent;
-    while( XCheckTypedWindowEvent( pDisplay, aWindow, Expose, &aEvent ) )
-    {
-        SalPaintEvent aPEvt;
-        aPEvt.mnBoundX          = aEvent.xexpose.x;
-        aPEvt.mnBoundY          = aEvent.xexpose.y;
-        aPEvt.mnBoundWidth      = aEvent.xexpose.width+1;
-        aPEvt.mnBoundHeight     = aEvent.xexpose.height+1;
-        pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
-    }
+
+    if( pFrame )
+        while( XCheckTypedWindowEvent( pDisplay, aWindow, Expose, &aEvent ) )
+        {
+            SalPaintEvent aPEvt;
+            aPEvt.mnBoundX          = aEvent.xexpose.x;
+            aPEvt.mnBoundY          = aEvent.xexpose.y;
+            aPEvt.mnBoundWidth      = aEvent.xexpose.width+1;
+            aPEvt.mnBoundHeight     = aEvent.xexpose.height+1;
+            pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
+        }
 
     do
     {
@@ -433,12 +435,15 @@ static void YieldGraphicsExpose( Display* pDisplay, SalFrame* pFrame, XLIB_Windo
         if( aEvent.type == NoExpose )
             break;
 
-        SalPaintEvent aPEvt;
-        aPEvt.mnBoundX          = aEvent.xgraphicsexpose.x;
-        aPEvt.mnBoundY          = aEvent.xgraphicsexpose.y;
-        aPEvt.mnBoundWidth      = aEvent.xgraphicsexpose.width+1;
-        aPEvt.mnBoundHeight     = aEvent.xgraphicsexpose.height+1;
-        pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
+        if( pFrame )
+        {
+            SalPaintEvent aPEvt;
+            aPEvt.mnBoundX          = aEvent.xgraphicsexpose.x;
+            aPEvt.mnBoundY          = aEvent.xgraphicsexpose.y;
+            aPEvt.mnBoundWidth      = aEvent.xgraphicsexpose.width+1;
+            aPEvt.mnBoundHeight     = aEvent.xgraphicsexpose.height+1;
+            pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
+        }
     } while( aEvent.xgraphicsexpose.count != 0 );
 }
 
@@ -633,6 +638,7 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
                    pPosAry->mnDestX, pPosAry->mnDestY,
                    pPosAry->mnDestWidth, pPosAry->mnDestHeight,
                    0, 0 );
+
         DBG_TESTTRANS( aBG );
 
         // mask out paint bitmap in pixmap #1 (transparent areas 0)
@@ -671,6 +677,8 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
                    0, 0,
                    pPosAry->mnDestWidth, pPosAry->mnDestHeight,
                    pPosAry->mnDestX, pPosAry->mnDestY );
+        YieldGraphicsExpose( pXDisp, bWindow_ ? m_pFrame : NULL, aDrawable );
+
         DBG_TESTTRANS( aBG );
 
         bXORMode_ = bOldXORMode;
