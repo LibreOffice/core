@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 18:20:50 $
+ *  last change: $Author: oj $ $Date: 2002-08-13 11:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,14 +190,14 @@ namespace dbaccess
         // fire a notification for all that are listening on column::VALUE property
         void firePropertyChange(const ORowSetMatrix::iterator& _rOldRow);
         virtual void fireRowcount() { }                             // fire if rowcount changed
-        virtual sal_Bool notifyAllListenersRowBeforeChange(const ::com::sun::star::sdb::RowChangeEvent &rEvt)
+        virtual sal_Bool notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::sdb::RowChangeEvent &rEvt)
             {return sal_True; }                                                     // fire if rowcount changed
-        virtual void notifyAllListenersRowChanged(const ::com::sun::star::sdb::RowChangeEvent &rEvt)
+        virtual void notifyAllListenersRowChanged(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::sdb::RowChangeEvent &rEvt)
             {}                                                      // notify row changed
-        virtual sal_Bool notifyAllListenersCursorBeforeMove() {return sal_True; }       // notify row changed
+        virtual sal_Bool notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard) {return sal_True; }       // notify row changed
 
-        virtual void notifyAllListenersCursorMoved() { }            // notify cursor moved
-        virtual void notifyAllListeners() { }                       // notify all that rowset changed
+        virtual void notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard) { }            // notify cursor moved
+        virtual void notifyAllListeners(::osl::ResettableMutexGuard& _rGuard) { }                       // notify all that rowset changed
         // check if the insert must be canceled
         virtual void checkInsert() = 0;
 
@@ -208,7 +208,7 @@ namespace dbaccess
         // returns a value of a column of the current row
         const connectivity::ORowSetValue& getValue(sal_Int32 columnIndex);
         // sets the current and the bookmark
-        void setCurrentRow(sal_Bool _bMoved,const ORowSetMatrix::iterator& _rOldValues);
+        void setCurrentRow(sal_Bool _bMoved,const ORowSetMatrix::iterator& _rOldValues,::osl::ResettableMutexGuard& _rGuard);
         void checkPositioningAllowed() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         // checks  if the cache is null
         void checkCache();

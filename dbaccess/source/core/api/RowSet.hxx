@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 07:02:26 $
+ *  last change: $Author: oj $ $Date: 2002-08-13 11:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,11 +221,11 @@ namespace dbaccess
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
 
         virtual void fireRowcount();
-        virtual sal_Bool notifyAllListenersRowBeforeChange(const ::com::sun::star::sdb::RowChangeEvent &rEvt);
-        virtual void notifyAllListenersRowChanged(const ::com::sun::star::sdb::RowChangeEvent &rEvt);
-        virtual sal_Bool notifyAllListenersCursorBeforeMove();
-        virtual void notifyAllListenersCursorMoved();
-        virtual void notifyAllListeners();
+        virtual sal_Bool notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::sdb::RowChangeEvent &rEvt);
+        virtual void notifyAllListenersRowChanged(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::sdb::RowChangeEvent &rEvt);
+        virtual sal_Bool notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard);
+        virtual void notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard);
+        virtual void notifyAllListeners(::osl::ResettableMutexGuard& _rGuard);
         virtual void checkInsert();
 
         void fireProperty(sal_Int32 _nProperty,sal_Bool _bNew,sal_Bool _bOld);
@@ -377,7 +377,7 @@ namespace dbaccess
             connection
             @param      _rClearForNotification      mutex to clear before doing the final notifications
         */
-        void    execute_NoApprove_NoNewConn(::osl::ClearableMutexGuard& _rClearForNotification);
+        void    execute_NoApprove_NoNewConn(::osl::ResettableMutexGuard& _rClearForNotification);
 
         /** call the RowSetApproveListeners<p/>
             throws an RowSetVetoException if one of the listeners vetoed
@@ -465,6 +465,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.30  2002/07/11 07:02:26  oj
+    #100984# cancel insert after refreshRow
+
     Revision 1.29  2001/11/15 10:42:42  oj
     #94384# change &m_rMutex in m_pMutex to avoid illegal member access
 

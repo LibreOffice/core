@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 18:24:07 $
+ *  last change: $Author: oj $ $Date: 2002-08-13 11:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,7 +432,7 @@ Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     OSL_ENSURE(bookmark.hasValue(),"ORowSetBase::moveToBookmark bookmark has no value!");
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
     if(!bookmark.hasValue() || m_nResultSetType == ResultSetType::FORWARD_ONLY)
     {
@@ -447,7 +447,7 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
     checkCache();
 
     sal_Bool bRet;
-    if(bRet = notifyAllListenersCursorBeforeMove())
+    if(bRet = notifyAllListenersCursorBeforeMove(aGuard))
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
@@ -460,7 +460,7 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
         bRet = m_pCache->moveToBookmark(bookmark);
         if(bRet)
         {
-            setCurrentRow(sal_True,aOldValues);
+            setCurrentRow(sal_True,aOldValues,aGuard);
         }
         else
         {
@@ -475,13 +475,13 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
     checkPositioningAllowed();
 
 
     sal_Bool bRet;
-    if(bRet = notifyAllListenersCursorBeforeMove())
+    if(bRet = notifyAllListenersCursorBeforeMove(aGuard))
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
@@ -494,7 +494,7 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
         bRet = m_pCache->moveRelativeToBookmark(bookmark,rows);
         if(bRet)
         {
-            setCurrentRow(sal_True,aOldValues);
+            setCurrentRow(sal_True,aOldValues,aGuard);
         }
         else
             movementFailed();
@@ -569,11 +569,11 @@ Reference< XNameAccess > SAL_CALL ORowSetBase::getColumns(  ) throw(RuntimeExcep
 // XResultSet
 sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkCache();
 
     sal_Bool bRet;
-    if(bRet = notifyAllListenersCursorBeforeMove())
+    if(bRet = notifyAllListenersCursorBeforeMove(aGuard))
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
@@ -586,7 +586,7 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
         bRet = m_pCache->next();
         if(bRet || (!m_bBeforeFirst && !m_bAfterLast))
         {
-            setCurrentRow(sal_True,aOldValues);
+            setCurrentRow(sal_True,aOldValues,aGuard);
             OSL_ENSURE(!m_bBeforeFirst,"BeforeFirst is true. I don't know why?");
         }
         else
@@ -652,14 +652,14 @@ sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException)
 void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
     checkPositioningAllowed();
 
     // check if we are inserting a row
     sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
 
-    if((bWasNew || !m_bBeforeFirst) && notifyAllListenersCursorBeforeMove())
+    if((bWasNew || !m_bBeforeFirst) && notifyAllListenersCursorBeforeMove(aGuard) )
     {
         checkInsert();
 
@@ -675,7 +675,7 @@ void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
             m_aCurrentRow.setBookmark(m_aBookmark);
             m_bBeforeFirst  = !(m_bAfterLast = sal_False);
         }
-        notifyAllListenersCursorMoved();
+        notifyAllListenersCursorMoved(aGuard);
         firePropertyChange(aOldValues);
         m_aOldRow       = NULL;
     }
@@ -685,12 +685,12 @@ void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
     sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
 
-    if((bWasNew || !m_bAfterLast) && notifyAllListenersCursorBeforeMove())
+    if((bWasNew || !m_bAfterLast) && notifyAllListenersCursorBeforeMove(aGuard) )
     {
         // check if we are inserting a row
         checkInsert();
@@ -701,7 +701,7 @@ void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException)
         if(!m_bAfterLast)
         {
             m_pCache->afterLast();
-            setCurrentRow(sal_True,aOldValues);
+            setCurrentRow(sal_True,aOldValues,aGuard);
         }
         fireRowcount();
     }
@@ -710,11 +710,11 @@ void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
     sal_Bool bRet;
-    if(bRet = notifyAllListenersCursorBeforeMove())
+    if(bRet = notifyAllListenersCursorBeforeMove(aGuard) )
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
@@ -730,7 +730,7 @@ sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
 
         bRet = m_pCache->first();
         if(bRet)
-            setCurrentRow(bMoved,aOldValues);
+            setCurrentRow(bMoved,aOldValues,aGuard);
         else
         {// first goes wrong so there is no row
             movementFailed();
@@ -743,11 +743,11 @@ sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
     sal_Bool bRet;
-    if(bRet = notifyAllListenersCursorBeforeMove())
+    if(bRet = notifyAllListenersCursorBeforeMove(aGuard) )
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
@@ -764,7 +764,7 @@ sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
         bRet = m_pCache->last();
         if(bRet)
         {
-            setCurrentRow(bMoved,aOldValues);
+            setCurrentRow(bMoved,aOldValues,aGuard);
         }
         else
         { // last goes wrong so there is no row
@@ -812,12 +812,12 @@ sal_Int32 SAL_CALL ORowSetBase::getRow(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
     sal_Bool bRet = !(m_bAfterLast && row > 1); // m_bAfterLast && row > 1 we are already behind the last row
 
-    if(bRet && (bRet = notifyAllListenersCursorBeforeMove()))
+    if ( bRet && (bRet = notifyAllListenersCursorBeforeMove(aGuard)) )
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
@@ -830,7 +830,7 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
         bRet = m_pCache->absolute(row);
         if(bRet)
         {
-            setCurrentRow(sal_True,aOldValues);
+            setCurrentRow(sal_True,aOldValues,aGuard);
         }
         else
         { // absolute movement goes wrong we stand left or right side of the rows
@@ -845,7 +845,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
     if(!rows)
         return sal_True; // in this case do nothing
@@ -855,7 +855,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
     sal_Bool bRet =!((m_bAfterLast && rows > 1) || (m_bBeforeFirst && rows < 0)); // we are already behind the last row or before the first
 
 
-    if(bRet && (bRet = notifyAllListenersCursorBeforeMove()))
+    if(bRet && (bRet = notifyAllListenersCursorBeforeMove(aGuard)))
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
@@ -868,7 +868,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
         bRet = m_pCache->relative(rows);
         if(bRet)
         {
-            setCurrentRow(sal_True,aOldValues);
+            setCurrentRow(sal_True,aOldValues,aGuard);
         }
         else
         {
@@ -883,13 +883,13 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
 sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
     checkPositioningAllowed();
 
     sal_Bool bRet = !m_bBeforeFirst;
 
-    if(bRet && (bRet = notifyAllListenersCursorBeforeMove()))
+    if(bRet && (bRet = notifyAllListenersCursorBeforeMove(aGuard)))
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
@@ -902,14 +902,14 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
         bRet = m_pCache->previous();
         // if m_bBeforeFirst is false and bRet is false than we stood on the first row
         if(!m_bBeforeFirst || bRet)
-            setCurrentRow(sal_True,aOldValues);
+            setCurrentRow(sal_True,aOldValues,aGuard);
         else
             movementFailed();
     }
     return bRet;
 }
 // -----------------------------------------------------------------------------
-void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetMatrix::iterator& _rOldValues)
+void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetMatrix::iterator& _rOldValues,::osl::ResettableMutexGuard& _rGuard)
 {
     m_bBeforeFirst  = m_pCache->isBeforeFirst();
     m_bAfterLast    = m_pCache->isAfterLast();
@@ -938,7 +938,7 @@ void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetMatrix::iterator& 
     }
 
     if(_bMoved)
-        notifyAllListenersCursorMoved();
+        notifyAllListenersCursorMoved(_rGuard);
 
     firePropertyChange(_rOldValues);
 

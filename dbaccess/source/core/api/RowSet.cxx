@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 06:35:23 $
+ *  last change: $Author: oj $ $Date: 2002-08-13 11:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,54 @@ extern "C" void SAL_CALL createRegistryInfo_ORowSet()
 {
     static OMultiInstanceAutoRegistration< ORowSet > aAutoRegistration;
 }
+// -----------------------------------------------------------------------------
+#define NOTIFY_LISTERNERS(_rListeners,T,method)                                   \
+    Sequence< Reference< XInterface > > aListenerSeq = _rListeners.getElements(); \
+                                                                                  \
+    const Reference< XInterface >* pxIntBegin = aListenerSeq.getConstArray();     \
+    const Reference< XInterface >* pxInt = pxIntBegin + aListenerSeq.getLength(); \
+                                                                                  \
+    _rGuard.clear();                                                              \
+    while( pxInt > pxIntBegin )                                                   \
+    {                                                                             \
+        try                                                                       \
+        {                                                                         \
+            while( pxInt > pxIntBegin )                                           \
+            {                                                                     \
+                --pxInt;                                                          \
+                static_cast< T* >( pxInt->get() )->method(aEvt);                  \
+            }                                                                     \
+        }                                                                         \
+        catch( RuntimeException& )                                                \
+        {                                                                         \
+        }                                                                         \
+    }                                                                             \
+    _rGuard.reset();
+
+#define NOTIFY_LISTERNERS_CHECK(_rListeners,T,method)                             \
+    Sequence< Reference< XInterface > > aListenerSeq = _rListeners.getElements(); \
+                                                                                  \
+    const Reference< XInterface >* pxIntBegin = aListenerSeq.getConstArray();     \
+    const Reference< XInterface >* pxInt = pxIntBegin + aListenerSeq.getLength(); \
+                                                                                  \
+    _rGuard.clear();                                                              \
+    sal_Bool bCheck = sal_True;                                                   \
+    while( pxInt > pxIntBegin && bCheck )                                         \
+    {                                                                             \
+        try                                                                       \
+        {                                                                         \
+            while( pxInt > pxIntBegin && bCheck )                                 \
+            {                                                                     \
+                --pxInt;                                                          \
+                bCheck = static_cast< T* >( pxInt->get() )->method(aEvt);         \
+            }                                                                     \
+        }                                                                         \
+        catch( RuntimeException& )                                                \
+        {                                                                         \
+        }                                                                         \
+    }                                                                             \
+    _rGuard.reset();
+
 
 //..................................................................
 namespace dbaccess
@@ -901,7 +949,7 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
     // standing not on the insert row nor
     // when the row isn't modified
     // or the concurency is read only
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     if(!m_pCache || !m_bNew || !m_bModified || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throwFunctionSequenceException(*this);
 
@@ -912,17 +960,17 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
 
         ORowSetMatrix::iterator aOldValues = m_aCurrentRow;
         RowChangeEvent aEvt(*this,RowChangeAction::INSERT,1);
-        if(notifyAllListenersRowBeforeChange(aEvt))
+        if(notifyAllListenersRowBeforeChange(aGuard,aEvt))
         {
             ::osl::MutexGuard aCacheGuard( *m_pMutex);
             m_pCache->insertRow();
-            setCurrentRow(sal_False,aOldValues); // we don't move here
+            setCurrentRow(sal_False,aOldValues,aGuard); // we don't move here
 //          m_aBookmark     = m_pCache->getBookmark();
 //          OSL_ENSURE(m_aBookmark.hasValue(),"ORowSet::insertRow bookmark has no value!");
 //          m_aCurrentRow   = m_pCache->m_aMatrixIter;
 //          m_bAfterLast = m_bBeforeFirst = sal_False;   // we are on a valid row so this must be set to false
 
-            notifyAllListenersRowChanged(aEvt);
+            notifyAllListenersRowChanged(aGuard,aEvt);
             // fire PROPERTY_ID_ISNEW
             if(m_bNew != bOld)
                 fireProperty(PROPERTY_ID_ISNEW,m_bNew,bOld);
@@ -950,7 +998,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
     // not allowed when standing on insert row
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     if(!m_pCache || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY || m_bNew)
         throwFunctionSequenceException(*this);
 
@@ -959,13 +1007,13 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
         ORowSetMatrix::iterator aOldValues = m_aCurrentRow;
 
         RowChangeEvent aEvt(*this,RowChangeAction::UPDATE,1);
-        if(notifyAllListenersRowBeforeChange(aEvt))
+        if(notifyAllListenersRowBeforeChange(aGuard,aEvt))
         {
             m_pCache->updateRow(m_aCurrentRow.operator ->());
             m_aBookmark     = m_pCache->getBookmark();
             m_aCurrentRow   = m_pCache->m_aMatrixIter;
             m_aOldRow       = (*m_aCurrentRow);
-            notifyAllListenersRowChanged(aEvt);
+            notifyAllListenersRowChanged(aGuard,aEvt);
 
             ORowSetBase::firePropertyChange(aOldValues);
             // fire property modified
@@ -986,7 +1034,7 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
 
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     // deleteRow is not allowed when:
     // stands before the first row
     // after the last row
@@ -1004,7 +1052,7 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
     ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
     RowChangeEvent aEvt(*this,RowChangeAction::DELETE,1);
-    if(notifyAllListenersRowBeforeChange(aEvt))
+    if(notifyAllListenersRowBeforeChange(aGuard,aEvt))
     {
         m_nPosition = m_pCache->getRow();
         m_pCache->deleteRow();
@@ -1014,7 +1062,7 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
         m_aCurrentRow   = NULL;
         m_aCurrentRow.setBookmark(Any());
 
-        notifyAllListenersRowChanged(aEvt);
+        notifyAllListenersRowChanged(aGuard,aEvt);
         //  ORowSetBase::firePropertyChange(aOldValues);
         fireRowcount();
         checkInsert();
@@ -1067,47 +1115,35 @@ void SAL_CALL ORowSet::removeRowSetListener( const Reference< XRowSetListener >&
     if(listener.is())
         m_aRowsetListeners.removeInterface(listener);
 }
-// -------------------------------------------------------------------------
-void ORowSet::notifyAllListeners()
+// -----------------------------------------------------------------------------
+void ORowSet::notifyAllListeners(::osl::ResettableMutexGuard& _rGuard)
 {
     EventObject aEvt(*m_pMySelf);
-    OInterfaceIteratorHelper aIter(m_aRowsetListeners);
-    while (aIter.hasMoreElements())
-        ((XRowSetListener*)aIter.next())->rowSetChanged(aEvt);
+    NOTIFY_LISTERNERS(m_aRowsetListeners,XRowSetListener,rowSetChanged);
 }
 // -------------------------------------------------------------------------
-void ORowSet::notifyAllListenersCursorMoved()
+void ORowSet::notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard)
 {
     EventObject aEvt(*m_pMySelf);
-    OInterfaceIteratorHelper aIter(m_aRowsetListeners);
-    while (aIter.hasMoreElements())
-        ((XRowSetListener*)aIter.next())->cursorMoved(aEvt);
+    NOTIFY_LISTERNERS(m_aRowsetListeners,XRowSetListener,cursorMoved);
 }
 // -------------------------------------------------------------------------
-void ORowSet::notifyAllListenersRowChanged(const RowChangeEvent &rEvt)
+void ORowSet::notifyAllListenersRowChanged(::osl::ResettableMutexGuard& _rGuard,const RowChangeEvent &aEvt)
 {
-    OInterfaceIteratorHelper aIter(m_aRowsetListeners);
-    while (aIter.hasMoreElements())
-        ((XRowSetListener*)aIter.next())->rowChanged(rEvt);
+    NOTIFY_LISTERNERS(m_aRowsetListeners,XRowSetListener,rowChanged);
 }
 // -------------------------------------------------------------------------
-sal_Bool ORowSet::notifyAllListenersCursorBeforeMove()
+sal_Bool ORowSet::notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard)
 {
     EventObject aEvt(*m_pMySelf);
-    OInterfaceIteratorHelper aIter(m_aApproveListeners);
-    sal_Bool bReturn = sal_True;
-    while (aIter.hasMoreElements() && bReturn)
-        bReturn =((XRowSetApproveListener*)aIter.next())->approveCursorMove(aEvt);
-    return bReturn;
+    NOTIFY_LISTERNERS_CHECK(m_aApproveListeners,XRowSetApproveListener,approveCursorMove);
+    return bCheck;
 }
 // -------------------------------------------------------------------------
-sal_Bool ORowSet::notifyAllListenersRowBeforeChange(const RowChangeEvent &rEvt)
+sal_Bool ORowSet::notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rGuard,const RowChangeEvent &aEvt)
 {
-    sal_Bool bReturn = sal_True;
-    OInterfaceIteratorHelper aIter(m_aApproveListeners);
-    while (aIter.hasMoreElements() && bReturn)
-        bReturn = ((XRowSetApproveListener*)aIter.next())->approveRowChange(rEvt);
-    return bReturn;
+    NOTIFY_LISTERNERS_CHECK(m_aApproveListeners,XRowSetApproveListener,approveRowChange);
+    return bCheck;
 }
 // -------------------------------------------------------------------------
 void ORowSet::fireRowcount()
@@ -1135,10 +1171,10 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
 
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
-    if(notifyAllListenersCursorBeforeMove())
+    if(notifyAllListenersCursorBeforeMove(aGuard))
     {
         // remember old value for fire
         // check before because the resultset could be empty
@@ -1151,7 +1187,8 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 
         m_pCache->moveToInsertRow();
         m_aCurrentRow = m_pCache->m_aInsertRow;
-        notifyAllListenersCursorMoved();
+        notifyAllListenersCursorMoved(aGuard);
+
         ORowSetBase::firePropertyChange(aOldValues);
 
         // fire PROPERTY_ID_ISNEW
@@ -1164,17 +1201,17 @@ void SAL_CALL ORowSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
 {
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
 
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
     checkPositioningAllowed();
 
     if(m_pCache && m_pCache->m_bInserted)
     {
-        if(notifyAllListenersCursorBeforeMove())
+        if(notifyAllListenersCursorBeforeMove(aGuard))
         {
             positionCache();
             m_pCache->moveToCurrentRow();
-            notifyAllListenersCursorMoved();
+            notifyAllListenersCursorMoved(aGuard);
 
             checkInsert();
         }
@@ -1335,7 +1372,7 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
     // tell everybody that we will change the result set
     approveExecution();
 
-    ClearableMutexGuard aGuard( m_aMutex );
+    ResettableMutexGuard aGuard( m_aMutex );
 
 
     // create and fill a composer
@@ -1398,7 +1435,7 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
     // tell everybody that we will change the result set
     approveExecution();
 
-    ClearableMutexGuard aGuard( m_aMutex );
+    ResettableMutexGuard aGuard( m_aMutex );
     freeResources();
 
     // calc the connection to be used
@@ -1417,7 +1454,7 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
 }
 // -----------------------------------------------------------------------------
 // XRowSet
-void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotification)
+void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotification)
 {
     // now we can dispose our old connection
     ::comphelper::disposeComponent(m_xOldConnection);
@@ -1683,7 +1720,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
     checkCache();
     _rClearForNotification.clear();
     // notify the rowset listeners
-    notifyAllListeners();
+    notifyAllListeners(_rClearForNotification);
 }
 // -------------------------------------------------------------------------
 // XRowSetApproveBroadcaster
@@ -1740,12 +1777,12 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
     if(!m_pCache || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throwFunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
     Sequence< sal_Int32 > aRet;
     RowChangeEvent aEvt(*this,RowChangeAction::DELETE,rows.getLength());
     // notify the rowset listeners
-    if(notifyAllListenersRowBeforeChange(aEvt))
+    if(notifyAllListenersRowBeforeChange(aGuard,aEvt))
     {
 
         // first notify the clones so that they can save their position
@@ -1784,7 +1821,7 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
         }
 
         aEvt.Rows = aRet.getLength();
-        notifyAllListenersRowChanged(aEvt);
+        notifyAllListenersRowChanged(aGuard,aEvt);
         fireRowcount();
         // we have to check if we stand on the insert row and if so we have to reset it
         checkInsert();
