@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-23 11:01:35 $
+ *  last change: $Author: oj $ $Date: 2001-03-28 06:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,11 +102,11 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
              :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
              ,m_aDescription(this, ResId (FT_DESCRIPTION))
              ,m_aCatalogLbl(this, ResId (FT_CATALOG))
-             ,m_aCatalog(this, ResId (ET_CATALOG))
+             ,m_aCatalog(this, ResId (ET_CATALOG),_rxMetaData.is() ? _rxMetaData->getExtraNameCharacters() : ::rtl::OUString())
              ,m_aSchemaLbl(this, ResId (FT_SCHEMA))
-             ,m_aSchema(this, ResId (ET_SCHEMA))
+             ,m_aSchema(this, ResId (ET_SCHEMA),_rxMetaData.is() ? _rxMetaData->getExtraNameCharacters() : ::rtl::OUString())
              ,m_aLabel(this, ResId (FT_TITLE))
-             ,m_aTitle(this, ResId (ET_TITLE))
+             ,m_aTitle(this, ResId (ET_TITLE),_rxMetaData.is() ? _rxMetaData->getExtraNameCharacters() : ::rtl::OUString())
              ,m_aPB_OK(this, ResId( PB_OK ) )
              ,m_aPB_CANCEL(this, ResId( PB_CANCEL ))
              ,m_aPB_HELP(this, ResId( PB_HELP))
