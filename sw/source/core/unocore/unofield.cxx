@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 11:45:14 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 13:23:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1557,6 +1557,9 @@ void SwXTextField::attachToRange(
                 USHORT nUserSubType = m_pProps->bBool1 ? SUB_INVISIBLE : 0;
                 if(m_pProps->bBool2)
                     nUserSubType |= SUB_CMD;
+                if(m_pProps->bFormatIsDefault &&
+                    GSE_STRING == ((SwUserFieldType*)pFldType)->GetType())
+                        m_pProps->nFormat = -1;
                 pFld = new SwUserField((SwUserFieldType*)pFldType,
                                     nUserSubType,
                                     m_pProps->nFormat);
