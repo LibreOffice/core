@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.10 $
+*  $Revision: 1.11 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-08-12 14:01:51 $
+*  last change: $Author: dfoster $ $Date: 2003-08-19 11:38:28 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -169,10 +169,10 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             // Creates a ScriptProvider ( if one is not created allready )
             createScriptProvider( aURL.Complete );
 
-            Reference< provider::XScript > xScript =
+            Reference< provider::XScript > xFunc =
                 m_xScriptProvider->getScript( aURL.Complete );
-            validateXRef( xScript,
-                "ScriptProtocolHandler::dispatchWithNotification: validate xScript - unable to obtain XScript interface" );
+            validateXRef( xFunc,
+                "ScriptProtocolHandler::dispatchWithNotification: validate xFunc - unable to obtain XScript interface" );
 
 
             Sequence< Any > inArgs( 0 );
@@ -203,7 +203,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                    }
                }
             }
-            invokeResult = xScript->invoke( inArgs, outIndex, outArgs );
+            invokeResult = xFunc->invoke( inArgs, outIndex, outArgs );
             bSuccess = sal_True;
         }
 
@@ -355,10 +355,10 @@ throw ( RuntimeException )
         Reference< XInterface > xXinterface =
         m_xFactory->createInstanceWithArguments(
             ::rtl::OUString::createFromAscii(
-            "drafts.com.sun.star.script.framework.provider.ScriptProvider" ),
+            "drafts.com.sun.star.script.framework.provider.MasterScriptProvider" ),
             args );
         validateXRef( xXinterface,
-            "ScriptProtocolHandler::initialize: cannot get instance of ScriptProvider" );
+            "ScriptProtocolHandler::initialize: cannot get instance of MasterScriptProvider" );
         m_xScriptProvider = Reference< provider::XScriptProvider >( xXinterface,
             UNO_QUERY_THROW );
     }
