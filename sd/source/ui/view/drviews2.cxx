@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:18:12 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,6 +663,12 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         pHandoutMPage->SetAutoLayout(aNewAutoLayout, TRUE);
                     }
+                    // The list of presentation objects at the page
+                    // has been cleared by SetAutolayout().  We still
+                    // have to clear the list of removed presentation
+                    // objects held by the model which references the
+                    // former list.
+                    pDoc->ClearDeletedPresObjList();
 
                     GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
                                         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
