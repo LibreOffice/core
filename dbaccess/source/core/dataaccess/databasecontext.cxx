@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-30 07:05:14 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
@@ -120,11 +123,31 @@
 #ifndef COMPHELPER_EVENTLISTENERHELPER_HXX
 #include <comphelper/evtlistenerhlp.hxx>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XIMPORTER_HPP_
+#include <com/sun/star/document/XImporter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
+#include <com/sun/star/document/XFilter.hpp>
+#endif
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
+#endif
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
@@ -132,8 +155,6 @@ using namespace ::com::sun::star::registry;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::utl;
-
-#define REGISTRYFILE    "dbaccess.rdb"
 
 //==========================================================================
 
@@ -149,19 +170,25 @@ namespace dbaccess
 
     namespace
     {
-        Reference< XEventListener > addHelperListener(ODatabaseContext* _pDatabaseContext,const Reference< XInterface >& _xComponent)
+        //--------------------------------------------------------------------
+        const ::rtl::OUString& getDbRegisteredNamesNodeName()
         {
-            Reference< XEventListener > xListenerHelper;
-            Reference< XComponent > xComponent(_xComponent, UNO_QUERY);
-            if (xComponent.is())
-            {
-                xListenerHelper = new ::comphelper::OEventListenerHelper(static_cast<XEventListener*>(_pDatabaseContext));
-                xComponent->addEventListener(xListenerHelper);
-            }
-            else
-                DBG_ERROR("ODatabaseContext::getRegisteredObject: missing the XComponent interface!");
+            static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("org.openoffice.Office.DataAccess/RegisteredNames");
+            return s_sNodeName;
+        }
 
-            return xListenerHelper;
+        //--------------------------------------------------------------------
+        const ::rtl::OUString& getDbNameNodeName()
+        {
+            static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Name");
+            return s_sNodeName;
+        }
+
+        //--------------------------------------------------------------------
+        const ::rtl::OUString& getDbLocationNodeName()
+        {
+            static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Location");
+            return s_sNodeName;
         }
     }
 
@@ -183,14 +210,6 @@ ODatabaseContext::ODatabaseContext(const Reference< XMultiServiceFactory >  & xS
                        ,m_aContainerListeners(m_aMutex)
 {
     DBG_CTOR(ODatabaseContext,NULL);
-
-    // get our the configuration root node
-    m_aRootNode = OConfigurationTreeRoot::createWithServiceFactory(m_xServiceManager,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/DataSources")), -1, OConfigurationTreeRoot::CM_PREFER_UPDATABLE);
-
-    DBG_ASSERT(m_aRootNode.isSetNode(), "ODatabaseContext::ODatabaseContext: our node should be a set!");
-    // enable auto name encoding
-    m_aRootNode.setEscape(m_aRootNode.isSetNode());
 }
 
 //--------------------------------------------------------------------------
@@ -240,42 +259,32 @@ Sequence< ::rtl::OUString > ODatabaseContext::getSupportedServiceNames(  ) throw
     return getSupportedServiceNames_Static();
 }
 
-// ::com::sun::star::lang::XUnoTunnel
-//--------------------------------------------------------------------------
-Sequence< sal_Int8 > ODatabaseContext::getUnoTunnelImplementationId() throw (RuntimeException)
-{
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-
 //--------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODatabaseContext::createInstance(  ) throw (Exception, RuntimeException)
 {
-    return *(new ODatabaseSource(m_xServiceManager));
+    return *(new ODatabaseSource(m_xServiceManager,this));
 }
 
 //--------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODatabaseContext::createInstanceWithArguments( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
 {
-    return createInstance();
-}
+    const Any* pIter = _rArguments.getConstArray();
+    const Any* pEnd = pIter + _rArguments.getLength();
+    NamedValue aValue;
+    Reference< XInterface > xExistent;
+    ::rtl::OUString sURL;
+    for (; pIter != pEnd; ++pIter)
+    {
+        if ( (*pIter >>= aValue) && aValue.Name == INFO_POOLURL && (aValue.Value >>= sURL) )
+        {
+            xExistent = getObject(sURL);
+            break;
+        }
+    }
+    if ( !xExistent.is() )
+        xExistent = createInstance();
 
-//--------------------------------------------------------------------------
-sal_Int64 SAL_CALL ODatabaseContext::getSomething(const Sequence<sal_Int8>& _rIdentifier) throw( RuntimeException )
-{
-    if (_rIdentifier.getLength() == 16 && 0 == rtl_compareMemory(getImplementationId().getConstArray(),  _rIdentifier.getConstArray(), 16 ) )
-        return (sal_Int64)this;
-
-    return 0;
+    return xExistent;
 }
 
 // DatabaseAccessContext_Base
@@ -283,7 +292,7 @@ sal_Int64 SAL_CALL ODatabaseContext::getSomething(const Sequence<sal_Int8>& _rId
 void ODatabaseContext::disposing()
 {
     // notify our listener
-    EventObject aDisposeEvent(static_cast< XContainer* >(this));
+    com::sun::star::lang::EventObject aDisposeEvent(static_cast< XContainer* >(this));
     m_aContainerListeners.disposeAndClear(aDisposeEvent);
 
     // dispose the data sources
@@ -307,37 +316,71 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUStri
     MutexGuard aGuard(m_aMutex);
     if (DatabaseAccessContext_Base::rBHelper.bDisposed)
         throw DisposedException();
-    if(!_rName.getLength())
-        throw IllegalArgumentException(_rName, Reference<XNamingService>(this),1);
 
-    ObjectCacheIterator aExistent = m_aDatabaseObjects.find(_rName);
-    if (aExistent != m_aDatabaseObjects.end())
+    if (!_rName.getLength())
+        throw IllegalArgumentException();
+
+    ::rtl::OUString sURL;
+    // the config node where all pooling relevant info are stored under
+    OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
+        m_xServiceManager, getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
+    if ( aDbRegisteredNamesRoot.isValid() && aDbRegisteredNamesRoot.hasByName(_rName) )
     {
-        Reference< XInterface > xExistent = aExistent->second.first.get();
-        if (xExistent.is())
+        OConfigurationNode aThisDriverSettings = aDbRegisteredNamesRoot.openNode(_rName);
+        aThisDriverSettings.getNodeValue(getDbLocationNodeName()) >>= sURL;
+        sURL = SvtPathOptions().SubstituteVariable(sURL);
+
+        // check if URL is already loaded
+        Reference< XInterface > xExistent = getObject(sURL);
+        if ( xExistent.is() )
             return xExistent;
-        // the adapter still exists, but the object is already dead
-        m_aDatabaseObjects.erase(aExistent);
+    }
+    if ( !sURL.getLength() )
+        throw IllegalArgumentException();
+
+    return loadObjectFromURL(_rName,sURL);
+}
+// -----------------------------------------------------------------------------
+Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUString& _rName,const ::rtl::OUString& _sURL)
+{
+    try
+    {
+        ::ucb::Content aContent(_sURL,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+        if ( !aContent.isDocument() )
+            throw IllegalArgumentException(_sURL, Reference<XNamingService>(this),1);
+    }
+    catch(IllegalArgumentException)
+    {
+        throw;
+    }
+    catch(Exception)
+    {
+        throw IllegalArgumentException(_sURL, Reference<XNamingService>(this),1);
+        OSL_ENSURE(0,"Exception catched!");
     }
 
-    OConfigurationNode aObjectBase = getObjectNode(_rName, sal_False);
-    if (!aObjectBase.isValid())
-        throw NoSuchElementException((::rtl::OUString::createFromAscii("There is no object named ") += _rName) += ::rtl::OUString::createFromAscii("."), Reference<XNamingService>(this));
+    Reference<XImporter> xImporter(m_xServiceManager->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdb.DBFilter"))),UNO_QUERY);
+    Reference< XInterface > xExistent = *(new ODatabaseSource(*this, _rName, m_xServiceManager,this));
+    xImporter->setTargetDocument(Reference<XComponent>(xExistent,UNO_QUERY));
 
-    Reference< XInterface > xNewObject = *(new ODatabaseSource(*this, aObjectBase, _rName, m_xServiceManager));
-    // add as dispose listener to the data source object, so we know when it's dying to save the session-persistent
-    // properties
-    Reference< XEventListener > xListenerHelper = addHelperListener(this,xNewObject);
+    Reference<XFilter> xFilter(xImporter,UNO_QUERY);
 
-    m_aDatabaseObjects.insert(ObjectCache::value_type(_rName,ObjectCacheType(WeakReferenceHelper(xNewObject),WeakReferenceHelper(xListenerHelper))));
+    Sequence< PropertyValue > aArgs(1);
+    aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
+    aArgs[0].Value <<= _sURL;
+
+    Reference<XModel> xModel(xExistent,UNO_QUERY);
+    xModel->attachResource(_sURL,aArgs);
+
+    xFilter->filter(aArgs);
 
     // check if we have any session persistent properties to initialize the new object with
-    if (m_aDatasourceProperties.end() != m_aDatasourceProperties.find(_rName))
+    if ( m_aDatasourceProperties.end() != m_aDatasourceProperties.find(_sURL) )
     {   // yes, we do ....
-        Reference< XPropertySet > xDSProps(xNewObject, UNO_QUERY);
+        Reference< XPropertySet > xDSProps(xExistent, UNO_QUERY);
         if (xDSProps.is())
         {
-            const Sequence< PropertyValue >& rSessionPersistentProps = m_aDatasourceProperties[_rName];
+            const Sequence< PropertyValue >& rSessionPersistentProps = m_aDatasourceProperties[_sURL];
             const PropertyValue* pSessionPersistentProps = rSessionPersistentProps.getConstArray();
 
             for (sal_Int32 i=0; i<rSessionPersistentProps.getLength(); ++i, ++pSessionPersistentProps)
@@ -355,89 +398,43 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUStri
         else
             DBG_ERROR("ODatabaseContext::getRegisteredObject: missing an interface!");
     }
-
-
-
-    return xNewObject;
-}
-
-//--------------------------------------------------------------------------
-OConfigurationNode ODatabaseContext::getObjectNode(const ::rtl::OUString& _rTitle, sal_Bool _bCreate) throw()
-{
-    DBG_ASSERT(m_aRootNode.isValid(), "ODatabaseContext::getObjectNode : don't call without a configuration node!");
-    if (!m_aRootNode.isValid())
-        return OConfigurationNode();
-
-    // if the node exists, just return it
-    if (m_aRootNode.hasByName(_rTitle))
-        return m_aRootNode.openNode(_rTitle);
-
-    // if we're not allowed to create it -> outta here
-    if (!_bCreate)
-        return OConfigurationNode();
-
-    // create the node
-    DBG_ASSERT(m_aRootNode.isSetNode(), "ODatabaseContext::getObjectNode: the top-level context node is no set node!");
-
-    // the configuration does not support different types of operations in one transaction, so we must commit
-    // before and after we create the new node, to ensure, that every transaction we ever do contains only
-    // one type of operation (insert, remove, update)
-    OSL_VERIFY(m_aRootNode.commit());
-    OConfigurationNode aReturn = m_aRootNode.createNode(_rTitle);
-    OSL_VERIFY(m_aRootNode.commit());
-    return aReturn;
+    return xExistent;
 }
 
 //------------------------------------------------------------------------------
 void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Reference< XInterface > & _rxObject) throw( Exception, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (!m_aRootNode.isValid() || DatabaseAccessContext_Base::rBHelper.bDisposed)
+    if ( DatabaseAccessContext_Base::rBHelper.bDisposed )
         throw DisposedException();
 
-    // solaris compiler needs a construct like this and can't work with comphelper::getImplementation ...
-    Reference< XUnoTunnel > xTunnel(_rxObject, UNO_QUERY);
-    ODatabaseSource* pObjectImpl = NULL;
-    if (xTunnel.is())
-        pObjectImpl = reinterpret_cast<ODatabaseSource*> (xTunnel->getSomething(ODatabaseSource::getUnoTunnelImplementationId()));
-    if (!pObjectImpl)
-        throw IllegalArgumentException();
+    Reference< XComponent > xComponent(_rxObject,UNO_QUERY);
+    Reference<XModel> xModel(_rxObject,UNO_QUERY);
+    if ( !_rName.getLength() || !xComponent.is() || !xModel.is() )
+        throw IllegalArgumentException(::rtl::OUString(),*this,1);
 
-    if (pObjectImpl->isContainerElement())
-        // we do not allow to change an object's registration name in this way
-        throw IllegalArgumentException();
+    ::rtl::OUString sURL = xModel->getURL();
+    if ( !sURL.getLength() )
+        throw IllegalArgumentException(DBACORE_RESSTRING( RID_STR_DATASOURCE_NOT_STORED ),*this,2);
 
-    if (!_rName.getLength())
-        throw IllegalArgumentException();
+    OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
+            ::comphelper::getProcessServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
-    if (m_aRootNode.hasByName(_rName))
-        throw ElementExistException();
-
-
-    OConfigurationNode aObjectNode;
-    // here we have to check if the datasource should only be renamed
-    ::utl::OConfigurationNode aTreeNode = pObjectImpl->getRenameNode();
-    if(aTreeNode.isValid() && m_aRootNode.isValid())
+    if ( aDbRegisteredNamesRoot.isValid() )
     {
-        aObjectNode = m_aRootNode.appendNode(_rName,aTreeNode);
-        OSL_VERIFY(m_aRootNode.commit());
-        pObjectImpl->clearRenameNode();
+        OConfigurationNode aThisDriverSettings;
+        // the sub-node for this driver
+        if (aDbRegisteredNamesRoot.hasByName(_rName))
+            aThisDriverSettings = aDbRegisteredNamesRoot.openNode(_rName);
+        else
+            aThisDriverSettings = aDbRegisteredNamesRoot.createNode(_rName);
+
+        // set the values
+        aThisDriverSettings.setNodeValue(getDbNameNodeName(), makeAny(_rName));
+        aThisDriverSettings.setNodeValue(getDbLocationNodeName(), makeAny(sURL));
+        aDbRegisteredNamesRoot.commit();
     }
-    else
-        aObjectNode = getObjectNode(_rName, sal_True);
-
-    if (!aObjectNode.isValid())
-        // TODO: a better error message
-        throw InvalidRegistryException();
-
-    pObjectImpl->inserted(*this, _rName, aObjectNode.cloneAsRoot());
-    pObjectImpl->flush();
-
-    // add as dispose listener to the data source object, so we know when it's dying to save the session-persistent
-    // properties
-    Reference< XEventListener > xListenerHelper = addHelperListener(this,_rxObject);
-    // add the object to our bag
-    m_aDatabaseObjects[_rName] = ObjectCacheType(WeakReferenceHelper(_rxObject),WeakReferenceHelper(xListenerHelper));
+    registerPrivate(sURL,_rxObject);
 
     // notify our container listeners
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rName), makeAny(_rxObject), Any());
@@ -447,12 +444,12 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL ODatabaseContext::disposing( const EventObject& _rSource ) throw(RuntimeException)
+void SAL_CALL ODatabaseContext::disposing( const com::sun::star::lang::EventObject& _rSource ) throw(RuntimeException)
 {
     Reference< XInterface > xSource(_rSource.Source, UNO_QUERY);
         // the query is for normalizing, else it could be XInterface part of any XInterface-derived concrete interface
         // the object implements
-    ConstObjectCacheIterator aLookup;
+    ObjectCacheIterator aLookup;
     for (   aLookup = m_aDatabaseObjects.begin();
             aLookup != m_aDatabaseObjects.end();
             ++aLookup
@@ -501,6 +498,7 @@ void SAL_CALL ODatabaseContext::disposing( const EventObject& _rSource ) throw(R
         }
 
         m_aDatasourceProperties[aLookup->first] = aRememberProps;
+        m_aDatabaseObjects.erase(aLookup);
     }
 }
 
@@ -520,46 +518,42 @@ void SAL_CALL ODatabaseContext::removeContainerListener( const Reference< XConta
 void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exception, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (!m_aRootNode.isValid() || DatabaseAccessContext_Base::rBHelper.bDisposed)
+    if ( DatabaseAccessContext_Base::rBHelper.bDisposed )
         throw DisposedException();
-
-    OConfigurationNode aObjectNode = getObjectNode(_rName, sal_False);
-    if (!aObjectNode.isValid())
-        throw NoSuchElementException();
 
     Reference< XInterface > xExistent;
 
-    ObjectCacheIterator aExistent = m_aDatabaseObjects.find(_rName);
-    sal_Bool bAlreadyAccessed = aExistent != m_aDatabaseObjects.end();
-    if (bAlreadyAccessed)
+    OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
+        m_xServiceManager, getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE);
+    if ( aDbRegisteredNamesRoot.isValid() && aDbRegisteredNamesRoot.hasByName(_rName) )
     {
-        xExistent = aExistent->second.first.get();
-        if (xExistent.is())
-        {
-            Reference< XComponent > xComponent(xExistent, UNO_QUERY);
-            if ( xComponent.is() )
-            {
-                Reference<XEventListener> xListenerHelper(aExistent->second.second.get(),UNO_QUERY);
-                xComponent->removeEventListener(xListenerHelper);
-            }
-            // solaris compiler needs a construct like this and can't work with comphelper::getImplementation ...
-            Reference< XUnoTunnel > xTunnel(xExistent, UNO_QUERY);
-            ODatabaseSource* pObjectImpl = NULL;
-            if (xTunnel.is())
-                pObjectImpl = reinterpret_cast<ODatabaseSource*> (xTunnel->getSomething(ODatabaseSource::getUnoTunnelImplementationId()));
-            DBG_ASSERT(pObjectImpl, "ODatabaseContext::revokeObject : there is an object which is no ODatabaseSource !");
-            if (pObjectImpl)
-            {
-                pObjectImpl->setRenameNode(m_aRootNode.openNode(_rName));
-                pObjectImpl->removed();
-            }
-        }
-        m_aDatabaseObjects.erase(aExistent);
-    }
+        OConfigurationNode aThisDriverSettings = aDbRegisteredNamesRoot.openNode(_rName);
+        ::rtl::OUString sURL;
+        aThisDriverSettings.getNodeValue(getDbLocationNodeName()) >>= sURL;
+        sURL = SvtPathOptions().SubstituteVariable(sURL);
 
-    if (!m_aRootNode.removeNode(_rName))
-        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("An unexpected und unknown error occured.")), static_cast<XNamingService*>(this));
-    OSL_VERIFY(m_aRootNode.commit());
+        // check if URL is already loaded
+        ObjectCacheIterator aExistent = m_aDatabaseObjects.find(sURL);
+        if ( aExistent != m_aDatabaseObjects.end() )
+        {
+            xExistent = aExistent->second.first.get();
+            if (xExistent.is())
+            {
+                Reference< XComponent > xComponent(xExistent, UNO_QUERY);
+                if ( xComponent.is() )
+                {
+                    Reference<XEventListener> xListenerHelper(aExistent->second.second.get(),UNO_QUERY);
+                    xComponent->removeEventListener(xListenerHelper);
+                }
+            }
+            m_aDatabaseObjects.erase(aExistent);
+        }
+        if (!aDbRegisteredNamesRoot.removeNode(_rName))
+            throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("An unexpected und unknown error occured.")), static_cast<XNamingService*>(this));
+        aDbRegisteredNamesRoot.commit();
+    }
+    else
+        throw NoSuchElementException();
 
     // notify our container listeners
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rName), Any(), makeAny(xExistent));
@@ -580,7 +574,7 @@ Type ODatabaseContext::getElementType(  ) throw(RuntimeException)
 sal_Bool ODatabaseContext::hasElements(void) throw( RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (!m_aRootNode.isValid() || DatabaseAccessContext_Base::rBHelper.bDisposed)
+    if ( DatabaseAccessContext_Base::rBHelper.bDisposed)
         throw DisposedException();
 
     return 0 != getElementNames().getLength();
@@ -600,11 +594,31 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
                                                           WrappedTargetException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
+    if ( DatabaseAccessContext_Base::rBHelper.bDisposed )
+        throw DisposedException();
+    if ( !_rName.getLength() )
+        throw NoSuchElementException(_rName, *this);
+
     try
     {
-        Reference< XDataSource > xObject(getRegisteredObject(_rName), UNO_QUERY);
+        Reference< XInterface > xExistent = getObject(_rName);
+        if ( xExistent.is() )
+            return makeAny(xExistent);
+
+        try
+        {
+            xExistent = getRegisteredObject(_rName);
+        }
+        catch(Exception)
+        {
             // will throw an NoSuchElementException if neccessary
-        return makeAny(xObject);
+            if ( !xExistent.is() )
+            {
+                // try to load this as URL
+                xExistent = loadObjectFromURL(_rName,_rName);
+            }
+        }
+        return makeAny(xExistent);
     }
     catch (NoSuchElementException&)
     {   // let these exceptions through
@@ -620,7 +634,7 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
     }
     catch (Exception& e)
     {   // exceptions other than the speciafied ones -> wrap
-        throw WrappedTargetException(rtl::OUString(), *this, makeAny(e));
+        throw NoSuchElementException(_rName, *this);
     }
 }
 
@@ -628,22 +642,73 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
 Sequence< rtl::OUString > ODatabaseContext::getElementNames(void) throw( RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (!m_aRootNode.isValid() || DatabaseAccessContext_Base::rBHelper.bDisposed)
+    if ( DatabaseAccessContext_Base::rBHelper.bDisposed)
         throw DisposedException();
 
-    return m_aRootNode.getNodeNames();
+    DECLARE_STL_USTRINGACCESS_MAP( bool , TNameMap);
+    TNameMap aRet;
+
+    OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
+        m_xServiceManager, getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
+
+    Sequence< ::rtl::OUString> aSeq;
+    if ( aDbRegisteredNamesRoot.isValid() )
+    {
+        aSeq = aDbRegisteredNamesRoot.getNodeNames();
+    } // if ( aDbRegisteredNamesRoot.isValid() )
+
+    return aSeq;
 }
 
 //------------------------------------------------------------------------------
 sal_Bool ODatabaseContext::hasByName(const rtl::OUString& _rName) throw( RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    if (!m_aRootNode.isValid() || DatabaseAccessContext_Base::rBHelper.bDisposed)
+    if ( DatabaseAccessContext_Base::rBHelper.bDisposed)
         throw DisposedException();
 
-    return m_aRootNode.hasByName(_rName);
-}
+    OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
+        m_xServiceManager, getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
 
+    return aDbRegisteredNamesRoot.isValid() && aDbRegisteredNamesRoot.hasByName(_rName);
+}
+// -----------------------------------------------------------------------------
+Reference< XInterface > ODatabaseContext::getObject(const ::rtl::OUString& _rName)
+{
+    ObjectCacheIterator aFind = m_aDatabaseObjects.find(_rName);
+    Reference< XInterface > xExistent;
+    if ( aFind != m_aDatabaseObjects.end() )
+    {
+        xExistent = aFind->second.first.get();
+        if ( !xExistent.is() )
+        {
+            // the adapter still exists, but the object is already dead
+            m_aDatabaseObjects.erase(aFind);
+        }
+    }
+    return xExistent;
+}
+// -----------------------------------------------------------------------------
+void ODatabaseContext::registerPrivate(const ::rtl::OUString& _sName, const Reference< XInterface >& _xObject)
+{
+    //  OSL_ENSURE(m_aDatabaseObjects.find(_sName) == m_aDatabaseObjects.end(),"Name already exists!");
+    if ( m_aDatabaseObjects.find(_sName) == m_aDatabaseObjects.end() )
+    {
+        m_aDatabaseObjects.insert(
+                ObjectCache::value_type(_sName,
+                    ObjectCacheType(WeakReferenceHelper(_xObject),WeakReferenceHelper(*this))));
+        // add as dispose listener to the data source object, so we know when it's dying to save the session-persistent
+        // properties
+        Reference< XComponent > xComponent(_xObject,UNO_QUERY);
+        if ( xComponent.is() )
+            xComponent->addEventListener(this);
+    }
+}
+// -----------------------------------------------------------------------------
+void ODatabaseContext::nameChangePrivate(const ::rtl::OUString& _sOldName, const ::rtl::OUString& _sNewName)
+{
+    registerPrivate(_sNewName,getObject(_sOldName));
+}
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
