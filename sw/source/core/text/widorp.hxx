@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-05 09:05:03 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ public:
     void ClrOrphLines(){ nOrphLines = 0; }
 
     sal_Bool FindBreak( SwTxtFrm *pFrm, SwTxtMargin &rLine, sal_Bool bHasToFit );
-    sal_Bool WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight );
+    sal_Bool WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sal_Bool bTest );
     sal_Bool IsBreakNow( SwTxtMargin &rLine )
     {   return ( rLine.GetLineNr() > nOrphLines ) &&
                  SwTxtFrmBreak::IsBreakNow( rLine ); }
