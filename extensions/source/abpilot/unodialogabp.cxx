@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialogabp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:10:07 $
+ *  last change: $Author: fs $ $Date: 2001-09-14 09:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef EXTENSIONS_ABSPILOT_HXX
 #include "abspilot.hxx"
 #endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
 
 extern "C" void SAL_CALL createRegistryInfo_OABSPilotUno()
 {
@@ -82,6 +85,7 @@ namespace abp
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::ui::dialogs;
 
     //=====================================================================
     //= OABSPilotUno
@@ -92,11 +96,48 @@ namespace abp
     {
     }
 
+    //--------------------------------------------------------------------------
+    Any SAL_CALL OABSPilotUno::queryInterface( const Type& aType ) throw (RuntimeException)
+    {
+        Any aReturn = OABSPilotUno_DBase::queryInterface( aType );
+        return aReturn.hasValue() ? aReturn : OABSPilotUno_JBase::queryInterface( aType );
+    }
+
+    //--------------------------------------------------------------------------
+    void SAL_CALL OABSPilotUno::acquire(  ) throw ()
+    {
+        OABSPilotUno_DBase::acquire();
+    }
+
+    //--------------------------------------------------------------------------
+    void SAL_CALL OABSPilotUno::release(  ) throw ()
+    {
+        OABSPilotUno_DBase::release();
+    }
+
+    //---------------------------------------------------------------------
+    Sequence< Type > SAL_CALL OABSPilotUno::getTypes(  ) throw (RuntimeException)
+    {
+        return ::comphelper::concatSequences(
+            OABSPilotUno_DBase::getTypes(),
+            OABSPilotUno_JBase::getTypes()
+        );
+    }
+
     //---------------------------------------------------------------------
     Sequence<sal_Int8> SAL_CALL OABSPilotUno::getImplementationId(  ) throw(RuntimeException)
     {
-        static ::cppu::OImplementationId aId;
-        return aId.getImplementationId();
+        static ::cppu::OImplementationId* s_pId;
+        if ( !s_pId )
+        {
+            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+            if ( !s_pId )
+            {
+                static ::cppu::OImplementationId s_aId;
+                s_pId = &s_aId;
+            }
+        }
+        return s_pId->getImplementationId();
     }
 
     //---------------------------------------------------------------------
@@ -158,6 +199,15 @@ namespace abp
         return new OAddessBookSourcePilot(_pParent, m_xORB);
     }
 
+    //--------------------------------------------------------------------------
+    void SAL_CALL OABSPilotUno::execute( const Reference< XInterface >& xContext, const Sequence< NamedValue >& aArgs ) throw (IllegalArgumentException, RuntimeException)
+    {
+        // not interested in the context, not interested in the args
+        // -> call the execute method of the XExecutableDialog
+
+        static_cast< XExecutableDialog* >( this )->execute();
+    }
+
 //.........................................................................
 }   // namespace abp
 //.........................................................................
@@ -165,6 +215,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/01 11:10:07  fs
+ *  initial checkin - address book auto pilot - uno wrapper for the pilot
+ *
  *  Revision 1.1  2001/02/12 07:16:13  fs
  *  initial checkin - importing StarOffice 5.2 database files
  *

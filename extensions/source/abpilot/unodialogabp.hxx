@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialogabp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:10:14 $
+ *  last change: $Author: fs $ $Date: 2001-09-14 09:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,12 @@
 #ifndef _EXTENSIONS_COMPONENT_MODULE_HXX_
 #include "componentmodule.hxx"
 #endif
+#ifndef _COM_SUN_STAR_TASK_XJOB_HPP_
+#include <com/sun/star/task/XJob.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 
 //.........................................................................
 namespace abp
@@ -82,17 +88,25 @@ namespace abp
     //=====================================================================
     class OABSPilotUno;
     typedef ::svt::OGenericUnoDialog                                OABSPilotUno_DBase;
+    typedef ::cppu::ImplHelper1< ::com::sun::star::task::XJob >     OABSPilotUno_JBase;
     typedef ::comphelper::OPropertyArrayUsageHelper< OABSPilotUno > OABSPilotUno_PBase;
     /// the UNO wrapper for the address book source pilot
     class OABSPilotUno
             :public OABSPilotUno_DBase
+            ,public OABSPilotUno_JBase
             ,public OABSPilotUno_PBase
             ,public OModuleResourceClient
     {
         OABSPilotUno(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
 
     public:
+        // XInterface (disambiguation)
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL acquire(  ) throw ();
+        virtual void SAL_CALL release(  ) throw ();
+
         // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
@@ -112,6 +126,9 @@ namespace abp
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
+        // XJob
+        virtual void SAL_CALL execute( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xContext, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aArgs ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
     protected:
     // OGenericUnoDialog overridables
         virtual Dialog* createDialog(Window* _pParent);
@@ -126,6 +143,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/01 11:10:14  fs
+ *  initial checkin - address book auto pilot - uno wrapper for the pilot
+ *
  *  Revision 1.1  2001/02/12 07:16:22  fs
  *  initial checkin - importing StarOffice 5.2 database files
  *
