@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:15:35 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,8 @@ const SfxItemPropertyMap* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_SHEETLINKS),   0,  &getCppuType((uno::Reference<container::XNameAccess>*)0), 0},
         {MAP_CHAR_LEN(SC_UNO_SPELLONLINE),  0,  &getBooleanCppuType(),                                    0},
         {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),  0,  &getCppuType((sal_Int16*)0),                              0},
-        {MAP_CHAR_LEN(SC_UNO_REGEXENABLED), 0,  &getBooleanCppuType(),                  0},
+        {MAP_CHAR_LEN(SC_UNO_REGEXENABLED), 0,  &getBooleanCppuType(),                                    0},
+        {MAP_CHAR_LEN(SC_UNO_RUNTIMEUID),   0,  &getCppuType(static_cast< const rtl::OUString * >(0)),    beans::PropertyAttribute::READONLY},
 
         {0,0,0,0}
     };
@@ -1310,6 +1311,10 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         else if ( aString.EqualsAscii( SC_UNO_BASICLIBRARIES ) )
         {
             aRet <<= pDocShell->GetBasicContainer();
+        }
+        else if ( aString.EqualsAscii( SC_UNO_RUNTIMEUID ) )
+        {
+            aRet <<= getRuntimeUID();
         }
     }
 
