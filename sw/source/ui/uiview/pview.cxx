@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2002-11-27 08:55:02 $
+ *  last change: $Author: od $ $Date: 2002-12-02 07:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,8 @@
 #include <swslots.hxx>
 #endif
 
+// OD 02.12.2002 #103492#
+#define NEW_PREVIEW
 
 SFX_IMPL_VIEWFACTORY(SwPagePreView, SW_RES(STR_NONAME))
 {
@@ -861,6 +863,21 @@ void  SwPagePreViewWin::Paint( const Rectangle& rRect )
             aWinSize = GetOutputSizePixel();
 
         Rectangle aRect( LogicToPixel( rRect ));
+#ifdef NEW_PREVIEW // OD 29.11.2002 #103492#
+        {
+            nRow = BYTE( nRowCol >> 8 );
+            nCol = BYTE( nRowCol & 0xff );
+            Size aPreviewDocSize;
+            pViewShell->InitPreviewLayout( nCol, nRow, aPreviewDocSize,
+                                           true, &aWinSize );
+            aPgSize = aPreviewDocSize; // for testing
+            Point aAbsStartPt;
+            pViewShell->PreparePreviewPaint( 1, Point(0,0),
+                                             nSttPage, nVirtPage, aAbsStartPt );
+            nSelectedPage = nSttPage;
+            pViewShell->PaintPreview( nSelectedPage, PixelToLogic( aRect ) );
+        }
+#else
         nSelectedPage = nSttPage = pViewShell->CalcPreViewPage( aWinSize, nRowCol,
                                                 0, aPgSize, nVirtPage,
                                                 nSelectedPage );
@@ -868,6 +885,7 @@ void  SwPagePreViewWin::Paint( const Rectangle& rRect )
                                     aPgSize, nSelectedPage );
         nRow = BYTE( nRowCol >> 8 );
         nCol = BYTE( nRowCol & 0xff );
+#endif
         SetPagePreview(nRow, nCol);
         aScale = GetMapMode().GetScaleX();
     }
@@ -877,7 +895,11 @@ void  SwPagePreViewWin::Paint( const Rectangle& rRect )
         aMM.SetScaleX( aScale );
         aMM.SetScaleY( aScale );
         SetMapMode( aMM );
+#ifdef NEW_PREVIEW // OD 29.11.2002 #103492#
+        pViewShell->PaintPreview( nSelectedPage, rRect );
+#else
         pViewShell->PreViewPage( rRect, nRowCol, nSttPage, aPgSize, nSelectedPage );
+#endif
     }
 }
 
@@ -897,10 +919,25 @@ void SwPagePreViewWin::CalcWish( BYTE nNewRow, BYTE nNewCol )
     if( nSttPage > nLastSttPg )
         nSttPage = nLastSttPg;
 
+#ifdef NEW_PREVIEW // OD 29.11.2002 #103492#
+    {
+        nRow = BYTE( nRowCol >> 8 );
+        nCol = BYTE( nRowCol & 0xff );
+        Size aPreviewDocSize;
+        pViewShell->InitPreviewLayout( nCol, nRow, aPreviewDocSize,
+                                       true, &aWinSize );
+        aPgSize = aPreviewDocSize; // for testing
+        Point aAbsStartPt;
+        pViewShell->PreparePreviewPaint( 1, Point(0,0),
+                                         nSttPage, nVirtPage, aAbsStartPt );
+        nSelectedPage = nSttPage;
+    }
+#else
     nSelectedPage = nSttPage = pViewShell->CalcPreViewPage( aWinSize, nRowCol, nSttPage,
                                             aPgSize, nVirtPage, USHRT_MAX );
     nRow = BYTE( nRowCol >> 8 );
     nCol = BYTE( nRowCol & 0xff );
+#endif
     SetPagePreview(nRow, nCol);
     aScale = GetMapMode().GetScaleX();
 
@@ -948,7 +985,7 @@ int SwPagePreViewWin::MovePage( int eMoveMode )
                         nSelectedPage += nPages;
                         break;
     case MV_DOC_STT:    nNewSttPage = nDefSttPg;
-        nSelectedPage = nNewSttPage ? nNewSttPage : 1;
+                        nSelectedPage = nNewSttPage ? nNewSttPage : 1;
                         break;
     case MV_DOC_END:    nNewSttPage = nLastSttPg;
                         nSelectedPage = nPageCount - 1;
@@ -965,9 +1002,24 @@ int SwPagePreViewWin::MovePage( int eMoveMode )
 
     Size aSave( aPgSize );
     USHORT nRowCol = ( nRow << 8 ) + nCol;  // Zeilen / DoppelSeiten
+#ifdef NEW_PREVIEW // OD 29.11.2002 #103492#
+    {
+        nRow = BYTE( nRowCol >> 8 );
+        nCol = BYTE( nRowCol & 0xff );
+        Size aPreviewDocSize;
+        pViewShell->InitPreviewLayout( nCol, nRow, aPreviewDocSize,
+                                       true, &aWinSize );
+        aPgSize = aPreviewDocSize; // for testing
+        Point aAbsStartPt;
+        pViewShell->PreparePreviewPaint( nNewSttPage, Point(0,0),
+                                         nNewSttPage, nVirtPage, aAbsStartPt );
+        nSelectedPage = nNewSttPage;
+    }
+#else
     nNewSttPage = pViewShell->CalcPreViewPage( aWinSize, nRowCol,
                                             nNewSttPage, aPgSize, nVirtPage,
                                             nSelectedPage );
+#endif
     if( nNewSttPage == nSttPage && aPgSize == aSave )
         return FALSE;
 
@@ -1001,9 +1053,25 @@ void SwPagePreViewWin::SetWinSize( const Size& rNewSize )
 
     if( USHRT_MAX == nSttPage )
         nSelectedPage = nSttPage = GetDefSttPage();
+
+#ifdef NEW_PREVIEW // OD 29.11.2002 #103492#
+    {
+        nRow = BYTE( nRowCol >> 8 );
+        nCol = BYTE( nRowCol & 0xff );
+        Size aPreviewDocSize;
+        pViewShell->InitPreviewLayout( nCol, nRow, aPreviewDocSize,
+                                       true, &aWinSize );
+        aPgSize = aPreviewDocSize; // for testing
+        Point aAbsStartPt;
+        pViewShell->PreparePreviewPaint( nSttPage, Point(0,0),
+                                         nSttPage, nVirtPage, aAbsStartPt );
+        nSelectedPage = nSttPage;
+    }
+#else
     nSttPage = pViewShell->CalcPreViewPage( aWinSize, nRowCol,
                                             nSttPage, aPgSize,
                                             nVirtPage, nSelectedPage );
+#endif
     if(nSelectedPage < nSttPage || nSelectedPage > nSttPage + (nRow * nCol) )
     {
         nSelectedPage = nSttPage ? nSttPage : 1;
@@ -2293,9 +2361,24 @@ void  SwPagePreViewWin::GetOptimalSize( Size& rSize ) const
 
     Size aPageSize;
     USHORT nVirtPage;
+#ifdef NEW_PREVIEW // OD 29.11.2002 #103492#
+    {
+        BYTE nRow = BYTE( nRowCol >> 8 );
+        BYTE nCol = BYTE( nRowCol & 0xff );
+        Size aPreviewDocSize;
+        pViewShell->InitPreviewLayout( nCol, nRow, aPreviewDocSize,
+                                       true, &rSize );
+        aPageSize = aPreviewDocSize; // for testing
+        Point aAbsStartPt;
+        sal_uInt16 nDummy;
+        pViewShell->PreparePreviewPaint( nSttPage, Point(0,0),
+                                         nDummy, nVirtPage, aAbsStartPt );
+    }
+#else
     pViewShell->CalcPreViewPage( rSize, nRowCol,
                                     nSttPage, aPageSize,
                                     nVirtPage, USHRT_MAX );
+#endif
 
     if(aPageSize.Width() && aPageSize.Height())
     {
