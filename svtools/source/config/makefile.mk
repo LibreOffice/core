@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: jp $ $Date: 2000-11-29 12:19:48 $
+#   last change: $Author: dbo $ $Date: 2000-11-29 12:50:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,8 @@ SLOFILES = \
     $(SLO)$/menuoptions.obj				\
     $(SLO)$/options3d.obj				\
     $(SLO)$/fontoptions.obj				\
-    $(SLO)$/addxmltostorageoptions.obj
+    $(SLO)$/addxmltostorageoptions.obj	\
+    $(SLO)$/miscopt.obj
 
 # --- Targets ------------------------------------------------------
 
