@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:06:22 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@
 #include "drawdoc.hxx"
 #include "docshell.hxx"
 #include "drviewsh.hxx"
+#include "presvish.hxx"
 #include "sdoutl.hxx"
 #include "sdclient.hxx"
 #include "fuslshow.hxx"
@@ -515,7 +516,7 @@ void SdDrawViewShell::WriteFrameViewData()
     {
         if( pFuSlideShow && ( pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW ) )
             pFrameView->SetSelectedPage( pFuSlideShow->GetCurrentPage() );
-        else
+        else if( !ISA( SdPresViewShell ) )
             pFrameView->SetSelectedPage( aTabControl.GetCurPageId() - 1 );
     }
 
