@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:48:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ namespace framework{
 #define SERVICENAME_LICENSE                                     DECLARE_ASCII("com.sun.star.task.Job"                               )
 #define SERVICENAME_STATUSBARFACTORY                            DECLARE_ASCII("drafts.com.sun.star.ui.StatusBarFactory"             )
 #define SERVICENAME_UICATEGORYDESCRIPTION                       DECLARE_ASCII("com.sun.star.ui.UICategoryDescription"               )
+#define SERVICENAME_STATUSBARCONTROLLERFACTORY                  DECLARE_ASCII("com.sun.star.frame.StatusbarControllerFactory"       )
 
 //_________________________________________________________________________________________________________________
 //  used implementationnames by framework
@@ -179,7 +180,7 @@ namespace framework{
 #define IMPLEMENTATIONNAME_DETECTORFACTORY                      DECLARE_ASCII("com.sun.star.comp.framework.DetectorFactory"         )
 #define IMPLEMENTATIONNAME_LAYOUTMANAGER                        DECLARE_ASCII("com.sun.star.comp.framework.LayoutManager"           )
 #define IMPLEMENTATIONNAME_POPUPMENUCONTROLLERFACTORY           DECLARE_ASCII("com.sun.star.comp.framework.PopupMenuControllerFactory" )
-#define IMPLEMENTATIONNAME_MACROSMENUCONTROLLER                   DECLARE_ASCII("com.sun.star.comp.framework.MacrosMenuController"      )
+#define IMPLEMENTATIONNAME_MACROSMENUCONTROLLER                 DECLARE_ASCII("com.sun.star.comp.framework.MacrosMenuController"      )
 #define IMPLEMENTATIONNAME_FONTMENUCONTROLLER                   DECLARE_ASCII("com.sun.star.comp.framework.FontMenuController"      )
 #define IMPLEMENTATIONNAME_FONTSIZEMENUCONTROLLER               DECLARE_ASCII("com.sun.star.comp.framework.FontSizeMenuController"  )
 #define IMPLEMENTATIONNAME_FORMATMENUCONTROLLER                 DECLARE_ASCII("com.sun.star.comp.framework.FormatMenuController"    )
@@ -208,7 +209,6 @@ namespace framework{
 #define IMPLEMENTATIONNAME_STATUSBARFACTORY                     DECLARE_ASCII("com.sun.star.comp.framework.StatusBarFactory"        )
 #define IMPLEMENTATIONNAME_UICATEGORYDESCRIPTION                DECLARE_ASCII("com.sun.star.comp.framework.UICategoryDescription"   )
 #define IMPLEMENTATIONNAME_APPDISPATCHPROVIDER                  DECLARE_ASCII("com.sun.star.comp.sfx2.AppDispatchProvider"          )
-
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_SERVICES_H_
