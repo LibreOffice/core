@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-13 09:29:16 $
+ *  last change: $Author: pl $ $Date: 2002-02-14 11:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1742,7 +1742,7 @@ BOOL Printer::EndJob()
                                                             mpRemotePages->size(),
                                                             xReq );
             if( bResult )
-                do Application::Reschedule(); while( ! pRequestor->isCompleted() );
+                do Application::Reschedule(); while( mbPrinting && ! pRequestor->isCompleted() );
         }
     }
     catch( RuntimeException &e )
@@ -1755,6 +1755,10 @@ BOOL Printer::EndJob()
             mpPrinter = NULL;
         }
     }
+
+    for( int i = 0; i < mpRemotePages->size(); i++ )
+        delete (*mpRemotePages)[i];
+    *mpRemotePages = ::std::vector< PrinterPage* >();
 
     if ( mpPrinter )
     {
@@ -1834,16 +1838,28 @@ BOOL Printer::AbortJob()
         return TRUE;
     }
 #else
-    for( int i = 0; i < mpRemotePages->size(); i++ )
-        delete (*mpRemotePages)[i];
-    *mpRemotePages = ::std::vector< PrinterPage* >();
     mbPrinting      = FALSE;
-    mbDevOutput = FALSE;
+    mbDevOutput     = FALSE;
     mnCurPage       = 0;
     mnCurPrintPage  = 0;
     maJobName.Erase();
-    delete mpPrinter;
-    mpPrinter = NULL;
+    if( mpPrinter )
+    {
+        if( mpPrinter->mxRemotePrinter.is() )
+        {
+            CHECK_FOR_RVPSYNC_NORMAL();
+            try
+            {
+                mpPrinter->mxRemotePrinter->AbortJob();
+            }
+            catch( RuntimeException &e )
+            {
+                rvpExceptionHandler();
+            }
+        }
+        delete mpPrinter;
+        mpPrinter = NULL;
+    }
     EndPrint();
 
     return TRUE;
