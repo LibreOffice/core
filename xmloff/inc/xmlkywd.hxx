@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-01 13:12:21 $
+ *  last change: $Author: sab $ $Date: 2000-12-01 17:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,8 +598,8 @@ XML_CONSTASCII_ACTION( sXML_font_style, "font-style" );
 XML_CONSTASCII_ACTION( sXML_font_style_asian, "font-style-asian" );
 XML_CONSTASCII_ACTION( sXML_font_style_complex, "font-style-complex" );
 XML_CONSTASCII_ACTION( sXML_font_style_name, "font-style-name" );
-XML_CONSTASCII_ACTION( sXML_font_style_name_asian, "font-style-name-asian-complex" );
-XML_CONSTASCII_ACTION( sXML_font_style_name_complex, "font-style-name" );
+XML_CONSTASCII_ACTION( sXML_font_style_name_asian, "font-style-name-asian" );
+XML_CONSTASCII_ACTION( sXML_font_style_name_complex, "font-style-name-complex" );
 XML_CONSTASCII_ACTION( sXML_font_variant, "font-variant" );
 XML_CONSTASCII_ACTION( sXML_font_weight, "font-weight" );
 XML_CONSTASCII_ACTION( sXML_font_weight_asian, "font-weight-asian" );
@@ -665,6 +665,7 @@ XML_CONSTASCII_ACTION( sXML_group_by_field_number, "group-by-field-number");
 XML_CONSTASCII_ACTION( sXML_grouping, "grouping" );
 XML_CONSTASCII_ACTION( sXML_gt, "gt" );
 XML_CONSTASCII_ACTION( sXML_h, "h" );
+XML_CONSTASCII_ACTION( sXML_hanging, "hanging" );
 XML_CONSTASCII_ACTION( sXML_has_persistent_data, "has-persistent-data");
 XML_CONSTASCII_ACTION( sXML_hatch , "hatch" );
 XML_CONSTASCII_ACTION( sXML_hatch_distance, "distance" );
@@ -707,6 +708,7 @@ XML_CONSTASCII_ACTION( sXML_id, "id" );
 XML_CONSTASCII_ACTION( sXML_ident, "ident");
 XML_CONSTASCII_ACTION( sXML_identifier, "identifier" );
 XML_CONSTASCII_ACTION( sXML_identify_categories, "identify-categories");
+XML_CONSTASCII_ACTION( sXML_ideograph_alpha, "ideograph-alpha");
 XML_CONSTASCII_ACTION( sXML_ignore_case, "ignore-case" );
 XML_CONSTASCII_ACTION( sXML_ignore_empty_rows, "ignore-empty-rows");
 XML_CONSTASCII_ACTION( sXML_illustration_index, "illustration-index" );
@@ -930,6 +932,7 @@ XML_CONSTASCII_ACTION( sXML_noempty, "!empty");
 XML_CONSTASCII_ACTION( sXML_nomatch, "!match");
 XML_CONSTASCII_ACTION( sXML_none, "none" );
 XML_CONSTASCII_ACTION( sXML_noprtsubset, "notprsubset" );
+XML_CONSTASCII_ACTION( sXML_normal, "normal" );
 XML_CONSTASCII_ACTION( sXML_not, "not" );
 XML_CONSTASCII_ACTION( sXML_note, "note" );
 XML_CONSTASCII_ACTION( sXML_notes, "notes" );
@@ -1081,6 +1084,7 @@ XML_CONSTASCII_ACTION( sXML_protected, "protected" );
 XML_CONSTASCII_ACTION( sXML_prsubset, "prsubset" );
 XML_CONSTASCII_ACTION( sXML_publisher, "publisher" );
 XML_CONSTASCII_ACTION( sXML_pyramid, "pyramid" );
+XML_CONSTASCII_ACTION( sXML_punctuation_wrap, "punctuation-wrap" );
 XML_CONSTASCII_ACTION( sXML_quarter, "quarter" );
 XML_CONSTASCII_ACTION( sXML_query_name, "query-name");
 XML_CONSTASCII_ACTION( sXML_quo_vadis, "quo-vadis" );
@@ -1260,6 +1264,7 @@ XML_CONSTASCII_ACTION( sXML_string, "string");
 XML_CONSTASCII_ACTION( sXML_string_value, "string-value");
 XML_CONSTASCII_ACTION( sXML_string_value_if_false, "string-value-if-false" );
 XML_CONSTASCII_ACTION( sXML_string_value_if_true, "string-value-if-true" );
+XML_CONSTASCII_ACTION( sXML_strict , "strict" );
 XML_CONSTASCII_ACTION( sXML_stroke , "stroke" );
 XML_CONSTASCII_ACTION( sXML_stroke_color , "stroke-color" );
 XML_CONSTASCII_ACTION( sXML_stroke_dash , "stroke-dash" );
@@ -1317,6 +1322,7 @@ XML_CONSTASCII_ACTION( sXML_text, "text" );
 XML_CONSTASCII_ACTION( sXML_text_align, "text-align" );
 XML_CONSTASCII_ACTION( sXML_text_align_last, "text-align-last" );
 XML_CONSTASCII_ACTION( sXML_text_align_source, "text-align-source" );
+XML_CONSTASCII_ACTION( sXML_text_autospace, "text-autospace" );
 XML_CONSTASCII_ACTION( sXML_text_background_color, "text-background-color" );
 XML_CONSTASCII_ACTION( sXML_text_blinking, "text-blinking" );
 XML_CONSTASCII_ACTION( sXML_text_box, "text-box" );
@@ -1513,7 +1519,6 @@ XML_CONSTASCII_ACTION( sXML_blend, "blend" );
 XML_CONSTASCII_ACTION( sXML_enabled, "enabled" );
 XML_CONSTASCII_ACTION( sXML_disabled, "disabled" );
 XML_CONSTASCII_ACTION( sXML_double_sided, "double-sided" );
-XML_CONSTASCII_ACTION( sXML_normal, "normal" );
 XML_CONSTASCII_ACTION( sXML_attractive, "attractive");
 XML_CONSTASCII_ACTION( sXML_correct, "correct");
 
