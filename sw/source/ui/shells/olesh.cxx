@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olesh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:42:57 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,6 @@ SFX_IMPL_INTERFACE(SwOleShell, SwFrameShell, SW_RES(STR_SHELLNAME_OBJECT))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_OLE_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_OLE_TOOLBOX));
-    SFX_OBJECTMENU_REGISTRATION(SID_OBJECTMENU0, SW_RES(MN_OBJECTMENU_OLE));
 }
 
 
