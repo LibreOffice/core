@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinefun.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,18 +83,18 @@ public:
 
     BOOL        MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL bRecord, BOOL bApi );
     BOOL        RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL bRecord, BOOL bApi );
-    BOOL        RemoveAllOutlines( USHORT nTab, BOOL bRecord, BOOL bApi );
+    BOOL        RemoveAllOutlines( SCTAB nTab, BOOL bRecord, BOOL bApi );
     BOOL        AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bApi );
 
-    BOOL        SelectLevel( USHORT nTab, BOOL bColumns, USHORT nLevel,
+    BOOL        SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
                                     BOOL bRecord, BOOL bPaint, BOOL bApi );
 
     BOOL        ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, BOOL bApi );
     BOOL        HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, BOOL bApi );
 
-    BOOL        ShowOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
+    BOOL        ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
                                     BOOL bRecord, BOOL bPaint, BOOL bApi );
-    BOOL        HideOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
+    BOOL        HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
                                     BOOL bRecord, BOOL bPaint, BOOL bApi );
 };
 
