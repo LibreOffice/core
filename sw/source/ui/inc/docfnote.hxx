@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: hr $ $Date: 2000-12-07 15:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ class SwFootNoteOptionDlg :public SfxTabDialog
 
     virtual void PageCreated( USHORT nId, SfxTabPage &rPage );
 
-#ifdef __PRIVATE
+#ifdef _SOLAR__PRIVATE
     DECL_LINK( OkHdl, Button * );
 #endif
 
