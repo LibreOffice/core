@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
+ *  last change: $Author: cl $ $Date: 2001-09-28 09:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,7 +603,7 @@ XMLTextImportHelper::XMLTextImportHelper(
         xChapterNumbering = xCNSupplier->getChapterNumberingRules();
 
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( rModel, UNO_QUERY );
-    DBG_ASSERT( xFamiliesSupp.is(), "no chapter numbering supplier" );
+//  DBG_ASSERT( xFamiliesSupp.is(), "no chapter numbering supplier" ); for clipboard there may be documents without styles
 
     if( xFamiliesSupp.is() )
     {
