@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ssa $ $Date: 2002-02-01 08:41:37 $
+ *  last change: $Author: pl $ $Date: 2002-03-19 17:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,8 @@
 #endif
 
 // =======================================================================
+BOOL SalFrame::mbInReparent = FALSE;
+
 static void UpdateFrameGeometry( HWND hWnd, SalFrame* pFrame );
 
 static void ImplSaveFrameState( SalFrame* pFrame )
@@ -234,7 +236,7 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
             if ( nSalFrameStyle & SAL_FRAME_STYLE_DEFAULT )
                 nExSysStyle |= WS_EX_APPWINDOW;
         }
-        else
+        if( nSalFrameStyle & SAL_FRAME_STYLE_TOOLWINDOW )
         {
             pFrame->maFrameData.mbNoIcon = TRUE;
             nExSysStyle |= WS_EX_TOOLWINDOW;
@@ -546,7 +548,8 @@ static UINT ImplSalGetWheelScrollLines()
     }
 
     if ( !nScrLines )
-        nScrLines = SystemParametersInfo( SPI_GETWHEELSCROLLLINES, 0, &nScrLines, 0 );
+        if( !SystemParametersInfo( SPI_GETWHEELSCROLLLINES, 0, &nScrLines, 0 ) )
+            nScrLines = 0 ;
 
     if ( !nScrLines )
         nScrLines = 3;
@@ -1180,6 +1183,104 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     // Notification -- really ???
     if( nEvent )
         maFrameData.mpProc( maFrameData.mpInst, this, nEvent, NULL );
+}
+
+// -----------------------------------------------------------------------
+
+void SalFrame::SetParent( SalFrame* pNewParent )
+{
+    mbInReparent = TRUE;
+    /*
+    BOOL bSameParent = FALSE;
+    if( pNewParent ) //&& ImplGetParentHwnd( maFrameData.mhWnd ) != pNewParent->maFrameData.mhWnd )
+    {
+        if( ImplGetParentHwnd( maFrameData.mhWnd ) == pNewParent->maFrameData.mhWnd )
+            bSameParent = TRUE;
+        if( maFrameData.mhWnd != pNewParent->maFrameData.mhWnd )
+        {
+            ULONG parentStyle = GetWindowLong(pNewParent->maFrameData.mhWnd, GWL_STYLE );
+            ULONG style = GetWindowLong( maFrameData.mhWnd, GWL_STYLE );
+            SetWindowLong( maFrameData.mhWnd, GWL_STYLE, (style|WS_CHILD)&~WS_POPUP );
+
+            //ULONG exstyle = GetWindowLong( maFrameData.mhWnd, GWL_EXSTYLE );
+            DWORD err=0;
+            HWND hOldParent = ::GetParent( maFrameData.mhWnd );
+            hOldParent = ImplGetParentHwnd( maFrameData.mhWnd );
+            hOldParent = ::SetParent( maFrameData.mhWnd, pNewParent->maFrameData.mhWnd );
+            if( !hOldParent )
+                err = GetLastError();
+            BOOL bOk = IsChild( pNewParent->maFrameData.mhWnd, maFrameData.mhWnd);
+            HWND hNewParent = ::GetParent( maFrameData.mhWnd );
+            HWND hImplParent = ImplGetParentHwnd( maFrameData.mhWnd );
+            SetWindowLong( maFrameData.mhWnd, GWL_STYLE, style );
+            //SetWindowLong( maFrameData.mhWnd, GWL_EXSTYLE, exstyle );
+        }
+    }
+    else
+        if( !pNewParent )
+            ::SetParent( maFrameData.mhWnd, NULL );
+            */
+
+    // save hwnd, will be overwritten in WM_CREATE during createwindow
+    HWND hWndOld = maFrameData.mhWnd;
+    BOOL bNeedGraphics = maFrameData.mbGraphics;
+
+    // Release Cache DC
+    if ( maFrameData.mpGraphics2 &&
+         maFrameData.mpGraphics2->maGraphicsData.mhDC )
+        ReleaseGraphics( maFrameData.mpGraphics2 );
+
+    // destroy saved DC
+    if ( maFrameData.mpGraphics )
+    {
+        if ( maFrameData.mpGraphics->maGraphicsData.mhDefPal )
+            SelectPalette( maFrameData.mpGraphics->maGraphicsData.mhDC, maFrameData.mpGraphics->maGraphicsData.mhDefPal, TRUE );
+        ImplSalDeInitGraphics( &(maFrameData.mpGraphics->maGraphicsData) );
+        ReleaseDC( maFrameData.mhWnd, maFrameData.mpGraphics->maGraphicsData.mhDC );
+        //delete maFrameData.mpGraphics;
+    }
+
+    // create a new hwnd with the same styles
+    HWND hWnd = NULL;
+    HWND hWndParent = pNewParent->maFrameData.mhWnd;
+    ULONG nSysStyle = GetWindowLong( maFrameData.mhWnd, GWL_STYLE );
+    ULONG nExSysStyle = GetWindowLong( maFrameData.mhWnd, GWL_EXSTYLE );
+    HINSTANCE hInstance = GetSalData()->mhInst;
+    if ( aSalShlData.mbWNT )
+    {
+        LPCWSTR pClassName = SAL_SUBFRAME_CLASSNAMEW;
+        hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
+                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+                                hWndParent, 0, hInstance, (void*)this );
+    }
+    else
+    {
+        LPCSTR pClassName = SAL_SUBFRAME_CLASSNAMEA;
+        hWnd = CreateWindowExA( nExSysStyle, pClassName, "", nSysStyle,
+                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+                                hWndParent, 0, hInstance, (void*)this );
+    }
+
+    // succeeded ?
+    hWndParent = ::GetParent( hWnd );
+    DBG_ASSERT( hWndParent == pNewParent->maFrameData.mhWnd, "SalFrame::SetParent not successful");
+
+    // recreate DCs
+    if( bNeedGraphics )
+    {
+        maFrameData.mpGraphics->maGraphicsData.mhDC = GetDC( hWnd );
+        if ( GetSalData()->mhDitherPal )
+        {
+            maFrameData.mpGraphics->maGraphicsData.mhDefPal = SelectPalette( maFrameData.mpGraphics->maGraphicsData.mhDC, GetSalData()->mhDitherPal, TRUE );
+            RealizePalette( maFrameData.mpGraphics->maGraphicsData.mhDC );
+        }
+        ImplSalInitGraphics( &(maFrameData.mpGraphics->maGraphicsData) );
+    }
+
+    // now destroy original hwnd
+    DestroyWindow( hWndOld );
+
+    mbInReparent = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -2491,6 +2592,27 @@ void SalFrame::SetCallback( void* pInst, SALFRAMEPROC pProc )
 
 // -----------------------------------------------------------------------
 
+ULONG SalFrame::GetCurrentModButtons()
+{
+    ULONG nMod = 0;
+
+    if ( GetKeyState( VK_LBUTTON ) & 0x8000 )
+        nMod |= MOUSE_LEFT;
+    if ( GetKeyState( VK_MBUTTON ) & 0x8000 )
+        nMod |= MOUSE_MIDDLE;
+    if ( GetKeyState( VK_RBUTTON ) & 0x8000 )
+        nMod |= MOUSE_RIGHT;
+    if ( GetKeyState( VK_SHIFT ) & 0x8000 )
+        nMod |= KEY_SHIFT;
+    if ( GetKeyState( VK_CONTROL ) & 0x8000 )
+        nMod |= KEY_MOD1;
+    if ( GetKeyState( VK_MENU ) & 0x8000 )
+        nMod |= KEY_MOD2;
+    return nMod;
+}
+
+// -----------------------------------------------------------------------
+
 static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
                                 WPARAM wParam, LPARAM lParam )
 {
@@ -3345,7 +3467,7 @@ static void ImplHandleFocusMsg( HWND hWnd )
     if ( ImplSalYieldMutexTryToAcquire() )
     {
         SalFrame* pFrame = GetWindowPtr( hWnd );
-        if ( pFrame )
+        if ( pFrame && !SalFrame::mbInReparent )
         {
             // Query the actual status
             if ( ::GetFocus() == hWnd )
@@ -4563,3 +4685,4 @@ BOOL ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LR
     else
         return FALSE;
 }
+

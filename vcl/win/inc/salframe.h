@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-24 08:52:44 $
+ *  last change: $Author: pl $ $Date: 2002-03-19 17:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ public:
     BOOL                    mbSpezIME;              // TRUE: Spez IME
     BOOL                    mbAtCursorIME;          // TRUE: Wir behandeln nur einige IME-Messages
     BOOL                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
+    BOOL                    mbInReparent;           // TRUE: ignore focus lost and gain due to reparenting
 };
 
 #endif // _SV_SALFRAME_H

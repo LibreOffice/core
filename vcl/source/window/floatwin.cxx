@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-04 17:07:20 $
+ *  last change: $Author: pl $ $Date: 2002-03-19 17:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,31 +109,38 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     DBG_ASSERT( pParent, "FloatWindow::FloatingWindow(): - pParent == NULL and no AppWindow exists" );
 
     // no Border, then we dont need a border window
-    //if ( !(nStyle & (WB_BORDER|WB_MOVEABLE|WB_SIZEABLE)) )
     if ( !nStyle )
     {
-        if ( nStyle & WB_SYSTEMWINDOW )
-            mbFrame = TRUE;
         mbOverlapWin = TRUE;
-        if ( !(nStyle & WB_NODIALOGCONTROL) )
-            nStyle |= WB_DIALOGCONTROL;
+        nStyle |= WB_DIALOGCONTROL;
         SystemWindow::ImplInit( pParent, nStyle, NULL );
     }
     else
     {
-        ImplBorderWindow*   pBorderWin;
-        USHORT              nBorderStyle = BORDERWINDOW_STYLE_OVERLAP | BORDERWINDOW_STYLE_BORDER | BORDERWINDOW_STYLE_FLOAT;
-        if ( (nStyle & WB_SYSTEMWINDOW) && !(nStyle & (WB_MOVEABLE | WB_SIZEABLE)) )
-            nBorderStyle |= BORDERWINDOW_STYLE_FRAME;
-        pBorderWin  = new ImplBorderWindow( pParent, nStyle, nBorderStyle );
-        if ( !(nStyle & WB_NODIALOGCONTROL) )
-            nStyle |= WB_DIALOGCONTROL;
-        SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
-        pBorderWin->mpClientWindow = this;
-        pBorderWin->GetBorder( mnLeftBorder, mnTopBorder, mnRightBorder, mnBottomBorder );
-        pBorderWin->SetDisplayActive( TRUE );
-        mpBorderWindow  = pBorderWin;
-        mpRealParent    = pParent;
+        if( nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE) )
+        {
+            WinBits nFloatWinStyle = nStyle;
+            nFloatWinStyle |= WB_CLOSEABLE;
+            mbFrame = TRUE;
+            mbOverlapWin = TRUE;
+            SystemWindow::ImplInit( pParent, nFloatWinStyle & ~WB_BORDER, NULL );
+        }
+        else
+        {
+            ImplBorderWindow*   pBorderWin;
+            USHORT              nBorderStyle = BORDERWINDOW_STYLE_OVERLAP | BORDERWINDOW_STYLE_BORDER | BORDERWINDOW_STYLE_FLOAT;
+            if ( (nStyle & WB_SYSTEMWINDOW) && !(nStyle & (WB_MOVEABLE | WB_SIZEABLE)) )
+                nBorderStyle |= BORDERWINDOW_STYLE_FRAME;
+            pBorderWin  = new ImplBorderWindow( pParent, nStyle, nBorderStyle );
+            if ( !(nStyle & WB_NODIALOGCONTROL) )
+                nStyle |= WB_DIALOGCONTROL;
+            SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
+            pBorderWin->mpClientWindow = this;
+            pBorderWin->GetBorder( mnLeftBorder, mnTopBorder, mnRightBorder, mnBottomBorder );
+            pBorderWin->SetDisplayActive( TRUE );
+            mpBorderWindow  = pBorderWin;
+            mpRealParent    = pParent;
+        }
     }
     SetActivateMode( 0 );
 
@@ -674,8 +681,21 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, ULONG nFlags )
 
     // Daten von der ToolBox holen
     Rectangle aRect = pBox->GetItemRect( nItemId );
-    Point aPos = pBox->OutputToScreenPixel( aRect.TopLeft() );
+    Point aPos;
+    aPos = GetParent()->AbsoluteScreenToOutputPixel( pBox->OutputToAbsoluteScreenPixel( aRect.TopLeft() ) );
     aRect.SetPos( aPos );
+
+    nFlags |=
+        FLOATWIN_POPUPMODE_NOFOCUSCLOSE     |
+//        FLOATWIN_POPUPMODE_NOMOUSECLOSE       |
+        FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE |
+        FLOATWIN_POPUPMODE_NOMOUSERECTCLOSE |
+        FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE   |
+        FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
+/*
+ *  FLOATWIN_POPUPMODE_NOKEYCLOSE       |
+ *  don't set since it diables closing floaters with escape
+ */
 
     // Flags fuer Positionierung bestimmen
     if ( !(nFlags & (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_UP |

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-18 15:50:56 $
+ *  last change: $Author: pl $ $Date: 2002-03-19 17:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1998,6 +1998,21 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
     }
 }
 
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+void SalFrame::SetParent( SalFrame* pNewParent )
+{
+    if( maFrameData.mpParent != pNewParent )
+    {
+        if( maFrameData.mpParent )
+            maFrameData.mpParent->maFrameData.maChildren.remove( this );
+
+        maFrameData.mpParent = pNewParent;
+        pNewParent->maFrameData.maChildren.push_back( this );
+        maFrameData.GetDisplay()->getWMAdaptor()->changeReferenceFrame( this, pNewParent );
+    }
+}
+
 // Sound
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::Beep( SoundType eSoundType ) // not fully suported
@@ -2032,6 +2047,24 @@ static USHORT sal_GetCode( int state )
         nCode |= KEY_MOD2;
 
     return nCode;
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+ULONG SalFrame::GetCurrentModButtons()
+{
+    XLIB_Window aRoot, aChild;
+    int rx, ry, wx, wy;
+    unsigned int nMask = 0;
+    XQueryPointer( maFrameData.GetXDisplay(),
+                   maFrameData.GetShellWindow(),
+                   &aRoot,
+                   &aChild,
+                   &rx, &ry,
+                   &wx, &wy,
+                   &nMask
+                   );
+    return sal_GetCode( nMask );
 }
 
 long SalFrameData::HandleMouseEvent( XEvent *pEvent )

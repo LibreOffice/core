@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cp $ $Date: 2002-02-20 08:31:02 $
+ *  last change: $Author: pl $ $Date: 2002-03-19 17:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@
 #endif
 #ifndef _SV_BRDWIN_HXX
 #include <brdwin.hxx>
+#endif
+#ifndef _SV_DOCKWIN_HXX
+#include <dockwin.hxx>
 #endif
 #undef private
 
@@ -1460,6 +1463,12 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
 
 void ImplHandleMove( Window* pWindow, long nNewX, long nNewY )
 {
+    if( pWindow->mbFrame && pWindow->mnType == WINDOW_FLOATINGWINDOW && pWindow->IsReallyVisible() )
+    {
+        static_cast<FloatingWindow*>(pWindow)->EndPopupMode( FLOATWIN_POPUPMODEEND_TEAROFF );
+        pWindow->Move();
+    }
+
     KillOwnPopups( pWindow );
 
     if ( pWindow->mbFrame && pWindow->mpClientWindow )
@@ -1671,11 +1680,13 @@ void ImplHandleClose( Window* pWindow )
         pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL | ENDTRACK_KEY );
 
     // Dann stellen wir fest, ob Close ueberhaupt erlaubt ist
-    SystemWindow* pSysWindow = (SystemWindow*)pWindow->ImplGetWindow();
-    if ( !pSysWindow->IsEnabled() || !pSysWindow->IsInputEnabled() )
-        Sound::Beep( SOUND_DISABLE, pSysWindow );
-    else
-        pSysWindow->Close();
+    Window *pWin = pWindow->ImplGetWindow();
+    if ( !pWin->IsEnabled() || !pWin->IsInputEnabled() )
+        Sound::Beep( SOUND_DISABLE, pWin );
+    else if( pWin->IsSystemWindow() )
+        ((SystemWindow*)pWin)->Close();
+    else if( pWin->ImplIsDockingWindow() )
+        ((DockingWindow*)pWin)->Close();
 }
 
 // -----------------------------------------------------------------------

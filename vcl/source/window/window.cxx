@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obr $ $Date: 2002-03-14 13:30:40 $
+ *  last change: $Author: pl $ $Date: 2002-03-19 17:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,8 +596,13 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             nFrameStyle |= SAL_FRAME_STYLE_CLOSEABLE;
         if ( nStyle & WB_APP )
             nFrameStyle |= SAL_FRAME_STYLE_DEFAULT;
-        if ( mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow) || (nStyle & WB_SYSTEMFLOATWIN) )
+        if( ! nFrameStyle &&
+            ( mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow) || (nStyle & WB_SYSTEMFLOATWIN) )
+            )
             nFrameStyle = SAL_FRAME_STYLE_FLOAT; // hmmm, was '0' before ????
+        else if( mbFloatWin )
+            nFrameStyle |= SAL_FRAME_STYLE_TOOLWINDOW;
+
 
         SalFrame* pParentFrame = NULL;
         if ( pParent )
@@ -815,6 +820,34 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
     // AppFont-Aufloesung berechnen
     if ( mbFrame && !pSVData->maGDIData.mnAppFontX )
         ImplInitAppFontData( this );
+}
+
+// -----------------------------------------------------------------------
+
+void Window::ImplSetFrameParent( const Window* pParent )
+{
+    if( mpFrame )
+    {
+        SalFrame* pParentFrame = pParent ? pParent->mpFrame : NULL;
+        Window* pFrameWindow = ImplGetSVData()->maWinData.mpFirstFrame;
+        while( pFrameWindow )
+        {
+            if( pFrameWindow->mpRealParent == this  || pFrameWindow->mpParent == this )
+            {
+                DBG_ASSERT( mpFrame != pFrameWindow->mpFrame, "SetFrameParent to own" );
+                DBG_ASSERT( mpFrame, "no frame" );
+                pFrameWindow->mpFrame->SetParent( pParentFrame );
+            }
+            pFrameWindow = pFrameWindow->mpFrameData->mpNextFrame;
+        }
+    }
+
+    Window* pChild = mpFirstChild;
+    while( pChild )
+    {
+        pChild->ImplSetFrameParent( pParent );
+        pChild = pChild->mpNext;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -3603,22 +3636,34 @@ void Window::ImplCallFocusChangeActivate( Window* pNewOverlapWindow,
 
     if ( bCallDeactivate )
     {
-        pOldOverlapWindow->mbActive = FALSE;
-        pOldOverlapWindow->Deactivate();
+        if( pOldOverlapWindow->mbActive )
+        {
+            pOldOverlapWindow->mbActive = FALSE;
+            pOldOverlapWindow->Deactivate();
+        }
         if ( pOldRealWindow != pOldOverlapWindow )
         {
-            pOldRealWindow->mbActive = FALSE;
-            pOldRealWindow->Deactivate();
+            if( pOldRealWindow->mbActive )
+            {
+                pOldRealWindow->mbActive = FALSE;
+                pOldRealWindow->Deactivate();
+            }
         }
     }
-    if ( bCallActivate )
+    if ( bCallActivate && ! pNewOverlapWindow->mbActive )
     {
-        pNewOverlapWindow->mbActive = TRUE;
-        pNewOverlapWindow->Activate();
+        if( ! pNewOverlapWindow->mbActive )
+        {
+            pNewOverlapWindow->mbActive = TRUE;
+            pNewOverlapWindow->Activate();
+        }
         if ( pNewRealWindow != pNewOverlapWindow )
         {
-            pNewRealWindow->mbActive = TRUE;
-            pNewRealWindow->Activate();
+            if( ! pNewRealWindow->mbActive )
+            {
+                pNewRealWindow->mbActive = TRUE;
+                pNewRealWindow->Activate();
+            }
         }
     }
 }
@@ -5419,6 +5464,8 @@ void Window::SetParent( Window* pNewParent )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     DBG_ASSERT( pNewParent, "Window::SetParent(): pParent == NULL" );
+
+    ImplSetFrameParent( pNewParent );
 
     if ( mbFrame )
         return;
