@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SyncScheme.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
     @derepcated
  */
-struct SyncScheme
+published struct SyncScheme
 {
     /** contains the scheme name of this SyncScheme
      */
