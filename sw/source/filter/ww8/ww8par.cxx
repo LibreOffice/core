@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:29:07 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
@@ -1624,7 +1623,9 @@ void SwWW8ImplReader::ImportDop()
     if (pWwFib->nFib > 105)
         ImportDopTypography(pWDop->doptypography);
 
-    if (pWDop->fProtEnabled)
+    // #110055# disable form design mode to be able to use imported controls directly
+    // #i31239# always disable form design mode, not only in protected docs
+//    if (pWDop->fProtEnabled)
     {
         using namespace com::sun::star;
 
