@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:09:24 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,14 +88,8 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
-#endif
-#ifndef _IPENV_HXX //autogen
-#include <so3/ipenv.hxx>
-#endif
 #ifndef _SOERR_HXX //autogen
-#include <so3/soerr.hxx>
+#include <svtools/soerr.hxx>
 #endif
 #ifndef _SFX_PROGRESS_HXX //autogen
 #include <sfx2/progress.hxx>
@@ -207,6 +201,17 @@
 #ifndef _ACCESSIBILITYOPTIONS_HXX
 #include <accessibilityoptions.hxx>
 #endif
+
+#ifndef _COM_SUN_STAR_EMBED_EMBEDMISC_HPP_
+#include <com/sun/star/embed/EmbedMisc.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
+
+#include <svtools/embedhlp.hxx>
+
+using namespace com::sun::star;
 
 #define DEFTEXTSIZE  12
 
@@ -1048,7 +1053,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 pGrfNd->IsLinkedFile() )
             {
                 Size aTmpSz;
-                ::so3::SvLinkSource* pGrfObj = pGrfNd->GetLink()->GetObj();
+                ::sfx2::SvLinkSource* pGrfObj = pGrfNd->GetLink()->GetObj();
                 if( !pGrfObj ||
                     !pGrfObj->IsDataComplete() ||
                     !(aTmpSz = pGrfNd->GetTwipSize()).Width() ||
@@ -1142,7 +1147,8 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     }
     else if( pOLENd )
     {
-        SvInPlaceObjectRef xRef( pOLENd->GetOLEObj().GetOleRef() );
+        Point aPosition(aAlignedGrfArea.Pos());
+        Size aSize(aAlignedGrfArea.SSize());
 
         // Im BrowseModus gibt es nicht unbedingt einen Drucker und
         // damit kein JobSetup, also legen wir eines an ...
@@ -1160,8 +1166,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         if(bBufferOLEOutput)
         {
             // needs to be buffered to a VirtualDevice
-            Point aPosition(aAlignedGrfArea.Pos());
-            Size aSize(aAlignedGrfArea.SSize());
             VirtualDevice aBufferDevice(*pOut, 0L, 0L);
 
             // calulate PixelSize
@@ -1178,7 +1182,21 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             aBufferDevice.SetMapMode(aMapMode);
 
             // draw to VDev
-            xRef->DoDraw( &aBufferDevice, aPosition, aSize, *pJobSetup );
+            //TODO/LATER: is it a problem that the JopSetup isn't used? It seems that only Writer uses it (does it really?)
+            //xRef->DoDraw( &aBufferDevice, aPosition, aSize, *pJobSetup );
+            if ( pOLENd->GetGraphic() && pOLENd->GetGraphic()->GetType() != GRAPHIC_NONE )
+            {
+                pOLENd->GetGraphic()->Draw( &aBufferDevice, aPosition, aSize );
+
+                // shade the representation if the object is activated outplace
+                if ( pOLENd->GetOLEObj().GetOleRef().is()
+                  && pOLENd->GetOLEObj().GetOleRef()->getCurrentState() == embed::EmbedStates::ACTIVE )
+                {
+                    ::svt::EmbeddedObjectRef::DrawShading( Rectangle( aPosition, aSize ), &aBufferDevice );
+                }
+            }
+            else
+                ::svt::EmbeddedObjectRef::DrawPaintReplacement( Rectangle( aPosition, aSize ), pOLENd->GetOLEObj().GetCurrentPersistName(), &aBufferDevice );
 
             // draw VDev to pOut
             const sal_Bool bWasEnabled(pOut->IsMapModeEnabled());
@@ -1193,21 +1211,33 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         }
         else
         {
-            xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
+            //TODO/LATER: is it a problem that the JopSetup isn't used?
+            //xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
+            if ( pOLENd->GetGraphic() && pOLENd->GetGraphic()->GetType() != GRAPHIC_NONE )
+            {
+                pOLENd->GetGraphic()->Draw( pOut, aPosition, aSize );
+
+                // shade the representation if the object is activated outplace
+                if ( pOLENd->GetOLEObj().GetOleRef().is()
+                  && pOLENd->GetOLEObj().GetOleRef()->getCurrentState() == embed::EmbedStates::ACTIVE )
+                {
+                    ::svt::EmbeddedObjectRef::DrawShading( Rectangle( aPosition, aSize ), pOut );
+                }
+            }
+            else
+                ::svt::EmbeddedObjectRef::DrawPaintReplacement( Rectangle( aPosition, aSize ), pOLENd->GetOLEObj().GetCurrentPersistName(), pOut );
         }
 
         if( bDummyJobSetup )
             delete pJobSetup;  // ... und raeumen wieder auf.
 
-        //Objecte mit die beim Sichtbarwerden aktiviert werden wollen
-        //werden jetzt Connected (Aktivieren wird vom Sfx erledigt).
-        if( !bPrn && ((SVOBJ_MISCSTATUS_ACTIVATEWHENVISIBLE|
-            SVOBJ_MISCSTATUS_ALWAYSACTIVATE) & xRef->GetMiscStatus()) &&
-            pShell->ISA( SwCrsrShell ))
+        sal_Int64 nMiscStatus = pOLENd->GetOLEObj().GetOleRef()->getStatus( pOLENd->GetAspect() );
+        if ( !bPrn && pShell->ISA( SwCrsrShell ) &&
+                nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
         {
             const SwFlyFrm *pFly = FindFlyFrm();
             ASSERT( pFly, "OLE not in FlyFrm" );
-            ((SwFEShell*)pShell)->ConnectObj( xRef, pFly->Prt(), pFly->Frm());
+            ((SwFEShell*)pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
         }
     }
 }
