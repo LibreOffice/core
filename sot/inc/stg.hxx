@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-19 13:04:33 $
+ *  last change: $Author: mba $ $Date: 2001-06-22 09:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,11 @@ public:
     BOOL                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
 };
 
+namespace ucb
+{
+    class Content;
+};
+
 class UCBStorage_Impl;
 struct UCBStorageElement_Impl;
 class UCBStorage : public BaseStorage
@@ -317,6 +322,7 @@ protected:
 public:
     static BOOL                 IsStorageFile( SvStream* );
 
+                                UCBStorage( const ::ucb::Content& rContent, const String& rName, StreamMode nMode, BOOL bDirect = TRUE, BOOL bIsRoot = TRUE );
                                 UCBStorage( const String& rName, StreamMode nMode, BOOL bDirect = TRUE, BOOL bIsRoot = TRUE );
                                 UCBStorage( UCBStorage_Impl* );
                                 UCBStorage( SvStream& rStrm, BOOL bDirect = TRUE );

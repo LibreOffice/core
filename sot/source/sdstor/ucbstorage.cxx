@@ -35,6 +35,15 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENTCREATOR_HPP_
+#include <com/sun/star/ucb/XContentCreator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_CONTENTINFOATTRIBUTE_HPP_
+#include <com/sun/star/ucb/ContentInfoAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
+#include <com/sun/star/beans/Property.hpp>
+#endif
 
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
@@ -48,6 +57,7 @@
 #include "formats.hxx"
 #include "clsids.hxx"
 
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::io;
@@ -198,6 +208,7 @@ public:
 
     UCBStorageElementList_Impl  m_aChildrenList;
 
+                                UCBStorage_Impl( const ::ucb::Content&, const String&, StreamMode, UCBStorage*, BOOL, BOOL );
                                 UCBStorage_Impl( const String&, StreamMode, UCBStorage*, BOOL, BOOL );
                                 UCBStorage_Impl( SvStream&, UCBStorage*, BOOL );
     void                        Init();
@@ -747,6 +758,16 @@ UCBStorage::UCBStorage( SvStream& rStrm, BOOL bDirect )
     StorageBase::nMode = pImp->m_nMode;
 }
 
+UCBStorage::UCBStorage( const ::ucb::Content& rContent, const String& rName, StreamMode nMode, BOOL bDirect, BOOL bIsRoot )
+{
+    // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
+    // to class UCBStorage !
+    pImp = new UCBStorage_Impl( rContent, rName, nMode, this, bDirect, bIsRoot );
+    pImp->AddRef();
+    pImp->Init();
+    StorageBase::nMode = pImp->m_nMode;
+}
+
 UCBStorage::UCBStorage( const String& rName, StreamMode nMode, BOOL bDirect, BOOL bIsRoot )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
@@ -772,6 +793,33 @@ UCBStorage::~UCBStorage()
 
     pImp->m_pAntiImpl = NULL;
     pImp->ReleaseRef();
+}
+
+UCBStorage_Impl::UCBStorage_Impl( const ::ucb::Content& rContent, const String& rName, StreamMode nMode, UCBStorage* pStorage, BOOL bDirect, BOOL bIsRoot )
+    : m_pAntiImpl( pStorage )
+    , m_pTempFile( NULL )
+    , m_pContent( new ::ucb::Content( rContent ) )
+    , m_pSource( NULL )
+    , m_pStream( NULL )
+    , m_nMode( nMode )
+    , m_nFormat( 0 )
+    , m_bIsRoot( bIsRoot )
+    , m_bDirect( bDirect )
+    , m_bModified( FALSE )
+    , m_bCommited( FALSE )
+    , m_bDirty( FALSE )
+    , m_aClassId( SvGlobalName() )
+{
+    String aName( rName );
+    if( !aName.Len() )
+    {
+        // no name given = use temporary name!
+        DBG_ASSERT( m_bIsRoot, "SubStorage must have a name!" );
+        m_pTempFile = new ::utl::TempFile;
+        m_aName = m_aOriginalName = aName = m_pTempFile->GetURL();
+    }
+
+    m_aURL = rName;
 }
 
 UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStorage* pStorage, BOOL bDirect, BOOL bIsRoot )
@@ -860,20 +908,23 @@ void UCBStorage_Impl::Init()
         // if the name was not already set to a temp name
         m_aName = m_aOriginalName = aObj.GetLastName();
 
-    try
+    if ( !m_pContent )
     {
-        // create content; where to put StreamMode ?! ( already done when opening the file of the package ? )
-        m_pContent = new ::ucb::Content( m_aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-    }
-    catch ( ContentCreationException& )
-    {
-        // content could not be created
-        m_pAntiImpl->SetError( SVSTREAM_CANNOT_MAKE );
-    }
-    catch ( RuntimeException& )
-    {
-        // any other error - not specified
-        m_pAntiImpl->SetError( SVSTREAM_CANNOT_MAKE );
+        try
+        {
+            // create content; where to put StreamMode ?! ( already done when opening the file of the package ? )
+            m_pContent = new ::ucb::Content( m_aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        }
+        catch ( ContentCreationException& )
+        {
+            // content could not be created
+            m_pAntiImpl->SetError( SVSTREAM_CANNOT_MAKE );
+        }
+        catch ( RuntimeException& )
+        {
+            // any other error - not specified
+            m_pAntiImpl->SetError( SVSTREAM_CANNOT_MAKE );
+        }
     }
 
     if ( m_pContent )
@@ -951,7 +1002,9 @@ void UCBStorage_Impl::Init()
         catch ( CommandAbortedException& )
         {
             // any command wasn't executed successfully - not specified
-            m_pAntiImpl->SetError( ERRCODE_IO_GENERAL );
+            if ( !( m_nMode & STREAM_WRITE ) )
+                // if the folder was just inserted and not already commited, this is not an error!
+                m_pAntiImpl->SetError( ERRCODE_IO_GENERAL );
         }
         catch ( RuntimeException& )
         {
@@ -990,21 +1043,49 @@ BOOL UCBStorage_Impl::Insert( ::ucb::Content *pContent )
 {
     // a new substorage is inserted into a UCBStorage ( given by the parameter pContent )
     // it must be inserted with a title and a type
-    Sequence < ::rtl::OUString > aNames(1);
-    Sequence < Any > aValues(1);
-    ::rtl::OUString* pNames = aNames.getArray();
-    pNames[0] = ::rtl::OUString::createFromAscii("Title");
-    Any* pValues = aValues.getArray();
-    pValues[0] <<= ::rtl::OUString( m_aName );
-    ::rtl::OUString aType = ::rtl::OUString::createFromAscii( "application/vnd.sun.star.pkg-folder" );
-
-    // remove old content, create an "empty" new one and initialize it by inserting
-    DELETEZ( m_pContent );
-    m_pContent = new ::ucb::Content;
     BOOL bRet = FALSE;
+    Reference< XContentCreator > xCreator = Reference< XContentCreator >( pContent->get(), UNO_QUERY );
+    if ( !xCreator.is() )
+        return sal_False;
+
     try
     {
-        bRet = pContent->insertNewContent( aType, aNames, aValues, *m_pContent );
+        Sequence< ContentInfo > aInfo = xCreator->queryCreatableContentsInfo();
+        sal_Int32 nCount = aInfo.getLength();
+        if ( nCount == 0 )
+            return sal_False;
+
+        for ( sal_Int32 i = 0; i < nCount; ++i )
+        {
+            // Simply look for the first KIND_FOLDER...
+            const ContentInfo & rCurr = aInfo[i];
+            if ( rCurr.Attributes & ContentInfoAttribute::KIND_FOLDER )
+            {
+                // Make sure the only required bootstrap property is "Title",
+                const Sequence< Property > & rProps = rCurr.Properties;
+                if ( rProps.getLength() != 1 )
+                    continue;
+
+                if ( !rProps[ 0 ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+                    continue;
+
+                Sequence < ::rtl::OUString > aNames(1);
+                ::rtl::OUString* pNames = aNames.getArray();
+                pNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+                Sequence < Any > aValues(1);
+                Any* pValues = aValues.getArray();
+                pValues[0] = makeAny( ::rtl::OUString( m_aName ) );
+
+                Content aNewFolder;
+                if ( !pContent->insertNewContent( rCurr.Type, aNames, aValues, aNewFolder ) )
+                    continue;
+
+                // remove old content, create an "empty" new one and initialize it with the new inserted
+                DELETEZ( m_pContent );
+                m_pContent = new ::ucb::Content( aNewFolder );
+                bRet = TRUE;
+            }
+        }
     }
     catch ( CommandAbortedException& )
     {

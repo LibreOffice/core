@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-21 12:36:10 $
+ *  last change: $Author: mba $ $Date: 2001-06-22 09:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,6 +514,13 @@ SotStorage::SotStorage()
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
+
+SotStorage::SotStorage( const ::ucb::Content& rContent, const String & rName, StreamMode nMode, StorageMode nStorageMode )
+    INIT_SotStorage()
+{
+    aName = rName; // Namen merken
+    pOwnStg = new UCBStorage( rContent, aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+}
 
 SotStorage::SotStorage( const String & rName, StreamMode nMode, StorageMode nStorageMode )
     INIT_SotStorage()
