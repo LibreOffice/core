@@ -83,7 +83,8 @@ UNIXTEXT= \
     $(MISC)$/smemo.sh \
     $(MISC)$/svcard.sh \
     $(MISC)$/sweb.sh \
-    $(MISC)$/swriter.sh
+    $(MISC)$/swriter.sh \
+    $(MISC)$/unopkg.sh
 
 .INCLUDE :  target.mk
 
