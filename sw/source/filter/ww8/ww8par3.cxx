@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:56 $
+ *  last change: $Author: cmc $ $Date: 2002-05-24 16:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,10 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP_
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#endif
+
+#ifndef __SGI_STL_ALGORITHM
+#include <algorithm>
 #endif
 
 #ifndef _HINTIDS_HXX
@@ -402,19 +406,12 @@ struct WW8LSTInfo   // sortiert nach nIdLst (in WW8 verwendete Listen-Id)
 
     SwNumRule*  pNumRule;        // Zeiger auf entsprechende Listenvorlage im Writer
     sal_uInt32      nIdLst;          // WW8Id dieser Liste
-    sal_uInt16      nStreamPos;  // Reihenfolge des Auftretens des LST im PLCF LST
-                                                     // siehe auch "WW8ListManager::GetLSTByStreamPos()"
     sal_Bool        bSimpleList:1;// Flag, ob diese NumRule nur einen Level verwendet
     sal_Bool        bUsedInDoc :1;// Flag, ob diese NumRule im Doc verwendet wird,
                                                      //   oder beim Reader-Ende geloescht werden sollte
 
-    // Hilfs Ctor, benoetigt innerhalb von WW8ListManager::GetLSTByListId()
-    WW8LSTInfo(sal_uInt32 nIdLst_): nIdLst( nIdLst_){}
-
-    // normaler Ctor
-    WW8LSTInfo(SwNumRule* pNumRule_, WW8LST& aLST, sal_uInt16 nStreamPos_):
+    WW8LSTInfo(SwNumRule* pNumRule_, WW8LST& aLST) :
         nIdLst(         aLST.nIdLst         ),
-        nStreamPos( nStreamPos_         ),
         pNumRule(       pNumRule_               ),
         bSimpleList(aLST.bSimpleList),
         bUsedInDoc( 0 )
@@ -424,14 +421,7 @@ struct WW8LSTInfo   // sortiert nach nIdLst (in WW8 verwendete Listen-Id)
         memset(&aCharFmt, 0,  sizeof( aCharFmt ));
     }
 
-    sal_Bool operator==( const WW8LSTInfo& rEntry ) const
-    {   return nIdLst == rEntry.nIdLst; }
-    sal_Bool operator<( const WW8LSTInfo& rEntry ) const
-    {   return nIdLst < rEntry.nIdLst;  }
 };
-
-SV_IMPL_OP_PTRARR_SORT(WW8LSTInfos, WW8LSTInfo_Ptr)
-
 
 // in den ListenFormatOverrideInfos zu speichernde Daten /////////////////////
 //
@@ -447,12 +437,12 @@ struct WW8LFOInfo   // unsortiert, d.h. Reihenfolge genau wie im WW8 Stream
     // Byte mit hineinpacken, doch waere das eine ziemliche Fehlerquelle,
     // an dem Tag, wo MS ihr Listenformat auf mehr als 15 Level aufbohren.
 
-    sal_Bool    bOverride   :1;// Flag, ob die NumRule nicht in pLSTInfos steht,
+    sal_Bool    bOverride   :1;// Flag, ob die NumRule nicht in maLSTInfos steht,
                                                      //   sondern fuer pLFOInfos NEU angelegt wurde
     sal_Bool    bSimpleList:1;// Flag, ob diese NumRule nur einen Level verwendet
     sal_Bool    bUsedInDoc  :1;// Flag, ob diese NumRule im Doc verwendet wird,
                                                      //   oder beim Reader-Ende geloescht werden sollte
-    sal_Bool    bLSTbUIDSet :1;// Flag, ob bUsedInDoc in pLSTInfos gesetzt wurde,
+    sal_Bool    bLSTbUIDSet :1;// Flag, ob bUsedInDoc in maLSTInfos gesetzt wurde,
                                                      //   und nicht nochmals gesetzt zu werden braucht
     WW8LFOInfo( const WW8LFO& rLFO ):
         nIdLst(         rLFO.nIdLst             ),
@@ -489,26 +479,32 @@ sal_uInt8* WW8ListManager::GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms,
     return 0;                           // Sprm not found
 }
 
+class ListIdCompare : public
+    ::std::binary_function<const WW8LSTInfo *, const WW8LSTInfo *, bool>
+{
+public:
+    bool operator()(const WW8LSTInfo *pOne, const WW8LSTInfo *pTwo) const
+    { return pOne->nIdLst == pTwo->nIdLst; }
+};
+
+class ListWithId : public ::std::unary_function<const WW8LSTInfo *, bool>
+{
+private:
+    sal_uInt32 mnIdLst;
+public:
+    explicit ListWithId(sal_uInt32 nIdLst) : mnIdLst(nIdLst) {}
+    bool operator() (const WW8LSTInfo *pEntry) const
+        { return (pEntry->nIdLst == mnIdLst); }
+};
+
 // Zugriff ueber die List-Id des LST Eintrags
 WW8LSTInfo* WW8ListManager::GetLSTByListId( sal_uInt32 nIdLst ) const
 {
-    WW8LSTInfo aEntry( nIdLst );
-    sal_uInt16 nPos;
-    if( !pLSTInfos->Seek_Entry( &aEntry, &nPos ) ) return 0;
-    return pLSTInfos->GetObject( nPos );
-}
-
-// Zugriff ueber Reihenfolge der LST Eintraege im PLCF LST (Null basiert)
-WW8LSTInfo* WW8ListManager::GetLSTByStreamPos( sal_uInt16 nStreamPos ) const
-{
-    if( !pLSTInfos ) return 0;
-    WW8LSTInfo* pEntry;
-    for(sal_uInt16 nPos = nLSTInfos; nPos; )
-    {
-        pEntry = pLSTInfos->GetObject( --nPos );
-        if( pEntry && ( pEntry->nStreamPos == nStreamPos )) return pEntry;
-    }
-    return 0;
+    ::std::vector<WW8LSTInfo *>::const_iterator aResult =
+        ::std::find_if(maLSTInfos.begin(),maLSTInfos.end(),ListWithId(nIdLst));
+    if (aResult == maLSTInfos.end())
+        return 0;
+    return *aResult;
 }
 
 sal_Bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
@@ -918,9 +914,8 @@ SwNumRule* WW8ListManager::CreateNextRule(BOOL bSimple)
 // oeffentliche Methoden /////////////////////////////////////////////////////
 //
 WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
-    : pLSTInfos( 0 ), pLFOInfos( 0 ), nLSTInfos( 0 ), nUniqueList(1),
-    nLFOInfos( 0 ), rSt( rSt_ ), rReader( rReader_ ), rDoc( rReader.GetDoc() ),
-    rFib( rReader.GetFib() )
+    : pLFOInfos( 0 ), nUniqueList(1), rSt( rSt_ ), rReader( rReader_ ),
+    rDoc( rReader.GetDoc() ), rFib( rReader.GetFib() )
 {
     // LST und LFO gibts erst ab WW8
     if(    ( 8 > rFib.nVersion )
@@ -929,9 +924,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             || ( !rFib.lcbPlfLfo ) ) return; // offensichtlich keine Listen da
 
     // Arrays anlegen
-    pLSTInfos = new WW8LSTInfos;
     pLFOInfos = new WW8LFOInfos;
-    sal_uInt16 nList;
     sal_uInt16 nLfo;
     sal_Bool   bLVLOk=sal_True;
     sal_uInt8  aBits1;
@@ -951,7 +944,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         //
         // 1.1 alle LST einlesen
         //
-        for(nList = 0; nList < nListCount; nList++)
+        for (sal_uInt16 nList=0; nList < nListCount; ++nList)
         {
             bOk = sal_False;
             memset(&aLST, 0, sizeof( aLST ));
@@ -962,16 +955,15 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             rSt >> aLST.nIdLst;
             rSt >> aLST.nTplC;
             for(nLevel = 0; nLevel < nWW8MaxListLevel; nLevel++)
-            {
                 rSt >> aLST.aIdSty[ nLevel ];
-            }
 
 
             rSt >> aBits1;
 
             rSt.SeekRel( 1 );
 
-            if( 0 != rSt.GetError() ) break;
+            if (rSt.GetError())
+                break;
 
             if( aBits1 & 0x01 )
                 aLST.bSimpleList = sal_True;
@@ -997,9 +989,8 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             SwNumRule* pMyNumRule = CreateNextRule(
                 aLST.bSimpleList || (aBits1 & 0x10));
 
-            WW8LSTInfo* pLSTInfo = new WW8LSTInfo(pMyNumRule, aLST, nList);
-            pLSTInfos->Insert( pLSTInfo );
-            nLSTInfos++;
+            WW8LSTInfo* pLSTInfo = new WW8LSTInfo(pMyNumRule, aLST);
+            maLSTInfos.push_back(pLSTInfo);
             bOk = sal_True;
         }
     }
@@ -1010,10 +1001,11 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         // 1.2 alle LVL aller aLST einlesen
         //
         sal_uInt8 nLevel;
-        for(nList = 0; nList < nLSTInfos; nList++)
+        sal_uInt16 nLSTInfos = maLSTInfos.size();
+        for(sal_uInt16 nList = 0; nList < nLSTInfos; nList++)
         {
             bOk = sal_False;
-            WW8LSTInfo* pListInfo = GetLSTByStreamPos( nList );
+            WW8LSTInfo* pListInfo = maLSTInfos[nList];
             if( !pListInfo || !pListInfo->pNumRule ) break;
             SwNumRule& rMyNumRule = *pListInfo->pNumRule;
             //
@@ -1055,6 +1047,9 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 
         ;
     }
+
+    ::std::unique(maLSTInfos.begin(),maLSTInfos.end(),ListIdCompare());
+
     //
     // 2. PLF LFO auslesen und speichern
     //
@@ -1082,21 +1077,21 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             rSt >> aLFO.nLfoLvl;
             rSt.SeekRel( 3 );
             // soviele Overrides existieren
-            if( (nWW8MaxListLevel < aLFO.nLfoLvl) && (0 != rSt.GetError()) )
+            if( (nWW8MaxListLevel < aLFO.nLfoLvl) && rSt.GetError())
                 break;
 
             // die Parent NumRule der entsprechenden Liste ermitteln
-            WW8LSTInfo* pParentListInfo = GetLSTByListId( aLFO.nIdLst );
-            if( !pParentListInfo ) break;
-            // hier, im ersten Schritt, erst mal diese NumRule festhalten
-            aLFO.pNumRule = pParentListInfo->pNumRule;
-            if( !aLFO.pNumRule ) break;
-            // hat die Liste mehrere Level ?
-            aLFO.bSimpleList = pParentListInfo->bSimpleList;
+            if (WW8LSTInfo* pParentListInfo = GetLSTByListId(aLFO.nIdLst))
+            {
+                // hier, im ersten Schritt, erst mal diese NumRule festhalten
+                aLFO.pNumRule = pParentListInfo->pNumRule;
+
+                // hat die Liste mehrere Level ?
+                aLFO.bSimpleList = pParentListInfo->bSimpleList;
+            }
             // und rein ins Merk-Array mit dem Teil
-            WW8LFOInfo* pLFOInfo = new WW8LFOInfo( aLFO );
+            WW8LFOInfo* pLFOInfo = new WW8LFOInfo(aLFO);
             pLFOInfos->Insert(pLFOInfo, pLFOInfos->Count());
-            nLFOInfos++;
             bOk = sal_True;
         }
     }
@@ -1106,22 +1101,25 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         // 2.2 fuer alle LFO die zugehoerigen LFOLVL einlesen
         //
         WW8LFOLVL aLFOLVL;
+        sal_uInt16 nLFOInfos = pLFOInfos ? pLFOInfos->Count() : 0;
         for(nLfo = 0; nLfo < nLFOInfos; nLfo++)
         {
             bOk = sal_False;
             WW8LFOInfo* pLFOInfo = pLFOInfos->GetObject( nLfo );
-            if( !pLFOInfo )
+            if (!pLFOInfo)
                 break;
             // stehen hierfuer ueberhaupt LFOLVL an ?
             if( pLFOInfo->bOverride )
             {
                 WW8LSTInfo* pParentListInfo = GetLSTByListId(pLFOInfo->nIdLst);
+                ASSERT(pParentListInfo, "ww: Impossible lists, please report");
                 if (!pParentListInfo)
                     break;
                 //
                 // 2.2.1 eine neue NumRule fuer diese Liste anlegen
                 //
                 SwNumRule* pParentNumRule = pLFOInfo->pNumRule;
+                ASSERT(pParentNumRule, "ww: Impossible lists, please report");
                 if( !pParentNumRule )
                     break;
                 // Nauemsprefix aufbauen: fuer NumRule-Name (eventuell)
@@ -1168,7 +1166,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                     do
                     {
                         rSt >> n1;
-                        if( 0 != rSt.GetError() )
+                        if (rSt.GetError())
                             break;
                     }
                     while( 0xFF == n1 );
@@ -1180,7 +1178,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                     rSt >> aLFOLVL.nStartAt;
                     rSt >> aBits1;
                     rSt.SeekRel( 3 );
-                    if( 0 != rSt.GetError() )
+                    if (rSt.GetError())
                         break;
 
                     // beachte: Die Witzbolde bei MS quetschen die
@@ -1282,31 +1280,29 @@ WW8ListManager::~WW8ListManager()
     /*
     named lists remain in doc!!!
     unnamed lists are deleted when unused
-    pLSTInfos and pLFOInfos are in any case destructed
+    pLFOInfos are in any case destructed
     */
-    sal_uInt16 nInfo;
-    if( pLSTInfos )
+    for(::std::vector<WW8LSTInfo *>::iterator aIter = maLSTInfos.begin();
+        aIter != maLSTInfos.end(); ++aIter)
     {
-        for(nInfo = pLSTInfos->Count(); nInfo; )
+        if ((*aIter)->pNumRule && !(*aIter)->bUsedInDoc &&
+            (*aIter)->pNumRule->IsAutoRule())
         {
-            WW8LSTInfo& rActInfo = *pLSTInfos->GetObject( --nInfo );
-            if (rActInfo.pNumRule && !rActInfo.bUsedInDoc
-                    && rActInfo.pNumRule->IsAutoRule())
-            {
-                rDoc.DelNumRule( rActInfo.pNumRule->GetName() );
-            }
+            rDoc.DelNumRule((*aIter)->pNumRule->GetName());
         }
-        delete pLSTInfos;
+//        delete *aIter, *aIter=0;
+        delete *aIter;
     }
-    if( pLFOInfos )
+
+    if (pLFOInfos)
     {
-        for(nInfo = pLFOInfos->Count(); nInfo; )
+        for(sal_uInt16 nInfo = pLFOInfos->Count(); nInfo; )
         {
-            WW8LFOInfo& rActInfo = *pLFOInfos->GetObject( --nInfo );
-            if (rActInfo.bOverride &&  rActInfo.pNumRule
-                && !rActInfo.bUsedInDoc && rActInfo.pNumRule->IsAutoRule())
+            WW8LFOInfo *pActInfo = pLFOInfos->GetObject(--nInfo);
+            if (pActInfo->bOverride && pActInfo->pNumRule
+                && !pActInfo->bUsedInDoc && pActInfo->pNumRule->IsAutoRule())
             {
-                rDoc.DelNumRule( rActInfo.pNumRule->GetName() );
+                rDoc.DelNumRule( pActInfo->pNumRule->GetName() );
             }
         }
         delete pLFOInfos;
@@ -1316,6 +1312,7 @@ WW8ListManager::~WW8ListManager()
 SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     sal_uInt8 nLevel) const
 {
+    sal_uInt16 nLFOInfos = pLFOInfos ? pLFOInfos->Count() : 0;
     if( nLFOInfos <= nLFOPosition )
         return 0;
 
@@ -1355,10 +1352,9 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     return pLFOInfo->pNumRule;
 }
 
-
-
 sal_Bool WW8ListManager::IsSimpleList(sal_uInt16 nLFOPosition) const
 {
+    sal_uInt16 nLFOInfos = pLFOInfos ? pLFOInfos->Count() : 0;
     if (nLFOInfos <= nLFOPosition)
         return sal_False;
 
@@ -1368,9 +1364,6 @@ sal_Bool WW8ListManager::IsSimpleList(sal_uInt16 nLFOPosition) const
         return sal_False;
     return pLFOInfo->bSimpleList;
 }
-
-
-
 
 //----------------------------------------------------------------------------
 //          SwWW8ImplReader:  anhaengen einer Liste an einen Style oder Absatz

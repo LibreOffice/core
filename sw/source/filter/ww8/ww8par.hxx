@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-22 14:24:58 $
+ *  last change: $Author: cmc $ $Date: 2002-05-24 16:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,10 +215,7 @@ namespace com{namespace sun {namespace star{
 //            Listen-Manager (ab Ver8)
 //-----------------------------------------
 
-struct WW8LSTInfo;
 struct WW8LFOInfo;
-
-typedef WW8LSTInfo* WW8LSTInfo_Ptr;
 typedef WW8LFOInfo* WW8LFOInfo_Ptr;
 // Zeichenattribute aus GrpprlChpx
 typedef SfxItemSet* WW8aISet[nWW8MaxListLevel ];
@@ -230,7 +227,6 @@ typedef WW8AuthorInfo* WW8AuthorInfo_Ptr;
 struct WW8OleMap;
 typedef WW8OleMap* WW8OleMap_Ptr;
 
-SV_DECL_PTRARR_SORT_DEL(WW8LSTInfos,WW8LSTInfo_Ptr,16,16)
 SV_DECL_PTRARR_DEL(WW8LFOInfos,WW8LFOInfo_Ptr,16,16)
 SV_DECL_PTRARR_SORT_DEL(WW8AuthorInfos, WW8AuthorInfo_Ptr,16,16)
 SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,16,16)
@@ -254,19 +250,17 @@ struct WW8OleMap
 };
 
 class SwWW8ImplReader;
+struct WW8LSTInfo;
 class WW8ListManager
 {
     SwWW8ImplReader& rReader;
     SwDoc&           rDoc;
     const WW8Fib&    rFib;
     SvStream&        rSt;
-    WW8LSTInfos* pLSTInfos;// Daten aus PLCF LST, sortiert nach LST Id
+    ::std::vector<WW8LSTInfo* > maLSTInfos;
     WW8LFOInfos* pLFOInfos;// D. aus PLF LFO, sortiert genau wie im WW8 Stream
-    USHORT       nLSTInfos;// geht schneller als Abfrage von pLSTInfos->Count()
-    USHORT       nLFOInfos;// dito
     USHORT       nUniqueList; // current number for creating unique list names
     BYTE* GrpprlHasSprm(USHORT nId, BYTE& rSprms, BYTE nLen);
-    WW8LSTInfo* GetLSTByStreamPos( USHORT nStreamPos ) const;
     WW8LSTInfo* GetLSTByListId(    ULONG  nIdLst     ) const;
     BOOL ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet, USHORT nLevelStyle,
         BOOL bSetStartNo );
