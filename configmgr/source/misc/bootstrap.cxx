@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jb $ $Date: 2002-09-19 10:52:06 $
+ *  last change: $Author: jb $ $Date: 2002-09-23 14:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@
 #define BOOTSTRAP_ITEM_SERVERTYPE           "CFG_ServerType"
 #define BOOTSTRAP_ITEM_UNOSERVICE           BOOTSTRAP_ITEM_PREFIX_ SETTING_UNOSERVICE
 #define BOOTSTRAP_ITEM_UNOWRAPPER           BOOTSTRAP_ITEM_PREFIX_ SETTING_UNOWRAPPER
+#define BOOTSTRAP_ITEM_OFFLINE            /*BOOTSTRAP_ITEM_PREFIX_*/ SETTING_OFFLINE
 #define BOOTSTRAP_ITEM_LOCALE               BOOTSTRAP_ITEM_PREFIX_ "Locale"
 #define BOOTSTRAP_ITEM_ASYNCENABLE          BOOTSTRAP_ITEM_PREFIX_ "EnableAsync"
 
@@ -1463,6 +1464,7 @@ namespace {
         addSetting(_rSettings, NAME(SETTING_SERVERTYPE), ITEM(BOOTSTRAP_ITEM_SERVERTYPE) );
         addSetting(_rSettings, NAME(SETTING_UNOSERVICE), ITEM(BOOTSTRAP_ITEM_UNOSERVICE) );
         addSetting(_rSettings, NAME(SETTING_UNOWRAPPER), ITEM(BOOTSTRAP_ITEM_UNOWRAPPER) );
+        addSetting(_rSettings, NAME(SETTING_OFFLINE),    ITEM(BOOTSTRAP_ITEM_OFFLINE) );
         addSetting(_rSettings, NAME(SETTING_LOCALE),     ITEM(BOOTSTRAP_ITEM_LOCALE) );
         addSetting(_rSettings, NAME(SETTING_ASYNC),      ITEM(BOOTSTRAP_ITEM_ASYNCENABLE) );
         addSetting(_rSettings, NAME(SETTING_SOURCEPATH), ITEM(BOOTSTRAP_ITEM_SOURCE_PATH) );
