@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:45:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,8 @@ using namespace rtl;
  ***************************************************************************/
 
 GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay, Visual* pVis, Colormap aCol )
-            : m_pGdkDisplay( pDisplay ),
-              SalDisplay( gdk_x11_display_get_xdisplay( pDisplay ), aCol )
+            : SalDisplay( gdk_x11_display_get_xdisplay( pDisplay ), aCol ),
+              m_pGdkDisplay( pDisplay )
 {
     for(int i = 0; i < POINTER_COUNT; i++)
         m_aCursors[ i ] = NULL;
@@ -165,9 +165,9 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
                  it != pDisplay->m_aFrames.end(); ++it )
         {
             GtkSalFrame* pFrame = static_cast<GtkSalFrame*>(*it);
-            if( pFrame->GetSystemData()->aWindow == pEvent->xany.window ||
-                ( pFrame->getForeignParent() && GDK_WINDOW_XWINDOW(pFrame->getForeignParent()) == pEvent->xany.window ) ||
-                ( pFrame->getForeignTopLevel() && GDK_WINDOW_XWINDOW(pFrame->getForeignTopLevel()) == pEvent->xany.window )
+            if( (GdkNativeWindow)pFrame->GetSystemData()->aWindow == pEvent->xany.window ||
+                ( pFrame->getForeignParent() && pFrame->getForeignParentWindow() == pEvent->xany.window ) ||
+                ( pFrame->getForeignTopLevel() && pFrame->getForeignTopLevelWindow() == pEvent->xany.window )
                 )
             {
                 if( ! pFrame->Dispatch( pEvent ) )
@@ -189,7 +189,7 @@ long GtkSalDisplay::Dispatch( XEvent* pEvent )
         for( std::list< SalFrame* >::const_iterator it = m_aFrames.begin();
              it != m_aFrames.end(); ++it )
         {
-            if( (*it)->GetSystemData()->aWindow == pEvent->xany.window )
+            if( (GdkNativeWindow)(*it)->GetSystemData()->aWindow == pEvent->xany.window )
                 return static_cast<GtkSalFrame*>(*it)->Dispatch( pEvent );
         }
     }
