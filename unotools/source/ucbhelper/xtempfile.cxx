@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtempfile.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-28 16:45:17 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@ using namespace utl;
 #define DESKTOP_TEMPNAMEBASE_DIR    "/temp/soffice.tmp"
 
 XTempFile::XTempFile ()
+: mbRemoveFile( sal_True )
+, mbInClosed( sal_False )
+, mbOutClosed( sal_False )
 {
     if ( ! TempFile::GetTempNameBaseDirectory().Len())
     {
@@ -139,7 +142,8 @@ XTempFile::XTempFile ()
 }
 XTempFile::~XTempFile ()
 {
-    delete mpTempFile;
+    if ( mpTempFile )
+        delete mpTempFile;
 }
 
 // XInterface
@@ -153,6 +157,8 @@ Any SAL_CALL XTempFile::queryInterface( const Type& rType )
                                 // my own interfaces
                                 static_cast< XInputStream*  > ( this ),
                                 static_cast< XOutputStream* > ( this ),
+                                static_cast< XStream*       > ( this ),
+                                static_cast< XTruncate*     > ( this ),
                                 static_cast< XPropertySet*  > ( this ),
                                 static_cast< XSeekable*     > ( this ) );
 }
@@ -166,15 +172,19 @@ void SAL_CALL XTempFile::release(  )
 {
     OWeakObject::release();
 }
+
 // XInputStream
+
 sal_Int32 SAL_CALL XTempFile::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
     throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
+    MutexGuard aGuard( maMutex );
+    if ( mbInClosed )
+        throw NotConnectedException ( OUString(), const_cast < XWeak * > ( static_cast < const XWeak* > (this ) ) );
+
     checkConnected();
     if (nBytesToRead < 0)
         throw BufferSizeExceededException( OUString(), static_cast<XWeak*>(this));
-
-    MutexGuard aGuard( maMutex );
 
     aData.realloc(nBytesToRead);
 
@@ -189,6 +199,10 @@ sal_Int32 SAL_CALL XTempFile::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 
 sal_Int32 SAL_CALL XTempFile::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
     throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
+    MutexGuard aGuard( maMutex );
+    if ( mbInClosed )
+        throw NotConnectedException ( OUString(), const_cast < XWeak * > ( static_cast < const XWeak* > (this ) ) );
+
     checkError();
 
     if (nMaxBytesToRead < 0)
@@ -206,6 +220,9 @@ void SAL_CALL XTempFile::skipBytes( sal_Int32 nBytesToSkip )
     throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     MutexGuard aGuard( maMutex );
+    if ( mbInClosed )
+        throw NotConnectedException ( OUString(), const_cast < XWeak * > ( static_cast < const XWeak* > (this ) ) );
+
     checkError();
     mpStream->SeekRel(nBytesToSkip);
     checkError();
@@ -214,6 +231,9 @@ sal_Int32 SAL_CALL XTempFile::available(  )
     throw (NotConnectedException, IOException, RuntimeException)
 {
     MutexGuard aGuard( maMutex );
+    if ( mbInClosed )
+        throw NotConnectedException ( OUString(), const_cast < XWeak * > ( static_cast < const XWeak* > (this ) ) );
+
     checkConnected();
 
     sal_uInt32 nPos = mpStream->Tell();
@@ -231,8 +251,27 @@ sal_Int32 SAL_CALL XTempFile::available(  )
 void SAL_CALL XTempFile::closeInput(  )
     throw (NotConnectedException, IOException, RuntimeException)
 {
+    MutexGuard aGuard( maMutex );
+    if ( mbInClosed )
+        throw NotConnectedException ( OUString(), const_cast < XWeak * > ( static_cast < const XWeak* > (this ) ) );
+
+    mbInClosed = sal_True;
+
+    if ( mbOutClosed )
+    {
+        // stream will be deleted by TempFile implementation
+        mpStream = NULL;
+
+        if ( mpTempFile )
+        {
+            delete mpTempFile;
+            mpTempFile = NULL;
+        }
+    }
 }
+
 // XSeekable
+
 void SAL_CALL XTempFile::seek( sal_Int64 nLocation )
     throw (IllegalArgumentException, IOException, RuntimeException)
 {
@@ -273,10 +312,15 @@ sal_Int64 SAL_CALL XTempFile::getLength(  )
 }
 
 // XOutputStream
+
 void SAL_CALL XTempFile::writeBytes( const Sequence< sal_Int8 >& aData )
     throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     MutexGuard aGuard( maMutex );
+    if ( mbOutClosed )
+        throw NotConnectedException ( OUString(), const_cast < XWeak * > ( static_cast < const XWeak* > (this ) ) );
+
+    checkConnected();
     sal_uInt32 nWritten = mpStream->Write(aData.getConstArray(),aData.getLength());
     checkError();
     if  ( nWritten != (sal_uInt32)aData.getLength())
@@ -286,13 +330,37 @@ void SAL_CALL XTempFile::flush(  )
     throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     MutexGuard aGuard( maMutex );
+    if ( mbOutClosed )
+        throw NotConnectedException ( OUString(), const_cast < XWeak * > ( static_cast < const XWeak* > (this ) ) );
+
+    checkConnected();
     mpStream->Flush();
     checkError();
 }
 void SAL_CALL XTempFile::closeOutput(  )
     throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
+    MutexGuard aGuard( maMutex );
+    if ( mbOutClosed )
+        throw NotConnectedException ( OUString(), const_cast < XWeak * > ( static_cast < const XWeak* > (this ) ) );
+
+    mbOutClosed = sal_True;
+
+    if ( mbInClosed )
+    {
+        // stream will be deleted by TempFile implementation
+        mpStream = NULL;
+
+        if ( mpTempFile )
+        {
+            delete mpTempFile;
+            mpTempFile = NULL;
+        }
+    }
 }
+
+
+
 void XTempFile::checkError () const
 {
     if (mpStream->SvStream::GetError () != ERRCODE_NONE )
@@ -308,11 +376,54 @@ Reference< XPropertySetInfo > SAL_CALL XTempFile::getPropertySetInfo(  )
 {
     return Reference < XPropertySetInfo > ();
 }
+
+// XStream
+
+Reference< XInputStream > SAL_CALL XTempFile::getInputStream()
+    throw (RuntimeException)
+{
+    return Reference< XInputStream >( static_cast< OWeakObject* >( this ), ::com::sun::star::uno::UNO_QUERY );
+}
+
+Reference< XOutputStream > SAL_CALL XTempFile::getOutputStream()
+    throw (RuntimeException)
+{
+    return Reference< XOutputStream >( static_cast< OWeakObject* >( this ), ::com::sun::star::uno::UNO_QUERY );
+}
+
+// XTruncate
+
+void SAL_CALL XTempFile::truncate()
+    throw (IOException, RuntimeException)
+{
+    MutexGuard aGuard( maMutex );
+    checkConnected();
+    mpStream->SetStreamSize( 0 );
+    checkError();
+}
+
+// XPropertySet
+
 void SAL_CALL XTempFile::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
     throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    // All properties are read-only
-    if ( aPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "ResourceName" ) ) ||
+    MutexGuard aGuard( maMutex );
+
+    if ( !mpTempFile )
+    {
+        // the stream is already disconnected
+        throw RuntimeException();
+    }
+
+    if ( aPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "RemoveFile" ) ) )
+    {
+        if ( !( aValue >>= mbRemoveFile ) )
+            throw IllegalArgumentException();
+
+        mpTempFile->EnableKillingFile( mbRemoveFile );
+    }
+    // All other properties are read-only
+    else if ( aPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "ResourceName" ) ) ||
          aPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Uri" ) ) )
         throw IllegalArgumentException();
     else
@@ -321,8 +432,19 @@ void SAL_CALL XTempFile::setPropertyValue( const OUString& aPropertyName, const 
 Any SAL_CALL XTempFile::getPropertyValue( const OUString& PropertyName )
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
+    MutexGuard aGuard( maMutex );
+
+    if ( !mpTempFile )
+    {
+        // the stream is already disconnected
+        throw RuntimeException();
+    }
+
     Any aRet;
-    if ( PropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "ResourceName" ) ) )
+
+    if ( PropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "RemoveFile" ) ) )
+        aRet <<= mbRemoveFile;
+    else if ( PropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "ResourceName" ) ) )
         aRet <<= OUString ( mpTempFile->GetFileName() );
     else if ( PropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Uri" ) ) )
         aRet <<= OUString ( mpTempFile->GetURL() );
@@ -350,6 +472,8 @@ void SAL_CALL XTempFile::removeVetoableChangeListener( const OUString& PropertyN
 {
     DBG_ASSERT ( sal_False, "Listeners not implemented" );
 }
+
+
 
 OUString XTempFile::getImplementationName ()
 {
