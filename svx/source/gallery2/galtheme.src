@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:49:43 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ String RID_GALLERYSTR_THEME_3D
     Text[ portuguese_brazilian ] = "3D";
     Text[ japanese ] = "3D";
     Text[ chinese_simplified ] = "3 Î¬";
-    Text[ chinese_traditional ] = "3 ºû";
+    Text[ chinese_traditional ] = "3 D";
     Text[ arabic ] = "ÃÔßÇá ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ greek ] = "3Ä";
     Text[ korean ] = "3D";
@@ -102,14 +102,14 @@ String RID_GALLERYSTR_THEME_ANIMATIONS
     Text[ spanish ] = "Animaciones";
     Text[ italian ] = "Animazioni";
     Text[ danish ] = "Animationer";
-    Text[ swedish ] = "Animeringar";
+    Text[ swedish ] = "Animationer";
     Text[ polish ] = "Animacje";
     Text[ portuguese_brazilian ] = "Animations";
-    Text[ japanese ] = "±ÆÒ°¼®İ";
+    Text[ japanese ] = "“®‰æ";
     Text[ chinese_simplified ] = "¶¯»­";
     Text[ chinese_traditional ] = "°Êµe";
     Text[ arabic ] = "ÊÃËíÑÇÊ ÍÑßÉ";
-    Text[ greek ] = "Åöİ êéíŞóåùí";
+    Text[ greek ] = "Êéíïıìåíåò åéêüíåò";
     Text[ korean ] = "¾Ö´Ï¸ŞÀÌ¼Ç";
     Text[ turkish ] = "Canlandırmalar";
     Text[ language_user1 ] = " ";
@@ -133,8 +133,8 @@ String RID_GALLERYSTR_THEME_BULLETS
     Text[ polish ] = "Znaki wypunktowania";
     Text[ portuguese_brazilian ] = "Bullets";
     Text[ japanese ] = "‰Óğ‘‚«¼İÎŞÙ";
-    Text[ chinese_simplified ] = "¸÷Ê½Í¼±ê";
-    Text[ chinese_traditional ] = "¦U¦¡¹Ï¼Ğ";
+    Text[ chinese_simplified ] = "¸÷ÖÖĞÎ×´";
+    Text[ chinese_traditional ] = "¦UÏú§Îª¬";
     Text[ arabic ] = "ÚáÇãÇÊ ÊÚÏÇÏ";
     Text[ greek ] = "Êïõêßäåò";
     Text[ korean ] = "±Û¸Ó¸®Ç¥";
@@ -157,7 +157,7 @@ String RID_GALLERYSTR_THEME_CLIPARTS
     Text[ italian ] = "Clipart";
     Text[ danish ] = "Clipart";
     Text[ swedish ] = "Clipart";
-    Text[ polish ] = "Clipart";
+    Text[ polish ] = "Klipart";
     Text[ portuguese_brazilian ] = "Clipart";
     Text[ japanese ] = "¸Ø¯Ìß±°Ä";
     Text[ chinese_simplified ] = "¼ôÌù»­";
@@ -186,7 +186,7 @@ String RID_GALLERYSTR_THEME_FLAGS
     Text[ swedish ] = "Flaggor";
     Text[ polish ] = "Flagi";
     Text[ portuguese_brazilian ] = "Flags";
-    Text[ japanese ] = "Šø";
+    Text[ japanese ] = "‘Šø";
     Text[ chinese_simplified ] = "¸÷Ê½¹úÆì";
     Text[ chinese_traditional ] = "¦U¦¡°êºX";
     Text[ arabic ] = "ÃÚáÇã";
@@ -244,7 +244,7 @@ String RID_GALLERYSTR_THEME_FORMS
     Text[ chinese_simplified ] = "¸÷Ê½Í¼°¸";
     Text[ chinese_traditional ] = "¦U¦¡¹Ï®×";
     Text[ arabic ] = "ÃÔßÇá";
-    Text[ greek ] = "Ó÷Şìáôá";
+    Text[ greek ] = "Ìïñöİò";
     Text[ korean ] = "µµÇü";
     Text[ turkish ] = "Şekiller";
     Text[ language_user1 ] = " ";
@@ -295,7 +295,7 @@ String RID_GALLERYSTR_THEME_BACKGROUNDS
     Text[ polish ] = "T³a";
     Text[ portuguese_brazilian ] = "Backgrounds";
     Text[ japanese ] = "”wŒi";
-    Text[ chinese_simplified ] = "¸÷Ê½±³¾°";
+    Text[ chinese_simplified ] = "¸÷ÖÖ±³¾°";
     Text[ chinese_traditional ] = "¦U¦¡­I´º";
     Text[ arabic ] = "ÎáİíÇÊ";
     Text[ greek ] = "Åğéëïãİò öüíôïõ";
@@ -325,7 +325,7 @@ String RID_GALLERYSTR_THEME_HOMEPAGE
     Text[ chinese_simplified ] = "Ö÷Ò³";
     Text[ chinese_traditional ] = "ºô¸ô¥D­¶";
     Text[ arabic ] = "ãİÇÊíÍ";
-    Text[ greek ] = "ÊåíôñéêŞ óåëßäá";
+    Text[ greek ] = "Áñ÷éêŞ óåëßäá";
     Text[ korean ] = "È¨ÆäÀÌÁö";
     Text[ turkish ] = "Web sayfası";
     Text[ language_user1 ] = " ";
@@ -464,12 +464,12 @@ String RID_GALLERYSTR_THEME_RULERS
     Text[english_us] = "Rulers";
     Text[ portuguese ] = "Limites";
     Text[ russian ] = "Îãğàíè÷åíèÿ";
-    Text[ dutch ] = "Linealen";
+    Text[ dutch ] = "Begrenzingen";
     Text[ french ] = "Règles";
     Text[ spanish ] = "Límites";
-    Text[ italian ] = "Rulers";
+    Text[ italian ] = "Limiti";
     Text[ danish ] = "Linealer";
-    Text[ swedish ] = "Begränsningar";
+    Text[ swedish ] = "Linjaler";
     Text[ polish ] = "Ograniczenia";
     Text[ portuguese_brazilian ] = "Rulers";
     Text[ japanese ] = "Ù°×°";
@@ -556,7 +556,7 @@ String RID_GALLERYSTR_THEME_MYTHEME
     Text[ portuguese_brazilian ] = "My theme";
     Text[ japanese ] = "“Æ©‚ÌÃ°Ï";
     Text[ korean ] = "My theme";
-    Text[ chinese_simplified ] = "¸öÈËÖ÷Ìâ";
+    Text[ chinese_simplified ] = "×Ô¼ºµÄÖ÷Ìâ";
     Text[ chinese_traditional ] = "¦Û­q¥DÃD";
     Text[ turkish ] = "Kullanıcı konusu";
     Text[ arabic ] = "ãæÖæÚ ÎÇÕ";
