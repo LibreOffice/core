@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AxTestComponents.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-12 13:17:46 $
+ *  last change: $Author: jl $ $Date: 2002-03-12 13:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ import "ocidl.idl";
         [id(68), helpstring("method inMulDimArrayVariant2")] HRESULT inMulDimArrayVariant2([in] SAFEARRAY(VARIANT) val);
         [id(69), helpstring("method inMulDimArrayByte")] HRESULT inMulDimArrayByte([in] SAFEARRAY(unsigned char) val);
         [id(70), helpstring("method inMulDimArrayByte2")] HRESULT inMulDimArrayByte2([in] SAFEARRAY(unsigned char) val);
+        [id(71), helpstring("method outMore")] HRESULT outMore([out]long* val1, [out]long* val2);
 
     };
 

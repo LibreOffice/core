@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Basic.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-12 13:18:22 $
+ *  last change: $Author: jl $ $Date: 2002-03-12 13:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,12 @@ class ATL_NO_VTABLE CBasic :
     public IDispatchImpl<IBasic, &IID_IBasic, &LIBID_AXTESTCOMPONENTSLib>
 {
 public:
-    CBasic():   m_cPrpByte(0),m_nPrpShort(0),m_lPrpLong(0),m_fPrpFloat(0), m_dPrpDouble(0),m_PrpArray(0)
+    CBasic();
+    ~CBasic();
+/*  CBasic():   m_cPrpByte(0),m_nPrpShort(0),m_lPrpLong(0),m_fPrpFloat(0), m_dPrpDouble(0),m_PrpArray(0)
     {
     }
-
+*/
 DECLARE_REGISTRY_RESOURCEID(IDR_BASIC)
 
 DECLARE_PROTECT_FINAL_CONSTRUCT()
@@ -88,6 +90,7 @@ END_COM_MAP()
 
 // IBasic
 public:
+    STDMETHOD(outMore)(/*[out]*/long* val1, /*[out]*/long* val2);
     STDMETHOD(inMulDimArrayByte2)(LPSAFEARRAY val);
     STDMETHOD(inMulDimArrayByte)(LPSAFEARRAY val);
     STDMETHOD(inMulDimArrayVariant2)(LPSAFEARRAY val);

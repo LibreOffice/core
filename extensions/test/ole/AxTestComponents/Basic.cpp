@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Basic.cpp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-12 13:18:22 $
+ *  last change: $Author: jl $ $Date: 2002-03-12 13:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,13 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // CBasic
+CBasic::CBasic():   m_cPrpByte(0),m_nPrpShort(0),m_lPrpLong(0),m_fPrpFloat(0), m_dPrpDouble(0),m_PrpArray(0)
+{
+}
 
+CBasic::~CBasic()
+{
+}
 
 STDMETHODIMP CBasic::inByte(unsigned char val)
 {
@@ -956,3 +962,11 @@ void CBasic::printMulArray( SAFEARRAY* val, VARTYPE type)
 
 
 
+
+STDMETHODIMP CBasic::outMore(long* val1, long* val2)
+{
+    // TODO: Add your implementation code here
+    *val1= 111;
+    *val2= 112;
+    return S_OK;
+}
