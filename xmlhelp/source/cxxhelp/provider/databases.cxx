@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-23 16:51:01 $
+ *  last change: $Author: abi $ $Date: 2002-02-05 13:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,11 +527,31 @@ Databases::getCollator( const rtl::OUString& Language,
             Reference< XCollator > (
                 m_xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.i18n.Collator" ) ),
                 UNO_QUERY );
-
-        it->second->loadDefaultCollator( Locale( lang( Language ),
-                                                 country( Language ),
-                                                 rtl::OUString() ),
-                                         0 );
+        rtl::OUString langStr = lang(Language);
+        rtl::OUString countryStr = country(Language);
+        if( !countryStr.getLength() )
+        {
+            if( langStr.compareToAscii("de") == 0 )
+                countryStr = rtl::OUString::createFromAscii("DE");
+            else if( langStr.compareToAscii("en") == 0 )
+                countryStr = rtl::OUString::createFromAscii("US");
+            else if( langStr.compareToAscii("es") == 0 )
+                countryStr = rtl::OUString::createFromAscii("ES");
+            else if( langStr.compareToAscii("it") == 0 )
+                countryStr = rtl::OUString::createFromAscii("IT");
+            else if( langStr.compareToAscii("fr") == 0 )
+                countryStr = rtl::OUString::createFromAscii("FR");
+            else if( langStr.compareToAscii("sv") == 0 )
+                countryStr = rtl::OUString::createFromAscii("SE");
+            else if( langStr.compareToAscii("ja") == 0 )
+                countryStr = rtl::OUString::createFromAscii("JP");
+            else if( langStr.compareToAscii("ko") == 0 )
+                countryStr = rtl::OUString::createFromAscii("KR");
+        }
+        it->second->loadDefaultCollator(  Locale( langStr,
+                                                  countryStr,
+                                                  rtl::OUString() ),
+                                          0 );
     }
 
     return it->second;
@@ -654,7 +674,7 @@ KeywordInfo::KeywordInfo( const std::vector< KeywordElement >& aVec )
       listAnchor( aVec.size() ),
       listTitle( aVec.size() )
 {
-    for( int i = 0; i < aVec.size(); ++i )
+    for( unsigned int i = 0; i < aVec.size(); ++i )
     {
         listKey[i] = aVec[i].key;
         listId[i] = aVec[i].listId;
@@ -688,7 +708,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                                fileNameOU.getLength(),
                                osl_getThreadTextEncoding() );
 
-        Db table( 0,DB_CXX_NO_EXCEPTIONS );
+        Db table(0,DB_CXX_NO_EXCEPTIONS);
         if( 0 == table.open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
         {
             std::vector<KeywordInfo::KeywordElement> aVector;
@@ -725,7 +745,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
             if( cursor ) cursor->close();
 
             // sorting
-            Reference< XCollator > xCollator = getCollator( Language,rtl::OUString() );
+            Reference< XCollator > xCollator = getCollator( Language,rtl::OUString());
             KeywordElementComparator aComparator( xCollator );
             std::sort(aVector.begin(),aVector.end(),aComparator);
 
