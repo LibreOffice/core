@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:38:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ CheckBox CB_USE_PASSWD
     Text[ korean ] = "ÆÐ½º¿öµå(~P)";
     Text[ turkish ] = "Þifre";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Contraseña";
 };
 CheckBox CB_READ_ONLY
 {
@@ -112,6 +113,7 @@ CheckBox CB_READ_ONLY
     Text[ korean ] = "ÀÐ±â Àü¿ë(~R)";
     Text[ turkish ] = "~Salt okunur";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Solo lectura";
 };
 String STR_LINKEDIT_TEXT
 {
@@ -139,6 +141,7 @@ String STR_LINKEDIT_TEXT
     Text[ korean ] = "¿¬°á ÆíÁý";
     Text[ turkish ] = "Baðlantýlarý düzenle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar vínculos";
 };
 String STR_PATH_NOT_FOUND1
 {
@@ -166,6 +169,7 @@ String STR_PATH_NOT_FOUND1
     Text[ greek ] = "Ï êáôÜëïãïò '";
     Text[ korean ] = "µð·ºÅä¸®'";
     Text[ turkish ] = "Dizin '";
+    Text[ catalan ] = "El directorio '";
 };
 String STR_PATH_NOT_FOUND2
 {
@@ -194,6 +198,7 @@ String STR_PATH_NOT_FOUND2
     Text[ korean ] = "' °¡ Á¸ÀçÇÏÁö ¾ÊÀ½";
     Text[ turkish ] = "' mevcut deðil.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "' no existe.";
 };
 String STR_FLT_SGV
 {
