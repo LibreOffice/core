@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabdash.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:10:52 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:21:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,8 +358,8 @@ BOOL XDashList::Load()
 
         aURL.Append( aName );
 
-        if( !aURL.getExtension().Len() )
-            aURL.setExtension( String( pszExtDash, 3 ) );
+        if( !aURL.getExtension().getLength() )
+            aURL.setExtension( rtl::OUString( pszExtDash, 3 ) );
 
 //BFS01     // check if file exists, SfxMedium shows an errorbox else
 //BFS01     {
@@ -419,8 +419,8 @@ BOOL XDashList::Save()
 
     aURL.Append( aName );
 
-    if( !aURL.getExtension().Len() )
-        aURL.setExtension( String( pszExtDash, 3 ) );
+    if( !aURL.getExtension().getLength() )
+        aURL.setExtension( rtl::OUString( pszExtDash, 3 ) );
 
     uno::Reference< container::XNameContainer > xTable( SvxUnoXDashTable_createInstance( this ), uno::UNO_QUERY );
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
