@@ -70,7 +70,7 @@ Public CONST CalBLThueringen     = 16
 Sub CalAutopilotTable()
 
 &apos; On Error Goto ErrorHandler
-        Application.BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	&apos; HauptRoutine zur Erstellung des Kalenders
 	Set DlgBuffer = DlgCalendar
 
