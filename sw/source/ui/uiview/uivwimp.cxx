@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:25:54 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
 #endif
+#ifndef _MMCONFIGITEM_HXX
+#include <mmconfigitem.hxx>
+#endif
 
 #include <view.hrc>
 
@@ -139,7 +142,10 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 SwView_Impl::SwView_Impl(SwView* pShell) :
         pView(pShell),
         pxXTextView(new uno::Reference<view::XSelectionSupplier>),
-        eShellMode(SEL_TEXT)
+        eShellMode(SEL_TEXT),
+        pConfigItem(0),
+        nMailMergeRestartPage(0),
+        bMailMergeSourceView(sal_True)
 {
     *pxXTextView = new SwXTextView(pView);
     xDisProvInterceptor = new SwXDispatchProviderInterceptor(*pView);
@@ -168,6 +174,7 @@ SwView_Impl::~SwView_Impl()
         pClipEvtLstnr->AddRemoveListener( FALSE );
         pClipEvtLstnr->ViewDestroyed();
     }
+    delete pConfigItem;
 }
 
 /*-----------------13.12.97 09:54-------------------
