@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-14 19:53:31 $
+ *  last change: $Author: jp $ $Date: 2001-11-14 20:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -940,35 +940,139 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !xInfo.is() )
         return;
 
-    // static array of setting names which are not loaded. Its sorted
-    // first by the length, then by the name!
+    // static array of setting names which are not loaded.
+    // This table is created with the iout commended procedure. This will
+    // be need if anybody add more or change strings!!!
+    /*
+        program to calculate the best hash parameters for the property names.
+-----------------------------------------------------------------
+#include <stdio.h>
+#include <string.h>
+
+ const char* aNmArr[] = {
+ "ForbiddenCharacters" ,
+ "IsKernAsianPunctuation" ,
+ "CharacterCompressionType" ,
+ "LinkUpdateMode" ,
+ "FieldAutoUpdate" ,
+ "ChartAutoUpdate" ,
+ "AddParaTableSpacing" ,
+ "AddParaTableSpacingAtStart" ,
+ "PrintAnnotationMode" ,
+ "PrintBlackFonts" ,
+ "PrintControls" ,
+ "PrintDrawings" ,
+ "PrintGraphics" ,
+ "PrintLeftPages" ,
+ "PrintPageBackground" ,
+ "PrintProspect" ,
+ "PrintReversed" ,
+ "PrintRightPages" ,
+ "PrintFaxName" ,
+ "PrintPaperFromSetup" ,
+ "PrintTables" ,
+ "PrintSingleJobs"
+  };
+#define TBL_MAX 100
+int aArr[ TBL_MAX ];
+int nPrime, nSub;
+
+unsigned long calc_hash( const char* p )
+{
+    unsigned long ii = 0;
+    while( *p )
+        ii = (ii * nPrime) ^ ( *p++ - nSub );
+    return ii;
+}
+int Chk_Unique_hashValue( unsigned short nTblSize )
+{
+    memset( aArr, 0, sizeof( aArr ) );
+    unsigned long ii;
+    for( int n = 0; n < sizeof( aNmArr ) / sizeof( aNmArr[0] ); ++n )
+    {
+        ii = calc_hash( aNmArr[ n ] ) % nTblSize;
+        if( aArr[ ii ] )
+            break;
+        aArr[ ii ] = 1;
+    }
+    return n == ( sizeof( aNmArr ) / sizeof( aNmArr[0] ) );
+}
+
+void Show_Result( unsigned short nTblSize )
+{
+    printf( "\nTblSz = %d\n", nTblSize );
+    for( int n = 0; n < sizeof( aNmArr ) / sizeof( aNmArr[0] ); ++n )
+    {
+        unsigned long ii = calc_hash( aNmArr[ n ] ) % nTblSize;
+        printf( "%-30s -> %3d\n", aNmArr[ n ], ii );
+    }
+}
+
+void main()
+{
+    int nPrm = nPrime, nSb = nSub;
+    unsigned short nLTbl = TBL_MAX, nTblSize;
+
+    for( nSub = ' '; nSub < 127; ++nSub )
+        for( nPrime = 13 ; nPrime < 99; ++nPrime )
+            for( nTblSize = sizeof( aNmArr ) / sizeof( aNmArr[0] );
+                    nTblSize < TBL_MAX; ++nTblSize )
+                if( Chk_Unique_hashValue( nTblSize ))
+                {
+                    if( nLTbl > nTblSize )
+                    {
+                        nLTbl = nTblSize;
+                        nPrm = nPrime;
+                        nSb = nSub;
+                    }
+                    break;
+                }
+
+    nPrime = nPrm;
+    nSub = nSb;
+    nTblSize = nLTbl;
+
+    Show_Result( nTblSize );
+    printf( "\nPrime: %d, nSub: %d, TblSz = %d - %d", nPrime, nSub,
+            sizeof( aNmArr ) / sizeof( aNmArr[0] ), nTblSize );
+}
+-----------------------------------------------------------------
+    */
     static const struct {
         const sal_Char* pName;
         sal_uInt16 nLen;
-    }  aNotSetArr[] =
-    {
-        {RTL_CONSTASCII_STRINGPARAM ( "PrintTables" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "PrintFaxName" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "PrintControls" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "PrintDrawings" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "PrintGraphics" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "PrintProspect" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "PrintReversed" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "LinkUpdateMode" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "PrintLeftPages" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "FieldAutoUpdate" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "ChartAutoUpdate" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "PrintBlackFonts" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "PrintRightPages" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "PrintSingleJobs" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "AddParaTableSpacing" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "ForbiddenCharacters" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "PrintAnnotationMode" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "PrintPageBackground" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "PrintPaperFromSetup" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "IsKernAsianPunctuation" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "CharacterCompressionType" )},
-        {RTL_CONSTASCII_STRINGPARAM ( "AddParaTableSpacingAtStart" )}
+    }  aNotSetArr[31] = {
+/* 0*/      {RTL_CONSTASCII_STRINGPARAM ( "ChartAutoUpdate" )},
+/* 1*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintAnnotationMode" )},
+/* 2*/      {RTL_CONSTASCII_STRINGPARAM ( "ForbiddenCharacters" )},
+/* 3*/      {0,0},
+/* 4*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintReversed" )},
+/* 5*/      {RTL_CONSTASCII_STRINGPARAM ( "IsKernAsianPunctuation" )},
+/* 6*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintControls" )},
+/* 7*/      {RTL_CONSTASCII_STRINGPARAM ( "AddParaTableSpacing" )},
+/* 8*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintFaxName" )},
+/* 9*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintLeftPages" )},
+/*10*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintDrawings" )},
+/*11*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintPaperFromSetup" )},
+/*12*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintPageBackground" )},
+/*13*/      {RTL_CONSTASCII_STRINGPARAM ( "AddParaTableSpacingAtStart" )},
+/*14*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintRightPages" )},
+/*15*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintSingleJobs" )},
+/*16*/      {0,0},
+/*17*/      {0,0},
+/*18*/      {0,0},
+/*19*/      {RTL_CONSTASCII_STRINGPARAM ( "FieldAutoUpdate" )},
+/*20*/      {0,0},
+/*21*/      {0,0},
+/*22*/      {0,0},
+/*23*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintGraphics" )},
+/*24*/      {0,0},
+/*25*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintProspect" )},
+/*26*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintTables" )},
+/*27*/      {RTL_CONSTASCII_STRINGPARAM ( "CharacterCompressionType" )},
+/*28*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintBlackFonts" )},
+/*29*/      {0,0},
+/*30*/      {RTL_CONSTASCII_STRINGPARAM ( "LinkUpdateMode" )}
     };
 
     sal_Int32 nCount = aConfigProps.getLength();
@@ -982,29 +1086,16 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     {
         if( !bIsUserSetting )
         {
-            // search the entry in the table
-            const OUString& rNm = pValues->Name;
-            bSet = TRUE;
-            register USHORT nO = sizeof(aNotSetArr) / sizeof(aNotSetArr[0])-1,
-                    nM, nU = 0;
-            while( nU <= nO )
-            {
-                nM = nU + ( nO - nU ) / 2;
-                int nCmp = rNm.getLength() - aNotSetArr[ nM ].nLen;
-                if( !nCmp )             // equal?
-                    nCmp = rNm.compareToAscii( aNotSetArr[ nM ].pName );
-                if( !nCmp )
-                {
-                    bSet = FALSE;
-                    break;
-                }
-                else if( 0 < nCmp )
-                    nU = nM + 1;
-                else if( nM == 0 )
-                    break;
-                else
-                    nO = nM - 1;
-            }
+            // test over the hash value if the entry is in the table.
+            ULONG nHash = 0;
+            const sal_Unicode* p = pValues->Name;
+            for( ULONG nLen = pValues->Name.getLength(); nLen; --nLen, ++p )
+                nHash = (nHash * 14) ^ ( *p - 76 );
+            nHash %= sizeof( aNotSetArr ) / sizeof( aNotSetArr[0] );
+            bSet = 0 == aNotSetArr[ nHash ].pName ||
+                    !pValues->Name.equalsAsciiL(
+                            aNotSetArr[ nHash ].pName,
+                            aNotSetArr[ nHash ].nLen );
         }
 
         if( bSet )
