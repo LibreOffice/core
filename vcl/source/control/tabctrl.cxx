@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-11 17:14:47 $
+ *  last change: $Author: pl $ $Date: 2001-07-19 12:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,9 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
     mbScroll            = FALSE;
     mbColored           = FALSE;
 
-    if ( GetSettings().GetStyleSettings().GetTabControlStyle() & STYLE_TABCONTROL_SINGLELINE )
+    if ( GetSettings().GetStyleSettings().GetTabControlStyle() & STYLE_TABCONTROL_SINGLELINE
+         || (nStyle & WB_SINGLELINE)
+         )
         mbSingleLine = TRUE;
 
     if ( mbSingleLine )

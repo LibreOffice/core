@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscicpx.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:55 $
+ *  last change: $Author: pl $ $Date: 2001-07-19 12:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2373,6 +2373,8 @@ RscTop * RscTypCont::InitClassTabControl( RscTop * pSuper,
         nId = aNmTb.Put( "PageList", VARNAME );
         pClassTabControl->SetVariable( nId, pCont, NULL, 0,
                                        RSC_TABCONTROL_ITEMLIST );
+
+        INS_WINBIT( pClassTabControl, SingleLine );
     }
 
     return pClassTabControl;

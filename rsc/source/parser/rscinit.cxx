@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscinit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mm $ $Date: 2001-05-17 15:15:27 $
+ *  last change: $Author: pl $ $Date: 2001-07-19 12:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,6 +427,8 @@ void RscTypCont::Init()
     aWinBits.SetConstant( nNoLabelId, WB_NOLABEL );
     nVertId             = pHS->Insert( "WB_VERT" );
     aWinBits.SetConstant( nVertId, WB_VERT );
+    nSingleLineId       = pHS->Insert( "WB_SINGLELINE" );
+    aWinBits.SetConstant( nSingleLineId, WB_SINGLELINE );
 }
 {
     /********** I n i t   B a s i c   T y p e s **************************/
