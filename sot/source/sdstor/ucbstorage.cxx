@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: mav $ $Date: 2002-05-13 13:18:06 $
+ *  last change: $Author: mav $ $Date: 2002-08-07 15:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1081,10 +1081,11 @@ ULONG UCBStorageStream_Impl::SeekPos( ULONG nPos )
                     DBG_ASSERT( aResult == m_pStream->Tell(), "Error in stream arithmetic!\n" );
                 }
 
-                if( !m_bSourceRead )
+                if( (m_nMode & STREAM_WRITE) && !m_bSourceRead && aResult < nPos )
                 {
                     // it means that all the Source stream was copied already
                     // but the required position still was not reached
+                    // for writable streams it should be done
                     m_pStream->SetStreamSize( nPos );
                     aResult = m_pStream->Seek( STREAM_SEEK_TO_END );
                     DBG_ASSERT( aResult == nPos, "Error in stream arithmetic!\n" );
