@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-29 20:20:58 $
+ *  last change: $Author: er $ $Date: 2001-07-17 17:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,9 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, USHORT nTab,
                         ScRange aR = pDoc->GetRange( nTab, aObjRect );
                         // Rectangle in mm/100
                         Size aSize( MMToPixel( aObjRect.GetSize() ) );
+                        // If the image is somewhere in a merged range we must
+                        // move the anchor to the upper left (THE span cell).
+                        pDoc->ExtendOverlapped( aR );
                         USHORT nCol1 = aR.aStart.Col();
                         USHORT nRow1 = aR.aStart.Row();
                         USHORT nCol2 = aR.aEnd.Col();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:43:47 $
+ *  last change: $Author: er $ $Date: 2001-07-17 17:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -972,8 +972,7 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
         return ;
 
     ScAddress aPos( nCol, nRow, nTab );
-    BOOL bIsGraphHere = FALSE;
-    ScHTMLGraphEntry* pGraphEntry;
+    ScHTMLGraphEntry* pGraphEntry = NULL;
     if ( bTabHasGraphics )
     {
         for ( pGraphEntry = aGraphList.First(); pGraphEntry;
@@ -983,7 +982,7 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
             if ( pGraphEntry->bInCell && pGraphEntry->aRange.In( aPos ) )
             {
                 if ( pGraphEntry->aRange.aStart == aPos )
-                    bIsGraphHere = TRUE;
+                    break;  // for
                 else
                     return ;        // ist ein Col/RowSpan, Overlapped
                 break;
@@ -1007,11 +1006,12 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
     USHORT nHeightPixel;
 
     const ScMergeAttr& rMergeAttr = (const ScMergeAttr&) pAttr->GetItem( ATTR_MERGE );
-    if ( bIsGraphHere || rMergeAttr.IsMerged() )
+    if ( pGraphEntry || rMergeAttr.IsMerged() )
     {
         USHORT j, n, v;
-        if ( bIsGraphHere )
-            n = pGraphEntry->aRange.aEnd.Col() - nCol + 1;
+        if ( pGraphEntry )
+            n = Max( USHORT(pGraphEntry->aRange.aEnd.Col() - nCol + 1),
+                USHORT(rMergeAttr.GetColMerge()) );
         else
             n = rMergeAttr.GetColMerge();
         if ( n > 1 )
@@ -1025,8 +1025,9 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
         else
             nWidthPixel = ToPixel( pDoc->GetColWidth( nCol, nTab ) );
 
-        if ( bIsGraphHere )
-            n = pGraphEntry->aRange.aEnd.Row() - nRow + 1;
+        if ( pGraphEntry )
+            n = Max( USHORT(pGraphEntry->aRange.aEnd.Row() - nRow + 1),
+                USHORT(rMergeAttr.GetRowMerge()) );
         else
             n = rMergeAttr.GetRowMerge();
         if ( n > 1 )
@@ -1214,7 +1215,7 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
         else
             OUT_STR( aStrOut );
     }
-    if ( bIsGraphHere )
+    if ( pGraphEntry )
         WriteGraphEntry( pGraphEntry );
 
     if ( bSetFont )     TAG_OFF( sHTML_font );
