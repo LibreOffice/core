@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-26 10:18:32 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 10:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,6 @@ using namespace ::com::sun::star::sdbc;
 //========================================================================
 OWizTypeSelectControl::~OWizTypeSelectControl()
 {
-    delete pActFieldDescr;
 }
 // -----------------------------------------------------------------------
 void OWizTypeSelectControl::ActivateAggregate( EControlType eType )
