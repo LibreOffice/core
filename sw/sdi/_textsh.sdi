@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _textsh.sdi,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 07:15:00 $
+ *  last change: $Author: mba $ $Date: 2002-06-10 17:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,26 @@ interface BaseText : Selection
     Automation = FALSE;
 ]
 {
+    SID_ATTR_PARA_NUMRULE
+    [
+        ExecMethod = Execute ;
+    ]
+
+    FN_NUMBER_NEWSTART
+    [
+        ExecMethod = Execute ;
+    ]
+
+    FN_NUMBER_NEWSTART_AT
+    [
+        ExecMethod = Execute ;
+    ]
+
+    FN_FORMAT_LINENUMBER
+    [
+        ExecMethod = Execute ;
+    ]
+
     SID_INSERTDOC // status(final|play|rec)
     [
         ExecMethod = Execute ;
