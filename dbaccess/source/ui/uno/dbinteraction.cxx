@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 12:16:07 $
+ *  last change: $Author: fs $ $Date: 2001-05-17 09:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,12 @@
 #ifndef _DBAUI_PARAMDIALOG_HXX_
 #include "paramdialog.hxx"
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 //==========================================================================
 
@@ -182,6 +188,9 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void OInteractionHandler::implHandle(const ParametersRequest& _rParamRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
+        ::vos::OGuard aGuard(Application::GetSolarMutex());
+            // want to open a dialog ....
+
         sal_Int32 nAbortPos = getContinuation(ABORT, _rContinuations);
         sal_Int32 nParamPos = getContinuation(SUPPLY_PARAMETERS, _rContinuations);
 
@@ -223,6 +232,9 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void OInteractionHandler::implHandle(const AuthenticationRequest& _rAuthRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
+        ::vos::OGuard aGuard(Application::GetSolarMutex());
+            // want to open a dialog ....
+
         // search the continuations we can handle
         sal_Int32 nAbortPos = getContinuation(ABORT, _rContinuations);
         sal_Int32 nRetryPos = getContinuation(RETRY, _rContinuations);
@@ -335,6 +347,9 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void OInteractionHandler::implHandle(const SQLExceptionInfo& _rSqlInfo, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
+        ::vos::OGuard aGuard(Application::GetSolarMutex());
+            // want to open a dialog ....
+
         sal_Int32 nApprovePos = getContinuation(APPROVE, _rContinuations);
         sal_Int32 nAbortPos = getContinuation(ABORT, _rContinuations);
         sal_Int32 nRetryPos = getContinuation(RETRY, _rContinuations);
@@ -425,6 +440,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/01/05 12:16:07  fs
+ *  adjusted the implementation name
+ *
  *  Revision 1.5  2000/12/15 15:48:13  fs
  *  #82151# two instances of the registration helper module - one for every library in this project
  *
