@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:07:58 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ String STR_SVT_AUTOMATIC_COLOR
     Text[ russian ] = "Автоматически";
     Text[ greek ] = "Automatic";
     Text[ dutch ] = "Automatic";
-    Text[ french ] = "Automatic";
+    Text[ french ] = "Automatique";
     Text[ spanish ] = "Automatic";
     Text[ italian ] = "Automatic";
     Text[ danish ] = "Automatic";
@@ -146,7 +146,7 @@ String STR_SVT_COLLATE_CHARSET
     Text[ russian ] = "Набор знаков";
     Text[ greek ] = "Уэнплп чбсбкфЮсщн";
     Text[ dutch ] = "Character Set";
-    Text[ french ] = "Character Set";
+    Text[ french ] = "Jeu de caractиres";
     Text[ spanish ] = "Character Set";
     Text[ italian ] = "Character Set";
     Text[ danish ] = "Character Set";
@@ -171,7 +171,7 @@ String STR_SVT_COLLATE_DICTIONARY
     Text[ russian ] = "Словарь";
     Text[ greek ] = "Леойкь";
     Text[ dutch ] = "Dictionary";
-    Text[ french ] = "Dictionary";
+    Text[ french ] = "Dictionnaire";
     Text[ spanish ] = "Dictionary";
     Text[ italian ] = "Dictionary";
     Text[ danish ] = "Dictionary";
@@ -221,7 +221,7 @@ String STR_SVT_COLLATE_STROKE
     Text[ russian ] = "Штрихи";
     Text[ greek ] = "Stroke";
     Text[ dutch ] = "Stroke";
-    Text[ french ] = "Stroke";
+    Text[ french ] = "Trait";
     Text[ spanish ] = "Stroke";
     Text[ italian ] = "Stroke";
     Text[ danish ] = "Stroke";
