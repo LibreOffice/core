@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 11:24:30 $
+#   last change: $Author: kz $ $Date: 2004-10-04 20:51:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,7 +117,6 @@ SLOFILES =\
 SRS1NAME=$(TARGET)
 SRC1FILES =\
         recfloat.src		\
-        about.src			\
         cfg.src				\
         dialog.src			\
         dinfdlg.src			\
