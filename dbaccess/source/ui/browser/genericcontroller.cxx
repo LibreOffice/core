@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:04:44 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,11 +258,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
                     throw Exception(::rtl::OUString::createFromAscii("Parent window is null"),*this);
                 }
 
-                if(xFrame.is() && Construct(pParentWin))
-                {
-                }
-                // remove the container window
-                ::dbaui::notifySystemWindow(pParentWin,pParentWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+                Construct( pParentWin );
                 break; // no more needed here
             }
             else
@@ -926,15 +922,19 @@ void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
         xLayoutManager->lock();
         xLayoutManager->createElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" )));
         xLayoutManager->createElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/toolbar" )));
-        loadSubToolbar(xLayoutManager);
         xLayoutManager->unlock();
         xLayoutManager->doLayout();
     }
+
+    onLoadedMenu( xLayoutManager );
 }
+
 // -----------------------------------------------------------------------------
-void OGenericUnoController::loadSubToolbar(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
+void OGenericUnoController::onLoadedMenu(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
 {
+    // not interested in
 }
+
 // -----------------------------------------------------------------------------
 void OGenericUnoController::closeTask()
 {
