@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 18:50:33 $
+ *  last change: $Author: os $ $Date: 2001-12-18 12:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1334,7 +1334,7 @@ TabPage TP_FRM_STD
     FixedText FT_AT_HORZ_POS
     {
         Pos = MAP_APPFONT ( 101 , 117 ) ;
-        Size = MAP_APPFONT ( 15 , 8 ) ;
+        Size = MAP_APPFONT ( 20 , 8 ) ;
         Center = TRUE ;
         Text = "u~m" ;
         Text [ ENGLISH ] = "~by" ;
@@ -1363,8 +1363,8 @@ TabPage TP_FRM_STD
     MetricField ED_AT_HORZ_POS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 118 , 115 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 123 , 115 ) ;
+        Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -1380,7 +1380,7 @@ TabPage TP_FRM_STD
     FixedText FT_HORI_RELATION
     {
         Pos = MAP_APPFONT ( 160 , 117 ) ;
-        Size = MAP_APPFONT ( 16 , 8 ) ;
+        Size = MAP_APPFONT ( 21 , 8 ) ;
         Center = TRUE ;
         Text = "z~u" ;
         Text [ ENGLISH ] = "~to" ;
@@ -1408,8 +1408,8 @@ TabPage TP_FRM_STD
     };
     ListBox LB_HORI_RELATION
     {
-        Pos = MAP_APPFONT ( 178 , 115 ) ;
-        Size = MAP_APPFONT ( 70 , 60 ) ;
+        Pos = MAP_APPFONT ( 183 , 115 ) ;
+        Size = MAP_APPFONT ( 65 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
@@ -1480,7 +1480,7 @@ TabPage TP_FRM_STD
     FixedText FT_AT_VERT_POS
     {
         Pos = MAP_APPFONT ( 101 , 147 ) ;
-        Size = MAP_APPFONT ( 15 , 8 ) ;
+        Size = MAP_APPFONT ( 20 , 8 ) ;
         Center = TRUE ;
         Text = "u~m" ;
         Text [ ENGLISH ] = "b~y" ;
@@ -1509,8 +1509,8 @@ TabPage TP_FRM_STD
     MetricField ED_AT_VERT_POS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 118 , 145 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 123 , 145 ) ;
+        Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -1526,7 +1526,7 @@ TabPage TP_FRM_STD
     FixedText FT_VERT_RELATION
     {
         Pos = MAP_APPFONT ( 160 , 147 ) ;
-        Size = MAP_APPFONT ( 16 , 8 ) ;
+        Size = MAP_APPFONT ( 21 , 8 ) ;
         Center = TRUE ;
         Text = "z~u" ;
         Text [ ENGLISH ] = "t~o" ;
@@ -1554,8 +1554,8 @@ TabPage TP_FRM_STD
     };
     ListBox LB_VERT_RELATION
     {
-        Pos = MAP_APPFONT ( 178 , 145 ) ;
-        Size = MAP_APPFONT ( 70 , 60 ) ;
+        Pos = MAP_APPFONT ( 183 , 145 ) ;
+        Size = MAP_APPFONT ( 65 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
