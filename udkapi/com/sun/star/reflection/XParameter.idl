@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XParameter.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:59:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com {  module sun {  module star {  module reflection {
    <p>This type supersedes <type>XMethodParameter</type>, which only supports
    parameters of interface methods (which cannot have rest parameters).</p>
 
-   @since OOo2.0.0
+   @since OOo 2.0.0
  */
 interface XParameter: XMethodParameter {
     /**
