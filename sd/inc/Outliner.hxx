@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:00:53 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 11:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,15 @@ public:
 
     DECL_LINK( SpellError, void * );
 
+    enum ChangeHint { CH_VIEW_SHELL_INVALID, CH_VIEW_SHELL_VALID, };
+
+    /** Handle a change outside the outliner which may affect the outliner.
+        At the moment this is restricted to changes of the main view shell
+        but later may include any changes that are detected now by
+        DetectChange().
+    */
+    void HandleOutsideChange (ChangeHint eHint);
+
 private:
     /// Specifies whether to search and replace, to spell check or to do a
     /// hangul hanja conversion.
@@ -352,6 +361,11 @@ private:
     /// The position when the search started.  Corresponds largely to the
     /// m?Start* members.
     ::sd::outliner::Iterator maSearchStartPosition;
+    /** The last valid position desribes where the last text object has been
+        found.  This position is restored when some dialogs are shown.  The
+        position is initially set to the where the search begins.
+    */
+    ::sd::outliner::IteratorPosition maLastValidPosition;
 
     /** This flag remebers a selection change between a call to the
         selection change listener callback and the next
@@ -363,6 +377,16 @@ private:
         to a programatical change of the selection.
     */
     bool mbExpectingSelectionChangeEvent;
+
+    /** When this flag is true then a PrepareSpelling() is executed when
+        StartSearchAndReplace() is called the next time.
+    */
+    bool mbPrepareSpellingPending;
+
+    /** In this flag we store whether the view shell is valid and may be
+        accessed.
+    */
+    bool mbViewShellValid;
 
     /** Initialize the object iterator.  Call this method after being
         invoked from the search or spellcheck dialog.  It creates a new
