@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-26 12:09:13 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 07:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@ private:
     BOOL                CursorIsOverRect( BOOL bForceAdding = FALSE ) const;
     void                SetPinned_Impl( BOOL );
     void                SetFadeIn_Impl( BOOL );
+    void                SaveConfig_Impl();
+    void                FadeOut_Impl();
 
 protected:
 
@@ -110,7 +112,7 @@ public:
 
                         ~SfxSplitWindow();
 
-    void                ReleaseWindow_Impl(SfxDockingWindow *pWin);
+    void                ReleaseWindow_Impl(SfxDockingWindow *pWin, BOOL bSaveConfig=TRUE);
 
     void                InsertWindow( SfxDockingWindow* pDockWin,
                             const Size& rSize);
