@@ -304,6 +304,7 @@ Dim LocMaxIndex as Integer
 	bItemFound = False
 	TemplatePath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/web/&quot;)
 	DirContent() = oUcb.GetFolderContents(TemplatePath,True)
+	DirContent() = BubbleSortList(DirContent())
 	LocMaxIndex = Ubound(DirContent())
 	a = 0
 	For i = 0 To LocMaxIndex

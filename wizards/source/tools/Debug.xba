@@ -81,13 +81,11 @@ End Sub
 Sub ShowPropertyValues(oLocObject as Object)
 Dim PropName as String
 Dim sValues as String
-Dim MaxIndex as Integer
 	On Local Error Goto NOPROPERTYSETINFO:
 	sValues = &quot;&quot;
-	MaxIndex = Ubound(oLocObject.PropertySetInfo.Properties)
-	For i = 0 To MaxIndex
+	For i = 0 To Ubound(oLocObject.PropertySetInfo.Properties)
 		Propname = oLocObject.PropertySetInfo.Properties(i).Name
-		sValues = sValues &amp; PropName &amp;  oLocObject.GetPropertyValue(PropName) &amp; chr(13)
+		sValues = sValues &amp; PropName &amp; chr(13) &apos;&quot; = &quot; &amp; oLocObject.GetPropertyValue(PropName) &amp; chr(13)
 	Next i
 	Msgbox(sValues , 64, GetProductName())
 	Exit Sub
@@ -175,6 +173,4 @@ Sub ShowCommands(oLocObject as Object)
 	Msgbox(&quot;Sorry, No &apos;QueryCommands&apos; - Property attached to the object&quot;, 16, GetProductName())
 	Resume LEAVEPROC
 	LEAVEPROC:
-End Sub
-
-</script:module>
+End Sub</script:module>

@@ -5,7 +5,7 @@
   <dlg:style dlg:style-id="0"/>
  </dlg:styles>
  <dlg:bulletinboard>
-  <dlg:button dlg:style-id="0" dlg:id="cbCancel" dlg:left="5" dlg:top="190" dlg:width="50" dlg:height="13" dlg:value="Cancel">
+  <dlg:button dlg:style-id="0" dlg:id="cbCancel" dlg:tab-index="0" dlg:left="5" dlg:top="190" dlg:width="50" dlg:height="13" dlg:value="Cancel">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="WebWizard.HtmlAutoPilotBasic.CancelHTMLWizard"/>
   </dlg:button>
   <dlg:button dlg:style-id="0" dlg:id="cbHelp" dlg:tab-index="1" dlg:left="65" dlg:top="190" dlg:width="50" dlg:height="13" dlg:value="Help"/>

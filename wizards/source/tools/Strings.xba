@@ -35,8 +35,7 @@ End Function
 &apos; Finds a PartString, that is framed by the Strings &apos;Prestring&apos; and &apos;PostString&apos;
 Function FindPartString(BigString, PreString, PostString as String, SearchPos as Integer) as String
 Dim StartPos%, EndPos%
-Dim BigLen%,PreLen%,PostLen%
-
+Dim BigLen%, PreLen%, PostLen%
 	StartPos = Instr(SearchPos,BigString,PreString)
 	If StartPos &lt;&gt; 0 Then
 		PreLen = Len(PreString)
@@ -61,9 +60,8 @@ End Function
 &apos; Deletes the String &apos;SmallString&apos; out of the String &apos;BigString&apos;
 &apos; in case SmallString&apos;s Position in BigString is right at the end
 Function RTrimStr(ByVal BigString, SmallString as String) as String
-Dim SmallLen%
-Dim BigLen%
-
+Dim SmallLen as Integer
+Dim BigLen as Integer
 	SmallLen = Len(SmallString)
 	BigLen = Len(BigString)
 	If Mid(BigString,BigLen + 1 - SmallLen, SmallLen) = SmallString Then
@@ -96,26 +94,34 @@ End Function
 &apos; The Array MaxLocindex delivers the highest Index of this Array
 Function ArrayOutOfString(BigString, Separator as String, Optional MaxIndex as integer)
 Dim i%, OldPos%, Pos%, SepLen%, BigLen%
-Dim LocList(200) as string
-
+Dim CurUbound as Integer
+Dim StartUbound as Integer
+	StartUbound = 50
+	Dim LocList(StartUbound) as String
+	CurUbound = StartUbound	
 	OldPos = 1
 	i = -1
 	SepLen = Len(Separator)
 	BigLen = Len(BigString)
 	Do
-		Pos = Instr(OldPos,BigString,Separator)
+		Pos = Instr(OldPos,BigString, Separator)
 		i = i + 1
 		If Pos = 0 Then
-			LocList(i) = Mid(BigString,OldPos,BigLen - OldPos + 1 )
+			LocList(i) = Mid(BigString, OldPos, BigLen - OldPos + 1 )
 		Else
-			LocList(i) = Mid(BigString,OldPos,Pos-OldPos )
+			LocList(i) = Mid(BigString, OldPos, Pos-OldPos )
 			OldPos = Pos + SepLen
 		End If
+		If i = CurUbound Then
+			CurUbound = CurUbound + StartUbound
+			ReDim Preserve LocList(CurUbound) as String
+		End If
 	Loop until Pos = 0
-	If Vartype(Maxindex) &lt;&gt; 0 Then
-		MaxIndex = i
+	If Not IsMissing(Maxindex) Then
+		MaxIndex = i	
 	End If
-	ArrayoutofString = LocList()
+	ReDim Preserve LocList(i) as String
+	ArrayOutofString = LocList()
 End Function
 
 
@@ -152,7 +158,6 @@ Dim i as integer
 	Next
 	FieldInArray = False
 End Function
-
 
 
 &apos; Checks if a Field (LocField) is already defined in an Array
@@ -353,25 +358,58 @@ Dim LocCount%, LocPos%
 End Function
 
 
-Function BubbleSortList(ByVal SortList())
-Dim s as Integer
-Dim t as Integer
-Dim i as Integer
-Dim DisplayDummy as String
-	i = Val(SortList(0,0))
+Function BubbleSortList(ByVal SortList(),optional sort2ndValue as Boolean)
+	Dim s as Integer
+	Dim t as Integer
+	Dim i,k as Integer
+	Dim bJustOneDim, bSort2nd as Boolean
+	Dim DisplayDummy as String
+	bJustOneDim = false
+	bSort2nd = false
+On Local Error Goto No2ndDim
+    k = Ubound(SortList(),2)
+	No2ndDim:
+	bJustOneDim = Err &lt;&gt; 0
+	i = Ubound(SortList(),1)
+	If ismissing(sort2ndValue) then
+		bSort2nd = false
+	else
+		bSort2nd = sort2ndValue
+	end if
+	
 	For s = 1 to i - 1
 		For t = 0 to i-s
-			If SortList(t,0) &gt; SortList(t+1, 0) Then
-				DisplayDummy = SortList(t,0)
-				SortList(t,0) = SortList(t+1,0)
-				SortList(t+1,0) = DisplayDummy
-
-				DisplayDummy = SortList(t,1)
-				SortList(t,1) = SortList(t+1,1)
-				SortList(t+1,1) = DisplayDummy	
+			If bJustOneDim Then
+				If SortList(t) &gt; SortList(t+1) Then                             
+					DisplayDummy = SortList(t)
+					SortList(t) = SortList(t+1)
+					SortList(t+1) = DisplayDummy    
+				End If
+			Else
+				If bSort2nd Then
+					If SortList(t,1) &gt; SortList(t+1,1) Then                         
+						DisplayDummy = SortList(t,0)
+						SortList(t,0) = SortList(t+1,0)
+						SortList(t+1,0) = DisplayDummy
+						
+						DisplayDummy = SortList(t,1)
+						SortList(t,1) = SortList(t+1,1)
+						SortList(t+1,1) = DisplayDummy  
+					End If
+				Else
+					If SortList(t,0) &gt; SortList(t+1,0) Then                         
+						DisplayDummy = SortList(t,0)
+						SortList(t,0) = SortList(t+1,0)
+						SortList(t+1,0) = DisplayDummy
+						
+						DisplayDummy = SortList(t,1)
+						SortList(t,1) = SortList(t+1,1)
+						SortList(t+1,1) = DisplayDummy  
+					End If
+				End If
 			End If
 		Next t
 	Next s 
-	BubbleSortList = SortList()		
+	BubbleSortList = SortList()             
 End Function
 </script:module>

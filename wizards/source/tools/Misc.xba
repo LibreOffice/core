@@ -76,13 +76,15 @@ End Function
 Function GetStarOfficeLocale() as New com.sun.star.lang.Locale
 Dim aLocLocale As New com.sun.star.lang.Locale
 Dim sLocale as String
-Dim sLocaleList()
+Dim sLocaleList(1)
 Dim oMasterKey
 	oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.UserProfile/International/&quot;)
 	sLocale = oMasterKey.getByName(&quot;Locale&quot;)
 	sLocaleList() = ArrayoutofString(sLocale, &quot;-&quot;)
 	aLocLocale.Language = sLocaleList(0)
-	aLocLocale.Country = sLocaleList(1)
+	If Ubound(sLocaleList()) &gt; 0 Then
+		aLocLocale.Country = sLocaleList(1)
+	End If
 	GetStarOfficeLocale() = aLocLocale
 End Function
 

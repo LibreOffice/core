@@ -4,7 +4,7 @@
 
 Const SAMPLES = 1000
 Const STYLES = 1100
-Const aTempFileName = &quot;Berend_Ilko_Peter_Tom.vor&quot;
+Const aTempFileName = &quot;Berend_Ilko_Tom_Stella_Volker.stc&quot;
 Public Const Twip = 425
 Dim oUcbObject as Object
 Public StylesDir as String
@@ -91,12 +91,13 @@ Dim MaxIndex as Integer
 			DialogModel.Title = GetResText(STYLES)
 			DialogModel.cmdCancel.Label = GetResText(STYLES+2)
 			DialogModel.cmdOk.Label = GetResText(STYLES+3)
-			Stylenames() = ReadDirectories(StylesDir, False, False, True,)
-			MaxIndex = Val(StyleNames(0,0))-1
+			Stylenames() = ReadDirectories(StylesDir, False, False, True,)			
+			MaxIndex = Ubound(Stylenames())
+			BubbleSortList(Stylenames(),True)
 			Dim cStyles(MaxIndex)
 			For t = 0 to MaxIndex
-				Files(t) = StyleNames(t+1,0)
-				cStyles(t) = StyleNames(t+1,1)
+				Files(t) = StyleNames(t,0)
+				cStyles(t) = StyleNames(t,1)
 			Next t
 			On Local Error Resume Next
 			DialogModel.lbStyles.StringItemList() = cStyles()
@@ -132,7 +133,7 @@ Sub SaveCurrentStyles(oDocument as Object)
 	aTempURL = aTempURL &amp; &quot;/&quot; &amp; aTempFileName
 
 	While FileExists(aTempURL)
-		aTempURL=Left(aTempURL,(Len(aTempURL)-4)) &amp; &quot;_1.vor&quot;
+		aTempURL=Left(aTempURL,(Len(aTempURL)-4)) &amp; &quot;_1.stc&quot;
 	Wend
 	oDocument.storeToURL(aTempURL, NoArgs())
 	Exit Sub
