@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: AccessiblePreviewTable.hxx,v $
+ *  $RCSfile: AccessiblePreviewHeaderCell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: nn $ $Date: 2002-02-28 19:28:48 $
  *
@@ -60,33 +60,42 @@
  ************************************************************************/
 
 
-#ifndef _SC_ACCESSIBLEPREVIEWTABLE_HXX
-#define _SC_ACCESSIBLEPREVIEWTABLE_HXX
+#ifndef _SC_ACCESSIBLEPREVIEWHEADERCELL_HXX
+#define _SC_ACCESSIBLEPREVIEWHEADERCELL_HXX
 
 #ifndef _SC_ACCESSIBLECONTEXTBASE_HXX
 #include "AccessibleContextBase.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETABLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleTable.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEVALUE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleValue.hpp>
+#endif
+
+#ifndef _SV_GEN_HXX
+#include <tools/gen.hxx>
+#endif
+
+#ifndef SC_SCGLOB_HXX
+#include "global.hxx"
 #endif
 
 
 class ScPreviewShell;
-class ScPreviewTableInfo;
 
 
-class ScAccessiblePreviewTable :
-        public ::drafts::com::sun::star::accessibility::XAccessibleTable,
+class ScAccessiblePreviewHeaderCell :
+        public ::drafts::com::sun::star::accessibility::XAccessibleValue,
         public ScAccessibleContextBase
 {
 public:
-    ScAccessiblePreviewTable( const ::com::sun::star::uno::Reference<
+    ScAccessiblePreviewHeaderCell( const ::com::sun::star::uno::Reference<
                                 ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-                            ScPreviewShell* pViewShell, sal_Int32 nIndex );
+                            ScPreviewShell* pViewShell,
+                            const ScAddress& rCellPos, sal_Bool bIsColHdr, sal_Bool bIsRowHdr,
+                            sal_Int32 nIndex, const Rectangle& rPosition );
 
 protected:
-    virtual ~ScAccessiblePreviewTable();
+    virtual ~ScAccessiblePreviewHeaderCell();
 
 public:
     void SetDefunc();
@@ -103,56 +112,13 @@ public:
     virtual void SAL_CALL   acquire() throw();
     virtual void SAL_CALL   release() throw();
 
-    //=====  XAccessibleTable  ================================================
+    //=====  XAccessibleValue  ================================================
 
-    virtual sal_Int32 SAL_CALL getAccessibleRowCount() throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getAccessibleColumnCount() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getAccessibleRowDescription( sal_Int32 nRow )
-                                throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getAccessibleColumnDescription( sal_Int32 nColumn )
-                                throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
-                                throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
-                                throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleTable > SAL_CALL
-                            getAccessibleRowHeaders() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleTable > SAL_CALL
-                            getAccessibleColumnHeaders() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL getSelectedAccessibleRows()
+    virtual ::com::sun::star::uno::Any SAL_CALL getCurrentValue() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL setCurrentValue( const ::com::sun::star::uno::Any& aNumber )
                                 throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL getSelectedAccessibleColumns()
-                                throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL isAccessibleRowSelected( sal_Int32 nRow )
-                                throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL isAccessibleColumnSelected( sal_Int32 nColumn )
-                                throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
-                            getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
-                                throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
-                            getAccessibleCaption() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
-                            getAccessibleSummary() throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
-                                throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
-                                throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getAccessibleRow( sal_Int32 nChildIndex )
-                                throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int32 nChildIndex )
-                                throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getMaximumValue() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getMinimumValue() throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleComponent  ============================================
 
@@ -181,13 +147,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    //=====  XTypeProvider  ===================================================
-
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-                                throw(::com::sun::star::uno::RuntimeException);
-
 protected:
     virtual ::rtl::OUString SAL_CALL createAccessibleDescription(void) throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL createAccessibleName(void) throw (::com::sun::star::uno::RuntimeException);
@@ -198,13 +157,14 @@ protected:
 private:
     ScPreviewShell*     mpViewShell;
     sal_Int32           mnIndex;
-    ScPreviewTableInfo* mpTableInfo;
+    ScAddress           maCellPos;
+    sal_Bool            mbColumnHeader;
+    sal_Bool            mbRowHeader;
+    Rectangle           maPosition;
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
-
-    void    FillTableInfo();
 };
 
 
