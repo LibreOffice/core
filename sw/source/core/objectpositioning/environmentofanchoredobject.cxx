@@ -2,9 +2,9 @@
  *
  *  $RCSfile: environmentofanchoredobject.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:42:54 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,30 +89,16 @@ SwEnvironmentOfAnchoredObject::~SwEnvironmentOfAnchoredObject()
     @author OD
 */
 const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(
-                                            const SwFrm& _rHoriOrientFrm,
-                                            const bool _bForPageAlignment ) const
+                                            const SwFrm& _rHoriOrientFrm ) const
 {
     const SwFrm* pHoriEnvironmentLayFrm = &_rHoriOrientFrm;
 
     if ( !mbFollowTextFlow )
     {
-        if ( _bForPageAlignment )
-        {
-            while ( !pHoriEnvironmentLayFrm->IsCellFrm() &&
-                    !pHoriEnvironmentLayFrm->IsPageFrm() )
-            {
-                pHoriEnvironmentLayFrm =
-                    pHoriEnvironmentLayFrm->IsFlyFrm()
-                    ? static_cast<const SwFlyFrm*>(pHoriEnvironmentLayFrm)->GetAnchorFrm()
-                    : pHoriEnvironmentLayFrm->GetUpper();
-                ASSERT( pHoriEnvironmentLayFrm,
-                        "SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(..) - no page|cell frame found" );
-            }
-        }
-        else
-        {
-            pHoriEnvironmentLayFrm = _rHoriOrientFrm.FindPageFrm();
-        }
+        // --> OD 2005-01-20 #118546# - no exception any more for page alignment.
+        // the page frame determines the horizontal layout environment.
+        pHoriEnvironmentLayFrm = _rHoriOrientFrm.FindPageFrm();
+        // <--
     }
     else
     {
@@ -139,30 +125,16 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(
     @author OD
 */
 const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(
-                                            const SwFrm& _rVertOrientFrm,
-                                            const bool _bForPageAlignment ) const
+                                            const SwFrm& _rVertOrientFrm ) const
 {
     const SwFrm* pVertEnvironmentLayFrm = &_rVertOrientFrm;
 
     if ( !mbFollowTextFlow )
     {
-        if ( _bForPageAlignment )
-        {
-            while ( !pVertEnvironmentLayFrm->IsCellFrm() &&
-                    !pVertEnvironmentLayFrm->IsPageFrm() )
-            {
-                pVertEnvironmentLayFrm =
-                    pVertEnvironmentLayFrm->IsFlyFrm()
-                    ? static_cast<const SwFlyFrm*>(pVertEnvironmentLayFrm)->GetAnchorFrm()
-                    : pVertEnvironmentLayFrm->GetUpper();
-                ASSERT( pVertEnvironmentLayFrm,
-                        "SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(..) - proposed frame not found" );
-            }
-        }
-        else
-        {
-            pVertEnvironmentLayFrm = _rVertOrientFrm.FindPageFrm();
-        }
+        // --> OD 2005-01-20 #118546# - no exception any more for page alignment.
+        // the page frame determines the vertical layout environment.
+        pVertEnvironmentLayFrm = _rVertOrientFrm.FindPageFrm();
+        // <--
     }
     else
     {
