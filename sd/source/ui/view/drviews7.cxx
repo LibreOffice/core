@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:48:49 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,21 +149,37 @@
 #include "glob.hrc"
 #include "res_bmp.hrc"
 
-#ifndef _SD_PRESVISH_HXX
-#include "presvish.hxx"
+#ifndef SD_PRESENTATION_VIEW_SHELL_HXX
+#include "PresentationViewShell.hxx"
 #endif
 
 #include "misc.hxx"
-#include "sdoutl.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
 #include "sdpage.hxx"
-#include "sdclient.hxx"
-#include "docshell.hxx"
+#ifndef SD_CLIENT_HXX
+#include "Client.hxx"
+#endif
+#include "DrawDocShell.hxx"
 #include "zoomlist.hxx"
-#include "preview.hxx"
+#ifndef SD_PREVIEW_WINDOW_HXX
+#include "PreviewWindow.hxx"
+#endif
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -173,17 +189,20 @@ using namespace ::com::sun::star::linguistic2;
 
 //////////////////////////////////////////////////////////////////////////////
 // service routine for Undo/Redo implementation
-
-SfxUndoManager* ImpGetUndoManagerFromViewShell(SdDrawViewShell& rDViewShell)
+namespace {
+SfxUndoManager* ImpGetUndoManagerFromViewShell (::sd::DrawViewShell& rDViewShell)
 {
-    SdViewShell* pViewShell = rDViewShell.GetDocSh()->GetViewShell();
+    ::sd::ViewShell* pViewShell = rDViewShell.GetDocSh()->GetViewShell();
     if(pViewShell)
         return pViewShell->GetViewFrame()->GetDispatcher()->GetShell(0)->GetUndoManager();
     DBG_ASSERT(pViewShell, "ViewShell not found");
     return 0L;
 }
+}
 
-IMPL_LINK( SdDrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
+namespace sd {
+
+IMPL_LINK( DrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
 {
     if ( pDataHelper )
     {
@@ -203,9 +222,9 @@ IMPL_LINK( SdDrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelp
 |*
 \************************************************************************/
 
-void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
+void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 {
-    SdViewShell::GetMenuState(rSet);
+    ViewShell::GetMenuState(rSet);
     BOOL bDisableVerticalText = !SvtLanguageOptions().IsVerticalTextEnabled();
 
     if (pFuSlideShow)
@@ -222,12 +241,14 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) )
     {
-        SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
-        SdPreviewWin*   pPreviewWin = (SdPreviewWin*) ( pPreviewChildWindow ? pPreviewChildWindow->GetWindow() : NULL );
-        FuSlideShow*    pShow = pPreviewWin ? pPreviewWin->GetSlideShow() : NULL;
+        SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow(
+            PreviewChildWindow::GetChildWindowId());
+        PreviewWindow* pPreviewWin = static_cast<PreviewWindow*>(
+            pPreviewChildWindow ? pPreviewChildWindow->GetWindow() : NULL );
+        FuSlideShow* pShow = pPreviewWin ? pPreviewWin->GetSlideShow() : NULL;
 
         if ( (pShow && pShow->IsInputLocked()) ||
-             pDocSh->IsPreview() )
+             GetDocSh()->IsPreview() )
         {
             rSet.DisableItem( SID_PRESENTATION );
         }
@@ -339,17 +360,17 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REHEARSE_TIMINGS ) )
     {
         BOOL bDisable = TRUE;
-        USHORT nCount = pDoc->GetSdPageCount( PK_STANDARD );
+        USHORT nCount = GetDoc()->GetSdPageCount( PK_STANDARD );
 
         for( USHORT i = 0; i < nCount && bDisable; i++ )
         {
-            SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
+            SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
 
             if( !pPage->IsExcluded() )
                 bDisable = FALSE;
         }
 
-        if( bDisable || pDocSh->IsPreview())
+        if( bDisable || GetDocSh()->IsPreview())
         {
             rSet.DisableItem( SID_PRESENTATION );
             rSet.DisableItem( SID_REHEARSE_TIMINGS );
@@ -510,7 +531,7 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
         else
         {
-            LanguageType            eLang = pDoc->GetLanguage( EE_CHAR_LANGUAGE );
+            LanguageType            eLang = GetDoc()->GetLanguage( EE_CHAR_LANGUAGE );
             Reference< XThesaurus > xThesaurus( LinguMgr::GetThesaurus() );
             Locale                  aLocale;
 
@@ -548,10 +569,11 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         if ( !pClipEvtLstnr )
         {
             // SSA: #108717# avoid clipboard initialization for read-only presentation views (workaround for NT4.0 clipboard prob...)
-            if( !ISA( SdPresViewShell ) || ( pFuSlideShow && pFuSlideShow->IsLivePresentation())  )
+            if( !ISA(PresentationViewShell)
+                || ( pFuSlideShow && pFuSlideShow->IsLivePresentation())  )
             {
                 // create listener
-                pClipEvtLstnr = new TransferableClipboardListener( LINK( this, SdDrawViewShell, ClipboardChanged ) );
+                pClipEvtLstnr = new TransferableClipboardListener( LINK( this, DrawViewShell, ClipboardChanged ) );
                 pClipEvtLstnr->acquire();
                 pClipEvtLstnr->AddRemoveListener( GetActiveWindow(), TRUE );
 
@@ -697,14 +719,11 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_MANAGE_LINKS ) )
     {
-        if ( pDoc->GetLinkCount() == 0 )
+        if ( GetDoc()->GetLinkCount() == 0 )
         {
             rSet.DisableItem(SID_MANAGE_LINKS);
         }
     }
-
-    rSet.Put(SfxBoolItem(SID_DIAMODE, FALSE));
-    rSet.Put(SfxBoolItem(SID_OUTLINEMODE, FALSE));
 
     if (ePageKind == PK_HANDOUT)
     {
@@ -715,9 +734,6 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     if (ePageKind == PK_NOTES)
     {
         rSet.DisableItem(SID_ANIMATIONMODE);
-        rSet.Put(SfxBoolItem(SID_DRAWINGMODE, FALSE));
-        rSet.Put(SfxBoolItem(SID_NOTESMODE, TRUE));
-        rSet.Put(SfxBoolItem(SID_HANDOUTMODE, FALSE));
         rSet.DisableItem(SID_INSERTPAGE);
         rSet.DisableItem(SID_RENAMEPAGE);
         rSet.DisableItem(SID_RENAMEPAGE_QUICK);
@@ -735,9 +751,6 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
     else if (ePageKind == PK_HANDOUT)
     {
-        rSet.Put(SfxBoolItem(SID_DRAWINGMODE, FALSE));
-        rSet.Put(SfxBoolItem(SID_NOTESMODE, FALSE));
-        rSet.Put(SfxBoolItem(SID_HANDOUTMODE, TRUE));
         rSet.DisableItem(SID_INSERTPAGE);
         rSet.DisableItem(SID_DUPLICATE_PAGE);
         rSet.ClearItem(SID_ANIMATION_OBJECTS);
@@ -754,10 +767,6 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
     else
     {
-        rSet.Put(SfxBoolItem(SID_DRAWINGMODE, TRUE));
-        rSet.Put(SfxBoolItem(SID_NOTESMODE, FALSE));
-        rSet.Put(SfxBoolItem(SID_HANDOUTMODE, FALSE));
-
         if (eEditMode == EM_MASTERPAGE)
         {
             rSet.DisableItem(SID_INSERTPAGE);
@@ -795,11 +804,11 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
             // Gibt es eine Seite mit dem AutoLayout "Titel"?
             BOOL bDisable = TRUE;
             USHORT i = 0;
-            USHORT nCount = pDoc->GetSdPageCount(PK_STANDARD);
+            USHORT nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
 
             while (i < nCount && bDisable)
             {
-                SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
+                SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
 
                 if (pPage->GetAutoLayout() == AUTOLAYOUT_TITLE)
                 {
@@ -841,13 +850,13 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
                 BOOL bCheck = FALSE;
                 BOOL bDisable = TRUE;
                 USHORT i = 0;
-                USHORT nCount = pDoc->GetSdPageCount(PK_STANDARD);
+                USHORT nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
 
                 // Referenziert eine Seite mit dem AutoLayout "Titel" die
                 // aktuelle MasterPage?
                 while (i < nCount && !bCheck && bDisable)
                 {
-                    SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
+                    SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
 
                     // Seite referenziert aktuelle MasterPage
                     if (pPage->GetAutoLayout() == AUTOLAYOUT_TITLE)
@@ -917,7 +926,7 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     // darf der aktuelle Layer geloescht werden?
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DELETE_LAYER ) )
     {
-        SdrLayerAdmin& rAdmin = pDoc->GetLayerAdmin();
+        SdrLayerAdmin& rAdmin = GetDoc()->GetLayerAdmin();
 
         USHORT        nCurrentLayer = aLayerTab.GetCurPageId();
         const String& rName         = aLayerTab.GetPageText(nCurrentLayer);
@@ -993,7 +1002,7 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    if ( pDocSh->IsUIActive() )
+    if ( GetDocSh()->IsUIActive() )
     {
         rSet.DisableItem( SID_INSERT_OBJECT );
         rSet.DisableItem( SID_INSERT_PLUGIN );
@@ -1022,12 +1031,12 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ZOOM_OUT )||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ZOOM_PANNING ) )
     {
-        if( pWindow->GetZoom() <= pWindow->GetMinZoom() || pDocSh->IsUIActive() )
+        if( pWindow->GetZoom() <= pWindow->GetMinZoom() || GetDocSh()->IsUIActive() )
         {
             rSet.DisableItem( SID_ZOOM_IN );
             rSet.DisableItem( SID_ZOOM_PANNING );
         }
-        if( pWindow->GetZoom() >= pWindow->GetMaxZoom() || pDocSh->IsUIActive() )
+        if( pWindow->GetZoom() >= pWindow->GetMaxZoom() || GetDocSh()->IsUIActive() )
             rSet.DisableItem( SID_ZOOM_OUT );
     }
 
@@ -1041,7 +1050,8 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     // EditText aktiv
-    if( nCurrentObjectBar == RID_DRAW_TEXT_TOOLBOX )
+    if (GetObjectBarManager().GetTopObjectBarId()
+        == RID_DRAW_TEXT_TOOLBOX)
     {
         USHORT nCurrentSId = SID_ATTR_CHAR;
 
@@ -1060,13 +1070,13 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.Put( TbxImageItem( SID_DRAWTBX_TEXT, nCurrentSId ) );
     }
 
-    if ( pDocSh->IsReadOnly() )
+    if ( GetDocSh()->IsReadOnly() )
     {
         rSet.DisableItem( SID_AUTOSPELL_CHECK );
     }
     else
     {
-        if (pDoc->GetOnlineSpell())
+        if (GetDoc()->GetOnlineSpell())
         {
             rSet.Put(SfxBoolItem(SID_AUTOSPELL_CHECK, TRUE));
         }
@@ -1317,50 +1327,9 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_MATH );
     }
 
-    const SvEditObjectProtocol& rProt = pDocSh->GetProtocol();
+    const SvEditObjectProtocol& rProt = GetDocSh()->GetProtocol();
 
-    // #101976# Removed [pDocSh->GetActualFunction() ||] from the following
-    // clause because the current function of the docshell can only be
-    // search and replace or spell checking and in that case switching the
-    // view mode is allowed.
-    if (rProt.IsInPlaceActive() || pFuSlideShow)
-    {
-        if ( !rProt.IsInPlaceActive() )
-        {
-            rSet.ClearItem( SID_DRAWINGMODE );
-            rSet.DisableItem( SID_DRAWINGMODE );
-        }
-
-        rSet.ClearItem( SID_NOTESMODE );
-        rSet.DisableItem( SID_NOTESMODE );
-
-        rSet.ClearItem( SID_HANDOUTMODE );
-        rSet.DisableItem( SID_HANDOUTMODE );
-
-        rSet.ClearItem( SID_OUTLINEMODE );
-        rSet.DisableItem( SID_OUTLINEMODE );
-
-        rSet.ClearItem( SID_DIAMODE );
-        rSet.DisableItem( SID_DIAMODE );
-    }
-
-    if (pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
-    {
-        // Outplace-Edit: Kein Umschalten erlauben
-        rSet.ClearItem( SID_OUTLINEMODE );
-        rSet.DisableItem( SID_OUTLINEMODE );
-
-        rSet.ClearItem( SID_DIAMODE );
-        rSet.DisableItem( SID_DIAMODE );
-
-        rSet.ClearItem( SID_NOTESMODE );
-        rSet.DisableItem( SID_NOTESMODE );
-
-        rSet.ClearItem( SID_HANDOUTMODE );
-        rSet.DisableItem( SID_HANDOUTMODE );
-    }
-
-    if ( pFuSlideShow || pDocSh->IsPreview() || bInEffectAssignment )
+    if ( pFuSlideShow || GetDocSh()->IsPreview() || bInEffectAssignment )
     {
         // Eigene Slots
         rSet.DisableItem( SID_PRESENTATION );
@@ -1543,10 +1512,10 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    // #96090# moved SID_UNDO to SdViewShell::GetMenuState()
-    // #96090# moved SID_REDO to SdViewShell::GetMenuState()
-    // #96090# moved SID_GETUNDOSTRINGS to SdViewShell::GetMenuState()
-    // #96090# moved SID_GETREDOSTRINGS to SdViewShell::GetMenuState()
+    // #96090# moved SID_UNDO to ViewShell::GetMenuState()
+    // #96090# moved SID_REDO to ViewShell::GetMenuState()
+    // #96090# moved SID_GETUNDOSTRINGS to ViewShell::GetMenuState()
+    // #96090# moved SID_GETREDOSTRINGS to ViewShell::GetMenuState()
 
     ///////////////////////////////////////////////////////////////////////
     // Menuoption: Edit->Hyperlink
@@ -1596,7 +1565,7 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
             }
         }
     }
-    if ( bDisableEditHyperlink || pDocSh->IsReadOnly() )
+    if ( bDisableEditHyperlink || GetDocSh()->IsReadOnly() )
         rSet.DisableItem( SID_EDIT_HYPERLINK );
 
     if ( bDisableEditHyperlink )
@@ -1615,15 +1584,86 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     rSet.DisableItem( SID_INSERT_APPLET );
 #endif
 
+    GetModeSwitchingMenuState (rSet);
+}
 
+
+void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
+{
+    //draview
+    rSet.Put(SfxBoolItem(SID_DIAMODE, FALSE));
+    rSet.Put(SfxBoolItem(SID_OUTLINEMODE, FALSE));
+    if (ePageKind == PK_NOTES)
+    {
+        rSet.DisableItem(SID_ANIMATIONMODE);
+        rSet.Put(SfxBoolItem(SID_DRAWINGMODE, FALSE));
+        rSet.Put(SfxBoolItem(SID_NOTESMODE, TRUE));
+        rSet.Put(SfxBoolItem(SID_HANDOUTMODE, FALSE));
+    }
+    else if (ePageKind == PK_HANDOUT)
+    {
+        rSet.Put(SfxBoolItem(SID_DRAWINGMODE, FALSE));
+        rSet.Put(SfxBoolItem(SID_NOTESMODE, FALSE));
+        rSet.Put(SfxBoolItem(SID_HANDOUTMODE, TRUE));
+    }
+    else
+    {
+        rSet.Put(SfxBoolItem(SID_DRAWINGMODE, TRUE));
+        rSet.Put(SfxBoolItem(SID_NOTESMODE, FALSE));
+        rSet.Put(SfxBoolItem(SID_HANDOUTMODE, FALSE));
+    }
+    const SvEditObjectProtocol& rProt = GetDocSh()->GetProtocol();
+
+    // #101976# Removed [GetDocSh()->GetActualFunction() ||] from the following
+    // clause because the current function of the docshell can only be
+    // search and replace or spell checking and in that case switching the
+    // view mode is allowed.
+    if (rProt.IsInPlaceActive() || pFuSlideShow)
+    {
+        if ( !rProt.IsInPlaceActive() )
+        {
+            rSet.ClearItem( SID_DRAWINGMODE );
+            rSet.DisableItem( SID_DRAWINGMODE );
+        }
+
+        rSet.ClearItem( SID_NOTESMODE );
+        rSet.DisableItem( SID_NOTESMODE );
+
+        rSet.ClearItem( SID_HANDOUTMODE );
+        rSet.DisableItem( SID_HANDOUTMODE );
+
+        rSet.ClearItem( SID_OUTLINEMODE );
+        rSet.DisableItem( SID_OUTLINEMODE );
+
+        rSet.ClearItem( SID_DIAMODE );
+        rSet.DisableItem( SID_DIAMODE );
+    }
+
+    if (GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
+    {
+        // Outplace-Edit: Kein Umschalten erlauben
+        rSet.ClearItem( SID_OUTLINEMODE );
+        rSet.DisableItem( SID_OUTLINEMODE );
+
+        rSet.ClearItem( SID_DIAMODE );
+        rSet.DisableItem( SID_DIAMODE );
+
+        rSet.ClearItem( SID_NOTESMODE );
+        rSet.DisableItem( SID_NOTESMODE );
+
+        rSet.ClearItem( SID_HANDOUTMODE );
+        rSet.DisableItem( SID_HANDOUTMODE );
+    }
     // #94252# Hands off from controls if we're editing an OLE
-    const SdClient* pIPClient = (const SdClient*) GetIPClient();
+    OSL_ASSERT (GetViewShell()!=NULL);
+    const Client* pIPClient = static_cast<Client*>(
+        GetViewShell()->GetIPClient());
 
     // editing an internal OLE switches off our UI
     if( !pIPClient || !pIPClient->IsUIActive() )
     {
         SfxItemState nState = rSet.GetItemState(SID_PRESENTATION);
-        if( pDocSh->IsPreview() || SFX_ITEM_DISABLED == nState )
+        if( GetDocSh()->IsPreview() || SFX_ITEM_DISABLED == nState )
             aPresentationBtn.Disable();
         else if( SFX_ITEM_UNKNOWN != nState )
             aPresentationBtn.Enable();
@@ -1658,8 +1698,8 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         else if( SFX_ITEM_UNKNOWN != nState )
             aDrawBtn.Enable();
 
-        // these are manually changed from SdDrawViewShell::ActivateObject()
-        // and SdDrawViewShell::SelectionHasChanged
+        // these are manually changed from DrawViewShell::ActivateObject()
+        // and DrawViewShell::SelectionHasChanged
         // aTabControl.Enable();
         // aLayerTab.Enable();
     }
@@ -1667,8 +1707,7 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
 
 
 
-
-void SdDrawViewShell::GetState (SfxItemSet& rSet)
+void DrawViewShell::GetState (SfxItemSet& rSet)
 {
     // Iterate over all requested items in the set.
     SfxWhichIter aIter( rSet );
@@ -1681,10 +1720,10 @@ void SdDrawViewShell::GetState (SfxItemSet& rSet)
             case SID_SEARCH_OPTIONS:
                 // Forward this request to the the common (old) code of the
                 // document shell.
-                pDocSh->GetState (rSet);
+                GetDocSh()->GetState (rSet);
                 break;
             default:
-                OSL_TRACE ("SdDrawViewShell::GetState(): can not handle which id %d", nWhich);
+                OSL_TRACE ("DrawViewShell::GetState(): can not handle which id %d", nWhich);
                 break;
         }
         nWhich = aIter.NextWhich();
@@ -1694,7 +1733,7 @@ void SdDrawViewShell::GetState (SfxItemSet& rSet)
 
 
 
-void SdDrawViewShell::Execute (SfxRequest& rReq)
+void DrawViewShell::Execute (SfxRequest& rReq)
 {
     FuSlideShow* pFuSlideShow = GetSlideShow();
     if (pFuSlideShow!=NULL && !pFuSlideShow->IsLivePresentation())
@@ -1708,11 +1747,13 @@ void SdDrawViewShell::Execute (SfxRequest& rReq)
         case SID_SEARCH_ITEM:
             // Forward this request to the the common (old) code of the
             // document shell.
-            pDocSh->Execute (rReq);
+            GetDocSh()->Execute (rReq);
         break;
 
         default:
-            OSL_TRACE ("SdDrawViewShell::Execute(): can not handle slot %d", rReq.GetSlot());
+            OSL_TRACE ("DrawViewShell::Execute(): can not handle slot %d", rReq.GetSlot());
             break;
     }
 }
+
+} // end of namespace sd
