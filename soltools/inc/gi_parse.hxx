@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gi_parse.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2001-06-11 16:05:17 $
+ *  last change: $Author: np $ $Date: 2001-06-22 09:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,8 +136,7 @@ class GenericInfo_Parser : public GenericInfoParseTypes
                             GenericInfoList_Browser &
                                                 io_rSrc );
 
-    void                ReadLine(
-                            std::istream &      i_rSrc );
+    void                ReadLine();
     bool                InterpretLine();
     E_LineType          ClassifyLine();
 
@@ -180,6 +179,9 @@ class GenericInfo_Parser : public GenericInfoParseTypes
                         pResult;
     GenericInfoList_Browser *
                         pResource;
+
+    char *              dpBuffer;
+    char *              sFilePtr;
 };
 
 

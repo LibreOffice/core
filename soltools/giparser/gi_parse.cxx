@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gi_parse.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2001-06-12 14:38:15 $
+ *  last change: $Author: np $ $Date: 2001-06-22 09:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,37 @@ GenericInfo_Parser::LoadList( GenericInfoList_Builder &  o_rResult,
         return false;
     }
 
+    aFile.seekg(0, ios::end);
+    UINT32 nTextSize = aFile.tellg();
+    if ( nTextSize == 0 || nTextSize == UINT32(-1) )
+        return true;
+    dpBuffer = new char[nTextSize+2];
+
+    aFile.seekg(0);
+    aFile.read( dpBuffer, nTextSize );
+    aFile.close();
+
+    sFilePtr = dpBuffer;
+    char * sLastChar = dpBuffer + nTextSize - 1;
+
+    while ( sFilePtr != sLastChar && *sFilePtr <= 32 )
+        ++sCurParsePosition;
+    if ( sFilePtr == sLastChar )
+    {
+        if ( *sFilePtr <= 32 )
+            return true;
+    }
+    else while ( *sLastChar <= 32 )
+    {
+        --sLastChar;
+    }
+
+    *(sLastChar+1) = '\n';
+    *(sLastChar+2) = '\0';
+
     ResetState(o_rResult);
 
-    for ( ReadLine(aFile); bGoon; ReadLine(aFile) )
+    for ( ReadLine(); bGoon; ReadLine() )
     {
         bool bOk = InterpretLine();
         if ( !bOk)
@@ -143,7 +171,10 @@ GenericInfo_Parser::LoadList( GenericInfoList_Builder &  o_rResult,
         SetError(unexpected_list_end);
     }
 
-    aFile.close();
+    delete [] dpBuffer;
+    dpBuffer = 0;
+    sFilePtr = 0;
+
     return eErrorCode == ok;
 }
 
@@ -196,36 +227,31 @@ GenericInfo_Parser::ResetState( GenericInfoList_Browser & io_rSrc )
 
 
 void
-GenericInfo_Parser::ReadLine( istream & i_rSrc )
+GenericInfo_Parser::ReadLine()
 {
-    const int nInputSize = 32000;
-    static char sInput[nInputSize];
-
-    i_rSrc.get(sInput, nInputSize);
-    UINT32 nGot = UINT32(i_rSrc.gcount());
-    if (nGot == 0 && i_rSrc.eof())
+    if ( *sFilePtr == '\0' )    // See initialising of dpBuffer and sLastChar in LoadList().
     {
         bGoon = false;
         return;
     }
 
+    sCurParsePosition = sFilePtr;
+    while ( *sFilePtr != '\n' )
+        ++sFilePtr;
     nCurLine++;
 
-#if 0
-    if ( sInput[ nGot-1 ] == '\r' )
-        sInput[ nGot-1 ] = '\0';
-#endif
-    i_rSrc.get();
+    // Remove leading and trailing whitespace from line:
+    while ( sCurParsePosition != sFilePtr && *sCurParsePosition <= 32 )
+        ++sCurParsePosition;
 
-    for ( sCurParsePosition = &sInput[0]; *sCurParsePosition > 0 && *sCurParsePosition <= 32; ++sCurParsePosition );
-    for ( char * sEnd = const_cast< char* >(strchr(sCurParsePosition,'\0'));
-          sEnd != sCurParsePosition
-                ? *(sEnd-1) <= 32
-                : false;
-          --sEnd )
-    {
-        *(sEnd-1) = '\0';
-    }
+    char * sEndOfLine = sFilePtr;
+    while ( sEndOfLine != sCurParsePosition && *sEndOfLine <= 32 )
+          --sEndOfLine;
+    if ( sCurParsePosition != sEndOfLine || *sCurParsePosition > 32 )
+        ++sEndOfLine;
+    *sEndOfLine = '\0';
+
+    ++sFilePtr; // Go beyond line end to first character of next line.
 }
 
 bool
