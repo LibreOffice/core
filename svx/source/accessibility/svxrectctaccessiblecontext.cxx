@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2002-06-14 06:32:55 $
+ *  last change: $Author: fs $ $Date: 2002-09-30 11:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,15 +904,17 @@ SvxRectCtlChildAccessibleContext::~SvxRectCtlChildAccessibleContext()
 {
     DBG_DTOR( SvxRectCtlChildAccessibleContext, NULL );
 
+    osl_incrementInterlockedCount( &m_refCount );
+        // prevent to enter this a second time
+
     if( mpEventListeners )
     {
         lang::EventObject aEvent;
         aEvent.Source = static_cast< cppu::OWeakObject* >( this );
-        if( mpEventListeners )
-        {
-            mpEventListeners->disposeAndClear( aEvent );
-            delete mpEventListeners;
-        }
+
+        mpEventListeners->disposeAndClear( aEvent );
+        delete mpEventListeners;
+        mpEventListeners = NULL;
     }
 
     delete mpBoundingBox;
