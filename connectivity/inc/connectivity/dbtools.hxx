@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:49:27 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,15 +202,13 @@ namespace dbtools
         SAL_THROW ( (::com::sun::star::sdbc::SQLException) );
 
 
-    /** return the active connection which is got from the first model which occurs and has the active connection set as argument.
-        @param  _xChild
-            The child to ask for the XModel interface, if not supported it goes the parent hierachy up.
-
-        @return ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XConnection>
-        @see XModel::getArgs
+    /** determines whether the given component is part of a document which is an embedded database
+        document (such as a form)
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>  getActiveConnectionFromParent(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xChild);
+    bool    isEmbeddedInDatabase(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent,
+                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxActualConnection
+            );
 
     /** returns the columns of the named table of the given connection
     */
