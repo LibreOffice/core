@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:30:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1248,8 +1248,7 @@ String SvxGetDictionaryURL(const String &rDicName, sal_Bool bIsUserDic)
     return aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
 }
 
-//TL:TODO: soll mal den rictigen Rückgabetyp bekommen!
-sal_Bool SvxAddEntryToDic(
+sal_uInt8 SvxAddEntryToDic(
         Reference< XDictionary >  &rxDic,
         const OUString &rWord, sal_Bool bIsNeg,
         const OUString &rRplcTxt, sal_Int16 nRplcLang,
@@ -1271,7 +1270,7 @@ sal_Bool SvxAddEntryToDic(
     }
     sal_Bool bAddOk = rxDic->add( aTmp, bIsNeg, rRplcTxt );
 
-    sal_Int16 nRes = DIC_ERR_NONE;
+    sal_uInt8 nRes = DIC_ERR_NONE;
     if (!bAddOk)
     {
         if (rxDic->isFull())
@@ -1286,7 +1285,7 @@ sal_Bool SvxAddEntryToDic(
         }
     }
 
-    return (sal_Bool)nRes;
+    return nRes;
 }
 
 short SvxDicError( Window *pParent, sal_Int16 nError )
