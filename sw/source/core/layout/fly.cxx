@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-10 11:32:43 $
+ *  last change: $Author: mib $ $Date: 2002-10-11 13:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,27 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
 
 SwFlyFrm::~SwFlyFrm()
 {
+#ifdef ACCESSIBLE_LAYOUT
+    // Accessible objects for fly frames will be destroyed in this destructor.
+    // For frames bound as char or frames that don't have an anchor we have
+    // to do that ourselves. For any other frame the call RemoveFly at the
+    // anchor will do that.
+    if( IsAccessibleFrm() && GetFmt() && (IsFlyInCntFrm() || !pAnchor) )
+    {
+        SwRootFrm *pRootFrm = FindRootFrm();
+        if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
+        {
+            ViewShell *pVSh = pRootFrm->GetCurrShell();
+            if( pVSh && pVSh->Imp() )
+            {
+                // Lowers aren't disposed already, so we have to do a recursive
+                // dispose
+                pVSh->Imp()->DisposeAccessibleFrm( this, sal_True );
+            }
+        }
+    }
+#endif
+
     if( GetFmt() && !GetFmt()->GetDoc()->IsInDtor() )
     {
         //Aus der Verkettung loessen.

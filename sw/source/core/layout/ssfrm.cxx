@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-10 11:33:25 $
+ *  last change: $Author: mib $ $Date: 2002-10-11 13:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,9 @@ Point SwFrm::GetAnchorPos() const
 SwFrm::~SwFrm()
 {
 #ifdef ACCESSIBLE_LAYOUT
-    if( IsAccessibleFrm() && GetDep() )
+    // accessible objects for fly and cell frames have been already disposed
+    // by the destructors of the derived classes.
+    if( IsAccessibleFrm() && !(IsFlyFrm() || IsCellFrm()) && GetDep() )
     {
         SwRootFrm *pRootFrm = FindRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
