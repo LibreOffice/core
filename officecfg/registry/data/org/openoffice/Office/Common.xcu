@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:48:31 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,9 @@
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
           <value >_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
+          <value >private:image/3245</value>
         </prop>
       </node>
       <node oor:name="m5" oor:op="replace">
