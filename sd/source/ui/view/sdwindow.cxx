@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: af $ $Date: 2002-04-11 17:00:14 $
+ *  last change: $Author: af $ $Date: 2002-04-22 15:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,9 @@
 #include "drviewsh.hxx"
 #include "sdview.hxx"
 #include "outlnvsh.hxx"
-#include "AccessibleDocumentView.hxx"
+#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DRAW_DOCUMENT_VIEW_HXX
+#include "AccessibleDrawDocumentView.hxx"
+#endif
 
 
 
@@ -878,30 +880,18 @@ sal_Int8 SdWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 }
 
 
+
+
 ::com::sun::star::uno::Reference<
     ::drafts::com::sun::star::accessibility::XAccessible>
     SdWindow::CreateAccessible (void)
 {
     if (pViewShell != NULL)
+    return pViewShell->CreateAccessibleDocumentView (this);
+    else
     {
-        SdDrawDocument* pDocument = pViewShell->GetDoc();
-        ::com::sun::star::uno::Reference<
-              ::com::sun::star::frame::XController> xController (pViewShell->GetController());
-        if (xController.is())
-        {
-            accessibility::AccessibleDocumentView* pDocumentView =
-                new accessibility::AccessibleDocumentView (this,
-                    pViewShell,
-                    xController,
-                    GetAccessibleParentWindow()->GetAccessible());
-            pDocumentView->Init();
-            return ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::accessibility::XAccessible>
-                (static_cast< ::com::sun::star::uno::XWeak*>(pDocumentView),
-                    ::com::sun::star::uno::UNO_QUERY);
-        }
-    }
-    OSL_TRACE ("no view shell or no controller");
+        OSL_TRACE ("SdWindow::CreateAccessible: no view shell");
     return Window::CreateAccessible ();
+    }
 }
 
