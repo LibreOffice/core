@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:30:56 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:33:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2641,7 +2641,8 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
         USHORT nCount = (USHORT)pList->Count();
         if( nCount )
         {
-            for ( USHORT i = 0; i < nCount; i++ )
+            USHORT i;
+            for ( i = 0; i < nCount; i++ )
             {
                 aFrameCB.InsertEntry(*pList->GetObject(i));
             }
