@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:22 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,11 @@ namespace xmloff
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >
                                         m_xOuterAttributes;
 
+        /** the address of the calc cell which the control model should be bound to,
+            if applicable
+        */
+        ::rtl::OUString                 m_sBoundCellAddress;
+
     protected:
         // for use by derived classes only
         OControlImport(
@@ -272,14 +277,23 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >& _rxPropInfo,
             ::com::sun::star::beans::PropertyValue& /* [in/out] */ _rPropValue);
 
-    protected:
-            //added by BerryJia for fixing bug102407 2002-11-5
-            /** create the (uninitialized) element which is to represent the read data
+        /** registers the given cell address as value binding address for our element
 
-                <p>The default implementation uses <member>m_xORB</member> to create a object with <member>m_sServiceName</member>.
-            */
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                            createElement();
+            <p>The default implementation simply calls registerCellValueBinding at our import
+            context, but you may want to override this behaviour.</p>
+
+            @param _rBoundCellAddress
+                the cell address to register for our element. Must not be <NULL/>.
+            @precond
+                we have a valid element (m_xElement)
+        */
+        virtual void doRegisterCellValueBinding( const ::rtl::OUString& _rBoundCellAddress );
+
+    protected:
+        //added by BerryJia for fixing bug102407 2002-11-5
+        // OElementImport overridables
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                        createElement();
 
     };
 
@@ -462,10 +476,15 @@ namespace xmloff
         ::com::sun::star::uno::Sequence< sal_Int16 >
                         m_aDefaultSelectedSeq;
 
-        sal_Int32       m_nEmptyListItems;
-        sal_Int32       m_nEmptyValueItems;
+        ::rtl::OUString m_sCellListSource;      /// the cell range which acts as list source for the control
+
+        sal_Int32       m_nEmptyListItems;      /// number of empty list items encountered during reading
+        sal_Int32       m_nEmptyValueItems;     /// number of empty value items encountered during reading
 
         sal_Bool        m_bEncounteredLSAttrib;
+        sal_Bool        m_bLinkWithIndexes;     /** <TRUE/> if and only if we should use a cell value binding
+                                                    which exchanges the selection index (instead of the selection text
+                                                */
 
     public:
         OListAndComboImport(
@@ -486,6 +505,9 @@ namespace xmloff
         virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
+
+        // OControlImport ovrridables
+        virtual void doRegisterCellValueBinding( const ::rtl::OUString& _rBoundCellAddress );
 
     protected:
         void implPushBackLabel(const ::rtl::OUString& _rLabel);
