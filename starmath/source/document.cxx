@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-11 13:00:52 $
+ *  last change: $Author: tl $ $Date: 2001-05-17 13:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,10 @@ void SmDocShell::LoadSymbols()
 SmSymSetManager & SmDocShell::GetSymSetManager()
 {
     if (!pSymSetMgr)
+    {
         pSymSetMgr = new SmSymSetManager;
+        pSymSetMgr->Load();
+    }
     return *pSymSetMgr;
 }
 
@@ -630,7 +633,6 @@ SmDocShell::SmDocShell(SfxObjectCreateMode eMode) :
 
     StartListening(aFormat);
     StartListening(*pp->GetConfig());
-    LoadSymbols();
 
     SetShell(this);
     SetModel( new SmModel(this) );  //! das hier mit new erzeugte Model brauch
