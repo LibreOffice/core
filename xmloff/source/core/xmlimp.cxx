@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:18:49 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,7 +705,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
             if( XML_NAMESPACE_UNKNOWN == nKey  )
             {
                 OUString aTestName( rAttrValue );
-                if( SvXMLNamespaceMap::NormalizeOasisURN( aTestName ) )
+                if( SvXMLNamespaceMap::NormalizeURI( aTestName ) )
                     nKey = pNamespaceMap->AddIfKnown( aPrefix, aTestName );
             }
             // If that namespace is not known, too, add it as unknown
