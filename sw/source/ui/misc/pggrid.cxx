@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:46:33 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,10 +214,12 @@ BOOL    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
     BOOL bRet = FALSE;
     if(aNoGridRB.GetSavedValue() != aNoGridRB.IsChecked()||
         aLinesGridRB.GetSavedValue() != aLinesGridRB.IsChecked()||
-        aLinesPerPageNF.GetSavedValue() != aLinesPerPageNF.GetValue()||
-        aTextSizeMF.GetSavedValue() != aTextSizeMF.GetValue()||
-        aCharsPerLineNF.GetSavedValue() != aCharsPerLineNF.GetValue()||
-        aRubySizeMF.GetSavedValue() != aRubySizeMF.GetValue()||
+        aLinesPerPageNF.GetSavedValue().ToInt32()
+           != aLinesPerPageNF.GetValue()||
+        aTextSizeMF.GetSavedValue().ToInt32() != aTextSizeMF.GetValue()||
+        aCharsPerLineNF.GetSavedValue().ToInt32()
+           != aCharsPerLineNF.GetValue()||
+        aRubySizeMF.GetSavedValue().ToInt32() != aRubySizeMF.GetValue()||
         aRubyBelowCB.GetSavedValue() != aRubyBelowCB.IsChecked()||
         aDisplayCB.GetSavedValue() != aDisplayCB.IsChecked()||
         aPrintCB.GetSavedValue() != aPrintCB.IsChecked()||
