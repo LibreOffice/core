@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WindowAttribute.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:58:46 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ constants WindowAttribute
         @see com::sun::star::lang::SystemDependent
 
         @deprecated
-            conflicts with <type>VclWindowPeerAttribute::HSCROLL</type>
+            conflicts with <member>VclWindowPeerAttribute::HSCROLL</member>
      */
     const long SYSTEMDEPENDENT = 256;
 
