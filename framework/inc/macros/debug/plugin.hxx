@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plugin.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:23 $
+ *  last change: $Author: as $ $Date: 2000-12-19 10:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@
         Log information about parameter of a newURL() at a plugin frame.
     _____________________________________________________________________________________________________________*/
 
-    #define LOG_PARAMETER_NEWURL( SFRAMENAME, SMIMETYPE, SURL, AANY )                                       \
+    #define LOG_PARAMETER_NEWURL( SFRAMENAME, SMIMETYPE, SURL, sFILTER, AANY )                              \
                 /* Use new scope to declare local private variables! */                                     \
                 {                                                                                           \
                     ::rtl::OStringBuffer sBuffer(1024);                                                     \
@@ -157,6 +157,8 @@
                     sBuffer.append( U2B( SMIMETYPE )                );                                      \
                     sBuffer.append( "\", \""                        );                                      \
                     sBuffer.append( U2B( SURL )                     );                                      \
+                    sBuffer.append( "\", \""                        );                                      \
+                    sBuffer.append( U2B( SFILTER )                  );                                      \
                     sBuffer.append( "\", "                          );                                      \
                     if( AANY.hasValue() == sal_True )                                                       \
                     {                                                                                       \
@@ -176,7 +178,7 @@
         Log information about parameter of a newStream() at a plugin frame.
     _____________________________________________________________________________________________________________*/
 
-    #define LOG_PARAMETER_NEWSTREAM( SFRAMENAME, SMIMETYPE, SURL, XSTREAM, AANY )                           \
+    #define LOG_PARAMETER_NEWSTREAM( SFRAMENAME, SMIMETYPE, SURL, SFILTER, XSTREAM, AANY )                  \
                 /* Use new scope to declare local private variables! */                                     \
                 {                                                                                           \
                     ::rtl::OStringBuffer sBuffer(1024);                                                     \
@@ -186,6 +188,8 @@
                     sBuffer.append( U2B( SMIMETYPE )                );                                      \
                     sBuffer.append( "\", \""                        );                                      \
                     sBuffer.append( U2B( SURL )                     );                                      \
+                    sBuffer.append( "\", \""                        );                                      \
+                    sBuffer.append( U2B( SFILTER )                  );                                      \
                     sBuffer.append( "\", "                          );                                      \
                     if( XSTREAM.is() == sal_True )                                                          \
                     {                                                                                       \
@@ -220,8 +224,8 @@
     #undef  LOGFILE_PLUGIN
     #define LOG_URLSEND( SFRAMENAME, SSENDMODE, SINTERNALURL, SEXTERNALURL )
     #define LOG_URLRECEIVE( SFRAMENAME, SRECEIVEMODE, SEXTERNALURL, SINTERNALURL )
-    #define LOG_PARAMETER_NEWURL( SFRAMENAME, SMIMETYPE, SURL, AANY )
-    #define LOG_PARAMETER_NEWSTREAM( SFRAMENAME, SMIMETYPE, SURL, XSTREAM, AANY )
+    #define LOG_PARAMETER_NEWURL( SFRAMENAME, SMIMETYPE, SURL, SFILTER, AANY )
+    #define LOG_PARAMETER_NEWSTREAM( SFRAMENAME, SMIMETYPE, SURL, SFILTER, XSTREAM, AANY )
 
 #endif  // #ifdef ENABLE_PLUGINDEBUG
 
