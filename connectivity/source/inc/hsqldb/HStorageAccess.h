@@ -51,9 +51,9 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_r
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess
  * Method:    read
- * Signature: (Ljava/lang/String;Ljava/lang/String;[BII)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;[BII)I
  */
-JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_read__Ljava_lang_String_2Ljava_lang_String_2_3BII
+JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_read__Ljava_lang_String_2Ljava_lang_String_2_3BII
   (JNIEnv *, jobject, jstring, jstring, jbyteArray, jint, jint);
 
 /*
