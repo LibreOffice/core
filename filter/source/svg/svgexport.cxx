@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgexport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-05 13:39:56 $
+ *  last change: $Author: ka $ $Date: 2002-08-15 14:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,13 +130,6 @@ bool ObjectRepresentation::operator==( const ObjectRepresentation& rPresentation
     return( ( mxObject == rPresentation.mxObject ) &&
             ( *mpMtf == *rPresentation.mpMtf ) );
 }
-
-// -----------------------------------------------------------------------------
-
-struct ::std::hash< Reference< XInterface > >
-{
-  size_t operator()( Reference< XInterface > xIf ) const { return reinterpret_cast< size_t >( xIf.get() ); }
-};
 
 // -------------
 // - SVGFilter -

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgfilter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-05 13:40:05 $
+ *  last change: $Author: ka $ $Date: 2002-08-15 14:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,15 @@ public:
     const GDIMetaFile&              GetRepresentation() const { return *mpMtf; }
 };
 
+// ---------------------------
+// - HashReferenceXInterface -
+// ---------------------------
+
+struct HashReferenceXInterface
+{
+    size_t operator()( const Reference< XInterface >& rxIf ) const { return reinterpret_cast< size_t >( rxIf.get() ); }
+};
+
 // -------------
 // - SVGFilter -
 // -------------
@@ -235,7 +244,7 @@ class SVGFilter : public cppu::WeakImplHelper5 < XFilter,
                                                  XInitialization,
                                                  XServiceInfo >
 {
-    typedef ::std::hash_map< Reference< XInterface >, ObjectRepresentation, hash< Reference< XInterface > > > ObjectMap;
+    typedef ::std::hash_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface > ObjectMap;
 
 private:
 
