@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-02 14:08:50 $
+ *  last change: $Author: obo $ $Date: 2001-03-06 11:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,7 +501,7 @@ short SwGrfNode::SwapIn( BOOL bWaitForData )
                 SvStorageRef refPics = aPicStgName.Len()
                        ? refRoot->OpenStorage( aPicStgName,
                         STREAM_READ | STREAM_SHARE_DENYWRITE )
-                    : refRoot;
+                    : &refRoot;
                 if( refPics->GetError() == SVSTREAM_OK )
                 {
                     SvStorageStreamRef refStrm =
@@ -1064,7 +1064,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
             SvStorageRef refPics = aPicStgName.Len()
                    ? refRoot->OpenStorage( aPicStgName,
                         STREAM_READ | STREAM_SHARE_DENYWRITE )
-                : refRoot;
+                : &refRoot;
             if( refPics->GetError() == SVSTREAM_OK )
             {
                 SvStorageStreamRef refStrm = refPics->OpenStream( aStrmName,
@@ -1143,7 +1143,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
                 SvStorageRef refPics = aPicStgName.Len()
                     ? refRoot->OpenStorage( aPicStgName,
                         STREAM_READ | STREAM_SHARE_DENYWRITE )
-                    : refRoot;
+                    : &refRoot;
                 if( refPics->GetError() == SVSTREAM_OK )
                 {
                     SvStream* pTmp = refPics->OpenStream( aStrmName,
