@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-12 12:33:36 $
+ *  last change: $Author: sj $ $Date: 2001-02-14 16:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6165,8 +6165,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 bStatus = FALSE;
                             else
                             {   // patching the RecordHeader
-                                aClientTextBoxHd.nFilePos -= nHeaderSize;
-                                aClientTextBoxHd.nRecLen += nHeaderSize;
+                                aClientTextBoxHd.nFilePos -= DFF_COMMON_RECORD_HEADER_SIZE;
+                                aClientTextBoxHd.nRecLen += DFF_COMMON_RECORD_HEADER_SIZE;
                                 aClientTextBoxHd.nRecType = DFF_msofbtClientTextbox;
                                 aClientTextBoxHd.nRecVer = DFF_PSFLAG_CONTAINER;
 
@@ -6178,7 +6178,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     if ( ( aTmpHd.nRecType == PPT_PST_SlidePersistAtom ) || ( aTmpHd.nRecType == PPT_PST_TextHeaderAtom ) )
                                         break;
                                     aTmpHd.SeekToEndOfRecord( rIn );
-                                    aClientTextBoxHd.nRecLen += aTmpHd.nRecLen + nHeaderSize;
+                                    aClientTextBoxHd.nRecLen += aTmpHd.nRecLen + DFF_COMMON_RECORD_HEADER_SIZE;
                                 }
                                 aClientTextBoxHd.SeekToContent( rIn );
                             }
