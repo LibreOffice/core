@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-04 16:23:31 $
+ *  last change: $Author: tbe $ $Date: 2002-11-06 15:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -834,8 +834,6 @@ uno::Any VCLXAccessibleComponent::getAccessibleKeyBinding() throw (uno::RuntimeE
     return aRet;
 }
 
-// XAccessibleExtendedComponent
-
 sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
@@ -877,6 +875,8 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  ) throw (uno::Runtim
     return nColor;
 }
 
+// XAccessibleExtendedComponent
+
 uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  ) throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
@@ -900,22 +900,6 @@ uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  ) throw
     }
 
     return xFont;
-}
-
-awt::FontDescriptor SAL_CALL VCLXAccessibleComponent::getFontMetrics( const uno::Reference< awt::XFont >& xFont ) throw (uno::RuntimeException)
-{
-    return xFont->getFontDescriptor();
-}
-
-sal_Bool SAL_CALL VCLXAccessibleComponent::isEnabled(  ) throw (uno::RuntimeException)
-{
-    OExternalLockGuard aGuard( this );
-
-    sal_Bool bEnabled = sal_False;
-    if ( GetWindow() )
-        bEnabled = GetWindow()->IsEnabled();
-
-    return bEnabled;
 }
 
 ::rtl::OUString SAL_CALL VCLXAccessibleComponent::getTitledBorderText(  ) throw (uno::RuntimeException)
