@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-03 07:55:54 $
+#   last change: $Author: hr $ $Date: 2004-11-09 18:31:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -571,7 +571,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     installer::scriptitems::changing_name_of_langugage_dependent_keys($filesinproductlanguageresolvedarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles5.log", $filesinproductlanguageresolvedarrayref); }
 
-    if ( $installer::globals::iswin ) { installer::converter::convert_slash_to_backslash($filesinproductlanguageresolvedarrayref); }
+    if ( $installer::globals::iswin and $ENV{'USE_SHELL'} eq "4nt" ) { installer::converter::convert_slash_to_backslash($filesinproductlanguageresolvedarrayref); }
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles6.log", $filesinproductlanguageresolvedarrayref); }
 
     $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_non_existent_languages_in_productlists($filesinproductlanguageresolvedarrayref, $languagestringref, "Name", "file");
