@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-25 11:08:45 $
+ *  last change: $Author: cl $ $Date: 2002-08-29 11:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -787,10 +787,6 @@ sal_Bool SdXMLFilter::Export()
                         xDocStream->SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), uno::makeAny( (sal_Bool)sal_True ) );
                     }
 
-                }
-                else
-                {
-                    xDocOut = mrMedium.GetDataSink();
                 }
 
                 uno::Reference< io::XActiveDataSource > xDocSrc( xWriter, uno::UNO_QUERY );
