@@ -5,8 +5,8 @@
 #*	  Beschreibung		TARGET-Rules
 #*
 #*	  Ersterstellung	TH 28.03.94
-#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-09-21 13:12:00 $
-#*	  $Revision: 1.2 $
+#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-09-21 14:03:04 $
+#*	  $Revision: 1.3 $
 #*
 #*	  $Logfile:   T:/solar/inc/target.mkv  $
 #*
@@ -1669,6 +1669,12 @@ SDI5 ?= TNR!:=5
 XMLPROPERTIESN:=$(foreach,i,$(XMLPROPERTIES) $(MISC)$/$(TARGET)_$(i:s/.xrb/.done/))
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
+.IF "$(UNIXTEXT)"!=""
+.IF "$(GUI)"=="UNX"
+CONVERTUNIXTEXT:=$(UNIXTEXT)
+.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(UNIXTEXT)"!=""
+
 .IF "$(IDLFILES)"!=""
 .IF "$(TF_PACKAGES)"!=""
 .IF "$(NODEFAULTUNO)"==""
@@ -1856,7 +1862,7 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(PRJHIDTARGET) \
         $(SIGNFORNETSCAPE) \
         $(SIGNFOREXPLORER) \
-        $(UNIXTEXT) \
+        $(CONVERTUNIXTEXT) \
         last_target
 
 .IF "$(EXCEPTIONSNOOPT_FLAG)"==""
@@ -1971,6 +1977,14 @@ $(MISC)$/s2u_$(TARGET).don:
 .ENDIF
 
 .ENDIF			# "$(TF_PACKAGES)"==""
+
+.IF "$(UNIXTEXT)"!=""
+$(UNIXTEXT) :
+    @+echo Making $@
+    @+-$(RM) -f $@ >& $(NULLDEV)
+    @+tr -d "\015" < $(@:f) > $@
+    
+.ENDIF			# "$(UNIXTEXT)"!=""
 
 .IF "$(GUI)$(UPDATER)"=="WNTYES"
 make_uno_doc:
