@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvtablebox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-15 09:29:12 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #include <vcl/scrbar.hxx>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 #ifndef _SC_CSVCONTROL_HXX
 #include "csvcontrol.hxx"
 #endif
@@ -95,7 +98,7 @@ Column: The range between two splits.
 
 /** The control in the CSV import dialog that contains a ruler and a data grid
     to visualize and modify the current import settings. */
-class ScCsvTableBox : public ScCsvControl
+class SC_DLLPUBLIC ScCsvTableBox : public ScCsvControl
 {
 private:
     ScCsvLayoutData             maData;             /// Current layout data of the controls.
@@ -130,22 +133,22 @@ public:
 
 private:
     /** Initialisation on construction. */
-    void                        Init();
+    SC_DLLPRIVATE void                        Init();
     /** Initializes the children controls (pos/size, scroll bars, ...). */
-    void                        InitControls();
+    SC_DLLPRIVATE void                        InitControls();
     /** Initializes size and position data of horizontal scrollbar. */
-    void                        InitHScrollBar();
+    SC_DLLPRIVATE void                        InitHScrollBar();
     /** Initializes size and position data of vertical scrollbar. */
-    void                        InitVScrollBar();
+    SC_DLLPRIVATE void                        InitVScrollBar();
 
     /** Calculates and sets valid position offset nearest to nPos. */
-    inline void                 ImplSetPosOffset( sal_Int32 nPos )
+    SC_DLLPRIVATE inline void                 ImplSetPosOffset( sal_Int32 nPos )
                                     { maData.mnPosOffset = Max( Min( nPos, GetMaxPosOffset() ), 0L ); }
     /** Calculates and sets valid line offset nearest to nLine. */
-    inline void                 ImplSetLineOffset( sal_Int32 nLine )
+    SC_DLLPRIVATE inline void                 ImplSetLineOffset( sal_Int32 nLine )
                                     { maData.mnLineOffset = Max( Min( nLine, GetMaxLineOffset() ), 0L ); }
     /** Moves controls (not cursors!) so that nPos becomes visible. */
-    void                        MakePosVisible( sal_Int32 nPos );
+    SC_DLLPRIVATE void                        MakePosVisible( sal_Int32 nPos );
 
     // cell contents ----------------------------------------------------------
 public:
@@ -184,9 +187,9 @@ protected:
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
 
 private:
-                                DECL_LINK( CsvCmdHdl, ScCsvControl* );
-                                DECL_LINK( ScrollHdl, ScrollBar* );
-                                DECL_LINK( ScrollEndHdl, ScrollBar* );
+    SC_DLLPRIVATE              DECL_LINK( CsvCmdHdl, ScCsvControl* );
+    SC_DLLPRIVATE              DECL_LINK( ScrollHdl, ScrollBar* );
+    SC_DLLPRIVATE              DECL_LINK( ScrollEndHdl, ScrollBar* );
 
     // accessibility ----------------------------------------------------------
 public:
