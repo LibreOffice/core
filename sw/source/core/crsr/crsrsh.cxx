@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-18 08:19:04 $
+ *  last change: $Author: dvo $ $Date: 2002-06-26 10:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1331,6 +1331,40 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
     }
 
     UpdateCrsrPos();
+
+
+    // #100722# The cursor must always point into content; there's some code
+    // that relies on this. (E.g. in SwEditShell::GetScriptType, which always
+    // loops _behind_ the last node in the selection, which always works if you
+    // are in content.) To achieve this, we'll force cursor(s) to point into
+    // content, if UpdateCrsrPos() hasn't already done so.
+    SwPaM* pCmp = pCurCrsr;
+    do
+    {
+        // start will move forwards, end will move backwards
+        bool bPointIsStart = ( pCmp->Start() == pCmp->GetPoint() );
+
+        // move point; forward if it's the start, backwards if it's the end
+        if( ! pCmp->GetPoint()->nNode.GetNode().IsCntntNode() )
+            pCmp->Move( bPointIsStart ? fnMoveForward : fnMoveBackward,
+                        fnGoCntnt );
+
+        // move mark (if exists); forward if it's the start, else backwards
+        if( pCmp->HasMark() )
+        {
+            if( ! pCmp->GetMark()->nNode.GetNode().IsCntntNode() )
+            {
+                pCmp->Exchange();
+                pCmp->Move( !bPointIsStart ? fnMoveForward : fnMoveBackward,
+                            fnGoCntnt );
+                pCmp->Exchange();
+            }
+        }
+
+        // iterate to next PaM in ring
+        pCmp = static_cast<SwPaM*>( pCmp->GetNext() );
+    }
+    while( pCmp != pCurCrsr );
 
 
     SwRect aOld( aCharRect );
