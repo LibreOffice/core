@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-23 06:32:22 $
+ *  last change: $Author: as $ $Date: 2002-05-24 09:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #ifndef _COM_SUN_STAR_FRAME_XNOTIFYINGDISPATCH_HPP_
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
-#include <com/sun/star/frame/XTasksSupplier.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -453,19 +453,12 @@ void ShutdownIcon::terminateDesktop()
         getInstance()->m_xDesktop->removeTerminateListener( getInstance() );
 
         // terminate desktop only if no tasks exist
-        Reference < XTasksSupplier > xTasksSupplier( getInstance()->m_xDesktop, UNO_QUERY );
+        Reference < XFramesSupplier > xTasksSupplier( getInstance()->m_xDesktop, UNO_QUERY );
         if( xTasksSupplier.is() )
         {
-            Reference < XEnumerationAccess > xEnum = xTasksSupplier->getTasks();
-            if( xEnum.is() )
-            {
-                Reference < XElementAccess > xElement ( xEnum, UNO_QUERY );
-                if ( xElement.is() )
-                {
-                    if( !xElement->hasElements() )
-                        getInstance()->m_xDesktop->terminate();
-                }
-            }
+            Reference < XElementAccess > xCont( xTasksSupplier->getFrames(), UNO_QUERY );
+            if( !xCont->hasElements() )
+                getInstance()->m_xDesktop->terminate();
         }
     }
 }
