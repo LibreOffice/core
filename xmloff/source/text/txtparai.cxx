@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-15 14:01:55 $
+ *  last change: $Author: dvo $ $Date: 2000-11-16 16:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -987,7 +987,6 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         break;
 
     case XML_TOK_TEXT_REFERENCE:
-        rIgnoreLeadingSpace = sal_False;
     case XML_TOK_TEXT_BOOKMARK:
     case XML_TOK_TEXT_BOOKMARK_START:
     case XML_TOK_TEXT_BOOKMARK_END:
@@ -1000,14 +999,12 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         pContext = new XMLStartReferenceContext_Impl( rImport,
                                                       nPrefix, rLocalName,
                                                       rHints, xAttrList );
-        rIgnoreLeadingSpace = sal_False;
         break;
 
     case XML_TOK_TEXT_REFERENCE_END:
         pContext = new XMLEndReferenceContext_Impl( rImport,
                                                     nPrefix, rLocalName,
                                                     rHints, xAttrList );
-        rIgnoreLeadingSpace = sal_False;
         break;
 
     case XML_TOK_TEXT_TEXTBOX:

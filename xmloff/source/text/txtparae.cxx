@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-16 13:23:56 $
+ *  last change: $Author: dvo $ $Date: 2000-11-16 16:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,8 +893,12 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
             if( !bAutoStyles )
             {
                 aNextNumInfo.Reset();
-                exportListChange( aPrevNumInfo, aNextNumInfo );
             }
+
+            exportListAndSectionChange( xCurrentTextSection, xTxtCntnt,
+                                        aPrevNumInfo, aNextNumInfo,
+                                        bAutoStyles );
+
             exportTable( xTxtCntnt, bAutoStyles );
             bHasContent = sal_True;
         }
@@ -1090,7 +1094,6 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                                sBookmark,
                                lcl_XmlBookmarkElements,
                                bAutoStyles);
-                bPrevCharIsSpace = sal_False;
             }
             else if (sType.equals(sReferenceMark))
             {
@@ -1098,13 +1101,11 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                                sReferenceMark,
                                lcl_XmlReferenceElements,
                                bAutoStyles);
-                bPrevCharIsSpace = sal_False;
             }
             else if (sType.equals(sDocumentIndexMark))
             {
                 exportIndexMark(xPropSet,
                                 bAutoStyles);
-                bPrevCharIsSpace = sal_False;
             }
             else
                 DBG_ERROR("unknown text portion type");
