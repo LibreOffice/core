@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-28 15:33:37 $
+ *  last change: $Author: dg $ $Date: 2001-06-14 10:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,8 @@ namespace configmgr
                 CFG_TRACE_ERROR_NI("config provider: Cannot access foreign user data");
                 throw lang::IllegalArgumentException(OUString::createFromAscii("config provider: Cannot access foreign user data"),this->getProviderInstance(), -1);
             }
+            // user should always be the default user!
+            xOptions->setUser(xOptions->getDefaultUser());
         }
 
         // create the access object
@@ -210,6 +212,8 @@ namespace configmgr
                 CFG_TRACE_ERROR_NI("config provider: Cannot access foreign user data");
                 throw lang::IllegalArgumentException(OUString::createFromAscii("config provider: Cannot access foreign user data"),this->getProviderInstance(), -1);
             }
+            // user should always be the default user!
+            xOptions->setUser(xOptions->getDefaultUser());
         }
 
         // create the access object
