@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Pipe.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,15 +79,13 @@ module com {  module sun {  module star {  module io {
 // DocMerge from xml: service com::sun::star::io::Pipe
 /** the implementation of an output stream and an input stream.
 
-    <p>All data written through the outputstream is buffered until it is
-    read again from the input stream. The buffer grows in 2 ^ x steps.
-    The maximum size of the buffer is 2 ^ 31 -1. </p>
+    <p>
+    All data written through the outputstream is buffered until it is
+    read again from the input stream. Often two different threads access
+    input and outputstream.
 
-    @guarantees
-    <ul>
-        <li>-thread safe </li>
-        <li>-allow buffer size is 2 ^ 31 -1 </li>
-    </ul>
+    <p> With the pipe-service, an outputstream can be converted into an
+    input stream at the cost of an additional buffer.
  */
 service Pipe
 {
@@ -106,6 +104,9 @@ service Pipe
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:49  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:36  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPersistObject.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:36 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,8 @@ interface XPersistObject: com::sun::star::uno::XInterface
             the service name that specifies the behavior and the
             persistent data format of this implementation.
 
-        <p>This name can be used to create such an object by a factory. </p>
+        <p>This name can be used to create such an object by a factory
+        during deserialization. </p>
 
         @see XServiceName::getServiceName
      */
@@ -122,6 +123,9 @@ interface XPersistObject: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 15:10:36  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/11 16:09:49  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

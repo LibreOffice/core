@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataOutputStream.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,22 +77,23 @@ module com {  module sun {  module star {  module io {
 //=============================================================================
 
 // DocMerge from xml: service com::sun::star::io::DataOutputStream
-/** writes its data to a chained <type>XOutputStream</type>.
+/** writes structured data to a chained <type>XOutputStream</type>.
 
-    @guarantees
-    <ul>
-    <li>-thread safe</li>
-    <li>-allow buffer size is 2 ^ 31 -1</li>
-    </ul>
+    <p>
+    An implementation of this service in general does not need
+    to buffer data itself.
+
  */
 service DataOutputStream
 {
-    // DocMerge: empty anyway
+    /** allows to write structured data.
+     */
     interface com::sun::star::io::XDataOutputStream;
 
-    // DocMerge: empty anyway
+    /** used to plug the outputstream-data-sink.
+        <p>A plain output stream is sufficient.
+     */
     interface com::sun::star::io::XActiveDataSource;
-
 };
 
 //=============================================================================
@@ -102,6 +103,9 @@ service DataOutputStream
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:49  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:36  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Pump.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,20 +87,18 @@
     the data to the connected output stream. Data will not be buffered by
     this service. </p>
 
-    @guarantees
-    <ul>
-        <li>thread safe</li>
-    </ul>
  */
 service Pump
 {
-    // DocMerge: empty anyway
+    /** allows to set the outputstream
+     */
     interface com::sun::star::io::XActiveDataSource;
 
-    // DocMerge: empty anyway
+    /** allows to set the inputstream
+     */
     interface com::sun::star::io::XActiveDataSink;
 
-    // DocMerge: empty anyway
+    /** allows listener administration and starting/stopping the pump */
     interface com::sun::star::io::XActiveDataControl;
 
 };
@@ -112,6 +110,9 @@ service Pump
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:49  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:36  mi
     moved from api
 

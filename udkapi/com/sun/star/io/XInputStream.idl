@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInputStream.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:45:32 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@ module com {  module sun {  module star {  module io {
 
 // DocMerge from xml: interface com::sun::star::io::XInputStream
 /** This is the basic interface to read data from a stream.
+
+    <p>
+    See the <a href="http://udk.openoffice.org/common/man/concept/streams.html">
+    streaming document</a> for further information on chaining and piping streams.
  */
 interface XInputStream: com::sun::star::uno::XInterface
 {
@@ -192,6 +196,9 @@ interface XInputStream: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/11/16 14:45:32  mi
+    proofing by Richard Holt
+
     Revision 1.8  2001/05/03 12:37:21  jbu
     removed a typo
 

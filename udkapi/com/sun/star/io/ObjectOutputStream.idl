@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ObjectOutputStream.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:45:32 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,13 +109,14 @@ module com {  module sun {  module star {  module io {
  */
 service ObjectOutputStream
 {
-    // DocMerge: empty anyway
+    /** allows to write the data to the stream.
+     */
     interface com::sun::star::io::XObjectOutputStream;
 
-    // DocMerge: empty anyway
+    /** allows to set the underlying outputstream */
     interface com::sun::star::io::XActiveDataSource;
 
-    // DocMerge: empty anyway
+    /** allows to navigate via a chain of streams */
     interface com::sun::star::io::XConnectable;
 
 };
@@ -127,6 +128,9 @@ service ObjectOutputStream
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/11/16 14:45:32  mi
+    proofing by Richard Holt
+
     Revision 1.5  2000/12/11 16:09:49  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

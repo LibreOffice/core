@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MarkableOutputStream.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-22 12:10:50 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,17 @@ module com {  module sun {  module star {  module io {
  */
 service MarkableOutputStream
 {
+    /** allows to write data at the current position */
     interface com::sun::star::io::XOutputStream;
 
+    /** allows to create marks at the current position
+        and to set the current position.
+     */
     interface com::sun::star::io::XMarkableStream;
 
+    /** allows to access to the underlying sink
+        of this stream.
+     */
     interface com::sun::star::io::XActiveDataSource;
 
     /** allows to navigate via a chain of streams */

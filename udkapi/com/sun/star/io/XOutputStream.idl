@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XOutputStream.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:36 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@ module com {  module sun {  module star {  module io {
 
 // DocMerge from xml: interface com::sun::star::io::XOutputStream
 /** This is the basic interface to write data to a stream.
+    <p>
+    See the <a href="http://udk.openoffice.org/common/man/concept/streams.html">
+    streaming document</a> for further information on chaining and piping streams.
  */
 interface XOutputStream: com::sun::star::uno::XInterface
 {
@@ -110,7 +113,7 @@ interface XOutputStream: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::io::XOutputStream::closeOutput
     /** gets called to indicate that all data has been written.
 
-        <p>If this method is not yet been called, no attached
+        <p>If this method has not yet been called, no attached
         <type>XInputStream</type> receives an EOF signal. No further
         bytes may be written after this method has been called.</p>
      */
@@ -128,6 +131,9 @@ interface XOutputStream: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 15:10:36  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/11 16:09:49  mi
     documentation syntax fixed and some minor semantic documentation fixes
 
