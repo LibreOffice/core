@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: pl $ $Date: 2001-05-08 11:46:10 $
+#   last change: $Author: cp $ $Date: 2001-05-23 11:49:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ LIB1FILES=	$(SLB)$/fontman.lib			\
 SHL1TARGET= psp$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= ipsp
 SHL1LIBS=$(LIB1FILES)
+SHL1VERSIONMAP=	libpsp.map
 SHL1STDLIBS=$(UNOTOOLSLIB)		\
             $(TOOLSLIB) 		\
             $(VOSLIB)			\

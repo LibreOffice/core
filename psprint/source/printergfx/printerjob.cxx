@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-22 09:02:08 $
+ *  last change: $Author: cp $ $Date: 2001-05-23 11:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,37 @@ using namespace psp ;
 
 #define nBLOCKSIZE 0x2000
 
+namespace psp
+{
+
 sal_Bool
-AppendPS(FILE* pDst, osl::File* pSrc,
-         sal_uChar* pBuffer = NULL, sal_uInt64 nBlockSize = nBLOCKSIZE);
+AppendPS (FILE* pDst, osl::File* pSrc, sal_uChar* pBuffer,
+          sal_uInt64 nBlockSize = nBLOCKSIZE)
+{
+    if ((pDst == NULL) || (pSrc == NULL))
+        return sal_False;
+
+    if (nBlockSize == 0)
+        nBlockSize = nBLOCKSIZE;
+    if (pBuffer == NULL)
+        pBuffer = (sal_uChar*)alloca (nBlockSize);
+
+    pSrc->setPos (osl_Pos_Absolut, 0);
+
+    sal_uInt64 nIn;
+    sal_uInt64 nOut;
+    do
+    {
+        pSrc->read  (pBuffer, nBlockSize, nIn);
+        if (nIn > 0)
+            nOut = fwrite (pBuffer, 1, nIn, pDst);
+    }
+    while ((nIn > 0) && (nIn == nOut));
+
+    return sal_True;
+}
+
+} // namespace psp
 
 /*
  * private convenience routines for file handling
@@ -124,32 +152,6 @@ PrinterJob::CreateSpoolFile (const rtl::OUString& rName, const rtl::OUString& rE
                           osl_File_Attribute_OwnWrite | osl_File_Attribute_OwnRead );
 
     return pFile;
-}
-
-sal_Bool
-AppendPS (FILE* pDst, osl::File* pSrc, sal_uChar* pBuffer, sal_uInt64 nBlockSize)
-{
-    if ((pDst == NULL) || (pSrc == NULL))
-        return sal_False;
-
-    if (nBlockSize == 0)
-        nBlockSize = nBLOCKSIZE;
-    if (pBuffer == NULL)
-        pBuffer = (sal_uChar*)alloca (nBlockSize);
-
-    pSrc->setPos (osl_Pos_Absolut, 0);
-
-    sal_uInt64 nIn;
-    sal_uInt64 nOut;
-    do
-    {
-        pSrc->read  (pBuffer, nBlockSize, nIn);
-        if (nIn > 0)
-            nOut = fwrite (pBuffer, 1, nIn, pDst);
-    }
-    while ((nIn > 0) && (nIn == nOut));
-
-    return sal_True;
 }
 
 /*
@@ -242,6 +244,9 @@ PrinterJob::PrinterJob () :
         mpJobHeader (NULL)
 {
 }
+
+namespace psp
+{
 
 /* check whether the given name points to a directory which is
    usable for the user */
@@ -354,6 +359,8 @@ createSpoolDir ()
     return aUNCSubDir;
 }
 
+} // namespace psp
+
 PrinterJob::~PrinterJob ()
 {
     std::list< osl::File* >::iterator pPage;
@@ -378,6 +385,8 @@ PrinterJob::~PrinterJob ()
     // osl::Directory::remove (maSpoolDirName);
 }
 
+namespace psp
+{
 
 // get locale invariant, 7bit clean current local time string
 sal_Char*
@@ -388,6 +397,8 @@ getLocalTime(sal_Char* pBuffer, sal_uInt32 nBufSize)
     struct tm *pLocalTime = localtime_r (&nTime, &aTime);
 
     return asctime_r(pLocalTime, pBuffer);
+}
+
 }
 
 sal_Bool
