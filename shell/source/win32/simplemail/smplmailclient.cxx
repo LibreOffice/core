@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smplmailclient.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:16:20 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
