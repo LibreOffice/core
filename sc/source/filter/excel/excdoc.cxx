@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-19 13:23:29 $
+ *  last change: $Author: dr $ $Date: 2001-03-28 13:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,7 +935,9 @@ void ExcTable::FillAsTable( void )
             ScMergeAttr& rItem = (ScMergeAttr&) pPatt->GetItem( ATTR_MERGE );
             if( rItem.IsMerged() )
             {
-                UINT16 nXF = pAktExcCell ? pAktExcCell->GetXF() : (pLastRKMulRK ? pLastRKMulRK->GetXF() : 0);
+                UINT16 nXF = (pAktExcCell ? pAktExcCell->GetXF() :
+                            (pLastBlank ? pLastBlank->GetXF() :
+                            (pLastRKMulRK ? pLastRKMulRK->GetXF() : 0)));
                 for( UINT16 iCol = aIterator.GetStartCol(); iCol <= aIterator.GetEndCol(); iCol++ )
                     rR.pCellMerging->Append( iCol, rItem.GetColMerge(), nRow, rItem.GetRowMerge(), nXF );
             }
