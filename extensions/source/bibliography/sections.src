@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:00:04 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,7 +698,7 @@ TabPage RID_TP_GENERAL
         Text[ japanese ] = "’ß(~O)";
         Text[ korean ] = "ÁÖ¼®(~O)";
         Text[ chinese_simplified ] = "ËµÃ÷(~O)";
-        Text[ chinese_traditional ] = "³Æª`(~O)";
+        Text[ chinese_traditional ] = "³Æµù(~O)";
         Text[ arabic ] = "ÊÚáíŞ ÊæÖíÍí";
         Text[ turkish ] = "Açıklama";
         Text[ language_user1 ] = " ";
@@ -724,7 +724,7 @@ TabPage RID_TP_GENERAL
         Text[ japanese ] = "ÒÓ(~N)";
         Text[ korean ] = "¸Ş¸ğ";
         Text[ chinese_simplified ] = "±¸×¢(~N)";
-        Text[ chinese_traditional ] = "µ§°O(~N)";
+        Text[ chinese_traditional ] = "³Æµù(~N)";
         Text[ arabic ] = "ãáÇÍÙÉ";
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
