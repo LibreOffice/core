@@ -2,9 +2,9 @@
 #
 #   $RCSfile: core.py,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-15 13:05:49 $
+#   last change: $Author: hr $ $Date: 2005-02-11 16:27:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -392,8 +392,11 @@ class TestCase( unittest.TestCase):
 
       def testInvoke( self ):
           self.failUnless( 5 == uno.invoke( self.tobj , "transportAny" , (uno.Any("byte", 5),) ) )
-
           self.failUnless( 5 == uno.invoke(
               PythonTransporter(), "transportAny" , (uno.Any( "byte", 5 ),) ) )
-
+          t = uno.getTypeByName( "long" )
+          mystruct = uno.createUnoStruct(
+              "com.sun.star.beans.PropertyValue", "foo",0,uno.Any(t,2),0 )
+          mystruct.Value = uno.Any(t, 1)
+          
           
