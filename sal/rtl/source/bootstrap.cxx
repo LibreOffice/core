@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 11:55:58 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _RTL_BYTESEQ_HXX_
 #include <rtl/byteseq.hxx>
+#endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
 #endif
 
 #ifndef INCLUDED_SAL_INTERNAL_ALLOCATOR_HXX
@@ -272,7 +275,7 @@ static void getFromList(
     }
 }
 
-static NameValueList s_rtl_bootstrap_set_list;
+namespace { struct rtl_bootstrap_set_list : public rtl::Static< NameValueList, rtl_bootstrap_set_list > {}; }
 
 struct Bootstrap_Impl
 {
@@ -431,7 +434,7 @@ sal_Bool Bootstrap_Impl::getValue(
             rtl_uString_release( *ppValue );
             *ppValue = 0;
         }
-        getFromList( &s_rtl_bootstrap_set_list, ppValue, pName );
+        getFromList( &rtl_bootstrap_set_list::get(), ppValue, pName );
         if (! *ppValue)
         {
             getFromCommandLineArgs( ppValue, pName );
@@ -521,7 +524,7 @@ typedef ::std::hash_map<
     OUString, Bootstrap_Impl *,
     OUStringHash, ::std::equal_to< OUString >,
     sal::Allocator< OUString > > t_bootstrap_map;
-static t_bootstrap_map s_bootstrap_map;
+namespace { struct bootstrap_map : public rtl::Static< t_bootstrap_map, bootstrap_map > {}; }
 
 rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open( rtl_uString * pIniName )
 {
@@ -542,18 +545,19 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open( rtl_uString * pIniName )
 
     Bootstrap_Impl * that;
     ResettableMutexGuard guard( Mutex::getGlobalMutex() );
-    t_bootstrap_map::const_iterator iFind( s_bootstrap_map.find( iniName ) );
-    if (iFind == s_bootstrap_map.end())
+    t_bootstrap_map& r_bootstrap_map = bootstrap_map::get();
+    t_bootstrap_map::const_iterator iFind( r_bootstrap_map.find( iniName ) );
+    if (iFind == r_bootstrap_map.end())
     {
         guard.clear();
         that = new Bootstrap_Impl( iniName );
         guard.reset();
-        iFind = s_bootstrap_map.find( iniName );
-        if (iFind == s_bootstrap_map.end())
+        iFind = r_bootstrap_map.find( iniName );
+        if (iFind == r_bootstrap_map.end())
         {
             ++that->_nRefCount;
             ::std::pair< t_bootstrap_map::iterator, bool > insertion(
-                s_bootstrap_map.insert(
+                r_bootstrap_map.insert(
                     t_bootstrap_map::value_type( iniName, that ) ) );
             OSL_ASSERT( insertion.second );
         }
@@ -581,8 +585,9 @@ void SAL_CALL rtl_bootstrap_args_close( rtlBootstrapHandle handle )
     Bootstrap_Impl * that = static_cast< Bootstrap_Impl * >( handle );
 
     MutexGuard guard( Mutex::getGlobalMutex() );
+    t_bootstrap_map& r_bootstrap_map = bootstrap_map::get();
     OSL_ASSERT(
-        s_bootstrap_map.find( that->_iniName )->second == that );
+        r_bootstrap_map.find( that->_iniName )->second == that );
     --that->_nRefCount;
     if (that->_nRefCount == 0)
     {
@@ -592,9 +597,9 @@ void SAL_CALL rtl_bootstrap_args_close( rtlBootstrapHandle handle )
 #elif OSL_DEBUG_LEVEL > 1 // debug
         nLeaking = 1;
 #endif
-        if (s_bootstrap_map.size() > nLeaking)
+        if (r_bootstrap_map.size() > nLeaking)
         {
-            ::std::size_t erased = s_bootstrap_map.erase( that->_iniName );
+            ::std::size_t erased = r_bootstrap_map.erase( that->_iniName );
             OSL_ASSERT( erased == 1 );
             delete that;
         }
@@ -674,8 +679,9 @@ void SAL_CALL rtl_bootstrap_set( rtl_uString * pName, rtl_uString * pValue )
 
     MutexGuard guard( Mutex::getGlobalMutex() );
 
-    NameValueList::iterator iPos( s_rtl_bootstrap_set_list.begin() );
-    NameValueList::iterator iEnd( s_rtl_bootstrap_set_list.end() );
+    NameValueList& r_rtl_bootstrap_set_list = rtl_bootstrap_set_list::get();
+    NameValueList::iterator iPos( r_rtl_bootstrap_set_list.begin() );
+    NameValueList::iterator iEnd( r_rtl_bootstrap_set_list.end() );
     for ( ; iPos != iEnd; ++iPos )
     {
         if (iPos->sName.equals( name ))
@@ -693,7 +699,7 @@ void SAL_CALL rtl_bootstrap_set( rtl_uString * pName, rtl_uString * pValue )
         cstr_name.getStr(), cstr_value.getStr() );
 #endif
 
-    s_rtl_bootstrap_set_list.push_back( rtl_bootstrap_NameValue( name, value ) );
+    r_rtl_bootstrap_set_list.push_back( rtl_bootstrap_NameValue( name, value ) );
 }
 
 void SAL_CALL rtl_bootstrap_expandMacros_from_handle(
