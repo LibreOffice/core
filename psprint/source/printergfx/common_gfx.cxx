@@ -2,9 +2,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2001-07-06 16:10:40 $
+ *  last change: $Author: cp $ $Date: 2001-11-01 16:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,9 +642,6 @@ PrinterGfx::PSSetFont ()
         sal_Char  pSetFont [256];
         sal_Int32 nChar = 0;
 
-        nChar += psp::appendStr  ("/",                      pSetFont + nChar);
-        nChar += psp::appendStr  (rCurrent.maFont.getStr(), pSetFont + nChar);
-
         // postscript based fonts need reencoding
         if (   (   rCurrent.maEncoding == RTL_TEXTENCODING_MS_1252)
             || (   rCurrent.maEncoding == RTL_TEXTENCODING_ISO_8859_1)
@@ -652,19 +649,23 @@ PrinterGfx::PSSetFont ()
                 && rCurrent.maEncoding <= RTL_TEXTENCODING_USER_END)
            )
         {
-            rtl::OString aEncoding =
-                        psp::GlyphSet::GetGlyphSetEncodingName (rCurrent.maEncoding,
+            rtl::OString aReencodedFont =
+                        psp::GlyphSet::GetReencodedFontName (rCurrent.maEncoding,
                                                                 rCurrent.maFont);
 
-            nChar += psp::appendStr  (" ",              pSetFont + nChar);
-            nChar += psp::appendStr  (aEncoding,        pSetFont + nChar);
-            nChar += psp::appendStr  (" psp_findfont ", pSetFont + nChar);
+            nChar += psp::appendStr  ("/",          pSetFont + nChar);
+            nChar += psp::appendStr  (aReencodedFont.getStr(),
+                                                    pSetFont + nChar);
+            nChar += psp::appendStr  (" ",          pSetFont + nChar);
+            nChar += psp::appendStr  (" findfont ", pSetFont + nChar);
         }
         else
         // tt based fonts mustn't reencode, the encoding is implied by the fontname
         // same for symbol type1 fonts, dont try to touch them
         {
-            nChar += psp::appendStr  (" findfont ",     pSetFont + nChar);
+            nChar += psp::appendStr  ("/",          pSetFont + nChar);
+            nChar += psp::appendStr  (rCurrent.maFont.getStr(), pSetFont + nChar);
+            nChar += psp::appendStr  (" findfont ", pSetFont + nChar);
         }
 
         nChar += psp::getValueOf (nTextWidth,   pSetFont + nChar);

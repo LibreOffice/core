@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-31 17:58:28 $
+ *  last change: $Author: cp $ $Date: 2001-11-01 16:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,6 +331,59 @@ GlyphSet::GetGlyphSetEncodingName (sal_Int32 nGlyphSetID)
 }
 
 void
+GlyphSet::PSDefineReencodedFont (osl::File* pOutFile, sal_Int32 nGlyphSetID)
+{
+    // only for ps fonts
+    if ((meBaseType != fonttype::Builtin) && (meBaseType != fonttype::Type1))
+        return;
+
+    sal_Char  pEncodingVector [256];
+    sal_Int32 nSize = 0;
+
+    nSize += psp::appendStr ("/", pEncodingVector + nSize);
+    nSize += psp::appendStr (GetReencodedFontName(nGlyphSetID),
+                                  pEncodingVector + nSize);
+    nSize += psp::appendStr (" /", pEncodingVector + nSize);
+    nSize += psp::appendStr (maBaseName.getStr(),
+                                  pEncodingVector + nSize);
+    nSize += psp::appendStr (" ", pEncodingVector + nSize);
+    nSize += psp::appendStr (GetGlyphSetEncodingName(nGlyphSetID),
+                                  pEncodingVector + nSize);
+    nSize += psp::appendStr (" psp_definefont\n",
+                                  pEncodingVector + nSize);
+
+    psp::WritePS (pOutFile, pEncodingVector);
+}
+
+rtl::OString
+GlyphSet::GetReencodedFontName (rtl_TextEncoding nEnc, const rtl::OString &rFontName)
+{
+    if (   nEnc == RTL_TEXTENCODING_MS_1252
+        || nEnc == RTL_TEXTENCODING_ISO_8859_1)
+    {
+        return rFontName
+               + rtl::OString("-iso1252");
+    }
+    else
+    if (nEnc >= RTL_TEXTENCODING_USER_START && nEnc <= RTL_TEXTENCODING_USER_END)
+    {
+        return rFontName
+               + rtl::OString("-enc")
+               + rtl::OString::valueOf ((sal_Int32)(nEnc - RTL_TEXTENCODING_USER_START));
+    }
+    else
+    {
+        return rtl::OString();
+    }
+}
+
+rtl::OString
+GlyphSet::GetReencodedFontName (sal_Int32 nGlyphSetID)
+{
+    return GetReencodedFontName (GetGlyphSetEncoding(nGlyphSetID), maBaseName);
+}
+
+void
 GlyphSet::DrawText (PrinterGfx &rGfx, const Point& rPoint,
                     const sal_Unicode* pStr, sal_Int16 nLen, const sal_Int32* pDeltaArray)
 {
@@ -449,10 +502,17 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
     {
         ++nGlyphSetID;
 
-        if (nGlyphSetID == 1) // iso1252 anyway, doesn't need reencoding
+        if (nGlyphSetID == 1) // latin1 page uses global reencoding table
+        {
+            PSDefineReencodedFont (pOutFile, nGlyphSetID);
             continue;
+        }
         if ((*aGlyphSet).size() == 0) // empty set, doesn't need reencoding
+        {
             continue;
+        }
+
+        // create reencoding table
 
         sal_Char  pEncodingVector [256];
         sal_Int32 nSize = 0;
@@ -509,6 +569,8 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
 
         nSize += psp::appendStr ("] def\n", pEncodingVector + nSize);
         psp::WritePS (pOutFile, pEncodingVector);
+
+        PSDefineReencodedFont (pOutFile, nGlyphSetID);
     }
 
     return sal_True;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2001-07-06 16:10:57 $
+ *  last change: $Author: cp $ $Date: 2001-11-01 16:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,11 @@ class GlyphSet
         rtl::OString    GetGlyphSetName (sal_Int32 nGlyphSetID);
         sal_Int32       GetGlyphSetEncoding (sal_Int32 nGlyphSetID);
         rtl::OString    GetGlyphSetEncodingName (sal_Int32 nGlyphSetID);
+
+        rtl::OString    GetReencodedFontName (sal_Int32 nGlyphSetID);
+        void            PSDefineReencodedFont (osl::File* pOutFile,
+                                sal_Int32 nGlyphSetID);
+
         sal_Bool        GetGlyphID (sal_Unicode nChar,
                                 sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID);
         sal_Bool        LookupGlyphID (sal_Unicode nChar,
@@ -128,8 +133,11 @@ class GlyphSet
         sal_Int32       GetFontID ();
         fonttype::type  GetFontType ();
         static rtl::OString
+                        GetReencodedFontName (rtl_TextEncoding nEnc,
+                                const rtl::OString &rFontName);
+        static rtl::OString
                         GetGlyphSetEncodingName (rtl_TextEncoding nEnc,
-                                                 const rtl::OString &rFontName);
+                                const rtl::OString &rFontName);
         sal_Bool        IsVertical ();
 
         sal_Bool        SetFont (sal_Int32 nFontID, sal_Bool bVertical);
