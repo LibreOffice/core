@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:14:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,13 +119,25 @@ void ScOutputData::DrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 nPaint
     USHORT nCol;
     USHORT nRow;
 
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+
     Point aOffset;
     Rectangle aRect;
 
     for (nCol=0; nCol<nX1; nCol++)
-        aOffset.X() -= pDoc->GetColWidth( nCol, nTab );
+        aOffset.X() -= pDoc->GetColWidth( nCol, nTab ) * nLayoutSign;
     for (nRow=0; nRow<nY1; nRow++)
         aOffset.Y() -= pDoc->GetRowHeight( nRow, nTab );
+
+    long nDataWidth = 0;
+    long nDataHeight = 0;
+    for (nCol=nX1; nCol<=nX2; nCol++)
+        nDataWidth += pDoc->GetColWidth( nCol, nTab );
+    for (nRow=nY1; nRow<=nY2; nRow++)
+        nDataHeight += pDoc->GetRowHeight( nRow, nTab );
+
+    if ( bLayoutRTL )
+        aOffset.X() += nDataWidth;
 
     aRect.Left() = aRect.Right()  = -aOffset.X();
     aRect.Top()  = aRect.Bottom() = -aOffset.Y();
