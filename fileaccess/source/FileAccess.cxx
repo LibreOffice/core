@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-10 15:39:11 $
+ *  last change: $Author: ab $ $Date: 2001-08-21 10:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ using namespace ::ucb;
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/beans/Property.hpp>
@@ -548,7 +549,12 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
     Any aCmdArg;
 
     aCmdArg <<= aInsertArg;
-    aCnt.executeCommand( OUString::createFromAscii( "insert" ), aCmdArg );
+    try
+    {
+        // #91330 Insert throws exception when file exists
+        aCnt.executeCommand( OUString::createFromAscii( "insert" ), aCmdArg );
+    }
+    catch (NameClashException &) {}
 
     Reference< XActiveDataStreamer > xSink = (XActiveDataStreamer*)new OActiveDataStreamer();
     Reference< XInterface > xSinkIface = Reference< XInterface >::query( xSink );
