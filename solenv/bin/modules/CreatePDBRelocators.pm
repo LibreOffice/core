@@ -2,9 +2,9 @@
 #
 #   $RCSfile: CreatePDBRelocators.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-09 10:14:11 $
+#   last change: $Author: hr $ $Date: 2003-07-17 11:42:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,9 +148,23 @@ sub create_pdb_relocators
     foreach (@pdb_files) {
         my $relocator = basename($_) . ".location";
         /$o\/(.*)/i;
-        my $location = "../../src.$milestone/" . $1;
 
-        my $target = ( $location =~ /\/so\// ) ? "$pdb_dir/so/$relocator" : "$pdb_dir/$relocator";
+        my $src_location = $1;
+
+        my $location = "";
+        my $target = "";
+        if ( $src_location =~ /\/so\// )
+        {
+            $location = "../../../src.$milestone/" . $src_location;
+            $target = "$pdb_dir/so/$relocator";
+        }
+        else
+        {
+            $location = "../../src.$milestone/" . $src_location;
+            $target = "$pdb_dir/$relocator";
+        }
+
+        print "writing $target\n";
         if ( !open(RELOCATOR, ">$target") ) {
             print STDERR "can't write file '$target'\n";
             return undef;
