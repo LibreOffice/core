@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2001-07-05 14:57:53 $
+ *  last change: $Author: er $ $Date: 2001-07-09 17:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1231,7 +1231,8 @@ inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const sal_Unicode* pCopyBu
 
 
 sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
-        long nNumber, USHORT nDecimals, BOOL bUseThousandSep ) const
+        long nNumber, USHORT nDecimals, BOOL bUseThousandSep,
+        BOOL bTrailingZeros ) const
 {
     sal_Unicode aNumBuf[32];
     sal_Unicode* pNumBuf;
@@ -1258,7 +1259,7 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
     if ( nNumLen <= nDecimals )
     {
         // strip .0 in decimals?
-        if ( !nNumber /* && !rIntn.IsNumTrailingZeros() */ )
+        if ( !nNumber && !bTrailingZeros )
         {
             *pBuf = '0';
             pBuf++;
@@ -1266,7 +1267,7 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
         else
         {
             // LeadingZero, insert 0
-            if ( TRUE /* rIntn.IsNumLeadingZero() */ )
+            if ( isNumLeadingZero() )
             {
                 *pBuf = '0';
                 pBuf++;
@@ -1329,7 +1330,7 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
             }
 
             // strip .0 in decimals?
-            if ( bNullEnd /* && !rIntn.IsNumTrailingZeros() */ )
+            if ( bNullEnd && !bTrailingZeros )
                 pBuf -= nDecimals+1;
         }
     }
@@ -1542,7 +1543,8 @@ inline long ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, USHOR
 }
 
 
-String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals, BOOL bUseThousandSep ) const
+String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals,
+        BOOL bUseThousandSep, BOOL bTrailingZeros ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     sal_Unicode aBuf[48];       // big enough for 64-bit long
@@ -1552,7 +1554,7 @@ String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals, BOOL bUseThous
         new sal_Unicode[nGuess + 16]);
 
     sal_Unicode* pBuf = ImplAddFormatNum( pBuffer, nNumber, nDecimals,
-        bUseThousandSep );
+        bUseThousandSep, bTrailingZeros );
     String aStr( pBuffer, (xub_StrLen)(ULONG)(pBuf-pBuffer) );
 
     if ( pBuffer != aBuf )
@@ -1561,10 +1563,10 @@ String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals, BOOL bUseThous
 }
 
 
-#if SUPD < 637
-String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals ) const
+#if SUPD < 638
+String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals, BOOL bUseThousandSep ) const
 {
-    return getNum( nNumber, nDecimals, TRUE );
+    return getNum( nNumber, nDecimals, bUseThousandSep, TRUE );
 }
 #endif
 
@@ -1598,7 +1600,7 @@ String LocaleDataWrapper::getCurr( long nNumber, USHORT nDecimals,
 
     // convert number
     sal_Unicode* pEndNumBuf = ImplAddFormatNum( pNumBuffer, nNumber, nDecimals,
-        bUseThousandSep );
+        bUseThousandSep, TRUE );
     xub_StrLen nNumLen = (xub_StrLen)(ULONG)(pEndNumBuf-pNumBuffer);
 
     // replace zeros with zero character

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2001-07-05 14:58:36 $
+ *  last change: $Author: er $ $Date: 2001-07-09 17:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ class LocaleDataWrapper
 
             sal_Unicode*        ImplAddFormatNum( sal_Unicode* pBuf,
                                     long nNumber, USHORT nDecimals,
-                                    BOOL bUseThousandSep ) const;
+                                    BOOL bUseThousandSep, BOOL bTrailingZeros ) const;
 
 public:
                                 LocaleDataWrapper(
@@ -276,23 +276,33 @@ public:
                                     sal_Bool bTwoDigitYear = sal_False
                                     ) const;
 
-    // simple number formatting, nNumber is  value * 10**nDecimals
-#if SUPD >= 637
+#if SUPD >= 638
+                                /** Simple number formatting, nNumber is
+                                    value * 10**nDecimals
+                                    @param bTrailingZeros
+                                    </TRUE> := always display trailing zeros in
+                                        decimal places, even if integer value.
+                                    </FALSE := trailing zeros are only displayed
+                                        if the value is not an integer value.
+                                 */
             String              getNum( long nNumber, USHORT nDecimals,
-                                    BOOL bUseThousandSep = TRUE ) const;
+                                    BOOL bUseThousandSep = TRUE,
+                                    BOOL bTrailingZeros = TRUE ) const;
 #else
             String              getNum( long nNumber, USHORT nDecimals,
-                                    BOOL bUseThousandSep ) const;
-            String              getNum( long nNumber, USHORT nDecimals ) const;
+                                    BOOL bUseThousandSep = TRUE ) const;
+            String              getNum( long nNumber, USHORT nDecimals,
+                                    BOOL bUseThousandSep,
+                                    BOOL bTrailingZeros ) const;
 #endif
 
                                 /// "Secure" currency formatted string.
             String              getCurr( long nNumber, USHORT nDecimals,
                                     const String& rCurrencySymbol,
                                     BOOL bUseThousandSep = TRUE ) const;
-                                /// Default currency formatted string, use with
-                                /// care as default currency may change in any
-                                /// locale, for example, DEM -> EUR
+                                /** Default currency formatted string, use with
+                                    care as default currency may change in any
+                                    locale, for example, DEM -> EUR */
             String              getCurr( long nNumber, USHORT nDecimals,
                                         BOOL bUseThousandSep = TRUE ) const
                                     { return getCurr( nNumber, nDecimals,
