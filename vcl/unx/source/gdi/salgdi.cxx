@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-10 11:14:39 $
+ *  last change: $Author: kr $ $Date: 2001-08-10 15:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,8 @@ GC SalGraphicsData::SelectPen()
     if( !pPenGC_ )
     {
         XGCValues values;
-        values.subwindow_mode       = IncludeInferiors;
+        //values.subwindow_mode     = IncludeInferiors;
+        values.subwindow_mode       = ClipByChildren;
         values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
         values.graphics_exposures   = True;
 
@@ -290,7 +291,8 @@ GC SalGraphicsData::SelectBrush()
     if( !pBrushGC_ )
     {
         XGCValues values;
-        values.subwindow_mode       = IncludeInferiors;
+        // values.subwindow_mode        = IncludeInferiors;
+        values.subwindow_mode       = ClipByChildren;
         values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
         values.graphics_exposures   = True;
 
@@ -983,11 +985,12 @@ void SalGraphics::DrawRect( long nX, long nY, long nDX, long nDY )
     #endif
 
     if( _GetBrushColor() != 0xFFFFFFFF )
+    {
         XFillRectangle( _GetXDisplay(),
                         _GetDrawable(),
                         _SelectBrush(),
                         nX, nY, nDX, nDY );
-
+    }
     // Beschreibung DrawRect verkehrt, deshalb -1
     if( _GetPenColor() != 0xFFFFFFFF )
         XDrawRectangle( _GetXDisplay(),
