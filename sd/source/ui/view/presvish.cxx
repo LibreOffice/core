@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:17:41 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 14:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@
 #endif
 #include "sdresid.hxx"
 #include "DrawDocShell.hxx"
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #include "sdattr.hxx"
 #include "sdpage.hxx"
@@ -100,9 +100,15 @@
 #include "FactoryIds.hxx"
 #endif
 
+// #110496#
+#include "slideshow.hxx"
+#include "fupoor.hxx"
+#include "Window.hxx"
+
 #define PresentationViewShell
 using namespace sd;
 #include "sdslots.hxx"
+
 
 namespace sd {
 
@@ -177,15 +183,16 @@ PresentationViewShell::~PresentationViewShell (void)
         WorkWindow* pWorkWindow = (WorkWindow*) GetViewFrame()->GetTopFrame()->GetWindow().GetParent();
 
         if( pWorkWindow )
-            pWorkWindow->StartPresentationMode( FALSE, pFuSlideShow ? pFuSlideShow->IsAlwaysOnTop() : 0 );
+            pWorkWindow->StartPresentationMode( FALSE, mpSlideShow ? mpSlideShow->isAlwaysOnTop() : 0 );
     }
 
-    if( pFuSlideShow )
+    if( mpSlideShow )
     {
-        pFuSlideShow->Deactivate();
-        pFuSlideShow->Terminate();
-        pFuSlideShow->Destroy();
-        pFuSlideShow = NULL;
+        mpSlideShow->deactivate();
+        mpSlideShow->stopShow();
+        mpSlideShow->dispose();
+        delete mpSlideShow;
+        mpSlideShow = NULL;
     }
 }
 
@@ -215,16 +222,14 @@ void PresentationViewShell::FinishInitialization (
     GetViewFrame()->GetDispatcher()->Execute(
         SID_SHOWPOPUPS, SFX_CALLMODE_SYNCHRON, &aShowItem, &aId, 0L );
     GetViewFrame()->Show();
-    SetSlideShowFunction (new FuSlideShow(
-        this,
-        GetActiveWindow(),
-        GetView(),
-        GetDoc(),
-        rRequest));
+
+    mpSlideShow = new sd::Slideshow( this, GetView(), GetDoc() );
     GetActiveWindow()->GrabFocus();
 
     // Start the show.
-    GetSlideShow()->StartShow();
+    mpSlideShow->startShow(0);
+    mbShowStarted = sal_True;
+
     Activate(TRUE);
 }
 
@@ -242,8 +247,8 @@ void PresentationViewShell::Activate( BOOL bIsMDIActivate )
 
         GetViewFrame()->GetDispatcher()->Execute( SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
-        if( pFuSlideShow && !pFuSlideShow->IsTerminated() )
-            pFuSlideShow->Activate();
+        if( mpSlideShow)
+            mpSlideShow->activate();
 
         if( pFuActual )
             pFuActual->Activate();
@@ -256,9 +261,9 @@ void PresentationViewShell::Activate( BOOL bIsMDIActivate )
         ReadFrameViewData( pFrameView );
     GetDocSh()->Connect( this );
 
-    if( pFuSlideShow && !mbShowStarted )
+    if( mpSlideShow && !mbShowStarted )
     {
-        pFuSlideShow->StartShow();
+        mpSlideShow->startShow(0);
         mbShowStarted = sal_True;
     }
 }
@@ -269,8 +274,8 @@ void PresentationViewShell::Activate( BOOL bIsMDIActivate )
 void PresentationViewShell::Paint( const Rectangle& rRect, ::sd::Window* pWin )
 {
     // allow paints only if show is already started
-    if( mbShowStarted )
-        DrawViewShell::Paint( rRect, pWin );
+    if( mbShowStarted && mpSlideShow )
+        mpSlideShow->paint(rRect);
 }
 
 
@@ -288,7 +293,7 @@ void PresentationViewShell::CreateFullScreenShow (
     bool bAlwaysOnTop =
         ((rRequest.GetSlot() !=  SID_REHEARSE_TIMINGS) && pAlwaysOnTop )
         ? pAlwaysOnTop->GetValue()
-        : pDoc->GetPresAlwaysOnTop();
+        : pDoc->getPresentationSettings().mbAlwaysOnTop;
 
     WorkWindow* pWorkWindow = new WorkWindow (
         NULL,
