@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSingletonTypeDescription.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 09:31:58 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 
 /** Reflects a singleton.
 
+    <p>This type is superseded by <type>XSingletonTypeDescription2</type>, which
+    supports interface-based singletons, in addition to the obsolete,
+    service-based singletons.</p>
+
     <p>The type class of this type is
     <member scope="com::sun::star::uno">TypeClass::SINGLETON</member>.
 
@@ -85,9 +89,11 @@
   */
 interface XSingletonTypeDescription : com::sun::star::reflection::XTypeDescription
 {
-    /** Returns the type description of the service of the singleton.
+    /** Returns the service associated with the singleton.
 
-        @return the type description of the service of the singleton.
+        @return the reflection of the service associated with the singleton, for
+            an obsolete, service-based singleton; for an interface-based
+            singleton, <NULL/> is returned
       */
     XServiceTypeDescription getService();
 
