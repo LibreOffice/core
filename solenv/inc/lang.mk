@@ -2,9 +2,9 @@
 #
 #   $RCSfile: lang.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mh $ $Date: 2001-06-20 08:54:51 $
+#   last change: $Author: nf $ $Date: 2001-06-21 13:59:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,7 @@ arab$(LANG_GUI)=-CHARSET_microsoft-cp1256
 greek$(LANG_GUI)=-CHARSET_microsoft-cp1253
 turk$(LANG_GUI)=-CHARSET_microsoft-cp1254
 korean$(LANG_GUI)=-CHARSET_microsoft-cp949
+extern$(LANG_GUI)=-CHARSET_UTF8
 
 .ELSE			# "$(USE_NEW_RSC)" != ""
 # os2
@@ -162,6 +163,7 @@ RSC_RES_CHARSET=$($(solarlang)$(LANG_GUI))
 IBM_PC_437=-CHARSET_IBMPC_437-SOURCE
 IBM_PC_850=-CHARSET_IBMPC_850-SOURCE
 IBM_PC_852=-CHARSET_IBMPC_852-SOURCE
+UTF8=-CHARSET_UTF8
 .ENDIF			# "$(NEWCHARSET)"!=""
 
 ####################################################
@@ -276,6 +278,10 @@ LANGEXT=82
 .IF "$(solarlang)" == "cat"
 RSCLANG=CATALAN ($IBM_PC_850)
 LANGEXT=37
+.ENDIF
+.IF "$(solarlang)" == "extern"
+RSCLANG=EXTERN ($UTF8)
+LANGEXT=99
 .ENDIF
 
 .ENDIF			# "$(NO_REC_RES)"==""

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mh $ $Date: 2001-06-20 09:09:38 $
+#   last change: $Author: nf $ $Date: 2001-06-21 14:00:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -272,11 +272,23 @@ catalan$(LANG_GUI)*=$(default$(LANG_GUI))
 cmd_catalan:=catalan 37 -lgCATALAN $(IBM_PC_850) $(catalan$(LANG_GUI))
 lang_37=catalan
 longlang_37=catalan
-langext_82=37
+langext_37=37
 rsclang_37=-lgCATALAN $(IBM_PC_850)
 rescharset_37=$(catalan$(LANG_GUI))
 RCLANGFLAGS_37+= -d CATALAN
 .ENDIF 
 
 .ENDIF			#  "$(UPDATER)"!="" || "$(give_me_all_languages)"!=""
+
+.IF "$(L10N-framework)"!=""
+alllangext+=99
+extern$(LANG_GUI)*=$(default$(LANG_GUI))
+cmd_extern:=extern 99 -lgEXTERN $(UTF8) $(extern$(LANG_GUI))
+lang_99=extern
+longlang_99=extern
+langext_99=99
+rsclang_99=-lgEXTERN $(UTF8)
+rescharset_99=$(extern$(LANG_GUI))
+RCLANGFLAGS_99+= -d EXTERN
+.ENDIF 
 
