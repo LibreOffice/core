@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:58:00 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/imgmgr.hxx>
-#include <offmgr/app.hxx>
 #include <stdlib.h>     // qsort
 #include <svx/scriptspaceitem.hxx>
 #include <svx/scripttypeitem.hxx>
