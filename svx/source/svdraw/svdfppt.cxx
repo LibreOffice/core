@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-09 15:41:39 $
+ *  last change: $Author: sj $ $Date: 2001-02-12 10:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5850,6 +5850,8 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
             }
             nLatestManTab = nTab;
         }
+        if ( nIsBullet == 0 )
+            aTabItem.Insert( SvxTabStop( (sal_uInt16)0 ) );
         if ( nDefaultTab )
         {
             nTab = ( nTextOfs > nLatestManTab ) ? nTextOfs : nLatestManTab;
@@ -5860,12 +5862,6 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
                 aTabItem.Insert( SvxTabStop( (UINT16)( ( ( nTab - nTextOfs ) * 2540 ) / 576 ) ) );
                 nTab += nDefaultTab;
             }
-        }
-        if ( nIsBullet == 0 )
-        {
-            nTab = GetAttrib( PPT_ParaAttr_BulletOfs, nTab, nInstanceInSheet );
-            if ( nTab )
-                aTabItem.Insert( nTab );
         }
         rSet.Put( aTabItem );
     }
