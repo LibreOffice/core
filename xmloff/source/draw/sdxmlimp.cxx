@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:00:45 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,7 +485,7 @@ SdXMLImport::SdXMLImport(
 
     GetNamespaceMap().Add(
         GetXMLToken(XML_NP_SMIL),
-        GetXMLToken(XML_N_SMIL),
+        GetXMLToken(XML_N_SMIL_COMPAT),
         XML_NAMESPACE_SMIL);
 
     GetNamespaceMap().Add(
