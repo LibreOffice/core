@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-02-22 11:52:18 $
+ *  last change: $Author: fs $ $Date: 2002-07-22 14:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,8 +267,16 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     if(bNewMark)
     {
         aDelBT.Hide();
-        ImageList aTempList(SW_RES(IMG_NAVI_ENTRYBMP));
-        aNewBT.SetImage(aTempList.GetImage(SID_SW_START + CONTENT_TYPE_INDEX));
+
+        {
+            ImageList aTempList( SW_RES( IMG_NAVI_ENTRYBMPH ) );
+            aNewBT.SetModeImage( aTempList.GetImage( SID_SW_START + CONTENT_TYPE_INDEX ), BMP_COLOR_HIGHCONTRAST );
+        }
+
+        {
+            ImageList aTempList( SW_RES( IMG_NAVI_ENTRYBMP ) );
+            aNewBT.SetModeImage( aTempList.GetImage( SID_SW_START + CONTENT_TYPE_INDEX ), BMP_COLOR_NORMAL );
+        }
     }
     else
     {
