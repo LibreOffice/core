@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:35:53 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ arabic ] = "AND";
         Text[ dutch ] = "EN";
         Text[ chinese_simplified ] = "AND";
-        Text[ greek ] = "KAI";
+        Text[ greek ] = "AND";
         Text[ korean ] = "AND";
         Text[ turkish ] = "VE";
         Text[ language_user1 ] = " ";
@@ -324,7 +324,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english ] = "RAND" ;
         Text [ norwegian ] = "TILFELDIG" ;
         Text [ italian ] = "CASUALE" ;
-        Text [ portuguese_brazilian ] = "ALEAT÷RIO" ;
+        Text [ portuguese_brazilian ] = "ALEAT”RIO" ;
         Text [ portuguese ] = "ALEAT“RIO" ;
         Text [ finnish ] = "SATUNNAISLUKU" ;
         Text [ danish ] = "SLUMP" ;
@@ -494,7 +494,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english ] = "NA" ;
         Text [ norwegian ] = "IT" ;
         Text [ italian ] = "NON.DISP" ;
-        Text [ portuguese_brazilian ] = "NA" ;
+        Text [ portuguese_brazilian ] = "ND" ;
         Text [ portuguese ] = "NA" ;
         Text [ finnish ] = "PUUTTUU" ;
         Text [ danish ] = "IKKE.TILG∆NGELIG" ;
@@ -1605,7 +1605,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ italian ] = "FI";
         Text[ danish ] = "phi";
         Text[ swedish ] = "FI";
-        Text[ polish ] = "PHI";
+        Text[ polish ] = "fi";
         Text[ portuguese_brazilian ] = "fi";
         Text[ japanese ] = "PHI";
         Text[ korean ] = "PHI";
@@ -1827,7 +1827,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ english_us ] = "CELL";
         Text[ portuguese ] = "C…LULA";
         Text[ russian ] = "ﬂ◊≈… ¿";
-        Text[ greek ] = " ≈À…";
+        Text[ greek ] = "CELL";
         Text[ dutch ] = "CEL";
         Text[ french ] = "CELLULE";
         Text[ spanish ] = "CELDA";
@@ -1835,7 +1835,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ danish ] = "CELLE";
         Text[ swedish ] = "CELL";
         Text[ polish ] = "CELL";
-        Text[ portuguese_brazilian ] = "CELL";
+        Text[ portuguese_brazilian ] = "C…LULA";
         Text[ japanese ] = "CELL";
         Text[ korean ] = "CELL";
         Text[ chinese_simplified ] = "CELL";
@@ -2897,7 +2897,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ english_us ] = "ARABIC";
         Text[ portuguese ] = "¡RABE";
         Text[ russian ] = "¿–¿¡— »≈";
-        Text[ greek ] = "¡—¡¬… ¡";
+        Text[ greek ] = "ARABIC";
         Text[ dutch ] = "ARABISCH";
         Text[ french ] = "ARABE";
         Text[ spanish ] = "¡RABE";
@@ -6462,7 +6462,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ dutch ] = "VAST";
         Text[ chinese_simplified ] = "FIXED";
         Text[ greek ] = "FIXED";
-        Text[ korean ] = "Í≥†Ï†ï";
+        Text[ korean ] = "FIXED";
         Text[ turkish ] = "SAB›TLENM›ﬁ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "FIXED";
@@ -6597,7 +6597,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ arabic ] = "RIGHT";
         Text[ dutch ] = "RECHTS";
         Text[ chinese_simplified ] = "RIGHT";
-        Text[ greek ] = "ƒ≈Œ…¡";
+        Text[ greek ] = "RIGHT";
         Text[ korean ] = "RIGHT";
         Text[ turkish ] = "SA–";
         Text[ language_user1 ] = " ";
@@ -9157,7 +9157,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ english_us ] = "ROMAN";
         Text[ portuguese ] = "ROMANO";
         Text[ russian ] = "–»Ã— »≈";
-        Text[ greek ] = "—ŸÃ¡… ¡";
+        Text[ greek ] = "ROMAN";
         Text[ dutch ] = "ROMEINS";
         Text[ french ] = "ROMAIN";
         Text[ spanish ] = "ROMANO";
@@ -9475,6 +9475,7 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_ROMAN { Text = "ROMAN" ; };
     String SC_OPCODE_ARABIC { Text = "ARABIC" ; };
 };
+
 
 
 
