@@ -89,6 +89,7 @@ ByteString sOutputFile;
 ByteString sOutputFileX;
 ByteString sOutputFileY;
 ByteString sMergeSrc;
+bool bQuiet;
 
 /*****************************************************************************/
 BOOL ParseCommandLine( int argc, char* argv[])
@@ -100,6 +101,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
     bUTF8 = TRUE;
     sPrj = "";
     sPrjRoot = "";
+    bQuiet = false;
     Export::sLanguages = "";
     Export::sForcedLanguages = "";
 
@@ -136,6 +138,9 @@ BOOL ParseCommandLine( int argc, char* argv[])
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-E" ) {
             nState = STATE_ERRORLOG;
             bErrorLog = FALSE;
+        }
+        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-QQ" ) {
+            bQuiet = true;
         }
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-UTF8" ) {
             nState = STATE_UTF8;
@@ -238,15 +243,17 @@ int _cdecl main( int argc, char *argv[] )
 #endif
 /*****************************************************************************/
 {
-    fprintf( stdout, "\nHelpEx 0.1 Copyright 2003 Sun Microsystems, Inc. All Rights Reserved.\n" );
-    fprintf( stdout, "====================================================================\n" );
-
     if ( !ParseCommandLine( argc, argv )) {
         Help();
         return 1;
     }
+    if( !bQuiet ){
+        fprintf( stdout, "\nHelpEx 0.1 Copyright 2003 Sun Microsystems, Inc. All Rights Reserved.\n" );
+        fprintf( stdout, "====================================================================\n" );
+    }
 
-    fprintf( stdout, "\nProcessing File %s ...\n", sInputFile.GetBuffer());
+    if( !bQuiet ) fprintf( stdout, "\nProcessing File %s ...\n", sInputFile.GetBuffer());
+    else printf(".");
 
     if ( sOutputFile.Len() ){
         HelpParser aParser( sInputFile, bUTF8 );
@@ -260,7 +267,7 @@ int _cdecl main( int argc, char *argv[] )
             aParser.Merge( sMergeSrc, sOutputFileX , sOutputFileY , true );
     }
 
-    fprintf( stdout, "\n=================================================\n\n" );
+    if( !bQuiet ) fprintf( stdout, "\n=================================================\n\n" );
 
     return 0;
 }
