@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-19 11:16:52 $
+ *  last change: $Author: jl $ $Date: 2002-09-17 16:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,12 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_DROPTARGETDRAGENTEREVENT_HPP_
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 
 #ifndef _CPPUHELPER_COMPBASE2_HXX_
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase3.hxx>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
@@ -90,6 +93,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
+using namespace rtl;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
@@ -102,7 +106,7 @@ using namespace ::com::sun::star::datatransfer::dnd;
 // it is destroyed. Therefore no second instance may exist which was
 // created in the same thread and still needs OLE.
 class DropTarget: public MutexDummy,
-                  public WeakComponentImplHelper2< XInitialization, XDropTarget>
+                  public WeakComponentImplHelper3< XInitialization, XDropTarget, XServiceInfo>
 
 {
 private:
@@ -185,6 +189,12 @@ public:
     virtual void SAL_CALL setActive( sal_Bool isActive ) throw(RuntimeException);
     virtual sal_Int8 SAL_CALL getDefaultActions(  ) throw(RuntimeException);
     virtual void SAL_CALL setDefaultActions( sal_Int8 actions ) throw(RuntimeException);
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+
 
     // Functions called from the IDropTarget implementation ( m_pDropTarget)
     virtual HRESULT DragEnter(

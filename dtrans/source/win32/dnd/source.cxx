@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tra $ $Date: 2002-08-05 08:33:41 $
+ *  last change: $Author: jl $ $Date: 2002-09-17 16:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ unsigned __stdcall DndOleSTAFunc(LPVOID pParams);
 */
 DragSource::DragSource( const Reference<XMultiServiceFactory>& sf):
     m_serviceFactory( sf),
-    WeakComponentImplHelper2< XDragSource, XInitialization >(m_mutex),
+    WeakComponentImplHelper3< XDragSource, XInitialization, XServiceInfo >(m_mutex),
 //  m_pcurrentContext_impl(0),
     m_hAppWindow(0),
     m_MouseButton(0),
@@ -147,7 +147,7 @@ void DragSource::StartDragImpl(
     const Reference<XDragSourceListener >& listener )
 {
 #ifdef _DEBUG
-    OutputDebugStringA("\n\nWin DnD: StartDrag\n\n" );
+    OSL_TRACE("\n\nWin DnD: StartDrag\n\n" );
 #endif
 
     // The actions supported by the drag source
@@ -282,7 +282,7 @@ void SAL_CALL DragSource::release()
     {
         int a = m_refCount;
     }
-    WeakComponentImplHelper2< XDragSource, XInitialization>::release();
+    WeakComponentImplHelper3< XDragSource, XInitialization, XServiceInfo>::release();
 }
 #endif
 
@@ -324,8 +324,9 @@ ULONG STDMETHODCALLTYPE DragSource::AddRef( void)
 */
 ULONG STDMETHODCALLTYPE DragSource::Release( void)
 {
+    ULONG ref= m_refCount;
     release();
-    return (ULONG) m_refCount;
+    return --ref;
 }
 
 //----------------------------------------------------
@@ -384,6 +385,26 @@ HRESULT STDMETHODCALLTYPE DragSource::GiveFeedback(
     return DRAGDROP_S_USEDEFAULTCURSORS;
 }
 
+// XServiceInfo
+OUString SAL_CALL DragSource::getImplementationName(  ) throw (RuntimeException)
+{
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(DNDSOURCE_IMPL_NAME));;
+}
+// XServiceInfo
+sal_Bool SAL_CALL DragSource::supportsService( const OUString& ServiceName ) throw (RuntimeException)
+{
+    if( ServiceName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(DNDSOURCE_SERVICE_NAME ))))
+        return sal_True;
+    return sal_False;
+}
+
+Sequence< OUString > SAL_CALL DragSource::getSupportedServiceNames(  ) throw (RuntimeException)
+{
+    OUString names[1]= {OUString(RTL_CONSTASCII_USTRINGPARAM(DNDSOURCE_SERVICE_NAME))};
+
+    return Sequence<OUString>(names, 1);
+}
+
 //----------------------------------------------------
 /**This function is called as extra thread from
     DragSource::executeDrag. The function
@@ -434,7 +455,7 @@ unsigned __stdcall DndOleSTAFunc(LPVOID pParams)
                                                         hr == DRAGDROP_S_DROP ? sal_True : sal_False, action);
 
 #ifdef _DEBUG
-        OutputDebugStringA("\n\nWin DnD: DragEnd\n\n" );
+        OSL_TRACE("\n\nWin DnD: DragEnd\n\n" );
 #endif
 
         // Destroy SourceContextslkfgj

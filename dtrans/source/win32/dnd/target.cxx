@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-14 13:57:51 $
+ *  last change: $Author: jl $ $Date: 2002-09-17 16:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams);
 DropTarget::DropTarget( const Reference<XMultiServiceFactory>& sf):
     m_hWnd( NULL),
     m_serviceFactory( sf),
-    WeakComponentImplHelper2<XInitialization,XDropTarget>(m_mutex),
+    WeakComponentImplHelper3<XInitialization,XDropTarget, XServiceInfo>(m_mutex),
     m_bActive(sal_True),
     m_nDefaultActions(ACTION_COPY|ACTION_MOVE|ACTION_LINK|ACTION_DEFAULT),
     m_nCurrentDropAction( ACTION_NONE),
@@ -162,7 +162,7 @@ void SAL_CALL DropTarget::release()
     {
         int a = m_refCount;
     }
-    WeakComponentImplHelper2<XInitialization, XDropTarget>::release();
+    WeakComponentImplHelper3<XInitialization, XDropTarget, XServiceInfo>::release();
 
 }
 #endif
@@ -303,6 +303,24 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
 
 
 
+// XServiceInfo
+OUString SAL_CALL DropTarget::getImplementationName(  ) throw (RuntimeException)
+{
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(DNDTARGET_IMPL_NAME));;
+}
+// XServiceInfo
+sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName ) throw (RuntimeException)
+{
+    if( ServiceName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(DNDTARGET_SERVICE_NAME ))))
+        return sal_True;
+    return sal_False;
+}
+
+Sequence< OUString > SAL_CALL DropTarget::getSupportedServiceNames(  ) throw (RuntimeException)
+{
+    OUString names[1]= {OUString(RTL_CONSTASCII_USTRINGPARAM(DNDTARGET_SERVICE_NAME))};
+    return Sequence<OUString>(names, 1);
+}
 
 
 // XDropTarget ----------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2002-08-05 08:33:40 $
+ *  last change: $Author: jl $ $Date: 2002-09-17 16:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,11 @@
 #include <osl/mutex.hxx>
 #endif
 #ifndef _CPPUHELPER_COMPBASE2_HXX_
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase3.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 #include "../../inc/DtObjFactory.hxx"
 #include "globals.hxx"
 #include <oleidl.h>
@@ -88,6 +90,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
+using namespace rtl;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
@@ -98,7 +101,7 @@ class SourceContext;
 // ALT modifier is considered to effect a user selection of effects
 class DragSource:
       public MutexDummy,
-      public WeakComponentImplHelper2<XDragSource, XInitialization>,
+      public WeakComponentImplHelper3<XDragSource, XInitialization, XServiceInfo>,
       public IDropSource
 
 {
@@ -164,6 +167,10 @@ public:
                                      const Reference<XDragSourceListener >& listener )
                 throw( RuntimeException);
 
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
 
 
