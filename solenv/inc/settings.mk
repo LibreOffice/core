@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-12 13:50:21 $
+#   last change: $Author: hjs $ $Date: 2001-02-12 13:59:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1318,6 +1318,7 @@ CFLAGSCXX+=$(CFLAGSEXCEPTIONS)
 CDEFS+=-DEXCEPTIONS_ON
 .ELSE
 .IF "$(OLD_EXCEPTIONS)"==""
+CDEFS+=-DEXCEPTIONS_OFF
 CFLAGSCXX+=$(CFLAGS_NO_EXCEPTIONS)
 .ELSE
 CDEFS+=-DEXCEPTIONS_ON
