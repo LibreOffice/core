@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 06:45:24 $
+ *  last change: $Author: kz $ $Date: 2001-04-18 11:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #include <uno/any2.h>
 
 #include <typelib/typedescription.h>
+
+#ifndef _UNO_ENVIRONMENT_H_
+#include <uno/environment.h>
+#endif
 
 #define CORBA_STRING8_NAME "com.sun.star.corba.CorbaString8"
 #define CORBA_STRING8_NAME_LENGTH (sizeof(CORBA_STRING8_NAME)-1)
