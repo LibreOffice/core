@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-03-12 16:43:25 $
+ *  last change: $Author: er $ $Date: 2001-03-14 15:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ class ScIndexMap;
 struct RowInfo;
 struct ScFunctionData;
 struct ScLineFlags;
+class CollatorWrapper;
 
 
 class ScTable
@@ -163,6 +164,7 @@ private:
 
     // SortierParameter um den Stackbedarf von Quicksort zu Minimieren
     ScSortParam     aSortParam;
+    CollatorWrapper*    pSortCollator;
     BOOL            bGlobalKeepQuery;
     BOOL            bSharedNameInserted;
 
@@ -600,6 +602,10 @@ public:
 
     void        IncRecalcLevel()        { ++nRecalcLvl; }
     void        DecRecalcLevel()        { if (!--nRecalcLvl) SetDrawPageSize(); }
+
+    BOOL        IsSortCollatorGlobal() const;
+    void        InitSortCollator( const ScSortParam& rPar );
+    void        DestroySortCollator();
 
 private:
     void        FillSeries( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
