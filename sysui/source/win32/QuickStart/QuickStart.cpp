@@ -49,21 +49,23 @@ bool launchSoffice( )
         char *p = strrchr( filename, '\\' );
         if ( !p )
             return false;
-        strcpy( p+1, "swriter.exe" );
+        strcpy( p+1, "soffice.exe" );
 
         char imagename[_MAX_PATH + 1];
-        wsprintf(imagename, "\"%s\" -bean", filename );
+        wsprintf(imagename, "\"%s\" -invisible", filename );
 
         UINT ret = WinExec( imagename, SW_SHOW );
         if ( ret < 32 )
             return false;
-
+/*
         // wait until we can communicate
         int retry = 30;
         while (retry-- && !SofficeRuns() )
             Sleep(1000);
 
         return SofficeRuns();
+        */
+        return true;
     }
     else
         return true;
@@ -111,6 +113,9 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow)
 {
+    launchSoffice();
+    return 0;
+
      // TODO: Place code here.
     MSG msg;
     HACCEL hAccelTable;
