@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:22:06 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,30 @@
 #include <uifactory/menubarfactory.hxx>
 #endif
 
+#ifndef __FRAMEWORK_UIFACTORY_TOOLBOXFACTORY_HXX_
+#include <uifactory/toolboxfactory.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UIFACTORY_ADDONSTOOLBOXFACTORY_HXX_
+#include <uifactory/addonstoolboxfactory.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UICONFIGURATION_WINDOWSTATECONFIGURATION_HXX_
+#include "uiconfiguration/windowstateconfiguration.hxx"
+#endif
+
+#ifndef __FRAMEWORK_UIELEMENT_TOOLBARSMENUCONTROLLER_HXX_
+#include <uielement/toolbarsmenucontroller.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UIFACTORY_TOOLBARCONTROLLERFACTORY_HXX_
+#include "uifactory/toolbarcontrollerfactory.hxx"
+#endif
+
+#ifndef __FRAMEWORK_UIELEMENT_TOOLBARSMENUCONTROLLER_HXX_
+#include <uielement/toolbarsmenucontroller.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer                          )
@@ -248,6 +272,12 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::ModuleUIConfigurationManagerSupplier    )
                         COMPONENTINFO( ::framework::ModuleUIConfigurationManager            )
                         COMPONENTINFO( ::framework::MenuBarFactory                          )
+                        COMPONENTINFO( ::framework::ToolBoxFactory                          )
+                        COMPONENTINFO( ::framework::AddonsToolBoxFactory                    )
+                        COMPONENTINFO( ::framework::WindowStateConfiguration                )
+                        COMPONENTINFO( ::framework::ToolbarsMenuController                  )
+                        COMPONENTINFO( ::framework::ToolbarControllerFactory                )
+                        COMPONENTINFO( ::framework::ToolbarsMenuController                  )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
@@ -280,6 +310,12 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::UIConfigurationManager                  )   else
                         IFFACTORY( ::framework::ModuleUIConfigurationManagerSupplier    )   else
                         IFFACTORY( ::framework::ModuleUIConfigurationManager            )   else
-                        IFFACTORY( ::framework::MenuBarFactory                          )
+                        IFFACTORY( ::framework::MenuBarFactory                          )   else
+                        IFFACTORY( ::framework::ToolBoxFactory                          )   else
+                        IFFACTORY( ::framework::AddonsToolBoxFactory                    )   else
+                        IFFACTORY( ::framework::WindowStateConfiguration                )   else
+                        IFFACTORY( ::framework::ToolbarsMenuController                  )   else
+                        IFFACTORY( ::framework::ToolbarControllerFactory                )   else
+                        IFFACTORY( ::framework::ToolbarsMenuController                  )
                     )
 
