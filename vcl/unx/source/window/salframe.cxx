@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-08 13:46:44 $
+ *  last change: $Author: cp $ $Date: 2002-05-22 12:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2424,7 +2424,13 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
     if( !nKeyCode && !nLen && !nKeyString)
         return 0;
 
-    rtl_TextEncoding nEncoding = osl_getThreadTextEncoding();
+    rtl_TextEncoding nEncoding;
+
+    if (mpInputContext != NULL && mpInputContext->IsMultiLingual() )
+        nEncoding = RTL_TEXTENCODING_UTF8;
+    else
+        nEncoding = osl_getThreadTextEncoding();
+
     sal_Unicode *pBuffer;
     sal_Unicode *pString;
     sal_Size     nBufferSize = nLen * 2;
