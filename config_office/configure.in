@@ -12,10 +12,17 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.53 $ )
+AC_REVISION( $Revision: 1.54 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
+AC_ARG_WITH(gpc,
+[  --without-gpc           *NOT RECOMMENDED*  Removes GPC code from
+                          openoffice.org Reduces some graphics capability
+                          slightly.
+                          This is required to allow some strict packagers to
+                          comply with their distrubution policy.
+],,)
 AC_ARG_ENABLE(gcc3,
 [  --enable-gcc3          Deprecated: Now has no effect, checks compiler version.
 ],,)
@@ -80,13 +87,17 @@ AC_ARG_WITH(psdk-home,
  
                           Usage: --with-psdk-home=<absolute path to Microsoft Platform SDK>
 ],,)
-AC_ARG_WITH(psdk2003,
-[  --with-2003-psdk        For Windows users, please use this option when you use the
-                          February 2003 version of the Microsoft Platform SDK.
+AC_ARG_WITH(2003-psdk,
+[  --with-2003-psdk        Deprecated: Now has no effect.
+],,)
+AC_ARG_WITH(old-psdk,
+[  --with-old-psdk         For Windows users, and compatibility reasons. Please use
+                          this option for the October 2002 version of the Microsoft
+                          Platform SDK.
 
-                          This may be a temporary workaround! 
+                          This is a temporary workaround! 
  
-                          Usage: --with-2003-psdk
+                          Usage: --with-old-psdk
 ],,)
 AC_ARG_WITH(local-solenv,
 [  --with-local-solenv     If you have solenv in a location other than ../solenv,
@@ -226,30 +237,43 @@ dnl These values may be checked and reset later.
 dnl ===================================================================
 case "$_os" in
 	"SunOS")
-	;;
+		test_x=yes
+		test_gtk=yes
+		;;
 	"Linux")
-	;;
+		test_x=yes
+		test_gtk=yes
+		;;
 	"GNU")
-	;;
+		test_x=yes
+		;;
 	"WINNT")
-	;;
+		test_x=no
+		;;
 	"Darwin")
-	;;
+		test_x=no
+		;;
 	"FreeBSD")
-	;;
+		test_x=yes
+		test_gtk=yes
+		;;
 	"OSF1")
-	;;
+		test_x=dontknow
+		;;
 	"NetBSD")
-	;;
+		test_x=yes
+		;;
 	"IRIX")
-	;;
+		test_x=yes
+		;;
 	"IRIX64")
-	;;
-	"WINNT")
-	;;
+		test_x=yes
+		;;
 	"AIX")
-	   echo "AIX is an alpha port --- Use at own risk" >> warn
-	;;
+		test_x=yes
+	   	PTHREAD_LIBS=-pthread
+		echo "AIX is an alpha port --- Use at own risk" >> warn
+		;;
    *)
    AC_MSG_ERROR([$_os operating system is not suitable to build OpenOffice.org!])
    ;;
@@ -551,7 +575,7 @@ if test "$_os" = "WINNT"; then
 				COMEX=8
 			else
 				if test $CCNUMVER -ge "001200000000"; then
-					if test "$with_2003_psdk" = "yes"; then
+					if test "$with_old_psdk" != "yes"; then
 						COMEX=9
 					else
 						COMEX=7
@@ -949,6 +973,18 @@ dnl Check whether ln -s works on the current file system.
 dnl AC_PROG_LN_S
 
 dnl ===================================================================
+dnl Check whether xmkmf program can be used, x systems only
+dnl ===================================================================
+if test  "$test_x" = "yes"; then
+		AC_PATH_PROGS(XMKMF, xmkmf)
+		if test -z "$XMKMF"; then
+		   AC_MSG_ERROR([install xmkmf to run this script, include openwin in path])
+		fi
+else
+	echo "Skipping xmkmf test $test_x"
+fi
+
+dnl ===================================================================
 dnl Check whether there's a Perl version available.
 dnl ===================================================================
 if test -z "$with_perl_home"; then
@@ -991,6 +1027,14 @@ if test "$_os" != "WINNT" -o "$with_use_shell" != "4nt"; then
 else
    AC_MSG_WARN([Windows 4NT builds don't need tcsh])
    TCSH="NO_TCSH_NEEDED"
+fi
+dnl ===================================================================
+dnl Check whether the gtk 2.0 libraries are available.
+dnl ===================================================================
+if test  "$test_gtk" = "yes"; then
+    pkg_modules="gtk+-2.0 >= 1.3.13"
+    PKG_CHECK_MODULES( GTK, [$pkg_modules] )
+dnl	AM_PATH_GTK("1.3.13", AC_MSG_RESULT([GTK OK]), AC_MSG_WARN([GTK 2.0 not found])
 fi
 
 dnl ===================================================================
@@ -1161,22 +1205,29 @@ dnl ===================================================================
 dnl Test for the presence of the required gpc.{c,h} files
 dnl ===================================================================
 
-AC_MSG_CHECKING([GPC files])
-if test -f ../external/gpc/gpc.h; then
-	HAVE_GPC_H="yes"
-else
-	HAVE_GPC_H="no"
-fi
-if test -f ../external/gpc/gpc.c; then
-	HAVE_GPC_C="yes"
-else
-	HAVE_GPC_C="no"
-fi
+if test "$with_gpc" != "no" ; then
+  WITH_GPC=YES
 
-if test "$HAVE_GPC_H" = "yes" -a "$HAVE_GPC_C" = "yes"; then
+  AC_MSG_CHECKING([GPC files])
+  if test -f ../external/gpc/gpc.h; then
+	HAVE_GPC_H="yes"
+  else
+	HAVE_GPC_H="no"
+  fi
+  if test -f ../external/gpc/gpc.c; then
+	HAVE_GPC_C="yes"
+  else
+	HAVE_GPC_C="no"
+  fi
+
+  if test "$HAVE_GPC_H" = "yes" -a "$HAVE_GPC_C" = "yes"; then
 	AC_MSG_RESULT([GPC files found])
+  else
+	AC_MSG_ERROR([GPC files not found
+ftp://ftp.cs.man.ac.uk/pub/toby/gpc/gpc231.tar.Z and untar in external/gpc])
+  fi
 else
-	AC_MSG_ERROR([GPC files not found])
+  WITH_GPC=NO
 fi
 
 dnl ===================================================================
@@ -1288,7 +1339,7 @@ else
    with_lang=","$with_lang","
 fi
 if test -z "$with_dict"; then
-   with_dict=,ENUS,
+   with_dict=,ALL,
 else
    with_dict=","$with_dict","
 fi
@@ -1351,6 +1402,7 @@ AC_SUBST(PTHREAD_LIBS)
 AC_SUBST(ENABLE_DEBUG)
 AC_SUBST(ENABLE_STATIC_GTK)
 AC_SUBST(ENVCFLAGSCXX)
+AC_SUBST(WITH_GPC)
 
 AC_OUTPUT([set_soenv])
 
