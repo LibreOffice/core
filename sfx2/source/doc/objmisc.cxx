@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:18:03 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ using namespace ::drafts::com::sun::star::script;
 #include "docfac.hxx"
 #include "helper.hxx"
 #include "doc.hrc"
+#include "helpid.hrc"
 
 // class SfxHeaderAttributes_Impl ----------------------------------------
 
@@ -1718,6 +1719,7 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
                 if ( !nAutoConformation )
                 {
                     QueryBox aBox( GetDialogParent(), SfxResId( DLG_MACROQUERY ) );
+                    aBox.SetHelpId( HID_MACROCHECKDIALOG );
                     aBox.SetButtonText( aBox.GetButtonId(0), String( SfxResId(BTN_OK) ) );
                     aBox.SetButtonText( aBox.GetButtonId(1), String( SfxResId(BTN_CANCEL) ) );
                     String aText = aBox.GetMessText();
