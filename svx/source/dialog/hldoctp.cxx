@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-01 13:50:56 $
+ *  last change: $Author: thb $ $Date: 2001-10-12 17:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,29 @@ String SvxHyperlinkDocTp::GetCurrentURL ()
             aStrURL.AssignAscii( sHash );
             aStrURL += aStrMark;
         }
+
+    return aStrURL;
+}
+
+/*************************************************************************
+|*
+|* retrieve current url-string
+|*
+|************************************************************************/
+
+String SvxHyperlinkDocTp::GetCurrentUiURL ()
+{
+    String          aStrURL;
+    INetURLObject   aURLObj( GetCurrentURL() );
+
+    if( aURLObj.GetProtocol() == INET_PROT_FILE )
+    {
+        utl::LocalFileHelper::ConvertURLToSystemPath( aURLObj.GetMainURL(INetURLObject::NO_DECODE), aStrURL );
+    }
+    else
+    {
+        aStrURL = aURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+    }
 
     return aStrURL;
 }
@@ -470,7 +493,7 @@ IMPL_LINK ( SvxHyperlinkDocTp, ModifiedPathHdl_Impl, void *, EMPTYARG )
 
     if ( mbNewName && !maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) &&
                       !maStrURL.EqualsIgnoreCaseAscii( sPortalFileScheme ) )
-        mpEdIndication->SetText( maFtFullURL.GetText() );
+        mpEdIndication->SetText( GetCurrentUiURL() );
 
     return( 0L );
 }
@@ -518,7 +541,7 @@ IMPL_LINK ( SvxHyperlinkDocTp, ModifiedTargetHdl_Impl, void *, EMPTYARG )
 
     if ( mbNewName && !maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) &&
                       !maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
-        mpEdIndication->SetText ( maFtFullURL.GetText() );
+        mpEdIndication->SetText( GetCurrentUiURL() );
 
     return( 0L );
 }
@@ -533,11 +556,11 @@ IMPL_LINK ( SvxHyperlinkDocTp, LostFocusPathHdl_Impl, void *, EMPTYARG )
 {
     maStrURL = GetCurrentURL();
 
-    maFtFullURL.SetText(maStrURL);
+    maFtFullURL.SetText( maStrURL );
 
     if ( mbNewName && !maStrURL.EqualsIgnoreCaseAscii( sFileScheme )  &&
                       !maStrURL.EqualsIgnoreCaseAscii( sPortalFileScheme ))
-        mpEdIndication->SetText ( maFtFullURL.GetText() );
+        mpEdIndication->SetText( GetCurrentUiURL() );
 
     return (0L);
 }
