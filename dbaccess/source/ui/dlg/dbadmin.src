@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:33:48 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,7 @@ TabPage PAGE_GENERAL
         Text [ russian ] = "~»Ïˇ";
         Text [ greek ] = "ºÌÔ~Ï·:";
         Text [ dutch ] = "~Naam:";
-        Text [ french ] = "~Nom";
+        Text [ french ] = "Nom";
         Text [ spanish ] = "~Nombre:";
         Text [ italian ] = "~Nome:";
         Text [ danish ] = "Navn:";
@@ -1052,7 +1052,7 @@ TabPage PAGE_ADO
         Text [ danish ] = "URL" ;
         Text [ italian ] = "U~RL" ;
         Text [ spanish ] = "U~RL" ;
-        Text [ french ] = "U~RL" ;
+        Text [ french ] = "URL" ;
         Text [ dutch ] = "U~RL" ;
         Text [ portuguese ] = "U~RL" ;
         Text [ chinese_simplified ] = "U~RL";
@@ -1207,7 +1207,7 @@ TabPage PAGE_JDBC
         Text [ danish ] = "URL" ;
         Text [ italian ] = "U~RL" ;
         Text [ spanish ] = "U~RL" ;
-        Text [ french ] = "U~RL" ;
+        Text [ french ] = "URL" ;
         Text [ dutch ] = "U~RL" ;
         Text [ portuguese ] = "U~RL" ;
         Text [ chinese_simplified ] = "U~RL";
@@ -1620,7 +1620,7 @@ TabPage PAGE_LDAP
         Text[ greek ] = "~Hostname";
         Text[ dutch ] = "~Hostnaam";
         Text[ french ] = "~Ordinateur";
-        Text[ spanish ] = "~Nombre del equipo";
+        Text[ spanish ] = "Nombre del equipo";
         Text[ finnish ] = "~P‰‰koneen nimi";
         Text[ italian ] = "Nome computer";
         Text[ danish ] = "~Hostname";
@@ -3387,6 +3387,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.87  2002/02/04 10:33:48  kz
+ *  Merge SRC641: 04.02.02 - 11:33:12
+ *
  *  Revision 1.86  2002/01/25 21:09:14  kz
  *  Merge SRC641: 25.01.02 - 22:07:21
  *
