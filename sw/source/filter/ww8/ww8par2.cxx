@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:20 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2024,25 +2024,9 @@ void WW8TabDesc::CalcDefaults()
             nMinCols = pR->nSwCols;
     }
 
-#if 1
     if (nMinLeft && (HORI_LEFT == eOri))
         eOri = HORI_LEFT_AND_WIDTH; //  absolutely positioned
-#else
-    // 4. Ausrichtung der Tabelle
-    long nMidTab  = ( (long)nMinLeft  + nMaxRight ) / 2; // TabellenMitte
-    long nRight   = pIo->nPgWidth - pIo->nPgRight - pIo->nPgLeft;
 
-    // set Position if not on adjusted to left border
-    if (nMinLeft && (HORI_LEFT == eOri))
-    {
-        if(MINLAY > abs(nMidTab - nRight/2))
-            eOri = HORI_CENTER; // very near the center IS centered
-        else if ((nMaxRight - nRight) == 0)
-            eOri = HORI_RIGHT;
-        else
-            eOri = HORI_LEFT_AND_WIDTH; //  absolutely positioned
-    }
-#endif
     nDefaultSwCols = nMinCols;  // da Zellen einfuegen billiger ist als Mergen
     if( nDefaultSwCols == 0 )
         bOk = false;
@@ -3454,7 +3438,7 @@ SwTxtFmtColl* WW8RStyle::SearchFmtColl( const String& rName )
                     // Collection noch nicht gefunden, vielleicht im Pool ?
         USHORT n = SwStyleNameMapper::GetPoolIdFromUIName( rName , GET_POOLID_TXTCOLL );
         if ( n != USHRT_MAX )       // gefunden oder Standard
-            pColl = pIo->rDoc.GetTxtCollFromPoolSimple( n, FALSE );
+            pColl = pIo->rDoc.GetTxtCollFromPoolSimple(n, false);
     }
     return pColl;
 }
@@ -3542,7 +3526,7 @@ SwTxtFmtColl* WW8RStyle::MakeOrGetFmtColl(bool * pbStyExist, WW8_STD* pStd,
         && !( pIo->nIniFlags & WW8FL_NO_DEFSTYLES ) ) // nicht abgeschaltet
     {
         SwTxtFmtColl* pCol =
-            pIo->rDoc.GetTxtCollFromPoolSimple(aArr[pStd->sti], FALSE);
+            pIo->rDoc.GetTxtCollFromPoolSimple(aArr[pStd->sti], false);
         if(pCol)
         {
             *pbStyExist = true;
@@ -3785,7 +3769,7 @@ void WW8RStyle::Import()
 {
     pIo->pDfltTxtFmtColl  = pIo->rDoc.GetDfltTxtFmtColl();
     pIo->pStandardFmtColl =
-        pIo->rDoc.GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, FALSE);
+        pIo->rDoc.GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, false);
 
     if( pIo->nIniFlags & WW8FL_NO_STYLES )
         return;

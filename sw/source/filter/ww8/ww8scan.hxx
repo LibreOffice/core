@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-03 13:30:32 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,10 +575,6 @@ public:
         const BYTE* HasSprm( USHORT nId );
         bool HasSprm(USHORT nId, std::vector<const BYTE *> &rResult);
 
-#if 0
-        ULONG GetParaHeight() const;    // fuer Header/Footer bei Papx-Fkps
-#endif
-
         const wwSprmParser &GetSprmParser() const { return maSprmParser; }
     };
 private:
@@ -626,9 +622,6 @@ public:
     void GetPCDSprms( WW8PLCFxDesc& rDesc );
     const BYTE* HasSprm( USHORT nId );
     bool HasSprm(USHORT nId, std::vector<const BYTE *> &rResult);
-#if 0
-    ULONG GetParaHeight() const;
-#endif
     bool HasFkp() const { return (0 != pFkp); }
 };
 

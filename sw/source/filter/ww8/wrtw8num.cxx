@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:19 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,13 +343,6 @@ void SwWW8Writer::OutListTab()
                     else
                         pO->Insert(93, pO->Count());
                     InsUInt16(nFontID);
-#if 0
-                    if (bWrtWW8)
-                    {
-                        InsUInt16(0x286F);
-                        pO->Insert(01, pO->Count());
-                    }
-#endif
                 }
                 else
                     pOutSet = &rFmt.GetCharFmt()->GetAttrSet();

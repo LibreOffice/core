@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: aidan $ $Date: 2002-12-06 12:56:30 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,6 @@ namespace com{namespace sun {namespace star{
 #define WW8FL_NO_TEXT        1
 #define WW8FL_NO_STYLES      2
 #define WW8FL_NO_ZSTYLES     4  // keine Zeichenstyles importieren
-#define WW8FL_NO_APO         8
 #define WW8FL_NO_FTN      0x20
 #define WW8FL_NO_FLD      0x40  // keine Felder
 #define WW8FL_NO_GRAF     0x80
@@ -191,15 +190,11 @@ namespace com{namespace sun {namespace star{
 // ueberschreiben
 #define WW8FL_NO_DEFSTYLES        0x400
 
-#define WW8FL_NO_TABLE            0x800
 #define WW8FL_NO_OUTLINE         0x1000
 #define WW8FL_NO_NUMRULE         0x2000
 #define WW8FL_NO_IMPLPASP        0x4000  // no implicit para space
 #define WW8FL_NO_GRAFLAYER       0x8000
-#define WW8FL_NO_COMPLEX        0x10000
 #define WW8FL_NO_OLE            0x20000
-#define WW8FL_OLE_TO_GRAF       0x40000
-#define WW8FL_NO_STD_STY_DYA   0x100000
 #define WW8FL_NO_COLS          0x200000
 #define WW8FL_NO_TOX           0x400000
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: aidan $ $Date: 2002-12-06 12:56:31 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,18 +373,6 @@ static short ReadULSprm( const WW8PLCFx_SEPX* pSep, USHORT nId, short nDefaultVa
         nVal = -nVal;
     return nVal;
 }
-
-#if 0
-static short ReadLRSprm(const WW8PLCFx_SEPX* pSep, USHORT nId,
-    short nDefaultVal )
-{
-    const BYTE* pS = pSep->HasSprm(nId);   // sprm da ?
-    short nVal = pS ? SVBT16ToShort(pS) : nDefaultVal;
-    if (nVal < 0)                          // < 0 ist beim SW nicht erlaubt
-        nVal = 0;
-    return nVal;
-}
-#endif
 
 // WW nimmt es mit den Groessen nicht so genau. Wird dieses nicht
 // korrigiert, dann erkennt es der Writer nur als Benutzergroesse
@@ -2748,13 +2736,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     if (pFS->nUpMgn || pFS->nLoMgn)
         Put(SvxULSpaceItem(pFS->nUpMgn, pFS->nLoMgn));
 
-    SwFmtSurround aSur( pFS->eSurround );   // Umfluss
-#if 0
-    //Why did we want this again, there was a good reason :-(
-    aSur.SetAnchorOnly( true);
-#endif
-
-    Put(aSur);
+    Put(SwFmtSurround(pFS->eSurround)); // Umfluss
 
     short aSizeArray[5]={0};
     rReader.SetFlyBordersShadow(*this,(const WW8_BRC*)pFW->brc,&aSizeArray[0]);
@@ -3820,29 +3802,6 @@ bool SwWW8ImplReader::GetFontParams( USHORT nFCode, FontFamily& reFamily,
 
     rName = String( pF->sFontname );
 
-#if defined( OS2 )
-            if (   rName.EqualsIgnoreCaseAscii( "Helv"  )
-                || rName.EqualsIgnoreCaseAscii( "Arial" ) )
-                rName.AssignAscii( "Helvetica" );
-            else if (    rName.EqualsIgnoreCaseAscii( "Tms Rmn"         )
-                      || rName.EqualsIgnoreCaseAscii( "Times New Roman" ) )
-                rName.AssignAscii( "Times New Roman" );
-            else if ( rName.EqualsIgnoreCaseAscii( "Courier New" ) )
-                rName.AssignAscii( "Courier" );
-            else if ( rName.EqualsIgnoreCaseAscii( "Symbol" ) )
-                rName.AssignAscii( "Symbol Set" );
-#endif // OS2
-#if defined( MAC )
-            if (   rName.EqualsIgnoreCaseAscii( "Helv"  )
-                || rName.EqualsIgnoreCaseAscii( "Arial" ))
-                rName.AssignAscii( "Helvetica" );
-            else if (  rName.EqualsIgnoreCaseAscii( "Tms Rmn" )
-                    || rName.EqualsIgnoreCaseAscii( "Times New Roman" ) )
-                rName.AssignAscii( "Times" );
-            else if ( rName.EqualsIgnoreCaseAscii( "Courier New"  ) )
-                rName.AssignAscii( "Courier" );
-#endif // MAC
-
     // pF->prg : Pitch
     rePitch = ePitchA[pF->prg];
 
@@ -4454,7 +4413,7 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
 void SwWW8ImplReader::Read_LineSpace( USHORT, const BYTE* pData, short nLen )
 {
 // Kommentear siehe Read_UL()
-    if( bStyNormal && ( bWWBugNormal || ( nIniFlags & WW8FL_NO_STD_STY_DYA ) ) )
+    if (bStyNormal && bWWBugNormal)
         return;
 
     if( nLen < 0 ){
@@ -4597,13 +4556,8 @@ void SwWW8ImplReader::Read_UL( USHORT nId, const BYTE* pData, short nLen )
 // Fehler in der benutzten WW-Version hin. Wenn sich die Styles <Standard> bzw.
 // <Normal> zwischen WW und SW im Absatz- oder Zeilenabstand unterscheiden,
 // dann bitte dieses Doc SH zukommen lassen." );
-// if( bStyNormal && ( bWWBugNormal || ( nIniFlags & WW8FL_NO_STD_STY_DYA ) ) )
-//      return;
 // bWWBugNormal ist kein hinreichendes Kriterium dafuer, dass der
 // angegebene Abstand falsch ist
-
-    if( bStyNormal && ( nIniFlags & WW8FL_NO_STD_STY_DYA ) )
-        return;
 
     if( nLen < 0 )
     {

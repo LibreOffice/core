@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-15 13:31:34 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
+
 #ifndef _WW8STRUC_HXX
 #define _WW8STRUC_HXX
 
@@ -66,13 +69,18 @@
 #include <tools/string.hxx>
 #endif
 
-#if defined  __BIGENDIAN || __ALIGNMENT4 > 2 || defined UNX
-#define __WW8_NEEDS_COPY
-#else
-#if defined WNT || defined WIN || defined OS2
-#define __WW8_NEEDS_PACK
-#pragma pack(2)
+#ifndef _SAL_CONFIG_H_
+#include <sal/config.h>
 #endif
+
+#if defined  __BIGENDIAN || __ALIGNMENT4 > 2 || defined UNX
+#   define __WW8_NEEDS_COPY
+#endif
+
+#ifdef SAL_W32
+#   pragma pack(push, 2)
+#elif defined(SAL_OS2)
+#   pragma pack(2)
 #endif
 
 inline void Set_UInt8( BYTE *& p, UINT8 n )
@@ -93,9 +101,9 @@ inline void Set_UInt32( BYTE *& p, UINT32 n )
     p+= 4;
 }
 
-typedef INT16 WW8_PN;
-typedef INT32 WW8_FC;
-typedef INT32 WW8_CP;
+typedef sal_Int16 WW8_PN;
+typedef sal_Int32 WW8_FC;
+typedef sal_Int32 WW8_CP;
 
 // STD: STyle Definition
 //   The STD contains the entire definition of a style.
@@ -728,41 +736,6 @@ struct WW8_PCD
                             // properties of the piece.
 };
 
-struct WW8_PHE_Base
-{
-    BYTE aBits1;            //
-//                              0   0   fSpare  int :1  0001    reserved
-//                              fUnk    int :1  0002    phe entry is invalid
-//                                                      when == 1
-//                              fDiffLines  int :1  0004    when 1, total
-//                               height of paragraph is known but lines in
-//                               paragraph have different heights.
-//                              *   int :5  00F8    reserved
-    BYTE nlMac;             //  when fDiffLines is 0 is number of lines in
-//                          //  paragraph
-    SVBT16 dxaCol;          //  width of lines in paragraph
-    SVBT16 dyl;
-//                              4   4   dylLine int when fDiffLines is 0,
-//                              is height of every line in paragraph.in pixels
-//                              4   4 dylHeight uns when fDiffLines is 1,
-//                              is the total height in pixels of the paragraph
-};
-
-/*
-eigentlich muessten wir das jetzt in etwa *so* praezisieren:
-
-            struct WW8_PHE_Ver6 : public WW8_PHE_Base
-            {
-                //  6 Bytes gross
-            };
-            struct WW8_PHE_Ver6 : public WW8_PHE_Base
-            {
-                SVBT16 a;
-                SVBT16 b;
-                SVBT16 c;   // 12 Byte gross
-            };
-*/
-
 // AnnoTation Refernce Descriptor (ATRD)
 struct WW8_ATRD                 // fuer die 8-Version
 {
@@ -802,9 +775,82 @@ struct WW8_TablePos
     BYTE nSp37;
 };
 
+struct WW8_FSPA
+{
+public:
+    long nSpId;     //Shape Identifier. Used in conjunction with the office art data (found via fcDggInfo in the FIB) to find the actual data for this shape.
+    long nXaLeft;   //left of rectangle enclosing shape relative to the origin of the shape
+    long nYaTop;        //top of rectangle enclosing shape relative to the origin of the shape
+    long nXaRight;  //right of rectangle enclosing shape relative to the origin of the shape
+    long nYaBottom;//bottom of the rectangle enclosing shape relative to the origin of the shape
+    USHORT bHdr:1;
+    //0001 1 in the undo doc when shape is from the header doc, 0 otherwise (undefined when not in the undo doc)
+    USHORT nbx:2;
+    //0006 x position of shape relative to anchor CP
+    //0 relative to page margin
+    //1 relative to top of page
+    //2 relative to text (column for horizontal text; paragraph for vertical text)
+    //3 reserved for future use
+    USHORT nby:2;
+    //0018 y position of shape relative to anchor CP
+    //0 relative to page margin
+    //1 relative to top of page
+    //2 relative to text (paragraph for horizontal text; column for vertical text)
+    USHORT nwr:4;
+    //01E0 text wrapping mode
+    //0 like 2, but doesn't require absolute object
+    //1 no text next to shape
+    //2 wrap around absolute object
+    //3 wrap as if no object present
+    //4 wrap tightly around object
+    //5 wrap tightly, but allow holes
+    //6-15 reserved for future use
+    USHORT nwrk:4;
+    //1E00 text wrapping mode type (valid only for wrapping modes 2 and 4
+    //0 wrap both sides
+    //1 wrap only on left
+    //2 wrap only on right
+    //3 wrap only on largest side
+    USHORT bRcaSimple:1;
+    //2000 when set, temporarily overrides bx, by, forcing the xaLeft, xaRight, yaTop, and yaBottom fields to all be page relative.
+    USHORT bBelowText:1;
+    //4000
+    //1 shape is below text
+    //0 shape is above text
+    USHORT bAnchorLock:1;
+    //8000  1 anchor is locked
+    //      0 anchor is not locked
+    long nTxbx; //count of textboxes in shape (undo doc only)
+public:
+    enum FSPAOrient {RelPgMargin, RelPageBorder, RelText};
+};
 
-#ifdef __WW8_NEEDS_PACK
-#pragma pack()
+
+struct WW8_FSPA_SHADOW  // alle Member an gleicher Position und Groesse,
+{                                               // wegen:  pF = (WW8_FSPA*)pFS;
+    SVBT32 nSpId;
+    SVBT32 nXaLeft;
+    SVBT32 nYaTop;
+    SVBT32 nXaRight;
+    SVBT32 nYaBottom;
+    SVBT16 aBits1;
+    SVBT32 nTxbx;
+};
+
+struct WW8_TXBXS
+{
+    SVBT32 cTxbx_iNextReuse;
+    SVBT32 cReusable;
+    SVBT16 fReusable;
+    SVBT32 reserved;
+    SVBT32 ShapeId;
+    SVBT32 txidUndo;
+};
+
+#ifdef SAL_W32
+#   pragma pack(pop)
+#elif defined(SAL_OS2)
+#   pragma pack()
 #endif
 
 namespace wwUtility

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 16:00:42 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2120,12 +2120,6 @@ ULONG SwWW8Writer::StoreDoc()
     PrepareStorage();
 
     maFontHelper.InitFontTable(bWrtWW8, *pDoc);
-#if 0
-    //I reckon we don't need this with the new ww font code
-    PutNumFmtFontsInAttrPool();
-    PutEditEngFontsInAttrPool();
-    PutCJKandCTLFontsInAttrPool();
-#endif
 
     pFib = new WW8Fib( bWrtWW8 ? 8 : 6 );
 
@@ -2257,7 +2251,7 @@ ULONG SwWW8Writer::StoreDoc()
     // set AutoHyphenation flag if found in default para style
     const SfxPoolItem* pItem;
     SwTxtFmtColl* pStdTxtFmtColl =
-        pDoc->GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, FALSE);
+        pDoc->GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, false);
     if (pStdTxtFmtColl && SFX_ITEM_SET == pStdTxtFmtColl->GetItemState(
         RES_PARATR_HYPHENZONE, false, &pItem))
     {

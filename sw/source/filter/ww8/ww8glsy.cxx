@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 16:01:59 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PRECOMPILED
 #include "filt_pch.hxx"
@@ -174,7 +177,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
     if( aStart < aDocEnd )
     {
         SwTxtFmtColl* pColl = pD->GetTxtCollFromPoolSimple
-            ( RES_POOLCOLL_STANDARD, FALSE );
+            (RES_POOLCOLL_STANDARD, false);
         USHORT nGlosEntry = 0;
         SwCntntNode* pCNd = 0;
         do {

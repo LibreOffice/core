@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: aidan $ $Date: 2002-12-06 12:56:30 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1006,8 +1006,8 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     }
 
     SwNodeIndex aNdIdx( rDoc.GetNodes().GetEndOfExtras() );
-    aNdIdx = *rDoc.GetNodes().MakeTextSection( aNdIdx, SwNormalStartNode,
-        rDoc.GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD, FALSE ));
+    aNdIdx = *rDoc.GetNodes().MakeTextSection(aNdIdx, SwNormalStartNode,
+        rDoc.GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD, false));
 
     {
         SwPaM *pTempPaM = pPaM;
@@ -1142,15 +1142,6 @@ void SwWW8ImplReader::Read_HdFt1( BYTE nPara, BYTE nWhichItems, SwPageDesc* pPD 
             }
     }
 }
-
-#if 0
-static BYTE ReadBSprm( const WW8PLCFx_SEPX* pSep, USHORT nId, BYTE nDefaultVal )
-{
-    const BYTE* pS = pSep->HasSprm( nId );          // sprm da ?
-    BYTE nVal = ( pS ) ? SVBT8ToByte( pS ) : nDefaultVal;
-    return nVal;
-}
-#endif
 
 void SwWW8ImplReader::SetHdFt( SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1,
     BYTE nIPara )
@@ -1307,7 +1298,7 @@ SwPageDesc* SwWW8ImplReader::CreatePageDesc(SwPageDesc* pFirstPageDesc,
     USHORT nPageDescCount = rDoc.GetPageDescCnt();
     nPos = rDoc.MakePageDesc(
         ViewShell::GetShellRes()->GetPageDescName(nPageDescCount,false,bFollow),
-        bFollow ? pFirstPageDesc : 0, FALSE );
+        bFollow ? pFirstPageDesc : 0, false);
 
     pNewPD = &rDoc._GetPageDesc( nPos );
 
@@ -1496,9 +1487,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool bAllEnd, bool* pbReSync,
 
     bWasTabRowEnd = false;  // must be deactivated right here to prevent next
                             // WW8TabDesc::TableCellEnd() from making nonsense
-#if 0
-    //we shouldn't need this anymore with table in table support.
-#endif
+
     if (nInTable && !bStopTab && (nInTable == nCellLevel && (bStartApo || bStopApo)))
         bStopTab = bStartTab = true;    // Required to stop and start table
 
@@ -1562,41 +1551,6 @@ bool SwWW8ImplReader::ProcessSpecial(bool bAllEnd, bool* pbReSync,
     }
     return bTableRowEnd;
 }
-
-#if defined OS2
-// eigentlich besser inline, aber das kann der BLC nicht
-static UCHAR ConvOs2( UCHAR ch, CharSet eDst )
-{
-    switch( ch )
-    {
-        case 132:
-        case 148:
-            return ( eDst == CHARSET_IBMPC_865 ) ? '"' : 175;
-                                // typographische "(links) gegen aehnliche
-                                // im OS/2-Charset
-        case 147:
-            return ( eDst == CHARSET_IBMPC_865 ) ? '"' : 174;
-        case 173:
-            // kurze, mittellange und lange Striche gegen Minus
-        case 150:
-        case 151:
-            return  '-';
-        case 130:
-            return ',';
-        case 145:
-        case 146:
-            return '\'';    // typographische ' gegen normale
-        case 139:
-            return '<';
-        case 155:
-            return '>';
-        case 152:
-            return '~';
-    }                       // ansonsten macht noch TM AErger.
-
-    return 0;               // kenn ick nich
-}
-#endif
 
 CharSet SwWW8ImplReader::GetCurrentCharSet()
 {
@@ -2434,10 +2388,6 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 
 
     }
-    else if( ( nIniFlags & WW8FL_NO_COMPLEX ) && pWwFib->fComplex )
-    {
-        nErrRet = WARN_WW6_FASTSAVE_ERR;            // Warning melden
-    }
     else
     {
         mpSprmParser = new wwSprmParser(pWwFib->nVersion);
@@ -2667,8 +2617,8 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 {
                     SwNodeIndex aIdx( rDoc.GetNodes().GetEndOfContent());
                     SwTxtFmtColl* pColl =
-                        rDoc.GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
-                                                       FALSE );
+                        rDoc.GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD,
+                        false);
                     SwStartNode *pNode =
                         rDoc.GetNodes().MakeTextSection(aIdx,
                         SwNormalStartNode,pColl);
@@ -3327,3 +3277,4 @@ bool SwWW8ImplReader::InEqualApo(int nLvl) const
         --nLvl;
     return maApos[nLvl];
 }
+

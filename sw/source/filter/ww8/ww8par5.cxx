@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: aidan $ $Date: 2002-12-06 12:56:31 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1765,29 +1765,6 @@ eF_ResT SwWW8ImplReader::Read_F_CurPage( WW8FieldDesc*, String& rStr )
 
 eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, String& rStr )
 {                                               // Symbol-Zeichensatz
-/*
-    char* p;
-    char* pQ = Find1stPara( pStr, &p );         // 1. Para ist Ascii-Wert
-    USHORT nC = String( pQ );
-    if( !nC )                                   // ungueltige Syntax
-        return FLD_TAGIGN;                      // -> kein 0-Zeichen in Text
-    char* pCSet = FindPara( p, 'f', 'F' );          // \f -> Zeichensatz
-    char* pSiz = FindPara( p, 's', 'S' );           // \s -> FontSize
-    if( pCSet ){                                // Charset angegeben ?
-        String aName( pCSet );
-        if( eStructCharSet != eSysCharSet )             // OS2, WIN mit Mac-Doc,...
-            aName.Convert( eStructCharSet, eSysCharSet );
-        SvxFontItem aFont(  FAMILY_DONTKNOW, aName, // "WingDings",
-                            aEmptyStr,
-                            PITCH_DONTKNOW, CHARSET_SYMBOL);
-        NewAttr( aFont );              // neuer Font
-    }
-    if( pSiz ){                                 // Size angegeben ?
-        ULONG nSiz = String( pSiz );            // in pt
-        SvxFontHeightItem aSz( nSiz * 20 );     // pT -> twip
-        NewAttr( aSz );
-    }
-*/
     String aQ;
     String aName;
     String aSiz;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-03 12:01:29 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1404,11 +1404,6 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
                 RegisterNumFmtOnTxtNode(rStyleInfo.nLFOIndex,
                     rStyleInfo.nListLevel, false);
             }
-#if 0       //Assume that style knows best, and allows #99550# to
-            //work correctly
-            else
-                pTxtNode->UpdateNum( SwNodeNum(NO_NUMBERING) );
-#endif
 
             if (rStyleInfo.bHasStyNumRule && pTxtNode)
                 pTxtNode->SetNumLSpace(false);
@@ -1840,7 +1835,7 @@ sal_Bool SwMSConvertControls::InsertFormula(WW8FormulaControl &rFormula)
     if ((bRet = rFormula.Import(rServiceFactory, xFComp, aSz)))
     {
         uno::Reference <drawing::XShape> xShapeRef;
-        if ((bRet = InsertControl(xFComp, aSz, &xShapeRef, FALSE)))
+        if ((bRet = InsertControl(xFComp, aSz, &xShapeRef, false)))
             GetShapes()->add(xShapeRef);
     }
     return bRet;
@@ -2073,69 +2068,6 @@ WW8FormulaEditBox::WW8FormulaEditBox(SwWW8ImplReader &rR)
     : WW8FormulaControl( CREATE_CONST_ASC(SL::aTextField) ,rR)
 {
 }
-
-/*
-#i3029#
-We are no longer importing the lagacy word95 edit boxes as uno textboxes,
-instead they are imported as writer input fields.
-*/
-#if 0
-sal_Bool WW8FormulaEditBox::Import(const uno::Reference<
-    lang::XMultiServiceFactory >& rServiceFactory,
-    uno::Reference< form::XFormComponent >& rFComp, awt::Size &rSz)
-{
-    uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance(
-        C2U("com.sun.star.form.component.TextField"));
-
-    if( !xCreate.is() )
-        return sal_False;
-
-    rFComp = uno::Reference< form::XFormComponent >( xCreate, uno::UNO_QUERY );
-    if( !rFComp.is() )
-        return sal_False;
-
-    uno::Reference< beans::XPropertySet > xPropSet( xCreate, uno::UNO_QUERY );
-
-    uno::Any aTmp;
-    if( sTitle.Len() )
-        aTmp <<= rtl::OUString(sTitle);
-    else
-        aTmp <<= rtl::OUString(sName);
-    xPropSet->setPropertyValue(C2U("Name"), aTmp);
-
-    sal_Bool bTemp = sal_False;
-    aTmp.setValue(&bTemp, ::getBooleanCppuType());
-    xPropSet->setPropertyValue(C2U("MultiLine"), aTmp);
-
-    aTmp <<= (sal_Int16)0;  //No Border
-    xPropSet->setPropertyValue(C2U("Border"), aTmp);
-
-    if( sDefault.Len() )
-    {
-        aTmp <<= rtl::OUString(sDefault);
-        xPropSet->setPropertyValue(C2U("DefaultText"), aTmp);
-    }
-
-    rSz.Width = 300;
-    rSz.Height = 200;
-
-    aTmp <<= (sal_Int32)(0x00C0C0C0);
-    xPropSet->setPropertyValue(C2U("BackgroundColor"), aTmp);
-
-    SetOthersFromDoc(rSz,xPropSet);
-
-    aTmp <<= (sal_Int16)nSize;
-    xPropSet->setPropertyValue(C2U("MaxTextLen"), aTmp);
-
-    if( sToolTip.Len() )
-    {
-        aTmp <<= rtl::OUString(sToolTip);
-        xPropSet->setPropertyValue(C2U("HelpText"), aTmp );
-    }
-
-    return sal_True;
-}
-#endif
 
 sal_Bool SwMSConvertControls::InsertControl(
     const uno::Reference< form::XFormComponent > & rFComp,

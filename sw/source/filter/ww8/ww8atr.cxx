@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 09:43:16 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,19 +360,12 @@
 
 #define ATTRFNTAB_SIZE 130
 #if ATTRFNTAB_SIZE != POOLATTR_END - POOLATTR_BEGIN
-#error "Attribut-Tabelle ist ungueltigt. Wurden neue Hint-ID's zugefuegt ??"
-#endif
-
-#if 0
-#define FORMATTAB_SIZE 6
-#if FORMATTAB_SIZE != RES_FMT_END - RES_FMT_BEGIN
-#error "Format-Tabelle ist ungueltigt. Wurden neue Hint-ID's zugefuegt ??"
-#endif
+#   error "Attribut-Tabelle ist ungueltigt. Wurden neue Hint-ID's zugefuegt ??"
 #endif
 
 #define NODETAB_SIZE 3
 #if NODETAB_SIZE != RES_NODE_END - RES_NODE_BEGIN
-#error "Node-Tabelle ist ungueltigt. Wurden neue Hint-ID's zugefuegt ??"
+#   error "Node-Tabelle ist ungueltigt. Wurden neue Hint-ID's zugefuegt ??"
 #endif
 
 #endif

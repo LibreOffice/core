@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-29 11:54:46 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1326,17 +1326,6 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTxtNode& rNd,
 
     if (nBrightness != 0)
         rPropOpt.AddOpt( ESCHER_Prop_pictureBrightness, nBrightness * 327 );
-
-#if 0
-    //gamma not seen
-    if( SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState( RES_GRFATR_GAMMA,
-                                                        true, &pItem ) )
-    {
-        double fGamma = ((SwGammaGrf*)pItem)->GetValue();
-        rPropOpt.AddOpt( ESCHER_Prop_pictureGamma,
-            static_cast<sal_uInt32>(fGamma * 655) );
-    }
-#endif
 
     if (SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_CROPGRF,
         true, &pItem))

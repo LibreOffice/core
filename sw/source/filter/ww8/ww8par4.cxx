@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:19 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
 #include "filt_pch.hxx"
@@ -148,7 +151,7 @@
 #endif
 
 #ifndef _WW8SCAN_HXX
-#include "ww8scan.hxx"          // __WW_NEEDS_COPY
+#include "ww8scan.hxx"
 #endif
 #ifndef _WW8PAR_HXX
 #include "ww8par.hxx"
@@ -496,12 +499,12 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
             }
         }
 
-        if( GRAPHIC_GDIMETAFILE == rGraph.GetType() ||
-            GRAPHIC_BITMAP == rGraph.GetType() )
+        if (GRAPHIC_GDIMETAFILE == rGraph.GetType() ||
+            GRAPHIC_BITMAP == rGraph.GetType())
         {
             ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
 
-            if( bOleOk && !( nIniFlags & WW8FL_OLE_TO_GRAF ))
+            if (bOleOk)
             {
                 ULONG nOldPos = pDataStream->Tell();
                 pDataStream->Seek(STREAM_SEEK_TO_END);
@@ -715,10 +718,6 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
 
     ASSERT(nLen < 0 || (pSprmCIbstRMark || pSprmCDttmRMark),
         "The wheels have fallen off revision mark import");
-#if 0
-    if (!pSprmCIbstRMark || !pSprmCDttmRMark)
-        return;
-#endif
 
     if (nLen < 0)
         mpRedlineStack->close(*pPaM->GetPoint(), eType);

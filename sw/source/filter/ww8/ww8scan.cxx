@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-04 09:56:32 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2664,42 +2664,7 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(USHORT nId,
     return !rResult.empty();
 }
 
-#if 0
-ULONG WW8PLCFx_Fc_FKP::WW8Fkp::GetParaHeight() const
-{
-    if( ePLCF != PAP )
-    {
-        ASSERT( !this, "Fkp::GetParaHeight: Falscher Fkp" );
-        return 0;
-    }
-
-    if( nIdx >= nIMax )
-        return 0;
-
-    BYTE *pScratch = (BYTE*)pFCFkp;
-
-    WW8_PHE_Base* pPhe = (WW8_PHE_Base*)( (pScratch + (nIMax + 1) * 4)
-                                        + ( nIdx * nItemSize ) + 1 );
-
-    if( pPhe->aBits1 & 0x2 )                    // fUnk
-        return 0;                               // invalid
-
-    if( pPhe->aBits1 & 0x4 ) // fDiffLines
-        return SVBT16ToShort( pPhe->dyl );      // Gesamthoehe
-    else
-    {
-        // nlMac gleich hohe Zeilen
-        INT32 nH = (INT16)SVBT16ToShort( pPhe->dyl );   // Zeilenhoehe
-        if( nH < 0 )                            // negative Werte wollen wir
-            nH = 0;                             // nicht
-        nH *= (INT32)pPhe->nlMac;               // Hoehe einer Zeile * Zeilen
-        return (ULONG)nH;
-    }
-}
-#endif
-
 //-----------------------------------------
-
 void WW8PLCFx::GetSprms( WW8PLCFxDesc* p )
 {
     ASSERT( !this, "Falsches GetSprms gerufen" );
@@ -3011,18 +2976,6 @@ bool WW8PLCFx_Fc_FKP::HasSprm(USHORT nId, std::vector<const BYTE *> &rResult)
     }
     return !rResult.empty();
 }
-
-#if 0
-ULONG WW8PLCFx_Fc_FKP::GetParaHeight() const
-{
-    if( !pFkp )
-    {
-        ASSERT( !this, "GetParaHeight: pFkp nicht da" );
-        return 0;
-    }
-    return pFkp->GetParaHeight();
-}
-#endif
 
 //-----------------------------------------
 
@@ -5878,7 +5831,6 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
 
 WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
 {
-    // OS2, or WIN with Mac-Doc,...
     // Attention: MacWord-Documents have their Stylenames
     // always in ANSI, even if eStructCharSet == CHARSET_MAC !!
 
@@ -5968,7 +5920,6 @@ struct WW8_FFN_Ver8 : public WW8_FFN_BASE
 
 WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 {
-    // OS2, or WIN with Mac-Doc,...
     // Attention: MacWord-Documents have their Fontnames
     // always in ANSI, even if eStructCharSet == CHARSET_MAC !!
     if( rFib.lcbSttbfffn <= 2 )
