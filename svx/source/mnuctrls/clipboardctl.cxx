@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clipboardctl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-24 14:50:37 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,20 +99,23 @@
 
 #include <svxids.hrc>
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+
 /////////////////////////////////////////////////////////////////
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxClipBoardControl, SfxVoidItem /*SfxUInt16Item*/ );
 
 
 SvxClipBoardControl::SvxClipBoardControl(
-        USHORT nId, ToolBox& rTbx, SfxBindings& rBind ) :
+        USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
 
-    SfxToolBoxControl( nId, rTbx, rBind ),
+    SfxToolBoxControl( nSlotId, nId, rTbx ),
     pPopup      (0),
     nItemId     (nId),
-    aForwarder( SID_CLIPBOARD_FORMAT_ITEMS, *this ),
     pClipboardFmtItem( 0 )
 {
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ClipboardFormatItems" )));
     ToolBox& rBox = GetToolBox();
     rBox.SetItemBits( nId, TIB_DROPDOWN | rBox.GetItemBits( nId ) );
     rBox.Invalidate();
@@ -150,18 +153,28 @@ SfxPopupWindow* SvxClipBoardControl::CreatePopupWindow()
         USHORT nId = GetId();
         rBox.SetItemDown( nId, TRUE );
 
-        //Point aPt( rBox.OutputToScreenPixel( rBox.GetPointerPosPixel() ) );
-        Point aPt( rBox.OutputToScreenPixel(
-                        rBox.GetItemRect( nItemId ).BottomLeft() ) );
-        pPopup->Execute( &rBox, rBox.ScreenToOutputPixel( aPt ) );
+        pPopup->Execute( &rBox, rBox.GetItemRect( nId ),
+            (rBox.GetAlign() == WINDOWALIGN_TOP || rBox.GetAlign() == WINDOWALIGN_BOTTOM) ?
+                POPUPMENU_EXECUTE_DOWN : POPUPMENU_EXECUTE_RIGHT );
+
         rBox.SetItemDown( nId, FALSE );
 
         SfxUInt32Item aItem( SID_CLIPBOARD_FORMAT_ITEMS, pPopup->GetCurItemId() );
+
+        Any a;
+        Sequence< PropertyValue > aArgs( 1 );
+        aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectedFormat" ));
+        aItem.QueryValue( a );
+        aArgs[0].Value = a;
+        Dispatch( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ClipboardFormatItems" )),
+                  aArgs );
+/*
         const SfxPoolItem* pArgs[] =
         {
             &aItem, NULL
         };
         GetBindings().ExecuteSynchron( SID_CLIPBOARD_FORMAT_ITEMS, pArgs );
+*/
     }
 
     GetToolBox().EndSelection();
