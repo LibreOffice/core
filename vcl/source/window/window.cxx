@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-30 12:48:48 $
+ *  last change: $Author: ssa $ $Date: 2002-05-31 07:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,7 +848,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
 
 #ifndef REMOTE_APPSERVER
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
-        if( ( pEnv && *pEnv ) || Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
+        if( true || ( pEnv && *pEnv ) || Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
         {
             // instanciate access bridge service
             if(!pSVData->mxAccessBridge.is())
@@ -922,7 +922,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
     if ( mbFrame && !pSVData->maGDIData.mnAppFontX )
         ImplInitAppFontData( this );
 
-    if ( GetAccessibleParentWindow() )//&& GetParent() != Application::GetDefDialogParent() )
+    if ( GetAccessibleParentWindow()  && GetParent() != Application::GetDefDialogParent() )
         GetAccessibleParentWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_CHILDCREATED, this );
 }
 
@@ -5917,8 +5917,10 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
     if ( mpFrameData->mpFirstBackWin )
         ImplInvalidateAllOverlapBackgrounds();
 
-    if( !bNativeFrameRegistered && ImplIsAccessibleCandidate() )
-        ImplCallEventListeners( mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE, this );
+    // the SHOW/HIDE events also serve as indicators to send child creation/destroy events to the access bridge
+    // to avoid creation event to be send twice a NULL handle is passed if this (frame)window was already registered
+    ImplCallEventListeners( mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE,
+        ( bNativeFrameRegistered || !ImplIsAccessibleCandidate() ) ? NULL : this );
 }
 
 // -----------------------------------------------------------------------
@@ -7493,6 +7495,7 @@ Reference< XClipboard > Window::GetSelection()
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > Window::GetAccessible( BOOL bCreate )
 {
     if ( /*!GetParent() &&*/ ( GetType() == WINDOW_BORDERWINDOW ) && ( GetChildCount() == 1 ) )
+    //if( !ImplIsAccessibleCandidate() )
     {
         Window* pChild = GetAccessibleChildWindow( 0 );
         if ( pChild )
@@ -7567,6 +7570,7 @@ Window* Window::ImplGetAccessibleCandidateChild( USHORT nChild, USHORT& rChildCo
     return NULL;
 }
 
+/*
 Window* Window::GetAccessibleParentWindow() const
 {
     Window* pParent = GetParent();
@@ -7577,7 +7581,18 @@ Window* Window::GetAccessibleParentWindow() const
             pParent = pParent->GetParent();
     return pParent;
 }
+*/
 
+Window* Window::GetAccessibleParentWindow() const
+{
+    Window* pParent = GetParent();
+    if ( pParent && ( pParent->GetType() == WINDOW_BORDERWINDOW ) && ( pParent->GetChildCount() == 1 ) )
+    {
+        pParent = pParent->GetParent();
+    }
+    return pParent;
+}
+/*
 USHORT Window::GetAccessibleChildWindowCount()
 {
     USHORT nChildren = ImplGetAccessibleCandidateChildWindowCount( WINDOW_FIRSTCHILD );
@@ -7588,7 +7603,25 @@ USHORT Window::GetAccessibleChildWindowCount()
 
     return nChildren;
 }
+*/
 
+USHORT Window::GetAccessibleChildWindowCount()
+{
+    USHORT nChildren = GetChildCount();
+
+    // Search also for SystemWindows.
+    Window* pOverlap = GetWindow( WINDOW_OVERLAP );
+    pOverlap = pOverlap->GetWindow( WINDOW_FIRSTOVERLAP );
+    while ( pOverlap )
+    {
+        nChildren++;
+        pOverlap = pOverlap->GetWindow( WINDOW_NEXT );
+    }
+
+    return nChildren;
+}
+
+/*
 Window* Window::GetAccessibleChildWindow( USHORT n )
 {
     USHORT nChildCount; // will be set in ImplGetAccessibleCandidateChild(...)
@@ -7601,6 +7634,32 @@ Window* Window::GetAccessibleChildWindow( USHORT n )
 
     return pChild;
 }
+*/
+
+Window* Window::GetAccessibleChildWindow( USHORT n )
+{
+    Window* pChild = GetChild( n );
+    if ( !pChild && ( n >= GetChildCount() ) )
+    {
+        USHORT n2 = n - GetChildCount();
+        Window* pOverlap = GetWindow( WINDOW_OVERLAP );
+        pOverlap = pOverlap->GetWindow( WINDOW_FIRSTOVERLAP );
+        while ( !pChild && pOverlap )
+        {
+            if ( !n2 )
+                pChild = pOverlap;
+            pOverlap = n2 ? pOverlap->GetWindow( WINDOW_NEXT ) : NULL;
+            n2--;
+        }
+
+    }
+    if ( pChild && ( pChild->GetType() == WINDOW_BORDERWINDOW ) && ( pChild->GetChildCount() == 1 ) )
+    {
+        pChild = pChild->GetChild( 0 );
+    }
+    return pChild;
+}
+
 
 void Window::SetAccessibleRole( USHORT nRole )
 {
