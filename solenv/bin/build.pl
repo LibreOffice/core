@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.90 $
+#   $Revision: 1.91 $
 #
-#   last change: $Author: vg $ $Date: 2003-09-16 09:10:31 $
+#   last change: $Author: vg $ $Date: 2003-10-14 16:16:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.90 $ ';
+$id_str = ' $Revision: 1.91 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -150,7 +150,12 @@ $ignore = '';
 %force_deliver = ();
 $only_platform = ''; # the only platform to prepare
 $only_common = ''; # the only common output tree to delete when preparing
+%build_modes = ();
+
+### main ###
+
 &get_options;
+&get_build_modes;
 %deliver_env = ();
 if ($prepare) {
     %platforms = &get_platforms;
@@ -373,21 +378,14 @@ sub dmake_dir {
             push(@ignored_errors, &CorrectPath($StandDir . $PathHash{$folder_nick}));
             $error_code = 0;
         };
-        if ($error_code && ($error_code != -1)) {
-            if (!$child) {
-                if ($incompartible) {
-                    $broken_build{$error_code} = &CorrectPath($StandDir . $PathHash{$folder_nick});
-                } else {
-                    &print_error("Error $? occurred while making $BuildDir");
-                };
-            };
-        };
     };
     if ($child) {
         my $oldfh = select STDERR;
         $| = 1;
         _exit($? >> 8) if ($? && ($? != -1));
         _exit(0);
+    } elsif ($error_code && ($error_code != -1)) {
+        &print_error("Error $? occurred while making $BuildDir");
     };
 };
 
@@ -410,7 +408,7 @@ sub GetParentsString {
         s/\r\n//;
         if ($_ =~ /\:+\s+/) {
             close BUILD_LST;
-            return $';
+            return &pick_for_build_type($');
         };
     };
     close BUILD_LST;
@@ -762,13 +760,14 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:   build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform]] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [-- dmake_options] \n";
+    print STDERR "Syntax:   build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform]] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [-- dmake_options] \n";
     print STDERR "Example:  build --from sfx2\n";
     print STDERR "              - build projects including current one from sfx2\n";
     print STDERR "Example:  build --all:sfx2\n";
     print STDERR "              - the same as --all, but skip all projects that have been already built when using \"--all\" switch before sfx2\n";
     print STDERR "Keys:     --all       - build all projects from very beginning till current one\n";
     print STDERR "      --from      - build all projects dependent from the specified (including it) till current one\n";
+    print STDERR "      --mode OOo      - build only projects needed for OpenOffice.org\n";
     print STDERR "      --prepare- clear all projects for incompartible build from prj_name till current one [for platform] (cws version)\n";
     print STDERR "      --with_branches- build all projects in neighbour branches and current branch starting from actual project\n";
     print STDERR "      --since     - build all projects beginning from the specified till current one (the same as \"--all:prj_name\", but skipping prj_name)\n";
@@ -831,6 +830,8 @@ sub get_options {
         $arg =~ /^-i$/      and $ignore = 1                         and next;
         $arg =~ /^--version$/   and exit(0);
         $arg =~ /^-V$/          and exit(0);
+        $arg =~ /^-m$/          and &get_modes      and next;
+        $arg =~ /^--mode$/      and &get_modes      and next;
         if ($arg =~ /^--$/) {
             &get_dmake_args;
             next;
@@ -944,7 +945,6 @@ sub clear_from_child {
 sub register_signal_handler {
     $sigaction = POSIX::SigAction->new('main::handle_dead_child');
     sigaction(SIGCHLD, $sigaction);
-    $handler_set = 1;
 };
 
 #
@@ -956,7 +956,6 @@ sub BuildDependent {
     my $child_nick = '';
     while ($child_nick = &PickPrjToBuild($dependencies_hash)) {
         if (($QuantityToBuild) ) { # multyprocessing not for $BuildAllParents (-all etc)!!
-            &register_signal_handler if (!$handler_set);
             do {
                 # start current child & all
                 # that could be started now
@@ -1007,6 +1006,7 @@ sub build_multiprocessing {
     my $Prj;
     my @build_queue = ();       # array, containing queue of projects
                                 # to build
+    &register_signal_handler;
     do {
         while ($Prj = &PickPrjToBuild(\%ParentDepsHash)) {
             my $module_type = &module_classify($Prj);
@@ -1475,6 +1475,22 @@ sub prepare_build_from_opt {
     };
 };
 
+sub get_modes {
+    my $option = '';
+    while ($option = shift @ARGV) {
+        if ($option =~ /^-+/) {
+            unshift(@ARGV, $option);
+            return;
+        } else {
+            if ($option =~ /,/) {
+                $build_modes{$`}++;
+                unshift(@ARGV, $') if ($');
+            } else {$build_modes{$option}++;};
+        };
+    };
+    $build_modes{$option}++;
+};
+
 sub get_incomp_projects {
     my $option = '';
     while ($option = shift @ARGV) {
@@ -1669,3 +1685,37 @@ sub get_deliver_commando {
     return $deliver_commando . ' -force';
 };
 
+#
+# Store all available build modi in %build_modes
+#
+sub get_build_modes {
+    return if (scalar keys %build_modes);
+    if (defined $ENV{BUILD_TYPE}) {
+        if ($ENV{BUILD_TYPE} =~ /_/o) {
+            my @build_modes = split (/_/, $ENV{BUILD_TYPE});
+            $build_modes{$_}++ foreach (@build_modes)
+        } else {
+            $build_modes{$ENV{BUILD_TYPE}}++;
+        };
+        return;
+    };
+    $build_modes{'OOo'}++;
+};
+
+#
+# pick only the modules, that should be built for
+# build types from %build_modes
+#
+sub pick_for_build_type {
+    my $modules = shift;
+    my @mod_array = split(/\s+/, $modules);
+    my $new_modules = '';
+    foreach (@mod_array) {
+        if (/(\w+):(\S+)/o) {
+            $new_modules .= $2 . ' ' if (defined $build_modes{$1});
+            next;
+        };
+        $new_modules .= $_ . ' '
+    };
+    return $new_modules;
+};
