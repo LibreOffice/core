@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-07 13:29:07 $
+ *  last change: $Author: mt $ $Date: 2001-12-11 13:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat, EditSelectio
         else
             DBG_ERROR( "Write: Unbekanntes Format" );
 
-#ifdef EDITDEBUG
+#if defined (EDITDEBUG) && !defined(MAC) && !defined( UNX )
         if ( eFormat == EE_FORMAT_RTF )
         {
             SvFileStream aStream( String( RTL_CONSTASCII_USTRINGPARAM ( "d:\\rtf_out.log" ) ), STREAM_WRITE|STREAM_TRUNC );
@@ -462,11 +462,11 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             {
                 bAlreadyExist = *aFontTable.Get( nTest ) == *pFontItem;
             }
+
             if ( !bAlreadyExist )
-            {
                 aFontTable.Insert( aFontTable.Count(), new SvxFontItem( *pFontItem ) );
-                pFontItem = (SvxFontItem*)aEditDoc.GetItemPool().GetItem( nWhich, ++i );
-            }
+
+            pFontItem = (SvxFontItem*)aEditDoc.GetItemPool().GetItem( nWhich, ++i );
         }
     }
 
