@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_app.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2003-07-16 10:42:21 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include "osl/process.h"
 #include "osl/file.hxx"
 #include "osl/thread.h"
+#include "rtl/ustrbuf.hxx"
 #include "cppuhelper/shlib.hxx"
 #include "cppuhelper/bootstrap.hxx"
 #include "com/sun/star/lang/XInitialization.hpp"
@@ -88,12 +89,101 @@ using namespace ::com::sun::star::uno;
 namespace climaker
 {
 
+//------------------------------------------------------------------------------
+static char const s_usingText [] =
+"\n"
+"using: climaker <switches> [registry-file-1 registry-file-2 ...]\n"
+"\n"
+"switches:\n"
+" -O, --out <output-file>       output assembly file;\n"
+"                               defaults to cli_unotypes.dll if more than one\n"
+"                               registry-file is given, else <registry-file>.dll\n"
+" -T, --types                   types to be generated (if none is given,\n"
+"   <type1[;type2;...]>         then all types of given registries are emitted\n"
+" -X, --extra <rdb-file>        additional rdb to saturate referenced types in\n"
+"                               given registry file(s); these types will not be\n"
+"                               emitted into the output assembly file\n"
+" -r, --reference               reference metadata from assembly file\n"
+"   <assembly-file>\n"
+" --assembly-version <version>  sets assembly version\n"
+" --assembly-description <text> sets assembly description text\n"
+" --assembly-product <text>     sets assembly product name\n"
+" --assembly-company <text>     sets assembly company\n"
+" --assembly-copyright <text>   sets assembly copyright\n"
+" --assembly-trademark <text>   sets assembly trademark\n"
+" -v, --verbose                 verbose output to stdout\n"
+" -h, --help                    this message\n"
+"\n"
+"example: climaker --out cli_mytypes.dll \\\n"
+"                  --reference cli_types.dll \\\n"
+"                  --extra types.rdb \\\n"
+"                  mytypes.rdb\n"
+"\n";
+
+struct OptionInfo
+{
+    char const * m_name;
+    sal_uInt32 m_name_length;
+    sal_Unicode m_short_option;
+    bool m_has_argument;
+};
+
 bool g_verbose = false;
 
 //------------------------------------------------------------------------------
-static bool read_option(
-    sal_Unicode copt, OUString const & opt, sal_uInt32 * pIndex )
+static const OptionInfo s_option_infos [] = {
+    { RTL_CONSTASCII_STRINGPARAM("out"), 'O', true },
+    { RTL_CONSTASCII_STRINGPARAM("types"), 'T', true },
+    { RTL_CONSTASCII_STRINGPARAM("extra"), 'X', true },
+    { RTL_CONSTASCII_STRINGPARAM("reference"), 'r', true },
+    { RTL_CONSTASCII_STRINGPARAM("assembly-version"), '\0', true },
+    { RTL_CONSTASCII_STRINGPARAM("assembly-description"), '\0', true },
+    { RTL_CONSTASCII_STRINGPARAM("assembly-product"), '\0', true },
+    { RTL_CONSTASCII_STRINGPARAM("assembly-company"), '\0', true },
+    { RTL_CONSTASCII_STRINGPARAM("assembly-copyright"), '\0', true },
+    { RTL_CONSTASCII_STRINGPARAM("assembly-trademark"), '\0', true },
+    { RTL_CONSTASCII_STRINGPARAM("verbose"), 'v', false },
+    { RTL_CONSTASCII_STRINGPARAM("help"), 'h', false }
+};
+
+//==============================================================================
+static OptionInfo const * get_option_info(
+    OUString const & opt, sal_Unicode copt = '\0' )
 {
+    for ( sal_Int32 pos = 0;
+          pos < (sizeof (s_option_infos) / sizeof (OptionInfo));
+          ++pos )
+    {
+        OptionInfo const & option_info = s_option_infos[ pos ];
+
+        if (opt.getLength() > 0)
+        {
+            if (opt.equalsAsciiL(
+                    option_info.m_name, option_info.m_name_length ) &&
+                (copt == '\0' || copt == option_info.m_short_option))
+            {
+                return &option_info;
+            }
+        }
+        else
+        {
+            OSL_ASSERT( copt != '\0' );
+            if (copt == option_info.m_short_option)
+            {
+                return &option_info;
+            }
+        }
+    }
+    OSL_ENSURE(
+        0, OUStringToOString( opt, osl_getThreadTextEncoding() ).getStr() );
+    return 0;
+}
+
+//==============================================================================
+static bool is_option(
+    OptionInfo const * option_info, sal_uInt32 * pIndex )
+{
+    OSL_ASSERT( option_info != 0 );
     if (osl_getCommandArgCount() <= *pIndex)
         return false;
 
@@ -101,37 +191,45 @@ static bool read_option(
     osl_getCommandArg( *pIndex, &arg.pData );
     sal_Int32 len = arg.getLength();
 
-    if (len < 2 || '-' != arg[ 0 ])
+    if (len < 2 || arg[ 0 ] != '-')
         return false;
 
-    if (2 == len && copt == arg[ 1 ])
+    if (len == 2 && arg[ 1 ] == option_info->m_short_option)
     {
         ++(*pIndex);
 #if OSL_DEBUG_LEVEL > 1
-        OSL_TRACE( __FILE__": identified option \'%c\'\n", copt );
+        OSL_TRACE(
+            __FILE__": identified option \'%c\'", option_info->m_short_option );
 #endif
         return true;
     }
-    if ('-' == arg[ 1 ] &&
-        0 == rtl_ustr_compare( arg.pData->buffer + 2, opt.pData->buffer ))
+    if (arg[ 1 ] == '-' && rtl_ustr_ascii_compare(
+            arg.pData->buffer + 2, option_info->m_name ) == 0)
     {
         ++(*pIndex);
 #if OSL_DEBUG_LEVEL > 1
-        OString cstr_opt(
-            OUStringToOString( opt, osl_getThreadTextEncoding() ) );
-        OSL_TRACE( __FILE__": identified option \'%s\'\n", cstr_opt.getStr() );
+        OSL_TRACE( __FILE__": identified option \'%s\'", option_info->m_name );
 #endif
         return true;
     }
     return false;
 }
 
-//------------------------------------------------------------------------------
-static bool read_argument(
-    OUString * pValue, sal_Unicode copt, OUString const & opt,
-    sal_uInt32 * pIndex )
+//==============================================================================
+static inline bool read_option(
+    bool * flag, OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
-    if (read_option( copt, opt, pIndex ))
+    bool ret = is_option( option_info, pIndex );
+    if (ret)
+        *flag = true;
+    return ret;
+}
+
+//==============================================================================
+static bool read_argument(
+    OUString * pValue, OptionInfo const * option_info, sal_uInt32 * pIndex )
+{
+    if (is_option( option_info, pIndex ))
     {
         if (*pIndex < osl_getCommandArgCount())
         {
@@ -149,7 +247,7 @@ static bool read_argument(
     return false;
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 static OUString const & path_get_working_dir()
 {
     static OUString s_workingDir;
@@ -158,7 +256,7 @@ static OUString const & path_get_working_dir()
     return s_workingDir;
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 static OUString path_make_absolute_file_url( OUString const & path )
 {
     OUString file_url;
@@ -188,7 +286,7 @@ static OUString path_make_absolute_file_url( OUString const & path )
     }
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 Reference< registry::XSimpleRegistry > open_registries(
     vector< OUString > const & registries,
     Reference< XComponentContext > xContext )
@@ -238,34 +336,6 @@ Reference< registry::XSimpleRegistry > open_registries(
     return xSimReg;
 }
 
-//------------------------------------------------------------------------------
-static char const s_usingText [] =
-"\n"
-"using: climaker <switches> [registry-file-1 registry-file-2 ...]\n"
-"\n"
-"switches:\n"
-" -O, --out <output-file>     output assembly file;\n"
-"                             defaults to cli_unotypes.dll if more than one\n"
-"                             registry-file is given, else <registry-file>.dll\n"
-" -T, --types                 types to be generated (if none is given,\n"
-"   <type1[;type2;...]>       then all types of given registries are emitted\n"
-" -X, --extra <rdb-file>      additional rdb to saturate referenced types in\n"
-"                             given registry file(s); these types will not be\n"
-"                             emitted into the output assembly file\n"
-" -r, --reference             reference metadata from assembly file\n"
-"   <assembly-file>\n"
-" --version <version>         sets assembly version\n"
-" --product <name>            sets assembly product name\n"
-" --description <text>        sets assembly description text\n"
-" -v, --verbose               verbose output to stdout\n"
-" -h, --help                  this message\n"
-"\n"
-"example: climaker --out cli_mytypes.dll \\\n"
-"                  --reference cli_types.dll \\\n"
-"                  --extra types.rdb \\\n"
-"                  mytypes.rdb\n"
-"\n";
-
 }
 
 using namespace ::climaker;
@@ -285,37 +355,48 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
 
     try
     {
-        OUString str_help = OUSTR("help");
-        OUString str_verbose = OUSTR("verbose");
-        OUString str_out = OUSTR("out");
-        OUString str_reference = OUSTR("reference");
-        OUString str_types = OUSTR("types");
-        OUString str_extra = OUSTR("extra");
-        OUString str_version = OUSTR("version");
-        OUString str_product = OUSTR("product");
-        OUString str_description = OUSTR("description");
+        OptionInfo const * info_help =
+            get_option_info( OUSTR("help") );
+        OptionInfo const * info_verbose =
+            get_option_info( OUSTR("verbose") );
+        OptionInfo const * info_out =
+            get_option_info( OUSTR("out") );
+        OptionInfo const * info_types =
+            get_option_info( OUSTR("types") );
+        OptionInfo const * info_reference =
+            get_option_info( OUSTR("reference") );
+        OptionInfo const * info_extra =
+            get_option_info( OUSTR("extra") );
+        OptionInfo const * info_version =
+            get_option_info( OUSTR("assembly-version") );
+        OptionInfo const * info_product =
+            get_option_info( OUSTR("assembly-product") );
+        OptionInfo const * info_description =
+            get_option_info( OUSTR("assembly-description") );
+        OptionInfo const * info_company =
+            get_option_info( OUSTR("assembly-company") );
+        OptionInfo const * info_copyright =
+            get_option_info( OUSTR("assembly-copyright") );
+        OptionInfo const * info_trademark =
+            get_option_info( OUSTR("assembly-trademark") );
 
         OUString output;
         vector< OUString > mandatory_registries;
         vector< OUString > extra_registries;
         vector< OUString > extra_assemblies;
         vector< OUString > explicit_types;
-        OUString version, product, description;
+        OUString version, product, description, company, copyright, trademark;
 
         OUString cmd_arg;
         for ( sal_uInt32 nPos = 0; nPos < nCount; )
         {
             // options
-            if (read_option( 'h', str_help, &nPos ))
+            if (is_option( info_help, &nPos ))
             {
                 printf( s_usingText );
                 return 0;
             }
-            else if (read_option( 'v', str_verbose, &nPos ))
-            {
-                g_verbose = true;
-            }
-            else if (read_argument( &cmd_arg, 'T', str_types, &nPos ))
+            else if (read_argument( &cmd_arg, info_types, &nPos ))
             {
                 sal_Int32 index = 0;
                 do
@@ -325,37 +406,73 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
                 }
                 while (index >= 0);
             }
-            else if (read_argument( &cmd_arg, 'X', str_extra, &nPos ))
+            else if (read_argument( &cmd_arg, info_extra, &nPos ))
             {
                 extra_registries.push_back(
                     path_make_absolute_file_url( cmd_arg ) );
             }
-            else if (read_argument( &cmd_arg, 'r', str_reference, &nPos ))
+            else if (read_argument( &cmd_arg, info_reference, &nPos ))
             {
                 extra_assemblies.push_back(
                     path_make_absolute_file_url( cmd_arg ) );
             }
-            else if (!read_argument( &version, '\0', str_version, &nPos ) &&
-                     !read_argument( &product, '\0', str_product, &nPos ) &&
-                     !read_argument(
-                         &description, '\0', str_description, &nPos ) &&
-                     !read_argument( &output, 'O', str_out, &nPos ))
+            else if (!read_option( &g_verbose, info_verbose, &nPos ) &&
+                     !read_argument( &output, info_out, &nPos ) &&
+                     !read_argument( &version, info_version, &nPos ) &&
+                     !read_argument( &description, info_description, &nPos ) &&
+                     !read_argument( &product, info_product, &nPos ) &&
+                     !read_argument( &company, info_company, &nPos ) &&
+                     !read_argument( &copyright, info_copyright, &nPos ) &&
+                     !read_argument( &trademark, info_trademark, &nPos ))
             {
-                OSL_VERIFY(
-                    osl_Process_E_None == osl_getCommandArg(
-                        nPos, &cmd_arg.pData ) );
+                oslProcessError rc = osl_getCommandArg( nPos, &cmd_arg.pData );
+                OSL_ASSERT( rc == osl_Process_E_None );
                 ++nPos;
                 cmd_arg = cmd_arg.trim();
-                if (cmd_arg.getLength() && '-' != cmd_arg[ 0 ]) // no option
+                if (cmd_arg.getLength() > 0)
                 {
-                    mandatory_registries.push_back(
-                        path_make_absolute_file_url( cmd_arg ) );
-                }
-                else
-                {
-                    throw RuntimeException(
-                        OUSTR("unknown option ") + cmd_arg,
-                        Reference< XInterface >() );
+                    if (cmd_arg[ 0 ] == '-') // is option
+                    {
+                        OptionInfo const * option_info = 0;
+                        if (cmd_arg.getLength() > 2 &&
+                            cmd_arg[ 1 ] == '-')
+                        {
+                            // long option
+                            option_info = get_option_info(
+                                cmd_arg.copy( 2 ), '\0' );
+                        }
+                        else if (cmd_arg.getLength() == 2 &&
+                                 cmd_arg[ 1 ] != '-')
+                        {
+                            // short option
+                            option_info = get_option_info(
+                                OUString(), cmd_arg[ 1 ] );
+                        }
+                        if (option_info == 0)
+                        {
+                            OUStringBuffer buf;
+                            buf.appendAscii(
+                                RTL_CONSTASCII_STRINGPARAM("unknown option ") );
+                            buf.append( cmd_arg );
+                            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
+                                                 "!  Use climaker --help "
+                                                 "to print all options.") );
+                            throw RuntimeException(
+                                buf.makeStringAndClear(),
+                                Reference< XInterface >() );
+                        }
+                        else
+                        {
+                            OSL_ENSURE( 0, "unhandled valid option?!" );
+                            if (option_info->m_has_argument)
+                                ++nPos;
+                        }
+                    }
+                    else
+                    {
+                        mandatory_registries.push_back(
+                            path_make_absolute_file_url( cmd_arg ) );
+                    }
                 }
             }
         }
@@ -446,7 +563,7 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
         AssemblyName * assembly_name = new AssemblyName();
         assembly_name->set_CodeBase( output_dir );
         assembly_name->set_Name( name );
-        if (0 != version.getLength())
+        if (version.getLength() != 0)
         {
             assembly_name->set_Version(
                 new ::System::Version( ustring_to_String( version ) ) );
@@ -459,7 +576,7 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
         Emit::AssemblyBuilder * assembly_builder =
             current_appdomain->DefineDynamicAssembly(
                 assembly_name, Emit::AssemblyBuilderAccess::Save, output_dir );
-        if (0 != product.getLength())
+        if (product.getLength() != 0)
         {
             ::System::Type * params __gc [] = new ::System::Type * __gc [ 1 ];
             ::System::Object * args __gc [] = new ::System::Object * __gc [ 1 ];
@@ -467,10 +584,10 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
             args[ 0 ] = ustring_to_String( product );
             assembly_builder->SetCustomAttribute(
                 new Emit::CustomAttributeBuilder(
-                    __typeof (AssemblyProductAttribute) ->GetConstructor(
+                    __typeof (AssemblyProductAttribute)->GetConstructor(
                         params ), args ) );
         }
-        if (0 != description.getLength())
+        if (description.getLength() != 0)
         {
             ::System::Type * params __gc [] = new ::System::Type * __gc [ 1 ];
             ::System::Object * args __gc [] = new ::System::Object * __gc [ 1 ];
@@ -478,8 +595,41 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
             args[ 0 ] = ustring_to_String( description );
             assembly_builder->SetCustomAttribute(
                 new Emit::CustomAttributeBuilder(
-                    __typeof (AssemblyDescriptionAttribute)
-                      ->GetConstructor( params ), args ) );
+                    __typeof (AssemblyDescriptionAttribute)->GetConstructor(
+                        params ), args ) );
+        }
+        if (company.getLength() != 0)
+        {
+            ::System::Type * params __gc [] = new ::System::Type * __gc [ 1 ];
+            ::System::Object * args __gc [] = new ::System::Object * __gc [ 1 ];
+            params[ 0 ] = __typeof (::System::String);
+            args[ 0 ] = ustring_to_String( company );
+            assembly_builder->SetCustomAttribute(
+                new Emit::CustomAttributeBuilder(
+                    __typeof (AssemblyCompanyAttribute)->GetConstructor(
+                        params ), args ) );
+        }
+        if (copyright.getLength() != 0)
+        {
+            ::System::Type * params __gc [] = new ::System::Type * __gc [ 1 ];
+            ::System::Object * args __gc [] = new ::System::Object * __gc [ 1 ];
+            params[ 0 ] = __typeof (::System::String);
+            args[ 0 ] = ustring_to_String( copyright );
+            assembly_builder->SetCustomAttribute(
+                new Emit::CustomAttributeBuilder(
+                    __typeof (AssemblyCopyrightAttribute)->GetConstructor(
+                        params ), args ) );
+        }
+        if (trademark.getLength() != 0)
+        {
+            ::System::Type * params __gc [] = new ::System::Type * __gc [ 1 ];
+            ::System::Object * args __gc [] = new ::System::Object * __gc [ 1 ];
+            params[ 0 ] = __typeof (::System::String);
+            args[ 0 ] = ustring_to_String( trademark );
+            assembly_builder->SetCustomAttribute(
+                new Emit::CustomAttributeBuilder(
+                    __typeof (AssemblyTrademarkAttribute)->GetConstructor(
+                        params ), args ) );
         }
 
         // load extra assemblies
