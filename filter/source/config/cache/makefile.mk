@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-04-29 13:43:17 $
+#   last change: $Author: rt $ $Date: 2005-02-02 13:46:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,8 @@ SHL1STDLIBS=    \
                 $(CPPULIB)          \
                 $(SALLIB)           \
                 $(TOOLSLIB)         \
-                $(UNOTOOLSLIB)
+                $(UNOTOOLSLIB)      \
+                $(FWELIB)
 
 DEF1NAME=       $(SHL1TARGET)
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
