@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_gc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:30:09 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 16:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,16 @@
 namespace pyuno
 {
 
+bool g_destructorsOfStaticObjectsHaveBeenCalled;
+class StaticDestructorGuard
+{
+public:
+    ~StaticDestructorGuard()
+    {
+        g_destructorsOfStaticObjectsHaveBeenCalled = true;
+    }
+};
+StaticDestructorGuard guard;
 
 class GCThread : public ::osl::Thread
 {
@@ -84,6 +94,9 @@ GCThread::GCThread( PyInterpreterState *interpreter, PyObject * object ) :
 
 void GCThread::run()
 {
+    //  otherwise we crash here, when main has been left already
+    if( g_destructorsOfStaticObjectsHaveBeenCalled )
+        return;
     try
     {
         PyThreadAttach guard( (PyInterpreterState*)mPyInterpreter );
@@ -117,6 +130,10 @@ void GCThread::onTerminated()
 
 void decreaseRefCount( PyInterpreterState *interpreter, PyObject *object )
 {
+    //  otherwise we crash in the last after main ...
+    if( g_destructorsOfStaticObjectsHaveBeenCalled )
+        return;
+
     // delegate to a new thread, because there does not seem
     // to be a method, which tells, whether the global
     // interpreter lock is held or not
