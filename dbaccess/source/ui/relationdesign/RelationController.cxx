@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-06 14:30:45 $
+ *  last change: $Author: oj $ $Date: 2001-03-12 14:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,10 +329,13 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
         }
         if(!m_xConnection.is()) // so what should otherwise
         {
-            String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
-            ODataView* pWindow = getView();
-            InfoBox(pWindow, aMessage).Execute();
+            {
+                String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
+                ODataView* pWindow = getView();
+                InfoBox(pWindow, aMessage).Execute();
+            }
             dispose(); // we are helpless without a connection
+            throw Exception(::rtl::OUString::createFromAscii("The data source does not support relations."), static_cast< XController* >(this));
         }
         // check if this database supports relations
         if(!m_xConnection->getMetaData()->supportsIntegrityEnhancementFacility())
