@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-16 15:15:07 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 19:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ String RID_SVXSTR_UNDO_GRAFRED
     Text[ russian ] = "Êîëè÷åñòâî êğàñíîãî";
     Text[ italian ] = "Percentuale di rosso";
     Text[ danish ] = "Rød-andel";
-    Text[ polish ] = "Zawarto?æ czerw.";
+    Text[ polish ] = "Zawartoœæ czerw.";
     Text[ portuguese_brazilian ] = "Red portion";
     Text[ japanese ] = "ÔF‚ÌŠ„‡";
     Text[ korean ] = "Àû»ö";
@@ -237,7 +237,7 @@ String RID_SVXSTR_UNDO_GRAFGREEN
     Text[ russian ] = "Êîëè÷åñòâî çåëåíîãî";
     Text[ italian ] = "Percentuale di verde";
     Text[ danish ] = "Grøn-andel";
-    Text[ polish ] = "Zawarto?æ zielonego";
+    Text[ polish ] = "Zawartoœæ zielonego";
     Text[ portuguese_brazilian ] = "Green portion";
     Text[ japanese ] = "—ÎF‚ÌŠ„‡";
     Text[ korean ] = "³ì»ö";
@@ -262,7 +262,7 @@ String RID_SVXSTR_UNDO_GRAFBLUE
     Text[ russian ] = "Êîëè÷åñòâî ñèíåãî";
     Text[ italian ] = "Percentuale di blu";
     Text[ danish ] = "Blå-andel";
-    Text[ polish ] = "Zawarto?æ niebiesk.";
+    Text[ polish ] = "Zawartoœæ niebiesk.";
     Text[ portuguese_brazilian ] = "Blue portion";
     Text[ japanese ] = "ÂF‚ÌŠ„‡";
     Text[ korean ] = "Ã»»ö";
@@ -287,7 +287,7 @@ String RID_SVXSTR_UNDO_GRAFLUMINANCE
     Text[ russian ] = "ßğêîñòü";
     Text[ italian ] = "Luminosità";
     Text[ danish ] = "Lysstyrke";
-    Text[ polish ] = "Jasno?æ";
+    Text[ polish ] = "Jasnoœæ";
     Text[ portuguese_brazilian ] = "Luminance";
     Text[ japanese ] = "–¾“x";
     Text[ korean ] = "¹à±â";
@@ -311,7 +311,7 @@ String RID_SVXSTR_UNDO_GRAFCONTRAST
     Text[ swedish ] = "Kontrast";
     Text[ russian ] = "Êîíòğàñò";
     Text[ italian ] = "Contrasto";
-    Text[ danish ] = "Kontrast";
+    Text[ danish ] = "- Kontrast";
     Text[ polish ] = "Kontrast";
     Text[ portuguese_brazilian ] = "Contrast";
     Text[ japanese ] = "ºİÄ×½Ä";
@@ -319,7 +319,7 @@ String RID_SVXSTR_UNDO_GRAFCONTRAST
     Text[ chinese_simplified ] = "¶Ô±È¶È";
     Text[ chinese_traditional ] = "¹ï¤ñ«×";
     Text[ arabic ] = "ÇáÊÈÇíä";
-    Text[ turkish ] = "Kontrast";
+    Text[ turkish ] = "Kontrastı azalt";
     Text[ catalan ] = "Contraste";
     Text[ finnish ] = "Kontrasti";
 };
@@ -362,7 +362,7 @@ String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
     Text[ russian ] = "Ïğîçğà÷íîñòü";
     Text[ italian ] = "Trasparenza";
     Text[ danish ] = "Transparens";
-    Text[ polish ] = "Przezroczysto?æ";
+    Text[ polish ] = "Przezroczystoœæ";
     Text[ portuguese_brazilian ] = "Transparency";
     Text[ japanese ] = "“§‰ß«";
     Text[ korean ] = "Åõ¸í";
