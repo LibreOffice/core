@@ -111,7 +111,7 @@ case $sd_platform in
     export LD_LIBRARYN32_PATH
     ;;
 
-  darwin*)
+  Darwin*)
     DYLD_LIBRARY_PATH="$sd_progsub":"$sd_prog":$DYLD_LIBRARY_PATH
     export DYLD_LIBRARY_PATH
     ;;
