@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:39:29 $
+ *  last change: $Author: kz $ $Date: 2004-12-08 17:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,6 +448,8 @@ public:
     BOOL HasMarkedLabel() const;
     // <- #i27615#
 
+    BYTE GetLevel() const;
+    void SetLevel(BYTE nLevel);
     BYTE GetOutlineLevel() const;
     void SetOutlineLevel(BYTE nLevel);
 
