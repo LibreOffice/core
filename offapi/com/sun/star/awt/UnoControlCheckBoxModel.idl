@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlCheckBoxModel.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:00:38 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 
 #ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
+#endif
+
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
 #endif
 
 #ifndef __com_sun_star_awt_FontDescriptor_idl__
@@ -154,13 +158,13 @@ service UnoControlCheckBoxModel
 
     /** specifies the text color (RGB) of the control.
      */
-    [property] long TextColor;
+    [property] com::sun::star::util::Color TextColor;
 
     //-------------------------------------------------------------------------
 
     /** specifies the text line color (RGB) of the control.
      */
-    [property] long TextLineColor;
+    [property] com::sun::star::util::Color TextLineColor;
 
     //-------------------------------------------------------------------------
 
