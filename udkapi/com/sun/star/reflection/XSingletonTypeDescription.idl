@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSingletonTypeDescription.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:56:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 
     @since #107627#
   */
-interface XSingletonTypeDescription : com::sun::star::reflection::XTypeDescription
+published interface XSingletonTypeDescription : com::sun::star::reflection::XTypeDescription
 {
     /** Returns the service associated with the singleton.
 
