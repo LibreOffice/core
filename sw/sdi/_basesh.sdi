@@ -2,7 +2,7 @@
 
     $Workfile:   _BASESH.SDI  $
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_basesh.sdi,v 1.5 2001-04-18 09:08:43 os Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_basesh.sdi,v 1.6 2001-04-18 10:22:57 os Exp $
 
     Beschreibung:   interface Base - gemeinsame Basisfunktionalitaet
                     fuer SW und SW/WEB
@@ -45,10 +45,10 @@ interface BaseTextSelection : Selection
         StateMethod = StateUndo ;
     ]
 
-//    SID_GETUNDOSTRINGS  // status(final|play)
-//    [
-//        StateMethod = StateUndo ;
-//    ]
+    SID_GETUNDOSTRINGS  // status(final|play)
+    [
+        StateMethod = StateUndo ;
+    ]
 
     SID_REDO // status(final|play)
     [
@@ -56,10 +56,10 @@ interface BaseTextSelection : Selection
         StateMethod = StateUndo ;
     ]
 
-//    SID_GETREDOSTRINGS  // status(final|play)
-//    [
-//        StateMethod = StateUndo ;
-//    ]
+    SID_GETREDOSTRINGS  // status(final|play)
+    [
+        StateMethod = StateUndo ;
+    ]
 
     SID_REPEAT // status()
     [
@@ -90,12 +90,12 @@ interface BaseTextSelection : Selection
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-//    SID_CLIPBOARD_FORMAT_ITEMS  // status(final|play)
-//    [
-//        StateMethod = StateClpbrd ;
-//        ExecMethod = ExecClpbrd ;
-//        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-//    ]
+    SID_CLIPBOARD_FORMAT_ITEMS  // status(final|play)
+    [
+        StateMethod = StateClpbrd ;
+        ExecMethod = ExecClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
 
     FN_PASTESPECIAL  // status(final|play)
     [
