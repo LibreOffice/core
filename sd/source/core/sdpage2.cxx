@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-19 08:53:08 $
+ *  last change: $Author: cl $ $Date: 2002-10-31 13:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,9 @@
  *
  ************************************************************************/
 
-#ifndef SVX_LIGHT
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
-#endif // !SVX_LIGHT
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -85,13 +83,17 @@
 #endif
 #include <svtools/urihelper.hxx>
 
-#ifndef SVX_LIGHT
 #ifndef _SVX_XMLCNITM_HXX
 #include <svx/xmlcnitm.hxx>
 #endif
+
+#ifndef _SVDITER_HXX
+#include <svx/svditer.hxx>
 #endif
 
-#pragma hdrstop
+#ifndef _LIST_HXX
+#include <tools/list.hxx>
+#endif
 
 #include "sdresid.hxx"
 #include "sdpage.hxx"
@@ -102,8 +104,8 @@
 #include "sdiocmpt.hxx"
 #include "pglink.hxx"
 #include "strmname.h"
+#include "anminfo.hxx"
 
-#ifndef SVX_LIGHT
 #ifdef MAC
 #include "::ui:inc:strings.hrc"
 #include "::ui:inc:docshell.hxx"
@@ -117,7 +119,6 @@
 #include "..\ui\inc\docshell.hxx"
 #endif
 #endif
-#endif // !SVX_LIGHT
 
 // #90477#
 #ifndef _TOOLS_TENCCVT_HXX
@@ -359,7 +360,6 @@ void SdPage::EndListenOutlineText()
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdPage::WriteData(SvStream& rOut) const
 {
     FmFormPage::WriteData( rOut );
@@ -466,7 +466,6 @@ void SdPage::WriteData(SvStream& rOut) const
     UINT16 nPresChangeTemp = (UINT16) ePresChange; // ab 370 (IO-Version 7)
     rOut << nPresChangeTemp;
 }
-#endif // !SVX_LIGHT
 
 /*************************************************************************
 |*
@@ -631,16 +630,12 @@ void SdPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
 
 void SdPage::SetModel(SdrModel* pNewModel)
 {
-#ifndef SVX_LIGHT
     DisconnectLink();
-#endif
 
     // Model umsetzen
     FmFormPage::SetModel(pNewModel);
 
-#ifndef SVX_LIGHT
     ConnectLink();
-#endif
 }
 
 
@@ -675,7 +670,6 @@ FASTBOOL SdPage::IsReadOnly() const
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdPage::ConnectLink()
 {
     SvxLinkManager* pLinkManager = pModel!=NULL ? pModel->GetLinkManager() : NULL;
@@ -701,7 +695,6 @@ void SdPage::ConnectLink()
         }
     }
 }
-#endif // !SVX_LIGHT
 
 
 /*************************************************************************
@@ -710,7 +703,6 @@ void SdPage::ConnectLink()
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdPage::DisconnectLink()
 {
     SvxLinkManager* pLinkManager = pModel!=NULL ? pModel->GetLinkManager() : NULL;
@@ -725,7 +717,6 @@ void SdPage::DisconnectLink()
         pPageLink=NULL;
     }
 }
-#endif // !SVX_LIGHT
 
 
 /*************************************************************************
@@ -788,6 +779,32 @@ SdPage::SdPage(const SdPage& rSrcPage) :
 SdrPage* SdPage::Clone() const
 {
     SdPage* pPage = new SdPage(*this);
+
+    if( (PK_STANDARD == ePageKind) && !IsMasterPage() )
+    {
+        // preserve presentation order on slide duplications
+        SdrObjListIter aSrcIter( *this, IM_DEEPWITHGROUPS );
+        SdrObjListIter aDstIter( *pPage, IM_DEEPWITHGROUPS );
+
+        while( aSrcIter.IsMore() && aDstIter.IsMore() )
+        {
+            SdrObject* pSrc = aSrcIter.Next();
+            SdrObject* pDst = aDstIter.Next();
+
+            SdAnimationInfo* pSrcInfo = ((SdDrawDocument*)pModel)->GetAnimationInfo(pSrc);
+            if( pSrcInfo && (pSrcInfo->nPresOrder != LIST_APPEND) )
+            {
+                SdAnimationInfo* pDstInfo = ((SdDrawDocument*)pModel)->GetAnimationInfo(pDst);
+                DBG_ASSERT( pDstInfo, "shape should have an animation info after clone!" );
+
+                if( pDstInfo )
+                    pDstInfo->nPresOrder = pSrcInfo->nPresOrder;
+            }
+        }
+
+        DBG_ASSERT( !aSrcIter.IsMore() && !aDstIter.IsMore(), "unequal shape numbers after a page clone?" );
+    }
+
     return(pPage);
 }
 
@@ -818,7 +835,6 @@ SfxItemSet* SdPage::getOrCreateItems()
 }
 
 
-#ifndef SVX_LIGHT
 sal_Bool SdPage::setAlienAttributes( const com::sun::star::uno::Any& rAttributes )
 {
     SfxItemSet* pSet = getOrCreateItems();
@@ -832,9 +848,7 @@ sal_Bool SdPage::setAlienAttributes( const com::sun::star::uno::Any& rAttributes
 
     return sal_False;
 }
-#endif
 
-#ifndef SVX_LIGHT
 void SdPage::getAlienAttributes( com::sun::star::uno::Any& rAttributes )
 {
     const SfxPoolItem* pItem;
@@ -849,6 +863,4 @@ void SdPage::getAlienAttributes( com::sun::star::uno::Any& rAttributes )
         ((SvXMLAttrContainerItem*)pItem)->QueryValue( rAttributes, 0 );
     }
 }
-
-#endif
 

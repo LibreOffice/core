@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-17 16:27:44 $
+ *  last change: $Author: cl $ $Date: 2002-10-31 13:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1054,6 +1054,10 @@ SdrModel* SdView::GetMarkedObjModel() const
     // of theire corresponding path. The index is a flat index
     PathSurrogateVector aPathSurro;
 
+    // this is a list with index's of all shapes with animation infos in the source list
+    // it is used to later update the nPresOrder counter
+    std::vector< std::pair< sal_uInt32, sal_uInt32 > > aAnimObjects;
+
     {
         // get a flat vector of all shapes inside the mark list first, including deep within groups
         SdrObjectVector aSdrVector;
@@ -1075,22 +1079,30 @@ SdrModel* SdView::GetMarkedObjModel() const
             if( pObj )
             {
                 SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(const_cast<SdrObject*>(pObj));
-                if( pInfo && pInfo->eEffect == presentation::AnimationEffect_PATH && pInfo->pPathObj)
+                if( pInfo)
                 {
-                    // we found one, now look for the path
-                    SdrObjectVector::iterator aPathIter( aSdrVector.begin() );
-                    sal_uInt32 nPath = 0;
-
-                    while( aPathIter != aEnd )
+                    if( pInfo->eEffect == presentation::AnimationEffect_PATH && pInfo->pPathObj)
                     {
-                        SdrObject* pPathObj = (*aPathIter++);
-                        if( pPathObj == pInfo->pPathObj )
+                        // we found one, now look for the path
+                        SdrObjectVector::iterator aPathIter( aSdrVector.begin() );
+                        sal_uInt32 nPath = 0;
+
+                        while( aPathIter != aEnd )
                         {
-                            // we found the path, so store the indices
-                            aPathSurro.push_back( std::pair< sal_uInt32, sal_uInt32 >( nObj, nPath ) );
-                            break;
+                            SdrObject* pPathObj = (*aPathIter++);
+                            if( pPathObj == pInfo->pPathObj )
+                            {
+                                // we found the path, so store the indices
+                                aPathSurro.push_back( std::pair< sal_uInt32, sal_uInt32 >( nObj, nPath ) );
+                                break;
+                            }
+                            nPath++;
                         }
-                        nPath++;
+                    }
+
+                    if( pInfo->nPresOrder != LIST_APPEND )
+                    {
+                        aAnimObjects.push_back( std::pair< sal_uInt32, sal_uInt32 >( nObj, pInfo->nPresOrder ) );
                     }
                 }
             }
@@ -1141,6 +1153,40 @@ SdrModel* SdView::GetMarkedObjModel() const
         }
     }
 
+    // restore presentation order
+    if( !aAnimObjects.empty() )
+    {
+        sal_uInt32 nCurrent = 0;
+        SdrPage* pPage = pNewModel->GetPage(0);
+        SdrObjListIter  aObjIter( *pPage, IM_DEEPWITHGROUPS );
+        SdrObject* pObj = aObjIter.Next();
+
+        std::vector< std::pair< sal_uInt32, sal_uInt32 > >::iterator aIter( aAnimObjects.begin() );
+        std::vector< std::pair< sal_uInt32, sal_uInt32 > >::iterator aEnd( aAnimObjects.end() );
+        while( aIter != aEnd )
+        {
+            sal_uInt32 nObject = (*aIter).first;
+
+            while( (nCurrent < nObject) && aObjIter.IsMore() )
+            {
+                nCurrent++;
+                pObj = aObjIter.Next();
+            }
+
+            DBG_ASSERT( nCurrent == nObject, "wrong shape count after paste!" );
+            if( nCurrent != nObject )
+                break;
+
+            SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pObj);
+            DBG_ASSERT( pInfo, "shape that should have an animation info hasn't after paste!" );
+
+            if( pInfo )
+                pInfo->nPresOrder = (*aIter).second;
+
+            aIter++;
+        }
+    }
+
     return pNewModel;
 }
 
@@ -1151,6 +1197,10 @@ BOOL SdView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst /* 
     // of theire corresponding path. The index is a flat index
     PathSurrogateVector aPathSurro;
 
+    // this is a list with index's of all shapes with animation infos in the source list
+    // it is used to later update the nPresOrder counter
+    std::vector< std::pair< sal_uInt32, sal_uInt32 > > aAnimObjects;
+
     // get the destination object list or page
     SdrObjList* pDstList = pLst;
     if( NULL == pDstList )
@@ -1160,6 +1210,8 @@ BOOL SdView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst /* 
             pDstList=pPV->GetObjList();
     }
 
+    sal_uInt32 nMaxPresOrder = 0;
+
     sal_uInt32 nDstObjCount = 0;
     if( pDstList )
     {
@@ -1167,8 +1219,15 @@ BOOL SdView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst /* 
         // object list, so we can have the absolut index of newly created shapes
         {
             SdrObjListIter  aIter( *pDstList, IM_DEEPWITHGROUPS );
-            while( aIter.Next() )
+            while( aIter.IsMore() )
+            {
+                SdrObject* pObj = aIter.Next();
+                SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(const_cast<SdrObject*>(pObj));
+                if( pInfo && (pInfo->nPresOrder != LIST_APPEND) && (pInfo->nPresOrder > nMaxPresOrder) )
+                    nMaxPresOrder = pInfo->nPresOrder;
+
                 nDstObjCount++;
+            }
         }
 
         // now find all shapes with an animation at path set and theire path shape
@@ -1187,18 +1246,27 @@ BOOL SdView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst /* 
                 for( pObj = aIter.Next(), nObj = 0; pObj; pObj = aIter.Next(), nObj++ )
                 {
                     SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(const_cast<SdrObject*>(pObj));
-                    if( pInfo && pInfo->eEffect == presentation::AnimationEffect_PATH && pInfo->pPathObj)
+                    if( pInfo )
                     {
-                        SdrObjListIter  aPathIter( *pPage, IM_DEEPWITHGROUPS );
-                        sal_uInt32 nPath;
-                        SdrObject* pPath;
-                        for( pPath = aPathIter.Next(), nPath = 0; pPath; pPath = aPathIter.Next(), nPath++ )
+                        if( pInfo->eEffect == presentation::AnimationEffect_PATH && pInfo->pPathObj)
                         {
-                            if( pPath == pInfo->pPathObj )
+                            SdrObjListIter  aPathIter( *pPage, IM_DEEPWITHGROUPS );
+                            sal_uInt32 nPath;
+                            SdrObject* pPath;
+                            for( pPath = aPathIter.Next(), nPath = 0; pPath; pPath = aPathIter.Next(), nPath++ )
                             {
-                                aPathSurro.push_back( std::pair< sal_uInt32, sal_uInt32 >( nDstObjCount + nObj, nDstObjCount + nPath ) );
-                                break;
+                                if( pPath == pInfo->pPathObj )
+                                {
+                                    aPathSurro.push_back( std::pair< sal_uInt32, sal_uInt32 >( nDstObjCount + nObj, nDstObjCount + nPath ) );
+                                    break;
+                                }
                             }
+                        }
+
+                        if( pInfo->nPresOrder != LIST_APPEND )
+                        {
+                            const sal_uInt32 nNewPresOrder = pInfo->nPresOrder + 1 + nMaxPresOrder;
+                            aAnimObjects.push_back( std::pair< sal_uInt32, sal_uInt32 >( nDstObjCount + nObj, nNewPresOrder ) );
                         }
                     }
                 }
@@ -1240,6 +1308,38 @@ BOOL SdView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst /* 
                 pInfo->eEffect = presentation::AnimationEffect_PATH;
                 pInfo->pPathObj = PTR_CAST(SdrPathObj, pPath );
             }
+
+            aIter++;
+        }
+    }
+
+    if( bRet && !aAnimObjects.empty() )
+    {
+        sal_uInt32 nCurrent = 0;
+        SdrObjListIter  aObjIter( *pDstList, IM_DEEPWITHGROUPS );
+        SdrObject* pObj = aObjIter.Next();
+
+        std::vector< std::pair< sal_uInt32, sal_uInt32 > >::iterator aIter( aAnimObjects.begin() );
+        std::vector< std::pair< sal_uInt32, sal_uInt32 > >::iterator aEnd( aAnimObjects.end() );
+        while( aIter != aEnd )
+        {
+            sal_uInt32 nObject = (*aIter).first;
+
+            while( (nCurrent < nObject) && aObjIter.IsMore() )
+            {
+                nCurrent++;
+                pObj = aObjIter.Next();
+            }
+
+            DBG_ASSERT( nCurrent == nObject, "wrong shape count after paste!" );
+            if( nCurrent != nObject )
+                break;
+
+            SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pObj);
+            DBG_ASSERT( pInfo, "shape that should have an animation info hasn't after paste!" );
+
+            if( pInfo )
+                pInfo->nPresOrder = (*aIter).second;
 
             aIter++;
         }
