@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UniversalContentBroker.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,12 +110,12 @@ service UniversalContentBroker
         references. Those references i.e. may occure if content provider
         implementations hold references to the Broker. The Broker itself
         always holds its providers.
-        If the Broker shall be released, <method>XComponent::dispose</method>
+        If the Broker shall be released, <member>XComponent::dispose</member>
         must be called at the Broker. The implementation of this method must
-        call <method>XEventListener::disposing</method> on the registered
+        call <member>XEventListener::disposing</member> on the registered
         listeners ( the providers holding the Broker must be those listeners )
         and release the appropriate object references. At the other hand, the
-        implementation of <method>XEventListener::disposing</method> must
+        implementation of <member>XEventListener::disposing</member> must
         release its appropriate references.
 
         This interface is required.
@@ -162,14 +162,14 @@ service UniversalContentBroker
     //-------------------------------------------------------------------------
     /** supports the configuration of a newly created broker.
 
-        If the method <method>XInitialization::initialize</method> is called
+        If the method <member>XInitialization::initialize</member> is called
         with a single boolean argument of value true, the newly instantiated
         broker is also configured:  The <type>Configuration</type> service is
         used to access the <type>XContentProviderConfiguration</type> stored
         under key "ContentProviderServices".  Each content provider service
         mentioned there is registered at the broker.
 
-        If the method <method>XInitialization::initialize</method> is called
+        If the method <member>XInitialization::initialize</member> is called
         with a single boolean argument of value false, the newly instatiated
         broker is not configured.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnection.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:39 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,9 @@ interface XConnection: com::sun::star::sdbc::XCloseable
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getAutoCommit
-    /** gets the current auto-commit state.@see setAutoCommit()
+    /** gets the current auto-commit state.
+
+        @see setAutoCommit
      */
     [const] boolean getAutoCommit() raises (SQLException);
     //-------------------------------------------------------------------------
@@ -219,7 +221,9 @@ interface XConnection: com::sun::star::sdbc::XCloseable
     /** makes all changes made since the previous commit/rollback
         permanent and releases any database locks currently held
         by the Connection. This method should be
-        used only when auto-commit mode has been disabled.@see setAutoCommit()
+        used only when auto-commit mode has been disabled.
+
+        @see setAutoCommit
      */
     void commit() raises (SQLException);
     //-------------------------------------------------------------------------
@@ -227,7 +231,9 @@ interface XConnection: com::sun::star::sdbc::XCloseable
     // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::rollback
     /** drops all changes made since the previous
         commit/rollback and releases any database locks currently held
-        by this Connection. This method should be used only when auto-commit has been disabled.@see setAutoCommit()
+        by this Connection. This method should be used only when auto-commit has been disabled.
+
+        @see setAutoCommit
      */
     void rollback() raises (SQLException);
     //-------------------------------------------------------------------------
@@ -349,6 +355,9 @@ interface XConnection: com::sun::star::sdbc::XCloseable
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:39  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

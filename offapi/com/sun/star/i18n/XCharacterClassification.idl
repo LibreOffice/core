@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCharacterClassification.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:17 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,7 +506,7 @@ interface XCharacterClassification : com::sun::star::uno::XInterface
         Parse a string for a token of type <em>nTokenType</em> starting at
         position <em>nPos</em>.
 
-        <p>Other parameters are the same as in <method>parseAnyToken</method>.
+        <p>Other parameters are the same as in <member>parseAnyToken</member>.
         If the actual token does not match a <em>nTokenType</em> a
         <member>ParseResult::TokenType</member> is returned.
 

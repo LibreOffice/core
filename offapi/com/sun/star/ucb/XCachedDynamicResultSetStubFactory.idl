@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCachedDynamicResultSetStubFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ module com { module sun { module star { module ucb {
 <p>The first method can be used to create a stub on serverside.
 
 <p>If you have instanciated a <type>CachedDynamicResultSet</type> on client side already,
-use the second <method>connectToCache</method> to connect your given DynamicResultSet
+use the second <member>connectToCache</member> to connect your given DynamicResultSet
 with this Cache.
 
 <p>The needed cache on server side you can create with

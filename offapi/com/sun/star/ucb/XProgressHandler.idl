@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XProgressHandler.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,11 @@ interface XProgressHandler: com::sun::star::uno::XInterface
 
         @param Status  An object representing the new activity.  There has to
         be an agreement between caller and callee of methods
-        <method>push</method> and <method>update</method> as to which Status
+        <member>push</member> and <member>update</member> as to which Status
         arguments are meaningful.  For example, a <type>string</type> argument
-        to <method>push</method> should be used to transport some status text
+        to <member>push</member> should be used to transport some status text
         that describes the progress being made (possibly followed by one or
-        more <method>update</method>s with <type>string</type> arguments, if
+        more <member>update</member>s with <type>string</type> arguments, if
         the appropriate status text changes as progress is being made).
     */
     void push([in] any Status);
@@ -97,7 +97,7 @@ interface XProgressHandler: com::sun::star::uno::XInterface
         progress.
 
         @param Status  An object representing the progress made.  See the
-        documentation of <method>push</method> for more information.
+        documentation of <member>push</member> for more information.
     */
     void update([in] any Status);
 

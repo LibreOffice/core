@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SQLWarning.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:35 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,11 @@
 // DocMerge from xml: exception com::sun::star::sdbc::SQLWarning
 /** is an exception that provides information on database access
     warnings. Warnings are silently chained to the object whose method
-    caused it to be reported.@see XConnection::getWarnings()
-        @see XResultSet::getWarnings()
-        @see XStatement::getWarnings()
+    caused it to be reported.
+
+    @see XConnection::getWarnings
+    @see XResultSet::getWarnings
+    @see XStatement::getWarnings
  */
 exception SQLWarning: SQLException
 {
@@ -85,6 +87,9 @@ exception SQLWarning: SQLException
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:41  hjs
     initial import
 

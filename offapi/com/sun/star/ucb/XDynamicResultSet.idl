@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDynamicResultSet.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 14:59:05 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,9 @@ interface XDynamicResultSet: com::sun::star::lang::XComponent
         <type>ContentResultSet</type>. Its content will never change.
 
         <p>This method is not allowed to be called, if someone already has
-        registered as listener via <member>XDynamicResultSet::setListener</member> or if someone has established a connection to
-        a <type>CashedDynamicresultSet</type> via <member>XDynamicResultSet::connectToCache</member>.
+        registered as listener via <member>XDynamicResultSet::setListener</member>
+        or if someone has established a connection to a <type>CashedDynamicresultSet</type>
+        via <member>XDynamicResultSet::connectToCache</member>.
         Otherwise you get the Exception <type>ListenerAlreadySetException</type>.
     */
     com::sun::star::sdbc::XResultSet getStaticResultSet()
@@ -163,9 +164,9 @@ interface XDynamicResultSet: com::sun::star::lang::XComponent
             <type>ListenerAlreadySetException</type>.
 
         <p>The implementor has to call
-        <method>XComponent::addEventListener( [in] XEventListener xListener )
-        </method> in this method, so that we can call
-        <method>XEventListener::disposing</method> to the listener
+        <member>XComponent::addEventListener( [in] XEventListener xListener )
+        </member> in this method, so that we can call
+        <member>XEventListener::disposing</member> to the listener
     */
     void setListener( [in] XDynamicResultSetListener Listener )
         raises( com::sun::star::ucb::ListenerAlreadySetException );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSourceBrowser.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 14:57:12 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ module com {  module sun {  module star {  module sdb {
     dispatches for (usually by implementing an <type scope="com::sun::star::frame">XDispatchProviderInterceptor</type>
     for the parent frame of the browser), thus indicating that the browser should provide special functionallity.<br/>
     In ths case the browser displays and maintains some additional slots (to be more concrete: toolbox items), which,
-    upon triggering, call the <method scope="com::sun::star::frame">XDispatch::dispatch</method> method of the object
+    upon triggering, call the <member scope="com::sun::star::frame">XDispatch::dispatch</member> method of the object
     provided by the external instance.</p>
 
     <p>In particular, the supported URL's for communicating to an external instance are:
@@ -165,7 +165,7 @@ service DataSourceBrowser
 
     /** is used to initialize the browser.
 
-        <p>Parameters (passed to the method <method scope=com::sun::star::lang">XInitialization::initialize</method>)
+        <p>Parameters (passed to the method <member scope=com::sun::star::lang">XInitialization::initialize</member>)
         have to be instances of <type scope="com::sun::star::beans">PropertyValue</type>, where the
         <member scope="com::sun::star::beans">PropertyValue::Name</member> member specifies what the parameter controls,
         with the <member scope="com::sun::star::beans">PropertyValue::Value</member> member containing the value
@@ -195,7 +195,7 @@ service DataSourceBrowser
 
     /** is used to control the browser from outside.
 
-    <p>You may use the <method scope="com::sun::star::frame">XDispatchProvider::queryDispatch</method> method
+    <p>You may use the <member scope="com::sun::star::frame">XDispatchProvider::queryDispatch</member> method
     to query for objects which implement the <type scope="com::sun::star::frame">XDispatch</type> interface,
     and which allow you to be notified on status changes and to dispatch special requests.</p>
     <p>The recognized URLs are:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentProviderManager.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 13:37:17 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ interface XContentProviderManager: com::sun::star::uno::XInterface
         @param Scheme
         the URL scheme for the provided contents. More generally, this
         may not only be a URL scheme, but a URL template (see
-        <method>registerContentProvider</method> for a discussion of URL
+        <member>registerContentProvider</member> for a discussion of URL
         templates).
     */
     [oneway] void deregisterContentProvider(
@@ -200,7 +200,7 @@ interface XContentProviderManager: com::sun::star::uno::XInterface
 
         @param Scheme
         a URL scheme. More generally, this may not only be a URL scheme, but a
-        URL template (see <method>registerContentProvider</method> for a
+        URL template (see <member>registerContentProvider</member> for a
         discussion of URL templates).
 
         @returns

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextFrame.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 14:59:04 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ service TextFrame
                 (e.g. due to a revised layout of the surrounding text).
 
                 <p>The position is relative to the position of the anchor
-                [see <method>XTextFrame::getAnchor()</method>]. Size and position are
+                [see <member>XTextFrame::getAnchor()</member>]. Size and position are
                 both measured in 100th mm. The size is not valid if the
                 size is relative and no layout exists or if the layout is invalid.
 
@@ -250,6 +250,9 @@ service TextFrame
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/19 14:59:04  mi
+    documentation sytax errors fixed
+
     Revision 1.3  2000/11/08 12:44:27  mi
     moved from api
 

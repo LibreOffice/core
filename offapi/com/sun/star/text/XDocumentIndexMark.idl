@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDocumentIndexMark.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,9 @@ interface XDocumentIndexMark: com::sun::star::text::XTextContent
 
     // DocMerge from idl: method com::sun::star::text::XDocumentIndexMark::getMarkEntry
     /** @returns
-                    the explicitly set string for the index mark.
-             @see setMarkEntry()
+                the explicitly set string for the index mark.
+
+         @see setMarkEntry
      */
     [const] string getMarkEntry();
 
@@ -109,6 +110,9 @@ interface XDocumentIndexMark: com::sun::star::text::XTextContent
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:04  hjs
     initial import
 

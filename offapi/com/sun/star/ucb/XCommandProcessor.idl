@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCommandProcessor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,10 @@ interface XCommandProcessor : com::sun::star::uno::XInterface
         @return
         The result according to the specification of the command.
 
-        @exception CommandAbortedException
+        @throws CommandAbortedException
         thrown to indicate that the command was aborted.
 
-        @exception Exception
+        @throws Exception
         Different exceptions are thrown to indicate errors during
         execution of the command.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPageCursor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,21 +110,27 @@ interface XPageCursor: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToNextPage
-    /** moves the cursor to the next page.@see jumpToPreviousPage()
+    /** moves the cursor to the next page.
+
+        @see XPageCursor::jumpToPreviousPage
      */
-    boolean jumpToNextPage();
+    boolean jumpToNextPage
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToPreviousPage
-    /** moves the cursor to the previous page.@see jumpToNextPage()
+    /** moves the cursor to the previous page.
+
+        @see XPageCursor::jumpToNextPage
      */
-    boolean jumpToPreviousPage();
+    boolean jumpToPreviousPage
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToEndOfPage
-    /** moves the cursor to the end of the current page.@see jumpToEndOfPreviousPage()
+    /** moves the cursor to the end of the current page.
+
+        @see XPageCursor::jumpToEndOfPreviousPage
      */
     boolean jumpToEndOfPage();
 
@@ -144,6 +150,9 @@ interface XPageCursor: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:04  hjs
     initial import
 

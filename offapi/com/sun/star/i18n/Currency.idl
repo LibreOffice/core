@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Currency.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:17 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ module com { module sun { module star { module i18n {
 /**
     Symbols and Names of a specific currency.
 
-    <p> Returned by <method>XLocaleData::getAllCurrencies()</method>
+    <p> Returned by <member>XLocaleData::getAllCurrencies()</member>
  */
 struct Currency {
     /// identifier, e.g. <bold>dollar</bold>

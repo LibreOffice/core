@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFrame.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:37 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,9 @@ interface XFrame: com::sun::star::lang::XComponent
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::frame::XFrame::initialize
-    /** is called to initialize the frame within a window.@see getContainerWindow()
+    /** is called to initialize the frame within a window.
+
+        @see XFrame::getContainerWindow
      */
     void initialize( [in] com::sun::star::awt::XWindow xWindow );
 
@@ -100,9 +102,9 @@ interface XFrame: com::sun::star::lang::XComponent
 
 
         <p>Normally this is used as the parent window of the
-        controller window.
+        controller window.  </p>
 
-        </p>@see initialize()
+        @see XFrame::initialize
      */
     com::sun::star::awt::XWindow getContainerWindow();
 
@@ -332,6 +334,9 @@ interface XFrame: com::sun::star::lang::XComponent
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:37  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:14  mi
     moved from api
 

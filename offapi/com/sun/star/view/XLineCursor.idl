@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLineCursor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:34 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,9 @@ interface XLineCursor: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::view::XLineCursor::gotoStartOfLine
-    /** moves the cursor to the start of the current line.@see gotoPreviousOfPara()
+    /** moves the cursor to the start of the current line.
+
+        @see XLineCursor::gotoPreviousOfPara
      */
     void gotoStartOfLine( [in] boolean bExpand );
 
@@ -117,6 +119,9 @@ interface XLineCursor: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:45:34  mi
+    moved from api
+
     Revision 1.2  2000/10/09 14:25:03  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

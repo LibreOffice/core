@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CachedDynamicResultSet.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:51 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@ service CachedDynamicResultSet
 
     //-------------------------------------------------------------------------
     /** provides the initialization of the <type>CachedDynamicResultSet</type>
-        with a source object. The <parameter>Source</parameter> in <method>
-        XSourceInitialization::setSource</method> has to be an interface
+        with a source object. The <parameter>Source</parameter> in <member>
+        XSourceInitialization::setSource</member> has to be an interface
         <type>XDynamicResultSet</type> and an implementation of service <type>
         CachedDynamicResultSetStub</type>
 

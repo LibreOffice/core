@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentInfo.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ struct ContentInfo
     //-------------------------------------------------------------------------
     /** This field contains a list with the properties which must be set at
         a content that was just created using
-        <method>XContentCreator::createNewContent</method> before it can be
+        <member>XContentCreator::createNewContent</member> before it can be
         committed ( via executing the command "insert" at the new content ).
         If one of the properties is missing, the insert command will fail.
 

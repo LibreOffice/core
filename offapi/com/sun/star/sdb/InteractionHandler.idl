@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InteractionHandler.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:31 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
         </li>
         <li><b>authentication</b><br/>
             If your <type scope="com.sun.star.task">XInteractionRequest</type>
-            (see <method scope="com.sun.star.task">XInteractionHandler::handle</method>) supplies an
+            (see <member scope="com.sun.star.task">XInteractionHandler::handle</member>) supplies an
             <type scope="com.sun.star.ucb">AuthenticationRequest</type>, the handler will open a standard login
             dialog to allow user authentication.
             <br/>
@@ -115,6 +115,9 @@ service InteractionHandler
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:31  mi
+    moved from api
+
     Revision 1.3  2000/10/26 18:00:29  fs
     added parameter request handling to the capabilities list
 

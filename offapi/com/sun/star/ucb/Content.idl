@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Content.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 10:25:28 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,11 +127,11 @@ service Content
         registered at the content ( the content holds the listeners ) and
         the implementation of the listener interface holds a reference on
         the content. If the content shall be released,
-        <method>XComponent::dispose</method> must be called at the content.
+        <member>XComponent::dispose</member> must be called at the content.
         The implementation of this method must call
-        <method>XEventListener::disposing</method> on the registered
+        <member>XEventListener::disposing</member> on the registered
         listeners and release the appropriate object references. At the other
-        hand, the implementation of <method>XEventListener::disposing</method>
+        hand, the implementation of <member>XEventListener::disposing</member>
         must release its appropriate references.
 
         This interface is required.
@@ -246,7 +246,7 @@ service Content
         // when "updating" a POP3-Inbox, the content for that box will get
         // and store all new objects on the appropriate server. The inserted
         // contents will be notified by calling
-        // <method>com::sun::star::ucb::XContent::contentEvent</method>.
+        // <member>com::sun::star::ucb::XContent::contentEvent</member>.
         void
             <B>update</B>
                 com::sun::star::ucb::OpenCommandArgument2 aOpenCommandArg
@@ -257,7 +257,7 @@ service Content
         // store all new objects and destroy all cached data for objects no
         // longer existing on the server. The inserted/deleted contents will
         // be notified by calling
-        // <method>com::sun::star::ucb::XContent::contentEvent</method>.
+        // <member>com::sun::star::ucb::XContent::contentEvent</member>.
         void
             <B>synchronize</B>
                 com::sun::star::ucb::OpenCommandArgument2 aOpenCommandArg
@@ -289,7 +289,7 @@ service Content
 
         // (1) This command inserts a new content. It commits the process of
         // creating a new content via calling another content's method
-        // <method>com::sun::star::ucb::XContentCreator::createNewContent</method>
+        // <member>com::sun::star::ucb::XContentCreator::createNewContent</member>
         // The command is not called on the content which created the new
         // content, because the new object already knows where it is to be
         // inserted (i.e. Calling "createNewContent" with content type for a
@@ -633,7 +633,7 @@ service Content
     /** provides access to the parent content of this content.
 
         The object returned by the implementation of the method
-        <method>com::sun::star::container::XChild::getParent()</method> must
+        <member>com::sun::star::container::XChild::getParent()</member> must
         implement the service <type>Content</type>. If the content is a root
         object, an empty interface may be returned.
 

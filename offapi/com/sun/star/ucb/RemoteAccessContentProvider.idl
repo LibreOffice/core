@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RemoteAccessContentProvider.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 14:59:05 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ service RemoteAccessContentProvider
         to specify that certain <type>XContentIdentifier</type>s map to
         <type>XContent</type>s from a certain remote UCB.  The Arguments
         string in the
-        <method>XParameterizedContentProvider::registerInstance</method>
+        <member>XParameterizedContentProvider::registerInstance</member>
         call must contain the UNO URL of the remote UCB.
      */
     interface com::sun::star::ucb::XParameterizedContentProvider;

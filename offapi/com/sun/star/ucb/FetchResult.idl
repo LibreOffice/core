@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetchResult.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** containes data of several rows.
-This struct is returned e.g. from <method>XFetchProvider::fetch</method>.
+This struct is returned e.g. from <member>XFetchProvider::fetch</member>.
 */
 
 struct FetchResult

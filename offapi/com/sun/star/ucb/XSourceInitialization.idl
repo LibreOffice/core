@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSourceInitialization.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ interface XSourceInitialization: com::sun::star::uno::XInterface
 
         <p>Hopefully you will only use this, when <parameter>Source</parameter>
         is an <type>XComponent</type> and this is an <type>XEventListener</type>.
-        Than you should call <method>XComponent::addEventListener()</method>
+        Than you should call <member>XComponent::addEventListener()</member>
         within this method.
     */
     void setSource( [in] com::sun::star::uno::XInterface Source )

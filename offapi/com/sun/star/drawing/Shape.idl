@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-23 19:11:28 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ service Shape
 
     // DocMerge from xml: service com::sun::star::drawing::Shape: interface com::sun::star::drawing::XShape
     /** This gives you the size and position of this <type>Shape</type>
-                and lets you change it. You can use <method>getShapeType</method>
+                and lets you change it. You can use <member>getShapeType</member>
                 to determine what kind of shape this is.
      */
     interface com::sun::star::drawing::XShape;
@@ -127,6 +127,9 @@ service Shape
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/23 19:11:28  cl
+    #80679# added ZOrder property for shapes
+
     Revision 1.3  2000/11/08 12:42:42  mi
     moved from api
 
