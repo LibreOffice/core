@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strmunx.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:09 $
+ *  last change: $Author: jbu $ $Date: 2001-05-10 14:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,12 +303,21 @@ SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
 
     SetBufferSize( 1024 );
     // convert URL to SystemPath, if necessary
+#ifdef TF_FILEURL
+    ::rtl::OUString aSystemFileName;
+    if( FileBase::getSystemPathFromFileURL( rFileName , aSystemFileName ) != osl_File_E_None )
+    {
+        aSystemFileName = rFileName;
+    }
+    Open( aSystemFileName, nOpenMode );
+#else
     ::rtl::OUString aFileName, aNormPath;
-    if ( FileBase::getNormalizedPathFromFileURL( rFileName, aNormPath ) == FileBase::E_None )
+     if ( FileBase::getNormalizedPathFromFileURL( rFileName, aNormPath ) == FileBase::E_None )
         FileBase::getSystemPathFromNormalizedPath( aNormPath, aFileName );
     else
         aFileName = rFileName;
     Open( aFileName, nOpenMode );
+#endif
 }
 
 /*************************************************************************
