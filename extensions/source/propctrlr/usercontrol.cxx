@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usercontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:59 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,88 @@ namespace pcr
             SetText(String());
             m_nLastDecimalDigits = 0;
         }
+    }
+
+    //========================================================================
+    //= OFileUrlControl
+    //========================================================================
+    //------------------------------------------------------------------
+    OFileUrlControl::OFileUrlControl( Window* pParent, WinBits nWinStyle )
+        :OCommonBehaviourControl( this )
+        ,OFileUrlControl_Base( pParent, nWinStyle | WB_DROPDOWN )
+    {
+        SetModifyHdl( LINK( this, OCommonBehaviourControl, ModifiedHdl ) );
+        SetGetFocusHdl( LINK( this, OCommonBehaviourControl, GetFocusHdl ) );
+        SetLoseFocusHdl( LINK( this, OCommonBehaviourControl, LoseFocusHdl ) );
+
+        autoSizeWindow();
+
+        SetDropDownLineCount( 10 );
+    }
+
+    //------------------------------------------------------------------
+    OFileUrlControl::~OFileUrlControl()
+    {
+    }
+
+    //------------------------------------------------------------------
+    long OFileUrlControl::PreNotify( NotifyEvent& rNEvt )
+    {
+        if ( OCommonBehaviourControl::handlePreNotify( rNEvt ) )
+            return sal_True;
+
+        // it wasn't a PropCommonControl event => let our window handle it
+        return OFileUrlControl_Base::PreNotify( rNEvt );
+    }
+
+    //------------------------------------------------------------------
+    void OFileUrlControl::SetProperty( const ::rtl::OUString& rString, sal_Bool bIsUnknown )
+    {
+        if ( bIsUnknown )
+            SetText( String() );
+        else
+            DisplayURL( rString );
+    }
+
+    //------------------------------------------------------------------
+    ::rtl::OUString OFileUrlControl::GetProperty() const
+    {
+        if ( GetText().Len() )
+            return const_cast< OFileUrlControl* >( this )->GetURL();
+        else
+            return String();
+    }
+
+    //========================================================================
+    //= TimeDurationInput
+    //========================================================================
+    //------------------------------------------------------------------
+    TimeDurationInput::TimeDurationInput( ::Window* pParent, WinBits nWinStyle )
+        :ONumericControl( pParent, 0, nWinStyle )
+    {
+        SetUnit( FUNIT_CUSTOM );
+        SetCustomUnitText( String::CreateFromAscii( " ms" ) );
+    }
+
+    //------------------------------------------------------------------
+    TimeDurationInput::~TimeDurationInput()
+    {
+    }
+
+    //------------------------------------------------------------------
+    void TimeDurationInput::CustomConvert()
+    {
+        long nMultiplier = 1;
+        if ( GetCurUnitText().EqualsIgnoreCaseAscii( "ms" ) )
+            nMultiplier = 1;
+        if ( GetCurUnitText().EqualsIgnoreCaseAscii( "s" ) )
+            nMultiplier = 1000;
+        else if ( GetCurUnitText().EqualsIgnoreCaseAscii( "m" ) )
+            nMultiplier = 1000 * 60 * 60;
+        else if ( GetCurUnitText().EqualsIgnoreCaseAscii( "h" ) )
+            nMultiplier = 1000 * 60 * 60;
+
+        ONumericControl::SetValue( GetLastValue() * nMultiplier );
     }
 
 //............................................................................
