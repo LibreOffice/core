@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSettingsImporter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:55:57 $
+ *  last change:$Date: 2003-09-08 12:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,21 +61,21 @@
 
 package mod._sw;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.document.XImporter;
-import com.sun.star.frame.XController;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.view.XPrintSettingsSupplier;
-import com.sun.star.view.XViewSettingsSupplier;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.frame.XController;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.view.XViewSettingsSupplier;
 
 /**
  * Test for object which is represented by service
@@ -154,7 +154,6 @@ public class XMLSettingsImporter extends TestCase {
 
         XInterface oObj = null;
         Object oInt = null ;
-        XPrintSettingsSupplier prnSetSup = null;
         final short impZoom = 50 ;
 
         // creation of testobject here
@@ -166,20 +165,12 @@ public class XMLSettingsImporter extends TestCase {
         try {
             oInt = xMSF.createInstance
                 ("com.sun.star.comp.Writer.XMLSettingsImporter") ;
-            XImporter imp = (XImporter)
-                UnoRuntime.queryInterface(XImporter.class, oInt) ;
-            //imp.setTargetDocument(xTextDoc) ;
 
-            Object globSet = xMSF.createInstance
-                ("com.sun.star.text.GlobalSettings") ;
-            prnSetSup = (XPrintSettingsSupplier) UnoRuntime.queryInterface
-                (XPrintSettingsSupplier.class, globSet) ;
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create component.", e) ;
         }
 
-        final XPropertySet prnSet = prnSetSup.getPrintSettings() ;
 
         oObj = (XInterface) oInt ;
 
