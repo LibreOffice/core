@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtsetup.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:56:36 $
+ *  last change: $Author: pl $ $Date: 2001-12-06 17:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,11 +221,6 @@ public:
 class RTSOtherPage : public TabPage
 {
     RTSDialog*          m_pParent;
-
-    ULONG               m_nMarginLeft;
-    ULONG               m_nMarginTop;
-    ULONG               m_nMarginRight;
-    ULONG               m_nMarginBottom;
 
     FixedText           m_aLeftTxt;
     MetricField         m_aLeftLB;

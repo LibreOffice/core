@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtsetup.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-24 11:51:14 $
+ *  last change: $Author: pl $ $Date: 2001-12-06 17:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,15 +560,27 @@ RTSOtherPage::~RTSOtherPage()
 
 void RTSOtherPage::initValues()
 {
-    m_nMarginLeft   = m_pParent->m_aJobData.m_nLeftMarginAdjust;
-    m_nMarginRight  = m_pParent->m_aJobData.m_nRightMarginAdjust;
-    m_nMarginTop    = m_pParent->m_aJobData.m_nTopMarginAdjust;
-    m_nMarginBottom = m_pParent->m_aJobData.m_nBottomMarginAdjust;
+    int nMarginLeft;
+    int nMarginTop;
+    int nMarginRight;
+    int nMarginBottom;
 
-    m_aLeftLB.SetValue( m_nMarginLeft );
-    m_aRightLB.SetValue( m_nMarginRight );
-    m_aTopLB.SetValue( m_nMarginTop );
-    m_aBottomLB.SetValue( m_nMarginBottom );
+    m_pParent->m_aJobData.m_pParser->
+        getMargins( m_pParent->m_aJobData.m_pParser->getDefaultPaperDimension(),
+                    nMarginLeft,
+                    nMarginRight,
+                    nMarginTop,
+                    nMarginBottom );
+
+    nMarginLeft     += m_pParent->m_aJobData.m_nLeftMarginAdjust;
+    nMarginRight    += m_pParent->m_aJobData.m_nRightMarginAdjust;
+    nMarginTop      += m_pParent->m_aJobData.m_nTopMarginAdjust;
+    nMarginBottom   += m_pParent->m_aJobData.m_nBottomMarginAdjust;
+
+    m_aLeftLB.SetValue( nMarginLeft );
+    m_aRightLB.SetValue( nMarginRight );
+    m_aTopLB.SetValue( nMarginTop );
+    m_aBottomLB.SetValue( nMarginBottom );
     m_aCommentEdt.SetText( m_pParent->m_aJobData.m_aComment );
 }
 
@@ -576,10 +588,22 @@ void RTSOtherPage::initValues()
 
 void RTSOtherPage::save()
 {
-    m_nMarginLeft   = m_pParent->m_aJobData.m_nLeftMarginAdjust     = m_aLeftLB.GetValue();
-    m_nMarginRight  = m_pParent->m_aJobData.m_nRightMarginAdjust    = m_aRightLB.GetValue();
-    m_nMarginTop    = m_pParent->m_aJobData.m_nTopMarginAdjust      = m_aTopLB.GetValue();
-    m_nMarginBottom = m_pParent->m_aJobData.m_nBottomMarginAdjust   = m_aBottomLB.GetValue();
+    int nMarginLeft = 0;
+    int nMarginTop = 0;
+    int nMarginRight = 0;
+    int nMarginBottom = 0;
+
+    m_pParent->m_aJobData.m_pParser->
+        getMargins( m_pParent->m_aJobData.m_pParser->getDefaultPaperDimension(),
+                    nMarginLeft,
+                    nMarginRight,
+                    nMarginTop,
+                    nMarginBottom );
+
+    m_pParent->m_aJobData.m_nLeftMarginAdjust   = m_aLeftLB.GetValue() - nMarginLeft;
+    m_pParent->m_aJobData.m_nRightMarginAdjust  = m_aRightLB.GetValue() - nMarginRight;
+    m_pParent->m_aJobData.m_nTopMarginAdjust    = m_aTopLB.GetValue() - nMarginTop;
+    m_pParent->m_aJobData.m_nBottomMarginAdjust = m_aBottomLB.GetValue() - nMarginBottom;
     m_pParent->m_aJobData.m_aComment = m_aCommentEdt.GetText();
 }
 
@@ -589,7 +613,6 @@ IMPL_LINK( RTSOtherPage, ClickBtnHdl, Button*, pButton )
 {
     if( pButton == &m_aDefaultBtn )
     {
-        m_nMarginBottom = m_nMarginTop = m_nMarginRight = m_nMarginLeft = 0;
         m_pParent->m_aJobData.m_nLeftMarginAdjust =
             m_pParent->m_aJobData.m_nRightMarginAdjust =
             m_pParent->m_aJobData.m_nTopMarginAdjust =
