@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.ll,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:11:25 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ static void	idlParsePragma(sal_Char* pPragma)
 	sal_Char* offset = begin;
 	while (*offset != ',') offset++;
 	//::rtl::OString include = pragma.copy(index + 8, offset - begin);
-	idlc()->insertInclude(pragma.copy(index + 8, offset - begin));
+	idlc()->insertInclude(pragma.copy(index + 8, (sal_Int32)(offset - begin)));
 }	
 
 static void parseLineAndFile(sal_Char* pBuf)
@@ -340,7 +340,7 @@ published       return IDL_PUBLISHED;
 			}
 
 {STRING_LITERAL}	{
-            	yylval.sval = new ::rtl::OString(yytext+1, strlen(yytext)-2);
+            	yylval.sval = new ::rtl::OString(yytext+1, (sal_Int32)(strlen(yytext)-2));
 				return IDL_STRING_LITERAL;
 			}
 
