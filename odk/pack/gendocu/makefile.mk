@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 15:02:50 $
+#   last change: $Author: obo $ $Date: 2004-06-04 03:17:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,6 @@ JAVA_SRC_FILES=\
         $(JAVA_SRC_DIR)$/jut_src.zip \
         $(JAVA_SRC_DIR)$/juh_src.zip \
         $(JAVA_SRC_DIR)$/ridl_src.zip \
-        $(JAVA_SRC_DIR)$/ridl2_src.zip \
         $(JAVA_SRC_DIR)$/sandbox_src.zip 
 
 JAVA_BEAN_SRC_FILES=\
@@ -109,7 +108,7 @@ AUTODOCPARAMS= -lg c++ \
         -p cppuhelper $(INCOUT) -t cppuhelper \
         -p bridges $(INCOUT) -t bridges
 
-JAVADOCPARAMS= -use -splitindex -windowtitle "Java UNO Runtime Reference" -header $(JAVADOCREFNAME) -d $(DESTDIRGENJAVAREF) -sourcepath $(JAVA_SRC_DIR) -linkoffline ../../common/ref ./uno -linkoffline http://java.sun.com/j2se/1.4.1/docs/api ./java $(JAVA_PACKAGES)
+JAVADOCPARAMS= -use -splitindex -windowtitle "Java UNO Runtime Reference" -header $(JAVADOCREFNAME) -d $(DESTDIRGENJAVAREF) -sourcepath $(JAVA_SRC_DIR) -classpath $(SOLARBINDIR)$/ridl.jar -linkoffline ../../common/ref ./uno -linkoffline http://java.sun.com/j2se/1.4.1/docs/api ./java $(JAVA_PACKAGES)
     
 JAVADOCLOG = $(MISC)$/javadoc_log.txt
 
@@ -132,11 +131,6 @@ $(JAVA_SRC_DIR)$/%.zip : $(SOLARCOMMONBINDIR)$/%.zip
     +$(MY_COPY) $< $@
     +cd $(JAVA_SRC_DIR) && unzip -quod . $(@:f)
 
-#$(JAVA_SRC_DIR)$/ridl2_src.zip : $(SOLARCOMMONBINDIR)$/ridl2_src.zip
-#	+$(MY_COPY) $(SOLARCOMMONBINDIR)$/ridl2_src.zip $@
-#	+cd $(JAVA_SRC_DIR) && unzip -quod . $(@:f)
-#	+-rm $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/*.java >& $(NULLDEV)
-     
 #$(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/%.java : $(PRJ)$/source$/bean$/com$/sun$/star$/beans$/%.java 
 #	+-$(MKDIRHIER) $(@:d)        
 #	+$(MY_COPY) $< $@
