@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optiongrouplayouter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 09:24:28 $
+ *  last change: $Author: fs $ $Date: 2001-02-21 12:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
 #endif
@@ -123,6 +126,30 @@ namespace dbp
     OOptionGroupLayouter::OOptionGroupLayouter(const Reference< XMultiServiceFactory >& _rxORB)
         :m_xORB(_rxORB)
     {
+    }
+
+    //---------------------------------------------------------------------
+    void OOptionGroupLayouter::disambiguateName(const OControlWizardContext& _rContext, ::rtl::OUString& _rElementsName)
+    {
+        try
+        {
+            Reference< XNameAccess > xNameChecker(_rContext.xForm, UNO_QUERY);
+
+            ::rtl::OUString sBase(_rElementsName);
+            for (sal_Int32 i=1; i<0x7FFFFFFF; ++i)
+            {
+                _rElementsName = sBase;
+                _rElementsName += ::rtl::OUString::valueOf((sal_Int32)i);
+                if (!xNameChecker->hasByName(_rElementsName))
+                    return;
+            }
+            // can't do anything ... no free names
+            _rElementsName = sBase;
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("OOptionGroupLayouter::disambiguateName: something went (strangely) wrong!");
+        }
     }
 
     //---------------------------------------------------------------------
@@ -178,13 +205,12 @@ namespace dbp
         ::com::sun::star::awt::Point aButtonPosition;
         aButtonPosition.X = aShapePosition.X + OFFSET;
 
-        String sGroupPostfix = String::CreateFromAscii("3");    // TODO
         ::rtl::OUString sElementsName = ::rtl::OUString::createFromAscii("RadioGroup");
-        sElementsName += ::rtl::OUString(sGroupPostfix);
+        disambiguateName(_rContext, sElementsName);
 
         const String* pLabels = _rSettings.aLabels.begin();
         const String* pValues = _rSettings.aValues.begin();
-        for (sal_Int32 i=0; i<nRadioButtons - 1; ++i, ++pLabels, ++pValues)
+        for (sal_Int32 i=0; i<nRadioButtons; ++i, ++pLabels, ++pValues)
         {
             aButtonPosition.Y = aShapePosition.Y + (i+1) * nTempHeight + nTopSpace;
 
@@ -273,6 +299,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/21 09:24:28  fs
+ *  initial checkin - form control auto pilots
+ *
  *
  *  Revision 1.0 15.02.01 14:24:31  fs
  ************************************************************************/
