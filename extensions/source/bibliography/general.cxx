@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 11:48:24 $
+ *  last change: $Author: os $ $Date: 2001-02-27 08:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,7 +591,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                 if(xPropInfo->hasPropertyByName(uProp))
                 {
                     String sId(C2S("HID:"));
-                    sId += nHelpId;
+                    sId += String::CreateFromInt32(nHelpId);
                     rtl::OUString uId(sId) ;
                     uno::Any aVal; aVal <<= uId;
                     xPropSet->setPropertyValue(uProp, aVal);
