@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2001-12-17 18:01:04 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 13:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,22 +535,24 @@ private:
 public:
     WW8_SHD(){ aBits = 0; }
 
-    BYTE GetFore()  const                           { return (BYTE)( aBits        & 0x1f); }
-    BYTE GetBack()  const                           { return (BYTE)((aBits >> 5 ) & 0x1f); }
-    BYTE GetStyle(BOOL bVer67)  const { return (BYTE)((aBits >> 10) & ( bVer67?0x1f:0x3f ) ); }
+    BYTE GetFore() const                { return (BYTE)( aBits & 0x1f); }
+    BYTE GetBack() const                { return (BYTE)((aBits >> 5 ) & 0x1f); }
+    BYTE GetStyle(BOOL bVer67)  const
+        { return (BYTE)((aBits >> 10) & ( bVer67?0x1f:0x3f ) ); }
 
-    UINT16 GetValue()   const                       { return aBits; }
+    UINT16 GetValue() const { return aBits; }
 
-    void SetValue(   UINT16 nVal ){ aBits = nVal; }
-    void SetWWValue( SVBT16 nVal ){ aBits = (UINT16)SVBT16ToShort( nVal ); }
+    void SetValue( UINT16 nVal ){ aBits = nVal; }
+    void SetWWValue( SVBT16 nVal ){ aBits = (UINT16)SVBT16ToShort(nVal); }
 
-    void SetFore( BYTE nVal ){ aBits = (aBits & 0xffe0) |  (nVal & 0x1f);     }
+    void SetFore( BYTE nVal ){ aBits = (aBits & 0xffe0) | (nVal & 0x1f); }
     void SetBack( BYTE nVal ){ aBits = (aBits & 0xfc1f) | ((nVal & 0x1f)<<5); }
-    void SetStyle( BOOL bVer67, BYTE nVal ){
-                                         aBits = (aBits & ( bVer67?0x83ff:0x03ff ) )
-                                                                                      | ((nVal & ( bVer67?0x1f:0x2f ))<<10); }
+    void SetStyle( BOOL bVer67, BYTE nVal )
+    {
+        aBits = (aBits & ( bVer67?0x83ff:0x03ff ) )
+            | ((nVal & ( bVer67?0x1f:0x2f ))<<10);
+    }
 };
-
 
 struct WW8_ANLV
 {
