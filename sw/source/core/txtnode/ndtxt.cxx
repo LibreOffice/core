@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-11 08:54:33 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2308,9 +2308,24 @@ BOOL SwTxtNode::IsOutlineNum() const
     return bResult;
 }
 
+// #i22362#
 BOOL SwTxtNode::MayBeNumbered() const
 {
-    return ! pNdNum || pNdNum->IsNum();
+    BOOL bResult = TRUE;
+
+    if (pNdNum)
+    {
+        SwNumRule * pRule = GetNumRule();
+
+        if (pRule)
+        {
+            const SwNumFmt &aFmt = pRule->Get(pNdNum->GetRealLevel());
+
+            bResult = aFmt.IsEnumeration();
+        }
+    }
+
+    return bResult;
 }
 
 // -> #i27615#
@@ -2472,6 +2487,47 @@ SwTxtAttr *SwTxtNode::GetTxtAttr( const xub_StrLen nIdx,
  *                      SwTxtNode::GetExpandTxt
  *************************************************************************/
 // Felder werden expandiert:
+// -> #i29560#
+BOOL SwTxtNode::HasNumber() const
+{
+    BOOL bResult = FALSE;
+    const SwNodeNum * pNum = GetNum();
+
+    if (pNum)
+    {
+        const SwNumRule * pRule = GetNumRule();
+
+        if (pRule)
+        {
+            SwNumFmt aFmt(pRule->Get(pNum->GetRealLevel()));
+
+            bResult = aFmt.IsEnumeration();
+        }
+    }
+
+    return bResult;
+}
+
+BOOL SwTxtNode::HasBullet() const
+{
+    BOOL bResult = FALSE;
+    const SwNodeNum * pNum = GetNum();
+
+    if (pNum)
+    {
+        const SwNumRule * pRule = GetNumRule();
+
+        if (pRule)
+        {
+            SwNumFmt aFmt(pRule->Get(pNum->GetRealLevel()));
+
+            bResult = aFmt.IsItemize();
+        }
+    }
+
+    return bResult;
+}
+// <- #i29560#
 
 XubString SwTxtNode::GetNumString() const
 {
