@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:13:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1632,6 +1632,15 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
 //
 //////////////////////////////////////////////////////////////////////////
 
+struct ImplStlAnimationInfoSortHelper
+{
+    bool operator()( const std::pair< SdrObject*, const SdAnimationInfo* >& p1, const std::pair< SdrObject*, const SdAnimationInfo* >& p2 )
+    {
+        return p1.second->nPresOrder < p2.second->nPresOrder;
+    }
+};
+
+
 void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimationsUsed )
 {
     ULONG nFilePosMerk = rStCtrl.Tell();
@@ -1885,76 +1894,64 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
         }
     }
 
-
-    // Animationsobjekte der Page in der Reihenfolge abstimmen
-    SdrObjListIter aIter( *pPage, IM_FLAT );
-    sal_Int32   i;
-    List    aAnimInfo;
-    while ( aIter.IsMore() )
-    {
-        SdrObject* pObj = aIter.Next();
-        const SdAnimationInfo *pInfo = pDoc->GetAnimationInfo( pObj );
-        if ( pInfo )
-        {
-            for ( i = aAnimInfo.Count() - 1; i >= 0; i-- )
-            {
-                if ( ( (const SdAnimationInfo*)aAnimInfo.GetObject( i ) )->nPresOrder <= pInfo->nPresOrder )
-                    break;
-            }
-            aAnimInfo.Insert( (void*)pInfo, i + 1 );
-        }
-    }
-    for ( i = 0; (sal_uInt32)i < aAnimInfo.Count(); i++ )
-        ( (SdAnimationInfo*)aAnimInfo.GetObject( i ) )->nPresOrder = i + 1;
-
     if ( !bNewAnimationsUsed )
     {
-        SdrObjListIter aIter( *pPage, IM_FLAT );
+        std::vector< std::pair< SdrObject*, const SdAnimationInfo* > > aEffects;
 
-        List    aAnimInfo;
-        while ( aIter.IsMore() )
+        // add effects from page in correct order
+        SdrObjListIter aSdrIter( *pPage, IM_FLAT );
+        while ( aSdrIter.IsMore() )
         {
-            SdrObject* pObj = aIter.Next();
+            SdrObject* pObj = aSdrIter.Next();
             const SdAnimationInfo *pInfo = pDoc->GetAnimationInfo( pObj );
             if ( pInfo )
+                aEffects.push_back( std::pair< SdrObject*, const SdAnimationInfo* >( pObj, pInfo ) );
+        }
+
+        ImplStlAnimationInfoSortHelper aSortHelper;
+        std::sort( aEffects.begin(), aEffects.end(), aSortHelper );
+
+        std::vector< std::pair< SdrObject*, const SdAnimationInfo* > >::iterator aIter( aEffects.begin() );
+        const std::vector< std::pair< SdrObject*, const SdAnimationInfo* > >::iterator aEnd( aEffects.end() );
+
+        for( ;aIter != aEnd; aIter++ )
+        {
+            SdrObject* pObj = (*aIter).first;;
+            const SdAnimationInfo *pInfo = (*aIter).second;;
+
+            uno::Reference< drawing::XShape > aXShape = GetXShapeForSdrObject( pObj );
+            if ( aXShape.is() )
             {
-                uno::Reference< drawing::XShape > aXShape = GetXShapeForSdrObject( pObj );
-                if ( aXShape.is() )
+                uno::Reference< beans::XPropertySet > aXPropSet( aXShape, uno::UNO_QUERY );
+                if ( aXPropSet.is() )
                 {
-                    uno::Reference< beans::XPropertySet > aXPropSet( aXShape, uno::UNO_QUERY );
-                    if ( aXPropSet.is() )
+                    if ( ( pInfo->eEffect != com::sun::star::presentation::AnimationEffect_NONE )
+                        || ( pInfo->eTextEffect != ::com::sun::star::presentation::AnimationEffect_NONE ) )
                     {
-                        if ( ( pInfo->eEffect != com::sun::star::presentation::AnimationEffect_NONE )
-                            || ( pInfo->eTextEffect != ::com::sun::star::presentation::AnimationEffect_NONE ) )
+                        uno::Any aAny;
+                        if ( pInfo->eEffect != com::sun::star::presentation::AnimationEffect_NONE )
                         {
-                            uno::Any aAny;
-                            sal_Int32 nPresOrder = pInfo->nPresOrder;
-                            aAny <<= nPresOrder;
-                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PresentationOrder" )), sal_True );
-                            if ( pInfo->eEffect != com::sun::star::presentation::AnimationEffect_NONE )
-                            {
-                                aAny <<= pInfo->eEffect;
-                                SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Effect" )), sal_True );
-                            }
-                            if ( pInfo->eTextEffect != com::sun::star::presentation::AnimationEffect_NONE )
-                            {
-                                aAny <<= pInfo->eTextEffect;
-                                SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextEffect" )), sal_True );
-                            }
-                            aAny <<= pInfo->eSpeed;
-                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Speed" )), sal_True );
-                            aAny <<= pInfo->bDimHide;
-                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DimHide" )), sal_True );
-                            aAny <<= pInfo->bDimPrevious;
-                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DimPrevious" )), sal_True );
-                            aAny <<= (sal_Int32)( (sal_uInt32)( pInfo->aDimColor.GetBlue() | ( pInfo->aDimColor.GetGreen() << 8 ) | ( pInfo->aDimColor.GetRed() << 16 ) ) );
-                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DimColor" )), sal_True );
-                            aAny <<= pInfo->bSoundOn;
-                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SoundOn" )), sal_True );
-                            rtl::OUString aStr( pInfo->aSoundFile );
-                            aAny <<= aStr;
-                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Sound" )), sal_True );
+                            aAny <<= pInfo->eEffect;
+                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Effect" )), sal_True );
                         }
+                        if ( pInfo->eTextEffect != com::sun::star::presentation::AnimationEffect_NONE )
+                        {
+                            aAny <<= pInfo->eTextEffect;
+                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextEffect" )), sal_True );
+                        }
+                        aAny <<= pInfo->eSpeed;
+                        SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Speed" )), sal_True );
+                        aAny <<= pInfo->bDimHide;
+                        SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DimHide" )), sal_True );
+                        aAny <<= pInfo->bDimPrevious;
+                        SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DimPrevious" )), sal_True );
+                        aAny <<= (sal_Int32)( (sal_uInt32)( pInfo->aDimColor.GetBlue() | ( pInfo->aDimColor.GetGreen() << 8 ) | ( pInfo->aDimColor.GetRed() << 16 ) ) );
+                        SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DimColor" )), sal_True );
+                        aAny <<= pInfo->bSoundOn;
+                        SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SoundOn" )), sal_True );
+                        rtl::OUString aStr( pInfo->aSoundFile );
+                        aAny <<= aStr;
+                        SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Sound" )), sal_True );
                     }
                 }
             }
