@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:09:41 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,16 +260,6 @@ ModelessDialog RID_SVXDLG_SEARCH
         WordBreak = TRUE ;
         Hide = TRUE ;
     };
-#if SUPD < 641 || defined( GT_DEBUG )
-    MultiLineEdit ED_SEARCH_FORMATS
-    {
-        Pos = MAP_APPFONT ( 10 , 24 ) ;
-        Size = MAP_APPFONT ( 171 , 16 ) ;
-        ReadOnly = TRUE ;
-        IgnoreTab = TRUE ;
-        Hide = TRUE ;
-    };
-#endif
     FixedText FT_SEARCH_FORMATS
     {
         Pos = MAP_APPFONT ( 10 , 24 ) ;
