@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 12:53:27 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,18 +560,10 @@ sal_Bool SwTxtPortion::Format( SwTxtFormatInfo &rInf )
 
 void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
-#ifndef USED
     if( ( !GetPortion() || ( GetPortion()->IsKernPortion() &&
         !GetPortion()->GetPortion() ) ) && GetLen() &&
         rInf.GetIdx() < rInf.GetTxt().Len() &&
         1 < rInf.GetIdx() && ' ' == rInf.GetChar( rInf.GetIdx() - 1 )
-#else
-    if( !GetPortion() && 1 < GetLen() &&
-        rInf.GetIdx() < rInf.GetTxt().Len() &&
-        1 < rInf.GetIdx() && ' ' == rInf.GetTxt()[xub_StrLen(rInf.GetIdx()-1)]
-        && !rInf.GetFly()
-#endif
-
         && !rInf.GetLast()->IsHolePortion() )
     {
         // calculate number of blanks
@@ -607,18 +599,6 @@ xub_StrLen SwTxtPortion::GetCrsrOfst( const KSHORT nOfst ) const
 {
     ASSERT( !this, "SwTxtPortion::GetCrsrOfst: don't use this method!" );
     return SwLinePortion::GetCrsrOfst( nOfst );
-}
-
-/*************************************************************************
- *               SwTxtPortion::GetCrsrOfst()
- *************************************************************************/
-
-xub_StrLen SwTxtPortion::GetCrsrOfst( const KSHORT nOfst,
-                                  SwTxtSizeInfo &rSizeInf ) const
-{
-    rSizeInf.SetLen( rSizeInf.GetTxtBreak( nOfst, nLineLength )
-                   - rSizeInf.GetIdx() );
-    return rSizeInf.GetLen();
 }
 
 /*************************************************************************
