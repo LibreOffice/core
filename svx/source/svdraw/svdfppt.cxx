@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:01:11 $
+ *  last change: $Author: sj $ $Date: 2000-11-22 15:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3908,6 +3908,7 @@ PPTCharSheet::PPTCharSheet( UINT32 nInstance )
     {
         maCharLevel[ nDepth ].mnFlags = 0;
         maCharLevel[ nDepth ].mnFont = 0;
+        maCharLevel[ nDepth ].mnAsianOrComplexFont = 0xffff;
         maCharLevel[ nDepth ].mnFontHeight = nFontHeight;
         maCharLevel[ nDepth ].mnFontColor = nColor;
         maCharLevel[ nDepth ].mnFontColorInStyleSheet = Color( (BYTE)nColor, (BYTE)( nColor >> 8 ), (BYTE)( nColor >> 16 ) );
@@ -3956,23 +3957,24 @@ void PPTCharSheet::Read( SvStream& rIn, BOOL bMasterStyle, UINT32 nLevel, BOOL b
             switch ( j )
             {
                 case PPT_CharAttr_FontColor :
+                {
                     rIn >> maCharLevel[ nLevel ].mnFontColor;
                     if( ! (maCharLevel[ nLevel ].mnFontColor && 0xff000000 ) )
                         maCharLevel[ nLevel ].mnFontColor = PPT_COLSCHEME_HINTERGRUND;
+                }
                 break;
-
                 case PPT_CharAttr_Font :
                     rIn >> maCharLevel[ nLevel ].mnFont;
                 break;
-
+                case PPT_CharAttr_AsianOrComplexFont :
+                    rIn >> maCharLevel[ nLevel ].mnAsianOrComplexFont;
+                break;
                 case PPT_CharAttr_FontHeight :
                     rIn >> maCharLevel[ nLevel ].mnFontHeight;
                 break;
-
                 case PPT_CharAttr_Escapement :
                     rIn >> maCharLevel[ nLevel ].mnEscapement;
                 break;
-
                 default :
                     rIn >> nVal;
             }
@@ -4722,48 +4724,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
         }
         if ( i )
             aString = String( pBuf, i );
-//      aString.EraseTrailingChars( 0 );
         delete[] pBuf;
-
-/*
-        BYTE cLo, cHi, *pBuf = new BYTE[ nMaxLen + 1 ];
-        pBuf[ nMaxLen ] = 0;
-        rIn.Read( pBuf, nMaxLen );
-        const BYTE* pPtr = pBuf;
-
-        aString.AllocStrBuf( (UINT16)( nMaxLen >> 1 ) );
-        for ( UINT32 i = 0; i < nMaxLen >> 1; i ++ )
-        {
-            cLo = *pPtr++;
-            cHi = *pPtr++;
-            if ( cHi == 0xf0 )          // in this special case we got a symbol
-                aSpecMarkerList.Insert( (void*)( i | PPT_SPEC_SYMBOL ), LIST_APPEND );
-            else
-            {
-                UINT16 nUni = ( (UINT16)cHi << 8 ) | cLo;
-                if ( nUni == 0xd )
-                    aSpecMarkerList.Insert( (void*)( i | PPT_SPEC_NEWLINE ), LIST_APPEND );
-                else if ( nUni >= 128 )
-                {
-#ifndef WNT
-                    BOOL bNeedsStarBats;
-                    unsigned char cReplace = PPTExportMapper( nUni, bNeedsStarBats );
-                    if ( bNeedsStarBats )
-                        aSpecMarkerList.Insert( (void*)( i | PPT_SPEC_USE_STARBATS | ( cReplace << 24 ) ), LIST_APPEND );
-                    else
-                        cLo = cReplace;
-                    if ( !cLo )
-#endif
-                        cLo = String::ConvertFromUnicode( nUni, rMan.eCharSetSystem );
-                    if( !cLo )
-                        cLo = ' ';
-                }
-            }
-            aString[ (UINT16)i ] = (char)cLo;
-        }
-        aString.EraseTrailingChars( 0 );
-        delete[] pBuf;
-*/
     }
     else
     {
@@ -4868,9 +4829,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                     rIn >> nDummy16;
                 if ( nMask & 16 )
                     rIn >> nDummy16;
-                if ( nMask & 32 )
-                    rIn >> nDummy16;
-                if ( nMask & 64 )
+                if ( nMask & 0xe0 )
                     rIn >> nDummy16;
                 if ( nExtParaPos )                          // if set, get the new ppt2000 numrules
                 {
@@ -4936,18 +4895,6 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                     if ( pDat[ nCount ] == 0xd )
                         nParaCount++;
                 }
-/*
-                const char *pDat = aString.GetStr() + nCharAnzRead;
-                const char *pF = pDat;
-                do
-                {
-                    pF = (const char*)memchr( (const void*)pF, 0xd, ( pDat + nCharCount ) - pF );
-                    if ( !pF++ )
-                        break;
-                    nParaCount++;
-                }
-                while ( pF );
-*/
             }
             while ( nParaCount-- )
                 aParaPropList.Insert( new PPTParaPropSet( aParaPropSet ), LIST_APPEND );
@@ -5012,6 +4959,18 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                             {
                                 rIn >> aSet.mnFont;
                                 aSet.mnAttrSet |= 1 << PPT_CharAttr_Font;
+                            }
+                            break;
+                            case PPT_CharAttr_AsianOrComplexFont :
+                            {
+                                rIn >> aSet.mnAsianOrComplexFont;
+                                aSet.mnAttrSet |= 1 << PPT_CharAttr_AsianOrComplexFont;
+                            }
+                            break;
+                            case PPT_CharAttr_Unknown2 :
+                            {
+                                rIn >> aSet.mnUnknown2;
+                                aSet.mnAttrSet |= 1 << PPT_CharAttr_Unknown2;
                             }
                             break;
                             case PPT_CharAttr_FontHeight :
@@ -5243,6 +5202,9 @@ BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstance
             case PPT_CharAttr_Font :
                 nRetValue = pCharSet->mnFont;
             break;
+            case PPT_CharAttr_AsianOrComplexFont :
+                nRetValue = pCharSet->mnAsianOrComplexFont;
+            break;
             case PPT_CharAttr_FontHeight :
                 nRetValue = pCharSet->mnFontHeight;
             break;
@@ -5290,6 +5252,13 @@ BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstance
                     bIsHardAttribute = 1;
             }
             break;
+            case PPT_CharAttr_AsianOrComplexFont :
+            {
+                nRetValue = rCharLevel.mnAsianOrComplexFont;
+                if ( pCharLevel && ( nRetValue != pCharLevel->mnAsianOrComplexFont ) )
+                    bIsHardAttribute = 1;
+            }
+            break;
             case PPT_CharAttr_FontHeight :
             {
                 nRetValue = rCharLevel.mnFontHeight;
@@ -5322,6 +5291,8 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
 {
     UINT32  nVal;
 
+    static String aTahoma( String( RTL_CONSTASCII_USTRINGPARAM( "Tahoma" ) ) );
+
     if ( GetAttrib( PPT_CharAttr_Bold, nVal, nInstanceInSheet ) )
         rSet.Put( SvxWeightItem( nVal != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL ) );
 
@@ -5340,12 +5311,35 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
 //  GetAttrib( PPT_CharAttr_Embossed, nVal, nInstanceInSheet );         // Embossed koennen wir nicht
 //  rSet.Put( SvxShadowedItem( nVal != 0 ) );
 
+    sal_uInt32  nAsianFontId = 0xffff;
+    if ( GetAttrib( PPT_CharAttr_AsianOrComplexFont, nAsianFontId, nInstanceInSheet ) )
+    {
+        String aFontName( aTahoma );
+        CharSet eCharSet = rManager.eCharSetSystem;
+        if ( nAsianFontId != 0xffff )
+        {
+            PptFontCollection& rFontCollection = *rManager.pFonts;
+            if ( nAsianFontId < rFontCollection.Count() )
+            {
+                CharSet eFontCharSet =  rFontCollection[ (USHORT)nAsianFontId ]->eCharSet;
+                if ( eFontCharSet != gsl_getSystemTextEncoding() )
+                    eCharSet = eFontCharSet;
+            }
+        }
+        rSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFontName, String(), PITCH_DONTKNOW, eCharSet, EE_CHAR_FONTINFO_CJK ) );
+        rSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFontName, String(), PITCH_DONTKNOW, eCharSet, EE_CHAR_FONTINFO_CTL ) );
+    }
     if ( GetAttrib( PPT_CharAttr_Font, nVal, nInstanceInSheet ) )
     {
         String aFontName;
         if ( rManager.GetFont( nVal, aFontName ) )
         {
             CharSet eCharSet = rManager.eCharSetSystem;
+            if ( nVal == nAsianFontId ) // when nVal equals nAsianFontId the asian font is used.
+            {                           // that also means that the standard font is undefined, so
+                nVal = 0;               // we set the first font. ( usual times new roman )
+                rManager.GetFont( nVal, aFontName );
+            }
             PptFontCollection& rFontCollection = *rManager.pFonts;
             if ( nVal < rFontCollection.Count() )
             {
@@ -5356,9 +5350,13 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
             rSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFontName, String(), PITCH_DONTKNOW, eCharSet ) );
         }
     }
-
     if ( GetAttrib( PPT_CharAttr_FontHeight, nVal, nInstanceInSheet ) ) // Schriftgrad in Point
-        rSet.Put( SvxFontHeightItem( rManager.ScalePoint( nVal ) ) );
+    {
+        sal_uInt32 nHeight = rManager.ScalePoint( nVal );
+        rSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
+        rSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+        rSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
+    }
 
     if ( GetAttrib( PPT_CharAttr_FontColor, nVal, nInstanceInSheet ) )  // Textfarbe (4Byte-Arg)
     {
