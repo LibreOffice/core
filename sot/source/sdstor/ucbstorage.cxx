@@ -924,13 +924,26 @@ void UCBStorage_Impl::Init()
                     ::rtl::OUString aContentType= xRow->getString(3);
                     UCBStorageElement_Impl* pElement = new UCBStorageElement_Impl( aTitle, aContentType, bIsFolder, (ULONG) nSize );
                     m_aChildrenList.Insert( pElement, LIST_APPEND );
+
                     if ( !bIsFolder )
                     {
                         // will be replaced by a detection using the MediaType
-                        BaseStorageStream* pStream = m_pAntiImpl->OpenStream( xRow->getString(1), STREAM_STD_READ, m_bDirect );
-                        if ( Storage::IsStorageFile( const_cast < SvStream* > ( pStream->GetSvStream() ) ) )
+                        String aName( m_aURL );
+                        aName += '/';
+                        aName += String( xRow->getString(1) );
+                        ::ucb::Content aContent( aName, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+
+                        ::rtl::OUString aMediaType;
+                        Any aAny = aContent.getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
+                        if ( ( aAny >>= aMediaType ) && ( aMediaType.compareToAscii("application/vnd.sun.star.oleobject") == 0 ) )
                             pElement->m_bIsStorage = TRUE;
-                        delete pStream;
+                        else if ( !aMediaType.getLength() )
+                        {
+                            BaseStorageStream* pStream = m_pAntiImpl->OpenStream( xRow->getString(1), STREAM_STD_READ, m_bDirect );
+                            if ( Storage::IsStorageFile( const_cast < SvStream* > ( pStream->GetSvStream() ) ) )
+                                pElement->m_bIsStorage = TRUE;
+                            delete pStream;
+                        }
                     }
                 }
             }
@@ -1062,6 +1075,8 @@ sal_Int16 UCBStorage_Impl::Commit()
                     else if ( pElement->m_xStream.Is() )
                     {
                         nLocalRet = pElement->m_xStream->Commit();
+                        if ( pElement->m_xStream->m_bIsOLEStorage )
+                            pElement->m_xStream->m_aContentType = String::CreateFromAscii("application/vnd.sun.star.oleobject");
                         pContent = pElement->GetContent();
                     }
 
