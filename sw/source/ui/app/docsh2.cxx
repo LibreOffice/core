@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:37:28 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:32:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,15 +164,9 @@
 #ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
 #endif
-#ifndef _OFA_HTMLCFG_HXX //autogen
-#include <offmgr/htmlcfg.hxx>
-#endif
-#ifndef _OFF_OFAITEM_HXX //autogen
-#include <offmgr/ofaitem.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
+
+#include <svx/htmlcfg.hxx>
+#include <svx/ofaitem.hxx>
 
 #ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
@@ -308,6 +302,8 @@
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
+
+#include <svx/acorrcfg.hxx>
 
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
@@ -758,10 +754,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
     {
         case SID_AUTO_CORRECT_DLG:
         {
-            OfficeApplication *pOApp = OFF_APP();
-
             SfxBoolItem aSwOptions( SID_AUTO_CORRECT_DLG, TRUE );
-            SvxSwAutoFmtFlags* pAFlags = &pOApp->GetAutoCorrect()->GetSwFlags();
+            SvxSwAutoFmtFlags* pAFlags = &SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags();
             SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
             BOOL bOldLocked = rACW.IsLockWordLstLocked(),
@@ -776,9 +770,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SfxViewShell* pViewShell = GetView()
                                             ? (SfxViewShell*)GetView()
                                             : SfxViewShell::Current();
-            SfxRequest aAppReq(SID_AUTO_CORRECT_DLG, SFX_CALLMODE_SYNCHRON, pOApp->GetPool());
+            SfxApplication* pApp = SFX_APP();
+            SfxRequest aAppReq(SID_AUTO_CORRECT_DLG, SFX_CALLMODE_SYNCHRON, pApp->GetPool());
             aAppReq.AppendItem(aSwOptions);
-            pOApp->ExecuteSlot(aAppReq);
+            pApp->ExecuteSlot(aAppReq);
 
             rACW.SetLockWordLstLocked( bOldLocked );
 
@@ -1678,15 +1673,14 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     // Ein EnterBasicCall braucht man hier nicht, weil man nichts ruft und
     // in HTML-Dokument kein Dok-Basic vorhanden sein kann, das noch nicht
     // geladen wurde.
-    OfficeApplication* pOffApp = OFF_APP();
-    OfaHtmlOptions* pHtmlOptions = pOffApp->GetHtmlOptions();
+    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
     //#59620# HasBasic() zeigt an, dass es schon einen BasicManager an der DocShell
     //          gibt. Der wurde im HTML-Import immer angelegt, wenn Macros im Quelltext
     //          vorhanden sind.
     if( pHtmlOptions && pHtmlOptions->IsStarBasic() && HasBasic())
     {
         BasicManager *pBasicMan = GetBasicManager();
-        if( pBasicMan && (pBasicMan != pOffApp->GetBasicManager()) )
+        if( pBasicMan && (pBasicMan != SFX_APP()->GetBasicManager()) )
         {
             USHORT nLibCount = pBasicMan->GetLibCount();
             while( nLibCount )
