@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textaction.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:26:47 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,37 +66,23 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <com/sun/star/rendering/RenderState.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_RENDERING_STRINGCONTEXT_HPP__
-#include <com/sun/star/rendering/StringContext.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP_
-#include <com/sun/star/rendering/TextDirection.hpp>
-#endif
-
-#ifndef _COMPHELPER_OPTIONALVALUE_HXX
-#include <comphelper/optionalvalue.hxx>
-#endif
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-
 #include <action.hxx>
 #include <cppcanvas/canvas.hxx>
+#include <cppcanvas/renderer.hxx>
 
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
+#endif
+#ifndef _SV_GEN_HXX
+#include <tools/gen.hxx>
+#endif
+
+class VirtualDevice;
 class Point;
+class Color;
 
-namespace com { namespace sun { namespace star { namespace rendering
-{
-    class  XCanvasFont;
-    class  XTextLayout;
-} } } }
 
-/* Definition of internal::LineAction class */
+/* Definition of internal::TextActionFactory class */
 
 namespace cppcanvas
 {
@@ -104,52 +90,51 @@ namespace cppcanvas
     {
         struct OutDevState;
 
-        class TextAction : public Action
+        /** Creates encapsulated converters between GDIMetaFile and
+            XCanvas. The Canvas argument is deliberately placed at the
+            constructor, to force reconstruction of this object for a
+            new canvas. This considerably eases internal state
+            handling, since a lot of the internal state (e.g. fonts,
+            text layout) is Canvas-dependent.
+         */
+        class TextActionFactory
         {
         public:
-            TextAction( const ::Point&                                                  rStartPoint,
-                        const ::rtl::OUString&                                          rText,
-                        sal_Int32                                                       nStartPos,
-                        sal_Int32                                                       nLen,
-                        const CanvasSharedPtr&                                          rCanvas,
-                        const OutDevState&                                              rState,
-                        const ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >&   rTextTransform );
-            TextAction( const ::Point&                                                  rStartPoint,
-                        const ::rtl::OUString&                                          rText,
-                        sal_Int32                                                       nStartPos,
-                        sal_Int32                                                       nLen,
-                        ::com::sun::star::uno::Sequence< double >                       aOffsets,
-                        const CanvasSharedPtr&                                          rCanvas,
-                        const OutDevState&                                              rState,
-                        const ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >&   rTextTransform      );
-            virtual ~TextAction();
+            /** Create text action, optionally shadow/relief effect
 
-            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                Note that this method accepts all coordinates in
+                logical coordinates.
+
+                @param pDXArray
+                Pointer to array of logical character offsets (or NULL)
+
+                @param bSubsettable
+                When this parameter is set to true, the generated
+                action might consume slightly more memory, but is
+                subsettable (Action::render( Subset ) works on
+                characters)
+             */
+            static ActionSharedPtr createTextAction( const ::Point&                 rStartPoint,
+                                                     const ::Size&                  rReliefOffset,
+                                                     const ::Color&                 rReliefColor,
+                                                     const ::Size&                  rShadowOffset,
+                                                     const ::Color&                 rShadowColor,
+                                                     const ::String&                rText,
+                                                     sal_Int32                      nStartPos,
+                                                     sal_Int32                      nLen,
+                                                     const sal_Int32*               pDXArray,
+                                                     VirtualDevice&                 rVDev,
+                                                     const CanvasSharedPtr&         rCanvas,
+                                                     const OutDevState&             rState,
+                                                     const Renderer::Parameters&    rParms,
+                                                     bool                           bSubsettable );
 
         private:
-            // default: disabled copy/assignment
-            TextAction(const TextAction&);
-            TextAction& operator = ( const TextAction& );
-
-            void init( const ::Point&                                                   rStartPoint,
-                       const OutDevState&                                               rState,
-                       const CanvasSharedPtr&                                           rCanvas,
-                       const ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >&    rTextTransform );
-
-            // TODO(P2): This is potentially a real mass object (every character might be
-            // a separate TextAction), thus, make it as lightweight as possible. For
-            // example, share common RenderState among several TextActions, use maOffsets
-            // for the translation.
-
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XCanvasFont >  mxFont;
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XTextLayout >  mxTextLayout;
-            ::com::sun::star::rendering::StringContext      maStringContext;
-            ::com::sun::star::uno::Sequence< double >               maOffsets;
-            CanvasSharedPtr                                         mpCanvas;
-            ::com::sun::star::rendering::RenderState        maState;
-            sal_Int8                                                maTextDirection;
+            // static factory, disable big four
+            TextActionFactory();
+            ~TextActionFactory();
+            TextActionFactory(const TextActionFactory&);
+            TextActionFactory& operator=( const TextActionFactory& );
         };
     }
 }
