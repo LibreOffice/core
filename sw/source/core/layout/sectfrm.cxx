@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:52:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -625,15 +625,21 @@ BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
     if( pSav ) // Robust
     {   // Einen neuen SctFrm anlegen, nicht als Follow/Master
         SwSectionFrm* pNew = new SwSectionFrm( *pSect->GetSection() );
-        SwLayoutFrm* pLay = pNew;
-        // Bei spaltigen Bereichen muss der erste ColumnBody gesucht werden
-        while( pLay->Lower() && pLay->Lower()->IsLayoutFrm() )
-            pLay = (SwLayoutFrm*)pLay->Lower();
         pNew->InsertBehind( pSect->GetUpper(), pSect );
         pNew->Init();
         SWRECTFN( this )
         (pNew->*fnRect->fnMakePos)( NULL, pSect, TRUE );
-        ::RestoreCntnt( pSav, pLay, NULL );
+        // OD 25.03.2003 #108339# - restore content:
+        // determine layout frame for restoring content after the initialization
+        // of the section frame. In the section initialization the columns are
+        // created.
+        {
+            SwLayoutFrm* pLay = pNew;
+            // Search for last layout frame, e.g. for columned sections.
+            while( pLay->Lower() && pLay->Lower()->IsLayoutFrm() )
+                pLay = (SwLayoutFrm*)pLay->Lower();
+            ::RestoreCntnt( pSav, pLay, NULL );
+        }
         _InvalidateSize();
         if( HasFollow() )
         {
@@ -688,10 +694,10 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, BOOL bSave )
     BOOL bSize = pDel->Lower() && pDel->Lower()->IsColumnFrm();
     SwFrm* pPrv = pDel->GetPrev();
     SwLayoutFrm* pUp = pDel->GetUpper();
-    SwFrm *pPrvCntnt, *pNxt;
-    SwSectionFrm *pPrvSct, *pNxtSct;
-    SwSectionFmt *pTmp = (SwSectionFmt*)pDel->GetFmt();
-    SwSectionFmt* pParent = pTmp->GetParent();
+    // OD 27.03.2003 #i12711# - initialize local pointer variables.
+    SwSectionFrm* pPrvSct = NULL;
+    SwSectionFrm* pNxtSct = NULL;
+    SwSectionFmt* pParent = static_cast<SwSectionFmt*>(pDel->GetFmt())->GetParent();
     if( pDel->IsInTab() && pParent )
     {
         SwTabFrm *pTab = pDel->FindTabFrm();
@@ -705,20 +711,18 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, BOOL bSave )
     // einen anderen SectionFrm aufgebrochen, dies muss geprueft werden,
     // dazu besorgen wir uns zunaechst den vorhergehende und den nach-
     // folgenden CntntFrm, mal sehen, ob diese in SectionFrms liegen.
-    if( pParent && 0 != ( pPrvCntnt = pDel->ContainsCntnt() ) )
+    // OD 27.03.2003 #i12711# - check, if previous and next section belonging
+    // together and can be joined, *not* only if deleted section contains content.
+    if ( pParent )
     {
-        if( pPrvCntnt )
-            pPrvCntnt = pPrvCntnt->FindPrev();
+        SwFrm* pPrvCntnt = pDel->GetPrevCntntFrm();
         pPrvSct = pPrvCntnt ? pPrvCntnt->FindSctFrm() : NULL;
-        pNxt = pDel->FindLastCntnt();
-        if( pNxt )
-            pNxt = pNxt->FindNext();
-        pNxtSct = pNxt ? pNxt->FindSctFrm() : NULL;
+        SwFrm* pNxtCntnt = pDel->GetNextCntntFrm();
+        pNxtSct = pNxtCntnt ? pNxtCntnt->FindSctFrm() : NULL;
     }
     else
     {
         pParent = NULL;
-        pPrvCntnt = pNxt = NULL;
         pPrvSct = pNxtSct = NULL;
     }
     // Jetzt wird der Inhalt beseite gestellt und der Frame zerstoert
@@ -2523,4 +2527,3 @@ BOOL SwRootFrm::IsInDelList( SwSectionFrm* pSct ) const
 }
 
 #endif
-
