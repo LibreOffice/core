@@ -24138,3 +24138,4 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?ImpLinkAnmeldung@SdrTextObj@@AAEXXZ
 ?ImpLimitToWorkArea@SdrExchangeView@@IBEEAAVPoint@@PBVSdrPageView@@@Z
 ?WriteBlibStoreEntry@EscherGraphicProvider@@QAEEAAVSvStream@@KEK@Z
+?GetMechanismFromUI@SvxSSOTabPage@@AAE?AW4MechType@1@XZ
