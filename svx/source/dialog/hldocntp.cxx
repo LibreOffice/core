@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #endif
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
+#endif
+#ifndef _UNOTOOLS_UCBHELPER_HXX
+#include <unotools/ucbhelper.hxx>
 #endif
 
 #include "hyperdlg.hrc"
@@ -531,42 +534,53 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
 IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
 {
-    rtl::OUString aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
-    Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    Reference < XFolderPicker > xFolderPicker( xFactory->createInstance( aService ), UNO_QUERY );
+    rtl::OUString                       aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
+    Reference < XMultiServiceFactory >  xFactory( ::comphelper::getProcessServiceFactory() );
+    Reference < XFolderPicker >         xFolderPicker( xFactory->createInstance( aService ), UNO_QUERY );
 
-    String aStrURL, aTempStrURL( maCbbPath.GetText() );
+    String              aStrURL;
+    String              aTempStrURL( maCbbPath.GetText() );
     utl::LocalFileHelper::ConvertSystemPathToURL( aTempStrURL, maCbbPath.GetBaseURL(), aStrURL );
 
-    String aStrPath = aStrURL;
-    INetURLObject aURL( aStrURL, INET_PROT_FILE );
-    String aStrName = aURL.getName();
+    String              aStrPath = aStrURL;
+    BOOL                bZeroPath = ( aStrPath.Len() == 0 );
+    BOOL                bHandleFileName = bZeroPath;    // when path has length of 0, then the rest should always be handled
+                                                        //  as file name, otherwise we do not yet know
 
-    if ( aStrPath == aEmptyStr )
+    if( bZeroPath )
         aStrPath = SvtPathOptions().GetWorkPath();
+    else if( !::utl::UCBContentHelper::IsFolder( aStrURL ) )
+        bHandleFileName = TRUE;
 
     xFolderPicker->setDisplayDirectory( aStrPath );
 
-    if ( xFolderPicker->execute() == ExecutableDialogResults::OK )
+    if( xFolderPicker->execute() == ExecutableDialogResults::OK )
     {
-        sal_Char const sSlash[] = "/";
+        sal_Char const  sSlash[] = "/";
+
+        INetURLObject   aURL( aStrURL, INET_PROT_FILE );
+        String          aStrName;
+        if( bHandleFileName )
+            aStrName = bZeroPath? aTempStrURL : aURL.getName();
 
         maCbbPath.SetBaseURL( xFolderPicker->getDirectory() );
-        String aStrTmp( xFolderPicker->getDirectory() );
+        String          aStrTmp( xFolderPicker->getDirectory() );
 
         if( aStrTmp.GetChar( aStrTmp.Len() - 1 ) != sSlash[0] )
             aStrTmp.AppendAscii( sSlash );
 
-        aStrTmp += aStrName;
-        INetURLObject aNewURL( aStrTmp );
+        // append old file name
+        if( bHandleFileName )
+            aStrTmp += aStrName;
 
-        if ( aStrName != aEmptyStr && aNewURL.getExtension() != aEmptyStr &&
-             maLbDocTypes.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+        INetURLObject   aNewURL( aStrTmp );
+
+        if( aStrName.Len() > 0 && aNewURL.getExtension().Len() > 0 &&
+            maLbDocTypes.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
         {
             // get private-url
             int nPos = maLbDocTypes.GetSelectEntryPos();
-            aNewURL.setExtension ( ( ( DocumentTypeData* )
-                                     maLbDocTypes.GetEntryData( nPos ) )->aStrExt );
+            aNewURL.setExtension( ( ( DocumentTypeData* ) maLbDocTypes.GetEntryData( nPos ) )->aStrExt );
         }
 
         if( aNewURL.GetProtocol() == INET_PROT_FILE )
