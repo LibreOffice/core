@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: abi $ $Date: 2001-08-21 13:26:25 $
+ *  last change: $Author: abi $ $Date: 2001-08-24 13:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,7 +544,8 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
                                                              m_aURLParameter.get_language() );
 
                 Any aAny;
-                aAny <<= inf->getKeywordList();
+                if( inf )
+                    aAny <<= inf->getKeywordList();
                 xRow->appendObject( rProp,aAny );
             }
             else if( rProp.Name.compareToAscii( "KeywordRef" ) == 0 )
@@ -553,7 +554,8 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
                                                              m_aURLParameter.get_language() );
 
                 Any aAny;
-                aAny <<= inf->getIdList();
+                if( inf )
+                    aAny <<= inf->getIdList();
                 xRow->appendObject( rProp,aAny );
             }
             else if( rProp.Name.compareToAscii( "KeywordAnchorForRef" ) == 0 )
@@ -562,7 +564,8 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
                                                              m_aURLParameter.get_language() );
 
                 Any aAny;
-                aAny <<= inf->getAnchorList();
+                if( inf )
+                    aAny <<= inf->getAnchorList();
                 xRow->appendObject( rProp,aAny );
             }
             else if( rProp.Name.compareToAscii( "KeywordTitleForRef" ) == 0 )
@@ -571,7 +574,8 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
                                                              m_aURLParameter.get_language() );
 
                 Any aAny;
-                aAny <<= inf->getTitleList();
+                if( inf )
+                    aAny <<= inf->getTitleList();
                 xRow->appendObject( rProp,aAny );
             }
             else if( rProp.Name.compareToAscii( "SearchScopes" ) == 0 )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: abi $ $Date: 2001-08-23 11:39:42 $
+ *  last change: $Author: abi $ $Date: 2001-08-24 13:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,8 @@ Databases::~Databases()
         DatabasesTable::iterator it = m_aDatabases.begin();
         while( it != m_aDatabases.end() )
         {
-            it->second->close( 0 );
+            if( it->second )
+                it->second->close( 0 );
             delete it->second;
             ++it;
         }
@@ -539,10 +540,12 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
 
     rtl::OUString key = lang(Language) + rtl::OUString::createFromAscii( "/" ) + Database;
 
-    KeywordInfoTable::iterator it =
-        m_aKeywordInfo.insert( KeywordInfoTable::value_type( key,0 ) ).first;
+    std::pair< KeywordInfoTable::iterator,bool > aPair =
+        m_aKeywordInfo.insert( KeywordInfoTable::value_type( key,0 ) );
 
-    if( ! it->second )
+    KeywordInfoTable::iterator it = aPair.first;
+
+    if( aPair.second && ! it->second )
     {
         std::vector< rtl::OUString > listKey_;
         std::hash_map< rtl::OUString,rtl::OUString,ha,eq > internalHash;
@@ -554,63 +557,64 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
 
         rtl::OString fileName( fileNameOU.getStr(),fileNameOU.getLength(),RTL_TEXTENCODING_UTF8 );
 
-        Db table(0,0);
-        table.open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 );
+        Db table( 0,DB_CXX_NO_EXCEPTIONS );
+        if( 0 == table.open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
+        {   // success opening the database
+            Dbc* cursor = 0;
+            table.cursor( 0,&cursor,0 );
+            Dbt key,data;
 
-        Dbc* cursor = 0;
-        table.cursor( 0,&cursor,0 );
-        Dbt key,data;
+            bool first = true;
+            key.set_flags( DB_DBT_MALLOC );      // Initially the cursor must allocate the necessary memory
+            data.set_flags( DB_DBT_MALLOC );
+            KeywordInfo* info = it->second = new KeywordInfo();
 
-        bool first = true;
-        key.set_flags( DB_DBT_MALLOC );      // Initially the cursor must allocate the necessary memory
-        data.set_flags( DB_DBT_MALLOC );
-        KeywordInfo* info = it->second = new KeywordInfo();
+            rtl::OUString keyStri;
 
-        rtl::OUString keyStri;
-
-        while( cursor && DB_NOTFOUND != cursor->get( &key,&data,DB_NEXT ) )
-        {
-            keyStri = rtl::OUString( static_cast<sal_Char*>(key.get_data()),
-                                     key.get_size(),
-                                     RTL_TEXTENCODING_UTF8 );
-            info->insert( listKey_,keyStri );
-            internalHash[ keyStri ] = rtl::OUString( static_cast<sal_Char*>(data.get_data()),
-                                                     data.get_size(),
-                                                     RTL_TEXTENCODING_UTF8 );
-
-            if( first )
+            while( cursor && DB_NOTFOUND != cursor->get( &key,&data,DB_NEXT ) )
             {
-                key.set_flags( DB_DBT_REALLOC );
-                data.set_flags( DB_DBT_REALLOC );
-                first = false;
+                keyStri = rtl::OUString( static_cast<sal_Char*>(key.get_data()),
+                                         key.get_size(),
+                                         RTL_TEXTENCODING_UTF8 );
+                info->insert( listKey_,keyStri );
+                internalHash[ keyStri ] = rtl::OUString( static_cast<sal_Char*>(data.get_data()),
+                                                         data.get_size(),
+                                                         RTL_TEXTENCODING_UTF8 );
+
+                if( first )
+                {
+                    key.set_flags( DB_DBT_REALLOC );
+                    data.set_flags( DB_DBT_REALLOC );
+                    first = false;
+                }
             }
-        }
 
-        info->sort( listKey_,KeywordInfo::Compare( getCollator( Language,
-                                                                rtl::OUString() ) ) );
-        cursor->close();
-        table.close( 0 );
+            info->sort( listKey_,KeywordInfo::Compare( getCollator( Language,
+                                                                    rtl::OUString() ) ) );
+            cursor->close();
+            table.close( 0 );
 
-        Sequence< rtl::OUString >& keywords = info->getKeywordList();
-        Db *table2 = getBerkeley( Database,Language );
-        for( sal_Int32 i = 0; i < keywords.getLength(); ++i )
-        {
-            Sequence< rtl::OUString >& id = info->insertId( i,internalHash[ keywords[i] ] );
-            Sequence< rtl::OUString >& title = info->getTitleForIndex( i );
-
-            for( sal_Int32 j = 0; j < id.getLength(); ++j )
+            Sequence< rtl::OUString >& keywords = info->getKeywordList();
+            Db *table2 = getBerkeley( Database,Language );
+            for( sal_Int32 i = 0; i < keywords.getLength(); ++i )
             {
-                rtl::OString idj( id[j].getStr(),id[j].getLength(),RTL_TEXTENCODING_UTF8 );
-                Dbt key1( static_cast< void* >( const_cast< sal_Char* >( idj.getStr() ) ),
-                          idj.getLength() );
-                Dbt data1;
-                if( table2 )
-                    table2->get( 0,&key1,&data1,0 );
+                Sequence< rtl::OUString >& id = info->insertId( i,internalHash[ keywords[i] ] );
+                Sequence< rtl::OUString >& title = info->getTitleForIndex( i );
 
-                DbtToStringConverter converter( static_cast< sal_Char* >( data1.get_data() ),
-                                                data1.get_size() );
+                for( sal_Int32 j = 0; j < id.getLength(); ++j )
+                {
+                    rtl::OString idj( id[j].getStr(),id[j].getLength(),RTL_TEXTENCODING_UTF8 );
+                    Dbt key1( static_cast< void* >( const_cast< sal_Char* >( idj.getStr() ) ),
+                              idj.getLength() );
+                    Dbt data1;
+                    if( table2 )
+                        table2->get( 0,&key1,&data1,0 );
 
-                title[j] = converter.getTitle();
+                    DbtToStringConverter converter( static_cast< sal_Char* >( data1.get_data() ),
+                                                    data1.get_size() );
+
+                    title[j] = converter.getTitle();
+                }
             }
         }
     }
