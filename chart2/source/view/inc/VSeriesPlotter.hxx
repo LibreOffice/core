@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-15 10:15:34 $
+ *  last change: $Author: iha $ $Date: 2003-12-15 19:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,8 @@ class VSeriesPlotter : public PlotterBase, public MinimumAndMaximumSupplier
     //-------------------------------------------------------------------------
 public:
     VSeriesPlotter( const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel );
+                ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel
+                , bool bCategoryXAxis=true );
     virtual ~VSeriesPlotter();
 
     /*
@@ -256,6 +257,10 @@ protected: //methods
         , bool bVertical
         );
 
+    virtual void createRegressionCurvesShapes( const VDataSeries& rVDataSeries
+        , const ::com::sun::star::uno::Reference<
+                ::com::sun::star::drawing::XShapes >& xTarget );
+
     virtual void setMappedProperties(
           const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShape >& xTarget
@@ -271,6 +276,8 @@ protected: //member
 
     ::std::vector< VDataSeriesGroup >   m_aXSlots;
     static tMakePropertyNameMap         m_aShapePropertyMapForArea;
+
+    bool                                m_bCategoryXAxis;//true->xvalues are indices (this would not be necessary if series for category chart wouldn't have x-values)
 };
 
 //.............................................................................
