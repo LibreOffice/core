@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 17:12:53 $
+ *  last change: $Author: mba $ $Date: 2000-11-30 09:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,6 @@ public:
     virtual void SAL_CALL   run();
     void                    Cancel();
     sal_Bool                DoIt();
-    void                    Notify( sal_Bool bError );
 };
 
 //----------------------------------------------------------------------------
@@ -376,7 +375,7 @@ void CommandThread_Impl::run()
     m_bRunning = sal_True;
 
     if( !m_bCanceled && schedule() )
-        Notify( DoIt() );
+        DoIt();
 
     m_bRunning = sal_False;
 }
@@ -405,12 +404,7 @@ sal_Bool CommandThread_Impl::DoIt()
         bException = true;
     }
 
-    return ( bAborted || bException );
-}
-
-void CommandThread_Impl::Notify( sal_Bool bError )
-{
-    if ( bError )
+    if ( bAborted || bException )
     {
         if( m_xHandler.Is() )
             m_xHandler->Handle( UcbLockBytesHandler::CANCEL, m_xLockBytes );
@@ -427,8 +421,9 @@ void CommandThread_Impl::Notify( sal_Bool bError )
     Reference < XActiveDataControl > xControl( m_aArgument.Sink, UNO_QUERY );
     if ( xControl.is() )
         xControl->terminate();
-}
 
+    return ( bAborted || bException );
+}
 
 //----------------------------------------------------------------------------
 void CommandThread_Impl::onTerminated()
@@ -757,7 +752,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xCon
     Reference< XProgressHandler > xProgressHdl = new ProgressHandler_Impl( LINK( &xLockBytes, UcbLockBytes, DataAvailHdl ) );
     CommandThread_Impl* pThread = new CommandThread_Impl( xLockBytes, xContent, aArgument, xInteractionHandler, xProgressHdl, pHandler );
 
-    if ( eOpenMode & STREAM_WRITE )
+    if ( ( eOpenMode & STREAM_WRITE ) || !pHandler )
     {
         // first try read/write mode
         sal_Bool bError = pThread->DoIt();
@@ -766,15 +761,9 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xCon
         delete pThread;
         return xLockBytes;
     }
-
-    if ( pHandler )
-    {
-        pThread->create();
-    }
     else
     {
-        pThread->DoIt();
-        delete pThread;
+        pThread->create();
     }
 
     return xLockBytes;
