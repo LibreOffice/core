@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:36 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ EditTextObject* XclImpStringHelper::CreateTextObject(
 
         SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
         if( bFirstEscaped )
-            rFontBuffer.FillToItemSet( rXFBuffer.GetFontIndex( nXFIndex ), aItemSet, xlFontEEIDs );
+            rFontBuffer.FillToItemSet( aItemSet, xlFontEEIDs, rXFBuffer.GetFontIndex( nXFIndex ) );
         ESelection aSelection;
 
         XclFormatRun aNextRun;
@@ -222,7 +222,7 @@ EditTextObject* XclImpStringHelper::CreateTextObject(
 
                 // start new item set
                 aItemSet.ClearItem();
-                rFontBuffer.FillToItemSet( aNextRun.mnFontIx, aItemSet, xlFontEEIDs );
+                rFontBuffer.FillToItemSet( aItemSet, xlFontEEIDs, aNextRun.mnFontIx );
 
                 // read new formatting information
                 if( aIter != aEndIter )
