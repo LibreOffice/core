@@ -8,8 +8,12 @@
 #ifndef _TREEVIEW_TVREAD_HXX_
 #include "tvread.hxx"
 #endif
+#ifdef SYSTEM_EXPAT
+#include <expat.h>
+#else
 #ifndef XmlParse_INCLUDED
 #include <expat/xmlparse.h>
+#endif
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
