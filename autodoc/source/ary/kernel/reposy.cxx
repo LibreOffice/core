@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reposy.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:21:54 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,8 @@ RepositoryCenter::inq_Gate_Cpp() const
     Sequence            2202
     ExplicitType        2203
     ExplicitNameRoom    2204
+    TemplateParamType   2205
+
 
     java
     ----
