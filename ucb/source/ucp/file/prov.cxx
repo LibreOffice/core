@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-15 12:40:30 $
+ *  last change: $Author: hro $ $Date: 2001-05-15 15:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,9 +206,17 @@ extern "C" void * SAL_CALL component_getFactory(
 /****************************************************************************/
 
 
-#ifdef UNX
-extern "C" oslFileError osl_getRealPath(rtl_uString* strPath, rtl_uString** strRealPath);
+oslFileError getResolvedURL(rtl_uString* ustrPath, rtl_uString** pustrResolvedURL)
+{
+#ifdef TF_FILEURL
+    /* TODO: If file exist and is a link get link target URL */
+    rtl_uString_assign( pustrResolvedURL, ustrPath );
+#else
+    rtl_uString_assign( pustrResolvedURL, ustrPath );
 #endif
+
+    return osl_File_E_None;
+}
 
 static bool moreLength( const shell::MountPoint& m1, const shell::MountPoint& m2 )
 {
@@ -352,13 +360,12 @@ FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& 
 #endif
                 // m_pMyShell->getUnqFromUrl( aAliasName,aUnqAl );
 
-#ifdef UNX
                 rtl::OUString aRealUnqDir;
                 rtl::OUString aRealUnqAlias;
 
-                osl_getRealPath( aUnqDir.pData, &aRealUnqDir.pData );
+                getResolvedURL( aUnqDir.pData, &aRealUnqDir.pData );
 #if 0
-                osl_getRealPath( aUnqAl.pData, &aRealUnqAlias.pData );
+                getResolvedURL( aUnqAl.pData, &aRealUnqAlias.pData );
 #else
                 aRealUnqAlias = aUnqAl;
 #endif
@@ -372,14 +379,6 @@ FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& 
                         shell::MountPoint( aRealUnqAlias, aRealUnqDir ) );
                     m_pMyShell->m_bFaked = true;
                 }
-#else
-                if ( aUnqDir.getLength() && aUnqAl.getLength() )
-                {
-                    m_pMyShell->m_vecMountPoint.push_back(
-                        shell::MountPoint( aUnqAl, aUnqDir ) );
-                    m_pMyShell->m_bFaked = true;
-                }
-#endif
 
             }
 
