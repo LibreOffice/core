@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:31:17 $
+ *  last change: $Author: oj $ $Date: 2001-07-23 07:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@ namespace connectivity
             // factory method for resultset's
             virtual OResultSet* createResultSet();
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> initResultSet();
+
+            void checkAndResizeParameters(sal_Int32 parameterIndex);
+            void setParameter(sal_Int32 parameterIndex, const ORowSetValue& x);
 
         public:
             DECLARE_SERVICE_INFO();
