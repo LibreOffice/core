@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:37:22 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,8 +179,9 @@ class ScUndoCut: public ScBlockUndo
 public:
                     TYPEINFO();
                     ScUndoCut( ScDocShell* pNewDocShell,
-                               ScRange aRange,      // incl. Merge
-                               ScAddress aOldEnd,   // Ende ohne Merge
+                               ScRange aRange,              // adjusted for merged cells
+                               ScAddress aOldEnd,           // end position without adjustment
+                               const ScMarkData& rMark,     // selected sheets
                                ScDocument* pNewUndoDoc );
     virtual         ~ScUndoCut();
 
@@ -192,6 +193,7 @@ public:
     virtual String  GetComment() const;
 
 private:
+    ScMarkData      aMarkData;
     ScDocument*     pUndoDoc;
     ScRange         aExtendedRange;
     ULONG           nStartChangeAction;
