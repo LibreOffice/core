@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:48:00 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ dutch ] = "Als de gemarkeerde cellen niet de gewenste gegevens bevatten markeert u nu het bereik.\n\nMarkeer eveneens de cellen met de kolom- resp. rijlabels als u deze in uw afbeelding wilt weergeven.";
         Text[ chinese_simplified ] = "ΘηΉϋΡ΅ΦΠµΔµ¥ΤªΈρΓ»ΣΠΚύΎέ£¬ΔΗΓ΄ΗλΔϊΡ΅ΤρΗψΣς΅£\n\nΔϊΏΙÒΤÒ²Ρ΅ΦΠΑΠ±κΜβΊΝΠΠ±κΜβ£¬Θη΄ΛΥβΠ©ΧΚΑΟÒ²»α±»ΟΤΚΎΤΪΝΌ±νΔΪ΅£";
         Text[ greek ] = "Στην περίπτωση που τα επιλεγμένα κελιά δεν περιέχουν τα δεδομένα που επιθυμείτε, επιλέξτε εσείς την σωστή περιοχή.\n\n Αν θέλετε να εμφανιστούν στο γραφικό σας και οι επιγραφές των στηλών και των γραμμών, τότε θα πρέπει να συμπεριληφθούν και αυτά τα δεδομένα στην περιοχή της επιλογής σας.";
-        Text[ korean ] = "Ό±ΕΓΗ¥½ΓµΘ ΌΏΐΜ ΏψΗΟ΄Β µ¥ΐΜΕΝΈ¦ ΖχΗΤΗΟ°ν ΐΦΑφ ΎΚΐ» °ζΏμ, Αφ±έ ΏµΏªΐ» Η¥½ΓΗΟ½Κ½ΓΏΐ. \n\nΏ­ ³»Αφ Ηΰ ¶σΊ§ΐ» Αφ΄Ρ ΌΏµιΐ» ±Χ·΅ΗΘΏ΅ ³ªΕΈ³»°ν ½ΝΐΈΈι ΐΜ ΌΏµιΐ» ΗΤ²² ΖχΗΤ½ΓΕ°½Κ½ΓΏΐ.";
+        Text[ korean ] = "Ό±ΕΓΗ¥½ΓµΘ ΌΏΐΜ ΏψΗΟ΄Β µ¥ΐΜΕΝΈ¦ ΖχΗΤΗΟ°ν ΐΦΑφ ΎΚΐ» °ζΏμ, Αφ±έ ΏµΏªΐ» Ό±ΕΓΗ¥½ΓΗΟ½Κ½ΓΏΐ. \n\nΏ­ ³»Αφ Ηΰ ¶σΊ§ΐ» °΅Αψ ΌΏµιΐ» ±Χ·΅ΗΘΏ΅ ³ªΕΈ³»°νΐΪΗΟΈι ΐΜ ΌΏµιΐ» ΗΤ²² ΖχΗΤ½ΓΕ°½Κ½ΓΏΐ.";
         Text[ turkish ] = "Seηilen hόcreler, istenen verileri iηermiyorsa aralύπύ ώimdi seηin.\n\nGrafikte gφrόnmelerini istiyorsanύz, sόtun ya da satύr baώlύklarύnύ iηeren hόcreleri de seηin";
     };
     FixedText FT_RANGE
@@ -127,7 +127,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ dutch ] = "~Bereik";
         Text[ chinese_simplified ] = "ΗψΣς(~A)";
         Text[ greek ] = "Περιοχή";
-        Text[ korean ] = "ΏµΏª(~A)";
+        Text[ korean ] = "ΏµΏª";
         Text[ turkish ] = "~Aralύk";
     };
     Edit ED_RANGE
@@ -162,7 +162,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ dutch ] = "Eerste ~rij als kop";
         Text[ chinese_simplified ] = "µΪÒ»ΠΠΧχΞª±κΜβ(~R)";
         Text[ greek ] = "Πρώτη γραμμή ως επιγραφή";
-        Text[ korean ] = "ΓΉΉψΒ° Ηΰΐ» ΔΈΌΗΐΈ·Ξ(~F)";
+        Text[ korean ] = "ΓΉΉψΒ° Ηΰΐ» ΔΈΌΗΐΈ·Ξ";
         Text[ turkish ] = "Baώlύklar ~birinci satύrda";
     };
     CheckBox CB_FIRST_COL
@@ -191,7 +191,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ dutch ] = "Eerste ~kolom als kop";
         Text[ chinese_simplified ] = "µΪÒ»ΑΠΧχΞª±κΜβ(~C)";
         Text[ greek ] = "Πρώτη στήλη ως επιγραφή";
-        Text[ korean ] = "ΓΉΉψΒ° Ώ­ΐ» ΔΈΌΗΐΈ·Ξ(~C)";
+        Text[ korean ] = "ΓΉΉψΒ° Ώ­ΐ» ΔΈΌΗΐΈ·Ξ";
         Text[ turkish ] = "Baώlύklar ~birinci sόtunda";
     };
     GroupBox GB_1
@@ -267,7 +267,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ dutch ] = "<< Vor~ige";
         Text[ chinese_simplified ] = "<< ·µ»Ψ(~B)";
         Text[ greek ] = "<< Πίσω";
-        Text[ korean ] = "<<µΪ·Ξ(~B)";
+        Text[ korean ] = "<<µΪ·Ξ)";
         Text[ turkish ] = "<< G~eri";
     };
     PushButton BT_NEXT
@@ -296,7 +296,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ dutch ] = "~Volgende >>";
         Text[ chinese_simplified ] = "ΌΜΠψ(~N)>>";
         Text[ greek ] = "Επόμενο >>";
-        Text[ korean ] = "΄Ωΐ½ >>(~N)";
+        Text[ korean ] = "΄Ωΐ½ >>";
         Text[ turkish ] = "~έleri >>";
     };
     PushButton BT_FINISH
@@ -344,6 +344,6 @@ ModelessDialog DLG_INSERT_CHART
     Text[ dutch ] = "AutoOpmaak diagram (1-4)";
     Text[ chinese_simplified ] = "ΧΤ¶―ΈρΚ½ΝΌ±ν(1-4)";
     Text[ greek ] = "ΑυτοΜορφή Διάγραμμα (1-4)";
-    Text[ korean ] = "ΐΪµΏ Ό­½Δ ΒχΖ® (1-4)";
+    Text[ korean ] = "ΐΪµΏΌ­½Δ ΒχΖ® (1-4)";
     Text[ turkish ] = "Otomatik ώema formatlama (1-4)";
 };
