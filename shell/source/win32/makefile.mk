@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-14 15:20:47 $
+#   last change: $Author: hro $ $Date: 2002-08-26 14:16:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,6 @@ SHL1STDLIBS=$(CPPULIB)\
             $(CPPUHELPERLIB)\
             $(SALLIB)\
             uwinapi.lib \
-            unicows.lib \
             advapi32.lib \
             shell32.lib
 
