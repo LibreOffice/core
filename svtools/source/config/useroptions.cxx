@@ -2,9 +2,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-25 10:00:42 $
+ *  last change: $Author: pb $ $Date: 2000-10-06 07:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,6 @@ using namespace com::sun::star::uno;
 #define USER_TITLE              13
 #define USER_ID                 14
 #define USER_ZIP                15
-#define USER_PATH               16
 
 // class SvtUserOptions_Impl ---------------------------------------------
 
@@ -123,7 +122,6 @@ private:
     String          m_aCustomerNumber;
 
     String          m_aEmptyString;
-    String          m_aUserPath;
 
     ::osl::Mutex    m_aMutex;
 
@@ -175,8 +173,6 @@ public:
     void            SetEmail( const String& rNewToken ) { SetUserToken( USER_EMAIL, rNewToken ); }
     void            SetCustomerNumber( const String& rNewToken )
                         { SetUserToken( USER_CUSTOMERNUMBER, rNewToken ); }
-
-    const String&   GetUserPath() const { return m_aUserPath; }
 };
 
 // global ----------------------------------------------------------------
@@ -206,7 +202,6 @@ Sequence< OUString > GetUserPropertyNames()
         "Data/Title",           // USER_TITLE
         "Data/UserID",          // USER_ID
         "Data/Zip",             // USER_ZIP
-        "Office/InstallPath"    // USER_PATH
     };
 
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
@@ -347,7 +342,6 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
                         case USER_FAX:              m_aFax = String( aTempStr );            break;
                         case USER_EMAIL:            m_aEmail = String( aTempStr );          break;
                         case USER_CUSTOMERNUMBER:   m_aCustomerNumber = String( aTempStr ); break;
-                        case USER_PATH:             m_aUserPath = String( aTempStr );       break;
 
                         default:
                             DBG_ERRORFILE( "invalid index to load a user token" );
@@ -394,7 +388,6 @@ void SvtUserOptions_Impl::Commit()
             case USER_FAX:              aTempStr = OUString( m_aFax );              break;
             case USER_EMAIL:            aTempStr = OUString( m_aEmail );            break;
             case USER_CUSTOMERNUMBER:   aTempStr = OUString( m_aCustomerNumber );   break;
-            case USER_PATH:             aTempStr = OUString( m_aUserPath );         break;
 
             default:
                 DBG_ERRORFILE( "invalid index to save a user token" );
@@ -543,6 +536,19 @@ const String& SvtUserOptions::GetEmail() const
 const String& SvtUserOptions::GetCustomerNumber() const
 {
     return pImp->GetCustomerNumber();
+}
+
+// -----------------------------------------------------------------------
+
+String SvtUserOptions::GetUserFullName() const
+{
+    String aFullName = pImp->GetFirstName();
+    aFullName.EraseLeadingAndTrailingChars();
+    if ( aFullName.Len() )
+        aFullName += ' ';
+    aFullName += pImp->GetLastName();
+    aFullName.EraseTrailingChars();
+    return aFullName;
 }
 
 // -----------------------------------------------------------------------
