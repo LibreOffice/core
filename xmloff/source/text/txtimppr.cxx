@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:24:58 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@ XMLTextImportPropertyMapper::XMLTextImportPropertyMapper(
             XMLFontStylesContext *pFontDecls ) :
     SvXMLImportPropertyMapper( rMapper, rImport ),
     nSizeTypeIndex( -2 ),
+    nWidthTypeIndex( -2 ),
     xFontDecls( pFontDecls )
 {
 }
@@ -318,6 +319,8 @@ void XMLTextImportPropertyMapper::finished(
 {
     sal_Bool bHasAnyHeight = sal_False;
     sal_Bool bHasAnyMinHeight = sal_False;
+    sal_Bool bHasAnyWidth = sal_False;
+    sal_Bool bHasAnyMinWidth = sal_False;
 
     XMLPropertyState* pFontFamilyName = 0;
     XMLPropertyState* pFontStyleName = 0;
@@ -414,6 +417,13 @@ void XMLTextImportPropertyMapper::finished(
         case CTF_FRAMEHEIGHT_REL:
 //      case CTF_SYNCHEIGHT:
                                         bHasAnyHeight = sal_True; break;
+        case CTF_FRAMEWIDTH_MIN_ABS:
+        case CTF_FRAMEWIDTH_MIN_REL:
+                                        bHasAnyMinWidth = sal_True;
+                                        // no break here!
+        case CTF_FRAMEWIDTH_ABS:
+        case CTF_FRAMEWIDTH_REL:
+                                        bHasAnyWidth = sal_True; break;
         case CTF_BACKGROUND_TRANSPARENCY: pBackTransparency = property; break;
         case CTF_BACKGROUND_TRANSPARENT:  pBackTransparent = property; break;
 
@@ -717,6 +727,34 @@ void XMLTextImportPropertyMapper::finished(
         {
             XMLPropertyState aSizeTypeState( nSizeTypeIndex );
             aSizeTypeState.maValue <<= (sal_Int16)( bHasAnyMinHeight
+                                                        ? SizeType::MIN
+                                                        : SizeType::FIX);
+            rProperties.push_back( aSizeTypeState );
+        }
+    }
+
+    if( bHasAnyWidth )
+    {
+        if( nWidthTypeIndex == -2 )
+        {
+            const_cast < XMLTextImportPropertyMapper * > ( this )
+                ->nWidthTypeIndex  = -1;
+            sal_Int32 nCount = getPropertySetMapper()->GetEntryCount();
+            for( sal_Int32 i=0; i < nCount; i++ )
+            {
+                if( CTF_FRAMEWIDTH_TYPE  == getPropertySetMapper()
+                        ->GetEntryContextId( i ) )
+                {
+                    const_cast < XMLTextImportPropertyMapper * > ( this )
+                        ->nWidthTypeIndex = i;
+                    break;
+                }
+            }
+        }
+        if( nWidthTypeIndex != -1 )
+        {
+            XMLPropertyState aSizeTypeState( nWidthTypeIndex );
+            aSizeTypeState.maValue <<= (sal_Int16)( bHasAnyMinWidth
                                                         ? SizeType::MIN
                                                         : SizeType::FIX);
             rProperties.push_back( aSizeTypeState );
