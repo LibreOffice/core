@@ -2,9 +2,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:55:30 $
+#   last change: $Author: kz $ $Date: 2004-10-15 14:54:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -328,6 +328,25 @@ sub setglobalvariables
     if (! -d $installer::globals::unpackpath )  # create unpackpath
     {
         installer::systemactions::create_directory($installer::globals::unpackpath);
+    }
+
+    # setting and creating the temppath
+
+    if (( $ENV{'TMP'} ) || ( $ENV{'TEMP'} ))
+    {
+        if ( $ENV{'TMP'} ) { $installer::globals::temppath = $ENV{'TMP'}; }
+        elsif ( $ENV{'TEMP'} )  { $installer::globals::temppath = $ENV{'TEMP'}; }
+        $installer::globals::temppath =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
+        $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . "instsetunpack";
+        $installer::globals::temppath = installer::systemactions::create_unique_directory($installer::globals::temppath);
+        push(@installer::globals::removedirs, $installer::globals::temppath);
+        $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::productextension;
+        installer::systemactions::create_directory($installer::globals::temppath);
+        $installer::globals::temppathdefined = 1;
+    }
+    else
+    {
+        $installer::globals::temppathdefined = 0;
     }
 
     # The following setting has to be removed, after removal of old setup and changes in scp projects

@@ -2,8 +2,8 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.16 $
-#   last change: $Author: rt $ $Date: 2004-09-20 14:45:17 $
+#   $Revision: 1.17 $
+#   last change: $Author: kz $ $Date: 2004-10-15 14:54:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,6 +116,9 @@ BEGIN
     $programmenufolder = "ProgramMenuFolder";
     $adafolder = "adabas";
     $listfileproductname = "";
+
+    $temppath = "";
+    $temppathdefined = 0;
 
     $is_special_epm = 0;
     $epm_in_path = 0;

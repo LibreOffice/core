@@ -2,9 +2,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:55:59 $
+#   last change: $Author: kz $ $Date: 2004-10-15 14:54:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,8 +148,7 @@ sub create_directories
 
     if (( $newdirectory eq "zipfiles" ) || ( $newdirectory =~ /rdb\s*$/ ))  # special handling for zip files and services file because of performance reasons
     {
-        if ( $ENV{'TMP'} ) { $path = $ENV{'TMP'}; }
-        elsif ( $ENV{'TEMP'} ) { $path = $ENV{'TEMP'}; }
+        if ( $installer::globals::temppathdefined ) { $path = $installer::globals::temppath; }
         else { $path = $installer::globals::unpackpath; }
         $path =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
         $path = $path . $installer::globals::separator;
@@ -935,6 +934,38 @@ sub remove_complete_directory
         rmdir $directory;
 
     }
+}
+
+######################################################
+# Creating a unique directory with number extension
+######################################################
+
+sub create_unique_directory
+{
+    my ($directory) = @_;
+
+    $directory =~ s/\Q$installer::globals::separator\E\s*$//;
+    $directory = $directory . "_INCREASINGNUMBER";
+
+    my $counter = 1;
+    my $created = 0;
+    my $localdirectory = "";
+
+    do
+    {
+        $localdirectory = $directory;
+        $localdirectory =~ s/INCREASINGNUMBER/$counter/;
+        $counter++;
+
+        if ( ! -d $localdirectory )
+        {
+            create_directory($localdirectory);
+            $created = 1;
+        }
+    }
+    while ( ! $created );
+
+    return $localdirectory;
 }
 
 1;
