@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 09:42:59 $
+ *  last change: $Author: hr $ $Date: 2003-06-16 11:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,6 +913,8 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
                     if ( ( rArgs[nInd].Value >>= aSize ) && aSize.getLength() == 4 )
                     {
                         Rectangle aTmpRect( aSize[0], aSize[1], aSize[2], aSize[3] );
+                        aTmpRect = OutputDevice::LogicToLogic( aTmpRect, MAP_100TH_MM, pInPlaceObj->GetMapUnit() );
+
                         pInPlaceObj->SetVisArea( aTmpRect );
                     }
                 }
@@ -981,6 +983,7 @@ SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getArgs() throw(::com::sun::sta
         if ( pInPlaceObj )
         {
             Rectangle aTmpRect = pInPlaceObj->GetVisArea( ASPECT_CONTENT );
+            aTmpRect = OutputDevice::LogicToLogic( aTmpRect, pInPlaceObj->GetMapUnit(), MAP_100TH_MM );
 
             Sequence< sal_Int32 > aSize(4);
             aSize[0] = aTmpRect.Left();
