@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-13 09:07:25 $
+ *  last change: $Author: fs $ $Date: 2002-05-30 08:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ namespace xmloff
                 _rpValuePropertyName = PROPERTY_REFVALUE;
                 break;
             case FormComponentType::HIDDENCONTROL:
-                _rpValuePropertyName = PROPERTY_VALUE;
+                _rpValuePropertyName = PROPERTY_HIDDEN_VALUE;
                 break;
         }
     }
@@ -171,6 +171,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/13 09:07:25  fs
+ *  #83528# no CurrentValue property for password fields
+ *
  *  Revision 1.1  2000/12/13 10:36:36  fs
  *  initial checkin - helper class for meta data for the different value properties
  *
