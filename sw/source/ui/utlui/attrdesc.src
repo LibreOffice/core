@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:53:00 $
+ *  last change: $Author: rt $ $Date: 2000-11-27 08:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1400,7 +1400,7 @@ String STR_EDIT_IN_READONLY
     Text[ dutch ] = "editeerbaar in schrijfbeveiligd document";
     Text[ chinese_simplified ] = "ÄÜ¹»±à¼­ÊÜ±£»¤µÄÎÄµµ";
     Text[ greek ] = "äõíáôüôçôá åğåîåñãáóßáò óå İããñáöï 'ìüíï ãéá áíÜãíùóç'";
-    Text[ korean ] = "¾²±â º¸È£µÈ ¹®¼­¿¡ ÆíÁı °¡´É";
+    Text[ korean ] = "¾²±â º¸È£µÈ ¹®¼­¿¡¼­  ÆíÁı °¡´É";
     Text[ turkish ] = "Salt okunur belgede düzenlenebilir";
     Text[ language_user1 ] = " ";
 };
@@ -1630,7 +1630,7 @@ String STR_LUMINANCE
     Text[ polish ] = "Jasnoœæ: ";
     Text[ portuguese_brazilian ] = "Luminance: ";
     Text[ japanese ] = "–¾“x: ";
-    Text[ korean ] = "Luminance: ";
+    Text[ korean ] = "¹à±â: ";
     Text[ chinese_simplified ] = "ÁÁ¶È£º ";
     Text[ chinese_traditional ] = "«G«×¡G ";
     Text[ turkish ] = "Luminance: ";
@@ -1654,7 +1654,7 @@ String STR_CHANNELR
     Text[ polish ] = "Zawaroœæ czerwonego: ";
     Text[ portuguese_brazilian ] = "Red portion: ";
     Text[ japanese ] = "ÔF‚ÌŠ„‡: ";
-    Text[ korean ] = "Red portion: ";
+    Text[ korean ] = "Àû»ö ºÎºĞ: ";
     Text[ chinese_simplified ] = "ºìÉ«±ÈÀı£º ";
     Text[ chinese_traditional ] = "¬õ¦â¤ñ¨Ò¡G ";
     Text[ turkish ] = "Red portion: ";
@@ -1678,7 +1678,7 @@ String STR_CHANNELG
     Text[ polish ] = "Zawartoœæ zielonego: ";
     Text[ portuguese_brazilian ] = "Green portion: ";
     Text[ japanese ] = "—ÎF‚ÌŠ„‡: ";
-    Text[ korean ] = "Green portion: ";
+    Text[ korean ] = "³ì»ö ºÎºĞ: ";
     Text[ chinese_simplified ] = "ÂÌÉ«±ÈÀı£º ";
     Text[ chinese_traditional ] = "ºñ¦â¤ñ¨Ò¡G ";
     Text[ turkish ] = "Green portion: ";
@@ -1702,7 +1702,7 @@ String STR_CHANNELB
     Text[ polish ] = "Zawartoœæ niebieskiego: ";
     Text[ portuguese_brazilian ] = "Blue portion: ";
     Text[ japanese ] = "ÂF‚ÌŠ„‡: ";
-    Text[ korean ] = "Blue portion: ";
+    Text[ korean ] = "Ã»»ö ºÎºĞ: ";
     Text[ chinese_simplified ] = "À¶É«±ÈÀı£º ";
     Text[ chinese_traditional ] = "ÂÅ¦â¤ñ¨Ò¡G ";
     Text[ turkish ] = "Blue portion: ";
@@ -1726,7 +1726,7 @@ String STR_CONTRAST
     Text[ polish ] = "Kontrast: ";
     Text[ portuguese_brazilian ] = "Contrast: ";
     Text[ japanese ] = "ºİÄ×½Ä: ";
-    Text[ korean ] = "Contrast: ";
+    Text[ korean ] = "´ëÁ¶: ";
     Text[ chinese_simplified ] = "¶Ô±È¶È£º ";
     Text[ chinese_traditional ] = "¹ï¤ñ«×¡G ";
     Text[ turkish ] = "Contrast: ";
@@ -1750,7 +1750,7 @@ String STR_GAMMA
     Text[ polish ] = "Gama: ";
     Text[ portuguese_brazilian ] = "Gamma: ";
     Text[ japanese ] = "¶ŞİÏ: ";
-    Text[ korean ] = "Gamma: ";
+    Text[ korean ] = "°¨¸¶: ";
     Text[ chinese_simplified ] = "»ÒÉ«ÏµÊı£º ";
     Text[ chinese_traditional ] = "¦Ç¦â¨t¼Æ¡G ";
     Text[ turkish ] = "Gamma: ";
@@ -1774,7 +1774,7 @@ String STR_TRANSPARENCY
     Text[ polish ] = "Przezroczystoœæ: ";
     Text[ portuguese_brazilian ] = "Transparency: ";
     Text[ japanese ] = "“§‰ß«: ";
-    Text[ korean ] = "Transparency: ";
+    Text[ korean ] = "Åõ¸í: ";
     Text[ chinese_simplified ] = "Í¸Ã÷¶È£º ";
     Text[ chinese_traditional ] = "³z©ú«×¡G ";
     Text[ turkish ] = "Transparency: ";
@@ -1786,7 +1786,7 @@ String STR_INVERT
     Text = "Invertieren";
     Text[ english ] = "Invert";
     Text[ english_us ] = "Invert";
-    Text[ portuguese ] = "Invert";
+    Text[ portuguese ] = "Inverter";
     Text[ russian ] = "Èíâåğòèğîâàòü";
     Text[ greek ] = "ÁíáóôñïöŞ";
     Text[ dutch ] = "Diapositief";
@@ -1798,7 +1798,7 @@ String STR_INVERT
     Text[ polish ] = "Odwróæ";
     Text[ portuguese_brazilian ] = "Invert";
     Text[ japanese ] = "‹t“]";
-    Text[ korean ] = "Invert";
+    Text[ korean ] = "¿ªÀ¸·Î";
     Text[ chinese_simplified ] = "»¥²¹É«×ª»»";
     Text[ chinese_traditional ] = "¤¬¸É¦âÂà´«";
     Text[ turkish ] = "Invert";
@@ -1821,7 +1821,7 @@ String STR_INVERT_NOT
     Text[ polish ] = "nie odwracaj";
     Text[ portuguese_brazilian ] = "not invert";
     Text[ japanese ] = "‹t“]‚È‚µ";
-    Text[ korean ] = "not invert";
+    Text[ korean ] = "»ğÀÔÇÏÁö ¾ÊÀ½";
     Text[ chinese_simplified ] = "²»×ª»»»¥²¹É«";
     Text[ chinese_traditional ] = "¤£Âà´«¤¬¸É¦â";
     Text[ turkish ] = "not invert";
@@ -1845,7 +1845,7 @@ String STR_DRAWMODE
     Text[ polish ] = "Tryb grafiki: ";
     Text[ portuguese_brazilian ] = "Graphics mode: ";
     Text[ japanese ] = "¸Ş×Ì¨¯¸Ó°ÄŞ: ";
-    Text[ korean ] = "Graphics mode: ";
+    Text[ korean ] = "±×·¡ÇÈ ¸ğµå: ";
     Text[ chinese_simplified ] = "Í¼ĞÎÄ£Ê½£º ";
     Text[ chinese_traditional ] = "¹Ï§Î¼Ò¦¡¡G ";
     Text[ turkish ] = "Graphics mode: ";
@@ -1869,7 +1869,7 @@ String STR_DRAWMODE_STD
     Text[ polish ] = "Standard";
     Text[ portuguese_brazilian ] = "Standard";
     Text[ japanese ] = "•W€";
-    Text[ korean ] = "Standard";
+    Text[ korean ] = "Ç¥ÁØ";
     Text[ chinese_simplified ] = "±ê×¼";
     Text[ chinese_traditional ] = "¼Ğ­ã";
     Text[ turkish ] = "Standard";
@@ -1892,7 +1892,7 @@ String STR_DRAWMODE_GREY
     Text[ polish ] = "Odcienie szaroœci";
     Text[ portuguese_brazilian ] = "Greys";
     Text[ japanese ] = "¸ŞÚ°½¹°Ù";
-    Text[ korean ] = "Greys";
+    Text[ korean ] = "È¸»ö µî±Ş";
     Text[ chinese_simplified ] = "»Ò¶È";
     Text[ chinese_traditional ] = "¦Ç¶¥";
     Text[ turkish ] = "Greys";
@@ -1915,7 +1915,7 @@ String STR_DRAWMODE_BLACKWHITE
     Text[ polish ] = "Czarno-bia³y";
     Text[ portuguese_brazilian ] = "Black/White";
     Text[ japanese ] = "”’•";
-    Text[ korean ] = "Black/White";
+    Text[ korean ] = "Èæ/¹é";
     Text[ chinese_simplified ] = "ºÚ°×";
     Text[ chinese_traditional ] = "¶Â¥Õ";
     Text[ turkish ] = "Black/White";
@@ -1938,7 +1938,7 @@ String STR_DRAWMODE_WATERMARK
     Text[ polish ] = "Znak wodny";
     Text[ portuguese_brazilian ] = "Watermark";
     Text[ japanese ] = "“§‚©‚µ";
-    Text[ korean ] = "Watermark";
+    Text[ korean ] = "ºÒºû¿¡ ºñÃçºÁ¾ß º¸ÀÌ´Â ¹«´Ì (ÁöÆó)";
     Text[ chinese_simplified ] = "Ë®Ó¡";
     Text[ chinese_traditional ] = "¤ô¦L";
     Text[ turkish ] = "Watermark";
@@ -1961,7 +1961,7 @@ String STR_ROTATION
     Text[ polish ] = "Obrót";
     Text[ portuguese_brazilian ] = "Rotation";
     Text[ japanese ] = "‰ñ“]";
-    Text[ korean ] = "Rotation";
+    Text[ korean ] = "È¸Àü";
     Text[ chinese_simplified ] = "Ğı×ª";
     Text[ chinese_traditional ] = "±ÛÂà";
     Text[ turkish ] = "Rotation";
