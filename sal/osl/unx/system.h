@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: svesik $ $Date: 2001-11-12 22:03:26 $
+ *  last change: $Author: svesik $ $Date: 2002-01-02 10:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,9 +333,6 @@ extern unsigned int nanosleep(unsigned int);
 #   endif
 #   define  SA_FAMILY_DECL \
         union { struct { short sa_family2; } sa_generic; } sa_union
-#ifndef IRIX
-#   define  CMD_ARG_PRG *__Argv
-#endif
 #   define  CMD_ARG_ENV _environ
 #   define  PTR_SIZE_T(s)               ((int *)&(s))
 #   define  NO_PTHREAD_PRIORITY
