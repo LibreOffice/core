@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:43:02 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,13 +63,8 @@
 #define _SAL_I18N_INPUTMETHOD_HXX
 
 extern "C" char* GetMethodName( XIMStyle nStyle, char *pBuf, int nBufSize);
-extern "C" Bool  CallDoneAfterResetIC();
 
-#if (1)
-    #define bUseInputMethodDefault True
-#else
-    #define bUseInputMethodDefault False
-#endif
+#define bUseInputMethodDefault True
 
 class SalI18N_InputMethod
 {
