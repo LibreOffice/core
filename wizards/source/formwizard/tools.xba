@@ -74,6 +74,8 @@ Dim NullValue
 		GetPeerSize() = oPeer.PreferredSize()
 	ElseIf CurFieldType = com.sun.star.sdbc.DataType.BIT Then
 		GetPeerSize() = oPeer.PreferredSize()
+	ElseIf CurFieldType = com.sun.star.sdbc.DataType.BOOLEAN Then
+		GetPeerSize() = oPeer.PreferredSize()
 	ElseIf CurFieldType = com.sun.star.sdbc.DataType.DATE Then
 		oControl.Model.Date = Date
 		GetPeerSize() = oPeer.PreferredSize()
