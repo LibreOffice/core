@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:18:26 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ struct WW8FlyPara
     void Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap);
     void ReadFull(const BYTE* pSprm29, SwWW8ImplReader* pIo);
     void Read(const BYTE* pSprm29, WW8RStyle* pStyle);
-    void ApplyTabPos(WW8_TablePos *pTabPos);
+    void ApplyTabPos(const WW8_TablePos *pTabPos);
     bool IsEmpty() const;
 };
 
@@ -282,16 +282,6 @@ friend class SwWW8ImplReader;
     void ImportGrupx(short nLen, bool bPara, bool bOdd);
     short ImportUPX(short nLen, bool bPAP, bool bOdd);
 
-    SwCharFmt* SearchCharFmt( const String& rName );
-    SwCharFmt* MakeNewCharFmt( WW8_STD* pStd, const String& rName );
-    SwCharFmt* MakeOrGetCharFmt(bool* pbStyExist, WW8_STD* pStd,
-        const String& rName);
-
-    SwTxtFmtColl* SearchFmtColl( const String& rName );
-    SwTxtFmtColl* MakeNewFmtColl( WW8_STD* pStd, const String& rName );
-    SwTxtFmtColl* MakeOrGetFmtColl(bool* pbStyExist, WW8_STD* pStd,
-        const String& rName);
-
     void Set1StyleDefaults();
     void Import1Style(USHORT nNr);
     void RecursiveReg(USHORT nNr);
@@ -312,11 +302,13 @@ class WW8FlySet: public SfxItemSet
 private:
     //No copying
     const WW8FlySet& operator=(const WW8FlySet&);
+    void Init(const SwWW8ImplReader& rReader, const SwPaM* pPaM);
 public:
     WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
         const WW8SwFlyPara* pFS, bool bGraf);
-    WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM, const WW8_PIC& rPic,
-        long nWidth, long nHeight );
+    WW8FlySet(SwWW8ImplReader& rReader, const SwPaM* pPaM, const WW8_PIC& rPic,
+        long nWidth, long nHeight);
+    WW8FlySet(const SwWW8ImplReader& rReader, const SwPaM* pPaM);
 };
 
 enum WW8LvlType {WW8_None, WW8_Outline, WW8_Numbering, WW8_Sequence, WW8_Pause};
