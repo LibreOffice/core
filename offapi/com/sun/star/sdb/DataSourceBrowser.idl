@@ -1,0 +1,233 @@
+/*************************************************************************
+ *
+ *  $RCSfile: DataSourceBrowser.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-08 14:57:12 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#ifndef __com_sun_star_sdb_DataSourceBrowser_idl__
+#define __com_sun_star_sdb_DataSourceBrowser_idl__
+
+#ifndef __com_sun_star_frame_XController_idl__
+#include <com/sun/star/frame/XController.idl>
+#endif
+#ifndef __com_sun_star_lang_XInitialization_idl__
+#include <com/sun/star/lang/XInitialization.idl>
+#endif
+#ifndef __com_sun_star_frame_XDispatchProvider_idl__
+#include <com/sun/star/frame/XDispatchProvider.idl>
+#endif
+
+module com {  module sun {  module star {  module sdb {
+
+//=============================================================================
+/** implements a component which allows to browse the data sources registered on the system.
+
+    <p>This service implements an user interface for browsing data sources registered on the
+    <service>DatabaseContext</service> instance of the system.</p>
+
+    <p>It is possible to navigate through all the data sources, it's queries and it's tables.
+    The queries/tables can be displayed in a grid-like view, where functionallity for searching,
+    sorting, filtering and such is provided</p>
+
+    <p>Ususally, you won't instantiate this service directly, instead you use the dispatch mechanisms
+    of the application framework to load the URL <b>.component:DB/DataSourceBrowser</b> into an arbitrary
+    frame. This should involve a <service>ContentLoader</service> service, which creates and initializes
+    the browser.</p>
+
+    <p>Some aspects of the browser can be controlled from outside, e.g. it is possible to dispatch a sort or filter
+    request if a table or query is beeing displayed.</p>
+
+    <p>The communication between the browser and external instances works in two ways.<br/>
+    The way <em>in</em> is provided by the <type scope="com::sun::star::frame">XDispatchProvider</type> interface
+    the service exports (Please see below for more details on this).</br>
+    The way <em>out</em> works in another way. There are several URL's which an external instance can provide
+    dispatches for (usually by implementing an <type scope="com::sun::star::frame">XDispatchProviderInterceptor</type>
+    for the parent frame of the browser), thus indicating that the browser should provide special functionallity.<br/>
+    In ths case the browser displays and maintains some additional slots (to be more concrete: toolbox items), which,
+    upon triggering, call the <method scope="com::sun::star::frame">XDispatch::dispatch</method> method of the object
+    provided by the external instance.</p>
+
+    <p>In particular, the supported URL's for communicating to an external instance are:
+        <ul>
+            <li><b>.uno:DataSourceBrowser/InsertColumns</b><br/>
+            Available whenever an external instance provides an dispatcher (<type scope="com::sun::star::frame">XDispatch</type>)
+            for this URL.<br/>
+            Enabled if at least one row in the grid view of a table or query is selected.<br/>
+            It is the task of the external instance to provide functionallity for this URL, but usually it is used
+            to implement some kind of "Data To Text" functionallity.<br/>
+            </li>
+            <li><b>.uno:DataSourceBrowser/InsertContent</b><br/>
+            Available whenever an external instance provides an dispatcher (<type scope="com::sun::star::frame">XDispatch</type>)
+            for this URL.<br/>
+            Enabled if at least one row in the grid view of a table or query is selected.<br/>
+            It is the task of the external instance to provide functionallity for this URL, but usually it is used
+            to implement some kind of "Data To Fields" functionallity.<br/>
+            </li>
+            <li><b>.uno:DataSourceBrowser/FormLetter</b><br/>
+            Available whenever an external instance provides an dispatcher (<type scope="com::sun::star::frame">XDispatch</type>)
+            for this URL.<br/>
+            It is the task of the external instance to provide functionallity for this URL, but usually it is used
+            to implement some kind of "Form Letter" functionallity.<br/>
+            </li>
+        </ul>
+        For all kinds of URL's, the parameters supplied when dispatching it are as follows:
+        <ul>
+            <li><b>DataSourceName</b><br/>
+            The name of the globally registered <service>DataSource</service> which the currently displayed data is
+            taken from.
+            </li>
+            <li><b>CommandType</b><br/>
+            A <type>CommandType</type> value, specifying the type of the object displayed currently.
+            </li>
+            <li><b>Command</b><br/>
+            A string value, specifying the name of the object displayed currently (or the SQL statement used to populate
+            the grid view).
+            </li>
+            <li><b>Selection</b><br/>
+            A sequence of integers, containing the numbers of the rows currently selected.
+            </li>
+            <li><b>Cursor</b> (optional)<br/>
+            If available, this parameter contains an object implementing the <service scope="com::sun::star::sdb">ResultSet</service>
+            service. It may be used to obtain the data described by the <em>Selection</em> parameter (which otherwise
+            would have to be retrieved from the <service>DatabaseContext</service>, using the information given
+            in the other parameters).
+            </li>
+        </ul>
+    </p>
+
+    @see com::sun::star::sdb::ContentLoader
+    @see com::sun::star::sdb::DatabaseContext
+    @see com::sun::star::sdb::DataSource
+    @see com::sun::star::frame::XDispatch
+    @see com::sun::star::frame::XDispatchInterceptor
+*/
+service DataSourceBrowser
+{
+    /** allows the component to be plugged into frames.
+    */
+    interface com::sun::star::frame::XController;
+
+    /** is used to initialize the browser.
+
+        <p>Parameters (passed to the method <method scope=com::sun::star::lang">XInitialization::initialize</method>)
+        have to be instances of <type scope="com::sun::star::beans">PropertyValue</type>, where the
+        <member scope="com::sun::star::beans">PropertyValue::Name</member> member specifies what the parameter controls,
+        with the <member scope="com::sun::star::beans">PropertyValue::Value</member> member containing the value
+        to be used.<br/>
+        Recognized parameters are:
+        <ul>
+            <li><b>Frame</b><br/>
+            has to be an <type scope="com::sun::star::frame">XFrame</type> interface specifying the frame to plug the
+            browser component into.
+            </li>
+            <li><b>DataSourceName</b><br/>
+            The name of the globally registered <service>DataSource</service> to be used for initial display. Only
+            meaningfull together with the other parameters specifying the object to display.
+            </li>
+            <li><b>CommandType</b><br/>
+            This has to be a <type>CommandType</type> value, specifying the type of the object to display initially.
+            Only meaningfull together with the <em>DataSourceName</em> and the <em>Command</em> parameters.
+            </li>
+            <li><b>Command</b><br/>
+            This is a string giving the name of the object to display initially. Whether it is table name, a query
+            name or a SQL string is controller by the <em>CommandType</em> parameter.
+            </li>
+        </ul>
+        </p>
+    */
+    interface com::sun::star::lang::XInitialization;
+
+    /** is used to control the browser from outside.
+
+    <p>You may use the <method scope="com::sun::star::frame">XDispatchProvider::queryDispatch</method> method
+    to query for objects which implement the <type scope="com::sun::star::frame">XDispatch</type> interface,
+    and which allow you to be notified on status changes and to dispatch special requests.</p>
+    <p>The recognized URLs are:
+        <ul>
+            <li><b>.uno:Copy</b><br/>
+            implements the usual <em>Copy</em> command. Enabled if the grid view has the focus and text in any cell
+            is selected.
+            </li>
+            <li><b>.uno:Cut</b><br/>
+            implements the usual <em>Cut</em> command. Enabled if the grid view has the focus and text in any cell
+            is selected.
+            </li>
+            <li><b>.uno:Paste</b><br/>
+            implements the usual <em>Paste</em> command. Enabled if the grid view has the focus and a cell which
+            allows text input is beeing edited.
+            </li>
+            <li><b>.uno:EditDoc</b><br/>
+            allows to switch the edit mode of the grid view. Enabled if editing the data is allowed in general.
+            </li>
+            <li><b>.uno:Undo</b><br/>
+            revokes any changes done in the current row.
+            </li>
+            <li><b>.uno:Save</b><br/>
+            saves the changes done in the current row.
+            </li>
+        </ul>
+    <p/>
+    */
+    interface com::sun::star::frame::XDispatchProvider;
+};
+
+//=============================================================================
+}; }; }; };
+
+#endif
