@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-06 19:32:17 $
+ *  last change: $Author: jp $ $Date: 2001-05-28 10:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,17 +741,17 @@ void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
         aLR.SetTxtLeft( 0 );
     else
     {
-#if 0
         long nLeft = rFmt.GetAbsLSpace(), nParaLeft = rLR.GetTxtLeft();
         if( 0 < rLR.GetTxtFirstLineOfst() )
             nParaLeft += rLR.GetTxtFirstLineOfst();
-        else
+        else if( nParaLeft >= nLeft )
+            // #82963#/#82962#: set correct paragraph indent
             nParaLeft -= nLeft;
+        else
+            //#83154#, Don't think any of the older #80856# bugfix code is
+            //relevent anymore.
+            nParaLeft = rLR.GetTxtLeft()+rLR.GetTxtFirstLineOfst();
         aLR.SetTxtLeft( nParaLeft );
-#else   //#83154#, Don't think any of the older #80856# bugfix code is
-        //relevent anymore.
-        aLR.SetTxtLeft(rLR.GetTxtLeft()+rLR.GetTxtFirstLineOfst());
-#endif
     }
 
     if( aLR.GetTxtLeft() != rLR.GetTxtLeft() )
@@ -1578,6 +1578,9 @@ Color ConvertBrushStyle(const Color& rCol, const Color& rFillCol, BYTE nStyle)
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/04/06 19:32:17  jp
+      Bug #85813#: no GPF and no ASSERT by reading/writing with the W4W filters
+
       Revision 1.8  2001/02/26 08:24:19  mib
       xml filters for templates and global docs
 
