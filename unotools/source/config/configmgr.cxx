@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2000-12-13 08:04:43 $
+ *  last change: $Author: sb $ $Date: 2000-12-14 08:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,6 +344,25 @@ rtl::OUString ConfigManager::GetConfigBaseURL()
  ---------------------------------------------------------------------------*/
 Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 {
+    ConfigManager * pTheConfigManager = GetConfigManager();
+    if (pTheConfigManager->IsLocalConfigProvider())
+        switch (eProp)
+        {
+            case INSTALLPATH:
+                return
+                    pTheConfigManager->
+                        GetLocalProperty(
+                            rtl::OUString::createFromAscii(
+                                "UserProfile/Office/InstallPath"));
+
+            case OFFICEINSTALL:
+                return
+                    pTheConfigManager->
+                        GetLocalProperty(
+                            rtl::OUString::createFromAscii(
+                                "Office.Common/Path/Current/OfficeInstall"));
+        }
+
     Any aRet;
     if ( eProp == PRODUCTNAME && aBrandName.getLength() )
     {
