@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 14:50:36 $
+ *  last change: $Author: kr $ $Date: 2001-02-22 14:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,15 +125,15 @@ SalObject* SalInstance::CreateObject( SalFrame* pParent )
     Widget pWidgetParent = pParent->maFrameData.GetWidget();
 
     pObject->maObjectData.maPrimary =
-        XtVaCreateManagedWidget( "salobject primary",
-                                 OBJECT_WIDGET_CLASS,
-                                 pWidgetParent,
-                                 NULL );
+        XtVaCreateWidget( "salobject primary",
+                          OBJECT_WIDGET_CLASS,
+                          pWidgetParent,
+                          NULL );
     pObject->maObjectData.maSecondary =
-        XtVaCreateManagedWidget( "salobject secondary",
-                                 OBJECT_WIDGET_CLASS,
-                                 pObject->maObjectData.maPrimary,
-                                 NULL );
+        XtVaCreateWidget( "salobject secondary",
+                          OBJECT_WIDGET_CLASS,
+                          pObject->maObjectData.maPrimary,
+                          NULL );
     XtRealizeWidget( pObject->maObjectData.maPrimary );
     XtRealizeWidget( pObject->maObjectData.maSecondary );
 
