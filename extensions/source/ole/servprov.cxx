@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2003-03-31 17:22:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
