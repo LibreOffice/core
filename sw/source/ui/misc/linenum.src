@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:05:21 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ TabPage TP_LINENUMBERING
         Text[ turkish ] = "~Numaralamayý etkinleþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mostrar ~numeración";
+        Text[ finnish ] = "~Näytä numerointi";
     };
     FixedText FT_CHAR_STYLE
     {
@@ -135,6 +136,7 @@ TabPage TP_LINENUMBERING
         Text[ turkish ] = "~Karakter biçimi";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
         Text[ catalan ] = "Est~ilo de caracteres";
+        Text[ finnish ] = "~Merkistön tyyli";
     };
     ListBox LB_CHAR_STYLE
     {
@@ -170,6 +172,7 @@ TabPage TP_LINENUMBERING
         Text[ turkish ] = "~Format";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Formato";
+        Text[ finnish ] = "~Muotoile";
     };
     ListBox LB_FORMAT
     {
@@ -204,6 +207,7 @@ TabPage TP_LINENUMBERING
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Posición";
+        Text[ finnish ] = "Sijainti";
     };
     ListBox LB_POS
     {
@@ -365,6 +369,13 @@ TabPage TP_LINENUMBERING
         < "Interior" ; > ;
         < "Exterior" ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Vasen" ; > ;
+        < "Oikea" ; > ;
+        < "Sisempi" ; > ;
+        < "ulompi" ; > ;
+    };
     };
     FixedText FT_OFFSET
     {
@@ -392,6 +403,7 @@ TabPage TP_LINENUMBERING
         Text[ korean ] = "°£°Ý";
         Text[ turkish ] = "~Uzaklýk";
         Text[ catalan ] = "E~spacio";
+        Text[ finnish ] = "Objektivälit";
     };
     MetricField MF_OFFSET
     {
@@ -436,6 +448,7 @@ TabPage TP_LINENUMBERING
         Text[ turkish ] = "~Aralýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Intervalo";
+        Text[ finnish ] = "Väli";
     };
     NumericField NF_NUM_INVERVAL
     {
@@ -478,6 +491,7 @@ TabPage TP_LINENUMBERING
         Text[ turkish ] = "Satýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Líneas";
+        Text[ finnish ] = "viivat";
     };
     GroupBox GB_DISPLAY
     {
@@ -505,6 +519,7 @@ TabPage TP_LINENUMBERING
         Text[ turkish ] = "Görünüm";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Visualización";
+        Text[ finnish ] = "Näytä";
     };
     FixedText FT_DIVISOR
     {
@@ -532,6 +547,7 @@ TabPage TP_LINENUMBERING
         Text[ turkish ] = "M~etin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Te~xto";
+        Text[ finnish ] = "Teksti";
     };
     Edit ED_DIVISOR
     {
@@ -567,6 +583,7 @@ TabPage TP_LINENUMBERING
         Text[ korean ] = "¸ðµç";
         Text[ turkish ] = "~Tümü";
         Text[ catalan ] = "Ca~da";
+        Text[ finnish ] = "Toistoväli";
     };
     NumericField NF_DIV_INTERVAL
     {
@@ -610,6 +627,7 @@ TabPage TP_LINENUMBERING
         Text[ turkish ] = "Satýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Líneas";
+        Text[ finnish ] = "Viivat";
     };
     GroupBox GB_DIVISOR
     {
@@ -637,6 +655,7 @@ TabPage TP_LINENUMBERING
         Text[ turkish ] = "Ayýrma iþareti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Separador";
+        Text[ finnish ] = "Erotin";
     };
     CheckBox CB_COUNT_EMPTYLINES
     {
@@ -665,6 +684,7 @@ TabPage TP_LINENUMBERING
         Text[ turkish ] = "B~oþ satýrlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Líneas en ~blanco";
+        Text[ finnish ] = "Tyhjät rivit";
     };
     CheckBox CB_COUNT_FRAMELINES
     {
@@ -693,6 +713,7 @@ TabPage TP_LINENUMBERING
         Text[ turkish ] = "Metin kutusu içindeki sa~týrlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Líneas en ma~rco de texto";
+        Text[ finnish ] = "Tekstikehikko";
     };
     CheckBox CB_RESTART_PAGE
     {
@@ -720,6 +741,7 @@ TabPage TP_LINENUMBERING
         Text[ turkish ] = "~Restart each new page";
         Text[ arabic ] = "ÅÚÇÏÉ ÇáÈÏÁ ÚäÏ ßá ÕÝÍÉ ÌÏíÏÉ";
         Text[ catalan ] = "~Reiniciar al comienzo de página";
+        Text[ finnish ] = "~Aloita jokainen uusi sivu uudelleen";
     };
     GroupBox GB_COUNT
     {
@@ -747,6 +769,7 @@ TabPage TP_LINENUMBERING
         Text[ turkish ] = "Say";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Contar";
+        Text[ finnish ] = "Laske";
     };
     Text [ english_us ] = "Line Numbering" ;
     Text [ portuguese_brazilian ] = "Zeilennumerierung" ;
@@ -768,4 +791,5 @@ TabPage TP_LINENUMBERING
     Text[ turkish ] = "Satýr numaralamasý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Numeración de líneas";
+    Text[ finnish ] = "Rivien numerointi";
 };
