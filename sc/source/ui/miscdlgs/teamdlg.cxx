@@ -2,9 +2,9 @@
  *
  *  $RCSfile: teamdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *  last change: $Author: nn $ $Date: 2001-05-22 12:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,13 @@ ScTeamDlg::ScTeamDlg( Window* pParent )
     aSize.Height() += (2*nOff);
     SetOutputSizePixel( aSize );
     Center();
+    Point aPos = GetPosPixel();
+    if (aPos.Y() < 0)
+    {
+        //  #87164# title bar must be visible
+        aPos.Y() = 0;
+        SetPosPixel(aPos);
+    }
     Show();
 }
 
