@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-28 11:49:41 $
+ *  last change: $Author: mtg $ $Date: 2001-03-02 11:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,7 +644,7 @@ XMLTextImportHelper::~XMLTextImportHelper()
 
     delete pPrevFrmNames;
     delete pNextFrmNames;
-    delete pOutlineStyles;
+    delete [] pOutlineStyles;
 
     _FinitBackpatcher();
 }
