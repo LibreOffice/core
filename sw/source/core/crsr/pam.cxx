@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:04:18 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,6 +933,24 @@ FASTBOOL GoInCntntCells( SwPaM & rPam, SwMoveFn fnMove )
         return TRUE;
     return GoInNode( rPam, fnMove );
 }
+
+FASTBOOL GoInCntntSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
+{
+    if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
+                        &rPam.GetPoint()->nContent, CRSR_SKIP_CHARS | CRSR_SKIP_HIDDEN ) )
+        return TRUE;
+    return GoInNode( rPam, fnMove );
+}
+
+FASTBOOL GoInCntntCellsSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
+{
+    if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
+                         &rPam.GetPoint()->nContent, CRSR_SKIP_CELLS | CRSR_SKIP_HIDDEN ) )
+        return TRUE;
+    return GoInNode( rPam, fnMove );
+}
+
+
 
 // --------- Funktionsdefinitionen fuer die SwCrsrShell --------------
 
