@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:20:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,6 +847,11 @@ XMLPropertyMapEntry aXMLSectionPropMap[] =
     MS_E( "EndnoteNumberingSuffix",     TEXT,   _EMPTY,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_ENDNOTE_NUM_SUFFIX ),
     MS_E( "EndnoteIsCollectAtTextEnd",  TEXT,   NOTES_CONFIGURATION,        MID_FLAG_ELEMENT_ITEM|XML_TYPE_BOOL,    CTF_SECTION_ENDNOTE_END ),
     MS_E( "UserDefinedAttributes",      TEXT,   XMLNS,      XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // RES_EDIT_IN_READONLY
+    MS_E( "EditInReadonly",             STYLE,  EDITABLE,  XML_TYPE_BOOL, 0 ),
+    // <--
 
     M_END()
 };
