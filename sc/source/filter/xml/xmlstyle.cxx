@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-21 10:51:24 $
+ *  last change: $Author: sab $ $Date: 2001-05-23 13:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ const XMLPropertyMapEntry aXMLScRowStylesProperties[] =
 const XMLPropertyMapEntry aXMLScTableStylesProperties[] =
 {
     { "IsVisible", XML_NAMESPACE_TABLE, sXML_display, XML_TYPE_BOOL, 0 },
-    { "PageStyle", XML_NAMESPACE_TABLE, sXML_master_page_name, XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_MASTERPAGENAME },
+    { "PageStyle", XML_NAMESPACE_STYLE, sXML_master_page_name, XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_MASTERPAGENAME },
     { 0L }
 };
 
