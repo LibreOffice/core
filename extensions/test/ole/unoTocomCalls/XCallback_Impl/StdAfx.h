@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StdAfx.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-12-06 14:49:12 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,3 +88,4 @@ extern CComModule _Module;
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
 #endif // !defined(AFX_STDAFX_H__180FF556_6F5C_11D4_8330_005004526AB4__INCLUDED)
+
