@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-20 12:40:26 $
+ *  last change: $Author: nn $ $Date: 2001-06-11 16:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3052,10 +3052,12 @@ void ScGridWindow::UpdateEditViewPos()
         USHORT nCol;
         USHORT nRow;
         pViewData->GetEditView( eWhich, pView, nCol, nRow );
+        USHORT nEndCol = pViewData->GetEditEndCol();
+        USHORT nEndRow = pViewData->GetEditEndRow();
 
-        //  EditView verstecken?
+        //  hide EditView?
 
-        BOOL bHide = ( nCol<pViewData->GetPosX(eHWhich) || nRow<pViewData->GetPosY(eVWhich) );
+        BOOL bHide = ( nEndCol<pViewData->GetPosX(eHWhich) || nEndRow<pViewData->GetPosY(eVWhich) );
         if ( SC_MOD()->IsFormulaMode() )
             if ( pViewData->GetTabNo() != pViewData->GetRefTabNo() )
                 bHide = TRUE;
