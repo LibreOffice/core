@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:44:40 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,7 +513,7 @@ void SlideSorterViewShell::Paint (
     ::sd::Window* pWindow)
 {
     SetActiveWindow (pWindow);
-    mpSlideSorterView->CompleteRedraw (pWindow, Region(rBBox));
+    mpSlideSorterController->Paint(rBBox,pWindow);
 }
 
 
