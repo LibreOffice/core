@@ -16,6 +16,7 @@
 "OImageControlModel";"com::sun::star::awt::UnoControlImageControlModel";"ImageURL"
 "OImageControlModel";"com::sun::star::awt::UnoControlImageControlModel";"Printable"
 "OImageControlModel";"com::sun::star::awt::UnoControlImageControlModel";"ScaleImage"
+"OImageControlModel";"com::sun::star::awt::UnoControlImageControlModel";"Tabstop#optional"
 "OImageControlModel";"com::sun::star::lang::XEventListener";"disposing()"
 "OImageControlModel";"com::sun::star::lang::XComponent";"dispose()"
 "OImageControlModel";"com::sun::star::lang::XComponent";"addEventListener()"
