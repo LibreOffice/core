@@ -396,6 +396,7 @@ namespace fileaccess {
                 case FileBase::E_NOENT:         // No such file or directory<br>
                     ioErrorCode = IOErrorCode_NOT_EXISTING;
                     break;
+                case FileBase::E_ROFS: // #i4735# handle ROFS transparently as ACCESS_DENIED
                 case FileBase::E_ACCES:         // permission denied<P>
                     ioErrorCode = IOErrorCode_ACCESS_DENIED;
                     break;
@@ -454,6 +455,7 @@ namespace fileaccess {
                 case FileBase::E_NOMEM:          // not enough memory for allocating structures <br>
                     ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
                     break;
+                case FileBase::E_ROFS: // #i4735# handle ROFS transparently as ACCESS_DENIED
                 case FileBase::E_ACCES:          // permission denied<br>
                     ioErrorCode = IOErrorCode_ACCESS_DENIED;
                     break;
@@ -596,6 +598,7 @@ namespace fileaccess {
                 case FileBase::E_NOMEM:         // not enough memory for allocating structures <br>
                     ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
                     break;
+                case FileBase::E_ROFS: // #i4735# handle ROFS transparently as ACCESS_DENIED
                 case FileBase::E_ACCES:         // permission denied<br>
                     ioErrorCode = IOErrorCode_ACCESS_DENIED;
                     break;

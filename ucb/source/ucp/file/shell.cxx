@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: abi $ $Date: 2002-02-27 12:25:59 $
+ *  last change: $Author: pl $ $Date: 2002-05-13 17:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1018,6 +1018,7 @@ shell::setv( sal_Int32 CommandId,
                             case osl::FileBase::E_NOLINK:       // Link has been severed<br>
                                 ioError = IOErrorCode_NOT_EXISTING;
                                 break;
+                            case osl::FileBase::E_ROFS: // #i4735# handle ROFS transparently as ACCESS_DENIED
                             case osl::FileBase::E_ACCES:        // permission denied<br>
                                 ioError = IOErrorCode_ACCESS_DENIED;
                                 break;
