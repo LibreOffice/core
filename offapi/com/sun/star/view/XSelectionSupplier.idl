@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSelectionSupplier.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-04-06 12:23:39 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 17:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ interface XSelectionSupplier: com::sun::star::uno::XInterface
                 the current selection.
 
                 <p>The selection is either specified by an object which is contained
-                in the component to which the view belongs or it is an interface of a
+                in the component to which the view belongs, or it is an interface of a
                 collection which contains such objects.
      */
     any getSelection();
@@ -130,6 +130,9 @@ interface XSelectionSupplier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/04/06 12:23:39  mi
+    com::sun::star::package finally removed - now in com::sun::star::packages (with 's' at the end, due to conflict with reserved identifier in Java)
+
     Revision 1.5  2001/03/16 16:41:53  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

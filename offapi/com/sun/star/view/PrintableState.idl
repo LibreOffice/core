@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintableState.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:34 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 17:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,13 @@
 /** specifies the print progress of an <type>XPrintable</type>
 
     <p>printing consists of two abstract phases: collecting the raw
-    data to send to the printer and the sending them (spooling).
+    data to send to the printer and then sending them (spooling).
     <type>PrintableState</type> describes which phase is currently
     progressing or has failed.</p>
  */
 enum PrintableState
 {
-    /** printing (that is collecting the data to send to the printer) has begun
+    /** printing (that is, collecting the data to send to the printer) has begun
      */
     JOB_STARTED,
     /** printing has finished, spooling has begun
@@ -87,7 +87,7 @@ enum PrintableState
         that can be considered as "success" for a print job.
     */
     JOB_SPOOLED,
-    /** printing was aborted (e.g. by the user) while either printing or spooling
+    /** printing was aborted (e.g., by the user) while either printing or spooling
      */
     JOB_ABORTED,
     /** printing ran into an error

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrintableListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:53 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 17:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,11 @@
 
  module com {  module sun {  module star {  module view {
 
-/** allows to get information about a print job
+/** allows for getting information about a print job.
 
     <p><type>XPrintableListener</type> can be registered to
-    <type>XPrintableBroadcaster</type>. The user will be informed about
-    print progress then.
+    <type>XPrintableBroadcaster</type>. Then, the user will be informed about
+    print progress.
     </p>
 
     @see XPrintableBroadcaster
@@ -90,8 +90,8 @@
 {
     /** informs the user of the new state in print progress
 
-        @param Event contains the <type>XPrintable</type> having changed state
-        and the new state
+        @param Event
+        contains the <type>XPrintable</type> having changed state   and the new state
     */
     [oneway] void stateChanged( [in] PrintableStateEvent Event );
 };

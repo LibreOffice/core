@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentZoomType.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 10:48:24 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 17:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ constants DocumentZoomType
      */
     const short BY_VALUE = 3;
     //-------------------------------------------------------------------------
-    /** the page width at the current selection fits into the view. There view ends
+    /** the page width at the current selection fits into the view. The view ends
         exactly at the end of the page.
      */
     const short PAGE_WIDTH_EXACT = 4;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AttributeContainer.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:41 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 17:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,11 @@ module com { module sun { module star { module xml {
 
 //=============================================================================
 /** This service describes a container for xml attributes. Each attribute is
-    accessed with its local name or optional its local name with its namespace
+    accessed with its local name, or optionally, its local name with its namespace
     prefix. The type and value of an attribute is stored in a
     <code>AttributeData</code> struct. If you use a namespace in the <code>
-    AttributeData</code> you must use a prefix in the name and you must use a
-    namespace if you use a prefix.
+    AttributeData</code>, you must use a prefix in the name and you must use a
+    namespace, if you use a prefix.
 */
 service AttributeContainer
 {

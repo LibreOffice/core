@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrintableBroadcaster.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:53 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 17:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,11 @@
 
  module com {  module sun {  module star {  module view {
 
-/** allows to get information about a print job
+/** allows for getting information about a print job
 
-    <p><type>XPrintableBroadcaster</type> can be implemented by classes
+    <p><type>XPrintableBroadcaster</type> can be implemented by classes by
     implementing <type>XPrintable</type>. It allows for <type>XPrintableListener</type>
-    to be set so a user can be informed about the print progress.</p>
+    to be set, so a user can be informed about the print progress.</p>
 
     @see XPrintableListener
  */
