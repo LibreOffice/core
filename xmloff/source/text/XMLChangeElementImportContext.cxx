@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeElementImportContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 15:39:36 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,3 +146,20 @@ SvXMLImportContext* XMLChangeElementImportContext::CreateChildContext(
     return pContext;
 }
 
+// #107848#
+void XMLChangeElementImportContext::StartElement( const Reference< XAttributeList >& xAttrList )
+{
+    if(bAcceptContent)
+    {
+        GetImport().GetTextImport()->SetInsideDeleteContext(sal_True);
+    }
+}
+
+// #107848#
+void XMLChangeElementImportContext::EndElement()
+{
+    if(bAcceptContent)
+    {
+        GetImport().GetTextImport()->SetInsideDeleteContext(sal_False);
+    }
+}
