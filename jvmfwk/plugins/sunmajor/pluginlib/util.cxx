@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:50:56 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -912,7 +912,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
         char const* const* arExePaths = (*pFunc)(&size);
         vecPaths = getVectorFromCharArray(arExePaths, size);
 
-        bool bOk = false;
+        bool bBreak = false;
         typedef vector<OUString>::const_iterator c_it;
         for (c_it i = vecPaths.begin(); i != vecPaths.end(); i++)
         {
@@ -960,25 +960,45 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             bool bProcessRun= false;
             if (getJavaProps(sFilePath, props, & bProcessRun) == false)
             {
+                //The java executable could not be run or the system properties
+                //could not be retrieved. We can assume that this java is corrupt.
                 vecBadPaths.push_back(sFilePath);
-                //if there was a java executable, that is the process was started
-                //then we can assume that it is not necessary to search for another
-                //executable under the same root folder.
+                //If there was a java executable, that could be run but we did not get
+                //the system properties, then we also assume that the whole Java installation
+                //does not work. In a jdk there are two executables. One in jdk/bin and the other
+                //in jdk/jre/bin. We do not search any further, because we assume that if one java
+                //does not work then the other does not work as well. This saves us to run java
+                //again which is quite costly.
                 if (bProcessRun == true)
                 {
-                    bOk = true;
+                    // 1.3.1 special treatment: jdk/bin/java and /jdk/jre/bin/java are links to
+                    //a script, named .java_wrapper. The script starts jdk/bin/sparc/native_threads/java
+                    //or jdk/jre/bin/sparc/native_threads/java. The script uses the name with which it was
+                    //invoked to build the path to the executable. It we start the script directy as .java_wrapper
+                    //then it tries to start a jdk/.../native_threads/.java_wrapper. Therefore the link, which
+                    //is named java, must be used to start the script.
+                    getJavaProps(sFullPath, props, & bProcessRun);
+                    // Either we found a working 1.3.1
+                    //Or the java is broken. In both cases we stop searchin under this "root" directory
+                    bBreak = true;
                     break;
                 }
+                //sFilePath is no working java executable. We continue with another possible
+                //path.
                 else
+                {
                     continue;
+                }
             }
+            //sFilePath is a java and we could get the system properties. We proceed with this
+            //java.
             else
             {
-                bOk = true;
+                bBreak = true;
                 break;
             }
         }
-        if (bOk)
+        if (bBreak)
             break;
     }
 
@@ -1207,7 +1227,7 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                         }
                         JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin: "
                                          "Checking if directory: ") + aStatus.getFileURL() +
-                                   OUSTR(" is a Java."));
+                                   OUSTR(" is a Java. \n"));
 
                         getJREInfoByPath(aStatus.getFileURL(),vecInfos);
                     }
