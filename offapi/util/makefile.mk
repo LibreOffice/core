@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: jsc $ $Date: 2001-12-03 13:42:50 $
+#   last change: $Author: jsc $ $Date: 2001-12-04 16:49:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,7 +133,21 @@ UNOIDLDBFILES= \
     $(UCR)$/dcssframe.db \
     $(UCR)$/dcssaccessibility.db\
 
+
+REFERENCE_SO_60_RDB=$(SOLARROOT)$/odk_reference$/SO-6.0$/applicat.rdb
+REFERENCE_SO_60_DOC_RDB=$(SOLARROOT)$/odk_reference$/SO-6.0$/applicat_doc.rdb
+
+REGISTRYCHECKFLAG=$(MISC)$/registrycheck.flag
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
+.IF "$(BUILD_SOSL)"==""
+
+ALLTAR: $(REGISTRYCHECKFLAG)
+
+$(REGISTRYCHECKFLAG) : $(UNOIDLDBTARGET)
+    +regcompare -r1 $(UNOIDLDBTARGET) -r2 $(REFERENCE_SO_60_RDB) && echo > $(REGISTRYCHECKFLAG)
+
+.ENDIF
