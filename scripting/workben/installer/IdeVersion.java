@@ -108,13 +108,13 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
 
         tableModel.addTableModelListener(this);
         JTable tableVersions = new JTable(tableModel);
-        tableVersions.setPreferredSize(new Dimension(InstallWizard.DEFWIDTH,InstallWizard.DEFHEIGHT));
-        tableVersions.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tableVersions.doLayout();
-        setBorder(new javax.swing.border.EtchedBorder(javax.swing.border.EtchedBorder.RAISED));
-        //JScrollPane scroll = new JScrollPane(tableVersions);
-        //versionPanel.add(scroll);
-        versionPanel.add(tableVersions);
+        JScrollPane scroll = new JScrollPane(tableVersions);
+
+        tableVersions.setPreferredSize(
+            new Dimension(InstallWizard.DEFWIDTH,InstallWizard.DEFHEIGHT));
+        initColumnSizes(tableVersions, tableModel);
+        versionPanel.add(scroll);
+
         JTextArea area = new JTextArea("Please select IDEs below that you wish to add Scripting support to");
         area.setLineWrap(true);
         area.setEditable(false);
@@ -154,6 +154,66 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
         }
     }
 
+    private void initColumnSizes(JTable table, MyTableModelIDE model) {
+        TableColumn column = null;
+        Component comp = null;
+        int headerWidth = 0;
+        int cellWidth = 0;
+        int preferredWidth = 0;
+        int totalWidth = 0;
+        Object[] longValues = model.longValues;
+
+        for (int i = 0; i < 3; i++) {
+            column = table.getColumnModel().getColumn(i);
+
+            try {
+                comp = column.getHeaderRenderer().
+                             getTableCellRendererComponent(
+                                 null, column.getHeaderValue(),
+                                 false, false, 0, 0);
+                headerWidth = comp.getPreferredSize().width;
+            } catch (NullPointerException e) {
+                // System.err.println("Null pointer exception!");
+                // System.err.println("  getHeaderRenderer returns null in 1.3.");
+                // System.err.println("  The replacement is getDefaultRenderer.");
+            }
+
+            // need to replace spaces in String before getting preferred width
+            if (longValues[i] instanceof String) {
+                longValues[i] = ((String)longValues[i]).replace(' ', '_');
+            }
+
+            System.out.println("longValues: " + longValues[i]);
+            comp = table.getDefaultRenderer(model.getColumnClass(i)).
+                         getTableCellRendererComponent(
+                             table, longValues[i],
+                             false, false, 0, i);
+            cellWidth = comp.getPreferredSize().width;
+
+            preferredWidth = Math.max(headerWidth, cellWidth);
+
+            if (false) {
+                System.out.println("Initializing width of column "
+                    + i + ". "
+                    + "preferredWidth = " + preferredWidth
+                    + "; totalWidth = " + totalWidth
+                    + "; leftWidth = " + (InstallWizard.DEFWIDTH - totalWidth));
+            }
+
+            //XXX: Before Swing 1.1 Beta 2, use setMinWidth instead.
+            if (i == 2) {
+                if (preferredWidth > InstallWizard.DEFWIDTH - totalWidth)
+                    column.setPreferredWidth(InstallWizard.DEFWIDTH - totalWidth);
+                else
+                    column.setPreferredWidth(preferredWidth);
+            }
+            else {
+                column.setMinWidth(preferredWidth);
+                totalWidth += preferredWidth;
+            }
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField jTextField2;
     private InstallWizard wizard;
@@ -165,12 +225,12 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
     private static final String [] versions = {"NetBeans 3.4", "jEdit 4.0.3"};
     // End of variables declaration//GEN-END:variables
 
-}
-
+  }
 
 class MyTableModelIDE extends AbstractTableModel {
     ArrayList data;
-    String colNames[] = {"Install", "Name", "Location"};
+    String colNames[] = {"", "IDE Name", "IDE Location"};
+    Object[] longValues = new Object[] {Boolean.TRUE, "Name", "Location"};
 
     MyTableModelIDE (Properties properties, String [] validVersions) {
         data = new ArrayList();
@@ -184,8 +244,17 @@ class MyTableModelIDE extends AbstractTableModel {
             if ((path = properties.getProperty(key)) != null) {
                 ArrayList row = new ArrayList();
                 row.add(0, new Boolean(false));
+
                 row.add(1, key);
-                row.add(2, properties.getProperty(key));
+                if (key.length() > ((String)longValues[1]).length()) {
+                    longValues[1] = key;
+                }
+
+                row.add(2, path);
+                if (path.length() > ((String)longValues[2]).length()) {
+                    longValues[2] = path;
+                }
+
                 data.add(row);
             }
         }
