@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-31 12:47:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,4 +93,6 @@
 #define IMG_TIME_H              25
 #define IMG_FILE_H              26
 #define IMG_TABLE_H             27
-
+#define FT_HF_DEFINED           28
+#define LB_DEFINED              29
+#define FT_HF_CUSTOM            30
