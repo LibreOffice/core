@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 09:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,16 +544,16 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_ext_getMapping(
         ::rtl::OUString sToName = pTo->pTypeName;
         ::rtl::OUString sUno = OUString::createFromAscii( UNO_LB_UNO );
         ::rtl::OUString sRemote = OUString::createFromAscii( "urp" );
-        if ( sFromName.equalsIgnoreCase( sRemote ) &&
-             sToName.equalsIgnoreCase( sUno ) )
+        if ( sFromName.equalsIgnoreAsciiCase( sRemote ) &&
+             sToName.equalsIgnoreAsciiCase( sUno ) )
         {
             pMapping =  new bridges_remote::RemoteMapping( pTo, /* Uno */
                                      pFrom, /*remote*/
                                      bridges_remote::RemoteMapping::remoteToUno,
                                      OUString() );
         }
-        else if ( sFromName.equalsIgnoreCase( sUno ) &&
-                  sToName.equalsIgnoreCase( sRemote ) )
+        else if ( sFromName.equalsIgnoreAsciiCase( sUno ) &&
+                  sToName.equalsIgnoreAsciiCase( sRemote ) )
         {
             pMapping =  new bridges_remote::RemoteMapping( pFrom ,
                                            pTo ,

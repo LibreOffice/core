@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-30 13:29:02 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 09:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 
 #include "cc50_solaris_sparc.hxx"
 
+#ifndef _RTL_STRBUF_HXX_
+#include <rtl/strbuf.hxx>
+#endif
+
 #include <hash.cxx>
 
 // need a += operator for OString and sal_Char
@@ -136,17 +140,17 @@ static OString toUNOname( const OString & rRTTIname )
 //==================================================================================================
 static OString toRTTIname( const OString & rUNOname )
 {
-    OString aRet;
+    OStringBuffer aRet( rUNOname.getLength()*2 );
 
-    int nTokens = rUNOname.getTokenCount( '.' );
-    for( int i = 0; i < nTokens; i++ )
+    sal_Int32 nIndex = 0;
+    do
     {
-        if( i > 0 )
-            aRet += "::";
-        aRet += rUNOname.getToken( i, '.' );
-    }
+        if( nIndex > 0 )
+            aRet.append( "::" );
+        aRet.append( rUNOname.getToken( 0, '.', nIndex ) );
+    } while( nIndex != -1 );
 
-    return aRet;
+    return aRet.makeStringAndClear();
 }
 //==================================================================================================
 
@@ -155,32 +159,30 @@ static OString toRTTImangledname( const OString & rRTTIname )
     if( ! rRTTIname.getLength() )
         return OString();
 
-    OString aRet;
+    OStringBuffer aRet( rRTTIname.getLength()*2 );
 
-    int nUnoTokens = rRTTIname.getTokenCount( ':' );
-    for( int i = 0; i < nUnoTokens; i++ )
+    aRet.append( "__1n" );
+    sal_Int32 nIndex = 0;
+    do
     {
-        OString aToken( rRTTIname.getToken( i, ':' ) );
+        OString aToken( rRTTIname.getToken( 0, ':', nIndex ) );
         int nBytes = aToken.getLength();
         if( nBytes )
         {
-            OString aAdd;
-            if( nBytes > 25 )
+            if( nBytes  > 25 )
             {
-                aAdd += (sal_Char)( nBytes/26 + 'a' );
-                aAdd += (sal_Char)( nBytes % 26 + 'A' );
+                aRet.append( (sal_Char)( nBytes/26 + 'a' ) );
+                aRet.append( (sal_Char)( nBytes%26 + 'A' ) );
             }
             else
-                aAdd += (sal_Char)( nBytes + 'A' );
-            aRet += aAdd;
-            aRet += aToken;
+                aRet.append( (sal_Char)( nBytes + 'A' ) );
+            aRet.append( aToken );
         }
-    }
-    aRet += '_';
+    } while( nIndex != -1 );
 
-    aRet = "__1n"+aRet;
+    aRet.append( '_' );
 
-    return aRet;
+    return aRet.makeStringAndClear();
 }
 
 
