@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-23 11:56:13 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 22:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ void XMLTextExportPropertySetMapper::handleElementItem(
         break;
 
     default:
-        DBG_ASSERT( !this, "unknown element property" );
+        SvXMLExportPropertyMapper::handleElementItem( rHandler, rProperty, rUnitConverter, rNamespaceMap, nFlags, pProperties, nIdx );
         break;
     }
 }
@@ -199,7 +199,7 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
         // There's nothing to do here!
         break;
     default:
-        DBG_ASSERT( !this, "unknown special property" );
+        SvXMLExportPropertyMapper::handleSpecialItem(rAttrList, rProperty, rUnitConverter, rNamespaceMap, pProperties, nIdx );
         break;
     }
 }
@@ -867,4 +867,6 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         pVertOrientRelFrameState->mnIndex = -1;
     if( pVertOrientRelAsCharState && TextContentAnchorType_AS_CHARACTER != eAnchor )
         pVertOrientRelAsCharState->mnIndex = -1;
+
+    SvXMLExportPropertyMapper::ContextFilter(rProperties,rPropSet);
 }
