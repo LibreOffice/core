@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:07:31 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,15 @@ CmdLineBits createFlags( GetOpt & _aOptions )
         retflags |= rtl_tres_Flag_BOOM;
     }
 
+    if (_aOptions.hasOpt("-verbose"))
+    {
+        retflags |= rtl_tres_Flag_VERBOSE;
+    }
+
+    if (_aOptions.hasOpt("-quiet"))
+    {
+        retflags |= rtl_tres_Flag_QUIET;
+    }
     return retflags;
 }
 // -----------------------------------------------------------------------------
