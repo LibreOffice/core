@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-07-12 13:10:25 $
+ *  last change: $Author: tl $ $Date: 2002-11-11 13:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,8 @@
 
 
 class SwView;
+class SvEmbeddedObjectRef;
+
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener > * XSelectionChangeListenerPtr;
 SV_DECL_PTRARR_DEL( SelectionChangeListenerArr, XSelectionChangeListenerPtr, 4, 4 );
 
@@ -132,6 +134,7 @@ class SwXTextView :
     SwView*                 pView;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *         pxViewSettings;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextViewCursor > *   pxTextViewCursor;
+
 
     SdrObject* GetControl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & Model,
@@ -186,6 +189,9 @@ public:
 
     SwView*                 GetView() {return pView;}
     void                    Invalidate();
+
+    // temporary document used for PDF export of selections/multi-selections
+    SfxObjectShellRef       BuildTmpSelectionDoc( SvEmbeddedObjectRef &rRef );
 };
 
 /* -----------------17.09.98 12:52-------------------

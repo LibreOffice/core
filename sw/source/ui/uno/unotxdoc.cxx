@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-08 14:20:13 $
+ *  last change: $Author: tl $ $Date: 2002-11-11 13:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 #endif
 #ifndef _SFXDOCINF_HXX
 #include <sfx2/docinf.hxx>
+#endif
+#ifndef _SFX_OBJSH_HXX
+#include <sfx2/objsh.hxx>   // SfxObjectShellRef <-> SV_DECL_REF(SfxObjectShell)
 #endif
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
@@ -2385,26 +2388,69 @@ Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName 
 /* -----------------------------23.08.02 16:00--------------------------------
 
  ---------------------------------------------------------------------------*/
+/*
+ *  GetRenderDoc:
+ *  returns the document to be rendered, usually this will be the 'regular'
+ *  document but in case of PDF export of (multi-)selection it will
+ *  be a temporary document that gets created if not already done.
+ *  The rpView variable will be set (if not already done) to the used
+ *  SfxViewShell.
+*/
+
+SwDoc * SwXTextDocument::GetRenderDoc( SfxViewShell *&rpView, const uno::Any& rSelection )
+{
+    SwDoc *pDoc = 0;
+
+    uno::Reference< frame::XModel > xModel;
+    rSelection >>= xModel;
+    if (xModel == pDocShell->GetModel())
+        pDoc = pDocShell->GetDoc();
+    else
+    {
+        // used for PDF export of (multi-)selection
+        if (rSelection.hasValue())     // is anything selected ?
+        {
+            if (!rpView)
+                rpView = GuessViewShell();
+            DBG_ASSERT( rpView, "ViewShell missing" );
+            // the view shell should be SwView for documents PDF export.
+            // for the page preview no selection should be possible
+            // (the export dialog does not allow for this option)
+            const TypeId aSwViewTypeId = TYPE(SwView);
+            if (rpView  &&  rpView->IsA(aSwViewTypeId))
+            {
+                SfxObjectShellRef xDocSh(((SwView*)rpView)->GetOrCreateTmpSelectionDoc());
+                if (xDocSh.Is())
+                {
+                    pDoc = ((SwDocShell*)&xDocSh)->GetDoc();
+                    rpView = pDoc->GetDocShell()->GetView();
+                }
+            }
+            else
+                DBG_ERROR( "unexpected ViewShell" );
+        }
+    }
+    return pDoc;
+}
+/* -----------------------------23.08.02 16:00--------------------------------
+
+ ---------------------------------------------------------------------------*/
 sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         const uno::Any& rSelection,
         const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (IllegalArgumentException, RuntimeException)
 {
-    sal_Int32 nRes = 0;
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid())
+        throw RuntimeException();
+    SfxViewShell *pView = 0;
+    SwDoc *pDoc = GetRenderDoc( pView, rSelection );
+    if (!pDoc)
+        throw RuntimeException();
+    SwWrtShell *pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->CalcLayout();
 
-    uno::Reference< frame::XModel > xModel;
-    rSelection >>= xModel;
-
-    if (xModel == pDocShell->GetModel())
-        nRes = pDocShell->GetDoc()->GetPageCount();
-    else
-    {
-        // used for 'export selection'
-        if (rSelection.hasValue())     // is anything selected ?
-            nRes = 1;
-    }
-
-    return nRes;
+    return pDoc->GetPageCount();
 }
 /* -----------------------------23.08.02 16:00--------------------------------
 
@@ -2415,14 +2461,22 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (IllegalArgumentException, RuntimeException)
 {
-    const SwDoc &rDoc = *pDocShell->GetDoc();
-    if (!(0 <= nRenderer  &&  nRenderer < rDoc.GetPageCount()))
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid())
+        throw RuntimeException();
+    SfxViewShell *pView = 0;
+    SwDoc *pDoc = GetRenderDoc( pView, rSelection );
+    if (!pDoc)
+        throw RuntimeException();
+
+    if (!(0 <= nRenderer  &&  nRenderer < pDoc->GetPageCount()))
         throw IllegalArgumentException();
 
-    Size aPgSize( rDoc.GetPageSize( nRenderer + 1 ) );
+    Size aPgSize( pDoc->GetPageSize( nRenderer + 1 ) );
+    DBG_ASSERT( aPgSize != Size(), "no page size" );
+
     awt::Size aPageSize( TWIP_TO_MM100( aPgSize.Width() ),
                          TWIP_TO_MM100( aPgSize.Height() ));
-
     uno::Sequence< beans::PropertyValue > aRenderer(1);
     PropertyValue  &rValue = aRenderer.getArray()[0];
     rValue.Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
@@ -2430,20 +2484,11 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
 
     return aRenderer;
 }
-/* -----------------------------23.08.02 16:00--------------------------------
+/* -----------------------------28.10.02 16:00--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SAL_CALL SwXTextDocument::render(
-        sal_Int32 nRenderer,
-        const uno::Any& rSelection,
-        const uno::Sequence< beans::PropertyValue >& rxOptions )
-    throw (IllegalArgumentException, RuntimeException)
+SfxViewShell * SwXTextDocument::GuessViewShell()
 {
-    const SwDoc &rDoc = *pDocShell->GetDoc();
-    if (!(0 <= nRenderer  &&  nRenderer < rDoc.GetPageCount()))
-        throw IllegalArgumentException();
-
-    const TypeId aTypeId = TYPE(SwView);
     SfxViewShell* pCurrentShell = SfxViewShell::Current();
     if(pCurrentShell->GetObjectShell() != pDocShell)
         pCurrentShell = 0;
@@ -2456,8 +2501,31 @@ void SAL_CALL SwXTextDocument::render(
             break;
         pView = SfxViewShell::GetNext(*pView );
     }
-    if(!pView)
-        return;
+
+    return pView;
+}
+/* -----------------------------23.08.02 16:00--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SAL_CALL SwXTextDocument::render(
+        sal_Int32 nRenderer,
+        const uno::Any& rSelection,
+        const uno::Sequence< beans::PropertyValue >& rxOptions )
+    throw (IllegalArgumentException, RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid())
+        throw RuntimeException();
+    SfxViewShell *pView = GuessViewShell();
+    SwDoc *pDoc = GetRenderDoc( pView, rSelection );
+    if (!pDoc || !pView)
+        throw RuntimeException();
+
+    if (!(0 <= nRenderer  &&  nRenderer < pDoc->GetPageCount()))
+        throw IllegalArgumentException();
+
+    // the view shell should be SwView for documents PDF export
+    // or SwPagePreView for PDF export of the page preview
     const TypeId aSwViewTypeId = TYPE(SwView);
     const TypeId aSwPreViewTypeId = TYPE(SwPagePreView);
     ViewShell* pVwSh = pView->IsA(aSwViewTypeId) ?
@@ -2502,7 +2570,6 @@ void SAL_CALL SwXTextDocument::render(
 
         uno::Reference< frame::XModel > xModel;
         rSelection >>= xModel;
-
         if (xModel != pDocShell->GetModel())    // 'export selection' ?
             aOptions.bPrintSelection = TRUE;
 
