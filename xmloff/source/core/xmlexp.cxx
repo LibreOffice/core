@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-17 13:42:42 $
+ *  last change: $Author: mib $ $Date: 2001-01-22 12:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 
 #pragma hdrstop
 
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+#include <rtl/uuid.h>
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
 #endif
@@ -153,6 +157,7 @@
 #endif
 
 using namespace ::rtl;
+using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -898,6 +903,44 @@ XMLEventExport& SvXMLExport::GetEventExport()
     }
 
     return *pEventExport;
+}
+
+// XUnoTunnel & co
+const uno::Sequence< sal_Int8 > & SvXMLExport::getUnoTunnelId() throw()
+{
+    static uno::Sequence< sal_Int8 > * pSeq = 0;
+    if( !pSeq )
+    {
+        Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
+        if( !pSeq )
+        {
+            static uno::Sequence< sal_Int8 > aSeq( 16 );
+            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+            pSeq = &aSeq;
+        }
+    }
+    return *pSeq;
+}
+
+SvXMLExport* SvXMLExport::getImplementation( uno::Reference< uno::XInterface > xInt ) throw()
+{
+    uno::Reference< lang::XUnoTunnel > xUT( xInt, uno::UNO_QUERY );
+    if( xUT.is() )
+        return (SvXMLExport*)xUT->getSomething( SvXMLExport::getUnoTunnelId() );
+    else
+        return NULL;
+}
+
+// XUnoTunnel
+sal_Int64 SAL_CALL SvXMLExport::getSomething( const uno::Sequence< sal_Int8 >& rId )
+    throw( uno::RuntimeException )
+{
+    if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+                                                         rId.getConstArray(), 16 ) )
+    {
+        return (sal_Int64)this;
+    }
+    return 0;
 }
 
 
