@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-26 10:18:26 $
+ *  last change: $Author: pl $ $Date: 2002-09-27 11:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,18 +527,23 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
     XubString aText = ImplGetText();
     nStart = 0;
     nEnd = aText.Len();
-    ImplClearBackground( 0, GetOutputSizePixel().Width() );
 
     long    nDXBuffer[256];
     long*   pDXBuffer = NULL;
     long*   pDX = nDXBuffer;
-    if( 2*aText.Len() > sizeof(nDXBuffer)/sizeof(nDXBuffer[0]) )
-    {
-        pDXBuffer = new long[2*(aText.Len()+1)];
-        pDX = pDXBuffer;
-    }
 
-    GetCaretPositions( aText, pDX, nStart, nEnd );
+    ImplClearBackground( 0, GetOutputSizePixel().Width() );
+
+    if( aText.Len() )
+    {
+        if( 2*aText.Len() > sizeof(nDXBuffer)/sizeof(nDXBuffer[0]) )
+        {
+            pDXBuffer = new long[2*(aText.Len()+1)];
+            pDX = pDXBuffer;
+        }
+
+        GetCaretPositions( aText, pDX, nStart, nEnd );
+    }
 
     // center vertically
     long    nH = GetOutputSize().Height();
@@ -876,23 +881,27 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
     Cursor*     pCursor = GetCursor();
     XubString   aText = ImplGetText();
 
+    long nTextPos = 0;
+
     long    nDXBuffer[256];
     long*   pDXBuffer = NULL;
     long*   pDX = nDXBuffer;
-    if( 2*aText.Len() > sizeof(nDXBuffer)/sizeof(nDXBuffer[0]) )
+
+    if( aText.Len() )
     {
-        pDXBuffer = new long[2*(aText.Len()+1)];
-        pDX = pDXBuffer;
+        if( 2*aText.Len() > sizeof(nDXBuffer)/sizeof(nDXBuffer[0]) )
+        {
+            pDXBuffer = new long[2*(aText.Len()+1)];
+            pDX = pDXBuffer;
+        }
+
+        GetCaretPositions( aText, pDX, 0, aText.Len() );
+
+        if( maSelection.Max() < aText.Len() )
+            nTextPos = pDX[ 2*maSelection.Max() ];
+        else
+            nTextPos = pDX[ 2*aText.Len()-1 ];
     }
-
-    GetCaretPositions( aText, pDX, 0, aText.Len() );
-
-//  long        nTextWidth = GetTextWidth( aText, 0, (xub_StrLen)maSelection.Max() );
-    long nTextPos = 0;
-    if( maSelection.Max() < aText.Len() )
-        nTextPos = pDX[ 2*maSelection.Max() ];
-    else
-        nTextPos = pDX[ 2*aText.Len()-1 ];
 
     long nCursorWidth = 0;
     if ( !mbInsertMode && !maSelection.Len() && (maSelection.Max() < aText.Len()) )
