@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:07:29 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ OGridControlModel::OGridControlModel(const Reference<XMultiServiceFactory>& _rxF
                     ,OErrorBroadcaster( OComponentHelper::rBHelper )
                     ,m_aSelectListeners(m_aMutex)
                     ,m_aResetListeners(m_aMutex)
-                    ,m_aDefaultControl(FRM_CONTROL_GRID)        // use the old control name for compytibility reasons
+                    ,m_aDefaultControl( FRM_SUN_CONTROL_GRIDCONTROL )
                     ,m_bEnable(sal_True)
                     ,m_bNavigation(sal_True)
                     ,m_nBorder(1)
@@ -751,7 +751,7 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     switch (nHandle)
     {
         case PROPERTY_ID_DEFAULTCONTROL:
-            aReturn <<= ::rtl::OUString( FRM_CONTROL_GRID  );
+            aReturn <<= ::rtl::OUString( STARDIV_ONE_FORM_CONTROL_GRID  );
             break;
 
         case PROPERTY_ID_PRINTABLE:
@@ -1043,7 +1043,12 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
         _rxOutStream->writeShort( aFont.Pitch );
     }
 
-    _rxOutStream << m_aDefaultControl;
+    if ( m_aDefaultControl == FRM_SUN_CONTROL_GRIDCONTROL )
+        // for compatibility, write a sevice name which older versions understand (up to 5.1)
+        _rxOutStream << STARDIV_ONE_FORM_CONTROL_GRID;
+    else
+        _rxOutStream << m_aDefaultControl;
+
     _rxOutStream->writeShort(m_nBorder);
     _rxOutStream->writeBoolean(m_bEnable);
 
