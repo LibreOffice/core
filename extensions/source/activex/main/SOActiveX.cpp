@@ -431,7 +431,10 @@ HRESULT CSOActiveX::CallLoadComponentFromURL1PBool( OLECHAR* sUrl, OLECHAR* sArg
     return S_OK;
 }
 
-HRESULT CSOActiveX::CallDispatch1PBool( OLECHAR* sUrl, OLECHAR* sArgName, BOOL sArgVal )
+HRESULT CSOActiveX::CallDispatchMethod( OLECHAR* sUrl,
+                                        CComVariant* aArgNames,
+                                        CComVariant* aArgVals,
+                                        unsigned int count )
 {
     CComPtr<IDispatch> pdispURL;
     HRESULT hr = GetUrlStruct( sUrl, pdispURL );
@@ -449,25 +452,27 @@ HRESULT CSOActiveX::CallDispatch1PBool( OLECHAR* sUrl, OLECHAR* sArgName, BOOL s
                          pdispXDispatch );
     if( !SUCCEEDED( hr ) ) return hr;
 
-    SAFEARRAY FAR* pPropVals = SafeArrayCreateVector( VT_DISPATCH, 0, 1 );
-    long ix = 0;
-    CComPtr<IDispatch> pdispPropVal;
-    hr = GetUnoStruct( L"com.sun.star.beans.PropertyValue", pdispPropVal );
-    if( !SUCCEEDED( hr ) ) return hr;
+    SAFEARRAY FAR* pPropVals = SafeArrayCreateVector( VT_DISPATCH, 0, count );
+    for( long ix = 0; ix < (long)count; ix ++ )
+    {
+        CComPtr<IDispatch> pdispPropVal;
+        hr = GetUnoStruct( L"com.sun.star.beans.PropertyValue", pdispPropVal );
+        if( !SUCCEEDED( hr ) ) return hr;
 
-    OLECHAR*    sPropMemberNames[2] = { L"Name", L"Value" };
-    CComVariant pPropVar[2];
-    pPropVar[0] = CComVariant( sArgName );
-    pPropVar[1] = CComVariant(); pPropVar[1].vt = VT_BOOL; pPropVar[1].boolVal = sArgVal ? VARIANT_TRUE : VARIANT_FALSE ;
-    hr = PutPropertiesToIDisp( pdispPropVal, sPropMemberNames, pPropVar, 2 );
-    if( !SUCCEEDED( hr ) ) return hr;
+        OLECHAR*    sPropMemberNames[2] = { L"Name", L"Value" };
+        CComVariant pPropVar[2];
+        pPropVar[0] = aArgNames[ix];
+        pPropVar[1] = aArgVals[ix];
+        hr = PutPropertiesToIDisp( pdispPropVal, sPropMemberNames, pPropVar, 2 );
+        if( !SUCCEEDED( hr ) ) return hr;
 
-    SafeArrayPutElement( pPropVals, &ix, pdispPropVal );
+        SafeArrayPutElement( pPropVals, &ix, pdispPropVal );
+    }
 
     CComVariant aDispArgs[2];
     aDispArgs[1] = CComVariant( pdispURL );
     // aDispArgs[0] = CComVariant( pPropVals ); such constructor is not defined ??!
-    aDispArgs[0] = CComVariant(); aDispArgs[0].vt = VT_ARRAY | VT_DISPATCH; aDispArgs[0].parray = pPropVals;
+    aDispArgs[0].vt = VT_ARRAY | VT_DISPATCH; aDispArgs[0].parray = pPropVals;
 
     CComVariant dummyResult;
     hr = ExecuteFunc( pdispXDispatch, L"dispatch", aDispArgs, 2, &dummyResult );
@@ -478,13 +483,17 @@ HRESULT CSOActiveX::CallDispatch1PBool( OLECHAR* sUrl, OLECHAR* sArgName, BOOL s
 
 HRESULT CSOActiveX::LoadURLToFrame( )
 {
-    HRESULT hr = CallDispatch1PBool( mCurFileUrl, L"ReadOnly", mbViewOnly );
-
-    // can be used later
-    // HRESULT hr = CallLoadComponentFromURL1PBool( mCurFileUrl, L"ReadOnly", mbViewOnly );
+    CComVariant aArgNames[2] = { L"ReadOnly", L"ViewOnly" };
+    CComVariant aArgVals[2];
+    aArgVals[0] = CComVariant(); aArgVals[0].vt = VT_BOOL; aArgVals[0].boolVal = mbViewOnly ? VARIANT_TRUE : VARIANT_FALSE;
+    aArgVals[1] = CComVariant(); aArgVals[1].vt = VT_BOOL; aArgVals[1].boolVal = mbViewOnly ? VARIANT_TRUE : VARIANT_FALSE;
+    HRESULT hr = CallDispatchMethod( mCurFileUrl, aArgNames, aArgVals, 2 );
     if( !SUCCEEDED( hr ) ) return hr;
 
-    hr = CallDispatch1PBool( L"slot:6661", L"MenuBarVisible", FALSE );
+    CComVariant aBarName( L"MenuBarVisible" );
+    CComVariant aBarVis;
+    aBarVis.vt = VT_BOOL; aBarVis.boolVal = VARIANT_FALSE;
+    hr = CallDispatchMethod( L"slot:6661", &aBarName, &aBarVis, 1 );
     if( !SUCCEEDED( hr ) ) return hr;
 
     /*

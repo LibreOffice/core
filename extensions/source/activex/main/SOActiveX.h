@@ -125,7 +125,7 @@ public:
     HRESULT CreateFrameOldWay( HWND hwnd, int width, int height );
     HRESULT GetUnoStruct( OLECHAR* sStructName, CComPtr<IDispatch>& pdispResult );
     HRESULT LoadURLToFrame();
-    HRESULT CallDispatch1PBool( OLECHAR* sUrl, OLECHAR* sArgName, BOOL sArgVal );
+    HRESULT CallDispatchMethod( OLECHAR* sUrl, CComVariant* sArgNames, CComVariant* sArgVal, unsigned int count );
     HRESULT CallLoadComponentFromURL1PBool( OLECHAR* sUrl, OLECHAR* sArgName, BOOL sArgVal );
     HRESULT GetUrlStruct( OLECHAR* sUrl, CComPtr<IDispatch>& pdispUrl );
     HRESULT Cleanup();
