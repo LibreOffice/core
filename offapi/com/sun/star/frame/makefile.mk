@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-13 11:56:47 $
+#   last change: $Author: kz $ $Date: 2004-05-18 10:44:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -45,8 +45,7 @@
 #   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
 #   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
 #   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
-#   See the License for the specific p	XTypeDetection.idl\
-rovisions governing your rights and
+#   See the License for the specific provisions governing your rights and
 #   obligations concerning the Software.
 #
 #   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
@@ -103,6 +102,7 @@ IDLFILES=\
     IllegalArgumentIOException.idl\
     MediaTypeDetectionHelper.idl\
     ProtocolHandler.idl\
+    SessionManager.idl\
     Settings.idl\
     SynchronousFrameLoader.idl\
     Task.idl\
@@ -141,6 +141,8 @@ IDLFILES=\
     XModel.idl\
     XNotifyingDispatch.idl\
     XRecordableDispatch.idl\
+    XSessionManagerClient.idl\
+    XSessionManagerListener.idl\
     XStatusListener.idl\
     XStorable.idl\
     XSynchronousDispatch.idl\
