@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-20 09:37:43 $
+ *  last change: $Author: cd $ $Date: 2001-07-25 12:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ BOOL OfficeIPCThread::EnableOfficeIPCThread()
     else
     {
         delete pThread;
-        return FALSE;
+        return TRUE;
     }
 
     // look if we are the first Office: try to open the pipe
