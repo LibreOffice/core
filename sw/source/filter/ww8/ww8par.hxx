@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:57:10 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,10 +447,27 @@ struct WW8AuthorInfo
     }
 };
 
+namespace sw
+{
+    namespace hack
+    {
+        class Position
+        {
+        private:
+            SwNodeIndex maPtNode;
+            xub_StrLen mnPtCntnt;
+        public:
+            Position(const SwPosition &rPos);
+            Position(const Position &rPos);
+            operator SwPosition() const;
+        };
+    }
+}
+
 class FieldEntry
 {
 public:
-    SwPosition maStartPos;
+    sw::hack::Position maStartPos;
     sal_uInt16 mnFieldId;
     FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw();
     FieldEntry(const FieldEntry &rOther) throw();
@@ -1593,7 +1610,10 @@ long GetListFirstLineIndent(const SwNumFmt &rFmt);
 String BookmarkToWriter(const String &rBookmark);
 bool RTLGraphicsHack(long &rLeft, long nWidth,
     SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, SwTwips nPageLeft,
-    SwTwips nPageRight, SwTwips nPageSize, bool bRTL);
+    SwTwips nPageRight, SwTwips nPageSize);
+bool RTLDrawingsHack(long &rLeft, long nWidth,
+    SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, SwTwips nPageLeft,
+    SwTwips nPageRight, SwTwips nPageSize);
 #endif
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
