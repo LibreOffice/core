@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 03:14:55 $
+ *  last change: $Author: mtg $ $Date: 2000-12-01 10:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ void SAL_CALL ZipOutputStream::setComment( const ::rtl::OUString& rComment )
 void SAL_CALL ZipOutputStream::setMethod( sal_Int32 nNewMethod )
     throw(uno::RuntimeException)
 {
-    nMethod = nNewMethod;
+    nMethod = static_cast < sal_Int16 > (nNewMethod);
 }
 void SAL_CALL ZipOutputStream::setLevel( sal_Int32 nNewLevel )
     throw(uno::RuntimeException)
@@ -121,7 +121,7 @@ void SAL_CALL ZipOutputStream::putNextEntry( const package::ZipEntry& rEntry )
         pNonConstEntry->nCrc != -1)
         pNonConstEntry->nFlag = 0;
 
-    pNonConstEntry->nOffset = aChucker.getPosition();
+    pNonConstEntry->nOffset = static_cast < sal_Int32 > (aChucker.getPosition());
     writeLOC(rEntry);
     aZipList.push_back(pNonConstEntry);
     pCurrentEntry=pNonConstEntry;
@@ -229,10 +229,10 @@ void SAL_CALL ZipOutputStream::finish(  )
         // boom
         VOS_DEBUG_ONLY("Zip file must have at least one entry!\n");
     }
-    sal_Int32 nOffset= aChucker.getPosition();
+    sal_Int32 nOffset= static_cast < sal_Int32 > (aChucker.getPosition());
     for (int i =0, nEnd = aZipList.size(); i < nEnd; i++)
         writeCEN(*aZipList[i]);
-    writeEND( nOffset, aChucker.getPosition() - nOffset);
+    writeEND( nOffset, static_cast < sal_Int32 > (aChucker.getPosition()) - nOffset);
     bFinished = sal_True;
 }
 void ZipOutputStream::doDeflate()
@@ -250,7 +250,7 @@ void ZipOutputStream::doDeflate()
 }
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
 {
-    sal_Int16 i=0, nCommentLength = sComment.getLength();
+    sal_Int16 i=0, nCommentLength = static_cast < sal_Int16 > (sComment.getLength());
     const sal_Unicode *pChar = sComment.getStr();
     uno::Sequence < sal_Int8 > aSequence (nCommentLength);
     for ( ; i < nCommentLength; i++)
@@ -271,9 +271,10 @@ void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
 }
 void ZipOutputStream::writeCEN( const package::ZipEntry &rEntry )
 {
-    sal_Int16 nNameLength = rEntry.sName.getLength(),
-              nCommentLength = rEntry.sComment.getLength(),
-              nExtraLength = rEntry.extra.getLength(), i = 0;
+    sal_Int16 nNameLength       = static_cast < sal_Int16 > ( rEntry.sName.getLength() ) ,
+              nCommentLength    = static_cast < sal_Int16 > ( rEntry.sComment.getLength() ) ,
+              nExtraLength      = static_cast < sal_Int16 > ( rEntry.extra.getLength() );
+    sal_Int16 i = 0;
 
     aChucker << CENSIG;
     aChucker << rEntry.nVersion;
@@ -331,7 +332,8 @@ void ZipOutputStream::writeEXT( const package::ZipEntry &rEntry )
 
 void ZipOutputStream::writeLOC( const package::ZipEntry &rEntry )
 {
-    sal_Int16 nNameLength = rEntry.sName.getLength(), i=0;
+    sal_Int16 nNameLength = static_cast < sal_Int16 > (rEntry.sName.getLength());
+    sal_Int16 i=0;
     aChucker << LOCSIG;
     aChucker << rEntry.nVersion;
     aChucker << rEntry.nFlag;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 14:09:05 $
+ *  last change: $Author: mtg $ $Date: 2000-12-01 10:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
                 xSeek->seek(0);
                 if (pStream->aEntry.nMethod == STORED)
                 {
-                    pStream->aEntry.nSize = pStream->aEntry.nCompressedSize = xSeek->getLength();
+                    pStream->aEntry.nSize = pStream->aEntry.nCompressedSize = static_cast < sal_Int32 > (xSeek->getLength());
                     bTrackLength = sal_False;
                 }
             }
@@ -341,7 +341,7 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
             while (1)
             {
                 uno::Sequence < sal_Int8 > aSeq (65535);
-                sal_Int64 nLength;
+                sal_Int32 nLength;
                 nLength = xStream->readBytes(aSeq, 65535);
                 if (nLength < 65535)
                     aSeq.realloc(nLength);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteGrabber.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 13:47:17 $
+ *  last change: $Author: mtg $ $Date: 2000-12-01 10:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ sal_Int64 SAL_CALL ByteGrabber::seek( sal_Int64 location )
 {
     if (xSeek.is() )
     {
-        sal_Int32 nLen = xSeek->getLength();
+        sal_Int64 nLen = xSeek->getLength();
         if (location > nLen )
             location = nLen;
         xSeek->seek( location );

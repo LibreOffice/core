@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 13:47:17 $
+ *  last change: $Author: mtg $ $Date: 2000-12-01 10:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ sal_Bool ZipFile::readLOC(const package::ZipEntry &rEntry)
     aGrabber >> nNameLen;
     aGrabber >> nExtraLen;
     package::ZipEntry *pNonConstEntry = const_cast < package::ZipEntry* > (&rEntry);
-    pNonConstEntry->nOffset =  aGrabber.getPosition() + nNameLen + nExtraLen;
+    pNonConstEntry->nOffset =  static_cast < sal_Int8 > (aGrabber.getPosition()) + nNameLen + nExtraLen;
     return sal_True;
 
 /*
@@ -251,9 +251,9 @@ sal_Bool ZipFile::readLOC(const package::ZipEntry &rEntry)
 
 sal_Int32 ZipFile::findEND( )
 {
-    sal_uInt32 nLength=0, nPos=0;
+    sal_Int32 nLength=0, nPos=0;
     uno::Sequence < sal_Int8 > aByteSeq;
-    nLength = nPos = aGrabber.getLength();
+    nLength = nPos = static_cast <sal_Int32 > (aGrabber.getLength());
     if (nLength == 0)
         return -1;
     aGrabber.seek( nLength );
@@ -273,7 +273,7 @@ sal_Int32 ZipFile::findEND( )
             if (nTest == ENDSIG)
             {
                 sal_uInt16 nCommentLength;
-                sal_uInt32 nEndPos = nPos + i;
+                sal_Int32 nEndPos = nPos + i;
                 aGrabber.seek(nEndPos+ENDCOM);
                 aGrabber >> nCommentLength;
                 if (nEndPos + ENDHDR + nCommentLength == nLength)
@@ -319,9 +319,9 @@ void ZipFile::addEntryComment( int nIndex, ByteSequence &rComment)
 
 sal_Int32 ZipFile::readCEN()
 {
-    sal_uInt32 nEndPos, nLocPos;
+    sal_Int32 nEndPos, nLocPos;
     sal_Int16  nCount, nTotal;
-    sal_uInt32 nCenLen, nCenPos, nCenOff;
+    sal_Int32 nCenLen, nCenPos, nCenOff;
 
     nEndPos = findEND();
     if (nEndPos == -1)

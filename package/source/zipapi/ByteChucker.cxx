@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 13:47:17 $
+ *  last change: $Author: mtg $ $Date: 2000-12-01 10:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ sal_Int64 SAL_CALL ByteChucker::seek( sal_Int64 location )
 {
     if (xSeek.is() )
     {
-        sal_Int32 nLen = xSeek->getLength();
+        sal_Int64 nLen = xSeek->getLength();
         if (location > nLen )
             location = nLen;
         xSeek->seek( location );
@@ -172,10 +172,10 @@ ByteChucker& ByteChucker::operator << (sal_uInt16 nuInt16)
 ByteChucker& ByteChucker::operator << (sal_uInt32 nuInt32)
 {
     uno::Sequence< sal_Int8 > aSequence (4);
-    aSequence[0] = (nuInt32 >>  0 ) & 0xFF;
-    aSequence[1] = (nuInt32 >>  8 ) & 0xFF;
-    aSequence[2] = (nuInt32 >> 16 ) & 0xFF;
-    aSequence[3] = (nuInt32 >> 24 ) & 0xFF;
+    aSequence[0] = static_cast < sal_Int8 > (nuInt32 >>  0 ) & 0xFF;
+    aSequence[1] = static_cast < sal_Int8 > (nuInt32 >>  8 ) & 0xFF;
+    aSequence[2] = static_cast < sal_Int8 > (nuInt32 >> 16 ) & 0xFF;
+    aSequence[3] = static_cast < sal_Int8 > (nuInt32 >> 24 ) & 0xFF;
     xStream->writeBytes(aSequence);
     return *this;
 }

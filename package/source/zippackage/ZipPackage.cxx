@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 13:47:18 $
+ *  last change: $Author: mtg $ $Date: 2000-12-01 10:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,14 +468,14 @@ void SAL_CALL ZipPackage::commitChanges(  )
 
     ManifestWriter aWriter ( xManOutStream, xFactory, aManList);
     aWriter.Write();
-    pManifestStream->aEntry.nSize = pManifestStream->aEntry.nCompressedSize = pBuffer->getPosition();
-    pBuffer->aBuffer.realloc(pBuffer->getPosition());
+    pManifestStream->aEntry.nSize = pManifestStream->aEntry.nCompressedSize = static_cast < sal_Int32 > (pBuffer->getPosition());
+    pBuffer->aBuffer.realloc(static_cast < sal_Int32 > (pBuffer->getPosition()));
     CRC32 aCRC;
     aCRC.update(pBuffer->aBuffer);
     pManifestStream->aEntry.nCrc = aCRC.getValue();
 
     pZipOut->putNextEntry(pManifestStream->aEntry);
-    pZipOut->write(pBuffer->aBuffer, 0, pBuffer->getPosition());
+    pZipOut->write(pBuffer->aBuffer, 0, static_cast < sal_Int32 > (pBuffer->getPosition()));
     pZipOut->closeEntry();
 
     pZipOut->finish();
@@ -485,7 +485,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
     xMetaFolder->insertByName(OUString::createFromAscii("manifest.xml"), aAny);
 
     pZipFile->updateFromManList( aManList );
-    for (sal_Int32 i=0 ; i < aManList.size(); i++)
+    for (sal_uInt32 i=0 ; i < aManList.size(); i++)
     {
         ZipEntry * pEntry = aManList[i]->pEntry;
         pEntry->sName = aManList[i]->sShortName;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-27 16:55:07 $
+ *  last change: $Author: mtg $ $Date: 2000-12-01 10:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ using namespace com::sun::star::io;
 
 ZipPackageBuffer::ZipPackageBuffer(sal_Int64 nNewBufferSize)
 : nBufferSize (nNewBufferSize)
-, aBuffer (nNewBufferSize)
+, aBuffer (static_cast < sal_Int32 > (nNewBufferSize))
 , nCurrent(0)
 , nEnd(0)
 {
@@ -101,11 +101,11 @@ sal_Int32 SAL_CALL ZipPackageBuffer::readBytes( Sequence< sal_Int8 >& aData, sal
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     if (nBytesToRead + nCurrent > nEnd)
-        nBytesToRead = nEnd - nCurrent;
+        nBytesToRead = static_cast < sal_Int32 > (nEnd - nCurrent);
     sal_Int64 nEndRead = nBytesToRead+nCurrent;
 
-    for (sal_Int64 i =0; nCurrent < nEndRead; nCurrent++, i++)
-        aData[i] = aBuffer[nCurrent];
+    for (sal_Int32 i =0; nCurrent < nEndRead; nCurrent++, i++)
+        aData[i] = aBuffer[static_cast < sal_Int32 > (nCurrent)];
     return nBytesToRead;
 }
 sal_Int32 SAL_CALL ZipPackageBuffer::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
@@ -130,7 +130,7 @@ void SAL_CALL ZipPackageBuffer::skipBytes( sal_Int32 nBytesToSkip )
 sal_Int32 SAL_CALL ZipPackageBuffer::available(  )
         throw(NotConnectedException, IOException, RuntimeException)
 {
-    return nEnd - nCurrent;
+    return static_cast < sal_Int32 > (nEnd - nCurrent);
 }
 void SAL_CALL ZipPackageBuffer::closeInput(  )
         throw(NotConnectedException, IOException, RuntimeException)
@@ -143,10 +143,10 @@ void SAL_CALL ZipPackageBuffer::writeBytes( const Sequence< sal_Int8 >& aData )
     if (nEnd + nDataLen > nBufferSize)
     {
         nBufferSize *=2;
-        aBuffer.realloc(nBufferSize);
+        aBuffer.realloc(static_cast < sal_Int32 > (nBufferSize));
     }
-    for (sal_Int64 i=0; i<nDataLen;i++,nCurrent++)
-        aBuffer[nCurrent] = aData[i];
+    for (sal_Int32 i=0; i<nDataLen;i++,nCurrent++)
+        aBuffer[static_cast < sal_Int32 > (nCurrent) ] = aData[i];
     if (nCurrent>nEnd)
         nEnd = nCurrent;
 }

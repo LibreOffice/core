@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-30 13:47:49 $
+ *  last change: $Author: mtg $ $Date: 2000-12-01 10:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,10 +85,10 @@ EntryInputStream::EntryInputStream( uno::Reference < io::XInputStream > xNewInpu
 , nBegin( 0 )
 , nCurrent( 0 )
 , nEnd(nUncompressedSize)
-, aSequence ( nNewEnd - nNewBegin )
+, aSequence ( static_cast < sal_Int32 > (nNewEnd - nNewBegin) )
 , bReachEOF ( sal_False )
 , aInflater( sal_True )
-, aBuffer( nUncompressedSize )
+, aBuffer( static_cast < sal_Int32 > (nUncompressedSize) )
 {
     if (nCompEnd - nCompBegin < nUncompressedSize)
         bDeflated = sal_True;
@@ -97,14 +97,14 @@ EntryInputStream::EntryInputStream( uno::Reference < io::XInputStream > xNewInpu
     if (bDeflated)
     {
         xSeek->seek(nNewBegin);
-        xStream->readBytes(aSequence, nNewEnd - nNewBegin);
-        aInflater.setInputSegment(aSequence, 0, nNewEnd - nNewBegin );
+        xStream->readBytes(aSequence, static_cast < sal_Int32 > (nNewEnd - nNewBegin));
+        aInflater.setInputSegment(aSequence, 0, static_cast < sal_Int32 > (nNewEnd - nNewBegin) );
         aInflater.doInflate(aBuffer);
     }
     else
     {
         xSeek->seek(nNewBegin);
-        xStream->readBytes(aBuffer, nUncompressedSize);
+        xStream->readBytes(aBuffer, static_cast < sal_Int32 > (nUncompressedSize));
     }
 }
 
@@ -113,15 +113,15 @@ EntryInputStream::~EntryInputStream( void )
 }
 void EntryInputStream::fill(void)
 {
-    sal_Int32 nLength, nBytesToRead = aSequence.getLength();
+    sal_Int64 nLength, nBytesToRead = aSequence.getLength();
     if (nBytesToRead + nCompCurrent> nCompEnd)
         nBytesToRead = nCompEnd - nCompCurrent;
     if (xSeek.is())
         xSeek->seek( nCompCurrent );
     else
         throw (io::IOException());
-    nLength = xStream->readBytes(aSequence, nBytesToRead);
-    aInflater.setInputSegment(aSequence, 0, nLength);
+    nLength = xStream->readBytes(aSequence, static_cast < sal_Int32> (nBytesToRead));
+    aInflater.setInputSegment(aSequence, 0, static_cast < sal_Int32> (nLength));
 }
 sal_Int32 SAL_CALL EntryInputStream::readBytes( uno::Sequence< sal_Int8 >& aData,
                                         sal_Int32 nBytesToRead )
@@ -134,14 +134,13 @@ sal_Int32 SAL_CALL EntryInputStream::readBytes( uno::Sequence< sal_Int8 >& aData
     {
         if (nCurrent > nEnd)
             return 0;
-        nBytesToRead = nEnd - nCurrent;
+        nBytesToRead = static_cast < sal_Int32> (nEnd - nCurrent);
     }
 
     aData.realloc( nBytesToRead );
-    sal_Int64 nDataLen = aData.getLength();
 
-    for ( sal_Int64 i = 0; i< nBytesToRead;i++,nCurrent++)
-        aData[i] = aBuffer[nCurrent];
+    for ( sal_Int32 i = 0; i< nBytesToRead;i++,nCurrent++)
+        aData[i] = aBuffer[static_cast < sal_Int32 > (nCurrent)];
 
     return nBytesToRead;
     /*
@@ -193,7 +192,7 @@ void SAL_CALL EntryInputStream::skipBytes( sal_Int32 nBytesToSkip )
     if (nBytesToSkip == 0)
         return;
     if (nBytesToSkip + nCurrent > nEnd )
-        nBytesToSkip = nEnd - nCurrent;
+        nBytesToSkip = static_cast < sal_Int32 > (nEnd - nCurrent);
 
     nCurrent+=nBytesToSkip;
 /*
@@ -231,7 +230,7 @@ void SAL_CALL EntryInputStream::skipBytes( sal_Int32 nBytesToSkip )
 sal_Int32 SAL_CALL EntryInputStream::available(  )
     throw(io::NotConnectedException, io::IOException, uno::RuntimeException)
 {
-    return aBuffer.getLength() - nCurrent;
+    return aBuffer.getLength() - static_cast < sal_Int32> (nCurrent);
     /*
     if (!bDeflated)
         return nCompEnd - nCompCurrent;
