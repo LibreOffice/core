@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.89 $
+#   $Revision: 1.90 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 09:56:48 $
+#   last change: $Author: obo $ $Date: 2005-03-18 10:21:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -253,7 +253,7 @@ $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
     +tr -d "\015" < $(SHL$(TNR)VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
-    
+
 .ENDIF			# "$(SHL$(TNR)VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL$(TNR)VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
@@ -292,7 +292,7 @@ SHL$(TNR)DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)T
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL$(TNR)TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL$(TNR)TARGETN:b)_linkinc.ls
@@ -304,7 +304,7 @@ $(SHL$(TNR)TARGETN) : $(LINKINCTARGETS)
 SHL$(TNR)LINKLIST=$(MISC)$/$(SHL$(TNR)TARGET)_link.lst
 $(MISC)$/$(SHL$(TNR)TARGET)_link.lst : $(SHL$(TNR)LIBS) 
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"=="name"
 
@@ -332,31 +332,17 @@ $(SHL$(TNR)TARGETN) : \
     @-+echo 1 ICON $(SHL$(TNR)ICON) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-.IF "$(USE_SHELL)"!="4nt"
 .IF "$(SHL$(TNR)ADD_VERINFO)"!=""
-     @-+echo \#include \"$(SHL$(TNR)ADD_VERINFO)\" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL$(TNR)ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ELSE			# "$(SHL$(TNR)ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL$(TNR)ADD_VERINFO)"!=""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo \#define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo \#define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo \#include \"shlinfo.rc\" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-.ELSE			# "$(USE_SHELL)"!="4nt"
-.IF "$(SHL$(TNR)ADD_VERINFO)"!=""
-    @-+echo #include "$(SHL$(TNR)ADD_VERINFO)" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-.ELSE			# "$(SHL$(TNR)ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc	
-.ENDIF			# "$(SHL$(TNR)ADD_VERINFO)"!=""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-.ENDIF			# "$(USE_SHELL)"!="4nt"
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)"!=""
@@ -372,8 +358,8 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL$(TNR)STDLIBS) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(SHL$(TNR)RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -470,7 +456,7 @@ $(SHL$(TNR)TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(SHL$(TNR)SONAME) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
     $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL$(TNR)LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    `cat /dev/null $(SHL$(TNR)LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
