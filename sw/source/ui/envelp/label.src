@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-14 18:52:44 $
+ *  last change: $Author: obo $ $Date: 2001-12-19 18:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1407,7 +1407,7 @@ TabPage TP_BUSINESS_DATA
         Text[ swedish ] = "Bes�ksadre~ss";
         Text[ polish ] = "Ulica";
         Text[ portuguese_brazilian ] = "Street";
-        Text[ japanese ] = "町名";
+        Text[ japanese ] = "市町村名番地";
         Text[ korean ] = "거리번지";
         Text[ chinese_simplified ] = "街道";
         Text[ chinese_traditional ] = "街道";
@@ -1481,7 +1481,7 @@ TabPage TP_BUSINESS_DATA
         Text[ swedish ] = "~Land/Delstat";
         Text[ polish ] = "Kraj/Wojew�dztwo";
         Text[ portuguese_brazilian ] = "Country/State";
-        Text[ japanese ] = "国/都道府県";
+        Text[ japanese ] = "国名/州名";
         Text[ korean ] = "국가/주";
         Text[ chinese_simplified ] = "国家/省市";
         Text[ chinese_traditional ] = "國家/省";
@@ -1650,6 +1650,7 @@ TabPage TP_BUSINESS_DATA
         Border = TRUE ;
     };
 };
+
 
 
 
