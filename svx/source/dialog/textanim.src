@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 11:49:48 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,62 +107,15 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( MA_TOTAL_WIDTH , 185 ) ;
-    Text = "Textanimation" ;
-    Text [ ENGLISH ] = "Text animation" ;
-    Text [ dutch ] = "Tekstanimatie" ;
-    Text [ english_us ] = "Animation" ;
-    Text [ italian ] = "Animazione testo" ;
-    Text [ spanish ] = "AnimaciÛn" ;
-    Text [ french ] = "Animation de texte" ;
-    Text [ swedish ] = "Textanimation" ;
-    Text [ danish ] = "Animation" ;
-    Text [ portuguese ] = "AnimaÁ„o de texto" ;
-    Text [ portuguese_brazilian ] = "AnimaÁ„o" ;
-    Text[ chinese_simplified ] = "Ê¥ªÂä®ÊñáÂ≠ó";
-    Text[ russian ] = "¿ÌËÏ‡ˆËˇ";
-    Text[ polish ] = "Animacja";
-    Text[ japanese ] = "„Ç¢„Éã„É°„Éº„Ç∑„Éß„É≥„ÉÜ„Ç≠„Çπ„Éà";
-    Text[ chinese_traditional ] = "ÂãïÊÖãÊñáÂ≠ó";
-    Text[ greek ] = "≈ˆ› ÍﬂÌÁÛÁÚ ÍÂÈÏ›ÌÔı";
-    Text[ korean ] = "Ïï†ÎãàÎ©îÏù¥ÏÖò";
-    Text[ arabic ] = " √ÀÌ—«  „ Õ—ﬂ…";
-    Text[ turkish ] = "Metin canland˝rma";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "AnimaciÛ de text";
-    Text[ finnish ] = "Animaatio";
+    Text [ de ] = "Textanimation" ;
+    Text [ en-US ] = "Animation" ;
+    Text [ x-comment ] = " ";
     FixedLine FL_EFFECT
     {
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT, RSC_SP_TBPG_INNERBORDER_TOP  ) ;
         Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text = "Lauftext Effekte" ;
-        Text [ ENGLISH ] = "Text Animation Effects" ;
-        Text [ english_us ] = "Text animation effects" ;
-        Text[ portuguese ] = "Efeitos de animaÁ„o de texto";
-        Text[ russian ] = "›ÙÙÂÍÚ˚ ‡ÌËÏ‡ˆËË ÚÂÍÒÚ‡";
-        Text[ greek ] = "≈ˆ› ÍﬂÌÁÛÁÚ ÍÂÈÏ›ÌÔı";
-        Text[ dutch ] = "Tekstanimatie-effecten";
-        Text[ french ] = "Effets d'animation de texte";
-        Text[ spanish ] = "Efectos de animaciÛn de texto";
-        Text[ finnish ] = "Tekstin animaatiotehosteet";
-        Text[ italian ] = "Effetti di animazione";
-        Text[ danish ] = "Effekter i animeret tekst";
-        Text[ swedish ] = "Effekter animerad text";
-        Text[ polish ] = "Efekty animacji tekstu";
-        Text[ portuguese_brazilian ] = "Efeitos de animaÁ„o de texto";
-        Text[ japanese ] = "„ÉÜ„Ç≠„Çπ„Éà„Ç¢„Éã„É°„Éº„Ç∑„Éß„É≥„ÅÆÂäπÊûú";
-        Text[ korean ] = "ÌÖçÏä§Ìä∏ Ïï†ÎãàÎß§Ïù¥ÏÖò Ìö®Í≥º";
-        Text[ chinese_simplified ] = "Ê¥ªÂä®ÊñáÂ≠óÁöÑÊïàÊûú";
-        Text[ chinese_traditional ] = "ÂãïÊÖãÊñáÂ≠óÁöÑÊïàÊûú";
-        Text[ turkish ] = "Metin Canland˝rna Efekleri";
-        Text[ arabic ] = "Text animation effects";
-        Text[ catalan ] = "Efectes d'animaciÛ de text";
-        Text[ thai ] = "‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡∏Å‡∏≤‡∏£‡πÄ‡∏Ñ‡∏•‡∏∑‡πà‡∏≠‡∏ô‡πÑ‡∏´‡∏ß‡∏Ç‡∏≠‡∏á‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°";
-        Text[ czech ] = "Efekty animace textu";
-        Text[ hebrew ] = "Lauftext Effekte";
-        Text[ hindi ] = "‡§ü‡•á‡§ï‡•ç‡§∏‡•ç‡§ü‡•ç ‡§π‡•Å‡§≤‡§æ‡§∏ ‡§™‡•ç‡§∞‡§≠‡§æ‡§µ";
-        Text[ slovak ] = "Efekty anim√°cie textu";
-        Text[ hungarian ] = "Sz√∂veganim√°ci√≥s hat√°sok";
-        Text[ slovenian ] = "Uƒçinki animacije besedila";
+        Text [ de ] = "Lauftext Effekte" ;
+        Text [ en-US ] = "Text animation effects" ;
     };
 #define MA_CURR_Y       RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + MA_BUTTON_HEIGHT
     FixedText FT_EFFECTS
@@ -170,35 +123,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y + 3 ) ;
         Size = MAP_APPFONT ( MA_EFFECTLIST_X - RSC_SP_CTRL_DESC_X - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_FLGR_INNERBORDER_LEFT,
                              RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text = "E~ffekt" ;
-        Text [ ENGLISH ] = "~Effect" ;
-        Text [ english_us ] = "E~ffect" ;
-        Text[ portuguese ] = "E~feito";
-        Text[ russian ] = "›ÙÙÂÍÚ";
-        Text[ greek ] = "≈~ˆ›";
-        Text[ dutch ] = "~Effect";
-        Text[ french ] = "Effet";
-        Text[ spanish ] = "Efecto";
-        Text[ finnish ] = "Te~hoste";
-        Text[ italian ] = "Effetto";
-        Text[ danish ] = "E~ffekt";
-        Text[ swedish ] = "E~ffekt";
-        Text[ polish ] = "E~fekt";
-        Text[ portuguese_brazilian ] = "E~feitos";
-        Text[ japanese ] = "ÂäπÊûú(~F)";
-        Text[ korean ] = "Ìö®Í≥º(~F)";
-        Text[ chinese_simplified ] = "ÊïàÊûú(~F)";
-        Text[ chinese_traditional ] = "ÊïàÊûú(~F)";
-        Text[ turkish ] = "Efekt";
-        Text[ arabic ] = "Effect";
-        Text[ catalan ] = "Efecte";
-        Text[ thai ] = "‡∏•‡∏±~‡∏Å‡∏©‡∏ì‡∏∞‡∏û‡∏¥‡πÄ‡∏®‡∏©";
-        Text[ czech ] = "Efekt";
-        Text[ hebrew ] = "E~ffekt";
-        Text[ hindi ] = "‡§™‡•ç‡§∞~‡§≠‡§æ‡§µ";
-        Text[ slovak ] = "E~fekt";
-        Text[ hungarian ] = "~Hat√°s";
-        Text[ slovenian ] = "U~ƒçinek";
+        Text [ de ] = "E~ffekt" ;
+        Text [ en-US ] = "E~ffect" ;
     };
     ListBox LB_EFFECT
     {
@@ -207,7 +133,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Size = MAP_APPFONT ( MA_EFFECTLIST_WIDTH , 57 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "Kein Effekt" ; Default ; > ;
             < "Blinken" ; Default ; > ;
@@ -215,23 +141,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
             < "Hin- und zur¸cklaufen" ; Default ; > ;
             < "Reinlaufen" ; Default ; > ;
         };
-        StringList [ ENGLISH ] =
-        {
-            < "Kein Effekt" ; Default ; > ;
-            < "Blinken" ; Default ; > ;
-            < "Durchlaufen" ; Default ; > ;
-            < "Hin- und zur¸cklaufen" ; Default ; > ;
-            < "Reinlaufen" ; Default ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "Sem efeitos" ; Default ; > ;
-            < "Intermitente" ; Default ; > ;
-            < "Deslize contÌnuo" ; Default ; > ;
-            < "De um lado para o outro" ; Default ; > ;
-            < "Mover para dentro" ; Default ; > ;
-        };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "No Effect" ; Default ; > ;
             < "Blink" ; Default ; > ;
@@ -239,213 +149,13 @@ TabPage RID_SVXPAGE_TEXTANIMATION
             < "Scroll Back and Forth" ; Default ; > ;
             < "Scroll In" ; Default ; > ;
         };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "Sem Efeitos" ; Default ; > ;
-            < "Piscar" ; Default ; > ;
-            < "Rolar atravÈs de" ; Default ; > ;
-            < "Rolar para tr·s e para frente" ; Default ; > ;
-            < "Rolar para dentro" ; Default ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "Ingen effekt" ; Default ; > ;
-            < "Blinka" ; Default ; > ;
-            < "Genomlˆpa" ; Default ; > ;
-            < "Lˆpa fram och tillbaka" ; Default ; > ;
-            < "Lˆpa in i" ; Default ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "Ingen effekt" ; Default ; > ;
-            < "Blink" ; Default ; > ;
-            < "Glid igennem" ; Default ; > ;
-            < "Glid frem og tilbage" ; Default ; > ;
-            < "Glid ind" ; Default ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "Nessun effetto" ; Default ; > ;
-            < "Lampeggio" ; Default ; > ;
-            < "Scorrimento" ; Default ; > ;
-            < "Scorrimento in avanti e indietro" ; Default ; > ;
-            < "Scorrimento interno" ; Default ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "Sin efectos" ; Default ; > ;
-            < "Intermitente" ; Default ; > ;
-            < "Continuo" ; Default ; > ;
-            < "De un lado al otro" ; Default ; > ;
-            < "Entrar" ; Default ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Aucun effet" ; Default ; > ;
-            < "Clignoter" ; Default ; > ;
-            < "DÈfiler" ; Default ; > ;
-            < "DÈfilement bidirectionnel" ; Default ; > ;
-            < "DÈfiler dedans" ; Default ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "Geen effect" ; Default ; > ;
-            < "Knipperen" ; Default ; > ;
-            < "Doorlopen" ; Default ; > ;
-            < "Heen en weer lopen" ; Default ; > ;
-            < "Binnenlopen" ; Default ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "Êó†ÊïàÊûú" ; Default ; > ;
-        < "Èó™Âä®" ; Default ; > ;
-        < "ËøûÁª≠" ; Default ; > ;
-        < "ÂæÄËøîÊ¥ªÂä®" ; Default ; > ;
-        < "‰∏ÄÊ¨°ËøõÂÖ•" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "¡ÂÁ ˝ÙÙÂÍÚ‡" ; Default ; > ;
-        < "ÃË„‡ÌËÂ" ; Default ; > ;
-        < "ÕÂÔÂ˚‚ÌÓ ·Â„Û˘‡ˇ" ; Default ; > ;
-        < "¡Â„Û˘‡ˇ ‚ÔÂÂ‰-Ì‡Á‡‰" ; Default ; > ;
-        < "¬˚ÂÁÊ‡˛˘‡ˇ ÒÚÓÍ‡" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Bez efektu" ; Default ; > ;
-        < "Miganie" ; Default ; > ;
-        < "Przep≥yw" ; Default ; > ;
-        < "PrzewiÒ tam i z powrotem" ; Default ; > ;
-        < "ZwiniÍcie" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "„Å™„Åó" ; Default ; > ;
-        < "ÁÇπÊªÖ" ; Default ; > ;
-        < "ÈÄöÈÅé" ; Default ; > ;
-        < "ÂâçÂæå„Å´ÈÄ≤Ë°å" ; Default ; > ;
-        < "ÊµÅ„ÅóËæº„Åø" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "ÁÑ°ÊïàÊûú" ; Default ; > ;
-        < "ÈñÉÂãï" ; Default ; > ;
-        < "ÊåÅÁ∫å" ; Default ; > ;
-        < "‰æÜÂõûÁßªÂãï" ; Default ; > ;
-        < "ÂñÆÂêëÈÄ≤ÂÖ•" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "◊˘ÒﬂÚ Âˆ›" ; Default ; > ;
-        < "Õ· ·Ì·‚ÔÛ‚ﬁÌÂÈ" ; Default ; > ;
-        < " ˝ÎÈÛÁ ‰È· Ï›ÛÔı" ; Default ; > ;
-        < " ˝ÎÈÛÁ ÂÏÒ¸Ú Í·È ﬂÛ˘" ; Default ; > ;
-        < " ﬂÌÁÛÁ ÂÌÙ¸Ú" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "Ìö®Í≥º ÏóÜÏùå" ; Default ; > ;
-        < "ÍπúÎ∞ïÏûÑ Ìö®Í≥º" ; Default ; > ;
-        < "Ï†ÑÏ≤¥ Ïä§ÌÅ¨Î°§" ; Default ; > ;
-        < "Ïïû Îí§Î°ú Ïä§ÌÅ¨Î°§" ; Default ; > ;
-        < "Ïä§ÌÅ¨Î°§ Ïù∏" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "»œÊ‰  √ÀÌ—« " ; Default ; > ;
-        < "Ê„Ì÷" ; Default ; > ;
-        < " Õ—Ìﬂ ⁄»—" ; Default ; > ;
-        < " Õ—ﬂ ··√„«„ Ê«·Œ·›" ; Default ; > ;
-        < " Õ—Ìﬂ œ«Œ·" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Efekt yok" ; Default ; > ;
-        < "Yan˝p sˆnme" ; Default ; > ;
-        < "GeÁi˛" ; Default ; > ;
-        < "Git gel" ; Default ; > ;
-        < "›Áeri kay" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
         < " " ; Default ; > ;
         < " " ; Default ; > ;
         < " " ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "Sense efectes" ; Default ; > ;
-        < "Parpelleja" ; Default ; > ;
-        < "Continu" ; Default ; > ;
-        < "D'una banda a l'altra" ; Default ; > ;
-        < "Entrar" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
-            < "Ei tehostetta" ; Default ; > ;
-        < "Vilkutus" ; Default ; > ;
-        < "Vierit‰ l‰pi" ; Default ; > ;
-        < "Vierit‰ edestakaisin" ; Default ; > ;
-        < "Vierit‰ sis‰‰n" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "‡πÑ‡∏°‡πà‡∏°‡∏µ‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡∏û‡∏¥‡πÄ‡∏®‡∏©" ; Default ; > ;
-        < "‡∏Å‡∏£‡∏∞‡∏û‡∏£‡∏¥‡∏ö" ; Default ; > ;
-        < "‡πÄ‡∏•‡∏∑‡πà‡∏≠‡∏ô‡∏ú‡πà‡∏≤‡∏ô" ; Default ; > ;
-        < "‡πÄ‡∏•‡∏∑‡πà‡∏≠‡∏ô‡∏Å‡∏•‡∏±‡∏ö‡πÅ‡∏•‡∏∞‡∏≠‡∏≠‡∏Å‡πÑ‡∏õ" ; Default ; > ;
-        < "‡πÄ‡∏•‡∏∑‡πà‡∏≠‡∏ô‡πÉ‡∏ô" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "Bez efekt≈Ø" ; Default ; > ;
-        < "Blikat" ; Default ; > ;
-        < "Rolovat dokola" ; Default ; > ;
-        < "Rolovat tam a zpƒõt" ; Default ; > ;
-        < "Rolovat dovnit≈ô" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "Kein Effekt" ; Default ; > ;
-        < "Blinken" ; Default ; > ;
-        < "Durchlaufen" ; Default ; > ;
-        < "Hin- und zur√ºcklaufen" ; Default ; > ;
-        < "Reinlaufen" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "‡§ï‡•ã‡§à ‡§™‡•ç‡§∞‡§≠‡§æ‡§µ ‡§®‡§π‡•Ä‡§Ç" ; Default ; > ;
-        < "‡§ü‡§ø‡§Æ‡§ü‡§ø‡§Æ‡§æ‡§π‡§ü" ; Default ; > ;
-        < "‡§Æ‡•á‡§Ç ‡§∏‡•á ‡§∏‡•ç‡§ï‡•ç‡§∞‡•â‡§≤ ‡§ï‡§∞‡•ã" ; Default ; > ;
-        < "‡§Ü‡§ó‡•á ‡§™‡•Ä‡§õ‡•á ‡§∏‡•ç‡§ï‡•ç‡§∞‡•â‡§≤ ‡§ï‡§∞‡•ã" ; Default ; > ;
-        < "‡§∏‡•ç‡§ï‡•ç‡§∞‡•â‡§≤ ‡§á‡§®‡•ç" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "Bez efektov" ; Default ; > ;
-        < "Blika≈•" ; Default ; > ;
-        < "Rolova≈• cez" ; Default ; > ;
-        < "Rolova≈• tam a sp√§≈•" ; Default ; > ;
-        < "Jeden priebeh" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "Nincs hat√°s" ; Default ; > ;
-        < "Villog√°s" ; Default ; > ;
-        < "√Åt√∫sztat√°s" ; Default ; > ;
-        < "Oda-vissza g√∂rget√©s" ; Default ; > ;
-        < "Be√∫sz√°s" ; Default ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "Brez uƒçinka" ; Default ; > ;
-        < "Utripanje" ; Default ; > ;
-        < "Drsenje" ; Default ; > ;
-        < "Drsenje naprej in nazaj" ; Default ; > ;
-        < "Drsenje navznoter" ; Default ; > ;
     };
     };
     FixedText FT_DIRECTION
@@ -456,35 +166,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
                              (MA_EFFECTLIST_X + MA_EFFECTLIST_WIDTH + RSC_SP_CTRL_X + RSC_SP_CTRL_DESC_X + 6),
                              RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Right = TRUE;
-        Text = "Laufrichtung" ;
-        Text [ ENGLISH ] = "Direction" ;
-        Text [ english_us ] = "Direction" ;
-        Text[ portuguese ] = "OrientaÁ„o";
-        Text[ russian ] = "Õ‡Ô‡‚ÎÂÌËÂ";
-        Text[ greek ] = " ·ÙÂ˝ËıÌÛÁ";
-        Text[ dutch ] = "Looprichting";
-        Text[ french ] = "Direction";
-        Text[ spanish ] = "DirecciÛn";
-        Text[ finnish ] = "Suunta";
-        Text[ italian ] = "Direzione";
-        Text[ danish ] = "Retning";
-        Text[ swedish ] = "Riktning";
-        Text[ polish ] = "Kierunek";
-        Text[ portuguese_brazilian ] = "DireÁ„o";
-        Text[ japanese ] = "ÊñπÂêë";
-        Text[ korean ] = "Î∞©Ìñ•";
-        Text[ chinese_simplified ] = "ÊñπÂêë";
-        Text[ chinese_traditional ] = "ÊñπÂêë";
-        Text[ turkish ] = "Yˆn";
-        Text[ arabic ] = "«·« Ã«Â";
-        Text[ catalan ] = "DirecciÛ";
-        Text[ thai ] = "‡∏ó‡∏¥‡∏®‡∏ó‡∏≤‡∏á";
-        Text[ czech ] = "Smƒõr";
-        Text[ hebrew ] = "Laufrichtung";
-        Text[ hindi ] = "‡§¶‡§ø‡§∂‡§æ";
-        Text[ slovak ] = "Smer";
-        Text[ hungarian ] = "Ir√°ny";
-        Text[ slovenian ] = "Smer";
+        Text [ de ] = "Laufrichtung" ;
+        Text [ en-US ] = "Direction" ;
     };
     ImageButton BTN_UP
     {
@@ -492,37 +175,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
                             RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP );
         Size = BUTTON_SIZE ;
         Symbol = IMAGEBUTTON_ARROW_UP ;
-        QuickHelpText = "Nach Oben" ;
-        QuickHelpText [ ENGLISH ] = "To top" ;
-        QuickHelpText [ english_us ] = "To Top" ;
-        QuickHelpText [ italian ] = "In alto" ;
-        QuickHelpText [ spanish ] = "Hacia arriba" ;
-        QuickHelpText [ french ] = "Vers le haut" ;
-        QuickHelpText [ dutch ] = "Naar boven" ;
-        QuickHelpText [ danish ] = "Opad" ;
-        QuickHelpText [ portuguese_brazilian ] = "Para cima" ;
-        QuickHelpText [ portuguese ] = "Para cima" ;
-        QuickHelpText [ swedish ] = "UppÂt" ;
-        QuickHelpText[ russian ] = "¬‚Âı";
-        QuickHelpText[ greek ] = "–ÒÔÚ Ù· ‹Ì˘";
-        QuickHelpText[ polish ] = "W gÛrÍ";
-        QuickHelpText[ japanese ] = "‰∏ä„Å∏";
-        QuickHelpText[ korean ] = "ÏúÑÎ°ú";
-        QuickHelpText[ chinese_simplified ] = "Âêë‰∏ä";
-        QuickHelpText[ chinese_traditional ] = "Âêë‰∏ä";
-        QuickHelpText[ arabic ] = "≈·Ï √⁄·Ï";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Nach Oben";
-        QuickHelpText[ catalan ] = "Cap amunt";
-        QuickHelpText[ finnish ] = "Yl‰reunaan";
-        QuickHelpText[ thai ] = "To Top";
-        QuickHelpText[ czech ] = "Nahoru";
-        QuickHelpText[ hebrew ] = "Nach Oben";
-        QuickHelpText[ hindi ] = "‡§ä‡§™‡§∞ ‡§§‡§ï";
-        QuickHelpText[ slovak ] = "Nahor";
-        QuickHelpText[ hungarian ] = "A tetej√©re";
-        QuickHelpText[ slovenian ] = "Na vrh";
+        QuickHelpText [ de ] = "Nach Oben" ;
+        QuickHelpText [ en-US ] = "To Top" ;
+        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_LEFT
     {
@@ -530,37 +185,10 @@ TabPage RID_SVXPAGE_TEXTANIMATION
                             RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + MA_BUTTON_HEIGHT);
         Size = BUTTON_SIZE ;
         Symbol = IMAGEBUTTON_ARROW_LEFT ;
-        QuickHelpText = "Nach Links" ;
-        QuickHelpText [ ENGLISH ] = "To left" ;
-        QuickHelpText [ english_us ] = "To Left" ;
-        QuickHelpText [ italian ] = "A sinistra" ;
-        QuickHelpText [ spanish ] = "Hacia la izquierda" ;
-        QuickHelpText [ french ] = "Vers la gauche" ;
-        QuickHelpText [ dutch ] = "Naar links" ;
-        QuickHelpText [ danish ] = "Mod venstre" ;
-        QuickHelpText [ portuguese_brazilian ] = "Para ‡ esquerda" ;
-        QuickHelpText [ portuguese ] = "Esquerda" ;
-        QuickHelpText [ swedish ] = "≈t v‰nster" ;
-        QuickHelpText[ russian ] = "¬ÎÂ‚Ó";
-        QuickHelpText[ greek ] = "–ÒÔÚ Ù· ·ÒÈÛÙÂÒ‹";
-        QuickHelpText[ polish ] = "W lewo";
-        QuickHelpText[ japanese ] = "Â∑¶„Å∏";
-        QuickHelpText[ korean ] = "ÏôºÏ™ΩÏúºÎ°ú";
-        QuickHelpText[ chinese_simplified ] = "ÂêëÂ∑¶";
-        QuickHelpText[ chinese_traditional ] = "ÂêëÂ∑¶";
-        QuickHelpText[ arabic ] = "≈·Ï «·Ì”«—";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Nach Links";
-        QuickHelpText[ catalan ] = "Cap a l'esquerra";
-        QuickHelpText[ finnish ] = "Vasemmalle";
-        QuickHelpText[ thai ] = "To Left";
-        QuickHelpText[ czech ] = "Doleva";
-        QuickHelpText[ hebrew ] = "Nach Links";
-        QuickHelpText[ hindi ] = "‡§¨‡§æ‡§Ø‡§æ‡§Å ‡§ì‡§∞";
-        QuickHelpText[ slovak ] = "Doƒæava";
-        QuickHelpText[ hungarian ] = "Balra";
-        QuickHelpText[ slovenian ] = "Na levo";
+        QuickHelpText [ de ] = "Nach Links" ;
+        QuickHelpText [ en-US ] = "To Left" ;
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_RIGHT
     {
@@ -568,37 +196,10 @@ TabPage RID_SVXPAGE_TEXTANIMATION
                             RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + MA_BUTTON_HEIGHT ) ;
         Size = BUTTON_SIZE ;
         Symbol = IMAGEBUTTON_ARROW_RIGHT ;
-        QuickHelpText = "Nach Rechts" ;
-        QuickHelpText [ ENGLISH ] = "To left" ;
-        QuickHelpText [ english_us ] = "To Right" ;
-        QuickHelpText [ italian ] = "A destra" ;
-        QuickHelpText [ spanish ] = "Hacia la derecha" ;
-        QuickHelpText [ french ] = "Vers la droite" ;
-        QuickHelpText [ dutch ] = "Naar rechts" ;
-        QuickHelpText [ danish ] = "Mod h¯jre" ;
-        QuickHelpText [ portuguese_brazilian ] = "Para ‡ direita" ;
-        QuickHelpText [ portuguese ] = "Direita" ;
-        QuickHelpText [ swedish ] = "≈t hˆger" ;
-        QuickHelpText[ russian ] = "¬Ô‡‚Ó";
-        QuickHelpText[ greek ] = "–ÒÔÚ Ù· ‰ÂÓÈ‹";
-        QuickHelpText[ polish ] = "W prawo";
-        QuickHelpText[ japanese ] = "Âè≥„Å∏";
-        QuickHelpText[ korean ] = "Ïò§Î•∏Ï™ΩÏúºÎ°ú";
-        QuickHelpText[ chinese_simplified ] = "ÂêëÂè≥";
-        QuickHelpText[ chinese_traditional ] = "ÂêëÂè≥";
-        QuickHelpText[ arabic ] = "≈·Ï «·Ì„Ì‰";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Nach Rechts";
-        QuickHelpText[ catalan ] = "Cap a la dreta";
-        QuickHelpText[ finnish ] = "Oikealle";
-        QuickHelpText[ thai ] = "To Right";
-        QuickHelpText[ czech ] = "Doprava";
-        QuickHelpText[ hebrew ] = "Nach Rechts";
-        QuickHelpText[ hindi ] = "‡§¶‡§æ‡§π‡§ø‡§®‡•Ä ‡§ì‡§∞";
-        QuickHelpText[ slovak ] = "Doprava";
-        QuickHelpText[ hungarian ] = "Jobbra";
-        QuickHelpText[ slovenian ] = "Na desno";
+        QuickHelpText [ de ] = "Nach Rechts" ;
+        QuickHelpText [ en-US ] = "To Right" ;
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_DOWN
     {
@@ -606,72 +207,18 @@ TabPage RID_SVXPAGE_TEXTANIMATION
                             RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + 2*MA_BUTTON_HEIGHT ) ;
         Size = BUTTON_SIZE ;
         Symbol = IMAGEBUTTON_ARROW_DOWN ;
-        QuickHelpText = "Nach Unten" ;
-        QuickHelpText [ ENGLISH ] = "To bottom" ;
-        QuickHelpText [ english_us ] = "To Bottom" ;
-        QuickHelpText [ italian ] = "In basso" ;
-        QuickHelpText [ spanish ] = "Hacia abajo" ;
-        QuickHelpText [ french ] = "Vers le bas" ;
-        QuickHelpText [ dutch ] = "Naar beneden" ;
-        QuickHelpText [ danish ] = "Nedad" ;
-        QuickHelpText [ portuguese_brazilian ] = "Para baixo" ;
-        QuickHelpText [ portuguese ] = "Para baixo" ;
-        QuickHelpText [ swedish ] = "NedÂt" ;
-        QuickHelpText[ russian ] = "¬ÌËÁ";
-        QuickHelpText[ greek ] = "–ÒÔÚ Ù· Í‹Ù˘";
-        QuickHelpText[ polish ] = "W dÛ≥";
-        QuickHelpText[ japanese ] = "‰∏ã„Å∏";
-        QuickHelpText[ korean ] = "ÏïÑÎûòÎ°ú";
-        QuickHelpText[ chinese_simplified ] = "Âêë‰∏ã";
-        QuickHelpText[ chinese_traditional ] = "Âêë‰∏ã";
-        QuickHelpText[ arabic ] = "≈·Ï √”›·";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Nach Unten";
-        QuickHelpText[ catalan ] = "Cap a avall";
-        QuickHelpText[ finnish ] = "Alareunaan";
-        QuickHelpText[ thai ] = "To Bottom";
-        QuickHelpText[ czech ] = "Dol≈Ø";
-        QuickHelpText[ hebrew ] = "Nach Unten";
-        QuickHelpText[ hindi ] = "‡§®‡•Ä‡§ö‡•á ‡§§‡§ï";
-        QuickHelpText[ slovak ] = "Nadol";
-        QuickHelpText[ hungarian ] = "Alulra";
-        QuickHelpText[ slovenian ] = "Na dno";
+        QuickHelpText [ de ] = "Nach Unten" ;
+        QuickHelpText [ en-US ] = "To Bottom" ;
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
 
     FixedLine FL_PROPERTIES
     {
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT , RSC_SP_TBPG_INNERBORDER_TOP + MA_EFFECTSGROUP_HEIGHT  ) ;
         Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text = "Eigenschaften" ;
-        Text [ ENGLISH ] = "Properties" ;
-        Text [ english_us ] = "Properties" ;
-        Text[ portuguese ] = "Propriedades";
-        Text[ russian ] = "—‚ÓÈÒÚ‚‡";
-        Text[ greek ] = "…‰È¸ÙÁÙÂÚ";
-        Text[ dutch ] = "Eigenschappen";
-        Text[ french ] = "PropriÈtÈs";
-        Text[ spanish ] = "Propiedades";
-        Text[ finnish ] = "Ominaisuudet";
-        Text[ italian ] = "Propriet‡";
-        Text[ danish ] = "Egenskaber";
-        Text[ swedish ] = "Egenskaper";
-        Text[ polish ] = "W≥aúciwoúci";
-        Text[ portuguese_brazilian ] = "Propriedades";
-        Text[ japanese ] = "Â±ûÊÄß";
-        Text[ korean ] = "Îì±Î°ù Ï†ïÎ≥¥";
-        Text[ chinese_simplified ] = "Â±ûÊÄß";
-        Text[ chinese_traditional ] = "Â±¨ÊÄß";
-        Text[ turkish ] = "÷zellikler";
-        Text[ arabic ] = "Œ’«∆’";
-        Text[ catalan ] = "Propietats";
-        Text[ thai ] = "‡∏Ñ‡∏∏‡∏ì‡∏™‡∏°‡∏ö‡∏±‡∏ï‡∏¥";
-        Text[ czech ] = "Vlastnosti";
-        Text[ hebrew ] = "‚ÄÆ◊û◊ê◊§◊ô◊†◊ô◊ù‚Ä¨";
-        Text[ hindi ] = "‡§µ‡§ø‡§∂‡•á‡§∑‡§§‡§æ‡§Ø‡•á‡§Ç";
-        Text[ slovak ] = "Vlastnosti";
-        Text[ hungarian ] = "Tulajdons√°gok";
-        Text[ slovenian ] = "Lastnosti";
+        Text [ de ] = "Eigenschaften" ;
+        Text [ en-US ] = "Properties" ;
     };
 #define MA_CURR_Y2      RSC_SP_TBPG_INNERBORDER_TOP + MA_EFFECTSGROUP_HEIGHT + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_START_INSIDE
@@ -679,36 +226,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y2 ) ;
         Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT - 12, RSC_CD_CHECKBOX_HEIGHT );
-        Text = "Text sichtbar beim ~Starten" ;
-        Text [ ENGLISH ] = "Text visible when ~starting" ;
-        Text [ dutch ] = "Tekst zichtbaar bij ~starten" ;
-        Text [ english_us ] = "S~tart inside" ;
-        Text [ italian ] = "Testo visibile all'~inizio" ;
-        Text [ spanish ] = "Texto visible al ~iniciar" ;
-        Text [ french ] = "Texte visible au dÈpart" ;
-        Text [ swedish ] = "Text synlig vid ~start" ;
-        Text [ danish ] = "Te~kst synlig ved start" ;
-        Text [ portuguese ] = "Texto visÌvel ao ~iniciar" ;
-        Text [ portuguese_brazilian ] = "Iniciar ~dentro" ;
-        Text[ chinese_simplified ] = "Âú®ÂêØÂä®Êó∂ÊòæÁ§∫ÊñáÂ≠ó(~T)";
-        Text[ russian ] = "«‡ÔÛÒÍ ËÁÌÛÚË";
-        Text[ polish ] = "~Tekst widoczny przy rozpoczÍciu";
-        Text[ japanese ] = "ÈñãÂßãÊôÇ„Å´„ÉÜ„Ç≠„Çπ„Éà„ÅåË¶ã„Åà„Çã(~T)";
-        Text[ chinese_traditional ] = "Âú®ÂïüÂãïÊôÇÈ°ØÁ§∫ÊñáÂ≠ó(~T)";
-        Text[ greek ] = " ÂﬂÏÂÌÔ ÔÒ·Ù¸ Í·Ù‹ ÙÁÌ ÂÍÍﬂÌÁ~ÛÁ";
-        Text[ korean ] = "ÏãúÏûëÏãú ÌÖçÏä§Ìä∏ ÌëúÏãú(~T)";
-        Text[ arabic ] = "≈ŸÂ«— «·‰’ ⁄‰œ «·»œ«Ì…";
-        Text[ turkish ] = "Metni, canland˝rma ba˛larken ~gˆr¸nt¸le";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "I~nicia a dins";
-        Text[ finnish ] = "~Aloita kohteessa";
-        Text[ thai ] = "‡πÄ~‡∏£‡∏¥‡πà‡∏°‡∏î‡πâ‡∏≤‡∏ô‡πÉ‡∏ô";
-        Text[ czech ] = "Spustit uvnit≈ô";
-        Text[ hebrew ] = "Text sichtbar beim ~Starten";
-        Text[ hindi ] = "‡§≠‡•Ä‡§§‡§∞‡•Ä ‡§≠‡§æ‡§ó ‡§™‡•ç‡§∞‡§æ~‡§∞‡§Ç‡§≠ ‡§ï‡§∞‡•ã";
-        Text[ slovak ] = "Spus~ti≈• vo vn√∫tri";
-        Text[ hungarian ] = "~Ind√≠t√°s bel√ºl";
-        Text[ slovenian ] = "Zaƒç~ni znotraj";
+        Text [ de ] = "Text sichtbar beim ~Starten" ;
+        Text [ en-US ] = "S~tart inside" ;
+        Text [ x-comment ] = " ";
     };
 #define MA_CURR_Y3      MA_CURR_Y2 + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     TriStateBox TSB_STOP_INSIDE
@@ -716,36 +236,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y3 ) ;
         Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT - 12, RSC_CD_CHECKBOX_HEIGHT );
-        Text = "Text sichtbar beim ~Beenden" ;
-        Text [ ENGLISH ] = "Text visible when e~xiting" ;
-        Text [ dutch ] = "Tekst zichtbaar bij ~beÎindigen" ;
-        Text [ english_us ] = "Text visible when exiting" ;
-        Text [ italian ] = "Testo visibile alla ~fine" ;
-        Text [ spanish ] = "Texto visible al ~finalizar" ;
-        Text [ french ] = "Texte visible ‡ l'arrÍt" ;
-        Text [ swedish ] = "Text synlig vid a~vslutning" ;
-        Text [ danish ] = "Tekst synlig ved afslutning" ;
-        Text [ portuguese ] = "Texto visÌvel ao ~finalizar" ;
-        Text [ portuguese_brazilian ] = "Texto visÌvel ao sair" ;
-        Text[ chinese_simplified ] = "Âú®ÁªìÊùüÊó∂ÊòæÁ§∫ÊñáÂ≠ó";
-        Text[ russian ] = "œÓÍ‡Á˚‚‡Ú¸ ~ÚÂÍÒÚ ÔË ‚˚ıÓ‰Â";
-        Text[ polish ] = "Tekst widoczny przy koÒczeniu";
-        Text[ japanese ] = "ÁµÇ‰∫ÜÊôÇ„Å´„ÉÜ„Ç≠„Çπ„Éà„ÅåË¶ã„Åà„Çã";
-        Text[ chinese_traditional ] = "Âú®ÁµêÊùüÊôÇÈ°ØÁ§∫ÊñáÂ≠ó";
-        Text[ greek ] = " ÂﬂÏÂÌÔ ÔÒ·Ù¸ Í·Ù‹ ÙÁÌ ›ÓÔ‰Ô";
-        Text[ korean ] = "Ï¢ÖÎ£åÏãú ÌÖçÏä§Ìä∏ ÌëúÏãú";
-        Text[ arabic ] = "≈ŸÂ«— «·‰’ ⁄‰œ «·«‰ Â«¡";
-        Text[ turkish ] = "Metni, canland˝rma bittiinde gˆ~r¸nt¸le";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Text visible al ~finaltizar";
-        Text[ finnish ] = "Teksti n‰kyviss‰ poistuttaessa";
-        Text[ thai ] = "‡∏™‡∏≤‡∏°‡∏≤‡∏£‡∏ñ‡∏°‡∏≠‡∏á‡πÄ‡∏´‡πá‡∏ô‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°‡πÄ‡∏°‡∏∑‡πà‡∏≠‡∏Å‡∏≥‡∏•‡∏±‡∏á‡∏≠‡∏≠‡∏Å";
-        Text[ czech ] = "Viditeln√Ω text p≈ôi ukonƒçen√≠";
-        Text[ hebrew ] = "Text sichtbar beim ~Beenden";
-        Text[ hindi ] = "‡§®‡§ø‡§∞‡•ç‡§ó‡§Æ ‡§ï‡§∞‡§®‡•á ‡§ï‡•á ‡§∏‡§Æ‡§Ø ‡§ü‡•á‡§ï‡•ç‡§∏‡•ç‡§ü‡•ç ‡§¶‡•É‡§∑‡•ç‡§ü‡§ø‡§ó‡•ã‡§ö‡§∞";
-        Text[ slovak ] = "Viditeƒæn√Ω text pri ukonƒçen√≠";
-        Text[ hungarian ] = "Kil√©p√©skor l√°that√≥ a sz√∂veg";
-        Text[ slovenian ] = "Besedilo vidno ob izhodu";
+        Text [ de ] = "Text sichtbar beim ~Beenden" ;
+        Text [ en-US ] = "Text visible when exiting" ;
+        Text [ x-comment ] = " ";
     };
 #define MA_CURR_Y4      MA_CURR_Y3 + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     FixedText FT_COUNT
@@ -753,36 +246,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y4 ) ;
         Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT - 12,
                              RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text = "Animationsdurchl‰ufe" ;
-        Text [ ENGLISH ] = "Count" ;
-        Text [ english_us ] = "Animation cycles" ;
-        Text [ italian ] = "Passaggi animazione" ;
-        Text [ spanish ] = "Cantidad" ;
-        Text [ french ] = "Cycles d'animation" ;
-        Text [ dutch ] = "Animatiecyclussen" ;
-        Text [ swedish ] = "Antal" ;
-        Text [ danish ] = "Animationsgentagelser" ;
-        Text [ portuguese_brazilian ] = "Ciclos de animaÁ„o" ;
-        Text [ portuguese ] = "Ciclos de animaÁ„o" ;
-        Text[ chinese_simplified ] = "Âä®ÁîªÂæ™ÁéØÁöÑÊ¨°Êï∞";
-        Text[ russian ] = "÷ËÍÎ˚ ‡ÌËÏ‡ˆËË";
-        Text[ polish ] = "Cykle animacji";
-        Text[ japanese ] = "ÂõûÊï∞";
-        Text[ chinese_traditional ] = "ÂãïÁï´Âæ™Áí∞ÁöÑÊ¨°Êï∏";
-        Text[ greek ] = " ˝ÍÎÔÈ ÍﬂÌÁÛÁÚ";
-        Text[ korean ] = "Ìö®Í≥º Ï£ºÍ∏∞";
-        Text[ arabic ] = "«·⁄œœ";
-        Text[ turkish ] = "Canland˝rma Devirleri";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Quantitat";
-        Text[ finnish ] = "Animaation kierto";
-        Text[ thai ] = "‡πÄ‡∏Ñ‡∏•‡∏∑‡πà‡∏≠‡∏ô‡πÑ‡∏´‡∏ß‡πÅ‡∏ö‡∏ö‡∏ß‡∏á‡∏Å‡∏•‡∏°";
-        Text[ czech ] = "Cykly animace";
-        Text[ hebrew ] = "Animationsdurchl√§ufe";
-        Text[ hindi ] = "‡§π‡•Å‡§≤‡§æ‡§∏ ‡§∏‡§á‡§ï‡§≤";
-        Text[ slovak ] = "Cykly anim√°cie";
-        Text[ hungarian ] = "Anim√°ci√≥s k√∂rforg√°s";
-        Text[ slovenian ] = "Kro≈æenje animacij";
+        Text [ de ] = "Animationsdurchl‰ufe" ;
+        Text [ en-US ] = "Animation cycles" ;
+        Text [ x-comment ] = " ";
     };
 #define MA_CURR_Y5      MA_CURR_Y4 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_ENDLESS
@@ -790,36 +256,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + 9 , MA_CURR_Y5 + 2 ) ;
         Size = MAP_APPFONT ( 71 , RSC_CD_CHECKBOX_HEIGHT ) ;
-        Text = "~Endlos" ;
-        Text [ ENGLISH ] = "~Endless" ;
-        Text [ dutch ] = "~Eindeloos" ;
-        Text [ english_us ] = "~Continuous" ;
-        Text [ italian ] = "Continuo" ;
-        Text [ spanish ] = "~Continuo" ;
-        Text [ french ] = "Continu" ;
-        Text [ swedish ] = "~Kontinuerligt" ;
-        Text [ danish ] = "~GennemgÂende" ;
-        Text [ portuguese ] = "~ContÌnuo" ;
-        Text [ portuguese_brazilian ] = "~ContÌnuo" ;
-        Text[ chinese_simplified ] = "‰∏çÈó¥Êñ≠(~C)";
-        Text[ russian ] = "¡ÂÒÍÓÌÂ˜ÌÓ";
-        Text[ polish ] = "~Ciπg≥y";
-        Text[ japanese ] = "„Ç®„É≥„Éâ„É¨„Çπ„Å´Á∂ö„Åë„Çã(~C)";
-        Text[ chinese_traditional ] = "‰∏çÈñìÊñ∑(~C)";
-        Text[ greek ] = "”ıÌÂ˜ﬁÚ";
-        Text[ korean ] = "Í≥ÑÏÜç(~C)";
-        Text[ arabic ] = "»·« ‰Â«Ì…";
-        Text[ turkish ] = "S¸rekli";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Continu";
-        Text[ finnish ] = "~Jatkuva";
-        Text[ thai ] = "~‡∏ï‡πà‡∏≠‡πÄ‡∏ô‡∏∑‡πà‡∏≠‡∏á";
-        Text[ czech ] = "Spojitƒõ";
-        Text[ hebrew ] = "‚ÄÆ◊®◊¶◊ô◊£‚Ä¨";
-        Text[ hindi ] = "~‡§®‡§ø‡§∞‡§®‡•ç‡§§‡§∞";
-        Text[ slovak ] = "~Spojito";
-        Text[ hungarian ] = "~Folyamatos";
-        Text[ slovenian ] = "~Zvezno";
+        Text [ de ] = "~Endlos" ;
+        Text [ en-US ] = "~Continuous" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NUM_FLD_COUNT
     {
@@ -839,36 +278,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y6 ) ;
         Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT - 12,
                              RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text = "Schrittweite" ;
-        Text [ ENGLISH ] = "Amount" ;
-        Text [ english_us ] = "Increment" ;
-        Text [ italian ] = "Incremento" ;
-        Text [ spanish ] = "Incremento" ;
-        Text [ french ] = "Pas de progression" ;
-        Text [ dutch ] = "Stapgrootte" ;
-        Text [ swedish ] = "Stegl‰ngd" ;
-        Text [ danish ] = "Trinvidde" ;
-        Text [ portuguese_brazilian ] = "Incremento" ;
-        Text [ portuguese ] = "Incremento" ;
-        Text[ chinese_simplified ] = "ÈÄíÂ¢û";
-        Text[ russian ] = "ÿ‡„";
-        Text[ polish ] = "Przyrost";
-        Text[ japanese ] = "„Çπ„ÉÜ„ÉÉ„ÉóÊï∞";
-        Text[ chinese_traditional ] = "Êº∏ÈÄ≤";
-        Text[ greek ] = "¬ﬁÏ·";
-        Text[ korean ] = "Ï¶ùÍ∞ÄÌè≠";
-        Text[ arabic ] = "«· “«Ìœ";
-        Text[ turkish ] = "Art˝˛";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Increment";
-        Text[ finnish ] = "Lis‰ys";
-        Text[ thai ] = "‡∏™‡πà‡∏ß‡∏ô‡πÄ‡∏û‡∏¥‡πà‡∏°";
-        Text[ czech ] = "P≈ô√≠r≈Østek";
-        Text[ hebrew ] = "Schrittweite";
-        Text[ hindi ] = "‡§¨‡§¢‡§§‡•Ä";
-        Text[ slovak ] = "Pr√≠rastok";
-        Text[ hungarian ] = "N√∂vel√©s";
-        Text[ slovenian ] = "Prirastek";
+        Text [ de ] = "Schrittweite" ;
+        Text [ en-US ] = "Increment" ;
+        Text [ x-comment ] = " ";
     };
 #define MA_CURR_Y7      MA_CURR_Y6 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_PIXEL
@@ -876,36 +288,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + 9 , MA_CURR_Y7 + 2 ) ;
         Size = MAP_APPFONT ( 71 , RSC_CD_CHECKBOX_HEIGHT ) ;
-        Text = "~Pixel" ;
-        Text [ ENGLISH ] = "~Pixel" ;
-        Text [ dutch ] = "~Pixels" ;
-        Text [ english_us ] = "~Pixels" ;
-        Text [ italian ] = "Pixel" ;
-        Text [ spanish ] = "PÌ~xel" ;
-        Text [ french ] = "~Pixels" ;
-        Text [ swedish ] = "~Pixel" ;
-        Text [ danish ] = "~Pixler" ;
-        Text [ portuguese ] = "~Pixel" ;
-        Text [ portuguese_brazilian ] = "~Pixels" ;
-        Text[ chinese_simplified ] = "ÂÉèÁ¥†(~P)";
-        Text[ russian ] = "“Ó˜ÂÍ";
-        Text[ polish ] = "~Piksele";
-        Text[ japanese ] = "„Éî„ÇØ„Çª„É´(~P)";
-        Text[ chinese_traditional ] = "ÂÉèÁ¥†(~P)";
-        Text[ greek ] = "~Pixel";
-        Text[ korean ] = "ÌîΩÏÖÄ(~P)";
-        Text[ arabic ] = "»ﬂ”·";
-        Text[ turkish ] = "~Piksel";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PÌ~xel";
-        Text[ finnish ] = "~Kuvapisteet";
-        Text[ thai ] = "~‡∏û‡∏¥‡∏Å‡πÄ‡∏ã‡∏•";
-        Text[ czech ] = "Pixely";
-        Text[ hebrew ] = "~Pixel";
-        Text[ hindi ] = "~‡§™‡§ø‡§ï‡•ç‡§∏‡§≤‡•ç‡§∏";
-        Text[ slovak ] = "~Body";
-        Text[ hungarian ] = "~K√©ppont";
-        Text[ slovenian ] = "Slikovne ~pike";
+        Text [ de ] = "~Pixel" ;
+        Text [ en-US ] = "~Pixels" ;
+        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_AMOUNT
     {
@@ -930,73 +315,19 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y8 ) ;
         Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT - 12,
                              RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text = "Schrittverzˆgerung" ;
-        Text [ ENGLISH ] = "Delay" ;
-        Text [ english_us ] = "Delay" ;
-        Text [ italian ] = "Ritardo" ;
-        Text [ spanish ] = "Retardo" ;
-        Text [ french ] = "Temporisation" ;
-        Text [ dutch ] = "Vertraging" ;
-        Text [ swedish ] = "Fˆrdrˆjning" ;
-        Text [ danish ] = "Trinforsinkelse" ;
-        Text [ portuguese_brazilian ] = "Atraso" ;
-        Text [ portuguese ] = "Retardar" ;
-        Text[ chinese_simplified ] = "Âª∂Ëøü";
-        Text[ russian ] = "«‡‰ÂÊÍ‡";
-        Text[ polish ] = "OpÛünienie";
-        Text[ japanese ] = "ÈÅÖ„Åè„Åô„Çã";
-        Text[ chinese_traditional ] = "Âª∂ÈÅ≤";
-        Text[ greek ] = " ·ËıÛÙ›ÒÁÛÁ";
-        Text[ korean ] = "ÏßÄÏó∞";
-        Text[ arabic ] = " √ŒÌ—";
-        Text[ turkish ] = "Gecikme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Retard";
-        Text[ finnish ] = "Viivyt‰";
-        Text[ thai ] = "‡∏´‡∏ô‡πà‡∏ß‡∏á‡πÄ‡∏ß‡∏•‡∏≤";
-        Text[ czech ] = "Prodleva";
-        Text[ hebrew ] = "Schrittverz√∂gerung";
-        Text[ hindi ] = "‡§µ‡§ø‡§≤‡§Æ‡•ç‡§¨";
-        Text[ slovak ] = "Pozdr≈æa≈•";
-        Text[ hungarian ] = "K√©sleltet√©s";
-        Text[ slovenian ] = "Zakasnitev";
+        Text [ de ] = "Schrittverzˆgerung" ;
+        Text [ en-US ] = "Delay" ;
+        Text [ x-comment ] = " ";
     };
 #define MA_CURR_Y9      MA_CURR_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_AUTO
     {
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + 9 , MA_CURR_Y9 + 2 ) ;
         Size = MAP_APPFONT ( 71 , RSC_CD_CHECKBOX_HEIGHT ) ;
-        Text = "~Automatisch" ;
-        Text [ ENGLISH ] = "~Automatic" ;
+        Text [ de ] = "~Automatisch" ;
         TabStop = TRUE ;
-        Text [ dutch ] = "~Automatisch" ;
-        Text [ english_us ] = "~Automatic" ;
-        Text [ italian ] = "Automatico" ;
-        Text [ spanish ] = "~Autom·tico" ;
-        Text [ french ] = "Automatique" ;
-        Text [ swedish ] = "~Automatisk" ;
-        Text [ danish ] = "~Automatisk" ;
-        Text [ portuguese ] = "~Automaticamente" ;
-        Text [ portuguese_brazilian ] = "~Autom·tico" ;
-        Text[ chinese_simplified ] = "Ëá™Âä®(~A)";
-        Text[ russian ] = "¿‚ÚÓÏ‡ÚË˜ÂÒÍË";
-        Text[ polish ] = "~Automatycznie";
-        Text[ japanese ] = "Ëá™Âãï(~A)";
-        Text[ chinese_traditional ] = "Ëá™Âãï(~A)";
-        Text[ greek ] = "¡ıÙ¸Ï·Ù·";
-        Text[ korean ] = "ÏûêÎèô(~A)";
-        Text[ arabic ] = " ·ﬁ«∆Ì";
-        Text[ turkish ] = "Otomatik";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Autom‡tic";
-        Text[ finnish ] = "~Automaattinen";
-        Text[ thai ] = "~‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥";
-        Text[ czech ] = "Automaticky";
-        Text[ hebrew ] = "‚ÄÆ◊ê◊ï◊ò◊ï◊û◊ò◊ô‚Ä¨";
-        Text[ hindi ] = "‡§∏‡•ç‡§µ~‡§ö‡§æ‡§≤‡§ø‡§§";
-        Text[ slovak ] = "~Automaticky";
-        Text[ hungarian ] = "~Automatikus";
-        Text[ slovenian ] = "S~amodejno";
+        Text [ en-US ] = "~Automatic" ;
+        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_DELAY
     {
@@ -1014,13 +345,6 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Maximum = 30000 ;
         Last = 30000 ;
     };
-    Text[ thai ] = "‡πÄ‡∏Ñ‡∏•‡∏∑‡πà‡∏≠‡∏ô‡πÑ‡∏´‡∏ß";
-    Text[ czech ] = "Animace";
-    Text[ hebrew ] = "Textanimation";
-    Text[ hindi ] = "‡§π‡•Å‡§≤‡§æ‡§∏";
-    Text[ slovak ] = "Anim√°cia";
-    Text[ hungarian ] = "Anim√°ci√≥";
-    Text[ slovenian ] = "Animacija";
 };
  // RID_SVXDLG_TEXT -------------------------------------------------------
 TabDialog RID_SVXDLG_TEXT
@@ -1028,29 +352,9 @@ TabDialog RID_SVXDLG_TEXT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 185 + 46 ) ;
-    Text = "Text" ;
-    Text [ ENGLISH ] = "Text" ;
-    Text [ english_us ] = "Text" ;
-    Text [ italian ] = "Testo" ;
-    Text [ spanish ] = "Texto" ;
-    Text [ french ] = "Texte" ;
-    Text [ dutch ] = "Tekst" ;
-    Text [ swedish ] = "Text" ;
-    Text [ danish ] = "Tekst" ;
-    Text [ portuguese_brazilian ] = "Texto" ;
-    Text [ portuguese ] = "Texto" ;
-    Text[ chinese_simplified ] = "ÊñáÂ≠ó";
-    Text[ russian ] = "“ÂÍÒÚ";
-    Text[ polish ] = "Tekst";
-    Text[ japanese ] = "„ÉÜ„Ç≠„Çπ„Éà";
-    Text[ chinese_traditional ] = "ÊñáÂ≠ó";
-    Text[ greek ] = " ÂﬂÏÂÌÔ";
-    Text[ korean ] = "ÌÖçÏä§Ìä∏";
-    Text[ arabic ] = "‰’";
-    Text[ turkish ] = "Metin";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Text";
-    Text[ finnish ] = "Teksti";
+    Text [ de ] = "Text" ;
+    Text [ en-US ] = "Text" ;
+    Text [ x-comment ] = " ";
     Moveable = TRUE ;
     TabControl 1
     {
@@ -1063,81 +367,20 @@ TabDialog RID_SVXDLG_TEXT
             {
                 PageResID = RID_SVXPAGE_TEXTATTR ;
                 Identifier = RID_SVXPAGE_TEXTATTR ;
-                Text = "Text" ;
-                Text [ ENGLISH ] = "Text" ;
-                Text [ english_us ] = "Text" ;
-                Text [ italian ] = "Testo" ;
-                Text [ spanish ] = "Texto" ;
-                Text [ french ] = "Texte" ;
-                Text [ dutch ] = "Tekst" ;
-                Text [ swedish ] = "Text" ;
-                Text [ danish ] = "Tekst" ;
-                Text [ portuguese_brazilian ] = "Texto" ;
-                Text [ portuguese ] = "Texto" ;
-                Text[ chinese_simplified ] = "ÊñáÂ≠ó";
-                Text[ russian ] = "“ÂÍÒÚ";
-                Text[ polish ] = "Tekst";
-                Text[ japanese ] = "„ÉÜ„Ç≠„Çπ„Éà";
-                Text[ chinese_traditional ] = "ÊñáÂ≠ó";
-                Text[ greek ] = " ÂﬂÏÂÌÔ";
-                Text[ korean ] = "ÌÖçÏä§Ìä∏";
-                Text[ arabic ] = "‰’";
-                Text[ turkish ] = "Metin";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Text";
-                Text[ finnish ] = "Teksti";
-                Text[ thai ] = "‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°";
-                Text[ czech ] = "Text";
-                Text[ hebrew ] = "‚ÄÆ◊ò◊ß◊°◊ò‚Ä¨";
-                Text[ hindi ] = "‡§ü‡•á‡§ï‡•ç‡§∏‡•ç‡§ü‡•ç";
-                Text[ slovak ] = "Text";
-                Text[ hungarian ] = "Sz√∂veg";
-                Text[ slovenian ] = "Besedilo";
+                Text [ de ] = "Text" ;
+                Text [ en-US ] = "Text" ;
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 PageResID = RID_SVXPAGE_TEXTANIMATION ;
                 Identifier = RID_SVXPAGE_TEXTANIMATION ;
-                Text = "Lauftext" ;
-                Text [ ENGLISH ] = "Text animation" ;
-                Text [ english_us ] = "Text Animation" ;
-                Text [ italian ] = "Testo scorrevole" ;
-                Text [ spanish ] = "AnimaciÛn de texto" ;
-                Text [ french ] = "Animation de texte" ;
-                Text [ dutch ] = "Tekstanimatie" ;
-                Text [ swedish ] = "Animerad text" ;
-                Text [ danish ] = "Tekstanimation" ;
-                Text [ portuguese_brazilian ] = "AnimaÁ„o do Texto" ;
-                Text [ portuguese ] = "Texto animado" ;
-                Text[ chinese_simplified ] = "Ê¥ªÂä®ÊñáÂ≠ó";
-                Text[ russian ] = "¿ÌËÏ‡ˆËˇ ÚÂÍÒÚ‡";
-                Text[ polish ] = "Animacja tekstu";
-                Text[ japanese ] = "„ÉÜ„Ç≠„Çπ„Éà„Ç¢„Éã„É°„Éº„Ç∑„Éß„É≥";
-                Text[ chinese_traditional ] = "ÂãïÊÖãÊñáÂ≠ó";
-                Text[ greek ] = " ÈÌÔ˝ÏÂÌÔ ÍÂﬂÏÂÌÔ";
-                Text[ korean ] = "ÌÖçÏä§Ìä∏ Ïï†ÎãàÎ©îÏù¥ÏÖò";
-                Text[ arabic ] = "‰’ „ Õ—ﬂ";
-                Text[ turkish ] = "Metin canland˝rma";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "AnimaciÛ de text";
-                Text[ finnish ] = "Tekstianimaatio";
-                Text[ thai ] = "‡∏Å‡∏≤‡∏£‡πÄ‡∏Ñ‡∏•‡∏∑‡πà‡∏≠‡∏ô‡πÑ‡∏´‡∏ß‡∏Ç‡∏≠‡∏á‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°";
-                Text[ czech ] = "Animace textu";
-                Text[ hebrew ] = "Lauftext";
-                Text[ hindi ] = "‡§ü‡•á‡§ï‡•ç‡§∏‡•ç‡§ü‡•ç ‡§π‡•Å‡§≤‡§æ‡§∏";
-                Text[ slovak ] = "Anim√°cia textu";
-                Text[ hungarian ] = "Sz√∂veg anim√°l√°sa";
-                Text[ slovenian ] = "Animacija besedila";
+                Text [ de ] = "Lauftext" ;
+                Text [ en-US ] = "Text Animation" ;
+                Text [ x-comment ] = " ";
             };
         };
     };
-    Text[ thai ] = "‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°";
-    Text[ czech ] = "Text";
-    Text[ hebrew ] = "‚ÄÆ◊ò◊ß◊°◊ò‚Ä¨";
-    Text[ hindi ] = "‡§ü‡•á‡§ï‡•ç‡§∏‡•ç‡§ü‡•ç";
-    Text[ slovak ] = "Text";
-    Text[ hungarian ] = "Sz√∂veg";
-    Text[ slovenian ] = "Besedilo";
 };
  // ******************************************************************* EOF
 
