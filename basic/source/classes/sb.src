@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 18:30:05 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "Óï·¨´íÎó";
         Text[ russian ] = "Ñèíòàêñè÷åñêàÿ îøèáêà";
         Text[ polish ] = "B³¹d sk³adni";
-        Text[ japanese ] = "¼İÀ¯¸½ ´×°";
+        Text[ japanese ] = "¼İÀ¯¸½´×°";
         Text[ chinese_traditional ] = "»yªk¿ù»~";
         Text[ arabic ] = "ÎØÃ İí ÈäÇÁ ÇáÌãáÉ";
         Text[ dutch ] = "Fout in syntaxis";
@@ -141,7 +141,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "ÊäÈëÎŞĞ§£¬ÇëÖØ¸´¡£";
         Text[ russian ] = "Íåïğàâèëüíûé ââîä äàííûõ, ïğîæàëóéñòà, ïîâòîğèòå";
         Text[ polish ] = "Niepoprawny wpis, proszê ponowiæ";
-        Text[ japanese ] = "³‚µ‚­‚È‚¢“ü—Í‚Å‚·A‚â‚è’¼‚µ‚Ä‰º‚³‚¢";
+        Text[ japanese ] = "“ü—Í‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñB‚à‚¤ˆê“x“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢B";
         Text[ chinese_traditional ] = "¿é¤JµL®Ä¡M½Ğ­«½Æ¡C";
         Text[ arabic ] = "ÅÏÎÇá ÎÇØÆ ºÇáÑÌÇÁ ÅÚÇÏÉ ÇáãÍÇæáÉ";
         Text[ dutch ] = "Incorrecte gegevens, herhalen a.u.b.";
@@ -228,7 +228,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "ÄÚ´æ²»×ã";
         Text[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè";
         Text[ polish ] = "Za ma³o pamiêci";
-        Text[ japanese ] = "\\•ª‚È‹ó‚«—e—Ê‚ª‚ ‚è‚Ü‚¹‚ñ";
+        Text[ japanese ] = "ÒÓØ‹ó‚«—e—Ê‚Ì•s‘«";
         Text[ chinese_traditional ] = "°O¾ĞÅé¤£¨¬";
         Text[ arabic ] = "áÇ íæÌÏ ĞÇßÑÉ ßÇİíÉ";
         Text[ dutch ] = "Niet voldoende geheugen";
@@ -256,7 +256,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "Êı×éÒÑ¾­±»¶¨³ß¶È";
         Text[ russian ] = "Ğàçìåğíîñòü ìàññèâà óæå çàäàíà";
         Text[ polish ] = "Macierz ju¿ zosta³a zwymiarowana";
-        Text[ japanese ] = "”z—ñ‚Í‚·‚Å‚ÉŸŒ³‰»‚³‚ê‚Ä‚¢‚Ü‚·";
+        Text[ japanese ] = "”z—ñ‚ÌŸŒ³‰»Ï‚İ";
         Text[ chinese_traditional ] = "¦æ¦C¤w¸g³Q©w¤Ø«×";
         Text[ arabic ] = "ÃÈÚÇÏ ÇáÕİíİ ãÚíäÉ ãÓÈŞÇğ";
         Text[ dutch ] = "Array reeds gedimensioneerd";
@@ -369,7 +369,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "Ã»ÓĞ¶¨Òå±äÊı";
         Text[ russian ] = "Ïåğåìåííàÿ íå îïğåäåëåíà";
         Text[ polish ] = "Zmienna nie zdefiniowana";
-        Text[ japanese ] = "•Ï”‚Í’è‹`‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ";
+        Text[ japanese ] = "•Ï”‚Ì–¢’è‹`";
         Text[ chinese_traditional ] = "¨S¦³©w¸qÅÜ¼Æ";
         Text[ arabic ] = "ÇáãÊÛíÑÉ ÛíÑ ãÍÏÏÉ";
         Text[ dutch ] = "Variabele niet gedefinieerd";
@@ -398,7 +398,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "Êı¾İÀàĞÍ²»Æ¥Åä";
         Text[ russian ] = "Íåñîâìåñòèìûå òèïû äàííûõ";
         Text[ polish ] = "Niezgodne typy danych";
-        Text[ japanese ] = "ÃŞ°À‚Ìí—Ş‚Í‹¦’²«‚ ‚è‚Ü‚¹‚ñ";
+        Text[ japanese ] = "ÃŞ°À‚Ìí—Ş‚Ì‹¦’²«‚È‚µ";
         Text[ chinese_traditional ] = "¸ê®ÆÃş«¬¤£¤Ç°t";
         Text[ arabic ] = "ÚÏã ãØÇÈŞÉ ÃäæÇÚ ÇáÈíÇäÇÊ";
         Text[ dutch ] = "Gegevenstypen passen niet bij elkaar";
@@ -540,7 +540,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "Ã»ÓĞ¶¨Òå·Ö¹ı³Ì»òº¯Êı¹ı³Ì";
         Text[ russian ] = "Ïîäïğîöåäóğà èëè ïğîöåäóğà ôóíêöèè íå îïğåäåëåíà";
         Text[ polish ] = "Nie zdefiniowano procedury podrzêdnej lub funkcyjnej";
-        Text[ japanese ] = "Sub‚Ü‚½‚ÍFunctionÌßÛ¼°¼Ş¬‚Í’è‹`‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ";
+        Text[ japanese ] = "Sub ‚Ü‚½‚Í Function ÌßÛ¼°¼Ş¬‚Ì–¢’è‹`";
         Text[ chinese_traditional ] = "¨S¦³©w¸q¤À¹Lµ{©Î¨ç¼Æ¹Lµ{";
         Text[ arabic ] = "áã íÊã ÊÚííä ÅÌÑÇÁ ÇáÏÇáÉ Ãæ ÇáÅÌÑÇÁ ÇáİÑÚí";
         Text[ dutch ] = "Sub- of functieprocedure niet gedefinieerd";
@@ -568,7 +568,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "×°ÔØ DLL ÎÄ¼şÊ±·¢Éú´íÎó";
         Text[ russian ] = "Îøèáêà ïğè çàãğóçêå ôàéëà DLL";
         Text[ polish ] = "B³¹d przy ³adowaniu pliku DLL";
-        Text[ japanese ] = "DLLÌ§²Ù‚Ì“Ç‚İ‚İ‚ÌÛ‚Ì´×°";
+        Text[ japanese ] = "DLLÌ§²Ù“Ç‚İ‚İ‚Ì´×°";
         Text[ chinese_traditional ] = "¸Ë¸üDLLÀÉ®×®Éµo¥Í¿ù»~";
         Text[ arabic ] = "DLL ÎØÃ ÃËäÇÁ ÊÍãíá ãáİ";
         Text[ dutch ] = "Fout bei laden van DLL-bestand";
@@ -652,7 +652,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "ÎŞĞ§µÄÎÄ¼ş»òºÅÂë";
         Text[ russian ] = "Èìÿ èëè íîìåğ ôàéëà íåïğàâèëüíû";
         Text[ polish ] = "Nazwa pliku lub numer nieprawid³owe";
-        Text[ japanese ] = "Ì§²Ù–¼‚Ü‚½‚ÍÌ§²Ù”Ô†‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ";
+        Text[ japanese ] = "Ì§²Ù–¼‚Ü‚½‚ÍÌ§²Ù”Ô†‚ª•s“KØ";
         Text[ chinese_traditional ] = "µL®ÄªºÀÉ®×©Î¸¹½X";
         Text[ arabic ] = "ÇÓã Çáãáİ Ãæ ÑŞãå ÛíÑ ÕÍíÍ";
         Text[ dutch ] = "Foutieve bestandsnaam of -nummer";
@@ -880,7 +880,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "¶ÁÈ¡³¬³öÎÄ¼ş·¶Î§";
         Text[ russian ] = "Ñ÷èòûâàíèå ïğåâûøàåò êîíåö ôàéëà";
         Text[ polish ] = "Odczyt przekracza koniec pliku";
-        Text[ japanese ] = "EOF º°ÄŞ‚ğ‰z‚¦‚é“Ç‚İæ‚è";
+        Text[ japanese ] = "EOF §Œäº°ÄŞ‚ğ‰z‚¦‚é“Ç‚İæ‚è";
         Text[ chinese_traditional ] = "Åª¨ú¶W¥XÀÉ®×½d³ò";
         Text[ arabic ] = "ÇáŞÑÇÁÉ ÍÊì äåÇíÉ Çáãáİ æãÇ ÈÚÏåÇ";
         Text[ dutch ] = "Lezen overschrijdt bestandseinde";
@@ -908,7 +908,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "Êı¾İÌõÄ¿ºÅÂë´íÎó";
         Text[ russian ] = "Íåïğàâèëüíûé íîìåğ ğåãèñòğàöèè äàííûõ";
         Text[ polish ] = "Niepoprawna d³ugoœæ rekordów";
-        Text[ japanese ] = "Úº°ÄŞ‚Ì”Ô†‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ";
+        Text[ japanese ] = "Úº°ÄŞ”Ô†‚ª•s“KØ";
         Text[ chinese_traditional ] = "¸ê®Æ¶µ¥Ø¸¹½X¿ù»~";
         Text[ arabic ] = "ÑŞã ÓÌáÇÊ ÇáÈíÇäÇÊ ÛíÑ ÕÍíÍ";
         Text[ dutch ] = "Foutief record-nummer";
@@ -1078,7 +1078,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "ÎŞ·¨ÖØÃüÃû³É²»Í¬µÄÇı¶¯ÅÌ";
         Text[ russian ] = "Ïåğåèìåíîâàòü íà ğàçíûõ äèñêàõ íåâîçìîæíî";
         Text[ polish ] = "Zmiana nazwy na ró¿nych dyskach jest niemo¿liwa";
-        Text[ japanese ] = "•¡”ÄŞ×²ÌŞ‚Ì–¼‘O‚Ì•ÏX‚Í‚Å‚«‚Ü‚¹‚ñ";
+        Text[ japanese ] = "ˆÙ‚È‚Á‚½ÄŞ×²ÌŞ‚Å‚Ì–¼‘O‚Ì•ÏX‚Í‚Å‚«‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "µLªk­«·s©R¦W¦¨¤£¦PªººÏ½L";
         Text[ arabic ] = "ÅÚÇÏÉ ÇáÊÓãíÉ Úáì ãÍÑßÇÊ ÃŞÑÇÕ ãÎÊáİÉ ÛíÑ ããßä";
         Text[ dutch ] = "Namen wijzigen op verschillende stations niet mogelijk";
@@ -1152,7 +1152,7 @@ Resource RID_BASIC_START
         Text [ italian ] = "Variabile dell'oggetto non impostata" ;
         Text [ portuguese_brazilian ] = "Object variable not set" ;
         Text [ portuguese ] = "Variável do objecto não configurada" ;
-        Text [ french ] = "Variable d'objet non configurée" ;
+        Text [ french ] = "Variable d'objet non paramétrée" ;
         Text [ dutch ] = "Objectvariabele niet gereserveerd" ;
         Text [ spanish ] = "La variable del objeto no se ha establecido" ;
         Text [ danish ] = "Objektvariablen er ikke optaget" ;
@@ -1248,7 +1248,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "DDE ´íÎó";
         Text[ russian ] = "Îøèáêà DDE";
         Text[ polish ] = "B³¹d DDE";
-        Text[ japanese ] = "DDE‚Ì´×°";
+        Text[ japanese ] = "DDE´×°";
         Text[ chinese_traditional ] = "DDE ¿ù»~";
         Text[ arabic ] = "DDE ÎØÃ";
         Text[ dutch ] = "DDE-fout";
@@ -1674,7 +1674,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "ÎŞĞ§µÄ DDE Á´½Ó¸ñÊ½";
         Text[ russian ] = "Íåäåéñòâèòåëüíûé ôîğìàò ñâÿçè DDE";
         Text[ polish ] = "Nieprawid³owy format ³¹cza DDE";
-        Text[ japanese ] = "–³Œø‚È DDE Øİ¸‘®";
+        Text[ japanese ] = "–³Œø‚ÈDDEØİ¸è–@";
         Text[ chinese_traditional ] = "µL®ÄªºDDE³sµ²®æ¦¡";
         Text[ arabic ] = "ÛíÑ ÕÇáÍ DDE ÊäÓíŞ ÇÑÊÈÇØ";
         Text[ dutch ] = "Foutief DDE-link-formaat";
@@ -1789,7 +1789,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "DDE ÒªÇó DDEML.DLL";
         Text[ russian ] = "Äëÿ DDE íåîáõîäèì DDEML.DLL";
         Text[ polish ] = "Dla DDE jest wymagane DDEML.DLL";
-        Text[ japanese ] = "DDE‚Ì‚½‚ß‚ÉDDEML.DLL‚ª•K—v‚Å‚·";
+        Text[ japanese ] = "DDE‚É‚ÍDDEML.DLL‚ª•K—v‚Å‚·";
         Text[ chinese_traditional ] = "DDE­n¨DDDEML.DLL";
         Text[ arabic ] = "DDEML.DLL íÍÊÇÌ Åáì ãáİ DDE";
         Text[ dutch ] = "DDE benodigt DDEML.DLL";
@@ -2639,7 +2639,7 @@ Resource RID_BASIC_START
         Text [ dutch ] = "Eigenschap kon niet worden vastgesteld" ;
         Text [ spanish ] = "No se pudo determinar la propiedad" ;
         Text [ danish ] = "Det var ikke muligt at bestemme egenskaben" ;
-        Text [ swedish ] = "Egenskaperna kunde inte bestämmas" ;
+        Text [ swedish ] = "Egenskap gick inte att bestämma" ;
         Text [ finnish ] = "Unable to get property" ;
         Text [ english_us ] = "Unable to determine property" ;
         Text[ chinese_simplified ] = "ÎŞ·¨¶Á³öÊôĞÔ";
@@ -3236,7 +3236,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "±ØĞëÎªÊı×é¶¨³ß¶È";
         Text[ russian ] = "Íåîáõîäèìî çàäàòü ğàçìåğíîñòü ìàññèâà";
         Text[ polish ] = "Macierz nale¿y zwymiarowaæ";
-        Text[ japanese ] = "”z—ñ‚ÍŸŒ³‰»‚³‚ê‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñ";
+        Text[ japanese ] = "”z—ñ‚ÌŸŒ³‰»‚ª•K—v‚Å‚·";
         Text[ chinese_traditional ] = "¦æ¦C¥²¶·©w¤Ø«×";
         Text[ arabic ] = "íÌÈ ÊÚííä ÃÈÚÇÏ ÇáÕİíİ";
         Text[ dutch ] = "Array moet worden gedimensioneerd";
@@ -3597,7 +3597,7 @@ String ERRCODE_BASMGR_LIBLOAD & ERRCODE_RES_MASK
     Text[ chinese_simplified ] = "×°ÔØ¿âÊ±·¢Éú´íÎó'$(ARG1)'";
     Text[ russian ] = "Îøèáêà ïğè çàãğóçêå áèáëèîòåêè '$(ARG1)'";
     Text[ polish ] = "B³¹d przy ³adowaniu biblioteki '$(ARG1)'";
-    Text[ japanese ] = "×²ÌŞ×Ø'$(ARG1)'‚Ì“Ç‚İ‚İ‚ÌÛ‚Ì´×°";
+    Text[ japanese ] = "'$(ARG1)' ×²ÌŞ×Ø‚Ì“Ç‚İ‚İ‚Ì´×°";
     Text[ chinese_traditional ] = "¸Ë¸üµ{¦¡®w®Éµo¥Í¿ù»~'$(ARG1)'";
     Text[ arabic ] = "'$(ARG1)' ÎØÃ ÃËäÇÁ ÊÍãíá ÇáãßÊÈÉ";
     Text[ dutch ] = "Fout bij laden van bibliotheek '$(ARG1)'";
@@ -3627,7 +3627,7 @@ String ERRCODE_BASMGR_LIBSAVE & ERRCODE_RES_MASK
     Text[ chinese_simplified ] = "´æÅÌ¿âÊ±·¢Éú´íÎó '$(ARG1)'";
     Text[ russian ] = "Îøèáêà ïğè çàãğóçêå áèáëèîòåêè: '$(ARG1)'";
     Text[ polish ] = "B³¹d przy zapisie biblioteki '$(ARG1)'";
-    Text[ japanese ] = "×²ÌŞ×Ø‚Ì•Û‘¶‚ÌÛ‚Ì´×°: '$(ARG1)'";
+    Text[ japanese ] = "×²ÌŞ×Ø•Û‘¶‚Ì´×°: '$(ARG1)'";
     Text[ chinese_traditional ] = "Àx¦sµ{¦¡®w®Éµo¥Í¿ù»~'$(ARG1)'";
     Text[ arabic ] = "'$(ARG1)' :ÎØÃ ÃËäÇÁ ÍİÙ ÇáãßÊÈÉ";
     Text[ dutch ] = "Fout bij het opslaan van bibliotheek: '$(ARG1)'";
@@ -3657,7 +3657,7 @@ String ERRCODE_BASMGR_MGROPEN & ERRCODE_RES_MASK
     Text[ chinese_simplified ] = "ÎŞ·¨´ÓÎÄ¼ş'$(ARG1)' ³õÊ¼»¯ BASIC";
     Text[ russian ] = "Èíèöèàëèçèğîâàòü BASIC èç ôàéëà '$(ARG1)' íåâîçìîæíî";
     Text[ polish ] = "BASIC z pliku '$(ARG1)' nie móg³ zostaæ zainicjowany";
-    Text[ japanese ] = "Ì§²Ù '$(ARG1)'‚©‚ç‚ÌBASIC‚Í‰Šú‰»‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+    Text[ japanese ] = "'$(ARG1)' Ì§²Ù‚ÌBASIC‚Í‰Šú‰»‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
     Text[ chinese_traditional ] = "µLªk±qÀÉ®×'$(ARG1)'ªì©l¤ÆBASIC";
     Text[ arabic ] = "'$(ARG1)' ãä Çáãáİ BASIC ÊÚĞÑ ÊåíÆÉ";
     Text[ dutch ] = "BASIC in bestand '$(ARG1)' kon niet worden geïnitialiseerd";
@@ -3683,7 +3683,7 @@ String ERRCODE_BASMGR_MGRSAVE & ERRCODE_RES_MASK
     Text[ chinese_simplified ] = "´æÅÌBASICÊ±·¢Éú´íÎó£º'$(ARG1)'";
     Text[ russian ] = "Îøèáêà ïğè ñîõğàíåíèè BASICà: '$(ARG1)'";
     Text[ polish ] = "B³¹d przy zapisie biblioteki BASIC: '$(ARG1)'";
-    Text[ japanese ] = "BASIC‚Ì•Û‘¶‚ÌÛ‚Ì´×°: '$(ARG1)'";
+    Text[ japanese ] = "BASIC•Û‘¶‚Ì´×°: '$(ARG1)'";
     Text[ chinese_traditional ] = "Àx¦sBASIC®Éµo¥Í¿ù»~¡G'$(ARG1)'";
     Text[ arabic ] = "'$(ARG1)' :BASIC ÎØÃ ÃËäÇÁ ÍİÙ";
     Text[ dutch ] = "Fout bij het opslaan van BASIC: '$(ARG1)'";
@@ -3709,7 +3709,7 @@ String ERRCODE_BASMGR_REMOVELIB & ERRCODE_RES_MASK
     Text[ chinese_simplified ] = "É¾³ı¿âÊ±·¢Éú´íÎó";
     Text[ russian ] = "Îøèáêà ïğè óäàëåíèè áèáëèîòåêè";
     Text[ polish ] = "B³¹d przy usuwaniu biblioteki";
-    Text[ japanese ] = "×²ÌŞ×Ø‚Ìíœ‚ÌÛ‚Ì´×°";
+    Text[ japanese ] = "×²ÌŞ×Øíœ‚Ì´×°";
     Text[ chinese_traditional ] = "§R°£µ{¦¡®w®Éµo¥Í¿ù»~";
     Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÍĞİ ÇáãßÊÈÉ";
     Text[ dutch ] = "Fout bij verwijderen van bibliotheek";
@@ -3728,7 +3728,7 @@ String ERRCODE_BASMGR_UNLOADLIB & ERRCODE_RES_MASK
     Text [ italian ] = "Impossibile eliminare la library dalla memoria." ;
     Text [ spanish ] = "No se pudo eliminar la biblioteca de la memoria." ;
     Text [ french ] = "Impossible de supprimer la bibliothèque de la mémoire." ;
-    Text [ swedish ] = "Biblioteket kunde inte tas bort från minnet." ;
+    Text [ swedish ] = "Det gick inte att ta bort biblioteket från minnet." ;
     Text [ danish ] = "Det var ikke muligt at slette biblioteket fra hukommelsen." ;
     Text [ portuguese ] = "Foi impossível remover a biblioteca da memória." ;
     Text [ portuguese_brazilian ] = "Die Bibliothek konnte nicht aus dem Speicher entfernt werden." ;
