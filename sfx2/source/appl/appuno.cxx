@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:44:29 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 18:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1854,7 +1854,8 @@ void SAL_CALL SfxAppDispatchProvider::initialize( const ::com::sun::star::uno::S
 Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& sTargetFrameName,
                     FrameSearchFlags eSearchFlags ) throw( RuntimeException )
 {
-    USHORT nId = 0;
+    USHORT                  nId( 0 );
+    sal_Bool                bMasterCommand( sal_False );
     Reference < XDispatch > xDisp;
     if ( aURL.Protocol.compareToAscii( "slot:" ) == COMPARE_EQUAL ||
          aURL.Protocol.compareToAscii( "commandId:" ) == COMPARE_EQUAL )
@@ -1865,11 +1866,20 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch( const ::
     if ( aURL.Protocol.compareToAscii( ".uno:" ) == COMPARE_EQUAL )
     {
         // Support ".uno" commands. Map commands to slotid
-        nId = SFX_APP()->GetAppDispatcher_Impl()->GetSlotId( aURL.Main );
+        bMasterCommand = SfxOfficeDispatch::IsMasterUnoCommand( aURL );
+        if ( bMasterCommand )
+            nId = SFX_APP()->GetAppDispatcher_Impl()->GetSlotId(
+                    SfxOfficeDispatch::GetMasterUnoCommand( aURL ) );
+        else
+            nId = SFX_APP()->GetAppDispatcher_Impl()->GetSlotId( aURL.Main );
     }
 
     if ( nId && SFX_APP()->GetAppDispatcher_Impl()->HasSlot_Impl( nId ) )
-        xDisp = new SfxOfficeDispatch( SFX_APP()->GetAppDispatcher_Impl(), nId, aURL ) ;
+    {
+        SfxOfficeDispatch* pDispatch = new SfxOfficeDispatch( SFX_APP()->GetAppDispatcher_Impl(), nId, aURL ) ;
+        pDispatch->SetMasterUnoCommand( bMasterCommand );
+        xDisp = pDispatch;
+    }
 
     return xDisp;
 }
