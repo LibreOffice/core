@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-06 16:52:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #include <memory>
+
+#ifndef _SFX_IPFRM_HXX
+#include <sfx2/ipfrm.hxx>
+#endif
 
 #include <ide_pch.hxx>
 
@@ -747,7 +751,9 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 {
     // ausser bei New/Record wird die Description durch LoseFocus uebernommen.
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+
+    // #108283# check if view frame is a SfxInPlaceFrame
+    SfxDispatcher* pDispatcher = ( pViewFrame && !pViewFrame->ISA( SfxInPlaceFrame ) ) ? pViewFrame->GetDispatcher() : NULL;
 
     if ( pButton == &aRunButton )
     {
@@ -808,6 +814,9 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             if ( bNewDelIsDel )
             {
                 DeleteMacro();
+                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+                pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                 if( pDispatcher )
                 {
                     pDispatcher->Execute( SID_BASICIDE_UPDATEMODULESOURCE,
@@ -871,6 +880,13 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         {
             pDispatcher->Execute( SID_CONFIG,
                                   SFX_CALLMODE_SYNCHRON, &aItem, 0L );
+        }
+        else
+        {
+            SfxAllItemSet Args( SFX_APP()->GetPool() );
+            SfxRequest aRequest( SID_CONFIG, SFX_CALLMODE_SYNCHRON, Args );
+            aRequest.AppendItem( aItem );
+            SFX_APP()->ExecuteSlot( aRequest );
         }
         // Wenn jetzt ein FloatingWindow vom Config-Dlg hochgezogen wurde,
         // muss dieser modale Dlg verschwinden:
