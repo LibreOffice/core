@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:20 $
+ *  last change: $Author: aidan $ $Date: 2002-12-06 12:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,9 @@
 #endif
 #ifndef _FMTFLCNT_HXX
 #include <fmtflcnt.hxx>
+#endif
+#ifndef _FMTCLBL_HXX
+#include <fmtclbl.hxx>
 #endif
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
@@ -584,7 +587,7 @@ void SwWW8ImplReader::Read_ParaBiDi(USHORT, const BYTE* pData, short nLen)
 bool SwWW8ImplReader::SetCols(SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
     USHORT nNettoWidth, bool bTestOnly)
 {
-    if( nIniFlags & WW8FL_NO_COLS )         // ausgeschaltet
+     if( nIniFlags & WW8FL_NO_COLS )            // ausgeschaltet
         return false;
 
     //sprmSCcolumns - Anzahl der Spalten - 1
@@ -1146,10 +1149,15 @@ void SwWW8ImplReader::InsertSectionWithWithoutCols(SwPaM& rMyPaM,
     if( 0 == pWDop->epc )
         aSet.Put( SwFmtEndAtTxtEnd( FTNEND_ATTXTEND ));
 
-    pNewSection = rDoc.Insert( rMyPaM, aSection, &aSet );
-
+    pLastInsertedSection = rDoc.Insert( rMyPaM, aSection, &aSet );
+    //Set the columns to be UnBalanced if compatability option is set
+    if (pWDop->fNoColumnBalance  )
+    {
+        SwSectionFmt *pFmt = pLastInsertedSection->GetFmt();
+        pFmt->SetAttr(SwFmtNoBalancedColumns(true));
+    }
     // set PaM into first Node of the new Section
-    const SwSectionNode* pSectionNode = pNewSection->GetFmt()->GetSectionNode();
+    const SwSectionNode* pSectionNode = pLastInsertedSection->GetFmt()->GetSectionNode();
     ASSERT( pSectionNode, "Kein Inhalt vorbereitet." );
 
     ASSERT( !pAfterSection, "pAfterSection not Null! why Recursion?");
@@ -1489,7 +1497,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, bool bMustHaveBreak)
                         SwTwips nWidth = rSz.GetWidth();
                         long nLeft  = rLR.GetTxtLeft();
                         long nRight = rLR.GetRight();
-                        SetCols( pNewSection->GetFmt(), pSep,
+                        SetCols( pLastInsertedSection->GetFmt(), pSep,
                             (USHORT)(nWidth - nLeft - nRight) );
                     }
                     break;

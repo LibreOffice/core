@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:19 $
+ *  last change: $Author: aidan $ $Date: 2002-12-06 12:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2341,7 +2341,7 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     pNumRule = 0;
     pNumOlst = 0;
     pAfterSection = 0;
-    pNewSection    = 0;
+    pLastInsertedSection    = 0;
     pNode_FLY_AT_CNTNT = 0;
     pDrawModel = 0;
     pDrawPg = 0;
@@ -2824,15 +2824,19 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     if (mbNewDoc)
         rDoc.SetRedlineMode( eMode );
 
-    // set NoBallanced flag on last inserted section and remove the trailing
-    // para that inserting the section pushed after the PaM
-    if (pNewSection)
-    {
-        SwSectionFmt *pFmt = pNewSection->GetFmt();
-        pFmt->SetAttr(SwFmtNoBalancedColumns(true));
-    }
+    //If there is no content after the end of the final section, we want to delete
+    //the final node and turn the column balancing off. All sections but the last
+    //one, have column balancing turned on unless NoColumnBalancing is set in
+    //MS Office's compatibility options.
     if (pAfterSection)
     {
+        // set NoBallanced flag on last inserted section and remove the trailing
+        // para that inserting the section pushed after the PaM
+        if(pLastInsertedSection || pPageDesc)
+        {
+            SwSectionFmt *pFmt = pLastInsertedSection->GetFmt();
+            pFmt->SetAttr(SwFmtNoBalancedColumns(true));
+        }
         if (mbNewDoc)
         {
             //Needed to unlock last node so that we can delete it without

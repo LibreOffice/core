@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:20 $
+ *  last change: $Author: aidan $ $Date: 2002-12-06 12:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,7 +723,7 @@ friend class WW8FormulaControl;
     SwNumRule* pNumRule;        // fuer Nummerierung / Aufzaehlungen im Text
     WW8_OLST* pNumOlst;         // Gliederung im Text
     SwNodeIndex* pAfterSection;
-    SwSection*   pNewSection;   // last Section that was inserted into the doc
+    SwSection*   pLastInsertedSection;  // last Section that was inserted into the doc
 
     SwNode* pNode_FLY_AT_CNTNT; // set: WW8SwFlyPara()   read: CreateSwTable()
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:20 $
+ *  last change: $Author: aidan $ $Date: 2002-12-06 12:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2229,9 +2229,9 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
     aSection.SetLinkFileName( aPara );
     aSection.SetProtect(true);
 
-    pNewSection = rDoc.Insert(*pPaM, aSection, 0 ,false);
+    pLastInsertedSection = rDoc.Insert(*pPaM, aSection, 0 ,false);
 
-    const SwSectionNode* pSectionNode = pNewSection->GetFmt()->GetSectionNode();
+    const SwSectionNode* pSectionNode = pLastInsertedSection->GetFmt()->GetSectionNode();
     ASSERT(!pAfterSection, "recursive sections!");
     pAfterSection = new SwNodeIndex( *pSectionNode->EndOfSectionNode(), 1 );
 
