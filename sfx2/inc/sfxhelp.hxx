@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-18 14:07:07 $
+ *  last change: $Author: mt $ $Date: 2001-04-20 08:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ class SfxHelp_Impl : public Help
     SfxHelpDB_Impl* pDB;
 
 private:
-    virtual BOOL    Start( ULONG nHelpId );
+    virtual BOOL    Start( ULONG nHelpId, const Window* pWindow );
     String          GetHelpModuleName( ULONG nHelpId );
 
 public:
