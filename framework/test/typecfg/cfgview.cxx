@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-09-25 13:39:53 $
+ *  last change: $Author: as $ $Date: 2001-11-21 10:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@
 #define FRAMESET_INVALIDFILTERS_HTML                "fs_invalidfilters.html"
 #define FRAMESET_INVALIDDETECTORS_HTML              "fs_invaliddetectors.html"
 #define FRAMESET_INVALIDLOADERS_HTML                "fs_invalidloaders.html"
-#define FRAMESET_DOUBLEFILTERUINAMES_HTML           "fs_doublefilteruinames.html"
+#define FRAMESET_DOUBLEFILTERNAMES_HTML             "fs_doublefilternames.html"
 #define FRAMESET_UNUSEDTYPES_HTML                   "fs_unusedtypes.html"
 
 #define ALLTYPES_HTML                               "alltypes.html"
@@ -186,7 +186,7 @@
 #define FILTERFLAGS_HTML                            "filterflags.html"
 #define MODULFILTERS_HTML                           "modulfilters.html"
 #define FILTERSUINAMESORT_HTML                      "filtersuinamesort.html"
-#define DOUBLEFILTERUINAMES_HTML                    "doublefilteruinames.html"
+#define DOUBLEFILTERNAMES_HTML                      "doublefilternames.html"
 #define UNUSEDTYPES_HTML                            "unusedtypes.html"
 
 #define TARGET_MENU                                 "menu"
@@ -465,10 +465,10 @@ void CFGView::impl_generateHTMLView()
     sMenuHTML.appendAscii( "\">Invalid Detect Services</a></li>\n"                                                      );
 
     sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "Double Filter UINames"
-    sMenuHTML.appendAscii( FRAMESET_DOUBLEFILTERUINAMES_HTML                                                            );
+    sMenuHTML.appendAscii( FRAMESET_DOUBLEFILTERNAMES_HTML                                                              );
     sMenuHTML.appendAscii( "\" target=\""                                                                               );
     sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
-    sMenuHTML.appendAscii( "\">Double Filter UINames</a></li>\n"                                                        );
+    sMenuHTML.appendAscii( "\">Double Filter UI/Names</a></li>\n"                                                       );
 
     sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "Unused Types"
     sMenuHTML.appendAscii( FRAMESET_UNUSEDTYPES_HTML                                                                    );
@@ -827,16 +827,16 @@ void CFGView::impl_generateFilterModulListHTML()
     css::uno::Sequence< ::rtl::OUString > lDefault;
     css::uno::Sequence< ::rtl::OUString > lNames  ;
 
-    m_aData.pCache->queryFilters( FILTERQUERY_TEXTDOCUMENT_WITHDEFAULT        ) >>= lWriter   ;
-    m_aData.pCache->queryFilters( FILTERQUERY_WEBDOCUMENT_WITHDEFAULT         ) >>= lWeb      ;
-    m_aData.pCache->queryFilters( FILTERQUERY_GLOBALDOCUMENT_WITHDEFAULT      ) >>= lGlobal   ;
-    m_aData.pCache->queryFilters( FILTERQUERY_CHARTDOCUMENT_WITHDEFAULT       ) >>= lChart    ;
-    m_aData.pCache->queryFilters( FILTERQUERY_SPREADSHEETDOCUMENT_WITHDEFAULT ) >>= lCalc     ;
-    m_aData.pCache->queryFilters( FILTERQUERY_PRESENTATIONDOCUMENT_WITHDEFAULT) >>= lImpress  ;
-    m_aData.pCache->queryFilters( FILTERQUERY_DRAWINGDOCUMENT_WITHDEFAULT     ) >>= lDraw     ;
-    m_aData.pCache->queryFilters( FILTERQUERY_FORMULARPROPERTIES_WITHDEFAULT  ) >>= lMath     ;
-    m_aData.pCache->queryFilters( FILTERQUERY_GRAPHICFILTERS                  ) >>= lGraphic  ;
-    m_aData.pCache->queryFilters( FILTERQUERY_DEFAULTFILTERS                  ) >>= lDefault  ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_writer:default_first:use_order:sort_prop=name")  ) >>= lWriter   ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_web:default_first:use_order:sort_prop=name")     ) >>= lWeb      ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_global:default_first:use_order:sort_prop=name")  ) >>= lGlobal   ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_chart:default_first:use_order:sort_prop=name")   ) >>= lChart    ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_calc:default_first:use_order:sort_prop=name")    ) >>= lCalc     ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_impress:default_first:use_order:sort_prop=name") ) >>= lImpress  ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_draw:default_first:use_order:sort_prop=name")    ) >>= lDraw     ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_math:default_first:use_order:sort_prop=name")    ) >>= lMath     ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_graphic:default_first:use_order:sort_prop=name") ) >>= lGraphic  ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_all:iflags=256")                                 ) >>= lDefault  ;
 
     sal_Int32       nModuls       =  0;
     sal_Int32       nFilters      =  0;
@@ -988,16 +988,16 @@ void CFGView::impl_generateFilterUINameSortListHTML()
     StringList                            lUINamesSorted    ;
     StringList                            lNamesSorted      ;
 
-    m_aData.pCache->queryFilters( FILTERQUERY_TEXTDOCUMENT_WITHDEFAULT        ) >>= lWriter   ;
-    m_aData.pCache->queryFilters( FILTERQUERY_WEBDOCUMENT_WITHDEFAULT         ) >>= lWeb      ;
-    m_aData.pCache->queryFilters( FILTERQUERY_GLOBALDOCUMENT_WITHDEFAULT      ) >>= lGlobal   ;
-    m_aData.pCache->queryFilters( FILTERQUERY_CHARTDOCUMENT_WITHDEFAULT       ) >>= lChart    ;
-    m_aData.pCache->queryFilters( FILTERQUERY_SPREADSHEETDOCUMENT_WITHDEFAULT ) >>= lCalc     ;
-    m_aData.pCache->queryFilters( FILTERQUERY_PRESENTATIONDOCUMENT_WITHDEFAULT) >>= lImpress  ;
-    m_aData.pCache->queryFilters( FILTERQUERY_DRAWINGDOCUMENT_WITHDEFAULT     ) >>= lDraw     ;
-    m_aData.pCache->queryFilters( FILTERQUERY_FORMULARPROPERTIES_WITHDEFAULT  ) >>= lMath     ;
-    m_aData.pCache->queryFilters( FILTERQUERY_GRAPHICFILTERS                  ) >>= lGraphic  ;
-    m_aData.pCache->queryFilters( FILTERQUERY_DEFAULTFILTERS                  ) >>= lDefault  ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_writer:default_first:use_order:sort_prop=name")  ) >>= lWriter   ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_web:default_first:use_order:sort_prop=name")     ) >>= lWeb      ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_global:default_first:use_order:sort_prop=name")  ) >>= lGlobal   ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_chart:default_first:use_order:sort_prop=name")   ) >>= lChart    ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_calc:default_first:use_order:sort_prop=name")    ) >>= lCalc     ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_impress:default_first:use_order:sort_prop=name") ) >>= lImpress  ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_draw:default_first:use_order:sort_prop=name")    ) >>= lDraw     ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_math:default_first:use_order:sort_prop=name")    ) >>= lMath     ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_graphic:default_first:use_order:sort_prop=name") ) >>= lGraphic  ;
+    m_aData.pCache->queryFilters( DECLARE_ASCII("_query_all:iflags=256")                                 ) >>= lDefault  ;
 
     sal_Int32       nModuls       =  0;
     sal_Int32       nFilters      =  0;
@@ -1611,12 +1611,12 @@ void CFGView::impl_generateDoubleFilterUINamesHTML()
     // generate frameset for double UINames
     OUStringBuffer sFrameSet( 10000 );
 
-    sFrameSet.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Search doubl UINames\n\t\t</title>\n\t</head>\n" );  // open html
+    sFrameSet.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Search double UINames\n\t\t</title>\n\t</head>\n");  // open html
     sFrameSet.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"                                                              );  // open frameset for cols
     sFrameSet.appendAscii( "\t\t\t<frame name=\""                                                                           );  // generate frame "list"
     sFrameSet.appendAscii( TARGET_LIST                                                                                      );
     sFrameSet.appendAscii( "\" src=\""                                                                                      );
-    sFrameSet.appendAscii( DOUBLEFILTERUINAMES_HTML                                                                         );
+    sFrameSet.appendAscii( DOUBLEFILTERNAMES_HTML                                                                           );
     sFrameSet.appendAscii( "\" title=\"Double UINames\">\n"                                                                 );
     sFrameSet.appendAscii( "\t\t\t<frame name=\""                                                                           );  // generate frame "properties"
     sFrameSet.appendAscii( TARGET_PROPERTIES                                                                                );
@@ -1626,18 +1626,18 @@ void CFGView::impl_generateDoubleFilterUINamesHTML()
     sFrameSet.appendAscii( "\t\t</frameset>\n"                                                                              );  // close frameset cols
     sFrameSet.appendAscii( "</html>\n"                                                                                      );  // close html
 
-    impl_writeFile( FRAMESET_DOUBLEFILTERUINAMES_HTML, U2B(sFrameSet.makeStringAndClear()) );
+    impl_writeFile( FRAMESET_DOUBLEFILTERNAMES_HTML, U2B(sFrameSet.makeStringAndClear()) );
 
     //-------------------------------------------------------------------------------------------------------------
-    // Search invalid registered detect services!
+    // Search double UINames
     OUStringBuffer sHTML( 10000 );
 
     sHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tDouble Filter UINames\n\t\t</title>\n\t</head>\n\t<body>\n"    );  // open html
     sHTML.appendAscii( "\t\tPlease check follow filter entries in configuration. Her UINames are registered twice!<p>\n"    );  // write "Note"
     sHTML.appendAscii( "\t\t<table border=0>\n"                                                                             );  // open table
     sHTML.appendAscii( "\t<tr><td bgcolor=#ff8040><strong>Nr.</strong></td>\n"                                              );  // generate table header
-    sHTML.appendAscii( "\t\t<td bgcolor=#ff8040><strong>UIName</strong></td>\n"                                             );
     sHTML.appendAscii( "\t\t<td bgcolor=#ff8040><strong>Filters</strong></td>\n"                                            );
+    sHTML.appendAscii( "\t\t<td bgcolor=#ff8040><strong>UIName</strong></td>\n"                                             );
     sHTML.appendAscii( "\t</tr>\n"                                                                                          );
 
     StringHash                            lUINames                                          ;
@@ -1650,6 +1650,7 @@ void CFGView::impl_generateDoubleFilterUINamesHTML()
     for( sal_Int32 nFilter=0; nFilter<nFilterCount; ++nFilter )
     {
         aFilter = m_aData.pCache->getFilter( lFilters[nFilter] );
+
         for( ConstStringHashIterator pUIName=aFilter.lUINames.begin(); pUIName!= aFilter.lUINames.end(); ++pUIName )
         {
             // Build key value by using localized UIName to register filter name
@@ -1661,7 +1662,7 @@ void CFGView::impl_generateDoubleFilterUINamesHTML()
             sUIName = sBuffer.makeStringAndClear();
 
             // insert filter into hash table
-            sBuffer.append     ( lUINames[ sUIName ]     );
+            sBuffer.append      ( lUINames[ sUIName ]    );
             sBuffer.appendAscii ( "<a href=\""           );
             sBuffer.appendAscii ( FILTERPROPERTIES_HTML  );
             sBuffer.appendAscii ( "#"                    );
@@ -1678,14 +1679,15 @@ void CFGView::impl_generateDoubleFilterUINamesHTML()
     nFilter = 1;
     for( ConstStringHashIterator pIterator=lUINames.begin(); pIterator!=lUINames.end(); ++pIterator )
     {
+        ::rtl::OUString sT = pIterator->second;
         if( pIterator->second.indexOf( '\n' ) != pIterator->second.lastIndexOf( '\n' ) )
         {
             sHTML.appendAscii ( "\t<tr><td bgcolor=#ff0000 color=#00ffff valign=top>"   );  // generate row for uiname->filter entry
             sHTML.append      ( OUString::valueOf( nFilter )                            );
             sHTML.appendAscii ( "</td><td valign=top>"                                  );
-            sHTML.append      ( pIterator->first                                        );
-            sHTML.appendAscii ( "</td><td bgcolor=#f0f0f0 valign=top>"                  );
             sHTML.append      ( pIterator->second                                       );
+            sHTML.appendAscii ( "</td><td bgcolor=#f0f0f0 valign=top>"                  );
+            sHTML.append      ( pIterator->first                                        );
             sHTML.appendAscii ( "</td></tr>\n"                                          );
 
             ++nFilter;
@@ -1694,7 +1696,7 @@ void CFGView::impl_generateDoubleFilterUINamesHTML()
 
     sHTML.appendAscii( "</table>\n"           );  // close table
     sHTML.appendAscii( "</body>\n</html>\n"   );  // close html
-    impl_writeFile( DOUBLEFILTERUINAMES_HTML, U2B(sHTML.makeStringAndClear()) );
+    impl_writeFile( DOUBLEFILTERNAMES_HTML, U2B(sHTML.makeStringAndClear()) );
 }
 
 //*****************************************************************************************************************
