@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:47:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -931,7 +931,7 @@ void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
         Font aOldFont( rDev.GetFont());
         Font aFont( aOldFont );
 
-        if ( ( aFeatures & HasError ) != 0  || ( aFeatures & HasWarning ) != 0 || ( aFeatures & HasQAError ) != 0 )
+        if ( ( aFeatures & HasError ) != 0  || ( aFeatures & HasWarning ) != 0 )
         {
             Color aCol;
             if ( ( aFeatures & HasError ) == HasError )
@@ -949,7 +949,7 @@ void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
                 aFont.SetTransparent( FALSE );
             }
         }
-        else    // also HasAssertion
+        else    // so its HasAssertion or HasQAError
         {
             if( rDev.IsSelected(pEntry) )
             {
@@ -961,11 +961,18 @@ void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
                 Size aSize( rDev.GetTextWidth( GetText() ), rDev.GetTextHeight() );
                 Rectangle aRect( rPos, aSize );
 
-                static Bitmap aBmp( ResId( MBP_ASSERT ) );
-                static BitmapEx aBmpEx( aBmp );
-                static Wallpaper aWP( aBmpEx );
+                static Bitmap aAssertionBmp( ResId( MBP_ASSERT ) );
+                static BitmapEx aAssertionBmpEx( aAssertionBmp );
+                static Wallpaper aAssertionWP( aAssertionBmpEx );
 
-                rDev.DrawWallpaper( aRect, aWP );
+                static Bitmap aQAErrorBmp( ResId( MBP_QAERROR ) );
+                static BitmapEx aQAErrorBmpEx( aQAErrorBmp );
+                static Wallpaper aQAErrorWP( aQAErrorBmpEx );
+
+                if ( ( aFeatures & HasAssertion ) == HasAssertion )
+                    rDev.DrawWallpaper( aRect, aAssertionWP );
+                else    // HasQAError
+                    rDev.DrawWallpaper( aRect, aQAErrorWP );
             }
 
 //          virtual void    NotifyScrolling( long nLines );
