@@ -12358,33 +12358,25 @@
             </node>
             <node oor:name=".uno:MacroDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Makro...</value>
-                    <value xml:lang="en-US">~Macro...</value>
-                    <value xml:lang="ar">...ماكرو</value>
-                    <value xml:lang="no">~Macro...</value>
-                    <value xml:lang="ca">~Macro...</value>
-                    <value xml:lang="zh-TW">巨集(~M)...</value>
-                    <value xml:lang="cs">Makro...</value>
-                    <value xml:lang="da">~Makro...</value>
-                    <value xml:lang="el">~Μακροεντολή...</value>
-                    <value xml:lang="es">~Macro...</value>
-                    <value xml:lang="fi">~Makro...</value>
-                    <value xml:lang="fr">~Macro...</value>
-                    <value xml:lang="he">‮הפעלת מקרו‬</value>
-                    <value xml:lang="it">M~acro...</value>
-                    <value xml:lang="ja">マクロ(~M)...</value>
-                    <value xml:lang="ko">매크로(~M)...</value>
-                    <value xml:lang="nl">~Macro...</value>
-                    <value xml:lang="pl">Makro...</value>
-                    <value xml:lang="pt-BR">~Macro...</value>
-                    <value xml:lang="ru">Макрос...</value>
-                    <value xml:lang="sk">~Makro...</value>
-                    <value xml:lang="sv">~Makro...</value>
-                    <value xml:lang="th">~มาโคร...</value>
-                    <value xml:lang="tr">~Makro...</value>
-                    <value xml:lang="hi">~मॉक्रो...</value>
-                    <value xml:lang="zh-CN">宏(~M)...</value>
-                    <value xml:lang="pt">Macro...</value>
+                    <value xml:lang="en-US">%PRODUCTNAME ~Basic...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:MacroOrganizer?TabId:short=1" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Organize ~Dialogs...</value>
+                    <value xml:lang="de">Dialoge verwalten...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ScriptOrganizer" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Organize Macros...</value>
+                    <value xml:lang="de">Makros verwalten...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:RunMacro" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">R~un Macro...</value>
+                    <value xml:lang="de">Makro ausführen...</value>
                 </prop>
             </node>
             <node oor:name=".uno:Gallery" oor:op="replace">
