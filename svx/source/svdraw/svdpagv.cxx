@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-08 15:51:16 $
+ *  last change: $Author: ka $ $Date: 2002-07-17 14:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,10 +103,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
 
-#ifndef _SVX_COLORCFG_HXX
 #include "colorcfg.hxx"
-#endif
-
 #include "svdedxv.hxx"
 #include "svdpagv.hxx"
 #include "svdoutl.hxx"
@@ -1119,13 +1116,7 @@ FASTBOOL SdrPageView::DoCachedMasterPaint(const SdrPage* pPg, ExtOutputDevice& r
         aNeedLogSize.Width() +=a1Pix.Width();  // 1 Pixel fuer Toleranz drauf
         aNeedLogSize.Height()+=a1Pix.Height();
 
-     // Die Wiese im Hintergrund fuer StarDraw
-#ifdef MAC
-        Color aWiesenColor( RGB_COLORDATA( 223, 223, 223 ) );
-#else
-        Color aWiesenColor( RGB_COLORDATA( 234, 234, 234 ) );
-#endif
-        pBmp->aVD.SetBackground( Wallpaper( aWiesenColor ) );
+        pBmp->aVD.SetBackground( Wallpaper( ::svx::ColorConfig().GetColorValue( ::svx::APPBACKGROUND ).nColor ) );
 
         if (pBmp->aVD.SetOutputSize(aNeedLogSize,TRUE))
         {
