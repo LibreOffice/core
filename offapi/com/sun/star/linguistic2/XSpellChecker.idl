@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSpellChecker.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ module com { module sun { module star { module linguistic2 {
 
     @see    <type scope="com::sun::star::linguistic2">XSupportedLocales</type>
 */
-interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocales
+published interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocales
 {
     //-------------------------------------------------------------------------
     /** checks if a word is spelled correctly in a given language.
