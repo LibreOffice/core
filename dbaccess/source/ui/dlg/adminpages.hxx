@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 10:17:26 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 08:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
+class ToolBox;
+class Accelerator;
+
 //.........................................................................
 namespace dbaui
 {
@@ -134,11 +137,15 @@ namespace dbaui
     class ODbAdminDialog;
     class OGenericAdministrationPage : public SfxTabPage
     {
-    protected:
-        Link        m_aModifiedHandler;     /// to be called if something on the page has been modified
+    private:
+        Accelerator*    m_pKeyAccel;        // for accelerating toolbox slots
+        ToolBox*        m_pToolBox;         // pointer to derived class' member
+
+        Link            m_aModifiedHandler;     /// to be called if something on the page has been modified
 
     public:
         OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet);
+        ~OGenericAdministrationPage();
 
         /// set a handler which gets called every time something on the page has been modified
         void            SetModifiedHandler(const Link& _rHandler) { m_aModifiedHandler = _rHandler; }
@@ -172,6 +179,8 @@ namespace dbaui
         /// default implementation: call implInitControls with the given item set and _bSaveValue = sal_True
         virtual void ActivatePage(const SfxItemSet& _rSet);
 
+        virtual long PreNotify( NotifyEvent& _rNEvt );
+
     protected:
         void callModifiedHdl() const { if (m_aModifiedHandler.IsSet()) m_aModifiedHandler.Call((void*)this); }
 
@@ -197,6 +206,27 @@ namespace dbaui
         */
         sal_Bool prepareConnectionAction( ODbAdminDialog* _pDialog, const String& _rActionDescription, OPageSettings** _pViewSettings = NULL );
 
+        /** enables keyboard acceleration for toolbox slots
+            @param _pDerivedClassToolBox
+                the toolbox which is a member of the derived class
+            @see
+                addToolboxAccelerator
+        */
+        void    enableToolBoxAcceleration( ToolBox* _pDerivedClassToolBox );
+
+        /** adds a accelerator for a toolbox item
+            @param _nToolboxItemId
+                the id of the toolbox item
+            @param _rKey
+                the key which should toggly the item
+        */
+        void    addToolboxAccelerator( sal_uInt16 _nToolboxItemId, const KeyCode& _rKey );
+
+        /** called when the accelerator simulates a toolbox slot
+            <p>The default implementation does nothing</p>
+        */
+        virtual void onToolBoxAction( sal_uInt16 _nClickedItemId );
+
     protected:
         /** This link be used for controls where the tabpage does not need to take any special action when the control
             is modified. The implementation just calls callModifiedHdl.
@@ -205,6 +235,9 @@ namespace dbaui
 
         /// may be used in SetXXXHdl calls to controls, is a link to <method>OnControlModified</method>
         Link getControlModifiedLink() { return LINK(this, OGenericAdministrationPage, OnControlModified); }
+
+    private:
+        DECL_LINK( OnAccelSelected, void*);
     };
 
 //.........................................................................
@@ -216,6 +249,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2001/05/29 10:17:26  fs
+ *  #86082# +OToolboxedPageViewSettings
+ *
  *  Revision 1.21  2001/05/23 13:47:00  fs
  *  #86444# +prepareConnectionAction
  *

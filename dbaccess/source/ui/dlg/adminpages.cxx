@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-23 13:47:00 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 08:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,12 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _SV_ACCEL_HXX
+#include <vcl/accel.hxx>
+#endif
+#ifndef _SV_TOOLBOX_HXX
+#include <vcl/toolbox.hxx>
+#endif
 
 #include <stdlib.h>
 #ifndef _OSL_FILE_HXX_
@@ -125,8 +131,17 @@ namespace dbaui
     //-------------------------------------------------------------------------
     OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rAttrSet)
+        ,m_pToolBox( NULL )
+        ,m_pKeyAccel( NULL )
     {
         SetExchangeSupport(sal_True);
+    }
+
+    //-------------------------------------------------------------------------
+    OGenericAdministrationPage::~OGenericAdministrationPage()
+    {
+        if ( m_pKeyAccel )
+            delete m_pKeyAccel;
     }
 
     //-------------------------------------------------------------------------
@@ -217,6 +232,66 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
+    void OGenericAdministrationPage::enableToolBoxAcceleration( ToolBox* _pDerivedClassToolBox )
+    {
+        DBG_ASSERT( !m_pKeyAccel && !m_pToolBox, "OGenericAdministrationPage::enableToolBoxAcceleration: already enabled!" );
+        if ( !m_pKeyAccel )
+        {
+            m_pKeyAccel = new Accelerator;
+            m_pKeyAccel->SetSelectHdl( LINK( this, OGenericAdministrationPage, OnAccelSelected ) );
+        }
+
+        m_pToolBox = _pDerivedClassToolBox;
+    }
+
+    // -----------------------------------------------------------------------
+    void OGenericAdministrationPage::addToolboxAccelerator( sal_uInt16 _nToolboxItemId, const KeyCode& _rKey )
+    {
+        DBG_ASSERT( m_pKeyAccel && m_pToolBox, "OGenericAdministrationPage::addToolboxAccelerator: toolbox acceleration not enabled!" );
+        if ( !(m_pKeyAccel && m_pToolBox) )
+            return;
+
+        // assert that the toolbox knows this item
+        DBG_ASSERT( TOOLBOX_ITEM_NOTFOUND != m_pToolBox->GetItemPos( _nToolboxItemId ),
+            "OGenericAdministrationPage::addToolboxAccelerator: invalid id!" );
+        // assert that the accelerator does not know this item, yet
+        OSL_ENSURE( !m_pKeyAccel->IsIdValid( _nToolboxItemId ), "OGenericAdministrationPage::addToolboxAccelerator: already have this id!" );
+
+        // add the item to the accelerator
+        m_pKeyAccel->InsertItem( _nToolboxItemId, _rKey );
+    }
+
+    //------------------------------------------------------------------------
+    long OGenericAdministrationPage::PreNotify( NotifyEvent& _rNEvt )
+    {
+        if ( m_pKeyAccel )
+        {
+            if ( EVENT_KEYINPUT == _rNEvt.GetType() )
+            {
+                const KeyEvent* pEvent = _rNEvt.GetKeyEvent();
+                if ( m_pKeyAccel->Call( pEvent->GetKeyCode() ) )
+                    return 1;
+            }
+        }
+        return SfxTabPage::PreNotify( _rNEvt );
+    }
+
+    //------------------------------------------------------------------------
+    void OGenericAdministrationPage::onToolBoxAction( sal_uInt16 _nClickedItemId )
+    {
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( OGenericAdministrationPage, OnAccelSelected, void*, NOTINTERESTEDIN )
+    {
+        sal_uInt16 nId = m_pKeyAccel->GetCurItemId();
+        if ( m_pToolBox && m_pToolBox->IsItemEnabled( nId ) )
+            onToolBoxAction( nId );
+
+        return 0L;
+    }
+
+    // -----------------------------------------------------------------------
     IMPL_LINK(OGenericAdministrationPage, OnControlModified, Control*, EMPTYARG)
     {
         callModifiedHdl();
@@ -230,6 +305,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30  2001/05/23 13:47:00  fs
+ *  #86444# +prepareConnectionAction
+ *
  *  Revision 1.29  2001/05/10 13:34:28  fs
  *  #86223# +OPageSettings/createViewSettings/filleViewSettings/restoreViewSettings
  *
