@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-14 12:00:16 $
+ *  last change: $Author: jsc $ $Date: 2001-04-06 12:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ sal_Bool CppuType::dump(CppuOptions* pOptions)
 
     if ( pOptions->isValid("-G") || pOptions->isValid("-Gc") )
     {
-        bFileExists = fileExists( hFileName );
+        bFileExists = fileExists( hxxFileName );
         ret = sal_True;
     }
 
@@ -246,7 +246,7 @@ sal_Bool CppuType::dump(CppuOptions* pOptions)
         hxxFile.closeFile();
         if (ret && bFileCheck)
         {
-            ret = checkFileContent(hFileName, tmpFileName);
+            ret = checkFileContent(hxxFileName, tmpFileName);
         }
     }
 
