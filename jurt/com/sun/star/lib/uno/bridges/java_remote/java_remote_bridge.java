@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-03 10:33:50 $
+ *  last change: $Author: cdt $ $Date: 2000-11-30 18:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.7 $ $ $Date: 2000-11-03 10:33:50 $
+ * @version     $Revision: 1.8 $ $ $Date: 2000-11-30 18:59:51 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -195,6 +195,56 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         }
 
         public void run() {
+
+        //--!! hack
+
+        java.lang.reflect.Method  enab = null;
+
+
+        try {
+            Class c = Class.forName("netscape.security.PrivilegeManager");
+            if (c != null) {
+                enab = c.getMethod("enablePrivilege",     new Class[] { String.class });
+                  enab.invoke(null, new Object[] { "Netcaster"});
+                enab.invoke(null, new Object[] { "IIOPRuntime"});
+                enab.invoke(null, new Object[] { "UniversalSystemClipboardAccess"});
+                enab.invoke(null, new Object[] { "UniversalSetFactory"});
+                enab.invoke(null, new Object[] { "UniversalPrintJobAccess"});
+                enab.invoke(null, new Object[] { "UniversalTopLevelWindow"});
+                enab.invoke(null, new Object[] { "UniversalClassLoaderAccess"});
+                enab.invoke(null, new Object[] { "MarimbaInternalTarget"});
+                enab.invoke(null, new Object[] { "UniversalThreadGroupAccess"});
+                enab.invoke(null, new Object[] { "UniversalExecAccess"});
+                enab.invoke(null, new Object[] { "UniversalExitAccess"});
+                enab.invoke(null, new Object[] { "UniversalLinkAccess"});
+                enab.invoke(null, new Object[] { "UniversalPropertyWrite"});
+                enab.invoke(null, new Object[] { "UniversalPropertyRead"});
+                enab.invoke(null, new Object[] { "UniversalFileRead"});
+                enab.invoke(null, new Object[] { "UniversalFileWrite"});
+                enab.invoke(null, new Object[] { "UniversalFileDelete"});
+                enab.invoke(null, new Object[] { "UniversalFdRead"}); }
+                enab.invoke(null, new Object[] { "UniversalFdWrite"});
+                enab.invoke(null, new Object[] { "UniversalListen"});
+                enab.invoke(null, new Object[] { "UniversalAccept"});
+                enab.invoke(null, new Object[] { "UniversalConnect"});
+                enab.invoke(null, new Object[] { "UniversalMulticast"});
+                enab.invoke(null, new Object[] { "UniversalPackageAccess"});
+                enab.invoke(null, new Object[] { "UniversalAwtEventQueueAccess"});
+                enab.invoke(null, new Object[] { "UniversalBrowserRead"});
+                enab.invoke(null, new Object[] { "UniversalBrowserWrite"});
+                enab.invoke(null, new Object[] { "UniversalSendMail"});
+                enab.invoke(null, new Object[] { "UniversalThreadAccess"});
+                enab.invoke(null, new Object[] { "Debugger"});
+                enab.invoke(null, new Object[] { "PresentationAccess"});
+                enab.invoke(null, new Object[] { "PrivateRegistryAccess"});
+                enab.invoke(null, new Object[] { "SignonAccess"});
+                enab.invoke(null, new Object[] { "SpreadsheetAccess"});
+                enab.invoke(null, new Object[] { "WordProcessorAccess"});
+            }
+         catch (Throwable cnfe) {
+        }
+
+
             try {
                 do {
                     try {
