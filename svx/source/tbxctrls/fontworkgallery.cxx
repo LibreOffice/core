@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkgallery.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:18:10 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, Window* pParent
         maFLFavorites       ( this, SVX_RES( FL_FAVORITES ) ),
         maOKButton          ( this, SVX_RES( BTN_OK ) ),
         maCancelButton      ( this, SVX_RES( BTN_CANCEL ) ),
+        maHelpButton        ( this, SVX_RES( BTN_HELP ) ),
         mnThemeId           ( -1 ),
         maStrClickToAddText ( SVX_RES( STR_CLICK_TO_ADD_TEXT ) ),
         mpSdrView           ( pSdrView ),
