@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:45:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+/** @HTML */
+
 #ifndef _OSL_MODULE_HXX_
 #define _OSL_MODULE_HXX_
 
@@ -83,6 +85,30 @@ public:
         return osl_getModuleURLFromAddress(addr, &libraryUrl.pData);
     }
 
+    /** Get module URL from the specified function address in the module.
+
+        Similar to getUrlFromAddress, but use a function address to get URL of the Module.
+        Use Function pointer as symbol address to conceal type conversion.
+
+        @param addr
+        [in] function address in oslGenericFunction format.
+
+        @param libraryUrl
+        [in|out] receives the URL of the module.
+
+        @return
+        <dl>
+        <dt>sal_True</dt>
+        <dd>on success</dd>
+        <dt>sal_False</dt>
+        <dd>can not get the URL from the specified function address or the parameter is invalid.</dd>
+        </dl>
+
+        @see getUrlFromAddress
+    */
+    static sal_Bool getUrlFromAddress( oslGenericFunction addr, ::rtl::OUString & libraryUrl){
+        return osl_getModuleURLFromFunctionAddress( addr, &libraryUrl.pData );
+    }
 
     Module(): m_Module(0){}
 
@@ -120,7 +146,30 @@ public:
 
     void* SAL_CALL getSymbol( const ::rtl::OUString& strSymbolName)
     {
-        return ( osl_getSymbol( m_Module, strSymbolName.pData ) );
+    return ( osl_getSymbol( m_Module, strSymbolName.pData ) );
+    }
+
+    /** Get function address by the function name in the module.
+
+        getFunctionSymbol is an alternative function for getSymbol.
+        Use Function pointer as symbol address to conceal type conversion.
+
+        @param ustrFunctionSymbolName
+        [in] Function name to be looked up.
+
+        @return
+        <dl>
+        <dt>oslGenericFunction format function address</dt>
+        <dd>on success</dd>
+        <dt>NULL</dt>
+        <dd>lookup failed or parameter is somewhat invalid</dd>
+        </dl>
+
+        @see getSymbol
+    */
+    oslGenericFunction SAL_CALL getFunctionSymbol( const ::rtl::OUString& ustrFunctionSymbolName )
+    {
+        return ( osl_getFunctionSymbol( m_Module, ustrFunctionSymbolName.pData ) );
     }
 
     operator oslModule() const
