@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.51 $
+*  $Revision: 1.52 $
 *
-*  last change: $Author: rt $ $Date: 2004-11-26 14:47:34 $
+*  last change: $Author: hr $ $Date: 2004-11-26 20:47:35 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1975,7 +1975,7 @@ End
 // new user interface configuration files
 File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (ARCHIVE);
     Dir = gid_Dir_Share_Config_Sofficecfg;
     Name = "uiconfig.zip";
 End
