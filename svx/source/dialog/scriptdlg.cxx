@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:13:27 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,15 +69,22 @@
 
 #include "dialogs.hrc"
 #include "scriptdlg.hrc"
+#include "fmresids.hrc"
 #include "scriptdlg.hxx"
 #include "dialmgr.hxx"
 
 #include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <drafts/com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
 #include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <drafts/com/sun/star/script/browse/XBrowseNodeFactory.hpp>
 #include <drafts/com/sun/star/script/browse/BrowseNodeFactoryViewType.hpp>
+#include <drafts/com/sun/star/script/provider/ScriptErrorRaisedException.hpp>
+#include <drafts/com/sun/star/script/provider/ScriptExceptionRaisedException.hpp>
+#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#include <drafts/com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 
 #include <com/sun/star/script/XInvocation.hpp>
 
@@ -87,9 +94,10 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <svtools/sbx.hxx>
+#include <svtools/imagemgr.hxx>
+#include <tools/urlobj.hxx>
 #include <vector>
 #include <algorithm>
 
@@ -97,24 +105,30 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::script;
 
+void ShowErrorDialog( const Any& aException )
+{
+    SvxScriptErrorDialog* pDlg = new SvxScriptErrorDialog( NULL, aException );
+    pDlg->Execute();
+    delete pDlg;
+}
 
 SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rRes, ResMgr* pBasResMgr ) :
     SvTreeListBox( pParent, ResId( rRes.GetId() ) ),
     m_aImagesNormal(ResId(RID_IMGLST_OBJECTS, pBasResMgr )),
-    m_aImagesHighContrast(ResId(RID_IMGLST_OBJECTS_HC, pBasResMgr ))
+    m_aImagesHighContrast(ResId(RID_IMGLST_OBJECTS_HC, pBasResMgr )),
+    m_hdImage(ResId(IMG_HARDDISK)),
+    m_hdImage_hc(ResId(IMG_HARDDISK_HC)),
+    m_sMyMacros(ResId(STR_MYMACROS)),
+    m_sProdMacros(ResId(STR_PRODMACROS))
 {
     SetSelectionMode( SINGLE_SELECTION );
     OSL_TRACE("setting default node images");
-    /* SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
-                   WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HIDESELECTION ); */
-    // ISSUE these node bitmaps don't appear?
-    SetNodeBitmaps( Image( ResId( IMG_PLUS ) ),
-                    Image( ResId( IMG_MINUS ) ),
-                    BMP_COLOR_NORMAL );
-    SetNodeBitmaps( Image( ResId( IMG_PLUS_HC ) ),
-                    Image( ResId( IMG_MINUS_HC ) ),
-                    BMP_COLOR_HIGHCONTRAST );
-    //SetWindowBits( WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_CLIPCHILDREN|WB_HSCROLL );
+
+    SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
+                   WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HIDESELECTION |
+                   WB_HASLINES | WB_HASLINESATROOT );
+    SetNodeDefaultImages();
+
     FreeResource();
     nMode = 0xFF;   // Alles
 }
@@ -198,11 +212,12 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
     ::rtl::OUString userStr = ::rtl::OUString::createFromAscii("user");
     ::rtl::OUString shareStr = ::rtl::OUString::createFromAscii("share");
     Reference< browse::XBrowseNode > rootNode;
+    Reference< XComponentContext > xCtx;
         try
         {
             Reference < beans::XPropertySet > xProps(
                 ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-            Reference< XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
+            xCtx.set( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
             Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
                 ::rtl::OUString::createFromAscii( "/singletons/drafts.com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
             rootNode.set( xFac->getView( browse::BrowseNodeFactoryViewType::SCRIPTORGANIZER ) );
@@ -231,19 +246,70 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
             for ( n = 0; n < childList.size(); n++ )
             {
                 BOOL app = false;
-                if ( childList[ n ]->getName().equals( userStr ) ||
-                    childList[ n ]->getName().equals( shareStr ) )
+                ::rtl::OUString uiName = childList[ n ]->getName();
+                ::rtl::OUString factoryURL;
+                if ( uiName.equals( userStr ) ||
+                    uiName.equals( shareStr ) )
                 {
                     app = true;
+                    if ( uiName.equals( userStr ) )
+                    {
+                        uiName = m_sMyMacros;
+                    }
+                    else
+                    {
+                        uiName = m_sProdMacros;
+                    }
                 }
+                else
+                {
+                    Reference<XInterface> xDocumentModel = getDocumentModel(xCtx, uiName );
+                    if ( xDocumentModel.is() )
+                    {
+                        Reference< ::drafts::com::sun::star::frame::XModuleManager >
+                            xModuleManager(
+                                xCtx->getServiceManager()
+                                    ->createInstanceWithContext(
+                                        ::rtl::OUString::createFromAscii("drafts." // xxx todo
+                                              "com.sun.star.frame.ModuleManager"),
+                                        xCtx ),
+                                    UNO_QUERY_THROW );
+                        Reference<container::XNameAccess> xModuleConfig(
+                            xModuleManager, UNO_QUERY_THROW );
+                        // get the long name of the document:
+                        ::rtl::OUString appModule( xModuleManager->identify(
+                                            xDocumentModel ) );
+                        Sequence<beans::PropertyValue> moduleDescr;
+                        Any aAny = xModuleConfig->getByName(appModule);
+                        if( sal_True != ( aAny >>= moduleDescr ) )
+                        {
+                            throw RuntimeException(::rtl::OUString::createFromAscii("SFTreeListBox::Init: failed to get PropertyValue"), Reference< XInterface >());
+                        }
+                        beans::PropertyValue const * pmoduleDescr =
+                            moduleDescr.getConstArray();
+                        for ( sal_Int32 pos = moduleDescr.getLength(); pos--; )
+                        {
+                            if (pmoduleDescr[ pos ].Name.equalsAsciiL(
+                                    RTL_CONSTASCII_STRINGPARAM(
+                                        "ooSetupFactoryEmptyDocumentURL") ))
+                            {
+                                pmoduleDescr[ pos ].Value >>= factoryURL;
+                                OSL_TRACE("factory url for doc images is %s",
+                                ::rtl::OUStringToOString( factoryURL , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 ::rtl::OUString lang( language );
                 Reference< browse::XBrowseNode > langEntries =
                     getLangNodeFromRootNode( childList[ n ], lang );
                 SvLBoxEntry* pBasicManagerRootEntry = insertEntry(
-                                       childList[ n ]->getName(),
+                                       uiName,
                                         app == true ? IMGID_APPICON : IMGID_DOCUMENT,
                                         0, true,
-                                    std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries )));
+                                    std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries )), factoryURL );
 
             }
         }
@@ -251,6 +317,114 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
     }
     SetUpdateMode( TRUE );
     OSL_TRACE("Leaving Init()");
+}
+
+Reference< XInterface  >
+SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OUString& docName )
+{
+    Reference< XInterface > xModel;
+    Reference< lang::XMultiComponentFactory > mcf =
+            xCtx->getServiceManager();
+    Reference< frame::XDesktop > desktop (
+        mcf->createInstanceWithContext(
+            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),                 xCtx ),
+            UNO_QUERY );
+
+    Reference< container::XEnumerationAccess > componentsAccess =
+        desktop->getComponents();
+    Reference< container::XEnumeration > components =
+        componentsAccess->createEnumeration();
+    sal_Int32 docIndex = 0;
+    while (components->hasMoreElements())
+    {
+        Reference< frame::XModel > model(
+            components->nextElement(), UNO_QUERY );
+        if ( model.is() )
+        {
+            ::rtl::OUString sTdocUrl = xModelToDocTitle( model );
+            if( sTdocUrl.equals( docName ) )
+            {
+                xModel = model;
+                break;
+            }
+        }
+    }
+    return xModel;
+}
+
+::rtl::OUString SFTreeListBox::xModelToDocTitle( const Reference< frame::XModel >& xModel )
+{
+    // Set a default name, this should never be seen.
+    ::rtl::OUString docNameOrURL =
+        ::rtl::OUString::createFromAscii("Unknown");
+    if ( xModel.is() )
+    {
+        ::rtl::OUString tempName;
+        try
+        {
+            Reference< beans::XPropertySet > propSet( xModel->getCurrentController()->getFrame(), UNO_QUERY );
+            if ( propSet.is() )
+            {
+                if ( sal_True == ( propSet->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) ) >>= tempName ) )
+                {
+                    docNameOrURL = tempName;
+                    if ( xModel->getURL().getLength() == 0 )
+                    {
+                        // process "UntitledX - YYYYYYYY"
+                        // to get UntitledX
+                        sal_Int32 pos = 0;
+                        docNameOrURL = tempName.getToken(0,' ',pos);
+                        OSL_TRACE("xModelToDocTitle() Title for document is %s.",
+                            ::rtl::OUStringToOString( docNameOrURL,
+                                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                    }
+                    else
+                    {
+                        Reference< document::XDocumentInfoSupplier >  xDIS( xModel, UNO_QUERY_THROW );
+                        Reference< beans::XPropertySet > xProp (xDIS->getDocumentInfo(),  UNO_QUERY_THROW );
+                        Any aTitle = xProp->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) );
+
+                        aTitle >>= docNameOrURL;
+                        if ( docNameOrURL.getLength() == 0 )
+                        {
+                            docNameOrURL =  parseLocationName( xModel->getURL() );
+                        }
+                    }
+                }
+            }
+        }
+        catch ( Exception& e )
+        {
+            OSL_TRACE("MiscUtils::xModelToDocTitle() exception thrown: !!! %s",
+                ::rtl::OUStringToOString( e.Message,
+                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        }
+
+    }
+    else
+    {
+        OSL_TRACE("MiscUtils::xModelToDocTitle() doc model is null" );
+    }
+    return docNameOrURL;
+}
+
+::rtl::OUString SFTreeListBox::parseLocationName( const ::rtl::OUString& location )
+{
+    // strip out the last leaf of location name
+    // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
+    ::rtl::OUString temp = location;
+    sal_Int32 lastSlashIndex = temp.lastIndexOf( ::rtl::OUString::createFromAscii( "/" ) );
+
+    if ( ( lastSlashIndex + 1 ) <  temp.getLength()  )
+    {
+        temp = temp.copy( lastSlashIndex + 1 );
+    }
+    // maybe we should throw here!!!
+    else
+    {
+        OSL_TRACE("Something wrong with name, perhaps we should throw an exception");
+    }
+    return temp;
 }
 
 Reference< browse::XBrowseNode >
@@ -267,7 +441,7 @@ SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNo
             break;
         }
     }
-    OSL_TRACE("Leavind getLangNodeFromRootNode");
+    OSL_TRACE("Leaving getLangNodeFromRootNode");
     return langNode;
 }
 
@@ -340,15 +514,51 @@ void SFTreeListBox::ExpandAllTrees()
 
 SvLBoxEntry * SFTreeListBox::insertEntry(
     String const & rText, USHORT nBitmap, SvLBoxEntry * pParent,
-    bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData)
+    bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData, ::rtl::OUString factoryURL )
 {
-    Image aImage(m_aImagesNormal.GetImage(nBitmap));
+    SvLBoxEntry * p;
+    if( nBitmap == IMGID_DOCUMENT && factoryURL.getLength() > 0 )
+    {
+        OSL_TRACE("=================================> adding icons for document");
+        Image aImage = SvFileInformationManager::GetFileImage(
+            INetURLObject(factoryURL), false,
+            BMP_COLOR_NORMAL );
+        Image aHCImage = SvFileInformationManager::GetFileImage(
+            INetURLObject(factoryURL), false,
+            BMP_COLOR_HIGHCONTRAST );
+        p = InsertEntry(
+            rText, aImage, aImage, pParent, bChildrenOnDemand, LIST_APPEND,
+            aUserData.release()); // XXX possible leak
+        SetExpandedEntryBmp(p, aHCImage, BMP_COLOR_HIGHCONTRAST);
+        SetCollapsedEntryBmp(p, aHCImage, BMP_COLOR_HIGHCONTRAST);
+    }
+    else
+    {
+        p = insertEntry( rText, nBitmap, pParent, bChildrenOnDemand, aUserData );
+    }
+    return p;
+}
+
+SvLBoxEntry * SFTreeListBox::insertEntry(
+    String const & rText, USHORT nBitmap, SvLBoxEntry * pParent,
+    bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData )
+{
+    Image aHCImage, aImage;
+    if( nBitmap == IMGID_APPICON )
+    {
+        aImage = m_hdImage;
+        aHCImage = m_hdImage_hc;
+    }
+    else
+    {
+        aImage = m_aImagesNormal.GetImage(nBitmap);
+        aHCImage = m_aImagesHighContrast.GetImage(nBitmap);
+    }
     SvLBoxEntry * p = InsertEntry(
         rText, aImage, aImage, pParent, bChildrenOnDemand, LIST_APPEND,
         aUserData.release()); // XXX possible leak
-    aImage = m_aImagesHighContrast.GetImage(nBitmap);
-    SetExpandedEntryBmp(p, aImage, BMP_COLOR_HIGHCONTRAST);
-    SetCollapsedEntryBmp(p, aImage, BMP_COLOR_HIGHCONTRAST);
+    SetExpandedEntryBmp(p, aHCImage, BMP_COLOR_HIGHCONTRAST);
+    SetCollapsedEntryBmp(p, aHCImage, BMP_COLOR_HIGHCONTRAST);
     return p;
 }
 
@@ -425,6 +635,36 @@ InputDialog::InputDialog(Window * pParent, USHORT nMode )
         aText.SetText( String( ResId( STR_FT_RENAME ) ) );
     }
     FreeResource();
+
+    // some resizing so that the text fits
+    Point point, newPoint;
+    Size siz, newSiz;
+    long gap;
+
+    USHORT style = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP |
+                   TEXT_DRAW_LEFT | TEXT_DRAW_WORDBREAK;
+
+    // get dimensions of dialog instructions control
+    point = aText.GetPosPixel();
+    siz = aText.GetSizePixel();
+
+    // get dimensions occupied by text in the control
+    Rectangle rect =
+        GetTextRect( Rectangle( point, siz ), aText.GetText(), style );
+    newSiz = rect.GetSize();
+
+    // the gap is the difference between the text width and its control width
+    gap = siz.Height() - newSiz.Height();
+
+    //resize the text field
+    newSiz = Size( siz.Width(), siz.Height() - gap );
+    aText.SetSizePixel( newSiz );
+
+    //move the OK & cancel buttons
+    point = aEdit.GetPosPixel();
+    newPoint = Point( point.X(), point.Y() - gap );
+    aEdit.SetPosPixel( newPoint );
+
 }
 
 InputDialog::~InputDialog()
@@ -464,8 +704,6 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ResMgr* pBasResMgr, ::r
     FreeResource();
 
     aScriptsBox.SetSelectHdl( LINK( this, SvxScriptOrgDialog, ScriptSelectHdl ) );
-    aScriptsBox.SetWindowBits( WB_HASLINES );
-
     aRunButton.SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
     aCloseButton.SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
     aRenameButton.SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
@@ -726,10 +964,25 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                             {
                                 aRet = xScript->invoke( args, outIndex, outArgs );
                             }
+                            catch ( reflection::InvocationTargetException& ite )
+                            {
+                                ::com::sun::star::uno::Any a = makeAny(ite);
+                                ShowErrorDialog(a);
+                            }
+                            catch ( provider::ScriptFrameworkErrorException& ite )
+                            {
+                                ::com::sun::star::uno::Any a = makeAny(ite);
+                                ShowErrorDialog(a);
+                            }
+                            catch ( RuntimeException& re )
+                            {
+                                ::com::sun::star::uno::Any a = makeAny(re);
+                                ShowErrorDialog(a);
+                            }
                             catch ( Exception& e )
                             {
-                                OSL_TRACE("Catch exception trying to run script %s" ,
-                                    ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                                ::com::sun::star::uno::Any a = makeAny(e);
+                                ShowErrorDialog(a);
                             }
                         }
                     }
@@ -1245,4 +1498,306 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     Reference< browse::XBrowseNode > node2 )
 {
     return ( node1->getName().compareTo( node2->getName() ) < 0 );
+}
+
+::rtl::OUString ReplaceString(
+    const ::rtl::OUString& source,
+    const ::rtl::OUString& token,
+    const ::rtl::OUString& value )
+{
+    sal_Int32 pos = source.indexOf( token );
+
+    if ( pos != -1 && value.getLength() != 0 )
+    {
+        return source.replaceAt( pos, token.getLength(), value );
+    }
+    else
+    {
+        return source;
+    }
+}
+
+::rtl::OUString FormatErrorString(
+    const ::rtl::OUString& unformatted,
+    const ::rtl::OUString& language,
+    const ::rtl::OUString& script,
+    const ::rtl::OUString& line,
+    const ::rtl::OUString& type,
+    const ::rtl::OUString& message )
+{
+    ::rtl::OUString result = unformatted.copy( 0 );
+
+    result = ReplaceString(
+        result, ::rtl::OUString::createFromAscii( "%LANGUAGENAME" ), language );
+    result = ReplaceString(
+        result, ::rtl::OUString::createFromAscii( "%SCRIPTNAME" ), script );
+    result = ReplaceString(
+        result, ::rtl::OUString::createFromAscii( "%LINENUMBER" ), line );
+
+    if ( type.getLength() != 0 )
+    {
+        result += ::rtl::OUString::createFromAscii( "\n\n" );
+        result += ::rtl::OUString(ResId(RID_SVXSTR_ERROR_TYPE_LABEL, DIALOG_MGR()));
+        result += ::rtl::OUString::createFromAscii( " " );
+        result += type;
+    }
+
+    if ( message.getLength() != 0 )
+    {
+        result += ::rtl::OUString::createFromAscii( "\n\n" );
+        result += ::rtl::OUString(ResId(RID_SVXSTR_ERROR_MESSAGE_LABEL, DIALOG_MGR()));
+        result += ::rtl::OUString::createFromAscii( " " );
+        result += message;
+    }
+
+    return result;
+}
+
+::rtl::OUString GetErrorMessage(
+    const provider::ScriptErrorRaisedException& eScriptError )
+{
+    ::rtl::OUString unformatted =
+        ::rtl::OUString( ResId( RID_SVXSTR_ERROR_AT_LINE, DIALOG_MGR() ) );
+
+    ::rtl::OUString unknown = ::rtl::OUString::createFromAscii( "UNKNOWN" );
+    ::rtl::OUString language = unknown;
+    ::rtl::OUString script = unknown;
+    ::rtl::OUString line = unknown;
+    ::rtl::OUString type = ::rtl::OUString();
+    ::rtl::OUString message = eScriptError.Message;
+
+        if ( eScriptError.language.getLength() != 0 )
+        {
+            language = eScriptError.language;
+        }
+
+        if ( eScriptError.scriptName.getLength() != 0 )
+        {
+            script = eScriptError.scriptName;
+        }
+
+        if ( eScriptError.Message.getLength() != 0 )
+        {
+            message = eScriptError.Message;
+        }
+        if ( eScriptError.lineNum != -1 )
+        {
+            line = ::rtl::OUString::valueOf( eScriptError.lineNum );
+            unformatted = ::rtl::OUString(
+                ResId( RID_SVXSTR_ERROR_AT_LINE, DIALOG_MGR() ) );
+        }
+        else
+        {
+            unformatted = ::rtl::OUString(
+            ResId( RID_SVXSTR_ERROR_RUNNING, DIALOG_MGR() ) );
+        }
+
+    return FormatErrorString(
+        unformatted, language, script, line, type, message );
+}
+
+::rtl::OUString GetErrorMessage(
+    const provider::ScriptExceptionRaisedException& eScriptException )
+{
+    ::rtl::OUString unformatted =
+    ::rtl::OUString( ResId( RID_SVXSTR_EXCEPTION_AT_LINE, DIALOG_MGR() ) );
+
+    ::rtl::OUString unknown = ::rtl::OUString::createFromAscii( "UNKNOWN" );
+    ::rtl::OUString language = unknown;
+    ::rtl::OUString script = unknown;
+    ::rtl::OUString line = unknown;
+    ::rtl::OUString type = unknown;
+    ::rtl::OUString message = eScriptException.Message;
+
+    if ( eScriptException.language.getLength() != 0 )
+    {
+        language = eScriptException.language;
+    }
+    if ( eScriptException.scriptName.getLength() != 0 )
+    {
+        script = eScriptException.scriptName;
+    }
+
+    if ( eScriptException.Message.getLength() != 0 )
+    {
+        message = eScriptException.Message;
+    }
+
+    if ( eScriptException.lineNum != -1 )
+    {
+        line = ::rtl::OUString::valueOf( eScriptException.lineNum );
+        unformatted = ::rtl::OUString(
+            ResId( RID_SVXSTR_EXCEPTION_AT_LINE, DIALOG_MGR() ) );
+    }
+    else
+    {
+        unformatted = ::rtl::OUString(
+            ResId( RID_SVXSTR_EXCEPTION_RUNNING, DIALOG_MGR() ) );
+    }
+
+    if ( eScriptException.exceptionType.getLength() != 0 )
+    {
+        type = eScriptException.exceptionType;
+    }
+
+    return FormatErrorString(
+        unformatted, language, script, line, type, message );
+
+}
+::rtl::OUString GetErrorMessage(
+    const provider::ScriptFrameworkErrorException& sError )
+{
+    ::rtl::OUString unformatted = ::rtl::OUString(
+        ResId( RID_SVXSTR_FRAMEWORK_ERROR_RUNNING, DIALOG_MGR() ) );
+
+    ::rtl::OUString language =
+        ::rtl::OUString::createFromAscii( "UNKNOWN" );
+
+    ::rtl::OUString script =
+        ::rtl::OUString::createFromAscii( "UNKNOWN" );
+
+    ::rtl::OUString message;
+
+    if ( sError.scriptName.getLength() > 0 )
+    {
+        script = sError.scriptName;
+    }
+    if ( sError.language.getLength() > 0 )
+    {
+        language = sError.language;
+    }
+    if ( sError.errorType == provider::ScriptFrameworkErrorType::NOTSUPPORTED )
+    {
+        message = ::rtl::OUString(
+            ResId(  RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED, DIALOG_MGR() ) );
+        message =  ReplaceString(
+        message, ::rtl::OUString::createFromAscii( "%LANGUAGENAME" ), language );
+
+    }
+    else
+    {
+        message = sError.Message;
+    }
+    return FormatErrorString(
+        unformatted, language, script, ::rtl::OUString(), ::rtl::OUString(), message );
+}
+
+::rtl::OUString GetErrorMessage( const RuntimeException& re )
+{
+    Type t = ::getCppuType( &re );
+    ::rtl::OUString message = t.getTypeName();
+    message += re.Message;
+
+    return message;
+}
+
+::rtl::OUString GetErrorMessage( const Exception& e )
+{
+    Type t = ::getCppuType( &e );
+    ::rtl::OUString message = t.getTypeName();
+    message += e.Message;
+
+    return message;
+}
+
+::rtl::OUString GetErrorMessage( const com::sun::star::uno::Any& aException )
+{
+    ::rtl::OUString exType;
+    if ( aException.getValueType() ==
+         ::getCppuType( (const reflection::InvocationTargetException* ) NULL ) )
+    {
+        OSL_TRACE("Detected InvocationTarget");
+        reflection::InvocationTargetException ite;
+        aException >>= ite;
+        if ( ite.TargetException.getValueType() == ::getCppuType( ( const provider::ScriptErrorRaisedException* ) NULL ) )
+        {
+            OSL_TRACE("Detected ScriptErrorRaisedException in InvocationTarget");
+            // Error raised by script
+            provider::ScriptErrorRaisedException scriptError;
+            ite.TargetException >>= scriptError;
+            return GetErrorMessage( scriptError );
+        }
+        else if ( ite.TargetException.getValueType() == ::getCppuType( ( const provider::ScriptExceptionRaisedException* ) NULL ) )
+        {
+            OSL_TRACE("Detected ScriptExceptionRaisedException in InvocationTarget");
+            // Exception raised by script
+            provider::ScriptExceptionRaisedException scriptException;
+            ite.TargetException >>= scriptException;
+            return GetErrorMessage( scriptException );
+        }
+        else
+        {
+            // Unknown error, shouldn't happen
+            // OSL_ASSERT(...)
+            OSL_TRACE("Unknown error");
+        }
+
+    }
+    else if ( aException.getValueType() == ::getCppuType( ( const provider::ScriptFrameworkErrorException* ) NULL ) )
+    {
+        OSL_TRACE("Detected ScriptFrameworkErrorException ");
+        // A Script Framework error has occured
+        provider::ScriptFrameworkErrorException sfe;
+        aException >>= sfe;
+        return GetErrorMessage( sfe );
+
+    }
+    // unknown exception
+    Exception e;
+    RuntimeException rte;
+    if ( aException >>= rte )
+    {
+        return GetErrorMessage( rte );
+    }
+
+    aException >>= e;
+    return GetErrorMessage( e );
+
+}
+
+SvxScriptErrorDialog::SvxScriptErrorDialog(
+    Window* parent, ::com::sun::star::uno::Any aException )
+    : m_sMessage()
+{
+    m_sMessage = GetErrorMessage( aException );
+}
+
+SvxScriptErrorDialog::~SvxScriptErrorDialog()
+{
+}
+
+USHORT SvxScriptErrorDialog::Execute()
+{
+    // Show Error dialog asynchronously
+    //
+    // Pass a copy of the message to the ShowDialog method as the
+    // SvxScriptErrorDialog may be deleted before ShowDialog is called
+    Application::PostUserEvent(
+        LINK( this, SvxScriptErrorDialog, ShowDialog ),
+        new rtl::OUString( m_sMessage ) );
+
+    return 0;
+}
+
+IMPL_LINK( SvxScriptErrorDialog, ShowDialog, ::rtl::OUString*, pMessage )
+{
+    ::rtl::OUString message;
+
+    if ( pMessage && pMessage->getLength() != 0 )
+    {
+        message = *pMessage;
+    }
+    else
+    {
+        message = ::rtl::OUString( ResId( RID_SVXSTR_ERROR_TITLE, DIALOG_MGR() ) );
+    }
+
+    MessBox* pBox = new WarningBox( NULL, WB_OK, message );
+    pBox->SetText( ResId( RID_SVXSTR_ERROR_TITLE, DIALOG_MGR() ) );
+    pBox->Execute();
+
+    if ( pBox ) delete pBox;
+    if ( pMessage ) delete pMessage;
+
+    return 0;
 }
