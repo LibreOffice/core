@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:02:23 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,8 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#include "svxdlg.hxx" //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 extern sal_Int16 ControllerSlotMap[];
 
@@ -1649,18 +1651,21 @@ void FmXFormShell::ExecuteSearch()
     LoopGrids(GA_DISABLE_SYNC /*| GA_ENABLE_ROCTRLR*/);
 
     // jetzt bin ich reif fuer den Dialog
-    FmSearchDialog dlg(&m_pShell->GetViewShell()->GetViewFrame()->GetWindow(), strInitialText, strRealContexts, nInitialContext, LINK(this, FmXFormShell, OnSearchContextRequest),
-        FmSearchDialog::SM_ALLOWSCHEDULE);
+    //CHINA001 FmSearchDialog dlg(&m_pShell->GetViewShell()->GetViewFrame()->GetWindow(), strInitialText, strRealContexts, nInitialContext, LINK(this, FmXFormShell, OnSearchContextRequest),
+//CHINA001      SM_ALLOWSCHEDULE); //CHINA001 FmSearchDialog::SM_ALLOWSCHEDULE);
     // wenn die potentiellen Deadlocks, die durch die Benutzung des Solar-Mutex in MTs VCLX...-Klasen entstehen, irgendwann mal
     // ausgeraeumt sind, sollte hier ein SM_USETHREAD rein, denn die Suche in einem eigenen Thread ist doch etwas fluessiger
     // sollte allerdings irgendwie von dem unterliegenden Cursor abhaengig gemacht werden, DAO zum Beispiel ist nicht thread-sicher
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    AbstractFmSearchDialog* dlg = pFact->CreateFmSearchDialog(&m_pShell->GetViewShell()->GetViewFrame()->GetWindow(), strInitialText, strRealContexts, nInitialContext, LINK(this, FmXFormShell, OnSearchContextRequest),ResId(RID_SVXDLG_SEARCHFORM),SM_ALLOWSCHEDULE);
+    DBG_ASSERT(dlg, "Dialogdiet fail!");//CHINA001
+    dlg->SetActiveField(strActiveField);//CHINA001  dlg.SetActiveField(strActiveField);
 
-    dlg.SetActiveField(strActiveField);
-
-    dlg.SetFoundHandler(LINK(this, FmXFormShell, OnFoundData));
-    dlg.SetCanceledNotFoundHdl(LINK(this, FmXFormShell, OnCanceledNotFound));
-    dlg.Execute();
-
+    dlg->SetFoundHandler(LINK(this, FmXFormShell, OnFoundData));//CHINA001 dlg.SetFoundHandler(LINK(this, FmXFormShell, OnFoundData));
+    dlg->SetCanceledNotFoundHdl(LINK(this, FmXFormShell, OnCanceledNotFound));//CHINA001 dlg.SetCanceledNotFoundHdl(LINK(this, FmXFormShell, OnCanceledNotFound));
+    dlg->Execute();//CHINA001 dlg.Execute();
+    delete dlg; //add CHINA001
     // GridControls wieder restaurieren
     LoopGrids(GA_ENABLE_SYNC | GA_DISABLE_ROCTRLR);
 
