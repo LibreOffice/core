@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AttrTransformerAction.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:32:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 11:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@ enum XMLAttrTransformerAction
     XML_ATACTION_IN2INCH,               // replace "in" with "inch"
     XML_ATACTION_INS2INCHS,             // replace "in" with "inch"
                                         // multiple times
+    XML_ATACTION_IN2TWIPS,              // replace "in" with "inch" and
+                                        // convert value from inch to twips
+                                        // but only for writer documents
     XML_ATACTION_RENAME_IN2INCH,        // replace "in" with "inch" and rename
                                         // attr:
                                         // - param1: namespace +
@@ -84,6 +87,9 @@ enum XMLAttrTransformerAction
     XML_ATACTION_INCH2IN,               // replace "inch" with "in"
     XML_ATACTION_INCHS2INS,             // replace "inch" with "in"
                                         // multiple times
+    XML_ATACTION_TWIPS2IN,              // replace "inch" with "in" and for writer
+                                        // documents convert measure value from twips
+                                        // to inch
     XML_ATACTION_RENAME_INCH2IN,        // replace "inch" with "in" and rename
                                         // attr:
                                         // - param1: namespace +
@@ -148,6 +154,12 @@ enum XMLAttrTransformerAction
                                          // if param2 or param3 are unused they must contain
                                          // XML_TOKEN_INVALID
     XML_ATACTION_ISO2RNG_DATETIME,       // converts , into . in datetimes
+    XML_ATACTION_SVG_WIDTH_HEIGHT_OOO,   // replace "inch" with "in" and subtracts 1/100th mm
+    XML_ATACTION_SVG_WIDTH_HEIGHT_OASIS, // replace "in" with "inch" and adds 1/100th mm
+    XML_ATACTION_DRAW_MIRROR_OOO,        // renames draw:mirror to style:mirror and adapts values
+    XML_ATACTION_DRAW_MIRROR_OASIS,      // renames style:mirror to draw:mirror and adapts values
+    XML_ATACTION_GAMMA_OASIS,            // converts percentage to double value
+    XML_ATACTION_GAMMA_OOO,              // converts double value to percentage
     XML_ATACTION_USER_DEFINED=0x80000000,// user defined actions start here
     XML_ATACTION_END=XML_TACTION_END
 };
