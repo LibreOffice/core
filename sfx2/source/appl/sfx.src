@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-01 20:07:58 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,7 @@ String STR_REDO
     Text = "Wiederherstellen: " ;
     Text [ English ] = "Redo: " ;
     Text [ english_us ] = "Re~do: " ;
-    Text [ portuguese ] = "Refazer: " ;
+    Text [ portuguese ] = "Restaurar: " ;
     Text [ portuguese_brazilian ] = "Refazer " ;
     Text [ swedish ] = "Återställ:  " ;
     Text [ danish ] = "Gendan: " ;
