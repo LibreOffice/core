@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syschild.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:16:59 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,14 +144,14 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
 
 void SystemChildWindow::ImplInit( Window* pParent, WinBits nStyle )
 {
-    mpSysObj = ImplGetSVData()->mpDefInst->CreateObject( pParent->ImplGetFrame() );
+    mpWindowImpl->mpSysObj = ImplGetSVData()->mpDefInst->CreateObject( pParent->ImplGetFrame() );
 
     Window::ImplInit( pParent, nStyle, NULL );
 
     // Wenn es ein richtiges SysChild ist, dann painten wir auch nicht
     if ( GetSystemData() )
     {
-        mpSysObj->SetCallback( this, ImplSysChildProc );
+        mpWindowImpl->mpSysObj->SetCallback( this, ImplSysChildProc );
         SetParentClipMode( PARENTCLIPMODE_CLIP );
         SetBackground();
     }
@@ -184,10 +184,10 @@ SystemChildWindow::SystemChildWindow( Window* pParent, const ResId& rResId ) :
 SystemChildWindow::~SystemChildWindow()
 {
     Hide();
-    if ( mpSysObj )
+    if ( mpWindowImpl->mpSysObj )
     {
-        ImplGetSVData()->mpDefInst->DestroyObject( mpSysObj );
-        mpSysObj = NULL;
+        ImplGetSVData()->mpDefInst->DestroyObject( mpWindowImpl->mpSysObj );
+        mpWindowImpl->mpSysObj = NULL;
     }
 }
 
@@ -195,8 +195,8 @@ SystemChildWindow::~SystemChildWindow()
 
 const SystemEnvData* SystemChildWindow::GetSystemData() const
 {
-    if ( mpSysObj )
-        return mpSysObj->GetSystemData();
+    if ( mpWindowImpl->mpSysObj )
+        return mpWindowImpl->mpSysObj->GetSystemData();
     else
         return NULL;
 }
