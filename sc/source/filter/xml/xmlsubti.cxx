@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-21 07:35:48 $
+ *  last change: $Author: sab $ $Date: 2001-06-27 11:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,6 +735,7 @@ uno::Reference< drawing::XShapes > ScMyTables::GetCurrentXShapes()
     {
         uno::Reference <drawing::XShapes > xTempShapes ( GetCurrentXDrawPage(), uno::UNO_QUERY );
         xShapes = xTempShapes;
+        rImport.GetShapeImport()->startPage(xShapes);
         rImport.GetShapeImport()->pushGroupForSorting ( xShapes );
         nCurrentXShapes = nCurrentSheet;
         return xShapes;
