@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgevtatt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-10 16:12:57 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,12 +166,14 @@ namespace dlgprov
 
     class DialogScriptListenerImpl : public DialogScriptListenerImpl_BASE
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xModel;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >             m_xModel;
 
         virtual void firing_impl( const ::com::sun::star::script::ScriptEvent& aScriptEvent, ::com::sun::star::uno::Any* pRet );
 
     public:
-        DialogScriptListenerImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
+        DialogScriptListenerImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
         virtual ~DialogScriptListenerImpl();
 
         // XEventListener
