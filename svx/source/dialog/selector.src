@@ -1,0 +1,269 @@
+/*************************************************************************
+ *
+ *  $RCSfile: selector.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:48:16 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "helpid.hrc"
+#include "dialogs.hrc"
+#include "selector.hrc"
+
+#define FIXEDTEXT_DIALOG_DESCRIPTION \
+Text = "W√§hlen Sie zuerst die Bibliothek, die das gew√ºnschte Makro enth√§lt. Dann w√§hlen Sie das Makro unter 'Name des Makros'." ; \
+Text [ ENGLISH ] = "Select the library that contains the macro you want. Then select the macro under 'Macro name'." ; \
+Text [ english_us ] = "Select the library that contains the macro you want. Then select the macro under 'Macro name'." ;
+
+String STR_SELECTOR_ADD_COMMANDS
+{
+  TEXT = "Befehle hinzuf√ºgen" ;
+  TEXT [ ENGLISH ] = "Add Commands" ;
+  TEXT [ english_us ] = "Add Commands" ;
+};
+
+String STR_SELECTOR_MACROS
+{
+  TEXT = "%PRODUCTNAME Makros" ;
+  TEXT [ ENGLISH ] = "%PRODUCTNAME Macros" ;
+  TEXT [ english_us ] = "%PRODUCTNAME Macros" ;
+};
+
+String STR_SELECTOR_CATEGORIES
+{
+    Text = "~Bereich" ;
+    Text [ ENGLISH ] = "~Group" ;
+    Text [ norwegian ] = "~Gruppe" ;
+    Text [ italian ] = "Area" ;
+    Text [ portuguese_brazilian ] = "~Categoria" ;
+    Text [ portuguese ] = "~Categoria" ;
+    Text [ finnish ] = "~Luokka" ;
+    Text [ danish ] = "~Kategori" ;
+    Text [ french ] = "~CatÈgorie" ;
+    Text [ swedish ] = "~Kategori" ;
+    Text [ dutch ] = "~Bereik" ;
+    Text [ spanish ] = "~CategorÌa" ;
+    Text [ english_us ] = "~Category" ;
+    Text[ chinese_simplified ] = "ËåÉÂõ¥(~C)";
+    Text[ russian ] = " ‡ÚÂ„ÓËˇ";
+    Text[ polish ] = "~Kategoria";
+    Text[ japanese ] = "ÁØÑÂõ≤(~C)";
+    Text[ chinese_traditional ] = "ÁØÑÂúç(~C)";
+    Text[ arabic ] = "«·›∆…";
+    Text[ greek ] = "~ ·ÙÁ„ÔÒﬂ·";
+    Text[ korean ] = "ÏòÅÏó≠(~C)";
+    Text[ turkish ] = "Ka~tegori";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Categoria";
+    Text[ thai ] = "~‡∏õ‡∏£‡∏∞‡πÄ‡∏†‡∏ó";
+    Text[ czech ] = "Kategorie";
+    Text[ hebrew ] = "‚ÄÆ◊°◊ô◊ï◊ï◊í‚Ä¨";
+    Text[ hindi ] = "~‡§µ‡§∞‡•ç‡§ó";
+    Text[ slovak ] = "~Kateg√≥ria";
+    Text[ hungarian ] = "~Kateg√≥ria";
+    Text[ slovenian ] = "~Kategorija";
+};
+
+String STR_SELECTOR_COMMANDS
+{
+  TEXT = "Befehle" ;
+  TEXT [ ENGLISH ] = "Commands" ;
+  TEXT [ english_us ] = "Commands" ;
+};
+
+String STR_SELECTOR_ADD
+{
+  TEXT = "Hinzuf√ºgen" ;
+  TEXT [ ENGLISH ] = "Add" ;
+  TEXT [ english_us ] = "Add" ;
+};
+
+String STR_SELECTOR_RUN
+{
+  TEXT = "Ausf√ºhren" ;
+  TEXT [ ENGLISH ] = "Run" ;
+  TEXT [ english_us ] = "Run" ;
+
+};
+
+String STR_SELECTOR_ADD_COMMANDS_DESCRIPTION
+{
+  TEXT = "Um Befehle einer Symbolleiste hinzuzuf√ºgen, w√§hlen Sie zuerst eine Kategorie und dann den Befehl. Ziehen Sie den Befehl direkt auf die gew√ºnschte Symbolleiste. Alternativ ziehen Sie den Befehl in die Befehlsliste auf der Registerseite 'Symbolleisten' im Dialog 'Anpassen'.";
+  TEXT [ ENGLISH ] = "To add a command to a toolbar, select the category and then the command. Then drag the command to where you want it on the desired toolbar. Alternatively, you can drag the command to the Commands list of the Toolbars tab page in the Customize dialog.";
+  TEXT [ english ] = "To add a command to a toolbar, select the category and then the command. Then drag the command to where you want it on the desired toolbar. Alternatively, you can drag the command to the Commands list of the Toolbars tab page in the Customize dialog.";
+};
+
+String STR_BASICMACROS
+{
+    TEXT = "BASIC-Makros" ;
+    TEXT [ ENGLISH ] = "BASIC Macros" ;
+    TEXT [ norwegian ] = "Basis Makroer" ;
+    TEXT [ italian ] = "Macro di BASIC" ;
+    TEXT [ portuguese_brazilian ] = "Macros BASIC" ;
+    TEXT [ portuguese ] = "Macros BASIC" ;
+    TEXT [ finnish ] = "BASIC-makrot" ;
+    TEXT [ danish ] = "BASIC-makroer" ;
+    TEXT [ french ] = "Macros BASIC" ;
+    TEXT [ swedish ] = "BASIC-makron" ;
+    TEXT [ dutch ] = "BASIC-macro's" ;
+    TEXT [ spanish ] = "Macros BASIC" ;
+    TEXT [ english_us ] = "BASIC Macros" ;
+    TEXT[ chinese_simplified ] = "BASIC-ÂÆè";
+    TEXT[ russian ] = "Ã‡ÍÓÒ˚ BASIC";
+    TEXT[ polish ] = "Makra jÍzyka BASIC";
+    TEXT[ japanese ] = "BASIC „Éû„ÇØ„É≠";
+    TEXT[ chinese_traditional ] = "BASIC-Â∑®ÈõÜ";
+    TEXT[ arabic ] = "ÊÕœ«  „«ﬂ—Ê BASIC";
+    TEXT[ greek ] = "Ã·ÍÒÔÂÌÙÔÎﬁ BASIC";
+    TEXT[ korean ] = "BASIC  Îß§ÌÅ¨Î°ú";
+    TEXT[ turkish ] = "BASIC makrolar˝";
+    TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Macros del BASIC";
+    TEXT[ thai ] = "BASIC ‡∏°‡∏≤‡πÇ‡∏Ñ‡∏£";
+    TEXT[ czech ] = "Makra BASIC";
+    TEXT[ hebrew ] = "‚ÄÆ◊û◊ê◊ß◊®◊ï◊ê◊ô◊ô◊ù ◊©◊ú ◊ë◊ô◊ô◊°◊ô◊ß‚Ä¨";
+    TEXT[ hindi ] = "BASIC ‡§Æ‡•â‡§ï‡•ç‡§∞‡•ã‡§∏";
+    TEXT[ slovak ] = "Makr√° BASIC";
+    TEXT[ hungarian ] = "BASIC makr√≥k";
+    TEXT[ slovenian ] = "BASIC makri";
+};
+
+ModelessDialog RID_DLG_SCRIPTSELECTOR
+{
+  OutputSize = TRUE ;
+  Size = MAP_APPFONT ( 256 , 233 ) ;
+  Text = "Makro-Selektor" ;
+  Text [ ENGLISH ] = "Macro Selector" ;
+  Text [ english_us ] = "Macro Selector" ;
+  SvLook = TRUE ;
+  Moveable = TRUE ;
+  Hide = TRUE;
+  FixedText TXT_SELECTOR_DIALOG_DESCRIPTION
+  {
+    Pos = MAP_APPFONT ( 6 , 8 ) ;
+    Size = MAP_APPFONT ( 190 , 48 ) ;
+    Group = TRUE ;
+    Left = TRUE ;
+    WordBreak = TRUE ;
+    FIXEDTEXT_DIALOG_DESCRIPTION
+  };
+  FixedText TXT_SELECTOR_CATEGORIES
+  {
+    Pos = MAP_APPFONT ( 6 , 62 ) ;
+    Size = MAP_APPFONT ( 83 , 8 ) ;
+    Group = TRUE ;
+    Left = TRUE ;
+    Text = "Bibliothek" ;
+    Text [ ENGLISH ] = "Library" ;
+    Text [ english_us ] = "Library" ;
+  };
+  Control BOX_SELECTOR_CATEGORIES
+  {
+    Border = TRUE ;
+    Pos = MAP_APPFONT ( 6 , 73 ) ;
+    Size = MAP_APPFONT ( 83 , 89 ) ;
+    TabStop = TRUE;
+    HelpId = HID_SELECTOR_CATEGORIES;
+  };
+  FixedText TXT_SELECTOR_COMMANDS
+  {
+    Pos = MAP_APPFONT ( 101 , 62 ) ;
+    Size = MAP_APPFONT ( 93 , 8 ) ;
+    Left = TRUE ;
+    Text = "Name des Makros" ;
+    Text [ ENGLISH ] = "Macro name" ;
+    Text [ english_us ] = "Macro name" ;
+  };
+  Control BOX_SELECTOR_COMMANDS
+  {
+    Border = TRUE ;
+    Pos = MAP_APPFONT ( 101 , 73 ) ;
+    Size = MAP_APPFONT ( 93 , 89 ) ;
+    TabStop = TRUE;
+    HelpId = HID_SELECTOR_COMMANDS;
+  };
+  OKButton BTN_SELECTOR_OK
+  {
+    Pos = MAP_APPFONT ( 200 , 73 ) ;
+    Size = MAP_APPFONT ( 50 , 14 ) ;
+    DefButton = TRUE;
+  };
+  CancelButton BTN_SELECTOR_CANCEL
+  {
+    Pos = MAP_APPFONT ( 200 , 90 ) ;
+    Size = MAP_APPFONT ( 50 , 14 ) ;
+  };
+  HelpButton BTN_SELECTOR_HELP
+  {
+    Pos = MAP_APPFONT ( 200 , 107 ) ;
+    Size = MAP_APPFONT ( 50 , 14 ) ;
+  };
+  FixedLine GRP_SELECTOR_DESCRIPTION
+  {
+    Pos = MAP_APPFONT ( 6 , 168 ) ;
+    Size = MAP_APPFONT ( 224 , 8 ) ;
+    Group = TRUE ;
+    Text = "Beschreibung" ;
+    Text [ ENGLISH ] = "Description" ;
+    Text [ english_us ] = "Description" ;
+  };
+  FixedText TXT_SELECTOR_DESCRIPTION
+  {
+    Pos = MAP_APPFONT ( 12 , 179 ) ;
+    Size = MAP_APPFONT ( 224 , 48 ) ;
+    WordBreak = TRUE ;
+  };
+};
+ // ********************************************************************** EOF
