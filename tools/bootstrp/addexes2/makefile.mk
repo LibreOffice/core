@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-18 09:52:08 $
+#   last change: $Author: nf $ $Date: 2001-04-18 10:45:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,11 +89,6 @@ APP3STDLIBS+=-lpthread
 APP3LIBS=	$(LB)$/bootstrp.lib
 APP3DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
-
-APP4TARGET= zipdep
-APP4OBJS=	$(OBJ)$/zipdep.obj
-APP4LIBS=	$(LB)$/bootstrp.lib
-APP4STDLIBS=$(STATIC_LIBS) 
 
 DEPOBJFILES		=	$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
 # --- Targets ------------------------------------------------------

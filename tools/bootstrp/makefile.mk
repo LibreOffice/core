@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-18 09:13:26 $
+#   last change: $Author: nf $ $Date: 2001-04-18 10:45:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,32 +159,13 @@ APP5STDLIBS=$(STATIC_LIBS)
 APP5LIBS=       $(LB)$/bootstrp.lib
 APP5DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
-APP6TARGET=     build
-APP6OBJS=   $(OBJ)$/make.obj $(OBJ)$/updmake.obj $(OBJ)$/allmake.obj
-APP6STDLIBS=$(STATIC_LIBS)
-APP6LIBS=       $(LB)$/bootstrp.lib
-APP6DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
+APP6TARGET= zipdep
+APP6OBJS=	$(OBJ)$/zipdep.obj
+APP6LIBS=	$(LB)$/bootstrp.lib
+APP6STDLIBS=$(STATIC_LIBS) 
 
-APP7TARGET= deliver
-APP7OBJS=       $(OBJ)$/deliver.obj
-APP7STDLIBS=$(STATIC_LIBS)
-APP7LIBS=       $(LB)$/bootstrp.lib
-APP7DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
-APP7STACK=      16384
 
-APP8TARGET=     makedepn
-APP8OBJS=   $(OBJ)$/makedepn.obj
-APP8STDLIBS=$(STATIC_LIBS)
-APP8DEPN=   $(LB)$/atools.lib
-
-APP9TARGET=     _mkout
-APP9LINKTYPE=STATIC
-APP9OBJS=   $(OBJ)$/mkout.obj
-APP9STDLIBS=$(STATIC_LIBS)
-APP9LIBS=       $(LB)$/bootstrp.lib
-APP9DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
-
-DEPOBJFILES		=	$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
+DEPOBJFILES		=	$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) 
 
 .ENDIF	# "$(OS)"=="MACOS"
 
