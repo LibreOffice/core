@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-06 14:02:06 $
+ *  last change: $Author: hjs $ $Date: 2001-11-06 17:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,12 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
                 if( m_aOutputFiles.back().aOutputRc.Len() )
                     m_aOutputFiles.push_back( OutputFile() );
                 m_aOutputFiles.back().aOutputRc = (*ppStr) + 3;
+            }
+            else if( !rsc_strnicmp( (*ppStr) + 1, "lip", 3 ) )
+            { // additional language specific include for system dependent files
+                if( m_aOutputFiles.back().aLangSearchPath.Len() )
+                    m_aOutputFiles.back().aLangSearchPath.Append( ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US ) );
+                m_aOutputFiles.back().aLangSearchPath.Append( (*ppStr)+4 );
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fp", 2 ) )
             { // anderer Name fuer .srs-file
@@ -890,12 +896,21 @@ ERRTYPE RscCompiler::Link()
 
             // Schreibe Datei
 #ifdef DEBUG
-            fprintf( stderr, "using tmp file %s %s\n", pTmp, aDir.GetBuffer() );
+            fprintf( stderr, "using tmp file %s\n", pTmp );
 #endif
             pTC->ChangeLanguage( it->nLangTypeId );
             pTC->ChangeDefLanguage( International::GetNeutralLanguage( it->nLangTypeId ) );
             pTC->SetSourceCharSet( it->nSourceCharSet );
             pTC->ClearSysNames();
+            ByteString aSysSearchPath( it->aLangSearchPath );
+            if( aSysSearchPath.Len() )
+                aSysSearchPath.Append( ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US ) );
+            aSysSearchPath.Append( pTC->GetSearchPath() );
+            pTC->SetSysSearchPath( aSysSearchPath );
+#ifdef DEBUG
+            fprintf( stderr, "from path %s setting search path %s\n", it->aLangSearchPath.GetBuffer(), aSysSearchPath.GetBuffer() );
+#endif
+
             aError = pTC->WriteRc( foutput );
 
             fclose( foutput );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscrsc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-06 14:02:05 $
+ *  last change: $Author: hjs $ $Date: 2001-11-06 17:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,10 @@ public:
 
     struct OutputFile
     {
-        LanguageType        nLangTypeId;    // Globale Sprachtyp
-        CharSet             nSourceCharSet; // Welcher Quellzeichensatz
-        ByteString          aOutputRc;      // Name der Rc-Ausgabedatei
+        LanguageType        nLangTypeId;        // language type
+        CharSet             nSourceCharSet;     // source text encoding
+        ByteString          aOutputRc;          // target file
+        ByteString          aLangSearchPath;    // language specific search path
 
         OutputFile() :
                 nLangTypeId( LANGUAGE_DONTKNOW ),

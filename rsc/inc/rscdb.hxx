@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-06 13:52:58 $
+ *  last change: $Author: hjs $ $Date: 2001-11-06 17:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ class RscTypCont
     USHORT              nMachineId;         // Globaler Maschinentyp
     RSCBYTEORDER_TYPE   nByteOrder;         // Intel oder
     ByteString          aSearchPath;        // Suchen der Bitmap, Icon, Pointer
+    ByteString          aSysSearchPath;     // aSearchPath plus language specific paths
     USHORT              nUniqueId;          // eindeutiger Id fuer Systemresourcen
     ULONG               nFilePos;           // Position in der Datei ( MTF )
     USHORT              nPMId;              // eindeutiger Id fuer PM-Rseourcefile
@@ -396,6 +397,8 @@ public:
     }
     void            SetSearchPath( const ByteString & rStr) { aSearchPath = rStr; }
     ByteString      GetSearchPath() const { return aSearchPath; }
+    void            SetSysSearchPath( const ByteString& rStr ) { aSysSearchPath = rStr; }
+    ByteString      GetSysSearchPath() const { return aSysSearchPath; }
     void        InsertType( RscTop * pType )
                 {
                     aBaseLst.Insert( pType, LIST_APPEND );

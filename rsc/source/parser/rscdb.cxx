@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-06 13:52:58 $
+ *  last change: $Author: hjs $ $Date: 2001-11-06 17:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,8 +795,11 @@ ERRTYPE RscTypCont::WriteRc( FILE * fOutput )
         {
             UniString aUniFileName( pSysEntry->aFileName, RTL_TEXTENCODING_ASCII_US );
             DirEntry aFullName( aUniFileName );
-            aFullName.Find( UniString( GetSearchPath(), RTL_TEXTENCODING_ASCII_US ) );
+            aFullName.Find( UniString( GetSysSearchPath(), RTL_TEXTENCODING_ASCII_US ) );
             pSysEntry->aFileName = ByteString( aFullName.GetFull(), RTL_TEXTENCODING_ASCII_US );
+#ifdef DEBUG
+            fprintf( stderr, "found sys dep file %s\n", pSysEntry->aFileName.GetBuffer() );
+#endif
             if( !::Append( fOutput, pSysEntry->aFileName.GetBuffer() ) )
             {
                 pEH->FatalError( ERR_OPENFILE, RscId(), pSysEntry->aFileName.GetBuffer() );

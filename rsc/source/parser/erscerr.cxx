@@ -2,9 +2,9 @@
  *
  *  $RCSfile: erscerr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-06 14:22:12 $
+ *  last change: $Author: hjs $ $Date: 2001-11-06 17:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,8 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstOut( "-lg<language>  Use a different language.\n" );
             StdLstOut( "-pp<filename>  Use a different Preprocessor.\n" );
             StdLstOut( "-rc<filename>  Use a different system resource compiler.\n" );
-            StdLstOut( "-fs<filename>  Renaming of the .res file.\n" );
+            StdLstOut( "-fs<filename>  Name of the .res file.\n" );
+            StdLstOut( "-lip<path>     additional search path for system dependant files\n" );
             StdLstOut( "-fp<filename>  Renaming of the .srs file.\n" );
             StdLstOut( "-fl<filename>  Listing file.\n" );
             StdLstOut( "-fh<filename>  Header file.\n" );
@@ -247,8 +248,9 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstOut( "-SMART        Generate smart names (cxx, hxx).\n" );
             StdLstOut( "-SrsDefault   Only write one language to srs file.\n" );
             StdLstOut( "\nwhen creating multiple .res files in one pass, please give these\n" );
-            StdLstOut( "three options in consecutive blocks:\n    -lg<language> -CHARSET_... -fs<filename>\n" );
-            StdLstOut( "a new block begins when any of these three options is used again.\n" );
+            StdLstOut( "options in consecutive blocks:\n" );
+            StdLstOut( "-lg<language> -CHARSET_... -fs<filename> [-lip<path> [-lip<path>] ]\n" );
+            StdLstOut( "a new block begins when any of the first three options is used again.\n" );
             break;
 
         case ERR_UNKNOWNSW:
