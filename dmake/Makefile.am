@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Makefile.am,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 14:02:08 $
+#   last change: $Author: kz $ $Date: 2004-02-25 13:52:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,8 +60,8 @@
 #
 #*************************************************************************
 
-# require "new" automake >= 1.5
-AUTOMAKE_OPTIONS = 1.5 foreign
+# require "new" automake >= 1.7
+AUTOMAKE_OPTIONS = 1.7 foreign
 
 
 
@@ -82,5 +82,3 @@ EXTRA_DIST = make.c
 
 # set the include path found by configure
 INCLUDES = -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@ -I$(top_srcdir)/@OS_TYPE@ -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@/gnu 
-
-CFLAGS = -O
