@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2002-09-13 14:35:08 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text[ danish ] = "On";
             Text[ swedish ] = "P�";
             Text[ polish ] = "On";
-            Text[ portuguese_brazilian ] = "On";
+            Text[ portuguese_brazilian ] = "Ativado";
             Text[ japanese ] = "オン";
             Text[ korean ] = "사용";
             Text[ chinese_simplified ] = "启动";
@@ -328,7 +328,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text[ danish ] = "Preview";
             Text[ swedish ] = "F�rhandsvisning";
             Text[ polish ] = "Preview";
-            Text[ portuguese_brazilian ] = "Preview";
+            Text[ portuguese_brazilian ] = "Pr�-visualizar";
             Text[ japanese ] = "プレビュー";
             Text[ korean ] = "미리 보기";
             Text[ chinese_simplified ] = "预览";
@@ -1029,7 +1029,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ danish ] = "Tekst";
                 Text[ swedish ] = "Text";
                 Text[ polish ] = "Tekst";
-                Text[ portuguese_brazilian ] = "Text";
+                Text[ portuguese_brazilian ] = "Texto";
                 Text[ japanese ] = "テキスト";
                 Text[ korean ] = "텍스트";
                 Text[ chinese_simplified ] = "文字";
