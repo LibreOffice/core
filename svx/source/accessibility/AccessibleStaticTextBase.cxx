@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-08 13:02:41 $
+ *  last change: $Author: thb $ $Date: 2002-08-09 15:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,26 +318,40 @@ namespace accessibility
     sal_Bool AccessibleStaticTextBase_Impl::SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                           sal_Int32 nEndPara, sal_Int32 nEndIndex )
     {
-        return maTextParagraph.GetEditViewForwarder( sal_True ).SetSelection( MakeSelection(nStartPara, nStartIndex,
-                                                                                            nEndPara, nEndIndex) );
+        try
+        {
+            SvxEditViewForwarder& rCacheVF = maTextParagraph.GetEditViewForwarder( sal_True );
+            return rCacheVF.SetSelection( MakeSelection(nStartPara, nStartIndex, nEndPara, nEndIndex) );
+        }
+        catch( const uno::RuntimeException& )
+        {
+            return sal_False;
+        }
     }
 
     sal_Bool AccessibleStaticTextBase_Impl::CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                       sal_Int32 nEndPara, sal_Int32 nEndIndex )
     {
-        SvxEditViewForwarder& rCacheVF = maTextParagraph.GetEditViewForwarder( sal_True );
-        SvxTextForwarder& rCacheTF = maTextParagraph.GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
-        sal_Bool aRetVal;
+        try
+        {
+            SvxEditViewForwarder& rCacheVF = maTextParagraph.GetEditViewForwarder( sal_True );
+            SvxTextForwarder& rCacheTF = maTextParagraph.GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
+            sal_Bool aRetVal;
 
-        // save current selection
-        ESelection aOldSelection;
+            // save current selection
+            ESelection aOldSelection;
 
-        rCacheVF.GetSelection( aOldSelection );
-        rCacheVF.SetSelection( MakeSelection(nStartPara, nStartIndex, nEndPara, nEndIndex) );
-        aRetVal = rCacheVF.Copy();
-        rCacheVF.SetSelection( aOldSelection ); // restore
+            rCacheVF.GetSelection( aOldSelection );
+            rCacheVF.SetSelection( MakeSelection(nStartPara, nStartIndex, nEndPara, nEndIndex) );
+            aRetVal = rCacheVF.Copy();
+            rCacheVF.SetSelection( aOldSelection ); // restore
 
-        return aRetVal;
+            return aRetVal;
+        }
+        catch( const uno::RuntimeException& )
+        {
+            return sal_False;
+        }
     }
 
     //------------------------------------------------------------------------

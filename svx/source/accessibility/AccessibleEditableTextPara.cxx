@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-02 11:32:39 $
+ *  last change: $Author: thb $ $Date: 2002-08-09 15:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1207,7 +1207,15 @@ namespace accessibility
 
         CheckRange(nStartIndex, nEndIndex);
 
-        return GetEditViewForwarder( sal_True ).SetSelection( MakeSelection(nStartIndex, nEndIndex) );
+        try
+        {
+            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            return rCacheVF.SetSelection( MakeSelection(nStartIndex, nEndIndex) );
+        }
+        catch( const uno::RuntimeException& )
+        {
+            return sal_False;
+        }
     }
 
     ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getText() throw (uno::RuntimeException)
@@ -1317,176 +1325,232 @@ namespace accessibility
     sal_Bool SAL_CALL AccessibleEditableTextPara::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
-        SvxTextForwarder& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
-        sal_Bool aRetVal;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
-                   "AccessibleEditableTextPara::copyText: index value overflow");
+        try
+        {
+            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            SvxTextForwarder& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
+            sal_Bool aRetVal;
 
-        CheckRange(nStartIndex, nEndIndex);
+            DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                       "AccessibleEditableTextPara::copyText: index value overflow");
 
-        // save current selection
-        ESelection aOldSelection;
+            CheckRange(nStartIndex, nEndIndex);
 
-        rCacheVF.GetSelection( aOldSelection );
-        rCacheVF.SetSelection( MakeSelection(nStartIndex, nEndIndex) );
-        aRetVal = rCacheVF.Copy();
-        rCacheVF.SetSelection( aOldSelection ); // restore
+            // save current selection
+            ESelection aOldSelection;
 
-        return aRetVal;
+            rCacheVF.GetSelection( aOldSelection );
+            rCacheVF.SetSelection( MakeSelection(nStartIndex, nEndIndex) );
+            aRetVal = rCacheVF.Copy();
+            rCacheVF.SetSelection( aOldSelection ); // restore
+
+            return aRetVal;
+        }
+        catch( const uno::RuntimeException& )
+        {
+            return sal_False;
+        }
     }
 
     // XAccessibleEditableText
     sal_Bool SAL_CALL AccessibleEditableTextPara::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
-        SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
-                   "AccessibleEditableTextPara::cutText: index value overflow");
+        try
+        {
+            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
-        CheckRange(nStartIndex, nEndIndex);
+            DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                       "AccessibleEditableTextPara::cutText: index value overflow");
 
-        if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
-            return sal_False; // non-editable area selected
+            CheckRange(nStartIndex, nEndIndex);
 
-        // don't save selection, might become invalid after cut!
-        rCacheVF.SetSelection( MakeSelection(nStartIndex, nEndIndex) );
+            if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
+                return sal_False; // non-editable area selected
 
-        return rCacheVF.Cut();
+            // don't save selection, might become invalid after cut!
+            rCacheVF.SetSelection( MakeSelection(nStartIndex, nEndIndex) );
+
+            return rCacheVF.Cut();
+        }
+        catch( const uno::RuntimeException& )
+        {
+            return sal_False;
+        }
     }
 
     sal_Bool SAL_CALL AccessibleEditableTextPara::pasteText( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
-        SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
-                   "AccessibleEditableTextPara::pasteText: index value overflow");
+        try
+        {
+            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
-        CheckPosition(nIndex);
+            DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                       "AccessibleEditableTextPara::pasteText: index value overflow");
 
-        if( !rCacheTF.IsEditable( MakeSelection(nIndex) ) )
-            return sal_False; // non-editable area selected
+            CheckPosition(nIndex);
 
-        // set empty selection (=> cursor) to given index
-        rCacheVF.SetSelection( MakeSelection(nIndex) );
+            if( !rCacheTF.IsEditable( MakeSelection(nIndex) ) )
+                return sal_False; // non-editable area selected
 
-        return rCacheVF.Paste();
+            // set empty selection (=> cursor) to given index
+            rCacheVF.SetSelection( MakeSelection(nIndex) );
+
+            return rCacheVF.Paste();
+        }
+        catch( const uno::RuntimeException& )
+        {
+            return sal_False;
+        }
     }
 
     sal_Bool SAL_CALL AccessibleEditableTextPara::deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
-                   "AccessibleEditableTextPara::deleteText: index value overflow");
+        try
+        {
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
 
-        CheckRange(nStartIndex, nEndIndex);
+            DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                       "AccessibleEditableTextPara::deleteText: index value overflow");
 
-        if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
-            return sal_False; // non-editable area selected
+            CheckRange(nStartIndex, nEndIndex);
 
-        sal_Bool nRet = rCacheTF.Delete( MakeSelection(nStartIndex, nEndIndex) );
+            if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
+                return sal_False; // non-editable area selected
 
-        GetEditSource().UpdateData();
+            sal_Bool bRet = rCacheTF.Delete( MakeSelection(nStartIndex, nEndIndex) );
 
-        return nRet;
+            GetEditSource().UpdateData();
+
+            return bRet;
+        }
+        catch( const uno::RuntimeException& )
+        {
+            return sal_False;
+        }
     }
 
     sal_Bool SAL_CALL AccessibleEditableTextPara::insertText( const ::rtl::OUString& sText, sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
-                   "AccessibleEditableTextPara::insertText: index value overflow");
+        try
+        {
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
 
-        CheckPosition(nIndex);
+            DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                       "AccessibleEditableTextPara::insertText: index value overflow");
 
-        if( !rCacheTF.IsEditable( MakeSelection(nIndex) ) )
-            return sal_False; // non-editable area selected
+            CheckPosition(nIndex);
 
-        // insert given text at empty selection (=> cursor)
-        sal_Bool nRet = rCacheTF.InsertText( sText, MakeSelection(nIndex) );
+            if( !rCacheTF.IsEditable( MakeSelection(nIndex) ) )
+                return sal_False; // non-editable area selected
 
-        rCacheTF.QuickFormatDoc();
-        GetEditSource().UpdateData();
+            // insert given text at empty selection (=> cursor)
+            sal_Bool bRet = rCacheTF.InsertText( sText, MakeSelection(nIndex) );
 
-        return nRet;
+            rCacheTF.QuickFormatDoc();
+            GetEditSource().UpdateData();
+
+            return bRet;
+        }
+        catch( const uno::RuntimeException& )
+        {
+            return sal_False;
+        }
     }
 
     sal_Bool SAL_CALL AccessibleEditableTextPara::replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const ::rtl::OUString& sReplacement ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
-                   "AccessibleEditableTextPara::replaceText: index value overflow");
+        try
+        {
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
 
-        CheckRange(nStartIndex, nEndIndex);
+            DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                       "AccessibleEditableTextPara::replaceText: index value overflow");
 
-        if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
-            return sal_False; // non-editable area selected
+            CheckRange(nStartIndex, nEndIndex);
 
-        // insert given text into given range => replace
-        sal_Bool nRet = rCacheTF.InsertText( sReplacement, MakeSelection(nStartIndex, nEndIndex) );
+            if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
+                return sal_False; // non-editable area selected
 
-        rCacheTF.QuickFormatDoc();
-        GetEditSource().UpdateData();
+            // insert given text into given range => replace
+            sal_Bool bRet = rCacheTF.InsertText( sReplacement, MakeSelection(nStartIndex, nEndIndex) );
 
-        return nRet;
+            rCacheTF.QuickFormatDoc();
+            GetEditSource().UpdateData();
+
+            return bRet;
+        }
+        catch( const uno::RuntimeException& )
+        {
+            return sal_False;
+        }
     }
 
     sal_Bool SAL_CALL AccessibleEditableTextPara::setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const uno::Sequence< beans::PropertyValue >& aAttributeSet ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
-        USHORT nPara = static_cast< USHORT >( GetParagraphIndex() );
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
-                   "AccessibleEditableTextPara::setAttributes: index value overflow");
-
-        CheckRange(nStartIndex, nEndIndex);
-
-        if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
-            return sal_False; // non-editable area selected
-
-        // do the indices span the whole paragraph? Then use the outliner map
-        // TODO: hold it as a member?
-        SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
-                                               0 == nStartIndex &&
-                                               rCacheTF.GetTextLen(nPara) == nEndIndex ?
-                                               ImplGetSvxUnoOutlinerTextCursorPropertyMap() :
-                                               ImplGetSvxTextPortionPropertyMap() );
-
-        aPropSet.SetSelection( MakeSelection(nStartIndex, nEndIndex) );
-
-        // convert from PropertyValue to Any
-        sal_Int32 i, nLength( aAttributeSet.getLength() );
-        const beans::PropertyValue* pPropArray = aAttributeSet.getConstArray();
-        for(i=0; i<nLength; ++i)
+        try
         {
-            try
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
+            USHORT nPara = static_cast< USHORT >( GetParagraphIndex() );
+
+            DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                       "AccessibleEditableTextPara::setAttributes: index value overflow");
+
+            CheckRange(nStartIndex, nEndIndex);
+
+            if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
+                return sal_False; // non-editable area selected
+
+            // do the indices span the whole paragraph? Then use the outliner map
+            // TODO: hold it as a member?
+            SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
+                                                   0 == nStartIndex &&
+                                                   rCacheTF.GetTextLen(nPara) == nEndIndex ?
+                                                   ImplGetSvxUnoOutlinerTextCursorPropertyMap() :
+                                                   ImplGetSvxTextPortionPropertyMap() );
+
+            aPropSet.SetSelection( MakeSelection(nStartIndex, nEndIndex) );
+
+            // convert from PropertyValue to Any
+            sal_Int32 i, nLength( aAttributeSet.getLength() );
+            const beans::PropertyValue* pPropArray = aAttributeSet.getConstArray();
+            for(i=0; i<nLength; ++i)
             {
-                aPropSet.setPropertyValue(pPropArray->Name, pPropArray->Value);
-            }
-            catch( const uno::Exception& )
-            {
-                DBG_ERROR("AccessibleEditableTextPara::setAttributes exception in setPropertyValue");
+                try
+                {
+                    aPropSet.setPropertyValue(pPropArray->Name, pPropArray->Value);
+                }
+                catch( const uno::Exception& )
+                {
+                    DBG_ERROR("AccessibleEditableTextPara::setAttributes exception in setPropertyValue");
+                }
+
+                ++pPropArray;
             }
 
-            ++pPropArray;
+            rCacheTF.QuickFormatDoc();
+            GetEditSource().UpdateData();
+
+            return sal_True;
         }
-
-        rCacheTF.QuickFormatDoc();
-        GetEditSource().UpdateData();
-
-        return sal_True;
+        catch( const uno::RuntimeException& )
+        {
+            return sal_False;
+        }
     }
 
     sal_Bool SAL_CALL AccessibleEditableTextPara::setText( const ::rtl::OUString& sText ) throw (uno::RuntimeException)
