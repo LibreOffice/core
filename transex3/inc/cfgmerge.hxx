@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-03 14:39:30 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,23 @@
 
 #include <tools/string.hxx>
 #include <tools/list.hxx>
+#include <hash_map>
 
+/*struct equalByteString{
+        bool operator()( const ByteString& rKey1, const ByteString& rKey2 ) const {
+            return rKey1.CompareTo( rKey2 )==COMPARE_EQUAL;
+    }
+};
+
+struct hashByteString{
+    size_t operator()( const ByteString& rName ) const{
+                std::hash< const char* > myHash;
+                return myHash( rName.GetBuffer() );
+    }
+};
+*/
+typedef std::hash_map<ByteString , ByteString , hashByteString,equalByteString>
+                                ByteStringHashMap;
 
 //=============================================
 
@@ -86,8 +102,8 @@ private:
     ByteString sTextTag;
     ByteString sEndTextTag;
 
-    ByteString sText[ LANGUAGES ];
-
+    //ByteString sText[ LANGUAGES ];
+    ByteStringHashMap sText;
 public:
     CfgStackData( const ByteString &rTag, const ByteString &rId )
             : sTagType( rTag ), sIdentifier( rId ) {};
@@ -140,7 +156,8 @@ protected:
 
     virtual void WorkOnText(
         ByteString &rText,
-        USHORT nLangIndex,
+        //USHORT nLangIndex,
+        ByteString nLangIndex,
         const ByteString &rResTyp );
 
     virtual void WorkOnRessourceEnd();
@@ -151,6 +168,7 @@ protected:
 
 private:
     int ExecuteAnalyzedToken( int nToken, char *pToken );
+    std::vector<ByteString> aLanguages;
     void AddText(
         ByteString &rText,
         const ByteString &rIsoLang,
@@ -187,7 +205,7 @@ class CfgExport : public CfgOutputParser
 private:
     ByteString sPrj;
     ByteString sPath;
-
+    std::vector<ByteString> aLanguages;
 protected:
     virtual void WorkOnText(
         ByteString &rText,
@@ -213,6 +231,7 @@ class CfgMerge : public CfgOutputParser
 {
 private:
     MergeDataFile *pMergeDataFile;
+    std::vector<ByteString> aLanguages;
     ResData *pResData;
 
     BOOL bGerman;
@@ -221,7 +240,8 @@ private:
 protected:
     virtual void WorkOnText(
         ByteString &rText,
-        USHORT nLangIndex,
+        //USHORT nLangIndex,
+        ByteString nLangIndex,
         const ByteString &rResTyp );
 
     virtual void WorkOnRessourceEnd();
