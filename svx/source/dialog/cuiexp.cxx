@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cuiexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 11:31:18 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,11 @@
 
 namespace cui
 {
-    static AbstractDialogFactory* pFactory=NULL;
-    AbstractDialogFactory* GetFactory()
+    static AbstractDialogFactory_Impl* pFactory=NULL;
+    AbstractDialogFactory_Impl* GetFactory()
     {
         if ( !pFactory )
-            pFactory = new AbstractDialogFactory;
+            pFactory = new AbstractDialogFactory_Impl;
         return pFactory;
     }
 };
