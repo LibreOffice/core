@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:16:20 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,6 @@
 #endif
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
