@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:34:26 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ class ScXMLExportDataPilot
     void WriteDatePart(sal_Int32 nPart);
     void WriteNumGroupInfo(const ScDPNumGroupInfo& pGroupInfo);
     void WriteGroupDimAttributes(const ScDPSaveGroupDimension* pGroupDim);
-    void WriteGroupDimElements(const ScDPSaveGroupDimension* pGroupDim);
+    void WriteGroupDimElements(ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
     void WriteNumGroupDim(const ScDPSaveNumGroupDimension* pNumGroupDim);
     void WriteDimension(ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
     void WriteDimensions(ScDPSaveData* pDPSave);
