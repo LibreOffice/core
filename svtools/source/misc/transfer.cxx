@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-21 09:19:00 $
+ *  last change: $Author: obr $ $Date: 2001-05-25 11:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -856,10 +856,12 @@ void TransferableHelper::CopyToClipboard( Window *pWindow ) const
 {
     Reference< XClipboard > xClipboard;
 
-    DBG_ASSERT( pWindow, "Window pointer is NULL" );
+//    DBG_ASSERT( pWindow, "Window pointer is NULL" );
 
     if( pWindow )
         xClipboard = pWindow->GetClipboard();
+
+#if 0 // GPF
     else
     {
         // temporary fix: as long as it is not ensured that pWindow is not null,
@@ -868,6 +870,7 @@ void TransferableHelper::CopyToClipboard( Window *pWindow ) const
         xClipboard = pTmpWin->GetClipboard();
         delete pTmpWin;
     }
+#endif
 
     if( xClipboard.is() )
         mxClipboard = xClipboard;
@@ -1751,13 +1754,15 @@ void TransferableDataHelper::StopClipboardListening( )
 
 TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window * pWindow )
 {
-    DBG_ASSERT( pWindow, "Window pointer is NULL" );
+//  DBG_ASSERT( pWindow, "Window pointer is NULL" );
 
        TransferableDataHelper   aRet;
     Reference< XClipboard > xClipboard;
 
     if( pWindow )
         xClipboard = pWindow->GetClipboard();
+
+#if 0 // GPF
     else
     {
         // temporary fix: as long as it is not ensured that pWindow is not null,
@@ -1766,6 +1771,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window
         xClipboard = pTmpWin->GetClipboard();
         delete pTmpWin;
     }
+#endif
 
     if( xClipboard.is() )
        {
