@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tstMgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2001-04-18 14:48:35 $
+ *  last change: $Author: ganaya $ $Date: 2001-05-04 04:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@ using namespace rtl;
 // <namespace_tstutl>
 namespace tstutl {
 
-typedef void* ( tstFunc )( tRes* );
-void test_Entry_Impl( ::osl::Module& oMod, tRes* oRes );
+typedef void* ( tstFunc )( TestResult* );
+void test_Entry_Impl( ::osl::Module& oMod, TestResult* oRes );
 
 // <private_members>
 struct tstMgr::tstMgr_Impl {
@@ -115,7 +115,7 @@ sal_Bool tstMgr::test_Entries( vector< sal_Char* > entries,
         log.open();
             while ( iter != entries.end() ) {
                 if ( *iter[0] != '#' ) {
-                    ::rtl::tRes oRes( *iter, pImpl->m_boom );
+                    ::rtl::TestResult oRes( *iter, pImpl->m_boom );
                     test_Entry_Impl( pImpl->m_tstmodule, &oRes );
                     bOK &= oRes.getState();
                     log.writeRes( oRes );
@@ -133,7 +133,7 @@ sal_Bool tstMgr::test_Entry( sal_Char* entry, sal_Char* logName ) {
     tLog log( logName );
     // open testLog
     log.open();
-    ::rtl::tRes oRes( entry, pImpl->m_boom );
+    ::rtl::TestResult oRes( entry, pImpl->m_boom );
     test_Entry_Impl( pImpl->m_tstmodule, &oRes );
     log.writeRes( oRes, sal_True );
     log.close();
@@ -173,7 +173,7 @@ void tstMgr::cleanup() {
 
 
 // <function_test_Entry_Impl>
-void test_Entry_Impl( ::osl::Module& oMod, ::rtl::tRes* oRes ) {
+void test_Entry_Impl( ::osl::Module& oMod, ::rtl::TestResult* oRes ) {
 
     tstFunc* pFunc;                             // entry pointer
     ::rtl::OString entryName( "test_" );        // entryname prefix

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tlog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sz $ $Date: 2001-04-12 10:54:54 $
+ *  last change: $Author: ganaya $ $Date: 2001-05-04 04:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ void tLog::initialize( const ::rtl::OString& name ) {
 } // </method_close>
 
 // <method_writeRes>
-::osl::FileBase::RC tLog::writeRes( ::rtl::tRes& oRes, sal_Bool v, sal_Bool xml ) {
+::osl::FileBase::RC tLog::writeRes( ::rtl::TestResult& oRes, sal_Bool v, sal_Bool xml ) {
     ::osl::FileBase::RC ret;
 
     sal_Char* ptr = oRes.getName();
