@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-28 15:52:31 $
+ *  last change: $Author: ab $ $Date: 2001-06-29 14:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,8 +786,6 @@ void BasicManager::SetImpl( BasicManagerImpl* pImpl )
             {
                 OUString aLibName = pNames[ i ];
                 Any aLibAny = xScriptCont->getByName( aLibName );
-                Reference< XNameAccess > xLibNameAccess;
-                aLibAny >>= xLibNameAccess;
 
                 if( String( aLibName ).EqualsAscii( "Standard" ) )
                     xScriptCont->loadLibrary( aLibName );
