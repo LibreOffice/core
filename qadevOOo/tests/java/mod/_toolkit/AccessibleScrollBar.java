@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleScrollBar.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-03-25 14:41:23 $
+ *  last change:$Date: 2003-03-25 14:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import drafts.com.sun.star.accessibility.AccessibleRole;
 import drafts.com.sun.star.accessibility.XAccessible;
+import drafts.com.sun.star.accessibility.XAccessibleAction;
 import drafts.com.sun.star.accessibility.XAccessibleComponent;
 import lib.StatusException;
 import lib.TestCase;
@@ -192,8 +193,8 @@ public class AccessibleScrollBar extends TestCase {
         oObj = at.getAccessibleObjectForRole(xRoot,
             AccessibleRole.SCROLLBAR);
 
-        final XAccessibleComponent acomp = (XAccessibleComponent)
-                    UnoRuntime.queryInterface(XAccessibleComponent.class,oObj);
+        final XAccessibleAction act = (XAccessibleAction)
+                    UnoRuntime.queryInterface(XAccessibleAction.class,oObj);
 
         log.println("ImplementationName: "+ util.utils.getImplName(oObj));
 
@@ -202,7 +203,9 @@ public class AccessibleScrollBar extends TestCase {
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
                 public void fireEvent() {
-                    acomp.grabFocus();
+                    try {
+                        act.doAccessibleAction(1);
+                    } catch (Exception e) {}
                 }
             });
 
