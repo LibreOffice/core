@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-16 12:32:03 $
+ *  last change: $Author: sab $ $Date: 2001-10-19 11:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,10 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
+
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -228,7 +232,7 @@ sal_Char __READONLY_DATA sXML_1_0[] = "1.0";
 #define XML_MODEL_SERVICE_MATH      "com.sun.star.formula.FormulaProperties"
 #define XML_MODEL_SERVICE_CHART     "com.sun.star.chart.ChartDocument"
 
-
+#define XML_USEPRETTYPRINTING "UsePrettyPrinting"
 
 struct XMLServiceMapEntry_Impl
 {
@@ -543,18 +547,30 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         if(xNumberFormatsSupplier.is() && xHandler.is())
             pNumExport = new SvXMLNumFmtExport(xHandler, xNumberFormatsSupplier);
     }
-    if (xExportInfo.is() && pNumExport && (mnExportFlags & (EXPORT_AUTOSTYLES | EXPORT_STYLES)))
+    if (xExportInfo.is())
     {
         uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xExportInfo->getPropertySetInfo();
         if (xPropertySetInfo.is())
         {
-            OUString sWrittenNumberFormats(RTL_CONSTASCII_USTRINGPARAM(XML_WRITTENNUMBERSTYLES));
-            if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
+            OUString sUsePrettyPrinting(RTL_CONSTASCII_USTRINGPARAM(XML_USEPRETTYPRINTING));
+            if (xPropertySetInfo->hasPropertyByName(sUsePrettyPrinting))
             {
-                uno::Any aAny = xExportInfo->getPropertyValue(sWrittenNumberFormats);
-                uno::Sequence<sal_Int32> aWasUsed;
-                if(aAny >>= aWasUsed)
-                    pNumExport->SetWasUsed(aWasUsed);
+                uno::Any aAny = xExportInfo->getPropertyValue(sUsePrettyPrinting);
+                if (::cppu::any2bool(aAny))
+                    mnExportFlags |= EXPORT_PRETTY;
+                else
+                    mnExportFlags &= ~EXPORT_PRETTY;
+            }
+            if (pNumExport && (mnExportFlags & (EXPORT_AUTOSTYLES | EXPORT_STYLES)))
+            {
+                OUString sWrittenNumberFormats(RTL_CONSTASCII_USTRINGPARAM(XML_WRITTENNUMBERSTYLES));
+                if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
+                {
+                    uno::Any aAny = xExportInfo->getPropertyValue(sWrittenNumberFormats);
+                    uno::Sequence<sal_Int32> aWasUsed;
+                    if(aAny >>= aWasUsed)
+                        pNumExport->SetWasUsed(aWasUsed);
+                }
             }
         }
     }
@@ -1611,7 +1627,7 @@ void SvXMLExport::StartElement(const OUString& rName,
     {
         try
         {
-            if( bIgnWSOutside )
+            if( bIgnWSOutside && ((mnExportFlags & EXPORT_PRETTY) == EXPORT_PRETTY))
                 xHandler->ignorableWhitespace( sWS );
             xHandler->startElement( rName, GetXAttrList() );
         }
@@ -1658,7 +1674,7 @@ void SvXMLExport::EndElement(const OUString& rName,
     {
         try
         {
-            if( bIgnWSInside )
+            if( bIgnWSInside && ((mnExportFlags & EXPORT_PRETTY) == EXPORT_PRETTY))
                 xHandler->ignorableWhitespace( sWS );
             xHandler->endElement( rName );
         }
@@ -1674,6 +1690,9 @@ void SvXMLExport::EndElement(const OUString& rName,
 
 void SvXMLExport::IgnorableWhitespace()
 {
+    if ((mnExportFlags & EXPORT_PRETTY) != EXPORT_PRETTY)
+        return;
+
     if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)
     {
         try
