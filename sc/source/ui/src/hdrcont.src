@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:39:08 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 21:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@
         /* ### ACHTUNG: Neuer Text in Resource? Einf¸gen : Einf≥gen */\
         Text = "E~inf¸gen" ; \
         Text [ ENGLISH ] = "Paste" ; \
-        Text [ finnish ] = "L~iit‰" ; \
+        Text [ finnish ] = "L~iit?" ; \
         Text [ danish ] = "SÊt i~nd" ; \
         Text [ french ] = "~InsÈrer" ; \
         Text [ swedish ] = "Klistra ~in" ; \
@@ -199,13 +199,13 @@ Menu RID_POPUP_ROWHEADER
             /* ### ACHTUNG: Neuer Text in Resource? Zeilenhˆhe... : Zeilenh˜he... */
             Text = "Zeile~nhˆhe..." ;
             Text [ ENGLISH ] = "Row height..." ;
-            Text [ finnish ] = "~Korkeus" ;
+            Text [ finnish ] = "~Korkeus..." ;
             Text [ danish ] = "RÊkkeh¯jde..." ;
             Text [ french ] = "Hauteur ~de ligne..." ;
             Text [ swedish ] = "R~adhˆjd..." ;
             Text [ dutch ] = "~Rijhoogte..." ;
             Text [ spanish ] = "~Altura de fila..." ;
-            Text [ english_us ] = "~Height..." ;
+            Text [ english_us ] = "Hei~ght..." ;
             /* ### ACHTUNG: Neuer Text in Resource? Zeilenhˆhe ‰ndern : Zeilenh˜he ındern */
             Text [ italian ] = "Altezza riga..." ;
             Text [ portuguese ] = "Altu~ra da linha..." ;
@@ -229,7 +229,7 @@ Menu RID_POPUP_ROWHEADER
             /* ### ACHTUNG: Neuer Text in Resource? Optimale Zeilenhˆhe... : Optimale Zeilenh˜he... */
             Text = "~Optimale Zeilenhˆhe..." ;
             Text [ ENGLISH ] = "Optimize row height..." ;
-            Text [ finnish ] = "~Optimaalinen rivikorkeus" ;
+            Text [ finnish ] = "~Optimaalinen rivikorkeus..." ;
             Text [ danish ] = "Optimal rÊkkeh¯jde..." ;
             Text [ french ] = "Hauteur de ligne ~optimale..." ;
             Text [ swedish ] = "~Optimal radhˆjd..." ;
@@ -262,7 +262,7 @@ Menu RID_POPUP_ROWHEADER
             /* ### ACHTUNG: Neuer Text in Resource? Zeilen einf¸gen : Zeilen einf≥gen */
             Text = "Zeilen ~einf¸gen" ;
             Text [ ENGLISH ] = "Insert rows" ;
-            Text [ finnish ] = "~Lis‰‰ rivit" ;
+            Text [ finnish ] = "~Lis?? rivit" ;
             Text [ danish ] = "IndsÊt rÊkker" ;
             Text [ french ] = "I~nsÈrer des lignes" ;
             Text [ swedish ] = "Infoga rad~er" ;
@@ -326,7 +326,7 @@ Menu RID_POPUP_ROWHEADER
             Text [ italian ] = "Canc~ella contenuti..." ;
             Text [ portuguese_brazilian ] = "Apa~gar Dados..." ;
             Text [ portuguese ] = "Eli~minar conte˙dos..." ;
-            Text [ finnish ] = "~Poista sis‰llˆt" ;
+            Text [ finnish ] = "~Poista sis?ll?..." ;
             Text [ danish ] = "Slet indhold..." ;
             Text [ french ] = "S~upprimer du contenu..." ;
             Text [ swedish ] = "Radera innehÂ~ll..." ;
@@ -383,7 +383,7 @@ Menu RID_POPUP_ROWHEADER
             HelpId = FID_ROW_SHOW ;
             Text = "Ein~blenden" ;
             Text [ ENGLISH ] = "Show" ;
-            Text [ finnish ] = "~N‰yt‰" ;
+            Text [ finnish ] = "~N?yt?" ;
             Text [ danish ] = "Vis" ;
             Text [ french ] = "~Afficher" ;
             Text [ swedish ] = "~Visa" ;
@@ -420,13 +420,13 @@ Menu RID_POPUP_ROWHEADER
             Text [ italian ] = "Incolla ~speciale..." ;
             Text [ portuguese_brazilian ] = "Colar ~Especial..." ;
             Text [ portuguese ] = "Colar e~special..." ;
-            Text [ finnish ] = "~Liit‰ m‰‰r‰ten" ;
+            Text [ finnish ] = "Liit? ~m??r?ten" ;
             Text [ danish ] = "IndsÊt ind~hold..." ;
             Text [ french ] = "Colla~ge spÈcial..." ;
             Text [ swedish ] = "Klistra in inne~hÂll..." ;
             Text [ dutch ] = "Plakken ~speciaal..." ;
             Text [ spanish ] = "Peg~ado especial..." ;
-            Text [ english_us ] = "Paste ~Special..." ;
+            Text [ english_us ] = "P~aste Special..." ;
             Text[ russian ] = "~—ÔÂˆË‡Î¸Ì‡ˇ ‚ÒÚ‡‚Í‡...";
             Text[ polish ] = "~Wstaw zawartoúÊ...";
             Text[ japanese ] = "ÂΩ¢Âºè„ÇíÈÅ∏Êäû„Åó„Å¶Ë≤º„Çä‰ªò„Åë(~S)...";
@@ -457,7 +457,7 @@ Menu RID_POPUP_COLHEADER
             HelpId = FID_COL_WIDTH ;
             Text = "Spalte~nbreite..." ;
             Text [ ENGLISH ] = "Column width..." ;
-            Text [ finnish ] = "~Sarakkeen leveys" ;
+            Text [ finnish ] = "~Sarakkeen leveys..." ;
             Text [ danish ] = "Kolonnebredde..." ;
             Text [ french ] = "L~argeur de colonne..." ;
             Text [ swedish ] = "Kolum~nbredd..." ;
@@ -486,7 +486,7 @@ Menu RID_POPUP_COLHEADER
             HelpId = FID_COL_OPT_WIDTH ;
             Text = "~Optimale Spaltenbreite..." ;
             Text [ ENGLISH ] = "Optimize column width..." ;
-            Text [ finnish ] = "~Optimaalinen sarakkeen leveys" ;
+            Text [ finnish ] = "~Optimaalinen sarakkeen leveys..." ;
             Text [ danish ] = "Optimal kolonnebredde..." ;
             Text [ french ] = "Largeur de colonne optimale..." ;
             Text [ swedish ] = "~Optimal kolumnbredd..." ;
@@ -518,7 +518,7 @@ Menu RID_POPUP_COLHEADER
             /* ### ACHTUNG: Neuer Text in Resource? Spalten einf¸gen : Spalten einf≥gen */
             Text = "Spalten ~einf¸gen" ;
             Text [ ENGLISH ] = "Insert columns" ;
-            Text [ finnish ] = "~Lis‰‰ sarakkeet" ;
+            Text [ finnish ] = "~Lis?? sarakkeet" ;
             Text [ danish ] = "IndsÊt kolonner" ;
             Text [ french ] = "I~nsÈrer des colonnes" ;
             Text [ swedish ] = "Infoga ~kolumner" ;
@@ -582,7 +582,7 @@ Menu RID_POPUP_COLHEADER
             Text [ italian ] = "Can~cella contenuti..." ;
             Text [ portuguese_brazilian ] = "Apa~gar Dados..." ;
             Text [ portuguese ] = "Eliminar co~nte˙dos..." ;
-            Text [ finnish ] = "~Poista sis‰llˆt" ;
+            Text [ finnish ] = "Pois~ta sis?lt?" ;
             Text [ danish ] = "Slet indhold..." ;
             Text [ french ] = "~Supprimer du contenu..." ;
             Text [ swedish ] = "Radera ~innehÂll..." ;
@@ -639,7 +639,7 @@ Menu RID_POPUP_COLHEADER
             HelpId = FID_COL_SHOW ;
             Text = "Ein~blenden" ;
             Text [ ENGLISH ] = "Show" ;
-            Text [ finnish ] = "~N‰yt‰" ;
+            Text [ finnish ] = "~N?yt?" ;
             Text [ danish ] = "Vis" ;
             Text [ french ] = "A~fficher" ;
             Text [ swedish ] = "~Visa" ;
@@ -676,7 +676,7 @@ Menu RID_POPUP_COLHEADER
             Text [ italian ] = "Incolla ~speciale..." ;
             Text [ portuguese_brazilian ] = "Colar ~Especial..." ;
             Text [ portuguese ] = "Colar e~special..." ;
-            Text [ finnish ] = "~Liit‰ m‰‰r‰ten" ;
+            Text [ finnish ] = "Liit? ~m??r?ten" ;
             Text [ danish ] = "IndsÊt ind~hold..." ;
             Text [ french ] = "Colla~ge spÈcial..." ;
             Text [ swedish ] = "Klistra in inne~hÂll..." ;
@@ -696,6 +696,7 @@ Menu RID_POPUP_COLHEADER
         };
     };
 };
+
 
 
 
