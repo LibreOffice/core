@@ -229,8 +229,8 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     }
 
     /**
-     * This initializes a font table so we can imcluide some basic font
-     * support for spreadsheets
+     * This initializes a font table so we can imclude some basic font
+     * support for spreadsheets.
      *
      */
     private void initFontTable() {
