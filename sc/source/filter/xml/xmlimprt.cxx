@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:57:41 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 14:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1819,7 +1819,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
     uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
     if (xMultiServiceFactory.is())
     {
-        uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.DocumentConfiguration")));
+        uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.SpreadsheetSettings")));
         uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
         if (xProperties.is())
             SvXMLUnitConverter::convertPropertySet(xProperties, aConfigProps);
