@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:59:33 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,6 +521,7 @@ void OCacheSet::setParameter(sal_Int32 nPos
                     _xParameter->setString(nPos,_rValue);
                 break;
             case DataType::BIT:
+            case DataType::BOOLEAN:
                 _xParameter->setBoolean(nPos,_rValue);
                 break;
             case DataType::TINYINT:
@@ -838,6 +839,7 @@ void OCacheSet::fetchValue(sal_Int32 _nPos,sal_Int32 _nType,const Reference<XRow
         _rValue = _xRow->getBytes(_nPos);
         break;
     case DataType::BIT:
+    case DataType::BOOLEAN:
         _rValue = _xRow->getBoolean(_nPos);
         break;
     case DataType::TINYINT:
