@@ -2,9 +2,9 @@
  *
  *  $RCSfile: corframe.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:01:54 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@ class CorporateFrame
 
     virtual const char *
                         CssStyle() const = 0;
+    virtual const char *
+                        CssStylesExplanation() const = 0;
     virtual const char *
                         DevelopersGuideHtmlRoot() const = 0;
     virtual bool        SimpleLinks() const = 0;
