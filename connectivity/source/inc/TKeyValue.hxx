@@ -2,9 +2,9 @@
  *
  *  $RCS: $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:18:21 $
+ *  last change: $Author: oj $ $Date: 2002-04-19 13:24:05 $
  *
  *  The Contents of this  are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,15 @@ namespace connectivity
         OKeyValue() { }
         OKeyValue(sal_Int32 nVal) : m_nValue(nVal) {}
         ~OKeyValue(){}
+
+        inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+            { return ::rtl_allocateMemory( nSize ); }
+        inline static void * SAL_CALL operator new( size_t nSize,const void* _pHint ) SAL_THROW( () )
+            { return (void *)_pHint; }
+        inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+            { ::rtl_freeMemory( pMem ); }
+        inline static void SAL_CALL operator delete( void * pMem,const void* _pHint ) SAL_THROW( () )
+            {  }
 
         inline void pushKey(const ORowSetValueDecoratorRef& _aValueRef)
         {
