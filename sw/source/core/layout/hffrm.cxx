@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 14:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ extern FASTBOOL bObjsDirect;    //frmtool.cxx
 SwHeaderFrm::SwHeaderFrm( SwFrmFmt *pFmt ):
     SwLayoutFrm( pFmt )
 {
-    nType = FRM_HEADER;
+    nType = FRMC_HEADER;
 
     const SwFmtCntnt &rCnt = pFmt->GetCntnt();
 
@@ -150,7 +150,7 @@ SwTwips SwHeaderFrm::ShrinkFrm( SwTwips nDist, const SzPtr pPtr,
 SwFooterFrm::SwFooterFrm( SwFrmFmt *pFmt ):
     SwLayoutFrm( pFmt )
 {
-    nType = FRM_FOOTER;
+    nType = FRMC_FOOTER;
 
     const SwFmtCntnt &rCnt = pFmt->GetCntnt();
 

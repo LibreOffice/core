@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-21 15:17:53 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 14:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     bLayout( FALSE ),
     bAutoPosition( FALSE )
 {
-    nType = FRM_FLY;
+    nType = FRMC_FLY;
 
     bInvalid = bNotifyBack = TRUE;
     bLocked  = bMinHeight =

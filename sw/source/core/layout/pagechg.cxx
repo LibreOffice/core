@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-10 09:11:26 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 14:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@
 SwBodyFrm::SwBodyFrm( SwFrmFmt *pFmt ):
     SwLayoutFrm( pFmt )
 {
-    nType = FRM_BODY;
+    nType = FRMC_BODY;
 }
 
 /*************************************************************************
@@ -193,7 +193,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
 {
     SetMaxFtnHeight( pPgDsc->GetFtnInfo().GetHeight() ?
                      pPgDsc->GetFtnInfo().GetHeight() : LONG_MAX ),
-    nType = FRM_PAGE;
+    nType = FRMC_PAGE;
     bInvalidLayout = bInvalidCntnt = bInvalidSpelling = TRUE;
     bInvalidFlyLayout = bInvalidFlyCntnt = bInvalidFlyInCnt =
     bFtnPage = bEndNotePage = FALSE;
@@ -285,6 +285,26 @@ SwPageFrm::~SwPageFrm()
         }
     }
 }
+
+#ifdef VERTICAL_LAYOUT
+
+void SwPageFrm::CheckDirection( BOOL bVert )
+{
+    if( bVert )
+    {
+        if( GetFmt()->GetName().GetChar(0)=='X')
+            bVertical = 1;
+        bInvalidVert = 0;
+    }
+    else
+    {
+        if( GetFmt()->GetName().GetChar(1)=='x')
+            bRightToLeft = 1;
+        bInvalidR2L = 0;
+    }
+}
+
+#endif
 
 /*************************************************************************
 |*

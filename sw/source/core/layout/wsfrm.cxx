@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-23 10:59:34 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 14:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,6 @@ static void CheckRootSize( SwFrm *pRoot )
 |*
 |*************************************************************************/
 
-
 SwFrm::SwFrm( SwModify *pMod ) :
     SwClient( pMod ),
     pPrev( 0 ),
@@ -179,6 +178,9 @@ SwFrm::SwFrm( SwModify *pMod ) :
 #endif
 {
 #ifndef PRODUCT
+#ifdef VERTICAL_LAYOUT
+    bFlag01 = bFlag02 = bFlag03 = bFlag04 = bFlag05 = bFlag06 = 0;
+#endif
 #ifdef DEBUG
     static USHORT nStopAt = USHRT_MAX;
     if ( nFrmId == nStopAt )
@@ -189,11 +191,25 @@ SwFrm::SwFrm( SwModify *pMod ) :
 #endif
 
     ASSERT( pMod, "Kein Frameformat uebergeben." );
+#ifdef VERTICAL_LAYOUT
+    bInvalidR2L = bInvalidVert = bDerivedR2L = bDerivedVert = 1;
+    bRightToLeft = bVertical = 0;
+#endif
     bValidPos = bValidPrtArea = bValidSize = bValidLineNum = bRetouche =
     bFixHeight = bFixWidth = bColLocked = FALSE;
     bCompletePaint = bInfInvalid = bVarHeight = TRUE;
 }
 
+#ifdef VERTICAL_LAYOUT
+void SwFrm::CheckDirection( BOOL bVert )
+{
+    if( bVert )
+        bDerivedVert = 1;
+    else
+        bDerivedR2L = 1;
+    SetDirFlags( bVert );
+}
+#endif
 /*************************************************************************
 |*
 |*  SwFrm::Modify()
@@ -1901,8 +1917,6 @@ SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt ):
     SwFrm( pFmt ),
     pLower( 0 )
 {
-    nType = FRM_LAYOUT;
-
     const SwFmtFrmSize &rFmtSize = pFmt->GetFrmSize();
     if ( rFmtSize.GetSizeType() == ATT_FIX_SIZE )
         bFixHeight = TRUE;

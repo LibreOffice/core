@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-02 10:41:34 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 14:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     pDrawPage( 0 ),
     nBrowseWidth( MM50*4 )  //2cm Minimum
 {
-    nType = FRM_ROOT;
+    nType = FRMC_ROOT;
     bIdleFormat = bTurboAllowed = bAssertFlyPages = bIsNewLayout = TRUE;
     bCheckSuperfluous = bBrowseWidthValid = FALSE;
 

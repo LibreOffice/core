@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 10:21:33 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 14:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ SwTabFrm::SwTabFrm( SwTable &rTab ):
     bComplete = bCalcLowers = bONECalcLowers = bLowersFormatted = bLockBackMove =
     bResizeHTMLTable = FALSE;
     bFixHeight = FALSE;     //Nicht nochmal auf die Importfilter hereinfallen.
-    nType = FRM_TAB;
+    nType = FRMC_TAB;
 
     //Gleich die Zeilen erzeugen und einfuegen.
     const SwTableLines &rLines = rTab.GetTabLines();
@@ -176,7 +176,7 @@ SwTabFrm::SwTabFrm( SwTabFrm &rTab ) :
     bLockJoin = bComplete = bONECalcLowers = bCalcLowers = bLowersFormatted = bLockBackMove =
     bResizeHTMLTable = FALSE;
     bFixHeight = FALSE;     //Nicht nochmal auf die Importfilter hereinfallen.
-    nType = FRM_TAB;
+    nType = FRMC_TAB;
 
     SetFollow( rTab.GetFollow() );
     rTab.SetFollow( this );
@@ -1885,7 +1885,7 @@ SwRowFrm::SwRowFrm( const SwTableLine &rLine ):
     SwLayoutFrm( rLine.GetFrmFmt() ),
     pTabLine( &rLine )
 {
-    nType = FRM_ROW;
+    nType = FRMC_ROW;
 
     //Gleich die Boxen erzeugen und einfuegen.
     const SwTableBoxes &rBoxes = rLine.GetTabBoxes();
@@ -2312,7 +2312,7 @@ SwCellFrm::SwCellFrm( const SwTableBox &rBox ) :
     SwLayoutFrm( rBox.GetFrmFmt() ),
     pTabBox( &rBox )
 {
-    nType = FRM_CELL;
+    nType = FRMC_CELL;
 
     //Wenn ein StartIdx vorhanden ist, so werden CntntFrms in der Zelle
     //angelegt, andernfalls muessen Rows vorhanden sein und diese werden

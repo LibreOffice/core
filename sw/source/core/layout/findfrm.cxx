@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-06-15 11:37:53 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 14:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1094,6 +1094,43 @@ void SwFrm::SetInfFlags()
 
     } while ( pFrm && !pFrm->IsPageFrm() ); //Oberhalb der Seite kommt nix
 }
+
+#ifdef VERTICAL_LAYOUT
+
+/*-----------------22.8.2001 14:30------------------
+ * SwFrm::SetDirFlags( BOOL )
+ * actualizes the vertical or the righttoleft-flags.
+ * If the property is derived, it's from the upper or (for fly frames) from
+ * the anchor. Otherwise we've to call a virtual method to check the property.
+ * --------------------------------------------------*/
+
+void SwFrm::SetDirFlags( BOOL bVert )
+{
+    if( bVert )
+    {
+        if( bDerivedVert )
+        {
+            SwFrm* pAsk = IsFlyFrm() ?
+                          GetUpper() : ((SwFlyFrm*)this)->GetAnchor();
+            bVertical = pAsk && pAsk->IsVertical() ? 1 : 0;
+        }
+        else
+            CheckDirection( bVert );
+        bInvalidVert = 0;
+    }
+    else
+    {
+        if( bDerivedR2L )
+        {
+            SwFrm* pAsk = IsFlyFrm() ?
+                          GetUpper() : ((SwFlyFrm*)this)->GetAnchor();
+            bRightToLeft = pAsk && pAsk->IsRightToLeft() ? 1 : 0;
+        }
+        bInvalidR2L = 0;
+    }
+}
+
+#endif
 
 /*************************************************************************
 |*

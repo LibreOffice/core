@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-06-22 11:40:48 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 14:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ SwSectionFrm::SwSectionFrm( SwSection &rSect ) :
     SwFlowFrm( (SwFrm&)*this ),
     pSection( &rSect )
 {
-    nType = FRM_SECTION;
+    nType = FRMC_SECTION;
 
     CalcFtnAtEndFlag();
     CalcEndAtEndFlag();
@@ -159,7 +159,7 @@ SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, BOOL bMaster ) :
     bFtnAtEnd = rSect.IsFtnAtEnd();
     bEndnAtEnd = rSect.IsEndnAtEnd();
     bLockJoin = FALSE;
-    nType = FRM_SECTION;
+    nType = FRMC_SECTION;
 
     PROTOCOL( this, PROT_SECTION, bMaster ? ACT_CREATE_MASTER : ACT_CREATE_FOLLOW, &rSect )
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-17 12:22:48 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 14:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ USHORT lcl_ColumnNum( const SwFrm* pBoss )
 SwFtnContFrm::SwFtnContFrm( SwFrmFmt *pFmt ):
     SwLayoutFrm( pFmt )
 {
-    nType = FRM_FTNCONT;
+    nType = FRMC_FTNCONT;
 }
 
 
@@ -549,7 +549,7 @@ SwFtnFrm::SwFtnFrm( SwFrmFmt *pFmt, SwCntntFrm *pCnt, SwTxtFtn *pAt ):
     pAttr( pAt ),
     bBackMoveLocked( FALSE )
 {
-    nType = FRM_FTN;
+    nType = FRMC_FTN;
 }
 
 /*************************************************************************

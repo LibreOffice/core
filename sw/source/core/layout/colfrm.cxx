@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colfrm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 14:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ void lcl_RemoveFtns( SwFtnBossFrm* pBoss, BOOL bPageOnly, BOOL bEndNotes );
 SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt ):
     SwFtnBossFrm( pFmt )
 {
-    nType = FRM_COLUMN;
+    nType = FRMC_COLUMN;
     SwBodyFrm* pColBody = new SwBodyFrm( pFmt->GetDoc()->GetDfltFrmFmt() );
     pColBody->InsertBehind( this, 0 ); // ColumnFrms jetzt mit BodyFrm
     SetMaxFtnHeight( LONG_MAX );

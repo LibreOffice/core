@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-21 11:13:04 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 14:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,6 @@ SwCntntFrm::SwCntntFrm( SwCntntNode * const pCntnt ) :
     SwFrm( pCntnt ),
     SwFlowFrm( (SwFrm&)*this )
 {
-    nType = FRM_CNTNT;
 }
 
 
