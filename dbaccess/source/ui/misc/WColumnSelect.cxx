@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:54:54 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ OWizColumnSelect::OWizColumnSelect( Window* pParent)
 // -----------------------------------------------------------------------
 OWizColumnSelect::~OWizColumnSelect()
 {
+    DBG_DTOR(OWizColumnSelect,NULL);
     while ( m_lbNewColumnNames.GetEntryCount() )
     {
         void* pData = m_lbNewColumnNames.GetEntryData(0);
@@ -159,7 +160,6 @@ OWizColumnSelect::~OWizColumnSelect()
         m_lbNewColumnNames.RemoveEntry(0);
     }
     m_lbNewColumnNames.Clear();
-    DBG_DTOR(OWizColumnSelect,NULL);
 }
 
 // -----------------------------------------------------------------------
