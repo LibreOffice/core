@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 16:12:08 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,11 +621,11 @@ ModalDialog DLG_ORDERCRIT
         Text [ ENGLISH_US ] = "Operator" ;
         Text[ chinese_simplified ] = "Á´½Ó";
         Text[ russian ] = "Îïåğàòîğ";
-        Text[ polish ] = "Operator";
+        Text[ polish ] = "£¹cze";
         Text[ japanese ] = "‰‰Zq";
         Text[ chinese_traditional ] = "±¶®|";
         Text[ arabic ] = "ÇÑÊÈÇØ";
-        Text[ greek ] = "ÔåëåóôŞò";
+        Text[ greek ] = "Óıíäåóç";
         Text[ korean ] = "¿¬»êÀÚ";
         Text[ turkish ] = "İşleç";
         Text[ language_user1 ] = " ";
