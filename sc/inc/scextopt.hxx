@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scextopt.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:14:45 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 08:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ private:
 
     BOOL                    bChanged;       // for import: copy data only first time to doc
     bool                    bWinProtection;  // Excel Workbook Windows protection flag
+    bool                    bWinEncryption;  // Excel Workbook Windows encryption flag
 
     void                    Reset();
 
@@ -202,6 +203,8 @@ public:
     void                    AddCodename( const String& );   // -> tables
     inline void             SetWinProtection(bool bImportWinProtection) {bWinProtection = bImportWinProtection; }
     inline bool             IsWinProtected()         { return bWinProtection; }
+    inline void             SetWinEncryption(bool bImportWinEncryption) {bWinEncryption = bImportWinEncryption; }
+    inline bool             IsWinEncrypted()         { return bWinEncryption; }
 };
 
 
