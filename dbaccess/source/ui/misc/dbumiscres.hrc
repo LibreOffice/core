@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:09:14 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,9 @@
 #define STR_OUTLOOK             14
 #define STR_OUTLOOKEXP          15
 #define STR_EVOLUTION           16
+#define STR_EMBEDDED            17
 
-#define STR_END                 STR_EVOLUTION + 1
+#define STR_END                 STR_EMBEDDED + 1
 
 #endif // _DBU_MISCRES_HRC_
 
