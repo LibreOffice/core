@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-16 11:48:32 $
+ *  last change: $Author: ab $ $Date: 2001-08-22 10:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@ void SbiRuntime::StepArith( SbxOperator eOp )
     SbxVariable* p2 = GetTOS();
     p2->ResetFlag( SBX_FIXED );
     p2->Compute( eOp, *p1 );
+
+    checkArithmeticOverflow( p2 );
 }
 
 void SbiRuntime::StepUnary( SbxOperator eOp )
