@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2000-09-21 17:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ SvxTextForwarder* ScCellEditSource::GetTextForwarder()
 #if SUPD > 600
         //  currently, GetPortions doesn't work if UpdateMode is FALSE,
         //  this will be fixed (in EditEngine) by src600
-        pEditEngine->SetUpdateMode( FALSE );
+//      pEditEngine->SetUpdateMode( FALSE );
 #endif
         pEditEngine->EnableUndo( FALSE );
         pEditEngine->SetRefMapMode( MAP_100TH_MM );
