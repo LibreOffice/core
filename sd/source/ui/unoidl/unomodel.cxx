@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-09-29 14:48:35 $
+ *  last change: $Author: cl $ $Date: 2000-11-01 14:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1076,6 +1076,15 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                            pPage->GetLwrBorder() );
         pDoc->InsertMasterPage(pMPage,  nIndex);
         pMPage->SetLayoutName( aLayoutName );
+
+        { // insert background object
+            Point aBackgroundPos ( pMPage->GetLftBorder(), pMPage->GetUppBorder() );
+            Size aBackgroundSize ( pMPage->GetSize() );
+            aBackgroundSize.Width()  -= pMPage->GetLftBorder() + pMPage->GetRgtBorder() - 1;
+            aBackgroundSize.Height() -= pMPage->GetUppBorder() + pMPage->GetLwrBorder() - 1;
+            Rectangle aBackgroundRect (aBackgroundPos, aBackgroundSize);
+            pMPage->CreatePresObj(PRESOBJ_BACKGROUND, aBackgroundRect, sal_True );
+        }
 
         xDrawPage = rModel.CreateXDrawPage(pMPage);
 
