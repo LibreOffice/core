@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-20 11:15:29 $
+ *  last change: $Author: ab $ $Date: 2001-08-03 15:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,7 +541,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
     Reference< XInputStream > xInput( pInput );
     InsertCommandArgument aInsertArg;
     aInsertArg.Data = xInput;
-    aInsertArg.ReplaceExisting = sal_True;
+    aInsertArg.ReplaceExisting = sal_False;
 
     INetURLObject aFileObj( FileURL, INET_PROT_FILE );
     Content aCnt( aFileObj.GetMainURL(), mxEnvironment );
