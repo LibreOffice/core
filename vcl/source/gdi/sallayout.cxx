@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-19 16:13:35 $
+ *  last change: $Author: hdu $ $Date: 2002-11-20 13:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ int GetVerticalFlags( sal_Unicode nChar )
         ||  nChar == 0x2016 || nChar == 0x2026
         || (nChar >= 0x3008 && nChar <= 0x301C && nChar != 0x3012)
         ||  nChar == 0xFF3B || nChar == 0xFF3D
-        || (nChar >= 0xFF5B && nChar <= 0xFF63)
+        || (nChar >= 0xFF5B && nChar <= 0xFF9F) // halfwidth forms
         ||  nChar == 0xFFE3 )
             return GF_NONE;   // not rotated
         else if( nChar == 0x30fc )
