@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellObj.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-11-18 16:29:48 $
+ *  last change:$Date: 2004-01-05 18:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ public class ScCellObj extends TestCase {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = (XComponent)
             UnoRuntime.queryInterface (XComponent.class, xSheetDoc);
-        oComp.dispose();
+        util.DesktopTools.closeDoc(oComp);
     }
 
     /**
