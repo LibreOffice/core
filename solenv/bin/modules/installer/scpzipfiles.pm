@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scpzipfiles.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 10:46:48 $
+#   last change: $Author: vg $ $Date: 2005-02-24 16:20:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ use installer::systemactions;
 
 sub replace_all_ziplistvariables_in_file
 {
-    my ( $fileref, $variablesref ) = @_;
+    my ( $fileref, $variableshashref ) = @_;
 
     for ( my $i = 0; $i <= $#{$fileref}; $i++ )
     {
@@ -82,21 +82,13 @@ sub replace_all_ziplistvariables_in_file
 
         if ( $line =~ /^.*\$\{\w+\}.*$/ )   # only occurence of ${abc}
         {
-            for ( my $j = 0; $j <= $#{$variablesref}; $j++ )
+            my $key;
+
+            foreach $key (keys %{$variableshashref})
             {
-                my $variableline = ${$variablesref}[$j];
-
-                my ($key, $value);
-
-                if ( $variableline =~ /^\s*(\w+?)\s+(.*?)\s*$/ )
-                {
-                    $key = $1;
-                    $value = $2;
-                    $key = '${' . $key . '}';
-                }
-
+                my $value = $variableshashref->{$key};
+                $key = '${' . $key . '}';
                 $line =~ s/\Q$key\E/$value/g;
-
                 ${$fileref}[$i] = $line;
             }
         }
@@ -150,7 +142,7 @@ sub replace_all_ziplistvariables_in_rtffile
 
 sub resolving_scpzip_replace_flag
 {
-    my ($filesarrayref, $variablesref, $item, $languagestringref) = @_;
+    my ($filesarrayref, $variableshashref, $item, $languagestringref) = @_;
 
     my $diritem = lc($item);
 
@@ -212,7 +204,7 @@ sub resolving_scpzip_replace_flag
                     # ToDo: How about binary patching?
 
                     my $onefileref = installer::files::read_file($movepath);
-                    replace_all_ziplistvariables_in_file($onefileref, $variablesref);
+                    replace_all_ziplistvariables_in_file($onefileref, $variableshashref);
                     installer::files::save_file($destinationpath ,$onefileref);
                 }
 
