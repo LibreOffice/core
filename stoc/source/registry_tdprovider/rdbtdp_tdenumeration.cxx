@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbtdp_tdenumeration.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:07:44 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,47 @@ TypeDescriptionEnumerationImpl::nextTypeDescription()
 }
 
 //=========================================================================
+bool TypeDescriptionEnumerationImpl::match(
+    RTTypeClass eType1, uno::TypeClass eType2 )
+{
+    switch ( eType1 )
+    {
+    case RT_TYPE_INTERFACE:
+        return eType2 == uno::TypeClass_INTERFACE;
+
+    case RT_TYPE_MODULE:
+        return eType2 == uno::TypeClass_MODULE;
+
+    case RT_TYPE_STRUCT:
+        return eType2 == uno::TypeClass_STRUCT;
+
+    case RT_TYPE_ENUM:
+        return eType2 == uno::TypeClass_ENUM;
+
+    case RT_TYPE_EXCEPTION:
+        return eType2 == uno::TypeClass_EXCEPTION;
+
+    case RT_TYPE_TYPEDEF:
+        return eType2 == uno::TypeClass_TYPEDEF;
+
+    case RT_TYPE_SERVICE:
+        return eType2 == uno::TypeClass_SERVICE;
+
+    case RT_TYPE_SINGLETON:
+        return eType2 == uno::TypeClass_SINGLETON;
+
+    case RT_TYPE_CONSTANTS:
+        return eType2 == uno::TypeClass_CONSTANTS;
+
+    case RT_TYPE_UNION:
+        return eType2 == uno::TypeClass_UNION;
+
+    default:
+        return false;
+    }
+}
+
+//=========================================================================
 bool TypeDescriptionEnumerationImpl::queryMore()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -384,7 +425,7 @@ bool TypeDescriptionEnumerationImpl::queryMore()
                                           m < m_aTypes.getLength();
                                           ++m )
                                     {
-                                        if ( m_aTypes[ m ] == eTypeClass )
+                                        if ( match(eTypeClass, m_aTypes[ m ]) )
                                         {
                                             bIncludeIt = true;
                                             break;
