@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testwriter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-13 06:49:11 $
+ *  last change: $Author: jbu $ $Date: 2001-01-04 16:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,7 @@ void OFileWriter::writeBytes(const Sequence< sal_Int8 >& aData)
         m_f = fopen( m_pcFile , "w" );
     }
 
-    fwrite( aData.getConstArray() , 1 , aData.getLength() , m_f );
-
+       fwrite( aData.getConstArray() , 1 , aData.getLength() , m_f );
 }
 
 
@@ -625,7 +624,21 @@ void OSaxWriterTest::testExceptions( const Reference< XExtendedDocumentHandler >
     }
 
     r->endCDATA();
-    r->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM("hi")) );
+
+    {
+        sal_Unicode array[] = { 'a' , 'b' , 4 , 9 , 10 };
+        OUString o( array , 5 );
+        try
+        {
+            r->characters( o );
+            ERROR_ASSERT( 0 , "Writer allowed to write forbidden characters" );
+        }
+        catch( SAXException & e )
+        {
+
+        }
+    }
+    r->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM("huhu")) );
 
     r->endDocument();
 }
@@ -685,23 +698,26 @@ void OSaxWriterTest::testPerformance(const  Reference< XExtendedDocumentHandler 
     // just write a bunch of xml tags !
     // for performance testing
     sal_Int32 i2;
-    for( i2 = 0 ; i2 < 75 ; i2 ++ )
+    OUString huhu( RTL_CONSTASCII_USTRINGPARAM("huhu") );
+    OUString emptyString;
+    const int ITERATIONS = 125;
+    for( i2 = 0 ; i2 < ITERATIONS ; i2 ++ )
     {
         r->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM("tag") ) +
                          OUString::valueOf( i2 ), rList );
         for( sal_Int32 i = 0 ; i < 450 ; i ++ )
         {
-            r->ignorableWhitespace( OUString());
-            r->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM("huhu")) , rList );
+            r->ignorableWhitespace( emptyString );
+            r->startElement( huhu , rList );
             r->characters( testParagraph );
 
-            r->ignorableWhitespace( OUString() );
-            r->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM("huhu")) );
+            r->ignorableWhitespace( emptyString );
+            r->endElement( huhu );
         }
     }
-    for( i2 = 74 ; i2 >= 0  ; i2-- )
+    for( i2 = ITERATIONS-1 ; i2 >= 0  ; i2-- )
     {
-        r->ignorableWhitespace( OUString() );
+        r->ignorableWhitespace( emptyString );
         r->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM("tag") ) + OUString::valueOf( i2 ) );
     }
 
