@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:38:13 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1025,6 +1025,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bAddParaSpacingToTableCells = false;
     // DVO, OD 12.01.2004 #i11859#
     bool bUseFormerLineSpacing = false;
+    // OD 2004-03-17 #i11860#
+    bool bUseFormerObjectPositioning = false;
 
     while( nCount-- )
     {
@@ -1057,6 +1059,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 // DVO, OD 12.01.2004 #i11859#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseFormerLineSpacing")) )
                     bUseFormerLineSpacing = true;
+                // OD 2004-03-17 #i11860#
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseFormerObjectPositioning")) )
+                    bUseFormerObjectPositioning = true;
 
                 // #111955#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseOldNumbering")) )
@@ -1093,6 +1098,13 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("UseFormerLineSpacing")), makeAny( true ) );
+    }
+
+    // OD 2004-03-17 #i11860#
+    if( ! bUseFormerObjectPositioning )
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("UseFormerObjectPositioning")), makeAny( true ) );
     }
 
     if( ! bUseOldNumbering) // #111955#
