@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:38:30 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,10 @@
 #define FL_FTN                 53
 #define IL_BITMAPS              54
 #define ILH_BITMAPS             55
+// --> FME 2004-06-22 #114856# edit in readonly sections
+#define FL_PROPERTIES           56
+#define CB_EDIT_IN_READONLY     57
+// <--
 
 /* Globale Resourcen */
 #define STR_REG_DUPLICATE       (RC_REGIONSW_BEGIN+6)
