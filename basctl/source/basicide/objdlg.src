@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 16:39:20 $
+ *  last change: $Author: tbe $ $Date: 2002-04-04 13:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ FloatingWindow RID_BASICIDE_OBJCAT
         Pos = MAP_APPFONT ( 4 , 6 ) ;
         ItemImageList = ImageList
         {
-            ImageBitmap = Bitmap { FILE = "images3.bmp" ; };
+            ImageBitmap = Bitmap { FILE = "im_ges3.bmp" ; };
             MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
             IdList =
             {

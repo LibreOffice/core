@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2002-02-22 21:06:19 $
+ *  last change: $Author: tbe $ $Date: 2002-04-04 13:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2945,7 +2945,7 @@ Menu RID_POPUP_DLGED
 };
 ImageList RID_IMGLST_OBJECTS
 {
-    ImageBitmap = Bitmap { FILE = "images.bmp" ; };
+    ImageBitmap = Bitmap { FILE = "im_ges.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
     IdList =
     {
@@ -2962,7 +2962,7 @@ ImageList RID_IMGLST_OBJECTS
 };
 ImageList RID_IMGLST_LAYOUT
 {
-    ImageBitmap = Bitmap { FILE = "images2.bmp" ; };
+    ImageBitmap = Bitmap { FILE = "im_ges2.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
     IdList =
     {
