@@ -614,6 +614,7 @@ hedabu: ..\inc\DescriptionGenerator.hxx %_DEST%\inc%_EXT%\svx\DescriptionGenerat
 hedabu: ..\inc\pgrditem.hxx %_DEST%\inc%_EXT%\svx\pgrditem.hxx
 hedabu: ..\inc\writingmodeitem.hxx %_DEST%\inc%_EXT%\svx\writingmodeitem.hxx
 hedabu: ..\inc\ParseContext.hxx %_DEST%\inc%_EXT%\svx\ParseContext.hxx
+hedabu: ..\inc\countryid.hxx %_DEST%\inc%_EXT%\svx\countryid.hxx
 
 ..\xml\SvxDrawPage.xml %_DEST%\xml%_EXT%\SvxDrawPage.xml
 ..\xml\SvxGraphicObject.xml %_DEST%\xml%_EXT%\SvxGraphicObject.xml
