@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-05-28 15:14:33 $
+#   last change: $Author: rt $ $Date: 2004-11-09 15:33:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ SLOFILES=\
     $(SLO)$/tdoc_docmgr.obj		\
     $(SLO)$/tdoc_datasupplier.obj \
     $(SLO)$/tdoc_resultset.obj  \
-    $(SLO)$/tdoc_fakedrootstorage.obj \
     $(SLO)$/tdoc_documentcontentfactory.obj \
     $(SLO)$/tdoc_passwordrequest.obj \
     $(SLO)$/tdoc_stgelems.obj
