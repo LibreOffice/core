@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:26:06 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1368,22 +1368,47 @@ FASTBOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
         switch ( eMoveType )
         {
         case END_SENT:
-        case NEXT_SENT:
             nPtPos = (xub_StrLen)pBreakIt->xBreak->endOfSentence(
                                     pTxtNd->GetTxt(),
                                     nPtPos, pBreakIt->GetLocale(
                                                 pTxtNd->GetLang( nPtPos ) ));
             break;
+        case NEXT_SENT:
+            {
+                String aTxt( pTxtNd->GetTxt() );
+                nPtPos = (xub_StrLen)pBreakIt->xBreak->endOfSentence(
+                                        aTxt,
+                                        nPtPos, pBreakIt->GetLocale(
+                                                    pTxtNd->GetLang( nPtPos ) ));
+                while (nPtPos != (USHORT) -1 && ++nPtPos < aTxt.Len()
+                       && aTxt.GetChar(nPtPos)== ' ' /*isWhiteSpace( aTxt.GetChar(nPtPos)*/ )
+                    ;
+                break;
+            }
         case START_SENT:
-        case PREV_SENT:
             nPtPos = (xub_StrLen)pBreakIt->xBreak->beginOfSentence(
                                     pTxtNd->GetTxt(),
                                     nPtPos, pBreakIt->GetLocale(
                                             pTxtNd->GetLang( nPtPos ) ));
             break;
+        case PREV_SENT:
+            nPtPos = (xub_StrLen)pBreakIt->xBreak->beginOfSentence(
+                                    pTxtNd->GetTxt(),
+                                    nPtPos, pBreakIt->GetLocale(
+                                                pTxtNd->GetLang( nPtPos ) ));
+            if (nPtPos == 0)
+                return FALSE;   // the previous sentence is not in this paragraph
+            if (nPtPos > 0)
+                nPtPos = (xub_StrLen)pBreakIt->xBreak->beginOfSentence(
+                                    pTxtNd->GetTxt(),
+                                    nPtPos - 1, pBreakIt->GetLocale(
+                                                pTxtNd->GetLang( nPtPos ) ));
+            break;
         }
 
-        if( 0 <= nPtPos && nPtPos < pTxtNd->GetTxt().Len() )
+        // it is allowed to place the PaM just behind the last
+        // character in the text thus <= ...Len
+        if( 0 <= nPtPos && nPtPos <= pTxtNd->GetTxt().Len() )
         {
             GetPoint()->nContent = nPtPos;
             if( !IsSelOvr() )
