@@ -1,14 +1,20 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %COMMON_DEST%\res%_EXT%
 mkdir: %_DEST%\xml%_EXT%\uiconfig
-mkdir: %_DEST%\xml%_EXT%\uiconfig\sdraw
-mkdir: %_DEST%\xml%_EXT%\uiconfig\simpress
-mkdir: %_DEST%\xml%_EXT%\uiconfig\sdraw\menubar
-mkdir: %_DEST%\xml%_EXT%\uiconfig\simpress\menubar
-mkdir: %_DEST%\xml%_EXT%\uiconfig\sdraw\toolbar
-mkdir: %_DEST%\xml%_EXT%\uiconfig\simpress\toolbar
-mkdir: %_DEST%\xml%_EXT%\uiconfig\sdraw\statusbar
-mkdir: %_DEST%\xml%_EXT%\uiconfig\simpress\statusbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sdraw
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\simpress
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\simpress\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\toolbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\simpress\toolbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\accelerator
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\accelerator\en-US
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator\en-US
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\statusbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\simpress\statusbar
+
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%COMMON_OUTDIR%\srs\core_srs.hid %COMMON_DEST%\res%_EXT%\sdcore_srs.hid
 
@@ -74,11 +80,13 @@ mkdir: %_DEST%\inc%_EXT%\sd
 ..\xml\AccessiblePresentationOLEShape.xml %_DEST%\xml%_EXT%\AccessiblePresentationOLEShape.xml
 ..\xml\AccessiblePageShape.xml %_DEST%\xml%_EXT%\AccessiblePageShape.xml
 
-..\uiconfig\sdraw\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\sdraw\menubar\*.xml
-..\uiconfig\simpress\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\simpress\menubar\*.xml
-..\uiconfig\sdraw\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\sdraw\toolbar\*.xml
-..\uiconfig\simpress\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\simpress\toolbar\*.xml
-..\uiconfig\sdraw\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\sdraw\statusbar\*.xml
-..\uiconfig\simpress\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\simpress\statusbar\*.xml
+..\uiconfig\sdraw\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\menubar\*.xml
+..\uiconfig\simpress\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\menubar\*.xml
+..\uiconfig\sdraw\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\toolbar\*.xml
+..\uiconfig\simpress\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\toolbar\*.xml
+..\uiconfig\sdraw\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\accelerator\en-US\*.xml
+..\uiconfig\simpress\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator\en-US\*.xml
+..\uiconfig\sdraw\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\statusbar\*.xml
+..\uiconfig\simpress\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\statusbar\*.xml
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
