@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2000-12-09 14:59:13 $
+ *  last change: $Author: os $ $Date: 2000-12-13 08:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
@@ -114,7 +117,10 @@ struct ConfigItemListEntry_Impl
 typedef std::list<ConfigItemListEntry_Impl> ConfigItemList;
 struct utl::ConfigMgr_Impl
 {
-    ConfigItemList aItemList;
+    sal_Bool                                bIsLocalProvider;
+    ConfigItemList                          aItemList;
+    Reference< XMultiServiceFactory >       xLocalConfigurationProvider;
+
 };
 
 /* -----------------------------28.08.00 15:35--------------------------------
@@ -123,6 +129,12 @@ struct utl::ConfigMgr_Impl
 ConfigManager::ConfigManager() :
     pMgrImpl(new utl::ConfigMgr_Impl)
 {
+    Reference< XMultiServiceFactory > xCfgProv = GetConfigurationProvider();
+    Reference< XMultiServiceFactory > xLocalCfgProv = GetLocalConfigurationProvider();
+    if(xCfgProv.get() && xCfgProv.get() == xLocalCfgProv.get())
+        pMgrImpl->bIsLocalProvider = sal_False;
+    else
+        pMgrImpl->bIsLocalProvider = sal_True;
 }
 /* -----------------------------17.11.00 13:51--------------------------------
 
@@ -131,6 +143,7 @@ ConfigManager::ConfigManager(Reference< XMultiServiceFactory > xConfigProv) :
     pMgrImpl(new utl::ConfigMgr_Impl),
     xConfigurationProvider(xConfigProv)
 {
+    pMgrImpl->bIsLocalProvider = sal_False;
 }
 /* -----------------------------28.08.00 15:35--------------------------------
 
@@ -160,6 +173,36 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
     if(!xConfigurationProvider.is())
     {
         Reference< XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
+        try
+          {
+            xConfigurationProvider = Reference< XMultiServiceFactory >
+            (xMSF->createInstance(
+                    C2U("com.sun.star.configuration.ConfigurationProvider")),
+                        UNO_QUERY);
+        }
+#ifdef DBG_UTIL
+    catch(Exception& rEx)
+    {
+        OString sMsg("CreateInstance with arguments exception: ");
+        sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+        OSL_DEBUG_ONLY(sMsg.getStr());
+    }
+#else
+    catch(Exception&){}
+#endif
+    }
+    return xConfigurationProvider;
+}
+/* -----------------------------12.12.00 17:19--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Reference< XMultiServiceFactory > ConfigManager::GetLocalConfigurationProvider()
+{
+    if(!pMgrImpl->xLocalConfigurationProvider.is())
+    {
+        Reference< XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
         Sequence <Any> aArgs(1);
         Any* pValues = aArgs.getArray();
         PropertyValue aPValue;
@@ -168,7 +211,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
         pValues[0] <<= aPValue;
         try
           {
-            xConfigurationProvider = Reference< XMultiServiceFactory >
+            pMgrImpl->xLocalConfigurationProvider = Reference< XMultiServiceFactory >
             (xMSF->createInstanceWithArguments(
                     C2U("com.sun.star.configuration.ConfigurationProvider"), aArgs),
                         UNO_QUERY);
@@ -186,7 +229,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
     catch(Exception&){}
 #endif
     }
-    return xConfigurationProvider;
+    return pMgrImpl->xLocalConfigurationProvider;
 }
 /* -----------------------------29.08.00 12:35--------------------------------
 
@@ -360,5 +403,115 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         aRet >>= aBrandName;
 
     return aRet;
+}
+/* -----------------------------12.12.00 17:22--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUString& rFullPath)
+{
+    Sequence< Any > aArgs(1);
+    aArgs[0] <<= rFullPath;
+    Reference< XMultiServiceFactory > xCfgProvider = GetLocalConfigurationProvider();
+    Reference< XInterface > xIFace;
+    if(xCfgProvider.is())
+    {
+        try
+        {
+            xIFace = xCfgProvider->createInstanceWithArguments(
+                    C2U(cAccessSrvc),
+                    aArgs);
+        }
+#ifdef DBG_UTIL
+        catch(Exception& rEx)
+        {
+            OString sMsg("CreateInstance exception: ");
+            sMsg += OString(rEx.Message.getStr(),
+                        rEx.Message.getLength(),
+                         RTL_TEXTENCODING_ASCII_US);
+            OSL_DEBUG_ONLY(sMsg.getStr());
+        }
+#else
+        catch(Exception&){}
+#endif
+    }
+    return Reference<XHierarchicalNameAccess>(xIFace, UNO_QUERY);
+}
+/* -----------------------------12.12.00 17:17--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Any ConfigManager::GetLocalProperty(const OUString& rProperty)
+{
+    OUString sPath = C2U(cConfigBaseURL);
+    sPath += rProperty;
+
+    sal_Int32 nLastIndex = sPath.lastIndexOf( '/',  sPath.getLength());
+    OUString sNode =    sPath.copy( 0, nLastIndex );
+    OUString sProperty =    sPath.copy( nLastIndex + 1, sPath.getLength() - nLastIndex - 1 );
+
+    Reference< XHierarchicalNameAccess> xAccess = GetHierarchyAccess(sNode);
+    Any aRet;
+    try
+    {
+        if(xAccess.is())
+            aRet = xAccess->getByHierarchicalName(sProperty);
+    }
+#ifdef DBG_UTIL
+    catch(Exception& rEx)
+    {
+        OString sMsg("GetLocalProperty: ");
+        sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+        OSL_DEBUG_ONLY(sMsg.getStr());
+    }
+#else
+    catch(Exception&){}
+#endif
+    return aRet;
+}
+/* -----------------------------12.12.00 17:17--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValue)
+{
+    OUString sPath = C2U(cConfigBaseURL);
+    sPath += rProperty;
+
+    sal_Int32 nLastIndex = sPath.lastIndexOf( '/',  sPath.getLength());
+    OUString sNode =    sPath.copy( 0, nLastIndex );
+    OUString sProperty =    sPath.copy( nLastIndex + 1, sPath.getLength() - nLastIndex - 1 );
+
+    Reference< XHierarchicalNameAccess> xHierarchyAccess = GetHierarchyAccess(sNode);
+
+    Any aNode = xHierarchyAccess->getByHierarchicalName(sNode);
+    Reference<XNameAccess> xNodeAcc;
+    aNode >>= xNodeAcc;
+    Reference<XNameReplace> xNodeReplace(xNodeAcc, UNO_QUERY);
+    if(xNodeReplace.is())
+    {
+        try
+        {
+            xNodeReplace->replaceByName(sProperty, rValue);
+        }
+#ifdef DBG_UTIL
+        catch(Exception& rEx)
+        {
+            OString sMsg("PutLocalProperty: ");
+            sMsg += OString(rEx.Message.getStr(),
+                        rEx.Message.getLength(),
+                         RTL_TEXTENCODING_ASCII_US);
+            OSL_DEBUG_ONLY(sMsg.getStr());
+        }
+#else
+        catch(Exception& ){}
+#endif
+    }
+}
+/* -----------------------------13.12.00 08:47--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool    ConfigManager::IsLocalConfigProvider()
+{
+    return pMgrImpl->bIsLocalProvider;
 }
 

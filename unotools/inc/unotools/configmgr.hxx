@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-30 09:12:41 $
+ *  last change: $Author: os $ $Date: 2000-12-13 08:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@ namespace utl
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                 GetConfigurationProvider();
 
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                GetLocalConfigurationProvider();
+
             com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
                 AddConfigItem(utl::ConfigItem& rCfgItem);
 
@@ -124,6 +127,12 @@ namespace utl
             };
             //direct readonly access to some special configuration elements
             static com::sun::star::uno::Any GetDirectConfigProperty(ConfigProperty eProp);
+
+            sal_Bool        IsLocalConfigProvider();
+            com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
+                GetHierarchyAccess(const rtl::OUString& rFullPath);
+            com::sun::star::uno::Any GetLocalProperty(const rtl::OUString& rProperty);
+            void PutLocalProperty(const rtl::OUString& , const com::sun::star::uno::Any& rValue);
 
     };
 }//namespace utl
