@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-18 14:44:30 $
+ *  last change: $Author: fs $ $Date: 2001-05-31 14:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,6 +442,7 @@ void OFormattedControl::setDesignMode(sal_Bool bOn)
 }
 
 /*************************************************************************/
+DBG_NAME(OFormattedModel)
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OFormattedModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -450,7 +451,7 @@ InterfaceRef SAL_CALL OFormattedModel_CreateInstance(const Reference<XMultiServi
 
 //------------------------------------------------------------------
 OFormattedModel::OFormattedModel(const Reference<XMultiServiceFactory>& _rxFactory)
-            :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_CONTROL_FORMATTEDFIELD )
+            :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_CONTROL_FORMATTEDFIELD, sal_False )
                                     // use the old control name for compytibility reasons
             ,OPropertyChangeListener(m_aMutex)
             ,m_bOriginalNumeric(sal_False)
@@ -458,7 +459,10 @@ OFormattedModel::OFormattedModel(const Reference<XMultiServiceFactory>& _rxFacto
             ,m_xOriginalFormatter(NULL)
             ,m_nKeyType(NumberFormat::UNDEFINED)
             ,m_aNullDate(DBTypeConversion::getStandardDate())
+            ,m_bAggregateListening(sal_False)
+            ,m_pPropertyMultiplexer(NULL)
 {
+    DBG_CTOR(OFormattedModel, NULL);
     m_nClassId = FormComponentType::TEXTFIELD;
 
     increment(m_refCount);
@@ -469,13 +473,69 @@ OFormattedModel::OFormattedModel(const Reference<XMultiServiceFactory>& _rxFacto
     if (OFormattedModel::nValueHandle == -1)
         OFormattedModel::nValueHandle = getOriginalHandle(PROPERTY_ID_EFFECTIVE_VALUE);
 
-    increment(m_refCount);
-    if (m_xAggregateSet.is())
+    startAggregateListening();
+    doSetDelegator();
+}
+
+//------------------------------------------------------------------------------
+OFormattedModel::~OFormattedModel()
+{
+    doResetDelegator();
+    releaseAggregateListener();
+
+    DBG_DTOR(OFormattedModel, NULL);
+}
+
+//------------------------------------------------------------------------------
+void OFormattedModel::startAggregateListening()
+{
+    DBG_ASSERT(!m_bAggregateListening, "OFormattedModel::startAggregateListening: already listening!");
+    if (m_bAggregateListening)
+        return;
+
+    DBG_ASSERT(NULL == m_pPropertyMultiplexer, "OFormattedModel::startAggregateListening: previous listener not released!");
+    if (m_pPropertyMultiplexer)
+        releaseAggregateListener();
+
+    m_pPropertyMultiplexer = new OPropertyChangeMultiplexer(this, m_xAggregateSet, sal_False);
+    m_pPropertyMultiplexer->addProperty(PROPERTY_FORMATKEY);
+    m_pPropertyMultiplexer->acquire();
+
+    m_bAggregateListening = sal_True;
+}
+
+//------------------------------------------------------------------------------
+void OFormattedModel::stopAggregateListening()
+{
+    DBG_ASSERT(m_bAggregateListening, "OFormattedModel::stopAggregateListening: not listening!");
+    if (!m_bAggregateListening)
+        return;
+
+    if (m_pPropertyMultiplexer)
+        m_pPropertyMultiplexer->dispose();
+
+    m_bAggregateListening = sal_False;
+}
+
+//------------------------------------------------------------------------------
+void OFormattedModel::releaseAggregateListener()
+{
+    DBG_ASSERT(!m_bAggregateListening, "OFormattedModel::releaseAggregateListener: still listening!");
+    if (m_bAggregateListening)
+        stopAggregateListening();
+
+    if (m_pPropertyMultiplexer)
     {
-        OPropertyChangeMultiplexer* pMultiplexer = new OPropertyChangeMultiplexer(this, m_xAggregateSet);
-        pMultiplexer->addProperty(PROPERTY_FORMATKEY);
+        m_pPropertyMultiplexer->release();
+        m_pPropertyMultiplexer = NULL;
     }
-    decrement(m_refCount);
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OFormattedModel::disposing()
+{
+    stopAggregateListening();
+    OEditBaseModel::disposing();
 }
 
 // XServiceInfo
@@ -615,7 +675,8 @@ Any SAL_CALL OFormattedModel::getPropertyDefault( const ::rtl::OUString& aProper
 //------------------------------------------------------------------------------
 void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyChangeEvent& evt ) throw(RuntimeException)
 {
-    if (evt.Source == m_xAggregate)
+    Reference< XPropertySet > xSourceSet(evt.Source, UNO_QUERY);
+    if (xSourceSet.get() == m_xAggregateSet.get())
     {
         if (evt.PropertyName.equals(PROPERTY_FORMATKEY))
         {
