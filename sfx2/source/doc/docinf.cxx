@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:42:16 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <tools/tenccvt.hxx>
 #include <svtools/useroptions.hxx>
 #include <sot/exchange.hxx>
+#include <sot/storage.hxx>
 #include "rtl/tencinfo.h"
 
 #include "docfilt.hxx"
@@ -790,145 +791,147 @@ sal_Bool TestValidity_Impl( const String& rString, sal_Bool bURL )
     return bRet;
 }
 
-BOOL SfxDocumentInfo::Load( SvStream& rStream )
-{
-    long d, t;
-    USHORT nUS;
-    BYTE nByte;
-    FileHeader aHeader(rStream);
-    if( ! aHeader.aHeader.EqualsAscii( pDocInfoHeader ))
-    {
-        rStream.SetError(SVSTREAM_FILEFORMAT_ERROR);
-        return FALSE;
-    }
-    Free();
-    bPasswd = aHeader.bPasswd;
-    rStream >> nUS;
-    //eFileCharSet = (CharSet)nUS;
-    eFileCharSet = GetSOLoadTextEncoding( nUS );
-
-        // Einstellen an den Streams
-    rStream.SetStreamCharSet(eFileCharSet);
-
-    rStream >> nByte;
-    bPortableGraphics = nByte? 1: 0;
-    rStream >> nByte;
-    bQueryTemplate = nByte? 1: 0;
-
-    aCreated.Load(rStream);
-    aChanged.Load(rStream);
-    aPrinted.Load(rStream);
-
-    rStream.ReadByteString( aTitle );
-    Skip(rStream, SFXDOCINFO_TITLELENMAX - aTitle.Len());
-    rStream.ReadByteString( aTheme );
-    Skip(rStream, SFXDOCINFO_THEMELENMAX - aTheme.Len());
-    rStream.ReadByteString( aComment );
-    Skip(rStream, SFXDOCINFO_COMMENTLENMAX- aComment.Len());
-    rStream.ReadByteString( aKeywords );
-    Skip(rStream, SFXDOCINFO_KEYWORDLENMAX - aKeywords.Len());
-
-    USHORT i;
-    for(i = 0; i < MAXDOCUSERKEYS; ++i)
-        aUserKeys[i].Load(rStream);
-
-    rStream.ReadByteString( aTemplateName );
-    rStream.ReadByteString( aTemplateFileName );
-    rStream >> d >> t;
-    aTemplateDate = DateTime(Date(d), Time(t));
-
-    // wurde mal fuer MB in Panik eingebaut und dann doch nie benutzt :-)
-    if ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_40 )
-    {
-        USHORT nMailAddr;
-        rStream >> nMailAddr;
-        for( i = 0; i < nMailAddr; i++ )
-        {
-            String aDummyString;
-            USHORT nDummyFlags;
-            rStream.ReadByteString( aDummyString );
-            rStream >> nDummyFlags;
-        }
-    }
-
-    rStream >> lTime;
-    if(aHeader.nVersion > 4)
-        rStream >> nDocNo;
-    else
-        nDocNo = 1;
-    rStream >> nUserDataSize;
-    if(nUserDataSize) {
-        pUserData = new char[nUserDataSize];
-        rStream.Read(pUserData,nUserDataSize);
-    }
-
-    BOOL bOK = (rStream.GetError() == SVSTREAM_OK);
-    nByte = 0;                          // wg.Kompatibilitaet;
-    rStream >> nByte;                   // evtl. nicht in DocInfo enthalten
-    bTemplateConfig = nByte ? 1 : 0;
-    if( aHeader.nVersion > 5 )
-    {
-        rStream >> bReloadEnabled;
-        rStream.ReadByteString( aReloadURL );
-        rStream >> nReloadSecs;
-        rStream.ReadByteString( aDefaultTarget );
-
-        if ( !TestValidity_Impl( aReloadURL, sal_True ) )
-        {
-            // the reload url is invalid -> reset all reload attributes
-            bReloadEnabled = FALSE;
-            aReloadURL.Erase();
-            nReloadSecs = 60;
-            aDefaultTarget.Erase();
-        }
-        else if ( !TestValidity_Impl( aDefaultTarget, sal_False ) )
-            // the default target is invalid -> reset it
-            aDefaultTarget.Erase();
-    }
-    if ( aHeader.nVersion > 6 )
-    {
-        rStream >> nByte;
-        bSaveGraphicsCompressed = nByte? 1: 0;
-    }
-    if ( aHeader.nVersion > 7 )
-    {
-        rStream >> nByte;
-        bSaveOriginalGraphics = nByte? 1: 0;
-    }
-    if ( aHeader.nVersion > 8 )
-    {
-        rStream >> nByte;
-        bSaveVersionOnClose = nByte? 1: 0;
-
-        rStream.ReadByteString( pImp->aCopiesTo );
-        rStream.ReadByteString( pImp->aOriginal );
-        rStream.ReadByteString( pImp->aReferences );
-        rStream.ReadByteString( pImp->aRecipient );
-        rStream.ReadByteString( pImp->aReplyTo );
-        rStream.ReadByteString( pImp->aBlindCopies );
-        rStream.ReadByteString( pImp->aInReplyTo );
-        rStream.ReadByteString( pImp->aNewsgroups );
-        rStream >> pImp->nPriority;
-    }
-    if ( aHeader.nVersion > 9 )
-    {
-        rStream.ReadByteString( pImp->aSpecialMimeType );
-    }
-    if ( aHeader.nVersion > 10 )
-    {
-        rStream >> nByte;
-        pImp->bUseUserData = nByte ? TRUE : FALSE;
-    }
-    return bOK;
-}
+//REMOVE    BOOL SfxDocumentInfo::Load( SvStream& rStream )
+//REMOVE    {
+//REMOVE        long d, t;
+//REMOVE        USHORT nUS;
+//REMOVE        BYTE nByte;
+//REMOVE        FileHeader aHeader(rStream);
+//REMOVE        if( ! aHeader.aHeader.EqualsAscii( pDocInfoHeader ))
+//REMOVE        {
+//REMOVE            rStream.SetError(SVSTREAM_FILEFORMAT_ERROR);
+//REMOVE            return FALSE;
+//REMOVE        }
+//REMOVE        Free();
+//REMOVE        bPasswd = aHeader.bPasswd;
+//REMOVE        rStream >> nUS;
+//REMOVE        //eFileCharSet = (CharSet)nUS;
+//REMOVE        eFileCharSet = GetSOLoadTextEncoding( nUS );
+//REMOVE
+//REMOVE            // Einstellen an den Streams
+//REMOVE        rStream.SetStreamCharSet(eFileCharSet);
+//REMOVE
+//REMOVE        rStream >> nByte;
+//REMOVE        bPortableGraphics = nByte? 1: 0;
+//REMOVE        rStream >> nByte;
+//REMOVE        bQueryTemplate = nByte? 1: 0;
+//REMOVE
+//REMOVE        aCreated.Load(rStream);
+//REMOVE        aChanged.Load(rStream);
+//REMOVE        aPrinted.Load(rStream);
+//REMOVE
+//REMOVE        rStream.ReadByteString( aTitle );
+//REMOVE        Skip(rStream, SFXDOCINFO_TITLELENMAX - aTitle.Len());
+//REMOVE        rStream.ReadByteString( aTheme );
+//REMOVE        Skip(rStream, SFXDOCINFO_THEMELENMAX - aTheme.Len());
+//REMOVE        rStream.ReadByteString( aComment );
+//REMOVE        Skip(rStream, SFXDOCINFO_COMMENTLENMAX- aComment.Len());
+//REMOVE        rStream.ReadByteString( aKeywords );
+//REMOVE        Skip(rStream, SFXDOCINFO_KEYWORDLENMAX - aKeywords.Len());
+//REMOVE
+//REMOVE        USHORT i;
+//REMOVE        for(i = 0; i < MAXDOCUSERKEYS; ++i)
+//REMOVE            aUserKeys[i].Load(rStream);
+//REMOVE
+//REMOVE        rStream.ReadByteString( aTemplateName );
+//REMOVE        rStream.ReadByteString( aTemplateFileName );
+//REMOVE        rStream >> d >> t;
+//REMOVE        aTemplateDate = DateTime(Date(d), Time(t));
+//REMOVE
+//REMOVE        // wurde mal fuer MB in Panik eingebaut und dann doch nie benutzt :-)
+//REMOVE        if ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_40 )
+//REMOVE        {
+//REMOVE            USHORT nMailAddr;
+//REMOVE            rStream >> nMailAddr;
+//REMOVE            for( i = 0; i < nMailAddr; i++ )
+//REMOVE            {
+//REMOVE                String aDummyString;
+//REMOVE                USHORT nDummyFlags;
+//REMOVE                rStream.ReadByteString( aDummyString );
+//REMOVE                rStream >> nDummyFlags;
+//REMOVE            }
+//REMOVE        }
+//REMOVE
+//REMOVE        rStream >> lTime;
+//REMOVE        if(aHeader.nVersion > 4)
+//REMOVE            rStream >> nDocNo;
+//REMOVE        else
+//REMOVE            nDocNo = 1;
+//REMOVE        rStream >> nUserDataSize;
+//REMOVE        if(nUserDataSize) {
+//REMOVE            pUserData = new char[nUserDataSize];
+//REMOVE            rStream.Read(pUserData,nUserDataSize);
+//REMOVE        }
+//REMOVE
+//REMOVE        BOOL bOK = (rStream.GetError() == SVSTREAM_OK);
+//REMOVE        nByte = 0;                          // wg.Kompatibilitaet;
+//REMOVE        rStream >> nByte;                   // evtl. nicht in DocInfo enthalten
+//REMOVE        bTemplateConfig = nByte ? 1 : 0;
+//REMOVE        if( aHeader.nVersion > 5 )
+//REMOVE        {
+//REMOVE            rStream >> bReloadEnabled;
+//REMOVE            rStream.ReadByteString( aReloadURL );
+//REMOVE            rStream >> nReloadSecs;
+//REMOVE            rStream.ReadByteString( aDefaultTarget );
+//REMOVE
+//REMOVE            if ( !TestValidity_Impl( aReloadURL, sal_True ) )
+//REMOVE            {
+//REMOVE                // the reload url is invalid -> reset all reload attributes
+//REMOVE                bReloadEnabled = FALSE;
+//REMOVE                aReloadURL.Erase();
+//REMOVE                nReloadSecs = 60;
+//REMOVE                aDefaultTarget.Erase();
+//REMOVE            }
+//REMOVE            else if ( !TestValidity_Impl( aDefaultTarget, sal_False ) )
+//REMOVE                // the default target is invalid -> reset it
+//REMOVE                aDefaultTarget.Erase();
+//REMOVE        }
+//REMOVE        if ( aHeader.nVersion > 6 )
+//REMOVE        {
+//REMOVE            rStream >> nByte;
+//REMOVE            bSaveGraphicsCompressed = nByte? 1: 0;
+//REMOVE        }
+//REMOVE        if ( aHeader.nVersion > 7 )
+//REMOVE        {
+//REMOVE            rStream >> nByte;
+//REMOVE            bSaveOriginalGraphics = nByte? 1: 0;
+//REMOVE        }
+//REMOVE        if ( aHeader.nVersion > 8 )
+//REMOVE        {
+//REMOVE            rStream >> nByte;
+//REMOVE            bSaveVersionOnClose = nByte? 1: 0;
+//REMOVE
+//REMOVE            rStream.ReadByteString( pImp->aCopiesTo );
+//REMOVE            rStream.ReadByteString( pImp->aOriginal );
+//REMOVE            rStream.ReadByteString( pImp->aReferences );
+//REMOVE            rStream.ReadByteString( pImp->aRecipient );
+//REMOVE            rStream.ReadByteString( pImp->aReplyTo );
+//REMOVE            rStream.ReadByteString( pImp->aBlindCopies );
+//REMOVE            rStream.ReadByteString( pImp->aInReplyTo );
+//REMOVE            rStream.ReadByteString( pImp->aNewsgroups );
+//REMOVE            rStream >> pImp->nPriority;
+//REMOVE        }
+//REMOVE        if ( aHeader.nVersion > 9 )
+//REMOVE        {
+//REMOVE            rStream.ReadByteString( pImp->aSpecialMimeType );
+//REMOVE        }
+//REMOVE        if ( aHeader.nVersion > 10 )
+//REMOVE        {
+//REMOVE            rStream >> nByte;
+//REMOVE            pImp->bUseUserData = nByte ? TRUE : FALSE;
+//REMOVE        }
+//REMOVE        return bOK;
+//REMOVE    }
 
 #ifndef GCC
 #pragma optimize ( "", off )
 #endif
 
-ULONG SfxDocumentInfo::LoadPropertySet( SvStorage* pStorage )
+ULONG SfxDocumentInfo::LoadPropertySet( SotStorage* pStorage )
 {
-    SvStorageStreamRef aStrPropSet = pStorage->OpenStream(
+    // TODO: is used for MS format, should stay here for a while
+
+    SotStorageStreamRef aStrPropSet = pStorage->OpenSotStream(
         String::CreateFromAscii( pPropSlot ), STREAM_STD_READ );
     if ( !aStrPropSet.Is() )
         return ERRCODE_IO_ACCESSDENIED;
@@ -1015,10 +1018,10 @@ ULONG SfxDocumentInfo::LoadPropertySet( SvStorage* pStorage )
 #endif
 
 //-------------------------------------------------------------------------
-BOOL SfxDocumentInfo::SavePropertySet( SvStorage *pStorage) const
+BOOL SfxDocumentInfo::SavePropertySet( SotStorage *pStorage) const
 {
     SfxPS_Impl* pPS = new SfxPS_Impl;
-    SvStorageStreamRef aStrPropSet = pStorage->OpenStream(
+    SotStorageStreamRef aStrPropSet = pStorage->OpenSotStream(
         String::CreateFromAscii( pPropSlot ), STREAM_TRUNC | STREAM_STD_WRITE );
     if ( !aStrPropSet.Is() )
     {
@@ -1052,144 +1055,144 @@ BOOL SfxDocumentInfo::SavePropertySet( SvStorage *pStorage) const
 
 //-------------------------------------------------------------------------
 
-BOOL SfxDocumentInfo::Save( SvStream& rStream ) const
-{
-    FileHeader aHeader(pDocInfoHeader, VERSION, bPasswd? 1: 0);
-    aHeader.Save(rStream);
-    CharSet eNewFileCharSet = GetSOStoreTextEncoding( eFileCharSet );
-    rStream << (USHORT)eNewFileCharSet;
-    rStream.SetStreamCharSet(eNewFileCharSet);
-    rStream << (bPortableGraphics? (BYTE)1: (BYTE)0)
-            << (bQueryTemplate? (BYTE)1: (BYTE)0);
-    aCreated.Save(rStream);
-    aChanged.Save(rStream);
-    aPrinted.Save(rStream);
-
-    DBG_ASSERT( aTitle.Len() <= SFXDOCINFO_TITLELENMAX , "length of title overflow" );
-    DBG_ASSERT( aTheme.Len() <= SFXDOCINFO_THEMELENMAX , "length of theme overflow" );
-    DBG_ASSERT( aComment.Len() <= SFXDOCINFO_COMMENTLENMAX , "length of description overflow" );
-    DBG_ASSERT( aKeywords.Len() <= SFXDOCINFO_KEYWORDLENMAX , "length of keywords overflow" );
-
-    // save the title
-    String aString = aTitle;
-    aString.Erase( SFXDOCINFO_TITLELENMAX );
-    rStream.WriteByteString( aString );
-    PaddWithBlanks_Impl(rStream, SFXDOCINFO_TITLELENMAX - aString.Len());
-    // save the theme
-    aString = aTheme;
-    aString.Erase( SFXDOCINFO_THEMELENMAX );
-    rStream.WriteByteString( aString );
-    PaddWithBlanks_Impl(rStream, SFXDOCINFO_THEMELENMAX - aString.Len());
-    // save the description
-    aString = aComment;
-    aString.Erase( SFXDOCINFO_COMMENTLENMAX );
-    rStream.WriteByteString( aString );
-    PaddWithBlanks_Impl(rStream, SFXDOCINFO_COMMENTLENMAX - aString.Len());
-    // save the keywords
-    aString = aKeywords;
-    aString.Erase( SFXDOCINFO_KEYWORDLENMAX );
-    rStream.WriteByteString( aString );
-    PaddWithBlanks_Impl(rStream, SFXDOCINFO_KEYWORDLENMAX - aString.Len());
-
-    for(USHORT i = 0; i < MAXDOCUSERKEYS; ++i)
-        aUserKeys[i].Save(rStream);
-    rStream.WriteByteString( aTemplateName );
-    rStream.WriteByteString( aTemplateFileName );
-    rStream << (long)aTemplateDate.GetDate()
-            << (long)aTemplateDate.GetTime();
-
-    // wurde mal fuer MB in Panik eingebaut und dann doch nie benutzt :-)
-    if ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_40 )
-        rStream << (USHORT) 0;
-
-    rStream << GetTime() << GetDocumentNumber();
-
-    rStream << nUserDataSize;
-    if(pUserData)
-        rStream.Write(pUserData, nUserDataSize);
-    rStream << (bTemplateConfig? (BYTE)1: (BYTE)0);
-    if( aHeader.nVersion > 5 )
-    {
-        rStream << bReloadEnabled;
-        rStream.WriteByteString( aReloadURL );
-        rStream << nReloadSecs;
-        rStream.WriteByteString( aDefaultTarget );
-    }
-    if ( aHeader.nVersion > 6 )
-        rStream << (bSaveGraphicsCompressed? (BYTE)1: (BYTE)0);
-    if ( aHeader.nVersion > 7 )
-        rStream << (bSaveOriginalGraphics? (BYTE)1: (BYTE)0);
-    if ( aHeader.nVersion > 8 )
-    {
-        rStream << (bSaveVersionOnClose? (BYTE)1: (BYTE)0);
-        rStream.WriteByteString( pImp->aCopiesTo );
-        rStream.WriteByteString( pImp->aOriginal );
-        rStream.WriteByteString( pImp->aReferences );
-        rStream.WriteByteString( pImp->aRecipient );
-        rStream.WriteByteString( pImp->aReplyTo );
-        rStream.WriteByteString( pImp->aBlindCopies );
-        rStream.WriteByteString( pImp->aInReplyTo );
-        rStream.WriteByteString( pImp->aNewsgroups );
-        rStream << pImp->nPriority;
-    }
-    if ( aHeader.nVersion > 9 )
-    {
-        rStream.WriteByteString( pImp->aSpecialMimeType );
-    }
-    if ( aHeader.nVersion > 10 )
-    {
-        rStream << ( pImp->bUseUserData ? (BYTE)1: (BYTE)0 );
-    }
-
-    return rStream.GetError() == SVSTREAM_OK;
-}
-
-//-------------------------------------------------------------------------
-
-BOOL SfxDocumentInfo::Load(SvStorage* pStorage)
-{
-#ifdef DBG_UTIL
-    if(!pStorage->IsStream( String::CreateFromAscii( pDocInfoSlot )))
-        return FALSE;
-#endif
-    if ( pStorage->GetVersion() >= SOFFICE_FILEFORMAT_60 )
-    {
-        DBG_ERROR("This method only supports binary file format, use service StandaloneDocumentInfo!");
-        return FALSE;
-    }
-
-    SvStorageStreamRef aStr = pStorage->OpenStream( String::CreateFromAscii( pDocInfoSlot ),STREAM_STD_READ);
-    if(!aStr.Is())
-        return FALSE;
-    aStr->SetVersion( pStorage->GetVersion() );
-    aStr->SetBufferSize(STREAM_BUFFER_SIZE);
-    BOOL bRet = Load(*aStr);
-    if ( bRet )
-    {
-        String aStr = SotExchange::GetFormatMimeType( pStorage->GetFormat() );
-        USHORT nPos = aStr.Search(';');
-        if ( nPos != STRING_NOTFOUND )
-            pImp->aSpecialMimeType = aStr.Copy( 0, nPos );
-        else
-            pImp->aSpecialMimeType = aStr;
-    }
-
-    return bRet;
-}
+//REMOVE    BOOL SfxDocumentInfo::Save( SvStream& rStream ) const
+//REMOVE    {
+//REMOVE        FileHeader aHeader(pDocInfoHeader, VERSION, bPasswd? 1: 0);
+//REMOVE        aHeader.Save(rStream);
+//REMOVE        CharSet eNewFileCharSet = GetSOStoreTextEncoding( eFileCharSet );
+//REMOVE        rStream << (USHORT)eNewFileCharSet;
+//REMOVE        rStream.SetStreamCharSet(eNewFileCharSet);
+//REMOVE        rStream << (bPortableGraphics? (BYTE)1: (BYTE)0)
+//REMOVE                << (bQueryTemplate? (BYTE)1: (BYTE)0);
+//REMOVE        aCreated.Save(rStream);
+//REMOVE        aChanged.Save(rStream);
+//REMOVE        aPrinted.Save(rStream);
+//REMOVE
+//REMOVE        DBG_ASSERT( aTitle.Len() <= SFXDOCINFO_TITLELENMAX , "length of title overflow" );
+//REMOVE        DBG_ASSERT( aTheme.Len() <= SFXDOCINFO_THEMELENMAX , "length of theme overflow" );
+//REMOVE        DBG_ASSERT( aComment.Len() <= SFXDOCINFO_COMMENTLENMAX , "length of description overflow" );
+//REMOVE        DBG_ASSERT( aKeywords.Len() <= SFXDOCINFO_KEYWORDLENMAX , "length of keywords overflow" );
+//REMOVE
+//REMOVE        // save the title
+//REMOVE        String aString = aTitle;
+//REMOVE        aString.Erase( SFXDOCINFO_TITLELENMAX );
+//REMOVE        rStream.WriteByteString( aString );
+//REMOVE        PaddWithBlanks_Impl(rStream, SFXDOCINFO_TITLELENMAX - aString.Len());
+//REMOVE        // save the theme
+//REMOVE        aString = aTheme;
+//REMOVE        aString.Erase( SFXDOCINFO_THEMELENMAX );
+//REMOVE        rStream.WriteByteString( aString );
+//REMOVE        PaddWithBlanks_Impl(rStream, SFXDOCINFO_THEMELENMAX - aString.Len());
+//REMOVE        // save the description
+//REMOVE        aString = aComment;
+//REMOVE        aString.Erase( SFXDOCINFO_COMMENTLENMAX );
+//REMOVE        rStream.WriteByteString( aString );
+//REMOVE        PaddWithBlanks_Impl(rStream, SFXDOCINFO_COMMENTLENMAX - aString.Len());
+//REMOVE        // save the keywords
+//REMOVE        aString = aKeywords;
+//REMOVE        aString.Erase( SFXDOCINFO_KEYWORDLENMAX );
+//REMOVE        rStream.WriteByteString( aString );
+//REMOVE        PaddWithBlanks_Impl(rStream, SFXDOCINFO_KEYWORDLENMAX - aString.Len());
+//REMOVE
+//REMOVE        for(USHORT i = 0; i < MAXDOCUSERKEYS; ++i)
+//REMOVE            aUserKeys[i].Save(rStream);
+//REMOVE        rStream.WriteByteString( aTemplateName );
+//REMOVE        rStream.WriteByteString( aTemplateFileName );
+//REMOVE        rStream << (long)aTemplateDate.GetDate()
+//REMOVE                << (long)aTemplateDate.GetTime();
+//REMOVE
+//REMOVE        // wurde mal fuer MB in Panik eingebaut und dann doch nie benutzt :-)
+//REMOVE        if ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_40 )
+//REMOVE            rStream << (USHORT) 0;
+//REMOVE
+//REMOVE        rStream << GetTime() << GetDocumentNumber();
+//REMOVE
+//REMOVE        rStream << nUserDataSize;
+//REMOVE        if(pUserData)
+//REMOVE            rStream.Write(pUserData, nUserDataSize);
+//REMOVE        rStream << (bTemplateConfig? (BYTE)1: (BYTE)0);
+//REMOVE        if( aHeader.nVersion > 5 )
+//REMOVE        {
+//REMOVE            rStream << bReloadEnabled;
+//REMOVE            rStream.WriteByteString( aReloadURL );
+//REMOVE            rStream << nReloadSecs;
+//REMOVE            rStream.WriteByteString( aDefaultTarget );
+//REMOVE        }
+//REMOVE        if ( aHeader.nVersion > 6 )
+//REMOVE            rStream << (bSaveGraphicsCompressed? (BYTE)1: (BYTE)0);
+//REMOVE        if ( aHeader.nVersion > 7 )
+//REMOVE            rStream << (bSaveOriginalGraphics? (BYTE)1: (BYTE)0);
+//REMOVE        if ( aHeader.nVersion > 8 )
+//REMOVE        {
+//REMOVE            rStream << (bSaveVersionOnClose? (BYTE)1: (BYTE)0);
+//REMOVE            rStream.WriteByteString( pImp->aCopiesTo );
+//REMOVE            rStream.WriteByteString( pImp->aOriginal );
+//REMOVE            rStream.WriteByteString( pImp->aReferences );
+//REMOVE            rStream.WriteByteString( pImp->aRecipient );
+//REMOVE            rStream.WriteByteString( pImp->aReplyTo );
+//REMOVE            rStream.WriteByteString( pImp->aBlindCopies );
+//REMOVE            rStream.WriteByteString( pImp->aInReplyTo );
+//REMOVE            rStream.WriteByteString( pImp->aNewsgroups );
+//REMOVE            rStream << pImp->nPriority;
+//REMOVE        }
+//REMOVE        if ( aHeader.nVersion > 9 )
+//REMOVE        {
+//REMOVE            rStream.WriteByteString( pImp->aSpecialMimeType );
+//REMOVE        }
+//REMOVE        if ( aHeader.nVersion > 10 )
+//REMOVE        {
+//REMOVE            rStream << ( pImp->bUseUserData ? (BYTE)1: (BYTE)0 );
+//REMOVE        }
+//REMOVE
+//REMOVE        return rStream.GetError() == SVSTREAM_OK;
+//REMOVE    }
 
 //-------------------------------------------------------------------------
 
-BOOL SfxDocumentInfo::Save(SvStorage* pStorage) const
-{
-    SvStorageStreamRef aStr = pStorage->OpenStream( String::CreateFromAscii( pDocInfoSlot ), STREAM_TRUNC | STREAM_STD_READWRITE);
-    if(!aStr.Is())
-        return FALSE;
-    aStr->SetVersion( pStorage->GetVersion() );
-    aStr->SetBufferSize(STREAM_BUFFER_SIZE);
-    if(!Save(*aStr))
-        return FALSE;
-    return SavePropertySet( pStorage );
-}
+//REMOVE    BOOL SfxDocumentInfo::Load(SvStorage* pStorage)
+//REMOVE    {
+//REMOVE    #ifdef DBG_UTIL
+//REMOVE        if(!pStorage->IsStream( String::CreateFromAscii( pDocInfoSlot )))
+//REMOVE            return FALSE;
+//REMOVE    #endif
+//REMOVE        if ( pStorage->GetVersion() >= SOFFICE_FILEFORMAT_60 )
+//REMOVE        {
+//REMOVE            DBG_ERROR("This method only supports binary file format, use service StandaloneDocumentInfo!");
+//REMOVE            return FALSE;
+//REMOVE        }
+//REMOVE
+//REMOVE        SvStorageStreamRef aStr = pStorage->OpenStream( String::CreateFromAscii( pDocInfoSlot ),STREAM_STD_READ);
+//REMOVE        if(!aStr.Is())
+//REMOVE            return FALSE;
+//REMOVE        aStr->SetVersion( pStorage->GetVersion() );
+//REMOVE        aStr->SetBufferSize(STREAM_BUFFER_SIZE);
+//REMOVE        BOOL bRet = Load(*aStr);
+//REMOVE        if ( bRet )
+//REMOVE        {
+//REMOVE            String aStr = SotExchange::GetFormatMimeType( pStorage->GetFormat() );
+//REMOVE            USHORT nPos = aStr.Search(';');
+//REMOVE            if ( nPos != STRING_NOTFOUND )
+//REMOVE                pImp->aSpecialMimeType = aStr.Copy( 0, nPos );
+//REMOVE            else
+//REMOVE                pImp->aSpecialMimeType = aStr;
+//REMOVE        }
+//REMOVE
+//REMOVE        return bRet;
+//REMOVE    }
+
+//-------------------------------------------------------------------------
+
+//REMOVE    BOOL SfxDocumentInfo::Save(SvStorage* pStorage) const
+//REMOVE    {
+//REMOVE        SvStorageStreamRef aStr = pStorage->OpenStream( String::CreateFromAscii( pDocInfoSlot ), STREAM_TRUNC | STREAM_STD_READWRITE);
+//REMOVE        if(!aStr.Is())
+//REMOVE            return FALSE;
+//REMOVE        aStr->SetVersion( pStorage->GetVersion() );
+//REMOVE        aStr->SetBufferSize(STREAM_BUFFER_SIZE);
+//REMOVE        if(!Save(*aStr))
+//REMOVE            return FALSE;
+//REMOVE        return SavePropertySet( pStorage );
+//REMOVE    }
 
 //-------------------------------------------------------------------------
 
@@ -1611,24 +1614,24 @@ void SfxDocumentInfo::SetUseUserData( BOOL bNew )
 
 //-----------------------------------------------------------------------------
 
-ErrCode SfxDocumentInfo::Load(const String& rName)
-{
-    SfxMedium aMedium( rName, SFX_STREAM_READONLY_MAKECOPY, TRUE );
-    if ( !aMedium.GetStorage() || SVSTREAM_OK != aMedium.GetError() )
-        // Datei existiert nicht oder ist kein Storage
-        return ERRCODE_IO_CANTREAD;
-
-    // Filter-Detection wegen FileFormat-Version
-    const SfxFilter *pFilter = 0;
-    if ( 0 != SFX_APP()->GetFilterMatcher().GuessFilter( aMedium, &pFilter ) || !pFilter )
-        // unbekanntes Dateiformat
-        return ERRCODE_IO_CANTREAD;
-
-    // Storage "offnen
-    SvStorageRef xStor = aMedium.GetStorage();
-    xStor->SetVersion( pFilter->GetVersion() );
-    return Load( xStor ) ? ERRCODE_NONE : ERRCODE_IO_CANTREAD;
-}
+//REMOVE    ErrCode SfxDocumentInfo::Load(const String& rName)
+//REMOVE    {
+//REMOVE        SfxMedium aMedium( rName, SFX_STREAM_READONLY_MAKECOPY, TRUE );
+//REMOVE        if ( !aMedium.GetStorage().is() || SVSTREAM_OK != aMedium.GetError() )
+//REMOVE            // Datei existiert nicht oder ist kein Storage
+//REMOVE            return ERRCODE_IO_CANTREAD;
+//REMOVE
+//REMOVE        // Filter-Detection wegen FileFormat-Version
+//REMOVE        const SfxFilter *pFilter = 0;
+//REMOVE        if ( 0 != SFX_APP()->GetFilterMatcher().GuessFilter( aMedium, &pFilter ) || !pFilter )
+//REMOVE            // unbekanntes Dateiformat
+//REMOVE            return ERRCODE_IO_CANTREAD;
+//REMOVE
+//REMOVE        // Storage "offnen
+//REMOVE        SvStorageRef xStor = aMedium.GetStorage();
+//REMOVE        xStor->SetVersion( pFilter->GetVersion() );
+//REMOVE        return Load( xStor ) ? ERRCODE_NONE : ERRCODE_IO_CANTREAD;
+//REMOVE    }
 
 //------------------------------------------------------------------------
 
