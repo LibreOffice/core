@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-04 12:27:59 $
+ *  last change: $Author: bm $ $Date: 2001-03-04 14:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,6 +392,49 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 SchXMLExport_getImplementationName(),
                 SchXMLExport_createInstance,
                 SchXMLExport_getSupportedServiceNames() );
+        }
+
+        else if( SchXMLImport_Styles_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SchXMLImport_Styles_getImplementationName(),
+                SchXMLImport_Styles_createInstance,
+                SchXMLImport_Styles_getSupportedServiceNames() );
+        }
+        else if( SchXMLExport_Styles_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SchXMLExport_Styles_getImplementationName(),
+                SchXMLExport_Styles_createInstance,
+                SchXMLExport_Styles_getSupportedServiceNames() );
+        }
+        else if( SchXMLImport_Content_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SchXMLImport_Content_getImplementationName(),
+                SchXMLImport_Content_createInstance,
+                SchXMLImport_Content_getSupportedServiceNames() );
+        }
+        else if( SchXMLExport_Content_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SchXMLExport_Content_getImplementationName(),
+                SchXMLExport_Content_createInstance,
+                SchXMLExport_Content_getSupportedServiceNames() );
+        }
+        else if( SchXMLImport_Meta_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SchXMLImport_Meta_getImplementationName(),
+                SchXMLImport_Meta_createInstance,
+                SchXMLImport_Meta_getSupportedServiceNames() );
+        }
+        else if( SchXMLExport_Meta_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SchXMLExport_Meta_getImplementationName(),
+                SchXMLExport_Meta_createInstance,
+                SchXMLExport_Meta_getSupportedServiceNames() );
         }
         else if ( XMLMetaExportComponent_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
