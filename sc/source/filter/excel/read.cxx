@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-27 13:10:18 $
+ *  last change: $Author: dr $ $Date: 2002-10-01 11:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,6 +584,7 @@ FltError ImportExcel::Read( void )
                         break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x85:  Boundsheet(); break;    // BOUNDSHEET   [    5]
+                    case 0x8C:  Country(); break;       // COUNTRY      [  345]
                         break;
                 }
             }
@@ -610,7 +611,6 @@ FltError ImportExcel::Read( void )
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x55:  DefColWidth(); break;
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
-                    case 0x8C:  Country(); break;       // COUNTRY      [  345]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345]
                     case 0x92:  Palette(); break;       // PALETTE      [  345]
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
@@ -1123,6 +1123,7 @@ FltError ImportExcel8::Read( void )
                         break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
                     case 0x85:  Boundsheet(); break;    // BOUNDSHEET   [    5   ]
+                    case 0x8C:  Country(); break;       // COUNTRY      [  345   ]
                         break;
                 }
             }
@@ -1146,7 +1147,6 @@ FltError ImportExcel8::Read( void )
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34    ]
                     case 0x59:  Xct(); break;           // XCT          [      8 ]
                     case 0x5A:  Crn(); break;           // CRN          [      8 ]
-                    case 0x8C:  Country(); break;       // COUNTRY      [  345   ]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345   ]
                     case 0x92:  Palette(); break;       // PALETTE      [  345   ]
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45   ]
