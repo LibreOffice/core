@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 14:48:35 $
+ *  last change: $Author: iha $ $Date: 2003-11-15 08:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@ public:
     //problem y maybe not is always the second border to ask for
     virtual double getMinimumYInRange( double fMinimumX, double fMaximumX ) = 0;
     virtual double getMaximumYInRange( double fMinimumX, double fMaximumX ) = 0;
+
+    //problem: z maybe not independent in future
+    virtual double getMinimumZ() = 0;
+    virtual double getMaximumZ() = 0;
 };
 
 //enum StackType { STACK_NORMAL, STACK_NONE, STACK_BESIDES, STACK_ONTOP, STACK_BEHIND };
@@ -155,6 +159,9 @@ public:
 
     virtual double getMinimumYInRange( double fMinimumX, double fMaximumX );
     virtual double getMaximumYInRange( double fMinimumX, double fMaximumX );
+
+    virtual double getMinimumZ();
+    virtual double getMaximumZ();
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------

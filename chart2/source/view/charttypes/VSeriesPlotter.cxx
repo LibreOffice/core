@@ -378,6 +378,17 @@ double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX )
     return fMaximum;
 }
 
+double VSeriesPlotter::getMinimumZ()
+{
+    //this is the default for all charts without a meaningfull z axis
+    return -0.5;
+}
+double VSeriesPlotter::getMaximumZ()
+{
+    //this is the default for all charts without a meaningfull z axis
+    return 0.5;
+}
+
 //static
 sal_Int32 VSeriesPlotter::getPointCount( const ::std::vector< VDataSeriesGroup >& rSlots )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:33 $
+ *  last change: $Author: iha $ $Date: 2003-11-15 08:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,16 +180,14 @@ void setExplicitScaleToDefault( ExplicitScaleData& rExplicitScale )
 
 void VCoordinateSystem::doAutoScale( MinimumAndMaximumSupplier* pMinMaxSupplier )
 {
-    for( sal_Int32 nDim = 0; nDim < 2; nDim++ )
+    sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
+    for( sal_Int32 nDim = 0; nDim < nDimensionCount; nDim++ )
     {
-        if(nDim < 0 || nDim > 2 )
-            return;
-
         uno::Reference< XScale > xScale(
             m_xCooSysModel->getScaleByDimension( nDim ),
             uno::UNO_QUERY );
         if( ! xScale.is() )
-            return;
+            continue;
         ScaleAutomatism aScaleAutomatism( xScale->getScaleData() );
         uno::Reference< XAxis > xAxis( this->getAxisByDimension(nDim) );
         if(xAxis.is())
@@ -215,10 +213,16 @@ void VCoordinateSystem::doAutoScale( MinimumAndMaximumSupplier* pMinMaxSupplier 
             aScaleAutomatism.m_fValueMinimum = pMinMaxSupplier->getMinimumYInRange(rScale.Minimum,rScale.Maximum);
             aScaleAutomatism.m_fValueMaximum = pMinMaxSupplier->getMaximumYInRange(rScale.Minimum,rScale.Maximum);
         }
+        else if(2==nDim)
+        {
+            aScaleAutomatism.m_fValueMinimum = pMinMaxSupplier->getMinimumZ();
+            aScaleAutomatism.m_fValueMaximum = pMinMaxSupplier->getMaximumZ();
+        }
         aScaleAutomatism.calculateExplicitScaleAndIncrement(
                     m_aExplicitScales[nDim], m_aExplicitIncrements[nDim] );
     }
-    setExplicitScaleToDefault(m_aExplicitScales[2]);
+    if(nDimensionCount<3)
+        setExplicitScaleToDefault(m_aExplicitScales[2]);
 }
 
 //.............................................................................
