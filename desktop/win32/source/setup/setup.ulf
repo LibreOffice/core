@@ -2,6 +2,10 @@
 en-US = "Setup"
 de = "Setup"
 
+[%APP_PROD_TITLE%]
+en-US = "The %PRODUCTNAME Setup"
+de = "Das %PRODUCTNAME Setup"
+
 [%FILE_NOT_FOUND%]
 en-US = "Setup was unable to find the file '%s'."
 de = "Das Setup konnte die Datei '%s' nicht finden."
@@ -21,7 +25,6 @@ de = "Ungültiges oder unvollständiges Profile."
 [%REQUIRES_ADMIN_PRIV%]
 en-US = "Administrator privileges are required for upgrading the Windows Installer."
 de = "Es werden Administrator Rechte benötigt, um den Windows Installer zu aktualisieren."
-
 
 [%OUTOFMEM%]
 en-US = "Out of Memory"
@@ -57,11 +60,11 @@ de = "An error occured installing the package.  Windows Installer returned '%d'.
 
 [%ALLOW_MSI_UPDATE%]
 en-US = "This package requires a newer version of the Windows Installer. \nDo you want to update the version of the Windows Installer on your system?"
-de = "This package requires a newer version of the Windows Installer. \nDo you want to update the version of the Windows Installer on your system?"
+de = "Dieser Installationssatz benötigt eine neuere Version des Windows Installers.\nMöchten Sie die vorhandene Version des Windows Installers aktualisieren?"
 
 [%USAGE%]
-en-US = "Usage:\n   /? :  Show this dialog.\n   /a :  Perform an administrative install.\n   /j[u|m] :  Perform an advertising install.\n   /q[n] : Don't show any User Interface (silent mode).\n"
-de = "Benutzung:\n   /? :  Zeigt diesen Dialog.\n   /a :  Eine Administrative Installation durchführen.\n   /j[u|m] :  Perform an advertising install.\n   /q[n] : Don't show any User Interface (silent mode).\n"
+en-US = "Usage:\n   /? :  Shows this dialog.\n   /a :  Performs an administrative installation.\n   /j[u|m] :  Performs an advertising installation.\n   /q[n] : Do not show any user interface (silent mode).\n"
+de = "Benutzung:\n   /? :  Zeigt diesen Dialog.\n   /a :  Eine Administrative Installation durchführen.\n   /j[u|m] :  Das Produkt auf dem Rechner ankündigen (advertising).\n   /q[n] : Zeige keine Benutzeroberfläche (ohne Rückmeldung).\n"
 
 [%UNKNOWN_ERROR%]
 en-US = "A Unknown Error occured!"
@@ -71,89 +74,93 @@ de = "A Unknown Error occured!"
 en-US = "Unknown Language: %d"
 de = "Unknown Language: %d"
 
+[%CHOOSE_LANG%]
+en-US = "Please choose the language to be used during the installation:"
+de = "Bitte wählen Sie die Sprache aus, die während der Installation benutzt werden soll:"
+
 [%LANGUAGE_ZH_TW%]
-en-US = "Chinese - Taiwan"
-de = "Chinese - Taiwan"
+en-US = "Chinese (traditional)"
+de = "Chinesisch (Trad.)"
 
 [%LANGUAGE_CS%]
 en-US = "Czech"
-de = "Czech"
+de = "Tschechisch"
 
 [%LANGUAGE_DA%]
 en-US = "Danish"
-de = "Danish"
+de = "Dänisch"
 
 [%LANGUAGE_DE_DE%]
-en-US = "German - Germany"
-de = "Deutsch - Deutschland"
+en-US = "German (Germany)"
+de = "Deutsch (Deutschland)"
 
 [%LANGUAGE_EL%]
 en-US = "Greek"
 de = "Griechisch"
 
 [%LANGUAGE_EN_US%]
-en-US = "English - United States"
-de = "Englisch - U.S.A."
+en-US = "English (USA)"
+de = "Englisch (USA)"
 
 [%LANGUAGE_ES%]
-en-US = "Spanish - Spain"
-de = "Spanisch - Spanien"
+en-US = "Spanish (Spain)"
+de = "Spanisch (Spanien)"
 
 [%LANGUAGE_FI%]
 en-US = "Finnish"
 de = "Finnisch"
 
 [%LANGUAGE_FR_FR%]
-en-US = "French - France"
-de = "Französisch - Frankreich"
+en-US = "French (France)"
+de = "Französisch (Frankreich)"
 
 [%LANGUAGE_HE%]
 en-US = "Hebrew"
-de = "Hebrew"
+de = "Hebräisch"
 
 [%LANGUAGE_HU%]
 en-US = "Hungarian"
-de = "Hungarian"
+de = "Ungarisch"
 
 [%LANGUAGE_IT_IT%]
-en-US = "Italian - Italy"
-de = "Italian - Italy"
+en-US = "Italian (Italy)"
+de = "Italienisch (Italien)"
 
 [%LANGUAGE_JA%]
 en-US = "Japanese"
-de = "Japanese"
+de = "Japanisch"
 
 [%LANGUAGE_KO%]
 en-US = "Korean"
-de = "Korean"
+de = "Koreanisch"
 
 [%LANGUAGE_NL_NL%]
-en-US = "Dutch - The Netherlands"
-de = "Dutch - The Netherlands"
+en-US = "Dutch (Netherlands)"
+de = "Niederländisch (Niederlande)"
 
 [%LANGUAGE_NO_NO%]
-en-US = "Norwegian - Bokmål"
-de = "Norwegian - Bokmål"
+en-US = "Norwegian (Bokmål)"
+de = "Norwegisch (Bokmål)"
 
 [%LANGUAGE_PL%]
 en-US = "Polish"
-de = "Polish"
+de = "Polnisch"
 
 [%LANGUAGE_PT_BR%]
-en-US = "Portuguese - Brazil"
-de = "Portuguese - Brazil"
+en-US = "Portuguese (Brazil)"
+de = "Portugiesisch (Brasilien)"
 
 [%LANGUAGE_RU%]
 en-US = "Russian"
-de = "Russian"
+de = "Russisch"
 
 [%LANGUAGE_SK%]
-en-US = "Slovak"
-de = "Slovak"
+en-US = "Slovakian"
+de = "Slovakisch"
 
 [%LANGUAGE_SV_SE%]
-en-US = "Swedish - Sweden"
-de = "Swedish - Sweden"
+en-US = "Swedish (Sweden)"
+de = "Schwedisch (Schweden)"
 
 [%LANGUAGE_TH%]
 en-US = "Thai"
@@ -161,17 +168,16 @@ de = "Thai"
 
 [%LANGUAGE_TR%]
 en-US = "Turkish"
-de = "Turkish"
+de = "Türkisch"
 
 [%LANGUAGE_ET%]
 en-US = "Estonian"
 de = "Estonian"
 
 [%LANGUAGE_ZH_CN%]
-en-US = "Chinese - China"
-de = "Chinese - China"
+en-US = "Chinese (Simplified)"
+de = "Chinesisch (einfach)"
 
 [%LANGUAGE_PT_PT%]
-en-US = "Portuguese - Portugal"
-de = "Portuguese - Portugal"
-
+en-US = "Portuguese (Portugal)"
+de = "Portugiesisch (Portugal)"
