@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 21:04:26 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 11:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   ctredlin.src  $
  //   $Author: kz $
- //     $Date: 2001-08-21 21:04:26 $
- // $Revision: 1.24 $
+ //     $Date: 2001-08-24 11:06:25 $
+ // $Revision: 1.25 $
  //  $Logfile:   T:/svx/source/dialog/ctredlin.srv  $
  //---------------------------------------------------------------------------
 
@@ -1053,6 +1053,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ finnish ] = "Kommentti";
     };
 };
+
 
 
 
