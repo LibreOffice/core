@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 18:35:23 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:01:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,11 @@
 // --> OD 2004-11-10 #i35007#
 #ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#endif
+// <--
+// --> OD 2005-03-10 #i44334#, #i44681#
+#ifndef _B2D_MATRIX3D_HXX
+#include <goodies/matrix3d.hxx>
 #endif
 // <--
 
@@ -2403,52 +2408,6 @@ awt::Point SwXShape::_GetAttrPosition()
     return aAttrPos;
 }
 
-/** method to adjust the position (translation) of the drawing object to
-    the layout direction, the drawing object is in
-
-    OD 2004-07-27 #i31698#
-
-    @author OD
-*/
-awt::Point SwXShape::_ConvertPositionToLayoutDir(
-                                            const awt::Point _aObjPosInHoriL2R,
-                                            const awt::Size _aObjSize )
-{
-    awt::Point aObjPos( _aObjPosInHoriL2R );
-
-    SwFrmFmt* pFrmFmt = GetFrmFmt();
-    if ( pFrmFmt )
-    {
-        SwFrmFmt::tLayoutDir eLayoutDir = pFrmFmt->GetLayoutDir();
-        switch ( eLayoutDir )
-        {
-            case SwFrmFmt::HORI_L2R:
-            {
-                // nothing to do
-            }
-            break;
-            case SwFrmFmt::HORI_R2L:
-            {
-                aObjPos.X = -_aObjPosInHoriL2R.X - _aObjSize.Width;
-            }
-            break;
-            case SwFrmFmt::VERT_R2L:
-            {
-                aObjPos.X = _aObjPosInHoriL2R.Y;
-                aObjPos.Y = -_aObjPosInHoriL2R.X - _aObjSize.Width;
-            }
-            break;
-            default:
-            {
-                ASSERT( false,
-                        "<SwXShape::_ConvertPositionToLayoutDir(..)> - unsupported layout direction" );
-            }
-        }
-    }
-
-    return aObjPos;
-}
-
 /** method to convert the position (translation) of the drawing object to
     the layout direction horizontal left-to-right.
 
@@ -2505,11 +2464,52 @@ drawing::HomogenMatrix3 SwXShape::_ConvertTransformationToLayoutDir(
 {
     drawing::HomogenMatrix3 aMatrix( _aMatrixInHoriL2R );
 
-    // get position
-    awt::Point aPos( getPosition() );
-    // set translation at the transformation structure
-    aMatrix.Line1.Column3 = aPos.X;
-    aMatrix.Line2.Column3 = aPos.Y;
+    // --> OD 2005-03-10 #i44334#, #i44681# - direct manipulation of the
+    // tranformation structure isn't valid, if it contains rotation.
+    SvxShape* pSvxShape = GetSvxShape();
+    ASSERT( pSvxShape,
+            "<SwXShape::_ConvertTransformationToLayoutDir(..)> - no SvxShape found!")
+    if ( pSvxShape )
+    {
+        const SdrObject* pObj = pSvxShape->GetSdrObject();
+        ASSERT( pObj,
+                "<SwXShape::_ConvertTransformationToLayoutDir(..)> - no SdrObject found!")
+        if ( pObj )
+        {
+            // get position of object in Writer coordinate system.
+            awt::Point aPos( getPosition() );
+            // get position of object in Drawing layer coordinate system
+            const Point aTmpObjPos( pObj->GetSnapRect().TopLeft() );
+            const awt::Point aObjPos(
+                    TWIP_TO_MM100( aTmpObjPos.X() - pObj->GetAnchorPos().X() ),
+                    TWIP_TO_MM100( aTmpObjPos.Y() - pObj->GetAnchorPos().Y() ) );
+            // determine difference between these positions according to the
+            // Writer coordinate system
+            const awt::Point aTranslateDiff( aPos.X - aObjPos.X,
+                                             aPos.Y - aObjPos.Y );
+            // apply translation difference to transformation matrix.
+            if ( aTranslateDiff.X != 0 || aTranslateDiff.Y != 0 )
+            {
+                Matrix3D aMatrix3D;
+                aMatrix3D[0] = Point3D( aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3 );
+                aMatrix3D[1] = Point3D( aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3 );
+                aMatrix3D[2] = Point3D( aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3 );
+
+                aMatrix3D.Translate( aTranslateDiff.X, aTranslateDiff.Y );
+
+                aMatrix.Line1.Column1 = aMatrix3D[0].X();
+                aMatrix.Line1.Column2 = aMatrix3D[0].Y();
+                aMatrix.Line1.Column3 = aMatrix3D[0].W();
+                aMatrix.Line2.Column1 = aMatrix3D[1].X();
+                aMatrix.Line2.Column2 = aMatrix3D[1].Y();
+                aMatrix.Line2.Column3 = aMatrix3D[1].W();
+                aMatrix.Line3.Column1 = aMatrix3D[2].X();
+                aMatrix.Line3.Column2 = aMatrix3D[2].Y();
+                aMatrix.Line3.Column3 = aMatrix3D[2].W();
+            }
+        }
+    }
+    // <--
 
     return aMatrix;
 }
