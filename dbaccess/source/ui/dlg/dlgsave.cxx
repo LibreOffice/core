@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 10:03:56 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 09:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 SetSizePixel(Size(GetSizePixel().Width(), nNewHeight));
 
                 m_aTitle.SetText(m_aName);
+                m_aTitle.setCheck(); // enable non valid sql chars as well
             }
             break;
         case CommandType::TABLE:

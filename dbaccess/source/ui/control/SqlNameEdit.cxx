@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SqlNameEdit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-03 13:17:37 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 09:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,20 +76,23 @@ namespace dbaui
     //------------------------------------------------------------------
     void OSQLNameEdit::Modify()
     {
-        XubString sSavedValue = GetSavedValue();
-        XubString sText = GetText();
-        xub_StrLen nMatch = 0;//sText.Search(sSavedValue);
-        for(xub_StrLen i=nMatch;i < sText.Len();++i)
+        if(m_bCheck)
         {
-            if(!isCharOk(sText.GetBuffer()[i],i == 0,m_bOnlyUpperCase,m_sAllowedChars))
+            XubString sSavedValue = GetSavedValue();
+            XubString sText = GetText();
+            xub_StrLen nMatch = 0;//sText.Search(sSavedValue);
+            for(xub_StrLen i=nMatch;i < sText.Len();++i)
             {
-                if(i) // only set when not first char
-                    sSavedValue = sText.Copy(nMatch,i-nMatch);
-                SetText(sSavedValue);
-                break;
+                if(!isCharOk(sText.GetBuffer()[i],i == 0,m_bOnlyUpperCase,m_sAllowedChars))
+                {
+                    if(i) // only set when not first char
+                        sSavedValue = sText.Copy(nMatch,i-nMatch);
+                    SetText(sSavedValue);
+                    break;
+                }
             }
+            SaveValue();
         }
-        SaveValue();
         Edit::Modify();
     }
 }
