@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:15:41 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,9 +442,10 @@ protected:
 //==================================================================
 class DbTextField : public DbLimitedLengthField
 {
-    sal_Int16                   m_nKeyType;
     ::svt::IEditImplementation* m_pEdit;
     ::svt::IEditImplementation* m_pPainterImplementation;
+    sal_Int16                   m_nKeyType;
+    sal_Bool                    m_bIsSimpleEdit;
 
 protected:
     ~DbTextField( );
@@ -454,6 +455,7 @@ public:
     DbTextField(DbGridColumn& _rColumn);
 
     ::svt::IEditImplementation* GetEditImplementation() { return m_pEdit; }
+    sal_Bool                    IsSimpleEdit() const { return m_bIsSimpleEdit; }
 
     virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
@@ -844,9 +846,29 @@ protected:
 //==================================================================
 class FmXTextCell : public FmXDataCell
 {
+protected:
+    /** determines whether the text of this cell can be painted directly, without
+        using the painter control
+
+        If this is <TRUE/>, the <member>Paint</member> method will simply use the text as returned
+        by <member>GetText</member>, and draw it onto the device passed to <member>Paint</member>,
+        while respecting the current alignment settings.
+
+        If this is <FALSE/>, the <member>Paint</member> request will be forwarded to the painter
+        control (<member>m_pPainter</member>). This is more expensive, but the only option
+        if your painting involves more that a simple DrawText.
+
+        This member is <TRUE/> by default, and can be modified by derived classes.
+    */
+    sal_Bool    m_bFastPaint;
+
 public:
     TYPEINFO();
-    FmXTextCell(DbGridColumn* pColumn, DbCellControl* pControl):FmXDataCell(pColumn, pControl){}
+    FmXTextCell( DbGridColumn* pColumn, DbCellControl* pControl )
+        :FmXDataCell( pColumn, pControl )
+        ,m_bFastPaint( sal_False )
+    {
+    }
 
     virtual void Paint(OutputDevice& rDev,
                const Rectangle& rRect,
@@ -871,12 +893,6 @@ protected:
     virtual ~FmXEditCell();
 public:
     FmXEditCell(DbGridColumn* pColumn, DbCellControl* pControl);
-
-    virtual void Paint( OutputDevice& _rDev,
-               const Rectangle& _rRect,
-               const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField,
-               const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter
-            );
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXEditCell, FmXTextCell);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
