@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 17:04:48 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ TabPage RID_SVXPAGE_MENUS
     {
         Pos = MAP_APPFONT ( 6 , 11 ) ;
         Size = MAP_APPFONT ( 232 , 8 ) ;
-        Text [ de ] = "%PRODUDUCTNAME %MODULENAME Menüs" ;
+        Text [ de ] = "%PRODUCTNAME %MODULENAME Menüs" ;
         Text [ en-US ] = "%PRODUCTNAME %MODULENAME Menus" ;
     };
     FixedText FT_MENUS
@@ -214,16 +214,16 @@ TabPage RID_SVXPAGE_MENUS
         Pos = MAP_APPFONT ( 188 , 67 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Befehle hinzufügen..." ;
-        Text [ en-US ] = "Add Commands..." ;
+        Text [ de ] = "Hinzufügen..." ;
+        Text [ en-US ] = "Add..." ;
     };
     MenuButton BTN_CHANGE_ENTRY
     {
         Pos = MAP_APPFONT ( 188 , 84 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Befehl" ;
-        Text [ en-US ] = "Command" ;
+        Text [ de ] = "Ändern" ;
+        Text [ en-US ] = "Modify" ;
     };
     ImageButton BTN_UP
     {
@@ -637,7 +637,7 @@ ModalDialog MD_ICONSELECTOR
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 240 , 136 ) ;
+    Size = MAP_APPFONT ( 240 , 152 ) ;
     Text [ de ] = "Symbole Austauschen" ;
     Text [ en-US ] = "Change Icon" ;
     Moveable = TRUE ;
@@ -646,7 +646,7 @@ ModalDialog MD_ICONSELECTOR
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 172 , 8 ) ;
         Text [ de ] = "Symbole" ;
-        Text [ en-US ] = "Buttons" ;
+        Text [ en-US ] = "Icons" ;
     };
     ToolBox TB_SYMBOLS
     {
@@ -686,10 +686,11 @@ ModalDialog MD_ICONSELECTOR
     FixedText FT_NOTE
     {
         Pos = MAP_APPFONT ( 12 , 117 ) ;
-        Size = MAP_APPFONT ( 172 , 8 ) ;
+        Size = MAP_APPFONT ( 172 , 24 ) ;
         Text [ de ] = "Hinweis:\nBitte beachten Sie das für einen erfolgreichen Import die Symbole eine Größe  von 16x16 Pixel haben müssen." ;
         Text [ en-US ] = "Note:\nThe size of the icons must be 16x16 pixels for them to be successfully imported." ;
         Left = TRUE ;
+        WordBreak = TRUE;
     };
     Color IMAGE_BTN_COLOR
     {
@@ -700,6 +701,12 @@ ModalDialog MD_ICONSELECTOR
 };
 
 // Strings ---------------------------------------------------------------
+String RID_SVXSTR_IMPORT_ICON_ERROR
+{
+    Text [ de ] = "Die aufgelisteten Dateien konnten nicht importiert werden. Die Symbole entsprechen nicht der Größe von 16x16 Pixel." ;
+    Text [ en-US ] = "The files listed here could not be imported. The icons are not the required 16x16 pixels in size." ;
+};
+
 String RID_SVXSTR_PRODUCTNAME_TOOLBARS
 {
     Text [ de ] = "%PRODUCTNAME %MODULENAME Symbolleisten" ;
@@ -761,6 +768,22 @@ QueryBox QBX_CONFIRM_RESET
     Message [ en-US ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the factory settings. Do you want to continue?";
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
+};
+
+/* Translators: Do not translate %SAVE IN SELECTION% It is a placeholder
+   and will be replaced at runtime by the name of the selected application
+   or document.
+*/
+String RID_SVXSTR_CONFIRM_MENU_RESET
+{
+    Text [ de ] = "Die Menükonfiguration für %SAVE IN SELECTION% wird auf die Standardeinstellung zurückgesetzt. Möchten Sie fortfahren?";
+    Text [ en-US ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the factory settings. Do you want to continue?";
+};
+
+String RID_SVXSTR_CONFIRM_TOOLBAR_RESET
+{
+    Text [ de ] = "Die Symbolleistenkonfiguration für %SAVE IN SELECTION% wird auf die Standardeinstellung zurückgesetzt. Möchten Sie fortfahren?";
+    Text [ en-US ] = "The toolbar configuration for %SAVE IN SELECTION% will be reset to the factory settings. Do you want to continue?";
 };
 
 QueryBox QBX_CONFIRM_RESTORE_DEFAULT
