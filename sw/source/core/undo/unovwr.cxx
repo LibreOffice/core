@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unovwr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:32:06 $
+ *  last change: $Author: jp $ $Date: 2001-12-12 12:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,11 +395,12 @@ struct _UndoTransliterate_Data
     SwHistory* pHistory;
     Sequence <long>* pOffsets;
     ULONG nNdIdx;
-    xub_StrLen nStart;
+    xub_StrLen nStart, nLen;
 
-    _UndoTransliterate_Data( ULONG nNd, xub_StrLen nStt, const String& rTxt )
+    _UndoTransliterate_Data( ULONG nNd, xub_StrLen nStt, xub_StrLen nStrLen,
+                                const String& rTxt )
         : pNext( 0 ), pOffsets( 0 ), pHistory( 0 ), sText( rTxt ),
-        nStart( nStt ), nNdIdx( nNd )
+        nStart( nStt ), nNdIdx( nNd ), nLen( nStrLen )
     {}
     ~_UndoTransliterate_Data() { delete pOffsets; delete pHistory; }
 
@@ -458,13 +459,13 @@ void SwUndoTransliterate::Repeat( SwUndoIter& rUndoIter )
 }
 
 void SwUndoTransliterate::AddChanges( const SwTxtNode& rTNd,
-                    xub_StrLen nStart, xub_StrLen nNewLen,
+                    xub_StrLen nStart, xub_StrLen nLen,
                      ::com::sun::star::uno::Sequence <long>& rOffsets )
 {
     long nOffsLen = rOffsets.getLength();
     _UndoTransliterate_Data* pNew = new _UndoTransliterate_Data(
-                        rTNd.GetIndex(), nStart,
-                        rTNd.GetTxt().Copy( nStart, xub_StrLen(nOffsLen) ));
+                        rTNd.GetIndex(), nStart, (xub_StrLen)nOffsLen,
+                        rTNd.GetTxt().Copy( nStart, nLen ));
     if( pData )
         pLastData->pNext = pNew;
     else
@@ -480,7 +481,7 @@ void SwUndoTransliterate::AddChanges( const SwTxtNode& rTNd,
         if( *p != ( nStart + n ))
         {
             // create the Offset array
-            pNew->pOffsets = new Sequence <long> ( nNewLen );
+            pNew->pOffsets = new Sequence <long> ( nLen );
             long* pIdx = pNew->pOffsets->getArray();
             p = pOffsets;
             long nMyOff, nNewVal = nStart;
@@ -490,12 +491,12 @@ void SwUndoTransliterate::AddChanges( const SwTxtNode& rTNd,
                 {
                     // something is deleted
                     nMyOff = *p;
-                    ++nNewVal;
+                    *(pIdx-1) = nNewVal++;
                 }
                 else if( *p > nMyOff )
                 {
                     for( ; *p > nMyOff; ++nMyOff )
-                        *pIdx++ = nNewVal-1;
+                        *pIdx++ = nNewVal;
                     --nMyOff;
                     --n;
                     --p;
@@ -503,8 +504,6 @@ void SwUndoTransliterate::AddChanges( const SwTxtNode& rTNd,
                 else
                     *pIdx++ = nNewVal++;
             }
-            while( n++ < nNewLen )
-                *pIdx++ = nNewVal-1;
 
             // and then we need to save the attributes/bookmarks
             // but this data must moved every time to the last in the chain!
@@ -537,18 +536,16 @@ void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
     SwTxtNode* pTNd = rDoc.GetNodes()[ nNdIdx ]->GetTxtNode();
     if( pTNd )
     {
-        xub_StrLen nDataLen = sText.Len();
-        Sequence <long> aOffsets( nDataLen );
-        String sChgd;
+        Sequence <long> aOffsets( pOffsets ? pOffsets->getLength() : nLen );
         if( pOffsets )
             aOffsets = *pOffsets;
         else
         {
             long* p = aOffsets.getArray();
-            for( xub_StrLen n = 0; n < nDataLen; ++n, ++p )
+            for( xub_StrLen n = 0; n < nLen; ++n, ++p )
                 *p = n + nStart;
         }
-        pTNd->ReplaceTextOnly( nStart, sText, aOffsets );
+        pTNd->ReplaceTextOnly( nStart, nLen, sText, aOffsets );
 
         if( pHistory )
         {
