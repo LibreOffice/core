@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tbe $ $Date: 2002-12-02 12:12:37 $
+ *  last change: $Author: cd $ $Date: 2002-12-10 13:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,8 @@
         case WINDOW_SYSWINDOW:
         case WINDOW_WORKWINDOW:
         case WINDOW_DOCKINGWINDOW:
-        case WINDOW_FLOATINGWINDOW: return new VCLXTopWindow;
+        case WINDOW_FLOATINGWINDOW:
+        case WINDOW_HELPTEXTWINDOW: return new VCLXTopWindow;
 
         case WINDOW_WINDOW:
         case WINDOW_TABPAGE:        return new VCLXContainer;
