@@ -482,7 +482,7 @@ void AreaChart::createShapes()
         m_xErrorBarTarget = createGroupShape( m_xLogicTarget,rtl::OUString() );
     else
         m_xErrorBarTarget = m_xSeriesTarget;
-    m_xTextTarget     = createGroupShape( m_xLogicTarget,rtl::OUString() );
+    m_xTextTarget     = m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() );
 
     //---------------------------------------------
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
@@ -641,14 +641,17 @@ void AreaChart::createShapes()
                     createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nIndex, m_xErrorBarTarget );
 
                     //create data point label
-                    LabelAlignment eAlignment(LABEL_ALIGN_TOP);
-                    awt::Point aScreenPosition2D = awt::Point(
-                            static_cast<sal_Int32>(aTransformedGeom.m_aPosition.PositionX)
-                            ,static_cast<sal_Int32>(aTransformedGeom.m_aPosition.PositionY
-                            -aSymbolSize.DirectionY/2-1));
-                    this->createDataLabel( m_xTextTarget, **aSeriesIter, nIndex
-                                    , aUnscaledLogicPosition.PositionY
-                                    , fLogicYSum, aScreenPosition2D, eAlignment );
+                    if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )
+                    {
+                        LabelAlignment eAlignment = LABEL_ALIGN_TOP;
+                        drawing::Position3D aScenePosition3D( aTransformedGeom.m_aPosition.PositionX
+                                    , aTransformedGeom.m_aPosition.PositionY-aSymbolSize.DirectionY/2-1
+                                    , aTransformedGeom.m_aPosition.PositionZ+m_pPosHelper->getTransformedDepth() );
+                        awt::Point aScreenPosition2D( this->transformSceneToScreenPosition( aScenePosition3D ) );
+                        this->createDataLabel( m_xTextTarget, **aSeriesIter, nIndex
+                                        , aUnscaledLogicPosition.PositionY
+                                        , fLogicYSum, aScreenPosition2D, eAlignment );
+                    }
                 }
 
                 //remove PointGroupShape if empty

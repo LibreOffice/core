@@ -188,6 +188,28 @@ APPHELPER_XSERVICEINFO_IMPL(BarChart,CHART2_VIEW_BARCHART_SERVICE_IMPLEMENTATION
 }
 */
 
+awt::Point BarChart::getLabelScreenPositionAndAlignment(
+                     LabelAlignment& rAlignment, bool bMiddlePosition
+                     , const DataPointGeometry& rTransformedGeom ) const
+{
+    drawing::Position3D aScenePosition3D( rTransformedGeom.m_aPosition.PositionX
+        , rTransformedGeom.m_aPosition.PositionY + rTransformedGeom.m_aSize.DirectionY
+        , 0 );
+    if(bMiddlePosition)
+    {
+        aScenePosition3D.PositionY -= rTransformedGeom.m_aSize.DirectionY/2.0;
+        rAlignment = LABEL_ALIGN_CENTER;
+    }
+    if(3==m_nDimension)
+    {
+        rAlignment = LABEL_ALIGN_CENTER;
+        aScenePosition3D.PositionZ -= rTransformedGeom.m_aSize.DirectionZ/2.0;
+        if(bMiddlePosition)
+            aScenePosition3D.PositionZ -= rTransformedGeom.m_aSize.DirectionZ/2.0;
+    }
+    return this->transformSceneToScreenPosition( aScenePosition3D );
+}
+
 uno::Reference< drawing::XShape > BarChart::createDataPoint2D_Bar(
           const uno::Reference< drawing::XShapes >& xTarget
         , const DataPointGeometry& rGeometry
@@ -288,7 +310,7 @@ void BarChart::createShapes()
     uno::Reference< drawing::XShapes > xRegressionCurveTarget(
         createGroupShape( m_xLogicTarget,rtl::OUString() ));
     uno::Reference< drawing::XShapes > xTextTarget(
-        createGroupShape( m_xLogicTarget,rtl::OUString() ));
+        m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() ));
 
 
     //---------------------------------------------
@@ -448,21 +470,14 @@ void BarChart::createShapes()
 
                     //------------
                     //create data point label
-                    bool bMiddlePosition = false;
-                    if( pSeriesList->begin() != pSeriesList->end() )
-                        bMiddlePosition = true;
-
-                    awt::Point aScreenPosition2D = awt::Point(
-                            static_cast<sal_Int32>(aTransformedGeom.m_aPosition.PositionX)
-                            ,static_cast<sal_Int32>(aTransformedGeom.m_aPosition.PositionY
-                                                    +aTransformedGeom.m_aSize.DirectionY )
-                            );
-                    if(bMiddlePosition)
-                        aScreenPosition2D.Y -= static_cast<sal_Int32>(aTransformedGeom.m_aSize.DirectionY/2.0);
-
-                    double fLogicSum = bPositive ? fLogicPositiveYSum : fLogicNegativeYSum;
-                    this->createDataLabel( xTextTarget, **aSeriesIter, nCatIndex
-                                    , fLogicBarHeight, fLogicSum, aScreenPosition2D );
+                    if( (**aSeriesIter).getDataPointLabelIfLabel(nCatIndex) )
+                    {
+                        double fLogicSum = bPositive ? fLogicPositiveYSum : fLogicNegativeYSum;
+                        LabelAlignment eAlignment(LABEL_ALIGN_TOP);
+                        awt::Point aScreenPosition2D( this->getLabelScreenPositionAndAlignment(eAlignment, pSeriesList->size() > 1, aTransformedGeom));
+                        this->createDataLabel( xTextTarget, **aSeriesIter, nCatIndex
+                                        , fLogicBarHeight, fLogicSum, aScreenPosition2D, eAlignment );
+                    }
                 }//end iteration through partial points
 
                 //remove PointGroupShape if empty

@@ -15,6 +15,10 @@
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
 #endif
+// header for class Vector2D
+#ifndef _VECTOR2D_HXX
+#include <tools/vector2d.hxx>
+#endif
 
 //.............................................................................
 namespace chart
@@ -238,6 +242,20 @@ bool PieChart::isSingleRingChart() const
     return m_pPosHelper->getEndCategoryIndex()==1 ;
 }
 
+awt::Point PieChart::transformLogicToScreenPosition( const drawing::Position3D& rLogicPosition3D ) const
+{
+    drawing::Position3D aScenePosition3D( SequenceToPosition3D(
+        m_pPosHelper->getTransformationLogicToScene( m_nDimension )->transform(
+            Position3DToSequence(rLogicPosition3D) ) ) );
+    if(3==m_nDimension)
+    {
+        drawing::Position3D aScenePosition3D_rotated( aScenePosition3D.PositionX, -aScenePosition3D.PositionZ, aScenePosition3D.PositionY );
+        aScenePosition3D = aScenePosition3D_rotated;
+    }
+    awt::Point aScreenPosition2D( this->transformSceneToScreenPosition( aScenePosition3D ) );
+    return aScreenPosition2D;
+}
+
 awt::Point PieChart::getLabelScreenPositionAndAlignment( LabelAlignment& rAlignment, bool bOutsidePosition
         , double fAngleDegree, double fOuterRadius, double fInnerRadius, double fLogicZ) const
 {
@@ -247,8 +265,71 @@ awt::Point PieChart::getLabelScreenPositionAndAlignment( LabelAlignment& rAlignm
     double fRadius = 0.0;
     if( bOutsidePosition )
     {
-        fRadius = fOuterRadius + 0.1*fOuterRadius;
-        if(fAngleDegree<=22.5)
+        fRadius = fOuterRadius;
+        if(3!=m_nDimension) //for 3D better add 10percent of the 2D distance
+            fRadius += 0.1*fOuterRadius;
+    }
+    else
+        fRadius = fInnerRadius + (fOuterRadius-fInnerRadius)/2.0 ;
+
+    if(3==m_nDimension)
+        fAnglePi *= -1.0;
+    drawing::Position3D aLogicPos(fRadius*cos(fAnglePi),fRadius*sin(fAnglePi),fLogicZ+0.5);
+    awt::Point aRet( this->transformLogicToScreenPosition( aLogicPos ) );
+
+    if(3==m_nDimension)
+    {
+        //check wether the upper or the downer edge is more distant from the center
+        //take the farest point to put the label to
+        drawing::Position3D aLogicPos2(fRadius*cos(fAnglePi),fRadius*sin(fAnglePi),fLogicZ-0.5);
+        drawing::Position3D aLogicCenter(0,0,fLogicZ);
+
+        awt::Point aP0( this->transformLogicToScreenPosition(
+                        drawing::Position3D(0,0,fLogicZ) ) );
+        awt::Point aP1(aRet);
+        awt::Point aP2( this->transformLogicToScreenPosition(
+                        drawing::Position3D(fRadius*cos(fAnglePi),fRadius*sin(fAnglePi),fLogicZ-0.5) ) );
+
+        Vector2D aV0( aP0.X, aP0.Y );
+        Vector2D aV1( aP1.X, aP1.Y );
+        Vector2D aV2( aP2.X, aP2.Y );
+
+        double fL1 = (aV1-aV0).GetLength();
+        double fL2 = (aV2-aV0).GetLength();
+
+        if(fL2>fL1)
+            aRet = aP2;
+
+        //calculate new angle for alignment
+        double fDX = aRet.X-aP0.X;
+        double fDY = aRet.Y-aP0.Y;
+        fDY*=-1.0;//drawing layer has inverse y values
+        if( fDX != 0.0 )
+        {
+            fAngleDegree = atan(fDY/fDX)*180.0/F_PI;
+            if(fDX<0.0)
+                fAngleDegree+=180.0;
+        }
+        else
+        {
+            if(fDY>0.0)
+                fAngleDegree = 90.0;
+            else
+                fAngleDegree = 270.0;
+        }
+    }
+    //------------------------------
+    //set LabelAlignment
+    if( bOutsidePosition )
+    {
+        while(fAngleDegree>360.0)
+            fAngleDegree-=360.0;
+        while(fAngleDegree<0.0)
+            fAngleDegree+=360.0;
+
+        if(fAngleDegree==0.0)
+            rAlignment = LABEL_ALIGN_CENTER;
+        else if(fAngleDegree<=22.5)
             rAlignment = LABEL_ALIGN_RIGHT;
         else if(fAngleDegree<67.5)
             rAlignment = LABEL_ALIGN_RIGHT_TOP;
@@ -269,14 +350,9 @@ awt::Point PieChart::getLabelScreenPositionAndAlignment( LabelAlignment& rAlignm
     }
     else
     {
-        fRadius = fInnerRadius + (fOuterRadius-fInnerRadius)/2.0 ;
         rAlignment = LABEL_ALIGN_CENTER;
     }
-    drawing::Position3D aLogicPos(fRadius*cos(fAnglePi),fRadius*sin(fAnglePi),fLogicZ);
-
-    uno::Reference< XTransformation > xTransformation = m_pPosHelper->getTransformationLogicToScene( m_nDimension );
-    drawing::Position3D aScreenPosition3D( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicPos) ) ) );
-    return awt::Point( aScreenPosition3D.PositionX, aScreenPosition3D.PositionY );
+    return aRet;
 }
 
 uno::Reference< drawing::XShape > PieChart::createDataPoint2D(
@@ -320,7 +396,7 @@ void PieChart::createShapes()
     uno::Reference< drawing::XShapes > xSeriesTarget(
         createGroupShape( m_xLogicTarget,rtl::OUString() ));
     uno::Reference< drawing::XShapes > xTextTarget(
-        createGroupShape( m_xLogicTarget,rtl::OUString() ));
+        m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() ));
 
     if( this->isSingleRingChart() )
     {
@@ -439,11 +515,14 @@ void PieChart::createShapes()
                             ,(*aSeriesIter)->getPropertiesOfPoint( nCatIndex ));
                     }
                     //create data point label
-                    LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
-                    awt::Point aScreenPosition2D( this->getLabelScreenPositionAndAlignment(eAlignment, this->isSingleRingChart()
-                        , fStartAngleDegree + fWidthAngleDegree/2.0, fOuterXRadius, fInnerXRadius, fLogicZ ));
-                    this->createDataLabel( xTextTarget, **aSeriesIter, nCatIndex
-                                    , fLogicYValue, fLogicYSum, aScreenPosition2D, eAlignment );
+                    if( (**aSeriesIter).getDataPointLabelIfLabel(nCatIndex) )
+                    {
+                        LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
+                        awt::Point aScreenPosition2D( this->getLabelScreenPositionAndAlignment(eAlignment, this->isSingleRingChart()
+                            , fStartAngleDegree + fWidthAngleDegree/2.0, fOuterXRadius, fInnerXRadius, fLogicZ ));
+                        this->createDataLabel( xTextTarget, **aSeriesIter, nCatIndex
+                                        , fLogicYValue, fLogicYSum, aScreenPosition2D, eAlignment );
+                    }
                 }
 
                 //remove PointGroupShape if empty

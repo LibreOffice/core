@@ -61,6 +61,10 @@ private: //methods
                         , const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::beans::XPropertySet >& xObjectProperties );
 
+    ::com::sun::star::awt::Point getLabelScreenPositionAndAlignment(
+                        LabelAlignment& rAlignment, bool bMiddlePosition
+                        , const DataPointGeometry& rTransformedGeom ) const;
+
 private: //member
     BarPositionHelper*                   m_pPosHelper;
 };
