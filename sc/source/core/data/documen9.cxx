@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:25:17 $
+ *  last change: $Author: nn $ $Date: 2002-05-08 14:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,7 +545,7 @@ void ScDocument::RefreshNoteFlags()
     if (!pDrawLayer)
         return;
 
-    BOOL bAnyNote = FALSE;
+    BOOL bAnyIntObj = FALSE;
     USHORT nTab;
     ScPostIt aNote;
     for (nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
@@ -558,18 +558,22 @@ void ScDocument::RefreshNoteFlags()
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {
-                if ( pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA( SdrCaptionObj ) )
+                if ( pObject->GetLayer() == SC_LAYER_INTERN )
                 {
-                    bAnyNote = TRUE;
-                    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
-                    if ( pData )
+                    bAnyIntObj = TRUE;  // for all internal objects, including detective
+
+                    if ( pObject->ISA( SdrCaptionObj ) )
                     {
-                        if ( GetNote( pData->aStt.nCol, pData->aStt.nRow, nTab, aNote ) )
-                            if ( !aNote.IsShown() )
-                            {
-                                aNote.SetShown(TRUE);
-                                SetNote( pData->aStt.nCol, pData->aStt.nRow, nTab, aNote );
-                            }
+                        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
+                        if ( pData )
+                        {
+                            if ( GetNote( pData->aStt.nCol, pData->aStt.nRow, nTab, aNote ) )
+                                if ( !aNote.IsShown() )
+                                {
+                                    aNote.SetShown(TRUE);
+                                    SetNote( pData->aStt.nCol, pData->aStt.nRow, nTab, aNote );
+                                }
+                        }
                     }
                 }
                 pObject = aIter.Next();
@@ -577,12 +581,14 @@ void ScDocument::RefreshNoteFlags()
         }
     }
 
-    if (bAnyNote)
+    if (bAnyIntObj)
     {
-        //  update attributes for all note objects
+        //  update attributes for all note objects and the colors of detective objects
+        //  (we don't know with which settings the file was created)
 
         ScDetectiveFunc aFunc( this, 0 );
         aFunc.UpdateAllComments();
+        aFunc.UpdateAllArrowColors();
     }
 }
 
