@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-02-13 09:47:55 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 20:58:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,7 +519,7 @@ TabPage TP_CHAR_URL
         Text[ dutch ] = "~Frame";
         Text[ chinese_simplified ] = "¿ò¶ÔÏó";
         Text[ greek ] = "Ğëáßóéï";
-        Text[ korean ] = "¸ñÇ¥ ÇÁ·¹ÀÓ";
+        Text[ korean ] = "ÇÁ·¹ÀÓ";
         Text[ turkish ] = "~Frame";
     };
     ComboBox LB_TARGET
@@ -611,7 +611,7 @@ TabPage TP_CHAR_URL
         Text[ chinese_simplified ] = "·ÃÎÊ¹ıµÄÁ´½Ó(~V)";
         Text[ greek ] = "Óõíäİóåéò ğïõ İ÷ïõí åğéóêåöèåß";
         Text[ korean ] = "¹æ¹®ÇÑ ¸µÅ©(~V)";
-        Text[ turkish ] = "~Kullanılmış bağlantı";
+        Text[ turkish ] = "~Kullanılmış hyperlink";
     };
     ListBox LB_VISITED
     {
@@ -637,7 +637,7 @@ TabPage TP_CHAR_URL
         Text [ swedish ] = "~Oanvänd länk" ;
         Text [ danish ] = "Ubesøgt hyperlink" ;
         Text [ portuguese_brazilian ] = "~Unbesuchte Links" ;
-        Text [ portuguese ] = "~Link não visitado" ;
+        Text [ portuguese ] = "~Ligação não visitada" ;
         Text[ chinese_simplified ] = "ÉĞÎ´·ÃÎÊ¹ıµÄÁ´½Ó(~L)";
         Text[ russian ] = "Íåïîñåùåííûå ññûëêè";
         Text[ polish ] = "Nieodwiedzone ³¹cze";
@@ -648,7 +648,7 @@ TabPage TP_CHAR_URL
         Text[ chinese_simplified ] = "ÉĞÎ´·ÃÎÊ¹ıµÄÁ´½Ó(~L)";
         Text[ greek ] = "Óõíäİóåéò ÷ùñßò åğßóêåøç";
         Text[ korean ] = "¹æ¹®ÇÏÁö ¾ÊÀº ¸µÅ©(~L)";
-        Text[ turkish ] = "Kullanıl~mamış bağlantı";
+        Text[ turkish ] = "Kullanıl~mamış hyperlink";
     };
     ListBox LB_NOT_VISITED
     {
