@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-13 22:11:13 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,14 +178,14 @@ TabDialog DLG_PARA
                 Text [ ENGLISH ] = "Asian typography" ;
                 Text[ english_us ] = "Asian Typography";
                 Text[ portuguese ] = "Asian typography";
-                Text[ russian ] = "Asian typography";
+                Text[ russian ] = "Àçèàòñêèå øğèôòû";
                 Text[ greek ] = "ÁóéÜôéêç ôõğïãñáößá";
-                Text[ dutch ] = "Asian typography";
+                Text[ dutch ] = "Asiatische typografie";
                 Text[ french ] = "Typographie asiatique";
                 Text[ spanish ] = "Tipografía asiática";
-                Text[ italian ] = "Asian typography";
+                Text[ italian ] = "Tipografia asiatica";
                 Text[ danish ] = "Asian typography";
-                Text[ swedish ] = "Asian typography";
+                Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
                 Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
@@ -430,6 +430,24 @@ TabDialog DLG_DRAWPARA
                 Identifier = TP_PARA_ASIAN;
                 Text = "Asiatische Typographie" ;
                 Text [ ENGLISH ] = "Asian typography" ;
+                Text[ english_us ] = "Asian Typography";
+                Text[ portuguese ] = "Asian typography";
+                Text[ russian ] = "Àçèàòñêèå øğèôòû";
+                Text[ greek ] = "ÁóéáôéêŞ ôõğïãñáößá";
+                Text[ dutch ] = "Asiatische typografie";
+                Text[ french ] = "Typographie asiatique";
+                Text[ spanish ] = "Tipografía asiática";
+                Text[ italian ] = "Tipografia asiatica";
+                Text[ danish ] = "Asian typography";
+                Text[ swedish ] = "Asiatisk typografi";
+                Text[ polish ] = "Typografia azjatycka";
+                Text[ portuguese_brazilian ] = "Asian typography";
+                Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
+                Text[ korean ] = "Asian typography";
+                Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
+                Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
+                Text[ turkish ] = "Asian typography";
+                Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
             };
             PageItem
             {
