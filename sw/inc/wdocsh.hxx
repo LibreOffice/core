@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wdocsh.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:43:23 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,17 @@
 #ifndef _SWWDOCSH_HXX
 #define _SWWDOCSH_HXX
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+#ifndef _SWDOCSH_HXX
 #include "docsh.hxx"
+#endif
 #ifndef SW_SWDLL_HXX
 #include <swdll.hxx>
 #endif
 
-class SwWebDocShell: public SwDocShell
+class SW_DLLPUBLIC SwWebDocShell: public SwDocShell
 {
     USHORT      nSourcePara;    // aktive Zeile in der SourceView
 public:
