@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-27 11:03:18 $
+ *  last change: $Author: cp $ $Date: 2001-08-28 09:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,10 @@ GlyphSet::AddGlyphID (sal_Unicode nChar,
     {
         // other chars are just appended to the list
         glyph_mapping_t& aGlyphSet = maGlyphList.back();
-        aGlyphSet [nChar] = aGlyphSet.size();
+
+        int nSize         = aGlyphSet.size();
+
+        aGlyphSet [nChar] = nSize;
         *nOutGlyphSetID   = maGlyphList.size();
         *nOutGlyphID      = aGlyphSet [nChar];
     }
@@ -456,7 +459,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
                                  pEncodingVector + nSize);
         nSize += psp::appendStr (GetGlyphSetEncodingName(nGlyphSetID),
                                  pEncodingVector + nSize);
-        nSize += psp::appendStr (" [ /.notdef ",
+        nSize += psp::appendStr (" [ ",
                                  pEncodingVector + nSize);
 
         // need a list of glyphs, sorted by glyphid
