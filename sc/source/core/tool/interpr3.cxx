@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-13 12:33:04 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,7 +896,9 @@ void ScInterpreter::ScCritBinom()
                 else
                 {
                     double fSum = 1.0 - fFactor; ULONG max = (ULONG) n;
-                    for (ULONG i = 0; i < max && fSum >= alpha; i++)
+                    ULONG i;
+
+                    for ( i = 0; i < max && fSum >= alpha; i++)
                     {
                         fFactor *= (n-i)/(i+1)*q/p;
                         fSum -= fFactor;
@@ -907,7 +909,9 @@ void ScInterpreter::ScCritBinom()
             else
             {
                 double fSum = fFactor; ULONG max = (ULONG) n;
-                for (ULONG i = 0; i < max && fSum < alpha; i++)
+                ULONG i;
+
+                for ( i = 0; i < max && fSum < alpha; i++)
                 {
                     fFactor *= (n-i)/(i+1)*p/q;
                     fSum += fFactor;
@@ -2592,7 +2596,9 @@ void ScInterpreter::ScModalValue()
 #endif
         ULONG nMaxIndex, nMax = 1, nCount = 1;
         double nOldVal = pSArray[0];
-        for (ULONG i = 1; i < nSize; i++)
+        ULONG i;
+
+        for ( i = 1; i < nSize; i++)
         {
             if (pSArray[i] == nOldVal)
                 nCount++;
