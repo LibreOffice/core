@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-12 09:00:21 $
+ *  last change: $Author: oj $ $Date: 2002-08-12 09:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef CONNECTIVITY_POOLCOLLECTION_HXX
 #include "ZPoolCollection.hxx"
 #endif
+#ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
+#include "connectivity/ConnectionWrapper.hxx"
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -118,6 +121,7 @@ namespace
         static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Timeout");
         return s_sNodeName;
     }
+
 }
 //==========================================================================
 //= OConnectionPool
