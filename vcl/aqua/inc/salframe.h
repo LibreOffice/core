@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:25 $
+ *  last change: $Author: pluby $ $Date: 2000-10-26 03:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,19 @@
 #include <sv.h>
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
+// Create a native NSWindow
+HWND NSWindow_create( ULONG nSalFrameStyle );
+
+// Destroy a native NSWindow
+void NSWindow_destroy( HWND window );
+
+#ifdef __cplusplus
+}
+
 #ifndef _SV_SYSDATA_HXX
 #include <sysdata.hxx>
 #endif
@@ -114,5 +127,6 @@ public:
     BOOL                    mbCompositionMode;      // TRUE: Wir befinden uns im Composition-Modus
     BOOL                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
 };
+#endif // __cplusplus
 
 #endif // _SV_SALFRAME_H
