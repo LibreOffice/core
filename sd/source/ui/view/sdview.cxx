@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:16:29 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,46 +728,52 @@ BOOL View::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
 
 SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally)
 {
+    return EndTextEdit(bDontDeleteReally, NULL );
+}
+
+SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FuPoor* pFunc)
+{
     BOOL bIsTextEdit = IsTextEdit();
 
     SdrEndTextEditKind eKind;
 
     ViewShell* pViewShell= pDocSh->GetViewShell();
 
-    if ( pViewShell && pViewShell->ISA(DrawViewShell) )
+    if( pFunc == 0 )
     {
-        FuPoor* pFunc = ( (DrawViewShell*) pViewShell)->GetActualFunction();
-
-        if ( !pFunc || !pFunc->ISA(FuText) )
-            pFunc = ( (DrawViewShell*) pViewShell)->GetOldFunction();
-
-        if ( pFunc && pFunc->ISA(FuText) )
+        if( pViewShell && pViewShell->ISA(DrawViewShell) )
         {
-            SdrTextObj* pTextObj = ( (FuText*) pFunc)->GetTextObj();
-            BOOL bDefaultTextRestored = ( (FuText*) pFunc)->RestoreDefaultText();
-            eKind = FmFormView::EndTextEdit(bDontDeleteReally);
+            pFunc = ( (DrawViewShell*) pViewShell)->GetActualFunction();
 
-            if( bDefaultTextRestored )
-                pTextObj->SetEmptyPresObj( TRUE );
-
-            pTextObj = ( (FuText*) pFunc)->GetTextObj();
-
-            if ( pTextObj && pViewShell )
-            {
-                FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
-                if (pFuSlideShow)
-                    pFuSlideShow->EndTextEdit(pTextObj);
-            }
-
-            if (eKind == SDRENDTEXTEDIT_CHANGED && !bDefaultTextRestored)
-                ( (FuText*) pFunc)->ObjectChanged();
-
-            // Tell the text function that the text object is not
-            // edited anymore and must not be accessed.
-            static_cast<FuText*>(pFunc)->TextEditingHasEnded(pTextObj);
+            if ( !pFunc || !pFunc->ISA(FuText) )
+                pFunc = ( (DrawViewShell*) pViewShell)->GetOldFunction();
         }
-        else
-            eKind = FmFormView::EndTextEdit(bDontDeleteReally);
+    }
+
+    if ( pFunc && pFunc->ISA(FuText) )
+    {
+        SdrTextObj* pTextObj = ( (FuText*) pFunc)->GetTextObj();
+        BOOL bDefaultTextRestored = ( (FuText*) pFunc)->RestoreDefaultText();
+        eKind = FmFormView::EndTextEdit(bDontDeleteReally);
+
+        if( bDefaultTextRestored )
+            pTextObj->SetEmptyPresObj( TRUE );
+
+        pTextObj = ( (FuText*) pFunc)->GetTextObj();
+
+        if ( pTextObj && pViewShell )
+        {
+            FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
+            if (pFuSlideShow)
+                pFuSlideShow->EndTextEdit(pTextObj);
+        }
+
+        if (eKind == SDRENDTEXTEDIT_CHANGED && !bDefaultTextRestored)
+            ( (FuText*) pFunc)->ObjectChanged();
+
+        // Tell the text function that the text object is not
+        // edited anymore and must not be accessed.
+        static_cast<FuText*>(pFunc)->TextEditingHasEnded(pTextObj);
     }
     else
         eKind = FmFormView::EndTextEdit(bDontDeleteReally);
