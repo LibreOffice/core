@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:12:03 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 
 #include "scitems.hxx"
 #include <svtools/colorcfg.hxx>
+#ifndef _SVX_ADJITEM_HXX
+#include <svx/adjitem.hxx>
+#endif
 #include <svx/eeitem.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/sdshitm.hxx>
@@ -92,6 +95,18 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xtable.hxx>
+#ifndef _OUTLINER_HXX
+#include <svx/outliner.hxx>
+#endif
+#ifndef _EDITOBJ_HXX
+#include <svx/editobj.hxx>
+#endif
+#ifndef _SXCECITM_HXX
+#include <svx/sxcecitm.hxx>
+#endif
+#ifndef _SFX_WHITER_HXX
+#include <svtools/whiter.hxx>
+#endif
 
 #include "detfunc.hxx"
 #include "document.hxx"
@@ -119,8 +134,6 @@ enum DetInsertResult {              // Return-Werte beim Einfuegen in einen Leve
             DET_INS_EMPTY,
             DET_INS_CIRCULAR };
 
-//  maximale Textlaenge (Zeichen), die noch in "kleines" Objekt passt
-#define SC_NOTE_SMALLTEXT   100
 
 //------------------------------------------------------------------------
 
@@ -156,6 +169,7 @@ public:
                 ScCommentData( ScDocument* pDoc, SdrModel* pModel );
 
     SfxItemSet& GetCaptionSet() { return aCaptionSet; }
+    void    UpdateCaptionSet(const SfxItemSet& UpdateSet);
 };
 
 //------------------------------------------------------------------------
@@ -237,7 +251,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
 
 ScCommentData::ScCommentData( ScDocument* pDoc, SdrModel* pModel ) :
     aCaptionSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END,
-                                        EE_CHAR_START, EE_CHAR_END, 0 )
+                                        EE_ITEMS_START, EE_ITEMS_END, 0,0 )
 {
     XPolygon aTriangle(4);
     aTriangle[0].X()=10; aTriangle[0].Y()= 0;
@@ -272,6 +286,45 @@ ScCommentData::ScCommentData( ScDocument* pDoc, SdrModel* pModel ) :
     //  modify the font for the annotations
     ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
         FillEditItemSet( &aCaptionSet );
+
+    // support the best position for the tail connector now that
+    // that notes can be resized and repositioned.
+    aCaptionSet.Put( SdrCaptionEscDirItem( SDRCAPT_ESCBESTFIT) );
+}
+
+void ScCommentData::UpdateCaptionSet( const SfxItemSet& rSet)
+{
+    SfxWhichIter aWhichIter(rSet);
+    sal_uInt16 nWhich(aWhichIter.FirstWhich());
+    const SfxPoolItem* pPoolItem = NULL;
+
+    while(nWhich)
+    {
+        if(rSet.GetItemState(nWhich, FALSE, &pPoolItem) == SFX_ITEM_SET)
+        {
+            switch(nWhich)
+            {
+                case SDRATTR_SHADOW:
+                    // use existing Caption default - appears that setting this
+                    // to true screws up the tail appearance. See also comment
+                    // for default setting above.
+                    break;
+                case SDRATTR_SHADOWXDIST:
+                    // use existing Caption default - svx sets a value of 35
+                    // but default 100 gives a better appearance.
+                    break;
+                case SDRATTR_SHADOWYDIST:
+                    // use existing Caption default - svx sets a value of 35
+                    // but default 100 gives a better appearance.
+                    break;
+
+                default:
+            aCaptionSet.Put(*pPoolItem);
+                    break;
+           }
+        }
+        nWhich = aWhichIter.NextWhich();
+    }
 }
 
 //------------------------------------------------------------------------
@@ -681,6 +734,30 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     pData->bValidEnd = FALSE;
 }
 
+BOOL lcl_MirrorCheckNoteRectangle(Rectangle& rRect, BOOL bNegativePage)
+{
+    BOOL bMirrorChange = false;
+
+    if ( bNegativePage )
+    {
+        if(rRect.Left() >= 0 && rRect.Right() > 0)
+            bMirrorChange = true;
+    }
+    else
+    {
+        if(rRect.Left() < 0 && rRect.Right() <= 0)
+            bMirrorChange = true;
+    }
+
+    if(bMirrorChange)
+    {
+        long nTemp = rRect.Left();
+        rRect.Left() = -rRect.Right();
+        rRect.Right() = -nTemp;
+    }
+    return bMirrorChange;
+}
+
 SdrObject* ScDetectiveFunc::DrawCaption( SCCOL nCol, SCROW nRow, const String& rText,
                                             ScCommentData& rData, SdrPage* pDestPage,
                                             BOOL bHasUserText, BOOL bLeft,
@@ -732,7 +809,7 @@ SdrObject* ScDetectiveFunc::DrawCaption( SCCOL nCol, SCROW nRow, const String& r
 
     //  bei Textlaenge > SC_NOTE_SMALLTEXT wird die Breite verdoppelt...
     long nDefWidth = ( rText.Len() > SC_NOTE_SMALLTEXT ) ? 5800 : 2900;
-    Size aRectSize( nDefWidth, 1800 );      // Hoehe wird hinterher angepasst
+    Size aRectSize( nDefWidth, 1800 );
 
     long nMaxWidth = 10000;             //! oder wie?
     if ( !bHasUserText )
@@ -769,8 +846,36 @@ SdrObject* ScDetectiveFunc::DrawCaption( SCCOL nCol, SCROW nRow, const String& r
             aRectPos.X() = rVisible.Left();
     }
 
-    SdrCaptionObj* pCaption = new SdrCaptionObj( Rectangle( aRectPos,aRectSize ), aTailPos );
+    bool bNewNote = true;
+    Rectangle aTextRect;
+    ScPostIt aCellNote(pDoc);
+    if(pDoc->GetNote( nCol, nRow, nTab, aCellNote ))
+    {
+        aTextRect = aCellNote.GetRectangle();
+        if(lcl_MirrorCheckNoteRectangle(aTextRect,bNegativePage))
+        {
+            aCellNote.SetRectangle(aTextRect);
+            pDoc->SetNote( nCol, nRow, nTab, aCellNote );
+        }
+        bNewNote = false;
+    }
+    SdrCaptionObj* pCaption;
+    //if no rectangle dimensions stored then default to our calculated dimensions.
+    if(aTextRect.IsEmpty())
+    {
+        pCaption = new SdrCaptionObj( Rectangle( aRectPos,aRectSize ), aTailPos );
+        aTextRect = pCaption->GetLogicRect();
+        aCellNote.SetRectangle(aTextRect);
+        pDoc->SetNote( nCol, nRow, nTab, aCellNote );
+    }
+    else
+        pCaption = new SdrCaptionObj( aTextRect, aTailPos );
+
+    if(!bNewNote)
+        rData.UpdateCaptionSet(aCellNote.GetItemSet());
     SfxItemSet& rAttrSet = rData.GetCaptionSet();
+
+
     if (bHasUserText)
     {
         rAttrSet.Put(SdrTextAutoGrowWidthItem(TRUE));
@@ -778,22 +883,47 @@ SdrObject* ScDetectiveFunc::DrawCaption( SCCOL nCol, SCROW nRow, const String& r
         rAttrSet.Put(SdrTextMaxFrameWidthItem(nMaxWidth));
     }
 
-    ScDrawLayer::SetAnchor( pCaption, SCA_CELL );
+    ScDrawLayer::SetAnchor( pCaption, SCA_PAGE );
     pCaption->SetLayer( SC_LAYER_INTERN );
-    pPage->InsertObject( pCaption );
-
-    // #78611# for SetText, the object must already be inserted
-    pCaption->SetText( rText );
-
-    OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject();
-    if ( pOPO )
-        pOPO->SetVertical( FALSE );         // notes are always horizontal
-
-    //  SetAttributes must be after SetText, because the font attributes
-    //  are applied to the text.
-    pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
-
     pCaption->SetSpecialTextBoxShadow();
+    pCaption->SetFixedTail();
+
+
+    if(bHasUserText)
+    {
+        pPage->InsertObject( pCaption );
+        // #78611# for SetText, the object must already be inserted
+        pCaption->SetText( rText );
+        //  SetAttributes must be after SetText, because the font attributes
+        //  are applied to the text.
+        pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
+    }
+    else
+    {
+        // SDR_* items must be applied before InsertObject()
+        pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
+        pPage->InsertObject( pCaption );
+
+        ScPostIt aNote(pDoc);
+        OutlinerParaObject* pOPO = NULL;
+        if(pDoc->GetNote( nCol, nRow, nTab, aNote ))
+        {
+            if(const EditTextObject* pEditText = aNote.GetEditTextObject())
+            {
+                pOPO = new OutlinerParaObject( *pEditText );
+                pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+                pOPO->SetVertical( FALSE );  // notes are always horizontal
+                pCaption->NbcSetOutlinerParaObject( pOPO );
+                // EE_* items must be applied after NbcSetOutlinerParaObject()
+                const SfxPoolItem* pItem = NULL;
+                if (rAttrSet.GetItemState(EE_PARA_JUST,TRUE,&pItem) == SFX_ITEM_SET)
+                {
+                    SvxAdjust eEEAlign = static_cast< const SvxAdjustItem& >( rAttrSet.Get( EE_PARA_JUST ) ).GetAdjust() ;
+                    pCaption->SetMergedItem( SvxAdjustItem( eEEAlign, EE_PARA_JUST));
+                }
+            }
+        }
+    }
 
     Rectangle aLogic = pCaption->GetLogicRect();
     Rectangle aOld = aLogic;
@@ -813,6 +943,11 @@ SdrObject* ScDetectiveFunc::DrawCaption( SCCOL nCol, SCROW nRow, const String& r
     }
     if (aLogic != aOld)
         pCaption->SetLogicRect(aLogic);
+
+    // InsertObject() modifies the rectangle.
+    aTextRect = pCaption->GetLogicRect();
+    aCellNote.SetRectangle(aTextRect);
+    pDoc->SetNote( nCol, nRow, nTab, aCellNote );
 
     //  Undo und UserData nur, wenn's im Dokument ist, also keine Page angegeben war
     if ( !pDestPage )
@@ -1591,7 +1726,7 @@ SdrObject* ScDetectiveFunc::ShowCommentUser( SCCOL nCol, SCROW nRow, const Strin
         return NULL;
 
     SdrObject* pObject = NULL;
-    ScPostIt aNote;
+    ScPostIt aNote(pDoc);
     BOOL bFound = pDoc->GetNote( nCol, nRow, nTab, aNote );
     if ( bFound || bForce || rUserText.Len() )
     {
@@ -1600,7 +1735,7 @@ SdrObject* ScDetectiveFunc::ShowCommentUser( SCCOL nCol, SCROW nRow, const Strin
             pDestModel = pDestPage->GetModel();
         ScCommentData aData( pDoc, pDestModel );    // richtigen Pool benutzen
 
-        String aNoteText = aNote.GetText();     //! Autor etc. von der Notiz?
+        String aNoteText = aNote.GetText();     //! Author etc. of this Note?
 
         String aDisplay;
         BOOL bHasUser = ( rUserText.Len() != 0 );
@@ -1683,11 +1818,23 @@ void ScDetectiveFunc::UpdateAllComments()
                 {
                     SdrCaptionObj* pCaption = (SdrCaptionObj*)pObject;
 
-                    SfxItemSet& rAttrSet = aData.GetCaptionSet();
+                    ScDrawObjData* pData = ScDrawLayer::GetObjData( pCaption, TRUE );
 
-                    pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
-
-                    pCaption->SetSpecialTextBoxShadow();
+                    ScPostIt aCellNote(pDoc);
+                    if(pDoc->GetNote( pData->aStt.Col(), pData->aStt.Row(), pData->aStt.Tab(), aCellNote ))
+                    {
+                        ScCommentData aData( pDoc, pModel );
+                        SfxItemSet rAttrColorSet(aCellNote.GetItemSet());
+                        Color aCommentColor( ScDetectiveFunc::GetCommentColor() );
+                        rAttrColorSet.Put( XFillColorItem( String(), aCommentColor ) );
+                        aData.UpdateCaptionSet(rAttrColorSet);
+                        SfxItemSet& rAttrSet = aData.GetCaptionSet();
+                        pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
+                        pCaption->SetSpecialTextBoxShadow();
+                        pCaption->SetFixedTail();
+                        aCellNote.SetItemSet(rAttrSet);
+                        pDoc->SetNote( pData->aStt.Col(), pData->aStt.Row(), pData->aStt.Tab(), aCellNote );
+                    }
                 }
 
                 pObject = aIter.Next();
