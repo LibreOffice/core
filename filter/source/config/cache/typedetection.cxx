@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 15:19:53 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 14:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,9 +498,6 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                  
     rLastChance = ::rtl::OUString();
     rUsedDetectors.clear();
 
-    // SAFE -> ----------------------------------
-    ::osl::ResettableMutexGuard aLock(m_aLock);
-
     // step over all possible types for this URL.
     // solutions:
     // a) no types                                => no detection
@@ -539,7 +536,11 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                  
 
         try
         {
+            // SAFE -> ----------------------------------
+            ::osl::ResettableMutexGuard aLock(m_aLock);
             CacheItem       aType         = m_rCache->getItem(FilterCache::E_TYPE, sFlatType);
+            aLock.clear();
+
             ::rtl::OUString sDetectService;
             aType[PROPNAME_DETECTSERVICE] >>= sDetectService;
 
@@ -615,21 +616,30 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                  
      */
     impl_openStream(rDescriptor);
 
+    css::uno::Reference< css::document::XExtendedFilterDetection > xDetector;
+    css::uno::Reference< css::lang::XMultiServiceFactory > xServiceManager;
+
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
-    css::uno::Reference< css::document::XExtendedFilterDetection > xDetector;
+    xServiceManager = m_xSMGR;
+    aLock.clear();
+    // <- SAFE
+
     try
     {
-        xDetector = css::uno::Reference< css::document::XExtendedFilterDetection >(m_xSMGR->createInstance(sDetectService), css::uno::UNO_QUERY);
-        if (!xDetector.is())
+        if ( xServiceManager.is() )
+        {
+            xDetector = css::uno::Reference< css::document::XExtendedFilterDetection >(xServiceManager->createInstance(sDetectService), css::uno::UNO_QUERY);
+            if (!xDetector.is())
+                return ::rtl::OUString();
+        }
+        else
             return ::rtl::OUString();
     }
     catch(const css::uno::Exception&)
     {
         return ::rtl::OUString();
     }
-    aLock.clear();
-    // <- SAFE
 
     // start deep detection
     // Dont forget to convert stl descriptor to its uno representation.
