@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:47:49 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "TextObjectBar.hxx"
 
 #define ITEMID_FRAMEDIR EE_PARA_WRITINGDIR
 
@@ -124,16 +126,31 @@
 #include "res_bmp.hrc"
 
 #include "eetext.hxx"
-#include "drtxtob.hxx"
+
 #include "drawdoc.hxx"
-#include "drviewsh.hxx"
-#include "outlnvsh.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_FU_TEMPLATE_HXX
 #include "futempl.hxx"
+#endif
 #include "sdresid.hxx"
-#include "sdwindow.hxx"
-#include "outlview.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_HXX
+#include "OutlineView.hxx"
+#endif
 
 
+using namespace sd;
+#define TextObjectBar
+#include "sdslots.hxx"
+
+namespace sd {
 
 /*************************************************************************
 |*
@@ -142,15 +159,13 @@
 |*
 \************************************************************************/
 
-#define SdDrawTextObjectBar
 #define FEATURE_DRAW_TEXT_OBJECTBAR     1L
 #define FEATURE_GRAPHIC_TEXT_OBJECTBAR  2L
 
 SFX_DECL_TYPE(13);
 
-#include "sdslots.hxx"
 
-SFX_IMPL_INTERFACE( SdDrawTextObjectBar, SfxShell, SdResId(STR_TEXTOBJECTBARSHELL) )
+SFX_IMPL_INTERFACE( TextObjectBar, SfxShell, SdResId(STR_TEXTOBJECTBARSHELL) )
 {
 //    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT, SdResId(RID_DRAW_TEXT_TOOLBOX) );
     SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT, SdResId(RID_DRAW_TEXT_TOOLBOX),
@@ -159,7 +174,7 @@ SFX_IMPL_INTERFACE( SdDrawTextObjectBar, SfxShell, SdResId(STR_TEXTOBJECTBARSHEL
                                          FEATURE_GRAPHIC_TEXT_OBJECTBAR );
 }
 
-TYPEINIT1( SdDrawTextObjectBar, SfxShell );
+TYPEINIT1( TextObjectBar, SfxShell );
 
 /*************************************************************************
 |*
@@ -167,32 +182,34 @@ TYPEINIT1( SdDrawTextObjectBar, SfxShell );
 |*
 \************************************************************************/
 
-SdDrawTextObjectBar::SdDrawTextObjectBar( SdViewShell* pSdViewSh,
-                SfxItemPool& rItemPool, SdView* pSdView ) :
-    SfxShell(pSdViewSh),
-    rPool( rItemPool ),
-    pViewShell( pSdViewSh ),
-    pView( pSdView )
+TextObjectBar::TextObjectBar (
+    ViewShell* pSdViewSh,
+    SfxItemPool& rItemPool,
+    ::sd::View* pSdView )
+    : SfxShell(pSdViewSh->GetViewShell()),
+      rPool( rItemPool ),
+      pViewShell( pSdViewSh ),
+      pView( pSdView )
 {
     SetPool(&rItemPool);
 
-    if (pSdViewSh->ISA(SdOutlineViewShell))
+    if (pSdViewSh->ISA(OutlineViewShell))
     {
-        SfxUndoManager& rUndoMgr = ((SdOutlineView*)pSdView)->
-                                    GetOutliner()->GetUndoManager();
+        SfxUndoManager& rUndoMgr = static_cast<OutlineView*>(pSdView)
+            ->GetOutliner()->GetUndoManager();
         SetUndoManager(&rUndoMgr);
     }
     else
     {
         SdDrawDocument* pDoc      = pView->GetDoc();
-        SdDrawDocShell* pDocShell = pDoc->GetDocSh();
+        DrawDocShell* pDocShell = pDoc->GetDocSh();
         SfxUndoManager* pUndoMgr  = pDocShell->GetUndoManager();
         SetUndoManager(pUndoMgr);
-        if ( pSdViewSh->ISA(SdDrawViewShell) )
+        if ( pSdViewSh->ISA(DrawViewShell) )
             SetRepeatTarget(pSdView);
     }
 
-    SetName( String( RTL_CONSTASCII_USTRINGPARAM( "SdDrawTextObjectBar" )));
+    SetName( String( RTL_CONSTASCII_USTRINGPARAM( "TextObjectBar" )));
 
     // SetHelpId( SD_IF_SDDRAWTEXTOBJECTBAR );
 }
@@ -203,7 +220,7 @@ SdDrawTextObjectBar::SdDrawTextObjectBar( SdViewShell* pSdViewSh,
 |*
 \************************************************************************/
 
-SdDrawTextObjectBar::~SdDrawTextObjectBar()
+TextObjectBar::~TextObjectBar()
 {
     SetRepeatTarget(NULL);
 }
@@ -214,7 +231,7 @@ SdDrawTextObjectBar::~SdDrawTextObjectBar()
 |*
 \************************************************************************/
 
-void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
+void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 {
     SfxWhichIter        aIter( rSet );
     USHORT              nWhich = aIter.FirstWhich();
@@ -278,19 +295,19 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
                 BOOL bDisableDown     = TRUE;
                 OutlinerView* pOLV = pView->GetTextEditOutlinerView();
 
-                if (pView->ISA(SdOutlineView))
+                if (pView->ISA(OutlineView))
                 {
-                    pOLV = ((SdOutlineView*) pView)->GetViewByWindow(
-                                                 pViewShell->GetActiveWindow());
+                    pOLV = static_cast<OutlineView*>(pView)->GetViewByWindow(
+                        pViewShell->GetActiveWindow());
                 }
 
-                BOOL bOutlineViewSh = pViewShell->ISA(SdOutlineViewShell);
+                BOOL bOutlineViewSh = pViewShell->ISA(OutlineViewShell);
 
                 if (pOLV &&
                     ( pOLV->GetOutliner()->GetMode() == OUTLINERMODE_OUTLINEOBJECT || bOutlineViewSh ) )
                 {
                     // Outliner im Gliederungsmodus
-                    Outliner* pOutl = pOLV->GetOutliner();
+                    ::Outliner* pOutl = pOLV->GetOutliner();
                     List* pList = pOLV->CreateSelectionList();
                     Paragraph* pPara = (Paragraph*) pList->First();
 
@@ -321,7 +338,7 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                     USHORT nMinDepth = 0;
 
-                    if (pViewShell->ISA(SdDrawViewShell))
+                    if (pViewShell->ISA(DrawViewShell))
                     {
                         nMinDepth = 1;
                     }
@@ -429,7 +446,7 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
 */
 
     // die sind im Gliederungsmodus disabled
-    if (!pViewShell->ISA(SdDrawViewShell))
+    if (!pViewShell->ISA(DrawViewShell))
     {
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_LEFT );
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_RIGHT );
@@ -590,7 +607,7 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
 |*
 \************************************************************************/
 
-void SdDrawTextObjectBar::Command( const CommandEvent& rCEvt )
+void TextObjectBar::Command( const CommandEvent& rCEvt )
 {
 }
 
@@ -600,7 +617,7 @@ void SdDrawTextObjectBar::Command( const CommandEvent& rCEvt )
 |*
 \************************************************************************/
 
-BOOL SdDrawTextObjectBar::HasUIFeature( ULONG nFeature )
+BOOL TextObjectBar::HasUIFeature( ULONG nFeature )
 {
     BOOL bRet = FALSE;
     DocumentType eDocType = pViewShell->GetDoc()->GetDocumentType();
@@ -621,5 +638,4 @@ BOOL SdDrawTextObjectBar::HasUIFeature( ULONG nFeature )
     return bRet;
 }
 
-
-
+} // end of namespace sd
