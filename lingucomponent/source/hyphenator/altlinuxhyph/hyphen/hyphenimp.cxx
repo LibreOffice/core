@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:17:06 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 12:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,6 @@
 #include <osl/file.hxx>
 
 #include "dictmgr.hxx"
-#include "csutil.hxx"
 
 #include <stdio.h>
 #include <iostream>
@@ -151,6 +150,7 @@ Hyphenator::Hyphenator() :
     pPropHelper = NULL;
         aDicts = NULL;
         numdict = 0;
+
 }
 
 
@@ -158,11 +158,16 @@ Hyphenator::~Hyphenator()
 {
     if (pPropHelper)
         pPropHelper->RemoveAsPropListener();
-        if ((aDicts) || (numdict)) {
-            if (aDicts) delete[] aDicts;
-        aDicts = NULL;
-            numdict = 0;
-        }
+
+        if ((numdict) && (aDicts)) {
+      for (int i=0; i < numdict; i++) {
+            if (aDicts[i].apCC) delete aDicts[i].apCC;
+            aDicts[i].apCC = NULL;
+      }
+    }
+        if (aDicts) delete[] aDicts;
+    aDicts = NULL;
+        numdict = 0;
 }
 
 
@@ -256,6 +261,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                  aDicts[k].aLoc = nLoc;
                  aDicts[k].aEnc = 0;
                  aDicts[k].aName = A2OU(updict->filename);
+                 aDicts[k].apCC = new CharClass(nLoc);
                  k++;
                  updict++;
               }
@@ -277,6 +283,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                  aDicts[k].aLoc = nLoc;
                  aDicts[k].aEnc = 0;
                  aDicts[k].aName = A2OU(spdict->filename);
+                 aDicts[k].apCC = new CharClass(nLoc);
                  k++;
                  spdict++;
               }
@@ -319,8 +326,8 @@ sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
     if (!aSuppLocales.getLength())
         getLocales();
 
-    INT32 nLen = aSuppLocales.getLength();
     const Locale *pLocale = aSuppLocales.getConstArray();
+    INT32 nLen = aSuppLocales.getLength();
     for (INT32 i = 0;  i < nLen;  ++i)
     {
         if (rLocale == pLocale[i])
@@ -357,6 +364,7 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
 
     HyphenDict *dict = NULL;
         rtl_TextEncoding aEnc = 0;
+        CharClass * pCC = NULL;
 
     Reference< XHyphenatedWord > xRes;
 
@@ -399,6 +407,7 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
             // other wise hyphenate the word with that dictionary
             dict = aDicts[k].aPtr;
             aEnc = aDicts[k].aEnc;
+            pCC =  aDicts[k].apCC;
 
             // first convert any smart quotes or apostrophes to normal ones
         OUStringBuffer rBuf(aWord);
@@ -411,13 +420,19 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
             }
             OUString nWord(rBuf.makeStringAndClear());
 
+            // now convert word to all lowercase for pattern recognition
+            OUString nTerm(makeLowerCase(nWord, pCC));
+
             // now convert word to needed encoding
-            OString encWord(OU2ENC(nWord,aEnc));
+            OString encWord(OU2ENC(nTerm,aEnc));
 
         wordlen = encWord.getLength();
             lcword = new char[wordlen+1];
         hyphens = new char[wordlen+5];
-            enmkallsmall(lcword,encWord.getStr(),dict->cset);
+
+            // copy converted word into simple char buffer
+            strcpy(lcword,encWord.getStr());
+
             // now strip off any ending periods
             int n = wordlen-1;
         while((n >=0) && (lcword[n] == '.')) n--;
@@ -497,7 +512,6 @@ Reference< XPossibleHyphens > SAL_CALL
 {
 
   SvtPathOptions aPathOpt;
-  //  CharClass chclass( rSMgr, aLocale );
 
   int nHyphenationPos = -1;
   int wordlen;
@@ -506,8 +520,9 @@ Reference< XPossibleHyphens > SAL_CALL
   int k;
 
 
-  HyphenDict *dict;
-  rtl_TextEncoding aEnc;
+  HyphenDict *dict = NULL;
+  rtl_TextEncoding aEnc = 0;
+  CharClass* pCC = NULL;
 
   Reference< XPossibleHyphens > xRes;
 
@@ -515,8 +530,6 @@ Reference< XPossibleHyphens > SAL_CALL
   for (int j = 0; j < numdict; j++)
      if (aLocale == aDicts[j].aLoc) k = j;
 
-  dict = NULL;
-  aEnc = 0;
 
   // if we have a hyphenation dictionary matching this locale
   if (k != -1) {
@@ -551,7 +564,7 @@ Reference< XPossibleHyphens > SAL_CALL
       // other wise hyphenate the word with that dictionary
       dict = aDicts[k].aPtr;
       aEnc = aDicts[k].aEnc;
-
+      pCC  = aDicts[k].apCC;
 
       // first handle smart quotes both single and double
       OUStringBuffer rBuf(aWord);
@@ -564,13 +577,19 @@ Reference< XPossibleHyphens > SAL_CALL
       }
       OUString nWord(rBuf.makeStringAndClear());
 
-      // now convert the string to the proper encoding
-      OString encWord(OU2ENC(nWord, aEnc));
+      // now convert word to all lowercase for pattern recognition
+      OUString nTerm(makeLowerCase(nWord, pCC));
+
+      // now convert word to needed encoding
+      OString encWord(OU2ENC(nTerm,aEnc));
 
       wordlen = encWord.getLength();
       lcword = new char[wordlen+1];
       hyphens = new char[wordlen+5];
-      enmkallsmall(lcword,encWord.getStr(),dict->cset);
+
+      // copy converted word into simple char buffer
+      strcpy(lcword,encWord.getStr());
+
       // first remove any trailing periods
       int n = wordlen-1;
       while((n >=0) && (lcword[n] == '.')) n--;
@@ -627,6 +646,14 @@ Reference< XPossibleHyphens > SAL_CALL
 
   return NULL;
 
+}
+
+
+OUString SAL_CALL Hyphenator::makeLowerCase(const OUString& aTerm, CharClass * pCC)
+{
+        if (pCC)
+      return pCC->toLower_rtl(aTerm, 0, aTerm.getLength());
+        return aTerm;
 }
 
 
