@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellDeleteMode.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** is used to specify how remaining cells are moved when cells are deleted.
  */
-enum CellDeleteMode
+published enum CellDeleteMode
 {
     //-------------------------------------------------------------------------
 
