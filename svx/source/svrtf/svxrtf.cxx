@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:42:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,18 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
     pDfltColor = new Color;
 }
 
+void SvxRTFParser::EnterEnvironment()
+{
+}
+
+void SvxRTFParser::LeaveEnvironment()
+{
+}
+
+void SvxRTFParser::ResetPard()
+{
+}
+
 SvxRTFParser::~SvxRTFParser()
 {
     if( aColorTbl.Count() )
@@ -285,22 +297,21 @@ INSINGLECHAR:
     case RTF_PAR:
         InsertPara();
         break;
-
     case '{':
-        if( bNewGroup )         // Verschachtelung !!
+        if (bNewGroup)          // Verschachtelung !!
             _GetAttrSet();
-        bNewGroup = TRUE;
+        EnterEnvironment();
+        bNewGroup = true;
         break;
-
     case '}':
         if( !bNewGroup )        // leere Gruppe ??
             AttrGroupEnd();
-        bNewGroup = FALSE;
+        LeaveEnvironment();
+        bNewGroup = false;
         break;
-
     case RTF_INFO:
 #ifndef SVX_LIGHT
-        if( bReadDocInfo && bNewDoc )
+        if (bReadDocInfo && bNewDoc)
             ReadInfo();
         else
 #endif
