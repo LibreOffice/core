@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _contdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-11-27 15:06:07 $
+ *  last change: $Author: ka $ $Date: 2002-07-05 14:55:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 #include <sfx2/dispatch.hxx>
 #endif
 #include <sfx2/viewfrm.hxx>
-#pragma hdrstop
+#include <svtools/miscopt.hxx>
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
@@ -458,9 +458,13 @@ SvxSuperContourDlg::SvxSuperContourDlg( SfxBindings *pBindings, SfxChildWindow *
     aContourWnd.SetPipetteClickHdl( LINK( this, SvxSuperContourDlg, PipetteClickHdl ) );
     aContourWnd.SetWorkplaceClickHdl( LINK( this, SvxSuperContourDlg, WorkplaceClickHdl ) );
 
-    const Size  aTbxSize( aTbx1.CalcWindowSizePixel() );
-    Point       aPos( aTbx1.GetPosPixel() );
+    const Size      aTbxSize( aTbx1.CalcWindowSizePixel() );
+    Point           aPos( aTbx1.GetPosPixel() );
+      SvtMiscOptions  aMiscOptions;
 
+    aMiscOptions.AddListener( LINK( this, SvxSuperContourDlg, MiscHdl ) );
+
+    aTbx1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
     aTbx1.SetSizePixel( aTbxSize );
     aTbx1.SetSelectHdl( LINK( this, SvxSuperContourDlg, Tbx1ClickHdl ) );
 
@@ -1166,4 +1170,17 @@ IMPL_LINK( SvxSuperContourDlg, WorkplaceClickHdl, ContourWindow*, pWnd )
     return 0L;
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+IMPL_LINK( SvxSuperContourDlg, MiscHdl, void*, p )
+{
+       SvtMiscOptions aMiscOptions;
+    aTbx1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
+
+    return 0L;
+}
 

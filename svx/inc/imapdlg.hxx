@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-14 09:03:39 $
+ *  last change: $Author: ka $ $Date: 2002-07-05 14:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,7 @@ class SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
                         DECL_LINK( UpdateHdl, Timer* );
                         DECL_LINK( TbxUpdateHdl, Timer* );
                         DECL_LINK( StateHdl, IMapWindow* );
+                        DECL_LINK( MiscHdl, void* );
 
     void                DoOpen();
     BOOL                DoSave();

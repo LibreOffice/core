@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-18 08:14:50 $
+ *  last change: $Author: ka $ $Date: 2002-07-05 14:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
+#include <svtools/miscopt.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
@@ -273,6 +274,10 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
     aEdtText.SetModifyHdl( LINK( this, SvxIMapDlg, URLModifyHdl ) );
     maCbbTarget.SetLoseFocusHdl( LINK( this, SvxIMapDlg, URLLoseFocusHdl ) );
 
+       SvtMiscOptions aMiscOptions;
+    aMiscOptions.AddListener( LINK( this, SvxIMapDlg, MiscHdl ) );
+
+    aTbxIMapDlg1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
     aTbxIMapDlg1.SetSizePixel( aTbxIMapDlg1.CalcWindowSizePixel() );
     aTbxIMapDlg1.SetSelectHdl( LINK( this, SvxIMapDlg, TbxClickHdl ) );
     aTbxIMapDlg1.CheckItem( TBI_SELECT, TRUE );
@@ -1060,4 +1065,16 @@ IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
     return 0L;
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
+IMPL_LINK( SvxIMapDlg, MiscHdl, void*, p )
+{
+       SvtMiscOptions aMiscOptions;
+    aTbxIMapDlg1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
+
+    return 0L;
+}
