@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:22:02 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 uno::Exception,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -197,7 +197,9 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         //       will behave after activation
 
         sal_Int32 nOldState = m_nObjectState;
+        aGuard.clear();
         StateChangeNotification_Impl( sal_True, nOldState, nNewState );
+        aGuard.reset();
 
         try
         {
@@ -211,7 +213,9 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 m_pOleComponent->CloseObject();
                 // GetRidOfComponent();
                 m_nObjectState = nNewState;
+                aGuard.clear();
                 StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+                aGuard.reset();
             }
             else if ( nNewState == embed::EmbedStates::RUNNING || nNewState == embed::EmbedStates::ACTIVE )
             {
@@ -226,16 +230,20 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
 
                     SwitchComponentToRunningState_Impl();
                     m_nObjectState = embed::EmbedStates::RUNNING;
+                    aGuard.clear();
                     StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+                    aGuard.reset();
 
 #ifdef WNT
                     if ( m_pOleComponent && m_bHasSizeToSet )
                     {
+                        aGuard.clear();
                         try {
                             m_pOleComponent->SetExtent( m_aCachedSize, m_nCachedAspect );
                             m_bHasSizeToSet = sal_False;
                         }
                         catch( uno::Exception& ) {}
+                        aGuard.reset();
                     }
 #endif
 
@@ -248,17 +256,21 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 if ( m_nObjectState == embed::EmbedStates::RUNNING && nNewState == embed::EmbedStates::ACTIVE )
                 {
                     // execute OPEN verb, if object does not reach active state it is an object's problem
+                    aGuard.clear();
                     m_pOleComponent->ExecuteVerb( embed::EmbedVerbs::MS_OLEVERB_OPEN );
+                    aGuard.reset();
 
 #ifdef WNT
                     // some objects do not allow to set the size even in running state
                     if ( m_pOleComponent && m_bHasSizeToSet )
                     {
+                        aGuard.clear();
                         try {
                             m_pOleComponent->SetExtent( m_aCachedSize, m_nCachedAspect );
                             m_bHasSizeToSet = sal_False;
                         }
                         catch( uno::Exception& ) {}
+                        aGuard.reset();
                     }
 #endif
 
@@ -266,8 +278,10 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 }
                 else if ( m_nObjectState == embed::EmbedStates::ACTIVE && nNewState == embed::EmbedStates::RUNNING )
                 {
+                    aGuard.clear();
                     m_pOleComponent->CloseObject();
                     m_pOleComponent->RunObject(); // Should not fail, the object already was active
+                    aGuard.reset();
                     m_nObjectState = nNewState;
                 }
                 else
@@ -280,6 +294,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         }
         catch( uno::Exception& )
         {
+            aGuard.clear();
             StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
             throw;
         }
@@ -349,7 +364,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 uno::Exception,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -366,23 +381,11 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
         // StateChangeNotification_Impl( sal_True, nOldState, nNewState );
         if ( m_nObjectState == embed::EmbedStates::LOADED )
         {
-            if ( m_nTargetState != -1 )
-            {
-                // means that the object is currently trying to reach the target state
-                throw embed::StateChangeInProgressException( ::rtl::OUString(),
-                                                            uno::Reference< uno::XInterface >(),
-                                                            m_nTargetState );
-            }
-            TargetStateControl_Impl aControl( m_nTargetState, embed::EmbedStates::RUNNING );
-
             // if the target object is in loaded state
             // it must be switched to running state to execute verb
-
-            // the component can exist already in noncomplete state
-            // it can be created during loading
-            CreateOleComponentAndLoad_Impl( m_pOleComponent );
-            SwitchComponentToRunningState_Impl();
-            m_nObjectState = embed::EmbedStates::RUNNING;
+            aGuard.clear();
+            changeState( embed::EmbedStates::RUNNING );
+            aGuard.reset();
         }
 
         try {
@@ -393,6 +396,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
         }
         catch( uno::Exception& )
         {
+            aGuard.clear();
             StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
             throw;
         }
