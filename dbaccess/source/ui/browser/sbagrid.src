@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-12 06:31:28 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text [ portuguese ] = "~Largura de coluna..." ;
             Text[ chinese_simplified ] = "ÁĞ¿í(~W)...";
             Text[ russian ] = "Øèğèíà êîëîíîê...";
-            Text[ polish ] = "Szerokoœæ kolumn...";
+            Text[ polish ] = "Szeroko?æ kolumn...";
             Text[ japanese ] = "—ñ•(~W)...";
             Text[ chinese_traditional ] = "Äæ¼e(~W)...";
             Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ...";
@@ -208,7 +208,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text [ english_us ] = "Row Height..." ;
             Text[ chinese_simplified ] = "ĞĞ¸ß...";
             Text[ russian ] = "Âûñîòà ñòğîê...";
-            Text[ polish ] = "Wysokoœæ wierszy...";
+            Text[ polish ] = "Wysoko?æ wierszy...";
             Text[ japanese ] = "s‚Ì‚‚³...";
             Text[ chinese_traditional ] = "¦C°ª...";
             Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİæİ...";
