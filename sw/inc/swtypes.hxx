@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: jp $ $Date: 2000-10-26 11:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,6 @@ extern UniString aEmptyStr;         // ""
 extern ByteString aEmptyByteStr;    // ""
 extern UniString aDotStr;           // '.'
 
-extern const sal_Char* __FAR_DATA pDefWordDelim;     // alle Worttrenner
 extern const sal_Char* __FAR_DATA pGlosExt;         // def. Ext. fuer AutoText in glosdoc.cxx
 
 
