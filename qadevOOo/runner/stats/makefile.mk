@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Date: 2003-01-27 16:26:49 $
+#   last change: $Date: 2003-02-05 16:40:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ JARFILES = sandbox.jar ridl.jar jurt.jar unoil.jar
 
 JAVAFILES =	\
             SimpleOutProducer.java	\
+            SimpleFileOutProducer.java	\
             SimpleLogWriter.java    \
             Summarizer.java
 
