@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:40:00 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:39:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,6 +726,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pNewSet = new SfxAllItemSet( *pMedium->GetItemSet() );
                     pNewSet->ClearItem( SID_VIEW_ID );
                     pNewSet->ClearItem( SID_USER_DATA );
+                    pNewSet->ClearItem( SID_STREAM );
+                    pNewSet->ClearItem( SID_INPUTSTREAM );
                     pNewSet->Put( SfxStringItem( SID_FILTER_NAME, pMedium->GetFilter()->GetName() ) );
                     if ( !bForEdit )
                         pNewSet->Put( SfxBoolItem( SID_DOC_READONLY, FALSE ) );
