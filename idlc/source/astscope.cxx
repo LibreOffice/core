@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astscope.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:45:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,9 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
             return NULL;
         }
         if ( (pDecl->getNodeType() == pDeclaration->getNodeType()) &&
-             ((pDecl->getNodeType() == NT_sequence) || (pDeclaration->getNodeType() == NT_array)) )
+             (pDecl->getNodeType() == NT_sequence
+              || pDecl->getNodeType() == NT_array
+              || pDecl->getNodeType() == NT_instantiated_struct) )
         {
             return pDeclaration;
         }
@@ -289,9 +291,10 @@ AstDeclaration* AstScope::lookupInInherited(const OString& scopedName) const
         pInterface->getAllInheritedInterfaces().end());
     while ( iter != end )
     {
-        if ( pDecl = iter->getInterface()->lookupByNameLocal(scopedName) )
+        AstInterface const * resolved = iter->getResolved();
+        if ( pDecl = resolved->lookupByNameLocal(scopedName) )
             return pDecl;
-        if ( pDecl = iter->getInterface()->lookupInInherited(scopedName) )
+        if ( pDecl = resolved->lookupInInherited(scopedName) )
             return pDecl;
         ++iter;
     }
