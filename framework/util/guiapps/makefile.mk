@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-18 12:13:50 $
+#   last change: $Author: hr $ $Date: 2002-08-19 16:25:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,8 @@ APP1TARGET= 	login
 
 APP1OBJS=		$(SLO)$/login.obj					\
                 $(SLO)$/servicemanager.obj			\
-                $(SLO)$/lockhelper.obj
+                $(SLO)$/lockhelper.obj				\
+                $(SLO)$/transactionmanager.obj
 
 APP1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
