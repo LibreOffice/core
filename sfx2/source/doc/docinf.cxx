@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-06 14:58:31 $
+ *  last change: $Author: pb $ $Date: 2001-07-09 08:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
 #endif
-
+#include <tools/urlobj.hxx>
 #include <svtools/saveopt.hxx>
 
 #include "docfilt.hxx"
@@ -660,6 +660,19 @@ const SfxDocUserKey& SfxDocUserKey::operator=(const SfxDocUserKey &rCopy)
 }
 // SfxDocumentInfo -------------------------------------------------------
 
+sal_Bool TestValidity_Impl( const String& rString, sal_Bool bURL )
+{
+    sal_Bool bRet = sal_True;
+    xub_StrLen nLen = rString.Len();
+    if ( nLen >= 1024 &&
+         ( !bURL || INetURLObject::CompareProtocolScheme( rString ) == INET_PROT_NOT_VALID ) )
+        // !bURL == the default target has not so many characters
+        // bURL ==  the reload url must have a valid protocol
+        bRet = sal_False;
+
+    return bRet;
+}
+
 BOOL SfxDocumentInfo::Load( SvStream& rStream )
 {
     long d, t;
@@ -740,6 +753,18 @@ BOOL SfxDocumentInfo::Load( SvStream& rStream )
         rStream.ReadByteString( aReloadURL );
         rStream >> nReloadSecs;
         rStream.ReadByteString( aDefaultTarget );
+
+        if ( !TestValidity_Impl( aReloadURL, sal_True ) )
+        {
+            // the reload url is invalid -> reset all reload attributes
+            bReloadEnabled = FALSE;
+            aReloadURL.Erase();
+            nReloadSecs = 60;
+            aDefaultTarget.Erase();
+        }
+        else if ( !TestValidity_Impl( aDefaultTarget, sal_False ) )
+            // the default target is invalid -> reset it
+            aDefaultTarget.Erase();
     }
     if ( aHeader.nVersion > 6 )
     {
