@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgpool.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:47:05 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 #ifndef _RSCSFX_HXX //autogen
 #include <rsc/rscsfx.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "msgpool.hxx"
 #include "minarray.hxx"
@@ -108,15 +110,15 @@ DECL_PTRARRAY(SfxSlotTypeArr_Impl, SfxSlotType_Impl*, 8, 8);
 //====================================================================
 
 SfxSlotPool::SfxSlotPool( SfxSlotPool *pParent, ResMgr* pResManager )
- : _pParentPool( pParent )
- , _pIdPool(0)
- , _pTypes(0)
+ : _pIdPool(0)
  , _pGroups(0)
- , _nCurGroup(0)
+ , _pTypes(0)
+ , _pParentPool( pParent )
+ , _pResMgr( pResManager )
  , _pInterfaces(0)
+ , _nCurGroup(0)
  , _nCurInterface(0)
  , _nCurMsg(0)
- , _pResMgr( pResManager )
  , _pUnoSlots( 0 )
 {
     if ( !_pResMgr )
