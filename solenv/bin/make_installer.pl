@@ -1182,7 +1182,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                         # Copying the java installer into the installation set
                         # if ( ! $installer::globals::javafilespath eq "" ) { installer::epmfile::put_java_installer_into_installset($newdir); }
                         chdir($currentdir); # changing back into start directory
-                        if ( ! $installer::globals::javafilespath eq "" ) { installer::javainstaller::create_java_installer($installdir, $languagestringref, $languagesarrayref, $filesinproductlanguageresolvedarrayref, $allvariableshashref, $includepatharrayref, $modulesinproductlanguageresolvedarrayref); }
+                        if ( ! $installer::globals::javafilespath eq "" ) { installer::javainstaller::create_java_installer($installdir, $languagestringref, $languagesarrayref, $filesinproductlanguageresolvedarrayref, $allvariableshashref, $includepatharrayref, $modulesinproductarrayref); }
                     }
                 }
             }
