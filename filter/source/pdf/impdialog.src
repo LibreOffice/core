@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 09:40:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,34 +65,35 @@ ModalDialog RID_PDF_EXPORT_DLG
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 230, 187 );
+    Size = MAP_APPFONT ( 230, 207 );
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text [ de ] = "PDF Optionen";
+    Text [ en-US ] = "PDF Options";
     FixedLine FL_PAGES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 162 , 8 ) ;
-        Text[ de ] = "Seiten" ;
-        Text[ en-US ] = "Pages";
+        Text[ de ] = "Bereich" ;
+        Text[ en-US ] = "Range";
     };
     RadioButton RB_ALL
     {
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 86 , 10 ) ;
         Text[ de ] = "~Alle" ;
         Text[ en-US ] = "~All";
     };
     RadioButton RB_RANGE
     {
-        Pos = MAP_APPFONT ( 12 , 24 ) ;
+        Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 86, 10 ) ;
-        Text[ de ] = "~Bereich" ;
-        Text[ en-US ] = "~Range";
+        Text[ de ] = "~Seiten" ;
+        Text[ en-US ] = "~Pages";
     };
     RadioButton RB_SELECTION
     {
-        Pos = MAP_APPFONT ( 12 , 36 ) ;
+        Pos = MAP_APPFONT ( 12 , 38 ) ;
         Size = MAP_APPFONT ( 86, 10 ) ;
         Text[ de ] = "A~uswahl" ;
         Text[ en-US ] = "~Selection";
@@ -100,8 +101,8 @@ ModalDialog RID_PDF_EXPORT_DLG
     Edit ED_PAGES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 101, 23 ) ;
-        Size = MAP_APPFONT ( 67 , 12 ) ;
+        Pos = MAP_APPFONT ( 114, 25 ) ;
+        Size = MAP_APPFONT ( 48 , 12 ) ;
     };
     FixedLine FL_IMAGES
     {
@@ -112,21 +113,21 @@ ModalDialog RID_PDF_EXPORT_DLG
     };
     RadioButton RB_LOSSLESSCOMPRESSION
     {
-        Pos = MAP_APPFONT ( 12 , 61 ) ;
+        Pos = MAP_APPFONT ( 12 , 64 ) ;
         Size = MAP_APPFONT ( 156 , 10 ) ;
         Text[ de ] = "~Verlustfreie Komprimierung" ;
         Text[ en-US ] = "~Lossless compression";
     };
     RadioButton RB_JPEGCOMPRESSION
     {
-        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Pos = MAP_APPFONT ( 12 , 76 ) ;
         Size = MAP_APPFONT ( 156, 10 ) ;
         Text[ de ] = "Optimiert für ~JPEG Komprimierung" ;
         Text[ en-US ] = "~JPEG compression";
     };
     FixedText FT_QUALITY
     {
-        Pos = MAP_APPFONT ( 30 , 85 ) ;
+        Pos = MAP_APPFONT ( 30 , 88 ) ;
         Size = MAP_APPFONT ( 70, 10 ) ;
         Text[ de ] = "~Qualität" ;
         Text[ en-US ] = "~Quality";
@@ -134,8 +135,8 @@ ModalDialog RID_PDF_EXPORT_DLG
     MetricField NF_QUALITY
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 103, 85 ) ;
-        Size = MAP_APPFONT ( 65, 12 ) ;
+        Pos = MAP_APPFONT ( 114, 88 ) ;
+        Size = MAP_APPFONT ( 48, 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
         StrictFormat = TRUE ;
@@ -144,20 +145,15 @@ ModalDialog RID_PDF_EXPORT_DLG
     };
     CheckBox CB_REDUCEIMAGERESOLUTION
     {
-        Pos = MAP_APPFONT ( 12 , 99 ) ;
-        Size = MAP_APPFONT ( 10 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 102 ) ;
+        Size = MAP_APPFONT ( 103 , 10 ) ;
         TabStop = TRUE ;
-    };
-    FixedText FT_REDUCEIMAGERESOLUTION
-    {
-        Pos = MAP_APPFONT ( 25 , 99 ) ;
-        Size = MAP_APPFONT ( 93, 10 ) ;
         Text[ de ] = "~Grafikauflösung verringern" ;
-        Text[ en-US ] = "~reduce image resolution";
+        Text[ en-US ] = "~Reduce image resolution";
     };
     ComboBox CO_REDUCEIMAGERESOLUTION
     {
-        Pos = MAP_APPFONT ( 120 , 99 ) ;
+        Pos = MAP_APPFONT ( 114 , 102 ) ;
         Size = MAP_APPFONT ( 48 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -172,53 +168,38 @@ ModalDialog RID_PDF_EXPORT_DLG
     };
     FixedLine FL_GENERAL
     {
-        Pos = MAP_APPFONT ( 6 , 115 ) ;
+        Pos = MAP_APPFONT ( 6 , 117 ) ;
         Size = MAP_APPFONT ( 162 , 8 ) ;
         Text[ de ] = "Allgemein";
         Text[ en-US ] = "General";
     };
     CheckBox CB_TAGGEDPDF
     {
-        Pos = MAP_APPFONT ( 12 , 125 ) ;
-        Size = MAP_APPFONT ( 10 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 129 ) ;
+        Size = MAP_APPFONT ( 153 , 10 ) ;
         TabStop = TRUE ;
-    };
-    FixedText FT_TAGGEDPDF
-    {
-        Pos = MAP_APPFONT ( 25 , 125 ) ;
-        Size = MAP_APPFONT ( 143 , 10 ) ;
-        Text[ de ] = "~tagged PDF" ;
-        Text[ en-US ] = "~tagged PDF";
+        Text[ de ] = "~Tagged PDF" ;
+        Text[ en-US ] = "~Tagged PDF";
     };
     CheckBox CB_EXPORTNOTES
     {
-        Pos = MAP_APPFONT ( 12 , 139 ) ;
-        Size = MAP_APPFONT ( 10 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 143 ) ;
+        Size = MAP_APPFONT ( 153 , 10 ) ;
         TabStop = TRUE ;
-    };
-    FixedText FT_EXPORTNOTES
-    {
-        Pos = MAP_APPFONT ( 25 , 139 ) ;
-        Size = MAP_APPFONT ( 143 , 10 ) ;
         Text[ de ] = "~Notizen exportieren" ;
-        Text[ en-US ] = "export ~notes";
+        Text[ en-US ] = "Export ~notes";
     };
     CheckBox CB_TRANSITIONEFFECTS
     {
-        Pos = MAP_APPFONT ( 12 , 153 ) ;
-        Size = MAP_APPFONT ( 10 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 157 ) ;
+        Size = MAP_APPFONT ( 153 , 10 ) ;
         TabStop = TRUE ;
-    };
-    FixedText FT_TRANSITIONEFFECTS
-    {
-        Pos = MAP_APPFONT ( 25 , 153 ) ;
-        Size = MAP_APPFONT ( 143, 10 ) ;
         Text[ de ] = "~Übergangseffekte benutzen" ;
-        Text[ en-US ] = "~use transitional effects";
+        Text[ en-US ] = "~Use transition effects";
     };
     FixedText FT_FORMSFORMAT
     {
-        Pos = MAP_APPFONT ( 12 , 167 ) ;
+        Pos = MAP_APPFONT ( 12 , 171 ) ;
         Size = MAP_APPFONT ( 116, 10 ) ;
         Text[ de ] = "~Format für Formularübermittlung:" ;
         Text[ en-US ] = "Submit forms in ~format:";
@@ -226,7 +207,7 @@ ModalDialog RID_PDF_EXPORT_DLG
     ListBox LB_FORMSFORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 130, 167 ) ;
+        Pos = MAP_APPFONT ( 124, 171 ) ;
         Size = MAP_APPFONT ( 38, 48 ) ;
         DeltaLang = < Default ; Default ; Default ; Default ; > ;
         TabStop = TRUE ;
@@ -262,5 +243,4 @@ ModalDialog RID_PDF_EXPORT_DLG
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
-    Text[ en-US ] = "PDF Options";
 };
