@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-09 11:19:35 $
+ *  last change: $Author: fs $ $Date: 2001-05-11 17:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ namespace svxform
         static sal_uInt32 s_nFormat = (sal_uInt32)-1;
         if ((sal_uInt32)-1 == s_nFormat)
         {
-            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("svxform.ControlPathExchange"));
+            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("application/x-openoffice;windows_formatname=\"svxform.ControlPathExchange\""));
             DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OControlExchange::getControlPathFormatId: bad exchange id!");
         }
         return s_nFormat;
@@ -263,7 +263,7 @@ namespace svxform
         static sal_uInt32 s_nFormat = (sal_uInt32)-1;
         if ((sal_uInt32)-1 == s_nFormat)
         {
-            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("svxform.HiddenControlModelsExchange"));
+            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("application/x-openoffice;windows_formatname=\"svxform.HiddenControlModelsExchange\""));
             DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OControlExchange::getHiddenControlModelsFormatId: bad exchange id!");
         }
         return s_nFormat;
@@ -275,7 +275,7 @@ namespace svxform
         static sal_uInt32 s_nFormat = (sal_uInt32)-1;
         if ((sal_uInt32)-1 == s_nFormat)
         {
-            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("svxform.FieldNameExchange"));
+            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("application/x-openoffice;windows_formatname=\"svxform.FieldNameExchange\""));
             DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OControlExchange::getFieldExchangeFormatId: bad exchange id!");
         }
         return s_nFormat;
