@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:17:39 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ hebrew ] = "‮אירוע‬";
         Text[ hindi ] = "घटना";
         Text[ slovak ] = "Udalosť";
+        Text[ hungarian ] = "Esemény";
+        Text[ slovenian ] = "Dogodek";
     };
     String STR_ASSMACRO
     {
@@ -118,12 +120,12 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ portuguese ] = "Assigned macro";
         Text[ russian ] = "Assigned macro";
         Text[ greek ] = "Assigned macro";
-        Text[ dutch ] = "Assigned macro";
+        Text[ dutch ] = "Toegewezen macro";
         Text[ french ] = "Macro assign�e";
         Text[ spanish ] = "Macro asignada";
         Text[ finnish ] = "Assigned macro";
         Text[ italian ] = "Macro assegnata";
-        Text[ danish ] = "Assigned macro";
+        Text[ danish ] = "Tildelt makro";
         Text[ swedish ] = "Tilldelat makro";
         Text[ polish ] = "Assigned macro";
         Text[ portuguese_brazilian ] = "Macro atribu�da";
@@ -139,6 +141,8 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ hebrew ] = "‮מקרו מושם‬";
         Text[ hindi ] = "Assigned macro";
         Text[ slovak ] = "Priradené makro";
+        Text[ hungarian ] = "Hozzárendelt makró";
+        Text[ slovenian ] = "Dodeljeni makro";
     };
     Control LB_EVENT
     {
@@ -178,12 +182,12 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ portuguese ] = "~Existing macros in:\n";
         Text[ russian ] = "~Existing macros in:\n";
         Text[ greek ] = "~Existing macros in:\n";
-        Text[ dutch ] = "~Existing macros in:\n";
+        Text[ dutch ] = "~Bestaande macro's in:\n";
         Text[ french ] = "Macros existantes dans :";
         Text[ spanish ] = "~Macros existentes en:\n";
         Text[ finnish ] = "~Existing macros in:\n";
         Text[ italian ] = "~Macro presenti in:";
-        Text[ danish ] = "~Existing macros in:\n";
+        Text[ danish ] = "~Eksisterende makroer i:\n";
         Text[ swedish ] = "~Existerande makron i:\n";
         Text[ polish ] = "~Existing macros in:\n";
         Text[ portuguese_brazilian ] = "Macros ~existentes em:\n";
@@ -199,6 +203,8 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ hebrew ] = "‮מקרואים קיימים ב:\n‬";
         Text[ hindi ] = "~Existing macros in:\n";
         Text[ slovak ] = "Makrá ~v:\n";
+        Text[ hungarian ] = "~Meglévő makrók itt:\n";
+        Text[ slovenian ] = "Obstoje~či makri v:\n";
     };
     Control LB_MACROS
     {
@@ -223,7 +229,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text [ french ] = "~Assigner" ;
         Text [ dutch ] = "T~oewijzen" ;
         Text [ swedish ] = "Till~dela" ;
-        Text [ danish ] = "Tildel" ;
+        Text [ danish ] = "T~ildel" ;
         Text [ portuguese_brazilian ] = "~Atribuir" ;
         Text [ portuguese ] = "~Atribuir" ;
         Text[ chinese_simplified ] = "指定(~A)";
@@ -242,6 +248,8 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ hebrew ] = "‮השמה‬";
         Text[ hindi ] = "~निर्दिष्ट करो";
         Text[ slovak ] = "Prir~adiť";
+        Text[ hungarian ] = " ~Hozzárendelés";
+        Text[ slovenian ] = "~Dodeli";
     };
     PushButton PB_DELETE
     {
@@ -257,7 +265,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text [ french ] = "~�liminer" ;
         Text [ dutch ] = "~Opheffen" ;
         Text [ swedish ] = "~Upph�v" ;
-        Text [ danish ] = "Oph~�v" ;
+        Text [ danish ] = "~Fjern" ;
         Text [ portuguese_brazilian ] = "~Remover" ;
         Text [ portuguese ] = "~Limpar" ;
         Text[ chinese_simplified ] = "取消(~R)";
@@ -276,6 +284,8 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ hebrew ] = "‮הסרה‬";
         Text[ hindi ] = "~हटाओ";
         Text[ slovak ] = "Odst~rániť";
+        Text[ hungarian ] = "~Eltávolítás";
+        Text[ slovenian ] = "Odst~rani";
     };
     ListBox LB_SCRIPTTYPE
     {
@@ -315,6 +325,8 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ hebrew ] = "‮מאקרו‬";
         Text[ hindi ] = "मॉक्रोस";
         Text[ slovak ] = "Makrá";
+        Text[ hungarian ] = "Makrók";
+        Text[ slovenian ] = "Makri";
     };
     Text[ russian ] = "��������� ������";
     Text[ greek ] = "������� ������������";
@@ -332,7 +344,10 @@ TabPage RID_SFX_TP_MACROASSIGN
     Text[ hebrew ] = "‮השמת מקרו‬";
     Text[ hindi ] = "मॉक्रो निर्दिष्ट करो";
     Text[ slovak ] = "Priradiť makro";
+    Text[ hungarian ] = "Makró hozzárendelése";
+    Text[ slovenian ] = "Dodeli makro";
 };
+
 
 
 
