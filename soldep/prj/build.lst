@@ -1,0 +1,3 @@
+dp	soldep	:	svtools NULL
+dp	soldep					usr1	-	all	dp_mkout NULL
+dp	soldep\source				nmake	-	all	dp_soldep NULL
