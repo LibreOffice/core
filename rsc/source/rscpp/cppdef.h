@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppdef.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-28 12:18:01 $
+ *  last change: $Author: pl $ $Date: 2002-11-01 12:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@
  */
 
 #ifndef IDMAX
-#define IDMAX                    31
+#define IDMAX                    127
 #endif
 #ifdef SOLAR
 #define PAR_MAC           (253 + 1)
