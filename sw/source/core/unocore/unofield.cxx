@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-03 15:07:00 $
+ *  last change: $Author: os $ $Date: 2001-04-10 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1942,6 +1942,8 @@ void SwXTextField::attachToRange(
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_CHAPTERFLD);
                 pFld = new SwChapterField((SwChapterFieldType*)pFldType, m_pProps->nUSHORT1);
                 ((SwChapterField*)pFld)->SetLevel(m_pProps->nByte1);
+                Any aVal; aVal <<= (sal_Int16)m_pProps->nUSHORT1;
+                pFld->PutValue(aVal, C2U(UNO_NAME_CHAPTER_FORMAT));
             }
             break;
             case SW_SERVICE_FIELDTYPE_AUTHOR:
