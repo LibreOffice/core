@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLColumnRowGroupExport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-21 16:40:57 $
+ *  last change: $Author: hr $ $Date: 2002-02-08 15:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ struct ScMyColumnRowGroup
     sal_Bool    bDisplay : 1;
 
     ScMyColumnRowGroup();
-    sal_Bool operator< (const ScMyColumnRowGroup& rGroup);
+    sal_Bool operator< (const ScMyColumnRowGroup& rGroup) const;
 };
 
 typedef std::list <ScMyColumnRowGroup> ScMyColumnRowGroupVec;

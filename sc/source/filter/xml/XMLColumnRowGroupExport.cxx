@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLColumnRowGroupExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-14 14:07:55 $
+ *  last change: $Author: hr $ $Date: 2002-02-08 15:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ ScMyColumnRowGroup::ScMyColumnRowGroup()
 {
 }
 
-sal_Bool ScMyColumnRowGroup::operator<(const ScMyColumnRowGroup& rGroup)
+sal_Bool ScMyColumnRowGroup::operator<(const ScMyColumnRowGroup& rGroup) const
 {
     if (rGroup.nField > nField)
         return sal_True;
