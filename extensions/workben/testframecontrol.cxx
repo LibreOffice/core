@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testframecontrol.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ void FrameControlApplication::init()
     XServiceRegistryRef xRegMgr(xMgr, USR_QUERY);
 
     XImplementationRegistrationRef xIR( xMgr->createInstance(L"stardiv.uno.repos.ImplementationRegistration"), USR_QUERY );
-    TRY
+    try
     {
         char szDllName[_MAX_PATH]="";
 
@@ -282,10 +282,9 @@ void FrameControlApplication::init()
         UString aFCDllName = StringToOUString(szDllName, CHARSET_SYSTEM);
         xIR->registerImplementation(L"stardiv.loader.SharedLibrary", aFCDllName, XSimpleRegistryRef() );
     }
-    CATCH( CannotRegisterImplementationException, e )
+    catch( CannotRegisterImplementationException& e )
     {
     }
-    END_CATCH;
 
 
 
