@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:07:10 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,14 +251,14 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if ( bSelectFirst )
     {
         //  #97016# select first draw object if none is selected yet
-        if(!pView->HasMarkedObj())
+        if(!pView->AreObjectsMarked())
         {
             // select first object
             pView->UnmarkAllObj();
             pView->MarkNextObj(TRUE);
 
             // ...and make it visible
-            if(pView->HasMarkedObj())
+            if(pView->AreObjectsMarked())
                 pView->MakeVisible(pView->GetAllMarkedRect(), *pWin);
         }
     }
@@ -272,7 +272,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             SetDrawTextShell( TRUE );
         else
         {
-            if ( bEx || pView->GetMarkList().GetMarkCount() != 0 )
+            if ( bEx || pView->GetMarkedObjectList().GetMarkCount() != 0 )
                 SetDrawShellOrSub();
             else
                 SetDrawShell( FALSE );
@@ -296,7 +296,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     {
         case SID_OBJECT_SELECT:
             //@#70206# Nicht immer zurueckschalten
-            if(pView->GetMarkList().GetMarkCount() == 0) SetDrawShell(bEx);
+            if(pView->GetMarkedObjectList().GetMarkCount() == 0) SetDrawShell(bEx);
             pTabView->SetDrawFuncPtr(new FuSelection(this, pWin, pView, pDoc, aNewReq));
             break;
 
