@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-04-18 12:24:01 $
+ *  last change: $Author: nn $ $Date: 2002-03-26 13:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1971,24 +1971,30 @@ void ScUndoUpdateAreaLink::DoChange( const BOOL bUndo ) const
         if ( bWithInsert )
         {
             pDoc->FitBlock( aNewRange, aOldRange );
+            pDoc->DeleteAreaTab( aOldRange, IDF_ALL );
             pUndoDoc->UndoToDocument( aOldRange, IDF_ALL, FALSE, pDoc );
         }
         else
-            pUndoDoc->CopyToDocument(
-                        ScRange(aOldRange.aStart, ScAddress(nEndX,nEndY,nEndZ)),
-                        IDF_ALL, FALSE, pDoc );
+        {
+            ScRange aCopyRange( aOldRange.aStart, ScAddress(nEndX,nEndY,nEndZ) );
+            pDoc->DeleteAreaTab( aCopyRange, IDF_ALL );
+            pUndoDoc->CopyToDocument( aCopyRange, IDF_ALL, FALSE, pDoc );
+        }
     }
     else
     {
         if ( bWithInsert )
         {
             pDoc->FitBlock( aOldRange, aNewRange );
+            pDoc->DeleteAreaTab( aNewRange, IDF_ALL );
             pRedoDoc->CopyToDocument( aNewRange, IDF_ALL, FALSE, pDoc );
         }
         else
-            pRedoDoc->CopyToDocument(
-                        ScRange(aOldRange.aStart, ScAddress(nEndX,nEndY,nEndZ)),
-                        IDF_ALL, FALSE, pDoc );
+        {
+            ScRange aCopyRange( aOldRange.aStart, ScAddress(nEndX,nEndY,nEndZ) );
+            pDoc->DeleteAreaTab( aCopyRange, IDF_ALL );
+            pRedoDoc->CopyToDocument( aCopyRange, IDF_ALL, FALSE, pDoc );
+        }
     }
 
     ScRange aWorkRange( aNewRange.aStart, ScTripel( nEndX, nEndY, nEndZ ) );
@@ -2000,7 +2006,10 @@ void ScUndoUpdateAreaLink::DoChange( const BOOL bUndo ) const
         aWorkRange.aEnd.SetCol(MAXCOL);
     if ( aNewRange.aEnd.Row() != aOldRange.aEnd.Row() )
         aWorkRange.aEnd.SetRow(MAXROW);
-    pDocShell->PostPaint( aWorkRange, PAINT_GRID );
+
+    if ( !pDocShell->AdjustRowHeight( aWorkRange.aStart.Row(), aWorkRange.aEnd.Row(), aWorkRange.aStart.Tab() ) )
+        pDocShell->PostPaint( aWorkRange, PAINT_GRID );
+
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
