@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xetable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:48:11 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,7 +634,8 @@ IMPL_FIXEDMEMPOOL_NEWDEL( XclExpNumberCell, 256, 256 )
 XclExpNumberCell::XclExpNumberCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, double fValue ) :
-    XclExpSingleCellBase( rRoot, EXC_ID_NUMBER, 8, rXclPos, pPattern, ApiScriptType::WEAK, nForcedXFId ),
+    // #i41210# always use latin script for number cells - may look wrong for special number formats...
+    XclExpSingleCellBase( rRoot, EXC_ID_NUMBER, 8, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),
     mfValue( fValue )
 {
 }
@@ -651,7 +652,8 @@ IMPL_FIXEDMEMPOOL_NEWDEL( XclExpBooleanCell, 256, 256 )
 XclExpBooleanCell::XclExpBooleanCell(
         const XclExpRoot rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, bool bValue ) :
-    XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::WEAK, nForcedXFId ),
+    // #i41210# always use latin script for boolean cells
+    XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),
     mbValue( bValue )
 {
 }
@@ -668,7 +670,8 @@ IMPL_FIXEDMEMPOOL_NEWDEL( XclExpErrorCell, 256, 256 )
 XclExpErrorCell::XclExpErrorCell(
         const XclExpRoot rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_uInt8 nErrCode ) :
-    XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::WEAK, nForcedXFId ),
+    // #i41210# always use latin script for error cells
+    XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),
     mnErrCode( nErrCode )
 {
 }
@@ -812,7 +815,15 @@ XclExpFormulaCell::XclExpFormulaCell(
                 (rFormatter.GetType( nScNumFmt ) == NUMBERFORMAT_LOGICAL) )
             nAltScNumFmt = rNumFmtBfr.GetStandardFormat();
 
-        SetXFId( rRoot.GetXFBuffer().InsertWithNumFmt( pPattern, ApiScriptType::WEAK, nAltScNumFmt ) );
+        // #i41420# find script type according to result type (always latin for numeric results)
+        sal_Int16 nScript = ApiScriptType::LATIN;
+        if( nFormatType == NUMBERFORMAT_TEXT )
+        {
+            String aResult;
+            mrScFmlaCell.GetString( aResult );
+            nScript = XclExpStringHelper::GetScriptType( rRoot, aResult );
+        }
+        SetXFId( rRoot.GetXFBuffer().InsertWithNumFmt( pPattern, nScript, nAltScNumFmt ) );
     }
 
     // *** Convert the formula token array *** --------------------------------
@@ -1150,7 +1161,8 @@ XclExpRkCell::XclExpRkCell(
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_Int32 nRkValue ) :
     XclExpMultiCellBase( EXC_ID_RK, EXC_ID_MULRK, 4, rXclPos )
 {
-    AppendXFId( rRoot, pPattern, ApiScriptType::WEAK, nForcedXFId );
+    // #i41210# always use latin script for number cells - may look wrong for special number formats...
+    AppendXFId( rRoot, pPattern, ApiScriptType::LATIN, nForcedXFId );
     maRkValues.push_back( nRkValue );
 }
 
