@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-01 11:40:53 $
+ *  last change: $Author: fme $ $Date: 2002-10-10 11:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,9 +354,9 @@ void SwFrm::CheckDirChange()
                                     // would not exceed the margins of the page
                                     Rectangle aRect( pObj->GetBoundRect() );
                                     Point aNewRel( pObj->GetRelativePos() );
-                                    if ( aRect.Left() < Frm().Left() )
+                                    if ( aRect.Right() <= Frm().Left() + 10 )
                                         aNewRel.X() = 0;
-                                    else if ( aRect.Right() > Frm().Right() )
+                                    else if ( aRect.Left() + 10 >= Frm().Right() )
                                         aNewRel.X() -= aRect.Right() - Frm().Right();
                                     pObj->SetRelativePos( aNewRel );
                                 }
@@ -402,8 +402,8 @@ void SwFrm::CheckDirChange()
                         // check if the new position
                         // would not exceed the margins of the page
                         Rectangle aRect( pObj->GetBoundRect() );
-                        if ( aRect.Left() < pPage->Frm().Left() ||
-                             aRect.Right() > pPage->Frm().Right() )
+                        if ( aRect.Right()     <= pPage->Frm().Left() + 10 ||
+                             aRect.Left() + 10 >= pPage->Frm().Right() )
                         {
                             Point aNewRel( 0, pObj->GetRelativePos().Y() );
                             pObj->SetRelativePos( aNewRel );

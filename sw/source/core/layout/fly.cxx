@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-01 11:42:07 $
+ *  last change: $Author: fme $ $Date: 2002-10-10 11:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2173,8 +2173,8 @@ void SwFrm::CalcFlys( BOOL bPosOnly )
                     SwPageFrm* pPage = FindPageFrm();
 
                     if ( pPage &&
-                            ( aRect.Left() < pPage->Frm().Left() ||
-                              aRect.Right() > pPage->Frm().Right() ) )
+                            ( aRect.Right() <= pPage->Frm().Left() + 10 ||
+                              aRect.Left() + 10 >= pPage->Frm().Right() ) )
                     {
                         Point aNewRel( 0, pO->GetRelativePos().Y() );
                         pO->SetRelativePos( aNewRel );
