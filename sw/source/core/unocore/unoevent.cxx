@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-29 16:56:19 $
+ *  last change: $Author: dvo $ $Date: 2001-01-30 13:17:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -938,7 +938,7 @@ OUString SwFrameEventDescriptor::getImplementationName()
 
 SwFrameStyleEventDescriptor::SwFrameStyleEventDescriptor(
     SwXFrameStyle& rStyleRef ) :
-        SwEventDescriptor((document::XEventSupplier&)rStyleRef,
+        SwEventDescriptor((document::XEventsSupplier&)rStyleRef,
                           aFrameStyleEvents),
         sSwFrameStyleEventDescriptor(RTL_CONSTASCII_USTRINGPARAM(
             sAPI_SwFrameStyleEventDescriptor)),

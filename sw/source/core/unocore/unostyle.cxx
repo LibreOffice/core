@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 17:28:55 $
+ *  last change: $Author: dvo $ $Date: 2001-01-30 13:17:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2660,7 +2660,7 @@ Sequence< uno::Type > SwXFrameStyle::getTypes(  ) throw(RuntimeException)
     Sequence< uno::Type > aTypes = SwXStyle::getTypes();
     sal_Int32 nLen = aTypes.getLength();
     aTypes.realloc(nLen + 1);
-    aTypes.getArray()[nLen] = ::getCppuType((Reference<XEventSupplier>*)0);
+    aTypes.getArray()[nLen] = ::getCppuType((Reference<XEventsSupplier>*)0);
     return aTypes;
 }
 /* -----------------------------15.12.00 14:30--------------------------------
@@ -2669,8 +2669,8 @@ Sequence< uno::Type > SwXFrameStyle::getTypes(  ) throw(RuntimeException)
 Any SwXFrameStyle::queryInterface( const uno::Type& rType ) throw(RuntimeException)
 {
     Any aRet;
-    if(rType == ::getCppuType((Reference<XEventSupplier>*)0))
-        aRet <<= Reference<XEventSupplier>(this);
+    if(rType == ::getCppuType((Reference<XEventsSupplier>*)0))
+        aRet <<= Reference<XEventsSupplier>(this);
     else
         aRet = SwXStyle::queryInterface(rType);
     return aRet;

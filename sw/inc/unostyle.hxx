@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 17:28:58 $
+ *  last change: $Author: dvo $ $Date: 2001-01-30 13:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx> // helper for implementations
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSUPPLIER_HPP_
-#include <com/sun/star/document/XEventSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
+#include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
 
 class SwDocShell;
@@ -308,7 +308,7 @@ public:
 
  ---------------------------------------------------------------------------*/
 class SwXFrameStyle : public SwXStyle,
-                        public com::sun::star::document::XEventSupplier
+                        public com::sun::star::document::XEventsSupplier
 {
 public:
     SwXFrameStyle(SfxStyleSheetBasePool& rPool,
