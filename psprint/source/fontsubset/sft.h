@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-26 19:23:12 $
+ *  last change: $Author: svesik $ $Date: 2001-07-13 22:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.4 2001-06-26 19:23:12 pl Exp $ */
+/* $Id: sft.h,v 1.5 2001-07-13 22:19:49 svesik Exp $ */
 
 /**
  *
@@ -124,6 +124,12 @@ extern "C" {
 #ifdef __i386
 #ifndef G_LITTLE_ENDIAN
 #define G_LITTLE_ENDIAN
+#endif
+#endif
+
+#ifdef __mips
+#ifndef G_BIG_ENDIAN
+#define G_BIG_ENDIAN
 #endif
 #endif
 
