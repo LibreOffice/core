@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:15:56 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #include "topfrm.hxx"
 
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
@@ -95,6 +98,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 #ifndef _SV_MENU_HXX
@@ -450,23 +456,23 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
                 Reference < XIndexAccess > xContainer(xSupplier->getFrames(), UNO_QUERY);
                 if (xContainer.is())
                 {
+                    Reference< drafts::com::sun::star::frame::XModuleManager > xCheck(::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("drafts.com.sun.star.frame.ModuleManager" )), UNO_QUERY);
                     sal_Int32 nCount = xContainer->getCount();
                     for (sal_Int32 i=0; i<nCount; ++i)
                     {
-                        Reference < XFrame > xFrame;
-                        if (!(xContainer->getByIndex(i) >>= xFrame) || !xFrame.is())
-                            continue;
-                        Reference < XPropertySet > xSet(xFrame, UNO_QUERY);
-                        sal_Bool bIsBacking;
-                        if (
-                            (xSet.is()) &&
-                            (xSet->getPropertyValue(::rtl::OUString::createFromAscii("IsBackingMode"))>>=bIsBacking) &&
-                            (bIsBacking)
-                           )
+                        try
                         {
-                            pFrame = Create(xFrame);
-                            break;
+                            Reference < XFrame > xFrame;
+                            if (!(xContainer->getByIndex(i) >>= xFrame) || !xFrame.is())
+                                continue;
+                            ::rtl::OUString sModule = xCheck->identify(xFrame);
+                            if (sModule.equalsAscii("com.sun.star.frame.StartModule"))
+                            {
+                                pFrame = Create(xFrame);
+                                break;
+                            }
                         }
+                        catch(const Exception&) {}
                     }
                 }
             }
@@ -621,7 +627,7 @@ void SfxTopFrame::SetPresentationMode( BOOL bSet )
     if ( GetCurrentViewFrame() )
         GetCurrentViewFrame()->GetWindow().SetBorderStyle( bSet ? WINDOW_BORDER_NOBORDER : WINDOW_BORDER_NORMAL );
 
-    SetMenuBarOn_Impl( !bSet );
+//    SetMenuBarOn_Impl( !bSet );
     if ( GetWorkWindow_Impl() )
         GetWorkWindow_Impl()->SetDockingAllowed( !bSet );
     if ( GetCurrentViewFrame() )
@@ -654,6 +660,7 @@ void SfxTopFrame::LockResize_Impl( BOOL bLock )
 
 void SfxTopFrame::SetMenuBar_Impl( MenuBar *pMenu )
 {
+/*
     if ( pMenu && !pImp->bMenuBarOn )
         return;
 
@@ -667,6 +674,7 @@ void SfxTopFrame::SetMenuBar_Impl( MenuBar *pMenu )
             pMenu->SetCloserHdl( LINK( pWindow, SfxTopWindow_Impl, CloserHdl ) );
         }
     }
+*/
 }
 
 IMPL_LINK( SfxTopWindow_Impl, CloserHdl, void*, pVoid )
@@ -681,20 +689,61 @@ IMPL_LINK( SfxTopWindow_Impl, CloserHdl, void*, pVoid )
 
 void SfxTopFrame::SetMenuBarOn_Impl( BOOL bOn )
 {
+/*
     pImp->bMenuBarOn = bOn;
     if ( !bOn )
         SetMenuBar_Impl( 0 );
+*/
+    Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
+    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+
+    if ( xPropSet.is() )
+    {
+        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+        aValue >>= xLayoutManager;
+    }
+
+    if ( xLayoutManager.is() )
+    {
+        rtl::OUString aMenuBarURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ));
+
+        if ( bOn )
+            xLayoutManager->showElement( aMenuBarURL );
+        else
+            xLayoutManager->hideElement( aMenuBarURL );
+    }
 }
 
 BOOL SfxTopFrame::IsMenuBarOn_Impl() const
 {
+/*
     return pImp->bMenuBarOn;
+*/
+    Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
+    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+
+    if ( xPropSet.is() )
+    {
+        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+        aValue >>= xLayoutManager;
+    }
+
+    if ( xLayoutManager.is() )
+    {
+        rtl::OUString aMenuBarURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ));
+        return xLayoutManager->isElementVisible( aMenuBarURL );
+    }
+
+    return FALSE;
 }
 
 MenuBar* SfxTopFrame::GetMenuBar_Impl() const
 {
+/*
     SystemWindow *pWin = GetTopWindow_Impl();
     return pWin ? pWin->GetMenuBar() : NULL;
+*/
+    return NULL;
 }
 
 String SfxTopFrame::GetWindowData()
