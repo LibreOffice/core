@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:46:59 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,18 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
 #endif
 #include <tools/urlobj.hxx>
 #ifndef GCC
@@ -77,6 +84,8 @@
 #include <unotools/intlwrapper.hxx>
 #endif
 
+#include <comphelper/storagehelper.hxx>
+
 #include "app.hxx"
 #include "objsh.hxx"
 #include "docfile.hxx"
@@ -89,6 +98,8 @@
 #include "view.hrc"
 #include "docfilt.hxx"
 #include "fltfnc.hxx"
+
+using namespace ::com::sun::star;
 
 //=========================================================================
 
@@ -104,7 +115,10 @@ struct _FileListEntry
     String aBaseName;           // Dateiname
     const CollatorWrapper* pCollator;
     SfxObjectShellLock aDocShell; // ObjectShell als Ref-Klasse
-    SvStorageRef aStor;         // Referenz auf Storage, wenn wir diesen geoeffnet haben
+
+//REMOVE        SvStorageRef aStor;         // Referenz auf Storage, wenn wir diesen geoeffnet haben
+    uno::Reference< embed::XStorage > xStorage;
+
     BOOL bFile;                 // als Datei auf Platte
                                 // (!= unbenannt1, nicht als Dok. geladen;
                                 // diese werden nicht gespeichert!)
@@ -189,13 +203,24 @@ BOOL _FileListEntry::DeleteObjectShell()
     if(bOwner && aDocShell.Is() && aDocShell->IsModified())
     {
         //Mussten wir konvertieren?
-        if(aStor.Is())
+        if( xStorage.is() )
         {
             if(!aDocShell->Save() )
                 bRet = FALSE;
             else
             {
-                aStor->Commit();
+                try {
+                    uno::Reference< embed::XTransactedObject > xTransact( xStorage, uno::UNO_QUERY );
+                    OSL_ENSURE( xTransact.is(), "Storage must implement XTransactedObject!\n" );
+                    if ( !xTransact.is() )
+                        throw uno::RuntimeException();
+
+                    xTransact->commit();
+                }
+                catch( uno::Exception& )
+                {
+                }
+
 //              aDocShell->SfxObjectShell::DoSaveCompleted();
             }
         }
@@ -209,11 +234,13 @@ BOOL _FileListEntry::DeleteObjectShell()
                         aTitle, aDocShell->GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT )->GetFilterName(), 0 );
         }
     }
+
     if( bOwner)
     {
         aDocShell.Clear();
-        aStor.Clear();
+        xStorage = uno::Reference< embed::XStorage >();
     }
+
     return bRet;
 }
 
@@ -327,7 +354,7 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( USHORT nIdx )
                 pFilter && !pFilter->UsesStorage() )
             {
                 pSfxApp->LoadTemplate( pEntry->aDocShell, aFilePath );
-                pEntry->aStor = 0;
+                pEntry->xStorage = uno::Reference< embed::XStorage >();
                 delete pMed;
                 if ( pEntry->aDocShell.Is() )
                     return (SfxObjectShellRef)(SfxObjectShell*)(pEntry->aDocShell);
@@ -348,24 +375,30 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( USHORT nIdx )
                 if ( !pEntry->aDocShell.Is() )
                     return NULL;
 #endif
-                pEntry->aStor = new SvStorage( aFilePath,
-                                                STREAM_READWRITE |
-                                                STREAM_NOCREATE  |
-                                                STREAM_SHARE_DENYALL,
-                                                STORAGE_TRANSACTED );
-                // kein Storage-File oder andere Fehler beim Oeffnen
-                if( SVSTREAM_OK == pEntry->aStor->GetError() )
-                {
+//REMOVE                    pEntry->aStor = new SvStorage( aFilePath,
+//REMOVE                                                    STREAM_READWRITE |
+//REMOVE                                                    STREAM_NOCREATE  |
+//REMOVE                                                    STREAM_SHARE_DENYALL,
+//REMOVE                                                    STORAGE_TRANSACTED );
+                try {
+                    pEntry->xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
+                                            aFilePath,
+                                            embed::ElementModes::READWRITE | embed::ElementModes::NOCREATE );
+
                     if ( pEntry->aDocShell.Is() )
                     {
                         String aOldBaseURL = INetURLObject::GetBaseURL();
                         pEntry->aDocShell->DoInitNew(0);
                         INetURLObject::SetBaseURL( pEntry->aDocShell->GetMedium()->GetName() );
-                        pEntry->aDocShell->LoadFrom(pEntry->aStor);
-                        pEntry->aDocShell->DoHandsOff();
-                        pEntry->aDocShell->DoSaveCompleted(pEntry->aStor);
+                        pEntry->aDocShell->LoadFrom( pEntry->xStorage );
+//REMOVE                            pEntry->aDocShell->DoHandsOff();
+                        pEntry->aDocShell->DoSaveCompleted( pEntry->xStorage );
                         INetURLObject::SetBaseURL( aOldBaseURL );
                     }
+                }
+                catch( uno::Exception& )
+                {
+                    // TODO: error handling?
                 }
             }
         }
