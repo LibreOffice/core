@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-28 09:37:11 $
+ *  last change: $Author: hro $ $Date: 2001-05-28 10:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2723,7 +2723,16 @@ sal_Bool SAL_CALL shell::ensuredir( const rtl::OUString& rUnqPath )
         aPath = rUnqPath;
 
 
-    osl::FileBase::RC   nError = osl::Directory::create( aPath );
+    // HACK: create directory on a mount point with nobrowse option
+    // returns ENOSYS in any case !!
+    osl::Directory aDirectory( aPath );
+    osl::FileBase::RC nError = aDirectory.open();
+    aDirectory.close();
+
+    if( nError == osl::File::E_None )
+        return sal_True;
+
+    nError = osl::Directory::create( aPath );
     sal_Bool            bSuccess = (nError == osl::File::E_None || nError == osl::FileBase::E_EXIST);
 
     if ( !bSuccess)
