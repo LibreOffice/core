@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_uno2java.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:29:25 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,8 +604,7 @@ void SAL_CALL UNO_proxy_dispatch(
 #if OSL_DEBUG_LEVEL > 1
     OUStringBuffer trace_buf( 64 );
     trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("uno->java call: ") );
-    trace_buf.append(
-        *reinterpret_cast< OUString const * >( &member_td->pTypeName ) );
+    trace_buf.append( OUString::unacquired( &member_td->pTypeName ) );
     trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" on oid ") );
     trace_buf.append( that->m_oid );
     OString cstr_msg(
@@ -822,11 +821,10 @@ void SAL_CALL UNO_proxy_dispatch(
         if (typelib_TypeClass_INTERFACE_METHOD == member_td->eTypeClass ||
             typelib_TypeClass_INTERFACE_ATTRIBUTE == member_td->eTypeClass)
         {
-            buf.append(
-                *reinterpret_cast< OUString const * >(
-                    &reinterpret_cast<
-                      typelib_InterfaceMemberTypeDescription const * >(
-                          member_td )->pMemberName ) );
+            buf.append( OUString::unacquired(
+                            &reinterpret_cast<
+                            typelib_InterfaceMemberTypeDescription const * >(
+                                member_td )->pMemberName ) );
         }
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(": ") );
         buf.append( err.m_message );
