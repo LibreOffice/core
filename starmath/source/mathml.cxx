@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: tl $ $Date: 2001-11-06 09:34:53 $
+ *  last change: $Author: cmc $ $Date: 2002-01-08 12:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1602,25 +1602,31 @@ void SmXMLErrorContext_Impl::EndElement()
     }
 }
 
-
-
 class SmXMLNumberContext_Impl : public SmXMLImportContext
 {
 public:
     SmXMLNumberContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName) {}
+        : SmXMLImportContext(rImport,nPrefix,rLName)
+    {
+        aToken.cMathChar = '\0';
+        aToken.nGroup = 0;
+        aToken.nLevel = 5;
+        aToken.eType = TNUMBER;
+    }
     virtual void TCharacters(const OUString &rChars);
+    void EndElement();
+protected:
+    SmToken aToken;
 };
 
 void SmXMLNumberContext_Impl::TCharacters(const OUString &rChars)
 {
-    SmToken aToken;
-    aToken.cMathChar = '\0';
-    aToken.nGroup = 0;
     aToken.aText = rChars;
-    aToken.nLevel = 5;
-    aToken.eType = TNUMBER;
+}
+
+void SmXMLNumberContext_Impl::EndElement()
+{
     GetSmImport().GetNodeStack().Push(new SmTextNode(aToken,FNT_NUMBER));
 }
 
@@ -1674,20 +1680,26 @@ class SmXMLTextContext_Impl : public SmXMLImportContext
 public:
     SmXMLTextContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName) {}
+        : SmXMLImportContext(rImport,nPrefix,rLName)
+    {
+        aToken.cMathChar = '\0';
+        aToken.nGroup = 0;
+        aToken.nLevel = 5;
+        aToken.eType = TTEXT;
+    }
     virtual void TCharacters(const OUString &rChars);
+    void EndElement();
+protected:
+    SmToken aToken;
 };
-
-
 
 void SmXMLTextContext_Impl::TCharacters(const OUString &rChars)
 {
-    SmToken aToken;
-    aToken.cMathChar = '\0';
-    aToken.nGroup = 0;
     aToken.aText = rChars;
-    aToken.nLevel = 5;
-    aToken.eType = TTEXT;
+}
+
+void SmXMLTextContext_Impl::EndElement()
+{
     GetSmImport().GetNodeStack().Push(new SmTextNode(aToken,FNT_TEXT));
 }
 
@@ -1696,16 +1708,21 @@ class SmXMLStringContext_Impl : public SmXMLImportContext
 public:
     SmXMLStringContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName) {}
+        : SmXMLImportContext(rImport,nPrefix,rLName)
+    {
+        aToken.cMathChar = '\0';
+        aToken.nGroup = 0;
+        aToken.nLevel = 5;
+        aToken.eType = TTEXT;
+    }
     virtual void TCharacters(const OUString &rChars);
+    void EndElement();
+protected:
+    SmToken aToken;
 };
 
 void SmXMLStringContext_Impl::TCharacters(const OUString &rChars)
 {
-    SmToken aToken;
-    aToken.cMathChar = '\0';
-    aToken.nGroup = 0;
-
     /*
     The content of <ms> elements should be rendered with visible "escaping" of
     certain characters in the content, including at least "double quote"
@@ -1720,9 +1737,10 @@ void SmXMLStringContext_Impl::TCharacters(const OUString &rChars)
     aToken.aText += '\"';
     aToken.aText += String(rChars);
     aToken.aText += '\"';
+}
 
-    aToken.nLevel = 5;
-    aToken.eType = TTEXT;
+void SmXMLStringContext_Impl::EndElement()
+{
     GetSmImport().GetNodeStack().Push(new SmTextNode(aToken,FNT_FIXED));
 }
 
@@ -1731,28 +1749,29 @@ class SmXMLIdentifierContext_Impl : public SmXMLImportContext
 public:
     SmXMLIdentifierContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName),aStyleHelper(*this) {}
+        : SmXMLImportContext(rImport,nPrefix,rLName),aStyleHelper(*this)
+    {
+        aToken.cMathChar = '\0';
+        aToken.nGroup = 0;
+        aToken.nLevel = 5;
+        aToken.eType = TIDENT;
+    }
     void TCharacters(const OUString &rChars);
     void StartElement(const uno::Reference<
     xml::sax::XAttributeList > & xAttrList ) {aStyleHelper.RetrieveAttrs(xAttrList);};
+    void EndElement();
 protected:
     SmXMLContext_Helper aStyleHelper;
+    SmToken aToken;
 };
 
-void SmXMLIdentifierContext_Impl::TCharacters(const OUString &rChars)
+void SmXMLIdentifierContext_Impl::EndElement()
 {
-    SmToken aToken;
-    aToken.cMathChar = '\0';
-    aToken.nGroup = 0;
-    aToken.aText = rChars;
-    aToken.nLevel = 5;
-    aToken.eType = TIDENT;
     SmTextNode *pNode = 0;
-
     //we will handle identifier italic/normal here instead of with a standalone
     //font node
-    if (((aStyleHelper.nIsItalic == -1) && (rChars.getLength() > 1))
-        || ((aStyleHelper.nIsItalic == 0) && (rChars.getLength() == 1)))
+    if (((aStyleHelper.nIsItalic == -1) && (aToken.aText.Len() > 1))
+        || ((aStyleHelper.nIsItalic == 0) && (aToken.aText.Len() == 1)))
     {
         pNode = new SmTextNode(aToken,FNT_FUNCTION);
         pNode->GetFont().SetItalic(ITALIC_NONE);
@@ -1779,28 +1798,39 @@ void SmXMLIdentifierContext_Impl::TCharacters(const OUString &rChars)
     GetSmImport().GetNodeStack().Push(pNode);
 }
 
+void SmXMLIdentifierContext_Impl::TCharacters(const OUString &rChars)
+{
+    aToken.aText = rChars;
+}
+
 class SmXMLOperatorContext_Impl : public SmXMLImportContext
 {
 public:
     SmXMLOperatorContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName), bIsStretchy(sal_False) {}
+        : SmXMLImportContext(rImport,nPrefix,rLName), bIsStretchy(sal_False)
+    {
+        aToken.nGroup = 0;
+        aToken.eType = TSPECIAL;
+        aToken.nLevel = 5;
+    }
     void TCharacters(const OUString &rChars);
     void StartElement(const uno::Reference<
         xml::sax::XAttributeList > &xAttrList );
+    void EndElement();
+protected:
+    SmToken aToken;
 private:
     sal_Bool bIsStretchy;
 };
 
 void SmXMLOperatorContext_Impl::TCharacters(const OUString &rChars)
 {
-    SmToken aToken;
-    aToken.nGroup = 0;
-
     aToken.cMathChar = rChars[0];
+}
 
-    aToken.eType = TSPECIAL;
-    aToken.nLevel = 5;
+void SmXMLOperatorContext_Impl::EndElement()
+{
     SmMathSymbolNode *pNode = new SmMathSymbolNode(aToken);
     //For stretchy scaling the scaling must be retrieved from this node
     //and applied to the expression itself so as to get the expression
@@ -1809,6 +1839,7 @@ void SmXMLOperatorContext_Impl::TCharacters(const OUString &rChars)
         pNode->SetScaleMode(SCALE_HEIGHT);
     GetSmImport().GetNodeStack().Push(pNode);
 }
+
 
 
 void SmXMLOperatorContext_Impl::StartElement(const uno::Reference<
