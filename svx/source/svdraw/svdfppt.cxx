@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-28 08:32:33 $
+ *  last change: $Author: sj $ $Date: 2001-07-06 14:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3603,6 +3603,26 @@ static sal_Unicode PPTExportMapper( sal_Unicode nUni, BOOL& bNeedsStarBats )
 sal_Unicode SdrPowerPointImport::PPTSubstitute( UINT16 nFont, sal_Unicode nChar,
                                         UINT32& nMappedFontId, Font& rFont, char nDefault ) const
 {
+    nMappedFontId = nFont;
+    PptFontEntityAtom* pAtom = GetFontEnityAtom( nFont );
+    if ( pAtom )
+    {
+        CharSet eCharSet( pAtom->eCharSet );
+        rFont.SetName( pAtom->aName );
+        rFont.SetCharSet( eCharSet );
+        rFont.SetFamily( pAtom->eFamily );
+        rFont.SetPitch( pAtom->ePitch );
+    }
+    return nChar;
+}
+
+/*
+// SJ: this is the old version, using our new unicode font it won't be necessary to
+//     do any fontmapping
+
+sal_Unicode SdrPowerPointImport::PPTSubstitute( UINT16 nFont, sal_Unicode nChar,
+                                        UINT32& nMappedFontId, Font& rFont, char nDefault ) const
+{
     static String aStarBats( String( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) ) );
     static String aTimes( String( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) ) );
     BOOL bNeedsStarBats = FALSE;
@@ -3655,12 +3675,6 @@ sal_Unicode SdrPowerPointImport::PPTSubstitute( UINT16 nFont, sal_Unicode nChar,
                     {
                         rFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Wingdings" ) ) );
                         c = nChar;
-/*
-                        if ( nChar & 0xff00 )
-                            c = String::ConvertFromUnicode( nChar, eCharSet );
-                        else
-                            c = (UINT8)nChar;
-*/
                         if ( nIWingdings & 0x80000000 )
                             nMappedFontId = nIWingdings &~0x80000000;
                     }
@@ -3676,12 +3690,6 @@ sal_Unicode SdrPowerPointImport::PPTSubstitute( UINT16 nFont, sal_Unicode nChar,
             else
             {
                 c = nChar;
-/*
-                if ( nChar & 0xff00 )
-                    c = String::ConvertFromUnicode( nChar, eCharSet );
-                else
-                    c = (UINT8)nChar;
-*/
             }
         }
         if ( bNeedsStarBats )
@@ -3700,6 +3708,7 @@ sal_Unicode SdrPowerPointImport::PPTSubstitute( UINT16 nFont, sal_Unicode nChar,
         c = nDefault ? nDefault : nChar;
     return c;
 }
+*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -5137,6 +5146,9 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
             {
                 if ( nChar == 0xd )
                     aSpecMarkerList.Insert( (void*)( i | PPT_SPEC_NEWLINE ), LIST_APPEND );
+/*
+// SJ: this is the old version, using our new unicode font it won't be necessary to
+//     do any fontmapping
 #ifndef WNT
                 else if ( nChar >= 128 )
                 {
@@ -5148,6 +5160,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                         *pPtr = cReplace;
                 }
 #endif
+*/
             }
         }
         if ( i )
