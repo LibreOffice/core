@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-26 11:25:41 $
+ *  last change: $Author: pl $ $Date: 2002-10-10 18:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1894,7 +1894,7 @@ bool SelectionManager::updateDragAction( int modifierState )
         nNewDropAction |= DNDConstants::ACTION_DEFAULT;
     }
 
-    if( nNewDropAction != m_nUserDragAction )
+    if( nNewDropAction != m_nUserDragAction || m_nTargetAcceptAction != DNDConstants::ACTION_DEFAULT )
     {
 #ifdef DEBUG
         fprintf( stderr, "updateDragAction: %x -> %x\n", (int)m_nUserDragAction, (int)nNewDropAction );
@@ -1909,7 +1909,6 @@ bool SelectionManager::updateDragAction( int modifierState )
         dsde.DropAction         = m_nUserDragAction;
         dsde.UserAction         = m_nUserDragAction;
         m_nTargetAcceptAction   = DNDConstants::ACTION_DEFAULT; // invalidate last accept
-        setCursor( getDefaultCursor( m_nUserDragAction ), m_aDropWindow, m_nDragTimestamp );
         m_xDragSourceListener->dropActionChanged( dsde );
     }
     return bRet;
@@ -2026,8 +2025,8 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
             dsde.Source                 = static_cast< OWeakObject* >(this);
             dsde.DragSourceContext      = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
             dsde.DragSource             = static_cast< XDragSource* >( this );
-            dsde.DropAction = DNDConstants::ACTION_NONE;
             dsde.UserAction = getUserDragAction();
+            dsde.DropAction = DNDConstants::ACTION_NONE;
             m_bDropSuccess = rMessage.xclient.data.l[1] & 1 ? true : false;
             if( rMessage.xclient.data.l[1] & 1 )
             {
@@ -2043,6 +2042,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
                 else
                     dsde.DropAction = DNDConstants::ACTION_COPY;
             }
+            m_nTargetAcceptAction = dsde.DropAction;
 
             if( ! ( rMessage.xclient.data.l[1] & 2 ) )
             {
@@ -2054,6 +2054,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
             else
                 m_nNoPosX = m_nNoPosY = m_nNoPosWidth = m_nNoPosHeight = 0;
 
+            setCursor( getDefaultCursor( dsde.DropAction ), m_aDropWindow, m_nDragTimestamp );
             aGuard.clear();
             m_xDragSourceListener->dragOver( dsde );
         }
@@ -2064,7 +2065,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
             dsde.Source             = static_cast< OWeakObject* >(this);
             dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
             dsde.DragSource         = static_cast< XDragSource* >(this);
-            dsde.DropAction         = getUserDragAction();
+            dsde.DropAction         = m_nTargetAcceptAction;
             dsde.DropSuccess        = m_bDropSuccess;
             Reference< XDragSourceListener > xListener( m_xDragSourceListener );
             m_xDragSourceListener.clear();
