@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-08 13:41:35 $
+ *  last change: $Author: oj $ $Date: 2002-12-10 12:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -871,7 +871,8 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     nRet = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_RELATIVE,0);
-    OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    // sometimes we got an error but we are not interested in anymore #106047# OJ
+    //  OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     nRet = N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
     OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
@@ -934,8 +935,20 @@ void SAL_CALL OResultSet::deleteRow(  ) throw(SQLException, RuntimeException)
     SQLRETURN nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_DELETE,SQL_LOCK_NO_CHANGE);
     OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
-    m_bRowDeleted = m_pRowStatusArray[0] == SQL_ROW_DELETED;
-    if(m_pSkipDeletedSet)
+    if ( m_bRowDeleted = (m_pRowStatusArray[0] == SQL_ROW_DELETED) )
+    {
+        TBookmarkPosMap::iterator aIter = m_aPosToBookmarks.begin();
+        TBookmarkPosMap::iterator aEnd = m_aPosToBookmarks.end();
+        for (; aIter != aEnd; ++aIter)
+        {
+            if ( aIter->second == nPos )
+            {
+                m_aPosToBookmarks.erase(aIter);
+                break;
+            }
+        }
+    }
+    if ( m_pSkipDeletedSet )
         m_pSkipDeletedSet->deletePosition(nPos);
 }
 // -------------------------------------------------------------------------
