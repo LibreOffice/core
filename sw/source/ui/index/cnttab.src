@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: os $ $Date: 2002-10-30 10:41:06 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2271,6 +2271,27 @@ TabPage TP_TOX_SELECT
     {
         Text = "[keine]" ;
         Text [ ENGLISH ] = "[none]" ;
+        Text[ english_us ] = "[none]";
+        Text[ portuguese ] = "[none]";
+        Text[ russian ] = "[none]";
+        Text[ greek ] = "[none]";
+        Text[ dutch ] = "[none]";
+        Text[ french ] = "[none]";
+        Text[ spanish ] = "[none]";
+        Text[ finnish ] = "[none]";
+        Text[ italian ] = "[none]";
+        Text[ danish ] = "[none]";
+        Text[ swedish ] = "[none]";
+        Text[ polish ] = "[none]";
+        Text[ portuguese_brazilian ] = "[none]";
+        Text[ japanese ] = "[none]";
+        Text[ korean ] = "[none]";
+        Text[ chinese_simplified ] = "[none]";
+        Text[ chinese_traditional ] = "[none]";
+        Text[ turkish ] = "[none]";
+        Text[ arabic ] = "[none]";
+        Text[ catalan ] = "[none]";
+        Text[ thai ] = "[none]";
     };
     FixedLine FL_AUTHORITY
     {
@@ -4200,7 +4221,7 @@ TabPage TP_TOX_ENTRY
         Text[ greek ] = "Êëåéäß ôáîéíüìçóçò";
         Text[ dutch ] = "Sorteersleutel";
         Text[ french ] = "Clé de tri";
-        Text[ spanish ] = "Criterios de ordenación";
+        Text[ spanish ] = "Criterios de orden";
         Text[ italian ] = "Criteri";
         Text[ danish ] = "Sorteringsnøgle";
         Text[ swedish ] = "Sorteringsnyckel";
