@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-09 11:26:53 $
+ *  last change: $Author: dv $ $Date: 2001-02-21 09:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,13 +107,6 @@
 
 #define PROPERTYVALUE       ::com::sun::star::beans::PropertyValue
 #define UNO_QUERY           ::com::sun::star::uno::UNO_QUERY
-
-//--------------------------------------------------------------------------------------------------------
-//  XInterface / XTypeProvider
-//--------------------------------------------------------------------------------------------------------
-
-SFX_IMPL_XINTERFACE_2( SfxEvents_Impl, OWeakObject, XNAMEREPLACE, XEVENTLISTENER )
-SFX_IMPL_XTYPEPROVIDER_2( SfxEvents_Impl, XNAMEREPLACE, XEVENTLISTENER )
 
 //--------------------------------------------------------------------------------------------------------
     //  --- XNameReplace ---
