@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Callback.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:56 $
+ *  last change: $Author: jl $ $Date: 2002-09-04 16:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ END_COM_MAP()
 // ICallback
 public:
     STDMETHOD(inSeqByte)(/*[in]*/ LPSAFEARRAY val);
+    STDMETHOD(inSeqXEventListener)(/*[in]*/ LPSAFEARRAY listener, LPSAFEARRAY event);
     STDMETHOD(outSeqByte)(/*[out]*/ LPSAFEARRAY* outVal);
     STDMETHOD(inValues)(/*[in]*/short aChar, /*[in]*/ long aLong, /*[in]*/ BSTR aString);
     STDMETHOD(inoutLong)(/*[in,out]*/ long* inoutVal);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpnt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2002-06-20 09:08:27 $
+ *  last change: $Author: jl $ $Date: 2002-09-04 15:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 
 #include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring>
 #include <com/sun/star/uno/Reference.hxx>
@@ -272,6 +273,16 @@ public: // XTestSequence
     void SAL_CALL func( const OUString &message) throw(::com::sun::star::uno::RuntimeException);
     OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
 
+};
+
+class EventListener: public WeakImplHelper1<XEventListener>
+{
+public:
+    EventListener::EventListener(): bCalled( sal_False)
+        {}
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException);
+
+    sal_Bool bCalled;
 };
 
 
@@ -1478,12 +1489,28 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
         xCallback->inValues( L'a', 0xffffL, OUString(L" a string from OleTest"));
         break;
     case 201:
+    {
+        sal_Int8 arbyte[3]= { 1,2,3};
+        Sequence< sal_Int8 > seq( arbyte, 3);
+        xCallback->inSeqByte( seq);
+        break;
+    }
+    case 202:
+    {
+        const int LISTENERS= 3;
+        Reference<XEventListener> arListeners[LISTENERS];
+        EventObject arEvents[LISTENERS];
+
+        for( int i= 0; i < LISTENERS; i++)
         {
-            sal_Int8 arbyte[3]= { 1,2,3};
-            Sequence< sal_Int8 > seq( arbyte, 3);
-            xCallback->inSeqByte( seq);
-            break;
+            Reference<XInterface> aList= static_cast<XWeak*>( new EventListener());
+            arListeners[i]= Reference<XEventListener>( aList, UNO_QUERY);
         }
+
+        xCallback->inSeqXEventListener(Sequence<Reference<XEventListener> > (arListeners, LISTENERS),
+                                       Sequence<EventObject>(arEvents, LISTENERS));
+        break;
+    }
 
     // ############################################################################
     // Call a COM object that has not been passed as parameter to a UNO component and
@@ -1681,6 +1708,11 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
 
     }
 
+}
+
+void SAL_CALL EventListener::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException)
+{
+    bCalled= sal_True;
 }
 
 // XSimple --------------------------------------------------------------------------

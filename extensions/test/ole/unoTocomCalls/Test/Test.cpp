@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Test.cpp,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:55 $
+ *  last change: $Author: jl $ $Date: 2002-09-04 16:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ HRESULT doTest()
     //######################################################################
     CComVariant param1( paramDisp);
     CComVariant param2(1);
+
     // oletest calls XCallback::func1
     hr= oletest.Invoke2(L"testInterface", &param1, &param2);
     // XCallback::returnInterface
@@ -238,11 +239,12 @@ HRESULT doTest()
     param2= 200;
     hr= oletest.Invoke2(L"testInterface", &param1, &param2);
     // XCallback::inSeqByte
-    // Does not work currently because Sequences are always converted to
     // SAFEARRAY( VARIANT)
-    //  param2= 201;
-    //  hr= oletest.Invoke2(L"testInterface", &param1, &param2);
-
+    param2= 201;
+    hr= oletest.Invoke2(L"testInterface", &param1, &param2);
+    //XCallback::inSeqXEventListener
+    param2= 202;
+    hr= oletest.Invoke2(L"testInterface", &param1, &param2);
     //######################################################################
     //  The UNO test component OleTest calls on XCallback_Impl.Callback directly
     // that is the COM object has not been past a parameter but rather OleTest
