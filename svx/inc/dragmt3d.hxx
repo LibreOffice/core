@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dragmt3d.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:55 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ class E3dDragMethod : public SdrDragMethod
 protected:
     E3dDragMethodUnitGroup      aGrp;
     E3dDragConstraint           eConstraint;
-    E3dDragDetail               eDragDetail;
+    //BFS01E3dDragDetail                eDragDetail;
     Point                       aLastPos;
     Rectangle                   aFullBound;
     BOOL                        bMoveFull;
@@ -134,7 +134,7 @@ public:
     TYPEINFO();
     E3dDragMethod(SdrDragView &rView,
         const SdrMarkList& rMark,
-        E3dDragDetail eDetail,
+        //BFS01E3dDragDetail eDetail,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
         BOOL bFull=FALSE);
 
@@ -145,7 +145,7 @@ public:
     virtual void Brk();
     virtual FASTBOOL End(FASTBOOL bCopy);
 
-    virtual void DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const;
+    virtual void DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const;
     E3dView& Get3DView()  { return (E3dView&)rView;  }
 
     DECL_LINK(TimerInterruptHdl, void*);
@@ -166,7 +166,7 @@ public:
     TYPEINFO();
     E3dDragRotate(SdrDragView &rView,
         const SdrMarkList& rMark,
-        E3dDragDetail eDetail,
+        //BFS01E3dDragDetail eDetail,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
         BOOL bFull=FALSE);
 
@@ -190,7 +190,7 @@ public:
     TYPEINFO();
     E3dDragMove(SdrDragView &rView,
         const SdrMarkList& rMark,
-        E3dDragDetail eDetail,
+        //BFS01E3dDragDetail eDetail,
         SdrHdlKind eDrgHdl = HDL_MOVE,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
         BOOL bFull=FALSE);
