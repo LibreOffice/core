@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,8 +589,8 @@ void SetResetImpl::doTest( view::Node const& rTarget)
 
 
                 Path::Component aFullName =
-                                    aNewTree.is() ? aFullName = aNewTree->getExtendedRootName() :
-                                    aOldTree.is() ? aFullName = aOldTree->getExtendedRootName() :
+                                    aNewTree.is() ? aNewTree->getExtendedRootName() :
+                                    aOldTree.is() ? aOldTree->getExtendedRootName() :
                                     Path::makeCompositeName(aName,accessor.getElementTemplate(aTargetSet)->getName());
 
                 OSL_ENSURE(aOldTree.is() || aNewTree.is(), "No data for change to default");
