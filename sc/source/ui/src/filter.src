@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:02:22 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "filter.hrc"
 ModelessDialog RID_SCDLG_FILTER
 {
@@ -1920,7 +1919,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ spanish ] = "El área contiene los títulos de ~columnas" ;
         Text [ english_us ] = "Range contains ~column labels" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "åŒºåŸŸåŒ…å«åˆ—æ ‡é¢˜(~C)";
+        Text[ chinese_simplified ] = "åŒºåŸŸåŒ…å«åˆ—æ ‡ç­¾";
         Text[ russian ] = "Îáëàñòü ñîäåğæèò çàãîëîâêè ñòîëáöîâ";
         Text[ polish ] = "Zakre~s zawiera nag³ówki kolumn";
         Text[ japanese ] = "ç¯„å›²ã«åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~C)";
@@ -2470,7 +2469,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ spanish ] = "El área contiene los títulos de ~columnas" ;
         Text [ english_us ] = "Range c~ontains column labels" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "åŒºåŸŸåŒ…å«åˆ—æ ‡é¢˜(~O)";
+        Text[ chinese_simplified ] = "åŒºåŸŸåŒ…å«åˆ—æ ‡ç­¾";
         Text[ russian ] = "Ñîäåğæèò çàãîëîâêè ñòîëáöîâ";
         Text[ polish ] = "Z~awiera nag³ówki kolumn";
         Text[ japanese ] = "ç¯„å›²ã«åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~O)";
