@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-19 13:36:30 $
+ *  last change: $Author: fs $ $Date: 2002-03-14 16:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,8 +299,8 @@ sal_Bool DbGridColumn::Commit()
             if (xComp.is())
                 bResult = xComp->commit();
         }
+        m_bInSave = sal_False;
     }
-    m_bInSave = sal_False;
     return bResult;
 }
 
