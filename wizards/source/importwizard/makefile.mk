@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tv $ $Date: 2001-04-23 09:02:27 $
+#   last change: $Author: tv $ $Date: 2001-04-23 09:58:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,27 +61,30 @@
 #*************************************************************************
 PRJ=..$/..
 
-
-
 PRJNAME=wizards
 TARGET=importwizardall
 
-.INCLUDE : settings.mk
+# --- Settings -----------------------------------------------------
 
+.INCLUDE :  svpre.mk
+.INCLUDE :  settings.mk
+.INCLUDE :  sv.mk
 .INCLUDE : $(PRJ)$/util$/target.pmk
 
+# --- Files --------------------------------------------------------
 
+#
+# testresource.
+#
+SRS2NAME =              importwi
+SRC2FILES=		importwi.src
+RESLIB2SRSFILES= $(SRS)$/importwi.srs
+RESLIB2NAME=	imp
 
 ZIP1TARGET      = $(IMPORTWIZARD_ALL_TARGET)
-
 ZIP1LIST        = *.xdl *.xba
 
+# --- Targets ------------------------------------------------------
 
-
-
-.INCLUDE : target.mk
-
-
-
-
+.INCLUDE :  target.mk
 
