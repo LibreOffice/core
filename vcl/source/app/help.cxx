@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-29 14:39:17 $
+ *  last change: $Author: ssa $ $Date: 2001-10-29 17:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,10 +632,11 @@ void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle
     }
     else
     {
-        // Wenn es die Maus-Position ist, dann Fenster leicht versetzt
-        // anzeigen, damit MousePointer nicht das Hilfe-Fenster verdeckt
-        Point mPos( pHelpWin->OutputToAbsoluteScreenPixel( pHelpWin->GetPointerPosPixel() ) );
-//      if ( aPos == mPos )
+        // If it's the mouse position, move the window slightly
+        // so the mouse pointer does not cover it
+        Point mPos( pHelpWin->GetParent()->GetPointerPosPixel() );
+        mPos = pHelpWin->GetParent()->OutputToAbsoluteScreenPixel( mPos );
+        if ( aPos == mPos )
         {
             aPos.X() += 12;
             aPos.Y() += 16;
@@ -646,18 +647,23 @@ void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle
     {
         if ( pHelpArea )
         {
+            // convert help area to screen coords
+            Rectangle devHelpArea(
+                pHelpWin->GetParent()->OutputToAbsoluteScreenPixel( pHelpArea->TopLeft() ),
+                pHelpWin->GetParent()->OutputToAbsoluteScreenPixel( pHelpArea->BottomRight() ) );
+
             // Welche Position vom Rechteck?
-            aPos = pHelpArea->Center();
+            aPos = devHelpArea.Center();
 
             if ( nStyle & QUICKHELP_LEFT )
-                aPos.X() = pHelpArea->Left();
+                aPos.X() = devHelpArea.Left();
             else if ( nStyle & QUICKHELP_RIGHT )
-                aPos.X() = pHelpArea->Right();
+                aPos.X() = devHelpArea.Right();
 
             if ( nStyle & QUICKHELP_TOP )
-                aPos.Y() = pHelpArea->Top();
+                aPos.Y() = devHelpArea.Top();
             else if ( nStyle & QUICKHELP_BOTTOM )
-                aPos.Y() = pHelpArea->Bottom();
+                aPos.Y() = devHelpArea.Bottom();
         }
 
         // Welche Richtung?

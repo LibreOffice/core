@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-24 08:49:02 $
+ *  last change: $Author: ssa $ $Date: 2001-10-29 17:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,8 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
     {
         Point aPos = rHEvt.GetMousePosPixel();
         // Pos etwas nach unter-rechts korrigieren, wegen Pointer
-        aPos.X() += 15;
+        // will be corrected in ImplSetHelpWIndowPos()
+//        aPos.X() += 15;
 //      aPos.Y() += 20;
         Help::ShowBalloon( pMenuWindow, aPos, pMenu->GetHelpText( nId ) );
         bDone = TRUE;
