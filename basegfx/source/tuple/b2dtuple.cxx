@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dtuple.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:39:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ namespace basegfx
     {
         return B2ITuple(fround(rTup.getX()), fround(rTup.getY()));
     }
+
 } // end of namespace basegfx
 
 // eof
