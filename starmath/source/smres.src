@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2001-04-11 18:17:35 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2322,7 +2322,7 @@ ModalDialog RID_ALIGNDIALOG
         Text [ english_us ] = "~Left" ;
         Text[ chinese_simplified ] = "œÚ◊Û(~L)";
         Text[ russian ] = "—ÎÂ‚‡";
-        Text[ polish ] = "Z lewej";
+        Text[ polish ] = "Do lewej";
         Text[ japanese ] = "ç∂ëµÇ¶(~L)";
         Text[ chinese_traditional ] = "¶V•™(~L)";
         Text[ arabic ] = "Ì”«—";
@@ -2341,7 +2341,7 @@ ModalDialog RID_ALIGNDIALOG
         Text [ norwegian ] = "~Center" ;
         Text [ italian ] = "~Centro" ;
         Text [ portuguese_brazilian ] = "~Centro" ;
-        Text [ portuguese ] = "~Centro" ;
+        Text [ portuguese ] = "~Centrado" ;
         Text [ finnish ] = "~Keski" ;
         Text [ danish ] = "~Centreret" ;
         Text [ french ] = "~CentrÈ" ;
@@ -2380,7 +2380,7 @@ ModalDialog RID_ALIGNDIALOG
         Text [ english_us ] = "~Right" ;
         Text[ chinese_simplified ] = "œÚ”“(~R)";
         Text[ russian ] = "—Ô‡‚‡";
-        Text[ polish ] = "Z pra~wej";
+        Text[ polish ] = "Do pra~wej";
         Text[ japanese ] = "âEëµÇ¶(~R)";
         Text[ chinese_traditional ] = "¶V•k(~R)";
         Text[ arabic ] = "Ì„Ì‰";
@@ -2585,7 +2585,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ italian ] = "~Cornice" ;
         Text [ spanish ] = "~Marco" ;
         Text [ french ] = "~Cadre" ;
-        Text [ portuguese ] = "~Quadro" ;
+        Text [ portuguese ] = "~Moldura" ;
         Text [ portuguese_brazilian ] = "~Rahmen" ;
         Text[ chinese_simplified ] = "±ﬂøÚ(~O)";
         Text[ russian ] = "–‡ÏÍ‡";
@@ -9592,7 +9592,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ danish ] = "Andet";
                 TEXT[ french ] = "Autres";
                 TEXT[ swedish ] = "÷vrigt";
-                TEXT[ dutch ] = "Diversen";
+                TEXT[ dutch ] = "Diverse";
                 TEXT[ spanish ] = "Otros";
                 TEXT[ english_us ] = "Others";
                 TEXT[ chinese_simplified ] = "∆‰À˚";
@@ -9832,13 +9832,13 @@ String STR_MATH_DOCUMENT_FULLTYPE_60
     Text = "%PRODUCTNAME 6.0 Formel" ;
     Text [ ENGLISH ] = "StarOffice 6.0 Formula" ;
     Text[ english_us ] = "StarOffice 6.0 Formula";
-    Text[ portuguese ] = "StarOffice 6.0 Formula";
+    Text[ portuguese ] = "StarOffice 6.0 FÛrmula";
     Text[ russian ] = "‘ÓÏÛÎ‡ ‚ %PRODUCTNAME 6.0";
     Text[ greek ] = "%PRODUCTNAME 6.0 ‘˝ÔÚ";
     Text[ dutch ] = "%PRODUCTNAME 6.0 Formule";
     Text[ french ] = "%PRODUCTNAME 6.0 Formule";
     Text[ spanish ] = "%PRODUCTNAME 6.0 FÛrmula";
-    Text[ italian ] = "StarOffice 6.0 Formula";
+    Text[ italian ] = "%PRODUCTNAME 6.0 Formula";
     Text[ danish ] = "StarOffice 6.0 Formula";
     Text[ swedish ] = "%PRODUCTNAME 6.0 formel";
     Text[ polish ] = "StarOffice 6.0 - Formu≥a";
