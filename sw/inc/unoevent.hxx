@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-14 13:11:12 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include <svtools/macitem.hxx>
 #endif
 
+class SvxMacroTableDtor;
 class SvxMacroItem;
 class SvxMacro;
 class SwXFrame;
@@ -89,7 +90,6 @@ class SwXTextGraphicObject;
 class SwXTextEmbeddedObject;
 class SwXFrameStyle;
 class SwFmtINetFmt;
-class SwXAutoTextEntry;
 
 /**
  * SwBaseEventDescriptor: Abstract class that implements the basics
@@ -350,15 +350,15 @@ class SwHyperlinkEventDescriptor : public SwDetachedEventDescriptor
 {
     const ::rtl::OUString sImplName;
 
+    //XServiceInfo
+    virtual rtl::OUString SAL_CALL getImplementationName(void)
+        throw( ::com::sun::star::uno::RuntimeException );
+
 public:
 
      SwHyperlinkEventDescriptor();
 
     virtual ~SwHyperlinkEventDescriptor();
-
-    //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void)
-        throw( ::com::sun::star::uno::RuntimeException );
 
     void copyMacrosFromINetFmt(const SwFmtINetFmt& aFmt);
     void copyMacrosIntoINetFmt(SwFmtINetFmt& aFmt);
@@ -366,6 +366,20 @@ public:
     void copyMacrosFromNameReplace(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XNameReplace> & xReplace);
+};
+
+
+class SwMacroTableEventDescriptor : public SwDetachedEventDescriptor
+{
+public:
+
+     SwMacroTableEventDescriptor();
+     SwMacroTableEventDescriptor(const SvxMacroTableDtor& aFmt);
+
+    virtual ~SwMacroTableEventDescriptor();
+
+    void copyMacrosFromTable(const SvxMacroTableDtor& aFmt);
+    void copyMacrosIntoTable(SvxMacroTableDtor& aFmt);
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-14 13:11:13 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -883,6 +883,54 @@ void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
         {
             SwBaseEventDescriptor::replaceByName(rName,
                                                  xReplace->getByName(rName));
+        }
+    }
+}
+
+//
+// SwMacroTableEventDescriptor
+//
+
+SwMacroTableEventDescriptor::SwMacroTableEventDescriptor() :
+    SwDetachedEventDescriptor(aAutotextEvents)
+{
+}
+
+SwMacroTableEventDescriptor::SwMacroTableEventDescriptor(
+    const SvxMacroTableDtor& rMacroTable) :
+        SwDetachedEventDescriptor(aAutotextEvents)
+{
+    copyMacrosFromTable(rMacroTable);
+}
+
+SwMacroTableEventDescriptor::~SwMacroTableEventDescriptor()
+{
+}
+
+void SwMacroTableEventDescriptor::copyMacrosFromTable(
+    const SvxMacroTableDtor& rMacroTable)
+{
+    for(sal_Int16 i = 0; aSupportedMacroItemIDs[i] != NULL; i++)
+    {
+        USHORT nEvent = aSupportedMacroItemIDs[i];
+        const SvxMacro* pMacro = rMacroTable.Get(nEvent);
+        if (NULL != pMacro)
+            replaceByName(nEvent, *pMacro);
+    }
+
+}
+
+void SwMacroTableEventDescriptor::copyMacrosIntoTable(
+    SvxMacroTableDtor& rMacroTable)
+{
+    for(sal_Int16 i = 0; aSupportedMacroItemIDs[i] != NULL; i++)
+    {
+        USHORT nEvent = aSupportedMacroItemIDs[i];
+        if (hasByName(nEvent))
+        {
+            SvxMacro* pMacro = new SvxMacro(aEmptyMacro);
+            getByName(*pMacro, nEvent);
+            rMacroTable.Insert(nEvent, pMacro);
         }
     }
 }
