@@ -61,7 +61,8 @@ public class TestCaseOldAPI extends ComplexTestCase {
             "testSubTitle",
             "testDiagram",
             "testAxis",
-            "testLegend"
+            "testLegend",
+            "testArea"
         };
     }
 
@@ -315,6 +316,28 @@ public class TestCaseOldAPI extends ComplexTestCase {
                     AnyConverter.toObject(
                         new Type( ChartLegendPosition.class ),
                         xLegendProp.getPropertyValue( "Alignment" )) == eNewPos );
+        }
+        catch( Exception ex )
+        {
+            failed( ex.getMessage() );
+            ex.printStackTrace( (PrintWriter)log );
+        }
+    }
+
+    // ------------
+
+    public void testArea()
+    {
+        XPropertySet xArea = mxOldDoc.getArea();
+        assure( "No Area", xArea != null );
+
+        try
+        {
+            int nColor = 0xffe1ff; // thistle1
+            xArea.setPropertyValue( "FillColor", new Integer( nColor ) );
+
+            int nNewColor = AnyConverter.toInt( xArea.getPropertyValue( "FillColor" ) );
+            assure( "Changing FillColor of Area failed", nNewColor == nColor );
         }
         catch( Exception ex )
         {
