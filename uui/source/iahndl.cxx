@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:07:35 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 12:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1614,18 +1614,25 @@ UUIInteractionHandler::handleAuthenticationRequest(
                     aRec(xContainer->find(rRequest.ServerName, this));
                 if (aRec.UserList.getLength() != 0)
                 {
-                    xSupplyAuthentication->
-                        setUserName(aRec.UserList[0].UserName.getStr());
-                    OSL_ENSURE(aRec.UserList[0].Passwords.getLength() != 0,
-                               "empty password list");
-                    xSupplyAuthentication->
-                        setPassword(aRec.UserList[0].Passwords[0].getStr());
+                    if (xSupplyAuthentication->canSetUserName())
+                        xSupplyAuthentication->
+                            setUserName(aRec.UserList[0].UserName.getStr());
+                    if (xSupplyAuthentication->canSetPassword())
+                    {
+                        OSL_ENSURE(aRec.UserList[0].Passwords.getLength() != 0,
+                                   "empty password list");
+                        xSupplyAuthentication->
+                            setPassword(aRec.UserList[0].Passwords[0].getStr());
+                    }
                     if (aRec.UserList[0].Passwords.getLength() > 1)
                         if (rRequest.HasRealm)
-                            xSupplyAuthentication->
-                                setRealm(aRec.UserList[0].Passwords[1].
-                                                              getStr());
-                        else
+                        {
+                            if (xSupplyAuthentication->canSetRealm())
+                                xSupplyAuthentication->
+                                    setRealm(aRec.UserList[0].Passwords[1].
+                                                                  getStr());
+                        }
+                        else if (xSupplyAuthentication->canSetAccount())
                             xSupplyAuthentication->
                                 setAccount(aRec.UserList[0].Passwords[1].
                                                                 getStr());
@@ -1646,17 +1653,22 @@ UUIInteractionHandler::handleAuthenticationRequest(
                     if (!rRequest.HasPassword
                         || rRequest.Password != aRec.UserList[0].Passwords[0])
                     {
-                        xSupplyAuthentication->
-                            setUserName(aRec.UserList[0].UserName.getStr());
-                        xSupplyAuthentication->
-                            setPassword(aRec.UserList[0].Passwords[0].
-                                                             getStr());
+                        if (xSupplyAuthentication->canSetUserName())
+                            xSupplyAuthentication->
+                                setUserName(aRec.UserList[0].UserName.getStr());
+                        if (xSupplyAuthentication->canSetPassword())
+                            xSupplyAuthentication->
+                                setPassword(aRec.UserList[0].Passwords[0].
+                                                                 getStr());
                         if (aRec.UserList[0].Passwords.getLength() > 1)
                             if (rRequest.HasRealm)
-                                xSupplyAuthentication->
-                                    setRealm(aRec.UserList[0].Passwords[1].
+                            {
+                                if (xSupplyAuthentication->canSetRealm())
+                                    xSupplyAuthentication->
+                                        setRealm(aRec.UserList[0].Passwords[1].
                                                                   getStr());
-                            else
+                            }
+                            else if (xSupplyAuthentication->canSetAccount())
                                 xSupplyAuthentication->
                                     setAccount(aRec.UserList[0].Passwords[1].
                                                                     getStr());
@@ -1694,8 +1706,10 @@ UUIInteractionHandler::handleAuthenticationRequest(
     case ERRCODE_BUTTON_OK:
         if (xSupplyAuthentication.is())
         {
-            xSupplyAuthentication->setUserName(aInfo.GetUserName());
-            xSupplyAuthentication->setPassword(aInfo.GetPassword());
+            if (xSupplyAuthentication->canSetUserName())
+                xSupplyAuthentication->setUserName(aInfo.GetUserName());
+            if (xSupplyAuthentication->canSetPassword())
+                xSupplyAuthentication->setPassword(aInfo.GetPassword());
             xSupplyAuthentication->
                 setRememberPassword(
                     aInfo.GetIsSavePassword() ?
@@ -1704,9 +1718,13 @@ UUIInteractionHandler::handleAuthenticationRequest(
                             star::ucb::RememberAuthentication_SESSION :
                         star::ucb::RememberAuthentication_NO);
             if (rRequest.HasRealm)
-                xSupplyAuthentication->setRealm(aInfo.GetAccount());
-            else
+            {
+                if (xSupplyAuthentication->canSetRealm())
+                    xSupplyAuthentication->setRealm(aInfo.GetAccount());
+            }
+            else if (xSupplyAuthentication->canSetAccount())
                 xSupplyAuthentication->setAccount(aInfo.GetAccount());
+
             xSupplyAuthentication->select();
         }
         // Empty user name can not be valid:
@@ -1773,7 +1791,8 @@ UUIInteractionHandler::handleMasterPasswordRequest(
     case ERRCODE_BUTTON_OK:
         if (xSupplyAuthentication.is())
         {
-            xSupplyAuthentication->setPassword(aInfo.GetPassword());
+            if (xSupplyAuthentication->canSetPassword())
+                xSupplyAuthentication->setPassword(aInfo.GetPassword());
             xSupplyAuthentication->select();
         }
         break;
