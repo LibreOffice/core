@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accelcfg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:05:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #ifndef GCC
 #pragma hdrstop
+#endif
+
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include "rtl/instance.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
@@ -177,10 +181,17 @@ bool SvtAcceleratorConfig_Impl::Commit( Reference< XOutputStream >& rOutputStrea
     return false;
 }
 
+namespace
+{
+    class LocalSingleton : public rtl::Static< osl::Mutex, LocalSingleton >
+    {
+    };
+}
+
 SvtAcceleratorConfiguration::SvtAcceleratorConfiguration()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
+    ::osl::MutexGuard aGuard( LocalSingleton::get() );
     if ( !pOptions )
     {
         SvStream* pStream = GetDefaultStream( STREAM_STD_READ );
@@ -243,7 +254,7 @@ SvtAcceleratorConfiguration::~SvtAcceleratorConfiguration()
     if ( pImp == pOptions )
     {
         // Global access, must be guarded (multithreading)
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        ::osl::MutexGuard aGuard( LocalSingleton::get() );
         if ( !--nRefCount )
         {
             if ( pImp->bModified )
