@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-16 12:49:04 $
+ *  last change: $Author: mib $ $Date: 2000-11-20 12:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,9 @@
 #endif
 #ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
+#endif
+#ifndef _FMTCLDS_HXX
+#include <fmtclds.hxx>
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
@@ -728,6 +731,13 @@ sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SfxItemSet& rSet, SfxItemSet&)
         SfxBoolItem aBool(RES_EDIT_IN_READONLY);
         ((SfxPoolItem&)aBool).PutValue(*pEdit, 0);
         rSet.Put(aBool);
+    }
+    uno::Any* pColumns;
+    if(GetProperty(C2S(UNO_NAME_TEXT_COLUMNS), pColumns))
+    {
+        SwFmtCol aCol;
+        ((SfxPoolItem&)aCol).PutValue(*pColumns, MID_COLUMNS);
+        rSet.Put(aCol);
     }
     return bRet;
 }
@@ -2648,6 +2658,9 @@ sal_uInt16 SwXOLEListener::FindEntry( const EventObject& rEvent,SwOLENode** ppNd
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2000/11/16 12:49:04  mib
+    TextWrap, SurroundContour and ContourOutside to work now
+
     Revision 1.8  2000/11/15 15:00:48  os
     chg: use optimized SfxItemPropertySet::get/setPropertyValue - methods
 
