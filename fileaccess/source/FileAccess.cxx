@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-11 12:26:12 $
+ *  last change: $Author: ab $ $Date: 2000-10-19 07:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,9 +511,9 @@ Reference< XOutputStream > OFileAccess::openFileWrite( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     Reference< XOutputStream > xRet;
-    //Reference< XStream > xStream = OFileAccess::openFileReadWrite( FileURL );
-    //if( xStream.is() )
-        //xRet = xStream.getOutputStream();
+    Reference< XStream > xStream = OFileAccess::openFileReadWrite( FileURL );
+    if( xStream.is() )
+        xRet = xStream->getOutputStream();
     return xRet;
 }
 
