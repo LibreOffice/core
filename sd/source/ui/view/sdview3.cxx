@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:07 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,14 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                             SdrObject*  pO = pM->GetObj();
 
                             if( pO )
+                            {
+                                // #i11702#
+                                BegUndo(String(SdResId(STR_MODIFYLAYER)));
+                                AddUndo(new SdrUndoObjectLayerChange(*pO, pO->GetLayer(), (SdrLayerID)nLayer));
+                                EndUndo();
+
                                 pO->SetLayer( (SdrLayerID) nLayer );
+                            }
                         }
 
                         bReturn = TRUE;
