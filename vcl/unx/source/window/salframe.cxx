@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-06 11:07:20 $
+ *  last change: $Author: pl $ $Date: 2001-09-06 13:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1091,31 +1091,39 @@ SalFrame::SetWindowState( const SalFrameState *pState )
             aPosSize.setHeight (nHeight);
         }
 
-        // demand correct positioning from the WM
-        XSizeHints* pHints = XAllocSizeHints();
-        long nSuppliedFlag;
-        const WMAdaptor *pWM = _GetDisplay()->getWMAdaptor();
-
-        Display*    pDisplay = _GetXDisplay();
-        XLIB_Window hWindow  = maFrameData.GetShellWindow();
-        if (XGetWMNormalHints (pDisplay, hWindow, pHints, &nSuppliedFlag))
+        // ignore request if frame would be placed outside the screen
+        const Size& rScreenSize( maFrameData.pDisplay_->GetScreenSize() );
+        if( aPosSize.Left() >= 0
+            && aPosSize.Top() >= 0
+            && aPosSize.Right() < rScreenSize.Width()
+            && aPosSize.Bottom() < rScreenSize.Height() )
         {
-            pHints->flags       = pHints->flags | PWinGravity | PPosition | PSize;
-            pHints->win_gravity = pWM->getPositionWinGravity();
-            pHints->x           = aPosSize.getX();
-            pHints->y           = aPosSize.getY();
+            // demand correct positioning from the WM
+            XSizeHints* pHints = XAllocSizeHints();
+            long nSuppliedFlag;
+            const WMAdaptor *pWM = _GetDisplay()->getWMAdaptor();
 
-            XSetWMNormalHints (pDisplay, hWindow, pHints);
-            XSync (pDisplay, False);
+            Display*    pDisplay = _GetXDisplay();
+            XLIB_Window hWindow  = maFrameData.GetShellWindow();
+            if (XGetWMNormalHints (pDisplay, hWindow, pHints, &nSuppliedFlag))
+            {
+                pHints->flags       = pHints->flags | PWinGravity | PPosition | PSize;
+                pHints->win_gravity = pWM->getPositionWinGravity();
+                pHints->x           = aPosSize.getX();
+                pHints->y           = aPosSize.getY();
+
+                XSetWMNormalHints (pDisplay, hWindow, pHints);
+                XSync (pDisplay, False);
+            }
+
+            XFree (pHints);
+
+            // resize with new args
+            if (pWM->supportsICCCMPos())
+                maFrameData.SetPosSize( aPosSize );
+            else
+                SetClientSize (aPosSize.GetWidth(), aPosSize.GetHeight());
         }
-
-        XFree (pHints);
-
-        // resize with new args
-        if (pWM->supportsICCCMPos())
-            maFrameData.SetPosSize( aPosSize );
-        else
-            SetClientSize (aPosSize.GetWidth(), aPosSize.GetHeight());
     }
 
     // request for status change
