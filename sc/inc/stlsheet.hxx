@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: er $ $Date: 2002-12-05 16:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,19 @@ class ScStyleSheetPool;
 class ScStyleSheet : public SfxStyleSheet
 {
 friend class ScStyleSheetPool;
+
+public:
+
+    enum    Usage
+    {
+        UNKNOWN,
+        USED,
+        NOTUSED
+    };
+
+private:
+    mutable ScStyleSheet::Usage eUsage;
+
 public:
                         TYPEINFO();
     virtual             ~ScStyleSheet();
@@ -94,6 +107,11 @@ public:
     virtual const String& GetFollow() const;
 
     virtual BOOL SetName( const String& );
+
+            void                SetUsage( ScStyleSheet::Usage eUse ) const
+                                    { eUsage = eUse; }
+            ScStyleSheet::Usage GetUsage() const
+                                    { return eUsage; }
 
 protected:
                 ScStyleSheet( const String&     rName,

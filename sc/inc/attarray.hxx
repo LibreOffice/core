@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-11-05 12:16:00 $
+ *  last change: $Author: er $ $Date: 2002-12-05 16:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ public:
     BOOL    RemoveAreaMerge( USHORT nStartRow, USHORT nEndRow );
 
     void    FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pUsed, BOOL bReset );
-    BOOL    IsStyleSheetUsed( const SfxStyleSheetBase& rStyle ) const;
+    BOOL    IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const;
 
     void    DeleteAreaSafe(USHORT nStartRow, USHORT nEndRow);
     void    SetPatternAreaSafe( USHORT nStartRow, USHORT nEndRow,

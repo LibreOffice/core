@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-07 13:06:13 $
+ *  last change: $Author: er $ $Date: 2002-12-05 16:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ public:
     const ScStyleSheet* GetAreaStyle( BOOL& rFound, USHORT nRow1, USHORT nRow2 ) const;
 
     void        FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pUsed, BOOL bReset );
-    BOOL        IsStyleSheetUsed( const SfxStyleSheetBase& rStyle ) const;
+    BOOL        IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const;
 
     short       SearchStyle( short nRow, const ScStyleSheet* pSearchStyle,
                                 BOOL bUp, BOOL bInSelection, const ScMarkData& rMark );

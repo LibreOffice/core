@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-28 14:54:22 $
+ *  last change: $Author: er $ $Date: 2002-12-05 16:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,6 +478,9 @@ private:
     BOOL                bPastingDrawFromOtherDoc;
 
     BYTE                nInDdeLinkUpdate;   // originating DDE links (stacked bool)
+
+    mutable BOOL        bStyleSheetUsageInvalid;
+
 
     inline BOOL         RowHidden( USHORT nRow, USHORT nTab );      // FillInfo
 
@@ -1125,7 +1128,7 @@ public:
                                         double nPPTX, double nPPTY,
                                         const Fraction& rZoomX, const Fraction& rZoomY );
 
-    BOOL            IsStyleSheetUsed( const SfxStyleSheetBase& rStyle ) const;
+    BOOL            IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const;
 
                     // Rueckgabe TRUE bei ApplyFlags: Wert geaendert
     BOOL            ApplyFlags( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow,
@@ -1610,6 +1613,9 @@ public:
 
                     /// an ID unique to each document instance
     sal_uInt32      GetDocumentID() const;
+
+    void            InvalidateStyleSheetUsage()
+                        { bStyleSheetUsageInvalid = TRUE; }
 
 private: // CLOOK-Impl-Methoden
     void    ImplLoadDocOptions( SvStream& rStream );
