@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:40:17 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
 #endif
@@ -98,30 +97,33 @@
 
 // Color data =================================================================
 
-/** Built-in color table (color indexes 0-7). */
-#define EXC_PALETTE_BUILTIN_COLORS \
+/** Standard EGA colors, bright. */
+#define EXC_PALETTE_EGA_COLORS_LIGHT \
             0x000000, 0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF00FF, 0x00FFFF
+/** Standard EGA colors, dark. */
+#define EXC_PALETTE_EGA_COLORS_DARK \
+            0x800000, 0x008000, 0x000080, 0x808000, 0x800080, 0x008080, 0xC0C0C0, 0x808080
 
 /** Default color table for BIFF2. */
-static const ColorData pDefColorTable2[] =
+static const ColorData spnDefColorTable2[] =
 {
-/*  0 */    EXC_PALETTE_BUILTIN_COLORS
+/*  0 */    EXC_PALETTE_EGA_COLORS_LIGHT
 };
 
 /** Default color table for BIFF3/BIFF4. */
-static const ColorData pDefColorTable3[] =
+static const ColorData spnDefColorTable3[] =
 {
-/*  0 */    EXC_PALETTE_BUILTIN_COLORS,
-/*  8 */    0x000000, 0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF00FF, 0x00FFFF,
-/* 16 */    0x800000, 0x008000, 0x000080, 0x808000, 0x800080, 0x008080, 0xC0C0C0, 0x808080
+/*  0 */    EXC_PALETTE_EGA_COLORS_LIGHT,
+/*  8 */    EXC_PALETTE_EGA_COLORS_LIGHT,
+/* 16 */    EXC_PALETTE_EGA_COLORS_DARK
 };
 
 /** Default color table for BIFF5/BIFF7. */
-static const ColorData pDefColorTable5[] =
+static const ColorData spnDefColorTable5[] =
 {
-/*  0 */    EXC_PALETTE_BUILTIN_COLORS,
-/*  8 */    0x000000, 0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF00FF, 0x00FFFF,
-/* 16 */    0x800000, 0x008000, 0x000080, 0x808000, 0x800080, 0x008080, 0xC0C0C0, 0x808080,
+/*  0 */    EXC_PALETTE_EGA_COLORS_LIGHT,
+/*  8 */    EXC_PALETTE_EGA_COLORS_LIGHT,
+/* 16 */    EXC_PALETTE_EGA_COLORS_DARK,
 /* 24 */    0x8080FF, 0x802060, 0xFFFFC0, 0xA0E0E0, 0x600080, 0xFF8080, 0x0080C0, 0xC0C0FF,
 /* 32 */    0x000080, 0xFF00FF, 0xFFFF00, 0x00FFFF, 0x800080, 0x800000, 0x008080, 0x0000FF,
 /* 40 */    0x00CFFF, 0x69FFFF, 0xE0FFE0, 0xFFFF80, 0xA6CAF0, 0xDD9CB3, 0xB38FEE, 0xE3E3E3,
@@ -130,11 +132,11 @@ static const ColorData pDefColorTable5[] =
 };
 
 /** Default color table for BIFF8. */
-static const ColorData pDefColorTable8[] =
+static const ColorData spnDefColorTable8[] =
 {
-/*  0 */    EXC_PALETTE_BUILTIN_COLORS,
-/*  8 */    0x000000, 0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF00FF, 0x00FFFF,
-/* 16 */    0x800000, 0x008000, 0x000080, 0x808000, 0x800080, 0x008080, 0xC0C0C0, 0x808080,
+/*  0 */    EXC_PALETTE_EGA_COLORS_LIGHT,
+/*  8 */    EXC_PALETTE_EGA_COLORS_LIGHT,
+/* 16 */    EXC_PALETTE_EGA_COLORS_DARK,
 /* 24 */    0x9999FF, 0x993366, 0xFFFFCC, 0xCCFFFF, 0x660066, 0xFF8080, 0x0066CC, 0xCCCCFF,
 /* 32 */    0x000080, 0xFF00FF, 0xFFFF00, 0x00FFFF, 0x800080, 0x800000, 0x008080, 0x0000FF,
 /* 40 */    0x00CCFF, 0xCCFFFF, 0xCCFFCC, 0xFFFF99, 0x99CCFF, 0xFF99CC, 0xCC99FF, 0xFFCC99,
@@ -142,12 +144,13 @@ static const ColorData pDefColorTable8[] =
 /* 56 */    0x003366, 0x339966, 0x003300, 0x333300, 0x993300, 0x993366, 0x333399, 0x333333
 };
 
-#undef EXC_PALETTE_BUILTIN_COLORS
+#undef EXC_PALETTE_EGA_COLORS_LIGHT
+#undef EXC_PALETTE_EGA_COLORS_DARK
 
 // ----------------------------------------------------------------------------
 
 XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
-    mpColorTable( 0 ),
+    mpnColorTable( 0 ),
     mnTableSize( 0 )
 {
     const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
@@ -161,22 +164,22 @@ XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
     switch( rRoot.GetBiff() )
     {
         case xlBiff2:
-            mpColorTable = pDefColorTable2;
-            mnTableSize = STATIC_TABLE_SIZE( pDefColorTable2 );
+            mpnColorTable = spnDefColorTable2;
+            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable2 );
         break;
         case xlBiff3:
         case xlBiff4:
-            mpColorTable = pDefColorTable3;
-            mnTableSize = STATIC_TABLE_SIZE( pDefColorTable3 );
+            mpnColorTable = spnDefColorTable3;
+            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable3 );
         break;
         case xlBiff5:
         case xlBiff7:
-            mpColorTable = pDefColorTable5;
-            mnTableSize = STATIC_TABLE_SIZE( pDefColorTable5 );
+            mpnColorTable = spnDefColorTable5;
+            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable5 );
         break;
         case xlBiff8:
-            mpColorTable = pDefColorTable8;
-            mnTableSize = STATIC_TABLE_SIZE( pDefColorTable8 );
+            mpnColorTable = spnDefColorTable8;
+            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable8 );
         break;
         default:
             DBG_ERROR_BIFF();
@@ -187,7 +190,7 @@ ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex ) const
 {
     ColorData nColor;
     if( nXclIndex < mnTableSize )
-        nColor = mpColorTable[ nXclIndex ];
+        nColor = mpnColorTable[ nXclIndex ];
     else switch( nXclIndex )
     {
         case EXC_COLOR_WINDOWTEXT3:
@@ -209,6 +212,13 @@ ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex ) const
 }
 
 // Font Data ==================================================================
+
+namespace Awt              = ::com::sun::star::awt;
+namespace AwtFontFamily    = Awt::FontFamily;
+namespace AwtFontUnderline = Awt::FontUnderline;
+namespace AwtFontStrikeout = Awt::FontStrikeout;
+
+// ----------------------------------------------------------------------------
 
 XclFontData::XclFontData()
 {
@@ -427,8 +437,6 @@ void XclFontData::SetScStrikeout( FontStrikeout eScStrikeout )
 
 // *** conversion of API constants *** ----------------------------------------
 
-namespace ApiAwt = ::com::sun::star::awt;
-
 float XclFontData::GetApiHeight() const
 {
     return static_cast< float >( mnHeight / TWIPS_PER_POINT );
@@ -436,15 +444,15 @@ float XclFontData::GetApiHeight() const
 
 sal_Int16 XclFontData::GetApiFamily() const
 {
-    sal_Int16 nApiFamily = ApiAwt::FontFamily::DONTKNOW;
+    sal_Int16 nApiFamily = AwtFontFamily::DONTKNOW;
     switch( mnFamily )
     {
-        case FAMILY_DECORATIVE: nApiFamily = ApiAwt::FontFamily::DECORATIVE;    break;
-        case FAMILY_MODERN:     nApiFamily = ApiAwt::FontFamily::MODERN;        break;
-        case FAMILY_ROMAN:      nApiFamily = ApiAwt::FontFamily::ROMAN;         break;
-        case FAMILY_SCRIPT:     nApiFamily = ApiAwt::FontFamily::SCRIPT;        break;
-        case FAMILY_SWISS:      nApiFamily = ApiAwt::FontFamily::SWISS;         break;
-        case FAMILY_SYSTEM:     nApiFamily = ApiAwt::FontFamily::SYSTEM;        break;
+        case FAMILY_DECORATIVE: nApiFamily = AwtFontFamily::DECORATIVE; break;
+        case FAMILY_MODERN:     nApiFamily = AwtFontFamily::MODERN;     break;
+        case FAMILY_ROMAN:      nApiFamily = AwtFontFamily::ROMAN;      break;
+        case FAMILY_SCRIPT:     nApiFamily = AwtFontFamily::SCRIPT;     break;
+        case FAMILY_SWISS:      nApiFamily = AwtFontFamily::SWISS;      break;
+        case FAMILY_SYSTEM:     nApiFamily = AwtFontFamily::SYSTEM;     break;
     }
     return nApiFamily;
 }
@@ -454,9 +462,9 @@ sal_Int16 XclFontData::GetApiCharSet() const
     return static_cast< sal_Int16 >( GetScCharSet() );
 }
 
-ApiAwt::FontSlant XclFontData::GetApiPosture() const
+Awt::FontSlant XclFontData::GetApiPosture() const
 {
-    return mbItalic ? ApiAwt::FontSlant_ITALIC : ApiAwt::FontSlant_NONE;
+    return mbItalic ? Awt::FontSlant_ITALIC : Awt::FontSlant_NONE;
 }
 
 float XclFontData::GetApiWeight() const
@@ -466,20 +474,20 @@ float XclFontData::GetApiWeight() const
 
 sal_Int16 XclFontData::GetApiUnderline() const
 {
-    sal_Int16 nApiUnderl = ApiAwt::FontUnderline::NONE;
+    sal_Int16 nApiUnderl = AwtFontUnderline::NONE;
     switch( mnUnderline )
     {
         case EXC_FONTUNDERL_SINGLE:
-        case EXC_FONTUNDERL_SINGLE_ACC: nApiUnderl = ApiAwt::FontUnderline::SINGLE; break;
+        case EXC_FONTUNDERL_SINGLE_ACC: nApiUnderl = AwtFontUnderline::SINGLE;  break;
         case EXC_FONTUNDERL_DOUBLE:
-        case EXC_FONTUNDERL_DOUBLE_ACC: nApiUnderl = ApiAwt::FontUnderline::DOUBLE; break;
+        case EXC_FONTUNDERL_DOUBLE_ACC: nApiUnderl = AwtFontUnderline::DOUBLE;  break;
     }
     return nApiUnderl;
 }
 
 sal_Int16 XclFontData::GetApiStrikeout() const
 {
-    return mbStrikeout ? ApiAwt::FontStrikeout::SINGLE : ApiAwt::FontStrikeout::NONE;
+    return mbStrikeout ? AwtFontStrikeout::SINGLE : AwtFontStrikeout::NONE;
 }
 
 void XclFontData::SetApiHeight( float fPoint )
@@ -491,13 +499,13 @@ void XclFontData::SetApiFamily( sal_Int16 nApiFamily )
 {
     switch( nApiFamily )
     {
-        case ApiAwt::FontFamily::DECORATIVE:    mnFamily = FAMILY_DECORATIVE;   break;
-        case ApiAwt::FontFamily::MODERN:        mnFamily = FAMILY_MODERN;       break;
-        case ApiAwt::FontFamily::ROMAN:         mnFamily = FAMILY_ROMAN;        break;
-        case ApiAwt::FontFamily::SCRIPT:        mnFamily = FAMILY_SCRIPT;       break;
-        case ApiAwt::FontFamily::SWISS:         mnFamily = FAMILY_SWISS;        break;
-        case ApiAwt::FontFamily::SYSTEM:        mnFamily = FAMILY_SYSTEM;       break;
-        default:                                mnFamily = FAMILY_DONTKNOW;
+        case AwtFontFamily::DECORATIVE: mnFamily = FAMILY_DECORATIVE;   break;
+        case AwtFontFamily::MODERN:     mnFamily = FAMILY_MODERN;       break;
+        case AwtFontFamily::ROMAN:      mnFamily = FAMILY_ROMAN;        break;
+        case AwtFontFamily::SCRIPT:     mnFamily = FAMILY_SCRIPT;       break;
+        case AwtFontFamily::SWISS:      mnFamily = FAMILY_SWISS;        break;
+        case AwtFontFamily::SYSTEM:     mnFamily = FAMILY_SYSTEM;       break;
+        default:                        mnFamily = FAMILY_DONTKNOW;
     }
 }
 
@@ -506,13 +514,13 @@ void XclFontData::SetApiCharSet( sal_Int16 nApiCharSet )
     SetScCharSet( static_cast< CharSet >( nApiCharSet ) );
 }
 
-void XclFontData::SetApiPosture( ApiAwt::FontSlant eApiPosture )
+void XclFontData::SetApiPosture( Awt::FontSlant eApiPosture )
 {
     mbItalic =
-        (eApiPosture == ApiAwt::FontSlant_OBLIQUE) ||
-        (eApiPosture == ApiAwt::FontSlant_ITALIC) ||
-        (eApiPosture == ApiAwt::FontSlant_REVERSE_OBLIQUE) ||
-        (eApiPosture == ApiAwt::FontSlant_REVERSE_ITALIC);
+        (eApiPosture == Awt::FontSlant_OBLIQUE) ||
+        (eApiPosture == Awt::FontSlant_ITALIC) ||
+        (eApiPosture == Awt::FontSlant_REVERSE_OBLIQUE) ||
+        (eApiPosture == Awt::FontSlant_REVERSE_ITALIC);
 }
 
 void XclFontData::SetApiWeight( float fApiWeight )
@@ -524,19 +532,19 @@ void XclFontData::SetApiUnderline( sal_Int16 nApiUnderl )
 {
     switch( nApiUnderl )
     {
-        case ApiAwt::FontUnderline::NONE:
-        case ApiAwt::FontUnderline::DONTKNOW:   mnUnderline = EXC_FONTUNDERL_NONE;      break;
-        case ApiAwt::FontUnderline::DOUBLE:
-        case ApiAwt::FontUnderline::DOUBLEWAVE: mnUnderline = EXC_FONTUNDERL_DOUBLE;    break;
-        default:                                mnUnderline = EXC_FONTUNDERL_SINGLE;
+        case AwtFontUnderline::NONE:
+        case AwtFontUnderline::DONTKNOW:    mnUnderline = EXC_FONTUNDERL_NONE;      break;
+        case AwtFontUnderline::DOUBLE:
+        case AwtFontUnderline::DOUBLEWAVE:  mnUnderline = EXC_FONTUNDERL_DOUBLE;    break;
+        default:                            mnUnderline = EXC_FONTUNDERL_SINGLE;
     }
 }
 
 void XclFontData::SetApiStrikeout( sal_Int16 nApiStrikeout )
 {
     mbStrikeout =
-        (nApiStrikeout != ApiAwt::FontStrikeout::NONE) &&
-        (nApiStrikeout != ApiAwt::FontStrikeout::DONTKNOW);
+        (nApiStrikeout != AwtFontStrikeout::NONE) &&
+        (nApiStrikeout != AwtFontStrikeout::DONTKNOW);
 }
 
 // ----------------------------------------------------------------------------
