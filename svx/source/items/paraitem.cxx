@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mhu $ $Date: 2002-05-10 21:22:22 $
+ *  last change: $Author: hr $ $Date: 2002-05-16 16:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,7 +935,10 @@ SvxTabStopItem::SvxTabStopItem( sal_uInt16 nWhich ) :
     const SvxTabAdjust eAdjst= SVX_TAB_ADJUST_DEFAULT;
 
     for (sal_uInt16 i = 0; i < nTabs; ++i)
-        SvxTabStopArr::Insert( new SvxTabStop( (i + 1) * nDist, eAdjst ), i );
+    {
+        SvxTabStop * pTab = new SvxTabStop( (i + 1) * nDist, eAdjst );
+        SvxTabStopArr::Insert( pTab, 1 );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -948,7 +951,10 @@ SvxTabStopItem::SvxTabStopItem( const sal_uInt16 nTabs,
     SvxTabStopArr( sal_Int8(nTabs) )
 {
     for ( sal_uInt16 i = 0; i < nTabs; ++i )
-        SvxTabStopArr::Insert( new SvxTabStop( (i + 1) * nDist, eAdjst ), i );
+    {
+        SvxTabStop * pTab = new SvxTabStop( (i + 1) * nDist, eAdjst );
+        SvxTabStopArr::Insert( pTab, 1 );
+    }
 }
 
 // -----------------------------------------------------------------------
