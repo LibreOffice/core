@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salunx.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-02 14:23:27 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 12:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,22 +58,12 @@
  *
  *
  ************************************************************************/
-//*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-//
-//                                                                            //
-// (C) 1997 Star Division GmbH, Hamburg, Germany                              //
-//                                                                            //
-// $Revision: 1.3 $  $Author: pl $  $Date: 2001-03-02 14:23:27 $    //
-//                                                                            //
-// $Workfile:   salunx.h  $                                                   //
-//  $Modtime:   14 Aug 1997 13:51:48  $                                       //
-//                                                                            //
-//*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-//
 
 #ifndef _SALUNX_H
 #define _SALUNX_H
 
 // -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#if defined SCO || defined LINUX || defined HPUX || defined FREEBSD || defined NETBSD
+#if defined SCO || defined LINUX || defined HPUX || defined FREEBSD || defined NETBSD || defined MACOSX
 #include <sys/time.h>
 #elif defined AIX
 #include <time.h>
@@ -82,6 +72,10 @@
 #elif defined IRIX
 #include <sys/time.h>
 #include <unistd.h>
+#endif
+
+#ifdef MACOSX
+#include <unxmacxp_protos.h>
 #endif
 
 #ifndef _SVUNX_H
