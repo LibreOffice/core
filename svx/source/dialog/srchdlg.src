@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-25 21:47:19 $
+ *  last change: $Author: os $ $Date: 2001-10-02 07:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,27 +541,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Size = MAP_APPFONT ( 81 , 10 ) ;
         TabStop = TRUE ;
         Text = "Halb-/normalbreite Formen" ;
-        Text [ English ] = "Match half/full width forms" ;
-        Text[ english_us ] = "Match half/full-width forms";
-        Text[ portuguese ] = "Formas de largura média e normal";
-        Text[ russian ] = "Íîğìàëüíûå/ïîëóøèğîêèå ôîğìû";
-        Text[ greek ] = "Öüñìåò ìå êáíïíéêü/ìéóü ğëÜôïò";
-        Text[ dutch ] = "Halve/normale breedte";
-        Text[ french ] = "Formes de demi et pleine chasse";
-        Text[ spanish ] = "Formas con ancho medio o normal";
-        Text[ italian ] = "Larghezza intera/ridotta";
-        Text[ danish ] = "Match half/full width forms";
-        Text[ swedish ] = "Halv-/normalbreda former";
-        Text[ polish ] = "Formy po³owy/zwyk³ej szerokoœci";
-        Text[ portuguese_brazilian ] = "Match half/full width forms";
-        Text[ japanese ] = "å…¨è§’ã¨åŠè§’";
-        Text[ korean ] = "ë°˜í­/ì „í­ í˜•ì‹";
-        Text[ chinese_simplified ] = "åŠè§’å’Œå…¨è§’å­—ç¬¦";
-        Text[ chinese_traditional ] = "åŠå½¢å’Œå…¨å½¢å­—å…ƒ";
-        Text[ turkish ] = "Match half/full width forms";
-        Text[ arabic ] = "äãÇĞÌ äÕİ ÇáÚÑÖ/ÚÑÖ ÚÇÏí";
-        Text[ catalan ] = "Formas con ancho medio o normal";
-        Text[ finnish ] = "Halb-/normalbreite Formen";
+        Text [ English ] = "Match character width" ;
     };
     CheckBox CB_JAP_SOUNDS_LIKE
     {
