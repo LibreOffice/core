@@ -2,9 +2,9 @@
  *
  *  $RCSfile: internalnode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:47:14 $
+ *  last change: $Author: hr $ $Date: 2000-10-26 11:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #include "internalnode.hxx"
 #endif
 
-#include <stl_algo.h>
+#include <algorithm>
 #ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include <connectivity/sqlparse.hxx>
 #endif
