@@ -2,9 +2,9 @@
  *
  *  $RCSfile: directsql.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-19 10:54:06 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -411,6 +411,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/06/19 10:54:06  fs
+ *  initial checkin - dialog for executing SQL statements
+ *
  *
  *  Revision 1.0 18.06.01 17:00:59  fs
  ************************************************************************/

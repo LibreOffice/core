@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 12:02:58 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_MISC_HRC_
+#include "dbu_misc.hrc"
 #endif
 #ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
 #include "WCopyTable.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-15 20:10:05 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #include "dbaccess_helpid.hrc"
 #endif
 
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
 #endif
 #ifndef _DBAUI_DBADMIN_HRC_
 #include "dbadmin.hrc"
@@ -3951,6 +3951,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.106  2002/08/15 20:10:05  kz
+ *  Merge SRX643: 15.08.02 - 22:06:52
+ *
  *  Revision 1.105  2002/08/05 20:53:20  kz
  *  Merge SRX643: 05.08.02 - 22:49:45
  *

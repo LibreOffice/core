@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTabWinUndoAct.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 08:22:08 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 08:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ DBG_NAME(OQueryTabWinUndoAct )
 OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, USHORT nCommentID)
     :OQueryDesignUndoAction(pOwner, nCommentID)
     ,m_pTabWin(NULL)
-    ,m_bOwnerOfObjects(FALSE)
 {
     DBG_CTOR(OQueryTabWinUndoAct ,NULL);
 }
@@ -122,19 +121,29 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
 //------------------------------------------------------------------------------
 void OTabFieldCellModifiedUndoAct::Undo()
 {
-    String strNext = pOwner->GetCellContents(m_nCellIndex, m_nColId);
-    pOwner->SetCellContents(m_nCellIndex, m_nColId, m_strNextCellContents);
+    String strNext = pOwner->GetCellContents(m_nCellIndex, m_nColumnPostion);
+    pOwner->SetCellContents(m_nCellIndex, m_nColumnPostion, m_strNextCellContents);
     m_strNextCellContents = strNext;
 }
 
 //------------------------------------------------------------------------------
 void OTabFieldSizedUndoAct::Undo()
 {
-    long nNextWidth = pOwner->GetColumnWidth(m_nColId);
-    pOwner->SetColWidth(m_nColId, m_nNextWidth);
+    long nNextWidth = pOwner->GetColumnWidth(m_nColumnPostion);
+    pOwner->SetColWidth(m_nColumnPostion, m_nNextWidth);
     m_nNextWidth = nNextWidth;
 }
 // -----------------------------------------------------------------------------
+void OTabFieldMovedUndoAct::Undo()
+{
+    sal_uInt16 nId = pDescr->GetColumnId();
+    USHORT nOldPos = pOwner->GetColumnPos(nId);
+    pOwner->SetColumnPos(nId,m_nColumnPostion);
+    pOwner->ColumnMoved(nId,FALSE);
+    m_nColumnPostion = nOldPos;
+}
+// -----------------------------------------------------------------------------
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-16 20:04:01 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 08:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_QRY_HRC_
+#include "dbu_qry.hrc"
 #endif
 #ifndef DBAUI_QUERY_HRC
 #include "Query.hrc"
@@ -336,6 +336,13 @@ String STR_QUERY_UNDO_TABFIELDDELETE
     Text[ finnish ] = "Poista sarake";
     Text[ catalan ] = "Suprimeix la columna";
     Text[ thai ] = "‡∏•‡∏ö‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå";
+};
+
+String STR_QUERY_UNDO_TABFIELDMOVED
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Spalte hinzuf¸gen : Spalte hinzuf¸gen */
+    Text = "Spalte verschieben" ;
+    Text [ ENGLISH ] = "Move column" ;
 };
 
 String STR_QUERY_UNDO_TABFIELDCREATE
@@ -1479,58 +1486,13 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         {
             Identifier = ID_BROWSER_UNDO ;
             HelpId = SID_UNDO ;
-            Text = "R¸ckg‰ngig" ;
-            Text [ ENGLISH ] = "Undo" ;
-            Text[ english_us ] = "Undo";
-            Text[ portuguese ] = "Anular";
-            Text[ russian ] = "ŒÚÏÂÌËÚ¸";
-            Text[ greek ] = "¡Ì·ﬂÒÂÛÁ";
-            Text[ dutch ] = "Ongedaan";
-            Text[ french ] = "Annuler";
-            Text[ spanish ] = "Deshacer";
-            Text[ italian ] = "Annulla";
-            Text[ danish ] = "Fortryd";
-            Text[ swedish ] = "≈ngra";
-            Text[ polish ] = "Cofnij";
-            Text[ portuguese_brazilian ] = "Undo";
-            Text[ japanese ] = "ÂÖÉ„Å´Êàª„Åô";
-            Text[ korean ] = "Ïã§Ìñâ Ï∑®ÏÜå";
-            Text[ chinese_simplified ] = "Êí§Ê∂àÂëΩ‰ª§";
-            Text[ chinese_traditional ] = "Âæ©Âéü";
-            Text[ turkish ] = "Undo";
-            Text[ arabic ] = " —«Ã⁄";
-            Text[ finnish ] = "Peruuta";
-            Text[ catalan ] = "DesfÈs";
-            Text[ thai ] = "‡πÄ‡∏•‡∏¥‡∏Å‡∏ó‡∏≥";
+            MID_UNDO
         };
         ToolBoxItem
         {
             Identifier = ID_BROWSER_REDO ;
             HelpId = SID_REDO ;
-            Text = "Wiederherstellen" ;
-            Text [ ENGLISH ] = "Redo" ;
-
-            Text[ english_us ] = "Redo";
-            Text[ portuguese ] = "Restaurar";
-            Text[ russian ] = "¬ÓÒÒÚ‡ÌÓ‚ËÚ¸";
-            Text[ greek ] = "≈·Ì·ˆÔÒ‹";
-            Text[ dutch ] = "Herstellen";
-            Text[ french ] = "Restaurer";
-            Text[ spanish ] = "Restaurar";
-            Text[ italian ] = "Ripristina";
-            Text[ danish ] = "Gendan";
-            Text[ swedish ] = "≈terst‰ll";
-            Text[ polish ] = "PrzywrÛÊ";
-            Text[ portuguese_brazilian ] = "Redo";
-            Text[ japanese ] = "„ÇÑ„ÇäÁõ¥„Åó";
-            Text[ korean ] = "Î≥µÍµ¨";
-            Text[ chinese_simplified ] = "ÊÅ¢Â§çÊí§Ê∂àÂëΩ‰ª§";
-            Text[ chinese_traditional ] = "ÊÅ¢Âæ©Êí§Ê∂àÊåá‰ª§";
-            Text[ turkish ] = "Redo";
-            Text[ arabic ] = "≈⁄«œ…";
-            Text[ finnish ] = "Toista ";
-            Text[ catalan ] = "RefÈs";
-            Text[ thai ] = "‡∏ó‡∏≥‡∏ã‡πâ‡∏≥";
+            MID_REDO
         };
         ToolBoxItem
         {
@@ -2493,7 +2455,7 @@ String STR_QRY_JOIN_COLUMN_COMPARE
 
 String STR_QRY_LIKE_LEFT_NO_COLUMN
 {
-    Text = "Links eines 'WIE' Ausdrucks darf nur ein Spaltename stehen.";
+    Text = "Links eines 'WIE' Ausdrucks darf nur ein Spaltenname stehen.";
     Text [ ENGLISH ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
     Text[ english_us ] = "You must use a column name before 'LIKE'.";
     Text[ portuguese ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
@@ -2517,8 +2479,7 @@ String STR_QRY_LIKE_LEFT_NO_COLUMN
 
 String STR_QRY_CHECK_CASESENSITIVE
 {
-    Text = "Bitte ¸berpr¸fen Sie die Gross- und Kleinschreibung.";
-    Text [ ENGLISH ] = "Please check if you are using the correct case.";
+    Text = "Die Spalte konnte nicht gefunden werden. Bitte beachten Sie, dass die Datenbank Gross- und Kleinschreibung unterscheidet.";
     Text[ english_us ] = "The column could not be found. Please note that the database is case-sensitive.";
     Text[ portuguese ] = "Please check if you are using the correct case.";
     Text[ russian ] = "Please check if you are using the correct case.";
@@ -2538,6 +2499,5 @@ String STR_QRY_CHECK_CASESENSITIVE
     Text[ turkish ] = "Please check if you are using the correct case.";
     Text[ arabic ] = "Please check if you are using the correct case.";
 };
-
 
 

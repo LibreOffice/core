@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 08:49:16 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
 #endif
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
@@ -305,6 +305,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31  2001/08/15 08:49:16  fs
+ *  #89822# added functionality to accelerate toolbox functions with key codes
+ *
  *  Revision 1.30  2001/05/23 13:47:00  fs
  *  #86444# +prepareConnectionAction
  *

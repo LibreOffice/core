@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescription.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 08:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ OTableFieldDesc::OTableFieldDesc()
              ,m_eFieldType(TAB_NORMAL_FIELD)
              ,m_nIndex(0)
              ,m_eDataType(1000)
+             ,m_nColumnId(-1)
 {
     DBG_CTOR(OTableFieldDesc,NULL);
 }
@@ -114,7 +115,8 @@ OTableFieldDesc::OTableFieldDesc(const OTableFieldDesc& rRS)
         m_nIndex(rRS.GetFieldIndex()),
         m_eFunctionType( rRS.GetFunctionType() ),
         m_bGroupBy(rRS.IsGroupBy()),
-        m_vecCriteria( rRS.m_vecCriteria)
+        m_vecCriteria( rRS.m_vecCriteria),
+        m_nColumnId( rRS.m_nColumnId)
 
 {
     DBG_CTOR(OTableFieldDesc,NULL);
@@ -127,6 +129,7 @@ OTableFieldDesc::OTableFieldDesc(const ::rtl::OUString& rT, const ::rtl::OUStrin
              ,m_eOrderDir( ORDER_NONE )
              ,m_eFunctionType( FKT_NONE )
              ,m_bGroupBy(sal_False)
+             ,m_nColumnId(-1)
 {
     DBG_CTOR(OTableFieldDesc,NULL);
     SetField( rF ); SetTable( rT );

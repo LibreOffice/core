@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-02 23:14:37 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
 #endif
 #ifndef _DBAUI_SQLMESSAGE_HRC_
 #include "sqlmessage.hrc"
@@ -409,6 +409,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.33  2002/05/02 23:14:37  kz
+ *  Merge SRX642: 03.05.02 - 01:13:35
+ *
  *  Revision 1.32  2002/04/29 08:34:30  oj
  *  #98772# new resource
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-13 12:45:22 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
 #endif
 #ifndef _DBAUI_INDEXDIALOG_HRC_
 #include "indexdialog.hrc"
@@ -852,6 +852,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2002/06/13 12:45:22  kz
+ *  Merge SRX642: 13.06.02 - 14:44:51
+ *
  *  Revision 1.25  2002/05/28 13:33:12  oj
  *  #99607# set maskcolor to magenta
  *

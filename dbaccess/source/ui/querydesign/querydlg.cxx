@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 07:45:42 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 08:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef DBAUI_QUERYDLG_HXX
 #include "querydlg.hxx"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_QRY_HRC_
+#include "dbu_qry.hrc"
 #endif
 #ifndef DBAUI_QUERYDLG_HRC
 #include "querydlg.hrc"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:00:55 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBAUI_PARAMDIALOG_HRC_
 #include "paramdialog.hrc"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
 #endif
 
 #define LIST_WIDTH      100
@@ -243,6 +243,9 @@ ModalDialog DLG_PARAMETERS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2001/11/16 23:00:55  kz
+ *  Merge SRC638: 16.11.01 - 22:59:20
+ *
  *  Revision 1.21  2001/08/29 15:13:53  kz
  *  Merge SRC638: 29.08.01 - 17:13:18
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-13 12:49:00 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBAUI_DBF_INDEXES_HRC_
 #include "dbfindex.hrc"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
 #endif
 
 #define WIN_X   264
@@ -392,6 +392,9 @@ ModalDialog DLG_DBASE_INDEXES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2002/06/13 12:49:00  kz
+ *  Merge SRX642: 13.06.02 - 14:48:31
+ *
  *  Revision 1.20  2002/05/02 23:18:40  kz
  *  Merge SRX642: 03.05.02 - 01:17:30
  *

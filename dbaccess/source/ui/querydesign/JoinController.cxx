@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 12:05:31 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 08:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_QRY_HRC_
+#include "dbu_qry.hrc"
 #endif
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
@@ -188,8 +188,6 @@ using namespace ::comphelper;
 DBG_NAME(OJoinController);
 // -----------------------------------------------------------------------------
 OJoinController::OJoinController(const Reference< XMultiServiceFactory >& _rM) : OJoinController_BASE(_rM)
-    ,m_bEditable(sal_True)
-    ,m_bModified(sal_False)
     ,m_bViewsAllowed(sal_True)
     ,m_pAddTabDlg(NULL)
 {
@@ -217,7 +215,7 @@ OJoinDesignView* OJoinController::getJoinView()
 void OJoinController::disposing()
 {
     OJoinController_BASE::disposing();
-    m_aUndoManager.Clear();
+
     m_pView         = NULL;
     m_pAddTabDlg    = NULL;
 
@@ -235,26 +233,9 @@ void OJoinController::disposing()
     }
 }
 // -----------------------------------------------------------------------------
-SfxUndoManager* OJoinController::getUndoMgr()
-{
-    return &m_aUndoManager;
-}
-// -----------------------------------------------------------------------------
-void OJoinController::addUndoActionAndInvalidate(SfxUndoAction *_pAction)
-{
-    // add undo action
-    m_aUndoManager.AddUndoAction(_pAction);
-    // when we add an undo action the controller was modified
-    setModified(sal_True);
-    // now inform me that or states changed
-    InvalidateFeature(ID_BROWSER_UNDO);
-    InvalidateFeature(ID_BROWSER_REDO);
-}
-// -----------------------------------------------------------------------------
 void OJoinController::setModified(sal_Bool _bModified)
 {
-    m_bModified = _bModified;
-    InvalidateFeature(ID_BROWSER_SAVEDOC);
+    OJoinController_BASE::setModified(_bModified);
     InvalidateFeature(ID_RELATION_ADD_RELATION);
 }
 // -----------------------------------------------------------------------------
@@ -324,10 +305,10 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
         case SID_CLOSEDOC:
             break;
         case ID_BROWSER_EDITDOC:
-            aReturn.aState = ::cppu::bool2any(m_bEditable);
+            aReturn.aState = ::cppu::bool2any(isEditable());
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = isConnected() && m_bModified;
+            aReturn.bEnabled = isConnected() && isModified();
             break;
         case ID_BROWSER_ADDTABLE:
             if (aReturn.bEnabled = getView() && const_cast< OJoinController* >( this )->getJoinView()->getTableView()->IsAddAllowed())
@@ -335,12 +316,8 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
             else
                 aReturn.aState = ::cppu::bool2any(sal_False);
             break;
-        case ID_BROWSER_UNDO:
-            aReturn.bEnabled = m_bEditable && m_aUndoManager.GetUndoActionCount() != 0;
-            break;
-        case ID_BROWSER_REDO:
-            aReturn.bEnabled = m_bEditable && m_aUndoManager.GetRedoActionCount() != 0;
-            break;
+        default:
+            aReturn = OJoinController_BASE::GetState(_nId);
     }
     return aReturn;
 }
@@ -349,12 +326,8 @@ void OJoinController::Execute(sal_uInt16 _nId)
 {
     switch(_nId)
     {
-        case SID_CLOSEDOC:
-            closeTask();
-            return;
-            break;
         case ID_BROWSER_EDITDOC:
-            if(m_bEditable)
+            if(isEditable())
             { // the state should be changed to not editable
                 switch (saveModified())
                 {
@@ -370,18 +343,10 @@ void OJoinController::Execute(sal_uInt16 _nId)
                         break;
                 }
             }
-            m_bEditable = !m_bEditable;
-            getJoinView()->setReadOnly(!m_bEditable);
+            setEditable(!isEditable());
+            getJoinView()->setReadOnly(!isEditable());
             InvalidateAll();
             return;
-            break;
-        case ID_BROWSER_UNDO:
-            m_aUndoManager.Undo();
-            InvalidateFeature(ID_BROWSER_REDO);
-            break;
-        case ID_BROWSER_REDO:
-            m_aUndoManager.Redo();
-            InvalidateFeature(ID_BROWSER_UNDO);
             break;
         case ID_BROWSER_ADDTABLE:
             if(!m_pAddTabDlg)
@@ -402,6 +367,8 @@ void OJoinController::Execute(sal_uInt16 _nId)
                 ::dbaui::notifySystemWindow(getView(),m_pAddTabDlg,::comphelper::mem_fun(&TaskPaneList::AddWindow));
             }
             break;
+        default:
+            OJoinController_BASE::Execute(_nId);
     }
     InvalidateFeature(_nId);
 }

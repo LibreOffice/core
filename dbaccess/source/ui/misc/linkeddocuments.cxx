@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 06:53:40 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,8 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_MISC_HRC_
+#include "dbu_misc.hrc"
 #endif
 #ifndef _DBAUI_FILENOTATION_HXX_
 #include "filenotation.hxx"
@@ -658,6 +658,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2002/07/25 06:53:40  oj
+ *  #100280# new method to start report autopilot
+ *
  *  Revision 1.3  2001/08/16 14:10:12  fs
  *  #88813# +newFormWithPilot
  *

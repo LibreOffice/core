@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-09 14:52:06 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _DBAUI_PARAMDIALOG_HRC_
 #include "paramdialog.hrc"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
 #endif
 #ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
@@ -486,6 +486,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2002/04/09 14:52:06  fs
+ *  #98181# use a ::dbtools::OPredicateInputController
+ *
  *  Revision 1.6  2001/07/11 10:10:30  oj
  *  #87257# change GetUILanguage
  *

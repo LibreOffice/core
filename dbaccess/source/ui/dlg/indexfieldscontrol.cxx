@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-09 07:43:43 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBAUI_INDEXFIELDSCONTROL_HXX_
 #include "indexfieldscontrol.hxx"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
@@ -544,6 +544,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2002/04/09 07:43:43  oj
+ *  #98286# new virtual method GetCellText
+ *
  *  Revision 1.8  2002/03/19 07:21:01  oj
  *  #97274# disable traveling with tab to allow control change
  *

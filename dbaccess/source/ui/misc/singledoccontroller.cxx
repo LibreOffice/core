@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-08 08:15:44 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_MISC_HRC_
+#include "dbu_misc.hrc"
 #endif
 #ifndef DBAUI_DATAVIEW_HXX
 #include "dataview.hxx"
@@ -100,6 +100,9 @@
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
 #endif
 
 //........................................................................
@@ -166,6 +169,9 @@ namespace dbaui
         ,OSingleDocumentController_PBASE( getBroadcastHelper() )
         ,m_bOwnConnection( sal_False )
         ,m_bSuspended( sal_False )
+        ,m_bEditable(sal_True)
+        ,m_bModified(sal_False)
+
     {
         registerProperty( PROPERTY_ACTIVECONNECTION, PROPERTY_ID_ACTIVECONNECTION, PropertyAttribute::READONLY | PropertyAttribute::BOUND,
             &m_xConnection, ::getCppuType( &m_xConnection ) );
@@ -391,6 +397,7 @@ namespace dbaui
     void SAL_CALL OSingleDocumentController::disposing()
     {
         OSingleDocumentController_CBASE::disposing();
+        m_aUndoManager.Clear();
 
         disconnect();
 
@@ -488,8 +495,83 @@ namespace dbaui
         return sal_True;
     }
     // -----------------------------------------------------------------------------
+    FeatureState OSingleDocumentController::GetState(sal_uInt16 _nId) const
+    {
+        FeatureState aReturn;
+            // (disabled automatically)
+        aReturn.bEnabled = sal_True;
 
-    //--------------------------------------------------------------------
+        switch (_nId)
+        {
+            case ID_BROWSER_UNDO:
+                aReturn.bEnabled = m_bEditable && m_aUndoManager.GetUndoActionCount() != 0;
+                if ( aReturn.bEnabled )
+                {
+                    String sUndo(ModuleRes(STR_UNDO_COLON));
+                    sUndo += String(RTL_CONSTASCII_USTRINGPARAM(" "));
+                    sUndo += m_aUndoManager.GetUndoActionComment();
+                    aReturn.aState <<= ::rtl::OUString(sUndo);
+                }
+                break;
+            case ID_BROWSER_REDO:
+                aReturn.bEnabled = m_bEditable && m_aUndoManager.GetRedoActionCount() != 0;
+                if ( aReturn.bEnabled )
+                {
+                    String sRedo(ModuleRes(STR_REDO_COLON));
+                    sRedo += String(RTL_CONSTASCII_USTRINGPARAM(" "));
+                    sRedo += m_aUndoManager.GetRedoActionComment();
+                    aReturn.aState <<= ::rtl::OUString(sRedo);
+                }
+                break;
+            default:
+                aReturn = OSingleDocumentController_CBASE::GetState(_nId);
+        }
+        return aReturn;
+    }
+    // -----------------------------------------------------------------------------
+    void OSingleDocumentController::Execute(sal_uInt16 _nId)
+    {
+        switch(_nId)
+        {
+            case SID_CLOSEDOC:
+                closeTask();
+                return;
+                break;
+            case ID_BROWSER_UNDO:
+                m_aUndoManager.Undo();
+                InvalidateFeature(ID_BROWSER_REDO);
+                break;
+            case ID_BROWSER_REDO:
+                m_aUndoManager.Redo();
+                InvalidateFeature(ID_BROWSER_UNDO);
+                break;
+        }
+        InvalidateFeature(_nId);
+    }
+    // -----------------------------------------------------------------------------
+    SfxUndoManager* OSingleDocumentController::getUndoMgr()
+    {
+        return &m_aUndoManager;
+    }
+    // -----------------------------------------------------------------------------
+    void OSingleDocumentController::addUndoActionAndInvalidate(SfxUndoAction *_pAction)
+    {
+        // add undo action
+        m_aUndoManager.AddUndoAction(_pAction);
+        // when we add an undo action the controller was modified
+        setModified(sal_True);
+        // now inform me that or states changed
+        InvalidateFeature(ID_BROWSER_UNDO);
+        InvalidateFeature(ID_BROWSER_REDO);
+    }
+    // -----------------------------------------------------------------------------
+    void OSingleDocumentController::setModified(sal_Bool _bModified)
+    {
+        m_bModified = _bModified;
+        InvalidateFeature(ID_BROWSER_SAVEDOC);
+        InvalidateFeature(ID_BROWSER_SAVEASDOC);
+    }
+    // -----------------------------------------------------------------------------
 //........................................................................
 }   // namespace dbaui
 //........................................................................
@@ -497,6 +579,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2002/07/08 08:15:44  oj
+ *  #97156# check if we are already suspended
+ *
  *  Revision 1.6  2002/05/06 08:50:00  oj
  *  #96363# impl new interface
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:27:29 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_MISC_HRC_
+#include "dbu_misc.hrc"
 #endif
 #ifndef _DBU_MISCRES_HRC_
 #include "dbumiscres.hrc"
@@ -583,39 +583,68 @@ String STR_BUTTON_TEXT_ALL
     Text[ thai ] = "~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
 };
 
+String STR_UNDO_COLON
+{
+    Text = "Rückgängig:" ;
+    Text [ ENGLISH ] = "Undo:" ;
+    Text[ english_us ] = "Undo:";
+    Text[ portuguese ] = "Anular:";
+    Text[ russian ] = "Îòìåíèòü";
+    Text[ greek ] = "Áíáßñåóç";
+    Text[ dutch ] = "Ongedaan";
+    Text[ french ] = "Annuler:";
+    Text[ spanish ] = "Deshacer:";
+    Text[ italian ] = "Annulla:";
+    Text[ danish ] = "Fortryd:";
+    Text[ swedish ] = "Ångra";
+    Text[ polish ] = "Cofnij";
+    Text[ portuguese_brazilian ] = "Undo:";
+    Text[ japanese ] = "å…ƒã«æˆ»ã™";
+    Text[ korean ] = "ì‹¤í–‰ì·¨ì†Œ";
+    Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤";
+    Text[ chinese_traditional ] = "å¾©åŸ";
+    Text[ turkish ] = "Undo";
+    Text[ arabic ] = "ÊÑÇÌÚ";
+    Text[ catalan ] = "Desfés:";
+    Text[ finnish ] = "Peruuta:";
+    Text[ thai ] = "à¹€à¸¥à¸´à¸à¸—à¸³";
+};
+
+String STR_REDO_COLON
+{
+    Text = "Wiederherstellen:" ;
+    Text [ ENGLISH ] = "Redo:" ;
+    Text[ english_us ] = "Redo:";
+    Text[ portuguese ] = "Restaurar:";
+    Text[ russian ] = "Âîññòàíîâèòü";
+    Text[ greek ] = "ÅğáíáöïñÜ";
+    Text[ dutch ] = "Herstellen:";
+    Text[ french ] = "Restaurer:";
+    Text[ spanish ] = "Restaurar:";
+    Text[ italian ] = "Ripristina:";
+    Text[ danish ] = "Gendan:";
+    Text[ swedish ] = "Återställ";
+    Text[ polish ] = "Przywróæ";
+    Text[ portuguese_brazilian ] = "Redo:";
+    Text[ japanese ] = "ã‚„ã‚Šç›´ã—";
+    Text[ korean ] = "ë³µêµ¬";
+    Text[ chinese_simplified ] = "æ¢å¤æ’¤æ¶ˆå‘½ä»¤";
+    Text[ chinese_traditional ] = "æ¢å¾©æ’¤æ¶ˆæŒ‡ä»¤";
+    Text[ turkish ] = "Redo";
+    Text[ arabic ] = "ÅÚÇÏÉ";
+    Text[ catalan ] = "Refés";
+    Text[ finnish ] = "Toista ";
+    Text[ thai ] = "à¸—à¸³à¸‹à¹‰à¸³";
+};
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.46  2002/08/01 20:27:29  kz
+ *  Merge SRX643: 01.08.02 - 22:24:17
+ *
  *  Revision 1.45  2002/07/22 07:39:28  oj
  *  #101514# remove resource entries for PLUS and MINUS
- *
- *  Revision 1.44  2002/06/10 20:12:23  rt
- *  Merge SRX642: 10.06.02 - 22:11:58
- *
- *  Revision 1.43  2002/05/03 08:36:06  kz
- *  Merge SRX642: 03.05.02 - 10:35:45
- *
- *  Revision 1.42  2002/04/29 08:01:21  oj
- *  #98772# new bitmaps
- *
- *  Revision 1.41  2002/03/04 11:04:47  oj
- *  #97788# new character set Big5-HKSCS
- *
- *  Revision 1.40  2001/10/31 21:41:44  kz
- *  Merge SRC641: 31.10.01 - 22:41:50
- *
- *  Revision 1.39  2001/10/25 20:29:45  kz
- *  Merge SRC641: 25.10.01 - 22:28:48
- *
- *  Revision 1.38  2001/10/22 20:43:27  kz
- *  Merge SRC641: 22.10.01 - 22:43:55
- *
- *  Revision 1.37  2001/10/18 20:44:31  vg
- *  Merge SRC641: 18.10.01 - 22:45:04
- *
- *  Revision 1.36  2001/10/15 13:38:09  fs
- *  #93204# new supported charset IBM866 (cyrillic)
- *
  *
  *  Revision 1.0 26.09.00 08:26:13  fs
  ************************************************************************/

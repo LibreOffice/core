@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-30 09:45:49 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBAUI_INDEXDIALOG_HXX_
 #include "indexdialog.hxx"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
@@ -983,6 +983,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2002/07/30 09:45:49  oj
+ *  #101836# enable sql92 namechecking when needed!
+ *
  *  Revision 1.13  2002/04/29 08:27:33  oj
  *  #98772# impl toolbox hi contrast
  *

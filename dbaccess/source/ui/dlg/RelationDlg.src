@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.26 2002-06-10 15:12:10 vg Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.27 2002-08-19 07:47:19 oj Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,14 +8,14 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: vg $ $Date: 2002-06-10 15:12:10 $ $Revision: 1.26 $
+ //  $Author: oj $ $Date: 2002-08-19 07:47:19 $ $Revision: 1.27 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
 #include "RelationDlg.hrc"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
 #endif
 #include "dbaccess_helpid.hrc"
 

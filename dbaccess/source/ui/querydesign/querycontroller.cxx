@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:39:37 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 08:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_QRY_HRC_
+#include "dbu_qry.hrc"
 #endif
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
@@ -342,31 +342,31 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = m_pSqlIterator != NULL && !m_bDesign;
             break;
         case ID_RELATION_ADD_RELATION:
-            aReturn.bEnabled = m_bEditable && m_bDesign && m_vTableData.size() > 1;
+            aReturn.bEnabled = isEditable() && m_bDesign && m_vTableData.size() > 1;
             break;
         case ID_BROWSER_SAVEASDOC:
             aReturn.bEnabled = !m_bCreateView && (!m_bDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty()));
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = m_bModified && (!m_bDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty()));
+            aReturn.bEnabled = isModified() && (!m_bDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty()));
             break;
         case SID_PRINTDOCDIRECT:
             break;
         case ID_BROWSER_CUT:
-            aReturn.bEnabled = m_bEditable && getContainer() && getContainer()->isCutAllowed();
+            aReturn.bEnabled = isEditable() && getContainer() && getContainer()->isCutAllowed();
             break;
         case ID_BROWSER_COPY:
             aReturn.bEnabled = getContainer() && getContainer()->isCopyAllowed();
             break;
         case ID_BROWSER_PASTE:
-            aReturn.bEnabled = m_bEditable && getContainer() && getContainer()->isPasteAllowed();
+            aReturn.bEnabled = isEditable() && getContainer() && getContainer()->isPasteAllowed();
             break;
         case ID_BROWSER_SQL:
             aReturn.bEnabled = m_bEsacpeProcessing && m_pSqlIterator;
             aReturn.aState = ::cppu::bool2any(m_bDesign);
             break;
         case ID_BROWSER_CLEAR_QUERY:
-            aReturn.bEnabled = m_bEditable && (m_sStatement.getLength() || !m_vTableData.empty());
+            aReturn.bEnabled = isEditable() && (m_sStatement.getLength() || !m_vTableData.empty());
             break;
         case ID_BROWSER_QUERY_VIEW_FUNCTIONS:
         case ID_BROWSER_QUERY_VIEW_TABLES:
@@ -375,7 +375,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = m_bDesign;
             break;
         case ID_BROWSER_QUERY_DISTINCT_VALUES:
-            aReturn.bEnabled = m_bDesign && m_bEditable;
+            aReturn.bEnabled = m_bDesign && isEditable();
             aReturn.aState = ::cppu::bool2any(m_bDistinct);
             break;
         case ID_BROWSER_QUERY_EXECUTE:
@@ -504,9 +504,9 @@ void OQueryController::Execute(sal_uInt16 _nId)
             break;
         case ID_BROWSER_CLEAR_QUERY:
             {
-                m_aUndoManager.EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
+                getUndoMgr()->EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
                 getContainer()->clear();
-                m_aUndoManager.LeaveListAction();
+                getUndoMgr()->LeaveListAction();
 
                 m_sStatement = ::rtl::OUString();
                 if(m_bDesign)
@@ -1061,7 +1061,7 @@ sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElement
 // -----------------------------------------------------------------------------
 void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 {
-    OSL_ENSURE(m_bEditable,"Slot ID_BROWSER_SAVEDOC should not be enabled!");
+    OSL_ENSURE(isEditable(),"Slot ID_BROWSER_SAVEDOC should not be enabled!");
     if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(getDataSource()->getPropertyValue(PROPERTY_NAME)),getORB()))
     {
         String aMessage(ModuleRes(STR_DATASOURCE_DELETED));
@@ -1283,7 +1283,7 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 short OQueryController::saveModified()
 {
     short nRet = RET_YES;
-    if(isConnected() && m_bModified && (!m_bDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty())))
+    if(isConnected() && isModified() && (!m_bDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty())))
     {
         QueryBox aQry(getView(), ModuleRes(m_bCreateView ? QUERY_VIEW_DESIGN_SAVEMODIFIED : QUERY_DESIGN_SAVEMODIFIED));
         nRet = aQry.Execute();

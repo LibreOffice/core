@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-02 06:56:00 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,10 @@
 #ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_REL_HRC_
+#include "dbu_rel.hrc"
 #endif
+
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
 #endif
@@ -263,11 +264,11 @@ FeatureState ORelationController::GetState(sal_uInt16 _nId) const
     switch (_nId)
     {
         case ID_RELATION_ADD_RELATION:
-            aReturn.bEnabled = m_vTableData.size() > 1 && isConnected() && m_bEditable;
+            aReturn.bEnabled = m_vTableData.size() > 1 && isConnected() && isEditable();
             aReturn.aState = ::cppu::bool2any(sal_False);
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = haveDataSource() && m_bModified;
+            aReturn.bEnabled = haveDataSource() && isModified();
             break;
         default:
             aReturn = OJoinController::GetState(_nId);
@@ -282,7 +283,7 @@ void ORelationController::Execute(sal_uInt16 _nId)
     {
         case ID_BROWSER_SAVEDOC:
             {
-                OSL_ENSURE(m_bEditable,"Slot ID_BROWSER_SAVEDOC should not be enabled!");
+                OSL_ENSURE(isEditable(),"Slot ID_BROWSER_SAVEDOC should not be enabled!");
                 if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(getDataSource()->getPropertyValue(PROPERTY_NAME)),getORB()))
                 {
                     String aMessage(ModuleRes(STR_DATASOURCE_DELETED));
@@ -360,7 +361,7 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
 
     if ( !ensureConnected( sal_False ) )
     {
-        m_bEditable             = sal_False;
+        setEditable(sal_False);
         m_bRelationsPossible    = sal_False;
         {
             {
@@ -374,7 +375,7 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
     else if(!getMetaData()->supportsIntegrityEnhancementFacility())
     {// check if this database supports relations
 
-        m_bEditable             = sal_False;
+        setEditable(sal_False);
         m_bRelationsPossible    = sal_False;
         {
             OSQLMessageBox aDlg(getView(),ModuleRes(STR_RELATIONDESIGN),ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
@@ -433,7 +434,7 @@ sal_Bool ORelationController::Construct(Window* pParent)
 short ORelationController::saveModified()
 {
     short nSaved = RET_YES;
-    if(haveDataSource() && m_bModified)
+    if(haveDataSource() && isModified())
     {
         QueryBox aQry(getView(), ModuleRes(RELATION_DESIGN_SAVEMODIFIED));
         nSaved = aQry.Execute();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 08:21:18 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,8 @@
 #ifndef DBAUI_TABLEFIELDDATA_HXX
 #include "TableFieldData.hxx"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_QRY_HRC_
+#include "dbu_qry.hrc"
 #endif
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
@@ -678,9 +678,9 @@ namespace
         for(;aIter != _rFieldList.end();++aIter)
         {
             OTableFieldDescRef pEntryField = *aIter;
-            if(pEntryField->IsVisible())
+            if ( pEntryField->IsVisible() )
             {
-                if(pEntryField->GetField().toChar() == '*')
+                if ( pEntryField->GetField().toChar() == '*' )
                     bAsterix = sal_True;
                 ++nVis;
             }
@@ -1434,7 +1434,7 @@ namespace
             aDragLeft->SetField(aCondition);
             aDragLeft->SetFunctionType(FKT_CONDITION);
 
-            eErrorCode = _pSelectionBrw->InsertField(aDragLeft,-1,sal_False,sal_True).isValid() ? eOk : eTooManyColumns;
+            eErrorCode = _pSelectionBrw->InsertField(aDragLeft,BROWSER_INVALIDID,sal_False,sal_True).isValid() ? eOk : eTooManyColumns;
         }
         else //! TODO not supported yet
             eErrorCode = eStatementTooComplex;
@@ -1882,7 +1882,7 @@ namespace
                                                     // now we have to insert the fields which aren't in the statement
                                                     OTableFields& rUnUsedFields = pController->getUnUsedFields();
                                                     for(OTableFields::iterator aIter = rUnUsedFields.begin();aIter != rUnUsedFields.end();++aIter)
-                                                        if(_pSelectionBrw->InsertField(*aIter,-1,sal_False,sal_False).isValid())
+                                                        if(_pSelectionBrw->InsertField(*aIter,BROWSER_INVALIDID,sal_False,sal_False).isValid())
                                                             (*aIter) = NULL;
                                                     OTableFields().swap( rUnUsedFields );
                                                 }
@@ -2468,7 +2468,7 @@ void OQueryDesignView::SaveTabWinUIConfig(OQueryTableWindow* pWin)
 // -----------------------------------------------------------------------------
 SqlParseError OQueryDesignView::InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis, sal_Bool bActivate)
 {
-    return m_pSelectionBox->InsertField( rInfo, -1,bVis, bActivate ).isValid() ? eOk : eTooManyColumns;
+    return m_pSelectionBox->InsertField( rInfo, BROWSER_INVALIDID,bVis, bActivate ).isValid() ? eOk : eTooManyColumns;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OQueryDesignView::getColWidth( const ::rtl::OUString& rAliasName, const ::rtl::OUString& rFieldName, sal_uInt32& nWidth )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-30 09:46:49 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_TBL_HRC_
+#include "dbu_tbl.hrc"
 #endif
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
@@ -259,8 +259,6 @@ Reference< XInterface > SAL_CALL OTableController::Create(const Reference<XMulti
 
 // -----------------------------------------------------------------------------
 OTableController::OTableController(const Reference< XMultiServiceFactory >& _rM) : OTableController_BASE(_rM)
-    ,m_bEditable(sal_True)
-    ,m_bModified(sal_False)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_bNew(sal_True)
     ,m_pTypeInfo(NULL)
@@ -323,11 +321,11 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             aReturn.aState = ::cppu::bool2any( isConnected() );
             break;
         case ID_BROWSER_EDITDOC:
-            aReturn.aState = ::cppu::bool2any(m_bEditable);
-            aReturn.bEnabled = m_bNew || m_bEditable || isAddAllowed() || isDropAllowed() || isAlterAllowed();
+            aReturn.aState = ::cppu::bool2any(isEditable());
+            aReturn.bEnabled = m_bNew || isEditable() || isAddAllowed() || isDropAllowed() || isAlterAllowed();
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = m_bModified;
+            aReturn.bEnabled = isModified();
             if ( aReturn.bEnabled )
             {
                 ::std::vector<OTableRow*>::const_iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),::std::mem_fun(&OTableRow::isValid));
@@ -344,23 +342,17 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             break;
 
         case ID_BROWSER_CUT:
-            aReturn.bEnabled = m_bEditable && m_bFrameUiActive && getView() && static_cast<OTableDesignView*>(getView())->isCutAllowed();
+            aReturn.bEnabled = isEditable() && m_bFrameUiActive && getView() && static_cast<OTableDesignView*>(getView())->isCutAllowed();
             break;
         case ID_BROWSER_COPY:
             aReturn.bEnabled = m_bFrameUiActive && getView() && static_cast<OTableDesignView*>(getView())->isCopyAllowed();
             break;
         case ID_BROWSER_PASTE:
-            aReturn.bEnabled = m_bEditable && m_bFrameUiActive;
-            break;
-        case ID_BROWSER_UNDO:
-            aReturn.bEnabled = m_bEditable && m_aUndoManager.GetUndoActionCount() != 0;
-            break;
-        case ID_BROWSER_REDO:
-            aReturn.bEnabled = m_bEditable && m_aUndoManager.GetRedoActionCount() != 0;
+            aReturn.bEnabled = isEditable() && m_bFrameUiActive;
             break;
         case SID_INDEXDESIGN:
             aReturn.bEnabled =
-                (   (   ((!m_bNew && m_bModified) || m_bModified)
+                (   (   ((!m_bNew && isModified()) || isModified())
                     ||  Reference< XIndexesSupplier >(m_xTable, UNO_QUERY).is()
                     )
                 &&  isConnected()
@@ -371,6 +363,8 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = aIter != m_vRowList.end();
             }
             break;
+        default:
+            aReturn = OTableController_BASE::GetState(_nId);
     }
     return aReturn;
 }
@@ -379,17 +373,13 @@ void OTableController::Execute(sal_uInt16 _nId)
 {
     switch(_nId)
     {
-        case SID_CLOSEDOC:
-            closeTask();
-            return;
-            break;
         case ID_TABLE_DESIGN_NO_CONNECTION:
             if (!isConnected())
                 reconnect( sal_False );
             break;
         case ID_BROWSER_EDITDOC:
-            m_bEditable = !m_bEditable;
-            static_cast<OTableDesignView*>(getView())->setReadOnly(!m_bEditable);
+            setEditable(!isEditable());
+            static_cast<OTableDesignView*>(getView())->setReadOnly(!isEditable());
             InvalidateFeature(ID_BROWSER_PASTE);
             InvalidateFeature(ID_BROWSER_CLEAR_QUERY);
             break;
@@ -409,17 +399,11 @@ void OTableController::Execute(sal_uInt16 _nId)
         case ID_BROWSER_PASTE:
             static_cast<OTableDesignView*>(getView())->paste();
             break;
-        case ID_BROWSER_UNDO:
-            m_aUndoManager.Undo();
-            InvalidateFeature(ID_BROWSER_REDO);
-            break;
-        case ID_BROWSER_REDO:
-            m_aUndoManager.Redo();
-            InvalidateFeature(ID_BROWSER_UNDO);
-            break;
         case SID_INDEXDESIGN:
             doEditIndexes();
             break;
+        default:
+            OTableController_BASE::Execute(_nId);
     }
     InvalidateFeature(_nId);
 }
@@ -566,7 +550,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     }
     catch(const ElementExistException& )
     {
-        String sText( ModuleRes(STR_OBJECT_ALREADY_EXISTS)) ;
+        String sText( ModuleRes(STR_OBJECT_ALREADY_EXISTS));
         sText.SearchAndReplaceAscii( "#" , m_sName);
         OSQLMessageBox aDlg(getView(), String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)), sText, WB_OK, OSQLMessageBox::Error);
 
@@ -597,7 +581,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
 void OTableController::doEditIndexes()
 {
     // table needs to be saved before editing indexes
-    if (m_bNew || m_bModified)
+    if (m_bNew || isModified())
     {
         QueryBox aAsk(getView(), ModuleRes(QUERY_SAVE_TABLE_EDIT_INDEXES));
         if (RET_YES != aAsk.Execute())
@@ -606,7 +590,7 @@ void OTableController::doEditIndexes()
         if (!doSaveDoc(sal_False))
             return;
 
-        OSL_ENSURE(!m_bNew && !m_bModified, "OTableController::doEditIndexes: what the hell did doSaveDoc do?");
+        OSL_ENSURE(!m_bNew && !isModified(), "OTableController::doEditIndexes: what the hell did doSaveDoc do?");
     }
 
     Reference< XNameAccess > xIndexes;          // will be the keys of the table
@@ -831,9 +815,7 @@ SfxUndoManager* OTableController::getUndoMgr()
 // -----------------------------------------------------------------------------
 void OTableController::setModified(sal_Bool _bModified)
 {
-    m_bModified = _bModified;
-    InvalidateFeature(ID_BROWSER_SAVEDOC);
-    InvalidateFeature(ID_BROWSER_SAVEASDOC);
+    OSingleDocumentController::setModified(_bModified);
     InvalidateFeature(SID_INDEXDESIGN);
 }
 // -----------------------------------------------------------------------------
@@ -1591,8 +1573,8 @@ void OTableController::assignTable()
 
                 // check if we set the table editable
                 Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
-                m_bEditable = isAlterAllowed() || isDropAllowed() || isAddAllowed();
-                if(!m_bEditable)
+                setEditable( isAlterAllowed() || isDropAllowed() || isAddAllowed() );
+                if(!isEditable())
                 {
                     ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
                     for(; aIter != m_vRowList.end(); ++aIter)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-16 13:00:02 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_MISC_HRC_
+#include "dbu_misc.hrc"
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
@@ -435,6 +435,9 @@ ADDRESSBOOK_TYPE AddressBookTypes::getAddressType( const String& _rAddressURL )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/08/16 13:00:02  hr
+ *  #65293#: syntax
+ *
  *  Revision 1.12  2001/08/15 13:16:25  oj
  *  #88644# insert some DBG's
  *

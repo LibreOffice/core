@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-26 09:33:29 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
 #endif
 #ifndef _DBAUI_DBADMIN_HRC_
 #include "dbadmin.hrc"
@@ -1345,6 +1345,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2002/07/26 09:33:29  oj
+ *  #95146# new controls inserted for auto retrieving
+ *
  *  Revision 1.14  2002/07/09 12:39:05  oj
  *  #99921# check if datasource allows to check names
  *

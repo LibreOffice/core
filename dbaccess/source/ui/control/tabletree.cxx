@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:49:26 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_CONTROL_HRC_
+#include "dbu_control.hrc"
 #endif
 #ifndef _SV_MENU_HXX
 #include <vcl/menu.hxx>
@@ -641,6 +641,9 @@ void OTableTreeListBox::removedTable( const Reference< XConnection >& _rxConn, c
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2002/04/29 08:49:26  oj
+ *  #98772# hi contrast changes
+ *
  *  Revision 1.19  2001/08/28 08:21:51  fs
  *  #91573# UpdateTableList returns the driver used for connecting
  *

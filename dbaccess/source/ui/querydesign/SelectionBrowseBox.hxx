@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-24 12:58:56 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 08:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ namespace dbaui
 #define BROW_CRIT5_ROW          10
 #define BROW_CRIT6_ROW          11
 #define BROW_ROW_CNT            12
+
     //==================================================================
     class OQueryDesignView;
     class OSelectionBrowseBox : public ::svt::EditBrowseBox
@@ -141,10 +142,10 @@ namespace dbaui
                                     ~OSelectionBrowseBox();
 
         void                        initialize();
-        OTableFieldDescRef          InsertField( const OJoinExchangeData& jxdSource, long nColId=-1, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );
-        OTableFieldDescRef          InsertField( const OTableFieldDescRef& rInfo, long nCol=-1, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );
-        void                        InsertColumn( OTableFieldDescRef pEntry, long& nColId );
-        void                        RemoveColumn( sal_uInt16 nColId );
+        OTableFieldDescRef          InsertField( const OJoinExchangeData& jxdSource, USHORT _nColumnPostion = BROWSER_INVALIDID, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );
+        OTableFieldDescRef          InsertField( const OTableFieldDescRef& rInfo, USHORT _nColumnPostion = BROWSER_INVALIDID, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );
+        void                        InsertColumn( OTableFieldDescRef pEntry, USHORT& _nColumnPostion );
+        void                        RemoveColumn( USHORT _nColumnId );
         void                        DeleteFields( const String& rAliasName );
         // AddGroupBy:: F"ugt ein Feld mit Funktion == Grupierung. Falls das Feld schon vorhanden ist und ein Aggregate Funktion
         // benutzt, wird das Flag nicht gesetzt
@@ -164,8 +165,8 @@ namespace dbaui
         void                        SetColWidth(sal_uInt16 nColId, long lNewWidth);
                                     // beachtet im Gegensatz zum SetColumnWidth der Basisklasse auch eine eventuell aktive Zelle in dieser Spalte
 
-        String                      GetCellContents(sal_uInt16 nCellIndex, long nColId);
-        void                        SetCellContents(sal_uInt16 nCellIndex, long nColId, const String& strNewText);
+        String                      GetCellContents(sal_Int32 nCellIndex, USHORT nColId);
+        void                        SetCellContents(sal_Int32 nCellIndex, USHORT nColId, const String& strNewText);
                                         // Zelleninhalt (als String formatiert) setzen/liefern
         sal_Int32                   GetNoneVisibleRows() const;
         void                        SetNoneVisbleRow(long nRows);
@@ -184,6 +185,8 @@ namespace dbaui
 
         virtual void                GetFocus();
         virtual void                DeactivateCell(sal_Bool bUpdate = sal_True);
+        virtual void                ColumnMoved( USHORT nColId ) { ColumnMoved(nColId,TRUE); }
+        void                        ColumnMoved( USHORT nColId,BOOL _bCreateUndo);
 
         void                        Fill();
         void                        PreFill();
@@ -242,15 +245,17 @@ namespace dbaui
         virtual sal_uInt32          GetTotalCellWidth(long nRow, sal_uInt16 nColId);
 
         virtual sal_uInt16          GetDefaultColumnWidth(const String& rName) const;
+        // if you want to have an own header ...
+        virtual BrowserHeader*      imp_CreateHeaderBar(BrowseBox* pParent);
 
         void                        stopTimer();
         void                        startTimer();
 
     private:
-        OTableFieldDescRef          FindFirstFreeCol(long & rCol);
+        OTableFieldDescRef          FindFirstFreeCol(USHORT& _rColumnPosition);
             // rCol enthaelt die Nummer (in pOTableFieldDescList) der ersten Spalte, die von sich sagt, dass sie leer ist
             // wenn es keine solche gibt, ist rCol undefiniert und der Rueckgabewert NULL
-        void                        CheckFreeColumns(long& rCol);
+        void                        CheckFreeColumns(USHORT& _rColumnPosition);
             // testet, ob es noch freie Spalten gibt, wenn nicht, wird ein neuer Packen angefuegt
             // rCol enthaelt die Nummer der ersten freien Spalte (in pOTableFieldDescList)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignFieldUndoAct.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 08:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #ifndef DBAUI_GENERALUNDO_HXX
 #include "GeneralUndo.hxx"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_QRY_HRC_
+#include "dbu_qry.hrc"
 #endif
 #ifndef DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX
 #include "SelectionBrowseBox.hxx"
@@ -81,16 +81,16 @@ namespace dbaui
     class OQueryDesignFieldUndoAct : public OCommentUndoAction
     {
     protected:
-        OSelectionBrowseBox*        pOwner;
-        long                    m_nColId;
+        OSelectionBrowseBox*    pOwner;
+        USHORT                  m_nColumnPostion;
 
         virtual void    Undo() = 0;
         virtual void    Redo() = 0;
 
     public:
-        OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, USHORT nCommentID) : OCommentUndoAction(nCommentID), pOwner(pSelBrwBox), m_nColId(-1) { }
+        OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, USHORT nCommentID) : OCommentUndoAction(nCommentID), pOwner(pSelBrwBox), m_nColumnPostion(BROWSER_INVALIDID) { }
 
-        void SetColId(long nCol) { m_nColId = nCol; }
+        inline void SetColumnPosition(USHORT _nColumnPostion) { m_nColumnPostion = _nColumnPostion; }
     };
 
     // ================================================================================================
@@ -105,10 +105,10 @@ namespace dbaui
     public:
         OTabFieldCellModifiedUndoAct(OSelectionBrowseBox* pSelBrwBox)
             : OQueryDesignFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_MODIFY_CELL)
-            ,m_nCellIndex(-1){ }
+            ,m_nCellIndex(BROWSER_INVALIDID){ }
 
-        void SetCellContents(const String& str) { m_strNextCellContents = str; }
-        void SetCellIndex(sal_Int32 nIndex) { m_nCellIndex = nIndex; }
+        inline void SetCellContents(const String& str)  { m_strNextCellContents = str; }
+        inline void SetCellIndex(sal_Int32 nIndex)      { m_nCellIndex = nIndex; }
 
         virtual void Undo();
         virtual void Redo() { Undo(); }
@@ -125,7 +125,7 @@ namespace dbaui
     public:
         OTabFieldSizedUndoAct(OSelectionBrowseBox* pSelBrwBox) : OQueryDesignFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_SIZE_COLUMN), m_nNextWidth(0) { }
 
-        void SetOriginalWidth(long nWidth) { m_nNextWidth = nWidth; }
+        inline void SetOriginalWidth(long nWidth) { m_nNextWidth = nWidth; }
 
         virtual void Undo();
         virtual void Redo() { Undo(); }
@@ -138,15 +138,11 @@ namespace dbaui
     {
     protected:
         OTableFieldDescRef      pDescr;     // geloeschte Spaltenbeschreibung
-        BOOL                    m_bOwnerOfDescription;
 
     public:
         OTabFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, USHORT nCommentID) : OQueryDesignFieldUndoAct(pSelBrwBox, nCommentID) { }
-        virtual ~OTabFieldUndoAct() { pDescr = NULL; }
 
         void SetTabFieldDescr(OTableFieldDescRef pDescription) { pDescr = pDescription; }
-            // anschliessend bitte SetOwnership
-        void SetOwnership(BOOL bTakeIt) { m_bOwnerOfDescription = bTakeIt; }
     };
 
     // ================================================================================================
@@ -155,8 +151,8 @@ namespace dbaui
     class OTabFieldDelUndoAct : public OTabFieldUndoAct
     {
     protected:
-        virtual void Undo() { pOwner->InsertColumn(pDescr, m_nColId); SetOwnership(FALSE); }
-        virtual void Redo() { pOwner->RemoveColumn((USHORT)m_nColId); SetOwnership(TRUE); }
+        virtual void Undo() { pOwner->InsertColumn(pDescr, m_nColumnPostion); }
+        virtual void Redo() { pOwner->RemoveColumn(pDescr->GetColumnId()); }
 
     public:
         OTabFieldDelUndoAct(OSelectionBrowseBox* pSelBrwBox) : OTabFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_TABFIELDDELETE) { }
@@ -168,11 +164,27 @@ namespace dbaui
     class OTabFieldCreateUndoAct : public OTabFieldUndoAct
     {
     protected:
-        virtual void Undo() { pOwner->RemoveColumn((USHORT)m_nColId); SetOwnership(TRUE); }
-        virtual void Redo() { pOwner->InsertColumn(pDescr, m_nColId); SetOwnership(FALSE); }
+        virtual void Undo() { pOwner->RemoveColumn(pDescr->GetColumnId());}
+        virtual void Redo() { pOwner->InsertColumn(pDescr, m_nColumnPostion);}
 
     public:
         OTabFieldCreateUndoAct(OSelectionBrowseBox* pSelBrwBox) : OTabFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_TABFIELDCREATE) { }
+    };
+
+    // ================================================================================================
+    // OTabFieldMovedUndoAct - Undo-class when a field was moved inside the selection
+
+    class OTabFieldMovedUndoAct : public OTabFieldUndoAct
+    {
+    protected:
+        virtual void Undo();
+        virtual void Redo()
+        {
+            Undo();
+        }
+
+    public:
+        OTabFieldMovedUndoAct(OSelectionBrowseBox* pSelBrwBox) : OTabFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_TABFIELDMOVED) { }
     };
 }
 #endif // DBAUI_QUERYDESIGNFIELDUNDOACT_HXX

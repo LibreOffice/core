@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2002-06-10 15:12:05 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_REL_HRC_
+#include "dbu_rel.hrc"
 #endif
 #ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
@@ -196,58 +196,13 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
         {
             Identifier = ID_BROWSER_UNDO ;
             HelpId = SID_UNDO ;
-            Text = "Rückgängig" ;
-            Text [ ENGLISH ] = "Undo" ;
-            Text[ english_us ] = "Undo";
-            Text[ portuguese ] = "Anular";
-            Text[ russian ] = "Îòìåíèòü";
-            Text[ greek ] = "Áíáßñåóç";
-            Text[ dutch ] = "Ongedaan";
-            Text[ french ] = "Annuler";
-            Text[ spanish ] = "Deshacer";
-            Text[ italian ] = "Annulla";
-            Text[ danish ] = "Undo";
-            Text[ swedish ] = "Ångra";
-            Text[ polish ] = "Cofnij";
-            Text[ portuguese_brazilian ] = "Undo";
-            Text[ japanese ] = "å…ƒã«æˆ»ã™";
-            Text[ korean ] = "ì‹¤í–‰ì·¨ì†Œ";
-            Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤";
-            Text[ chinese_traditional ] = "å¾©åŸ";
-            Text[ turkish ] = "Undo";
-            Text[ arabic ] = "ÊÑÇÌÚ";
-            Text[ catalan ] = "Desfés";
-            Text[ finnish ] = "Peruuta";
-            Text[ thai ] = "à¹€à¸¥à¸´à¸à¸—à¸³";
+            MID_UNDO
         };
         ToolBoxItem
         {
             Identifier = ID_BROWSER_REDO ;
             HelpId = SID_REDO ;
-            Text = "Wiederherstellen" ;
-            Text [ ENGLISH ] = "Redo" ;
-
-            Text[ english_us ] = "Redo";
-            Text[ portuguese ] = "Restaurar";
-            Text[ russian ] = "Âîññòàíîâèòü";
-            Text[ greek ] = "ÅğáíáöïñÜ";
-            Text[ dutch ] = "Herstellen";
-            Text[ french ] = "Restaurer";
-            Text[ spanish ] = "Restaurar";
-            Text[ italian ] = "Ripristina";
-            Text[ danish ] = "Redo";
-            Text[ swedish ] = "Återställ";
-            Text[ polish ] = "Przywróæ";
-            Text[ portuguese_brazilian ] = "Redo";
-            Text[ japanese ] = "ã‚„ã‚Šç›´ã—";
-            Text[ korean ] = "ë³µêµ¬";
-            Text[ chinese_simplified ] = "æ¢å¤æ’¤æ¶ˆå‘½ä»¤";
-            Text[ chinese_traditional ] = "æ¢å¾©æ’¤æ¶ˆæŒ‡ä»¤";
-            Text[ turkish ] = "Redo";
-            Text[ arabic ] = "ÅÚÇÏÉ";
-            Text[ catalan ] = "Refés";
-            Text[ finnish ] = "Toista ";
-            Text[ thai ] = "à¸—à¸³à¸‹à¹‰à¸³";
+            MID_REDO
         };
         ToolBoxItem
         {

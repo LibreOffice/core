@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-26 16:14:39 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
 #endif
 #ifndef _DBAUI_DBADMIN_HRC_
 #include "dbadmin.hrc"
@@ -455,13 +455,30 @@ namespace dbaui
     void OGeneralPage::checkCreateDatabase(DATASOURCE_TYPE _eType)
     {
         static BOOL bServiceFound = FALSE;
+        BOOL bInstallationFound = FALSE;
         OSL_ENSURE(m_pAdminDialog,"No parent set!");
-        if(_eType == DST_ADABAS && m_pAdminDialog && !bServiceFound)
+        if ( _eType == DST_ADABAS && m_pAdminDialog && !bServiceFound )
         {
             Reference<XCreateCatalog> xCatalog(m_xORB->createInstance(SERVICE_EXTENDED_ADABAS_DRIVER),UNO_QUERY);
             bServiceFound = xCatalog.is();
         }
+
         m_aCreateDatabase.Show(_eType == DST_ADABAS && bServiceFound);
+
+        if ( bServiceFound )
+        {
+            static const ::rtl::OUString sDBWORK(RTL_CONSTASCII_USTRINGPARAM("DBWORK"));
+            static const ::rtl::OUString sDBROOT(RTL_CONSTASCII_USTRINGPARAM("DBROOT"));
+            static const ::rtl::OUString sDBCONFIG(RTL_CONSTASCII_USTRINGPARAM("DBCONFIG"));
+            rtl_uString* pDbVar = NULL;
+            if ( (osl_getEnvironment(sDBWORK.pData,&pDbVar) == osl_Process_E_None && pDbVar)
+                && ((pDbVar = NULL) == NULL && osl_getEnvironment(sDBROOT.pData,&pDbVar) == osl_Process_E_None && pDbVar)
+                && ((pDbVar = NULL) == NULL && osl_getEnvironment(sDBCONFIG.pData,&pDbVar) == osl_Process_E_None && pDbVar)
+                )
+                bInstallationFound = TRUE;
+
+            m_aCreateDatabase.Enable( bInstallationFound );
+        }
     }
 
     //-------------------------------------------------------------------------
@@ -1400,6 +1417,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.27  2001/10/26 16:14:39  hr
+ *  #92924#: gcc-3.0.1 needs lvalue
+ *
  *  Revision 1.26  2001/09/11 07:07:26  fs
  *  #92027# accept arbitrary valid URLs - not only file URLs - when browsing for a dBase or text directory
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charsets.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-14 08:54:05 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _DBU_MISCRES_HRC_
 #include "dbumiscres.hrc"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_MISC_HRC_
+#include "dbu_misc.hrc"
 #endif
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
@@ -251,6 +251,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2002/03/14 08:54:05  fs
+ *  #97788# assertion for invalid character set maps corrected
+ *
  *  Revision 1.4  2001/10/15 13:38:09  fs
  *  #93204# new supported charset IBM866 (cyrillic)
  *
