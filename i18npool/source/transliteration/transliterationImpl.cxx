@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:06:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,8 +303,8 @@ TransliterationImpl::loadModulesByImplNames(const Sequence< OUString >& implName
 Sequence<OUString> SAL_CALL
 TransliterationImpl::getAvailableModules( const Locale& rLocale, sal_Int16 sType ) throw(RuntimeException)
 {
-    Sequence<OUString> &translist = localedata->getTransliterations(rLocale);
-    Sequence<OUString> &r = *new Sequence< OUString > (translist.getLength());
+    const Sequence<OUString> &translist = localedata->getTransliterations(rLocale);
+    Sequence<OUString> r(translist.getLength());
     Reference<XExtendedTransliteration> body;
     sal_Int32 n = 0;
     for (sal_Int32 i = 0; i < translist.getLength(); i++)
@@ -532,7 +532,7 @@ TransliterationImpl::getRange(const Sequence< OUString > &inStrs,
     sal_Int32 j_tmp = 0;
     Sequence< OUString > ostr(MaxOutput*length);
     for (sal_Int32 j = 0; j < length; j+=2) {
-        Sequence< OUString >& temp = bodyCascade[_numCascade]->transliterateRange(inStrs[j], inStrs[j+1]);
+        const Sequence< OUString >& temp = bodyCascade[_numCascade]->transliterateRange(inStrs[j], inStrs[j+1]);
 
         for ( sal_Int32 k = 0; k < temp.getLength(); k++) {
             if ( j_tmp >= MaxOutput*length ) throw ERROR;
