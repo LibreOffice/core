@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 20:30:08 $
+#   last change: $Author: hr $ $Date: 2004-03-09 11:08:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,8 @@ TARGETOBJS=   $(OBJ)$/app.obj					\
             $(OBJ)$/checkinstall.obj		\
             $(OBJ)$/cmdlinehelp.obj         \
             $(OBJ)$/langselect.obj          \
-            $(OBJ)$/userinstall.obj
+            $(OBJ)$/userinstall.obj         \
+            $(OBJ)$/license.obj         
 
 
 # --- Resourcen ----------------------------------------------------
@@ -238,8 +239,7 @@ APP5STDLIBS=			\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(SALLIB)			\
-    $(TKLIB)            \
-    $(SVTOOLLIB)
+    $(TKLIB)            
 
 APP5OBJS=$(TARGETOBJS)
 APP5OBJS += $(OBJ)$/copyright_ascii_ooo.obj
