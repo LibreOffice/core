@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 10:30:07 $
+ *  last change: $Author: mtg $ $Date: 2001-10-11 16:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,9 +811,12 @@ Sequence< Any > SwXTextSection::getPropertyValues(
                     case WID_SECT_DDE_AUTOUPDATE:
                     {
                         // GetUpdateType() returns .._ALWAYS or .._ONCALL
-                        sal_Bool bTemp =
-                            (pSect->GetUpdateType() == so3::LINKUPDATE_ALWAYS);
-                        pRet[nProperty].setValue( &bTemp, ::getCppuBooleanType());
+                        if ( pSect->IsLinkType() && pSect->IsConnected() )
+                        {
+                            sal_Bool bTemp =
+                                (pSect->GetUpdateType() == so3::LINKUPDATE_ALWAYS);
+                            pRet[nProperty].setValue( &bTemp, ::getCppuBooleanType());
+                        }
                     }
                     break;
                     case WID_SECT_LINK     :
