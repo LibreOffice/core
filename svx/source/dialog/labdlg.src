@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 20:18:45 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1038,4 +1038,5 @@ TabDialog RID_SVXDLG_CAPTION
     Text[ finnish ] = "Kuvatekstit";
 };
  // ********************************************************************** EOF
+
 
