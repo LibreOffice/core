@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 20:04:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1351,7 +1351,15 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectan
         BOOL bAlwaysActive =  ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY );
         if ( bAlwaysActive || ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE ) &&
                 rVisArea.IsOver( pIPClient->GetObjArea() ) )
-            pIPClient->DoVerb( 0 );
+        {
+            try
+            {
+                pIPClient->GetObject()->changeState( embed::EmbedStates::INPLACE_ACTIVE );
+            }
+            catch ( uno::Exception& )
+            {
+            }
+        }
     }
 }
 
