@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:35:01 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,6 @@ SvxXMeasurePreview::SvxXMeasurePreview
     Point aPt2 = Point( aSize.Width() * 4 / 5, (long) ( aSize.Height() / 2 ) );
 
     pMeasureObj = new SdrMeasureObj( aPt1, aPt2 );
-
     pModel = new SdrModel();
     pMeasureObj->SetModel( pModel );
 
