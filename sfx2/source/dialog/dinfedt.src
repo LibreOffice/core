@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfedt.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-31 10:22:56 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 22:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,4 +167,5 @@ ModalDialog DLG_DOCINFO_EDT
         TabStop = TRUE ;
     };
 };
+
 
