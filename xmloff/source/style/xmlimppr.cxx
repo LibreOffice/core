@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-11 10:39:10 $
+ *  last change: $Author: dvo $ $Date: 2001-06-25 17:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,8 +357,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
     const Reference<XPropertySet> & rPropSet,
     const Reference<XPropertySetInfo> & rPropSetInfo,
     const UniReference<XMLPropertySetMapper> & rPropMapper,
-    sal_Int16 nSearchForContextId,
-    sal_Int32* pFoundAtIndex )
+    struct _ContextID_Index_Pair* pSpecialContextIds )
 {
     DBG_ASSERT( rPropSet.is(), "need an XPropertySet" );
     DBG_ASSERT( rPropSetInfo.is(), "need an XPropertySetInfo" );
@@ -380,9 +379,9 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
         const OUString& rPropName = rPropMapper->GetEntryAPIName( nIdx );
         const sal_Int32 nPropFlags = rPropMapper->GetEntryFlags( nIdx );
 
-        if ( ( ( 0 != ( nPropFlags & MID_FLAG_MUST_EXIST ) ) &&
-               ( 0 == ( nPropFlags & ~MID_FLAG_NO_PROPERTY ) )   ) ||
-             rPropSetInfo->hasPropertyByName( rPropName ) )
+        if ( ( 0 == ( nPropFlags & MID_FLAG_NO_PROPERTY ) ) &&
+             ( ( 0 != ( nPropFlags & MID_FLAG_MUST_EXIST ) ) ||
+               rPropSetInfo->hasPropertyByName( rPropName ) )    )
         {
             // try setting the property
             try
@@ -401,14 +400,25 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
 #endif
             }
         }
-        else
+
+        // handle no-property and special items
+        if( ( pSpecialContextIds != NULL ) &&
+            ( ( 0 != ( nPropFlags & MID_FLAG_NO_PROPERTY_IMPORT ) ) ||
+              ( 0 != ( nPropFlags & MID_FLAG_SPECIAL_ITEM_IMPORT ) )   ) )
         {
-            // maybe it's out search context id?
-            if( (pFoundAtIndex != NULL) &&
-                (nSearchForContextId != -1) &&
-                (nSearchForContextId == rPropMapper->GetEntryContextId(nIdx)))
+            // maybe it's one of our special context ids?
+            sal_Int16 nContextId = rPropMapper->GetEntryContextId(nIdx);
+
+            for ( sal_Int32 n = 0;
+                  pSpecialContextIds[n].nContextID != -1;
+                  n++ )
             {
-                *pFoundAtIndex = i;
+                // found: set index in pSpecialContextIds array
+                if ( pSpecialContextIds[n].nContextID == nContextId )
+                {
+                    pSpecialContextIds[n].nIndex = i;
+                    break; // early out
+                }
             }
         }
     }
@@ -435,8 +445,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
     const Reference<XMultiPropertySet> & rMultiPropSet,
     const Reference<XPropertySetInfo> & rPropSetInfo,
     const UniReference<XMLPropertySetMapper> & rPropMapper,
-    sal_Int16 nSearchForContextId,
-    sal_Int32* pFoundAtIndex )
+    struct _ContextID_Index_Pair* pSpecialContextIds )
 {
     DBG_ASSERT( rMultiPropSet.is(), "Need multi property set. ");
     DBG_ASSERT( rPropSetInfo.is(), "Need property set info." );
@@ -461,22 +470,32 @@ sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
         const OUString& rPropName = rPropMapper->GetEntryAPIName( nIdx );
         const sal_Int32 nPropFlags = rPropMapper->GetEntryFlags( nIdx );
 
-        if ( ( ( 0 != ( nPropFlags & MID_FLAG_MUST_EXIST ) ) &&
-               ( 0 == ( nPropFlags & ~MID_FLAG_NO_PROPERTY ) )   ) ||
-             rPropSetInfo->hasPropertyByName( rPropName ) )
+        if ( ( 0 == ( nPropFlags & MID_FLAG_NO_PROPERTY ) ) &&
+             ( ( 0 != ( nPropFlags & MID_FLAG_MUST_EXIST ) ) ||
+               rPropSetInfo->hasPropertyByName( rPropName ) )    )
         {
             // save property into property pair structure
             PropertyPair aPair( &rPropName, &rProp.maValue );
             aPropertyPairs.push_back( aPair );
         }
-        else
+
+        // handle no-property and special items
+        if( ( pSpecialContextIds != NULL ) &&
+            ( ( 0 != ( nPropFlags & MID_FLAG_NO_PROPERTY_IMPORT ) ) ||
+              ( 0 != ( nPropFlags & MID_FLAG_SPECIAL_ITEM_IMPORT ) )   ) )
         {
-            // maybe it's out search context id?
-            if( (pFoundAtIndex != NULL) &&
-                (nSearchForContextId != -1) &&
-                (nSearchForContextId == rPropMapper->GetEntryContextId(nIdx)))
+            // maybe it's one of our special context ids?
+            sal_Int16 nContextId = rPropMapper->GetEntryContextId(nIdx);
+            for ( sal_Int32 n = 0;
+                  pSpecialContextIds[n].nContextID != -1;
+                  n++ )
             {
-                *pFoundAtIndex = i;
+                // found: set index in pSpecialContextIds array
+                if ( pSpecialContextIds[n].nContextID == nContextId )
+                {
+                    pSpecialContextIds[n].nIndex = i;
+                    break; // early out
+                }
             }
         }
     }

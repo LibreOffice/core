@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-20 12:01:47 $
+ *  last change: $Author: dvo $ $Date: 2001-06-25 17:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,11 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "CharEscapementHeight", STYLE, text_position,  XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
     // RES_CHRATR_FONT
     M_ED( "CharFontName",   STYLE,  font_name,          XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME ),
+#ifdef CONV_STAR_FONTS
+    M_ED( "CharFontName",   FO,     font_family,        XML_TYPE_TEXT_FONTFAMILYNAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTFAMILYNAME ),
+#else
     M_ED( "CharFontName",   FO,     font_family,        XML_TYPE_TEXT_FONTFAMILYNAME, CTF_FONTFAMILYNAME ),
+#endif
     M_ED( "CharFontStyleName",STYLE,    font_style_name,    XML_TYPE_STRING, CTF_FONTSTYLENAME ),
     M_ED( "CharFontFamily", STYLE,  font_family_generic,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY ),
     M_ED( "CharFontPitch",  STYLE,  font_pitch,         XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH ),
@@ -155,7 +159,11 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "CharBackColor",   FO, text_background_color, XML_TYPE_COLOR|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_OLDTEXTBACKGROUND ),
     // RES_CHRATR_CJK_FONT
     M_ED( "CharFontNameAsian",  STYLE,  font_name_asian,            XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME_CJK ),
+#ifdef CONV_STAR_FONTS
+    M_ED( "CharFontNameAsian",  STYLE,      font_family_asian,      XML_TYPE_TEXT_FONTFAMILYNAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTFAMILYNAME_CJK ),
+#else
     M_ED( "CharFontNameAsian",  STYLE,      font_family_asian,      XML_TYPE_TEXT_FONTFAMILYNAME, CTF_FONTFAMILYNAME_CJK ),
+#endif
     M_ED( "CharFontStyleNameAsian",STYLE,   font_style_name_asian,  XML_TYPE_STRING, CTF_FONTSTYLENAME_CJK ),
     M_ED( "CharFontFamilyAsian",    STYLE,  font_family_generic_asian,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY_CJK ),
     M_ED( "CharFontPitchAsian", STYLE,  font_pitch_asian,           XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH_CJK ),
@@ -173,7 +181,11 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "CharWeightAsian",     STYLE,      font_weight_asian,      XML_TYPE_TEXT_WEIGHT, 0 ),
     // RES_CHRATR_CTL_FONT
     M_ED( "CharFontNameComplex",    STYLE,  font_name_complex,          XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME_CTL ),
+#ifdef CONV_STAR_FONTS
+    M_ED( "CharFontNameComplex",    STYLE,      font_family_complex,        XML_TYPE_TEXT_FONTFAMILYNAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTFAMILYNAME_CTL ),
+#else
     M_ED( "CharFontNameComplex",    STYLE,      font_family_complex,        XML_TYPE_TEXT_FONTFAMILYNAME, CTF_FONTFAMILYNAME_CTL ),
+#endif
     M_ED( "CharFontStyleNameComplex",STYLE, font_style_name_complex,    XML_TYPE_STRING, CTF_FONTSTYLENAME_CTL ),
     M_ED( "CharFontFamilyComplex",  STYLE,  font_family_generic_complex,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY_CTL ),
     M_ED( "CharFontPitchComplex",   STYLE,  font_pitch_complex,         XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH_CTL ),
@@ -369,7 +381,11 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_E( "CharEscapementHeight", STYLE, text_position,  XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
     // RES_CHRATR_FONT
     M_ED( "CharFontName",   STYLE,  font_name,          XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME ),
+#ifdef CONV_STAR_FONTS
+    M_ED( "CharFontName",   FO,     font_family,        XML_TYPE_TEXT_FONTFAMILYNAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTFAMILYNAME ),
+#else
     M_ED( "CharFontName",   FO,     font_family,        XML_TYPE_TEXT_FONTFAMILYNAME, CTF_FONTFAMILYNAME ),
+#endif
     M_ED( "CharFontStyleName",STYLE,    font_style_name,    XML_TYPE_STRING, CTF_FONTSTYLENAME ),
     M_ED( "CharFontFamily", STYLE,  font_family_generic,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY ),
     M_ED( "CharFontPitch",  STYLE,  font_pitch,         XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH ),
@@ -412,7 +428,11 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_E( "CharBackColor",   FO, text_background_color, XML_TYPE_COLOR|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_OLDTEXTBACKGROUND ),
     // RES_CHRATR_CJK_FONT
     M_ED( "CharFontNameAsian",  STYLE,  font_name_asian,            XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME_CJK ),
+#ifdef CONV_STAR_FONTS
+    M_ED( "CharFontNameAsian",  STYLE,      font_family_asian,      XML_TYPE_TEXT_FONTFAMILYNAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTFAMILYNAME_CJK ),
+#else
     M_ED( "CharFontNameAsian",  STYLE,      font_family_asian,      XML_TYPE_TEXT_FONTFAMILYNAME, CTF_FONTFAMILYNAME_CJK ),
+#endif
     M_ED( "CharFontStyleNameAsian",STYLE,   font_style_name_asian,  XML_TYPE_STRING, CTF_FONTSTYLENAME_CJK ),
     M_ED( "CharFontFamilyAsian",    STYLE,  font_family_generic_asian,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY_CJK ),
     M_ED( "CharFontPitchAsian", STYLE,  font_pitch_asian,           XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH_CJK ),
@@ -430,7 +450,11 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_E( "CharWeightAsian",     STYLE,      font_weight_asian,      XML_TYPE_TEXT_WEIGHT, 0 ),
     // RES_CHRATR_CTL_FONT
     M_ED( "CharFontNameComplex",    STYLE,  font_name_complex,          XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME_CTL ),
+#ifdef CONV_STAR_FONTS
+    M_ED( "CharFontNameComplex",    STYLE,      font_family_complex,        XML_TYPE_TEXT_FONTFAMILYNAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTFAMILYNAME_CTL ),
+#else
     M_ED( "CharFontNameComplex",    STYLE,      font_family_complex,        XML_TYPE_TEXT_FONTFAMILYNAME, CTF_FONTFAMILYNAME_CTL ),
+#endif
     M_ED( "CharFontStyleNameComplex",STYLE, font_style_name_complex,    XML_TYPE_STRING, CTF_FONTSTYLENAME_CTL ),
     M_ED( "CharFontFamilyComplex",  STYLE,  font_family_generic_complex,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY_CTL ),
     M_ED( "CharFontPitchComplex",   STYLE,  font_pitch_complex,         XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH_CTL ),

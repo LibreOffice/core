@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
+ *  last change: $Author: dvo $ $Date: 2001-06-25 17:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,6 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
     }
 }
 
-
 void XMLTextStyleContext::FillPropertySet(
     const Reference<XPropertySet > & rPropSet )
 {
@@ -392,7 +391,16 @@ void XMLTextStyleContext::FillPropertySet(
         // intelligent solution.
 
 
-        sal_Int32 nCombinedCharactersIndex = -1;
+        struct _ContextID_Index_Pair aContextIDs[] =
+        {
+            { CTF_COMBINED_CHARACTERS_FIELD, -1 },
+#ifdef CONV_STAR_FONTS
+            { CTF_FONTFAMILYNAME, -1 },
+            { CTF_FONTFAMILYNAME_CJK, -1 },
+            { CTF_FONTFAMILYNAME_CTL, -1 },
+#endif
+            { -1, -1 }
+        };
 
         // get property set info
         Reference< XPropertySetInfo > xInfo = rPropSet->getPropertySetInfo();
@@ -404,23 +412,70 @@ void XMLTextStyleContext::FillPropertySet(
             // Try XMultiPropertySet. If that fails, try the regular route.
             sal_Bool bSet = SvXMLImportPropertyMapper::_FillMultiPropertySet(
                 GetProperties(), xMultiPropSet, xInfo, rPropMapper,
-                CTF_COMBINED_CHARACTERS_FIELD, &nCombinedCharactersIndex );
+                aContextIDs );
             if ( !bSet )
                 SvXMLImportPropertyMapper::_FillPropertySet(
                     GetProperties(), rPropSet, xInfo, rPropMapper,
-                    CTF_COMBINED_CHARACTERS_FIELD, &nCombinedCharactersIndex );
+                    aContextIDs );
         }
         else
             SvXMLImportPropertyMapper::_FillPropertySet(
                     GetProperties(), rPropSet, xInfo, rPropMapper,
-                    CTF_COMBINED_CHARACTERS_FIELD, &nCombinedCharactersIndex );
+                    aContextIDs );
 
         // have we found a combined characters
-        if ( nCombinedCharactersIndex != -1 )
+        sal_Int32 nIndex = aContextIDs[0].nIndex;
+        if ( nIndex != -1 )
         {
-            Any& rAny = GetProperties()[nCombinedCharactersIndex].maValue;
+            Any& rAny = GetProperties()[nIndex].maValue;
             sal_Bool bVal = *(sal_Bool*)rAny.getValue();
             bHasCombinedCharactersLetter = bVal;
         }
+
+#ifdef CONV_STAR_FONTS
+        // check for StarBats and StarMath fonts
+
+        // iterate over aContextIDs entries 1..3
+        for ( sal_Int32 i = 1; i < 4; i++ )
+        {
+            nIndex = aContextIDs[i].nIndex;
+            if ( nIndex != -1 )
+            {
+                // Found!
+                struct XMLPropertyState& rState = GetProperties()[nIndex];
+                Any rAny = rState.maValue;
+                sal_Int32 nMapperIndex = rState.mnIndex;
+
+                // Now check for font name in rState and set corrected value,
+                // if necessary.
+                OUString sFontName;
+                rAny >>= sFontName;
+                if ( sFontName.getLength() > 0 )
+                {
+                    if ( sFontName.equalsAsciiL(
+                                  RTL_CONSTASCII_STRINGPARAM("StarBats" ) ) ||
+                         sFontName.equalsAsciiL(
+                                  RTL_CONSTASCII_STRINGPARAM("StarMath" ) ) )
+                    {
+                        // construct new value
+                        sFontName = OUString(
+                            RTL_CONSTASCII_USTRINGPARAM("StarSymbol") );
+                        Any aAny( rAny );
+                        aAny <<= sFontName;
+
+                        // set property
+                        OUString rPropertyName(
+                            rPropMapper->GetEntryAPIName(nMapperIndex) );
+                        if ( xInfo->hasPropertyByName( rPropertyName ) )
+                        {
+                            rPropSet->setPropertyValue( rPropertyName, aAny );
+                        }
+                    }
+                    // else: "normal" style name -> no correction is necessary
+                }
+                // else: no style name found -> illegal value -> ignore
+            }
+        }
+#endif
     }
 }
