@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 09:03:15 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2715,7 +2715,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Bepaalt de variantie m.b.t. de hele populatie van alle cellen van een gegevensbereik, waarvan de inhoud aan de zoekcriteria voldoet.";
             Text[ chinese_simplified ] = "¼ÆËãÒ»¸öÊı¾İÇøÓòÄÚ·ûºÏËÑÑ°Ìõ¼şµÄËùÓĞµ¥Ôª¸ñÖĞÊı¾İµÄ×ÜÌå·½²î¡£";
             Text[ greek ] = "Õğïëïãßæåé ôç äéáêıìáíóç ôïõ ğëçèõóìïı ìå âÜóç üëá ôá êåëéÜ ôçò ğåñéï÷Şò äåäïìİíùí, ôùí ïğïßùí ôá ğåñéå÷üìåíá åğáëçèåıïõí ôá êñéôŞñéá áíáæŞôçóçò.";
-            Text[ korean ] = "³»¿ëÀÌ °Ë»ö ±âÁØ¿¡ »óÀÀÇÏ´Â µ¥ÀÌÅÍ ¿µ¿ªÀÇ ¸ğµç ¼¿ÀÇ  ÀüÃ¼¿Í °ü·Ã, º¯¼ö¸¦ °áÁ¤.";
+            Text[ korean ] = "³»¿ëÀÌ °Ë»ö ±âÁØ¿¡ »óÀÀÇÏ´Â µ¥ÀÌÅÍ ¿µ¿ªÀÇ ¸ğµç ¼¿¿¡¼­  ÀüÃ¼¿Í °ü·Ã, º¯ÇüÀ» °áÁ¤.";
             Text[ turkish ] = "Veri aralığında olup içerikleri arama ölçütlerine uyan tüm hücrelerin popülasyonu ile ilgili varyansı belirler.";
             Text[ language_user1 ] = " ";
         };
@@ -3014,7 +3014,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Ò»¸öÔÚ 1583 ºÍ 9956 Ö®¼ä»òÕßÔÚ 0 ºÍ 99 Ö®¼äµÄÕûÊı\n(19xx »ò20xx £¬ÊÓÑ¡Ïî¶ø¶¨)¡£";
             Text[ russian ] = "Öåëîå ÷èñëî îò 1583 è äî 9956, èëè îò 0 è äî 99 (19xx èëè 20xx ñîãëàñíî óñòàíîâëåííîãî ïàğàìåòğà).";
             Text[ polish ] = "Liczba ca³kowita pomiêdzy 1583 i 9956, lub 0 i 99 (19xx lub 20xx wed³ug ustawionej opcji).";
-            Text[ japanese ] = "1583‚©‚ç9956A‚ ‚é‚¢‚Í‚O‚©‚ç99(µÌß¼®İ‚Åİ’è‚³‚ê‚½19xx‚Ü‚½‚Í20xx)‚Ü‚Å‚Ì®”B";
+            Text[ japanese ] = "1583‚©‚ç9956A‚ ‚é‚¢‚Í0‚©‚ç99(µÌß¼®İ‚Åİ’è‚³‚ê‚½19xx‚Ü‚½‚Í20xx)‚Ü‚Å‚Ì®”B";
             Text[ chinese_traditional ] = "¤@­Ó¦b 1583 ©M 9956 ¤§¶¡©ÎªÌ¦b 0 ©M 99 ¤§¶¡ªº¾ã¼Æ(19xx ©Î20xx ¡Mµø¿ï¶µ¦Ó©w)¡C";
             Text[ arabic ] = "ÑŞã ÕÍíÍ Èíä 1583 æ9956¡ Ãæ Èíä 0 æ99 (19xx Ãæ  20xxÊÈÚÇğ ááÎíÇÑ ÇáãÍÏÏ).";
             Text[ dutch ] = "Een geheel getal tussen 1583 en 9956, of tussen 0 en 19 (19xx of 20xx overeenkomstig ingestelde optie).";
@@ -3079,7 +3079,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÓÃÓÚÔÂ·İÊıµÄÔÚ 1 ºÍ 12 Ö®¼äµÄÒ»¸öÕûÊı¡£";
             Text[ russian ] = "Öåëîå ÷èñëî îò 1 äî 12, ïğåäñòàâëÿşùåå íîìåğ ìåñÿöà â ãîäó.";
             Text[ polish ] = "Liczba ca³kowita pomiêdzy 1 i 12 dla wyra¿enia miesiêcy.";
-            Text[ japanese ] = "‚P‚©‚ç12‚Ü‚Å‚ÌŒ‚Ì”’lB";
+            Text[ japanese ] = "1‚©‚ç12‚Ü‚Å‚ÌŒ‚Ì”’lB";
             Text[ chinese_traditional ] = "¥Î©ó¤ë¥÷¼Æªº¦b 1 ©M 12 ¤§¶¡ªº¤@­Ó¾ã¼Æ¡C";
             Text[ arabic ] = "ÑŞã ÕÍíÍ ãä 1 Åáì 12 íÓÊÎÏã ááÔåÑ.";
             Text[ dutch ] = "De maand wordt weergegeven als een geheel getal.";
@@ -3144,7 +3144,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÓÃÓÚÌìÊıµÄÔÚ 1 ºÍ 31 Ö®¼äµÄÒ»¸öÕûÊı¡£";
             Text[ russian ] = "Öåëîå ÷èñëî îò 1 äî 31, ïğåäñòàâëÿşùåå íîìåğ äíÿ â ìåñÿöå.";
             Text[ polish ] = "Liczba ca³kowita pomiêdzy 1 i 31 dla wyra¿enia dni.";
-            Text[ japanese ] = "‚P‚©‚ç31‚Ü‚Å‚Ì“ú•t‚Ì”’lB";
+            Text[ japanese ] = "1‚©‚ç31‚Ü‚Å‚Ì“ú•t‚Ì”’lB";
             Text[ chinese_traditional ] = "¥Î©ó¤Ñ¼Æªº¦b 1 ©M 31 ¤§¶¡ªº¤@­Ó¾ã¼Æ¡C";
             Text[ arabic ] = "ÑŞã ÕÍíÍ ãä 1 Åáì 31 íãËá Çáíæã.";
             Text[ dutch ] = "De dag wordt weergegeven als een geheel getal tussen 1 en 31.";
@@ -3288,7 +3288,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "È·¶¨ÓëÈÕÆÚÖµÏà¶ÔÓ¦µÄ£¬ÇÒÓÃÕûÊı 1 µ½ 31 ±íÊ¾µÄ£¬Ò»ÔÂÄÚµÄÄ³Ìì¡£";
             Text[ russian ] = "Ïğåîáğàçóåò äàòó â äåíü ìåñÿöà (÷èñëî îò 1 äî 31).";
             Text[ polish ] = "Konwertuje kolejny numer na dzieñ miesi¹ca w postaci liczby (1 - 31).";
-            Text[ japanese ] = "“ú•t‚Ì¼Ø±Ù’l‚ª‚»‚ÌŒ‚Ì‰½“ú–Ú‚É‚ ‚½‚é‚©‚ğ”’l(‚P`31)‚Å•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "“ú•t‚Ì¼Ø±Ù’l‚ª‚»‚ÌŒ‚Ì‰½“ú–Ú‚É‚ ‚½‚é‚©‚ğ”’l(1`31)‚Å•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "Âà´«¤é´Á§Ç¦C¼Æ¦¨¹ïÀ³ªº¤@¤ë¤ºªº¬Y¤Ñ¡M¥Î¾ã¼Æ 1 ¨ì 31 ªí¥Ü¡C";
             Text[ arabic ] = "ÊÍæá ÑŞãÇğ ãÓáÓáÇğ Åáì íæã İí ÔåÑ.";
             Text[ dutch ] = "Converteert de actuele dag van de maand naar een serieel getal tussen 1 en 31.";
@@ -3394,7 +3394,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "°´ÕÕÒ»Äê360ÌìµÄ¹æÔò£¬¼ÆËãÁ½¸öÈÕÆÚÖ®¼äµÄÏà²îÌìÊı¡£";
             Text[ russian ] = "Âû÷èñëÿåò êîëè÷åñòâî äíåé ìåæäó äâóìÿ äàòàìè íà îñíîâå 360-äíåâíîãî ãîäà.";
             Text[ polish ] = "Oblicza liczbê dni zawartych pomiêdzy dwiema datami w oparciu o rok licz¹cy 360 dni.";
-            Text[ japanese ] = "‚Q‚Â‚Ì“ú•t‚ÌŠÔ‚Ì“ú”‚ğ•Ô‚µ‚Ü‚·B(‚P”N‚ğ360“ú‚Æ‚·‚é)";
+            Text[ japanese ] = "2‚Â‚Ì“ú•t‚ÌŠÔ‚Ì“ú”‚ğ•Ô‚µ‚Ü‚·B(1”N‚ğ360“ú‚Æ‚·‚é)";
             Text[ chinese_traditional ] = "«ö·Ó¤@¦~ 360¤Ñªººâªk¡M­pºâ¨â­Ó¤é´Áªº¬Û®t¤Ñ¼Æ¡C";
             Text[ arabic ] = "ÊÍÓÈ ÚÏÏ ÇáÃíÇã Èíä ÊÇÑíÎíä ÇÓÊäÇÏÇğ Åáì ÓäÉ İíåÇ 360 íæãÇğ.";
             Text[ dutch ] = "Bepaalt het aantal dagen tussen twee data op basis van 360 dagen per jaar.";
@@ -3432,7 +3432,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÈÕÆÚ_1";
             Text[ russian ] = "Äàòà_1";
             Text[ polish ] = "Data_1";
-            Text[ japanese ] = "“ú•t‚P";
+            Text[ japanese ] = "“ú•t 1";
             Text[ chinese_traditional ] = "date_1";
             Text[ arabic ] = "ÇáÊÇÑíÎ_1";
             Text[ dutch ] = "Datum_1";
@@ -3496,7 +3496,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÈÕÆÚ_2";
             Text[ russian ] = "Äàòà_2";
             Text[ polish ] = "Data_2";
-            Text[ japanese ] = "“ú•t‚Q";
+            Text[ japanese ] = "“ú•t 2";
             Text[ chinese_traditional ] = "date_2";
             Text[ arabic ] = "ÇáÊÇÑíÎ_2";
             Text[ dutch ] = "Datum_2";
@@ -3592,7 +3592,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "¹¹³É²îÊıµÄ·½Ê½¡£type = 0 ±íÊ¾ÃÀ¹ú·½Ê½(NASD)£¬ \ntype = 1 ±íÊ¾Å·ÖŞ·½Ê½¡£";
             Text[ russian ] = "Îïğåäåëÿåò, êàêîé ìåòîä äîëæåí èñïîëüçîâàòüñÿ ïğè âû÷èñëåíèè ğàçíîñòè: ìåòîä ÑØÀ (NASD) (1) èëè åâğîïåéñêèé ìåòîä (0).";
             Text[ polish ] = "Rodzaj obliczania ró¿nicy: 0 oznacza metodê amerykañsk¹ (NASD), 1 - europejsk¹.";
-            Text[ japanese ] = "Zo•û®B•û®‚O •Ä‘(NASD)•û®¤ •û®‚P Ö°Û¯Êß•û®B";
+            Text[ japanese ] = "Zo•û®B•û® = 0 •Ä‘(NASD)•û®¤ •û® = 1 Ö°Û¯Êß•û®B";
             Text[ chinese_traditional ] = "ºc¦¨®t¼Æªº¤è¦¡¡Ctype = 0 ªí¥Ü¬ü°ê¤è¦¡(NASD)¡M type = 1 ªí¥Ü¼Ú¬w¤è¦¡¡C";
             Text[ arabic ] = "ØÑíŞÉ ÍÓÇÈ ÇáİÇÑŞ. Type = 0 ÊÑãÒ Åáì ÇáØÑíŞÉ ÇáÃãÑíßíÉ (NASD) ¡  Type = 1  ÊÑãÒ Åáì ÇáØÑíŞÉ ÇáÃæÑæÈíÉ .";
             Text[ dutch ] = "Wijze van bepaling van het aantal dagen. Methode = 0 betekent VS-methode (NASD), Methode = 1 betekent Europese methode.";
@@ -3628,7 +3628,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "È·¶¨ÓëÊ±¼äÖµ¶ÔÓ¦µÄĞ¡Ê±Êı(0 - 23)¡£";
             Text[ russian ] = "Ïğåîáğàçóåò äàòó â ÷èñëîâîì ôîğìàòå (0 - 23) â ÷àñû.";
             Text[ polish ] = "Podaje godzinê odpowiednio do numeru kolejnego (liczba ca³kowita od 0 do 23).";
-            Text[ japanese ] = "ŠÔ‚Ì¼Ø±Ù’l‚ª‚»‚Ì“ú‚Ì‰½‚É‚ ‚½‚é‚©‚ğ”’l(‚O`23)‚Å•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "ŠÔ‚Ì¼Ø±Ù’l‚ª‚»‚Ì“ú‚Ì‰½‚É‚ ‚½‚é‚©‚ğ”’l(0`23)‚Å•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "Âà´«¼Æ¦r¦¨¤p®É¼Æ(0 - 23)¡C";
             Text[ arabic ] = "ÊÍæá ÑŞã ÊÓáÓáí Åáì ÓÇÚÉ İí íæã (ãä 0 Åáì 23).";
             Text[ dutch ] = "Converteert een tijdswaarde naar een uur van de dag dat wordt weergegeven als getal (0-23).";
@@ -3840,7 +3840,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "È·¶¨ÓëÊ±¼äÖµ¶ÔÓ¦µÄÔÂ·İÊı(1 - 12)¡£";
             Text[ russian ] = "Ïğåîáğàçóåò äàòó â ÷èñëîâîì ôîğìàòå â ìåñÿö (÷èñëî îò 1 äî 12).";
             Text[ polish ] = "Podaje miesi¹c odpowiadaj¹cy numerowi kolejnemu jako liczbê (1 - 12).";
-            Text[ japanese ] = "“ú•t‚Ì¼Ø±Ù’l‚ª‚»‚Ì”N‚Ì‰½Œ‚É‚ ‚½‚é‚©‚ğ”’l(‚P`12)‚Å•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "“ú•t‚Ì¼Ø±Ù’l‚ª‚»‚Ì”N‚Ì‰½Œ‚É‚ ‚½‚é‚©‚ğ”’l(1`12)‚Å•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "Âà´«¼Æ¦r¦¨¤ë¥÷¼Æ(1 - 12)¡C";
             Text[ arabic ] = "ÊÍæá ÑŞã ÊÓáÓáí Åáì ÔåÑ (ãä 1 Åáì 12)";
             Text[ dutch ] = "Converteert een tijdswaarde naar een maand als getal (1 - 12).";
@@ -3988,7 +3988,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "È·¶¨ÓëÊ±¼äÖµ¶ÔÓ¦µÄÃëÖÓÊı(0 - 59)¡£";
             Text[ russian ] = "Ïğåîáğàçóåò äàòó â ÷èñëîâîì ôîğìàòå â ñåêóíäû (÷èñëî îò 0 äî 59).";
             Text[ polish ] = "Podaje w wyniku sekundê, której przyporz¹dkowany jest numer_kolejny (liczba ca³kowita w zakresie od 0 do 59).";
-            Text[ japanese ] = "ŠÔ‚Ì¼Ø±Ù’l‚ª‚»‚Ì•ª‚Ì‰½•b‚É‚ ‚½‚é‚©‚ğ”’l(‚O`59)‚Å•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "ŠÔ‚Ì¼Ø±Ù’l‚ª‚»‚Ì•ª‚Ì‰½•b‚É‚ ‚½‚é‚©‚ğ”’l(0`59)‚Å•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "Âà´«¼Æ¦r¦¨¬íÄÁ¼Æ(0 - 59)¡C";
             Text[ arabic ] = "ÊÍæá ÑŞã ÊÓáÓáí Åáì ËÇäíÉ İí ÏŞíŞÉ (ãä 0 Åáì 59).";
             Text[ dutch ] = "Converteert een tijdswaarde naar een seconde, die wordt weergegeven als getal (0 - 59).";
@@ -4166,7 +4166,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Ğ¡Ê±Êı±ØĞëÎªÕûÊı¡£";
             Text[ russian ] = "Öåëîå ÷èñëî, ïğåäñòàâëÿşùåå ÷àñ.";
             Text[ polish ] = "Liczby ca³kowite pomiêdzy 0 i 23 dla wyra¿enia godziny.";
-            Text[ japanese ] = "‚O‚©‚ç23‚ÌŠÔ‚Ì”’l";
+            Text[ japanese ] = "0‚©‚ç23‚ÌŠÔ‚Ì”’l";
             Text[ chinese_traditional ] = "¤p®É¼Æ¬°¾ã¼Æ¡C";
             Text[ arabic ] = "ÑŞã ÕÍíÍ ãä 0 Åáì 23 íãËá ÇáÓÇÚÉ.";
             Text[ dutch ] = "Resulteert in een geheel getal tussen 0 en 23 voor uren.";
@@ -4231,7 +4231,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "·ÖÖÓÊı±ØĞëÎªÕûÊı¡£";
             Text[ russian ] = "Öåëîå ÷èñëî, ïğåäñòàâëÿşùåå ìèíóòó.";
             Text[ polish ] = "Liczby ca³kowite pomiêdzy 0 i 59 dla wyra¿enia minuty.";
-            Text[ japanese ] = "‚O‚©‚ç59‚Ì•ª‚Ì”’l";
+            Text[ japanese ] = "0‚©‚ç59‚Ì•ª‚Ì”’l";
             Text[ chinese_traditional ] = "¤ÀÄÁ¼Æ¬°¾ã¼Æ¡C";
             Text[ arabic ] = "ÑŞã ÕÍíÍ ãä 0 Åáì 59 íãËá ÇáÏŞíŞÉ.";
             Text[ dutch ] = "Resulteert in een geheel getal tussen 0 en 59 voor minuten.";
@@ -4296,7 +4296,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÃëÊı±ØĞëÎªÕûÊı¡£";
             Text[ russian ] = "Öåëîå ÷èñëî, ïğåäñòàâëÿşùåå ñåêóíäó.";
             Text[ polish ] = "Liczby ca³kowite pomiêdzy 0 i 59 dla wyra¿enia sekundy.";
-            Text[ japanese ] = "‚O‚©‚ç59‚Ì•b‚Ì”’l";
+            Text[ japanese ] = "0‚©‚ç59‚Ì•b‚Ì”’l";
             Text[ chinese_traditional ] = "¬í¼Æ¬°¾ã¼Æ¡C";
             Text[ arabic ] = "ÑŞã ÕÍíÍ ãä 0 Åáì 59 íãËá ÇáËÇäíÉ.";
             Text[ dutch ] = "Resulteert in een geheel getal tussen 0 en 59 voor seconden.";
@@ -4482,7 +4482,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "È·¶¨ÓëÈÕÆÚÖµÏà¶ÔÓ¦µÄÒ»ÖÜÄÚµÄÄ³Ìì£¬½á¹ûÓÃ½éÓÚ1ºÍ7Ö®¼äµÄÕûÊı±íÊ¾¡£";
             Text[ russian ] = "Ïğåîáğàçóåò äàòó â ÷èñëîâîì ôîğìàòå â íîìåğ äíÿ íåäåëè (÷èñëî îò 1 äî 7).";
             Text[ polish ] = "Podaje dzieñ tygodnia odpowiadaj¹cy numerowi kolejnemu (liczba ca³kowita od 1 do 7).";
-            Text[ japanese ] = "“ú•t‚Ì¼Ø±Ù’l‚ª‰½—j“ú‚É‚ ‚½‚é‚©‚ğ”’l(‚P`‚V)‚Å•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "“ú•t‚Ì¼Ø±Ù’l‚ª‰½—j“ú‚É‚ ‚½‚é‚©‚ğ”’l(1`7)‚Å•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "Âà´«¤é´Á¦¨¹ïÀ³ªº¤@¶g¤ºªº¬Y¤Ñ(1-7)¡C";
             Text[ arabic ] = "ÊÍæá ÑŞã ÊÓáÓáí Åáì íæã İí ÇáÃÓÈæÚ (ãä 1 Åáì 7).";
             Text[ dutch ] = "Converteert een bepaalde dag van de week naar een serieel getal (1 - 7).";
@@ -4758,7 +4758,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "¼ÆËãÁ½¸öÈÕÆÚµÄÏà²îÌìÊı¡£";
             Text[ russian ] = "Îïğåäåëÿåò êîëè÷åñòâî äíåé ìåæäó äâóìÿ äàòàìè.";
             Text[ polish ] = "Okreœla liczbê dni pomiêdzy dwoma datami.";
-            Text[ japanese ] = "‚Q‚Â‚Ì“ú•t‚ÌŠÔ‚Ì“ú”‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "2‚Â‚Ì“ú•t‚ÌŠÔ‚Ì“ú”‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "­pºâ¨â­Ó¤é´Áªº¬Û®t¤Ñ¼Æ¡C";
             Text[ arabic ] = "ÊÍÓÈ ÚÏÏ ÇáÃíÇã Èíä ÊÇÑíÎíä.";
             Text[ dutch ] = "Bepaalt het aantal dagen tussen twee data.";
@@ -4796,7 +4796,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÈÕÆÚ_2";
             Text[ russian ] = "Äàòà_2";
             Text[ polish ] = "Data_2";
-            Text[ japanese ] = "“ú•t‚Q";
+            Text[ japanese ] = "“ú•t 2";
             Text[ chinese_traditional ] = "date_2";
             Text[ arabic ] = "ÇáÊÇÑíÎ_2";
             Text[ dutch ] = "Datum_2";
@@ -4860,7 +4860,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÈÕÆÚ_1";
             Text[ russian ] = "Äàòà_1";
             Text[ polish ] = "Data_1";
-            Text[ japanese ] = "“ú•t‚P";
+            Text[ japanese ] = "“ú•t 1";
             Text[ chinese_traditional ] = "date_1";
             Text[ arabic ] = "ÇáÊÇÑíÎ_1";
             Text[ dutch ] = "Datum_1";
@@ -5149,7 +5149,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ swedish ] = "Ett heltal mellan 1583 och 9956, eller 0 och 99 (19xx eller 20xx enligt inställt alternativ).";
             Text[ polish ] = "jest liczb¹ ca³kowit¹ pomiêdzy 1583 i 9956 lub 0 i 99 (19xx lub 20xx wed³ug ustawionej opcji).";
             Text[ portuguese_brazilian ] = "is an integer between 1583 and 9956 or 0 and 99 (19xx or 20xx depending on the defined option).";
-            Text[ japanese ] = "1583‚©‚ç9956‚Ü‚ÅA‚ ‚é‚¢‚Í‚O‚©‚ç99‚Ü‚Å‚Ì®”(19xx ‚Ü‚½‚Í20xx ’è‹`‚µ‚½µÌß¼®İ‚É‰‚¶‚é)B";
+            Text[ japanese ] = "1583‚©‚ç9956‚Ü‚ÅA‚ ‚é‚¢‚Í0‚©‚ç99‚Ü‚Å‚Ì®”(19xx ‚Ü‚½‚Í20xx ’è‹`‚µ‚½µÌß¼®İ‚É‰‚¶‚é)B";
             Text[ chinese_simplified ] = "ÊÇÒ»¸öÔÚ1583 ºÍ 9956 »ò 0 ºÍ 99 Ö®¼äµÄÕûÊı\n(19xx »ò 20xx Æğ¾öÓÚÉè¶¨µÄÑ¡Ïî)¡£";
             Text[ chinese_traditional ] = "¬O¤@­Ó¦b1583 ©M 9956 ©Î 0 ©M 99 ¤§¶¡ªº¾ã¼Æ(19xx ©Î 20xx °_¨M¤_³]©wªº¿ï¶µ)¡C";
             Text[ arabic ] = "ÑŞã ÕÍíÍ Èíä 1583 æ9956¡ Ãæ Èíä 0 æ99 (19xx Ãæ  20xxÊÈÚÇğ ááÎíÇÑ ÇáãÍÏÏ).";
@@ -5518,7 +5518,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "µ½ÆÚÀàĞÍ¡£ type = 1 ±íÊ¾ÔÚÖÜÆÚ¿ªÊ¼Ê±µ½ÆÚ£¬type= 0 ±íÊ¾ÔÚÖÜÆÚ½áÊøÊ±µ½ÆÚ¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå (0 èëè1), îáîçíà÷àşùåå, äîëæíà ëè ïğîèçâîäèòüñÿ âûïëàòà â êîíöå ïåğèîäà (0) èëè â íà÷àëå ïåğèîäà (1).";
             Text[ polish ] = "Wartoœæ 0 lub 1 okreœlaj¹ca sposób dokonywania p³atnoœci (z do³u lub z góry).";
-            Text[ japanese ] = "x•¥Šú“úBx•¥Šú‚P‚ÍŠeŠú‚ÌŠúñAx•¥Šú“ú‚O‚ÍŠeŠú‚ÌŠú––B";
+            Text[ japanese ] = "x•¥Šú“úBx•¥Šú = 1 ‚ÍŠeŠú‚ÌŠúñAx•¥Šú“ú = 0 ‚ÍŠeŠú‚ÌŠú––B";
             Text[ chinese_traditional ] = "¨ì´ÁÃş«¬¡C F = 1 ªí¥Ü¦b¶g´Á¶}©l®É¨ì´Á¡MF = 0 ªí¥Ü¦b¶g´Áµ²§ô®É¨ì´Á¡C";
             Text[ arabic ] = "ÇáÏİÚ İí ÈÏÇíÉ ÇáİÊÑÉ ı= 1º ÇáÏİÚ İí äåÇíÉ ÇáİÊÑÉ = 0.";
             Text[ dutch ] = "Vervaltijd. V = 1 betekent verval aan het begin van een periode, V = 0 aan het einde.";
@@ -5886,7 +5886,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "µ½ÆÚÀàĞÍ¡£ type = 1 ±íÊ¾ÔÚÖÜÆÚ¿ªÊ¼Ê±µ½ÆÚ£¬type= 0 ±íÊ¾ÔÚÖÜÆÚ½áÊøÊ±µ½ÆÚ¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå (0 èëè1), îáîçíà÷àşùåå, äîëæíà ëè ïğîèçâîäèòüñÿ âûïëàòà â êîíöå ïåğèîäà (0) èëè â íà÷àëå ïåğèîäà (1).";
             Text[ polish ] = "Wartoœæ 0 lub 1 okreœlaj¹ca sposób dokonywania p³atnoœci ( z do³u lub z góry).";
-            Text[ japanese ] = "x•¥Šú“úAx•¥Šú“ú‚PŠeŠú‚ÌŠúñAx•¥Šú“ú‚OŠeŠú‚ÌŠú––B";
+            Text[ japanese ] = "x•¥Šú“úAx•¥Šú“ú = 1 ŠeŠú‚ÌŠúñAx•¥Šú“ú = 0 ŠeŠú‚ÌŠú––B";
             Text[ chinese_traditional ] = "¨ì´ÁÃş«¬¡C F = 1 ªí¥Ü¦b´Áªì®É¨ì´Á¡MF = 0 ªí¥Ü¦b´Á¥½®É¨ì´Á¡C";
             Text[ arabic ] = "ÇáÏİÚ İí ÈÏÇíÉ ÇáİÊÑÉ ı= 1º ÇáÏİÚ İí äåÇíÉ ÇáİÊÑÉ = 0.";
             Text[ dutch ] = "Vervaldatum. V = 1 geeft aan dat de betaling moet worden verricht aan het begin van een periode, V = 0 aan het einde.";
@@ -6254,7 +6254,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "µ½ÆÚÀàĞÍ¡£ type = 1 ±íÊ¾ÔÚÖÜÆÚ¿ªÊ¼Ê±µ½ÆÚ£¬type = 0 \n±íÊ¾ÔÚÖÜÆÚ½áÊøÊ±µ½ÆÚ¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå (0 èëè1), îáîçíà÷àşùåå, äîëæíà ëè ïğîèçâîäèòüñÿ âûïëàòà â êîíöå ïåğèîäà (0) èëè â íà÷àëå ïåğèîäà (1).";
             Text[ polish ] = "Wartoœæ 0 lub 1 oznaczaj¹ca sposób dokonywania p³atnoœci (z do³u lub z góry).";
-            Text[ japanese ] = "x•¥Šú“úBx•¥Šú“ú‚P‚ÍŠeŠú‚ÌŠúñAx•¥Šú“ú‚O‚ÍŠeŠú‚ÌŠú––B";
+            Text[ japanese ] = "x•¥Šú“úBx•¥Šú“ú = 1 ‚ÍŠeŠú‚ÌŠúñAx•¥Šú“ú = 0 ‚ÍŠeŠú‚ÌŠú––B";
             Text[ chinese_traditional ] = "¨ì´ÁÃş«¬¡C F = 1 ªí¥Ü¦b¶g´Á¶}©l®É¨ì´Á¡MF = 0 ªí¥Ü¦b¶g´Áµ²§ô®É¨ì´Á¡C";
             Text[ arabic ] = "ÇáÏİÚ İí ÈÏÇíÉ ÇáİÊÑÉ ı= 1º ÇáÏİÚ İí äåÇíÉ ÇáİÊÑÉ = 0.";
             Text[ dutch ] = "Vervaldatum. V = 1 geeft aan dat de betaling moet worden verricht aan het begin van een periode, V = 0 aan het einde.";
@@ -6555,7 +6555,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Î´À´Öµ¡£Íê³É×îºóÒ»´ÎÖ§¸¶ºó´ïµ½µÄ×îÖÕÖµ¡£";
             Text[ russian ] = "Áóäóùåå çíà÷åíèå. Çíà÷åíèå (êîíå÷íîå çíà÷åíèå), êîòîğîå äîëæíî ïîëó÷èòüñÿ ïîñëå  ïîñëåäíåãî ïëàòåæà.";
             Text[ polish ] = "Przysz³a wartoœæ. Wartoœæ koñcowa, która ma zostaæ osi¹gniêta po dokonaniu ostatniej p³atnoœci.";
-            Text[ japanese ] = "«—ˆ‰¿’lB“Š‘‚Ì«—ˆ‰¿’lA‚Ü‚½‚ÍÅŒã‚Ìx•¥‚¢‚ğs‚Á‚½Œã‚Éc‚éŒ»‹à‚ÌûxB";
+            Text[ japanese ] = "«—ˆ‰¿’lB“Š‘‚Ì«—ˆ‰¿’lA‚Ü‚½‚ÍÅŒã‚Ìx•¥‚¢‚ğs‚Á‚½‚ ‚Æ‚Éc‚éŒ»‹à‚ÌûxB";
             Text[ chinese_traditional ] = "¥¼¨Ó­È¡C§¹¦¨³Ì«á¤@¦¸¤ä¥I«á¹F¨ìªº³Ì²×­È¡C";
             Text[ arabic ] = "ÇáŞíãÉ ÇáãÓÊŞÈáíÉ¡ Ãæ ÇáãíÒÇäíÉ ÇáäŞÏíÉ ÇáÊí ÊÑíÏ ÇáæÕæá ÅáíåÇ ÈÚÏ ÓÏÇÏ ÃÎÑ ÏİÚÉ.";
             Text[ dutch ] = "Toekomstige waarde. De toekomstige waarde, ofwel het saldo dat u wilt bereiken als de laatste betaling is verricht.";
@@ -6622,7 +6622,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "µ½ÆÚÀàĞÍ¡£ type = 1 ±íÊ¾ÔÚÖÜÆÚ¿ªÊ¼Ê±µ½ÆÚ£¬type= 0 ±íÊ¾ÔÚÖÜÆÚ½áÊøÊ±µ½ÆÚ¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå (0 èëè1), îáîçíà÷àşùåå, äîëæíà ëè ïğîèçâîäèòüñÿ âûïëàòà â êîíöå ïåğèîäà (0) èëè â íà÷àëå ïåğèîäà (1).";
             Text[ polish ] = "Wartoœæ 0 lub 1 oznaczaj¹ca sposób dokonywania p³atnoœci (z do³u lub z góry).";
-            Text[ japanese ] = "x•¥Šú“úBx•¥Šú“ú‚P‚ÍŠeŠú‚ÌŠúñAx•¥Šú“ú‚O‚ÍŠeŠú‚ÌŠú––B";
+            Text[ japanese ] = "x•¥Šú“úBx•¥Šú“ú = 1 ‚ÍŠeŠú‚ÌŠúñAx•¥Šú“ú = 0 ‚ÍŠeŠú‚ÌŠú––B";
             Text[ chinese_traditional ] = "¨ì´ÁÃş«¬¡C F = 1 ªí¥Ü¦b¶g´Á¶}©l®É¨ì´Á¡MF = 0 ªí¥Ü¦b¶g´Áµ²§ô®É¨ì´Á¡C";
             Text[ arabic ] = "ÇáÏİÚ İí ÈÏÇíÉ ÇáİÊÑÉ ı= 1º ÇáÏİÚ İí äåÇíÉ ÇáİÊÑÉ = 0.";
             Text[ dutch ] = "Vervaldatum. V = 1 geeft aan dat de betaling moet worden voldaan aan het begin van een periode, V =0 aan het einde.";
@@ -6924,7 +6924,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Î´À´Öµ¡£Íê³É×îºóÒ»´ÎÖ§¸¶ºó´ïµ½µÄ×îÖÕÖµ¡£";
             Text[ russian ] = "Áóäóùàÿ ñòîèìîñòü èëè áàëàíñ íàëè÷íîñòè, êîòîğûé íóæíî äîñòè÷ü ïîñëå ïîñëåäíåé âûïëàòû.";
             Text[ polish ] = "Przysz³a wartoœæ. Wartoœæ koñcowa, która ma zostaæ osi¹gniêta po dokonaniu ostatniej p³atnoœci.";
-            Text[ japanese ] = "“Š‘‚Ì«—ˆ‰¿’lBÅŒã‚Ìx•¥‚¢‚ğs‚Á‚½Œã‚Éc‚éŒ»‹à‚Ìûx‚ğw’è‚µ‚Ü‚·B";
+            Text[ japanese ] = "“Š‘‚Ì«—ˆ‰¿’lBÅŒã‚Ìx•¥‚¢‚ğs‚Á‚½‚ ‚Æ‚Éc‚éŒ»‹à‚Ìûx‚ğw’è‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¥¼¨Ó­È¡C§¹¦¨³Ì«á¤@¦¸¤ä¥I«á¹F¨ìªº³Ì²×­È¡C";
             Text[ arabic ] = "ÇáŞíãÉ ÇáãÓÊŞÈáíÉ¡ Ãæ ÇáãíÒÇäíÉ ÇáäŞÏíÉ ÇáÊí ÊÑíÏ ÇáæÕæá ÅáíåÇ ÈÚÏ ÓÏÇÏ ÃÎÑ ÏİÚÉ.";
             Text[ dutch ] = "De toekomstige waarde, ofwel het saldo dat u wilt bereiken als de laatste betaling is verricht.";
@@ -6991,7 +6991,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "µ½ÆÚÀàĞÍ¡£ type = 1 ±íÊ¾ÔÚÖÜÆÚ¿ªÊ¼Ê±µ½ÆÚ£¬\ntype = 0 ±íÊ¾ÔÚÖÜÆÚ½áÊøÊ±µ½ÆÚ¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå (0 èëè1), îáîçíà÷àşùåå, äîëæíà ëè ïğîèçâîäèòüñÿ âûïëàòà â êîíöå ïåğèîäà (0) èëè â íà÷àëå ïåğèîäà (1).";
             Text[ polish ] = "Wartoœæ 0 lub 1 okreœlaj¹ca sposób dokonywania p³atnoœci ( z do³u lub z góry).";
-            Text[ japanese ] = "x•¥‚¢Šú“úBx•¥Šú“ú‚PŠeŠú‚ÌŠúñAx•¥Šú“ú‚OŠeŠú‚ÌŠú––B";
+            Text[ japanese ] = "x•¥‚¢Šú“úBx•¥Šú“ú = 1 ŠeŠú‚ÌŠúñAx•¥Šú“ú = 0 ŠeŠú‚ÌŠú––B";
             Text[ chinese_traditional ] = "¨ì´ÁÃş«¬¡C F = 1 ªí¥Ü¦b¶g´Á¶}©l®É¨ì´Á¡MF = 0 ªí¥Ü¦b¶g´Áµ²§ô®É¨ì´Á¡C";
             Text[ arabic ] = "ÇáÏİÚ İí ÈÏÇíÉ ÇáİÊÑÉ ı= 1º ÇáÏİÚ İí äåÇíÉ ÇáİÊÑÉ = 0.";
             Text[ dutch ] = "Vervaldatum. V = 1 geeft aan dat de betaling moet worden verricht aan het begin van een periode, V =0 aan het einde.";
@@ -7228,7 +7228,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÖÜÆÚÊı¡£Òª¼ÆËãÆäÀûÏ¢½ğ¶îµÄÖÜÆÚÊı¡£ per = 1 \nÊÇµÚÒ»¸öÖÜÆÚ£¬ per = nper ÊÇ×îºóÒ»¸öÖÜÆÚ¡£";
             Text[ russian ] = "Ïåğèîä, äëÿ êîòîğîãî òğåáóåòñÿ íàéòè ïğèáûëü, äîëæåí áûòü â èíòåğâàëå îò 1 äî Êïåğ.";
             Text[ polish ] = "Okres, dla którego maj¹ zostaæ obliczone odsetki sk³adowe. 1 oznacza pierwszy okres, nper  - ostatni.";
-            Text[ japanese ] = "ŠúB‹à—˜x•¥Šz‚ğ‹‚ß‚éŠúBŠú‚P‚ÍÅ‰‚ÌŠúAŠú‘Sx•¥‚¢ŠúŠÔ‚ÍÅŒã‚ÌŠúB";
+            Text[ japanese ] = "ŠúB‹à—˜x•¥Šz‚ğ‹‚ß‚éŠúBŠú = 1 ‚ÍÅ‰‚ÌŠúAŠú = ‘Sx•¥‚¢ŠúŠÔ‚ÍÅŒã‚ÌŠúB";
             Text[ chinese_traditional ] = "¶g´Á¡C¥Î©ó­pºâ´_§Qªº¶g´Á¼Æ¡C per = 1 ¬O²Ä¤@­Ó¶g´Á¡M \nper = nper ¬O³Ì«á¤@­Ó¶g´Á¡C";
             Text[ arabic ] = "ÇáİÊÑÉ ÇáÊí ÊÑíÏ ãÚÑİÉ ÇáİÇÆÏÉ ÎáÇáåÇ æíÌÈ Ãä Êßæä Öãä ÇáäØÇŞ 1 Åáì nper.";
             Text[ dutch ] = "De periode waarover de interest moet worden berekend. P = 1 betekent voor de eerste periode, P = NPER voor de laatste";
@@ -7489,7 +7489,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "µ½ÆÚÀàĞÍ¡£ type = 1 ±íÊ¾ÔÚÖÜÆÚ¿ªÊ¼Ê±µ½ÆÚ£¬\ntype = 0 ±íÊ¾ÔÚÖÜÆÚ½áÊøÊ±µ½ÆÚ¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå (0 èëè1), îáîçíà÷àşùåå, äîëæíà ëè ïğîèçâîäèòüñÿ âûïëàòà â êîíöå ïåğèîäà (0) èëè â íà÷àëå ïåğèîäà (1).";
             Text[ polish ] = "Wartoœæ 0 lub 1 okreœlaj¹ca sposób dokonywania p³atnoœci (z do³u lub z góry).";
-            Text[ japanese ] = "x•¥Šú“úBx•¥Šú“ú‚PŠeŠú‚ÌŠúñAx•¥Šú“ú‚OŠeŠú‚ÌŠú––";
+            Text[ japanese ] = "x•¥Šú“úBx•¥Šú“ú = 1 ŠeŠú‚ÌŠúñAx•¥Šú“ú = 0 ŠeŠú‚ÌŠú––";
             Text[ chinese_traditional ] = "¨ì´ÁÃş«¬¡C F = 1 ªí¥Ü¦b¶g´Á¶}©l®É¨ì´Á¡MF = 0 ªí¥Ü¬O¦b¶g´Áµ²§ô®É¨ì´Á¡C";
             Text[ arabic ] = "ÇáÏİÚ İí ÈÏÇíÉ ÇáİÊÑÉ ı= 1º ÇáÏİÚ İí äåÇíÉ ÇáİÊÑÉ = 0.";
             Text[ dutch ] = "Vervaldatum. V = 1 geeft aan dat de betaling moet worden verricht aan het begin van een periode, V =0 aan het einde.";
@@ -7661,7 +7661,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÖÜÆÚÊı¡£¼ÆËã·ÖÆÚ¸¶¿îµÄÖÜÆÚÊı¡£P = 1 ±íÊ¾µÚÒ»¸ö\nÖÜÆÚ£¬ P = NPER ±íÊ¾×îºóÒ»¸öÖÜÆÚ¡£";
             Text[ russian ] = "Ïåğèîä, äëÿ êîòîğîãî âû÷èñëÿåòñÿ óïëàòà. Çíà÷åíèå äîëæíî áûòü â èíòåğâàëå îò 1 (ïåğâûé ïåğèîä) äî êïåğ (ïîñëåäíèé ïåğèîä).";
             Text[ polish ] = "Wyznacza okres, dla którego obliczona bêdzie sp³ata kredytu. 1 oznacza pierwszy okres, NPER - ostatni.";
-            Text[ japanese ] = "ŠúBŒ³‹àx•¥Šz‚ğ‹‚ß‚éŠúBŠú‚P‚ÍÅ‰‚ÌŠúAŠú‘Sx•¥‚¢ŠúŠÔ‚ÍÅŒã‚ÌŠúB";
+            Text[ japanese ] = "ŠúBŒ³‹àx•¥Šz‚ğ‹‚ß‚éŠúBŠú = 1 ‚ÍÅ‰‚ÌŠúAŠú = ‘Sx•¥‚¢ŠúŠÔ‚ÍÅŒã‚ÌŠúB";
             Text[ chinese_traditional ] = "¶g´Á¼Æ¡C­pºâ¤À´Á¥I´Úªº¶g´Á¼Æ¡CP = 1 ªí¥Ü²Ä¤@­Ó¶g´Á¡M \nP = ZZR ªí¥Ü³Ì«á¤@­Ó¶g´Á¡C";
             Text[ arabic ] = "ÊÚííä ÇáİÊÑÉ æíÌÈ Ãä Êßæä Öãä ÇáäØÇŞ ãä 1 Åáì nper.";
             Text[ dutch ] = "Periode. De periode waarvoor de aflossing wordt berekend.. P = 1 betekent voor de eerste periode, P = NPER voor de laatste.";
@@ -7855,7 +7855,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Î´À´Öµ¡£»òÍê³É×îºóÒ»´ÎÖ§¸¶ºó´ïµ½µÄÊıÖµ¡£";
             Text[ russian ] = "Áóäóùåå çíà÷åíèå. Çíà÷åíèå (êîíå÷íîå çíà÷åíèå), êîòîğîå äîëæíî ïîëó÷èòüñÿ ïîñëå ïîñëåäíåãî ïëàòåæà.";
             Text[ polish ] = "Przysz³a wartoœæ. Wartoœæ koñcowa, która ma zostaæ osi¹gniêta po dokonaniu ostatniej p³atnoœci.";
-            Text[ japanese ] = "«—ˆ‰¿’lB“Š‘‚Ì«—ˆ‰¿’lA‚Ü‚½‚ÍÅŒã‚Ìx•¥‚¢‚ğs‚Á‚½Œã‚Éc‚éŒ»‹à‚ÌûxB";
+            Text[ japanese ] = "«—ˆ‰¿’lB“Š‘‚Ì«—ˆ‰¿’lA‚Ü‚½‚ÍÅŒã‚Ìx•¥‚¢‚ğs‚Á‚½‚ ‚Æ‚Éc‚éŒ»‹à‚ÌûxB";
             Text[ chinese_traditional ] = "¥¼¨Ó­È¡C©Î§¹¦¨³Ì«á¤@¦¸¤ä¥I«á¹F¨ìªº¼Æ­È¡C";
             Text[ arabic ] = "ÇáŞíãÉ ÇáãÓÊŞÈáíÉ¡ Ãæ ÇáãíÒÇäíÉ ÇáäŞÏíÉ ÇáÊí ÊÑíÏ ÇáæÕæá ÅáíåÇ ÈÚÏ ÓÏÇÏ ÃÎÑ ÏİÚÉ.";
             Text[ dutch ] = "Toekomstige waarde. De waarde (eindwaarde) die bij de laatste betaling moet zijn bereikt.";
@@ -7922,7 +7922,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "µ½ÆÚÀàĞÍ¡£ type = 1 ±íÊ¾ÔÚÒ»¸öÖÜÆÚµÄ¿ªÊ¼Ê±µ½ÆÚ£¬\ntype = 0 ±íÊ¾ÔÚÒ»¸öÖÜÆÚ½áÊøÊ±µ½ÆÚ¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå (0 èëè1), îáîçíà÷àşùåå, äîëæíà ëè ïğîèçâîäèòüñÿ âûïëàòà â êîíöå ïåğèîäà (0) èëè â íà÷àëå ïåğèîäà (1).";
             Text[ polish ] = "Wartoœæ 0 lub 1 okreœlaj¹ca sposób dokonywania p³atnoœci; 1 oznacza p³atnoœæ na pocz¹tku okresu, 0 - na koñcu.";
-            Text[ japanese ] = "x•¥Šú“úBx•¥Šú“ú‚P‚ÍŠeŠú‚ÌŠúñAx•¥Šú“ú‚O‚ÍŠeŠú‚ÌŠú––B";
+            Text[ japanese ] = "x•¥Šú“úBx•¥Šú“ú = 1 ‚ÍŠeŠú‚ÌŠúñAx•¥Šú“ú = 0 ‚ÍŠeŠú‚ÌŠú––B";
             Text[ chinese_traditional ] = "¨ì´ÁÃş«¬¡C F = 1 ªí¥Ü¦b¤@­Ó¶g´Á¶}©l®É¨ì´Á¡MF = 0  ªí¥Ü¦b¤@­Ó\n¶g´Áµ²§ô®É¨ì´Á¡C";
             Text[ arabic ] = "ÇáÏİÚ İí ÈÏÇíÉ ÇáİÊÑÉ ı= 1º ÇáÏİÚ İí äåÇíÉ ÇáİÊÑÉ = 0.";
             Text[ dutch ] = "Vervaldatum. V = 0 geeft aan dat de betaling moet worden voldaan aan het begin van een periode, V = 1 aan het einde.";
@@ -7965,7 +7965,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Berekent de cumulatieve hoofdsom van een lening met constante rentevoet die tussen begin- en eindtermijn is terugbetaald.";
             Text[ chinese_simplified ] = "ÀÛ»ı½ğ¶î¡£¼ÆËãÒ»±Ê¹Ì¶¨ÀûÂÊ´û¿îÔÚÖ¸¶¨ÆÚÏŞÄÚÓ¦³¥»¹µÄ±¾½ğ×Ü¶î¡£";
             Text[ greek ] = "Áèñïéóôéêü êåöÜëáéï. Õğïëïãßæåé ôï óõíïëéêü ğïóü ôùí äüóåùí áğüóâåóçò ìéáò ğåñéüäïõ ãéá ìéá åğİíäõóç ìå óôáèåñü åğéôüêéï.";
-            Text[ korean ] = "´©Àû ÀÚº». °íÁ¤ ÀÌÀÚÀ²°ú ÇÔ²² ÅõÀÚ¿¡´ëÇÑ±â°£¿¡ °ü°èµÇ´Â »óÈ¯ ÃÑ¾×À» »êÃâ";
+            Text[ korean ] = "´©Àû ÀÚº». °íÁ¤ ÀÌÀÚÀ²·Î ÅõÀÚ ±â°£°ú °ü·ÃÇØ¼­»óÈ¯ ÃÑ¾×À» »êÃâ";
             Text[ turkish ] = "Kümülatif sermaye. Sabit faiz oranlı yatırımlar için bir dönemdeki geri ödemelerin toplam meblağını hesaplar.";
             Text[ language_user1 ] = " ";
         };
@@ -8223,7 +8223,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÆğÊ¼ÖÜÆÚ¡£µÚÒ»¸ö¼ÆËãÖÜÆÚ¡£ Start_period = 1 ±íÊ¾µÚÒ»¸öÖÜÆÚ¡£";
             Text[ russian ] = "Íîìåğ ïåğâîãî ïåğèîäà, ó÷èòûâàåìîãî â âû÷èñëåíèÿõ. Åñëè íà÷_ïåğèîä ğàâåí 1, òî ıòî îçíà÷àåò ñàìûé ïåğâûé ïåğèîä.";
             Text[ polish ] = "Okres pocz¹tkowy dla obliczania amortyzacji. A = 1 oznacza pierwszy okres.";
-            Text[ japanese ] = "ŠJnŠúBŒvZ‚Ì‘ÎÛ‚Æ‚È‚éÅ‰‚ÌŠú‚ÅAŠJnŠú‚P‚Íˆê”Ô‚Í‚¶‚ß‚ÌŠúB";
+            Text[ japanese ] = "ŠJnŠúBŒvZ‚Ì‘ÎÛ‚Æ‚È‚éÅ‰‚ÌŠú‚ÅAŠJnŠú = 1 ‚Íˆê”Ô‚Í‚¶‚ß‚ÌŠúB";
             Text[ chinese_traditional ] = "°_©l¶g´Á¡C²Ä¤@­Ó­pºâ¶g´Á¡C A = 1 ªí¥Ü²Ä¤@­Ó¶g´Á¡C";
             Text[ arabic ] = "Ãæá İÊÑÉ ÊÑíÏ ÍÓÇÈ ÇáÇÓÊåáÇß İíåÇ.";
             Text[ dutch ] = "Begintermijn. De eerste termijn die in de berekening wordt opgenomen. B = 1 is de allereerste termijn.";
@@ -8355,7 +8355,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "µ½ÆÚÀàĞÍ¡£type = 1 ±íÊ¾ÔÚÖÜÆÚµÄ¿ªÊ¼Ê±µ½ÆÚ£¬type = 0 \n±íÊ¾ÔÚÖÜÆÚµÄ½áÊøÊ±µ½ÆÚ¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå (0 èëè1), îáîçíà÷àşùåå, äîëæíà ëè ïğîèçâîäèòüñÿ âûïëàòà â êîíöå ïåğèîäà (0) èëè â íà÷àëå ïåğèîäà (1).";
             Text[ polish ] = "Wartoœæ 0 lub 1 okreœlaj¹ca sposób dokonywania p³atnoœci. (1 oznacza p³atnoœæ na pocz¹tku okresu, 0 - na koñcu).";
-            Text[ japanese ] = "x•¥Šú“úBx•¥Šú“ú‚P‚ÍŠeŠú‚ÌŠúñAx•¥Šú“ú‚OŠeŠú‚ÌŠú––B";
+            Text[ japanese ] = "x•¥Šú“úBx•¥Šú“ú = 1 ‚ÍŠeŠú‚ÌŠúñAx•¥Šú“ú = 0 ŠeŠú‚ÌŠú––B";
             Text[ chinese_traditional ] = "¨ì´ÁÃş«¬¡C F = 1 ªí¥Ü¦b¶g´Áªº¶}©l®É¨ì´Á¡MF = 0 ªí¥Ü¦b¶g´Áªºµ²§ô®É¨ì´Á¡C";
             Text[ arabic ] = "ÇáÏİÚ İí ÈÏÇíÉ ÇáİÊÑÉ ı= 1º ÇáÏİÚ İí äåÇíÉ ÇáİÊÑÉ = 0.";
             Text[ dutch ] = "Geeft aan wanneer betalingen voldaan moeten worden. T = 1 betekent aan het begin van een periode, T = 0 aan het einde.";
@@ -8398,7 +8398,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Berekent de cumulatieve rente die tussen begin- en eindtermijn op een lening is betaald.";
             Text[ chinese_simplified ] = "ÀÛ»ı¸´Àû¡£¼ÆËãÒ»±Ê¹Ì¶¨ÀûÂÊ´û¿îÔÚÒ»¶¨Ê±ÆÚÄÚ\nÓ¦³¥»¹µÄÀûÏ¢×Ü¶î¡£";
             Text[ greek ] = "Áèñïéóôéêüò áíáôïêéóìüò. Õğïëïãßæåé ôï óõíïëéêü ğïóü ôùí äüóåùí áíáôïêéóìïı ìéáò ğåñßïäïõ, ãéá ìéá åğİíäõóç ìå óôáèåñü åğéôüêéï.";
-            Text[ korean ] = "´©Àû º¹ ÀÌÀÚ.  °íÁ¤ ÀÌÀÚÀ²°úÇÔ²² ÅõÀÚ¿¡´ëÇÑ ±â°£¿¡ °ü°èµÇ´Â ÀÌÀÚ  ÃÑ¾×À» »êÃâ";
+            Text[ korean ] = "´©Àû º¹¸®.  °íÁ¤ ÀÌÀÚÀ²·Î  ÅõÀÚ ±â°£°ú °ü·ÃÇØ¼­ ÀÌÀÚ  ÃÑ¾×À» °è»ê.";
             Text[ turkish ] = "Kümülatif bileşik faiz. Sabit faiz oranlı yatırımlar için bir dönemdeki faiz paylarının toplam meblağını hesaplar.";
             Text[ language_user1 ] = " ";
         };
@@ -8656,7 +8656,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÆğÊ¼ÖÜÆÚ¡£µÚÒ»¸ö¼ÆËãÖÜÆÚ¡£ Start_period = 1 ±íÊ¾µÚÒ»¸öÖÜÆÚ¡£";
             Text[ russian ] = "Íîìåğ ïåğâîãî ïåğèîäà, ó÷èòûâàåìîãî â âû÷èñëåíèÿõ. Åñëè íà÷_ïåğèîä ğàâåí 1, òî ıòî îçíà÷àåò ñàìûé ïåğâûé ïåğèîä.";
             Text[ polish ] = "Okres pocz¹tkowy do obliczenia amortyzacji. A = 1 oznacza pierwszy okres.";
-            Text[ japanese ] = "ŠJnŠúBŒvZ‚Ì‘ÎÛ‚Æ‚È‚éÅ‰‚ÌŠú‚ÅŠJnŠú‚P‚Íˆê”Ô‚Í‚¶‚ß‚ÌŠúB";
+            Text[ japanese ] = "ŠJnŠúBŒvZ‚Ì‘ÎÛ‚Æ‚È‚éÅ‰‚ÌŠú‚ÅŠJnŠú = 1 ‚Íˆê”Ô‚Í‚¶‚ß‚ÌŠúB";
             Text[ chinese_traditional ] = "°_©l¶g´Á¡C²Ä¤@­Ó­pºâ¶g´Á¡C A = 1 ªí¥Ü²Ä¤@­Ó¶g´Á¡C";
             Text[ arabic ] = "Ãæá İÊÑÉ ÊÑíÏ ÍÓÇÈ ÇáÇÓÊåáÇß İíåÇ.";
             Text[ dutch ] = "Begintermijn. De eerste termijn die in de berekening wordt opgenomen. B = 1 is de allereerste termijn.";
@@ -8786,7 +8786,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "µ½ÆÚÀàĞÍ¡£type = 1 ±íÊ¾ÔÚÒ»¸öÖÜÆÚ¿ªÊ¼Ê±µ½ÆÚ¡£ \ntype = 0 Ôò±íÊ¾ÔÚÒ»¸öÖÜÆÚ½áÊøÊ±µ½ÆÚ¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå (0 èëè1), îáîçíà÷àşùåå, äîëæíà ëè ïğîèçâîäèòüñÿ âûïëàòà â êîíöå ïåğèîäà (0) èëè â íà÷àëå ïåğèîäà (1).";
             Text[ polish ] = "Wartoœæ 0 lub 1 okreœlaj¹ca sposób dokonywania p³atnoœci. (1 oznacza p³atnoœæ na pocz¹tku okresu, 0 - na koñcu).";
-            Text[ japanese ] = "x•¥Šú“úBx•¥Šú“ú‚P‚ÍŠeŠú‚ÌŠúñAx•¥Šú“ú‚O‚ÍŠeŠú‚ÌŠú––B";
+            Text[ japanese ] = "x•¥Šú“úBx•¥Šú“ú = 1 ‚ÍŠeŠú‚ÌŠúñAx•¥Šú“ú = 0 ‚ÍŠeŠú‚ÌŠú––B";
             Text[ chinese_traditional ] = "¨ì´ÁÃş«¬¡CF = 1 ªí¥Ü¦b¤@­Ó¶g´Á¶}©l®É¨ì´Á¡C F = 0 «hªí¥Ü¦b¤@­Ó¶g´Áµ²§ô®É¨ì´Á¡C";
             Text[ arabic ] = "ÊÍÏÏ æŞÊ ÇáÇÓÊÍŞÇŞ. ÇáÇÓÊÍŞÇŞ ÚäÏ ÈÏÇíÉ İÊÑÉ =1¡ ÇáÇÓÊÍŞÇŞ ÚäÏ äåÇíÉ İÊÑÉ =0.";
             Text[ dutch ] = "Vervaldatum. V = 0 geeft aan dat de betaling moet worden verricht aan het begin van een periode, V = 1 aan het einde.";
@@ -9122,7 +9122,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "¼ÆËã¸÷ÆÚµÄÏßĞÔÕÛ¾É¶î¡£";
             Text[ russian ] = "Âû÷èñëÿåò âåëè÷èíó íåïîñğåäñòâåííîé àìîğòèçàöèè èìóùåñòâà çà îäèí ïåğèîä.";
             Text[ polish ] = "Oblicza wartoœæ amortyzacji œrodka trwa³ego w podanym okresie metod¹ liniow¹.";
-            Text[ japanese ] = "’èŠz–@(Straight-line Method)‚ğg—p‚µ‚ÄA‘Y‚Ì‚PŠú“–‚½‚è‚ÌŒ¸‰¿‹p”ï‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "’èŠz–@(Straight-line Method)‚ğg—p‚µ‚ÄA‘Y‚Ì1Šú“–‚½‚è‚ÌŒ¸‰¿‹p”ï‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "­pºâ¦U´Áªº½u©Ê§éÂÂÃB¡C";
             Text[ arabic ] = "ÊÍÓÈ ÇáÇÓÊåáÇß ÇáËÇÈÊ ááãæÌæÏÇÊ áßá İÊÑÉ.";
             Text[ dutch ] = "Berekent de lineaire afschrijving over één termijn.";
@@ -9686,7 +9686,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÎªÓÃÓÚÕÛ¾É¼ÆËãµÄÓà¶îµİ¼õÒò×Ó¡£F=2 ËµÃ÷²ÉÓÃµÄÊÇË«±¶Óà¶îµİ¼õÕÛ¾É·¨¡£";
             Text[ russian ] = "Íîğìà ñíèæåíèÿ áàëàíñîâîé ñòîèìîñòè. Êîıôôèöèåíò ğàâåí äâóì îçíà÷àåò äâóêğàòíîå ñíèæåíèå áàëàíñîâîé ñòîèìîñòè.";
             Text[ polish ] = "Wartoœæ steruj¹ca szybkoœci¹, z jak¹ ma maleæ saldo. 2 oznacza metodê podwójnego spadku.";
-            Text[ japanese ] = "—¦BŒ¸‰¿‹p—¦‚ğw’è‚µ‚Ü‚·B—¦‚Q‚É‚·‚é‚Æ”{—¦’üŒ¸–@‚ÅŒvZ‚ªs‚í‚ê‚Ü‚·B";
+            Text[ japanese ] = "—¦BŒ¸‰¿‹p—¦‚ğw’è‚µ‚Ü‚·B—¦ = 2 ‚É‚·‚é‚Æ”{—¦’üŒ¸–@‚ÅŒvZ‚ªs‚í‚ê‚Ü‚·B";
             Text[ chinese_traditional ] = "¬°§EÃB»¼´î§éÂÂ¦]¤l¡MF=2 ¬OÂù­¿§EÃB»¼´î§éÂÂªk¡C";
             Text[ arabic ] = "ÇáäÓÈÉ ÇáÊí ÊÊäÇŞÕ ÇáãíÒÇäíÉ ÚäÏåÇ.";
             Text[ dutch ] = "Factor. Factor voor de snelheid waarmee wordt afgeschreven. FA = 2 betekent afschrijving in dubbele termijnen.";
@@ -10479,7 +10479,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Óà¶îµİ¼õÕÛ¾ÉÒò×Ó£¬factor=2 ±íÊ¾²ÉÓÃË«±¶Óà¶îµİ¼õÕÛ¾É·¨¡£";
             Text[ russian ] = "Íîğìà ñíèæåíèÿ áàëàíñîâîé ñòîèìîñòè. Êîıôôèöèåíò ğàâåí äâóì îçíà÷àåò äâóêğàòíîå ñíèæåíèå áàëàíñîâîé ñòîèìîñòè.";
             Text[ polish ] = "Wartoœæ steruj¹ca szybkoœci¹, z jak¹ ma maleæ saldo. Wartoœæ 2 oznacza metodê podwójnego spadku.";
-            Text[ japanese ] = "—¦BŒ¸‰¿‹p—¦B—¦‚Q‚Í”{—¦’üŒ¸–@‚ğ•\\‚µ‚Ü‚·B";
+            Text[ japanese ] = "—¦BŒ¸‰¿‹p—¦B—¦ = 2 ‚Í”{—¦’üŒ¸–@‚ğ•\\‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "§EÃB»¼´î§éÂÂ¦]¤l¡MF=2 ¬OÂù­¿§EÃB»¼´î§éÂÂªk¡C";
             Text[ arabic ] = "ÇáäÓÈÉ ÇáÊí ÊÊäÇŞÕ ÇáãíÒÇäíÉ ÚäÏåÇ.";
             Text[ dutch ] = "Factor voor de snelheid waarmee wordt afgeschreven. FA = 2 betekent afschrijving in dubbele termijnen.";
@@ -10544,7 +10544,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "no_switch=1 ±íÊ¾×ª»»ÖÁÖ±ÏßÊ½ÕÛ¾É·¨£¬ no_switch= 0 ±íÊ¾²»×ª»»¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå, îïğåäåëÿşùåå ñëåäóåò ëè èñïîëüçîâàòü ïğÿìóş àìîğòèçàöèş â òîì ñëó÷àå, êîãäà àìîğòèçàöèÿ ïğåâûøàåò âû÷èñëåííóş âåëè÷èíó àìîğòèçàöèè (1 îçíà÷àåò ïåğåêëş÷åíèå íà ëèíåéíóş àìîğòèçàöèş; 0 îçíà÷àåò áåç ïåğåêëş÷åíèé)";
             Text[ polish ] = "Nie zmieniaj. Typ 1 oznacza prze³¹czenie na odpis na amortyzacjê liniow¹, typ 0 oznacza brak prze³¹czania.";
-            Text[ japanese ] = "Ø‚è‘Ö‚¦‚È‚µBØ‚è‘Ö‚¦‚È‚µ‚P‚Í’èŠz–@‚Ö‚ÌØ‚è‘Ö‚¦‚ªs‚í‚êAØ‚è‘Ö‚¦‚È‚µ‚O‚ÍØ‚è‘Ö‚¦‚ªs‚í‚ê‚Ü‚¹‚ñB";
+            Text[ japanese ] = "Ø‚è‘Ö‚¦‚È‚µBØ‚è‘Ö‚¦‚È‚µ = 1 ‚Í’èŠz–@‚Ö‚ÌØ‚è‘Ö‚¦‚ªs‚í‚êAØ‚è‘Ö‚¦‚È‚µ = 0 ‚ÍØ‚è‘Ö‚¦‚ªs‚í‚ê‚Ü‚¹‚ñB";
             Text[ chinese_traditional ] = "¬O­ÓÅŞ¿è­È¡C¼Æ­È = 1 ªí¥Ü¤Á´«¦Üª½½u¦¡§éÂÂªk¡M ¼Æ­È = 0 ªí¥Ü¤£¥Î¤Á´«¡C";
             Text[ arabic ] = "ÊÈÏíá Åáì ÇÓÊåáÇß ËÇÈÊ İí ÍÇáÉ ßæä ÇáÇÓÊåáÇß ÃßÈÑ ãä ÊäÇŞÕ ÇáãíÒÇäíÉ.";
             Text[ dutch ] = "Niet wisselen. Wissel = 1 betekent omschakelen op lineaire afschrijving, Wissel = 0 betekent niet omschakelen.";
@@ -10581,7 +10581,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÀûÓÃ¸ø¶¨µÄÃûÒåÀûÂÊ¼ÆËãÊµ¼ÊÄêÀûÂÊ¡£";
             Text[ russian ] = "Âû÷èñëÿåò ãîäîâîé ôàêòè÷åñêèé ïğîöåíò äëÿ íîìèíàëüíîé ïğîöåíòíîé ñòàâêè.";
             Text[ polish ] = "Oblicza efektywn¹ roczn¹ stopê procentow¹ przy danej rocznej stopie nominalnej.";
-            Text[ japanese ] = "w’è‚³‚ê‚½–¼–Ú”N—˜—¦‚Æ‚P”N“–‚½‚è‚Ì•¡—˜ŒvZ‰ñ”‚ğ‚à‚Æ‚ÉAÀŒø”N—˜—¦‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "w’è‚³‚ê‚½–¼–Ú”N—˜—¦‚Æ1”N“–‚½‚è‚Ì•¡—˜ŒvZ‰ñ”‚ğ‚à‚Æ‚ÉAÀŒø”N—˜—¦‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "§Q¥Î«ü©wªº¦W¸q§Q²v­pºâ¹ê»Ú¦~§Q²v¡C";
             Text[ arabic ] = "ÊÍÓÈ ÇáİÇÆÏÉ ÇáİÚáíÉ ÇáÓäæíÉ áİÇÆÏÉ ÇÓãíÉ.";
             Text[ dutch ] = "Berekent de jaarlijkse effectieve rente m.b.t. de nominale renteopbrengst.";
@@ -10715,7 +10715,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Ã¿ÄêÖ§¸¶ÀûÏ¢µÄ´ÎÊı¡£";
             Text[ russian ] = "×èñëî óïëàò ïğîöåíòîâ â ãîä.";
             Text[ polish ] = "Okresy. Liczba p³atnoœci odsetek w roku.";
-            Text[ japanese ] = "ŠúŠÔB‚P”N“–‚½‚è‚Ì•¡—˜ŒvZ‰ñ”B";
+            Text[ japanese ] = "ŠúŠÔB1”N“–‚½‚è‚Ì•¡—˜ŒvZ‰ñ”B";
             Text[ chinese_traditional ] = "¨C¦~¤ä¥I§Q®§ªº¦¸¼Æ¡C";
             Text[ arabic ] = "ÚÏÏ İÊÑÇÊ ÏİÚ ÇáİæÇÆÏ İí ÇáÚÇã.";
             Text[ dutch ] = "Termijnen. Het aantal rentebetalingen per jaar.";
@@ -10752,7 +10752,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "¼ÆËãÒÔÊµ¼ÊÀûÂÊÎª»ù´¡µÄÄêÃûÒåÀûÂÊ¡£";
             Text[ russian ] = "Âû÷èñëÿåò ãîäîâîé íîìèíàëüíûé ïğîöåíò äëÿ ôàêòè÷åñêîé ïğîöåíòíîé íîğìû.";
             Text[ polish ] = "Przelicza nominalne roczne oprocentowanie na efektywn¹ stopê procentow¹.";
-            Text[ japanese ] = "w’è‚³‚ê‚½ÀŒø”N—˜—¦‚Æ‚P”N“–‚½‚è‚Ì•¡—˜ŒvZ‰ñ”‚ğŒ³‚ÉA–¼–Ú”N—˜—¦‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "w’è‚³‚ê‚½ÀŒø”N—˜—¦‚Æ1”N“–‚½‚è‚Ì•¡—˜ŒvZ‰ñ”‚ğŒ³‚ÉA–¼–Ú”N—˜—¦‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "­pºâ¥H¹ê»Ú§Q®§¬°°òÂ¦ªº¦~¦W¸q§Q®§¡C";
             Text[ arabic ] = "ÊÍÓÈ ÇáİæÇÆÏ ÇáÇÓãíÉ ÇáÓäæíÉ áäÓÈÉ İÇÆÏÉ İÚáíÉ.";
             Text[ dutch ] = "Berekent de nominale jaarlijkse rente op basis van het effectieve rentepercentage.";
@@ -10886,7 +10886,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÖÜÆÚÊı¡£Ã¿ÄêÖ§¸¶ÀûÏ¢µÄÖÜÆÚÊı¡£";
             Text[ russian ] = "×èñëî óïëàò ïğîöåíòîâ â ãîä.";
             Text[ polish ] = "Okresy. Liczba p³atnoœci odsetek w roku.";
-            Text[ japanese ] = "ŠúŠÔB‚P”N“–‚½‚è‚Ì—˜‘§ŒvZ‰ñ”B";
+            Text[ japanese ] = "ŠúŠÔB1”N“–‚½‚è‚Ì—˜‘§ŒvZ‰ñ”B";
             Text[ chinese_traditional ] = "¶g´Á¼Æ¡C¨C¦~¤ä¥I§Q®§ªº¶g´Á¼Æ¡C";
             Text[ arabic ] = "ÚÏÏ ÏİÚÇÊ ÇáİÇÆÏÉ İí ÇáÚÇã ÇáæÇÍÏ.";
             Text[ dutch ] = "Perioden. Het aantal rentebetalingen per jaar.";
@@ -11058,7 +11058,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÊıÖµ 1;ÊıÖµ 2;... ÊÇ±íÊ¾ÊÕÈëºÍÖ§³öµÄ 1 ÖÁ 30 ¸öÊıÖµ¡£";
             Text[ russian ] = "Çíà÷åíèå 1;çíà÷åíèå 2;... îò 1 äî 29 çíà÷åíèé, ïğåäñòàâëÿşùèõ äîõîäû è ğàñõîäû.";
             Text[ polish ] = "Stanowi¹ od 1 do 29 argumentów reprezentuj¹cych p³atnoœci i nale¿noœci.";
-            Text[ japanese ] = "’l‚P;’l‚Q;...‚Í‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìx•¥Šz(•‰‚Ì’l)‚Æû‰vŠz(³‚Ì’l)B";
+            Text[ japanese ] = "’l 1;’l 2;...‚Í1‚©‚ç30ŒÂ‚Ü‚Å‚Ìx•¥Šz(•‰‚Ì’l)‚Æû‰vŠz(³‚Ì’l)B";
             Text[ chinese_traditional ] = "¼Æ­È 1;¼Æ­È 2;... ¬Oªí¥Ü¦¬¤J©M¤ä¥Xªº 1 ¦Ü 30 ­Ó¼Æ­È¡C";
             Text[ arabic ] = "value1;value2... ãä 1 Åáì 29 ŞíãÉ ááÏİÚÉ Ãæ ááÅíÑÇÏ.";
             Text[ dutch ] = "Waarde 1;Waarde 2;... zijn maximaal 30 waarden voor inkomsten en uitgaven.";
@@ -13671,7 +13671,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Âß¼­Öµ 1; Âß¼­Öµ 2;... ÎªĞèÒª½øĞĞ¼ìÑéµÄ 1 µ½ 30 ¸ö\nÌõ¼ş£¬Îª TRUE »ò FALSE¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå 1, ëîãè÷åñêîå çíà÷åíèå 2, ... îò 1 äî 30 ïğîâåğÿåìûõ óñëîâèé, êîòîğûå ìîãóò èìåòü çíà÷åíèå ëèáî ÈÑÒÈÍÀ, ëèáî ËÎÆÜ.";
             Text[ polish ] = "Od 1 do 30 warunków, które maj¹ zostaæ sprawdzone i zwracaj¹ PRAWDA lub FA£SZ.";
-            Text[ japanese ] = "˜_—’l‚P;˜_—’l‚Q;...‚Í TRUE ‚© FALSE ‚©‚ğ’²‚×‚é‚O‚©‚ç30ŒÂ‚Ü‚Å‚ÌğŒB";
+            Text[ japanese ] = "˜_—’l 1;˜_—’l 2;...‚Í TRUE ‚© FALSE ‚©‚ğ’²‚×‚é0‚©‚ç30ŒÂ‚Ü‚Å‚ÌğŒB";
             Text[ chinese_traditional ] = "ÅŞ¿è­È 1; ÅŞ¿è­È 2;... ¬°»İ­n¶i¦æÀËÅçªº 1 ¨ì 30 ­Ó±ø¥ó¡M¬° TRUE ©Î FALSE¡C";
             Text[ arabic ] = "ãä 1 Åáì 30 ÔÑØÇğ ÊÑíÏ İÍÕåÇ áãÚÑİÉ ãÇ ÅĞÇ ßÇäÊ TRUE Ãæ FALSE.";
             Text[ dutch ] = "Logisch 1; Logisch 2;... zijn maximaal 30 voorwaarden die getest worden en die WAAR of ONWAAR kunnen zijn.";
@@ -13778,7 +13778,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Âß¼­Öµ 1;Âß¼­Öµ 2;... ÊÇ 1 ÖÁ 30 ¸ö´ı¼ì²éµÄÌõ¼şÖµ£¬\n½á¹ûÎª TRUE »ò FALSE ¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå 1, ëîãè÷åñêîå çíà÷åíèå 2, ... îò 1 äî 30 ïğîâåğÿåìûõ óñëîâèé, êîòîğûå ìîãóò èìåòü çíà÷åíèå ëèáî ÈÑÒÈÍÀ, ëèáî ËÎÆÜ.";
             Text[ polish ] = "Wartoœæ prawdziwoœci 1;wartoœæ prawdziwoœci 2;... s¹ warunkami od 1 do 30, które musz¹ zostaæ sprawdzone i które wyznaczaj¹ ka¿dorazowo PRAWDA lub FA£SZ.";
-            Text[ japanese ] = "˜_—’l‚P;˜_—’l‚Q;...‚Í TRUE ‚© FALSE ‚©‚ğ•]‰¿‚·‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ì˜_—’lB";
+            Text[ japanese ] = "˜_—’l 1;˜_—’l 2;...‚Í TRUE ‚© FALSE ‚©‚ğ•]‰¿‚·‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ì˜_—’lB";
             Text[ chinese_traditional ] = "ÅŞ¿è­È 1;ÅŞ¿è­È 2;... ¬O 1 ¦Ü 30 ­Ó«İÀË¬dªº±ø¥ó­È¡Mµ²ªG¬° TRUE ©Î FALSE ¡C";
             Text[ arabic ] = "logical1;logical 2;... ãä 1 Åáì 30 ÔÑØÇğ íÌÈ İÍÕåÇ æãä Çáããßä Ãä Êßæä TRUE Ãæ FALSE.";
             Text[ dutch ] = "Logisch 1;Logisch 2;... zijn 1 tot 30 voorwaarden die moeten worden gecontroleerd en die ofwel WAAR of FOUT opleveren.";
@@ -14308,7 +14308,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÔªËØ 1; ÔªËØ 2;... ÊÇ 1 µ½ 30 ¸öĞèÒªÇóºÍµÄÔªËØ¡£";
             Text[ russian ] = "×èñëî 1;÷èñëî 2;... îò 1 äî 30 àğãóìåíòîâ, ñóììó êîòîğûõ íåîáõîäèìî âû÷èñëèòü.";
             Text[ polish ] = "Od 1 do 30 argumentów, które zostan¹ zszmowane.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Í‡Œv‚ğ‹‚ß‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚Í‡Œv‚ğ‹‚ß‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¤¸¯À 1; ¤¸¯À 2;... ¬O 1 ¨ì 30 ­Ó»İ­n¨D©Mªº¤¸¯À¡C";
             Text[ arabic ] = "number1;number2;... ãä 1 Åáì 30 ÑŞãÇğ íÑÇÏ ÌãÚåÇ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 argumenten waarvan de som wordt berekend.";
@@ -14344,7 +14344,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "¼ÆËãÔªËØµÄÆ½·½ºÍ¡£";
             Text[ russian ] = "Âû÷èñëÿåò ñóììó êâàäğàòîâ àğãóìåíòîâ.";
             Text[ polish ] = "Sumuje kwadraty argumentów.";
-            Text[ japanese ] = "ˆø”‚Ì‚Qæ‚Ì˜a(•½•û˜a)‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "ˆø”‚Ì2æ‚Ì˜a(•½•û˜a)‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "­pºâ¤¸¯Àªº¥­¤è©M¡C";
             Text[ arabic ] = "ÊÌãÚ ãÑÈÚÇÊ ÇáæÓÇÆØ.";
             Text[ dutch ] = "Berekent de som van de kwadraten van de argumenten.";
@@ -14414,7 +14414,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Êı×Ö 1;Êı×Ö 2;... ÊÇ 1 ÖÁ 30 ¸öĞèÒªÇóÆäÆ½·½ºÍµÄ²ÎÊı¡£";
             Text[ russian ] = "×èñëî 1;÷èñëî 2;... îò 1 äî 30 àğãóìåíòîâ, ñóììó êâàäğàòîâ êîòîğûõ íåîáõîäèìî âû÷èñëèòü.";
             Text[ polish ] = "Od 1 do 30 argumentów, których kwadraty maj¹ zostaæ zsumowane.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Í•½•û˜a‚ğ‹‚ß‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ì”’lB";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚Í•½•û˜a‚ğ‹‚ß‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ì”’lB";
             Text[ chinese_traditional ] = "¼Æ¦r 1;¼Æ¦r 2;... ¬O 1 ¦Ü 30 ­Ó»İ­n¨D¨ä¥­¤è©Mªº°Ñ¼Æ¡C";
             Text[ arabic ] = "number1;number2... ãä 1 Åáì 30 ÑŞãÇğ ÊÑíÏ ÍÓÇÈ ãÌãæÚ ãÑÈÚÇÊåÇ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 argumenten waarvan u kwadratensom wilt berekenen.";
@@ -14520,7 +14520,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÔªËØ 1; ÔªËØ  2;...  Îª 1 µ½ 30 ¸öĞèÒªÏà³ËµÄÊı×ÖÔªËØ¡£";
             Text[ russian ] = "×èñëî 1;÷èñëî 2;... îò 1 äî 30 àğãóìåíòîâ, ïğîèçâåäåíèå êîòîğûõ âû÷èñëÿåòñÿ.";
             Text[ polish ] = "Od 1 do 30 argumentów, których iloczyn ma zostaæ obliczony";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚ÍÏ‚ğ‹‚ß‚é‚P‚©‚ç30ŒÂ‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚ÍÏ‚ğ‹‚ß‚é1‚©‚ç30ŒÂ‚Ìˆø”B";
             Text[ chinese_traditional ] = "¤¸¯À 1; ¤¸¯À  2;...  ¬° 1 ¨ì 30 ­Ó»İ­n¬Û­¼ªº¼Æ¦r¤¸¯À¡C";
             Text[ arabic ] = "number1;number2 ãä 1 Åáì 30 ÑŞã íÑÇÏ ÖÑÈåÇ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 argumenten die u wilt vermenigvuldigen.";
@@ -15070,7 +15070,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Éú³ÉÒ»¸ö´óÓÚ 0 Ğ¡ÓÚ 1 µÄËæ»úÊı¡£";
             Text[ russian ] = "Âîçâğàùàåò ñëó÷àéíîå ÷èñëî ìåæäó 0 è 1.";
             Text[ polish ] = "Podaje liczbê losow¹ z zakresu od 0 do 1.";
-            Text[ japanese ] = "‚OˆÈã‚Å‚P‚æ‚è¬‚³‚¢—”‚ğ”­¶‚³‚¹‚Ü‚·B";
+            Text[ japanese ] = "0ˆÈã‚Å1‚æ‚è¬‚³‚¢—”‚ğ”­¶‚³‚¹‚Ü‚·B";
             Text[ chinese_traditional ] = "¥Í¦¨¤@­Ó¤j©ó 0 ¤p©ó 1 ªºÀH¾÷¼Æ¡C";
             Text[ arabic ] = "ÊŞÏã ÑŞã ÚÔæÇÆí Èíä 0 æ 1.";
             Text[ dutch ] = "Geeft als resultaat een toevallige waarde tussen 0 en 1.";
@@ -15364,7 +15364,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "number_1";
             Text[ russian ] = "×èñëî_1";
             Text[ polish ] = "Liczba_1";
-            Text[ japanese ] = "‘”‚P";
+            Text[ japanese ] = "‘” 1";
             Text[ chinese_traditional ] = "number_1";
             Text[ arabic ] = "ÇáÚÏÏ_1";
             Text[ dutch ] = "Aantal_1";
@@ -15428,7 +15428,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "number_2";
             Text[ russian ] = "×èñëî_2";
             Text[ polish ] = "Liczba_2";
-            Text[ japanese ] = "‘”‚Q";
+            Text[ japanese ] = "‘” 2";
             Text[ chinese_traditional ] = "number_2";
             Text[ arabic ] = "ÇáÚÏÏ_2";
             Text[ dutch ] = "Aantal_2";
@@ -15460,7 +15460,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Ã¿Ò»×éºÏÖĞÔªËØµÄÊıÄ¿¡£";
             Text[ russian ] = "Âûáğàííîå ÷èñëî îáúåêòîâ èç êàæäîé êîìáèíàöèè.";
             Text[ polish ] = "Liczba elementów do wyboru.";
-            Text[ japanese ] = "‘g‚İ‡‚í‚¹‚é‚P‘g‚ÉŠÜ‚Ü‚ê‚é€–Ú‚Ì”B";
+            Text[ japanese ] = "‘g‚İ‡‚í‚¹‚é1‘g‚ÉŠÜ‚Ü‚ê‚é€–Ú‚Ì”B";
             Text[ chinese_traditional ] = "¨C¤@²Õ¦X¤¤¤¸¯Àªº¼Æ¥Ø¡C";
             Text[ arabic ] = "ÚÏÏ ÇáßÇÆäÇÊ İí ßá ÊÈÏíáÉ.";
             Text[ dutch ] = "Het aantal elementen in een combinatie.";
@@ -15534,7 +15534,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "number_1";
             Text[ russian ] = "×èñëî_1";
             Text[ polish ] = "Liczba_1";
-            Text[ japanese ] = "‘”‚P";
+            Text[ japanese ] = "‘” 1";
             Text[ chinese_traditional ] = "number_1";
             Text[ arabic ] = "ÇáÚÏÏ_1";
             Text[ dutch ] = "Aantal_1";
@@ -15598,7 +15598,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "number_2";
             Text[ russian ] = "×èñëî_2";
             Text[ polish ] = "Liczba_2";
-            Text[ japanese ] = "‘”‚Q";
+            Text[ japanese ] = "‘” 2";
             Text[ chinese_traditional ] = "number_2";
             Text[ arabic ] = "ÇáÚÏÏ_2";
             Text[ dutch ] = "Aantal_2";
@@ -15630,7 +15630,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Ã¿Ò»×éºÏÖĞÔªËØµÄÊıÄ¿¡£";
             Text[ russian ] = "Âûáğàííîå ÷èñëî îáúåêòîâ èç êàæäîé êîìáèíàöèè.";
             Text[ polish ] = "Liczba elementów do wyboru.";
-            Text[ japanese ] = "‘g‚İ‡‚í‚¹‚é‚P‘g‚ÉŠÜ‚Ü‚ê‚é€–Ú‚Ì”B";
+            Text[ japanese ] = "‘g‚İ‡‚í‚¹‚é1‘g‚ÉŠÜ‚Ü‚ê‚é€–Ú‚Ì”B";
             Text[ chinese_traditional ] = "¨C¤@²Õ¦X¤¤¤¸¯Àªº¼Æ¥Ø¡C";
             Text[ arabic ] = "ÚÏÏ ÇáßÇÆäÇÊ İí ßá ÊÈÏíáÉ.";
             Text[ dutch ] = "Het aantal gekozen elementen in elke combinatie.";
@@ -15738,7 +15738,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Ò»¸öÒª¼ÆËãÆä·´ÓàÏÒÖµµÄÔÚ -1 ºÍ 1 Ö®¼äµÄÊıÖµ¡£";
             Text[ russian ] = "Çíà÷åíèå îò -1 äî 1, àğêêîñèíóñ êîòîğîãî íåîáõîäèìî âû÷èñëèòü.";
             Text[ polish ] = "Wartoœæ z przedzia³u od -1 do 1, dla której ma zostaæ obliczony arcus cosinus.";
-            Text[ japanese ] = "±°¸º»²İ‚ğ‹‚ß‚é|‚P‚©‚ç‚P‚Ü‚Å‚Ì”’lB";
+            Text[ japanese ] = "±°¸º»²İ‚ğ‹‚ß‚é-1‚©‚ç1‚Ü‚Å‚Ì”’lB";
             Text[ chinese_traditional ] = "¤@­Ó­n­pºâ¨ä¤Ï§E©¶­Èªº¦b -1 ©M 1 ¤§¶¡ªº¼Æ­È¡C";
             Text[ arabic ] = "ÌíÈ ÊãÇã ÇáÒÇæíÉ ÇáÊí ÊÑíÏ ÍÓÇÈåÇ æíÌÈ Ãä íßæä ãä -1 Åáì 1.";
             Text[ dutch ] = "Een waarde tussen -1 en 1, waarvan de boogcosinus moet worden berekend.";
@@ -15846,7 +15846,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Ò»¸öÒª¼ÆËãÆä·´ÕıÏÒÖµµÄÔÚ -1 ºÍ 1 Ö®¼äµÄÊıÖµ¡£";
             Text[ russian ] = "Çíà÷åíèå îò -1 äî 1, àğêñèíóñ êîòîğîãî íåîáõîäèìî âû÷èñëèòü.";
             Text[ polish ] = "Wartoœæ z przedzia³u od -1 do 1, dla której ma zostaæ obliczony arcus sinus.";
-            Text[ japanese ] = "±°¸»²İ‚ğ‹‚ß‚é|‚P‚©‚ç‚P‚Ü‚Å‚Ì”’lB";
+            Text[ japanese ] = "±°¸»²İ‚ğ‹‚ß‚é-1‚©‚ç1‚Ü‚Å‚Ì”’lB";
             Text[ chinese_traditional ] = "¤@­Ó­n­pºâ¨ä¤Ï¥¿©¶­Èªº¦b -1 ©M 1 ¤§¶¡ªº¼Æ­È¡C";
             Text[ arabic ] = "ÌíÈ ÇáÒÇæíÉ æíÌÈ Ãä íßæä ãä -1 Åáì 1.";
             Text[ dutch ] = "Een waarde tussen -1 en 1, waarvan de boogsinus moet worden berekend.";
@@ -15955,7 +15955,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Ò»¸öÒª¼ÆËãÆä·´Ë«ÇúÓàÏÒÖµµÄ´óÓÚ»òµÈÓÚ 1 µÄÊıÖµ¡£";
             Text[ russian ] = "Çíà÷åíèå, êîòîğîå áîëüøå èëè ğàâíî 1, ãèïåğáîëè÷åñêèé àğêêîñèíóñ êîòîğîãî íåîáõîäèìî âû÷èñëèòü.";
             Text[ polish ] = "Dowolna liczba rzeczywista równa lub wiêksza od 1, dla której ma zostaæ obliczony arcus cosinus hiperboliczny.";
-            Text[ japanese ] = "Ê²Êß°ÎŞØ¯¸º»²İ‚Ì‹tŠÖ”‚ğ‹‚ß‚é‚PˆÈã‚Ì”’lB";
+            Text[ japanese ] = "Ê²Êß°ÎŞØ¯¸º»²İ‚Ì‹tŠÖ”‚ğ‹‚ß‚é1ˆÈã‚Ì”’lB";
             Text[ chinese_traditional ] = "¤@­Ó­n­pºâ¨ä¤ÏÂù¦±§E©¶­Èªº¤j©ó©Îµ¥©ó 1 ªº¼Æ­È¡C";
             Text[ arabic ] = "Åí ÑŞã ÍŞíŞí íÓÇæí Ãæ ÃßÈÑ ãä 1.";
             Text[ dutch ] = "Een waarde groter of gelijk aan 1, waarvan de inverse cosinus hyperbolecus moet worden berekend.";
@@ -16388,7 +16388,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Ò»¸öÒª¼ÆËãÆä·´Ë«ÇúÓàÇĞÖµµÄÔÚ -1 ºÍ 1 Ö®¼äµÄÊıÖµ¡£";
             Text[ russian ] = "Çíà÷åíèå, êîòîğîå ìåíüøå -1 èëè áîëüøå 1, ãèïåğáîëè÷åñêèé àğêêîòàíãåíñ êîòîğîãî íåîáõîäèìî âû÷èñëèòü.";
             Text[ polish ] = "Wartoœæ równa lub wiêksza od 1, dla którejma zostaæ obliczony arcus cotangens hiperboliczny.";
-            Text[ japanese ] = "Ê²Êß°ÎŞØ¯¸ºÀİ¼ŞªİÄ‚ğ‹‚ß‚é|‚P‚©‚ç‚P‚Ü‚Å‚Ì”’lB";
+            Text[ japanese ] = "Ê²Êß°ÎŞØ¯¸ºÀİ¼ŞªİÄ‚ğ‹‚ß‚é-1‚©‚ç1‚Ü‚Å‚Ì”’lB";
             Text[ chinese_traditional ] = "¤@­Ó­n­pºâ¨ä¤ÏÂù¦±§E¤Á­Èªº¦b -1 ©M 1 ¤§¶¡ªº¼Æ­È¡C";
             Text[ arabic ] = "ŞãíÉ ÃÕÛÑ ãä -1¡ Ãæ ÃßÈÑ ãä 1¡ æÇáÊí ÊÑíÏ ÍÓÇÈ Ùá ÊãÇã ŞØÚåÇ ÇáÒÇÆÏ.";
             Text[ dutch ] = "Een waarde kleiner dan -1 of groter dan 1, waarvan de inverse cotangens hyperbolicus moet worden berekend.";
@@ -16496,7 +16496,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Òª¼ÆËãÆä·´Ë«ÇúÕıÇĞÖµµÄÔÚ -1 ºÍ 1 Ö®¼äµÄÊıÖµ¡£";
             Text[ russian ] = "Çíà÷åíèå îò -1 äî 1, ãèïåğáîëè÷åñêèé àğêòàíãåíñ êîòîğîãî íåîáõîäèìî âû÷èñëèòü.";
             Text[ polish ] = "Wartoœæ z przedzia³u -1 i 1, dla której nale¿y obliczyæ arcus tangens hiperboliczny.";
-            Text[ japanese ] = "”’l‚Ì‘o‹Èü‹t³Ú‚ğ‹‚ß‚é|‚P‚©‚ç‚P‚Ü‚Å‚Ì”’lB";
+            Text[ japanese ] = "”’l‚Ì‘o‹Èü‹t³Ú‚ğ‹‚ß‚é-1‚©‚ç1‚Ü‚Å‚Ì”’lB";
             Text[ chinese_traditional ] = "­n­pºâ¨ä¤ÏÂù¦±¥¿¤Á­Èªº¦b -1 ©M 1 ¤§¶¡ªº¼Æ­È¡C";
             Text[ arabic ] = "Ãí ÑŞã ÍŞíŞí Èíä -1 æ1 ÈÇÓÊËäÇÁ -1 æ1.";
             Text[ dutch ] = "Een waarde tussen -1 en 1, waarvan de inverse tangens hyperbolicus wordt berekend.";
@@ -17256,7 +17256,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Òª¼ÆËãÆäË«ÇúÓàÇĞÖµµÄ²»µÈÓÚÁãµÄÊıÖµ¡£";
             Text[ russian ] = "Çíà÷åíèå, íå ğàâíîå íóëş, äëÿ êîòîğîãî âû÷èñëÿåòñÿ ãèïåğáîëè÷åñêèé êîòàíãåíñ.";
             Text[ polish ] = "Wartoœæ ró¿na od zera, dla której ma zostaæ obliczony cotangens hyperboliczny.";
-            Text[ japanese ] = "Ê²Êß°ÎŞØ¯¸ºÀİ¼ŞªİÄ‚ğ‹‚ß‚é‚O‚Å‚È‚¢”’lB";
+            Text[ japanese ] = "Ê²Êß°ÎŞØ¯¸ºÀİ¼ŞªİÄ‚ğ‹‚ß‚é0‚Å‚È‚¢”’lB";
             Text[ chinese_traditional ] = "­n­pºâ¨äÂù¦±§E¤Á­Èªº¤£µ¥©ó¹sªº¼Æ­È¡C";
             Text[ arabic ] = "Ãí ÑŞã ÍŞíŞí.";
             Text[ dutch ] = "Een waarde ongelijk aan 0, waarvan de cotangens hyperbolicus moet worden berekend.";
@@ -17364,7 +17364,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Òª¼ÆËãÆäË«ÇúÕıÇĞÖµµÄÊıÖµ¡£";
             Text[ russian ] = "Çíà÷åíèå, äëÿ êîòîğîãî íåîáõîäèìî âû÷èñëèòü ãèïåğáîëè÷åñêèé òàíãåíñ.";
             Text[ polish ] = "Wartoœæ, dla której ma byæ obliczony tangens hiperboliczny.";
-            Text[ japanese ] = "Ê²Êß° ÎŞØ¯¸Àİ¼ŞªİÄ‚ğ‹‚ß‚é’l";
+            Text[ japanese ] = "Ê²Êß°ÎŞØ¯¸Àİ¼ŞªİÄ‚ğ‹‚ß‚é’lB";
             Text[ chinese_traditional ] = "­n­pºâ¨äÂù¦±¥¿¤Á­Èªº¼Æ­È¡C";
             Text[ arabic ] = "Ãí ÑŞã ÍŞíŞí.";
             Text[ dutch ] = "De waarde waarvan u de tangens hyperbolicus wilt berekenen.";
@@ -20036,13 +20036,13 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Èç¹ûÉè¶¨²»µÈÓÚÁã£¬ÔÚ¸ºÊıºÍ¸º»ùÊıµÄÇé¿öÏÂÑØ\n¾ø¶ÔÖµÔö´óµÄ·½ÏòÉáÈë¡£";
             Text[ russian ] = "Åñëè ñïîñîá çàäàí è íå ğàâåí íóëş, òî â ñëó÷àå îòğèöàòåëüíîãî ÷èñëà è îòğèöàòåëüíîé çíà÷èìîñòè îêğóãëåíèå ïîñëåäóåò äî àáñîëşòíîãî çíà÷åíèÿ.";
             Text[ polish ] = "Jeœli tryb nie jest zerem, zaokr¹gla siê w przypadku liczby ujemnej i ujemnej wa¿noœcido wartoœci absolutnej.";
-            Text[ japanese ] = "‘ÎÛ‚Ì”’l‚ªÏ²Å½‚ÌA‚±‚±‚É‚OˆÈŠO‚Ì”’l‚ğw’è‚·‚é‚ÆA”’l‚ğ‹²‚ŞŠî€’l‚Ì‚Â‚¬‚Ì”{”‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "‘ÎÛ‚Ì”’l‚ªÏ²Å½‚ÌA‚±‚±‚É0ˆÈŠO‚Ì”’l‚ğw’è‚·‚é‚ÆA”’l‚ğ‹²‚ŞŠî€’l‚Ì‚Â‚¬‚Ì”{”‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¦pªG³]©w¤£µ¥©ó¹s¡M¦b­t¼Æ©M­t°ò¼Æªº±¡ªp¤Uªuµ´¹ï­È¼W¤jªº¤è¦VªÙ¤J¡C";
             Text[ arabic ] = "ÅĞÇ Êã ÅÏÎÇá ŞíãÉ ÑŞãíÉ ÛíÑ ãÓÇæíÉ ááÕİÑ¡ íÊã ÊŞÑíÈåÇ ÑŞãíÇğ ááÃÚáì ÊÈÚÇğ ááÒíÇÏÉ ÇáãÚØÇÉ¡ æĞáß ÅĞÇ ßÇäÊ ÇáŞíãÉ ÓÇáÈÉ.";
             Text[ dutch ] = "Als aangegeven en niet gelijk aan nul, dan wordt bij een negatief getal en stapgrootte naar boven afgerond..";
             Text[ chinese_simplified ] = "Èç¹ûÉè¶¨²»µÈÓÚÁã£¬ÔÚ¸ºÊıºÍ¸º»ùÊıµÄÇé¿öÏÂÑØ\n¾ø¶ÔÖµÔö´óµÄ·½ÏòÉáÈë¡£";
             Text[ greek ] = "Áí ïñßæåôáé êáé åßíáé äéÜöïñï ôïõ ìçäåíüò, ôüôå óôç ğåñßğôùóç áñíçôéêïı áñéèìïı êáé âŞìáôïò ãßíåôáé óôñïããõëïğïßçóç ğñïò ôá ğÜíù áíáëïãéêÜ ğñïò ôï ğïóü.";
-            Text[ korean ] = "¸ğµå°¡ 0À¸·Î ÁöÁ¤µÇ¾î ÀÖÁö ¾ÊÀ¸¸é ¸¶ÀÌ³Ê½º ¼ıÀÚ¿Í À¯È¿¼ıÀÚÀÇ °æ¿ì °ª¿¡ µû¶ó ¹İ¿Ã¸²µË´Ï´Ù.";
+            Text[ korean ] = "¼³Á¤µÇ¾î ÀÖ°í,   0ÀÌ ¾Æ´Ò °æ¿ì ¸¶ÀÌ³Ê½º ¼ıÀÚ¿Í À¯È¿¼ıÀÚÀÇ °æ¿ì  °ª¿¡ µû¶ó ¹İ¿Ã¸²µË´Ï´Ù.";
             Text[ turkish ] = "Belirtildiğinde ve sıfıra eşit olmadığında, negatif sayılar ve adımlar için meblağa göre yukarı yuvarlama yapılır.";
             Text[ language_user1 ] = " ";
         };
@@ -20259,13 +20259,13 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Èç¹ûÉè¶¨²»µÈÓÚÁã£¬ÔÚ¸ºÊıºÍ¸º»ùÊıµÄÇé¿öÏÂÑØ\n¾ø¶ÔÖµ¼õĞ¡µÄ·½ÏòÈ¥Î²ÉáÈë¡£";
             Text[ russian ] = "Åñëè ñïîñîá çàäàí è íåğàâåí íóëş, òî â ñëó÷àå îòğèöàòåëüíîãî ÷èñëà è îòğèöàòåëüíîé çíà÷èìîñòè îêğóãëåíèå ïîñëåäóåò äî àáñîëşòíîãî çíà÷åíèÿ.";
             Text[ polish ] = "Jeœli tryb nie jest zerem, zaokr¹gla siê w przypadku liczby ujemnej i ujemnej wa¿noœcido wartoœci absolutnej.";
-            Text[ japanese ] = "‘ÎÛ‚Ì”’l‚ªÏ²Å½‚ÌA‚±‚±‚É‚OˆÈŠO‚Ì”’l‚ğw’è‚·‚é‚ÆA”’l‚ğ‹²‚ŞŠî€’l‚Ì‚Â‚¬‚Ì”{”‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "‘ÎÛ‚Ì”’l‚ªÏ²Å½‚ÌA‚±‚±‚É0ˆÈŠO‚Ì”’l‚ğw’è‚·‚é‚ÆA”’l‚ğ‹²‚ŞŠî€’l‚Ì‚Â‚¬‚Ì”{”‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¦pªG³]©w¤£µ¥©ó¹s¡M¦b­t¼Æ©M­t°ò¼Æªº±¡ªp¤Uªuµ´¹ï­È´î¤pªº¤è¦V¥h§ÀªÙ¤J¡C";
             Text[ arabic ] = "ÅĞÇ Êã ÅÏÎÇá ŞíãÉ ÑŞãíÉ ÛíÑ ãÓÇæíÉ ááÕİÑ¡ íÊã ÊŞÑíÈåÇ ÑŞãíÇğ ááÃÚáì ÊÈÚÇğ ááÒíÇÏÉ ÇáãÚØÇÉ¡ æĞáß ÅĞÇ ßÇäÊ ÇáŞíãÉ ÓÇáÈÉ.";
             Text[ dutch ] = "Indfien aangegeven en niet gelijk aan nul dan wordt bij een negatief getal en bij negatieve stapgrootte afgerond.";
             Text[ chinese_simplified ] = "Èç¹ûÉè¶¨²»µÈÓÚÁã£¬ÔÚ¸ºÊıºÍ¸º»ùÊıµÄÇé¿öÏÂÑØ\n¾ø¶ÔÖµ¼õĞ¡µÄ·½ÏòÈ¥Î²ÉáÈë¡£";
             Text[ greek ] = "Áí ïñßæåôáé êáé åßíáé äéÜöïñï ôïõ ìçäİí, ôüôå óôç ğåñßğôùóç áñíçôéêïı áñéèìïı êáé âŞìáôïò ãßíåôáé óôñïããõëïğïßçóç ğñïò ôá êÜôù áíáëïãéêÜ ğñïò ôï ğïóü.";
-            Text[ korean ] = "¸ğµå°¡ 0À¸·Î ÁöÁ¤µÇ¾î ÀÖÁö ¾ÊÀ¸¸é ¸¶ÀÌ³Ê½º¼ö¿Í À¯È¿¼ıÀÚÀÇ °æ¿ì ±İ¾×¿¡ µû¶ó ¹İ¿Ã¸²µË´Ï´Ù.";
+            Text[ korean ] = "¼³Á¤µÇ¾î ÀÖ°í, 0ÀÌ ¾Æ´Ò °æ¿ì, ¸¶ÀÌ³Ê½º¼ö¿Í À¯È¿¼ıÀÚÀÇ °æ¿ì ±İ¾×¿¡ µû¶ó ¹İ¿Ã¸²µË´Ï´Ù.";
             Text[ turkish ] = "Belirtildiğinde ve sıfıra eşit olmadığında, negatif sayı ve adım için meblağa göre aşağı yuvarlanır.";
             Text[ language_user1 ] = " ";
         };
@@ -20367,13 +20367,13 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÕûÊı 1;ÕûÊı 2,... ÊÇÒª¼ÆËãÆä×î´ó¹«Ô¼ÊıµÄÕûÊı¡£";
             Text[ russian ] = "Öåëîå ÷èñëî 1; öåëîå ÷èñëî 2,... öåëûå ÷èñëà, äëÿ êîòîğûõ âû÷èñëÿåòñÿ íàèáîëüøèé îáùèé äåëèòåëü.";
             Text[ polish ] = "1;2,... s¹ liczbami ca³kowitymi, dla których zostanie obliczony ich najwiêkszy wspólny dzielnik.";
-            Text[ japanese ] = "®”‚P;®”‚Q,...‚ÍÅ‘åŒö–ñ”‚ğ‹‚ß‚é”’lB";
+            Text[ japanese ] = "®” 1;®” 2,...‚ÍÅ‘åŒö–ñ”‚ğ‹‚ß‚é”’lB";
             Text[ chinese_traditional ] = "¾ã¼Æ 1;¾ã¼Æ 2,... ¬O­n­pºâ¨ä³Ì¤j¤½¬ù¼Æªº¾ã¼Æ¡C";
             Text[ arabic ] = "ÚÏÏ ÕÍíÍ 1¡ ÚÏÏ ÕÍíÍ 2¡... ÃÚÏÇÏ ÕÍíÍÉ ÊÑíÏ ÍÓÇÈ ÇáŞÇÓã ÇáãÔÊÑß ÇáÃßÈÑ áåÇ.";
             Text[ dutch ] = "Integer 1;Integer 2,... zijn gehele getallen waarvan de grootste gemene deler wordt berekend.";
             Text[ chinese_simplified ] = "ÕûÊı 1;ÕûÊı 2,... ÊÇÒª¼ÆËãÆä×î´ó¹«Ô¼ÊıµÄÕûÊı¡£";
             Text[ greek ] = "Áêİñáéïò 1 , Áêİñáéïò 2,... åßíáé áêİñáéïé áñéèìïß ôùí ïğïßùí õğïëïãßæåôáé ï ìİãéóôïò êïéíüò äéáéñİôçò.";
-            Text[ korean ] = "Integer 1; integer 2,...Àº »êÃâµÇ´Â ÃÖ´ë°ø¾à¼öÀÔ´Ï´Ù.";
+            Text[ korean ] = "Integer 1; integer 2,...Àº °è»êµÇ´Â ÃÖ´ë°ø¾à¼ö·Î¼­ Á¤¼öÀÔ´Ï´Ù.";
             Text[ turkish ] = "Tamsayı 1;Tamsayı  2,... en büyük ortak bölenleri hesaplanan tamsayılardır.";
             Text[ language_user1 ] = " ";
         };
@@ -20473,13 +20473,13 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÕûÊı 1;ÕûÊı 2,... ÊÇÒª¼ÆËãÆä×îĞ¡¹«±¶ÊıµÄÕûÊı¡£";
             Text[ russian ] = "×èñëî 1; ÷èñëî 2,... öåëûå ÷èñëà, äëÿ êîòîğûõ âû÷èñëÿåòñÿ íàèìåíüøåå îáùåå êğàòíîå.";
             Text[ polish ] = "1; 2,... s¹ liczbami ca³kowitymi, dla których ma zostaæ obliczona najmniejsza wspólna wielokrotnoœæ.";
-            Text[ japanese ] = "®”‚P;®”‚Q,...‚ÍÅ¬Œö”{”‚ğ‹‚ß‚é”’lB";
+            Text[ japanese ] = "®” 1;®” 2,...‚ÍÅ¬Œö”{”‚ğ‹‚ß‚é”’lB";
             Text[ chinese_traditional ] = "¾ã¼Æ 1;¾ã¼Æ 2,... ¬O­n­pºâ¨ä³Ì¤p¤½­¿¼Æªº¾ã¼Æ¡C";
             Text[ arabic ] = "ÚÏÏ ÕÍíÍ 1¡ ÚÏÏ ÕÍíÍ 2¡... ÃÚÏÇÏ ÕÍíÍÉ ÊÑíÏ ÍÓÇÈ ÇáãÖÇÚİ ÇáãÔÊÑß ÇáÃÕÛÑ áåÇ.";
             Text[ dutch ] = "Integer 1;Integer 2,... zijn gehele getallen waarvan het kleinste gemene veelvoud wordt berekend.";
             Text[ chinese_simplified ] = "ÕûÊı 1;ÕûÊı 2,... ÊÇÒª¼ÆËãÆä×îĞ¡¹«±¶ÊıµÄÕûÊı¡£";
             Text[ greek ] = "Áêİñáéïò 1;Áêİñáéïò 2,... åßíáé ïé áêİñáéïé áñéèìïß ãéá ôïõò ïğïßïõò èá õğïëïãéóôåß ôï åëÜ÷éóôï êïéíü ğïëëáğëÜóéï.";
-            Text[ korean ] = "Integer 1; integer 2,...Àº »êÃâµÈ ÃÖ¼Ò °ø¹è¼öÀÔ´Ï´Ù.";
+            Text[ korean ] = "Integer 1; integer 2,...Àº °è»êµÇ´Â ÃÖ¼Ò°ø¾à¼ö·Î¼­ Á¤¼öÀÔ´Ï´Ù.";
             Text[ turkish ] = "Tamsayı 1;Tamsayı  2,... en küçük ortak katları hesaplanan tamsayılardır.";
             Text[ language_user1 ] = " ";
         };
@@ -20615,7 +20615,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "¾ØÕó³Ë»ı¡£¼ÆËãÁ½¸ö¾ØÕóµÄ³Ë»ı¡£";
             Text[ russian ] = "Âû÷èñëÿåò ïğîèçâåäåíèå ìàòğèö.";
             Text[ polish ] = "Mno¿enie macierzy. Jest iloczynem dwóch tablic.";
-            Text[ japanese ] = "‚Q‚Â‚Ì”z—ñ‚Ìs—ñÏ‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "2‚Â‚Ì”z—ñ‚Ìs—ñÏ‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¯x°}­¼¿n¡C­pºâ¨â­Ó¯x°}ªº­¼¿n¡C";
             Text[ arabic ] = "ÊÚØí ÇáãÕİæİÉ ÇáäÇÊÌÉ Úä ÖÑÈ Õİíİíä.";
             Text[ dutch ] = "Vermenigvuldigt twee matrices.";
@@ -20686,7 +20686,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "ÓÃÓÚ¼ÆËã¾ØÕó³Ë»ıµÄµÚÒ»¸ö¾ØÕó¡£";
             Text[ russian ] = "Ïåğâàÿ ìàòğèöà äëÿ âû÷èñëåíèÿ ïğîèçâåäåíèÿ ìàòğèö.";
             Text[ polish ] = "Pierwsza macierz dla iloczynu macierzy.";
-            Text[ japanese ] = "s—ñÏ‚ğ‹‚ß‚é‚P‚Â–Ú‚Ì”z—ñB";
+            Text[ japanese ] = "s—ñÏ‚ğ‹‚ß‚é1‚Â–Ú‚Ì”z—ñB";
             Text[ chinese_traditional ] = "¥Î©ó¯x°}­¼¿nªº²Ä¤@­Ó¯x°}¡C";
             Text[ arabic ] = "ÇáãÕİæİÉ ÇáÃæáì ãä ÇáÃÑŞÇã ÇáãÑÇÏ ÖÑÈåÇ.";
             Text[ dutch ] = "De eerste matrix voor de vermenigvuldiging.";
@@ -20750,7 +20750,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "µÚ¶ş¸ö¾ØÕóµÄĞĞÊıºÍµÚÒ»¸ö¾ØÕóºÍÁĞÊıÏàµÈ¡£";
             Text[ russian ] = "Âòîğàÿ ìàòğèöà. Êîëè÷åñòâî ñòğîê âòîğîé ìàòğèöû è êîëè÷åñòâî ñòîëáöîâ ïåğâîé ìàòğèöû äîëæíî áûòü îäèíàêîâûì.";
             Text[ polish ] = "Druga macierz zawiera tak¹ sam¹ iloœæ wierszy, jak pierwsza kolumn.";
-            Text[ japanese ] = "‚P‚Â–Ú‚Ì”z—ñ‚Æ“™‚µ‚¢s”‚Ì‚Q‚Â–Ú‚Ì”z—ñB";
+            Text[ japanese ] = "1‚Â–Ú‚Ì”z—ñ‚Æ“™‚µ‚¢s”‚Ì2‚Â–Ú‚Ì”z—ñB";
             Text[ chinese_traditional ] = "²Ä¤G­Ó¯x°}ªº¦C¼Æ©M²Ä¤@­Ó¯x°}©MÄæ¼Æ¬Ûµ¥¡C";
             Text[ arabic ] = "ÇáãÕİæİÉ ÇáËÇäíÉ ÇáÊí ÊÍÊæí Úáì ÚÏÏ ãä ÇáÕİæİ ãÓÇæò áÚÏÏ ÃÚãÏÉ ÇáãÕİæİÉ ÇáÃæáì.";
             Text[ dutch ] = "De tweede matrix met hetzelde aantal rijen als de eerste matrix kolommen heeft.";
@@ -21176,7 +21176,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Êı×é 1; Êı×é 2,... ÊÇ1ÖÁ 30 ¸öÊı×é£¬ÆäÏàÓ¦ÔªËØĞèÒª½øĞĞÏà³Ë²¢ÇóºÍ¡£";
             Text[ russian ] = "Ìàññèâ 1; ìàññèâ 2,... äî 30 ìàññèâîâ, àğãóìåíòû êîòîğûõ ïåğåìíîæàşòñÿ.";
             Text[ polish ] = "Od 1 do 30 tablic, których sk³adniki maj¹ zostaæ wymno¿one.";
-            Text[ japanese ] = "ÏÄØ¯¸½‚P;ÏÄØ¯¸½‚Q;...‚ÍŒvZ‚Ì‘ÎÛ‚Æ‚È‚é—v‘f‚ğŠÜ‚Ş30ŒÂ‚Ü‚Å‚Ì”z—ñB";
+            Text[ japanese ] = "ÏÄØ¯¸½ 1;ÏÄØ¯¸½ 2;...‚ÍŒvZ‚Ì‘ÎÛ‚Æ‚È‚é—v‘f‚ğŠÜ‚Ş30ŒÂ‚Ü‚Å‚Ì”z—ñB";
             Text[ chinese_traditional ] = "¼Æ²Õ 1; ¼Æ²Õ 2,... ¬O1¦Ü 30 ­Ó¼Æ²Õ¡M¨ä¬ÛÀ³¤¸¯À»İ­n¶i¦æ¬Û­¼¨Ã¨D©M¡C";
             Text[ arabic ] = "array1;array2... ÍÊì 30 ÕİíİÇğ ÊÑíÏ ÖÑÈ ãßæäÇÊåÇ.";
             Text[ dutch ] = "Matrix 1; Matrix 2,... zijn maximaal 30 matrices waarvan de argumenten worden vermenigvuldigd.";
@@ -21382,7 +21382,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Á½¸öÊı×éÖĞ¶ÔÓ¦ÊıÖµµÄÆ½·½ºÍÖ®ºÍ¡£";
             Text[ russian ] = "Âû÷èñëÿåò ñóììó ñóìì êâàäğàòîâ ñîîòâåòñòâóşùèõ ıëåìåíòîâ äâóõ ìàññèâîâ.";
             Text[ polish ] = "Sumuje sumy kwadratów dwóch tablic.";
-            Text[ japanese ] = "‚Q‚Â‚Ì”z—ñ‚Å‘Î‰‚·‚é”z—ñ—v‘f‚Ì•½•û˜a‚ğ‡Œv‚µ‚Ü‚·B";
+            Text[ japanese ] = "2‚Â‚Ì”z—ñ‚Å‘Î‰‚·‚é”z—ñ—v‘f‚Ì•½•û˜a‚ğ‡Œv‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¨â­Ó¼Æ²Õ¤¤¹ïÀ³¼Æ­Èªº¥­¤è©M¤§©M¡C";
             Text[ arabic ] = "ÊÌãÚ ãÌãæÚ ãÑÈÚÇÊ Õİíİíä.";
             Text[ dutch ] = "Telt de sommen van de kwadraten van twee matrices bij elkaar op.";
@@ -21552,7 +21552,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "Á½¸öÊı×éÖĞ¶ÔÓ¦ÊıÖµÖ®²îµÄÆ½·½ºÍ¡£";
             Text[ russian ] = "Âû÷èñëÿåò ñóììó êâàäğàòîâ ğàçíîñòåé ñîîòâåòñòâóşùèõ çíà÷åíèé â äâóõ ìàññèâàõ.";
             Text[ polish ] = "Oblicza sumê kwadratów odpowiadaj¹cych sobie wartoœci dwóch tablic.";
-            Text[ japanese ] = "‚Q‚Â‚Ì”z—ñ‚Å‘Î‰‚·‚é”z—ñ—v‘f‚Ì·‚ğ‚Qæ‚µA‚³‚ç‚É‚»‚Ì‡Œv‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "2‚Â‚Ì”z—ñ‚Å‘Î‰‚·‚é”z—ñ—v‘f‚Ì·‚ğ2æ‚µA‚³‚ç‚É‚»‚Ì‡Œv‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¨â­Ó¼Æ²Õ¤¤¹ïÀ³¼Æ­È¤§®tªº¥­¤è©M¡C";
             Text[ arabic ] = "ÊÌãÚ ãÑÈÚÇÊ ÇáİÇÑŞ Èíä Õİíİíä.";
             Text[ dutch ] = "Berekent de som van de kwadraten van de verschillen van twee matrices.";
@@ -22097,13 +22097,13 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Èç¹ûtype=0£¬ÄÇÃ´Ö±Ïß¾­¹ıÁãµã¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå, êîòîğîå óêàçûâàåò, òğåáóåòñÿ ëè, ÷òîáû êîíñòàíòà b áûëà ğàâíà 0.";
             Text[ polish ] = "Wartoœæ logiczna okreœlaj¹ca, czy dla sta³ej b ma zostaæ wymuszona wartoœæ 0.";
-            Text[ japanese ] = "’è”‚O‚É‚·‚é‚Æ’l‚ª‚O‚Éİ’è‚³‚êA‚»‚¤‚Å‚È‚¢ê‡‚Í’l‚ª’²®‚³‚ê‚Ü‚·B";
+            Text[ japanese ] = "’è” = 0 ‚É‚·‚é‚Æ’l‚ª0‚Éİ’è‚³‚êA‚»‚¤‚Å‚È‚¢ê‡‚Í’l‚ª’²®‚³‚ê‚Ü‚·B";
             Text[ chinese_traditional ] = "¦pªGconst=0¡Mªí¥Üª½½u¸g¹L¹sÂI¡C";
             Text[ arabic ] = "ŞíãÉ ãäØŞíÉ: íÍÓÈ ÇáËÇÈÊ b ÈÔßá ÚÇÏí ÅĞÇ ßÇä Const = TRUE Ãæ ãåãáÇğº æíÚíä b ãÓÇæíÇğ 0 ÅĞÇ ßÇä Const = FALSE.";
             Text[ dutch ] = "Indien type=0 dan worden de lijnen door het nulpunt berekend; verschoven lijnen zijn ook mogelijk.";
             Text[ chinese_simplified ] = "Èç¹ûtype=0£¬ÄÇÃ´Ö±Ïß¾­¹ıÁãµã¡£";
             Text[ greek ] = "ÅÜí åßíáé Ôığïò=0, ôüôå õğïëïãßæïíôáé åõèåßåò ïé ïğïßåò äéİñ÷ïíôáé áğü ôï ìçäåíéêü óçìåßï, áëëéşò êáé ìåôáöåñüìåíåò åõèåßåò.";
-            Text[ korean ] = "type=0ÀÌ¸é, ¿øÁ¡À» Åë°úÇÏ´Â Á÷¼±µéÀÌ °è»êµÇ¸ç ±×·¸Áö ¾ÊÀ» °æ¿ì ÀÌµ¿µÈ Á÷¼±µéµµ °è»êµË´Ï´Ù.";
+            Text[ korean ] = "type=0ÀÌ¸é, 0Á¡À» Åë°úÇÏ´Â Á÷¼±µéÀÌ °è»êµÇ¸ç ±×·¸Áö ¾ÊÀ» °æ¿ì ÀÌµ¿µÈ Á÷¼±µéµµ °è»êµË´Ï´Ù.";
             Text[ turkish ] = "Tür=0 olursa doğrular, sıfır noktası üzerinden hesaplanır. Diğer durumlarda taşınmış doğrular da hesaplanır.";
             Text[ language_user1 ] = " ";
         };
@@ -22163,7 +22163,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Èç¹û stats=0 £¬Ö»¼ÆËã»Ø¹éÏµÊı£¬·ñÔòÍ¬Ê±¼ÆËãÆäËû¸½¼ÓÊıÖµ¡£";
             Text[ russian ] = "Åñëè ïàğàìåòğû ğàâíû íóëş, òî âû÷èñëÿşòñÿ òîëüêî êîıôôèöèåíòû ğåãğåññèè, â ïğîòèâíîì ñëó÷àå òàêæå äîïîëíèòåëüíûå çíà÷åíèÿ.";
             Text[ polish ] = "Jeœli parametry wynosz¹ 0, obliczane bêd¹ tylko wspó³czynniki regresji, w innych przypadkach równie¿ pozosta³e wartoœci.";
-            Text[ japanese ] = "•â³‚O‚É‚·‚é‚Æ‰ñ‹A’¼ü‚Ì•â³€‚¾‚¯‚ğ’Ç‰Áî•ñ‚Æ‚µ‚Ä•Ô‚µA‚»‚¤‚Å‚È‚¢ê‡‚Í‚»‚Ì‘¼‚Ì’l‚à•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "•â³ = 0 ‚É‚·‚é‚Æ‰ñ‹A’¼ü‚Ì•â³€‚¾‚¯‚ğ’Ç‰Áî•ñ‚Æ‚µ‚Ä•Ô‚µA‚»‚¤‚Å‚È‚¢ê‡‚Í‚»‚Ì‘¼‚Ì’l‚à•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¦pªG stats=0 ¡M¥u­pºâ¦^Âk¬ÛÃö«Y¼Æ¡M§_«h¦P®É­pºâ¨ä¥Lªş¥[¼Æ­È¡C";
             Text[ arabic ] = "ŞíãÉ ãäØŞíÉ: ÅÑÌÇÚ ÅÍÕÇÆíÇÊ ÇäÍÏÇÑ ÅÖÇİíÉ TRUE =º ÅÑÌÇÚ ãÚÇãáÇÊ m æÇáËÇÈÊ b = FALSE Ãæ ãåãá.";
             Text[ dutch ] = "Indien parameter=0 dan worden alleen de regressiecoëfficiënten berekend; ook andere waarden zijn mogelijk.";
@@ -22238,7 +22238,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "data_Y";
             Text[ russian ] = "Èçâ_äàííûå_Y";
             Text[ polish ] = "Dane_Y";
-            Text[ japanese ] = "Šù’m‚Ì ‚x";
+            Text[ japanese ] = "Šù’m‚Ì Y";
             Text[ chinese_traditional ] = "data_Y";
             Text[ arabic ] = "ÈíÇäÇÊ_Y";
             Text[ dutch ] = "Gegevens_Y";
@@ -22302,7 +22302,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "data_X";
             Text[ russian ] = "Èçâ_äàííûå_X";
             Text[ polish ] = "Dane_X";
-            Text[ japanese ] = "Šù’m‚Ì ‚w";
+            Text[ japanese ] = "Šù’m‚Ì X";
             Text[ chinese_traditional ] = "data_X";
             Text[ arabic ] = "ÈíÇäÇÊ_X";
             Text[ dutch ] = "Gegevens_X";
@@ -22398,7 +22398,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÊÇÒ»¸öÂß¼­Öµ¡£Èç¹ûÊıÖµÎªÁã£¬¾Í°´ÕÕ¹«Ê½ y=m^x \n¼ÆËã£¬·ñÔò¾Í°´ÕÕ y=b*m^x ¼ÆËã¡£";
             Text[ russian ] = "Åñëè òèï ğàâåí íóëş, òî ôóíêöèÿ âû÷èñëÿåòñÿ ïî ôîğìóëå y=m^x, â ïğîòèâíîì ñëó÷àå ôóíêöèÿ âû÷èñëÿåòñÿ ïî ôîğìóëå y=b*m^x.";
             Text[ polish ] = "Jeœli typ wynosi 0, obliczane bêd¹ funkcje postaci y=m^x, w pozosta³ych przypadkach równie¿ funkcje y=b*m^x.";
-            Text[ japanese ] = "ŒvZ•û®‚O‚Ìê‡‚Í Ym^x ‚ÅA‚»‚¤‚Å‚È‚¢ê‡‚Í Yb*m^x ‚ÅŒvZ‚³‚ê‚Ü‚·B";
+            Text[ japanese ] = "ŒvZ•û® = 0 ‚Ìê‡‚Í Ym^x ‚ÅA‚»‚¤‚Å‚È‚¢ê‡‚Í Yb*m^x ‚ÅŒvZ‚³‚ê‚Ü‚·B";
             Text[ chinese_traditional ] = "¬O¤@­ÓÅŞ¿è­È¡C¦pªG¼Æ­È¬°¹s¡M´N«ö·Ó¤½¦¡ y=m^x ­pºâ¡M\n§_«h´N«ö·Ó y=b*m^x ­pºâ¡C";
             Text[ arabic ] = "ŞíãÉ ãäØŞíÉ:íÍÓÈ ÇáËÇÈÊ b ÈÔßá ÇÚÊíÇÏí ÅĞÇ ßÇä = TRUE Constº æíÚíä b ãÓÇæíÇğ 1 ÅĞÇ ßÇä Const = FALSE Ãæ ãåãáÇğ.";
             Text[ dutch ] = "Indien type=0 dan worden de functies van de vorm y=m^x berekend, anders ook functies y=b*m^x. ";
@@ -22464,7 +22464,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÊÇÒ»¸öÂß¼­Öµ¡£Èç¹ûÊıÖµÎªÁã£¬¾ÍÖ»¼ÆËã»Ø¹éÏà¹ØÏµÊı£¬\n·ñÔò»¹¼ÆËãÆäËû¸½¼ÓÊıÖµ¡£";
             Text[ russian ] = "Åñëè ïàğàìåòğû ğàâíû íóëş, òî âû÷èñëÿşòñÿ òîëüêî êîıôôèöèåíòû ğåãğåññèè, â ïğîòèâíîì ñëó÷àå åùå è äîïîëíèòåëüíûå çíà÷åíèÿ.";
             Text[ polish ] = "Jeœli parametry wynosz¹ 0, obliczane bêd¹ tylko wspó³czynniki regresji, w innych przypadkach równie¿ pozosta³e wartoœci.";
-            Text[ japanese ] = "•â³‚O‚É‚·‚é‚Æ‰ñ‹Aw”‹Èü‚Ì•â³€‚¾‚¯‚ğ’Ç‰Áî•ñ‚Æ‚µ‚Ä•Ô‚µA‚»‚¤‚Å‚È‚¢ê‡‚Í‚Ù‚©‚Ì’l‚à•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "•â³ = 0 ‚É‚·‚é‚Æ‰ñ‹Aw”‹Èü‚Ì•â³€‚¾‚¯‚ğ’Ç‰Áî•ñ‚Æ‚µ‚Ä•Ô‚µA‚»‚¤‚Å‚È‚¢ê‡‚Í‚Ù‚©‚Ì’l‚à•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¬O¤@­ÓÅŞ¿è­È¡C¦pªG¼Æ­È¬°¹s¡M´N¥u­pºâ¦^Âk¬ÛÃö«Y¼Æ¡M\n§_«hÁÙ­pºâ¨ä¥Lªş¥[¼Æ­È¡C";
             Text[ arabic ] = "ŞíãÉ ãäØŞíÉ: ÅÑÌÇÚ ÅÍÕÇÆíÇÊ ÇäÍÏÇÑ ÅÖÇİíÉ TRUE =º ÅÑÌÇÚ ãÚÇãáÇÊ m æÇáËÇÈÊ b = FALSE Ãæ ãåãá.";
             Text[ dutch ] = "Indien parameter=0 worden alleen de regressiecëfficiëenten berekend; andere waarden zijn ook mogelijk.";
@@ -22762,13 +22762,13 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Èç¹û type=0£¬ÄÇÃ´Ö±Ïßµ±×÷¾­¹ıÁãµã¼ÆËã¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå, êîòîğîå óêàçûâàåò, òğåáóåòñÿ ëè, ÷òîáû êîíñòàíòà b áûëà ğàâíà 0.";
             Text[ polish ] = "Wartoœæ logiczna okreœlaj¹ca, czy wymusiæ 0 dla sta³ej b.";
-            Text[ japanese ] = "’è”‚O‚É‚·‚é‚Æ‚O‚Éİ’è‚³‚êA‚»‚¤‚Å‚È‚¢ê‡‚Í’²®‚³‚ê‚Ü‚·B";
+            Text[ japanese ] = "’è” = 0 ‚É‚·‚é‚Æ0‚Éİ’è‚³‚êA‚»‚¤‚Å‚È‚¢ê‡‚Í’²®‚³‚ê‚Ü‚·B";
             Text[ chinese_traditional ] = "¦pªG const=0 ¡M­n­pºâªºª½½u¸g¹L¹sÂI¡C";
             Text[ arabic ] = "ŞíãÉ ãäØŞíÉ: íÍÓÈ ÇáËÇÈÊ b ÈÔßá ÚÇÏí ÅĞÇ ßÇä Const = TRUE Ãæ ãåãáÇğº æíÚíä b ãÓÇæíÇğ 0 ÅĞÇ ßÇä Const = FALSE.";
             Text[ dutch ] = "Indien type=0 dan worden de lijnen door het nulpunt berekend. Ook verschoven lijnen zijn mogelijk.";
             Text[ chinese_simplified ] = "Èç¹û type=0£¬ÄÇÃ´Ö±Ïßµ±×÷¾­¹ıÁãµã¼ÆËã¡£";
             Text[ greek ] = "ÅÜí åßíáé Ôığïò=0, ôüôå õğïëïãßæïíôáé åõèåßåò ïé ïğïßåò äéİñ÷ïíôáé áğü ôï ìçäåíéêü óçìåßï, áëëéşò êáé ìåôáöåñüìåíåò åõèåßåò.";
-            Text[ korean ] = "type=0ÀÌ¸é,  ¿øÁ¡À» Åë°úÇÏ´Â Á÷¼±µéÀÌ °è»êµÇ¸ç ±×·¸Áö ¾ÊÀ» °æ¿ì ÀÌµ¿µÈ Á÷¼±µéµµ °è»êµË´Ï´Ù.";
+            Text[ korean ] = "type=0ÀÌ¸é, 0Á¡À» Åë°úÇÏ´Â Á÷¼±µéÀÌ °è»êµÇ¸ç ±×·¸Áö ¾ÊÀ» °æ¿ì ÀÌµ¿µÈ Á÷¼±µéµµ °è»êµË´Ï´Ù.";
             Text[ turkish ] = "Tür=0 olursa doğrular, sıfır noktası üzerinden hesaplanır. Diğer durumlarda taşınmış doğrular da hesaplanır.";
             Text[ language_user1 ] = " ";
         };
@@ -23060,7 +23060,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Èç¹û type=0 £¬º¯Êı¾Í°´ÕÕ¹«Ê½ y=m^x ¼ÆËã£¬\n·ñÔò±ã°´ÕÕ¹«Ê½ y=b*m^x ¼ÆËã¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå, åñëè îíî ğàâíî 0, òî ôóíêöèè âû÷èñëÿşòñÿ ïî ôîğìóëå y=m^x, ïğè íàëè÷èè çíà÷åíèÿ - ïî ôîğìóëå y=b*m^x.";
             Text[ polish ] = "Jeœli typ wynosi 0, bêd¹ obliczane funkcje rodzaju y=m^x, w pozosta³ych wypadkach równie¿ funkcje y=b*m^x.";
-            Text[ japanese ] = "ŒvZ•û®‚O‚Ìê‡‚Í Ym^x‚ÅA‚»‚¤‚Å‚È‚¢ê‡‚Í Yb*m^x‚ÅŒvZ‚³‚ê‚Ü‚·B";
+            Text[ japanese ] = "ŒvZ•û® = 0 ‚Ìê‡‚Í Ym^x‚ÅA‚»‚¤‚Å‚È‚¢ê‡‚Í Yb*m^x‚ÅŒvZ‚³‚ê‚Ü‚·B";
             Text[ chinese_traditional ] = "¦pªG const=0 ¡M¨º»ò¨ç¼Æ´N«ö·Ó¤½¦¡ y=m^x ­pºâ¡M§_«h´N«ö·Ó y=b*m^x ­pºâ¡C";
             Text[ arabic ] = "ŞíãÉ ãäØŞíÉ:íÍÓÈ ÇáËÇÈÊ b ÈÔßá ÇÚÊíÇÏí ÅĞÇ ßÇä = TRUE Constº æíÚíä b ãÓÇæíÇğ 1 ÅĞÇ ßÇä Const = FALSE Ãæ ãåãáÇğ.";
             Text[ dutch ] = "Is Type=0, dan worden functies van de vorm y=m^x berekend, verder ook functies y=b*m^x.";
@@ -23168,7 +23168,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÊıÖµ1; ÊıÖµ 2;... ÊÇ 1 ÖÁ 30¸öº¬ÓĞ¸÷ÖÖÀàĞÍÊı¾İµÄ\n²ÎÊı£¬µ«Ö»¼ÆÊıÊı×ÖÀàĞÍµÄÊı¾İ¡£";
             Text[ russian ] = "Çíà÷åíèå 1; çíà÷åíèå 2;... îò 1 äî 30 àğãóìåíòîâ, êîòîğûå ìîãóò ñîäåğæàòü èëè ññûëàòüñÿ íà äàííûå ğàçëè÷íûõ òèïîâ, íî â ïîäñ÷åòå ó÷àñòâóşò òîëüêî ÷èñëà.";
             Text[ polish ] = "Od 1 do 30 argumentów, które mog¹ odnosiæ siê do argumentów ró¿nych typów danych, przy czym zliczane bêd¹ tylko liczby.";
-            Text[ japanese ] = "’l‚P;’l‚Q;...‚Í‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ì¾Ù”ÍˆÍ‚Å”CˆÓ‚ÌÃŞ°À‚ğ‘ÎÛ‚Æ‚µ‚Ü‚·‚ªA”’l‚Ì¾Ù‚Ì‚İ‚ğ”‚¦‚Ü‚·B";
+            Text[ japanese ] = "’l 1;’l 2;...‚Í1‚©‚ç30ŒÂ‚Ü‚Å‚Ì¾Ù”ÍˆÍ‚Å”CˆÓ‚ÌÃŞ°À‚ğ‘ÎÛ‚Æ‚µ‚Ü‚·‚ªA”’l‚Ì¾Ù‚Ì‚İ‚ğ”‚¦‚Ü‚·B";
             Text[ chinese_traditional ] = "¼Æ­È1; ¼Æ­È 2;... ¬O 1 ¦Ü 30­Ó§t¦³¦UºØÃş«¬¸ê®Æªº°Ñ¼Æ¡M\n¦ı¥u­p¼Æ¼Æ¦rÃş«¬ªº¸ê®Æ¡C";
             Text[ arabic ] = "value1;value2;... ãä 1 Åáì 30 æÓíØÉ ĞÇÊ ÃäãÇØ ÈíÇäÇÊ ãÎÊáİÉº ÅáÇ Ãä ÇáÃÑŞÇã İŞØ åí ÇáÊí Óæİ ÊÚÏ.";
             Text[ dutch ] = "Waarde 1; Waarde 2;...zijn maximaal 30 argumenten met verschillende typen gegevens, waarbij alleen de getallen worden geteld.";
@@ -23276,7 +23276,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÊıÖµ 1; ÊıÖµ 2;... ÊÇ 1 ÖÁ 30 ¸öÒª¼ÆÊıµÄ²ÎÊı¡£";
             Text[ russian ] = "Çíà÷åíèå 1; çíà÷åíèå 2;... îò 1 äî 30 àğãóìåíòîâ, êîëè÷åñòâî êîòîğûõ òğåáóåòñÿ ñîñ÷èòàòü.";
             Text[ polish ] = "Od 1 do 30 argumentów, które odpowiadaj¹ wartoœciom do zliczania.";
-            Text[ japanese ] = "’l‚P;’l‚Q;...‚Í‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ì¾Ù”ÍˆÍ‚Å”CˆÓ‚ÌÃŞ°À‚ğ‘ÎÛ‚Æ‚µ‚Ü‚·B";
+            Text[ japanese ] = "’l 1; ’l 2;...‚Í1‚©‚ç30ŒÂ‚Ü‚Å‚Ì¾Ù”ÍˆÍ‚Å”CˆÓ‚ÌÃŞ°À‚ğ‘ÎÛ‚Æ‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¼Æ­È 1; ¼Æ­È 2;... ¬O 1 ¦Ü 30 ­Ó­n­p¼Æªº°Ñ¼Æ¡C";
             Text[ arabic ] = "value1;value2... ãä 1 Åáì 30 æÓíØÉ ÊãËá ÇáŞíã ÇáãÑÇÏ ÚÏåÇ.";
             Text[ dutch ] = "Waarde 1; Waarde 2;... zijn maximaal 30 argumenten met de waarden die geteld moeten worden.";
@@ -23384,7 +23384,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı×Ö 1; Êı×Ö 2;... ÊÇ 1 ÖÁ 30 ¸öÒªÕÒ³öÆä×î´óÊıÖµµÄÊı¾İ¡£";
             Text[ russian ] = "×èñëî 1; ÷èñëî 2;... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, ìàêñèìàëüíîå çíà÷åíèå êîòîğûõ òğåáóåòñÿ îïğåäåëèòü.";
             Text[ polish ] = "Od 1 do 30 numerycznych argumentów, dla których ma zostaæ okreœlona maksymalna wartoœæ.";
-            Text[ japanese ] = "”‚P;”’l‚Q;...‚ÍÅ‘å‚Ì”’l‚ğŒ©‚Â‚¯‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ì”’lB";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚ÍÅ‘å‚Ì”’l‚ğŒ©‚Â‚¯‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ì”’lB";
             Text[ chinese_traditional ] = "¼Æ¦r 1; ¼Æ¦r 2;... ¬O 1 ¦Ü 30 ­Ó­n§ä¥X¨ä³Ì¤j¼Æ­Èªº¼Æ¾Ú¡C";
             Text[ arabic ] = "number1;number2... ãä 1 Åáì 30 ÑŞãÇğ ÊÑíÏ ÊÍÏíÏ ÇáŞíãÉ ÇáÚÙãì áåÇ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 argumenten waarvan de hoogste waarde moet worden bepaald.";
@@ -23472,7 +23472,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÊıÖµ1£»ÊıÖµ2£»...ÊÇ 1 ÖÁ 30¸öÒªÕÒ³öÆä×î´óÊıÖµµÄ²ÎÊı¡£";
             Text[ russian ] = "Çíà÷åíèå 1, çíà÷åíèå 2,... îò 1 äî 30 àğãóìåíòîâ, ñğåäè êîòîğûõ èùåòñÿ íàèáîëüøåå.";
             Text[ polish ] = "Od 1 do 30 argumentów, dla których ma zostaæ okreœlona maksymalna wartoœæ.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚ÍÅ‘å‚Ì”’l‚ğŒ©‚Â‚¯‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;..‚ÍÅ‘å‚Ì”’l‚ğŒ©‚Â‚¯‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ­È1¡Q¼Æ­È2¡Q...¬O 1 ¦Ü 30­Ó­n§ä¥X¨ä³Ì¤j¼Æ­Èªº°Ñ¼Æ¡C";
             Text[ arabic ] = "value1;value2... ãä 1 Åáì 30 æÓíØÉ ÊÑíÏ ÊÍÏíÏ ÇáŞíãÉ ÇáÚÙãì áåÇ.";
             Text[ dutch ] = "waarde 1; waarde 2;... zijn 1 tot 30 argumenten waarvan u de grootste waarde wilt bepalen.";
@@ -23578,7 +23578,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı×Ö 1; Êı×Ö 2;... ÊÇ 1 ÖÁ 30 ¸öÒªÈ·¶¨Æä×îĞ¡ÖµµÄ²ÎÊı¡£";
             Text[ russian ] = "×èñëî 1; ÷èñëî 2;... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, ìèíèìàëüíîå çíà÷åíèå êîòîğûõ òğåáóåòñÿ îïğåäåëèòü.";
             Text[ polish ] = "Od 1 do 30 liczb, wœród których nast¹pi wyszukanie liczby najmniejszej.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚ÍÅ¬‚Ì”’l‚ğŒ©‚Â‚¯‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ì”’lB";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚ÍÅ¬‚Ì”’l‚ğŒ©‚Â‚¯‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ì”’lB";
             Text[ chinese_traditional ] = "¼Æ¦r 1; ¼Æ¦r 2;... ¬O 1 ¦Ü 30 ­Ó­n½T©w¨ä³Ì¤p­Èªº°Ñ¼Æ¡C";
             Text[ arabic ] = "number1;number2... ãä 1 Åáì 30 ÑŞãÇğ ÊÑíÏ ÊÍÏíÏ ÇáŞíãÉ ÇáÕÛÑì áåÇ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 argumenten waarvan de laagste waarde moet worden bepaald.";
@@ -23666,7 +23666,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÊıÖµ1£»ÊıÖµ2£»...ÊÇ 1 ÖÁ 30 ¸öÒªÈ·¶¨Æä×îĞ¡ÖµµÄ²ÎÊı¡£";
             Text[ russian ] = "Çíà÷åíèå 1, çíà÷åíèå 2,... îò 1 äî 30 àğãóìåíòîâ, ñğåäè êîòîğûõ èùåòñÿ íàèìåíüøåå.";
             Text[ polish ] = "Od 1 do 30 argumentów, dla których ma zostaæ okreœlona minimalna wartoœæ.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚ÍÅ¬’l‚ğŒ©‚Â‚¯‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚ÍÅ¬’l‚ğŒ©‚Â‚¯‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ­È1¡Q¼Æ­È2¡Q...¬O 1 ¦Ü 30 ­Ó­n½T©w¨ä³Ì¤p­Èªº°Ñ¼Æ¡C";
             Text[ arabic ] = "value1;value2... ãä 1 Åáì 30 æÓíØÉ ÊÑíÏ ÊÍÏíÏ ÇáŞíãÉ ÇáÚÙãì áåÇ.";
             Text[ dutch ] = "waarde 1; waarde 2;... zijn 1 tot 30 argumenten waarvan u de kleinste waarde wilt bepalen..";
@@ -23772,7 +23772,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı×Ö 1£»Êı×Ö 2£»ÊÇ 1 ÖÁ 30 ¸ö±íÊ¾Ò»¸ö³éÑùµÄÊı×ÖÔªËØ¡£";
             Text[ russian ] = "×èñëî1, ÷èñëî2, ... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, ñîîòâåòñòâóşùèõ âûáîğêå èç ãåíåğàëüíîé ñîâîêóïíîñòè.";
             Text[ polish ] = "Od 1 do 30 numerycznych argumentów, które przedstawiaj¹ próbkê, odpowiadaj¹c¹ populacji.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Í•êW’c‚Ì•W–{‚É‘Î‰‚·‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚Í•êW’c‚Ì•W–{‚É‘Î‰‚·‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ¦r 1¡Q¼Æ¦r 2¡Q¬O 1 ¦Ü 30 ­Óªí¥Ü¤@­Ó©â¼Ëªº¼Æ¦r¤¸¯À¡C";
             Text[ arabic ] = "Number 1, Number 2;... ãä 1 Åáì 30 æÓíØÉ ÚÏÏíÉ ÊãËá ÚíäÉ ãÃÎæĞÉ ãä ÇáãÌÊãÚ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 numerieke argumenten die resulteren uit een steekproef onder een populatie.";
@@ -23860,7 +23860,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÊıÖµ1£»ÊıÖµ2£»...ÊÇ 1 ÖÁ 30¸ö±í´ïÒ»¸ö³éÑùµÄÔªËØ¡£";
             Text[ russian ] = "Çíà÷åíèå 1 ,çíà÷åíèå 2,... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, ñîîòâåòñòâóşùèõ âûáîğêå èç ãåíåğàëüíîé ñîâîêóïíîñòè.";
             Text[ polish ] = "Od 1 do 30 argumentów, które odpowiadaj¹ próbce populacji.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Í•êW’c‚Ì•W–{‚É‘Î‰‚·‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚Í•êW’c‚Ì•W–{‚É‘Î‰‚·‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ­È1¡Q¼Æ­È2¡Q...¬O 1 ¦Ü 30­Óªí¹F¤@­Ó©â¼Ëªº¤¸¯À¡C";
             Text[ arabic ] = "value1;value2... ãä 1 Åáì 30 æÓíØÉ ÊãËá ÚíäÉ ãÃÎæĞÉ ãä ÇáãÌÊãÚ.";
             Text[ dutch ] = "waarde 1; waarde 2;... zijn 1 tot 30 argumenten die resulteren uit een steekproef onder een populatie.";
@@ -23968,7 +23968,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı×Ö 1£»Êı×Ö 2£»ÊÇ 1 ÖÁ 30 ¸ö±íÊ¾Ò»¸ö³éÑùµÄÊı×ÖÔªËØ¡£";
             Text[ russian ] = "×èñëî1, ÷èñëî2, ... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, ñîîòâåòñòâóşùèõ ãåíåğàëüíîé ñîâîêóïíîñòè.";
             Text[ polish ] = "Od 1 do 30 numerycznych argumentów, które odpowiadaj¹ populacji.";
-            Text[ japanese ] = "”‚P;”’l‚Q;...‚Í•êW’c‘S‘Ì‚É‘Î‰‚·‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "” 1;”’l 2;...‚Í•êW’c‘S‘Ì‚É‘Î‰‚·‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ¦r 1¡Q¼Æ¦r 2¡Q¬O 1 ¦Ü 30 ­Óªí¥Ü¤@­Ó©â¼Ëªº¼Æ¦r¤¸¯À¡C";
             Text[ arabic ] = "number1;number2... ãä 1 Åáì 30 æÓíØÉ ÊãËá ÇáãÌÊãÚ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 numerieke argumenten die overeenkomen met een populatie.";
@@ -24056,7 +24056,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÊıÖµ1£»ÊıÖµ2£»... ÊÇ 1 ÖÁ 30¸ö±íÊ¾³éÑù×ÜÌåµÄÊı×ÖÔªËØ¡£";
             Text[ russian ] = "Çíà÷åíèå 1, çíà÷åíèå 2, ... îò1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, ñîîòâåòñòâóşùèõ ãåíåğàëüíîé ñîâîêóïíîñòè.";
             Text[ polish ] = "Od 1 do 30 argumentów, które reprezentuj¹ populacjê.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Í•êW’c‘S‘Ì‚É‘Î‰‚·‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚Í•êW’c‘S‘Ì‚É‘Î‰‚·‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ­È1¡Q¼Æ­È2¡Q... ¬O 1 ¦Ü 30­Óªí¥Ü©â¼ËÁ`Åéªº¼Æ¦r¤¸¯À¡C";
             Text[ arabic ] = "value1;value2... ãä 1 Åáì 30 æÓíØÉ ÊãËá ãÌÊãÚ.";
             Text[ dutch ] = "waarde 1; waarde 2;... zijn 1 tot 30 argumenten die overeenkomen met een populatie.";
@@ -24162,7 +24162,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı×Ö 1£»Êı×Ö 2£»ÊÇ 1 ÖÁ 30 ¸ö±íÊ¾³éÑùµÄÊı×ÖÔªËØ¡£";
             Text[ russian ] = "×èñëî1, ÷èñëî2, ... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, ñîîòâåòñòâóşùèõ âûáîğêå èç ãåíåğàëüíîé ñîâîêóïíîñòè.";
             Text[ polish ] = "Od 1 do 30 numerycznych argumentów, które przedstawiaj¹ próbkê, odpowiadaj¹c¹ populacji.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Í•êW’c‚Ì•W–{‚É‘Î‰‚·‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚Í•êW’c‚Ì•W–{‚É‘Î‰‚·‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ¦r 1¡Q¼Æ¦r 2¡Q¬O 1 ¦Ü 30 ­Óªí¥Ü©â¼Ëªº¼Æ¦r¤¸¯À¡C";
             Text[ arabic ] = "Number 1, Number 2;... ãä 1 Åáì 30 æÓíØÉ ÚÏÏíÉ ÊãËá ÚíäÉ ãÃÎæĞÉ ãä ÇáãÌÊãÚ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 numerieke argumenten die resulteren uit een steekproef onder een populatie.";
@@ -24250,7 +24250,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÊıÖµ1£»ÊıÖµ2£»...ÊÇ 1 ÖÁ 30 ¸ö±íÊ¾Ò»¸ö³éÑùµÄÊıÖµ¡£";
             Text[ russian ] = "Çíà÷åíèå 1 ,çíà÷åíèå 2,... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, ñîîòâåòñòâóşùèõ âûáîğêå èç ãåíåğàëüíîé ñîâîêóïíîñòè.";
             Text[ polish ] = "Od 1 do 30 argumentów, które odpowiadaj¹ próbce populacji.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Í•êW’c‚Ì•W–{‚É‘Î‰‚·‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚Í•êW’c‚Ì•W–{‚É‘Î‰‚·‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ­È1¡Q¼Æ­È2¡Q...¬O 1 ¦Ü 30 ­Óªí¥Ü¤@­Ó©â¼Ëªº¼Æ­È¡C";
             Text[ arabic ] = "value1;value2... ãä 1 Åáì 30 æÓíØÉ ÊãËá ÚíäÉ ãÃÎæĞÉ ãä ÇáãÌÊãÚ.";
             Text[ dutch ] = "waarde 1; waarde 2;... zijn 1 tot 30 argumenten die resulteren uit een steekproef onder een populatie.";
@@ -24358,7 +24358,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı×Ö 1£»Êı×Ö 2£»ÊÇ1 µ½ 30 ¸ö±íÊ¾ºÍÑù±¾×ÜÌåÏà¶ÔÓ¦µÄÊı×ÖÔªËØ¡£";
             Text[ russian ] = "×èñëî1, ÷èñëî2, ... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, ñîîòâåòñòâóşùèõ ãåíåğàëüíîé ñîâîêóïíîñòè.";
             Text[ polish ] = "Od 1 do 30 numerycznych argumentów, reprezentuj¹cych populacjê.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Í•êW’c‘S‘Ì‚É‘Î‰‚·‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚Í•êW’c‘S‘Ì‚É‘Î‰‚·‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ¦r 1¡Q¼Æ¦r 2¡Q¬O1 ¨ì 30 ­Óªí¥Ü©M¼Ë¥»Á`Åé¬Û¹ïÀ³ªº¼Æ¦r¤¸¯À¡C";
             Text[ arabic ] = "number1;number2... ãä 1 Åáì 30 æÓíØÉ ÊãËá ÇáãÌÊãÚ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 numerieke argumenten die betrekking hebben op een populatie.";
@@ -24446,7 +24446,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÊıÖµ1£»ÊıÖµ2£»...ÊÇ 1 ÖÁ 30¸ö±íÊ¾Ñù±¾×ÜÌåµÄÊıÖµ¡£";
             Text[ russian ] = "Çíà÷åíèå 1, çíà÷åíèå 2, ... îò1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, ñîîòâåòñòâóşùèõ ãåíåğàëüíîé ñîâîêóïíîñòè.";
             Text[ polish ] = "Od 1 do 30 argumentów, które reprezentuj¹ populacjê.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Í•êW’c‘S‘Ì‚É‘Î‰‚·‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚Í•êW’c‘S‘Ì‚É‘Î‰‚·‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ­È1¡Q¼Æ­È2¡Q...¬O 1 ¦Ü 30­Óªí¥Ü¼Ë¥»Á`Åéªº¼Æ­È¡C";
             Text[ arabic ] = "value1;value2... ãä 1 Åáì 30 æÓíØÉ ÊãËá ãÌÊãÚ.";
             Text[ dutch ] = "waarde 1; waarde 2;... zijn 1 tot 30 argumenten die resulteren uit een steekproef onder een populatie.";
@@ -24552,7 +24552,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı×Ö1; Êı×Ö2;... ÊÇ 1 ÖÁ 30¸öÊı×Ö×Ô±äÁ¿, ËüÃÇ±íÊ¾\nÒª¼ÆËãÆäÆ½¾ùÖµµÄÒ»¸ö³éÑù¡£";
             Text[ russian ] = "×èñëî 1; ÷èñëî 2;... îò 1 äî 30 àğãóìåíòîâ, äëÿ êîòîğûõ âû÷èñëÿåòñÿ ñğåäíåå âûáîğêè, âûäåëåííîé èç îáùåé ñîâîêóïíîñòè.";
             Text[ polish ] = "Od 1 do 30 numerycznych argumentów, które przedstawiaj¹ próbkê, odpowiadaj¹c¹ populacji.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Í•½‹Ï‚ğ‹‚ß‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚Í•½‹Ï‚ğ‹‚ß‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ¦r1; ¼Æ¦r2;... ¬O 1 ¦Ü 30­Ó¼Æ¦r¦ÛÅÜ¶q, ¥¦­Ìªí¥Ü­n­pºâ¨ä¥­§¡­Èªº¤@­Ó©â¼Ë¡C";
             Text[ arabic ] = "Number 1, Number 2;... ãä 1 Åáì 30 æÓíØÉ ÚÏÏíÉ ÊãËá ÚíäÉ ãÃÎæĞÉ ãä ÇáãÌÊãÚ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 numerieke argumenten waarvan het gemiddelde moet worden berekend.";
@@ -24641,7 +24641,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ language_user1 ] = " ";
             Text[ russian ] = "Çíà÷åíèå 1 ,çíà÷åíèå 2,... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, ñîîòâåòñòâóşùèõ âûáîğêå èç ãåíåğàëüíîé ñîâîêóïíîñòè.";
             Text[ polish ] = "Od 1 do 30 argumentów, które reprezentuj¹ próbkê.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Í•êW’c‚Ì•W–{‚É‘Î‰‚·‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚Í•êW’c‚Ì•W–{‚É‘Î‰‚·‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ­È1¡Q¼Æ­È2¡Q...¬O 1 ¦Ü 30­Ó­n­pºâ¨ä©â¼Ë¥­§¡­Èªº¤¸¯À¡C";
             Text[ arabic ] = "Value 1, value 2;.. ãä 1 Åáì 30 æÓíØÉ ÊãËá ÚíäÉ ãÃÎæĞÉ ãä ÇáãÌÊãÚ.";
             Text[ dutch ] = "waarde 1; waarde 2;... zijn 1 tot 30 argumenten waarvan u het gemiddelde wilt bepalen.";
@@ -24746,7 +24746,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı×Ö1; Êı×Ö 2;... ÊÇ 1 ÖÁ 30 ¸ö±íÊ¾³éÑùµÄÊı×ÖÔªËØ¡£";
             Text[ russian ] = "×èñëî 1; ÷èñëî 2;... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, äëÿ êîòîğûõ âû÷èñëÿåòñÿ ñóììà êâàäğàòîâ îòêëîíåíèé.";
             Text[ polish ] = "Od 1 do 30 numerycznych argumentów reprezentuj¹cych próbkê.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Í•Î·‚Ì•½•û˜a‚ğ‹‚ß‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "” 1;”’l 2;...‚Í•Î·‚Ì•½•û˜a‚ğ‹‚ß‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ¦r1; ¼Æ¦r 2;... ¬O 1 ¦Ü 30 ­Óªí¥Ü©â¼Ëªº¼Æ¦r¤¸¯À¡C";
             Text[ arabic ] = "number1;number2... ãä 1 Åáì 30 æÓíØÉ ÚÏÏíÉ ÊãËá ÚíäÉ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 argumenten die een steekproef weergeven.";
@@ -24852,7 +24852,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı×Ö1; Êı×Ö2;... ÊÇ 1 ÖÁ 30 ¸öÊı×Ö×Ô±äÁ¿, ËüÃÇ±íÊ¾Ò»¸ö³éÑù¡£";
             Text[ russian ] = "×èñëî 1; ÷èñëî 2;... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, äëÿ êîòîğûõ îïğåäåëÿåòñÿ ñğåäíåå àáñîëşòíûõ îòêëîíåíèé.";
             Text[ polish ] = "Od 1 do 30 numerycznych argumentów, reprezentuj¹cych próbkê.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Í•½‹Ï‚ğ‹‚ß‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚Í•½‹Ï‚ğ‹‚ß‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ¦r1; ¼Æ¦r2;... ¬O 1 ¦Ü 30 ­Ó¼Æ¦r¦ÛÅÜ¶q, ¥¦­Ìªí¥Ü¤@­Ó©â¼Ë¡C";
             Text[ arabic ] = "Number 1, Number 2;... ãä 1 Åáì 30 æÓíØÉ ÚÏÏíÉ ÊãËá ÚíäÉ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 numerieke argumenten die een steekproef weegeven.";
@@ -24958,7 +24958,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı×Ö 1£»Êı×Ö 2£»ÊÇ±íÊ¾³éÑù·Ö²¼µÄ 1 µ½ 30 ¸öÊı×ÖÔªËØ¡£";
             Text[ russian ] = "×èñëî1, ÷èñëî2, ... îò 1 äî 30 àğãóìåíòîâ, äëÿ êîòîğûõ âû÷èñëÿåòñÿ àñèììåòğè÷íîñòü.";
             Text[ polish ] = "Od 1 do 30 numerycznych argumentów reprezentuj¹cych próbkê rozk³adu.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Í•ª•z‚Ì•W–{‚ğ•\\‚·‚½‚ß‚Ì‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ì”’lÃŞ°ÀB";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚Í•ª•z‚Ì•W–{‚ğ•\\‚·‚½‚ß‚Ì1‚©‚ç30ŒÂ‚Ü‚Å‚Ì”’lÃŞ°ÀB";
             Text[ chinese_traditional ] = "¼Æ¦r 1¡Q¼Æ¦r 2¡Q¬Oªí¥Ü©â¼Ë¤À§Gªº 1 ¨ì 30 ­Ó¼Æ¦r¤¸¯À¡C";
             Text[ arabic ] = "number1;number2... ãä 1 Åáì 30 æÓíØÉ ÊãËá ÚíäÉ ááÊæÒíÚ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 argumenten die een steekproef van de verdeling weergeven.";
@@ -25064,7 +25064,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı×Ö1; Êı×Ö2;... ÊÇ 1 ÖÁ 30¸öÊı×ÖÔªËØ, ËüÃÇ±íÊ¾\nÒ»¸ö³éÑùµÄ·Ö²¼¡£";
             Text[ russian ] = "×èñëî 1; ÷èñëî 2;... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, ïğåäñòàâëÿşùèå âûáîğêó ğàñïğåäëåíèÿ, äëÿ êîòîğûõ âû÷èñëÿåòñÿ ıêñöåññ.";
             Text[ polish ] = "Od 1 do 30 numerycznych argumentów reprezentuj¹cych próbkê rozk³adu.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Íë“x‚ğŒvZ‚·‚é‚½‚ß‚Ì‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ì”’lB";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚Íë“x‚ğŒvZ‚·‚é‚½‚ß‚Ì1‚©‚ç30ŒÂ‚Ü‚Å‚Ì”’lB";
             Text[ chinese_traditional ] = "¼Æ¦r1; ¼Æ¦r2;... ¬O 1 ¦Ü 30­Ó¼Æ¦r¤¸¯À, ¥¦­Ìªí¥Ü¤@­Ó©â¼Ëªº¤À§G¡C";
             Text[ arabic ] = "number1;number2... ãä 1 Åáì 30 æÓíØÉ ÚÏÏíÉ ÊãËá ÚíäÉ ÇáÊæÒíÚ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 argumenten die een steekproef uit de verdeling weergeven.";
@@ -25170,7 +25170,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı×Ö 1; Êı×Ö 2;... ÊÇ 1 ÖÁ 30 ¸ö±íÊ¾Ò»¸ö³éÑùµÄÊı×Ö²ÎÊı¡£";
             Text[ russian ] = "×èñëî 1; ÷èñëî 2;... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, äëÿ êîòîğûõ âû÷èñëÿåòñÿ ñğåäíåå.";
             Text[ polish ] = "Od 1 do 30 numerycznych argumentów, dla których ma zostaæ wyznaczona œrednia wartoœæ geometryczna.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚Í•W–{‚ğ•\\‚·‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚Í•W–{‚ğ•\\‚·1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ¦r 1; ¼Æ¦r 2;... ¬O 1 ¦Ü 30ªí¥Ü¤@­Ó©â¼Ëªº¼Æ¦r°Ñ¼Æ¡C";
             Text[ arabic ] = "number1;number2... ãä 1 Åáì 30 æÓíØÉ íÑÇÏ ÍÓÇÈ ÇáæÓØ áåÇ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn 1 tot 30 numerieke argumenten die een steekproef weergeven.";
@@ -25206,7 +25206,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "¼ÆËãÒ»¸ö³éÑùµÄµ÷ºÍÆ½¾ùÖµ¡£";
             Text[ russian ] = "Âîçâğàùàåò ãàğìîíè÷åñêîå ñğåäíåå íàáîğà äàííûõ.";
             Text[ polish ] = "Oblicza wyrywczo œredni¹ harmoniczn¹.";
-            Text[ japanese ] = "‚P‘g‚Ì”’l‚Ì’²˜a•½‹Ï‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "1‘g‚Ì”’l‚Ì’²˜a•½‹Ï‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "­pºâ¤@­Ó©â¼Ëªº½Õ©M¥­§¡­È¡C";
             Text[ arabic ] = "ÊÍÓÈ ÇáãÚÏá ÇáÊæÇİŞí áÚíäÉ.";
             Text[ dutch ] = "Berekent het harmonische gemiddelde van een steekproef.";
@@ -25276,7 +25276,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı×Ö 1; Êı×Ö 2;... ÊÇ 1 ÖÁ 30 µÄ±íÊ¾Ò»¸ö³éÑùµÄÊı×ÖÔªËØ¡£";
             Text[ russian ] = "×èñëî 1; ÷èñëî 2;... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, äëÿ êîòîğûõ âû÷èñëÿåòñÿ ãàğìîíè÷åñêîå ñğäíåå.";
             Text[ polish ] = "Od 1 do 30 numerycznych argumentów, dla których ma zostaæ wyznaczona œrednia wartoœæ geometryczna.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚ÍŒvZ‚Ì‘ÎÛ‚Æ‚È‚é‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ì”’lB";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚ÍŒvZ‚Ì‘ÎÛ‚Æ‚È‚é1‚©‚ç30ŒÂ‚Ü‚Å‚Ì”’lB";
             Text[ chinese_traditional ] = "¼Æ¦r 1; ¼Æ¦r 2;... ¬O 1 ¦Ü 30 ªºªí¥Ü¤@­Ó©â¼Ëªº¼Æ¦r¤¸¯À¡C";
             Text[ arabic ] = "number1;number2... ãä 1 Åáì 30 æÓíØÉ íÑÇÏ ÍÓÇÈ ÇáæÓØ áåÇ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 numerieke argumenten die een steekproef weergeven.";
@@ -25383,7 +25383,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı×Ö 1; Êı×Ö 2;... ÊÇ 1 ÖÁ 30 ¸ö±íÊ¾Ò»¸ö³éÑùµÄÊı×ÖÔªËØ¡£";
             Text[ russian ] = "×èñëî 1; ÷èñëî 2;... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, ïğåäñòàâëÿşùèå âûáîğêó, è äëÿ êîòîğûõ âû÷èñëÿåòñÿ ìîäà.";
             Text[ polish ] = "Od 1 do 30 argumentów, wœród których ma zostaæ znaleziona wartoœæ wystêpuj¹ca najczêœciej.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚ÍŒvZ‚·‚é‚½‚ß‚Ì‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚ÍŒvZ‚·‚é‚½‚ß‚Ì1‚©‚ç30ŒÂ‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ¦r 1; ¼Æ¦r 2;... ¬O 1 ¦Ü 30 ­Óªí¥Ü¤@­Ó©â¼Ëªº¼Æ¦r¤¸¯À¡C";
             Text[ arabic ] = "number1;number2... ãä 1 Åáì 30 æÓíØÉ ÊÑíÏ ÍÓÇÈ ÇáãäæÇá áåÇ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 argumenten die een steekproef weergeven.";
@@ -25489,7 +25489,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı×Ö 1; Êı×Ö 2;... ÊÇ 1 ÖÁ 30 ¸ö±íÊ¾Ò»¸ö³éÑùµÄÔªËØ¡£";
             Text[ russian ] = "×èñëî 1; ÷èñëî 2;... îò 1 äî 30 ÷èñëîâûõ àğãóìåíòîâ, ïğåäñòàâëÿşùèå âûáîğêó, è äëÿ êîòîğûõ îïğåäåëÿåòñÿ ìåäèàíà.";
             Text[ polish ] = "Od 1 do 30 numerycznych argumentów, które okreœlaj¹ medianê.";
-            Text[ japanese ] = "”’l‚P;”’l‚Q;...‚ÍÒ¼Ş±İ‚ğŒvZ‚·‚é‚½‚ß‚Ì‚P‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
+            Text[ japanese ] = "”’l 1;”’l 2;...‚ÍÒ¼Ş±İ‚ğŒvZ‚·‚é‚½‚ß‚Ì1‚©‚ç30ŒÂ‚Ü‚Å‚Ìˆø”B";
             Text[ chinese_traditional ] = "¼Æ¦r 1; ¼Æ¦r 2;... ¬O 1 ¦Ü 30 ­Óªí¥Ü¤@­Ó©â¼Ëªº¤¸¯À¡C";
             Text[ arabic ] = "number1;number2... ãä 1 Åáì 30 ÑŞãÇğ ÊÑíÏ ÊÍÏíÏ æÓíØåÇ.";
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 argumenten die een steekproef weergeven.";
@@ -25659,7 +25659,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "°Ù·Ö±ÈÊıÖµ£¬ÔÚ 0 µ½ 1 Ö®¼ä£¬°üº¬ 0 ºÍ 1¡£";
             Text[ russian ] = "Çíà÷åíèå ïåğñåíòèëÿ â èíòåğâàëå îò 0 äî 1 âêëş÷èòåëüíî.";
             Text[ polish ] = "Wartoœæ procentowa kwantylu w zakresie miêdzy 0 lub 1.";
-            Text[ japanese ] = "‚O`‚P‚Ì”ÍˆÍ‚ÅA–Ú“I‚Ì•S•ªˆÊ‚Ì’l‚ğw’è‚µ‚Ü‚·B";
+            Text[ japanese ] = "0`1‚Ì”ÍˆÍ‚ÅA–Ú“I‚Ì•S•ªˆÊ‚Ì’l‚ğw’è‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¦Ê¤À¤ñ¼Æ­È¡M¦b 0 ¨ì 1 ¤§¶¡¡M¥]§t 0 ©M 1¡C";
             Text[ arabic ] = "ŞíãÉ ÇáãÆæí æåí Èíä 0 æ 1.";
             Text[ dutch ] = "De procentwaarde van het kwantiel tussen 0 en 1.";
@@ -25695,7 +25695,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "¼ÆËãÒ»¸ö³éÑùµÄËÄ·ÖÎ»Êı¡£";
             Text[ russian ] = "Âû÷èñëÿåò êâàğòèëü ìíîæåñòâà äàííûõ.";
             Text[ polish ] = "Wyznacza kwartyl zbioru danych.";
-            Text[ japanese ] = "‚P‘g‚ÌÃŞ°À‚©‚çl•ªˆÊ”‚ğ’Šo‚µ‚Ü‚·¡";
+            Text[ japanese ] = "1‘g‚ÌÃŞ°À‚©‚çl•ªˆÊ”‚ğ’Šo‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "­pºâ¤@­Ó©â¼Ëªº¥|¤À¦ì¼Æ¡C";
             Text[ arabic ] = "ÊÍÓÈ ÑÈÚí ÚíäÉ ãÇ.";
             Text[ dutch ] = "Bepaalt het kwartiel van een gegevensverzameling.";
@@ -25829,7 +25829,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ËÄ·ÖÎ»Öµ (0=MIN, 1=25%, 2=50%, 3=75%, 4=MAX)¡£";
             Text[ russian ] = "Òèï êâàğòèëÿ (0=ÌÈÍ, 1=25%, 2=50%, 3=75%, 4=ÌÀÊÑ).";
             Text[ polish ] = "Typ kwartylu (0=MIN, 1=25%, 2=50%, 3=75%, 4=MAX).";
-            Text[ japanese ] = "l•ªˆÊ”‚ª•Ô‚·–ß‚è’l(‚OÅ¬’lA‚P25%A250%A375%A4Å‘å’l)B";
+            Text[ japanese ] = "l•ªˆÊ”‚ª•Ô‚·–ß‚è’l(0=Å¬’lA1=25%A250%A375%A4Å‘å’l)B";
             Text[ chinese_traditional ] = "¥|¤À¦ì­È (0=MIN, 1=25%, 2=50%, 3=75%, 4=MAX)¡C";
             Text[ arabic ] = "äãØ ŞíãÉ ÇáÑÈÚí (0=MIN, 1=25%, 2=50%, 3=75%, 4=MAX).";
             Text[ dutch ] = "Kwartieltype (0=MIN, 1=25%, 2=50%, 3=75%, 4=MAX).";
@@ -25866,7 +25866,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "¼ÆËãÒ»¸ö³éÑùÖĞµÄµÚ k ¸ö×î´óÖµ¡£";
             Text[ russian ] = "Âîçâğàùàåò k-îå íàèáîëüøåå çíà÷åíèå èç ìíîæåñòâà äàííûõ.";
             Text[ polish ] = "Zwraca k-t¹ najwiêksz¹ wartoœæ ze zbioru danych.";
-            Text[ japanese ] = "‚P‘g‚ÌÃŞ°À‚Ì’†‚Å‡ˆÊ”Ô–Ú‚É‘å‚«‚ÈÃŞ°À‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "1‘g‚ÌÃŞ°À‚Ì’†‚Å‡ˆÊ”Ô–Ú‚É‘å‚«‚ÈÃŞ°À‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "­pºâ¤@­Ó©â¼Ë¤¤ªº²Ä k ­Ó³Ì¤j­È¡C";
             Text[ arabic ] = "ÊÍÓÈ ÃßÈÑ ŞíãÉ k áÚíäÉ.";
             Text[ dutch ] = "Bepaalt de k-grootste waarde van een steekproef.";
@@ -26036,7 +26036,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "¼ÆËãÊı¾İ×éÖĞµÄµÚ k ¸ö×îĞ¡Öµ¡£";
             Text[ russian ] = "Âîçâğàùàåò k-îå íàèìåíüøåå çíà÷åíèå â ìíîæåñòâå äàííûõ.";
             Text[ polish ] = "Podaje k-t¹ najmniejsz¹ wartoœæ w zbiorze danych.";
-            Text[ japanese ] = "‚P‘g‚ÌÃŞ°À‚Ì’†‚Å‡ˆÊ”Ô–Ú‚É¬‚³‚ÈÃŞ°À‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "1‘g‚ÌÃŞ°À‚Ì’†‚Å‡ˆÊ”Ô–Ú‚É¬‚³‚ÈÃŞ°À‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "­pºâ¼Æ¾Ú²Õ¤¤ªº²Ä k ­Ó³Ì¤p­È¡C";
             Text[ arabic ] = "ÊÍÓÈ ÇáŞíãÉ ÇáÃÕÛÑ áÜ k İí ÚíäÉ.";
             Text[ dutch ] = "Berekent de k-kleinste waarde van een steekproef.";
@@ -26208,7 +26208,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "¼ÆËãÒ»¸öÊıÖµÔÚÊı¾İ¼¯ÖĞµÄ°Ù·Ö±ÈÅÅÎ»¡£";
             Text[ russian ] = "Âîçâğàùàåò ïğîöåíòíóş ñòåïåíü çíà÷åíèÿ â âûáîğêå.";
             Text[ polish ] = "Wyznacza pozycjê procentow¹ wartoœci w próbce.";
-            Text[ japanese ] = "‚P‘g‚ÌÃŞ°À‚Ì’†‚Ì’l‚ğ•S•ª—¦‚ğg‚Á‚½‡ˆÊ‚Å•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "1‘g‚ÌÃŞ°À‚Ì’†‚Ì’l‚ğ•S•ª—¦‚ğg‚Á‚½‡ˆÊ‚Å•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "­pºâ¤@­Ó¼Æ­È¦b¼Æ¾Ú¶°¤¤ªº¦Ê¤À¤ñ±Æ¦ì¡C";
             Text[ arabic ] = "ÊÍÓÈ ÇáãÑÊÈÉ ÇáãÆæíÉ áŞíãÉ ãÇ İí ÅÍÏì ÇáÚíäÇÊ.";
             Text[ dutch ] = "Bepaalt de procentuele rang van een waarde in een steekproef.";
@@ -26578,7 +26578,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Ö¸Ã÷ÅÅÎ»µÄ·½Ê½£º0 = °´½µĞòÅÅÎ», 1 = °´ÉıĞòÅÅÎ»¡£";
             Text[ russian ] = "×èñëî, îïğåäåëÿşùåå ñïîñîá óïîğÿäî÷åíèÿ: 0 îçíà÷àåò â ïîğÿäêå âîçğàñòàíèÿ, 1 îçíà÷àåò â ïîğÿäêå óáûâàíèÿ.";
             Text[ polish ] = "Wyznacza kolejnoœæ pozycji liczb: 0 oznacza rosn¹co, 1 oznacza malej¹co.";
-            Text[ japanese ] = "”ÍˆÍ“à‚Ì”’l‚ğ•À‚×‘Ö‚¦‚é•û–@: ‚O‚ğw’è‚·‚é‚Æ¸‡A‚P‚ğw’è‚·‚é‚Æ~‡B";
+            Text[ japanese ] = "”ÍˆÍ“à‚Ì”’l‚ğ•À‚×‘Ö‚¦‚é•û–@: 0‚ğw’è‚·‚é‚Æ¸‡A1‚ğw’è‚·‚é‚Æ~‡B";
             Text[ chinese_traditional ] = "«ü©ú±Æ¦ìªº¤è¦¡¡R0 = «ö­°§Ç±Æ¦ì, 1 = «ö¤É§Ç±Æ¦ì¡C";
             Text[ arabic ] = "ÑŞã: 0 ÊÚäí ãÑÊÈÉ İí ŞÇÆãÉ ãİÑæÒÉ ÊÕÇÚÏíÇğº 1 ÊÚäí ãÑÊÈÉ İí ŞÇÆãÉ ãİÑæÒÉ ÊäÇÒáíÇğ.";
             Text[ dutch ] = "De volgorde 0 betekent oplopend, 1 aflopend.";
@@ -27218,7 +27218,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "µ¥¸öÊÔÑéµÄ³É¹¦¸ÅÂÊ";
             Text[ russian ] = "Âåğîÿòíîñòü óñïåõà êàæäîãî ğåçóëüòàòà èñïûòàíèé";
             Text[ polish ] = "Prawdopodobieñstwo sukcesu próby.";
-            Text[ japanese ] = "sŒ‹‰Ê‚Ì‚P‰ñ‚ ‚½‚è‚ÌŠm—¦B";
+            Text[ japanese ] = "sŒ‹‰Ê‚Ì1‰ñ‚ ‚½‚è‚ÌŠm—¦B";
             Text[ chinese_traditional ] = "³æ­Ó¸ÕÅçªº¦¨¥\\·§²v";
             Text[ arabic ] = "ÇÍÊãÇá ÇáäÌÇÍ İí ßá ÊÌÑÈÉ.";
             Text[ dutch ] = "Kans op succes bij een test.";
@@ -27664,7 +27664,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ĞèÒª±ä»»µÄÊıÖµ (-1 < ÊıÖµ < 1)¡£";
             Text[ russian ] = "Òğàíñôîğìèğóåìîå ÷èñëîâîå çíà÷åíèå (÷èñëî â èíòåğâàëå îò -1 äî 1).";
             Text[ polish ] = "Wartoœæ, która ma zostaæ przekszta³cona (-1 < x < 1).";
-            Text[ japanese ] = "•ÏŠ·‚·‚é”’l(|‚P < ’l < ‚P)B";
+            Text[ japanese ] = "•ÏŠ·‚·‚é”’l(-1 < ’l < 1 )B";
             Text[ chinese_traditional ] = "»İ­nÅÜ´«ªº¼Æ­È (-1 < ¼Æ­È < 1)¡C";
             Text[ arabic ] = "ÇáŞíãÉ ÇáÊí ÊÑíÏ ÊÍæíáåÇ (ÑŞã Èíä -1 æ 1¡ ãÇ ÚÏÇ -1 æ 1).";
             Text[ dutch ] = "De waarde die wordt getransformeerd (-1 < WAARDE < 1).";
@@ -28005,7 +28005,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "µ¥¸öÊÔÑéµÄ³É¹¦¸ÅÂÊ¡£";
             Text[ russian ] = "Âåğîÿòíîñòü óñïåõà êàæäîãî èñïûòàíèÿ.";
             Text[ polish ] = "Prawdopodobieñstwo sukcesu próby.";
-            Text[ japanese ] = "‚P‰ñ‚Ìs‚ª¬Œ÷‚·‚éŠm—¦‚ğw’è‚µ‚Ü‚·B";
+            Text[ japanese ] = "1‰ñ‚Ìs‚ª¬Œ÷‚·‚éŠm—¦‚ğw’è‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "³æ­Ó¸ÕÅçªº¦¨¥\\·§²v¡C";
             Text[ arabic ] = "ÇÍÊãÇá äÌÇÍ ÊÌÑÈÉ.";
             Text[ dutch ] = "De kans op succes bij een experiment.";
@@ -28474,7 +28474,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Ã¿¸öÊÔÑéµÄ³É¹¦¸ÅÂÊ¡£";
             Text[ russian ] = "Âåğîÿòíîñòü óñïåõà â êàæäîì èñïûòàíèè.";
             Text[ polish ] = "Prawdopodobieñstwo sukcesu próby.";
-            Text[ japanese ] = "‚P‰ñ‚Ìs‚ª¬Œ÷‚·‚éŠm—¦B";
+            Text[ japanese ] = "1‰ñ‚Ìs‚ª¬Œ÷‚·‚éŠm—¦B";
             Text[ chinese_traditional ] = "¨C­Ó¸ÕÅçªº¦¨¥\\·§²v¡C";
             Text[ arabic ] = "ÇÍÊãÇá äÌÇÍ ÊÌÑÈÉ.";
             Text[ dutch ] = "De kans op een gunstige uitkomst";
@@ -28773,7 +28773,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "È·¶¨¸ÅÂÊ·Ö²¼ĞÎÊ½µÄÂß¼­Öµ¡£ K = 0 ±íÊ¾¼ÆËãÃÜ¶È\nº¯Êı£¬ K = 1 ±íÊ¾¼ÆËã·Ö²¼º¯Êı¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå, îïğåäåëÿşùåå âèä ôóíêöèè: ôóíêöèÿ ïëîòíîñòè (0) èëè ôóíêöèÿ ğàñïğåäåëåíèÿ.";
             Text[ polish ] = "Skumulowany. 0 wyznacza gêstoœæ, 1 - rozk³ad.";
-            Text[ japanese ] = "ŠÖ”Œ`®BŠÖ”Œ`®‚O‚É‚·‚é‚ÆŠm—¦–§“xŠÖ”‚ªAŠÖ”Œ`®‚P‚É‚·‚é‚ÆŠm—¦•ª•zŠÖ”‚ªŒvZ‚³‚ê‚Ü‚·B";
+            Text[ japanese ] = "ŠÖ”Œ`®BŠÖ”Œ`® = 0 ‚É‚·‚é‚ÆŠm—¦–§“xŠÖ”‚ªAŠÖ”Œ`® = 1 ‚É‚·‚é‚ÆŠm—¦•ª•zŠÖ”‚ªŒvZ‚³‚ê‚Ü‚·B";
             Text[ chinese_traditional ] = "½T©w·§²v¤À§G§Î¦¡ªºÅŞ¿è­È¡C K = 0 ­pºâ±K«×¨ç¼Æ¡M K = 1 ­pºâ¤À§G¨ç¼Æ¡C";
             Text[ arabic ] = "ŞíãÉ ãäØŞíÉ ÊÍÏÏ äãØ ÇÍÊãÇá ÇáÊæÒíÚ.";
             Text[ dutch ] = "Cumulatief. C = 0 berekent de vorm (dichtheid), C = 1 de verdeling.";
@@ -29071,7 +29071,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Âß¼­Öµ£¬Ö¸Ã÷º¯ÊıÀàĞÍ¡£ K = 0 ±íÊ¾¼ÆËãÃÜ¶Èº¯Êı£¬ \nK = 1 ¼ÆËã·Ö²¼º¯Êı¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå, îïğåäåëÿşùåå âèä ôóíêöèè: ôóíêöèÿ ïëîòíîñòè (0) èëè ôóíêöèÿ ğàñïğåäåëåíèÿ (1).";
             Text[ polish ] = "Skumulowany. 0 oblicza gêstoœæ, 1 - rozk³ad.";
-            Text[ japanese ] = "ŠÖ”Œ`®BŠÖ”Œ`®‚O‚É‚·‚é‚ÆŠm—¦–§“xŠÖ”‚Ì’l‚ªAŠÖ”Œ`®‚P‚É‚·‚é‚Æ—İÏ•ª•zŠÖ”‚Ì’l‚ªŒvZ‚³‚ê‚Ü‚·B";
+            Text[ japanese ] = "ŠÖ”Œ`®BŠÖ”Œ`® = 0 ‚É‚·‚é‚ÆŠm—¦–§“xŠÖ”‚Ì’l‚ªAŠÖ”Œ`® = 1 ‚É‚·‚é‚Æ—İÏ•ª•zŠÖ”‚Ì’l‚ªŒvZ‚³‚ê‚Ü‚·B";
             Text[ chinese_traditional ] = "ÅŞ¿è­È¡M«ü©ú¨ç¼ÆÃş«¬¡C K = 0 ªí¥Ü­pºâ±K«×¨ç¼Æ¡M K = 1 ªí¥Ü­pºâ¤À§G¨ç¼Æ¡C";
             Text[ arabic ] = "ŞíãÉ ãäØŞíÉ ÊÍÏÏ äãØ ÇáÏÇáÉ.";
             Text[ dutch ] = "Cumulatief. C = 0 berekent de vorm (dichtheid) van de functie, C = 1 de verdeling.";
@@ -30219,7 +30219,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Ö¸¶¨º¯ÊıÀàĞÍµÄÂß¼­Öµ¡£ K = 0 ÎªÃÜ¶Èº¯Êı£¬ \nK = 1 ÎªÀÛ»ı·Ö²¼º¯Êı¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå, êîòîğîå óêàçûâàåò, ôóíêöèş êàêîãî âèäà èñïîëüçîâàòü: ôóíêöèş ïëîòíîñòè (0) èëè ôóíêöèş ğàñïğåäåëåíèÿ (1).";
             Text[ polish ] = "Skumulowany. 0 wyznacza gêstoœæ, 1 - rozk³ad.";
-            Text[ japanese ] = "ŠÖ”Œ`®BŠÖ”Œ`®‚O‚É‚·‚é‚Æ—İÏ•ª•zŠÖ”‚ªAŠÖ”Œ`®‚P‚É‚·‚é‚ÆŠm—¦–§“xŠÖ”‚ª•Ô‚³‚ê‚Ü‚·B";
+            Text[ japanese ] = "ŠÖ”Œ`®BŠÖ”Œ`® = 0 ‚É‚·‚é‚Æ—İÏ•ª•zŠÖ”‚ªAŠÖ”Œ`® = 1 ‚É‚·‚é‚ÆŠm—¦–§“xŠÖ”‚ª•Ô‚³‚ê‚Ü‚·B";
             Text[ chinese_traditional ] = "«ü©w¨ç¼ÆÃş«¬ªºÅŞ¿è­È¡C K = 0 ¬°±K«×¨ç¼Æ¡M K = 1 ¬°²Ö¿n¤À§G¨ç¼Æ¡C";
             Text[ arabic ] = "ŞíãÉ ãäØŞíÉ ÊÍÏÏ äãØ ÇáÏÇáÉ.";
             Text[ dutch ] = "Cumulatief. C = 0 berekent de dichtheid, C = 1 de verdeling.";
@@ -30517,7 +30517,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Ö¸¶¨º¯ÊıÀàĞÍµÄÂß¼­Öµ¡£ K = 0 ÎªÃÜ¶Èº¯Êı£¬ \nK = 1 ÎªÀÛ»ı·Ö²¼º¯Êı¡£";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå, îïğåäåëÿşùåå âèä ôóíêöèè: ôóíêöèÿ ïëîòíîñòè (0) èëè ôóíêöèÿ ğàñïğåäåëåíèÿ (1).";
             Text[ polish ] = "Skumulowany. 0 wyznacza gêstoœæ, 1 - rozk³ad.";
-            Text[ japanese ] = "ŠÖ”Œ`®BŠÖ”Œ`®‚O‚É‚·‚é‚ÆŠm—¦—ÊŠÖ”‚Ì’l‚ÉAŠÖ”Œ`®‚P‚É‚·‚é‚Æ—İÏ•ª•zŠÖ”‚Ì’l‚Æ‚È‚è‚Ü‚·B";
+            Text[ japanese ] = "ŠÖ”Œ`®BŠÖ”Œ`® = 0 ‚É‚·‚é‚ÆŠm—¦—ÊŠÖ”‚Ì’l‚ÉAŠÖ”Œ`® = 1 ‚É‚·‚é‚Æ—İÏ•ª•zŠÖ”‚Ì’l‚Æ‚È‚è‚Ü‚·B";
             Text[ chinese_traditional ] = "«ü©w¨ç¼ÆÃş«¬ªºÅŞ¿è­È¡C K = 0 ¬°±K«×¨ç¼Æ¡M K = 1 ¬°²Ö¿n¤À§G¨ç¼Æ¡C";
             Text[ arabic ] = "ŞíãÉ ãäØŞíÉ ÊÍÏÏ äãØ ÇáÏÇáÉ.";
             Text[ dutch ] = "Cumulatief. C = 0 berekent vorm van de functie, C = 1 de verdeling.";
@@ -31884,7 +31884,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Âß¼­Öµ£¬ÓÃÓÚÈ·¶¨º¯ÊıµÄÀàĞÍ¡£ K = 0 ±íÊ¾¼ÆËã\nÃÜ¶Èº¯Êı£¬ K = 1 ±íÊ¾¼ÆËãÀÛ»ı·Ö²¼º¯Êı¡£";
             Text[ russian ] = "Îïğåäåëÿåò âèä ôóíêöèè: ôóíêöèÿ ïëîòíîñòè (0) èëè ôóíêöèÿ ğàñïğåäåëåíèÿ (1).";
             Text[ polish ] = "Skumulowany. 0 oblicza gêstoœæ, 1 - rozk³ad.";
-            Text[ japanese ] = "ŠÖ”Œ`®BŠÖ”Œ`®‚O‚É‚·‚é‚ÆŠm—¦–§“xŠÖ”‚Ì’l‚ªAŠÖ”Œ`®‚P‚É‚·‚é‚Æ•ª•zŠÖ”‚Ì’l‚ªŒvZ‚³‚ê‚Ü‚·B";
+            Text[ japanese ] = "ŠÖ”Œ`®BŠÖ”Œ`® = 0 ‚É‚·‚é‚ÆŠm—¦–§“xŠÖ”‚Ì’l‚ªAŠÖ”Œ`® = 1 ‚É‚·‚é‚Æ•ª•zŠÖ”‚Ì’l‚ªŒvZ‚³‚ê‚Ü‚·B";
             Text[ chinese_traditional ] = "ÅŞ¿è­È¡M¥Î¨Ó½T©w¨ç¼ÆªºÃş«¬¡C K = 0 ªí¥Ü­pºâ±K«×¨ç¼Æ¡M K = 1 \nªí¥Ü­pºâ²Ö¿n¤À§G¨ç¼Æ¡C";
             Text[ arabic ] = "ŞíãÉ ãäØŞíÉ: ãä ÃÌá ÏÇáÉ ÇáÊæÒíÚ ÇáÊÑÇßãí¡ ÇÓÊÎÏã TRUEº ãä ÃÌá ÏÇáÉ ÇáÇÍÊãÇáÇÊ ÛíÑ ÇáÊÑÇßãíÉ¡ ÇÓÊÎÏã FALSE.";
             Text[ dutch ] = "Cumulatief. C = 0 berekent de vorm (dichtheid), C = 1 de verdeling.";
@@ -32422,7 +32422,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "tails = 1 ¼ÆËãµ¥Ò³µÄÊÔÑé£¬tails = 2 ¼ÆËãË«Ò³µÄÊÔÑé¡£";
             Text[ russian ] = "Åñëè õâîñòû = 1, òî ôóíêöèÿ ÑÒÜŞÄĞÀÑÏ âû÷èñëÿåò îäíîñòîğîííåå ğàñïğåäåëåíèå. Åñëè õâîñòû = 2, òî ôóíêöèÿ ÑÒÜŞÄĞÀÑÏ âîçâğàùàåò äâóñòîğîííåå ğàñïğåäåëåíèå.";
             Text[ polish ] = "Tryb = 1 oblicza jednoœladowy test, Tryb = 2 dwuœladowy.";
-            Text[ japanese ] = " ”ö•”‚P‚É‚·‚é‚Æ•Ğ‘¤•ª•z‚Ì’l‚ªA”ö•”‚Q‚É‚·‚é‚Æ—¼‘¤•ª•z‚Ì’l‚ªŒvZ‚³‚ê‚Ü‚·B";
+            Text[ japanese ] = " ”ö•” = 1 ‚É‚·‚é‚Æ•Ğ‘¤•ª•z‚Ì’l‚ªA”ö•” = 2 ‚É‚·‚é‚Æ—¼‘¤•ª•z‚Ì’l‚ªŒvZ‚³‚ê‚Ü‚·B";
             Text[ chinese_traditional ] = "tails = 1 ­pºâ³æ­¶ªº¸ÕÅç¡Mtails = 2 ­pºâÂù­¶ªº¸ÕÅç¡C";
             Text[ arabic ] = "ÊõÍÏÏ ÚÏÏ ÃØÑÇİ ÇáÊæÒíÚ ááÅÑÌÇÚº ÊæÒíÚ ÃÍÇÏí ÇáØÑİ = 1º ÊæÒíÚ ËäÇÆí ÇáØÑİ = 2.";
             Text[ dutch ] = "Modus = 1 berekent de eenzijdige test, modus = 2 de tweezijdige.";
@@ -32734,7 +32734,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "×ÔÓÉ¶È_1";
             Text[ russian ] = "Ñòåïåíè_ñâîáîäû_1";
             Text[ polish ] = "Stopnie swobody_1";
-            Text[ japanese ] = "©—R“x‚P";
+            Text[ japanese ] = "©—R“x 1";
             Text[ chinese_traditional ] = "degrees_freedom_1";
             Text[ arabic ] = "ÏÑÌÇÊ_ÇáÍÑíÉ_1";
             Text[ dutch ] = "Vrijheidsgraden_1";
@@ -32799,7 +32799,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "×ÔÓÉ¶È_2";
             Text[ russian ] = "Ñòåïåíè_ñâîáîäû_2";
             Text[ polish ] = "Stopnie swobody_2";
-            Text[ japanese ] = "©—R“x‚Q";
+            Text[ japanese ] = "©—R“x 2";
             Text[ chinese_traditional ] = "degrees_freedom_2";
             Text[ arabic ] = "ÏÑÌÇÊ_ÇáÍÑíÉ_2";
             Text[ dutch ] = "Vrijheidsgraden_2";
@@ -32969,7 +32969,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "×ÔÓÉ¶È_1";
             Text[ russian ] = "Ñòåïåíè_ñâîáîäû_1";
             Text[ polish ] = "Stopnie swobody_1";
-            Text[ japanese ] = "©—R“x‚P";
+            Text[ japanese ] = "©—R“x 1";
             Text[ chinese_traditional ] = "degrees_freedom_1";
             Text[ arabic ] = "ÏÑÌÇÊ_ÇáÍÑíÉ_1";
             Text[ dutch ] = "Vrijheidsgraden_1";
@@ -33034,7 +33034,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "×ÔÓÉ¶È_2";
             Text[ russian ] = "Ñòåïåíè_ñâîáîäû_2";
             Text[ polish ] = "Stopnie swobody_2";
-            Text[ japanese ] = "©—R“x‚Q";
+            Text[ japanese ] = "©—R“x 2";
             Text[ chinese_traditional ] = "degrees_freedom_2";
             Text[ arabic ] = "ÏÑÌÇÊ_ÇáÍÑíÉ_2";
             Text[ dutch ] = "Vrijheidsgraden_2";
@@ -33102,7 +33102,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Chi Æ½·½·Ö²¼µÄµ¥Î²¸ÅÂÊ¡£";
             Text[ russian ] = "Âîçâğàùàåò îäíîñòîğîííşş âåğîÿòíîñòü ğàñïğåäåëåíèÿ õè-êâàäğàò.";
             Text[ polish ] = "Wyznacza wartoœci rozk³adu chi-kwadrat";
-            Text[ japanese ] = "¶²‚Qæ(ƒÔ‚Q)•ª•z‚ğ•]‰¿‚·‚é’l‚ğw’è‚µ‚Ü‚·B";
+            Text[ japanese ] = "¶²2æ(ƒÔ2)•ª•z‚ğ•]‰¿‚·‚é’l‚ğw’è‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "Chi ¥­¤è¤À§Gªº³æ§À·§²v¡C";
             Text[ arabic ] = "Şíã ÊæÒíÚ Chi ÇáÊÑÈíÚí.";
             Text[ dutch ] = "Berekent de kans van de chikwadraatsverdeling";
@@ -33172,7 +33172,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÓÃÀ´¼ÆËã Chi Æ½·½·Ö²¼µ¥Î²¸ÅÂÊµÄÊıÖµ¡£";
             Text[ russian ] = "Çíà÷åíèå, äëÿ êîòîğîãî òğåáóåòñÿ âû÷èñëèòü ğàñïğåäåëåíèå.";
             Text[ polish ] = "Wartoœæ, dla kórej ma zostaæ obliczony rozk³ad chi-kwadrat.";
-            Text[ japanese ] = "¶²‚Qæ(ƒÔ‚Q)•ª•z‚ÌŠm—¦‚ğ•Ô‚·’lB";
+            Text[ japanese ] = "¶²2æ(ƒÔ2)•ª•z‚ÌŠm—¦‚ğ•Ô‚·’lB";
             Text[ chinese_traditional ] = "¥Î¨Ó­pºâ Chi ¥­¤è¤À§G³æ§À·§²vªº¼Æ­È¡C";
             Text[ arabic ] = "ÇáŞíãÉ ÇáÊí ÊÑíÏ ÚäÏåÇ ÊŞííã ÇáÊæÒíÚ.";
             Text[ dutch ] = "De waarde, waarop de chikwadraatsverdeling moet worden berekend.";
@@ -33272,7 +33272,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Chi Æ½·½·Ö²¼µ¥Î²¸ÅÂÊµÄÄæº¯Êı¡£";
             Text[ russian ] = "Âîçâğàùàåò çíà÷åíèå, îáğàòíîå ê îäíîñòîğîííåé âåğîÿòíîñòè ğàñïğåäåëíèÿ õè-êâàäğàò.";
             Text[ polish ] = "Wyznacza odwrotnoœæ rozk³adu chi-kwadrat.";
-            Text[ japanese ] = "¶²‚Qæ(ƒÔ‚Q)•ª•z‚Ì‹tŠÖ”‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "¶²2æ(ƒÔ2)•ª•z‚Ì‹tŠÖ”‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "Chi ¥­¤è¤À§G³æ§À·§²vªº°f¨ç¼Æ¡C";
             Text[ arabic ] = "Şíã ÚßÓ ÊæÒíÚ Chi ÇáÊÑÈíÚí.";
             Text[ dutch ] = "Waarden van de inverse chi kwadraatverdeling.";
@@ -33342,7 +33342,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Chi Æ½·½·Ö²¼µÄµ¥Î²¸ÅÂÊ¡£";
             Text[ russian ] = "Âåğîÿòíîñòü, ñâÿçàííàÿ ñ ğàñïğåäåëåíèåì õè-êâàäğàò";
             Text[ polish ] = "Prawdopodobieñstwo, dla którego ma zostaæ obliczona odwrotnoœæ rozk³adu chi-kwadrat.";
-            Text[ japanese ] = "‹tŠÖ”¶²‚Qæ(ƒÔ‚Q)•ª•z‚É”º‚¤Šm—¦‚ğw’è‚µ‚Ü‚·B";
+            Text[ japanese ] = "‹tŠÖ”¶²2æ(ƒÔ2)•ª•z‚É”º‚¤Šm—¦‚ğw’è‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "Chi ¥­¤è¤À§Gªº³æ§À·§²v¡C";
             Text[ arabic ] = "ÇÍÊãÇá ãŞÊÑä ãÚ ÊæÒíÚ ßÇí ÊÑÈíÚ.";
             Text[ dutch ] = "De kansdichtheid, waarop de inverse chi-kwadraatverdeling moet worden berekend.";
@@ -33406,7 +33406,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Chi Æ½·½·Ö²¼µÄ×ÔÓÉ¶È¡£";
             Text[ russian ] = "×èñëî ñòåïåíåé ñâîáîäû.";
             Text[ polish ] = "Stopnie swobody w rozk³adzie chi-kwadrat.";
-            Text[ japanese ] = "¶²‚Qæ(ƒÔ‚Q)•ª•z‚Ì©—R“xB";
+            Text[ japanese ] = "¶²2æ(ƒÔ2)•ª•z‚Ì©—R“xB";
             Text[ chinese_traditional ] = "Chi ¥­¤è¤À§Gªº¦Û¥Ñ«×¡C";
             Text[ arabic ] = "ÚÏÏ ÏÑÌÇÊ ÇáÍÑíÉ.";
             Text[ dutch ] = "De vrijheidsgraden van de chi-kwadraatverdeling.";
@@ -33682,7 +33682,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Berekent het aantal variaties van elementen zonder herhaling.";
             Text[ chinese_simplified ] = "ÔÚ¸ø¶¨ÔªËØ×ÜÊıµÄÇé¿öÏÂ¼ÆËãÑ¡È¡Èô¸ÉÔªËØµÄ\nÅÅÁĞÊı(²»ÔÊĞíÖØ¸´ÅÅÁĞ)¡£";
             Text[ greek ] = "Õğïëïãßæåé ôï ğëŞèïò ìåôáèİóåùí óôïé÷åßùí ÷ùñßò åğáíÜëçøç.";
-            Text[ korean ] = "¹İº¹¾øÀÌ, ¿ä¼ÒÀÇ ÁÖ¾îÁø ¹øÈ£ÀÇ Ä¡È¯µÈ ¼ö¸¦ °è»ê.";
+            Text[ korean ] = "¿ä¼ÒÀÇ º¯Çü ¼ö¸¦ °è»ê (¹İº¹¾øÀÌ).";
             Text[ turkish ] = "Yinelenmeyen öğeler varyasyonları sayısını hesaplar.";
             Text[ language_user1 ] = " ";
         };
@@ -33714,7 +33714,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Count_1";
             Text[ russian ] = "×èñëî_1";
             Text[ polish ] = "Liczba_1";
-            Text[ japanese ] = "”’l‚P";
+            Text[ japanese ] = "”’l 1";
             Text[ chinese_traditional ] = "Count_1";
             Text[ arabic ] = "ÇáÚÏÏ_1";
             Text[ dutch ] = "Aantal_1";
@@ -33778,7 +33778,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Count_2";
             Text[ russian ] = "×èñëî_2";
             Text[ polish ] = "Liczba_2";
-            Text[ japanese ] = "”’l‚Q";
+            Text[ japanese ] = "”’l 2";
             Text[ chinese_traditional ] = "Count_2";
             Text[ arabic ] = "ÇáÚÏÏ_2";
             Text[ dutch ] = "Aantal_2";
@@ -33810,7 +33810,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Ã¿¸öÅÅÁĞÖĞµÄÔªËØÊıÄ¿¡£";
             Text[ russian ] = "×èñëî ıëåìåíòîâ â êàæäîé ïåğåñòàíîâêå.";
             Text[ polish ] = "Liczba elementów do wyboru.";
-            Text[ japanese ] = "‘g‚İ‡‚í‚¹‚é‚P‘g‚ÉŠÜ‚Ü‚ê‚é€–Ú‚Ì”B";
+            Text[ japanese ] = "‘g‚İ‡‚í‚¹‚é1‘g‚ÉŠÜ‚Ü‚ê‚é€–Ú‚Ì”B";
             Text[ chinese_traditional ] = "¨C­Ó±Æ¦C¤¤ªº¤¸¯À¼Æ¥Ø¡C";
             Text[ arabic ] = "ÚÏÏ ÇáßÇÆäÇÊ İí ßá ÊÈÏíáÉ.";
             Text[ dutch ] = "Aantal gekozen elementen.";
@@ -33884,7 +33884,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Count_1";
             Text[ russian ] = "×èñëî_1";
             Text[ polish ] = "Liczba_1";
-            Text[ japanese ] = "”’l‚P";
+            Text[ japanese ] = "”’l 1";
             Text[ chinese_traditional ] = "Count_1";
             Text[ arabic ] = "ÇáÚÏÏ_1";
             Text[ dutch ] = "Aantal_1";
@@ -33948,7 +33948,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Count_2";
             Text[ russian ] = "×èñëî_2";
             Text[ polish ] = "Liczba_2";
-            Text[ japanese ] = "”’l‚Q";
+            Text[ japanese ] = "”’l 2";
             Text[ chinese_traditional ] = "Count_2";
             Text[ arabic ] = "ÇáÚÏÏ_2";
             Text[ dutch ] = "Aantal_2";
@@ -33980,7 +33980,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Ã¿¸öÅÅÁĞÖĞµÄÔªËØÊıÄ¿¡£";
             Text[ russian ] = "×èñëî ıëåìåíòîâ â êàæäîé ïåğåñòàíîâêå.";
             Text[ polish ] = "Liczba elementów do wyboru.";
-            Text[ japanese ] = "‘g‚İ‡‚í‚¹‚é‚P‘g‚ÉŠÜ‚Ü‚ê‚é€–Ú‚Ì”B";
+            Text[ japanese ] = "‘g‚İ‡‚í‚¹‚é1‘g‚ÉŠÜ‚Ü‚ê‚é€–Ú‚Ì”B";
             Text[ chinese_traditional ] = "¨C­Ó±Æ¦C¤¤ªº¤¸¯À¼Æ¥Ø¡C";
             Text[ arabic ] = "ÚÏÏ ÇáßÇÆäÇÊ İí ßá ÊÈÏíáÉ.";
             Text[ dutch ] = "Aantal gekozen elementen.";
@@ -34016,7 +34016,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "¼ÆËãÕıÌ¬·Ö²¼ (1-alpha) µÄÖÃĞÅÇø¼ä¡£";
             Text[ russian ] = "Âîçâğàùàåò äîâåğèòåëüíûé èíòåğâàë äëÿ ñğåäíåãî ãåíåğàëüíîé ñîâîêóïíîñòè.";
             Text[ polish ] = "Wyznacza przedzia³ ufnoœci dla œredniej z populacji.";
-            Text[ japanese ] = "(‚P-ƒ¿)M—Š“x‚ğ•W–{•½‹Ï‚É•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "(1-ƒ¿)M—Š“x‚ğ•W–{•½‹Ï‚É•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "­pºâ¥¿ºA¤À§G (1-alpha) ªº¸m«H°Ï¶¡¡C";
             Text[ arabic ] = "ÊÍÓÈ İÇÕá ÇáËŞÉ (1-alpha) Åáì ÇáÊæÒíÚ ÇáØÈíÚí.";
             Text[ dutch ] = "Berekent een (1-alfa)-confidentie-interval voor een normale verdeling.";
@@ -34487,7 +34487,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "¼ÆËã Chi Æ½·½µÄ¶ÀÁ¢ĞÔ¼ìÑéÖµ¡£";
             Text[ russian ] = "Âîçâğàùàåò òåñò íà íåçàâèñèìîñòü.";
             Text[ polish ] = "Oblicza test na niezale¿noœæ rozk³adu chi-kwadrat.";
-            Text[ japanese ] = "¶²‚Qæ(ƒÔ‚Q)ŒŸ’è‚ğs‚¢‚Ü‚·B";
+            Text[ japanese ] = "¶²2æ(ƒÔ2)ŒŸ’è‚ğs‚¢‚Ü‚·B";
             Text[ chinese_traditional ] = "­pºâ Chi ¥­¤èªº¿W¥ß©ÊÀËÅç­È¡C";
             Text[ arabic ] = "ÊÍÓÈ ÇÎÊÈÇÑ ÇÓÊŞáÇá Chi ÇáÊÑÈíÚí.";
             Text[ dutch ] = "Geeft als resultaat van de onafhankelijkheidstoets.";
@@ -34695,7 +34695,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı¾İ_1";
             Text[ russian ] = "Äàííûå_1";
             Text[ polish ] = "Dane_1";
-            Text[ japanese ] = "”z—ñ‚P";
+            Text[ japanese ] = "”z—ñ 1";
             Text[ chinese_traditional ] = "data_1";
             Text[ arabic ] = "ÈíÇäÇÊ_1";
             Text[ dutch ] = "Gegevens_1";
@@ -34727,7 +34727,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "µÚÒ»¸öÊı¾İ×é¡£";
             Text[ russian ] = "Ïåğâûé ìàññèâ èëè äèàïàçîí äàííûõ.";
             Text[ polish ] = "Macierz pierwszego rekordu.";
-            Text[ japanese ] = "•ªÍ‚·‚é‚P‚Â–Ú‚ÌÃŞ°À‚ğŠÜ‚Ş”z—ñ‚Ü‚½‚Í¾Ù”ÍˆÍB";
+            Text[ japanese ] = "•ªÍ‚·‚é1‚Â–Ú‚ÌÃŞ°À‚ğŠÜ‚Ş”z—ñ‚Ü‚½‚Í¾Ù”ÍˆÍB";
             Text[ chinese_traditional ] = "²Ä¤@­Ó¼Æ¾Ú²Õ¡C";
             Text[ arabic ] = "ÇáÕİíİ Ãæ ÇáäØÇŞ ÇáÃæá ãä ÇáÈíÇäÇÊ.";
             Text[ dutch ] = "De matrix van de eerste record.";
@@ -34759,7 +34759,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı¾İ_2";
             Text[ russian ] = "Äàííûå_2";
             Text[ polish ] = "Dane_2";
-            Text[ japanese ] = "”z—ñ‚Q";
+            Text[ japanese ] = "”z—ñ 2";
             Text[ chinese_traditional ] = "data_2";
             Text[ arabic ] = "ÈíÇäÇÊ_2";
             Text[ dutch ] = "Gegevens_2";
@@ -34791,7 +34791,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "µÚ¶ş¸öÊı¾İ×é¡£";
             Text[ russian ] = "Âòîğîé ìàññèâ èëè äèàïàçîí äàííûõ.";
             Text[ polish ] = "Macierz drugiego zbioru danych.";
-            Text[ japanese ] = "•ªÍ‚·‚é‚Q‚Â–Ú‚ÌÃŞ°À‚ğŠÜ‚Ş”z—ñ‚Ü‚½‚Í¾Ù”ÍˆÍB";
+            Text[ japanese ] = "•ªÍ‚·‚é2‚Â–Ú‚ÌÃŞ°À‚ğŠÜ‚Ş”z—ñ‚Ü‚½‚Í¾Ù”ÍˆÍB";
             Text[ chinese_traditional ] = "²Ä¤G­Ó¼Æ¾Ú²Õ¡C";
             Text[ arabic ] = "ÇáÕİíİ Ãæ ÇáäØÇŞ ÇáËÇäí ãä ÇáÈíÇäÇÊ.";
             Text[ dutch ] = "De matrix van de tweede record.";
@@ -34865,7 +34865,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı¾İ_1";
             Text[ russian ] = "Äàííûå_1";
             Text[ polish ] = "Dane_1";
-            Text[ japanese ] = "”z—ñ‚P";
+            Text[ japanese ] = "”z—ñ 1";
             Text[ chinese_traditional ] = "data_1";
             Text[ arabic ] = "ÈíÇäÇÊ_1";
             Text[ dutch ] = "Gegevens_1";
@@ -34929,7 +34929,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı¾İ_2";
             Text[ russian ] = "Äàííûå_2";
             Text[ polish ] = "Dane_2";
-            Text[ japanese ] = "”z—ñ‚Q";
+            Text[ japanese ] = "”z—ñ 2";
             Text[ chinese_traditional ] = "data_2";
             Text[ arabic ] = "ÈíÇäÇÊ_2";
             Text[ dutch ] = "Gegevens_2";
@@ -35025,7 +35025,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "tails = 1 ¼ÆËãµ¥Î²·Ö²¼£¬tails = 2 ¼ÆËãË«Î²·Ö²¼¡£";
             Text[ russian ] = "Åñëè õâîñòû = 1, òî ôóíêöèÿ ÒÒÅÑÒ èñïîëüçóåò îäíîñòîğîííåå ğàñïğåäåëåíèå. Åñëè õâîñòû = 2, òî ôóíêöèÿ ÒÒÅÑÒ èñïîëüçóåò äâóñòîğîííåå ğàñïğåäåëåíèå.";
             Text[ polish ] = "Tryb = 1 oblicza jednoœladowy test, Tryb = 2 dwuœladowy.";
-            Text[ japanese ] = "”ö•”‚P‚É‚·‚é‚Æ•Ğ‘¤•ª•z‚Ì’l‚ªA”ö•”‚Q‚É‚·‚é‚Æ—¼‘¤•ª•z‚Ì’l‚ªŒvZ‚³‚ê‚Ü‚·B";
+            Text[ japanese ] = "”ö•” = 1 ‚É‚·‚é‚Æ•Ğ‘¤•ª•z‚Ì’l‚ªA”ö•” = 2 ‚É‚·‚é‚Æ—¼‘¤•ª•z‚Ì’l‚ªŒvZ‚³‚ê‚Ü‚·B";
             Text[ chinese_traditional ] = "tails = 1 ­pºâ³æ§À¤À§G¡Mtails = 2 ­pºâÂù§À¤À§G¡C";
             Text[ arabic ] = "ÊõÍÏÏ ÚÏÏ ÃØÑÇİ ÇáÊæÒíÚ ááÅÑÌÇÚº ÊæÒíÚ ÃÍÇÏí ÇáØÑİ = 1º ÊæÒíÚ ËäÇÆí ÇáØÑİ = 2.";
             Text[ dutch ] = "Modus = 1 berekent de eenzijdige test, modus = 2 de tweezijdige.";
@@ -35089,7 +35089,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "T-¼ìÑéµÄÀàĞÍ¡£";
             Text[ russian ] = "Òèï èñïîëíÿåìîãî t-òåñòà.";
             Text[ polish ] = "Typ testu T.";
-            Text[ japanese ] = "Às‚·‚étŒŸ’è‚Ìí—ŞB";
+            Text[ japanese ] = "Às‚·‚é t ŒŸ’è‚Ìí—ŞB";
             Text[ chinese_traditional ] = "T-ÀËÅçªºÃş«¬¡C";
             Text[ arabic ] = "äæÚ t-test.";
             Text[ dutch ] = "Het type T-test.";
@@ -35125,7 +35125,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "¼ÆËã Pearson ³Ë»ı¾ØÏà¹ØÏµÊıµÄÆ½·½¡£";
             Text[ russian ] = "Âû÷èñëÿåò êâàäğàò êîıôôèöèåíòà êîğğåëÿöèè Ïèğñîíà ïî òî÷êàì äàííûõ.";
             Text[ polish ] = "Wyznacza kwadrat chwilowego wspó³czynnika korelacji iloczynu Pearsona.";
-            Text[ japanese ] = "Ëß±¿İ‚ÌÏ—¦‘ŠŠÖŒW”‚Ì’l‚ğ‚Qæ‚µ‚Ä•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "Ëß±¿İ‚ÌÏ—¦‘ŠŠÖŒW”‚Ì’l‚ğ2æ‚µ‚Ä•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "­pºâ Pearson ­¼¿n¯x¬ÛÃö«Y¼Æªº¥­¤è¡C";
             Text[ arabic ] = "ÊÍÓÈ ÊÑÈíÚ ãÚÇãá Pearson ááÇÑÊÈÇØ ÇáÚÒæãí.";
             Text[ dutch ] = "Berekent de correlatiecoëfficiënt van Peorson in kwadraatvorm.";
@@ -35843,7 +35843,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı¾İ_1";
             Text[ russian ] = "Äàííûå_1";
             Text[ polish ] = "Dane_1";
-            Text[ japanese ] = "”z—ñ‚P";
+            Text[ japanese ] = "”z—ñ 1";
             Text[ chinese_traditional ] = "data_1";
             Text[ arabic ] = "ÈíÇäÇÊ_1";
             Text[ dutch ] = "Gegevens_1";
@@ -35907,7 +35907,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı¾İ_2";
             Text[ russian ] = "Äàííûå_2";
             Text[ polish ] = "Dane_2";
-            Text[ japanese ] = "”z—ñ‚Q";
+            Text[ japanese ] = "”z—ñ 2";
             Text[ chinese_traditional ] = "data_2";
             Text[ arabic ] = "ÈíÇäÇÊ_2";
             Text[ dutch ] = "Gegevens_2";
@@ -36013,7 +36013,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı¾İ_1";
             Text[ russian ] = "Äàííûå_1";
             Text[ polish ] = "Dane_1";
-            Text[ japanese ] = "”z—ñ‚P";
+            Text[ japanese ] = "”z—ñ 1";
             Text[ chinese_traditional ] = "data_1";
             Text[ arabic ] = "ÈíÇäÇÊ_1";
             Text[ dutch ] = "Gegevens_1";
@@ -36045,7 +36045,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "µÚÒ»×éÊı¾İµ¥Ôª¸ñÇøÓò¡£";
             Text[ russian ] = "Ïåğâûé äèàïàçîí çíà÷åíèé.";
             Text[ polish ] = "Macierz pierwszego rekordu.";
-            Text[ japanese ] = "ÃŞ°À‚ª“ü—Í‚³‚ê‚½‚P‚Â–Ú‚Ì”z—ñB";
+            Text[ japanese ] = "ÃŞ°À‚ª“ü—Í‚³‚ê‚½1‚Â–Ú‚Ì”z—ñB";
             Text[ chinese_traditional ] = "²Ä¤@²Õ¼Æ¾ÚÀx¦s®æ°Ï°ì¡C";
             Text[ arabic ] = "ãÕİæİÉ ÇáÓÌá ÇáÃæá.";
             Text[ dutch ] = "De matrix van de eerste record.";
@@ -36077,7 +36077,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı¾İ_2";
             Text[ russian ] = "Äàííûå_2";
             Text[ polish ] = "Dane_2";
-            Text[ japanese ] = "”z—ñ‚Q";
+            Text[ japanese ] = "”z—ñ 2";
             Text[ chinese_traditional ] = "data_2";
             Text[ arabic ] = "ÈíÇäÇÊ_2";
             Text[ dutch ] = "Gegevens_2";
@@ -36109,7 +36109,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "µÚ¶ş×éÊı¾İµ¥Ôª¸ñÇøÓò¡£";
             Text[ russian ] = "Âòîğîé äèàïàçîí çíà÷åíèé.";
             Text[ polish ] = "Macierz drugiego zbioru danych.";
-            Text[ japanese ] = "ÃŞ°À‚ª“ü—Í‚³‚ê‚½‚à‚¤‚P‚Â‚Ì”z—ñB";
+            Text[ japanese ] = "ÃŞ°À‚ª“ü—Í‚³‚ê‚½‚à‚¤1‚Â‚Ì”z—ñB";
             Text[ chinese_traditional ] = "²Ä¤G²Õ¼Æ¾ÚÀx¦s®æ°Ï°ì¡C";
             Text[ arabic ] = "ãÕİæİÉ ÇáÓÌá ÇáËÇäí.";
             Text[ dutch ] = "De matrix met de tweede record.";
@@ -36183,7 +36183,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı¾İ_1";
             Text[ russian ] = "Äàííûå_1";
             Text[ polish ] = "Dane_1";
-            Text[ japanese ] = "”z—ñ‚P";
+            Text[ japanese ] = "”z—ñ 1";
             Text[ chinese_traditional ] = "data_1";
             Text[ arabic ] = "ÈíÇäÇÊ_1";
             Text[ dutch ] = "Gegevens_1";
@@ -36215,7 +36215,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "µÚÒ»¸öÊı¾İ×éµÄµ¥Ôª¸ñÇøÓò¡£";
             Text[ russian ] = "Ïåğâûé äèàïàçîí ÿ÷ååê öåëûõ ÷èñåë.";
             Text[ polish ] = "Macierz pierwszego rekordu.";
-            Text[ japanese ] = "ÃŞ°À‚ª“ü—Í‚³‚ê‚Ä‚¢‚é‚P‚Â–Ú‚Ì¾Ù”ÍˆÍB";
+            Text[ japanese ] = "ÃŞ°À‚ª“ü—Í‚³‚ê‚Ä‚¢‚é1‚Â–Ú‚Ì¾Ù”ÍˆÍB";
             Text[ chinese_traditional ] = "²Ä¤@­Ó¼Æ¾Ú²ÕªºÀx¦s®æ°Ï°ì¡C";
             Text[ arabic ] = "ãÕİæİÉ ÇáÓÌá ÇáÃæá.";
             Text[ dutch ] = "De matrix met de eerste record.";
@@ -36247,7 +36247,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Êı¾İ_2";
             Text[ russian ] = "Äàííûå_2";
             Text[ polish ] = "Dane_2";
-            Text[ japanese ] = "”z—ñ‚Q";
+            Text[ japanese ] = "”z—ñ 2";
             Text[ chinese_traditional ] = "data_2";
             Text[ arabic ] = "ÈíÇäÇÊ_2";
             Text[ dutch ] = "Gegevens_2";
@@ -36279,7 +36279,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "µÚ¶ş¸öÊı¾İ×éµÄµ¥Ôª¸ñÇøÓò¡£";
             Text[ russian ] = "Âòîğîé äèàïàçîí ÿ÷ååê öåëûõ ÷èñåë.";
             Text[ polish ] = "Macierz drugiego zbioru danych.";
-            Text[ japanese ] = "ÃŞ°À‚ª“ü—Í‚³‚ê‚Ä‚¢‚é‚à‚¤‚P‚Â‚Ì¾Ù”ÍˆÍB";
+            Text[ japanese ] = "ÃŞ°À‚ª“ü—Í‚³‚ê‚Ä‚¢‚é‚à‚¤1‚Â‚Ì¾Ù”ÍˆÍB";
             Text[ chinese_traditional ] = "²Ä¤G­Ó¼Æ¾Ú²ÕªºÀx¦s®æ°Ï°ì¡C";
             Text[ arabic ] = "ãÕİæİÉ ÇáÓÌá ÇáËÇäí.";
             Text[ dutch ] = "De matrix met de tweede record.";
@@ -36955,7 +36955,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "´Ó 30 ¸öÊıÖµÖĞÑ¡Ò»¸öÊıÖµ¡£";
             Text[ russian ] = "Âûáèğàåò çíà÷åíèå èç ñïèñêà äî 30 àğãóìåíòîâ.";
             Text[ polish ] = "Wybiera wartoœæ z listy zawieraj¹cej do 30 argumentów.";
-            Text[ japanese ] = "²İÃŞ¯¸½‚ğg‚Á‚ÄAˆø”Ø½Ä‚Ì’l(‚P`29)‚Ì’†‚©‚ç“Á’è‚Ì’l‚ğ‚P‚Â‘I‘ğ‚µ‚Ü‚·B";
+            Text[ japanese ] = "²İÃŞ¯¸½‚ğg‚Á‚ÄAˆø”Ø½Ä‚Ì’l(1`29)‚Ì’†‚©‚ç“Á’è‚Ì’l‚ğ1‚Â‘I‘ğ‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "±q 30 ­Ó¼Æ­È¤¤¿ï¤@­Ó¼Æ­È¡C";
             Text[ arabic ] = "ÊÍÏÏ ŞíãÉ ãä ŞÇÆãÉ ÈåÇ 30 æÓíØÉ ßÍÏ ÃŞÕì.";
             Text[ dutch ] = "Kiest een waarde uit een lijst van maximaal 30 argumenten.";
@@ -37026,7 +37026,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÒªÑ¡ÔñÊıÖµ1ÖÁ30¸öµÄË÷Òı¡£";
             Text[ russian ] = "Çàäàíèå âûáèğàåìîãî çíà÷åíèÿ-àğãóìåíòà â äèàïàçîíå îò 1 äî 30.";
             Text[ polish ] = "Okreœla, które wartoœci argumentu (1..30) zostan¹ wybrane.";
-            Text[ japanese ] = "‘I‘ğ‚µ‚½’l(‚P`30)‚Ì²İÃŞ¯¸½B";
+            Text[ japanese ] = "‘I‘ğ‚µ‚½’l(1`30)‚Ì²İÃŞ¯¸½B";
             Text[ chinese_traditional ] = "­n¿ï¾Üªº¼Æ­È1¦Ü30ªº¯Á¤Ş¡C";
             Text[ arabic ] = "ÊÍÏíÏ æÓíØÉ ÇáŞíãÉ ÇáãÑÇÏ ÇÎÊíÇÑåÇ.";
             Text[ dutch ] = "De index van de gekozen waarde (1..30).";
@@ -37091,7 +37091,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÊıÖµ 1;  ÊıÖµ 2;... ÓÃÓÚ½øĞĞÊı¾İÑ¡ÔñµÄÊı¾İ±í¡£";
             Text[ russian ] = "Çíà÷åíèå 1; çíà÷åíèå 2;... îò 1 äî 29 àğãóìåíòîâ-çíà÷åíèé, èç êîòîğûõ ÂÛÁÎĞ, èïîëüçóÿ íîìåğ_èíäåêñà, âûáèğàåò çíà÷åíèå èëè âûïîëíÿåìîå äåéñòâèå.";
             Text[ polish ] = "Wartoœæ 1; Wartoœæ 2;... Lista argumentów, z której ma zostaæ wybrana wartoœæ.";
-            Text[ japanese ] = "’l‚P;’l‚Q;...‚Íˆø”Ø½Ä‚Ì€–Ú‚Æ‚È‚è‘I‘ğ‚³‚ê‚é’lB";
+            Text[ japanese ] = "’l 1;’l 2;...‚Íˆø”Ø½Ä‚Ì€–Ú‚Æ‚È‚è‘I‘ğ‚³‚ê‚é’lB";
             Text[ chinese_traditional ] = "¼Æ­È 1;  ¼Æ­È 2;... ¥Î¤_¶i¦æ¼Æ¾Ú¿ï¾Üªº¼Æ¾Úªí¡C";
             Text[ arabic ] = "value1;value2... ŞÇÆãÉ ÇáæÓÇÆØ ÇáÊí ÊÑíÏ ÊÍÏíÏ ÃÍÏ ÇáŞíã ãäåÇ.";
             Text[ dutch ] = "Waarde 1; Waarde 2;... De lijst van argumenten waaruit een waarde wordt gekozen.";
@@ -38028,7 +38028,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÔÚÊı¾İ×éµÄÊ×ÁĞ²éÕÒÖ¸¶¨µÄÊıÖµ£¬²¢·µ»ØÊıÖµËùÔÚĞĞ\nÖĞÖ¸¶¨ÁĞ´¦µÄÊıÖµ¡£";
             Text[ russian ] = "Ïîèñê â âåğòèêàëüíîì ïîğÿäêå è ññûëêà íà áëèçëåæàùèå ÿ÷åéêè.";
             Text[ polish ] = "Wyszukiwanie pionowe i adres wskazanej komórki.";
-            Text[ japanese ] = "”ÍˆÍ“à‚Ì—ñ‚©‚ç‚Ps‚ğŒŸõ‚µA‚»‚Ìs‚É‚ ‚éQÆ¾Ù‚Ì’l‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "”ÍˆÍ“à‚Ì—ñ‚©‚ç1s‚ğŒŸõ‚µA‚»‚Ìs‚É‚ ‚éQÆ¾Ù‚Ì’l‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¦b¸ê®Æ²Õªº­º¦C¬d§ä«ü©wªº¼Æ­È¡M¨Ãªğ¦^¼Æ­È©Ò¦b¦æ¤¤«ü©w¦C³Bªº¼Æ­È¡C";
             Text[ arabic ] = "ÇáÈÍË ÚãæÏíÇğ Ëã ÇáÅÔÇÑÉ Åáì ÇáÎáÇíÇ ÇáãÌÇæÑÉ.";
             Text[ dutch ] = "Verticaal zoeken en verwijzing naar naastliggende cellen.";
@@ -38398,7 +38398,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Ò»¸ö(¶àÖØ)ÇøÓòµÄÒıÓÃ¡£";
             Text[ russian ] = "Ññûëêà íà îäèí èëè íåñêîëüêî äèàïàçîíîâ.";
             Text[ polish ] = "Odwo³anie do obszaru z³o¿onego.";
-            Text[ japanese ] = "‚P‚Â‚Ü‚½‚Í•¡”‚Ì¾Ù‚Ì—ÌˆæB";
+            Text[ japanese ] = "1‚Â‚Ü‚½‚Í•¡”‚Ì¾Ù‚Ì—ÌˆæB";
             Text[ chinese_traditional ] = "¤@­Ó(¦h­«)°Ï°ìªº°Ñ·Ó¡C";
             Text[ arabic ] = "ÇáãÑÌÚ Åáì äØÇŞ (ãÊÚÏÏ).";
             Text[ dutch ] = "De verwijzing naar één of meer cellenbereiken.";
@@ -38590,7 +38590,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Èç¹ûÊÇÒ»¸ö¶àÖØÇøÓò£¬ÄÇ¾ÍÊÇÒ»¸ö²¿·ÖÇøÓòµÄË÷Òı¡£";
             Text[ russian ] = "Íîìåğ îäíîãî äèàïàçîíà, â ñëó÷àå, åñëè ğå÷ü èäåò î íåñêîëüêèõ äèàïàçîíàõ.";
             Text[ polish ] = "Indeks obszaru czêœciowego, jeœli chodzi o obszar z³o¿ony.";
-            Text[ japanese ] = "”ÍˆÍ‚É•¡”‚Ì—Ìˆæ‚ğ‘I‘ğ‚µ‚½ê‡A‚»‚Ì’†‚Ì‚P‚Â‚Ì—Ìˆæ‚ğ”’l‚Åw’èB";
+            Text[ japanese ] = "”ÍˆÍ‚É•¡”‚Ì—Ìˆæ‚ğ‘I‘ğ‚µ‚½ê‡A‚»‚Ì’†‚Ì1‚Â‚Ì—Ìˆæ‚ğ”’l‚Åw’èB";
             Text[ chinese_traditional ] = "¦pªG¬O¤@­Ó¦h­«°Ï°ì¡M¨º´N¬O¤@­Ó³¡¥÷°Ï°ìªº¯Á¤Ş¡C";
             Text[ arabic ] = "ÇáäØÇŞ İí ÇáãÑÌÚ ÇáĞí ÓÊÑÌÚ ãäå ÇáŞíãÉ.";
             Text[ dutch ] = "De index van een bereik uit meer cellenbereiken.";
@@ -38732,7 +38732,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Í¨¹ıÍ¬ÁíÒ»¸öÊ¸Á¿µÄÊıÖµ±È½ÏÀ´È·¶¨ÔÚÒ»¸öÊ¸Á¿ÖĞµÄÊıÖµ¡£";
             Text[ russian ] = "Îïğåäåëÿåò çíà÷åíèå â âåêòîğå ïóòåì ñğàâíåíèÿ çíà÷åíèé ñ äğóãèì âåêòîğîì.";
             Text[ polish ] = "Okreœla wartoœæ wektoru przez porównanie wartoœci w innym wektorze.";
-            Text[ japanese ] = "w’è‚µ‚½ÍŞ¸ÄÙ(‚Ps‚Ü‚½‚Í‚P—ñ‚©‚ç‚È‚é¾Ù”ÍˆÍ)‚Ì’l‚ğ‘¼‚ÌÍŞ¸ÄÙ‚Æ”äŠr‚µ‚Ä’l‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "w’è‚µ‚½ÍŞ¸ÄÙ(1s‚Ü‚½‚Í1—ñ‚©‚ç‚È‚é¾Ù”ÍˆÍ)‚Ì’l‚ğ‘¼‚ÌÍŞ¸ÄÙ‚Æ”äŠr‚µ‚Ä’l‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "³q¹L¦P¥t¤@­Ó¦V¶qªº¼Æ­È¤ñ¸û¨Ó½T©w¦b¤@­Ó¦V¶q¤¤ªº¼Æ­È¡C";
             Text[ arabic ] = "ÊÍÏÏ ŞíãÉ ãÇ ãä äØÇŞ Õİ æÇÍÏ¡ Ãæ äØÇŞ ÚãæÏ æÇÍÏ¡ Ãæ ãä Õİíİ.";
             Text[ dutch ] = "Bepaalt de waarde op een vector door vergelijking van waarden op een andere vector.";
@@ -39164,7 +39164,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÎªÊıÖµ 1, 0 »ò -1£¬ÓÃÓÚÈ·¶¨±È½ÏµÄ¹æÔò¡£";
             Text[ russian ] = "×èñëî â èíòåğâàëå îò 1, 0 èëè -1 è îïğåäåëÿåò, ïî êàêèì êğèòåğèÿì ñëåäóåò ñğàâíèâàòü.";
             Text[ polish ] = "Typ mo¿e przyjmowaæ wartoœci 1, 0 lub -1 i okreœliæ, wed³ug jakich kryteriów ma zostaæ porównane.";
-            Text[ japanese ] = "Æ‡‚ÌŒ^‚Í‚PA‚OA‚Ü‚½‚Í|‚P‚Ì”’l‚Ì‚¢‚¸‚ê‚©‚ğw’è‚µAŒŸ¸”ÍˆÍ‚Ì’†‚ÅŒŸ¸’l‚ğ’T‚·•û–@‚ğw’è‚µ‚Ü‚·B";
+            Text[ japanese ] = "Æ‡‚ÌŒ^‚Í 1A0A‚Ü‚½‚Í -1 ‚Ì”’l‚Ì‚¢‚¸‚ê‚©‚ğw’è‚µAŒŸ¸”ÍˆÍ‚Ì’†‚ÅŒŸ¸’l‚ğ’T‚·•û–@‚ğw’è‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¬°¼Æ­È 1, 0 ©Î -1¡M¥Î¨Ó½T©w¤ñ¸ûªº³W«h¡C";
             Text[ arabic ] = "ÇáÑŞã 1¡ Ãæ 0¡ Ãæ -1 æíÍÏÏ ãÚÇííÑ ÇáãØÇÈŞÉ.";
             Text[ dutch ] = "Type kan de waarden 1, 0 of -1 aannemen en bepaalt volgens welke criteria er wordt vergeleken.";
@@ -40544,7 +40544,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "×Ö·ûµÄ´úÂëÖµ¡£";
             Text[ russian ] = "×èñëî â èíòåğâàëå îò 1 äî 255, óêàçûâàşùåå íà íóæíûé ñèìâîë.";
             Text[ polish ] = "Wartoœæ kodu dla znaku";
-            Text[ japanese ] = "”’l‚É‚Í•Ô‚µ‚½‚¢•¶š‚ğ•\\‚·‚P‚©‚ç255A‚¨‚æ‚Ñ8481‚©‚ç39038‚Ü‚Å‚Ì”’l‚ğw’è‚µ‚Ü‚·B";
+            Text[ japanese ] = "”’l‚É‚Í•Ô‚µ‚½‚¢•¶š‚ğ•\\‚·1‚©‚ç255A‚¨‚æ‚Ñ8481‚©‚ç39038‚Ü‚Å‚Ì”’l‚ğw’è‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¦r¤¸ªº¥N½X­È¡C";
             Text[ arabic ] = "ÑŞã Èíä 1 æ 255 íÍÏÏ ÇáÍÑİ ÇáãÑÇÏ.";
             Text[ dutch ] = "De codewaarde voor het teken.";
@@ -40587,7 +40587,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Verwijdert niet-afdrukbare tekens uit de tekst.";
             Text[ chinese_simplified ] = "É¾³ıÎÄ±¾ÖĞ²»ÄÜ´òÓ¡µÄ×Ö·û¡£";
             Text[ greek ] = "ÄéáãñÜöåé áğü ôï êåßìåíï ôïõò ÷áñáêôŞñåò ïé ïğïßïé äåí åßíáé äõíáôüí íá åêôõğùèïıí.";
-            Text[ korean ] = "ÅØ½ºÆ®¿¡¼­ ºñÀÎ¼â ¹®ÀÚ¸¦  Á¦°Å";
+            Text[ korean ] = "ÅØ½ºÆ®¿¡¼­ ´Ü¶ô±âÈ£Ç¥½Ã  Á¦°Å";
             Text[ turkish ] = "Yazdırılamayan karakterleri metinden siler.";
             Text[ language_user1 ] = " ";
         };
@@ -40657,7 +40657,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "De tekst waaruit de niet-afdrukbare tekens worden verwijderd.";
             Text[ chinese_simplified ] = "Òª´ÓÖĞÉ¾³ıÎŞ·¨´òÓ¡×Ö·ûµÄÎÄ±¾¡£";
             Text[ greek ] = "Ôï êåßìåíï áğü ôï ïğïßï èá áğïìáêñõíèïıí ïé ÷áñáêôŞñåò ğïõ äåí åßíáé äõíáôüí íá åêôõğùèïıí.";
-            Text[ korean ] = "ºñÀÎ¼â ¹®ÀÚ°¡  Á¦°ÅµÇ¾î¾ß  ÇÏ´Â ÅØ½ºÆ®";
+            Text[ korean ] = "´Ü¶ô±âÈ£Ç¥½Ã°¡  Á¦°ÅµÇ¾î¾ß  ÇÏ´Â ÅØ½ºÆ®";
             Text[ turkish ] = "Yazdırılamayan karakterlerin silineceği metin.";
             Text[ language_user1 ] = " ";
         };
@@ -40687,7 +40687,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "½«Èô¸ÉÎÄ×Ö´®ºÏ²¢µ½Ò»¸öÎÄ×Ö´®ÖĞ¡£";
             Text[ russian ] = "Îáúåäèíÿåò íåñêîëüêî òåêñòîâ â îäèí.";
             Text[ polish ] = "£¹czy elementy tekstu w jeden.";
-            Text[ japanese ] = "•¡”‚Ì•¶š—ñ‚ğŒ‹‡‚µ‚Ä‚P‚Â‚Ì•¶š—ñ‚É‚Ü‚Æ‚ß‚Ü‚·B";
+            Text[ japanese ] = "•¡”‚Ì•¶š—ñ‚ğŒ‹‡‚µ‚Ä1‚Â‚Ì•¶š—ñ‚É‚Ü‚Æ‚ß‚Ü‚·B";
             Text[ chinese_traditional ] = "±N­Y¤z¤å¦r¦ê¦X¨Ö¨ì¤@­Ó¤å¦r¦ê¤¤¡C";
             Text[ arabic ] = "ÊÕá ÚÏÉ äÕæÕ İí äÕ æÇÍÏ.";
             Text[ dutch ] = "Verschillende teksten tot één enkele samenvoegen.";
@@ -40758,7 +40758,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÊÇ½«ÒªºÏ²¢µÄ×Ö´®¡£";
             Text[ russian ] = "Òåêñò 1; òåêñò 2;...îò 1 äî 30 ıëåìåíòîâ òåêñòà, îáúäèíÿåìûõ â îäèí ıëåìåíò òåêñòà.";
             Text[ polish ] = "Od 1 do 30 ci¹gów znaków, które maj¹ byæ po³¹czone w jeden ci¹g.";
-            Text[ japanese ] = "•¡”‚Ì•¶š—ñ‚ğŒ‹‡‚µ‚Ä‚P‚Â‚É‚Ü‚Æ‚ß‚é•¶š—ñB";
+            Text[ japanese ] = "•¡”‚Ì•¶š—ñ‚ğŒ‹‡‚µ‚Ä1‚Â‚É‚Ü‚Æ‚ß‚é•¶š—ñB";
             Text[ chinese_traditional ] = "¬O±N­n¦X¨Öªº¦r¦ê¡C";
             Text[ arabic ] = "ãä 1 Åáì 30 ÓáÓáÉ äÕíÉ áæÕáåÇ áÊÕÈÍ ÓáÓáÉ äÕíÉ æÇÍÏÉ.";
             Text[ dutch ] = "Tekst voor de samenvoeging.";
@@ -40794,7 +40794,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "±È½ÏÁ½¸ö×Ö·û´®ÊÇ·ñÏàÍ¬¡£";
             Text[ russian ] = "Ïğîâåğÿåò èäåíòè÷íîñòü äâóõ òåêñòîâ.";
             Text[ polish ] = "Podaje, czy dwa teksty s¹ identyczne.";
-            Text[ japanese ] = "‚Q‚Â‚Ì•¶š—ñ‚ª“¯‚¶‚©‚Ç‚¤‚©‚ğ”äŠr‚µ‚Ü‚·B";
+            Text[ japanese ] = "2‚Â‚Ì•¶š—ñ‚ª“¯‚¶‚©‚Ç‚¤‚©‚ğ”äŠr‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¤ñ¸û¨â­Ó¦r¤¸¦ê¬O§_¬Û¦P¡C";
             Text[ arabic ] = "ÊÍÏÏ ãÇ ÅĞÇ ßÇä åäÇß ÊÔÇÈå Èíä äÕíä.";
             Text[ dutch ] = "Geeft aan of twee teksten gelijk zijn.";
@@ -40832,7 +40832,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÎÄ×Ö_1";
             Text[ russian ] = "Òåêñò_1";
             Text[ polish ] = "Tekst_1";
-            Text[ japanese ] = "•¶š—ñ‚P";
+            Text[ japanese ] = "•¶š—ñ 1";
             Text[ chinese_traditional ] = "text_1";
             Text[ arabic ] = "äÕ_1";
             Text[ dutch ] = "Tekst_1";
@@ -40865,7 +40865,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÓÃÓÚ±È½ÏµÄµÚÒ»¸ö×Ö´®¡£";
             Text[ russian ] = "Ïåğâûé òåêñò äëÿ ñğàâíåíèÿ òåêñòîâ.";
             Text[ polish ] = "Pierwszy tekst dla porównania.";
-            Text[ japanese ] = "”äŠr‚·‚é‚P‚Â–Ú‚Ì•¶š—ñB";
+            Text[ japanese ] = "”äŠr‚·‚é1‚Â–Ú‚Ì•¶š—ñB";
             Text[ chinese_traditional ] = "¥Î©ó¤ñ¸ûªº²Ä¤@­Ó¦r¦ê¡C";
             Text[ arabic ] = "ÇáäÕ ÇáÃæá áãŞÇÑäÉ ÇáäÕ.";
             Text[ dutch ] = "De eerste tekst voor de tekstvergelijking.";
@@ -40897,7 +40897,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÎÄ×Ö_2";
             Text[ russian ] = "Òåêñò_2";
             Text[ polish ] = "Tekst_2";
-            Text[ japanese ] = "•¶š—ñ‚Q";
+            Text[ japanese ] = "•¶š—ñ 2";
             Text[ chinese_traditional ] = "text_2";
             Text[ arabic ] = "äÕ_2";
             Text[ dutch ] = "Tekst_2";
@@ -40930,7 +40930,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÓÃÓÚ±È½ÏµÄµÚ¶ş¸ö×Ö´®¡£";
             Text[ russian ] = "Âòîğîé òåêñò äëÿ ñğàâíåíèÿ òåêñòîâ.";
             Text[ polish ] = "Drugi tekst dla porównania.";
-            Text[ japanese ] = "”äŠr‚·‚é‚à‚¤‚P‚Â‚Ì•¶š—ñB";
+            Text[ japanese ] = "”äŠr‚·‚é‚à‚¤1‚Â‚Ì•¶š—ñB";
             Text[ chinese_traditional ] = "¥Î©ó¤ñ¸ûªº²Ä¤G­Ó¦r¦ê¡C";
             Text[ arabic ] = "ÇáäÕ ÇáËÇäí áãŞÇÑäÉ ÇáäÕ.";
             Text[ dutch ] = "De tweede tekst voor de tekstvergelijking.";
@@ -43936,7 +43936,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Verandert een positief rond getal in een tekst uit een aangegeven getalsysteem.";
             Text[ chinese_simplified ] = "°´ÕÕ¸ø¶¨µÄÊı×ÖÏµÍ³×ª»»Ò»¸öÕıÕûÊı³ÉÎÄ×Ö¡£";
             Text[ greek ] = "Ìåôáôñİğåé İíáí èåôéêü áêİñáéï áñéèìü óå İíá êåßìåíï åíüò óõóôŞìáôïò áñéèìşí ùò ğñïò ôç åğéëåãìİíç âÜóç.";
-            Text[ korean ] = "¾çÀÇ Á¤¼ö¸¦ ÁöÁ¤µÈ ±âÃÊÀÇ ¼öÃ¼°è¿¡¼­ ÅØ½ºÆ®·Î º¯È¯ÇÕ´Ï´Ù.";
+            Text[ korean ] = "ÁÖ¾îÁø ±âÁØ¿¡ ´ëÇØ, ¼ö Ã¼°è·Î µÈ ÅØ½ºÆ®¸¦ ¾çÀÇ Á¤¼ö·Î º¯È¯ÇÕ´Ï´Ù.";
             Text[ turkish ] = "Pozitif bir tamsayıyı belirtilen tabanda sayı sisteminden metne dönüştürür.";
             Text[ language_user1 ] = " ";
         };
@@ -44040,7 +44040,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "×ª»»ºóµÄÊı×Ö±ØĞëÎ»ÓÚ 2 ºÍ 36 Ö®¼ä¡£";
             Text[ russian ] = "×èñëîâîé áàçèñ, â êîòîğûé îñóùåñòâëÿåòñÿ ïğåîáğàçîâàíèå, äîëæåí íàõîäèòüñÿ â äèàïàçîíå îò 2 äî 36.";
             Text[ polish ] = "Podstawa systemu liczbowego do konwersji musi byæ zawarta w przedziale 2 - 36.";
-            Text[ japanese ] = "•ÏŠ·‚³‚ê‚é‹L”–@‚ÌŠî”‚Í‚Q`36‚Ì”ÍˆÍ‚É‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB";
+            Text[ japanese ] = "•ÏŠ·‚³‚ê‚é‹L”–@‚ÌŠî”‚Í2`36‚Ì”ÍˆÍ‚É‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB";
             Text[ chinese_traditional ] = "©Ò­nÂà´«ªº°ò¼Æ¥²¶·¦b 2 - 36 ¤§¶¡¡C";
             Text[ arabic ] = "ÃÓÇÓ ÇáÃÑŞÇã ÇáÊí Óæİ íÊã ÇáÊÍæíá ÅáíåÇ íÌÈ Ãä íßæä İí ÇáäØÇŞ ÇáĞí íÊÑÇæÍ Èíä 2 æ 36.";
             Text[ dutch ] = "De getalwaarde waarnaar wordt geconverteerd moet tussen 2 - 36 liggen.";
@@ -44128,7 +44128,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Converteert een tekst uit een aangegeven getalsysteem in een positief geheel getal.";
             Text[ chinese_simplified ] = "°ÑÒ»¸öÊôÓÚÊı×ÖÏµÍ³µÄÎÄ×Ö×ª»»³ÉÕıÕûÊı¡£";
             Text[ greek ] = "Ìåôáôñİğåé İíá êåßìåíï åíüò óõóôŞìáôïò áñéèìşí ùò ğñïò ôç åğéëåãìİíç âÜóç óå İíáí èåôéêü áêİñáéï áñéèìü.";
-            Text[ korean ] = "ÁöÁ¤µÈ ±âÃÊ¸¦ À§ÇÑ ¼öÃ¼°è·Î µÈ ÅØ½ºÆ®¸¦ ¾çÀÇ Á¤¼ö·Î ÀüÈ¯ÇÕ´Ï´Ù.";
+            Text[ korean ] = "ÁÖ¾îÁø ±âÁØ¿¡ ´ëÇØ, ¼ö Ã¼°è·Î µÈ ÅØ½ºÆ®¸¦ ¾çÀÇ Á¤¼ö·Î º¯È¯ÇÕ´Ï´Ù.";
             Text[ turkish ] = "Belirli bir sayı sistemindeki metni, belirtilen tabanda pozitif tamsayıya dönüştürür.";
             Text[ language_user1 ] = " ";
         };
@@ -44231,7 +44231,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ swedish ] = "Talbasen från vilken konverteringen sker, måste ligga i området 2 - 36.";
             Text[ polish ] = "Podstawa liczb do konwersji musi byæ zawarta w przedziale pomiêdzy 2 - 36.";
             Text[ portuguese_brazilian ] = "The base of the number system for conversion must be in the range 2 - 36.";
-            Text[ japanese ] = "•ÏŠ·‚³‚ê‚é‹L”–@‚ÌŠî”‚Í‚Q`36‚Ì”ÍˆÍ‚É‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB";
+            Text[ japanese ] = "•ÏŠ·‚³‚ê‚é‹L”–@‚ÌŠî”‚Í2`36‚Ì”ÍˆÍ‚É‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB";
             Text[ chinese_simplified ] = "×ª»»ºóµÄÊı×Ö±ØĞëÎ»ÓÚ 2 ºÍ 36 Ö®¼ä¡£";
             Text[ chinese_traditional ] = "©Ò­nÂà´«°ò¼Æ¥²¶·¬O¦b 2 - 36 ¤§¶¡¡C";
             Text[ arabic ] = "ÃÓÇÓ ÇáÃÑŞÇã ÇáÊí Óæİ íÊã ÇáÊÍæíá ãäåÇ íÌÈ Ãä íßæä İí ÇáäØÇŞ ÇáĞí íÊÑÇæÍ Èíä 2 æ 36.";
