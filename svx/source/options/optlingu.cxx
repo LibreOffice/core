@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: pb $ $Date: 2002-11-21 08:57:55 $
+ *  last change: $Author: tl $ $Date: 2002-12-04 13:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1150,6 +1150,8 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
         pItem = NULL;
 
     FreeResource();
+
+    SvxLinguConfigUpdate::UpdateAll();
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-13 12:22:33 $
+ *  last change: $Author: tl $ $Date: 2002-12-04 13:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,24 @@ class Window;
 //#define DIC_ERR_ENTRY_NOTEXISTS   6
 
 ///////////////////////////////////////////////////////////////////////////
+// SvxLinguConfigUpdate
+// class to update configuration items when (before!) the linguistic is used.
+//
+// This class is called by all the dummy implementations to update all of the
+// configuration (list of used/available services) when the linguistic is
+// accessed for the first time.
+
+class SvxLinguConfigUpdate
+{
+    static BOOL bUpdated;
+
+public:
+
+    static BOOL IsUpdated()     { return bUpdated; }
+    static void UpdateAll();
+};
+
+///////////////////////////////////////////////////////////////////////////
 
 class LinguMgr
 {
@@ -185,6 +203,9 @@ public:
         ::com::sun::star::linguistic2::XDictionary1 >   GetIgnoreAllList();
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary1 >   GetChangeAllList();
+
+    // update all configuration entries
+    static void UpdateAll();
 };
 
 ///////////////////////////////////////////////////////////////////////////

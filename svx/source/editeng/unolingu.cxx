@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2002-12-03 08:05:55 $
+ *  last change: $Author: tl $ $Date: 2002-12-04 13:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XAVAILABLELOCALES_HPP_
+#include <com/sun/star/linguistic2/XAvailableLocales.hpp>
+#endif
 #include <comphelper/processfactory.hxx>
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
@@ -104,6 +107,9 @@
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
+#ifndef _LINGUISTIC_MISC_HXX_
+#include <linguistic/misc.hxx>
+#endif
 
 #ifndef _SVX_DIALMGR_HXX
 #include <dialmgr.hxx>
@@ -119,6 +125,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::linguistic2;
+
+#define A2OU(x) OUString::createFromAscii(x)
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -136,6 +144,232 @@ static Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
     return xRes;
 }
 
+///////////////////////////////////////////////////////////////////////////
+
+BOOL lcl_FindEntry( const OUString &rEntry, const Sequence< OUString > &rCfgSvcs )
+{
+    INT32 nRes = -1;
+    INT32 nEntries = rCfgSvcs.getLength();
+    const OUString *pEntry = rCfgSvcs.getConstArray();
+    for (INT32 i = 0;  i < nEntries && nRes == -1;  ++i)
+    {
+        if (rEntry == pEntry[i])
+            nRes = i;
+    }
+    return nRes != -1;
+}
+
+
+Sequence< OUString > lcl_RemoveMissingEntries(
+        const Sequence< OUString > &rCfgSvcs,
+        const Sequence< OUString > &rAvailSvcs )
+{
+    Sequence< OUString > aRes( rCfgSvcs.getLength() );
+    OUString *pRes = aRes.getArray();
+    INT32 nCnt = 0;
+
+    INT32 nEntries = rCfgSvcs.getLength();
+    const OUString *pEntry = rCfgSvcs.getConstArray();
+    for (INT32 i = 0;  i < nEntries;  ++i)
+    {
+        if (pEntry[i].getLength() && lcl_FindEntry( pEntry[i], rAvailSvcs ))
+            pRes[ nCnt++ ] = pEntry[i];
+    }
+
+    aRes.realloc( nCnt );
+    return aRes;
+}
+
+
+Sequence< OUString > lcl_GetLastFoundSvcs(
+        SvtLinguConfigItem &rCfg,
+        const OUString &rLastFoundList ,
+        const Locale &rAvailLocale )
+{
+    Sequence< OUString > aRes;
+
+    OUString aCfgLocaleStr( ConvertLanguageToIsoString(
+                                SvxLocaleToLanguage( rAvailLocale ) ) );
+
+    Sequence< OUString > aNodeNames( rCfg.GetNodeNames(rLastFoundList) );
+    BOOL bFound = lcl_FindEntry( aCfgLocaleStr, aNodeNames);
+
+    if (bFound)
+    {
+        Sequence< OUString > aNames(1);
+        OUString &rNodeName = aNames.getArray()[0];
+        rNodeName = rLastFoundList;
+        rNodeName += OUString::valueOf( (sal_Unicode)'/' );
+        rNodeName += aCfgLocaleStr;
+        Sequence< Any > aValues( rCfg.GetProperties( aNames ) );
+#ifdef DEBUG
+        const Any *pValue = aValues.getConstArray();
+#endif
+        if (aValues.getLength())
+        {
+            DBG_ASSERT( aValues.getLength() == 1, "unexpected length of sequence" );
+            Sequence< OUString > aSvcImplNames;
+            if (aValues.getConstArray()[0] >>= aSvcImplNames)
+                aRes = aSvcImplNames;
+            else
+                DBG_ERROR( "type mismatch" );
+        }
+    }
+
+    return aRes;
+}
+
+
+Sequence< OUString > lcl_GetNewEntries(
+        const Sequence< OUString > &rLastFoundSvcs,
+        const Sequence< OUString > &rAvailSvcs )
+{
+    INT32 nLen = rAvailSvcs.getLength();
+    Sequence< OUString > aRes( nLen );
+    OUString *pRes = aRes.getArray();
+    INT32 nCnt = 0;
+
+    const OUString *pEntry = rAvailSvcs.getConstArray();
+    for (INT32 i = 0;  i < nLen;  ++i)
+    {
+        if (pEntry[i].getLength() && !lcl_FindEntry( pEntry[i], rLastFoundSvcs ))
+            pRes[ nCnt++ ] = pEntry[i];
+    }
+
+    aRes.realloc( nCnt );
+    return aRes;
+}
+
+
+Sequence< OUString > lcl_MergeSeq(
+        const Sequence< OUString > &rCfgSvcs,
+        const Sequence< OUString > &rNewSvcs )
+{
+    Sequence< OUString > aRes( rCfgSvcs.getLength() + rNewSvcs.getLength() );
+    OUString *pRes = aRes.getArray();
+    INT32 nCnt = 0;
+
+    for (INT32 k = 0;  k < 2;  ++k)
+    {
+        const Sequence< OUString > &rSeq = k == 0 ? rCfgSvcs : rNewSvcs;
+        INT32 nLen = rSeq.getLength();
+        const OUString *pEntry = rSeq.getConstArray();
+        for (INT32 i = 0;  i < nLen;  ++i)
+        {
+            if (pEntry[i].getLength() && !lcl_FindEntry( pEntry[i], aRes ))
+                pRes[ nCnt++ ] = pEntry[i];
+        }
+    }
+
+    aRes.realloc( nCnt );
+    return aRes;
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+// static member initialization
+BOOL SvxLinguConfigUpdate::bUpdated = FALSE;
+
+void SvxLinguConfigUpdate::UpdateAll()
+{
+    if (!IsUpdated())
+    {
+        Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        DBG_ASSERT( xLngSvcMgr.is(), "service manager missing")
+        if (!xLngSvcMgr.is())
+            return;
+
+        SvtLinguConfigItem aCfg( A2OU( "Office.Linguistic/ServiceManager" ) );
+
+        char * aServices[3]      =  { SN_THESAURUS,         SN_SPELLCHECKER,            SN_HYPHENATOR };
+        char * aActiveList[3]    =  { "ThesaurusList",      "SpellCheckerList",         "HyphenatorList" };
+        char * aLastFoundList[3] =  { "LastFoundThesauri",  "LastFoundSpellCheckers",   "LastFoundHyphenators" };
+
+        for (int k = 0;  k < 3;  ++k)
+        {
+            OUString aService( A2OU(aServices[k]) );
+            OUString aActiveList( A2OU(aActiveList[k]) );
+            OUString aLastFoundList( A2OU(aLastFoundList[k]) );
+            INT32 i;
+
+            //
+            // remove configured but not available language/services entries
+            //
+            Sequence< OUString > aNodeNames( aCfg.GetNodeNames( aActiveList ) );   // list of configured locales
+            INT32 nNodeNames = aNodeNames.getLength();
+            const OUString *pNodeName = aNodeNames.getConstArray();
+            for (i = 0;  i < nNodeNames;  ++i)
+            {
+                Locale aLocale( SvxCreateLocale( ConvertIsoStringToLanguage(pNodeName[i]) ) );
+                Sequence< OUString > aCfgSvcs(
+                        xLngSvcMgr->getConfiguredServices( aService, aLocale ));
+                Sequence< OUString > aAvailSvcs(
+                        xLngSvcMgr->getAvailableServices( aService, aLocale ));
+                aCfgSvcs = lcl_RemoveMissingEntries( aCfgSvcs, aAvailSvcs );
+                xLngSvcMgr->setConfiguredServices( aService, aLocale, aCfgSvcs );
+            }
+
+            //
+            // add new available language/servcice entries
+            //
+            Reference< XAvailableLocales > xAvail( xLngSvcMgr, UNO_QUERY );
+            Sequence< Locale > aAvailLocales( xAvail->getAvailableLocales(aService) );
+            INT32 nAvailLocales = aAvailLocales.getLength();
+            const Locale *pAvailLocale = aAvailLocales.getConstArray();
+            for (i = 0;  i < nAvailLocales;  ++i)
+            {
+                Sequence< OUString > aAvailSvcs(
+                        xLngSvcMgr->getAvailableServices( aService, pAvailLocale[i] ));
+                Sequence< OUString > aLastFoundSvcs(
+                        lcl_GetLastFoundSvcs( aCfg, aLastFoundList , pAvailLocale[i] ));
+                Sequence< OUString > aNewSvcs =
+                        lcl_GetNewEntries( aLastFoundSvcs, aAvailSvcs );
+
+                Sequence< OUString > aCfgSvcs(
+                        xLngSvcMgr->getConfiguredServices( aService, pAvailLocale[i] ));
+                aCfgSvcs = lcl_MergeSeq( aCfgSvcs, aNewSvcs );
+                xLngSvcMgr->setConfiguredServices( aService, pAvailLocale[i], aCfgSvcs );
+            }
+
+            //
+            // set last found services to currently available ones
+            //
+            Sequence< PropertyValue > aValues( nAvailLocales );
+            PropertyValue *pValue = aValues.getArray();
+            for (i = 0;  i < nAvailLocales;  ++i)
+            {
+                Sequence< OUString > aSvcImplNames(
+                        xLngSvcMgr->getConfiguredServices( aService, pAvailLocale[i] ) );
+
+#ifdef DEBUG
+                INT32 nSvcs = aSvcImplNames.getLength();
+                const OUString *pSvcImplName = aSvcImplNames.getConstArray();
+                for (INT32 j = 0;  j < nSvcs;  ++j)
+                {
+                    OUString aImplName( pSvcImplName[j] );
+                }
+#endif
+                // build value to be written back to configuration
+                Any aCfgAny;
+                aCfgAny <<= aSvcImplNames;
+                DBG_ASSERT( aCfgAny.hasValue(), "missing value for 'Any' type" );
+
+                OUString aCfgLocaleStr( ConvertLanguageToIsoString(
+                                            SvxLocaleToLanguage( pAvailLocale[i] ) ) );
+                pValue->Value = aCfgAny;
+                pValue->Name  = aLastFoundList;
+                pValue->Name += OUString::valueOf( (sal_Unicode) '/' );
+                pValue->Name += aCfgLocaleStr;
+                pValue++;
+            }
+            // change, add new or replace existing entries.
+            BOOL bRes = aCfg.ReplaceSetProperties( aLastFoundList, aValues );
+            DBG_ASSERT( bRes, "failed to set LastFound list" );
+        }
+
+        bUpdated = TRUE;
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -145,19 +379,14 @@ static Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
 //! The dummy accesses the real implementation (and thus loading the DLL)
 //! when "real" work needs to be done only.
 class ThesDummy_Impl :
-    public cppu::WeakImplHelper1
-    <
-        ::com::sun::star::linguistic2::XThesaurus
-    >
+    public cppu::WeakImplHelper1< XThesaurus >
 {
     Reference< XThesaurus >     xThes;      // the real one...
     Sequence< Locale >         *pLocaleSeq;
 
     void GetCfgLocales();
-    void ClearLocales()
-    {
-        delete pLocaleSeq;    pLocaleSeq = 0;
-    }
+
+    void GetThes_Impl();
 
 public:
     ThesDummy_Impl() : pLocaleSeq(0)  {}
@@ -194,8 +423,8 @@ void ThesDummy_Impl::GetCfgLocales()
 {
     if (!pLocaleSeq)
     {
-        SvtLinguConfigItem aCfg( String::CreateFromAscii( "Office.Linguistic/ServiceManager" ) );
-        String  aNode( String::CreateFromAscii( "ThesaurusList" ) );
+        SvtLinguConfigItem aCfg( A2OU( "Office.Linguistic/ServiceManager" ) );
+        String  aNode( A2OU( "ThesaurusList" ) );
         Sequence < OUString > aNodeNames( aCfg.GetNodeNames( aNode ) );
         const OUString *pNodeNames = aNodeNames.getConstArray();
         INT32 nLen = aNodeNames.getLength();
@@ -210,10 +439,33 @@ void ThesDummy_Impl::GetCfgLocales()
 }
 
 
+void ThesDummy_Impl::GetThes_Impl()
+{
+    // update configuration before accessing the service
+    if (!SvxLinguConfigUpdate::IsUpdated())
+        SvxLinguConfigUpdate::UpdateAll();
+
+    if (!xThes.is())
+    {
+        Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        if (xLngSvcMgr.is())
+            xThes = xLngSvcMgr->getThesaurus();
+
+        if (xThes.is())
+        {
+            // no longer needed...
+            delete pLocaleSeq;    pLocaleSeq = 0;
+        }
+    }
+}
+
+
 uno::Sequence< lang::Locale > SAL_CALL
         ThesDummy_Impl::getLocales()
             throw(uno::RuntimeException)
 {
+    if (SvxLinguConfigUpdate::IsUpdated())
+        GetThes_Impl();
     if (xThes.is())
         return xThes->getLocales();
     else if (!pLocaleSeq)
@@ -226,6 +478,8 @@ sal_Bool SAL_CALL
         ThesDummy_Impl::hasLocale( const lang::Locale& rLocale )
             throw(uno::RuntimeException)
 {
+    if (SvxLinguConfigUpdate::IsUpdated())
+        GetThes_Impl();
     if (xThes.is())
         return xThes->hasLocale( rLocale );
     else if (!pLocaleSeq)
@@ -252,16 +506,8 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
             throw(lang::IllegalArgumentException,
                   uno::RuntimeException)
 {
+    GetThes_Impl();
     uno::Sequence< uno::Reference< linguistic2::XMeaning > > aRes;
-    if (!xThes.is())
-    {
-        Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
-        if (xLngSvcMgr.is())
-        {
-            xThes = xLngSvcMgr->getThesaurus();
-            ClearLocales();
-        }
-    }
     DBG_ASSERT( xThes.is(), "Thesaurus missing" );
     if (xThes.is())
         aRes = xThes->queryMeanings( rTerm, rLocale, rProperties );
@@ -276,10 +522,7 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
 //! The dummy accesses the real implementation (and thus loading the DLL)
 //! when it needs to be done only.
 class SpellDummy_Impl :
-    public cppu::WeakImplHelper1
-    <
-        ::com::sun::star::linguistic2::XSpellChecker1
-    >
+    public cppu::WeakImplHelper1< XSpellChecker1 >
 {
     Reference< XSpellChecker1 >     xSpell;      // the real one...
 
@@ -312,6 +555,10 @@ public:
 
 void SpellDummy_Impl::GetSpell_Impl()
 {
+    // update configuration before accessing the service
+    if (!SvxLinguConfigUpdate::IsUpdated())
+        SvxLinguConfigUpdate::UpdateAll();
+
     if (!xSpell.is())
     {
         Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
@@ -380,10 +627,7 @@ uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL
 //! The dummy accesses the real implementation (and thus loading the DLL)
 //! when it needs to be done only.
 class HyphDummy_Impl :
-    public cppu::WeakImplHelper1
-    <
-        ::com::sun::star::linguistic2::XHyphenator
-    >
+    public cppu::WeakImplHelper1< XHyphenator >
 {
     Reference< XHyphenator >     xHyph;      // the real one...
 
@@ -430,6 +674,10 @@ public:
 
 void HyphDummy_Impl::GetHyph_Impl()
 {
+    // update configuration before accessing the service
+    if (!SvxLinguConfigUpdate::IsUpdated())
+        SvxLinguConfigUpdate::UpdateAll();
+
     if (!xHyph.is())
     {
         Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
@@ -744,6 +992,12 @@ Reference< XThesaurus > LinguMgr::GetThes()
     return xThes;
 }
 
+
+void LinguMgr::UpdateAll()
+{
+}
+
+
 Reference< XDictionaryList > LinguMgr::GetDicList()
 {
     if (bExiting)
@@ -756,8 +1010,7 @@ Reference< XDictionaryList > LinguMgr::GetDicList()
     if (xMgr.is())
     {
         xDicList = Reference< XDictionaryList > ( xMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.linguistic2.DictionaryList") ), UNO_QUERY );
+                    A2OU("com.sun.star.linguistic2.DictionaryList") ), UNO_QUERY );
     }
     return xDicList;
 }
@@ -774,8 +1027,7 @@ Reference< XPropertySet > LinguMgr::GetProp()
     if (xMgr.is())
     {
         xProp = Reference< XPropertySet > ( xMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.linguistic2.LinguProperties") ), UNO_QUERY );
+                    A2OU("com.sun.star.linguistic2.LinguProperties") ), UNO_QUERY );
     }
     return xProp;
 }
@@ -792,7 +1044,7 @@ Reference< XDictionary1 > LinguMgr::GetIgnoreAll()
     if (xTmpDicList.is())
     {
         xIgnoreAll = Reference< XDictionary1 > ( xTmpDicList->getDictionaryByName(
-                    OUString::createFromAscii("IgnoreAllList") ), UNO_QUERY );
+                    A2OU("IgnoreAllList") ), UNO_QUERY );
     }
     return xIgnoreAll;
 }
@@ -810,7 +1062,7 @@ Reference< XDictionary1 > LinguMgr::GetChangeAll()
     {
         xChangeAll = Reference< XDictionary1 > (
                         xDicList->createDictionary(
-                            OUString::createFromAscii("ChangeAllList"),
+                            A2OU("ChangeAllList"),
                             SvxCreateLocale( LANGUAGE_NONE ),
                             DictionaryType_NEGATIVE, String() ), UNO_QUERY );
     }
