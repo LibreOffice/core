@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlehelp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-26 10:25:38 $
+ *  last change: $Author: bm $ $Date: 2001-05-21 11:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,10 +399,34 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
             }
             case MAP_POINT:
             {
-                // 1pt = 1pt (exactly)
-                DBG_ASSERT(MAP_POINT == eDestUnit, "output unit not supported for pt values");
-                fRetval = ((10.0 / 1.0) / 10.0);
-                pUnit = sXML_unit_pt;
+                switch(eDestUnit)
+                {
+                    case MAP_MM:
+                        // 1mm = 72 / 25.4 pt (exactly)
+                        fRetval = ( 25.4 / 72.0 );
+                        pUnit = sXML_unit_mm;
+                        break;
+
+                    case MAP_CM:
+                        // 1cm = 72 / 2.54 pt (exactly)
+                        fRetval = ( 2.54 / 72.0 );
+                        pUnit = sXML_unit_cm;
+                        break;
+
+                    case MAP_INCH:
+                        // 1in = 72 pt (exactly)
+                        fRetval = ( 1.0 / 72.0 );
+                        pUnit = sXML_unit_inch;
+                        break;
+
+                    case MAP_TWIP:
+                    default:
+                        // 1pt = 1pt (exactly)
+                        DBG_ASSERT(MAP_POINT == eDestUnit, "output unit not supported for pt values");
+                        fRetval = 1.0;
+                        pUnit = sXML_unit_pt;
+                        break;
+                }
                 break;
             }
             case MAP_100TH_MM:
@@ -539,7 +563,7 @@ MapUnit SvXMLExportHelper::GetUnitFromString(const ::rtl::OUString& rString, Map
             {
                 if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('t')
                     || rString[nPos+1] == sal_Unicode('T')))
-                    eRetUnit = MAP_MM;
+                    eRetUnit = MAP_POINT;
                 if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('c')
                     || rString[nPos+1] == sal_Unicode('C')))
                     eRetUnit = MAP_TWIP;
