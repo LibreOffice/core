@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-01 16:08:01 $
+ *  last change: $Author: cmc $ $Date: 2001-11-02 13:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
+#endif
+#ifndef _SVSTDARR_HXX
+#define _SVSTDARR_USHORTS
+#include <svtools/svstdarr.hxx>
 #endif
 #ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
@@ -1504,9 +1508,20 @@ BOOL SwWW8ImplReader::ReadPlainChars( long& rPos, long nEnd, long nCpOfs )
     // ammount of characters to read == length to next attribut
     ULONG nLen = nEnd - rPos;
 
-    CharSet eSrcCharSet = ( eHardCharSet != RTL_TEXTENCODING_DONTKNOW )
-                        ? eHardCharSet
-                        : eFontSrcCharSet;
+    /*
+    #i2015
+    If the hard charset is set use it, if not see if there is an open
+    character run that has set the charset, if not then fallback to the
+    current underlying paragraph style.
+    */
+    CharSet eSrcCharSet = eHardCharSet;
+    if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+    {
+        if (pFontSrcCharSets->Count())
+            eSrcCharSet = (*pFontSrcCharSets)[pFontSrcCharSets->Count()-1];
+        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+            eSrcCharSet = pCollA[nAktColl].eFontSrcCharSet;
+    }
 
     // (re)alloc UniString data
     String sPlainCharsBuf;
@@ -1554,7 +1569,8 @@ BOOL SwWW8ImplReader::ReadPlainChars( long& rPos, long nEnd, long nCpOfs )
 
 
 // Returnwert: TRUE fuer Zeilenende
-BOOL SwWW8ImplReader::ReadChars( long& rPos, long nNextAttr, long nTextEnd, long nCpOfs )
+BOOL SwWW8ImplReader::ReadChars( long& rPos, long nNextAttr, long nTextEnd,
+    long nCpOfs )
 {
     long nEnd = ( nNextAttr < nTextEnd ) ? nNextAttr : nTextEnd;
 
@@ -1752,36 +1768,19 @@ void SwWW8ImplReader::ProcessAktCollChange( WW8PLCFManResult& rRes,
     if( pStartAttr && bCallProcessSpecial && !bInHyperlink )
     {
         BOOL bReSync;
-        bTabRowEnd = ProcessSpecial( FALSE, &bReSync, rRes.nAktCp + pPlcxMan->GetCpOfs() );// Apo / Table / Anl
+        // Frame / Table / Autonumbering List Level
+        bTabRowEnd = ProcessSpecial( FALSE, &bReSync,
+            rRes.nAktCp + pPlcxMan->GetCpOfs() );
         if( bReSync )
             *pStartAttr = pPlcxMan->Get( &rRes ); // hole Attribut-Pos neu
     }
 
-/*
-SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult & {...}, unsigned char * 0x0012d6d8, unsigned char 0x01) line 1643
-SwWW8ImplReader::ReadTextAttr(long & 0x00000000, unsigned char & 0x00) line 1679
-SwWW8ImplReader::ReadAttrs(long & 0x00000000, long & 0x00000000, unsigned char & 0x00) line 1762 + 16 bytes
-SwWW8ImplReader::ReadText(long 0x00000000, long 0x00000267, short 0x0000) line 1860
-SwWW8ImplReader::LoadDoc1(SwPaM & {...}, WW8Glossary * 0x00000000) line 2270
-SwWW8ImplReader::LoadDoc(SwPaM & {...}, WW8Glossary * 0x00000000) line 2609 + 16 bytes
-WW8Reader::Read(SwDoc & {...}, SwPaM & {...}, const String & {???}) line 2675 + 14 bytes
-SW612MI! SwReader::Read(class Reader const &) + 779 bytes
-SW612MI! SwDocShell::ConvertFrom(class SfxMedium &) + 245 bytes
-SFX612MI! SfxObjectShell::DoLoad(class SfxMedium *) + 3576 bytes
-*/
-
-
     if( !bTabRowEnd )
     {
         SetTxtFmtCollAndListLevel( *pPaM, pCollA[ nAktColl ]);
-
-        ChkToggleAttr( pCollA[ nOldColl ].n81Flags,
-                       pCollA[ nAktColl ].n81Flags );
+        ChkToggleAttr(pCollA[ nOldColl ].n81Flags, pCollA[ nAktColl ].n81Flags);
     }
-
-    eFontSrcCharSet = pCollA[nAktColl].eFontSrcCharSet; // aus P-Style
 }
-
 
 long SwWW8ImplReader::ReadTextAttr( long& rTxtPos, BOOL& rbStartLine )
 {
@@ -2100,6 +2099,7 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara,
     pDrawPg = 0;
     pDrawGroup = 0;
     pDrawHeight = 0;
+    pFontSrcCharSets = new SvUShorts;
     nDrawTxbx = 0;
     pDrawEditEngine = 0;
     pFormImpl = 0;
@@ -2113,9 +2113,6 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara,
 
     nLFOPosition = USHRT_MAX;
     nListLevel   = nWW8MaxListLevel;
-
-    eFontSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
-    eFontDstCharSet = RTL_TEXTENCODING_DONTKNOW;
     eHardCharSet = RTL_TEXTENCODING_DONTKNOW;
     pPageDesc = 0;
 
@@ -2622,6 +2619,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     if (!pGloss)
         DELETEZ( pWwFib );
     DeleteCtrlStk();
+    DELETEZ(pFontSrcCharSets);
     DeleteEndStk();
     DeleteRefFldStk();
 
@@ -2630,39 +2628,6 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     {
         pNewSection->GetFmt()->SetAttr( SwFmtNoBalancedColumns( TRUE ) );
     }
-
-    // NumRules koennen erst nach dem setzen aller Attribute korrgiert werden
-#ifdef DEBUG
-    {
-    ULONG nN = rDoc.GetNodes().Count();
-    for( ULONG iN = 0; iN < nN; ++iN )
-    {
-        SwTxtNode* pN = rDoc.GetNodes()[ iN ]->GetTxtNode();
-        if( pN && pN->GetNum() )
-        {
-            const SwNumRuleItem& rItem
-                    = (SwNumRuleItem&)(pN->SwCntntNode::GetAttr( RES_PARATR_NUMRULE ) );
-            if( !rItem.GetValue().Len() )
-                ASSERT( !this, "NdNum gesetzt, aber KEIN NumRuleItem" );
-        }
-    }
-    }
-#endif
-
-#ifdef DEBUG
-    {
-    const SwSpzFrmFmts& rFmts = *rDoc.GetSpzFrmFmts();
-    for( USHORT iN = 0, nN = rFmts.Count(); iN < nN; ++iN )
-    {
-        const SwFmtAnchor& rA = rFmts[ iN ]->GetAnchor();
-        if( FLY_IN_CNTNT == rA.GetAnchorId() &&
-            !rA.GetCntntAnchor())
-        {
-            int x = 0;
-        }
-    }
-    }
-#endif
 
     aRelNumRule.SetNumRelSpaces( rDoc );
     if( !bNew && !nErrRet && aSttNdIdx.GetIndex() )

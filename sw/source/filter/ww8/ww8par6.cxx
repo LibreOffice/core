@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-01 16:08:01 $
+ *  last change: $Author: cmc $ $Date: 2001-11-02 13:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3073,16 +3073,27 @@ void SwWW8ImplReader::Read_Symbol( USHORT nId, const BYTE* pData, short nLen )
     if( !bIgnoreText )
     {
         if( nLen < 0 )
+        {
             bSymbol = FALSE;
+            ResetCharSetVars();
+        }
         else
         {
-            // neues Font-Atribut aufmachen
-            // (wird in SwWW8ImplReader::ReadChars() geschlossen)
-            if( SetNewFontAttr( SVBT16ToShort( pData ), FALSE, RES_CHRATR_FONT ))
+            // Make new Font-Atribut
+            // (will be closed in SwWW8ImplReader::ReadChars() )
+
+            /*
+            aside: Is it still necessary to close the symbol font in the char
+            handler. Would be cleaner to trust our property handler and
+            charset manager to handle this as part of the ordinary case
+            */
+            if (SetNewFontAttr(SVBT16ToShort( pData ), FALSE, RES_CHRATR_FONT))
             {
                 if( bVer67 )
+                {
                     cSymbol = ByteString::ConvertToUnicode(
-                                *(sal_Char*)(pData+2), RTL_TEXTENCODING_MS_1252 );
+                        *(sal_Char*)(pData+2), RTL_TEXTENCODING_MS_1252 );
+                }
                 else
                     cSymbol = SVBT16ToShort( pData+2 );
                 bSymbol = TRUE;
@@ -3448,7 +3459,7 @@ void SwWW8ImplReader::Read_TxtColor( USHORT, const BYTE* pData, short nLen )
 }
 
 BOOL SwWW8ImplReader::GetFontParams( USHORT nFCode, FontFamily& reFamily,
-        String& rName, FontPitch& rePitch, CharSet& reCharSet )
+    String& rName, FontPitch& rePitch, CharSet& reCharSet )
 {
     // Die Defines, aus denen diese Tabellen erzeugt werden, stehen in windows.h
     static FontPitch __READONLY_DATA ePitchA[]
@@ -3566,7 +3577,20 @@ BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums,
     CharSet eSrcCharSet;
 
     if( !GetFontParams( nFCode, eFamily, aName, ePitch, eSrcCharSet ) )
+    {
+        //If we fail (and are not doing a style) then put something into the
+        //character encodings stack anyway so that the property end that pops
+        //off the stack will keep in sync
+        if (!pAktColl)
+        {
+            if (pFontSrcCharSets->Count())
+                eSrcCharSet = (*pFontSrcCharSets)[pFontSrcCharSets->Count()-1];
+            else
+                eSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
+            pFontSrcCharSets->Insert(eSrcCharSet,pFontSrcCharSets->Count());
+        }
         return FALSE;
+    }
 
     CharSet eDstCharSet = eSrcCharSet;
 
@@ -3580,7 +3604,10 @@ BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums,
                 pCollA[nAktColl].eFontSrcCharSet = eSrcCharSet;
         }
         else
-            eFontSrcCharSet = eSrcCharSet;
+        {
+            //Add character text encoding to stack
+            pFontSrcCharSets->Insert(eSrcCharSet,pFontSrcCharSets->Count());
+        }
     }
 
     NewAttr( aFont );                       // ...und 'reinsetzen
@@ -3590,16 +3617,8 @@ BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums,
 
 void SwWW8ImplReader::ResetCharSetVars()
 {
-    if( nCharFmt >= 0 )
-    {
-        eFontSrcCharSet = pCollA[nCharFmt].eFontSrcCharSet; // aus C-Style
-    }
-    else
-    {
-        eFontSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
-    }
-    if( eFontSrcCharSet == RTL_TEXTENCODING_DONTKNOW )
-        eFontSrcCharSet = pCollA[nAktColl].eFontSrcCharSet; // aus P-Style
+    ASSERT(pFontSrcCharSets->Count(),"no charset to remove");
+    pFontSrcCharSets->Remove(pFontSrcCharSets->Count()-1);
 }
 
 /*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-01 16:08:01 $
+ *  last change: $Author: cmc $ $Date: 2001-11-02 13:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ class Size;
 class EditEngine;
 struct SwPosition;
 class SvShorts;
+class SvUShorts;
 class WW8ReaderSave;
 struct WW8PicDesc;
 class Graphic;
@@ -630,12 +631,11 @@ friend class WW8FormulaControl;
     INT32 nIniFlyDx;            // X-Verschiebung von Flys
     INT32 nIniFlyDy;            // Y-Verschiebung von Flys
 
-    rtl_TextEncoding eTextCharSet;      // Default-Charset fuer Text
-    rtl_TextEncoding eStructCharSet;        // rtl_TextEncoding fuer interne Strukturen
-    rtl_TextEncoding eFontSrcCharSet;   // Source-rtl_TextEncoding fuer aktuellen Font
-    rtl_TextEncoding eFontDstCharSet;   // Dest-rtl_TextEncoding fuer aktuellen Font
-    rtl_TextEncoding eHardCharSet;       // Hartes rtl_TextEncoding-Attribut
-
+    rtl_TextEncoding eTextCharSet;    // Default charset for Text
+    rtl_TextEncoding eStructCharSet;  // rtl_TextEncoding for structures
+    rtl_TextEncoding eHardCharSet;    // Hard rtl_TextEncoding-Attribute
+    // Source rtl_TextEncoding character encodings stack for word text
+    SvUShorts *pFontSrcCharSets;
     USHORT nProgress;           // %-Angabe fuer Progressbar
     USHORT nColls;              // Groesse des Arrays
     USHORT nAktColl;            // gemaess WW-Zaehlung
