@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hbrinkm $ $Date: 2003-09-05 16:35:12 $
+#   last change: $Author: hr $ $Date: 2004-03-08 12:30:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,7 +148,6 @@ EXCEPTIONSFILES= \
         $(SLO)$/xmlfonte.obj \
         $(SLO)$/XMLRedlineImportHelper.obj
 
-# --- Tagets -------------------------------------------------------
+# --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
-
