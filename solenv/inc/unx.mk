@@ -7,8 +7,8 @@
 #*                      Fuer WindowsNT-Envrionments
 #*
 #*    Ersterstellung    MH 9.2.96
-#*    Letzte Aenderung  $Author: mh $ $Date: 2000-10-17 18:57:32 $
-#*    $Revision: 1.2 $
+#*    Letzte Aenderung  $Author: svesik $ $Date: 2000-10-25 14:09:29 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile:   T:/solar/inc/unx.mkv  $
 #*
@@ -102,6 +102,10 @@ OLE2DEF=-DOLE2
 .INCLUDE : unxfbsdi.mk
 .ENDIF
 
+
+.IF "$(COM)$(OS)$(CPU)" == "C730IRIXM"
+.INCLUDE : unxirxm3.mk
+.ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "C710IRIXM"
 .INCLUDE : unxirxm.mk
