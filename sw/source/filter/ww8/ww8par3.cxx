@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:45:13 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,9 @@
 #ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
 #endif
+#ifndef SW_WRITERWORDGLUE
+#include "writerwordglue.hxx"
+#endif
 #ifndef _WW8PAR_HXX
 #include "ww8par.hxx"
 #endif
@@ -255,6 +258,7 @@
 
 using namespace com::sun::star;
 using namespace sw::util;
+using namespace sw::types;
 //-----------------------------------------
 //            UNO-Controls
 //-----------------------------------------
@@ -272,7 +276,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
 {
     WW8FormulaEditBox aFormula(*this);
 
-    if (0x01 == rStr.GetChar(pF->nLCode-1))
+    if (0x01 == rStr.GetChar(writer_cast<xub_StrLen>(pF->nLCode-1)))
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_EDIT);
 
     /* #80205#
@@ -305,7 +309,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
     if( !pFormImpl )
         pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
 
-    if (0x01 == rStr.GetChar(pF->nLCode-1))
+    if (0x01 == rStr.GetChar(writer_cast<xub_StrLen>(pF->nLCode-1)))
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_CHECKBOX);
 
     pFormImpl->InsertFormula(aFormula);
@@ -316,7 +320,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
 {
     WW8FormulaListBox aFormula(*this);
 
-    if (0x01 == rStr.GetChar(pF->nLCode-1))
+    if (0x01 == rStr.GetChar(writer_cast<xub_StrLen>(pF->nLCode-1)))
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_DROPDOWN);
 
     SwDropDownField aFld(
@@ -412,7 +416,10 @@ struct WW8LFOLVL
     // (siehe Kommentar unten bei struct WW8LFOInfo)
 
     BYTE bStartAt :1;       // true if the start-at value is overridden
-    BYTE bFormat    :1;     // true if the formatting is overriden
+    BYTE bFormat :1;        // true if the formatting is overriden
+
+    WW8LFOLVL() :
+        nStartAt(1), nLevel(0), bStartAt(1), bFormat(0) {}
 };
 
 typedef std::vector<sal_uInt8> levelsprms;
@@ -448,6 +455,7 @@ struct WW8LSTInfo   // sortiert nach nIdLst (in WW8 verwendete Listen-Id)
 struct WW8LFOInfo   // unsortiert, d.h. Reihenfolge genau wie im WW8 Stream
 {
     std::vector<levelsprms> maParaSprms;
+    std::vector<WW8LFOLVL> maOverrides;
     SwNumRule* pNumRule;         // Zeiger auf entsprechende Listenvorlage im Writer
                                                      // entweder: Liste in LSTInfos oder eigene Liste
                                                      // (im Ctor erstmal die aus den LSTInfos merken)
@@ -1193,7 +1201,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         //
         // 2.2 fuer alle LFO die zugehoerigen LFOLVL einlesen
         //
-        WW8LFOLVL aLFOLVL;
         sal_uInt16 nLFOInfos = pLFOInfos ? pLFOInfos->Count() : 0;
         for (sal_uInt16 nLfo = 0; nLfo < nLFOInfos; ++nLfo)
         {
@@ -1205,8 +1212,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             if( pLFOInfo->bOverride )
             {
                 WW8LSTInfo* pParentListInfo = GetLSTByListId(pLFOInfo->nIdLst);
-                ASSERT(pParentListInfo, "ww: Impossible lists, please report");
-                if (!pParentListInfo)
+                if (!pParentListInfo) //e.g. #112324#
                     break;
                 //
                 // 2.2.1 eine neue NumRule fuer diese Liste anlegen
@@ -1250,11 +1256,11 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 std::deque<bool> aNotReallyThere;
                 aNotReallyThere.resize(WW8ListManager::nMaxLevel);
                 pLFOInfo->maParaSprms.resize(WW8ListManager::nMaxLevel);
-
+                pLFOInfo->maOverrides.resize(pLFOInfo->nLfoLvl);
                 for (sal_uInt8 nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
                 {
+                    WW8LFOLVL aLFOLVL;
                     bLVLOk = false;
-                    memset(&aLFOLVL, 0, sizeof( aLFOLVL ));
 
                     //
                     // 2.2.2.0 fuehrende 0xFF ueberspringen
@@ -1289,14 +1295,16 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                     if( (0xFF > aBits1) &&
                         (nMaxLevel > aLFOLVL.nLevel) )
                     {
-                        if( aBits1 & 0x10 )
+                        if (aBits1 & 0x10)
                             aLFOLVL.bStartAt = true;
+                        else
+                            aLFOLVL.bStartAt = false;
                         //
                         // 2.2.2.2 eventuell auch den zugehoerigen LVL einlesen
                         //
                         SwNumFmt aNumFmt(
-                            pLFOInfo->pNumRule->Get( aLFOLVL.nLevel ) );
-                        if( aBits1 & 0x20 )
+                            pLFOInfo->pNumRule->Get(aLFOLVL.nLevel));
+                        if (aBits1 & 0x20)
                         {
                             aLFOLVL.bFormat = true;
                             // falls bStartup true, hier den Startup-Level
@@ -1307,17 +1315,21 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                                 aLFOLVL.bStartAt, aNotReallyThere, nLevel,
                                 pLFOInfo->maParaSprms[nLevel]);
 
-                            if( !bLVLOk )
+                            if (!bLVLOk)
                                 break;
                         }
-                        else if( aLFOLVL.bStartAt )
-                            aNumFmt.SetStart( (sal_uInt16)aLFOLVL.nStartAt );
+                        else if (aLFOLVL.bStartAt)
+                        {
+                            aNumFmt.SetStart(
+                                writer_cast<USHORT>(aLFOLVL.nStartAt));
+                        }
                         //
                         // 2.2.2.3 das NumFmt in die NumRule aufnehmen
                         //
-                        pLFOInfo->pNumRule->Set( nLevel, aNumFmt );
+                        pLFOInfo->pNumRule->Set(aLFOLVL.nLevel, aNumFmt);
                     }
                     bLVLOk = true;
+                    pLFOInfo->maOverrides[aLFOLVL.nLevel] = aLFOLVL;
                 }
                 if( !bLVLOk )
                     break;
@@ -1385,8 +1397,38 @@ WW8ListManager::~WW8ListManager()
     }
 }
 
+bool IsEqualFormatting(const SwNumRule &rOne, const SwNumRule &rTwo)
+{
+    bool bRet =
+        (
+          rOne.GetRuleType() == rTwo.GetRuleType() &&
+          rOne.IsContinusNum() == rTwo.IsContinusNum() &&
+          rOne.IsAbsSpaces() == rTwo.IsAbsSpaces() &&
+          rOne.GetPoolFmtId() == rTwo.GetPoolFmtId() &&
+          rOne.GetPoolHelpId() == rTwo.GetPoolHelpId() &&
+          rTwo.GetPoolHlpFileId() == rTwo.GetPoolHlpFileId()
+        );
+
+    if (bRet)
+    {
+        for (BYTE n = 0; n < MAXLEVEL; ++n )
+        {
+            //The SvxNumberFormat compare, not the SwNumFmt compare
+            const SvxNumberFormat &rO = rOne.Get(n);
+            const SvxNumberFormat &rT = rTwo.Get(n);
+            if (!(rO == rT))
+            {
+                bRet = false;
+                break;
+            }
+        }
+    }
+    return bRet;
+}
+
 SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
-    sal_uInt8 nLevel, std::vector<sal_uInt8> &rParaSprms) const
+    sal_uInt8 nLevel, std::vector<sal_uInt8> &rParaSprms, SwNodeNum *pNodeNum)
+    const
 {
     sal_uInt16 nLFOInfos = pLFOInfos ? pLFOInfos->Count() : 0;
     if( nLFOInfos <= nLFOPosition )
@@ -1397,6 +1439,7 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     if( !pLFOInfo )
         return 0;
 
+    bool bFirstUse = !pLFOInfo->bUsedInDoc;
     pLFOInfo->bUsedInDoc = true;
 
     if( !pLFOInfo->pNumRule )
@@ -1428,7 +1471,69 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     if (pLFOInfo->maParaSprms.size() > nLevel)
         rParaSprms = pLFOInfo->maParaSprms[nLevel];
 
-    return pLFOInfo->pNumRule;
+    SwNumRule *pRet = pLFOInfo->pNumRule;
+
+    bool bRestart(false);
+    USHORT nStart;
+    bool bNewstart(false);
+    /*
+      Note: If you fiddle with this then you have to make sure that #i18322#
+      #i13833#, #i20095# and #112466# continue to work
+
+      Check if there were overrides for this level
+    */
+    if (pLFOInfo->bOverride && nLevel < pLFOInfo->nLfoLvl)
+    {
+        WW8LSTInfo* pParentListInfo = GetLSTByListId(pLFOInfo->nIdLst);
+        ASSERT(pParentListInfo, "ww: Impossible lists, please report");
+        if (pParentListInfo && pParentListInfo->pNumRule)
+        {
+            const WW8LFOLVL &rOverride = pLFOInfo->maOverrides[nLevel];
+            bool bNoChangeFromParent =
+                IsEqualFormatting(*pRet, *(pParentListInfo->pNumRule));
+
+            //If so then I think word still uses the parent (maybe)
+            if (bNoChangeFromParent)
+            {
+                pRet = pParentListInfo->pNumRule;
+
+                //did it not affect start at value ?
+                if (bFirstUse)
+                {
+                    if (rOverride.bStartAt)
+                    {
+                        const SwNumFmt &rFmt =
+                            pParentListInfo->pNumRule->Get(nLevel);
+                        if (
+                             rFmt.GetStart() ==
+                             pLFOInfo->maOverrides[nLevel].nStartAt
+                           )
+                        {
+                            bRestart = true;
+                        }
+                        else
+                        {
+                            bNewstart = true;
+                            nStart = writer_cast<USHORT>
+                                (pLFOInfo->maOverrides[nLevel].nStartAt);
+                        }
+                    }
+                }
+
+                pParentListInfo->bUsedInDoc = true;
+            }
+        }
+    }
+
+    if (pNodeNum)
+    {
+        pNodeNum->SetLevel(nLevel);
+        if (bRestart || bNewstart)   //#112466# (I think)
+            pNodeNum->SetStart(true);
+        if (bNewstart)
+            pNodeNum->SetSetValue(nStart);
+    }
+    return pRet;
 }
 
 //----------------------------------------------------------------------------
@@ -1468,7 +1573,7 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
     long nListFirstLineIndent = GetListFirstLineIndent(rFmt);
     SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
     aLR.SetTxtLeft(nAbsLSpace);
-    aLR.SetTxtFirstLineOfst(nListFirstLineIndent);
+    aLR.SetTxtFirstLineOfst(writer_cast<short>(nListFirstLineIndent));
     rStyle.pFmt->SetAttr(aLR);
     rStyle.bListReleventIndentSet = true;
 }
@@ -1574,18 +1679,19 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
     if (pLstManager) // sind die Listendeklarationen gelesen?
     {
         std::vector<sal_uInt8> aParaSprms;
+        SwNodeNum aNum(nActLevel);
         const SwNumRule* pRule = bSetAttr ?
             pLstManager->GetNumRuleForActivation( nActLFO, nActLevel,
-                aParaSprms) : 0;
+                aParaSprms, &aNum) : 0;
 
-        if( pRule || !bSetAttr )
+        if (pRule || !bSetAttr)
         {
             SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
             ASSERT( pTxtNode, "Kein Text-Node an PaM-Position" );
 
             if (bSetAttr)
                 pTxtNode->SwCntntNode::SetAttr(SwNumRuleItem(pRule->GetName()));
-            pTxtNode->UpdateNum(SwNodeNum(nActLevel));
+            pTxtNode->UpdateNum(aNum);
 
             SfxItemSet aListIndent(rDoc.GetAttrPool(), RES_LR_SPACE,
                     RES_LR_SPACE);
@@ -2019,7 +2125,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
     uno::Any aTmp;
     for( const CtrlFontMapEntry* pMap = aMapTable; pMap->nWhichId; ++pMap )
     {
-        BOOL bSet = TRUE;
+        bool bSet = true;
         const SfxPoolItem* pItem = GetFmtAttr( pMap->nWhichId );
         ASSERT(pItem, "Impossible");
         if (!pItem)
@@ -2105,7 +2211,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
             break;
 
         default:
-            bSet = FALSE;
+            bSet = false;
             break;
         }
 
