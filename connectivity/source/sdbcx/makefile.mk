@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ganaya $ $Date: 2001-01-30 16:58:32 $
+#   last change: $Author: ganaya $ $Date: 2001-02-08 03:43:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -151,8 +151,13 @@ SLOFILES=\
         $(SLO)$/VKey.obj						\
         $(SLO)$/VIndex.obj						\
         $(SLO)$/VCatalog.obj					\
-        $(SLO)$/VView.obj \
+        $(SLO)$/VView.obj
+
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
         $(SLO)$/staticmbsdbcx.obj
+.ENDIF
         
 
 # --- Targets ----------------------------------
