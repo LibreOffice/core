@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-07 09:25:15 $
+#   last change: $Author: kz $ $Date: 2005-01-13 18:14:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,7 @@ MKDEPENDSOLVER=
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile2.pmk
 
 # --- Files --------------------------------------------------------
 
