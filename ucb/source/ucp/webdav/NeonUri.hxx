@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonUri.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,13 @@
 #ifndef _NEONURI_HXX_
 #define _NEONURI_HXX_
 
+#ifndef URI_H
 #include <uri.h>
+#endif
+
+#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
 
 namespace webdav_ucp
 {
@@ -91,8 +96,6 @@ class NeonUri
         NeonUri( const ::rtl::OUString & inUri );
         ~NeonUri( );
 
-        const ::rtl::OUString & GetHostName( void ) const
-                                            { return mHostName; };
         const ::rtl::OUString & GetURI( void ) const
                                             { return mURI; };
         const ::rtl::OUString & GetScheme( void ) const
@@ -116,7 +119,15 @@ class NeonUri
 
         static ::rtl::OUString escapeSegment( const ::rtl::OUString& segment );
         static ::rtl::OUString unescape( const ::rtl::OUString& string );
+
+        // "host:port", omit ":port" for port 80 and 443
+        static rtl::OUString makeConnectionEndPointString(
+                                        const rtl::OUString & rHostName,
+                                        int nPort );
+        rtl::OUString makeConnectionEndPointString() const
+        { return makeConnectionEndPointString( GetHost(), GetPort() ); }
 };
 
 }; // namespace webdav_ucp
+
 #endif // _NEONURI_HXX_

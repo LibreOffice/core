@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonTypes.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,11 @@
 #endif
 #ifndef DAV_PROPS_H
 #include <dav_props.h>
+#endif
+
+#ifdef WIN32
+// http_request.h -> nsocket.h -> winsock2.h defines ERROR!!!
+#undef ERROR
 #endif
 
 typedef http_session                HttpSession;

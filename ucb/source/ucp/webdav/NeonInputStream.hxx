@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonInputStream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-10 14:36:08 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,19 @@
 #ifndef _NEONINPUTSTREAM_HXX_
 #define _NEONINPUTSTREAM_HXX_
 
-#include <cppuhelper/weak.hxx>
+#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
+#endif
+#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif

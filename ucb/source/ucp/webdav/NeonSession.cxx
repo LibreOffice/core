@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,31 @@ using namespace webdav_ucp;
 sal_Bool NeonSession::sSockInited = sal_False;
 
 // -------------------------------------------------------------------
+// Helper fuction
+// -------------------------------------------------------------------
+static sal_uInt16 makeStatusCode( const rtl::OUString & rStatusText )
+{
+    // Extract status code from session error string. Unfortunately
+    // neon provides no direct access to the status code...
+
+    if ( rStatusText.getLength() < 3 )
+    {
+        OSL_ENSURE(
+            sal_False, "makeStatusCode - status text string to short!" );
+        return 0;
+    }
+
+    sal_Int32 nPos = rStatusText.indexOf( ' ' );
+    if ( nPos == -1 )
+    {
+        OSL_ENSURE( sal_False, "makeStatusCode - wrong status text format!" );
+        return 0;
+    }
+
+    return sal_uInt16( rStatusText.copy( 0, nPos ).toInt32() );
+}
+
+// -------------------------------------------------------------------
 // Constructor
 // -------------------------------------------------------------------
 NeonSession::NeonSession( DAVSessionFactory* pSessionFactory,
@@ -123,28 +148,31 @@ NeonSession::NeonSession( DAVSessionFactory* pSessionFactory,
     // to that buffer (last verified with neon 0.11.0)!!! We do this
     // by having the members mHostName and mProxyName, which are OStrings!
 
-    Init();
     NeonUri theUri( inUri );
 
-    mHostName = OUStringToOString( theUri.GetHost(), RTL_TEXTENCODING_UTF8 );
+    mHostName = theUri.GetHost();
     mPort = theUri.GetPort();
 
-    mProxyName = OUStringToOString( rProxyCfg.aName, RTL_TEXTENCODING_UTF8 );
+    mProxyName = rProxyCfg.aName;
     mProxyPort = rProxyCfg.nPort;
+
+    Init();
 
     mHttpSession = CreateSession( mHostName,
                                   theUri.GetPort(),
                                   mProxyName,
                                   rProxyCfg.nPort );
     if ( mHttpSession == NULL )
-        throw DAVException( DAVException::DAV_SESSION_CREATE );
+        throw DAVException( DAVException::DAV_SESSION_CREATE,
+                            theUri.makeConnectionEndPointString() );
 
     // Note: Uncomment the following if locking support is required
     /*
     mNeonLockSession = dav_lock_register( mHttpSession );
 
     if ( mNeonLockSession == NULL )
-        throw DAVException( DAVException::DAV_SESSION_CREATE );
+        throw DAVException( DAVException::DAV_SESSION_CREATE,
+                            theUri::makeConnectionEndPointString() );
     */
 
     // Register redirect callbacks.
@@ -179,8 +207,7 @@ sal_Bool NeonSession::CanUse( const OUString & inUri )
     sal_Bool IsConnected = sal_False;
     NeonUri theUri( inUri );
     if ( ( theUri.GetPort() == mPort ) &&
-         ( OUStringToOString( theUri.GetHost(), RTL_TEXTENCODING_UTF8 )
-             == mHostName ) )
+         ( theUri.GetHost() == mHostName ) )
          IsConnected = sal_True;
     return IsConnected;
 }
@@ -591,7 +618,9 @@ void NeonSession::Init( void )
     if ( sSockInited == sal_False )
     {
         if ( sock_init() != 0 )
-            throw DAVException( DAVException::DAV_SESSION_CREATE );
+            throw DAVException( DAVException::DAV_SESSION_CREATE,
+                                NeonUri::makeConnectionEndPointString(
+                                                        mHostName, mPort ) );
         sSockInited = sal_True;
     }
 }
@@ -603,6 +632,7 @@ void NeonSession::Init( void )
 void NeonSession::HandleError( int nError )
     throw ( DAVException )
 {
+    // Map error code to DAVException.
     switch ( nError )
     {
         case HTTP_OK:
@@ -613,15 +643,59 @@ void NeonSession::HandleError( int nError )
             return;
         }
 
-        case HTTP_AUTH:
-            throw DAVException( DAVException::DAV_HTTP_AUTH );
+        case HTTP_ERROR:        // Generic error
+        {
+            OUString aText = OUString::createFromAscii(
+                                    http_get_error( mHttpSession ) );
+            throw DAVException( DAVException::DAV_HTTP_ERROR,
+                                aText,
+                                makeStatusCode( aText ) );
+        }
+
+        case HTTP_LOOKUP:       // Name lookup failed.
+            throw DAVException( DAVException::DAV_HTTP_LOOKUP,
+                                NeonUri::makeConnectionEndPointString(
+                                                    mHostName, mPort ) );
+
+        case HTTP_AUTH:         // User authentication failed on server
+            throw DAVException( DAVException::DAV_HTTP_AUTH,
+                                NeonUri::makeConnectionEndPointString(
+                                                    mHostName, mPort ) );
+
+        case HTTP_AUTHPROXY:    // User authentication failed on proxy
+            throw DAVException( DAVException::DAV_HTTP_AUTHPROXY,
+                                NeonUri::makeConnectionEndPointString(
+                                                    mProxyName, mProxyPort ) );
+
+        case HTTP_SERVERAUTH:   // Server authentication failed
+            throw DAVException( DAVException::DAV_HTTP_SERVERAUTH,
+                                NeonUri::makeConnectionEndPointString(
+                                                    mHostName, mPort ) );
+
+        case HTTP_PROXYAUTH:    // Proxy authentication failed
+            throw DAVException( DAVException::DAV_HTTP_PROXYAUTH,
+                                NeonUri::makeConnectionEndPointString(
+                                                    mProxyName, mProxyPort ) );
+
+        case HTTP_CONNECT:      // Could not connect to server
+            throw DAVException( DAVException::DAV_HTTP_CONNECT,
+                                NeonUri::makeConnectionEndPointString(
+                                                    mHostName, mPort ) );
+
+#if 0
+        case HTTP_TIMEOUT:      // Connection timed out
+        case HTTP_FAILED:       // The precondition failed
+        case HTTP_RETRY:        // Retry request (http_end_request ONLY)
+#endif
 
         case HTTP_REDIRECT:
             throw DAVException( DAVException::DAV_HTTP_REDIRECT,
                                 OUString::createFromAscii(
                                     http_redirect_location( mHttpSession ) ) );
         default:
-            throw DAVException( DAVException::DAV_HTTP_ERROR );
+            throw DAVException( DAVException::DAV_HTTP_ERROR,
+                                OUString::createFromAscii(
+                                    http_get_error( mHttpSession ) ) );
     }
 }
 
@@ -629,9 +703,9 @@ void NeonSession::HandleError( int nError )
 // CreateSession
 // Creates a new neon session.
 // -------------------------------------------------------------------
-HttpSession * NeonSession::CreateSession( const OString & inHostName,
+HttpSession * NeonSession::CreateSession( const OUString & inHostName,
                                              int inPort,
-                                              const OString & inProxyName,
+                                          const OUString & inProxyName,
                                              int inProxyPort )
     throw ( DAVException )
 {
@@ -640,23 +714,42 @@ HttpSession * NeonSession::CreateSession( const OString & inHostName,
 
     HttpSession * theHttpSession;
     if ( ( theHttpSession = http_session_create() ) == NULL )
-        throw DAVException( DAVException::DAV_SESSION_CREATE );
+        throw DAVException( DAVException::DAV_SESSION_CREATE,
+                            NeonUri::makeConnectionEndPointString(
+                                                inHostName, inPort ) );
+
+    // Set a progress callback for the session.
+    http_set_progress( theHttpSession, ProgressNotify, theHttpSession );
+
+    // Set a status notification callback for the session, to report
+    // connection status.
+    http_set_status( theHttpSession, StatusNotify, theHttpSession );
 
     if ( inProxyName.getLength() )
     {
-        if ( http_session_proxy(
-                theHttpSession, inProxyName.getStr(), inProxyPort ) != HTTP_OK )
+        if ( http_session_proxy( theHttpSession,
+                                 OUStringToOString( inProxyName,
+                                                    RTL_TEXTENCODING_UTF8 )
+                                    .getStr(),
+                                 inProxyPort ) != HTTP_OK )
         {
             http_session_destroy( theHttpSession );
-            throw DAVException( DAVException::DAV_HTTP_LOOKUP );
+            throw DAVException( DAVException::DAV_HTTP_LOOKUP,
+                                NeonUri::makeConnectionEndPointString(
+                                                inProxyName, inProxyPort ) );
         }
     }
 
-    if ( http_session_server(
-            theHttpSession, inHostName.getStr(), inPort ) != HTTP_OK )
+    if ( http_session_server( theHttpSession,
+                              OUStringToOString( inHostName,
+                                                 RTL_TEXTENCODING_UTF8 )
+                                .getStr(),
+                              inPort ) != HTTP_OK )
     {
         http_session_destroy( theHttpSession );
-        throw DAVException( DAVException::DAV_HTTP_LOOKUP );
+        throw DAVException( DAVException::DAV_HTTP_LOOKUP,
+                            NeonUri::makeConnectionEndPointString(
+                                                inHostName, inPort ) );
     }
 
     return theHttpSession;
@@ -787,8 +880,7 @@ int NeonSession::NeonAuth( void *       inUserData,
 
     int theRetVal = theSession->mListener->authenticate(
                             OUString::createFromAscii( inRealm ),
-                            OStringToOUString( theSession->mHostName,
-                                               RTL_TEXTENCODING_UTF8 ),
+                            theSession->mHostName,
                             theUserNameBuffer,
                             thePassWordBuffer,
                             theSession->mEnv );
@@ -831,5 +923,28 @@ void NeonSession::RedirectNotify(
                     void * userdata, const char * src, const char * dest )
 {
 //  NeonSession * theSession = ( NeonSession * )userdata;
+}
+
+// static
+void NeonSession::ProgressNotify( void * userdata, off_t progress, off_t total )
+{
+    // progress: bytes read so far
+    // total:    total bytes to read, -1 -> total count not known
+}
+
+// static
+void NeonSession::StatusNotify(
+            void * userdata, http_conn_status status, const char *info )
+{
+#if 0
+    typedef enum {
+        http_conn_namelookup, /* lookup up hostname (info = hostname) */
+        http_conn_connecting, /* connecting to host (info = hostname) */
+        http_conn_connected, /* connected to host (info = hostname) */
+        http_conn_secure /* connection now secure (info = crypto level) */
+    } http_conn_status;
+#endif
+
+    // info: hostname
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavresultset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-07 15:49:00 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,8 @@
 #ifndef _WEBDAV_SESSION_HXX
 #include "DAVSession.hxx"
 #endif
-using namespace com::sun::star::lang;
-using namespace com::sun::star::ucb;
-using namespace com::sun::star::uno;
 
+using namespace com::sun::star;
 using namespace webdav_ucp;
 
 //=========================================================================
@@ -89,10 +87,11 @@ using namespace webdav_ucp;
 //=========================================================================
 
 DynamicResultSet::DynamicResultSet(
-                        const Reference< XMultiServiceFactory >& rxSMgr,
-                        const vos::ORef< Content >& rxContent,
-                        const OpenCommandArgument2& rCommand,
-                        const Reference< XCommandEnvironment >& rxEnv )
+                const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+                const rtl::Reference< Content >& rxContent,
+                const com::sun::star::ucb::OpenCommandArgument2& rCommand,
+                const uno::Reference<
+                    com::sun::star::ucb::XCommandEnvironment >& rxEnv )
 : ResultSetImplHelper( rxSMgr, rCommand ),
   m_xContent( rxContent ),
   m_xEnv( rxEnv )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:49:55 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 
  *************************************************************************/
 
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -88,6 +88,9 @@
 #endif
 #ifndef _UCBHELPER_CONFIGUREUCB_HXX_
 #include <ucbhelper/configureucb.hxx>
+#endif
+#ifndef _UCBHELPER_CANCELCOMMANDEXECUTION_HXX_
+#include <ucbhelper/cancelcommandexecution.hxx>
 #endif
 
 #ifndef _IDENTIFY_HXX
@@ -124,7 +127,7 @@ UniversalContentBroker::UniversalContentBroker(
   m_nInitCount( 0 ), //@@@ see initialize() method
   m_nCommandId( 0 )
 {
-    VOS_ENSURE( m_xSMgr.is(),
+    OSL_ENSURE( m_xSMgr.is(),
                 "UniversalContentBroker ctor: No service manager" );
 }
 
@@ -499,7 +502,8 @@ Any SAL_CALL UniversalContentBroker::execute(
     //////////////////////////////////////////////////////////////////////
 
     if ( ( aCommand.Handle == GETCOMMANDINFO_HANDLE ) ||
-         ( aCommand.Name.compareToAscii( GETCOMMANDINFO_NAME ) == 0 ) )
+         aCommand.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( GETCOMMANDINFO_NAME ) ) )
     {
         //////////////////////////////////////////////////////////////////
         // getCommandInfo
@@ -508,23 +512,27 @@ Any SAL_CALL UniversalContentBroker::execute(
         aRet <<= getCommandInfo();
     }
     else if ( ( aCommand.Handle == GLOBALTRANSFER_HANDLE ) ||
-              ( aCommand.Name.compareToAscii( GLOBALTRANSFER_NAME ) == 0 ) )
+              aCommand.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM(GLOBALTRANSFER_NAME ) ) )
     {
         //////////////////////////////////////////////////////////////////
         // globalTransfer
         //////////////////////////////////////////////////////////////////
 
         GlobalTransferCommandArgument aTransferArg;
-        if ( aCommand.Argument >>= aTransferArg )
+        if ( !( aCommand.Argument >>= aTransferArg ) )
         {
-            globalTransfer( aTransferArg, Environment );
+            ucbhelper::cancelCommandExecution(
+                makeAny( IllegalArgumentException(
+                                rtl::OUString::createFromAscii(
+                                        "Wrong argument type!" ),
+                                static_cast< cppu::OWeakObject * >( this ),
+                                -1 ) ),
+                Environment );
+            // Unreachable
         }
-        else
-        {
-            VOS_ENSURE( sal_False,
-                        "UniversalContentBroker::execute - invalid parameter!" );
-            throw CommandAbortedException();
-        }
+
+        globalTransfer( aTransferArg, Environment );
     }
     else
     {
@@ -532,9 +540,12 @@ Any SAL_CALL UniversalContentBroker::execute(
         // Unknown command
         //////////////////////////////////////////////////////////////////
 
-        VOS_ENSURE( sal_False,
-                    "UniversalContentBroker::execute - unknown command!" );
-        throw CommandAbortedException();
+        ucbhelper::cancelCommandExecution(
+            makeAny( UnsupportedCommandException(
+                            rtl::OUString(),
+                            static_cast< cppu::OWeakObject * >( this ) ) ),
+            Environment );
+        // Unreachable
     }
 
     return aRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVException.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,31 +72,45 @@ namespace webdav_ucp
 class DAVException
 {
     public:
-        enum ExceptionCode { DAV_HTTP_LOOKUP = 0,
-                             DAV_HTTP_ERROR,
-                             DAV_HTTP_AUTH,
-                             DAV_HTTP_REDIRECT,
-                             DAV_SESSION_CREATE,
-                             DAV_REQUEST_CREATE,
-                             DAV_INVALID_ARG,
-                             DAV_FILE_OPEN,
-                             DAV_FILE_WRITE,
-                             DAV_UNKNOWN };
+        enum ExceptionCode {
+            DAV_HTTP_ERROR = 0, // Generic error, mData = error message
+            DAV_HTTP_LOOKUP,    // Name lookup failed, mData = server[:port]
+            DAV_HTTP_AUTH,      // User authentication failed on server
+            DAV_HTTP_AUTHPROXY, // User authentication failed on proxy
+            DAV_HTTP_SERVERAUTH,// Server authentication failed
+            DAV_HTTP_PROXYAUTH, // Proxy authentication failed
+            DAV_HTTP_CONNECT,   // Could not connect to server, mData = server[:port]
+            DAV_HTTP_TIMEOUT,   // Connection timed out
+            DAV_HTTP_FAILED,    // The precondition failed
+            DAV_HTTP_RETRY,     // Retry request (http_end_request ONLY)
+            DAV_HTTP_REDIRECT,  // See http_redirect.h, mData = new URL
+            DAV_SESSION_CREATE, // session creation error, mData = server[:port]
+            DAV_INVALID_ARG,
+            DAV_FILE_OPEN,      // mData = file URL
+            DAV_FILE_WRITE };   // mData = file URL
 
     private:
         ExceptionCode   mExceptionCode;
         rtl::OUString   mData;
+        sal_uInt16      mStatusCode;
 
     public:
          DAVException( ExceptionCode inExceptionCode ) :
-            mExceptionCode( inExceptionCode ) {};
+            mExceptionCode( inExceptionCode ), mStatusCode( 0 ) {};
          DAVException( ExceptionCode inExceptionCode,
                        const rtl::OUString & rData ) :
-            mExceptionCode( inExceptionCode ), mData( rData ) {};
+            mExceptionCode( inExceptionCode ), mData( rData ),
+            mStatusCode( 0 ) {};
+         DAVException( ExceptionCode inExceptionCode,
+                       const rtl::OUString & rData,
+                       sal_uInt16 nStatusCode ) :
+            mExceptionCode( inExceptionCode ), mData( rData ),
+            mStatusCode( nStatusCode ) {};
         ~DAVException( ) {};
 
     const ExceptionCode & getError() const { return mExceptionCode; }
     const rtl::OUString & getData() const  { return mData; }
+    sal_uInt16 getStatus() const { return mStatusCode; }
 };
 
 }; // namespace webdav_ucp

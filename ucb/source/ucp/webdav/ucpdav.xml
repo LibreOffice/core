@@ -44,9 +44,9 @@
     <project-build-dependency> vos                </project-build-dependency>
     <project-build-dependency> ucbhelper          </project-build-dependency>
 
-    <runtime-module-dependency> sal2          </runtime-module-dependency>
-    <runtime-module-dependency> cppu2         </runtime-module-dependency>
-    <runtime-module-dependency> cppuhelper2$(COM) </runtime-module-dependency>
+    <runtime-module-dependency> sal3              </runtime-module-dependency>
+    <runtime-module-dependency> cppu3             </runtime-module-dependency>
+    <runtime-module-dependency> cppuhelper3$(COM) </runtime-module-dependency>
     <runtime-module-dependency> vos2$(COM)        </runtime-module-dependency>
     <runtime-module-dependency> ucbhelper1$(COM)  </runtime-module-dependency>
 
@@ -57,6 +57,7 @@
     <type> com.sun.star.beans.XPropertyContainer               </type>
     <type> com.sun.star.beans.XPropertySetInfoChangeNotifier   </type>
     <type> com.sun.star.container.XChild                       </type>
+    <type> com.sun.star.container.XNameAccess                  </type>
     <type> com.sun.star.container.XHierarchicalNameAccess      </type>
     <type> com.sun.star.io.XActiveDataSink                     </type>
     <type> com.sun.star.io.XInputStream                        </type>
@@ -80,15 +81,28 @@
     <type> com.sun.star.ucb.ContentInfoAttribute               </type>
     <type> com.sun.star.ucb.InsertCommandArgument              </type>
     <type> com.sun.star.ucb.InteractiveBadTransferURLException </type>
+    <type> com.sun.star.ucb.InteractiveIOException             </type>
+    <type> com.sun.star.ucb.InteractiveNetworkConnectException </type>
+    <type> com.sun.star.ucb.InteractiveNetworkGeneralException </type>
+    <type> com.sun.star.ucb.InteractiveNetworkReadException    </type>
+    <type> com.sun.star.ucb.InteractiveNetworkResolveNameException  </type>
+    <type> com.sun.star.ucb.InteractiveNetworkWriteException   </type>
     <type> com.sun.star.ucb.Link                   </type>
     <type> com.sun.star.ucb.Lock                   </type>
+    <type> com.sun.star.ucb.MissingInputStreamException        </type>
+    <type> com.sun.star.ucb.MissingPropertiesException         </type>
     <type> com.sun.star.ucb.NameClash                          </type>
+    <type> com.sun.star.ucb.NameClashException                 </type>
     <type> com.sun.star.ucb.OpenCommandArgument2               </type>
     <type> com.sun.star.ucb.OpenMode                           </type>
     <type> com.sun.star.ucb.RememberAuthentication             </type>
     <type> com.sun.star.ucb.ResultSetException                 </type>
     <type> com.sun.star.ucb.TransferInfo                       </type>
     <type> com.sun.star.ucb.XCommandEnvironment                </type>
+    <type> com.sun.star.ucb.UnsupportedCommandException        </type>
+    <type> com.sun.star.ucb.UnsupportedDataSinkException       </type>
+    <type> com.sun.star.ucb.UnsupportedNameClashException      </type>
+    <type> com.sun.star.ucb.UnsupportedOpenModeException       </type>
     <type> com.sun.star.ucb.XCommandInfo                       </type>
     <type> com.sun.star.ucb.XCommandInfoChangeNotifier         </type>
     <type> com.sun.star.ucb.XCommandProcessor                  </type>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 14:58:06 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
@@ -108,8 +108,8 @@ class DAVSessionFactory;
 class DAVResourceAccess
 {
     rtl::OUString m_aPath;
-      ::vos::ORef< DAVSession > m_xSession;
-    DAVSessionFactory*        m_pSessionFactory;
+    rtl::Reference< DAVSession > m_xSession;
+    DAVSessionFactory*           m_pSessionFactory;
     com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
 
@@ -217,8 +217,8 @@ public:
 
 private:
     sal_Bool handleException( DAVException & e );
-    sal_Bool initialize( const rtl::OUString & rURL );
-
+    sal_Bool initialize( const rtl::OUString & rURL )
+        throw ( DAVException );
 };
 
 }; // namespace webdav_ucp

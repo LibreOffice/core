@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-29 09:22:56 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ int AuthListener::authenticate( const ::rtl::OUString & inRealm,
             }
         }
     }
-    // abort.
+    // Abort.
     return -1;
 }
 
@@ -191,7 +191,11 @@ DAVResourceAccess::DAVResourceAccess(
   m_pSessionFactory( pSessionFactory )
 {
     if ( !initialize( rURL ) )
-        throw DAVException( DAVException::DAV_SESSION_CREATE );
+    {
+        NeonUri theUri( rURL );
+        throw DAVException( DAVException::DAV_SESSION_CREATE,
+                            theUri.makeConnectionEndPointString() );
+    }
 }
 
 //=========================================================================
@@ -199,7 +203,11 @@ void DAVResourceAccess::setURL( const rtl::OUString & rNewURL )
     throw( DAVException )
 {
     if ( !initialize( rNewURL ) )
-        throw DAVException( DAVException::DAV_SESSION_CREATE );
+    {
+        NeonUri theUri( rNewURL );
+        throw DAVException( DAVException::DAV_SESSION_CREATE,
+                            theUri.makeConnectionEndPointString() );
+    }
 }
 
 //=========================================================================
@@ -495,6 +503,7 @@ void DAVResourceAccess::UNLOCK ( const ucb::Lock & rLock,
 //=========================================================================
 // init dav session and path
 sal_Bool DAVResourceAccess::initialize( const rtl::OUString & rURL )
+    throw ( DAVException )
 {
     NeonUri aURI( rURL );
 
@@ -505,17 +514,9 @@ sal_Bool DAVResourceAccess::initialize( const rtl::OUString & rURL )
         return sal_False;
       }
 
-    try
-      {
-        // set the webdav session
-          m_xSession = m_pSessionFactory->createDAVSession( rURL, m_xSMgr );
-        m_xSession->setServerAuthListener( &webdavAuthListener );
-    }
-    catch ( DAVException & )
-    {
-        OSL_ENSURE( sal_False, "DAVResourceAccess::initialize - DAVException" );
-        return sal_False;
-      }
+    // set the webdav session
+    m_xSession = m_pSessionFactory->createDAVSession( rURL, m_xSMgr );
+    m_xSession->setServerAuthListener( &webdavAuthListener );
 
     return sal_True;
 }
@@ -526,10 +527,20 @@ sal_Bool DAVResourceAccess::handleException( DAVException & e )
     switch ( e.getError() )
     {
         case DAVException::DAV_HTTP_REDIRECT:
-            // set new path and session
-            return initialize( e.getData() );
+            try
+            {
+                // set new path and session
+                return initialize( e.getData() );
+            }
+            catch( DAVException const & )
+            {
+            }
+            return sal_False;
 
         case DAVException::DAV_HTTP_AUTH:
+        case DAVException::DAV_HTTP_AUTHPROXY:
+        case DAVException::DAV_HTTP_SERVERAUTH:
+        case DAVException::DAV_HTTP_PROXYAUTH:
             // Retry. If user cancels the login request,
             // we will get DAV_HTTP_ERROR and abort.
             return sal_True;

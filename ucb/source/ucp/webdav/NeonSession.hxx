@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@ class NeonSession : public DAVSession
 {
     private:
         osl::Mutex              mMutex;
-        rtl::OString            mHostName;
-        rtl::OString            mProxyName;
+        rtl::OUString           mHostName;
+        rtl::OUString           mProxyName;
         sal_Int32               mPort;
         sal_Int32               mProxyPort;
         HttpSession *           mHttpSession;
@@ -105,7 +105,7 @@ class NeonSession : public DAVSession
         rtl::OUString mPrevPassWord;
 
     public:
-        NeonSession( DAVSessionFactory* psessionFactory,
+        NeonSession( DAVSessionFactory* pSessionFactory,
                      const rtl::OUString& inUri,
                      const ProxyConfig& rProxyCfg )
             throw ( DAVException );
@@ -214,9 +214,9 @@ class NeonSession : public DAVSession
             throw ( DAVException );
 
         // Create a Neon session for server at supplied host & port
-        HttpSession *   CreateSession( const ::rtl::OString & inHostName,
+        HttpSession *   CreateSession( const ::rtl::OUString & inHostName,
                                        int inPort,
-                                        const ::rtl::OString & inProxyName,
+                                       const ::rtl::OUString & inProxyName,
                                        int inProxyPort )
             throw( DAVException );
 
@@ -249,6 +249,16 @@ class NeonSession : public DAVSession
         static void RedirectNotify( void *       userdata,
                                      const char * src,
                                     const char * dest );
+
+        // Progress / Status callbacks.
+        static void NeonSession::ProgressNotify( void * userdata,
+                                                 off_t progress,
+                                                 off_t total );
+
+        // static
+        static void NeonSession::StatusNotify( void * userdata,
+                                               http_conn_status status,
+                                               const char *info );
 };
 
 }; // namespace_ucp

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 
 #include <list>
 
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UCB_CONTENTCREATIONEXCEPTION_HPP_
@@ -97,6 +97,10 @@ namespace com { namespace sun { namespace star { namespace io {
 
 namespace com { namespace sun { namespace star { namespace sdbc {
     class XRow;
+} } } }
+
+namespace com { namespace sun { namespace star { namespace ucb {
+    struct TransferInfo;
 } } } }
 
 namespace webdav_ucp
@@ -148,7 +152,7 @@ private:
                         const ::com::sun::star::uno::Reference<
                             ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
-      typedef vos::ORef< Content > ContentRef;
+    typedef rtl::Reference< Content > ContentRef;
       typedef std::list< ContentRef > ContentRefList;
       void queryChildren( ContentRefList& rChildren);
 
@@ -162,11 +166,24 @@ private:
                    sal_Bool bReplaceExisting,
                    const com::sun::star::uno::Reference<
                       com::sun::star::ucb::XCommandEnvironment >& Environment )
-        throw( ::com::sun::star::ucb::CommandAbortedException );
+        throw( ::com::sun::star::uno::Exception );
+
+    // Command "transfer"
+    void transfer( const ::com::sun::star::ucb::TransferInfo & rArgs,
+                   const com::sun::star::uno::Reference<
+                      com::sun::star::ucb::XCommandEnvironment >& Environment )
+        throw( ::com::sun::star::uno::Exception );
 
     // Command "delete"
       void destroy( sal_Bool bDeletePhysical )
-        throw( ::com::sun::star::ucb::CommandAbortedException );
+        throw( ::com::sun::star::uno::Exception );
+
+    void cancelCommandExecution(
+                    const DAVException & e,
+                    const ::com::sun::star::uno::Reference<
+                        com::sun::star::ucb::XCommandEnvironment > & xEnv,
+                    sal_Bool bWrite = sal_False )
+        throw( ::com::sun::star::uno::Exception );
 
 public:
       Content( const ::com::sun::star::uno::Reference<
@@ -261,7 +278,7 @@ public:
                        const ::com::sun::star::uno::Sequence<
                               ::com::sun::star::beans::Property >& rProperties,
                           const ContentProperties& rData,
-                          const ::vos::ORef<
+                       const rtl::Reference<
                            ::ucb::ContentProviderImplHelper >&  rProvider,
                           const ::rtl::OUString& rContentId );
 };

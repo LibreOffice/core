@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavdatasupplier.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,16 @@
 #ifndef _WEBDAV_UCP_DATASUPPLIER_HXX
 #define _WEBDAV_UCP_DATASUPPLIER_HXX
 
+#include <vector>
+
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
+
 #ifndef _UCBHELPER_RESULTSET_HXX
 #include <ucbhelper/resultset.hxx>
 #endif
-#ifndef __VECTOR__
-#include <vector>
-#endif
+
 namespace webdav_ucp {
 
 struct DataSupplier_Impl;
@@ -85,7 +89,7 @@ private:
 public:
     DataSupplier( const com::sun::star::uno::Reference<
               com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-              const vos::ORef< Content >& rContent,
+              const rtl::Reference< Content >& rContent,
               sal_Int32 nOpenMode);
 
     virtual ~DataSupplier();

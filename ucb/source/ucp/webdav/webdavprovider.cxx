@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-18 08:23:48 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 
  *************************************************************************/
 
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
-#endif
 #ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
 #endif
@@ -79,11 +76,7 @@
 #include "webdavcontent.hxx"
 #endif
 
-using namespace com::sun::star::lang;
-using namespace com::sun::star::ucb;
-using namespace com::sun::star::uno;
-using namespace rtl;
-
+using namespace com::sun::star;
 using namespace webdav_ucp;
 
 //=========================================================================
@@ -95,7 +88,7 @@ using namespace webdav_ucp;
 //=========================================================================
 
 ContentProvider::ContentProvider(
-                            const Reference< XMultiServiceFactory >& rSMgr )
+                const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
 : ::ucb::ContentProviderImplHelper( rSMgr ),
   m_pProps( 0 )
 {
@@ -114,11 +107,10 @@ ContentProvider::~ContentProvider()
 //
 //=========================================================================
 
-// @@@ Add own interfaces.
 XINTERFACE_IMPL_3( ContentProvider,
-                   XTypeProvider,
-                   XServiceInfo,
-                   XContentProvider );
+                   lang::XTypeProvider,
+                   lang::XServiceInfo,
+                   com::sun::star::ucb::XContentProvider );
 
 //=========================================================================
 //
@@ -126,11 +118,10 @@ XINTERFACE_IMPL_3( ContentProvider,
 //
 //=========================================================================
 
-// @@@ Add own interfaces.
 XTYPEPROVIDER_IMPL_3( ContentProvider,
-                         XTypeProvider,
-                         XServiceInfo,
-                         XContentProvider );
+                      lang::XTypeProvider,
+                      lang::XServiceInfo,
+                      com::sun::star::ucb::XContentProvider );
 
 //=========================================================================
 //
@@ -139,9 +130,9 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     OUString::createFromAscii(
+                     rtl::OUString::createFromAscii(
                          "com.sun.star.comp.WebDAVContentProvider" ),
-                     OUString::createFromAscii(
+                     rtl::OUString::createFromAscii(
                          WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
@@ -159,15 +150,18 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 //=========================================================================
 
 // virtual
-Reference< XContent > SAL_CALL ContentProvider::queryContent(
-                        const Reference< XContentIdentifier >& Identifier )
-    throw( IllegalIdentifierException, RuntimeException )
+uno::Reference< com::sun::star::ucb::XContent > SAL_CALL
+ContentProvider::queryContent(
+            const uno::Reference<
+                    com::sun::star::ucb::XContentIdentifier >& Identifier )
+    throw( com::sun::star::ucb::IllegalIdentifierException,
+           uno::RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
 
     // Check URL scheme...
 
-    const OUString aScheme
+    const rtl::OUString aScheme
         = Identifier->getContentProviderScheme().toAsciiLowerCase();
     if ( !aScheme.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( HTTP_URL_SCHEME ) ) &&
@@ -175,21 +169,21 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
             RTL_CONSTASCII_STRINGPARAM( HTTPS_URL_SCHEME ) ) &&
          !aScheme.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) ) )
-        throw IllegalIdentifierException();
+        throw com::sun::star::ucb::IllegalIdentifierException();
 
     // Normalize URL and create new Id, if nessacary.
-    OUString aURL = Identifier->getContentIdentifier();
+    rtl::OUString aURL = Identifier->getContentIdentifier();
 
     // At least: <scheme> + "://"
     if ( aURL.getLength() < ( aScheme.getLength() + 3 ) )
-        throw IllegalIdentifierException();
+        throw com::sun::star::ucb::IllegalIdentifierException();
 
     if ( ( aURL.getStr()[ aScheme.getLength() ]     != sal_Unicode( ':' ) ) ||
          ( aURL.getStr()[ aScheme.getLength() + 1 ] != sal_Unicode( '/' ) ) ||
          ( aURL.getStr()[ aScheme.getLength() + 2 ] != sal_Unicode( '/' ) ) )
-        throw IllegalIdentifierException();
+        throw com::sun::star::ucb::IllegalIdentifierException();
 
-    Reference< XContentIdentifier > xCanonicId;
+    uno::Reference< com::sun::star::ucb::XContentIdentifier > xCanonicId;
 
     sal_Int32 nPos = aURL.lastIndexOf( '/' );
     if ( nPos != aURL.getLength() - 1 )
@@ -197,12 +191,12 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
         // Find second slash in URL.
         nPos = aURL.indexOf( '/', aURL.indexOf( '/' ) + 1 );
         if ( nPos == -1 )
-            throw IllegalIdentifierException();
+            throw com::sun::star::ucb::IllegalIdentifierException();
 
         nPos = aURL.indexOf( '/', nPos + 1 );
         if ( nPos == -1 )
         {
-            aURL += OUString::createFromAscii( "/" );
+            aURL += rtl::OUString::createFromAscii( "/" );
             xCanonicId = new ::ucb::ContentIdentifier( m_xSMgr, aURL );
         }
         else
@@ -212,29 +206,26 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
         xCanonicId = Identifier;
 
     // Check, if a content with given id already exists...
-    Reference< XContent > xContent
+    uno::Reference< com::sun::star::ucb::XContent > xContent
         = queryExistingContent( xCanonicId ).getBodyPtr();
     if ( xContent.is() )
         return xContent;
-
-    // @@@ Decision, which content implementation to instanciate may be
-    //     made here ( in case you have different content classes ).
 
     // Create a new content. Note that the content will insert itself
     // into providers content list by calling addContent(...) from it's ctor.
 
     try
     {
-      xContent = new ::webdav_ucp::Content(
+        xContent = new ::webdav_ucp::Content(
                           m_xSMgr, this, xCanonicId, &m_aDAVSessionFactory );
     }
-    catch (ContentCreationException e)
+    catch ( com::sun::star::ucb::ContentCreationException const & )
     {
-      throw IllegalIdentifierException();
+        throw com::sun::star::ucb::IllegalIdentifierException();
     }
 
     if ( !xContent->getIdentifier().is() )
-      throw IllegalIdentifierException();
+        throw com::sun::star::ucb::IllegalIdentifierException();
 
     return xContent;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSessionFactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,13 @@
  *
  *
  ************************************************************************/
+
+#ifndef _DAVSESSIONFACTORY_HXX_
 #include "DAVSessionFactory.hxx"
+#endif
+#ifndef _NEONSESSION_HXX_
 #include "NeonSession.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -70,20 +75,21 @@ using namespace com::sun::star;
 
 DAVSessionFactory::~DAVSessionFactory()
 {
-    if ( m_xProxySettings.isValid() )
+    if ( m_xProxySettings.is() )
     {
         m_xProxySettings->dispose();
         m_xProxySettings = 0;
     }
 }
 
-vos::ORef< DAVSession > DAVSessionFactory::createDAVSession(
+rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
                 const ::rtl::OUString & inUri,
                 const uno::Reference< lang::XMultiServiceFactory > & rxSMgr )
+    throw( DAVException )
 {
      osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( !m_xProxySettings.isValid() )
+    if ( !m_xProxySettings.is() )
         m_xProxySettings = new ProxySettings( rxSMgr );
 
     DAVSession * theSession = GetExistingSession( inUri );

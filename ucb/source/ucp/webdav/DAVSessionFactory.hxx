@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSessionFactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-02 07:26:40 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,13 @@
 #define _DAVSESSIONFACTORY_HXX_
 
 #include <vector>
-#include <rtl/ustring.hxx>
-#include <vos/ref.hxx>
+
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
@@ -71,6 +76,9 @@
 
 #ifndef _PROXYCONFIG_HXX_
 #include "proxyconfig.hxx"
+#endif
+#ifndef _DAVEXCEPTION_HXX_
+#include "DAVException.hxx"
 #endif
 
 namespace com { namespace sun { namespace star { namespace lang {
@@ -85,17 +93,18 @@ class DAVSession;
 class DAVSessionFactory
 {
         osl::Mutex m_aMutex;
-        ::vos::ORef< ProxySettings > m_xProxySettings;
+        rtl::Reference< ProxySettings > m_xProxySettings;
         std::vector< DAVSession * > sActiveSessions;
 
     public:
         ~DAVSessionFactory();
 
-        ::vos::ORef< DAVSession >
+        rtl::Reference< DAVSession >
         createDAVSession( const ::rtl::OUString & inUri,
                           const ::com::sun::star::uno::Reference<
                                ::com::sun::star::lang::XMultiServiceFactory >&
-                                rxSMgr );
+                                rxSMgr )
+            throw( DAVException );
 
         void ReleaseDAVSession( DAVSession * inSession );
 
