@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:17:52 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 13:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,9 +389,11 @@ ErrorBox RID_ERRBOX_MODULENOTINSTALLED
         SID_ADDONS;\
         SID_SET_SUPER_SCRIPT;   \
         SID_SET_SUB_SCRIPT;     \
+        SID_HELPINDEX; \
+        SID_EXTENDEDHELP; \
     };\
     IdCount = {\
-        303;\
+        305;\
     };
 
 #define OFFICE_ID_LIST\
@@ -734,6 +736,7 @@ ACC RID_DEFAULTACCEL
         AI_WIN_FULLSCREEN
         AI_FOCUSURLBOX
         AI_CLOSEWIN
+        ACC_CODE( SID_EXTENDEDHELP, KEY_F1, TRUE, FALSE, FALSE )
         ACC_CODE( SID_BASICBREAK, KEY_Q, TRUE, TRUE, FALSE )
         ACC_CODE( SID_VIEW_DATA_SOURCE_BROWSER, KEY_F4, FALSE, FALSE, FALSE )
         ACC_CODE( SID_FM_GRABCONTROLFOCUS, KEY_F5, FALSE, TRUE, FALSE )
