@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuicfgsupplier.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:50:01 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
+
 #include <vcl/svapp.hxx>
 
 using namespace rtl;
@@ -195,9 +199,12 @@ void ModuleUIConfigurationManagerSupplier::impl_initStorages()
 {
     if ( !m_bInit )
     {
+        RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ModuleUIConfigurationManagerSupplier::impl_initStorages" );
+
         rtl::OUString aFinalSlash( RTL_CONSTASCII_USTRINGPARAM( "/" ));
         rtl::OUString aConfigRootFolder( RTL_CONSTASCII_USTRINGPARAM( "soffice.cfg" ));
         rtl::OUString aConfigSubFolder( RTL_CONSTASCII_USTRINGPARAM( "soffice.cfg/soffice.cfg" ));
+        rtl::OUString aConfigFileName( RTL_CONSTASCII_USTRINGPARAM( "soffice.cfg/uiconfig.zip" ));
 
         Reference< XPropertySet > xPathSettings( m_xServiceManager->createInstance(
                                                         OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSettings" ))),
@@ -226,7 +233,7 @@ void ModuleUIConfigurationManagerSupplier::impl_initStorages()
         if (( nIndex > 0 ) &&  ( nIndex != ( m_aUserConfigURL.getLength()-1 )))
             m_aUserConfigURL += aFinalSlash;
 
-        aDefaultConfigFolderURL += aConfigRootFolder;
+//        aDefaultConfigFolderURL += aConfigRootFolder;
 
         // Create root storages for user interface configuration data (default and customizable)
         Reference< XSingleServiceFactory > xStorageFactory( m_xServiceManager->createInstance(
@@ -234,12 +241,12 @@ void ModuleUIConfigurationManagerSupplier::impl_initStorages()
                                                             UNO_QUERY_THROW );
 
         Sequence< Any > aArgs( 2 );
-/*
+
         // Default root storage (READ-ACCESS)
-        aArgs[0] <<= m_aDefaultConfigURL + aConfigSubFolder;
+        aArgs[0] <<= m_aDefaultConfigURL + aConfigFileName; //aConfigSubFolder;
         aArgs[1] <<= ElementModes::READ;
         m_xDefaultCfgRootStorage = Reference< XStorage >( xStorageFactory->createInstanceWithArguments( aArgs ), UNO_QUERY_THROW );
-*/
+/*
         Reference < XOutputStream > xTempOut( m_xServiceManager->createInstance (
                                                 ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
                                               UNO_QUERY );
@@ -248,16 +255,21 @@ void ModuleUIConfigurationManagerSupplier::impl_initStorages()
                                                                         OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.PackageStructureCreator" ))),
                                                                      UNO_QUERY_THROW );
 
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ convertToPackage" );
         xPackageStructCreator->convertToPackage( aDefaultConfigFolderURL, xTempOut );
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} convertToPackage" );
+
         xTempOut->closeOutput();
         Reference< XInputStream > xTempIn( xTempOut, UNO_QUERY );
         Reference< XSeekable > xTempSeek( xTempOut, UNO_QUERY );
 
         // Default root storage (READ-ACCESS)
         xTempSeek->seek( 0 );
+
         aArgs[0] <<= xTempIn;
         aArgs[1] <<= ElementModes::READ;
         m_xDefaultCfgRootStorage = Reference< XStorage >( xStorageFactory->createInstanceWithArguments( aArgs ), UNO_QUERY_THROW );
+*/
 
         // Customizable root storage (READWRITE-ACCESS)
         aArgs[0] <<= m_aUserConfigURL + aConfigSubFolder;
@@ -429,9 +441,9 @@ throw ( NoSuchElementException, RuntimeException)
         }
 
         PropertyValue   aArg;
-        Sequence< Any > aArgs( 4 );
+        Sequence< Any > aArgs( 5 );
         aArg.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
-        aArg.Value <<= sShort;
+        aArg.Value <<= ModuleIdentifier;
         aArgs[0] <<= aArg;
         aArg.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultConfigStorage" ));
         aArg.Value <<= xDefaultConfigModuleStorage;
@@ -442,6 +454,9 @@ throw ( NoSuchElementException, RuntimeException)
         aArg.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UserRootCommit" ));
         aArg.Value <<= m_xUserRootCommit;
         aArgs[3] <<= aArg;
+        aArg.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleShortName" ));
+        aArg.Value <<= sShort;
+        aArgs[4] <<= aArg;
 
         pIter->second = Reference< XUIConfigurationManager >( m_xServiceManager->createInstanceWithArguments(
                                                                 SERVICENAME_MODULEUICONFIGURATIONMANAGER, aArgs ),
