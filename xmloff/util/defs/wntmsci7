@@ -10265,3 +10265,10 @@ _real@8@4003a000000000000000
 ?EVENT_APPLICATION@xmloff@@3UConstAsciiString@1@B
 ?EVENT_STARBASIC@xmloff@@3UConstAsciiString@1@B
 ?EVENT_STAROFFICE@xmloff@@3UConstAsciiString@1@B
+??0SfxXMLMetaContext@@QAE@AAVSvXMLImport@@GABVOUString@rtl@@ABV?$Reference@VXDocumentInfo@document@star@sun@com@@@uno@star@sun@com@@@Z
+??0SvXMLMetaDocumentContext@@QAE@AAVSvXMLImport@@GABVOUString@rtl@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXDocumentInfo@document@star@sun@com@@@5678@@Z
+?query@?$Reference@VXDocumentInfo@document@star@sun@com@@@uno@star@sun@com@@SA?AV12345@ABVBaseReference@2345@@Z
+?s_pType_com_sun_star_document_XDocumentInfo@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXDocumentInfo@document@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?setTargetDocument@XMLMetaImportComponent@@MAAXABV?$Reference@VXComponent@lang@star@sun@com@@@uno@star@sun@com@@@Z
+?_SetListBlock@XMLTextImportHelper@@QAEXPAVSvXMLImportContext@@@Z
+?_SetListItem@XMLTextImportHelper@@QAEXPAVSvXMLImportContext@@@Z
