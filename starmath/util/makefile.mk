@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-19 08:54:10 $
+#   last change: $Author: kz $ $Date: 2004-05-19 09:04:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ GEN_HID_OTHER=TRUE
 # --- Files --------------------------------------------------------
 
 RESLIB1NAME=sm
+RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES=\
     $(SRS)$/smres.srs \
     $(SRS)$/smslots.srs \
