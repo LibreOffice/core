@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SqlNameEdit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-20 08:45:07 $
+ *  last change: $Author: oj $ $Date: 2001-03-27 13:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,49 +64,32 @@
 namespace dbaui
 {
     //------------------------------------------------------------------
-    long OSQLNameEdit::PreNotify( NotifyEvent& rNEvt )
+    sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const ::rtl::OUString& _sAllowedChars)
     {
-        if (rNEvt.GetType() == EVENT_KEYINPUT)
+        return  (_cChar >= 'A' && _cChar <= 'Z'                     ||
+                 _cChar == '_'                                      ||
+                 _sAllowedChars.indexOf(_cChar) != -1               ||
+                 (!_bFirstChar && (_cChar >= '0' && _cChar <= '9')) ||
+                 (!_bUpperCase && (_cChar >= 'a' && _cChar <= 'z')));
+
+    }
+    //------------------------------------------------------------------
+    void OSQLNameEdit::Modify()
+    {
+        XubString sSavedValue = GetSavedValue();
+        XubString sText = GetText();
+        xub_StrLen nMatch = 0;//sText.Search(sSavedValue);
+        for(xub_StrLen i=nMatch;i < sText.Len();++i)
         {
-            const KeyEvent *pEvt = rNEvt.GetKeyEvent();
-            if( Edit::IsCharInput(*pEvt))
+            if(!isCharOk(sText.GetBuffer()[i],i == 0,m_bOnlyUpperCase,m_sAllowedChars))
             {
-                XubString sText = GetText();
-                if( sText.Len() == 0)
-                {
-                    if(m_bOnlyUpperCase)
-                    {
-                        if(!(pEvt->GetCharCode() >= 'A' && pEvt->GetCharCode() <= 'Z'   ||
-                            pEvt->GetCharCode() == '_'                                  ||
-                            m_sAllowedChars.indexOf(pEvt->GetCharCode()) != -1) )
-                            return 1; // return 1 when the char is not a valid sql starting char
-                    }
-                    else if(!(pEvt->GetCharCode() >= 'a' && pEvt->GetCharCode() <= 'z'  ||
-                        pEvt->GetCharCode() >= 'A' && pEvt->GetCharCode() <= 'Z'    ||
-                        pEvt->GetCharCode() == '_'                                  ||
-                        m_sAllowedChars.indexOf(pEvt->GetCharCode()) != -1) )
-                        return 1; // return 1 when the char is not a valid sql starting char
-                }
-                else
-                {
-                    if(m_bOnlyUpperCase)
-                    {
-                        if(!(pEvt->GetCharCode() >= 'A' && pEvt->GetCharCode() <= 'Z'   ||
-                            pEvt->GetCharCode() >= '0' && pEvt->GetCharCode() <= '9'    ||
-                            pEvt->GetCharCode() == '_'                                  ||
-                            m_sAllowedChars.indexOf(pEvt->GetCharCode()) != -1) )
-                            return 1; // return 1 when the char is not a valid sql starting char
-                    }
-                    else if(!(pEvt->GetCharCode() >= 'a' && pEvt->GetCharCode() <= 'z'  ||
-                        pEvt->GetCharCode() >= 'A' && pEvt->GetCharCode() <= 'Z'    ||
-                        pEvt->GetCharCode() >= '0' && pEvt->GetCharCode() <= '9'    ||
-                        pEvt->GetCharCode() == '_'                                  ||
-                        m_sAllowedChars.indexOf(pEvt->GetCharCode()) != -1) )
-                        return 1; // return 1 when the char is not a valid sql starting char
-                }
+                sSavedValue += sText.Copy(nMatch,i-nMatch);
+                SetText(sSavedValue);
+                break;
             }
         }
-        return Edit::PreNotify(rNEvt);
+        SaveValue();
+        Edit::Modify();
     }
 }
 // -----------------------------------------------------------------------------

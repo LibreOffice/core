@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SqlNameEdit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-20 08:15:22 $
+ *  last change: $Author: oj $ $Date: 2001-03-27 13:04:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,9 @@ namespace dbaui
         }
 
         // Window overload
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        //  virtual long PreNotify( NotifyEvent& rNEvt );
+        // Edit
+        virtual void Modify();
     };
 
 }
