@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-21 07:34:53 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 07:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,16 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
 #endif
 #ifndef _RTL_OUSTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #ifndef _NEONURI_HXX_
@@ -105,13 +110,14 @@ NeonUri::NeonUri( const ne_uri * inUri )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
     char * uri = ne_uri_unparse( inUri );
+
     if ( uri == 0 )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
     init( rtl::OString( uri ), inUri );
-    calculateURI();
-
     free( uri );
+
+    calculateURI();
 }
 
 NeonUri::NeonUri( const rtl::OUString & inUri )
@@ -131,9 +137,9 @@ NeonUri::NeonUri( const rtl::OUString & inUri )
     }
 
     init( theInputUri, &theUri );
-    calculateURI();
-
     ne_uri_free( &theUri );
+
+    calculateURI();
 }
 
 void NeonUri::init( const rtl::OString & rUri, const ne_uri * pUri )
@@ -172,18 +178,31 @@ NeonUri::~NeonUri( )
 
 void NeonUri::calculateURI ()
 {
-    mURI = mScheme;
-    mURI += rtl::OUString::createFromAscii ("://");
-    if (mUserInfo.getLength() > 0)
+    rtl::OUStringBuffer aBuf( mScheme );
+    aBuf.appendAscii( "://" );
+    if ( mUserInfo.getLength() > 0 )
     {
         //TODO! differentiate between empty and missing userinfo
-        mURI += mUserInfo;
-        mURI += rtl::OUString::createFromAscii ("@");
+        aBuf.append( mUserInfo );
+        aBuf.appendAscii( "@" );
     }
-    mURI += mHostName;
-    mURI += rtl::OUString::createFromAscii (":");
-    mURI += rtl::OUString::valueOf (mPort);
-    mURI += mPath;
+    // Is host a numeric IPv6 address?
+    if ( ( mHostName.indexOf( ':' ) != -1 ) &&
+         ( mHostName[ 0 ] != sal_Unicode( '[' ) ) )
+    {
+        aBuf.appendAscii( "[" );
+        aBuf.append( mHostName );
+        aBuf.appendAscii( "]" );
+    }
+    else
+    {
+        aBuf.append( mHostName );
+    }
+    aBuf.appendAscii( ":" );
+    aBuf.append( rtl::OUString::valueOf( mPort ) );
+    aBuf.append( mPath );
+
+    mURI = aBuf.makeStringAndClear();
 }
 
 ::rtl::OUString NeonUri::GetPathBaseName () const
@@ -256,12 +275,26 @@ rtl::OUString NeonUri::unescape( const rtl::OUString& segment )
 rtl::OUString NeonUri::makeConnectionEndPointString(
                                 const rtl::OUString & rHostName, int nPort )
 {
-    rtl::OUString aServer( rHostName );
+    rtl::OUStringBuffer aBuf;
+
+    // Is host a numeric IPv6 address?
+    if ( ( rHostName.indexOf( ':' ) != -1 ) &&
+         ( rHostName[ 0 ] != sal_Unicode( '[' ) ) )
+    {
+        aBuf.appendAscii( "[" );
+        aBuf.append( rHostName );
+        aBuf.appendAscii( "]" );
+    }
+    else
+    {
+        aBuf.append( rHostName );
+    }
+
     if ( ( nPort != DEFAULT_HTTP_PORT ) && ( nPort != DEFAULT_HTTPS_PORT ) )
     {
-        aServer += rtl::OUString::createFromAscii( ":" );
-        aServer += rtl::OUString::valueOf( sal_Int32( nPort ) );
+        aBuf.appendAscii( ":" );
+        aBuf.append( rtl::OUString::valueOf( sal_Int32( nPort ) ) );
     }
-    return aServer;
+    return aBuf.makeStringAndClear();
 }
 
