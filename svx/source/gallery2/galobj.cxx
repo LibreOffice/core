@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-07 08:43:31 $
+ *  last change: $Author: ka $ $Date: 2001-11-14 12:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <svtools/itempool.hxx>
 #include "fmmodel.hxx"
 #include "fmview.hxx"
+#include "fmpage.hxx"
 #include "gallery.hrc"
 #include "galmisc.hxx"
 #include "galobj.hxx"
@@ -119,29 +120,14 @@ BOOL SgaObject::CreateThumb( const Graphic& rGraphic )
     }
     else if( rGraphic.GetType() == GRAPHIC_GDIMETAFILE )
     {
-        const Size aMtfSize( rGraphic.GetPrefSize() );
+        const Size aSize( S_THUMB, S_THUMB );
 
-        if( aMtfSize.Width() && aMtfSize.Height() )
+        aThumbBmp = rGraphic.GetBitmap( &aSize );
+
+        if( !aThumbBmp.IsEmpty() )
         {
-            VirtualDevice*  pVDev = new VirtualDevice;
-            Size            aVSize( S_THUMB, S_THUMB );
-            Point           aVPos;
-            Size            aLogSize;
-            const double    fFactor  = (double) aMtfSize.Width() / aMtfSize.Height();
-            const Size      aNewSize((USHORT)(fFactor < 1. ? S_THUMB * fFactor : S_THUMB),
-                                     (USHORT)(fFactor < 1. ? S_THUMB : S_THUMB / fFactor));
-
-            pVDev->SetOutputSizePixel( aNewSize );
-            rGraphic.Draw( pVDev, aVPos, aNewSize );
-
-            aThumbBmp = pVDev->GetBitmap( aVPos, aNewSize );
-            delete pVDev;
-
-            if( !!aThumbBmp )
-            {
-                aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
-                bRet = TRUE;
-            }
+            aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
+            bRet = TRUE;
         }
     }
 
@@ -433,31 +419,67 @@ BOOL SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
     ImageMap    aImageMap;
     BOOL        bRet = FALSE;
 
-    // Falls das Draw-Objekt nur eine Graphik enthaelt,
-    // erzeugen wir mit dieser den Thumb
     if ( CreateIMapGraphic( rModel, aGraphic, aImageMap ) )
         bRet = SgaObject::CreateThumb( aGraphic );
     else
     {
-        VirtualDevice   aVDev;
-        GDIMetaFile     aMtf;
+        VirtualDevice aVDev;
 
-        aVDev.SetMapMode( MapMode( MAP_100TH_MM ) );
-        FmFormView aView( &(FmFormModel&) rModel, &aVDev );
+        aVDev.SetOutputSizePixel( Size( S_THUMB, S_THUMB ) );
 
-        aView.SetMarkHdlHidden( TRUE );
-        aView.ShowPagePgNum( 0, Point() );
-        aView.MarkAll();
-
-        const Graphic   aGraphic( aView.GetAllMarkedGraphic() );
-        const Size      aMtfSize( aGraphic.GetPrefSize() );
-        const double    fFactor  = (double) aMtfSize.Width() / aMtfSize.Height();
-
-        if( fFactor != 0.0 )
+        if( bRet = DrawCentered( &aVDev, rModel ) )
         {
-            const Size aNewSize( fFactor < 1. ? S_THUMB * fFactor : S_THUMB, fFactor < 1. ? S_THUMB : S_THUMB / fFactor );
-            aThumbBmp = aGraphic.GetBitmap( &aNewSize );
+            aThumbBmp = aVDev.GetBitmap( Point(), aVDev.GetOutputSizePixel() );
             aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
+        }
+    }
+
+    return bRet;
+}
+
+// ------------------------------------------------------------------------
+
+BOOL SgaObjectSvDraw::DrawCentered( OutputDevice* pOut, const FmFormModel& rModel )
+{
+    const FmFormPage*   pPage = static_cast< const FmFormPage* >( rModel.GetPage( 0 ) );
+    BOOL                bRet = FALSE;
+
+    if( pOut && pPage )
+    {
+        const Rectangle aObjRect( pPage->GetAllObjBoundRect() );
+        const Size      aOutSizePix( pOut->GetOutputSizePixel() );
+
+        if( aObjRect.GetWidth() && aObjRect.GetHeight() && aOutSizePix.Width() > 2 && aOutSizePix.Height() > 2 )
+        {
+            FmFormView      aView( const_cast< FmFormModel* >( &rModel ), pOut );
+            MapMode         aMap( rModel.GetScaleUnit() );
+            Rectangle       aDrawRectPix( Point( 1, 1 ), Size( aOutSizePix.Width() - 2, aOutSizePix.Height() - 2 ) );
+            const double    fFactor  = (double) aObjRect.GetWidth() / aObjRect.GetHeight();
+            Fraction        aFrac( FRound( fFactor < 1. ? aDrawRectPix.GetWidth() * fFactor : aDrawRectPix.GetWidth() ),
+                                   pOut->LogicToPixel( aObjRect.GetSize(), aMap ).Width() );
+
+            aMap.SetScaleX( aFrac );
+            aMap.SetScaleY( aFrac );
+
+            const Size aDrawSize( pOut->PixelToLogic( aDrawRectPix.GetSize(), aMap ) );
+            Point aOrigin( pOut->PixelToLogic( aDrawRectPix.TopLeft(), aMap ) );
+
+            aOrigin.X() += ( ( aDrawSize.Width() - aObjRect.GetWidth() ) >> 1 ) - aObjRect.Left();
+            aOrigin.Y() += ( ( aDrawSize.Height() - aObjRect.GetHeight() ) >> 1 ) - aObjRect.Top();
+            aMap.SetOrigin( aOrigin );
+
+            aView.SetPageVisible( FALSE );
+            aView.SetBordVisible( FALSE );
+            aView.SetGridVisible( FALSE );
+            aView.SetHlplVisible( FALSE );
+            aView.SetGlueVisible( FALSE );
+
+            pOut->Push();
+            pOut->SetMapMode( aMap );
+            aView.ShowPage( const_cast< FmFormPage* >( pPage ), Point() );
+            aView.InitRedraw( pOut, Rectangle( pOut->PixelToLogic( Point() ), pOut->GetOutputSize() ) );
+            pOut->Pop();
+
             bRet = TRUE;
         }
     }
