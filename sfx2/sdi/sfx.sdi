@@ -41,10 +41,10 @@ SfxVoidItem AddBookmark SID_CREATELINK
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -69,10 +69,10 @@ SfxVoidItem BrowseBackward SID_BROWSE_BACKWARD
     SlotType = SfxStringItem
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_NAVIGATOR;
 ]
 
@@ -97,10 +97,10 @@ SfxVoidItem BrowseForward SID_BROWSE_FORWARD
     SlotType = SfxStringItem
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_NAVIGATOR;
 ]
 
@@ -225,10 +225,10 @@ SfxVoidItem CreateBookmark SID_EXPLORER_CREATEBOOKMARK
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -250,10 +250,10 @@ SfxVoidItem CreateDatabase SID_EXPLORER_CREATEDATABASE
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -275,10 +275,10 @@ SfxVoidItem CreateFolder SID_EXPLORER_CREATEFOLDER
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -300,10 +300,10 @@ SfxVoidItem CreateFtpServer SID_EXPLORER_CREATEFTPSERVER
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -325,10 +325,10 @@ SfxVoidItem CreateGallery SID_EXPLORER_CREATEGALLERY
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -350,10 +350,10 @@ SfxVoidItem CreateIMapAccount SID_EXPLORER_CREATEIMAPACCOUNT
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -375,10 +375,10 @@ SfxVoidItem CreateLink SID_EXPLORER_CREATELINK
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -425,10 +425,10 @@ SfxVoidItem CreateNewsServer SID_EXPLORER_CREATENEWS
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -450,10 +450,10 @@ SfxVoidItem CreateOuttray SID_EXPLORER_CREATEOUTTRAY
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -475,10 +475,10 @@ SfxVoidItem CreatePOP3Account SID_EXPLORER_CREATEPOP3ACCOUNT
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -500,10 +500,10 @@ SfxVoidItem CreateSearchFolder SID_EXPLORER_CREATESEARCHFOLDER
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -525,10 +525,10 @@ SfxVoidItem CreateWorkplace SID_EXPLORER_CREATEWORKPLACE
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -627,10 +627,10 @@ SfxBoolItem IsDesktop SID_EXPLORER_ISDESKTOP
 
     Readonly = FALSE,
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -653,10 +653,10 @@ SfxBoolItem ExplorerDetails SID_EXPLORER_DETAILS
 
     Readonly = FALSE,
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -679,10 +679,10 @@ SfxBoolItem ExplorerDocinfo SID_EXPLORER_DOCINFO
 
     Readonly = FALSE,
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -730,10 +730,10 @@ SfxBoolItem FocusBeamer SID_FOCUS_BEAMER
 
     Readonly = FALSE,
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -756,10 +756,10 @@ SfxBoolItem FocusExplorer SID_FOCUS_EXPLORER
 
     Readonly = FALSE,
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -809,10 +809,10 @@ SfxVoidItem ImportBmkFile SID_EXPLORER_IMPORTBOOKMARKS
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -834,10 +834,10 @@ SfxVoidItem MakeExplorerRoot SID_EXPLORER_MAKEROOT
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -886,10 +886,10 @@ SfxBoolItem MultiQuickSearch SID_EXPLORER_MULTIQUICKSEARCH
 
     Readonly = FALSE,
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -1119,10 +1119,10 @@ SfxVoidItem SwitchToPrevLevel SID_EXPLORER_PREVLEVEL
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -1219,10 +1219,10 @@ SfxVoidItem Properties SID_PROPERTIES
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -1510,10 +1510,10 @@ SfxBoolItem ExplorerSearch SID_EXPLORER_SEARCH_DLG
 
     Readonly = FALSE,
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -1561,10 +1561,10 @@ SfxVoidItem SearchOriginal SID_EXPLORER_SEARCHORIGINAL
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -1640,7 +1640,7 @@ SfxStringItem ExplorerSelectionSize SID_EXPLORER_SELECTIONSIZE
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
-    StatusBarConfig = TRUE,
+    StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
@@ -1663,10 +1663,10 @@ SfxVoidItem SetAsBookmarkDir SID_EXPLORER_MAKEBMKDIR
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -1743,10 +1743,10 @@ SfxBoolItem ExplorerSymbols SID_EXPLORER_ICONS
 
     Readonly = FALSE,
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -1768,10 +1768,10 @@ SfxVoidItem SyncExplorer SID_SYNCEXPLORER
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -1934,10 +1934,10 @@ SfxVoidItem HelpDownload SID_HELP_DOWNLOAD
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -3962,10 +3962,10 @@ SfxVoidItem InternetUpdate SID_INTERNET_UPDATE
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -4057,10 +4057,10 @@ SfxBoolItem MailWindow SID_MAIL_CHILDWIN
 
     Readonly = FALSE,
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
 ]
 
@@ -5156,10 +5156,10 @@ SfxVoidItem HelpZoomIn SID_HELP_ZOOMIN
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -5179,10 +5179,10 @@ SfxVoidItem HelpZoomOut SID_HELP_ZOOMOUT
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -5326,7 +5326,7 @@ SfxStringItem GetActiveTask SID_TOPDOC
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -5369,10 +5369,10 @@ SfxVoidItem HelpAnnotate SID_HELP_ANNOTATE
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -5392,10 +5392,10 @@ SfxVoidItem HelpBookmark SID_HELP_BOOKMARK
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -5507,10 +5507,10 @@ SfxVoidItem HelpIndex SID_HELP_INDEX
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -5964,10 +5964,10 @@ SfxBoolItem InternetOnline SID_INTERNET_ONLINE
 
     Readonly = FALSE,
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -6763,10 +6763,10 @@ SfxVoidItem MailNotifyReset SID_MAIL_NOTIFY_RESET
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
@@ -7024,7 +7024,7 @@ SfxVoidItem FocusUrlBox SID_FOCUSURLBOX
     SlotType = SfxStringItem
 
     /* config: */
-    AccelConfig = TRUE,
+    AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -7330,10 +7330,10 @@ SfxVoidItem ClearMemCache SID_CLEARMEMCACHE
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_OPTIONS;
 ]
 
@@ -7517,10 +7517,10 @@ SfxVoidItem Close SID_CLOSEDOCS
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_APPLICATION;
 ]
 
@@ -9120,10 +9120,10 @@ SfxVoidItem HelpSearch SID_HELP_SEARCH
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
 
