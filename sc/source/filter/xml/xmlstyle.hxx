@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-03 14:46:23 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 21:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,20 +225,30 @@ class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP
     ScXMLExport& rScXMLExport;
 
     virtual void exportStyleAttributes(
+#if SUPD < 650
             SvXMLAttributeList& rAttrList,
+#endif
             sal_Int32 nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
-            const SvXMLExportPropertyMapper& rPropExp,
-            const SvXMLUnitConverter& rUnitConverter,
-            const SvXMLNamespaceMap& rNamespaceMap) const;
+            const SvXMLExportPropertyMapper& rPropExp
+#if SUPD < 650
+            , const SvXMLUnitConverter& rUnitConverter,
+            const SvXMLNamespaceMap& rNamespaceMap
+#endif
+            ) const;
 
     virtual void exportStyleContent(
+#if SUPD < 650
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+#endif
             sal_Int32 nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
-            const SvXMLExportPropertyMapper& rPropExp,
-            const SvXMLUnitConverter& rUnitConverter,
-            const SvXMLNamespaceMap& rNamespaceMap) const;
+            const SvXMLExportPropertyMapper& rPropExp
+#if SUPD < 650
+            , const SvXMLUnitConverter& rUnitConverter,
+            const SvXMLNamespaceMap& rNamespaceMap
+#endif
+            ) const;
 
 public:
             ScXMLAutoStylePoolP(ScXMLExport& rScXMLExport);

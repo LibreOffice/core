@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-18 12:15:26 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 21:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,14 +457,23 @@ void ScXMLTableExportPropertyMapper::handleSpecialItem(
 }
 
 void ScXMLAutoStylePoolP::exportStyleAttributes(
+#if SUPD < 650
             SvXMLAttributeList& rAttrList,
+#endif
             sal_Int32 nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
-            const SvXMLExportPropertyMapper& rPropExp,
-            const SvXMLUnitConverter& rUnitConverter,
-            const SvXMLNamespaceMap& rNamespaceMap) const
+            const SvXMLExportPropertyMapper& rPropExp
+#if SUPD < 650
+            , const SvXMLUnitConverter& rUnitConverter,
+            const SvXMLNamespaceMap& rNamespaceMap
+#endif
+            ) const
 {
+#if SUPD < 650
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
+#else
+    SvXMLAutoStylePoolP::exportStyleAttributes( nFamily, rProperties, rPropExp );
+#endif
     if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
     {
         ::std::vector< XMLPropertyState >::const_iterator i = rProperties.begin();
@@ -483,9 +492,10 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
                         rtl::OUString sAttrValue = rScXMLExport.getDataStyleName(nNumberFormat);
                         if (sAttrValue.getLength())
                         {
-                            rtl::OUString sAttrName( rNamespaceMap.GetQNameByKey(
-                                aPropMapper->GetEntryNameSpace(i->mnIndex), aPropMapper->GetEntryXMLName(i->mnIndex) ) );
-                            rAttrList.AddAttribute( sAttrName, GetXMLToken(XML_CDATA), sAttrValue );
+                            GetExport().AddAttribute(
+                                aPropMapper->GetEntryNameSpace(i->mnIndex),
+                                aPropMapper->GetEntryXMLName(i->mnIndex),
+                                sAttrValue );
                         }
                     }
                 }
@@ -508,9 +518,10 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
                     rtl::OUString sName;
                     if (i->maValue >>= sName)
                     {
-                        rtl::OUString sAttrName( rNamespaceMap.GetQNameByKey(
-                            aPropMapper->GetEntryNameSpace(i->mnIndex), aPropMapper->GetEntryXMLName(i->mnIndex) ) );
-                        rAttrList.AddAttribute( sAttrName, GetXMLToken(XML_CDATA), sName );
+                        GetExport().AddAttribute(
+                            aPropMapper->GetEntryNameSpace(i->mnIndex),
+                            aPropMapper->GetEntryXMLName(i->mnIndex),
+                            sName );
                     }
                 }
                 break;
@@ -520,14 +531,23 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
 }
 
 void ScXMLAutoStylePoolP::exportStyleContent(
+#if SUPD < 650
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+#endif
         sal_Int32 nFamily,
         const std::vector< XMLPropertyState >& rProperties,
-        const SvXMLExportPropertyMapper& rPropExp,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap ) const
+        const SvXMLExportPropertyMapper& rPropExp
+#if SUPD < 650
+        , const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap
+#endif
+        ) const
 {
+#if SUPD < 650
     SvXMLAutoStylePoolP::exportStyleContent( rHandler, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
+#else
+    SvXMLAutoStylePoolP::exportStyleContent( nFamily, rProperties, rPropExp );
+#endif
     if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
     {
         sal_Bool bNotFound = sal_True;
@@ -635,7 +655,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
 }
 
 ScXMLAutoStylePoolP::ScXMLAutoStylePoolP(ScXMLExport& rTempScXMLExport):
-    SvXMLAutoStylePoolP(),
+    SvXMLAutoStylePoolP(rTempScXMLExport),
     rScXMLExport(rTempScXMLExport)
 {
 }

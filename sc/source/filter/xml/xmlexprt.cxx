@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-19 09:17:59 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 21:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1915,6 +1915,7 @@ void ScXMLExport::_ExportAutoStyles()
                     }
                     pChangeTrackingExportHelper->CollectAutoStyles();
 
+#if SUPD < 650
                     GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN,
                         GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
                     GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_ROW,
@@ -1924,6 +1925,13 @@ void ScXMLExport::_ExportAutoStyles()
                     exportAutoDataStyles();
                     GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_CELL,
                         GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
+#else
+                    GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN);
+                    GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_ROW);
+                    GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE);
+                    exportAutoDataStyles();
+                    GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_CELL);
+#endif
                     GetTextParagraphExport()->exportTextAutoStyles();
 
                     GetShapeExport()->exportAutoStyles();
