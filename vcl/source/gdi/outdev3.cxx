@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 14:29:29 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4648,10 +4648,9 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
         return false;
 
     // calculate rotation offset
-    Point aPoint = aBoundRect.TopLeft();
-    Polygon aPoly( Rectangle( aPoint, aBoundRect.GetSize() ) );
-    aPoly.Rotate( aPoint, mpFontEntry->mnOwnOrientation );
-    aPoint = aPoly.GetBoundRect().TopLeft();
+    Polygon aPoly( aBoundRect );
+    aPoly.Rotate( Point(), mpFontEntry->mnOwnOrientation );
+    Point aPoint = aPoly.GetBoundRect().TopLeft();
     aPoint += Point( nX, nY );
 
     // mask output with text colored bitmap
@@ -5830,40 +5829,10 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     {
         // convert from logical units to font units using a temporary array
         long* pTempDXAry = (long*)alloca( nLength * sizeof(long) );
-
         // using base position for better rounding a.k.a. "dancing characters"
-        if( (nOrientation == 0) || (nOrientation == 1800) )
-        {
-            int nPixelXOfs = ImplLogicWidthToDevicePixel( rLogicalPos.X() );
-            for( int i = 0; i < nLength; ++i )
-                pTempDXAry[i] = ImplLogicWidthToDevicePixel( rLogicalPos.X() + pDXArray[i] ) - nPixelXOfs;
-        }
-        else if( (nOrientation == 900) || (nOrientation == 2700) )
-        {
-            int nPixelYOfs = ImplLogicHeightToDevicePixel( rLogicalPos.Y() );
-            for( int i = 0; i < nLength; ++i )
-                pTempDXAry[i] = ImplLogicHeightToDevicePixel( rLogicalPos.Y() + pDXArray[i] ) - nPixelYOfs;
-        }
-        else
-        {
-            static int nOldOrientation = 0;
-            static double fAbsCos = 1.0, fAbsSin = 0.0;
-            if( nOldOrientation != nOrientation )
-            {
-                nOldOrientation = nOrientation;
-                fAbsCos = fabs( cos( nOrientation*F_PI1800 ) );
-                fAbsSin = fabs( sin( nOrientation*F_PI1800 ) );
-            }
-
-            int nPixelXOfs = ImplLogicWidthToDevicePixel( rLogicalPos.X() );
-            int nPixelYOfs = ImplLogicHeightToDevicePixel( rLogicalPos.Y() );
-            for( int i = 0; i < nLength; ++i )
-            {
-                int nX = ImplLogicWidthToDevicePixel( rLogicalPos.X() + pDXArray[i] ) - nPixelXOfs;
-                int nY = ImplLogicHeightToDevicePixel( rLogicalPos.Y() + pDXArray[i] ) - nPixelYOfs;
-                pTempDXAry[i] = (long)(fAbsCos * nX + fAbsSin * nY + 0.5);
-            }
-        }
+        int nPixelXOfs = ImplLogicWidthToDevicePixel( rLogicalPos.X() );
+        for( int i = 0; i < nLength; ++i )
+            pTempDXAry[i] = ImplLogicWidthToDevicePixel( rLogicalPos.X() + pDXArray[i] ) - nPixelXOfs;
 
         pDXArray = pTempDXAry;
     }
