@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:11:45 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 11:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,11 @@ namespace css = ::com::sun::star;
 
 //_______________________________________________
 // definitions
+
+// Error message in case filter config seems to be corrupted.
+// Note: Dont tell user something about "setup -repair"!
+// Its no longer supported by using native installers ...
+static ::rtl::OUString MESSAGE_CORRUPTED_FILTERCONFIG = ::rtl::OUString::createFromAscii("The filter configuration appears to be defective. Please install the office suite again.");
 
 /*-----------------------------------------------
     15.03.2004 08:59
@@ -933,8 +938,10 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
         sMsg.appendAscii("Could not open configuration file \"");
         sMsg.append     (sPath                                 );
         sMsg.appendAscii("\"."                                 );
-        throw css::uno::Exception(sMsg.makeStringAndClear()                    ,
-                                  css::uno::Reference< css::uno::XInterface >());
+        throw css::document::CorruptedFilterConfigurationException(
+                MESSAGE_CORRUPTED_FILTERCONFIG,
+                css::uno::Reference< css::uno::XInterface >(),
+                sMsg.makeStringAndClear());
     }
 
     /* TODO
@@ -984,10 +991,19 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(const ::rtl::OUString& sDirect
     {
         aValue = xAccess->getByName(sKey);
     }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    #if OSL_DEBUG_LEVEL>0
+    catch(const css::uno::Exception& ex)
+    #else
     catch(const css::uno::Exception&)
-        { aValue.clear(); }
+    #endif
+        {
+            #if OSL_DEBUG_LEVEL > 0
+            OSL_ENSURE(sal_False, ::rtl::OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
+            #endif
+            aValue.clear();
+        }
 
     return aValue;
 }
@@ -1033,10 +1049,15 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
         else
             xCfg = xConfigProvider->createInstanceWithArguments(SERVICE_CONFIGURATIONUPDATEACCESS, lParams.getAsConstList());
     }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
-    catch(const css::uno::Exception&)
-        { xCfg.clear(); }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception& exAny)
+        {
+            throw css::document::CorruptedFilterConfigurationException(
+                MESSAGE_CORRUPTED_FILTERCONFIG,
+                css::uno::Reference< css::uno::XInterface >(),
+                exAny.Message);
+        }
 
     return xCfg;
     // <- SAFE
@@ -1048,11 +1069,6 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
 void FilterCache::impl_validateAndOptimize()
     throw(css::uno::Exception)
 {
-    // Error message in case filter config seems to be corrupted.
-    // Note: Dont tell user something about "setup -repair"!
-    // Its no longer supported by using native installers ...
-    static ::rtl::OUString MESSAGE_CORRUPTED_FILTERCONFIG = ::rtl::OUString::createFromAscii("The filter configuration appears to be defective. Please install the office suite again.");
-
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -1118,7 +1134,7 @@ void FilterCache::impl_validateAndOptimize()
         sal_Int32 ce = lExtensions.getLength();
         sal_Int32 cu = lURLPattern.getLength();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         if (!ce && !cu)
         {
             sLog.appendAscii("Warning\t:\t");
@@ -1171,7 +1187,7 @@ void FilterCache::impl_validateAndOptimize()
                 lTypesForURLPattern.push_back(sType);
         }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 
         // Dont check cross references between types and filters, if
         // not all filters read from disk!
@@ -1206,7 +1222,6 @@ void FilterCache::impl_validateAndOptimize()
                 sLog.append     (sType                                                     );
                 sLog.appendAscii("\" isnt used by any filter, loader or content handler.\n");
                 ++nErrors;
-                continue;
             }
         }
 
@@ -1249,7 +1264,19 @@ void FilterCache::impl_validateAndOptimize()
                 sLog.append     (sFilterTypeReg                     );
                 sLog.appendAscii("\".\n"                            );
                 ++nErrors;
-                continue;
+            }
+
+            sal_Int32 nFlags = 0;
+            aPrefFilter[PROPNAME_FLAGS] >>= nFlags;
+            if ((nFlags & FLAGVAL_IMPORT) != FLAGVAL_IMPORT)
+            {
+                sLog.appendAscii("error\t:\t"                   );
+                sLog.appendAscii("The preferred filter \""      );
+                sLog.append     (sPrefFilter                    );
+                sLog.appendAscii("\" of type \""                );
+                sLog.append     (sType                          );
+                sLog.appendAscii("\" is not an IMPORT filter!\n");
+                ++nErrors;
             }
         }
 #endif
@@ -1552,8 +1579,10 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
         sMsg.appendAscii("could not open config set \"");
         sMsg.append     (sSetName                      );
         sMsg.appendAscii("\""                          );
-        throw css::uno::Exception(sMsg.makeStringAndClear()                    ,
-                                  css::uno::Reference< css::uno::XInterface >());
+        throw css::document::CorruptedFilterConfigurationException(
+                MESSAGE_CORRUPTED_FILTERCONFIG,
+                css::uno::Reference< css::uno::XInterface >(),
+                sMsg.makeStringAndClear());
     }
 
     // get names of all existing sub items of this set
@@ -2255,8 +2284,8 @@ void FilterCache::impl_readOldFormat()
         if (!xCfg.is())
             return;
     }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
     catch(const css::uno::Exception&)
         { return; }
 
