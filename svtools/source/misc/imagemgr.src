@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:15:50 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,14 +178,14 @@ String STR_DESCRIPTION_SOURCEFILE
     Text [ spanish ] = "Código fuente" ;
     Text [ french ] = "Code source" ;
     Text [ dutch ] = "Broncode" ;
-    Text [ chinese_simplified ] = "Ô´´úÂë";
+    Text [ chinese_simplified ] = "Ô´ÎÄ±¾";
     Text [ russian ] = "Èñõîäíûé êîä";
     Text [ polish ] = "Kod Ÿród³owy";
     Text [ japanese ] = "¿°½º°ÄŞ";
     Text [ chinese_traditional ] = "­ì©lÀÉ";
     Text [ arabic ] = "ÇáÔíİÑÉ ÇáãÕÏÑíÉ";
     Text[ dutch ] = "Broncode";
-    Text[ chinese_simplified ] = "Ô´´úÂë";
+    Text[ chinese_simplified ] = "Ô´ÎÄ±¾";
     Text[ greek ] = "Êùäéêüò ğñïİëåõóçò";
     Text[ korean ] = "¼Ò½º ÄÚµå";
     Text[ turkish ] = "Kaynak kod";
@@ -1095,6 +1095,7 @@ String STR_DESCRIPTION_FACTORY_MATH
     Text[ arabic ] = "Formula";
     Text[ catalan ] = "Formula";
 };
+
 
 
 
