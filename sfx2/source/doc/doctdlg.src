@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:24:23 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 21:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ chinese_traditional ] = "¼Ë¦¡(~T)";
         Text[ arabic ] = "ÞæÇáÈ";
         Text[ greek ] = "Ðñüôõðá";
-        Text[ korean ] = "¼­½ÄÆÄÀÏ(~T)";
+        Text[ korean ] = "¼­½Ä ÆÄÀÏ(~T)";
         Text[ turkish ] = "~Þablon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "P~lantillas";
@@ -213,7 +213,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ chinese_traditional ] = "¼Ë¦¡";
         Text[ arabic ] = "ÞæÇáÈ";
         Text[ greek ] = "Ðñüôõðá";
-        Text[ korean ] = "¼­½ÄÆÄÀÏ";
+        Text[ korean ] = "¼­½Ä ÆÄÀÏ";
         Text[ turkish ] = "Þablon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Plantillas";
@@ -305,3 +305,4 @@ ModalDialog DLG_DOC_TEMPLATE
     Text[ catalan ] = "Plantilla de documento";
 };
  // ********************************************************************** EOF
+
