@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 18:02:46 $
+ *  last change: $Author: rt $ $Date: 2000-11-29 11:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1261,7 +1261,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ danish ] = "Før" ;
         Text [ french ] = "A~vant" ;
         Text [ swedish ] = "F~öre" ;
-        Text [ dutch ] = "er~voor" ;
+        Text [ dutch ] = "Er~voor" ;
         Text [ spanish ] = "delan~te" ;
         Text [ english_us ] = "Be~fore" ;
         Group = TRUE ;
@@ -1292,7 +1292,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ danish ] = "Efter" ;
         Text [ french ] = "A~près" ;
         Text [ swedish ] = "Eft~er" ;
-        Text [ dutch ] = "er~achter" ;
+        Text [ dutch ] = "Ern~a" ;
         Text [ spanish ] = "~detrás" ;
         Text [ english_us ] = "~After" ;
         Text[ chinese_simplified ] = "Ö®ºó(~E)";
@@ -1333,7 +1333,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ chinese_traditional ] = "±a­¶­±¼Ë¦¡(~Y)";
         Text[ arabic ] = "ÈäãØ ÕİÍÉ";
         Text[ greek ] = "ìå ğñüôõğï óåëßäáò";
-        Text[ korean ] = "ÆäÀÌÁö À¯Çü°ú(~Y)";
+        Text[ korean ] = "ÆäÀÌÁö À¯Çü°ú ÇÔ²²(~Y)";
         Text[ turkish ] = "Sayfa düzeni ile";
         Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     };
@@ -1427,7 +1427,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ italian ] = "Non separare dal paragrafo seguente." ;
         Text [ spanish ] = "Mantener ~junto al párrafo siguiente" ;
         Text [ french ] = "~Ne pas séparer du paragraphe suivant" ;
-        Text [ dutch ] = "~Met de volgende alinea samenvoegen" ;
+        Text [ dutch ] = "~Alinea's bijeenhouden" ;
         Text [ portuguese ] = "Jun~tar ao parágrafo seguinte" ;
         Text[ chinese_simplified ] = "ºÍÏÂÒ»¶ÎÂä±£³ÖÁ¬½Ó(~K)";
         Text[ russian ] = "Âìåñòå ñî ñëåäóşùèì àáçàöåì";
