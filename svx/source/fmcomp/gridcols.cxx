@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcols.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 07:56:27 $
+ *  last change: $Author: th $ $Date: 2001-05-11 11:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,14 +141,14 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
         nTypeId = TYPE_TEXTFIELD;
     else
     {
-        sal_Int32 nPrefixPos = aModelName.search(aModelPrefix);
-        sal_Int32 nCompatiblePrefixPos = aModelName.search(aCompatibleModelPrefix);
+        sal_Int32 nPrefixPos = aModelName.indexOf(aModelPrefix);
+        sal_Int32 nCompatiblePrefixPos = aModelName.indexOf(aCompatibleModelPrefix);
         DBG_ASSERT( (nPrefixPos != -1) ||   (nCompatiblePrefixPos != -1),
                 "::getColumnTypeByModelName() : wrong servivce !");
 
         ::rtl::OUString aColumnType = (nPrefixPos != -1)
-            ? aModelName.copy(aModelPrefix.len())
-            : aModelName.copy(aCompatibleModelPrefix.len());
+            ? aModelName.copy(aModelPrefix.getLength())
+            : aModelName.copy(aCompatibleModelPrefix.getLength());
 
         const ::comphelper::StringSequence& rColumnTypes = getColumnTypes();
 #if SUPD>583
