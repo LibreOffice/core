@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextConversionOption.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:15:54 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,13 @@ published constants TextConversionOption
 
     /// Ignore post-positional word for Hangul to Hanja conversion
     const long  IGNORE_POST_POSITIONAL_WORD     = 2;    // (1 << 1)
+
+    /** Use Taiwan, HongKong SAR, and Macao SAR character variants for
+        Simplified to Traditionary Chinese conversion
+
+        @since #i29300#
+    */
+    const long  USE_CHARACTER_VARIANTS          = 2;    // (1 << 1)
 };
 
 //=============================================================================
