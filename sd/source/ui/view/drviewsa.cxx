@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-24 15:06:27 $
+ *  last change: $Author: cl $ $Date: 2002-05-21 13:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,18 +465,21 @@ void SdDrawViewShell::Construct(SdDrawDocShell* pDocSh)
     aLayerTab.SetSplitHdl( LINK( this, SdDrawViewShell, TabSplitHdl ) );
 
     aPageBtn.SetImage( Image( Bitmap( SdResId( BMP_TAB_PAGEMODE ) ), IMAGE_STDBTN_COLOR ) );
+    aPageBtn.SetModeImage( Image( Bitmap( SdResId( BMP_TAB_PAGEMODE_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
     aPageBtn.SetClickHdl(LINK(this, SdDrawViewShell, TabModeBtnHdl));
     aPageBtn.SetQuickHelpText( String( SdResId( STR_PAGEMODE ) ) );
     aPageBtn.SetHelpId( HID_SD_BTN_PAGE );
     aPageBtn.Show();
 
     aMasterPageBtn.SetImage( Image( Bitmap( SdResId( BMP_TAB_MASTERPAGE ) ), IMAGE_STDBTN_COLOR ) );
+    aMasterPageBtn.SetModeImage( Image( Bitmap( SdResId( BMP_TAB_MASTERPAGE_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
     aMasterPageBtn.SetClickHdl(LINK(this, SdDrawViewShell, TabModeBtnHdl));
     aMasterPageBtn.SetQuickHelpText( String( SdResId( STR_MASTERPAGEMODE ) ) );
     aMasterPageBtn.SetHelpId( HID_SD_BTN_MASTERPAGE );
     aMasterPageBtn.Show();
 
     aLayerBtn.SetImage( Image( Bitmap( SdResId( BMP_TAB_LAYERMODE ) ), IMAGE_STDBTN_COLOR ) );
+    aLayerBtn.SetModeImage( Image( Bitmap( SdResId( BMP_TAB_LAYERMODE_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
     aLayerBtn.SetClickHdl(LINK(this, SdDrawViewShell, TabModeBtnHdl));
     aLayerBtn.SetQuickHelpText( String( SdResId( STR_LAYERMODE ) ) );
     aLayerBtn.SetHelpId( HID_SD_BTN_LAYER );
