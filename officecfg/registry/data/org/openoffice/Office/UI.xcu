@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcu,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:42:14 $
+ *  last change: $Author: rt $ $Date: 2004-11-17 08:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
                         <value xml:lang="en-US">Text documents</value>
                     </prop>
                     <prop oor:name="Filters">
-                        <value oor:separator=";">HTML (StarWriter);MS WinWord 2.x (W4W);MS WinWord 6.0;MS Word 95;MS Word 95 Vorlage;MS Word 97;MS Word 97 Vorlage;StarOffice XML (Writer);StarWriter 3.0;StarWriter 3.0 Vorlage/Template;StarWriter 4.0;StarWriter 4.0 Vorlage/Template;StarWriter 5.0;StarWriter 5.0 Vorlage/Template;writer_StarOffice_XML_Writer_Template;Text;WordPerfect</value>
+                                                <value oor:separator=";">HTML (StarWriter);MS WinWord 2.x (W4W);MS WinWord 6.0;MS Word 95;MS Word 95 Vorlage;MS Word 97;MS Word 97 Vorlage;StarOffice XML (Writer);StarWriter 3.0;StarWriter 3.0 Vorlage/Template;StarWriter 4.0;StarWriter 4.0 Vorlage/Template;StarWriter 5.0;StarWriter 5.0 Vorlage/Template;writer_StarOffice_XML_Writer_Template;Text;WordPerfect;writer8;writer8_template</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">
@@ -79,7 +79,7 @@
                         <value xml:lang="en-US">Spreadsheets</value>
                     </prop>
                     <prop oor:name="Filters">
-                        <value oor:separator=";">StarCalc 1.0;StarCalc 3.0;StarCalc 4.0;StarCalc 5.0;StarCalc 3.0 Vorlage/Template;StarCalc 4.0 Vorlage/Template;StarCalc 5.0 Vorlage/Template;MS Excel 97;MS Excel 97 Vorlage/Template;MS Excel 95;MS Excel 5.0/95;MS Excel 4.0;MS Excel 95 Vorlage/Template;;MS Excel 4.0 Vorlage/Template;StarOffice XML (Calc);calc_StarOffice_XML_Calc_Template;Text - txt - csv (StarCalc)</value>
+                                                <value oor:separator=";">StarCalc 1.0;StarCalc 3.0;StarCalc 4.0;StarCalc 5.0;StarCalc 3.0 Vorlage/Template;StarCalc 4.0 Vorlage/Template;StarCalc 5.0 Vorlage/Template;MS Excel 97;MS Excel 97 Vorlage/Template;MS Excel 95;MS Excel 5.0/95;MS Excel 4.0;MS Excel 95 Vorlage/Template;;MS Excel 4.0 Vorlage/Template;StarOffice XML (Calc);calc_StarOffice_XML_Calc_Template;Text - txt - csv (StarCalc);calc8;calc8_template</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
@@ -88,7 +88,7 @@
                         <value xml:lang="en-US">Presentations</value>
                     </prop>
                     <prop oor:name="Filters">
-                        <value oor:separator=";">impress_StarOffice_XML_Draw;impress_StarOffice_XML_Impress_Template;MS PowerPoint 97;MS PowerPoint 97 Vorlage;StarImpress 4.0;StarImpress 4.0 Vorlage;StarImpress 5.0;StarImpress 5.0 (packed);StarImpress 5.0 Vorlage;StarOffice XML (Impress)</value>
+                                                <value oor:separator=";">impress_StarOffice_XML_Draw;impress_StarOffice_XML_Impress_Template;MS PowerPoint 97;MS PowerPoint 97 Vorlage;StarImpress 4.0;StarImpress 4.0 Vorlage;StarImpress 5.0;StarImpress 5.0 (packed);StarImpress 5.0 Vorlage;StarOffice XML (Impress);impress8;impress8_template</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace">
@@ -97,7 +97,7 @@
                         <value xml:lang="en-US">Drawings</value>
                     </prop>
                     <prop oor:name="Filters">
-                        <value oor:separator=";">draw_StarOffice_XML_Draw_Template;SGV - StarDraw 2.0;StarDraw 3.0;StarDraw 3.0 Vorlage;StarDraw 5.0;StarDraw 5.0 Vorlage;StarOffice XML (Draw)</value>
+                                                <value oor:separator=";">draw_StarOffice_XML_Draw_Template;SGV - StarDraw 2.0;StarDraw 3.0;StarDraw 3.0 Vorlage;StarDraw 5.0;StarDraw 5.0 Vorlage;StarOffice XML (Draw);draw8;draw8_template</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.text.WebDocument" oor:op="replace">
@@ -106,7 +106,7 @@
                         <value xml:lang="en-US">Web pages</value>
                     </prop>
                     <prop oor:name="Filters">
-                        <value oor:separator=";">HTML;StarWriter/Web 4.0 Vorlage/Template;StarWriter/Web 5.0 Vorlage/Template;writer_web_StarOffice_XML_Writer_Web_Template</value>
+                                                <value oor:separator=";">HTML;StarWriter/Web 4.0 Vorlage/Template;StarWriter/Web 5.0 Vorlage/Template;writer_web_StarOffice_XML_Writer_Web_Template;writerweb8_writer_template</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace">
@@ -115,7 +115,7 @@
                         <value xml:lang="en-US">Master documents</value>
                     </prop>
                     <prop oor:name="Filters">
-                        <value oor:separator=";">StarWriter 4.0 (StarWriter/GlobalDocument)/GlobalDocument;StarWriter 5.0 (StarWriter/GlobalDocument)/GlobalDocument;writer_globaldocument_StarOffice_XML_Writer_GlobalDocument</value>
+                                                <value oor:separator=";">StarWriter 4.0 (StarWriter/GlobalDocument)/GlobalDocument;StarWriter 5.0 (StarWriter/GlobalDocument)/GlobalDocument;writer_globaldocument_StarOffice_XML_Writer_GlobalDocument;writerglobal8</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.formula.FormularProperties" oor:op="replace">
@@ -124,7 +124,7 @@
                         <value xml:lang="en-US">Formulas</value>
                     </prop>
                     <prop oor:name="Filters">
-                        <value oor:separator=";">MathML XML (Math);MathType 3.x;StarMath 2.0;StarMath 3.0;StarMath 4.0;StarMath 5.0;StarOffice XML (Math)</value>
+                                                <value oor:separator=";">MathML XML (Math);MathType 3.x;StarMath 2.0;StarMath 3.0;StarMath 4.0;StarMath 5.0;StarOffice XML (Math);math8</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.sdb.DatabaseDocument" oor:op="replace">
