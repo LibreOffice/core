@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:40:45 $
+ *  last change: $Author: vg $ $Date: 2003-07-23 08:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,8 +585,10 @@ int Export::Execute( int nToken, char * pToken )
                 // cur. line has macro line end
                 ByteString sTmpLine( sToken );
                 sTmpLine.EraseAllChars( '\t' ); sTmpLine.EraseAllChars( ' ' );
-                if ( sTmpLine.GetChar(( USHORT )( sTmpLine.Len() - 1 )) != '\\' )
-                    bNextMustBeDefineEOL = TRUE;
+                if( sTmpLine.Len() < 0 ){
+                    if ( sTmpLine.GetChar(( USHORT )( sTmpLine.Len() - 1 )) != '\\' )
+                        bNextMustBeDefineEOL = TRUE;
+                }
             }
         }
     }
