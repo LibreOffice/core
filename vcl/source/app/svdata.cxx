@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obr $ $Date: 2002-10-10 09:03:21 $
+ *  last change: $Author: obr $ $Date: 2002-11-20 15:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,13 +363,11 @@ bool ImplInitAccessBridge()
             {
                 ResMgr *pResMgr = ImplGetResMgr();
 
-                String aTitle(ResId(SV_ACCESSERROR_MISSING_JAVA, pResMgr));
-                String aMessage(ResId(SV_ACCESSERROR_MISSING_JAVA_MSG, pResMgr));
-
-                ::std::list< String > aButtonList;
-                aButtonList.push_back(String(ResId(SV_BUTTONTEXT_OK, pResMgr)));
-
-                ImplShowNativeDialog(aTitle, aMessage, aButtonList);
+                ImplShowNativeMessageBox(
+                    String(ResId(SV_ACCESSERROR_MISSING_JAVA, pResMgr)),
+                    String(ResId(SV_ACCESSERROR_MISSING_JAVA_MSG, pResMgr)),
+                    SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_ABORT_RETRY_IGNORE,
+                    SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE);
             }
         }
 
@@ -396,10 +394,11 @@ bool ImplInitAccessBridge()
 
                 if( aTitle.Len() != 0 )
                 {
-                    ::std::list< String > aButtonList;
-                    aButtonList.push_back(String(ResId(SV_BUTTONTEXT_OK, pResMgr)));
-
-                    ImplShowNativeDialog(aTitle, aMessage, aButtonList);
+                    ImplShowNativeMessageBox(
+                        aTitle,
+                        aMessage,
+                        SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_ABORT_RETRY_IGNORE,
+                        SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE);
                 }
             }
         }
