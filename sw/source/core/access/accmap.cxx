@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-27 12:34:44 $
+ *  last change: $Author: mib $ $Date: 2002-05-27 15:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,11 @@ static sal_Bool AreInSameTable( const Reference< XAccessible >& rAcc,
 void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
 {
     ::vos::ORef < SwAccessibleContext > xAccImpl( rEvent.GetContext() );
-    if( xAccImpl.isValid() )
+    if( SwAccessibleEvent_Impl::SHAPE_SELECTION == rEvent.GetType() )
+    {
+        DoInvalidateShapeSelection();
+    }
+    else if( xAccImpl.isValid() && xAccImpl->GetFrm() )
     {
         switch( rEvent.GetType() )
         {
@@ -575,9 +579,6 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
         case SwAccessibleEvent_Impl::CHILD_POS_CHANGED:
             xAccImpl->InvalidateChildPosOrSize( rEvent.GetFrmOrObj(),
                                        rEvent.GetOldBox() );
-            break;
-        case SwAccessibleEvent_Impl::SHAPE_SELECTION:
-            DoInvalidateShapeSelection();
             break;
         case SwAccessibleEvent_Impl::DISPOSE:
             ASSERT( xAccImpl.isValid(),
