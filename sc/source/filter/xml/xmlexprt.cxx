@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-15 17:26:30 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 15:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,7 @@ sal_Int16 ScXMLExport::GetFieldUnit()
 
 
 ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
-    SvXMLExport( SvXMLUnitConverter::GetMapUnit(GetFieldUnit()), sXML_spreadsheet, nExportFlag ),
+    SvXMLExport( SvXMLUnitConverter::GetMapUnit(GetFieldUnit()), XML_SPREADSHEET, nExportFlag ),
     pDoc(NULL),
     mbShowProgress( sal_False ),
     pSharedData(NULL),
