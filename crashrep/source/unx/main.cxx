@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 11:05:23 $
+ *  last change: $Author: rt $ $Date: 2004-06-02 14:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1046,7 +1046,11 @@ static void read_settings_from_environment( hash_map< string, string >& rSetting
 
     strEnv = get_environment_string( "ERRORREPORT_RETURNADDRESS" );
     if ( strEnv.length() )
+    {
         rSettings[ "EMAIL" ] = strEnv;
+        rSettings[ "CONTACT" ] = "true";
+    }
+
 
     strEnv = get_environment_string( "ERRORREPORT_HTTPPROXYSERVER" );
     if ( strEnv.length() )
@@ -1056,17 +1060,17 @@ static void read_settings_from_environment( hash_map< string, string >& rSetting
     if ( strEnv.length() )
         rSettings[ "PORT" ] = strEnv;
 
-    rSettings[ "USEPROXY" ] =
-        0 == strcasecmp( get_environment_string( "ERRORREPORT_HTTPCONNECTIONTYPE" ).c_str(), "MANUALPROXY" ) ?
-        "true" : "false";
-
-    rSettings[ "CONTACT" ] = rSettings.find( "EMAIL" )->second.length() ? "true" : "false";
+    strEnv = get_environment_string( "ERRORREPORT_HTTPCONNECTIONTYPE" );
+    if ( strEnv.length() )
+        rSettings[ "USEPROXY" ] = 0 == strcasecmp( strEnv.c_str(), "MANUALPROXY" ) ? "true" : "false";
 
     strEnv = get_environment_string( "ERRORREPORT_BODYFILE" );
     if ( strEnv.length() )
         rSettings[ "DESCRIPTION" ] = read_from_file( strEnv );
 
-    rSettings[ "TITLE" ] = get_environment_string( "ERRORREPORT_SUBJECT" );
+    strEnv = get_environment_string( "ERRORREPORT_SUBJECT" );
+    if ( strEnv.length() )
+        rSettings[ "TITLE" ] = strEnv;
 }
 
 static bool setup_version()
