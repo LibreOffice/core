@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PaneDockingWindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:14:02 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,15 +308,18 @@ void PaneDockingWindow::InitializeTitleToolBox (void)
 
 USHORT PaneDockingWindow::AddMenu (
     const String& rsMenuName,
+    ULONG nHelpId,
     const Link& rCallback)
 {
     // Add the menu before the closer button.
     int nItemCount (mpTitleToolBox->GetItemCount());
+    USHORT nItemId = nItemCount+1;
     mpTitleToolBox->InsertItem (
-        nItemCount+1,
+        nItemId,
         rsMenuName,
         TIB_DROPDOWN,
         nItemCount-1);
+    mpTitleToolBox->SetHelpId( nItemId, nHelpId );
     mpTitleToolBox->SetClickHdl (rCallback);
     mpTitleToolBox->SetDropdownClickHdl (rCallback);
 
