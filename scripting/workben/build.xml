@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-02-06 18:19:51 $
+#   last change: $Author: npower $ $Date: 2003-02-12 09:50:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,6 +146,26 @@
     <copy file="${prj}/examples/java/MemoryUsageParcel.xml" tofile="${out}/class/examples/java/MemoryUsage/parcel-descriptor.xml"/>
     <copy file="${prj}/examples/java/MemoryUsage.java" todir="${out}/class/examples/java/MemoryUsage/"/>
     <copy file="${prj}/examples/java/ExampleSpreadSheet.sxc" todir="${out}/class/examples/java/MemoryUsage/"/>
+
+    <mkdir dir="${out}/class/examples/java/EventHelper"/>
+    <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/java/EventHelper/"
+              includes="**/EventHelper.java" classpathref="idlclasspath"
+       debug="${debug}" optimize="${optimize}" deprecation="on"/>
+    <copy todir="${out}/class/examples/java/EventHelper/">
+        <fileset dir="${prj}/examples/java/">
+            <include name="**/EventHelper.java"/>
+        </fileset>
+    </copy>
+    <copy file="${prj}/examples/java/EventHelperParcel.xml" tofile="${out}/class/examples/java/EventHelper/parcel-descriptor.xml"/>
+    <jar jarfile="${out}/class/examples/java/EventHelper/EventHelper.jar"
+        basedir="${out}/class/examples/java/EventHelper"
+        includes="**/*.java,**/*.class,**/*.xml"
+        excludes="${out}/class/examples/java/EventHelper/EventHelper.jar">
+        <manifest>
+            <attribute name="Built-By" value="Sun Microsystems"/>
+            <attribute name="ScriptFramework-Version" value="${sfversion}"/>
+        </manifest>
+    </jar>
     <mkdir dir="${out}/class/examples/beanshell"/>
     <copy todir="${out}/class/examples/beanshell">
         <fileset dir="${prj}/examples/beanshell" includes="**"/>
