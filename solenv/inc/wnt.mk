@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-28 15:57:26 $
+#   last change: $Author: vg $ $Date: 2003-06-12 10:03:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -165,7 +165,7 @@ CFLAGS+=-Zm200
 
 #.IF"$(bndchk)"==""
 .IF "$(COMEX)"=="8"
-CFLAGS+=-Zm500 /wd4290 /wd4786 /wd4800
+CFLAGS+=-Zm500 -wd4290 -wd4786 -wd4800
 .ENDIF
 #.ENDIF
 
@@ -174,7 +174,7 @@ CFLAGS+=-Zm500 /wd4290 /wd4786 /wd4800
 .IF "$(seg)" == ""
 .IF "$(demo)" == ""
 CDEFS+= -D_X86_=1 $(OLE2DEF)
-CFLAGS+=-c -nologo -Gs -Gy $(NOLOGO) $(MINUS_I)$(INCLUDE) -Zi -Fd$(MISC)\_ooo_st_$(TARGET).PDB
+CFLAGS+=-c -nologo -Gs -Gy $(NOLOGO) $(MINUS_I)$(INCLUDE)
 .IF "$(bndchk)" == ""
 CFLAGS+= -Ob1
 .ENDIF
@@ -187,6 +187,9 @@ CFLAGS+=-c -nologo -Gs $(NOLOGO) $(MINUS_I)$(INCLUDE)
 CFLAGS+= -Ob1
 .ENDIF
 .ENDIF
+
+# flags required for crashdump feature
+CFLAGSCRASHDUMP=-Zi -Fd$(MISC)\_ooo_st_$(TARGET).PDB
 
 .IF "$(bndchk)" != ""
 .IF "$(debug)" == ""
