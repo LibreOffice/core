@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 17:54:21 $
+ *  last change: $Author: af $ $Date: 2002-04-22 08:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,9 +173,11 @@ void AccessibleDrawDocumentView::Init (void)
 
     // Create the children manager.
     mpChildrenManager = new ChildrenManager(this, xShapeList, maShapeTreeInfo, *this);
-    // Here is missing the code to handle a failed creation of the children manager.
-    mpChildrenManager->AddAccessibleShape (UpdateDrawPageShape());
-    mpChildrenManager->Update ();
+    if (mpChildrenManager != NULL)
+    {
+        mpChildrenManager->AddAccessibleShape (CreateDrawPageShape());
+        mpChildrenManager->Update ();
+    }
 }
 
 
@@ -195,7 +197,7 @@ void AccessibleDrawDocumentView::ViewForwarderChanged (ChangeType aChangeType,
 /**  The page shape is created on every call at the moment (provided that
      every thing goes well).
 */
-AccessiblePageShape* AccessibleDrawDocumentView::UpdateDrawPageShape (void)
+AccessiblePageShape* AccessibleDrawDocumentView::CreateDrawPageShape (void)
 {
     AccessiblePageShape* pShape = NULL;
 
@@ -245,7 +247,6 @@ AccessiblePageShape* AccessibleDrawDocumentView::UpdateDrawPageShape (void)
                 // "Rectangle..."
                 pShape = new AccessiblePageShape (
                     xView->getCurrentPage(), this, maShapeTreeInfo);
-                mxPageShape = pShape;
             }
         }
     }
@@ -314,7 +315,8 @@ void SAL_CALL
     {
         ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
         // maShapeTreeInfo has been modified in base class.
-        mpChildrenManager->SetInfo (maShapeTreeInfo);
+        if (mpChildrenManager != NULL)
+            mpChildrenManager->SetInfo (maShapeTreeInfo);
     }
 }
 
@@ -331,22 +333,25 @@ void SAL_CALL
 
     if (rEventObject.Action == frame::FrameAction_COMPONENT_REATTACHED)
     {
-        mpChildrenManager->ClearAccessibleShapeList ();
-        mpChildrenManager->SetInfo (maShapeTreeInfo);
-        mpChildrenManager->ViewForwarderChanged (
-            IAccessibleViewForwarderListener::TRANSFORMATION,
-            &maViewForwarder);
+        if (mpChildrenManager != NULL)
+        {
+            mpChildrenManager->ClearAccessibleShapeList ();
+            mpChildrenManager->SetInfo (maShapeTreeInfo);
+            mpChildrenManager->ViewForwarderChanged (
+                IAccessibleViewForwarderListener::TRANSFORMATION,
+                &maViewForwarder);
 
-        // To properly inform the registered listeners of this we just have
-        // to call the children manager and update its shape list.
-        uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
-        if (xView.is())
-            mpChildrenManager->SetShapeList (
-                uno::Reference<drawing::XShapes> (
-                    xView->getCurrentPage(), uno::UNO_QUERY));
-        mpChildrenManager->AddAccessibleShape (UpdateDrawPageShape ());
-        mpChildrenManager->Update (false);
-        OSL_TRACE ("done handling frame event for AccessibleDrawDocumentView");
+            // To properly inform the registered listeners of this we just have
+            // to call the children manager and update its shape list.
+            uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
+            if (xView.is())
+                mpChildrenManager->SetShapeList (
+                    uno::Reference<drawing::XShapes> (
+                        xView->getCurrentPage(), uno::UNO_QUERY));
+            mpChildrenManager->AddAccessibleShape (CreateDrawPageShape ());
+            mpChildrenManager->Update (false);
+            OSL_TRACE ("done handling frame event for AccessibleDrawDocumentView");
+        }
     }
 }
 
@@ -376,7 +381,7 @@ void SAL_CALL
             uno::Reference<drawing::XShapes> xShapeList (
                 xView->getCurrentPage(), uno::UNO_QUERY);
             mpChildrenManager->SetShapeList (xShapeList);
-            mpChildrenManager->AddAccessibleShape (UpdateDrawPageShape ());
+            mpChildrenManager->AddAccessibleShape (CreateDrawPageShape ());
             mpChildrenManager->Update (false);
         }
         else
@@ -385,9 +390,10 @@ void SAL_CALL
     else if (rEventObject.PropertyName == OUString (RTL_CONSTASCII_USTRINGPARAM("VisibleArea")))
     {
         OSL_TRACE ("    visible area changed");
-        mpChildrenManager->ViewForwarderChanged (
-            IAccessibleViewForwarderListener::VISIBLE_AREA,
-            &maViewForwarder);
+        if (mpChildreManager != NULL)
+            mpChildrenManager->ViewForwarderChanged (
+                IAccessibleViewForwarderListener::VISIBLE_AREA,
+                &maViewForwarder);
     }
     else
     {
