@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undraw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-13 13:51:24 $
+ *  last change: $Author: jp $ $Date: 2002-03-15 11:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,10 +581,10 @@ SwUndoDrawDelete::SwUndoDrawDelete( USHORT nCnt )
 
 SwUndoDrawDelete::~SwUndoDrawDelete()
 {
-    if ( bDelFmt )
+    if( bDelFmt )
     {
         SwUndoGroupObjImpl* pTmp = pObjArr;
-        for( USHORT n = 0; n < nSize; ++n, ++pTmp )
+        for( USHORT n = 0; n < pMarkLst->GetMarkCount(); ++n, ++pTmp )
             delete pTmp->pFmt;
     }
     __DELETE ( nSize ) pObjArr;
@@ -595,7 +595,7 @@ void SwUndoDrawDelete::Undo( SwUndoIter &rIter )
 {
     bDelFmt = FALSE;
     SwSpzFrmFmts& rFlyFmts = *rIter.GetDoc().GetSpzFrmFmts();
-    for( USHORT n = 0; n < nSize; ++n )
+    for( USHORT n = 0; n < pMarkLst->GetMarkCount(); ++n )
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
         ::lcl_RestoreAnchor( rSave.pFmt, rSave.nNodeIdx );
@@ -611,7 +611,7 @@ void SwUndoDrawDelete::Redo( SwUndoIter &rIter )
 {
     bDelFmt = TRUE;
     SwSpzFrmFmts& rFlyFmts = *rIter.GetDoc().GetSpzFrmFmts();
-    for( USHORT n = 0; n < nSize; ++n )
+    for( USHORT n = 0; n < pMarkLst->GetMarkCount(); ++n )
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
         SdrObject *pObj = rSave.pObj;
@@ -629,10 +629,10 @@ void SwUndoDrawDelete::Redo( SwUndoIter &rIter )
     }
 }
 
-void SwUndoDrawDelete::AddObj( USHORT nPos, SwDrawFrmFmt* pFmt,
+void SwUndoDrawDelete::AddObj( USHORT , SwDrawFrmFmt* pFmt,
                                 const SdrMark& rMark )
 {
-    SwUndoGroupObjImpl& rSave = *( pObjArr + nPos );
+    SwUndoGroupObjImpl& rSave = *( pObjArr + pMarkLst->GetMarkCount() );
     rSave.pObj = rMark.GetObj();
     rSave.pFmt = pFmt;
     ::lcl_SaveAnchor( pFmt, rSave.nNodeIdx );
