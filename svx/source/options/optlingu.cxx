@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-02 11:48:08 $
+ *  last change: $Author: tl $ $Date: 2001-07-02 14:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1603,10 +1603,26 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
 
 IMPL_LINK( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox )
 {
-    if(pBox == &aLinguOptionsCLB)
+    if (pBox == &aLinguModulesCLB)
+    {
+        //! in order to avoid a bug causing a GPF when double clicking
+        //! on a module entry and exiting the "Edit Modules" dialog
+        //! after that.
+        Application::PostUserEvent( LINK(
+                    this, SvxLinguTabPage, PostDblClickHdl_Impl ) );
+    }
+    else if (pBox == &aLinguOptionsCLB)
+    {
         ClickHdl_Impl(&aLinguOptionsEditPB);
-    else
-        ClickHdl_Impl(&aLinguModulesEditPB);
+    }
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxLinguTabPage, PostDblClickHdl_Impl, SvTreeListBox *, pBox )
+{
+    ClickHdl_Impl(&aLinguModulesEditPB);
     return 0;
 }
 
