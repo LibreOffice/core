@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.111 $
+#   $Revision: 1.112 $
 #
-#   last change: $Author: vg $ $Date: 2004-05-07 09:05:25 $
+#   last change: $Author: hr $ $Date: 2004-06-28 14:49:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,20 +72,24 @@
     use Cwd;
     use File::Path;
 
+    my $log = undef;
     if (defined $ENV{CWS_WORK_STAMP}) {
         require lib; import lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
         require Cws; import Cws;
-        require Logging; import Logging ;
         require CvsModule; import CvsModule;
         require GenInfoParser; import GenInfoParser;
         require IO::Handle; import IO::Handle;
+        eval { require Logging; import Logging; };
+        $log = Logging->new() if (!$@);
     };
+
+
 
 #### script id #####
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.111 $ ';
+    $id_str = ' $Revision: 1.112 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -103,7 +107,6 @@
         } else {
             print_error("Can't determine VCSID. Please use setsolar.", 5);
         };
-        $log = Logging->new() if (defined $ENV{CWS_WORK_STAMP});
     };
     $modules_number++;
     $perl = "";
