@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hro $ $Date: 2002-07-01 08:24:29 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ struct oslPipeImpl {
 
 static oslInterlockedCount nPipes = 0;
 
-oslPipe __osl_createPipeImpl()
+oslPipe __osl_createPipeImpl(void)
 {
     oslPipe pPipe;
 
