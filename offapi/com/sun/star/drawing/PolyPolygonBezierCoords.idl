@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PolyPolygonBezierCoords.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 // DocMerge from xml: struct com::sun::star::drawing::PolyPolygonBezierCoords
 /** specifies the coordinates for a poly polygon bezier.
  */
-struct PolyPolygonBezierCoords
+published struct PolyPolygonBezierCoords
 {
     // DocMerge: empty anyway
     com::sun::star::drawing::PointSequenceSequence Coordinates;
