@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:46:47 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,7 +832,7 @@ BYTE lcl_WhichPunctuation( xub_Unicode cChar )
     return SwScriptInfo::SPECIAL_LEFT;
 }
 
-sal_Bool lcl_IsMonoSpaceFont( const OutputDevice& rOut )
+static sal_Bool lcl_IsMonoSpaceFont( const OutputDevice& rOut )
 {
     const String aStr1( xub_Unicode( 0x3008 ) );
     const String aStr2( xub_Unicode( 0x307C ) );
