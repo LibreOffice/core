@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-11 14:45:50 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 16:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@
 #ifdef DEBUG
 #include <stdio.h>
 #endif
+
+#include <algorithm>
 
 #define VCLASS_ROTATE           0
 #define VCLASS_ROTATE_REVERSE   1
@@ -173,20 +175,20 @@ ExtendedFontStruct::GetFontBoundingBox( XCharStruct *pCharStruct,
     for ( nIdx = 0; nIdx < mpXlfd->NumEncodings(); nIdx++ )
         if ( mpXFontStruct[ nIdx ] != NULL )
         {
-            *pAscent  = max( mpXFontStruct[nIdx]->ascent,  *pAscent );
-            *pDescent = max( mpXFontStruct[nIdx]->descent, *pDescent );
+            *pAscent  = std::max( mpXFontStruct[nIdx]->ascent,  *pAscent );
+            *pDescent = std::max( mpXFontStruct[nIdx]->descent, *pDescent );
 
             XCharStruct* pMaxBounds = &(mpXFontStruct[nIdx]->max_bounds);
 
-            pCharStruct->lbearing = max( pMaxBounds->lbearing,
+            pCharStruct->lbearing = std::max( pMaxBounds->lbearing,
                                          pCharStruct->lbearing );
-            pCharStruct->rbearing = max( pMaxBounds->rbearing,
+            pCharStruct->rbearing = std::max( pMaxBounds->rbearing,
                                          pCharStruct->rbearing );
-            pCharStruct->width    = max( pMaxBounds->width,
+            pCharStruct->width    = std::max( pMaxBounds->width,
                                          pCharStruct->width );
-            pCharStruct->ascent   = max( pMaxBounds->ascent,
+            pCharStruct->ascent   = std::max( pMaxBounds->ascent,
                                          pCharStruct->ascent );
-            pCharStruct->descent  = max( pMaxBounds->descent,
+            pCharStruct->descent  = std::max( pMaxBounds->descent,
                                          pCharStruct->descent );
         }
 
@@ -214,7 +216,7 @@ ExtendedFontStruct::ToImplFontMetricData(ImplFontMetricData *pFontMetric)
         pFontMetric->mnWidth     = aBoundingBox.width;
         pFontMetric->mnAscent    = aBoundingBox.ascent;
         pFontMetric->mnDescent   = aBoundingBox.descent;
-        pFontMetric->mnLeading   = max(0, aBoundingBox.ascent  - nAscent
+        pFontMetric->mnLeading   = std::max(0, aBoundingBox.ascent  - nAscent
                                           + aBoundingBox.descent - nDescent );
         // XXX Fix me
         pFontMetric->mnFirstChar =   0;
@@ -382,9 +384,9 @@ ExtendedFontStruct::GetCharWidth8( sal_Unicode nFrom, sal_Unicode nTo,
 
         int nIdx = nFrom;
 
-        for ( ; nIdx <  min(nTo, nMinChar); nIdx++, pWidthArray++ )
+        for ( ; nIdx <  std::min((int)nTo, nMinChar); nIdx++, pWidthArray++ )
             *pWidthArray = mnDefaultWidth;
-        for ( ; nIdx <= min(nTo, nMaxChar); nIdx++, pWidthArray++ )
+        for ( ; nIdx <= std::min((int)nTo, nMaxChar); nIdx++, pWidthArray++ )
         {
             XCharStruct* pChar = &(pXFontStruct->per_char[nIdx - nMinChar]);
             *pWidthArray = CharExists(pChar) ? pChar->width : mnDefaultWidth;
@@ -554,7 +556,7 @@ ExtendedFontStruct::GetCharWidth( sal_Unicode nFrom, sal_Unicode nTo, long *pWid
         {
             // optimize the most frequent case, requesting only the latin1
             // chars which are mappable to a single encoding
-            sal_Unicode nMinTo = min(nAsciiRange, nTo);
+            sal_Unicode nMinTo = std::min(nAsciiRange, (int)nTo);
             nConverted = GetCharWidth8( nFrom, nMinTo, pWidthArray, nEncoding );
         }
 
