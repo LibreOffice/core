@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupBox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:32 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ OGroupBoxModel::OGroupBoxModel( const OGroupBoxModel* _pOriginal, const Referenc
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL OGroupBoxModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+StringSequence SAL_CALL OGroupBoxModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -156,14 +156,10 @@ void OGroupBoxModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(3)
+    BEGIN_DESCRIBE_PROPERTIES( 0, OControlModel )
         // don't want to have the TabStop property
         RemoveProperty(_rAggregateProps, PROPERTY_TABSTOP);
-
-        DECL_PROP2(CLASSID,     sal_Int16,          READONLY, TRANSIENT);
-        DECL_PROP1(NAME,        ::rtl::OUString,    BOUND);
-        DECL_PROP1(TAG,         ::rtl::OUString,    BOUND);
-    FRM_END_PROP_HELPER();
+    END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
@@ -173,8 +169,8 @@ void OGroupBoxModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OGroupBoxModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
-    throw(stario::IOException, RuntimeException)
+void SAL_CALL OGroupBoxModel::write(const Reference< XObjectOutputStream>& _rxOutStream)
+    throw(IOException, RuntimeException)
 {
     OControlModel::write(_rxOutStream);
 
@@ -184,7 +180,7 @@ void SAL_CALL OGroupBoxModel::write(const Reference<stario::XObjectOutputStream>
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OGroupBoxModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException)
+void SAL_CALL OGroupBoxModel::read(const Reference< XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
 {
     OControlModel::read( _rxInStream );
 
@@ -219,7 +215,7 @@ OGroupBoxControl::OGroupBoxControl(const Reference<starlang::XMultiServiceFactor
 }
 
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL OGroupBoxControl::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+StringSequence SAL_CALL OGroupBoxControl::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
