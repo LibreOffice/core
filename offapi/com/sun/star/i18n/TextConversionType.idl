@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextConversionType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:12:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module i18n {
      @since #107627#
 */
 
-constants TextConversionType
+published constants TextConversionType
 {
     /// Conversion from Hanja to Hangul
     const short TO_HANGUL       = 1;
