@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-13 11:32:49 $
+ *  last change: $Author: jl $ $Date: 2001-02-13 12:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGSOURCE_HPP_
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETFACTORY_HPP_
-#include <com/sun/star/datatransfer/dnd/XDropTargetFactory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGSOURCECONTEXT_HPP_
 #include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>
