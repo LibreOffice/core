@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:13:31 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@ namespace connectivity
             virtual void refreshKeys();
             virtual void refreshIndexes();
 
+            // ::cppu::OComponentHelper
+            virtual void SAL_CALL disposing(void);
+
         public:
             OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable);
             OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCatalog);
@@ -99,6 +102,7 @@ namespace connectivity
 
             ::rtl::OUString SAL_CALL getName() { return m_Name; }
             ::rtl::OUString getSchema() const { return m_SchemaName; }
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const;
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
