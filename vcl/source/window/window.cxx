@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 16:06:48 $
+ *  last change: $Author: obr $ $Date: 2001-07-13 07:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,7 +642,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             }
 
             if ( mpFrame->IsValid() )
-                mpFrame->GetFrameInterface()->GetDragSourceDropTarget( mpFrameData->mxDragSource, mpFrameData->mxDropTarget );
+                mpFrame->GetDragSourceDropTarget( mpFrameData->mxDragSource, mpFrameData->mxDropTarget );
 #else
             Reference< XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
             if ( xFactory.is() )
