@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:22:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,19 @@
 #include "glyphset.hxx"
 
 using namespace psp ;
+
+#ifdef MACOSX
+// Prototype our MacOS X printing help function
+void macxp_ProcessAndPrintDocument( sal_Int32 applePrintSysType,
+                                    char *spoolFileName,
+                                    FILE *pDestFile,
+                                    const rtl::OString psprintPrintCmd,
+                                    const rtl::OString psprintDriverName,
+                                    const JobData pJobData,
+                                    const rtl::OUString *aJobName,
+                                    sal_uInt32 jobDPI );
+int macxp_ConvertPSFileToPDF( char *psFileName, char *pdfFileName, int pdfFileNameBufferLen, sal_uInt32 jobDPI );
+#endif
 
 // forward declaration
 
@@ -433,6 +446,7 @@ PrinterJob::StartJob (
     maFileName = rFileName;
     mnFileMode = nMode;
     maSpoolDirName = createSpoolDir ();
+    maJobName = rJobName;
 
     rtl::OUString aExt = rtl::OUString::createFromAscii (".ps");
     mpJobHeader  = CreateSpoolFile (rtl::OUString::createFromAscii("psp_head"), aExt);
@@ -500,6 +514,11 @@ PrinterJob::StartJob (
 sal_Bool
 PrinterJob::EndJob ()
 {
+#ifdef MACOSX
+    sal_Int32       applePrintSysType;
+    char            *spoolFileName = NULL;
+#endif
+
     // write document setup (done here because it
     // includes the accumulated fonts
     if( mpJobHeader )
@@ -526,8 +545,12 @@ PrinterJob::EndJob ()
 
     FILE* pDestFILE = NULL;
 
-    /* create a destination either as file or as a pipe */
+#ifdef MACOSX
+    /* Ascertain the printing system */
+    applePrintSysType = macxp_GetSystemPrintMethod();
+#endif
 
+    /* create a destination either as file or as a pipe */
     sal_Bool bSpoolToFile = maFileName.getLength() > 0 ? sal_True : sal_False;
     if (bSpoolToFile)
     {
@@ -565,9 +588,48 @@ PrinterJob::EndJob ()
         const rtl::OString aShellCommand = rtl::OUStringToOString (rCommand,
                                                                    RTL_TEXTENCODING_ISO_8859_1);
 
-        pDestFILE = popen (aShellCommand.getStr(), "w");
-        if (pDestFILE == NULL)
-            return sal_False;
+        /* Mac OS X: open a pipe only if we are using (1) Darwin5 LPR printing.
+         *           All other OS X/Darwin cases use spool to file.
+        * Other UNIX:  always open a pipe.
+         */
+        if (
+           #ifdef MACOSX
+               applePrintSysType == kApplePrintingLPR
+           #else
+               sal_True
+           #endif
+           )
+        {
+            pDestFILE = popen (aShellCommand.getStr(), "w");
+            if (pDestFILE == NULL)
+                return sal_False;
+        }
+     #ifdef MACOSX
+        else
+        {
+            /* Spool to file instead so we can convert it.  Cases used here:
+             * 1) kApplePrintingPrintCenter && kApplePrintingUsePDF
+             * 2) kApplePrintingPrintCenter && kApplePrintingUsePS
+             * 3) kApplePrintingCUPS && kApplePrintingUsePDF
+             * 4) kApplePrintingCUPS && kApplePrintingUsePS
+             */
+
+            /* Get a temporary file name for the spool file.
+             * This name must be free()ed later.
+             */
+            spoolFileName = macxp_tempnam( NULL, "ooopj" );
+            if ( spoolFileName == NULL )
+                return sal_False;
+
+            /* Create temporary spool file */
+            pDestFILE = fopen( spoolFileName, "w" );
+            if ( pDestFILE == NULL )
+          {
+                free( spoolFileName );
+                return sal_False;
+            }
+        }
+     #endif
     }
 
     /* spool the document parts to the destination */
@@ -616,10 +678,327 @@ PrinterJob::EndJob ()
     if (bSpoolToFile)
         fclose (pDestFILE);
     else
-        pclose (pDestFILE);
+    {
+        #ifdef MACOSX
+            sal_uInt32  nXdpi;
+            sal_uInt32  nYdpi;
+
+            /* For Mac OS X/Darwin, process and spool the file to the printing subsystem
+             * if required.
+             */
+            const rtl::OUString& rPrinter     = m_aLastJobData.m_aPrinterName;
+            const PrinterInfoManager& rPrinterInfoManager = PrinterInfoManager::get();
+            const PrinterInfo&   rPrinterInfo = rPrinterInfoManager.getPrinterInfo( rPrinter );
+
+            // Grab printer's spool command
+            const rtl::OUString& rCommand     = rPrinterInfo.m_aCommand;
+            const rtl::OString aShellCommand = rtl::OUStringToOString( rCommand, RTL_TEXTENCODING_ISO_8859_1 );
+
+            // Grab the printer's PPD file name
+            const rtl::OUString& rDriverName     = rPrinterInfo.m_aDriverName;
+            const rtl::OString aDriverName = rtl::OUStringToOString( rDriverName, RTL_TEXTENCODING_ISO_8859_1 );
+
+            /* Grab the resolution for the job, for use in PS->PDF conversion */
+/*            GetResolution( nXdpi, nYdpi );*/
+
+            macxp_ProcessAndPrintDocument( applePrintSysType,
+                                           spoolFileName,
+                                           pDestFILE,
+                                           aShellCommand,
+                                           aDriverName,
+                                           m_aLastJobData,
+                                           &maJobName,
+                                           mnResolution );
+        #else
+            pclose (pDestFILE);
+        #endif
+    }
+
+#ifdef MACOSX
+    /* If we created a spool file for our Mac OS X/Darwin job,
+     * delete it.  Also free the variable, since it is malloc()ed in macxp_tempnam()
+     * and otherwise we'd leak memory.
+     */
+    if ( spoolFileName )
+    {
+        unlink( spoolFileName );
+        free( spoolFileName );
+    }
+#endif
 
     return bSuccess;
 }
+
+#ifdef MACOSX
+// Because the printing on MacOS X and Darwin is a bit more complicated,
+// its got its own routine.
+
+#define kSysCommandBufferLen    1024
+#define kPDFFileNameBufferLen   1024
+
+void macxp_ProcessAndPrintDocument( sal_Int32 applePrintSysType,
+                                    char *spoolFileName,
+                                    FILE *pDestFile,
+                                    const rtl::OString psprintPrintCmd,
+                                    const rtl::OString psprintDriverName,
+                                    const JobData pJobData,
+                                    const rtl::OUString *aJobName,
+                                    sal_uInt32 jobDPI )
+{
+    char      sysCommandBuffer[ kSysCommandBufferLen ];
+    int       printCmdErr;
+    sal_Int32 printFormat;
+
+    if ( applePrintSysType == kApplePrintingLPR )
+    {
+        /* Job is to be printed with Darwin5 lpr. It has already
+         * been piped to lp/lpr above in EndJob(), so simply
+        * close the pipe.
+        */
+        pclose( pDestFile );
+    }
+    else
+    {
+        /* Handle cases for MacOS X printing that don't pipe directly to lp/lpr */
+
+        /* Close the intermediate file */
+        fclose( pDestFile );
+
+        /* Determine if we are going to print with PostScript, or with PS->PDF conversion.
+         * We assume we are to use PS->PDF conversion unless proven otherwise.  Most printers
+         * will have a PPD, except Rendezvous-shared ones.  If the PPD _doesn't_ have the
+         * "cupsFilter" key, or if the "cupsFilter" key _doesn't_ contain "application/pdf",
+         * then we print directly with PostScript.
+         */
+        printFormat = kApplePrintingUsePDF;
+        if ( (sal_False == psprintDriverName.equals("SGENPRT")) && (sal_False == psprintDriverName.equals("MacShared")) )
+        {
+            /* The should exist a valid PPD for this printer */
+            if ( pJobData.m_pParser )
+            {
+                const PPDKey    *pCupsFilterKey;
+                const PPDValue  *pCupsFilterValue;
+
+                pCupsFilterKey = pJobData.m_pParser->getKey( String(RTL_CONSTASCII_USTRINGPARAM("cupsFilter")) );
+                pCupsFilterValue = pCupsFilterKey != NULL ? pJobData.m_aContext.getValue( pCupsFilterKey ) : NULL;
+                if ( pCupsFilterValue )
+                {
+                    ByteString    aCupsFilterString( pCupsFilterValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1 );
+                    if ( aCupsFilterString.Search("application/pdf") == 0 )
+                    {
+                        /* cupsFilter didn't have application/pdf */
+                        printFormat = kApplePrintingUsePS;
+                    }
+                }
+                else
+                {
+                    /* No "cupsFilter" key */
+                    printFormat = kApplePrintingUsePS;
+                }
+            }
+        }
+
+        if ( (applePrintSysType==kApplePrintingPrintCenter) && (printFormat==kApplePrintingUsePS) )
+        {
+            /* Now pass the PS file to /usr/sbin/Print for printing. */
+            snprintf( sysCommandBuffer, kSysCommandBufferLen-1, "%s -M ps \"%s\"", kApplePCPrintCommand, spoolFileName );
+            #ifdef DEBUG
+                fprintf( stderr, "printerjob.cxx: printing doc with command '%s'\n", sysCommandBuffer );
+            #endif
+
+            printCmdErr = system( sysCommandBuffer );
+        }
+        else if ( (applePrintSysType==kApplePrintingPrintCenter) && (printFormat==kApplePrintingUsePDF) )
+        {
+            char    pdfFileName[ kPDFFileNameBufferLen ];
+            char    pdfFileNameMacFormat[ kPDFFileNameBufferLen ];
+            char    *c;
+
+            /* Convert file to PDF using GhostScript */
+            printCmdErr =  macxp_ConvertPSFileToPDF( spoolFileName, pdfFileName, kPDFFileNameBufferLen, jobDPI );
+            if ( printCmdErr == 0 )
+          {
+                /* AppleScript expects MacOS-style paths, so convert Unix path to Mac OS Style.
+                 * If the Unix path is absolute, get rid of the starting slash
+                 */
+                strncpy( pdfFileNameMacFormat, pdfFileName, kPDFFileNameBufferLen-1 );
+                if ( *pdfFileNameMacFormat == '/' )
+                    sprintf( pdfFileNameMacFormat, "%s", (pdfFileNameMacFormat+1) );
+                while ( (c=strchr(pdfFileNameMacFormat,'/')) != NULL )
+                    *c = ':';
+
+                /* Construct and execute the actual printing command using AppleScript */
+                snprintf( sysCommandBuffer, kSysCommandBufferLen-1, "/usr/bin/osascript -e 'tell application \"Finder\"' -e 'print {file \"%s\"}' -e 'end tell'", pdfFileNameMacFormat );
+                #ifdef DEBUG
+                    fprintf( stderr, "printerjob.cxx: printing PDF with command '%s'\n", sysCommandBuffer );
+                #endif
+                printCmdErr = system( sysCommandBuffer );
+            }
+          unlink( pdfFileName );
+        }
+        else if ( (applePrintSysType==kApplePrintingCUPS) && ((printFormat==kApplePrintingUsePDF) || (printFormat==kApplePrintingUsePS)) )
+        {
+            char         pdfFileName[ kPDFFileNameBufferLen ];
+            char         numCopiesSwitch[ 5 ];
+            sal_uInt32   index;
+
+            /* Convert file to PDF using GhostScript if using PS->PDF conversion */
+          if ( printFormat == kApplePrintingUsePDF )
+                printCmdErr =  macxp_ConvertPSFileToPDF( spoolFileName, pdfFileName, kPDFFileNameBufferLen, jobDPI );
+            else
+            {
+                strncpy( pdfFileName, spoolFileName, kPDFFileNameBufferLen );
+                printCmdErr = 0;
+            }
+
+            if ( printCmdErr == 0 )
+          {
+                #define kJobOptionsStringSize    500
+              char    jobOptions[ kJobOptionsStringSize ];
+
+                jobOptions[ 0 ] = NULL;
+                /* Based on job options, find out what parameters to pass to the printer. */
+                if ( pJobData.m_pParser )
+                {
+                    const PPDKey    *pSizeKey;
+                    const PPDValue  *pSizeValue;
+                    const PPDKey    *pSlotKey;
+                    const PPDValue  *pSlotValue;
+                    BOOL            needComma = FALSE;
+
+                    // Only CUPS PS->PDF printers require the page size options
+                    if ( printFormat == kApplePrintingUsePDF )
+                    {
+                        // Add page size option if necessary
+                        pSizeKey = pJobData.m_pParser->getKey( String(RTL_CONSTASCII_USTRINGPARAM("PageSize")) );
+                        pSizeValue = pSizeKey != NULL ? pJobData.m_aContext.getValue( pSizeKey ) : NULL;
+                        if ( pSizeValue )
+                        {
+                            ByteString aSizeString( pSizeValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1 );
+                            snprintf( jobOptions, kJobOptionsStringSize, "-o \"media=" );
+                            strncat( jobOptions, aSizeString.GetBuffer(), kJobOptionsStringSize-strlen(jobOptions) );
+                            needComma = TRUE;
+                        }
+                    }
+
+                    // Add paper tray option if necessary
+                    pSlotKey = pJobData.m_pParser->getKey( String(RTL_CONSTASCII_USTRINGPARAM("InputSlot")) );
+                    pSlotValue = pSlotKey != NULL ? pJobData.m_aContext.getValue( pSlotKey ) : NULL;
+                    if ( pSlotValue )
+                    {
+                        ByteString      aSlotString( pSlotValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1 );
+                        // If the string wasn't created from PageSize, create it now
+                        if ( strlen(jobOptions) == 0 )
+                            snprintf( jobOptions, kJobOptionsStringSize, "-o \"media=" );
+                        if ( TRUE == needComma )
+                            strncat( jobOptions, ",", kJobOptionsStringSize - strlen(jobOptions) );
+
+                        strncat( jobOptions, aSlotString.GetBuffer(), kJobOptionsStringSize - strlen(jobOptions) );
+                    }
+
+                    // Add on the ending " to the media= part
+                    if ( strlen(jobOptions) > 0 )
+                        strncat( jobOptions, "\"", kJobOptionsStringSize - strlen(jobOptions) );
+
+                /* Deal with landscape orientation */
+                // Disable for the moment since testers say it has undesired effects
+                //    if ( pJobData.m_eOrientation == orientation::Landscape )
+                //        strncat( jobOptions, " -o landscape ", kJobOptionsStringSize - strlen(jobOptions) );
+
+                /* Attach a job title */
+                    ByteString    jobTitle( aJobName->getStr(), RTL_TEXTENCODING_UTF8 );
+                if ( strstr(psprintPrintCmd.getStr(), "lpr ") > 0 )
+                    snprintf( jobOptions, kJobOptionsStringSize, "%s -T \"%s\"", jobOptions, jobTitle.GetBuffer() );
+                else if  ( strstr(psprintPrintCmd.getStr(), "lp ") > 0 )
+                    snprintf( jobOptions, kJobOptionsStringSize, "%s -t \"%s\"", jobOptions, jobTitle.GetBuffer() );
+                }
+
+                /* Construct and execute the printing command */
+                snprintf( sysCommandBuffer, kSysCommandBufferLen-1, "cat \"%s\" | %s %s", pdfFileName, psprintPrintCmd.getStr(), jobOptions );
+                #ifdef DEBUG
+                    fprintf( stderr, "printerjob.cxx: printing PDF with command '%s'\n", sysCommandBuffer );
+                #endif
+
+                /* Stupid lp and lpr on 10.2 don't actually honor their respective # copies arguments.
+                 * So we have to just keep printing the job over and over for multiple copies for PS->PDF
+                 * printers.  Direct-to-PostScript printers can handle the # copies _inside_ the PostScript
+                 * document we are sending to them.
+                 */
+                int numCopies = (printFormat == kApplePrintingUsePDF ) ? pJobData.m_nCopies : 1;
+                for( index = 1; index <= numCopies; index++ )
+                    printCmdErr = system( sysCommandBuffer );
+            }
+            unlink( pdfFileName );
+        }
+
+        #ifdef DEBUG
+           /* A printCmdErr of -1 will usually be an error in PS->PDF conversion,
+           * otherwise its an error returned by system().
+           */
+            if ( printCmdErr != 0 )
+                fprintf( stderr, "printerjob.cxx: printing error, got %d.\n", printCmdErr );
+            else
+                fprintf( stderr, "printerjob.cxx: printing successful, system() returned 0.\n" );
+        #endif
+    }
+}
+
+#define kSysPrintSetupString  "sh -c 'PATH=$PATH:/usr/local/bin"
+#define kPDFFileExtension ".pdf"
+
+// Convert PostScript files to PDF for easy printing, using GhostScript.
+// Returns:   0 if no error
+//           -1 if error
+int macxp_ConvertPSFileToPDF( char *psFileName, char *pdfFileName, int pdfFileNameBufferLen, sal_uInt32 jobDPI )
+{
+    int returnVal = 0;
+    int printCmdErr = 0;
+
+    /* Make sure we've got the space to play with file names/paths */
+    if ( (strlen(psFileName) + strlen(kPDFFileExtension)) >= pdfFileNameBufferLen-1 )
+    {
+        fprintf( stderr, "printerjob.cxx:  Cannot convert print job to PDF because the file's path is too long.\n" );
+        returnVal = -1;
+    }
+    else
+    {
+        char *sysCommandBuffer;
+
+        /* Create the file name for the converted PDF and assemble the conversion command */
+        snprintf( pdfFileName, pdfFileNameBufferLen-1, "%s%s", psFileName, kPDFFileExtension );
+
+       sysCommandBuffer = (char *)malloc( sizeof(char) * ( strlen(kSysPrintSetupString) +
+                                                   strlen(kApplePS2PDFLocation) +
+                                                    10 +    /* For " -r<DPI>" */
+                                                    strlen(psFileName) +
+                                                    strlen(pdfFileName) +
+                                                    10) );  /*  10 bytes fudge factor */
+        if ( sysCommandBuffer == NULL )
+            returnVal = -1;
+        else
+       {
+            sprintf( sysCommandBuffer, "%s;%s -r%d \"%s\" \"%s\"'", kSysPrintSetupString, kApplePS2PDFLocation, jobDPI, psFileName, pdfFileName );
+          #ifdef DEBUG
+                fprintf( stderr, "printerjob.cxx: converting document to PDF with command '%s'\n", sysCommandBuffer );
+          #endif
+
+            /* Convert the PS spool file to a PDF */
+            printCmdErr = system( sysCommandBuffer );
+            free( sysCommandBuffer );
+
+          #ifdef DEBUG
+            if ( printCmdErr != 0 )
+                fprintf( stderr, "printerjob.cxx: pdf conversion error, system() returned %d.\n", printCmdErr );
+            else
+                fprintf( stderr, "printerjob.cxx: pdf conversion successful, system() returned 0.\n" );
+          #endif
+            returnVal = (printCmdErr != 0) ? -1 : 0;
+        }
+    }
+
+    return( returnVal );
+}
+#endif  /* MACOSX */
 
 sal_Bool
 PrinterJob::AbortJob ()
@@ -735,8 +1114,8 @@ PrinterJob::EndPage ()
 
     sal_Char pTrailer[256];
     sal_Int32 nChar = 0;
-    nChar  = psp::appendStr ("showpage\n",          pTrailer);
-    nChar += psp::appendStr ("grestore grestore\n", pTrailer + nChar);
+    nChar  = psp::appendStr ("grestore grestore\n", pTrailer);
+    nChar += psp::appendStr ("showpage\n",          pTrailer + nChar);
     nChar += psp::appendStr ("%%PageTrailer\n\n",   pTrailer + nChar);
     WritePS (pPageBody, pTrailer);
 
@@ -821,7 +1200,9 @@ bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool b
                    && pValue->m_eType == eInvocation
                    && pValue->m_aValue.Len()
                    && ( m_aLastJobData.m_pParser == NULL
-                        || m_aLastJobData.m_aContext.getValue( pKey ) != pValue )
+                        || m_aLastJobData.m_aContext.getValue( pKey ) != pValue
+                        || bDocumentSetup
+                        )
                    )
                 {
                     // try to avoid PS level 2 feature commands if level is set to 1
