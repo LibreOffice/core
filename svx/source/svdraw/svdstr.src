@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-22 23:18:18 $
+ *  last change: $Author: rt $ $Date: 2001-11-27 23:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2733,7 +2733,7 @@ String STR_ObjNameSingulGRAFBMP
     Text[ korean ] = "비트맵";
     Text[ turkish ] = "Bit e�lem";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Bitmap";
+    Text[ catalan ] = "Mapa de bits";
 };
 String STR_ObjNameSingulGRAFBMPTRANS
 {
@@ -7691,7 +7691,7 @@ String STR_ItemValCAPTIONESCHORI
     Text[ korean ] = "수평";
     Text[ turkish ] = "Yatay";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Horizontal";
+    Text[ catalan ] = "Horitzontal";
     Text[ finnish ] = "Vaakataso";
 };
 String STR_ItemValCAPTIONESCVERT
@@ -13998,7 +13998,7 @@ String SIP_SA_XMLATTRIBUTES
     Text[ french ] = "Attributs utilisateur";
     Text[ spanish ] = "Atributos definidos por el usuario";
     Text[ finnish ] = "User definied Attributes";
-    Text[ italian ] = "User definied Attributes";
+    Text[ italian ] = "Attributi personalizzati";
     Text[ danish ] = "User definied Attributes";
     Text[ swedish ] = "Anv�ndardefinierade attribut";
     Text[ polish ] = "Atrybuty indywidualne";
@@ -17730,6 +17730,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
