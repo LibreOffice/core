@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-13 08:30:53 $
+ *  last change: $Author: os $ $Date: 2000-10-16 11:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4627,6 +4627,10 @@ beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             const OUString& rPropertyName )
 {
     beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
+    if(0 == rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPE) ||
+         0 == rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPES) ||
+            0 == rPropertyName.compareToAscii(UNO_NAME_TEXT_WRAP))
+        return eRet;
 
     if( !*ppSet )
     {
@@ -4731,6 +4735,11 @@ void SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
+        if(0 == rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPE) ||
+            0 == rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPES)||
+                0 == rPropertyName.compareToAscii(UNO_NAME_TEXT_WRAP))
+            return;
+
         // Absatz selektieren
         SwParaSelection aParaSel(pUnoCrsr);
         SwDoc* pDoc = pUnoCrsr->GetDoc();
@@ -4786,6 +4795,9 @@ uno::Any SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
     SwUnoCrsr* pUnoCrsr = ((SwXParagraph*)this)->GetCrsr();
     if(pUnoCrsr)
     {
+        if(SwXParagraph::getDefaultTextContentValue(aRet, rPropertyName))
+            return aRet;
+
         SwDoc* pDoc = pUnoCrsr->GetDoc();
         const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                 aPropSet.getPropertyMap(), rPropertyName);
