@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-16 11:52:02 $
+ *  last change: $Author: kz $ $Date: 2001-05-18 11:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ spanish ] = "Transparente";
         Text[ chinese_simplified ] = "Õ∏√˜";
         Text[ russian ] = "œÓÁ‡˜Ì˚È";
-        Text[ polish ] = "Przeüroczysty";
+        Text[ polish ] = "Prze?roczysty";
         Text[ japanese ] = "ìßâﬂê´";
         Text[ chinese_traditional ] = "≥z©˙";
         Text[ arabic ] = "‘›«›";
@@ -254,9 +254,9 @@ TabPage RID_SVXPAGE_CHAR_STD
         StringList [ portuguese_brazilian ] =
         {
             "Normal" ;
-            "It·lico" ;
+            "It?lico" ;
             "Negrito" ;
-            "Negrito It·lico" ;
+            "Negrito It?lico" ;
         };
         StringList [ portuguese ] =
         {
@@ -509,7 +509,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text [ english_us ] = "~Underline" ;
         Text[ chinese_simplified ] = "œ¬ªÆœﬂ(~U)";
         Text[ russian ] = "œÓ‰˜ÂÍË‚‡ÌËÂ";
-        Text[ polish ] = "P~odkreúl";
+        Text[ polish ] = "P~odkre?l";
         Text[ japanese ] = "â∫ê¸(~U)";
         Text[ chinese_traditional ] = "©≥Ωu(~U)";
         Text[ arabic ] = "Œÿ  Õ Ì";
@@ -538,7 +538,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text [ english_us ] = "S~trikethrough" ;
         Text[ chinese_simplified ] = "…æ≥˝œﬂ(~T)";
         Text[ russian ] = "«‡˜ÂÍË‚‡ÌËÂ";
-        Text[ polish ] = "Przekr~eúl";
+        Text[ polish ] = "Przekr~e?l";
         Text[ japanese ] = "éÊÇËè¡Çµê¸(~T)";
         Text[ chinese_traditional ] = "ßR∞£Ωu(~T)";
         Text[ arabic ] = "‘ÿ»";
@@ -768,7 +768,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
     Text [ English ] = "Character Extension" ;
     Text [ norwegian ] = "Character Extension" ;
     Text [ italian ] = "Effetto carattere" ;
-    Text [ portuguese_brazilian ] = "Extens„o de Caracter" ;
+    Text [ portuguese_brazilian ] = "Extens?o de Caracter" ;
     Text [ portuguese ] = "Efeitos do tipo de letra" ;
     Text [ finnish ] = "Fonttitehosteet" ;
     Text [ danish ] = "Skrifteffekt" ;
@@ -815,7 +815,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         < "Versalien" ; Default ; > ;
         < "Gemeine" ; Default ; > ;
         < "Titelschrift" ; Default ; > ;
-        < "Kapit‰lchen" ; Default ; > ;
+        < "Kapit?lchen" ; Default ; > ;
     };
     StringList [ english_us ] =
     {
@@ -911,7 +911,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         < "Versalien" ; Default ; > ;
         < "Gemeine" ; Default ; > ;
         < "Titelschrift" ; Default ; > ;
-        < "Kapit‰lchen" ; Default ; > ;
+        < "Kapit?lchen" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -1104,7 +1104,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ ENGLISH ] = "~Title" ;
         Text [ norwegian ] = "~Tittel" ;
         Text [ italian ] = "Cara~ttere" ;
-        Text [ portuguese_brazilian ] = "~TÌtulo" ;
+        Text [ portuguese_brazilian ] = "~T?tulo" ;
         Text [ portuguese ] = "~Caracteres do tÌtulo" ;
         Text [ finnish ] = "~Otsikko" ;
         Text [ danish ] = "Titelskrift" ;
@@ -1431,7 +1431,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ ENGLISH ] = "Position Options" ;
         Text [ norwegian ] = "Position Options" ;
         Text [ italian ] = "Opzioni posizione" ;
-        Text [ portuguese_brazilian ] = "OpÁıes de posiÁ„o" ;
+        Text [ portuguese_brazilian ] = "Op??s de posi??o" ;
         Text [ portuguese ] = "OpÁıes de posiÁ„o" ;
         Text [ finnish ] = "Sijaintiasetukset" ;
         Text [ danish ] = "Positionsindstillinger" ;
@@ -1550,7 +1550,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
     };
     StringList [ polish ] =
     {
-            < "Domyúlnie" ; Default ; > ;
+            < "Domy?lnie" ; Default ; > ;
         < "Szerokie" ; Default ; > ;
         < "Wπskie" ; Default ; > ;
     };
@@ -1681,7 +1681,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ ENGLISH ] = "Spacing" ;
         Text [ norwegian ] = "Spacing" ;
         Text [ italian ] = "Spaziatura" ;
-        Text [ portuguese_brazilian ] = "EspaÁamento" ;
+        Text [ portuguese_brazilian ] = "Espa?amento" ;
         Text [ portuguese ] = "EspaÁamento" ;
         Text [ finnish ] = "V‰lit" ;
         Text [ danish ] = "Afstand" ;
@@ -1721,7 +1721,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ english_us ] = "Underlining" ;
         Text[ chinese_simplified ] = "œ¬ªÆœﬂ(~D)";
         Text[ russian ] = "œÓ‰˜ÂÍË‚‡ÌËÂ";
-        Text[ polish ] = "Podkreúlenie";
+        Text[ polish ] = "Podkre?lenie";
         Text[ japanese ] = "â∫ê¸";
         Text[ chinese_traditional ] = "©≥Ωu(~D)";
         Text[ arabic ] = "Œÿ  Õ Ì";
@@ -2201,7 +2201,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ english_us ] = "Stri~kethrough" ;
         Text[ chinese_simplified ] = "…æ≥˝œﬂ(~K)";
         Text[ russian ] = "«‡˜ÂÍË‚‡ÌËÂ";
-        Text[ polish ] = "Przekreúlenie";
+        Text[ polish ] = "Przekre?lenie";
         Text[ japanese ] = "éÊÇËè¡Çµê¸(~K)";
         Text[ chinese_traditional ] = "ßR∞£Ωu(~K)";
         Text[ arabic ] = "‘ÿ»";
@@ -2510,7 +2510,7 @@ String RID_SVXSTR_COLOR_USER
     Text [ English ] = "User" ;
     Text [ norwegian ] = "User" ;
     Text [ italian ] = "Utente" ;
-    Text [ portuguese_brazilian ] = "Usu·rio" ;
+    Text [ portuguese_brazilian ] = "Usu?rio" ;
     Text [ portuguese ] = "Utilizador" ;
     Text [ finnish ] = "K‰ytt‰j‰" ;
     Text [ danish ] = "Bruger" ;
@@ -2555,7 +2555,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ danish ] = "Schriftart f¸r westlichen Text";
         Text[ swedish ] = "Teckensnitt fˆr v‰stlig text";
         Text[ polish ] = "Czcionka tekstu zachodniego";
-        Text[ portuguese_brazilian ] = "Schriftart f¸r westlichen Text";
+        Text[ portuguese_brazilian ] = "Schriftart f? westlichen Text";
         Text[ japanese ] = "âpêîéöópÃ´›ƒ";
         Text[ korean ] = "æÀ∆ƒ∫™ ≈ÿΩ∫∆Æ¿« ±€≤√";
         Text[ chinese_simplified ] = "  ”√”⁄Œ˜Œƒµƒ◊÷ÃÂ";
@@ -2872,7 +2872,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ danish ] = "Schriftart f¸r asiatischen Text";
         Text[ swedish ] = "Teckensnitt fˆr asiatisk text";
         Text[ polish ] = "Czcionka tekstu azjatyckiego";
-        Text[ portuguese_brazilian ] = "Schriftart f¸r asiatischen Text";
+        Text[ portuguese_brazilian ] = "Schriftart f? asiatischen Text";
         Text[ japanese ] = "ì˙ñ{åÍópÃ´›ƒ";
         Text[ korean ] = "æ∆Ω√æ∆ πÆ¿⁄¿« ±€≤√";
         Text[ chinese_simplified ] = "÷–»’∫´◊÷ÃÂ";
@@ -3308,7 +3308,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ spanish ] = "Transparente";
         Text[ chinese_simplified ] = "Õ∏√˜";
         Text[ russian ] = "œÓÁ‡˜Ì˚È";
-        Text[ polish ] = "Przeüroczysty";
+        Text[ polish ] = "Prze?roczysty";
         Text[ japanese ] = "ìßâﬂê´";
         Text[ chinese_traditional ] = "≥z©˙";
         Text[ arabic ] = "‘›«›";
@@ -3342,7 +3342,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ italian ] = "~Sottolineato";
         Text[ danish ] = "Underlining";
         Text[ swedish ] = "~Understrykning";
-        Text[ polish ] = "Podkreúlenie";
+        Text[ polish ] = "Podkre?lenie";
         Text[ portuguese_brazilian ] = "Underlining";
         Text[ japanese ] = "â∫ê¸";
         Text[ korean ] = "πÿ¡Ÿ";
@@ -3782,22 +3782,22 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ finnish ] =
     {
-            < "(Ilman)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Yksitt‰inen"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Kaksinkertainen"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Lihavointi"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Pisteet"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Pisteet (lihavointi)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "V‰liviiva"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "V‰liviiva (lihavointi)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Pitk‰ ajatusviiva"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Pitk‰ ajatusviiva (lihavointi)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Piste-viiva"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Piste-viiva (lihavointi)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Piste-piste-viiva"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Piste-piste-viiva (lihavointi)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Aaltoviiva"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Aaltoviiva (lihavointi)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+            < "(Ilman)" ; CHRDLG_UNDERLINE_NONE ; > ;
+        < "Yksitt‰inen" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+        < "Kaksinkertainen" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+        < "Lihavointi"; CHRDLG_UNDERLINE_BOLD; > ;
+        < "Pisteet" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+        < "Pisteet (lihavointi)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+        < "V‰liviiva"; CHRDLG_UNDERLINE_DASH; > ;
+        < "V‰liviiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+        < "Pitk‰ ajatusviiva"; CHRDLG_UNDERLINE_LONGDASH; > ;
+        < "Pitk‰ ajatusviiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+        < "Piste-viiva"; CHRDLG_UNDERLINE_DASHDOT; > ;
+        < "Piste-viiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+        < "Piste-piste-viiva"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+        < "Piste-piste-viiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+        < "Aaltoviiva"; CHRDLG_UNDERLINE_WAVE; > ;
+        < "Aaltoviiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
         < "Kaksinkertainen aaltoviiva"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
     };
     };
@@ -3850,7 +3850,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ italian ] = "~Barrato";
         Text[ danish ] = "Strikethrough";
         Text[ swedish ] = "~Genomstrykning";
-        Text[ polish ] = "Przekreúlenie";
+        Text[ polish ] = "Przekre?lenie";
         Text[ portuguese_brazilian ] = "Strikethrough";
         Text[ japanese ] = "éÊÇËè¡Çµê¸";
         Text[ korean ] = "¡Ÿ±ﬂ±‚";
@@ -4059,11 +4059,11 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ finnish ] =
     {
-            < "(Ilman)" ; CHRDLG_STRIKEOUT_X ; > ;
-        < "Yksitt‰inen" ; CHRDLG_STRIKEOUT_X ; > ;
-        < "Kaksinkertainen" ; CHRDLG_STRIKEOUT_X ; > ;
-        < "Lihavointi" ; CHRDLG_STRIKEOUT_X ; > ;
-        < "Kenoviivoilla" ; CHRDLG_STRIKEOUT_X ; > ;
+            < "(Ilman)" ; CHRDLG_STRIKEOUT_NONE ; > ;
+        < "Yksitt‰inen" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+        < "Kaksinkertainen" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+        < "Lihavointi" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+        < "Kenoviivoilla" ; CHRDLG_STRIKEOUT_SLASH ; > ;
         < "X-kirjaimilla" ; CHRDLG_STRIKEOUT_X ; > ;
     };
     };
@@ -4242,7 +4242,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     StringList [ portuguese_brazilian ] =
     {
             < "(Ohne)" ; default ; > ;
-        < "∞" ; default ; > ;
+        < "?" ; default ; > ;
         < "." ; default ; > ;
         < "Scheibe" ; default ; > ;
         < "Akzent" ; default ; > ;
@@ -4258,10 +4258,10 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     StringList [ korean ] =
     {
             < "(æ¯¿Ã)" ; default ; > ;
-        < "?" ; default ; > ;
-        < "." ; default ; > ;
-        < "Scheibe" ; default ; > ;
-        < "Akzent" ; default ; > ;
+        < "¡°" ; default ; > ;
+        < "ø¯" ; default ; > ;
+        < "ΩΩ∂Û¿ÃΩ∫" ; default ; > ;
+        < "æ◊ºæ∆Æ" ; default ; > ;
     };
     StringList [ chinese_simplified ] =
     {
@@ -4412,7 +4412,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ portuguese_brazilian ] =
     {
-            < "‹ber Text" ; CHRDLG_POSITION_OVER ; > ;
+            < "?ber Text" ; CHRDLG_POSITION_OVER ; > ;
         < "Unter Text" ; CHRDLG_POSITION_UNDER ; > ;
     };
     StringList [ japanese ] =
@@ -4452,7 +4452,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ finnish ] =
     {
-            < "Tekstin yl‰puolella" ; CHRDLG_POSITION_UNDER ; > ;
+            < "Tekstin yl‰puolella" ; CHRDLG_POSITION_OVER ; > ;
         < "Tekstin alapuolella" ; CHRDLG_POSITION_UNDER ; > ;
     };
     };
@@ -4509,7 +4509,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
             < "Versalien" ; Default ; > ;
             < "Gemeine" ; Default ; > ;
             < "Titelschrift" ; Default ; > ;
-            < "Kapit‰lchen" ; Default ; > ;
+            < "Kapit?lchen" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -4597,7 +4597,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
             < "Versalien" ; Default ; > ;
             < "Gemeine" ; Default ; > ;
             < "Titelschrift" ; Default ; > ;
-            < "Kapit‰lchen" ; Default ; > ;
+            < "Kapit?lchen" ; Default ; > ;
         };
         StringList [ japanese ] =
         {
@@ -4683,7 +4683,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ polish ] = "Relief";
         Text[ portuguese_brazilian ] = "Relief";
         Text[ japanese ] = "ïÇÇ´èoÇµ(~R)";
-        Text[ korean ] = "~Relief";
+        Text[ korean ] = "~æÁ∞¢";
         Text[ chinese_simplified ] = "∏°µÒ(~R)";
         Text[ chinese_traditional ] = "ØB¿J(~R)";
         Text[ turkish ] = "Relief";
@@ -4794,9 +4794,9 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ korean ] =
     {
-            < "Keine" ; Default ; > ;
-        < "Erhaben" ; Default ; > ;
-        < "Vertieft" ; Default ; > ;
+            < "æ¯¿Ω" ; Default ; > ;
+        < "µπ√‚" ; Default ; > ;
+        < "»®" ; Default ; > ;
     };
     StringList [ chinese_simplified ] =
     {
@@ -4830,7 +4830,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ finnish ] =
     {
-            < "Keine" ; Default ; > ;
+            < "Ei mit‰‰n" ; Default ; > ;
         < "Erhaben" ; Default ; > ;
         < "Vertieft" ; Default ; > ;
     };
@@ -5297,7 +5297,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "Automatic";
         Text[ arabic ] = " ·ﬁ«∆Ì";
         Text[ catalan ] = "Autom·tico";
-        Text[ finnish ] = "A~utomatisch";
+        Text[ finnish ] = "A~utomaattinen";
     };
     FixedText FT_FONTSIZE
     {
@@ -5359,7 +5359,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ polish ] = "Rotacja / Skalowanie";
         Text[ portuguese_brazilian ] = "Rotation / scaling";
         Text[ japanese ] = "âÒì]Ç∆î{ó¶";
-        Text[ korean ] = "Rotation / scaling";
+        Text[ korean ] = "»∏¿¸ / Ω∫ƒ…¿œ∏µ";
         Text[ chinese_simplified ] = "–˝◊™/œ‘ æ±»¡–";
         Text[ chinese_traditional ] = "±€¬‡/≈„•‹§Ò®“";
         Text[ turkish ] = "Rotation / scaling";
@@ -5385,13 +5385,13 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ polish ] = "Skalowanie";
         Text[ portuguese_brazilian ] = "Scaling";
         Text[ japanese ] = "î{ó¶";
-        Text[ korean ] = "Scaling";
+        Text[ korean ] = "Ω∫ƒ…¿œ∏µ";
         Text[ chinese_simplified ] = "œ‘ æ±»¡–";
         Text[ chinese_traditional ] = "≈„•‹§Ò®“";
         Text[ turkish ] = "Scaling";
         Text[ arabic ] = "Scaling";
         Text[ catalan ] = "Scaling";
-        Text[ finnish ] = "Skalierung";
+        Text[ finnish ] = "Zoomaa kohteeseen";
     };
     RadioButton RB_0_DEG
     {
@@ -5412,7 +5412,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ polish ] = "0 stopni";
         Text[ portuguese_brazilian ] = "0 degree";
         Text[ japanese ] = "0 ìx";
-        Text[ korean ] = "0 degree";
+        Text[ korean ] = "0 µµ";
         Text[ chinese_simplified ] = "0 ∂»";
         Text[ chinese_traditional ] = "0 ´◊";
         Text[ turkish ] = "0 degree";
@@ -5439,13 +5439,13 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ polish ] = "90 stopni";
         Text[ portuguese_brazilian ] = "90 degree";
         Text[ japanese ] = "90 ìx";
-        Text[ korean ] = "90 degree";
+        Text[ korean ] = "90 µµ";
         Text[ chinese_simplified ] = "90 ∂»";
         Text[ chinese_traditional ] = "90 ´◊";
         Text[ turkish ] = "90 degree";
         Text[ arabic ] = "90 œ—Ã…";
         Text[ catalan ] = "90 grados";
-        Text[ finnish ] = "90 Grad";
+        Text[ finnish ] = "90 astetta";
     };
     RadioButton RB_270_DEG
     {
@@ -5466,7 +5466,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ polish ] = "270 stopni";
         Text[ portuguese_brazilian ] = "270 degree";
         Text[ japanese ] = "270 ìx";
-        Text[ korean ] = "270 degree";
+        Text[ korean ] = "270 µµ";
         Text[ chinese_simplified ] = "270 ∂»";
         Text[ chinese_traditional ] = "270 ´◊";
         Text[ turkish ] = "270 degree";
@@ -5493,7 +5493,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ polish ] = "Dopasuj do wiersza";
         Text[ portuguese_brazilian ] = "Fit to line";
         Text[ japanese ] = "çsÇ…çáÇÌÇπÇÈ";
-        Text[ korean ] = "Fit to line";
+        Text[ korean ] = "¡Ÿø° ∏¬√ﬂ±‚";
         Text[ chinese_simplified ] = "∫Õ––∂‘∆Î";
         Text[ chinese_traditional ] = "©M¶ÊπÔªÙ";
         Text[ turkish ] = "Fit to line";
@@ -5516,10 +5516,10 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ italian ] = "Scala larghezza";
         Text[ danish ] = "Scale width";
         Text[ swedish ] = "Skala bredd";
-        Text[ polish ] = "Skaluj szerokoúÊ";
+        Text[ polish ] = "Skaluj szeroko?Ê";
         Text[ portuguese_brazilian ] = "Scale width";
         Text[ japanese ] = "ïùÇÃî{ó¶";
-        Text[ korean ] = "Scale width";
+        Text[ korean ] = "∆¯ Ω∫ƒ…¿œ∏µ";
         Text[ chinese_simplified ] = " π”√øÌ∂»œ‘ æ±»¿˝";
         Text[ chinese_traditional ] = "±ƒ•Œºe´◊≈„•‹§Ò®“";
         Text[ turkish ] = "Scale width";
@@ -5649,13 +5649,13 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         };
         StringList [ polish ] =
         {
-                < "Domyúlnie" ; Default ; > ;
+                < "Domy?lnie" ; Default ; > ;
             < "Szerokie" ; Default ; > ;
             < "Wπskie" ; Default ; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
-                < "Padr„o" ; Default ; > ;
+                < "Padr?o" ; Default ; > ;
             < "Gesperrt" ; Default ; > ;
             < "Schmal" ; Default ; > ;
         };
@@ -6141,11 +6141,11 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     };
     StringList [ finnish ] =
     {
-            < "(Ei mit‰‰n)" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-        < "(" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-        < "<" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-        < "{" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+            < "(Ei mit‰‰n)" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
         < "Muut merkit" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
     };
     };
@@ -6372,11 +6372,11 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     };
     StringList [ finnish ] =
     {
-            < "(Ei mit‰‰n)" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-        < ")" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-        < ">" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-        < "}" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+            < "(Ei mit‰‰n)" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
         < "Muut merkit" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
     };
     };
