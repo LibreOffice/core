@@ -380,8 +380,8 @@
    </node>
    <node oor:name="private:resource/toolbar/optimizetablebar" oor:op="replace">
     <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Optimize Table</value>
-     <value xml:lang="de">Tabelle optimieren</value>
+     <value xml:lang="en-US">Optimize</value>
+     <value xml:lang="de">Optimieren</value>
     </prop>
    </node>
    <node oor:name="private:resource/toolbar/previewobjectbar" oor:op="replace">
