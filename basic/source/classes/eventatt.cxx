@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-02-22 15:40:19 $
+ *  last change: $Author: ab $ $Date: 2001-03-03 16:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,12 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
 
+
+//==================================================================================================
+
+#include <xmlscript/xmldlg_imexp.hxx>
 #include <svtools/sbx.hxx>
+#include <sbunoobj.hxx>
 #include <sbstar.hxx>
 #include <sbmeth.hxx>
 
@@ -265,25 +270,6 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         if( pRet )
             *pRet = sbxToUnoValue( xValue );
     }
-
-    /*
-    Guard< Mutex > aGuard( maMutex );
-
-    ScriptEvent aScriptEvent;
-    aScriptEvent.Source         = (OWeakObject *)this;  // get correct XInterface
-    aScriptEvent.ListenerType   = Event.ListenerType;
-    aScriptEvent.MethodName     = Event.MethodName;
-    aScriptEvent.Arguments      = Event.Arguments;
-    aScriptEvent.Helper         = Event.Helper;
-    aScriptEvent.Arguments      = Event.Arguments;
-    aScriptEvent.ScriptType     = maScriptType;
-    aScriptEvent.ScriptCode     = maScriptCode;
-
-    if( pRet )
-        *pRet = mxScriptListener->approveFiring( aScriptEvent );
-    else
-        mxScriptListener->firing( aScriptEvent );
-        */
 }
 
 
@@ -529,126 +515,74 @@ void SAL_CALL DialogEventAttacher::attachEvents
 }
 
 
-
-// TEST
-void RTL_Impl_ExecuteDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
+void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 {
     Reference< XMultiServiceFactory > xSMgr( comphelper::getProcessServiceFactory() );
     if( !xSMgr.is() )
         return;
 
-    // Wir brauchen mindestens 1 Parameter
-    if ( rPar.Count() < 2 )
+    // We need at least 2 parameters
+    if ( rPar.Count() < 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    sal_Bool bExecute = rPar.Get(1)->GetBool();
 
+    // Get library
+    SbxBaseRef pObj = (SbxBase*)rPar.Get( 1 )->GetObject();
+    if( !(pObj && pObj->ISA(SbUnoObject)) )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+    Any aAny = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
+    TypeClass eType = aAny.getValueType().getTypeClass();
+    if( eType != TypeClass_INTERFACE )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
 
-    Reference< XToolkit > xToolkit( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), UNO_QUERY );
+    // Get XNameAccess from any
+    Reference< XNameAccess > xNameAccess;
+    aAny >>= xNameAccess;
+    if( !xNameAccess.is() )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    // Get dialog name
+    String aDialogName = rPar.Get( 2 )->GetString();
+
+    // Get dialog data
+    Any aElement = xNameAccess->getByName( aDialogName );
+    Sequence< sal_Int8 > aDialogsSeq;
+    aElement >>= aDialogsSeq;
 
     // Create a DialogModel
-    Reference< XNameContainer > xC( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
-    Reference< XMultiServiceFactory >  xModFact( xC, UNO_QUERY );
+    Sequence< Reference< XNameContainer > > aModelSeq;
+    xmlscript::importDialogModelsFromByteSequence( &aModelSeq, aDialogsSeq );
+    Reference< XNameContainer > xDialogModel = aModelSeq.getConstArray()[0];
+    if( !xDialogModel.is() )
+        return;
 
-    // Create a ButtonModel
-    Reference< XControlModel > xCtrl1( xModFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlButtonModel" ) ) ), UNO_QUERY );
-    Reference< XPropertySet > xPSet( xCtrl1, UNO_QUERY );
-
-
-    // EventContainer
-    Reference< XScriptEventsSupplier > xEventsSupplier( xCtrl1, UNO_QUERY );
-    if( xEventsSupplier.is() )
-    {
-        Reference< XNameContainer > xEventCont = xEventsSupplier->getEvents();
-
-        ScriptEventDescriptor aDesc;
-        OUString aType( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.XActionListener" ) );
-        OUString aMethod( RTL_CONSTASCII_USTRINGPARAM( "actionPerformed" ) );
-        OUString aName = aType;
-        aName += OUString(RTL_CONSTASCII_USTRINGPARAM( "::" ) );
-        aName += aMethod;
-
-        aDesc.ListenerType = aType;
-        aDesc.EventMethod = aMethod;
-        aDesc.ScriptType = OUString( RTL_CONSTASCII_USTRINGPARAM( "StarBasic" ) );
-        aDesc.ScriptCode = OUString( RTL_CONSTASCII_USTRINGPARAM( "standard.module1.doit" ) );
-
-        Any aEventAny;
-        aEventAny <<= aDesc;
-        xEventCont->insertByName( aName, aEventAny );
-    }
-
-
-    Any aValue;
-    aValue <<= (sal_Int32) 10;
-    xPSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
-    aValue <<= (sal_Int32) 10;
-    xPSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ), aValue );
-    aValue <<= (sal_Int32) 40;
-    xPSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aValue );
-    aValue <<= (sal_Int32) 12;
-    xPSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
-    aValue <<= OUString(RTL_CONSTASCII_USTRINGPARAM( "Test!" ) );
-    xPSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" ) ), aValue );
-    Any aAny;
-    aAny <<= xCtrl1;
-    xC->insertByName( OUString(RTL_CONSTASCII_USTRINGPARAM("Control1" ) ), aAny );
-
-    Reference< XPropertySet > xDlgPSet( xC, UNO_QUERY );
-    aValue <<= OUString(RTL_CONSTASCII_USTRINGPARAM( "Test-Dialog" ) );
-    xDlgPSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aValue );
-    aValue <<= (sal_Int32) 200;
-    xDlgPSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aValue );
-    aValue <<= (sal_Int32) 200;
-    xDlgPSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
-
-    // Create a Dialog
+    // Create a "living" Dialog
     Reference< XControl > xDlg( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), UNO_QUERY );
-    Reference< XControlModel > xDlgMod( xC, UNO_QUERY );
+    Reference< XControlModel > xDlgMod( xDialogModel, UNO_QUERY );
     xDlg->setModel( xDlgMod );
-
-     // Create a EditModel
-    Reference< XControlModel > xCtrl2( xModFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlEditModel" ) ) ), UNO_QUERY );
-    xPSet = Reference< XPropertySet >( xCtrl2, UNO_QUERY );
-    aValue <<= (sal_Int32) 10;
-    xPSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
-    aValue <<= (sal_Int32) 40;
-    xPSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ), aValue );
-    aValue <<= (sal_Int32) 80;
-    xPSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aValue );
-    aValue <<= (sal_Int32) 12;
-    xPSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
-    aValue <<= OUString(RTL_CONSTASCII_USTRINGPARAM( "Text..." ) );
-    xPSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Text" ) ), aValue );
-    aAny <<= xCtrl2;
-    xC->insertByName( OUString(RTL_CONSTASCII_USTRINGPARAM("Control2" ) ), aAny );
-
-    // test if listener works...
-    aValue <<= (sal_Int32) 20;
-    xPSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
-
+    Reference< XWindow > xW( xDlg, UNO_QUERY );
+    xW->setVisible( sal_False );
+    Reference< XToolkit > xToolkit( xSMgr->createInstance(
+        OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), UNO_QUERY );
     xDlg->createPeer( xToolkit, NULL );
-
-
     attachDialogEvents( pBasic, xDlg );
 
-    if( bExecute )
-    {
-        Reference< XDialog > xD( xDlg, UNO_QUERY );
-        xD->execute();
-    }
-    else
-    {
-        Reference< XWindow > xW( xDlg, UNO_QUERY );
-        xW->setVisible( sal_True );
-    }
-
     // Return dialog
-    aValue <<= xDlg;
+    Any aRetVal;
+    aRetVal <<= xDlg;
     SbxVariableRef refVar = rPar.Get(0);
-    unoToSbxValue( (SbxVariable*)refVar, aValue );
+    unoToSbxValue( (SbxVariable*)refVar, aRetVal );
 }
 
 
