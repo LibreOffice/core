@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:56:53 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,6 +631,8 @@ static __FAR_DATA SvXMLTokenMapEntry aDatabaseRangeAttrTokenMap[] =
 static __FAR_DATA SvXMLTokenMapEntry aDatabaseRangeSourceSQLAttrTokenMap[] =
 {
     { XML_NAMESPACE_TABLE, XML_DATABASE_NAME,           XML_TOK_SOURCE_SQL_ATTR_DATABASE_NAME       },
+    { XML_NAMESPACE_XLINK, XML_HREF,                    XML_TOK_SOURCE_SQL_ATTR_HREF                },
+    { XML_NAMESPACE_TABLE, XML_CONNECTION_RESOURCE,     XML_TOK_SOURCE_SQL_ATTR_CONNECTION_RESSOURCE},
     { XML_NAMESPACE_TABLE, XML_SQL_STATEMENT,           XML_TOK_SOURCE_SQL_ATTR_SQL_STATEMENT       },
     { XML_NAMESPACE_TABLE, XML_PARSE_SQL_STATEMENT, XML_TOK_SOURCE_SQL_ATTR_PARSE_SQL_STATEMENT },
     XML_TOKEN_MAP_END
@@ -638,15 +640,19 @@ static __FAR_DATA SvXMLTokenMapEntry aDatabaseRangeSourceSQLAttrTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aDatabaseRangeSourceTableAttrTokenMap[] =
 {
-    { XML_NAMESPACE_TABLE, XML_DATABASE_NAME,   XML_TOK_SOURCE_TABLE_ATTR_DATABASE_NAME     },
-    { XML_NAMESPACE_TABLE, XML_TABLE_NAME,      XML_TOK_SOURCE_TABLE_ATTR_TABLE_NAME        },
+    { XML_NAMESPACE_TABLE, XML_DATABASE_NAME,           XML_TOK_SOURCE_TABLE_ATTR_DATABASE_NAME         },
+    { XML_NAMESPACE_XLINK, XML_HREF,                    XML_TOK_SOURCE_TABLE_ATTR_HREF                  },
+    { XML_NAMESPACE_TABLE, XML_CONNECTION_RESOURCE,     XML_TOK_SOURCE_TABLE_ATTR_CONNECTION_RESSOURCE  },
+    { XML_NAMESPACE_TABLE, XML_TABLE_NAME,              XML_TOK_SOURCE_TABLE_ATTR_TABLE_NAME            },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aDatabaseRangeSourceQueryAttrTokenMap[] =
 {
-    { XML_NAMESPACE_TABLE, XML_DATABASE_NAME,   XML_TOK_SOURCE_QUERY_ATTR_DATABASE_NAME     },
-    { XML_NAMESPACE_TABLE, XML_QUERY_NAME,      XML_TOK_SOURCE_QUERY_ATTR_QUERY_NAME        },
+    { XML_NAMESPACE_TABLE, XML_DATABASE_NAME,           XML_TOK_SOURCE_QUERY_ATTR_DATABASE_NAME         },
+    { XML_NAMESPACE_XLINK, XML_HREF,                    XML_TOK_SOURCE_QUERY_ATTR_HREF                  },
+    { XML_NAMESPACE_TABLE, XML_CONNECTION_RESOURCE,     XML_TOK_SOURCE_QUERY_ATTR_CONNECTION_RESSOURCE  },
+    { XML_NAMESPACE_TABLE, XML_QUERY_NAME,              XML_TOK_SOURCE_QUERY_ATTR_QUERY_NAME            },
     XML_TOKEN_MAP_END
 };
 
