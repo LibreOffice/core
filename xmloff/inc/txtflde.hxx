@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:19:58 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ namespace com { namespace sun { namespace star {
     namespace text { class XText; }
     namespace beans { class XPropertySet; }
     namespace frame { class XModel; }
+    namespace uno { template<typename A> class Sequence; }
 } } }
 namespace rtl { class OUString; }
 
@@ -191,6 +192,7 @@ enum FieldIdEnum {
     FIELD_ID_MEASURE,               // for measure shapes
 
     FIELD_ID_TABLE_FORMULA,         // DEPRECATED: table formulas (Writer 2.0)
+    FIELD_ID_DROP_DOWN,             // DEPRECATED: dropdown fields (WW8)
 
     FIELD_ID_UNKNOWN        // invalid or unknown field type!
 };
@@ -404,6 +406,14 @@ protected:
     void ProcessCommandType(
         sal_Int32 nCommandType);        /// com::sun::star::sdb::CommandType
 
+    void ProcessStringSequence(
+        const ::com::sun::star::uno::Sequence<rtl::OUString>& rSequence,
+        const rtl::OUString sSelected );
+
+    void ProcessStringSequence(
+        const ::com::sun::star::uno::Sequence<rtl::OUString>& rSequence,
+        sal_Int32 nSelected );
+
     /// for XDependentTextFields, get PropertySet of FieldMaster
     ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >
     GetMasterPropertySet(const ::com::sun::star::uno::Reference <
@@ -520,6 +530,8 @@ private:
     const ::rtl::OUString sPropertyDataCommandType;
     const ::rtl::OUString sPropertyIsFixedLanguage;
     const ::rtl::OUString sPropertyCharStyleNames;
+    const ::rtl::OUString sPropertyItems;
+    const ::rtl::OUString sPropertySelectedItem;
 
     const ::rtl::OUString sEmpty;
 
