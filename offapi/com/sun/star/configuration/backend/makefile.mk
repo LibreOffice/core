@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 14:50:41 $
+#   last change: $Author: rt $ $Date: 2004-08-20 12:59:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,7 @@ IDLFILES = \
     OnlineBackend.idl		\
     HierarchyBrowser.idl	\
     LocalHierarchyBrowser.idl	\
-    DataImporter.idl	\
+    DataImporter.idl		\
     LocalDataImporter.idl	\
     LayerUpdateMerger.idl	\
     Importer.idl			\
@@ -97,9 +97,10 @@ IDLFILES = \
     SchemaSupplier.idl	    \
     LocalSchemaSupplier.idl \
     PolicyLayerBackend.idl  \
-    PlatformBackend.idl  \
-    SystemIntegration.idl \
-    LayerDescriber.idl    \
+    PlatformBackend.idl		\
+    SystemIntegration.idl	\
+    LayerDescriber.idl		\
+    InteractionHandler.idl  \
     XBackend.idl			\
     XBackendEntities.idl	\
     XSchemaSupplier.idl		\
@@ -112,24 +113,25 @@ IDLFILES = \
     XSchemaHandler.idl		\
     XLayerHandler.idl		\
     XUpdateHandler.idl      \
-    XLayerImporter.idl      \
+    XLayerImporter.idl		\
+    XBackendChangesNotifier.idl	\
+    XBackendChangesListener.idl	\
+    XLayerContentDescriber.idl	\
+    ComponentChangeEvent.idl	\
     TemplateIdentifier.idl  \
     SchemaAttribute.idl     \
     NodeAttribute.idl       \
+    PropertyInfo.idl			\
+    MergeRecoveryRequest.idl	\
     MalformedDataException.idl	\
     BackendSetupException.idl	\
+    StratumCreationException.idl	\
     AuthenticationFailedException.idl	\
     CannotConnectException.idl	\
     InvalidAuthenticationMechanismException.idl \
     BackendAccessException.idl	\
     ConnectionLostException.idl	\
-    InsufficientAccessRightsException.idl	\
-    ComponentChangeEvent.idl    \
-    XBackendChangesNotifier.idl	\
-    XBackendChangesListener.idl	\
-    PropertyInfo.idl			\
-    XLayerContentDescriber.idl
-
+    InsufficientAccessRightsException.idl
 
 .INCLUDE: target.mk
 .INCLUDE: $(PRJ)$/util$/target.pmk
