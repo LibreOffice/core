@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-05 12:44:24 $
+ *  last change: $Author: ka $ $Date: 2001-03-07 12:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1277,7 +1277,7 @@ sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::
                                           const ::com::sun::star::datatransfer::DataFlavor& rFlavor2,
                                           sal_Bool bCompareParameters )
 {
-    if( bCompareParameters )
+    if( sal_True/*bCompareParameters*/ )
         return( rFlavor1.MimeType == rFlavor2.MimeType );
     else
         return( String( rFlavor1.MimeType ).GetToken( 0, ';' ) == String( rFlavor2.MimeType ).GetToken( 0, ';' ) );
