@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pamain.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:48:26 $
+ *  last change: $Author: kz $ $Date: 2005-03-03 20:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,7 @@ void MyApp::Main()
 
     pPADialog = PADialog::Create( NULL , FALSE );
     Application::SetDisplayName( pPADialog->GetText() );
+    pPADialog->SetIcon(501);
     pPADialog->Execute();
     delete pPADialog;
 
