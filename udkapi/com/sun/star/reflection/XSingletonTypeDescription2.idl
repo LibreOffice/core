@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSingletonTypeDescription2.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:00:53 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ interface XTypeDescription;
    <p>This type supersedes <type>XSingletonTypeDescription</type>, which only
    supports obsolete, service-based singletons.</p>
 
-   @since OOo2.0.0
+   @since OOo 2.0.0
  */
 interface XSingletonTypeDescription2: XSingletonTypeDescription {
     /**
