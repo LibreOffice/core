@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,7 +498,7 @@ TabDialog DLG_TAB_OUTLINE
         Text [ french ] = "Format" ;
         Text [ dutch ] = "~Vorm" ;
         Text [ swedish ] = "~Format" ;
-        Text [ danish ] = "Format" ;
+        Text [ danish ] = "Form" ;
         Text [ portuguese_brazilian ] = "~Form" ;
         Text [ portuguese ] = "Forma~to" ;
         Text[ chinese_simplified ] = "∏Ò Ω(~F)";
