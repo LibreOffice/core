@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-29 09:42:53 $
+ *  last change: $Author: dr $ $Date: 2002-11-01 13:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -861,195 +861,194 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
 {
     sal_Bool        bRetValue = sal_False;
 
-    if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
+    sal_Bool        bMirrored = sal_False;
+    sal_Bool        bRotate   = sal_True;
+    GraphicAttr*    pGraphicAttr = NULL;
+    GraphicObject   aGraphicObject;
+    String          aGraphicUrl;
+    ByteString      aUniqueId;
+
+    ::com::sun::star::drawing::BitmapMode   eBitmapMode( ::com::sun::star::drawing::BitmapMode_NO_REPEAT );
+    ::com::sun::star::uno::Any aAny;
+
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, rSource ) )
     {
-        sal_Bool        bMirrored = sal_False;
-        sal_Bool        bRotate   = sal_True;
-        GraphicAttr*    pGraphicAttr = NULL;
-        GraphicObject   aGraphicObject;
-        String          aGraphicUrl;
-        ByteString      aUniqueId;
-
-        ::com::sun::star::drawing::BitmapMode   eBitmapMode( ::com::sun::star::drawing::BitmapMode_NO_REPEAT );
-        ::com::sun::star::uno::Any aAny;
-
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, rSource ) )
+        if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ) )
         {
-            Point aEmptyPoint;
-            Rectangle aRect( aEmptyPoint, pShapeBoundRect->GetSize() );
+            ::com::sun::star::uno::Sequence<sal_uInt8> aSeq = *(::com::sun::star::uno::Sequence<sal_uInt8>*)aAny.getValue();
+            const sal_uInt8*    pAry = aSeq.getArray();
+            sal_uInt32          nAryLen = aSeq.getLength();
 
-            if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ) )
+            // the metafile is already rotated
+            bRotate = sal_False;
+
+            if ( pAry && nAryLen )
             {
-                ::com::sun::star::uno::Sequence<sal_uInt8> aSeq = *(::com::sun::star::uno::Sequence<sal_uInt8>*)aAny.getValue();
-                const sal_uInt8*    pAry = aSeq.getArray();
-                sal_uInt32          nAryLen = aSeq.getLength();
-
-                // the metafile is already rotated
-                bRotate = sal_False;
-
-                if ( pAry && nAryLen )
+                Graphic         aGraphic;
+                SvMemoryStream  aTemp( (void*)pAry, nAryLen, STREAM_READ );
+                sal_uInt32 nErrCode = GraphicConverter::Import( aTemp, aGraphic, CVT_WMF );
+                if ( nErrCode == ERRCODE_NONE )
                 {
-                    Graphic         aGraphic;
-                    SvMemoryStream  aTemp( (void*)pAry, nAryLen, STREAM_READ );
-                    sal_uInt32 nErrCode = GraphicConverter::Import( aTemp, aGraphic, CVT_WMF );
+                    aGraphicObject = aGraphic;
+                    aUniqueId = aGraphicObject.GetUniqueID();
+                }
+            }
+        }
+        else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) ) )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >xBitmap;
+            if ( ::cppu::extractInterface( xBitmap, aAny ) )
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBitmap;
+                if ( aAny >>= xBitmap )
+                {
+                    BitmapEx    aBitmapEx( VCLUnoHelper::GetBitmap( xBitmap ) );
+                    Graphic     aGraphic( aBitmapEx );
+                    aGraphicObject = aGraphic;
+                    aUniqueId = aGraphicObject.GetUniqueID();
+                }
+            }
+        }
+        else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapURL" ) ) )
+        {
+            aGraphicUrl = *(::rtl::OUString*)aAny.getValue();
+        }
+        else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ) )
+        {
+            aGraphicUrl = *(::rtl::OUString*)aAny.getValue();
+        }
+        else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillHatch" ) ) )
+        {
+            ::com::sun::star::drawing::Hatch aHatch;
+            if ( aAny >>= aHatch )
+            {
+                sal_Bool        bBackground = sal_False;
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                        String( RTL_CONSTASCII_USTRINGPARAM( "FillBackground" ) ), sal_True ) )
+                {
+                    aAny >>= bBackground;
+                }
+
+                const MapMode   aMap100( MAP_100TH_MM );
+                VirtualDevice   aVDev;
+                const Size      aOutSize( aVDev.PixelToLogic( Size( 28, 28 ), aMap100 ) );
+
+                if( aVDev.SetOutputSize( aOutSize ) )
+                {
+                    Rectangle aRectangle = Rectangle( Point(), aOutSize );
+                    const PolyPolygon   aPolyPoly( aRectangle );
+                    Hatch               aVclHatch( (HatchStyle) aHatch.Style, Color( aHatch.Color ), aHatch.Distance, (sal_uInt16)aHatch.Angle );
+
+                    if ( bBackground )
+                    {
+                        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                            String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ), sal_False ) )
+                        {
+                            aVDev.SetLineColor();
+                            aVDev.SetFillColor( ImplGetColor( *((sal_uInt32*)aAny.getValue()), sal_False ) );
+                            aVDev.DrawRect( Rectangle( Point(), aOutSize ) );
+                        }
+                    }
+                    aVDev.SetMapMode( aMap100 );
+                    aVDev.DrawHatch( aPolyPoly, aVclHatch );
+                    Bitmap  aBitmap( aVDev.GetBitmap( Point(), aOutSize ) );
+
+                    if ( bBackground )
+                        aGraphicObject = Graphic( aBitmap );
+                    else
+                    {
+                        VirtualDevice   aMaskVDev( 1 );
+                        aMaskVDev.SetMapMode( aMap100 );
+                        if( aMaskVDev.SetOutputSize( aOutSize ) )
+                        {
+                            aVclHatch.SetColor( Color( COL_BLACK ) );
+                            aMaskVDev.DrawHatch( aPolyPoly, aVclHatch );
+                            Graphic   aGraphic( BitmapEx( aBitmap, aMaskVDev.GetBitmap( Point(), aOutSize ) ) );
+                            aGraphicObject = aGraphic;
+                        }
+                        else
+                            aGraphicObject = Graphic( aBitmap );
+
+                    }
+                    eBitmapMode = ::com::sun::star::drawing::BitmapMode_REPEAT;
+                    aUniqueId = aGraphicObject.GetUniqueID();
+                }
+            }
+        }
+        if ( aGraphicUrl.Len() )
+        {
+            String aVndUrl( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
+            xub_StrLen nIndex = aGraphicUrl.Search( aVndUrl, 0 );
+            if ( nIndex != STRING_NOTFOUND )
+            {
+                nIndex += aVndUrl.Len();
+                if ( aGraphicUrl.Len() > nIndex  )
+                    aUniqueId = ByteString( aGraphicUrl, nIndex, aGraphicUrl.Len() - nIndex, RTL_TEXTENCODING_UTF8 );
+            }
+            else
+            {
+                INetURLObject   aTmp( aGraphicUrl );
+                SvStream* pIn = ::utl::UcbStreamHelper::CreateStream(
+                    aTmp.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+                if ( pIn )
+                {
+                    Graphic aGraphic;
+                    sal_uInt32 nErrCode = GraphicConverter::Import( *pIn, aGraphic );
                     if ( nErrCode == ERRCODE_NONE )
                     {
                         aGraphicObject = aGraphic;
                         aUniqueId = aGraphicObject.GetUniqueID();
                     }
+                    delete pIn;
                 }
             }
-            else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) ) )
+        }
+        if ( aUniqueId.Len() )
+        {
+            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsMirrored" ) ), sal_True ) )
+                aAny >>= bMirrored;
+
+            if ( bFillBitmap )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >xBitmap;
-                if ( ::cppu::extractInterface( xBitmap, aAny ) )
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapMode" ) ), sal_True ) )
+                    aAny >>= eBitmapMode;
+            }
+            else
+            {
+                sal_uInt16 nAngle = bRotate && EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                                        String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True )
+                                    ? (sal_uInt16)( ( *((sal_Int32*)aAny.getValue() ) ) + 5 ) / 10
+                                    : 0;
+
+                if ( bMirrored || nAngle )
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBitmap;
-                    if ( aAny >>= xBitmap )
+                    pGraphicAttr = new GraphicAttr;
+                    if ( bMirrored )
+                        pGraphicAttr->SetMirrorFlags( BMP_MIRROR_HORZ );
+                    GraphicObject aTmpGraphicObject( aUniqueId );
+                    if ( aTmpGraphicObject.GetType() == GRAPHIC_GDIMETAFILE )
+                        AddOpt( ESCHER_Prop_Rotation, ( ( ((sal_Int32)nAngle << 16 ) / 10 ) + 0x8000 ) &~ 0xffff );
+                    else
                     {
-                        BitmapEx    aBitmapEx( VCLUnoHelper::GetBitmap( xBitmap ) );
-                        Graphic     aGraphic( aBitmapEx );
-                        aGraphicObject = aGraphic;
-                        aUniqueId = aGraphicObject.GetUniqueID();
-                    }
-                }
-            }
-            else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapURL" ) ) )
-            {
-                aGraphicUrl = *(::rtl::OUString*)aAny.getValue();
-            }
-            else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ) )
-            {
-                aGraphicUrl = *(::rtl::OUString*)aAny.getValue();
-            }
-            else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillHatch" ) ) )
-            {
-                ::com::sun::star::drawing::Hatch aHatch;
-                if ( aAny >>= aHatch )
-                {
-                    sal_Bool        bBackground = sal_False;
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                            String( RTL_CONSTASCII_USTRINGPARAM( "FillBackground" ) ), sal_True ) )
-                    {
-                        aAny >>= bBackground;
-                    }
-
-                    const MapMode   aMap100( MAP_100TH_MM );
-                    VirtualDevice   aVDev;
-                    const Size      aOutSize( aVDev.PixelToLogic( Size( 28, 28 ), aMap100 ) );
-
-                    if( aVDev.SetOutputSize( aOutSize ) )
-                    {
-                        Rectangle aRectangle = Rectangle( Point(), aOutSize );
-                        const PolyPolygon   aPolyPoly( aRectangle );
-                        Hatch               aVclHatch( (HatchStyle) aHatch.Style, Color( aHatch.Color ), aHatch.Distance, (sal_uInt16)aHatch.Angle );
-
-                        if ( bBackground )
+                        pGraphicAttr->SetRotation( nAngle );
+                        if ( nAngle && pShapeBoundRect )   // up to xp ppoint does not rotate bitmaps !
                         {
-                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                                String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ), sal_False ) )
-                            {
-                                aVDev.SetLineColor();
-                                aVDev.SetFillColor( ImplGetColor( *((sal_uInt32*)aAny.getValue()), sal_False ) );
-                                aVDev.DrawRect( Rectangle( Point(), aOutSize ) );
-                            }
-                        }
-                        aVDev.SetMapMode( aMap100 );
-                        aVDev.DrawHatch( aPolyPoly, aVclHatch );
-                        Bitmap  aBitmap( aVDev.GetBitmap( Point(), aOutSize ) );
-
-                        if ( bBackground )
-                            aGraphicObject = Graphic( aBitmap );
-                        else
-                        {
-                            VirtualDevice   aMaskVDev( 1 );
-                            aMaskVDev.SetMapMode( aMap100 );
-                            if( aMaskVDev.SetOutputSize( aOutSize ) )
-                            {
-                                aVclHatch.SetColor( Color( COL_BLACK ) );
-                                aMaskVDev.DrawHatch( aPolyPoly, aVclHatch );
-                                Graphic   aGraphic( BitmapEx( aBitmap, aMaskVDev.GetBitmap( Point(), aOutSize ) ) );
-                                aGraphicObject = aGraphic;
-                            }
-                            else
-                                aGraphicObject = Graphic( aBitmap );
-
-                        }
-                        eBitmapMode = ::com::sun::star::drawing::BitmapMode_REPEAT;
-                        aUniqueId = aGraphicObject.GetUniqueID();
-                    }
-                }
-            }
-            if ( aGraphicUrl.Len() )
-            {
-                String aVndUrl( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
-                xub_StrLen nIndex = aGraphicUrl.Search( aVndUrl, 0 );
-                if ( nIndex != STRING_NOTFOUND )
-                {
-                    nIndex += aVndUrl.Len();
-                    if ( aGraphicUrl.Len() > nIndex  )
-                        aUniqueId = ByteString( aGraphicUrl, nIndex, aGraphicUrl.Len() - nIndex, RTL_TEXTENCODING_UTF8 );
-                }
-                else
-                {
-                    INetURLObject   aTmp( aGraphicUrl );
-                    SvStream* pIn = ::utl::UcbStreamHelper::CreateStream(
-                        aTmp.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
-                    if ( pIn )
-                    {
-                        Graphic aGraphic;
-                        sal_uInt32 nErrCode = GraphicConverter::Import( *pIn, aGraphic );
-                        if ( nErrCode == ERRCODE_NONE )
-                        {
-                            aGraphicObject = aGraphic;
-                            aUniqueId = aGraphicObject.GetUniqueID();
-                        }
-                        delete pIn;
-                    }
-                }
-            }
-            if ( aUniqueId.Len() )
-            {
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsMirrored" ) ), sal_True ) )
-                    aAny >>= bMirrored;
-
-                if ( bFillBitmap )
-                {
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapMode" ) ), sal_True ) )
-                        aAny >>= eBitmapMode;
-                }
-                else
-                {
-                    sal_uInt16 nAngle = bRotate && EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                                            String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True )
-                                        ? (sal_uInt16)( ( *((sal_Int32*)aAny.getValue() ) ) + 5 ) / 10
-                                        : 0;
-
-                    if ( bMirrored || nAngle )
-                    {
-                        pGraphicAttr = new GraphicAttr;
-                        if ( bMirrored )
-                            pGraphicAttr->SetMirrorFlags( BMP_MIRROR_HORZ );
-                        GraphicObject aTmpGraphicObject( aUniqueId );
-                        if ( aTmpGraphicObject.GetType() == GRAPHIC_GDIMETAFILE )
-                            AddOpt( ESCHER_Prop_Rotation, ( ( ((sal_Int32)nAngle << 16 ) / 10 ) + 0x8000 ) &~ 0xffff );
-                        else
-                        {
-                            pGraphicAttr->SetRotation( nAngle );
-                            if ( nAngle )   // up to xp ppoint does not rotate bitmaps !
-                            {
-                                Polygon aPoly( *pShapeBoundRect );
-                                aPoly.Rotate( pShapeBoundRect->TopLeft(), nAngle );
-                                *pShapeBoundRect = aPoly.GetBoundRect();
-                                bSuppressRotation = sal_True;
-                            }
+                            Polygon aPoly( *pShapeBoundRect );
+                            aPoly.Rotate( pShapeBoundRect->TopLeft(), nAngle );
+                            *pShapeBoundRect = aPoly.GetBoundRect();
+                            bSuppressRotation = sal_True;
                         }
                     }
                 }
-                if ( eBitmapMode == ::com::sun::star::drawing::BitmapMode_REPEAT )
-                    AddOpt( ESCHER_Prop_fillType, ESCHER_FillTexture );
-                else
-                    AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
+            }
+            if ( eBitmapMode == ::com::sun::star::drawing::BitmapMode_REPEAT )
+                AddOpt( ESCHER_Prop_fillType, ESCHER_FillTexture );
+            else
+                AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
+
+            if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
+            {
+                Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
 
                 sal_uInt32 nBlibId = 0;
                 if ( aUniqueId.Len() )
@@ -1066,9 +1065,26 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                     bRetValue = sal_True;
                 }
             }
-            delete pGraphicAttr;
+            else
+            {
+                EscherGraphicProvider aProvider;
+                SvMemoryStream aMemStrm;
+                Rectangle aRect;
+
+                if ( aUniqueId.Len() && aProvider.GetBlibID( aMemStrm, aUniqueId, aRect, pGraphicAttr ) )
+                {
+                    // grab BLIP from stream and insert directly as complex property
+                    // ownership of stream memory goes to complex property
+                    aMemStrm.ObjectOwnsMemory( FALSE );
+                    sal_uInt8* pBuf = (sal_uInt8*) aMemStrm.GetData();
+                    sal_uInt32 nSize = aMemStrm.Seek( STREAM_SEEK_TO_END );
+                    AddOpt( ESCHER_Prop_fillBlip, sal_True, nSize, pBuf, nSize );
+                    bRetValue = sal_True;
+                }
+            }
         }
     }
+    delete pGraphicAttr;
     return bRetValue;
 }
 
