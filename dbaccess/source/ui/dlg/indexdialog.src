@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:29:48 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 07:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _DBAUI_INDEXDIALOG_HRC_
 #include "indexdialog.hrc"
 #endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
 
 #define DIALOG_SIZE_X       220
 #define DIALOG_SIZE_Y       140
@@ -97,6 +100,7 @@ ModalDialog DLG_INDEXDESIGN
             ToolBoxItem
             {
                 Identifier = ID_INDEX_NEW;
+                HelpId = HID_DLGIDX_NEWINDEX;
                 Command = ".index:createNew";
                 ItemBitmap = Bitmap { File = "indexnew_sc.bmp"; };
                 Text = "neuer Index" ;
@@ -125,6 +129,7 @@ ModalDialog DLG_INDEXDESIGN
             ToolBoxItem
             {
                 Identifier = ID_INDEX_DROP;
+                HelpId = HID_DLGIDX_DROPINDEX;
                 Command = ".index:dropCurrent";
                 ItemBitmap = Bitmap { File = "indexdrop_sc.bmp"; };
                 Text = "aktuellen Index löschen" ;
@@ -153,6 +158,7 @@ ModalDialog DLG_INDEXDESIGN
             ToolBoxItem
             {
                 Identifier = ID_INDEX_RENAME;
+                HelpId = HID_DLGIDX_RENAMEINDEX;
                 Command = ".index:renameCurrent";
                 ItemBitmap = Bitmap { File = "indexrename_sc.bmp"; };
                 Text = "aktuellen Index umbenennen" ;
@@ -181,6 +187,7 @@ ModalDialog DLG_INDEXDESIGN
             ToolBoxItem
             {
                 Identifier = ID_INDEX_SAVE;
+                HelpId = HID_DLGIDX_SAVEINDEX;
                 Command = ".index:saveCurrent";
                 ItemBitmap = Bitmap { File = "indexsave_sc.bmp"; };
                 Text = "aktuellen Index speichern" ;
@@ -209,6 +216,7 @@ ModalDialog DLG_INDEXDESIGN
             ToolBoxItem
             {
                 Identifier = ID_INDEX_RESET;
+                HelpId = HID_DLGIDX_RESETINDEX;
                 Command = ".index:resetCurrent";
                 ItemBitmap = Bitmap { File = "indexreset_sc.bmp"; };
                 Text = "aktuellen Index zurücksetzen" ;
@@ -242,6 +250,8 @@ ModalDialog DLG_INDEXDESIGN
         Size = MAP_APPFONT ( LIST_WIDTH , DIALOG_SIZE_Y - (BUTTON_SIZE_Y + 4) - 29 ) ;
         SVLook = TRUE;
         Border  = TRUE;
+
+        HelpId = HID_DLGIDX_INDEXLIST;
     };
     FixedLine FL_INDEXDETAILS
     {
@@ -746,6 +756,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/07/13 21:29:48  kz
+ *  Merge SRC638: 13.07.01 - 23:29:14
+ *
  *  Revision 1.14  2001/06/08 22:09:10  rt
  *  Merge SRC633: 09.06.01 - 00:09:32
  *
