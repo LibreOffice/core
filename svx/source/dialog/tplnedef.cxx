@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplnedef.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:36:06 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -936,7 +936,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, p )
     {
         aFile.Append( pDashList->GetName() );
 
-        if( !aFile.getExtension().Len() )
+        if( !aFile.getExtension().getLength() )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sod" ) ) );
     }
 
