@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:56:19 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,10 +469,16 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x63:
             case 0x23: // Name                                  [318 269]
                 aIn >> nUINT16;
+            {
                 aIn.Ignore( 2 );
-
-                aStack << aPool.Store( nUINT16 );
-                break;
+                //Determine if this is a user-defined Macro name.
+                const XclImpName* pName = pExcRoot->pIR->GetNameBuffer().GetNameFromIndex(nUINT16);
+                if(pName && !pName->GetScRangeData())
+                    aStack << aPool.Store( ocMacro, pName->GetXclName() );
+                else
+                    aStack << aPool.Store( nUINT16 );
+            }
+            break;
             case 0x44:
             case 0x64:
             case 0x24: // Cell Reference                        [319 270]
@@ -658,11 +664,15 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                     switch( pExtName->GetType() )
                     {
                         case xlExtName:
-                        case xlExtAddIn:
                         {
                             aStack << aPool.Store( ocNoName, pExtName->GetName() );
-                            if( pExtName->GetType() == xlExtName )
-                                pExcRoot->pIR->GetTracer().TraceFormulaExtName();
+                            pExcRoot->pIR->GetTracer().TraceFormulaExtName();
+                        }
+                        break;
+
+                        case xlExtAddIn:
+                        {
+                            aStack << aPool.Store( ocExternal, pExtName->GetName() );
                         }
                         break;
 
