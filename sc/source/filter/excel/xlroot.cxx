@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:30:15 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,12 @@
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
+#ifndef _SFX_PRINTER_HXX
+#include <sfx2/printer.hxx>
+#endif
+#ifndef _SV_FONT_HXX
+#include <vcl/font.hxx>
+#endif
 #ifndef _EDITSTAT_HXX
 #include <svx/editstat.hxx>
 #endif
@@ -93,6 +99,10 @@
 #endif
 #ifndef SC_EDITUTIL_HXX
 #include "editutil.hxx"
+#endif
+
+#ifndef SC_XLSTYLE_HXX
+#include "xlstyle.hxx"
 #endif
 
 #include "root.hxx"
@@ -142,6 +152,8 @@ XclRoot::XclRoot( XclRootData& rRootData ) :
 #ifdef DBG_UTIL
     ++mrData.mnObjCnt;
 #endif
+    if( GetBiff() != xlBiffUnknown )
+        SetMaxPos();
 }
 
 XclRoot::XclRoot( const XclRoot& rRoot ) :
@@ -170,7 +182,28 @@ XclRoot& XclRoot::operator=( const XclRoot& rRoot )
 void XclRoot::SetBiff( XclBiff eBiff )
 {
     mrData.meBiff = eBiff;
-    switch( eBiff )
+    if( eBiff != xlBiffUnknown )
+        SetMaxPos();
+}
+
+void XclRoot::SetCharWidth( const XclFontData& rFontData )
+{
+    if( SfxPrinter* pPrinter = GetPrinter() )
+    {
+        Font aFont( rFontData.maName, Size( 0, rFontData.mnHeight ) );
+        aFont.SetFamily( rFontData.GetScFamily( GetCharSet() ) );
+        aFont.SetCharSet( rFontData.GetScCharSet() );
+        aFont.SetWeight( rFontData.GetScWeight() );
+        pPrinter->SetFont( aFont );
+        mrData.mnCharWidth = pPrinter->GetTextWidth( String( '0' ) );
+    }
+    else
+        mrData.mnCharWidth = 11 * rFontData.mnHeight / 20;
+}
+
+void XclRoot::SetMaxPos()
+{
+    switch( GetBiff() )
     {
         case xlBiff2:
         case xlBiff3:   mrData.maXclMaxPos.Set( EXC_MAXCOL_BIFF2, EXC_MAXROW_BIFF2, EXC_MAXTAB_BIFF2 );    break;
@@ -265,8 +298,7 @@ bool XclRoot::CheckCellRange( ScRange& rRange, const ScAddress rMaxPos ) const
     // check & correct end position
     if( bValidStart )
     {
-        if( !CheckCellAddress( rRange.aEnd, rMaxPos ) )
-            mrData.mbTruncated = true;
+        CheckCellAddress( rRange.aEnd, rMaxPos );
 
         if( rRange.aEnd.Col() > rMaxPos.Col() )
             rRange.aEnd.SetCol( rMaxPos.Col() );
