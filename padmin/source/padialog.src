@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-17 13:09:22 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3800,7 +3800,7 @@ String RID_TXT_FONT_THIN
     Text[ greek ] = "Thin";
     Text[ dutch ] = "Dun";
     Text[ french ] = "Fin";
-    Text[ spanish ] = "Delgada";
+    Text[ spanish ] = "Fina";
     Text[ finnish ] = "Ohut";
     Text[ italian ] = "Fine";
     Text[ danish ] = "Tynd";
