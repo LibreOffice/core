@@ -2,9 +2,9 @@
  *
  *  $RCSfile: login.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:12 $
+ *  last change: $Author: as $ $Date: 2001-05-10 10:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_SERVICES_LOGINDIALOG_HXX_
-#include <services/logindialog.hxx>
+#ifndef __FRAMEWORK_LOGINDIALOG_LOGINDIALOG_HXX_
+#include <logindialog.hxx>
 #endif
 
 #ifndef __FRAMEWORK_CLASSES_SERVICEMANAGER_HXX_
@@ -79,8 +79,8 @@
 #include <macros/debug.hxx>
 #endif
 
-#ifndef __FRAMEWORK_SERVICES_H_
-#include <services.h>
+#ifndef __FRAMEWORK_DEFINES_HXX_
+#include <defines.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -146,12 +146,15 @@
 //_________________________________________________________________________________________________________________
 
 #define TEMPFILE_ENCODING           RTL_TEXTENCODING_UTF8           // encoding of written temp. ascii file
-#define ARGUMENTFOUND               0                               // OUString::compareTo returns 0 if searched string match given one
-#define SEPERATOR                   (sal_Unicode)';'                // seperator for temp. file values
-#define ENCODESIGN                  (sal_Unicode)'\\'               // special character to encode SEPERATOR. These sign must be encoded too!!!
+#define LOGIN_RDB                   DECLARE_ASCII("login.rdb")      // name of our own registry file - neccessary to create own servicemanager
+#define SEPERATOR                   "\n"                            // used to seperate parts in temp. file
 
-#define ARGUMENT_TEMPFILE           DECLARE_ASCII("-f=")            // we support "-f=c:\temp\test.txt" as argument
-#define ARGUMENTLENGTH_TEMPFILE     3                               // length of ARGUMENT_TEMPFILE to find it in argumentlist
+#define MINARGUMENTCOUNT            1                               // count of min. required arguments
+#define ARGUMENTFOUND               0                               // OUString::compareTo returns 0 if searched string match given one
+#define ARGUMENTLENGTH              3                               // length of fixed part of any argument to detect it easier!
+
+#define ARGUMENT_TEMPFILE           DECLARE_ASCII("-f=")            // we support "-f=c:\temp\test.txt" to write dialog data in temp. file
+#define ARGUMENT_DIALOGPARENT       DECLARE_ASCII("-p=")            // we support "-p=36748322" as window handle of parent for vcl dialog
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -197,14 +200,14 @@ class LoginApplication : public Application
     //  private methods
     //*************************************************************************************************************
     private:
-        void        impl_parseCommandline   (                           );      // search supported arguments on command line
-        OUString    impl_encodeString       ( const OUString& sValue    );      // encode SEPERATOR and "\" with an additional "\"! zB "\" => "\\"
+        void impl_parseCommandline();       // search supported arguments on command line
 
     //*************************************************************************************************************
     //  private variables
     //*************************************************************************************************************
     private:
-        OString m_sTempFile ;   // name of temp. file in system notation
+        OString     m_sTempFile     ;   // name of temp. file in system notation
+        sal_Int32   m_nParentHandle ;   // a parent window handle for used vcl dialog
 
 };  //  class LoginApplication
 
@@ -222,7 +225,7 @@ void LoginApplication::Main()
 {
     // Init global uno servicemanager.
     ServiceManager aManager;
-    Reference< XMultiServiceFactory > xServiceManager = aManager.getSharedUNOServiceManager( DECLARE_ASCII("login.rdb") );
+    Reference< XMultiServiceFactory > xServiceManager = aManager.getManager( LOGIN_RDB );
     LOG_ASSERT( !(xServiceManager.is()==sal_False), "LoginApplication::Main()\nCould not create uno service manager!\n" )
 
     // Parse command line and set found arguments on application member.
@@ -243,9 +246,14 @@ void LoginApplication::Main()
             ( m_sTempFile.getLength()   >   0           )
         )
     {
-        // User can't set used connection type in dialog directly!
-        // And if our setup has written wrong value for it ...
-        // we must set right type before to get right value after showing dialog!!!
+        // Exist a parent window? YES => set right property.
+        if( m_nParentHandle != 0 )
+        {
+            Any aParentWindow;
+            aParentWindow <<= m_nParentHandle;
+            xPropertySet->setPropertyValue( PROPERTYNAME_PARENTWINDOW, aParentWindow );
+        }
+
         Any aConnectionType;
         aConnectionType <<= PROPERTYNAME_COMPRESSEDSECURE;
         xPropertySet->setPropertyValue( PROPERTYNAME_CONNECTIONTYPE, aConnectionType );
@@ -258,7 +266,6 @@ void LoginApplication::Main()
         OUString    sServer         ;
         OUString    sConnectionType ;
         sal_Int32   nPort=0         ;   // We need this default if follow "if"-statement "failed"!
-                                        // Strings before has "" as default.
 
         // If user say "OK" ... get values from dialog.
         // If user say "NO" ... leave it. Then we save empty informations later ...
@@ -277,7 +284,11 @@ void LoginApplication::Main()
 
         // Build string for output.
         // At this point it doesnt matter if information exist or not!
-        // Format of output: "<decision[0|1]>;<username[string]>;<password[string]>;<servername[string]>;<port[int]>"
+        // Format of output: "<decision>    [0|1]       SEPERATOR
+        //                    <username>    [string]    SEPERATOR
+        //                    <password>    [string]    SEPERATOR
+        //                    <servername>  [string]    SEPERATOR
+        //                    <port>        [int]       SEPERATOR"
         OUStringBuffer sBuffer( 1000 );
 
         if( bDecision == sal_True )
@@ -288,18 +299,17 @@ void LoginApplication::Main()
         {
             sBuffer.appendAscii( "0" );
         }
-        sBuffer.append      ( SEPERATOR                         );
-        sBuffer.append      ( impl_encodeString(sUserName)      );
-        sBuffer.append      ( SEPERATOR                         );
-        sBuffer.append      ( impl_encodeString(sPassword)      );
-        sBuffer.append      ( SEPERATOR                         );
-        sBuffer.append      ( impl_encodeString(sServer)        );
-        sBuffer.append      ( SEPERATOR                         );
-        sBuffer.append      ( impl_encodeString(sConnectionType));
-        sBuffer.append      ( SEPERATOR                         );
-        sBuffer.append      ( nPort                             );
-        sBuffer.append      ( SEPERATOR                         );
-        sBuffer.appendAscii ( "\n"                              );
+        sBuffer.appendAscii ( SEPERATOR         );
+        sBuffer.append      ( sUserName         );
+        sBuffer.appendAscii ( SEPERATOR         );
+        sBuffer.append      ( sPassword         );
+        sBuffer.appendAscii ( SEPERATOR         );
+        sBuffer.append      ( sServer           );
+        sBuffer.appendAscii ( SEPERATOR         );
+        sBuffer.append      ( sConnectionType   );
+        sBuffer.appendAscii ( SEPERATOR         );
+        sBuffer.append      ( nPort             );
+        sBuffer.appendAscii ( SEPERATOR         );
 
         // Write informations in temp. file.
         // If given file name isnt valid ... caller will have a problem!!!
@@ -328,9 +338,14 @@ void LoginApplication::impl_parseCommandline()
     sal_uInt32  nCount      =   aInfo.getCommandArgCount()  ;
     sal_uInt32  nArgument   =   0                           ;
     OUString    sArgument                                   ;
+    OUString    sValue                                      ;
 
     // Warn programmer if argument count isnt ok!
-    LOG_ASSERT( !(nCount!=1), "LoginApplication::impl_parseCommandline()\nWrong argument count detected!\n" )
+    LOG_ASSERT( !(nCount!=MINARGUMENTCOUNT), "LoginApplication::impl_parseCommandline()\nWrong argument count detected!\n" )
+
+    // Reset all possible argument variables to defaults if someone is missing.
+    m_sTempFile     = OString();
+    m_nParentHandle = 0        ;
 
     // Step over all arguments ...
     for( nArgument=0; nArgument<nCount; ++nArgument )
@@ -340,43 +355,23 @@ void LoginApplication::impl_parseCommandline()
         aInfo.getCommandArg( nArgument, sArgument );
 
         //_____________________________________________________________________________________________________
-        // Look for "-f<temp. file name>
-        if( sArgument.compareTo( ARGUMENT_TEMPFILE, ARGUMENTLENGTH_TEMPFILE ) == ARGUMENTFOUND )
+        // Look for "-f=<temp. file name>"
+        if( sArgument.compareTo( ARGUMENT_TEMPFILE, ARGUMENTLENGTH ) == ARGUMENTFOUND )
         {
-            m_sTempFile = U2B(sArgument.copy( ARGUMENTLENGTH_TEMPFILE ));
+            sValue      = sArgument.copy( ARGUMENTLENGTH );
+            m_sTempFile = U2B(sValue);
+        }
+        else
+        //_____________________________________________________________________________________________________
+        // Look for "-p=<parent window handle>"
+        if( sArgument.compareTo( ARGUMENT_DIALOGPARENT, ARGUMENTLENGTH ) == ARGUMENTFOUND )
+        {
+            sValue          = sArgument.copy( ARGUMENTLENGTH );
+            m_nParentHandle = sValue.toInt32();
         }
     }
-}
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
-OUString LoginApplication::impl_encodeString( const OUString& sValue )
-{
-    // Read all signs from source buffer into destination buffer
-    // and change all ";" and "\" to "\;" and "\\"!
-
-    sal_Int32       nCount      = sValue.getLength();
-    OUStringBuffer  sSource     ( sValue    )       ;
-    OUStringBuffer  sDestination( nCount*2  )       ;   // Reserve destination buffer with enough free space for changes! Sometimes we must add signs ...
-    sal_Unicode     cLetter                         ;
-
-    for( sal_Int32 nLetter=0; nLetter<nCount; ++nLetter )
-    {
-        cLetter = sSource.charAt(nLetter);
-        // If sign a special one ...
-        // add escape letter before ...
-        // and special one then!
-        // Otherwise letter will copied normaly.
-        if  (
-                ( cLetter   ==  SEPERATOR   )   ||
-                ( cLetter   ==  ENCODESIGN  )
-            )
-        {
-            sDestination.append( ENCODESIGN );
-        }
-        sDestination.append( cLetter );
-    }
-
-    return sDestination.makeStringAndClear();
+    // Parent window handle is an optional argument ... but should be used mostly!
+    // Warn programmer.
+    LOG_ASSERT( !(m_nParentHandle==0), "Login.exe\nYou should give me a parent window handle!\n" )
 }
