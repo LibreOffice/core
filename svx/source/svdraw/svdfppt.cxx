@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-12 10:37:52 $
+ *  last change: $Author: sj $ $Date: 2001-04-12 14:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,9 @@
 #ifndef _SVX_SHDDITEM_HXX //autogen
 #include <shdditem.hxx>
 #endif
+#ifndef _SVX_CHARRELIEFITEM_HXX
+#include <charreliefitem.hxx>
+#endif
 #ifndef _SVX_FONTITEM_HXX
 #include <fontitem.hxx>
 #endif
@@ -167,6 +170,9 @@
 #endif
 #ifndef _SV_METRIC_HXX //autogen
 #include <vcl/metric.hxx>
+#endif
+#ifndef _SV_BMPACC_HXX //autogen
+#include <vcl/bmpacc.hxx>
 #endif
 #ifndef _SVDITER_HXX
 #include <svditer.hxx>
@@ -5439,9 +5445,6 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
     if ( GetAttrib( PPT_CharAttr_Strikeout, nVal, nInstanceInSheet ) )
         rSet.Put( SvxCrossedOutItem( nVal != 0 ? STRIKEOUT_SINGLE : STRIKEOUT_NONE ) );
 
-//  GetAttrib( PPT_CharAttr_Embossed, nVal, nInstanceInSheet );         // Embossed koennen wir nicht
-//  rSet.Put( SvxShadowedItem( nVal != 0 ) );
-
     sal_uInt32  nAsianFontId = 0xffff;
     if ( GetAttrib( PPT_CharAttr_AsianOrComplexFont, nAsianFontId, nInstanceInSheet ) )
     {
@@ -5482,20 +5485,104 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
         rSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
     }
 
-    if ( GetAttrib( PPT_CharAttr_FontColor, nVal, nInstanceInSheet ) )  // Textfarbe (4Byte-Arg)
+    if ( GetAttrib( PPT_CharAttr_Embossed, nVal, nInstanceInSheet ) )
+        rSet.Put( SvxCharReliefItem( nVal != 0 ? RELIEF_EMBOSSED : RELIEF_NONE ) );
+    if ( nVal ) // if Embossed is set the font color depends to the fillstyle/color
     {
-        Color aCol( rManager.MSO_CLR_ToColor( nVal ) );
-        rSet.Put( SvxColorItem( aCol, EE_CHAR_COLOR ) );
-        if ( nInstanceInSheet == 0xffffffff )
-            mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ].mnFontColorInStyleSheet = aCol;
+        Color aDefColor( COL_BLACK );
+        if ( rManager.GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 )  // filled
+        {
+            switch( (MSO_FillType)rManager.GetPropertyValue( DFF_Prop_fillType, mso_fillSolid ) )
+            {
+                case mso_fillShade :
+                case mso_fillShadeCenter :
+                case mso_fillShadeShape :
+                case mso_fillShadeScale :
+                case mso_fillShadeTitle :
+                case mso_fillSolid :
+                    aDefColor = rManager.MSO_CLR_ToColor( rManager.GetPropertyValue( DFF_Prop_fillColor ) );
+                break;
+                case mso_fillPattern :
+                    aDefColor = rManager.MSO_CLR_ToColor( rManager.GetPropertyValue( DFF_Prop_fillBackColor ) );
+                break;
+                case mso_fillTexture :
+                {
+                    Graphic aGraf;
+                    if ( rManager.GetBLIP( rManager.GetPropertyValue( DFF_Prop_fillBlip ), aGraf ) )
+                    {
+                        Bitmap aBmp( aGraf.GetBitmap() );
+                        Size aSize( aBmp.GetSizePixel() );
+                        if ( aSize.Width() && aSize.Height() )
+                        {
+                            if ( aSize.Width () > 64 )
+                                aSize.Width () = 64;
+                            if ( aSize.Height() > 64 )
+                                aSize.Height() = 64;
+
+                            ULONG nRt = 0, nGn = 0, nBl = 0;
+                            BitmapReadAccess*   pAcc = aBmp.AcquireReadAccess();
+                            if( pAcc )
+                            {
+                                const long nWidth = aSize.Width();
+                                const long nHeight = aSize.Height();
+
+                                if( pAcc->HasPalette() )
+                                {
+                                    for( long nY = 0L; nY < nHeight; nY++ )
+                                    {
+                                        for( long nX = 0L; nX < nWidth; nX++ )
+                                        {
+                                            const BitmapColor& rCol = pAcc->GetPaletteColor( (BYTE) pAcc->GetPixel( nY, nX ) );
+                                            nRt+=rCol.GetRed(); nGn+=rCol.GetGreen(); nBl+=rCol.GetBlue();
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    for( long nY = 0L; nY < nHeight; nY++ )
+                                    {
+                                        for( long nX = 0L; nX < nWidth; nX++ )
+                                        {
+                                            const BitmapColor aCol( pAcc->GetPixel( nY, nX ) );
+                                            nRt+=aCol.GetRed(); nGn+=aCol.GetGreen(); nBl+=aCol.GetBlue();
+                                        }
+                                    }
+                                }
+                                aBmp.ReleaseAccess( pAcc );
+                                sal_uInt32 nC = ( aSize.Width() * aSize.Height() );
+                                nRt /= nC;
+                                nGn /= nC;
+                                nBl /= nC;
+                                aDefColor = Color(sal_uInt8( nRt ), sal_uInt8( nGn ),sal_uInt8( nBl ) );
+                            }
+                        }
+                    }
+                }
+                break;
+//              case mso_fillPicture :
+//              case mso_fillBackground :
+            }
+        }
+        rSet.Put( SvxColorItem( aDefColor, EE_CHAR_COLOR ) );
     }
-    else if ( nVal & 0x0f000000 )   // this is not a hard attribute, but maybe the page has a different colerscheme,
-    {                               // so that in this case we must use a hard color attribute
-        Color   aCol( rManager.MSO_CLR_ToColor( nVal ) );
-        Color&  aColorInSheet = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ].mnFontColorInStyleSheet;
-        if ( aColorInSheet != aCol )
+    else
+    {
+        if ( GetAttrib( PPT_CharAttr_FontColor, nVal, nInstanceInSheet ) )  // Textfarbe (4Byte-Arg)
+        {
+            Color aCol( rManager.MSO_CLR_ToColor( nVal ) );
             rSet.Put( SvxColorItem( aCol, EE_CHAR_COLOR ) );
+            if ( nInstanceInSheet == 0xffffffff )
+                mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ].mnFontColorInStyleSheet = aCol;
+        }
+        else if ( nVal & 0x0f000000 )   // this is not a hard attribute, but maybe the page has a different colerscheme,
+        {                               // so that in this case we must use a hard color attribute
+            Color   aCol( rManager.MSO_CLR_ToColor( nVal ) );
+            Color&  aColorInSheet = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ].mnFontColorInStyleSheet;
+            if ( aColorInSheet != aCol )
+                rSet.Put( SvxColorItem( aCol, EE_CHAR_COLOR ) );
+        }
     }
+
     if ( GetAttrib( PPT_CharAttr_Escapement, nVal, nInstanceInSheet ) ) // Hoch/Tiefstellung in %
     {
         sal_uInt16  nEsc = 0;
