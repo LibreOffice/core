@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SQLException.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:11:34 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,10 +130,12 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        char * cSignature = "()Ljava/sql/Exception;";
-        char * cMethodName = "getNextException";
+        static char * cSignature = "()Ljava/sql/Exception;";
+        static char * cMethodName = "getNextException";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,0);
@@ -151,21 +153,21 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
 
 ::rtl::OUString java_sql_SQLException_BASE::getSQLState() const
 {
-    jstring out = (jstring)NULL;
     SDBThreadAttach t;
     ::rtl::OUString aStr;
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        char * cSignature = "()Ljava/lang/String;";
-        char * cMethodName = "getSQLState";
+        static char * cSignature = "()Ljava/lang/String;";
+        static char * cMethodName = "getSQLState";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
-            out = (jstring) t.pEnv->CallObjectMethod( object, mID);
+            jstring out = (jstring) t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,0);
-            if(out)
-                aStr = JavaString2String(t.pEnv,out);
+            aStr = JavaString2String(t.pEnv,out);
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
@@ -178,10 +180,12 @@ sal_Int32 java_sql_SQLException_BASE::getErrorCode() const
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        char * cSignature = "()I";
-        char * cMethodName = "getErrorCode";
+        static char * cSignature = "()I";
+        static char * cMethodName = "getErrorCode";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
             ThrowSQLException(t.pEnv,0);
