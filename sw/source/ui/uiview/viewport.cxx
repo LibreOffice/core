@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: os $ $Date: 2000-10-17 09:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,7 +479,7 @@ void SwView::Scroll( const Rectangle &rRect, USHORT nRangeX, USHORT nRangeY )
     Rectangle aOldVisArea( aVisArea );
     long nDiffY = 0;
 
-    Window* pCareWn = GetWrtShell().GetCareWin();
+    Window* pCareWn = ViewShell::GetCareWin(GetWrtShell());
     if ( pCareWn )
     {
         Rectangle aDlgRect( GetEditWin().PixelToLogic(
@@ -1353,156 +1353,4 @@ BOOL SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     return bOk;
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.254  2000/09/18 16:06:14  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.253  2000/09/07 15:59:33  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.252  2000/07/21 10:15:43  jp
-    Must changes for SFX
-
-    Revision 1.251  2000/04/18 15:02:51  os
-    UNICODE
-
-    Revision 1.250  2000/03/03 15:17:04  os
-    StarView remainders removed
-
-    Revision 1.249  2000/02/11 14:59:40  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.248  1999/07/13 06:48:04  OS
-    #67584# Scrollbar settings via StarOne
-
-
-      Rev 1.247   13 Jul 1999 08:48:04   OS
-   #67584# Scrollbar settings via StarOne
-
-      Rev 1.246   27 May 1999 11:26:20   AMA
-   Fix #64863#: Nicht ueber das Dokumentende hinausscrollen, nu aber wirklich
-
-      Rev 1.245   11 May 1999 09:26:22   AMA
-   Fix #64863#: Nicht ueber das Dokumentende hinausscrollen
-
-      Rev 1.244   03 Mar 1999 12:52:56   MA
-   #62722# UpdateScrollbars macht ohne VisArea keinen Sinn
-
-      Rev 1.243   02 Mar 1999 16:04:20   AMA
-   Fix #62568#: Invalidierungen so sparsam wie moeglich, so gruendlich wie noetig
-
-      Rev 1.242   27 Nov 1998 14:58:36   AMA
-   Fix #59951#59825#: Unterscheiden zwischen Rahmen-,Seiten- und Bereichsspalten
-
-      Rev 1.241   04 Sep 1998 12:31:12   OS
-   #55949# Verstecken der PageButtons noch veredelt
-
-      Rev 1.240   03 Sep 1998 13:17:00   OS
-   #55949# Buttons unter dem VScrollbar verstecken, wenn nicht genug Platz ist
-
-      Rev 1.239   20 Aug 1998 13:39:50   MA
-   #55307# Scrollbars muessen nicht existieren
-
-      Rev 1.238   27 Jul 1998 16:52:00   JP
-   Bug #54031#: WheelData richtig auswerten
-
-      Rev 1.237   19 Jul 1998 17:57:10   JP
-   Task #49835#: Radmausunterstuetzung
-
-      Rev 1.236   13 Jul 1998 17:16:06   OS
-   Scrollbar-Buttons muessen an zwei Positionen auf Sichtbarkeit geprueft werden #52527#
-
-      Rev 1.235   03 Jul 1998 16:57:16   OS
-   PageButtons an das AutoHide des VScrollbars anpassen
-
-      Rev 1.234   24 Jun 1998 18:43:54   MA
-   DataChanged fuer ScrollBar und Retouche, Retouche ganz umgestellt
-
-      Rev 1.233   24 Jun 1998 07:29:54   OS
-   CreatePageButtons nicht mehrfach rufen #51535#
-
-      Rev 1.232   14 Jun 1998 16:13:52   MA
-   chg: Navi-Tool auch fuer Browse-View
-
-      Rev 1.231   06 May 1998 17:09:54   MA
-   #50098# Scrolloffset beruecksichtigen
-
-      Rev 1.230   27 Apr 1998 17:17:18   JP
-   statt GetSize().GetHeight/-Width direkt GetHeight/Width am Rectangle rufen
-
-      Rev 1.229   17 Apr 1998 17:22:28   OS
-   keine Tabulatoren in der QuickHelp #49563#
-
-      Rev 1.228   14 Apr 1998 12:08:46   OS
-   autom. Scrollbars: Scrollbar immer erzeugen #49061#
-
-      Rev 1.227   09 Apr 1998 08:08:02   OS
-   CalcPt: Scroll bei Bedarf verkleinern 49364#
-
-      Rev 1.226   20 Mar 1998 13:23:54   MA
-   OleVis2Page durch BrowseMode ersetzt
-
-      Rev 1.225   06 Mar 1998 18:57:54   JP
-   Bug #47878#: den richtigen Point heruntergeben
-
-      Rev 1.224   27 Feb 1998 17:04:50   MA
-   Outline in Tiphilfe
-
-      Rev 1.223   27 Feb 1998 17:01:46   MA
-   Outline in Tiphilfe
-
-      Rev 1.222   29 Jan 1998 10:25:12   OS
-   das VCL-Lineal braucht ein eigenes Resize wenn es nicht sichtbar ist. #46802#
-
-      Rev 1.221   05 Dec 1997 14:14:32   OS
-   Scrollbar nicht mehr MAC-abhaengig
-
-      Rev 1.220   04 Dec 1997 15:27:38   MA
-   #45726# Rect auch im Seitenrand sichtbar machen
-
-      Rev 1.219   29 Nov 1997 16:49:56   MA
-   includes
-
-      Rev 1.218   28 Nov 1997 11:33:54   TJ
-   include
-
-      Rev 1.217   21 Nov 1997 15:00:22   MA
-   includes
-
-      Rev 1.216   03 Nov 1997 13:58:32   MA
-   precomp entfernt
-
-      Rev 1.215   22 Oct 1997 08:24:08   OS
-   eigener UpdateMode zur Verhinderung des Flackerns #43684#
-
-      Rev 1.214   09 Oct 1997 16:16:38   MA
-   alte Methoden aufgeraeumt
-
-      Rev 1.213   22 Sep 1997 13:11:12   MA
-   #44052# bInOuterResizePixel ist jetzt Member
-
-      Rev 1.212   18 Sep 1997 14:01:10   OS
-   Pointer::GetPosPixel fuer VCL ersetzt
-
-      Rev 1.211   09 Sep 1997 11:35:00   OS
-   bStarting gibt's nicht mehr
-
-      Rev 1.210   04 Sep 1997 17:14:40   MA
-   includes
-
-      Rev 1.209   01 Sep 1997 13:13:48   OS
-   DLL-Umstellung
-
-      Rev 1.208   12 Aug 1997 15:57:22   OS
-   frmitems/textitem/paraitem aufgeteilt
-
-      Rev 1.207   08 Aug 1997 17:25:52   OM
-   Headerfile-Umstellung
-
-      Rev 1.206   07 Aug 1997 14:58:26   OM
-   Headerfile-Umstellung
-
-------------------------------------------------------------------------*/
 

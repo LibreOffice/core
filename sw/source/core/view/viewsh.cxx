@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:29 $
+ *  last change: $Author: os $ $Date: 2000-10-17 09:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,9 @@
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
 #endif
-
+#ifndef _SFXVIEWSH_HXX
+#include <sfx2/viewsh.hxx>
+#endif
 #ifndef _SHL_HXX
 //#include <tools/shl.hxx>
 #endif
@@ -544,7 +546,7 @@ void ViewShell::InvalidateWindows( const SwRect &rRect )
 
 void ViewShell::MakeVisible( const SwRect &rRect )
 {
-    if ( !VisArea().IsInside( rRect ) || IsScrollMDI( this, rRect ) || GetCareWin() )
+    if ( !VisArea().IsInside( rRect ) || IsScrollMDI( this, rRect ) || GetCareWin(*this) )
     {
         if ( !IsViewLocked() )
         {
@@ -584,15 +586,17 @@ void ViewShell::MakeVisible( const SwRect &rRect )
 |*
 ******************************************************************************/
 
-Window* ViewShell::CareChildWin()
+Window* ViewShell::CareChildWin(ViewShell& rVSh)
 {
-    const USHORT nId = SvxSearchDialogWrapper::GetChildWindowId();
-    SfxViewFrame* pVFrame = SfxViewFrame::Current();
-    const SfxChildWindow* pChWin = pVFrame->GetChildWindow( nId );
-    Window *pWin = pChWin ? pChWin->GetWindow() : NULL;
-    if ( pWin && pWin->IsVisible() )
-        return pWin;
-
+    if(rVSh.pSfxViewShell)
+    {
+        const USHORT nId = SvxSearchDialogWrapper::GetChildWindowId();
+        SfxViewFrame* pVFrame = rVSh.pSfxViewShell->GetViewFrame();
+        const SfxChildWindow* pChWin = pVFrame->GetChildWindow( nId );
+        Window *pWin = pChWin ? pChWin->GetWindow() : NULL;
+        if ( pWin && pWin->IsVisible() )
+            return pWin;
+    }
     return NULL;
 }
 
@@ -2094,6 +2098,9 @@ BOOL ViewShell::IsNewLayout() const
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/19 00:08:29  hr
+      initial import
+
       Revision 1.384  2000/09/18 16:04:37  willem.vandorp
       OpenOffice header added.
 

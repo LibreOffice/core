@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: os $ $Date: 2000-10-17 09:24:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,9 +351,9 @@ public:
     static ShellResource* GetShellRes() { return pShellRes; }
 
     static void           SetCareWin( Window* pNew ) { pCareWindow = pNew; }
-    static Window*        GetCareWin()
-                        { return pCareWindow ? pCareWindow : CareChildWin(); }
-    static Window*        CareChildWin();
+    static Window*        GetCareWin(ViewShell& rVSh)
+                        { return pCareWindow ? pCareWindow : CareChildWin(rVSh); }
+    static Window*        CareChildWin(ViewShell& rVSh);
 
     inline SfxViewShell   *GetSfxViewShell() { return pSfxViewShell; }
     inline void           SetSfxViewShell(SfxViewShell *pNew) { pSfxViewShell = pNew; }
