@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 15:01:16 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,19 +131,14 @@ GtkSalDisplay::~GtkSalDisplay()
     pDisp_ = NULL;
 }
 
-void GtkSalDisplay::registerFrame( GtkSalFrame* pFrame )
-{
-    m_aFrames.push_back( pFrame );
-}
-
-void GtkSalDisplay::deregisterFrame( GtkSalFrame* pFrame )
+void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
 {
     if( m_pCapture == pFrame )
     {
         static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( FALSE );
         m_pCapture = NULL;
     }
-    m_aFrames.remove( pFrame );
+    SalDisplay::deregisterFrame( pFrame );
 }
 
 GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
@@ -160,24 +155,44 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
     if (pDisplay->GetDisplay() == pEvent->xany.display )
     {
         // let's see if one of our frames wants to swallow these events
-
-        // get the child frame
-        GtkSalFrame* pFrame = NULL;
-        for( std::list< GtkSalFrame* >::const_iterator it = pDisplay->m_aFrames.begin();
-                 it != pDisplay->m_aFrames.end() && ! pFrame; ++it )
+        // get the frame
+        for( std::list< SalFrame* >::const_iterator it = pDisplay->m_aFrames.begin();
+                 it != pDisplay->m_aFrames.end(); ++it )
         {
-            if( (*it)->GetSystemData()->aWindow == pEvent->xany.window )
-                pFrame = *it;
+            GtkSalFrame* pFrame = static_cast<GtkSalFrame*>(*it);
+            if( pFrame->GetSystemData()->aWindow == pEvent->xany.window ||
+                ( pFrame->getForeignParent() && GDK_WINDOW_XWINDOW(pFrame->getForeignParent()) == pEvent->xany.window ) ||
+                ( pFrame->getForeignTopLevel() && GDK_WINDOW_XWINDOW(pFrame->getForeignTopLevel()) == pEvent->xany.window )
+                )
+            {
+                if( ! pFrame->Dispatch( pEvent ) )
+                    aFilterReturn = GDK_FILTER_REMOVE;
+                break;
+            }
         }
-
-        if( pFrame && !pFrame->Dispatch( pEvent ) )
-            aFilterReturn = GDK_FILTER_REMOVE;
     }
 
     return aFilterReturn;
 }
 
-GdkCursor *GtkSalDisplay::getFromXPM( const char *pBitmap,
+long GtkSalDisplay::Dispatch( XEvent* pEvent )
+{
+    if( GetDisplay() == pEvent->xany.display )
+    {
+        // let's see if one of our frames wants to swallow these events
+        // get the child frame
+        for( std::list< SalFrame* >::const_iterator it = m_aFrames.begin();
+             it != m_aFrames.end(); ++it )
+        {
+            if( (*it)->GetSystemData()->aWindow == pEvent->xany.window )
+                return static_cast<GtkSalFrame*>(*it)->Dispatch( pEvent );
+        }
+    }
+
+    return GDK_FILTER_CONTINUE;
+}
+
+GdkCursor* GtkSalDisplay::getFromXPM( const char *pBitmap,
                                       const char *pMask,
                                       int nWidth, int nHeight,
                                       int nXHot, int nYHot )
@@ -363,20 +378,28 @@ class GtkXLib : public SalXLib
     GtkSalDisplay       *m_pGtkSalDisplay;
     std::list<GSource *> m_aSources;
     GSource             *m_pTimeout;
-private:
-    void updateTimeout (gint wait_ms);
+    GSource             *m_pUserEvent;
+    ULONG                m_nTimeoutMs;
+
+    static gboolean      timeoutFn(gpointer data);
+    static gboolean      userEventFn(gpointer data);
 public:
+
     GtkXLib();
     virtual ~GtkXLib();
 
     virtual void    Init();
     virtual void    Yield( BOOL );
-    virtual void    Wakeup();
     virtual void    Insert( int fd, void* data,
                             YieldFunc   pending,
                             YieldFunc   queued,
                             YieldFunc   handle );
     virtual void    Remove( int fd );
+
+    virtual void    StartTimer( ULONG nMS );
+    virtual void    StopTimer();
+    virtual void    Wakeup();
+    virtual void    PostUserEvent();
 };
 
 GtkXLib::GtkXLib()
@@ -386,6 +409,7 @@ GtkXLib::GtkXLib()
 #endif
     m_pGtkSalDisplay = NULL;
     m_pTimeout = NULL;
+    m_nTimeoutMs = 0;
 }
 
 GtkXLib::~GtkXLib()
@@ -393,10 +417,12 @@ GtkXLib::~GtkXLib()
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "GtkXLib::~GtkXLib()\n" );
 #endif
+    StopTimer();
 }
 
 void GtkXLib::Init()
 {
+    int i;
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "GtkXLib::Init()\n" );
 #endif
@@ -423,8 +449,7 @@ void GtkXLib::Init()
     osl_getExecutableFile( &aParam.pData );
     osl_getSystemPathFromFileURL( aParam.pData, &aBin.pData );
     pCmdLineAry[0] = g_strdup( OUStringToOString( aBin, aEnc ).getStr() );
-    int i;
-    for (i = 0; i<nParams; i++)
+    for (i=0; i<nParams; i++)
     {
         osl_getCommandArg(i, &aParam.pData );
         OString aBParam( OUStringToOString( aParam, aEnc ) );
@@ -511,73 +536,111 @@ void GtkXLib::Init()
     SetIgnoreXErrors( bOldErrorSetting );
 
     m_pGtkSalDisplay->SetKbdExtension( pKbdExtension );
+
 }
 
-static gboolean
-dummy_fn (gpointer data)
+gboolean GtkXLib::timeoutFn(gpointer data)
 {
-    return TRUE;
+    SalData *pSalData = GetSalData();
+    GtkXLib *pThis = (GtkXLib *) data;
+
+    pSalData->pInstance_->GetYieldMutex()->acquire();
+
+    if( pThis->m_pTimeout )
+    {
+        g_source_unref (pThis->m_pTimeout);
+        pThis->m_pTimeout = NULL;
+    }
+
+    // Auto-restart immediately
+    pThis->StartTimer( pThis->m_nTimeoutMs );
+
+    GetSalData()->Timeout();
+
+    pSalData->pInstance_->GetYieldMutex()->release();
+
+    return FALSE;
 }
 
-void GtkXLib::updateTimeout (gint wait_ms)
+void GtkXLib::StartTimer( ULONG nMS )
+{
+    StopTimer();
+    m_nTimeoutMs = nMS; // for restarting
+
+//  fprintf (stderr, "Add timeout of '%d'ms\n", m_nTimeoutMs);
+
+    m_pTimeout = g_timeout_source_new (m_nTimeoutMs);
+    g_source_set_can_recurse (m_pTimeout, TRUE);
+    g_source_set_callback (m_pTimeout, timeoutFn,
+                           (gpointer) this, NULL);
+    g_source_attach (m_pTimeout, g_main_context_default ());
+}
+
+void GtkXLib::StopTimer()
 {
     if (m_pTimeout)
     {
         g_source_destroy (m_pTimeout);
         g_source_unref (m_pTimeout);
+        m_pTimeout = NULL;
     }
-
-//  fprintf (stderr, "Add timeout of '%d'ms\n", wait_ms);
-    m_pTimeout = g_timeout_source_new (wait_ms);
-    g_source_set_can_recurse (m_pTimeout, TRUE);
-    g_source_set_callback (m_pTimeout, dummy_fn, NULL, NULL);
-    g_source_attach (m_pTimeout, g_main_context_default ());
 }
 
-void GtkXLib::Yield( BOOL bWait )
+gboolean GtkXLib::userEventFn(gpointer data)
 {
-    // check for timeouts here if you want to make screenshots
-    static char* p_prioritize_timer = getenv ("SAL_HIGHPRIORITY_REPAINT");
-    if (p_prioritize_timer != NULL)
-        CheckTimeout();
+    gboolean bContinue;
+    GtkXLib *pThis = (GtkXLib *) data;
+    SalData *pSalData = GetSalData();
 
-    // first, check for already queued events; dispatch one if exists
-    if( m_pGtkSalDisplay->DispatchInternalEvent() )
-        return;
+    pSalData->pInstance_->GetYieldMutex()->acquire();
+    pThis->m_pGtkSalDisplay->EventGuardAcquire();
 
-    timeval thisTimeout = { 0 };
-    gint wait_ms = 0;
-
-    if (bWait) {
-        if (Timeout_.tv_sec) {
-            // determine remaining timeout.
-            gettimeofday (&thisTimeout, 0);
-            thisTimeout = Timeout_ - thisTimeout;
-            wait_ms = (thisTimeout.tv_usec + 900)/1000 + thisTimeout.tv_sec * 1000;
-            if (wait_ms <= 0)
-                bWait = FALSE;
-            else
-                updateTimeout (wait_ms);
-        }
-    }
-
+    if( !pThis->m_pGtkSalDisplay->HasMoreEvents() )
     {
-        // release YieldMutex (and re-acquire at block end)
-        YieldMutexReleaser aReleaser;
-        if( !bWait )
-            osl_yieldThread();
-        g_main_context_iteration( NULL, bWait );
+        if( pThis->m_pUserEvent )
+        {
+            g_source_unref (pThis->m_pUserEvent);
+            pThis->m_pUserEvent = NULL;
+        }
+        bContinue = FALSE;
     }
+    else
+        bContinue = TRUE;
 
-    // dispatch eventual timeout
-    CheckTimeout();
-    // dispatch eventual user event
-    m_pGtkSalDisplay->DispatchInternalEvent();
+    pThis->m_pGtkSalDisplay->EventGuardRelease();
+
+    pThis->m_pGtkSalDisplay->DispatchInternalEvent();
+
+    pSalData->pInstance_->GetYieldMutex()->release();
+
+    return bContinue;
+}
+
+// hEventGuard_ held during this invocation
+void GtkXLib::PostUserEvent()
+{
+    if( !m_pUserEvent ) // not pending anyway
+    {
+        m_pUserEvent = g_idle_source_new();
+        g_source_set_priority( m_pUserEvent, G_PRIORITY_HIGH );
+        g_source_set_can_recurse (m_pUserEvent, TRUE);
+        g_source_set_callback (m_pUserEvent, userEventFn,
+                               (gpointer) this, NULL);
+        g_source_attach (m_pUserEvent, g_main_context_default ());
+    }
 }
 
 void GtkXLib::Wakeup()
 {
-    g_main_context_wakeup (NULL);
+    g_main_context_wakeup( g_main_context_default () );
+}
+
+void GtkXLib::Yield( BOOL bWait )
+{
+    // release YieldMutex (and re-acquire at method end)
+    YieldMutexReleaser aReleaser;
+
+    g_main_context_iteration( NULL, bWait );
 }
 
 extern "C" {
