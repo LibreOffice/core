@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:15:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ danish ] = "Assigned macro";
         Text[ swedish ] = "Tilldelat makro";
         Text[ polish ] = "Assigned macro";
-        Text[ portuguese_brazilian ] = "Assigned macro";
+        Text[ portuguese_brazilian ] = "Macro atribuνda";
         Text[ japanese ] = "ε‰²γ‚ε½“γ¦γ‚‰γ‚γγƒγ‚―γƒ­";
         Text[ korean ] = "μ§€μ •λ λ§¤ν¬λ΅";
         Text[ chinese_simplified ] = "ζ‡ε®η„ε®";
@@ -186,11 +186,11 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ danish ] = "~Existing macros in:\n";
         Text[ swedish ] = "~Existerande makron i:\n";
         Text[ polish ] = "~Existing macros in:\n";
-        Text[ portuguese_brazilian ] = "~Existing macros in:\n";
-        Text[ japanese ] = "γƒγ‚―γƒ­γ®γ‚γ‚‹ε ΄ζ‰€\n";
-        Text[ korean ] = "λ§¤ν¬λ΅κ°€ μλ” μ„μΉ\n";
-        Text[ chinese_simplified ] = "η°ζ‰η„ε®η„δ½η½®(~E)οΌ\n";
-        Text[ chinese_traditional ] = "ηΎζ‰η„ε·¨ι›†δ½η½®οΌ\n";
+        Text[ portuguese_brazilian ] = "Macros ~existentes em:\n";
+        Text[ japanese ] = "γƒγ‚―γƒ­γ®γ‚γ‚‹ε ΄ζ‰€(~E)\n";
+        Text[ korean ] = "λ§¤ν¬λ΅κ°€ μλ” μ¥μ†(~E)\n";
+        Text[ chinese_simplified ] = "η°ζ‰η„ε®η„δ½η½®οΌ(~E)\n";
+        Text[ chinese_traditional ] = "ηΎζ‰η„ε·¨ι›†δ½η½®οΌ(~E)\n";
         Text[ turkish ] = "~Mevcut makrolar:\n";
         Text[ arabic ] = "~Existing macros in:\n";
         Text[ catalan ] = "~Existing macros in:\n";
@@ -232,7 +232,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ japanese ] = "ε‰²γ‚ε½“γ¦(~A)";
         Text[ chinese_traditional ] = "ζ‡ε®(~A)";
         Text[ arabic ] = "ΚΪννδ";
-        Text[ greek ] = "Αντιστοίχιση";
+        Text[ greek ] = "Ανάθεση";
         Text[ korean ] = "μ§€μ •(~A)";
         Text[ turkish ] = "A~ta";
         Text[ catalan ] = "~Assigna";
@@ -317,7 +317,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ slovak ] = "MakrΓ΅";
     };
     Text[ russian ] = "Νΰηνΰχθςό μΰκπξρ";
-    Text[ greek ] = "Αντιστοίχιση μακροεντολής";
+    Text[ greek ] = "Ανάθεση μακροεντολής";
     Text[ polish ] = "Przypisz makro";
     Text[ japanese ] = "γƒγ‚―γƒ­γ®ε‰²γ‚ε½“γ¦";
     Text[ korean ] = "λ§¤ν¬λ΅ ν• λ‹Ή";
@@ -333,6 +333,7 @@ TabPage RID_SFX_TP_MACROASSIGN
     Text[ hindi ] = "ΰ¤®ΰ¥‰ΰ¤•ΰ¥ΰ¤°ΰ¥‹ ΰ¤¨ΰ¤Ώΰ¤°ΰ¥ΰ¤¦ΰ¤Ώΰ¤·ΰ¥ΰ¤ ΰ¤•ΰ¤°ΰ¥‹";
     Text[ slovak ] = "PriradiΕ¥ makro";
 };
+
 
 
 
