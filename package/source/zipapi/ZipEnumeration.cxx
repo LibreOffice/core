@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipEnumeration.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
+ *  last change: $Author: mtg $ $Date: 2001-09-14 14:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,6 @@
 #ifndef _ZIP_ENUMERATION_HXX
 #include <ZipEnumeration.hxx>
 #endif
-
-using namespace rtl;
-using namespace com::sun::star;
-using namespace com::sun::star::packages;
-using namespace com::sun::star::packages::zip;
 
 /** Provides an Enumeration over the contents of a Zip file */
 
