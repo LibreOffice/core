@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfld.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:16:04 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,15 @@ SwFmtFld::~SwFmtFld()
             delete pType;
         }
     }
+}
+
+// #111840#
+void SwFmtFld::SetFld(SwField * _pField)
+{
+    if (NULL != pField)
+        delete pField;
+
+    pField = _pField;
 }
 
 int SwFmtFld::operator==( const SfxPoolItem& rAttr ) const
