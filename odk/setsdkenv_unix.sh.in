@@ -97,6 +97,9 @@ case $sd_platform in
     ;;
 
   Darwin)
+    SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | $OO_SDK_CPP_HOME/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+    export SDK_GXX_INCLUDE_PATH
+
     directoryname=macosx
     exampleout=MACOSXexample.out
     platform=MacOSX
@@ -105,6 +108,9 @@ case $sd_platform in
     ;;
 
   Linux)
+    SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | $OO_SDK_CPP_HOME/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+    export SDK_GXX_INCLUDE_PATH
+
     directoryname=linux
     exampleout=LINUXexample.out
     platform=Linux
@@ -112,6 +118,9 @@ case $sd_platform in
     export LD_LIBRARY_PATH
     ;;
   FreeBSD)
+    SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | $OO_SDK_CPP_HOME/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+    export SDK_GXX_INCLUDE_PATH
+
     directoryname=freebsd
     exampleout=FREEBSDexample.out
     platform=FreeBSD

@@ -75,6 +75,9 @@ switch (`uname -s`)
     endif
   breaksw
   case "Linux":
+    set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+    setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}
+
     set directoryname=linux
     set exampleout=LINUXexample.out
     set platform=Linux
@@ -87,6 +90,9 @@ switch (`uname -s`)
     endif
   breaksw
   case "Darwin":
+    set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+    setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}
+
     set directoryname=macosx
     set exampleout=MACOSXexample.out
     set platform=MacOSX
@@ -99,6 +105,9 @@ switch (`uname -s`)
     endif
   breaksw
   case "FreeBSD":
+    set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+    setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}
+
     set directoryname=freebsd
     set exampleout=FREEBSDexample.out
     set platform=FreeBSD
