@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-14 11:26:31 $
+ *  last change: $Author: cd $ $Date: 2001-05-15 06:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,8 @@ void SfxApplication::InitializeDisplayName_Impl()
 IMPL_LINK( SfxApplication, OpenClients_Impl, void*, pvoid )
 {
     OpenClients();
+    DELETEZ(pImp->pIntro);
+
     return 0;
 }
 
