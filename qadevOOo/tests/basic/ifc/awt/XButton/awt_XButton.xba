@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="awt_XButton" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: awt_XButton.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:44:07 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+Dim bAL_actionPerformed As Boolean
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.awt.XButton
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim oListener As Object
+
+    Out.Log("create com.sun.star.awt.XActionListener")
+    oListener = createUNOListener("AL_", "com.sun.star.awt.XActionListener")
+
+    Test.StartMethod("addActionListener()")
+    bAL_actionPerformed = False
+    oObj.addActionListener(oListener)
+    Out.Log("Can be checked only interactively !!!")
+    bOK = True
+    Test.MethodTested("addActionListener()", bOK)
+
+    Test.StartMethod("removeActionListener()")
+    oObj.removeActionListener(oListener)
+    bOK = true
+    Test.MethodTested("removeActionListener()", bOK)
+
+    Test.StartMethod("setLabel()")
+    oObj.setLabel("XButton Label")
+    bOK = True
+    Test.MethodTested("setLabel()", bOK)
+
+    Test.StartMethod("setActionCommand()")
+    oObj.setActionCommand("XButtonComand")
+    bOK = True
+    Test.MethodTested("setActionCommand()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Sub AL_disposing
+End Sub
+
+Sub AL_actionPerformed
+    Out.Log("CallBack for ActionListener actionPerformed was called.")
+    bAL_actionPerformed = true
+End Sub
+</script:module>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="table_XCellRange" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: table_XCellRange.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:53:35 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' You can only get ranges within your
+' object-range. That means is your object-range
+' is (A1:C3) you can get only a range within
+' (A1:C3).
+
+'*************************************************************************
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.table.XCellRange
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+
+    Dim oCell As Object
+    Dim oCellRange As Object
+    Dim oCellRange1 As Object
+    Dim bSupport As Boolean
+    Dim oAddress As Object
+    Dim nSCol As Long, nECol As Long
+    Dim nSRow As Long, nERow As Long
+    Dim nCol As Long, nRow As Long
+    Dim cSCol As String, cECol As String
+
+    bOK = true
+    'does the object support this service? If yes, the object is a range itself.
+    'So we must look for the range address to be get a valid range
+    if hasUnoInterfaces( oObj, "com.sun.star.sheet.XCellRangeAddressable" ) then
+        Out.Log("Object supports com.sun.star.sheet.XCellRangeAddressable")
+        bSupport = true
+        oAddress = oObj.getRangeAddress()
+        nSCol = oAddress.StartColumn
+        nECol = oAddress.EndColumn
+        nSRow = oAddress.StartRow
+        nERow = oAddress.EndRow
+        nCol = nECol - nSCol
+        nRow = nERow - nSRow
+    else
+        bSupport = false
+        nCol = 1
+        nRow = 1
+    end if
+
+    Test.StartMethod("getCellByPosition()")
+    bOK = true
+    Out.Log("try to getCellByPosition(" + nCol + "," + nRow + ")")
+    oCell = oObj.getCellByPosition(nCol, nRow)
+    bOK = bOK AND hasUnoInterfaces( oCell, "com.sun.star.table.XCell" )
+    Test.MethodTested("getCellByPosition()", bOK)
+
+    Test.StartMethod("getCellRangeByPosition()")
+    bOK = true
+    Out.Log("try to getCellRangeByPosition(0,0," + nCol + "," + nRow + ")")
+    oCellRange = oObj.getCellRangeByPosition(0, 0, nCol, nRow)
+    bOK = bOK AND hasUnoInterfaces( oCellRange, "com.sun.star.table.XCellRange" )
+    Test.MethodTested("getCellRangeByPosition()", bOK)
+
+    Test.StartMethod("getCellRangeByName()")
+    bOK = true
+    if bSupport then
+        oAddress = oObj.getRangeAddress()
+        nSCol = oAddress.StartColumn
+        nECol = oAddress.EndColumn
+        nSRow = oAddress.StartRow
+        nERow = oAddress.EndRow
+        cSCol = getCharacter(nSCol)
+        cECol = getCharacter(nECol)
+    else
+        nSRow = 0
+        nERow = 2
+        cSCol = "A"
+        cECol = "C"
+    end if
+    Out.Log("Try to getCellRangeByName(""" + cSCol + (nSRow + 1) + ":" + cECol + (nERow + 1) + """)")
+    oCellRange1 = oObj.getCellRangeByName("" + cSCol + (nSRow + 1) + ":" + cECol + (nERow + 1))
+    bOK = bOK AND hasUnoInterfaces( oCellRange1, "com.sun.star.table.XCellRange" )
+    Test.MethodTested("getCellRangeByName()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+Function getCharacter( nCol as Integer) as String
+    Dim Char As String
+    Dim nNum As Integer
+    nNum = nCol
+    Char = ""
+    if (nNum - 26) &gt; 0 Then
+        Char = Chr((nNum mod 26)+65)
+        nNum = Int((nNum - 26)/ 26)
+    end if
+    Char = Chr(nNum + 65) + Char
+    getCharacter = Char
+End Function
+</script:module>

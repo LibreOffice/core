@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="dbaccess_ORowSet" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: dbaccess_ORowSet.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:56:35 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' Required for  com.sun.star.lang.XComponent:
+  Global oComponentInstance As Object ' it will be disposed
+
+' Required for  com.sun.star.sdbc.XColumnLocate:
+  Global cExistantColumnName As String
+
+' Required for com.sun.star.sdbc.XResultSet
+  Global cXResultSetFirstRecord as String
+  Global cXResultSetLastRecord as String
+  Global cXResultSetRecord1 as String
+  Global cXResultSetRecord2 as String
+  Global cXResultSet2BeforeLastRecord as String
+
+' Required for com.sun.star.sdbc.XParameters
+  Global paramTypes as Variant
+
+' Required for com.sun.star.sdbc.XRow and com.sun.star.sdbc.XRowUpdate
+  Global rowTypes as Variant
+  Global rowTypesCol as Variant
+
+' Required for com.sun.star.sdbc.XResultSetUpdate
+  Global textColumn As String
+
+  Global oConnection As Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' dbaccess.ORowSet
+'*************************************************************************
+On Error Goto ErrHndl
+
+    Dim oRowSet As Object, facc As Object, dbSource As Object
+    Dim srcFile As String, dstFile As String, dbSrcURL As String
+
+    ' Copying DB file to temp location
+    srcFile = utils.Path2URL(cTestDocsDir) + "TestDB/testDB.dbf"
+    dstFile = utils.getTempFileURL("TestDB.dbf")
+    dbSrcURL = "sdbc:dbase:" + gsub(dstFile, "/testDB.dbf", "")
+
+    facc = createUnoService("com.sun.star.ucb.SimpleFileAccess")
+    if (facc.exists(dstFile)) then facc.kill(dstFile)
+    facc.copy(srcFile, dstFile)
+
+    dbtools.RegisterDataSource("DBTest", dbSrcURL)
+
+    oRowSet = createUnoService("com.sun.star.sdb.RowSet")
+
+    oRowSet.DataSourceName = "DBTest"
+    oRowSet.Command = "TestDB"
+    oRowSet.CommandType = com.sun.star.sdb.CommandType.TABLE
+
+    oRowSet.execute()
+
+    wait(200)
+
+    oConnection = oRowSet.ActiveConnection
+
+    if NOT isObject(oConnection) then
+        Out.Log("oConnection wasn't retrieved properly !!!")
+    end if
+
+    oRowSet.first()
+
+    Out.Log("The first record has: '" + oRowSet.getString(1) + "'")
+
+    oObj = oRowSet
+
+    oComponentInstance = createUnoService("com.sun.star.sdb.RowSet")
+    cExistantColumnName = "_TEXT"
+    cXResultSetFirstRecord = "text1"
+    cXResultSetLastRecord = "text3"
+    cXResultSetRecord1 = "text1"
+    cXResultSetRecord2 = "text2"
+    cXResultSet2BeforeLastRecord = "text2"
+
+    paramTypes = DimArray()
+
+'    paramTypes = Array("boolean", "byte", "short", "int", "long", "float", "double", "string", _
+'        "bytes", "date", "time", "timestamp", "binarystream", "characterstream", "object", _
+'        "ref", "blob", "clob", "array")
+
+
+'    Dim dat As new com.sun.star.util.Date
+'    Dim tim As new com.sun.star.util.Time
+'    Dim datTim As new com.sun.star.util.DateTime
+
+'    dat.Year = 2001
+'    dat.Month = 1
+'    dat.Day = 1
+
+'    tim.Hours = 1
+'    tim.Minutes = 1
+'    tim.Seconds = 1
+
+'    paramVal = Array(true, 11, 11, 111, NULL, 1.1, 11.11, "text1", NULL, dat, tim, NULL, NULL, NULL, NULL,
+'        NULL, NULL, NULL, NULL)
+
+    ' for XRow and XRowUpdate
+    rowTypes = Array("string", "int", "long", "double", "float", "date", "datetm", "boolean")
+    rowTypesCol = Array(1, 2, 3, 4, 5, 6, 7, 9)
+'    rowTypes = Array("boolean", "byte", "short", "int", "long", "float", "double", "string", _
+'        "bytes", "date", "time", "timestamp", "binarystream", "characterstream", "object", _
+'        "numericobject")
+
+
+
+' Required for com.sun.star.sdbc.XResultSetUpdate
+    textColumn = "_TEXT"
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Sub DisposeObj()
+On Error Goto ErrHndl
+    Out.Log("Closing DB connection ...")
+    oConnection.close()
+
+    Out.Log("Revoking 'DBTest' datasource ...")
+    dbtools.RevokeDB("DBTest")
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    resume next
+End Sub
+</script:module>

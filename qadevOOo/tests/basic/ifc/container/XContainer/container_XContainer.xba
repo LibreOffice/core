@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="container_XContainer" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: container_XContainer.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:45:57 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'      Global oElementToInsert As Object
+'       Global oContainer As Object in case if the component tested doesnt support XNameContainer
+
+'*************************************************************************
+
+
+
+
+Dim ElIns1 As Integer
+Dim ElIns2 As Integer
+Dim ElRem1 As Integer
+Dim ElRem2 As Integer
+Dim ElRep1 As Integer
+Dim ElRep2 As Integer
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.container.XContainer
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim old As Object
+    Dim bOK As Boolean
+
+    oListener1 = createUNOListener("CB1_", "com.sun.star.container.XContainerListener")
+    oListener2 = createUNOListener("CB2_", "com.sun.star.container.XContainerListener")
+    bOK = NOT isNULL(oListener1) AND NOT isNULL(oListener2)
+    Out.Log("Listeners creation : " + bOK)
+
+    ResetCounters()
+
+    Test.StartMethod("addContainerListener()")
+    bOK = true
+    oObj.addContainerListener(oListener1)
+    Out.Log("Listener1 was added")
+    oObj.addContainerListener(oListener2)
+    Out.Log("Listener2 was added")
+
+    Out.Log("Inserting element ... ")
+    if hasUnoInterfaces(oObj, "com.sun.star.container.XNameContainer") then
+        oObj.InsertByName(cIfcShortName, oElementToInsert)
+    else
+        oContainer.InsertByName(cIfcShortName, oElementToInsert)
+    end if
+        
+    Dim bInsOK As Boolean
+    bInsOK = ElIns1 = 1 AND ElIns2 = 1
+    Out.Log("... " + bInsOK)
+    bOK = bOK AND bInsOK
+
+    Out.Log("Removing element ... ")
+    Dim bRemOK As Boolean
+    if hasUnoInterfaces(oObj, "com.sun.star.container.XNameContainer") then
+        oObj.RemoveByName(cIfcShortName)
+    else
+        oContainer.RemoveByName(cIfcShortName)
+    end if
+        
+    bRemOK = ElRem1 = 1 AND ElRem2 = 1
+    Out.Log("... " + bRemOK)
+    bOK = bOK AND bRemOK
+
+    Out.Log("Replacing element ... ")
+    Dim bRepOK As Boolean
+    
+    if hasUnoInterfaces(oObj, "com.sun.star.container.XIndexReplace") then
+        old = oObj.getByIndex(0)
+        oObj.ReplaceByIndex(0, oElementToInsert)
+        oObj.ReplaceByIndex(0, old)
+    else
+        old = oContainer.getByIndex(0)
+        oContainer.ReplaceByIndex(0, oElementToInsert)
+        oContainer.ReplaceByIndex(0, old)
+    end if
+    
+    bRepOK = ElRep1 = 2 AND ElRep2 = 2
+    Out.Log("... " + bRepOK)
+    bOK = bOK AND bRepOK
+
+    Test.MethodTested("addContainerListener()", bOK)
+
+
+    Test.StartMethod("removeContainerListener()")
+    bOK = true
+    oObj.removeContainerListener(oListener1)
+    Out.Log("Listener1 was removed")
+    ResetCounters()
+
+    Out.Log("Inserting element ... ")
+    if hasUnoInterfaces(oObj, "com.sun.star.container.XNameContainer") then
+        oObj.InsertByName(cIfcShortName, oElementToInsert)
+    else
+        oContainer.InsertByName(cIfcShortName, oElementToInsert)
+    end if
+        
+    bInsOK = ElIns1 = 0 AND ElIns2 = 1
+    Out.Log("... " + bInsOK)
+    bOK = bOK AND bInsOK
+
+    Out.Log("Removing element ... ")
+    if hasUnoInterfaces(oObj, "com.sun.star.container.XNameContainer") then
+        oObj.RemoveByName(cIfcShortName)
+    else
+        oContainer.RemoveByName(cIfcShortName)
+    end if
+    
+    bRemOK = ElRem1 = 0 AND ElRem2 = 1
+    Out.Log("... " + bRemOK)
+    bOK = bOK AND bRemOK
+
+    Out.Log("Replacing element ... ")
+    if hasUnoInterfaces(oObj, "com.sun.star.container.XIndexReplace") then
+        oObj.ReplaceByIndex(0, oElementToInsert)
+    else
+        oContainer.ReplaceByIndex(0, oElementToInsert)
+    end if
+        
+    bRepOK = ElRep1 = 0 AND ElRep2 = 1
+    Out.Log("... " + bRepOK)
+    bOK = bOK AND bRepOK
+    Test.MethodTested("removeContainerListener()", bOK)
+
+    oObj.removeContainerListener(oListener2)
+    Out.Log("Listener2 was removed")
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Sub CB1_elementInserted(ev As Object)
+    Out.Log("CB1 called: element was inserted")
+    ElIns1 = ElIns1 + 1
+End Sub
+
+Sub CB1_elementRemoved(ev As Object)
+    Out.Log("CB1 called: element was removed")
+    ElRem1 = ElRem1 + 1
+End Sub
+
+Sub CB1_elementReplaced(ev As Object)
+    Out.Log("CB1 called: element was replaced")
+    ElRep1 = ElRep1 + 1
+End Sub
+
+Sub CB2_elementInserted(ev As Object)
+    Out.Log("CB2 called: element was inserted")
+    ElIns2 = ElIns2 + 1
+End Sub
+
+Sub CB2_elementRemoved(ev As Object)
+    Out.Log("CB2 called: element was removed")
+    ElRem2 = ElRem2 + 1
+End Sub
+
+Sub CB2_elementReplaced(ev As Object)
+    Out.Log("CB2 called: element was replaced")
+    ElRep2 = ElRep2 + 1
+End Sub
+
+Sub ResetCounters
+    ElIns1 = 0
+    ElIns2 = 0
+    ElRem1 = 0
+    ElRem2 = 0
+    ElRep1 = 0
+    ElRep2 = 0
+End Sub
+</script:module>

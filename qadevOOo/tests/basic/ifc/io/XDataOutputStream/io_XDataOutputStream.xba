@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="io_XDataOutputStream" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: io_XDataOutputStream.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:50:44 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.io.XDataOutputStream
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim DataTypes(10) As String
+    Dim Data(10) As Variant
+    Dim oTypeConvertor As Object
+    Dim i As Integer
+    Dim oInputStream As Object
+
+    bOK = true
+
+    oTypeConvertor = createUnoService("com.sun.star.script.Converter")
+
+    DataTypes(0) = "byte"
+    Data(0) = 65
+    DataTypes(1) = "boolean"
+    Data(1) = true
+    DataTypes(2) = "double"
+    Data(2) = 10.567
+    DataTypes(3) = "long"
+    Data(3) = 12345678
+    DataTypes(4) = "char"
+    Data(4) = oTypeConvertor.convertToSimpleType(89, com.sun.star.uno.TypeClass.CHAR)
+    DataTypes(5) = "short"
+    Data(5) = 233
+    DataTypes(6) = "UTF"
+    Data(6) = "UTF String"
+    DataTypes(7) = "float"
+    Data(7) = -233.15
+    DataTypes(8) = "Hyper"
+    Data(8) = 98765432123456
+
+    Out.Log("Writing data first... ")
+
+    for i = 0 to ubound(Data())
+        select case DataTypes(i)
+            case "boolean"
+                oObj.writeBoolean(Data(i))
+            case "byte"
+                oObj.writeByte(Data(i))
+            case "char"
+                oObj.writeChar(Data(i))
+            case "short"
+                oObj.writeShort(Data(i))
+            case "long"
+                oObj.writeLong(Data(i))
+            case "Hyper"
+                oObj.writeHyper(Data(i))
+            case "float"
+                oObj.writeFloat(Data(i))
+            case "double"
+                oObj.writeDouble(Data(i))
+            case "UTF"
+                oObj.writeUTF(Data(i))
+        end select
+    next i
+
+    Out.Log("then reading and comparering... ")
+
+    oInputStream = getInStream()
+
+    for i = 0 to ubound(Data())
+        select case DataTypes(i)
+            case "boolean"
+                Dim bVar As Boolean
+                bVar = oInputStream.readBoolean()
+                Out.Log("Expected boolean '" + Data(i) + "', actual is '" + bVar + "'")
+                bOK = bOK AND Data(i) = bVar
+                Test.MethodTested("writeBoolean()", bOK)
+            case "byte"
+                Dim iByteVar As Integer
+                iByteVar = oInputStream.readByte()
+                Out.Log("Expected byte '" + int(Data(i)) + "', actual is '" + int(iByteVar) + "'")
+                bOK = bOK AND Data(i) = iByteVar
+                Test.MethodTested("writeByte()", bOK)
+            case "char"
+                Dim cCharVar As Integer
+                cCharVar = oInputStream.readChar()
+                Out.Log("Expected char '" + chr(Data(i)) + "', actual is '" + chr(cCharVar) + "'")
+                bOK = bOK AND Data(i) = cCharVar
+                Test.MethodTested("writeChar()", bOK)
+            case "short"
+                Dim iShortVar As Integer
+                iShortVar = oInputStream.readShort()
+                Out.Log("Expected short '" + int(Data(i)) + "', actual is '" + int(iShortVar) + "'")
+                bOK = bOK AND Data(i) = iShortVar
+                Test.MethodTested("writeShort()", bOK)
+            case "long"
+                Dim iLongVar As Long
+                iLongVar = oInputStream.readLong()
+                Out.Log("Expected long '" + Data(i) + "', actual is '" + iLongVar + "'")
+                bOK = bOK AND Data(i) = iLongVar
+                Test.MethodTested("writeLong()", bOK)
+            case "Hyper"
+                Dim iHyperVar As Variant
+                iHyperVar = oInputStream.readHyper()
+                Out.Log("Expected hyper '" + Data(i) + "', actual is '" + iHyperVar + "'")
+                bOK = bOK AND Data(i) = iHyperVar
+                Test.MethodTested("writeHyper()", bOK)
+            case "float"
+                Dim dFloatVar As Double
+                dFloatVar = oInputStream.readFloat()
+                Out.Log("Expected float '" + Data(i) + "', actual is '" + dFloatVar + "'")
+                bOK = bOK AND (abs(Data(i) - dFloatVar) &lt; 0.00001)
+                Test.MethodTested("writeFloat()", bOK)
+            case "double"
+                Dim dDoubleVar As Double
+                dDoubleVar = oInputStream.readDouble()
+                Out.Log("Expected double '" + Data(i) + "', actual is '" + dDoubleVar + "'")
+                bOK = bOK AND Data(i) = dDoubleVar
+                Test.MethodTested("writeDouble()", bOK)
+            case "UTF"
+                Dim cUTFVar As Variant
+                cUTFVar = oInputStream.readUTF()
+                Out.Log("Expected UTF '" + Data(i) + "', actual is '" + cUTFVar + "'")
+                bOK = bOK AND Data(i) = cUTFVar
+                Test.MethodTested("writeUTF()", bOK)
+        end select
+    next i
+
+    ResetStreams()
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

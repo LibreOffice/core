@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="frame_XModel" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: frame_XModel.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:50:13 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'     - Global oXModelController as Object
+'     - Global oXModelSel as Object
+'     - Global oXModelToSel as Object
+
+'*************************************************************************
+
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.frame.XModel
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+
+    Dim oController As Object
+    Dim oSelection As Object
+    Dim aArgs(0 to 0) As Variant
+    Dim oCursor As Object
+    Dim cURL As String
+    Dim i As Integer
+	Dim args1(0) As New com.sun.star.beans.PropertyValue
+
+    Test.StartMethod("attachResource()")
+    args1(0).Name = "XModel"
+    bOK = oObj.attachResource(".component:DB/DataSourceBrowser", args1())
+    Test.MethodTested("attachResource()", bOK)
+
+    Test.StartMethod("getURL()")
+    bOK = true
+    cURL = oObj.getURL()
+    bOK = bOK AND (cURL = ".component:DB/DataSourceBrowser")
+    Test.MethodTested("getURL()", bOK)
+
+    Test.StartMethod("getArgs()")
+    bOK = true
+    aArgs() = oObj.Args
+    bOK = bOK AND aArgs(0).Name = "XModel"
+    Test.MethodTested("getArgs()", bOK)
+
+    Test.StartMethod("getCurrentController()")
+    bOK = true
+    Dim oCurrCtrl As Object
+    oCurrCtrl = oObj.getCurrentController()
+    bOK = bOK AND isObject(oCurrCtrl)
+    bOK = bOK AND hasUnoInterfaces(oCurrCtrl, "com.sun.star.frame.XController")
+    Test.MethodTested("getCurrentController()", bOK)
+
+    Test.StartMethod("getCurrentSelection()")
+    bOK = true
+    Dim oCurrSelection As Object
+    oXModelSel.select(oXModelToSel)
+    oCurrSelection = oObj.getCurrentSelection()
+    bOK = bOK AND hasUnoInterfaces(oCurrSelection, "com.sun.star.uno.XInterface")
+    Test.MethodTested("getCurrentSelection()", bOK)
+
+    Test.StartMethod("hasControllersLocked()")
+    bOK = true
+    ' there should no controllers be locked
+    bOK = bOK AND NOT oObj.hasControllersLocked()
+    Test.MethodTested("hasControllersLocked()", bOK)
+
+    ' now lock controllers
+    Test.StartMethod("lockControllers()")
+    bOK = true
+    oObj.lockControllers()
+    ' controllers should be locked
+    bOK = bOK AND oObj.hasControllersLocked()
+    Test.MethodTested("lockControllers()", bOK)
+
+    ' unlock controllers and check success
+    Test.StartMethod("unlockControllers()")
+    bOK = true
+    oObj.unlockControllers()
+    bOK = bOK AND NOT oObj.hasControllersLocked()
+    Test.MethodTested("unlockControllers()", bOK)
+
+    Test.StartMethod("connectController()")
+    oObj.connectController(oXModelController)
+    Test.MethodTested("connectController()", bOK)
+
+    Test.StartMethod("disconnectController()")
+    oObj.disconnectController(oXModelController)
+    oObj.connectController(oCurrCtrl)
+    Test.MethodTested("disconnectController()", bOK)
+
+    Test.StartMethod("setCurrentController()")
+    oObj.setCurrentController(oCurrCtrl)
+    Test.MethodTested("setCurrentController()", bOK)
+
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

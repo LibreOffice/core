@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="accessibility_XAccessibleEditableText" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: accessibility_XAccessibleEditableText.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:43:29 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'	global hasChangeableAttrs as boolean
+
+'*************************************************************************
+
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.accessibility.XAccessibleEditableText
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean, locRes As Boolean
+    Dim oldText As String, curText As String
+    Dim length As Integer, initialText As String
+
+    oldText = oObj.getText()
+    initialText = oldText
+    length = oObj.getCharacterCount()
+    Out.Log("Text: "+oldText)
+    Out.Log("Length: "+length)
+
+
+    Test.StartMethod("cutText()")
+    bOK = true
+    locRes = oObj.cutText(0,length)
+    curText = oObj.getText()
+    bOK = bOK AND (len(curText) = 0) AND locRes
+    Test.MethodTested("cutText()",bOK)
+
+
+    Test.StartMethod("pasteText()")
+    bOK = true
+    locRes = oObj.pasteText(0)
+    curText = oObj.getText()
+    bOK = bOK AND (len(curText) = length) AND locRes
+    Test.MethodTested("pasteText()",bOK)
+
+
+    Test.StartMethod("insertText()")
+    Dim insString As String
+    bOK = true
+    insString = "Inserted String"
+    locRes = oObj.insertText(insString,length)
+    curText = oObj.getText()
+    bOK = bOK AND (curText = oldText + insString) AND locRes
+    Test.MethodTested("insertText()",bOK)
+
+
+    Test.StartMethod("deleteText()")
+    bOK = true
+    locRes = oObj.deleteText(len(curText) - len(insString),len(curText))
+    curText = oObj.getText()
+    bOK = bOK AND (curText = oldText) AND locRes
+    Test.MethodTested("deleteText()",bOK)
+
+
+    Test.StartMethod("replaceText()")
+    Dim replacement As String
+    Dim endIndex As Integer
+    bOK = true
+    oObj.setText(oldText+"(part of string to replace)")
+    endIndex = len(oObj.getText)
+    replacement = "Replacement string"
+    locRes = oObj.replaceText(len(oldText),endIndex,replacement)
+    curText = oObj.getText()
+    bOK = bOK AND (curText = oldText + replacement) AND locRes
+    Test.MethodTested("replaceText()",bOK)
+
+
+    Test.StartMethod("setAttributes()")
+    Dim attrs As Variant, newAttrs As Variant
+    Dim i As Integer
+    bOK = true
+    length = oObj.getCharacterCount()
+    attrs = oObj.getCharacterAttributes(0)
+    if hasChangeableAttrs then
+        for i=0 to ubound(attrs())
+            if attrs(i).Name = "CharBackColor" then attrs(i).Value = RGB(120,205,40)
+            if attrs(i).Name = "CharHeight" then attrs(i).Value = 30
+            if attrs(i).Name = "CharColor" then attrs(i).Value = RGB(255,255,255)
+        next i
+        locRes = oObj.setAttributes(0,length,attrs)
+        bOK = bOK AND locRes
+        newAttrs = oObj.getCharacterAttributes(0)
+        bOK = bOK AND PropertyTester.equals(attrs,newAttrs)
+    else
+        Out.Log("Object has no changeable attributes.")
+        bOK = true 
+    End If
+    Test.MethodTested("setAttributes()",bOK)
+
+
+    Test.StartMethod("setText()")
+    Dim newText As String
+    bOK = true
+    oldText = oObj.getText()
+    newText = "New string"
+    locRes = oObj.setText(newText)
+    curText = oObj.getText()
+    bOK = bOK AND (curText = newText) AND locRes
+    if locRes then
+        Out.Log("Test 1 passed OK.")
+    else
+        Out.Log("Test 1 failed.")
+    End If
+    newText = ""
+    locRes = oObj.setText(newText)
+    curText = oObj.getText()
+    bOK = bOK AND (newText = curText) AND locRes
+    if locRes then
+        Out.Log("Test 2 passed OK.")
+    else
+        Out.Log("Test 2 failed.")
+    End If
+    locRes = oObj.setText(oldText)
+    curText = oObj.getText()
+    bOK = bOK AND (curText = oldText) AND locRes
+    if locRes then
+        Out.Log("Test 3 passed OK.")
+    else
+        Out.Log("Test 3 failed.")
+    End If
+    Test.MethodTested("setText()",bOK)
+
+    ' Setting initial text
+    oObj.setText(initialText)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="form_XSubmit" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: form_XSubmit.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:48:58 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.form.XSubmit
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim list1 As Object, list2 As Object
+    Dim event As new com.sun.star.awt.MouseEvent
+
+    Test.StartMethod("addSubmitListener()")
+    
+    l1Called = 0 : l2Called = 0 
+
+    bOK = true
+    list1 = createUnoListener("L1_", "com.sun.star.form.XSubmitListener")
+    list2 = createUnoListener("L2_", "com.sun.star.form.XSubmitListener")
+
+    Out.Log("add two listeners")
+    oObj.addSubmitListener(list1)
+    oObj.addSubmitListener(list2)
+
+    Test.StartMethod("removeSubmitListener()")
+    Out.Log("remove listener 1")
+    oObj.removeSubmitListener(list1)
+
+    Test.StartMethod("submit()")
+
+    l1Called = false
+    l2Called = false
+    
+    oObj.TargetURL = "someserver"
+    oObj.submit(NULL_OBJECT, event)
+    
+    wait(500)
+    
+    Out.Log("Listener1 was called " + l1Called + " times."
+    Out.Log("Listener2 was called " + l2Called + " times."
+
+    Test.MethodTested("addSubmitListener()", l2Called = 1)
+    Test.MethodTested("submit()", l2Called > 0)
+    Test.MethodTested("removeSubmitListener()", l1Called = 0)
+
+    Out.Log("remove listener 2")
+    oObj.removeSubmitListener(list2)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Dim l1Called As Integer
+Dim l2Called As Integer
+
+Function L1_approveSubmit() As Boolean
+    l1Called = l1Called + 1
+    L1_approveSubmit = true
+End Function
+
+Function L2_approveSubmit() As Boolean
+    l2Called = l2Called + 1
+    L2_approveSubmit = true
+End Function
+</script:module>

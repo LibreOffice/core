@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="frame_XDocumentTemplates" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: frame_XDocumentTemplates.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:50:04 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'     - Global oStore As Object
+
+'*************************************************************************
+
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.frame.XDocumentTemplates
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim content As Object, groupContent As Object
+    Dim result as Object, statRes As Object
+    Dim res As Boolean
+
+    Test.StartMethod("getContent()")
+    bOK = true
+    content = oObj.getContent()
+    Out.Log("Content list :")
+    Out.Log(getContentList(content))
+
+    bOK = bOK AND NOT isNull(content)
+    Test.MethodTested("getContent()", bOK)
+
+    Test.StartMethod("addGroup()")
+    bOK = true
+    res = oObj.addGroup("XDocumentTemplatesTemp")
+    Out.Log("Method returned: " + res)
+    bOK = bOK AND res AND NOT isNull(getSubContent(content, "XDocumentTemplatesTemp"))
+    Test.MethodTested("addGroup()", bOK)
+
+    Test.StartMethod("renameGroup()")
+    bOK = true
+    res = oObj.renameGroup("XDocumentTemplatesTemp", "XDocumentTemplates")
+    Out.Log("Method returned: " + res)
+    groupContent = getSubContent(content, "XDocumentTemplates")
+    bOK = bOK AND res AND isNull(getSubContent(content, "XDocumentTemplatesTemp")) _
+        AND NOT isNull(groupContent)
+    Test.MethodTested("renameGroup()", bOK)
+
+    Test.StartMethod("addTemplate()")
+    Dim testDoc As String 
+    testDoc = utils.Path2URL(cTestDocsDir) + "report.stw"
+    Out.Log("Adding template from " + testDoc
+
+    bOK = true
+    res = oObj.addTemplate("XDocumentTemplates", "ANewTemplateTemp", testDoc)
+    Out.Log("Method returned: " + res)
+    bOK = bOK AND res AND NOT isNull(getSubContent(groupContent, "ANewTemplateTemp"))
+    Test.MethodTested("addTemplate()", bOK)
+
+    Test.StartMethod("renameTemplate()")
+    bOK = true
+    res = oObj.renameTemplate("XDocumentTemplates", "ANewTemplateTemp", "ANewTemplate")
+    Out.Log("Method returned: " + res)
+    bOK = bOK AND res AND isNull(getSubContent(groupContent, "ANewTemplateTemp")) _
+        AND NOT isNull(getSubContent(groupContent, "ANewTemplate"))
+    Test.MethodTested("renameTemplate()", bOK)
+
+    Test.StartMethod("storeTemplate()")
+    bOK = true
+    res = oObj.storeTemplate("XDocumentTemplates", "NewStoreTemplate", oStore)
+    Out.Log("Method returned: " + res)
+    bOK = bOK AND res AND NOT isNull(getSubContent(groupContent, "NewStoreTemplate"))
+    Test.MethodTested("storeTemplate()", bOK)
+
+    Test.StartMethod("removeTemplate()")
+    bOK = true
+    res = oObj.removeTemplate("XDocumentTemplates", "ANewTemplate")
+    Out.Log("Method returned: " + res)
+    bOK = bOK AND res AND isNull(getSubContent(groupContent, "ANewTemplate")
+    Test.MethodTested("removeTemplate()", bOK)
+
+    Test.StartMethod("removeGroup()")
+    bOK = true
+    res = oObj.removeGroup("XDocumentTemplates")
+    Out.Log("Method returned: " + res)
+    bOK = bOK AND res AND isNull(getSubContent(content, "XDocumentTemplatesTemp")
+    Test.MethodTested("removeGroup()", bOK)
+
+    Test.StartMethod("update()")
+    bOK = true
+    oObj.update()
+    Test.MethodTested("update()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Function getDynaResultSet(content As Object) As Object
+    Dim command as new com.sun.star.ucb.Command
+    Dim comArg as new com.sun.star.ucb.OpenCommandArgument2
+    Dim comProps(0) as new com.sun.star.beans.Property
+    Dim result as Object, statRes As Object
+
+    comArg.Mode = com.sun.star.ucb.OpenMode.ALL
+    comProps(0).Name = "Title"
+    comArg.Properties = comProps()
+
+    command.Name = "open"
+    command.Handle = -1
+    command.Argument = comArg
+
+    getDynaResultSet = content.execute(command, 0, NULL_OBJECT)
+End Function
+
+Function getStatResultSet(content As Object) As Object
+    getStatResultSet = getDynaResultSet(content).getStaticResultSet()
+End Function
+
+Function getContentList(content As Object) As String
+    Dim statRes As Object
+    Dim ret As String
+
+    statRes = getStatResultSet(content)
+    statRes.first()
+    ret = ""
+    while NOT statRes.isAfterLast()
+         ret = ret + "   " + statRes.getString(1) + chr(13)
+         statRes.next()
+    wend
+    getContentList = ret
+End Function
+
+Function getSubContent(content As Object, subName As String) As Object
+    Dim statRes As Object
+    Dim ret As Object
+
+    statRes = getStatResultSet(content)
+    statRes.first()
+    while NOT statRes.isAfterLast()
+         if subName = statRes.getString(1) then
+            ret = statRes.queryContent()
+         endif
+         statRes.next()
+    wend
+    
+    getSubContent = ret
+End Function 
+</script:module>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="accessibility_XAccessibleEventBroadcaster" script:language="StarBasic">
+&apos;*************************************************************************
+&apos;*
+&apos;*  $RCSfile: accessibility_XAccessibleEventBroadcaster.xba,v $ 
+&apos;*
+&apos;*  $Revision: 1.1 $ 
+&apos;*
+&apos;*  last change:$Date: 2003-01-27 17:43:30 $ 
+&apos;*
+&apos;*  The Contents of this file are made available subject to the terms of
+&apos;*  either of the following licenses
+&apos;*
+&apos;*         - GNU Lesser General Public License Version 2.1
+&apos;*         - Sun Industry Standards Source License Version 1.1
+&apos;*
+&apos;*  Sun Microsystems Inc., October, 2000
+&apos;*
+&apos;*  GNU Lesser General Public License Version 2.1
+&apos;*  =============================================
+&apos;*  Copyright 2000 by Sun Microsystems, Inc.
+&apos;*  901 San Antonio Road, Palo Alto, CA 94303, USA
+&apos;*
+&apos;*  This library is free software; you can redistribute it and/or
+&apos;*  modify it under the terms of the GNU Lesser General Public
+&apos;*  License version 2.1, as published by the Free Software Foundation.
+&apos;*
+&apos;*  This library is distributed in the hope that it will be useful,
+&apos;*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+&apos;*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+&apos;*  Lesser General Public License for more details.
+&apos;*
+&apos;*  You should have received a copy of the GNU Lesser General Public
+&apos;*  License along with this library; if not, write to the Free Software
+&apos;*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+&apos;*  MA  02111-1307  USA
+&apos;*
+&apos;*
+&apos;*  Sun Industry Standards Source License Version 1.1
+&apos;*  =================================================
+&apos;*  The contents of this file are subject to the Sun Industry Standards
+&apos;*  Source License Version 1.1 (the &quot;License&quot;); You may not use this file
+&apos;*  except in compliance with the License. You may obtain a copy of the
+&apos;*  License at http://www.openoffice.org/license.html.
+&apos;*
+&apos;*  Software provided under this License is provided on an &quot;AS IS&quot; basis,
+&apos;*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+&apos;*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+&apos;*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+&apos;*  See the License for the specific provisions governing your rights and
+&apos;*  obligations concerning the Software.
+&apos;*
+&apos;*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+&apos;*
+&apos;*  Copyright: 2000 by Sun Microsystems, Inc.
+&apos;*
+&apos;*  All Rights Reserved.
+&apos;*
+&apos;*  Contributor(s): _______________________________________
+&apos;*
+&apos;*
+&apos;*************************************************************************
+&apos;*************************************************************************
+
+
+
+&apos; Be sure that all variables are dimensioned:
+option explicit
+
+&apos;*************************************************************************
+&apos; This Interface/Service test depends on the following GLOBAL variables,
+&apos; which must be specified in the object creation:
+
+&apos; fireEvent() precedure 
+&apos; located in component test
+
+&apos;*************************************************************************
+
+
+
+
+
+Dim oListener1 As Object
+Dim oListener2 As Object
+Dim bL1called As Boolean
+Dim bL2called As Boolean
+
+
+Sub RunTest()
+
+&apos;*************************************************************************
+&apos; INTERFACE: 
+&apos; com.sun.star.accessibility.XAccessibleEventBroadcaster
+&apos;*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim isTransient As Boolean
+    Dim stateSet As Variant
+    bOK = true
+
+    &apos;out.log(&quot;Creating Listeners...&quot;)
+    oListener1 = createUNOListener(&quot;EL1_&quot;,&quot;drafts.com.sun.star.accessibility.XAccessibleEventListener&quot;)
+    oListener2 = createUNOListener(&quot;EL2_&quot;,&quot;drafts.com.sun.star.accessibility.XAccessibleEventListener&quot;)
+    bOK = bOK AND NOT isNULL(oListener1) AND NOT isNULL(oListener2)
+    if NOT bOK then print &quot;ERROR: Cannot create listeners...&quot;
+
+    if NOT hasUNOInterfaces(oObj,&quot;drafts.com.sun.star.accessibility.XAccessibleContext&quot;) then
+        &apos;out.log(&quot;Object does not implement XAccessibleContext.&quot;)
+        isTransient = false
+    else
+        stateSet = oObj.getAccessibleStateSet()
+        isTransient = stateSet.contains(27)
+    End If
+
+    Test.StartMethod(&quot;addEventListener()&quot;)
+    bOK = true
+    bL1called = false
+    bL2called = false
+    &apos;out.log(&quot;Adding two listeners...&quot;)
+    oObj.drafts_com_sun_star_accessibility_XAccessibleEventBroadcaster_addEventListener(oListener1)
+    oObj.drafts_com_sun_star_accessibility_XAccessibleEventBroadcaster_addEventListener(oListener2)
+    &apos;out.log(&quot;fire event&quot;)
+    fireEvent()
+    wait(500)
+    &apos;out.log(&quot;Listener1 called: &quot;+bL1called)
+    &apos;out.log(&quot;Listener2 called: &quot;+bL2called)
+    if NOT isTransient then
+        bOK = bOK AND bL1called AND bL2called
+    else
+        &apos;out.log(&quot;Object is transient, listeners aren&apos;t expected to call.&quot;)
+        bOK = true
+    End If
+    Test.MethodTested(&quot;addEventListener()&quot;,bOK)
+
+
+    Test.StartMethod(&quot;removeEventListener()&quot;)
+    bOK = true
+    bL1called = false
+    bL2called = false
+    &apos;out.log(&quot;Removing one listener...&quot;)
+    oObj.drafts_com_sun_star_accessibility_XAccessibleEventBroadcaster_removeEventListener(oListener1)
+    &apos;out.log(&quot;fire event&quot;)
+    fireEvent()
+    wait(500)
+    &apos;out.log(&quot;Listener1 called: &quot;+bL1called)
+    &apos;out.log(&quot;Listener2 called: &quot;+bL2called)
+    if NOT isTransient then
+        bOK = bOK AND NOT bL1called AND bL2called
+    else
+        &apos;out.log(&quot;Object is transient, listeners aren&apos;t expected to call.&quot;)
+        bOK = true
+    End If
+    Test.MethodTested(&quot;removeEventListener()&quot;,bOK)
+
+    &apos; Removing the second listener...
+    oObj.drafts_com_sun_star_accessibility_XAccessibleEventBroadcaster_removeEventListener(oListener2)
+
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Sub EL1_notifyEvent(ev As Variant)
+    &apos;out.log(&quot;CallBack for Listener1 notifyEvent was called.&quot;)
+    bL1called = true
+End Sub 
+
+Sub EL1_disposing()
+End Sub
+
+Sub EL2_notifyEvent(ev As Variant)
+    &apos;out.log(&quot;CallBack for Listener2 notifyEvent was called.&quot;)
+    bL2called = true
+End Sub
+
+Sub EL2_disposing()
+End Sub
+
+</script:module>

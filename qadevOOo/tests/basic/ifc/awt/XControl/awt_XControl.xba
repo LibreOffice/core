@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="awt_XControl" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: awt_XControl.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:44:14 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'Global oModel As Object
+'Global oContext As Object
+'Global oWinpeer As Object
+'Global oToolkit As Object
+
+'*************************************************************************
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.awt.XControl
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+
+    If isNull(oContext) then
+       Out.Log("'oContext' as global variable required!")
+    End If
+    If isNull(oWinpeer) then
+       Out.Log("'oWinper' as global variable required!")
+    End If
+    If isNull(oToolkit) then
+       Out.Log("'oToolkit' as global variable required!")
+    End If
+
+    Test.StartMethod("setContext()")
+    bOK = true
+    oObj.setContext(oContext)
+    Test.MethodTested("setContext()", bOK)
+
+    Test.StartMethod("getContext()")
+    bOK = hasUnoInterfaces(oObj.getContext(), "com.sun.star.uno.XInterface")
+    Test.MethodTested("getContext()", bOK)
+
+    Test.StartMethod("createPeer()")
+    bOK = true
+    oObj.createPeer(oToolkit, oWinpeer)
+    Test.MethodTested("createPeer()", bOK)
+
+    Test.StartMethod("getPeer()")
+    bOK = hasUnoInterfaces(oObj.getPeer(),"com.sun.star.awt.XWindowPeer")
+    Test.MethodTested("getPeer()", bOK)
+
+    Test.StartMethod("setModel()")
+    bOK = true
+    oObj.setModel(oModel)
+    Test.StartMethod("getModel()")
+    bOK = bOK AND hasUnoInterfaces(oObj.getModel(), "com.sun.star.awt.XControlModel")
+    Test.MethodTested("setModel()", bOK)
+    Test.MethodTested("getModel()", bOK)
+
+    Test.StartMethod("getView()")
+    bOK = hasUnoInterfaces(oObj.getView(), "com.sun.star.awt.XView")
+    Test.MethodTested("getView()", bOK)
+
+    Test.StartMethod("setDesignMode()")
+    bOK = true
+    oObj.setDesignMode(true)
+    Test.StartMethod("isDesignMode()")
+    bOk = bOk AND oObj.isDesignMode()
+    oObj.setDesignMode(false)
+    bOk = bOk AND NOT oObj.isDesignMode()
+    Test.MethodTested("setDesignMode()", bOK)
+    Test.MethodTested("isDesignMode()", bOK)
+
+    Test.StartMethod("isTransparent()")
+    bOk = VarType(oObj.isTransparent()) = 11
+    Test.MethodTested("isTransparent()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

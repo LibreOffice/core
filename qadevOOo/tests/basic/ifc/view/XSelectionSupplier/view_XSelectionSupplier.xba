@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="view_XSelectionSupplier" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: view_XSelectionSupplier.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:56:00 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'     - Global SelectableObj1 As Object
+'     - Global SelectableObj2 As Object
+
+'*************************************************************************
+
+
+
+
+Dim nCB1Val, nCB2Val As Integer
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.view.XSelectionSupplier
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK, bSelected As Boolean
+    Dim oListener1, oListener2, oSelection As Object
+
+    Out.Log("creating two Listeners")
+    oListener1 = createUNOListener("CB1_", "com.sun.star.view.XSelectionChangeListener")
+    oListener2 = createUNOListener("CB2_", "com.sun.star.view.XSelectionChangeListener")
+    bOK = NOT isNULL(oListener1) AND NOT isNULL(oListener2)
+    Out.Log("Listeners creation : " &amp; bOK)
+
+    Test.StartMethod("select()")
+    bOK = true
+    out.log("Trying to select ...")
+    bOK = bOK AND oObj.select(SelectableObj1)
+    Test.MethodTested("select()", bOK)
+
+    Test.StartMethod("getSelection()")
+    bOK = true
+    oSelection = oObj.getSelection()
+    bOK = bOK AND NOT isNULL(oSelection)
+
+    ' The selection is either specified by an object which is contained
+    ' in the component to which the view belongs or it is an interface of a
+    ' collection which contains such objects.
+
+    if bOK then
+        if (cObjectName = "sw.SwXTextView") then
+            bOK = bOK AND oSelection.hasElements()
+            bOK = bOK AND (oSelection.getByIndex(0).String = SelectableObj1.String)
+        elseif (hasUnoInterfaces(oSelection, "com.sun.star.container.XElementAccess")) then
+            bOK = bOK AND oSelection.hasElements()
+            if bOK then bOK = bOK AND (oSelection.getByIndex(0).dbg_methods = SelectableObj1.dbg_methods)
+        else
+            bOK = bOK AND (oSelection.dbg_methods = SelectableObj1.dbg_methods)
+        end if
+    end if
+
+    Test.MethodTested("getSelection()", bOK)
+
+    Test.StartMethod("addSelectionChangeListener()")
+    bOK = true
+    Out.Log("Adding two listeners...")
+    oObj.addSelectionChangeListener(oListener1)
+    oObj.addSelectionChangeListener(oListener2)
+
+    Out.Log("Select item...")
+    ResetCB()
+    bOK = bOK AND oObj.select(SelectableObj2)
+    bOK = bOK AND (nCB1Val &gt; 0) AND (nCB2Val &gt; 0)
+    Test.MethodTested("addSelectionChangeListener()", bOK)
+
+    Test.StartMethod("removeSelectionChangeListener()")
+    bOK = true
+    Out.Log("Remove first listener...")
+    oObj.removeSelectionChangeListener(oListener1)
+
+    Out.Log("Select item...")
+    ResetCB()
+    bOK = bOK AND oObj.select(SelectableObj1)
+    bOK = bOK AND (nCB1Val = 0) AND (nCB2Val &gt; 0)
+    Test.MethodTested("removeSelectionChangeListener()", bOK)
+
+    Out.Log("Remove last listener...")
+    oObj.removeSelectionChangeListener(oListener2)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Sub CB1_selectionChanged
+    Out.Log("Listener 1 was called")
+    nCB1Val = nCB1Val + 1
+end sub
+
+Sub CB2_selectionChanged
+    Out.Log("Listener 2 was called")
+    nCB2Val = nCB2Val + 1
+end sub
+
+Sub ResetCB()
+    nCB1Val = 0
+    nCB2Val = 0
+End Sub
+</script:module>

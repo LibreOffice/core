@@ -1,0 +1,143 @@
+/*************************************************************************
+ *
+ *  $RCSfile: _XApproveActionBroadcaster.java,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change:$Date: 2003-01-27 18:10:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+package ifc.form;
+
+import com.sun.star.form.XApproveActionBroadcaster;
+import com.sun.star.form.XApproveActionListener;
+import com.sun.star.lang.EventObject;
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
+/**
+* Testing <code>com.sun.star.form.XApproveActionBroadcaster</code>
+* interface methods:
+* <ul>
+*  <li><code> addApproveActionListener() </code></li>
+*  <li><code> removeApproveActionListener() </code></li>
+* </ul><p>
+* Test is <b> NOT </b> multithread compilant. <p>
+* @see com.sun.star.form.XApproveActionBroadcaster
+*/
+public class _XApproveActionBroadcaster extends MultiMethodTest {
+    public XApproveActionBroadcaster oObj = null;
+
+    /**
+    * Class we need to test methods.
+    */
+    protected class TestListener implements XApproveActionListener {
+        public boolean approve = false ;
+
+        public void init() {
+            approve = false ;
+        }
+        public void disposing(EventObject ev) {}
+        public boolean approveAction(EventObject ev) {
+            log.println("XApproveActionListener: ActionListener was called");
+            return approve ;
+        }
+
+    }
+
+    private TestListener listener = new TestListener();
+
+    /**
+    * Test calls the method. <p>
+    * Has <b> OK </b> status if the method successfully returns
+    * and no exceptions were thrown.
+    */
+    public void _addApproveActionListener() {
+        oObj.addApproveActionListener(listener) ;
+        tRes.tested("addApproveActionListener()", true);
+    }
+
+    /**
+    * Test calls the method. <p>
+    * Has <b> OK </b> status if the method successfully returns
+    * and no exceptions were thrown. <p>
+    * The following method tests are to be completed successfully before :
+    * <ul>
+    *  <li> <code> addApproveActionListener() </code> : adds listener to an
+    * object </li>
+    * </ul>
+    */
+    public void _removeApproveActionListener() {
+        requiredMethod("addApproveActionListener()");
+        listener.init() ;
+        listener.approve = true ;
+        oObj.removeApproveActionListener(listener);
+        tRes.tested("removeApproveActionListener()", true);
+    }
+
+
+    /**
+    * Just log output
+    */
+    protected void after() {
+        log.println("Skipping all XApproveActionBroadcaster methods, since they"
+                + " need user interaction");
+        throw new StatusException(Status.skipped(true));
+    }
+
+}
+
+

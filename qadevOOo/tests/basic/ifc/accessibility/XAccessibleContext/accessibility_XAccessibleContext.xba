@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="accessibility_XAccessibleContext" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: accessibility_XAccessibleContext.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:43:27 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.accessibility.XAccessibleContext
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim childCount As Long, i As Integer
+    Dim oParent As Object
+
+    Test.StartMethod("getAccessibleChildCount()")
+    bOK = true
+    childCount = oObj.getAccessibleChildCount()    
+    bOK = bOK AND (childCount &gt; -1)
+    Test.MethodTested("getAccessibleChildCount()",bOK)
+
+
+    Test.StartMethod("getAccessibleChild()")
+    Dim childContext As Object
+    Dim mCount As Integer
+    bOK = true
+    i = 0
+    if (childCount &gt; 50) then 
+        mCount = 50
+    else 
+        mCount = childCount
+    End If
+    while (i &lt; mCount)
+        childContext = oObj.getAccessibleChild(i).getAccessibleContext()
+        Out.Log("  Child " + i + ": " + childContext.getAccessibleDescription())
+        bOK = bOK AND utils.at_equals(childContext.getAccessibleParent(), oObj)
+        i = i + 1
+    wend
+    Test.MethodTested("getAccessibleChild()",bOK)
+
+
+    Test.StartMethod("getAccessibleParent()")
+    bOK = true
+    oParent = oObj.getAccessibleParent()
+    bOK = bOK AND NOT isNull(oParent)
+    Test.MethodTested("getAccessibleParent()",bOK)
+
+
+    Test.StartMethod("getAccessibleIndexInParent()")
+    Dim idx As Integer
+    Dim parentAC As Object
+    bOK = true
+    idx = oObj.getAccessibleIndexInParent()
+    parentAC = oParent.getAccessibleContext()
+    bOK = bOK AND utils.at_equals(parentAC.getAccessibleChild(idx), oObj)
+    Test.MethodTested("getAccessibleIndexInParent()",bOK)
+
+
+    Test.StartMethod("getAccessibleRole()")
+    Dim role As Integer
+    bOK = true
+    role = oObj.getAccessibleRole()
+    Out.Log("The role is " + role)
+    bOK = bOK AND (role &gt; -1)
+    Test.MethodTested("getAccessibleRole()",bOK)
+
+
+    Test.StartMethod("getAccessibleDescription()")
+    Dim descr As String
+    bOK = true
+    descr = oObj.getAccessibleDescription()
+    Out.Log("The description is " + descr)
+    bOK = bOK AND NOT isNull(descr)
+    Test.MethodTested("getAccessibleDescription()",bOK)
+
+
+    Test.StartMethod("getAccessibleName()")
+    Dim oName As String
+    bOK = true
+    oName = oObj.getAccessibleName()
+    Out.Log("The name is " + oName)
+    bOK = bOK AND NOT isNull(oName) AND (len(oName) &gt; 0)
+    Test.MethodTested("getAccessibleName()",bOK)
+
+
+    Test.StartMethod("getAccessibleRelationSet()")
+    Dim oSet As Variant
+    bOK = true
+    oSet = oObj.getAccessibleRelationSet()
+	' Relationset could be null
+	if not isNull(oSet) then
+		oSet.getRelationCount()
+	end if
+    Test.MethodTested("getAccessibleRelationSet()",bOK)
+
+
+    Test.StartMethod("getAccessibleStateSet()")
+    bOK = true
+    oSet = oObj.getAccessibleStateSet()
+    bOK = bOK AND NOT isNull(oSet)
+    if NOT bOK then Out.Log("This object does not support states")
+    Test.MethodTested("getAccessibleStateSet()",bOK)
+
+
+    Test.StartMethod("getLocale()")
+    Dim oLoc As Variant
+    bOK = true
+    oLoc = oObj.getLocale()
+    Out.Log("The locale is "+oLoc.Language+", "+oLoc.Country)
+    bOK = bOK AND NOT isNull(oLoc) AND (len(oLoc.Language) &gt; 0) AND (len(oLoc.Country) &gt; 0)
+    Test.MethodTested("getLocale()",bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

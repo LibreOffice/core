@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="accessibility_XAccessibleText" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: accessibility_XAccessibleText.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:43:35 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'	global variable accText
+
+'*************************************************************************
+
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.accessibility.XAccessibleText
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim chCount As Integer
+
+    Test.StartMethod("getCharacterCount()")
+    bOK = true
+    chCount = oObj.getCharacterCount()
+    Out.Log("Character count: "+chCount)
+    bOK = bOK AND (len(accText) = chCount)
+    Test.MethodTested("getCharacterCount()",bOK)
+
+    Test.StartMethod("getCaretPosition()")
+    Test.StartMethod("setCaretPosition()")
+    bOK = true
+    Dim carPos As Integer
+    oObj.setCaretPosition(chCount - 1)
+    carPos = oObj.getCaretPosition()
+    Out.Log("getCaretPosition: " + carPos)
+    bOK = bOK AND (carPos = chCount - 1)
+    Test.MethodTested("getCaretPosition()",bOK)
+    Test.MethodTested("setCaretPosition()",bOK)
+
+    Test.StartMethod("getCharacter()")
+    Dim i As Integer
+    bOK = true
+    for i = 0 to chCount-1
+        bOK = bOK AND (chr(oObj.getCharacter(i)) = utils.getCharacter(i+1,accText))
+    next i
+    Test.MethodTested("getCharacter()",bOK)
+
+    Test.StartMethod("getCharacterAttributes()")
+    Dim attrs() As Variant
+    bOK = true
+    attrs = oObj.getCharacterAttributes(chCount - 1)
+    bOK = bOK AND (ubound(attrs) &gt; 0)
+    Out.Log("Properties ubound: "+ubound(attrs))
+    Test.MethodTested("getCharacterAttributes()",bOK)
+
+    Test.StartMethod("getCharacterBounds()")
+    Dim chBounds As new com.sun.star.awt.Rectangle
+    bOK = true
+    chBounds = oObj.getCharacterBounds(chCount - 1)
+    Out.Log("Character boundbox: "+chBounds.X+", "+chBounds.Y+", "+ _
+    chBounds.Width+", "+chBounds.Height)
+    bOK = bOK AND NOT isNull(chBounds)
+    Test.MethodTested("getCharacterBounds()",bOK)
+
+    Test.StartMethod("getIndexAtPoint()")
+    Dim index As Integer
+    Dim point As new com.sun.star.awt.Point
+    bOK = true
+    point.X = chBounds.X + 1
+    point.Y = chBounds.Y + 1
+    index = oObj.getIndexAtPoint(point)
+    bOK = bOK AND (index = chCount -1)
+    Test.MethodTested("getIndexAtPoint()",bOK)
+
+    Test.StartMethod("getSelectedText()")
+    bOK = true
+    oObj.setSelection(0, chCount)
+    bOK = bOK AND (accText = oObj.getSelectedText())
+    Test.MethodTested("getSelectedText()",bOK)
+
+    Test.StartMethod("getSelectionStart()")
+    bOK = true
+    oObj.setSelection(chCount-1,chCount)
+    bOK = bOK AND (oObj.getSelectionStart() = chCount -1)
+    Test.MethodTested("getSelectionStart()",bOK)
+
+    Test.StartMethod("getSelectionEnd()")
+    bOK = true
+    oObj.setSelection(0,chCount - 1)
+    bOK = bOK AND (oObj.getSelectionEnd() = chCount - 1)
+    Test.MethodTested("getSelectionEnd()",bOK)
+
+    Test.StartMethod("setSelection()")
+    bOK = true
+    bOK = bOK AND oObj.setSelection(0,chCount)
+    Test.MethodTested("setSelection()",bOK)
+
+    Test.StartMethod("getText()")
+    bOK = true
+    bOK = bOK AND (accText = oObj.getText())
+    Test.MethodTested("getText()",bOK)
+
+    Test.StartMethod("getTextRange()")
+    bOK = true
+    bOK = bOK AND (accText = oObj.getTextRange(0,chCount))
+    Test.MethodTested("getTextRange()",bOK)
+
+    Test.StartMethod("getTextAtIndex()")
+    bOK = true
+    bOK = bOK AND (accText = oObj.getTextAtIndex(chCount - 1, 4))
+    Test.MethodTested("getTextAtIndex()",bOK)
+
+    Test.StartMethod("getTextBeforeIndex()")
+    bOK = true
+    bOK = bOK AND (oObj.getTextBeforeIndex(1,1) = utils.getCharacter(1,accText))
+    Test.MethodTested("getTextBeforeIndex()",bOK)
+
+    Test.StartMethod("getTextBehindIndex()")
+    bOK = true
+    bOK = bOK AND (oObj.getTextBehindIndex(chCount-2,1) = utils.getCharacter(chCount,accText))
+    Test.MethodTested("getTextBehindIndex()",bOK)
+
+    Test.StartMethod("copyText()")
+    bOK = true
+    bOK = bOK AND oObj.copyText(0,chCount)
+    Test.MethodTested("copyText()",bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="ucb_XContentProviderManager" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: ucb_XContentProviderManager.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:55:11 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.ucb.XContentProviderManager
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+
+    Dim Provider As Object
+    Dim Scheme As String
+    Dim ReplaceExisting As Boolean
+    Dim ContentProvider As Object
+    Dim queryInfo As Variant
+    Dim bFound As Boolean
+
+    Test.StartMethod("queryContentProviders()")
+    bOK = true
+    queryInfo = oObj.queryContentProviders()
+    Out.Log("queryContentProviders() returned " &amp; ubound(queryInfo) &amp; " elements.")
+    for i = 0 to ubound(queryInfo)
+        Out.Log(queryInfo(i).Scheme)
+    next i
+    Test.MethodTested("queryContentProviders()", bOK)
+
+    Test.StartMethod("registerContentProvider()")
+    bOK = true
+    ReplaceExisting = true
+    Scheme = "XContentProviderManager"
+    Provider = createUNOService("com.sun.star.ucb.FileContentProvider")
+    Out.Log("Registering Scheme = '" &amp; Scheme &amp; "'")
+    ContentProvider = oObj.registerContentProvider(Provider, Scheme, ReplaceExisting)
+    bOK = bOK AND hasUnoInterfaces(ContentProvider, "com.sun.star.ucb.XContentProvider")
+    Out.Log("ContentProvider is XContentProvider - " &amp; bOK)
+    if bOK then
+        bFound = false
+        queryInfo = oObj.queryContentProviders()
+        for i = 0 to ubound(queryInfo)
+            bFound = bFound OR queryInfo(i).Scheme = Scheme
+        next i
+        if NOT bFound then
+            Out.Log("Can't find registered ContentProvider in query!")
+            bOK = false
+        end if
+    end if
+    Test.MethodTested("registerContentProvider()", bOK)
+
+    Test.StartMethod("deregisterContentProvider()")
+    if bOK then
+        oObj.deregisterContentProvider(ContentProvider, Scheme)
+        bFound = false
+        queryInfo = oObj.queryContentProviders()
+        for i = 0 to ubound(queryInfo)
+            bFound = bFound OR queryInfo(i).Scheme = Scheme
+        next i
+        if bFound then
+            Out.Log("ContentProvider was found in query! It was not DeRegistered!")
+            bOK = false
+        end if
+    else
+        Out.Log("Can't deregister ContentProvider without registering!")
+    end if
+
+    Test.MethodTested("deregisterContentProvider()", bOK)
+
+    Test.StartMethod("queryContentProvider()")
+    bOK = true
+    ContentProvider = oObj.queryContentProvider(queryInfo(0).Scheme)
+    bOK = bOK AND hasUnoInterfaces(ContentProvider, "com.sun.star.ucb.XContentProvider")
+    Test.MethodTested("queryContentProvider()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

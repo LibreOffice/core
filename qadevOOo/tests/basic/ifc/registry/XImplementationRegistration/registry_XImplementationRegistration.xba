@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="registry_XImplementationRegistration" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: registry_XImplementationRegistration.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:51:35 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.registry.XImplementationRegistration
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim aImplementationLoader As String
+    Dim aImplementations As Variant
+    Dim aMissingServices As Variant
+    Dim aLocation As String
+    Dim i As Integer
+    Dim k As Integer
+    Dim xReg As Object
+    Dim regKey As Object
+    Dim keyNames As Variant
+    Dim bNeedTest As Boolean
+
+    xReg = createUNOService("com.sun.star.registry.SimpleRegistry")
+    xReg.Open(utils.Path2URL(cTestDocsDir &amp; "XImpReg.reg"), false, true)
+    aImplementationLoader = "com.sun.star.loader.Java2"
+    aLocation = utils.Path2URL(cTestDocsDir &amp; "bascomps.jar")
+
+    Test.StartMethod("getImplementations()")
+    bOK = true
+    aImplementations = oObj.getImplementations(aImplementationLoader, aLocation)
+    bOK = bOK AND i &gt;= 0
+    for i = 0 to ubound(aImplementations)
+        Out.Log "" &amp; i + 1 &amp; ") " &amp; aImplementations(i)
+    next i
+    Test.MethodTested("getImplementations()", bOK)
+
+    Test.StartMethod("registerImplementation()")
+    Out.Log("Registering implementation from " &amp; aLocation)
+    bOK = true
+    oObj.registerImplementation(aImplementationLoader, aLocation, xReg)
+
+    bOK = bOK AND xReg.isValid()
+
+    regKey = xReg.getRootKey.openKey("IMPLEMENTATIONS")
+    keyNames = regKey.getKeyNames()
+    Out.Log("In registry found " &amp; ubound(keyNames) + 1 &amp; " implementations.")
+    Dim aFlags(ubound(aImplementations())) As Boolean
+    for i = 0 to ubound(aFlags())
+        aFlags(i) = false
+    next i
+
+    for i = 0 to ubound(keyNames())
+        Out.Log("Found key: " &amp; keyNames(i))
+        for k = 0 to ubound(aImplementations)
+            if (inStr(1, keyNames(i), aImplementations(k)) &gt; 0 ) then
+                aFlags(k) = true
+            end if
+        next k
+    next i
+
+    for i = 0 to ubound(aFlags())
+        if (NOT aFlags(i)) then
+            Out.Log("Can't find information about " &amp; aImplementations(i) &amp; " in regestry")
+            bOK = false
+        end if
+    next i
+
+    Test.MethodTested("registerImplementation()", bOK)
+
+    Test.StartMethod("checkInstantiation()")
+    bOK = true
+    Out.Log("Looking for missing services to create " &amp; aImplementations(0))
+    aMissingServices = oObj.checkInstantiation(aImplementations(0))
+    Out.Log("" &amp; ubound(aMissingServices) + 1 &amp; " missing services were found")
+    for i = 0 to ubound(aMissingServices)
+        Out.Log "" &amp; i &amp; ") " &amp; aMissingServices(i)
+    next i
+    Test.MethodTested("checkInstantiation()", bOK)
+
+    Test.StartMethod("revokeImplementation()")
+    bOK = true
+    bNeedTest = false
+
+    oObj.revokeImplementation(aLocation, xReg)
+
+    bOK = bOK AND xReg.isValid()
+    regKey = xReg.getRootKey
+    keyNames = regKey.getKeyNames()
+    for i = 0 to ubound(keyNames())
+        if (inStr(1, keyNames(i), "IMPLEMENTATIONS") &gt; 0) then
+            bNeedTest = true
+        end if
+    next i
+    if (NOT bNeedTest) then
+        Out.Log("No implementation was found.")
+    end if
+
+    if (bOK AND bNeedTest) then
+        regKey = xReg.getRootKey.openKey("IMPLEMENTATIONS")
+        Out.Log("In registry found " &amp; ubound(keyNames) + 1 &amp; " implementations.")
+
+        for i = 0 to ubound(aFlags())
+            aFlags(i) = false
+        next i
+
+        for i = 0 to ubound(keyNames())
+            Out.Log("Found key: " &amp; keyNames(i))
+            for k = 0 to ubound(aImplementations)
+                if (inStr(1, keyNames(i), aImplementations(k)) &gt; 0 ) then
+                    aFlags(k) = true
+                end if
+            next k
+        next i
+
+        for i = 0 to ubound(aFlags())
+            if (aFlags(i)) then
+                Out.Log("Information about " &amp; aImplementations(i) &amp; " is still in regestry")
+                bOK = false
+            end if
+        next i
+    end if
+    Test.MethodTested("revokeImplementation()", bOK)
+
+    xReg.Close()
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

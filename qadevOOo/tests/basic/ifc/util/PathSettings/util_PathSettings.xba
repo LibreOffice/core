@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="util_PathSettings" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: util_PathSettings.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:55:33 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' SERVICE: 
+' com.sun.star.util.PathSettings
+'*************************************************************************
+On Error Goto ErrHndl
+
+    Dim values(1) As String
+    values(1) = oObj.Addin
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Addin", values())
+
+    values(1) = oObj.AutoCorrect
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("AutoCorrect", values())
+
+    values(1) = oObj.AutoText
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("AutoText", values())
+
+    values(1) = oObj.Backup
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Backup", values())
+
+    values(1) = oObj.Basic
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Basic", values())
+
+    values(1) = oObj.Bitmap
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Bitmap", values())
+
+    values(1) = oObj.Config
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Config", values())
+
+    values(1) = oObj.Dictionary
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Dictionary", values())
+
+    values(1) = oObj.Favorite
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Favorite", values())
+
+    values(1) = oObj.Filter
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Filter", values())
+
+    values(1) = oObj.Gallery
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Gallery", values())
+
+    values(1) = oObj.Graphic
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Graphic", values())
+
+    values(1) = oObj.Help
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Help", values())
+
+    values(1) = oObj.Linguistic
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Linguistic", values())
+
+    values(1) = oObj.Module
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Module", values())
+
+    values(1) = oObj.Palette
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Palette", values())
+
+    values(1) = oObj.Plugin
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Plugin", values())
+
+    values(1) = oObj.Storage
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Storage", values())
+
+    values(1) = oObj.Temp
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Temp", values())
+
+    values(1) = oObj.Template
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Template", values())
+
+    values(1) = oObj.UIConfig
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("UIConfig", values())
+
+    values(1) = oObj.UserConfig
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("UserConfig", values())
+
+    values(1) = oObj.UserDictionary
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("UserDictionary", values())
+
+    values(1) = oObj.Work
+    values(0) = values(1) + "New"
+    PropertyTester.TestProperty("Work", values())
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    resume next
+End Sub
+</script:module>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="ucb_XDataContainer" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: ucb_XDataContainer.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:55:12 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.ucb.XDataContainer
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim i As Integer
+
+
+    Test.StartMethod("setContentType()")
+    Test.StartMethod("getContentType()")
+
+    Dim aContType As String
+    Dim objContType As String
+    Dim newContType As String
+
+    bOK = true
+    aContType = oObj.getContentType()
+    Out.Log("Current content type is: '" + aContType + "'")
+    newContType = "text/html"
+
+    if (newContType = aContType) then
+        newContType = "text/plain"
+    end if
+
+    Out.Log("Trying to change type to " + newContType)
+    oObj.setContentType(newContType)
+
+    objContType = oObj.getContentType()
+    Out.Log("Actual content type is: '" + objContType + "'")
+    bOK = bOK AND objContType = newContType
+    Out.Log("Change type back to original...")
+    oObj.setContentType(aContType)
+
+    Test.MethodTested("getContentType()", bOK)
+    Test.MethodTested("setContentType()", bOK)
+
+
+    Test.StartMethod("getData()")
+    bOK = true
+
+    Dim Data As Variant
+
+    Data = oObj.getData()
+    Out.Log("getData returned array with ubound = " + ubound(Data))
+    bOK = bOK AND ubound(Data) &gt;= -1
+    for i  = 0 to ubound(Data)
+        Out.Log("" + Data(i) + " " + chr(Data(i)))
+    next i
+    Test.MethodTested("getData()", bOK)
+
+    Test.StartMethod("setData()")
+    bOK = true
+
+    Dim DataToSet As Variant
+    DataToSet = DimArray(ubound(Data()))
+
+    for i = 0 to ubound(DataToSet())
+        DataToSet(i) = Data(i) + 1
+    next i
+
+    oObj.setData(DataToSet)
+    Data = oObj.getData()
+    Out.Log("after setData() call: getData returned array with ubound = " + ubound(Data))
+    bOK = bOK AND (ubound(Data) = ubound(DataToSet))
+    if (bOK) then 
+        for i  = 0 to ubound(Data)
+            Out.Log("" + Data(i) + " " + chr(Data(i)))
+            bOK = bOK AND (DataToSet(i) = Data(i))
+        next i
+    end if
+
+    Test.MethodTested("setData()", bOK)
+
+    Test.StartMethod("getDataURL()")
+    Test.StartMethod("setDataURL()")
+
+
+    Dim aDataURL As String
+    Dim objDataURL As String
+    Dim newDataURL As String
+
+    bOK = true
+    aDataURL = oObj.getDataURL()
+    Out.Log("Current data URL is: '" + aDataURL + "'")
+    newDataURL = "http://www.sun.com"
+    if (newDataURL = aDataURL) then
+        newDataURL = "http://www.openoffice.org"
+    end if
+
+    Out.Log("Trying to change data URL to " + newDataURL)
+    oObj.setDataURL(newDataURL)
+
+    objDataURL = oObj.getDataURL()
+    Out.Log("Actual data URL is: '" + objDataURL + "'")
+    bOK = bOK AND objDataURL = newDataURL
+    Out.Log("Change data URL back to original...")
+    oObj.setDataURL(aDataURL)
+
+    Out.Log("Methods getDataURL() and setDataURL() are DEPRICATED. The result of test is ALWAYS true!")
+
+    bOK = true
+
+    Test.MethodTested("getDataURL()", bOK)
+    Test.MethodTested("setDataURL()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

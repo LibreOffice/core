@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="dbaccess_TableWindowAccessibility" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: dbaccess_TableWindowAccessibility.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:56:39 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+Global cancelButton As Object
+Global queryWindow As Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' dbaccess.TableWindowAccessibility
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim oMSF As Object, oWin As Object
+    Dim thRunner As Object, xRoot As Object
+    Dim tk As Object
+
+    Dim dbSource As Object
+    dbSource = createUnoService("com.sun.star.sdb.DataSource")
+
+    Dim info(2) As new com.sun.star.beans.PropertyValue
+    info(0).Name = "JavaDriverClass"
+    info(0).Value = "org.gjt.mm.mysql.Driver"
+    info(1).Name = "user"
+    info(1).Value = jdbcUser
+    info(2).Name = "password"
+    info(2).Value = jdbcPassword
+    dbSource.info = info()
+    dbSource.URL = jdbcUrl
+
+    Dim dbContext As Object
+    dbContext = createUnoService("com.sun.star.sdb.DatabaseContext")
+
+    Dim sourceName As String
+    sourceName = "AAADBSource for dbu-accessibility"
+
+    if dbContext.hasByName(sourceName) then
+        dbContext.revokeObject(sourceName)
+    endif
+
+    dbContext.registerObject(sourceName, dbSource)
+
+    Dim connection As Object
+    connection = dbSource.getIsolatedConnection(jdbcUser, jdbcPassword)
+
+    Dim statement As Object
+    statement = connection.createStatement()
+
+    statement.executeUpdate("drop table if exists tst_table1")
+    statement.executeUpdate("drop table if exists tst_table2")
+    statement.executeUpdate("create table tst_table1 (id1 int)")
+    statement.executeUpdate("create table tst_table2 (id2 int)")
+
+    Dim defContainer As Object
+    defContainer = dbSource.getQueryDefinitions()
+
+    Dim newQuery As Object
+    newQuery = createUnoService("com.sun.star.sdb.QueryDefinition")
+    newQuery.Command = "select * from tst_table1, tst_table2 where " + _
+                       "tst_table1.id1=tst_table2.id2"
+
+    defContainer.insertByName("Query1", newQuery)
+
+    oMSF = getProcessServiceManager()
+    thRunner = oMSF.createInstance("basichelper.ThreadRunner")
+    tk = createUNOService("com.sun.star.awt.Toolkit")
+    wait(500)
+    thRunner.initialize(Array("ExecuteDialog", "com.sun.star.sdb.DatasourceAdministrationDialog"))
+    wait(3000)
+
+    oWin = tk.getActiveTopWindow()
+    xRoot = utils.at_getAccessibleObject(oWin)
+
+    Dim pageTabList As Object
+    pageTabList = utils.at_getAccessibleObjectForRole(xRoot, 31)
+
+    pageTabList.selectAccessibleChild(3)
+    wait(500)
+
+    Dim editQueryButton As Object
+    editQueryButton = utils.at_getAccessibleObjectForRole(xRoot, 35, "Edit Query")
+
+    cancelButton = utils.at_getAccessibleObjectForRole(xRoot, 35, "Cancel")
+
+    editQueryButton.doAccessibleAction(0)
+    wait(1000)
+
+    oWin = tk.getActiveTopWindow()
+    queryWindow = oWin
+    xRoot = utils.at_getAccessibleObject(oWin)
+
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, 32)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Sub DisposeObj()
+    queryWindow.dispose()
+    if NOT isNull(cancelButton) then
+        cancelButton.doAccessibleAction(0)
+        wait(1000)
+    End If
+End Sub
+
+Sub fireEvent()
+End Sub
+</script:module>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sc_ScChartObj" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: sc_ScChartObj.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:59:26 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+'Required for com.sun.star.container.XNamed
+Global cNameToSet As String ' "fixed" if name is fixed
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' sc.ScChartObj
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim oCharts As Variant
+    Dim oSheet As Object
+    Dim i,j As Integer
+    Dim tRect As New com.sun.star.awt.Rectangle
+    Dim tAddr As New com.sun.star.table.CellRangeAddress
+    Dim oRanges(0) As New com.sun.star.table.CellRangeAddress
+
+
+    oDoc = utils.createDocument("scalc", cObjectName)
+    oSheet = oDoc.Sheets(0)
+
+    ' Filling some cells with the text
+    for i = 1 to 6
+        oSheet.getCellByPosition(0, i).setString("Row" &amp; i)
+        oSheet.getCellByPosition(i, 0).setString("Col" &amp; i)
+    next i
+
+    for i = 1 to 6
+        for j = 1 to 6
+            oSheet.getCellByPosition(i, j).Value = (i + 1) * j
+        next j
+    next i
+
+    tRect.X = 500
+    tRect.Y = 500
+    tRect.Width = 25000
+    tRect.Height = 15000
+
+    tAddr.Sheet = 0
+    tAddr.StartRow = 0
+    tAddr.StartColumn = 0
+    tAddr.EndRow = 6
+    tAddr.EndColumn = 6
+
+    oCharts = oSheet.getCharts()
+    oRanges(0) = tAddr
+    oCharts.addNewByName("ScChartObj", tRect, oRanges(), true, true)
+
+    oObj = oCharts.getByName("ScChartObj")
+
+    cNameToSet = "fixed"
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+</script:module>

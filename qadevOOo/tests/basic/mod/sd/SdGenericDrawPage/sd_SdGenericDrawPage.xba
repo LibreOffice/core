@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sd_SdGenericDrawPage" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: sd_SdGenericDrawPage.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 18:01:34 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+Global oGrouperCollection AS Object
+Global oCombinerCollection As Object
+Global oBinderCollection As Object
+
+'Required for com.sun.star.drawing.XShapes
+Global oXShapeInstance As Object 'to add/remove
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' sd.SdGenericDrawPage
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim oDrawPage As Object
+
+    oDoc = utils.createDocument("sdraw", cObjectName)
+
+    oDrawPage = oDoc.DrawPages(0)
+    oGrouperCollection = createUNOService("com.sun.star.drawing.ShapeCollection")
+    oCombinerCollection = createUNOService("com.sun.star.drawing.ShapeCollection")
+    oBinderCollection = createUNOService("com.sun.star.drawing.ShapeCollection")
+
+    oObj = oDrawPage
+
+    addShape(oObj, 1000, 1000)
+    addShape(oObj, 5000, 5000)
+    addShape(oObj, 2000, 2000)
+    addShape(oObj, 3000, 3000)
+    addShape(oObj, 4000, 4000)
+    addShape(oObj, 5000, 5000)
+    addShape(oObj, 6000, 6000)
+    addShape(oObj, 7000, 7000)
+
+    oGrouperCollection.Add(oObj.getByIndex(0))
+    oGrouperCollection.Add(oObj.getByIndex(1))
+    oCombinerCollection.Add(oObj.getByIndex(2))
+    oCombinerCollection.Add(oObj.getByIndex(3))
+    oBinderCollection.Add(oObj.getByIndex(4))
+    oBinderCollection.Add(oObj.getByIndex(5))
+
+    oXShapeInstance = oDoc.createInstance("com.sun.star.drawing.RectangleShape")
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Sub AddShape(oPage as Object, nPosX as Integer, nPosY as Integer)
+    Dim aPoint As New com.sun.star.awt.Point
+    Dim aSize As New com.sun.star.awt.Size
+    Dim oRectangleShape As Object
+    aPoint.x = nPosX
+    aPoint.y = nPosY
+    aSize.Width = 10000
+    aSize.Height = 10000
+    oRectangleShape = oDoc.createInstance("com.sun.star.drawing.RectangleShape")
+    oRectangleShape.Size = aSize
+    oRectangleShape.Position = aPoint
+    oRectangleShape.FillColor = RGB(255,0,0)
+    oPage.add(oRectangleShape)
+End Sub
+
+Sub DisposeObj()
+    if hasUnoInterfaces(oDoc, "com.sun.star.lang.XComponent") then
+        oDoc.dispose()
+    end if
+End Sub
+</script:module>

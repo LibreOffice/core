@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="svx_GraphicExporter" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: svx_GraphicExporter.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 18:02:41 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+' Requiered for  com.sun.star.document.XFilter
+  Global oFilterDescriptor As Variant
+  Global pictureURL As String 
+
+' Requiered for  com.sun.star.document.XExporter
+  Global oSrcDocument As Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' svx.GraphicExporter
+'*************************************************************************
+On Error Goto ErrHndl
+
+    oDoc = utils.createDocument("sdraw", cObjectName)
+    oObj = createUnoService("com.sun.star.drawing.GraphicExportFilter")    
+
+    Dim shape As Object
+    shape = oDoc.createInstance("com.sun.star.drawing.GraphicObjectShape")
+    out.log("create com.sun.star.drawing.GraphicObjectShape : is NULL? " + IsNULL(shape))
+
+    Dim shapeSize As new com.sun.star.awt.Size
+    Dim shapePos As new com.sun.star.awt.Point
+    shapeSize.Width = 5000
+    shapeSize.Height = 5000
+    out.log("set size of shape : " + shapeSize.Width + ", " + shapeSize.Height)
+    shape.setSize(shapeSize)
+    shapePos.x = 1500
+    shapePos.y = 1000
+    out.log("set position of shape : " + shapePos.x + ", " + shapePos.y)
+    shape.setPosition(shapePos)
+    out.log("adds created shape")
+    oDoc.getDrawPages.getByIndex(0).add(shape)
+    out.log("set GraphicURL to " + utils.Path2URL(cTestDocsDir &amp; "space-metal.jpg") )
+    shape.GraphicURL = utils.Path2URL(cTestDocsDir &amp; "space-metal.jpg")
+    out.log("set shape as source document for created object")
+    oObj.setSourceDocument(shape)
+    oSrcDocument = shape
+
+    Dim _Filter(2) As New com.sun.star.beans.PropertyValue
+    _Filter(0).Name = "FilterName" : _Filter(0).Value = "JPG"       
+    Dim url as new com.sun.star.util.URL
+    url.Complete = utils.getTempFileURL("picture.jpg", True)
+    pictureURL = url.Complete 
+    out.log("URL descriptor : " + pictureURL)
+    _Filter(1).Name = "URL" : _Filter(1).Value = url
+    _Filter(2).Name = "MediaType" : _Filter(1).Value = "image/jpeg"
+    oFilterDescriptor = _Filter()
+    
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+    
+Function checkFilter() As Boolean
+    If IsNULL(soapi_test_hidewindows) Or soapi_test_hidewindows = True Then
+        out.log("all windows are hide")
+        checkFilter() = True
+    Else
+        Dim simpleFile As Object
+        simpleFile = createUnoService("com.sun.star.ucb.SimpleFileAccess")
+        out.log("creates com.sun.star.ucb.SimpleFileAccess : is NULL? " + IsNULL(SimpleFile))
+        checkFilter() = simpleFile.exists(pictureURL)
+        out.log("check existing of " + pictureURL + ": " + checkFilter)
+    EndIf
+End Function
+</script:module>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="document_XActionLockable" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: document_XActionLockable.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:46:44 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.document.XActionLockable
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim bResetOK As Boolean
+
+    Test.StartMethod("resetActionLocks()")
+    bOK = true
+    oObj.resetActionLocks()
+    bResetOK = bOK
+
+    Test.StartMethod("isActionLocked()")
+    Test.StartMethod("addActionLock()")
+    bOK = true
+    bOK = bOK AND NOT oObj.isActionLocked()
+    oObj.addActionLock()
+    bOK = bOK AND oObj.isActionLocked()
+    Test.MethodTested("addActionLock()", bOK)
+    Test.MethodTested("isActionLocked()", bOK)
+
+    Test.StartMethod("removeActionLock()")
+    bOK = true
+    oObj.removeActionLock()
+    bOK = bOK AND NOT oObj.isActionLocked()
+    Test.MethodTested("removeActionLock()", bOK)
+
+    Test.StartMethod("setActionLocks()")
+    bOK = true
+    oObj.setActionLocks(5)
+    bOK = bOK AND oObj.resetActionLocks() = 5
+    bResetOK = bResetOK AND bOK
+    Test.MethodTested("setActionLocks()", bOK)
+    Test.MethodTested("resetActionLocks()", bResetOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

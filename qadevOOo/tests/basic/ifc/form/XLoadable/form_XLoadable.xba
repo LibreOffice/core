@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="form_XLoadable" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: form_XLoadable.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:48:55 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.form.XLoadable
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim bLoaded As Boolean
+    Dim list As Object
+
+    list = createUnoListener("L_", "com.sun.star.form.XLoadListener")
+    initListener()
+
+    Test.StartMethod("isLoaded()")
+    bOK = true
+    bLoaded = oObj.isLoaded()
+    if bLoaded then  oObj.unload()
+    bLoaded = oObj.isLoaded()
+    bOK = bOK AND NOT bLoaded
+    Test.MethodTested("isLoaded()", bOK)
+
+    Test.StartMethod("addLoadListener()")
+    oObj.addLoadListener(list)
+
+    Test.StartMethod("load()")
+    bOK = true
+    oObj.load()
+    bOK = bOK AND oObj.isLoaded() 
+    bOK = bOK AND loaded
+    Test.MethodTested("load()", bOK)
+
+    Test.StartMethod("reload()")
+    bOK = true
+    oObj.reload()
+    bOK = bOK AND oObj.isLoaded()
+    bOK = bOK AND reloaded
+    Test.MethodTested("reload()", bOK)
+
+    Test.StartMethod("unload()")
+    bOK = true
+    oObj.unload()
+    bOK = bOK AND NOT oObj.isLoaded()
+    bOK = bOK AND unloaded
+    Test.MethodTested("unload()", bOK)
+
+    bOK = loaded AND reloaded AND reloading AND unloaded AND unloading
+    Test.MethodTested("addLoadListener()", bOK)
+
+    Test.StartMethod("removeLoadListener()")
+    bOK = true
+    oObj.removeLoadListener(list)
+    initListener()
+    oObj.load()
+    bOK = bOK AND NOT loaded
+    Test.MethodTested("removeLoadListener()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Sub initListener()
+    loaded = false
+    reloaded = false
+    reloading = false
+    unloaded = false
+    unloading = false
+End Sub
+
+Dim loaded As Boolean
+Dim reloaded As Boolean
+Dim reloading As Boolean
+Dim unloaded As Boolean
+Dim unloading As Boolean
+
+Sub L_loaded()
+   Out.Log("Listener: loaded")
+   loaded = true
+End Sub
+Sub L_reloaded()
+   Out.Log("Listener: reloaded")
+   reloaded = true
+End Sub
+Sub L_reloading()
+   Out.Log("Listener: reloading")
+   reloading = true
+End Sub
+Sub L_unloaded()
+   Out.Log("Listener: unloaded")
+   unloaded = true
+End Sub
+Sub L_unloading()
+   Out.Log("Listener: unloading")
+   unloading = true
+End Sub
+</script:module>

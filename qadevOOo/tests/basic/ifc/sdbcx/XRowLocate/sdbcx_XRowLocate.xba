@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sdbcx_XRowLocate" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: sdbcx_XRowLocate.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:52:14 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.sdbcx.XRowLocate
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim oBM1 As Variant
+    Dim oBM2 As Variant
+    Dim oBM3 As Variant
+    Dim oBM4 As Variant
+    Dim cDscr1 As String
+    Dim cDscr2 As String
+
+    ReCreateObj()
+
+    oObj.first()
+
+    Test.StartMethod("getBookmark()")
+    bOK = true
+    oBM1 = oObj.getBookmark()
+    cDscr1 = oObj.getString(1)
+    Out.Log("Set bookmark to row " + cDscr1)
+    bOK = bOK AND NOT isNULL(oBM1)
+    Test.MethodTested("getBookmark()", bOK)
+
+    Test.StartMethod("moveToBookmark()")
+    bOK = true
+    oObj.next()
+    cDscr2 = oObj.getString(1)
+    Out.Log("Now on " + cDscr2)
+    oObj.moveToBookmark(oBM1)
+    Out.Log("After movment on " + oObj.getString(1))
+    bOK = bOK AND oObj.getString(1) = cDscr1
+    Test.MethodTested("moveToBookmark()", bOK)
+
+    Test.StartMethod("moveRelativeToBookmark()")
+    bOK = true
+    oObj.moveRelativeToBookmark(oBM1, 1)
+    Out.Log("After movment on " + oObj.getString(1))
+    bOK = bOK AND oObj.getString(1) = cDscr2
+    Test.MethodTested("moveRelativeToBookmark()", bOK)
+
+    oBM2 = oObj.getBookmark()
+
+    Test.StartMethod("compareBookmarks()")
+    bOK = true
+    ' if database driver supports ordered marks then
+    ' compareBookmarks should return values CompareBookmark::LESS or
+    ' CompareBookmark::GREATER in case when bookmarks are not equal
+    ' otherwise this method returnes only CompareBookmark::NOT_EQUAL
+
+    if (oObj.hasOrderedBookmarks()) then
+        bOK = bOK AND oObj.compareBookmarks(oBM1, oBM1) = com.sun.star.sdbcx.CompareBookmark.EQUAL
+        bOK = bOK AND oObj.compareBookmarks(oBM1, oBM2) = com.sun.star.sdbcx.CompareBookmark.LESS
+        bOK = bOK AND oObj.compareBookmarks(oBM2, oBM1) = com.sun.star.sdbcx.CompareBookmark.GREATER
+    else
+        bOK = bOK AND oObj.compareBookmarks(oBM1, oBM1) = com.sun.star.sdbcx.CompareBookmark.EQUAL
+        bOK = bOK AND oObj.compareBookmarks(oBM1, oBM2) = com.sun.star.sdbcx.CompareBookmark.NOT_EQUAL
+        bOK = bOK AND oObj.compareBookmarks(oBM2, oBM1) = com.sun.star.sdbcx.CompareBookmark.NOT_EQUAL
+    end if
+    Test.MethodTested("compareBookmarks()", bOK)
+
+    Test.StartMethod("hasOrderedBookmarks()")
+    bOK = true
+    bOK = bOK AND oObj.hasOrderedBookmarks()
+    Test.MethodTested("hasOrderedBookmarks()", bOK)
+
+    Test.StartMethod("hashBookmark()")
+    bOK = true
+
+    oObj.last()
+    oBM3 = oObj.getBookmark()
+    oObj.first()
+    oBM4 = oObj.getBookmark()
+
+    bOK = bOK AND oObj.hashBookmark(oBM1) &lt;&gt; oObj.hashBookmark(oBM2)
+    bOK = bOK AND oObj.hashBookmark(oBM1) &lt;&gt; oObj.hashBookmark(oBM3)
+    bOK = bOK AND oObj.hashBookmark(oBM3) &lt;&gt; oObj.hashBookmark(oBM2)
+    bOK = bOK AND oObj.hashBookmark(oBM1) = oObj.hashBookmark(oBM4)
+    Test.MethodTested("hashBookmark()", bOK)
+    
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="registry_XSimpleRegistry" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: registry_XSimpleRegistry.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:51:36 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.registry.XSimpleRegistry
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim cURL As String
+    Dim cTempURL As String
+    Dim oTempReg As Object
+    Dim oRoot As Object
+    Dim oKey As Object
+    Dim oKey2 As Object
+
+    cURL = utils.getTempFileURL("BASReg.rdb", true)
+
+    Test.StartMethod("open()")
+    bOK = true
+    if (cObjectName &lt;&gt; "defreg.NestedRegistry") then
+        oObj.open(cURL, false, true)
+        bOK = bOK AND FileExists(cURL)
+    end if
+    Test.MethodTested("open()", bOK)
+
+    Test.StartMethod("isValid()")
+    bOK = true
+    bOK = bOK AND oObj.isValid()
+    Test.MethodTested("isValid()", bOK)
+
+    Test.StartMethod("getRootKey()")
+    bOK = true
+    oKey = oObj.getRootKey()
+    bOK = bOK AND hasUnoInterfaces(oKey, "com.sun.star.registry.XRegistryKey")
+    Test.MethodTested("getRootKey()", bOK)
+
+    Test.StartMethod("isReadOnly()")
+    bOK = true
+    bOK = bOK AND NOT oObj.isReadOnly()
+    Test.MethodTested("isReadOnly()", bOK)
+
+    Test.StartMethod("mergeKey()")
+    bOK = true
+
+    oKey.createKey("Key1").setStringValue("Value of Key1")
+
+    cTempURL = utils.getTempFileURL("BASRegTemp.rdb", true)
+    oTempReg = createUnoService("com.sun.star.registry.SimpleRegistry")
+    oTempReg.open(cTempURL, false, true)
+    oKey2 = oTempReg.getRootKey()
+    oKey2.createKey("Key2").setStringValue("Value of Key2")
+
+    oObj.mergeKey("/", cTempURL)
+
+    oRoot = oObj.RootKey
+    oKey = oRoot.openKey("Key1")
+    bOK = bOK AND oKey.getStringValue = "Value of Key1"
+    oKey = oRoot.openKey("Key2")
+    bOK = bOK AND oKey.getStringValue = "Value of Key2"
+    oTempReg.close()
+
+    Test.MethodTested("mergeKey()", bOK)
+
+    Test.StartMethod("getURL()")
+    bOK = true
+    Out.Log("Returned URL is " &amp; oObj.URL)
+    bOK = bOK AND inStr(1, oObj.URL, ".rdb") &gt; 0
+    Test.MethodTested("getURL()", bOK)
+
+    Test.StartMethod("destroy()")
+    bOK = true
+    if (cObjectName &lt;&gt; "defreg.NestedRegistry") then
+        oObj.open(cURL, false, true)
+        oObj.destroy()
+    end if
+    Test.MethodTested("destroy()", bOK)
+
+    Test.StartMethod("close()")
+    bOK = true
+    if (cObjectName &lt;&gt; "defreg.NestedRegistry") then
+        oObj.open(cURL, false, true)
+        oObj.close()
+    end if
+    Test.MethodTested("close()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

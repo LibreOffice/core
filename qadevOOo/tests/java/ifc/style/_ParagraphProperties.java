@@ -1,0 +1,345 @@
+/*************************************************************************
+ *
+ *  $RCSfile: _ParagraphProperties.java,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change:$Date: 2003-01-27 18:12:51 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+package ifc.style;
+
+import com.sun.star.table.BorderLine;
+import lib.MultiPropertyTest;
+import lib.MultiPropertyTest$PropertyTester;
+import lib.MultiPropertyTest$PropertyValueSwitcher;
+import util.utils;
+
+/**
+* Testing <code>com.sun.star.style.ParagraphProperties</code>
+* service properties :
+* <ul>
+*  <li><code> ParaAdjust</code></li>
+*  <li><code> ParaLineSpacing</code></li>
+*  <li><code> ParaBackColor</code></li>
+*  <li><code> ParaBackTransparent</code></li>
+*  <li><code> ParaBackGraphicURL</code></li>
+*  <li><code> ParaBackGraphicFilter</code></li>
+*  <li><code> ParaBackGraphicLocation</code></li>
+*  <li><code> ParaLastLineAdjust</code></li>
+*  <li><code> ParaExpandSingleWord</code></li>
+*  <li><code> ParaLeftMargin</code></li>
+*  <li><code> ParaRightMargin</code></li>
+*  <li><code> ParaTopMargin</code></li>
+*  <li><code> ParaBottomMargin</code></li>
+*  <li><code> ParaLineNumberCount</code></li>
+*  <li><code> ParaLineNumberStartValue</code></li>
+*  <li><code> ParaIsHyphenation</code></li>
+*  <li><code> PageDescName</code></li>
+*  <li><code> PageNumberOffset</code></li>
+*  <li><code> ParaRegisterModeActive</code></li>
+*  <li><code> ParaTabStops</code></li>
+*  <li><code> ParaStyleName</code></li>
+*  <li><code> DropCapFormat</code></li>
+*  <li><code> DropCapWholeWord</code></li>
+*  <li><code> ParaKeepTogether</code></li>
+*  <li><code> ParaSplit</code></li>
+*  <li><code> NumberingLevel</code></li>
+*  <li><code> NumberingRules</code></li>
+*  <li><code> NumberingStartValue</code></li>
+*  <li><code> ParaIsNumberingRestart</code></li>
+*  <li><code> NumberingStyleName</code></li>
+*  <li><code> ParaOrphans</code></li>
+*  <li><code> ParaWidows</code></li>
+*  <li><code> ParaShadowFormat</code></li>
+*  <li><code> IsHangingPunctuation</code></li>
+*  <li><code> IsCharacterDistance</code></li>
+*  <li><code> IsForbiddenRules</code></li>
+*  <li><code> LeftBorder</code></li>
+*  <li><code> RightBorder</code></li>
+*  <li><code> TopBorder</code></li>
+*  <li><code> BottomBorder</code></li>
+*  <li><code> BorderDistance</code></li>
+*  <li><code> LeftBorderDistance</code></li>
+*  <li><code> RightBorderDistance</code></li>
+*  <li><code> TopBorderDistance</code></li>
+*  <li><code> BottomBorderDistance</code></li>
+* </ul> <p>
+* This test needs the following object relations :
+* <ul>
+*  <li> <code>'NRULES'</code> : <b>optional</b>
+*   (service <code>com.sun.star.text.NumberingRules</code>):
+*   instance of the service which can be set as 'NumberingRules'
+*   property new value. If the relation doesn't then two
+*   different <code>NumberingRules</code> objects are tried
+*   to be obtained by setting different 'NumberingStyleName'
+*   property styles and getting 'NumberingRules' property values.</li>
+* <ul> <p>
+* Properties testing is automated by <code>lib.MultiPropertyTest</code>.
+* @see com.sun.star.style.ParagraphProperties
+*/
+public class _ParagraphProperties extends MultiPropertyTest {
+
+    /**
+     * Custom tester for numbering style properties. Switches between
+     * 'Numbering 1' and 'Numbering 2' styles.
+     */
+    protected PropertyTester NumberingStyleTester = new PropertyTester() {
+        protected Object getNewValue(String propName, Object oldValue)
+                throws java.lang.IllegalArgumentException {
+            if ((oldValue != null) && (oldValue.equals("Numbering 1")))
+                return "Numbering 2"; else
+                return "Numbering 1";
+        }
+    } ;
+
+    /**
+     * Custom tester for paragraph style properties. Switches between
+     * 'Salutation' and 'Heading' styles.
+     */
+    protected PropertyTester charStyleTester = new PropertyTester() {
+        protected Object getNewValue(String propName, Object oldValue) {
+            if (!utils.isVoid(oldValue) && (oldValue.equals("Example")))
+                return "Emphasis"; else
+                return "Example";
+        }
+    } ;
+
+    /**
+     * Custom tester for paragraph style properties. Switches between
+     * 'Salutation' and 'Heading' styles.
+     */
+    protected PropertyTester ParaStyleTester = new PropertyTester() {
+        protected Object getNewValue(String propName, Object oldValue) {
+            if (!utils.isVoid(oldValue) && (oldValue.equals("Heading")))
+                return "Salutation"; else
+                return "Heading";
+        }
+    } ;
+
+    /**
+     * Custom tester for PageDescName properties. Switches between
+     * 'HTML' and 'Standard' descriptor names.
+     */
+    protected PropertyTester PageDescTester = new PropertyTester() {
+        protected Object getNewValue(String propName, Object oldValue) {
+            if (!util.utils.isVoid(oldValue) && (oldValue.equals("Default")))
+                return "HTML"; else
+                return "Default";
+        }
+    } ;
+
+    /**
+     * Custom tester for properties which have <code>short</code> type
+     * and can be void, so if they have void value, the new value must
+     * be specified. Switches between two different values.
+     */
+    protected PropertyTester ShortTester = new PropertyTester() {
+        protected Object getNewValue(String propName, Object oldValue) {
+            if ((oldValue != null) && (oldValue.equals(new Short((short) 0))))
+                return new Short((short) 2); else
+                return new Short((short) 0);
+        }
+    } ;
+
+    /**
+     * Custom tester for properties which contains image URLs.
+     * Switches between two JPG images' URLs.
+     */
+    protected PropertyTester URLTester = new PropertyTester() {
+        protected Object getNewValue(String propName, Object oldValue) {
+            if (oldValue.equals(util.utils.getFullTestURL("space-metal.jpg")))
+                return util.utils.getFullTestURL("crazy-blue.jpg"); else
+                return util.utils.getFullTestURL("space-metal.jpg");
+        }
+    } ;
+
+    protected PropertyTester rules = null ;
+
+    /**
+     * Creates tester for 'NumberingRules' depending on relation.
+     */
+    public void before() {
+        final Object nRules = tEnv.getObjRelation("NRULES");
+
+        if (nRules != null) {
+            rules = new PropertyTester() {
+                protected Object getNewValue(String propName, Object oldValue) {
+                    return nRules;
+                }
+            } ;
+        } else {
+            Object rules1 = null ;
+            Object rules2 = null ;
+            try {
+                oObj.setPropertyValue("NumberingStyleName", "Numbering 1");
+                rules1 = oObj.getPropertyValue("NumberingRules") ;
+                oObj.setPropertyValue("NumberingStyleName", "Numbering 2");
+                rules2 = oObj.getPropertyValue("NumberingRules") ;
+            } catch (com.sun.star.lang.WrappedTargetException e) {
+                log.println("WARNING !!! Exception getting numbering rules :");
+                e.printStackTrace(log);
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
+                log.println("WARNING !!! Exception getting numbering rules :");
+                e.printStackTrace(log);
+            } catch (com.sun.star.beans.PropertyVetoException e) {
+                log.println("WARNING !!! Exception getting numbering rules :");
+                e.printStackTrace(log);
+            } catch (com.sun.star.beans.UnknownPropertyException e) {
+                log.println("Property 'NumberingStyleName' is not supported.");
+            }
+            rules = new PropertyValueSwitcher(rules1, rules2) ;
+        }
+    }
+
+    /**
+     * Tested with custom property tester.
+     */
+    public void _NumberingStyleName() {
+        log.println("Testing with custom Property tester") ;
+        testProperty("NumberingStyleName", NumberingStyleTester) ;
+    }
+
+    /**
+     * Tested with custom property tester.
+     */
+    public void _DropCapCharStyleName() {
+        log.println("Testing with custom Property tester") ;
+        testProperty("DropCapCharStyleName", charStyleTester) ;
+    }
+
+    /**
+     * Tested with custom property tester.
+     */
+    public void _ParaStyleName() {
+        log.println("Testing with custom Property tester") ;
+        testProperty("ParaStyleName", ParaStyleTester) ;
+    }
+
+    /**
+     * Tested with custom property tester.
+     */
+    public void _PageDescName() {
+        log.println("Testing with custom Property tester") ;
+        testProperty("PageDescName", PageDescTester) ;
+    }
+
+    /**
+     * Tested with custom property tester. Before testing property
+     * <code>ParaAdjust</code> is setting to value <code>BLOCK</code>
+     * because setting the property <code>ParaLastLineAdjust</code>
+     * makes sense only in this case.
+     */
+    public void _ParaLastLineAdjust() {
+        log.println("Testing with custom Property tester") ;
+        try {
+            oObj.setPropertyValue("ParaAdjust",
+                com.sun.star.style.ParagraphAdjust.BLOCK);
+        } catch (com.sun.star.lang.WrappedTargetException e) {
+            log.println("Exception occured setting property 'ParagraphAdjust'" + e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
+            log.println("Exception occured setting property 'ParagraphAdjust'" + e);
+        } catch (com.sun.star.beans.UnknownPropertyException e) {
+            log.println("Exception occured setting property 'ParagraphAdjust'" + e);
+        } catch (com.sun.star.beans.PropertyVetoException e) {
+            log.println("Exception occured setting property 'ParagraphAdjust'" + e);
+        }
+        testProperty("ParaLastLineAdjust", ShortTester) ;
+    }
+
+    /**
+     * Tested with custom property tester.
+     */
+    public void _ParaBackGraphicURL() {
+        log.println("Testing with custom Property tester") ;
+        testProperty("ParaBackGraphicURL", URLTester) ;
+    }
+
+    /**
+     * Tested with custom property tester. <p>
+     * The following property tests are to be completed successfully before :
+     * <ul>
+     *  <li> <code> NumberingStyleName </code> : a numbering style must
+     *  be set before testing this property </li>
+     * </ul>
+     */
+    public void _NumberingLevel() {
+        requiredMethod("NumberingStyleName");
+        log.println("Testing with custom Property tester") ;
+        testProperty("NumberingLevel", ShortTester) ;
+    }
+
+    /**
+     * Tested with custom property tester.
+     */
+    public void _ParaVertAlignment() {
+        log.println("Testing with custom Property tester") ;
+        testProperty("ParaVertAlignment", ShortTester) ;
+    }
+
+    /**
+     * Tested with custom property tester. <p>
+     * The following property tests are to be completed successfully before :
+     * <ul>
+     *  <li> <code> NumberingStyleName </code> : a numbering style must
+     *  be set before testing this property </li>
+     * </ul>
+     */
+    public void _NumberingRules() {
+        requiredMethod("NumberingStyleName");
+        testProperty("NumberingRules",rules);
+    }
+}  // finish class _ParagraphProperties
+

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="text_XTextTable" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: text_XTextTable.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:54:53 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'     - Global nTableW As Integer
+'     - Global nTableH As Integer
+
+'*************************************************************************
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.text.XTextTable
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim i As Integer, j As Integer
+    Dim oRows As Object, oColumns As Object
+    Dim oCursor As Object, oCell As Object
+    Dim aNames As Variant
+    Dim nDscColumns As Integer, nDscRows As Integer
+
+    Test.StartMethod("initialize()")
+    bOK = true
+    ' Object is already was initialized, when it was created... So, assume that this is OK.
+
+    For i = 0 to nTableW - 1
+        For j = 0 to nTableH - 1
+            oObj.getCellByPosition(i, j).Value = i + j * nTableW
+        Next j
+    Next i
+    
+    nDscColumns = ubound(oObj.getColumnDescriptions()) + 1
+    nDscRows = ubound(oObj.getRowDescriptions()) + 1
+
+    bOK = bOK AND nDscRows = nTableH AND nDscColumns = nTableW 
+    if NOT bOK then
+        Out.Log("The table must have size (" + nTableW + "," + nTableH + _
+            "), but descriptions returned for size (" + nDscColumns + "," + nDscRows + ")")
+    endif
+    Test.MethodTested("initialize()", bOK)
+
+    Test.StartMethod("getRows()")
+    bOK = true
+
+    oRows = oObj.getRows()
+
+    bOK = bOK AND hasUnoInterfaces(oRows, "com.sun.star.table.XTableRows")
+    bOK = bOK AND oRows.getCount() = nTableH
+    Test.MethodTested("getRows()", bOK)
+
+    Test.StartMethod("getColumns()")
+    bOK = true
+
+    oColumns = oObj.getColumns()
+
+    bOK = bOK AND hasUnoInterfaces(oColumns, "com.sun.star.table.XTableColumns")
+    bOK = bOK AND oColumns.getCount() = nTableW
+    Test.MethodTested("getColumns()", bOK)
+
+
+    Test.StartMethod("createCursorByCellName()")
+    bOK = true
+    oCursor = oObj.createCursorByCellName("B2")
+    bOK = bOK AND hasUnoInterfaces(oCursor, "com.sun.star.text.XTextTableCursor")
+    bOK = bOK AND oCursor.getRangeName() = "B2"
+    Test.MethodTested("createCursorByCellName()", bOK)
+
+    oCursor.splitRange(1, true)
+    oCursor.splitRange(1, false)
+
+    Test.StartMethod("getCellNames()")
+    bOK = true
+    aNames = oObj.getCellNames()
+    bOK = bOK AND ubound(aNames) = nTableW * nTableH + 1 ' = nTableW * nTableH - 1 + 2(after splitting)
+    Test.MethodTested("getCellNames()", bOK)
+
+    Test.StartMethod("getCellByName()")
+    bOK = true
+    oCell = oObj.getCellByPosition(0,0)
+    oCell.String = "A1"
+    oCell = oObj.getCellByName("A1")
+    bOK = bOK AND oCell.String = "A1"
+    
+    oCell = oObj.getCellByName("B2.2.1")
+    bOK = bOK AND hasUnoInterfaces(oCell, "com.sun.star.table.XCell")
+
+    Test.MethodTested("getCellByName()", bOK)
+
+    ReCreateObj()
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

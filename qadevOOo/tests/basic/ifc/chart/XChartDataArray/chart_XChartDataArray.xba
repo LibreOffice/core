@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="chart_XChartDataArray" script:language="StarBasic">
+
+
+'*************************************************************************
+'*
+'*  $RCSfile: chart_XChartDataArray.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-01-27 17:45:45 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'      Global nTableH As Integer
+'      Global nTableW As Integer
+
+'*************************************************************************
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.chart.XChartDataArray
+'*************************************************************************
+On Error Goto ErrHndl
+
+    Dim bOK As Boolean
+    Dim i As Integer, j As Integer
+    Dim objRowDsc As Variant, objColDsc As Variant
+    Dim objEl As Variant, newEl As Variant
+    Dim chData As Variant
+    
+    Out.Log("Object is '" + cObjectName + "'")
+    if (cObjectName = "sw.SwXTextTable") then
+        Out.Log("Object is 'SwXTextTable'. First, remove labels.")
+        oObj.setPropertyValue("ChartRowAsLabel", false)
+        oObj.setPropertyValue("ChartColumnAsLabel", false)
+    end if
+
+    Test.StartMethod("getData()")
+    bOK = true
+
+    Dim oData As Object
+    oData = oObj.getData()
+    bOK = bOK AND NOT isNULL(oData)
+    Test.MethodTested("getData()", bOK)
+
+    Test.StartMethod("setData()")
+    bOK = true
+
+    Dim newData(nTableH - 1) As Variant
+    Dim a(nTableW - 1) As Double
+
+    for i = 0 to nTableH - 1
+        ReDim a(nTableW - 1) As Double
+        for j = 0 to nTableW - 1
+            a(j) = ((nTableW * 4) / (i + 2) + j * 2) + 16
+        next j
+        newData(i) = a()
+    next i
+
+    oObj.setData(newData())
+    chData = oObj.getData()
+
+    bOK = bOK AND ubound(oObj.getRowDescriptions()) = nTableH - 1
+    bOK = bOK AND ubound(oObj.getColumnDescriptions()) = nTableW - 1
+
+    for i = 0 to nTableH - 1
+        objEl = chData(i)
+        newEl = newData(i)
+        for j = 0 to nTableW - 1
+            bOK = bOK AND objEl(j) = newEl(j)
+        next j
+    next i
+
+    Test.MethodTested("setData()", bOK)
+
+    if (cObjectName = "sw.SwXTextTable") then
+        Out.Log("Object is 'SwXTextTable'. Initialize labels.")
+        oObj.setPropertyValue("ChartRowAsLabel", true)
+        oObj.setPropertyValue("ChartColumnAsLabel", true)
+    end if
+
+    Test.StartMethod("getRowDescriptions()")
+    bOK = true
+
+    Dim oRowDsc() As String
+    oRowDsc = oObj.getRowDescriptions()
+    bOK = bOK AND NOT isNULL(oRowDsc)
+    Test.MethodTested("getRowDescriptions()", bOK)
+
+    Test.StartMethod("setRowDescriptions()")
+    bOK = true
+
+    Dim newRowDsc(nTableH - 2) As String
+    for i = 0 to nTableH - 2 ' -1 for 0-index and -1 for columns labels
+        newRowDsc(i) = "RowDsc " + i
+    next i
+
+    oObj.setRowDescriptions(newRowDsc())
+
+    objRowDsc = oObj.getRowDescriptions()
+
+    for i = 0 to nTableH - 2
+        bOK = bOK AND newRowDsc(i) = objRowDsc(i)
+    next i
+
+    Test.MethodTested("setRowDescriptions()", bOK)
+
+    Test.StartMethod("getColumnDescriptions()")
+    bOK = true
+    bOK = bOK AND NOT isNULL(oObj.getColumnDescriptions())
+    Test.MethodTested("getColumnDescriptions()", bOK)
+
+    Test.StartMethod("setColumnDescriptions()")
+    bOK = true
+
+    Dim newColDsc(nTableW - 2) As String
+    for i = 0 to nTableW - 2
+        newColDsc(i) = "ColDsc " + i
+    next i
+
+    oObj.setColumnDescriptions(newColDsc())
+
+    objColDsc = oObj.getColumnDescriptions()
+
+    for i = 0 to nTableW - 2
+        bOK = bOK AND newColDsc(i) = objColDsc(i)
+    next i
+
+    if (cObjectName = "sw.SwXTextTable") then
+        Out.Log("Object is 'SwXTextTable'. Remove labels finally.")
+        oObj.setPropertyValue("ChartRowAsLabel", false)
+        oObj.setPropertyValue("ChartColumnAsLabel", false)
+    end if
+
+    Test.MethodTested("setColumnDescriptions()", bOK)
+
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>
