@@ -116,61 +116,14 @@
 <DefaultFullName>ديسمبر</DefaultFullName>
 </Month>
 </MonthsOfYear>
-<Eras>
-<Era>
-<EraID>bc</EraID>
-<DefaultAbbrvName>ق.م</DefaultAbbrvName>
-<DefaultFullName>قبل الميلاد</DefaultFullName>
-</Era>
-<Era>
-<EraID>ad</EraID>
-<DefaultAbbrvName>م</DefaultAbbrvName>
-<DefaultFullName>ميلادى</DefaultFullName>
-</Era>
-</Eras>
+<Eras ref="ar_EG_gregorian"/>
 <StartDayOfWeek>
 <DayID>sat</DayID>
 </StartDayOfWeek>
 <MinimalDaysInFirstWeek>7</MinimalDaysInFirstWeek>
 </Calendar>
 <Calendar unoid="hijri" default="false">
-<DaysOfWeek>
-<Day>
-<DayID>sun</DayID>
-<DefaultAbbrvName>الأحد</DefaultAbbrvName>
-<DefaultFullName>الأحد</DefaultFullName>
-</Day>
-<Day>
-<DayID>mon</DayID>
-<DefaultAbbrvName>الاثنين</DefaultAbbrvName>
-<DefaultFullName>الاثنين</DefaultFullName>
-</Day>
-<Day>
-<DayID>tue</DayID>
-<DefaultAbbrvName>الثلاثاء</DefaultAbbrvName>
-<DefaultFullName>الثلاثاء</DefaultFullName>
-</Day>
-<Day>
-<DayID>wed</DayID>
-<DefaultAbbrvName>الأربعاء</DefaultAbbrvName>
-<DefaultFullName>الأربعاء</DefaultFullName>
-</Day>
-<Day>
-<DayID>thu</DayID>
-<DefaultAbbrvName>الخميس</DefaultAbbrvName>
-<DefaultFullName>الخميس</DefaultFullName>
-</Day>
-<Day>
-<DayID>fri</DayID>
-<DefaultAbbrvName>الجمعة</DefaultAbbrvName>
-<DefaultFullName>الجمعة</DefaultFullName>
-</Day>
-<Day>
-<DayID>sat</DayID>
-<DefaultAbbrvName>السبت</DefaultAbbrvName>
-<DefaultFullName>السبت</DefaultFullName>
-</Day>
-</DaysOfWeek>
+<DaysOfWeek ref="ar_EG_hijri"/>
 <MonthsOfYear>
 <Month>
 <MonthID>jan</MonthID>
@@ -233,18 +186,7 @@
 <DefaultFullName>ذو الحجة</DefaultFullName>
 </Month>
 </MonthsOfYear>
-<Eras>
-<Era>
-<EraID>BeforeHijra</EraID>
-<DefaultAbbrvName>قبل الهجرة</DefaultAbbrvName>
-<DefaultFullName>قبل الهجرة</DefaultFullName>
-</Era>
-<Era>
-<EraID>AfterHijra</EraID>
-<DefaultAbbrvName>هـ</DefaultAbbrvName>
-<DefaultFullName>هجرى</DefaultFullName>
-</Era>
-</Eras>
+<Eras ref="ar_EG_hijri"/>
 <StartDayOfWeek>
 <DayID>sat</DayID>
 </StartDayOfWeek>
