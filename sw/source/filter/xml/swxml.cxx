@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-10 14:07:35 $
+ *  last change: $Author: dvo $ $Date: 2001-05-15 13:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,15 +327,16 @@ sal_Int32 ReadThroughComponent(
     if (! pStorage->IsStream(sStreamName))
     {
         // stream name not found! Then try the compatibility name.
+        // if no stream can be opened, return immediatly with OK signal
 
         // do we even have an alternative name?
         if ( NULL == pCompatibilityStreamName )
-            return ERR_SWG_READ_ERROR;
+            return 0;
 
         // if so, does the stream exist?
         sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
         if (! pStorage->IsStream(sStreamName) )
-            return ERR_SWG_READ_ERROR;
+            return 0;
     }
 
     // get input stream
@@ -573,7 +574,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         sal_uInt32 nWarn = 0;
         sal_uInt32 nWarn2 = 0;
         // read storage streams
-        if( !IsOrganizerMode() )
+        if( !IsOrganizerMode() && !IsBlockMode() )
             nWarn = ReadThroughComponent(
                 pStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
                 "com.sun.star.comp.Writer.XMLMetaImporter",
@@ -581,12 +582,13 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
                 aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
                 sal_False );
 
-        nWarn2 = ReadThroughComponent(
-            pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
-            "com.sun.star.comp.Writer.XMLSettingsImporter",
-            aFilterArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
-            aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
-            IsOrganizerMode() );
+        if ( !IsBlockMode() )
+            nWarn2 = ReadThroughComponent(
+                pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
+                "com.sun.star.comp.Writer.XMLSettingsImporter",
+                aFilterArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
+                aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
+                IsOrganizerMode() );
 
         // update redline view mode (was set in view settings)
         bTmp = IsShowChanges(rDoc.GetRedlineMode());
