@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:41:20 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,14 +82,14 @@ FloatingWindow SID_RECORDING_FLOATWINDOW
     Text[ french ] = "Record Macro";
     Text[ spanish ] = "Record Macro";
     Text[ finnish ] = "Record Macro";
-    Text[ italian ] = "Record Macro";
+    Text[ italian ] = "Registra macro";
     Text[ danish ] = "Record Macro";
     Text[ swedish ] = "Record Macro";
     Text[ polish ] = "Record Macro";
-    Text[ japanese ] = "Record Macro";
-    Text[ korean ] = "Record Macro";
+    Text[ japanese ] = "マクロの記録";
+    Text[ korean ] = "매크로 기록";
     Text[ chinese_simplified ] = "Record Macro";
-    Text[ chinese_traditional ] = "Record Macro";
+    Text[ chinese_traditional ] = "記錄巨集";
     Text[ turkish ] = "Record Macro";
     Text[ arabic ] = "Record Macro";
 };
@@ -119,14 +119,14 @@ String STR_MACRO_LOSS
     Text[ french ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
     Text[ spanish ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
     Text[ finnish ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ italian ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
+    Text[ italian ] = "Volete davvero annullate la registrazione? Tutte le fasi registrate fino a questo punto andranno perse.";
     Text[ danish ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
     Text[ swedish ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
     Text[ polish ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ japanese ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ korean ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
+    Text[ japanese ] = "記録をキャンセルしますか。記録されたステップは、この時点ですべて失われます。";
+    Text[ korean ] = "기록을 정말로 취소하시겠습니까? 지금까지 기록된 모든 작업 진행 내용을 잃을 수 있습니다.";
     Text[ chinese_simplified ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ chinese_traditional ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
+    Text[ chinese_traditional ] = "真的要取消記錄？所有的目前的記錄內容就會流失。";
     Text[ turkish ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
     Text[ arabic ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
 };
@@ -143,14 +143,14 @@ String STR_CANCEL_RECORDING
     Text[ french ] = "Cancel Recording";
     Text[ spanish ] = "Cancel Recording";
     Text[ finnish ] = "Cancel Recording";
-    Text[ italian ] = "Cancel Recording";
+    Text[ italian ] = "Annulla la registrazione";
     Text[ danish ] = "Cancel Recording";
     Text[ swedish ] = "Cancel Recording";
     Text[ polish ] = "Cancel Recording";
-    Text[ japanese ] = "Cancel Recording";
-    Text[ korean ] = "Cancel Recording";
+    Text[ japanese ] = "記録をキャンセルする";
+    Text[ korean ] = "기록 취소";
     Text[ chinese_simplified ] = "Cancel Recording";
-    Text[ chinese_traditional ] = "Cancel Recording";
+    Text[ chinese_traditional ] = "取消記錄";
     Text[ turkish ] = "Cancel Recording";
     Text[ arabic ] = "Cancel Recording";
 };
