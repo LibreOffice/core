@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:02:10 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1453,14 +1453,14 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSync
     // load on demand
     pAppData_Impl->pEventConfig->GetAppEventConfig_Impl();
 
-    if ( bSynchron )
+    //if ( bSynchron )
     {
         Broadcast(rEventHint);
         if ( pDoc )
             pDoc->Broadcast( rEventHint );
     }
-    else
-        new SfxEventAsyncer_Impl( rEventHint );
+    //else
+//        new SfxEventAsyncer_Impl( rEventHint );
 }
 
 //-------------------------------------------------------------------------
