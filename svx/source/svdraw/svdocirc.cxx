@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:11:09 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,6 +339,13 @@ void SdrCircObj::RecalcBoundRect()
         long nLEndWdt=ImpGetLineEndAdd();
         if (nLEndWdt>nLineWdt) nLineWdt=nLEndWdt;
     }
+
+    //BFS09
+    if(ImpAddLineGeomteryForMiteredLines())
+    {
+        nLineWdt = 0;
+    }
+
     if (nLineWdt!=0) {
         aOutRect.Left  ()-=nLineWdt;
         aOutRect.Top   ()-=nLineWdt;
@@ -349,7 +356,7 @@ void SdrCircObj::RecalcBoundRect()
     ImpAddTextToBoundRect();
 }
 
-sal_Bool SdrCircObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrCircObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     // #110094#-16 Moved to ViewContactOfSdrObj::ShouldPaintObject(..)
     //// Hidden objects on masterpages, draw nothing
@@ -569,12 +576,12 @@ SdrObject* SdrCircObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
     BigInt nBigTmpY(aPt.Y());
     BigInt nPntRadQ(nBigTmpX*nBigTmpX+nBigTmpY*nBigTmpY);
 
-    FASTBOOL bRet=FALSE;
+    sal_Bool bRet(sal_False);
     if (nPntRadQ<=nAusRadQ) { // sonst ausserhalb
-        if (nInnen==0) bRet=TRUE;
+        if (nInnen==0) bRet = sal_True;
         else if (eKind==OBJ_CIRC) { // Vollkreis
-            if (bFilled) bRet=TRUE;
-            else if (nPntRadQ>=nInnRadQ) bRet=TRUE;
+            if (bFilled) bRet = sal_True;
+            else if (nPntRadQ>=nInnRadQ) bRet = sal_True;
         } else { // Teilkreise
             long nWink=NormAngle360(GetAngle(aPt));
             long a=nStartWink;
@@ -582,8 +589,8 @@ SdrObject* SdrCircObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
             if (e<a) e+=36000;
             if (nWink<a) nWink+=36000;
             if (nWink>=a && nWink<=e) {
-                if (bFilled) bRet=TRUE;
-                else if (nPntRadQ>=nInnRadQ) bRet=TRUE;
+                if (bFilled) bRet = sal_True;
+                else if (nPntRadQ>=nInnRadQ) bRet = sal_True;
             }
             if (!bRet) {
                 Rectangle aR(aPtNoStretch.X()-nMyTol,aPtNoStretch.Y()-nMyTol,
@@ -598,9 +605,10 @@ SdrObject* SdrCircObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
                     bRet=IsRectTouchesLine(aZero,aP1,aR) || IsRectTouchesLine(aZero,aP2,aR);
                 }
                 if (eKind==OBJ_CCUT) { // Kreisabschnitt noch die Sehne und die MaeuseEcke (Dreieck) testen
-                    if (IsRectTouchesLine(aP1,aP2,aR)) bRet=TRUE; // die Sehne
+                    if (IsRectTouchesLine(aP1,aP2,aR)) bRet = sal_True; // die Sehne
                     else if (bFilled) { // und nun die Maeusescke
-                        Polygon aPoly(XOutCreatePolygon(GetXPoly(),NULL));
+//BFS09                     Polygon aPoly(XOutCreatePolygon(GetXPoly(),NULL));
+                        Polygon aPoly(XOutCreatePolygon(GetXPoly()));
                         bRet=IsPointInsidePoly(aPoly,rPnt);
                     }
                 }
@@ -1441,102 +1449,103 @@ SdrObject* SdrCircObj::DoConvertToPolyObj(BOOL bBezier) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrCircObj::WriteData(SvStream& rOut) const
-{
-    SdrRectObj::WriteData(rOut);
-    SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrCircObj");
-#endif
+//BFS01void SdrCircObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 SdrRectObj::WriteData(rOut);
+//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrCircObj");
+//BFS01#endif
+//BFS01
+//BFS01 if(eKind != OBJ_CIRC)
+//BFS01 {
+//BFS01     rOut << nStartWink;
+//BFS01     rOut << nEndWink;
+//BFS01 }
+//BFS01
+//BFS01 SfxItemPool* pPool=GetItemPool();
+//BFS01 if(pPool)
+//BFS01 {
+//BFS01     const SfxItemSet& rSet = GetObjectItemSet();
+//BFS01
+//BFS01     pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_CIRC));
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     rOut << UINT16(SFX_ITEMS_NULL);
+//BFS01 }
+//BFS01}
 
-    if(eKind != OBJ_CIRC)
-    {
-        rOut << nStartWink;
-        rOut << nEndWink;
-    }
+//BFS01void SdrCircObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if(rIn.GetError())
+//BFS01     return;
+//BFS01
+//BFS01 // #91764# remember eKind, it will be deleted during SdrRectObj::ReadData(...)
+//BFS01 // but needs to be known to decide to jump over angles or not. Deletion happens
+//BFS01 // cause of fix #89025# wich is necessary, too.
+//BFS01 SdrObjKind eRememberedKind = eKind;
+//BFS01
+//BFS01 SdrRectObj::ReadData(rHead,rIn);
+//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrCircObj");
+//BFS01#endif
+//BFS01
+//BFS01 // #92309# at once restore the remembered eKind here.
+//BFS01 eKind = eRememberedKind;
+//BFS01
+//BFS01 // #91764# use remembered eKind here
+//BFS01 if(eRememberedKind != OBJ_CIRC)
+//BFS01 {
+//BFS01     rIn >> nStartWink;
+//BFS01     rIn >> nEndWink;
+//BFS01 }
+//BFS01
+//BFS01 if(aCompat.GetBytesLeft() > 0)
+//BFS01 {
+//BFS01     SfxItemPool* pPool = GetItemPool();
+//BFS01
+//BFS01     if(pPool)
+//BFS01     {
+//BFS01         sal_uInt16 nSetID = SDRATTRSET_CIRC;
+//BFS01         const SdrCircSetItem* pCircAttr = (const SdrCircSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
+//BFS01         if(pCircAttr)
+//BFS01             SetObjectItemSet(pCircAttr->GetItemSet());
+//BFS01     }
+//BFS01     else
+//BFS01     {
+//BFS01         sal_uInt16 nSuroDum;
+//BFS01         rIn >> nSuroDum;
+//BFS01     }
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     // create pCircAttr for old Objects to let ImpSetCircInfoToAttr() do it's work
+//BFS01     SdrCircKind eKindA(SDRCIRC_FULL);
+//BFS01
+//BFS01     if(eKind == OBJ_SECT)
+//BFS01         eKindA = SDRCIRC_SECT;
+//BFS01     else if(eKind == OBJ_CARC)
+//BFS01         eKindA = SDRCIRC_ARC;
+//BFS01     else if(eKind == OBJ_CCUT)
+//BFS01         eKindA = SDRCIRC_CUT;
+//BFS01
+//BFS01     if(eKindA != SDRCIRC_FULL)
+//BFS01     {
+//BFS01         GetProperties().SetObjectItemDirect(SdrCircKindItem(eKindA));
+//BFS01
+//BFS01         if(nStartWink)
+//BFS01         {
+//BFS01             GetProperties().SetObjectItemDirect(SdrCircStartAngleItem(nStartWink));
+//BFS01         }
+//BFS01
+//BFS01         if(nEndWink != 36000)
+//BFS01         {
+//BFS01             GetProperties().SetObjectItemDirect(SdrCircEndAngleItem(nEndWink));
+//BFS01         }
+//BFS01     }
+//BFS01 }
+//BFS01}
 
-    SfxItemPool* pPool=GetItemPool();
-    if(pPool)
-    {
-        const SfxItemSet& rSet = GetObjectItemSet();
-
-        pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_CIRC));
-    }
-    else
-    {
-        rOut << UINT16(SFX_ITEMS_NULL);
-    }
-}
-
-void SdrCircObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    if(rIn.GetError())
-        return;
-
-    // #91764# remember eKind, it will be deleted during SdrRectObj::ReadData(...)
-    // but needs to be known to decide to jump over angles or not. Deletion happens
-    // cause of fix #89025# wich is necessary, too.
-    SdrObjKind eRememberedKind = eKind;
-
-    SdrRectObj::ReadData(rHead,rIn);
-    SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrCircObj");
-#endif
-
-    // #92309# at once restore the remembered eKind here.
-    eKind = eRememberedKind;
-
-    // #91764# use remembered eKind here
-    if(eRememberedKind != OBJ_CIRC)
-    {
-        rIn >> nStartWink;
-        rIn >> nEndWink;
-    }
-
-    if(aCompat.GetBytesLeft() > 0)
-    {
-        SfxItemPool* pPool = GetItemPool();
-
-        if(pPool)
-        {
-            sal_uInt16 nSetID = SDRATTRSET_CIRC;
-            const SdrCircSetItem* pCircAttr = (const SdrCircSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
-            if(pCircAttr)
-                SetObjectItemSet(pCircAttr->GetItemSet());
-        }
-        else
-        {
-            sal_uInt16 nSuroDum;
-            rIn >> nSuroDum;
-        }
-    }
-    else
-    {
-        // create pCircAttr for old Objects to let ImpSetCircInfoToAttr() do it's work
-        SdrCircKind eKindA(SDRCIRC_FULL);
-
-        if(eKind == OBJ_SECT)
-            eKindA = SDRCIRC_SECT;
-        else if(eKind == OBJ_CARC)
-            eKindA = SDRCIRC_ARC;
-        else if(eKind == OBJ_CCUT)
-            eKindA = SDRCIRC_CUT;
-
-        if(eKindA != SDRCIRC_FULL)
-        {
-            GetProperties().SetObjectItemDirect(SdrCircKindItem(eKindA));
-
-            if(nStartWink)
-            {
-                GetProperties().SetObjectItemDirect(SdrCircStartAngleItem(nStartWink));
-            }
-
-            if(nEndWink != 36000)
-            {
-                GetProperties().SetObjectItemDirect(SdrCircEndAngleItem(nEndWink));
-            }
-        }
-    }
-}
-
+// eof
