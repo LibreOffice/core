@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:55:44 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
+#ifndef _SO_CLSIDS_HXX
+#include <so3/clsids.hxx>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
@@ -86,9 +89,17 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDPROCESSOR_HPP_
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
+#include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
+#include <com/sun/star/ucb/OpenMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
 #include <com/sun/star/task/XJobExecutor.hpp>
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
@@ -108,23 +119,14 @@
 #ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
 #endif
-#ifndef _DBAUI_FILENOTATION_HXX_
-#include "filenotation.hxx"
-#endif
-#ifndef _DBAUI_MISSINGDOCDLG_HXX_
-#include "missingdocdlg.hxx"
-#endif
-#ifndef _DBAUI_DOCLINKDIALOG_HXX_
-#include "doclinkdialog.hxx"
+#ifndef SVTOOLS_FILENOTATION_HXX_
+#include <svtools/filenotation.hxx>
 #endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
 #ifndef _SFXNEW_HXX
 #include <sfx2/new.hxx>
-#endif
-#ifndef _DBAUI_DOCUMENTAUTOLINKER_HXX_
-#include "documentautolinker.hxx"
 #endif
 #ifndef _SVTOOLS_TEMPLDLG_HXX
 #include <svtools/templdlg.hxx>
@@ -153,6 +155,10 @@
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMECONTAINER_HPP_
+#include <com/sun/star/container/XHierarchicalNameContainer.hpp>
+#endif
+
 //......................................................................
 namespace dbaui
 {
@@ -167,159 +173,55 @@ namespace dbaui
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::task;
+    using namespace ::svt;
+
+    namespace
+    {
+        Sequence< sal_Int8 > lcl_GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
+                                                    sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
+                                                    sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
+        {
+            Sequence< sal_Int8 > aResult( 16 );
+            aResult[0] = static_cast<sal_Int8>(n1 >> 24);
+            aResult[1] = static_cast<sal_Int8>(( n1 << 8 ) >> 24);
+            aResult[2] = static_cast<sal_Int8>(( n1 << 16 ) >> 24);
+            aResult[3] = static_cast<sal_Int8>(( n1 << 24 ) >> 24);
+            aResult[4] = n2 >> 8;
+            aResult[5] = ( n2 << 8 ) >> 8;
+            aResult[6] = n3 >> 8;
+            aResult[7] = ( n3 << 8 ) >> 8;
+            aResult[8] = b8;
+            aResult[9] = b9;
+            aResult[10] = b10;
+            aResult[11] = b11;
+            aResult[12] = b12;
+            aResult[13] = b13;
+            aResult[14] = b14;
+            aResult[15] = b15;
+
+            return aResult;
+        }
+    }
+
 
     //==================================================================
     //= OLinkedDocumentsAccess
     //==================================================================
     //------------------------------------------------------------------
-    OLinkedDocumentsAccess::OLinkedDocumentsAccess(Window* _pDialogParent, const Reference< XMultiServiceFactory >& _rxORB, const Reference< XNameAccess >& _rxContainer)
+    OLinkedDocumentsAccess::OLinkedDocumentsAccess(Window* _pDialogParent
+                                                    , const Reference< XMultiServiceFactory >& _rxORB
+                                                    , const Reference< XNameAccess >& _rxContainer
+                                                    ,const Reference< XConnection>& _xConnection
+                                                    )
         :m_xORB(_rxORB)
         ,m_xDocumentContainer(_rxContainer)
         ,m_pDialogParent(_pDialogParent)
+        ,m_xConnection(_xConnection)
     {
         OSL_ENSURE(m_xORB.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid service factory!");
         OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid document container!");
         OSL_ENSURE(m_pDialogParent, "OLinkedDocumentsAccess::OLinkedDocumentsAccess: really need a dialog parent!");
     }
-
-    //------------------------------------------------------------------
-//  Reference< XPropertySet > OLinkedDocumentsAccess::get(const ::rtl::OUString& _rLinkName) SAL_THROW((Exception))
-//  {
-//      Reference< XPropertySet > xLink;
-//      if (m_xDocumentContainer.is())
-//          m_xDocumentContainer->getByName(_rLinkName) >>= xLink;
-//      return xLink;
-//  }
-
-    //------------------------------------------------------------------
-    ::rtl::OUString OLinkedDocumentsAccess::getLocation(const ::rtl::OUString& _rLinkName)
-    {
-        ::rtl::OUString sDocumentLocation;
-        try
-        {
-            if (m_xDocumentContainer.is())
-                m_xDocumentContainer->getByName(_rLinkName) >>= sDocumentLocation;
-        }
-        catch(const Exception&)
-        {
-            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::getLocation: could not retrieve the link target!");
-        }
-        return sDocumentLocation;
-    }
-
-    //------------------------------------------------------------------------
-    IMPL_LINK( OLinkedDocumentsAccess, OnValidateLinkName, String*, _pText )
-    {
-        OSL_ENSURE(_pText, "OLinkedDocumentsAccess::OnValidateLinkName: invalid text ptr!");
-        if (!_pText || 0 == _pText->Len())
-            return sal_False;
-
-        try
-        {
-            if (m_xDocumentContainer->hasByName(*_pText) && (m_sCurrentlyEditing != *_pText))
-                return sal_False;
-        }
-        catch(const Exception&)
-        {
-            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::OnValidateLinkName: could not ask the collection for the name!");
-        }
-
-        return sal_True;
-    }
-
-    //------------------------------------------------------------------
-    sal_Bool OLinkedDocumentsAccess::edit(const ::rtl::OUString& _rLinkName, ::rtl::OUString& _rNewName, ::rtl::OUString& _rNewLocation)
-    {
-        return SUCCESS == implEdit(_rLinkName, _rNewName, _rNewLocation) ? sal_True : sal_False;
-    }
-
-    //------------------------------------------------------------------
-    OLinkedDocumentsAccess::RESULT OLinkedDocumentsAccess::implEdit(const ::rtl::OUString& _rLinkName, ::rtl::OUString& _rNewName, ::rtl::OUString& _rNewLocation)
-    {
-        ODocumentLinkDialog aEditLink(m_pDialogParent, sal_False);
-        aEditLink.setNameValidator( LINK(this, OLinkedDocumentsAccess, OnValidateLinkName) );
-
-        // retrieve the current objects properties
-        String sSelected = _rLinkName;
-        String sLocation = getLocation(sSelected);
-
-        {
-            OFileNotation aTransformer(sLocation, OFileNotation::N_URL);
-            sLocation = aTransformer.get(OFileNotation::N_SYSTEM);
-        }
-
-        // set in on the dialog
-        m_sCurrentlyEditing = sSelected;
-        aEditLink.set( sSelected, sLocation );
-        sal_Int32 nResult = aEditLink.Execute();
-        m_sCurrentlyEditing = String();
-
-        if (RET_OK != nResult)
-            return CANCEL;
-
-        // the new link properties
-        String sNewName, sNewLocation;
-        aEditLink.get( sNewName, sNewLocation );
-        _rNewName = sNewName;
-        // the outparam of the location must be a URL, not in system notation
-        OFileNotation aTransformer(sNewLocation, OFileNotation::N_SYSTEM);
-        _rNewLocation = aTransformer.get(OFileNotation::N_URL);
-
-        sal_Bool bNameChanged = sSelected != sNewName;
-        sal_Bool bLocationChanged = sLocation != sNewLocation;
-        if (!bNameChanged && !bLocationChanged)
-            return CANCEL;
-
-        try
-        {
-            ::rtl::OUString sOldName = sSelected;
-
-            Reference< XNameContainer > xModifyAccess(m_xDocumentContainer, UNO_QUERY);
-            if (xModifyAccess.is())
-            {
-                if (bNameChanged)
-                {   // at least the name changed
-                    xModifyAccess->removeByName(sOldName);
-                    xModifyAccess->insertByName(sNewName, makeAny(_rNewLocation));
-                }
-                else
-                {   // only the location changed
-                    xModifyAccess->replaceByName(sOldName, makeAny(_rNewLocation));
-                }
-            }
-            else
-                OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::implEdit: no container access! can't rename the object!");
-
-            // flush the container
-            Reference< XFlushable > xFlush(m_xDocumentContainer, UNO_QUERY);
-            if (xFlush.is())
-                xFlush->flush();
-
-            return SUCCESS;
-        }
-        catch(const Exception&)
-        {
-            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::implEdit: caught an exception while committing the changes!");
-            return ERROR;
-        }
-
-        OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::implEdit: reached the unreachable!");
-        return CANCEL;
-    }
-
-    //------------------------------------------------------------------
-    sal_Bool OLinkedDocumentsAccess::implFileExists( const ::rtl::OUString& _rURL )
-    {
-        try
-        {
-            ::ucb::Content aFile(_rURL, Reference< XCommandEnvironment >());
-            if (aFile.isDocument())
-                return sal_True;
-        }
-        catch(Exception&) { }
-        return sal_False;
-    }
-
     //------------------------------------------------------------------
     void OLinkedDocumentsAccess::implDrop(const ::rtl::OUString& _rLinkName)
     {
@@ -330,11 +232,6 @@ namespace dbaui
                 xRemoveAccess->removeByName(_rLinkName);
             else
                 OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::implDrop: : missing the XNameContainer interface!");
-
-            // flush the container
-            Reference< XFlushable > xFlush(m_xDocumentContainer, UNO_QUERY);
-            if (xFlush.is())
-                xFlush->flush();
         }
         catch(const Exception&)
         {
@@ -343,133 +240,35 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    OLinkedDocumentsAccess::RESULT OLinkedDocumentsAccess::implOpen(const ::rtl::OUString& _rLinkName, sal_Bool _bReadOnly)
+    Reference< XComponent> OLinkedDocumentsAccess::implOpen(const ::rtl::OUString& _rLinkName,Reference< XComponent >& _xDefinition, sal_Bool _bReadOnly)
     {
-        if (!m_xORB.is() || !m_xDocumentContainer.is())
-            return ERROR;
+        Reference< XComponent> xRet;
+        Reference< XComponentLoader > xComponentLoader(m_xDocumentContainer,UNO_QUERY);
+        if ( !xComponentLoader.is() )
+            return xRet;
 
-        // get an URL for the document
-        ::rtl::OUString sDocumentLocation = getLocation(_rLinkName);
+        Sequence< PropertyValue > aArguments(2);
 
-        // check for existence, and show an error message in case the file is not there
-        if (!implFileExists(sDocumentLocation))
-        {
-            OMissingLinkDialog aWhatToDo( m_pDialogParent, sDocumentLocation );
-            if (RET_OK != aWhatToDo.Execute())
-                return CANCEL;
+        aArguments[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenMode"));
+        aArguments[0].Value <<= (_bReadOnly ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open")) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("openDesign")) );
 
-            if (aWhatToDo.shouldEditLink())
-            {
-                ::rtl::OUString sNewName, sNewLocation;
-                RESULT eResult = implEdit(_rLinkName, sNewName, sNewLocation);
-                if (SUCCESS != eResult)
-                    return eResult;
-
-                if (implFileExists(sNewLocation))
-                    sDocumentLocation = sNewLocation;
-                    // proceed with the opening process from here on ....
-                else
-                    return CANCEL;
-            }
-            else if (aWhatToDo.shouldDropLink())
-            {
-                implDrop(_rLinkName);
-                return CANCEL;
-            }
-            else
-                return CANCEL;
-        }
-
-        Reference< XDispatch > xDispatcher;
-        try
-        {   // get the desktop object
-            Reference< XInterface > xDesktop = m_xORB->createInstance(SERVICE_FRAME_DESKTOP);
-
-            Reference< XComponentLoader > xLoader(xDesktop, UNO_QUERY);
-            OSL_ENSURE(xLoader.is(), "OLinkedDocumentsAccess::implOpen: invalid desktop object!");
-            if (xLoader.is())
-            {
-                ::rtl::OUString sTargetFrame = ::rtl::OUString::createFromAscii("_default"); // #104099# OJ
-
-                sal_Int32 nSearchFlags = FrameSearchFlag::CHILDREN | FrameSearchFlag::CREATE;
-
-                Sequence< PropertyValue > aAccessRights(1);
-                aAccessRights[0].Name = ::rtl::OUString::createFromAscii("ReadOnly");
-                aAccessRights[0].Value = ::cppu::bool2any(_bReadOnly);
-
-                Reference< XComponent > xComp = xLoader->loadComponentFromURL(sDocumentLocation, sTargetFrame, nSearchFlags, aAccessRights);
-                return xComp.is() ? SUCCESS : ERROR;
-            }
-            else
-                return ERROR;
-        }
-        catch(Exception&)
-        {
-            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::implOpen: caught an exception while retrieving the dispatcher!");
-        }
-
-        return ERROR;
-    }
-
-    //------------------------------------------------------------------
-    sal_Bool OLinkedDocumentsAccess::addLinkUI()
-    {
-        // need a container access later on
-        Reference< XNameContainer > xContainerAccess(m_xDocumentContainer, UNO_QUERY);
-        if (!xContainerAccess.is())
-        {
-            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::addLinkUI: missing a container interface!");
-            ErrorBox aError(m_pDialogParent, WB_OK, String(ModuleRes(STR_UNEXPECTED_ERROR)));
-            aError.Execute();
-            return sal_False;
-        }
-
-        ODocumentLinkDialog aEditLink(m_pDialogParent, sal_True);
-        aEditLink.setNameValidator( LINK(this, OLinkedDocumentsAccess, OnValidateLinkName) );
-
-        if (RET_OK != aEditLink.Execute())
-            return sal_False;
-
-        String sName, sLocation;
-        aEditLink.get(sName, sLocation);
+        aArguments[1].Name = PROPERTY_ACTIVECONNECTION;
+        aArguments[1].Value <<= m_xConnection;
         try
         {
-            ::rtl::OUString sNormalizedLocation = sLocation;
-
-            OFileNotation aTransformer(sNormalizedLocation, OFileNotation::N_SYSTEM);
-            sNormalizedLocation = aTransformer.get(OFileNotation::N_URL);
-
-            xContainerAccess->insertByName(sName, makeAny(sNormalizedLocation));
-
-            // flush the container
-            Reference< XFlushable > xFlush(m_xDocumentContainer, UNO_QUERY);
-            if (xFlush.is())
-                xFlush->flush();
+            Reference<XHierarchicalNameContainer> xHier(m_xDocumentContainer,UNO_QUERY);
+            if ( xHier.is() && xHier->hasByHierarchicalName(_rLinkName) )
+            {
+                _xDefinition.set(xHier->getByHierarchicalName(_rLinkName),UNO_QUERY);
+            }
+            xRet = xComponentLoader->loadComponentFromURL(_rLinkName,::rtl::OUString(),0,aArguments);
         }
-        catch(const Exception&)
+        catch(Exception& )
         {
-            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::addLinkUI: could not insert the new object!");
         }
-        return sal_True;
+
+        return xRet;
     }
-
-    //------------------------------------------------------------------
-    void OLinkedDocumentsAccess::drop(const ::rtl::OUString& _rLinkName)
-    {
-        // let the user confirm this
-        String sQuestion = String(ModuleRes(STR_QUERY_DROP_DOCUMENT_LINK));
-        sQuestion.SearchAndReplaceAscii("$name$", _rLinkName);
-
-        QueryBox aAsk(m_pDialogParent, WB_YES_NO | WB_DEF_YES, sQuestion);
-        aAsk.SetText(String(ModuleRes(STR_TITLE_CONFIRM_DELETION)));
-
-        if (RET_YES != aAsk.Execute())
-            // cancelled
-            return;
-
-        implDrop(_rLinkName);
-    }
-
     //------------------------------------------------------------------
     sal_Bool OLinkedDocumentsAccess::newFormWithPilot(const String& _rDataSourceName, const sal_Int32 _nCommandType,
         const String& _rObjectName, const Reference< XConnection >& _rxConnection)
@@ -519,8 +318,7 @@ namespace dbaui
         try
         {
             ::svx::ODataAccessDescriptor aDesc;
-            if ( _rDataSourceName.Len() )
-                aDesc[::svx::daDataSource] <<= ::rtl::OUString(_rDataSourceName);
+            aDesc.setDataSource(::rtl::OUString(_rDataSourceName));
             if ( _nCommandType != -1 )
                 aDesc[::svx::daCommandType] <<= _nCommandType;
             if ( _rObjectName.Len() )
@@ -539,6 +337,7 @@ namespace dbaui
         }
         return sal_True;
     }
+
     //------------------------------------------------------------------
     sal_Bool OLinkedDocumentsAccess::newQueryWithPilot(const String& _rDataSourceName, const sal_Int32 _nCommandType,
         const String& _rObjectName, const Reference< XConnection >& _rxConnection)
@@ -547,7 +346,7 @@ namespace dbaui
         {
             ::svx::ODataAccessDescriptor aDesc;
             if ( _rDataSourceName.Len() )
-                aDesc[::svx::daDataSource] <<= ::rtl::OUString(_rDataSourceName);
+                aDesc.setDataSource( ::rtl::OUString(_rDataSourceName) );
             if ( _nCommandType != -1 )
                 aDesc[::svx::daCommandType] <<= _nCommandType;
             if ( _rObjectName.Len() )
@@ -562,66 +361,66 @@ namespace dbaui
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newReport: caught an exception while loading the object!");
+            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newQueryWithPilot: caught an exception while loading the object!");
         }
         return sal_True;
     }
     //------------------------------------------------------------------
-    sal_Bool OLinkedDocumentsAccess::newForm(sal_Int32 _nNewFormId)
+    Reference< XComponent > OLinkedDocumentsAccess::newForm(sal_Int32 _nNewFormId,Reference< XComponent >& _xDefinition)
     {
         // determine the URL to use for the new document
-        ::rtl::OUString sDocumentURL;
+        Sequence<sal_Int8> aClassId;
         switch (_nNewFormId)
         {
             case ID_FORM_NEW_TEXT:
-                sDocumentURL = ::rtl::OUString::createFromAscii("private:factory/swriter");
+                aClassId = lcl_GetSequenceClassID(SO3_SW_CLASSID);
                 break;
 
             case ID_FORM_NEW_CALC:
-                sDocumentURL = ::rtl::OUString::createFromAscii("private:factory/scalc");
+                aClassId = lcl_GetSequenceClassID(SO3_SC_CLASSID);
                 break;
 
             case ID_FORM_NEW_IMPRESS:
-                sDocumentURL = ::rtl::OUString::createFromAscii("private:factory/simpress");
+                aClassId = lcl_GetSequenceClassID(SO3_SIMPRESS_CLASSID);
                 break;
 
             case ID_FORM_NEW_PILOT:
+            default:
                 OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newForm: pleas use newFormWithPilot!");
-                return sal_False;
+                return Reference< XComponent >();
 
-            case ID_FORM_NEW_TEMPLATE:
-            {
-                SvtDocumentTemplateDialog aDialog( m_pDialogParent, SvtDocumentTemplateDialog::SelectOnly() );
-                if ( ( RET_OK == aDialog.Execute() ) && aDialog.IsFileSelected() )
-                    sDocumentURL = aDialog.GetSelectedFileURL( );
-                else
-                    return sal_False;
-            }
-            break;
         }
-
-        if (0 == sDocumentURL.getLength())
-            return sal_False;
-
         // load the document as template
         Reference< XComponent > xNewDocument;
         try
         {   // get the desktop object
-            Reference< XInterface > xDesktop = m_xORB->createInstance(SERVICE_FRAME_DESKTOP);
 
-            Reference< XComponentLoader > xLoader(xDesktop, UNO_QUERY);
-            OSL_ENSURE(xLoader.is(), "OLinkedDocumentsAccess::newForm: invalid desktop object!");
-            if (xLoader.is())
+            Reference<XMultiServiceFactory> xORB(m_xDocumentContainer,UNO_QUERY);
+            if ( xORB.is() )
             {
-                ::rtl::OUString sTargetFrame = ::rtl::OUString::createFromAscii("_default"); // #104099# OJ
+                Sequence< Any > aArguments(2);
 
-                sal_Int32 nSearchFlags = FrameSearchFlag::CHILDREN | FrameSearchFlag::CREATE;
+                PropertyValue aValue;
 
-                Sequence< PropertyValue > aAccessRights(1);
-                aAccessRights[0].Name = ::rtl::OUString::createFromAscii("AsTemplate");
-                aAccessRights[0].Value = ::cppu::bool2any(sal_True);
+                aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ClassID"));
+                aValue.Value <<= aClassId;
+                aArguments[0] <<= aValue;
 
-                xNewDocument = xLoader->loadComponentFromURL(sDocumentURL, sTargetFrame, nSearchFlags, aAccessRights);
+                aValue.Name = PROPERTY_ACTIVECONNECTION;
+                aValue.Value <<= m_xConnection;
+                aArguments[1] <<= aValue;
+
+                Reference<XCommandProcessor> xContent(xORB->createInstanceWithArguments(SERVICE_SDB_DOCUMENTDEFINITION,aArguments),UNO_QUERY);
+                if ( xContent.is() )
+                {
+                    _xDefinition.set(xContent,UNO_QUERY);
+                    Command aCommand;
+                    aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("openDesign"));
+                    OpenCommandArgument2 aOpenCommand;
+                    aOpenCommand.Mode = OpenMode::DOCUMENT;
+                    aCommand.Argument <<= aOpenCommand;
+                    xNewDocument.set(xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >()),UNO_QUERY);
+                }
             }
         }
         catch(const Exception&)
@@ -629,54 +428,21 @@ namespace dbaui
             OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newForm: caught an exception while loading the object!");
         }
 
-        if (!xNewDocument.is())
-        {
-            // TODO: error message
-            return sal_False;
-        }
-
-        Reference< XModel > xDocModel(xNewDocument, UNO_QUERY);
-        Reference< XNameContainer > xContainerAccess(m_xDocumentContainer, UNO_QUERY);
-        if (xDocModel.is() && xContainerAccess.is())
-        {
-            ODocumentAutoLinker* pAutoDocumentLink = new ODocumentAutoLinker(xDocModel, xContainerAccess);
-            Reference< XInterface > xEnsureDelete(*pAutoDocumentLink);
-        }
-        else
-            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newForm: invalid doc model or invalid link container (unable to automatically register the file)!");
-
-        return sal_True;
+        return xNewDocument;
     }
 
     //------------------------------------------------------------------
-    sal_Bool OLinkedDocumentsAccess::open(const ::rtl::OUString& _rLinkName, sal_Bool _bReadOnly)
+    Reference< XComponent > OLinkedDocumentsAccess::open(const ::rtl::OUString& _rLinkName,Reference< XComponent >& _xDefinition, sal_Bool _bReadOnly)
     {
-        RESULT eResult = implOpen(_rLinkName, _bReadOnly);
-        switch (eResult)
+        Reference< XComponent > xRet = implOpen(_rLinkName,_xDefinition, _bReadOnly);
+        if ( !xRet.is() )
         {
-            case ERROR:
-            {
-                String sLocation = getLocation(_rLinkName);
-                OFileNotation aTransformer(sLocation, OFileNotation::N_URL);
-                sLocation = aTransformer.get(OFileNotation::N_SYSTEM);
-
-                String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
-                sMessage.SearchAndReplaceAscii("$file$", sLocation);
-                ErrorBox aError(m_pDialogParent, WB_OK, sMessage);
-                aError.Execute();
-
-                return sal_False;
-            }
-
-            case CANCEL:
-                return sal_False;
-
-            case SUCCESS:
-                return sal_True;
+            String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
+            sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
+            ErrorBox aError(m_pDialogParent, WB_OK, sMessage);
+            aError.Execute();
         }
-
-        OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::open: reached the unreachable!");
-        return sal_False;
+        return xRet;
     }
 //......................................................................
 }   // namespace dbaui
