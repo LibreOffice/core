@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: od $ $Date: 2002-11-01 11:36:31 $
+ *  last change: $Author: od $ $Date: 2002-11-11 09:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@
 #include "ftninfo.hxx"
 #include "sectfrm.hxx"
 #include "dbg_lay.hxx"
+
 
 //------------------------------------------------------------------------
 //              Move-Methoden
@@ -1118,6 +1119,28 @@ void SwCntntFrm::MakeAll()
     {
         bMovedFwd = TRUE;
         MoveFwd( bMakePage, FALSE );
+    }
+
+    // OD 08.11.2002 #104840# - check footnote content for forward move.
+    // If a content of a footnote is on a prior page/column as its invalid
+    // reference, it can be moved forward.
+    if ( bFtn && !bValidPos )
+    {
+        SwFtnFrm* pFtn = FindFtnFrm();
+        SwCntntFrm* pRefCnt = pFtn ? pFtn->GetRef() : 0;
+        if ( pRefCnt && !pRefCnt->IsValid() )
+        {
+            SwFtnBossFrm* pFtnBossOfFtn = pFtn->FindFtnBossFrm();
+            SwFtnBossFrm* pFtnBossOfRef = pRefCnt->FindFtnBossFrm();
+            //<loop of movefwd until condition held or no move>
+            if ( pFtnBossOfFtn && pFtnBossOfRef &&
+                 pFtnBossOfFtn != pFtnBossOfRef &&
+                 pFtnBossOfFtn->IsBefore( pFtnBossOfRef ) )
+            {
+                bMovedFwd = TRUE;
+                MoveFwd( bMakePage, FALSE );
+            }
+        }
     }
 
     SWRECTFN( this )
