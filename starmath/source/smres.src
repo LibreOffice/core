@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-21 21:13:30 $
+ *  last change: $Author: rt $ $Date: 2002-02-22 21:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ chinese_traditional ] = "ζ¨™ζΊ–(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έ(~D)";
+        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
@@ -1010,7 +1010,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text [ portuguese_brazilian ] = "~Standard" ;
         Text [ portuguese ] = "~Padrγo" ;
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έ(~D)";
+        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
@@ -1250,7 +1250,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ chinese_traditional ] = "ζ¨™ζΊ–(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έ(~D)";
+        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
@@ -2511,7 +2511,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ chinese_traditional ] = "ζ¨™ζΊ–(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έ(~D)";
+        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
