@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:36:38 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,7 @@
 #include "helpid.hrc"
 #include "dialogs.hrc"
 #include "transfrm.hrc"
- // pragma -------------------------------------------------------------------
-#pragma CHARSET_IBMPC
+ //
  // RID_SVXPAGE_POSITION -----------------------------------------------------
 TabPage RID_SVXPAGE_POSITION
 {
