@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FinishEngineEvent.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,9 @@
 //=============================================================================
 /** event contains the reasons and the data for the
     <member>XEngineListener::finished()</member> method.
-
     @deprecated
  */
-struct FinishEngineEvent: com::sun::star::lang::EventObject
+published struct FinishEngineEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
     /** specifies why the script terminates.
