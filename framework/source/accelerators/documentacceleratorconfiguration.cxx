@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentacceleratorconfiguration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:05:46 $
+ *  last change: $Author: as $ $Date: 2004-10-14 09:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,11 +150,6 @@ void SAL_CALL DocumentAcceleratorConfiguration::initialize(const css::uno::Seque
                         ::rtl::OUString::createFromAscii("DocumentRoot"),
                         css::uno::Reference< css::embed::XStorage >());
 
-    if (!m_xDocumentRoot.is())
-        throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("The document dependend accelerator configuration was initialized with an invalid roo storage!"),
-                static_cast< ::cppu::OWeakObject* >(this));
-
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -170,24 +165,38 @@ void DocumentAcceleratorConfiguration::impl_ts_fillCache()
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
+    // Sometimes we must live without a document root.
+    // E.g. if the document is readonly ...
+    if (!xDocumentRoot.is())
+        return;
+
     // get current office locale ... but dont cache it.
     // Otherwise we must be listener on the configuration layer
     // which seems to superflous for this small implementation .-)
     ::comphelper::Locale aLocale = impl_ts_getLocale();
 
-    // Note: The used preset class is threadsafe by itself ... and live if we live!
-    // We do not need any mutex here.
+    // May be the current document does not contain any
+    // accelerator config? Handle it gracefully :-)
+    try
+    {
+        // Note: The used preset class is threadsafe by itself ... and live if we live!
+        // We do not need any mutex here.
 
-    // open the folder, where the configuration exists
-    m_aPresetHandler.connectToResource(
-        PresetHandler::E_DOCUMENT,
-        PresetHandler::RESOURCETYPE_ACCELERATOR(),
-        ::rtl::OUString(),
-        xDocumentRoot,
-        aLocale);
+        // open the folder, where the configuration exists
+        m_aPresetHandler.connectToResource(
+            PresetHandler::E_DOCUMENT,
+            PresetHandler::RESOURCETYPE_ACCELERATOR(),
+            ::rtl::OUString(),
+            xDocumentRoot,
+            aLocale);
 
-    AcceleratorConfiguration::reload();
-    m_aPresetHandler.addStorageListener(this);
+        AcceleratorConfiguration::reload();
+        m_aPresetHandler.addStorageListener(this);
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        {}
 }
 
 } // namespace framework

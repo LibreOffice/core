@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleacceleratorconfiguration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:06:24 $
+ *  last change: $Author: as $ $Date: 2004-10-14 09:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,25 +189,34 @@ void ModuleAcceleratorConfiguration::impl_ts_fillCache()
     // which seems to superflous for this small implementation .-)
     ::comphelper::Locale aLocale = impl_ts_getLocale();
 
-    // Note: The used preset class is threadsafe by itself ... and live if we live!
-    // We do not need any mutex here.
+    // May be the current app module does not have any
+    // accelerator config? Handle it gracefully :-)
+    try
+    {
+        // Note: The used preset class is threadsafe by itself ... and live if we live!
+        // We do not need any mutex here.
 
-    // open the folder, where the configuration exists
-    m_aPresetHandler.connectToResource(
-        PresetHandler::E_MODULES,
-        PresetHandler::RESOURCETYPE_ACCELERATOR(),
-        sModule,
-        css::uno::Reference< css::embed::XStorage >(),
-        aLocale);
+        // open the folder, where the configuration exists
+        m_aPresetHandler.connectToResource(
+            PresetHandler::E_MODULES,
+            PresetHandler::RESOURCETYPE_ACCELERATOR(),
+            sModule,
+            css::uno::Reference< css::embed::XStorage >(),
+            aLocale);
 
-    // check if the user already has a current configuration
-    // if not - se the default preset as new current one.
-    // means: copy "share/default.xml" => "user/current.xml"
-    if (!m_aPresetHandler.existsTarget(PresetHandler::TARGET_CURRENT()))
-        m_aPresetHandler.copyPresetToTarget(PresetHandler::PRESET_DEFAULT(), PresetHandler::TARGET_CURRENT());
+        // check if the user already has a current configuration
+        // if not - se the default preset as new current one.
+        // means: copy "share/default.xml" => "user/current.xml"
+        if (!m_aPresetHandler.existsTarget(PresetHandler::TARGET_CURRENT()))
+            m_aPresetHandler.copyPresetToTarget(PresetHandler::PRESET_DEFAULT(), PresetHandler::TARGET_CURRENT());
 
-    AcceleratorConfiguration::reload();
-    m_aPresetHandler.addStorageListener(this);
+        AcceleratorConfiguration::reload();
+        m_aPresetHandler.addStorageListener(this);
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        {}
 }
 
 } // namespace framework
