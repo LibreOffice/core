@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAutoFormatFieldObj.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 14:20:27 $
+ *  last change:$Date: 2003-05-27 13:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
@@ -112,10 +113,10 @@ public class ScAutoFormatFieldObj extends TestCase {
 
         try {
 
-            SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
+            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
                   log.println ("create Object ...") ;
             // creation of testobject here
-            XInterface formats = (XInterface)Param.getMSF().createInstance
+            XInterface formats = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.sheet.TableAutoFormats");
             XIndexAccess formatsIndex = (XIndexAccess)UnoRuntime.queryInterface
                 (XIndexAccess.class, formats);
