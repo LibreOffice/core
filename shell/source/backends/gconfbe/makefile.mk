@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-10-21 11:51:41 $
+#   last change: $Author: obo $ $Date: 2004-11-18 08:50:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,8 @@ INCPRE=$(UNOUCROUT)
 
 .INCLUDE : settings.mk
 
+UNIXTEXT=$(MISC)/$(TARGET)1-ucd.txt
+
 # no "lib" prefix
 DLLPRE =
 
@@ -130,4 +132,3 @@ DEF1NAME=$(SHL1TARGET)
 # --- Targets ---
 
 .INCLUDE : target.mk
-
