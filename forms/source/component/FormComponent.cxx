@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-24 08:53:48 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 15:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ void OControl::disposing()
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OControl::supportsService(const rtl::OUString& _rsServiceName)
+sal_Bool SAL_CALL OControl::supportsService(const rtl::OUString& _rsServiceName) throw ( ::com::sun::star::uno::RuntimeException)
 {
         Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
     const rtl::OUString* pSupported = aSupported.getConstArray();
@@ -285,44 +285,44 @@ void SAL_CALL OControl::createPeer(const Reference<XToolkit>& Toolkit, const Ref
 }
 
 //------------------------------------------------------------------------------
-Reference<XWindowPeer> SAL_CALL OControl::getPeer()
+Reference<XWindowPeer> SAL_CALL OControl::getPeer() throw ( ::com::sun::star::uno::RuntimeException)
 {
         return m_xControl.is() ? m_xControl->getPeer() : Reference<XWindowPeer>();
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OControl::setModel(const Reference<XControlModel>& Model)
+sal_Bool SAL_CALL OControl::setModel(const Reference<XControlModel>& Model) throw ( ::com::sun::star::uno::RuntimeException)
 {
     return m_xControl.is() ? m_xControl->setModel( Model ) : sal_False;
 }
 
 //------------------------------------------------------------------------------
-Reference<XControlModel> SAL_CALL OControl::getModel()
+Reference<XControlModel> SAL_CALL OControl::getModel() throw ( ::com::sun::star::uno::RuntimeException)
 {
         return m_xControl.is() ? m_xControl->getModel() : Reference<XControlModel>();
 }
 
 //------------------------------------------------------------------------------
-Reference<XView> SAL_CALL OControl::getView()
+Reference<XView> SAL_CALL OControl::getView() throw ( ::com::sun::star::uno::RuntimeException)
 {
         return m_xControl.is() ? m_xControl->getView() : Reference<XView>();
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OControl::setDesignMode(sal_Bool bOn)
+void SAL_CALL OControl::setDesignMode(sal_Bool bOn) throw ( ::com::sun::star::uno::RuntimeException)
 {
     if (m_xControl.is())
         m_xControl->setDesignMode(bOn);
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OControl::isDesignMode()
+sal_Bool SAL_CALL OControl::isDesignMode() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return m_xControl.is() ? m_xControl->isDesignMode() : sal_True;
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OControl::isTransparent()
+sal_Bool SAL_CALL OControl::isTransparent() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return m_xControl.is() ? m_xControl->isTransparent() : sal_True;
 }
@@ -584,7 +584,7 @@ void SAL_CALL OControlModel::setName(const ::rtl::OUString& _rName) throw(Runtim
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OControlModel::supportsService(const rtl::OUString& _rServiceName)
+sal_Bool SAL_CALL OControlModel::supportsService(const rtl::OUString& _rServiceName) throw ( ::com::sun::star::uno::RuntimeException)
 {
         Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
     const rtl::OUString* pSupported = aSupported.getConstArray();
