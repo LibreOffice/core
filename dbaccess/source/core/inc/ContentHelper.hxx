@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:12:31 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ namespace dbaccess
         // helper
         virtual void SAL_CALL disposing();
 
-        void notifyDataSourceModified();
+        virtual void notifyDataSourceModified();
 
         /**
         * This method can be used to propagate changes of property values.
