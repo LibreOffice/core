@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: dl $ $Date: 2001-12-06 14:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,13 @@
 #endif
 #ifndef _SVDOPATH_HXX //autogen
 #include <svx/svdopath.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX //autogen
+#include <sfx2/docfile.hxx>
+#endif
+
+#ifndef _SFXENUMITEM_HXX
+#include <svtools/eitem.hxx>
 #endif
 
 #pragma hdrstop
@@ -410,6 +417,15 @@ void SdDrawViewShell::Construct(SdDrawDocShell* pDocSh)
     aShellTable.Insert( RID_DRAW_TEXT_TOOLBOX, pObjBarShell );
 
     aShellTable.Insert( RID_FORMLAYER_TOOLBOX, new FmFormShell( this, pDrView ) );
+    FmFormShell* pFormShell = GetFormShell();
+    if( pFormShell && pDocSh->GetMedium()->GetName().Len() == 0 )
+    {
+        // new document: turn on design mode
+        SfxItemSet aSet( pDoc->GetItemPool() );
+        aSet.Put( SfxBoolItem( SID_FM_DESIGN_MODE, TRUE ) );
+        SfxRequest aReq( SID_FM_DESIGN_MODE, 0, aSet);
+        pFormShell->ExecuteSlot( aReq );
+    }
 
     aShellTable.Insert( RID_DRAW_GRAF_TOOLBOX, new SdDrawGrafObjectBar( this, pDrView ) );
 
