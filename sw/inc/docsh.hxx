@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:42:59 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #ifndef _SFX_OBJFAC_HXX //autogen
 #include <sfx2/docfac.hxx>
 #endif
-#ifndef _SFX_INTERNO_HXX //autogen
-#include <sfx2/interno.hxx>
-#endif
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
@@ -84,8 +81,9 @@
 #include <shellid.hxx>
 #endif
 
+#include <svtools/lstner.hxx>
+
 class   SwDoc;
-class   Sw3Io;
 class   SfxDocumentInfoDialog;
 class   SfxStyleSheetBasePool;
 class   FontList;
@@ -101,11 +99,9 @@ class   FixedText;
 class   SwPaM;
 class   SwgReaderOption;
 
-class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxInPlaceObject,
-                  public SfxListener
+class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 {
     SwDoc*                  pDoc;           // Document
-    Sw3Io*                  pIo;            // Reader / Writer
     SfxStyleSheetBasePool*  pBasePool;      // Durchreiche fuer Formate
     FontList*               pFontList;      // aktuelle FontListe
 
@@ -121,7 +117,8 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxInPlaceObject,
                                             // Grafik-Links. Sind alle da,
                                             // dann ist Doc voll. geladen
 
-    SvPersistRef            xOLEChildList;  // fuers RemoveOLEObjects
+    //SvPersistRef            xOLEChildList;  // fuers RemoveOLEObjects
+    comphelper::EmbeddedObjectContainer*    pOLEChildList;
     sal_Int16               nUpdateDocMode; // contains the com::sun::star::document::UpdateDocMode
     bool                    bInUpdateFontList; //prevent nested calls of UpdateFontList
     // Methoden fuer den Zugriff aufs Doc
@@ -132,14 +129,14 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxInPlaceObject,
     SW_DLLPRIVATE virtual void          Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     // FileIO
-    SW_DLLPRIVATE virtual BOOL          InitNew(SvStorage* pNewStor);
-    SW_DLLPRIVATE virtual BOOL          Load(SvStorage* pStor);
-    SW_DLLPRIVATE virtual BOOL          LoadFrom(SvStorage* pStor);
-    SW_DLLPRIVATE virtual BOOL          ConvertFrom( SfxMedium &rMedium );
-    SW_DLLPRIVATE virtual void          HandsOff();
-    SW_DLLPRIVATE virtual BOOL          SaveAs(SvStorage * pNewStor );
-    SW_DLLPRIVATE virtual BOOL          ConvertTo(SfxMedium &rMedium );
-    SW_DLLPRIVATE virtual BOOL          SaveCompleted(SvStorage * pNewStor );
+    SW_DLLPRIVATE virtual sal_Bool InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    SW_DLLPRIVATE virtual sal_Bool Load( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    SW_DLLPRIVATE virtual sal_Bool LoadFrom( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    SW_DLLPRIVATE virtual sal_Bool            ConvertFrom( SfxMedium &rMedium );
+    SW_DLLPRIVATE virtual sal_Bool            ConvertTo( SfxMedium &rMedium );
+    SW_DLLPRIVATE virtual sal_Bool SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewStg );
+    SW_DLLPRIVATE virtual sal_Bool SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+
     SW_DLLPRIVATE virtual USHORT            PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
 
     // DocInfo dem Doc melden
@@ -178,7 +175,7 @@ public:
 
     // aber selbst implementieren
     SFX_DECL_INTERFACE(SW_DOCSHELL);
-    SFX_DECL_OBJECTFACTORY(SwDocShell);
+    SFX_DECL_OBJECTFACTORY();
     TYPEINFO();
 
     static SfxInterface *_GetInterface() { return _GetInterfaceImpl(); }
@@ -221,8 +218,6 @@ public:
 
     // globaler IO
     virtual BOOL            Save();
-    inline BOOL                 SaveAsChilds( SvStorage *pStor );
-    inline BOOL                 SaveCompletedChilds( SvStorage *pStor );
 
     // fuer VorlagenPI
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
@@ -262,21 +257,17 @@ public:
     Reader* StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
                             SwCrsrShell* pCrsrSh = 0, SwPaM* pPaM = 0);
 
-    // Anforderung der pIo-Struktur fuer den Zugriff auf Substorages
-    // und Streams
-    Sw3Io* GetIoSystem() { return pIo; }
-
     virtual long DdeGetData( const String& rItem, const String& rMimeType,
                              ::com::sun::star::uno::Any & rValue );
     virtual long DdeSetData( const String& rItem, const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
-    virtual ::so3::SvLinkSource* DdeCreateLinkSource( const String& rItem );
+    virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const String& rItem );
     virtual void FillClass( SvGlobalName * pClassName,
                                    ULONG * pClipFormat,
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
-                                   long nVersion = SOFFICE_FILEFORMAT_CURRENT ) const;
+                                   sal_Int32 nFileFormat ) const;
 
     virtual void LoadStyles( SfxObjectShell& rSource );
 
@@ -312,22 +303,11 @@ public:
     void InvalidateModel();
     void ReactivateModel();
 
-#if SUPD>620
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >  GetEventNames();
-#endif
 
     // --> FME 2004-08-05 #i20883# Digital Signatures and Encryption
     virtual sal_uInt16 GetHiddenInformationState( sal_uInt16 nStates );
     // <--
 };
 
-inline BOOL SwDocShell::SaveAsChilds( SvStorage *pStor )
-{
-    return SfxInPlaceObject::SaveAsChilds( pStor );
-}
-
-inline BOOL SwDocShell::SaveCompletedChilds( SvStorage *pStor )
-{
-    return SfxInPlaceObject::SaveCompletedChilds( pStor );
-}
 #endif
