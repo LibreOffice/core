@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-19 11:00:23 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 17:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,9 @@
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
 #endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -251,6 +254,9 @@
 #endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
 #endif
 #ifndef DBAUI_TOKENWRITER_HXX
 #include "TokenWriter.hxx"
@@ -316,6 +322,7 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::dbtools;
 using namespace ::svx;
@@ -380,6 +387,7 @@ Reference< XInterface > SAL_CALL SbaTableQueryBrowser::Create(const Reference<XM
 //------------------------------------------------------------------------------
 SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory >& _rM)
     :SbaXDataBrowserController(_rM)
+    ,m_aSelectionListeners(m_aMutex)
     ,m_pTreeModel(NULL)
     ,m_pTreeView(NULL)
     ,m_pSplitter(NULL)
@@ -407,10 +415,38 @@ SbaTableQueryBrowser::~SbaTableQueryBrowser()
 }
 
 //------------------------------------------------------------------------------
+Any SAL_CALL SbaTableQueryBrowser::queryInterface(const Type& _rType) throw (RuntimeException)
+{
+    Any aReturn = SbaXDataBrowserController::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = SbaTableQueryBrowser_Base::queryInterface(_rType);
+    return aReturn;
+}
+
+//------------------------------------------------------------------------------
+Sequence< Type > SAL_CALL SbaTableQueryBrowser::getTypes(  ) throw (RuntimeException)
+{
+    return ::comphelper::concatSequences(
+        SbaXDataBrowserController::getTypes(),
+        SbaTableQueryBrowser_Base::getTypes()
+    );
+}
+
+//------------------------------------------------------------------------------
+Sequence< sal_Int8 > SAL_CALL SbaTableQueryBrowser::getImplementationId(  ) throw (RuntimeException)
+{
+    static ::cppu::OImplementationId aId;
+    return aId.getImplementationId();
+}
+
+//------------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::disposing()
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
         // doin' a lot of VCL stuff here -> lock the SolarMutex
+
+    // kiss our listeners goodbye
+    m_aSelectionListeners.disposeAndClear();
 
     // reset the content's tree view: it holds a reference to our model which is to be deleted immediately,
     // and it will live longer than we do.
@@ -1034,6 +1070,81 @@ void SbaTableQueryBrowser::implRemoveStatusListeners()
 }
 
 // -------------------------------------------------------------------------
+sal_Bool SAL_CALL SbaTableQueryBrowser::select( const Any& _rSelection ) throw (IllegalArgumentException, RuntimeException)
+{
+    Sequence< PropertyValue > aDescriptorSequence;
+    if (!(_rSelection >>= aDescriptorSequence))
+        throw IllegalArgumentException(::rtl::OUString(), *this, 1);
+        // TODO: error message
+
+    ODataAccessDescriptor aDescriptor;
+    try
+    {
+        aDescriptor = ODataAccessDescriptor(aDescriptorSequence);
+    }
+    catch(const Exception&)
+    {
+        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::select: could not extract the descriptor!");
+    }
+
+    // check the precense of the props we need
+    if (!aDescriptor.has(daDataSource) || !aDescriptor.has(daCommand) || !aDescriptor.has(daCommandType))
+        throw IllegalArgumentException(::rtl::OUString(), *this, 1);
+        // TODO: error message
+
+    // extract the props
+    ::rtl::OUString sDataSource; aDescriptor[daDataSource] >>= sDataSource;
+    ::rtl::OUString sCommand; aDescriptor[daCommand] >>= sCommand;
+    sal_Int32 nCommandType = CommandType::COMMAND; aDescriptor[daCommandType] >>= nCommandType;
+
+    // escape processing is the only one allowed not to be present
+    sal_Bool bEscapeProcessing = sal_True;
+    if (aDescriptor.has(daEscapeProcessing))
+        bEscapeProcessing = ::cppu::any2bool(aDescriptor[daEscapeProcessing]);
+
+    // select it
+    return implSelect(sDataSource, sCommand, nCommandType, bEscapeProcessing);
+}
+
+// -------------------------------------------------------------------------
+Any SAL_CALL SbaTableQueryBrowser::getSelection(  ) throw (RuntimeException)
+{
+    Any aReturn;
+
+    try
+    {
+        Reference< XLoadable > xLoadable(getRowSet(), UNO_QUERY);
+        if (xLoadable.is() && xLoadable->isLoaded())
+        {
+            ODataAccessDescriptor aDescriptor(Reference< XPropertySet >(getRowSet(), UNO_QUERY));
+            // remove properties which are not part of our "selection"
+            aDescriptor.erase(daConnection);
+            aDescriptor.erase(daCursor);
+
+            aReturn <<= aDescriptor.createPropertyValueSequence();
+        }
+    }
+    catch(const Exception&)
+    {
+        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::getSelection: caught an exception while retrieving the selection!");
+    }
+
+    return aReturn;
+}
+
+// -------------------------------------------------------------------------
+void SAL_CALL SbaTableQueryBrowser::addSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener ) throw (RuntimeException)
+{
+    m_aSelectionListeners.addInterface(_rxListener);
+}
+
+// -------------------------------------------------------------------------
+void SAL_CALL SbaTableQueryBrowser::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener ) throw (RuntimeException)
+{
+    m_aSelectionListeners.removeInterface(_rxListener);
+}
+
+// -------------------------------------------------------------------------
 void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame::XFrame > & _xFrame) throw( RuntimeException )
 {
     implRemoveStatusListeners();
@@ -1086,12 +1197,12 @@ void SbaTableQueryBrowser::addModelListeners(const Reference< ::com::sun::star::
     Reference< XPropertySet >  xSourceSet(_xGridControlModel, UNO_QUERY);
     if (xSourceSet.is())
     {
-        xSourceSet->addPropertyChangeListener(PROPERTY_ROW_HEIGHT, (XPropertyChangeListener*)this);
-        xSourceSet->addPropertyChangeListener(PROPERTY_FONT, (XPropertyChangeListener*)this);
-        xSourceSet->addPropertyChangeListener(PROPERTY_TEXTCOLOR, (XPropertyChangeListener*)this);
-        xSourceSet->addPropertyChangeListener(PROPERTY_TEXTLINECOLOR, (XPropertyChangeListener*)this);
-        xSourceSet->addPropertyChangeListener(PROPERTY_TEXTEMPHASIS, (XPropertyChangeListener*)this);
-        xSourceSet->addPropertyChangeListener(PROPERTY_TEXTRELIEF, (XPropertyChangeListener*)this);
+        xSourceSet->addPropertyChangeListener(PROPERTY_ROW_HEIGHT, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->addPropertyChangeListener(PROPERTY_FONT, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->addPropertyChangeListener(PROPERTY_TEXTCOLOR, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->addPropertyChangeListener(PROPERTY_TEXTLINECOLOR, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->addPropertyChangeListener(PROPERTY_TEXTEMPHASIS, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->addPropertyChangeListener(PROPERTY_TEXTRELIEF, static_cast<XPropertyChangeListener*>(this));
     }
 
 }
@@ -1103,12 +1214,12 @@ void SbaTableQueryBrowser::removeModelListeners(const Reference< ::com::sun::sta
     Reference< XPropertySet >  xSourceSet(_xGridControlModel, UNO_QUERY);
     if (xSourceSet.is())
     {
-        xSourceSet->removePropertyChangeListener(PROPERTY_ROW_HEIGHT, (XPropertyChangeListener*)this);
-        xSourceSet->removePropertyChangeListener(PROPERTY_FONT, (XPropertyChangeListener*)this);
-        xSourceSet->removePropertyChangeListener(PROPERTY_TEXTCOLOR, (XPropertyChangeListener*)this);
-        xSourceSet->removePropertyChangeListener(PROPERTY_TEXTLINECOLOR, (XPropertyChangeListener*)this);
-        xSourceSet->removePropertyChangeListener(PROPERTY_TEXTEMPHASIS, (XPropertyChangeListener*)this);
-        xSourceSet->removePropertyChangeListener(PROPERTY_TEXTRELIEF, (XPropertyChangeListener*)this);
+        xSourceSet->removePropertyChangeListener(PROPERTY_ROW_HEIGHT, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->removePropertyChangeListener(PROPERTY_FONT, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->removePropertyChangeListener(PROPERTY_TEXTCOLOR, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->removePropertyChangeListener(PROPERTY_TEXTLINECOLOR, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->removePropertyChangeListener(PROPERTY_TEXTEMPHASIS, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->removePropertyChangeListener(PROPERTY_TEXTRELIEF, static_cast<XPropertyChangeListener*>(this));
     }
 }
 // -------------------------------------------------------------------------
@@ -1150,21 +1261,34 @@ void SbaTableQueryBrowser::InvalidateFeature(sal_uInt16 nId, const Reference< ::
 void SbaTableQueryBrowser::AddColumnListener(const Reference< XPropertySet > & xCol)
 {
     SbaXDataBrowserController::AddColumnListener(xCol);
-    SafeAddPropertyListener(xCol, PROPERTY_WIDTH, (XPropertyChangeListener*)this);
-    SafeAddPropertyListener(xCol, PROPERTY_HIDDEN, (XPropertyChangeListener*)this);
-    SafeAddPropertyListener(xCol, PROPERTY_ALIGN, (XPropertyChangeListener*)this);
-    SafeAddPropertyListener(xCol, PROPERTY_FORMATKEY, (XPropertyChangeListener*)this);
+    SafeAddPropertyListener(xCol, PROPERTY_WIDTH, static_cast<XPropertyChangeListener*>(this));
+    SafeAddPropertyListener(xCol, PROPERTY_HIDDEN, static_cast<XPropertyChangeListener*>(this));
+    SafeAddPropertyListener(xCol, PROPERTY_ALIGN, static_cast<XPropertyChangeListener*>(this));
+    SafeAddPropertyListener(xCol, PROPERTY_FORMATKEY, static_cast<XPropertyChangeListener*>(this));
 }
 
 //------------------------------------------------------------------------------
 void SbaTableQueryBrowser::RemoveColumnListener(const Reference< XPropertySet > & xCol)
 {
     SbaXDataBrowserController::RemoveColumnListener(xCol);
-    SafeRemovePropertyListener(xCol, PROPERTY_WIDTH, (XPropertyChangeListener*)this);
-    SafeRemovePropertyListener(xCol, PROPERTY_HIDDEN, (XPropertyChangeListener*)this);
-    SafeRemovePropertyListener(xCol, PROPERTY_ALIGN, (XPropertyChangeListener*)this);
-    SafeRemovePropertyListener(xCol, PROPERTY_FORMATKEY, (XPropertyChangeListener*)this);
+    SafeRemovePropertyListener(xCol, PROPERTY_WIDTH, static_cast<XPropertyChangeListener*>(this));
+    SafeRemovePropertyListener(xCol, PROPERTY_HIDDEN, static_cast<XPropertyChangeListener*>(this));
+    SafeRemovePropertyListener(xCol, PROPERTY_ALIGN, static_cast<XPropertyChangeListener*>(this));
+    SafeRemovePropertyListener(xCol, PROPERTY_FORMATKEY, static_cast<XPropertyChangeListener*>(this));
 }
+
+//------------------------------------------------------------------------------
+void SbaTableQueryBrowser::FormLoaded(sal_Bool _bWasSynch)
+{
+    SbaXDataBrowserController::FormLoaded(_bWasSynch);
+
+    // if the form has been loaded, this means that our "selection" has changed
+    ::com::sun::star::lang::EventObject aEvt(*this);
+    ::cppu::OInterfaceIteratorHelper aIter(m_aSelectionListeners);
+    while (aIter.hasMoreElements())
+        static_cast< XSelectionChangeListener* >(aIter.next())->selectionChanged(aEvt);
+}
+
 //------------------------------------------------------------------------------
 void SbaTableQueryBrowser::AddSupportedFeatures()
 {
@@ -1850,6 +1974,82 @@ IMPL_LINK(SbaTableQueryBrowser, OnEntryDoubleClicked, SvLBoxEntry*, _pEntry)
 };
 
 //------------------------------------------------------------------------------
+sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
+                                      const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing)
+{
+    if (_rDataSourceName.getLength() && _rCommand.getLength() && (-1 != _nCommandType))
+    {
+        SvLBoxEntry* pDataSource = m_pTreeView->getListBox()->GetEntryPosByName(_rDataSourceName, NULL);
+        if(pDataSource)
+        {
+            m_pTreeView->getListBox()->Expand(pDataSource);
+            SvLBoxEntry* pCommandType = NULL;
+            if (CommandType::TABLE == _nCommandType)
+                pCommandType = m_pTreeView->getListBox()->GetModel()->GetEntry(pDataSource, CONTAINER_TABLES);
+            else if (CommandType::QUERY == _nCommandType)
+                pCommandType = m_pTreeView->getListBox()->GetModel()->GetEntry(pDataSource, CONTAINER_QUERIES);
+
+            if(pCommandType)
+            {
+                // we need to expand the command
+                m_pTreeView->getListBox()->Expand(pCommandType);
+                SvLBoxEntry* pCommand = m_pTreeView->getListBox()->GetEntryPosByName(_rCommand,pCommandType);
+                if(pCommand)
+                   m_pTreeView->getListBox()->Select(pCommand);
+            }
+            else // we have a command and need to display this in the rowset
+            {
+                Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
+                if(xProp.is())
+                {
+                    Reference< ::com::sun::star::form::XLoadable >  xLoadable(xProp,UNO_QUERY);
+                    try
+                    {
+                        // the values allowing the RowSet to re-execute
+                        xProp->setPropertyValue(PROPERTY_DATASOURCENAME, makeAny(_rDataSourceName));
+                            // set this _before_ setting the connection, else the rowset would rebuild it ...
+                        xProp->setPropertyValue(PROPERTY_COMMANDTYPE, makeAny(_nCommandType));
+                        xProp->setPropertyValue(PROPERTY_COMMAND, makeAny(_rCommand));
+                        xProp->setPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING, ::cppu::bool2any(_bEscapeProcessing));
+
+                        // the formatter depends on the data source we're working on, so rebuild it here ...
+                        initFormatter();
+
+                        // switch the grid to design mode while loading
+                        getBrowserView()->getGridControl()->setDesignMode(sal_True);
+                        InitializeForm(getRowSet());
+
+                        {
+                            FormErrorHelper aHelper(this);
+                            // load the row set
+                            if (xLoadable->isLoaded())
+                                // reload does not work if not already loaded
+                                xLoadable->reload();
+                            else
+                                xLoadable->load();
+                            // initialize the model
+                            InitializeGridModel(getFormComponent());
+                        }
+
+                        FormLoaded(sal_True);
+                        return sal_True;
+                    }
+                    catch(SQLException& e)
+                    {
+                        showError(SQLExceptionInfo(e));
+                    }
+                    catch(Exception&)
+                    {
+                        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implSelect: something strange happended!");
+                    }
+                }
+            }
+        }
+    }
+    return sal_False;
+}
+
+//------------------------------------------------------------------------------
 void SbaTableQueryBrowser::openHelpAgent(sal_Int32 _nHelpId)
 {
     try
@@ -2514,18 +2714,23 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
     const Any* pEnd     = pBegin + aArguments.getLength();
 
     ::rtl::OUString aTableName,aCatalogName,aSchemaName;
+
     sal_Bool bEsacpeProcessing = sal_True;
     sal_Int32 nInitialDisplayCommandType;
+    ::rtl::OUString sInitialDataSourceName;
+    ::rtl::OUString sInitialCommand;
+
     for(;pBegin != pEnd;++pBegin)
     {
         if (!(*pBegin >>= aValue))
             continue;
+
         if (0 == aValue.Name.compareToAscii(PROPERTY_DATASOURCENAME))
-            aValue.Value >>= m_sDefaultDataSourceName;
+            aValue.Value >>= sInitialDataSourceName;
         else if (0 == aValue.Name.compareToAscii(PROPERTY_COMMANDTYPE))
             aValue.Value >>= nInitialDisplayCommandType;
         else if (0 == aValue.Name.compareToAscii(PROPERTY_COMMAND))
-            aValue.Value >>= m_sDefaultCommand;
+            aValue.Value >>= sInitialCommand;
         else if (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION))
             ::cppu::extractInterface(xConnection,aValue.Value);
         else if (0 == aValue.Name.compareToAscii(PROPERTY_UPDATE_CATALOGNAME))
@@ -2553,7 +2758,7 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
         {
             try
             {
-                if(!::cppu::any2bool(aValue.Value) && getView())
+                if (!::cppu::any2bool(aValue.Value) && getView())
                 {
                     // hide the explorer and the separator
                     getView()->getToolBox()->HideItem(ID_BROWSER_EXPLORER);
@@ -2567,77 +2772,24 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
         }
     }
 
-    if(m_sDefaultDataSourceName.getLength() && m_sDefaultCommand.getLength() && nInitialDisplayCommandType != -1)
+    if (implSelect(sInitialDataSourceName, sInitialCommand, nInitialDisplayCommandType, bEsacpeProcessing))
     {
-        SvLBoxEntry* pDataSource = m_pTreeView->getListBox()->GetEntryPosByName(m_sDefaultDataSourceName,NULL);
-        if(pDataSource)
+        try
         {
-            m_pTreeView->getListBox()->Expand(pDataSource);
-            SvLBoxEntry* pCommandType = NULL;
-            if(CommandType::TABLE == nInitialDisplayCommandType)
-                pCommandType = m_pTreeView->getListBox()->GetModel()->GetEntry(pDataSource, CONTAINER_TABLES);
-            else if(CommandType::QUERY == nInitialDisplayCommandType)
-                pCommandType = m_pTreeView->getListBox()->GetModel()->GetEntry(pDataSource, CONTAINER_QUERIES);
-
-            if(pCommandType)
-            {
-                // we need to expand the command
-                m_pTreeView->getListBox()->Expand(pCommandType);
-                SvLBoxEntry* pCommand = m_pTreeView->getListBox()->GetEntryPosByName(m_sDefaultCommand,pCommandType);
-                if(pCommand)
-                   m_pTreeView->getListBox()->Select(pCommand);
-            }
-            else // we have a command and need to display this in the rowset
-            {
-                Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
-                if(xProp.is())
-                {
-                    Reference< ::com::sun::star::form::XLoadable >  xLoadable(xProp,UNO_QUERY);
-                    try
-                    {
-                        // the values allowing the RowSet to re-execute
-                        xProp->setPropertyValue(PROPERTY_DATASOURCENAME,makeAny(m_sDefaultDataSourceName));
-                            // set this _before_ setting the connection, else the rowset would rebuild it ...
-                        if(xConnection.is())
-                            xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(xConnection));
-                        xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(nInitialDisplayCommandType));
-                        xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(m_sDefaultCommand));
-
-                        xProp->setPropertyValue(PROPERTY_UPDATE_CATALOGNAME,makeAny(aCatalogName));
-                        xProp->setPropertyValue(PROPERTY_UPDATE_SCHEMANAME,makeAny(aSchemaName));
-                        xProp->setPropertyValue(PROPERTY_UPDATE_TABLENAME,makeAny(aTableName));
-                        xProp->setPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING,::cppu::bool2any(bEsacpeProcessing));
-                        // the formatter depends on the data source we're working on, so rebuild it here ...
-                        initFormatter();
-                        // switch the grid to design mode while loading
-                        getBrowserView()->getGridControl()->setDesignMode(sal_True);
-                        InitializeForm(getRowSet());
-                        {
-                            FormErrorHelper aHelper(this);
-                            // load the row set
-                            if (xLoadable->isLoaded())
-                                // reload does not work if not already loaded
-                                xLoadable->reload();
-                            else
-                                xLoadable->load();
-                            // initialize the model
-                            InitializeGridModel(getFormComponent());
-                        }
-
-                        FormLoaded(sal_True);
-                    }
-                    catch(SQLException& e)
-                    {
-                        showError(SQLExceptionInfo(e));
-                    }
-                    catch(Exception&)
-                    {
-                    }
-                }
-            }
+            Reference< XPropertySet > xProp(getRowSet(), UNO_QUERY);
+            xProp->setPropertyValue(PROPERTY_UPDATE_CATALOGNAME,makeAny(aCatalogName));
+            xProp->setPropertyValue(PROPERTY_UPDATE_SCHEMANAME,makeAny(aSchemaName));
+            xProp->setPropertyValue(PROPERTY_UPDATE_TABLENAME,makeAny(aTableName));
+            if(xConnection.is())
+                xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(xConnection));
+        }
+        catch(const Exception&)
+        {
+            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::initialize: could not set the update related names!");
         }
     }
 }
+
 // -------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::haveExplorer() const
 {

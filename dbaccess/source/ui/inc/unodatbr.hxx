@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-19 10:58:32 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 17:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,11 @@
 #ifndef _COM_SUN_STAR_I18N_XCOLLATOR_HPP_
 #include <com/sun/star/i18n/XCollator.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
@@ -108,7 +111,8 @@ namespace dbaui
     class DBTreeView;
     class DBTreeListModel;
     // =====================================================================
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::frame::XStatusListener
+    typedef ::cppu::ImplHelper2 <   ::com::sun::star::frame::XStatusListener
+                                ,   ::com::sun::star::view::XSelectionSupplier
                                 >   SbaTableQueryBrowser_Base;
     class SbaTableQueryBrowser
                 :public SbaXDataBrowserController
@@ -128,12 +132,10 @@ namespace dbaui
         SpecialSlotDispatchers  m_aDispatchers;         // external dispatchers for slots we do not execute ourself
         SpecialSlotStates       m_aDispatchStates;      // states of the slots handled by external dispatchers
 
-        ::rtl::OUString         m_sDefaultDataSourceName;
-        ::rtl::OUString         m_sDefaultCommand;
-        sal_Bool                m_bHideTreeView;
-
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >
                                 m_xCollator;
+
+        ::cppu::OInterfaceContainerHelper   m_aSelectionListeners;
 
         // ---------------------------
         struct DropDescriptor
@@ -170,9 +172,16 @@ namespace dbaui
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-        DECLARE_UNO3_DEFAULTS(SbaTableQueryBrowser,OGenericUnoController);
+        DECLARE_UNO3_DEFAULTS(SbaTableQueryBrowser,SbaXDataBrowserController);
         // late construction
         virtual sal_Bool Construct(Window* pParent);
+
+        // XInterface
+        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+
+        // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::beans::XPropertyChangeListener
         virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt);
@@ -189,6 +198,12 @@ namespace dbaui
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+
+        // XSelectionSupplier
+        virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
@@ -215,6 +230,8 @@ namespace dbaui
 
         virtual void AddColumnListener(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xCol);
         virtual void RemoveColumnListener(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xCol);
+
+        virtual void FormLoaded(sal_Bool _bWasSynch);
 
         virtual void            AddSupportedFeatures();
         virtual FeatureState    GetState(sal_uInt16 nId);
@@ -317,6 +334,9 @@ namespace dbaui
         void implRemoveStatusListeners();
 
         void openHelpAgent(sal_Int32 _nHelpId);
+
+        sal_Bool implSelect(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
+            const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing);
 
         void transferChangedControlProperty(const ::rtl::OUString& _rProperty, const ::com::sun::star::uno::Any& _rNewValue);
 
