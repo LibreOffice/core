@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-20 21:28:30 $
+ *  last change: $Author: dv $ $Date: 2001-01-16 09:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1751,7 +1751,8 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
             if(!ConnectTmpStorage_Impl( pMedium->GetStorage() ))
                 bCouldNotConnect = sal_True;
         }
-        if( bNeedsStorage )
+
+        if( bNeedsStorage || !pMedium->GetName().Len() )
             xNewTempRef = GetStorage();
     }
 
@@ -1763,84 +1764,19 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         if ( bCouldNotConnect )
             bOk = sal_False;
 
-#ifdef DONT_NEEDED_ANY_LONGER
-        // Auf die Platte
-        if( !bRemote )
-        {
-            // Options vorhanden?
-            SfxItemSet *pOptions = pMediumTmp->GetItemSet();
-            if ( pOptions )
-                // Options "ubernehmen
-                pNewFile->SetItemSet( new SfxAllItemSet( *pOptions ) );
-
-            // Falls jetzt in ein Fremdformat gespeichert wird, darf nicht der
-            // Objektstorage weiterverwendet werden, wenn das alte Format das
-            // eigene war. Daher wird hier eine temporaerer erzeugt.
-
-            // Damit DoHandsOff gerufen werden kann, merken wir uns den
-            // Storage und rufen anschliessend von Hand SaveCompleted
-
-            sal_Bool bNeedsStorage =
-                !bCopyTo && IsOwnStorageFormat_Impl(*pMedium) &&
-                !IsOwnStorageFormat_Impl(*pNewFile);
-
-            // Sind wir embedded, so war es Save Copy to
-            SvStorageRef xNewTempRef;
-            if ( bNeedsStorage && pMedium->GetName().Len())
-            {
-                if(!ConnectTmpStorage_Impl( pMedium->GetStorage() ))
-                    bOk = sal_False;
-            }
-            if( bNeedsStorage )
-                xNewTempRef = GetStorage();
-            if( !bCopyTo ) // Braucht kein HandsOff, da nicht ueber sich selbst
-                DoHandsOff(); //gespeichert wird.
-
-            ErrCode nErr = aFileName.Exists() ? aFileName.Kill() : 0;
-            if( !nErr )
-            {
-                SetError(pMediumTmp->GetErrorCode());
-                pMediumTmp->Close();
-                nErr = aTmpFile.MoveTo(pNewFile->GetPhysicalName() );
-                if( nErr != ERRCODE_NONE )
-                {
-                    // Extrabehandlung HS Fall: man kann schreiben, aber nicht
-                    // moven
-                    nErr = aTmpFile.CopyTo( pNewFile->GetPhysicalName(),
-                            FSYS_ACTION_COPYFILE );
-                    if( nErr != ERRCODE_NONE )
-                    {
-                        SetError( nErr );
-                        DoSaveCompleted( pMediumTmp );
-                        DBG_ERROR("Fall der Faelle" );
-                        return sal_False;
-                    }
-                    else aTmpFile.Kill();
-                }
-                else if( bNeedsStorage )
-                    SaveCompleted( xNewTempRef );
-            }
-            else bOk = sal_False;
-        }
-#endif
         SetError( pMediumTmp->GetErrorCode() );
+
         if( bNeedsStorage )
             SaveCompleted( xNewTempRef );
 
-        SfxMedium *pMed = bCopyTo ? pMedium : pNewFile;
         if ( !bCopyTo )
-            bOk = DoSaveCompleted( pMed );
+            bOk = DoSaveCompleted( pNewFile );
 
         //! Vorsich. Muss nicht immer klappen.
         DBG_ASSERT( bOk, "DoSaveCompleted nicht geklappt und keine Fehlerbehandlung");
         if( bOk )
         {
-            if( bCopyTo )
-            {
-//              if ( !bRemote )
-//                  DELETEZ( pNewFile );
-            }
-            else
+            if( !bCopyTo )
             {
                 SetModified(sal_False);
                 bOk=sal_True;
@@ -1849,6 +1785,9 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         else
         {
             SetError( pNewFile->GetErrorCode() );
+            if ( !pMedium->GetName().Len() )
+                SaveCompleted( xNewTempRef );
+            else
             DoSaveCompleted( pMedium );
             DELETEZ( pNewFile );
         }
@@ -1861,11 +1800,16 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     {
         INetURLObject::SetBaseURL( aOldURL );
         SetError(pMediumTmp->GetErrorCode());
-//      aTmpFile.Kill();
-        DoSaveCompleted( (SvStorage*)0 );
+        if ( bCopyTo )
+            DoSaveCompleted( (SvStorage*)0 );
+        else
+        {
+            if( !pMedium->GetName().Len() )
+                SaveCompleted( xNewTempRef );
+            else
+                DoSaveCompleted( pMedium );
+        }
     }
-//  if( !bRemote )
-//      delete pMediumTmp;
 
     if(!bOk)
         SetModified(sal_True);
