@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_python.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:55:05 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ Module gid_Module_Optional_Pyuno
     MOD_NAME_DESC ( MODULE_OPTIONAL_PYTHON );
     ParentID = gid_Module_Optional;
     Procedures = (gid_Procedure_Python_Install);
-    Files = (gid_File_Pyuno,gid_File_Lib_Pyuno,gid_File_Lib_Pythonloader,gid_File_Py_Unohelper,gid_File_Py_Uno,gid_File_Py_Pythonloader,gid_File_Py_Python_Core,gid_File_Python_Sh,gid_File_Python_Dll,gid_File_Lib_Python_So, gid_File_Py_Scriptprovider,gid_File_Py_Pythonscript,gid_File_Scripts_Python,gid_File_Pythonmsi_Dll);
+    Files = (gid_File_Pyuno,gid_File_Lib_Pyuno,gid_File_Lib_Pythonloader,gid_File_Py_Unohelper,gid_File_Py_Uno,gid_File_Py_Pythonloader,gid_File_Py_Python_Core,gid_File_Python_Sh,gid_File_Python_Dll,gid_File_Lib_Python_So, gid_File_Py_Scriptprovider,gid_File_Py_Pythonscript,gid_File_Scripts_Python,gid_File_Registry_Spool_Oo_Scripting_Python_Xcu,gid_File_Pythonmsi_Dll);
     Minimal = NO;
     Default = NO;
     Styles = ( );
