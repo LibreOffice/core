@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:32:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,11 +505,7 @@ FuInsertOLE::FuInsertOLE (
                     {
                         // get URL
                         String aStrURL(aPluginFileDialog.GetPath());
-                        aStrURL = ::URIHelper::SmartRelToAbs( aStrURL, FALSE,
-                                                            INetURLObject::WAS_ENCODED,
-                                                            INetURLObject::DECODE_UNAMBIGUOUS );
-
-                        INetURLObject aURL( aStrURL );
+                        INetURLObject aURL( aStrURL, INET_PROT_FILE );
                         if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
                         {
                             // create a plugin object
