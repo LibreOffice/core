@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:41 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 10:56:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
             OKeySet*                                            m_pFileSet;
             OKeySet::iterator                                   m_aFileSetIter;
 
-            UINT16                                              nOrderbyColumnNumber[SQL_ORDERBYKEYS];
+            sal_Int32                                           m_nOrderbyColumnNumber[SQL_ORDERBYKEYS];
             BOOL                                                bOrderbyAscending[SQL_ORDERBYKEYS];
 
             OFILESortIndex*                                     m_pSortIndex;
@@ -313,8 +313,13 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
                                 BOOL bEvaluate = TRUE,
                                 BOOL bRetrieveData = TRUE);
 
+            void setBoundedColumns(const OValueRow& _rRow,
+                                   const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
+                                   const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xNames,
+                                   sal_Bool _bSetColumnMapping);
+
             OFILEKeyValue* GetOrderbyKeyValue(OValueRow _rRow);
-            BOOL IsSorted() const {return nOrderbyColumnNumber[0] != SQL_COLUMN_NOTFOUND;}
+            BOOL IsSorted() const {return m_nOrderbyColumnNumber[0] != SQL_COLUMN_NOTFOUND;}
             void anylizeSQL();
             void setOrderbyColumn(UINT16 nOrderbyColumnNo,
                                      connectivity::OSQLParseNode* pColumnRef,
@@ -466,7 +471,7 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
 
             OSL_ENSURE(column > 0, "file::OResultSet::mapColumn: invalid column index!");
                 // the first column (index 0) is for convenience only. The first real select column is no 1.
-            if ((column > 0) && (column < m_aColMapping.size()))
+            if ((column > 0) && (column < (sal_Int32)m_aColMapping.size()))
                 map = m_aColMapping[column];
 
             return map;
