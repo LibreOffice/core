@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commontypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2000-10-24 11:58:36 $
+ *  last change: $Author: fs $ $Date: 2000-12-01 14:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,6 @@ public:
     virtual void SAL_CALL acquire(  ) throw () = 0;
     virtual void SAL_CALL release(  ) throw () = 0;
 };
-
-//==========================================================================
-//= SettingsOverride
-//==========================================================================
-DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Any, SettingsOverride );
 
 typedef ::com::sun::star::uno::RuntimeException CantRenameException_Base;
 class CantRenameException : CantRenameException_Base

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-30 15:45:30 $
+ *  last change: $Author: fs $ $Date: 2000-12-01 14:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,46 +65,165 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
-
-#ifndef _CONFIGMGR_COMMONTYPES_HXX_
-#include "commontypes.hxx"
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
 #endif
-
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
 #endif
-
-namespace com { namespace sun { namespace star {
-
-    namespace uno   { template <class> class Reference; }
-    namespace lang  { class XMultiServiceFactory; }
-
-} } }
-
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
+
+namespace osl {
+    class Profile;
+}
 
 namespace configmgr
 {
-    namespace css = ::com::sun::star;
-    namespace uno  = css::uno;
-    namespace lang = css::lang;
-    using ::rtl::OUString;
-
     class IConfigSession;
 
+    // ===================================================================================
+
+    #define PORTAL_SESSION_IDENTIFIER           "portal"
+    #define REMOTE_SESSION_IDENTIFIER           "remote"
+    #define LOCAL_SESSION_IDENTIFIER            "local"
+    #define SETUP_SESSION_IDENTIFIER            "setup"
+    #define PLUGIN_SESSION_IDENTIFIER           "plugin"
+
+    // ===================================================================================
+    // = ConnectionSettings
+    // ===================================================================================
     class ConnectionSettings
     {
     public:
+        enum SETTING_ORIGIN
+        {
+            SO_SREGISTRY,
+            SO_OVERRIDE,
+            SO_FALLBACK,
+            SO_UNKNOWN
+        };
+
+    protected:
+        // ine single setting
+        struct Setting
+        {
+            ::com::sun::star::uno::Any      aValue;
+            SETTING_ORIGIN                  eOrigin;
+
+            Setting() : eOrigin(SO_UNKNOWN) { }
+            Setting(const ::rtl::OUString& _rValue, SETTING_ORIGIN _eOrigin) : aValue(::com::sun::star::uno::makeAny(_rValue)), eOrigin(_eOrigin) { }
+            Setting(const sal_Int32 _nValue, SETTING_ORIGIN _eOrigin) : aValue(::com::sun::star::uno::makeAny(_nValue)), eOrigin(_eOrigin) { }
+            Setting(const ::com::sun::star::uno::Any& _rValue, SETTING_ORIGIN _eOrigin) : aValue(_rValue), eOrigin(_eOrigin) { }
+        };
+        DECLARE_STL_USTRINGACCESS_MAP( Setting, SettingsImpl );
+        SettingsImpl        m_aImpl;
+
+        ::osl::Profile*     m_pSRegistry;
+
+    public:
+        /// default ctor
         ConnectionSettings();
-        explicit ConnectionSettings(OUString const& aSettingsFile);
 
+        /// dtor
+        ~ConnectionSettings();
 
-        /** create a connection with the current settings. If the user name provided in _rSecurityOverride
-            is not empty, the security override will be used (if applicable), else it will be ignored
+        /// copy ctor
+        ConnectionSettings(const ConnectionSettings& _rSource);
+
+        /** construct a settings object.
+
+            <p>The runtime overrides given will be merged with the settings found in a sversion.ini (sversionrc),
+            if any. The former overrule the latter</p>
         */
-        IConfigSession* createConnection(uno::Reference<lang::XMultiServiceFactory> const& aServiceMgr,
-            const SettingsOverride& _rSettings) const;
+        ConnectionSettings(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rRuntimeOverrides );
 
+        /// merge the given overrides into a new ConnectionSettings object
+        const ConnectionSettings& merge(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rOverrides);
+
+        /// merge the given overrides into the object itself
+        ConnectionSettings merge(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rOverrides) const
+        {
+            return ConnectionSettings(*this).merge(_rOverrides);
+        }
+
+        // check setting existence
+        sal_Bool            hasUser() const;
+        sal_Bool            hasPassword() const;
+        sal_Bool            hasServer() const;
+        sal_Bool            hasPort() const;
+        sal_Bool            hasTimeout() const;
+
+        sal_Bool            isValidSourcePath() const;
+        sal_Bool            isValidUpdatePath() const;
+
+        // get a special setting
+        ::rtl::OUString     getSessionType() const;
+        ::rtl::OUString     getUser() const;
+        ::rtl::OUString     getPassword() const;
+        ::rtl::OUString     getSourcePath() const;
+        ::rtl::OUString     getUpdatePath() const;
+        ::rtl::OUString     getServer() const;
+        sal_Int32           getPort() const;
+        sal_Int32           getTimeout() const;
+
+        // set a new session type. Must be one of the *_SESSION_IDENTIFIER defines
+        void                setSessionType(const ::rtl::OUString& _rSessionIdentifier);
+
+
+        IConfigSession* ConnectionSettings::createConnection(
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const& _rxServiceMgr) const;
+
+    protected:
+        void construct(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rOverrides);
+
+        // transfer runtime overwrites into m_aImpl. Existent settings will be overwritten.
+        void implTranslate(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rOverrides)
+            throw (::com::sun::star::lang::IllegalArgumentException);
+
+        /** normalize a path setting, delete it if the value could not be normalized
+            @return <TRUE/> if the setting exists and is a valid path
+        */
+        sal_Bool implNormalizePathSetting(const sal_Char* _pSetting);
+
+        // translate old settings, which exist for compatiblity only, into new ones
+        void implTranslateCompatibilitySettings();
+
+        // if we do not already have the given config path setting, ensure that it exists (calculated relative to a given path)
+        void ensureConfigPath(const sal_Char* _pSetting, const ::rtl::OUString& _rBasePath, const sal_Char* _pRelative);
+
+        sal_Bool        haveSetting(const sal_Char* _pName) const;
+        void            putSetting(const sal_Char* _pName, const Setting& _rSetting);
+        void            clearSetting(const sal_Char* _pName);
+
+        ::rtl::OUString getStringSetting(const sal_Char* _pName) const;
+        sal_Int32       getIntSetting(const sal_Char* _pName) const;
+        Setting         getSetting(const sal_Char* _pName) const;
+        Setting         getMaybeSetting(const sal_Char* _pName) const;
+
+        ::rtl::OUString getProfileStringItem(const sal_Char* _pSection, const sal_Char* _pKey);
+        sal_Int32       getProfileIntItem(const sal_Char* _pSection, const sal_Char* _pKey);
+
+    private:
+        // ensures that m_aImpl contains a session type
+        // to be called from within construct only
+        void implDetermineSessionType();
+
+        // collect settings from the sregistry, put them into m_aImpl, if not overruled by runtime settings
+        void implCollectSRegistrySetting();
+
+        // clear items which are not relevant because of the session type origin
+        void clearIrrelevantItems();
     };
 }
 
