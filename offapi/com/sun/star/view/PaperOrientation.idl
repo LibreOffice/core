@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PaperOrientation.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:11:10 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ module com {  module sun {  module star {  module view {
 
 /** specifies the orientation of the paper.
  */
-enum PaperOrientation
+published enum PaperOrientation
 {
     //-------------------------------------------------------------------------
     /** set the paper orientation to portrait.
