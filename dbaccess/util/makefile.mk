@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: fs $ $Date: 2000-10-25 13:02:00 $
+#   last change: $Author: oj $ $Date: 2000-10-26 15:07:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ LIB1FILES=\
         $(SLB)$/dataaccess.lib	\
         $(SLB)$/misc.lib	\
         $(SLB)$/core_resource.lib	\
-        $(SLB)$/shared.lib	
+        $(SLB)$/dbashared.lib	
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1VERSIONMAP= $(TARGET).map
@@ -104,6 +104,7 @@ SHL1STDLIBS= \
         $(COMPHELPERLIB) \
         $(SVTOOLLIB) \
         $(DBTOOLSLIB) \
+        $(COMPHELPERLIB)	\
 
 .IF "$(DBTOOLSLIB)" == ""
 SHL1STDLIBS+=idbt$(UPD)$(DLLPOSTFIX).lib
@@ -127,7 +128,7 @@ ALL: \
 
 # --- .res file ----------------------------------------------------------
 RES1FILELIST=\
-    $(SRS)$/core_strings.srs \
+    $(SRS)$/core_strings.srs
 
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES=$(RES1FILELIST)
@@ -136,32 +137,35 @@ RESLIB1SRSFILES=$(RES1FILELIST)
 
 LIB2TARGET=$(SLB)$/$(TARGET2).lib
 LIB2FILES=\
-        $(SLB)$/uimisc.lib	\
-        $(SLB)$/uidlg.lib	\
-        $(SLB)$/shared.lib	\
-        $(SLB)$/uicontrols.lib	\
-        $(SLB)$/uiuno.lib	\
+        $(SLB)$/uimisc.lib		\
+        $(SLB)$/uidlg.lib		\
+        $(SLB)$/dbushared.lib	\
+        $(SLB)$/browser.lib		\
+        $(SLB)$/uicontrols.lib
 
 SHL2TARGET=$(TARGET2)$(UPD)$(DLLPOSTFIX)
 SHL2VERSIONMAP= $(TARGET2).map
 
 SHL2STDLIBS= \
-        $(SALLIB) \
-        $(OSLLIB) \
-        $(ONELIB) \
-        $(VOSLIB) \
-        $(CPPUHELPERLIB) \
-        $(CPPULIB) \
-        $(UNOTOOLSLIB) \
-        $(VCLLIB) \
-        $(TOOLSLIB)	\
-        $(SFXLIB)	\
-        $(SVLLIB)	\
-        $(SVTOOLLIB)	\
-        $(TKLIB)	\
-        $(COMPHELPERLIB)	\
-        $(DBTOOLSLIB) \
-        $(UCBHELPERLIB) \
+        $(SALLIB)				\
+        $(OSLLIB)				\
+        $(ONELIB)				\
+        $(VOSLIB)				\
+        $(CPPUHELPERLIB)		\
+        $(CPPULIB)				\
+        $(UNOTOOLSLIB)			\
+        $(VCLLIB)				\
+        $(TOOLSLIB)				\
+        $(SFXLIB)				\
+        $(SVLLIB)				\
+        $(SVTOOLLIB)			\
+        $(TKLIB)				\
+        $(COMPHELPERLIB)		\
+        $(SVXLIB)				\
+        $(SOTLIB)				\
+        $(SO2LIB)				\
+        $(UCBHELPERLIB) 		\
+        $(DBTOOLSLIB)
 
 .IF "$(DBTOOLSLIB)" == ""
 SHL2STDLIBS+=idbt$(UPD)$(DLLPOSTFIX).lib
@@ -182,9 +186,10 @@ ALL: \
 
 # --- .res file ----------------------------------------------------------
 RES2FILELIST=\
-    $(SRS)$/uiuno.srs	\
-    $(SRS)$/uidlg.srs	\
-    $(SRS)$/uicontrols.srs	\
+    $(SRS)$/uidlg.srs			\
+    $(SRS)$/uicontrols.srs		\
+    $(SRS)$/browser.srs			\
+    $(SRS)$/uiuno.srs			\
     $(SRS)$/uimisc.srs
 
 RESLIB2NAME=$(TARGET2)
