@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passcrtdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:54:23 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,11 +194,13 @@ ModalDialog DLG_UUI_PASSWORD_CRT
     Text[ arabic ] = "Please enter master password";
     Text[ catalan ] = "Introdu�u la contrasenya mestra";
     Text[ thai ] = "รหัสผ่าน";
-    Text[ czech ] = "Zadat hlavní heslo";
+    Text[ czech ] = "Heslo";
     Text[ hebrew ] = "‮נא להקליד את הסיסמה הראשית‬";
     Text[ hindi ] = "मास्टर कूटशब्द को प्रविष्ट करो";
     Text[ slovak ] = "Heslo";
 };
+
+
 
 
 
