@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-05 10:42:22 $
+ *  last change: $Author: mt $ $Date: 2001-04-10 11:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1300,15 +1300,11 @@ void UnoButtonControl::createPeer( const uno::Reference< awt::XToolkit > & rxToo
 void UnoButtonControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
 {
     sal_uInt16 nType = GetPropertyId( rPropName );
-    if ( mxPeer.is() && nType == BASEPROPERTY_IMAGEURL )
+    if ( mxPeer.is() && ( nType == BASEPROPERTY_IMAGEURL ) )
     {
         uno::Reference < awt::XImageProducer > xImgProd( getModel(), uno::UNO_QUERY );
         uno::Reference < awt::XImageConsumer > xImgCons( mxPeer, uno::UNO_QUERY );
 
-#ifdef DEBUG
-        uno::Reference < awt::XImageConsumer > xTest1( (awt::XImageConsumer*)this, uno::UNO_QUERY );
-        uno::Reference < awt::XImageProducer > xTest2( (awt::XImageConsumer*)this, uno::UNO_QUERY );
-#endif
         if ( xImgProd.is() && xImgCons.is() )
         {
             xImgProd->addConsumer( xImgCons );
@@ -1456,6 +1452,12 @@ UnoControlImageControlModel::UnoControlImageControlModel()
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
 }
 
+uno::Any UnoControlImageControlModel::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    uno::Any aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::XImageProducer*, this ) );
+    return (aRet.hasValue() ? aRet : UnoControlModel::queryAggregation( rType ));
+}
+
 ::rtl::OUString UnoControlImageControlModel::getServiceName() const
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlImageControlModel );
@@ -1491,6 +1493,34 @@ uno::Reference< beans::XPropertySetInfo > UnoControlImageControlModel::getProper
     return xInfo;
 }
 
+// ::com::sun::star::awt::XImageProducer
+void UnoControlImageControlModel::addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
+{
+    maListeners.push_back( xConsumer );
+}
+
+void UnoControlImageControlModel::removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
+{
+    maListeners.remove( xConsumer );
+}
+
+void UnoControlImageControlModel::startProduction(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    uno::Sequence<uno::Any> aArgs(1);
+    aArgs.getArray()[0] = getPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) );
+    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    uno::Reference< awt::XImageProducer > xImageProducer( xMSF->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "com.sun.star.awt.ImageProducer" ), aArgs ), uno::UNO_QUERY );
+    if ( xImageProducer.is() )
+    {
+        std::list< uno::Reference< awt::XImageConsumer > >::iterator aIter( maListeners.begin() );
+        while ( aIter != maListeners.end() )
+        {
+            xImageProducer->addConsumer( *aIter );
+            aIter++;
+        }
+        xImageProducer->startProduction();
+    }
+}
 
 
 //  ----------------------------------------------------
@@ -1626,6 +1656,25 @@ void UnoImageControlControl::ImplUpdateImage( sal_Bool bGetNewImage )
         startProduction();
         removeConsumer( xC );
     }
+}
+
+void UnoImageControlControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
+{
+    sal_uInt16 nType = GetPropertyId( rPropName );
+    if ( mxPeer.is() && ( nType == BASEPROPERTY_IMAGEURL ) )
+    {
+        uno::Reference < awt::XImageProducer > xImgProd( getModel(), uno::UNO_QUERY );
+        uno::Reference < awt::XImageConsumer > xImgCons( mxPeer, uno::UNO_QUERY );
+
+        if ( xImgProd.is() && xImgCons.is() )
+        {
+            xImgProd->addConsumer( xImgCons );
+            xImgProd->startProduction();
+            xImgProd->removeConsumer( xImgCons );
+        }
+    }
+    else
+        UnoControl::ImplSetPeerProperty( rPropName, rVal );
 }
 
 //  ----------------------------------------------------
