@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:51:30 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 10:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,7 +441,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
         sal_Bool bIsConversion )
 {
     Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-    sal_Bool bIsWrapReverse = (bIsConversion && xProp.is()) ?
+    sal_Bool bIsWrapReverse = (!bIsConversion && xProp.is()) ?
             *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_WRAP_REVERSE) ).getValue() : sal_False;
 
     SwDocPositions eStart = DOCPOS_START;
