@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:33:11 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1820,7 +1820,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ chinese_traditional ] = "¥£•‹";
         Text[ arabic ] = "„·«ÕŸ…";
         Text[ greek ] = "”ıÏ‚ÔıÎﬁ";
-        Text[ korean ] = "∆¡";
+        Text[ korean ] = "¡÷";
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
     };
