@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:12:17 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 17:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1477,7 +1477,10 @@ void LayoutManager::implts_findNextDockingPos( DockingArea DockingArea, const ::
     // Retrieve output size from container Window
     vos::OGuard aGuard( Application::GetSolarMutex() );
     pContainerWindow  = VCLUnoHelper::GetWindow( xContainerWindow );
-    return pContainerWindow->GetOutputSizePixel();
+    if ( pContainerWindow )
+        return pContainerWindow->GetOutputSizePixel();
+    else
+        return ::Size();
 }
 
 void LayoutManager::implts_sortUIElements()
