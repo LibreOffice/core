@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:38:59 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,12 @@ static const String lcl_dbg_out(const SfxPoolItem & rItem)
 const char * dbg_out(const SfxPoolItem & rItem)
 {
     return dbg_out(lcl_dbg_out(rItem));
+}
+
+const char * dbg_out(const SfxPoolItem * pItem)
+{
+    return dbg_out(pItem ? lcl_dbg_out(*pItem) :
+                   String("(nil)", RTL_TEXTENCODING_ASCII_US));
 }
 
 static const String lcl_dbg_out(const SfxItemSet & rSet)
