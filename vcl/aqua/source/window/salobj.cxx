@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pluby $ $Date: 2001-01-03 21:29:23 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 12:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,6 @@
  ************************************************************************/
 
 #include <string.h>
-
-#define _SV_SALOBJ_CXX
 
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
