@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-09-20 12:10:03 $
+ *  last change: $Author: os $ $Date: 2002-11-01 11:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -910,7 +910,10 @@ int SwPagePreViewWin::MovePage( int eMoveMode )
 
         if( nNewSttPage > nLastSttPg )
             nNewSttPage = nLastSttPg;
-        break;
+
+        //put the the selected page into the current range
+        if(nSelectedPage < nNewSttPage || nSelectedPage >= (nNewSttPage + nPages) )
+            nSelectedPage = nNewSttPage ? nNewSttPage : 1;
     }
 
     Size aSave( aPgSize );
