@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-29 13:21:19 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 09:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _SFX_SFXUNO_HXX
 #include <sfx2/sfxuno.hxx>
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
 #endif
 
 #define BUTTONID_MORE   BUTTONID_RETRY + 1
@@ -437,6 +440,7 @@ void OSQLMessageBox::Construct(const UniString& rTitle,
         m_pInfoButton = new PushButton(this);
         m_pInfoButton->SetText(Button::GetStandardText(BUTTON_MORE));
         m_pInfoButton->SetClickHdl(LINK(this,OSQLMessageBox,ButtonClickHdl));
+        m_pInfoButton->SetUniqueId(UID_SQLERROR_BUTTONMORE);
         m_pInfoButton->Show();
         AddButton(m_pInfoButton, BUTTONID_MORE, 0);
     }
@@ -571,6 +575,9 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/01/29 13:21:19  oj
+ *  use second exception for message text
+ *
  *  Revision 1.5  2000/12/08 17:56:46  fs
  *  #79541# wrong define in the previous brandname fix - and, cause I was just touching it, adjusted the changes to our own style :)
  *
