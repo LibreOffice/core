@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 17:56:50 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -427,12 +426,10 @@ XclEscher::~XclEscher()
 }
 
 
-void XclEscher::AddSdrPage( RootData& rRootData )
+void XclEscher::AddSdrPage( const XclExpRoot& rRoot )
 {
-    if( ScDrawLayer* pDrawLayer = rRootData.pDoc->GetDrawLayer() )
-        if( SdrPage* pPage = pDrawLayer->GetPage(
-                    static_cast<sal_uInt16>(rRootData.pER->GetCurrScTab()) ) )
-            pEx->AddSdrPage( *pPage );
+    if( SdrPage* pPage = rRoot.GetSdrPage( rRoot.GetCurrScTab() ) )
+        pEx->AddSdrPage( *pPage );
     // #106213# the first dummy object may still be open
     DBG_ASSERT( pEx->GetGroupLevel() <= 1, "XclEscher::AddSdrPage - still groups open?" );
     while( pEx->GetGroupLevel() )
