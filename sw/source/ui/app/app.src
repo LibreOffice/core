@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-11 20:21:25 $
+ *  last change: $Author: kz $ $Date: 2001-09-24 20:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,10 +444,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             };
         FilterList [ english_us ] =
         {
-         < "Automatic" ; SFXSTYLEBIT_ALL ; > ;
-            < "All Styles" ; SFXSTYLEBIT_USED ; > ;
-            < "Applied Styles" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Custom Styles" ; SFXSTYLEBIT_AUTO ; > ;
+         < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
+            < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
+            < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Automatic" ; SFXSTYLEBIT_AUTO ; > ;
             < "Text Styles" ; SWSTYLEBIT_TEXT ; > ;
             < "Chapter Styles" ; SWSTYLEBIT_CHAPTER ; > ;
             < "List Styles" ; SWSTYLEBIT_LIST ; > ;
@@ -458,10 +458,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ portuguese ] =
         {
-         < "Automático" ; SFXSTYLEBIT_ALL ; > ;
-            < "Estilos todos" ; SFXSTYLEBIT_USED ; > ;
-            < "Estilos usados" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Estilos personalizados" ; SFXSTYLEBIT_AUTO ; > ;
+         < "Estilos todos" ; SFXSTYLEBIT_ALL ; > ;
+            < "Estilos utilizados" ; SFXSTYLEBIT_USED ; > ;
+            < "Estilos personalizados" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Automático" ; SFXSTYLEBIT_AUTO ; > ;
             < "Estilos de texto" ; SWSTYLEBIT_TEXT ; > ;
             < "Estilos de capítulos" ; SWSTYLEBIT_CHAPTER ; > ;
             < "Estilos de listas" ; SWSTYLEBIT_LIST ; > ;
@@ -472,10 +472,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ russian ] =
         {
-         < "Àâòîìàòè÷åñêè" ; SFXSTYLEBIT_ALL ; > ;
-            < "Âñå ñòèëè" ; SFXSTYLEBIT_USED ; > ;
-            < "Ïðèìåíåííûå ñòèëè" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Ñòèëè ïîëüçîâàòåëÿ" ; SFXSTYLEBIT_AUTO ; > ;
+         < "Âñå ñòèëè" ; SFXSTYLEBIT_ALL ; > ;
+            < "Èñïîëüçîâàííûå ñòèëè" ; SFXSTYLEBIT_USED ; > ;
+            < "Ñòèëè ïîëüçîâàòåëÿ" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Àâòîìàòè÷åñêè" ; SFXSTYLEBIT_AUTO ; > ;
             < "Ñòèëè òåêñòà" ; SWSTYLEBIT_TEXT ; > ;
             < "Ñòèëè ãëàâû" ; SWSTYLEBIT_CHAPTER ; > ;
             < "Ñòèëè ñïèñêà" ; SWSTYLEBIT_LIST ; > ;
@@ -514,10 +514,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ french ] =
         {
-         < "Automatique" ; SFXSTYLEBIT_ALL ; > ;
-            < "Tous les styles" ; SFXSTYLEBIT_USED ; > ;
-            < "Styles utilisés" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Styles personnalisés" ; SFXSTYLEBIT_AUTO ; > ;
+         < "Tous les styles" ; SFXSTYLEBIT_ALL ; > ;
+            < "Styles utilisés" ; SFXSTYLEBIT_USED ; > ;
+            < "Styles personnalisés" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Automatique" ; SFXSTYLEBIT_AUTO ; > ;
             < "Styles de texte" ; SWSTYLEBIT_TEXT ; > ;
             < "Styles de chapitre" ; SWSTYLEBIT_CHAPTER ; > ;
             < "Styles de liste" ; SWSTYLEBIT_LIST ; > ;
@@ -528,10 +528,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ spanish ] =
         {
-         < "Automático" ; SFXSTYLEBIT_ALL ; > ;
-            < "Todos los estilos" ; SFXSTYLEBIT_USED ; > ;
-            < "Estilos utilizados" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Estilos del usuario" ; SFXSTYLEBIT_AUTO ; > ;
+         < "Todos los estilos" ; SFXSTYLEBIT_ALL ; > ;
+            < "Estilos usados" ; SFXSTYLEBIT_USED ; > ;
+            < "Estilos de usuario" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Automático" ; SFXSTYLEBIT_AUTO ; > ;
             < "Estilos de texto" ; SWSTYLEBIT_TEXT ; > ;
             < "Estilos de capítulos" ; SWSTYLEBIT_CHAPTER ; > ;
             < "Estilos de listas" ; SWSTYLEBIT_LIST ; > ;
@@ -556,10 +556,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ italian ] =
         {
-         < "Automatico" ; SFXSTYLEBIT_ALL ; > ;
-            < "Tutti i modelli" ; SFXSTYLEBIT_USED ; > ;
-            < "Modelli usati" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Modelli utente" ; SFXSTYLEBIT_AUTO ; > ;
+         < "Tutti i modelli" ; SFXSTYLEBIT_ALL ; > ;
+            < "Modelli usati" ; SFXSTYLEBIT_USED ; > ;
+            < "Modelli utente" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Automatico" ; SFXSTYLEBIT_AUTO ; > ;
             < "Modelli di testo" ; SWSTYLEBIT_TEXT ; > ;
             < "Modelli di capitolo" ; SWSTYLEBIT_CHAPTER ; > ;
             < "Modelli di elenchi" ; SWSTYLEBIT_LIST ; > ;
@@ -584,10 +584,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ swedish ] =
         {
-         < "Automatiskt" ; SFXSTYLEBIT_ALL ; > ;
-            < "Alla formatmallar" ; SFXSTYLEBIT_USED ; > ;
-            < "Använda formatmallar" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Användardefinierade formatmallar" ; SFXSTYLEBIT_AUTO ; > ;
+         < "Alla mallar" ; SFXSTYLEBIT_ALL ; > ;
+            < "Använda mallar" ; SFXSTYLEBIT_USED ; > ;
+            < "Användarformatmallar" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Automatiskt" ; SFXSTYLEBIT_AUTO ; > ;
             < "Textformatmallar" ; SWSTYLEBIT_TEXT ; > ;
             < "Kapitelformatmallar" ; SWSTYLEBIT_CHAPTER ; > ;
             < "Listformatmallar" ; SWSTYLEBIT_LIST ; > ;
@@ -598,10 +598,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ polish ] =
         {
-         < "Automatycznie" ; SFXSTYLEBIT_ALL ; > ;
-            < "Wszystkie style" ; SFXSTYLEBIT_USED ; > ;
-            < "U¿yte style" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Style indywidualne" ; SFXSTYLEBIT_AUTO ; > ;
+         < "Wszystkie style" ; SFXSTYLEBIT_ALL ; > ;
+            < "Zastosowane style" ; SFXSTYLEBIT_USED ; > ;
+            < "Style indywidualne" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Automatycznie" ; SFXSTYLEBIT_AUTO ; > ;
             < "Style tekstu" ; SWSTYLEBIT_TEXT ; > ;
             < "Style rozdzia³u" ; SWSTYLEBIT_CHAPTER ; > ;
             < "Style listy" ; SWSTYLEBIT_LIST ; > ;
@@ -626,10 +626,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ japanese ] =
         {
-         < "è‡ªå‹•" ; SFXSTYLEBIT_ALL ; > ;
-            < "ã™ã¹ã¦ã®ï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USED ; > ;
-            < "ä½¿ç”¨ã—ãŸï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "ï¾•ï½°ï½»ï¾žï½°å®šç¾©ã®ï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_AUTO ; > ;
+         < "ã™ã¹ã¦ã®ï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_ALL ; > ;
+            < "ä½¿ç”¨ã—ãŸï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USED ; > ;
+            < "ï¾•ï½°ï½»ï¾žï½°å®šç¾©ã®ï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "è‡ªå‹•" ; SFXSTYLEBIT_AUTO ; > ;
             < "æ–‡æ›¸ç”¨ï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_TEXT ; > ;
             < "ç« ã®ï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_CHAPTER ; > ;
             < "ï¾˜ï½½ï¾„ã®ï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_LIST ; > ;
@@ -654,10 +654,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ chinese_simplified ] =
         {
-         < "è‡ªåŠ¨" ; SFXSTYLEBIT_ALL ; > ;
-            < "å…¨éƒ¨æ ·å¼" ; SFXSTYLEBIT_USED ; > ;
-            < "ä½¿ç”¨çš„æ ·å¼" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "è‡ªå®šæ ·å¼" ; SFXSTYLEBIT_AUTO ; > ;
+         < "å…¨éƒ¨æ ·å¼" ; SFXSTYLEBIT_ALL ; > ;
+            < "ä½¿ç”¨çš„æ ·å¼" ; SFXSTYLEBIT_USED ; > ;
+            < "è‡ªå®šæ ·å¼" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "è‡ªåŠ¨" ; SFXSTYLEBIT_AUTO ; > ;
             < "æ–‡å­—æ ·å¼" ; SWSTYLEBIT_TEXT ; > ;
             < "ç« æ ·å¼" ; SWSTYLEBIT_CHAPTER ; > ;
             < "åˆ—å•æ ·å¼" ; SWSTYLEBIT_LIST ; > ;
@@ -721,6 +721,20 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "Estilos de áreas especiales" ; SWSTYLEBIT_EXTRA ; > ;
             < "Estilos HTML" ; SWSTYLEBIT_HTML ; > ;
             < "Estilos condicionados" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ language_user1 ] =
+        {
+         < "Alle Vorlagen" ; SFXSTYLEBIT_ALL ; > ;
+            < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+            < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Textvorlagen" ; SWSTYLEBIT_TEXT ; > ;
+            < "Kapitelvorlagen" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Listenvorlagen" ; SWSTYLEBIT_LIST ; > ;
+            < "Verzeichnisvorlagen" ; SWSTYLEBIT_IDX ; > ;
+            < "Vorlagen Sonderbereiche" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML Vorlagen" ; SWSTYLEBIT_HTML ; > ;
+            < "Bedingte Vorlagen" ; SWSTYLEBIT_CONDCOLL ; > ;
         };
     };
         SfxStyleFamilyItem
@@ -3183,6 +3197,7 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ catalan ] = "desconocido";
     Text[ finnish ] = "tuntematon";
 };
+
 
 
 
