@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FontDescriptor.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:32 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,24 +72,20 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::awt::FontDescriptor
 /** describes the characteristics of a font.
-
-
 
     <p>For example, this can be used to select a font.</p>
  */
 struct FontDescriptor
 {
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::Name
-    /** specifies the exact name of the font ("Arial",
-        "Courier", "Frutiger").
+    //-------------------------------------------------------------------------
+
+    /** specifies the exact name of the font.
      */
     string Name;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::Height
     /** specifies the height of the font in the measure of the
         destination.
      */
@@ -97,7 +93,6 @@ struct FontDescriptor
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::Width
     /** specifies the width of the font in the measure of the
         destination.
      */
@@ -105,27 +100,21 @@ struct FontDescriptor
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::StyleName
-    /** specifies the style name of the font ("Bold", "Fett", "Italic
-        Bold").
+    /** specifies the style name of the font.
      */
     string StyleName;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::Family
     /** specifies the general style of the font.
 
-
-
         <p>Use one value out of the constant group
-        <type>FontFamily</type>.</p>
+        <type scope="com::sun::star::awt">FontFamily</type>.</p>
      */
     short Family;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::CharSet
     /** specifies the character set which is supported by the font.
 
         <p>Use one value out of the constant group
@@ -135,7 +124,6 @@ struct FontDescriptor
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::Pitch
     /** specifies the pitch of the font.
 
         <p>Use one value out of the constant group
@@ -145,60 +133,53 @@ struct FontDescriptor
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::CharacterWidth
     /** specifies the character width.
 
-
-
         <p>Depending on the specified width, a font that supports this
-        width may be selected.
+        width may be selected.</p>
 
-        </p>
         <p>The value is expressed as a percentage.</p>
      */
     float CharacterWidth;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::Weight
     /** specifies the thickness of the line.
 
+        <p>Depending on the specified weight, a font that supports this
+        thickness may be selected.</p>
 
-
-        <p>Depending on the specified weight, a font that supports this thickness may be selected.
-
-        </p>
         <p>The value is expressed as a percentage.</p>
      */
     float Weight;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::Slant
-    /** specifies if there is a character slant (italic).
+    /** specifies the slant of the font.
      */
     com::sun::star::awt::FontSlant Slant;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::Underline
-    /** use one value out of the constant group <type>FontUnderline</type>.
+    /** specifies the kind of underlining.
+
+        <p>Use one value out of the constant group
+        <type scope="com::sun::star::awt">FontUnderline</type>.</p>
      */
     short Underline;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::Strikeout
-    /** use one value out of the constant group <type scope="com::sun::star::awt">FontStrikeout</type>.
+    /** specifies the kind of strikeout.
+
+        <p>Use one value out of the constant group
+        <type scope="com::sun::star::awt">FontStrikeout</type>.</p>
      */
     short Strikeout;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::Orientation
     /** specifies the rotation of the font.
-
-
 
         <p>The unit of measure is degrees; 0 is the baseline.</p>
      */
@@ -206,40 +187,31 @@ struct FontDescriptor
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::Kerning
-    /** for requesting, it specifies if there is a kerning table available.
+    /** For requesting, it specifies if there is a kerning table available.
         For selecting, it specifies if the kerning table is to be used.
      */
     boolean Kerning;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::WordLineMode
     /** specifies if only words get underlined.
 
+        <p><TRUE/> means that only non-space characters get underlined,
+        <FALSE/> means that the spacing also gets underlined.</p>
 
-
-        <p>
-        <TRUE/> means that only non-space characters get underlined,
-        <FALSE/> means that the spacing also gets underlined.
-
-        </p>
         <p>This property is only valid if the property
-        <member scope="com::sun::star::awt">FontDescriptor::Underline</member> is not
-        <const>FontUnderline::NONE</const>.</p>
+        <member scope="com::sun::star::awt">FontDescriptor::Underline</member>
+        is not <const>FontUnderline::NONE</const>.</p>
      */
     boolean WordLineMode;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::FontDescriptor::Type
     /** specifies the technology of the font representation.
 
-
-
         <p>One or more values out of the constant group
-        <type scope="com::sun::star::awt">FontType</type> can be combined by an arithmetical
-        or-operation.</p>
+        <type scope="com::sun::star::awt">FontType</type> can be combined by
+        an arithmetical or-operation.</p>
      */
     short Type;
 
