@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_wrp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-27 13:19:00 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,14 +280,9 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
  * Close the connection to the input manager, and free the XIM structure
  */
 
-Status
-XvaCloseIM(XIM im)
+Status XvaCloseIM(XIM im)
 {
       Status s;
-    #if 0
-      XCloseIM(im);
-      s = (im->methods->close)(im); /* we can use the same close module  */
-    #endif
 
     /* MacOS X doesn't yet support XIM... FIXME */
 #if !defined(MACOSX)
@@ -299,12 +294,6 @@ XvaCloseIM(XIM im)
         g_open_im = (OpenFunction)NULL;
       }
 #endif
-
-    #if 0
-      if (im)
-        Xfree((char *)im);
-    #endif
-
     return (s);
 }
 
