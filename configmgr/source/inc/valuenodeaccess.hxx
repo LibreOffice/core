@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenodeaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:47:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,14 @@ namespace configmgr
             {
             }
 
-            static bool isInstance(NodeAccess const & _aNode)
+            explicit
+            ValueNodeAccess(NodeAccessRef const & _aNode)
+            : m_aAccessor(_aNode.accessor())
+            , m_pData(check(_aNode))
+            {
+            }
+
+            static bool isInstance(NodeAccessRef const & _aNode)
             {
                 return check(_aNode) != NULL;
             }
@@ -127,14 +134,14 @@ namespace configmgr
             static void changeDefault(memory::UpdateAccessor & _aUpdater, NodeAddressType _aValueNode, uno::Any const& _aValue);
 
             NodeAddressType address()   const { return NodeAddressType(m_pData); }
-            Accessor        accessor()  const { return m_aAccessor; }
+            Accessor const& accessor()  const { return m_aAccessor; }
 
             DataType& data() const { return *static_cast<NodePointerType>(m_aAccessor.validate(m_pData)); }
 
-            operator NodeAccess() const { return NodeAccess(m_aAccessor,NodeAddress(m_pData)); }
+            operator NodeAccessRef() const { return NodeAccessRef(&m_aAccessor,NodeAddress(m_pData)); }
         private:
             static AddressType check(Accessor const& _acc, NodePointerType _p) { return _acc.address(_p); }
-            static AddressType check(NodeAccess const& _aNodeData);
+            static AddressType check(NodeAccessRef const& _aNodeData);
 
             Accessor    m_aAccessor;
             AddressType m_pData;
@@ -150,7 +157,7 @@ namespace configmgr
 
         inline
         NodeAccess::Attributes ValueNodeAccess::getAttributes() const
-        { return data().info.getAttributes(); }
+        { return sharable::node(data()).getAttributes(); }
 
         inline
         bool ValueNodeAccess::isDefault()   const
