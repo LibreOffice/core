@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-03 14:07:53 $
+ *  last change: $Author: tra $ $Date: 2001-08-10 12:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,32 +95,15 @@
 #include <memory>
 #include <vector>
 
-//-------------------------------------------------------------------------
-// a cache for the control values before and after execution of the dialog
-//-------------------------------------------------------------------------
-
-struct ControlCacheEntry
-{
-    sal_Int16 m_controlId;
-    sal_Int16 m_controlAction;
-    ::com::sun::star::uno::Any m_Value;
-
-    ControlCacheEntry(
-        sal_Int16 aControlId, sal_Int16 aControlAction, ::com::sun::star::uno::Any aValue ) :
-        m_controlId( aControlId ),
-        m_controlAction( aControlAction ),
-        m_Value( aValue )
-    {}
-};
-
-typedef std::vector< ControlCacheEntry > ControlCache_T;
-
 //------------------------------------------------------------------------
 // deklarations
 //------------------------------------------------------------------------
 
 // forward declaration
 class CFilePicker;
+class CFilePickerState;
+class CExecuteFilePickerState;
+class CNonExecuteFilePickerState;
 
 class CWinFileOpenImpl : public CFileOpenDialog
 {
@@ -220,7 +203,6 @@ protected:
 
     virtual sal_uInt32 SAL_CALL onFileOk();
     virtual void SAL_CALL onSelChanged( HWND hwndListBox );
-    virtual void SAL_CALL onHelp( );
 
     // only called back if OFN_EXPLORER is set
     virtual void SAL_CALL onInitDone();
@@ -234,19 +216,13 @@ protected:
 
 private:
     // initialize all controls from cache
-    void SAL_CALL InitControlState( HWND hWnd );
+    void SAL_CALL InitControlLabel( HWND hWnd );
 
     // save the control state
     void SAL_CALL CacheControlState( HWND hWnd );
 
     // checks wether there is the checkbox preview
     sal_Bool SAL_CALL HasPreview( HWND hWnd );
-
-    // returns a hwnd for a control if successful
-    // if bIncludeStdCtrls is false, the standard file dialog
-    // controls like OK button, etc. will not be considered
-    // the function return 0 on failure
-    HWND SAL_CALL GetHwndDlgItem( sal_Int16 ctrlId, sal_Bool bIncludeStdCtrls = sal_True );
 
     void SAL_CALL SetDefaultExtension( );
     void SAL_CALL InitialSetDefaultName( );
@@ -265,10 +241,11 @@ private:
     DLGPROC                             m_pfnOldDlgProc;
     DIMENSION_T                         m_SizeFileListBoxOriginal;
     rtl::OUString                       m_defaultName;
-    sal_Bool                            m_bInExecuteMode;
-    ControlCache_T                      m_ControlCache;
     sal_Bool                            m_bInitialSelChanged;
     CHelpPopupWindow                    m_HelpPopupWindow;
+    CFilePickerState*                   m_FilePickerState;
+    CExecuteFilePickerState*            m_ExecuteFilePickerState;
+    CNonExecuteFilePickerState*         m_NonExecuteFilePickerState;
 };
 
 

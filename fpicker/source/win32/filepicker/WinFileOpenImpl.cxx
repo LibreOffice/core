@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-03 14:07:53 $
+ *  last change: $Author: tra $ $Date: 2001-08-10 12:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,10 @@
 #include <osl/thread.hxx>
 #endif
 
+#ifndef _FILEPICKERSTATE_HXX_
+#include "filepickerstate.hxx"
+#endif
+
 //------------------------------------------------------------------------
 // namespace directives
 //------------------------------------------------------------------------
@@ -162,7 +166,7 @@ using namespace ::com::sun::star::ui::dialogs::ListboxControlActions;
 enum ECW_ACTION_T
 {
     CHECK_PREVIEW = 0,
-    INIT_CONTROL_VALUES,
+    INIT_CONTROL_LABEL,
     CACHE_CONTROL_VALUES
 };
 
@@ -181,7 +185,6 @@ struct EnumParam
 //
 //-------------------------------------------------------------------------
 
-const sal_Int32 MAX_LABEL = 256;
 const OUString BACKSLASH = OUString::createFromAscii( "\\" );
 
 //-------------------------------------------------------------------------
@@ -198,10 +201,12 @@ CWinFileOpenImpl::CWinFileOpenImpl(
     m_filterContainer( new CFilterContainer( ) ),
     m_FilePicker( aFilePicker ),
     m_bPreviewExists( sal_False ),
-    m_bInExecuteMode( sal_False ),
     m_bInitialSelChanged( sal_True ),
-    m_HelpPopupWindow( hInstance, m_hwndFileOpenDlg )
+    m_HelpPopupWindow( hInstance, m_hwndFileOpenDlg ),
+    m_ExecuteFilePickerState( new CExecuteFilePickerState( ) ),
+    m_NonExecuteFilePickerState( new CNonExecuteFilePickerState( ) )
 {
+    m_FilePickerState = m_NonExecuteFilePickerState;
 }
 
 //------------------------------------------------------------------------
@@ -210,6 +215,8 @@ CWinFileOpenImpl::CWinFileOpenImpl(
 
 CWinFileOpenImpl::~CWinFileOpenImpl( )
 {
+    delete m_ExecuteFilePickerState;
+    delete m_NonExecuteFilePickerState;
 }
 
 //------------------------------------------------------------------------
@@ -249,22 +256,8 @@ void CWinFileOpenImpl::setDisplayDirectory( const OUString& aDirectory )
 
 OUString CWinFileOpenImpl::getDisplayDirectory( ) throw( RuntimeException )
 {
-    OUString pathURL;
-    OUString displayDir;
-
-    if ( m_bInExecuteMode )
-    {
-        displayDir = getCurrentFolderPath( );
-    }
-    else
-    {
-        displayDir = CFileOpenDialog::getDisplayDirectory( );
-    }
-
-    if ( displayDir.getLength( ) )
-        ::osl::FileBase::getFileURLFromSystemPath( displayDir, pathURL );
-
-    return pathURL;
+    OSL_ASSERT( m_FilePickerState );
+    return m_FilePickerState->getDisplayDirectory( this );
 }
 
 //-----------------------------------------------------------------------------------------
@@ -294,83 +287,8 @@ void SAL_CALL CWinFileOpenImpl::setDefaultName( const OUString& aName )
 
 Sequence< OUString > SAL_CALL CWinFileOpenImpl::getFiles(  ) throw(RuntimeException)
 {
-    Sequence< OUString > aFilePathList;
-    OUString aFilePathURL;
-    OUString aFilePath;
-    ::osl::FileBase::RC rc;
-
-    // in execution mode getFullFileName doesn't
-    // return anything, so we must use another way
-    if ( m_bInExecuteMode )
-    {
-        // returns the currently selected file(s)
-        // including path information
-        aFilePath = getCurrentFilePath( );
-
-        // if multiple files are selected or the user
-        // typed anything that doesn't seem to be a valid
-        // file name getFileURLFromSystemPath fails
-        // and we return an empty file list
-        rc = ::osl::FileBase::getFileURLFromSystemPath(
-            aFilePath, aFilePathURL );
-
-        if ( ::osl::FileBase::E_None == rc )
-        {
-            aFilePathList.realloc( 1 );
-            aFilePathList[0] = aFilePathURL;
-        }
-    }
-    else // not in execution mode
-    {
-        aFilePath = getFullFileName( );
-
-        if ( aFilePath.getLength( ) )
-        {
-            // tokenize the returned string and copy the
-            // sub-strings separately into a sequence
-            const sal_Unicode* pTemp = aFilePath.getStr( );
-            const sal_Unicode* pStrEnd = pTemp + aFilePath.getLength( );
-            sal_uInt32 lSubStr;
-
-            while ( pTemp < pStrEnd )
-            {
-                // detect the length of the next
-                // sub string
-                lSubStr = wcslen( pTemp );
-
-                aFilePathList.realloc(
-                    aFilePathList.getLength( ) + 1 );
-
-                aFilePathList[aFilePathList.getLength( ) - 1] =
-                    OUString( pTemp, lSubStr );
-
-                pTemp += (lSubStr + 1);
-            }
-
-            // change all entries to file URLs
-            sal_Int32 lenFileList = aFilePathList.getLength( );
-            OSL_ASSERT( lenFileList >= 1 );
-
-            for ( sal_Int32 i = 0; i < lenFileList; i++ )
-            {
-                rc = ::osl::FileBase::getFileURLFromSystemPath(
-                    aFilePathList[i], aFilePathURL );
-
-                // we do return all or nothing, that means
-                // in case of failures we destroy the sequence
-                // and return an empty sequence
-                if ( rc != ::osl::FileBase::E_None )
-                {
-                    aFilePathList.realloc( 0 );
-                    break;
-                }
-
-                aFilePathList[i] = aFilePathURL;
-            }
-        }
-    }
-
-    return aFilePathList;
+    OSL_ASSERT( m_FilePickerState );
+    return m_FilePickerState->getFiles( this );
 }
 
 //-----------------------------------------------------------------------------------------
@@ -455,46 +373,8 @@ OUString SAL_CALL CWinFileOpenImpl::getCurrentFilter(  ) throw(RuntimeException)
 void SAL_CALL CWinFileOpenImpl::setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const Any& aValue )
     throw(RuntimeException)
 {
-    if ( m_bInExecuteMode )
-    {
-        HWND hwndCtrl = GetHwndDlgItem( aControlId );
-
-        // the filter listbox can be manipulated via this
-        // method the caller should use XFilterManager
-        if ( !hwndCtrl || (aControlId == LISTBOX_FILTER) )
-        {
-            OSL_ENSURE( sal_False, "invalid control id" );
-            return;
-        }
-
-        CTRL_CLASS aCtrlClass = GetCtrlClass( hwndCtrl );
-        if ( UNKNOWN == aCtrlClass )
-        {
-            OSL_ENSURE( sal_False, "unsupported control class" );
-            return;
-        }
-
-        CTRL_SETVALUE_FUNCTION_T lpfnSetValue =
-            GetCtrlSetValueFunction( aCtrlClass, aControlAction );
-
-        if ( !lpfnSetValue )
-        {
-            OSL_ENSURE( sal_False, "unsupported control action" );
-            return;
-        }
-
-        // the function that we call should throw an IllegalArgumentException if
-        // the given value is invalid or empty, that's why we provide a Reference
-        // to an XInterface and a argument position
-        lpfnSetValue( hwndCtrl, aValue, static_cast< XFilePicker* >( m_FilePicker ), 3 );
-    }
-    else
-    {
-        // the last one wins if somebody adds an entry for
-        // a checkbox for instance multiple times
-        m_ControlCache.push_back(
-            ControlCacheEntry( aControlId, aControlAction, aValue ) );
-    }
+    OSL_ASSERT( m_FilePickerState );
+    m_FilePickerState->setValue( aControlId, aControlAction, aValue );
 }
 
 //-----------------------------------------------------------------------------------------
@@ -505,55 +385,8 @@ void SAL_CALL CWinFileOpenImpl::setValue( sal_Int16 aControlId, sal_Int16 aContr
 Any SAL_CALL CWinFileOpenImpl::getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
     throw(RuntimeException)
 {
-    Any aAny;
-
-    if ( m_bInExecuteMode )
-    {
-        HWND hwndCtrl = GetHwndDlgItem( aControlId );
-
-        // the filter listbox can be manipulated via this
-        // method the caller should use XFilterManager
-        if ( !hwndCtrl || (aControlId == LISTBOX_FILTER) )
-        {
-            OSL_ENSURE( sal_False, "invalid control id" );
-            return aAny;
-        }
-
-        CTRL_CLASS aCtrlClass = GetCtrlClass( hwndCtrl );
-        if ( UNKNOWN == aCtrlClass )
-        {
-            OSL_ENSURE( sal_False, "unsupported control class" );
-            return aAny;
-        }
-
-        CTRL_GETVALUE_FUNCTION_T lpfnGetValue =
-            GetCtrlGetValueFunction( aCtrlClass, aControlAction );
-
-        if ( !lpfnGetValue )
-        {
-            OSL_ENSURE( sal_False, "unsupported control action" );
-            return aAny;
-        }
-
-        aAny = lpfnGetValue( hwndCtrl );
-    }
-    else
-    {
-        ControlCache_T::iterator iter_end = m_ControlCache.end( );
-        ControlCache_T::iterator iter = m_ControlCache.begin( );
-
-        for ( /* empty */; iter != iter_end; ++iter )
-        {
-            if ( (iter->m_controlId == aControlId) &&
-                 (iter->m_controlAction == aControlAction) )
-            {
-                aAny = iter->m_Value;
-                break;
-            }
-        }
-    }
-
-    return aAny;
+    OSL_ASSERT( m_FilePickerState );
+    return m_FilePickerState->getValue( aControlId, aControlAction );
 }
 
 //-----------------------------------------------------------------------------------------
@@ -563,25 +396,8 @@ Any SAL_CALL CWinFileOpenImpl::getValue( sal_Int16 aControlId, sal_Int16 aContro
 void SAL_CALL CWinFileOpenImpl::enableControl( sal_Int16 ControlID, sal_Bool bEnable )
     throw(RuntimeException)
 {
-    HWND hwndCtrl = GetHwndDlgItem( ControlID );
-
-    if ( !hwndCtrl )
-    {
-
-#pragma message( "################################" )
-#pragma message( " fix this" )
-#pragma message( "################################" )
-        /*
-        will be enabled again when enableControl in offline
-        mode is ready
-
-        OSL_ENSURE( sal_False, "invalid element id");
-        */
-
-        return;
-    }
-
-    EnableWindow( hwndCtrl, bEnable );
+    OSL_ASSERT( m_FilePickerState );
+    m_FilePickerState->enableControl( ControlID, bEnable );
 }
 
 //-----------------------------------------------------------------------------------------
@@ -591,25 +407,8 @@ void SAL_CALL CWinFileOpenImpl::enableControl( sal_Int16 ControlID, sal_Bool bEn
 void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel )
     throw (RuntimeException)
 {
-    HWND hwndCtrl = GetHwndDlgItem( aControlId );
-
-    if ( !hwndCtrl )
-    {
-#pragma message( "################################" )
-#pragma message( " fix this" )
-#pragma message( "################################" )
-        /*
-        will be enabled again when setLabel in offline
-        mode is ready
-
-        OSL_ENSURE( sal_False, "invalid element id");
-        */
-        return;
-    }
-
-    // somewhat risky because we don't know if OUString
-    // has a terminating '\0'
-    SetWindowTextW( hwndCtrl, aLabel.getStr( ) );
+    OSL_ASSERT( m_FilePickerState );
+    m_FilePickerState->setLabel( aControlId, aLabel );
 }
 
 //-----------------------------------------------------------------------------------------
@@ -619,30 +418,8 @@ void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const ::rtl::OUS
 OUString SAL_CALL CWinFileOpenImpl::getLabel( sal_Int16 aControlId )
         throw (RuntimeException)
 {
-    HWND hwndCtrl = GetHwndDlgItem( aControlId );
-
-    if ( !hwndCtrl )
-    {
-#pragma message( "################################" )
-#pragma message( " fix this" )
-#pragma message( "################################" )
-        /*
-        will be enabled again when setLabel in offline
-        mode is ready
-        OSL_ENSURE( sal_False, "invalid element id");
-        */
-
-        return OUString( );
-    }
-
-    sal_Unicode aLabel[MAX_LABEL];
-    int nRet = GetWindowTextW( hwndCtrl, aLabel, MAX_LABEL );
-
-    OUString ctrlLabel;
-    if ( nRet )
-        ctrlLabel = OUString( aLabel, wcslen( aLabel ) );
-
-    return ctrlLabel;
+    OSL_ASSERT( m_FilePickerState );
+    return m_FilePickerState->getLabel( aControlId );
 }
 
 //-----------------------------------------------------------------------------------------
@@ -841,27 +618,15 @@ unsigned int CALLBACK CWinFileOpenImpl::SubClassFunc(
 //
 //-----------------------------------------------------------------
 
-void SAL_CALL CWinFileOpenImpl::InitControlState( HWND hWnd )
+void SAL_CALL CWinFileOpenImpl::InitControlLabel( HWND hWnd )
 {
     CResourceProvider aResProvider;
-
-    ControlCache_T::iterator iter_end = m_ControlCache.end( );
-    ControlCache_T::iterator iter = m_ControlCache.begin( );
-
-    for ( /* empty */; iter != iter_end; ++iter )
-    {
-        if ( GetDlgCtrlID( hWnd ) == iter->m_controlId )
-            setValue(
-                iter->m_controlId,
-                iter->m_controlAction,
-                iter->m_Value );
-    }
 
     //-----------------------------------------
     // set the labels for all extendet controls
     //-----------------------------------------
 
-    sal_Int32 aCtrlId = GetDlgCtrlID( hWnd );
+    sal_Int16 aCtrlId = GetDlgCtrlID( hWnd );
     OUString aLabel = aResProvider.getResString( aCtrlId );
     if ( aLabel.getLength( ) )
         setLabel( aCtrlId, aLabel );
@@ -873,34 +638,8 @@ void SAL_CALL CWinFileOpenImpl::InitControlState( HWND hWnd )
 
 void SAL_CALL CWinFileOpenImpl::CacheControlState( HWND hWnd )
 {
-    CTRL_CLASS aCtrlClass = GetCtrlClass( hWnd );
-
-    if ( UNKNOWN == aCtrlClass )
-        return;
-
-    sal_Int16 aControlAction;
-
-    if ( CHECKBOX == aCtrlClass )
-    {
-        aControlAction = 0;
-    }
-    else if ( LISTBOX == aCtrlClass )
-    {
-        // for listboxes we save only the
-        // last selected item
-        aControlAction = GET_SELECTED_ITEM;
-    }
-
-    CTRL_GETVALUE_FUNCTION_T lpfnGetValue =
-        GetCtrlGetValueFunction( aCtrlClass, aControlAction );
-
-    OSL_ASSERT( lpfnGetValue );
-
-    m_ControlCache.push_back(
-        ControlCacheEntry(
-        GetDlgCtrlID( hWnd ),
-        aControlAction,
-        lpfnGetValue( hWnd ) ) );
+    OSL_ASSERT( m_FilePickerState && m_NonExecuteFilePickerState );
+    m_ExecuteFilePickerState->cacheControlState( hWnd, m_NonExecuteFilePickerState );
 }
 
 //-----------------------------------------------------------------
@@ -935,8 +674,8 @@ BOOL CALLBACK CWinFileOpenImpl::EnumChildWndProc( HWND hWnd, LPARAM lParam )
             bRet = FALSE;
     break;
 
-    case INIT_CONTROL_VALUES:
-        pImpl->InitControlState( hWnd );
+    case INIT_CONTROL_LABEL:
+        pImpl->InitControlLabel( hWnd );
     break;
 
     case CACHE_CONTROL_VALUES:
@@ -957,8 +696,7 @@ BOOL CALLBACK CWinFileOpenImpl::EnumChildWndProc( HWND hWnd, LPARAM lParam )
 
 sal_uInt32 SAL_CALL CWinFileOpenImpl::onFileOk()
 {
-    // fill the control value cache
-    m_ControlCache.clear( );
+    m_NonExecuteFilePickerState->reset( );
 
     EnumParam enumParam( CACHE_CONTROL_VALUES, this );
 
@@ -993,18 +731,6 @@ void SAL_CALL CWinFileOpenImpl::onSelChanged( HWND hwndListBox )
     FilePickerEvent evt;
     evt.Source = static_cast< XFilePicker* >( m_FilePicker );
     m_FilePicker->fileSelectionChanged( evt );
-}
-
-//-----------------------------------------------------------------
-//
-//-----------------------------------------------------------------
-
-void SAL_CALL CWinFileOpenImpl::onHelp( )
-{
-    FilePickerEvent evt;
-    evt.ElementId = getFocused( );
-    evt.Source = static_cast< XFilePicker* >( m_FilePicker );
-    m_FilePicker->helpRequested( evt );
 }
 
 //-----------------------------------------------------------------
@@ -1105,13 +831,21 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
     }
 
     // initialize controls from cache
-    enumParam.m_action   = INIT_CONTROL_VALUES;
+
+    enumParam.m_action   = INIT_CONTROL_LABEL;
     enumParam.m_instance = this;
 
     EnumChildWindows(
         m_hwndFileOpenDlgChild,
         CWinFileOpenImpl::EnumChildWndProc,
         (LPARAM)&enumParam );
+
+    m_ExecuteFilePickerState->setHwnd( m_hwndFileOpenDlgChild );
+
+    m_ExecuteFilePickerState->initFilePickerControls(
+        m_NonExecuteFilePickerState->getControlCommand( ) );
+
+    m_FilePickerState = m_ExecuteFilePickerState;
 
     SetDefaultExtension( );
 
@@ -1188,8 +922,6 @@ sal_Bool SAL_CALL CWinFileOpenImpl::preModal( )
     CFileOpenDialog::setFilter(
         makeWinFilterBuffer( *m_filterContainer.get( ) ) );
 
-    m_bInExecuteMode = sal_True;
-
     return sal_True;
 }
 
@@ -1201,26 +933,7 @@ void CWinFileOpenImpl::postModal( sal_Int16 nDialogResult )
 {
     CFileOpenDialog::postModal( nDialogResult );
 
-    m_bInExecuteMode = sal_False;
-}
-
-//-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
-
-HWND SAL_CALL CWinFileOpenImpl::GetHwndDlgItem( sal_Int16 ctrlId, sal_Bool bIncludeStdCtrls )
-{
-    HWND hwndCtrl = GetDlgItem( m_hwndFileOpenDlgChild, ctrlId );
-
-    // maybe it's a control of the dialog itself for instance
-    // the ok and cancel button
-    if ( !hwndCtrl && bIncludeStdCtrls )
-    {
-        ctrlId = CommonFilePickerCtrlIdToWinFileOpenCtrlId( ctrlId );
-        hwndCtrl = GetDlgItem( m_hwndFileOpenDlg, ctrlId );
-    }
-
-    return hwndCtrl;
+    m_FilePickerState = m_NonExecuteFilePickerState;
 }
 
 //-----------------------------------------------------------------------------------------
