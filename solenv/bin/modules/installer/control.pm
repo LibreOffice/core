@@ -2,9 +2,6 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.10 $
-#
-#   last change: $Author: obo $ $Date: 2004-10-18 13:51:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -434,11 +431,37 @@ sub check_updatepack
 
                     if ( installer::systemactions::try_to_create_directory($directory))
                     {
-                        my $systemcall = "rmdir $directory";
-                        my $returnvalue = system($systemcall);
-                        $installer::globals::updatepack = 1;
                         $infoline = "Write access on Ship drive\n";
                         push(@installer::globals::globallogfileinfo, $infoline);
+                        my $systemcall = "rmdir $directory";
+                        my $returnvalue = system($systemcall);
+
+                        # 5th condition: No local build environment.
+                        # In this case the content of SOLARENV starts with the content of SOL_TMP
+
+                        my $solarenv = "";
+                        my $sol_tmp = "";
+                        if ( $ENV{'SOLARENV'} ) { $solarenv = $ENV{'SOLARENV'}; }
+                        if ( $ENV{'SOL_TMP'} ) { $sol_tmp = $ENV{'SOL_TMP'}; }
+
+                        $infoline = "Environment variable SOLARENV: $solarenv\n";
+                        push(@installer::globals::globallogfileinfo, $infoline);
+
+                        $infoline = "Environment variable SOL_TMP: $sol_tmp\n";
+                        push(@installer::globals::globallogfileinfo, $infoline);
+
+                        if ( ! ( $solarenv =~ /^\s*$sol_tmp/ ))
+                        {
+                            $infoline = "Content of SOLARENV does not start with the content of SOL_TMP: No local environment\n";
+                            push(@installer::globals::globallogfileinfo, $infoline);
+
+                            $installer::globals::updatepack = 1;    # That's it
+                        }
+                        else
+                        {
+                            $infoline = "Content of SOLARENV starts with the content of SOL_TMP\: Local environment -\> No Updatepack\n";
+                            push(@installer::globals::globallogfileinfo, $infoline);
+                        }
                     }
                     else
                     {
