@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsitems.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:45:39 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,14 +105,14 @@
 #define DSID_AUTOINCREMENTVALUE     38
 #define DSID_AUTORETRIEVEVALUE      39
 #define DSID_AUTORETRIEVEENABLED    40
-
+#define DSID_DOSLINEENDS            41
 
 
 //========================================================================
 //= item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
-#define DSID_LAST_ITEM_ID   DSID_AUTORETRIEVEENABLED
+#define DSID_LAST_ITEM_ID   DSID_DOSLINEENDS
 
 #endif // _DBAUI_DATASOURCEITEMS_HXX_
 
