@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: af $ $Date: 2002-11-28 10:52:52 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -880,13 +880,12 @@ void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocume
 
         // Take the change mode of the template page as indication of the
         // document's kiosk mode.
-        if (pTemplatePage->GetPresChange() == PRESCHANGE_AUTO)
-        {
-            pSummaryPage->SetPresChange(PRESCHANGE_AUTO);
-            pSummaryPage->SetFadeEffect (pTemplatePage->GetFadeEffect());
-            pSummaryPage->SetFadeSpeed (pTemplatePage->GetFadeSpeed());
-            pSummaryPage->SetTime (pTemplatePage->GetTime());
-        }
+        pSummaryPage->SetFadeSpeed (pTemplatePage->GetFadeSpeed());
+        pSummaryPage->SetFadeEffect (pTemplatePage->GetFadeEffect());
+        pSummaryPage->SetPresChange (pTemplatePage->GetPresChange());
+        pSummaryPage->SetTime (pTemplatePage->GetTime());
+        pSummaryPage->SetSound (pTemplatePage->IsSoundOn());
+        pSummaryPage->SetSoundFile (pTemplatePage->GetSoundFile());
     }
 }
 
