@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:19:45 $
+ *  last change: $Author: nf $ $Date: 2003-08-05 13:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,7 +684,6 @@ String STR_QUERY_FUNCTIONS
     Text[ chinese_simplified ] = "(ζ— ε‡½ζ•°);εΉ³ε‡ε€Ό;ζ•°η›®;ζ€ε¤§;ζ€ε°;ζ€»ζ•°;ε†η»„";
     Text[ chinese_traditional ] = "(η„΅ε‡½ζ•Έ);εΉ³ε‡ε€Ό;ζ•Έη›®;ζ€ε¤§;ζ€ε°;ηΈ½ζ•Έ;ε†ηµ„";
     Text[ dutch ] = "(geen functie);Gemiddelde;Aantal;Maximum;Minimum;Som;Groep";
-    Text[ chinese_simplified ] = "(ζ— ε‡½ζ•°);εΉ³ε‡ε€Ό;ζ•°η›®;ζ€ε¤§;ζ€ε°;ζ€»ζ•°;ε†η»„";
     Text[ greek ] = "(καμία συνάρτηση);Μέσος όρος;Πλήθος;Μέγιστο;Ελάχιστο;Σύνολο;Ομαδοποίηση";
     Text[ korean ] = "(ν•¨μ μ—†μ);ν‰κ· ;κ°μ;μµλ€;μµμ†;ν•©κ³„;κ·Έλ£Ή";
     Text[ arabic ] = "ύ(ΘΟζδ ΟΗαΙ)ΊγΪΟαΊΪΟΟΊΓήΥμΊΓΟδμΊγΜγζΪΊΚΜγνΪ";
