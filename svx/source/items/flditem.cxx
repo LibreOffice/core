@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-19 08:58:32 $
+ *  last change: $Author: thb $ $Date: 2002-08-01 11:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,19 +964,22 @@ XubString SvxExtFileField::GetFormatted() const
         switch( eFormat )
         {
             case SVXFILEFORMAT_FULLPATH:
-                aString = aURLObj.GetFull();
+                aString = aURLObj.getFSysPath(INetURLObject::FSYS_DETECT);
             break;
 
             case SVXFILEFORMAT_PATH:
-                aString = aURLObj.GetPath();
+                aURLObj.removeSegment(INetURLObject::LAST_SEGMENT, false);
+                // #101742# Leave trailing slash at the pathname
+                aURLObj.setFinalSlash();
+                aString = aURLObj.getFSysPath(INetURLObject::FSYS_DETECT);
             break;
 
             case SVXFILEFORMAT_NAME:
-                aString = aURLObj.GetBase();
+                aString = aURLObj.getBase();
             break;
 
             case SVXFILEFORMAT_NAME_EXT:
-                aString = aURLObj.GetName();
+                aString = aURLObj.getName();
             break;
         }
     }
@@ -989,16 +992,18 @@ XubString SvxExtFileField::GetFormatted() const
             break;
 
             case SVXFILEFORMAT_PATH:
+                aURLObj.removeSegment(INetURLObject::LAST_SEGMENT, false);
+                // #101742# Leave trailing slash at the pathname
+                aURLObj.setFinalSlash();
                 aString = aURLObj.GetMainURL();
-                aString.Erase( aString.Search( aURLObj.GetLastName() ) );
             break;
 
             case SVXFILEFORMAT_NAME:
-                aString = aURLObj.GetBase();
+                aString = aURLObj.getBase();
             break;
 
             case SVXFILEFORMAT_NAME_EXT:
-                aString = aURLObj.GetLastName();
+                aString = aURLObj.getName();
             break;
         }
     }
