@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:00:45 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1147,7 +1147,8 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         }
 
         // 8) Decimal tab portion in table cell
-        if ( GetTxtFrm()->IsInTab() &&  rInf.GetVsh()->IsTabCompat() )
+        if ( !pPor && !pCurr->GetPortion() &&
+             GetTxtFrm()->IsInTab() &&  rInf.GetVsh()->IsTabCompat() )
         {
             pPor = NewTabPortion( rInf, true );
         }
