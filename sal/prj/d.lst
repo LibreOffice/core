@@ -38,6 +38,7 @@ mkdir: %_DEST%\inc%_EXT%\systools\unx
 ..\%__SRC%\misc\*.hid %_DEST%\bin%_EXT%\*.hid
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 
+..\%__SRC%\inc\udkversion.h %_DEST%\inc%_EXT%\sal\udkversion.h
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
