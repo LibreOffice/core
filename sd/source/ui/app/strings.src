@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ String STR_DRAW_DEFAULTTOOLBOX
     Text [ portuguese_brazilian ] = "Barra de funções" ;
     Text [ portuguese ] = "Barra de funções" ;
     Text [ finnish ] = "Toimintorivi" ;
-    Text [ danish ] = "Værktøjslinje" ;
+    Text [ danish ] = "Funktionslinje" ;
     Text [ french ] = "Barre de fonctions" ;
     Text [ swedish ] = "Funktionslist" ;
     Text [ dutch ] = "Werkbalk" ;
@@ -150,7 +150,7 @@ String RID_PLUGINTOOLBOX
     Text[ russian ] = "Ïàíåëü Plug-In";
     Text[ polish ] = "Pasek dodatków";
     Text[ japanese ] = "Ìß×¸Ş²İ ÊŞ°";
-    Text[ greek ] = "ÃñáììŞ Plug-In";
+    Text[ greek ] = "ÃñáììŞ óõíäåüìåíçò õğïìïíÜäáò";
     Text[ korean ] = "ÇÃ·¯±×ÀÎ ¸ğÀ½";
     Text[ chinese_traditional ] = "Plug-In ¦C";
     Text[ arabic ] = "ÔÑíØ Plug-In";
@@ -958,7 +958,7 @@ String STR_LIGHTBLUE
     Text [ portuguese ] = "Azul claro" ;
     Text [ finnish ] = "Vaalea sininen" ;
     Text [ danish ] = "Lyseblå" ;
-    Text [ french ] = "Bleu roi" ;
+    Text [ french ] = "Bleu clair" ;
     Text [ swedish ] = "Ljusblå" ;
     Text [ dutch ] = "Lichtblauw" ;
     Text [ spanish ] = "Azul claro" ;
@@ -1762,7 +1762,7 @@ String STR_INSERTGRAPHIC
     Text [ portuguese_brazilian ] = "Inserir gráfico" ;
     Text [ portuguese ] = "Inserir imagem" ;
     Text [ finnish ] = "Lisää kuva" ;
-    Text [ danish ] = "Indsæt billede" ;
+    Text [ danish ] = "Indsæt grafik" ;
     Text [ french ] = "Insérer une image" ;
     Text [ swedish ] = "Infoga grafik" ;
     Text [ dutch ] = "Afbeelding invoegen" ;
@@ -4325,7 +4325,7 @@ String STR_WINDOWS_METAFILE
     Text [ finnish ] = "Windows-Metafile" ;
     Text [ danish ] = "Windows-metafil" ;
     Text [ french ] = "Métafichier-Windows" ;
-    Text [ swedish ] = "Windows-Metafil" ;
+    Text [ swedish ] = "Windows-metafil" ;
     Text [ dutch ] = "Windows-metabestand" ;
     Text [ spanish ] = "Metaarchivo Windows" ;
     Text [ english_us ] = "Windows Metafile" ;
@@ -4840,12 +4840,12 @@ String STR_ALL_FILES
     Text = "<Alle>" ;
     Text [ ENGLISH ] = "<All>" ;
     Text [ english_us ] = "<All>" ;
-    Text[ portuguese ] = "Todos os ficheiros";
+    Text[ portuguese ] = "<Todos>";
     Text[ russian ] = "âñå ôàéëû";
     Text[ greek ] = "<¼ëá>";
     Text[ dutch ] = "<Alle>";
     Text[ french ] = "<Tous>";
-    Text[ spanish ] = "Todos los archivos";
+    Text[ spanish ] = "<Todos>";
     Text[ italian ] = "Tutti i file";
     Text[ danish ] = "<Alle>";
     Text[ swedish ] = "<Alla>";
@@ -5181,7 +5181,7 @@ String STR_EDIT_OBJ
     Text[ chinese_simplified ] = "±à¼­(~E)";
     Text[ russian ] = "Ïğàâêà";
     Text[ polish ] = "~Edytuj";
-    Text[ japanese ] = "•ÒWi~‚dj";
+    Text[ japanese ] = "•ÒW(~E)";
     Text[ greek ] = "~Åğåîåñãáóßá";
     Text[ korean ] = "ÆíÁı(~E)";
     Text[ chinese_traditional ] = "½s¿è(~E)";
@@ -5383,7 +5383,7 @@ String STR_DEL_SHAPE
     Text [ dutch ] = "Symbool wissen" ;
     Text [ english_us ] = "Delete icon" ;
     Text [ italian ] = "Elimina simbolo" ;
-    Text [ spanish ] = "Eliminar icono" ;
+    Text [ spanish ] = "Eliminar símbolo" ;
     Text [ french ] = "Supprimer le symbole" ;
     Text [ swedish ] = "Radera ikon" ;
     Text [ danish ] = "Slet symbol" ;
@@ -6244,7 +6244,7 @@ String STR_EXPORT_EMPTYGRAPHIC
     Text [ italian ] = "Le immagini vuote non vengono supportate" ;
     Text [ spanish ] = "No se aceptan imágenes vacías" ;
     Text [ french ] = "Les Images vides ne sont pas supportées" ;
-    Text [ swedish ] = "Blanka grafiker stöds inte" ;
+    Text [ swedish ] = "Tom grafik stöds inte" ;
     Text [ danish ] = "Tom grafik understøttes ikke." ;
     Text [ portuguese ] = "As imagens vazias não têm suporte." ;
     Text [ portuguese_brazilian ] = "Leere Grafiken werden nicht unterstützt" ;
@@ -6709,7 +6709,7 @@ String STR_START_PRESENTATION
     Text [ portuguese ] = "Iniciar apresentação" ;
     Text [ portuguese_brazilian ] = "Bildschirmpräsentation starten" ;
     Text [ swedish ] = "Starta bildskärmspresentation" ;
-    Text [ danish ] = "Start diasshow" ;
+    Text [ danish ] = "Start præsentation" ;
     Text [ italian ] = "Avvia la presentazione" ;
     Text [ spanish ] = "Iniciar presentación" ;
     Text [ french ] = "Lancer la présentation à l'écran" ;
@@ -9244,7 +9244,7 @@ String STR_PUBLISH_OUTLINE
     Text [ french ] = "Résumé" ;
     Text [ dutch ] = "Overzicht" ;
     Text [ swedish ] = "Översikt" ;
-    Text [ danish ] = "Resume" ;
+    Text [ danish ] = "Oversigt" ;
     Text [ portuguese ] = "Sumário" ;
     Text [ portuguese_brazilian ] = "Übersicht" ;
     Text[ chinese_simplified ] = "ÕªÒª";
@@ -9737,7 +9737,7 @@ String STR_FILEFORMAT_FULLPATH
     Text [ english_us ] = "Path/File name" ;
     Text [ portuguese_brazilian ] = "Pfad/Dateiname" ;
     Text [ swedish ] = "Sökväg/Filnamn" ;
-    Text [ danish ] = "Sti/filnavn" ;
+    Text [ danish ] = "Sti/Filnavn" ;
     Text [ italian ] = "Percorso/nome file" ;
     Text [ spanish ] = "Ruta/Nombre de archivo" ;
     Text [ french ] = "Chemin/Nom de fichier" ;
@@ -9832,7 +9832,7 @@ String STR_NEW_CUSTOMSHOW
     Text [ english_us ] = "New Custom Slide Show" ;
     Text [ portuguese_brazilian ] = "Neue individuelle Präsentation" ;
     Text [ swedish ] = "Ny individuell bildskärmspresentation" ;
-    Text [ danish ] = "Nyt individuelt diasshow" ;
+    Text [ danish ] = "Ny individuel præsentation" ;
     Text [ italian ] = "Nuova presentazione su schermo personalizzata" ;
     Text [ spanish ] = "Nueva presentación personalizada" ;
     Text [ french ] = "Nouvelle présentation à l'écran personnalisée" ;
@@ -10410,7 +10410,7 @@ String STR_HTMLEXP_HOMEPAGE
     Text[ russian ] = "Íà÷àëüíàÿ ñòğàíèöà";
     Text[ polish ] = "Strona macierzysta";
     Text[ japanese ] = "Î°ÑÍß°¼Ş";
-    Text[ greek ] = "ÊåíôñéêŞ óåëßäá";
+    Text[ greek ] = "Áñ÷éêŞ óåëßäá";
     Text[ korean ] = "È¨ÆäÀÌÁö";
     Text[ chinese_traditional ] = "¥D­¶";
     Text[ arabic ] = "ÕİÍÉ ÇáÈÏÁ";
@@ -10882,7 +10882,7 @@ String STR_ERROR_OBJNOCREATE_PLUGIN
     Text [ english_us ] = "Plug-in from document % could not be inserted." ;
     Text[ portuguese ] = "Foi impossível inserir o plug-in do documento %.";
     Text[ russian ] = "Âñòàâèòü Plug-in èç äîêóìåíòà % íå óäàåòñÿ.";
-    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé åéóáãùãŞ ôïõ Plug-in áğü ôï İããñáöï %.";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé åéóáãùãŞ ôçò óõíäåüìåíçò õğïìïíÜäáò áğü ôï İããñáöï %.";
     Text[ dutch ] = "Plug-in van document % kan niet worden ingevoegd.";
     Text[ french ] = "Impossible d'insérer le Plug-In du document %.";
     Text[ spanish ] = "No se puede insertar plug-in del documento %.";
@@ -10960,7 +10960,7 @@ String STR_UNDO_CONVERT_TO_METAFILE
     Text[ spanish ] = "Convertir en Metafile";
     Text[ italian ] = "Converti in metafile";
     Text[ danish ] = "Konverter til metafil";
-    Text[ swedish ] = "Konvertera till Metafile";
+    Text[ swedish ] = "Konvertera till metafil";
     Text[ polish ] = "Konwertuj w metapliku";
     Text[ portuguese_brazilian ] = "Convert to metafile";
     Text[ japanese ] = "ÒÀÌ§²Ù‚É•ÏŠ·";
@@ -11123,7 +11123,7 @@ String STR_HTMLEXP_ERROR_GALLERY
     Text[ french ] = "Erreur lors de la copie de fichiers graphiques à partir de la Gallery.";
     Text[ spanish ] = "Ha ocurrido un error al copiar archivos gráficos de la Gallery.";
     Text[ italian ] = "Si è verificato un errore mentre venivano copiati i file grafici dalla Gallery.";
-    Text[ danish ] = "Der opstod en fejl under kopiering af billedfiler fra Gallery.";
+    Text[ danish ] = "Der opstod en fejl under kopiering af grafikfiler fra Gallery.";
     Text[ swedish ] = "Det uppstod ett fel vid kopieringen av grafikfiler från Gallery.";
     Text[ polish ] = "Wyst¹pi³ b³¹d w kopiowaniu plików graficznych z galerii.";
     Text[ portuguese_brazilian ] = "Error while copying graphic filese from the Gallery.";
