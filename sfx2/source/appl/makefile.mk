@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-19 07:57:24 $
+#   last change: $Author: kz $ $Date: 2004-02-25 15:42:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,7 +130,8 @@ SLOFILES =  \
     $(SLO)$/sfxpicklist.obj \
     $(SLO)$/helpdispatch.obj \
     $(SLO)$/imestatuswindow.obj \
-    $(SLO)$/accelinfo.obj
+    $(SLO)$/accelinfo.obj\
+    $(SLO)$/xpackcreator.obj
 
 EXCEPTIONSFILES=\
     $(SLO)$/imagemgr.obj		\
@@ -146,7 +147,8 @@ EXCEPTIONSFILES=\
     $(SLO)$/shutdownicon.obj	\
     $(SLO)$/shutdowniconw32.obj \
     $(SLO)$/sfxpicklist.obj		\
-    $(SLO)$/helpdispatch.obj
+    $(SLO)$/helpdispatch.obj	\
+    $(SLO)$/xpackcreator.obj
 
 .IF "$(GUI)" == "MAC"
 SLOFILES +=\
