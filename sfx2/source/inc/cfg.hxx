@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:26 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@
 #include <svtools/svstdarr.hxx>     // SvUShorts
 #include "minarray.hxx"
 #include "tabdlg.hxx"
+
+#include <vector>
 
 class SfxMenuManager;
 class SfxAcceleratorManager;
@@ -330,6 +332,15 @@ struct AccelInfo_Impl
     BOOL                        bModified;
 };
 
+struct AccelBackup
+{
+    AccelBackup( const KeyCode& rKeyCode, USHORT nSlotId ) :
+        aKeyCode( rKeyCode ), nId( nSlotId ) {}
+
+    KeyCode aKeyCode;
+    USHORT  nId;
+};
+
 class SfxAcceleratorConfigPage : public SfxTabPage
 {
     friend SfxAccCfgTabListBox_Impl;
@@ -351,6 +362,7 @@ private:
     PushButton                      aLoadButton;
     PushButton                      aSaveButton;
     PushButton                      aResetButton;
+    std::vector< AccelBackup >      m_aAccelBackup;
 
     USHORTArr                   aConfigCodeArr;
     USHORTArr                   aConfigAccelArr;
