@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:52:35 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,8 @@ SwFntObj::SwFntObj( const SwSubFont &rFont, const void *pOwner, ViewShell *pSh )
     nPropWidth( rFont.GetPropWidth() )
 {
     nZoom = pSh ? pSh->GetViewOptions()->GetZoom() : USHRT_MAX;
-    nLeading = USHRT_MAX;
+    nGuessedLeading = USHRT_MAX;
+    nExtLeading = USHRT_MAX;
     nPrtAscent = USHRT_MAX;
     nPrtHeight = USHRT_MAX;
     bPaintBlank = ( UNDERLINE_NONE != aFont.GetUnderline()
@@ -260,7 +261,31 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
 
 /*************************************************************************
  *
- *  USHORT SwFntObj::GetAscent( const OutputDevice *pOut )
+ *  bool lcl_IsFontAdjustNecessary( rOutDev, rRefDev )
+ *
+ *  returns whether we have to adjust the output font to resemble
+ *  the formatting font
+ *
+ *  _Not_ necessary if
+ *
+ *  1. RefDef == OutDev (text formatting, online layout...)
+ *  2. PDF export from online layout
+ *  3. Prospect/PagePreview pringing
+ *
+ *************************************************************************/
+
+bool lcl_IsFontAdjustNecessary( const OutputDevice& rOutDev,
+                                const OutputDevice& rRefDev )
+{
+    return &rRefDev != &rOutDev &&
+           OUTDEV_WINDOW != rRefDev.GetOutDevType() &&
+           ( OUTDEV_PRINTER != rRefDev.GetOutDevType() ||
+             OUTDEV_PRINTER != rOutDev.GetOutDevType() );
+}
+
+/*************************************************************************
+ *
+ *  USHORT SwFntObj::GetFontAscent( const OutputDevice& rOut )
  *
  *  Ersterstellung      AMA 7. Nov. 94
  *  Letzte Aenderung    AMA 7. Nov. 94
@@ -270,71 +295,121 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
  *  erzeugt werden.
  *************************************************************************/
 
-USHORT SwFntObj::GetAscent( const ViewShell *pSh, const OutputDevice *pOut )
+USHORT SwFntObj::GetFontAscent( const ViewShell *pSh, const OutputDevice& rOut )
 {
-    // Condition for output font / refdev font adjustment
-    // 1. RefDef == OutDev (common printing, online layout)
-    // 2. Prospect/PagePreview pringing
-    // 3. PDF export from online layout
-    const OutputDevice* pRefDev = pOut;
-    if ( !pSh || ( pRefDev = &pSh->GetRefDev() ) == pOut ||
-         ( OUTDEV_PRINTER == pRefDev->GetOutDevType() &&
-           OUTDEV_PRINTER == pOut->GetOutDevType() ) ||
-         OUTDEV_WINDOW == pRefDev->GetOutDevType() )
+    USHORT nRet = 0;
+    const OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
+
+    if ( pSh && lcl_IsFontAdjustNecessary( rOut, rRefDev ) )
+    {
+        CreateScrFont( *pSh, rOut );
+        ASSERT( USHRT_MAX != nScrAscent, "nScrAscent is going berzerk" )
+        nRet = nScrAscent + GetFontLeading( pSh, rRefDev );;
+    }
+    else
     {
         if ( nPrtAscent == USHRT_MAX ) // DruckerAscent noch nicht bekannt?
         {
-            CreatePrtFont( *pOut );
-            const Font aOldFnt( pRefDev->GetFont() );
-            ((OutputDevice*)pRefDev)->SetFont( *pPrtFont );
-            const FontMetric aOutMet( pRefDev->GetFontMetric() );
+            CreatePrtFont( rOut );
+            const Font aOldFnt( rRefDev.GetFont() );
+            ((OutputDevice&)rRefDev).SetFont( *pPrtFont );
+            const FontMetric aOutMet( rRefDev.GetFontMetric() );
             nPrtAscent = (USHORT) aOutMet.GetAscent();
-            ( (OutputDevice *)pRefDev )->SetFont( aOldFnt );
+            ( (OutputDevice&)rRefDev).SetFont( aOldFnt );
         }
-        return nPrtAscent + nLeading;
+
+        nRet = nPrtAscent + GetFontLeading( pSh, rRefDev );;
     }
 
-    CreateScrFont( pSh, *pOut );  // eventuell Bildschirmanpassung durchfuehren
-    return nScrAscent;
-}
-
-USHORT SwFntObj::GetHeight( const ViewShell *pSh, const OutputDevice *pOut )
-{
-    // Condition for output font / refdev font adjustment
-    // 1. RefDef == OutDev (common printing, online layout)
-    // 2. Prospect/PagePreview pringing
-    // 3. PDF export from online layout
-    const OutputDevice* pRefDev = pOut;
-    if ( ! pSh || ( pRefDev = &pSh->GetRefDev() ) == pOut ||
-         ( OUTDEV_PRINTER == pRefDev->GetOutDevType() &&
-           OUTDEV_PRINTER == pOut->GetOutDevType() ) ||
-         OUTDEV_WINDOW == pRefDev->GetOutDevType()  )
-    {
-        if ( nPrtHeight == USHRT_MAX ) // PrinterHeight noch nicht bekannt?
-        {
-            CreatePrtFont( *pOut );
-            const Font aOldFnt( pRefDev->GetFont() );
-            ((OutputDevice*)pRefDev)->SetFont( *pPrtFont );
-            nPrtHeight = (USHORT)pRefDev->GetTextHeight();
-            ((OutputDevice *)pRefDev)->SetFont( aOldFnt );
-        }
-        return nPrtHeight + nLeading;
-    }
-
-    CreateScrFont( pSh, *pOut );  // eventuell Bildschirmanpassung durchfuehren
-    if ( nScrHeight == USHRT_MAX ) // ScreenHeight noch nicht bekannt?
-    {
-        const Font aOldFnt( pOut->GetFont() );
-        ((OutputDevice*)pOut)->SetFont( *pPrtFont );
-        nScrHeight = (USHORT)pOut->GetTextHeight();
-        ((OutputDevice*)pOut)->SetFont( aOldFnt );
-    }
-    return nScrHeight;
+    ASSERT( USHRT_MAX != nRet, "GetFontAscent returned USHRT_MAX" )
+    return nRet;
 }
 
 /*************************************************************************
  *
- *  SwFntObj::CreateScrFont( const ViewShell *pSh, const OutputDevice& rOut )
+ *  USHORT SwFntObj::GetFontHeight( const OutputDevice* pOut )
+ *
+ *  Ersterstellung      AMA 7. Nov. 94
+ *  Letzte Aenderung    AMA 7. Nov. 94
+ *
+ *  Beschreibung: liefern die Höhe des Fonts auf dem
+ *  gewuenschten Outputdevice zurueck, ggf. muss der Bildschirmfont erst
+ *  erzeugt werden.
+ *************************************************************************/
+
+USHORT SwFntObj::GetFontHeight( const ViewShell* pSh, const OutputDevice& rOut )
+{
+    USHORT nRet = 0;
+    const OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
+
+    if ( pSh && lcl_IsFontAdjustNecessary( rOut, rRefDev ) )
+    {
+        CreateScrFont( *pSh, rOut );
+        ASSERT( USHRT_MAX != nScrHeight, "nScrHeight is going berzerk" )
+        nRet = nScrHeight + GetFontLeading( pSh, rRefDev );
+    }
+    else
+    {
+        if ( nPrtHeight == USHRT_MAX ) // PrinterHeight noch nicht bekannt?
+        {
+            CreatePrtFont( rOut );
+            const Font aOldFnt( rRefDev.GetFont() );
+            ((OutputDevice&)rRefDev).SetFont( *pPrtFont );
+            nPrtHeight = rRefDev.GetTextHeight();
+
+#if OSL_DEBUG_LEVEL > 1
+            // Check if vcl did not change the meading of GetTextHeight
+            const FontMetric aOutMet( rRefDev.GetFontMetric() );
+            long nTmpPrtHeight = (USHORT)aOutMet.GetAscent() + aOutMet.GetDescent();
+            ASSERT( nTmpPrtHeight = nPrtHeight, "GetTextHeight != Ascent + Descent" )
+#endif
+
+            ((OutputDevice&)rRefDev).SetFont( aOldFnt );
+        }
+
+        nRet = nPrtHeight + GetFontLeading( pSh, rRefDev );
+    }
+
+    ASSERT( USHRT_MAX != nRet, "GetFontHeight returned USHRT_MAX" )
+    return nRet;
+}
+
+USHORT SwFntObj::GetFontLeading( const ViewShell *pSh, const OutputDevice& rOut )
+{
+    USHORT nRet = 0;
+
+    if ( pSh )
+    {
+        if ( USHRT_MAX == nGuessedLeading || USHRT_MAX == nExtLeading )
+        {
+            const Font aOldFnt( rOut.GetFont() );
+            ((OutputDevice&)rOut).SetFont( *pPrtFont );
+            const FontMetric aMet( rOut.GetFontMetric() );
+            ((OutputDevice&)rOut).SetFont( aOldFnt );
+            bSymbol = RTL_TEXTENCODING_SYMBOL == aMet.GetCharSet();
+            GuessLeading( *pSh, aMet );
+            nExtLeading = aMet.GetExtLeading();
+        }
+
+        const bool bUseExtLeading = pSh->IsAddExtLeading();
+        const bool bBrowse = ( pSh->GetWin() &&
+                               pSh->GetDoc()->IsBrowseMode() &&
+                              !pSh->GetViewOptions()->IsPrtFormat() );
+
+        if ( bUseExtLeading && !bBrowse )
+            nRet = nExtLeading;
+        else
+            nRet = nGuessedLeading;
+    }
+
+    ASSERT( USHRT_MAX != nRet, "GetFontLeading returned USHRT_MAX" )
+    return nRet;
+}
+
+
+/*************************************************************************
+ *
+ *  SwFntObj::CreateScrFont( const ViewShell& rSh, const OutputDevice& rOut )
  *
  *  Ersterstellung      AMA 7. Nov. 94
  *  Letzte Aenderung    AMA 7. Nov. 94
@@ -343,7 +418,7 @@ USHORT SwFntObj::GetHeight( const ViewShell *pSh, const OutputDevice *pOut )
  *
  *************************************************************************/
 
-void SwFntObj::CreateScrFont( const ViewShell *pSh, const OutputDevice& rOut )
+void SwFntObj::CreateScrFont( const ViewShell& rSh, const OutputDevice& rOut )
 {
 static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
 
@@ -359,26 +434,26 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
     nScrHeight = USHRT_MAX;
 
     // Condition for output font / refdev font adjustment
-    ASSERT( pSh, "No shell available during ChooseFont" )
-    OutputDevice* pPrt = &pSh->GetRefDev();
+    OutputDevice* pPrt = &rSh.GetRefDev();
 
 #ifdef MAC
 
-    if( pSh && ( !pSh->GetDoc()->IsBrowseMode() ||
-                  pSh->GetViewOptions()->IsPrtFormat() ) )
+    if( !rSh.GetDoc()->IsBrowseMode() ||
+         rSh.GetViewOptions()->IsPrtFormat() )
     {
         CreatePrtFont( *pPrt );
         pPrinter = pPrt;
     }
 
     bSymbol = CHARSET_SYMBOL == pPrtFont->GetCharSet();
-    nLeading = 0;
+    nGuessedLeading = 0;
+    nExtLeading = 0;
     pScrFont = pPrtFont;
 
 #else
 
-    if( pSh && ( !pSh->GetWin() || !pSh->GetDoc()->IsBrowseMode() ||
-                  pSh->GetViewOptions()->IsPrtFormat() ) )
+    if( !rSh.GetWin() || !rSh.GetDoc()->IsBrowseMode() ||
+         rSh.GetViewOptions()->IsPrtFormat() )
     {
         // After CreatePrtFont pPrtFont is the font which is actually used
         // by the reference device
@@ -398,17 +473,12 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
 
         FontMetric aMet = pPrt->GetFontMetric( );
         bSymbol = RTL_TEXTENCODING_SYMBOL == aMet.GetCharSet();
-        if ( nLeading == USHRT_MAX )
-        {
-            long nTmpLeading = (long)aMet.GetLeading();
-            if ( nTmpLeading < 5 )
-            {
-                GetAscent( pSh, pPrt );
-                GuessLeading( pSh, aMet );
-            }
-            else
-                nLeading = 0;
-        }
+
+        if ( USHRT_MAX == nGuessedLeading )
+            GuessLeading( rSh, aMet );
+
+        if ( USHRT_MAX == nExtLeading )
+            nExtLeading = aMet.GetExtLeading();
 
 #if OSL_DEBUG_LEVEL > 1
         const XubString aDbgTxt1( pPrtFont->GetName() );
@@ -570,8 +640,13 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
     else
     {
         bSymbol = RTL_TEXTENCODING_SYMBOL == aFont.GetCharSet();
-        if ( nLeading == USHRT_MAX )
-            nLeading = 0;
+        if ( nGuessedLeading == USHRT_MAX )
+            nGuessedLeading = 0;
+
+        // no external leading in browse mode
+        if ( nExtLeading == USHRT_MAX )
+            nExtLeading = 0;
+
         pScrFont = pPrtFont;
     }
 
@@ -598,19 +673,27 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
     }
 
     nScrAscent = (USHORT)pOut->GetFontMetric().GetAscent();
+    if ( USHRT_MAX == nScrHeight )
+        nScrHeight = (USHORT)pOut->GetTextHeight();
 
     // reset original output device font
     pOut->SetFont( aOldOutFont );
 }
 
 
-void SwFntObj::GuessLeading( const ViewShell *pSh, const FontMetric& rMet )
+void SwFntObj::GuessLeading( const ViewShell& rSh, const FontMetric& rMet )
 {
-//  Wie waere es mit 50% des Descents (StarMath??):
-//  nLeading = USHORT( aMet.GetDescent() / 2 );
+    // If leading >= 5, this seems to be enough leading.
+    // Nothing has to be done.
+    if ( rMet.GetIntLeading() >= 5 )
+    {
+        nGuessedLeading = 0;
+        return;
+    }
 
 #if defined(WNT) || defined(WIN) || defined(PM2)
-    OutputDevice *pWin = ( pSh && pSh->GetWin() ) ? pSh->GetWin() :
+    OutputDevice *pWin = rSh.GetWin() ?
+                         rSh.GetWin() :
                          GetpApp()->GetDefaultDevice();
     if ( pWin )
     {
@@ -625,20 +708,20 @@ void SwFntObj::GuessLeading( const ViewShell *pSh, const FontMetric& rMet )
         {
             // Wenn das Leading auf dem Window auch 0 ist, dann
             // muss es auch so bleiben (vgl. StarMath!).
-            long nTmpLeading = (long)aWinMet.GetLeading();
+            long nTmpLeading = (long)aWinMet.GetIntLeading();
              // einen Versuch haben wir noch wg. 31003:
             if( nTmpLeading <= 0 )
             {
                 pWin->SetFont( rMet );
-                nTmpLeading = (long)pWin->GetFontMetric().GetLeading();
+                nTmpLeading = (long)pWin->GetFontMetric().GetIntLeading();
                 if( nTmpLeading < 0 )
-                    nLeading = 0;
+                    nGuessedLeading = 0;
                 else
-                    nLeading = USHORT(nTmpLeading);
+                    nGuessedLeading = USHORT(nTmpLeading);
             }
             else
             {
-                nLeading = USHORT(nTmpLeading);
+                nGuessedLeading = USHORT(nTmpLeading);
                 // Manta-Hack #50153#:
                 // Wer beim Leading luegt, luegt moeglicherweise auch beim
                 // Ascent/Descent, deshalb wird hier ggf. der Font ein wenig
@@ -648,7 +731,8 @@ void SwFntObj::GuessLeading( const ViewShell *pSh, const FontMetric& rMet )
                 if( nDiff > 0 )
                 {
                     ASSERT( nPrtAscent < USHRT_MAX, "GuessLeading: PrtAscent-Fault" );
-                    nPrtAscent += (USHORT)(( 2 * nDiff ) / 5);
+                    if ( USHRT_MAX < nPrtAscent )
+                        nPrtAscent += (USHORT)(( 2 * nDiff ) / 5);
                 }
             }
         }
@@ -656,7 +740,7 @@ void SwFntObj::GuessLeading( const ViewShell *pSh, const FontMetric& rMet )
         {
             // Wenn alle Stricke reissen, nehmen wir 15% der
             // Hoehe, ein von CL empirisch ermittelter Wert.
-            nLeading = (nWinHeight * 15) / 100;
+            nGuessedLeading = (nWinHeight * 15) / 100;
         }
         pWin->SetFont( aOldFnt );
         pWin->SetMapMode( aOldMap );
@@ -664,9 +748,9 @@ void SwFntObj::GuessLeading( const ViewShell *pSh, const FontMetric& rMet )
     else
 #endif
 #ifdef MAC
-        nLeading = (pPrtFont->GetSize().Height() * 15) / 100;
+        nGuessedLeading = (pPrtFont->GetSize().Height() * 15) / 100;
 #else
-        nLeading = 0;
+        nGuessedLeading = 0;
 #endif
 }
 
@@ -682,43 +766,28 @@ void SwFntObj::GuessLeading( const ViewShell *pSh, const FontMetric& rMet )
  *
  *************************************************************************/
 
-void SwFntObj::SetDevFont( const ViewShell *pSh, OutputDevice *pOut )
+void SwFntObj::SetDevFont( const ViewShell *pSh, OutputDevice& rOut )
 {
-    // Condition for output font / refdev font adjustment
-    // 1. RefDef == OutDev (common printing, online layout)
-    // 2. Prospect/PagePreview pringing
-    // 3. PDF export from online layout
-    const OutputDevice* pRefDev = pOut;
-    if ( pSh && ( pRefDev = &pSh->GetRefDev() ) != pOut &&
-         ( OUTDEV_PRINTER != pRefDev->GetOutDevType() ||
-           OUTDEV_PRINTER != pOut->GetOutDevType() ) &&
-         OUTDEV_WINDOW != pRefDev->GetOutDevType() )
+    const OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
+
+    if ( pSh && lcl_IsFontAdjustNecessary( rOut, rRefDev ) )
     {
-        CreateScrFont( pSh, *pOut );
-        if( !GetScrFont()->IsSameInstance( pOut->GetFont() ) )
-            pOut->SetFont( *pScrFont );
+        CreateScrFont( *pSh, rOut );
+        if( !GetScrFont()->IsSameInstance( rOut.GetFont() ) )
+            rOut.SetFont( *pScrFont );
         if( pPrinter && ( !pPrtFont->IsSameInstance( pPrinter->GetFont() ) ) )
             pPrinter->SetFont( *pPrtFont );
     }
     else
     {
-        CreatePrtFont( *pOut );
-        if( !pPrtFont->IsSameInstance( pOut->GetFont() ) )
-            pOut->SetFont( *pPrtFont );
-        if ( nLeading == USHRT_MAX )
-        {
-            FontMetric aMet( pOut->GetFontMetric() );
-            bSymbol = RTL_TEXTENCODING_SYMBOL == aMet.GetCharSet();
-            long nTmpLead = (long)aMet.GetLeading();
-            if ( nTmpLead < 5 )
-            {
-                GetAscent( pSh, pOut );
-                GuessLeading( pSh, aMet );
-            }
-            else
-                nLeading = 0;
-        }
+        CreatePrtFont( rOut );
+        if( !pPrtFont->IsSameInstance( rOut.GetFont() ) )
+            rOut.SetFont( *pPrtFont );
     }
+
+    // Here, we actually do not need the leading values, but by calling
+    // GetFontLeading() we assure that the values are calculated for later use.
+    GetFontLeading( pSh, rRefDev );
 }
 
 #define WRONG_SHOW_MIN 5
@@ -760,18 +829,15 @@ BYTE lcl_WhichPunctuation( xub_Unicode cChar )
     return SwScriptInfo::SPECIAL_LEFT;
 }
 
-sal_Bool lcl_IsMonoSpaceFont( const OutputDevice* pOut )
+sal_Bool lcl_IsMonoSpaceFont( const OutputDevice& rOut )
 {
-    if ( ! pOut )
-        return sal_False;
-
     const String aStr1( xub_Unicode( 0x3008 ) );
     const String aStr2( xub_Unicode( 0x307C ) );
 #ifndef PRODUCT
-    const long nWidth1 = pOut->GetTextWidth( aStr1 );
-    const long nWidth2 = pOut->GetTextWidth( aStr2 );
+    const long nWidth1 = rOut.GetTextWidth( aStr1 );
+    const long nWidth2 = rOut.GetTextWidth( aStr2 );
 #endif
-    return pOut->GetTextWidth( aStr1 ) == pOut->GetTextWidth( aStr2 );
+    return rOut.GetTextWidth( aStr1 ) == rOut.GetTextWidth( aStr2 );
 }
 
 // ER 09.07.95 20:34
@@ -784,23 +850,14 @@ sal_Bool lcl_IsMonoSpaceFont( const OutputDevice* pOut )
 
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 {
-    OutputDevice* pRefDev = NULL;
-    OutputDevice* pWin = NULL;
+    ASSERT( rInf.GetShell(), "SwFntObj::DrawText without shell" )
 
-    if ( rInf.GetShell() )
-    {
-        pRefDev = &rInf.GetShell()->GetRefDev();
-        pWin = rInf.GetShell()->GetWin();
-    }
-    else
-    {
-        ASSERT( sal_True, "DrawText without shell" )
-        pRefDev = rInf.GetpOut();
-    }
+    OutputDevice& rRefDev = rInf.GetShell()->GetRefDev();
+    OutputDevice* pWin = rInf.GetShell()->GetWin();
 
     // true if pOut is the printer and the printer has been used for formatting
     const BOOL bPrt = OUTDEV_PRINTER == rInf.GetOut().GetOutDevType() &&
-                      OUTDEV_PRINTER == pRefDev->GetOutDevType();
+                      OUTDEV_PRINTER == rRefDev.GetOutDevType();
     const BOOL bBrowse = ( pWin &&
                            rInf.GetShell()->GetDoc()->IsBrowseMode() &&
                           !rInf.GetShell()->GetViewOptions()->IsPrtFormat() &&
@@ -814,10 +871,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     const BOOL bDirectPrint = bPrt || bBrowse;
 
     // Condition for output font / refdev font adjustment
-    const BOOL bUseScrFont = pRefDev != rInf.GetpOut() &&
-                             ( OUTDEV_PRINTER != pRefDev->GetOutDevType() ||
-                               OUTDEV_PRINTER != rInf.GetpOut()->GetOutDevType() ) &&
-                             OUTDEV_WINDOW != pRefDev->GetOutDevType();;
+    const BOOL bUseScrFont =
+        lcl_IsFontAdjustNecessary( rInf.GetOut(), rRefDev );
 
     Font* pTmpFont = bUseScrFont ? pScrFont : pPrtFont;
 
@@ -841,14 +896,14 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     const BOOL bNoAdjust = bPrt || ( pWin && rInf.GetShell()->GetDoc()->IsBrowseMode() &&
                                      !rInf.GetShell()->GetViewOptions()->IsPrtFormat() );
 
-    if ( OUTDEV_PRINTER == rInf.GetpOut()->GetOutDevType() )
+    if ( OUTDEV_PRINTER == rInf.GetOut().GetOutDevType() )
     {
         // Printer output
-        if ( OUTDEV_PRINTER == pRefDev->GetOutDevType() )
+        if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
         {
             ASSERT( bNoAdjust == 1 && bUseScrFont == 0, "Outdev Check failed" )
         }
-        else if ( OUTDEV_VIRDEV == pRefDev->GetOutDevType() )
+        else if ( OUTDEV_VIRDEV == rRefDev.GetOutDevType() )
         {
             ASSERT( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" )
         }
@@ -857,14 +912,14 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             ASSERT( sal_False, "Outdev Check failed" )
         }
     }
-    else if ( OUTDEV_VIRDEV == rInf.GetpOut()->GetOutDevType() && ! pWin )
+    else if ( OUTDEV_VIRDEV == rInf.GetOut().GetOutDevType() && ! pWin )
     {
         // PDF export
-        if ( OUTDEV_PRINTER == pRefDev->GetOutDevType() )
+        if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
         {
             ASSERT( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" )
         }
-        else if ( OUTDEV_VIRDEV == pRefDev->GetOutDevType() )
+        else if ( OUTDEV_VIRDEV == rRefDev.GetOutDevType() )
         {
             ASSERT( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" )
         }
@@ -873,19 +928,19 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             ASSERT( sal_False, "Outdev Check failed" )
         }
     }
-    else if ( OUTDEV_WINDOW == rInf.GetpOut()->GetOutDevType() ||
-               ( OUTDEV_VIRDEV == rInf.GetpOut()->GetOutDevType() && pWin ) )
+    else if ( OUTDEV_WINDOW == rInf.GetOut().GetOutDevType() ||
+               ( OUTDEV_VIRDEV == rInf.GetOut().GetOutDevType() && pWin ) )
     {
         // Window or virtual window
-        if ( OUTDEV_PRINTER == pRefDev->GetOutDevType() )
+        if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
         {
             ASSERT( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" )
         }
-        else if ( OUTDEV_VIRDEV == pRefDev->GetOutDevType() )
+        else if ( OUTDEV_VIRDEV == rRefDev.GetOutDevType() )
         {
             ASSERT( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" )
         }
-        else if ( OUTDEV_WINDOW == pRefDev->GetOutDevType() )
+        else if ( OUTDEV_WINDOW == rRefDev.GetOutDevType() )
         {
             ASSERT( bNoAdjust == 1 && bUseScrFont == 0, "Outdev Check failed" )
         }
@@ -911,21 +966,18 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     // in der Fontfarbe erscheinen.
 
     const BOOL bSwitchH2V = rInf.GetFrm() && rInf.GetFrm()->IsVertical();
-
-#ifdef BIDI
     const BOOL bSwitchL2R = rInf.GetFrm() && rInf.GetFrm()->IsRightToLeft() &&
                             ! rInf.IsIgnoreFrmRTL();
-    const ULONG nMode = rInf.GetpOut()->GetLayoutMode();
+    const ULONG nMode = rInf.GetOut().GetLayoutMode();
     const BOOL bBidiPor = ( bSwitchL2R !=
                             ( 0 != ( TEXT_LAYOUT_BIDI_RTL & nMode ) ) );
 
     // be sure to have the correct layout mode at the printer
     if ( pPrinter )
     {
-        pPrinter->SetLayoutMode( rInf.GetpOut()->GetLayoutMode() );
-        pPrinter->SetDigitLanguage( rInf.GetpOut()->GetDigitLanguage() );
+        pPrinter->SetLayoutMode( rInf.GetOut().GetLayoutMode() );
+        pPrinter->SetDigitLanguage( rInf.GetOut().GetDigitLanguage() );
     }
-#endif
 
     Point aPos( rInf.GetPos() );
     if( !bPrt )
@@ -950,6 +1002,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     if ( STRING_LEN == rInf.GetLen() )
         rInf.SetLen( rInf.GetText().Len() );
+
+
+    //
+    // ASIAN LINE AND CHARACTER GRID MODE START
+    //
 
     if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
@@ -1035,17 +1092,19 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
     }
 
-    // "No screen adj"
+
+    //
+    // DIRECT PAINTING WITHOUT SCREEN ADJUSTMENT
+    //
+
     if ( bDirectPrint )
     {
         const Fraction aTmp( 1, 1 );
         BOOL bStretch = rInf.GetWidth() && ( rInf.GetLen() > 1 ) && bPrt
                         && ( aTmp != rInf.GetOut().GetMapMode().GetScaleX() );
 
-#ifdef BIDI
         if ( bSwitchL2R )
             rInf.GetFrm()->SwitchLTRtoRTL( aPos );
-#endif
 
         if ( bSwitchH2V )
             rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
@@ -1103,7 +1162,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 // Kana Compression
                 if ( SW_CJK == nActual && rInf.GetKanaComp() &&
                      pSI && pSI->CountCompChg() &&
-                     lcl_IsMonoSpaceFont( rInf.GetpOut() ) )
+                     lcl_IsMonoSpaceFont( rInf.GetOut() ) )
                 {
                     pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                                    rInf.GetKanaComp(),
@@ -1148,7 +1207,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     }
                 }
 
-#ifdef BIDI
                 // Kashida Justification
                 if ( SW_CTL == nActual && nSpaceAdd )
                 {
@@ -1163,7 +1221,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         nSpaceAdd = 0;
                     }
                 }
-#endif
             }
 
             long nKernSum = rInf.GetKern();
@@ -1217,14 +1274,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         rInf.GetOut().DrawText( aTmpPos, rInf.GetText(),
                                                 rInf.GetIdx() + j, i - j );
                         j = i + 1;
-#ifdef BIDI
                         SwTwips nAdd = pKernArray[ i ] + nKernSum;
                         if ( ( TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL ) == nMode )
                             nAdd *= -1;
                         aTmpPos.X() = aPos.X() + nAdd;
-#else
-                        aTmpPos.X() = aPos.X() + pKernArray[ i ] + nKernSum;
-#endif
                     }
                 }
                 if( j < i )
@@ -1262,6 +1315,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             rInf.GetOut().DrawText( aPos, rInf.GetText(),
                                     rInf.GetIdx(), rInf.GetLen() );
     }
+
+    //
+    // PAINTING WITH FORMATTING DEVICE/SCREEN ADJUSTMENT
+    //
+
     else
     {
         const String* pStr = &rInf.GetText();
@@ -1270,7 +1328,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         if( bSymbol )
             bBullet = FALSE;
         long *pKernArray = new long[ rInf.GetLen() ];
-        CreateScrFont( rInf.GetShell(), *rInf.GetpOut() );
+        CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
         long nScrPos;
 
         // get screen array
@@ -1278,8 +1336,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray,
                                     rInf.GetIdx(), rInf.GetLen() );
 
-// OLE: no printer available
-//        ASSERT( pPrinter, "DrawText needs pPrinter" )
+        // OLE: no printer available
+        // ASSERT( pPrinter, "DrawText needs pPrinter" )
         if ( pPrinter )
         {
             // pTmpFont has already been set as current font for rInf.GetOut()
@@ -1323,7 +1381,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             // Kana Compression
             if ( SW_CJK == nActual && rInf.GetKanaComp() &&
                  pSI && pSI->CountCompChg() &&
-                 lcl_IsMonoSpaceFont( rInf.GetpOut() ) )
+                 lcl_IsMonoSpaceFont( rInf.GetOut() ) )
             {
                 Point aTmpPos( aPos );
                 pSI->Compress( pScrArray, rInf.GetIdx(), rInf.GetLen(),
@@ -1369,7 +1427,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
             }
 
-#ifdef BIDI
             // Kashida Justification
             if ( SW_CTL == nActual && nSpaceAdd )
             {
@@ -1382,14 +1439,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     nSpaceAdd = 0;
                 }
             }
-#endif
         }
 
         nScrPos = pScrArray[ 0 ];
 
         if( bBullet )
         {
-#ifdef BIDI
             // !!! HACK !!!
             // The Arabic layout engine requires some context of the string
             // which should be painted.
@@ -1409,14 +1464,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             for( xub_StrLen i = 0; i < aStr.Len(); ++i )
                 if( CH_BLANK == aStr.GetChar( i ) )
                     aStr.SetChar( i, cBulletChar );
-#else
-            aStr = rInf.GetText().Copy( rInf.GetIdx(), rInf.GetLen() );
-            pStr = &aStr;
-            for( xub_StrLen i = 0; i < aStr.Len(); ++i )
-                if( CH_BLANK == aStr.GetChar( i ) )
-                    aStr.SetChar( i, CH_BULLET );
-#endif
-
         }
 
         xub_StrLen nCnt = rInf.GetText().Len();
@@ -1434,10 +1481,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         {
             pKernArray[0] = rInf.GetWidth() + rInf.GetSpace() + rInf.GetKern();
 
-#ifdef BIDI
             if ( bSwitchL2R )
                 rInf.GetFrm()->SwitchLTRtoRTL( aPos );
-#endif
 
             if ( bSwitchH2V )
                 rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
@@ -1558,17 +1603,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         Point aEnd;
                         long nKernVal = pKernArray[ USHORT( rInf.GetLen() - 1 ) ];
 
-#ifdef BIDI
                         USHORT nDir = bBidiPor ?
                                         1800 :
                                         UnMapDirection(
                                             GetFont()->GetOrientation(),
                                             bSwitchH2V );
-#else
-                        USHORT nDir =  UnMapDirection(
-                                            GetFont()->GetOrientation(),
-                                            bSwitchH2V );
-#endif
+
                         switch ( nDir )
                         {
                         case 0 :
@@ -1591,13 +1631,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
                         Point aPos( rInf.GetPos() );
 
-#ifdef BIDI
                         if ( bSwitchL2R )
                         {
                             rInf.GetFrm()->SwitchLTRtoRTL( aPos );
                             rInf.GetFrm()->SwitchLTRtoRTL( aEnd );
                         }
-#endif
 
                         if ( bSwitchH2V )
                         {
@@ -1662,17 +1700,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                                   0;
                                 long nKernEnd = pKernArray[ USHORT( nEnd - 1 ) ];
 
-#ifdef BIDI
                                 USHORT nDir = bBidiPor ?
                                               1800 :
                                               UnMapDirection(
                                                 GetFont()->GetOrientation(),
                                                 bSwitchH2V );
-#else
-                                USHORT nDir = UnMapDirection(
-                                                GetFont()->GetOrientation(),
-                                                bSwitchH2V );
-#endif
 
                                 switch ( nDir )
                                 {
@@ -1698,13 +1730,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                     break;
                                 }
 
-#ifdef BIDI
                                 if ( bSwitchL2R )
                                 {
                                     rInf.GetFrm()->SwitchLTRtoRTL( aStart );
                                     rInf.GetFrm()->SwitchLTRtoRTL( aEnd );
                                 }
-#endif
 
                                 if ( bSwitchH2V )
                                 {
@@ -1754,7 +1784,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 #endif
             if( nOffs < nLen )
             {
-#ifdef BIDI
                 // If we paint bullets instead of spaces, we use a copy of
                 // the paragraph string. For the layout engine, the copy
                 // of the string has to be an environment of the range which
@@ -1765,9 +1794,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
                 if ( bSwitchL2R )
                     rInf.GetFrm()->SwitchLTRtoRTL( aPos );
-#else
-                register xub_StrLen nTmpIdx = bBullet ? 0 : rInf.GetIdx();
-#endif
 
                 if ( bSwitchH2V )
                     rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
@@ -1809,8 +1835,8 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     // be sure to have the correct layout mode at the printer
     if ( pPrinter )
     {
-        pPrinter->SetLayoutMode( rInf.GetpOut()->GetLayoutMode() );
-        pPrinter->SetDigitLanguage( rInf.GetpOut()->GetDigitLanguage() );
+        pPrinter->SetLayoutMode( rInf.GetOut().GetLayoutMode() );
+        pPrinter->SetDigitLanguage( rInf.GetOut().GetDigitLanguage() );
     }
 
     if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
@@ -1834,7 +1860,11 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 
             aTxtSize.Width() =
                     pOutDev->GetTextWidth( rInf.GetText(), rInf.GetIdx(), nLn );
-            aTxtSize.Height() = pOutDev->GetTextHeight() + nLeading;
+
+            ASSERT( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExtLeading(),
+                "Leading values should be already calculated" )
+            aTxtSize.Height() = pOutDev->GetTextHeight() +
+                                GetFontLeading( rInf.GetShell(), rInf.GetOut() );
 
             long nWidthPerChar = aTxtSize.Width() / nLn;
 
@@ -1854,7 +1884,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                            SW_CJK == rInf.GetFont()->GetActual() &&
                            rInf.GetScriptInfo() &&
                            rInf.GetScriptInfo()->CountCompChg() &&
-                           lcl_IsMonoSpaceFont( rInf.GetpOut() );
+                           lcl_IsMonoSpaceFont( rInf.GetOut() );
 
     ASSERT( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
@@ -1869,9 +1899,9 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                                                    rInf.GetIdx(), nLn );
         aTxtSize.Height() = pPrinter->GetTextHeight();
         long *pKernArray = new long[nLn];
-        CreateScrFont( rInf.GetShell(), *rInf.GetpOut() );
-        if( !GetScrFont()->IsSameInstance( rInf.GetpOut()->GetFont() ) )
-            rInf.GetpOut()->SetFont( *pScrFont );
+        CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
+        if( !GetScrFont()->IsSameInstance( rInf.GetOut().GetFont() ) )
+            rInf.GetOut().SetFont( *pScrFont );
         long nScrPos;
 
         pPrinter->GetTextArray( rInf.GetText(), pKernArray, rInf.GetIdx(),nLn );
@@ -1887,8 +1917,8 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         else
         {
             long* pScrArray = new long[ rInf.GetLen() ];
-            rInf.GetpOut()->GetTextArray( rInf.GetText(), pScrArray,
-                                   rInf.GetIdx(), rInf.GetLen() );
+            rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray,
+                                        rInf.GetIdx(), rInf.GetLen() );
             nScrPos = pScrArray[ 0 ];
             xub_StrLen nCnt = rInf.GetText().Len();
             if ( nCnt < rInf.GetIdx() )
@@ -1933,13 +1963,13 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     }
     else
     {
-        if( !pPrtFont->IsSameInstance( rInf.GetpOut()->GetFont() ) )
-            rInf.GetpOut()->SetFont( *pPrtFont );
+        if( !pPrtFont->IsSameInstance( rInf.GetOut().GetFont() ) )
+            rInf.GetOut().SetFont( *pPrtFont );
         if( bCompress )
         {
             long *pKernArray = new long[nLn];
-            rInf.GetpOut()->GetTextArray( rInf.GetText(), pKernArray,
-                                          rInf.GetIdx(), nLn );
+            rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+                                        rInf.GetIdx(), nLn );
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray,
                 rInf.GetIdx(), nLn, rInf.GetKanaComp(),
                 (USHORT) aFont.GetSize().Height() ) );
@@ -1948,18 +1978,20 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         }
         else
         {
-            aTxtSize.Width() = rInf.GetpOut()->GetTextWidth( rInf.GetText(),
-                                                             rInf.GetIdx(), nLn );
+            aTxtSize.Width() = rInf.GetOut().GetTextWidth( rInf.GetText(),
+                                                           rInf.GetIdx(), nLn );
             rInf.SetKanaDiff( 0 );
         }
 
-        aTxtSize.Height() = rInf.GetpOut()->GetTextHeight();
+        aTxtSize.Height() = rInf.GetOut().GetTextHeight();
     }
 
     if ( rInf.GetKern() && nLn )
         aTxtSize.Width() += ( nLn - 1 ) * long( rInf.GetKern() );
 
-    aTxtSize.Height() += nLeading;
+    ASSERT( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExtLeading(),
+            "Leading values should be already calculated" )
+    aTxtSize.Height() += GetFontLeading( rInf.GetShell(), rInf.GetOut() );
     return aTxtSize;
 }
 
@@ -1978,14 +2010,14 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
     if ( pPrinter )
     {
-        pPrinter->SetLayoutMode( rInf.GetpOut()->GetLayoutMode() );
-        pPrinter->SetDigitLanguage( rInf.GetpOut()->GetDigitLanguage() );
+        pPrinter->SetLayoutMode( rInf.GetOut().GetLayoutMode() );
+        pPrinter->SetDigitLanguage( rInf.GetOut().GetDigitLanguage() );
         pPrinter->GetTextArray( rInf.GetText(), pKernArray,
                                 rInf.GetIdx(), rInf.GetLen() );
     }
     else
-        rInf.GetpOut()->GetTextArray( rInf.GetText(), pKernArray,
-                            rInf.GetIdx(), rInf.GetLen() );
+        rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+                                    rInf.GetIdx(), rInf.GetLen() );
 
     const SwScriptInfo* pSI = rInf.GetScriptInfo();
     if ( rInf.GetFont() && rInf.GetLen() )
@@ -1995,7 +2027,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         // Kana Compression
         if ( SW_CJK == nActual && rInf.GetKanaComp() &&
              pSI && pSI->CountCompChg() &&
-             lcl_IsMonoSpaceFont( rInf.GetpOut() ) )
+             lcl_IsMonoSpaceFont( rInf.GetOut() ) )
         {
             pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                            rInf.GetKanaComp(),
@@ -2236,7 +2268,8 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
                 pFntObj->CreatePrtFont( *pOut );
                 pFntObj->pPrinter = pOut;
                 pFntObj->pScrFont = NULL;
-                pFntObj->nLeading = USHRT_MAX;
+                pFntObj->nGuessedLeading = USHRT_MAX;
+                pFntObj->nExtLeading = USHRT_MAX;
                 pFntObj->nPrtAscent = USHRT_MAX;
                 pFntObj->nPrtHeight = USHRT_MAX;
             }
@@ -2266,13 +2299,13 @@ extern xub_StrLen lcl_CalcCaseMap( const SwFont& rFnt,
 
 xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 {
-     ChgFnt( rInf.GetShell(), rInf.GetpOut() );
+    ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
     const BOOL bCompress = rInf.GetKanaComp() && rInf.GetLen() &&
                            SW_CJK == GetActual() &&
                            rInf.GetScriptInfo() &&
                            rInf.GetScriptInfo()->CountCompChg() &&
-                           lcl_IsMonoSpaceFont( rInf.GetpOut() );
+                           lcl_IsMonoSpaceFont( rInf.GetOut() );
 
     ASSERT( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
@@ -2365,12 +2398,12 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
         }
 
            if( rInf.GetHyphPos() )
-            nTxtBreak = rInf.GetpOut()->GetTextBreak( *pTmpText, nTextWidth,
-                                                      '-', *rInf.GetHyphPos(),
-                                                      nTmpIdx, nTmpLen, nKern );
+            nTxtBreak = rInf.GetOut().GetTextBreak( *pTmpText, nTextWidth,
+                                                    '-', *rInf.GetHyphPos(),
+                                                     nTmpIdx, nTmpLen, nKern );
         else
-               nTxtBreak = rInf.GetpOut()->GetTextBreak( *pTmpText, nTextWidth,
-                                                      nTmpIdx, nTmpLen, nKern );
+            nTxtBreak = rInf.GetOut().GetTextBreak( *pTmpText, nTextWidth,
+                                                    nTmpIdx, nTmpLen, nKern );
 
         if ( bTextReplaced && STRING_LEN != nTxtBreak )
         {
