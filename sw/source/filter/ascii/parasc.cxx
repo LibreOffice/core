@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:42:43 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,6 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-
-#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -186,10 +184,9 @@ ULONG AsciiReader::Read( SwDoc &rDoc, SwPaM &rPam, const String & )
     return nRet;
 }
 
-SwASCIIParser::SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
-                            int bReadNewDoc, const SwAsciiOptions& rOpts )
-    : pDoc( pD ), rInput( rIn ), rOpt( rOpts ), bNewDoc( bReadNewDoc ),
-    nScript( 0 )
+SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
+    int bReadNewDoc, const SwAsciiOptions& rOpts)
+    : pDoc(pD), rInput(rIn), rOpt(rOpts), nScript(0), bNewDoc(bReadNewDoc)
 {
     pPam = new SwPaM( *rCrsr.GetPoint() );
     pArr = new sal_Char [ ASC_BUFFLEN + 1 ];
@@ -253,8 +250,8 @@ ULONG SwASCIIParser::CallParser()
     ::StartProgress( STR_STATSTR_W4WREAD, 0, nFileSize, pDoc->GetDocShell() );
 
     SwPaM* pInsPam = 0;
-    xub_StrLen nSttCntnt;
-    if( !bNewDoc )
+    xub_StrLen nSttCntnt = 0;
+    if (!bNewDoc)
     {
         const SwNodeIndex& rTmp = pPam->GetPoint()->nNode;
         pInsPam = new SwPaM( rTmp, rTmp, 0, -1 );
