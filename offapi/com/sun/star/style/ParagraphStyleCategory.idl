@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphStyleCategory.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:50:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 // DocMerge from idl: constants com::sun::star::style::ParagraphStyleCategory
 /** These constants are used to specify the category of paragraph styles in text documents.
  */
-constants ParagraphStyleCategory
+published constants ParagraphStyleCategory
 {
     //-------------------------------------------------------------------------
 
