@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:45:15 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,9 +926,32 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont,
         USHORT nEntryCount = (USHORT)GetEntryCount();
         const OUString* pFileNames = aFileNames.getConstArray();
         rSh.StartAction();
-        for(sal_Int32 nFile = nFiles; nFile; nFile--)
+        // after insertion of the first new content the 'pCont' parameter becomes invalid
+        // find the index of the 'anchor' content to always use a current anchor content
+        USHORT nAnchorContent = pSwGlblDocContents->Count() - 1;
+        if(!bMove)
         {
-            String sFileName(pFileNames[nFile - 1]);
+            for( USHORT nContent = 0; nContent < pSwGlblDocContents->Count(); ++nContent)
+            {
+                if( *pCont == *pSwGlblDocContents->GetObject(nContent) )
+                {
+                    nAnchorContent = nContent;
+                    break;
+                }
+            }
+        }
+        SwGlblDocContents aTempContents;
+        for(sal_Int32 nFile = 0; nFile < nFiles; ++nFile)
+        {
+            //update the global document content after each inserted document
+            rSh.GetGlobalDocContent(aTempContents);
+            SwGlblDocContent* pAnchorContent = 0;
+            DBG_ASSERT(aTempContents.Count() > (nAnchorContent + nFile), "invalid anchor content -> last insertion failed")
+            if( aTempContents.Count() > (nAnchorContent + nFile) )
+                pAnchorContent = aTempContents.GetObject(nAnchorContent + nFile);
+            else
+                pAnchorContent = aTempContents.GetObject(aTempContents.Count() - 1);
+            String sFileName(pFileNames[nFile]);
             INetURLObject aFileUrl(sFileName);
             String sSectionName(String(aFileUrl.GetLastName(
                 INetURLObject::DECODE_UNAMBIGUOUS)).GetToken(0,
@@ -964,7 +987,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont,
             aSection.SetType( FILE_LINK_SECTION);
             aSection.SetLinkFilePassWd( sFilePassword );
 
-            rSh.InsertGlobalDocContent( *pCont, aSection );
+            rSh.InsertGlobalDocContent( *pAnchorContent, aSection );
         }
         if(bMove)
         {
