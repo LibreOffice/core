@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:37:24 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,19 +262,25 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
             if( pViewSh )
             {
-                if( pViewSh->ISA( SdOutlineViewShell ) &&
-                    pInfo->GetOutliner() == ( (SdOutlineView*) ( (SdOutlineViewShell*) pViewSh)->GetView() )->GetOutliner()  )
+                if( pViewSh->ISA( SdOutlineViewShell ) )
                 {
-                    // outline mode
-                    nPgNum = 0;
-                    Outliner* pOutl = ((SdOutlineView*)pViewSh->GetView())->GetOutliner();
-                    long nPos = pInfo->GetPara();
-                    ULONG nParaPos = 0;
-
-                    for( Paragraph* pPara = pOutl->GetParagraph( 0 ); pPara && nPos >= 0; pPara = pOutl->GetParagraph( ++nParaPos ), nPos-- )
+                    // #110023#
+                    // since the view from the SdOutlineViewShell can be zero during SdOutlineViewShell c'tor
+                    // we have to check this here
+                    SdOutlineView * pSdView = (SdOutlineView*) ( (SdOutlineViewShell*) pViewSh)->GetView();
+                    if( pSdView && (pInfo->GetOutliner() ==  pSdView->GetOutliner())  )
                     {
-                        if( pOutl->GetDepth( (USHORT) nParaPos ) == 0 )
-                            nPgNum++;
+                        // outline mode
+                        nPgNum = 0;
+                        Outliner* pOutl = pSdView->GetOutliner();
+                        long nPos = pInfo->GetPara();
+                        ULONG nParaPos = 0;
+
+                        for( Paragraph* pPara = pOutl->GetParagraph( 0 ); pPara && nPos >= 0; pPara = pOutl->GetParagraph( ++nParaPos ), nPos-- )
+                        {
+                            if( pOutl->GetDepth( (USHORT) nParaPos ) == 0 )
+                                nPgNum++;
+                        }
                     }
                 }
                 else
