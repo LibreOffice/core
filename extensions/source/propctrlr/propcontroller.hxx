@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 06:28:14 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 10:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,8 @@ namespace pcr
         void ChangeFontProperty(const ::rtl::OUString& rName);
         void ChangeEventProperty(const ::rtl::OUString& rName);
         void ChangeFormatProperty(const ::rtl::OUString& rName, const ::rtl::OUString& rCurVal);
+        // and again ...
+        void OnImageURLClicked( const String& _rName, const String& _rVal, void* _pData );
 
         void SetTables(OLineDescriptor& _rProperty);
         void SetQueries(OLineDescriptor& _rProperty);
@@ -371,6 +373,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/04/12 06:28:14  fs
+ *  #84694# +recalcConnection
+ *
  *  Revision 1.5  2001/03/21 15:42:29  fs
  *  #82696# new helper methods for font handling
  *
