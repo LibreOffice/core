@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:51:42 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,10 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
         Point aPoint( aTmpPos );
         aPoint.X() -= 1;                    //nicht im Fly landen!!
         GetLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
-        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->GetFrm( 0, 0, sal_False );
+        // OD 01.07.2003 #108784# - determine text frame by left-top-corner
+        // of object
+        //pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->GetFrm( 0, 0, sal_False );
+        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->GetFrm( &aTmpPos, 0, sal_False );
     }
     const SwFrm *pTmp = ::FindAnchor( pTxtFrm, aTmpPos );
     const SwFlyFrm *pFly = pTmp->FindFlyFrm();
@@ -545,8 +548,8 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
          !GetUserCall(rMrkList.GetMark( 0 )->GetObj()) )
         return aRet;
 
-    SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
-    SwFmt *pFmt = ::FindFrmFmt( pObj );
+    SdrObject* pObj = rMrkList.GetMark( 0 )->GetObj();
+    SwFmt* pFmt = ::FindFrmFmt( pObj );
     SwFmtAnchor aAnch( pFmt->GetAnchor() );
     RndStdIds nAnchorId = aAnch.GetAnchorId();
 
@@ -555,8 +558,8 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
 
     sal_Bool bFlyFrame = pObj->IsWriterFlyFrame();
 
-    SwFlyFrm *pFly;
-    const SwFrm *pOldAnch;
+    SwFlyFrm* pFly;
+    const SwFrm* pOldAnch;
     const SwFrm* pFooterOrHeader = NULL;
 
     if( bFlyFrame )
@@ -573,6 +576,16 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
             return aRet;
         if( FLY_PAGE != nAnchorId )
             pFooterOrHeader = pCntnt->FindFooterOrHeader();
+    }
+    // OD 26.06.2003 #108784# - set <pFooterOrHeader> also for drawing
+    // objects, but not for control objects.
+    // Necessary for moving 'anchor symbol' at the user interface inside header/footer.
+    else if ( !::CheckControlLayer( pObj ) )
+    {
+        SwCntntFrm *pCntnt = GetCurrFrm( sal_False );
+        if( !pCntnt )
+            return aRet;
+        pFooterOrHeader = pCntnt->FindFooterOrHeader();
     }
 
     //Ausgehend von der linken oberen Ecke des Fly den
@@ -1783,10 +1796,25 @@ const SwFrmFmt* SwFEShell::GetFmtFromAnyObj( const Point& rPt ) const
 ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
 {
     ObjCntType eType;
-    if( FmFormInventor == rObj.GetObjInventor() )
+
+    // OD 23.06.2003 #108784# - investigate 'master' drawing object, if method
+    // is called for a 'virtual' drawing object.
+    const SdrObject* pInvestigatedObj;
+    if ( rObj.ISA(SwDrawVirtObj) )
+    {
+        const SwDrawVirtObj* pDrawVirtObj = static_cast<const SwDrawVirtObj*>(&rObj);
+        pInvestigatedObj = &(pDrawVirtObj->GetReferencedObj());
+    }
+    else
+    {
+        pInvestigatedObj = &rObj;
+    }
+
+    if( FmFormInventor == pInvestigatedObj->GetObjInventor() )
     {
         eType = OBJCNT_CONTROL;
-        uno::Reference< awt::XControlModel >  xModel = ((SdrUnoObj&)rObj).GetUnoControlModel();
+        uno::Reference< awt::XControlModel >  xModel =
+                ((SdrUnoObj&)(*pInvestigatedObj)).GetUnoControlModel();
         if( xModel.is() )
         {
             uno::Any aVal;
@@ -1803,9 +1831,9 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
             }
         }
     }
-    else if( rObj.IsWriterFlyFrame() )
+    else if( pInvestigatedObj->IsWriterFlyFrame() )
     {
-        SwFlyFrm *pFly = ((SwVirtFlyDrawObj&)rObj).GetFlyFrm();
+        SwFlyFrm *pFly = ((SwVirtFlyDrawObj&)(*pInvestigatedObj)).GetFlyFrm();
         if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
         {
             if ( ((SwCntntFrm*)pFly->Lower())->GetNode()->GetGrfNode() )
@@ -1816,8 +1844,9 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
         else
             eType = OBJCNT_FLY;
     }
-    else if( rObj.ISA( SdrObjGroup ) && FLY_IN_CNTNT !=
-        ((SwDrawContact*)GetUserCall(&rObj))->GetFmt()->GetAnchor().GetAnchorId() )
+    else if( pInvestigatedObj->ISA( SdrObjGroup ) &&
+             FLY_IN_CNTNT !=
+                ((SwDrawContact*)GetUserCall(pInvestigatedObj))->GetFmt()->GetAnchor().GetAnchorId() )
         eType = OBJCNT_GROUPOBJ;
     else
         eType = OBJCNT_SIMPLE;
