@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: npower $ $Date: 2003-02-18 13:10:01 $
+#   last change: $Author: npower $ $Date: 2003-02-18 14:54:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -213,7 +213,7 @@
 <!--  <target name="buildunopackage_win7" depends="build.conditions" if="win7.build">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
-    <!-- <exec executable="regmerge">
+    <exec executable="regmerge">
         <arg value="/tmp/ScriptFramework.rdb"/>
         <arg value="/"/>
         <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcssscriptframework.db"/>
@@ -222,7 +222,7 @@
         <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcsssfsecurity.db"/>
     </exec>
     <copy file="/tmp/ScriptFramework.rdb"
-        todir="${out}/class/sframework/"/> -->
+        todir="${out}/class/sframework/"/>
     <copy file="/net/cdelab18/scriptdev/duncanf/SRX644/scripting/workben/sf.rdb"
         todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
@@ -312,8 +312,7 @@
     <copy file="${out}/class/ScriptRuntimeForBeanShell.jar"
         todir="${out}/class/bshruntime/"/>
     <mkdir dir="${out}/class/bshruntime/skip_registration"/>
-    <!-- <copy file="${install.dir}/bsh-1.2b7.jar" -->
-    <copy file="${prj}/java/bsh-1.2b7.jar"
+    <copy file="${install.dir}/bsh-1.2b7.jar"
         todir="${out}/class/bshruntime/skip_registration"/>
     <zip zipfile="${out}/class/sframeworkinstall/sframework/bshruntime.zip"
         basedir="${out}/class/bshruntime">
