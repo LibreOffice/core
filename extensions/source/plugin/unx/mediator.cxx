@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediator.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-27 19:44:13 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ ULONG Mediator::SendMessage( ULONG nBytes, const char* pBytes, ULONG nMessageID 
     pBuffer[ 1 ] = nBytes;
     memcpy( &pBuffer[2], pBytes, (size_t)nBytes );
     write( m_nSocket, pBuffer, nBytes + 2*sizeof( ULONG ) );
-    delete pBuffer;
+    delete [] pBuffer;
 
     return nMessageID;
 }
@@ -225,7 +225,7 @@ void MediatorListener::run()
             else
                 medDebug( 1, "got incomplete MediatorMessage: { %d, %d, %*s }\n",
                           nHeader[0], nHeader[1], nHeader[1], pBuffer );
-                delete pBuffer;
+            delete [] pBuffer;
         }
         else
         {
