@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:40:56 $
+ *  last change: $Author: kz $ $Date: 2004-12-08 17:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,31 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     SetModified();
 }
 
+void SwDoc::PropagateOutlineRule()
+{
+    for (USHORT n = 0; n < pTxtFmtCollTbl->Count(); n++)
+    {
+        SwTxtFmtColl *pColl = (*pTxtFmtCollTbl)[n];
 
+        if (NO_NUMBERING != pColl->GetOutlineLevel())
+        {
+            SwClientIter aIter(*pColl);
+
+            const SwClient * pClient = aIter.First(TYPE(SwTxtNode));
+            while (pClient)
+            {
+                SwTxtNode * pTxtNode = ((SwTxtNode *) pClient);
+
+                const SwPaM aPam(*pTxtNode);
+                SetNumRule(aPam, *GetOutlineNumRule());
+
+                pTxtNode->SetLevel(pColl->GetOutlineLevel());
+
+                pClient = aIter.Next();
+            }
+        }
+    }
+}
 
     // Hoch-/Runterstufen
 BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
