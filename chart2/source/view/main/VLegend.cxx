@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-16 11:20:53 $
+ *  last change: $Author: bm $ $Date: 2003-10-16 11:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,9 +333,7 @@ void lcl_getLegendEntries(
                 {
                     // setting initial value (otherwise (0,0) is always the minimum)
                     if( rOutMinExtentSoFar.Height == 0 )
-                    {
                         rOutMinExtentSoFar = aEntrySize;
-                    }
                     else
                     {
                         rOutMinExtentSoFar.Width =  ::std::min( rOutMinExtentSoFar.Width,  aEntrySize.Width );
@@ -372,7 +370,6 @@ void lcl_createLegend(
     const sal_Int32 nXOffset = 100;
     const sal_Int32 nYOffset = 100;
 
-//     awt::Size aMaxSymbolExtent( aMaxEntryExtent.Height * 3/2, aMaxEntryExtent.Height );
     awt::Size aMaxSymbolExtent( aMinEntryExtent.Height * 3/2, aMinEntryExtent.Height );
     sal_Int32 nCurrentXPos = nXPadding;
     sal_Int32 nCurrentYPos = nYPadding;
@@ -495,7 +492,6 @@ void lcl_createLegend(
 
     rOutSize.Width  = nCurrentXPos + nXPadding;
     rOutSize.Height = nMaxYPos + nYPadding;
-    // 2*nYPadding + (nMaxEntryHeight * nNumberOfRows ) - nYOffset;
 }
 
 } // anonymous namespace
@@ -508,7 +504,6 @@ namespace chart
 VLegend::VLegend(
     const uno::Reference< chart2::XLegend > & xLegend ) :
         m_xLegend( xLegend )
-//         m_aMaxSize( -1, -1 )
 {
 }
 

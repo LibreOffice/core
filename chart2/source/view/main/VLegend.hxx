@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-14 17:17:17 $
+ *  last change: $Author: bm $ $Date: 2003-10-16 11:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,6 @@ public:
                             ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
 
     void createShapes( const ::com::sun::star::awt::Size & rAvailableSpace );
-
-//     void setMaxSize( const ::com::sun::star::awt::Size & rSize );
 
     void changePosition( const ::com::sun::star::awt::Point & rPos,
                          const ::drafts::com::sun::star::layout::Alignment& rAlignment );
