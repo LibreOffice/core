@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-11 12:18:09 $
+ *  last change: $Author: cl $ $Date: 2002-02-14 07:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,6 +693,15 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             break;
         }
     }
+
+    // #97489# #97111#
+    // if there was an error and no element for the shape was exported
+    // we need to clear the attribute list or the attributes will be
+    // set on the next exported element, which can result in corrupt
+    // xml files due to duplicate attributes
+
+    rExport.CheckAttrList();    // asserts in non pro if we have attributes left
+    rExport.ClearAttrList();    // clears the attributes
 }
 
 ///////////////////////////////////////////////////////////////////////
