@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:33:15 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,6 +377,9 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // read/write the default for this item
     M_ED( "IsSplitAllowed", STYLE, KEEP_TOGETHER, XML_TYPE_BOOL | MID_FLAG_NO_PROPERTY_IMPORT, CTF_KEEP_TOGETHER ),
 
+    // RES_FOLLOW_TEXT_FLOW - DVO, OD 01.10.2003 #i18732#
+    M_ED( "IsFollowingTextFlow", DRAW, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
+
     M_END()
 };
 
@@ -685,6 +688,8 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // RES_GRFATR_DRAWMODE
     M_E( "GraphicColorMode", DRAW, COLOR_MODE,          XML_TYPE_COLOR_MODE, 0 ),
     M_E( "WritingMode",      STYLE, WRITING_MODE,       XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
+    // RES_FOLLOW_TEXT_FLOW - DVO, OD 01.10.2003 #i18732#
+    M_E( "IsFollowingTextFlow", DRAW, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
 
     // special entries for floating frames
     M_E( "",            DRAW,   FRAME_DISPLAY_SCROLLBAR,    XML_TYPE_BOOL|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY, CTF_FRAME_DISPLAY_SCROLLBAR ),
@@ -830,7 +835,3 @@ XMLTextPropertySetMapper::XMLTextPropertySetMapper( sal_uInt16 nType ) :
 XMLTextPropertySetMapper::~XMLTextPropertySetMapper()
 {
 }
-
-
-
-
