@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-06 12:41:53 $
+ *  last change: $Author: os $ $Date: 2001-04-10 10:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,15 +601,15 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_TOP_BORDER),                    RES_BOX,                &::getCppuType((const table::BorderLine*)0),        PropertyAttribute::MAYBEVOID, TOP_BORDER   |CONVERT_TWIPS },                            \
         { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER),             RES_BOX,                &::getCppuType((const table::BorderLine*)0),        PropertyAttribute::MAYBEVOID, BOTTOM_BORDER|CONVERT_TWIPS },                                \
         { SW_PROP_NAME(UNO_NAME_BORDER_DISTANCE),           RES_BOX,                &::getCppuType((const sal_Int32*)0),            PropertyAttribute::MAYBEVOID, BORDER_DISTANCE|CONVERT_TWIPS },                               \
-        { SW_PROP_NAME(UNO_NAME_LEFT_BORDER_DISTANCE),  RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },                                                            \
-        { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER_DISTANCE), RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },                                                            \
-        { SW_PROP_NAME(UNO_NAME_TOP_BORDER_DISTANCE),       RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },                                                        \
-        { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER_DISTANCE),    RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },                                                        \
-        { SW_PROP_NAME(UNO_NAME_HYPER_LINK_U_R_L   ),           RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_URL},                                                                 \
-        { SW_PROP_NAME(UNO_NAME_HYPER_LINK_TARGET  ),           RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_TARGET},                                                              \
-        { SW_PROP_NAME(UNO_NAME_HYPER_LINK_NAME ),          RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_HYPERLINKNAME     },                                                      \
-        { SW_PROP_NAME(UNO_NAME_UNVISITED_CHAR_STYLE_NAME),   RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),       PROPERTY_NONE ,MID_URL_VISITED_FMT       },                                                       \
-        { SW_PROP_NAME(UNO_NAME_VISITED_CHAR_STYLE_NAME),     RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),           PROPERTY_NONE ,MID_URL_UNVISITED_FMT     },                                                     \
+        { SW_PROP_NAME(UNO_NAME_LEFT_BORDER_DISTANCE),  RES_BOX,                &::getCppuType((const sal_Int32*)0),        PropertyAttribute::MAYBEVOID, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },                                                            \
+        { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER_DISTANCE), RES_BOX,                &::getCppuType((const sal_Int32*)0),        PropertyAttribute::MAYBEVOID, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },                                                            \
+        { SW_PROP_NAME(UNO_NAME_TOP_BORDER_DISTANCE),       RES_BOX,                &::getCppuType((const sal_Int32*)0),    PropertyAttribute::MAYBEVOID, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },                                                        \
+        { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER_DISTANCE),    RES_BOX,                &::getCppuType((const sal_Int32*)0),    PropertyAttribute::MAYBEVOID, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },                                                        \
+        { SW_PROP_NAME(UNO_NAME_HYPER_LINK_U_R_L   ),           RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),      PropertyAttribute::MAYBEVOID ,MID_URL_URL},                                                                 \
+        { SW_PROP_NAME(UNO_NAME_HYPER_LINK_TARGET  ),           RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),      PropertyAttribute::MAYBEVOID ,MID_URL_TARGET},                                                              \
+        { SW_PROP_NAME(UNO_NAME_HYPER_LINK_NAME ),          RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID ,MID_URL_HYPERLINKNAME  },                                                      \
+        { SW_PROP_NAME(UNO_NAME_UNVISITED_CHAR_STYLE_NAME),   RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),       PropertyAttribute::MAYBEVOID ,MID_URL_VISITED_FMT   },                                                       \
+        { SW_PROP_NAME(UNO_NAME_VISITED_CHAR_STYLE_NAME),     RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),        PropertyAttribute::MAYBEVOID ,MID_URL_UNVISITED_FMT  },                                                     \
         { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },                                   \
         { SW_PROP_NAME(UNO_NAME_TEXT_USER_DEFINED_ATTRIBUTES),  RES_TXTATR_UNKNOWN_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },                               \
         { SW_PROP_NAME(UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL), FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL,&::getCppuType((const sal_Int8*)0),   PropertyAttribute::READONLY, 0},                                                     \
@@ -620,9 +620,9 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_PREFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PropertyAttribute::MAYBEVOID, MID_START_BRACKET}, \
         { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PropertyAttribute::MAYBEVOID, MID_END_BRACKET}, \
         { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIS),                 RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_EMPHASIS},\
-        { SW_PROP_NAME(UNO_NAME_PARA_IS_HANGING_PUNCTUATION),   RES_PARATR_HANGINGPUNCTUATION,  &::getBooleanCppuType(),    PROPERTY_NONE ,0     },    \
-        { SW_PROP_NAME(UNO_NAME_PARA_IS_CHARACTER_DISTANCE),    RES_PARATR_SCRIPTSPACE,         &::getBooleanCppuType(),    PROPERTY_NONE ,0     },    \
-        { SW_PROP_NAME(UNO_NAME_PARA_IS_FORBIDDEN_RULES),       RES_PARATR_FORBIDDEN_RULES,     &::getBooleanCppuType(),    PROPERTY_NONE ,0     }, \
+        { SW_PROP_NAME(UNO_NAME_PARA_IS_HANGING_PUNCTUATION),   RES_PARATR_HANGINGPUNCTUATION,  &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID ,0  },    \
+        { SW_PROP_NAME(UNO_NAME_PARA_IS_CHARACTER_DISTANCE),    RES_PARATR_SCRIPTSPACE,         &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID ,0  },    \
+        { SW_PROP_NAME(UNO_NAME_PARA_IS_FORBIDDEN_RULES),       RES_PARATR_FORBIDDEN_RULES,     &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID ,0  }, \
         { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION               ),  RES_CHRATR_ROTATE,      &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID,     MID_ROTATE      },  \
         { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE),  RES_CHRATR_ROTATE,      &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID,         MID_FITTOLINE  },  \
         { SW_PROP_NAME(UNO_NAME_CHAR_SCALE_WIDTH            ),  RES_CHRATR_SCALEW,      &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID,          0 },  \
