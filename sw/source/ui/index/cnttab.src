@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 21:05:01 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3298,7 +3298,7 @@ TabPage TP_TOX_ENTRY
         Text = "Formatierung" ;
         Text [ ENGLISH ] = "Format" ;
         Text[ english_us ] = "Format";
-        Text[ portuguese ] = "Formataηγo";
+        Text[ portuguese ] = "Formato";
         Text[ russian ] = "Τξπμΰς";
         Text[ greek ] = "Μορφοποιημένο πεδίο";
         Text[ dutch ] = "Opmaak";
