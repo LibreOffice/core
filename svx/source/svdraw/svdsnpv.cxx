@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdsnpv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:01:29 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ SdrSnapView::SdrSnapView(SdrModel* pModel1, OutputDevice* pOut):
     ClearVars();
 }
 
-SdrSnapView::SdrSnapView(SdrModel* pModel1, ExtOutputDevice* pXOut):
+SdrSnapView::SdrSnapView(SdrModel* pModel1, XOutputDevice* pXOut):
     SdrPaintView(pModel1,pXOut)
 {
     ClearVars();
@@ -705,129 +705,129 @@ void SdrSnapView::DrawDragHelpLine(OutputDevice* pOut) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrSnapView::WriteRecords(SvStream& rOut) const
-{
-    SdrPaintView::WriteRecords(rOut);
-    {
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWSNAP);
-        rOut<<aMagnSiz;
-        rOut<<aSnapSiz;
+//BFS01void SdrSnapView::WriteRecords(SvStream& rOut) const
+//BFS01{
+//BFS01 SdrPaintView::WriteRecords(rOut);
+//BFS01 {
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWSNAP);
+//BFS01     rOut<<aMagnSiz;
+//BFS01     rOut<<aSnapSiz;
+//BFS01
+//BFS01     rOut << (BOOL)bSnapEnab;
+//BFS01     rOut << (BOOL)bGridSnap;
+//BFS01     rOut << (BOOL)bBordSnap;
+//BFS01     rOut << (BOOL)bHlplSnap;
+//BFS01     rOut << (BOOL)bOFrmSnap;
+//BFS01     rOut << (BOOL)bOPntSnap;
+//BFS01     rOut << (BOOL)bOConSnap;
+//BFS01     rOut << (BOOL)bMoveMFrmSnap;
+//BFS01     rOut << (BOOL)bMoveOFrmSnap;
+//BFS01     rOut << (BOOL)bMoveOPntSnap;
+//BFS01     rOut << (BOOL)bMoveOConSnap;
+//BFS01     rOut << (BOOL)bHlplFixed;
+//BFS01
+//BFS01     rOut<<nMagnSizPix;
+//BFS01
+//BFS01     rOut << (BOOL)bSnapTo1Pix;
+//BFS01     rOut << (BOOL)bMoveSnapOnlyTopLeft;
+//BFS01
+//BFS01     rOut<<aSnapWdtX;
+//BFS01     rOut<<aSnapWdtY;
+//BFS01 } {
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWORTHO);
+//BFS01
+//BFS01     rOut << (BOOL)bOrtho;
+//BFS01     rOut << (BOOL)bBigOrtho;
+//BFS01
+//BFS01     rOut<<nSnapAngle;
+//BFS01
+//BFS01     rOut << (BOOL)bAngleSnapEnab;
+//BFS01     rOut << (BOOL)bMoveOnlyDragging;
+//BFS01     rOut << (BOOL)bSlantButShear;
+//BFS01     rOut << (BOOL)bCrookNoContortion;
+//BFS01
+//BFS01     rOut<<USHORT(eCrookMode);
+//BFS01 }
+//BFS01}
 
-        rOut << (BOOL)bSnapEnab;
-        rOut << (BOOL)bGridSnap;
-        rOut << (BOOL)bBordSnap;
-        rOut << (BOOL)bHlplSnap;
-        rOut << (BOOL)bOFrmSnap;
-        rOut << (BOOL)bOPntSnap;
-        rOut << (BOOL)bOConSnap;
-        rOut << (BOOL)bMoveMFrmSnap;
-        rOut << (BOOL)bMoveOFrmSnap;
-        rOut << (BOOL)bMoveOPntSnap;
-        rOut << (BOOL)bMoveOConSnap;
-        rOut << (BOOL)bHlplFixed;
-
-        rOut<<nMagnSizPix;
-
-        rOut << (BOOL)bSnapTo1Pix;
-        rOut << (BOOL)bMoveSnapOnlyTopLeft;
-
-        rOut<<aSnapWdtX;
-        rOut<<aSnapWdtY;
-    } {
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWORTHO);
-
-        rOut << (BOOL)bOrtho;
-        rOut << (BOOL)bBigOrtho;
-
-        rOut<<nSnapAngle;
-
-        rOut << (BOOL)bAngleSnapEnab;
-        rOut << (BOOL)bMoveOnlyDragging;
-        rOut << (BOOL)bSlantButShear;
-        rOut << (BOOL)bCrookNoContortion;
-
-        rOut<<USHORT(eCrookMode);
-    }
-}
-
-BOOL SdrSnapView::ReadRecord(const SdrIOHeader& rViewHead,
-    const SdrNamedSubRecord& rSubHead,
-    SvStream& rIn)
-{
-    BOOL bRet=FALSE;
-    if (rSubHead.GetInventor()==SdrInventor)
-    {
-        bRet=TRUE;
-        BOOL bZwi;
-
-        switch (rSubHead.GetIdentifier())
-        {
-            case SDRIORECNAME_VIEWSNAP:
-            {
-                rIn>>aMagnSiz;
-                rIn>>aSnapSiz;
-
-                rIn >> bZwi; bSnapEnab = bZwi;
-                rIn >> bZwi; bGridSnap = bZwi;
-                rIn >> bZwi; bBordSnap = bZwi;
-                rIn >> bZwi; bHlplSnap = bZwi;
-                rIn >> bZwi; bOFrmSnap = bZwi;
-                rIn >> bZwi; bOPntSnap = bZwi;
-                rIn >> bZwi; bOConSnap = bZwi;
-                rIn >> bZwi; bMoveMFrmSnap = bZwi;
-                rIn >> bZwi; bMoveOFrmSnap = bZwi;
-                rIn >> bZwi; bMoveOPntSnap = bZwi;
-                rIn >> bZwi; bMoveOConSnap = bZwi;
-
-                if (rSubHead.GetBytesLeft()>0)
-                {
-                    rIn >> bZwi; bHlplFixed = bZwi; // kam erst spaeter dazu
-                }
-                if (rSubHead.GetBytesLeft()>0)
-                {
-                    // kam erst spaeter dazu
-                    rIn>>nMagnSizPix;
-                    rIn >> bZwi; bSnapTo1Pix = bZwi;
-                }
-                if (rSubHead.GetBytesLeft()>0)
-                {
-                    // kam erst spaeter dazu
-                    rIn >> bZwi; bMoveSnapOnlyTopLeft = bZwi;
-                }
-                if (rSubHead.GetBytesLeft()>0)
-                {
-                    // kam erst spaeter dazu
-                    rIn>>aSnapWdtX;
-                    rIn>>aSnapWdtY;
-                }
-            } break;
-            case SDRIORECNAME_VIEWORTHO:
-            {
-                rIn >> bZwi; bOrtho = bZwi;
-                rIn >> bZwi; bBigOrtho = bZwi;
-
-                rIn>>nSnapAngle;
-
-                if (rSubHead.GetBytesLeft()>0)
-                {
-                    // kam erst spaeter dazu
-                    rIn >> bZwi; bAngleSnapEnab = bZwi;
-                    rIn >> bZwi; bMoveOnlyDragging = bZwi;
-                    rIn >> bZwi; bSlantButShear = bZwi;
-                    rIn >> bZwi; bCrookNoContortion = bZwi;
-                }
-                if (rSubHead.GetBytesLeft()>0)
-                {
-                    // kam erst spaeter dazu
-                    USHORT nCrookMode;
-                    rIn>>nCrookMode;
-                    eCrookMode=SdrCrookMode(nCrookMode);
-                }
-            } break;
-            default: bRet=FALSE;
-        }
-    }
-    if (!bRet) bRet=SdrPaintView::ReadRecord(rViewHead,rSubHead,rIn);
-    return bRet;
-}
+//BFS01BOOL SdrSnapView::ReadRecord(const SdrIOHeader& rViewHead,
+//BFS01 const SdrNamedSubRecord& rSubHead,
+//BFS01 SvStream& rIn)
+//BFS01{
+//BFS01 BOOL bRet=FALSE;
+//BFS01 if (rSubHead.GetInventor()==SdrInventor)
+//BFS01 {
+//BFS01     bRet=TRUE;
+//BFS01     BOOL bZwi;
+//BFS01
+//BFS01     switch (rSubHead.GetIdentifier())
+//BFS01     {
+//BFS01         case SDRIORECNAME_VIEWSNAP:
+//BFS01         {
+//BFS01             rIn>>aMagnSiz;
+//BFS01             rIn>>aSnapSiz;
+//BFS01
+//BFS01             rIn >> bZwi; bSnapEnab = bZwi;
+//BFS01             rIn >> bZwi; bGridSnap = bZwi;
+//BFS01             rIn >> bZwi; bBordSnap = bZwi;
+//BFS01             rIn >> bZwi; bHlplSnap = bZwi;
+//BFS01             rIn >> bZwi; bOFrmSnap = bZwi;
+//BFS01             rIn >> bZwi; bOPntSnap = bZwi;
+//BFS01             rIn >> bZwi; bOConSnap = bZwi;
+//BFS01             rIn >> bZwi; bMoveMFrmSnap = bZwi;
+//BFS01             rIn >> bZwi; bMoveOFrmSnap = bZwi;
+//BFS01             rIn >> bZwi; bMoveOPntSnap = bZwi;
+//BFS01             rIn >> bZwi; bMoveOConSnap = bZwi;
+//BFS01
+//BFS01             if (rSubHead.GetBytesLeft()>0)
+//BFS01             {
+//BFS01                 rIn >> bZwi; bHlplFixed = bZwi; // kam erst spaeter dazu
+//BFS01             }
+//BFS01             if (rSubHead.GetBytesLeft()>0)
+//BFS01             {
+//BFS01                 // kam erst spaeter dazu
+//BFS01                 rIn>>nMagnSizPix;
+//BFS01                 rIn >> bZwi; bSnapTo1Pix = bZwi;
+//BFS01             }
+//BFS01             if (rSubHead.GetBytesLeft()>0)
+//BFS01             {
+//BFS01                 // kam erst spaeter dazu
+//BFS01                 rIn >> bZwi; bMoveSnapOnlyTopLeft = bZwi;
+//BFS01             }
+//BFS01             if (rSubHead.GetBytesLeft()>0)
+//BFS01             {
+//BFS01                 // kam erst spaeter dazu
+//BFS01                 rIn>>aSnapWdtX;
+//BFS01                 rIn>>aSnapWdtY;
+//BFS01             }
+//BFS01         } break;
+//BFS01         case SDRIORECNAME_VIEWORTHO:
+//BFS01         {
+//BFS01             rIn >> bZwi; bOrtho = bZwi;
+//BFS01             rIn >> bZwi; bBigOrtho = bZwi;
+//BFS01
+//BFS01             rIn>>nSnapAngle;
+//BFS01
+//BFS01             if (rSubHead.GetBytesLeft()>0)
+//BFS01             {
+//BFS01                 // kam erst spaeter dazu
+//BFS01                 rIn >> bZwi; bAngleSnapEnab = bZwi;
+//BFS01                 rIn >> bZwi; bMoveOnlyDragging = bZwi;
+//BFS01                 rIn >> bZwi; bSlantButShear = bZwi;
+//BFS01                 rIn >> bZwi; bCrookNoContortion = bZwi;
+//BFS01             }
+//BFS01             if (rSubHead.GetBytesLeft()>0)
+//BFS01             {
+//BFS01                 // kam erst spaeter dazu
+//BFS01                 USHORT nCrookMode;
+//BFS01                 rIn>>nCrookMode;
+//BFS01                 eCrookMode=SdrCrookMode(nCrookMode);
+//BFS01             }
+//BFS01         } break;
+//BFS01         default: bRet=FALSE;
+//BFS01     }
+//BFS01 }
+//BFS01 if (!bRet) bRet=SdrPaintView::ReadRecord(rViewHead,rSubHead,rIn);
+//BFS01 return bRet;
+//BFS01}
 
