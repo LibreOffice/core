@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.13 $
+#*  $Revision: 1.14 $
 #*
-#*  last change: $Author: rt $ $Date: 2003-04-08 16:09:52 $
+#*  last change: $Author: vg $ $Date: 2003-04-15 15:03:47 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -64,7 +64,6 @@ PRJ=..
 PRJNAME=i18npool
 TARGET=i18npool
 VERSION=$(UPD)
-USE_LDUMP2=TRUE
 
 # Make symbol renaming match library name for Mac OS X
 .IF "$(OS)"=="MACOSX"
@@ -96,26 +95,20 @@ LIB1FILES=	$(SLB)$/defaultnumberingprovider.lib	\
 SHL1TARGET= $(TARGET)$(VERSION)$(DLLPOSTFIX)
 SHL1IMPLIB= i$(TARGET)
 
-SHL1STDLIBS=\
-        $(TOOLSLIB)				\
-        $(CPPULIB)				\
-        $(COMPHELPERLIB)			\
-        $(CPPUHELPERLIB)			\
-        $(SALLIB)				\
-        $(ICUI18NLIB)                           \
-                $(I18NUTILLIB)
+SHL1VERSIONMAP=$(TARGET).map
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
 
-SHL1LIBS=	$(LIB1TARGET)
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=	$(SHL1TARGET)
-DEF1EXPORTFILE=	$(TARGET).dxp
+SHL1LIBS=$(LIB1TARGET)
+SHL1STDLIBS= \
+        $(TOOLSLIB) \
+        $(I18NUTILLIB) \
+        $(CPPUHELPERLIB) \
+        $(CPPULIB) \
+        $(SALLIB) \
+        $(ICUINLIB) \
+        $(ICUUCLIB)
 
 # --- Targets ------------------------------------------------------------
 
 .INCLUDE :	target.mk
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo Provider>> $@
-
