@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleMailMessage.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-03 13:22:14 $
+ *  last change: $Author: arellano $ $Date: 2001-07-16 16:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 module com { module sun { module star { module system {
 
 //=============================================================================
-/**
+/** <!-- Editor: Missing summary -->
 
     @author     tra
     @version    0.1
@@ -91,8 +91,8 @@ interface XSimpleMailMessage: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /**
         @param aRecipient
-        the email address of an recipient, the method doesn't check if
-        the given address is valid
+        the email address of a recipient. The method doesn't check if
+        the given address is valid.
     */
     void setRecipient( [in] string aRecipient );
 
@@ -100,15 +100,15 @@ interface XSimpleMailMessage: com::sun::star::uno::XInterface
     /**
         @returns
         the specified email address of a recipient
-        if any has been specified or an empty string
+        if any has been specified or an empty string.
     */
     string getRecipient( );
 
     //-------------------------------------------------------------------------
     /**
         @param aCcRecipient
-        set a sequence with the email addresses of one or more cc recipients,
-        the method doesn't check if the given addresses are valid
+        sets a sequence with the email addresses of one or more cc recipients.
+        The method does not check if the given addresses are valid.
     */
     void setCcRecipient( [in] sequence< string > aCcRecipient );
 
@@ -116,14 +116,14 @@ interface XSimpleMailMessage: com::sun::star::uno::XInterface
     /**
         @returns
         a sequence with the email addresses of one or more cc recipients
-        or an empty sequence if no cc recipients have been specified
+        or an empty sequence if no cc recipients have been specified.
     */
     sequence< string > getCcRecipient( );
 
     //-------------------------------------------------------------------------
     /**
         @param aBccRecipient
-        set a sequence with the email addresses of one ore more bcc recipients
+        sets a sequence with the email addresses of one ore more bcc recipients.
     */
     void setBccRecipient( [in] sequence< string > aBccRecipient );
 
@@ -131,35 +131,33 @@ interface XSimpleMailMessage: com::sun::star::uno::XInterface
     /**
         @returns
         a sequence with the email addresses of one or more bcc recipients or an
-        empty sequence if no cc recipients have been specified
-    */
+        empty sequence if no cc recipients have been specified. */
     sequence< string > getBccRecipient( );
 
     //-------------------------------------------------------------------------
     /**
         @param aOriginator
-        sets the email address of an originator of the mail
-    */
+        sets the email address of the originator of the mail.   */
     void setOriginator( [in] string aOriginator );
 
     //-------------------------------------------------------------------------
     /**
         @returns
-        the email address of the originator of the mail if any has been specified
+        the email address of the originator of the mail if any has been specified.
     */
     string getOriginator( );
 
     //-------------------------------------------------------------------------
     /**
         @param aSubject
-        sets the subject of the mail
+        sets the subject of the mail.
     */
     void setSubject( [in] string aSubject );
 
     //-------------------------------------------------------------------------
     /**
         @returns
-        the subject of the mail if any has been specified
+        the subject of the mail if any has been specified.
     */
     string getSubject( );
 
@@ -167,11 +165,11 @@ interface XSimpleMailMessage: com::sun::star::uno::XInterface
     /**
         @param aAttachement
         sets a sequence of File-URL specifying the files that should be
-        attached to the mail, the method does not check if the specified
-        file or files really exist
+        attached to the mail. The method does not check if the specified
+        file or files really exist.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-        if at least one of the given File-URL is invalid
+        if at least one of the given File-URLs is invalid.
     */
     void setAttachement( [in] sequence< string > aAttachement )
         raises( ::com::sun::star::lang::IllegalArgumentException );
@@ -180,7 +178,7 @@ interface XSimpleMailMessage: com::sun::star::uno::XInterface
     /**
         @returns
         a sequence of File-URLs specifying the files that should be attached to
-        the mail or an empty sequence if no attachements have been specified yet
+        the mail or an empty sequence if no attachements have been specified.
     */
     sequence< string > getAttachement( );
 };
