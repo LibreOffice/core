@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-03 17:07:17 $
+ *  last change: $Author: htajima $ $Date: 2000-12-15 01:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,9 +547,6 @@ CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data )
       XIMUnicodeText *cbtext = (XIMUnicodeText *)call_data;
       sal_Unicode *p_unicode_data = (sal_Unicode*)cbtext->string.utf16_char;
       p_unicode_data[cbtext->length] = (sal_Unicode)0;
-
-    if ( pPreeditData->eState == ePreeditStatusActive )
-        PreeditDoneCallback( ic, client_data, call_data );
 
     SalExtTextInputEvent aTextEvent;
 
