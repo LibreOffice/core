@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:56:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2179,20 +2179,27 @@ void SwTabFrm::MakeAll()
                     bTryToSplit = !bSplitError;
 
                     // --> FME 2004-06-09 #i29771# Two tries to split the table:
+                    // If an error occured during splitting. We start a second
+                    // try, this time without splitting of table rows.
                     if ( bSplitError )
                     {
-                        // An error occured during splitting. We start a second
-                        // try, this time without splitting of table rows.
                         if ( HasFollowFlowLine() )
                             RemoveFollowFlowLine();
+                    }
 
-                        if ( GetFollow() && !GetFollow()->GetFirstNonHeadlineRow() )
-                            Join();
+                    // --> FME 2005-02-10 #119477#
+                    // If splitting the table was successfull or not,
+                    // we do not want to have 'empty' follow tables.
+                    if ( GetFollow() && !GetFollow()->GetFirstNonHeadlineRow() )
+                        Join();
+                    // <--
 
-                        // We want to restore the situation before the failed
-                        // split operation as good as possible. Therefore we
-                        // do some more calculations. Note: Restricting this
-                        // to nDeadLine may not be enough.
+                    // We want to restore the situation before the failed
+                    // split operation as good as possible. Therefore we
+                    // do some more calculations. Note: Restricting this
+                    // to nDeadLine may not be enough.
+                    if ( bSplitError )
+                    {
                         ::lcl_CalcLayout( (SwLayoutFrm*)Lower(), LONG_MAX );
                         bValidPos = FALSE;
                         continue;
@@ -5049,7 +5056,7 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
     // nTmpHeight is the height of the heading row if we are a follow.
     if ( pFirstRow )
     {
-        const bool bSplittable = ((SwRowFrm*)pFirstRow)->IsRowSplitAllowed();
+        const bool bSplittable = static_cast<const SwRowFrm*>(pFirstRow)->IsRowSplitAllowed();
         const bool bDontSplit = !IsFollow() && !GetFmt()->GetLayoutSplit().GetValue();
 
         if ( bDontSplit )
@@ -5065,7 +5072,15 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
         {
             const bool bOldJoinLock = IsJoinLocked();
             ((SwTabFrm*)this)->LockJoin();
-            nTmpHeight += lcl_CalcHeightOfFirstContentLine( *(SwRowFrm*)pFirstRow );
+            const SwTwips nHeightOfFirstContentLine = lcl_CalcHeightOfFirstContentLine( *(SwRowFrm*)pFirstRow );
+
+            // Consider minimum row height:
+            const SwFmtFrmSize &rSz = static_cast<const SwRowFrm*>(pFirstRow)->GetFmt()->GetFrmSize();
+            const SwTwips nMinRowHeight = rSz.GetHeightSizeType() == ATT_MIN_SIZE ?
+                                          rSz.GetHeight() : 0;
+
+            nTmpHeight += Max( nHeightOfFirstContentLine, nMinRowHeight );
+
             if ( !bOldJoinLock )
                 ((SwTabFrm*)this)->UnlockJoin();
         }
