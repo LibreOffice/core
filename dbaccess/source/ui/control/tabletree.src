@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:38:12 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 11:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ String STR_ALL_TABLES
     Text[ portuguese ] = "Tabelas todas";
     Text[ russian ] = "Âñå òàáëèöû";
     Text[ greek ] = "¼ëïé ïé ğßíáêåò";
-    Text[ dutch ] = "All tables";
+    Text[ dutch ] = "Alle tabellen";
     Text[ french ] = "Toutes les tables";
     Text[ spanish ] = "Todas las tablas";
     Text[ italian ] = "Tutte le tabelle";
@@ -276,7 +276,7 @@ String STR_ALL_TABLES
     Text[ portuguese_brazilian ] = "All tables";
     Text[ japanese ] = "‚·‚×‚Ä‚ÌÃ°ÌŞÙ";
     Text[ korean ] = "All tables";
-    Text[ chinese_simplified ] = "All tables";
+    Text[ chinese_simplified ] = "È«²¿µÄ±í¸ñ";
     Text[ chinese_traditional ] = "¥ş³¡ªºªí®æ";
     Text[ turkish ] = "All tables";
     Text[ arabic ] = "ßá ÇáÌÏÇæá";
@@ -289,7 +289,7 @@ String STR_ALL_VIEWS
     Text[ portuguese ] = "Todas as vistas de tabelas";
     Text[ russian ] = "Âñå âèäû òàáëèö";
     Text[ greek ] = "¼ëåò ïé ğñïâïëİò ôùí ğéíÜêùí";
-    Text[ dutch ] = "All views";
+    Text[ dutch ] = "Alle tabelmodi";
     Text[ french ] = "Toutes les vues";
     Text[ spanish ] = "Todas las visualizaciones de tablas";
     Text[ italian ] = "Tutte le viste di tabella";
@@ -299,7 +299,7 @@ String STR_ALL_VIEWS
     Text[ portuguese_brazilian ] = "All views";
     Text[ japanese ] = "‚·‚×‚Ä‚ÌÃ°ÌŞÙËŞ­°";
     Text[ korean ] = "All views";
-    Text[ chinese_simplified ] = "All views";
+    Text[ chinese_simplified ] = "È«²¿µÄ±í¸ñÊÓÍ¼";
     Text[ chinese_traditional ] = "©Ò¦³ªºªí®æÀËµø";
     Text[ turkish ] = "All views";
     Text[ arabic ] = "ßÇİÉ ØÑŞ ÚÑÖ ÇáÌÏÇæá";
@@ -312,7 +312,7 @@ String STR_ALL_TABLES_AND_VIEWS
     Text[ portuguese ] = "Todas as tabelas e vistas";
     Text[ russian ] = "Âñå òàáëèöû è èõ âèäû";
     Text[ greek ] = "¼ëïé ïé ğßíáêåò êáé üëåò ïé ğñïâïëİò ôïõò";
-    Text[ dutch ] = "All tables and views";
+    Text[ dutch ] = "Alle tabellen en tabelmodi";
     Text[ french ] = "Toutes les tables et vues";
     Text[ spanish ] = "Todas las tablas y visualizaciones de tablas";
     Text[ italian ] = "Tutte le tabelle e le viste";
@@ -322,7 +322,7 @@ String STR_ALL_TABLES_AND_VIEWS
     Text[ portuguese_brazilian ] = "All tables and views";
     Text[ japanese ] = "‚·‚×‚Ä‚ÌÃ°ÌŞÙ‚ÆÃ°ÌŞÙËŞ­°";
     Text[ korean ] = "All tables and views";
-    Text[ chinese_simplified ] = "All tables and views";
+    Text[ chinese_simplified ] = "È«²¿µÄ±í¸ñºÍ±í¸ñÊÓÍ¼";
     Text[ chinese_traditional ] = "©Ò¦³ªºªí®æ©Mªí®æÀËµø";
     Text[ turkish ] = "All tables and views";
     Text[ arabic ] = "ßÇİÉ ÇáÌÏÇæá æØÑŞ ÚÑÖåÇ";
@@ -331,6 +331,9 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/03/09 20:38:12  kz
+ *  Merge SRC624: 09.03.01 - 21:38:15 (NoBranch)
+ *
  *  Revision 1.6  2001/01/30 08:29:43  fs
  *  'wildcard checking'
  *
