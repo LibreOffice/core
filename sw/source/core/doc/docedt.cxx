@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:56:36 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1325,17 +1325,27 @@ void lcl_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
     if( rPam.GetPoint()->nNode != rPam.GetMark()->nNode )
     {
         const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
-        SwTxtNode* pTxtNd = pStt->nNode.GetNode().GetTxtNode();
-        rJoinTxt = (0 != pTxtNd) && pEnd->nNode.GetNode().IsTxtNode();
+        SwTxtNode* pSttNd = pStt->nNode.GetNode().GetTxtNode();
+        rJoinTxt = (0 != pSttNd) && pEnd->nNode.GetNode().IsTxtNode();
 
-        if( rJoinTxt && pStt == rPam.GetPoint() &&
-            0 != ( pTxtNd = pEnd->nNode.GetNode().GetTxtNode() ) &&
-            pTxtNd->GetTxt().Len() == pEnd->nContent.GetIndex() )
+        bool bDone = false;
+
+        if( rJoinTxt && pStt == rPam.GetPoint())
         {
-            rPam.Exchange();
-            rJoinPrev = sal_False;
+            SwTxtNode * pEndNd = pEnd->nNode.GetNode().GetTxtNode();
+
+            if (0 != pEndNd &&
+                (pEndNd->GetTxt().Len() == pEnd->nContent.GetIndex() ||
+                 0 != pSttNd->GetNumRule()) )
+            {
+                rPam.Exchange();
+                rJoinPrev = sal_False;
+
+                bDone = true;
+            }
         }
-        else
+
+        if (! bDone)
             rJoinPrev = rJoinTxt && rPam.GetPoint() == pStt;
     }
     else
