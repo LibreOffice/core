@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:24:48 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ czech ] = "před";
         Text[ hebrew ] = "da~vor";
         Text[ hindi ] = "~पहिले";
+        Text[ slovak ] = "p~red";
     };
     RadioButton CB_POS_AFTER
     {
@@ -170,6 +171,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ czech ] = "za";
         Text[ hebrew ] = "da~hinter";
         Text[ hindi ] = "पश्चा~त";
+        Text[ slovak ] = "~za";
     };
     NumericField ED_COUNT
     {
@@ -219,6 +221,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ czech ] = "Vložit";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "जोड़ो";
+        Text[ slovak ] = "Vložiť";
     };
     FixedLine FL_POS
     {
@@ -250,6 +253,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
+        Text[ slovak ] = "Umiestnenie";
     };
     FixedText FT_COUNT
     {
@@ -284,6 +288,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ czech ] = "Množství";
         Text[ hebrew ] = "~Anzahl";
         Text[ hindi ] = "~जोड़";
+        Text[ slovak ] = "~Množstvo";
     };
     String STR_ROW
     {
@@ -315,6 +320,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ czech ] = " řádky";
         Text[ hebrew ] = " Zeilen";
         Text[ hindi ] = " पंक्तियाँ";
+        Text[ slovak ] = " riadky";
     };
     String STR_COL
     {
@@ -346,6 +352,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ czech ] = " sloupce";
         Text[ hebrew ] = "‮טורים‬";
         Text[ hindi ] = " स्तंभ";
+        Text[ slovak ] = " stĺpce";
     };
     Text[ chinese_simplified ] = "插入";
     Text[ russian ] = "�������";
@@ -362,7 +369,10 @@ ModalDialog DLG_INS_ROW_COL
     Text[ czech ] = "Vložit";
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ो";
+    Text[ slovak ] = "Vložiť";
 };
+
+
 
 
 
