@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: jsc $ $Date: 2001-12-07 14:54:48 $
+#   last change: $Author: os $ $Date: 2002-01-09 08:54:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,6 +117,7 @@ UNOIDLDBFILES= \
     $(UCR)$/csstask.db \
     $(UCR)$/csstext.db \
     $(UCR)$/csstextfield.db \
+    $(UCR)$/csstextfielddocinfo.db \
     $(UCR)$/cssfieldmaster.db \
     $(UCR)$/cssucb.db \
     $(UCR)$/cssutil.db \
