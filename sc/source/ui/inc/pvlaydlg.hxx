@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:13 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef SC_PVLAYDLG_HXX
 #define SC_PVLAYDLG_HXX
 
+#include <vector>
+#include <boost/shared_ptr.hpp>
+
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
@@ -78,15 +81,12 @@
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
-
 #ifndef SC_ANYREFDG_HXX
 #include "anyrefdg.hxx"
 #endif
-
 #ifndef SC_FIELDWND_HXX
 #include "fieldwnd.hxx"
 #endif
-
 
 /*==========================================================================*\
 
@@ -136,20 +136,25 @@ public:
     virtual void            SetActive();
     virtual BOOL            Close();
 
-    void                    NotifyDoubleClick    ( ScDPFieldType eType, long nFieldIndex );
-    PointerStyle            NotifyMouseButtonDown( ScDPFieldType eType, long nFieldIndex );
+    void                    NotifyDoubleClick    ( ScDPFieldType eType, size_t nFieldIndex );
+    PointerStyle            NotifyMouseButtonDown( ScDPFieldType eType, size_t nFieldIndex );
     void                    NotifyMouseButtonUp  ( const Point& rAt );
     PointerStyle            NotifyMouseMove      ( const Point& rAt );
     void                    NotifyFieldFocus     ( ScDPFieldType eType, BOOL bGotFocus );
     void                    NotifyMoveField      ( ScDPFieldType eToType );
-    void                    NotifyRemoveField    ( ScDPFieldType eType, long nFieldIndex );
+    void                    NotifyRemoveField    ( ScDPFieldType eType, size_t nFieldIndex );
     BOOL                    NotifyMoveSlider     ( USHORT nKeyCode );   // return TRUE, if position changed
 
 protected:
     virtual void            Deactivate();
 
 private:
+    typedef boost::shared_ptr< FuncData >   FuncDataRef;
+    typedef std::vector< FuncDataRef >      FuncDataVec;
+
     FixedLine               aFlLayout;
+    FixedText               aFtPage;
+    ScDPFieldWindow         aWndPage;
     FixedText               aFtCol;
     ScDPFieldWindow         aWndCol;
     FixedText               aFtRow;
@@ -179,27 +184,29 @@ private:
 
     const String            aStrUndefined;
     const String            aStrNewTable;
-    String*                 aFuncNameArr[FUNC_COUNT];
+    std::vector< String >   aFuncNameArr;
 
     ScDPFieldType           eDnDFromType;
-    long                    nDnDFromIndex;
+    size_t                  nDnDFromIndex;
     BOOL                    bIsDrag;
 
+    Rectangle               aRectPage;
     Rectangle               aRectRow;
     Rectangle               aRectCol;
     Rectangle               aRectData;
     Rectangle               aRectSelect;
 
     LabelData**             aLabelDataArr; // (nCol, Feldname, Zahl/Text)
-    long                    nLabelCount;
+    size_t                  nLabelCount;
 
     ScDPFieldType           eLastActiveType;        /// Type of last active area.
-    long                    nOffset;                /// Offset of first field in TYPE_SELECT area.
+    size_t                  nOffset;                /// Offset of first field in TYPE_SELECT area.
 
-    FuncData*               aSelectArr[MAX_LABELS]; // (nCol, nFuncMask)
-    FuncData*               aColArr   [MAX_FIELDS]; // (nCol, nFuncMask)
-    FuncData*               aRowArr   [MAX_FIELDS]; // (nCol, nFuncMask)
-    FuncData*               aDataArr  [MAX_FIELDS]; // (nCol, nFuncMask)
+    FuncDataVec             aSelectArr;
+    FuncDataVec             aPageArr;
+    FuncDataVec             aColArr;
+    FuncDataVec             aRowArr;
+    FuncDataVec             aDataArr;
 
     BOOL                    bShowAll[MAX_LABELS];
 
@@ -209,7 +216,6 @@ private:
     ScDocument*             pDoc;
     BOOL                    bRefInputMode;
 
-#ifdef _PVLAYDLG_CXX
 private:
     ScDPFieldWindow&        GetFieldWindow  ( ScDPFieldType eType );
     void                    Init            ();
@@ -218,22 +224,24 @@ private:
     void                    InitFocus       ();
     void                    CalcWndSizes    ();
     Point                   DlgPos2WndPos   ( const Point& rPt, Window& rWnd );
-    LabelData*              GetLabelData    ( short nCol, long* pPos = NULL );
+    LabelData*              GetLabelData    ( short nCol, size_t* pPos = NULL );
     String                  GetLabelString  ( short nCol );
     String                  GetFuncString   ( USHORT& rFuncMask, BOOL bIsValue = TRUE );
-    BOOL                    Contains        ( FuncData** pArr, short nCol, long& nAt );
-    void                    Remove          ( FuncData** pArr, long nAt );
-    void                    Insert          ( FuncData** pArr, const FuncData& rFData, long nAt );
+    BOOL                    Contains        ( FuncDataVec* pArr, short nCol, size_t& nAt );
+    void                    Remove          ( FuncDataVec* pArr, size_t nAt );
+    void                    Insert          ( FuncDataVec* pArr, const FuncData& rFData, size_t nAt );
 
-    void                    AddField        ( long nFromIndex,
+    void                    AddField        ( size_t nFromIndex,
                                               ScDPFieldType eToType, const Point& rAtPos );
-    void                    MoveField       ( ScDPFieldType eFromType, long nFromIndex,
+    void                    MoveField       ( ScDPFieldType eFromType, size_t nFromIndex,
                                               ScDPFieldType eToType, const Point&  rAtPos );
-    void                    RemoveField     ( ScDPFieldType eRemType, long nRemIndex );
+    void                    RemoveField     ( ScDPFieldType eRemType, size_t nRemIndex );
 
-    BOOL                    GetPivotArrays  ( PivotField*   pColArr,
+    BOOL                    GetPivotArrays  ( PivotField*   pPageArr,
+                                              PivotField*   pColArr,
                                               PivotField*   pRowArr,
                                               PivotField*   pDataArr,
+                                              USHORT&       rPageCount,
                                               USHORT&       rColCount,
                                               USHORT&       rRowCount,
                                               USHORT&       rDataCount );
@@ -245,7 +253,6 @@ private:
     DECL_LINK( EdModifyHdl, Edit * );
     DECL_LINK( OkHdl, OKButton * );
     DECL_LINK( CancelHdl, CancelButton * );
-#endif
 };
 
 
