@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testpropshlp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-09 11:13:47 $
+ *  last change: $Author: dbo $ $Date: 2001-05-08 15:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,16 +199,16 @@ void test_PropertyArrayHelper()
     // Test getProperties() and getCount()
     {
         OPropertyArrayHelper a1( getPropertyTable1(), 6 );
-        OSL_ENSHURE( 6 == a1.getCount(), "not all properties inserted" );
+        OSL_ENSURE( 6 == a1.getCount(), "not all properties inserted" );
         Sequence< Property > aProps = a1.getProperties();
         Property * pP = aProps.getArray();
-        OSL_ENSHURE( 6 == aProps.getLength(), "getProperties() gives not all properties" );
+        OSL_ENSURE( 6 == aProps.getLength(), "getProperties() gives not all properties" );
         for( int i = 0; i < 6; i++ )
         {
-            OSL_ENSHURE( pP[i].Name         == getPropertyTable1()[i].Name , "Name not correct" );
-            OSL_ENSHURE( pP[i].Handle       == getPropertyTable1()[i].Handle, "Handle not correct" );
-            OSL_ENSHURE( pP[i].Attributes   == getPropertyTable1()[i].Attributes, "Attributes not correct" );
-            OSL_ENSHURE( pP[i].Type == getPropertyTable1()[i].Type, "Type not correct" );
+            OSL_ENSURE( pP[i].Name      == getPropertyTable1()[i].Name , "Name not correct" );
+            OSL_ENSURE( pP[i].Handle        == getPropertyTable1()[i].Handle, "Handle not correct" );
+            OSL_ENSURE( pP[i].Attributes    == getPropertyTable1()[i].Attributes, "Attributes not correct" );
+            OSL_ENSURE( pP[i].Type == getPropertyTable1()[i].Type, "Type not correct" );
         }
     }
 
@@ -217,16 +217,16 @@ void test_PropertyArrayHelper()
           OPropertyArrayHelper a1( getPropertyTable2(), 6, sal_False );
           Sequence< Property > aProps = a1.getProperties();
           Property * pP = aProps.getArray();
-          OSL_ENSHURE( 6 == aProps.getLength(), "getProperties() gives not all properties" );
+          OSL_ENSURE( 6 == aProps.getLength(), "getProperties() gives not all properties" );
 
         // table to switch to sorted
         int a[] = { 2 , 1 , 4, 3, 5, 0 };
           for( int i = 0; i < 6; i++ )
           {
-              OSL_ENSHURE( pP[i].Name == getPropertyTable2()[a[i]].Name , "Name not correct" );
-              OSL_ENSHURE( pP[i].Handle == getPropertyTable2()[a[i]].Handle, "Handle not correct" );
-              OSL_ENSHURE( pP[i].Attributes == getPropertyTable2()[a[i]].Attributes, "Attributes not correct" );
-              OSL_ENSHURE( pP[i].Type == getPropertyTable2()[a[i]].Type, "Type not correct" );
+              OSL_ENSURE( pP[i].Name == getPropertyTable2()[a[i]].Name , "Name not correct" );
+              OSL_ENSURE( pP[i].Handle == getPropertyTable2()[a[i]].Handle, "Handle not correct" );
+              OSL_ENSURE( pP[i].Attributes == getPropertyTable2()[a[i]].Attributes, "Attributes not correct" );
+              OSL_ENSURE( pP[i].Type == getPropertyTable2()[a[i]].Type, "Type not correct" );
           }
     }
 
@@ -235,15 +235,15 @@ void test_PropertyArrayHelper()
           OPropertyArrayHelper a1( getPropertyTable3(), 3, sal_False );
           Sequence< Property > aProps = a1.getProperties();
           Property * pP = aProps.getArray();
-          OSL_ENSHURE( 3 == aProps.getLength(), "getProperties() gives not all properties" );
+          OSL_ENSURE( 3 == aProps.getLength(), "getProperties() gives not all properties" );
         // table to switch to sorted
         int a[] = { 2 , 0 , 1 };
           for( int i = 0; i < 3; i++ )
           {
-              OSL_ENSHURE( pP[i].Name == getPropertyTable3()[a[i]].Name , "Name not correct" );
-              OSL_ENSHURE( pP[i].Handle == getPropertyTable3()[a[i]].Handle, "Handle not correct" );
-              OSL_ENSHURE( pP[i].Attributes == getPropertyTable3()[a[i]].Attributes, "Attributes not correct" );
-              OSL_ENSHURE( pP[i].Type == getPropertyTable3()[a[i]].Type, "Type not correct" );
+              OSL_ENSURE( pP[i].Name == getPropertyTable3()[a[i]].Name , "Name not correct" );
+              OSL_ENSURE( pP[i].Handle == getPropertyTable3()[a[i]].Handle, "Handle not correct" );
+              OSL_ENSURE( pP[i].Attributes == getPropertyTable3()[a[i]].Attributes, "Attributes not correct" );
+              OSL_ENSURE( pP[i].Type == getPropertyTable3()[a[i]].Type, "Type not correct" );
           }
     }
 
@@ -252,19 +252,19 @@ void test_PropertyArrayHelper()
         OPropertyArrayHelper a1( getPropertyTable1(), 6 );
         for( int i = 0; i < 6; i++ )
         {
-            OSL_ENSHURE( a1.hasPropertyByName( getPropertyTable1()[i].Name ), "hasPropertyByName not correct" );
+            OSL_ENSURE( a1.hasPropertyByName( getPropertyTable1()[i].Name ), "hasPropertyByName not correct" );
             Property aP = a1.getPropertyByName( getPropertyTable1()[i].Name );
-            OSL_ENSHURE( aP.Name == getPropertyTable1()[i].Name , "Name not correct" );
-            OSL_ENSHURE( aP.Handle == getPropertyTable1()[i].Handle, "Handle not correct" );
-            OSL_ENSHURE( aP.Attributes == getPropertyTable1()[i].Attributes, "Attributes not correct" );
-            OSL_ENSHURE( aP.Type == getPropertyTable1()[i].Type, "Type not correct" );
+            OSL_ENSURE( aP.Name == getPropertyTable1()[i].Name , "Name not correct" );
+            OSL_ENSURE( aP.Handle == getPropertyTable1()[i].Handle, "Handle not correct" );
+            OSL_ENSURE( aP.Attributes == getPropertyTable1()[i].Attributes, "Attributes not correct" );
+            OSL_ENSURE( aP.Type == getPropertyTable1()[i].Type, "Type not correct" );
         }
 
-        OSL_ENSHURE( !a1.hasPropertyByName( OUString( RTL_CONSTASCII_USTRINGPARAM("never exist") ) ), "hasPropertyByName not correct" );
+        OSL_ENSURE( !a1.hasPropertyByName( OUString( RTL_CONSTASCII_USTRINGPARAM("never exist") ) ), "hasPropertyByName not correct" );
         try
         {
             a1.getPropertyByName( OUString( RTL_CONSTASCII_USTRINGPARAM("never exist") ) );
-            OSL_ENSHURE( sal_False, "exeption not thrown" );
+            OSL_ENSURE( sal_False, "exeption not thrown" );
         }
         catch( UnknownPropertyException & )
         {
@@ -277,10 +277,10 @@ void test_PropertyArrayHelper()
         for( int i = 0; i < 6; i++ )
         {
             sal_Int32 Handle = a1.getHandleByName( getPropertyTable1()[i].Name );
-            OSL_ENSHURE( Handle == getPropertyTable1()[i].Handle, "Handle not correct" );
+            OSL_ENSURE( Handle == getPropertyTable1()[i].Handle, "Handle not correct" );
         }
         sal_Int32 Handle = a1.getHandleByName( OUString( RTL_CONSTASCII_USTRINGPARAM("asdaf") ) );
-        OSL_ENSHURE( Handle == -1, "Handle not correct" );
+        OSL_ENSURE( Handle == -1, "Handle not correct" );
     }
 
     // Test fillPropertyMembersByHandle
@@ -292,11 +292,11 @@ void test_PropertyArrayHelper()
             sal_Int16   nAttributes;
             OUString aPropName;
             sal_Bool b = a1.fillPropertyMembersByHandle( &aPropName, &nAttributes, getPropertyTable1()[i].Handle );
-            OSL_ENSHURE( b, "fillPropertyMembersByHandle: handle not found" );
-            OSL_ENSHURE( nAttributes == getPropertyTable1()[i].Attributes, "fillPropertyMembersByHandle: Attributes not correct" );
-            OSL_ENSHURE( aPropName == getPropertyTable1()[i].Name , "fillPropertyMembersByHandle: Name not correct" );
+            OSL_ENSURE( b, "fillPropertyMembersByHandle: handle not found" );
+            OSL_ENSURE( nAttributes == getPropertyTable1()[i].Attributes, "fillPropertyMembersByHandle: Attributes not correct" );
+            OSL_ENSURE( aPropName == getPropertyTable1()[i].Name , "fillPropertyMembersByHandle: Name not correct" );
         }
-        OSL_ENSHURE( !a1.fillPropertyMembersByHandle( NULL, NULL, 66666 ), "fillPropertyMembersByHandle: handle found" );
+        OSL_ENSURE( !a1.fillPropertyMembersByHandle( NULL, NULL, 66666 ), "fillPropertyMembersByHandle: handle found" );
         // optimized table
         OPropertyArrayHelper a4( getPropertyTable4(), 3 );
         for( i = 0; i < 3; i++ )
@@ -304,11 +304,11 @@ void test_PropertyArrayHelper()
             sal_Int16   nAttributes;
             OUString aPropName;
             sal_Bool b = a1.fillPropertyMembersByHandle( &aPropName, &nAttributes, getPropertyTable4()[i].Handle );
-            OSL_ENSHURE( b, "fillPropertyMembersByHandle: handle not found" );
-            OSL_ENSHURE( nAttributes == getPropertyTable1()[i].Attributes, "fillPropertyMembersByHandle: Attributes not correct" );
-            OSL_ENSHURE( aPropName == getPropertyTable1()[i].Name , "fillPropertyMembersByHandle: Name not correct" );
+            OSL_ENSURE( b, "fillPropertyMembersByHandle: handle not found" );
+            OSL_ENSURE( nAttributes == getPropertyTable1()[i].Attributes, "fillPropertyMembersByHandle: Attributes not correct" );
+            OSL_ENSURE( aPropName == getPropertyTable1()[i].Name , "fillPropertyMembersByHandle: Name not correct" );
         }
-        OSL_ENSHURE( !a4.fillPropertyMembersByHandle( NULL, NULL, 66666 ), "fillPropertyMembersByHandle: handle found" );
+        OSL_ENSURE( !a4.fillPropertyMembersByHandle( NULL, NULL, 66666 ), "fillPropertyMembersByHandle: handle found" );
     }
 
     // Test fillHandles
@@ -322,11 +322,11 @@ void test_PropertyArrayHelper()
         aS.getArray()[2] = OUString( RTL_CONSTASCII_USTRINGPARAM("f") );
         aS.getArray()[3] = OUString( RTL_CONSTASCII_USTRINGPARAM("t") );
         sal_Int32 nHitCount = a1.fillHandles( Handles, aS );
-        OSL_ENSHURE( nHitCount == 3, "wrong number of hits " );
-        OSL_ENSHURE( Handles[0] == getPropertyTable1()[0].Handle, "Handle not correct" );
-        OSL_ENSHURE( Handles[1] == getPropertyTable1()[3].Handle, "Handle not correct" );
-        OSL_ENSHURE( Handles[2] == getPropertyTable1()[5].Handle, "Handle not correct" );
-        OSL_ENSHURE( Handles[3] == -1, "Handle not correct" );
+        OSL_ENSURE( nHitCount == 3, "wrong number of hits " );
+        OSL_ENSURE( Handles[0] == getPropertyTable1()[0].Handle, "Handle not correct" );
+        OSL_ENSURE( Handles[1] == getPropertyTable1()[3].Handle, "Handle not correct" );
+        OSL_ENSURE( Handles[2] == getPropertyTable1()[5].Handle, "Handle not correct" );
+        OSL_ENSURE( Handles[3] == -1, "Handle not correct" );
     }
 }
 
@@ -497,54 +497,54 @@ public:
         if( !pExceptedListenerValues )
             return;
         MutexGuard aGuard( aMutex );
-        OSL_ENSHURE( nCurrent +1 < nCount, "PropertySetHelper: too many listener calls" );
+        OSL_ENSURE( nCurrent +1 < nCount, "PropertySetHelper: too many listener calls" );
 
         switch( evt.PropertyHandle )
         {
             case PROPERTY_BOOL:
                 {
-                OSL_ENSHURE( sal_False          , "PropertySetHelper: BOOL cannot change" );
-                OSL_ENSHURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ), "PropertySetHelper: wrong name" );
+                OSL_ENSURE( sal_False           , "PropertySetHelper: BOOL cannot change" );
+                OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ), "PropertySetHelper: wrong name" );
                 }
             break;
 
             case PROPERTY_INT16:
                 {
-                OSL_ENSHURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), "PropertySetHelper: wrong name" );
+                OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), "PropertySetHelper: wrong name" );
 
-                OSL_ENSHURE( pExceptedListenerValues[nCurrent].getValueType().getTypeClass() == TypeClass_SHORT ,
+                OSL_ENSURE( pExceptedListenerValues[nCurrent].getValueType().getTypeClass() == TypeClass_SHORT ,
                             "PropertySetHelper: wrong data type" );
 
                 sal_Int16 nInt16, nOldInt16;
                 pExceptedListenerValues[nCurrent]   >>= nInt16;
                 evt.OldValue                        >>= nOldInt16;
-                OSL_ENSHURE( nInt16 == nOldInt16, "PropertySetHelper: wrong old value" );
+                OSL_ENSURE( nInt16 == nOldInt16, "PropertySetHelper: wrong old value" );
 
 
                 pExceptedListenerValues[nCurrent+1] >>= nInt16;
                 evt.NewValue                        >>= nOldInt16;
-                OSL_ENSHURE( nInt16 == nOldInt16 ,  "PropertySetHelper: wrong new value" );
+                OSL_ENSURE( nInt16 == nOldInt16 ,   "PropertySetHelper: wrong new value" );
                 }
             break;
 
             case PROPERTY_INT32:
                 {
-                    OSL_ENSHURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), "PropertySetHelper: wrong name" );
 
                     sal_Int32 nInt32,nOldInt32;
 
                     pExceptedListenerValues[nCurrent] >>= nInt32;
                     evt.OldValue >>= nOldInt32;
-                    OSL_ENSHURE( nInt32 == nOldInt32 ,  "PropertySetHelper: wrong old value" );
+                    OSL_ENSURE( nInt32 == nOldInt32 ,   "PropertySetHelper: wrong old value" );
 
                     pExceptedListenerValues[nCurrent+1] >>= nInt32;
                     evt.NewValue >>= nOldInt32;
-                    OSL_ENSHURE( nInt32 == nOldInt32 ,  "PropertySetHelper: wrong new value" );
+                    OSL_ENSURE( nInt32 == nOldInt32 ,   "PropertySetHelper: wrong new value" );
                 }
             break;
 
             default:
-                OSL_ENSHURE( sal_False, "XPropeSetHelper: invalid property handle" );
+                OSL_ENSURE( sal_False, "XPropeSetHelper: invalid property handle" );
         }
         nCurrent += 2;
     }
@@ -555,30 +555,30 @@ public:
         if( !pExceptedListenerValues )
             return;
         MutexGuard aGuard( aMutex );
-        OSL_ENSHURE( nCurrent +1 < nCount, "PropertySetHelper: too many listener calls" );
+        OSL_ENSURE( nCurrent +1 < nCount, "PropertySetHelper: too many listener calls" );
 
         switch( evt.PropertyHandle )
         {
             case PROPERTY_BOOL:
                 {
-                    OSL_ENSHURE( sal_False  , "PropertySetHelper: BOOL cannot change" );
-                    OSL_ENSHURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( sal_False   , "PropertySetHelper: BOOL cannot change" );
+                    OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ), "PropertySetHelper: wrong name" );
                 }
             break;
 
             case PROPERTY_INT16:
                 {
-                    OSL_ENSHURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), "PropertySetHelper: wrong name" );
 
                     sal_Int16 nInt16, nOldInt16;
                     pExceptedListenerValues[nCurrent]   >>= nInt16;
                     evt.OldValue                        >>= nOldInt16;
 
-                    OSL_ENSHURE( nInt16 == nOldInt16,"PropertySetHelper: wrong old value" );
+                    OSL_ENSURE( nInt16 == nOldInt16,"PropertySetHelper: wrong old value" );
 
                     pExceptedListenerValues[nCurrent+1]     >>= nInt16;
                     evt.NewValue                            >>= nOldInt16;
-                    OSL_ENSHURE( nInt16 == nOldInt16 ,  "PropertySetHelper: wrong new value" );
+                    OSL_ENSURE( nInt16 == nOldInt16 ,   "PropertySetHelper: wrong new value" );
 
                     if( nOldInt16 == 100 )
                     {
@@ -590,21 +590,21 @@ public:
 
             case PROPERTY_INT32:
                 {
-                    OSL_ENSHURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), "PropertySetHelper: wrong name" );
 
                     sal_Int32 nInt32,nOldInt32;
                     pExceptedListenerValues[nCurrent] >>= nInt32;
                     evt.OldValue >>= nOldInt32;
-                    OSL_ENSHURE( nInt32 == nOldInt32 , "PropertySetHelper: wrong old value" );
+                    OSL_ENSURE( nInt32 == nOldInt32 , "PropertySetHelper: wrong old value" );
 
                     pExceptedListenerValues[nCurrent+1] >>= nInt32;
                     evt.NewValue >>= nOldInt32;
-                    OSL_ENSHURE( nInt32 == nOldInt32 , "PropertySetHelper: wrong new value" );
+                    OSL_ENSURE( nInt32 == nOldInt32 , "PropertySetHelper: wrong new value" );
                 }
             break;
 
             default:
-                OSL_ENSHURE( sal_False, "XPropeSetHelper: invalid property handle" );
+                OSL_ENSURE( sal_False, "XPropeSetHelper: invalid property handle" );
         }
         nCurrent += 2;
     }
@@ -618,51 +618,51 @@ public:
         for( sal_Int32 i = 0; i < evtSeq.getLength(); i++ )
         {
             const PropertyChangeEvent & evt = evtSeq.getConstArray()[i];
-            OSL_ENSHURE( nCurrent +1 < nCount, "PropertySetHelper: too many listener calls" );
+            OSL_ENSURE( nCurrent +1 < nCount, "PropertySetHelper: too many listener calls" );
 
             switch( evt.PropertyHandle )
             {
                 case PROPERTY_BOOL:
                     {
-                    OSL_ENSHURE( sal_False, "PropertySetHelper: BOOL cannot change" );
-                    OSL_ENSHURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( sal_False, "PropertySetHelper: BOOL cannot change" );
+                    OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ), "PropertySetHelper: wrong name" );
                     }
                 break;
 
                 case PROPERTY_INT16:
                     {
-                    OSL_ENSHURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), "PropertySetHelper: wrong name" );
 
                     sal_Int16 nInt16, nOldInt16;
                     pExceptedListenerValues[nCurrent]   >>= nInt16;
                     evt.OldValue                        >>= nOldInt16;
-                    OSL_ENSHURE( nInt16 == nOldInt16 , "PropertySetHelper: wrong old value" );
+                    OSL_ENSURE( nInt16 == nOldInt16 , "PropertySetHelper: wrong old value" );
 
 
                     pExceptedListenerValues[nCurrent+1] >>= nInt16;
                     evt.NewValue                        >>= nOldInt16;
-                    OSL_ENSHURE( nInt16 == nOldInt16 , "PropertySetHelper: wrong new value" );
+                    OSL_ENSURE( nInt16 == nOldInt16 , "PropertySetHelper: wrong new value" );
                     }
                 break;
 
                 case PROPERTY_INT32:
                     {
-                    OSL_ENSHURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), "PropertySetHelper: wrong name" );
 
 
                     sal_Int32 nInt32,nOldInt32;
                     pExceptedListenerValues[nCurrent] >>= nInt32;
                     evt.OldValue >>= nOldInt32;
-                    OSL_ENSHURE( nInt32 == nOldInt32 , "PropertySetHelper: wrong old value" );
+                    OSL_ENSURE( nInt32 == nOldInt32 , "PropertySetHelper: wrong old value" );
 
                     pExceptedListenerValues[nCurrent+1] >>= nInt32;
                     evt.NewValue >>= nOldInt32;
-                    OSL_ENSHURE( nInt32 == nOldInt32 ,  "PropertySetHelper: wrong new value" );
+                    OSL_ENSURE( nInt32 == nOldInt32 ,   "PropertySetHelper: wrong new value" );
                     }
                 break;
 
                 default:
-                    OSL_ENSHURE( sal_False, "XPropeSetHelper: invalid property handle" );
+                    OSL_ENSURE( sal_False, "XPropeSetHelper: invalid property handle" );
             }
             nCurrent += 2;
         }
@@ -746,7 +746,7 @@ sal_Bool test_OPropertySetHelper::convertFastPropertyValue
         break;
 
         default:
-            OSL_ENSHURE( nHandle == -1, "invalid property handle" );
+            OSL_ENSURE( nHandle == -1, "invalid property handle" );
             return sal_False;
     }
 }
@@ -763,22 +763,22 @@ void test_OPropertySetHelper::setFastPropertyValue_NoBroadcast
     switch( nHandle )
     {
         case PROPERTY_BOOL:
-            OSL_ENSHURE( rValue.getValueType().getTypeClass() == TypeClass_BOOLEAN, "invalid type" );
+            OSL_ENSURE( rValue.getValueType().getTypeClass() == TypeClass_BOOLEAN, "invalid type" );
             bBOOL = *((sal_Bool*)rValue.getValue());
         break;
 
         case PROPERTY_INT16:
-            OSL_ENSHURE( rValue.getValueType().getTypeClass() == TypeClass_SHORT, "invalid type" );
+            OSL_ENSURE( rValue.getValueType().getTypeClass() == TypeClass_SHORT, "invalid type" );
             rValue >>= nINT16;
         break;
 
         case PROPERTY_INT32:
-            OSL_ENSHURE( rValue.getValueType().getTypeClass() == TypeClass_LONG, "invalid type" );
+            OSL_ENSURE( rValue.getValueType().getTypeClass() == TypeClass_LONG, "invalid type" );
             rValue >>= nINT32;
         break;
 
         default:
-            OSL_ENSHURE( nHandle == -1, "invalid property handle" );
+            OSL_ENSURE( nHandle == -1, "invalid property handle" );
     }
 }
 
@@ -800,7 +800,7 @@ void test_OPropertySetHelper::getFastPropertyValue( Any & rRet, sal_Int32 nHandl
         break;
 
         default:
-            OSL_ENSHURE( nHandle == -1, "invalid property handle" );
+            OSL_ENSURE( nHandle == -1, "invalid property handle" );
     }
 }
 
@@ -826,13 +826,13 @@ void test_PropertySetHelper()
 
         // Test queryInterface
         Reference < XPropertySet > rProp( xPS , UNO_QUERY );
-        OSL_ENSHURE( rProp.is() , "PropertySetHelper: XPropertySet nor supported" );
+        OSL_ENSURE( rProp.is() , "PropertySetHelper: XPropertySet nor supported" );
 
         Reference < XMultiPropertySet > rMulti( xPS , UNO_QUERY );
-        OSL_ENSHURE( rMulti.is() , "PropertySetHelper: XMultiPropertySet nor supported" );
+        OSL_ENSURE( rMulti.is() , "PropertySetHelper: XMultiPropertySet nor supported" );
 
         Reference < XFastPropertySet > rFast( xPS , UNO_QUERY );
-        OSL_ENSHURE( rFast.is() , "PropertySetHelper: XFastPropertySet nor supported" );
+        OSL_ENSURE( rFast.is() , "PropertySetHelper: XFastPropertySet nor supported" );
 
         x = Reference < XInterface > ();
 
@@ -861,7 +861,7 @@ void test_PropertySetHelper()
             try
             {
                 xPS->addPropertyChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ), xPS_L );
-                OSL_ENSHURE( sal_False, "PropertySetHelper: exeption not thrown" );
+                OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
             catch( UnknownPropertyException & e )
             {
@@ -871,7 +871,7 @@ void test_PropertySetHelper()
             try
             {
                 xPS->addVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ), x2 );
-                OSL_ENSHURE( sal_False, "PropertySetHelper: exeption not thrown" );
+                OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
             catch( UnknownPropertyException & e )
             {
@@ -879,7 +879,7 @@ void test_PropertySetHelper()
             }
 
         }
-        OSL_ENSHURE( pPS_L->getRefCount() == 1, "PropertySetHelper: wrong reference count" );
+        OSL_ENSURE( pPS_L->getRefCount() == 1, "PropertySetHelper: wrong reference count" );
 
         // Test disposing
         {
@@ -896,8 +896,8 @@ void test_PropertySetHelper()
             pPS->addVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), x2 );
             pPS->dispose();
         }
-        OSL_ENSHURE( pPS_L->nDisposing == 4     , "PropertySetHelper: wrong disposing count" );
-        OSL_ENSHURE( pPS_L->getRefCount() == 1  , "PropertySetHelper: wrong reference count" );
+        OSL_ENSURE( pPS_L->nDisposing == 4      , "PropertySetHelper: wrong disposing count" );
+        OSL_ENSURE( pPS_L->getRefCount() == 1   , "PropertySetHelper: wrong reference count" );
         pPS_L->nDisposing = 0;
         xPS = pPS = new test_OPropertySetHelper( getBasicProps(), PROPERTY_COUNT - z );
 
@@ -911,7 +911,7 @@ void test_PropertySetHelper()
                 Any aBool;
                 aBool.setValue( &b , getCppuBooleanType() );
                 xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ), aBool );
-                OSL_ENSHURE( sal_False, "PropertySetHelper: exeption not thrown" );
+                OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
             catch( PropertyVetoException & e )
             {
@@ -925,7 +925,7 @@ void test_PropertySetHelper()
                 aBool.setValue( &b , getCppuBooleanType() );
                 // BOOL i s0
                 pPS->setFastPropertyValue( PROPERTY_BOOL, aBool );
-                OSL_ENSHURE( sal_False, "PropertySetHelper: exeption not thrown" );
+                OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
             catch( PropertyVetoException & e )
             {
@@ -938,7 +938,7 @@ void test_PropertySetHelper()
                 Any aBool;
                 aBool.setValue( &b , getCppuBooleanType() );
                 xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ), aBool );
-                OSL_ENSHURE( sal_False, "PropertySetHelper: exeption not thrown" );
+                OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
             catch( UnknownPropertyException & e )
             {
@@ -950,7 +950,7 @@ void test_PropertySetHelper()
                 Any aBool;
                 aBool.setValue( &b , getCppuBooleanType() );
                 pPS->setFastPropertyValue( 3, aBool );
-                OSL_ENSHURE( sal_False, "PropertySetHelper: exeption not thrown" );
+                OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
             catch( UnknownPropertyException & e )
             {
@@ -961,7 +961,7 @@ void test_PropertySetHelper()
             {
                 Any aBool;
                 aBool = xPS->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ) );
-                OSL_ENSHURE( sal_False, "PropertySetHelper: exeption not thrown" );
+                OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
             catch( UnknownPropertyException & e )
             {
@@ -971,7 +971,7 @@ void test_PropertySetHelper()
             {
                 Any aBool;
                 aBool = ((XFastPropertySet *)pPS)->getFastPropertyValue( 3 );
-                OSL_ENSHURE( sal_False, "PropertySetHelper: exeption not thrown" );
+                OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
             catch( UnknownPropertyException & e )
             {
@@ -982,7 +982,7 @@ void test_PropertySetHelper()
             {
                 Any aBool;
                 xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), aBool );
-                OSL_ENSHURE( sal_False, "PropertySetHelper: exeption not thrown" );
+                OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
             catch( IllegalArgumentException & e )
             {
@@ -992,7 +992,7 @@ void test_PropertySetHelper()
             {
                 Any aBool;
                 pPS->setFastPropertyValue( PROPERTY_INT32, aBool );
-                OSL_ENSHURE( sal_False, "PropertySetHelper: exeption not thrown" );
+                OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
             catch( IllegalArgumentException & e )
             {
@@ -1004,7 +1004,7 @@ void test_PropertySetHelper()
                 Any aINT32;
                 aINT32 <<= (sal_Int32 ) 16;
                 xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), aINT32 );
-                OSL_ENSHURE( sal_False, "PropertySetHelper: exeption not thrown" );
+                OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
             catch( IllegalArgumentException & e )
             {
@@ -1016,7 +1016,7 @@ void test_PropertySetHelper()
                 Any aINT32;
                 aINT32 <<= (sal_Int32) 16;
                 pPS->setFastPropertyValue( PROPERTY_INT16, aINT32 );
-                OSL_ENSHURE( sal_False, "PropertySetHelper: exeption not thrown" );
+                OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
             catch( IllegalArgumentException & e )
             {
@@ -1026,24 +1026,24 @@ void test_PropertySetHelper()
             Any aValue;
             aValue = xPS->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ) );
             sal_Bool b = *( (sal_Bool*)aValue.getValue());
-            OSL_ENSHURE( ! b, "PropertySetHelper: wrong BOOL value" );
+            OSL_ENSURE( ! b, "PropertySetHelper: wrong BOOL value" );
             aValue = ((XFastPropertySet *)pPS)->getFastPropertyValue( PROPERTY_BOOL );
 
             b = *((sal_Bool*)aValue.getValue());
-            OSL_ENSHURE( !b, "PropertySetHelper: wrong BOOL value" );
+            OSL_ENSURE( !b, "PropertySetHelper: wrong BOOL value" );
 
             sal_Int16 n16;
             aValue <<=(sal_Int16)22;
             xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), aValue );
             aValue = xPS->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ) );
             aValue >>= n16;
-            OSL_ENSHURE( 22 == n16 , "PropertySetHelper: wrong INT16 value" );
+            OSL_ENSURE( 22 == n16 , "PropertySetHelper: wrong INT16 value" );
             aValue <<= (sal_Int16)44;
             ((XFastPropertySet *)pPS)->setFastPropertyValue( PROPERTY_INT16, aValue );
 
             aValue = ((XFastPropertySet *)pPS)->getFastPropertyValue( PROPERTY_INT16 );
             aValue >>= n16;
-            OSL_ENSHURE( 44 == n16, "PropertySetHelper: wrong INT16 value" );
+            OSL_ENSURE( 44 == n16, "PropertySetHelper: wrong INT16 value" );
 
             // widening conversion
             aValue <<= (sal_Int16)55;
@@ -1051,12 +1051,12 @@ void test_PropertySetHelper()
             aValue = xPS->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ) );
             sal_Int32 n32;
             aValue >>= n32;
-            OSL_ENSHURE( 55 == n32 , "PropertySetHelper: wrong INT32 value" );
+            OSL_ENSURE( 55 == n32 , "PropertySetHelper: wrong INT32 value" );
             aValue <<= (sal_Int16)66;
             ((XFastPropertySet *)pPS)->setFastPropertyValue( PROPERTY_INT32, aValue );
             aValue = ((XFastPropertySet *)pPS)->getFastPropertyValue( PROPERTY_INT32 );
             aValue >>= n32;
-            OSL_ENSHURE( 66 == n32, "PropertySetHelper: wrong INT32 value" );
+            OSL_ENSURE( 66 == n32, "PropertySetHelper: wrong INT32 value" );
 
             Sequence< OUString >valueNames = Sequence<OUString>( 3 );
             valueNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") );
@@ -1068,9 +1068,9 @@ void test_PropertySetHelper()
             aValues.getConstArray()[1] >>= n16;
             aValues.getConstArray()[2] >>= n32;
 
-            OSL_ENSHURE( !b, "PropertySetHelper: wrong BOOL value" );
-            OSL_ENSHURE( 44 == n16, "PropertySetHelper: wrong INT16 value" );
-            OSL_ENSHURE( 66 == n32, "PropertySetHelper: wrong INT32 value" );
+            OSL_ENSURE( !b, "PropertySetHelper: wrong BOOL value" );
+            OSL_ENSURE( 44 == n16, "PropertySetHelper: wrong INT16 value" );
+            OSL_ENSURE( 66 == n32, "PropertySetHelper: wrong INT32 value" );
         }
         pPS->nINT32 = 0;
         pPS->nINT16 = 0;
@@ -1109,13 +1109,13 @@ void test_PropertySetHelper()
             try
             {
                 ((XFastPropertySet *)pPS)->setFastPropertyValue( PROPERTY_INT16, aValue );
-                OSL_ENSHURE( sal_False, "PropertySetHelper: exeption not thrown" );
+                OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
             catch( PropertyVetoException & e )
             {
             }
 
-            OSL_ENSHURE( pPS_L->nCount == pPS_L->nCurrent, "not all listeners called" );
+            OSL_ENSURE( pPS_L->nCount == pPS_L->nCurrent, "not all listeners called" );
             pPS->nINT32 = 0;
             pPS->nINT16 = 0;
             pPS_L->nCount = 0;
@@ -1157,7 +1157,7 @@ void test_PropertySetHelper()
             aValues.getArray()[0] <<= (sal_Int16) 22;
             aValues.getArray()[1] <<= (sal_Int16) 44;
             pPS->setPropertyValues( szPN, aValues );
-            OSL_ENSHURE( pPS_L->nCount == pPS_L->nCurrent, "not all listeners called" );
+            OSL_ENSURE( pPS_L->nCount == pPS_L->nCurrent, "not all listeners called" );
 
             //firePropertiesChangeEvent
             pPS->nINT16 = 8;
@@ -1169,7 +1169,7 @@ void test_PropertySetHelper()
             pPS_L->pExceptedListenerValues[2] <<= (sal_Int32) 5; // old value
             pPS_L->pExceptedListenerValues[3] <<= (sal_Int32) 5; // new value
             pPS->firePropertiesChangeEvent( szPN, pPS_L );
-            OSL_ENSHURE( pPS_L->nCount == pPS_L->nCurrent, "not all listeners called" );
+            OSL_ENSURE( pPS_L->nCount == pPS_L->nCurrent, "not all listeners called" );
 
 
             //vetoable exception with multible
@@ -1189,13 +1189,13 @@ void test_PropertySetHelper()
                 aValues.getArray()[0] <<= (sal_Int16)44;
                 aValues.getArray()[1] <<= (sal_Int16)100;
                 pPS->setPropertyValues( szPN, aValues );
-                OSL_ENSHURE( sal_False, "PropertySetHelper: exeption not thrown" );
+                OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
             catch ( PropertyVetoException & e )
             {
             }
 
-            OSL_ENSHURE( pPS_L->nCount == pPS_L->nCurrent, "not all listeners called" );
+            OSL_ENSURE( pPS_L->nCount == pPS_L->nCurrent, "not all listeners called" );
             pPS->removePropertiesChangeListener( x1 );
             pPS->removeVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), x2 );
         }

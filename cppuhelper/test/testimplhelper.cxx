@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testimplhelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:11 $
+ *  last change: $Author: dbo $ $Date: 2001-05-08 15:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,24 +254,24 @@ struct TestWeakAggComponentImpl : public WeakAggComponentImplHelper4< CA, DBA, F
 static void dotest( const Reference< XInterface > & xOriginal )
 {
     Reference< A > xa( xOriginal, UNO_QUERY );
-    OSL_ENSHURE( xa->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### A failed!" );
+    OSL_ENSURE( xa->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### A failed!" );
     Reference< BA > xba( xa, UNO_QUERY );
-    OSL_ENSHURE( xba->ba().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ba") ), "### BA failed!" );
-    OSL_ENSHURE( xba->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### BA failed!" );
+    OSL_ENSURE( xba->ba().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ba") ), "### BA failed!" );
+    OSL_ENSURE( xba->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### BA failed!" );
     Reference< CA > xca( xba, UNO_QUERY );
-    OSL_ENSHURE( xca->ca().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ca") ), "### CA failed!" );
-    OSL_ENSHURE( xca->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### CA failed!" );
+    OSL_ENSURE( xca->ca().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ca") ), "### CA failed!" );
+    OSL_ENSURE( xca->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### CA failed!" );
     Reference< DBA > xdba( xca, UNO_QUERY );
-    OSL_ENSHURE( xdba->dba().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dba") ), "### DBA failed!" );
-    OSL_ENSHURE( xdba->ba().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ba") ), "### DBA failed!" );
-    OSL_ENSHURE( xdba->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### DBA failed!" );
+    OSL_ENSURE( xdba->dba().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dba") ), "### DBA failed!" );
+    OSL_ENSURE( xdba->ba().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ba") ), "### DBA failed!" );
+    OSL_ENSURE( xdba->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### DBA failed!" );
     Reference< E > xe( xdba, UNO_QUERY );
-    OSL_ENSHURE( xe->e().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("e") ), "### E failed!" );
+    OSL_ENSURE( xe->e().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("e") ), "### E failed!" );
     Reference< FE > xfe( xe, UNO_QUERY );
-    OSL_ENSHURE( xfe->fe().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("fe") ), "### FE failed!" );
+    OSL_ENSURE( xfe->fe().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("fe") ), "### FE failed!" );
     Reference< G > xg( xfe, UNO_QUERY );
-    OSL_ENSHURE( xg->g().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("g") ), "### G failed!" );
-    OSL_ENSHURE( xg->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### G failed!" );
+    OSL_ENSURE( xg->g().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("g") ), "### G failed!" );
+    OSL_ENSURE( xg->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### G failed!" );
 
     // type provider
     Reference< XTypeProvider > xProv( xg, UNO_QUERY );
@@ -325,7 +325,7 @@ static void dotest( const Reference< XInterface > & xOriginal )
         }
     }
 
-    OSL_ENSHURE( Reference< XInterface >::query( xg ) == xOriginal, "### root!" );
+    OSL_ENSURE( Reference< XInterface >::query( xg ) == xOriginal, "### root!" );
 }
 
 //==================================================================================================
@@ -351,7 +351,7 @@ void test_ImplHelper( const Reference< XMultiServiceFactory > & xSF )
     }
     catch (RuntimeException & rExc)
     {
-        OSL_ENSHURE( rExc.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("runtime exc") ) && rExc.Context == xImpl,
+        OSL_ENSURE( rExc.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("runtime exc") ) && rExc.Context == xImpl,
                      "### unexpected exception content!" );
         try
         {
@@ -360,11 +360,11 @@ void test_ImplHelper( const Reference< XMultiServiceFactory > & xSF )
         }
         catch (IllegalAccessException &)
         {
-            OSL_ENSHURE( sal_False, "### unexpected IllegalAccessException exception caught!" );
+            OSL_ENSURE( sal_False, "### unexpected IllegalAccessException exception caught!" );
         }
         catch (Exception rExc)
         {
-            OSL_ENSHURE( rExc.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("exc") ) && rExc.Context == xImpl,
+            OSL_ENSURE( rExc.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("exc") ) && rExc.Context == xImpl,
                          "### unexpected exception content!" );
             try
             {
@@ -373,7 +373,7 @@ void test_ImplHelper( const Reference< XMultiServiceFactory > & xSF )
             }
             catch (IllegalAccessException & rExc)
             {
-                OSL_ENSHURE( rExc.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("axxess exc") ) && rExc.Context == xImpl,
+                OSL_ENSURE( rExc.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("axxess exc") ) && rExc.Context == xImpl,
                              "### unexpected exception content!" );
                 return;
             }
@@ -382,6 +382,6 @@ void test_ImplHelper( const Reference< XMultiServiceFactory > & xSF )
     catch (...)
     {
     }
-    OSL_ENSHURE( sal_False, "### exception test failed!" );
+    OSL_ENSURE( sal_False, "### exception test failed!" );
 }
 
