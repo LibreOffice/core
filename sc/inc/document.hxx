@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-19 15:23:07 $
+ *  last change: $Author: nn $ $Date: 2000-10-26 19:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@
 
 class KeyEvent;
 class OutputDevice;
-class ODbVariant;
 class SdrObject;
 class SfxBroadcaster;
 class SfxHint;
@@ -669,10 +668,6 @@ public:
     void            SetValue( USHORT nCol, USHORT nRow, USHORT nTab, const double& rVal );
     void            SetNote( USHORT nCol, USHORT nRow, USHORT nTab, const ScPostIt& rNote );
     void            SetError( USHORT nCol, USHORT nRow, USHORT nTab, const USHORT nError);
-
-    void            PutVariable( USHORT nCol, USHORT nRow, USHORT nTab,
-                                    const ODbVariant* pVar, long nType, // enum SdbDatabaseType
-                                    BOOL* pSimpleFlag );
 
     void            InsertMatrixFormula(USHORT nCol1, USHORT nRow1,
                                         USHORT nCol2, USHORT nRow2,

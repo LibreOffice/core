@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen6.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 17:25:08 $
+ *  last change: $Author: nn $ $Date: 2000-10-26 19:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,122 +65,12 @@
 
 #pragma hdrstop
 
-#include <svtools/zforlist.hxx>
-#include <sdb/sdbcol.hxx>
-#include <sdb/variant.hxx>
-
-#include <com/sun/star/uno/Exception.hpp>
-
-#include "document.hxx"
-#include "cell.hxx"
+//#include "document.hxx"
 
 //
 //  this file is compiled with exceptions enabled
 //  put functions here that need exceptions!
 //
 
-// -----------------------------------------------------------------------
-
-void ScDocument::PutVariable( USHORT nCol, USHORT nRow, USHORT nTab,
-                                const ODbVariant* pVar, long nType, BOOL* pSimpleFlag )
-{
-    if (nTab<=MAXTAB && pTab[nTab])
-    {
-        String aString;
-        double nVal = 0.0;
-        BOOL bValue = FALSE;
-        BOOL bEmptyFlag = FALSE;
-        BOOL bError = FALSE;
-        ULONG nFormatIndex = 0;
-
-        if ( !pVar || pVar->isNull() )
-            bEmptyFlag = TRUE;
-        else
-        {
-            try
-            {
-                switch ( (SdbDatabaseType)nType )
-                {
-                    case SDB_DBTYPE_CHAR:
-                    case SDB_DBTYPE_VARCHAR:
-                    case SDB_DBTYPE_LONGVARCHAR:
-                        aString = String( pVar->toString() );
-                        break;
-
-                    case SDB_DBTYPE_DECIMAL:
-                    case SDB_DBTYPE_NUMERIC:
-                    case SDB_DBTYPE_TINYINT:
-                    case SDB_DBTYPE_SMALLINT:
-                    case SDB_DBTYPE_INTEGER:
-                    case SDB_DBTYPE_BIGINT:
-                    case SDB_DBTYPE_REAL:
-                    case SDB_DBTYPE_DOUBLE:
-                        nVal = pVar->toDouble();
-                        bValue = TRUE;
-                        break;
-
-                    case SDB_DBTYPE_CURRENCY:
-                        nFormatIndex = pFormTable->GetStandardFormat(
-                                        NUMBERFORMAT_CURRENCY, ScGlobal::eLnge );
-                        nVal = pVar->toDouble();
-                        bValue = TRUE;
-                        break;
-
-                    case SDB_DBTYPE_BOOLEAN:
-                        nFormatIndex = pFormTable->GetStandardFormat(
-                                        NUMBERFORMAT_LOGICAL, ScGlobal::eLnge );
-                        nVal = (pVar->toBOOL() ? 1 : 0);
-                        bValue = TRUE;
-                        break;
-
-                    case SDB_DBTYPE_DATE:
-                        //! subtract base date difference if var contains numeric value?
-                        nFormatIndex = pFormTable->GetStandardFormat(
-                                        NUMBERFORMAT_DATE, ScGlobal::eLnge );
-                        nVal = pVar->toDate() - *pFormTable->GetNullDate();
-                        bValue = TRUE;
-                        break;
-
-                    default:
-                        aString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("[unknown type]"));
-                }
-            }
-            catch(com::sun::star::uno::Exception&)
-            {
-                bError = TRUE;
-            }
-        }
-
-        ScBaseCell* pCell;
-        if (bEmptyFlag)
-        {
-            pCell = NULL;
-            PutCell( nCol, nRow, nTab, pCell );
-        }
-        else if (bError)
-        {
-            SetError( nCol, nRow, nTab, NOVALUE );
-        }
-        else if (bValue)
-        {
-            pCell = new ScValueCell( nVal );
-            if (nFormatIndex == 0)
-                PutCell( nCol, nRow, nTab, pCell );
-            else
-                PutCell( nCol, nRow, nTab, pCell, nFormatIndex );
-        }
-        else
-        {
-            pCell = ScBaseCell::CreateTextCell( aString, this );
-            if ( pSimpleFlag && pCell->GetCellType() == CELLTYPE_EDIT )
-                *pSimpleFlag = FALSE;
-            PutCell( nCol, nRow, nTab, pCell );
-        }
-    }
-}
-
-
-
-
-
+// currently nothing here...
 
