@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-25 11:39:00 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,95 +59,21 @@
  *
  ************************************************************************/
 
-#include <stdio.h>
+#include "docfile.hxx"
 
 #include <uno/mapping.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/ucb/XContent.hpp>
 
-#ifndef _EXTATTR_HXX
-#include <svtools/extattr.hxx>
-#endif
-#define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
-
-#ifndef _EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
-#endif
-#ifndef _CACHESTR_HXX //autogen
-#include <tools/cachestr.hxx>
-#endif
-#ifndef _UNDO_HXX //autogen
-#include <svtools/undo.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
-#include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
-#include <svtools/eitem.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
-#include <vcl/button.hxx>
-#endif
-#ifndef _DIALOG_HXX //autogen
-#include <vcl/dialog.hxx>
-#endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
-#include <vcl/fixed.hxx>
-#endif
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
-#endif
-
-#ifndef _INET_CONFIG_HXX
-#include <inet/inetcfg.hxx>
-#endif
-
-#ifndef  _UNOTOOLS_STREAMHELPER_HXX_
-#include <unotools/streamhelper.hxx>
-#endif
-
-#include <svtools/intitem.hxx>
-
-#include <tools/zcodec.hxx>
-#ifndef _TOOLS_TEMPFILE_HXX
-#include <tools/tempfile.hxx>
-#endif
-
-#define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
-
-#ifndef _COM_SUN_STAR_UTIL_DISKFULLEXCEPTION_HPP_
-#include <com/sun/star/util/DiskFullException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_FILEIOEXCEPTION_HPP_
-#include <com/sun/star/util/FileIOException.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UTIL_XARCHIVER_HPP_
 #include <com/sun/star/util/XArchiver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XCONNECTABLE_HPP_
-#include <com/sun/star/io/XConnectable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XDATAOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XDataOutputStream.hpp>
-#endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATACONTROL_HPP_
 #include <com/sun/star/io/XActiveDataControl.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XDATAINPUTSTREAM_HPP_
-#include <com/sun/star/io/XDataInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XMARKABLESTREAM_HPP_
-#include <com/sun/star/io/XMarkableStream.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
@@ -161,13 +87,15 @@
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #endif
-#ifndef  _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
-
 #ifndef  _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #endif
@@ -177,183 +105,97 @@
 #ifndef  _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #endif
-
+#ifndef _ZCODEC_HXX
+#include <tools/zcodec.hxx>
+#endif
+#ifndef _CACHESTR_HXX //autogen
+#include <tools/cachestr.hxx>
+#endif
+#ifndef _URLOBJ_HXX //autogen
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _TOOLS_TEMPFILE_HXX
+#include <tools/tempfile.hxx>
+#endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
 #endif
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/ucb/XContent.hpp>
+#ifndef  _UNOTOOLS_STREAMHELPER_HXX_
+#include <unotools/streamhelper.hxx>
+#endif
+#ifndef _MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
+#endif
+#ifndef _SVSTOR_HXX //autogen
+#include <so3/svstor.hxx>
+#endif
+#ifndef _EXTATTR_HXX
+#include <svtools/extattr.hxx>
+#endif
+#ifndef _SFXSTRITEM_HXX //autogen
+#include <svtools/stritem.hxx>
+#endif
+#ifndef _SFXENUMITEM_HXX //autogen
+#include <svtools/eitem.hxx>
+#endif
+#include <svtools/lckbitem.hxx>
+#ifndef _SFXECODE_HXX
+#include <svtools/sfxecode.hxx>
+#endif
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
+#ifndef _SFXINTITEM_HXX
+#include <svtools/intitem.hxx>
+#endif
+
+#define _SVSTDARR_ULONGS
+#define _SVSTDARR_STRINGSDTOR
+#include <svtools/svstdarr.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 
-#include <svtools/lckbitem.hxx>
-
-#ifndef _SFXECODE_HXX
-#include <svtools/sfxecode.hxx>
-#endif
-
 #pragma hdrstop
 
-#include "appdata.hxx"
-#include "app.hxx"
-#include "sfxtypes.hxx"
-#include "openflag.hxx"
-#include "docfile.hxx"
-#include "docfilt.hxx"
-#include "docfac.hxx"
-#include "fltfnc.hxx"
-#include "sfxresid.hxx"
-#include "doc.hrc"
-#include "progress.hxx"
-#include "doctempl.hxx"
-#include "request.hxx"
-#include "dataurl.hxx"
+#include <so3/transbnd.hxx> // SvKeyValueIterator
+#include <tools/urlobj.hxx>
+#include <unotools/ucblockbytes.hxx>
+
 #include "ucbhelp.hxx"
-#include "inimgr.hxx"
 #include "helper.hxx"
+#include "request.hxx"      // SFX_ITEMSET_SET
+#include "app.hxx"          // GetFilterMatcher
+#include "frame.hxx"        // LoadTargetFrame
+#include "fltfnc.hxx"       // SfxFilterMatcher
+#include "sfxtypes.hxx"     // AsynchronLink
+#include "docfilt.hxx"      // SfxFilter
+#include "objsh.hxx"        // CheckOpenMode
+#include "docfac.hxx"       // GetFilterContainer
+#include "doc.hrc"          // MSG_WARNING_BACKUP, MSG_OPEN_READONLY
+#include "openflag.hxx"     // SFX_STREAM_READONLY etc.
+#include "sfxresid.hxx"
+#include "inimgr.hxx"       // Backup Path
 
 #define MAX_REDIRECT 5
 
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
-#include <com/sun/star/io/XInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
-#include <com/sun/star/io/XSeekable.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
-#endif
-
-#define staruno ::com::sun::star::uno
-#define stario ::com::sun::star::io
-
-typedef ::cppu::WeakImplHelper2<com::sun::star::io::XInputStream, com::sun::star::io::XSeekable> InputStreamHelper_Base;
-class OInputStreamHelper : public InputStreamHelper_Base
+class UcbLockBytesCancellable_Impl : public SfxCancellable
 {
-    ::osl::Mutex    m_aMutex;
-    SvLockBytesRef  m_xLockBytes;
-    sal_uInt32      m_nActPos;
-    sal_Int32       m_nAvailable;   // this is typically the chunk(buffer) size
+    UcbLockBytesRef         xLockBytes;
 
 public:
-    OInputStreamHelper(const SvLockBytesRef& _xLockBytes,
-                       sal_uInt32 _nAvailable,
-                       sal_uInt32 _nPos = 0)
-        :m_xLockBytes(_xLockBytes)
-        ,m_nActPos(_nPos)
-        ,m_nAvailable(_nAvailable){}
+                            UcbLockBytesCancellable_Impl( const UcbLockBytesRef& rLockBytes, SfxCancelManager* pManager, const String& rTitle )
+                                : SfxCancellable( pManager, rTitle )
+                                , xLockBytes( rLockBytes )
+                            {}
 
-// stario::XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException);
-    virtual sal_Int32 SAL_CALL readSomeBytes( staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException);
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException);
-    virtual sal_Int32 SAL_CALL available(  ) throw(stario::NotConnectedException, stario::IOException, staruno::RuntimeException);
-    virtual void SAL_CALL closeInput(  ) throw (stario::NotConnectedException, stario::IOException, staruno::RuntimeException);
-
-// stario::XSeekable
-    virtual void SAL_CALL seek( sal_Int64 location ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int64 SAL_CALL getPosition(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int64 SAL_CALL getLength(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void            Cancel();
 };
 
-//------------------------------------------------------------------------------
-sal_Int32 SAL_CALL OInputStreamHelper::readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-    throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException)
+void UcbLockBytesCancellable_Impl::Cancel()
 {
-    if (!m_xLockBytes.Is())
-        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
-
-    if (nBytesToRead < 0)
-        throw stario::BufferSizeExceededException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
-
-    ::osl::MutexGuard aGuard( m_aMutex );
-    aData.realloc(nBytesToRead);
-
-    sal_uInt32 nRead;
-    ErrCode nError = m_xLockBytes->ReadAt(m_nActPos, (void*)aData.getArray(), nBytesToRead, &nRead);
-    m_nActPos += nRead;
-
-    if (nError != ERRCODE_NONE)
-        throw stario::IOException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
-
-    // adjust sequence if data read is lower than the desired data
-    if (nRead < (sal_uInt32)nBytesToRead)
-        aData.realloc( nRead );
-
-    return nRead;
+    xLockBytes->Cancel();
 }
-
-void SAL_CALL OInputStreamHelper::seek( sal_Int64 location ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    m_nActPos = location;
-}
-
-sal_Int64 SAL_CALL OInputStreamHelper::getPosition(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
-{
-    return m_nActPos;
-}
-
-sal_Int64 SAL_CALL OInputStreamHelper::getLength(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
-{
-    if (!m_xLockBytes.Is())
-        return 0;
-
-    ::osl::MutexGuard aGuard( m_aMutex );
-    SvLockBytesStat aStat;
-    m_xLockBytes->Stat( &aStat, SVSTATFLAG_DEFAULT );
-    m_nActPos = aStat.nSize;
-    return m_nActPos;
-}
-
-//------------------------------------------------------------------------------
-sal_Int32 SAL_CALL OInputStreamHelper::readSomeBytes(staruno::Sequence< sal_Int8 >& aData,
-                                                     sal_Int32 nMaxBytesToRead)
-    throw (stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException)
-{
-    // read all data desired
-    return readBytes(aData, nMaxBytesToRead);
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OInputStreamHelper::skipBytes(sal_Int32 nBytesToSkip)
-    throw (stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if (!m_xLockBytes.Is())
-        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
-
-    if (nBytesToSkip < 0)
-        throw stario::BufferSizeExceededException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
-
-    m_nActPos += nBytesToSkip;
-}
-
-//------------------------------------------------------------------------------
-sal_Int32 SAL_CALL OInputStreamHelper::available()
-    throw (stario::NotConnectedException, stario::IOException, staruno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if (!m_xLockBytes.Is())
-        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
-
-    return m_nAvailable;
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OInputStreamHelper::closeInput()
-    throw (stario::NotConnectedException, stario::IOException, staruno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if (!m_xLockBytes.Is())
-        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
-
-    m_xLockBytes = NULL;
-}
-
-
-
 
 class FileSource_Impl   :   public ::com::sun::star::lang::XTypeProvider    ,
                             public ::com::sun::star::io::XActiveDataSource  ,
@@ -498,7 +340,7 @@ FileSource_Impl::~FileSource_Impl()
 void SAL_CALL  FileSource_Impl::addListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > & aListener) throw( ::com::sun::star::uno::RuntimeException )
 {
     if( m_xListener.is() )
-        fprintf( stderr, "Warning: addSourceControllerListener called when already having a listener\n" );
+        DBG_ERROR( "addSourceControllerListener called when already having a listener!" );
     m_xListener = aListener;
 }
 
@@ -575,8 +417,7 @@ void SAL_CALL  FileSource_Impl::terminate() throw( ::com::sun::star::uno::Runtim
 String ConvertDateTime_Impl(const SfxStamp &rTime);
 
 //----------------------------------------------------------------
-SfxPoolCancelManager::SfxPoolCancelManager(
-    SfxCancelManager* pParent, const String& rName )
+SfxPoolCancelManager::SfxPoolCancelManager( SfxCancelManager* pParent, const String& rName )
     : SfxCancelManager( pParent ),
       SfxCancellable( pParent ? pParent : this, rName ),
       wParent( pParent )
@@ -638,10 +479,12 @@ public:
     sal_Bool bForceSynchron : 1;
     sal_Bool bDontCreateCancellable : 1;
     sal_Bool bDownloadDone          : 1;
+    sal_Bool bStreamReady: 1;
 
     sal_uInt16       nPrio;
 
     SfxPoolCancelManagerRef xCancelManager;
+    UcbLockBytesCancellable_Impl* pCancellable;
     SfxMedium*       pAntiImpl;
     SvEaMgr*         pEaMgr;
 
@@ -678,29 +521,21 @@ public:
 
 IMPL_LINK( SfxMedium_Impl, Done_Impl, void*, pVoid )
 {
+    DELETEZ( pCancellable );
     bDownloadDone = sal_True;
-
-    if ( pAntiImpl->GetErrorCode() == ERRCODE_NONE )
-        pAntiImpl->GetInStream();
-
-    // Don't call because it will crash !!
-//    if ( aAvailableLink.IsSet() )
-//        aAvailableLink.Call( pVoid );
-
-    aDoneLink.ClearPendingCall();
-    aDoneLink.Call( pVoid );
+    if ( bStreamReady )
+    {
+        aDoneLink.ClearPendingCall();
+        aDoneLink.Call( pVoid );
+    }
 
     return 0;
 }
 
 IMPL_LINK( SfxMedium_Impl, DataAvailable_Impl, void*, pVoid )
 {
-    // ???? why?
-    pAntiImpl->GetInStream();
-
     aAvailableLink.ClearPendingCall();
     aAvailableLink.Call( pVoid );
-
     return 0;
 }
 
@@ -731,9 +566,9 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
  :
     SvCompatWeakBase( pAntiImplP ),
     bUpdatePickList(sal_True), bIsTemp( sal_False ), pOrigFilter( 0 ),
-    bUsesCache(sal_True),
+    bUsesCache(sal_True), pCancellable( 0 ),
     nPrio( 99 ), aExpireTime( Date() + 10, Time() ),
-    bForceSynchron( sal_False ),
+    bForceSynchron( sal_False ), bStreamReady( sal_False ),
     pLoadEnv( 0 ), pAntiImpl( pAntiImplP ),
     bDontCreateCancellable( sal_False ), pSource( NULL ), pSink( NULL ), pTempDir( NULL ),
     bDownloadDone( sal_True ), nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL )
@@ -743,6 +578,8 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
 //------------------------------------------------------------------
 SfxMedium_Impl::~SfxMedium_Impl()
 {
+    delete pCancellable;
+
     if ( aLinkList.Is() )
         aLinkList->Clear();
 
@@ -895,8 +732,8 @@ void SfxMedium::CloseInStream_Impl()
         }
     }
 
-    delete pInStream;
-    pInStream = NULL;
+    DELETEZ( pInStream );
+    DELETEZ( pImp->pCancellable );
 }
 
 //------------------------------------------------------------------
@@ -1021,8 +858,12 @@ sal_Bool SfxMedium::Commit()
 //------------------------------------------------------------------
 sal_Bool SfxMedium::IsStorage() const
 {
-    (const_cast< SfxMedium* > (this))->GetStorage();
-    (const_cast< SfxMedium* > (this))->ResetError();
+    if( !aStorage.Is() && !pInStream )
+    {
+        (const_cast< SfxMedium* > (this))->GetStorage();
+        (const_cast< SfxMedium* > (this))->ResetError();
+    }
+
     return aStorage.Is();
 }
 
@@ -1393,7 +1234,7 @@ void SfxMedium::Transfer_Impl()
         SvStream *pStream = GetOutStream();
         SvLockBytesRef xLockBytes = new SvLockBytes( pStream );
         Reference < ::com::sun::star::io::XInputStream > xStream
-            = new OInputStreamHelper( xLockBytes, 8192 );
+            = new ::utl::OInputStreamHelper( xLockBytes, 8192 );
 
         Any aAny;
         InsertCommandArgument aArg;
@@ -1434,18 +1275,7 @@ void SfxMedium::DoBackup_Impl()
         aDest = GetURLObject();
     }
 
-    // Derzeit immer bak dranhaengen (MAC ???)
-#ifndef MAC
-    // *.bak
     aDest.setExtension( DEFINE_CONST_UNICODE( "bak" ) );
-#else
-    // * Kopie
-    aDest.setName( aDest.getName( INetURLObject::LAST_SEGMENT,
-                                  true,
-                                  INetURLObject::DECODE_WITH_CHARSET )
-                   + String(SfxResId(STR_BACKUP_COPY)) );
-#endif
-
     aName = aDest.getName( INetURLObject::LAST_SEGMENT, true,
                            INetURLObject::DECODE_WITH_CHARSET );
 
@@ -1493,7 +1323,7 @@ void SfxMedium::DoBackup_Impl()
             SvStream *pStream = GetInStream();
             SvLockBytesRef xLockBytes = new SvLockBytes( pStream );
             Reference < ::com::sun::star::io::XInputStream > xStream
-                    = new OInputStreamHelper( xLockBytes, 8192 );
+                    = new ::utl::OInputStreamHelper( xLockBytes, 8192 );
 
             Any aAny;
             InsertCommandArgument aArg;
@@ -1517,8 +1347,9 @@ void SfxMedium::GetMedium_Impl()
     {
         DBG_ASSERT( bDownLoad, "Medium without DownloadFlag!" );
         pImp->bDownloadDone = sal_False;
+        pImp->bStreamReady = sal_False;
 
-        SvLockBytesRef xLockBytes;
+        UcbLockBytesRef xLockBytes;
         if ( !pImp->aLinkList.Is() )
         {
             pImp->aLinkList = new UCB_Link_Helper;
@@ -1533,28 +1364,31 @@ void SfxMedium::GetMedium_Impl()
         {
             Reference < ::com::sun::star::io::XInputStream > xStream;
             if ( ( pStreamItem->GetValue() >>= xStream ) && xStream.is() )
-                xLockBytes = UCB_Helper::CreateInputLockBytes(
-                        xStream, pImp->aLinkList,
-                        pImp->GetCancelManager() );
+                xLockBytes = UcbLockBytes::CreateInputLockBytes( xStream, pImp->aLinkList );
         }
         else
         {
-            xLockBytes = UCB_Helper::CreateInputLockBytes(
+            xLockBytes = UcbLockBytes::CreateInputLockBytes(
                         GetContent(),
-                        pImp->aLinkList,
-                        pImp->GetCancelManager() );
+                        pImp->aLinkList );
         }
 
         if ( xLockBytes.Is() )
         {
+            pImp->pCancellable = new UcbLockBytesCancellable_Impl( xLockBytes, pImp->GetCancelManager(), aLogicName );
             if ( pImp->bForceSynchron || ! pImp->aDoneLink.IsSet() )
                 xLockBytes->SetSynchronMode( sal_True );
             else
                 xLockBytes->SetSynchronMode( sal_False );
 
             pInStream = new SvStream( xLockBytes );
+            pImp->bStreamReady = sal_True;
         }
     }
+
+    // Download complete happened while pInStream was constructed
+    if ( pImp->bDownloadDone )
+        pImp->Done_Impl(0);
 
 #ifdef OLD_CODE_FOR_POSTING
 
@@ -1621,28 +1455,10 @@ void SfxMedium::CancelTransfers()
 }
 
 //----------------------------------------------------------------
-void AddNumber_Impl( String& aNumber, sal_uInt32 nArg )
-{
-    if ( nArg >= 10240 )
-    {
-        aNumber += String::CreateFromInt32( (sal_uInt16)( ( nArg + 512 ) / 1024 ) );
-        aNumber += ' ';
-        aNumber += SfxResId( STR_KB );
-    }
-    else
-    {
-        aNumber += String::CreateFromInt32( nArg );
-        aNumber += ' ';
-        aNumber += SfxResId( STR_BYTES );
-    }
-}
-
-//----------------------------------------------------------------
-
+/*
 String SfxMedium::GetStatusString( const SvProgressArg* pArg )
 {
     String aString;
-/*
     StringList_Impl aSL( SfxResId( RID_DLSTATUS2 ), (USHORT)pArg->eStatus );
     USHORT nTotal = 0;
 
@@ -1682,9 +1498,9 @@ String SfxMedium::GetStatusString( const SvProgressArg* pArg )
         }
         aString.SearchAndReplaceAscii( "$(BYTE)", aNumber );
     }
- */
     return aString;
 }
+*/
 
 sal_Bool SfxMedium::IsRemote()
 {
@@ -1899,73 +1715,6 @@ void SfxMedium::Close()
         CloseOutStream_Impl();
 }
 
-#if SUPD<605
-sal_uInt32 SfxMedium::UrlToAbs( String& rAbsUrl, const String& rUrl,
-                           SfxObjectShell* pSh )
-{
-    String aMedName( pSh->GetMedium()->GetName() );
-    INetURLObject aAktUrl;
-    INetURLObject aTargetUrl;
-    if ( aMedName.Len() )
-    {
-        aAktUrl.SetSmartProtocol( INET_PROT_FILE );
-        aAktUrl.SetSmartURL( aMedName );
-    }
-
-    sal_Bool bTargetSet = sal_False;
-    sal_uInt32 nErr = ERRCODE_NONE;
-
-    // Absolutes File Protokoll testen
-    bool bWasAbsolute = FALSE;
-    INetURLObject aFileObj( aAktUrl );
-    aFileObj.smartRel2Abs( rUrl, bWasAbsolute );
-
-    if( bWasAbsolute && SfxContentHelper::Exists( aFileObj.GetURLNoMark() ) )
-    {
-        rAbsUrl = aFileObj.GetMainURL();
-        return ERRCODE_NONE;
-    }
-
-    // Ist aktuelles Doc unbenamt?
-    if( !aMedName.Len() )
-    {
-        if( bWasAbsolute )
-        {
-            rAbsUrl = aFileObj.GetMainURL();
-            return ERRCODE_NONE;
-        }
-        else
-        {
-            rAbsUrl = rUrl;
-            return ERRCODE_SFX_ISRELATIVE;
-        }
-    }
-
-    // Falls File Protokoll, testen ob DirEntry vorhanden (relativ)
-    if( aAktUrl.GetProtocol() == INET_PROT_FILE )
-    {
-        INetURLObject aFileObj;
-        aFileObj.SetSmartProtocol( INET_PROT_FILE );
-        if( aAktUrl.GetNewAbsURL( rUrl, &aFileObj ) )
-        {
-            String aFileName = aFileObj.PathToFileName();
-            //Relativ zum Dokument testen!
-            if( SfxContentHelper::Exists( aFileName ) )
-            {
-                // File e.Istiert, also als FileUrl Parsen
-                rAbsUrl = aFileObj.GetMainURL();
-                return ERRCODE_NONE;
-            }
-        }
-    }
-
-    if( !aAktUrl.GetNewAbsURL( rUrl, &aTargetUrl ) )
-        nErr = ERRCODE_IO_GENERAL;
-    rAbsUrl = aTargetUrl.GetMainURL();
-    return nErr;
-}
-#endif
-
 //------------------------------------------------------------------
 
 void SfxMedium::RefreshName_Impl()
@@ -2159,13 +1908,8 @@ SfxMedium::SfxMedium( SvStorage *pStorage, sal_Bool bRootP )
         pFilter = pApp->GetFilterMatcher().ResolveRedirection( pFilter, *this );
     if( !pFilter && nFormat )
     {
-#ifdef DBG_UTIL
-        ByteString aErr( U2S( Exchange::GetFormatName( nFormat ) ) );
-        aErr += " leider kein Filter vorhanden";
-        DBG_ERROR( aErr.GetBuffer() );
-#endif
-        pFilter = SfxObjectFactory::GetDefaultFactory().GetFilterContainer()->
-            GetFilter( 0 );
+        DBG_ERROR( "No Filter for storage found!" );
+        pFilter = SfxObjectFactory::GetDefaultFactory().GetFilterContainer()->GetFilter( 0 );
     }
 
     bDownLoad = sal_False;
@@ -2512,104 +2256,6 @@ sal_Bool SfxMedium::SupportsMIME_Impl() const
     return sal_False;
 }
 
-sal_Bool SfxMedium::IsAllowedForExternalBrowser() const
-{
-    if ( pFilter && !pFilter->GetFilterName().EqualsAscii( "ExternBrowser" ) )
-        return sal_False;
-
-    sal_Bool bCheckExternBrowser = SFX_APP()->ShouldUseExternalBrowser( aLogicName );
-    if ( bCheckExternBrowser )
-    {
-        // Wenn Reload eines mit dem Office geladenen Dokuments gemacht wird oder nicht readonly geladen wird,
-        // soll kein externer Browser benutzt werden
-        SFX_ITEMSET_ARG( GetItemSet(), pReloadItem, SfxBoolItem, SID_RELOAD, sal_False );
-        SFX_ITEMSET_ARG( GetItemSet(), pReadonlyItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
-        SFX_ITEMSET_ARG( GetItemSet(), pHidden, SfxBoolItem, SID_HIDDEN, sal_False);
-        if ( pReloadItem || ( pReadonlyItem && !pReadonlyItem->GetValue() ) || pHidden && pHidden->GetValue() )
-            bCheckExternBrowser = sal_False;
-    }
-
-    return bCheckExternBrowser;
-}
-
-//----------------------------------------------------------------
-
-/* Kann der URL eine lokale Datei zugeordnet werden? */
-
-sal_Bool SfxMedium::ProvidesFile_Impl() const
-{
-    INetProtocol eProt = GetURLObject().GetProtocol();
-    return eProt == INET_PROT_FILE;
-}
-//----------------------------------------------------------------
-
-/* Liefert die ::com::sun::star::util::URL direkt einen Storage oder Stream? Hierzu z"ahlen
-   nicht Executable Filter, die ja erst in der n"achsten Runde einen
-   Stream liefern */
-
-sal_Bool SfxMedium::ProvidesData_Impl() const
-{
-    // perhaps this medium was constructed for an embedded object
-    if ( aStorage.Is() )
-        return sal_True;
-
-    if( pFilter )
-    {
-        if ( pFilter->GetFilterContainer()->GetName().EqualsAscii( "plugin" ) )
-            return sal_True;
-
-        if ( ( pFilter->GetFilterFlags() & SFX_FILTER_EXECUTABLE ) || pFilter->GetFilterName().EqualsAscii( SFX_FILTER_DOWNLOAD ) )
-            return sal_False;
-    }
-    else
-    {
-        const SfxFilter* pProtoFilter = SFX_APP()->GetFilterMatcher().GetFilter4Protocol( *(SfxMedium*)this );
-        if( pProtoFilter && (pProtoFilter->GetFilterFlags() & SFX_FILTER_EXECUTABLE ) )
-            return sal_False;
-    }
-
-    INetProtocol eProt;
-    if ( GetContent().is() )
-    {
-        const INetURLObject& aObj= GetURLObject();
-        eProt = aObj.GetProtocol();
-        if ( INET_PROT_FTP == eProt )
-        {
-#if 0                                   // (dv)
-            const String &rUrl = aObj.GetMainURL();
-            CntINetConfig::load (NULL, NULL);
-            INetProxyConfig aProxyConfig;
-            if (CntINetConfig::shouldUseProxy (NULL, rUrl, aProxyConfig))
-                if (aProxyConfig.hasFtpProxy())
-#endif
-                    return sal_True;
-        }
-        else if( eProt == INET_PROT_HTTPS || eProt == INET_PROT_HTTP )
-            return sal_True;
-
-        Any aAny( UCB_Helper::GetProperty( GetContent(), WID_FLAG_IS_FOLDER ) );
-        sal_Bool bIsFolder = FALSE;
-        if ( ( aAny >>= bIsFolder ) && bIsFolder )
-            return sal_False;
-    }
-    else
-        eProt = GetURLObject().GetProtocol();
-
-    if ( eProt == INET_PROT_FILE )
-    {
-        if ( aLogicName.Search('{') != STRING_NOTFOUND )
-            return sal_False;
-        else
-            return sal_True;
-    }
-    else if ( INET_PROT_FTP == eProt )
-        return sal_True;
-    else if ( eProt == INET_PROT_NOT_VALID )
-        return sal_False;
-
-  return sal_False;
-}
-
 //----------------------------------------------------------------
 SfxFrame* SfxMedium::GetLoadTargetFrame() const
 {
@@ -2688,7 +2334,7 @@ sal_Bool SfxMedium::IsDownloadDone_Impl()
 
 SvEaMgr* SfxMedium::GetEaMgr()
 {
-    if ( !pImp->pEaMgr && ProvidesData_Impl() && pFilter )
+    if ( !pImp->pEaMgr && pFilter )
     {
         /* the stream in the storage is probably not a filestream ( the stream is
             closed anyway! ). Therefor we will always use GetPhysicalName to
@@ -2726,21 +2372,18 @@ void SfxMedium::SetDontCreateCancellable( )
 
 void SfxMedium::CreateDataSource()
 {
-    if ( ProvidesData_Impl() )
+    SfxLoadEnvironment *pEnv = NULL;
+    if ( pImp->pLoadEnv )
     {
-        SfxLoadEnvironment *pEnv = NULL;
-        if ( pImp->pLoadEnv )
-        {
-            pEnv = new SfxLoadEnvironment( pImp->pLoadEnv );
-            SfxRefItem aItem( SID_LOADENVIRONMENT, pEnv );
-            GetItemSet()->Put( aItem );
-        }
-
-        pImp->pSource = new FileSource_Impl( this );
-        pImp->pSource->acquire();
-        if ( pEnv )
-            pEnv->SetDataAvailableLink( LINK( pImp->pSource, FileSource_Impl, DataAvailableHdl ) );
+        pEnv = new SfxLoadEnvironment( pImp->pLoadEnv );
+        SfxRefItem aItem( SID_LOADENVIRONMENT, pEnv );
+        GetItemSet()->Put( aItem );
     }
+
+    pImp->pSource = new FileSource_Impl( this );
+    pImp->pSource->acquire();
+    if ( pEnv )
+        pEnv->SetDataAvailableLink( LINK( pImp->pSource, FileSource_Impl, DataAvailableHdl ) );
 }
 
 void SfxMedium::CreateDataSink()
@@ -2997,95 +2640,4 @@ SvStringsDtor* SfxVersionTableDtor::GetVersions() const
 
     return pList;
 }
-
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SfxDataSourceFactory::createInstance(const ::rtl::OUString& ServiceSpecifier) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
-{
-    INetProtocol eProt = INetURLObject::CompareProtocolScheme( U2S( ServiceSpecifier ) );
-    switch ( eProt )
-    {
-        case INET_PROT_FTP :
-        case INET_PROT_HTTP :
-        case INET_PROT_FILE :
-        case INET_PROT_HTTPS :
-        case INET_PROT_NEWS :
-        case INET_PROT_PRIV_SOFFICE :
-        case INET_PROT_IMAP :
-        case INET_PROT_POP3 :
-        case INET_PROT_VIM :
-            break;
-        default:
-            return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ();
-            break;
-    }
-
-    return (::cppu::OWeakObject*) new FileSource_Impl;
-}
-
-SFX_IMPL_XINTERFACE_2( SfxDataSourceFactory, OWeakObject, ::com::sun::star::lang::XMultiServiceFactory, ::com::sun::star::lang::XServiceInfo )
-SFX_IMPL_XTYPEPROVIDER_2( SfxDataSourceFactory, ::com::sun::star::lang::XMultiServiceFactory, ::com::sun::star::lang::XServiceInfo )
-SFX_IMPL_XSERVICEINFO( SfxDataSourceFactory, "com.sun.star.frame.DataSourceFactory", "com.sun.star.comp.sfx2.DataSourceFactory" )
-SFX_IMPL_SINGLEFACTORY( SfxDataSourceFactory )
-
-SfxDataSourceFactory::SfxDataSourceFactory( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory> const & )
-{
-    DBG_ERRORFILE( "NIJ!" );
-}
-
-SfxDataSourceFactory::~SfxDataSourceFactory()
-{
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SfxDataSourceFactory::createInstanceWithArguments(const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
-{
-    INetProtocol eProt = INetURLObject::CompareProtocolScheme( U2S( ServiceSpecifier ) );
-    switch ( eProt )
-    {
-        case INET_PROT_FTP :
-        case INET_PROT_HTTP :
-        case INET_PROT_FILE :
-        case INET_PROT_HTTPS :
-        case INET_PROT_NEWS :
-        case INET_PROT_PRIV_SOFFICE :
-        case INET_PROT_IMAP :
-        case INET_PROT_POP3 :
-        case INET_PROT_VIM :
-            break;
-        default:
-            return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ();
-            break;
-    }
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xRet;
-    FileSource_Impl* pSource = new FileSource_Impl();
-    xRet = (::cppu::OWeakObject*) pSource;
-    pSource->initialize( Arguments );
-    return xRet;
-}
-
-::com::sun::star::uno::Sequence< ::rtl::OUString > SfxDataSourceFactory::getAvailableServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
-{
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aRet(9);
-    ::rtl::OUString *pArr = aRet.getArray();
-    pArr[0] = DEFINE_CONST_UNICODE( "ftp:" );
-    pArr[1] = DEFINE_CONST_UNICODE( "http:" );
-    pArr[2] = DEFINE_CONST_UNICODE( "https:" );
-    pArr[3] = DEFINE_CONST_UNICODE( "file:" );
-    pArr[4] = DEFINE_CONST_UNICODE( "news:" );
-    pArr[5] = DEFINE_CONST_UNICODE( "staroffice.private:" );
-    pArr[6] = DEFINE_CONST_UNICODE( "imap:" );
-    pArr[7] = DEFINE_CONST_UNICODE( "pop3:" );
-    pArr[8] = DEFINE_CONST_UNICODE( "vim:" );
-
-    return aRet;
-}
-
-#if SUPD<604
-void SfxMedium::SetReloadAvailableLink(  const Link& rLink )
-{
-}
-#endif
-
 
