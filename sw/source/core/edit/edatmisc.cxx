@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edatmisc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: jp $ $Date: 2002-01-14 13:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,8 @@ void SwEditShell::ResetAttr()
 
     if( bUndoGroup )
         GetDoc()->EndUndo(UNDO_RESETATTR);
-
+    CallChgLnk();
     EndAllAction();
-
 }
 
 
