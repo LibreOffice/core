@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:46:38 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,6 +829,11 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
     }
     DBG_ASSERT( pMap, "illegal map type" );
     return pMap;
+}
+
+const XMLPropertyMapEntry* XMLTextPropertySetMapper::getPropertyMapForType( sal_uInt16 _nType )
+{
+    return lcl_txtprmap_getMap( _nType );
 }
 
 XMLTextPropertySetMapper::XMLTextPropertySetMapper( sal_uInt16 nType ) :
