@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-27 15:42:54 $
+ *  last change: $Author: nn $ $Date: 2000-11-29 20:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,6 +790,25 @@ void ScTextWnd::UpdateAutoCorrFlag()
     }
 }
 
+void lcl_ExtendEditFontAttribs( SfxItemSet& rSet )
+{
+    const SfxPoolItem& rFontItem = rSet.Get( EE_CHAR_FONTINFO );
+    rSet.Put( rFontItem, EE_CHAR_FONTINFO_CJK );
+    rSet.Put( rFontItem, EE_CHAR_FONTINFO_CTL );
+    const SfxPoolItem& rHeightItem = rSet.Get( EE_CHAR_FONTHEIGHT );
+    rSet.Put( rHeightItem, EE_CHAR_FONTHEIGHT_CJK );
+    rSet.Put( rHeightItem, EE_CHAR_FONTHEIGHT_CTL );
+    const SfxPoolItem& rWeightItem = rSet.Get( EE_CHAR_WEIGHT );
+    rSet.Put( rWeightItem, EE_CHAR_WEIGHT_CJK );
+    rSet.Put( rWeightItem, EE_CHAR_WEIGHT_CTL );
+    const SfxPoolItem& rItalicItem = rSet.Get( EE_CHAR_ITALIC );
+    rSet.Put( rItalicItem, EE_CHAR_ITALIC_CJK );
+    rSet.Put( rItalicItem, EE_CHAR_ITALIC_CTL );
+    const SfxPoolItem& rLangItem = rSet.Get( EE_CHAR_LANGUAGE );
+    rSet.Put( rLangItem, EE_CHAR_LANGUAGE_CJK );
+    rSet.Put( rLangItem, EE_CHAR_LANGUAGE_CTL );
+}
+
 void ScTextWnd::StartEditEngine()
 {
     //  #31147# Bei "eigener Modalitaet" (Doc-modale Dialoge) nicht aktivieren
@@ -821,6 +840,7 @@ void ScTextWnd::StartEditEngine()
         {
             SfxItemSet* pSet = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
             pEditEngine->SetFontInfoInItemSet( *pSet, aTextFont );
+            lcl_ExtendEditFontAttribs( *pSet );
             pEditEngine->SetDefaults( pSet );
         }
 
@@ -974,6 +994,7 @@ void ScTextWnd::MakeDialogEditView()
 
     SfxItemSet* pSet = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
     pEditEngine->SetFontInfoInItemSet( *pSet, aTextFont );
+    lcl_ExtendEditFontAttribs( *pSet );
     pEditEngine->SetDefaults( pSet );
     pEditEngine->SetUpdateMode( TRUE );
 
