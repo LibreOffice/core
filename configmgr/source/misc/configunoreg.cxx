@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-10 22:45:38 $
+ *  last change: $Author: fs $ $Date: 2000-11-23 09:51:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,8 @@ namespace configmgr
 
         typedef ::com::sun::star::uno::WeakReference< XInterface >  ProviderReference;
         DECLARE_STL_USTRINGACCESS_MAP(ProviderReference, UserSpecificProvider);
-        UserSpecificProvider    m_aUserProvider;
+        UserSpecificProvider    m_aUserProvider;                // provider for all non-plugin sessions
+        UserSpecificProvider    m_aPluginSessionProviders;      // provider for pluin session
 
     public:
         OProviderFactory(
@@ -169,6 +170,14 @@ namespace configmgr
 
     protected:
         void    ensureDefaultProvider();
+
+        // from the given map, extract a provider for the guven user. (if necessary, create one and insert it into the map)
+        Reference< XInterface > implGetProvider(
+                    UserSpecificProvider& _rExistentProviders,
+                    sal_Bool _bCreateWithPassword,
+                    const ::rtl::OUString& _rCreateForUser,
+                    const Sequence< Any > _rArguments
+                );
     };
 
     //=======================================================================================
@@ -179,6 +188,33 @@ namespace configmgr
         :m_pObjectCreator(_pObjectCreator)
         ,m_xORB(_rxORB)
     {
+    }
+
+    //---------------------------------------------------------------------------------------
+    Reference< XInterface > OProviderFactory::implGetProvider(UserSpecificProvider& _rExistentProviders,
+            sal_Bool _bCreateWithPassword, const ::rtl::OUString& _rCreateForUser, const Sequence< Any > _rArguments)
+    {
+        Reference< XInterface > xReturn;
+        if (!_bCreateWithPassword)
+        {
+            UserSpecificProviderIterator aExistentProvider = _rExistentProviders.find(_rCreateForUser);
+            if (_rExistentProviders.end() != aExistentProvider)
+                xReturn = aExistentProvider->second;
+        }
+
+        if (!xReturn.is())
+        {
+            xReturn = (*m_pObjectCreator)(m_xORB);
+            if (!_bCreateWithPassword)
+                _rExistentProviders[_rCreateForUser] = xReturn;
+
+            // initialize it
+            Reference< XInitialization > xProvInit(xReturn, UNO_QUERY);
+            if (xProvInit.is())
+                xProvInit->initialize(_rArguments);
+        }
+
+        return xReturn;
     }
 
     //---------------------------------------------------------------------------------------
@@ -212,21 +248,23 @@ namespace configmgr
         MutexGuard aGuard(m_aMutex);
         ::rtl::OUString sUser;
         // #78409
-        // if a provider is queried with a password, we always create a new instance for him,
-        // as don't wan't to the passwords for the user.
+        // if a provider is queried with a password, we always create a new instance for it,
+        // as don't wan't to remember the passwords for the user.
         ::rtl::OUString sPassword;
         bool bPasswordUsed = false;
+
+        ::rtl::OUString sServerType;
 
         const Any* pArguments = _rArguments.getConstArray();
         PropertyValue aCurrentArg;
         for (sal_Int32 i=0; i<_rArguments.getLength(); ++i, ++pArguments)
         {
             if (!((*pArguments) >>= aCurrentArg))
-                throw IllegalArgumentException(::rtl::OUString::createFromAscii("Arguments have to be com.sun.star.beans.PropertyValue's."), NULL, i);
+                throw IllegalArgumentException(::rtl::OUString::createFromAscii("Arguments have to be com.sun.star.beans.PropertyValue's."), NULL, (sal_Int16)i);
             if (0 == aCurrentArg.Name.compareToAscii("user"))
             {
                 if (!(aCurrentArg.Value >>= sUser) || !sUser.getLength())
-                    throw IllegalArgumentException(::rtl::OUString::createFromAscii("The user name specified is invalid."), NULL, i);
+                    throw IllegalArgumentException(::rtl::OUString::createFromAscii("The user name specified is invalid."), NULL, (sal_Int16)i);
             }
 
             // sesions which query for a password are always one instance
@@ -234,31 +272,21 @@ namespace configmgr
             {
                 bPasswordUsed = true;
                 if (!(aCurrentArg.Value >>= sPassword))
-                    throw IllegalArgumentException(::rtl::OUString::createFromAscii("The password specified is invalid."), NULL, i);
+                    throw IllegalArgumentException(::rtl::OUString::createFromAscii("The password specified is invalid."), NULL, (sal_Int16)i);
+            }
+
+            // check for the server type
+            if (0 == aCurrentArg.Name.compareToAscii("servertype"))
+            {
+                if (!(aCurrentArg.Value >>= sServerType))
+                    throw IllegalArgumentException(::rtl::OUString::createFromAscii("The servertype specified is invalid."), NULL, (sal_Int16)i);
             }
         }
 
-        Reference< XInterface > xThisUsersProvider;
-        if (!bPasswordUsed)
-        {
-            UserSpecificProviderIterator aExistentProvider = m_aUserProvider.find(sUser);
-            if (m_aUserProvider.end() != aExistentProvider)
-                xThisUsersProvider = aExistentProvider->second;
-        }
-
-        if (!xThisUsersProvider.is())
-        {
-            xThisUsersProvider = (*m_pObjectCreator)(m_xORB);
-            if (!bPasswordUsed)
-                m_aUserProvider[sUser] = xThisUsersProvider;
-
-            // initialize it
-            Reference< XInitialization > xProvInit(xThisUsersProvider, UNO_QUERY);
-            if (xProvInit.is())
-                xProvInit->initialize(_rArguments);
-        }
-
-        return xThisUsersProvider;
+        if (0 == sServerType.compareToAscii("plugin"))
+            return implGetProvider(m_aPluginSessionProviders, bPasswordUsed, sUser, _rArguments);
+        else
+            return implGetProvider(m_aUserProvider, bPasswordUsed, sUser, _rArguments);
     }
 
     //---------------------------------------------------------------------------------------
@@ -308,7 +336,7 @@ void REGISTER_PROVIDER(
     Reference< XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
     OSL_ENSHURE(xNewKey.is(), "CONFMGR::component_writeInfo : could not create a registry key !");
 
-    for (sal_uInt32 i=0; i<Services.getLength(); ++i)
+    for (sal_Int32 i=0; i<Services.getLength(); ++i)
         xNewKey->createKey(Services[i]);
 }
 
