@@ -2,9 +2,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:19:29 $
+#   last change: $Author: rt $ $Date: 2004-06-17 10:29:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -893,10 +893,9 @@ sub get_position_in_sequencetable
 
 sub set_custom_action
 {
-    my ($customactionidttable, $installtable, $binarytable, $actionname, $actionflags, $exefilename, $actionparameter, $actioncondition, $position, $inbinarytable, $filesref, $customactionidttablename, $installtablename) = @_;
+    my ($customactionidttable, $binarytable, $actionname, $actionflags, $exefilename, $actionparameter, $inbinarytable, $filesref, $customactionidttablename) = @_;
 
     my $included_customaction = 0;
-    my $feature = "";
     my $infoline = "";
     my $customaction_exefilename = $exefilename;
 
@@ -905,6 +904,48 @@ sub set_custom_action
     if ( $inbinarytable ) { $customaction_exefilename =~ s/\.//; }  # this is the entry in the binary table ("abc.dll" -> "abcdll")
 
     # is the $exefilename included into the product?
+
+    my $contains_file = 0;
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        my $filename = ${$filesref}[$i]->{'Name'};
+
+        if ( $filename eq $exefilename )
+        {
+            $contains_file = 1;
+            last;
+        }
+    }
+
+    if ( $contains_file )
+    {
+        # Now the CustomAction can be included into the CustomAc.idt
+
+        my $line = $actionname . "\t" . $actionflags . "\t" . $customaction_exefilename . "\t" . $actionparameter . "\n";
+        push(@{$customactionidttable}, $line);
+
+        $included_customaction = 1;
+    }
+
+    if ( $included_customaction ) { $infoline = "Added $actionname CustomAction into table $customactionidttablename\n"; }
+    else { $infoline = "Did not add $actionname CustomAction into table $customactionidttablename\n"; }
+    push(@installer::globals::logfileinfo, $infoline);
+
+    return $included_customaction;
+}
+
+####################################################################
+# Adding a Custom Action to InstallExecuteTable or InstallUITable
+####################################################################
+
+sub add_custom_action_to_install_table
+{
+    my ($installtable, $exefilename, $actionname, $actioncondition, $position, $filesref, $installtablename) = @_;
+
+    my $included_customaction = 0;
+    my $feature = "";
+    my $infoline = "";
 
     my $contains_file = 0;
 
@@ -931,13 +972,7 @@ sub set_custom_action
 
     if ( $contains_file )
     {
-        # Now the CustomAction can be included
-        # First the CustomAc.idt
-
-        my $line = $actionname . "\t" . $actionflags . "\t" . $customaction_exefilename . "\t" . $actionparameter . "\n";
-        push(@{$customactionidttable}, $line);
-
-        # then the InstallE.idt.idt
+        # then the InstallE.idt.idt or InstallU.idt.idt
 
         $actioncondition =~ s/FEATURETEMPLATE/$feature/g;   # only execute Custom Action, if feature of the file is installed
 
@@ -946,16 +981,54 @@ sub set_custom_action
         if ( $position eq "end" ) { $actionposition = get_last_position_in_sequencetable($installtable) + 25; }
         if ( $position eq "InstallWelcome" ) { $actionposition = get_position_in_sequencetable($position, $installtable) - 5; }
 
-        $line = $actionname . "\t" . $actioncondition . "\t" . $actionposition . "\n";
+        my $line = $actionname . "\t" . $actioncondition . "\t" . $actionposition . "\n";
         push(@{$installtable}, $line);
 
         $included_customaction = 1;
     }
 
-    if ( $included_customaction ) { $infoline = "Added $actionname CustomAction into table $customactionidttablename and $installtablename\n"; }
-    else { $infoline = "Did not add $actionname CustomAction into table $customactionidttablename and $installtablename\n"; }
+    if ( $included_customaction ) { $infoline = "Added $actionname CustomAction into table $installtablename\n"; }
+    else { $infoline = "Did not add $actionname CustomAction into table $installtablename\n"; }
     push(@installer::globals::logfileinfo, $infoline);
 
+}
+
+##################################################################
+# A line in the table ControlEvent connects a Control
+# with a Custom Action
+#################################################################
+
+sub connect_custom_action_to_control
+{
+    my ( $table, $tablename, $dialog, $control, $event, $argument, $condition, $ordering) = @_;
+
+    my $line = $dialog . "\t" . $control. "\t" . $event. "\t" . $argument. "\t" . $condition. "\t" . $ordering . "\n";
+
+    push(@{$table}, $line);
+
+    $line =~ s/\s*$//g;
+
+    $infoline = "Added line \"$line\" into table $tablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+}
+
+##################################################################
+# A line in the table ControlCondition connects a Control state
+# with a condition
+##################################################################
+
+sub connect_condition_to_control
+{
+    my ( $table, $tablename, $dialog, $control, $event, $condition) = @_;
+
+    my $line = $dialog . "\t" . $control. "\t" . $event. "\t" . $condition. "\n";
+
+    push(@{$table}, $line);
+
+    $line =~ s/\s*$//g;
+
+    $infoline = "Added line \"$line\" into table $tablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
 }
 
 ##################################################################
