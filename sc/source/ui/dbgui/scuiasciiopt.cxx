@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scuiasciiopt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:57:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,11 @@
 #include <unotools/transliterationwrapper.hxx>
 #endif
 
+//! TODO make dynamic
 #ifdef WIN
-const sal_Int32 ASCIIDLG_MAXROWS                = 10000;
+const SCSIZE ASCIIDLG_MAXROWS                = 10000;
 #else
-const sal_Int32 ASCIIDLG_MAXROWS                = 32000;
+const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
 #endif
 
 // ============================================================================
@@ -135,6 +136,18 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         ModalDialog ( pParent, ScResId( RID_SCDLG_ASCII ) ),
         pDatStream  ( pInStream ),
 
+        pRowPosArray( NULL ),
+        pRowPosArrayUnicode( NULL ),
+        bVFlag      ( FALSE ),
+
+        aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
+        aFtCharSet  ( this, ScResId( FT_CHARSET ) ),
+        aLbCharSet  ( this, ScResId( LB_CHARSET ) ),
+
+        aFtRow      ( this, ScResId( FT_AT_ROW  ) ),
+        aNfRow      ( this, ScResId( NF_AT_ROW  ) ),
+
+        aFlSepOpt   ( this, ScResId( FL_SEPOPT ) ),
         aRbFixed    ( this, ScResId( RB_FIXED ) ),
         aRbSeparated( this, ScResId( RB_SEPARATED ) ),
 
@@ -144,31 +157,24 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         aCkbSpace   ( this, ScResId( CKB_SPACE   ) ),
         aCkbOther   ( this, ScResId( CKB_OTHER ) ),
         aEdOther    ( this, ScResId( ED_OTHER ) ),
-
-        aFtRow      ( this, ScResId( FT_AT_ROW  ) ),
-        aNfRow      ( this, ScResId( NF_AT_ROW  ) ),
-
-        aFtCharSet  ( this, ScResId( FT_CHARSET ) ),
-        aLbCharSet  ( this, ScResId( LB_CHARSET ) ),
-        aFlSepOpt   ( this, ScResId( FL_SEPOPT ) ),
+        aCkbAsOnce  ( this, ScResId( CB_ASONCE) ),
         aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
         aCbTextSep  ( this, ScResId( CB_TEXTSEP ) ),
-        aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
-        aCkbAsOnce  ( this, ScResId( CB_ASONCE) ),
+
+        aFlWidth    ( this, ScResId( FL_WIDTH ) ),
         aFtType     ( this, ScResId( FT_TYPE ) ),
         aLbType     ( this, ScResId( LB_TYPE1 ) ),
+
         maTableBox  ( this, ScResId( CTR_TABLEBOX ) ),
-        aFlWidth    ( this, ScResId( FL_WIDTH ) ),
+
         aBtnOk      ( this, ScResId( BTN_OK ) ),
         aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp    ( this, ScResId( BTN_HELP ) ),
+
         aCharSetUser( ScResId( SCSTR_CHARSET_USER ) ),
         aColumnUser ( ScResId( SCSTR_COLUMN_USER ) ),
         aFldSepList ( ScResId( SCSTR_FIELDSEP ) ),
-        aTextSepList( ScResId( SCSTR_TEXTSEP ) ),
-        pRowPosArray( NULL ),
-        pRowPosArrayUnicode( NULL ),
-        bVFlag      ( FALSE )
+        aTextSepList( ScResId( SCSTR_TEXTSEP ) )
 {
     FreeResource();
 
@@ -190,21 +196,15 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     }
 
     nArrayEndPos = nArrayEndPosUnicode = 0;
-    USHORT nField;
     BOOL bPreselectUnicode = FALSE;
     if( pDatStream )
     {
         USHORT j;
         pRowPosArray=new ULONG[ASCIIDLG_MAXROWS+2];
         pRowPosArrayUnicode=new ULONG[ASCIIDLG_MAXROWS+2];
-        ULONG *pPtrRowPos=pRowPosArray;
-        ULONG *pPtrRowPosUnicode=pRowPosArrayUnicode;
-        for(nField=0;nField<ASCIIDLG_MAXROWS;nField++)
-        {
-            *pPtrRowPos++=0;
-            *pPtrRowPosUnicode++=0;
-        }
-        pDatStream->SetBufferSize(ASCIIDLG_MAXROWS);
+        memset( pRowPosArray, 0, sizeof(ULONG) * (ASCIIDLG_MAXROWS+2));
+        memset( pRowPosArrayUnicode, 0, sizeof(ULONG) * (ASCIIDLG_MAXROWS+2));
+        pDatStream->SetBufferSize(0x7fff);
         pDatStream->SetStreamCharSet( gsl_getSystemTextEncoding() );    //!???
         pDatStream->Seek( 0 );
         for ( j=0; j < CSV_PREVIEW_LINES; j++ )
@@ -307,7 +307,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     maTableBox.SetColTypeHdl( LINK( this, ScImportAsciiDlg, ColTypeHdl ) );
 
     if(!bVFlag)
-        maTableBox.Execute( CSVCMD_SETLINECOUNT, ASCIIDLG_MAXROWS );
+        maTableBox.Execute( CSVCMD_SETLINECOUNT, static_cast<sal_Int32>(ASCIIDLG_MAXROWS) );
 
     aRbSeparated.SetClickHdl( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
     aRbFixed.SetClickHdl( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
@@ -331,7 +331,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
     rOpt.SetCharSet( meCharSet );
     rOpt.SetCharSetSystem( mbCharSetSystem );
     rOpt.SetFixedLen( aRbFixed.IsChecked() );
-    rOpt.SetStartRow( (USHORT)aNfRow.GetValue() );
+    rOpt.SetStartRow( (long)aNfRow.GetValue() );
     maTableBox.FillColumnData( rOpt );
     if( aRbSeparated.IsChecked() )
     {
@@ -384,14 +384,14 @@ void ScImportAsciiDlg::UpdateVertical( bool bSwitchToFromUnicode )
     if ( bSwitchToFromUnicode )
     {
         bVFlag = FALSE;
-        maTableBox.Execute( CSVCMD_SETLINECOUNT, ASCIIDLG_MAXROWS );
+        maTableBox.Execute( CSVCMD_SETLINECOUNT, static_cast<sal_Int32>(ASCIIDLG_MAXROWS) );
     }
     ULONG nNew = 0;
     if(!bVFlag)
     {
         // dragging the scrollbar -> read entire file
         bVFlag=TRUE;
-        ULONG nRows = 0;
+        SCSIZE nRows = 0;
 
         pDatStream->Seek(0);
         if ( meCharSet == RTL_TEXTENCODING_UNICODE )
@@ -427,7 +427,7 @@ void ScImportAsciiDlg::UpdateVertical( bool bSwitchToFromUnicode )
             nStreamPos = pDatStream->Tell();
         }
 
-        maTableBox.Execute( CSVCMD_SETLINECOUNT, nRows );
+        maTableBox.Execute( CSVCMD_SETLINECOUNT, static_cast<sal_Int32>(nRows) );
     }
 
     nNew = maTableBox.GetFirstVisLine();
