@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hiranges.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef SC_HIRANGES_HXX
 #define SC_HIRANGES_HXX
 
-#ifndef _COLOR_HXX //autogen
-#include <vcl/color.hxx>
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 
 #ifndef SC_SCGLOB_HXX
