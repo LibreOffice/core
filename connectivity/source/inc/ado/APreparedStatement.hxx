@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:25 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 12:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ namespace connectivity
                             //  for the prepared statement
 
             ::std::vector<OTypeInfo>    m_aTypeInfo;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
             ADOParameters*              m_pParameters;
 
         public:

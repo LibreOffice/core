@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 11:23:39 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 12:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,9 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
 
 Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) throw(SQLException, RuntimeException)
 {
-    Reference< XResultSetMetaData > xRef = new OResultSetMetaData(m_RecordSet);
-    return xRef;
+    if(!m_xMetaData.is())
+        m_xMetaData = new OResultSetMetaData(m_RecordSet);
+    return m_xMetaData;
 }
 // -------------------------------------------------------------------------
 void OPreparedStatement::disposing()
