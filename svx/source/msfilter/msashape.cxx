@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-19 19:14:15 $
+ *  last change: $Author: sj $ $Date: 2001-01-24 12:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3892,6 +3892,172 @@ static const mso_AutoShape msoSeal32 =
     0x80000000, 0x80000000
 };
 
+static const sal_Int32 mso_sptRibbon2Vert[] =           // adjustment1 : x 2700  - 8100     def 5400
+{                                                       // adjustment2 : y 14400 - 21600    def 18900
+    12 MSO_I, 1 MSO_I,                                  // p00
+    12 MSO_I, 13 MSO_I,                                 // p01
+    12 MSO_I, 14 MSO_I,                                 // c02
+    15 MSO_I, 21600,                                    // c03
+    16 MSO_I, 21600,                                    // p04
+    0,      21600,                                      // p05
+    2750,   7 MSO_I,                                    // p06
+    0,      2 MSO_I,                                    // p07
+    0 MSO_I,2 MSO_I,                                    // p08
+    0 MSO_I,4 MSO_I,                                    // p09
+    0 MSO_I,5 MSO_I,                                    // c10
+    10 MSO_I,0,                                         // c11
+    11 MSO_I,0,                                         // p12
+    17 MSO_I, 0,                                        // p13
+    18 MSO_I, 0,                                        // c14
+    19 MSO_I,5 MSO_I,                                   // c15
+    19 MSO_I,4 MSO_I,                                   // p16
+    19 MSO_I,2 MSO_I,                                   // p17
+    21600,  2 MSO_I,                                    // p18
+    18850, 7 MSO_I,                                     // p19
+    21600,  21600,                                      // p20
+    20 MSO_I, 21600,                                    // p21
+    21 MSO_I, 21600,                                    // c22
+    22 MSO_I, 14 MSO_I,                                 // c23
+    22 MSO_I, 13 MSO_I,                                 // p24
+    22 MSO_I, 1 MSO_I,                                  // p25
+
+    12 MSO_I, 1 MSO_I,                                  // p26
+    12 MSO_I, 13 MSO_I,                                 // p27
+    12 MSO_I, 23 MSO_I,                                 // c28
+    15 MSO_I, 24 MSO_I,                                 // c29
+    16 MSO_I, 24 MSO_I,                                 // p30
+    11 MSO_I, 24 MSO_I,                                 // p31
+    10 MSO_I, 24 MSO_I,                                 // c32
+    0 MSO_I, 26 MSO_I,                                  // c33
+    0 MSO_I, 25 MSO_I,                                  // p34
+    0 MSO_I, 27 MSO_I,                                  // c35
+    10 MSO_I, 1 MSO_I,                                  // c36
+    11 MSO_I, 1 MSO_I,                                  // p37
+
+    22 MSO_I, 1 MSO_I,                                  // p38
+    22 MSO_I, 13 MSO_I,                                 // p39
+    22 MSO_I, 23 MSO_I,                                 // c40
+    21 MSO_I, 24 MSO_I,                                 // c41
+    20 MSO_I, 24 MSO_I,                                 // p42
+    17 MSO_I, 24 MSO_I,                                 // p43
+    18 MSO_I, 24 MSO_I,                                 // c44
+    19 MSO_I, 26 MSO_I,                                 // c45
+    19 MSO_I, 25 MSO_I,                                 // p46
+    19 MSO_I, 27 MSO_I,                                 // c47
+    18 MSO_I, 1 MSO_I,                                  // c48
+    17 MSO_I, 1 MSO_I,                                  // p49
+
+    0 MSO_I, 25 MSO_I,
+    0 MSO_I, 2 MSO_I,
+
+    19 MSO_I, 25 MSO_I,
+    19 MSO_I, 2 MSO_I
+
+};
+static const sal_uInt16 mso_sptRibbon2Segm[] =
+{
+    0x4000, 0x0001, 0x2001, 0x0005, 0x2001, 0x0001, 0x2001, 0x0005, 0x2001, 0x0001, 0x6001, 0x8000,
+    0x4000, 0x0001, 0x2001, 0x0001, 0x2002, 0x6001, 0x8000,
+    0x4000, 0x0001, 0x2001, 0x0001, 0x2002, 0x6001, 0x8000,
+    0x4000, 0x0001, 0x8000,
+    0x4000, 0x0001, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptRibbon2Calc[] =
+{
+    { 0x2000, DFF_Prop_adjustValue, 0, 0 },             // 00
+    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },            // 01
+    { 0x8000, 21600, 0, 0x401 },                        // 02
+    { 0x2001, 0x402, 1, 2 },                            // 03
+    { 0x2001, 0x403, 1, 2 },                            // 04
+    { 0x2001, 0x404, 1, 2 },                            // 05
+    { 0x2001, 0x401, 1, 2 },                            // 06
+    { 0x8000, 21600, 0, 0x406 },                        // 07
+    { 0x0000, 420, 0, 0 },                              // 08
+    { 0x2001, 0x408, 2, 1 },                            // 09
+    { 0x6000, 0x400, 0x408, 0 },                        // 10
+    { 0x6000, 0x400, 0x409, 0 },                        // 11
+    { 0x2000, 0x400, 2700, 0 },                         // 12
+    { 0x8000, 21600, 0, 0x404 },                        // 13
+    { 0x8000, 21600, 0, 0x405 },                        // 14
+    { 0xa000, 0x40c, 0, 0x408 },                        // 15
+    { 0xa000, 0x40c, 0, 0x409 },                        // 16
+
+    { 0x8000, 21600, 0, 0x40b },                        // 17
+    { 0x8000, 21600, 0, 0x40a },                        // 18
+    { 0x8000, 21600, 0, 0x400 },                        // 19
+    { 0x8000, 21600, 0, 0x410 },                        // 20
+    { 0x8000, 21600, 0, 0x40f },                        // 21
+    { 0x8000, 21600, 0, 0x40c },                        // 22
+
+    { 0xa000, 0x40d, 0, 0x405 },                        // 23
+    { 0x6000, 0x401, 0x403, 0 },                        // 24
+    { 0x6000, 0x401, 0x404, 0 },                        // 25
+    { 0x6000, 0x419, 0x405, 0 },                        // 26
+    { 0xa000, 0x419, 0, 0x405 }                         // 27
+};
+static const sal_Int32 mso_sptRibbon2Default[] =
+{
+    2, 5400, 18900
+};
+static const sal_Int32 mso_sptRibbon2TextRect[] =
+{
+    1, 0 MSO_I, 0, 19 MSO_I, 1 MSO_I
+};
+static const mso_AutoShape msoRibbon2 =
+{
+    (sal_Int32*)mso_sptRibbon2Vert, sizeof( mso_sptRibbon2Vert ) >> 3,
+    (sal_uInt16*)mso_sptRibbon2Segm, sizeof( mso_sptRibbon2Segm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptRibbon2Calc, sizeof( mso_sptRibbon2Calc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptRibbon2Default,
+    (sal_Int32*)mso_sptRibbon2TextRect,
+    (sal_Int32*)NULL,
+    0x80000000, 0x80000000
+};
+
+static const SvxMSDffCalculationData mso_sptRibbonCalc[] =      // adjustment1 : x 2700  - 8100     def 5400
+{                                                               // adjustment2 : y 0 - 7200
+    { 0x2000, DFF_Prop_adjustValue, 0, 0 },             // 00
+    { 0x8000, 21600, 0, DFF_Prop_adjust2Value },        // 01
+    { 0x8000, 21600, 0, 0x401 },                        // 02
+    { 0x2001, 0x402, 1, 2 },                            // 03
+    { 0x2001, 0x403, 1, 2 },                            // 04
+    { 0x2001, 0x404, 1, 2 },                            // 05
+    { 0x2001, 0x401, 1, 2 },                            // 06
+    { 0x8000, 21600, 0, 0x406 },                        // 07
+    { 0x0000, 420, 0, 0 },                              // 08
+    { 0x2001, 0x408, 2, 1 },                            // 09
+    { 0x6000, 0x400, 0x408, 0 },                        // 10
+    { 0x6000, 0x400, 0x409, 0 },                        // 11
+    { 0x2000, 0x400, 2700, 0 },                         // 12
+    { 0x8000, 21600, 0, 0x404 },                        // 13
+    { 0x8000, 21600, 0, 0x405 },                        // 14
+    { 0xa000, 0x40c, 0, 0x408 },                        // 15
+    { 0xa000, 0x40c, 0, 0x409 },                        // 16
+
+    { 0x8000, 21600, 0, 0x40b },                        // 17
+    { 0x8000, 21600, 0, 0x40a },                        // 18
+    { 0x8000, 21600, 0, 0x400 },                        // 19
+    { 0x8000, 21600, 0, 0x410 },                        // 20
+    { 0x8000, 21600, 0, 0x40f },                        // 21
+    { 0x8000, 21600, 0, 0x40c },                        // 22
+
+    { 0xa000, 0x40d, 0, 0x405 },                        // 23
+    { 0x6000, 0x401, 0x403, 0 },                        // 24
+    { 0x6000, 0x401, 0x404, 0 },                        // 25
+    { 0x6000, 0x419, 0x405, 0 },                        // 26
+    { 0xa000, 0x419, 0, 0x405 }                         // 27
+};
+static const mso_AutoShape msoRibbon =
+{
+    (sal_Int32*)mso_sptRibbon2Vert, sizeof( mso_sptRibbon2Vert ) >> 3,
+    (sal_uInt16*)mso_sptRibbon2Segm, sizeof( mso_sptRibbon2Segm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptRibbonCalc, sizeof( mso_sptRibbonCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptRibbon2Default,
+    (sal_Int32*)mso_sptRibbon2TextRect,
+    (sal_Int32*)NULL,
+    0x80000000, 0x80000000
+};
+
 class SvxMSDffAdjustmentHandle
 {
     sal_Int32   nAdjustValue;
@@ -3927,6 +4093,7 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
     nFix16Angle         ( nAngle ),
     nXRef               ( 0x80000000 ),
     nYRef               ( 0x80000000 ),
+    nFlags              ( 0 ),
     nColorData          ( 0 ),
     nCalculationData    ( 0 ),
     nAdjustmentHandles  ( 0 ),
@@ -4113,8 +4280,19 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
         case mso_sptSeal16 :                pDefAutoShape = &msoSeal16; break;
         case mso_sptSeal24 :                pDefAutoShape = &msoSeal24; break;
         case mso_sptSeal32 :                pDefAutoShape = &msoSeal32; break;
-//      case mso_sptRibbon2 :
-//      case mso_sptRibbon :
+        case mso_sptRibbon2 :
+        {
+            pDefAutoShape = &msoRibbon2;
+            nColorData = 0x30dd0000;
+        }
+        break;
+        case mso_sptRibbon :
+        {
+            pDefAutoShape = &msoRibbon;
+            nFlags |= DFF_AUTOSHAPE_FLIP_V;
+            nColorData = 0x30dd0000;
+        }
+        break;
 //      case mso_sptEllipseRibbon2 :
 //      case mso_sptEllipseRibbon :
 
@@ -4343,6 +4521,8 @@ sal_Int32 SvxMSDffAutoShape::GetValue( sal_uInt32 nDat, sal_Bool bScale, sal_Boo
                 fVal -= aBoundRect.Left();
                 fVal *= fXScale;
             }
+            if ( nFlags & DFF_AUTOSHAPE_FLIP_H )
+                fVal = aSnapRect.GetWidth() - fVal;
         }
         else
         {
@@ -4368,6 +4548,8 @@ sal_Int32 SvxMSDffAutoShape::GetValue( sal_uInt32 nDat, sal_Bool bScale, sal_Boo
                 fVal -= aBoundRect.Top();
                 fVal *= fYScale;
             }
+            if ( nFlags & DFF_AUTOSHAPE_FLIP_V )
+                fVal = aSnapRect.GetHeight() - fVal;
         }
     }
     return fVal;

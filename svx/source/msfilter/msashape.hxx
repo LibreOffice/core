@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *  last change: $Author: sj $ $Date: 2001-01-24 12:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include <msdffimp.hxx>
 #endif
 
+#define DFF_AUTOSHAPE_FLIP_V        1
+#define DFF_AUTOSHAPE_FLIP_H        2
+
 class SdrModel;
 class SfxItemSet;
 struct SvxMSDffCalculationData;
@@ -86,6 +89,7 @@ class SvxMSDffAutoShape
         sal_Int32                   nFix16Angle;
         sal_Int32                   nXRef;
         sal_Int32                   nYRef;
+        sal_uInt32                  nFlags;
 
         sal_uInt32                  nNumElemVert;
         sal_uInt32                  nNumElemSeg;
