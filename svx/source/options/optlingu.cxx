@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-22 07:50:49 $
+ *  last change: $Author: gt $ $Date: 2002-07-24 14:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1930,8 +1930,6 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
         aPrioUpPB   ( this, ResId( PB_EDIT_MODULES_PRIO_UP ) ),
         aPrioDownPB ( this, ResId( PB_EDIT_MODULES_PRIO_DOWN ) ),
         aBackPB     ( this, ResId( PB_EDIT_MODULES_PRIO_BACK ) ),
-        aChkunBmp   ( ResId( BMP_CHKBUT_UNCHECKED ) ),
-        aChkchBmp   ( ResId( BMP_CHKBUT_CHECKED ) ),
         sSpell( ResId( ST_SPELL)),
         sHyph( ResId( ST_HYPH)),
         sThes( ResId( ST_THES)),
@@ -1995,9 +1993,7 @@ SvLBoxEntry* SvxEditModulesDlg::CreateEntry( String& rTxt, USHORT nCol )
     SvLBoxEntry* pEntry = new SvLBoxEntry;
     if( !pCheckButtonData )
     {
-        pCheckButtonData = new SvLBoxButtonData;
-        pCheckButtonData->aBmps[SV_BMP_UNCHECKED] = aChkunBmp;
-        pCheckButtonData->aBmps[SV_BMP_CHECKED]   = aChkchBmp;
+        pCheckButtonData = new SvLBoxButtonData( &aModulesCLB );
         pCheckButtonData->SetLink( aModulesCLB.GetCheckButtonHdl() );
     }
 
