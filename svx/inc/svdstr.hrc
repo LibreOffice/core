@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 10:41:25 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 08:59:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,10 @@
 #define STR_ObjNameSingulCUSTOMSHAPE        (STR_ObjNameBegin + 141)
 #define STR_ObjNamePluralCUSTOMSHAPE        (STR_ObjNameBegin + 142)
 
-#define STR_ObjNameEnd               (STR_ObjNamePluralCUSTOMSHAPE)
+#define STR_ObjNameSingulMEDIA              (STR_ObjNameBegin + 143)
+#define STR_ObjNamePluralMEDIA              (STR_ObjNameBegin + 144)
+
+#define STR_ObjNameEnd               (STR_ObjNamePluralMEDIA)
 
 #define STR_EditBegin                (STR_ObjNameEnd+1)
 #define STR_EditWithCopy             (STR_EditBegin  +  0)
