@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEnumTypeDescription.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 
 /** Reflects an enum type.
 */
-interface XEnumTypeDescription: com::sun::star::reflection::XTypeDescription
+published interface XEnumTypeDescription: com::sun::star::reflection::XTypeDescription
 {
     /** Returns the default enum value.
 
