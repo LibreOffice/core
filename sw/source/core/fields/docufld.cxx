@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:17:09 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1472,7 +1472,7 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
 //              geprueft. Nur wenn zwei oder mehr Punkte vorhanden sind und kein
 //              Anfuehrungszeichen enthalten ist, gehen wir von einer DB aus.
         if(sTmpName.Len() > 1 && sTmpName.GetChar(0) == '\"' &&
-            sTmpName.GetChar((sTmpName.Len() - 1)))
+            sTmpName.GetChar((sTmpName.Len() - 1))== '\"')
         {
             aContent = sTmpName.Copy(1, sTmpName.Len() - 2);
             bValid = sal_True;
@@ -1621,6 +1621,9 @@ BOOL SwHiddenTxtField::QueryValue( uno::Any& rAny, BYTE nMId ) const
     case FIELD_PROP_PAR3:
         pOut = &aFALSETxt;
         break;
+    case FIELD_PROP_PAR4 :
+        pOut = &aContent;
+    break;
     case FIELD_PROP_BOOL1:
         {
             sal_Bool bHidden = bIsHidden;
@@ -1657,6 +1660,10 @@ BOOL SwHiddenTxtField::PutValue( const uno::Any& rAny, BYTE nMId )
     case FIELD_PROP_BOOL1:
         bIsHidden = *(sal_Bool*)rAny.getValue();
         break;
+    case FIELD_PROP_PAR4:
+        ::GetString( rAny, aContent);
+        bValid = TRUE;
+    break;
     default:
         DBG_ERROR("illegal property");
     }
