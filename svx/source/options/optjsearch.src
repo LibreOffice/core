@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-19 11:21:36 $
+ *  last change: $Author: tl $ $Date: 2001-02-21 13:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,58 +134,51 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text = "Alte Kana-Formen" ;
         Text [ ENGLISH ] = "Match old kana forms" ;
     };
-    CheckBox CB_MATCH_CHOON_USED_FOR_VOWELS
-    {
-        Pos = MAP_APPFONT ( 136 , 14 ) ;
-        Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Cho-on bei Vokalen" ;
-        Text [ ENGLISH ] = "Match cho-on used for vowels" ;
-    };
     CheckBox CB_MATCH_DIZI_DUZU
     {
-        Pos = MAP_APPFONT ( 136 , 28 ) ;
+        Pos = MAP_APPFONT ( 136 , 14 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Di/zi, du/zu" ;
         Text [ ENGLISH ] = "Match di/zi, du/zu" ;
     };
     CheckBox CB_MATCH_BAVA_HAFA
     {
-        Pos = MAP_APPFONT ( 136 , 42 ) ;
+        Pos = MAP_APPFONT ( 136 , 28 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Ba/va, ha/fa" ;
         Text [ ENGLISH ] = "Match ba/va, ha/fa" ;
     };
     CheckBox CB_MATCH_TSITHICHI_DHIZI
     {
-        Pos = MAP_APPFONT ( 136 , 56 ) ;
+        Pos = MAP_APPFONT ( 136 , 42 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Tsi/thi/chi, dhi/zi" ;
         Text [ ENGLISH ] = "Match tsi/thi/chi, dhi/zi" ;
     };
     CheckBox CB_MATCH_HYUIYU_BYUVYU
     {
-        Pos = MAP_APPFONT ( 136 , 70 ) ;
+        Pos = MAP_APPFONT ( 136 , 56 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Hyu/iyu, byu/vyu" ;
         Text [ ENGLISH ] = "Match hyu/iyu, byu/vyu" ;
     };
     CheckBox CB_MATCH_SESHE_ZEJE
     {
-        Pos = MAP_APPFONT ( 136 , 84 ) ;
+        Pos = MAP_APPFONT ( 136 , 70 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Se/she, ze/je" ;
         Text [ ENGLISH ] = "Match se/she, ze/je" ;
     };
     CheckBox CB_MATCH_IAIYA
     {
-        Pos = MAP_APPFONT ( 136 , 98 ) ;
+        Pos = MAP_APPFONT ( 136 , 84 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Ia/iya (piano/piyano)" ;
         Text [ ENGLISH ] = "Match ia/iya (piano/piyano)" ;
     };
     CheckBox CB_MATCH_KIKU
     {
-        Pos = MAP_APPFONT ( 136 , 112 ) ;
+        Pos = MAP_APPFONT ( 136 , 98 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Ki/ku (tekisuto/tekusuto)" ;
         Text [ ENGLISH ] = "Match ki/ku (tekisuto/tekusuto)" ;
@@ -210,6 +203,20 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Leerraumzeichen" ;
         Text [ ENGLISH ] = "Whitespace characters" ;
+    };
+    CheckBox CB_IGNORE_PROLONGED_SOUNDMARK
+    {
+        Pos = MAP_APPFONT ( 6 , 150 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text = "Verlängerte Vokale (cho-on)" ;
+        Text [ ENGLISH ] = "Prolonged soundmarks (cho-on)" ;
+    };
+    CheckBox CB_IGNORE_MIDDLE_DOT
+    {
+        Pos = MAP_APPFONT ( 136 , 150 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text = "Mittiger Punkt" ;
+        Text [ ENGLISH ] = "Middle dots" ;
     };
 };
 // end TabPage

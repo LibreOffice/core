@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-20 09:04:27 $
+ *  last change: $Author: tl $ $Date: 2001-02-21 13:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     pMoreBtn        ( new MoreButton( this, ResId( BTN_MORE ) ) ),
 
     aWordBtn        ( this, ResId( BTN_CELLS ) ),
-    aExactBtn       ( this, ResId( BTN_EXACT ) ),
+    aMatchCaseCB    ( this, ResId( CB_MATCH_CASE ) ),
     aBackwardsBtn   ( this, ResId( BTN_BACKWARDS ) ),
     aSelectionBtn   ( this, ResId( BTN_SELECTIONS ) ),
     aRegExpBtn      ( this, ResId( BTN_REGEXP ) ),
@@ -350,7 +350,7 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     aSimilarityBox  ( this, ResId( CB_SIMILARITY) ),
     aSimilarityBtn  ( this, ResId( PB_SIMILARITY) ),
     aJapMatchFullHalfWidthCB( this, ResId( CB_JAP_MATCH_FULL_HALF_WIDTH ) ),
-    aJapSoundsLikeCB( this, ResId( CB_JAP_SOUNDS_LIKE ) ),
+    aJapOptionsCB   ( this, ResId( CB_JAP_SOUNDS_LIKE ) ),
     aJapOptionsBtn  ( this, ResId( PB_JAP_OPTIONS ) ),
     aOptionsBox     ( this, ResId( GB_OPTIONS ) ),
 
@@ -388,7 +388,7 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     pFamilyController       ( NULL ),
     pSearchSetController    ( NULL ),
     pReplaceSetController   ( NULL ),
-    nTransliterationSettings( 0x00000000 )
+    nTransliterationFlags   ( 0x00000000 )
 
 {
     Wallpaper aBackground = GetBackground();
@@ -494,14 +494,14 @@ BOOL SvxSearchDialog::Close()
 
     // save settings to configuration
     SvtSearchOptions aOpt;
-    aOpt.SetWholeWordsOnly      ( aWordBtn                .IsChecked() );
-    aOpt.SetBackwards           ( aBackwardsBtn           .IsChecked() );
-    aOpt.SetUseRegularExpression( aRegExpBtn              .IsChecked() );
-    aOpt.SetMatchCase           ( aExactBtn               .IsChecked() );
-    aOpt.SetSearchForStyles     ( aLayoutBtn              .IsChecked() );
-    aOpt.SetSimilaritySearch    ( aSimilarityBox          .IsChecked() );
-    aOpt.SetMatchFullHalfWidth  ( aJapMatchFullHalfWidthCB.IsChecked() );
-    aOpt.SetSoundsLikeEnabled   ( aJapSoundsLikeCB        .IsChecked() );
+    aOpt.SetWholeWordsOnly          ( aWordBtn                .IsChecked() );
+    aOpt.SetBackwards               ( aBackwardsBtn           .IsChecked() );
+    aOpt.SetUseRegularExpression    ( aRegExpBtn              .IsChecked() );
+    //aOpt.SetMatchCase             ( aMatchCaseCB            .IsChecked() );
+    aOpt.SetSearchForStyles         ( aLayoutBtn              .IsChecked() );
+    aOpt.SetSimilaritySearch        ( aSimilarityBox          .IsChecked() );
+    //aOpt.SetMatchFullHalfWidthForms   ( aJapMatchFullHalfWidthCB.IsChecked() );
+    aOpt.SetUseAsianOptions         ( aJapOptionsCB           .IsChecked() );
 
     NotifyApp( FID_SEARCH_OFF );
     NotifyApp( SID_SEARCH_DLG );
@@ -510,20 +510,29 @@ BOOL SvxSearchDialog::Close()
 
 // -----------------------------------------------------------------------
 
-INT32 SvxSearchDialog::GetTransliterationSettings() const
+INT32 SvxSearchDialog::GetTransliterationFlags() const
 {
-    return nTransliterationSettings;
+    INT32 &rFlags = (INT32) nTransliterationFlags;
+    if (!aMatchCaseCB.IsChecked())
+        rFlags |=  TransliterationModules_IGNORE_CASE;
+    else
+        rFlags &= ~TransliterationModules_IGNORE_CASE;
+    if (!aJapMatchFullHalfWidthCB.IsChecked())
+        rFlags |=  TransliterationModules_IGNORE_WIDTH;
+    else
+        rFlags &= ~TransliterationModules_IGNORE_WIDTH;
+    return nTransliterationFlags;
 }
 
 // -----------------------------------------------------------------------
 
-void SvxSearchDialog::ApplyTransliterationSettings_Impl( INT32 nSettings )
+void SvxSearchDialog::ApplyTransliterationFlags_Impl( INT32 nSettings )
 {
-    nTransliterationSettings = nSettings;
+    nTransliterationFlags = nSettings;
     BOOL bVal = 0 != (nSettings & TransliterationModules_IGNORE_CASE);
-    aExactBtn               .Check( bVal );
+    aMatchCaseCB            .Check( !bVal );
     bVal = 0 != (nSettings & TransliterationModules_IGNORE_WIDTH);
-    aJapMatchFullHalfWidthCB.Check( bVal );
+    aJapMatchFullHalfWidthCB.Check( !bVal );
 }
 
 // -----------------------------------------------------------------------
@@ -566,11 +575,11 @@ void SvxSearchDialog::InitControls_Impl()
     aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
     aWordBtn.SetClickHdl( aLink );
     aSelectionBtn.SetClickHdl( aLink );
-    aExactBtn.SetClickHdl( aLink );
+    aMatchCaseCB.SetClickHdl( aLink );
     aRegExpBtn.SetClickHdl( aLink );
     aBackwardsBtn.SetClickHdl( aLink );
     aSimilarityBox.SetClickHdl( aLink );
-    aJapSoundsLikeCB.SetClickHdl( aLink );
+    aJapOptionsCB.SetClickHdl( aLink );
     aJapMatchFullHalfWidthCB.SetClickHdl( aLink );
 
     aLayoutBtn.SetClickHdl( LINK( this, SvxSearchDialog, TemplateHdl_Impl ) );
@@ -579,19 +588,6 @@ void SvxSearchDialog::InitControls_Impl()
         LINK( this, SvxSearchDialog, NoFormatHdl_Impl ) );
     aAttributeBtn.SetClickHdl(
         LINK( this, SvxSearchDialog, AttributeHdl_Impl ) );
-
-    // apply settings from configuration
-    SvtSearchOptions aOpt;
-    aWordBtn                .Check( aOpt.IsWholeWordsOnly() );
-    aBackwardsBtn           .Check( aOpt.IsBackwards() );
-    aRegExpBtn              .Check( aOpt.IsUseRegularExpression() );
-    aExactBtn               .Check( aOpt.IsMatchCase() );
-    aLayoutBtn              .Check( aOpt.IsSearchForStyles() );
-    aSimilarityBox          .Check( aOpt.IsSimilaritySearch() );
-    aJapMatchFullHalfWidthCB.Check( aOpt.IsMatchFullHalfWidth() );
-    aJapSoundsLikeCB        .Check( aOpt.IsSoundsLikeEnabled() );
-    ApplyTransliterationSettings_Impl( aOpt.GetTransliterationSettings() );
-    FlagHdl_Impl( &aJapSoundsLikeCB );
 }
 
 // -----------------------------------------------------------------------
@@ -636,7 +632,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
     if ( ( nModifyFlag & MODIFY_WORD ) == 0 )
          aWordBtn.Check( pSearchItem->GetWordOnly() );
     if ( ( nModifyFlag & MODIFY_EXACT ) == 0 )
-        aExactBtn.Check( pSearchItem->GetExact() );
+        aMatchCaseCB.Check( pSearchItem->GetExact() );
     if ( ( nModifyFlag & MODIFY_BACKWARDS ) == 0 )
         aBackwardsBtn.Check( pSearchItem->GetBackward() );
     if ( ( nModifyFlag & MODIFY_SELECTION ) == 0 )
@@ -645,6 +641,11 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         aRegExpBtn.Check( pSearchItem->GetRegExp() );
     if ( ( nModifyFlag & MODIFY_LAYOUT ) == 0 )
         aLayoutBtn.Check( pSearchItem->GetPattern() );
+    aSimilarityBox          .Check( pSearchItem->IsLevenshtein() );
+    aJapMatchFullHalfWidthCB.Check( pSearchItem->IsMatchFullHalfWidthForms() );
+    aJapOptionsCB           .Check( pSearchItem->IsUseAsianOptions() );
+    ApplyTransliterationFlags_Impl( pSearchItem->GetTransliterationFlags() );
+
     FASTBOOL bDraw = FALSE;
 
     if ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_CALC )
@@ -754,9 +755,12 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
     if ( ( nModifyFlag & MODIFY_SIMILARITY ) == 0 )
         aSimilarityBox.Check( pSearchItem->IsLevenshtein() );
     bSet = TRUE;
+
     pImpl->bSaveToModule = FALSE;
     FlagHdl_Impl( &aSimilarityBox );
+    FlagHdl_Impl( &aJapOptionsCB );
     pImpl->bSaveToModule = TRUE;
+
     FASTBOOL bDisableSearch = FALSE;
     SfxViewShell* pViewShell = SfxViewShell::Current();
 
@@ -810,7 +814,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
 
         aWordBtn.Disable();
         aRegExpBtn.Disable();
-        aExactBtn.Disable();
+        aMatchCaseCB.Disable();
 
         bDisableSearch = !aSearchTmplLB.GetEntryCount();
     }
@@ -848,7 +852,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         aReplaceTmplLB.Hide();
 
         EnableControl_Impl( &aRegExpBtn );
-        EnableControl_Impl( &aExactBtn );
+        EnableControl_Impl( &aMatchCaseCB );
 
         if ( aRegExpBtn.IsChecked() )
             aWordBtn.Disable();
@@ -989,7 +993,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Button *, pButton )
 
             if ( aLayoutBtn.IsChecked() )
             {
-                EnableControl_Impl( &aExactBtn );
+                EnableControl_Impl( &aMatchCaseCB );
                 aLayoutBtn.Check( FALSE );
             }
             aRegExpBtn.Disable();
@@ -1016,8 +1020,8 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Button *, pButton )
             aWordBtn.Disable();
             aRegExpBtn.Check( FALSE );
             aRegExpBtn.Disable();
-            aExactBtn.Check( FALSE );
-            aExactBtn.Disable();
+            aMatchCaseCB.Check( FALSE );
+            aMatchCaseCB.Disable();
 
             if ( aSearchTmplLB.GetEntryCount() )
             {
@@ -1030,7 +1034,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Button *, pButton )
         else
         {
             EnableControl_Impl( &aRegExpBtn );
-            EnableControl_Impl( &aExactBtn );
+            EnableControl_Impl( &aMatchCaseCB );
 
             if ( aRegExpBtn.IsChecked() )
             {
@@ -1062,11 +1066,11 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Button *, pButton )
         }
     }
 
-    if ( &aJapSoundsLikeCB == pButton )
+    if ( &aJapOptionsCB == pButton )
     {
-        BOOL bEnableJapOpt = aJapSoundsLikeCB.IsChecked();
-        aExactBtn               .Enable( !bEnableJapOpt );
-        aJapMatchFullHalfWidthCB.Enable( !bEnableJapOpt );
+        BOOL bEnableJapOpt = aJapOptionsCB.IsChecked();
+        aMatchCaseCB            .Enable(!bEnableJapOpt );
+        aJapMatchFullHalfWidthCB.Enable(!bEnableJapOpt );
         aJapOptionsBtn          .Enable( bEnableJapOpt );
     }
 
@@ -1108,11 +1112,16 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         }
 
         pSearchItem->SetWordOnly( GetCheckBoxValue( aWordBtn ) );
+        pSearchItem->SetBackward( GetCheckBoxValue( aBackwardsBtn ) );
         pSearchItem->SetPattern( GetCheckBoxValue( aLayoutBtn ) );
         pSearchItem->SetSelection( GetCheckBoxValue( aSelectionBtn ) );
-        pSearchItem->SetExact( GetCheckBoxValue( aExactBtn ) );
         pSearchItem->SetRegExp( GetCheckBoxValue( aRegExpBtn ) );
-        pSearchItem->SetBackward( GetCheckBoxValue( aBackwardsBtn ) );
+        pSearchItem->SetLevenshtein( GetCheckBoxValue( aSimilarityBox ));
+        pSearchItem->SetUseAsianOptions( GetCheckBoxValue( aJapOptionsCB ) );
+        //! and even if checkboxes are disabled...
+        pSearchItem->SetExact( aMatchCaseCB.IsChecked() );
+        pSearchItem->SetMatchFullHalfWidthForms( aJapMatchFullHalfWidthCB.IsChecked() );
+        pSearchItem->SetTransliterationFlags( GetTransliterationFlags() );
 
         if ( !bWriter )
         {
@@ -1191,9 +1200,9 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
                     SvxJSearchOptionsPage::Create( &aDlg, aSet );
         aDlg.SetTabPage( pPage );   //! implicitly calls pPage->Reset(...)!
         pPage->EnableSaveOptions( FALSE );
-        pPage->SetTransliterationSettings( GetTransliterationSettings() );
+        pPage->SetTransliterationFlags( GetTransliterationFlags() );
         aDlg.Execute();
-        ApplyTransliterationSettings_Impl( pPage->GetTransliterationSettings() );
+        ApplyTransliterationFlags_Impl( pPage->GetTransliterationFlags() );
     }
 
     return 0;
@@ -1490,9 +1499,9 @@ void SvxSearchDialog::EnableControls_Impl( const USHORT nFlags )
     else
         aRegExpBtn.Disable();
     if ( ( SEARCH_OPTIONS_EXACT & nOptions ) != 0 )
-        aExactBtn.Enable();
+        aMatchCaseCB.Enable();
     else
-        aExactBtn.Disable();
+        aMatchCaseCB.Disable();
     if ( ( SEARCH_OPTIONS_SELECTION & nOptions ) != 0 )
         aSelectionBtn.Enable();
     else
@@ -1579,9 +1588,10 @@ void SvxSearchDialog::EnableControl_Impl( Control* pCtrl )
         aRegExpBtn.Enable();
         return;
     }
-    if ( &aExactBtn == pCtrl && ( SEARCH_OPTIONS_EXACT & nOptions ) != 0 )
+    if ( &aMatchCaseCB == pCtrl && ( SEARCH_OPTIONS_EXACT & nOptions ) != 0 )
     {
-        aExactBtn.Enable();
+        if (!aJapOptionsCB.IsChecked())
+            aMatchCaseCB.Enable();
         return;
     }
     if ( &aSelectionBtn == pCtrl && ( SEARCH_OPTIONS_SELECTION & nOptions ) != 0 )
@@ -1975,7 +1985,7 @@ void SvxSearchDialog::SetModifyFlag_Impl( const Control* pCtrl )
         nModifyFlag |= MODIFY_REPLACE;
     else if ( &aWordBtn == (CheckBox*)pCtrl )
         nModifyFlag |= MODIFY_WORD;
-    else if ( &aExactBtn == (CheckBox*)pCtrl )
+    else if ( &aMatchCaseCB == (CheckBox*)pCtrl )
         nModifyFlag |= MODIFY_EXACT;
     else if ( &aBackwardsBtn == (CheckBox*)pCtrl )
         nModifyFlag |= MODIFY_BACKWARDS;
@@ -2021,11 +2031,16 @@ void SvxSearchDialog::SaveToModule_Impl()
     }
 
     pSearchItem->SetWordOnly( GetCheckBoxValue( aWordBtn ) );
+    pSearchItem->SetBackward( GetCheckBoxValue( aBackwardsBtn ) );
     pSearchItem->SetPattern( GetCheckBoxValue( aLayoutBtn ) );
     pSearchItem->SetSelection( GetCheckBoxValue( aSelectionBtn ) );
-    pSearchItem->SetExact( GetCheckBoxValue( aExactBtn ) );
     pSearchItem->SetRegExp( GetCheckBoxValue( aRegExpBtn ) );
-    pSearchItem->SetBackward( GetCheckBoxValue( aBackwardsBtn ) );
+    pSearchItem->SetLevenshtein( GetCheckBoxValue( aSimilarityBox ));
+    pSearchItem->SetUseAsianOptions( GetCheckBoxValue( aJapOptionsCB ) );
+    //! and even if checkboxes are disabled...
+    pSearchItem->SetExact( aMatchCaseCB.IsChecked() );
+    pSearchItem->SetMatchFullHalfWidthForms( aJapMatchFullHalfWidthCB.IsChecked() );
+    pSearchItem->SetTransliterationFlags( GetTransliterationFlags() );
 
     if ( !bWriter )
     {

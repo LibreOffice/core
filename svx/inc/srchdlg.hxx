@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-19 11:16:57 $
+ *  last change: $Author: tl $ $Date: 2001-02-21 13:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,22 +101,10 @@
 #include <svtools/svmedit.hxx>
 #endif
 
-// defines ---------------------------------------------------------------
+#ifndef _SFX_SRCHDEFS_HXX_
+#include <sfx2/srchdefs.hxx>
+#endif
 
-#define SEARCH_OPTIONS_SEARCH       ((USHORT)0x0001)
-#define SEARCH_OPTIONS_SEARCH_ALL   ((USHORT)0x0002)
-#define SEARCH_OPTIONS_REPLACE      ((USHORT)0x0004)
-#define SEARCH_OPTIONS_REPLACE_ALL  ((USHORT)0x0008)
-#define SEARCH_OPTIONS_WHOLE_WORDS  ((USHORT)0x0010)
-#define SEARCH_OPTIONS_BACKWARDS    ((USHORT)0x0020)
-#define SEARCH_OPTIONS_REG_EXP      ((USHORT)0x0040)
-#define SEARCH_OPTIONS_EXACT        ((USHORT)0x0080)
-#define SEARCH_OPTIONS_SELECTION    ((USHORT)0x0100)
-#define SEARCH_OPTIONS_FAMILIES     ((USHORT)0x0200)
-#define SEARCH_OPTIONS_FORMAT       ((USHORT)0x0400)
-#define SEARCH_OPTIONS_MORE         ((USHORT)0x0800)
-#define SEARCH_OPTIONS_SIMILARITY   ((USHORT)0x1000)
-#define SEARCH_OPTIONS_CONTENT      ((USHORT)0x2000)
 
 // forward ---------------------------------------------------------------
 
@@ -213,7 +201,7 @@ public:
 
     PushButton&     GetReplaceBtn() { return aReplaceBtn; }
 
-    INT32           GetTransliterationSettings() const;
+    INT32           GetTransliterationFlags() const;
 
 private:
     FixedText       aSearchText;
@@ -242,7 +230,7 @@ private:
     MoreButton*     pMoreBtn;
 
     CheckBox        aWordBtn;
-    CheckBox        aExactBtn;
+    CheckBox        aMatchCaseCB;
     CheckBox        aBackwardsBtn;
     CheckBox        aSelectionBtn;
     CheckBox        aRegExpBtn;
@@ -251,7 +239,7 @@ private:
     CheckBox        aSimilarityBox;
     PushButton      aSimilarityBtn;
     CheckBox        aJapMatchFullHalfWidthCB;
-    CheckBox        aJapSoundsLikeCB;
+    CheckBox        aJapOptionsCB;
     PushButton      aJapOptionsBtn;
     GroupBox        aOptionsBox;
 
@@ -295,7 +283,7 @@ private:
     SvxSearchController*    pSearchSetController;
     SvxSearchController*    pReplaceSetController;
 
-    INT32           nTransliterationSettings;
+    INT32           nTransliterationFlags;
 
 #ifdef _SVX_SRCHDLG_CXX
     DECL_LINK( ModifyHdl_Impl, ComboBox* pEdit );
@@ -325,7 +313,7 @@ private:
     void            SetModifyFlag_Impl( const Control* pCtrl );
     void            SaveToModule_Impl();
 
-    void            ApplyTransliterationSettings_Impl( INT32 nSettings );
+    void            ApplyTransliterationFlags_Impl( INT32 nSettings );
 #endif
 };
 
