@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-15 14:17:38 $
+ *  last change: $Author: bm $ $Date: 2003-10-15 15:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,7 +379,7 @@ void lcl_createLegend(
             ceil( static_cast< double >( nNumberOfEntries ) /
                   static_cast< double >( nNumberOfColumns ) ));
     }
-    else
+    else if( eExpansion == chart2::LegendExpansion_WIDE )
     {
         sal_Int32 nMaxNumberOfColumns = (rAvailableSpace.Width - 2*nXPadding ) / nMaxEntryWidth;
 
@@ -390,6 +390,19 @@ void lcl_createLegend(
             ceil( static_cast< double >( nNumberOfEntries ) /
                   static_cast< double >( nNumberOfRows ) ));
     }
+    else // chart2::LegendExpansion_BALANCED
+    {
+        double fAspect =
+            static_cast< double >( nMaxEntryWidth ) / static_cast< double >( nMaxEntryHeight );
+
+        nNumberOfRows = static_cast< sal_Int32 >(
+            ceil( sqrt( static_cast< double >( nNumberOfEntries ) * fAspect )));
+        nNumberOfColumns = static_cast< sal_Int32 >(
+            ceil( static_cast< double >( nNumberOfEntries ) /
+                  static_cast< double >( nNumberOfRows ) ));
+    }
+
+    OSL_TRACE( "Number of Rows: %ud, Number of Columns: %ud", nNumberOfRows, nNumberOfColumns );
 
     // place entries ordered in optimal-width columns
     for( sal_Int32 nColumn = 0; nColumn < nNumberOfColumns; ++nColumn )
@@ -399,9 +412,10 @@ void lcl_createLegend(
 
         for( sal_Int32 nRow = 0; nRow < nNumberOfRows; ++nRow )
         {
-            sal_Int32 nEntry = ( eExpansion == chart2::LegendExpansion_HIGH )
-                ? (nRow + nColumn * nNumberOfRows)
-                : (nColumn + nRow * nNumberOfColumns);
+            sal_Int32 nEntry = ( eExpansion == chart2::LegendExpansion_WIDE )
+                ? (nColumn + nRow * nNumberOfColumns)
+                // HIGH or BALANCED
+                : (nRow + nColumn * nNumberOfRows);
 
             if( nEntry >= nNumberOfEntries )
                 break;
