@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:23:08 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1055,9 +1055,28 @@ void SwTabFrm::MakeAll()
                                 (GetFollow()->GetUpper()->Frm().*fnRect->fnGetBottom)() );
                             if ( !GetFollow()->GetFollow() )
                             {
-                                SwFrm *pNxt = ((SwFrm*)GetFollow())->FindNext();
+                                SwFrm* pNxt = ((SwFrm*)GetFollow())->FindNext();
                                 if ( pNxt )
-                                    pNxt->Calc();
+                                {
+                                    // OD 26.08.2003 #i18103# - no formatting
+                                    // of found next frame, if its a follow
+                                    // section of the 'ColLocked' section,
+                                    // the follow table is in.
+                                    bool bCalcNxt = true;
+                                    if ( GetFollow()->IsInSct() && pNxt->IsSctFrm() )
+                                    {
+                                        SwSectionFrm* pSct = GetFollow()->FindSctFrm();
+                                        if ( pSct->IsColLocked() &&
+                                             pSct->GetFollow() == pNxt )
+                                        {
+                                            bCalcNxt = false;
+                                        }
+                                    }
+                                    if ( bCalcNxt )
+                                    {
+                                        pNxt->Calc();
+                                    }
+                                }
                             }
                             --nStack;
                         }
@@ -1985,27 +2004,9 @@ void SwTabFrm::Cut()
         }
         else if( (Frm().*fnRect->fnGetHeight)() )
         {
-            // OD 24.02.2003 #104992# - unlock section the table frame was in.
-            // Otherwise, the section will not shrink.
-            // The section will be locked in this situation, if table is
-            // converted to text and the table was the only content in the
-            // section beside a footnote.
-            // Note: lock state will be restored.
-            bool bOldLock;
-            if ( pSct )
-            {
-                bOldLock = pSct->IsColLocked() ? true : false;
-                pSct->ColUnlock();
-            }
+            // OD 26.08.2003 #i18103# - *no* 'ColUnlock' of section -
+            // undo changes of fix for #104992#
             pUp->Shrink( Frm().Height() PHEIGHT );
-            // OD 24.02.2003 #104992# - restore section lock state.
-            if ( pSct )
-            {
-                if ( bOldLock )
-                {
-                    pSct->ColLock();
-                }
-            }
         }
     }
 
