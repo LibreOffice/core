@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-24 20:51:01 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,14 +108,14 @@ Window FLT_NAVIGATOR
                 Text [ portuguese_brazilian ] = "Livemodus" ;
                 Text [ portuguese ] = "Ao vivo" ;
                 Text [ swedish ] = "Liveläge" ;
-                Text[ chinese_simplified ] = "Êµ¿öÄ£Ê½";
+                Text[ chinese_simplified ] = "å®å†µæ¨¡å¼";
                 Text[ russian ] = "Ğåæèì Live";
                 Text[ polish ] = "Tryb Live";
-                Text[ japanese ] = "×²ÌŞÓ°ÄŞ";
-                Text[ chinese_traditional ] = "¹êªp¼Ò¦¡";
+                Text[ japanese ] = "ï¾—ï½²ï¾Œï¾ï¾“ï½°ï¾„ï¾";
+                Text[ chinese_traditional ] = "å¯¦æ³æ¨¡å¼";
                 Text[ arabic ] = "ÇáæÖÚ ÇáãÈÇÔÑ";
                 Text[ greek ] = "ÊáôÜóôáóç æùíôáíŞò óıíäåóçò";
-                Text[ korean ] = "¶óÀÌºê ¸ğµå";
+                Text[ korean ] = "ë¼ì´ë¸Œ ëª¨ë“œ";
                 Text[ turkish ] = "\"Canlı sunu\" kipi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Modo en vivo";
@@ -142,14 +142,14 @@ Window FLT_NAVIGATOR
                 Text [ portuguese_brazilian ] = "Stift" ;
                 Text [ portuguese ] = "Ponteiro" ;
                 Text [ swedish ] = "Penna" ;
-                Text[ chinese_simplified ] = "±Ê";
+                Text[ chinese_simplified ] = "ç¬”";
                 Text[ russian ] = "Êàğàíäàø";
                 Text[ polish ] = "Kredka";
-                Text[ japanese ] = "Íßİ";
-                Text[ chinese_traditional ] = "µeµ§";
+                Text[ japanese ] = "ï¾ï¾Ÿï¾";
+                Text[ chinese_traditional ] = "ç•«ç­†";
                 Text[ arabic ] = "Şáã";
                 Text[ greek ] = "Ğİíá";
-                Text[ korean ] = "Æ÷ÀÎÅÍ";
+                Text[ korean ] = "í¬ì¸í„°";
                 Text[ turkish ] = "Kalem";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Pluma";
@@ -180,14 +180,14 @@ Window FLT_NAVIGATOR
                 Text [ portuguese_brazilian ] = "Erste Seite" ;
                 Text [ portuguese ] = "Primeira página" ;
                 Text [ swedish ] = "Första sidan" ;
-                Text[ chinese_simplified ] = "Ê×Ò³";
+                Text[ chinese_simplified ] = "é¦–é¡µ";
                 Text[ russian ] = "Ïåğâûé ñëàéä";
                 Text[ polish ] = "Pierwszy slajd";
-                Text[ japanese ] = "Å‰‚ÌÍß°¼Ş";
-                Text[ chinese_traditional ] = "­º­¶";
+                Text[ japanese ] = "æœ€åˆã®ï¾ï¾Ÿï½°ï½¼ï¾";
+                Text[ chinese_traditional ] = "é¦–é ";
                 Text[ arabic ] = "ÇáÕİÍÉ ÇáÃæáì";
                 Text[ greek ] = "Ğñşôç óåëßäá";
-                Text[ korean ] = "Ã¹¹øÂ° ½½¶óÀÌµå";
+                Text[ korean ] = "ì²«ë²ˆì§¸ ìŠ¬ë¼ì´ë“œ";
                 Text[ turkish ] = "İlk sayfa";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Primera página";
@@ -214,14 +214,14 @@ Window FLT_NAVIGATOR
                 Text [ portuguese_brazilian ] = "vorherige Seite" ;
                 Text [ portuguese ] = "Página anterior" ;
                 Text [ swedish ] = "Föregående sida" ;
-                Text[ chinese_simplified ] = "ÉÏÒ»Ò³";
+                Text[ chinese_simplified ] = "ä¸Šä¸€é¡µ";
                 Text[ russian ] = "Ïğåäûäóùèé ñëàéä";
                 Text[ polish ] = "Poprzedni slajd";
-                Text[ japanese ] = "‘O‚ÌÍß°¼Ş";
-                Text[ chinese_traditional ] = "¤W¤@­¶";
+                Text[ japanese ] = "å‰ã®ï¾ï¾Ÿï½°ï½¼ï¾";
+                Text[ chinese_traditional ] = "ä¸Šä¸€é ";
                 Text[ arabic ] = "ÇáÕİÍÉ ÇáÓÇÈŞÉ";
                 Text[ greek ] = "Ğñïçãïıìåíç óåëßäá";
-                Text[ korean ] = "ÀÌÀü ½½¶óÀÌµå";
+                Text[ korean ] = "ì´ì „ ìŠ¬ë¼ì´ë“œ";
                 Text[ turkish ] = "Önceki sayfa";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Página anterior";
@@ -250,14 +250,14 @@ Window FLT_NAVIGATOR
                 Text [ portuguese_brazilian ] = "N?chste Seite" ;
                 Text [ portuguese ] = "Página seguinte" ;
                 Text [ swedish ] = "Nästa sida" ;
-                Text[ chinese_simplified ] = "ÏÂÒ»Ò³";
+                Text[ chinese_simplified ] = "ä¸‹ä¸€é¡µ";
                 Text[ russian ] = "Ñëåäóşùèé ñëàéä";
                 Text[ polish ] = "Nastêpny slajd";
-                Text[ japanese ] = "Ÿ‚ÌÍß°¼Ş";
-                Text[ chinese_traditional ] = "¤U¤@­¶";
+                Text[ japanese ] = "æ¬¡ã®ï¾ï¾Ÿï½°ï½¼ï¾";
+                Text[ chinese_traditional ] = "ä¸‹ä¸€é ";
                 Text[ arabic ] = "ÇáÕİÍÉ ÇáÊÇáíÉ";
                 Text[ greek ] = "Åğüìåíç óåëßäá";
-                Text[ korean ] = "´ÙÀ½ ½½¶óÀÌµå";
+                Text[ korean ] = "ë‹¤ìŒ ìŠ¬ë¼ì´ë“œ";
                 Text[ turkish ] = "Sonraki sayfa";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Página siguiente";
@@ -284,14 +284,14 @@ Window FLT_NAVIGATOR
                 Text [ portuguese_brazilian ] = "Letzte Seite" ;
                 Text [ portuguese ] = "Última página" ;
                 Text [ swedish ] = "Sista sidan" ;
-                Text[ chinese_simplified ] = "×îºóÒ»Ò³";
+                Text[ chinese_simplified ] = "æœ€åä¸€é¡µ";
                 Text[ russian ] = "Ïîñëåäíèé ñëàéä";
                 Text[ polish ] = "Ostatni slajd";
-                Text[ japanese ] = "ÅŒã‚ÌÍß°¼Ş";
-                Text[ chinese_traditional ] = "³Ì«á¤@­¶";
+                Text[ japanese ] = "æœ€å¾Œã®ï¾ï¾Ÿï½°ï½¼ï¾";
+                Text[ chinese_traditional ] = "æœ€å¾Œä¸€é ";
                 Text[ arabic ] = "ÇáÕİÍÉ ÇáÃÎíÑÉ";
                 Text[ greek ] = "Ôåëåõôáßá óåëßäá";
-                Text[ korean ] = "¸¶Áö¸· ½½¶óÀÌµå";
+                Text[ korean ] = "ë§ˆì§€ë§‰ ìŠ¬ë¼ì´ë“œ";
                 Text[ turkish ] = "Son sayfa";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Última página";
@@ -319,14 +319,14 @@ Window FLT_NAVIGATOR
                 Text [ portuguese_brazilian ] = "Dragmodus" ;
                 Text [ portuguese ] = "Modo Arrastar" ;
                 Text [ swedish ] = "Draläge" ;
-                Text[ chinese_simplified ] = "ÍÏÒ·Ä£Ê½";
+                Text[ chinese_simplified ] = "æ‹–æ›³æ¨¡å¼";
                 Text[ russian ] = "Ğåæèì ïåğåòàñêèâàíèÿ";
                 Text[ polish ] = "Tryb przeci¹gania";
-                Text[ japanese ] = "ÄŞ×¯¸ŞÓ°ÄŞ";
-                Text[ chinese_traditional ] = "©ì¦²¼Ò¦¡";
+                Text[ japanese ] = "ï¾„ï¾ï¾—ï½¯ï½¸ï¾ï¾“ï½°ï¾„ï¾";
+                Text[ chinese_traditional ] = "æ‹–æ›³æ¨¡å¼";
                 Text[ arabic ] = "ØÑíŞÉ ÇáÓÍÈ";
                 Text[ greek ] = "ÊáôÜóôáóç ìåôáêßíçóçò";
-                Text[ korean ] = "µå·¡±× ¸ğµå";
+                Text[ korean ] = "ë“œë˜ê·¸ ëª¨ë“œ";
                 Text[ turkish ] = "Sürükleme kipi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Modo Arrastrar";
@@ -356,12 +356,12 @@ Window FLT_NAVIGATOR
         QuickHelpText [ swedish ] = "Dokument" ;
     QuickHelpText[ russian ] = "Äîêóìåíòû";
         QuickHelpText[ polish ] = "Dokumenty";
-        QuickHelpText[ japanese ] = "ÄŞ·­ÒİÄ";
-        QuickHelpText[ chinese_simplified ] = "ÎÄµµ";
-        QuickHelpText[ chinese_traditional ] = "¤å¥ó";
+        QuickHelpText[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„";
+        QuickHelpText[ chinese_simplified ] = "æ–‡æ¡£";
+        QuickHelpText[ chinese_traditional ] = "æ–‡ä»¶";
         QuickHelpText[ arabic ] = "ãÓÊäÏÇÊ";
         QuickHelpText[ greek ] = "¸ããñáöá";
-        QuickHelpText[ korean ] = "¹®¼­";
+        QuickHelpText[ korean ] = "ë¬¸ì„œ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -371,6 +371,7 @@ Window FLT_NAVIGATOR
         QuickHelpText[ finnish ] = "Asiakirjat";
     };
 };
+
 
 
 
