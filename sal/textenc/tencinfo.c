@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2001-11-23 15:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -907,6 +907,10 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
         { "sjis", RTL_TEXTENCODING_SHIFT_JIS },
         { "ascii", RTL_TEXTENCODING_ASCII_US },
         { "us", RTL_TEXTENCODING_ASCII_US },
+        { "gb180302000", RTL_TEXTENCODING_GB_18030 },
+            /* This is no actual MIME character set name, it's only a guess */
+        { "gb18030", RTL_TEXTENCODING_GB_18030 },
+            /* This is no actual MIME character set name, it's only a guess */
         { NULL, RTL_TEXTENCODING_DONTKNOW }
     };
 
