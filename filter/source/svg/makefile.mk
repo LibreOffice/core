@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2004-03-25 14:59:21 $
+#   last change: $Author: kz $ $Date: 2005-01-21 15:25:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,29 +73,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  	sv.mk
 
 # --- Types -------------------------------------
-
-UNOTYPES=\
-    com.sun.star.uno.RuntimeException							\
-    com.sun.star.uno.TypeClass									\
-    com.sun.star.uno.XInterface									\
-    com.sun.star.uno.XWeak										\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.io.XInputStream								\
-    com.sun.star.io.XOutputStream								\
-    com.sun.star.lang.XComponent								\
-    com.sun.star.lang.XInitialization							\
-    com.sun.star.lang.XMultiServiceFactory						\
-    com.sun.star.lang.XSingleServiceFactory						\
-    com.sun.star.lang.XServiceInfo								\
-    com.sun.star.loader.XImplementationLoader					\
-    com.sun.star.registry.XImplementationRegistration			\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.registry.XSimpleRegistry						\
-    com.sun.star.document.XFilter								\
-    com.sun.star.document.XExporter								\
-    com.sun.star.drawing.XDrawPagesSupplier						\
-    com.sun.star.container.XIndexAccess
-# --- Files -------------------------------------
 
 SLOFILES=	$(SLO)$/svguno.obj			\
             $(SLO)$/svgfilter.obj		\
