@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:27:35 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,12 @@
 #ifndef _SVX_GRAFCTRL_HXX
 #include <svx/grafctrl.hxx>
 #endif
+#ifndef _SVX_TBXCUSTOMSHAPES_HXX
+#include <svx/tbxcustomshapes.hxx>
+#endif
+#ifndef _SVX_FONTWORK_GALLERY_DIALOG_HXX
+#include <svx/fontworkgallery.hxx>
+#endif
 #ifndef _SVX_LBOXCTRL_HXX_
 #include <svx/lboxctrl.hxx>
 #endif
@@ -230,6 +236,12 @@ void SdDLL::RegisterControllers()
     SdTbxControl::RegisterControl( SID_DRAWTBX_CONNECTORS, pMod );
     SdTbxControl::RegisterControl( SID_DRAWTBX_INSERT, pMod );
 
+    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_BASIC, pMod );
+    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_SYMBOL, pMod );
+    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_ARROW, pMod );
+    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_FLOWCHART, pMod );
+    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_CALLOUT, pMod );
+    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_STAR, pMod );
     SdTbxCtlDiaEffect::RegisterControl(0, pMod);
     SdTbxCtlDiaSpeed::RegisterControl(0, pMod);
     SdTbxCtlDiaAuto::RegisterControl(0, pMod);
@@ -245,6 +257,14 @@ void SdDLL::RegisterControllers()
     ::sd::LayerDialogChildWindow::RegisterChildWindow(0, pMod);
     ::sd::SlideChangeChildWindow::RegisterChildWindow(0, pMod);
     //Sd3DChildWindow::RegisterChildWindow(0, pMod);
+/*
+    SvxChildWinCustomShapesBasic::RegisterChildWindow( 0, pMod );
+    SvxChildWinCustomShapesSymbol::RegisterChildWindow( 0, pMod );
+    SvxChildWinCustomShapesArrow::RegisterChildWindow( 0, pMod );
+    SvxChildWinCustomShapesFlowChart::RegisterChildWindow( 0, pMod );
+    SvxChildWinCustomShapesCallout::RegisterChildWindow( 0, pMod );
+    SvxChildWinCustomShapesStar::RegisterChildWindow( 0, pMod );
+*/
     Svx3DChildWindow::RegisterChildWindow(0, pMod);
     SvxFontWorkChildWindow::RegisterChildWindow(0, pMod);
     SvxColorChildWindow::RegisterChildWindow(0, pMod, SFX_CHILDWIN_TASK);
@@ -318,6 +338,9 @@ void SdDLL::RegisterControllers()
     svx::ExtrusionSurfaceControl::RegisterControl( SID_EXTRUSION_SURFACE_FLOATER, pMod );
     svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
 
+    svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPES, pMod );
+    svx::FontWorkAlignmentControl::RegisterControl( SID_FONTWORK_ALIGNMENT_FLOATER, pMod );
+    svx::FontWorkCharacterSpacingControl::RegisterControl( SID_FONTWORK_CHARACTER_SPACING_FLOATER, pMod );
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
 }
