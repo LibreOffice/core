@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePageHeader.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,25 +61,8 @@
 
 package mod._sc;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XDispatch;
-import com.sun.star.frame.XDispatchProvider;
-import com.sun.star.frame.XModel;
-import com.sun.star.lang.XComponent;
-import com.sun.star.sheet.XSpreadsheet;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.sheet.XSpreadsheets;
-import com.sun.star.table.XCell;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.URL;
-import com.sun.star.util.XURLTransformer;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
 import java.io.PrintWriter;
+
 import lib.Status;
 import lib.StatusException;
 import lib.TestCase;
@@ -89,18 +72,32 @@ import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
 
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XWindow;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XPropertySetInfo;
+import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.XComponent;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XHeaderFooterContent;
+import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.style.XStyle;
 import com.sun.star.style.XStyleFamiliesSupplier;
+import com.sun.star.table.XCell;
 import com.sun.star.text.XText;
-
-import com.sun.star.uno.Type;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.URL;
+import com.sun.star.util.XCloseable;
+import com.sun.star.util.XURLTransformer;
 
 /**
  * Test for object which is represented by accessible component of
@@ -172,7 +169,7 @@ public class ScAccessiblePageHeader extends TestCase {
                 UnoRuntime.queryInterface(XDispatchProvider.class, xController);
             XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
                 UnoRuntime.queryInterface(XURLTransformer.class,
-            ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
+            ( (XMultiServiceFactory) Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
@@ -193,7 +190,7 @@ public class ScAccessiblePageHeader extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole
@@ -285,9 +282,13 @@ public class ScAccessiblePageHeader extends TestCase {
      */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
-        oComp.dispose();
+        try {
+        XCloseable oComp = (XCloseable)
+            UnoRuntime.queryInterface (XCloseable.class, xSpreadsheetDoc) ;
+        oComp.close(true);
+        } catch(com.sun.star.util.CloseVetoException e) {
+            log.println("Couldn't close document: "+e.getMessage());
+        }
     }
 
     /**
@@ -302,7 +303,7 @@ public class ScAccessiblePageHeader extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) Param.getMSF());
 
         try {
             log.println("creating a spreadsheetdocument");
