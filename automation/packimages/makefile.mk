@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-21 09:46:53 $
+#   last change: $Author: rt $ $Date: 2005-01-28 16:04:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,6 +62,7 @@
 PRJ=..
 PRJNAME=automation
 TARGET=packimages
+RSCCUSTOMIMG*=$(PRJ)$/util
 
 # point to an existing directory as default that poses no threat
 # to a "find" that looks for "*.png"
@@ -86,5 +87,5 @@ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/images_tt.zip .PHONY:
     +$(COPY) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SOLARRESDIR))$/img$/svt*.ilst $(MISC) 
     +$(COPY) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SOLARRESDIR))$/img$/vcl*.ilst $(MISC) 
     +-$(MKDIR) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))
-    +$(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(SOLARSRC)$/$(RSCCUSTOMIMG) -l $(MISC) -o $@
+    +$(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -l $(MISC) -o $@
 
