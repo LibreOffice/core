@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:50:37 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,11 @@
 #include "viewopt.hxx"
 #include "uitool.hxx"
 #include "cmdid.h"
-#include "docstdlg.hxx"
+//CHINA001 #include "docstdlg.hxx"
+#ifndef _SFXTABDLG_HXX //autogen
+#include <sfx2/tabdlg.hxx>//add CHINA001
+#endif
+
 #include "pagedesc.hxx"
 
 
