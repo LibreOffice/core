@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:37:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,10 @@ inline void checkUnoStructCopy( SbxVariableRef& refVal, SbxVariableRef& refVar )
     if( !xValObj.Is() || xValObj->ISA(SbUnoAnyObject) )
         return;
 
+    // #115826: Exclude ProcedureProperties to avoid call to Property Get procedure
+    if( refVar->ISA(SbProcedureProperty) )
+        return;
+
     SbxObjectRef xVarObj = (SbxObject*)refVar->GetObject();
     SbxDataType eValType = refVal->GetType();
     if( eValType == SbxOBJECT && xVarObj == xValObj )
@@ -295,6 +299,10 @@ void SbiRuntime::StepSET()
                 n = refVar->GetFlags();
                 refVar->SetFlag( SBX_WRITE );
             }
+            SbProcedureProperty* pProcProperty = PTR_CAST(SbProcedureProperty,(SbxVariable*)refVar);
+            if( pProcProperty )
+                pProcProperty->setSet( true );
+
             *refVar = *refVal;
             // #67607 Uno-Structs kopieren
             checkUnoStructCopy( refVal, refVar );
@@ -634,7 +642,7 @@ void SbiRuntime::StepARGV()
 
         // Before fix of #94916:
         // if( pVal->ISA(SbxMethod) || pVal->ISA(SbxProperty) )
-        if( pVal->ISA(SbxMethod) || pVal->ISA(SbUnoProperty) )
+        if( pVal->ISA(SbxMethod) || pVal->ISA(SbUnoProperty) || pVal->ISA(SbProcedureProperty) )
         {
             // Methoden und Properties evaluieren!
             SbxVariable* pRes = new SbxVariable( *pVal );
