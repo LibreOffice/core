@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinDesignView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-11 12:52:10 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 07:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,15 +202,11 @@ void OJoinDesignView::SaveTabWinUIConfig(OTableWindow* pWin)
     getController()->SaveTabWinPosSize(pWin, m_pScrollWindow->GetHScrollBar()->GetThumbPos(), m_pScrollWindow->GetVScrollBar()->GetThumbPos());
 }
 // -----------------------------------------------------------------------------
-void OJoinDesignView::GetFocus()
-{
-    if ( m_pTableView && m_pTableView->IsVisible() )
-        m_pTableView->GetFocus();
-}
-// -----------------------------------------------------------------------------
 void OJoinDesignView::KeyInput( const KeyEvent& rEvt )
 {
     if ( m_pTableView && m_pTableView->IsVisible() )
         m_pTableView->KeyInput( rEvt );
+    else
+        ODataView::KeyInput(rEvt);
 }
 // -----------------------------------------------------------------------------

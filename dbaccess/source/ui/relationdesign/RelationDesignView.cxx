@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDesignView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:49:36 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 07:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,13 @@ long ORelationDesignView::PreNotify( NotifyEvent& rNEvt )
     if(!nDone)
         nDone = OJoinDesignView::PreNotify(rNEvt);
     return nDone;
+}
+// -----------------------------------------------------------------------------
+void ORelationDesignView::GetFocus()
+{
+    OJoinDesignView::GetFocus();
+    if ( m_pTableView && m_pTableView->IsVisible() && !m_pTableView->GetTabWinMap()->empty() )
+        m_pTableView->GrabTabWinFocus();
 }
 // -----------------------------------------------------------------------------
 

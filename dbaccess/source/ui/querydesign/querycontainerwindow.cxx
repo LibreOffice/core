@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-01 14:42:07 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 07:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 //.........................................................................
 namespace dbaui
@@ -186,8 +189,9 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void OQueryContainerWindow::GetFocus()
     {
+        ODataView::GetFocus();
         if(m_pViewSwitch)
-            m_pViewSwitch->GetFocus();
+            m_pViewSwitch->GrabFocus();
     }
     // -----------------------------------------------------------------------------
     IMPL_LINK( OQueryContainerWindow, SplitHdl, void*, p )
@@ -218,6 +222,7 @@ namespace dbaui
     void OQueryContainerWindow::disposingPreview()
     {
         // here I know that we will be destroyed from the frame
+        ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         m_pBeamer = NULL;
         m_xBeamer = NULL;
         m_pSplitter->Hide();
@@ -229,43 +234,6 @@ namespace dbaui
         BOOL bHandled = FALSE;
         switch (rNEvt.GetType())
         {
-            case EVENT_KEYINPUT:
-                {
-                    const KeyCode& rCode = rNEvt.GetKeyEvent()->GetKeyCode();
-                    if (    m_pViewSwitch
-                        &&  !rCode.IsMod1()
-                        &&  !rCode.IsMod2()
-                        &&  rCode.GetCode() == KEY_F6)
-                    {
-                        ToolBox* pToolBox   = getToolBox();
-                        Window*  pLeft      = m_pViewSwitch->getActive();
-                        //  if ( !rCode.IsShift() )
-                        {
-                            if ( m_pBeamer && pLeft && m_pBeamer->HasChildPathFocus() )
-                            {
-                                pLeft->GrabFocus();
-                                bHandled = sal_True;
-                            }
-                            else if ( m_pBeamer && pToolBox && pToolBox->HasChildPathFocus() )
-                            {
-                                m_pBeamer->GrabFocus();
-                                bHandled = sal_True;
-                            }
-                            else if ( pLeft && pToolBox && pToolBox->HasChildPathFocus() )
-                            {
-                                pLeft->GrabFocus();
-                                bHandled = sal_True;
-                            }
-                            else if ( pToolBox )
-                            {
-                                pToolBox->GrabFocus();
-                                bHandled = sal_True;
-                            }
-                        }
-                    }
-                }
-
-                break;
             case  EVENT_GETFOCUS:
                 if ( m_pViewSwitch )
                 {
@@ -283,6 +251,9 @@ namespace dbaui
         if(!m_pBeamer)
         {
             m_pBeamer = new OBeamer(this);
+
+            ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
+
             m_xBeamer = Reference<XFrame>(m_pViewSwitch->getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Frame")),UNO_QUERY);
             OSL_ENSURE(m_xBeamer.is(),"No frame created!");
             m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );
@@ -328,6 +299,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2002/03/01 14:42:07  oj
+ *  #97850# correct F6 handling
+ *
  *  Revision 1.4  2002/02/11 12:58:53  oj
  *  #90580# enable F6 key for components
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-26 08:55:04 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 07:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 #include <algorithm>
 #include <functional>
@@ -1628,7 +1631,9 @@ void OJoinTableView::lookForUiActivities()
 // -----------------------------------------------------------------------------
 void OJoinTableView::GetFocus()
 {
-    //  GrabTabWinFocus();
+    Window::GetFocus();
+    if ( !m_aTableMap.empty() )
+        GrabTabWinFocus();
 }
 // -----------------------------------------------------------------------------
 Reference< XAccessible > OJoinTableView::CreateAccessible()

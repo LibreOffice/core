@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-11 12:58:15 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 07:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ OTableWindowListBox* OTableWindow::CreateListBox()
 BOOL OTableWindow::FillListBox()
 {
     // mark all primary keys with special image
-    ImageList aImageList(ModuleRes(IMG_JOINS));
+    ImageList aImageList(ModuleRes(isHiContrast(m_pListBox) ? IMG_JOINS_H : IMG_JOINS));
     Image aPrimKeyImage = aImageList.GetImage(IMG_PRIMARY_KEY);
 
     if (GetData()->IsShowAll())

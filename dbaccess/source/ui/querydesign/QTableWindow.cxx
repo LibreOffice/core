@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-11 08:38:13 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 07:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
 
 
 using namespace ::com::sun::star::sdbc;
@@ -231,7 +234,7 @@ sal_Bool OQueryTableWindow::Init()
 //------------------------------------------------------------------------------
 sal_Bool OQueryTableWindow::FillListBox()
 {
-    ImageList aImageList(ModuleRes(IMG_JOINS));
+    ImageList aImageList(ModuleRes(isHiContrast(m_pListBox) ? IMG_JOINS_H : IMG_JOINS));
     Image aPrimKeyImage = aImageList.GetImage(IMG_PRIMARY_KEY);
 
 
