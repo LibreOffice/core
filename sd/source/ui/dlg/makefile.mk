@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 15:49:41 $
+#   last change: $Author: hr $ $Date: 2004-05-10 15:44:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ PROJECTPCH=sd
 PROJECTPCHSOURCE=$(PRJ)$/util$/sd
 PRJNAME=sd
 TARGET=dlg
+LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
@@ -111,7 +112,7 @@ SRC1FILES =\
     brkdlg.src\
     vectdlg.src\
     dlgolbul.src \
-    PreviewWindow.src	\
+    PreviewWindow.src	
 
 
 SLOFILES =  \
@@ -166,7 +167,11 @@ SLOFILES =  \
         $(SLO)$/PreviewWindow.obj			\
         $(SLO)$/PreviewChildWindow.obj		\
         $(SLO)$/SlideChangeChildWindow.obj	\
-        $(SLO)$/TemplateScanner.obj
+        $(SLO)$/TemplateScanner.obj \
+                $(SLO)$/sduiexp.obj \
+        $(SLO)$/sddlgfact.obj \
+        $(SLO)$/sdabstdlg.obj 
+        
 
 EXCEPTIONSFILES= \
         $(SLO)$/filedlg.obj   	    \
@@ -175,8 +180,83 @@ EXCEPTIONSFILES= \
         $(SLO)$/sdtreelb.obj        \
         $(SLO)$/tpoption.obj
 
+LIB1TARGET= $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES= \
+        $(SLO)$/dlgctrls.obj \
+        $(SLO)$/diactrl.obj  \
+        $(SLO)$/gluectrl.obj  \
+        $(SLO)$/sdtreelb.obj \
+        $(SLO)$/animobjs.obj \
+        $(SLO)$/filedlg.obj   \
+        $(SLO)$/unchss.obj  \
+        $(SLO)$/dlgassim.obj	\
+        $(SLO)$/assclass.obj \
+        $(SLO)$/graphpro.obj \
+        $(SLO)$/navigatr.obj \
+        $(SLO)$/effect.obj   \
+        $(SLO)$/effcthdl.obj   \
+        $(SLO)$/effcthlp.obj   \
+        $(SLO)$/tlborder.obj   \
+        $(SLO)$/slidechg.obj   \
+        $(SLO)$/slchghdl.obj   \
+        $(SLO)$/slchghlp.obj   \
+        $(SLO)$/docprev.obj     \
+        $(SLO)$/AnimationChildWindow.obj	\
+        $(SLO)$/EffectChildWindow.obj		\
+        $(SLO)$/NavigatorChildWindow.obj	\
+        $(SLO)$/PreviewWindow.obj			\
+        $(SLO)$/PreviewChildWindow.obj		\
+        $(SLO)$/SlideChangeChildWindow.obj	\
+        $(SLO)$/TemplateScanner.obj \
+                $(SLO)$/sdabstdlg.obj 
+
+        
+LIB2TARGET= $(SLB)$/sdui.lib
+
+LIB2OBJFILES= \
+        $(SLO)$/sduiexp.obj \
+        $(SLO)$/sddlgfact.obj \
+        $(SLO)$/brkdlg.obj \
+        $(SLO)$/copydlg.obj \
+        $(SLO)$/custsdlg.obj \
+        $(SLO)$/dlgchar.obj \
+        $(SLO)$/dlgass.obj \
+        $(SLO)$/dlgfield.obj \
+        $(SLO)$/dlgpage.obj \
+        $(SLO)$/dlgsnap.obj \
+        $(SLO)$/inspage.obj \
+        $(SLO)$/ins_paste.obj \
+        $(SLO)$/inspagob.obj \
+        $(SLO)$/morphdlg.obj \
+        $(SLO)$/newfoil.obj \
+        $(SLO)$/dlgolbul.obj \
+        $(SLO)$/paragr.obj \
+        $(SLO)$/present.obj \
+        $(SLO)$/printdlg.obj \
+        $(SLO)$/prltempl.obj \
+        $(SLO)$/sdpreslt.obj \
+        $(SLO)$/tabtempl.obj \
+        $(SLO)$/tpaction.obj \
+        $(SLO)$/tpoption.obj \
+        $(SLO)$/vectdlg.obj \
+        $(SLO)$/prntopts.obj 
+        
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
 
+$(INCCOM)$/sduilib.hxx: makefile.mk
+.IF "$(GUI)"=="UNX"
+    $(RM) $@
+    +echo \#define DLL_NAME \"libsdui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+.ELSE
+.IF "$(USE_SHELL)"!="4nt"
+    +echo \#define DLL_NAME \"sdui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+.ELSE          # "$(USE_SHELL)"!="4nt"
+    +echo #define DLL_NAME "sdui$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
+.ENDIF          # "$(USE_SHELL)"!="4nt"
+.ENDIF
+
+$(SLO)$/sdabstdlg.obj : $(INCCOM)$/sduilib.hxx
 
