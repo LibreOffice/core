@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
+ *  last change: $Author: fme $ $Date: 2002-02-14 14:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,8 +670,7 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
             DBTXTFRM << "Paint()" << endl;
 #endif
 #ifdef VERTICAL_LAYOUT
-        if( IsLocked() || IsHiddenNow() ||
-            IsVertical() ? ! Prt().Width() : !Prt().Height() )
+        if( IsLocked() || IsHiddenNow() || ! Prt().HasArea() )
             return;
 #else
         if( IsLocked() || IsHiddenNow() || !Prt().Height() )
