@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:17:45 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4793,6 +4793,12 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
                 UnoActionContext aAction(pFrmFmt->GetDoc());
                 SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
+
+                {
+                    // remove actions
+                    UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
+                }
+
                 pFrmFmt->GetDoc()->InsertRow(*pUnoCrsr, (sal_uInt16)nCount, bAppend);
                 delete pUnoCrsr;
             }
@@ -5009,7 +5015,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
 
                 {
-                    // hier muessen die Actions aufgehoben werden
+                    // remove actions
                     UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
                 }
 
