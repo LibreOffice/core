@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointProperties.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:30 $
+ *  last change: $Author: bm $ $Date: 2003-11-12 10:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ public:
         PROP_DATAPOINT_LINE_DASH,
 
         // others
-        PROP_DATAPOINT_SYMBOL,
+        PROP_DATAPOINT_SYMBOL_PROP,
         PROP_DATAPOINT_OFFSET,
         PROP_DATAPOINT_DATA_CAPTION,
         PROP_DATAPOINT_NUMBER_FORMAT

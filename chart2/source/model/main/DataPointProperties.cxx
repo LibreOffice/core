@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointProperties.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:30 $
+ *  last change: $Author: bm $ $Date: 2003-11-12 10:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
 #include <drafts/com/sun/star/chart2/NumberFormat.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLPROPERTIES_HPP_
+#include <drafts/com/sun/star/chart2/SymbolProperties.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -247,8 +250,8 @@ void DataPointProperties::AddPropertiesToVector(
     // others
     rOutProperties.push_back(
         Property( C2U( "Symbol" ),
-                  PROP_DATAPOINT_SYMBOL,
-                  ::getCppuType( reinterpret_cast< const drawing::PolyPolygonBezierCoords * >(0)),
+                  PROP_DATAPOINT_SYMBOL_PROP,
+                  ::getCppuType( reinterpret_cast< const chart2::SymbolProperties * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
@@ -337,9 +340,12 @@ void DataPointProperties::AddDefaultsToMap(
 
 
     //others
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_SYMBOL ));
-    rOutMap[ PROP_DATAPOINT_SYMBOL ] =
-        uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
+    chart2::SymbolProperties aSymbProp;
+    aSymbProp.aStyle = chart2::SymbolStyle_NONE;
+    aSymbProp.nStandardSymbol = 0;
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_SYMBOL_PROP ));
+    rOutMap[ PROP_DATAPOINT_SYMBOL_PROP ] =
+        uno::makeAny( aSymbProp );
 
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_OFFSET ));
     rOutMap[ PROP_DATAPOINT_OFFSET ] =
