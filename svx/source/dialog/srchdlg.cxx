@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-03 14:18:51 $
+ *  last change: $Author: tl $ $Date: 2001-06-12 14:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,7 @@ INT32 SvxSearchDialog::GetTransliterationFlags() const
         rFlags |=  TransliterationModules_IGNORE_CASE;
     else
         rFlags &= ~TransliterationModules_IGNORE_CASE;
-    if (!aJapMatchFullHalfWidthCB.IsChecked())
+    if ( aJapMatchFullHalfWidthCB.IsChecked())
         rFlags |=  TransliterationModules_IGNORE_WIDTH;
     else
         rFlags &= ~TransliterationModules_IGNORE_WIDTH;
@@ -586,9 +586,9 @@ void SvxSearchDialog::ApplyTransliterationFlags_Impl( INT32 nSettings )
 {
     nTransliterationFlags = nSettings;
     BOOL bVal = 0 != (nSettings & TransliterationModules_IGNORE_CASE);
-    aMatchCaseCB            .Check( !bVal );
+    aMatchCaseCB            .Check(!bVal );
     bVal = 0 != (nSettings & TransliterationModules_IGNORE_WIDTH);
-    aJapMatchFullHalfWidthCB.Check( !bVal );
+    aJapMatchFullHalfWidthCB.Check( bVal );
 }
 
 // -----------------------------------------------------------------------
@@ -1275,10 +1275,13 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         pSearchItem->SetTransliterationFlags( GetTransliterationFlags() );
         SvxJSearchOptionsDialog aDlg( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS,
                                     pSearchItem->GetTransliterationFlags() );
-        aDlg.Execute();
-        INT32 nFlags = aDlg.GetTransliterationFlags();
-         pSearchItem->SetTransliterationFlags( nFlags );
-        ApplyTransliterationFlags_Impl( nFlags );
+        int nRet = aDlg.Execute();
+        if (RET_OK == nRet) //! true only if FillItemSet of SvxJSearchOptionsPage returns true
+        {
+            INT32 nFlags = aDlg.GetTransliterationFlags();
+            pSearchItem->SetTransliterationFlags( nFlags );
+            ApplyTransliterationFlags_Impl( nFlags );
+        }
     }
 
     return 0;
