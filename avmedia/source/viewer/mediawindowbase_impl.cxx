@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediawindowbase_impl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 21:07:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
