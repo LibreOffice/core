@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CalendarFieldIndex.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 10:01:46 $
+ *  last change: $Author: bustamam $ $Date: 2002-03-26 02:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ constants CalendarFieldIndex
     const short MONTH           = 12;
     /// Get/Set
     const short ERA             = 13;
+    /// Total number of field
+    const short FIELD_COUNT     = 14;
 };
 
 //=============================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBreakIterator.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jsc $ $Date: 2001-11-28 16:28:24 $
+ *  last change: $Author: bustamam $ $Date: 2002-03-26 02:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,14 @@ interface XBreakIterator: com::sun::star::uno::XInterface
         The <type>WordType</type> specify the type of travelling.
         @returns the <type>Boundary</type> of the found word.
         Normally used for the CTRL-Right.
+
+        nLocale refers to previous character from nStartPos.
+        When previous character is a space charcter and WordType indicates spaces
+        should be skiped, and if the first non-space character is a Asian character,
+        since Asian word break needs language specific wordbreak dictionary, the
+        method will return -1 as end boundary pointer and the position after the
+        Asian character as start boundary pinter to caller, for whom to resend
+        correct nLocale refered to the Asian character.
     */
     Boundary previousWord( [in] string Text, [in] long nStartPos,
                        [in] ::com::sun::star::lang::Locale nLocale,
@@ -442,6 +450,9 @@ interface XBreakIterator: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/11/28 16:28:24  jsc
+    remove ' in comment
+
     Revision 1.7  2001/10/25 10:01:46  mi
     proofreading and corrections from Richard Holt
 
