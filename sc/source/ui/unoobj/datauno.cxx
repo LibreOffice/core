@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2000-10-04 10:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,7 +635,8 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
             aParam.pFunctions[nPos] = NULL;
         }
     }
-    //! sonst Exception oder so? (zuviele Felder / Spalten)
+    else                                    // too many fields / columns
+        throw uno::RuntimeException();      // no other exceptions specified
 
     PutData(aParam);
 }
@@ -672,7 +673,10 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getByIndex( sal_Int32 nIndex )
     ScUnoGuard aGuard;
     uno::Reference<sheet::XSubTotalField> xField = GetObjectByIndex_Impl(nIndex);
     uno::Any aAny;
-    aAny <<= xField;
+    if (xField.is())
+        aAny <<= xField;
+    else
+        throw lang::IndexOutOfBoundsException();
     return aAny;
 }
 
@@ -1832,6 +1836,7 @@ void SAL_CALL ScDatabaseRangesObj::addNewByName( const rtl::OUString& aName,
                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    BOOL bDone = FALSE;
     if (pDocShell)
     {
         ScDBDocFunc aFunc(*pDocShell);
@@ -1839,20 +1844,25 @@ void SAL_CALL ScDatabaseRangesObj::addNewByName( const rtl::OUString& aName,
         String aString = aName;
         ScRange aNameRange( aRange.StartColumn, aRange.StartRow, aRange.Sheet,
                             aRange.EndColumn,   aRange.EndRow,   aRange.Sheet );
-        aFunc.AddDBRange( aString, aNameRange, TRUE );
+        bDone = aFunc.AddDBRange( aString, aNameRange, TRUE );
     }
+    if (!bDone)
+        throw uno::RuntimeException();      // no other exceptions specified
 }
 
 void SAL_CALL ScDatabaseRangesObj::removeByName( const rtl::OUString& aName )
                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    BOOL bDone = FALSE;
     if (pDocShell)
     {
         ScDBDocFunc aFunc(*pDocShell);
         String aString = aName;
-        aFunc.DeleteDBRange( aString, TRUE );
+        bDone = aFunc.DeleteDBRange( aString, TRUE );
     }
+    if (!bDone)
+        throw uno::RuntimeException();      // no other exceptions specified
 }
 
 // XEnumerationAccess
@@ -1889,7 +1899,10 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByIndex( sal_Int32 nIndex )
     ScUnoGuard aGuard;
     uno::Reference<sheet::XDatabaseRange> xRange = GetObjectByIndex_Impl(nIndex);
     uno::Any aAny;
-    aAny <<= xRange;
+    if (xRange.is())
+        aAny <<= xRange;
+    else
+        throw lang::IndexOutOfBoundsException();
     return aAny;
 }
 
@@ -1914,7 +1927,10 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByName( const rtl::OUString& aName )
     ScUnoGuard aGuard;
     uno::Reference<sheet::XDatabaseRange> xRange = GetObjectByName_Impl(aName);
     uno::Any aAny;
-    aAny <<= xRange;
+    if (xRange.is())
+        aAny <<= xRange;
+    else
+        throw container::NoSuchElementException();
     return aAny;
 }
 
