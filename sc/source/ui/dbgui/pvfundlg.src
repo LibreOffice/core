@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 21:08:20 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 15:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,14 +94,14 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ spanish ] = "~Ningún" ;
         Text [ english_us ] = "~None" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÎŞ(~N)";
+        Text[ chinese_simplified ] = "æ— (~N)";
         Text[ russian ] = "áåç";
         Text[ polish ] = "Brak";
-        Text[ japanese ] = "‚È‚µ(~N)";
-        Text[ chinese_traditional ] = "µL(~N)";
+        Text[ japanese ] = "ãªã—(~N)";
+        Text[ chinese_traditional ] = "ç„¡(~N)";
         Text[ arabic ] = "ÈÏæä";
         Text[ greek ] = "Êáíİíá";
-        Text[ korean ] = "¾øÀ½(~N)";
+        Text[ korean ] = "ì—†ìŒ(~N)";
         Text[ turkish ] = "~Yok";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ningún";
@@ -124,14 +124,14 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ spanish ] = "~Automático" ;
         Text [ english_us ] = "~Automatic" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "×Ô¶¯(~A)";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨(~A)";
         Text[ russian ] = "Àâòîìàòè÷åñêè";
         Text[ polish ] = "Automatycznie";
-        Text[ japanese ] = "©“®(~A)";
-        Text[ chinese_traditional ] = "¦Û°Ê(~A)";
+        Text[ japanese ] = "è‡ªå‹•(~A)";
+        Text[ chinese_traditional ] = "è‡ªå‹•(~A)";
         Text[ arabic ] = "ÊáŞÇÆí";
         Text[ greek ] = "Áõôüìáôá";
-        Text[ korean ] = "ÀÚµ¿(~A)";
+        Text[ korean ] = "ìë™(~A)";
         Text[ turkish ] = "~Otomatik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Automático";
@@ -154,14 +154,14 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ spanish ] = "Definido por el ~usuario" ;
         Text [ english_us ] = "~User-defined" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Ê¹ÓÃÕß×ÔÉè(~U)";
+        Text[ chinese_simplified ] = "ä½¿ç”¨è€…è‡ªè®¾(~U)";
         Text[ russian ] = "Îïğåäåëÿåìûé ïîëüçîâàòåëåì";
         Text[ polish ] = "Ustawienia indywidualne";
-        Text[ japanese ] = "Õ°»Ş°’è‹`(~U)";
-        Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¦Û­q(~U)";
+        Text[ japanese ] = "ï¾•ï½°ï½»ï¾ï½°å®šç¾©(~U)";
+        Text[ chinese_traditional ] = "ä½¿ç”¨è€…è‡ªè¨‚(~U)";
         Text[ arabic ] = "ãÚÑİ ãä ŞÈá ÇáãÓÊÎÏã";
         Text[ greek ] = "Ïñéæüìåíï áğü ôïí ÷ñŞóôç";
-        Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ(~U)";
+        Text[ korean ] = "ì‚¬ìš©ì ì •ì˜(~U)";
         Text[ turkish ] = "~Kullanıcı tanımlı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Definido por el ~usuario";
@@ -361,17 +361,17 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         SimpleMode = TRUE ;
     StringList [ chinese_simplified ] =
     {
-            < "×Ü¼Æ" ; Default ; > ;
-        < "ÊıÄ¿" ; Default ; > ;
-        < "Æ½¾ùÖµ" ; Default ; > ;
-        < "×î´ó" ; Default ; > ;
-        < "×îĞ¡" ; Default ; > ;
-        < "³Ë»ı" ; Default ; > ;
-        < "ÊıÄ¿(Ö»Êı×Ö)" ; Default ; > ;
-        < "±ê×¼Æ«²î(³éÑù)" ; Default ; > ;
-        < "±ê×¼Æ«²î(È«²¿»ùÊı)" ; Default ; > ;
-        < "·½²î(³éÑù)" ; Default ; > ;
-        < "·½²î(È«²¿»ùÊı)" ; Default ; > ;
+            < "æ€»è®¡" ; Default ; > ;
+        < "æ•°ç›®" ; Default ; > ;
+        < "å¹³å‡å€¼" ; Default ; > ;
+        < "æœ€å¤§" ; Default ; > ;
+        < "æœ€å°" ; Default ; > ;
+        < "ä¹˜ç§¯" ; Default ; > ;
+        < "æ•°ç›®(åªæ•°å­—)" ; Default ; > ;
+        < "æ ‡å‡†åå·®(æŠ½æ ·)" ; Default ; > ;
+        < "æ ‡å‡†åå·®(å…¨éƒ¨åŸºæ•°)" ; Default ; > ;
+        < "æ–¹å·®(æŠ½æ ·)" ; Default ; > ;
+        < "æ–¹å·®(å…¨éƒ¨åŸºæ•°)" ; Default ; > ;
     };
     StringList [ russian ] =
     {
@@ -403,31 +403,31 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     };
     StringList [ japanese ] =
     {
-            < "‡Œv" ; Default ; > ;
-        < "‘”" ; Default ; > ;
-        < "•½‹Ï’l" ; Default ; > ;
-        < "Å‘å’l" ; Default ; > ;
-        < "Å¬’l" ; Default ; > ;
-        < "Ï" ; Default ; > ;
-        < "‘”(”’l‚Ì‚İ)" ; Default ; > ;
-        < "StDev(•W–{)" ; Default ; > ;
-        < "StDevP(•êW’c)" ; Default ; > ;
-        < "•ªU(•W–{)" ; Default ; > ;
-        < "•ªU(•êW’c)" ; Default ; > ;
+            < "åˆè¨ˆ" ; Default ; > ;
+        < "ç·æ•°" ; Default ; > ;
+        < "å¹³å‡å€¤" ; Default ; > ;
+        < "æœ€å¤§å€¤" ; Default ; > ;
+        < "æœ€å°å€¤" ; Default ; > ;
+        < "ç©" ; Default ; > ;
+        < "ç·æ•°(æ•°å€¤ã®ã¿)" ; Default ; > ;
+        < "StDev(æ¨™æœ¬)" ; Default ; > ;
+        < "StDevP(æ¯é›†å›£)" ; Default ; > ;
+        < "åˆ†æ•£(æ¨™æœ¬)" ; Default ; > ;
+        < "åˆ†æ•£(æ¯é›†å›£)" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "¤p­p" ; Default ; > ;
-        < "¼Æ¥Ø" ; Default ; > ;
-        < "¥­§¡­È" ; Default ; > ;
-        < "³Ì¤j" ; Default ; > ;
-        < "³Ì¤p" ; Default ; > ;
-        < "­¼¿n" ; Default ; > ;
-        < "¼Æ¥Ø(¥u¬O¼Æ¦r)" ; Default ; > ;
-        < "¼Ğ·Ç°¾®t(©â¼Ë)" ; Default ; > ;
-        < "¼Ğ·Ç°¾®t(¥ş³¡°ò¼Æ)" ; Default ; > ;
-        < "¤è®t(©â¼Ë)" ; Default ; > ;
-        < "¤è®t(¥ş³¡°ò¼Æ)" ; Default ; > ;
+            < "å°è¨ˆ" ; Default ; > ;
+        < "æ•¸ç›®" ; Default ; > ;
+        < "å¹³å‡å€¼" ; Default ; > ;
+        < "æœ€å¤§" ; Default ; > ;
+        < "æœ€å°" ; Default ; > ;
+        < "ä¹˜ç©" ; Default ; > ;
+        < "æ•¸ç›®(åªæ˜¯æ•¸å­—)" ; Default ; > ;
+        < "æ¨™æº–åå·®(æŠ½æ¨£)" ; Default ; > ;
+        < "æ¨™æº–åå·®(å…¨éƒ¨åŸºæ•¸)" ; Default ; > ;
+        < "æ–¹å·®(æŠ½æ¨£)" ; Default ; > ;
+        < "æ–¹å·®(å…¨éƒ¨åŸºæ•¸)" ; Default ; > ;
     };
     StringList [ arabic ] =
     {
@@ -459,17 +459,17 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     };
     StringList [ korean ] =
     {
-            < "ÇÕ°è" ; Default ; > ;
-        < "¼ö" ; Default ; > ;
-        < "Æò±Õ" ; Default ; > ;
-        < "ÃÖ´ë" ; Default ; > ;
-        < "ÃÖ¼Ò" ; Default ; > ;
-        < "°ö" ; Default ; > ;
-        < "¼ö (¼ıÀÚ¸¸)" ; Default ; > ;
-        < "StDev (»ùÇÃ)" ; Default ; > ;
-        < "£ÓtDevP (¸ğÁı´Ü)" ; Default ; > ;
-        < "ºĞ»ê (»ùÇÃ)" ; Default ; > ;
-        < "ºĞ»ê (¸ğÁı´Ü)" ; Default ; > ;
+            < "í•©ê³„" ; Default ; > ;
+        < "ìˆ˜" ; Default ; > ;
+        < "í‰ê· " ; Default ; > ;
+        < "ìµœëŒ€" ; Default ; > ;
+        < "ìµœì†Œ" ; Default ; > ;
+        < "ê³±" ; Default ; > ;
+        < "ìˆ˜ (ìˆ«ìë§Œ)" ; Default ; > ;
+        < "StDev (ìƒ˜í”Œ)" ; Default ; > ;
+        < "ï¼³tDevP (ëª¨ì§‘ë‹¨)" ; Default ; > ;
+        < "ë¶„ì‚° (ìƒ˜í”Œ)" ; Default ; > ;
+        < "ë¶„ì‚° (ëª¨ì§‘ë‹¨)" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -538,10 +538,10 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ swedish ] = "Visa objekt utan data";
         Text[ polish ] = "Poka¿ elementy bez danych";
         Text[ portuguese_brazilian ] = "Show elements without data";
-        Text[ japanese ] = "ÃŞ°À‚È‚µ‚Å—v‘f‚Ì•\\¦(~E)";
-        Text[ korean ] = "µ¥ÀÌÅÍ ¾øÀÌ ¿ä¼Ò º¸±â(~E)";
-        Text[ chinese_simplified ] = "ÏÔÊ¾²»º¬Êı¾İµÄÌõÄ¿(~E)";
-        Text[ chinese_traditional ] = "Åã¥ÜµL¼Æ¾Úªº³æ¤¸(~E)";
+        Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ãªã—ã§è¦ç´ ã®è¡¨ç¤º(~E)";
+        Text[ korean ] = "ë°ì´í„° ì—†ì´ ìš”ì†Œ ë³´ê¸°(~E)";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºä¸å«æ•°æ®çš„æ¡ç›®(~E)";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºç„¡æ•¸æ“šçš„å–®å…ƒ(~E)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÚäÇÕÑ ÈÏæä ÈíÇäÇÊ";
         Text[ turkish ] = "~Ögeleri veriler olmadan görüntüle";
         Text[ language_user1 ] = " ";
@@ -565,14 +565,14 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ dutch ] = "Naam:" ;
         Text [ spanish ] = "Nombre:" ;
         Text [ english_us ] = "Name:" ;
-        Text[ chinese_simplified ] = "Ãû³Æ£º";
+        Text[ chinese_simplified ] = "åç§°ï¼š";
         Text[ russian ] = "Èìÿ:";
         Text[ polish ] = "Nazwa:";
-        Text[ japanese ] = "–¼‘O:";
-        Text[ chinese_traditional ] = "¦WºÙ¡G";
+        Text[ japanese ] = "åå‰:";
+        Text[ chinese_traditional ] = "åç¨±ï¼š";
         Text[ arabic ] = "ÇáÇÓã:";
         Text[ greek ] = "¼íïìá:";
-        Text[ korean ] = "ÀÌ¸§:";
+        Text[ korean ] = "ì´ë¦„:";
         Text[ turkish ] = "Ad:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre:";
@@ -616,14 +616,14 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ dutch ] = "Subtotalen" ;
         Text [ spanish ] = "Subtotales" ;
         Text [ english_us ] = "Subtotals" ;
-        Text[ chinese_simplified ] = "·ÖÀà»ã×Ü";
+        Text[ chinese_simplified ] = "åˆ†ç±»æ±‡æ€»";
         Text[ russian ] = "Ïğîìåæóòî÷íûå èòîãè";
         Text[ polish ] = "Sumy poœrednie";
-        Text[ japanese ] = "¬Œv";
-        Text[ chinese_traditional ] = "¤p­p";
+        Text[ japanese ] = "å°è¨ˆ";
+        Text[ chinese_traditional ] = "å°è¨ˆ";
         Text[ arabic ] = "Subtotals";
         Text[ greek ] = "ÌåñéêÜ áèñïßóìáôá";
-        Text[ korean ] = "¼Ò°è";
+        Text[ korean ] = "ì†Œê³„";
         Text[ turkish ] = "Ara toplam";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Subtotales";
@@ -643,14 +643,14 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ dutch ] = "Functie" ;
         Text [ spanish ] = "Función" ;
         Text [ english_us ] = "Function" ;
-        Text[ chinese_simplified ] = "º¯Êı";
+        Text[ chinese_simplified ] = "å‡½æ•°";
         Text[ russian ] = "Ôóíêöèÿ";
         Text[ polish ] = "Funkcja";
-        Text[ japanese ] = "ŠÖ”";
-        Text[ chinese_traditional ] = "¨ç¼Æ";
+        Text[ japanese ] = "é–¢æ•°";
+        Text[ chinese_traditional ] = "å‡½æ•¸";
         Text[ arabic ] = "Function";
         Text[ greek ] = "ÓõíÜñôçóç";
-        Text[ korean ] = "ÇÔ¼ö";
+        Text[ korean ] = "í•¨ìˆ˜";
         Text[ turkish ] = "Fonksiyon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Función";
@@ -660,19 +660,20 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     Text [ dutch ] = "Gegevensveld" ;
     Text [ swedish ] = "Datafält" ;
     Text [ danish ] = "Datafelt" ;
-    Text[ chinese_simplified ] = "Êı¾İ×Ö¶Î";
+    Text[ chinese_simplified ] = "æ•°æ®å­—æ®µ";
     Text[ russian ] = "Ïîëå äàííûõ";
     Text[ polish ] = "Pole danych";
-    Text[ japanese ] = "ÃŞ°ÀÌ¨°ÙÄŞ";
-    Text[ chinese_traditional ] = "¸ê®ÆÄæ¦ì";
+    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï¾Œï½¨ï½°ï¾™ï¾„ï¾";
+    Text[ chinese_traditional ] = "è³‡æ–™æ¬„ä½";
     Text[ arabic ] = "ÍŞá ÈíÇäÇÊ";
     Text[ greek ] = "Ğåäßï äåäïìİíùí";
-    Text[ korean ] = "µ¥ÀÌÅÍ ÇÊµå";
+    Text[ korean ] = "ë°ì´í„° í•„ë“œ";
     Text[ turkish ] = "Veri alanı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de datos";
     Text[ finnish ] = "Tietokenttä";
 };
+
 
 
 
