@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:10:41 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   namedlg.src  $
  //   $Author: hr $
- //     $Date: 2003-04-29 17:10:41 $
- // $Revision: 1.25 $
+ //     $Date: 2003-06-13 13:43:49 $
+ // $Revision: 1.26 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -146,6 +146,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "Prid~ať";
     };
     PushButton BTN_REMOVE
     {
@@ -181,6 +182,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     FixedLine FL_NAME
     {
@@ -214,6 +216,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ czech ] = "Název";
         Text[ hebrew ] = "Name";
         Text[ hindi ] = "नाम";
+        Text[ slovak ] = "Názov";
     };
     ComboBox ED_NAME
     {
@@ -255,6 +258,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ czech ] = "Přiřazeno";
         Text[ hebrew ] = "Zugeordnet zu";
         Text[ hindi ] = "केलिए निर्दिष्ट किया हुआ";
+        Text[ slovak ] = "Priradené k";
     };
     Edit ED_ASSIGN
     {
@@ -295,6 +299,7 @@ ModelessDialog RID_SCDLG_NAMES
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     MoreButton BTN_MORE
     {
@@ -336,6 +341,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ czech ] = "Typ oblasti";
         Text[ hebrew ] = "Bereichsart";
         Text[ hindi ] = "विस्तीर्ण वर्ग";
+        Text[ slovak ] = "Typ oblasti";
     };
     CheckBox BTN_PRINTAREA
     {
@@ -370,6 +376,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ czech ] = "Tisk oblasti";
         Text[ hebrew ] = "‮טווח הדפסה‬";
         Text[ hindi ] = "~छपाई फैलाव";
+        Text[ slovak ] = "~Tlačiť oblasť";
     };
     CheckBox BTN_CRITERIA
     {
@@ -404,6 +411,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ czech ] = "Filtr";
         Text[ hebrew ] = "‮סינון‬";
         Text[ hindi ] = "~फिल्टर";
+        Text[ slovak ] = "~Filter";
     };
     CheckBox BTN_ROWHEADER
     {
@@ -438,6 +446,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ czech ] = "Opakovat řádek";
         Text[ hebrew ] = "W~iederholungszeile";
         Text[ hindi ] = "~पंक्ति को दुहराओ";
+        Text[ slovak ] = "Opakovať ~riadok";
     };
     CheckBox BTN_COLHEADER
     {
@@ -472,6 +481,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ czech ] = "Opakovat sloupec";
         Text[ hebrew ] = "~Wiederholungsspalte";
         Text[ hindi ] = "~स्तंभ को दुहराओ";
+        Text[ slovak ] = "Opakovať stĺpe~c";
     };
     String STR_ADD
     {
@@ -504,6 +514,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "Prid~ať";
     };
     String STR_MODIFY
     {
@@ -536,6 +547,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ czech ] = "Změnit";
         Text[ hebrew ] = "~Ändern";
         Text[ hindi ] = "सुधा~रो";
+        Text[ slovak ] = "Zmen~iť";
     };
     String STR_INVALIDSYMBOL
     {
@@ -568,6 +580,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ czech ] = "Neplatný výraz";
         Text[ hebrew ] = "Ungültiger Ausdruck";
         Text[ hindi ] = "अमान्य वर्णन";
+        Text[ slovak ] = "Neplatný výraz";
     };
     Text[ chinese_simplified ] = "定义名称";
     Text[ russian ] = "���������� �����";
@@ -584,7 +597,10 @@ ModelessDialog RID_SCDLG_NAMES
     Text[ czech ] = "Definovat jména";
     Text[ hebrew ] = "Namen festlegen";
     Text[ hindi ] = "नामों को परिभाषा दो";
+    Text[ slovak ] = "Definovať názvy";
 };
+
+
 
 
 
