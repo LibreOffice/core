@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-10 12:32:24 $
+ *  last change: $Author: cmc $ $Date: 2001-07-11 13:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,8 +757,8 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
 
         /*Add xmlns line*/
         SvXMLAttributeList &rList = GetAttrList();
-        rList.AddAttribute(GetNamespaceMap().GetAttrNameByIndex(
-            XML_NAMESPACE_MATH_IDX),sCDATA,GetNamespaceMap().GetNameByIndex(
+        rList.AddAttribute(GetNamespaceMap().GetAttrNameByKey(
+            XML_NAMESPACE_MATH_IDX),sCDATA,GetNamespaceMap().GetNameByKey(
             XML_NAMESPACE_MATH_IDX));
 
         //I think we need something like ImplExportEntities();
