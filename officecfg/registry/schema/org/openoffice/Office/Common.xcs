@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-18 19:10:47 $
+ *  last change: $Author: tl $ $Date: 2002-07-19 09:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,6 +739,10 @@
             </prop>
         </group>
         <group oor:name="AutoCorrect">
+            <!-- Responsible: OS -->
+            <info>
+                <desc xml:lang="en-US">Contains miscellaneous settings for the auto correction.</desc>
+            </info>
             <prop oor:name="UseReplacementTable" oor:type="xs:boolean">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
@@ -901,6 +905,9 @@
                 </info>
             </prop>
             <group oor:name="Exceptions">
+                <info>
+                    <desc xml:lang="en-US">Contains settings to apply replacement rules and exceptions.</desc>
+                </info>
                 <prop oor:name="TwoCapitalsAtStart" oor:type="xs:boolean">
                     <!-- OldPath: AutoCorrect/Options/All -->
                     <!-- OldLocation: Soffice.cfg -->
@@ -2412,13 +2419,17 @@
             </prop>
         </group>
         <group oor:name="AddXMLToStorage">
+            <!-- Responsible: OS -->
+            <info>
+                <desc xml:lang="en-US">Contains settings specifing if a XML package is added to the applications binary files.</desc>
+            </info>
             <prop oor:name="Writer" oor:type="xs:boolean">
                 <!-- OldPath: AddXMLToStorage_Writer -->
                 <!-- OldLocation: soffice.ini -->
                 <!-- Responsible: OS -->
                 <!-- UIHints: no -->
                 <info>
-                    <desc xml:lang="en-US">Defines if a XML package is added to the Writer binary files</desc>
+                    <desc xml:lang="en-US">Defines if a XML package is added to the Writer binary files.</desc>
                 </info>
             </prop>
             <prop oor:name="Calc" oor:type="xs:boolean">
@@ -2427,7 +2438,7 @@
                 <!-- Responsible: OS -->
                 <!-- UIHints: no -->
                 <info>
-                    <desc xml:lang="en-US">Defines if a XML package is added to the Calc binary files</desc>
+                    <desc xml:lang="en-US">Defines if a XML package is added to the Calc binary files.</desc>
                 </info>
             </prop>
             <prop oor:name="Impress" oor:type="xs:boolean">
@@ -2436,7 +2447,7 @@
                 <!-- Responsible: OS -->
                 <!-- UIHints: no -->
                 <info>
-                    <desc xml:lang="en-US">Defines if a XML package is added to the Impress binary files</desc>
+                    <desc xml:lang="en-US">Defines if a XML package is added to the Impress binary files.</desc>
                 </info>
             </prop>
             <prop oor:name="Draw" oor:type="xs:boolean">
@@ -2445,7 +2456,7 @@
                 <!-- Responsible: OS -->
                 <!-- UIHints: no -->
                 <info>
-                    <desc xml:lang="en-US">Defines if a XML package is added to the Draw binary files</desc>
+                    <desc xml:lang="en-US">Defines if a XML package is added to the Draw binary files.</desc>
                 </info>
             </prop>
         </group>
@@ -3631,7 +3642,14 @@
                 </group>
             </group>
             <group oor:name="HTML">
+                <!-- Responsible: OS -->
+                <info>
+                    <desc xml:lang="en-US">Contains settings for HTML import/export.</desc>
+                </info>
                 <group oor:name="Import">
+                    <info>
+                        <desc xml:lang="en-US">Contains settings for HTML import.</desc>
+                    </info>
                     <prop oor:name="UnknownTag" oor:type="xs:boolean">
                         <!-- OldPath: Browser/HTML/Import -->
                         <!-- OldLocation: soffice.cfg -->
@@ -3735,6 +3753,9 @@
                     </group>
                 </group>
                 <group oor:name="Export">
+                    <info>
+                        <desc xml:lang="en-US">Contains settings for HTML export.</desc>
+                    </info>
                     <prop oor:name="Browser" oor:type="xs:int">
                         <!-- OldPath: Browser/HTML/Export -->
                         <!-- OldLocation: soffice.cfg -->
@@ -3906,7 +3927,7 @@
         <group oor:name="AsianLayout">
             <!-- Responsible: OS -->
             <info>
-                <desc xml:lang="en-US">Contains Asian layout specific settings.</desc>
+                <desc xml:lang="en-US">Contains layout specific settings for Asian languages.</desc>
             </info>
             <prop oor:name="IsKerningWesternTextOnly" oor:type="xs:boolean">
                 <!-- OldPath: -->
