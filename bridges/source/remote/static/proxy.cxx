@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxy.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-20 01:07:05 $
+ *  last change: $Author: vg $ $Date: 2001-10-15 16:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,54 +90,6 @@ using namespace ::bridges_remote;
 using namespace ::com::sun::star::uno;
 
 namespace bridges_remote {
-
-Remote2UnoProxy::Remote2UnoProxy( remote_Interface *pRemoteI,
-                                  rtl_uString *pOid,
-                                  typelib_InterfaceTypeDescription *pType,
-                                  uno_Environment *pEnvUno,
-                                  uno_Environment *pEnvRemote ) :
-    m_pType( pType ),
-    m_pRemoteI( pRemoteI ),
-    m_pEnvUno( pEnvUno ),
-    m_pEnvRemote( pEnvRemote ),
-    m_sOid( pOid ),
-    m_nRef( 1 ),
-    m_mapRemote2Uno( pEnvRemote, pEnvUno ),
-    m_mapUno2Remote( pEnvUno , pEnvRemote )
-{
-    typelib_typedescription_acquire( (typelib_TypeDescription * ) m_pType );
-    m_pEnvUno->acquire( m_pEnvUno );
-    m_pEnvRemote->acquire( m_pEnvRemote );
-
-    acquire = thisAcquire;
-    release = thisRelease;
-    pDispatcher = ( uno_DispatchMethod ) thisDispatch;
-
-    m_pEnvRemote->pExtEnv->registerInterface(
-        m_pEnvRemote->pExtEnv,
-        (void**)&m_pRemoteI,
-        m_sOid.pData,
-        m_pType );
-    m_pRemoteI->acquire( m_pRemoteI );
-
-#ifdef DEBUG
-    thisCounter.acquire();
-#endif
-}
-
-Remote2UnoProxy::~Remote2UnoProxy()
-{
-    // revoke external ref (oid)
-    m_pEnvRemote->pExtEnv->revokeInterface( m_pEnvRemote->pExtEnv , m_pRemoteI );
-
-    typelib_typedescription_release( (typelib_TypeDescription * )m_pType );
-    m_pRemoteI->release( m_pRemoteI );
-    m_pEnvUno->release( m_pEnvUno );
-    m_pEnvRemote->release( m_pEnvRemote );
-#ifdef DEBUG
-    thisCounter.release();
-#endif
-}
 
 void Remote2UnoProxy::thisFree( uno_ExtEnvironment *pEnvUno , void *pThis )
 {
@@ -370,6 +322,54 @@ void Remote2UnoProxy::thisDispatch(
         TYPELIB_DANGER_RELEASE( ppArgType[ i] );
     }
 
+}
+
+Remote2UnoProxy::Remote2UnoProxy( remote_Interface *pRemoteI,
+                                  rtl_uString *pOid,
+                                  typelib_InterfaceTypeDescription *pType,
+                                  uno_Environment *pEnvUno,
+                                  uno_Environment *pEnvRemote ) :
+    m_pType( pType ),
+    m_pRemoteI( pRemoteI ),
+    m_pEnvUno( pEnvUno ),
+    m_pEnvRemote( pEnvRemote ),
+    m_sOid( pOid ),
+    m_nRef( 1 ),
+    m_mapRemote2Uno( pEnvRemote, pEnvUno ),
+    m_mapUno2Remote( pEnvUno , pEnvRemote )
+{
+    typelib_typedescription_acquire( (typelib_TypeDescription * ) m_pType );
+    m_pEnvUno->acquire( m_pEnvUno );
+    m_pEnvRemote->acquire( m_pEnvRemote );
+
+    acquire = thisAcquire;
+    release = thisRelease;
+    pDispatcher = ( uno_DispatchMethod ) thisDispatch;
+
+    m_pEnvRemote->pExtEnv->registerInterface(
+        m_pEnvRemote->pExtEnv,
+        (void**)&m_pRemoteI,
+        m_sOid.pData,
+        m_pType );
+    m_pRemoteI->acquire( m_pRemoteI );
+
+#ifdef DEBUG
+    thisCounter.acquire();
+#endif
+}
+
+Remote2UnoProxy::~Remote2UnoProxy()
+{
+    // revoke external ref (oid)
+    m_pEnvRemote->pExtEnv->revokeInterface( m_pEnvRemote->pExtEnv , m_pRemoteI );
+
+    typelib_typedescription_release( (typelib_TypeDescription * )m_pType );
+    m_pRemoteI->release( m_pRemoteI );
+    m_pEnvUno->release( m_pEnvUno );
+    m_pEnvRemote->release( m_pEnvRemote );
+#ifdef DEBUG
+    thisCounter.release();
+#endif
 }
 
 } // end namespace bridge_remote
