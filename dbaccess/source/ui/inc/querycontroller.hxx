@@ -49,6 +49,7 @@ namespace dbaui
 
         // creates the querycomposer
         void setQueryComposer();
+
     protected:
         // all the features which should be handled by this class
         virtual void            AddSupportedFeatures();
@@ -59,6 +60,8 @@ namespace dbaui
         virtual ToolBox* CreateToolBox(Window* pParent);
 
         OQueryView* getQueryView() { return static_cast<OQueryView*>(m_pView); }
+        void createNewConnection(sal_Bool _bUI = sal_False);
+
     public:
         OQueryController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
