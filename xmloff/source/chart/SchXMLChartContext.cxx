@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: bm $ $Date: 2002-11-11 15:53:31 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,57 +207,75 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
         {
             case XML_TOK_CHART_CLASS:
                 {
-                    USHORT nEnumVal;
-                    if( GetImport().GetMM100UnitConverter().convertEnum( nEnumVal, aValue, aXMLChartClassMap ))
+                    rtl::OUString sClassName;
+                    sal_uInt16 nClassPrefix =
+                        GetImport().GetNamespaceMap().GetKeyByAttrName(
+                                aValue, &sClassName );
+                    if( XML_NAMESPACE_CHART == nClassPrefix )
                     {
-                        switch( nEnumVal )
+                        USHORT nEnumVal;
+                        if( GetImport().GetMM100UnitConverter().convertEnum(
+                                    nEnumVal, sClassName, aXMLChartClassMap ))
                         {
+                            switch( nEnumVal )
+                            {
                             case XML_CHART_CLASS_LINE:
-                                aServiceName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.chart.LineDiagram" ));
+                                aServiceName =
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.chart.LineDiagram" ));
                                 break;
                             case XML_CHART_CLASS_AREA:
-                                aServiceName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.chart.AreaDiagram" ));
+                                aServiceName =
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.chart.AreaDiagram" ));
                                 break;
                             case XML_CHART_CLASS_CIRCLE:
-                                aServiceName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.chart.PieDiagram" ));
+                                aServiceName =
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.chart.PieDiagram" ));
                                 bSetSwitchData = sal_True;
                                 break;
                             case XML_CHART_CLASS_RING:
-                                aServiceName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.chart.DonutDiagram" ));
+                                aServiceName =
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.chart.DonutDiagram" ));
                                 break;
                             case XML_CHART_CLASS_SCATTER:
-                                aServiceName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.chart.XYDiagram" ));
+                                aServiceName =
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.chart.XYDiagram" ));
                                 bDomainForDefaultDataNeeded = sal_True;
                                 break;
                             case XML_CHART_CLASS_RADAR:
-                                aServiceName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.chart.NetDiagram" ));
+                                aServiceName =
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.chart.NetDiagram" ));
                                 break;
                             case XML_CHART_CLASS_BAR:
-                                aServiceName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.chart.BarDiagram" ));
+                                aServiceName =
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.chart.BarDiagram" ));
                                 break;
                             case XML_CHART_CLASS_STOCK:
-                                aServiceName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.chart.StockDiagram" ));
+                                aServiceName =
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.chart.StockDiagram" ));
                                 break;
                             case XML_CHART_CLASS_BUBBLE:
                                 DBG_ERROR( "Bubble chart not supported yet" );
                                 break;
-                            case XML_CHART_CLASS_ADDIN:
-                                // service is taken from add-in-name attribute
-
-                                // for service charts assume domain in base type
-                                // if base type doesn't use a domain this is ok,
-                                // the data just grows bigger
-                                bDomainForDefaultDataNeeded = sal_True;
-                                break;
+                            }
                         }
+                    }
+                    else if( XML_NAMESPACE_OOO == nClassPrefix )
+                    {
+                        // service is taken from add-in-name attribute
+
+                        // for service charts assume domain in base type
+                        // if base type doesn't use a domain this is ok,
+                        // the data just grows bigger
+                        bDomainForDefaultDataNeeded = sal_True;
+                        aServiceName = sClassName;
                     }
                 }
                 break;
@@ -272,10 +290,6 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
             case XML_TOK_CHART_STYLE_NAME:
                 sAutoStyleName = aValue;
-                break;
-
-            case XML_TOK_CHART_ADDIN_NAME:
-                aServiceName = aValue;
                 break;
 
             case XML_TOK_CHART_COL_MAPPING:
