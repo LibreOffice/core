@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2002-08-05 20:29:12 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -803,14 +803,14 @@ TabPage TP_DOCINFORELOAD
         Text[ french ] = "Do not refresh automatically";
         Text[ spanish ] = "Do not refresh automatically";
         Text[ finnish ] = "Do not refresh automatically";
-        Text[ italian ] = "Do not refresh automatically";
+        Text[ italian ] = "Non aggiornare automaticamente";
         Text[ danish ] = "Do not refresh automatically";
         Text[ swedish ] = "Do not refresh automatically";
         Text[ polish ] = "Do not refresh automatically";
-        Text[ japanese ] = "Do not refresh automatically";
-        Text[ korean ] = "Do not refresh automatically";
+        Text[ japanese ] = "自動更新しない";
+        Text[ korean ] = "자동 새로 고침 안함";
         Text[ chinese_simplified ] = "Do not refresh automatically";
-        Text[ chinese_traditional ] = "Do not refresh automatically";
+        Text[ chinese_traditional ] = "不自動更新";
         Text[ turkish ] = "Do not refresh automatically";
         Text[ arabic ] = "Do not refresh automatically";
     };
@@ -830,14 +830,14 @@ TabPage TP_DOCINFORELOAD
         Text[ french ] = "Refresh this document";
         Text[ spanish ] = "Refresh this document";
         Text[ finnish ] = "Refresh this document";
-        Text[ italian ] = "Refresh this document";
+        Text[ italian ] = "Aggiorna questo documento";
         Text[ danish ] = "Refresh this document";
         Text[ swedish ] = "Refresh this document";
         Text[ polish ] = "Refresh this document";
-        Text[ japanese ] = "Refresh this document";
-        Text[ korean ] = "Refresh this document";
+        Text[ japanese ] = "このドキュメントを更新する";
+        Text[ korean ] = "문서 새로 고침";
         Text[ chinese_simplified ] = "Refresh this document";
-        Text[ chinese_traditional ] = "Refresh this document";
+        Text[ chinese_traditional ] = "更新這個文件";
         Text[ turkish ] = "Refresh this document";
         Text[ arabic ] = "Refresh this document";
     };
@@ -855,14 +855,14 @@ TabPage TP_DOCINFORELOAD
         Text[ french ] = "every";
         Text[ spanish ] = "every";
         Text[ finnish ] = "every";
-        Text[ italian ] = "every";
+        Text[ italian ] = "ogni";
         Text[ danish ] = "every";
         Text[ swedish ] = "every";
         Text[ polish ] = "every";
-        Text[ japanese ] = "every";
-        Text[ korean ] = "every";
+        Text[ japanese ] = "すべて";
+        Text[ korean ] = "모두";
         Text[ chinese_simplified ] = "every";
-        Text[ chinese_traditional ] = "every";
+        Text[ chinese_traditional ] = "毎";
         Text[ turkish ] = "every";
         Text[ arabic ] = "every";
         Text[ catalan ] = "Tot";
@@ -895,14 +895,14 @@ TabPage TP_DOCINFORELOAD
         Text[ french ] = "seconds";
         Text[ spanish ] = "seconds";
         Text[ finnish ] = "seconds";
-        Text[ italian ] = "seconds";
+        Text[ italian ] = "secondi";
         Text[ danish ] = "seconds";
         Text[ swedish ] = "seconds";
         Text[ polish ] = "seconds";
-        Text[ japanese ] = "seconds";
-        Text[ korean ] = "seconds";
+        Text[ japanese ] = "秒毎";
+        Text[ korean ] = "초";
         Text[ chinese_simplified ] = "seconds";
-        Text[ chinese_traditional ] = "seconds";
+        Text[ chinese_traditional ] = "秒";
         Text[ turkish ] = "seconds";
         Text[ arabic ] = "seconds";
         Text[ catalan ] = "segons";
@@ -924,14 +924,14 @@ TabPage TP_DOCINFORELOAD
         Text[ french ] = "Redirect from this document";
         Text[ spanish ] = "Redirect from this document";
         Text[ finnish ] = "Redirect from this document";
-        Text[ italian ] = "Redirect from this document";
+        Text[ italian ] = "Inoltra da questo documento";
         Text[ danish ] = "Redirect from this document";
         Text[ swedish ] = "Redirect from this document";
         Text[ polish ] = "Redirect from this document";
-        Text[ japanese ] = "Redirect from this document";
-        Text[ korean ] = "Redirect from this document";
+        Text[ japanese ] = "このドキュメントから転送する";
+        Text[ korean ] = "이 문서로부터 다시 전달";
         Text[ chinese_simplified ] = "Redirect from this document";
-        Text[ chinese_traditional ] = "Redirect from this document";
+        Text[ chinese_traditional ] = "從這個文件轉送";
         Text[ turkish ] = "Redirect from this document";
         Text[ arabic ] = "Redirect from this document";
     };
@@ -949,14 +949,14 @@ TabPage TP_DOCINFORELOAD
         Text[ french ] = "after";
         Text[ spanish ] = "after";
         Text[ finnish ] = "after";
-        Text[ italian ] = "after";
+        Text[ italian ] = "dopo";
         Text[ danish ] = "after";
         Text[ swedish ] = "after";
         Text[ polish ] = "after";
-        Text[ japanese ] = "after";
-        Text[ korean ] = "after";
+        Text[ japanese ] = "更新する時間";
+        Text[ korean ] = "기준";
         Text[ chinese_simplified ] = "after";
-        Text[ chinese_traditional ] = "after";
+        Text[ chinese_traditional ] = "經過";
         Text[ turkish ] = "after";
         Text[ arabic ] = "after";
     };
@@ -987,14 +987,14 @@ TabPage TP_DOCINFORELOAD
         Text[ french ] = "seconds";
         Text[ spanish ] = "seconds";
         Text[ finnish ] = "seconds";
-        Text[ italian ] = "seconds";
+        Text[ italian ] = "secondi";
         Text[ danish ] = "seconds";
         Text[ swedish ] = "seconds";
         Text[ polish ] = "seconds";
-        Text[ japanese ] = "seconds";
-        Text[ korean ] = "seconds";
+        Text[ japanese ] = "秒毎";
+        Text[ korean ] = "초";
         Text[ chinese_simplified ] = "seconds";
-        Text[ chinese_traditional ] = "seconds";
+        Text[ chinese_traditional ] = "秒";
         Text[ turkish ] = "seconds";
         Text[ arabic ] = "seconds";
         Text[ catalan ] = "segons";
@@ -1019,10 +1019,10 @@ TabPage TP_DOCINFORELOAD
         Text[ swedish ] = "~URL";
         Text[ polish ] = "URL";
         Text[ portuguese_brazilian ] = "~URL";
-        Text[ japanese ] = "~URL";
-        Text[ korean ] = "~URL";
+        Text[ japanese ] = "URL へ";
+        Text[ korean ] = "URL로";
         Text[ chinese_simplified ] = "~URL";
-        Text[ chinese_traditional ] = "~URL";
+        Text[ chinese_traditional ] = "送至 URL";
         Text[ turkish ] = "~URL";
         Text[ arabic ] = "URL~";
         Text[ catalan ] = "~URL";
@@ -1053,14 +1053,14 @@ TabPage TP_DOCINFORELOAD
         Text[ french ] = "to frame";
         Text[ spanish ] = "to frame";
         Text[ finnish ] = "to frame";
-        Text[ italian ] = "to frame";
+        Text[ italian ] = "al frame";
         Text[ danish ] = "to frame";
         Text[ swedish ] = "to frame";
         Text[ polish ] = "to frame";
-        Text[ japanese ] = "to frame";
-        Text[ korean ] = "to frame";
+        Text[ japanese ] = "フレームへ";
+        Text[ korean ] = "프레임으로";
         Text[ chinese_simplified ] = "to frame";
-        Text[ chinese_traditional ] = "to frame";
+        Text[ chinese_traditional ] = "送至訊框";
         Text[ turkish ] = "to frame";
         Text[ arabic ] = "to frame";
     };
@@ -1082,14 +1082,14 @@ TabPage TP_DOCINFORELOAD
         Text[ french ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
         Text[ spanish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
         Text[ finnish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
-        Text[ italian ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ italian ] = "Se selezionate l'opzione \"%PLACEHOLDER%\" dovete indicare un URL.";
         Text[ danish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
         Text[ swedish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
         Text[ polish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
-        Text[ japanese ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
-        Text[ korean ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ japanese ] = "オプション \"%PLACEHOLDER%\" を選択するときは、URL を指定してください。";
+        Text[ korean ] = "\"%PLACEHOLDER%\" 옵션을 선택할 경우 URL을 입력해야만 합니다.";
         Text[ chinese_simplified ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
-        Text[ chinese_traditional ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ chinese_traditional ] = "如果您選擇選項 \"%PLACEHOLDER%\" ，就必須輸入一個 URL 地址。";
         Text[ turkish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
         Text[ arabic ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
     };
