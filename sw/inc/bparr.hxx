@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bparr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:24 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,13 +133,11 @@ public:
     ULONG Count() const { return nSize; }
 
     void Insert( const ElementPtr& r, ULONG pos );
-//  void Insert( const ElementPtr* p, ULONG n, ULONG pos );
     void Remove( ULONG pos, ULONG n = 1 );
     void Move( ULONG from, ULONG to );
     void Replace( ULONG pos, const ElementPtr& r);
 
     ElementPtr operator[]( ULONG ) const;
-    ULONG GetIndex( const ElementPtr, ULONG, ULONG ) const;
     void ForEach( FnForEach fn, void* pArgs = NULL )
     {
         ForEach( 0, nSize, fn, pArgs );
