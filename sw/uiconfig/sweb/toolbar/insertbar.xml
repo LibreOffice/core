@@ -22,6 +22,6 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertObjCtrl" toolbar:visible="false" toolbar:helpid="52823"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:EditGlossary"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:text="Insert Note" toolbar:helpid="20329"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:helpid="20329"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertBookmark" toolbar:helpid="20302"/>
 </toolbar:toolbar>
