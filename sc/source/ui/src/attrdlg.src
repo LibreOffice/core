@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:54:11 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ TabDialog RID_SCDLG_ATTR
     Text [ portuguese_brazilian ] = "Atributos da C�lula" ;
     Text [ portuguese ] = "Atributos de c�lula" ;
     Text [ finnish ] = "Solun m��ritteet" ;
-    Text [ danish ] = "Celleattributter" ;
+    Text [ danish ] = "Formater celle" ;
     Text [ french ] = "Formatage des cellules" ;
     Text [ swedish ] = "Formatera celler" ;
     Text [ dutch ] = "Celattributen" ;
@@ -125,6 +125,8 @@ TabDialog RID_SCDLG_ATTR
                 Text[ hebrew ] = "Zahlen";
                 Text[ hindi ] = "संख्या";
                 Text[ slovak ] = "Čísla";
+                Text[ hungarian ] = "Számok";
+                Text[ slovenian ] = "Številke";
             };
             PageItem
             {
@@ -159,6 +161,8 @@ TabDialog RID_SCDLG_ATTR
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट";
                 Text[ slovak ] = "Písmo";
+                Text[ hungarian ] = "Betűkészlet";
+                Text[ slovenian ] = "Pisava";
             };
             PageItem
             {
@@ -174,7 +178,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ french ] = "Effets de caract�res";
                 Text[ spanish ] = "Efectos de fuente";
                 Text[ italian ] = "Effetto carattere";
-                Text[ danish ] = "Skrifteffekt";
+                Text[ danish ] = "Skrifteffekter";
                 Text[ swedish ] = "Teckeneffekt";
                 Text[ polish ] = "Efekty czcionki";
                 Text[ portuguese_brazilian ] = "Efeitos da Fonte";
@@ -191,6 +195,8 @@ TabDialog RID_SCDLG_ATTR
                 Text[ hebrew ] = "‮אפקטים לגופנים‬";
                 Text[ hindi ] = "फ़ॉन्ट प्रभाव";
                 Text[ slovak ] = "Efekty pre písmo";
+                Text[ hungarian ] = "Betűhatások";
+                Text[ slovenian ] = "Učinki pisave";
             };
             PageItem
             {
@@ -225,6 +231,8 @@ TabDialog RID_SCDLG_ATTR
                 Text[ hebrew ] = "‮ישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
                 Text[ slovak ] = "Zarovnanie";
+                Text[ hungarian ] = "Igazítás";
+                Text[ slovenian ] = "Poravnava";
             };
             PageItem
             {
@@ -257,6 +265,8 @@ TabDialog RID_SCDLG_ATTR
                 Text[ hebrew ] = "Asiatische Typographie";
                 Text[ hindi ] = "ऐशियन ढइपोग्रफी";
                 Text[ slovak ] = "Ázijská typografia";
+                Text[ hungarian ] = "Ázsiai tipográfia";
+                Text[ slovenian ] = "Azijska tipografija";
             };
             PageItem
             {
@@ -269,7 +279,7 @@ TabDialog RID_SCDLG_ATTR
                 Text [ portuguese_brazilian ] = "Bordas" ;
                 Text [ portuguese ] = "Contornos" ;
                 Text [ finnish ] = "Reunat" ;
-                Text [ danish ] = "Ramme" ;
+                Text [ danish ] = "Kanter" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
                 Text [ dutch ] = "Omranding" ;
@@ -291,6 +301,8 @@ TabDialog RID_SCDLG_ATTR
                 Text[ hebrew ] = "‮מסגרות‬";
                 Text[ hindi ] = "किनारें";
                 Text[ slovak ] = "Okraje";
+                Text[ hungarian ] = "Szegélyek";
+                Text[ slovenian ] = "Obrobe";
             };
             PageItem
             {
@@ -325,6 +337,8 @@ TabDialog RID_SCDLG_ATTR
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
                 Text[ slovak ] = "Pozadie";
+                Text[ hungarian ] = "Háttér";
+                Text[ slovenian ] = "Ozadje";
             };
             PageItem
             {
@@ -359,6 +373,8 @@ TabDialog RID_SCDLG_ATTR
                 Text[ hebrew ] = "Zellschutz";
                 Text[ hindi ] = "कोष्ठ रक्षा";
                 Text[ slovak ] = "Ochrana bunky";
+                Text[ hungarian ] = "Cellavédelem";
+                Text[ slovenian ] = "Zaščita celice";
             };
         };
     };
@@ -378,6 +394,8 @@ TabDialog RID_SCDLG_ATTR
     Text[ hebrew ] = "Zellen formatieren";
     Text[ hindi ] = "कोष्ठ ऐट्रिब्यूट्स";
     Text[ slovak ] = "Atribúty bunky";
+    Text[ hungarian ] = "Cellák formázása";
+    Text[ slovenian ] = "Oblikuj celice";
 };
 
  //================================================
@@ -401,7 +419,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ portuguese_brazilian ] = "~Protegido" ;
         Text [ portuguese ] = "~Proteger" ;
         Text [ finnish ] = "~Suojattu" ;
-        Text [ danish ] = "L�st" ;
+        Text [ danish ] = "~Beskyttet" ;
         Text [ french ] = "~Verrouiller" ;
         Text [ swedish ] = "Skydda~d" ;
         Text [ dutch ] = "~Beveiligd" ;
@@ -424,6 +442,8 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ hebrew ] = "~Gesperrt";
         Text[ hindi ] = "~रक्षित";
         Text[ slovak ] = "Ch~ránené";
+        Text[ hungarian ] = "~Nem módosítható";
+        Text[ slovenian ] = "~Zaščiteno";
     };
     TriStateBox BTN_HIDE_FORMULAR
     {
@@ -459,6 +479,8 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ hebrew ] = "~Formel ausblenden";
         Text[ hindi ] = "~सूत्र छिपाओ";
         Text[ slovak ] = "S~kryť vzorec";
+        Text[ hungarian ] = "~Képletek elrejtése";
+        Text[ slovenian ] = "Skrij ~formulo";
     };
     TriStateBox BTN_HIDE_ALL
     {
@@ -471,7 +493,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ portuguese_brazilian ] = "Ocultar ~tudo" ;
         Text [ portuguese ] = "Ocultar ~tudo" ;
         Text [ finnish ] = "Piilota ~kaikki" ;
-        Text [ danish ] = "S~kjul alt" ;
+        Text [ danish ] = "Skjul ~alt" ;
         Text [ french ] = "~Tout masquer" ;
         Text [ swedish ] = "D�lj ~allt" ;
         Text [ dutch ] = "~Alles verbergen" ;
@@ -494,6 +516,8 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ hebrew ] = "~Alles ausblenden";
         Text[ hindi ] = "~सब छिपाओ";
         Text[ slovak ] = "Skryť vš~etko";
+        Text[ hungarian ] = "~Teljes tartalom elrejtése";
+        Text[ slovenian ] = "Skrij ~vse";
     };
     FixedText FT_HINT
     {
@@ -510,7 +534,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ portuguese_brazilian ] = "Para ativar a prote��o da c�lula, � necess�rio proteger a planilha ativa.\n\nEscolha 'Proteger Documento' no menu 'Ferramentas' e, em seguida o comando 'Planilha'." ;
         Text [ portuguese ] = "Para activar a protec��o da c�lula, � necess�rio proteger a tabela activa.\n\nSeleccione 'Proteger documento' no menu 'Ferramentas' e em seguida o comando 'Tabela'." ;
         Text [ finnish ] ="Solun suojaus on voimassa vasta, kun k�sitelt�v�n� oleva taulukko on suojattu. \n\nValitse Ty�kalut-valikosta Suojaa asiakirja ja m��rit� sitten Taulukko." ;
-        Text [ danish ] = "Cellebeskyttelsen er kun effektiv, n�r det aktive regneark er beskyttet.\n\nV�lg 'Bekyt dokument' i menuen 'Funktioner'og derefter 'Regneark' for at beskytte regnearket." ;
+        Text [ danish ] = "Cellebeskyttelsen tr�der f�rst i kraft, n�r det aktive regneark er beskyttet.\n\nV�lg 'Bekyt dokument' i menuen 'Funktioner' og angiv 'Regneark'." ;
         Text [ french ] = "Pour activer la protection d'une cellule, vous devez prot�ger la feuille active.\n\nChoisissez 'Protection' dans le menu 'Outils' puis la commande 'Feuille'." ;
         Text [ swedish ] = "Cellskyddet �r bara verksamt om den aktiva tabellen �r skyddad.\n\nV�lj 'Skydda dokument' p� menyn 'Verktyg' och d�refter 'Tabell' f�r att skydda tabellen." ;
         Text [ dutch ] = "De celbeveiliging functioneert alleen als het actieve werkblad beveiligd is.\n\nKies eerst in menu 'Extra' de optie 'Document beveiligen' en vervolgens de optie 'Werkblad'." ;
@@ -532,6 +556,8 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ hebrew ] = "Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'.";
         Text[ hindi ] = "केवल वर्तमान शीट् को रक्षा करने बाद ही कोष्ठ रक्षा सक्षम हो सकता है ।\n\n'औज़ार' मेनु से 'लेखपत्र रक्षा' विकल्प को चुनिए, और 'शीट्' को निर्दिष्ट कीजिए ।";
         Text[ slovak ] = "Ochrana bunky je účinná iba v prípade že je chránený celý list. \n\nVyberte 'Zamknúť Dokument' z menu 'Nástroje' a zvolte 'List'.";
+        Text[ hungarian ] = "A cellavédelem csak akkor hatásos, ha az aktuális munkalap is védett. \n\nEzt az 'Eszközök' menü 'Dokumentumvédelem' pontjában a 'Munkalap' elemet választva érheti el.";
+        Text[ slovenian ] = "Zaščita celic je učinkovita šele potem, ko je zaščiten trenutni list. \n\nIzberite 'Zaščiti dokument' iz menija 'Orodja' in določite 'List'.";
     };
     FixedLine FL_PROTECTION
     {
@@ -566,6 +592,8 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ hebrew ] = "Schutz";
         Text[ hindi ] = "रक्षा";
         Text[ slovak ] = "Ochrana";
+        Text[ hungarian ] = "Védelem";
+        Text[ slovenian ] = "Zaščita";
     };
     TriStateBox BTN_HIDE_PRINT
     {
@@ -578,7 +606,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ portuguese_brazilian ] = "~Ocultar ao imprimir" ;
         Text [ portuguese ] = "Ocultar para ~impress�o" ;
         Text [ finnish ] = "Piilota ~tulostettaessa" ;
-        Text [ danish ] = "Skjul ved udskrivning" ;
+        Text [ danish ] = "Skjul ~ved udskrivning" ;
         Text [ french ] = "Masquer pour l'~impression" ;
         Text [ swedish ] = "D�lj vid ~utskrift" ;
         Text [ dutch ] = "Verbergen voor af~drukken" ;
@@ -601,6 +629,8 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ hebrew ] = "Für Aus~druck ausblenden";
         Text[ hindi ] = "~छपाई करने के समय छिपाओ";
         Text[ slovak ] = "Skryť počas ~tlače";
+        Text[ hungarian ] = "N~em nyomtatható";
+        Text[ slovenian ] = "Skrij ~med tiskanjem";
     };
     FixedText FT_HINT2
     {
@@ -636,6 +666,8 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ hebrew ] = "Die Zellen der aktuellen Selektion werden beim Ausdruck nicht ausgegeben.";
         Text[ hindi ] = "चुने हुए कोष्ठों को छपाई करने के समय उपेक्षा किया जाएगा ।";
         Text[ slovak ] = "Vybrané bunky budú pri tlači vynechané.";
+        Text[ hungarian ] = "A kiválasztott cellák nyomtatásban nem jelennek meg.";
+        Text[ slovenian ] = "Izbrane celice bodo pri tiskanju izpuščene.";
     };
     FixedLine FL_PRINT
     {
@@ -648,7 +680,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ portuguese_brazilian ] = "Imprimir" ;
         Text [ portuguese ] = "Impress�o" ;
         Text [ finnish ] = "Tulosta" ;
-        Text [ danish ] = "Udskrivning" ;
+        Text [ danish ] = "Udskriv" ;
         Text [ french ] = "Impression" ;
         Text [ swedish ] = "Utskrift" ;
         Text [ dutch ] = "Afdrukken" ;
@@ -670,8 +702,12 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ hebrew ] = "‮הדפסה‬";
         Text[ hindi ] = "छपाई";
         Text[ slovak ] = "Tlač";
+        Text[ hungarian ] = "Nyomtatás";
+        Text[ slovenian ] = "Natisni";
     };
 };
+
+
 
 
 
