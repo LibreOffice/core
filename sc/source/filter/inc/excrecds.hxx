@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:30:36 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1058,47 +1058,43 @@ public:
 };
 
 
-//------------------------------------------------------ class ExcDefcolwidth -
+// ============================================================================
 
-class ExcDefcolwidth : public ExcRecord
+/** Contains the column settings for a range of columns. */
+class XclExpColinfo : public XclExpRecord, protected XclExpRoot
 {
 private:
-    UINT16                  nWidth;
-
-    virtual void            SaveCont( XclExpStream& rStrm );
+    sal_uInt32              mnXFId;         /// The XF ID for column default format.
+    sal_uInt16              mnFirstXclCol;  /// Index to first column.
+    sal_uInt16              mnLastXclCol;   /// Index to last column.
+    sal_uInt16              mnWidth;        /// Width of the column(s), Excel value.
+    sal_uInt16              mnFlags;        /// Additional column flags.
 
 public:
-                            ExcDefcolwidth( UINT16 nDefColWidth );
+    explicit                XclExpColinfo(
+                                const XclExpRoot& rRoot,
+                                sal_uInt16 nScCol, sal_uInt16 nScTab, sal_uInt32 nXFId,
+                                ExcEOutline& rOutline );
 
-    virtual UINT16          GetNum( void ) const;
-    virtual ULONG           GetLen( void ) const;
+    /** Tries to expand this record with a new column.
+        @descr  This can be done, if the new column has the same settings as all other columns.
+        @return  true = Expansion was successful, no new COLINFO record is needed. */
+    bool                    Expand(
+                                sal_uInt16 nScCol, sal_uInt16 nScTab, sal_uInt32 nXFId,
+                                ExcEOutline& rOutline );
+
+private:
+    /** Returns the Excel width of the passed Calc column. */
+    sal_uInt16              GetWidth( sal_uInt16 nScCol, sal_uInt16 nScTab ) const;
+    /** Returns the Excel option flags of the passed Calc column. */
+    sal_uInt16              GetFlags( sal_uInt16 nScCol, sal_uInt16 nScTab, ExcEOutline& rOutline ) const;
+
+    /** Writes the contents of this COLINFO record. */
+    virtual void            WriteBody( XclExpStream& rStrm );
 };
 
 
-//---------------------------------------------------------- class ExcColinfo -
-
-class ExcColinfo : public ExcRecord
-{
-private:
-    sal_uInt32              mnXFId;
-    UINT16                  nFirstCol;
-    UINT16                  nLastCol;
-    UINT16                  nColWidth;
-    UINT16                  nOptions;
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-
-public:
-                            ExcColinfo( UINT16 nCol, UINT16 nTab, sal_uInt32 nXFId, RootData&, ExcEOutline& rOutline );
-
-                            // if expandable, delete rpExp and set to NULL
-    void                    Expand( ExcColinfo*& rpExp );
-
-    virtual UINT16          GetNum( void ) const;
-    virtual ULONG           GetLen( void ) const;
-};
-
-
+// ============================================================================
 //------------------------------------------------------ class ExcExterncount -
 
 class ExcExterncount : public ExcRecord, ExcRoot
