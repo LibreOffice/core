@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:09:18 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ czech ] = "Nový";
         Text[ hebrew ] = "‮חדש‬";
         Text[ hindi ] = "नया";
+        Text[ slovak ] = "Nový";
     };
     PushButton RID_PB_DEL
     {
@@ -155,6 +156,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "मिटाओ";
+        Text[ slovak ] = "Zmazať";
     };
     CheckBox RID_CHKB_ACTIVE
     {
@@ -188,6 +190,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ czech ] = "Aktivní";
         Text[ hebrew ] = "Aktiv";
         Text[ hindi ] = "क्रियाशील";
+        Text[ slovak ] = "Aktívny";
     };
     FixedText RID_FT_PASS
     {
@@ -204,11 +207,11 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text [ french ] = "Adaptation :" ;
         Text [ dutch ] = "Doorloop:" ;
         Text [ portuguese ] = "Ajuste:" ;
-        Text[ chinese_simplified ] = "穿透：";
+        Text[ chinese_simplified ] = "已循环计数：";
         Text[ russian ] = "���������:";
         Text[ polish ] = "Liczba przej��:";
         Text[ japanese ] = "ひととおり実行:";
-        Text[ chinese_traditional ] = "過程：";
+        Text[ chinese_traditional ] = "循環計數：";
         Text[ arabic ] = "���:";
         Text[ greek ] = "������� ���������:";
         Text[ korean ] = "과정";
@@ -220,6 +223,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ czech ] = "Počet průběhů:";
         Text[ hebrew ] = "Durchlauf:";
         Text[ hindi ] = "पास गिनती:";
+        Text[ slovak ] = "Počet:";
     };
     FixedText RID_FT_BRKPOINTS
     {
@@ -252,6 +256,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ czech ] = "Body přerušení";
         Text[ hebrew ] = "Haltepunkte";
         Text[ hindi ] = "खण्डन बिन्दु";
+        Text[ slovak ] = "Body prerušenia";
     };
     NumericField RID_FLD_PASS
     {
@@ -285,7 +290,10 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
     Text[ czech ] = "Body přerušení";
     Text[ hebrew ] = "Haltepunkte";
     Text[ hindi ] = "खण्डन बिन्दु";
+    Text[ slovak ] = "Body prerušenia";
 };
+
+
 
 
 
