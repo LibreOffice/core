@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-24 14:32:10 $
+ *  last change: $Author: kz $ $Date: 2001-10-25 20:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5280,7 +5280,7 @@ String STR_ACTION_NOTPOSSIBLE
     Text[ japanese ] = "æ©Ÿèƒ½ã¯é¸æŠã•ã‚ŒãŸï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã§ã¯\nå®Ÿè¡Œã§ãã¾ã›ã‚“ã€‚";
     Text[ greek ] = "Äåí åßíáé äõíáôüí íá åêôåëåóôåß ç \nëåéôïõñãßá áõôŞ ìå ôá åğéëåãìİíá áíôéêåßìåíá.";
     Text[ korean ] = "ì´ ê¸°ëŠ¥ì„ ì„ íƒëœ \nê°œì²´ë¡œ ì‹¤í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_traditional ] = "é€™å€‹åŠŸèƒ½ç„¡æ³•ç”¨äºé¸å–çš„ç‰©ä»¶ã€‚";
+    Text[ chinese_traditional ] = "é€™å€‹åŠŸèƒ½ç„¡æ³•ç”¨æ–¼é¸å–çš„ç‰©ä»¶ã€‚";
     Text[ arabic ] = "áÇ íãßä ÊäİíĞ åĞå ÇáÚãáíÉ \nÈÇáßÇÆäÇÊ ÇáãÍÏÏÉ.";
     Text[ turkish ] = "Seçilen nesnelerle \nbu işlev yürütülemez.";
     Text[ catalan ] = "No es posible ejecutar la función\ncon los objetos seleccionados";
@@ -5748,7 +5748,7 @@ ModalDialog RID_UNDO_DELETE_WARNING
         Text[ portuguese ] = "This action will delete the list of undoable actions.\nChanges on the document made up to now are maintained,\nbut cannot be taken back. Do You want to continue and\nassign the new page layout?";
         Text[ russian ] = "İòèì äåéñòâèåì óäàëÿåòñÿ ñïèñîê øàãîâ, êîòîğûå ìîæíî âåğíóòü.\nÂûïîëíåííûå äî ñèõ ïîğ èçìåíåíèÿ â äîêóìåíòå áóäóò ñîõğàíåíû,\níî âåğíóòü èõ óæå íåëüçÿ áóäåò. Ïğîäîëæèòü íåñìîòğÿ íà ıòî\nè íàçíà÷èòü íîâûé ñòèëü ñòğàíèöû?";
         Text[ greek ] = "This action will delete the list of undoable actions.\nChanges on the document made up to now are maintained,\nbut cannot be taken back. Do You want to continue and\nassign the new page layout?";
-        Text[ dutch ] = "This action will delete the list of undoable actions.\nChanges on the document made up to now are maintained,\nbut cannot be taken back. Do You want to continue and\nassign the new page layout?";
+        Text[ dutch ] = "Met deze opdracht wist u de lijst met handelingen die \nongedaan kunnen worden gemaakt. Tot nu toe aangebrachte \\wijzigingen aan het document blijven behouden en kunnen niet \nmeer ongedaan worden gemaakt. Wilt u doorgaan \nen het nieuwe pagina-opmaakprofiel toewijzen?";
         Text[ french ] = "Cette action supprime la liste des opérations pouvant\nêtre annulées. Ceci n'affecte pas les modifications\napportées au document, mais empêche de les annuler.\nVoulez-vous poursuivre et assigner\nle nouveau style de page ?";
         Text[ spanish ] = "Este comando elimina la lista de los pasos que se\ndeban deshacer. Se conservarán las modificaciones\nrealizadas hasta ahora en el documento, pero no podrán\ndeshacerse más. Desea continuar y asignar el nuevo\nestilo de página.";
         Text[ finnish ] = "This action will delete the list of undoable actions.\nChanges on the document made up to now are maintained,\nbut cannot be taken back. Do You want to continue and\nassign the new page layout?";
@@ -5760,7 +5760,7 @@ ModalDialog RID_UNDO_DELETE_WARNING
         Text[ japanese ] = "This action will delete the list of undoable actions.\nChanges on the document made up to now are maintained,\nbut cannot be taken back. Do You want to continue and\nassign the new page layout?";
         Text[ korean ] = "This action will delete the list of undoable actions.\nChanges on the document made up to now are maintained,\nbut cannot be taken back. Do You want to continue and\nassign the new page layout?";
         Text[ chinese_simplified ] = "è¿™é¡¹æ“ä½œä¼šåˆ é™¤ç”¨æ¥æ’¤æ¶ˆå‘½ä»¤çš„å·¥ä½œæ­¥éª¤åˆ—å•ã€‚\nè‡³ä»Šä¸ºæ­¢æ‚¨å¯¹æ–‡æ¡£æ‰€åšçš„æ›´æ”¹ä¼šè¢«ä¿å­˜ï¼Œ\nä½†æ˜¯æ‚¨æ— æ³•å†æ’¤æ¶ˆè¿™äº›æ›´æ”¹ã€‚\nè¦ç»§ç»­å¹¶ä½¿ç”¨æ–°çš„é¡µé¢æ ·å¼ï¼Ÿ";
-        Text[ chinese_traditional ] = "é€™å€‹å‹•ä½œæœƒåˆªé™¤å¾©åŸæ¸…å–®çš„é …ç›®ã€‚\nå·²ç¶“è®Šæ›´çš„å†…å®¹å°‡æœƒè¢«ä¿ç•™ä¸è®Šï¼Œä½†æ˜¯ä¸å¯ä»¥å†å¾©åŸæ‰€æœ‰çš„è®Šæ›´å†…å®¹ã€‚\nè¦ç¹¼çºŒä¸¦ä¸”ä½¿ç”¨é€™å€‹æ–°çš„é é¢æ¨£å¼ï¼Ÿ";
+        Text[ chinese_traditional ] = "é€™å€‹å‹•ä½œæœƒåˆªé™¤å¾©åŸæ¸…å–®çš„é …ç›®ã€‚\nå·²ç¶“è®Šæ›´çš„å…§å®¹å°‡æœƒè¢«ä¿ç•™ä¸è®Šï¼Œä½†æ˜¯ä¸å¯ä»¥å†å¾©åŸæ‰€æœ‰çš„è®Šæ›´å…§å®¹ã€‚\nè¦ç¹¼çºŒä¸¦ä¸”ä½¿ç”¨é€™å€‹æ–°çš„é é¢æ¨£å¼ï¼Ÿ";
         Text[ turkish ] = "This action will delete the list of undoable actions.\nChanges on the document made up to now are maintained,\nbut cannot be taken back. Do You want to continue and\nassign the new page layout?";
         Text[ arabic ] = "This action will delete the list of undoable actions.\nChanges on the document made up to now are maintained,\nbut cannot be taken back. Do You want to continue and\nassign the new page layout?";
         Text[ catalan ] = "This action will delete the list of undoable actions.\nChanges on the document made up to now are maintained,\nbut cannot be taken back. Do You want to continue and\nassign the new page layout?";
@@ -5775,7 +5775,7 @@ ModalDialog RID_UNDO_DELETE_WARNING
         Text[ portuguese ] = "~Don't show this warning again";
         Text[ russian ] = "~İòî ïğåäóïğåæäåíèå áîëüøå íå ïîêàçûâàòü";
         Text[ greek ] = "~Don't show this warning again";
-        Text[ dutch ] = "~Don't show this warning again";
+        Text[ dutch ] = "~Deze waarschuwing voortaan niet meer weergeven";
         Text[ french ] = "~Ne plus afficher cet avertissement";
         Text[ spanish ] = "~No mostrar más esta advertencia.";
         Text[ finnish ] = "~Don't show this warning again";
@@ -5803,22 +5803,22 @@ ModalDialog RID_UNDO_DELETE_WARNING
         Size = MAP_APPFONT( 50, 14 );
         DefButton = TRUE;
     };
-    Text[ english_us ] = "Hint";
+    Text[ english_us ] = "Note";
     Text[ portuguese ] = "Hint";
-    Text[ russian ] = "Hint";
+    Text[ russian ] = "Óêàçàíèå";
     Text[ greek ] = "Hint";
-    Text[ dutch ] = "Hint";
-    Text[ french ] = "Hint";
-    Text[ spanish ] = "Hint";
+    Text[ dutch ] = "Aanwijzing";
+    Text[ french ] = "Remarque";
+    Text[ spanish ] = "Indicación";
     Text[ finnish ] = "Hint";
     Text[ italian ] = "Hint";
     Text[ danish ] = "Hint";
     Text[ swedish ] = "Hänvisning";
-    Text[ polish ] = "Hint";
+    Text[ polish ] = "Wskazówka";
     Text[ portuguese_brazilian ] = "Hint";
     Text[ japanese ] = "Hint";
     Text[ korean ] = "Hint";
-    Text[ chinese_simplified ] = "Hint";
+    Text[ chinese_simplified ] = "æç¤º";
     Text[ chinese_traditional ] = "æç¤º";
     Text[ turkish ] = "Hint";
     Text[ arabic ] = "Hint";
@@ -9681,7 +9681,7 @@ String STR_EFFECT_STRTCH_FROM_B
     Text[ english ] = "Stretch from bottom";
     Text[ english_us ] = "Stretch From Bottom";
     Text[ portuguese ] = "Expandir a partir da base";
-    Text[ russian ] = "Ğàñòÿãèâàíèå ñëåâà";
+    Text[ russian ] = "Ğàñòÿãèâàíèå ñíèçó";
     Text[ greek ] = "ÅğéìŞêõíóç áğü êÜôù";
     Text[ dutch ] = "Uitrekken vanaf beneden";
     Text[ french ] = "Étirer à partir du bas";
@@ -13675,6 +13675,7 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transparencia";
     Text[ finnish ] = "Läpikuultavuus";
 };
+
 
 
 
