@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectImportContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:11:04 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #endif
 #ifndef _XMLOFF_XMLERROR_HXX
 #include "xmlerror.hxx"
+#endif
+#ifndef _XMLOFF_ATTRLIST_HXX
+#include "attrlist.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLFILTERSERVICENAMES_H
@@ -336,11 +339,27 @@ SvXMLImportContext *XMLEmbeddedObjectImportContext::CreateChildContext(
 }
 
 void XMLEmbeddedObjectImportContext::StartElement(
-        const Reference< XAttributeList >& xAttrList )
+        const Reference< XAttributeList >& rAttrList )
 {
     if( xHandler.is() )
     {
         xHandler->startDocument();
+
+        // #i34042: copy namepspace declarations
+        SvXMLAttributeList *pAttrList = new SvXMLAttributeList( rAttrList );
+        Reference< XAttributeList > xAttrList( pAttrList );
+        const SvXMLNamespaceMap& rNamespaceMap = GetImport().GetNamespaceMap();
+        sal_uInt16 nPos = rNamespaceMap.GetFirstKey();
+        while( USHRT_MAX != nPos )
+        {
+            OUString aAttrName( rNamespaceMap.GetAttrNameByKey( nPos ) );
+            if( 0 == xAttrList->getValueByName( aAttrName ).getLength() )
+            {
+                pAttrList->AddAttribute( aAttrName,
+                                          rNamespaceMap.GetNameByKey( nPos ) );
+            }
+            nPos = rNamespaceMap.GetNextKey( nPos );
+        }
         xHandler->startElement( GetImport().GetNamespaceMap().GetQNameByKey(
                                     GetPrefix(), GetLocalName() ),
                                 xAttrList );
@@ -370,7 +389,7 @@ void XMLEmbeddedObjectImportContext::EndElement()
             {
                 xStorable->store();
             }
-            catch( ::com::sun::star::beans::PropertyVetoException& e )
+            catch( ::com::sun::star::beans::PropertyVetoException& )
             {
                 Sequence<OUString> aSeq( 0 );
                 GetImport().SetError( XMLERROR_FLAG_WARNING |
