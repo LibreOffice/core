@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctextframe.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:39:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,23 +72,23 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATION_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRelation.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATION_HPP_
+#include <com/sun/star/accessibility/AccessibleRelation.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONSET_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleRelationSet.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONSET_HPP_
+#include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
@@ -116,12 +116,12 @@
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
 using utl::AccessibleRelationSetHelper;
 
-const sal_Char sServiceName[] = "drafts.com.sun.star.text.AccessibleTextFrameView";
+const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextFrameView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleTextFrameView";
 
 SwAccessibleTextFrame::SwAccessibleTextFrame(
@@ -150,7 +150,7 @@ void SwAccessibleTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
             if( sOldDesc != GetName() )
             {
                 AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT;
+                aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
                 aEvent.OldValue <<= sOldDesc;
                 aEvent.NewValue <<= GetName();
                 FireAccessibleEvent( aEvent );
