@@ -2,9 +2,9 @@
  *
  *  $RCSfile: custsdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:27:39 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ korean ] = "»õ·Î(~N)...";
         Text[ turkish ] = "Yeni...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nuevo...";
     };
     PushButton BTN_EDIT
     {
@@ -127,6 +128,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ korean ] = "ÆíÁý(~E)...";
         Text[ turkish ] = "Düzenle...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "E~ditar...";
     };
     PushButton BTN_REMOVE
     {
@@ -154,6 +156,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar";
     };
     PushButton BTN_COPY
     {
@@ -181,6 +184,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ korean ] = "º¹»ç(~Y)";
         Text[ turkish ] = "Kopyala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Copiar";
     };
     HelpButton BTN_HELP
     {
@@ -214,6 +218,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ korean ] = "½ÃÀÛ(~S)";
         Text[ turkish ] = "Baþlat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Inicio";
     };
     OKButton BTN_OK
     {
@@ -242,6 +247,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ korean ] = "´Ý±â(~C)";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Cerrar";
     };
     ListBox LB_CUSTOMSHOWS
     {
@@ -276,6 +282,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ korean ] = "°³º° ½½¶óÀÌµå ¼î ÀÌ¿ë(~U)";
         Text[ turkish ] = "Özel ekran sunusunu kullan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Utilizar presentación personalizada";
     };
     Text [ english_us ] = "Custom Slide Shows" ;
     Text [ portuguese_brazilian ] = "Individuelle Präsentationen" ;
@@ -296,6 +303,7 @@ ModalDialog DLG_CUSTOMSHOW
     Text[ korean ] = "°³º° ½½¶óÀÌµå ¼î";
     Text[ turkish ] = "Özel ekran sunularý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Presentación personalizada";
 };
 ModalDialog DLG_DEFINE_CUSTOMSHOW
 {
@@ -351,6 +359,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text[ korean ] = "ÀÌ¸§";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre";
     };
     Edit EDT_NAME
     {
@@ -415,6 +424,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼Ç ½½¶óÀÌµå";
         Text[ turkish ] = "Sunu sayfalarý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Páginas existentes";
     };
     FixedText FT_CUSTOM_PAGES
     {
@@ -441,6 +451,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text[ korean ] = "°³ÀÎÀû ÇÁ¸®Á¨Å×ÀÌ¼Ç";
         Text[ turkish ] = "Özel sunu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Presentación personalizada";
     };
     Text [ english_us ] = "Define Custom Slide Show" ;
     Text [ portuguese_brazilian ] = "Individuelle Präsentation definieren" ;
@@ -461,4 +472,5 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     Text[ korean ] = "°³º° ½½¶óÀÌµå ¼î Á¤ÀÇ";
     Text[ turkish ] = "Özel ekran sunusu tanýmla";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Definir presentación personalizada";
 };
