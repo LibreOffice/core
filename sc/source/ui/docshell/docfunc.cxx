@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2001-04-18 12:30:51 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@
 #include "undodraw.hxx"
 #include "undotab.hxx"
 #include "waitoff.hxx"
+#include "sizedev.hxx"
 
 using namespace com::sun::star;
 
@@ -155,34 +156,15 @@ BOOL ScDocFunc::AdjustRowHeight( const ScRange& rRange, BOOL bPaint )
         return FALSE;
     }
 
-//! OutputDevice* pDev = rDocShell.GetPrinter();
-    VirtualDevice aVDev;
-    OutputDevice* pDev = &aVDev;        // aus Kompatibilitaetsgruenden...
-
-    if (!pDev)
-    {
-        DBG_ERROR("kein Printer !??!?");
-        return FALSE;
-    }
-
     USHORT nTab      = rRange.aStart.Tab();
     USHORT nStartRow = rRange.aStart.Row();
     USHORT nEndRow   = rRange.aEnd.Row();
 
+    ScSizeDeviceProvider aProv( &rDocShell );
     Fraction aOne(1,1);
 
-    MapMode aOldMap = pDev->GetMapMode();
-    pDev->SetMapMode( MAP_PIXEL );              // wichtig fuer GetNeededSize
-    Point aPix1000 = pDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
-    double nPPTX = aPix1000.X() / 1000.0;
-    double nPPTY = aPix1000.Y() / 1000.0;
-
-    nPPTX /= rDocShell.GetOutputFactor();       // noetig fuer Bildschirm/VDev
-
-    BOOL bChanged = pDoc->SetOptimalHeight( nStartRow, nEndRow, nTab, 0, pDev,
-                                            nPPTX, nPPTY, aOne, aOne, FALSE );
-
-    pDev->SetMapMode( aOldMap );        //! noetig ???
+    BOOL bChanged = pDoc->SetOptimalHeight( nStartRow, nEndRow, nTab, 0, aProv.GetDevice(),
+                                            aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, FALSE );
 
     if ( bPaint && bChanged )
         rDocShell.PostPaint( 0, nStartRow, nTab, MAXCOL, MAXROW, nTab,
@@ -2230,22 +2212,10 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRanges
                     }
                 }
 
-//!             OutputDevice* pDev = rDocShell.GetPrinter();
-                VirtualDevice aVDev;
-                OutputDevice* pDev = &aVDev;        // aus Kompatibilitaetsgruenden...
-
-                if (pDev)
-                {
-                    Fraction aOne(1,1);
-                    MapMode aOldMap = pDev->GetMapMode();
-                    pDev->SetMapMode( MAP_PIXEL );              // wichtig fuer GetNeededSize
-                    Point aPix1000 = pDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
-                    double nPPTX = aPix1000.X() / 1000.0;
-                    double nPPTY = aPix1000.Y() / 1000.0;
-                    pDoc->SetOptimalHeight( nStartNo, nEndNo, nTab, 0, pDev,
-                                            nPPTX, nPPTY, aOne, aOne, bAll );
-                    pDev->SetMapMode( aOldMap );        //! noetig ???
-                }
+                ScSizeDeviceProvider aProv( &rDocShell );
+                Fraction aOne(1,1);
+                pDoc->SetOptimalHeight( nStartNo, nEndNo, nTab, 0, aProv.GetDevice(),
+                                        aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, bAll );
 
                 if (bAll)
                     pDoc->ShowRows( nStartNo, nEndNo, nTab, TRUE );

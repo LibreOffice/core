@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-04-21 20:28:55 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,6 @@
 #include "scitems.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
@@ -212,6 +211,7 @@
 #include "uiitems.hxx"
 #include "sc.hrc"
 #include "waitoff.hxx"
+#include "sizedev.hxx"
 
 // ---------------------------------------------------------------------------
 
@@ -474,14 +474,10 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL
 
 BOOL ScDocShell::AdjustRowHeight( USHORT nStartRow, USHORT nEndRow, USHORT nTab )
 {
-    VirtualDevice aVDev;
-    Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
-    double nPPTX = aLogic.X() / 1000.0;
-    double nPPTY = aLogic.Y() / 1000.0;
-    nPPTX /= GetOutputFactor();         // noetig fuer Bildschirm/VDev
+    ScSizeDeviceProvider aProv(this);
     Fraction aZoom(1,1);
-    BOOL bChange = aDocument.SetOptimalHeight( nStartRow,nEndRow, nTab, 0, &aVDev,
-                                                nPPTX,nPPTY, aZoom,aZoom, FALSE );
+    BOOL bChange = aDocument.SetOptimalHeight( nStartRow,nEndRow, nTab, 0, aProv.GetDevice(),
+                                                aProv.GetPPTX(),aProv.GetPPTY(), aZoom,aZoom, FALSE );
     if (bChange)
         PostPaint( 0,nStartRow,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID|PAINT_LEFT );
 
@@ -492,15 +488,12 @@ void ScDocShell::UpdateAllRowHeights()
 {
     // update automatic row heights
 
-    VirtualDevice aVDev;
-    Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
-    double nPPTX = aLogic.X() / 1000.0;
-    double nPPTY = aLogic.Y() / 1000.0;
-    nPPTX /= GetOutputFactor();         // needed for screen or VDev
+    ScSizeDeviceProvider aProv(this);
     Fraction aZoom(1,1);
     USHORT nTabCnt = aDocument.GetTableCount();
     for (USHORT nTab=0; nTab<nTabCnt; nTab++)
-        aDocument.SetOptimalHeight( 0,MAXROW, nTab,0, &aVDev, nPPTX,nPPTY, aZoom,aZoom, FALSE );
+        aDocument.SetOptimalHeight( 0,MAXROW, nTab,0, aProv.GetDevice(),
+                                    aProv.GetPPTX(),aProv.GetPPTY(), aZoom,aZoom, FALSE );
 }
 
 void ScDocShell::PivotUpdate( ScPivot* pOldPivot, ScPivot* pNewPivot, BOOL bRecord, BOOL bApi )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-10 17:29:29 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1301,13 +1301,15 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                         nWidth + (USHORT)ScGlobal::nLastColWidthExtra );
                 }
             }
-            if ( bSetRowHeights )
-            {
-                //  nExtra must be 0
-                aDocument.SetOptimalHeight( 0, nEndRow, nTab, 0, &aVirtDev,
-                    nPPTX, nPPTY, aZoom, aZoom, FALSE );
-            }
+//          if ( bSetRowHeights )
+//          {
+//              //  nExtra must be 0
+//              aDocument.SetOptimalHeight( 0, nEndRow, nTab, 0, &aVirtDev,
+//                  nPPTX, nPPTY, aZoom, aZoom, FALSE );
+//          }
         }
+        if ( bSetRowHeights )
+            UpdateAllRowHeights();      // with vdev or printer, depending on configuration
     }
     FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
 

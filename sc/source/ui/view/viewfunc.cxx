@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:34:08 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,9 +123,7 @@
 #include "docfunc.hxx"
 #include "appoptio.hxx"
 #include "dociter.hxx"
-
-// STATIC DATA -----------------------------------------------------------
-
+#include "sizedev.hxx"
 
 //==================================================================
 
@@ -1949,12 +1947,22 @@ void ScViewFunc::SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRange
                                     pDoc->SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
                             }
                         }
-                        VirtualDevice aVirtDev;
-                        pDoc->SetOptimalHeight( nStartNo, nEndNo, nTab, nSizeTwips, &aVirtDev,
-                                                    GetViewData()->GetPPTX(),
-                                                    GetViewData()->GetPPTY(),
-                                                    GetViewData()->GetZoomX(),
-                                                    GetViewData()->GetZoomY(), bAll );
+
+                        double nPPTX = GetViewData()->GetPPTX();
+                        double nPPTY = GetViewData()->GetPPTY();
+                        Fraction aZoomX = GetViewData()->GetZoomX();
+                        Fraction aZoomY = GetViewData()->GetZoomY();
+
+                        ScSizeDeviceProvider aProv(pDocSh);
+                        if (aProv.IsPrinter())
+                        {
+                            nPPTX = aProv.GetPPTX();
+                            nPPTY = aProv.GetPPTY();
+                            aZoomX = aZoomY = Fraction( 1, 1 );
+                        }
+
+                        pDoc->SetOptimalHeight( nStartNo, nEndNo, nTab, nSizeTwips, aProv.GetDevice(),
+                                                    nPPTX, nPPTY, aZoomX, aZoomY, bAll );
                         if (bAll)
                             pDoc->ShowRows( nStartNo, nEndNo, nTab, TRUE );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-04-18 12:14:41 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@
 #include <svtools/svstdarr.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 
 #include "viewfunc.hxx"
@@ -111,6 +110,7 @@
 #include "undoblk.hxx"
 #include "undocell.hxx"
 #include "undotab.hxx"
+#include "sizedev.hxx"
 
 
 // STATIC DATA ---------------------------------------------------------------
@@ -133,7 +133,19 @@ BOOL ScViewFunc::AdjustBlockHeight( BOOL bPaint, ScMarkData* pMarkData )
         nRangeCnt = 1;
     }
 
-    VirtualDevice aVirtDev;
+    double nPPTX = GetViewData()->GetPPTX();
+    double nPPTY = GetViewData()->GetPPTY();
+    Fraction aZoomX = GetViewData()->GetZoomX();
+    Fraction aZoomY = GetViewData()->GetZoomY();
+
+    ScSizeDeviceProvider aProv(pDocSh);
+    if (aProv.IsPrinter())
+    {
+        nPPTX = aProv.GetPPTX();
+        nPPTY = aProv.GetPPTY();
+        aZoomX = aZoomY = Fraction( 1, 1 );
+    }
+
     BOOL bAnyChanged = FALSE;
     USHORT nTabCount = pDoc->GetTableCount();
     for (USHORT nTab=0; nTab<nTabCount; nTab++)
@@ -147,12 +159,8 @@ BOOL ScViewFunc::AdjustBlockHeight( BOOL bPaint, ScMarkData* pMarkData )
             {
                 USHORT nStartNo = *(pOneRange++);
                 USHORT nEndNo = *(pOneRange++);
-                if (pDoc->SetOptimalHeight( nStartNo, nEndNo, nTab, 0, &aVirtDev,
-                                            GetViewData()->GetPPTX(),
-                                            GetViewData()->GetPPTY(),
-                                            GetViewData()->GetZoomX(),
-                                            GetViewData()->GetZoomY(),
-                                            FALSE ))
+                if (pDoc->SetOptimalHeight( nStartNo, nEndNo, nTab, 0, aProv.GetDevice(),
+                                            nPPTX, nPPTY, aZoomX, aZoomY, FALSE ))
                 {
                     if (!bChanged)
                         nPaintY = nStartNo;
@@ -177,20 +185,26 @@ BOOL ScViewFunc::AdjustBlockHeight( BOOL bPaint, ScMarkData* pMarkData )
 
 BOOL ScViewFunc::AdjustRowHeight( USHORT nStartRow, USHORT nEndRow, BOOL bPaint )
 {
-    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
     USHORT nTab = GetViewData()->GetTabNo();
     double nPPTX = GetViewData()->GetPPTX();
     double nPPTY = GetViewData()->GetPPTY();
+    Fraction aZoomX = GetViewData()->GetZoomX();
+    Fraction aZoomY = GetViewData()->GetZoomY();
     USHORT nOldPixel;
     if (nStartRow == nEndRow)
         nOldPixel = (USHORT) (pDoc->GetRowHeight(nStartRow,nTab) * nPPTY);
 
-    VirtualDevice aVirtDev;
-    BOOL bChanged = pDoc->SetOptimalHeight( nStartRow, nEndRow, nTab, 0, &aVirtDev,
-                                            nPPTX, nPPTY,
-                                            GetViewData()->GetZoomX(),
-                                            GetViewData()->GetZoomY(),
-                                            FALSE );
+    ScSizeDeviceProvider aProv(pDocSh);
+    if (aProv.IsPrinter())
+    {
+        nPPTX = aProv.GetPPTX();
+        nPPTY = aProv.GetPPTY();
+        aZoomX = aZoomY = Fraction( 1, 1 );
+    }
+    BOOL bChanged = pDoc->SetOptimalHeight( nStartRow, nEndRow, nTab, 0, aProv.GetDevice(),
+                                            nPPTX, nPPTY, aZoomX, aZoomY, FALSE );
 
     if (bChanged && ( nStartRow == nEndRow ))
     {
@@ -200,7 +214,7 @@ BOOL ScViewFunc::AdjustRowHeight( USHORT nStartRow, USHORT nEndRow, BOOL bPaint 
     }
 
     if ( bPaint && bChanged )
-        GetViewData()->GetDocShell()->PostPaint( 0, nStartRow, nTab, MAXCOL, MAXROW, nTab,
+        pDocSh->PostPaint( 0, nStartRow, nTab, MAXCOL, MAXROW, nTab,
                                             PAINT_GRID | PAINT_LEFT );
 
     return bChanged;
