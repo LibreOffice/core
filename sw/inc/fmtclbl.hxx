@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtclbl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 12:46:26 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ public:
 };
 
 
-#ifndef MACOSX
+#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
 // GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwFmtNoBalancedColumns &SwAttrSet::GetBalancedColumns(BOOL bInP) const
     { return (const SwFmtNoBalancedColumns&)Get( RES_COLUMNBALANCE, bInP ); }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtclds.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 12:49:52 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ public:
     USHORT CalcPrtColWidth( USHORT nCol, USHORT nAct ) const;
 };
 
-#ifndef MACOSX
+#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
 // GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwFmtCol &SwAttrSet::GetCol(BOOL bInP) const
     { return (const SwFmtCol&)Get( RES_COL,bInP); }
