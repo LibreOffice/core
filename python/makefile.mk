@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: khendricks $ $Date: 2003-05-18 13:30:34 $
+#   last change: $Author: obo $ $Date: 2003-06-12 14:51:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,25 @@ PYTHONCORELINK1=$(OUT)$/lib$/libpython.so.$(PYMAJOR)
 PYTHONCORELINK2=$(OUT)$/lib$/libpython.so
 .ELSE
 BUILD_DIR=PCBuild
+.IF "$(COMEX)"=="8"
+CONFIGURE_DIR=$(BUILD_DIR)
+CONFIGURE_ACTION=wdevenv pcbuild Release
+.IF "$(USE_SHELL)"!="4nt"
+BUILD_ACTION_SEP=;
+.ELSE # "$(USE_SHELL)"!="4nt"
+BUILD_ACTION_SEP=^
+.ENDIF # "$(USE_SHELL)"!="4nt"
+BUILD_ACTION=devenv /build Release /project winsound pcbuild.sln /useenv \
+    $(BUILD_ACTION_SEP) devenv /build Release /project winreg pcbuild.sln /useenv \
+    $(BUILD_ACTION_SEP) devenv /build Release /project unicodedata pcbuild.sln /useenv 	\
+    $(BUILD_ACTION_SEP) devenv /build Release /project select pcbuild.sln /useenv  \
+    $(BUILD_ACTION_SEP) devenv /build Release /project parser pcbuild.sln /useenv  \
+    $(BUILD_ACTION_SEP) devenv /build Release /project mmap pcbuild.sln /useenv    \
+    $(BUILD_ACTION_SEP) devenv /build Release /project _symtable pcbuild.sln /useenv \
+    $(BUILD_ACTION_SEP) devenv /build Release /project _socket pcbuild.sln /useenv  \
+    $(BUILD_ACTION_SEP) devenv /build Release /project _sre pcbuild.sln /useenv  \
+       $(BUILD_ACTION_SEP) devenv /build Release /project python pcbuild.sln /useenv
+.ELSE
 BUILD_ACTION=msdev pcbuild.dsw /MAKE 	\
     "python - Win32 Release" 	\
     "_sre - Win32 Release" 		\
@@ -95,7 +114,8 @@ BUILD_ACTION=msdev pcbuild.dsw /MAKE 	\
     "select - Win32 Release" 	\
     "unicodedata - Win32 Release" 	\
     "winreg - Win32 Release" 	\
-    "winsound - Win32 Release" 
+    "winsound - Win32 Release"
+.ENDIF
 .ENDIF
 
 PYVERSIONFILE=$(MISC)$/pyversion.mk
@@ -133,4 +153,4 @@ $(PYTHONCORELINK2) : makefile.mk
 
 $(PYVERSIONFILE) : pyversion.mk
     -rm -f $@
-    cat $? > $@ 
+    cat $? > $@
