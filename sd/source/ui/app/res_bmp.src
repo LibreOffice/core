@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:04:21 $
+ *  last change: $Author: ka $ $Date: 2001-04-03 14:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,6 +802,8 @@ Bitmap BMP_WAIT_ICON
 {
     File = "waiticon.bmp";
 };
+
+// ----------------------------------------
 
 #ifdef STARIMAGE_AVAILABLE
 Bitmap BMP_PRESOBJ_IMAGE
