@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-25 10:59:48 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 07:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,37 +252,39 @@ Reference< XDriver > SAL_CALL OConnectionPool::getDriverByURL( const ::rtl::OUSt
     if (m_xDriverAccess.is())
     {
         xDriver = m_xDriverAccess->getDriverByURL(_rURL);
-
-        Reference< XDriver > xExistentProxy;
-        // look if we already have a proxy for this driver
-        for (   ConstMapDriver2DriverRefIterator aLookup = m_aDriverProxies.begin();
-                aLookup != m_aDriverProxies.end();
-                ++aLookup
-            )
+        if (xDriver.is())
         {
-            // hold the proxy alive as long as we're in this loop round
-            xExistentProxy = aLookup->second;
-
-            if (xExistentProxy.is() && (aLookup->first.get() == xDriver.get()))
-                // already created a proxy for this
-                break;
-        }
-        if (xExistentProxy.is())
-        {
-            xDriver = xExistentProxy;
-        }
-        else
-        {   // create a new proxy for the driver
-            // this allows us to control the connections created by it
-            if (m_xProxyFactory.is())
+            Reference< XDriver > xExistentProxy;
+            // look if we already have a proxy for this driver
+            for (   ConstMapDriver2DriverRefIterator aLookup = m_aDriverProxies.begin();
+                    aLookup != m_aDriverProxies.end();
+                    ++aLookup
+                )
             {
-                Reference< XAggregation > xDriverProxy = m_xProxyFactory->createProxy(xDriver.get());
-                OSL_ENSURE(xDriverProxy.is(), "OConnectionPool::getDriverByURL: invalid proxy returned by the proxy factory!");
+                // hold the proxy alive as long as we're in this loop round
+                xExistentProxy = aLookup->second;
 
-                xDriver = new ODriverWrapper(xDriverProxy, this);
+                if (xExistentProxy.is() && (aLookup->first.get() == xDriver.get()))
+                    // already created a proxy for this
+                    break;
+            }
+            if (xExistentProxy.is())
+            {
+                xDriver = xExistentProxy;
             }
             else
-                OSL_ENSURE(sal_False, "OConnectionPool::getDriverByURL: could not instantiate a proxy factory!");
+            {   // create a new proxy for the driver
+                // this allows us to control the connections created by it
+                if (m_xProxyFactory.is())
+                {
+                    Reference< XAggregation > xDriverProxy = m_xProxyFactory->createProxy(xDriver.get());
+                    OSL_ENSURE(xDriverProxy.is(), "OConnectionPool::getDriverByURL: invalid proxy returned by the proxy factory!");
+
+                    xDriver = new ODriverWrapper(xDriverProxy, this);
+                }
+                else
+                    OSL_ENSURE(sal_False, "OConnectionPool::getDriverByURL: could not instantiate a proxy factory!");
+            }
         }
     }
 
