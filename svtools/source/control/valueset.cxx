@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:49:45 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ void ValueSet::ImplInit( WinBits nWinStyle )
     mnSpacing           = 0;
     mnFrameStyle        = 0;
     mbFormat            = TRUE;
-    mbHighlight         = FALSE;
+    mbHighlight         = FALSE ;
     mbSelection         = FALSE;
     mbNoSelection       = TRUE;
     mbDrawSelection     = TRUE;
@@ -309,9 +309,9 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             maVirDev.SetFont( GetFont() );
-            maVirDev.SetTextColor( rStyleSettings.GetWindowTextColor() );
+            maVirDev.SetTextColor( ( nStyle & WB_MENUSTYLEVALUESET ) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor() );
             maVirDev.SetTextFillColor();
-            maVirDev.SetFillColor( rStyleSettings.GetWindowColor() );
+            maVirDev.SetFillColor( ( nStyle & WB_MENUSTYLEVALUESET ) ? rStyleSettings.GetMenuColor() : rStyleSettings.GetWindowColor() );
             maVirDev.DrawRect( aRect );
             Point   aTxtPos( aRect.Left()+2, aRect.Top() );
             long    nTxtWidth = GetTextWidth( pItem->maText );
@@ -336,10 +336,11 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
         }
         else
         {
+            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             if ( IsColor() )
                 maVirDev.SetFillColor( maColor );
             else
-                maVirDev.SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() );
+                maVirDev.SetFillColor( ( nStyle & WB_MENUSTYLEVALUESET ) ? rStyleSettings.GetMenuColor() : rStyleSettings.GetWindowColor() );
             maVirDev.DrawRect( aRect );
 
             if ( pItem->meType == VALUESETITEM_USERDRAW )
@@ -354,15 +355,20 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
                 Point   aPos( aRect.Left(), aRect.Top() );
                 aPos.X() += (aRectSize.Width()-aImageSize.Width())/2;
                 aPos.Y() += (aRectSize.Height()-aImageSize.Height())/2;
+
+                USHORT  nImageStyle  = 0;
+                if( (nStyle & WB_MENUSTYLEVALUESET) && !IsEnabled() )
+                    nImageStyle  |= IMAGE_DRAW_DISABLE;
+
                 if ( (aImageSize.Width()  > aRectSize.Width()) ||
                      (aImageSize.Height() > aRectSize.Height()) )
                 {
                     maVirDev.SetClipRegion( Region( aRect ) );
-                    maVirDev.DrawImage( aPos, pItem->maImage );
+                    maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle);
                     maVirDev.SetClipRegion();
                 }
                 else
-                    maVirDev.DrawImage( aPos, pItem->maImage );
+                    maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle );
             }
         }
     }
@@ -763,146 +769,173 @@ void ValueSet::ImplDrawSelect()
 
     USHORT nItemId = mnSelItemId;
 
-    if ( mbHighlight )
-        nItemId = mnHighItemId;
-
-    ValueSetItem* pItem;
-    if ( nItemId )
-        pItem = mpItemList->GetObject( GetItemPos( nItemId ) );
-    else
+    for( int stage = 0; stage < 2; stage++ )
     {
-        if ( mpNoneItem )
-            pItem = mpNoneItem;
+        if( stage == 1 )
+        {
+            if ( mbHighlight )
+                nItemId = mnHighItemId;
+            else
+                break;
+        }
+
+        ValueSetItem* pItem;
+        if ( nItemId )
+            pItem = mpItemList->GetObject( GetItemPos( nItemId ) );
         else
         {
-            pItem = ImplGetFirstItem();
-            if ( !bFocus || !pItem )
-                return;
-        }
-    }
-
-    if ( pItem->maRect.IsEmpty() )
-        return;
-
-    // Selection malen
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    Rectangle               aRect = pItem->maRect;
-    Control::SetFillColor();
-
-    Color aDoubleColor( rStyleSettings.GetHighlightColor() );
-    Color aSingleColor( rStyleSettings.GetHighlightTextColor() );
-    if( ! mbDoubleSel )
-    {
-        /*
-         *  #99777# contrast enhancement for thin mode
-         */
-        const Wallpaper& rWall = GetDisplayBackground();
-        if( ! rWall.IsBitmap() && ! rWall.IsGradient() )
-        {
-            const Color& rBack = rWall.GetColor();
-            if( rBack.IsDark() && ! aDoubleColor.IsBright() )
-            {
-                aDoubleColor = Color( COL_WHITE );
-                aSingleColor = Color( COL_BLACK );
-            }
-            else if( rBack.IsBright() && ! aDoubleColor.IsDark() )
-            {
-                aDoubleColor = Color( COL_BLACK );
-                aSingleColor = Color( COL_WHITE );
-            }
-        }
-    }
-
-    // Selectionsausgabe festlegen
-    WinBits nStyle = GetStyle();
-    if ( nStyle & WB_RADIOSEL )
-    {
-        aRect.Left()    += 3;
-        aRect.Top()     += 3;
-        aRect.Right()   -= 3;
-        aRect.Bottom()  -= 3;
-        if ( nStyle & WB_DOUBLEBORDER )
-        {
-            aRect.Left()++;
-            aRect.Top()++;
-            aRect.Right()--;
-            aRect.Bottom()--;
-        }
-
-        if ( bFocus )
-            ShowFocus( aRect );
-
-        if ( bDrawSel )
-        {
-            SetLineColor( aDoubleColor );
-            aRect.Left()++;
-            aRect.Top()++;
-            aRect.Right()--;
-            aRect.Bottom()--;
-            DrawRect( aRect );
-            aRect.Left()++;
-            aRect.Top()++;
-            aRect.Right()--;
-            aRect.Bottom()--;
-            DrawRect( aRect );
-        }
-    }
-    else
-    {
-        if ( bDrawSel )
-        {
-            if ( mbBlackSel )
-                SetLineColor( Color( COL_BLACK ) );
+            if ( mpNoneItem )
+                pItem = mpNoneItem;
             else
+            {
+                pItem = ImplGetFirstItem();
+                if ( !bFocus || !pItem )
+                    continue;
+            }
+        }
+
+        if ( pItem->maRect.IsEmpty() )
+            continue;
+
+        // Selection malen
+        const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
+        Rectangle               aRect = pItem->maRect;
+        Control::SetFillColor();
+
+        Color aDoubleColor( rStyleSettings.GetHighlightColor() );
+        Color aSingleColor( rStyleSettings.GetHighlightTextColor() );
+        if( ! mbDoubleSel )
+        {
+            /*
+            *  #99777# contrast enhancement for thin mode
+            */
+            const Wallpaper& rWall = GetDisplayBackground();
+            if( ! rWall.IsBitmap() && ! rWall.IsGradient() )
+            {
+                const Color& rBack = rWall.GetColor();
+                if( rBack.IsDark() && ! aDoubleColor.IsBright() )
+                {
+                    aDoubleColor = Color( COL_WHITE );
+                    aSingleColor = Color( COL_BLACK );
+                }
+                else if( rBack.IsBright() && ! aDoubleColor.IsDark() )
+                {
+                    aDoubleColor = Color( COL_BLACK );
+                    aSingleColor = Color( COL_WHITE );
+                }
+            }
+        }
+
+        // Selectionsausgabe festlegen
+        WinBits nStyle = GetStyle();
+        if ( nStyle & WB_MENUSTYLEVALUESET )
+        {
+            if ( bFocus )
+                ShowFocus( aRect );
+
+            if ( bDrawSel )
+            {
+                if ( mbBlackSel )
+                    SetLineColor( Color( COL_BLACK ) );
+                else
+                    SetLineColor( aDoubleColor );
+                DrawRect( aRect );
+            }
+        }
+        else if ( nStyle & WB_RADIOSEL )
+        {
+            aRect.Left()    += 3;
+            aRect.Top()     += 3;
+            aRect.Right()   -= 3;
+            aRect.Bottom()  -= 3;
+            if ( nStyle & WB_DOUBLEBORDER )
+            {
+                aRect.Left()++;
+                aRect.Top()++;
+                aRect.Right()--;
+                aRect.Bottom()--;
+            }
+
+            if ( bFocus )
+                ShowFocus( aRect );
+
+            aRect.Left()++;
+            aRect.Top()++;
+            aRect.Right()--;
+            aRect.Bottom()--;
+
+            if ( bDrawSel )
+            {
                 SetLineColor( aDoubleColor );
-            DrawRect( aRect );
-        }
-        if ( mbDoubleSel )
-        {
-            aRect.Left()++;
-            aRect.Top()++;
-            aRect.Right()--;
-            aRect.Bottom()--;
-            if ( bDrawSel )
+                aRect.Left()++;
+                aRect.Top()++;
+                aRect.Right()--;
+                aRect.Bottom()--;
                 DrawRect( aRect );
-        }
-        aRect.Left()++;
-        aRect.Top()++;
-        aRect.Right()--;
-        aRect.Bottom()--;
-        Rectangle aRect2 = aRect;
-        aRect.Left()++;
-        aRect.Top()++;
-        aRect.Right()--;
-        aRect.Bottom()--;
-        if ( bDrawSel )
-            DrawRect( aRect );
-        if ( mbDoubleSel )
-        {
-            aRect.Left()++;
-            aRect.Top()++;
-            aRect.Right()--;
-            aRect.Bottom()--;
-            if ( bDrawSel )
+                aRect.Left()++;
+                aRect.Top()++;
+                aRect.Right()--;
+                aRect.Bottom()--;
                 DrawRect( aRect );
-        }
-
-        if ( bDrawSel )
-        {
-            if ( mbBlackSel )
-                SetLineColor( Color( COL_WHITE ) );
-            else
-                SetLineColor( aSingleColor );
+            }
         }
         else
-            SetLineColor( Color( COL_LIGHTGRAY ) );
-        DrawRect( aRect2 );
+        {
+            if ( bDrawSel )
+            {
+                if ( mbBlackSel )
+                    SetLineColor( Color( COL_BLACK ) );
+                else
+                    SetLineColor( aDoubleColor );
+                DrawRect( aRect );
+            }
+            if ( mbDoubleSel )
+            {
+                aRect.Left()++;
+                aRect.Top()++;
+                aRect.Right()--;
+                aRect.Bottom()--;
+                if ( bDrawSel )
+                    DrawRect( aRect );
+            }
+            aRect.Left()++;
+            aRect.Top()++;
+            aRect.Right()--;
+            aRect.Bottom()--;
+            Rectangle aRect2 = aRect;
+            aRect.Left()++;
+            aRect.Top()++;
+            aRect.Right()--;
+            aRect.Bottom()--;
+            if ( bDrawSel )
+                DrawRect( aRect );
+            if ( mbDoubleSel )
+            {
+                aRect.Left()++;
+                aRect.Top()++;
+                aRect.Right()--;
+                aRect.Bottom()--;
+                if ( bDrawSel )
+                    DrawRect( aRect );
+            }
 
-        if ( bFocus )
-            ShowFocus( aRect2 );
+            if ( bDrawSel )
+            {
+                if ( mbBlackSel )
+                    SetLineColor( Color( COL_WHITE ) );
+                else
+                    SetLineColor( aSingleColor );
+            }
+            else
+                SetLineColor( Color( COL_LIGHTGRAY ) );
+            DrawRect( aRect2 );
+
+            if ( bFocus )
+                ShowFocus( aRect2 );
+        }
+
+        ImplDrawItemText( pItem->maText );
     }
-
-    ImplDrawItemText( pItem->maText );
 }
 
 // -----------------------------------------------------------------------
@@ -1301,9 +1334,19 @@ void ValueSet::ImplTracking( const Point& rPos, BOOL bRepeat )
 
     ValueSetItem* pItem = ImplGetItem( ImplGetItem( rPos ) );
     if ( pItem && (pItem->meType != VALUESETITEM_SPACE) )
+    {
+        if( GetStyle() & WB_MENUSTYLEVALUESET )
+            mbHighlight = TRUE;
+
         ImplHighlightItem( pItem->mnId );
+    }
     else
+    {
+        if( GetStyle() & WB_MENUSTYLEVALUESET )
+            mbHighlight = TRUE;
+
         ImplHighlightItem( mnSelItemId, FALSE );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1393,7 +1436,7 @@ void ValueSet::MouseButtonUp( const MouseEvent& rMEvt )
 void ValueSet::MouseMove( const MouseEvent& rMEvt )
 {
     // Wegen SelectionMode
-    if ( mbSelection )
+    if ( mbSelection || (GetStyle() & WB_MENUSTYLEVALUESET) )
         ImplTracking( rMEvt.GetPosPixel(), FALSE );
     Control::MouseMove( rMEvt );
 }
@@ -1525,20 +1568,30 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                         nItemPos = nCalcPos - ( nLineCount * mnCols );
                     else
                     {
-                        if ( mpNoneItem )
+                        if( (KEY_UP == rKEvt.GetKeyCode().GetCode() ) && (GetStyle() & WB_MENUSTYLEVALUESET) )
                         {
-                            mnCurCol  = nCalcPos%mnCols;
-                            nItemPos = VALUESET_ITEM_NONEITEM;
+                            Window* pParent = GetParent();
+                            pParent->GrabFocus();
+                            pParent->KeyInput( rKEvt );
+                            break;
                         }
                         else
                         {
-                            if ( nLastItem+1 <= mnCols )
-                                nItemPos = nCalcPos;
+                            if ( mpNoneItem )
+                            {
+                                mnCurCol  = nCalcPos%mnCols;
+                                nItemPos = VALUESET_ITEM_NONEITEM;
+                            }
                             else
                             {
-                                nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(nCalcPos%mnCols);
-                                if ( nItemPos+mnCols <= nLastItem )
-                                    nItemPos += mnCols;
+                                if ( nLastItem+1 <= mnCols )
+                                    nItemPos = nCalcPos;
+                                else
+                                {
+                                    nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(nCalcPos%mnCols);
+                                    if ( nItemPos+mnCols <= nLastItem )
+                                        nItemPos += mnCols;
+                                }
                             }
                         }
                     }
@@ -1566,13 +1619,23 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                         nItemPos = nCalcPos + ( nLineCount * mnCols );
                     else
                     {
-                        if ( mpNoneItem )
+                        if( (KEY_DOWN == rKEvt.GetKeyCode().GetCode() ) && (GetStyle() & WB_MENUSTYLEVALUESET) )
                         {
-                            mnCurCol  = nCalcPos%mnCols;
-                            nItemPos = VALUESET_ITEM_NONEITEM;
+                            Window* pParent = GetParent();
+                            pParent->GrabFocus();
+                            pParent->KeyInput( rKEvt );
+                            break;
                         }
                         else
-                            nItemPos = nCalcPos%mnCols;
+                        {
+                            if ( mpNoneItem )
+                            {
+                                mnCurCol  = nCalcPos%mnCols;
+                                nItemPos = VALUESET_ITEM_NONEITEM;
+                            }
+                            else
+                                nItemPos = nCalcPos%mnCols;
+                        }
                     }
                     nCalcPos = nItemPos;
                 }
