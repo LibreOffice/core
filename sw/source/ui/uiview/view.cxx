@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:45 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1266,7 +1266,14 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
             {
                 long nX = sNewCrsrPos.GetToken( 0, ';' ).ToInt32(),
                       nY = sNewCrsrPos.GetToken( 1, ';' ).ToInt32();
-                pWrtShell->SwCrsrShell::SetCrsr( Point( nX, nY ), FALSE );
+                Point aCrsrPos( nX, nY );
+                bSelectObj = pWrtShell->IsObjSelectable( aCrsrPos );
+                pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, FALSE );
+                if( bSelectObj )
+                {
+                    pWrtShell->SelectObj( aCrsrPos );
+                    pWrtShell->EnterSelFrmMode( &aCrsrPos );
+                }
                 sNewCrsrPos.Erase();
             }
             else if(USHRT_MAX != nNewPage)
