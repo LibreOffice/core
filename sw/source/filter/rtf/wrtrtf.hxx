@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-31 10:18:50 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,9 @@ class SwNumRuleTbl;
 extern SwAttrFnTab aRTFAttrFnTab;
 extern SwNodeFnTab aRTFNodeFnTab;
 
-// the text encoding for the export
-#ifdef MAC
-#define DEF_ENCODING        RTL_TEXTENCODING_APPLE_ROMAN
-#else
-#define DEF_ENCODING        RTL_TEXTENCODING_MS_1252
-#endif
+// the default text encoding for the export, if it doesn't fit unicode will
+// be used
+#define DEF_ENCODING        RTL_TEXTENCODING_ASCII_US
 
 
 // der RTF-Writer
@@ -180,6 +177,8 @@ public:
     void OutBookmarks( xub_StrLen nCntntPos );
         // gebe die PageDesc-Daten im normalen RTF-Format aus
     void OutRTFPageDescription( const SwPageDesc&, BOOL , BOOL );
+    void OutRTFBorders( SvxBoxItem aBox );
+    void OutRTFBorder( const SvxBorderLine* aLine, const USHORT nSpace );
     BOOL OutBreaks( const SfxItemSet& rSet );
 
         // gebe die PageDescriptoren aus
