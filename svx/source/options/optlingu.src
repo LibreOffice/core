@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 20:29:42 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,17 +552,17 @@ TabPage RID_SFXPAGE_LINGU
         Text [ English ] = "~Available language modules" ;
         Text[ english_us ] = "Available language modules:";
         Text[ portuguese ] = "~Módulos linguísticos disponíveis:";
-        Text[ russian ] = "Äîñòóïíûå ÿçûêîâûå ìîäóëè:";
+        Text[ russian ] = "Äîñòóïíûå ÿçûêîâûå ìîäóëè";
         Text[ greek ] = "Äéáèİóéìåò ëåéôïõñãéêİò ìïíÜäåò ãëşóóáò:";
         Text[ dutch ] = "~Beschikbare taalmodules:";
         Text[ french ] = "~Modules de langue disponibles :";
-        Text[ spanish ] = "~Módulos disponibles de idioma:";
+        Text[ spanish ] = "~Módulos disponibles de idioma";
         Text[ italian ] = "Moduli linguistici disponibili:";
         Text[ danish ] = "Available language modules:";
-        Text[ swedish ] = "T~illgängliga språkmoduler:";
+        Text[ swedish ] = "T~illgängliga språkmoduler";
         Text[ polish ] = "Dostêpne modu³y jêzyków:";
         Text[ portuguese_brazilian ] = "Available language modules:";
-        Text[ japanese ] = "g—p‚Å‚«‚éŒ¾ŒêÓ¼Ş­°Ù:";
+        Text[ japanese ] = "g—p‚Å‚«‚éŒ¾ŒêÓ¼Ş­°Ù";
         Text[ korean ] = "»ç¿ë °¡´ÉÇÑ ¾ğ¾î ¸ğµâ:";
         Text[ chinese_simplified ] = "¿É¹©Ê¹ÓÃµÄÓïÑÔÄ£¿é£º";
         Text[ chinese_traditional ] = "´£¨Ñ¨Ï¥Îªº»y¨¥¼Ò¶ô¡G";
@@ -594,7 +594,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ spanish ] = "~Editar...";
         Text[ italian ] = "~Modifica...";
         Text[ danish ] = "~Edit...";
-        Text[ swedish ] = "R~edigera...";
+        Text[ swedish ] = "~Redigera...";
         Text[ polish ] = "~Edytuj...";
         Text[ portuguese_brazilian ] = "~Edit...";
         Text[ japanese ] = "•ÒW(~E)...";
@@ -622,7 +622,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ spanish ] = "Diccionarios de usuario";
         Text[ italian ] = "Dizionari utente";
         Text[ danish ] = "Personal dictionaries";
-        Text[ swedish ] = "Användarordlistor";
+        Text[ swedish ] = "An~vändarordlistor";
         Text[ polish ] = "S³owniki u¿ytkownika";
         Text[ portuguese_brazilian ] = "Personal dictionaries";
         Text[ japanese ] = "Õ°»Ş°«‘";
@@ -685,7 +685,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ spanish ] = "~Editar...";
         Text[ italian ] = "Modifica...";
         Text[ danish ] = "Edit";
-        Text[ swedish ] = "~Redigera...";
+        Text[ swedish ] = "R~edigera...";
         Text[ polish ] = "Edytuj...";
         Text[ portuguese_brazilian ] = "Edit";
         Text[ japanese ] = "•ÒW(~E)...";
@@ -734,17 +734,17 @@ TabPage RID_SFXPAGE_LINGU
         Text [ English ] = "~Options" ;
         Text[ english_us ] = "Options:";
         Text[ portuguese ] = "Opções:";
-        Text[ russian ] = "Ïàğàìåòğû:";
+        Text[ russian ] = "Ïàğàìåòğû";
         Text[ greek ] = "Åğéëïãİò:";
         Text[ dutch ] = "Opties:";
         Text[ french ] = "Options :";
-        Text[ spanish ] = "Opciones:";
+        Text[ spanish ] = "Opciones";
         Text[ italian ] = "Opzioni:";
         Text[ danish ] = "Options:";
-        Text[ swedish ] = "Alternativ:";
+        Text[ swedish ] = "Al~ternativ";
         Text[ polish ] = "Opcje:";
         Text[ portuguese_brazilian ] = "Options:";
-        Text[ japanese ] = "µÌß¼®İ:";
+        Text[ japanese ] = "µÌß¼®İ";
         Text[ korean ] = "¿É¼Ç:";
         Text[ chinese_simplified ] = "Ñ¡Ïî£º";
         Text[ chinese_traditional ] = "¿ï¶µ¡G";
@@ -1144,7 +1144,7 @@ QueryBox RID_SFXQB_DELDICT
     Message [ finnish ] = "Haluatko poistaa sanaston?" ;
     Message [ danish ] = "Vil du slette ordbogen?" ;
     Message [ french ] = "Voulez-vous supprimer le dictionnaire?" ;
-    Message [ swedish ] = "Vill Du radera ordboken?" ;
+    Message [ swedish ] = "Vill du radera ordlistan?" ;
     Message [ dutch ] = "Wilt u de woordenlijst wissen?" ;
     Message [ spanish ] = "¿Desea eliminar el diccionario?" ;
     Message[ chinese_simplified ] = "ÄúÒªÉ¾³ıÕâ¸ö´ÊµäÂğ£¿";
@@ -1173,7 +1173,7 @@ QueryBox RID_SFXQB_DEL_IGNORELIST
     Message [ spanish ] = "¿Desea eliminar la lista Ignorar?" ;
     Message [ french ] = "Voulez-vous supprimer la liste des exclusions ?" ;
     Message [ dutch ] = "Wilt u de lijst Negeren wissen?" ;
-    Message [ swedish ] = "Vill Du radera ignorera-listan?" ;
+    Message [ swedish ] = "Vill du radera ignorera-listan?" ;
     Message [ danish ] = "Vil du slette Ignorer-listen?" ;
     Message [ portuguese ] = "Deseja eliminar a lista Ignorar?" ;
     Message [ portuguese_brazilian ] = "M?hten Sie die Ignorieren-Liste l?chen?" ;
@@ -1190,6 +1190,7 @@ QueryBox RID_SFXQB_DEL_IGNORELIST
     Message[ finnish ] = "Haluatko poistaa ohitettavien luettelon?";
 };
  // ******************************************************************* EOF
+
 
 
 
