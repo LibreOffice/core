@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 15:05:18 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,8 +182,8 @@ private:
     DECL_LINK( ChangeCond31Hdl, void * );
     DECL_LINK( ChangeCond32Hdl, void * );
 
-    DECL_LINK( EdGetFocusHdl, ScRefEdit* );
-    DECL_LINK( EdLoseFocusHdl, ScRefEdit* );
+    DECL_LINK( GetFocusHdl, Control* );
+    DECL_LINK( LoseFocusHdl, Control* );
     DECL_LINK( BtnHdl, PushButton* );
 #endif // _CONDFRMT_CXX
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formula.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-28 11:47:09 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1449,87 +1449,64 @@ void ScFormulaDlg::UpdateSelection()
 }
 
 //  virtuelle Methoden von ScAnyRefDlg:
-void ScFormulaDlg::RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton)
+void ScFormulaDlg::RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton )
 {
     aEdRef.Show();
-    pTheRefEdit=pEdit;
-    pTheRefButton=pButton;
-    if(pTheRefEdit!=NULL)
+    pTheRefEdit = pEdit;
+    pTheRefButton = pButton;
+
+    if( pTheRefEdit )
     {
-        aEdRef.SetRefString(pTheRefEdit->GetText());
-        aEdRef.SetSelection(pTheRefEdit->GetSelection());
-        aEdRef.SetHelpId(pTheRefEdit->GetHelpId());
-        aEdRef.SetUniqueId(pTheRefEdit->GetUniqueId());
-
-        if(pButton!=NULL)
-        {
-            aRefBtn.Show();
-            ScAnyRefDlg::RefInputStart(&aEdRef,&aRefBtn);
-            aRefBtn.SetEndImage();
-        }
-        else
-        {
-            aRefBtn.Hide();
-            ScAnyRefDlg::RefInputStart(&aEdRef);
-        }
-
-        String aStr=aTitle2;
-        aStr+=String(' ');
-        aStr+=aFtEditName.GetText();
-
-        if(aScParaWin.GetActiveLine()>0)
-        {
-            aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "(...; " ));
-        }
-        else
-        {
-            aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "( " ));
-        }
-
-        aStr += aScParaWin.GetActiveArgName();
-        if(nArgs>1)
-            aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";...)" ));
-        else
-            aStr += ')';
-        SetText(aStr);
+        aEdRef.SetRefString( pTheRefEdit->GetText() );
+        aEdRef.SetSelection( pTheRefEdit->GetSelection() );
+        aEdRef.SetHelpId( pTheRefEdit->GetHelpId() );
+        aEdRef.SetUniqueId( pTheRefEdit->GetUniqueId() );
     }
-    else
+
+    aRefBtn.Show( pButton != NULL );
+    ScAnyRefDlg::RefInputStart( &aEdRef, pButton ? &aRefBtn : NULL );
+    aRefBtn.SetEndImage();
+
+    if( pTheRefEdit )
     {
-        if(pButton!=NULL)
-        {
-            aRefBtn.Show();
-            ScAnyRefDlg::RefInputStart(&aEdRef,&aRefBtn);
-        }
-        else
-        {
-            aRefBtn.Hide();
-            ScAnyRefDlg::RefInputStart(&aEdRef);
-        }
+        String aStr = aTitle2;
+        aStr += ' ';
+        aStr += aFtEditName.GetText();
+        aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "( " ) );
+        if( aScParaWin.GetActiveLine() > 0 )
+            aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "...; " ) );
+        aStr += aScParaWin.GetActiveArgName();
+        if( aScParaWin.GetActiveLine() + 1 < nArgs )
+            aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; ..." ));
+        aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " )" ) );
+
+        aStr.EraseAllChars( '~' );
+        SetText( aStr );
     }
 }
 
-void ScFormulaDlg::RefInputDone( BOOL bForced)
+void ScFormulaDlg::RefInputDone( BOOL bForced )
 {
-    ScAnyRefDlg::RefInputDone(bForced);
-    if(bForced || !aRefBtn.IsVisible())
+    ScAnyRefDlg::RefInputDone( bForced );
+    aRefBtn.SetStartImage();
+    if( bForced || !aRefBtn.IsVisible() )
     {
         aEdRef.Hide();
         aRefBtn.Hide();
-        if(pTheRefEdit!=NULL)
+        if( pTheRefEdit )
         {
-            pTheRefEdit->SetRefString(aEdRef.GetText());
+            pTheRefEdit->SetRefString( aEdRef.GetText() );
             pTheRefEdit->GrabFocus();
 
-            if(pTheRefButton!=NULL)
+            if( pTheRefButton )
                 pTheRefButton->SetStartImage();
 
-            aRefBtn.SetStartImage();
-            USHORT nPrivActiv=aScParaWin.GetActiveLine();
-            aScParaWin.SetArgument(nPrivActiv,aEdRef.GetText());
-            ModifyHdl(&aScParaWin);
-            pTheRefEdit=NULL;
+            USHORT nPrivActiv = aScParaWin.GetActiveLine();
+            aScParaWin.SetArgument( nPrivActiv, aEdRef.GetText() );
+            ModifyHdl( &aScParaWin );
+            pTheRefEdit = NULL;
         }
-        SetText(aTitle1);
+        SetText( aTitle1 );
     }
 }
 
@@ -1539,12 +1516,13 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
     {
         aScParaWin.SetRefMode(TRUE);
 
-        Edit*       pEd = aScParaWin.GetActiveEdit();
         Selection   theSel;
         String      aStrEd;
+        Edit* pEd = GetCurrRefEdit();
         if(pEd!=NULL && pTheRefEdit==NULL)
         {
             theSel=pEd->GetSelection();
+            theSel.Justify();
             aStrEd=pEd->GetText();
             aEdRef.SetRefString(aStrEd);
             aEdRef.SetSelection( theSel );
@@ -1552,6 +1530,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
         else
         {
             theSel=aEdRef.GetSelection();
+            theSel.Justify();
             aStrEd=aEdRef.GetText();
         }
         String      aRefStr;
@@ -1625,8 +1604,8 @@ void ScFormulaDlg::SetActive()
     if(nArgs > 0)
     {
         RefInputDone();
-        Edit*   pEd = aScParaWin.GetActiveEdit();
-        if(pEd!=NULL)
+        Edit* pEd = GetCurrRefEdit()/*aScParaWin.GetActiveEdit()*/;
+        if( pEd )
         {
             Selection theSel=aEdRef.GetSelection();
             //  Edit may have the focus -> call ModifyHdl in addition
@@ -2097,5 +2076,9 @@ void ScFormulaDlg::SaveLRUEntry(ScFuncDesc* pFuncDesc)
     }
 }
 
+ScRefEdit* ScFormulaDlg::GetCurrRefEdit()
+{
+    return aEdRef.IsVisible() ? &aEdRef : aScParaWin.GetActiveEdit();
+}
 
 

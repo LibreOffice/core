@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 10:50:15 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,10 +211,17 @@ void ScColRowNameRangesDlg::Init()
     aBtnRowHead.SetClickHdl ( LINK( this, ScColRowNameRangesDlg, RowClickHdl ) );
     aEdAssign2.SetModifyHdl ( LINK( this, ScColRowNameRangesDlg, Range2DataModifyHdl ) );
 
-    aEdAssign.SetGetFocusHdl ( LINK( this, ScColRowNameRangesDlg, EdGetFocusHdl ) );
-    aEdAssign2.SetGetFocusHdl ( LINK( this, ScColRowNameRangesDlg, EdGetFocusHdl ) );
-    aEdAssign.SetLoseFocusHdl ( LINK( this, ScColRowNameRangesDlg, EdLoseFocusHdl ) );
-    aEdAssign2.SetLoseFocusHdl ( LINK( this, ScColRowNameRangesDlg, EdLoseFocusHdl ) );
+    Link aLink = LINK( this, ScColRowNameRangesDlg, GetFocusHdl );
+    aEdAssign.SetGetFocusHdl( aLink );
+    aRbAssign.SetGetFocusHdl( aLink );
+    aEdAssign2.SetGetFocusHdl( aLink );
+    aRbAssign2.SetGetFocusHdl( aLink );
+
+    aLink = LINK( this, ScColRowNameRangesDlg, LoseFocusHdl );
+    aEdAssign.SetLoseFocusHdl( aLink );
+    aRbAssign.SetLoseFocusHdl( aLink );
+    aEdAssign2.SetLoseFocusHdl( aLink );
+    aRbAssign2.SetLoseFocusHdl( aLink );
 
     pEdActive = &aEdAssign;
 
@@ -240,6 +247,7 @@ void ScColRowNameRangesDlg::Init()
     aBtnRowHead.Enable();
     aEdAssign.Enable();
     aEdAssign.GrabFocus();
+    aRbAssign.Enable();
     //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
     //SFX_APPWINDOW->Enable();      // Ref-Feld hat Focus
 
@@ -342,6 +350,7 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,BOOL bRef)
         aBtnColHead.Disable();
         aBtnRowHead.Disable();
         aEdAssign2.Disable();
+        aRbAssign2.Disable();
     }
 }
 
@@ -498,14 +507,17 @@ void ScColRowNameRangesDlg::SetActive()
     if ( bDlgLostFocus )
     {
         bDlgLostFocus = FALSE;
-        pEdActive->GrabFocus();
+        if( pEdActive )
+            pEdActive->GrabFocus();
     }
     else
         GrabFocus();
-    if ( pEdActive == &aEdAssign )
+
+    if( pEdActive == &aEdAssign )
         Range1DataModifyHdl( 0 );
-    else
+    else if( pEdActive == &aEdAssign2 )
         Range2DataModifyHdl( 0 );
+
     RefInputDone();
 }
 
@@ -698,6 +710,7 @@ void ScColRowNameRangesDlg::UpdateRangeData( const String& rRangeStr, BOOL bColN
     aBtnColHead.Enable();
     aBtnRowHead.Enable();
     aEdAssign2.Enable();
+    aRbAssign2.Enable();
 }
 
 
@@ -1004,6 +1017,7 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1SelectHdl, void *, EMPTYARG )
             aBtnColHead.Enable();
             aBtnRowHead.Enable();
             aEdAssign2.Enable();
+            aRbAssign2.Enable();
         }
         else
         {
@@ -1011,6 +1025,7 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1SelectHdl, void *, EMPTYARG )
             aBtnColHead.Disable();
             aBtnRowHead.Disable();
             aEdAssign2.Disable();
+            aRbAssign2.Disable();
         }
         aBtnRemove.Disable();
         aEdAssign.GrabFocus();
@@ -1059,6 +1074,7 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1DataModifyHdl, void *, EMPTYARG )
         aBtnColHead.Enable();
         aBtnRowHead.Enable();
         aEdAssign2.Enable();
+        aRbAssign2.Enable();
     }
     else
     {
@@ -1066,6 +1082,7 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1DataModifyHdl, void *, EMPTYARG )
         aBtnColHead.Disable();
         aBtnRowHead.Disable();
         aEdAssign2.Disable();
+        aRbAssign2.Disable();
     }
     aBtnRemove.Disable();
     return 0;
@@ -1185,46 +1202,23 @@ IMPL_LINK( ScColRowNameRangesDlg, RowClickHdl, void *, EMPTYARG )
 }
 
 
-/*************************************************************************
-#*  Handler:    EdGetFocusHdl                               Datum:04.09.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScColRowNameRangesDlg
-#*
-#*  Funktion:   Wird ausgeloest, wenn das Fenster einen Focus
-#*              erhaelt.
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-IMPL_LINK( ScColRowNameRangesDlg, EdGetFocusHdl, ScRefEdit*, pEd )
+IMPL_LINK( ScColRowNameRangesDlg, GetFocusHdl, Control*, pCtrl )
 {
-    pEdActive = pEd;
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    //SFX_APPWINDOW->Enable();
-    pEd->SetSelection( Selection(0,SELECTION_MAX) );
+    if( (pCtrl == (Control*)&aEdAssign) || (pCtrl == (Control*)&aRbAssign) )
+        pEdActive = &aEdAssign;
+    else if( (pCtrl == (Control*)&aEdAssign2) || (pCtrl == (Control*)&aRbAssign2) )
+        pEdActive = &aEdAssign2;
+    else
+        pEdActive = NULL;
+
+    if( pEdActive )
+        pEdActive->SetSelection( Selection( 0, SELECTION_MAX ) );
+
     return 0;
 }
 
 
-/*************************************************************************
-#*  Handler:    EdLoseFocusHdl                              Datum:04.09.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScColRowNameRangesDlg
-#*
-#*  Funktion:   Wird ausgeloest, wenn das Fenster seinen Focus
-#*              verliert.
-#*
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-IMPL_LINK( ScColRowNameRangesDlg, EdLoseFocusHdl, ScRefEdit*, pEd )
+IMPL_LINK( ScColRowNameRangesDlg, LoseFocusHdl, Control*, pCtrl )
 {
     bDlgLostFocus = !IsActive();
     return 0;

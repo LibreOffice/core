@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:12:33 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,12 +136,22 @@ void __EXPORT ScTabOpDlg::Init()
 {
     aBtnOk.         SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
     aBtnCancel.     SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
-    aEdFormulaRange.SetGetFocusHdl  ( LINK( this, ScTabOpDlg, EdGetFocusHdl ) );
-    aEdRowCell.     SetGetFocusHdl  ( LINK( this, ScTabOpDlg, EdGetFocusHdl ) );
-    aEdColCell.     SetGetFocusHdl  ( LINK( this, ScTabOpDlg, EdGetFocusHdl ) );
-    aEdFormulaRange.SetLoseFocusHdl ( LINK( this, ScTabOpDlg, EdLoseFocusHdl ) );
-    aEdRowCell.     SetLoseFocusHdl ( LINK( this, ScTabOpDlg, EdLoseFocusHdl ) );
-    aEdColCell.     SetLoseFocusHdl ( LINK( this, ScTabOpDlg, EdLoseFocusHdl ) );
+
+    Link aLink = LINK( this, ScTabOpDlg, GetFocusHdl );
+    aEdFormulaRange.SetGetFocusHdl( aLink );
+    aRBFormulaRange.SetGetFocusHdl( aLink );
+    aEdRowCell.     SetGetFocusHdl( aLink );
+    aRBRowCell.     SetGetFocusHdl( aLink );
+    aEdColCell.     SetGetFocusHdl( aLink );
+    aRBColCell.     SetGetFocusHdl( aLink );
+
+    aLink = LINK( this, ScTabOpDlg, LoseFocusHdl );
+    aEdFormulaRange.SetLoseFocusHdl( aLink );
+    aRBFormulaRange.SetLoseFocusHdl( aLink );
+    aEdRowCell.     SetLoseFocusHdl( aLink );
+    aRBRowCell.     SetLoseFocusHdl( aLink );
+    aEdColCell.     SetLoseFocusHdl( aLink );
+    aRBColCell.     SetLoseFocusHdl( aLink );
 
     aEdFormulaRange.GrabFocus();
     pEdActive = &aEdFormulaRange;
@@ -164,7 +174,8 @@ void ScTabOpDlg::SetActive()
     if ( bDlgLostFocus )
     {
         bDlgLostFocus = FALSE;
-        pEdActive->GrabFocus();
+        if( pEdActive )
+            pEdActive->GrabFocus();
     }
     else
         GrabFocus();
@@ -366,18 +377,26 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScTabOpDlg, EdGetFocusHdl, ScRefEdit*, pEd )
+IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control*, pCtrl )
 {
-    pEdActive       = pEd;
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    //SFX_APPWINDOW->Enable();
-    pEd->SetSelection( Selection(0,SELECTION_MAX) );
+    if( (pCtrl == (Control*)&aEdFormulaRange) || (pCtrl == (Control*)&aRBFormulaRange) )
+        pEdActive = &aEdFormulaRange;
+    else if( (pCtrl == (Control*)&aEdRowCell) || (pCtrl == (Control*)&aRBRowCell) )
+        pEdActive = &aEdRowCell;
+    else if( (pCtrl == (Control*)&aEdColCell) || (pCtrl == (Control*)&aRBColCell) )
+        pEdActive = &aEdColCell;
+    else
+        pEdActive == NULL;
+
+    if( pEdActive )
+        pEdActive->SetSelection( Selection( 0, SELECTION_MAX ) );
+
     return 0;
 }
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScTabOpDlg, EdLoseFocusHdl, ScRefEdit*, pEd )
+IMPL_LINK( ScTabOpDlg, LoseFocusHdl, Control*, pCtrl )
 {
     bDlgLostFocus = !IsActive();
     return 0;

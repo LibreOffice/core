@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: nn $ $Date: 2002-01-22 17:46:45 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2362,8 +2362,26 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
 
 void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 {
+    // #96965# Cursor control for ref input dialog
+    if( SC_MOD()->IsRefDialogOpen() )
+    {
+        const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+        if( !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
+        {
+            SC_MOD()->EndReference();
+            return;
+        }
+        else if( pViewData->GetViewShell()->MoveCursorKeyInput( rKEvt ) )
+        {
+            ScRange aRef(
+                pViewData->GetRefStartX(), pViewData->GetRefStartY(), pViewData->GetRefStartZ(),
+                pViewData->GetRefEndX(), pViewData->GetRefEndY(), pViewData->GetRefEndZ() );
+            SC_MOD()->SetReference( aRef, pViewData->GetDocument() );
+            return;
+        }
+    }
     // wenn semi-Modeless-SfxChildWindow-Dialog oben, keine KeyInputs:
-    if ( !SC_MOD()->IsRefDialogOpen() && !pViewData->IsAnyFillMode() )
+    else if( !pViewData->IsAnyFillMode() )
     {
         ScTabViewShell* pViewSh = pViewData->GetViewShell();
 

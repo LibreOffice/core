@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:14:57 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,18 +162,33 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
     aBtnOk.SetClickHdl    ( LINK( this, ScConditionalFormatDlg, BtnHdl ) );
 //? aBtnCancel.SetClickHdl( LINK( this, ScConditionalFormatDlg, BtnHdl ) );
 
-    aEdtCond11.SetGetFocusHdl ( LINK( this, ScConditionalFormatDlg, EdGetFocusHdl ) );
-    aEdtCond12.SetGetFocusHdl ( LINK( this, ScConditionalFormatDlg, EdGetFocusHdl ) );
-    aEdtCond21.SetGetFocusHdl ( LINK( this, ScConditionalFormatDlg, EdGetFocusHdl ) );
-    aEdtCond22.SetGetFocusHdl ( LINK( this, ScConditionalFormatDlg, EdGetFocusHdl ) );
-    aEdtCond31.SetGetFocusHdl ( LINK( this, ScConditionalFormatDlg, EdGetFocusHdl ) );
-    aEdtCond32.SetGetFocusHdl ( LINK( this, ScConditionalFormatDlg, EdGetFocusHdl ) );
-    aEdtCond11.SetLoseFocusHdl ( LINK( this, ScConditionalFormatDlg, EdLoseFocusHdl ) );
-    aEdtCond12.SetLoseFocusHdl ( LINK( this, ScConditionalFormatDlg, EdLoseFocusHdl ) );
-    aEdtCond21.SetLoseFocusHdl ( LINK( this, ScConditionalFormatDlg, EdLoseFocusHdl ) );
-    aEdtCond22.SetLoseFocusHdl ( LINK( this, ScConditionalFormatDlg, EdLoseFocusHdl ) );
-    aEdtCond31.SetLoseFocusHdl ( LINK( this, ScConditionalFormatDlg, EdLoseFocusHdl ) );
-    aEdtCond32.SetLoseFocusHdl ( LINK( this, ScConditionalFormatDlg, EdLoseFocusHdl ) );
+    Link aLink = LINK( this, ScConditionalFormatDlg, GetFocusHdl );
+    aEdtCond11.SetGetFocusHdl( aLink );
+    aEdtCond12.SetGetFocusHdl( aLink );
+    aEdtCond21.SetGetFocusHdl( aLink );
+    aEdtCond22.SetGetFocusHdl( aLink );
+    aEdtCond31.SetGetFocusHdl( aLink );
+    aEdtCond32.SetGetFocusHdl( aLink );
+    aRbCond11.SetGetFocusHdl( aLink );
+    aRbCond12.SetGetFocusHdl( aLink );
+    aRbCond21.SetGetFocusHdl( aLink );
+    aRbCond22.SetGetFocusHdl( aLink );
+    aRbCond31.SetGetFocusHdl( aLink );
+    aRbCond32.SetGetFocusHdl( aLink );
+
+    aLink = LINK( this, ScConditionalFormatDlg, LoseFocusHdl );
+    aEdtCond11.SetLoseFocusHdl( aLink );
+    aEdtCond12.SetLoseFocusHdl( aLink );
+    aEdtCond21.SetLoseFocusHdl( aLink );
+    aEdtCond22.SetLoseFocusHdl( aLink );
+    aEdtCond31.SetLoseFocusHdl( aLink );
+    aEdtCond32.SetLoseFocusHdl( aLink );
+    aRbCond11.SetLoseFocusHdl( aLink );
+    aRbCond12.SetLoseFocusHdl( aLink );
+    aRbCond21.SetLoseFocusHdl( aLink );
+    aRbCond22.SetLoseFocusHdl( aLink );
+    aRbCond31.SetLoseFocusHdl( aLink );
+    aRbCond32.SetLoseFocusHdl( aLink );
 
     // Condition 1
     aCond1Pos1 = aLbCond12.GetPosPixel();       // Position Edit ohne Listbox
@@ -360,6 +375,7 @@ void ScConditionalFormatDlg::SetReference( const ScRange& rRef, ScDocument* pDoc
         rRef.Format( aStr, SCR_ABS_3D, pDoc );
         String aVal( pEdActive->GetText() );
         Selection aSel( pEdActive->GetSelection() );
+        aSel.Justify();
         aVal.Erase( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
         aVal.Insert( aStr, (xub_StrLen)aSel.Min() );
         Selection aNewSel( aSel.Min(), aSel.Min()+aStr.Len() );
@@ -400,7 +416,8 @@ void ScConditionalFormatDlg::SetActive()
     if ( bDlgLostFocus )
     {
         bDlgLostFocus = FALSE;
-        pEdActive->GrabFocus();
+        if( pEdActive )
+            pEdActive->GrabFocus();
     }
     else
         GrabFocus();
@@ -722,22 +739,36 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond32Hdl, void *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScConditionalFormatDlg, EdGetFocusHdl, ScRefEdit*, pEd )
+IMPL_LINK( ScConditionalFormatDlg, GetFocusHdl, Control*, pCtrl )
 {
-    pEdActive = pEd;
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    //SFX_APPWINDOW->Enable();
-    pEd->SetSelection( Selection(0,SELECTION_MAX) );
-    return( 0L );
+    if( (pCtrl == (Control*)&aEdtCond11) || (pCtrl == (Control*)&aRbCond11) )
+        pEdActive = &aEdtCond11;
+    else if( (pCtrl == (Control*)&aEdtCond12) || (pCtrl == (Control*)&aRbCond12) )
+        pEdActive = &aEdtCond12;
+    else if( (pCtrl == (Control*)&aEdtCond21) || (pCtrl == (Control*)&aRbCond21) )
+        pEdActive = &aEdtCond21;
+    else if( (pCtrl == (Control*)&aEdtCond22) || (pCtrl == (Control*)&aRbCond22) )
+        pEdActive = &aEdtCond22;
+    else if( (pCtrl == (Control*)&aEdtCond31) || (pCtrl == (Control*)&aRbCond31) )
+        pEdActive = &aEdtCond31;
+    else if( (pCtrl == (Control*)&aEdtCond32) || (pCtrl == (Control*)&aRbCond32) )
+        pEdActive = &aEdtCond32;
+    else
+        pEdActive = NULL;
+
+    if( pEdActive )
+        pEdActive->SetSelection( Selection( 0, SELECTION_MAX ) );
+
+    return 0;
 }
 
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScConditionalFormatDlg, EdLoseFocusHdl, ScRefEdit*, pEd )
+IMPL_LINK( ScConditionalFormatDlg, LoseFocusHdl, Control*, pCtrl )
 {
     bDlgLostFocus = !IsActive();
-    return( 0L );
+    return 0;
 }
 
 

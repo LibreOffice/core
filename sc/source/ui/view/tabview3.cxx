@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-12 09:28:58 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1256,6 +1256,70 @@ void ScTabView::MoveCursorEnter( BOOL bShift )          // bShift -> hoch/runter
         MoveCursorRel( nMoveX,nMoveY, SC_FOLLOW_LINE, FALSE );
     }
 }
+
+
+BOOL ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
+{
+    const KeyCode& rKCode = rKeyEvent.GetKeyCode();
+
+    enum { MOD_NONE, MOD_CTRL, MOD_ALT, MOD_BOTH } eModifier =
+        rKCode.IsMod1() ?
+            (rKCode.IsMod2() ? MOD_BOTH : MOD_CTRL) :
+            (rKCode.IsMod2() ? MOD_ALT : MOD_NONE);
+
+    BOOL bSel = rKCode.IsShift();
+    USHORT nCode = rKCode.GetCode();
+
+    // CURSOR keys
+    short nDX = 0;
+    short nDY = 0;
+    switch( nCode )
+    {
+        case KEY_LEFT:  nDX = -1;   break;
+        case KEY_RIGHT: nDX = 1;    break;
+        case KEY_UP:    nDY = -1;   break;
+        case KEY_DOWN:  nDY = 1;    break;
+    }
+    if( nDX || nDY )
+    {
+        switch( eModifier )
+        {
+            case MOD_NONE:  MoveCursorRel( nDX, nDY, SC_FOLLOW_LINE, bSel );    break;
+            case MOD_CTRL:  MoveCursorArea( nDX, nDY, SC_FOLLOW_JUMP, bSel );   break;
+        }
+        // always TRUE to suppress changes of col/row size (ALT+CURSOR)
+        return TRUE;
+    }
+
+    // PAGEUP/PAGEDOWN
+    if( (nCode == KEY_PAGEUP) || (nCode == KEY_PAGEDOWN) )
+    {
+        nDX = (nCode == KEY_PAGEUP) ? -1 : 1;
+        switch( eModifier )
+        {
+            case MOD_NONE:  MoveCursorPage( 0, nDX, SC_FOLLOW_FIX, bSel );  break;
+            case MOD_ALT:   MoveCursorPage( nDX, 0, SC_FOLLOW_FIX, bSel );  break;
+            case MOD_CTRL:  SelectNextTab( nDX );                           break;
+        }
+        return TRUE;
+    }
+
+    // HOME/END
+    if( (nCode == KEY_HOME) || (nCode == KEY_END) )
+    {
+        nDX = (nCode == KEY_HOME) ? -1 : 1;
+        ScFollowMode eMode = (nCode == KEY_HOME) ? SC_FOLLOW_LINE : SC_FOLLOW_JUMP;
+        switch( eModifier )
+        {
+            case MOD_NONE:  MoveCursorEnd( nDX, 0, eMode, bSel );   break;
+            case MOD_CTRL:  MoveCursorEnd( nDX, nDX, eMode, bSel ); break;
+        }
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 
         // naechste/vorherige nicht geschuetzte Zelle
 void ScTabView::FindNextUnprot( BOOL bShift, BOOL bInSelection )

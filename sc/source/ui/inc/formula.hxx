@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formula.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ private:
     Font            aFntBold;
     Font            aFntLight;
     USHORT          nEdFocus;
-    Selection       theCurSel;
+//    Selection       theCurSel;
     BOOL            bEditFlag;
     ScFuncDesc*     pFuncDesc;
     USHORT          nArgs;
@@ -271,6 +271,8 @@ private:
 
     xub_StrLen      GetFunctionPos(xub_StrLen nPos);
     void            UpdateTokenArray( const String& rStrExp);
+
+    ScRefEdit*      GetCurrRefEdit();
 
     DECL_LINK( ScrollHdl, ScParaWin* );
     DECL_LINK( ModifyHdl, ScParaWin* );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcutl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-28 11:47:09 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ void __EXPORT ArgEdit::KeyInput( const KeyEvent& rKEvt )
             Sound::Beep();
     }
     else
-        Edit::KeyInput( rKEvt );
+        ScRefEdit::KeyInput( rKEvt );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:13:35 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,27 +731,8 @@ IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
 {
     // alle 50ms nachschauen, ob RefInputMode noch stimmt
 
-    if ( _pTimer == pTimer && IsActive() )
-    {
-        if ( aEdCopyArea.HasFocus() )
-        {
-            if ( !bRefInputMode )
-            {
-                bRefInputMode = TRUE;
-                //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-                //SFX_APPWINDOW->Enable(); // Mauseingabe im Tabellenfenster zulassen
-            }
-        }
-        else
-        {
-            if ( bRefInputMode )
-            {
-                bRefInputMode = FALSE;
-                //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-                //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
-            }
-        }
-    }
+    if( _pTimer == pTimer && IsActive() )
+        bRefInputMode = (aEdCopyArea.HasFocus() || aRbCopyArea.HasFocus());
 
     if ( aBtnMore.GetState() )
         pTimer->Start();

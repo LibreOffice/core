@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfiltdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:13:35 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,31 +478,22 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer )
 {
     // alle 50ms nachschauen, ob RefInputMode noch stimmt
 
-    if ( _pTimer == pTimer && IsActive() )
+    if( (_pTimer == pTimer) && IsActive() )
     {
-        if ( aEdCopyArea.HasFocus() || aEdFilterArea.HasFocus() )
+        if( aEdCopyArea.HasFocus() || aRbCopyArea.HasFocus() )
         {
-            pRefInputEdit = aEdCopyArea.HasFocus()
-                             ? &aEdCopyArea
-                             : &aEdFilterArea;
-
-            if ( !bRefInputMode )
-            {
-
-                bRefInputMode = TRUE;
-                //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-                //SFX_APPWINDOW->Enable(); // Mauseingabe im Tabellenfenster zulassen
-            }
+            pRefInputEdit = &aEdCopyArea;
+            bRefInputMode = TRUE;
         }
-        else
+        else if( aEdFilterArea.HasFocus() || aRbFilterArea.HasFocus() )
         {
-            if ( bRefInputMode )
-            {
-                pRefInputEdit = NULL;
-                bRefInputMode = FALSE;
-                //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-                //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
-            }
+            pRefInputEdit = &aEdFilterArea;
+            bRefInputMode = TRUE;
+        }
+        else if( bRefInputMode )
+        {
+            pRefInputEdit = NULL;
+            bRefInputMode = FALSE;
         }
     }
 

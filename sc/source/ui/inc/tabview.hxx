@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-02 18:32:43 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,6 +380,8 @@ public:
     void            MoveCursorScreen( short nMovX, short nMovY, ScFollowMode eMode, BOOL bShift );
 
     void            MoveCursorEnter( BOOL bShift );     // Shift fuer Richtung (kein Markieren)
+
+    BOOL            MoveCursorKeyInput( const KeyEvent& rKeyEvent );
 
     void            FindNextUnprot( BOOL bShift, BOOL bInSelection = TRUE );
 

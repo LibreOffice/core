@@ -2,9 +2,9 @@
  *
  *  $RCSfile: areasdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:15:31 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,7 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
 
             String aVal = aEdPrintArea.GetText();
             Selection aSel = aEdPrintArea.GetSelection();
+            aSel.Justify();
             aVal.Erase( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
             aVal.Insert( aStr, (xub_StrLen)aSel.Min() );
             Selection aNewSel( aSel.Min(), aSel.Min()+aStr.Len() );

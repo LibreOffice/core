@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-28 11:45:35 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,16 +62,16 @@
 #ifndef SC_ANYREFDG_HXX
 #define SC_ANYREFDG_HXX
 
-#ifndef _IMAGEBTN_HXX //autogen
+#ifndef _IMAGEBTN_HXX
 #include <vcl/imagebtn.hxx>
 #endif
-#ifndef _EDIT_HXX //autogen
+#ifndef _EDIT_HXX
 #include <vcl/edit.hxx>
 #endif
-#ifndef _ACCEL_HXX //autogen
+#ifndef _ACCEL_HXX
 #include <vcl/accel.hxx>
 #endif
-#ifndef _BASEDLGS_HXX //autogen
+#ifndef _BASEDLGS_HXX
 #include <sfx2/basedlgs.hxx>
 #endif
 
@@ -80,6 +80,7 @@ class ScRange;
 class ScDocument;
 class ScTabViewShell;
 class ScAnyRefDlg;
+class ScRefButton;
 class ScFormulaCell;
 class ScCompiler;
 
@@ -88,123 +89,134 @@ class ScCompiler;
 class ScRefEdit : public Edit
 {
 private:
+    Timer               aTimer;
+    ScAnyRefDlg*        pAnyRefDlg;         // parent dialog
+    BOOL                bSilentFocus;       // for SilentGrabFocus()
 
-    Timer           aTimer;
-    ScAnyRefDlg*    pAnyRefDlg;         // Dialog
+    DECL_LINK( UpdateHdl, Timer* );
 
-    DECL_LINK( UpdateHdl, Timer*);
+protected:
+    virtual void        KeyInput( const KeyEvent& rKEvt );
+    virtual void        GetFocus();
+    virtual void        LoseFocus();
 
 public:
-                    ScRefEdit( ScAnyRefDlg* pParent, const ResId& rResId);
-                    ScRefEdit( Window *pParent, const ResId& rResId);
-                    ~ScRefEdit();
+                        ScRefEdit( ScAnyRefDlg* pParent, const ResId& rResId );
+                        ScRefEdit( Window* pParent, const ResId& rResId );
+    virtual             ~ScRefEdit();
 
-    void            SetRefString( const XubString& rStr );
-    virtual void    SetText( const XubString& rStr );
+    void                SetRefString( const XubString& rStr );
+    virtual void        SetText( const XubString& rStr );
+    virtual void        Modify();
 
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
-    virtual void    Modify();
-    void            StartUpdateData();
+    void                StartUpdateData();
 
-    void            SetRefDialog(ScAnyRefDlg *pDlg);
-    ScAnyRefDlg*    GetRefDialog() {return pAnyRefDlg;}
+    void                SilentGrabFocus();  // does not update any references
 
+    void                SetRefDialog( ScAnyRefDlg* pDlg );
+    inline ScAnyRefDlg* GetRefDialog() { return pAnyRefDlg; }
 };
+
+//============================================================================
 
 class ScRefButton : public ImageButton
 {
-public:
-                    ScRefButton( ScAnyRefDlg* pParent, const ResId& rResId, ScRefEdit* pEdit );
-                    ScRefButton( Window *pParent, const ResId& rResId);
-
-    void            SetReferences( ScAnyRefDlg* pRefDlg,ScRefEdit* pEdit );
-
-    void            SetStartImage();
-    void            SetEndImage();
-    void            DoRef() { Click(); }
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
-
+private:
+    Image               aImgRefStart;   // Symbol fuer Ref.-Eingabe starten
+    Image               aImgRefDone;    // Symbol fuer Ref.-Eingabe beenden
+    ScAnyRefDlg*        pAnyRefDlg;     // parent dialog
+    ScRefEdit*          pRefEdit;       // zugeordnetes Edit-Control
 
 protected:
-    virtual void    Click();
+    virtual void        Click();
+    virtual void        KeyInput( const KeyEvent& rKEvt );
+    virtual void        GetFocus();
+    virtual void        LoseFocus();
 
-private:
-    Image           aImgRefStart;   // Symbol fuer Ref.-Eingabe starten
-    Image           aImgRefDone;    // Symbol fuer Ref.-Eingabe beenden
-    ScAnyRefDlg*    pDlg;           // Dialog
-    ScRefEdit*      pRefEdit;       // zugeordnetes Edit-Control
+public:
+                        ScRefButton( ScAnyRefDlg* pParent, const ResId& rResId, ScRefEdit* pEdit );
+                        ScRefButton( Window* pParent, const ResId& rResId );
+
+    void                SetReferences( ScAnyRefDlg* pDlg, ScRefEdit* pEdit );
+
+    void                SetStartImage();
+    void                SetEndImage();
+    inline void         DoRef() { Click(); }
 };
 
 
 //============================================================================
+
 class ScAnyRefDlg : public SfxModelessDialog
 {
-friend  ScRefButton;
+    friend class        ScRefButton;
+    friend class        ScRefEdit;
 
 private:
-    SfxBindings*    pMyBindings;
-    Edit*           pRefEdit;               // aktives Eingabefeld
-    ScRefButton*    pRefBtn;                // Button dazu
-    String          sOldDialogText;         // Originaltitel des Dialogfensters
-    Size            aOldDialogSize;         // Originalgroesse Dialogfenster
-    Point           aOldEditPos;            // Originalposition des Eingabefeldes
-    Size            aOldEditSize;           // Originalgroesse des Eingabefeldes
-    Point           aOldButtonPos;          // Originalpositiuon des Buttons
-    BOOL*           pHiddenMarks;           // Merkfeld fuer versteckte Controls
-    Accelerator*    pAccel;                 // fuer Enter/Escape
-    BOOL            bAccInserted;
-    BOOL            bHighLightRef;
-    BOOL            bEnableColorRef;
-    ScFormulaCell*  pRefCell;
-    ScCompiler*     pRefComp;
-    Window*         pActiveWin;
-    Timer           aTimer;
-    String          aDocName;               // document on which the dialog was opened
+    SfxBindings*        pMyBindings;
+    ScRefEdit*          pRefEdit;               // aktives Eingabefeld
+    ScRefButton*        pRefBtn;                // Button dazu
+    String              sOldDialogText;         // Originaltitel des Dialogfensters
+    Size                aOldDialogSize;         // Originalgroesse Dialogfenster
+    Point               aOldEditPos;            // Originalposition des Eingabefeldes
+    Size                aOldEditSize;           // Originalgroesse des Eingabefeldes
+    Point               aOldButtonPos;          // Originalpositiuon des Buttons
+    BOOL*               pHiddenMarks;           // Merkfeld fuer versteckte Controls
+    Accelerator*        pAccel;                 // fuer Enter/Escape
+    BOOL                bAccInserted;
+    BOOL                bHighLightRef;
+    BOOL                bEnableColorRef;
+    ScFormulaCell*      pRefCell;
+    ScCompiler*         pRefComp;
+    Window*             pActiveWin;
+    Timer               aTimer;
+    String              aDocName;               // document on which the dialog was opened
 
-    DECL_LINK( UpdateFocusHdl, Timer*);
-    DECL_LINK( AccelSelectHdl, Accelerator * );
+    DECL_LINK( UpdateFocusHdl, Timer* );
+    DECL_LINK( AccelSelectHdl, Accelerator* );
 
 protected:
-    BOOL            DoClose( USHORT nId );
+    BOOL                DoClose( USHORT nId );
 
-    void            EnableSpreadsheets(BOOL bFlag=TRUE, BOOL bChilds=TRUE);
-    void            SetDispatcherLock( BOOL bLock );
+    void                EnableSpreadsheets( BOOL bFlag = TRUE, BOOL bChilds = TRUE );
+    void                SetDispatcherLock( BOOL bLock );
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual long        PreNotify( NotifyEvent& rNEvt );
 
-    virtual void    RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton = NULL );
-    virtual void    RefInputDone( BOOL bForced = FALSE );
-    void            ShowSimpleReference( const XubString& rStr );
-    void            ShowFormulaReference( const XubString& rStr );
-
+    virtual void        RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton = NULL );
+    virtual void        RefInputDone( BOOL bForced = FALSE );
+    void                ShowSimpleReference( const XubString& rStr );
+    void                ShowFormulaReference( const XubString& rStr );
 
 public:
-                    ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
-                                 Window* pParent, USHORT nResId);
-    virtual         ~ScAnyRefDlg();
+                        ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
+                                     Window* pParent, USHORT nResId);
+    virtual             ~ScAnyRefDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) = 0;
-    virtual void    AddRefEntry();
+    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) = 0;
+    virtual void        AddRefEntry();
 
-    virtual BOOL    IsRefInputMode() const;
-    virtual BOOL    IsTableLocked() const;
-    virtual BOOL    IsDocAllowed(SfxObjectShell* pDocSh) const;
+    virtual BOOL        IsRefInputMode() const;
+    virtual BOOL        IsTableLocked() const;
+    virtual BOOL        IsDocAllowed( SfxObjectShell* pDocSh ) const;
 
-    void            ShowReference( const XubString& rStr );
-    void            HideReference( BOOL bDoneRefMode = TRUE );
+    void                ShowReference( const XubString& rStr );
+    void                HideReference( BOOL bDoneRefMode = TRUE );
 
-    void            ViewShellChanged(ScTabViewShell* pScViewShell);
-    void            SwitchToDocument();
-    SfxBindings&    GetBindings();
+    void                ToggleCollapsed( ScRefEdit* pEdit, ScRefButton* pButton = NULL );
+    void                ReleaseFocus( ScRefEdit* pEdit, ScRefButton* pButton = NULL );
 
-    virtual void    SetActive() = 0;
-//  virtual BOOL    Close();
-    virtual void    StateChanged( StateChangedType nStateChange );
+    void                ViewShellChanged( ScTabViewShell* pScViewShell );
+    void                SwitchToDocument();
+    SfxBindings&        GetBindings();
+
+    virtual void        SetActive() = 0;
+//  virtual BOOL        Close();
+    virtual void        StateChanged( StateChangedType nStateChange );
 };
 
 
+//============================================================================
 
 #endif // SC_ANYREFDG_HXX
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-28 11:46:41 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,40 +173,37 @@ void lcl_InvalidateWindows()
 
 #define SC_ENABLE_TIME 100
 
-ScRefEdit::ScRefEdit( ScAnyRefDlg* pParent, const ResId& rResId):
-            Edit(pParent,rResId)
+ScRefEdit::ScRefEdit( ScAnyRefDlg* pParent, const ResId& rResId ) :
+    Edit( pParent, rResId ),
+    pAnyRefDlg( pParent ),
+    bSilentFocus( FALSE )
 {
-    pAnyRefDlg=pParent;
-    aTimer.SetTimeoutHdl(LINK( this, ScRefEdit, UpdateHdl) );
-    aTimer.SetTimeout(SC_ENABLE_TIME);
+    aTimer.SetTimeoutHdl( LINK( this, ScRefEdit, UpdateHdl ) );
+    aTimer.SetTimeout( SC_ENABLE_TIME );
 }
 
-ScRefEdit::ScRefEdit( Window *pParent, const ResId& rResId):
-            Edit(pParent,rResId)
+ScRefEdit::ScRefEdit( Window* pParent, const ResId& rResId ) :
+    Edit( pParent, rResId ),
+    pAnyRefDlg( NULL ),
+    bSilentFocus( FALSE )
 {
-    pAnyRefDlg=NULL;
 }
 
 ScRefEdit::~ScRefEdit()
 {
-    aTimer.SetTimeoutHdl(Link());
+    aTimer.SetTimeoutHdl( Link() );
     aTimer.Stop();
 }
 
-void ScRefEdit::SetRefDialog(ScAnyRefDlg *pDlg)
+void ScRefEdit::SetRefString( const XubString& rStr )
 {
-    pAnyRefDlg=pDlg;
+    Edit::SetText( rStr );
+}
 
-    if(pDlg!=NULL)
-    {
-        aTimer.SetTimeoutHdl(LINK( this, ScRefEdit, UpdateHdl) );
-        aTimer.SetTimeout(SC_ENABLE_TIME);
-    }
-    else
-    {
-        aTimer.SetTimeoutHdl(Link());
-        aTimer.Stop();
-    }
+void ScRefEdit::SetText( const XubString& rStr )
+{
+    Edit::SetText( rStr );
+    UpdateHdl( &aTimer );
 }
 
 void ScRefEdit::StartUpdateData()
@@ -214,50 +211,63 @@ void ScRefEdit::StartUpdateData()
     aTimer.Start();
 }
 
-void ScRefEdit::SetText( const XubString& rStr )
+void ScRefEdit::SilentGrabFocus()
 {
-    Edit::SetText(rStr);
-    UpdateHdl(&aTimer);
+    bSilentFocus = TRUE;
+    GrabFocus();
+    bSilentFocus = FALSE;
 }
 
-void ScRefEdit::SetRefString( const XubString& rStr )
+void ScRefEdit::SetRefDialog( ScAnyRefDlg* pDlg )
 {
-    Edit::SetText(rStr);
-}
+    pAnyRefDlg = pDlg;
 
-void ScRefEdit::GetFocus()
-{
-    Edit::GetFocus();
-    StartUpdateData();
+    if( pDlg )
+    {
+        aTimer.SetTimeoutHdl( LINK( this, ScRefEdit, UpdateHdl ) );
+        aTimer.SetTimeout( SC_ENABLE_TIME );
+    }
+    else
+    {
+        aTimer.SetTimeoutHdl( Link() );
+        aTimer.Stop();
+    }
 }
 
 void ScRefEdit::Modify()
 {
     Edit::Modify();
-    if(pAnyRefDlg!=NULL)
-    {
+    if( pAnyRefDlg )
         pAnyRefDlg->HideReference();
-    }
 }
 
+void ScRefEdit::KeyInput( const KeyEvent& rKEvt )
+{
+    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    if( pAnyRefDlg && !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
+        pAnyRefDlg->ReleaseFocus( this );
+    else
+        Edit::KeyInput( rKEvt );
+}
+
+void ScRefEdit::GetFocus()
+{
+    Edit::GetFocus();
+    if( !bSilentFocus )
+        StartUpdateData();
+}
 
 void ScRefEdit::LoseFocus()
 {
     Edit::LoseFocus();
-
-    if(pAnyRefDlg!=NULL)
-    {
+    if( pAnyRefDlg )
         pAnyRefDlg->HideReference();
-    }
 }
 
-IMPL_LINK( ScRefEdit, UpdateHdl, Timer*, pTi)
+IMPL_LINK( ScRefEdit, UpdateHdl, Timer*, pTi )
 {
-    if(pAnyRefDlg!=NULL)
-    {
-        pAnyRefDlg->ShowReference(GetText());
-    }
-
+    if( pAnyRefDlg )
+        pAnyRefDlg->ShowReference( GetText() );
     return 0;
 }
 
@@ -266,80 +276,74 @@ IMPL_LINK( ScRefEdit, UpdateHdl, Timer*, pTi)
 //  class ScRefButton
 //----------------------------------------------------------------------------
 
-ScRefButton::ScRefButton( ScAnyRefDlg* pParent, const ResId& rResId, ScRefEdit* pEdit )
-    :   ImageButton ( pParent, rResId ),
-        aImgRefStart(ScResId( RID_BMP_REFBTN1 )),
-        aImgRefDone (ScResId( RID_BMP_REFBTN2 )),
-        pDlg        ( pParent ),
-        pRefEdit    ( pEdit )
+ScRefButton::ScRefButton( ScAnyRefDlg* pParent, const ResId& rResId, ScRefEdit* pEdit ) :
+    ImageButton ( pParent, rResId ),
+    aImgRefStart( ScResId( RID_BMP_REFBTN1 ) ),
+    aImgRefDone ( ScResId( RID_BMP_REFBTN2 ) ),
+    pAnyRefDlg  ( pParent ),
+    pRefEdit    ( pEdit )
 {
-    SetImage(aImgRefStart);
+    SetStartImage();
 }
 
-ScRefButton::ScRefButton( Window *pParent, const ResId& rResId)
-    :   ImageButton ( pParent, rResId ),
-        aImgRefStart( ScResId( RID_BMP_REFBTN1 )),
-        aImgRefDone ( ScResId( RID_BMP_REFBTN2 )),
-        pDlg        ( NULL),
-        pRefEdit    ( NULL)
+ScRefButton::ScRefButton( Window *pParent, const ResId& rResId ) :
+    ImageButton ( pParent, rResId ),
+    aImgRefStart( ScResId( RID_BMP_REFBTN1 ) ),
+    aImgRefDone ( ScResId( RID_BMP_REFBTN2 ) ),
+    pAnyRefDlg  ( NULL ),
+    pRefEdit    ( NULL )
 {
-    SetImage(aImgRefStart);
+    SetStartImage();
 }
 
-void ScRefButton::SetReferences( ScAnyRefDlg* pRefDlg,ScRefEdit* pEdit )
+void ScRefButton::SetReferences( ScAnyRefDlg* pDlg, ScRefEdit* pEdit )
 {
-    pDlg    =pRefDlg;
-    pRefEdit=pEdit;
+    pAnyRefDlg = pDlg;
+    pRefEdit = pEdit;
 }
 
 
 //----------------------------------------------------------------------------
 
-//  wenn der Button reingedrueckt erscheinen soll,
-//  Check(FALSE/TRUE) statt SetImage
-
 void ScRefButton::Click()
 {
-    if(pDlg!=NULL && pRefEdit!=NULL)
-    {
-        if (pDlg->pRefEdit == pRefEdit)             // Ref.-Input aktiv auf Edit?
-        {
-            SetImage(aImgRefStart);                 // Image aendern
-            pDlg->RefInputDone(TRUE);               // Ref.-Eingabe beenden
-        }
-        else
-        {
-            pDlg->RefInputDone(TRUE);               // sicherheitshalber
-            pDlg->RefInputStart(pRefEdit, this);    // Ref.-Eingabe starten
-            pRefEdit->GrabFocus();                  // Focus auf Edit
-            SetImage(aImgRefDone);                  // Image aendern
-        }
-    }
+    if( pAnyRefDlg )
+        pAnyRefDlg->ToggleCollapsed( pRefEdit, this );
 }
 
-void ScRefButton::SetStartImage()               // fuer Aufruf von aussen
+void ScRefButton::KeyInput( const KeyEvent& rKEvt )
 {
-    SetImage(aImgRefStart);
-}
-
-void ScRefButton::SetEndImage()
-{
-    SetImage(aImgRefDone);
+    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    if( pAnyRefDlg && !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
+        pAnyRefDlg->ReleaseFocus( pRefEdit );
+    else
+        ImageButton::KeyInput( rKEvt );
 }
 
 void ScRefButton::GetFocus()
 {
     ImageButton::GetFocus();
-    if(pRefEdit!=NULL) pRefEdit->StartUpdateData();
+    if( pRefEdit )
+        pRefEdit->StartUpdateData();
 }
-
 
 void ScRefButton::LoseFocus()
 {
     ImageButton::LoseFocus();
-
-    if(pRefEdit!=NULL) pRefEdit->Modify();
+    if( pRefEdit )
+        pRefEdit->Modify();
 }
+
+void ScRefButton::SetStartImage()
+{
+    SetImage( aImgRefStart );
+}
+
+void ScRefButton::SetEndImage()
+{
+    SetImage( aImgRefDone );
+}
+
 
 //----------------------------------------------------------------------------
 
@@ -379,11 +383,9 @@ ScAnyRefDlg::ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
     aTimer.SetTimeoutHdl(LINK( this, ScAnyRefDlg, UpdateFocusHdl));
 
     SC_MOD()->InputEnterHandler();
-    ScTabViewShell* pScViewShell = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
-    if ( pScViewShell )
-    {
+    ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
+    if( pScViewShell )
         pScViewShell->UpdateInputHandler(TRUE);
-    }
 
     // title has to be from the view that opened the dialog,
     // even if it's not the current view
@@ -453,11 +455,9 @@ ScAnyRefDlg::~ScAnyRefDlg()
     delete pRefComp;
     delete pRefCell;
 
-    ScTabViewShell* pScViewShell = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
-    if ( pScViewShell )
-    {
+    ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
+    if( pScViewShell )
         pScViewShell->UpdateInputHandler(TRUE);
-    }
     if (bAccInserted)
         Application::RemoveAccel( pAccel );
     delete pAccel;
@@ -566,7 +566,7 @@ BOOL __EXPORT ScAnyRefDlg::DoClose( USHORT nId )
 
     pSfxApp->Broadcast( SfxSimpleHint( FID_KILLEDITVIEW ) );
 
-    ScTabViewShell* pScViewShell = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
     if ( pScViewShell )
         pScViewShell->UpdateInputHandler(TRUE);
 
@@ -645,7 +645,7 @@ void ScAnyRefDlg::ViewShellChanged(ScTabViewShell* pScViewShell)
 
 void ScAnyRefDlg::ShowReference( const XubString& rStr )
 {
-    if(pRefEdit==NULL && bEnableColorRef)
+    if( /*!pRefEdit &&*/ bEnableColorRef )
     {
         if( rStr.Search('(')!=STRING_NOTFOUND ||
             rStr.Search('+')!=STRING_NOTFOUND ||
@@ -669,7 +669,7 @@ void ScAnyRefDlg::ShowReference( const XubString& rStr )
 
 void ScAnyRefDlg::ShowSimpleReference( const XubString& rStr )
 {
-    if(pRefEdit==NULL && bEnableColorRef)
+    if( /*!pRefEdit &&*/ bEnableColorRef )
     {
         bHighLightRef=TRUE;
         ScViewData* pViewData=ScDocShell::GetViewData();
@@ -702,7 +702,7 @@ void ScAnyRefDlg::ShowSimpleReference( const XubString& rStr )
 
 void ScAnyRefDlg::ShowFormulaReference( const XubString& rStr )
 {
-    if(pRefEdit==NULL && bEnableColorRef)
+    if( /*!pRefEdit &&*/ bEnableColorRef)
     {
         bHighLightRef=TRUE;
         ScViewData* pViewData=ScDocShell::GetViewData();
@@ -766,8 +766,7 @@ void ScAnyRefDlg::HideReference( BOOL bDoneRefMode )
 {
     ScViewData* pViewData=ScDocShell::GetViewData();
 
-    if(pViewData!=NULL  && pRefEdit==NULL &&
-            bHighLightRef  && bEnableColorRef)
+    if( pViewData && /*!pRefEdit &&*/ bHighLightRef && bEnableColorRef)
     {
         ScTabViewShell* pTabViewShell=pViewData->GetViewShell();
 
@@ -858,9 +857,12 @@ void ScAnyRefDlg::RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton )
         }
         pRefEdit->SetPosSizePixel(Point(0, 0), aNewEditSize);
 
-        // Button verschieben
-        if (pRefBtn)
-            pRefBtn->SetPosPixel(Point(aOldDialogSize.Width()-pRefBtn->GetSizePixel().Width(), 0));
+        // set button position and image
+        if( pRefBtn )
+        {
+            pRefBtn->SetPosPixel( Point( aOldDialogSize.Width() - pRefBtn->GetSizePixel().Width(), 0 ) );
+            pRefBtn->SetEndImage();
+        }
 
         // Fenster verkleinern
         SetOutputSizePixel(aNewDlgSize);
@@ -869,8 +871,8 @@ void ScAnyRefDlg::RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton )
         sNewDialogText.EraseAllChars('~');
         SetText(sNewDialogText);
 
-        if ( pButton )      // ueber den Button: Enter und Escape abfangen
-        {
+//        if ( pButton )      // ueber den Button: Enter und Escape abfangen
+//        {
             if (!pAccel)
             {
                 pAccel = new Accelerator;
@@ -880,7 +882,7 @@ void ScAnyRefDlg::RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton )
             }
             Application::InsertAccel( pAccel );
             bAccInserted = TRUE;
-        }
+//        }
     }
 }
 
@@ -904,8 +906,13 @@ void ScAnyRefDlg::RefInputDone( BOOL bForced )
 
         // pEditCell an alte Position
         pRefEdit->SetPosSizePixel(aOldEditPos, aOldEditSize);
-        if (pRefBtn)
-            pRefBtn->SetPosPixel(aOldButtonPos);
+
+        // set button position and image
+        if( pRefBtn )
+        {
+            pRefBtn->SetPosPixel( aOldButtonPos );
+            pRefBtn->SetStartImage();
+        }
 
         // Alle anderen: Show();
         USHORT nChildren = GetChildCount();
@@ -917,6 +924,62 @@ void ScAnyRefDlg::RefInputDone( BOOL bForced )
         delete [] pHiddenMarks;
 
         pRefEdit = NULL;
+        pRefBtn = NULL;
+    }
+}
+
+void ScAnyRefDlg::ToggleCollapsed( ScRefEdit* pEdit, ScRefButton* pButton )
+{
+    if( pEdit )
+    {
+        if( pRefEdit == pEdit )                 // is this the active ref edit field?
+        {
+            pRefEdit->GrabFocus();              // before RefInputDone()
+            RefInputDone( TRUE );               // finish ref input
+        }
+        else
+        {
+            RefInputDone( TRUE );               // another active ref edit?
+            RefInputStart( pEdit, pButton );    // start ref input
+            // pRefEdit might differ from pEdit after RefInputStart() (i.e. ScFormulaDlg)
+            if( pRefEdit )
+                pRefEdit->GrabFocus();
+        }
+    }
+}
+
+void ScAnyRefDlg::ReleaseFocus( ScRefEdit* pEdit, ScRefButton* pButton )
+{
+    if( !pRefEdit && pEdit )
+    {
+        RefInputStart( pEdit, pButton );
+//        if( pRefEdit )
+//            pRefEdit->SilentGrabFocus();
+    }
+
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if( pViewShell )
+    {
+        pViewShell->ActiveGrabFocus();
+        if( pRefEdit )
+        {
+            const ScViewData* pViewData = pViewShell->GetViewData();
+            ScDocument* pDoc = pViewData->GetDocument();
+            ScRangeList aRangeList;
+            if( aRangeList.Parse( pRefEdit->GetText(), pDoc ) )
+            {
+                const ScRange* pRange = aRangeList.GetObject( 0 );
+                if( pRange )
+                {
+                    pViewShell->SetTabNo( pRange->aStart.Tab() );
+                    pViewShell->MoveCursorAbs(  pRange->aStart.Col(),
+                        pRange->aStart.Row(), SC_FOLLOW_JUMP, FALSE, FALSE );
+                    pViewShell->MoveCursorAbs( pRange->aEnd.Col(),
+                        pRange->aEnd.Row(), SC_FOLLOW_JUMP, TRUE, FALSE );
+                    SetReference( *pRange, pDoc );
+                }
+            }
+        }
     }
 }
 
@@ -971,19 +1034,11 @@ IMPL_LINK( ScAnyRefDlg, AccelSelectHdl, Accelerator *, pAccel )
     {
         case KEY_RETURN:
         case KEY_ESCAPE:
-            //  #57383# der SimpleRefDlg loescht sich bei RefInputDone,
-            //  darum Button umschalten vorher...
-            if (pRefBtn)
-                pRefBtn->SetStartImage();       // Image aendern
-            RefInputDone(TRUE);                 // Ref.-Eingabe beenden
-            break;
-
-        default:
+            if( pRefEdit )
+                pRefEdit->GrabFocus();
+            RefInputDone( TRUE );
         break;
     }
     return TRUE;
 }
-
-
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-30 15:49:01 $
+ *  last change: $Author: dr $ $Date: 2002-03-13 11:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,21 +139,25 @@ void __EXPORT ScSolverDlg::Init()
 
     aBtnOk.         SetClickHdl     ( LINK( this, ScSolverDlg, BtnHdl ) );
     aBtnCancel.     SetClickHdl     ( LINK( this, ScSolverDlg, BtnHdl ) );
-    aEdFormulaCell. SetGetFocusHdl  ( LINK( this, ScSolverDlg, EdGetFocusHdl ) );
-    aEdVariableCell.SetGetFocusHdl  ( LINK( this, ScSolverDlg, EdGetFocusHdl ) );
-    aEdTargetVal.   SetGetFocusHdl  ( LINK( this, ScSolverDlg, EdGetFocusHdl ) );
-    aEdFormulaCell. SetLoseFocusHdl ( LINK( this, ScSolverDlg, EdLoseFocusHdl ) );
-    aEdVariableCell.SetLoseFocusHdl ( LINK( this, ScSolverDlg, EdLoseFocusHdl ) );
+
+    Link aLink = LINK( this, ScSolverDlg, GetFocusHdl );
+    aEdFormulaCell. SetGetFocusHdl  ( aLink );
+    aRBFormulaCell. SetGetFocusHdl  ( aLink );
+    aEdVariableCell.SetGetFocusHdl  ( aLink );
+    aRBVariableCell.SetGetFocusHdl  ( aLink );
+    aEdTargetVal.   SetGetFocusHdl  ( aLink );
+
+    aLink = LINK( this, ScSolverDlg, LoseFocusHdl );
+    aEdFormulaCell. SetLoseFocusHdl ( aLink );
+    aRBFormulaCell. SetLoseFocusHdl ( aLink );
+    aEdVariableCell.SetLoseFocusHdl ( aLink );
+    aRBVariableCell.SetLoseFocusHdl ( aLink );
 
     theFormulaCell.Format( aStr, SCA_ABS );
 
     aEdFormulaCell.SetText( aStr );
     aEdFormulaCell.GrabFocus();
     pEdActive = &aEdFormulaCell;
-    bMouseInputMode = TRUE;
-
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    //SFX_APPWINDOW->Enable();
 }
 
 //----------------------------------------------------------------------------
@@ -167,10 +171,11 @@ BOOL __EXPORT ScSolverDlg::Close()
 
 void ScSolverDlg::SetActive()
 {
-    if ( bDlgLostFocus && bMouseInputMode )
+    if ( bDlgLostFocus )
     {
         bDlgLostFocus = FALSE;
-        pEdActive->GrabFocus();
+        if( pEdActive )
+            pEdActive->GrabFocus();
     }
     else
     {
@@ -183,7 +188,7 @@ void ScSolverDlg::SetActive()
 
 void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
 {
-    if ( bMouseInputMode && pEdActive )
+    if( pEdActive )
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(pEdActive);
@@ -230,6 +235,13 @@ void ScSolverDlg::RaiseError( ScSolverErr eError )
             aEdTargetVal.GrabFocus();
             break;
     }
+}
+
+//----------------------------------------------------------------------------
+
+BOOL ScSolverDlg::IsRefInputMode() const
+{
+    return pEdActive != NULL;
 }
 
 //----------------------------------------------------------------------------
@@ -304,26 +316,27 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScSolverDlg, EdGetFocusHdl, ScRefEdit*, pEd )
+IMPL_LINK( ScSolverDlg, GetFocusHdl, Control*, pCtrl )
 {
-    pEdActive       = pEd;
-    bMouseInputMode = ( pEd != &aEdTargetVal );
+    Edit* pEdit = NULL;
+    pEdActive = NULL;
 
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    /*
-    if ( bMouseInputMode )
-        SFX_APPWINDOW->Enable();
-    else
-        SFX_APPWINDOW->Disable(FALSE);      //! allgemeine Methode im ScAnyRefDlg
-    */
-    pEd->SetSelection( Selection(0,SELECTION_MAX) );
+    if( (pCtrl == (Control*)&aEdFormulaCell) || (pCtrl == (Control*)&aRBFormulaCell) )
+        pEdit = pEdActive = &aEdFormulaCell;
+    else if( (pCtrl == (Control*)&aEdVariableCell) || (pCtrl == (Control*)&aRBVariableCell) )
+        pEdit = pEdActive = &aEdVariableCell;
+    else if( pCtrl == (Control*)&aEdTargetVal )
+        pEdit = &aEdTargetVal;
+
+    if( pEdit )
+        pEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
 
     return NULL;
 }
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScSolverDlg, EdLoseFocusHdl, ScRefEdit*, pEd )
+IMPL_LINK( ScSolverDlg, LoseFocusHdl, Control*, pCtrl )
 {
     bDlgLostFocus = !IsActive();
     return NULL;
