@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: os $ $Date: 2000-10-12 06:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,6 +326,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     (pWrtShell->GetRedlineMode() & nMask) == nMask ));
             }
             break;
+        case SID_GALLERY :
         case FN_REDLINE_ACCEPT:
             {
                 SfxViewFrame* pVFrame = GetViewFrame();
@@ -379,8 +380,8 @@ void SwView::GetState(SfxItemSet &rSet)
             if( GetDocShell()->IsA( SwGlobalDocShell::StaticType() ) ||
                 pWrtShell->IsAnySectionInDoc( sal_True, sal_True, sal_True ))
                 rSet.DisableItem(nWhich);
-            break;
         }
+        break;
         nWhich = aIter.NextWhich();
     }
 }
@@ -440,167 +441,4 @@ sal_Bool SwView::HasUIFeature( sal_uInt32 nFeature )
 {
     return pWrtShell->IsLabelDoc();
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.147  2000/09/18 16:06:14  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.146  2000/09/08 08:12:54  os
-    Change: Set/Toggle/Has/Knows/Show/GetChildWindow
-
-    Revision 1.145  2000/08/18 14:46:23  tl
-    #74855# disable Thesaurus for multiselections
-
-    Revision 1.144  2000/05/29 08:03:23  os
-    new scanner interface
-
-    Revision 1.143  2000/05/26 07:21:35  os
-    old SW Basic API Slots removed
-
-    Revision 1.142  2000/05/15 16:47:34  jp
-    Changes for Unicode
-
-    Revision 1.141  2000/05/09 14:43:13  os
-    BASIC interface partially removed
-
-    Revision 1.140  2000/04/18 15:02:51  os
-    UNICODE
-
-    Revision 1.139  2000/03/23 07:50:25  os
-    UNO III
-
-    Revision 1.138  2000/02/16 21:01:21  tl
-    #72219# Locale Umstellung
-
-    Revision 1.137  2000/02/15 14:17:26  os
-    #72904# INSERT_CAPTION: not allowed in draw text edit
-
-    Revision 1.136  2000/02/11 14:59:48  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.135  2000/01/21 13:29:46  tl
-    #70503# disbale Thesaurus slot if language is not support
-
-    Revision 1.134  2000/01/17 14:40:36  os
-    #71979# IsAnySectionInDoc: check indexes
-
-    Revision 1.133  1999/06/09 11:19:40  OS
-    #66578# new slot: FN_EDIT_CURENT_TOX
-
-
-      Rev 1.132   09 Jun 1999 13:19:40   OS
-   #66578# new slot: FN_EDIT_CURENT_TOX
-
-      Rev 1.131   09 Mar 1999 12:55:50   OS
-   #61809# Kein Scanning im RemoteServer
-
-      Rev 1.130   28 Jan 1999 18:16:32   JP
-   Bug #59688#: kein vergleichen/zusammenfassen wenn das Doc geschuetzte/versteckte Breiche enthaelt
-
-      Rev 1.129   27 Jan 1999 13:39:54   JP
-   Bug #59688#: bei GlobalDokumenten gibts kein vergeleichen oder zusammenfuehren
-
-      Rev 1.128   10 Dec 1998 09:47:16   MIB
-   #60060#: Beschriftungen fuer Zeichen-Objekte
-
-      Rev 1.127   27 Nov 1998 15:01:10   AMA
-   Fix #59951#59825#: Unterscheiden zwischen Rahmen-,Seiten- und Bereichsspalten
-
-      Rev 1.126   18 Nov 1998 15:06:42   OM
-   #59280# FormController Create Modes verlassen
-
-      Rev 1.125   21 Jul 1998 20:48:44   JP
-   Bug #53429# GetState mit SID_UNDO - die Shell kann auch noch 0 sein, also anlegen
-
-      Rev 1.124   14 Jul 1998 10:43:46   OM
-   #52748# Twain-Menueeintrag
-
-      Rev 1.123   11 Jul 1998 12:28:16   MA
-   chg: State fuer scrollbody
-
-      Rev 1.122   09 Jun 1998 15:32:20   OM
-   VC-Controls entfernt
-
-      Rev 1.121   01 Apr 1998 17:31:48   OM
-   #31111 Rahmen in protecteten Rahmen sind auch geschuetzt
-
-      Rev 1.120   16 Mar 1998 16:18:04   OM
-   Aktualisieren-Button kontextsensitiv
-
-      Rev 1.119   15 Mar 1998 15:14:14   OM
-   Synchron-Button
-
-      Rev 1.118   12 Mar 1998 12:55:22   OS
-   SID_NEWWINDOW nicht mehr ueberladen
-
-      Rev 1.117   03 Mar 1998 16:39:02   OM
-   ofa includen
-
-      Rev 1.116   03 Mar 1998 10:43:12   OM
-   Redline-Browser
-
-      Rev 1.115   19 Feb 1998 09:35:08   JP
-   RedlineMode darf nur im InsertMode einschaltbar sein
-
-      Rev 1.114   18 Feb 1998 15:02:44   JP
-   Status erfragen/setzen fuer Redlines anzeigen korrigiert
-
-      Rev 1.113   03 Feb 1998 15:28:22   OM
-   Redlining
-
-      Rev 1.112   23 Jan 1998 16:04:16   MA
-   includes
-
-      Rev 1.111   06 Jan 1998 07:28:40   OS
-   getrennter Status fuer Insert-Controller #46322#
-
-      Rev 1.110   16 Dec 1997 12:00:26   OS
-   Impl-Pointer fuer UNO
-
-      Rev 1.109   29 Nov 1997 16:49:26   MA
-   includes
-
-      Rev 1.108   28 Nov 1997 11:35:50   TJ
-   include
-
-      Rev 1.107   21 Nov 1997 15:00:24   MA
-   includes
-
-      Rev 1.106   03 Nov 1997 13:58:28   MA
-   precomp entfernt
-
-      Rev 1.105   01 Sep 1997 13:13:56   OS
-   DLL-Umstellung
-
-      Rev 1.104   15 Aug 1997 11:48:02   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.103   11 Aug 1997 10:29:42   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.102   31 Jul 1997 14:59:46   MH
-   chg: header
-
-      Rev 1.101   09 Jun 1997 14:27:56   MA
-   chg: Browse-Flag nur noch am Doc
-
-      Rev 1.100   05 Jun 1997 09:33:40   OS
-   FN_INSERT_HEADER/FOOTER im Druck-Layout disablen #40441#
-
-      Rev 1.99   20 Mar 1997 19:15:20   OS
-   Objekt einfuegen und Draw einfuegen im Web disabled
-
-      Rev 1.98   11 Mar 1997 16:11:38   OS
-   FN_TOOLBOX_SWITCH weg
-
-      Rev 1.97   24 Feb 1997 16:53:56   OM
-   Silbentrennung in Draw-Objekten
-
-      Rev 1.96   23 Feb 1997 22:17:56   OM
-   Feld-Controller an Textshell verschoben
-
-------------------------------------------------------------------------*/
-
 
