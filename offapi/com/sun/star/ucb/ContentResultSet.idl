@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentResultSet.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-01-15 10:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,57 +172,68 @@ service ContentResultSet
 
     /** controls the travel mode of the resultset cursor.
 
+        <p>
         There are two possible travel modes:
-        <type>CursorTravelMode::BLOCKING</type> and
-        <type>CursorTravelMode::NONBLOCKING</type>.
+        </p>
 
-        In blocking mode each travel method of the resultset will not return
-        until the data for the new position were retrieved.
+        <table border=1>
+        <tr><td><type>BLOCKING</type></td>
+            <td>Each travel method of the resultset will not return until the
+                data for the new position were retrieved.</td></tr>
+        <tr><td><type>NONBLOCKING</type></td>
+            <td>The implementation will throw a
+                <type>CursorWouldBlockException</type>, if the data for the new
+                position are not retrieved yet.</td></tr>
+        </table>
 
-        In non-blocking mode the implementation will throw a
-        <type>CursorWouldBlockException</type>, if the data for the new
-        position are not retrieved yet.
-
+        <p>
         The following pseudo-code illustrates the usage of a non-blocking
         cursor:
+        </p>
 
-            bProcessedAllRows = false
-            while ( !bProcessedAllRows )
+        <pre>
+    bProcessedAllRows = false
+    while ( !bProcessedAllRows )
+    {
+        cursor.setPropertyValue( "CursorTravelMode", BLOCKING )
+
+        cursor.travelSomeWhere()
+        collectRowData()
+
+        cursor.setPropertyValue( "CursorTravelMode", NONBLOCKING )
+
+        bGoOn = true;
+        while ( bGoOn )
+        {
+                  try
             {
-                cursor.setPropertyValue( "CursorTravelMode", BLOCKING )
-
                 cursor.travelSomeWhere()
                 collectRowData()
-
-                cursor.setPropertyValue( "CursorTravelMode", NONBLOCKING )
-
-                bGoOn = true;
-                while ( bGoOn )
-                {
-                    try
-                    {
-                        cursor.travelSomeWhere()
-                        collectRowData()
-                    }
-                    catch ( CursorWouldBlockException )
-                    {
-                        // No more data at the moment.
-                        bGoOn = false
-                    }
-                }
-
-                doSomethingWithCollectedRowData()
-
-                bProcessedAllRows = ...
             }
+            catch ( CursorWouldBlockException )
+            {
+                // No more data at the moment.
+                bGoOn = false
+            }
+        }
 
-         If this property is not supported, the implementation must provide
+        doSomethingWithCollectedRowData()
+
+        bProcessedAllRows = ...
+    }
+        </pre>
+
+        <p>
+         If this property is not supported, the implementation needs to provide
         a blocking cursor.
+        </p>
 
-        The implementation initially must set the value of this property
-        to <type>CursorTravelMode::BLOCKING</type>.
+        <p>
+        The implementation initially needs to set the value of this property
+        to <type>BLOCKING</type>.
+        </p>
 
-        @see com::sun::star::ucb::CursorTravelMode;
+        @see com::sun::star::ucb::CursorTravelMode
      */
     [optional, property] long CursorTravelMode;
 
