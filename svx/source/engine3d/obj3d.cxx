@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
+ *  last change: $Author: aw $ $Date: 2000-10-31 12:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4511,6 +4511,10 @@ void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
             BOOL bLightingWasEnabled = pBase3D->GetLightGroup()->IsLightingEnabled();
             pBase3D->GetLightGroup()->EnableLighting(FALSE);
             pBase3D->SetLightGroup(pBase3D->GetLightGroup());
+
+            // #79585# switch off texturing (if used)
+            pBase3D->SetActiveTexture();
+
             pBase3D->DrawPolygonGeometry(GetDisplayGeometry(), TRUE);
             pBase3D->GetLightGroup()->EnableLighting(bLightingWasEnabled);
             pBase3D->SetLightGroup(pBase3D->GetLightGroup());
