@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hjs $ $Date: 2001-07-17 14:07:46 $
+#   last change: $Author: hjs $ $Date: 2001-07-17 15:04:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,7 +141,7 @@ $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
     +cd $(PACKAGE_DIR) && echo no patch needed...
 .ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 .IF "$(GUI)"=="WNT"
-    +cd $(PACKAGE_DIR) && patch --verbose -b -p2 -f -i ..$/..$/$(PATCH_FILE_NAME) && $(TOUCH) $(PATCH_FLAG_FILE)
+    +cd $(PACKAGE_DIR) && $(TYPE) ..$/..$/$(PATCH_FILE_NAME) | tr -d "\015" | d:\temp\patch -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ELSE           # "$(GUI)"=="WNT"
     +cd $(PACKAGE_DIR) && $(TYPE) ..$/..$/$(PATCH_FILE_NAME) | patch -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ENDIF          # "$(GUI)"=="WNT"
@@ -211,15 +211,11 @@ $(MISC)$/$(TARFILE_ROOTDIR) : $(MISC)$/$(TARFILE_NAME).tar
 
 .IF "$(P_ADDITIONAL_FILES)"!=""
 $(P_ADDITIONAL_FILES) :
-# $(MISC)$/$(TARFILE_ROOTDIR)
-#	+-touch $@
     +-echo dummy > $@
 .ENDIF			 "$(P_ADDITIONAL_FILES)"!=""
 
 .IF "$(T_ADDITIONAL_FILES)"!=""
 $(T_ADDITIONAL_FILES) :
-#$(PACKAGE_DIR)
-#	+-touch $@
     +-echo dummy > $@
 .ENDIF			 "$(T_ADDITIONAL_FILES)"!=""
 
