@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-07-03 13:15:23 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include "filehelper.hxx"
 #endif
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -100,10 +103,13 @@ namespace configmgr
         if (eError != osl_File_E_None &&
             eError != osl_File_E_NOENT)
         {
-            rtl::OUString sError = ASCII("tryToRemoveFile: ");
-            sError += FileHelper::createOSLErrorString(eError);
-            sError += ASCII("\n with URL: ");
-            sError += _aURL;
+            rtl::OUStringBuffer sErrorBuf;
+            sErrorBuf.appendAscii("Configmgr: removeFile failed ");
+            sErrorBuf.appendAscii("for file \"").append(_aURL).appendAscii("\". ");
+            sErrorBuf.appendAscii("Error = \"").append(FileHelper::createOSLErrorString(eError)).appendAscii("\" ");
+            sErrorBuf.appendAscii("[").append(sal_Int32(eError)).appendAscii("] ");
+
+            rtl::OUString const sError = sErrorBuf.makeStringAndClear();
             OSL_ENSURE(0, rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US).getStr());
             throw io::IOException(sError, NULL);
         }
@@ -113,11 +119,19 @@ namespace configmgr
     void FileHelper::replaceFile(
         const rtl::OUString& _aToURL, const rtl::OUString &_aFromURL) CFG_THROW1 (io::IOException)
     {
-        FileHelper::removeFile(_aToURL);
+        File::remove(_aToURL);
         FileBase::RC eError = File::move(_aFromURL, _aToURL);
-        if (eError != osl_File_E_None)
+        if (eError != osl_File_E_None &&
+            eError != osl_File_E_NOENT)
         {
-            rtl::OUString sError = ASCII("createBackupAndRemove: ") + FileHelper::createOSLErrorString(eError) + ASCII("\n with URL: ") + _aFromURL;
+            rtl::OUStringBuffer sErrorBuf;
+            sErrorBuf.appendAscii("Configmgr: replaceFile failed ");
+            sErrorBuf.appendAscii("for replacing file \"").append(_aFromURL).appendAscii("\". ");
+            sErrorBuf.appendAscii("by file \"").append(_aToURL).appendAscii("\". ");
+            sErrorBuf.appendAscii("Error = \"").append(FileHelper::createOSLErrorString(eError)).appendAscii("\" ");
+            sErrorBuf.appendAscii("[").append(sal_Int32(eError)).appendAscii("] ");
+
+            rtl::OUString const sError = sErrorBuf.makeStringAndClear();
             OSL_ENSURE(0, rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US).getStr());
             throw io::IOException(sError, NULL);
         }
@@ -332,6 +346,7 @@ namespace configmgr
             break;
 
             /* unmapped error: always last entry in enum! */
+        default: OSL_ENSURE(false, "Found unknown OSL File Error");
         case osl_File_E_invalidError:
             aRet = ASCII("unmapped Error");
             break;
@@ -374,27 +389,47 @@ namespace configmgr
         return fileName ;
     }
     // -----------------------------------------------------------------------------
-    bool FileHelper::mkdir(rtl::OUString const& _sDirURL)
+    osl::FileBase::RC FileHelper::mkdir(rtl::OUString const& _sDirURL)
     {
         // direct create a directory
         osl::FileBase::RC eError = osl::Directory::create(_sDirURL); // try to create the directory
         if (eError == osl::FileBase::E_EXIST ||
             eError == osl::FileBase::E_None ||
-            FileHelper::dirExists(_sDirURL)) return true; // Exists or created
-        else
-            return false;
+            FileHelper::dirExists(_sDirURL))
+        {
+            eError = osl::FileBase::E_None; // Exists or created
+        }
+        return eError;
     }
 
     // -----------------------------------------------------------------------------
-    bool FileHelper::mkdirs(rtl::OUString const& _sDirURL)
+    osl::FileBase::RC FileHelper::mkdirs(rtl::OUString const& _sDirURL)
     {
-        bool bRes = mkdir(_sDirURL);
-        if (!bRes)
+        osl::FileBase::RC eError = mkdir(_sDirURL);
+        switch (eError)
         {
-            rtl::OUString sParentDir = FileHelper::getParentDir(_sDirURL);
-            bRes = (sParentDir.getLength() > 0) && mkdirs(sParentDir) && mkdir(_sDirURL);
+        case osl::FileBase::E_EXIST: OSL_ASSERT(false);
+        case osl::FileBase::E_None:
+            break;
+
+        case osl::FileBase::E_NOENT:
+            {
+                rtl::OUString sParentDir = FileHelper::getParentDir(_sDirURL);
+                if (sParentDir.getLength() == 0)
+                    break;
+
+                eError = mkdirs(sParentDir);
+                if (eError != osl::FileBase::E_None)
+                    break;
+
+                eError = mkdir(_sDirURL);
+            }
+            break;
+
+        default: OSL_TRACE("configmgr: Could not create directory (%d).", int(eError));
+            break;
         }
-        return bRes;
+        return eError;
     }
 
 } // namespace configmgr
