@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:24:12 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,6 +352,39 @@ public:
 };
 
 #endif
+
+/* -----------------------------20.06.01 16:32--------------------------------
+
+ ---------------------------------------------------------------------------*/
+#ifdef WNT
+#else
+#define HELPER_PAGE_COMPLETE
+#endif
+
+struct SvxEMailTabPage_Impl;
+class SvxEMailTabPage : public SfxTabPage
+{
+    FixedLine       aMailFL;
+    ReadOnlyImage   aMailerURLFI;
+    FixedText       aMailerURLFT;
+    Edit            aMailerURLED;
+    PushButton      aMailerURLPB;
+
+    String          m_sDefaultFilterName;
+
+    SvxEMailTabPage_Impl* pImpl;
+
+    DECL_LINK(  FileDialogHdl_Impl, PushButton* ) ;
+
+public:
+    SvxEMailTabPage( Window* pParent, const SfxItemSet& rSet );
+    ~SvxEMailTabPage();
+
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
+};
 
 #endif // #ifndef _SVX_OPTINET_HXX
 
