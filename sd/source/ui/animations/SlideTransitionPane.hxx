@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideTransitionPane.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 18:19:13 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #endif
 
 #include <vector>
+#include <map>
 
 class SdDrawDocument;
 class SdPage;
@@ -183,6 +184,9 @@ private:
     typedef ::std::vector< String > tSoundListType;
     tSoundListType  maSoundList;
     mutable String  maCurrentSoundFile;
+
+    typedef ::std::map< sal_uInt16, sal_uInt16 > tPresetIndexesType;
+    tPresetIndexesType m_aPresetIndexes;
 };
 
 } //  namespace sd
