@@ -1,0 +1,9 @@
+sm	starmath	:	svx NULL
+sm	starmath								usr1	-	all	sm_mkout NULL
+sm	starmath\inc							get		-	all	sm_inc NULL
+sm	starmath\prj							get		-	all	sm_prj NULL
+sm	starmath\jobs							get		-	all	sm_jobs NULL
+sm	starmath\res							get		-	all	sm_res NULL
+sm	starmath\sdi							nmake	-	all	sm_sdi NULL
+sm	starmath\source							nmake	-	all	sm_sorce sm_sdi NULL
+sm	starmath\util							nmake	-	all	sm_util sm_sorce NULL

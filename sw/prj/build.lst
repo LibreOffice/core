@@ -1,0 +1,80 @@
+sw	sw	:	connectivity offmgr sd NULL
+sw	sw										usr1	-	all	sw_mkout NULL
+sw	sw\inc									get		-	all	sw_inc NULL
+sw	sw\prj									get		-	all	sw_prj NULL
+sw	sw\jobs									get		-	all	sw_jobs NULL
+sw	sw\source\ui\inc						get		-	all	sw_uinc NULL
+sw	sw\source\core\inc						get		-	all	sw_cinc NULL
+sw	sw\source\filter\inc					get		-	all	sw_finc NULL
+sw	sw\res									get		-	all	sw_res NULL
+sw	sw\win\res								get		-	all	sw_wres NULL
+sw	sw\win\imglst							get		-	all	sw_wimg NULL
+sw	sw\sdi									nmake	-	all	sw_sdi NULL
+sw	sw\source\core\core_1st					nmake	-	all	sw_core1 NULL
+sw	sw\source\core\bastyp					nmake	-	all	sw_bast sw_core1 NULL
+sw	sw\source\ui\ui_1st						nmake	-	all	sw_ui1 sw_sdi NULL
+sw	sw\source\ui\app						nmake	-	all	sw_app sw_sdi NULL
+sw	sw\source\ui\cctrl						nmake	-	all	sw_cctrl NULL
+sw	sw\source\ui\chrdlg						nmake	-	all	sw_chrdl NULL
+sw	sw\source\ui\config						nmake	-	all	sw_conf NULL
+sw	sw\source\ui\dbui						nmake	-	all	sw_dbui NULL
+sw	sw\source\ui\dialog						nmake	-	all	sw_dlg NULL
+sw	sw\source\ui\dochdl						nmake	-	all	sw_dchdl NULL
+sw	sw\source\ui\docvw						nmake	-	all	sw_dcvw NULL
+sw	sw\source\ui\envelp						nmake	-	all	sw_envlp NULL
+sw	sw\source\ui\fldui						nmake	-	all	sw_fldui NULL
+sw	sw\source\ui\fmtui						nmake	-	all	sw_fmtui NULL
+sw	sw\source\ui\frmdlg						nmake	-	all	sw_frmdl NULL
+sw	sw\source\ui\globdoc					nmake	-	all	sw_globd NULL
+sw	sw\source\ui\index						nmake	-	all	sw_index NULL
+sw	sw\source\ui\lingu						nmake	-	all	sw_ling NULL
+sw	sw\source\ui\misc						nmake	-	all	sw_misc sw_sdi NULL
+sw	sw\source\ui\ribbar						nmake	-	all	sw_rbbar NULL
+sw	sw\source\ui\shells						nmake	-	all	sw_shell sw_sdi NULL
+sw	sw\source\ui\table						nmake	-	all	sw_table NULL
+sw	sw\source\ui\uiview						nmake	-	all	sw_uivw sw_sdi NULL
+sw	sw\source\ui\uno						nmake	-	all	sw_uiuno sw_sdi NULL
+sw	sw\source\ui\utlui						nmake	-	all	sw_utlui NULL
+sw	sw\source\ui\web						nmake	-	all	sw_web sw_sdi NULL
+sw	sw\source\ui\wizard						nmake	-	all	sw_wiz NULL
+sw	sw\source\ui\wrtsh						nmake	-	all	sw_wrtsh NULL
+sw	sw\source\core\attr						nmake	-	all	sw_attr NULL
+sw	sw\source\core\crsr						nmake	-	all	sw_crsr NULL
+sw	sw\source\core\doc						nmake	-	all	sw_doc NULL
+sw	sw\source\core\docnode					nmake	-	all	sw_dcnd NULL
+sw	sw\source\core\draw						nmake	-	all	sw_draw NULL
+sw	sw\source\core\edit						nmake	-	all	sw_edit NULL
+sw	sw\source\core\except					nmake	-	all	sw_excpt NULL
+sw	sw\source\core\fields					nmake	-	all	sw_fld NULL
+sw	sw\source\core\frmedt					nmake	-	all	sw_frmed NULL
+sw	sw\source\core\graphic					nmake	-	all	sw_grph NULL
+sw	sw\source\core\layout					nmake	-	all	sw_layo NULL
+sw	sw\source\core\ole						nmake	-	all	sw_ole NULL
+sw	sw\source\core\para						nmake	-	all	sw_para NULL
+sw	sw\source\core\sw3io					nmake	-	all	sw_sw3io NULL
+sw	sw\source\core\swg						nmake	-	all	sw_swg NULL
+sw	sw\source\core\text						nmake	-	all	sw_text NULL
+sw	sw\source\core\tox						nmake	-	all	sw_tox NULL
+sw	sw\source\core\txtnode					nmake	-	all	sw_txtnd NULL
+sw	sw\source\core\undo						nmake	-	all	sw_undo NULL
+sw	sw\source\core\view						nmake	-	all	sw_view NULL
+sw	sw\source\core\unocore					nmake	-	all	sw_uco NULL
+sw	sw\source\filter\filt_1st				nmake	-	all	sw_flt1 sw_sdi NULL
+sw	sw\source\filter\ascii					nmake	-	all	sw_ascii NULL
+sw	sw\source\filter\basflt					nmake	-	all	sw_bsflt NULL
+sw	sw\source\filter\debug					nmake	-	w	sw_dbugw NULL
+sw	sw\source\filter\debug					nmake	-	u	sw_dbugu NULL
+sw	sw\source\filter\excel					nmake	-	all	sw_excel NULL
+sw	sw\source\filter\html					nmake	-	all	sw_html NULL
+sw	sw\source\filter\lotus					nmake	-	all	sw_lotus NULL
+sw	sw\source\filter\rtf					nmake	-	all	sw_rtf NULL
+sw	sw\source\filter\sw6					nmake	-	all	sw_sw6 NULL
+sw	sw\source\filter\w4w					nmake	-	all	sw_w4w NULL
+sw	sw\source\filter\writer					nmake	-	all	sw_wrtr NULL
+sw	sw\source\filter\ww1					nmake	-	all	sw_ww1 NULL
+sw	sw\source\filter\ww8					nmake	-	all	sw_ww8 NULL
+sw	sw\source\filter\xml					nmake	-	all	sw_xml NULL
+sw	sw\source\ui							nmake	-	all	sw_ui sw_app sw_cctrl sw_chrdl sw_conf sw_dbui sw_dchdl sw_dcvw sw_dlg sw_envlp sw_fldui sw_fmtui sw_frmdl sw_globd sw_index sw_ling sw_misc sw_rbbar sw_shell sw_table sw_uiuno sw_uivw sw_utlui sw_web sw_wiz sw_wrtsh NULL
+sw	sw\source\core							nmake	-	all	sw_core sw_attr sw_crsr sw_dcnd sw_doc sw_draw sw_edit sw_excpt sw_fld sw_frmed sw_grph sw_layo sw_ole sw_para sw_sw3io sw_swg sw_text sw_tox sw_txtnd sw_uco sw_undo sw_view NULL
+sw	sw\source\filter						nmake	-	all	sw_flt sw_ascii sw_bsflt sw_dbugu.u sw_dbugw.n sw_excel sw_html sw_lotus sw_rtf sw_sw6 sw_w4w sw_wrtr sw_ww1 sw_ww8 sw_xml NULL
+sw	sw\util									nmake	-	all	sw_util sw_core sw_flt sw_sdi sw_ui NULL
