@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-21 21:17:01 $
+ *  last change: $Author: kz $ $Date: 2002-02-22 21:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3996,7 +3996,7 @@ SfxSlotInfo FN_INSERT_LINEBREAK
     SlotName[ dutch ] = "Handmatig regeleinde invoegen";
     SlotName[ chinese_simplified ] = "ζ‰‹ε·¥ζ’ε…¥ζΆθ΅η¬¦";
     SlotName[ greek ] = "Εισαγωγή χειροκίνητης αλλαγής γραμμής";
-    SlotName[ korean ] = "μλ™ κ°ν–‰ μ‚½μ…";
+    SlotName[ korean ] = "μλ™ λ‹¨λ½ μ‚½μ…";
     SlotName[ turkish ] = "Manόel satύr sonu ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar salto de lνnea manual";
@@ -9348,7 +9348,7 @@ SfxSlotInfo FN_FORMAT_COLUMN
     SlotName[ polish ] = "Kolumny";
     SlotName[ portuguese_brazilian ] = "Spalten";
     SlotName[ japanese ] = "ζ®µηµ„γΏ";
-    SlotName[ korean ] = "μ—΄";
+    SlotName[ korean ] = "λ‹¨";
     SlotName[ chinese_simplified ] = "ε—";
     SlotName[ chinese_traditional ] = "ζ¬„";
     SlotName[ arabic ] = "ΓΪγΟΙ";
