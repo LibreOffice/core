@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 16:14:31 $
+ *  last change: $Author: th $ $Date: 2001-08-13 11:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,9 +893,11 @@ void Application::SystemSettingsChanging( AllSettings& rSettings,
 
 void Application::MergeSystemSettings( AllSettings& rSettings )
 {
+    Window* pWindow = ImplGetDefaultWindow();
 #ifndef REMOTE_APPSERVER
-    ImplGetDefaultWindow()->ImplGetFrame()->UpdateSettings( rSettings );
+    pWindow->ImplGetFrame()->UpdateSettings( rSettings );
 #endif
+    pWindow->ImplUpdateGlobalSettings( rSettings, FALSE );
 }
 
 // -----------------------------------------------------------------------
