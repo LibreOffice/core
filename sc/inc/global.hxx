@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:11:09 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:30:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,7 +854,7 @@ public:
     inline ScAddress( USHORT nCol, USHORT nRow, USHORT nTab )
     { Set( nCol, nRow, nTab ); }
     inline ScAddress( const ScAddress& r ) { nAddress = r.nAddress; }
-    inline ScAddress( UINT32 nNewAddress ) { nAddress = nNewAddress; }
+    inline explicit ScAddress( UINT32 nNewAddress ) { nAddress = nNewAddress; }
     // TO BE REMOVED
     inline ScAddress( const ScTripel& r ) { Set( r.nCol, r.nRow, r.nTab ); }
     inline ScAddress& operator=( const ScAddress& r )
