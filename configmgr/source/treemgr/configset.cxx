@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:15:30 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include "configgroup.hxx"
 
 #include "valuenode.hxx"
+#include "valuenodeimpl.hxx"
+#include "setnodeimplbase.hxx"
+
 #include <vos/refernce.hxx>
 
 namespace configmgr
@@ -78,6 +81,53 @@ namespace configmgr
     {
 //-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+// class ElementRef
+//-----------------------------------------------------------------------------
+
+ElementRef::ElementRef(ElementTreeImpl* pTree)
+: m_aTreeHolder(pTree)
+{
+}
+//-----------------------------------------------------------------------------
+
+ElementRef::ElementRef(ElementRef const& aOther)
+: m_aTreeHolder(aOther.m_aTreeHolder)
+{
+}
+//-----------------------------------------------------------------------------
+
+ElementRef& ElementRef::operator=(ElementRef const& aOther)
+{
+    m_aTreeHolder = aOther.m_aTreeHolder;
+    return *this;
+}
+//-----------------------------------------------------------------------------
+
+ElementRef::~ElementRef()
+{
+}
+//-----------------------------------------------------------------------------
+
+bool ElementRef::isValid() const
+{
+    return !!m_aTreeHolder.isValid();
+}
+
+//-----------------------------------------------------------------------------
+
+ElementTree ElementRef::getElementTree() const
+{
+   return ElementTree(m_aTreeHolder);
+}
+//-----------------------------------------------------------------------------
+
+Name ElementRef::getName() const
+{
+    if (!isValid()) return Name();
+
+    return m_aTreeHolder->name( m_aTreeHolder->root() );
+}
 //-----------------------------------------------------------------------------
 // class ElementTree
 //-----------------------------------------------------------------------------
@@ -360,10 +410,10 @@ ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, UnoAny co
 }
 //-----------------------------------------------------------------------------
 
-ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, NodeRef const& , UnoAny const& aValue)
+ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, ElementNodeRef const& , UnoAny const& aValue)
 {
     // for now ignoring the node.
-    // TODO: take attributes etc. from that node's value
+    // TODO: merge attributes etc. from that node's value
     return makeValueElement(aName, aValue);
 }
 //-----------------------------------------------------------------------------
@@ -404,7 +454,7 @@ static void doValidateSet(Tree const& aParentTree, NodeRef const& aSetNode)
     if (! TreeImplHelper::isSet(aSetNode))
         throw Exception("INTERNAL ERROR: Set Update: node is not a set");
 
-    if (!aSetNode.getAttributes().bWritable)
+    if (!aParentTree.getAttributes(aSetNode).bWritable)
         throw ConstraintViolation( "Set Update: Set is read-only !" );
 }
 //-----------------------------------------------------------------------------
@@ -448,59 +498,52 @@ void ValueSetUpdater::implValidateSet()
 }
 //-----------------------------------------------------------------------------
 
-static void doValidateElement(Tree const& aTree, NodeRef const& aNode)
+static void doValidateElement(ElementRef const& aElement)
 {
-    if (!aNode.isValid())
-        throw Exception("INTERNAL ERROR: Set Update: Unexpected NULL element node");
-
-    if (aTree.isEmpty())
-        throw Exception("INTERNAL ERROR: Set Update: Unexpected NULL element tree");
-
-    if (!aTree.isValidNode(aNode))
-        throw Exception("INTERNAL ERROR: Set Update: node does not match tree");
-
-    if (TreeImplHelper::offset(aNode) != TreeImplHelper::impl(aTree)->root())
-        throw Exception("INTERNAL ERROR: Set Update: node must be a root node");
+    if (!aElement.isValid())
+        throw Exception("INTERNAL ERROR: Set Update: Unexpected NULL element");
 
 // DISABLED: replaceable/removable != writable
-//  if (!aNode.getAttributes().writable)
+//  if (!aElement.getAttributes().writable)
 //      throw ConstraintViolation( "Set Update: Existing element is read-only !" );
 
 // DISABLED: replaceable/removable != nullable
-//  if (!aNode.getAttributes().nullable)
+//  if (!aElement.getAttributes().nullable)
 //      throw ConstraintViolation( "Set Update: Existing element cannot be removed (or replaced) !" );
 }
 //-----------------------------------------------------------------------------
 
 /// validates that the given element is valid in this context and returns its name
-Name TreeSetUpdater::implValidateElement(Tree const& aTree, NodeRef const& aNode)
+Name TreeSetUpdater::implValidateElement(ElementRef const& aElement)
 {
-    doValidateElement(aTree,aNode);
+    doValidateElement(aElement);
 
 //  ElementTreeImpl* pElement = TreeImplHelper::elementImpl(aTree)->isTemplateInstance();
 //  OSL_ENSURE( pElement, "INTERNAL ERROR: Set Element has wrong type of tree");
 //  OSL_ENSURE( !pElement || pElement->isTemplateInstance(), "INTERNAL ERROR: Set Element without associated template found");
 //  OSL_ENSURE( !pElement || pElement->isInstanceOf(m_aTemplate), "INTERNAL ERROR: Set Update: existing element does not match template");
 
-    return aNode.getName();
+    return aElement.getName();
 }
 //-----------------------------------------------------------------------------
 
 /// validates that the given element is valid and can be replaced in this context and returns its name
-Name ValueSetUpdater::implValidateElement(Tree const& aTree, NodeRef const& aNode)
+Name ValueSetUpdater::implValidateElement(ElementRef const& aElement)
 {
-    doValidateElement(aTree,aNode);
+    doValidateElement(aElement);
 
-    UnoType aNodeType = aNode.getUnoType();
+#ifdef _DEBUG
+    UnoType aNodeType = ElementHelper::getUnoType(aElement);
 
-    OSL_ENSURE(aNode.getUnoType().getTypeClass() != uno::TypeClass_VOID, "INTERNAL ERROR: Set Element without associated type found");
-    OSL_ENSURE(aNode.getUnoType().getTypeClass() != uno::TypeClass_INTERFACE,"INTERNAL ERROR: Set Element with complex type found");
+    OSL_ENSURE(aNodeType.getTypeClass() != uno::TypeClass_VOID, "INTERNAL ERROR: Set Element without associated type found");
+    OSL_ENSURE(aNodeType.getTypeClass() != uno::TypeClass_INTERFACE,"INTERNAL ERROR: Set Element with complex type found");
 
-    OSL_ENSURE(aNode.getUnoType() == m_aTemplate->getInstanceType() ||
+    OSL_ENSURE(aNodeType == m_aTemplate->getInstanceType() ||
                uno::TypeClass_ANY == m_aTemplate->getInstanceType().getTypeClass(),
                "INTERNAL ERROR: Set Update: existing element does not match template type");
+#endif
 
-    return aNode.getName();
+    return aElement.getName();
 }
 //-----------------------------------------------------------------------------
 static void checkEligibleChild(ElementTree const& aElementTree, Tree const& aParentTree)
@@ -571,16 +614,17 @@ UnoAny ValueSetUpdater::implValidateValue(UnoAny const& aValue)
 }
 //-----------------------------------------------------------------------------
 
-UnoAny ValueSetUpdater::implValidateValue(NodeRef const& aElementNode, UnoAny const& aValue)
+UnoAny ValueSetUpdater::implValidateValue(ElementNodeRef const& aElementTree, UnoAny const& aValue)
 {
+    Attributes aAttributes = aElementTree.getAttributes(aElementTree.getRootNode());
     // Here we assume writable == removable/replaceable
-    if (!aElementNode.getAttributes().bWritable)
+    if (!aAttributes.bWritable)
         throw ConstraintViolation( "Set Update: Existing element is read-only !" );
 
     // Here we assume nullable != removable
     if (!aValue.hasValue())
     {
-        if (!aElementNode.getAttributes().bNullable)
+        if (!aAttributes.bNullable)
             throw ConstraintViolation( "Set Update: Value is not nullable !" );
     }
     return implValidateValue( aValue);
@@ -595,11 +639,11 @@ NodeChange TreeSetUpdater::validateInsertElement (Name const& aName, ElementTree
 
     implValidateTree(aNewElement);
 
-    NodeChange aChange(new SetInsertTreeImpl(aName, aNewElement.get()) );
+    std::auto_ptr<SetChangeImpl> pChange( new SetInsertTreeImpl(aName, aNewElement.get()) );
 
-    aChange.impl()->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
+    pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
-    return aChange;
+    return NodeChange(pChange.release());
 }
 //-----------------------------------------------------------------------------
 
@@ -611,66 +655,120 @@ NodeChange ValueSetUpdater::validateInsertElement (Name const& aName, UnoAny con
 
     UnoAny aValidValue = implValidateValue(aNewValue);
 
-    NodeChange aChange(new SetInsertValueImpl(aName, makeValueElement(aName, aValidValue)));
+    std::auto_ptr<SetChangeImpl> pChange( new SetInsertValueImpl(aName, makeValueElement(aName, aValidValue)) );
 
-    aChange.impl()->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
+    pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
-    return aChange;
+    return NodeChange(pChange.release());
 }
 //-----------------------------------------------------------------------------
 
-NodeChange TreeSetUpdater::validateReplaceElement(Tree const& aElementTree, NodeRef const& aElementNode, ElementTree const& aNewElement)
+NodeChange TreeSetUpdater::validateReplaceElement(ElementRef const& aElement, ElementTree const& aNewElement)
 {
-    Name aName = implValidateElement(aElementTree, aElementNode);
+    Name aName = implValidateElement(aElement);
 
     implValidateTree(aNewElement);
 
-    NodeChange aChange(new SetReplaceTreeImpl(aName, aNewElement.get()) );
+    std::auto_ptr<SetChangeImpl> pChange( new SetReplaceTreeImpl(aName, aNewElement.get()) );
 
-    aChange.impl()->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
+    pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
-    return aChange;
+    return NodeChange(pChange.release());
 }
 //-----------------------------------------------------------------------------
 
-NodeChange ValueSetUpdater::validateReplaceElement(Tree const& aElementTree, NodeRef const& aElementNode, UnoAny const& aNewValue)
+NodeChange ValueSetUpdater::validateReplaceElement(ElementRef const& aElement, UnoAny const& aNewValue)
 {
-    Name aName = implValidateElement(aElementTree, aElementNode);
+    Name aName = implValidateElement(aElement);
+
+    ElementNodeRef aElementNode = extractElementNode(aElement);
 
     UnoAny aValidValue = implValidateValue(aElementNode, aNewValue);
 
-    NodeChange aChange(new SetReplaceValueImpl(aName, makeValueElement(aName, aElementNode,aValidValue)));
+    std::auto_ptr<SetChangeImpl> pChange( new SetReplaceValueImpl(aName, makeValueElement(aName, aElementNode,aValidValue)) );
 
-    aChange.impl()->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
+    pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
-    return aChange;
+    return NodeChange(pChange.release());
 }
 //-----------------------------------------------------------------------------
 
-NodeChange TreeSetUpdater::validateRemoveElement (Tree const& aElementTree, NodeRef const& aElementNode)
+NodeChange TreeSetUpdater::validateRemoveElement (ElementRef const& aElement)
 {
-    Name aName = implValidateElement(aElementTree, aElementNode);
+    Name aName = implValidateElement(aElement);
 
-    NodeChange aChange(new SetRemoveTreeImpl(aName));
+    std::auto_ptr<SetChangeImpl> pChange( new SetRemoveTreeImpl(aName) );
 
-    aChange.impl()->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
+    pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
-    return aChange;
+    return NodeChange(pChange.release());
 }
 
 //-----------------------------------------------------------------------------
 
-NodeChange ValueSetUpdater::validateRemoveElement (Tree const& aElementTree, NodeRef const& aElementNode)
+NodeChange ValueSetUpdater::validateRemoveElement (ElementRef const& aElement)
 {
-    Name aName = implValidateElement(aElementTree, aElementNode);
+    Name aName = implValidateElement(aElement);
 
-    NodeChange aChange(new SetRemoveValueImpl(aName));
+    std::auto_ptr<SetChangeImpl> pChange( new SetRemoveValueImpl(aName) );
 
-    aChange.impl()->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
+    pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
-    return aChange;
+    return NodeChange(pChange.release());
 }
 
+//-----------------------------------------------------------------------------
+
+static inline
+Tree impl_extractElementTree (ElementRef const& aElement)
+{
+    return aElement.getElementTree().getTree();
+}
+//-----------------------------------------------------------------------------
+
+static inline
+NodeRef impl_extractElementNode (ElementRef const& aElement)
+{
+    return impl_extractElementTree(aElement).getRootNode();
+}
+//-----------------------------------------------------------------------------
+
+ValueSetUpdater::ElementNodeRef ValueSetUpdater::extractElementNode (ElementRef const& aElement)
+{
+    return impl_extractElementTree(aElement);
+}
+//-----------------------------------------------------------------------------
+
+UnoType ElementHelper::getUnoType(ElementRef const& aElement)
+{
+    OSL_PRECOND( aElement.isValid(), "ERROR: Configuration: ElementRef operation requires valid node" );
+    if (!aElement.isValid()) return getVoidCppuType();
+
+    NodeRef aNode = impl_extractElementNode(aElement);
+    OSL_ASSERT( aNode.isValid() );
+
+    if (TreeImplHelper::isValueElement(aNode))
+    {
+        return TreeImplHelper::node(aNode)->valueElementImpl().getValueType();
+    }
+    else
+    {
+        uno::Reference< uno::XInterface > const * const selectInterface=0;
+        return ::getCppuType(selectInterface);
+    }
+}
+//-----------------------------------------------------------------------------
+
+Name ElementHelper::getElementName(ElementRef const& aElement)
+{
+    OSL_PRECOND( aElement.isValid(), "ERROR: Configuration: ElementRef operation requires valid node" );
+
+    Tree aElementTree = impl_extractElementTree(aElement);
+
+    OSL_ASSERT( aElementTree.isEmpty() == !aElement.isValid() );
+
+    return aElementTree.getRootName();
+}
 //-----------------------------------------------------------------------------
     }
 }
