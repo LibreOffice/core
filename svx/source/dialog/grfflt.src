@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:13:01 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:34:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,13 +249,13 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
     };
 #define MA_Y4   MA_Y3 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_Y
     CheckBox DLG_FILTERMOSAIC_CBX_EDGES
-    {   
-        Pos = MAP_APPFONT ( 12, MA_Y4 ) ; 
-        Size = MAP_APPFONT ( 91, 12 ) ; 
-        TabStop = TRUE ; 
-        Text = "~Kanten hervorheben" ; 
-        Text[ ENGLISH ] = "~Enhance edges" ; 
-        Text[ english_us ] = "E~nhance edges" ; 
+    {
+        Pos = MAP_APPFONT ( 12, MA_Y4 ) ;
+        Size = MAP_APPFONT ( 91, 12 ) ;
+        TabStop = TRUE ;
+        Text = "~Kanten hervorheben" ;
+        Text[ ENGLISH ] = "~Enhance edges" ;
+        Text[ english_us ] = "E~nhance edges" ;
         Text[ portuguese ] = "~Destacar arestas";
         Text[ russian ] = "~¬˚‰ÂÎËÚ¸ Í‡ˇ";
         Text[ greek ] = "≈ÈÛﬁÏ·ÌÛÁ ‹~ÍÒ˘Ì";
@@ -320,19 +320,19 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250, 100 ) ;
 
-    Text = "Solarisation" ; 
-    Text[ ENGLISH ] = "Solarization" ; 
-    Text[ norwegian ] = "Solarization" ; 
-    Text[ italian ] = "Solarizzazione" ; 
-    Text[ portuguese_brazilian ] = "SolarizaÁ„o" ; 
-    Text[ portuguese ] = "SolarizaÁ„o" ; 
-    Text[ finnish ] = "Solarisaatio" ; 
-    Text[ danish ] = "Solarisering" ; 
-    Text[ french ] = "Solarisation" ; 
-    Text[ swedish ] = "Solarisering" ; 
-    Text[ dutch ] = "Solarisatie" ; 
-    Text[ spanish ] = "SolarizaciÛn" ; 
-    Text[ english_us ] = "Solarization" ; 
+    Text = "Solarisation" ;
+    Text[ ENGLISH ] = "Solarization" ;
+    Text[ norwegian ] = "Solarization" ;
+    Text[ italian ] = "Solarizzazione" ;
+    Text[ portuguese_brazilian ] = "SolarizaÁ„o" ;
+    Text[ portuguese ] = "SolarizaÁ„o" ;
+    Text[ finnish ] = "Solarisaatio" ;
+    Text[ danish ] = "Solarisering" ;
+    Text[ french ] = "Solarisation" ;
+    Text[ swedish ] = "Solarisering" ;
+    Text[ dutch ] = "Solarisatie" ;
+    Text[ spanish ] = "SolarizaciÛn" ;
+    Text[ english_us ] = "Solarization" ;
     Text[ chinese_simplified ] = "ÊõùÂÖâ";
     Text[ russian ] = "—ÓÎˇËÁ‡ˆËˇ";
     Text[ polish ] = "Solaryzacja";
@@ -386,19 +386,19 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
     {
         Pos = MAP_APPFONT ( 12, MA_Y5 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
-        Text = "~Schwellenwert" ; 
-        Text[ ENGLISH ] = "Threshold" ; 
-        Text[ norwegian ] = "Threshold" ; 
-        Text[ italian ] = "Soglia" ; 
-        Text[ portuguese_brazilian ] = "~Valor limite" ; 
-        Text[ portuguese ] = "~Valor limite" ; 
-        Text[ finnish ] = "Raja-~arvo" ; 
-        Text[ danish ] = "~TÊrskelvÊrdi" ; 
-        Text[ french ] = "~Valeur de seuil" ; 
-        Text[ swedish ] = "Trˆ~skelv‰rde" ; 
-        Text[ dutch ] = "~Drempelwaarde" ; 
-        Text[ spanish ] = "Valor ~umbral" ; 
-        Text[ english_us ] = "Threshold ~value" ; 
+        Text = "~Schwellenwert" ;
+        Text[ ENGLISH ] = "Threshold" ;
+        Text[ norwegian ] = "Threshold" ;
+        Text[ italian ] = "Soglia" ;
+        Text[ portuguese_brazilian ] = "~Valor limite" ;
+        Text[ portuguese ] = "~Valor limite" ;
+        Text[ finnish ] = "Raja-~arvo" ;
+        Text[ danish ] = "~TÊrskelvÊrdi" ;
+        Text[ french ] = "~Valeur de seuil" ;
+        Text[ swedish ] = "Trˆ~skelv‰rde" ;
+        Text[ dutch ] = "~Drempelwaarde" ;
+        Text[ spanish ] = "Valor ~umbral" ;
+        Text[ english_us ] = "Threshold ~value" ;
         Text[ chinese_simplified ] = "ÂàùÂßãÂÄº(~V)";
         Text[ russian ] = "œÓÓ„Ó‚ÓÂ ÁÌ‡˜ÂÌËÂ";
         Text[ polish ] = "WartoúÊ progowa";
@@ -419,38 +419,38 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
 #define MA_Y6   MA_Y5 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERSOLARIZE_MTR_THRESHOLD
     {
-        Border = TRUE ; 
+        Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , MA_Y6 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
-        TabStop = TRUE ; 
-        Repeat = TRUE ; 
-        Spin = TRUE ; 
-        Maximum = 100 ; 
-        StrictFormat = TRUE ; 
-        Unit = FUNIT_CUSTOM ; 
-        CustomUnitText = " %" ; 
-        Last = 100 ; 
-        SpinSize = 1 ; 
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+        Last = 100 ;
+        SpinSize = 1 ;
     };
 #define MA_Y7   MA_Y6 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     CheckBox DLG_FILTERSOLARIZE_CBX_INVERT
-    {   
-        Pos = MAP_APPFONT ( 12, 46 ) ; 
-        Size = MAP_APPFONT ( 77, 12 ) ; 
-        TabStop = TRUE ; 
-        Text = "~Invertieren" ; 
-        Text[ ENGLISH ] = "Invert" ; 
-        Text[ norwegian ] = "Invert" ; 
-        Text[ italian ] = "Inverti" ; 
-        Text[ portuguese_brazilian ] = "~Inverter" ; 
-        Text[ portuguese ] = "~Inverter" ; 
-        Text[ finnish ] = "Muunna ~k‰‰nteiseksi" ; 
-        Text[ danish ] = "~Inverter" ; 
-        Text[ french ] = "~Invertir" ; 
-        Text[ swedish ] = "~Invertera" ; 
-        Text[ dutch ] = "~Diapositief" ; 
-        Text[ spanish ] = "I~nvertir" ; 
-        Text[ english_us ] = "~Invert" ; 
+    {
+        Pos = MAP_APPFONT ( 12, 46 ) ;
+        Size = MAP_APPFONT ( 77, 12 ) ;
+        TabStop = TRUE ;
+        Text = "~Invertieren" ;
+        Text[ ENGLISH ] = "Invert" ;
+        Text[ norwegian ] = "Invert" ;
+        Text[ italian ] = "Inverti" ;
+        Text[ portuguese_brazilian ] = "~Inverter" ;
+        Text[ portuguese ] = "~Inverter" ;
+        Text[ finnish ] = "Muunna ~k‰‰nteiseksi" ;
+        Text[ danish ] = "~Inverter" ;
+        Text[ french ] = "~Invertir" ;
+        Text[ swedish ] = "~Invertera" ;
+        Text[ dutch ] = "~Diapositief" ;
+        Text[ spanish ] = "I~nvertir" ;
+        Text[ english_us ] = "~Invert" ;
         Text[ chinese_simplified ] = "‰∫íË°•Ëâ≤ËΩ¨Êç¢(~I)";
         Text[ russian ] = "»Ì‚ÂÚËÓ‚‡Ú¸";
         Text[ polish ] = "~OdwrÛÊ";
@@ -507,19 +507,19 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250, 100 ) ;
 
-    Text = "Alterung" ; 
-    Text[ ENGLISH ] = "Age" ; 
-    Text[ norwegian ] = "Age" ; 
-    Text[ italian ] = "Invecchiamento" ; 
-    Text[ portuguese_brazilian ] = "Envelhecimento" ; 
-    Text[ portuguese ] = "Envelhecimento" ; 
-    Text[ finnish ] = "Ik‰‰ntyminen" ; 
-    Text[ danish ] = "Sepia" ; 
-    Text[ french ] = "Vieillissement" ; 
-    Text[ swedish ] = "≈ldrande" ; 
-    Text[ dutch ] = "Ouder maken" ; 
-    Text[ spanish ] = "Envejecimiento" ; 
-    Text[ english_us ] = "Aging" ; 
+    Text = "Alterung" ;
+    Text[ ENGLISH ] = "Age" ;
+    Text[ norwegian ] = "Age" ;
+    Text[ italian ] = "Invecchiamento" ;
+    Text[ portuguese_brazilian ] = "Envelhecimento" ;
+    Text[ portuguese ] = "Envelhecimento" ;
+    Text[ finnish ] = "Ik‰‰ntyminen" ;
+    Text[ danish ] = "Sepia" ;
+    Text[ french ] = "Vieillissement" ;
+    Text[ swedish ] = "≈ldrande" ;
+    Text[ dutch ] = "Ouder maken" ;
+    Text[ spanish ] = "Envejecimiento" ;
+    Text[ english_us ] = "Aging" ;
     Text[ chinese_simplified ] = "Êó∂Êïà";
     Text[ russian ] = "—Ú‡ÂÌËÂ";
     Text[ polish ] = "Efekt starzenia";
@@ -574,19 +574,19 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
     {
         Pos = MAP_APPFONT ( 12 , MA_Y8 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
-        Text = "Alterungsgrad" ; 
-        Text[ ENGLISH ] = "Age value" ; 
-        Text[ norwegian ] = "Age value" ; 
-        Text[ italian ] = "Grado di invecchiamento" ; 
-        Text[ portuguese_brazilian ] = "Grau de Envelhecimento" ; 
-        Text[ portuguese ] = "Grau de envelhecimento" ; 
-        Text[ finnish ] = "Ik‰‰ntymisaste" ; 
-        Text[ danish ] = "Sepiagrad" ; 
-        Text[ french ] = "DegrÈ de vieillissement" ; 
-        Text[ swedish ] = "≈ldringsgrad" ; 
-        Text[ dutch ] = "Mate van veroudering" ; 
-        Text[ spanish ] = "Grado de envejecimiento" ; 
-        Text[ english_us ] = "Aging degree" ; 
+        Text = "Alterungsgrad" ;
+        Text[ ENGLISH ] = "Age value" ;
+        Text[ norwegian ] = "Age value" ;
+        Text[ italian ] = "Grado di invecchiamento" ;
+        Text[ portuguese_brazilian ] = "Grau de Envelhecimento" ;
+        Text[ portuguese ] = "Grau de envelhecimento" ;
+        Text[ finnish ] = "Ik‰‰ntymisaste" ;
+        Text[ danish ] = "Sepiagrad" ;
+        Text[ french ] = "DegrÈ de vieillissement" ;
+        Text[ swedish ] = "≈ldringsgrad" ;
+        Text[ dutch ] = "Mate van veroudering" ;
+        Text[ spanish ] = "Grado de envejecimiento" ;
+        Text[ english_us ] = "Aging degree" ;
         Text[ chinese_simplified ] = "Êó∂ÊïàÂ∫¶";
         Text[ russian ] = "—ÚÂÔÂÌ¸ ÒÚ‡ÂÌËˇ";
         Text[ polish ] = "StopieÒ efektu starzenia";
@@ -608,21 +608,21 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
 #define MA_Y9   MA_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERSEPIA_MTR_SEPIA
     {
-        Border = TRUE ; 
+        Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , MA_Y9 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
-        TabStop = TRUE ; 
-        Right = TRUE ; 
-        Repeat = TRUE ; 
-        Spin = TRUE ; 
-        Minimum = 1 ; 
-        Maximum = 100 ; 
-        StrictFormat = TRUE ; 
-        Unit = FUNIT_CUSTOM ; 
-        CustomUnitText = " %" ; 
-        First = 1 ; 
-        Last = 100 ; 
-        SpinSize = 1 ; 
+        TabStop = TRUE ;
+        Right = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+        First = 1 ;
+        Last = 100 ;
+        SpinSize = 1 ;
     };
     OKButton BTN_OK
     {
@@ -662,20 +662,20 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
     Moveable = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250, 100 ) ;
-    
-    Text = "Poster" ; 
-    Text[ ENGLISH ] = "Posterize" ; 
-    Text[ norwegian ] = "Posterize" ; 
-    Text[ italian ] = "Poster" ; 
-    Text[ portuguese_brazilian ] = "Transformar em pÙster" ; 
-    Text[ portuguese ] = "Poster" ; 
-    Text[ finnish ] = "V‰rien v‰hennys" ; 
-    Text[ danish ] = "Plakat" ; 
-    Text[ french ] = "Poster" ; 
-    Text[ swedish ] = "Poster" ; 
-    Text[ dutch ] = "Poster" ; 
-    Text[ spanish ] = "PÛster" ; 
-    Text[ english_us ] = "Posterize" ; 
+
+    Text = "Poster" ;
+    Text[ ENGLISH ] = "Posterize" ;
+    Text[ norwegian ] = "Posterize" ;
+    Text[ italian ] = "Poster" ;
+    Text[ portuguese_brazilian ] = "Transformar em pÙster" ;
+    Text[ portuguese ] = "Poster" ;
+    Text[ finnish ] = "V‰rien v‰hennys" ;
+    Text[ danish ] = "Plakat" ;
+    Text[ french ] = "Poster" ;
+    Text[ swedish ] = "Poster" ;
+    Text[ dutch ] = "Poster" ;
+    Text[ spanish ] = "PÛster" ;
+    Text[ english_us ] = "Posterize" ;
     Text[ chinese_simplified ] = "Êµ∑Êä•";
     Text[ russian ] = "œÎ‡Í‡Ú";
     Text[ polish ] = "Plakat";
@@ -728,19 +728,19 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
     {
         Pos = MAP_APPFONT ( 12 , MA_Y10 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
-        Text = "Posterfarben" ; 
-        Text[ ENGLISH ] = "Poster colors" ; 
-        Text[ norwegian ] = "Poster colors" ; 
-        Text[ italian ] = "Colori posterizz." ; 
-        Text[ portuguese_brazilian ] = "Cores do pÙster" ; 
-        Text[ portuguese ] = "Cores do poster" ; 
-        Text[ finnish ] = "V‰rien m‰‰r‰" ; 
-        Text[ danish ] = "Plakatfarver" ; 
-        Text[ french ] = "Couleurs du poster" ; 
-        Text[ swedish ] = "Posterf‰rger" ; 
-        Text[ dutch ] = "Posterkleuren" ; 
-        Text[ spanish ] = "Colores del pÛster" ; 
-        Text[ english_us ] = "Poster colors" ; 
+        Text = "Posterfarben" ;
+        Text[ ENGLISH ] = "Poster colors" ;
+        Text[ norwegian ] = "Poster colors" ;
+        Text[ italian ] = "Colori posterizz." ;
+        Text[ portuguese_brazilian ] = "Cores do pÙster" ;
+        Text[ portuguese ] = "Cores do poster" ;
+        Text[ finnish ] = "V‰rien m‰‰r‰" ;
+        Text[ danish ] = "Plakatfarver" ;
+        Text[ french ] = "Couleurs du poster" ;
+        Text[ swedish ] = "Posterf‰rger" ;
+        Text[ dutch ] = "Posterkleuren" ;
+        Text[ spanish ] = "Colores del pÛster" ;
+        Text[ english_us ] = "Poster colors" ;
         Text[ chinese_simplified ] = "Êµ∑Êä•È¢úËâ≤";
         Text[ russian ] = "÷‚ÂÚ‡ ÔÎ‡Í‡Ú‡";
         Text[ polish ] = "Kolory plakatu";
@@ -760,18 +760,18 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
 #define MA_Y11  MA_Y10 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     NumericField DLG_FILTERPOSTER_NUM_POSTER
     {
-        Border = TRUE ; 
+        Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , MA_Y11 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
-        TabStop = TRUE ; 
-        Repeat = TRUE ; 
-        Spin = TRUE ; 
-        Minimum = 2 ; 
-        Maximum = 64 ; 
-        StrictFormat = TRUE ; 
-        First = 2 ; 
-        Last = 64 ; 
-        SpinSize = 1 ; 
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 2 ;
+        Maximum = 64 ;
+        StrictFormat = TRUE ;
+        First = 2 ;
+        Last = 64 ;
+        SpinSize = 1 ;
     };
     OKButton BTN_OK
     {
@@ -806,8 +806,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
 
 TabPage RID_SVX_GRFFILTER_DLG_EMBOSS_TAB
 {
-    Pos = MAP_APPFONT ( 0, 0 ) ; 
-    Size = MAP_APPFONT ( 0, 0 ) ; 
+    Pos = MAP_APPFONT ( 0, 0 ) ;
+    Size = MAP_APPFONT ( 0, 0 ) ;
 };
 
 ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
@@ -818,19 +818,19 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250, 100 ) ;
 
-    Text = "Relief" ; 
-    Text[ ENGLISH ] = "Emboss" ; 
-    Text[ norwegian ] = "Emboss" ; 
-    Text[ italian ] = "Rilievo" ; 
-    Text[ portuguese_brazilian ] = "Relevo" ; 
-    Text[ portuguese ] = "Relevo" ; 
-    Text[ finnish ] = "Korkokuva" ; 
-    Text[ danish ] = "Relief" ; 
-    Text[ french ] = "Relief" ; 
-    Text[ swedish ] = "Relief" ; 
-    Text[ dutch ] = "ReliÎf" ; 
-    Text[ spanish ] = "Relieve" ; 
-    Text[ english_us ] = "Relief" ; 
+    Text = "Relief" ;
+    Text[ ENGLISH ] = "Emboss" ;
+    Text[ norwegian ] = "Emboss" ;
+    Text[ italian ] = "Rilievo" ;
+    Text[ portuguese_brazilian ] = "Relevo" ;
+    Text[ portuguese ] = "Relevo" ;
+    Text[ finnish ] = "Korkokuva" ;
+    Text[ danish ] = "Relief" ;
+    Text[ french ] = "Relief" ;
+    Text[ swedish ] = "Relief" ;
+    Text[ dutch ] = "ReliÎf" ;
+    Text[ spanish ] = "Relieve" ;
+    Text[ english_us ] = "Relief" ;
     Text[ chinese_simplified ] = "ÊµÆÈõï";
     Text[ russian ] = "–ÂÎ¸ÂÙ";
     Text[ polish ] = "Uwypuklenie";
@@ -841,7 +841,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     Text[ korean ] = "ÏñëÍ∞Å";
     Text[ turkish ] = "Kabartma";
     Text[ language_user1 ] = " ";
-    
+
     FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -884,19 +884,19 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     {
         Pos = MAP_APPFONT ( 12 , MA_Y12 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
-        Text = "Lichtquelle" ; 
-        Text[ ENGLISH ] = "Source of light" ; 
-        Text[ norwegian ] = "Source of light" ; 
-        Text[ italian ] = "Sorgente di luce" ; 
-        Text[ portuguese_brazilian ] = "Fonte de luz" ; 
-        Text[ portuguese ] = "Fonte de luz" ; 
-        Text[ finnish ] = "Valonl‰hde" ; 
-        Text[ danish ] = "Lyskilde" ; 
-        Text[ french ] = "Source de lumiËre" ; 
-        Text[ swedish ] = "Ljusk‰lla" ; 
-        Text[ dutch ] = "Lichtbron" ; 
-        Text[ spanish ] = "Fuente de luz" ; 
-        Text[ english_us ] = "Light source" ; 
+        Text = "Lichtquelle" ;
+        Text[ ENGLISH ] = "Source of light" ;
+        Text[ norwegian ] = "Source of light" ;
+        Text[ italian ] = "Sorgente di luce" ;
+        Text[ portuguese_brazilian ] = "Fonte de luz" ;
+        Text[ portuguese ] = "Fonte de luz" ;
+        Text[ finnish ] = "Valonl‰hde" ;
+        Text[ danish ] = "Lyskilde" ;
+        Text[ french ] = "Source de lumiËre" ;
+        Text[ swedish ] = "Ljusk‰lla" ;
+        Text[ dutch ] = "Lichtbron" ;
+        Text[ spanish ] = "Fuente de luz" ;
+        Text[ english_us ] = "Light source" ;
         Text[ chinese_simplified ] = "ÂÖâÊ∫ê";
         Text[ russian ] = "»ÒÚÓ˜ÌËÍ Ò‚ÂÚ‡";
         Text[ polish ] = "èrÛd≥o úwiat≥a";
@@ -917,10 +917,10 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     Control DLG_FILTEREMBOSS_CTL_LIGHT
     {
         HelpID = HID_GRFFILTER_EMBOSS_LIGHT ;
-        Border = TRUE ; 
+        Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , MA_Y13 ) ;
         Size = MAP_APPFONT ( 77 , 60 ) ;
-        TabStop = TRUE ; 
+        TabStop = TRUE ;
     };
     OKButton BTN_OK
     {
@@ -948,6 +948,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     Text[ hindi ] = "‡§∏‡§π‡§æ‡§Ø‡§§‡§æ";
     Text[ slovak ] = "Reli√©f";
 };
+
 
 
 
