@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:41:16 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 // OD 26.06.2003 #108784#
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
+#endif
+#ifndef _NDOLE_HXX
+#include <ndole.hxx>
 #endif
 
 // Inline Methode vom UndoIter
@@ -401,21 +404,22 @@ void SwUndoInsLayFmt::Repeat( SwUndoIter& rUndoIter )
 // #111827#
 String SwUndoInsLayFmt::GetComment() const
 {
-    /*
-      If frame format is present and has an SdrObject use the undo
-      comment of the SdrObject. Otherwise use the default comment.
-     */
     String aResult;
 
-    bool bDone = false;
-    if (pFrmFmt)
+    if (! pComment)
     {
-        const SdrObject * pSdrObj = pFrmFmt->FindSdrObject();
+        /*
+          If frame format is present and has an SdrObject use the undo
+          comment of the SdrObject. Otherwise use the default comment.
+        */
 
-        if (pSdrObj)
+        bool bDone = false;
+        if (pFrmFmt)
         {
+            const SdrObject * pSdrObj = pFrmFmt->FindSdrObject();
+
             // -> #i30295#
-            if (pSdrObj != pSdrObjLast)
+            if (pSdrObj && pSdrObj != pSdrObjLast)
             {
                 delete pSdrUndo;
                 delete pSdrObjCopy;
@@ -435,10 +439,12 @@ String SwUndoInsLayFmt::GetComment() const
                 bDone = true;
             }
         }
-    }
 
-    if (! bDone)
-        aResult = SwUndo::GetComment();
+        if (! bDone)
+            aResult = SwUndo::GetComment();
+    }
+    else
+        aResult = *pComment;
 
     return aResult;
 }
@@ -460,8 +466,36 @@ SwUndoDelLayFmt::SwUndoDelLayFmt( SwFrmFmt* pFormat )
         if( pNd->IsGrfNode() )
             SetId( UNDO_DELGRF );
         else if( pNd->IsOLENode() )
-            SetId( UNDO_DELOLE );
+        {
+            SetId( UNDO_DELETE );
+
+        }
     }
+}
+
+SwRewriter SwUndoDelLayFmt::GetRewriter() const
+{
+    SwRewriter aRewriter;
+
+    SwDoc * pDoc = pFrmFmt->GetDoc();
+
+    if (pDoc)
+    {
+        SwNodeIndex* pIdx = GetMvSttIdx();
+        if( 1 == GetMvNodeCnt() && pIdx)
+        {
+            SwNode * pNd = (*pDoc->GetUndoNds())[ *pIdx ];
+
+            if ( pNd->IsNoTxtNode() && pNd->IsOLENode())
+            {
+                SwOLENode * pOLENd = pNd->GetOLENode();
+
+                aRewriter.AddRule(UNDO_ARG1, pOLENd->GetDescription());
+            }
+        }
+    }
+
+    return aRewriter;
 }
 
 void SwUndoDelLayFmt::Undo( SwUndoIter& rUndoIter )
@@ -500,6 +534,17 @@ SwUndoSetFlyFmt::SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt )
     nNewNode( 0 ), nNewCntnt( 0 ), nNewAnchorTyp( 0 ), bAnchorChgd( FALSE )
 {
 }
+
+SwRewriter SwUndoSetFlyFmt::GetRewriter() const
+{
+    SwRewriter aRewriter;
+
+    if (pNewFmt)
+        aRewriter.AddRule(UNDO_ARG1, pNewFmt->GetName());
+
+    return aRewriter;
+}
+
 
 SwUndoSetFlyFmt::~SwUndoSetFlyFmt()
 {
