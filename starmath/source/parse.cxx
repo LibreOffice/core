@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-06 12:39:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,7 +559,7 @@ void SmParser::NextToken()
         CurToken.nLevel     = 5;
         CurToken.aText      = BufferString.Copy( nRealStart, (xub_StrLen) n );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             if (!IsDelimiter( BufferString, aRes.EndPos ))
                 DBG_WARNING( "identifier really finished? (compatibility!)" );
 #endif
@@ -597,7 +597,7 @@ void SmParser::NextToken()
             CurToken.nLevel     = 5;
             CurToken.aText      = aName;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             if (!IsDelimiter( BufferString, aRes.EndPos ))
                 DBG_WARNING( "identifier really finished? (compatibility!)" );
 #endif
