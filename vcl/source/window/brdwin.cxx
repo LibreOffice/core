@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:32:10 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1759,9 +1759,10 @@ long ImplOS2BorderWindowView::CalcTitleWidth() const
 
 // -----------------------------------------------------------------------
 
-void ImplOS2BorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pDev, const Point* pOffset )
+void ImplOS2BorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutDev, const Point* pOffset )
 {
     ImplBorderFrameData*    pData = &maFrameData;
+    OutputDevice*           pDev = pOutDev ? pOutDev : pData->mpOutDev;
     ImplBorderWindow*       pBorderWindow = pData->mpBorderWindow;
     Point                   aTmpPoint( pOffset ? *pOffset : Point() );
     Rectangle               aInRect( aTmpPoint, Size( pData->mnWidth, pData->mnHeight ) );
@@ -2199,9 +2200,10 @@ long ImplUnxBorderWindowView::CalcTitleWidth() const
 
 // -----------------------------------------------------------------------
 
-void ImplUnxBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pDev, const Point* pOffset )
+void ImplUnxBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutDev, const Point* pOffset )
 {
     ImplBorderFrameData*    pData = &maFrameData;
+    OutputDevice*           pDev = pOutDev ? pOutDev : pData->mpOutDev;
     ImplBorderWindow*       pBorderWindow = pData->mpBorderWindow;
     Point                   aTmpPoint( pOffset ? *pOffset : Point() );
     Rectangle               aInRect( aTmpPoint, Size( pData->mnWidth, pData->mnHeight ) );
@@ -2807,9 +2809,10 @@ long ImplMacBorderWindowView::CalcTitleWidth() const
 
 // -----------------------------------------------------------------------
 
-void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pDev, const Point* pOffset )
+void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutDev, const Point* pOffset )
 {
     ImplBorderFrameData*    pData = &maFrameData;
+    OutputDevice*           pDev = pOutDev ? pOutDev : pData->mpOutDev;
     ImplBorderWindow*       pBorderWindow = pData->mpBorderWindow;
     Point                   aTmpPoint( pOffset ? *pOffset : Point() );
     Rectangle               aInRect( aTmpPoint, Size( pData->mnWidth, pData->mnHeight ) );
