@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:01:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 08:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,6 +715,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Sicherheit" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Darstellung" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Zugänglichkeit" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Netzwerkidentität" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ENGLISH]=
@@ -731,6 +732,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Fonts" ; RID_SVX_FONT_SUBSTITUTION ; > ;
             < "Security" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Accessibility" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Network Identity" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ language_user1 ] =
@@ -748,6 +750,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "; Sicherheit" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "; Appearance" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "; Accessibility" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "; Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "; EM Sept 2002: This string is not used. But if it were used it would refer to a type of \\\\\\\\\\\\\\\\!; ; EM Sept 2002: This string is not used. But if it were used it would refer to a type of \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ english_us ] =
@@ -765,6 +768,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Security" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Appearance" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Accessibility" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Network Identity" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ portuguese ] =
@@ -782,6 +786,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Segurança" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Java" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Outros" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Netzwerkidentität" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ russian ] =
@@ -799,6 +804,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Áåçîïàñíîñòü" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Java" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Ïðî÷åå" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Netzwerkidentit?t" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ greek ] =
@@ -816,6 +822,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "ÁóöÜëåéá" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "ÅìöÜíéóç" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Ðñïóâáóéìüôçôá" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "ÄéêôõáêÞ Ôáõôüôçôá" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ dutch ] =
@@ -833,6 +840,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Veiligheid" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Vormgeving" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Overige" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Netwerkidentiteit" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ french ] =
@@ -850,6 +858,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Sécurité" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Apparence" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Accessibilité" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Identité réseau" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ spanish ] =
@@ -867,6 +876,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Seguridad" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Representación" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Accesibilidad" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Identidad red" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ finnish ] =
@@ -884,6 +894,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Suojaus" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Varjostus" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Muu" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Netzwerkidentität" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ italian ] =
@@ -901,6 +912,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Sicurezza" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Rappresentazione" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Accessibilità" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Identità network" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ danish ] =
@@ -918,6 +930,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Sikkerhed" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Udseende" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Tilgængelighed" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Netværksidentifikation" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ swedish ] =
@@ -935,6 +948,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Säkerhet" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Visning" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Tillgänglighet" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Nätverksidentitet" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ polish ] =
@@ -952,6 +966,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Bezpieczeñstwo" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Java" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Inne" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Netzwerkidentität" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ portuguese_brazilian ] =
@@ -969,6 +984,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Segurança" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Aparência" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Acessibilidade" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Identidade de rede" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ japanese ] =
@@ -986,6 +1002,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "é…è‰²ã®èª¿æ•´" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "ã‚¢ã‚¯ã‚»ã‚·ãƒ“ãƒªãƒ†ã‚£" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¢ã‚¤ãƒ‡ãƒ³ãƒ†ã‚£ãƒ†ã‚£" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ korean ] =
@@ -1003,6 +1020,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "ë³´ì•ˆ" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "í‘œì‹œ í˜•ì‹" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "ë‚´ê²Œ í•„ìš”í•œ ì˜µì…˜" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "ë„¤íŠ¸ì›Œí¬ ID" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ chinese_simplified ] =
@@ -1020,6 +1038,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "å®‰å…¨" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "æ˜¾ç¤º" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "è¾…åŠ©åŠŸèƒ½" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "ä½¿ç”¨è€…ç™»å½•" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ chinese_traditional ] =
@@ -1037,6 +1056,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "å®‰å…¨" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "é¡¯ç¤º" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "å”åŠ©å·¥å…·" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "ä½¿ç”¨è€…ç™»å…¥" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ turkish ] =
@@ -1054,6 +1074,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Güvenlik" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Görünüm" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Eriþilebilirlik" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Að Kimliði" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ arabic ] =
@@ -1071,6 +1092,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "ÛíÑ Ðáß" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Java" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "ÛíÑ Ðáß" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Netzwerkidentit?t" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ catalan ] =
@@ -1088,6 +1110,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Altres" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "Representació" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Accessibility" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Netzwerkidentität" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ thai ] =
@@ -1105,6 +1128,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "à¸„à¸§à¸²à¸¡à¸›à¸¥à¸­à¸”à¸ à¸±à¸¢" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
             < "à¹à¸£à¹€à¸‡à¸²" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Accessibility" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "NetzwerkidentitÃ¤t" ; RID_SVXPAGE_SSO ; > ;
         };
     ItemList [ czech ] =
@@ -1122,6 +1146,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         < "BezpeÄnost" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
         < "Vzhled" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
         < "ZpÅ™Ã­stupnÄ›nÃ­" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+        < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
         < "SÃ­Å¥ovÃ¡ identita" ; RID_SVXPAGE_SSO ; > ;
     };
     ItemList [ hebrew ] =
@@ -1139,6 +1164,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         < "Sicherheit" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
         < "Darstellung" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
         < "ZugÃ¤nglichkeit" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+        < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
         < "NetzwerkidentitÃ¤t" ; RID_SVXPAGE_SSO ; > ;
     };
     ItemList [ hindi ] =
@@ -1156,6 +1182,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         < "à¤°à¤•à¥à¤·à¤¾" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
         < "Appearance" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
         < "Accessibility" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+        < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
         < "Network Identity" ; RID_SVXPAGE_SSO ; > ;
     };
     ItemList [ slovak ] =
@@ -1173,6 +1200,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         < "BezpeÄnosÅ¥" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
         < "VzhÄ¾ad" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
         < "PrÃ­stupnosÅ¥" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+        < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
         < "SieÅ¥ovÃ¡ identita" ; RID_SVXPAGE_SSO ; > ;
     };
     ItemList [ hungarian ] =
@@ -1190,6 +1218,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         < "BiztonsÃ¡g" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
         < "KinÃ©zet" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
         < "KisegÃ­tÅ‘ lehetÅ‘sÃ©gek" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+        < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
         < "HÃ¡lÃ³zati azonosÃ­tÃ¡s" ; RID_SVXPAGE_SSO ; > ;
     };
     ItemList [ slovenian ] =
@@ -1207,6 +1236,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         < "Varnost" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
         < "Izgled" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
         < "PripomoÄki za invalide" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+        < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
         < "OmreÅ¾na identiteta" ; RID_SVXPAGE_SSO ; > ;
     };
     };
