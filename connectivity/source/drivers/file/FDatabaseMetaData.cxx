@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-20 06:51:53 $
+ *  last change: $Author: oj $ $Date: 2000-10-05 14:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,35 +217,50 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     while(xResultSet->next())
     {
         aName = xRow->getString(1);
+        INetURLObject aURL;
+        aURL.SetSmartProtocol(INET_PROT_FILE);
+        aURL.SetSmartURL(aName);
         ORow aRow(3);
+        sal_Bool bNewRow = sal_False;
         if (aFilenameExtension.Len())
         {
-            aName = aName.replaceAt(aName.getLength()-(aFilenameExtension.Len()+1),aFilenameExtension.Len()+1,::rtl::OUString());
-            if(match(tableNamePattern,aName.getStr(),'\0'))
-                aRow.push_back(makeAny(aName));
+            if(aURL.getExtension() == aFilenameExtension)
+            {
+                aName = aName.replaceAt(aName.getLength()-(aFilenameExtension.Len()+1),aFilenameExtension.Len()+1,::rtl::OUString());
+                if(match(tableNamePattern,aName.getStr(),'\0'))
+                {
+                    aRow.push_back(makeAny(aName));
+                    bNewRow = sal_True;
+                }
+            }
         }
         else // keine extension, dann selbst filtern
         {
             sal_Bool bErg = sal_False;
             do
             {
-                INetURLObject aURL;
-                aURL.SetSmartProtocol(INET_PROT_FILE);
-                aURL.SetSmartURL(aName);
-
                 if (!aURL.getExtension().Len())
                 {
                     if(match(tableNamePattern,aURL.getBase().GetBuffer(),'\0'))
+                    {
                         aRow.push_back(makeAny(::rtl::OUString(aURL.getBase())));
+                        bNewRow = sal_True;
+                    }
                     break;
                 }
                 else if(bErg = xResultSet->next())
+                {
                     aName = xRow->getString(1);
+                    aURL.SetSmartURL(aName);
+                }
             } while (bErg);
         }
-        aRow.push_back(makeAny(aTable));
-        aRow.push_back(Any());
-        aRows.push_back(aRow);
+        if(bNewRow)
+        {
+            aRow.push_back(makeAny(aTable));
+            aRow.push_back(Any());
+            aRows.push_back(aRow);
+        }
     }
 
     pResult->setRows(aRows);

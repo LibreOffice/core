@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-20 06:52:26 $
+ *  last change: $Author: oj $ $Date: 2000-10-05 14:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,5 +451,12 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getCrossReference(
         Reference< XResultSet > xRef = pResult;
     pResult->setCrossReferenceMap();
     return xRef;
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ODbaseDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    return ::rtl::OUString::createFromAscii("sdbc:dbase:");
 }
 
