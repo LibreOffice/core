@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-16 09:08:13 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1293,7 +1293,7 @@ Reference< text::XText >  SwXTextViewCursor::getText(void) throw( uno::RuntimeEx
         SwWrtShell& rSh = pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
         SwDoc* pDoc = pView->GetDocShell()->GetDoc();
-        Reference< text::XTextRange >  xRg = ::CreateTextRangeFromPosition(pDoc,
+        Reference< text::XTextRange >  xRg = SwXTextRange::CreateTextRangeFromPosition(pDoc,
                                     *pShellCrsr->Start(), 0);
         xRet = xRg->getText();
     }
@@ -1313,7 +1313,7 @@ Reference< text::XTextRange >  SwXTextViewCursor::getStart(void) throw( uno::Run
         SwWrtShell& rSh = pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
         SwDoc* pDoc = pView->GetDocShell()->GetDoc();
-        xRet = ::CreateTextRangeFromPosition(pDoc,
+        xRet = SwXTextRange::CreateTextRangeFromPosition(pDoc,
                                     *pShellCrsr->Start(), 0);
     }
     else
@@ -1332,7 +1332,7 @@ Reference< text::XTextRange >  SwXTextViewCursor::getEnd(void) throw( uno::Runti
         SwWrtShell& rSh = pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
         SwDoc* pDoc = pView->GetDocShell()->GetDoc();
-        xRet = ::CreateTextRangeFromPosition(pDoc,
+        xRet = SwXTextRange::CreateTextRangeFromPosition(pDoc,
                                         *pShellCrsr->End(), 0);
     }
     else

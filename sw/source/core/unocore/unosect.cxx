@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-01-11 12:40:02 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ uno::Reference< text::XTextRange >  SwXTextSection::getAnchor(void) throw( uno::
             SwCursor aCrsr(*aPaM.GetPoint());
             aCrsr.SetMark();
             aCrsr.MoveRegion( fnRegionCurr, fnRegionEnd );
-            xRet = ::CreateTextRangeFromPosition(pSectFmt->GetDoc(),
+            xRet = SwXTextRange::CreateTextRangeFromPosition(pSectFmt->GetDoc(),
                 *aCrsr.Start(), aCrsr.End());
         }
     }

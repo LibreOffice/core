@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2000-12-09 14:12:18 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1067,7 +1067,7 @@ Reference< text::XTextRange >  SwXDocumentIndex::getAnchor(void) throw( RuntimeE
             aPaM.SetMark();
             aPaM.GetPoint()->nNode = *pIdx->GetNode().EndOfSectionNode();
             aPaM.Move( fnMoveBackward, fnGoCntnt );
-            xRet = ::CreateTextRangeFromPosition(pSectFmt->GetDoc(),
+            xRet = SwXTextRange::CreateTextRangeFromPosition(pSectFmt->GetDoc(),
                 *aPaM.GetMark(), aPaM.GetPoint());
         }
     }

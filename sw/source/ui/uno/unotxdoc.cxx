@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 10:46:46 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #ifndef _UNOCOLL_HXX
 #include <unocoll.hxx>
 #endif
+#ifndef _UNOREDLINES_HXX
+#include <unoredlines.hxx>
+#endif
 #ifndef _UNOSRCH_HXX
 #include <unosrch.hxx>
 #endif
@@ -199,6 +202,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
 using namespace ::rtl;
 
 /******************************************************************************
@@ -358,8 +362,8 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell) :
     pDrawPage(0),
     pxXDrawPage(0),
     pxXReferenceMarks(0),
-    pxLinkTargetSupplier(0)
-//  pxXRedlines(0)
+    pxLinkTargetSupplier(0),
+    pxXRedlines(0)
 {
 }
 /*-- 18.12.98 11:53:00---------------------------------------------------
@@ -373,12 +377,6 @@ SwXTextDocument::~SwXTextDocument()
         Reference< XInterface >  x0;
         xNumFmtAgg->setDelegator(x0);
         xNumFmtAgg = 0;
-    }
-    if(pxLinkTargetSupplier)
-    {
-         container::XNameAccess* pAccess = (*pxLinkTargetSupplier).get();
-        ((SwXLinkTargetSupplier*)pAccess)->Invalidate();
-        delete pAccess;
     }
 }
 /*-- 18.12.98 11:55:08---------------------------------------------------
@@ -493,7 +491,7 @@ Reference< frame::XController >  SwXTextDocument::getCurrentController(void) thr
 
   -----------------------------------------------------------------------*/
 void SwXTextDocument::setCurrentController(const Reference< frame::XController > & xController)
-    throw( container::NoSuchElementException, RuntimeException )
+    throw( NoSuchElementException, RuntimeException )
 {
     SfxBaseModel::setCurrentController(xController);
 }
@@ -602,7 +600,7 @@ Reference< XPropertySet > SwXTextDocument::getLineNumberingProperties(void)
 /*-- 18.12.98 11:55:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< container::XIndexReplace >  SwXTextDocument::getChapterNumberingRules(void)
+Reference< XIndexReplace >  SwXTextDocument::getChapterNumberingRules(void)
                                     throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -610,7 +608,7 @@ Reference< container::XIndexReplace >  SwXTextDocument::getChapterNumberingRules
         throw RuntimeException();
     if(!pxXChapterNumbering)
     {
-        pxXChapterNumbering = new Reference< container::XIndexReplace > ;
+        pxXChapterNumbering = new Reference< XIndexReplace > ;
         *pxXChapterNumbering = new SwXChapterNumbering(*pDocShell);
     }
     return *pxXChapterNumbering;
@@ -618,14 +616,14 @@ Reference< container::XIndexReplace >  SwXTextDocument::getChapterNumberingRules
 /*-- 18.12.98 11:55:21---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< container::XIndexAccess >  SwXTextDocument::getFootnotes(void) throw( RuntimeException )
+Reference< XIndexAccess >  SwXTextDocument::getFootnotes(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
     if(!pxXFootnotes)
     {
-        ((SwXTextDocument*)this)->pxXFootnotes = new Reference< container::XIndexAccess > ;
+        ((SwXTextDocument*)this)->pxXFootnotes = new Reference< XIndexAccess > ;
         *pxXFootnotes = new SwXFootnotes(sal_False, pDocShell->GetDoc());
     }
     return *pxXFootnotes;
@@ -649,14 +647,14 @@ Reference< XPropertySet >  SAL_CALL
 /*-- 18.12.98 11:55:21---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< container::XIndexAccess >  SwXTextDocument::getEndnotes(void) throw( RuntimeException )
+Reference< XIndexAccess >  SwXTextDocument::getEndnotes(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
     if(!pxXEndnotes)
     {
-        ((SwXTextDocument*)this)->pxXEndnotes = new Reference< container::XIndexAccess > ;
+        ((SwXTextDocument*)this)->pxXEndnotes = new Reference< XIndexAccess > ;
         *pxXEndnotes = new SwXFootnotes(sal_True, pDocShell->GetDoc());
     }
     return *pxXEndnotes;
@@ -947,7 +945,7 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
 /*-- 18.12.98 11:55:23---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< container::XIndexAccess >
+Reference< XIndexAccess >
     SwXTextDocument::findAll(const Reference< util::XSearchDescriptor > & xDesc)
                                                 throw( RuntimeException )
 {
@@ -958,7 +956,7 @@ Reference< container::XIndexAccess >
     SwUnoCrsr* pResultCrsr = FindAny(xDesc, xCrsr, sal_True, nResult, xTmp);
     if(!pResultCrsr)
         throw RuntimeException();
-    Reference< container::XIndexAccess >  xRet;
+    Reference< XIndexAccess >  xRet;
     if(nResult)
         xRet = new SwXTextRanges(pResultCrsr);
     else
@@ -981,7 +979,7 @@ Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSear
     Reference< XInterface >  xRet;
     if(nResult)
     {
-        Reference< text::XTextRange >  xTempRange = CreateTextRangeFromPosition(
+        Reference< text::XTextRange >  xTempRange = SwXTextRange::CreateTextRangeFromPosition(
                         pDocShell->GetDoc(),
                         *pResultCrsr->GetPoint(),
                         pResultCrsr->GetMark());
@@ -1008,7 +1006,7 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
     Reference< XInterface >  xRet;
     if(nResult)
     {
-        Reference< text::XTextRange >  xTempRange = CreateTextRangeFromPosition(
+        Reference< text::XTextRange >  xTempRange = SwXTextRange::CreateTextRangeFromPosition(
                         pDocShell->GetDoc(),
                         *pResultCrsr->GetPoint(),
                         pResultCrsr->GetMark());
@@ -1256,7 +1254,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
 /*-- 18.12.98 11:55:25---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< container::XNameAccess >  SwXTextDocument::getReferenceMarks(void)
+Reference< XNameAccess >  SwXTextDocument::getReferenceMarks(void)
                                         throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1264,7 +1262,7 @@ Reference< container::XNameAccess >  SwXTextDocument::getReferenceMarks(void)
         throw RuntimeException();
     if(!pxXReferenceMarks)
     {
-        ((SwXTextDocument*)this)->pxXReferenceMarks = new Reference< container::XNameAccess > ;
+        ((SwXTextDocument*)this)->pxXReferenceMarks = new Reference< XNameAccess > ;
         *pxXReferenceMarks = new SwXReferenceMarks(pDocShell->GetDoc());
     }
     return *pxXReferenceMarks;
@@ -1272,14 +1270,14 @@ Reference< container::XNameAccess >  SwXTextDocument::getReferenceMarks(void)
 /* -----------------21.12.98 10:20-------------------
  *
  * --------------------------------------------------*/
-Reference< container::XEnumerationAccess >  SwXTextDocument::getTextFields(void) throw( RuntimeException )
+Reference< XEnumerationAccess >  SwXTextDocument::getTextFields(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
     if(!pxXTextFieldTypes)
     {
-        ((SwXTextDocument*)this)->pxXTextFieldTypes = new Reference< container::XEnumerationAccess > ;
+        ((SwXTextDocument*)this)->pxXTextFieldTypes = new Reference< XEnumerationAccess > ;
         *pxXTextFieldTypes = new SwXTextFieldTypes(pDocShell->GetDoc());
     }
     return *pxXTextFieldTypes;
@@ -1287,7 +1285,7 @@ Reference< container::XEnumerationAccess >  SwXTextDocument::getTextFields(void)
 /*-- 21.12.98 10:21:12---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< container::XNameAccess >  SwXTextDocument::getTextFieldMasters(void)
+Reference< XNameAccess >  SwXTextDocument::getTextFieldMasters(void)
     throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1295,7 +1293,7 @@ Reference< container::XNameAccess >  SwXTextDocument::getTextFieldMasters(void)
         throw RuntimeException();
     if(!pxXTextFieldMasters)
     {
-        ((SwXTextDocument*)this)->pxXTextFieldMasters = new Reference< container::XNameAccess > ;
+        ((SwXTextDocument*)this)->pxXTextFieldMasters = new Reference< XNameAccess > ;
         *pxXTextFieldMasters = new SwXTextFieldMasters(pDocShell->GetDoc());
     }
     return *pxXTextFieldMasters;
@@ -1303,14 +1301,14 @@ Reference< container::XNameAccess >  SwXTextDocument::getTextFieldMasters(void)
 /*-- 21.12.98 10:21:12---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< container::XNameAccess >  SwXTextDocument::getEmbeddedObjects(void) throw( RuntimeException )
+Reference< XNameAccess >  SwXTextDocument::getEmbeddedObjects(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
     if(!pxXEmbeddedObjects)
     {
-        ((SwXTextDocument*)this)->pxXEmbeddedObjects = new Reference< container::XNameAccess > ;
+        ((SwXTextDocument*)this)->pxXEmbeddedObjects = new Reference< XNameAccess > ;
         *pxXEmbeddedObjects = new SwXTextEmbeddedObjects(pDocShell->GetDoc());
     }
     return *pxXEmbeddedObjects;
@@ -1318,14 +1316,14 @@ Reference< container::XNameAccess >  SwXTextDocument::getEmbeddedObjects(void) t
 /*-- 21.12.98 10:21:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< container::XNameAccess >  SwXTextDocument::getBookmarks(void) throw( RuntimeException )
+Reference< XNameAccess >  SwXTextDocument::getBookmarks(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
     if(!pxXBookmarks)
     {
-        ((SwXTextDocument*)this)->pxXBookmarks = new Reference< container::XNameAccess > ;
+        ((SwXTextDocument*)this)->pxXBookmarks = new Reference< XNameAccess > ;
         *pxXBookmarks = new SwXBookmarks(pDocShell->GetDoc());
     }
     return *pxXBookmarks;
@@ -1333,14 +1331,14 @@ Reference< container::XNameAccess >  SwXTextDocument::getBookmarks(void) throw( 
 /*-- 21.12.98 10:21:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< container::XNameAccess >  SwXTextDocument::getTextSections(void) throw( RuntimeException )
+Reference< XNameAccess >  SwXTextDocument::getTextSections(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
     if(!pxXTextSections)
     {
-        ((SwXTextDocument*)this)->pxXTextSections = new Reference< container::XNameAccess > ;
+        ((SwXTextDocument*)this)->pxXTextSections = new Reference< XNameAccess > ;
         *pxXTextSections = new SwXTextSections(pDocShell->GetDoc());
     }
     return *pxXTextSections;
@@ -1348,14 +1346,14 @@ Reference< container::XNameAccess >  SwXTextDocument::getTextSections(void) thro
 /*-- 21.12.98 10:21:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< container::XNameAccess >  SwXTextDocument::getTextTables(void) throw( RuntimeException )
+Reference< XNameAccess >  SwXTextDocument::getTextTables(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
     if(!pxXTextTables)
     {
-        ((SwXTextDocument*)this)->pxXTextTables = new Reference< container::XNameAccess > ;
+        ((SwXTextDocument*)this)->pxXTextTables = new Reference< XNameAccess > ;
         *pxXTextTables = new SwXTextTables(pDocShell->GetDoc());
     }
     return *pxXTextTables;
@@ -1363,14 +1361,14 @@ Reference< container::XNameAccess >  SwXTextDocument::getTextTables(void) throw(
 /*-- 21.12.98 10:21:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< container::XNameAccess >  SwXTextDocument::getGraphicObjects(void) throw( RuntimeException )
+Reference< XNameAccess >  SwXTextDocument::getGraphicObjects(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
     if(!pxXGraphicObjects)
     {
-        ((SwXTextDocument*)this)->pxXGraphicObjects = new Reference< container::XNameAccess > ;
+        ((SwXTextDocument*)this)->pxXGraphicObjects = new Reference< XNameAccess > ;
         *pxXGraphicObjects = new SwXTextGraphicObjects(pDocShell->GetDoc());
     }
     return *pxXGraphicObjects;
@@ -1378,14 +1376,14 @@ Reference< container::XNameAccess >  SwXTextDocument::getGraphicObjects(void) th
 /*-- 21.12.98 10:21:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< container::XNameAccess >  SwXTextDocument::getTextFrames(void) throw( RuntimeException )
+Reference< XNameAccess >  SwXTextDocument::getTextFrames(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
     if(!pxXTextFrames)
     {
-        ((SwXTextDocument*)this)->pxXTextFrames = new Reference< container::XNameAccess > ;
+        ((SwXTextDocument*)this)->pxXTextFrames = new Reference< XNameAccess > ;
         *pxXTextFrames = new SwXTextFrames(pDocShell->GetDoc());
     }
     return *pxXTextFrames;
@@ -1393,14 +1391,14 @@ Reference< container::XNameAccess >  SwXTextDocument::getTextFrames(void) throw(
 /* -----------------21.12.98 10:56-------------------
  *
  * --------------------------------------------------*/
-Reference< container::XNameAccess >  SwXTextDocument::getStyleFamilies(void) throw( RuntimeException )
+Reference< XNameAccess >  SwXTextDocument::getStyleFamilies(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
     if(!pxXStyleFamilies)
     {
-        ((SwXTextDocument*)this)->pxXStyleFamilies = new Reference< container::XNameAccess > ;
+        ((SwXTextDocument*)this)->pxXStyleFamilies = new Reference< XNameAccess > ;
         *pxXStyleFamilies = new SwXStyleFamilies(*pDocShell);
     }
     return *pxXStyleFamilies;
@@ -1482,7 +1480,7 @@ void    SwXTextDocument::InitNewDoc()
     // zunaechst alle Collections invalidieren, dann Referenzen loeschen und Null setzen
     if(pxXTextTables)
     {
-         container::XNameAccess* pTbls = pxXTextTables->get();
+         XNameAccess* pTbls = pxXTextTables->get();
         ((SwXTextTables*)pTbls)->Invalidate();
         delete pxXTextTables;
         pxXTextTables = 0;
@@ -1490,7 +1488,7 @@ void    SwXTextDocument::InitNewDoc()
 
     if(pxXTextFrames)
     {
-         container::XNameAccess* pFrms = pxXTextFrames->get();
+         XNameAccess* pFrms = pxXTextFrames->get();
         ((SwXTextFrames*)pFrms)->Invalidate();
         delete pxXTextFrames;
         pxXTextFrames = 0;
@@ -1498,7 +1496,7 @@ void    SwXTextDocument::InitNewDoc()
 
     if(pxXGraphicObjects)
     {
-         container::XNameAccess* pFrms = pxXGraphicObjects->get();
+         XNameAccess* pFrms = pxXGraphicObjects->get();
         ((SwXTextGraphicObjects*)pFrms)->Invalidate();
         delete pxXGraphicObjects;
         pxXGraphicObjects = 0;
@@ -1506,7 +1504,7 @@ void    SwXTextDocument::InitNewDoc()
 
     if(pxXEmbeddedObjects)
     {
-     container::XNameAccess* pOLE = pxXEmbeddedObjects->get();
+     XNameAccess* pOLE = pxXEmbeddedObjects->get();
         ((SwXTextEmbeddedObjects*)pOLE)->Invalidate();
         delete pxXEmbeddedObjects;
         pxXEmbeddedObjects = 0;
@@ -1537,7 +1535,7 @@ void    SwXTextDocument::InitNewDoc()
 
     if(pxXTextFieldTypes)
     {
-         container::XEnumerationAccess* pT = pxXTextFieldTypes->get();
+         XEnumerationAccess* pT = pxXTextFieldTypes->get();
         ((SwXTextFieldTypes*)pT)->Invalidate();
         delete pxXTextFieldTypes;
         pxXTextFieldTypes = 0;
@@ -1545,7 +1543,7 @@ void    SwXTextDocument::InitNewDoc()
 
     if(pxXTextFieldMasters)
     {
-         container::XNameAccess* pT = pxXTextFieldMasters->get();
+         XNameAccess* pT = pxXTextFieldMasters->get();
         ((SwXTextFieldMasters*)pT)->Invalidate();
         delete pxXTextFieldMasters;
         pxXTextFieldMasters = 0;
@@ -1553,7 +1551,7 @@ void    SwXTextDocument::InitNewDoc()
 
     if(pxXTextSections)
     {
-         container::XNameAccess* pSect = pxXTextSections->get();
+         XNameAccess* pSect = pxXTextSections->get();
         ((SwXTextSections*)pSect)->Invalidate();
         delete pxXTextSections;
         pxXTextSections = 0;
@@ -1569,7 +1567,7 @@ void    SwXTextDocument::InitNewDoc()
 
     if(pxXFootnotes)
     {
-         container::XIndexAccess* pFtn = pxXFootnotes->get();
+         XIndexAccess* pFtn = pxXFootnotes->get();
         ((SwXFootnotes*)pFtn)->Invalidate();
         delete pxXFootnotes;
         pxXFootnotes = 0;
@@ -1577,7 +1575,7 @@ void    SwXTextDocument::InitNewDoc()
 
     if(pxXEndnotes)
     {
-         container::XIndexAccess* pFtn = pxXEndnotes->get();
+         XIndexAccess* pFtn = pxXEndnotes->get();
         ((SwXFootnotes*)pFtn)->Invalidate();
         delete pxXEndnotes;
         pxXEndnotes = 0;
@@ -1585,7 +1583,7 @@ void    SwXTextDocument::InitNewDoc()
 
     if(pxXDocumentIndexes)
     {
-         container::XIndexAccess* pIdxs = pxXDocumentIndexes->get();
+         XIndexAccess* pIdxs = pxXDocumentIndexes->get();
         ((SwXDocumentIndexes*)pIdxs)->Invalidate();
         delete pxXDocumentIndexes;
         pxXDocumentIndexes = 0;
@@ -1593,7 +1591,7 @@ void    SwXTextDocument::InitNewDoc()
 
     if(pxXStyleFamilies)
     {
-         container::XNameAccess* pStyles = pxXStyleFamilies->get();
+         XNameAccess* pStyles = pxXStyleFamilies->get();
         ((SwXStyleFamilies*)pStyles)->Invalidate();
         delete pxXStyleFamilies;
         pxXStyleFamilies = 0;
@@ -1601,7 +1599,7 @@ void    SwXTextDocument::InitNewDoc()
 
     if(pxXBookmarks)
     {
-         container::XNameAccess* pBm = pxXBookmarks->get();
+         XNameAccess* pBm = pxXBookmarks->get();
         ((SwXBookmarks*)pBm)->Invalidate();
         delete pxXBookmarks;
         pxXBookmarks = 0;
@@ -1609,7 +1607,7 @@ void    SwXTextDocument::InitNewDoc()
 
     if(pxXChapterNumbering)
     {
-         container::XIndexReplace* pCh = pxXChapterNumbering->get();
+         XIndexReplace* pCh = pxXChapterNumbering->get();
         ((SwXChapterNumbering*)pCh)->Invalidate();
         delete pxXChapterNumbering;
         pxXChapterNumbering = 0;
@@ -1652,22 +1650,24 @@ void    SwXTextDocument::InitNewDoc()
 */
     if(pxXReferenceMarks)
     {
-         container::XNameAccess* pMarks = pxXReferenceMarks->get();
+         XNameAccess* pMarks = pxXReferenceMarks->get();
         ((SwXReferenceMarks*)pMarks)->Invalidate();
         delete pxXReferenceMarks;
         pxXReferenceMarks = 0;
     }
-/*
+    if(pxLinkTargetSupplier)
+    {
+         XNameAccess* pAccess = (*pxLinkTargetSupplier).get();
+        ((SwXLinkTargetSupplier*)pAccess)->Invalidate();
+        delete pAccess;
+    }
     if(pxXRedlines)
     {
-        XRedlines* pMarks = *pxXRedlines;
+        XEnumerationAccess* pMarks = pxXRedlines->get();
         ((SwXRedlines*)pMarks)->Invalidate();
         delete pxXRedlines;
         pxXRedlines = 0;
     }
-
-
-*/
 }
 
 /*-- 11.03.99 11:51:40---------------------------------------------------
@@ -1776,14 +1776,14 @@ Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( Runt
 /* -----------------05.05.99 12:10-------------------
  *
  * --------------------------------------------------*/
-Reference< container::XIndexAccess >  SwXTextDocument::getDocumentIndexes(void) throw( RuntimeException )
+Reference< XIndexAccess >  SwXTextDocument::getDocumentIndexes(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
     if(!pxXDocumentIndexes)
     {
-        ((SwXTextDocument*)this)->pxXDocumentIndexes = new Reference< container::XIndexAccess > ;
+        ((SwXTextDocument*)this)->pxXDocumentIndexes = new Reference< XIndexAccess > ;
         *pxXDocumentIndexes = new SwXDocumentIndexes(pDocShell->GetDoc());
     }
     return *pxXDocumentIndexes;
@@ -1979,16 +1979,27 @@ void SwXTextDocument::removeVetoableChangeListener(const OUString& PropertyName,
 /* -----------------25.10.99 10:42-------------------
 
  --------------------------------------------------*/
-Reference< container::XNameAccess >  SwXTextDocument::getLinks(void) throw( RuntimeException )
+Reference< XNameAccess >  SwXTextDocument::getLinks(void) throw( RuntimeException )
 {
     if(!pxLinkTargetSupplier)
     {
-        ((SwXTextDocument*)this)->pxLinkTargetSupplier = new Reference< container::XNameAccess > ;
+        pxLinkTargetSupplier = new Reference< XNameAccess > ;
         (*pxLinkTargetSupplier) = new SwXLinkTargetSupplier(*(SwXTextDocument*)this);
     }
     return (*pxLinkTargetSupplier);
 }
+/* -----------------------------11.01.01 15:01--------------------------------
 
+ ---------------------------------------------------------------------------*/
+Reference< XEnumerationAccess > SwXTextDocument::getRedlines(  ) throw(RuntimeException)
+{
+    if(!pxXRedlines)
+    {
+        pxXRedlines = new Reference< XEnumerationAccess > ;
+        (*pxXRedlines) = new SwXRedlines(pDocShell->GetDoc());
+    }
+    return *pxXRedlines;
+}
 /*-- 21.02.00 08:41:06---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -2055,7 +2066,7 @@ SwXLinkTargetSupplier::~SwXLinkTargetSupplier()
 
   -----------------------------------------------------------------------*/
 Any SwXLinkTargetSupplier::getByName(const OUString& rName)
-    throw( container::NoSuchElementException, WrappedTargetException, RuntimeException )
+    throw( NoSuchElementException, WrappedTargetException, RuntimeException )
 {
     Any aRet;
     if(!pxDoc)
@@ -2066,7 +2077,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     {
         sSuffix += UniString::CreateFromAscii(pMarkToTable);
 
-        Reference< container::XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
+        Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextTables(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
         aRet.setValue(&xRet, ::getCppuType((Reference<XPropertySet>*)0));
@@ -2074,7 +2085,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     else if(sToCompare == sFrames)
     {
         sSuffix += UniString::CreateFromAscii(pMarkToFrame);
-        Reference< container::XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
+        Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextFrames(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
         aRet.setValue(&xRet, ::getCppuType((Reference< XPropertySet>*)0));
@@ -2082,7 +2093,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     else if(sToCompare == sSections)
     {
         sSuffix += UniString::CreateFromAscii(pMarkToRegion);
-        Reference< container::XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
+        Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextSections(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
         aRet.setValue(&xRet, ::getCppuType((Reference< XPropertySet>*)0));
@@ -2090,7 +2101,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
 /*  else if(sToCompare == )
     {
         sSuffix += UniString::CreateFromAscii(pMarkToText);
-        Reference< container::XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
+        Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
         aRet.setValue(&xRet, ::getCppuType((const XPropertySet*)0));
@@ -2098,7 +2109,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     else if(sToCompare == sGraphics)
     {
         sSuffix += UniString::CreateFromAscii(pMarkToGraphic);
-        Reference< container::XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
+        Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getGraphicObjects(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
         aRet.setValue(&xRet, ::getCppuType((Reference< XPropertySet>*)0));
@@ -2106,7 +2117,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     else if(sToCompare == sOLEs)
     {
         sSuffix += UniString::CreateFromAscii(pMarkToOLE);
-        Reference< container::XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
+        Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getEmbeddedObjects(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
         aRet.setValue(&xRet, ::getCppuType((Reference< XPropertySet>*)0));
@@ -2114,7 +2125,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     else if(sToCompare == sOutlines)
     {
         sSuffix += UniString::CreateFromAscii(pMarkToOutline);
-        Reference< container::XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
+        Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         *pxDoc, sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
         aRet.setValue(&xRet, ::getCppuType((Reference< XPropertySet>*)0));
@@ -2122,13 +2133,13 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     else if(sToCompare == sBookmarks)
     {
         sSuffix.Erase();
-        Reference< container::XNameAccess >  xBkms = new SwXLinkNameAccessWrapper(
+        Reference< XNameAccess >  xBkms = new SwXLinkNameAccessWrapper(
                                         pxDoc->getBookmarks(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xBkms, UNO_QUERY);
         aRet.setValue(&xRet, ::getCppuType((Reference< XPropertySet>*)0));
     }
     else
-        throw container::NoSuchElementException();
+        throw NoSuchElementException();
     return aRet;
 }
 /*-- 25.10.99 11:12:46---------------------------------------------------
@@ -2212,7 +2223,7 @@ Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames(void)
 
   -----------------------------------------------------------------------*/
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
-            Reference< container::XNameAccess >  xAccess, const String& rLinkDisplayName, String sSuffix ) :
+            Reference< XNameAccess >  xAccess, const String& rLinkDisplayName, String sSuffix ) :
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_LINK_TARGET)),
     sLinkDisplayName(rLinkDisplayName),
     xRealAccess(xAccess),
@@ -2242,7 +2253,7 @@ SwXLinkNameAccessWrapper::~SwXLinkNameAccessWrapper()
 
   -----------------------------------------------------------------------*/
 Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
-    throw( container::NoSuchElementException, WrappedTargetException, RuntimeException )
+    throw( NoSuchElementException, WrappedTargetException, RuntimeException )
 {
     Any aRet;
     sal_Bool bFound = sal_False;
@@ -2288,7 +2299,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
         }
     }
     if(!bFound)
-        throw container::NoSuchElementException();
+        throw NoSuchElementException();
     return aRet;
 }
 /*-- 26.10.99 09:16:24---------------------------------------------------
@@ -2510,7 +2521,7 @@ void SwXLinkNameAccessWrapper::removeVetoableChangeListener(
 /*-- 26.10.99 09:16:32---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< container::XNameAccess >  SwXLinkNameAccessWrapper::getLinks(void)
+Reference< XNameAccess >  SwXLinkNameAccessWrapper::getLinks(void)
                                     throw( RuntimeException )
 {
     return (SwXLinkNameAccessWrapper*)this;

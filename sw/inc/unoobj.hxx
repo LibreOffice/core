@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-08 09:43:08 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,14 +64,14 @@
 #ifndef _UNOEVTLSTNR_HXX
 #include <unoevtlstnr.hxx>
 #endif
+#ifndef _UNOBASECLASS_HXX
+#include <unobaseclass.hxx>
+#endif
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
-#endif
-#ifndef _CALBCK_HXX //autogen
-#include <calbck.hxx>
 #endif
 #ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
@@ -127,9 +127,6 @@
 #ifndef _COM_SUN_STAR_UTIL_XSORTABLE_HPP_
 #include <com/sun/star/util/XSortable.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #endif
@@ -165,9 +162,6 @@
 #endif
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>   // helper for factories
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx> // helper for implementations
 #endif
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx> // helper for implementations
@@ -244,9 +238,6 @@ enum CursorType
  *
  * --------------------------------------------------*/
 SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName);
-::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  CreateTextRangeFromPosition(SwDoc* pDoc,
-                        const SwPosition& rPos, const SwPosition* pMark);
-
 ::com::sun::star::uno::Sequence< sal_Int8 > CreateUnoTunnelId();
 
 /* -----------------29.04.98 07:35-------------------
@@ -781,6 +772,8 @@ public:
 
     static  BOOL        XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange);
+    static ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  CreateTextRangeFromPosition(SwDoc* pDoc,
+                        const SwPosition& rPos, const SwPosition* pMark);
 };
 
 /* -----------------15.05.98 08:29-------------------
@@ -1005,11 +998,7 @@ public:
 /*-----------------07.04.98 08:10-------------------
 
 --------------------------------------------------*/
-class SwXParagraphEnumeration : public cppu::WeakImplHelper2
-<
-    ::com::sun::star::container::XEnumeration,
-    ::com::sun::star::lang::XServiceInfo
->,
+class SwXParagraphEnumeration : public SwSimpleEnumerationBaseClass,
     public SwClient
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >           xParentText;
@@ -1353,37 +1342,6 @@ public:
     SwDoc*              GetDoc() const{return pDoc;}
     void                Invalidate();
 };
-/* -----------------01.09.98 16:09-------------------
- *
- * --------------------------------------------------*/
-// os: 04.12.98 11:44 - keine Definition
-//class SwXRedline : public XRedline,
-/*
-class SwXRedline : public XRedline,
-                    public UsrObject,
-                        public SwClient
-{
-    SwDoc*              pDoc;
-    const SwRedline*    pRedline;
-
-    BOOL                IsValid() const;
-public:
-    SwXRedline(SwDoc* pDoc, const SwRedline* pRedline);
-    virtual ~SwXRedline();
-
-    //XRedline
-    virtual sal_uInt16 getActionType(void) const;
-    virtual rtl::OUString getAuthor(void) const;
-    virtual ::com::sun::star::util::DateTime getCreationDateTime(void) const;
-    virtual rtl::OUString getDescription(void) const;
-    virtual void setDescription(const rtl::OUString& Description_);
-
-    //SwClient
-    virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
-};
-
-
-*/
 #endif
 
 

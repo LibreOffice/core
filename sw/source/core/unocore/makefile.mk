@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dvo $ $Date: 2000-12-19 17:28:54 $
+#   last change: $Author: os $ $Date: 2001-01-12 16:12:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,7 @@ CXXFILES = \
         unoportenum.cxx \
         unoprnms.cxx \
         unoredline.cxx \
+        unoredlines.cxx \
         unorefmk.cxx \
         unosett.cxx \
         unosrch.cxx \
@@ -136,6 +137,7 @@ SLOFILES =	\
         $(SLO)$/unoportenum.obj\
         $(SLO)$/unoprnms.obj\
         $(SLO)$/unoredline.obj\
+        $(SLO)$/unoredlines.obj\
         $(SLO)$/unosrch.obj\
         $(SLO)$/unostyle.obj\
         $(SLO)$/unotbl.obj \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-12-21 14:52:16 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1186,7 +1186,7 @@ uno::Reference< XText >  SwXTextRange::getText(void) throw( uno::RuntimeExceptio
             SwTable* pTable = SwTable::FindTable( pTblFmt );
             SwTableNode* pTblNode = pTable->GetTableNode();
             SwPosition aPosition( *pTblNode );
-            Reference< XTextRange >  xRange = CreateTextRangeFromPosition(pDoc,
+            Reference< XTextRange >  xRange = SwXTextRange::CreateTextRangeFromPosition(pDoc,
                         aPosition, 0);
             xParentText = xRange->getText();
         }
@@ -1379,6 +1379,265 @@ sal_Bool        SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
     }
     return bRet;
 }
+/* -----------------24.02.99 14:18-------------------
+ * Der StartNode muss in einem existierenden Header/Footen liegen
+ * --------------------------------------------------*/
+sal_Bool lcl_IsStartNodeInFormat(sal_Bool bHeader, SwStartNode* pSttNode,
+    const SwFrmFmt* pFrmFmt, SwFrmFmt*& rpFormat)
+{
+    sal_Bool bRet = sal_False;
+    const SfxItemSet& rSet = pFrmFmt->GetAttrSet();
+    const SfxPoolItem* pItem;
+    SwFrmFmt* pHeadFootFmt;
+    if(SFX_ITEM_SET == rSet.GetItemState(bHeader ? RES_HEADER : RES_FOOTER, sal_True, &pItem) &&
+            0 != (pHeadFootFmt = bHeader ?
+                    ((SwFmtHeader*)pItem)->GetHeaderFmt() :
+                                ((SwFmtFooter*)pItem)->GetFooterFmt()))
+    {
+        const SwFmtCntnt& rFlyCntnt = pHeadFootFmt->GetCntnt();
+        const SwNode& rNode = rFlyCntnt.GetCntntIdx()->GetNode();
+        const SwStartNode* pCurSttNode = rNode.FindSttNodeByType(
+            bHeader ? SwHeaderStartNode : SwFooterStartNode);
+        if(pCurSttNode && pCurSttNode == pSttNode)
+        {
+            bRet = sal_True;
+            rpFormat = pHeadFootFmt;
+        }
+    }
+    return bRet;
+}
+/* -----------------03.11.98 15:58-------------------
+ *
+ * --------------------------------------------------*/
+uno::Reference< XTextRange >  SwXTextRange::CreateTextRangeFromPosition(SwDoc* pDoc,
+                        const SwPosition& rPos, const SwPosition* pMark)
+{
+    uno::Reference< XTextRange >  aRet;
+    SwUnoCrsr* pNewCrsr = pDoc->CreateUnoCrsr(rPos, sal_False);
+    if(pMark)
+    {
+        pNewCrsr->SetMark();
+        *pNewCrsr->GetMark() = *pMark;
+    }
+    uno::Reference< XText >  xParentText;
+    //jetzt besorgen wir uns mal den Parent:
+    SwStartNode* pSttNode = rPos.nNode.GetNode().FindStartNode();
+    while(pSttNode && pSttNode->IsSectionNode())
+    {
+        pSttNode = pSttNode->FindStartNode();
+    }
+    SwStartNodeType eType = pSttNode->GetStartNodeType();
+    switch(eType)
+    {
+        case SwTableBoxStartNode:
+        {
+            const SwTableNode* pTblNode = pSttNode->FindTableNode();
+            SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
+            SwTableBox* pBox = pSttNode->GetTblBox();
+
+            if( pBox )
+                aRet = new SwXTextRange(*pTableFmt, *pBox, *pNewCrsr);
+            else
+                aRet = new SwXTextRange(*pTableFmt, *pSttNode, *pNewCrsr);
+        }
+        break;
+        case SwFlyStartNode:
+        {
+            SwFrmFmt* pFmt;
+            if(0 != (pFmt = pSttNode->GetFlyFmt()))
+            {
+                aRet = new SwXTextRange(*pFmt, *pNewCrsr);
+
+            }
+        }
+        break;
+        case SwHeaderStartNode:
+        case SwFooterStartNode:
+        {
+            sal_Bool bHeader = SwHeaderStartNode == eType;
+            sal_uInt16 nPDescCount = pDoc->GetPageDescCnt();
+            for(sal_uInt16 i = 0; i < nPDescCount; i++)
+            {
+                const SwPageDesc& rDesc = pDoc->GetPageDesc( i );
+                const SwFrmFmt* pFrmFmtMaster = &rDesc.GetMaster();
+                const SwFrmFmt* pFrmFmtLeft = &rDesc.GetLeft();
+
+                SwFrmFmt* pHeadFootFmt = 0;
+                if(!lcl_IsStartNodeInFormat(bHeader, pSttNode, pFrmFmtMaster, pHeadFootFmt))
+                    lcl_IsStartNodeInFormat(bHeader, pSttNode, pFrmFmtLeft, pHeadFootFmt);
+
+                if(pHeadFootFmt)
+                {
+                    SwXHeadFootText* pxHdFt = (SwXHeadFootText*)SwClientIter( *pHeadFootFmt ).
+                                    First( TYPE( SwXHeadFootText ));
+                    xParentText = pxHdFt;
+                    if(!pxHdFt)
+                        xParentText = new SwXHeadFootText(*pHeadFootFmt, bHeader);
+                    break;
+                }
+            }
+        }
+        break;
+        case SwFootnoteStartNode:
+        {
+            sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().Count();
+            SwTxtFtn* pTxtFtn;
+            uno::Reference< XFootnote >  xRef;
+            for( n = 0; n < nFtnCnt; ++n )
+            {
+                pTxtFtn = pDoc->GetFtnIdxs()[ n ];
+                const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
+                const SwTxtFtn* pTxtFtn = rFtn.GetTxtFtn();
+#ifdef DEBUG
+                const SwStartNode* pTmpSttNode = pTxtFtn->GetStartNode()->GetNode().
+                                FindSttNodeByType(SwFootnoteStartNode);
+#endif
+
+                if(pSttNode == pTxtFtn->GetStartNode()->GetNode().
+                                    FindSttNodeByType(SwFootnoteStartNode))
+                {
+                    aRet = new SwXFootnote(pDoc, rFtn);
+                    break;
+                }
+            }
+        }
+        break;
+        default:
+        {
+            // dann ist es der Body-Text
+            uno::Reference<frame::XModel> xModel = pDoc->GetDocShell()->GetBaseModel();
+            uno::Reference< XTextDocument > xDoc(
+                xModel, uno::UNO_QUERY);
+            xParentText = xDoc->getText();
+        }
+    }
+    if(!aRet.is())
+        aRet = new SwXTextRange(*pNewCrsr, xParentText);
+    delete pNewCrsr;
+    return aRet;
+}
+/*Reference< XTextRange > SwXTextRange::createTextRangeFromPaM(
+    SwPaM& rPaM, Reference<XText> xParentText)
+{
+    Reference< XTextRange > xRet;
+    // in welcher Umgebung steht denn der PaM?
+    SwStartNode* pSttNode = rPaM.GetNode()->FindStartNode();
+    SwStartNodeType eType = pSttNode->GetStartNodeType();
+    uno::Reference< XText >  xCurParentRef;
+    switch(eType)
+    {
+        case SwTableBoxStartNode:
+        {
+            SwTableBox* pBox = pSttNode->GetTblBox();
+            xRet = new SwXTextRange(*pBox->GetFrmFmt(), *pBox, rPaM);
+        }
+        break;
+        case SwFlyStartNode:
+        {
+            SwFrmFmt* pFlyFmt = pSttNode->GetFlyFmt();
+            SwXTextFrame* pxFrm = (SwXTextFrame*)SwClientIter( *pFlyFmt ).
+                                        First( TYPE( SwXTextFrame ));
+            if(pxFrm)
+                xCurParentRef = pxFrm;
+            else
+                xRet = new SwXTextRange(*pFlyFmt, rPaM);
+        }
+        break;
+        case SwFootnoteStartNode:
+        {
+            const SwFtnIdxs& rIdxs = rPaM.GetDoc()->GetFtnIdxs();
+            sal_uInt16 n, nFtnCnt = rIdxs.Count();
+            for( n = 0; n < nFtnCnt; ++n )
+            {
+                const SwTxtFtn* pFtn = rIdxs[ n ];
+
+                const SwStartNode* pTemp = 0;
+                const SwNode& rNode = pFtn->GetStartNode()->GetNode();
+                if(rNode.GetNodeType() == ND_STARTNODE)
+                    pTemp = (const SwStartNode*)&rNode;
+                if(pSttNode == pTemp)
+                {
+                    const SwFmtFtn& rFtn = pFtn->GetFtn();
+                    //TODO: schon existierendes Fussnotenobjekt wiederfinden!
+                    xCurParentRef = new SwXFootnote(rPaM.GetDoc(), rFtn);
+                    break;
+                }
+            }
+        }
+        break;
+        case SwHeaderStartNode:
+        case SwFooterStartNode:
+        {
+            //PageStyle besorgen, HeaderText anlegen/erfragen,
+            //und dann SwXTextPosition damit anlegen
+            String sPageStyleName = SwUnoCursorHelper::GetCurPageStyle(rPaM);
+            uno::Reference< style::XStyleFamiliesSupplier >  xStyleSupp(
+                rPaM.GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+
+            uno::Reference< container::XNameAccess >  xStyles = xStyleSupp->getStyleFamilies();
+            uno::Any aStyleFamily = xStyles->getByName(C2U("PageStyles"));
+
+            uno::Reference< container::XNameContainer > xFamily =
+                *(uno::Reference< container::XNameContainer > *)aStyleFamily.getValue();
+            uno::Any aStyle = xFamily->getByName(sPageStyleName);
+            uno::Reference< style::XStyle >  xStyle = *(uno::Reference< style::XStyle > *)aStyle.getValue();
+
+            uno::Reference< beans::XPropertySet >  xPropSet(xStyle, uno::UNO_QUERY);
+            uno::Any aLayout = xPropSet->getPropertyValue(C2U(UNO_NAME_PAGE_STYLE_LAYOUT));
+
+            style::PageStyleLayout eLayout = *(style::PageStyleLayout*)aLayout.getValue();
+            uno::Any aShare = xPropSet->getPropertyValue(C2U(UNO_NAME_HEADER_IS_SHARED));
+            sal_Bool bShare;
+            aShare >>= bShare;
+            sal_Bool bLeft = sal_False;
+            sal_Bool bRight = sal_False;
+            //jetzt evtl. noch zw. linker/rechter Kopf-/Fusszeile unterscheiden
+            if(!bShare && eLayout == style::PageStyleLayout_MIRRORED)
+            {
+                uno::Reference<lang::XUnoTunnel> xTunnel(xStyle, uno::UNO_QUERY);
+                SwXPageStyle* pStyle = (SwXPageStyle*)
+                    xTunnel->getSomething( SwXPageStyle::getUnoTunnelId());
+
+                DBG_ASSERT(pStyle, "Was ist das fuer ein style::XStyle?")
+                bLeft = pSttNode == pStyle->GetStartNode(eType == SwHeaderStartNode, sal_True);
+                bRight = !bLeft;
+            }
+            uno::Any aParent;
+            sal_Bool bFooter = eType == SwFooterStartNode;
+            if(eLayout == style::PageStyleLayout_LEFT || bLeft)
+                aParent = xPropSet->getPropertyValue(C2U(bFooter ? UNO_NAME_FOOTER_TEXT_LEFT : UNO_NAME_HEADER_TEXT_LEFT));
+            else if(eLayout == style::PageStyleLayout_RIGHT)
+                aParent = xPropSet->getPropertyValue(C2U(bFooter ? UNO_NAME_FOOTER_TEXT_RIGHT : UNO_NAME_HEADER_TEXT_RIGHT));
+            else
+                aParent = xPropSet->getPropertyValue(C2U(bFooter ? UNO_NAME_FOOTER_TEXT : UNO_NAME_HEADER_TEXT));
+
+            if(aParent.getValueType() != ::getVoidCppuType())
+            {
+                uno::Reference< XText >  xText = *(uno::Reference< XText > *)aParent.getValue();
+                xCurParentRef = xText;
+            }
+        }
+
+
+        break;
+//              case SwNormalStartNode:
+        default:
+        {
+            if(!xParentText.is())
+            {
+                uno::Reference< XTextDocument >  xDoc(
+                    rPaM.GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+                xParentText = xDoc->getText();
+            }
+            xCurParentRef = xParentText;
+        }
+    }
+    if(xCurParentRef.is() && !xRet.is())
+        xRet = new SwXTextRange(rPaM, xCurParentRef);
+    DBG_ASSERT(xRet.is(), "SwXTextRange not created")
+    return xRet;
+}*/
+
 /* -----------------------------03.04.00 09:11--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1717,122 +1976,11 @@ XTextRangeArr*  SwXTextRanges::GetRangesArray()
     {
         pRangeArr = new XTextRangeArr();
         FOREACHUNOPAM_START(pCrsr)
-            uno::Reference< XTextRange > * pPtr = new uno::Reference< XTextRange > ;
-            // in welcher Umgebung steht denn der PaM?
-            SwStartNode* pSttNode = PUNOPAM->GetNode()->FindStartNode();
-            SwStartNodeType eType = pSttNode->GetStartNodeType();
-            uno::Reference< XText >  xCurParentRef;
-            switch(eType)
-            {
-                case SwTableBoxStartNode:
-                {
-                    SwTableBox* pBox = pSttNode->GetTblBox();
-                    *pPtr = new SwXTextRange(*pBox->GetFrmFmt(), *pBox, *PUNOPAM);
-                }
-                break;
-                case SwFlyStartNode:
-                {
-                    SwFrmFmt* pFlyFmt = pSttNode->GetFlyFmt();
-                    SwXTextFrame* pxFrm = (SwXTextFrame*)SwClientIter( *pFlyFmt ).
-                                                First( TYPE( SwXTextFrame ));
-                    if(pxFrm)
-                        xCurParentRef = pxFrm;
-                    else
-                        *pPtr = new SwXTextRange(*pFlyFmt, *PUNOPAM);
-                }
-                break;
-                case SwFootnoteStartNode:
-                {
-                    const SwFtnIdxs& rIdxs = pCrsr->GetDoc()->GetFtnIdxs();
-                    sal_uInt16 n, nFtnCnt = rIdxs.Count();
-                    for( n = 0; n < nFtnCnt; ++n )
-                    {
-                        const SwTxtFtn* pFtn = rIdxs[ n ];
 
-                        const SwStartNode* pTemp = 0;
-                        const SwNode& rNode = pFtn->GetStartNode()->GetNode();
-                        if(rNode.GetNodeType() == ND_STARTNODE)
-                            pTemp = (const SwStartNode*)&rNode;
-                        if(pSttNode == pTemp)
-                        {
-                            const SwFmtFtn& rFtn = pFtn->GetFtn();
-                            //TODO: schon existierendes Fussnotenobjekt wiederfinden!
-                            xCurParentRef = new SwXFootnote(pCrsr->GetDoc(), rFtn);
-                            break;
-                        }
-                    }
-                }
-                break;
-                case SwHeaderStartNode:
-                case SwFooterStartNode:
-                {
-                    //PageStyle besorgen, HeaderText anlegen/erfragen,
-                    //und dann SwXTextPosition damit anlegen
-                    String sPageStyleName = SwUnoCursorHelper::GetCurPageStyle(*pCrsr);
-                    uno::Reference< style::XStyleFamiliesSupplier >  xStyleSupp(
-                        pCrsr->GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
-
-                    uno::Reference< container::XNameAccess >  xStyles = xStyleSupp->getStyleFamilies();
-                    uno::Any aStyleFamily = xStyles->getByName(C2U("PageStyles"));
-
-                    uno::Reference< container::XNameContainer > xFamily =
-                        *(uno::Reference< container::XNameContainer > *)aStyleFamily.getValue();
-                    uno::Any aStyle = xFamily->getByName(sPageStyleName);
-                    uno::Reference< style::XStyle >  xStyle = *(uno::Reference< style::XStyle > *)aStyle.getValue();
-
-                    uno::Reference< beans::XPropertySet >  xPropSet(xStyle, uno::UNO_QUERY);
-                    uno::Any aLayout = xPropSet->getPropertyValue(C2U(UNO_NAME_PAGE_STYLE_LAYOUT));
-
-                     style::PageStyleLayout eLayout = *(style::PageStyleLayout*)aLayout.getValue();
-                    uno::Any aShare = xPropSet->getPropertyValue(C2U(UNO_NAME_HEADER_IS_SHARED));
-                    sal_Bool bShare;
-                    aShare >>= bShare;
-                    sal_Bool bLeft = sal_False;
-                    sal_Bool bRight = sal_False;
-                    //jetzt evtl. noch zw. linker/rechter Kopf-/Fusszeile unterscheiden
-                    if(!bShare && eLayout == style::PageStyleLayout_MIRRORED)
-                    {
-                        uno::Reference<lang::XUnoTunnel> xTunnel(xStyle, uno::UNO_QUERY);
-                        SwXPageStyle* pStyle = (SwXPageStyle*)
-                            xTunnel->getSomething( SwXPageStyle::getUnoTunnelId());
-
-                        DBG_ASSERT(pStyle, "Was ist das fuer ein style::XStyle?")
-                        bLeft = pSttNode == pStyle->GetStartNode(eType == SwHeaderStartNode, sal_True);
-                        bRight = !bLeft;
-                    }
-                    uno::Any aParent;
-                    sal_Bool bFooter = eType == SwFooterStartNode;
-                    if(eLayout == style::PageStyleLayout_LEFT || bLeft)
-                        aParent = xPropSet->getPropertyValue(C2U(bFooter ? UNO_NAME_FOOTER_TEXT_LEFT : UNO_NAME_HEADER_TEXT_LEFT));
-                    else if(eLayout == style::PageStyleLayout_RIGHT)
-                        aParent = xPropSet->getPropertyValue(C2U(bFooter ? UNO_NAME_FOOTER_TEXT_RIGHT : UNO_NAME_HEADER_TEXT_RIGHT));
-                    else
-                        aParent = xPropSet->getPropertyValue(C2U(bFooter ? UNO_NAME_FOOTER_TEXT : UNO_NAME_HEADER_TEXT));
-
-                    if(aParent.getValueType() != ::getVoidCppuType())
-                    {
-                        uno::Reference< XText >  xText = *(uno::Reference< XText > *)aParent.getValue();
-                        xCurParentRef = xText;
-                    }
-                }
-
-
-                break;
-//              case SwNormalStartNode:
-                default:
-                {
-                    if(!xParentText.is())
-                    {
-                        uno::Reference< XTextDocument >  xDoc(
-                            pCrsr->GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
-                        xParentText = xDoc->getText();
-                    }
-                    xCurParentRef = xParentText;
-                }
-            }
-
-            if(xCurParentRef.is())
-                *pPtr = new SwXTextRange(*PUNOPAM, xCurParentRef);
+            Reference< XTextRange >* pPtr =
+                new Reference<XTextRange>( SwXTextRange::CreateTextRangeFromPosition(PUNOPAM->GetDoc(),
+                        *PUNOPAM->GetPoint(), PUNOPAM->GetMark()));
+//              new Reference<XTextRange>( SwXTextRange::createTextRangeFromPaM(*PUNOPAM, xParentText));
             if(pPtr->is())
                 pRangeArr->Insert(pPtr, pRangeArr->Count());
         FOREACHUNOPAM_END()

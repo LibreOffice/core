@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: os $ $Date: 2001-01-11 12:40:02 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,6 +506,13 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
     { SW_PROP_NAME(UNO_NAME_END_REDLINE),           FN_UNO_REDLINE_NODE_END ,   &::getCppuType((Sequence<PropertyValue>*)0)  ,          PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0xff },
 #endif
 
+#define _REDLINE_PROPERTIES \
+    {SW_PROP_NAME(UNO_NAME_REDLINE_AUTHOR),     0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
+    {SW_PROP_NAME(UNO_NAME_REDLINE_DATE_TIME),  0, &::getCppuType((util::DateTime*)0),                  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
+    {SW_PROP_NAME(UNO_NAME_REDLINE_COMMENT),    0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
+    {SW_PROP_NAME(UNO_NAME_REDLINE_TYPE),       0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
+    {SW_PROP_NAME(UNO_NAME_REDLINE_SUCCESSOR_DATA),  0, &::getCppuType((Sequence<PropertyValue>*)0),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
+    {SW_PROP_NAME(UNO_NAME_REDLINE_IDENTIFIER), 0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},
 
 /* -----------------24.06.98 18:12-------------------
  *
@@ -1867,12 +1874,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     {SW_PROP_NAME(UNO_NAME_CONTROL_CHARACTER ), 0, &::getCppuType((const sal_Int16*)0),                 PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, MID_HYPHEN_MIN_LEAD   },
                     {SW_PROP_NAME(UNO_NAME_IS_COLLAPSED),       0, &::getBooleanCppuType(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
                     {SW_PROP_NAME(UNO_NAME_IS_START),           0, &::getBooleanCppuType(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
-                    {SW_PROP_NAME(UNO_NAME_REDLINE_AUTHOR),     0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
-                    {SW_PROP_NAME(UNO_NAME_REDLINE_DATE_TIME),  0, &::getCppuType((util::DateTime*)0),                  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
-                    {SW_PROP_NAME(UNO_NAME_REDLINE_COMMENT),    0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
-                    {SW_PROP_NAME(UNO_NAME_REDLINE_TYPE),       0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
-                    {SW_PROP_NAME(UNO_NAME_REDLINE_SUCCESSOR_DATA),  0, &::getCppuType((Sequence<PropertyValue>*)0),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
-                    {SW_PROP_NAME(UNO_NAME_REDLINE_IDENTIFIER), 0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},
+                    _REDLINE_PROPERTIES
                     {SW_PROP_NAME(UNO_NAME_TEXT_PORTION_TYPE),  0, &::getCppuType((OUString*)0),                        PropertyAttribute::READONLY,    0},
                     {0,0,0,0}
                 };
@@ -1908,6 +1910,19 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTextColumns_Impl;
+            }
+            break;
+            case PROPERTY_MAP_REDLINE :
+            {
+                static SfxItemPropertyMap aRedlineMap_Impl[] =
+                {
+                    _REDLINE_PROPERTIES
+                    {SW_PROP_NAME(UNO_NAME_REDLINE_START), 0, &::getCppuType((Reference<XInterface>*)0),    PropertyAttribute::READONLY,    0},
+                    {SW_PROP_NAME(UNO_NAME_REDLINE_END  ), 0, &::getCppuType((Reference<XInterface>*)0),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
+                    {SW_PROP_NAME(UNO_NAME_REDLINE_TEXT  ), 0, &::getCppuType((Reference<XText>*)0),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
+                    {0,0,0,0}
+                };
+                aMapArr[nPropertyId] = aRedlineMap_Impl;
             }
             break;
         }

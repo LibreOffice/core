@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2000-12-07 12:06:41 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2210,7 +2210,7 @@ uno::Reference< XTextRange >  SwXTextField::getAnchor(void) throw( uno::RuntimeE
 
         SwPaM aPam(rTxtNode, *pTxtFld->GetStart() + 1, rTxtNode, *pTxtFld->GetStart());
 
-        aRef = ::CreateTextRangeFromPosition(m_pDoc,
+        aRef = SwXTextRange::CreateTextRangeFromPosition(m_pDoc,
                                 *aPam.GetPoint(), aPam.GetMark());
     }
     return aRef;

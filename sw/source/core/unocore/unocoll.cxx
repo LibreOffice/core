@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 17:28:55 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1959,86 +1959,6 @@ SwXReferenceMark* SwXReferenceMarks::GetObject( SwDoc* pDoc, const SwFmtRefMark*
     if( !pxMark )
         pxMark = new SwXReferenceMark(pDoc, pMark);
     return pxMark;
-}
-/******************************************************************
- *
- ******************************************************************/
-/* -----------------------------06.04.00 12:44--------------------------------
-
- ---------------------------------------------------------------------------*/
-OUString SwXRedlines::getImplementationName(void) throw( RuntimeException )
-{
-    return C2U("SwXRedlines");
-}
-/* -----------------------------06.04.00 12:44--------------------------------
-
- ---------------------------------------------------------------------------*/
-BOOL SwXRedlines::supportsService(const OUString& rServiceName) throw( RuntimeException )
-{
-    return C2U("com.sun.star.text.Redlines") == rServiceName;
-}
-/* -----------------------------06.04.00 12:44--------------------------------
-
- ---------------------------------------------------------------------------*/
-Sequence< OUString > SwXRedlines::getSupportedServiceNames(void) throw( RuntimeException )
-{
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.Redlines");
-    return aRet;
-}
-/*-- 14.01.99 09:02:36---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwXRedlines::SwXRedlines(SwDoc* pDoc) :
-    SwUnoCollection(pDoc)
-{
-}
-/*-- 14.01.99 09:02:36---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwXRedlines::~SwXRedlines()
-{
-}
-/*-- 14.01.99 09:02:37---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-sal_Int32 SwXRedlines::getCount(void) throw( uno::RuntimeException )
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!IsValid())
-        throw uno::RuntimeException();
-    return  GetDoc()->GetRedlineTbl().Count();
-}
-/*-- 14.01.99 09:02:37---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    //Definition der Redline existiert noch nicht
-    DBG_WARNING("not implemented")
-    return uno::Any();
-}
-/*-- 14.01.99 09:02:37---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-uno::Type SAL_CALL SwXRedlines::getElementType() throw(uno::RuntimeException)
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    //Definition der Redline existiert noch nicht
-    DBG_WARNING("not implemented")
-    return ::getCppuVoidType();
-}
-/*-- 14.01.99 09:02:37---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-sal_Bool SwXRedlines::hasElements(void) throw( uno::RuntimeException )
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!IsValid())
-        throw uno::RuntimeException();
-    return  0 != GetDoc()->GetRedlineTbl().Count();
 }
 /******************************************************************
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-01-11 12:40:02 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,27 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _PAGEDESC_HXX //autogen
+#include <pagedesc.hxx>
+#endif
+#include "poolfmt.hxx"
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
+#endif
+#ifndef _SECTION_HXX
+#include <section.hxx>
 #endif
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
 #endif
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
+#endif
+#ifndef _UNOCOLL_HXX
+#include <unocoll.hxx>
+#endif
+#ifndef _UNOMAP_HXX
+#include <unomap.hxx>
 #endif
 #ifndef _UNOCRSR_HXX
 #include <unocrsr.hxx>
@@ -105,6 +118,9 @@
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTTABLE_HPP_
+#include <com/sun/star/text/XTextTable.hpp>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -115,16 +131,17 @@ using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 
 
-/* -----------------------------19.12.00 11:36--------------------------------
+/* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-
 SwXRedlineText::SwXRedlineText(SwDoc* pDoc, SwNodeIndex aIndex) :
     SwXText(pDoc, CURSOR_REDLINE),
     aNodeIndex(aIndex)
 {
 }
+/* ---------------------------------------------------------------------------
 
+ ---------------------------------------------------------------------------*/
 Any SwXRedlineText::queryInterface( const Type& rType )
     throw(RuntimeException)
 {
@@ -136,28 +153,32 @@ Any SwXRedlineText::queryInterface( const Type& rType )
     }
     return aRet;
 }
+/* ---------------------------------------------------------------------------
 
+ ---------------------------------------------------------------------------*/
 Sequence<Type> SwXRedlineText::getTypes()
     throw(RuntimeException)
 {
-    // merge getTypes() from superclasses
-
     // SwXText::getTypes()
     uno::Sequence<uno::Type> aTypes = SwXText::getTypes();
-
     return aTypes;
 }
+/* ---------------------------------------------------------------------------
 
+ ---------------------------------------------------------------------------*/
 Sequence<sal_Int8> SwXRedlineText::getImplementationId()
     throw(RuntimeException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = FALSE;
     if(!bInit)
         rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
     return aId;
 }
+/* ---------------------------------------------------------------------------
 
+ ---------------------------------------------------------------------------*/
 Reference<XTextCursor> SwXRedlineText::createTextCursor(void)
     throw( RuntimeException )
 {
@@ -170,7 +191,9 @@ Reference<XTextCursor> SwXRedlineText::createTextCursor(void)
     pUnoCursor->Move(fnMoveForward, fnGoNode);
     return (XWordCursor*)pCrsr;
 }
+/* ---------------------------------------------------------------------------
 
+ ---------------------------------------------------------------------------*/
 Reference<XTextCursor> SwXRedlineText::createTextCursorByRange(
     const Reference<XTextRange> & aTextRange)
         throw( RuntimeException )
@@ -180,7 +203,6 @@ Reference<XTextCursor> SwXRedlineText::createTextCursorByRange(
     xCursor->gotoRange(aTextRange->getEnd(), sal_True);
     return xCursor;
 }
-
 /* -----------------------------19.12.00 11:36--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -293,6 +315,19 @@ util::DateTime lcl_DateTimeToUno(const DateTime& rDT)
     return aRetDT;
 }
 // ---------------------------------------------------------------------------
+DateTime lcl_DateTimeFromUno(const util::DateTime& rDT)
+{
+    DateTime aRetDT;
+    aRetDT.SetYear(rDT.Year);
+    aRetDT.SetMonth(rDT.Month);
+    aRetDT.SetDay(rDT.Day);
+    aRetDT.SetHour(rDT.Hours);
+    aRetDT.SetMin(rDT.Minutes);
+    aRetDT.SetSec(rDT.Seconds);
+    aRetDT.Set100Sec(rDT.HundredthSeconds);
+    return aRetDT;
+}
+// ---------------------------------------------------------------------------
 OUString lcl_RedlineTypeToOUString(SwRedlineType eType)
 {
     OUString sRet;
@@ -305,6 +340,21 @@ OUString lcl_RedlineTypeToOUString(SwRedlineType eType)
         case REDLINE_FMTCOLL:sRet = C2U("Style"); break;
     }
     return sRet;
+}
+// ---------------------------------------------------------------------------
+SwRedlineType  lcl_OUStringToRedlineType(const OUString& rType)
+{
+    SwRedlineType eType = REDLINE_INSERT;
+    if(!rType.compareToAscii("Delete"))
+        eType = REDLINE_DELETE;
+    else if(!rType.compareToAscii("Format"))
+        eType = REDLINE_FORMAT;
+    else if(!rType.compareToAscii("TextTable"))
+        eType = REDLINE_TABLE;
+    else if(!rType.compareToAscii("Style"))
+        eType = REDLINE_FMTCOLL;
+//  else if(!rType.compareToAscii("Insert"))
+    return eType;
 }
 // ---------------------------------------------------------------------------
 Sequence<PropertyValue> lcl_GetSuccessorProperties(const SwRedline& rRedline)
@@ -333,39 +383,9 @@ Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
     Validate();
-
-    Any aRet;
-    if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_AUTHOR       .pName, UNO_NAME_REDLINE_AUTHOR.nNameLen))
-        aRet <<= OUString(pRedline->GetAuthorString());
-    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_DATE_TIME.pName, UNO_NAME_REDLINE_DATE_TIME.nNameLen))
-    {
-        aRet <<= lcl_DateTimeToUno(pRedline->GetTimeStamp());
-    }
-    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_COMMENT  .pName, UNO_NAME_REDLINE_COMMENT  .nNameLen))
-        aRet <<= OUString(pRedline->GetComment());
-    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_TYPE        .pName, UNO_NAME_REDLINE_TYPE     .nNameLen))
-    {
-        aRet <<= lcl_RedlineTypeToOUString(pRedline->GetType());
-    }
-    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_SUCCESSOR_DATA.pName, UNO_NAME_REDLINE_SUCCESSOR_DATA.nNameLen))
-    {
-        if(pRedline->GetRedlineData().Next())
-            aRet <<= lcl_GetSuccessorProperties(*pRedline);
-    }
-    else if (rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_IDENTIFIER.pName,
-                                        UNO_NAME_REDLINE_IDENTIFIER.nNameLen))
-    {
-        // create identifier from SwRedline address (if available)
-        if (NULL != pRedline)
-        {
-            OUStringBuffer sBuf;
-            sBuf.append((sal_Int64)pRedline);
-            aRet <<= sBuf.makeStringAndClear();
-        }
-    }
-    else
+    Any aRet = GetPropertyValue( rPropertyName, *pRedline);
+    if(!aRet.hasValue())
         aRet = SwXTextPortion::getPropertyValue(rPropertyName);
     return aRet;
 }
@@ -442,6 +462,38 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  ) th
         rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
     return aId;
 }
+/* -----------------------------11.01.01 16:39--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, const SwRedline& rRedline ) throw()
+{
+    Any aRet;
+    if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_AUTHOR       .pName, UNO_NAME_REDLINE_AUTHOR.nNameLen))
+        aRet <<= OUString(rRedline.GetAuthorString());
+    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_DATE_TIME.pName, UNO_NAME_REDLINE_DATE_TIME.nNameLen))
+    {
+        aRet <<= lcl_DateTimeToUno(rRedline.GetTimeStamp());
+    }
+    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_COMMENT  .pName, UNO_NAME_REDLINE_COMMENT  .nNameLen))
+        aRet <<= OUString(rRedline.GetComment());
+    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_TYPE        .pName, UNO_NAME_REDLINE_TYPE     .nNameLen))
+    {
+        aRet <<= lcl_RedlineTypeToOUString(rRedline.GetType());
+    }
+    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_SUCCESSOR_DATA.pName, UNO_NAME_REDLINE_SUCCESSOR_DATA.nNameLen))
+    {
+        if(rRedline.GetRedlineData().Next())
+            aRet <<= lcl_GetSuccessorProperties(rRedline);
+    }
+    else if (rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_IDENTIFIER.pName,
+                                        UNO_NAME_REDLINE_IDENTIFIER.nNameLen))
+    {
+        OUStringBuffer sBuf;
+        sBuf.append((sal_Int64)&rRedline);
+        aRet <<= sBuf.makeStringAndClear();
+    }
+    return aRet;
+}
 /* -----------------------------11.01.01 11:22--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -466,5 +518,216 @@ Sequence< PropertyValue > SwXRedlinePortion::CreateRedlineProperties( const SwRe
         pRet[4].Value <<= lcl_GetSuccessorProperties(rRedline);
     }
     return aRet;
+}
+/*-- 11.01.01 17:06:07---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+TYPEINIT1(SwXRedline, SwClient);
+SwXRedline::SwXRedline(SwRedline& rRedline, SwDoc& rDoc) :
+    pDoc(&rDoc),
+    pRedline(&rRedline)
+{
+    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+}
+/*-- 11.01.01 17:06:08---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXRedline::~SwXRedline()
+{
+}
+/*-- 11.01.01 17:06:08---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Reference< XPropertySetInfo > SwXRedline::getPropertySetInfo(  ) throw(RuntimeException)
+{
+    static uno::Reference< beans::XPropertySetInfo >  xRef =
+        SfxItemPropertySet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_REDLINE)).getPropertySetInfo();
+    return xRef;
+}
+/*-- 11.01.01 17:06:08---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXRedline::setPropertyValue( const OUString& rPropertyName, const Any& aValue )
+    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException,
+        WrappedTargetException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!pDoc)
+        throw RuntimeException();
+    if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_AUTHOR       .pName, UNO_NAME_REDLINE_AUTHOR.nNameLen))
+    {
+        DBG_ERROR("currently not available")
+    }
+    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_DATE_TIME.pName, UNO_NAME_REDLINE_DATE_TIME.nNameLen))
+    {
+        DBG_ERROR("currently not available")
+//      util::DateTime aDT;
+//      if(aValue >>= aDT)
+//              pRedline->SetTimeStamp(lcl_DateTimeFromUno(aDT));
+    }
+    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_COMMENT  .pName, UNO_NAME_REDLINE_COMMENT  .nNameLen))
+    {
+        OUString sTmp; aValue >>= sTmp;
+        pRedline->SetComment(sTmp);
+    }
+    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_TYPE        .pName, UNO_NAME_REDLINE_TYPE     .nNameLen))
+    {
+        DBG_ERROR("currently not available")
+        OUString sTmp; aValue >>= sTmp;
+        if(!sTmp.getLength())
+            throw IllegalArgumentException();
+//      pRedline->SetType(lcl_OUStringToRedlineType(sTmp));
+    }
+    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_SUCCESSOR_DATA.pName, UNO_NAME_REDLINE_SUCCESSOR_DATA.nNameLen))
+    {
+        DBG_ERROR("currently not available")
+/*      SwRedlineData* pNext = pRedline->GetRedlineData().Next();
+        Sequence<PropertyValue> aValues;
+        if(!(aValue =>> aValues) || !pNext)
+            throw IllegalArgumentException();
+
+        const PropertyValue* pValues = aValues.getConstArray();
+        for(sal_Int32 nValue = 0; nValue < aValues.getLength(); nValue++)
+        {
+            if(pValues[nValue].Name.equalsAscii(UNO_NAME_REDLINE_AUTHOR.pName)
+            {
+                DBG_ERROR("currently not available")
+            }
+            else if(pValues[nValue].Name.equalsAscii(UNO_NAME_REDLINE_DATE_TIME.pName))
+            {
+                util::DateTime aDT;
+                if(pValues[nValue].Value >>= aDT)
+                    pNext->SetTimeStamp(lcl_DateTimeFromUno(aDT));
+            }
+            else if(pValues[nValue].Name.equalsAscii(UNO_NAME_REDLINE_COMMENT.pName))
+            {
+                OUString sTmp; pValues[nValue].Value >>= sTmp;
+                pNext->SetComment(sTmp);
+            }
+            else if(pValues[nValue].Name.equalsAscii(UNO_NAME_REDLINE_TYPE.pName))
+            {
+                OUString sTmp; pValues[nValue].Value >>= sTmp;
+                pNext->SetType(lcl_OUStringToRedlineType(sTmp);
+            }
+        }
+*/  }
+    else
+    {
+        throw IllegalArgumentException();
+    }
+}
+/*-- 11.01.01 17:06:08---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
+    throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!pDoc)
+        throw RuntimeException();
+    Any aRet;
+    BOOL bStart = rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_START     .pName, UNO_NAME_REDLINE_START.nNameLen);
+    if(bStart ||
+        rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_END     .pName, UNO_NAME_REDLINE_END.nNameLen))
+    {
+        Reference<XInterface> xRet;
+        SwNode* pNode = pRedline->GetNode();
+        if(!bStart && pRedline->HasMark())
+            pNode = pRedline->GetNode(FALSE);
+        switch(pNode->GetNodeType())
+        {
+            case ND_SECTIONNODE:
+            {
+                SwSectionNode* pSectNode = pNode->GetSectionNode();
+                DBG_ASSERT(pSectNode, "No section node!")
+                xRet = SwXTextSections::GetObject( *pSectNode->GetSection().GetFmt() );
+            }
+            break;
+            case ND_TABLENODE :
+            {
+                SwTableNode* pTblNode = pNode->GetTableNode();
+                DBG_ASSERT(pTblNode, "No table node!")
+                SwTable& rTbl = pTblNode->GetTable();
+                SwFrmFmt* pTblFmt = rTbl.GetFrmFmt();
+                xRet = SwXTextTables::GetObject( *pTblFmt );
+            }
+            break;
+            case ND_TEXTNODE :
+            {
+                SwPosition* pPoint = 0;
+                if(bStart || !pRedline->HasMark())
+                    pPoint = pRedline->GetPoint();
+                else
+                    pPoint = pRedline->GetMark();
+                SwPaM aTmp(*pPoint);
+                Reference<XText> xTmpParent;
+//              Reference< XTextRange > xRange = SwXTextRange::createTextRangeFromPaM(aTmp);
+                Reference<XTextRange>xRange =
+                    SwXTextRange::CreateTextRangeFromPosition( pDoc, *pPoint, 0 );
+                xRet = xRange.get();
+            }
+            break;
+            default:
+                DBG_ERROR("illegal node type")
+        }
+        aRet <<= xRet;
+    }
+    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_TEXT        .pName, UNO_NAME_REDLINE_TEXT.nNameLen))
+    {
+        SwNodeIndex* pNodeIdx = pRedline->GetContentIdx();
+        if(pNodeIdx)
+        {
+            Reference<XText> xRet = new SwXRedlineText(pDoc, *pNodeIdx);
+            aRet <<= xRet;
+        }
+    }
+    else
+        aRet = SwXRedlinePortion::GetPropertyValue(rPropertyName, *pRedline);
+    return aRet;
+}
+/*-- 11.01.01 17:06:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXRedline::addPropertyChangeListener(
+    const OUString& aPropertyName,
+    const Reference< XPropertyChangeListener >& xListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+/*-- 11.01.01 17:06:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXRedline::removePropertyChangeListener(
+    const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+/*-- 11.01.01 17:06:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXRedline::addVetoableChangeListener(
+    const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+/*-- 11.01.01 17:06:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXRedline::removeVetoableChangeListener(
+    const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+/*-- 11.01.01 17:06:10---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXRedline::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    ClientModify(this, pOld, pNew);
+    if(!GetRegisteredIn())
+      {
+        pDoc = 0;
+        pRedline = 0;
+    }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:15:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ SwXMLImport::SwXMLImport(
     _InitItemImport();
 
     Reference < XTextRange > xTextRange =
-        CreateTextRangeFromPosition( &rDoc, *rPaM.GetPoint(), 0 );
+        SwXTextRange::CreateTextRangeFromPosition( &rDoc, *rPaM.GetPoint(), 0 );
     Reference < XText > xText = xTextRange->getText();
     Reference < XTextCursor > xTextCursor =
         xText->createTextCursorByRange( xTextRange );

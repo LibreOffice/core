@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-23 08:45:59 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ uno::Reference< text::XTextRange >  SwXFootnote::getAnchor(void) throw( uno::Run
     {
         const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
         SwPosition aPos( *pTxtFtn->GetStartNode() );
-        aRef = ::CreateTextRangeFromPosition((SwDoc*)GetDoc(), aPos, 0);
+        aRef = SwXTextRange::CreateTextRangeFromPosition((SwDoc*)GetDoc(), aPos, 0);
     }
     else
         throw uno::RuntimeException();
@@ -619,6 +619,9 @@ void SwXFootnote::removeVetoableChangeListener( const OUString& PropertyName,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/10/23 08:45:59  os
+    syntax: ')'
+
     Revision 1.3  2000/10/20 15:55:57  os
     #78714# set reference number directly if document is in reading
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2000-12-22 09:51:05 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1813,7 +1813,7 @@ uno::Reference< XTextRange >  SwXFrame::getAnchor(void) throw( RuntimeException 
         if( pFmt->GetAnchor().GetAnchorId() != FLY_PAGE )
         {
             const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
-            aRef = ::CreateTextRangeFromPosition(pFmt->GetDoc(), rPos, 0);
+            aRef = SwXTextRange::CreateTextRangeFromPosition(pFmt->GetDoc(), rPos, 0);
         }
     }
     else

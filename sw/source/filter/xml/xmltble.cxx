@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-11 20:15:54 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:15:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ Reference < XTextRange > lcl_xml_CreateTableBoxTextRange(
     aPaM.Move( fnMoveForward, fnGoNode );
 
     Reference < XTextRange > xTextRange =
-        CreateTextRangeFromPosition( aPaM.GetDoc(), *aPaM.GetPoint(),
+        SwXTextRange::CreateTextRangeFromPosition( aPaM.GetDoc(), *aPaM.GetPoint(),
                                      aPaM.GetMark() );
     return xTextRange;
 }

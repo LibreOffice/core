@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2000-12-22 09:54:15 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,8 @@
 #define PROPERTY_MAP_TEXT_COLUMS            36
 #define PROPERTY_MAP_PARAGRAPH              37
 #define PROPERTY_MAP_EMBEDDED_OBJECT        38
-#define PROPERTY_MAP_END                    39
+#define PROPERTY_MAP_REDLINE                39
+#define PROPERTY_MAP_END                    40
 
 #define PROPERTY_SET_CHAR_STYLE             1
 #define PROPERTY_SET_PARA_STYLE             2

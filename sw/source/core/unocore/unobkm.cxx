@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unobkm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: os $ $Date: 2001-01-12 16:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ uno::Reference< text::XTextRange >  SwXBookmark::getAnchor(void) throw( uno::Run
         const SwPosition& rPos = pBkm->GetPos();
         const SwPosition* pMarkPos = pBkm->GetOtherPos();
 
-        aRet = CreateTextRangeFromPosition(pDoc, rPos, pMarkPos);
+        aRet = SwXTextRange::CreateTextRangeFromPosition(pDoc, rPos, pMarkPos);
     }
     else
         throw uno::RuntimeException();
@@ -417,6 +417,9 @@ void SwXBookmark::removeVetoableChangeListener(const OUString& PropertyName, con
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/19 00:08:28  hr
+    initial import
+
     Revision 1.3  2000/09/18 16:04:31  willem.vandorp
     OpenOffice header added.
 
