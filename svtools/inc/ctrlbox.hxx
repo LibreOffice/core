@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-19 09:41:24 $
+ *  last change: $Author: gt $ $Date: 2002-07-31 07:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,6 +415,9 @@ private:
     void            ImplDestroyFontList();
 #endif
 
+    void            InitBitmaps( void );
+protected:
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 public:
                     FontNameBox( Window* pParent,
                                  WinBits nWinStyle = WB_SORT );
