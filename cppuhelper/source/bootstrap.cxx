@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-28 14:17:16 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include "com/sun/star/container/XSet.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/io/IOException.hpp"
+#include "com/sun/star/bridge/UnoUrlResolver.hpp"
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
@@ -603,17 +604,9 @@ Reference< XComponentContext > SAL_CALL bootstrap()
                 throw BootstrapException( OUSTR( "unmapped error!" ) );
         }
 
-        // initial service manager
-        Reference< lang::XMultiComponentFactory > xLocalServiceManager(
-            xLocalContext->getServiceManager() );
-        if ( !xLocalServiceManager.is() )
-            throw BootstrapException( OUSTR( "no initial service manager!" ) );
-
         // create a URL resolver
         Reference< bridge::XUnoUrlResolver > xUrlResolver(
-            xLocalServiceManager->createInstanceWithContext(
-            OUSTR( "com.sun.star.bridge.UnoUrlResolver" ), xLocalContext ),
-            UNO_QUERY_THROW );
+            bridge::UnoUrlResolver::create( xLocalContext ) );
 
         // connection string
         OSL_ASSERT( buf.getLength() == 0 );
