@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _RowSet.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:38 $
+ *  last change:$Date: 2003-01-31 10:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@ package ifc.sdb;
 import com.sun.star.sdbc.XConnection;
 import lib.MultiPropertyTest;
 import lib.MultiPropertyTest$PropertyTester;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import lib.StatusException;
 
 /**
  * Testing <code>com.sun.star.sdb.RowSet</code>
@@ -149,8 +153,16 @@ public class _RowSet extends MultiPropertyTest {
     public void _ActiveConnection() {
         boolean result = false;
         try {
-            XConnection the_connection = (XConnection)
-                                    oObj.getPropertyValue("ActiveConnection");
+            XConnection the_connection = null;
+
+            try {
+                the_connection = (XConnection) AnyConverter.toObject(
+                                    new Type(XConnection.class),
+                                    oObj.getPropertyValue("ActiveConnection"));
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                throw new StatusException("couldn't convert Any",iae);
+            }
+
             result = (the_connection != null);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             log.println("the property is unknown");
