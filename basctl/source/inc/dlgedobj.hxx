@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:17:10 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@ public:
     virtual void SAL_CALL _elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL _elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 
+    virtual void SetLayer(SdrLayerID nLayer);
     virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
 };
 
