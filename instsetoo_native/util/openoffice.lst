@@ -5,7 +5,7 @@ OpenOffice
 		variables
 		{
 			PRODUCTNAME OpenOffice.org
-			PRODUCTVERSION 680
+			PRODUCTVERSION 1.9.{milestone}
 			PRODUCTEXTENSION
 			LONG_PRODUCTEXTENSION
 			REGISTRATIONURL http://www.openoffice.org/welcome/registration.html
