@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testbasi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:03:45 $
+ *  last change: $Author: kz $ $Date: 2004-01-19 17:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@ IMPL_LINK( TTBasic, CErrorImpl, ErrorEntry*, pData )
 
 BOOL TTBasic::Compile( SbModule* p )
 {
+    p->SetComment( ((TestToolObj*)pTestObject)->GetRevision(p->GetSource()) );
     SbModule* pOldModule = GetCompileModule();
     SetCompileModule( p );
     p->SetSource( ((TestToolObj*)pTestObject)->PreCompile(p->GetSource()) );
