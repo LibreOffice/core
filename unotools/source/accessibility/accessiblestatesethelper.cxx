@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-05 13:09:25 $
+ *  last change: $Author: sab $ $Date: 2002-02-19 08:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,13 @@
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
 #endif
-#include <map>
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+#include <bitset>
+
+// defines how many states the bitfield can contain
+#define BITFIELDSIZE 30
 
 using namespace ::utl;
 using namespace ::rtl;
@@ -84,9 +90,15 @@ public:
         throw (uno::RuntimeException);
     void AddState(sal_Int16 aState)
         throw (uno::RuntimeException);
+    void RemoveState(sal_Int16 aState)
+        throw (uno::RuntimeException);
+    void Compare(const AccessibleStateSetHelperImpl* pComparativeValue,
+                        AccessibleStateSetHelperImpl* pOldStates,
+                        AccessibleStateSetHelperImpl* pNewStates)
+        throw (uno::RuntimeException);
 
 private:
-    std::map<sal_Int16, sal_Bool> maStates;
+    std::bitset<BITFIELDSIZE> maStates; //Bitfield
 };
 
 AccessibleStateSetHelperImpl::AccessibleStateSetHelperImpl()
@@ -100,22 +112,47 @@ AccessibleStateSetHelperImpl::~AccessibleStateSetHelperImpl()
 sal_Bool AccessibleStateSetHelperImpl::IsEmpty ()
     throw (uno::RuntimeException)
 {
-    return maStates.empty();
+    return maStates.none();
 }
 
 sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState)
     throw (uno::RuntimeException)
 {
-    std::map<sal_Int16, sal_Bool>::const_iterator aItr(maStates.find(aState));
-    return (aItr != maStates.end());
+    DBG_ASSERT(aState >= BITFIELDSIZE, "the statesset is to small")
+    return maStates.test(aState);
 }
 
 void AccessibleStateSetHelperImpl::AddState(sal_Int16 aState)
     throw (uno::RuntimeException)
 {
-    std::pair< const sal_Int16, sal_Bool > aStatePair(aState, sal_True);
-    maStates.insert(aStatePair);
+    DBG_ASSERT(aState >= BITFIELDSIZE, "the statesset is to small")
+    maStates.set(aState);
 }
+
+void AccessibleStateSetHelperImpl::RemoveState(sal_Int16 aState)
+    throw (uno::RuntimeException)
+{
+    DBG_ASSERT(aState >= BITFIELDSIZE, "the statesset is to small")
+    maStates.set(aState, 0);
+}
+
+void AccessibleStateSetHelperImpl::Compare(
+    const AccessibleStateSetHelperImpl* pComparativeValue,
+        AccessibleStateSetHelperImpl* pOldStates,
+        AccessibleStateSetHelperImpl* pNewStates)
+    throw (uno::RuntimeException)
+{
+    if (pComparativeValue && pOldStates && pNewStates)
+    {
+        std::bitset<BITFIELDSIZE> aTempBitSet(maStates);
+        aTempBitSet ^= pComparativeValue->maStates;
+        pOldStates->maStates = aTempBitSet;
+        pOldStates->maStates &= maStates;
+        pNewStates->maStates = aTempBitSet;
+        pNewStates->maStates &= pComparativeValue->maStates;
+    }
+}
+
 
 //=====  internal  ============================================================
 
@@ -199,9 +236,27 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::containsAll
 void AccessibleStateSetHelper::AddState(sal_Int16 aState)
     throw (uno::RuntimeException)
 {
+    ::vos::OGuard aGuard (maMutex);
     mpHelperImpl->AddState(aState);
 }
 
+void AccessibleStateSetHelper::RemoveState(sal_Int16 aState)
+    throw (uno::RuntimeException)
+{
+    ::vos::OGuard aGuard (maMutex);
+    mpHelperImpl->RemoveState(aState);
+}
+
+void AccessibleStateSetHelper::Compare(
+    const AccessibleStateSetHelper& rComparativeValue,
+        AccessibleStateSetHelper& rOldStates,
+        AccessibleStateSetHelper& rNewStates)
+    throw (uno::RuntimeException)
+{
+    ::vos::OGuard aGuard (maMutex);
+    mpHelperImpl->Compare(rComparativeValue.mpHelperImpl,
+        rOldStates.mpHelperImpl, rNewStates.mpHelperImpl);
+}
 
 //=====  XTypeProvider  =======================================================
 
@@ -209,7 +264,6 @@ uno::Sequence< ::com::sun::star::uno::Type>
     AccessibleStateSetHelper::getTypes (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
     const ::com::sun::star::uno::Type aTypeList[] = {
         ::getCppuType((const uno::Reference<
             XAccessibleStateSet>*)0),
