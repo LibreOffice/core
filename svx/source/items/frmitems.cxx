@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:43:56 $
+ *  last change: $Author: jp $ $Date: 2001-06-29 11:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5180,37 +5180,41 @@ const GraphicObject* SvxBrushItem::GetGraphicObject( SfxObjectShell* pSh ) const
             pThis->bLoadAgain = sal_False;
             return 0;
         }
-        pImpl->xMedium = new SfxMedium(
-            *pStrLink, STREAM_STD_READ, sal_False );
-
-        pImpl->xMedium->SetTransferPriority( SFX_TFPRIO_VISIBLE_LOWRES_GRAPHIC );
-        if( pImpl->xMedium->IsRemote() )
+        //JP 29.6.2001: only with "valid" names - empty names now allowed
+        if( pStrLink->Len() )
         {
-            if( pSh )
-                pSh->RegisterTransfer( *pImpl->xMedium );
+            pImpl->xMedium = new SfxMedium(
+                *pStrLink, STREAM_STD_READ, sal_False );
+
+            pImpl->xMedium->SetTransferPriority( SFX_TFPRIO_VISIBLE_LOWRES_GRAPHIC );
+            if( pImpl->xMedium->IsRemote() )
+            {
+                if( pSh )
+                    pSh->RegisterTransfer( *pImpl->xMedium );
+                else
+                    DBG_WARNING( "SvxBrushItem::GetGraphic ohne DocShell" );
+            }
+
+            SfxMediumRef xRef( pImpl->xMedium );
+            // Ref halten wg. synchr. DoneCallback
+            if( pImpl->aDoneLink.IsSet() )
+            {
+                // Auf besonderen Wunsch des Writers wird der synchrone und der
+                // asynchrone Fall was die Benachrichtigung angeht unterschiedlich
+                // behandelt. Der Callback erfolgt nur bei asynchronem Eintreffen
+                // der Daten
+
+                Link aTmp = pImpl->aDoneLink;
+                pImpl->aDoneLink = Link();
+                pImpl->xMedium->DownLoad(
+                    STATIC_LINK( this, SvxBrushItem, DoneHdl_Impl ) );
+                pImpl->aDoneLink = aTmp;
+            }
             else
-                DBG_WARNING( "SvxBrushItem::GetGraphic ohne DocShell" );
-        }
-
-        SfxMediumRef xRef( pImpl->xMedium );
-        // Ref halten wg. synchr. DoneCallback
-        if( pImpl->aDoneLink.IsSet() )
-        {
-            // Auf besonderen Wunsch des Writers wird der synchrone und der
-            // asynchrone Fall was die Benachrichtigung angeht unterschiedlich
-            // behandelt. Der Callback erfolgt nur bei asynchronem Eintreffen
-            // der Daten
-
-            Link aTmp = pImpl->aDoneLink;
-            pImpl->aDoneLink = Link();
-            pImpl->xMedium->DownLoad(
-                STATIC_LINK( this, SvxBrushItem, DoneHdl_Impl ) );
-            pImpl->aDoneLink = aTmp;
-        }
-        else
-        {
-            pImpl->xMedium->DownLoad( );
-            DoneHdl_Impl( (SvxBrushItem*)this, 0 );
+            {
+                pImpl->xMedium->DownLoad( );
+                DoneHdl_Impl( (SvxBrushItem*)this, 0 );
+            }
         }
     }
 #endif
