@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:38:51 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2149,7 +2149,9 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                     break;
                 }
 
-                rWrtShell.InsertDDETable( pDDETyp, nRows, nCols );
+                rWrtShell.InsertDDETable(
+                    SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ), // TODO MULTIHEADER
+                    pDDETyp, nRows, nCols );
             }
             else if( 1 < aExpand.GetTokenCount( '\n' ) )
             {
