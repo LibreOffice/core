@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 19:10:54 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,14 +78,24 @@
 #include <rtl/ustring>
 #endif
 
+#include <map>
+#include <set>
+
+
 class SvXMLExport;
 class SvXMLNumFmtExport;
 struct XMLPropertyState;
 
-namespace com { namespace sun { namespace star { namespace util {
-    struct DateTime;
-    struct Date;
-}}}}
+namespace com { namespace sun { namespace star {
+    namespace util { struct DateTime; }
+    namespace util { struct Date; }
+    namespace text { class XTextField; }
+    namespace text { class XText; }
+    namespace beans { class XPropertySet; }
+    namespace frame { class XModel; }
+} } }
+namespace rtl { class OUString; }
+
 
 /// field IDs,
 //   including translation between UNO speak and XML speak if appropriate
@@ -179,19 +189,17 @@ enum FieldIdEnum {
     FIELD_ID_UNKNOWN        // invalid or unknown field type!
 };
 
-namespace com { namespace sun { namespace star{
-    namespace text { class XTextField; }
-    namespace beans { class XPropertySet; }
-    namespace frame { class XModel; }
-} } }
-
-namespace rtl { class OUString; }
-
 
 
 class XMLTextFieldExport
 {
     SvXMLExport& rExport;
+
+    /// store used text field master names (NULL means: don't collect)
+    ::std::map<
+            ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >,
+            ::std::set< ::rtl::OUString > > *
+        pUsedMasters;
 
 public:
 
@@ -207,6 +215,7 @@ public:
 
     /// collect styles (character styles, data styles, ...) for this field
     /// (if appropriate).
+    /// Also collect used field masters (if pUsedMasters is set)
     /// to be called for every field during style export.
     void ExportFieldAutoStyle(const ::com::sun::star::uno::Reference <
                       ::com::sun::star::text::XTextField > & rTextField );
@@ -214,6 +223,18 @@ public:
     /// export field declarations.
     /// to be called once at beginning of document body.
     void ExportFieldDeclarations();
+
+    /// export field declarations for fields used in the the particular XText.
+    /// (Requires that a list of used field declarations has previously been
+    ///  built-up in ExportFieldAutoStyle() )
+    void ExportFieldDeclarations(
+        const ::com::sun::star::uno::Reference <
+                ::com::sun::star::text::XText > & rText);
+
+    /// export all field declarations, or only those that have been used?
+    /// Calling this method will reset the list of used field declataions.
+    void SetExportOnlyUsedFieldDeclarations(
+        sal_Bool bExportOnlyUsed = sal_True);
 
     // determine element or attribute names
     // (public, because they may be useful in related XML export classes)
@@ -478,6 +499,7 @@ private:
     const ::rtl::OUString sPropertyAuthor;
     const ::rtl::OUString sPropertyDate;
     const ::rtl::OUString sPropertyMeasureKind;
+    const ::rtl::OUString sPropertyInstanceName;
 
     const ::rtl::OUString sEmpty;
 

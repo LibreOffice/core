@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-28 11:36:41 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,7 @@ inline Date const GetDateProperty( const OUString& sPropName,
 XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
                                         XMLPropertyState* pCombinedCharState)
     : rExport(rExp),
+      pUsedMasters(NULL),
       sServicePrefix(
           RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.")),
       sFieldMasterPrefix(
@@ -457,13 +458,16 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
       sPropertyAuthor(RTL_CONSTASCII_USTRINGPARAM("Author")),
       sPropertyDate(RTL_CONSTASCII_USTRINGPARAM("Date")),
       sPropertyMeasureKind(RTL_CONSTASCII_USTRINGPARAM("Kind")),
+      sPropertyInstanceName(RTL_CONSTASCII_USTRINGPARAM("InstanceName")),
       pCombinedCharactersPropertyState(pCombinedCharState)
 {
+    SetExportOnlyUsedFieldDeclarations();
 }
 
 XMLTextFieldExport::~XMLTextFieldExport()
 {
     delete pCombinedCharactersPropertyState;
+    delete pUsedMasters;
 }
 
 /// get the field ID (as in FieldIDEnum) from XTextField
@@ -819,6 +823,33 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
 {
     // get property set
     Reference<XPropertySet> xPropSet(rTextField, UNO_QUERY);
+
+    // add field master to list of used field masters (if desired)
+    if (NULL != pUsedMasters)
+    {
+        Reference<XDependentTextField> xDepField(rTextField, UNO_QUERY);
+        if (xDepField.is())
+        {
+            Reference<XText> xOurText = rTextField->getAnchor()->getText();
+
+            map<Reference<XText>, set<OUString> >::iterator aMapIter =
+                pUsedMasters->find(xOurText);
+
+            // insert a list for our XText (if necessary)
+            if (aMapIter == pUsedMasters->end())
+            {
+                set<OUString> * pSet = new set<OUString> ;
+                (*pUsedMasters)[xOurText] = *pSet;
+                aMapIter = pUsedMasters->find(xOurText);
+            }
+
+            // insert this text field master
+            OUString sFieldMasterName = GetStringProperty(
+                sPropertyInstanceName, xDepField->getTextFieldMaster());
+            aMapIter->second.insert( sFieldMasterName );
+        }
+        // else: no dependent field -> no master -> ignore
+    }
 
     // get Field ID
     sal_uInt16 nToken = GetFieldID(rTextField, xPropSet);
@@ -1663,8 +1694,17 @@ void XMLTextFieldExport::ExportFieldHelper(
     }
 }
 
+
 /// export field declarations / field masters
 void XMLTextFieldExport::ExportFieldDeclarations()
+{
+    Reference<XText> xEmptyText;
+    ExportFieldDeclarations(xEmptyText);
+}
+
+/// export field declarations / field masters
+void XMLTextFieldExport::ExportFieldDeclarations(
+    const Reference<XText> & rText )
 {
     // store lists for decl elements
     vector<OUString>                    aVarName;
@@ -1672,19 +1712,57 @@ void XMLTextFieldExport::ExportFieldDeclarations()
     vector<OUString>                    aSeqName;
     vector<OUString>                    aDdeName;
 
-    // get text fields supplier
+    // get text fields supplier and field master name access
     Reference<XTextFieldsSupplier> xTextFieldsSupp(GetExport().GetModel(),
                                                    UNO_QUERY);
-
-    // iterate over field masters
     Reference<container::XNameAccess> xFieldMasterNameAccess(
         xTextFieldsSupp->getTextFieldMasters(), UNO_QUERY);
-    Sequence<OUString> fieldMasters =
-        xFieldMasterNameAccess->getElementNames();
-    for(sal_Int32 i=0; i<fieldMasters.getLength(); i++) {
+
+    // where to get the text field masters from?
+    // a) we get a specific XText: then use pUsedMasters
+    // b) the XText is empty: then export all text fields
+    Sequence<OUString> aFieldMasters;
+    if (rText.is())
+    {
+        // export only used masters
+        DBG_ASSERT(NULL != pUsedMasters,
+                   "field masters must be recorded in order to be "
+                   "written out separatly" );
+        if (NULL != pUsedMasters)
+        {
+            map<Reference<XText>, set<OUString> > ::iterator aMapIter =
+                pUsedMasters->find(rText);
+            if (aMapIter != pUsedMasters->end())
+            {
+                // found the set of used field masters
+                set<OUString> & rOurMasters = aMapIter->second;
+
+                // copy set to sequence
+                aFieldMasters.realloc( rOurMasters.size() );
+                sal_Int32 i = 0;
+                for( set<OUString>::iterator aSetIter = rOurMasters.begin();
+                     aSetIter != rOurMasters.end();
+                     aSetIter++, i++ )
+                {
+                    aFieldMasters[i] = *aSetIter;
+                }
+
+                pUsedMasters->erase(rText);
+            }
+            // else: XText not found -> ignore
+        }
+        // else: no field masters have been recorded -> ignore
+    }
+    else
+    {
+        // no XText: export all!
+        aFieldMasters = xFieldMasterNameAccess->getElementNames();
+    }
+
+    for(sal_Int32 i=0; i<aFieldMasters.getLength(); i++) {
 
         // get field master name
-        OUString sFieldMaster = fieldMasters[i];
+        OUString sFieldMaster = aFieldMasters[i];
 
         // workaround for #no-bug#
         static const sal_Char sDB[] =
@@ -1941,6 +2019,17 @@ void XMLTextFieldExport::ExportFieldDeclarations()
         }
     }
     // else: no declarations element
+}
+
+void XMLTextFieldExport::SetExportOnlyUsedFieldDeclarations(
+    sal_Bool bExportOnlyUsed)
+{
+    delete pUsedMasters;
+    pUsedMasters = NULL;
+
+    // create used masters set (if none is used)
+    if (bExportOnlyUsed)
+        pUsedMasters = new map<Reference<XText>, set<OUString> > ;
 }
 
 void XMLTextFieldExport::ExportElement(const sal_Char* pElementName,
