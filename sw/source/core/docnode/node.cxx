@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:23:56 $
+ *  last change: $Author: jp $ $Date: 2001-10-12 10:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1541,7 +1541,7 @@ BOOL SwCntntNode::ResetAttr( const SvUShorts& rWhichArr )
                     aNew( *pAttrSet->GetPool(), pAttrSet->GetRanges() );
 
         for( USHORT n = 0, nEnd = rWhichArr.Count(); n < nEnd; ++n )
-            if( pAttrSet->ClearItem( rWhichArr[ n ] ))
+            if( pAttrSet->ClearItem_BC( rWhichArr[ n ], &aOld, &aNew ))
                 ++nDel;
 
         if( nDel )
