@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _UnoControlFormattedFieldModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:24:29 $
+ *  last change:$Date: 2003-09-08 10:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,10 @@
 
 package ifc.awt;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
 import util.utils;
+
+import com.sun.star.lang.XMultiServiceFactory;
 
 /**
 * Testing <code>com.sun.star.awt.UnoControlFormattedFieldModel</code>
@@ -138,6 +138,19 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     * This property can be void, so if old value is <code> null </code>
     * new value must be specified.
     */
+    public void _TextLineColor() {
+        testProperty("TextLineColor", new PropertyTester() {
+            protected Object getNewValue(String p, Object v) {
+                return utils.isVoid(v) ? new Integer(123) :
+                    super.getNewValue(p,v) ;
+            }
+        }) ;
+    }
+
+    /**
+    * This property can be void, so if old value is <code> null </code>
+    * new value must be specified.
+    */
     public void _BackgroundColor() {
         testProperty("BackgroundColor", new PropertyTester() {
             protected Object getNewValue(String p, Object v) {
@@ -185,9 +198,8 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
             protected Object getNewValue(String p, Object v) {
                 Object newValue = null;
                 try {
-                    newValue = ((XMultiServiceFactory)tParam.getMSF())
-                        .createInstance(
-                        "com.sun.star.util.NumberFormatsSupplier");
+                    newValue = ((XMultiServiceFactory)tParam.getMSF()).createInstance(
+                                    "com.sun.star.util.NumberFormatsSupplier");
                 } catch (com.sun.star.uno.Exception e) {}
                 return newValue;
             }
