@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2000-11-06 22:21:07 $
+ *  last change: $Author: th $ $Date: 2000-11-15 20:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1265,10 +1265,11 @@ void SalFrame::SetPointer( PointerStyle ePointerStyle )
     { 0, 0, SAL_RESID_POINTER_AUTOSCROLL_NS },      // POINTER_AUTOSCROLL_NS
     { 0, 0, SAL_RESID_POINTER_AUTOSCROLL_WE },      // POINTER_AUTOSCROLL_WE
     { 0, 0, SAL_RESID_POINTER_AUTOSCROLL_NSWE },    // POINTER_AUTOSCROLL_NSWE
-    { 0, 0, SAL_RESID_POINTER_AIRBRUSH }            // POINTER_AIRBRUSH
+    { 0, 0, SAL_RESID_POINTER_AIRBRUSH },           // POINTER_AIRBRUSH
+    { 0, 0, SAL_RESID_POINTER_TEXT_VERTICAL }       // POINTER_TEXT_VERTICAL
     };
 
-#if POINTER_COUNT != 86
+#if POINTER_COUNT != 87
 #error New Pointer must be defined!
 #endif
 
