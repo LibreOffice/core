@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invmerge.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,17 +136,33 @@ void ScInvertMerger::AddRect( const Rectangle& rRect )
     }
     else
     {
-        if ( rRect.Top()    == aLineRect.Top()    &&
-             rRect.Bottom() == aLineRect.Bottom() &&
-             rRect.Left()   == aLineRect.Right() + 1 )
+        Rectangle aJustified = rRect;
+        if ( rRect.Left() > rRect.Right() )     // switch for RTL layout
         {
-            // extend line rect
-            aLineRect.Right() = rRect.Right();
+            aJustified.Left() = rRect.Right();
+            aJustified.Right() = rRect.Left();
         }
-        else
+
+        BOOL bDone = FALSE;
+        if ( aJustified.Top()    == aLineRect.Top()    &&
+             aJustified.Bottom() == aLineRect.Bottom() )
         {
-            FlushLine();            // use old line rect for total rect
-            aLineRect = rRect;      // and start new one
+            // try to extend line rect
+            if ( aJustified.Left() == aLineRect.Right() + 1 )
+            {
+                aLineRect.Right() = aJustified.Right();
+                bDone = TRUE;
+            }
+            else if ( aJustified.Right() + 1 == aLineRect.Left() )  // for RTL layout
+            {
+                aLineRect.Left() = aJustified.Left();
+                bDone = TRUE;
+            }
+        }
+        if (!bDone)
+        {
+            FlushLine();                // use old line rect for total rect
+            aLineRect = aJustified;     // and start new one
         }
     }
 }
