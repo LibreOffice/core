@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:28 $
+ *  last change: $Author: fs $ $Date: 2000-10-06 12:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ using namespace ::com::sun::star::lang;
 IMPLEMENT_SERVICE_INFO(OCatalog,"com.sun.star.sdbcx.VDatabaseDefinition","com.sun.star.sdbcx.DatabaseDefinition")
 //------------------------------------------------------------------------------
 OCatalog::OCatalog(const Reference< XConnection> &_xConnection) : OCatalog_BASE(m_aMutex)
-            ,connectivity::OSubComponent<OCatalog>(_xConnection)
+            ,connectivity::OSubComponent<OCatalog>(_xConnection, this)
             ,m_pTables(NULL)
             ,m_pViews(NULL)
             ,m_pGroups(NULL)
@@ -102,7 +102,6 @@ OCatalog::~OCatalog()
 void SAL_CALL OCatalog::release() throw(RuntimeException)
 {
     relase_ChildImpl();
-    OCatalog_BASE::release();
 }
 //------------------------------------------------------------------------------
 void SAL_CALL OCatalog::disposing()
