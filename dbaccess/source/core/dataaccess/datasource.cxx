@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 10:48:09 $
+ *  last change: $Author: fs $ $Date: 2001-01-23 08:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,14 +345,18 @@ ODatabaseSource::~ODatabaseSource()
 //--------------------------------------------------------------------------
 Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException)
 {
-    OTypeCollection aTypes(::getCppuType( (const Reference< XPropertySet > *)0 ),
-                           ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
-                           ::getCppuType( (const Reference< XDataSource > *)0 ),
-                           ::getCppuType( (const Reference< XUnoTunnel > *)0 ),
-                           ::getCppuType( (const Reference< XServiceInfo > *)0 ),
-                            OSubComponent::getTypes() );
+    OTypeCollection aPropertyHelperTypes(   ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
+                                            ::getCppuType( (const Reference< XPropertySet > *)0 ),
+                                            ::getCppuType( (const Reference< XMultiPropertySet > *)0 ));
 
-    return aTypes.getTypes();
+    return ::comphelper::concatSequences(
+        ::comphelper::concatSequences(
+            OSubComponent::getTypes(),
+            OConfigurationFlushable::getTypes(),
+            aPropertyHelperTypes.getTypes()
+        ),
+        ODatabaseSource_Base::getTypes()
+    );
 }
 
 //--------------------------------------------------------------------------
