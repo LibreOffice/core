@@ -688,7 +688,45 @@ void AreaChart::createShapes()
                                             , aTransformedGeom.m_aPosition, aSize
                                             , pSymbolProperties->nStandardSymbol
                                             , pSymbolProperties->nFillColor );
-                                }
+#if 0
+                                    m_pShapeFactory->createErrorBar2D(
+                                            xPointGroupShape_Shapes
+                                          , aTransformedGeom.m_aPosition
+                                            , drawing::Direction3D(
+                                                aSize.DirectionX * 1.5,
+                                                aSize.DirectionY * 3.0,
+                                                0.0 ),
+                                            ShapeFactory::UP
+                                        );
+                                    m_pShapeFactory->createErrorBar2D(
+                                            xPointGroupShape_Shapes
+                                          , aTransformedGeom.m_aPosition
+                                            , drawing::Direction3D(
+                                                aSize.DirectionX * 1.5,
+                                                aSize.DirectionY * 2.0,
+                                                0.0 ),
+                                            ShapeFactory::DOWN
+                                        );
+                                    m_pShapeFactory->createErrorBar2D(
+                                            xPointGroupShape_Shapes
+                                          , aTransformedGeom.m_aPosition
+                                            , drawing::Direction3D(
+                                                aSize.DirectionX * 1.5,
+                                                aSize.DirectionY * 1.5,
+                                                0.0 ),
+                                            ShapeFactory::RIGHT
+                                        );
+                                    m_pShapeFactory->createErrorBar2D(
+                                            xPointGroupShape_Shapes
+                                          , aTransformedGeom.m_aPosition
+                                            , drawing::Direction3D(
+                                                aSize.DirectionX * 3.5,
+                                                aSize.DirectionY * 1.5,
+                                                0.0 ),
+                                            ShapeFactory::LEFT
+                                        );
+#endif
+                                    }
                                 //@todo other symbol styles
                             }
                         }

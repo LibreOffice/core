@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 16:04:39 $
+ *  last change: $Author: bm $ $Date: 2003-12-11 18:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,16 @@ public:
 
     //------
 
+    enum tErrorBarDirection
+    {
+        UP,
+        RIGHT,
+        DOWN,
+        LEFT
+    };
+
+    //------
+
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
             createCube(   const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::drawing::XShapes >& xTarget
@@ -185,6 +195,15 @@ public:
         createLine3D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::PolyPolygonShape3D& rPoints
                     , const VLineProperties& rLineProperties );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+        createErrorBar2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
+                    , const ::com::sun::star::drawing::Position3D& rPos
+                    , const ::com::sun::star::drawing::Direction3D& rSize
+                    , tErrorBarDirection eDirection
+            );
+//                     , const tNameSequence& rPropNames
+//                     , const tAnySequence& rPropValues );
 
     //------------------- create 2D elements:
 

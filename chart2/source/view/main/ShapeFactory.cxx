@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-04 15:51:47 $
+ *  last change: $Author: bm $ $Date: 2003-12-11 18:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1788,6 +1788,118 @@ uno::Reference< drawing::XShape >
             if(rLineProperties.Dash.hasValue())
                 xProp->setPropertyValue( C2U( UNO_NAME_LINEDASH )
                     , rLineProperties.Dash );
+        }
+        catch( uno::Exception& e )
+        {
+            ASSERT_EXCEPTION( e );
+        }
+    }
+    return xShape;
+}
+
+uno::Reference< drawing::XShape > ShapeFactory::createErrorBar2D(
+      const uno::Reference< drawing::XShapes >& xTarget
+    , const drawing::Position3D& rPos
+    , const drawing::Direction3D& rSize
+    , tErrorBarDirection eDirection
+    )
+//     , const tNameSequence& rPropNames
+//     , const tAnySequence& rPropValues )
+{
+    const double fX = rPos.PositionX;
+    const double fY = rPos.PositionY;
+    const double fZ = rPos.PositionZ;
+
+    const double fWidth  = rSize.DirectionX;
+    const double fHeight = rSize.DirectionY;
+    const double fWidthHalf = fWidth/2.0;
+    const double fHeightHalf = fHeight/2.0;
+
+    //create shape and add to page
+    uno::Reference< drawing::XShape > xShape(
+            m_xShapeFactory->createInstance( C2U(
+            "com.sun.star.drawing.PolyLineShape" ) ), uno::UNO_QUERY );
+    xTarget->add(xShape);
+
+    drawing::PolyPolygonShape3D aPPShape;
+
+    aPPShape.SequenceX.realloc(2);
+    aPPShape.SequenceY.realloc(2);
+    aPPShape.SequenceZ.realloc(2);
+
+    aPPShape.SequenceX[0].realloc(2);
+    aPPShape.SequenceY[0].realloc(2);
+    aPPShape.SequenceZ[0].realloc(2);
+
+    aPPShape.SequenceX[1].realloc(2);
+    aPPShape.SequenceY[1].realloc(2);
+    aPPShape.SequenceZ[1].realloc(2);
+
+    aPPShape.SequenceZ[0][0] = aPPShape.SequenceZ[0][1] =
+    aPPShape.SequenceZ[1][0] = aPPShape.SequenceZ[1][1] =
+        fZ;
+
+    switch( eDirection )
+    {
+        case UP:
+            // body
+            aPPShape.SequenceX[0][0] = aPPShape.SequenceX[0][1] = fX;
+            aPPShape.SequenceY[0][0] = fY;
+            aPPShape.SequenceY[0][1] = fY - fHeight;
+            // head
+            aPPShape.SequenceX[1][0] = fX - fWidthHalf;
+            aPPShape.SequenceX[1][1] = fX + fWidthHalf;
+            aPPShape.SequenceY[1][0] = aPPShape.SequenceY[1][1] = fY - fHeight;
+            break;
+
+        case RIGHT:
+            // body
+            aPPShape.SequenceX[0][0] = fX;
+            aPPShape.SequenceX[0][1] = fX + fWidth;
+            aPPShape.SequenceY[0][0] = aPPShape.SequenceY[0][1] = fY;
+            // head
+            aPPShape.SequenceX[1][0] = aPPShape.SequenceX[1][1] = fX + fWidth;
+            aPPShape.SequenceY[1][0] = fY - fHeightHalf;
+            aPPShape.SequenceY[1][1] = fY + fHeightHalf;
+            break;
+
+        case DOWN:
+            // body
+            aPPShape.SequenceX[0][0] = aPPShape.SequenceX[0][1] = fX;
+            aPPShape.SequenceY[0][0] = fY;
+            aPPShape.SequenceY[0][1] = fY + fHeight;
+            // head
+            aPPShape.SequenceX[1][0] = fX - fWidthHalf;
+            aPPShape.SequenceX[1][1] = fX + fWidthHalf;
+            aPPShape.SequenceY[1][0] = aPPShape.SequenceY[1][1] = fY + fHeight;
+            break;
+
+        case LEFT:
+            // body
+            aPPShape.SequenceX[0][0] = fX;
+            aPPShape.SequenceX[0][1] = fX - fWidth;
+            aPPShape.SequenceY[0][0] = aPPShape.SequenceY[0][1] = fY;
+            // head
+            aPPShape.SequenceX[1][0] = aPPShape.SequenceX[1][1] = fX - fWidth;
+            aPPShape.SequenceY[1][0] = fY - fHeightHalf;
+            aPPShape.SequenceY[1][1] = fY + fHeightHalf;
+            break;
+    }
+
+    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
+    if( xProp.is() )
+    {
+        //set properties
+//         PropertyMapper::setMultiProperties( rPropNames, rPropValues, xProp );
+
+        //set polygon-shape
+        try
+        {
+            drawing::PointSequenceSequence aPoints( PolyToPointSequence( aPPShape ));
+
+            //Polygon
+            xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON ), uno::makeAny( aPoints ) );
+//             xProp->setPropertyValue( C2U( "PolyPolygon" ), uno::makeAny( aPtSeq ));
         }
         catch( uno::Exception& e )
         {
