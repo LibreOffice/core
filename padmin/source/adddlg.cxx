@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:18:21 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ APChooseDevicePage::APChooseDevicePage( AddPrinterDialog* pParent ) :
     m_aOldBtn.Check( FALSE );
     if( ! AddPrinterDialog::getOldPrinterLocation().Len() )
         m_aOldBtn.Enable( FALSE );
-    if( PrinterInfoManager::get().getType() != PrinterInfoManager::Default )
+    if( ! PrinterInfoManager::get().addOrRemovePossible() )
     {
         m_aPrinterBtn.Check( FALSE );
         m_aFaxBtn.Check( TRUE );
