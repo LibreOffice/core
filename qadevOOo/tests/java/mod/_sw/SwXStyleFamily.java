@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXStyleFamily.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:48:57 $
+ *  last change:$Date: 2003-09-08 12:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,24 +61,25 @@
 
 package mod._sw;
 
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.container.XNameContainer;
-import com.sun.star.lang.XComponent;
-import com.sun.star.style.XStyleFamiliesSupplier;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameContainer;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.style.XStyleFamiliesSupplier;
+import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * Test for object which is represented by service
@@ -157,8 +158,7 @@ public class SwXStyleFamily extends TestCase {
     * </ul>
     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-        XInterface oInterface = null;
-        XInterface oObj = null;
+
         XNameAccess oSFNA = null;
 
         log.println( "Creating Test Environment..." );
