@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docrecovery.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:35:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,7 @@ TabPage RID_SVXPAGE_ERR_REP_SEND
         Pos = MAP_APPFONT( ERRSEND_COL0, ERRSEND_ROW7 );
         Size = MAP_APPFONT( ERRSEND_CONTROLWIDTH2, RSC_CD_FIXEDTEXT_HEIGHT );
         Text[ de ] = "~Beschreiben Sie wobei der Fehler aufgetreten ist. (optional)";
-        Text[ en-US ] = "~How were you using %PRODUCTNAME when the error occured? (optional)";
+        Text[ en-US ] = "~How were you using %PRODUCTNAME when the error occurred? (optional)";
     };
     MultiLineEdit ML_ERRSEND_USING
     {
