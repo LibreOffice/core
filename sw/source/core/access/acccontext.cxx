@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mib $ $Date: 2002-10-29 14:05:36 $
+ *  last change: $Author: mib $ $Date: 2002-12-05 14:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,15 @@
 #endif
 #ifndef _FESH_HXX
 #include "fesh.hxx"
+#endif
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
+#ifndef _PAM_HXX
+#include <pam.hxx>
 #endif
 #ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
@@ -979,7 +988,42 @@ awt::Size SAL_CALL SwAccessibleContext::getSize()
 void SAL_CALL SwAccessibleContext::grabFocus()
         throw (RuntimeException)
 {
-    // impossible
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+
+    if( GetFrm()->IsFlyFrm() )
+    {
+        const SdrObject *pObj =
+            static_cast < const SwFlyFrm * >( GetFrm() )->GetVirtDrawObj();
+        if( pObj )
+            Select( const_cast < SdrObject * >( pObj ), sal_False );
+    }
+    else
+    {
+        const SwCntntFrm *pCFrm = 0;
+        if( GetFrm()->IsCntntFrm() )
+            pCFrm = static_cast< const SwCntntFrm * >( GetFrm() );
+        else if( GetFrm()->IsLayoutFrm() )
+            pCFrm = static_cast< const SwLayoutFrm * >( GetFrm() )->ContainsCntnt();
+
+        if( pCFrm && pCFrm->IsTxtFrm() )
+        {
+            const SwTxtFrm *pTxtFrm = static_cast< const SwTxtFrm * >( pCFrm );
+            const SwTxtNode *pTxtNd = pTxtFrm->GetTxtNode();
+            if( pTxtNd )
+            {
+                // create pam for selection
+                SwIndex aIndex( const_cast< SwTxtNode * >( pTxtNd ),
+                                pTxtFrm->GetOfst() );
+                SwPosition aStartPos( *pTxtNd, aIndex );
+                SwPaM aPaM( aStartPos );
+
+                // set PaM at cursor shell
+                Select( aPaM );
+            }
+        }
+    }
 }
 
 

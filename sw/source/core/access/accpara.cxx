@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-09-11 13:53:20 $
+ *  last change: $Author: mib $ $Date: 2002-12-05 14:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,12 +964,16 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
     // get cursor shell
     SwCrsrShell *pCrsrSh = GetCrsrShell();
     SwPaM *pCrsr = GetCrsr();
-    SwTxtNode* pTxtNd = const_cast<SwTxtNode*>( GetTxtNode() );
-    if( pCrsrSh != 0 && pTxtNd != 0 && pCrsr != 0 &&
-         pCrsr->GetPoint()->nNode.GetIndex() != pTxtNd->GetIndex() )
+    const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
+    const SwTxtNode* pTxtNd = pTxtFrm->GetTxtNode();
+    if( pCrsrSh != 0 && pTxtNd != 0 &&
+        ( pCrsr == 0 ||
+           pCrsr->GetPoint()->nNode.GetIndex() != pTxtNd->GetIndex() ||
+          !pTxtFrm->IsInside( pCrsr->GetPoint()->nContent.GetIndex()) ) )
     {
         // create pam for selection
-        SwIndex aIndex( pTxtNd, 0 );
+        SwIndex aIndex( const_cast< SwTxtNode * >( pTxtNd ),
+                        pTxtFrm->GetOfst() );
         SwPosition aStartPos( *pTxtNd, aIndex );
         SwPaM aPaM( aStartPos );
 
