@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoreferencemap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:41:26 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@ namespace configmgr
         AutoReferenceMap()  {}
         ~AutoReferenceMap() {}
 
+        Map copy() const
+        {
+            return m_aMap;
+        }
         void swap(Map & _rOtherData)
         {
             m_aMap.swap( _rOtherData );
