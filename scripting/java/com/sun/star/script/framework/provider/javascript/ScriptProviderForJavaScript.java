@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForJavaScript.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: toconnor $ $Date: 2003-10-29 15:01:18 $
+*  last change: $Author: rt $ $Date: 2004-01-05 14:07:07 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -82,18 +82,21 @@ import com.sun.star.script.CannotConvertException;
 
 import java.io.*;
 import java.util.Vector;
+import java.util.Map;
 import java.net.MalformedURLException;
+import java.net.URL;
 
 import drafts.com.sun.star.script.provider.XScriptProvider;
 import drafts.com.sun.star.script.provider.XScript;
 import drafts.com.sun.star.script.provider.XScriptContext;
-import drafts.com.sun.star.script.framework.storage.XScriptInfo;
 
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.provider.PathUtils;
 import com.sun.star.script.framework.provider.ScriptContext;
 import com.sun.star.script.framework.provider.ClassLoaderFactory;
 import com.sun.star.script.framework.provider.ScriptProvider;
+import com.sun.star.script.framework.browse.ScriptMetaData;
+import com.sun.star.script.framework.log.*;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ImporterTopLevel;
@@ -109,168 +112,24 @@ public class ScriptProviderForJavaScript
             super(ctx, "JavaScript");
         }
 
-        /**
-         *  The invoke method of the ScriptProviderForJavaScript runs the
-         *  JavaScript script specified in the URI
-         *
-         *
-         * @param scriptName        The scriptName is the language specific
-         *                          name of the script
-         *
-         * @param invocationCtx     The invocation context contains the
-         *                          documentStorageID and document reference
-         *                          for use in script name resolving
-         *
-         * @param aParams           All parameters; pure, out params are
-         *                          undefined in sequence, i.e., the value
-         *                          has to be ignored by the callee
-         *
-         * @param aOutParamIndex    Out indices
-         *
-         * @param aOutParam         Out parameters
-         *
-         * @returns                 The value returned from the function
-         *                          being invoked
-         *
-         * @throws IllegalArgumentException If there is no matching script name
-         *
-         * @throws CannotConvertException   If args do not match or cannot
-         *                                  be converted the those of the
-         *                                  invokee
-         *
-         * @throws InvocationTargetException If the running script throws
-         *                                   an exception this information
-         *                                   is captured and rethrown as
-         *                                   this exception type.
-         */
-
-        private Object invoke(  /*IN*/String scriptURI,
-                               /*IN*/Object invocationCtx,
-                               /*IN*/Object[]  params,
-                               /*OUT*/short[][]  aOutParamIndex,
-                               /*OUT*/Object[][]  aOutParam )
-
-        throws IllegalArgumentException, InvocationTargetException,
-               CannotConvertException
+        public XScript getScript( /*IN*/String scriptURI )
+            throws com.sun.star.uno.RuntimeException,
+                   com.sun.star.lang.IllegalArgumentException
         {
-            // Initialise the out paramters - not used at the moment
-            aOutParamIndex[0] = new short[0];
-            aOutParam[0] = new Object[0];
-
-            XPropertySet languageProps = m_xScriptInfo.getLanguageProperties();
-            String cp = null;
-
-            // Set up ClassLoader based on property defined with script
-            try {
-                cp = (String)languageProps.getPropertyValue(CLASSPATH);
-            }
-            catch (Exception e) {
-            }
-
-            if (cp == null) {
-                cp = "";
-            }
-
-            String parcelURI = m_xScriptInfo.getParcelURI();
-            if (!parcelURI.endsWith("/")) {
-                parcelURI += "/";
-            }
-
-            Vector classpath;
-            try {
-                classpath = PathUtils.buildClasspath(parcelURI, cp);
-            }
-            catch (MalformedURLException mue) {
-                throw new InvocationTargetException(mue.getMessage());
-            }
-
-            ClassLoader cl = null;
-            try {
-                cl = ClassLoaderFactory.getClassLoader(m_xContext,
-                    this.getClass().getClassLoader(), classpath);
-            }
-            catch (Exception e)
+            ScriptMetaData scriptData = getScriptData( scriptURI );
+            if ( scriptData == null )
             {
-                throw new InvocationTargetException(e.getMessage());
+                throw new com.sun.star.uno.RuntimeException(
+                    "Cannot find script for URI: " + scriptURI );
             }
-
-            try {
-                String script = parcelURI + m_xScriptInfo.getFunctionName();
-                InputStream is;
-                Object result = null;
-
-                try {
-                    is = PathUtils.getScriptFileStream( script, m_xContext );
-                }
-                catch (IOException ioe) {
-                    throw new InvocationTargetException(ioe.getMessage());
-                }
-
-                if (is == null) {
-                    throw new InvocationTargetException("Could not load script");
-                }
-
-                /* Set the context ClassLoader on the current thread to
-                   be our custom ClassLoader. This is the suggested method
-                   for setting up a ClassLoader to be used by the Rhino
-                   interpreter
-                 */
-                if (cl != null) {
-                    Thread.currentThread().setContextClassLoader(cl);
-                }
-
-                // Initialize a Rhino Context object
-                Context ctxt = Context.enter();
-
-                /* The ImporterTopLevel ensures that importClass and
-                   importPackage statements work in Javascript scripts
-                   Make the XScriptContext available as a global variable
-                   to the script
-                 */
-                try {
-                    ImporterTopLevel scope = new ImporterTopLevel(ctxt);
-                    Scriptable jsArgs = Context.toObject(
-                        ScriptContext.createContext(invocationCtx, m_xContext,
-                            m_xMultiComponentFactory), scope);
-                    scope.put("XSCRIPTCONTEXT", scope, jsArgs);
-
-                    result = ctxt.evaluateReader(scope,
-                        new InputStreamReader(is), "script", 1, null);
-
-                    result = ctxt.toString(result);
-                }
-                catch (JavaScriptException jse) {
-                    jse.printStackTrace();
-                    throw new InvocationTargetException(jse.getMessage());
-                }
-                catch (IOException ioe) {
-                    ioe.printStackTrace();
-                    throw new InvocationTargetException(ioe.getMessage());
-                }
-                finally {
-                    Context.exit();
-                    try {is.close();} catch (IOException ignored) {}
-                }
-
-                return result;
-            }
-            catch (Exception ex) {
-                ex.printStackTrace();
-                throw new InvocationTargetException(ex.getMessage());
+            else
+            {
+                ScriptImpl script = new ScriptImpl( m_xContext, scriptData,m_xInvocationContext );
+                return script;
             }
         }
 
-        public Object invoke( /*IN*/Object[] aParams,
-                            /*OUT*/short[][] aOutParamIndex,
-                            /*OUT*/Object[][] aOutParam )
-            throws IllegalArgumentException, CannotConvertException,
-                InvocationTargetException
-        {
-            return invoke(m_scriptURI, m_xInvocationContext, aParams,
-                            aOutParamIndex, aOutParam);
-        }
-    }
-
+     }
     /**
      * Returns a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -337,3 +196,152 @@ public class ScriptProviderForJavaScript
         return false;
     }
 }
+class ScriptImpl implements XScript
+{
+    private ScriptMetaData metaData;
+    private XComponentContext m_xContext;
+    private XMultiComponentFactory m_xMultiComponentFactory;
+    private Object m_oInvokeContext;
+
+    ScriptImpl( XComponentContext ctx, ScriptMetaData metaData, Object oInvokeContext ) throws com.sun.star.uno.RuntimeException
+    {
+        this.metaData = metaData;
+        this.m_xContext = ctx;
+        this.m_oInvokeContext = oInvokeContext;
+        try
+        {
+            this.m_xMultiComponentFactory = m_xContext.getServiceManager();
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+            throw new com.sun.star.uno.RuntimeException(
+                "Error constructing  ScriptImpl: [javascript]");
+        }
+        LogUtils.DEBUG("ScriptImpl [javascript] script data = " + metaData );
+    }
+
+        /**
+         *  The invoke method of the ScriptProviderForJavaScript runs the
+         *  JavaScript script specified in the URI
+         *
+         *
+         *
+         * @param aParams           All parameters; pure, out params are
+         *                          undefined in sequence, i.e., the value
+         *                          has to be ignored by the callee
+         *
+         * @param aOutParamIndex    Out indices
+         *
+         * @param aOutParam         Out parameters
+         *
+         * @returns                 The value returned from the function
+         *                          being invoked
+         *
+         * @throws IllegalArgumentException If there is no matching script name
+         *
+         * @throws CannotConvertException   If args do not match or cannot
+         *                                  be converted the those of the
+         *                                  invokee
+         *
+         * @throws InvocationTargetException If the running script throws
+         *                                   an exception this information
+         *                                   is captured and rethrown as
+         *                                   this exception type.
+         */
+
+        public Object invoke(
+                               /*IN*/Object[]  params,
+                               /*OUT*/short[][]  aOutParamIndex,
+                               /*OUT*/Object[][]  aOutParam )
+
+        throws IllegalArgumentException, InvocationTargetException,
+               CannotConvertException
+        {
+            // Initialise the out paramters - not used at the moment
+            aOutParamIndex[0] = new short[0];
+            aOutParam[0] = new Object[0];
+
+
+            String parcelURI = metaData.getParcelLocation();
+            if (!parcelURI.endsWith("/")) {
+                parcelURI += "/";
+            }
+
+
+            ClassLoader cl = null;
+            try {
+                cl = ClassLoaderFactory.getURLClassLoader( metaData );
+            }
+            catch (Exception e)
+            {
+                throw new InvocationTargetException(e.getMessage());
+            }
+
+            try {
+                String script = parcelURI + metaData.getLanguageName();
+                InputStream is;
+                Object result = null;
+
+                try {
+                    is = PathUtils.getScriptFileStream( script );
+                }
+                catch (IOException ioe) {
+                    throw new InvocationTargetException(ioe.getMessage());
+                }
+
+                if (is == null) {
+                    throw new InvocationTargetException("Could not load script");
+                }
+
+                /* Set the context ClassLoader on the current thread to
+                   be our custom ClassLoader. This is the suggested method
+                   for setting up a ClassLoader to be used by the Rhino
+                   interpreter
+                 */
+                if (cl != null) {
+                    Thread.currentThread().setContextClassLoader(cl);
+                }
+
+                // Initialize a Rhino Context object
+                Context ctxt = Context.enter();
+
+                /* The ImporterTopLevel ensures that importClass and
+                   importPackage statements work in Javascript scripts
+                   Make the XScriptContext available as a global variable
+                   to the script
+                 */
+                try {
+                    ImporterTopLevel scope = new ImporterTopLevel(ctxt);
+                    Scriptable jsArgs = Context.toObject(
+                        ScriptContext.createContext(m_oInvokeContext, m_xContext,
+                            m_xMultiComponentFactory), scope);
+                    scope.put("XSCRIPTCONTEXT", scope, jsArgs);
+
+                    result = ctxt.evaluateReader(scope,
+                        new InputStreamReader(is), "script", 1, null);
+
+                    result = ctxt.toString(result);
+                }
+                catch (JavaScriptException jse) {
+                    jse.printStackTrace();
+                    throw new InvocationTargetException(jse.getMessage());
+                }
+                catch (IOException ioe) {
+                    ioe.printStackTrace();
+                    throw new InvocationTargetException(ioe.getMessage());
+                }
+                finally {
+                    Context.exit();
+                    try {is.close();} catch (IOException ignored) {}
+                }
+
+                return result;
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+                throw new InvocationTargetException(ex.getMessage());
+            }
+        }
+}
+
