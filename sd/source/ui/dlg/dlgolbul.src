@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,8 @@ TabDialog TAB_OUTLINEBULLET
                 Text [ ENGLISH ] = "Images" ;
                 Text [ english_us ] = "Graphics" ;
                 Text [ portuguese_brazilian ] = "Grafiken" ;
-                Text [ swedish ] = "Grafiker" ;
-                Text [ danish ] = "Billeder" ;
+                Text [ swedish ] = "Grafik" ;
+                Text [ danish ] = "Grafik" ;
                 Text [ italian ] = "Immagini" ;
                 Text [ spanish ] = "Imágenes" ;
                 Text [ french ] = "Images" ;
