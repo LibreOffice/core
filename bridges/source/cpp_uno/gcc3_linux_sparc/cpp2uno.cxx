@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:28:42 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,7 +488,7 @@ static void cpp_vtable_call()
     sal_Bool bComplex = nTableEntry & 0x80000000 ? sal_True : sal_False;
 
     typelib_TypeClass aType =
-        cpp_mediate( nTableEntry, pCallStack+17, &nRegReturn );
+        cpp_mediate( nTableEntry, pCallStack+17, (sal_Int64*)&nRegReturn );
 
     switch( aType )
     {
