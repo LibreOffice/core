@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-11 07:14:35 $
+#   last change: $Author: pluby $ $Date: 2001-03-11 17:43:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,7 +140,7 @@ SOLARVERSHLLIBS+=$(shell -/bin/sh -c "ls $(STLPORT4)$/lib$/*$(DLLPOST) 2>/dev/nu
 .ENDIF
 
 LINK=cc
-LINKFLAGS=-dynamic -framework System -lcc_dynamic -lstdc++ \
+LINKFLAGS=-dynamic -framework System -framework CoreFoundation -lcc_dynamic -lstdc++ \
   $(foreach,i,$(SOLARVERSHLLIBS) -dylib_file @executable_path$/$(i:f):$i) \
   -L$(MISC)
 LINKFLAGSAPPGUI=-Wl,-u,__objcInit
