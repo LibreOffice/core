@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 11:05:07 $
+ *  last change: $Author: mib $ $Date: 2001-03-09 15:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,6 +422,9 @@ void SwXMLImport::startDocument( void )
     if( !GetModel().is() )
         return;
 
+    if( (getImportFlags() & (IMPORT_CONTENT|IMPORT_MASTERSTYLES)) == 0 )
+        return;
+
     // There only is a text cursor by now if we are in insert mode. In any
     // other case we have to create one at the start of the document.
     Reference < XTextCursor > xTextCursor = GetTextImport()->GetCursor();
@@ -449,18 +452,11 @@ void SwXMLImport::startDocument( void )
     if( !pDoc )
         return;
 
-    if( !IsStylesOnlyMode() )
+    if( (getImportFlags() & IMPORT_CONTENT) != 0 && !IsStylesOnlyMode() )
     {
         pSttNdIdx = new SwNodeIndex( pDoc->GetNodes() );
         if( IsInsertMode() )
         {
-            Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
-                                               UNO_QUERY);
-            ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-            SwXTextCursor *pTxtCrsr =
-                    (SwXTextCursor*)xCrsrTunnel->getSomething(
-                                            SwXTextCursor::getUnoTunnelId() );
-            ASSERT( pTxtCrsr, "SwXTextCursor missing" );
             SwPaM *pPaM = pTxtCrsr->GetCrsr();
             const SwPosition* pPos = pPaM->GetPoint();
 
@@ -485,7 +481,7 @@ void SwXMLImport::startDocument( void )
 void SwXMLImport::endDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
-    if( !IsStylesOnlyMode() )
+    if( (getImportFlags() & IMPORT_CONTENT) != 0 && !IsStylesOnlyMode() )
     {
         Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
                                               UNO_QUERY);
@@ -588,7 +584,10 @@ void SwXMLImport::endDocument( void )
                     pPaM->SetMark(); pPaM->DeleteMark();
                     pNextNd->JoinPrev();
 
-                    if( pNextNd->CanJoinPrev(/* &pPos->nNode*/ ) )
+                    // Remove line break that has been inserted by the import,
+                    // but only if one has been inserted!
+                    if( pNextNd->CanJoinPrev(/* &pPos->nNode*/ ) &&
+                         *pSttNdIdx != pPos->nNode )
                     {
 //                      SwTxtNode* pPrevNd = pPos->nNode.GetNode().GetTxtNode();
 //                      pPos->nContent.Assign( pPrevNd, 0 );
