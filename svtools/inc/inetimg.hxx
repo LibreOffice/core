@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetimg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-03 12:30:11 $
+ *  last change: $Author: dv $ $Date: 2001-07-26 11:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,14 +113,6 @@ public:
     const String&   GetTargetFrame() const { return aTargetFrame; }
     const String&   GetAlternateText() const { return aAlternateText; }
     const Size&     GetSizePixel() const { return aSizePixel; }
-
-#ifndef TF_SVDATA
-    static ULONG    HasFormat( SotDataObject& rObj );
-    BOOL            SetData( SvData& rData ) const;
-    BOOL            Copy( SotDataMemberObject& rObj ) const;
-    BOOL            CopyFormats( SotDataObject& rObj ) const;
-    BOOL            Paste( SotDataObject& rObj, ULONG nFormat );
-#endif
 
     // Im-/Export
     sal_Bool Write( SvStream& rOStm, ULONG nFormat ) const;

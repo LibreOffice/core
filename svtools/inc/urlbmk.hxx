@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlbmk.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-03 16:35:06 $
+ *  last change: $Author: dv $ $Date: 2001-07-26 11:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,6 @@
 #include <tools/string.hxx>
 #endif
 
-#ifndef TF_SVDATA
-
-class SvData;
-class SotDataObject;
-
-#endif
-
 //=========================================================================
 
 class INetBookmark
@@ -92,10 +85,6 @@ class INetBookmark
     String          aDescr;
 
 protected:
-#ifndef TF_SVDATA
-    String          CopyExchange() const;
-    void            PasteExchange( String aString );
-#endif
 
     void            SetURL( const String& rS )          { aUrl = rS; }
     void            SetDescription( const String& rS )  { aDescr = rS; }
@@ -109,30 +98,6 @@ public:
 
     const String&   GetURL() const          { return aUrl; }
     const String&   GetDescription() const  { return aDescr; }
-
-#ifndef TF_SVDATA
-    static BOOL     ClipboardHasFormat();
-    static BOOL     DragServerHasFormat( USHORT nItem );
-
-    BOOL            CopyClipboard() const;
-    BOOL            CopyDragServer() const;
-    BOOL            PasteClipboard();
-    BOOL            PasteDragServer( USHORT nItem );
-
-    BOOL            SetData( SvData& rData ) const;
-    static ULONG    HasFormat( const SotDataObject& rObj );
-    BOOL            Copy( SotDataObject& rObj ) const;
-    BOOL            Paste( SotDataObject& rObj, ULONG nFormat );
-
-    BOOL            _SetData( SvData& rData ) const
-                        {   return INetBookmark::SetData( rData ); }
-    static ULONG    _HasFormat( const SotDataObject& rObj )
-                        {   return INetBookmark::HasFormat( rObj ); }
-    BOOL            _Copy( SotDataObject& rObj ) const
-                        {   return INetBookmark::Copy( rObj ); }
-    BOOL            _Paste( SotDataObject& rObj, ULONG nFormat )
-                        {   return INetBookmark::Paste( rObj, nFormat ); }
-#endif
 };
 
 
