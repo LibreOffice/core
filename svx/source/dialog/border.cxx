@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-02-04 14:21:54 $
+ *  last change: $Author: os $ $Date: 2002-03-20 15:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,10 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     :   SfxTabPage( pParent, ResId( RID_SVXPAGE_BORDER, DIALOG_MGR() ), rCoreAttrs ),
 
         aFlBorder       ( this, ResId( FL_BORDER ) ),
+        aDefaultFT      ( this, ResId( FT_DEFAULT ) ),
+        aUserDefFT      ( this, ResId( FT_USERDEF ) ),
+        aStyleFT        ( this, ResId( FT_STYLE ) ),
+        aColorFT        ( this, ResId( FT_COLOR ) ),
         aWndPresets     ( this, ResId( WIN_PRESETS ) ),
         aFrameSel(          this, ResId( WIN_FRAMESEL )),
         aFlSep1         ( this, ResId( FL_SEPARATOR1 ) ),

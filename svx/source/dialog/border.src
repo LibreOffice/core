@@ -1,11 +1,10 @@
-
 /*************************************************************************
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2002-02-06 10:04:50 $
+ *  last change: $Author: os $ $Date: 2002-03-20 15:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,23 +95,6 @@ TabPage RID_SVXPAGE_BORDER
     Text[ korean ] = "Å×µÎ¸®";
     Text[ turkish ] = "Kenarlýk";
     Text[ language_user1 ] = " ";
-
-    Control WIN_PRESETS
-    {
-        HelpId = HID_BORDER_CTL_PRESETS ;
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 61 , 12 ) ;
-        TabStop = TRUE ;
-    };
-    Control WIN_FRAMESEL
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 30 ) ;
-        Size = MAP_APPFONT ( 61 , 61 ) ;
-        TabStop = TRUE ;
-        Text = "Border control";
-    };
     FixedLine FL_BORDER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -142,25 +124,41 @@ TabPage RID_SVXPAGE_BORDER
         Text[ language_user1 ] = "EM6April01: Found in Text doc under Format - Page - Borders tab.";
         Text[ catalan ] = "Marco";
     };
+    FixedText FT_DEFAULT
+    {
+        Pos = MAP_APPFONT ( 12, 14) ;
+        Size = MAP_APPFONT ( 64, 8) ;
+        Text = "~Standard" ;
+        Text[ english_us ] = "~Default";
+    };
+    Control WIN_PRESETS
+    {
+        HelpId = HID_BORDER_CTL_PRESETS ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 61 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_USERDEF
+    {
+        Pos = MAP_APPFONT (12 , 41) ;
+        Size = MAP_APPFONT ( 64, 8) ;
+        Text = "~Benutzerdefiniert" ;
+        Text[ english_us ] = "~User-defined";
+    };
+    Control WIN_FRAMESEL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 61 , 61 ) ;
+        TabStop = TRUE ;
+        Text = "Border control";
+    };
     FixedLine FL_SEPARATOR1
     {
         Pos = MAP_APPFONT ( 77 , 14 ) ;
         Size = MAP_APPFONT ( 4 , 104 ) ;
         Vert = TRUE ;
-    };
-    ListBox LB_LINESTYLE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 88 , 14 ) ;
-        Size = MAP_APPFONT ( 74 , 88 ) ;
-    };
-    ListBox LB_LINECOLOR
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 88 , 106 ) ;
-        Size = MAP_APPFONT ( 74 , 68 ) ;
-        DropDown = TRUE ;
-        DDExtraWidth = TRUE ;
     };
     FixedLine FL_LINE
     {
@@ -191,7 +189,34 @@ TabPage RID_SVXPAGE_BORDER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Línea";
     };
-
+    FixedText FT_STYLE
+    {
+        Pos = MAP_APPFONT ( 88, 14) ;
+        Size = MAP_APPFONT ( 77, 8) ;
+        Text = "S~til" ;
+        Text[ english_us ] = "St~yle";
+    };
+    ListBox LB_LINESTYLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 25 ) ;
+        Size = MAP_APPFONT ( 74 , 66 ) ;
+    };
+    FixedText FT_COLOR
+    {
+        Pos = MAP_APPFONT ( 88, 95 ) ;
+        Size = MAP_APPFONT ( 77, 8 ) ;
+        Text = "~Farbe" ;
+        Text[ english_us ] = "~Color";
+    };
+    ListBox LB_LINECOLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 106 ) ;
+        Size = MAP_APPFONT ( 74 , 68 ) ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
     FixedLine FL_SEPARATOR2
     {
         Pos = MAP_APPFONT ( 166 , 14 ) ;
@@ -247,7 +272,7 @@ TabPage RID_SVXPAGE_BORDER
         Size = MAP_APPFONT ( 34 , 8 ) ;
         Text = "R~echts" ;
         Text [ ENGLISH ] = "R~ight" ;
-        Text[ english_us ] = "Right";
+        Text[ english_us ] = "Ri~ght";
         Text[ portuguese ] = "~Direita";
         Text[ russian ] = "Ñïðàâà";
         Text[ greek ] = "ÄåîéÜ";
@@ -375,7 +400,7 @@ TabPage RID_SVXPAGE_BORDER
         Size = MAP_APPFONT ( 74 , 10 ) ;
         Text = "S~ynchronisieren" ;
         Text [ ENGLISH ] = "Synchronize" ;
-        Text[ english_us ] = "Synchronize";
+        Text[ english_us ] = "Synchroni~ze";
         Text[ portuguese ] = "~Sincronizar";
         Text[ russian ] = "Ñèíõðîíèçèðîâàòü";
         Text[ greek ] = "Ó~õã÷ñïíéóìüò";
@@ -469,7 +494,7 @@ TabPage RID_SVXPAGE_BORDER
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "~Distanz" ;
         Text [ ENGLISH ] = "~Distance" ;
-        Text[ english_us ] = "Distan~ce";
+        Text[ english_us ] = "Dista~nce";
         Text[ portuguese ] = "~Distância";
         Text[ russian ] = "Ðàññòîÿíèå";
         Text[ greek ] = "ÌÝãåèïò";
