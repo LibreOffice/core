@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbitmapcanvas.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:59:16 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,11 @@
  *
  ************************************************************************/
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP__
-#include <drafts/com/sun/star/rendering/XCanvas.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP__
+#include <com/sun/star/rendering/XCanvas.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XBITMAPCANVAS_HPP__
-#include <drafts/com/sun/star/rendering/XBitmapCanvas.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XBITMAPCANVAS_HPP__
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
@@ -76,7 +76,7 @@
 #include <implbitmapcanvas.hxx>
 
 
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 namespace cppcanvas
