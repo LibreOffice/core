@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errorhandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:06:51 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@ enum ErrorCode
     EIDL_TYPE_NOT_VALID,    // Type is not valid in this context
     EIDL_INTERFACEMEMBER_LOOKUP,    // interface is not defined or a fwd declaration not exists
     EIDL_SERVICEMEMBER_LOOKUP,
-    EIDL_MULTIBLE_INHERITANCE,  // multible inheritance is not allowed
     EIDL_TYPE_IDENT_CONFLICT,   // type and identifier has equal names
     EIDL_ONEWAY_RAISE_CONFLICT, // oneway function raised excpetion conflict
     EIDL_WRONGATTRIBUTEFLAG,
@@ -117,7 +116,9 @@ enum ErrorCode
     EIDL_WRONGATTRIBUTEKEYWORD,
     EIDL_MISSINGATTRIBUTEKEYWORD,
     EIDL_ATTRIBUTEREADONLYEXPECTED,
-    EIDL_OPTIONALEXPECTED
+    EIDL_OPTIONALEXPECTED,
+    EIDL_MIXED_INHERITANCE,
+    EIDL_DOUBLE_INHERITANCE
 };
 
 enum WarningCode
@@ -161,7 +162,7 @@ public:
     // Report a type error
     void    noTypeError(AstDeclaration* pDecl);
 
-    void    inheritanceError(::rtl::OString* name, AstDeclaration* pDecl);
+    void    inheritanceError(NodeType nodeType, const ::rtl::OString* name, AstDeclaration* pDecl);
 
     void    flagError(ErrorCode e, sal_uInt32 flag);
 
