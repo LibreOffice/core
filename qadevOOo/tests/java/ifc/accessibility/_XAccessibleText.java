@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleText.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change:$Date: 2003-05-27 12:24:19 $
+ *  last change:$Date: 2003-05-28 10:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ import lib.Status;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Point;
-import com.sun.star.lang.XAccessibleText;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.accessibility.AccessibleTextType;
 import com.sun.star.accessibility.TextSegment;

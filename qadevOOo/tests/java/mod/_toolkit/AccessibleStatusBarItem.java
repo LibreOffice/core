@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStatusBarItem.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2003-05-22 13:32:30 $
+ *  last change:$Date: 2003-05-28 10:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@ import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.accessibility.AccessibleRole;
@@ -124,7 +125,7 @@ public class AccessibleStatusBarItem extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop(Param.getMSF()));
+                    XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()));
     }
 
     /**
@@ -164,9 +165,9 @@ public class AccessibleStatusBarItem extends TestCase {
         log.println( "creating a test environment" );
 
         if (xTextDoc != null) xTextDoc.dispose();
-
+        XMultiServiceFactory msf = (XMultiServiceFactory) tParam.getMSF();
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( msf);
 
         try {
             log.println( "creating a text document" );
@@ -187,7 +188,7 @@ public class AccessibleStatusBarItem extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(tParam.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow(msf, aModel);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleFixedText.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2003-05-22 13:31:22 $
+ *  last change: $Date: 2003-05-28 10:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ public class AccessibleFixedText extends TestCase {
         TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
-        XMultiServiceFactory xMSF = Param.getMSF() ;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF() ;
         XControlModel dlgModel = null ;
 
         XControl txtControl = null ;
@@ -171,7 +171,7 @@ public class AccessibleFixedText extends TestCase {
         }
 
         try {
-            oObj = (XInterface) Param.getMSF().createInstance
+            oObj = (XInterface) xMSF.createInstance
                 ("com.sun.star.awt.Toolkit") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");

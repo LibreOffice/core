@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleButton.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2003-05-22 13:30:57 $
+ *  last change: $Date: 2003-05-28 10:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,13 +128,12 @@ public class AccessibleButton extends lib.TestCase {
         TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
-
+        XMultiServiceFactory msf = (XMultiServiceFactory) Param.getMSF();
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( msf);
 
         try {
-            oObj = (XInterface) Param.getMSF().createInstance
-                ("com.sun.star.awt.Toolkit") ;
+            oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
@@ -146,7 +145,7 @@ public class AccessibleButton extends lib.TestCase {
 
         shortWait();
 
-        DiagThread psDiag = new DiagThread(xTextDoc,Param.getMSF());
+        DiagThread psDiag = new DiagThread(xTextDoc,msf);
         psDiag.start();
         try{
             psDiag.join();
@@ -223,7 +222,7 @@ public class AccessibleButton extends lib.TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);

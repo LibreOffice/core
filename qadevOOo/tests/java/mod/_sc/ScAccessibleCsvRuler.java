@@ -2,7 +2,7 @@
  *
  *  $RCSfile: ScAccessibleCsvRuler.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
  *  last change: $Author: vg $
  *
@@ -66,6 +66,7 @@ import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
@@ -112,9 +113,10 @@ public class ScAccessibleCsvRuler extends TestCase {
 
         shortWait();
 
+        XMultiServiceFactory msf = (XMultiServiceFactory) Param.getMSF();
+
         try {
-            oObj = (XInterface) Param.getMSF()
-                                     .createInstance("com.sun.star.awt.Toolkit");
+            oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
@@ -216,7 +218,7 @@ public class ScAccessibleCsvRuler extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         log.println("opening dialog");
 
@@ -224,7 +226,7 @@ public class ScAccessibleCsvRuler extends TestCase {
         try {
             args[0] = new PropertyValue();
             args[0].Name = "InteractionHandler";
-            args[0].Value = Param.getMSF().createInstance(
+            args[0].Value = ((XMultiServiceFactory)Param.getMSF()).createInstance(
                 "com.sun.star.comp.uui.UUIInteractionHandler");
         } catch(com.sun.star.uno.Exception e) {
         }
