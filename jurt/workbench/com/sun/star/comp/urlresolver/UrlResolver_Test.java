@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UrlResolver_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:22:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@ package com.sun.star.comp.urlresolver;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.UnoRuntime;
@@ -82,11 +83,8 @@ public class UrlResolver_Test
             XMultiComponentFactory xLocalServiceManager = xcomponentcontext.getServiceManager();
 
             // create a connector, so that it can contact the office
-            Object xUrlResolver  = xLocalServiceManager.createInstanceWithContext(
-                "com.sun.star.bridge.UnoUrlResolver", xcomponentcontext );
-
-            XUnoUrlResolver urlResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
-            XUnoUrlResolver.class, xUrlResolver );
+            XUnoUrlResolver urlResolver
+                = UnoUrlResolver.create( xcomponentcontext );
 
             Object initialObject = urlResolver.resolve(
                 "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager" );
