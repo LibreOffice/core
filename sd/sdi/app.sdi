@@ -18,12 +18,17 @@ interface StarImpress : Module
         StateMethod = GetState;
     ]
 
-    SID_AUTOPILOT // ole : ?, status : ?
+    SID_SD_AUTOPILOT // ole : ?, status : ?
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
 
+    SID_NEWSD // ole : ?, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     SID_OPENDOC // ole() api()
     [
 
