@@ -1,11 +1,12 @@
-fm	forms	:	svx sfx2 NULL
-fm	forms									usr1	-	all	fm_mkofrm NULL
-fm	forms\source\inc						get		-	all	fm_inc NULL
-fm	forms\source\cppugen				    nmake	-	all	fm_cppugen NULL
-fm	forms\source\component					nmake	-	all	fm_component fm_cppugen NULL
-fm	forms\source\solar\component    nmake	-	all	fm_solar_component fm_cppugen NULL
-fm	forms\source\solar\control      nmake	-	all	fm_solar_control NULL
-fm	forms\source\helper             nmake	-	all	fm_helper fm_cppugen NULL
-fm	forms\source\misc						nmake	-	all	fm_misc fm_cppugen NULL
-fm	forms\source\resource					nmake	-	all	fm_resource fm_cppugen NULL
-fm	forms\util		                nmake	-	all	fm_util fm_component fm_solar_component fm_solar_control fm_helper fm_misc fm_resource NULL
+fm  forms   :   svx sfx2 NULL
+fm  forms                                   usr1    -   all fm_mkofrm NULL
+fm  forms\source\inc                        get     -   all fm_inc NULL
+fm  forms\source\cppugen                    nmake   -   all fm_cppugen NULL
+fm  forms\source\component                  nmake   -   all fm_component fm_cppugen NULL
+fm  forms\source\solar\component            nmake   -   all fm_solar_component fm_cppugen NULL
+fm  forms\source\solar\control              nmake   -   all fm_solar_control NULL
+fm  forms\source\helper                     nmake   -   all fm_helper fm_cppugen NULL
+fm  forms\source\misc                       nmake   -   all fm_misc fm_cppugen NULL
+fm  forms\source\resource                   nmake   -   all fm_resource fm_cppugen NULL
+fm  forms\source\richtext                   nmake   -   all fm_richtext fm_cppugen NULL
+fm  forms\util                              nmake   -   all fm_util fm_component fm_solar_component fm_solar_control fm_helper fm_misc fm_resource fm_richtext NULL
