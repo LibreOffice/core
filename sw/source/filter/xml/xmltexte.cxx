@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:37:49 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,7 @@ void lcl_addOutplaceProperties(
         //TODO/LATER: only VisAreaSize is available!
         //const Rectangle& rVisArea = pEmbed->GetVisArea();
         awt::Size aSz = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+
         if( aSz.Width && aSz.Height )
         {
             Any aAny;
