@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-18 09:52:55 $
+ *  last change: $Author: pb $ $Date: 2002-03-21 13:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,9 +179,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     // ggf. Spezial Version
     String aStr = aVersionText.GetText();
     aStr.SearchAndReplaceAscii( "$(VER)", Application::GetDisplayName() );
-    if ( aStr.GetChar( aStr.Len() - 1 ) != ' ' )
-        aStr += ' ';
-    aStr += String( RTL_CONSTASCII_STRINGPARAM("- based on the OpenOffice.org project") );
     aVersionText.SetText( aStr );
 
     // Initialisierung fuer Aufruf Entwickler
