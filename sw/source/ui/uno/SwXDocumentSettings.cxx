@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:31:21 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,9 @@ enum SwDocumentSettingsPropertyHandles
     /* Stampit It disable the print cancel button of the shown progress dialog. */
     HANDLE_ALLOW_PRINTJOB_CANCEL,
     // DVO, OD 12.01.2004 #i11859#
-    HANDLE_USE_FORMER_LINE_SPACING
+    HANDLE_USE_FORMER_LINE_SPACING,
+    // OD 2004-02-16 #106629#
+    HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -208,6 +210,8 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("AllowPrintJobCancel"),        HANDLE_ALLOW_PRINTJOB_CANCEL,           CPPUTYPE_BOOLEAN,           0,   0},
         // DVO, OD 12.01.2004 #i11859#
         { RTL_CONSTASCII_STRINGPARAM("UseFormerLineSpacing"),       HANDLE_USE_FORMER_LINE_SPACING,         CPPUTYPE_BOOLEAN,           0,   0},
+        // OD 2004-02-16 #106629#
+        { RTL_CONSTASCII_STRINGPARAM("AddParaSpacingToTableCells"), HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS, CPPUTYPE_BOOLEAN,           0,   0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -569,6 +573,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->SetUseFormerLineSpacing( bTmp );
         }
         break;
+        // OD 2004-02-17 #106629#
+        case HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetAddParaSpacingToTableCells( bTmp );
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -764,6 +775,13 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_USE_FORMER_LINE_SPACING:
         {
             sal_Bool bTmp = mpDoc->IsFormerLineSpacing();
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        // OD 2004-02-16 #106629#
+        case HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS:
+        {
+            sal_Bool bTmp = mpDoc->IsAddParaSpacingToTableCells();
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
