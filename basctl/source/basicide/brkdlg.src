@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:38:20 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ catalan ] = "Nou";
         Text[ finnish ] = "Uusi";
         Text[ thai ] = "à¹ƒà¸«à¸¡à¹ˆ";
+        Text[ czech ] = "NovÃ½";
+        Text[ hebrew ] = "â€®×—×“×©â€¬";
+        Text[ hindi ] = "à¤¨à¤¯à¤¾";
     };
     PushButton RID_PB_DEL
     {
@@ -135,7 +138,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text [ swedish ] = "Radera" ;
         Text [ danish ] = "Slet" ;
         Text [ portuguese ] = "Eliminar" ;
-        Text [ portuguese_brazilian ] = "L?chen" ;
+        Text [ portuguese_brazilian ] = "Excluir" ;
         Text[ chinese_simplified ] = "åˆ é™¤";
         Text[ russian ] = "Óäàëèòü";
         Text[ polish ] = "Usuñ";
@@ -149,6 +152,9 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ catalan ] = "Suprimeix";
         Text[ finnish ] = "Poista";
         Text[ thai ] = "à¸¥à¸š";
+        Text[ czech ] = "Smazat";
+        Text[ hebrew ] = "â€®××—×™×§×”â€¬";
+        Text[ hindi ] = "à¤®à¤¿à¤Ÿà¤¾à¤“";
     };
     CheckBox RID_CHKB_ACTIVE
     {
@@ -164,7 +170,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text [ dutch ] = "Actief" ;
         Text [ swedish ] = "Aktiv" ;
         Text [ danish ] = "Aktiv" ;
-        Text [ portuguese_brazilian ] = "Aktiv" ;
+        Text [ portuguese_brazilian ] = "Ativo" ;
         Text [ portuguese ] = "Activo" ;
         Text[ chinese_simplified ] = "ä½¿ç”¨ä¸­";
         Text[ russian ] = "Âêë./âûêë.";
@@ -179,6 +185,9 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ catalan ] = "Actiu";
         Text[ finnish ] = "Aktiivinen";
         Text[ thai ] = "à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸­à¸¢à¸¹à¹ˆ";
+        Text[ czech ] = "AktivnÃ­";
+        Text[ hebrew ] = "Aktiv";
+        Text[ hindi ] = "à¤•à¥à¤°à¤¿à¤¯à¤¾à¤¶à¥€à¤²";
     };
     FixedText RID_FT_PASS
     {
@@ -187,7 +196,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text = "Durchlauf:" ;
         Text [ English ] = "Pass Count:" ;
         Text [ english_us ] = "Pass Count:" ;
-        Text [ portuguese_brazilian ] = "Durchlauf:" ;
+        Text [ portuguese_brazilian ] = "Passagens:" ;
         Text [ swedish ] = "Genomflöde:" ;
         Text [ danish ] = "Glid igennem:" ;
         Text [ italian ] = "Passaggi:" ;
@@ -197,17 +206,20 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text [ portuguese ] = "Ajuste:" ;
         Text[ chinese_simplified ] = "ç©¿é€ï¼š";
         Text[ russian ] = "Ïğîïóñêîâ:";
-        Text[ polish ] = "Przebieg:";
+        Text[ polish ] = "Liczba przejœæ:";
         Text[ japanese ] = "ã²ã¨ã¨ãŠã‚Šå®Ÿè¡Œ:";
         Text[ chinese_traditional ] = "éç¨‹ï¼š";
         Text[ arabic ] = "ÚÈÑ:";
         Text[ greek ] = "Áñéèìüò äéáäñïìşí:";
         Text[ korean ] = "ê³¼ì •";
-        Text[ turkish ] = "Pass count:";
+        Text[ turkish ] = "Geçiş Sayacı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Recompte de passades:";
         Text[ finnish ] = "Kertojen #:";
         Text[ thai ] = "à¸™à¸±à¸šà¸œà¹ˆà¸²à¸™:";
+        Text[ czech ] = "PoÄet prÅ¯bÄ›hÅ¯:";
+        Text[ hebrew ] = "Durchlauf:";
+        Text[ hindi ] = "à¤ªà¤¾à¤¸ à¤—à¤¿à¤¨à¤¤à¥€:";
     };
     FixedText RID_FT_BRKPOINTS
     {
@@ -222,7 +234,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text [ dutch ] = "Onderbrekingspunten" ;
         Text [ swedish ] = "Brytpunkter" ;
         Text [ danish ] = "Pausepunkter" ;
-        Text [ portuguese_brazilian ] = "Haltepunkte" ;
+        Text [ portuguese_brazilian ] = "Pontos de interrupção" ;
         Text [ portuguese ] = "Pontos de interrupção" ;
         Text[ chinese_simplified ] = "ä¸­æ–­ç‚¹";
         Text[ russian ] = "Òî÷êè îñòàíîâà";
@@ -232,11 +244,14 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ arabic ] = "äŞÇØ ÇáÅíŞÇİ";
         Text[ greek ] = "Óçìåßá óôÜóçò";
         Text[ korean ] = "ì¤‘ë‹¨ì ";
-        Text[ turkish ] = "Kesme noktaları";
+        Text[ turkish ] = "AyırmaNoktaları";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Punts de ruptura";
         Text[ finnish ] = "Keskeytyspisteet";
         Text[ thai ] = "à¸ˆà¸¸à¸”à¹à¸šà¹ˆà¸‡";
+        Text[ czech ] = "Body pÅ™eruÅ¡enÃ­";
+        Text[ hebrew ] = "Haltepunkte";
+        Text[ hindi ] = "à¤–à¤£à¥à¤¡à¤¨ à¤¬à¤¿à¤¨à¥à¤¦à¥";
     };
     NumericField RID_FLD_PASS
     {
@@ -246,28 +261,41 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         TabStop = TRUE ;
     };
     Text [ english_us ] = "Manage Breakpoints" ;
-    Text [ italian ] = "Punto di interruzione" ;
-    Text [ spanish ] = "Puntos de ruptura" ;
-    Text [ french ] = "Points d'arrêt" ;
+    Text [ italian ] = "Gestisci punti di interruzione" ;
+    Text [ spanish ] = "Gestionar los puntos de ruptura" ;
+    Text [ french ] = "Gestion des points d'arrêt" ;
     Text [ dutch ] = "Onderbrekingspunten" ;
-    Text [ swedish ] = "Brytpunkter" ;
+    Text [ swedish ] = "Hantera brytpunkter" ;
     Text [ danish ] = "Pausepunkter" ;
-    Text [ portuguese_brazilian ] = "Haltepunkte" ;
+    Text [ portuguese_brazilian ] = "Pontos de interrupção" ;
     Text [ portuguese ] = "Pontos de interrupção" ;
-    Text[ chinese_simplified ] = "ä¸­æ–­ç‚¹";
+    Text[ chinese_simplified ] = "ç®¡ç†ä¸­æ–­ç‚¹";
     Text[ russian ] = "Òî÷êè îñòàíîâà";
     Text[ polish ] = "Punkty przerwania";
-    Text[ japanese ] = "ãƒ–ãƒ¬ãƒ¼ã‚¯ãƒã‚¤ãƒ³ãƒˆ";
-    Text[ chinese_traditional ] = "ä¸­æ–·é»";
+    Text[ japanese ] = "ãƒ–ãƒ¬ãƒ¼ã‚¯ãƒã‚¤ãƒ³ãƒˆã®ç®¡ç†";
+    Text[ chinese_traditional ] = "ç®¡ç†ä¸­æ–·é»";
     Text[ arabic ] = "äŞÇØ ÇáÅíŞÇİ";
     Text[ greek ] = "Óçìåßá óôÜóçò";
-    Text[ korean ] = "ì¤‘ë‹¨ì ";
-    Text[ turkish ] = "Kesme noktaları";
+    Text[ korean ] = "ì¤‘ë‹¨ì  ê´€ë¦¬";
+    Text[ turkish ] = "Kırılma noktaları";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Punts de ruptura";
     Text[ finnish ] = "Keskeytyspisteet";
     Text[ thai ] = "à¸ˆà¸¸à¸”à¹à¸šà¹ˆà¸‡";
+    Text[ czech ] = "Body pÅ™eruÅ¡enÃ­";
+    Text[ hebrew ] = "Haltepunkte";
+    Text[ hindi ] = "à¤–à¤£à¥à¤¡à¤¨ à¤¬à¤¿à¤¨à¥à¤¦à¥";
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
