@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-10 07:31:05 $
+ *  last change: $Author: pb $ $Date: 2002-06-14 12:22:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3466,7 +3466,10 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         if ( nNewPos != mnCurPos && !( HasFocus() && nNewPos == TOOLBOX_ITEM_NOTFOUND ) )
         {
             if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
+            {
                 ImplDrawItem( mnCurPos );
+                ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, (void*) mnCurPos );
+            }
 
             mnCurPos = nNewPos;
             if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
@@ -3557,7 +3560,9 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                                 if ( mnHighItemId )
                                 {
                                     ImplHideFocus();
-                                    ImplDrawItem( GetItemPos( mnHighItemId ) );
+                                    USHORT nPos = GetItemPos( mnHighItemId );
+                                    ImplDrawItem( nPos );
+                                    ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, (void*) nPos );
                                 }
                                 mnHighItemId = pItem->mnId;
                                 ImplDrawItem( nTempPos, 2 );
@@ -3580,7 +3585,11 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         {
             USHORT nClearPos = GetItemPos( mnHighItemId );
             if ( nClearPos != TOOLBOX_ITEM_NOTFOUND )
+            {
                 ImplDrawItem( nClearPos, (nClearPos == mnCurPos) ? TRUE : FALSE );
+                if( nClearPos != mnCurPos )
+                    ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, (void*) nClearPos );
+            }
             ImplHideFocus();
             mnHighItemId = 0;
         }
@@ -4956,7 +4965,9 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
     if ( mnHighItemId )
     {
         ImplHideFocus();
-        ImplDrawItem( GetItemPos( mnHighItemId ), FALSE );
+        USHORT nPos = GetItemPos( mnHighItemId );
+        ImplDrawItem( nPos, FALSE );
+        ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, (void*) nPos );
         pOldItem = ImplGetItem( mnHighItemId );
         oldPos = (USHORT) mpItemList->GetPos( pOldItem );
     }
