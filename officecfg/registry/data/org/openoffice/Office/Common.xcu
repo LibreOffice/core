@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:37:16 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,49 @@
           </prop>
         </node>
       </node>
+     <node oor:name="Evolution 1.4 or later" oor:op="replace">
+      <node oor:name="FormatStrings">
+       <prop oor:name="base">
+        <value>mailto:?%s</value>
+       </prop>
+       <prop oor:name="from">
+        <value/>
+       </prop>
+       <prop oor:name="to">
+        <value>to=%s</value>
+       </prop>
+       <prop oor:name="cc">
+        <value>cc=%s</value>
+       </prop>
+       <prop oor:name="bcc">
+        <value>bcc=%s</value>
+       </prop>
+       <prop oor:name="subject">
+        <value>subject=%s</value>
+       </prop>
+       <prop oor:name="attachment">
+        <value>attach=%s</value>
+       </prop>
+       <prop oor:name="body">
+        <value>body=%s</value>
+       </prop>
+     </node>
+     <node oor:name="EnumDelimiters">
+      <prop oor:name="base">
+       <value>&amp;</value>
+      </prop>
+      <prop oor:name="cc">
+       <value>&amp;cc=</value>
+      </prop>
+      <prop oor:name="bcc">
+       <value>&amp;bcc=</value>
+      </prop>
+      <prop oor:name="attachment">
+       <value>&amp;attach=</value>
+      </prop>
+     </node>
     </node>
+   </node>
   </node>
   <node oor:name="Startup">
     <node oor:name="RunOnce">
