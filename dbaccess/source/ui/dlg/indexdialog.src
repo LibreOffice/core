@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 14:18:04 $
+ *  last change: $Author: oj $ $Date: 2002-03-19 07:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,7 @@ ModalDialog DLG_INDEXDESIGN
         Border  = TRUE;
 
         HelpId = HID_DLGIDX_INDEXLIST;
+        TabStop = TRUE ;
     };
     FixedLine FL_INDEXDETAILS
     {
@@ -376,6 +377,7 @@ ModalDialog DLG_INDEXDESIGN
         Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 22, DIALOG_SIZE_Y - (BUTTON_SIZE_Y + 4) - 65 ) ;
         SVLook = TRUE;
         Border  = TRUE;
+        TabStop = TRUE ;
     };
     PushButton PB_CLOSE
     {
@@ -756,6 +758,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/08/29 14:18:04  kz
+ *  Merge SRC638: 29.08.01 - 16:17:26
+ *
  *  Revision 1.20  2001/08/24 11:23:24  kz
  *  Merge SRC638: 24.08.01 - 13:22:35
  *
