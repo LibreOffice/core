@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_sfwk.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:43:20 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,95 +90,102 @@ namespace sfwk
 //==============================================================================
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 {
-private:
-    OUString m_sCtx; //TODO needs an accessor or needs to be passed as part of create for Package
-protected:
+    class PackageImpl : public ::dp_registry::backend::Package
+    {
+        BackendImpl * getMyBackend() const {
+            return static_cast<BackendImpl *>(m_myBackend.get());
+        }
+
+        Reference< container::XNameContainer > m_xNameCntrPkgHandler;
+        OUString m_descr;
+
+        void initPackageHandler();
+
+        // Package
+        virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
+            ::osl::ResettableMutexGuard & guard,
+            ::rtl::Reference<AbortChannel> const & abortChannel,
+            Reference<XCommandEnvironment> const & xCmdEnv );
+        virtual void processPackage_(
+            ::osl::ResettableMutexGuard & guard,
+            bool registerPackage,
+            ::rtl::Reference<AbortChannel> const & abortChannel,
+            Reference<XCommandEnvironment> const & xCmdEnv );
+
+    public:
+        PackageImpl( ::rtl::Reference<BackendImpl> const & myBackend,
+                     OUString const & url, OUString const & libType,
+                     Reference<XCommandEnvironment> const &xCmdEnv );
+        // XPackage
+        virtual OUString SAL_CALL getDescription() throw (RuntimeException);
+    };
+    friend class PackageImpl;
+
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
+    const Reference<deployment::XPackageTypeInfo> m_xTypeInfo;
+
 public:
     BackendImpl(
         Sequence<Any> const & args,
         Reference<XComponentContext> const & xComponentContext,
-        OUString const & implName,
-        Sequence<OUString> const & supportedMediaTypes );
+        OUString const & implName );
 
-    OUString getCtx() { return m_sCtx; }
-};
-
-//==============================================================================
-class PackageImpl : public ::dp_registry::backend::Package
-{
-protected:
-    Reference< container::XNameContainer > m_xNameCntrPkgHandler;
-
-    inline BackendImpl * getMyBackend() const
-        { return static_cast<BackendImpl *>(m_myBackend.get()); }
-    void initPackageHandler();
-    // Package
-    virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
-        ::osl::ResettableMutexGuard & guard,
-        ::rtl::Reference<AbortChannel> const & abortChannel,
-        Reference<XCommandEnvironment> const & xCmdEnv );
-    virtual void processPackage_(
-        ::osl::ResettableMutexGuard & guard,
-        bool registerPackage,
-        ::rtl::Reference<AbortChannel> const & abortChannel,
-        Reference<XCommandEnvironment> const & xCmdEnv );
-
-    inline PackageImpl(
-        ::rtl::Reference<BackendImpl> const & myBackend,
-        OUString const & url, OUString const & libType,
-        OUString const & mediaType )
-        : Package( myBackend.get(), url, mediaType,
-                   OUString(), OUString(), // will be late-initialized
-           OUString( libType ) )
-        { initPackageHandler(); }
-
-public:
-    static PackageImpl * create(
-        ::rtl::Reference<BackendImpl> const & myBackend,
-        OUString const & url,
-        OUString const & mediaType,
-        Reference<XCommandEnvironment> const &xCmdEnv, OUString const & libType );
-
-    // XPackage
-    virtual Any SAL_CALL getIcon( sal_Bool highContrast, sal_Bool smallIcon )
-        throw (RuntimeException);
+    // XPackageRegistry
+    virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
+    getSupportedPackageTypes() throw (RuntimeException);
 };
 
 //______________________________________________________________________________
-PackageImpl * PackageImpl::create(
-    ::rtl::Reference<BackendImpl> const & myBackend,
-    OUString const & url,
-    OUString const & mediaType,
-    Reference<XCommandEnvironment> const &xCmdEnv,
-    OUString const & libType  )
+OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
 {
-    ::std::auto_ptr<PackageImpl> ret(
-        new PackageImpl( myBackend, url, libType, mediaType ) );
+    if (m_descr.getLength() == 0)
+        return Package::getDescription();
+    else
+        return m_descr;
+}
 
-    // name, displayName:
-    // name and display name default the same
-    ret->m_displayName = url.copy( url.lastIndexOf( '/' ) + 1 );
-    ret->m_name = ret->m_displayName;
+//______________________________________________________________________________
+BackendImpl::PackageImpl::PackageImpl(
+    ::rtl::Reference<BackendImpl> const & myBackend,
+    OUString const & url, OUString const & libType,
+    Reference<XCommandEnvironment> const &xCmdEnv )
+    : Package( myBackend.get(), url, OUString(), OUString(),
+               myBackend->m_xTypeInfo ),
+      m_descr(libType)
+{
+    initPackageHandler();
+
+    sal_Int32 segmEnd = url.getLength();
+    if (url.getLength() > 0 && url[ url.getLength() - 1 ] == '/')
+        --segmEnd;
+    sal_Int32 segmStart = (url.lastIndexOf( '/', segmEnd ) + 1);
+    if (segmStart < 0)
+        segmStart = 0;
+    // name and display name default the same:
+    m_displayName = ::rtl::Uri::decode(
+        url.copy( segmStart, segmEnd - segmStart ),
+        rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+    m_name = m_displayName;
 
     OSL_TRACE("PakageImpl displayName is %s",
-        ::rtl::OUStringToOString( ret->m_displayName , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
-    return ret.release();
+        ::rtl::OUStringToOString( m_displayName , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 }
 
 //______________________________________________________________________________
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext,
-    OUString const & implName,
-    Sequence<OUString> const & supportedMediaTypes )
-    : PackageRegistryBackend(
-        args, xComponentContext, implName, supportedMediaTypes )
+    OUString const & implName )
+    : PackageRegistryBackend( args, xComponentContext, implName ),
+      m_xTypeInfo( new Package::TypeInfo(
+                       OUSTR("application/vnd.sun.star.framework-script"),
+                       OUString() /* no file filter */,
+                       OUSTR("Scripting Framework Script Library"),
+                       RID_IMG_SCRIPTLIB, RID_IMG_SCRIPTLIB_HC ) )
 {
     if (! transientMode())
     {
@@ -209,20 +216,16 @@ BackendImpl::BackendImpl(
                         ":BaseInstallation}/share/basic") );
             m_basic_script_libs.reset(
                 new LibraryContainer(
-                    make_url( basic_path, OUSTR("/script.xlc") ),
+                    makeURL( basic_path, OUSTR("script.xlc") ),
                     getMutex(),
                     getComponentContext() ) );
             m_dialog_libs.reset(
                 new LibraryContainer(
-                    make_url( basic_path, OUSTR("/dialog.xlc") ),
+                    makeURL( basic_path, OUSTR("dialog.xlc") ),
                     getMutex(),
                     getComponentContext() ) );
         }
 */
-        OUString ctx(
-            m_eContext == CONTEXT_USER
-                ? OUSTR("user") : OUSTR("share") );
-        m_sCtx = ctx;
     }
 }
 
@@ -238,13 +241,16 @@ Reference<XInterface> SAL_CALL create(
     Reference<XComponentContext> const & xComponentContext )
     SAL_THROW( (Exception) )
 {
-    OUString const mediaTypes [] = {
-        OUSTR("application/vnd.sun.star.framework-script")
-    };
     return static_cast< ::cppu::OWeakObject * >(
-        new BackendImpl(
-            args, xComponentContext, getImplementationName(),
-            Sequence<OUString >( mediaTypes, ARLEN(mediaTypes) ) ) );
+        new BackendImpl( args, xComponentContext, getImplementationName() ) );
+}
+
+// XPackageRegistry
+//______________________________________________________________________________
+Sequence< Reference<deployment::XPackageTypeInfo> >
+BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
+{
+    return Sequence< Reference<deployment::XPackageTypeInfo> >(&m_xTypeInfo, 1);
 }
 
 // PackageRegistryBackend
@@ -263,7 +269,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         {
             // probe for script.xlb:
             if (create_ucb_content(
-                    0, make_url( url, OUSTR("parcel-descriptor.xml") ),
+                    0, makeURL( url, OUSTR("parcel-descriptor.xml") ),
                     xCmdEnv, false /* no throw */ ))
         {
                 mediaType = OUSTR("application/vnd.sun.star.framework-script");
@@ -272,7 +278,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         }
         if (mediaType.getLength() == 0)
             throw lang::IllegalArgumentException(
-                m_strCannotDetectMediaType + url,
+                StrCannotDetectMediaType::get() + url,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
     }
 
@@ -284,7 +290,8 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         {
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.framework-script"))
             {
-                OUString sParcelDescURL = make_url( url, OUSTR("parcel-descriptor.xml") );
+                OUString sParcelDescURL = makeURL(
+                    url, OUSTR("parcel-descriptor.xml") );
                 ::ucb::Content ucb_content( sParcelDescURL, xCmdEnv );
                 ParcelDescDocHandler* pHandler =
                     new ParcelDescDocHandler();
@@ -304,7 +311,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 if ( !pHandler->isParsed() )
                 {
                     throw lang::IllegalArgumentException(
-                        m_strCannotDetectMediaType + url,
+                        StrCannotDetectMediaType::get() + url,
                         static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
                 }
                 lang =  pHandler->getParcelLanguage();
@@ -320,38 +327,37 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 OSL_TRACE(" for url %s",
                      rtl::OUStringToOString( source.sSystemId, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 OSL_TRACE("******************************");
-                return PackageImpl::create(
-                    this, url, mediaType, xCmdEnv, sfwkLibType );
+                return new PackageImpl( this, url, sfwkLibType, xCmdEnv );
             }
         }
     }
     throw lang::IllegalArgumentException(
-        m_strUnsupportedMediaType + mediaType,
+        StrUnsupportedMediaType::get() + mediaType,
         static_cast<OWeakObject *>(this),
         static_cast<sal_Int16>(-1) );
 }
 
 //##############################################################################
 
-// XPackage
-//______________________________________________________________________________
-
-void PackageImpl:: initPackageHandler()
+void BackendImpl::PackageImpl:: initPackageHandler()
 {
+    if (m_xNameCntrPkgHandler.is())
+        return;
+
     BackendImpl * that = getMyBackend();
     Any aContext;
 
-    if ( that->getCtx().equals(  OUSTR("user") ) )
+    if ( that->m_eContext == CONTEXT_USER )
     {
         aContext  <<= OUSTR("user");
-
     }
-    else if ( that->getCtx().equals( OUSTR( "share" ) ) )
+    else if ( that->m_eContext == CONTEXT_SHARED )
     {
         aContext  <<= OUSTR("share");
     }
     else
     {
+        OSL_ASSERT( 0 );
         // NOT supported at the momemtn // TODO
     }
 
@@ -370,21 +376,10 @@ void PackageImpl:: initPackageHandler()
     // TODO what happens if above fails??
 }
 
-Any PackageImpl::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
-    throw (RuntimeException)
-{
-    OSL_ASSERT( smallIcon );
-    if (smallIcon)
-    {
-        sal_uInt16 ret = highContrast ? RID_IMG_SCRIPTLIB_HC : RID_IMG_SCRIPTLIB;
-        return makeAny(ret);
-    }
-    return Package::getIcon( highContrast, smallIcon );
-}
-
 // Package
 //______________________________________________________________________________
-beans::Optional< beans::Ambiguous<sal_Bool> > PackageImpl::isRegistered_(
+beans::Optional< beans::Ambiguous<sal_Bool> >
+BackendImpl::PackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard & guard,
     ::rtl::Reference<AbortChannel> const & abortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
@@ -398,7 +393,7 @@ beans::Optional< beans::Ambiguous<sal_Bool> > PackageImpl::isRegistered_(
 }
 
 //______________________________________________________________________________
-void PackageImpl::processPackage_(
+void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard & guard,
     bool registerPackage,
     ::rtl::Reference<AbortChannel> const & abortChannel,
