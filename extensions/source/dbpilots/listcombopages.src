@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-04 14:32:51 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,7 +425,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text [ dutch ] = "Veld uit de ~waardentabel";
         Text [ chinese_simplified ] = "´ÓÊıÖµ±í¸ñÉú³É×Ö¶Î(~V)";
         Text [ greek ] = "Ğåäßï áğü ôïí ğßíáêá ôéìşí";
-        Text [ korean ] = "°ª Å×ÀÌºí·ÎºÎÅÍÀÇ ÇÊµå";
+        Text [ korean ] = "°ª Å×ÀÌºí·ÎºÎÅÍÀÇ ÇÊµå(~V)";
         Text [ turkish ] = "Değer tablosu alanı";
         Text[ catalan ] = "Campo de la tabla de ~valores";
         Text[ finnish ] = "Feld aus der ~Wertetabelle";
@@ -465,7 +465,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text [ dutch ] = "Veld uit de ~lijsttabel";
         Text [ chinese_simplified ] = "´ÓÁĞµ¥±í¸ñÉú³É×Ö¶Î(~L)";
         Text [ greek ] = "Ğåäßï áğü ôïí ğßíáêá ëßóôáò";
-        Text [ korean ] = "¸ñ·Ï Å×ÀÌºí·ÎºÎÅÍÀÇ ÇÊµå";
+        Text [ korean ] = "¸ñ·Ï Å×ÀÌºí·ÎºÎÅÍÀÇ ÇÊµå(~L)";
         Text [ turkish ] = "Liste tablosu alanı";
         Text[ catalan ] = "Campo del list&ado";
         Text[ finnish ] = "Feld aus der ~Listentabelle";
@@ -515,6 +515,9 @@ String RID_STR_COMBOWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/07/04 14:32:51  kz
+ *  Merge SRC633: 04.07.01 - 16:32:52
+ *
  *  Revision 1.17  2001/07/03 22:40:16  kz
  *  Merge SRC633: 04.07.01 - 00:39:09
  *
@@ -530,6 +533,7 @@ String RID_STR_COMBOWIZ_DBFIELD
  *
  *  Revision 1.0 21.02.01 16:16:18  fs
  ************************************************************************/
+
 
 
 
