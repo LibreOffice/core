@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2004-12-23 11:47:36 $
+#   last change: $Author: rt $ $Date: 2005-01-27 15:26:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,7 @@
     <mkdir dir="${outdir}/HelloWorld"/>
 
     <javac srcdir="HelloWorld" destdir="${outdir}/HelloWorld"
-           includes="**\*.java" classpathref="idlclasspath"
+           includes="**/*.java" classpathref="idlclasspath"
            debug="${debug}" optimize="${optimize}" deprecation="on"/>
 
     <copy file="HelloWorld/HelloWorld.java" todir="${outdir}/HelloWorld"/>
@@ -91,7 +91,7 @@
 
     <jar jarfile="${outdir}/HelloWorld/HelloWorld.jar"
          basedir="${outdir}/HelloWorld"
-         includes="**\*.class"
+         includes="**/*.class"
          excludes="${outdir}/HelloWorld/HelloWorld.jar">
     </jar>
 
@@ -105,7 +105,7 @@
     <mkdir dir="${outdir}/Highlight"/>
 
     <javac srcdir="Highlight" destdir="${outdir}/Highlight"
-           includes="**\*.java" classpathref="idlclasspath"
+           includes="**/*.java" classpathref="idlclasspath"
            debug="${debug}" optimize="${optimize}" deprecation="on"/>
 
     <copy file="Highlight/HighlightText.java" todir="${outdir}/Highlight"/>
@@ -113,7 +113,7 @@
 
     <jar jarfile="${outdir}/Highlight/Highlight.jar"
          basedir="${outdir}/Highlight"
-         includes="**\*.class"
+         includes="**/*.class"
          excludes="${outdir}/Highlight/Highlight.jar">
     </jar>
 
@@ -124,34 +124,22 @@
   <!-- ===================== MemoryUsage example ========================== -->
   <target name="MemoryUsage">
 
-    <property name="scriptsdir"
-              value="${outdir}/MemoryUsage/Scripts/java/MemoryUsage"/>
-
     <mkdir dir="${outdir}/MemoryUsage"/>
-    <mkdir dir="${scriptsdir}"/>
 
-    <javac srcdir="MemoryUsage" destdir="${scriptsdir}"
-           includes="**\*.java" classpathref="idlclasspath"
+    <javac srcdir="MemoryUsage" destdir="${outdir}/MemoryUsage"
+           includes="**/*.java" classpathref="idlclasspath"
            debug="${debug}" optimize="${optimize}" deprecation="on"/>
 
-    <copy file="MemoryUsage/MemoryUsage.ods"
-          todir="${outdir}/MemoryUsage"/>
     <copy file="MemoryUsage/MemoryUsage.java" todir="${outdir}/MemoryUsage"/>
-    <copy file="MemoryUsage/parcel-descriptor.xml" todir="${scriptsdir}"/>
+    <copy file="MemoryUsage/parcel-descriptor.xml" todir="${outdir}/MemoryUsage"/>
 
-    <jar jarfile="${scriptsdir}/MemoryUsage.jar"
-         basedir="${scriptsdir}"
+    <jar jarfile="${outdir}/MemoryUsage/MemoryUsage.jar"
+         basedir="${outdir}/MemoryUsage"
          includes="**/*.class"
-         excludes="${scriptsdir}/MemoryUsage.jar">
+         excludes="${outdir}/MemoryUsage/MemoryUsage.jar">
     </jar>
 
-    <delete file="${scriptsdir}/MemoryUsage.class"/>
-
-    <zip destfile="${outdir}/MemoryUsage/MemoryUsage.ods"
-         basedir="${outdir}/MemoryUsage" includes="Scripts/java/MemoryUsage/*"
-         update="yes" filesonly="true"/>
-
-    <delete dir="${outdir}/MemoryUsage/Scripts"/>
+    <delete file="${outdir}/MemoryUsage/MemoryUsage.class"/>
 
   </target>
 
@@ -161,7 +149,7 @@
     <mkdir dir="${outdir}/selector"/>
 
     <javac srcdir="selector" destdir="${outdir}/selector"
-              includes="**\*.java" classpathref="idlclasspath"
+              includes="**/*.java" classpathref="idlclasspath"
            debug="${debug}" optimize="${optimize}" deprecation="on"/>
 
     <copy todir="${outdir}/selector">
