@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2004-07-23 10:54:25 $
+#   last change: $Date: 2005-02-02 13:52:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,6 @@ CT_APP      = org.openoffice.Runner
 RUN: run
 
 run:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) -cs pipe,name=sg128468  $(CT_PACKAGE).CheckImageManager
+    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_PACKAGE).CheckImageManager
 
 
