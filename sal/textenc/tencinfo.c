@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sb $ $Date: 2002-05-28 10:12:55 $
+ *  last change: $Author: sb $ $Date: 2002-05-29 11:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -766,6 +766,9 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
         { "iso885915", RTL_TEXTENCODING_ISO_8859_15 },
         { "iso885914", RTL_TEXTENCODING_ISO_8859_14 },
         { "iso885913", RTL_TEXTENCODING_ISO_8859_13 },
+        { "iso885911", RTL_TEXTENCODING_TIS_620 },
+            /* This is no official MIME character set name, but it might be in
+               use in Thailand. */
         { "iso885910", RTL_TEXTENCODING_ISO_8859_10 },
         { "iso88591", RTL_TEXTENCODING_ISO_8859_1 },
         { "iso88592", RTL_TEXTENCODING_ISO_8859_2 },
@@ -930,6 +933,15 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
         { "cp936", RTL_TEXTENCODING_GBK },
         { "ms936", RTL_TEXTENCODING_GBK },
         { "windows936", RTL_TEXTENCODING_GBK },
+        { "cp874", RTL_TEXTENCODING_MS_874 },
+            /* This is no official MIME character set name, but it might be in
+               use in Thailand. */
+        { "ms874", RTL_TEXTENCODING_MS_874 },
+            /* This is no official MIME character set name, but it might be in
+               use in Thailand. */
+        { "windows874", RTL_TEXTENCODING_MS_874 },
+            /* This is no official MIME character set name, but it might be in
+               use in Thailand. */
         { NULL, RTL_TEXTENCODING_DONTKNOW }
     };
 
