@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-07-06 05:59:37 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 
 class SvxPopupWindowTbxMgr : public SfxPopupWindow
 {
-    SfxToolBoxManager   aTbx;
+//  SfxToolBoxManager   aTbx;
     void*               pNiemalsDenPointerAufDieErzeugendeToolBoxMerken; // MI!
     ResId               aRIdWinTemp;
     ResId               aRIdTbxTemp;
@@ -89,13 +89,11 @@ public:
     SvxPopupWindowTbxMgr(   USHORT nId,
                             SfxToolBoxControl* pTbxCtl,
                             ResId aRIdWin,
-                            ResId aRIdTbx,
-                            SfxBindings& rBindings );
+                            ResId aRIdTbx );
     SvxPopupWindowTbxMgr(   USHORT nId,
                             WindowAlign eAlign,
                             ResId aRIdWin,
-                            ResId aRIdTbx,
-                            SfxBindings& rBindings );
+                            ResId aRIdTbx );
     ~SvxPopupWindowTbxMgr();
 
     virtual void                StateChanged( USHORT nSID, SfxItemState eState,
@@ -104,7 +102,7 @@ public:
     virtual void                PopupModeEnd();
 
     void                        StartSelection();
-    inline SfxToolBoxManager&   GetTbxMgr() { return aTbx; }
+//  inline SfxToolBoxManager&   GetTbxMgr() { return aTbx; }
 
     // toolbox click or execute may chage the default selection in the tools toolbox
     virtual void                UserEvent( ULONG nEvent, void* pEventData );
