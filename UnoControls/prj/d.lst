@@ -3,8 +3,3 @@
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
-
-..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
-..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
-..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
-
