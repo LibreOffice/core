@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-28 09:32:31 $
+ *  last change: $Author: thb $ $Date: 2002-07-05 08:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1050,7 +1050,7 @@ namespace accessibility
         }
     }
 
-    sal_Bool AccessibleEditableTextPara::GetSelection( USHORT& nStartPos, USHORT& nEndPos ) throw (uno::RuntimeException)
+    sal_Bool AccessibleEditableTextPara::GetSelection( USHORT& nStartPos, USHORT& nEndPos ) SAL_THROW((uno::RuntimeException))
     {
         ESelection aSelection;
         USHORT nPara = static_cast< USHORT > ( GetParagraphIndex() );
