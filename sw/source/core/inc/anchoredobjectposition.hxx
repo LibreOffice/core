@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: od $ $Date: 2004-03-11 13:05:04 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #ifndef _ORNTENUM_HXX
 #include <orntenum.hxx>
 #endif
+// OD 2004-03-16 #i11860#
+#ifndef _FRAME_HXX
+#include <frame.hxx>
+#endif
 
 class SdrObject;
 class SwFrm;
@@ -128,6 +132,18 @@ namespace objectpositioning
             virtual const SwRect* ToCharRect() const;
             // OD 12.11.2003 #i22341#
             virtual SwTwips ToCharTopOfLine() const;
+
+        // *********************************************************************
+            /** helper method to determine top of a frame for the vertical
+                object positioning
+
+                OD 2004-03-11 #i11860#
+
+                @author OD
+            */
+            SwTwips _GetTopForObjPos( const SwFrm& _rFrm,
+                                      const SwRectFn& _fnRect,
+                                      const bool _bVert ) const;
 
         // *********************************************************************
             void _GetVertAlignmentValues( const SwFrm& _rVertOrientFrm,
