@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regactivex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:03:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #define IMPRESS_COMPONENT 4
 #define CALC_COMPONENT 8
 #define WRITER_COMPONENT 16
+#define MATH_COMPONENT 32
 
 typedef int ( __stdcall * DllNativeProc ) ( int, BOOL );
 
@@ -243,6 +244,22 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
             nInstallMode |= IMPRESS_COMPONENT;
            else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
             nDeinstallMode |= IMPRESS_COMPONENT;
+    }
+    else
+    {
+        // assert( FALSE );
+    }
+
+    if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_p_Math_Bin", &current_state, &future_state ) )
+    {
+        // analyze impress installation mode
+        if ( current_state == INSTALLSTATE_LOCAL )
+            nOldInstallMode |= MATH_COMPONENT;
+
+        if ( future_state == INSTALLSTATE_LOCAL )
+            nInstallMode |= MATH_COMPONENT;
+           else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
+            nDeinstallMode |= MATH_COMPONENT;
     }
     else
     {
