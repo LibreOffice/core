@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2002-01-15 12:47:31 $
+ *  last change: $Author: cl $ $Date: 2002-04-25 10:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
+#endif
+#ifndef _SVX_WRITINGMODEITEM_HXX
+#include <svx/writingmodeitem.hxx>
 #endif
 
 #pragma hdrstop
@@ -381,7 +384,7 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
                         bLeftToRight = FALSE;
                 }
                 else
-                    bLeftToRight = ( (const SfxBoolItem&) aAttrSet.Get( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT ) ).GetValue();
+                    bLeftToRight = ( (const SvxWritingModeItem&) aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == com::sun::star::text::WritingMode_LR_TB;
 
                 rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, bLeftToRight ) );
                 rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, !bLeftToRight ) );

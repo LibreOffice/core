@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2002-01-16 11:02:53 $
+ *  last change: $Author: cl $ $Date: 2002-04-25 10:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 #endif
 #ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
+#endif
+#ifndef _SVX_WRITINGMODEITEM_HXX
+#include <svx/writingmodeitem.hxx>
 #endif
 #ifndef _SFXITEMITER_HXX
 #include <svtools/itemiter.hxx>
@@ -358,8 +361,8 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
         {
             pView->EndTextEdit();
-            SfxItemSet aAttr( pView->GetDoc()->GetPool(), SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, 0 );
-            aAttr.Put( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, BOOL( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ) ) );
+            SfxItemSet aAttr( pView->GetDoc()->GetPool(), SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION, 0 );
+            aAttr.Put( SvxWritingModeItem( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ? com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL ) );
             rReq.Done( aAttr );
             pView->SetAttributes( aAttr );
             Invalidate();
