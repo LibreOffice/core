@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: accessibility_XAccessibleSelection.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:43:33 $ 
+'*  last change:$Date: 2003-10-06 12:44:16 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -163,11 +163,13 @@ On Error Goto ErrHndl
     End If
     Test.MethodTested("clearAccessibleSelection()",bOK)
 
-    Test.StartMethod("selectAllAccessible()")
+' ### The following property was not found in correspond IDL file! ###
+    Test.StartMethod("selectAllAccessibleChildren()")
     bOK = true
     i = 0
     if ((mCount &gt; 0) AND multiSelection) then
-        oObj.selectAllAccessible()
+' ### The following property was not found in correspond IDL file! ###
+        oObj.selectAllAccessibleChildren()
         wait(500)
         while (i &lt; mCount)
             bOK = bOK AND oObj.isAccessibleChildSelected(i)
@@ -177,12 +179,12 @@ On Error Goto ErrHndl
         Out.Log("Cannot select all children for this object!")
     End If
     clearSelection()
-    Test.MethodTested("selectAllAccessible()",bOK)
+    Test.MethodTested("selectAllAccessibleChildren()",bOK)
 
     Test.StartMethod("getSelectedAccessibleChildCount()")
     bOK = true
     Out.Log("Selecting all...")
-    oObj.selectAllAccessible()
+    oObj.selectAllAccessibleChildren()
     wait(500)
     selCount = oObj.getSelectedAccessibleChildCount()
     Out.Log("Selected "+selCount+" child(ren).")
@@ -227,11 +229,11 @@ On Error Goto ErrHndl
     End If
     Test.MethodTested("getSelectedAccessibleChild()",bOK)
 
-    Test.StartMethod("deselectSelectedAccessibleChild()")
+    Test.StartMethod("deselectAccessibleChild()")
     Dim newSelCount As Long
 	Dim isSelected as Boolean
     bOK = true
-	oObj.selectAllAccessible()
+	oObj.selectAllAccessibleChildren()
 	wait(500)
     selCount = oObj.getSelectedAccessibleChildCount()
     Out.Log("There was "+selCount+" selected child(ren)")
@@ -240,7 +242,7 @@ On Error Goto ErrHndl
 		if oObj.isAccessibleChildSelected(i) then
 			isSelected = true
 		end if
-        oObj.deselectSelectedAccessibleChild(i)
+        oObj.deselectAccessibleChild(i)
         wait(500)
         newSelCount = oObj.getSelectedAccessibleChildCount()
 		Out.Log("selCount = " + selCount + " newSelCount = " + newSelCount) 
@@ -253,11 +255,11 @@ On Error Goto ErrHndl
 			end if
         else
 			Out.Log("is not multi")
-            bOK = bOK AND (newSelCount = 1)
+            bOK = bOK AND (newSelCount &lt;= 1)
         End If
 		selCount = newSelCount
 	next
-    Test.MethodTested("deselectSelectedAccessibleChild()",bOK)
+    Test.MethodTested("deselectAccessibleChild()",bOK)
 
 Exit Sub
 ErrHndl:
@@ -282,7 +284,7 @@ Sub clearSelection()
 End Sub
 
 Function itemDisabled(oChild As Object) As Boolean
-    if NOT hasUNOInterfaces(oChild,"drafts.com.sun.star.accessibility.XAccessibleContext") then
+    if NOT hasUNOInterfaces(oChild,"com.sun.star.accessibility.XAccessibleContext") then
         oChild = oChild.getAccessibleContext()
     End If
     itemDisabled = NOT oChild.getAccessibleStateSet().contains(21)
