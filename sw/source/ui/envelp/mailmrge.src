@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:59:51 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1233,7 +1233,7 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
         Text[ swedish ] = "F�lt anv�nds f�r att f�rse standardbrev med persondata. F�lten �r platsh�llare f�r data som kommer fr�n en datak�lla, t.ex. fr�n en databas. F�lten i standardbrevet m�ste vara anslutna till datak�llan.";
         Text[ japanese ] = "フィールドは個人書簡用差し込み印刷に使用されます。データベースなどデータソースからデータ情報のあるフィールドがプレースホルダに使用されます。差し込み印刷のフィールドはデータソースに接続されている必要があります。";
         Text[ korean ] = "편지 양식을 개별적으로 설정하려면 필드가 필요합니다. 필드는 이 경우에, 데이터베이스와 같은 데이터 원본에서 온 데이터의 플레이스홀더입니다. 편지 양식의 필드는 데이터 원본과 연결되어야 합니다.";
-        Text[ chinese_simplified ] = "邮件合并需要使用个人信息的字段。此处的字段是代表来源于一个数据库信息的通配符，例如通讯簿的数据库。字段必须和数据源相连接。";
+        Text[ chinese_simplified ] = "字段用于自定义表单字母。该字段是来源于一个数据源的占位符，例如数据库。表单字母中的字段必须和数据源相连接。";
         Text[ chinese_traditional ] = "合併列印需要使用個人資訊的欄位。此處的欄位是代表來源於一個資料庫資料的萬用字元，例如通訊錄的資料庫。欄位必須和資料源相連結。";
         Text[ turkish ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
         Text[ greek ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
