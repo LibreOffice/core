@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:53:16 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1135,7 +1135,7 @@ String GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject
         if( aPath.Len() && ( nItemTextFlags & GALLERY_ITEM_TITLE ) )
             aRet += String( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
 
-        aRet += aURL.getFSysPath( INetURLObject::FSYS_DETECT );
+        aRet += String(aURL.getFSysPath( INetURLObject::FSYS_DETECT ));
 
         if( aPath.Len() && ( nItemTextFlags & GALLERY_ITEM_TITLE ) )
             aRet += ')';
