@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XObjectOutputStream.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:36 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,33 +77,18 @@ interface XPersistObject;
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::io::XObjectOutputStream
-/** makes it possible to store the data and structure of runtime objects.
+/** stores XPersistObject implementations into the stream
 
-    <p>In every case all participating objects have to be stored or
-    loaded at the same time. To be able to load objects, for each object
-    class in the stream, a factory is needed. These factories are
-    <type scope="com::sun::star::lang">XMultiServiceFactory</type>, which are
-    registered at the global service manager.  </p>
+    <p>An implementation of the type <type>XPersistObject</type>
+    uses this interface to write its internal state into a stream.
+    Have a look there for the explanation of the concept.
 
-    @example
-        <p>Given: Object A refers to B, B to C and C to A and D. The order
-        of storing and loading these objects is irrelevant, but it must be
-        the same for each action: </p>
-
-        <ul>
-            <li>storing: A,B,C,D; loading: A,B,C,D is correct </li>
-            <li>storing: B,A,C,D; loading: B,A,C,D is correct </li>
-            <li>storing: C,A,B,D; loading: A,B,C,D is wrong </li>
-            <li>storing: A,B,C,D; loading: A,B,C is wrong</li>
-        </ul>
+    @see com::sun::star::io::XPersistObject
  */
 interface XObjectOutputStream: XDataOutputStream
 {
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::io::XObjectOutputStream::writeObject
     /** writes an object to the stream.
+        @param Object the object, which shall serialize itself into the stream.
      */
     void writeObject( [in] XPersistObject Object )
             raises( IOException );
@@ -117,6 +102,12 @@ interface XObjectOutputStream: XDataOutputStream
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6.16.1  2002/06/05 16:38:41  jbu
+    documentation reviewed
+
+    Revision 1.6  2001/03/16 15:10:36  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/11 16:09:49  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

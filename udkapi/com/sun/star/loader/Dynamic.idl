@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dynamic.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:58:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,8 @@ interface XImplementationLoader;
 
 
 /** makes it possible to access services accessible via a <code>UnoUrlResolver</code>
-    E.g., instantiation of services in another process
+    E.g., instantiation of services in another process. This service is still in an
+    experimental state and should not be used in a production environment.
  */
 service Dynamic
 {
@@ -89,8 +90,7 @@ service Dynamic
     interface XImplementationLoader;
 
 
-    /** provides additional information about the implementations
-        and the services supported by them.
+    /** gives information about other supported services
      */
     interface com::sun::star::lang::XServiceInfo;
 };

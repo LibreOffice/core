@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEventAttacher.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:09:06 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,16 +95,12 @@
  module com {  module sun {  module star {  module script {
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::script::XEventAttacher
 /** makes it possible to attach script events given by a sequence of
     <type>ScriptEventDescriptor</type> structures to a given interface.
  */
 interface XEventAttacher: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XEventAttacher::attachListener
     /** registers the given "AllListener" object as a listener at the
         given interface by creating a suitable listener adapter and
         calling the "addListener" method corresponding to the
@@ -121,24 +117,12 @@ interface XEventAttacher: com::sun::star::uno::XInterface
                     com::sun::star::lang::ServiceNotRegisteredException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XEventAttacher::attachSingleEventListener
     /** registers an object as a listener at the given interface by
         creating a suitable listener adapter and calling the method
-
-<!-- jrh: Why all the empty space?  -->
-
-
-
-        which corresponds to the
-        listener type.
-
-
+        which corresponds to the listener type.
 
         <p>Only the event corresponding to the given event method
-        will be delegated to <var>xAllListener</var>.
-
-        </p>
+        will be delegated to <var>xAllListener</var>.</p>
      */
     com::sun::star::lang::XEventListener attachSingleEventListener( [in] com::sun::star::uno::XInterface xTarget,
              [in] com::sun::star::script::XAllListener xAllListener,
@@ -152,16 +136,10 @@ interface XEventAttacher: com::sun::star::uno::XInterface
                     com::sun::star::lang::ServiceNotRegisteredException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XEventAttacher::removeListener
     /** removes a listener object as a listener from the given interface.
 
-
-
         <p> This method can and should be used as a contrary method
-        to the two attach methods.
-
-        </p>
+        to the two attach methods.</p>
      */
     void removeListener( [in] com::sun::star::uno::XInterface xTarget,
              [in] string aListenerType,
@@ -176,27 +154,4 @@ interface XEventAttacher: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/03/16 15:10:40  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.4  2000/11/08 12:28:52  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:35  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:38  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/02/23 11:41:17  mi
-    results from proofreading in layouted version
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MemberType.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:52 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,8 @@
 module com { module sun { module star { module script {
 
 //=============================================================================
-/** These values are used to specify a member accessible by XInvocation
+/** These values are used to specify a member accessible by
+    <type>XInvocation</type>.
 */
 enum MemberType
 {
@@ -81,17 +82,5 @@ enum MemberType
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:35  hjs
-    initial import
-
-    Revision 1.1  2000/09/15 11:48:50  ab
-    new
-
-
-
-=============================================================================*/
 #endif
 

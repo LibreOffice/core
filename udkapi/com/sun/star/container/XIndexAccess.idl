@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIndexAccess.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ module com {  module sun {  module star {  module container {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::container::XIndexAccess
 /** provides access to the elements of a collection through an
     index.
 
@@ -91,9 +90,8 @@ interface XIndexAccess: com::sun::star::container::XElementAccess
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::container::XIndexAccess::getCount
     /** @returns
-                the number of elements.
+                the number of elements in this container.
      */
     long getCount();
 
@@ -101,7 +99,7 @@ interface XIndexAccess: com::sun::star::container::XElementAccess
 
     // DocMerge from idl: method com::sun::star::container::XIndexAccess::getByIndex
     /** @returns
-            the element at the specified index
+            the element at the specified index.
 
         @param Index
             specifies the position in the array. The first index is 0.
@@ -124,27 +122,4 @@ interface XIndexAccess: com::sun::star::container::XElementAccess
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2000/12/11 16:09:45  mi
-    documentation syntax fixed and some minor semantic documentation fixes
-
-    Revision 1.4  2000/11/08 12:28:31  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:54  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:04  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:17  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:41  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextInputStream.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:36 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,58 +75,75 @@
 module com {  module sun {  module star {  module io {
 
 //=============================================================================
+/** Interface to read strings from a stream.
 
-// DocMerge from xml: interface com::sun::star::io::XTextInputStream
-/** makes it possible to read machine-independent simple data types from a
-    stream.
+    <p>This interfaces allows to read strings seperated by
+    delimiters and to read lines. The character encoding
+    to be used can be set by <member>setEncoding()</member>.
+    Default encoding is "utf8".</p>
  */
 interface XTextInputStream: com::sun::star::io::XInputStream
 {
     //-------------------------------------------------------------------------
+    /** reads text until a line break (CR, LF, or CR/LF) or
+        EOF is found and returns it as string (without CR, LF).
 
-    // DocMerge from xml: method com::sun::star::io::XTextInputStream::readLine
-    /** reads text until a line break (CR, LF, or CR/LF) or EOF is found
-        and returns it as string (without CR, LF).
+        <p>The read characters are converted according to the
+        encoding defined by <member>setEncoding</member>. If
+        EOF is already reached before calling this method
+        an empty string is returned.<p>
 
-        <p>The read characters are converted according to the encoding defined
-        by <member>XTextInputStream::setEncoding</member>.
+        @see setEncoding
+        @see isEOF
      */
     string readLine()
             raises( com::sun::star::io::IOException );
 
     //-------------------------------------------------------------------------
+    /** reads text until one of the given delimiter characters
+        or EOF is found and returns it as string (without delimiter).
 
-    // DocMerge from xml: method com::sun::star::io::XTextInputStream::readString
-    /** reads text until one of the given delimiter characters or EOF is found.
-
-        <p>Important: CR/LF is not used as default delimiter! So if no delimiter
-        is defined or none of the delimiters is found, the stream will be read
-        to EOF. The read characters are converted according to the encoding
-        defined by <member>XTextInputStream::setEncoding</member>.
+        <p><strong>Important:</strong> CR/LF is not used as default
+        delimiter! So if no delimiter is defined or none of the
+        delimiters is found, the stream will be read to EOF. The
+        read characters are converted according to the encoding
+        defined by <member>setEncoding</member>. If EOF is already
+        reached before calling this method an empty string is returned.</p>
 
         @see setEncoding
+        @see isEOF
      */
     string readString( [in] sequence<char> Delimiters, [in] boolean bRemoveDelimiter )
             raises( com::sun::star::io::IOException );
 
     //-------------------------------------------------------------------------
+    /** Returns the EOF status.
 
-    // DocMerge from xml: method com::sun::star::io::XTextInputStream::isEOF
-    /** @returns
-            <TRUE/>, if the end of file is reached, so that no next string can be read.
+        <p>This method has to be used to detect if the end
+        of the stream is reached.</p>
+        <p><strong>Important:</strong>
+        This cannot be detected by asking for an empty string
+        because that can be a valid return value of <member>
+        readLine()</member> (if the line is empty) and
+        readString() (if a delimiter is directly followed
+        by the next one).</p>
 
-        @see setEncoding
+        @returns
+            <TRUE/>, if the end of file is reached, so that
+            no next string can be read. <FALSE/> otherwise
      */
     boolean isEOF()
             raises( com::sun::star::io::IOException );
 
-
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::io::XTextInputStream::setEncoding
     /** sets character encoding.
 
-        @incomplete
+        @param Encoding
+            sets the character encoding that should be used.
+            The character encoding names refer to the document
+            http://www.iana.org/assignments/character-sets.
+            Which character sets are supported depends on
+            the implementation.
      */
     void setEncoding( [in] string Encoding );
 };
@@ -135,25 +152,4 @@ interface XTextInputStream: com::sun::star::io::XInputStream
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2000/12/11 16:09:49  mi
-    documentation syntax fixed and some minor semantic documentation fixes
-
-    Revision 1.4  2000/11/08 12:28:36  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:24  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:32  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/08/01 07:18:12  ab
-    new
-
-
-
-=============================================================================*/
 #endif

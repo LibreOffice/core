@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptEventDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:09:06 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,31 +67,22 @@
  module com {  module sun {  module star {  module script {
 
 //=============================================================================
-
-// DocMerge from xml: struct com::sun::star::script::ScriptEventDescriptor
 /** describes an effect, especially a script to be executed,
     for a certain event given by the listener type and the name of the
     event method.
  */
 struct ScriptEventDescriptor
 {
-    // DocMerge from xml: field com::sun::star::script::ScriptEventDescriptor::ListenerType
     /** listener type as string, same as listener-XIdlClass.getName().
      */
     string ListenerType;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR ScriptEventDescriptor::EventMethod
-
-    // DocMerge from xml: field com::sun::star::script::ScriptEventDescriptor::EventMethod
     /** event method as string.
      */
     string EventMethod;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR ScriptEventDescriptor::AddListenerParam
-
-    // DocMerge from xml: field com::sun::star::script::ScriptEventDescriptor::AddListenerParam
     /** data to be used if the addListener method needs an additional
         parameter.
         <p>If the type of this parameter is different from string,
@@ -100,17 +91,11 @@ struct ScriptEventDescriptor
     string AddListenerParam;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR ScriptEventDescriptor::ScriptType
-
-    // DocMerge from xml: field com::sun::star::script::ScriptEventDescriptor::ScriptType
     /** type of the script language as string; for example, "Basic" or "StarScript".
      */
     string ScriptType;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR ScriptEventDescriptor::ScriptCode
-
-    // DocMerge from xml: field com::sun::star::script::ScriptEventDescriptor::ScriptCode
     /** script code as string (the code has to correspond with the language
         defined by ScriptType).
      */
@@ -122,27 +107,4 @@ struct ScriptEventDescriptor
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/11/08 12:28:52  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:35  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:38  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/04/20 14:14:36  mm
-    #74031# better documentation
-
-    Revision 1.2  2000/02/07 11:24:51  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif

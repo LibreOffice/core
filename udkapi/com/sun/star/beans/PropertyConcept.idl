@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyConcept.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-08-05 09:21:55 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,26 +64,32 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module beans {
+module com {  module sun {  module star {  module beans {
 
 //=============================================================================
+/** These constants are used to specify concepts of the
+    introspection which apply to properties and to the
+    methods which represent attributes.
 
-/** These constants are used to specify concepts of the introspection
-    which apply to properties and to the methods which represent attributes.
+    <p>This list is not necessarily complete; new constants
+    may be added.</p>
 
-    <p>This list is not necessarily complete; new constants may be added
-    (by the author). </p>
+    @see Introspection
+    @see XIntrospection
+    @see XIntrospectionAccess
  */
 constants PropertyConcept
 {
     //-------------------------------------------------------------------------
+    /** This value is used to query for all properties.
 
-    /** This value is used to query for all methods and properties.
+        See
+        <member>XIntrospectionAccess::getProperty()</member> and
+        <member>XIntrospectionAccess::getProperties()</member>
      */
     const long ALL = -1;
 
     //-------------------------------------------------------------------------
-
     /** specifies that the change or retrieval of this
         property directly by the user can result in an unstable
         state (deadlock, application crash, security hole, etc.)
@@ -91,7 +97,6 @@ constants PropertyConcept
     const long DANGEROUS = 1;
 
     //-------------------------------------------------------------------------
-
     /** specifies all properties which are reachable by
         <type>XPropertySet</type>, <type>XFastPropertySet</type> or
         <type>XMultiPropertySet</type>.
@@ -109,7 +114,7 @@ constants PropertyConcept
     /** specifies all properties which are represented by getter or setter methods.
 
         <p>These methods have the signature <code>type get...()</code>,
-        <code>void set...()</code> or <code>boolean is...()</code>. </p>
+        <code>void set...()</code> or <code>boolean is...()</code>.</p>
      */
     const long METHODS = 8;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MacroExpander.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 12:47:52 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,8 @@ service MacroExpander
 
     @see MacroExpander
 */
-singleton theMacroExpander
+//! singleton theMacroExpander
+service theMacroExpander
 {
     service MacroExpander;
 };

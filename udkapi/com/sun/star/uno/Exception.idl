@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Exception.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:29:00 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,28 +73,23 @@
 //=============================================================================
 
 // DocMerge from xml: exception com::sun::star::uno::Exception
-/** The basic exception:
+/** the base of all UNO exceptions
 
-
-
-    <p>All StarOne exceptions are derived from this exception.</p>
+    <p>All exceptions defined in UNO idl should derive from this exception.</p>
  */
 exception Exception
 {
-    // DocMerge from xml: field com::sun::star::uno::Exception::Message
-    /** specifies a detailed message of the exception or an empty string
-        if the callee does not describe the exception.
+    /** gives a detailed description of the reason, why the exception was thrown.
+        <p>
+        The description should be as detailed as possible.
+
      */
     string Message;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::uno::Exception::Context
-    /** an object that describes the reason for the exception.
-
-
-
-        <p>May be NULL if the callee does not describe the exception.</p>
+    /** should contain a reference to the original, which raised the exception.
+        <p>May be NULL.</p>
      */
     com::sun::star::uno::XInterface Context;
 
@@ -107,6 +102,12 @@ exception Exception
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.24.1  2002/06/05 16:38:42  jbu
+    documentation reviewed
+
+    Revision 1.4  2000/11/08 12:29:00  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:18  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XScriptListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:40 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,15 +79,11 @@
  module com {  module sun {  module star {  module script {
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::script::XScriptListener
 /** makes it possible to receive <type>ScriptEvent</type>s.
  */
 interface XScriptListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XScriptListener::firing
     /** gets called when an event takes place.  For that a
         <type>ScriptEventDescriptor</type> is registered at and
         attached to an object by an <type>XEventAttacherManager</type>.
@@ -95,8 +91,6 @@ interface XScriptListener: com::sun::star::lang::XEventListener
     void firing( [in] com::sun::star::script::ScriptEvent aEvent );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XScriptListener::approveFiring
     /** gets called when a "vetoable event" occurs at the object.
      */
     any approveFiring( [in] com::sun::star::script::ScriptEvent aEvent )
@@ -108,24 +102,4 @@ interface XScriptListener: com::sun::star::lang::XEventListener
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/11/08 12:28:52  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:36  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:39  mi
-    documentation merged from XML
-
-    Revision 1.2  1999/12/06 12:47:12  ab
-    #70472# Invokation -> Invocation
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStarBasicLibraryInfo.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:09:06 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,18 +73,19 @@
 //=============================================================================
 
 /** Interface representing a library and provides access to its modules
+
+    @deprecated
  */
 interface XStarBasicLibraryInfo: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** @returns
-        The library's name
+    /** returns the library's name
      */
     string getName();
 
     //-------------------------------------------------------------------------
-    /** @returns
-        The module container giving access to the modules stored in the library.
+    /** returns
+        the module container giving access to the modules stored in the library.
         The container has to be returned in any case, no matter if the library is
         stored embedded, external, or linked.
 
@@ -94,8 +95,8 @@ interface XStarBasicLibraryInfo: com::sun::star::uno::XInterface
     com::sun::star::container::XNameContainer getModuleContainer();
 
     //-------------------------------------------------------------------------
-    /** @returns
-        The dialog container giving access to the dialogs stored in the library.
+    /** returns
+        the dialog container giving access to the dialogs stored in the library.
         The container has to be returned in any case, no matter if the library is
         stored embedded, external, or linked.
 
@@ -105,14 +106,14 @@ interface XStarBasicLibraryInfo: com::sun::star::uno::XInterface
     com::sun::star::container::XNameContainer getDialogContainer();
 
     //-------------------------------------------------------------------------
-    /** @returns
-        The password, if the library is protected with one,
+    /** returns
+        the password, if the library is protected with one,
         an empty string otherwise.
      */
     string getPassword();
 
     //-------------------------------------------------------------------------
-    /** @returns
+    /** returns an
         URL describing the location where the library is stored if the library
         is stored seperately (for example not in the main XML file but in a
         special library format file), an empty string otherwise.
@@ -122,12 +123,12 @@ interface XStarBasicLibraryInfo: com::sun::star::uno::XInterface
     string getExternalSourceURL();
 
     //-------------------------------------------------------------------------
-    /** @returns
+    /** returns an
         URL describing the location of the library linked to.
 
-        HINT: This method can be removed when there is a generic interface
+        <p>HINT: This method can be removed when there is a generic interface
         for linking. Then the implementation will simply support this
-        "XLinked" interface and it can be checked by queryInterface().
+        "XLinked" interface and it can be checked by queryInterface().</p>
      */
     string getLinkTargetURL();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XImplementationRegistration.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:05:59 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,14 @@ interface XImplementationRegistration: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::registry::XImplementationRegistration::registerImplementation
-    /** registers one or more implementations.
+    /** registers a component which provides one or more implementations.
 
-        <p>The location of the implementation is specified with the URL.
-        </p>
+        @param aLocation
+            specifies the location of the component with the URL.
+
+        @param xReg
+            specifies the registry where the component should be installed. If it is a NULL interface
+            the component will be installed in the system registry.
      */
     void registerImplementation( [in] string aImplementationLoader,
              [in] string aLocation,
@@ -102,10 +106,14 @@ interface XImplementationRegistration: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::registry::XImplementationRegistration::revokeImplementation
-    /** revokes one or more implementations from the registry.
+    /** revokes a component and all their provided implementations from the registry.
 
-        <p>The location of the implementation is specified with the URL.
-        </p>
+        @param aLocation
+            specifies the location of the component with the URL.
+
+        @param xReg
+            specifies the registry where the component should be installed. If it is a NULL interface
+            the component will be revoked from the system registry.
      */
     boolean revokeImplementation( [in] string aLocation,
              [in] com::sun::star::registry::XSimpleRegistry xReg );
@@ -115,15 +123,15 @@ interface XImplementationRegistration: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::registry::XImplementationRegistration::getImplementations
     /** @returns
-                the names of the implementations registered by the url location.
+            the names of the implementations registered by the url location.
 
-                 @param aImplementationLoader
-                     specifies the name of the needed loader for this type of implementation. For
-                     example, the loader "com.sun.star.loader.SharedLibrary" for implementations
-                     that are realized as an SharedLibrary.
+        @param aImplementationLoader
+            specifies the name of the needed loader for this type of implementation. For
+            example, the loader "com.sun.star.loader.SharedLibrary" for implementations
+            that are realized as an SharedLibrary.
 
-                 @param aLocation
-                     specifies the location of the implementation.
+        @param aLocation
+            specifies the location of the component with the URL.
      */
     sequence<string> getImplementations( [in] string aImplementationLoader,
              [in] string aLocation );
@@ -133,7 +141,10 @@ interface XImplementationRegistration: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::registry::XImplementationRegistration::checkInstantiation
     /** @returns
-                 a sequence with names of the missing services to create an instance of this implementation.
+             a sequence with names of the missing services to create an instance of this implementation.
+
+        @param implementationName
+            specifies the name of the checked implementation.
      */
     sequence<string> checkInstantiation( [in] string implementationName );
 
@@ -146,6 +157,12 @@ interface XImplementationRegistration: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6.2.1  2002/03/26 14:24:17  jsc
+    #98365# reviewed
+
+    Revision 1.6  2001/11/16 15:05:59  mi
+    proofing by Richard Holt
+
     Revision 1.5  2001/03/16 15:10:39  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

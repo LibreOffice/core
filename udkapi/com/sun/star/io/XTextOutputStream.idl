@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextOutputStream.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:45:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,23 +75,23 @@
 module com {  module sun {  module star {  module io {
 
 //=============================================================================
+/** Interface to write strings to a stream using a special
+    character encoding.
 
-// DocMerge from xml: interface com::sun::star::io::XTextOutputStream
-/** makes it possible to write machine-independent simple data types to a
-    stream.
+    <p>This interfaces allows to write strings to a stream.
+    The character encoding to be used can be set by <member>
+    setEncoding()</member>. Default encoding is "utf8".</p>
  */
 interface XTextOutputStream: com::sun::star::io::XOutputStream
 {
     //-------------------------------------------------------------------------
+    /** writes a string to the stream using the encoding
+        defined by <member>setEncoding</member>.
 
-    // DocMerge from xml: method com::sun::star::io::XTextOutputStream::writeString
-    /** writes a string using the encoding defined by
-        <member>XTextOutputStream::setEncoding</member>.
-
-        <p>Line breaks or delimiters that may be neccessary to support
-        <member>XTextInputStream::readLine</member> and
-        <member>XTextInputStream::readString</member>
-        have to be added manually to the parameter string.
+        <p>Line breaks or delimiters that may be neccessary
+        to support <member>XTextInputStream::readLine</member>
+        and <member>XTextInputStream::readString</member>
+        have to be added manually to the parameter string.</p>
 
         @see setEncoding
         @see XTextInputStream::readLine
@@ -101,11 +101,14 @@ interface XTextOutputStream: com::sun::star::io::XOutputStream
             raises( com::sun::star::io::IOException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::io::XTextOutputStream::setEncoding
     /** sets character encoding.
 
-        @incomplete
+        @param Encoding
+            sets the character encoding that should be used.
+            The character encoding names refer to the document
+            http://www.iana.org/assignments/character-sets.
+            Which character sets are supported depends on
+            the implementation.
      */
     void setEncoding( [in] string Encoding );
 };
@@ -114,30 +117,4 @@ interface XTextOutputStream: com::sun::star::io::XOutputStream
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2001/03/16 15:10:36  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.5  2000/12/11 16:09:49  mi
-    documentation syntax fixed and some minor semantic documentation fixes
-
-    Revision 1.4  2000/11/08 12:28:36  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:24  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:32  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/08/01 07:18:01  ab
-    new
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

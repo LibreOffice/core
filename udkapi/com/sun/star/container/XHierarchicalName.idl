@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHierarchicalName.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,12 @@
 #include <com/sun/star/lang/NoSupportException.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module container {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module container {
-
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::container::XHierarchicalName
 /** specifies the fully qualified name of the object within a hierarchy.
 
     <p>The name is generally globally unique in the hierarchy.  </p>
@@ -92,7 +90,6 @@ interface XHierarchicalName: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::container::XHierarchicalName::getHierarchicalName
     /** @returns
                 the fully qualified hierarchical name of the object.
      */
@@ -100,7 +97,6 @@ interface XHierarchicalName: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::XHierarchicalName::composeHierarchicalName
     /** builds the hierarchical name of an object, given a relative name
 
         <p>Can be used to find the name of a descendant object in the hierarchy
@@ -117,24 +113,4 @@ interface XHierarchicalName: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2000/12/11 16:09:45  mi
-    documentation syntax fixed and some minor semantic documentation fixes
-
-    Revision 1.4  2000/11/08 12:28:31  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:04  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:17  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/06/15 15:55:51  jb
-    Add XHierarchicalName interface
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIntrospectionAccess.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,41 +95,25 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::beans::XIntrospectionAccess
-/** gives access to the result of an interface / object
-    introspection done by the inspect-method of XIntrospection.
+/** represents the result of an introspection operation done by
+    the inspect method of <type scope="com::sun::star::beans">
+    XIntrospection</type>.
 
-    <p>It supports some of the methods that are also defined in
-    <type>XPropertySet</type>, but not the methods for listener registration,
-    since this would not be appropriate for an introspection result.  </p>
+    <p>This interface gives information about an object's
+    properties and methods as detected in the introspection
+    process. It's not possible to access properties or call
+    methods directly using this interface but it provides
+    access to other interfaces to do so.
+    See <member scope="com::sun::star::beans">
+    XIntrospectionAccess::queryAdapter()</member></p>
 
-    <p>The results of the <code>get..()</code> and <code>has..()</code>
-    methods depends on the concepts given in the parameter
-    <var>nConcepts</var>.  The minimum supported concepts should be
-    for the <type>MethodConcept</type>: </p>
+    <p>The <type>XExactName</type> interface has to be supported
+    in order to implement inaccurate name access for all objects
+    which implement the <type scope="com::sun::star::container">
+    XNameAccess</type> interface or <type>XPropertySet</type>.</p>
 
-    <ul>
-        <li> <const>MethodConcept::PROPERTY</const>, </li>
-        <li> <const>MethodConcept::LISTENER</const>, </li>
-        <li> <const>MethodConcept::ENUMERATION</const>, </li>
-        <li> <const>MethodConcept::NAMECONTAINER</const> and </li>
-        <li> <const>MethodConcept::INDEXCONTAINER</const>; </li>
-    </ul>
-
-    and for the <type>PropertyConcept</type>:
-
-    <ul>
-        <li> <const>PropertyConcept::PROPERTYSET</const>, </li>
-        <li> <const>PropertyConcept::ATTRIBUTES</const> and </li>
-        <li> <const>PropertyConcept::METHODS</const>.  </li>
-    </ul>
-
-    Both groups get combined by an arithmetical or-operation.
-
-    <p>The <type>XExactName</type> interface has to be supported in order to
-    implement inaccurate name access for all objects which implement the
-    <type scope="com::sun::star::container">XNameAccess</type> interface or
-    <type>XPropertySet</type>.  </p>
+    <p>The <type>XMaterialHolder</type> interface has to be
+    supported to give access to the inspected object.</p>
 
         @see XPropertySet
         @see com::sun::star::beans::XExactName
@@ -137,156 +121,225 @@
 interface XIntrospectionAccess: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
+    /** returns information about which method concepts described in
+        the <type>MethodConcept</type> constants group are supported
+        by this <type>XIntrospectionAccess</type> implementation.
 
-    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::getSuppliedMethodConcepts
-    /** @returns
-            zero or more constants of the <type>MethodConcept</type> constants group.
+        <p>The minimum supported concepts should be:</p>
+
+        <ul>
+            <li> <const>MethodConcept::PROPERTY</const>, </li>
+            <li> <const>MethodConcept::LISTENER</const>, </li>
+            <li> <const>MethodConcept::ENUMERATION</const>, </li>
+            <li> <const>MethodConcept::NAMECONTAINER</const></li>
+            <li> <const>MethodConcept::INDEXCONTAINER</const>; </li>
+        </ul>
+
+        @returns
+            zero or more constants of the <type>MethodConcept</type>
+            constants group combined by an arithmetical or-operation.
      */
     long getSuppliedMethodConcepts();
 
     //-------------------------------------------------------------------------
+    /** returns information about which property concepts described in
+        the <type>PropertyConcept</type> constants group are supported
+        by this <type>XIntrospectionAccess</type> implementation.
 
-    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::getSuppliedPropertyConcepts
-    /** @returns
-            zero or more constants of the <type>PropertyConcept</type> constants group.
+        <p>The minimum supported concepts should be:</p>
+
+        <ul>
+            <li> <const>PropertyConcept::PROPERTYSET</const>, </li>
+            <li> <const>PropertyConcept::ATTRIBUTES</const> and </li>
+            <li> <const>PropertyConcept::METHODS</const>.  </li>
+        </ul>
+
+        @returns
+            zero or more constants of the <type>PropertyConcept</type>
+            constants group.combined by an arithmetical or-operation.
      */
     long getSuppliedPropertyConcepts();
 
     //-------------------------------------------------------------------------
+    /** returns information about a property if a property with
+        the demanded name exists and if it accords to one of the
+        demanded <type>PropertyConcept</type>s. The information
+        is provided as <type>Property</type> struct.
 
-    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::getProperty
-    /** @returns
-            <TRUE/> if the method exists and fits the
-            given MethodConcepts; otherwise <FALSE/> is returned.
+        @returns
+            A <type>Property</type> struct providing
+            information about the demanded property,
+            if a corresponding property exists.
 
         @param aName
-            the name of the <type>Property</type>.
+            the name of the property.
 
         @param nPropertyConcepts
-            zero or more constants of the <type>PropertyConcept</type> constants group.
+            zero or more constants of the <type>PropertyConcept
+            </type> constants group combined by an arithmetical
+            or-operation.
 
         @throws NoSuchElementException
-            when an element under Name does not exist.
+            when a property with the demanded name doesn't exist
+            or if it accords to a wrong <type>PropertyConcept
+            </type>.
      */
     com::sun::star::beans::Property getProperty( [in] string aName,
              [in] long nPropertyConcepts )
             raises( com::sun::star::container::NoSuchElementException );
 
     //-------------------------------------------------------------------------
+    /** allows to ask if a property with the demanded name exists
+        and if it accords to one of the demanded <type>
+        PropertyConcept</type>s.
 
-    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::hasProperty
-    /** @returns
-            <TRUE/> if the method exists and fits the given <type>PropertyConcept</type>s;
-            otherwise <FALSE/> is returned.
+        @returns
+            <TRUE/> if the property exists and accords to one of
+            the demanded <type>PropertyConcept</type>s, otherwise
+            <FALSE/> is returned.
 
         @param aName
-            the name of the <type>Property</type>.
+            the name of the property.
 
         @param nPropertyConcepts
-            zero or more constants of the <type>PropertyConcept</type> constants group.
+            zero or more constants of the <type>PropertyConcept
+            </type> constants group combined by an arithmetical
+            or-operation.
      */
     boolean hasProperty( [in] string aName,
              [in] long nPropertyConcepts );
 
     //-------------------------------------------------------------------------
+    /** returns a sequence of properties of the introspected object
 
-    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::getProperties
-    /** @returns
-            all properties of the introspected object which accord to the
-            given <type>PropertyConcept</type>s.
+        @returns
+            all properties of the introspected object which accord
+            to the demanded <type>PropertyConcept</type>s.
+
+        @param nPropertyConcepts
+            zero or more constants of the <type>PropertyConcept
+            </type> constants group combined by an arithmetical
+            or-operation.
      */
     sequence<com::sun::star::beans::Property> getProperties(
                 [in] long nPropertyConcepts );
 
     //-------------------------------------------------------------------------
+    /** returns information about a method if a method with
+        the demanded name exists and if it accords to one of
+        the demanded MethodConcepts. The information is
+        provided as <type scope="com::sun::star::reflection">
+        XIdlMethod</type>.
 
-    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::getMethod
-    /** @returns
-            the method with the given name if it exists and fits the
-            specified <type>MethodConcept</type>s.
+        @returns
+            A <type scope="com::sun::star::reflection">
+            XIdlMethod</type> providing information about and
+            access to the demanded method if a corresponding
+            method exists.
 
         @param aName
             the name of the method.
 
         @param nMethodConcepts
-            zero or more constants of the <type>MethodConcept</type> group.
+            zero or more constants of the <type>MethodConcept
+            </type> constants group combined by an arithmetical
+            or-operation.
 
         @throws NoSuchElementException
-            if no element with the <var>Name</var> exists.
+            when a method with the demanded name doesn't exist
+            or if it accords to a wrong <type>MethodConcept</type>.
      */
     com::sun::star::reflection::XIdlMethod getMethod( [in] string aName,
              [in] long nMethodConcepts )
             raises( com::sun::star::lang::NoSuchMethodException );
 
     //-------------------------------------------------------------------------
+    /** allows to ask if a method with the demanded name exists
+        and if it accords to one of the demanded <type>MethodConcept
+        </type>s.
 
-    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::hasMethod
-    /** @returns
-            <TRUE/> if the method exists and fits the given <type>MethodConcepts</type>s;
-            otherwise <FALSE/> is returned.
+        @returns
+            <TRUE/> if the method exists and accords to one of
+            the demanded <type>MethodConcept</type>s, otherwise
+            <FALSE/> is returned.
 
         @param aName
             the name of the method.
 
         @param nMethodConcepts
-            zero or more constants of the <type>MethodConcept</type> constants group.
+            zero or more constants of the <type>MethodConcept
+            </type> constants group combined by an arithmetical
+            or-operation.
      */
     boolean hasMethod( [in] string aName,
              [in] long nMethodConcepts );
 
     //-------------------------------------------------------------------------
+    /** returns a sequence of methods of the introspected object.
 
-    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::getMethods
-    /** @returns
-            all methods of the introspected object which accord to the
-            given <type>MethodConcept</type>s.
+        @returns
+            all methods of the introspected object which accord
+            to the demanded <type>MethodConcept</type>s.
+
+        @param nMethodConcepts
+            zero or more constants of the <type>MethodConcept
+            </type> constants group combined by an arithmetical
+            or-operation.
      */
     sequence<com::sun::star::reflection::XIdlMethod> getMethods(
             [in] long nMethodConcepts );
 
     //-------------------------------------------------------------------------
+    /** returns the listener types supported by the introspected
+        object.
 
-    // DocMerge from idl: method com::sun::star::beans::XIntrospectionAccess::getSupportedListeners
-    /** @returns
-            a sequence of the types of listener interfaces which are
-            supported by the introspected object.
+        <p>If the introspected object has the methods
+        <code>addFooListener( XFooListener xFoo )</code> and
+        <code>removeFooListener( XFooListener xFoo )</code>
+        the type of XFooListener will be one of the elements
+        in the returned sequence.
+
+        @returns
+            a sequence of the types of listener interfaces
+            which are supported by the introspected object.
      */
     sequence<type> getSupportedListeners();
 
     //-------------------------------------------------------------------------
+    /** creates an adapter that implements an interface with the
+        specified type.
 
-    // DocMerge from xml: method com::sun::star::beans::XIntrospectionAccess::queryAdapter
-    /** creates an adapter that implements an interface
-        with the specified type.
+        <p>To access properties, query for the <type>XPropertySet
+        </type> interface. If the <type>XPropertySet</type> can
+        be queried, the <type>XFastPropertySet</type> interface
+        must be supported too.  </p>
 
-        <p>The supplied concepts (see the methods
-        <member>XIntrospectionAccess::setConcepts()</member>)
-        and the <member>XIntrospectionAccess::setConcepts()</member> member
-        determine the interfaces returned by this method.  </p>
+        <p>If the introspected object implements a name container,
+        the introspection should return the <type scope=
+        "com::sun::star::container">XNameAccess</type> and <type
+        scope="com::sun::star::container">XNameContainer</type>
+        interfaces.</p>
 
-        <p>To access properties, query for the <type>XPropertySet</type>
-        interface. If the <type>XPropertySet</type> can be queried,
-        the <type>XFastPropertySet</type> interface must be
-        supported too.  </p>
+        <p>If the introspected object implements an index container,
+        the introspection should return the <type scope=
+        "com::sun::star::container">XIndexAccess</type> and <type
+        scope="com::sun::star::container">XIndexContainer</type>
+        interfaces.</p>
 
-        <p>If the introspected object implements a name container, the
-        introspection should return the <type scope="com::sun::star::container">XNameAccess</type> and
-        <type scope="com::sun::star::container">XNameContainer</type> interfaces.  </p>
+        <p>If the introspected object implements an enumeration
+        container, the introspection should return the <type scope=
+        "com::sun::star::container">XEnumerationAccess</type>
+        interface.</p>
 
-        <p>If the introspected object implements an index container, the
-        introspection should return the <type scope="com::sun::star::container">XIndexAccess</type> and
-        <type scope="com::sun::star::container">XIndexContainer</type> interfaces.  </p>
+        <p>If the introspected object implements the <type scope=
+        "com::sun::star::reflection">XIdlArray</type> interface,
+        the introspection should return this.</p>
 
-        <p>If the introspected object implements an enumeration container, the introspection
-        should return the <type scope="com::sun::star::container">XEnumerationAccess</type>
-        interface.  </p>
-
-        <p>If the introspected object implements the <type scope="com::sun::star::reflection">XIdlArray</type>
-        interface, the introspection should return this.  </p>
-
-        <p>To implement inaccurate name access, at all objects, which
-        implement the <type scope="com::sun::star::container">XNameAccess</type> or <type>XPropertySet</type>
-        interface, the <type>XExactName</type> interface has to be supported.  </p>
+        <p>To implement inaccurate name access, at all objects,
+        which implement the <type scope="com::sun::star::container">
+        XNameAccess</type> or <type>XPropertySet</type> interface,
+        the <type>XExactName</type> interface has to be supported.
+        </p>
 
         @see com::sun::star::beans::XExactName
      */
@@ -299,51 +352,4 @@ interface XIntrospectionAccess: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.8  2001/03/16 15:10:32  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.7  2001/01/31 09:45:40  mi
-    TYPE_XIDLCLASS is now 'type'
-
-    Revision 1.6  2000/12/12 10:21:31  jbu
-    reconstructed some method references, that have gone lost during merges
-
-    Revision 1.5  2000/12/11 16:09:35  mi
-    documentation syntax fixed and some minor semantic documentation fixes
-
-    Revision 1.4  2000/11/08 12:28:20  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:53  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:34:56  hjs
-    initial import
-
-    Revision 1.8  2000/09/11 11:52:11  mi
-    documentation merged from XML
-
-    Revision 1.6  2000/02/23 12:43:24  mi
-    missing documentations
-
-    Revision 1.5  2000/02/17 09:30:05  mi
-    proofreading in layouted version
-
-    Revision 1.4  2000/02/07 11:24:18  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.3  2000/01/14 11:05:18  jsc
-    #71616# Typumstellung
-
-    Revision 1.2  1999/11/24 17:48:16  mi
-    documentation welformed
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterruptEngineEvent.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:09:06 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,16 +75,13 @@
  module com {  module sun {  module star {  module script {
 
 //=============================================================================
-
-// DocMerge from xml: struct com::sun::star::script::InterruptEngineEvent
 /** describes an interrupt which occurs in the scripting engine.
+
+    @deprecated
  */
 struct InterruptEngineEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR InterruptEngineEvent::Name
-
-    // DocMerge from xml: field com::sun::star::script::InterruptEngineEvent::Name
     /** fully qualified name to address the module or function affected by the event that
         took place.
 
@@ -94,9 +91,6 @@ struct InterruptEngineEvent: com::sun::star::lang::EventObject
     string Name;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR InterruptEngineEvent::SourceCode
-
-    // DocMerge from xml: field com::sun::star::script::InterruptEngineEvent::SourceCode
     /** source code of the Module affected by the event that took place.
 
         <p>If the source can
@@ -106,8 +100,6 @@ struct InterruptEngineEvent: com::sun::star::lang::EventObject
     string SourceCode;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::script::InterruptEngineEvent::StartLine
     /** contains the first line in the module's source code that is affected
         by the event that took place.
 
@@ -124,41 +116,30 @@ struct InterruptEngineEvent: com::sun::star::lang::EventObject
     long StartLine;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::script::InterruptEngineEvent::StartColumn
     /** contains the first column in the "StartLine" that is affected by the
         event that took place.
      */
     long StartColumn;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::script::InterruptEngineEvent::EndLine
     /** contains the last line in the module's source code that is affected
         by the event that took place.
      */
     long EndLine;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::script::InterruptEngineEvent::EndColumn
     /** contains the first column in the "EndLine" which is NOT affected by
         the event that took place.
      */
     long EndColumn;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR InterruptEngineEvent::ErrorMessage
-
-    // DocMerge from xml: field com::sun::star::script::InterruptEngineEvent::ErrorMessage
     /** error message.
         <p>Only valid if Reason is RuntimeError or CompileError.</p>
      */
     string ErrorMessage;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::script::InterruptEngineEvent::Reason
     /** contains the interrupt reason.
      */
     com::sun::star::script::InterruptReason Reason;
@@ -169,30 +150,4 @@ struct InterruptEngineEvent: com::sun::star::lang::EventObject
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2000/12/19 16:15:29  mi
-    documentation syntax fixed
-
-    Revision 1.4  2000/11/08 12:28:52  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:35  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:38  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/04/20 14:14:35  mm
-    #74031# better documentation
-
-    Revision 1.2  2000/02/07 11:24:51  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdentifierAccess.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-31 13:37:47 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,9 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 #endif
 
-
 //=============================================================================
 
- module com {  module sun {  module star {  module container {
+module com {  module sun {  module star {  module container {
 
 //=============================================================================
 
@@ -102,6 +101,7 @@ interface XIdentifierAccess: com::sun::star::container::XElementAccess
             raises( com::sun::star::container::NoSuchElementException,
                     com::sun::star::lang::WrappedTargetException );
 
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     /** @returns
             a sequence of all identifiers in this container.
 

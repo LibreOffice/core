@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XImplementationLoader.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,15 +83,40 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::loader::XImplementationLoader
-/** defines the interface for classes that manage all the work needed to instantiate an implementation.@see     XImplementationRegistration
+/** handles activation (loading) of a UNO component.
+    @see        com::sun::star::registry::XImplementationRegistration
  */
 interface XImplementationLoader: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::loader::XImplementationLoader::activate
-    /** activates an external service factory.
+    /** activates a concrete implementation within a component.
+        @param implementationName The name of the implementation,
+               which shall be instantiated. The method
+               <member>XImplementationLoader::writeRegistryInfo</member>
+               writes a list of implementation names hosted by this component.
+        @param implementationLoaderUrl specification bug, ignore this parameter, please
+               pass an empty string.
+        @param locationUrl Points to the location of the file containing
+               the component (for instance a .jar-file or a shared library).
+               This parameter
+               should be in an URL format (= protocol:protocol-dependent-part).
+               In case the string contains no
+               leading "protocol:", the implementation in general assumes,
+               that it is a relative file url. <p>Special loaders may define
+               their own protocol (for instance an executable loader may need
+               more than only one file url).
+
+        @param xKey A registry which may be used to read static data previously
+               written via <method>XImplementationLoader::writeRegistryInfo()</method>.
+               The use of this parameter is deprecated.
+
+        @return returns a factory interface, which allows to create an instance of
+                the concrete implementation. In general, the object supports a
+                <type>com::sun::star::lang::XSingleComponentFactory</type>
+                and the <type>com::sun::star::lang::XServiceInfo</type> interface. The
+                XServiceInfo interface informs about the capabilities of the
+                service implementation, not the factory itself.
      */
     com::sun::star::uno::XInterface activate( [in] string implementationName,
              [in] string implementationLoaderUrl,
@@ -100,11 +125,23 @@ interface XImplementationLoader: com::sun::star::uno::XInterface
             raises( com::sun::star::loader::CannotActivateFactoryException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::loader::XImplementationLoader::writeRegistryInfo
-    /** writes information about implementations in the registry. An implementation supports one or more services. This
-        and more information will be written in the registry. This function is called when an implementation
-        is registered.@see com::sun::star::repos::XImplementationRegistration
+    /** writes a list of all implementations hosted by this component into a registry key.
+        <p>This method is called during registering a component.
+        @param xKey The registry key, which shall be used to write for each
+                    implementation the implementation name plus a list of supported
+                    services.
+        @param implementationLoaderUrl specification bug, ignore this parameter, please
+               pass an empty string.
+        @param locationUrl Points to the location of the file containing
+               the component (for instance a .jar-file or a shared library).
+               This parameter
+               should be in an URL format (= protocol:protocol-dependent-part).
+               In case the string contains no
+               leading &quot;protocol:&quot;, the implementation in general assumes,
+               that it is a relative file url. <p>Special loaders may define
+               their own protocol (for instance an executable loader may need
+               more than only one file url).
+        @see com::sun::star::registry::XImplementationRegistration
      */
     boolean writeRegistryInfo( [in] com::sun::star::registry::XRegistryKey xKey,
              [in] string implementationLoaderUrl,
@@ -120,6 +157,12 @@ interface XImplementationLoader: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.16.1  2002/06/05 16:38:41  jbu
+    documentation reviewed
+
+    Revision 1.5  2001/03/16 15:10:38  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2000/11/08 12:28:45  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMaterialHolder.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,19 +71,24 @@
  module com {  module sun {  module star {  module beans {
 
 //=============================================================================
+/** gives access to the material a (tool-) object is working on.
 
-// DocMerge from xml: interface com::sun::star::beans::XMaterialHolder
-/** allows the inspection of an object's properties and functions.
+    <p>Example: The introspection service allows the inspection of an
+    object's properties and methods. The result is represented as
+    XIntrospectionAccess interface. The inspected object then is the
+    material attached to the introspection tool and an implementation
+    of <type>XIntrospectionAccess</type> should also support
+    <type>XMaterialHolder</type> to give access to this material.</p>
 
-    @see XIntrospectionAccess::inspect
+    @see XIntrospectionAccess
  */
 interface XMaterialHolder: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
+    /** returns the material that is connected to this (tool-) object
 
-    // DocMerge from idl: method com::sun::star::beans::XMaterialHolder::getMaterial
-    /** @returns
-                the material that is connected to this (tool-) object.
+        @returns
+            the material that is connected to this (tool-) object.
      */
     any getMaterial();
 
@@ -93,27 +98,4 @@ interface XMaterialHolder: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2000/12/19 16:15:24  mi
-    documentation syntax fixed
-
-    Revision 1.5  2000/12/11 16:09:35  mi
-    documentation syntax fixed and some minor semantic documentation fixes
-
-    Revision 1.4  2000/11/08 12:28:20  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:56  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:11  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

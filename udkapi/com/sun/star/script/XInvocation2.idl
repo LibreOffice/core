@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInvocation2.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:40 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,20 +84,17 @@
 interface XInvocation2: com::sun::star::script::XInvocation
 {
 
-    /** @returns
-        The names of all methods and properties accessable via XInvocation.
+    /** returns the names of all methods and properties accessable via XInvocation.
      */
     sequence< string > getMemberNames();
 
-    /** @returns
-        Information items for all methods and properties accessable via XInvocation.
+    /** returns information items for all methods and properties accessable via XInvocation.
 
         @see com::sun::star::script::Invocation
      */
     sequence< InvocationInfo > getInfo();
 
-    /** @returns
-        Information item for the method or property defined by aName
+    /** returns information item for the method or property defined by aName
 
         @param aName
             specifies the name of the method or property
@@ -119,22 +116,4 @@ interface XInvocation2: com::sun::star::script::XInvocation
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2000/12/19 15:35:58  mi
-    documentation syntax fixed
-
-    Revision 1.4  2000/11/08 12:28:52  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:36  hjs
-    initial import
-
-    Revision 1.1  2000/09/15 11:48:06  ab
-    new
-
-
-
-=============================================================================*/
 #endif

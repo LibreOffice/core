@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SharedLibrary.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,13 +70,11 @@
 interface XImplementationLoader;
 
 
-// DocMerge from xml: service com::sun::star::loader::SharedLibrary
-/** makes it possible to access the services implemented in a shared library.
+/** allows to access a native component stored in a shared library.
  */
 service SharedLibrary
 {
 
-    // DocMerge from xml: service com::sun::star::loader::SharedLibrary: interface com::sun::star::loader::XImplementationLoader
     /** is used for writing persistent information in the registry for
                 an external implementation and for activating this
                 implementation.
@@ -84,9 +82,7 @@ service SharedLibrary
     interface XImplementationLoader;
 
 
-    // DocMerge from xml: service com::sun::star::loader::SharedLibrary: interface com::sun::star::lang::XServiceInfo
-    /** provides additional information about the implementations
-                and the services supported by them.
+    /** gives information about other supported services
      */
     interface com::sun::star::lang::XServiceInfo;
 };
@@ -98,6 +94,12 @@ service SharedLibrary
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4.24.1  2002/06/05 16:38:41  jbu
+      documentation reviewed
+
+      Revision 1.4  2000/11/08 12:28:45  mi
+      moved from api
+
       Revision 1.2  2000/10/09 14:24:57  mi
       #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

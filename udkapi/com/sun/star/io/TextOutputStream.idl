@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextOutputStream.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,23 +75,20 @@
 module com {  module sun {  module star {  module io {
 
 //=============================================================================
+/** provides functionality to write text data to a
+    <type scope="com::sun::star::io">XOutputStream</type>
+    that initially has to be passed to the method
+    <member>XActiveDataSource::setOutputStream()</member>.
 
-// DocMerge from xml: service com::sun::star::io::TextOutputStream
-/** writes its data to a chained <type>XOutputStream</type>.
-
-    @guarantees
-        thread safe
-
-    @guarantees
-        allow buffer size is 2 ^ 31 -1
-    </ul>
+    <p>For details about the text functionality see
+    <type scope="com::sun::star::io">XTextOutputStream</type>.
  */
 service TextOutputStream
 {
-    // DocMerge: empty anyway
+    /// Interface to write text data
     interface com::sun::star::io::XTextOutputStream;
 
-    // DocMerge: empty anyway
+    /// Interface to specify the used <type scope="com::sun::star::io">XOutputStream</type>
     interface com::sun::star::io::XActiveDataSource;
 
 };
@@ -100,22 +97,4 @@ service TextOutputStream
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/11/08 12:28:36  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:23  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:31  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/08/01 07:13:56  ab
-    new
-
-
-
-=============================================================================*/
 #endif

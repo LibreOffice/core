@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEventAttacherManager.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-08-05 09:34:00 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,84 +87,66 @@
  module com {  module sun {  module star {  module script {
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::script::XEventAttacherManager
 /** registers listeners for specified events.
  */
 interface XEventAttacherManager: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XEventAttacherManager::registerScriptEvent
     /** registers one event for an object identified by its index.
 
-
-
         <p>If any object is attached under this index, then this
-        event is attached automatically.
+        event is attached automatically.</p>
 
-        </p>
-        <p>
+        <p>Exceptions of type
         <type scope="com::sun::star::beans">IntrospectionException</type> and
         <type scope="com::sun::star::script">CannotCreateAdapterException</type>
-        are thrown by <type>XEventAttacher</type> and are caught and ignored.
-
-        </p>
+        that can be thrown by methods of <type>XEventAttacher</type> are caught
+        and ignored.</p>
      */
     void registerScriptEvent( [in] long nIndex,
              [in] com::sun::star::script::ScriptEventDescriptor aScriptEvent )
             raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XEventAttacherManager::registerScriptEvents
     /** registers several events for an object identified by its index.
 
+        <p>The result is the same as if the method <member>registerScriptEvent
+        </member> was called once for each <type>ScriptEventDescriptor</type>
+        in the sequence.</p>
 
-
-        <p>The result is the same as if the method
-
-
-
-
-
-
-        were called once for each <type>ScriptEventDescriptor</type>
-        in the sequence.
-
-        </p>
         <p>If any object is attached under this index, then this
-        event is attached automatically.
-        <type scope="com::sun::star::beans">IntrospectionException</type>
-        and <type scope="com::sun::star::script">CannotCreateAdapterException</type>
-        from the <type>XEventAttacher</type> are caught and ignored.
+        event is attached automatically (see <member>attach</member>)</p>
 
-        </p>
+        <p>Exceptions of type
+        <type scope="com::sun::star::beans">IntrospectionException</type> and
+        <type scope="com::sun::star::script">CannotCreateAdapterException</type>
+        that can be thrown by methods of <type>XEventAttacher</type> are caught
+        and ignored.</p>
+
+        @see registerScriptEvent
+        @see attach
      */
     void registerScriptEvents( [in] long nIndex,
              [in] sequence<com::sun::star::script::ScriptEventDescriptor> aScriptEvents )
             raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XEventAttacherManager::revokeScriptEvent
     /** revokes the registration of an event.
-
-
 
         <p>The parameters <var>ListenerType</var> and
         <var>EventMethod</var> are equivalent to the first two
         members of the <type>ScriptEventDescriptor</type>
         used to register events. If this event at this index has
-        been attached to any object, it is detached automatically.
+        been attached to any object, it is detached automatically
+        (see <member>attach</member>).</p>
 
-        </p>
-        <p>The <type scope="com::sun::star::beans">IntrospectionException</type> and the
+        <p>Exceptions of type
+        <type scope="com::sun::star::beans">IntrospectionException</type> and
         <type scope="com::sun::star::script">CannotCreateAdapterException</type>
-        are thrown by the <type>XEventAttacher</type> and are caught
-        and ignored.
+        that can be thrown by methods of <type>XEventAttacher</type> are caught
+        and ignored.</p>
 
-        </p>
+        @see attach
      */
     void revokeScriptEvent( [in] long nIndex,
              [in] string aListenerType,
@@ -173,55 +155,40 @@ interface XEventAttacherManager: com::sun::star::uno::XInterface
             raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XEventAttacherManager::revokeScriptEvents
     /** revokes all events which are registered for the given index.
-
-
 
         <p>If the events at this index have been attached to any
         object, they are detached automatically.
+        (see <member>attach</member>).</p>
 
-        </p>
+        @see attach
      */
     void revokeScriptEvents( [in] long nIndex )
             raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XEventAttacherManager::insertEntry
     /** creates an empty entry at the given position.
 
-
-
         <p>The index <var>n</var> of all entries with <code>n &amp;gt;=
-        nIndex</code> will be increased by one.
-
-        </p>
+        nIndex</code> will be increased by one.</p>
      */
     void insertEntry( [in] long nIndex )
             raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XEventAttacherManager::removeEntry
     /** removes the entry at the given position.
-
-
 
         <p>If any events are registered at this index, they will
         be revoked, too. So if the events at this index have been
         attached to any object they are detached automatically.
+        (see <member>attach</member>).</p>
 
-        </p>
+        @see attach
      */
     void removeEntry( [in] long nIndex )
             raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XEventAttacherManager::getScriptEvents
-
-    // DocMerge from idl: method com::sun::star::script::XEventAttacherManager::getScriptEvents
     /** @eturns
             all events registered for the given object index.
 
@@ -235,17 +202,14 @@ interface XEventAttacherManager: com::sun::star::uno::XInterface
             raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XEventAttacherManager::attach
     /** attaches all the <type>ScriptEvent</type>s which are registered
         for the given index to the given object.
 
-        <p>
+        <p>Exceptions of type
         <type scope="com::sun::star::beans">IntrospectionException</type> and
         <type scope="com::sun::star::script">CannotCreateAdapterException</type>
-        are thrown by the <type>XEventAttacher</type> and are caught
-        and ignored.
-        </p>
+        that can be thrown by methods of <type>XEventAttacher</type> are caught
+        and ignored.</p>
      */
     void attach( [in] long nIndex,
              [in] com::sun::star::uno::XInterface xObject,
@@ -254,29 +218,22 @@ interface XEventAttacherManager: com::sun::star::uno::XInterface
                     com::sun::star::lang::ServiceNotRegisteredException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XEventAttacherManager::detach
     /** detaches all the <type>ScriptEvent</type>s from the given object
         which are registered at this object for the given index.
 
-
-
-        <p>
+        <p>Exceptions of type
         <type scope="com::sun::star::beans">IntrospectionException</type> and
-        "com::sun::star::script::CannotCreateAdapterException" from the
-        XEventAttacher are caught and ignored.
-
-        </p>
+        <type scope="com::sun::star::script">CannotCreateAdapterException</type>
+        that can be thrown by methods of <type>XEventAttacher</type> are caught
+        and ignored.</p>
      */
     void detach( [in] long nIndex,
              [in] com::sun::star::uno::XInterface xObject )
             raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XEventAttacherManager::addScriptListener
     /** adds an <type>XScriptListener</type> that will be notified when an
-        event takes place.  For that a
+        event takes place. For that a
         <type>ScriptEventDescriptor</type> is registered at and
         attached to an object by an <type>XEventAttacherManager</type>.
 
@@ -289,8 +246,6 @@ interface XEventAttacherManager: com::sun::star::uno::XInterface
             raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XEventAttacherManager::removeScriptListener
     /** removes a <type>XScriptListener</type> from the listener list.
 
         <p>Nothing happens if the listener is not registered.
@@ -309,39 +264,4 @@ interface XEventAttacherManager: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2001/11/16 15:09:06  mi
-    proofing by Richard Holt
-
-    Revision 1.6  2001/03/16 15:10:40  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.5  2000/12/19 15:35:58  mi
-    documentation syntax fixed
-
-    Revision 1.4  2000/11/08 12:28:52  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:36  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:52:38  mi
-    documentation merged from XML
-
-    Revision 1.4  2000/04/20 14:14:36  mm
-    #74031# better documentation
-
-    Revision 1.3  2000/02/23 11:41:17  mi
-    results from proofreading in layouted version
-
-    Revision 1.2  2000/02/07 11:24:51  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: XTypeProvider.idl,v $
+ *  $RCSfile: OleBridgeSupplierVar1.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:04 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,56 +58,33 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_lang_XTypeProvider_idl__
-#define __com_sun_star_lang_XTypeProvider_idl__
+#ifndef __com_sun_star_bridge_OleBridgeSupplierVar1_idl__
+#define __com_sun_star_bridge_OleBridgeSupplierVar1_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
+#ifndef __com_sun_star_bridge_OBridgeSupplier2_idl__
+#include <com/sun/star/bridge/OleBridgeSupplier2.idl>
 #endif
 
-#ifndef __com_sun_star_reflection_XIdlClass_idl__
-#include <com/sun/star/reflection/XIdlClass.idl>
-#endif
 
-//=============================================================================
+ module com {  module sun {  module star {  module bridge {
 
-module com {  module sun {  module star {  module lang {
 
-//=============================================================================
-
-/** interface to get information about the types
-    (usually interface types) supported by an object.
- */
-interface XTypeProvider: com::sun::star::uno::XInterface
+/** maps UNO types to COM types and vice versa. It is optimized for use in a
+     remote szenario. <p>
+The functionality is basically the same as
+<type scope="com::sun::star::bridge">com::sun::star::bridge::OleBridgeSupplier2</type>.
+However, the implementation should be optimized for remote access. For example, it could
+try to reduce the calls into the remote process. Also it could create components on its own behalf in the remote process, if this increases performance.
+*/
+service OleBridgeSupplierVar1
 {
+    service OleBridgeSupplier2;
 
-    /** returns
-        a sequence of all types (usually interface types) provided by the object.
-        Important: If the object aggregates other objects the sequence also has
-        to contain all types supported by the aggregated objects.
-     */
-    sequence<type> getTypes();
-
-
-    /** returns
-        a sequence of bytes with length > 0 that is used as an Id to distinguish
-        unambiguously between two sets of types, e.g. to realise hashing
-        functionality when the object is introspected. Two objects that return
-        the same UUID also have to return the same set of types in getTypes().
-
-        If a unique implementation Id cannot be provided this method has to return
-        an empty sequence.
-
-        Important: If the object aggregates other objects the UUID has to be unique
-        for the whole combination of objects.
-     */
-    sequence<byte> getImplementationId();
 };
 
 //=============================================================================
 
 }; }; }; };
 
+
 #endif
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContainer.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:35:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,10 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module container {
+module com {  module sun {  module star {  module container {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::container::XContainer
 /** supports quick access to the information if a container currently
     contains elements.
 
@@ -97,9 +96,11 @@ interface XContainer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::XContainer::addContainerListener
     /** adds the specified listener to receive events when
         elements are inserted or removed.
+
+       <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
 
         @see XContainerListener
      */
@@ -107,9 +108,11 @@ interface XContainer: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::XContainer::removeContainerListener
     /** removes the specified listener so it does not receive
         any events from this container.
+
+       <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
 
         @see XContainerListener
      */
@@ -121,27 +124,4 @@ interface XContainer: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2001/03/16 15:10:34  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.5  2000/12/11 16:09:45  mi
-    documentation syntax fixed and some minor semantic documentation fixes
-
-    Revision 1.4  2000/11/08 12:28:31  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:04  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:17  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:41  jsc
-    new
-
-
-=============================================================================*/
 #endif

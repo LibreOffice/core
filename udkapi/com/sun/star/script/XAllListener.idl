@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAllListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:40 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,8 @@
  module com {  module sun {  module star {  module script {
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::script::XAllListener
 /** specifies a listener combining all methods
     of a listener interface in a single generic call.
-
-
 
     <p>Without any output parameters, it is possible to adapt any interface
     if the <type>XAllListenerAdapterService</type> can generate an adapter.</p>
@@ -92,51 +88,22 @@
 interface XAllListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XAllListener::firing
     /** gets called when an event occurs at the object.
      */
     [oneway] void firing( [in] com::sun::star::script::AllEventObject iaEvent );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XAllListener::approveFiring
     /** gets called when a "vetoable event" occurs at the object.
 
-
-
         <p>That happens when the listener method raises an exception,
-        has a return value declared, or is not "oneway".
-
-        </p>
+        has a return value declared, or is not "oneway".</p>
      */
     any approveFiring( [in] com::sun::star::script::AllEventObject aEvent )
             raises( com::sun::star::reflection::InvocationTargetException );
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/11/08 12:28:52  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:35  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:38  mi
-    documentation merged from XML
-
-    Revision 1.2  1999/12/06 12:45:16  ab
-    #70472# Invokation -> Invocation
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif

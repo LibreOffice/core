@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CannotActivateFactoryException.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:58:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,16 @@
 
 //=============================================================================
 
-// DocMerge from xml: exception com::sun::star::loader::CannotActivateFactoryException
-/** is thrown when an application tries to activate a component factory using the
+/** indicates an error during component activation
+    <p> This exception is thrown when an application tries to
+    activate a component factory using the
     <member>XImplementationLoader::activate()</member>
     method, but the component factory can not be activated.
+    <p>
+    Possible reasons for this error is a missing shared library or .jar file,
+    a badly linked library, a wrong LD_LIBRARY_PATH or PATH, an incomplete
+    classpath, or a missing java installation. The Message should
+    contain some more detailed explanations.
  */
 exception CannotActivateFactoryException: com::sun::star::uno::Exception
 {
@@ -87,6 +93,12 @@ exception CannotActivateFactoryException: com::sun::star::uno::Exception
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/06/05 16:38:41  jbu
+    documentation reviewed
+
+    Revision 1.5  2001/11/16 14:58:45  mi
+    proofing by Richard Holt
+
     Revision 1.4  2000/11/08 12:28:45  mi
     moved from api
 

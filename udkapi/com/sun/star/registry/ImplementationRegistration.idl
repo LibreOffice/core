@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplementationRegistration.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:05:59 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,10 @@
 //=============================================================================
 
 // DocMerge from xml: service com::sun::star::registry::ImplementationRegistration
-/** is the implementation of the interface XImplementationRegistration.
-    This service allows installation or deinstallation implementations. Further, it is
-    possible to check if all needed services are available to create a specified
-    implementation.
-
+/** is the implementation of the interface <type>XImplementationRegistration</type>.
+    This service can be used to install or uninstall components (implementations).
+    Further, it is possible to check if all runtime dependencies (needed services) are
+    available to use a specified component.
 
     Guarantees:
     <ul>
@@ -98,6 +97,12 @@ service ImplementationRegistration
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/03/26 14:24:17  jsc
+    #98365# reviewed
+
+    Revision 1.5  2001/11/16 15:05:59  mi
+    proofing by Richard Holt
+
     Revision 1.4  2000/11/08 12:28:50  mi
     moved from api
 

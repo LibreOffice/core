@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPersistObject.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-18 13:41:36 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,22 +79,40 @@ interface XObjectOutputStream;
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::io::XPersistObject
-/** makes it possible to write the corresponding object to a stream.
+/** allows to make UNO objects persistent
+
+  <p>Every UNO object, that wants to be serializable, should implement
+     this interface. The object stores stores itself, when the
+     write method is called.
+     <p>
+     The object needs to be created before it deserializes
+     itself again (by using the read method). Therefor it must be
+     createable by name via a factory, which is in general
+     the global service manager. The create and read mechanism
+     is implemented by the <type>com::sun::star::io::ObjectInputStream</type>.
+
+     <p>The serialization format (the series of strings, integers, objects) must
+     be specified at the specification of the concrete service.
+
+     <p>The interface does not support any special versioning mechanism.
+
+     @see com::sun::star::io::XObjectOutputStream
+     @see com::sun::star::io::XObjectInputStream
  */
 interface XPersistObject: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::io::XPersistObject::getServiceName
-    /** @returns
+    /** gives the service name of the object
+
+      @returns
             the service name that specifies the behavior and the
             persistent data format of this implementation.
 
-        <p>This name can be used to create such an object by a factory
+        <p>This name is used to create such an object by a factory
         during deserialization. </p>
 
-        @see XServiceName::getServiceName
+        @see com::sun::star::lang::XServiceInfo::getAvailableServiceNames
      */
     string getServiceName();
 
@@ -102,6 +120,10 @@ interface XPersistObject: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::io::XPersistObject::write
     /** writes all the persistent data of the object to the stream.
+        <p>The implementation
+        must write the data in the order documented in the service specification.
+        @param OutStream the stream, the data shall be written to. The stream
+               supports simple types and other XPersistObject implementations.
      */
     void write( [in] com::sun::star::io::XObjectOutputStream OutStream )
             raises( com::sun::star::io::IOException );
@@ -110,6 +132,12 @@ interface XPersistObject: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::io::XPersistObject::read
     /** reads all the persistent data of the object from the stream.
+        <p>In case
+        other XPersistObjects are read from the stream, the implementation uses a factory
+        to create these objects (in general the global service manager).
+        <p> The implementation must read the data in the order documented at
+        the service specification.
+        @param InStream the stream, the data shall be read from.
      */
     void read( [in] com::sun::star::io::XObjectInputStream InStream )
             raises( com::sun::star::io::IOException );
@@ -123,6 +151,12 @@ interface XPersistObject: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7.2.1  2002/06/05 16:38:41  jbu
+    documentation reviewed
+
+    Revision 1.7  2002/01/18 13:41:36  jbu
+    #96701# DataInputStream.idl DataOutputStream.idl MarkableInputStream.idl MarkableOutputStream.idl ObjectInputStream.idl ObjectOutputStream.idl Pipe.idl Pump.idl XDataInputStream.idl XDataOutputStream.idl XInputStream.idl XOutputStream.idl XPersistObject.idl
+
     Revision 1.6  2001/03/16 15:10:36  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

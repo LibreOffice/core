@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInputStream.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-18 13:41:36 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,11 +134,20 @@ interface XInputStream: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XInputStream::readSomeBytes
-    /** reads the available number of bytes at maximum
+    /** reads the available number of bytes, at maximum
         <var>nMaxBytesToRead</var>.
 
-        <p>This method blocks the thread until at least one byte is
-        available.  </p>
+        <p>This method is very similar to the readBytes method, except that
+           it has different blocking behaviour.
+           The method blocks as long as at least 1 byte is available or
+           EOF has been reached. EOF has only been reached, when the method
+           returns 0 and the corresponding byte sequence is empty.
+           Otherwise, after the call, aData contains the available,
+           but no more than nMaxBytesToRead, bytes.
+        @param aData contains the data read from the stream.
+        @param nMaxBytesToRead The maximum number of bytes to be read from this
+                               stream during the call.
+        @see com::sun::star::io::XInputStream::readBytes
      */
     long readSomeBytes( [out] sequence<byte> aData,
              [in] long nMaxBytesToRead )
@@ -196,6 +205,12 @@ interface XInputStream: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.10.2.1  2002/06/05 16:38:40  jbu
+    documentation reviewed
+
+    Revision 1.10  2002/01/18 13:41:36  jbu
+    #96701# DataInputStream.idl DataOutputStream.idl MarkableInputStream.idl MarkableOutputStream.idl ObjectInputStream.idl ObjectOutputStream.idl Pipe.idl Pump.idl XDataInputStream.idl XDataOutputStream.idl XInputStream.idl XOutputStream.idl XPersistObject.idl
+
     Revision 1.9  2001/11/16 14:45:32  mi
     proofing by Richard Holt
 

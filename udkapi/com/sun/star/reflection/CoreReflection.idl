@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CoreReflection.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 13:33:02 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,11 @@ service CoreReflection
 };
 
 /** Accessable singleton to CoreReflection instance.
-*/
 singleton theCoreReflection
 {
     service CoreReflection;
 };
+*/
 
 //=============================================================================
 
@@ -105,6 +105,9 @@ singleton theCoreReflection
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2002/06/14 13:33:02  dbo
+    #100075# corereflection singleton
+
     Revision 1.7  2002/03/08 17:19:13  dbo
     #96711# reviewed reflection API documentation
 

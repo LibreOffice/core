@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InvocationAdapterFactory.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,23 @@
  module com {  module sun {  module star {  module script {
 
 //=============================================================================
+/** Provides functionality to create an adapter that supports (a)
+    special interface type(s) and maps calls to the interface's
+    methods to an invocation interface.
 
-/** Service to create adapter objects giving types to be supported and a
-    an invocation interface incoming calls are delegated to.
-*/
+    <p>
+    An adapter like this allows generic dispatch interfaces to
+    meet interface requirements, e.g. if a specific listener
+    interface has to be passed to an add...Listener method.
+    </p>
+
+    <p>
+    The adapter has to support
+        <type scope="com::sun::star::script">XInvocationAdapterFactory</type>.
+    The adapter may also support
+        <type scope="com::sun::star::script">XInvocationAdapterFactory2</type>.
+    </p>
+ */
 service InvocationAdapterFactory
 {
     /** Interface for creating adapter objects.
@@ -86,6 +99,7 @@ service InvocationAdapterFactory
         @deprecated
     */
     interface com::sun::star::script::XInvocationAdapterFactory;
+
     /** Interface for creating adapter objects.
     */
     interface com::sun::star::script::XInvocationAdapterFactory2;
@@ -95,21 +109,4 @@ service InvocationAdapterFactory
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/11/08 12:28:52  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:35  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:38  mi
-    documentation merged from XML
-
-    Revision 1.1  1999/11/11 13:36:27  dbo
-    new
-
-
-=============================================================================*/
 #endif

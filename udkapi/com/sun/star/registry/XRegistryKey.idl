@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRegistryKey.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:05:59 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,6 @@ module com { module sun { module star { module registry {
     of a single registry key accessible.
 
     <p>This is the main interface for registry keys.<p>
-
-    @version     0.1
-    @author      Juergen Schmidt
 
     @see XSimpleRegistry
 */
@@ -450,7 +447,7 @@ interface XRegistryKey: com::sun::star::uno::XInterface
             raises( com::sun::star::registry::InvalidRegistryException );
 
     //-------------------------------------------------------------------------
-    /** deletes a key from the registry.
+    /** deletes a link from the registry.
 
         @param aLinkName
         specifies the relative path from the current key to
@@ -466,7 +463,7 @@ interface XRegistryKey: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::getLinkTarget
     /** @returns
-        the target of the link specified by rLinkName.
+        the target (complete path of a key) of the link specified by rLinkName.
 
          @param rLinKName
         specifies the relative path from the current key to

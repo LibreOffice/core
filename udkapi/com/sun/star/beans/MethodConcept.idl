@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodConcept.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,90 +67,88 @@
  module com {  module sun {  module star {  module beans {
 
 //=============================================================================
+/** These constants are used to specify concepts of the
+    introspection which apply to methods.
 
-// DocMerge from idl: constants com::sun::star::beans::MethodConcept
-/** These constants are used to specify concepts of the introspection
-        which apply to methods.
+    <p>This list is not necessarily complete; new constants
+    may be added.</p>
 
-        This list is not necessarily complete; new constants may be added
-        (by the author).
- */
+    @see Introspection
+    @see XIntrospection
+    @see XIntrospectionAccess
+
+*/
 constants MethodConcept
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::beans::MethodConcept::ALL
-    /** This value is used to query for all methods.
+    /** This value is used to query for all methods, see
+        <member>XIntrospectionAccess::getMethod()</member> and
+        <member>XIntrospectionAccess::getMethods()</member>
      */
     const long ALL = -1;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::beans::MethodConcept::DANGEROUS
     /** specifies methods which can result in an unstable state
-        (i.e., deadlock, application crash, security hole, etc.) when called
-        directly by the user.
+        (i.e. deadlock, application crash, security hole, etc.)
+        when called directly by the user.
      */
     const long DANGEROUS = 1;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::beans::MethodConcept::PROPERTY
     /** specifies methods which are used to set and get the
         value of properties/attributes.
 
-        <p>These methods have the signature <code>type get...()</code>,
-        <code>void set...()</code> or <code>boolean is...()</code>. </p>
+        <p>These methods have the signature <code>type get...()
+        </code>, <code>void set...()</code> or <code>boolean is...()
+        </code>. </p>
      */
     const long PROPERTY = 2;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::beans::MethodConcept::LISTENER
     /** specifies methods of the <em>listener concept</em>.
 
-        <p>These methods have the signature <code>add...Listener()</code>
-        or <code>remove...Listener()</code>. </p>
+        <p>These methods have the signature <code>add...Listener()
+        </code> or <code>remove...Listener()</code>. </p>
      */
     const long LISTENER = 4;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::beans::MethodConcept::ENUMERATION
     /** specifies methods of the <em>enumeration concept</em>.
 
-        <p>These methods have the signature  <code>create...Enumeration</code>
-        and return an interface that was derived from
-        <type scope="com::sun::star::container">XEnumeration</type>.
-        Additionally, the method
-        <member scope="com::sun::star::container">XEnumerationAccess::getElementType</member>
-        belongs to this concept. </p>
+        <p>These methods have the signature
+        <code>create...Enumeration</code> and return an interface
+        that is derived from <type scope="com::sun::star::container">
+        XEnumeration</type> Additionally, the method <member scope=
+        "com::sun::star::container">XEnumerationAccess::getElementType
+        </member> belongs to this concept.</p>
      */
     const long ENUMERATION = 8;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::beans::MethodConcept::NAMECONTAINER
     /** specifies methods of the <em>name container concept</em>.
 
-        <p>These methods have the signature <code>get...ByName()</code>,
-        <code>set...ByName()</code>, <code>replace...ByName()</code>,
-        <code>remove...ByName()</code>, <code>has...ByName()</code>, or
+        <p>These methods have the signature
+        <code>get...ByName()</code>,
+        <code>set...ByName()</code>,
+        <code>replace...ByName()</code>,
+        <code>remove...ByName()</code>,
+        <code>has...ByName()</code>, or
         <code>get...Names</code>.  In addition, the method
-        <member>XNameAccess::getElementType()</member> belongs to this
-        concept. </p>
+        <member>XNameAccess::getElementType()</member>
+        belongs to this concept. </p>
      */
     const long NAMECONTAINER = 16;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::beans::MethodConcept::INDEXCONTAINER
     /** specifies methods of the <em>index container concept</em>.
 
-        <p>These methods have the signature <code>get...ByIndex()</code>,
-        <code>insert...ByIndex()</code>, <code>replace...ByIndex()</code>, or
-        <code>remove...ByIndex()</code>.  The method
-        <member scope="com::sun::star::container">XIndexAccess::getCount()</member>
+        <p>These methods have the signature
+        <code>get...ByIndex()</code>,
+        <code>insert...ByIndex()</code>,
+        <code>replace...ByIndex()</code>, or
+        <code>remove...ByIndex()</code>.
+        The method <member scope="com::sun::star::container">
+        XIndexAccess::getCount()</member>
         also belongs to this concept. </p>
      */
     const long INDEXCONTAINER = 32;
@@ -161,33 +159,4 @@ constants MethodConcept
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2000/12/19 15:32:23  mi
-    documentation syntax fixed
-
-    Revision 1.5  2000/12/11 16:09:35  mi
-    documentation syntax fixed and some minor semantic documentation fixes
-
-    Revision 1.4  2000/11/08 12:28:20  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:55  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:10  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/17 09:30:04  mi
-    proofreading in layouted version
-
-    Revision 1.2  2000/02/07 11:24:18  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

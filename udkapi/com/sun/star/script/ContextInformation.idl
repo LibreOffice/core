@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContextInformation.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:09:06 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,12 @@
  module com {  module sun {  module star {  module script {
 
 //=============================================================================
-
-// DocMerge from xml: struct com::sun::star::script::ContextInformation
 /** provides information about a certain stack frame.
+
+    @deprecated
  */
 struct ContextInformation
 {
-    // DocMerge from xml: field com::sun::star::script::ContextInformation::Name
     /** Full qualified name to adress the module or function associated with the context.
         If the module or function can't be adressed by name, e.g., in case that a runtime
         generated eval-module is executed, this string is empty
@@ -81,9 +80,6 @@ struct ContextInformation
     string Name;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR ContextInformation::SourceCode
-
-    // DocMerge from xml: field com::sun::star::script::ContextInformation::SourceCode
     /** Source code of the Module, that is associated with the context. If the source can
         be accessed using the ModuleName or if the source is unknown (executing compiled
         code) this string can be empty.
@@ -91,12 +87,8 @@ struct ContextInformation
     string SourceCode;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::script::ContextInformation::StartLine
     /** contains the first line in the module's source code associated with
         the context.
-
-
 
         <p>If "name" addresses a function, all line and column values
         are nevertheless given relative to the module's source. If
@@ -109,8 +101,6 @@ struct ContextInformation
     long StartLine;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::script::ContextInformation::StartColumn
     /** contains the first column in the <var>StartLine</var> associated with
         the context.
      */
@@ -118,25 +108,19 @@ struct ContextInformation
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::script::ContextInformation::EndLine
     /** contains the last line in the module's source code associated with
         the context.
      */
     long EndLine;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::script::ContextInformation::EndColumn
     /** contains the first column in the <var>EndLine</var> that is NOT
         associated with the context.
      */
     long EndColumn;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR ContextInformation::LocalVariableNames
-
-    // DocMerge from idl: field com::sun::star::script::ContextInformation::LocalVariableNames
-    /** * Get all names of the local variable in this context.
+    /** Get all names of the local variable in this context.
      */
     sequence<string> LocalVariableNames;
 
@@ -146,30 +130,4 @@ struct ContextInformation
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2000/12/19 16:15:29  mi
-    documentation syntax fixed
-
-    Revision 1.4  2000/11/08 12:28:52  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:35  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:38  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/04/20 14:14:35  mm
-    #74031# better documentation
-
-    Revision 1.2  2000/02/07 11:24:51  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif

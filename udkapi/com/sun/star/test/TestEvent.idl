@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestEvent.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:57 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ module com { module sun { module star { module test {
 //=============================================================================
 /** This event gets delivered whenever a test event (an error, an exception,
     a warning) takes place.
+    @deprecated
 */
 struct TestEvent: com::sun::star::lang::EventObject
 {

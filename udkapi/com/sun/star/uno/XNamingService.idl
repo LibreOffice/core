@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNamingService.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-20 10:20:42 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,25 +73,20 @@
 
 //=============================================================================
 
-// DocMerge from idl: interface com::sun::star::uno::XNamingService
-/** This is <B>the<B> interface which should be provided by a naming service.
+/** allows to insert, remove and access named objects.
  */
 interface XNamingService: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::uno::XNamingService::getRegisteredObject
     /** provides a previous registered object.
      */
     com::sun::star::uno::XInterface getRegisteredObject( [in] string Name )
             raises (Exception);
 
 
-    // DocMerge from xml: method com::sun::star::uno::XNamingService::registerObject
     /** registers one object under the specified name.
 
-
-
-        <p>If any object is registered before, then this
+    <p>If any object is registered before, then this
         object is revoked automatically.
 
         </p>
@@ -100,8 +95,7 @@ interface XNamingService: com::sun::star::uno::XInterface
         raises (Exception);
 
 
-    // DocMerge from xml: method com::sun::star::uno::XNamingService::revokeObject
-    /** revokes the registration of an object. If the object was not
+    /** revokes the registration of an object. <p>If the object was not
         previously registered, then this call does nothing.
      */
     void revokeObject( [in]string Name )
@@ -118,6 +112,12 @@ interface XNamingService: com::sun::star::uno::XInterface
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6.2.1  2002/06/05 16:38:42  jbu
+      documentation reviewed
+
+      Revision 1.6  2001/11/20 10:20:42  mi
+      proofing by Richard Holt
+
       Revision 1.5  2001/03/16 15:10:43  jsc
       remove interfaceheader with uik and remove [const] in method definitions
 

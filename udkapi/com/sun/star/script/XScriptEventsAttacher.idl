@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XScriptEventsAttacher.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:09:06 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,6 @@ interface XScriptEventsAttacher: com::sun::star::uno::XInterface
                             passed to the XScriptListener as Helper property in the
                             <type>ScriptEvent</type>.
     */
-
     void attachEvents(  [in] sequence< com::sun::star::uno::XInterface > Objects,
                         [in] com::sun::star::script::XScriptListener xListener,
                         [in] any Helper )

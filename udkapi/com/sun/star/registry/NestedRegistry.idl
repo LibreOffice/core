@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NestedRegistry.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:05:59 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@
     <br>
 
     </dt>
-    <dt>Functions of XRegistryKey:
+    <dt>Functions of <type>XRegistryKey</type>:
     <dl>
     <dt> <b>openKey</b>
     </dt>
@@ -153,31 +153,22 @@
     <b>Note: all write functions only work on registry1.</b>
     </dt>
     </dl>
-
+    </dt>
+    </dl>
     <br>
-
-    </dt>
-    <dt>How to initialize the registries:
-    <dl>
-    <dt> use a sequence of XSimpleRegistry with two elements. The first element must be
+    How to initialize the registries:<br>
+    Use a sequence of <type>XSimpleRegistry</type> with two elements. The first element must be
     the registry which is opened with read/write rights and the second element must be
-    the read-only one.
-    </dt>
-    <dt> Two different ways are possible:
-    </dt>
-    <dd>
-    <dl>
-    <dt> use createInstanceWithArguments to create an instance of this service where the
-    value of the any parameter must be the sequence with the two open registries.
-    </dt>
-    <dt> use the initialize function of the XInitialization interface where the value of the
+    the read-only one.<br>
+    Two different ways are possible:<br>
+    <ul>
+    <li> use <member>com.sun.star.lang.XMultiServiceFactory::createInstanceWithArguments()</member> to
+    create an instance of this service where the value of the any parameter must be the sequence with
+    the two open registries.
+    <li> use the initialize function of the <type>XInitialization</type> interface where the value of the
     any parameter must be the sequence with the two open registries.
-    </dt>
-    </dl>
-    </dd>
-    </dl>
-    </dt>
-    </dl>
+    </ul>
+    <br>
 
 
     Guarantees:
@@ -201,6 +192,12 @@ service NestedRegistry
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6.2.1  2002/03/26 14:24:17  jsc
+    #98365# reviewed
+
+    Revision 1.6  2001/11/16 15:05:59  mi
+    proofing by Richard Holt
+
     Revision 1.5  2000/12/19 14:17:15  mi
     documentation sytax fixed
 

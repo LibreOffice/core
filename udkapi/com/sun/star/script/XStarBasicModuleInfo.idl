@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStarBasicModuleInfo.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:09:06 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 12:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,24 +73,23 @@
 //=============================================================================
 
 /** Script Module containing some scripting code in a certain scripting language
+
+    @deprecated
  */
 interface XStarBasicModuleInfo: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** @returns
-        Name of the module
+    /** returns the name of the module
      */
     string getName();
 
     //-------------------------------------------------------------------------
-    /** @returns
-        type of the script language as string, for example, "StarBasic" or "JavaScript".
+    /** returns the type of the script language as string, for example, "StarBasic" or "JavaScript".
      */
     string getLanguage();
 
     //-------------------------------------------------------------------------
-    /** @returns
-        script source code as string.
+    /** returns the script source code as string.
 
         <p>The code has to correspond with the language
         defined by Language.</p>
