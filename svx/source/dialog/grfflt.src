@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:03:18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,67 +76,16 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250, 100 ) ;
 
-    Text = "Mosaik" ;
-    Text[ ENGLISH ] = "Mosaic" ;
-    Text[ norwegian ] = "Mosaic" ;
-    Text[ italian ] = "Mosaico" ;
-    Text[ portuguese_brazilian ] = "Mosaico" ;
-    Text[ portuguese ] = "Mosaico" ;
-    Text[ finnish ] = "Mosaiikki" ;
-    Text[ danish ] = "Mosaik" ;
-    Text[ french ] = "Mosaïque" ;
-    Text[ swedish ] = "Mosaik" ;
-    Text[ dutch ] = "Mozaïek" ;
-    Text[ spanish ] = "Mosaico" ;
-    Text[ english_us ] = "Mosaic" ;
-    Text[ chinese_simplified ] = "é•¶åµŒ";
-    Text[ russian ] = "Ìîçàèêà";
-    Text[ polish ] = "Mozaika";
-    Text[ japanese ] = "ãƒ¢ã‚¶ã‚¤ã‚¯";
-    Text[ chinese_simplified ] = "é•¶åµŒ";
-    Text[ russian ] = "Ìîçàèêà";
-    Text[ polish ] = "Mozaika";
-    Text[ japanese ] = "ãƒ¢ã‚¶ã‚¤ã‚¯";
-    Text[ chinese_traditional ] = "é‘²åµŒ";
-    Text[ arabic ] = "İÓíİÓÇÁ";
-    Text[ greek ] = "Ìùóáúêü";
-    Text[ korean ] = "ëª¨ìì´í¬";
-    Text[ turkish ] = "Mozaik";
-    Text[ language_user1 ] = " ";
+    Text [ de ] = "Mosaik" ;
+    Text [ en-US ] = "Mosaic" ;
+    Text [ x-comment ] = " ";
 
     FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 182, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text = "Parameter";
-        Text[ ENGLISH ] = "Parameter";
-        Text[ english_us ] = "Parameters";
-        Text[ portuguese ] = "Parâmetros";
-        Text[ russian ] = "Ïàğàìåòğû";
-        Text[ greek ] = "ĞáñÜìåôñïé";
-        Text[ dutch ] = "Parameters";
-        Text[ french ] = "Paramètres";
-        Text[ spanish ] = "Parámetros";
-        Text[ italian ] = "Parametri";
-        Text[ danish ] = "Parametre";
-        Text[ swedish ] = "Parametrar";
-        Text[ polish ] = "Parametry";
-        Text[ portuguese_brazilian ] = "Parâmetros";
-        Text[ japanese ] = "ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿";
-        Text[ korean ] = "ë§¤ê°œ ë³€ìˆ˜";
-        Text[ chinese_simplified ] = "å‚æ•°";
-        Text[ chinese_traditional ] = "åƒæ•¸";
-        Text[ turkish ] = "Parametreler";
-        Text[ arabic ] = "ÇáãÚáãÇÊ";
-        Text[ catalan ] = "Paràmetres";
-        Text[ finnish ] = "Parametrit";
-        Text[ thai ] = "à¸à¸²à¸£à¸²à¸¡à¸´à¹€à¸•à¸­à¸£à¹Œ";
-        Text[ czech ] = "Parametry";
-        Text[ hebrew ] = "â€®×¤×¨××˜×¨×™×â€¬";
-        Text[ hindi ] = "à¤ªà¥ˆà¤°à¤¾à¤®à¥€à¤Ÿà¤°à¥‡à¤‚";
-        Text[ slovak ] = "Parametre";
-        Text[ hungarian ] = "ParamÃ©terek";
-        Text[ slovenian ] = "Parametri";
+        Text [ de ] = "Parameter";
+        Text [ en-US ] = "Parameters";
     };
     Control CTL_PREVIEW
     {
@@ -148,37 +97,9 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
     {
         Pos = MAP_APPFONT ( 12, MA_Y0 ) ;
         Size = MAP_APPFONT ( 77, 10 ) ;
-        Text = "~Breite" ;
-        Text[ ENGLISH ] = "~Width" ;
-        Text[ norwegian ] = "~Bredde" ;
-        Text[ italian ] = "Larghezza" ;
-        Text[ portuguese_brazilian ] = "~Largura" ;
-        Text[ portuguese ] = "~Largura" ;
-        Text[ finnish ] = "Leve~ys" ;
-        Text[ danish ] = "~Bredde" ;
-        Text[ french ] = "Largeur" ;
-        Text[ swedish ] = "~Bredd" ;
-        Text[ dutch ] = "~Breedte" ;
-        Text[ spanish ] = "Ancho" ;
-        Text[ english_us ] = "~Width" ;
-        Text[ chinese_simplified ] = "å®½åº¦(~W)";
-        Text[ russian ] = "~Øèğèíà";
-        Text[ polish ] = "~Szerokoœæ";
-        Text[ japanese ] = "å¹…(~W)";
-        Text[ chinese_traditional ] = "å¯¬åº¦(~W)";
-        Text[ arabic ] = "ÇáÚÑÖ";
-        Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "ë„ˆë¹„(~W)";
-        Text[ turkish ] = "~Genişlik";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Amplada";
-        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸à¸§à¹‰à¸²à¸‡";
-        Text[ czech ] = "Å Ã­Å™ka";
-        Text[ hebrew ] = "â€®×¨×•×—×‘â€¬";
-        Text[ hindi ] = "à¤šà¥Œ~à¤¡à¤¼à¤¾à¤ˆ";
-        Text[ slovak ] = "Å Ã­~rka";
-        Text[ hungarian ] = "S~zÃ©lessÃ©g";
-        Text[ slovenian ] = "~Å irina";
+        Text [ de ] = "~Breite" ;
+        Text [ en-US ] = "~Width" ;
+        Text [ x-comment ] = " ";
     };
 #define MA_Y1   MA_Y0 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERMOSAIC_MTR_WIDTH
@@ -203,37 +124,9 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
     {
         Pos = MAP_APPFONT ( 12, MA_Y2 ) ;
         Size = MAP_APPFONT ( 77, 10 ) ;
-        Text = "~Höhe" ;
-        Text[ ENGLISH ] = "~Height" ;
-        Text[ norwegian ] = "~H°yde" ;
-        Text[ italian ] = "Altezza" ;
-        Text[ portuguese_brazilian ] = "~Altura" ;
-        Text[ portuguese ] = "~Altura" ;
-        Text[ finnish ] = "~Korkeus" ;
-        Text[ danish ] = "H~øjde" ;
-        Text[ french ] = "Hauteur" ;
-        Text[ swedish ] = "~Höjd" ;
-        Text[ dutch ] = "~Hoogte" ;
-        Text[ spanish ] = "A~ltura" ;
-        Text[ english_us ] = "H~eight" ;
-        Text[ chinese_simplified ] = "é«˜åº¦(~E)";
-        Text[ russian ] = "~Âûñîòà";
-        Text[ polish ] = "W~ysokoœæ";
-        Text[ japanese ] = "é«˜ã•(~E)";
-        Text[ chinese_traditional ] = "é«˜åº¦(~E)";
-        Text[ arabic ] = "ÇáÇÑÊİÇÚ";
-        Text[ greek ] = "¾øïò";
-        Text[ korean ] = "ë†’ì´(~E)";
-        Text[ turkish ] = "Yüksekl'k";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~lçada";
-        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹~à¸‡";
-        Text[ czech ] = "VÃ½Å¡ka";
-        Text[ hebrew ] = "â€®×’×•×‘×”â€¬";
-        Text[ hindi ] = "à¤Šà¤~à¤šà¤¾à¤ˆ";
-        Text[ slovak ] = "~VÃ½Å¡ka";
-        Text[ hungarian ] = "~MagassÃ¡g";
-        Text[ slovenian ] = "Vi~Å¡ina";
+        Text [ de ] = "~Höhe" ;
+        Text [ en-US ] = "H~eight" ;
+        Text [ x-comment ] = " ";
     };
 #define MA_Y3   MA_Y2 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERMOSAIC_MTR_HEIGHT
@@ -259,35 +152,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Pos = MAP_APPFONT ( 12, MA_Y4 ) ;
         Size = MAP_APPFONT ( 91, 12 ) ;
         TabStop = TRUE ;
-        Text = "~Kanten hervorheben" ;
-        Text[ ENGLISH ] = "~Enhance edges" ;
-        Text[ english_us ] = "E~nhance edges" ;
-        Text[ portuguese ] = "~Destacar arestas";
-        Text[ russian ] = "~Âûäåëèòü êğàÿ";
-        Text[ greek ] = "ÅğéóŞìáíóç Ü~êñùí";
-        Text[ dutch ] = "~Randen accentueren";
-        Text[ french ] = "Mise en évidence des ~arêtes";
-        Text[ spanish ] = "~Resaltar aristas";
-        Text[ italian ] = "E~videnzia gli angoli";
-        Text[ danish ] = "Fremhæv ~kanter";
-        Text[ swedish ] = "Framhäv ~kanter";
-        Text[ polish ] = "~Wzmocnij krawêdzie";
-        Text[ portuguese_brazilian ] = "~Destacar arestas";
-        Text[ japanese ] = "è§’ã‚’å¼·èª¿ã™ã‚‹(~N)";
-        Text[ korean ] = "ê°€ì¥ìë¦¬ ê°•ì¡°(~N)";
-        Text[ chinese_simplified ] = "çªå‡ºæ˜¾ç¤ºè¾¹è§’(~N)";
-        Text[ chinese_traditional ] = "çªå‡ºé¡¯ç¤ºé‚Šè§’(~N)";
-        Text[ turkish ] = "Köşeleri Geliştir";
-        Text[ arabic ] = "ÅÈÑÇÒ ÇáÍæÇİ";
-        Text[ catalan ] = "~Resalta arestes";
-        Text[ finnish ] = "K~orosta reunoja";
-        Text[ thai ] = "à¸‚à¸­à¸šà¸ªà¸¹à¸‡~à¸‚à¸¶à¹‰à¸™";
-        Text[ czech ] = "VylepÅ¡it hrany";
-        Text[ hebrew ] = "â€®×”×“×’×©×ª ×§×¦×•×•×ªâ€¬";
-        Text[ hindi ] = "à¤•à¤¿~à¤¨à¤¾à¤°à¥‹à¤‚ à¤•à¥‹ à¤¬à¤¢à¤¼à¤¾à¤“";
-        Text[ slovak ] = "VylepÅ¡iÅ¥ hra~ny";
-        Text[ hungarian ] = "Ã‰~lek kiemelÃ©se";
-        Text[ slovenian ] = "Po~udari robove";
+        Text [ de ] = "~Kanten hervorheben" ;
+        Text [ en-US ] = "E~nhance edges" ;
     };
     OKButton BTN_OK
     {
@@ -308,14 +174,6 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
-    Text[ catalan ] = "Mosaic";
-    Text[ thai ] = "à¹‚à¸¡à¹€à¸ªà¸ª";
-    Text[ czech ] = "Mozaika";
-    Text[ hebrew ] = "â€®×¤×¡×™×¤×¡â€¬";
-    Text[ hindi ] = "à¤®à¥‹à¤¸à¤¾à¤‡à¤•";
-    Text[ slovak ] = "Mozaika";
-    Text[ hungarian ] = "Mozaik";
-    Text[ slovenian ] = "Mozaik";
 };
 
 // ----------------------
@@ -330,63 +188,16 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250, 100 ) ;
 
-    Text = "Solarisation" ;
-    Text[ ENGLISH ] = "Solarization" ;
-    Text[ norwegian ] = "Solarization" ;
-    Text[ italian ] = "Solarizzazione" ;
-    Text[ portuguese_brazilian ] = "Solarização" ;
-    Text[ portuguese ] = "Solarização" ;
-    Text[ finnish ] = "Solarisaatio" ;
-    Text[ danish ] = "Solarisering" ;
-    Text[ french ] = "Solarisation" ;
-    Text[ swedish ] = "Solarisering" ;
-    Text[ dutch ] = "Solarisatie" ;
-    Text[ spanish ] = "Solarización" ;
-    Text[ english_us ] = "Solarization" ;
-    Text[ chinese_simplified ] = "æ›å…‰";
-    Text[ russian ] = "Ñîëÿğèçàöèÿ";
-    Text[ polish ] = "Solaryzacja";
-    Text[ japanese ] = "ã‚½ãƒ©ãƒªã‚¼ãƒ¼ã‚·ãƒ§ãƒ³";
-    Text[ chinese_traditional ] = "æ›å…‰";
-    Text[ arabic ] = "ÇáÊÔãøÓ";
-    Text[ greek ] = "¸êèåóç óôï öùò";
-    Text[ korean ] = "ì†”ë¼ë¦¬ì œì´ì…˜";
-    Text[ turkish ] = "Renk soldurma";
-    Text[ language_user1 ] = " ";
+    Text [ de ] = "Solarisation" ;
+    Text [ en-US ] = "Solarization" ;
+    Text [ x-comment ] = " ";
 
     FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 182, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text = "Parameter";
-        Text[ ENGLISH ] = "Parameter";
-        Text[ english_us ] = "Parameters";
-        Text[ portuguese ] = "Parâmetros";
-        Text[ russian ] = "Ïàğàìåòğû";
-        Text[ greek ] = "ĞáñÜìåôñïé";
-        Text[ dutch ] = "Parameters";
-        Text[ french ] = "Paramètres";
-        Text[ spanish ] = "Parámetros";
-        Text[ italian ] = "Parametri";
-        Text[ danish ] = "Parametre";
-        Text[ swedish ] = "Parametrar";
-        Text[ polish ] = "Parametry";
-        Text[ portuguese_brazilian ] = "Parâmetros";
-        Text[ japanese ] = "ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿";
-        Text[ korean ] = "ë§¤ê°œ ë³€ìˆ˜";
-        Text[ chinese_simplified ] = "å‚æ•°";
-        Text[ chinese_traditional ] = "åƒæ•¸";
-        Text[ turkish ] = "Parametreler";
-        Text[ arabic ] = "ÇáãÚáãÇÊ";
-        Text[ catalan ] = "Paràmetres";
-        Text[ finnish ] = "Parametrit";
-        Text[ thai ] = "à¸à¸²à¸£à¸²à¸¡à¸´à¹€à¸•à¸­à¸£à¹Œ";
-        Text[ czech ] = "Parametry";
-        Text[ hebrew ] = "â€®×¤×¨××˜×¨×™×â€¬";
-        Text[ hindi ] = "à¤ªà¥ˆà¤°à¤¾à¤®à¥€à¤Ÿà¤°à¥‡à¤‚";
-        Text[ slovak ] = "Parametre";
-        Text[ hungarian ] = "ParamÃ©terek";
-        Text[ slovenian ] = "Parametri";
+        Text [ de ] = "Parameter";
+        Text [ en-US ] = "Parameters";
     };
     Control CTL_PREVIEW
     {
@@ -398,37 +209,9 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
     {
         Pos = MAP_APPFONT ( 12, MA_Y5 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
-        Text = "~Schwellenwert" ;
-        Text[ ENGLISH ] = "Threshold" ;
-        Text[ norwegian ] = "Threshold" ;
-        Text[ italian ] = "Soglia" ;
-        Text[ portuguese_brazilian ] = "~Valor limite" ;
-        Text[ portuguese ] = "~Valor limite" ;
-        Text[ finnish ] = "Raja-~arvo" ;
-        Text[ danish ] = "~Tærskelværdi" ;
-        Text[ french ] = "~Valeur de seuil" ;
-        Text[ swedish ] = "Trö~skelvärde" ;
-        Text[ dutch ] = "~Drempelwaarde" ;
-        Text[ spanish ] = "Valor ~umbral" ;
-        Text[ english_us ] = "Threshold ~value" ;
-        Text[ chinese_simplified ] = "åˆå§‹å€¼(~V)";
-        Text[ russian ] = "Ïîğîãîâîå çíà÷åíèå";
-        Text[ polish ] = "Wartoœæ progowa";
-        Text[ japanese ] = "ã—ãã„å€¤(~V)";
-        Text[ chinese_traditional ] = "è‡¨ç•Œå€¼(~V)";
-        Text[ arabic ] = "ŞíãÉ ÇáÈÏÁ";
-        Text[ greek ] = "ÔéìŞ ïñßïõ";
-        Text[ korean ] = "ì„ê³„ê°’(~V)";
-        Text[ turkish ] = "Eşik ~değeri";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Valor llindar";
-        Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸‚à¹‰à¸²à¹ƒà¸à¸¥à¹‰";
-        Text[ czech ] = "Hodnota prahu";
-        Text[ hebrew ] = "â€®×¢×¨×š ×¡×£â€¬";
-        Text[ hindi ] = "à¤¥à¥à¤°à¥‡à¤¶à¥‹à¤²à¥à¤¡ ~à¤®à¥‚à¤²à¥à¤¯";
-        Text[ slovak ] = "~Hodnota prahu";
-        Text[ hungarian ] = "~KÃ¼szÃ¶bÃ©rtÃ©k";
-        Text[ slovenian ] = "~Vrednost praga";
+        Text [ de ] = "~Schwellenwert" ;
+        Text [ en-US ] = "Threshold ~value" ;
+        Text [ x-comment ] = " ";
     };
 #define MA_Y6   MA_Y5 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERSOLARIZE_MTR_THRESHOLD
@@ -452,37 +235,9 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Pos = MAP_APPFONT ( 12, 46 ) ;
         Size = MAP_APPFONT ( 77, 12 ) ;
         TabStop = TRUE ;
-        Text = "~Invertieren" ;
-        Text[ ENGLISH ] = "Invert" ;
-        Text[ norwegian ] = "Invert" ;
-        Text[ italian ] = "Inverti" ;
-        Text[ portuguese_brazilian ] = "~Inverter" ;
-        Text[ portuguese ] = "~Inverter" ;
-        Text[ finnish ] = "Muunna ~käänteiseksi" ;
-        Text[ danish ] = "~Inverter" ;
-        Text[ french ] = "~Invertir" ;
-        Text[ swedish ] = "~Invertera" ;
-        Text[ dutch ] = "~Diapositief" ;
-        Text[ spanish ] = "I~nvertir" ;
-        Text[ english_us ] = "~Invert" ;
-        Text[ chinese_simplified ] = "äº’è¡¥è‰²è½¬æ¢(~I)";
-        Text[ russian ] = "Èíâåğòèğîâàòü";
-        Text[ polish ] = "~Odwróæ";
-        Text[ japanese ] = "é€†è»¢(~I)";
-        Text[ chinese_traditional ] = "äº’è£œè‰²è½‰æ›(~I)";
-        Text[ arabic ] = "ÚßÓ";
-        Text[ greek ] = "Áíô~éóôñïöŞ";
-        Text[ korean ] = "ë°˜ì „(~I)";
-        Text[ turkish ] = "~Çevir";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Inverteix";
-        Text[ thai ] = "~à¸ªà¸¥à¸±à¸š";
-        Text[ czech ] = "Invertovat";
-        Text[ hebrew ] = "â€®×”×™×¤×•×šâ€¬";
-        Text[ hindi ] = "~à¤‰à¤²à¤Ÿà¤¾ à¤•à¤°à¥‹";
-        Text[ slovak ] = "~InvertovaÅ¥";
-        Text[ hungarian ] = "~InvertÃ¡lÃ¡s";
-        Text[ slovenian ] = "~Obrni";
+        Text [ de ] = "~Invertieren" ;
+        Text [ en-US ] = "~Invert" ;
+        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
@@ -503,14 +258,6 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
-    Text[ catalan ] = "Solarització";
-    Text[ thai ] = "à¸•à¸²à¸à¹à¸”à¸”";
-    Text[ czech ] = "Solarizace";
-    Text[ hebrew ] = "â€®×ª××•×¨×”â€¬";
-    Text[ hindi ] = "à¤¸à¥‹à¤²à¤°à¥ˆà¤¸à¥‡à¤¶à¤¨";
-    Text[ slovak ] = "SolarizÃ¡cia";
-    Text[ hungarian ] = "FakÃ­tÃ¡s";
-    Text[ slovenian ] = "SonÄenje";
 };
 
 // ----------------------
@@ -525,64 +272,15 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250, 100 ) ;
 
-    Text = "Alterung" ;
-    Text[ ENGLISH ] = "Age" ;
-    Text[ norwegian ] = "Age" ;
-    Text[ italian ] = "Invecchiamento" ;
-    Text[ portuguese_brazilian ] = "Envelhecimento" ;
-    Text[ portuguese ] = "Envelhecimento" ;
-    Text[ finnish ] = "Ikääntyminen" ;
-    Text[ danish ] = "Sepia" ;
-    Text[ french ] = "Vieillissement" ;
-    Text[ swedish ] = "Åldrande" ;
-    Text[ dutch ] = "Ouder maken" ;
-    Text[ spanish ] = "Envejecimiento" ;
-    Text[ english_us ] = "Aging" ;
-    Text[ chinese_simplified ] = "æ—¶æ•ˆ";
-    Text[ russian ] = "Ñòàğåíèå";
-    Text[ polish ] = "Efekt starzenia";
-    Text[ japanese ] = "ã‚¨ã‚¤ã‚¸ãƒ³ã‚°";
-    Text[ chinese_traditional ] = "æ™‚æ•ˆ";
-    Text[ arabic ] = "ÇáÊŞÇÏã";
-    Text[ dutch ] = "Ouder maken";
-    Text[ chinese_simplified ] = "æ—¶æ•ˆ";
-    Text[ greek ] = "ÃŞñáíóç";
-    Text[ korean ] = "ë‚¡ìŒ íš¨ê³¼";
-    Text[ turkish ] = "Yaşlandırma";
+    Text [ de ] = "Alterung" ;
+    Text [ en-US ] = "Aging" ;
 
     FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 182, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text = "Parameter";
-        Text[ ENGLISH ] = "Parameter";
-        Text[ english_us ] = "Parameters";
-        Text[ portuguese ] = "Parâmetros";
-        Text[ russian ] = "Ïàğàìåòğû";
-        Text[ greek ] = "ĞáñÜìåôñïé";
-        Text[ dutch ] = "Parameters";
-        Text[ french ] = "Paramètre";
-        Text[ spanish ] = "Parámetros";
-        Text[ italian ] = "Parametri";
-        Text[ danish ] = "Parametre";
-        Text[ swedish ] = "Parametrar";
-        Text[ polish ] = "Parametry";
-        Text[ portuguese_brazilian ] = "Parâmetros";
-        Text[ japanese ] = "ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿";
-        Text[ korean ] = "ë§¤ê°œ ë³€ìˆ˜";
-        Text[ chinese_simplified ] = "å‚æ•°";
-        Text[ chinese_traditional ] = "åƒæ•¸";
-        Text[ turkish ] = "Parametreler";
-        Text[ arabic ] = "ÇáãÚáãÉ";
-        Text[ catalan ] = "Paràmetres";
-        Text[ finnish ] = "Parametrit";
-        Text[ thai ] = "à¸à¸²à¸£à¸²à¸¡à¸´à¹€à¸•à¸­à¸£à¹Œ";
-        Text[ czech ] = "Parametry";
-        Text[ hebrew ] = "â€®×¤×¨××˜×¨×™×â€¬";
-        Text[ hindi ] = "à¤ªà¥ˆà¤°à¤¾à¤®à¥€à¤Ÿà¤°à¥‡à¤‚";
-        Text[ slovak ] = "Parametre";
-        Text[ hungarian ] = "ParamÃ©terek";
-        Text[ slovenian ] = "Parametri";
+        Text [ de ] = "Parameter";
+        Text [ en-US ] = "Parameters";
     };
     Control CTL_PREVIEW
     {
@@ -594,38 +292,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
     {
         Pos = MAP_APPFONT ( 12 , MA_Y8 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
-        Text = "Alterungsgrad" ;
-        Text[ ENGLISH ] = "Age value" ;
-        Text[ norwegian ] = "Age value" ;
-        Text[ italian ] = "Grado di invecchiamento" ;
-        Text[ portuguese_brazilian ] = "Grau de Envelhecimento" ;
-        Text[ portuguese ] = "Grau de envelhecimento" ;
-        Text[ finnish ] = "Ikääntymisaste" ;
-        Text[ danish ] = "Sepiagrad" ;
-        Text[ french ] = "Degré de vieillissement" ;
-        Text[ swedish ] = "Åldringsgrad" ;
-        Text[ dutch ] = "Mate van veroudering" ;
-        Text[ spanish ] = "Grado de envejecimiento" ;
-        Text[ english_us ] = "Aging degree" ;
-        Text[ chinese_simplified ] = "æ—¶æ•ˆåº¦";
-        Text[ russian ] = "Ñòåïåíü ñòàğåíèÿ";
-        Text[ polish ] = "Stopieñ efektu starzenia";
-        Text[ japanese ] = "ã‚¨ã‚¤ã‚¸ãƒ³ã‚°åº¦åˆ";
-        Text[ chinese_traditional ] = "æ™‚æ•ˆåº¦";
-        Text[ arabic ] = "ÏÑÌÉ ÇáÊŞÇÏã";
-        Text[ dutch ] = "Mate van veroudering";
-        Text[ chinese_simplified ] = "æ—¶æ•ˆåº¦";
-        Text[ greek ] = "Âáèìüò ãŞñáíóçò";
-        Text[ korean ] = "ë‚¡ìŒ íš¨ê³¼ ì •ë„";
-        Text[ turkish ] = "Yaşlanma derecesi";
-        Text[ catalan ] = "Grau d'envelliment";
-        Text[ thai ] = "à¸£à¸°à¸”à¸±à¸šà¸à¸²à¸£à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¹€à¸§à¸¥à¸²";
-        Text[ czech ] = "StupeÅˆ ztmavnutÃ­";
-        Text[ hebrew ] = "â€®×“×¨×’×ª ×¢×ª×™×§×•×ªâ€¬";
-        Text[ hindi ] = "à¤à¤œà¤¿à¤‚à¤— à¤¡à¤¿à¤—à¥à¤°à¥€";
-        Text[ slovak ] = "StupeÅˆ tmavnutia";
-        Text[ hungarian ] = "ElÃ©vÃ¼lÃ©s mÃ©rtÃ©ke";
-        Text[ slovenian ] = "Stopnja staranja";
+        Text [ de ] = "Alterungsgrad" ;
+        Text [ en-US ] = "Aging degree" ;
     };
 #define MA_Y9   MA_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERSEPIA_MTR_SEPIA
@@ -665,14 +333,6 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
-    Text[ catalan ] = "Envelliment";
-    Text[ thai ] = "à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¹€à¸§à¸¥à¸²";
-    Text[ czech ] = "ZtmavnutÃ­";
-    Text[ hebrew ] = "â€®×¢×™×ª×•×§â€¬";
-    Text[ hindi ] = "à¤à¤œà¤¿à¤‚à¤—";
-    Text[ slovak ] = "Stmavnutie";
-    Text[ hungarian ] = "ElÃ©vÃ¼lÃ©s";
-    Text[ slovenian ] = "Staranje";
 };
 
 // --------------------
@@ -687,62 +347,15 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250, 100 ) ;
 
-    Text = "Poster" ;
-    Text[ ENGLISH ] = "Posterize" ;
-    Text[ norwegian ] = "Posterize" ;
-    Text[ italian ] = "Poster" ;
-    Text[ portuguese_brazilian ] = "Transformar em pôster" ;
-    Text[ portuguese ] = "Poster" ;
-    Text[ finnish ] = "Värien vähennys" ;
-    Text[ danish ] = "Plakat" ;
-    Text[ french ] = "Poster" ;
-    Text[ swedish ] = "Poster" ;
-    Text[ dutch ] = "Poster" ;
-    Text[ spanish ] = "Póster" ;
-    Text[ english_us ] = "Posterize" ;
-    Text[ chinese_simplified ] = "æµ·æŠ¥";
-    Text[ russian ] = "Ïëàêàò";
-    Text[ polish ] = "Plakat";
-    Text[ japanese ] = "ãƒã‚¹ã‚¿ãƒ¼";
-    Text[ chinese_traditional ] = "æµ·å ±";
-    Text[ arabic ] = "ãõáÕŞ";
-    Text[ greek ] = "Áößóá";
-    Text[ korean ] = "í¬ìŠ¤í„°";
-    Text[ turkish ] = "Posterleştir";
+    Text [ de ] = "Poster" ;
+    Text [ en-US ] = "Posterize" ;
 
     FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 182, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text = "Parameter";
-        Text[ ENGLISH ] = "Parameter";
-        Text[ english_us ] = "Parameters";
-        Text[ portuguese ] = "Parâmetros";
-        Text[ russian ] = "Ïàğàìåòğû";
-        Text[ greek ] = "ĞáñÜìåôñïé";
-        Text[ dutch ] = "Parameters";
-        Text[ french ] = "Paramètre";
-        Text[ spanish ] = "Parámetros";
-        Text[ italian ] = "Parametri";
-        Text[ danish ] = "Parametre";
-        Text[ swedish ] = "Parametrar";
-        Text[ polish ] = "Parametry";
-        Text[ portuguese_brazilian ] = "Parâmetros";
-        Text[ japanese ] = "ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿";
-        Text[ korean ] = "ë§¤ê°œ ë³€ìˆ˜";
-        Text[ chinese_simplified ] = "å‚æ•°";
-        Text[ chinese_traditional ] = "åƒæ•¸";
-        Text[ turkish ] = "Parametreler";
-        Text[ arabic ] = "ÇáãÚáãÉ";
-        Text[ catalan ] = "Paràmetres";
-        Text[ finnish ] = "Parametrit";
-        Text[ thai ] = "à¸à¸²à¸£à¸²à¸¡à¸´à¹€à¸•à¸­à¸£à¹Œ";
-        Text[ czech ] = "Parametry";
-        Text[ hebrew ] = "â€®×¤×¨××˜×¨×™×â€¬";
-        Text[ hindi ] = "à¤ªà¥ˆà¤°à¤¾à¤®à¥€à¤Ÿà¤°à¥‡à¤‚";
-        Text[ slovak ] = "Parametre";
-        Text[ hungarian ] = "ParamÃ©terek";
-        Text[ slovenian ] = "Parametri";
+        Text [ de ] = "Parameter";
+        Text [ en-US ] = "Parameters";
     };
     Control CTL_PREVIEW
     {
@@ -754,36 +367,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
     {
         Pos = MAP_APPFONT ( 12 , MA_Y10 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
-        Text = "Posterfarben" ;
-        Text[ ENGLISH ] = "Poster colors" ;
-        Text[ norwegian ] = "Poster colors" ;
-        Text[ italian ] = "Colori posterizz." ;
-        Text[ portuguese_brazilian ] = "Cores do pôster" ;
-        Text[ portuguese ] = "Cores do poster" ;
-        Text[ finnish ] = "Värien määrä" ;
-        Text[ danish ] = "Plakatfarver" ;
-        Text[ french ] = "Couleurs du poster" ;
-        Text[ swedish ] = "Posterfärger" ;
-        Text[ dutch ] = "Posterkleuren" ;
-        Text[ spanish ] = "Colores del póster" ;
-        Text[ english_us ] = "Poster colors" ;
-        Text[ chinese_simplified ] = "æµ·æŠ¥é¢œè‰²";
-        Text[ russian ] = "Öâåòà ïëàêàòà";
-        Text[ polish ] = "Kolory plakatu";
-        Text[ japanese ] = "ãƒã‚¹ã‚¿ãƒ¼ã‚«ãƒ©ãƒ¼";
-        Text[ chinese_traditional ] = "æµ·å ±é¡è‰²";
-        Text[ arabic ] = "ÃáæÇä ÇáãõáÕŞ";
-        Text[ greek ] = "×ñşìáôá áößóáò";
-        Text[ korean ] = "í¬ìŠ¤í„° ìƒ‰ìƒ";
-        Text[ turkish ] = "Poster renkleri";
-        Text[ catalan ] = "Colors del pòster";
-        Text[ thai ] = "à¸ªà¸µà¹‚à¸›à¸ªà¹€à¸•à¸­à¸£à¹Œ";
-        Text[ czech ] = "Barvy posterizace";
-        Text[ hebrew ] = "â€®×¦×‘×¢×™ ×©×œ×˜â€¬";
-        Text[ hindi ] = "à¤ªà¥‹à¤¸à¥à¤Ÿà¤° à¤°à¤‚à¤—";
-        Text[ slovak ] = "Farby plagÃ¡tu";
-        Text[ hungarian ] = "PoszterszÃ­nek";
-        Text[ slovenian ] = "Barve za posterizacijo";
+        Text [ de ] = "Posterfarben" ;
+        Text [ en-US ] = "Poster colors" ;
     };
 #define MA_Y11  MA_Y10 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     NumericField DLG_FILTERPOSTER_NUM_POSTER
@@ -820,14 +405,6 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
-    Text[ catalan ] = "Redueix la gamma de colors";
-    Text[ thai ] = "à¸—à¸³à¹€à¸›à¹‡à¸™à¹‚à¸›à¸ªà¹€à¸•à¸­à¸£à¹Œ";
-    Text[ czech ] = "Posterizovat";
-    Text[ hebrew ] = "â€®×©×™×œ×•×˜ ×—×•×¦×•×ªâ€¬";
-    Text[ hindi ] = "à¤ªà¥‹à¤¸à¥à¤Ÿà¤°à¥ˆà¤œ";
-    Text[ slovak ] = "PosterizovaÅ¥";
-    Text[ hungarian ] = "PoszterizÃ¡lÃ¡s";
-    Text[ slovenian ] = "ZmanjÅ¡aj Å¡t. barv";
 };
 
 // --------------------
@@ -848,63 +425,16 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250, 100 ) ;
 
-    Text = "Relief" ;
-    Text[ ENGLISH ] = "Emboss" ;
-    Text[ norwegian ] = "Emboss" ;
-    Text[ italian ] = "Rilievo" ;
-    Text[ portuguese_brazilian ] = "Relevo" ;
-    Text[ portuguese ] = "Relevo" ;
-    Text[ finnish ] = "Korkokuva" ;
-    Text[ danish ] = "Relief" ;
-    Text[ french ] = "Relief" ;
-    Text[ swedish ] = "Relief" ;
-    Text[ dutch ] = "Reliëf" ;
-    Text[ spanish ] = "Relieve" ;
-    Text[ english_us ] = "Relief" ;
-    Text[ chinese_simplified ] = "æµ®é›•";
-    Text[ russian ] = "Ğåëüåô";
-    Text[ polish ] = "Uwypuklenie";
-    Text[ japanese ] = "ãƒ¬ãƒªãƒ¼ãƒ•";
-    Text[ chinese_traditional ] = "æµ®é›•";
-    Text[ arabic ] = "äŞÔ";
-    Text[ greek ] = "AíÜãëõöï";
-    Text[ korean ] = "ì–‘ê°";
-    Text[ turkish ] = "Kabartma";
-    Text[ language_user1 ] = " ";
+    Text [ de ] = "Relief" ;
+    Text [ en-US ] = "Relief" ;
+    Text [ x-comment ] = " ";
 
     FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 182, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text = "Parameter";
-        Text[ ENGLISH ] = "Parameter";
-        Text[ english_us ] = "Parameters";
-        Text[ portuguese ] = "Parâmetros";
-        Text[ russian ] = "Ïàğàìåòğû";
-        Text[ greek ] = "ĞáñÜìåôñïé";
-        Text[ dutch ] = "Parameters";
-        Text[ french ] = "Paramètre";
-        Text[ spanish ] = "Parámetros";
-        Text[ italian ] = "Parametri";
-        Text[ danish ] = "Parametre";
-        Text[ swedish ] = "Parametrar";
-        Text[ polish ] = "Parametry";
-        Text[ portuguese_brazilian ] = "Parâmetros";
-        Text[ japanese ] = "ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿";
-        Text[ korean ] = "ë§¤ê°œ ë³€ìˆ˜";
-        Text[ chinese_simplified ] = "å‚æ•°";
-        Text[ chinese_traditional ] = "åƒæ•¸";
-        Text[ turkish ] = "Parametreler";
-        Text[ arabic ] = "ÇáãÚáãÉ";
-        Text[ catalan ] = "Paràmetres";
-        Text[ finnish ] = "Parametrit";
-        Text[ thai ] = "à¸à¸²à¸£à¸²à¸¡à¸´à¹€à¸•à¸­à¸£à¹Œ";
-        Text[ czech ] = "Parametry";
-        Text[ hebrew ] = "â€®×¤×¨××˜×¨×™×â€¬";
-        Text[ hindi ] = "à¤ªà¥ˆà¤°à¤¾à¤®à¥€à¤Ÿà¤°à¥‡à¤‚";
-        Text[ slovak ] = "Parametre";
-        Text[ hungarian ] = "ParamÃ©terek";
-        Text[ slovenian ] = "Parametri";
+        Text [ de ] = "Parameter";
+        Text [ en-US ] = "Parameters";
     };
     Control CTL_PREVIEW
     {
@@ -916,36 +446,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     {
         Pos = MAP_APPFONT ( 12 , MA_Y12 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
-        Text = "Lichtquelle" ;
-        Text[ ENGLISH ] = "Source of light" ;
-        Text[ norwegian ] = "Source of light" ;
-        Text[ italian ] = "Sorgente di luce" ;
-        Text[ portuguese_brazilian ] = "Fonte de luz" ;
-        Text[ portuguese ] = "Fonte de luz" ;
-        Text[ finnish ] = "Valonlähde" ;
-        Text[ danish ] = "Lyskilde" ;
-        Text[ french ] = "Source de lumière" ;
-        Text[ swedish ] = "Ljuskälla" ;
-        Text[ dutch ] = "Lichtbron" ;
-        Text[ spanish ] = "Fuente de luz" ;
-        Text[ english_us ] = "Light source" ;
-        Text[ chinese_simplified ] = "å…‰æº";
-        Text[ russian ] = "Èñòî÷íèê ñâåòà";
-        Text[ polish ] = "ród³o œwiat³a";
-        Text[ japanese ] = "å…‰æº";
-        Text[ chinese_traditional ] = "å…‰æº";
-        Text[ arabic ] = "ãÕÏÑ ÇáÖæÁ";
-        Text[ greek ] = "Ğñïİëåõóç öùôüò";
-        Text[ korean ] = "ê´‘ì›";
-        Text[ turkish ] = "Işık kaynağı";
-        Text[ catalan ] = "Font de llum";
-        Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸„à¸§à¸²à¸¡à¸ªà¸§à¹ˆà¸²à¸‡";
-        Text[ czech ] = "SvÄ›telnÃ½ zdroj";
-        Text[ hebrew ] = "â€®××§×•×¨ ××•×¨â€¬";
-        Text[ hindi ] = "à¤¹à¤²à¥à¤•à¤¾ à¤®à¥‚à¤²";
-        Text[ slovak ] = "SvetelnÃ½ zdroj";
-        Text[ hungarian ] = "FÃ©nyforrÃ¡s";
-        Text[ slovenian ] = "Vir svetlobe";
+        Text [ de ] = "Lichtquelle" ;
+        Text [ en-US ] = "Light source" ;
     };
 #define MA_Y13  MA_Y12 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     Control DLG_FILTEREMBOSS_CTL_LIGHT
@@ -975,14 +477,6 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
-    Text[ catalan ] = "Relleu";
-    Text[ thai ] = "à¸™à¸¹à¸™";
-    Text[ czech ] = "ReliÃ©f";
-    Text[ hebrew ] = "â€®×ª×‘×œ×™×˜â€¬";
-    Text[ hindi ] = "à¤¸à¤¹à¤¾à¤¯à¤¤à¤¾";
-    Text[ slovak ] = "ReliÃ©f";
-    Text[ hungarian ] = "KiemelÃ©s";
-    Text[ slovenian ] = "Relief";
 };
 
 
