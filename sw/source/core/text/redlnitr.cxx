@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-27 13:33:52 $
+ *  last change: $Author: fme $ $Date: 2001-07-10 15:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,23 +157,17 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
     pHints = rTxtNode.GetpSwpHints();
 
     delete pFnt;
-    if ( rTxtNode.HasSwAttrSet() )
-    {
-        // no style template found
-        aAttrHandler.Init( *pAttrSet, *rTxtNode.GetDoc() );
+
+    const sal_Bool bAttrSet = rTxtNode.HasSwAttrSet();
+    SwFontAccess aFontAccess( &rTxtNode.GetAnyFmtColl(), pShell );
+    aAttrHandler.Init( aFontAccess.Get()->GetDefault(), *pAttrSet,
+                       *rTxtNode.GetDoc(), bAttrSet );
+
+    if ( bAttrSet )
+        // there are additional attributes for the paragraph
         pFnt = new SwFont( aAttrHandler );
-    }
     else
-    {
-//FEATURE::CONDCOLL
-//      SwFontAccess aFontAccess( rTxtNode.GetFmtColl() );
-        // we are using a style template, caching the resulting font for
-        SwFontAccess aFontAccess( &rTxtNode.GetAnyFmtColl(), pShell );
-//FEATURE::CONDCOLL
-        aAttrHandler.Init( aFontAccess.Get()->GetDefault(), *pAttrSet,
-                           *rTxtNode.GetDoc() );
         pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
-    }
 
     aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
 

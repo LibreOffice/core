@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-10 14:37:24 $
+ *  last change: $Author: fme $ $Date: 2001-07-10 15:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,9 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
+#ifndef _SFXITEMITER_HXX //autogen
+#include <svtools/itemiter.hxx>
+#endif
 
 #define NUM_OBJECTS (RES_TXTATR_END - RES_CHRATR_BEGIN + 1)
 #define STACK_INCREMENT 4
@@ -171,7 +174,7 @@
  * NUM_DEFAULT_VALUES.
  *************************************************************************/
 
-USHORT StackPos[ NUM_OBJECTS ] = {
+const BYTE StackPos[ NUM_OBJECTS ] = {
      0, //                                       //  0
      1, // RES_CHRATR_CASEMAP = RES_CHRATR_BEGIN //  1
      0, // RES_CHRATR_CHARSETCOLOR,              //  2
@@ -375,13 +378,33 @@ void SwAttrHandler::Init( const SwAttrSet& rAttrSet, const SwDoc& rDoc )
 }
 
 void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet& rAS,
-                          const SwDoc& rDoc )
+                          const SwDoc& rDoc, sal_Bool bAttrSet )
 {
     pAttrSet = &rAS;
     pDoc = &rDoc;
 
     memcpy( pDefaultArray, pPoolItem,
             NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
+
+    // we are finished, if no attribute set is defined, or if it is empty
+    if ( ! bAttrSet || ! rAS.Count() )
+        return;
+
+    // any other paragraph attributes for the default array?
+    SfxItemIter aIter( rAS );
+    register USHORT nWhich;
+    const SfxPoolItem* pItem = aIter.GetCurItem();
+    while( TRUE )
+    {
+        nWhich = pItem->Which();
+        if( RES_CHRATR_BEGIN <= nWhich && RES_TXTATR_END > nWhich )
+            pDefaultArray[ StackPos[ nWhich ] ] = pItem;
+
+        if( aIter.IsAtEnd() || nWhich >= RES_TXTATR_END )
+            break;
+
+        pItem = aIter.NextItem();
+    }
 }
 
 void SwAttrHandler::Reset( )
@@ -584,19 +607,6 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
                 ((SvxCharRotateItem*)pDefaultArray[ nRotateStack ])->GetValue()
             );
     }
-}
-
-/**************************************************************************
- *                      SwAttrHandler::GetDefault()
- *************************************************************************/
-
-const SfxPoolItem& SwAttrHandler::GetDefault( const USHORT nAttribID ) const
-{
-    ASSERT( 0 <= nAttribID && nAttribID < RES_TXTATR_END,
-            "this attrib does not ex."
-            );
-    ASSERT( pDefaultArray[ StackPos[ nAttribID ] ], "array not initialized" );
-    return *pDefaultArray[ StackPos[ nAttribID ] ];
 }
 
 /*************************************************************************
