@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:29:44 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@ one go*/
 
 #ifndef _TOOLS_DEBUG_H
 #include <tools/debug.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
@@ -192,6 +195,7 @@ ULONG SmXMLWrapper::ReadThroughComponent(
     Reference<io::XInputStream> xInputStream,
     Reference<XComponent> xModelComponent,
     Reference<lang::XMultiServiceFactory> & rFactory,
+    Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pFilterName,
     sal_Bool bEncrypted )
 {
@@ -214,8 +218,10 @@ ULONG SmXMLWrapper::ReadThroughComponent(
     if( !xParser.is() )
         return nError;
 
+    Sequence<Any> aArgs( 1 );
+    aArgs[0] <<= rPropSet;
+
     // get filter
-    uno::Sequence < uno::Any > aArgs( 0 );
     Reference< xml::sax::XDocumentHandler > xFilter(
         rFactory->createInstanceWithArguments(
             OUString::createFromAscii(pFilterName), aArgs ),
@@ -271,6 +277,7 @@ ULONG SmXMLWrapper::ReadThroughComponent(
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
     Reference<lang::XMultiServiceFactory> & rFactory,
+    Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pFilterName )
 {
     DBG_ASSERT(NULL != pStorage, "Need storage!");
@@ -305,10 +312,18 @@ ULONG SmXMLWrapper::ReadThroughComponent(
         aAny.getValueType() == ::getBooleanCppuType() &&
         *(sal_Bool *)aAny.getValue();
 
+    // set Base URL
+    if( rPropSet.is() )
+    {
+        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+        rPropSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
+    }
+
+
     Reference < io::XInputStream > xStream = xEventsStream->GetXInputStream();
     // read from the stream
     return ReadThroughComponent(
-        xStream, xModelComponent, rFactory, pFilterName, bEncrypted );
+        xStream, xModelComponent, rFactory, rPropSet, pFilterName, bEncrypted );
 }
 
 ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
@@ -328,6 +343,7 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
     // try to get an XStatusIndicator from the Medium
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
 
+    sal_Bool bEmbedded = sal_False;
     uno::Reference <lang::XUnoTunnel> xTunnel;
     xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
     SmModel *pModel = reinterpret_cast<SmModel *>
@@ -349,7 +365,36 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
                     pItem->GetValue() >>= xStatusIndicator;
             }
         }
+
+        if( pDocShell &&
+            SFX_CREATE_MODE_EMBEDDED == pDocShell->GetCreateMode() )
+            bEmbedded = sal_True;
     }
+
+    comphelper::PropertyMapEntry aInfoMap[] =
+    {
+        { "PrivateData", sizeof("PrivateData")-1, 0,
+              &::getCppuType( (Reference<XInterface> *)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "BaseURI", sizeof("BaseURI")-1, 0,
+              &::getCppuType( (OUString *)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StreamRelPath", sizeof("StreamRelPath")-1, 0,
+              &::getCppuType( (OUString *)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StreamName", sizeof("StreamName")-1, 0,
+              &::getCppuType( (OUString *)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { NULL, 0, 0, NULL, 0, 0 }
+    };
+    uno::Reference< beans::XPropertySet > xInfoSet(
+                comphelper::GenericPropertySet_CreateInstance(
+                            new comphelper::PropertySetInfo( aInfoMap ) ) );
+
+    // Set base URI
+    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+    xInfoSet->setPropertyValue( sPropName,
+                            makeAny( OUString(INetURLObject::GetBaseURL()) ) );
 
     sal_Int32 nSteps=3;
     if( !(rMedium.IsStorage()))
@@ -368,12 +413,25 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
 
     if( rMedium.IsStorage())
     {
+        if( bEmbedded )
+        {
+            OUString aName( rMedium.GetStorage()->GetName() );
+            if( aName.getLength() )
+            {
+                sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+                xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
+            }
+        }
+
+        sal_Bool bOASIS = rMedium.GetStorage()->GetVersion() > SOFFICE_FILEFORMAT_60;
         if (xStatusIndicator.is())
             xStatusIndicator->setValue(nSteps++);
 
         ULONG nWarn = ReadThroughComponent(
             rMedium.GetStorage(), xModelComp, "meta.xml", "Meta.xml",
-            xServiceFactory, "com.sun.star.comp.Math.XMLMetaImporter" );
+            xServiceFactory, xInfoSet,
+                (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaImporter"
+                        : "com.sun.star.comp.Math.XMLMetaImporter") );
 
         if ( nWarn != ERRCODE_IO_BROKENPACKAGE )
         {
@@ -382,7 +440,9 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
 
             nWarn = ReadThroughComponent(
                 rMedium.GetStorage(), xModelComp, "settings.xml", 0,
-                xServiceFactory, "com.sun.star.comp.Math.XMLSettingsImporter" );
+                xServiceFactory, xInfoSet,
+                (bOASIS ? "com.sun.star.comp.Math.XMLOasisSettingsImporter"
+                        : "com.sun.star.comp.Math.XMLSettingsImporter" ) );
 
             if ( nWarn != ERRCODE_IO_BROKENPACKAGE )
             {
@@ -391,7 +451,7 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
 
                 nError = ReadThroughComponent(
                     rMedium.GetStorage(), xModelComp, "content.xml", "Content.xml",
-                    xServiceFactory, "com.sun.star.comp.Math.XMLImporter" );
+                    xServiceFactory, xInfoSet, "com.sun.star.comp.Math.XMLImporter" );
             }
             else
                 nError = ERRCODE_IO_BROKENPACKAGE;
@@ -408,7 +468,7 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
             xStatusIndicator->setValue(nSteps++);
 
         nError = ReadThroughComponent( xInputStream, xModelComp,
-            xServiceFactory, "com.sun.star.comp.Math.XMLImporter", FALSE );
+            xServiceFactory, xInfoSet, "com.sun.star.comp.Math.XMLImporter", FALSE );
     }
 
     if (xStatusIndicator.is())
@@ -507,6 +567,8 @@ const uno::Sequence< sal_Int8 > & SmXMLExport::getUnoTunnelId() throw()
     return *pSeq;
 }
 
+//------------------------------------------------------------------------------
+
 OUString SAL_CALL SmXMLImport_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLImporter" ) );
@@ -529,6 +591,8 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
     return (cppu::OWeakObject*)new SmXMLImport(rSMgr, IMPORT_ALL);
 }
 
+//------------------------------------------------------------------------------
+
 OUString SAL_CALL SmXMLExport_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLExporter" ) );
@@ -548,12 +612,17 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_ALL );
-    return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_ALL );
+    // EXPORT_OASIS is required here allthough there is no differrence between
+    // OOo and OASIS, because without the flag, a transformation to OOo would
+    // be chained in.
+    return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_OASIS|EXPORT_ALL );
 }
+
+//------------------------------------------------------------------------------
 
 OUString SAL_CALL SmXMLImportMeta_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLMetaImporter" ) );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLOasisMetaImporter" ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SmXMLImportMeta_getSupportedServiceNames()
@@ -573,31 +642,59 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportMeta_createInstance(
     return (cppu::OWeakObject*)new SmXMLImport( rSMgr, IMPORT_META );
 }
 
+//------------------------------------------------------------------------------
+
+OUString SAL_CALL SmXMLExportMetaOOO_getImplementationName() throw()
+{
+return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLMetaExporter" ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SmXMLExportMetaOOO_getSupportedServiceNames()
+    throw()
+{
+const OUString aServiceName( EXPORT_SVC_NAME );
+const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMetaOOO_createInstance(
+const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+throw( uno::Exception )
+{
+// #110680#
+// return (cppu::OWeakObject*)new SmXMLExport( EXPORT_META );
+return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_META );
+}
+
+//------------------------------------------------------------------------------
+
 OUString SAL_CALL SmXMLExportMeta_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLMetaExporter" ) );
+return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLOasisMetaExporter" ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SmXMLExportMeta_getSupportedServiceNames()
-        throw()
+    throw()
 {
-    const OUString aServiceName( EXPORT_SVC_NAME );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-        return aSeq;
+const OUString aServiceName( EXPORT_SVC_NAME );
+const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMeta_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-    throw( uno::Exception )
+const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_META );
-    return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_META );
+// #110680#
+// return (cppu::OWeakObject*)new SmXMLExport( EXPORT_META );
+return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_OASIS|EXPORT_META );
 }
+
+//------------------------------------------------------------------------------
 
 OUString SAL_CALL SmXMLImportSettings_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLSettingsImporter" ) );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLOasisSettingsImporter" ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SmXMLImportSettings_getSupportedServiceNames()
@@ -617,10 +714,56 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportSettings_createInstance(
     return (cppu::OWeakObject*)new SmXMLImport( rSMgr, IMPORT_SETTINGS );
 }
 
-OUString SAL_CALL SmXMLExportSettings_getImplementationName() throw()
+//------------------------------------------------------------------------------
+
+OUString SAL_CALL SmXMLExportSettingsOOO_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLSettingsExporter" ) );
 }
+
+uno::Sequence< OUString > SAL_CALL SmXMLExportSettingsOOO_getSupportedServiceNames()
+        throw()
+{
+    const OUString aServiceName( EXPORT_SVC_NAME );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+        return aSeq;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettingsOOO_createInstance(
+    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+    throw( uno::Exception )
+{
+    // #110680#
+    // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_SETTINGS );
+    return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_SETTINGS );
+}
+
+//------------------------------------------------------------------------------
+
+OUString SAL_CALL SmXMLExportSettings_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLOasisSettingsExporter" ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SmXMLExportSettings_getSupportedServiceNames()
+        throw()
+{
+    const OUString aServiceName( EXPORT_SVC_NAME );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+        return aSeq;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettings_createInstance(
+    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+    throw( uno::Exception )
+{
+    // #110680#
+    // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_SETTINGS );
+    return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_OASIS|EXPORT_SETTINGS );
+}
+
+
+//------------------------------------------------------------------------------
 
 OUString SAL_CALL SmXMLExportContent_getImplementationName() throw()
 {
@@ -641,8 +784,12 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportContent_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_CONTENT );
-    return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_CONTENT );
+    // The EXPORT_OASIS flag is only required to avoid that a transformer is
+    // chanied in
+    return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_OASIS|EXPORT_CONTENT );
 }
+
+//------------------------------------------------------------------------------
 
 // XServiceInfo
 // override empty method from parent class
@@ -685,23 +832,6 @@ rtl::OUString SAL_CALL SmXMLImport::getImplementationName()
             return SmXMLImportSettings_getImplementationName();
             break;
     }
-}
-
-uno::Sequence< OUString > SAL_CALL SmXMLExportSettings_getSupportedServiceNames()
-        throw()
-{
-    const OUString aServiceName( EXPORT_SVC_NAME );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-        return aSeq;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettings_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-    throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_SETTINGS );
-    return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_SETTINGS );
 }
 
 
@@ -786,8 +916,7 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
     Reference<XComponent> xComponent,
     Reference<lang::XMultiServiceFactory> & rFactory,
     Reference<beans::XPropertySet> & rPropSet,
-    const sal_Char* pComponentName
-    )
+    const sal_Char* pComponentName )
 {
     DBG_ASSERT(xOutputStream.is(), "I really need an output stream!");
     DBG_ASSERT(xComponent.is(), "Need component!");
@@ -886,6 +1015,13 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
         xDocStream->SetProperty( aPropName, aAny );
     }
 
+    // set Base URL
+    if( rPropSet.is() )
+    {
+        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+        rPropSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
+    }
+
     // set buffer and create outputstream
     xDocStream->SetBufferSize( 16*1024 );
     xOutputStream = new utl::OOutputStreamWrapper( *xDocStream );
@@ -963,6 +1099,15 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
         { "UsePrettyPrinting", sizeof("UsePrettyPrinting")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0},
+        { "BaseURI", sizeof("BaseURI")-1, 0,
+              &::getCppuType( (OUString *)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StreamRelPath", sizeof("StreamRelPath")-1, 0,
+              &::getCppuType( (OUString *)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StreamName", sizeof("StreamName")-1, 0,
+              &::getCppuType( (OUString *)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
@@ -976,6 +1121,10 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
     aAny.setValue( &bUsePrettyPrinting, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sUsePrettyPrinting, aAny );
 
+    // Set base URI
+    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+    xInfoSet->setPropertyValue( sPropName,
+                            makeAny( OUString(INetURLObject::GetBaseURL()) ) );
 
     sal_Int32 nSteps=0;
     if (xStatusIndicator.is())
@@ -983,6 +1132,17 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
     if (!bFlat) //Storage (Package) of Stream
     {
         SvStorage *pStg = rMedium.GetOutputStorage(sal_True);
+        sal_Bool bOASIS = pStg->GetVersion() > SOFFICE_FILEFORMAT_60;
+
+        if( bEmbedded )
+        {
+            OUString aName( pStg->GetName() );
+            if( aName.getLength() )
+            {
+                sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+                xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
+            }
+        }
 
         if( !bEmbedded )
         {
@@ -991,7 +1151,9 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
 
             bRet = WriteThroughComponent(
                     pStg, xModelComp, "meta.xml", xServiceFactory, xInfoSet,
-                    "com.sun.star.comp.Math.XMLMetaExporter",sal_False);
+                    (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaExporter"
+                             : "com.sun.star.comp.Math.XMLMetaExporter"),
+                    sal_False);
         }
         if( bRet )
         {
@@ -1010,7 +1172,8 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
 
             bRet = WriteThroughComponent(
                     pStg, xModelComp, "settings.xml", xServiceFactory, xInfoSet,
-                    "com.sun.star.comp.Math.XMLSettingsExporter");
+                    (bOASIS ? "com.sun.star.comp.Math.XMLOasisSettingsExporter"
+                            : "com.sun.star.comp.Math.XMLSettingsExporter") );
         }
     }
     else
