@@ -3,7 +3,6 @@
 <menu:menubar xmlns:menu="http://openoffice.org/2001/menu" menu:id="menubar">
  <menu:menu menu:id="slot:5510" menu:label="~File">
   <menu:menupopup>
-   <menu:menuitem menu:id="script://HighlightText.showForm" menu:helpid="1001" menu:label="Highlight"/>
    <menu:menuitem menu:id="slot:5537" menu:helpid="5537" menu:label="~New"/>
    <menu:menuitem menu:id="slot:5501" menu:helpid="5501" menu:label="~Open..."/>
    <menu:menuitem menu:id="slot:6381" menu:helpid="6381" menu:label="A~utoPilot"/>
@@ -248,7 +247,7 @@
      <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteKeyBinding" menu:label="~Key..."/>
     </menu:menupopup>
    </menu:menu>
-   <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.RefreshUserScripts()" menu:label="~Refresh User Scripts"/>
+   <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.RefreshUserScripts()" menu:label="~Refresh User Scripts (Java)"/>
    <menu:menuitem menu:id="slot:31630" menu:helpid="31630" menu:label="~Options..."/>
   </menu:menupopup>
  </menu:menu>
