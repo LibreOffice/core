@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-04-12 07:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,8 +291,10 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     }
 
     // Baseline-Ausgabe auch bei nicht-TxtPortions (vgl. TabPor mit Fill)
-    const SwTwips nY = GetInfo().GetPos().Y() + nTmpAscent;
-    GetInfo().Y( nY );
+    // if no special vertical alignment is used,
+    // we calculate Y value for the whole line
+    if ( ! GetLineInfo().HasSpecialAlign() )
+        GetInfo().Y( GetInfo().GetPos().Y() + nTmpAscent );
 
     // 7529: PostIts prepainten
     if( GetInfo().OnWin() && pPor && !pPor->Width() )
@@ -316,6 +318,11 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         sal_Bool bSeeked = sal_True;
         GetInfo().SetLen( pPor->GetLen() );
         GetInfo().SetSpecialUnderline( sal_False );
+        const SwTwips nOldY = GetInfo().Y();
+
+        if ( GetLineInfo().HasSpecialAlign() )
+            GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr, *pPor ) );
+
         // Ein Sonderfall sind GluePortions, die Blanks ausgeben.
 
         // 6168: Der Rest einer FldPortion zog sich die Attribute der naechsten
@@ -345,8 +352,6 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
 //      bRest = sal_False;
 
-        ASSERT( GetInfo().Y() == nY, "DrawTextLine: Y() has changed" );
-
         // Wenn das Ende der Portion hinausragt, wird geclippt.
         // Es wird ein Sicherheitsabstand von Height-Halbe aufaddiert,
         // damit die TTF-"f" nicht im Seitenrand haengen...
@@ -375,6 +380,9 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         else
             pPor->Paint( GetInfo() );
 
+        // reset (for special vertical alignment)
+        GetInfo().Y( nOldY );
+
         if( GetFnt()->IsURL() && pPor->InTxtGrp() )
             GetInfo().NotifyURL( *pPor );
 
@@ -386,6 +394,8 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
         pPor = !bDrawInWindow && GetInfo().X() > nMaxRight ? 0 : pNext;
     }
+
+    // paint remaining stuff
     if( bDrawInWindow )
     {
         if( !GetNextLine() &&
@@ -394,8 +404,14 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().GetIdx() >= GetInfo().GetTxt().Len() )
         {
             SwTmpEndPortion aEnd( *pCurr->GetFirstPortion() );
+            const SwTwips nOldY = GetInfo().Y();
+            if ( GetLineInfo().HasSpecialAlign() )
+                GetInfo().Y( GetInfo().GetPos().Y()
+                           + AdjustBaseLine( *pCurr, aEnd ) );
             aEnd.Paint( GetInfo() );
+            GetInfo().Y( nOldY );
         }
+
         if( bUnderSz )
         {
             if( GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreView() )
@@ -415,6 +431,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             }
         }
     }
+
     if( pCurr->IsClipping() )
         rClip.ChgClip( rPaint );
 }

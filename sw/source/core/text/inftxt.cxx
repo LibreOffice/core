@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-04-12 07:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,6 @@
 #ifndef _SVX_FORBIDDENRULEITEM_HXX
 #include <svx/forbiddenruleitem.hxx>
 #endif
-
 #ifndef _TXATBASE_HXX //autogen
 #include <txatbase.hxx>
 #endif
@@ -232,6 +231,7 @@ void SwLineInfo::CtorInit( const SwAttrSet& rAttrSet )
 {
     pRuler = &rAttrSet.GetTabStops();
     pSpace = &rAttrSet.GetLineSpacing();
+    nVertAlign = rAttrSet.GetParaVertAlign().GetValue();
     nDefTabStop = MSHRT_MAX;
 }
 

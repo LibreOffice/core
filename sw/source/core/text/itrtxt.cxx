@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-05 12:51:29 $
+ *  last change: $Author: fme $ $Date: 2001-04-12 07:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 
 #ifndef _SVX_LSPCITEM_HXX //autogen
 #include <svx/lspcitem.hxx>
+#endif
+#ifndef _SVX_PARAVERTALIGNITEM_HXX //autogen
+#include <svx/paravertalignitem.hxx>
 #endif
 #include "txtcfg.hxx"
 #include "itrtxt.hxx"
@@ -429,6 +432,37 @@ const SwLineLayout *SwTxtCursor::CharCrsrToLine( const xub_StrLen nPos )
         bPrev = sal_False;
     return bPrev ? PrevLine() : pCurr;
 }
+
+/*************************************************************************
+ *                      SwTxtCrsr::AdjustBaseLine()
+ *************************************************************************/
+
+USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
+                                    const USHORT nPorHeight,
+                                    const USHORT nPorAscent ) const
+{
+    USHORT nOfst = rLine.GetRealHeight() - rLine.Height();
+
+    switch ( GetLineInfo().GetVertAlign() ) {
+        case SvxParaVertAlignItem::TOP :
+            nOfst += nPorAscent;
+            break;
+        case SvxParaVertAlignItem::CENTER :
+            ASSERT( rLine.Height() >= nPorHeight, "Portion height > Line height");
+            nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
+            break;
+        case SvxParaVertAlignItem::BOTTOM :
+            nOfst += rLine.Height() - nPorHeight + nPorAscent;
+            break;
+        default:
+            nOfst += rLine.GetAscent();
+    }
+
+    return nOfst;
+}
+
+
+
 
 /*************************************************************************
  *                      SwTxtIter::TwipsToLine()

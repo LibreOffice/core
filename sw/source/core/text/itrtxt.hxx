@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-04-12 07:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,14 @@ public:
                 const MSHORT nChgNode, const SwCrsrMoveState* = 0 ) const;
     // 1170: beruecksichtigt Mehrdeutigkeiten; Implementierung s.u.
     const SwLineLayout *CharCrsrToLine( const xub_StrLen nPos );
+
+    // calculates baseline for portion rPor
+    USHORT AdjustBaseLine( const SwLineLayout& rLine,
+                           const USHORT nPorHeight,
+                           const USHORT nPorAscent ) const;
+    inline USHORT AdjustBaseLine( const SwLineLayout& rLine,
+                                  const SwLinePortion& rPor ) const {
+        return AdjustBaseLine( rLine, rPor.Height(), rPor.GetAscent() ); };
 
     static inline void SetRightMargin( const sal_Bool bNew ){ bRightMargin = bNew; }
     static inline sal_Bool IsRightMargin() { return bRightMargin; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-04-12 07:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,7 +503,9 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     {
                         GetInfo().SetMulti( sal_True );
 
+                        nTmpAscent = AdjustBaseLine( *pCurr, *pPor );
                         pOrig->Pos().Y() += nTmpAscent - nPorAscent;
+
                         if( ( ((SwMultiPortion*)pPor)->IsDouble() ||
                               ((SwMultiPortion*)pPor)->HasRotation() )
                              && pCMS && pCMS->b2Lines )
@@ -576,7 +578,13 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                 pOrig->Pos().Y() = aOldPos.Y()
                                     + pPor->Height() - nTmp - pOrig->Height();
                             if ( pCMS && pCMS->bRealHeight )
+                            {
                                 pCMS->aRealHeight.Y() = -pCMS->aRealHeight.Y();
+                                if( ((SwMultiPortion*)pPor)->IsRevers() )
+                                    pCMS->aRealHeight.X() =
+                                         pOrig->Width() - pCMS->aRealHeight.X()
+                                       + pCMS->aRealHeight.Y();
+                            }
                         }
                         else
                         {
@@ -783,6 +791,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
         if ( pCMS && pCMS->bRealHeight )
         {
+            nTmpAscent = AdjustBaseLine( *pCurr, nPorHeight, nPorAscent );
             if ( nTmpAscent > nPorAscent )
                 pCMS->aRealHeight.X() = nTmpAscent - nPorAscent;
             else

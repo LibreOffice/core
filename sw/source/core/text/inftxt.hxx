@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-10 14:40:23 $
+ *  last change: $Author: fme $ $Date: 2001-04-12 07:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 #include "ndtxt.hxx"
 #include "txttypes.hxx"
 
+#ifndef _SVX_PARAVERTALIGNITEM_HXX //autogen
+#include <svx/paravertalignitem.hxx>
+#endif
+
 class Font;
 class OutputDevice;
 class SvxBrushItem;
@@ -136,6 +140,7 @@ class SwLineInfo
 
     const SvxTabStopItem    *pRuler;
     const SvxLineSpacingItem *pSpace;
+    USHORT nVertAlign;
     KSHORT nDefTabStop;
     void CtorInit( const SwAttrSet& rAttrSet );
     inline SwLineInfo() {}
@@ -150,6 +155,12 @@ public:
     inline KSHORT GetDefTabStop() const { return nDefTabStop; }
     inline void SetDefTabStop( KSHORT nNew ) const
         { ( (SwLineInfo*)this )->nDefTabStop = nNew; }
+
+    // vertical alignment
+    inline USHORT GetVertAlign() const { return nVertAlign; }
+    inline sal_Bool HasSpecialAlign() const
+        { return SvxParaVertAlignItem::BASELINE != nVertAlign; };
+
 //  friend ostream &operator<<( ostream &rOS, const SwLineInfo &rInf );
     friend SvStream &operator<<( SvStream &rOS, const SwLineInfo &rInf );
 };
@@ -370,7 +381,7 @@ public:
     };
     inline sal_Bool CompressLine()
     {
-        return aMaxWidth.Count();
+        return (sal_Bool)aMaxWidth.Count();
     };
 
     //

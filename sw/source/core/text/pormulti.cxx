@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-10 14:41:34 $
+ *  last change: $Author: fme $ $Date: 2001-04-12 07:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1333,6 +1333,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 
     SwLineLayout* pLay = &rMulti.GetRoot();// the first line of the multiportion
     SwLinePortion* pPor = pLay->GetFirstPortion();//first portion of these line
+    SwTwips nOfst = 0;
 
     // GetInfo().Y() is the baseline from the surrounding line. We must switch
     // this temporary to the baseline of the inner lines of the multiportion.
@@ -1341,20 +1342,32 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         if( rMulti.IsRevers() )
         {
             GetInfo().Y( nOldY - rMulti.GetAscent() );
-            GetInfo().X( nTmpX - pLay->GetAscent() + rMulti.Width() );
+            nOfst = nTmpX + rMulti.Width();
         }
         else
         {
             GetInfo().Y( nOldY - rMulti.GetAscent() + rMulti.Height() );
-            GetInfo().X( nTmpX + pLay->GetAscent() );
+            nOfst = nTmpX;
         }
     }
     else
-        GetInfo().Y( nOldY - rMulti.GetAscent() + pLay->GetAscent() );
+        nOfst = nOldY - rMulti.GetAscent();
+
     sal_Bool bRest = pLay->IsRest();
     sal_Bool bFirst = sal_True;
+
     do
     {
+        if( rMulti.HasRotation() )
+        {
+            if( rMulti.IsRevers() )
+                GetInfo().X( nOfst - AdjustBaseLine( *pLay, *pPor ) );
+            else
+                GetInfo().X( nOfst + AdjustBaseLine( *pLay, *pPor ) );
+        }
+        else
+            GetInfo().Y( nOfst + AdjustBaseLine( *pLay, *pPor ) );
+
         sal_Bool bSeeked = sal_True;
         GetInfo().SetLen( pPor->GetLen() );
         GetInfo().SetSpecialUnderline( sal_False );
@@ -1406,17 +1419,17 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             pPor = pLay->GetFirstPortion();
             bRest = pLay->IsRest();
             aManip.SecondLine();
+
             if( rMulti.HasRotation() )
             {
                 if( rMulti.IsRevers() )
                 {
-                    GetInfo().X( nTmpX + pLay->Height() - pLay->GetAscent() );
+                    nOfst += pLay->Height();
                     GetInfo().Y( nOldY - rMulti.GetAscent() );
                 }
                 else
                 {
-                    GetInfo().X( nTmpX + rMulti.Width()
-                                 - pLay->Height() + pLay->GetAscent() );
+                    nOfst -= pLay->Height();
                     GetInfo().Y( nOldY - rMulti.GetAscent() + rMulti.Height() );
                 }
             }
@@ -1424,8 +1437,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             {
                 GetInfo().X( nTmpX );
                 // We switch to the baseline of the next inner line
-                GetInfo().Y( GetInfo().Y() + rMulti.GetRoot().Height()
-                    - rMulti.GetRoot().GetAscent() + pLay->GetAscent() );
+                nOfst += rMulti.GetRoot().Height();
             }
         }
     } while( pPor );
