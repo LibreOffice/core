@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 12:59:47 $
+ *  last change: $Author: os $ $Date: 2000-11-01 11:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2070,7 +2070,9 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
             else if( COMPARE_EQUAL == pProperties[j].Name.compareToAscii("CharacterStyleName"  )  )
             {
                 const String sCharStyleName =
-                    lcl_AnyToString(pProperties[j].Value);
+                    SwXStyleFamilies::GetUIName(
+                        lcl_AnyToString(pProperties[j].Value),
+                            SFX_STYLE_FAMILY_CHAR);
                 aToken.sCharStyleName = sCharStyleName;
                 aToken.nPoolId = pSectFmt->GetDoc()->
                             GetPoolId( sCharStyleName, GET_POOLID_CHRFMT );
@@ -2148,9 +2150,9 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
         // set TokenType from TOKEN_ENTRY_TEXT to TOKEN_ENTRY if it is
         // not a content index
         if(TOKEN_ENTRY_TEXT == aToken.eTokenType &&
-            ((TOX_CONTENT != pTOXBase->GetType())) ||
-            TOKEN_ENTRY == aToken.eTokenType)
-            sPattern += aToken.GetString();
+                                TOX_CONTENT != pTOXBase->GetType())
+            aToken.eTokenType = TOKEN_ENTRY;
+        sPattern += aToken.GetString();
     }
     SwForm aForm(pTOXBase->GetTOXForm());
     aForm.SetPattern((sal_uInt16) nIndex, sPattern);
@@ -2214,7 +2216,10 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 //              pArr[0].Value <<= C2U("TokenEntryNumber");
 
                 pArr[1].Name = C2U("CharacterStyleName");
-                pArr[1].Value <<= OUString(aToken.sCharStyleName);
+                pArr[1].Value <<= OUString(
+                    SwXStyleFamilies::GetProgrammaticName(
+                        aToken.sCharStyleName,
+                            SFX_STYLE_FAMILY_CHAR));
             }
             break;
             case TOKEN_ENTRY        :   // no difference between Entry and Entry Text
@@ -2354,223 +2359,4 @@ sal_Bool SwXIndexTokenAccess_Impl::hasElements(void) throw( RuntimeException )
 {
     return sal_True;
 }
-/*------------------------------------------------------------------------
 
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/10/27 09:23:18  os
-    SwXIndexTokenAccess_Impl::getByIndex corrected
-
-    Revision 1.3  2000/10/16 10:31:05  os
-    #79422# SwXDocumentIndexMark: invalidation uses SwUnoCallBack
-
-    Revision 1.2  2000/10/05 12:10:09  jp
-    should change: remove image
-
-    Revision 1.1.1.1  2000/09/19 00:08:28  hr
-    initial import
-
-    Revision 1.66  2000/09/18 16:04:32  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.65  2000/09/12 11:42:58  os
-    #78682# support of service TextContent
-
-    Revision 1.64  2000/09/07 07:59:10  os
-    #78443# SetMarkEntry now works as desriptor too
-
-    Revision 1.63  2000/08/17 10:08:04  os
-    type of TabStopPosition corrected
-
-    Revision 1.62  2000/08/09 16:05:26  os
-    several new index services
-
-    Revision 1.61  2000/06/29 14:59:05  os
-    SwXDocumentIndex holds a SwTOXBase in its descriptor
-
-    Revision 1.60  2000/05/16 09:14:54  os
-    project usr removed
-
-    Revision 1.59  2000/04/26 11:35:19  os
-    GetName() returns String&
-
-    Revision 1.58  2000/04/11 08:31:03  os
-    UNICODE
-
-    Revision 1.57  2000/03/31 10:26:36  os
-    #74034# getServiceName: comply to documentation
-
-    Revision 1.56  2000/03/27 10:21:10  os
-    UNO III
-
-    Revision 1.55  2000/03/21 15:42:24  os
-    UNOIII
-
-    Revision 1.54  2000/02/28 15:36:40  hjs
-    #65293# include
-
-    Revision 1.53  2000/02/25 14:08:38  os
-    #72990# test script changes
-
-    Revision 1.52  2000/02/23 16:13:05  os
-    #72990# get/setPropertyValue and get/setName work as Descriptor, too
-
-    Revision 1.51  2000/02/14 13:20:14  os
-    #72990# service info added
-
-    Revision 1.50  2000/02/11 14:35:28  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.49  2000/01/31 09:56:01  os
-    #70889# SwXDocumentIndexes inherits container::XNameAccess
-
-    Revision 1.48  2000/01/19 09:23:19  os
-    #71955# setPropertyValues: template names corrected
-
-    Revision 1.47  2000/01/17 15:13:51  os
-    #71955# tab stop position as sal_Int32
-
-    Revision 1.46  1999/12/20 11:07:04  os
-    #70234# set pattern at the correct level
-
-    Revision 1.45  1999/12/09 14:53:02  os
-    #70234# index corrected
-
-    Revision 1.44  1999/12/03 11:10:42  os
-    #70234# wrong assignments corrected
-
-    Revision 1.43  1999/12/01 14:44:23  os
-    #70234# properties added
-
-    Revision 1.42  1999/11/29 15:46:16  os
-    #70234# some index errors corrected
-
-    Revision 1.41  1999/11/25 15:43:26  os
-    headers corrected
-
-    Revision 1.40  1999/11/19 16:40:18  os
-    modules renamed
-
-    Revision 1.39  1999/11/10 14:48:20  os
-    some index properties corrected
-
-    Revision 1.38  1999/09/20 12:49:52  hr
-    #65293#: .is()
-
-    Revision 1.37  1999/09/14 13:29:05  os
-    SwXDocumentIndex completed
-
-    Revision 1.36  1999/09/01 14:18:38  OS
-    new index properties
-
-
-      Rev 1.35   01 Sep 1999 16:18:38   OS
-   new index properties
-
-      Rev 1.34   17 Aug 1999 13:57:54   OS
-   extended indexes: get/set section attributes
-
-      Rev 1.33   30 Jul 1999 14:41:40   OS
-   container::XNamed in SwXDocumentIndex
-
-      Rev 1.32   27 Jul 1999 20:23:42   JP
-   replace class SwTOXBaseRange with SwTOXBaseSection - TOX use now SwSections
-
-      Rev 1.31   05 May 1999 14:07:22   OS
-   #64655# DocumentIndexes wiederbelebt
-
-      Rev 1.30   22 Apr 1999 16:13:42   OS
-   #65194# throw -> throw; #65124# not impl. nur noch warning; EventListener
-
-      Rev 1.29   21 Apr 1999 14:35:52   OS
-   #65098# Verzeichnisse und -eintraege
-
-      Rev 1.28   15 Mar 1999 14:36:40   OS
-   #62845# Makro fuer ServiceInfo jetzt auch fuer OS/2
-
-      Rev 1.27   12 Mar 1999 09:41:12   OS
-   #62845# XServiceInfo impl.
-
-      Rev 1.26   09 Mar 1999 12:41:06   OS
-   #62008# Solar-Mutex
-
-      Rev 1.25   04 Mar 1999 15:03:04   OS
-   #62191# UINT nicht mehr verwenden
-
-      Rev 1.24   18 Feb 1999 14:25:48   OS
-   #52654# insertTextContent statt attach
-
-      Rev 1.23   28 Jan 1999 16:45:06   OS
-   #56371# keine Objekte fuer DEBUG anlegen
-
-      Rev 1.22   22 Jan 1999 15:09:10   OS
-   #56371# Draw wieder verfuegbar
-
-      Rev 1.21   19 Jan 1999 08:04:16   OS
-    #56371# TF_ONE51: Descriptor-interfaces
-
-      Rev 1.20   14 Jan 1999 16:21:50   OS
-   #56371# TF_ONE51
-
-      Rev 1.19   15 Dec 1998 10:10:02   OS
-   #56371# TF_ONE51 Zwischenstand
-
-      Rev 1.18   10 Dec 1998 15:53:14   OS
-   #56371# TF_ONE51 Zwischenstand
-
-      Rev 1.17   17 Sep 1998 09:24:54   OS
-   #52654# IndexMark einfuegen auch ohne Markierung, Properties gerichtet
-
-      Rev 1.16   10 Jul 1998 18:08:30   OS
-   PropertySetInfo und IdlClass static
-
-      Rev 1.15   03 Jul 1998 16:18:00   OS
-   Verzeichnisse nicht verschachteln
-
-      Rev 1.14   26 Jun 1998 18:16:46   OS
-   Maps aus unomap
-
-      Rev 1.13   25 Jun 1998 11:15:54   OS
-   IndexMark::setPropertyValue : auch mit Alternativtext richtig umsetzen
-
-      Rev 1.12   23 Jun 1998 10:24:48   OS
-   Verzeichnisse benutzbar, mit Descriptor
-
-      Rev 1.11   19 Jun 1998 14:46:20   TJ
-   GetModel auskommentiert
-
-      Rev 1.10   17 Jun 1998 16:10:32   MH
-   chg: Syntax OS2
-
-      Rev 1.9   12 Jun 1998 13:49:14   OS
-   Package-Umstellung
-
-      Rev 1.8   04 Jun 1998 12:40:56   OS
-// automatisch auskommentiert - [getIdlClass(es) or queryInterface] - Bitte XTypeProvider benutzen!
-//   getIdlClasses
-
-
-      Rev 1.7   14 May 1998 17:49:40   OS
-   div. Namensaenderungen
-
-      Rev 1.6   13 May 1998 15:29:08   OS
-   TextPosition-Auswertung verbessert
-
-      Rev 1.5   06 May 1998 17:06:22   OS
-   XTextPosition ohne Doc anlegen
-
-      Rev 1.4   09 Apr 1998 15:10:52   OS
-   Uno-Umstellung
-
-      Rev 1.3   07 Apr 1998 14:09:42   OS
-   Properties der Vezeichnisse lesen
-
-      Rev 1.2   01 Apr 1998 07:28:48   OS
-   Syntaxfehler
-
-      Rev 1.1   31 Mar 1998 15:35:18   OS
-   Properties angefangen
-
-      Rev 1.0   30 Mar 1998 10:19:08   OS
-   Initial revision.
-
-------------------------------------------------------------------------*/
