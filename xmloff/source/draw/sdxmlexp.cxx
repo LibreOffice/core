@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-09 13:28:06 $
+ *  last change: $Author: aw $ $Date: 2001-03-09 14:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1153,6 +1153,42 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                         }
                         break;
                     }
+                    case 27 : // AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART
+                    {
+                        Rectangle aTop(pInfo->GetPresRectangle());
+                        aTop.setHeight(long(aTop.GetHeight() * 0.488));
+                        Rectangle aBottom(aTop);
+                        aBottom.Top() = long(aBottom.Top() + aBottom.GetHeight() * 1.05);
+
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderVerticalTitle, pInfo->GetTitleRectangle());
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderVerticalOutline, aTop);
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderChart, aBottom);
+                        break;
+                    }
+                    case 28 : // AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE
+                    {
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderVerticalTitle, pInfo->GetTitleRectangle());
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderVerticalOutline, pInfo->GetPresRectangle());
+                        break;
+                    }
+                    case 29 : // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE
+                    {
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderTitle, pInfo->GetTitleRectangle());
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderVerticalOutline, pInfo->GetPresRectangle());
+                        break;
+                    }
+                    case 30 : // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART
+                    {
+                        Rectangle aLeft(pInfo->GetPresRectangle());
+                        aLeft.setWidth(long(aLeft.GetWidth() * 0.488));
+                        Rectangle aRight(aLeft);
+                        aRight.Left() = long(aRight.Left() + aRight.GetWidth() * 1.05);
+
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderTitle, pInfo->GetTitleRectangle());
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderGraphic, aLeft);
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderVerticalOutline, aRight);
+                        break;
+                    }
                     default:
                     {
                         DBG_ERROR("XMLEXP: unknown autolayout export");
@@ -1186,6 +1222,8 @@ void SdXMLExport::ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectan
         case XmlPlaceholderPage: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("page")); break;
         case XmlPlaceholderNotes: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("notes")); break;
         case XmlPlaceholderHandout: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("handout")); break;
+        case XmlPlaceholderVerticalTitle: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("vertical_title")); break;
+        case XmlPlaceholderVerticalOutline: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("vertical_outline")); break;
     }
 
     AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_object, aStr);
