@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:20:37 $
+#   last change: $Author: fs $ $Date: 2001-06-14 13:04:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=\
+        $(SLO)$/confignode.obj \
         $(SLO)$/configitem.obj \
         $(SLO)$/configmgr.obj
 
