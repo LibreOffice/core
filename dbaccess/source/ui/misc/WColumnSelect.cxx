@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-07-11 13:37:24 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 12:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,15 @@ OWizColumnSelect::OWizColumnSelect( Window* pParent)
 // -----------------------------------------------------------------------
 OWizColumnSelect::~OWizColumnSelect()
 {
+    while ( m_lbNewColumnNames.GetEntryCount() )
+    {
+        void* pData = m_lbNewColumnNames.GetEntryData(0);
+        if ( pData )
+            delete static_cast<OFieldDescription*>(pData);
+
+        m_lbNewColumnNames.RemoveEntry(0);
+    }
+    m_lbNewColumnNames.Clear();
     DBG_DTOR(OWizColumnSelect,NULL);
 }
 
@@ -216,6 +225,8 @@ sal_Bool OWizColumnSelect::LeavePage()
         OSL_ENSURE(pField,"The field information can not be null!");
         m_pParent->insertColumn(i,pField);
     }
+
+    clearListBox(m_lbNewColumnNames);
 
 
     if(m_pParent->WasButtonPressed() == OCopyTableWizard::WIZARD_NEXT || m_pParent->WasButtonPressed() == OCopyTableWizard::WIZARD_FINISH)
