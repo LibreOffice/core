@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobj.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 12:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,13 +101,14 @@ class FmFormObj: public SdrUnoObj
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>     xParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >    m_xEnvironmentHistory;
     sal_Int32           nPos;
+    sal_Int32           m_nType;
 
 public:
     TYPEINFO();
 
 protected:
-    FmFormObj(const ::rtl::OUString& rModelName);
-    FmFormObj();
+    FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType);
+    FmFormObj(sal_Int32 _nType);
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& GetParent() const {return xParent;}
     void  SetObjEnv(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xForm, sal_Int32 nIdx = -1,
@@ -129,6 +130,10 @@ public:
     virtual void clonedFrom(const FmFormObj* _pSource);
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> ensureModelEnv(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rSourceContainer, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer> _rTopLevelDestContainer);
+
+    /** returns the type of this form object. See fmglob.hxx
+    */
+    sal_Int32   getType() const;
 
 protected:
     virtual void     WriteData(SvStream& rOut) const;
