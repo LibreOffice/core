@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 15:11:40 $
+ *  last change: $Author: dvo $ $Date: 2001-01-08 11:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
 
     Any aRet;
     if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_AUTHOR       .pName, UNO_NAME_REDLINE_AUTHOR.nNameLen))
-        aRet <<= OUString(pRedline->GetAuthorString( pRedline->GetAuthor()));
+        aRet <<= OUString(pRedline->GetAuthorString());
     else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_DATE_TIME.pName, UNO_NAME_REDLINE_DATE_TIME.nNameLen))
     {
         aRet <<= lcl_DateTimeToUno(pRedline->GetTimeStamp());
@@ -264,7 +264,9 @@ Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
             Sequence<PropertyValue> aValues(4);
             PropertyValue* pValues = aValues.getArray();
             pValues[0].Name = C2U(UNO_NAME_REDLINE_AUTHOR);
-            pValues[0].Value <<= OUString(pRedline->GetAuthorString( pNext->GetAuthor()));
+            // GetAuthorString(n) walks the SwRedlineData* chain;
+            // here we always need element 1
+            pValues[0].Value <<= OUString(pRedline->GetAuthorString(1));
             pValues[1].Name = C2U(UNO_NAME_REDLINE_DATE_TIME);
             pValues[1].Value <<= lcl_DateTimeToUno(pNext->GetTimeStamp());
             pValues[2].Name = C2U(UNO_NAME_REDLINE_COMMENT);
