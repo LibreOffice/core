@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XParagraphCursor.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 00:34:27 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:04:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,50 +72,61 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::text::XParagraphCursor
 /** makes it possible to move paragraph by paragraph.
  */
 published interface XParagraphCursor: com::sun::star::text::XTextCursor
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XParagraphCursor::isStartOfParagraph
     /** determines if the cursor is positioned at the start of a paragraph.
      */
     boolean isStartOfParagraph();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XParagraphCursor::isEndOfParagraph
     /** determines if the cursor is positioned at the end of a paragraph.
      */
     boolean isEndOfParagraph();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XParagraphCursor::gotoStartOfParagraph
     /** moves the cursor to the start of the current paragraph.
+
+        @returns
+            <true/> if the cursor is now at the start of a paragraph,
+            <false/> otherwise. If <false/> was returned the cursor
+            will remain at its original position.
      */
     boolean gotoStartOfParagraph( [in] boolean bExpand );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XParagraphCursor::gotoEndOfParagraph
     /** moves the cursor to the end of the current paragraph.
+
+        @returns
+            <true/> if the cursor is now at the end of a paragraph,
+            <false/> otherwise. If <false/> was returned the cursor
+            will remain at its original position.
      */
     boolean gotoEndOfParagraph( [in] boolean bExpand );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XParagraphCursor::gotoNextParagraph
     /** moves the cursor to the next paragraph.
+
+        @returns
+            <true/> if the cursor was moved. It returns <false/> it the
+            cursor can not advance further.
      */
     boolean gotoNextParagraph( [in] boolean bExpand );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XParagraphCursor::gotoPreviousParagraph
     /** moves the cursor to the previous paragraph.
+
+        @returns
+            <true/> if the cursor was moved. It returns <false/> it the
+            cursor can not advance further.
      */
     boolean gotoPreviousParagraph( [in] boolean bExpand );
 
