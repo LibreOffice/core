@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-26 14:24:30 $
+ *  last change: $Author: os $ $Date: 2002-03-27 16:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4451,7 +4451,7 @@ FloatingWindow RID_TOOLBOXWINDOW
         {
             ImageBitmap = Bitmap
             {
-                FILE = "unop.bmp" ;
+                FILE = "un_op.bmp" ;
             };
             MaskColor = IMAGE_STDBTN_COLOR ;
             IdList =
@@ -4955,7 +4955,7 @@ FloatingWindow RID_TOOLBOXWINDOW
         {
             ImageBitmap = Bitmap
             {
-                FILE = "biop.bmp" ;
+                FILE = "bi_op.bmp" ;
             };
             MaskColor = IMAGE_STDBTN_COLOR ;
             IdList =
@@ -5618,7 +5618,7 @@ FloatingWindow RID_TOOLBOXWINDOW
         {
             ImageBitmap = Bitmap
             {
-                FILE = "oper.bmp" ;
+                FILE = "op_er.bmp" ;
             };
             MaskColor = IMAGE_STDBTN_COLOR ;
             IdList =
@@ -6312,7 +6312,7 @@ FloatingWindow RID_TOOLBOXWINDOW
         {
             ImageBitmap = Bitmap
             {
-                FILE = "func.bmp" ;
+                FILE = "fu_nc.bmp" ;
             };
             MaskColor = IMAGE_STDBTN_COLOR ;
             IdList =
@@ -7082,7 +7082,7 @@ FloatingWindow RID_TOOLBOXWINDOW
         {
             ImageBitmap = Bitmap
             {
-                FILE = "form.bmp" ;
+                FILE = "fo_rm.bmp" ;
             };
             MaskColor = IMAGE_STDBTN_COLOR ;
             IdList =
@@ -7503,7 +7503,7 @@ FloatingWindow RID_TOOLBOXWINDOW
         {
             ImageBitmap = Bitmap
             {
-                FILE = "attr.bmp" ;
+                FILE = "at_tr.bmp" ;
             };
             MaskColor = IMAGE_STDBTN_COLOR ;
             IdList =
@@ -8220,7 +8220,7 @@ FloatingWindow RID_TOOLBOXWINDOW
         {
             ImageBitmap = Bitmap
             {
-                FILE = "algn.bmp" ;
+                FILE = "al_gn.bmp" ;
             };
             MaskColor = IMAGE_STDBTN_COLOR ;
             IdList =
@@ -8819,7 +8819,7 @@ FloatingWindow RID_TOOLBOXWINDOW
         {
             ImageBitmap = Bitmap
             {
-                FILE = "colr.bmp" ;
+                FILE = "co_lr.bmp" ;
             };
             MaskColor = IMAGE_STDBTN_COLOR ;
             IdList =
@@ -9291,7 +9291,7 @@ FloatingWindow RID_TOOLBOXWINDOW
         {
             ImageBitmap = Bitmap
             {
-                FILE = "misc.bmp" ;
+                FILE = "mi_sc.bmp" ;
             };
             MaskColor = IMAGE_STDBTN_COLOR ;
             IdList =
@@ -9885,7 +9885,7 @@ FloatingWindow RID_TOOLBOXWINDOW
         {
             ImageBitmap = Bitmap
             {
-                FILE = "img.bmp" ;  // image-list bitmap
+                FILE = "im_g.bmp" ;  // image-list bitmap
             };
             MaskColor = IMAGE_STDBTN_COLOR ;
             IdList =
