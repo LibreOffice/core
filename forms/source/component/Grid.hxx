@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2000-12-19 17:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,11 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>  createColumn(sal_Int32 nTypeId) const;
 
     OGridColumn* getColumnImplementation(const InterfaceRef& _rxIFace) const;
+
+protected:
+    virtual void implRemoved(const InterfaceRef& _rxObject);
+    virtual void implInserted(const InterfaceRef& _rxObject);
+    virtual void implReplaced(const InterfaceRef& _rxReplacedObject, const InterfaceRef& _rxNewObject);
 
 private:
     DECL_LINK( OnFontChanged, void* );

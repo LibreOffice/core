@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2000-12-19 17:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
+
+using namespace ::com::sun::star::uno;
 
 // TODO : find a place for this !
 namespace internal
@@ -1003,6 +1005,38 @@ OGridColumn* OGridControlModel::getColumnImplementation(const InterfaceRef& _rxI
         pImplementation = reinterpret_cast<OGridColumn*>(xUnoTunnel->getSomething(OGridColumn::getUnoTunnelImplementationId()));
 
     return pImplementation;
+}
+
+//------------------------------------------------------------------------------
+void OGridControlModel::implRemoved(const InterfaceRef& _rxObject)
+{
+    OInterfaceContainer::implRemoved(_rxObject);
+
+    if (Reference<XInterface>(m_xSelection, UNO_QUERY).get() == Reference<XInterface>(_rxObject, UNO_QUERY).get())
+    {   // the currently selected element was replaced
+        m_xSelection.clear();
+        starlang::EventObject aEvt(static_cast<staruno::XWeak*>(this));
+        NOTIFY_LISTENERS(m_aSelectListeners, starview::XSelectionChangeListener, selectionChanged, aEvt);
+    }
+}
+
+//------------------------------------------------------------------------------
+void OGridControlModel::implInserted(const InterfaceRef& _rxObject)
+{
+    OInterfaceContainer::implInserted(_rxObject);
+}
+
+//------------------------------------------------------------------------------
+void OGridControlModel::implReplaced(const InterfaceRef& _rxReplacedObject, const InterfaceRef& _rxNewObject)
+{
+    OInterfaceContainer::implReplaced(_rxReplacedObject, _rxNewObject);
+
+    if (Reference<XInterface>(m_xSelection, UNO_QUERY).get() == Reference<XInterface>(_rxReplacedObject, UNO_QUERY).get())
+    {   // the currently selected element was replaced
+        m_xSelection.clear();
+        starlang::EventObject aEvt(static_cast<staruno::XWeak*>(this));
+        NOTIFY_LISTENERS(m_aSelectListeners, starview::XSelectionChangeListener, selectionChanged, aEvt);
+    }
 }
 
 //------------------------------------------------------------------------------
