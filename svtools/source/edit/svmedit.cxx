@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-15 09:17:15 $
+ *  last change: $Author: mt $ $Date: 2002-08-15 09:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1360,6 +1360,17 @@ long MultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 {
     long nDone = 0;
 
+#if defined( DEBUG ) && !defined( PRODUCT )
+    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        const KeyEvent& rKEvent = *rNEvt.GetKeyEvent();
+        if ( ( rKEvent.GetKeyCode().GetCode() == KEY_W ) && rKEvent.GetKeyCode().IsMod1() && rKEvent.GetKeyCode().IsMod2() )
+        {
+            SetRightToLeft( !IsRightToLeft() );
+        }
+    }
+#endif
+
     if( ( rNEvt.GetType() == EVENT_KEYINPUT ) && ( !GetTextView()->IsCursorEnabled() ) )
     {
         const KeyEvent& rKEvent = *rNEvt.GetKeyEvent();
@@ -1490,7 +1501,10 @@ USHORT MultiLineEdit::GetLeftMargin() const
 void MultiLineEdit::SetRightToLeft( BOOL bRightToLeft )
 {
     if ( GetTextEngine() )
+    {
         GetTextEngine()->SetRightToLeft( bRightToLeft );
+        GetTextView()->ShowCursor();
+    }
 }
 
 BOOL MultiLineEdit::IsRightToLeft() const
