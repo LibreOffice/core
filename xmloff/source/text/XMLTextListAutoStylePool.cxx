@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextListAutoStylePool.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: mib $ $Date: 2000-10-31 09:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,14 @@
 #include <svtools/cntnrsrt.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
+#include <com/sun/star/container/XIndexReplace.hpp>
+#endif
+
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -101,43 +109,66 @@ class XMLTextListAutoStylePoolEntry_Impl
 {
     OUString    sName;
     OUString    sInternalName;
-    Reference < XIndexReplace > xNumRule;
+    Reference < XIndexReplace > xNumRules;
     sal_uInt32  nPos;
+    sal_Bool    bIsNamed;
 
 
 public:
 
     XMLTextListAutoStylePoolEntry_Impl(
             sal_uInt32 nPos,
-            const OUString& rIntName,
-            const Reference < XIndexReplace > & rNumRule,
+            const Reference < XIndexReplace > & rNumRules,
             XMLTextListAutoStylePoolNames_Impl& rNames,
             const OUString& rPrefix,
             sal_uInt32& rName );
 
-    XMLTextListAutoStylePoolEntry_Impl( const OUString& rIntName ) :
-        sInternalName( rIntName ),
-        nPos( 0 )
-    {}
+    XMLTextListAutoStylePoolEntry_Impl(
+            const Reference < XIndexReplace > & rNumRules ) :
+        nPos( 0 ),
+        xNumRules( rNumRules ),
+        bIsNamed( sal_False )
+    {
+        Reference < XNamed > xNamed( xNumRules, UNO_QUERY );
+        if( xNamed.is() )
+        {
+            sInternalName = xNamed->getName();
+            bIsNamed = sal_True;
+        }
+    }
 
+    XMLTextListAutoStylePoolEntry_Impl(
+            const OUString& rInternalName ) :
+        nPos( 0 ),
+        sInternalName( rInternalName ),
+        bIsNamed( sal_True )
+    {
+    }
 
     const OUString& GetName() const { return sName; }
     const OUString& GetInternalName() const { return sInternalName; }
-    const Reference < XIndexReplace > & GetNumRule() const { return xNumRule; }
+    const Reference < XIndexReplace > & GetNumRules() const { return xNumRules; }
     sal_uInt32 GetPos() const { return nPos; }
+    sal_Bool IsNamed() const { return bIsNamed; }
 };
 
 XMLTextListAutoStylePoolEntry_Impl::XMLTextListAutoStylePoolEntry_Impl(
         sal_uInt32 nP,
-        const OUString& rIntName,
-        const Reference < XIndexReplace > & rNumRule,
+        const Reference < XIndexReplace > & rNumRules,
         XMLTextListAutoStylePoolNames_Impl& rNames,
         const OUString& rPrefix,
         sal_uInt32& rName ) :
     nPos( nP ),
-    sInternalName( rIntName ),
-    xNumRule( rNumRule )
+    xNumRules( rNumRules ),
+    bIsNamed( sal_False )
 {
+    Reference < XNamed > xNamed( xNumRules, UNO_QUERY );
+    if( xNamed.is() )
+    {
+        sInternalName = xNamed->getName();
+        bIsNamed = sal_True;
+    }
+
     // create a name that hasn't been used before. The created name has not
     // to be added to the array, because it will never tried again
     OUStringBuffer sBuffer( 7 );
@@ -155,7 +186,23 @@ int XMLTextListAutoStylePoolEntryCmp_Impl(
         const XMLTextListAutoStylePoolEntry_Impl& r1,
         const XMLTextListAutoStylePoolEntry_Impl& r2 )
 {
-    return (int)r1.GetInternalName().compareTo( r2.GetInternalName() );
+    int nRet;
+    if( r1.IsNamed() )
+    {
+        if( r2.IsNamed() )
+             nRet = (int)r1.GetInternalName().compareTo( r2.GetInternalName());
+        else
+            nRet = -1;
+    }
+    else
+    {
+        if( r2.IsNamed() )
+            nRet = 1;
+        else
+             nRet = (int)(r1.GetNumRules().get() - r2.GetNumRules().get());
+    }
+
+    return nRet;
 }
 
 typedef XMLTextListAutoStylePoolEntry_Impl *XMLTextListAutoStylePoolEntryPtr;
@@ -193,11 +240,10 @@ sal_Bool XMLTextListAutoStylePool::HasName( const OUString& rName ) const
 }
 
 OUString XMLTextListAutoStylePool::Add(
-            const OUString& rInternalName,
-            const Reference < XIndexReplace > & rNumRule )
+            const Reference < XIndexReplace > & rNumRules )
 {
     OUString sName;
-    XMLTextListAutoStylePoolEntry_Impl aTmp( rInternalName );
+    XMLTextListAutoStylePoolEntry_Impl aTmp( rNumRules );
     sal_uInt32 nPos;
     if( pPool->Seek_Entry( &aTmp, &nPos ) )
     {
@@ -207,8 +253,7 @@ OUString XMLTextListAutoStylePool::Add(
     {
         XMLTextListAutoStylePoolEntry_Impl *pEntry =
             new XMLTextListAutoStylePoolEntry_Impl( pPool->Count(),
-                                                rInternalName,
-                                               rNumRule, *pNames, sPrefix,
+                                               rNumRules, *pNames, sPrefix,
                                                nName );
         pPool->Insert( pEntry );
         sName = pEntry->GetName();
@@ -218,7 +263,19 @@ OUString XMLTextListAutoStylePool::Add(
 }
 
 ::rtl::OUString XMLTextListAutoStylePool::Find(
-            const ::rtl::OUString& rInternalName ) const
+            const Reference < XIndexReplace > & rNumRules ) const
+{
+    OUString sName;
+    XMLTextListAutoStylePoolEntry_Impl aTmp( rNumRules );
+    sal_uInt32 nPos;
+    if( pPool->Seek_Entry( &aTmp, &nPos ) )
+        sName = pPool->GetObject( nPos )->GetName();
+
+    return sName;
+}
+
+::rtl::OUString XMLTextListAutoStylePool::Find(
+            const OUString& rInternalName ) const
 {
     OUString sName;
     XMLTextListAutoStylePoolEntry_Impl aTmp( rInternalName );
@@ -257,7 +314,7 @@ void XMLTextListAutoStylePool::exportXML() const
     {
         XMLTextListAutoStylePoolEntry_Impl *pEntry = aExpEntries[i];
         aNumRuleExp.exportNumberingRule( pEntry->GetName(),
-                                         pEntry->GetNumRule() );
+                                         pEntry->GetNumRules() );
     }
     delete aExpEntries;
 }

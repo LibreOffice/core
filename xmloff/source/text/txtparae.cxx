@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-19 10:25:01 $
+ *  last change: $Author: mib $ $Date: 2000-10-31 09:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,20 +270,16 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                 aAny >>= xNumRule;
                 if( xNumRule.is() )
                 {
+                    Reference < XNamed > xNamed( xNumRule, UNO_QUERY );
                     OUString sName;
-                    if( xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
-                    {
-                        aAny =rPropSet->getPropertyValue( sNumberingStyleName );
-                        aAny >>= sName;
-                    }
-                    DBG_ASSERT( sName.getLength(),"num rule name is missing!" );
-                    if( sName.getLength() )
+                    if( xNamed.is() )
+                        sName = xNamed->getName();
+                    if( !sName.getLength() || !pListAutoPool->HasName( sName ) )
                     {
                         // HasName returns false if the num rule is a style,
                         // because all style names have been registered while
                         // all automatic rules not.
-                        if( !pListAutoPool->HasName( sName ) )
-                            pListAutoPool->Add( sName, xNumRule );
+                        pListAutoPool->Add( xNumRule );
                     }
                 }
             }
@@ -368,13 +364,13 @@ void XMLTextParagraphExport::exportListChange(
 {
     // end a list
     if( rPrevInfo.GetLevel() > 0 &&
-        ( rNextInfo.GetName() != rPrevInfo.GetName() ||
+        ( !rNextInfo.HasSameNumRules( rPrevInfo ) ||
           rNextInfo.GetLevel() < rPrevInfo.GetLevel() ||
              rNextInfo.IsRestart()  ) )
     {
         sal_Int16 nPrevLevel = rPrevInfo.GetLevel();
         sal_Int16 nNextLevel =
-            ( rNextInfo.GetName() != rPrevInfo.GetName() ||
+            ( !rNextInfo.HasSameNumRules( rPrevInfo ) ||
               rNextInfo.IsRestart() ) ?  0 : rNextInfo.GetLevel();
 
         DBG_ASSERT( pListElements &&
@@ -399,26 +395,39 @@ void XMLTextParagraphExport::exportListChange(
 
     // start a new list
     if( rNextInfo.GetLevel() > 0 &&
-        ( rPrevInfo.GetName() != rNextInfo.GetName() ||
+        ( !rPrevInfo.HasSameNumRules( rNextInfo ) ||
           rPrevInfo.GetLevel() < rNextInfo.GetLevel() ||
              rNextInfo.IsRestart() ) )
     {
         sal_Int16 nPrevLevel =
-            ( rNextInfo.GetName() != rPrevInfo.GetName() ||
+            ( !rNextInfo.HasSameNumRules( rPrevInfo ) ||
               rNextInfo.IsRestart() ) ? 0 : rPrevInfo.GetLevel();
         sal_Int16 nNextLevel = rNextInfo.GetLevel();
 
-        const OUString& rListName = rNextInfo.GetName();
-        sal_Bool bListExported = pExportedLists &&
-                      pExportedLists->Seek_Entry( (OUString *)&rListName );
-        sal_Bool bContinue = !rNextInfo.IsRestart() && bListExported &&
-                             rPrevInfo.GetName() != rNextInfo.GetName();
-        if( !bListExported )
+        // Find out whether this is the first application of the list or not.
+        // For named lists, we use the internal name. For unnamed lists, we
+        // use the generated name. This works well, because there are either
+        // unnamed or either named lists only.
+        sal_Bool bListExported = sal_False;
+        OUString sName;
+        if( rNextInfo.IsNamed() )
+            sName = rNextInfo.GetName();
+        else
+            sName = pListAutoPool->Find( rNextInfo.GetNumRules() );
+        DBG_ASSERT( sName.getLength(), "list without a name" );
+        if( sName.getLength() )
         {
-            if( !pExportedLists )
-                pExportedLists = new OUStringsSort_Impl;
-            pExportedLists->Insert( new OUString(rListName) );
+            bListExported = pExportedLists &&
+                             pExportedLists->Seek_Entry( (OUString *)&sName );
+            if( !bListExported )
+            {
+                if( !pExportedLists )
+                    pExportedLists = new OUStringsSort_Impl;
+                pExportedLists->Insert( new OUString(sName) );
+            }
         }
+        sal_Bool bContinue = !rNextInfo.IsRestart() && bListExported &&
+                             !rPrevInfo.HasSameNumRules( rNextInfo );
 
         for( sal_Int16 i=nPrevLevel; i < nNextLevel; i++)
         {
@@ -426,10 +435,16 @@ void XMLTextParagraphExport::exportListChange(
             GetExport().CheckAttrList();
             if( 0 == i )
             {
-                OUString sName(  rListName );
-                OUString sTmp( pListAutoPool->Find( sName ) );
-                if( sTmp.getLength() )
-                    sName = sTmp;
+                // For named list, the name might be the name of an automatic
+                // rule, so we have to take a look into the style pool.
+                // For unnamed lists, we have done this already.
+                if( rNextInfo.IsNamed() )
+                {
+                    OUString sTmp( pListAutoPool->Find(
+                                            rNextInfo.GetNumRules() ) );
+                    if( sTmp.getLength() )
+                        sName = sTmp;
+                }
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_style_name,
                                           sName );
             }
@@ -481,7 +496,7 @@ void XMLTextParagraphExport::exportListChange(
     }
 
     if( rNextInfo.GetLevel() > 0 && rNextInfo.IsNumbered() &&
-        rPrevInfo.GetName() == rNextInfo.GetName() &&
+        rPrevInfo.HasSameNumRules( rNextInfo ) &&
         rPrevInfo.GetLevel() >= rNextInfo.GetLevel() &&
         !rNextInfo.IsRestart() )
     {
@@ -782,7 +797,6 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sFrame(RTL_CONSTASCII_USTRINGPARAM("Frame")),
     sCategory(RTL_CONSTASCII_USTRINGPARAM("Category")),
     sNumberingRules(RTL_CONSTASCII_USTRINGPARAM("NumberingRules")),
-    sNumberingStyleName(RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName")),
     sTextPortionType(RTL_CONSTASCII_USTRINGPARAM("TextPortionType")),
     sFootnote(RTL_CONSTASCII_USTRINGPARAM("Footnote")),
     sBookmark(RTL_CONSTASCII_USTRINGPARAM("Bookmark")),
@@ -1005,6 +1019,7 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
     XMLTextNumRuleInfo aPrevNumInfo;
     XMLTextNumRuleInfo aNextNumInfo;
 
+    sal_Bool bHasContent sal_False;
     Reference<XTextSection> xCurrentTextSection;
 
     while( rContEnum->hasMoreElements() )
@@ -1026,6 +1041,7 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
                                         bAutoStyles );
 
             exportParagraph( xTxtCntnt, bAutoStyles );
+            bHasContent = sal_True;
         }
         else if( xServiceInfo->supportsService( sTableService ) )
         {
@@ -1035,6 +1051,7 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
                 exportListChange( aPrevNumInfo, aNextNumInfo );
             }
             exportTable( xTxtCntnt, bAutoStyles );
+            bHasContent = sal_True;
         }
         else if( xServiceInfo->supportsService( sTextFrameService ) )
         {
@@ -1059,7 +1076,7 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
         }
     }
 
-    if( !bAutoStyles )
+    if( bHasContent && !bAutoStyles )
     {
         aNextNumInfo.Reset();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextNumRuleInfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-23 11:28:11 $
+ *  last change: $Author: mib $ $Date: 2000-10-31 09:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,6 @@ XMLTextNumRuleInfo::XMLTextNumRuleInfo() :
     sNumberingLevel(RTL_CONSTASCII_USTRINGPARAM("NumberingLevel")),
     sNumberingStartValue(RTL_CONSTASCII_USTRINGPARAM("NumberingStartValue")),
     sParaIsNumberingRestart(RTL_CONSTASCII_USTRINGPARAM("ParaIsNumberingRestart")),
-    sNumberingStyleName(RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName")),
     sNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType")),
     sIsNumbering(RTL_CONSTASCII_USTRINGPARAM("IsNumbering")),
     sNumberingIsNumber(RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber"))
@@ -132,7 +131,10 @@ void XMLTextNumRuleInfo::Set(
     {
         Reference < XNamed > xNamed( xNumRules, UNO_QUERY );
         if( xNamed.is() )
+        {
+            bIsNamed = sal_True;
             sName = xNamed->getName();
+        }
 
         aAny = xPropSet->getPropertyValue( sNumberingLevel );
         aAny >>= nLevel;

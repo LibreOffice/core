@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextNumRuleInfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-23 11:28:11 $
+ *  last change: $Author: mib $ $Date: 2000-10-31 09:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@ class XMLTextNumRuleInfo
     const ::rtl::OUString sNumberingLevel;
     const ::rtl::OUString sNumberingStartValue;
     const ::rtl::OUString sParaIsNumberingRestart;
-    const ::rtl::OUString sNumberingStyleName;
     const ::rtl::OUString sNumberingType;
     const ::rtl::OUString sIsNumbering;
     const ::rtl::OUString sNumberingIsNumber;
@@ -98,6 +97,7 @@ class XMLTextNumRuleInfo
     sal_Bool            bIsNumbered : 1;
     sal_Bool            bIsOrdered : 1;
     sal_Bool            bIsRestart : 1;
+    sal_Bool            bIsNamed : 1;
 
 public:
 
@@ -122,6 +122,9 @@ public:
     sal_Bool IsNumbered() const { return bIsNumbered; }
     sal_Bool IsOrdered() const { return bIsOrdered; }
     sal_Bool IsRestart() const { return bIsRestart; }
+    sal_Bool IsNamed() const { return bIsNamed; }
+
+    inline sal_Bool HasSameNumRules( const XMLTextNumRuleInfo& rCmp ) const;
 };
 
 inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
@@ -134,6 +137,7 @@ inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
     bIsNumbered = rInfo.bIsNumbered;
     bIsOrdered = rInfo.bIsOrdered;
     bIsRestart = rInfo.bIsRestart;
+    bIsNamed = rInfo.bIsNamed;
 
     return *this;
 }
@@ -144,8 +148,14 @@ inline void XMLTextNumRuleInfo::Reset()
     xNumRules = 0;
     nStartValue = -1;
     nLevel = 0;
-    bIsNumbered = bIsOrdered = bIsRestart = sal_False;
+    bIsNumbered = bIsOrdered = bIsRestart = bIsNamed = sal_False;
 }
 
+inline sal_Bool XMLTextNumRuleInfo::HasSameNumRules(
+                        const XMLTextNumRuleInfo& rCmp ) const
+{
+    return (bIsNamed && rCmp.bIsNamed) ? (rCmp.sName == sName)
+                                   : (rCmp.xNumRules == xNumRules);
+}
 
 #endif  //  _XMLOFF_XMLTEXTNUMRULEINFO_HXX

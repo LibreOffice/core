@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-26 09:25:33 $
+ *  last change: $Author: mib $ $Date: 2000-10-31 09:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,6 @@ XMLTextImportHelper::XMLTextImportHelper(
     sNumberingLevel(RTL_CONSTASCII_USTRINGPARAM("NumberingLevel")),
     sNumberingStartValue(RTL_CONSTASCII_USTRINGPARAM("NumberingStartValue")),
     sParaIsNumberingRestart(RTL_CONSTASCII_USTRINGPARAM("ParaIsNumberingRestart")),
-    sNumberingStyleName(RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName")),
     sNumberingRules(RTL_CONSTASCII_USTRINGPARAM("NumberingRules")),
     sSequenceNumber(RTL_CONSTASCII_USTRINGPARAM("SequenceNumber")),
     sSourceName(RTL_CONSTASCII_USTRINGPARAM("SourceName")),

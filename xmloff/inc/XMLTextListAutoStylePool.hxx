@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextListAutoStylePool.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:01 $
+ *  last change: $Author: mib $ $Date: 2000-10-31 08:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,12 +98,13 @@ public:
     sal_Bool HasName( const ::rtl::OUString& rName ) const;
 
     ::rtl::OUString Add(
-            const ::rtl::OUString& rInternalName,
             const ::com::sun::star::uno::Reference <
-                ::com::sun::star::container::XIndexReplace > & rNumRule );
+                ::com::sun::star::container::XIndexReplace > & rNumRules );
 
     ::rtl::OUString Find(
-            const ::rtl::OUString& rInternalName ) const;
+            const ::com::sun::star::uno::Reference <
+                ::com::sun::star::container::XIndexReplace > & rNumRules ) const;
+    ::rtl::OUString Find( const ::rtl::OUString& rInternalName ) const;
 
     void exportXML() const;
 };
