@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 12:38:03 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 09:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ String SCSTR_APPLICATION
     Text [ ENGLISH ] = "StarCalc 5.0" ;
     Text [ norwegian ] = "StarCalc 5.0" ;
     Text [ italian ] = "StarCalc 5.0" ;
-    Text [ portuguese_brazilian ] = "StarOffice Calc 4.0" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc 4.0" ;
     Text [ portuguese ] = "StarCalc 5.0" ;
     Text [ finnish ] = "StarCalc 5.0" ;
     Text [ danish ] = "StarCalc 5.0" ;
@@ -96,10 +96,10 @@ String SCSTR_APPLICATION
     Text[ russian ] = "StarCalc 5.0";
     Text[ polish ] = "StarCalc 5.0";
     Text[ japanese ] = "StarCalc 5.0";
-    Text[ chinese_traditional ] = "StarOffice Calc 5.0";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Calc 5.0";
     Text[ arabic ] = "StarCalc 5.0";
     Text[ greek ] = "Star Calc 5.0";
-    Text[ korean ] = "StarOffice Calc  5.0";
+    Text[ korean ] = "%PRODUCTNAME Calc  5.0";
     Text[ turkish ] = "StarCalc 5.0";
     Text[ language_user1 ] = " ";
 };
@@ -109,7 +109,7 @@ String SCSTR_40_APPLICATION
     Text [ ENGLISH ] = "StarCalc 4.0" ;
     Text [ norwegian ] = "StarCalc 4.0" ;
     Text [ italian ] = "StarCalc 4.0" ;
-    Text [ portuguese_brazilian ] = "StarOffice Calc 4.0" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc 4.0" ;
     Text [ portuguese ] = "StarCalc 4.0" ;
     Text [ finnish ] = "StarCalc 4.0" ;
     Text [ danish ] = "StarCalc 4.0" ;
@@ -122,10 +122,10 @@ String SCSTR_40_APPLICATION
     Text[ russian ] = "StarCalc 4.0";
     Text[ polish ] = "StarCalc 4.0";
     Text[ japanese ] = "StarCalc 4.0";
-    Text[ chinese_traditional ] = "StarOffice Calc 4.0";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Calc 4.0";
     Text[ arabic ] = "Star Calc 4.0";
     Text[ greek ] = "StarCalc 4.0";
-    Text[ korean ] = "StarOffice Calc 4.0";
+    Text[ korean ] = "%PRODUCTNAME Calc 4.0";
     Text[ turkish ] = "StarCalc 4.0";
     Text[ language_user1 ] = " ";
 };
@@ -135,7 +135,7 @@ String SCSTR_30_APPLICATION
     Text [ ENGLISH ] = "StarCalc 3.0" ;
     Text [ norwegian ] = "StarCalc 3.0" ;
     Text [ italian ] = "StarCalc 3.0" ;
-    Text [ portuguese_brazilian ] = "StarOffice Calc 3.0" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc 3.0" ;
     Text [ portuguese ] = "StarCalc 3.0" ;
     Text [ finnish ] = "StarCalc 3.0" ;
     Text [ danish ] = "StarCalc 3.0" ;
@@ -148,58 +148,58 @@ String SCSTR_30_APPLICATION
     Text[ russian ] = "StarCalc 3.0";
     Text[ polish ] = "StarCalc 3.0";
     Text[ japanese ] = "StarCalc 3.0";
-    Text[ chinese_traditional ] = "StarOffice Calc 3.0";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Calc 3.0";
     Text[ arabic ] = "Star Calc 3.0";
     Text[ greek ] = "Star Calc 3.0";
-    Text[ korean ] = "StarOffice Calc 3.0";
+    Text[ korean ] = "%PRODUCTNAME Calc 3.0";
     Text[ turkish ] = "StarCalc 3.0";
     Text[ language_user1 ] = " ";
 };
 String SCSTR_LONG_SCDOC_NAME
 {
-    Text = "StarOffice 5.0 Tabelle" ;
+    Text = "%PRODUCTNAME 5.0 Tabelle" ;
     Text [ ENGLISH ] = "StarOffice 5.0 Table" ;
-    Text [ dutch ] = "StarOffice 5.0 werkblad" ;
-    Text [ english_us ] = "StarOffice 5.0 Spreadsheet" ;
-    Text [ swedish ] = "StarOffice 5.0 tabell" ;
-    Text [ danish ] = "StarOffice Calc 5.0 regneark" ;
-    Text [ italian ] = "Foglio di calcolo StarOffice 5.0" ;
-    Text [ spanish ] = "Hoja de cálculo de StarOffice 5.0" ;
-    Text [ french ] = "StarOffice 5.0 Classeur" ;
-    Text [ portuguese ] = "StarOffice 5.0 Folha de cálculo" ;
-    Text [ portuguese_brazilian ] = "StarOffice 4.0 Tabelle" ;
-    Text[ chinese_simplified ] = "StarOffice 5.0 ¹¤×÷±í";
-    Text[ russian ] = "Ëèñò â StarOffice 5.0";
-    Text[ polish ] = "Arkusz kalkulacyjny StarOffice 5.0";
-    Text[ japanese ] = "StarOffice 5.0 •\\";
-    Text[ chinese_traditional ] = "StarOffice 5.0 ¤u§@ªí";
-    Text[ arabic ] = "ÌÏæá StarOffice Calc 5.0";
-    Text[ greek ] = "ÄéÜãñáììá StarOffice 5.0";
-    Text[ korean ] = "StarOffice Calc 5.0 ½ºÇÁ·¹µå ½ÃÆ®";
-    Text[ turkish ] = "StarOffice 5.0 tablosu";
+    Text [ dutch ] = "%PRODUCTNAME 5.0 werkblad" ;
+    Text [ english_us ] = "%PRODUCTNAME 5.0 Spreadsheet" ;
+    Text [ swedish ] = "%PRODUCTNAME 5.0 tabell" ;
+    Text [ danish ] = "%PRODUCTNAME Calc 5.0 regneark" ;
+    Text [ italian ] = "Foglio di calcolo %PRODUCTNAME 5.0" ;
+    Text [ spanish ] = "Hoja de cálculo de %PRODUCTNAME 5.0" ;
+    Text [ french ] = "%PRODUCTNAME 5.0 Classeur" ;
+    Text [ portuguese ] = "%PRODUCTNAME 5.0 Folha de cálculo" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Tabelle" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 ¹¤×÷±í";
+    Text[ russian ] = "Ëèñò â %PRODUCTNAME 5.0";
+    Text[ polish ] = "Arkusz kalkulacyjny %PRODUCTNAME 5.0";
+    Text[ japanese ] = "%PRODUCTNAME 5.0 •\\";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 ¤u§@ªí";
+    Text[ arabic ] = "ÌÏæá %PRODUCTNAME Calc 5.0";
+    Text[ greek ] = "ÄéÜãñáììá %PRODUCTNAME 5.0";
+    Text[ korean ] = "%PRODUCTNAME Calc 5.0 ½ºÇÁ·¹µå ½ÃÆ®";
+    Text[ turkish ] = "%PRODUCTNAME 5.0 tablosu";
     Text[ language_user1 ] = " ";
 };
 String SCSTR_40_LONG_DOCNAME
 {
-    Text = "StarOffice 4.0 Tabelle" ;
+    Text = "%PRODUCTNAME 4.0 Tabelle" ;
     Text [ ENGLISH ] = "StarOffice 4.0 Table" ;
     Text [ dutch ] = "StarCalc 4.0 werkblad" ;
     Text [ english_us ] = "Spreadsheet (StarCalc 4.0)" ;
     Text [ swedish ] = "Star 4.0 tabell" ;
     Text [ danish ] = "StarCalc 4.0 regneark" ;
-    Text [ italian ] = "Foglio elettronico StarOffice 4.0" ;
-    Text [ spanish ] = "Hoja de cálculo de StarOffice 4.0" ;
+    Text [ italian ] = "Foglio elettronico %PRODUCTNAME 4.0" ;
+    Text [ spanish ] = "Hoja de cálculo de %PRODUCTNAME 4.0" ;
     Text [ french ] = "StarCalc 4.0 Classeur" ;
     Text [ portuguese ] = "Folha de cálculo StarCalc 4.0" ;
-    Text [ portuguese_brazilian ] = "StarOffice 4.0 Tabelle" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Tabelle" ;
     Text[ chinese_simplified ] = "StarCalc 4.0 ¹¤×÷±í";
-    Text[ russian ] = "Ëèñò â StarOffice 4.0";
+    Text[ russian ] = "Ëèñò â %PRODUCTNAME 4.0";
     Text[ polish ] = "Arkusz kalkulacyjny StarCalc 4.0";
     Text[ japanese ] = "StarCalc 4.0 •\\ŒvZ";
-    Text[ chinese_traditional ] = "StarOffice 4.0 ¤u§@ªí";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 4.0 ¤u§@ªí";
     Text[ arabic ] = "ÌÏæá StarCalc 4.0";
     Text[ greek ] = "Star Calc 4.0 - Ğßíáêáò";
-    Text[ korean ] = "½ºÇÁ·¹µå ½ÃÆ® (StarOffice Calc 4.0)";
+    Text[ korean ] = "½ºÇÁ·¹µå ½ÃÆ® (%PRODUCTNAME Calc 4.0)";
     Text[ turkish ] = "StarCalc 4.0 tablosu";
     Text[ language_user1 ] = " ";
 };
@@ -215,15 +215,15 @@ String SCSTR_30_LONG_DOCNAME
     Text [ spanish ] = "Hoja de cálculo de StarCalc 3.0" ;
     Text [ french ] = "Classeur StarCalc 3.0" ;
     Text [ portuguese ] = "StarCalc 3.0 Folha de cálculo" ;
-    Text [ portuguese_brazilian ] = "StarOffice Calc 3.0 Tabelle" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc 3.0 Tabelle" ;
     Text[ chinese_simplified ] = "StaCalc 3.0 ¹¤×÷±í";
     Text[ russian ] = "Ëèñò â StarCalc 3.0";
     Text[ polish ] = "Arkusz kalkulacyjny StarCalc 3.0";
     Text[ japanese ] = "StarCalc 3.0 •\\ŒvZ";
-    Text[ chinese_traditional ] = "StarOffice Calc 3.0 ¤u§@ªí";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Calc 3.0 ¤u§@ªí";
     Text[ arabic ] = "ÌÏæá Star Calc 3.0";
     Text[ greek ] = "StarCalc 3.0 - Ğßíáêáò";
-    Text[ korean ] = "StarOffice Calc 3.0 ½ºÇÁ·¹µå ½ÃÆ®";
+    Text[ korean ] = "%PRODUCTNAME Calc 3.0 ½ºÇÁ·¹µå ½ÃÆ®";
     Text[ turkish ] = "StarCalc 3.0 tablosu";
     Text[ language_user1 ] = " ";
 };
@@ -1607,7 +1607,7 @@ String SCSTR_HOR_JUSTIFY_CENTER
     Text[ chinese_simplified ] = "Ë®Æ½¾ÓÖĞ";
     Text[ russian ] = "Ãîğèçîíòàëüíî ïî öåíòğó";
     Text[ polish ] = "Wyrównany w poziomie";
-    Text[ japanese ] = "…•½‚É’†‰›‘µ‚¦";
+    Text[ japanese ] = "‰¡ˆÊ’u‚É’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "¤ô¥­¸m¤¤";
     Text[ arabic ] = "ãæÓØ ÃİŞíÇ";
     Text[ greek ] = "Êåíôñáñéóìİíá ïñéæüíôéá";
@@ -2659,26 +2659,26 @@ String SCSTR_TEXTSEP
 
 String SCSTR_FORMULA_AUTOCORRECTION
 {
-    Text = "StarOffice Calc hat einen Fehler in der eingegebenen Formel gefunden.\nWollen Sie die unten vorgeschlagene Korrektur akzeptieren?\n\n" ;
+    Text = "%PRODUCTNAME Calc hat einen Fehler in der eingegebenen Formel gefunden.\nWollen Sie die unten vorgeschlagene Korrektur akzeptieren?\n\n" ;
     Text [ ENGLISH ] = "StarCalc found an error in the formula you entered.\nDo you want to accept the correction proposed below?\n\n" ;
-    Text [ portuguese ] = "O StarOffice Calc encontrou um erro na fórmula indicada. \nAceitar a correcção proposta em baixo?\n\n" ;
-    Text [ english_us ] = "StarOffice Calc found an error in the formula entered.\nDo you want to accept the correction proposed below?\n\n" ;
-    Text [ portuguese_brazilian ] = "StarOffice Calc hat einen Fehler in der eingegebenen Formel gefunden.\nWollen Sie die unten vorgeschlagene Korrektur akzeptieren?\n\n" ;
-    Text [ swedish ] = "StarOffice Calc har hittat ett fel i den angivna formeln.\nSkall korrigeringen som föreslås nedan accepteras?\n\n" ;
-    Text [ danish ] = "StarOffice Calc har fundet en fejl i den indtastede formel.\nVil du acceptere den rettelse, som foreslås nedenfor?\n" ;
-    Text [ italian ] = "StarOffice Calc ha trovato un errore nella formula digitata.\nVolete accettare la correzione proposta?\n\n" ;
-    Text [ spanish ] = "StarOffice Calc encontró un error en la fórmula dada.\n¿Desea aceptar la corrección sugerida abajo?\n\n" ;
-    Text [ french ] = "StarOffice Calc a détecté une erreur dans la formule.\nAcceptez-vous la correction proposée ci-dessous ?\n\n" ;
-    Text [ dutch ] = "StarOffice Calc heeft een fout in de formule gevonden.\nWilt u de hieronder voorgestelde correctie accepteren?\n\n" ;
-    Text[ chinese_simplified ] = "StarOffice Calc ·¢ÏÖÊäÈëµÄ¹«Ê½º¬ÓĞÒ»¸ö´íÎó¡£\nÄú½ÓÊÜÏÂÃæ½¨ÒéµÄĞŞ¸ÄÂğ£¿\n\n";
-    Text[ russian ] = "StarOffice Calc íàøåë îøèáêó â ââåäåííîé ôîğìóëå.\nÂû õîòèòå ïğèíÿòü èñïğàâëåíèå, ïğåäëîæåííîå âíèçó?\n\n";
-    Text[ polish ] = "StarOffice Calc znalaz³ b³¹d we wprowadzonej formule.\nCzy akceptujesz podan¹ na dole korektê?\n\n";
-    Text[ japanese ] = "StarOffice Calc ‚ª“ü—Í‚µ‚½”®‚É´×°‚ğŒŸo‚µ‚Ä‚¢‚Ü‚·B\nŸ‚ÌC³Œó•â‚ğ“K—p‚µ‚Ü‚·‚©B\n\n";
-    Text[ chinese_traditional ] = "StarOffice Calc µo²{¿é¤Jªº¤½¦¡§t¦³¤@­Ó¿ù»~¡C\n±z±µ¨ü¤U­±ªº­×§ï«ØÄ³¡H\n\n";
-    Text[ arabic ] = "StarOffice Calc æÌÏ ÎØÃ İí ÇáÕíÛÉ ÇáÊí ŞãÊ ÈÅÏÎÇáåÇ.\nåá ÊÑíÏ ŞÈæá ÇáÊÕÍíÍ ÇáãñŞÊÑÍ ÃÏäÇå¿\n\n";
-    Text[ greek ] = "Ôï StarOffice Calc åíôüğéóå İíá óöÜëìá óôïí ôığï ğïõ åéóÜãáôå.\nÈİëåôå íá ãßíåé ç áğïäï÷Ş ôçò ğñïôåéíüìåíçò äéüñèùóçò ğïõ áíáöİñåôáé ğáñáêÜôù;\n\n";
-    Text[ korean ] = "StarOffice Calc°¡ ÀÔ·ÂµÈ ¼ö½Ä¿¡¼­ ¿À·ù¸¦ Ã£¾Æ³Â½À´Ï´Ù.\n´ÙÀ½ÀÇ Á¦¾ÈµÈ ¸ğÀ½À» ¹Ş¾ÆµéÀÌ½Ã°Ú½À´Ï±î ?\n\n";
-    Text[ turkish ] = "StarOffice Calc, girilen formülde bir hata buldu.\nAşağıda önerilen düzeltmeyi kabul etmek istiyor musunuz?\n\n";
+    Text [ portuguese ] = "O %PRODUCTNAME Calc encontrou um erro na fórmula indicada. \nAceitar a correcção proposta em baixo?\n\n" ;
+    Text [ english_us ] = "%PRODUCTNAME Calc found an error in the formula entered.\nDo you want to accept the correction proposed below?\n\n" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat einen Fehler in der eingegebenen Formel gefunden.\nWollen Sie die unten vorgeschlagene Korrektur akzeptieren?\n\n" ;
+    Text [ swedish ] = "%PRODUCTNAME Calc har hittat ett fel i den angivna formeln.\nSkall korrigeringen som föreslås nedan accepteras?\n\n" ;
+    Text [ danish ] = "%PRODUCTNAME Calc har fundet en fejl i den indtastede formel.\nVil du acceptere den rettelse, som foreslås nedenfor?\n" ;
+    Text [ italian ] = "%PRODUCTNAME Calc ha trovato un errore nella formula digitata.\nVolete accettare la correzione proposta?\n\n" ;
+    Text [ spanish ] = "%PRODUCTNAME Calc encontró un error en la fórmula dada.\n¿Desea aceptar la corrección sugerida abajo?\n\n" ;
+    Text [ french ] = "%PRODUCTNAME Calc a détecté une erreur dans la formule.\nAcceptez-vous la correction proposée ci-dessous ?\n\n" ;
+    Text [ dutch ] = "%PRODUCTNAME Calc heeft een fout in de formule gevonden.\nWilt u de hieronder voorgestelde correctie accepteren?\n\n" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME Calc ·¢ÏÖÊäÈëµÄ¹«Ê½º¬ÓĞÒ»¸ö´íÎó¡£\nÄú½ÓÊÜÏÂÃæ½¨ÒéµÄĞŞ¸ÄÂğ£¿\n\n";
+    Text[ russian ] = "%PRODUCTNAME Calc íàøåë îøèáêó â ââåäåííîé ôîğìóëå.\nÂû õîòèòå ïğèíÿòü èñïğàâëåíèå, ïğåäëîæåííîå âíèçó?\n\n";
+    Text[ polish ] = "%PRODUCTNAME Calc znalaz³ b³¹d we wprowadzonej formule.\nCzy akceptujesz podan¹ na dole korektê?\n\n";
+    Text[ japanese ] = "%PRODUCTNAME Calc ‚ª“ü—Í‚µ‚½”®‚É´×°‚ğŒŸo‚µ‚Ä‚¢‚Ü‚·B\nŸ‚ÌC³Œó•â‚ğ“K—p‚µ‚Ü‚·‚©B\n\n";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Calc µo²{¿é¤Jªº¤½¦¡§t¦³¤@­Ó¿ù»~¡C\n±z±µ¨ü¤U­±ªº­×§ï«ØÄ³¡H\n\n";
+    Text[ arabic ] = "%PRODUCTNAME Calc æÌÏ ÎØÃ İí ÇáÕíÛÉ ÇáÊí ŞãÊ ÈÅÏÎÇáåÇ.\nåá ÊÑíÏ ŞÈæá ÇáÊÕÍíÍ ÇáãñŞÊÑÍ ÃÏäÇå¿\n\n";
+    Text[ greek ] = "Ôï %PRODUCTNAME Calc åíôüğéóå İíá óöÜëìá óôïí ôığï ğïõ åéóÜãáôå.\nÈİëåôå íá ãßíåé ç áğïäï÷Ş ôçò ğñïôåéíüìåíçò äéüñèùóçò ğïõ áíáöİñåôáé ğáñáêÜôù;\n\n";
+    Text[ korean ] = "%PRODUCTNAME Calc°¡ ÀÔ·ÂµÈ ¼ö½Ä¿¡¼­ ¿À·ù¸¦ Ã£¾Æ³Â½À´Ï´Ù.\n´ÙÀ½ÀÇ Á¦¾ÈµÈ ¸ğÀ½À» ¹Ş¾ÆµéÀÌ½Ã°Ú½À´Ï±î ?\n\n";
+    Text[ turkish ] = "%PRODUCTNAME Calc, girilen formülde bir hata buldu.\nAşağıda önerilen düzeltmeyi kabul etmek istiyor musunuz?\n\n";
     Text[ language_user1 ] = " ";
 };
 
