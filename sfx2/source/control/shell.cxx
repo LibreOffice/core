@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-11 07:41:12 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 09:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1501,6 +1501,7 @@ BOOL SfxShell::HasUIFeature( ULONG )
 long DispatcherUpdate_Impl( void* pObj, void* pArg )
 {
     ((SfxDispatcher*) pArg)->Update_Impl( TRUE );
+    ((SfxDispatcher*) pArg)->GetBindings()->InvalidateAll(FALSE);
     return 0;
 }
 
