@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-03 16:48:38 $
+ *  last change: $Author: ab $ $Date: 2001-03-09 11:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,7 +535,8 @@ sal_uInt16 SfxApplication::SaveBasicManager() const
 {
     // Save Dialog Container
     sal_Bool bComplete = sal_False;
-    pImp->pDialogContainer->storeLibraries( bComplete );
+    if( pImp->pDialogContainer )
+        pImp->pDialogContainer->storeLibraries( bComplete );
 
     // MT: #47347# AppBasicDir ist jetzt ein PATH!
     // Ncht den vom BasicManager, falls inzwischen der Pfad geaendert wurde !?
