@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-07 15:49:00 $
+ *  last change: $Author: kso $ $Date: 2000-11-08 13:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ struct ContentProperties
   ::rtl::OUString supportedlock;
 
   ContentProperties()
-    : bIsDocument( sal_False ), bIsFolder( sal_True ) {}
+    : bIsDocument( sal_True ), bIsFolder( sal_False ) {}
 
   void setValues(DAVResource& res);
 };
@@ -172,10 +172,8 @@ private:
   virtual ::rtl::OUString getParentURL();
 
   sal_Bool isFolder() const { return ( m_aProps.bIsFolder ); }
-  void setFolder() {
-    m_aProps.bIsFolder = sal_True;
-    m_aProps.bIsDocument = sal_True;
-  }
+  sal_Bool isFolder( const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
   ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
   getPropertyValues( const ::com::sun::star::uno::Sequence<
