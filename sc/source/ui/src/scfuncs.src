@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:22:55 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -41335,7 +41335,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ czech ] = "pořadí řazení";
             Text[ hebrew ] = "Sortiert";
             Text[ hindi ] = "सोर्ट क्रम";
-            Text[ slovak ] = "poradie radenia";
+            Text[ slovak ] = "poradie triedenia";
         };
         String 9 // Description of Parameter 4
         {
@@ -48242,6 +48242,94 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
 #if defined(U2S)
 #undef U2S
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
