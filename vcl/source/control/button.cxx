@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-31 15:14:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1654,6 +1654,14 @@ void RadioButton::ImplInitSettings( BOOL bFont,
                 SetBackground( pParent->GetBackground() );
         }
     }
+}
+
+//---------------------------------------------------------------------
+//--- 12.03.2003 18:46:14 ---------------------------------------------
+
+void RadioButton::DrawRadioButtonState( )
+{
+    ImplDrawRadioButtonState( );
 }
 
 // -----------------------------------------------------------------------
