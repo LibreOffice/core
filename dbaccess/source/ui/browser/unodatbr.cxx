@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: fs $ $Date: 2002-02-13 09:55:15 $
+ *  last change: $Author: oj $ $Date: 2002-03-18 14:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1850,6 +1850,7 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
         String& _rQueryName, Image& _rQueryImage, String& _rTableName, Image& _rTableImage,
         String& _rBookmarkName, Image& _rBookmarkImage)
 {
+    vos::OGuard aGuard( Application::GetSolarMutex() );
     // initialize the names/images if necessary
     if (!_rQueryName.Len())
         _rQueryName = String(ModuleRes(RID_STR_QUERIES_CONTAINER));
@@ -2537,6 +2538,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
                 pNewData->eType = etTable;
 
             sal_uInt16 nImageResId = DBTreeListModel::getImageResId(pNewData->eType);
+            vos::OGuard aGuard( Application::GetSolarMutex() );
             Image aImage = Image(ModuleRes(nImageResId));
             m_pTreeView->getListBox()->InsertEntry(::comphelper::getString(_rEvent.Accessor),
                                                                             aImage,
@@ -2561,6 +2563,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
                 pNewData->eType = pContainerData->eType == etQueryContainer ? etQuery : etBookmark;
 
                 sal_uInt16 nImageResId = DBTreeListModel::getImageResId(pNewData->eType);
+                vos::OGuard aGuard( Application::GetSolarMutex() );
                 Image aImage = Image(ModuleRes(nImageResId));
                 m_pTreeView->getListBox()->InsertEntry(::comphelper::getString(_rEvent.Accessor),
                                                                                 aImage,
@@ -3430,6 +3433,7 @@ void SbaTableQueryBrowser::implDropTable( SvLBoxEntry* _pApplyTo )
     Reference<XDrop> xDrop(xTables,UNO_QUERY);
     if(xDrop.is())
     {
+        vos::OGuard aGuard( Application::GetSolarMutex() );
         String aMsg(ModuleRes(STR_QUERY_DELETE_TABLE));
         aMsg.SearchAndReplace(String::CreateFromAscii("%1"),String(sTableName));
         OSQLMessageBox aDlg(getBrowserView()->getVclControl(),String(ModuleRes(STR_TITLE_CONFIRM_DELETION )),aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
