@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-13 11:10:48 $
+ *  last change: $Author: mtg $ $Date: 2001-10-11 15:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,10 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#ifndef _E3D_SCENE3D_HXX
+#include <svx/scene3d.hxx>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
@@ -390,7 +394,7 @@ uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj )
             uno::Reference< uno::XInterface > xCreate(xRet, uno::UNO_QUERY);
             xRet = 0;
             Reference< XPropertySet >  xPrSet;
-            if(pObj->IsGroupObject() && !pObj->Is3DObj())
+            if ( pObj->IsGroupObject() && (!pObj->Is3DObj() || ( PTR_CAST(E3dScene,pObj ) != NULL ) ) )
                 xPrSet = new SwXGroupShape( xCreate );
             else
                 xPrSet = new SwXShape( xCreate );
