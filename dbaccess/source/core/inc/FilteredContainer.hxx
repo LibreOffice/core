@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilteredContainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:12:43 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,9 +125,6 @@ namespace dbaccess
                         IRefreshListener*   _pRefreshListener = NULL,
                         IWarningsContainer* _pWarningsContainer = NULL
                         );
-
-        inline virtual void SAL_CALL acquire() throw(){ m_rParent.acquire();}
-        inline virtual void SAL_CALL release() throw(){ m_rParent.release();}
 
         inline void dispose() { disposing(); }
 
