@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-03 15:46:14 $
+ *  last change: $Author: sj $ $Date: 2001-04-05 09:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5335,7 +5335,12 @@ BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstance
             case PPT_CharAttr_Shadow :
             case PPT_CharAttr_Strikeout :
             case PPT_CharAttr_Embossed :
-                nRetValue = ( pCharSet->mnFlags & nMask ) ? 1 : 0;
+            {
+                if ( nInstanceInSheet == TSS_TYPE_TEXT_IN_SHAPE )   // no inheritance for standard textobjects
+                    nRetValue = 1;                                  // charset flags does not matter
+                else
+                    nRetValue = ( pCharSet->mnFlags & nMask ) ? 1 : 0;
+            }
             break;
             case PPT_CharAttr_Font :
                 nRetValue = pCharSet->mnFont;
@@ -5380,6 +5385,11 @@ BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstance
                     UINT32 nTmp = ( pCharLevel->mnFlags & nMask ) ? 1 : 0;
                     if ( nRetValue != nTmp )
                         bIsHardAttribute = 1;
+                }
+                if ( nRetValue && ( nInstanceInSheet == TSS_TYPE_TEXT_IN_SHAPE ) )
+                {
+                    nRetValue = 0;          // no inheritance for standard textobjects
+                    bIsHardAttribute = 1;   // this attribute must be hard formatted
                 }
             }
             break;
