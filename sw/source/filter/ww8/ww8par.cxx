@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-25 16:41:27 $
+ *  last change: $Author: cmc $ $Date: 2002-10-29 13:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1645,7 +1645,7 @@ bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
     UINT16 nUCode;
     for( xub_StrLen nL2 = 0; nL2 < nLen; ++nL2, ++pWork )
     {
-        if( bIsUnicode )
+        if (bIsUnicode)
             *pStrm >> nUCode;   // unicode  --> read 2 bytes
         else
         {
@@ -1653,27 +1653,40 @@ bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
             nUCode = nBCode;
         }
 
-        if( 0 != pStrm->GetError() )
+        if (pStrm->GetError())
         {
             rPos = LONG_MAX-10;     // -> eof or other error
             sPlainCharsBuf.ReleaseBufferAccess( 0 );
             return true;
         }
 
-        if( (32 > nUCode) || (0xa0 == nUCode) )
+        if ((32 > nUCode) || (0xa0 == nUCode))
         {
             pStrm->SeekRel( bIsUnicode ? -2 : -1 );
             sPlainCharsBuf.ReleaseBufferAccess( nL2 );
             break;              // Sonderzeichen < 32, == 0xa0 gefunden
         }
 
-        if( bIsUnicode )
-            *pWork = nUCode;
+        if (bIsUnicode)
+        {
+            if (bVer67)
+            {
+                sal_Char aTest[2];
+                aTest[0] = (nUCode & 0xFF00) >> 8;
+                aTest[1] = (nUCode & 0x00FF);
+                String aTemp(aTest, 2, eSrcCharSet);
+                ASSERT(aTemp.Len() == 1, "so much for that theory");
+                *pWork = aTemp.GetChar(0);
+            }
+            else
+                *pWork = nUCode;
+        }
         else
-            *pWork = ByteString::ConvertToUnicode( nBCode, eSrcCharSet );
+            *pWork = ByteString::ConvertToUnicode(nBCode, eSrcCharSet);
     }
-    if( sPlainCharsBuf.Len() )
-        rDoc.Insert( *pPaM, sPlainCharsBuf );
+
+    if (sPlainCharsBuf.Len())
+        rDoc.Insert (*pPaM, sPlainCharsBuf);
 
     rPos += nL2;
     return nL2 >= nLen;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-24 12:06:01 $
+ *  last change: $Author: cmc $ $Date: 2002-10-29 13:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5664,18 +5664,21 @@ rtl_TextEncoding WW8Fib::GetFIBCharset(UINT16 chs)
     return eCharSet;
 }
 
-WW8Style::WW8Style( SvStream& rStream, WW8Fib& rFibPara )
-    : rSt( rStream ), rFib( rFibPara )
+WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
+    : rSt(rStream), rFib(rFibPara), cstd(0), cbSTDBaseInFile(0),
+    stiMaxWhenSaved(0), istdMaxFixedWhenSaved(0),
+    nVerBuiltInNamesWhenSaved(0), ftcStandardChpStsh(0),
+    ftcStandardChpCJKStsh(0), ftcStandardChpCTLStsh(0)
 {
     nStyleStart = rFib.fcStshf;
-    nStyleLen   = rFib.lcbStshf;
+    nStyleLen = rFib.lcbStshf;
 
-    rSt.Seek( nStyleStart );
+    rSt.Seek(nStyleStart);
 
     USHORT cbStshi = 0; //  2 bytes size of the following STSHI structure
 
     // alte Version ?
-    if ( rFib.nFib < 67 )
+    if (rFib.nFib < 67)
         cbStshi = 4;    // -> Laengenfeld fehlt
     else    // neue Version:
         // lies die Laenge der in der Datei gespeicherten Struktur
@@ -5952,12 +5955,20 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 p->wWeight   = SVBT16ToShort( *(SVBT16*)&pVer6->wWeight );
                 p->chs       = pVer6->chs;
                 p->ibszAlt   = pVer6->ibszAlt;
-                p->sFontname = String( pVer6->szFfn, RTL_TEXTENCODING_MS_1252 );
+                /*
+                 #i8726# 7- seems to encode the name in the same encoding as
+                 the font, e.g load the doc in 97 and save to see the unicode
+                 ver of the asian fontnames in that example to confirm.
+                 */
+                p->sFontname = String(pVer6->szFfn,
+                    WW8Fib::GetFIBCharset(p->chs));
+//              p->sFontname = String(pVer6->szFfn, RTL_TEXTENCODING_MS_1252);
                 if (p->ibszAlt)
                 {
                     p->sFontname.Append(';');
                     p->sFontname += String(pVer6->szFfn+p->ibszAlt,
-                        RTL_TEXTENCODING_MS_1252 );
+                        WW8Fib::GetFIBCharset(p->chs));
+//                      RTL_TEXTENCODING_MS_1252 );
                 }
                 pVer6 = (WW8_FFN_Ver6*)( ((BYTE*)pVer6) + pVer6->cbFfnM1 + 1 );
             }
