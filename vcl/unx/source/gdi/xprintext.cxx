@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xprintext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:11:42 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _VCL_XPRINT_EXTENSION_CXX
 
 #include <stdio.h>
 #include <stdlib.h>
