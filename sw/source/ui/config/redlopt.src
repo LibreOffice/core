@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:21:03 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ TabPage TP_REDLINE_OPT
         Text[ greek ] = "Ιδιό~τητες";
         Text[ dutch ] = "Attributes";
         Text[ french ] = "A~ttributs";
-        Text[ spanish ] = "Attributes";
+        Text[ spanish ] = "~Atributos";
         Text[ italian ] = "Attributes";
         Text[ danish ] = "Attributes";
         Text[ swedish ] = "A~ttribut";
@@ -269,12 +269,12 @@ TabPage TP_REDLINE_OPT
         < "Cursiva" ; > ;
         < "Subrayado" ; > ;
         < "Subrayado doble" ; > ;
+        < "Tachar" ; > ;
         < "Mayϊsculas" ; > ;
         < "Minϊsculas" ; > ;
         < "Versalitas" ; > ;
-        < "Caracteres del tνtulo" ; > ;
+        < "Caracteres de tνtulo" ; > ;
         < "Color de fondo" ; > ;
-        < "Hintergrundfarbe" ; > ;
     };
     StringList [ italian ] =
     {
@@ -477,7 +477,7 @@ TabPage TP_REDLINE_OPT
         Text[ greek ] = "Εισαγωγή";
         Text[ dutch ] = "Insert";
         Text[ french ] = "Insιrer";
-        Text[ spanish ] = "Insert";
+        Text[ spanish ] = "Insertar";
         Text[ italian ] = "Insert";
         Text[ danish ] = "Insert";
         Text[ swedish ] = "Infoga";
@@ -502,7 +502,7 @@ TabPage TP_REDLINE_OPT
         Text[ greek ] = "Ιδιό~τητες";
         Text[ dutch ] = "Attributes";
         Text[ french ] = "A~ttributs";
-        Text[ spanish ] = "Attributes";
+        Text[ spanish ] = "~Atributos";
         Text[ italian ] = "Attributes";
         Text[ danish ] = "Attributes";
         Text[ swedish ] = "A~ttribut";
@@ -534,7 +534,7 @@ TabPage TP_REDLINE_OPT
         Text[ greek ] = "Χρώμα";
         Text[ dutch ] = "Color";
         Text[ french ] = "~Couleur";
-        Text[ spanish ] = "Color";
+        Text[ spanish ] = "~Color";
         Text[ italian ] = "Color";
         Text[ danish ] = "Color";
         Text[ swedish ] = "~Fδrg";
@@ -567,7 +567,7 @@ TabPage TP_REDLINE_OPT
         Text[ greek ] = "Διαγραφή";
         Text[ dutch ] = "Delete";
         Text[ french ] = "Supprimer";
-        Text[ spanish ] = "Delete";
+        Text[ spanish ] = "Eliminar";
         Text[ italian ] = "Delete";
         Text[ danish ] = "Delete";
         Text[ swedish ] = "Radera";
@@ -592,7 +592,7 @@ TabPage TP_REDLINE_OPT
         Text[ greek ] = "Ιδιό~τητες";
         Text[ dutch ] = "Attributes";
         Text[ french ] = "A~ttributs";
-        Text[ spanish ] = "Attributes";
+        Text[ spanish ] = "~Atributos";
         Text[ italian ] = "Attributes";
         Text[ danish ] = "Attributes";
         Text[ swedish ] = "A~ttribut";
@@ -624,7 +624,7 @@ TabPage TP_REDLINE_OPT
         Text[ greek ] = "Χρώμα";
         Text[ dutch ] = "Color";
         Text[ french ] = "~Couleur";
-        Text[ spanish ] = "Color";
+        Text[ spanish ] = "~Color";
         Text[ italian ] = "Color";
         Text[ danish ] = "Color";
         Text[ swedish ] = "~Fδrg";
@@ -657,7 +657,7 @@ TabPage TP_REDLINE_OPT
         Text[ greek ] = "Ιδιότητες";
         Text[ dutch ] = "Attributes";
         Text[ french ] = "Attributs";
-        Text[ spanish ] = "Attributes";
+        Text[ spanish ] = "Atributos";
         Text[ italian ] = "Attributes";
         Text[ danish ] = "Attributes";
         Text[ swedish ] = "Attribut";
