@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:58:49 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
+#endif
+#ifndef XMLOFF_SOURCE_FORMS_GRIDCOLUMNPROPTRANSLATOR_HXX
+#include "gridcolumnproptranslator.hxx"
 #endif
 
 #ifndef _COMPHELPER_EXTRACT_HXX_
@@ -345,7 +348,9 @@ namespace xmloff
         // set the style properties
         if ( m_pStyleElement && m_xElement.is() )
         {
-            const_cast< XMLTextStyleContext* >( m_pStyleElement )->FillPropertySet( m_xElement );
+            Reference< XPropertySet > xPropTranslation =
+                new OGridColumnPropertyTranslator( Reference< XMultiPropertySet >( m_xElement, UNO_QUERY ) );
+            const_cast< XMLTextStyleContext* >( m_pStyleElement )->FillPropertySet( xPropTranslation );
 
             ::rtl::OUString sNumberStyleName = const_cast< XMLTextStyleContext* >( m_pStyleElement )->GetDataStyleName( );
             if ( sNumberStyleName.getLength() )
@@ -1681,7 +1686,8 @@ namespace xmloff
         // clone the attributes
         Reference< XCloneable > xCloneList(_rxAttrList, UNO_QUERY);
         OSL_ENSURE(xCloneList.is(), "OColumnWrapperImport::StartElement: AttributeList not cloneable!");
-        m_xOwnAttributes = Reference< sax::XAttributeList >(xCloneList->createClone(), UNO_QUERY);
+        if ( xCloneList.is() )
+            m_xOwnAttributes = Reference< sax::XAttributeList >(xCloneList->createClone(), UNO_QUERY);
         OSL_ENSURE(m_xOwnAttributes.is(), "OColumnWrapperImport::StartElement: no cloned list!");
 
         // forward an empty attribute list to the base class
@@ -1752,13 +1758,13 @@ namespace xmloff
         {
             case OControlElement::COMBOBOX:
             case OControlElement::LISTBOX:
-                return new OColumnImport<OListAndComboImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType, m_xOwnAttributes);
+                return new OColumnImport<OListAndComboImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType );
 
             case OControlElement::PASSWORD:
-                return new OColumnImport<OPasswordImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType, m_xOwnAttributes);
+                return new OColumnImport<OPasswordImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType );
 
             default:
-                return new OColumnImport<OControlImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType, m_xOwnAttributes);
+                return new OColumnImport<OControlImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType );
         }
     }
 
