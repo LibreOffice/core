@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-20 11:19:04 $
+ *  last change: $Author: mba $ $Date: 2002-01-09 17:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
                                                         SvtPathOptions aOpt;
                                                         sal_uInt32 nCount = m_seqSecureURLs.getLength();
                                                         for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
-                                                            m_seqSecureURLs[nItem] = aOpt.SubstituteVariable( m_seqSecureURLs[nItem] );
+                                                            m_seqSecureURLs[nItem] = aOpt.SubstituteVariable( m_seqSecureURLs[nItem] ).ToLowerAscii();
                                                     }
                                                     break;
 
@@ -355,7 +355,7 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
             SvtPathOptions aOpt;
             sal_uInt32 nCount = m_seqSecureURLs.getLength();
             for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
-                m_seqSecureURLs[nItem] = aOpt.SubstituteVariable( m_seqSecureURLs[nItem] );
+                m_seqSecureURLs[nItem] = aOpt.SubstituteVariable( m_seqSecureURLs[nItem] ).ToLowerAscii();
         }
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_STAROFFICEBASIC )
         {
@@ -532,12 +532,13 @@ sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
         if( sReferer.getLength() > 0 )
         {
             // Search in internal list
+            ::rtl::OUString sRef = sReferer.toAsciiLowerCase();
             sal_uInt32 nCount = m_seqSecureURLs.getLength();
             for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
             {
                 OUString sCheckURL = m_seqSecureURLs[nItem];
                 sCheckURL += OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
-                if( WildCard( sCheckURL ).Matches( sReferer ) == sal_True )
+                if( WildCard( sCheckURL ).Matches( sRef ) == sal_True )
                 {
                     bState = sal_True;
                     break;
