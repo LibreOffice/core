@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-26 07:52:53 $
+ *  last change: $Author: fme $ $Date: 2002-09-03 12:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1333,34 +1333,34 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                     pPrv = pLay;
                     pLay = pLay->GetUpper();
                 }
-                // Wenn der umgebende Bereich bereits einen Follow besitzt,
-                // wird dieser benutzt. Es muss allerdings die Master/Follow-
-                // verkettung geloest werden, unterbrochenene SectionFrms sind
-                // _nicht_ durch Master/Follow verbunden.
-                pFrm = pActualSection->GetSectionFrm()->GetFollow();
-                if( pFrm )
-                {
-                    ((SwSectionFrm*)pFrm)->_SetIsFollow( FALSE );
-                    pActualSection->GetSectionFrm()->SetFollow( NULL );
-                    pActualSection->GetSectionFrm()->InvalidateSize();
-                }
-                else
-                {
-                    pFrm = pActualSection->GetSectionNode()->MakeFrm();
-                    pFrm->InsertBehind( pLay, pPrv );
+
+                // new section frame
+                pFrm = pActualSection->GetSectionNode()->MakeFrm();
+                pFrm->InsertBehind( pLay, pPrv );
 #ifdef VERTICAL_LAYOUT
-                    if( pFrm->IsVertical() )
-                        ((SwSectionFrm*)pFrm)->Init();
+                if( pFrm->IsVertical() )
+                   ((SwSectionFrm*)pFrm)->Init();
 #endif
-                    pFrm->Frm().Pos() = pLay->Frm().Pos();
-                    pFrm->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
-                }
-                SwSectionFrm* pSectFrm = pActualSection->GetSectionFrm();
-                // Wir wollen keine leeren Teile zuruecklassen
-                if( !pSectFrm->IsColLocked() && !pSectFrm->ContainsCntnt() )
+                pFrm->Frm().Pos() = pLay->Frm().Pos();
+                pFrm->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
+
+                SwSectionFrm* pOuterSectionFrm = pActualSection->GetSectionFrm();
+
+                // a follow has to be appended to the new section frame
+                SwSectionFrm* pFollow = pOuterSectionFrm->GetFollow();
+                if ( pFollow )
                 {
-                    pSectFrm->DelEmpty( TRUE );
-                    delete pSectFrm;
+                    pOuterSectionFrm->SetFollow( NULL );
+                    pOuterSectionFrm->InvalidateSize();
+                    ((SwSectionFrm*)pFrm)->SetFollow( pFollow );
+                }
+
+                // Wir wollen keine leeren Teile zuruecklassen
+                if( ! pOuterSectionFrm->IsColLocked() &&
+                    ! pOuterSectionFrm->ContainsCntnt() )
+                {
+                    pOuterSectionFrm->DelEmpty( TRUE );
+                    delete pOuterSectionFrm;
                 }
                 pActualSection->SetSectionFrm( (SwSectionFrm*)pFrm );
 
