@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:10:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1229,12 +1229,33 @@ void SwCntntFrm::MakeAll()
             }
         }
         if ( !bValidSize )
-        {   bValidSize = bFormatted = TRUE;
+        {
+            bValidSize = bFormatted = TRUE;
             ++nFormatCount;
             if( nFormatCount > STOP_FLY_FORMAT )
                 SetFlyLock( TRUE );
             Format();
         }
+
+        // OD 04.04.2003 #108446# - react on the situation detected in the text
+        // formatting - see <SwTxtFrm::FormatAdjust(..)>:
+        // text frame has to move forward, because its text formatting stopped,
+        // created a follow and detected, that it contains no content.
+        if ( IsTxtFrm() && bValidPos && bValidSize && bValidPrtArea &&
+             (Frm().*fnRect->fnGetHeight)() == 0 &&
+             HasFollow()
+           )
+        {
+            SwFrm* pOldUpper = GetUpper();
+            MoveFwd( TRUE, FALSE );
+            if ( GetUpper() != pOldUpper )
+            {
+                bMovedFwd = TRUE;
+                SWREFRESHFN( this )
+                continue;
+            }
+        }
+
         //Wenn ich der erste einer Kette bin koennte ich mal sehen ob
         //ich zurueckfliessen kann (wenn ich mich ueberhaupt bewegen soll).
         //Damit es keine Oszillation gibt, darf ich nicht gerade vorwaerts
@@ -1315,7 +1336,8 @@ void SwCntntFrm::MakeAll()
         if ( bValidPos )
         {
             if ( bFtn )
-            {   bValidPos = FALSE;
+            {
+                bValidPos = FALSE;
                 MakePos();
                 aOldFrmPos = (Frm().*fnRect->fnGetPos)();
                 aOldPrtPos = (Prt().*fnRect->fnGetPos)();
@@ -1650,10 +1672,14 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
             SwFrm *pOldNext = pTmpFrm->GetNext();
             pTmpFrm->Remove();
             pTmpFrm->InsertBefore( pNewUpper, 0 );
-            if( pFrm->IsTxtFrm() && ( bTstMove ||
-                ((SwTxtFrm*)pFrm)->HasFollow() ||
-                ( !((SwTxtFrm*)pFrm)->HasPara() &&
-                    !((SwTxtFrm*)pFrm)->IsEmpty() ) ) )
+            if ( pFrm->IsTxtFrm() &&
+                 ( bTstMove ||
+                   ((SwTxtFrm*)pFrm)->HasFollow() ||
+                   ( !((SwTxtFrm*)pFrm)->HasPara() &&
+                     !((SwTxtFrm*)pFrm)->IsEmpty()
+                   )
+                 )
+               )
             {
                 bTstMove = TRUE;
                 bRet = ((SwTxtFrm*)pFrm)->TestFormat( pPrev, nSpace, bSplit );
@@ -1703,8 +1729,20 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
         if ( bRet && !bSplit && pFrm->GetAttrSet()->GetKeep().GetValue() )
         {
             if( bTstMove )
+            {
                 while( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->HasFollow() )
+                {
                     pFrm = ((SwTxtFrm*)pFrm)->GetFollow();
+                }
+                // OD 11.04.2003 #108824# - If last follow frame of <this> text
+                // frame isn't valid, a formatting of the next content frame
+                // doesn't makes sense. Thus, return TRUE.
+                if ( IsAnFollow( pFrm ) && !pFrm->IsValid() )
+                {
+                    ASSERT( false, "Only a warning for task 108824:/n<SwCntntFrm::_WouldFit(..) - follow not valid!" );
+                    return TRUE;
+                }
+            }
             SwFrm *pNxt;
             if( 0 != (pNxt = pFrm->FindNext()) && pNxt->IsCntntFrm() &&
                 ( !pFtnFrm || ( pNxt->IsInFtn() &&
