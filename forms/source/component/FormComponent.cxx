@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:00:26 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 09:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,6 +662,7 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
     m_aTag = _pOriginal->m_aTag;
     m_nTabIndex = _pOriginal->m_nTabIndex;
     m_nClassId = _pOriginal->m_nClassId;
+    m_bNativeLook = _pOriginal->m_bNativeLook;
 
     if ( _bCloneAggregate )
     {
