@@ -2,9 +2,9 @@
  *
  *  $RCSfile: starmath.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-06 07:47:56 $
+ *  last change: $Author: tl $ $Date: 2001-06-07 10:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,6 +454,9 @@
 #define RID_LOCALIZED_SYMBOL_NAMES      (RID_APP_START + 3101)
 #define RID_UI_SYMBOL_NAMES             (RID_APP_START + 3102)
 #define RID_EXPORT_SYMBOL_NAMES         (RID_APP_START + 3103)
+#define RID_LOCALIZED_SYMBOLSET_NAMES   (RID_APP_START + 3104)
+#define RID_UI_SYMBOLSET_NAMES          (RID_APP_START + 3105)
+#define RID_EXPORT_SYMBOLSET_NAMES      (RID_APP_START + 3106)
 
 #define HID_SMA_OPTIONSDIALOG           (HID_SMA_START + 1)
 #define HID_SMA_FONTDIALOG              (HID_SMA_START + 2)
