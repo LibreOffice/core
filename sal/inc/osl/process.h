@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:42:39 $
+ *  last change: $Author: mfe $ $Date: 2001-02-27 12:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,12 @@ typedef sal_Int32 oslProcessOption;
 #define     osl_Process_FULLSCREEN 0x0080    /* run in fullscreen window */
 
 typedef sal_Int32 oslProcessData;
-#define     osl_Process_IDENTIFIER  0x0001
-#define     osl_Process_EXITCODE    0x0002
-#define     osl_Process_CPUTIMES    0x0004
-#define     osl_Process_HEAPUSAGE   0x0008
+
+/* defines for osl_getProcessInfo , can be OR'ed */
+#define     osl_Process_IDENTIFIER  0x0001   /* retrieves the process identifier   */
+#define     osl_Process_EXITCODE    0x0002   /* retrieves exit code of the process */
+#define     osl_Process_CPUTIMES    0x0004   /* retrieves used cpu time            */
+#define     osl_Process_HEAPUSAGE   0x0008   /* retrieves the used size of heap    */
 
 typedef sal_uInt32 oslProcessIdentifier;
 typedef sal_uInt32 oslProcessExitCode;
@@ -154,13 +156,13 @@ typedef struct {
 } oslIOResource;
 
 typedef struct {
-    sal_uInt32               Size;
+    sal_uInt32           Size;
     oslProcessData       Fields;
     oslProcessIdentifier Ident;
     oslProcessExitCode   Code;
     TimeValue            UserTime;
     TimeValue            SystemTime;
-    sal_uInt32               HeapUsage;
+    sal_uInt32           HeapUsage;
 } oslProcessInfo;
 
 #ifdef SAL_W32
@@ -171,7 +173,9 @@ typedef struct {
 
 /** Process handle
     @see osl_executeProcess
+    @see osl_terminateProcess
     @see osl_freeProcessHandle
+    @see osl_getProcessInfo
     @see osl_joinProcess
 */
 typedef void* oslProcess;
@@ -204,14 +208,31 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
                                             oslIOResource* pResources,
                                             oslProcess *pProcess);
 
+
+/** Terminate a process
+    @param Process [in] the handle of the process to be terminated
+
+    @see osl_executeProcess
+    @see osl_getProcess
+    @see osl_joinProcess
+ */
 oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process);
 
+
+/** @deprecated
+    Retrieve the process handle of a process identifier
+    @param Ident [in] a process identifier
+
+    @return the process handle on success, NULL in all other cases
+ */
 oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident);
+
 
 /** Free the specified proces-handle.
     @param Process [in]
 */
 void SAL_CALL osl_freeProcessHandle(oslProcess Process);
+
 
 /** Wait for completation of the specified childprocess.
     @param Process [in]
@@ -220,6 +241,21 @@ void SAL_CALL osl_freeProcessHandle(oslProcess Process);
 */
 oslProcessError SAL_CALL osl_joinProcess(oslProcess Process);
 
+/** Retrieves information about a Process
+    @param Process [in] the process handle of the process
+    @param Field   [in] the information which is to be retrieved
+                        this can be one or more of
+                        osl_Process_IDENTIFIER
+                        osl_Process_EXITCODE
+                        osl_Process_CPUTIMES
+                        osl_Process_HEAPUSAGE
+    @param pInfo  [out] a pointer to a vaid oslProcessInfo structure.
+                        the Size field has to be initialized with the size
+                        of the oslProcessInfo structure.
+                        on success the the Field member holds the (or'ed)
+                        retrieved valid information fields.
+    @return osl_Process_E_None on success, osl_Process_E_Unknown on failure.
+ */
 oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData Fields,
                                    oslProcessInfo* pInfo);
 
@@ -257,14 +293,6 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *strVar, rtl_uString **s
     @see osl_executeProcess (provide the ioresources)
 */
 oslProcessError SAL_CALL osl_getIOResources(oslIOResource Resources[], sal_uInt32 Max);
-
-/** Receive a single io-resource inherited by a parent process using the Netsape
-    portable runtime.
-    NOTE: Currently only pipes are supported.
-    @param pResource [out] the buffer to be filled.
-    @param name [in] the name identifying the requested handle.
-*/
-oslProcessError SAL_CALL osl_getIOResource(oslIOResource *pResource, const char * name);
 
 sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe Pipe, oslSocket Socket);
 
