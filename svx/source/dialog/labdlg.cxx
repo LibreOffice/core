@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 12:20:14 $
+ *  last change: $Author: dr $ $Date: 2001-06-28 13:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,10 +521,12 @@ IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton )
     {
         if( aCB_LAENGE.IsChecked() || ! aCB_LAENGE.IsEnabled() )
         {
+            aFT_LAENGE.Disable();
             aMF_LAENGE.Disable();
         }
         else
         {
+            aFT_LAENGE.Enable();
             aMF_LAENGE.Enable();
         }
     }
@@ -547,25 +549,33 @@ void SvxCaptionTabPage::SetupType_Impl( USHORT nType )
     switch( nType-1 )
     {
         case SDRCAPT_TYPE1:
+        aFT_WINKEL.Disable();
         aLB_WINKEL.Disable();
+        aFT_LAENGE.Disable();
         aCB_LAENGE.Disable();
         LineOptHdl_Impl( &aCB_LAENGE );
         break;
 
         case SDRCAPT_TYPE2:
+        aFT_WINKEL.Enable();
         aLB_WINKEL.Enable();
+        aFT_LAENGE.Disable();
         aCB_LAENGE.Disable();
         LineOptHdl_Impl( &aCB_LAENGE );
         break;
 
         case SDRCAPT_TYPE3:
+        aFT_WINKEL.Enable();
         aLB_WINKEL.Enable();
+        aFT_LAENGE.Enable();
         aCB_LAENGE.Enable();
         LineOptHdl_Impl( &aCB_LAENGE );
         break;
 
         case SDRCAPT_TYPE4:
+        aFT_WINKEL.Enable();
         aLB_WINKEL.Enable();
+        aFT_LAENGE.Enable();
         aCB_LAENGE.Enable();
         LineOptHdl_Impl( &aCB_LAENGE );
         break;
