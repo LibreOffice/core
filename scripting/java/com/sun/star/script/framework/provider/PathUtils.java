@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PathUtils.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:08:55 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.MalformedURLException;
 
+import java.lang.reflect.Method;
+
 import com.sun.star.uno.XComponentContext;
 
 import com.sun.star.script.framework.log.LogUtils;
@@ -83,6 +85,7 @@ import com.sun.star.util.XMacroExpander;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.frame.XModel;
+import com.sun.star.uno.IQueryInterface;
 
 public class PathUtils {
 
@@ -98,7 +101,26 @@ public class PathUtils {
         FILE_URL_PREFIX = m_windows ? "file:///" : "file://";
         BOOTSTRAP_NAME = m_windows ? "bootstrap.ini" : "bootstraprc";
     }
+    public static String getOidForModel( XModel xModel )
+    {
+        String oid = new String("");
+        if ( xModel != null )
+        {
+            try
+            {
+                Method getOid = IQueryInterface.class.getMethod("getOid", null);
+                if ( getOid != null )
+                {
+                    oid = (String)getOid.invoke( xModel, new Object[0] );
+                }
 
+            }
+            catch ( Exception ignore )
+            {
+            }
+        }
+        return oid;
+    }
     private PathUtils() {
     }
 }
