@@ -2,9 +2,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-15 14:54:43 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:53:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,10 +97,13 @@ The following parameter are needed:
 -javalanguage: Source of the Java language files (opt., non-Windows only)
 -buildid: Current BuildID (optional)
 -pro: Product version
+-rpm: Create RPMs for Linux
+-debian: Create Debian packages for Linux
 -dontunzip: do not unzip all files with flag ARCHIVE
 -dontcallepm : do not call epm to create install sets (opt., non-Windows only)
 -ispatchedepm : Usage of a patched (non-standard) epm (opt., non-Windows only)
 -packagelist : file, containing a list of module gids (opt., non-Windows only)
+-addpackagelist : additional packlist, only multilingual unix
 -copyproject : is set for projects that are only used for copying (optional)
 -languagepack : do create a languagepack, no product pack (optional)
 -log : Logging all available information (optional)
@@ -169,6 +172,8 @@ sub getparameter
         elsif ($param eq "-dontunzip") { $installer::globals::dounzip = 0; }
         elsif ($param eq "-c") { $installer::globals::compiler = shift(@ARGV); }
         elsif ($param eq "-pro") { $installer::globals::pro = 1; }
+        elsif ($param eq "-rpm") { $installer::globals::rpm = 1; }
+        elsif ($param eq "-debian") { $installer::globals::debian = 1; }
         elsif ($param eq "-log") { $installer::globals::globallogging = 1; }
         elsif ($param eq "-debug") { $installer::globals::debug = 1; }
         elsif ($param eq "-u") { $installer::globals::unpackpath = shift(@ARGV); }
@@ -181,6 +186,7 @@ sub getparameter
         elsif ($param eq "-javalanguage") { $installer::globals::javalanguagepath = shift(@ARGV); }
         elsif ($param eq "-buildid") { $installer::globals::buildid = shift(@ARGV); }
         elsif ($param eq "-packagelist") { $installer::globals::packagelist = shift(@ARGV); }
+        elsif ($param eq "-addpackagelist") { $installer::globals::addpackagelist = shift(@ARGV); }
         elsif ($param eq "-copyproject") { $installer::globals::is_copy_only_project = 1; }
         elsif ($param eq "-languagepack") { $installer::globals::languagepack = 1; }
         elsif ($param eq "-addchildprojects") { $installer::globals::addchildprojects = 1; }
@@ -262,7 +268,28 @@ sub setglobalvariables
     if ( $installer::globals::compiler =~ /unxlngi/ )
     {
         $installer::globals::islinuxbuild = 1;
-        $installer::globals::packageformat = "rpm";
+
+        if (( $installer::globals::rpm ) && ( $installer::globals::debian ))
+        {
+            print "ERROR: You can specify only one package format for Linux\n";
+            exit(-1);
+        }
+
+        if (( ! $installer::globals::rpm ) && ( ! $installer::globals::debian ))
+        {
+            print "ERROR: You have to specify at least one package format for Linux\n";
+            exit(-1);
+        }
+
+        if ( $installer::globals::rpm )
+        {
+            $installer::globals::islinuxrpmbuild = 1;
+            $installer::globals::packageformat = "rpm";
+        }
+        elsif ( $installer::globals::debian )
+        {
+            $installer::globals::packageformat = "dpkg";    # epm -f dpkg ... for Debian packages
+        }
     }
 
     if (( $installer::globals::compiler =~ /unxsols/ ) || ( $installer::globals::compiler =~ /unxsoli/ ))
@@ -274,6 +301,8 @@ sub setglobalvariables
     if ( $installer::globals::compiler =~ /unxsols/ ) { $installer::globals::issolarissparcbuild = 1; }
 
     if ( $installer::globals::compiler =~ /unxsoli/ ) { $installer::globals::issolarisx86build = 1; }
+
+    if (( $installer::globals::compiler =~ /unx/ ) && ( $installer::globals::addpackagelist )) { $installer::globals::is_unix_multi = 1; }
 
     # ToDo: Needs to be expanded for additional compiler
 
@@ -353,17 +382,16 @@ sub setglobalvariables
     # No binary file custom actions for Ada products and language packs
     # Typical scp definition, files with flag: BINARYTABLE or SELFREG
 
+    if (( $installer::globals::product =~ /OpenOffice/i ) && ( ! $installer::globals::languagepack ))
+    {
+        push(@installer::globals::binarytablefiles, "gid_File_Pythonmsi_Dll");  # to be removed after scp changes, see parameter.pm
+    }
+
     if (( $installer::globals::languagepack ) || ($installer::globals::product =~ /ada/i ))
     {
         @installer::globals::binarytablefiles = ();
         @installer::globals::selfreglibraries = ();
     }
-
-    if ($installer::globals::product =~ /OpenOffice/i )
-    {
-        push(@installer::globals::binarytablefiles, "gid_File_Pythonmsi_Dll");  # to be removed after scp changes, see parameter.pm
-    }
-
 }
 
 ############################################
@@ -381,7 +409,7 @@ sub set_childproductnames
         # $installer::globals::javafilename = 'Java 2 Runtime Environment, SE v1.4.2.msi';
     }
 
-    if ( $installer::globals::islinuxbuild )
+    if ( $installer::globals::islinuxrpmbuild )
     {
         $installer::globals::adafilename = "adabas-12.0.1-1.i586.rpm";
         $installer::globals::javafilename = "j2re-1_4_2_05-linux-i586.rpm";
@@ -434,6 +462,13 @@ sub control_required_parameter
         if (!($installer::globals::iswindowsbuild))
         {
             installer::files::check_file($installer::globals::packagelist);
+
+            # If an additional packagelist is defined (Unix, multilingual installation set), it has to exist.
+
+            if ( $installer::globals::addpackagelist )
+            {
+                installer::files::check_file($installer::globals::packagelist);
+            }
         }
 
         ##############################################################################################
@@ -570,8 +605,12 @@ sub outputparameter
     else  { push(@output, "Non-Product version\n"); }
     if ( $installer::globals::rootpath eq "" ) { push(@output, "Using default installpath\n"); }
     else { push(@output, "Installpath: $installer::globals::rootpath\n"); }
+    if ( $installer::globals::rpm ) { push(@output, "Creating RPMs on Linux\n"); }
+    if ( $installer::globals::debian ) { push(@output, "Creating Debian packages on Linux\n"); }
     if (!($installer::globals::packagelist eq ""))  { push(@output, "Package list file: $installer::globals::packagelist\n"); }
     if ((!($installer::globals::packagelist eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Package list file will be ignored for Windows!\n"); }
+    if (!($installer::globals::addpackagelist eq ""))   { push(@output, "Addon-Package list file: $installer::globals::addpackagelist\n"); }
+    if ((!($installer::globals::addpackagelist eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Addon-Package list file will be ignored for Windows!\n"); }
     if (!($installer::globals::idttemplatepath eq ""))  { push(@output, "msi templatepath: $installer::globals::idttemplatepath\n"); }
     if ((!($installer::globals::idttemplatepath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi template path will be ignored for non Windows builds!\n"); }
     if (!($installer::globals::idtlanguagepath eq ""))  { push(@output, "msi languagepath: $installer::globals::idtlanguagepath\n"); }
