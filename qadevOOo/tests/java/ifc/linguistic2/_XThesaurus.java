@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XThesaurus.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:03 $
+ *  last change:$Date: 2003-09-08 10:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.linguistic2;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.Locale;
 import com.sun.star.linguistic2.XMeaning;
 import com.sun.star.linguistic2.XThesaurus;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.linguistic2.XThesaurus</code>
