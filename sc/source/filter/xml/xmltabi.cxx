@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-10 14:26:31 $
+ *  last change: $Author: sab $ $Date: 2000-10-12 07:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,31 +192,34 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLTableContext::EndElement()
 {
-    sal_Int16 nTable = GetScImport().GetTables().GetCurrentSheet();
-    uno::Reference< sheet::XSpreadsheetDocument > xSpreadDoc( GetScImport().GetModel(), uno::UNO_QUERY );
-    if( xSpreadDoc.is() )
+    if (sPrintRanges.getLength())
     {
-        uno::Reference< sheet::XSpreadsheets > xSheets = xSpreadDoc->getSheets();
-        uno::Reference< container::XIndexAccess > xIndex( xSheets, uno::UNO_QUERY );
-        if( xIndex.is() )
+        sal_Int16 nTable = GetScImport().GetTables().GetCurrentSheet();
+        uno::Reference< sheet::XSpreadsheetDocument > xSpreadDoc( GetScImport().GetModel(), uno::UNO_QUERY );
+        if( xSpreadDoc.is() )
         {
-            uno::Reference< sheet::XSpreadsheet > xTable;
-            uno::Any aTable = xIndex->getByIndex( nTable );
-            if( aTable >>= xTable )
+            uno::Reference< sheet::XSpreadsheets > xSheets = xSpreadDoc->getSheets();
+            uno::Reference< container::XIndexAccess > xIndex( xSheets, uno::UNO_QUERY );
+            if( xIndex.is() )
             {
-                uno::Reference< sheet::XPrintAreas > xPrintAreas( xTable, uno::UNO_QUERY );
-                if( xPrintAreas.is() )
+                uno::Reference< sheet::XSpreadsheet > xTable;
+                uno::Any aTable = xIndex->getByIndex( nTable );
+                if( aTable >>= xTable )
                 {
-                    uno::Sequence< table::CellRangeAddress > aRangeList;
-                    sal_Int32 nIndex = 0;
-                    while( nIndex >= 0 )
+                    uno::Reference< sheet::XPrintAreas > xPrintAreas( xTable, uno::UNO_QUERY );
+                    if( xPrintAreas.is() )
                     {
-                        table::CellRangeAddress aCellRange;
-                        nIndex = GetScImport().GetRangeFromString( sPrintRanges, nIndex, aCellRange );
-                        aRangeList.realloc( aRangeList.getLength() + 1 );
-                        aRangeList[ aRangeList.getLength() - 1 ] = aCellRange;
+                        uno::Sequence< table::CellRangeAddress > aRangeList;
+                        sal_Int32 nIndex = 0;
+                        while( nIndex >= 0 )
+                        {
+                            table::CellRangeAddress aCellRange;
+                            nIndex = GetScImport().GetRangeFromString( sPrintRanges, nIndex, aCellRange );
+                            aRangeList.realloc( aRangeList.getLength() + 1 );
+                            aRangeList[ aRangeList.getLength() - 1 ] = aCellRange;
+                        }
+                        xPrintAreas->setPrintAreas( aRangeList );
                     }
-                    xPrintAreas->setPrintAreas( aRangeList );
                 }
             }
         }
