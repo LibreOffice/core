@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-07 07:40:08 $
+ *  last change: $Author: dv $ $Date: 2001-06-28 14:51:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,9 +266,11 @@ sal_Bool UCBContentHelper::GetTitle( const String& rContent, String& rTitle )
     {
         Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         OUString aTemp;
-        aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTemp;
-        rTitle = String( aTemp );
-        bRet = sal_True;
+        if ( aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTemp )
+        {
+            rTitle = String( aTemp );
+            bRet = sal_True;
+        }
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
