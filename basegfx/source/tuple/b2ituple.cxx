@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2ituple.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-25 09:54:11 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,18 @@
 #ifndef _BGFX_TUPLE_B2DTUPLE_HXX
 #include <basegfx/tuple/b2dtuple.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
+
+namespace { struct EmptyTuple : public rtl::Static<basegfx::B2ITuple, EmptyTuple> {}; }
 
 namespace basegfx
 {
-    // initialize static member
-    ::basegfx::B2ITuple B2ITuple::maEmptyTuple(0, 0);
+    const B2ITuple& B2ITuple::getEmptyTuple()
+    {
+            return EmptyTuple::get();
+    }
 
     // external operators
     //////////////////////////////////////////////////////////////////////////
