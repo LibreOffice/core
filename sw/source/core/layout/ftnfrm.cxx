@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 11:58:28 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,8 +1039,8 @@ BOOL SwFrm::IsFtnAllowed() const
     {
         //Keine Ftns in wiederholten Headlines.
         const SwTabFrm *pTab = ((SwFrm*)this)->ImplFindTabFrm();
-        if ( pTab->GetTable()->IsHeadlineRepeat() && pTab->IsFollow() )
-            return !((SwLayoutFrm*)pTab->Lower())->IsAnLower( this );
+        if ( pTab->IsFollow() )
+            return !pTab->IsInHeadline( *this );
     }
     return TRUE;
 }
