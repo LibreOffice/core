@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-23 10:18:56 $
+ *  last change: $Author: os $ $Date: 2002-11-06 12:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2173,29 +2173,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
               pACorr->GetSwFlags().bAutoCompleteWords ) &&
             rSh.GetPrevAutoCorrWord( *pACorr, sWord ) )
         {
-            pQuickHlpData->ClearCntnt();
-            if( pACfg->IsAutoTextTip() )
-            {
-                SwGlossaryList* pList = ::GetGlossaryList();
-                pList->HasLongName( sWord, &pQuickHlpData->aArr );
-            }
-
-            if( pQuickHlpData->aArr.Count() )
-            {
-                pQuickHlpData->bIsTip = TRUE;
-                pQuickHlpData->bIsAutoText = TRUE;
-            }
-            else if( pACorr->GetSwFlags().bAutoCompleteWords )
-            {
-                pQuickHlpData->bIsAutoText = FALSE;
-                pQuickHlpData->bIsTip = !pACorr ||
-                            pACorr->GetSwFlags().bAutoCmpltShowAsTip;
-
-                pQuickHlpData->FillStrArr( rSh, sWord );
-            }
-
-            if( pQuickHlpData->aArr.Count() )
-                pQuickHlpData->Start( rSh, sWord.Len() );
+            ShowAutoTextCorrectQuickHelp(sWord, pACfg, pACorr);
         }
     }
 }
@@ -4175,6 +4153,14 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         break;
 
     case COMMAND_EXTTEXTINPUT:
+    {
+        QuickHelpData aTmpQHD;
+        if( pQuickHlpData->bClear )
+        {
+            aTmpQHD.Move( *pQuickHlpData );
+            pQuickHlpData->Stop( rSh );
+        }
+        String sWord;
         if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
         {
             bCallBase = FALSE;
@@ -4185,8 +4171,24 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
             if( pData )
             {
+                sWord = pData->GetText();
                 bCallBase = FALSE;
                 rSh.SetExtTextInputData( *pData );
+            }
+        }
+            com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+                    rView.GetViewFrame()->GetBindings().GetRecorder();
+            if(!xRecorder.is())
+            {
+                OfaAutoCorrCfg* pACfg = OFF_APP()->GetAutoCorrConfig();
+                SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
+                if( pACfg && pACorr &&
+                    ( pACfg->IsAutoTextTip() ||
+                      pACorr->GetSwFlags().bAutoCompleteWords ) &&
+                    rSh.GetPrevAutoCorrWord( *pACorr, sWord ) )
+                {
+                    ShowAutoTextCorrectQuickHelp(sWord, pACfg, pACorr);
+                }
             }
         }
         break;
@@ -4465,3 +4467,35 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
         }
     }
 }
+/* -----------------06.11.2002 12:01-----------------
+ *
+ * --------------------------------------------------*/
+void SwEditWin::ShowAutoTextCorrectQuickHelp(
+        const String& rWord, OfaAutoCorrCfg* pACfg, SvxAutoCorrect* pACorr )
+{
+    SwWrtShell& rSh = rView.GetWrtShell();
+    pQuickHlpData->ClearCntnt();
+    if( pACfg->IsAutoTextTip() )
+    {
+        SwGlossaryList* pList = ::GetGlossaryList();
+        pList->HasLongName( rWord, &pQuickHlpData->aArr );
+    }
+
+    if( pQuickHlpData->aArr.Count() )
+    {
+        pQuickHlpData->bIsTip = TRUE;
+        pQuickHlpData->bIsAutoText = TRUE;
+    }
+    else if( pACorr->GetSwFlags().bAutoCompleteWords )
+    {
+        pQuickHlpData->bIsAutoText = FALSE;
+        pQuickHlpData->bIsTip = !pACorr ||
+                    pACorr->GetSwFlags().bAutoCmpltShowAsTip;
+
+        pQuickHlpData->FillStrArr( rSh, rWord );
+    }
+
+    if( pQuickHlpData->aArr.Count() )
+        pQuickHlpData->Start( rSh, rWord.Len() );
+}
+
