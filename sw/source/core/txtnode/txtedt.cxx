@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:09:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,6 +843,135 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 
     return pArgs->xSpellAlt.is() ? 1 : 0;
 }
+
+USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
+{
+    // mofified version of SwTxtNode::Spell.
+
+    BOOL bReverse = FALSE;  // bReverse is (currently) not wanted
+
+    xub_StrLen nBegin, nEnd;
+
+    // modify string according to redline information
+    const SwDoc* pDoc = GetDoc();
+    const XubString aOldTxt( aText );
+    const sal_Bool bShowChg = ::IsShowChanges( pDoc->GetRedlineMode() );
+    if ( bShowChg )
+    {
+        USHORT nAct = pDoc->GetRedlinePos( *this );
+
+        for ( ; nAct < pDoc->GetRedlineTbl().Count(); nAct++ )
+        {
+            const SwRedline* pRed = pDoc->GetRedlineTbl()[ nAct ];
+
+            if ( pRed->Start()->nNode > GetIndex() )
+                break;
+
+            if( REDLINE_DELETE == pRed->GetType() )
+            {
+                USHORT nStart, nEnd;
+                pRed->CalcStartEnd( GetIndex(), nStart, nEnd );
+
+                while ( nStart < nEnd && nStart < aText.Len() )
+                    aText.SetChar( nStart++, CH_TXTATR_INWORD );
+            }
+        }
+    }
+
+    if ( rArgs.pStartNode != this )
+        nBegin = 0;
+    else
+        nBegin = rArgs.rStartIdx.GetIndex();
+
+    if ( rArgs.pEndNode != this )
+        nEnd = aText.Len();
+    else
+        nEnd = rArgs.rEndIdx.GetIndex();
+
+    rArgs.bConvTextFound = sal_False;
+
+    if(aText.Len() )
+    {
+        if( nBegin > aText.Len() )
+            nBegin = aText.Len();
+        if( nEnd > aText.Len() )
+            nEnd = aText.Len();
+
+        LanguageType eActLang = GetLang( nBegin );
+
+        // In case 2. we pass the wrong list to the scanned, because only
+        // the words in the wrong list have to be checked
+        SwScanner aScanner( *this, NULL,
+                            WordType::DICTIONARY_WORD,
+                            nBegin, nEnd, bReverse, TRUE );
+        while( !rArgs.bConvTextFound && aScanner.NextWord( eActLang ) )
+        {
+            const XubString& rWord = aScanner.GetWord();
+
+            // get next language for next word, consider language attributes
+            // within the word
+            eActLang = GetLang( aScanner.GetBegin(), rWord.Len() );
+
+            if( rWord.Len() > 0 && LANGUAGE_KOREAN == eActLang )
+            {
+                // clip result to provided begin and end (that may be
+                // obtained from a selection) in order to restrict the
+                // results to that selection
+                xub_StrLen nRealBegin = aScanner.GetBegin();
+                xub_StrLen nRealEnd   = aScanner.GetEnd();
+/*
+                if (nRealBegin < nBegin)
+                    nRealBegin = nBegin;
+                if (nRealEnd > nEnd)
+                    nRealEnd = nEnd;
+*/
+                rArgs.bConvTextFound = sal_True;
+                rArgs.aConvText = rWord.Copy( nRealBegin - aScanner.GetBegin(), nRealEnd - nRealBegin );
+                rArgs.pStartNode = this;
+                rArgs.pEndNode = this;
+                rArgs.rStartIdx.Assign(this, nRealEnd );
+                rArgs.rEndIdx.Assign(this, nRealBegin );
+            }
+
+            // get next language in order to find next or previous word
+            xub_StrLen nNextBegin;
+            short nInc;
+
+            if ( bReverse )
+            {
+                nNextBegin = aScanner.GetBegin() ? aScanner.GetBegin() - 1 : 0;
+                nInc = -1;
+            }
+            else
+            {
+                nNextBegin = aScanner.GetBegin() + rWord.Len();
+                nInc = 1;
+            }
+
+            // first we have to skip some whitespace characters
+            while ( ( bReverse ? nNextBegin : ( nNextBegin < aText.Len() ) ) &&
+                    ( 0x3000 == aText.GetChar( nNextBegin ) ||
+                      ' ' == aText.GetChar( nNextBegin ) ||
+                      '\t' == aText.GetChar( nNextBegin ) ||
+                      0x0a == aText.GetChar( nNextBegin ) ) )
+            {
+                nNextBegin += nInc;
+            }
+
+            if ( nNextBegin < aText.Len() )
+                eActLang = GetLang( nNextBegin );
+            else
+                break;
+        }
+    }
+
+    // reset original text
+    if ( bShowChg )
+        aText = aOldTxt;
+
+    return rArgs.bConvTextFound ? 1 : 0;
+}
+
 
 SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
 {
