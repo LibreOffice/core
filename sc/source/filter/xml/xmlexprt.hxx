@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-24 08:44:56 $
+ *  last change: $Author: sab $ $Date: 2000-10-24 14:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,6 +463,7 @@ class ScXMLExport : public SvXMLExport
     void WriteDataPilots(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreaDoc);
 protected:
     virtual SvXMLAutoStylePoolP* CreateAutoStylePool();
+    virtual XMLPageExport* CreatePageExport();
 public:
     ScXMLExport( const com::sun::star::uno::Reference <com::sun::star::frame::XModel>& xTempModel, const ::rtl::OUString& rFileName,
                  const ::com::sun::star::uno::Reference<

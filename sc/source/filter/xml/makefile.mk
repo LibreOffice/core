@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dr $ $Date: 2000-10-24 12:25:49 $
+#   last change: $Author: sab $ $Date: 2000-10-24 14:17:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,6 +104,7 @@ CXXFILES = \
         xmlmapch.cxx \
         xmlsceni.cxx \
         xmlcvali.cxx \
+        XMLTableMasterPageExport.cxx \
         xmllabri.cxx
 
 SLOFILES =  \
@@ -128,6 +129,7 @@ SLOFILES =  \
         $(SLO)$/xmlmapch.obj \
         $(SLO)$/xmlsceni.obj \
         $(SLO)$/xmlcvali.obj \
+        $(SLO)$/XMLTableMasterPageExport.obj \
         $(SLO)$/xmllabri.obj
 
 

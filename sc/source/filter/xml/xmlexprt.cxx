@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-24 08:44:56 $
+ *  last change: $Author: sab $ $Date: 2000-10-24 14:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@
 #include "dociter.hxx"
 #include "patattr.hxx"
 #include "unonames.hxx"
+#include "XMLTableMasterPageExport.hxx"
 
 const sal_Int8 SC_MAXDIGITSCOUNT_TIME = 11;
 
@@ -4541,3 +4542,9 @@ SvXMLAutoStylePoolP* ScXMLExport::CreateAutoStylePool()
 {
     return new ScXMLAutoStylePoolP(*this);
 }
+
+XMLPageExport* ScXMLExport::CreatePageExport()
+{
+    return new XMLTableMasterPageExport( *this );
+}
+
