@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-24 20:12:18 $
+ *  last change: $Author: nn $ $Date: 2000-11-25 14:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,19 @@ void ScDrawView::InvalidateAttribs()
     rBindings.Invalidate( SID_ATTR_GRAF_CONTRAST );
     rBindings.Invalidate( SID_ATTR_GRAF_GAMMA );
     rBindings.Invalidate( SID_ATTR_GRAF_TRANSPARENCE );
+
+    rBindings.Invalidate( SID_GRFFILTER );
+    rBindings.Invalidate( SID_GRFFILTER_INVERT );
+    rBindings.Invalidate( SID_GRFFILTER_SMOOTH );
+    rBindings.Invalidate( SID_GRFFILTER_SHARPEN );
+    rBindings.Invalidate( SID_GRFFILTER_REMOVENOISE );
+    rBindings.Invalidate( SID_GRFFILTER_SOBEL );
+    rBindings.Invalidate( SID_GRFFILTER_MOSAIC );
+    rBindings.Invalidate( SID_GRFFILTER_EMBOSS );
+    rBindings.Invalidate( SID_GRFFILTER_POSTER );
+    rBindings.Invalidate( SID_GRFFILTER_POPART );
+    rBindings.Invalidate( SID_GRFFILTER_SEPIA );
+    rBindings.Invalidate( SID_GRFFILTER_SOLARIZE );
 }
 
 void ScDrawView::InvalidateDrawTextAttrs()
@@ -277,18 +290,13 @@ void ScDrawView::InvalidateDrawTextAttrs()
     if (!pViewData) return;
     SfxBindings& rBindings = pViewData->GetBindings();
 
+    //  cjk/ctl font items have no configured slots,
+    //  need no invalidate
+
     rBindings.Invalidate( SID_ATTR_CHAR_FONT );
-    rBindings.Invalidate( SID_ATTR_CHAR_CJK_FONT );
-    rBindings.Invalidate( SID_ATTR_CHAR_CTL_FONT );
     rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
-    rBindings.Invalidate( SID_ATTR_CHAR_CJK_FONTHEIGHT );
-    rBindings.Invalidate( SID_ATTR_CHAR_CTL_FONTHEIGHT );
     rBindings.Invalidate( SID_ATTR_CHAR_WEIGHT );
-    rBindings.Invalidate( SID_ATTR_CHAR_CJK_WEIGHT );
-    rBindings.Invalidate( SID_ATTR_CHAR_CTL_WEIGHT );
     rBindings.Invalidate( SID_ATTR_CHAR_POSTURE );
-    rBindings.Invalidate( SID_ATTR_CHAR_CJK_POSTURE );
-    rBindings.Invalidate( SID_ATTR_CHAR_CTL_POSTURE );
     rBindings.Invalidate( SID_ATTR_CHAR_UNDERLINE );
     rBindings.Invalidate( SID_ULINE_VAL_NONE );
     rBindings.Invalidate( SID_ULINE_VAL_SINGLE );
