@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:51:14 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEHYPERTEXT_HPP_
+#include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -88,20 +91,27 @@
 
 class SwTxtFrm;
 class SwTxtNode;
+class SwTxtAttr;
 class SwPaM;
 class SwCrsrShell;
 class SwAccessiblePortionData;
+class SwAccessibleHyperTextData;
 class SwXTextPortion;
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace i18n { struct Boundary; }
+    namespace accessibility { class XAccessibleHyperlink; }
 } } }
+
 
 class SwAccessibleParagraph :
         public SwAccessibleContext,
         public ::com::sun::star::accessibility::XAccessibleEditableText,
-        public com::sun::star::accessibility::XAccessibleSelection
+        public com::sun::star::accessibility::XAccessibleSelection,
+        public com::sun::star::accessibility::XAccessibleHypertext
 {
+    friend class SwAccessibleHyperlink;
+
     ::rtl::OUString sDesc;  // protected by base classes mutex
 
     /// data for this paragraph's text portions; this contains the
@@ -110,6 +120,7 @@ class SwAccessibleParagraph :
     /// pPortionData may be NULL; it should only be accessed through the
     /// Get/Clear/Has/UpdatePortionData() methods
     SwAccessiblePortionData* pPortionData;
+    SwAccessibleHyperTextData *pHyperTextData;
 
     sal_Int32 nOldCaretPos; // The 'old' caret pos. It's only valid as long
                             // as the cursor is inside this object (protected by
@@ -250,6 +261,8 @@ public:
     SwAccessibleParagraph( SwAccessibleMap *pMap, sal_Int32 nPara,
                            const SwTxtFrm *pTxtFrm );
 
+    inline operator ::com::sun::star::accessibility::XAccessibleText *();
+
     virtual sal_Bool HasCursor();   // required by map to remember that object
 
     //=====  XAccessibleContext  ==============================================
@@ -368,8 +381,25 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
 
+//=====  XAccessibleHypertext  ============================================
+virtual sal_Int32 SAL_CALL getHyperLinkCount()
+     throw (::com::sun::star::uno::RuntimeException);
+virtual ::com::sun::star::uno::Reference<
+          ::com::sun::star::accessibility::XAccessibleHyperlink >
+    SAL_CALL getHyperLink( sal_Int32 nLinkIndex )
+      throw (::com::sun::star::lang::IndexOutOfBoundsException,
+              ::com::sun::star::uno::RuntimeException);
+virtual sal_Int32 SAL_CALL getHyperLinkIndex( sal_Int32 nCharIndex )
+    throw (::com::sun::star::lang::IndexOutOfBoundsException,
+            ::com::sun::star::uno::RuntimeException);
+
 };
 
+inline SwAccessibleParagraph::operator ::com::sun::star::accessibility::XAccessibleText *()
+{
+    return static_cast<
+        ::com::sun::star::accessibility::XAccessibleEditableText * >( this );
+}
 
 #endif
 
