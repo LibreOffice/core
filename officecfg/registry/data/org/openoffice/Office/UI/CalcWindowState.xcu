@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="CalcWindowState" oor:package="org.openoffice.Office.UI">
+ <node oor:name="UIElements">
+  <node oor:name="States">
+   <node oor:name="private:resource/toolbar/grapicobjectbar" oor:op="replace">
+    <prop oor:name="DockPos" oor:type="xs:string">
+     <value>0,1</value>
+    </prop>
+    <prop oor:name="Docked" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="DockingArea" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Style" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Picture</value>
+     <value xml:lang="de">Bild</value>
+    </prop>
+    <prop oor:name="Visible" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/drawobjectbar" oor:op="replace">
+    <prop oor:name="DockPos" oor:type="xs:string">
+     <value>0,1</value>
+    </prop>
+    <prop oor:name="Docked" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="DockingArea" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Style" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Graphic</value>
+     <value xml:lang="de">Grafik</value>
+    </prop>
+    <prop oor:name="Visible" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/previewbar">
+    <prop oor:name="DockPos" oor:type="xs:string">
+     <value>0,1</value>
+    </prop>
+    <prop oor:name="Docked" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="DockingArea" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Style" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Visible" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Page Preview</value>
+     <value xml:lang="de">Seitenansicht</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/extrusionobjectbar">
+    <prop oor:name="DockPos" oor:type="xs:string">
+     <value>0,2</value>
+    </prop>
+    <prop oor:name="Docked" oor:type="xs:boolean">
+     <value>False</value>
+    </prop>
+    <prop oor:name="DockingArea" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Style" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Visible" oor:type="xs:boolean">
+     <value>True</value>
+    </prop>
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">3D-Settings</value>
+     <value xml:lang="de">3D-Einstellungen</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/formsobjectbar">
+    <prop oor:name="DockPos" oor:type="xs:string">
+     <value>0,1</value>
+    </prop>
+    <prop oor:name="Docked" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="DockingArea" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Style" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Visible" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Form Object</value>
+     <value xml:lang="de">Formular Objekt</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/formsbar" oor:op="replace">
+    <prop oor:name="DockPos" oor:type="xs:string">
+     <value>734,4</value>
+    </prop>
+    <prop oor:name="Docked" oor:type="xs:boolean">
+     <value>false</value>
+    </prop>
+    <prop oor:name="DockingArea" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Pos" oor:type="xs:string">
+     <value>61,130</value>
+    </prop>
+    <prop oor:name="Size" oor:type="xs:string">
+     <value>306,27</value>
+    </prop>
+    <prop oor:name="Style" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Form</value>
+     <value xml:lang="de">Formular</value>
+    </prop>
+    <prop oor:name="Visible" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/formatobjectbar" oor:op="replace">
+    <prop oor:name="DockPos" oor:type="xs:string">
+     <value>0,2</value>
+    </prop>
+    <prop oor:name="Docked" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="DockingArea" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Locked" oor:type="xs:boolean">
+     <value>false</value>
+    </prop>
+    <prop oor:name="Style" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Visible" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Format Object</value>
+     <value xml:lang="de">Objekt formatieren</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/formsobjectbar" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Form Object</value>
+     <value xml:lang="de">Formular Objekt</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/insertbar" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Insert</value>
+     <value xml:lang="de">Einfügen</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/insertbar" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Insert Cell</value>
+     <value xml:lang="de">Zelle einfügen</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/insertobjectbar" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Insert Object</value>
+     <value xml:lang="de">Objekt einfügen</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/standardbar" oor:op="replace">
+    <prop oor:name="DockPos" oor:type="xs:string">
+     <value>0,0</value>
+    </prop>
+    <prop oor:name="Docked" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="DockingArea" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Locked" oor:type="xs:boolean">
+     <value>false</value>
+    </prop>
+    <prop oor:name="Style" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Visible" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Standard</value>
+     <value xml:lang="de">Standard</value>
+     </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/textobjectbar" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Formatting</value>
+     <value xml:lang="de">Format</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
+    <prop oor:name="DockPos" oor:type="xs:string">
+     <value>0,0</value>
+    </prop>
+    <prop oor:name="Docked" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="DockingArea" oor:type="xs:int">
+     <value>1</value>
+    </prop>
+    <prop oor:name="Locked" oor:type="xs:boolean">
+     <value>false</value>
+    </prop>
+    <prop oor:name="Style" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Visible" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Tools</value>
+     <value xml:lang="de">Werkzeuge</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/fullscreenbar" oor:op="replace">
+    <prop oor:name="Docked" oor:type="xs:boolean">
+     <value>false</value>
+    </prop>
+    <prop oor:name="Locked" oor:type="xs:boolean">
+     <value>false</value>
+    </prop>
+    <prop oor:name="Pos" oor:type="xs:string">
+     <value>79,65</value>
+    </prop>
+    <prop oor:name="Size" oor:type="xs:string">
+     <value>99,27</value>
+    </prop>
+    <prop oor:name="Style" oor:type="xs:int">
+     <value>2</value>
+    </prop>
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Full Screen</value>
+     <value xml:lang="de">Ganzer Bildschirm</value>
+    </prop>
+    <prop oor:name="Visible" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+   </node>
+  </node>
+ </node>
+</oor:component-data>
