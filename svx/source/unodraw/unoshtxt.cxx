@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-01 16:50:27 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 20:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,12 @@ SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
         {
             pOutliner->SetText( *pOutlinerParaObject );
         }
+        else
+        {
+            // set objects style sheet on empty outliner
+            pOutliner->SetStyleSheet( 0, pObj->GetStyleSheet());
+        }
+
 
         bDataValid = TRUE;
     }
