@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-07-20 09:12:08 $
+ *  last change: $Author: nn $ $Date: 2001-07-30 15:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 //------------------------------------------------------------------------
 
-#include <sot/dtrans.hxx>
 #define SC_HTMLPARS_CXX
 #include "scitems.hxx"
 #ifndef _OFF_APP_HXX //autogen

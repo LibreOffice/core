@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:12:33 $
+ *  last change: $Author: nn $ $Date: 2001-07-30 15:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,6 @@
 #endif
 
 #pragma hdrstop
-
-#ifndef _SOT_DTRANS_HXX
-#include <sot/dtrans.hxx>
-#endif
 
 //----------------------------------------------------------------------------
 

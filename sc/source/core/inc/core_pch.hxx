@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_pch.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-07-26 16:04:05 $
+ *  last change: $Author: nn $ $Date: 2001-07-30 15:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,6 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/wintypes.hxx>
 #include <vcl/event.hxx>
-#include <sot/dtrans.hxx>
 #include <tools/ownlist.hxx>
 #include <svtools/itempool.hxx>
 #include <tools/datetime.hxx>
