@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-07 08:19:13 $
+ *  last change: $Author: fs $ $Date: 2001-03-16 16:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
 #include <com/sun/star/container/XContainerListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_I18N_XCOLLATOR_HPP_
+#include <com/sun/star/i18n/XCollator.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
@@ -85,6 +88,7 @@
 // =========================================================================
 class SvLBoxEntry;
 class Splitter;
+struct SvSortData;
 
 namespace dbaui
 {
@@ -113,6 +117,9 @@ namespace dbaui
         ::rtl::OUString         m_sDefaultCommand;
         sal_Int32               m_nDefaultCommandType;
         sal_Bool                m_bHideTreeView;
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >
+                                m_xCollator;
 
     // attribute access
     public:
@@ -230,6 +237,7 @@ namespace dbaui
         DECL_LINK( OnSelectEntry, SvLBoxEntry* );
         DECL_LINK( OnExpandEntry, SvLBoxEntry* );
         DECL_LINK( OnListContextMenu, const CommandEvent* );
+        DECL_LINK( OnTreeEntryCompare, const SvSortData* );
 
         void implRemoveStatusListeners();
     };
