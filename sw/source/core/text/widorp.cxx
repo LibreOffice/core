@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:51:39 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,6 @@ const sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
     // 7455 und 6114: Raum fuer die Umrandung unten einkalkulieren.
     nLineHeight += (pFrm->*fnRect->fnGetBottomMargin)();
 
-
     if( nRstHeight )
         bFit = nRstHeight >= nLineHeight;
     else
@@ -273,27 +272,17 @@ sal_Bool SwTxtFrmBreak::IsBreakNow( SwTxtMargin &rLine )
     return bBreak;
 }
 
-
-/*MA ehemals fuer COMPACT
-// WouldFit() liefert sal_True, wenn der Absatz ganz oder teilweise passen wuerde
-
-sal_Bool SwTxtFrmBreak::WouldFit( SwTxtMargin &rLine )
+// OD 2004-02-27 #106629# - no longer inline
+void SwTxtFrmBreak::SetRstHeight( const SwTxtMargin &rLine )
 {
-    rLine.Bottom();
-    if( IsInside( rLine ) )
-        return sal_True;
-
-    rLine.Top();
-    // Suche die erste Trennmoeglichkeit ...
-    while( !IsBreakNow( rLine ) )
-    {
-        DBG_LOOP;
-        if( !rLine.NextLine() )
-            return sal_False;
-    }
-    return sal_True;
+    // OD, FME 2004-02-27 #106629# - consider bottom margin
+    SWRECTFN( pFrm )
+    nRstHeight = (pFrm->*fnRect->fnGetBottomMargin)();
+    if ( bVert )
+        nRstHeight += nOrigin - pFrm->SwitchHorizontalToVertical( rLine.Y() );
+    else
+        nRstHeight += rLine.Y() - nOrigin;
 }
-*/
 
 /*************************************************************************
  *                  WidowsAndOrphans::WidowsAndOrphans()
