@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-03 12:45:52 $
+ *  last change: $Author: tbe $ $Date: 2002-07-25 11:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,6 @@ public:
     void                WindowEvent_Paint( Window* pWindow, const Rectangle& rRect );
 
     // Accessibility
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
-                                CreateAccessible( Window* pWindow, Menu* pMenu );
-
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
                                 CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar );
 };

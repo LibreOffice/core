@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-10 18:28:17 $
+ *  last change: $Author: tbe $ $Date: 2002-07-25 11:08:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,13 +132,8 @@
 
         case WINDOW_SYSWINDOW:
         case WINDOW_WORKWINDOW:
-        case WINDOW_DOCKINGWINDOW:  return new VCLXTopWindow;
-
-        case WINDOW_FLOATINGWINDOW:
-            if( pWindow->IsMenuFloatingWindow() )
-                return new VCLXMenuWindow;
-            else
-                return new VCLXTopWindow;
+        case WINDOW_DOCKINGWINDOW:
+        case WINDOW_FLOATINGWINDOW: return new VCLXTopWindow;
 
         case WINDOW_WINDOW:
         case WINDOW_TABPAGE:        return new VCLXContainer;
@@ -334,52 +329,6 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
         pWindow->GetWindowPeer()->SetWindow( NULL );
         pWindow->SetWindowPeer( NULL, NULL );
     }
-}
-
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > UnoWrapper::CreateAccessible( Window* pWindow, Menu* pMenu )
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
-
-    if ( !xPeer.is() )
-    {
-        xPeer = (::com::sun::star::awt::XWindowPeer*) new VCLXMenuWindow();
-        SetWindowInterface( pWindow, xPeer );
-    }
-
-    if ( xPeer.is() )
-    {
-        VCLXMenuWindow* pVCLXMenuWindow = VCLXMenuWindow::GetImplementation( xPeer );
-        DBG_ASSERT( pVCLXMenuWindow, "UnoWrapper::CreateAccessible: no pVCLXMenuWindow!" );
-        if ( pVCLXMenuWindow )
-        {
-            sal_Int32 nIndexInParent = -1;
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xParent;
-
-            Window* pParent = pWindow->GetAccessibleParentWindow();
-            if ( pParent )
-            {
-                // get accessible parent
-                xParent = pParent->GetAccessible();
-
-                // get index in parent
-                for ( USHORT n = pParent->GetAccessibleChildWindowCount(); n; )
-                {
-                    Window* pChild = pParent->GetAccessibleChildWindow( --n );
-                    if ( pChild == pWindow )
-                    {
-                        nIndexInParent = n;
-                        break;
-                    }
-                }
-            }
-
-            pVCLXMenuWindow->SetMenu( pMenu );
-            pVCLXMenuWindow->SetIndexInParent( nIndexInParent );
-            pVCLXMenuWindow->SetAccessibleParent( xParent );
-        }
-    }
-
-    return ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >( xPeer, ::com::sun::star::uno::UNO_QUERY );
 }
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > UnoWrapper::CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar )
