@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 16:29:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,43 +65,38 @@
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
 #endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
-#include <cppuhelper/interfacecontainer.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
-#include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
-#endif
-
-#ifndef _DBA_CORE_CONTAINERELEMENT_HXX_
-#include "containerelement.hxx"
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef _DBA_REGHELPER_HXX_
 #include "dba_reghelper.hxx"
 #endif
+#ifndef DBA_CONTENTHELPER_HXX
+#include "ContentHelper.hxx"
+#endif
+#ifndef COMPHELPER_PROPERTYSTATECONTAINER_HXX
+#include <comphelper/propertystatecontainer.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
+#endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
-#ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
-#include "configurationflushable.hxx"
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDCLIENT_HPP_
+#include <com/sun/star/embed/XEmbeddedClient.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
+#include <com/sun/star/frame/XComponentLoader.hpp>
 #endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
-#include <comphelper/broadcasthelper.hxx>
+#ifndef _COM_SUN_STAR_EMBED_XSTATECHANGELISTENER_HPP_
+#include <com/sun/star/embed/XStateChangeListener.hpp>
 #endif
 
 //........................................................................
@@ -109,114 +104,112 @@ namespace dbaccess
 {
 //........................................................................
 
+    typedef ::cppu::ImplHelper1<        ::com::sun::star::embed::XEmbeddedClient
+                                >   ODocumentDefinition_Base;
+
+    class OInterceptor;
+    class OEmbeddedClientHelper;
 //==========================================================================
 //= ODocumentDefinition - a database "document" which is simply a link to a real
 //=                   document
 //==========================================================================
-typedef ::cppu::WeakImplHelper2<
-                    ::com::sun::star::lang::XUnoTunnel,
-                    ::com::sun::star::lang::XServiceInfo
-                    > ODocumentDefinition_Base;
 
 class ODocumentDefinition
-        :public ODocumentDefinition_Base
-        ,public OContainerElement
-        ,public comphelper::OMutexAndBroadcastHelper
-        ,public OConfigurationFlushable
-        ,public ::cppu::OPropertySetHelper
+        :public OContentHelper
+        ,public ::comphelper::OPropertyStateContainer
         ,public ::comphelper::OPropertyArrayUsageHelper< ODocumentDefinition >
+        ,public ODocumentDefinition_Base
 {
-protected:
-    ::cppu::OInterfaceContainerHelper   m_aFlushListeners;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xContainer;
-
-// <properties>
-    ::rtl::OUString     m_sElementName;
-    ::rtl::OUString     m_sDocumentLocation;
-// </properties>
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject>         m_xEmbeddedObject;
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStateChangeListener >   m_xListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XComponentLoader >       m_xFrameLoader;
+    OInterceptor*                                                                       m_pInterceptor;
+    sal_Bool                                                                            m_bForm; // <TRUE/> if it is a form
+    OEmbeddedClientHelper*                                                              m_pClientHelper;
 
 private:
-    ODocumentDefinition();
+    // Command "insert"
+    void insert( const ::rtl::OUString& _sURL, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw( ::com::sun::star::uno::Exception );
 
+
+    /** loads the EmbeddedObject if not already loaded
+        @param  _aClassID
+            If set, it will be used to create the embedded object.
+    */
+    void loadEmbeddedObject(const ::com::sun::star::uno::Sequence< sal_Int8 >& _aClassID = ::com::sun::star::uno::Sequence< sal_Int8 >()
+                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>()
+                            ,sal_Bool _bReadOnly = sal_False);
+
+
+    void generateNewImage(::com::sun::star::uno::Any& _rImage);
+    void fillDocumentInfo(::com::sun::star::uno::Any& _rInfo);
+    /** searches for read-only flag in the args of the model and sets it to the given value,
+        if the value was not found, it will be appended.
+        @param  _bReadOnly
+            If <TRUE/> the document will be switched to readonly mode
+    */
+    void setModelReadOnly(sal_Bool _bReadOnly);
 protected:
-    ~ODocumentDefinition();
+    virtual ~ODocumentDefinition();
 
 public:
-    // helper class for controlling access privileges
-    class AccessControl
-    {
-        friend class ODocumentContainer;
-    private:
-        AccessControl() { }
-    };
-
-    // --------------------------------------------------------------------
-    // some kind of default ctor, accessible for selected classes only
-    ODocumentDefinition(AccessControl&);
 
     ODocumentDefinition(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
-            const ::rtl::OUString& _rElementName,
-            const ::utl::OConfigurationTreeRoot& _rObjectNode
+             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+            ,const TContentPtr& _pImpl
+            ,sal_Bool _bForm
+            ,const ::com::sun::star::uno::Sequence< sal_Int8 >& _aClassID = ::com::sun::star::uno::Sequence< sal_Int8 >()
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>()
         );
 
+// com::sun::star::lang::XTypeProvider
+    DECLARE_TYPEPROVIDER( );
+
 // ::com::sun::star::uno::XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  ) throw() { ODocumentDefinition_Base::acquire(); }
-    virtual void SAL_CALL release(  ) throw() { ODocumentDefinition_Base::release(); }
+    DECLARE_XINTERFACE( )
 
 // ::com::sun::star::lang::XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::lang::XServiceInfo - static methods
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-    static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-         SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
-
-// ::com::sun::star::lang::XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+    DECLARE_SERVICE_INFO_STATIC();
 
 // ::com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
+    // XComponentSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > SAL_CALL getComponent(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL visibilityChanged( ::sal_Bool bVisible ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException);
+
 // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                ::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
-                sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue)
-            throw (::com::sun::star::lang::IllegalArgumentException);
+    // XCommandProcessor
+    virtual ::com::sun::star::uno::Any SAL_CALL execute( const ::com::sun::star::ucb::Command& aCommand, sal_Int32 CommandId, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw (::com::sun::star::uno::Exception, ::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::RuntimeException) ;
 
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-            throw (::com::sun::star::uno::Exception);
+    // XEmbeddedClient
+    virtual void SAL_CALL saveObject(  ) throw (::com::sun::star::embed::ObjectSaveVetoException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL onShowWindow( sal_Bool bVisible ) throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL getFastPropertyValue(
-                ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
+    // XRename
+    virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
-// OContainerElement
-    virtual void        inserted(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
-        const ::rtl::OUString& _rElementName,
-        const ::utl::OConfigurationTreeRoot& _rConfigRoot);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage() const;
 
-    virtual void        removed();
-
-    virtual sal_Bool    isContainerElement() const { return m_aConfigurationNode.isValid(); }
-
+    sal_Bool save(sal_Bool _bApprove);
+    void closeObject();
+    sal_Bool isModified();
+    void fillReportData(sal_Bool _bFill = sal_True);
 protected:
-// OPropertyArrayUsageHelper
+    // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
-    /// read the objects properties from the configuration
-    void initializeFromConfiguration();
+    virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const;
+    // helper
+    virtual void SAL_CALL disposing();
 
-    // OConfigurationFlushable overridables
-    virtual void flush_NoBroadcast_NoCommit();
+private:
+    void registerProperties();
+
 };
 
 //........................................................................
