@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hjs $ $Date: 2001-04-11 09:10:15 $
+#   last change: $Author: hjs $ $Date: 2001-05-03 09:55:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,6 +136,7 @@ BERKELEYCPPLIB=$(L)$/libdb_cxx-3.2.x
 SFX2LIB=$(L)$/libsfx$(UPD)$(DLLPOSTFIX).x
 SFXLIB=$(L)$/libsfx$(UPD)$(DLLPOSTFIX).x
 SFXDEBUGLIB=
+FWELIB=$(L)$/libfwe$(UPD)$(DLLPOSTFIX).x
 SVXLIB=$(L)$/libsvx$(UPD)$(DLLPOSTFIX).x
 BASCTLLIB=$(L)$/libbasctl$(UPD)$(DLLPOSTFIX).x
 SVXlLIB=$(L)$/libsvx$(UPD)$(DLLPOSTFIX).a
@@ -266,6 +267,7 @@ BERKELEYCPPLIB=-ldb_cxx-3.2
 SFX2LIB=-lsfx$(UPD)$(DLLPOSTFIX)
 SFXLIB=-lsfx$(UPD)$(DLLPOSTFIX)
 SFXDEBUGLIB=
+FWELIB=-lfwe$(UPD)$(DLLPOSTFIX)
 SVXLIB=-lsvx$(UPD)$(DLLPOSTFIX)
 BASCTLLIB=-lbasctl$(UPD)$(DLLPOSTFIX)
 SVXLLIB=-lsvxl
@@ -414,6 +416,7 @@ SSWLIB=$(LIBPRE) ssw.lib
 SVLIBDEPEND=$(L)$/sv.lib
 SFX2LIB=$(LIBPRE) sfx.lib
 SFXLIB=$(SFX2LIB)
+FWELIB=$(LIBPRE) ifwe.lib
 BTSTRPLIB=$(LIBPRE) bootstrp.lib
 ICOLIB= $(LIBPRE) icom.lib
 SVTOOLLIB=$(LIBPRE) svtool.lib
