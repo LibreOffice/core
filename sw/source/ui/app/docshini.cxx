@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:11:52 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,6 +465,13 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
             }
         }
     }
+
+    /* #106748# If the default frame direction of a document is RTL
+        the default adjusment is to the right. */
+    if( !bHTMLTemplSet &&
+        FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) )
+        pDoc->SetDefault( (SvxAdjustItem(SVX_ADJUST_RIGHT)) );
+
     return bRet;
 }
 
@@ -956,11 +963,6 @@ void SwDocShell::SubInitNew()
                                           SVX_TAB_ADJUST_DEFAULT ) );
     }
     aDfltSet.Put( SvxColorItem( Color( COL_AUTO ), RES_CHRATR_COLOR ) );
-
-    /* #106748# If the default frame direction of a document is RTL
-        the default adjusment is to the right. */
-    if (FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()))
-        aDfltSet.Put(SvxAdjustItem(SVX_ADJUST_RIGHT));
 
     pDoc->SetDefault( aDfltSet );
     pDoc->ResetModified();
