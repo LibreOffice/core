@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: aw $ $Date: 2001-06-21 14:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,18 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
             if (aDragStat.IsOrtho8Possible()) OrthoDistance8(aDragStat.GetPrev(),aPnt,IsBigOrtho());
             else if (aDragStat.IsOrtho4Possible()) OrthoDistance4(aDragStat.GetPrev(),aPnt,IsBigOrtho());
         }
-        ImpLimitToWorkArea(aPnt,pCreatePV);
+
+        // #77734# If the drag point was limited and Ortho is active, do
+        // the small ortho correction (reduction) -> last parameter to FALSE.
+        sal_Bool bDidLimit(ImpLimitToWorkArea(aPnt,pCreatePV));
+        if(bDidLimit && IsOrtho())
+        {
+            if(aDragStat.IsOrtho8Possible())
+                OrthoDistance8(aDragStat.GetPrev(), aPnt, FALSE);
+            else if(aDragStat.IsOrtho4Possible())
+                OrthoDistance4(aDragStat.GetPrev(), aPnt, FALSE);
+        }
+
         if (aPnt==aDragStat.GetNow()) return;
         if (pLibObjDragMeth==NULL) {
             BOOL bMerk=aDragStat.IsMinMoved();
