@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.66 $
- *  last change: $Author: hdu $ $Date: 2001-11-29 17:17:13 $
+ *  $Revision: 1.67 $
+ *  last change: $Author: hdu $ $Date: 2001-12-04 18:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,14 @@
 #include <svapp.hxx>
 #include <settings.hxx>
 #include <tools/lang.hxx>
+
+// Glyph Flags
+#define GF_NONE     0
+#define GF_ROTMASK  3
+#define GF_ROTL     +1
+#define GF_ROTR     +3
+#define GF_UNHINTED +4
+#define GF_GSUB     +8
 
 // -----------------------------------------------------------------------
 
@@ -646,41 +654,42 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 int SetVerticalFlags( sal_Unicode nChar )
 {
     if ( (nChar >= 0x1100 && nChar <= 0x11f9)   // Hangul Jamo
-    ||   (nChar >= 0x3000 && nChar <= 0xfaff) )  // other CJK
+    ||   (nChar >= 0x3000 && nChar <= 0xfaff) ) // other CJK
     {
         if( nChar == 0x2010 || nChar == 0x2015
         ||  nChar == 0x2016 || nChar == 0x2026
-        || (nChar >= 0x3008 && nChar <= 0x3017)
-        ||  nChar >= 0xFF00 )
-            return 0;   // not rotated
+        || (nChar >= 0x3008 && nChar <= 0x3017) )
+            return GF_NONE;   // not rotated
         else if ( nChar == 0x30fc )
-            return +3;  // right
-        return +1;      // left
+            return GF_ROTR;  // right
+        return GF_ROTL;      // left
     }
 
-    return 0;
+    return GF_NONE;
 }
 
 static inline void SetGlyphFlags( int& nGlyphIndex, int nFlags )
 {
-    nGlyphIndex |= (nFlags << 28);
+    nGlyphIndex |= (nFlags << 24);
 }
 
 static inline void SplitGlyphFlags( int& nGlyphIndex, int& nGlyphFlags )
 {
-    nGlyphFlags = (nGlyphIndex >> 28);
+    nGlyphFlags = (nGlyphIndex >> 24);
     nGlyphIndex &= 0x00ffffff;
 }
 
 int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGlyphFT ) const
 {
-    FT_Vector aVector;
-    FT_Matrix aMatrix;
-
     int nAngle = GetFontSelData().mnOrientation;
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
 
-    switch( nGlyphFlags )
+    FT_Vector aVector;
+    FT_Matrix aMatrix;
+
+    bool bStretched = false;
+
+    switch( nGlyphFlags & (GF_ROTMASK | GF_GSUB) )
     {
     default:    // straight
         aVector.x = 0;
@@ -690,26 +699,22 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGly
         aMatrix.xy = -nSin;
         aMatrix.yx = +nSin;
         break;
-    case +1:    // left
+    case GF_ROTL:    // left
         nAngle += 900;
+        bStretched = (mfStretch != 1.0);
         aVector.x = +rMetrics.descender * mfStretch;
-        // for fonts without GSUB move glyph into middle
-        if( !maGlyphSubstitution.empty() )
-            aVector.x /= 2;
         aVector.y = -rMetrics.ascender;
         aMatrix.xx = -nSin / mfStretch;
         aMatrix.yy = -nSin * mfStretch;
         aMatrix.xy = -nCos * mfStretch;
         aMatrix.yx = +nCos / mfStretch;
         break;
-    case +3:    // right
+    case GF_ROTR:    // right
         nAngle -= 900;
+        bStretched = (mfStretch != 1.0);
         aVector.x = -rMetrics.descender * mfStretch;
-        // for fonts without GSUB move glyph into middle
-        if( !maGlyphSubstitution.empty() )
-            aVector.x /= 2;
-        aVector.x -= maFaceFT->glyph->metrics.horiAdvance;
         aVector.y = 0;
+        aVector.x -= maFaceFT->glyph->metrics.horiAdvance;
         aMatrix.xx = +nSin / mfStretch;
         aMatrix.yy = +nSin * mfStretch;
         aMatrix.xy = +nCos * mfStretch;
@@ -717,13 +722,16 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGly
         break;
     }
 
+    while( nAngle < 0 )
+        nAngle += 3600;
+
     if( pGlyphFT->format != ft_glyph_format_bitmap )
     {
         FT_Glyph_Transform( pGlyphFT, NULL, &aVector );
 
         // orthogonal transforms are handled by bitmap operations
-        // apply other transforms here
-        if( (nAngle % 900) != 0 || nGlyphFlags )
+        // apply non-orthogonal or stretch transformations here
+        if( (nAngle % 900) != 0 || bStretched )
         {
             FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
             nAngle = 0;
@@ -778,19 +786,30 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
     }
 
     int nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar );
+    int nGlyphFlags = GF_NONE;
 
     // do glyph substitution if necessary
     GlyphSubstitution::const_iterator it = maGlyphSubstitution.find( nGlyphIndex );
     // use OpenType substitution if available
     if( it != maGlyphSubstitution.end() )
+    {
         nGlyphIndex = (*it).second;
+        nGlyphFlags |= GF_GSUB;
+    }
 
     // CJK vertical writing needs special treatment
-    if( nGlyphIndex!=0 && GetFontSelData().mbVertical )
-    {
-        int nVertFlags = SetVerticalFlags( aChar );
-        SetGlyphFlags( nGlyphIndex, nVertFlags );
-    }
+    if( GetFontSelData().mbVertical )
+        nGlyphFlags |= SetVerticalFlags( aChar );
+
+#if !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
+    // #95556# autohinting not ready for for east asian characters yet
+    if( !(mnLoadFlags & FT_LOAD_NO_HINTING)
+    &&  ( (aChar >= 0x2900 && aChar < 0xD800) || (aChar >= 0xF800) ) )
+        nGlyphFlags |= GF_UNHINTED;
+#endif
+
+    if( nGlyphIndex !=0 )
+        SetGlyphFlags( nGlyphIndex, nGlyphFlags );
 
     return nGlyphIndex;
 }
@@ -802,8 +821,11 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     int nGlyphFlags;
     SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
 
-    FT_Error rc = -1;
     int nLoadFlags = mnLoadFlags;
+    if( nGlyphFlags & GF_UNHINTED )
+        nLoadFlags |= FT_LOAD_NO_HINTING;
+
+    FT_Error rc = -1;
 #if (FTVERSION <= 205)
     // #88364# freetype<=205 prefers autohinting to embedded bitmaps
     // => first we have to try without hinting
@@ -829,7 +851,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     }
 
     int nCharWidth = maFaceFT->glyph->metrics.horiAdvance;
-    if( nGlyphFlags ) {  // for bVertical rotated glyphs
+    if( nGlyphFlags & GF_ROTMASK ) {  // for bVertical rotated glyphs
         const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
 #if (FTVERSION < 200)
         nCharWidth = (rMetrics.height - rMetrics.descender) * mfStretch;
@@ -877,7 +899,9 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 {
     int nGlyphFlags;
     SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
+
     FT_Int nLoadFlags = mnLoadFlags;
+
 #if (FTVERSION >= 202)
     // for 0/90/180/270 degree fonts enable autohinting even if not advisable
     // non-hinted and non-antialiased bitmaps just look too ugly
@@ -962,10 +986,15 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 {
     int nGlyphFlags;
     SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
+
     FT_Int nLoadFlags = mnLoadFlags;
+
 #if (FTVERSION <= 204) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     // autohinting in FT<=2.0.4 makes antialiased glyphs look worse
     nLoadFlags |= FT_LOAD_NO_HINTING;
+#else
+    if( nGlyphFlags & GF_UNHINTED )
+        nLoadFlags |= FT_LOAD_NO_HINTING;
 #endif
 
     // #94409# do not load embedded bitmaps for non-0/90/180/270 degree fonts
