@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WNameMatch.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:13:10 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ void OColumnString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, Sv
 }
 //========================================================================
 OColumnTreeBox::OColumnTreeBox( Window* pParent, WinBits nWinStyle )
-    : OMarkableTreeListBox(pParent,nWinStyle)
+    : OMarkableTreeListBox(pParent,NULL,nWinStyle)
 {
     SetDragDropMode( 0 );
     EnableInplaceEditing( sal_False );
@@ -443,7 +443,7 @@ OColumnTreeBox::OColumnTreeBox( Window* pParent, WinBits nWinStyle )
 }
 //------------------------------------------------------------------------
 OColumnTreeBox::OColumnTreeBox( Window* pParent, const ResId& rResId )
-    : OMarkableTreeListBox(pParent,rResId)
+    : OMarkableTreeListBox(pParent,NULL,rResId)
 {
     SetDragDropMode( 0 );
     EnableInplaceEditing( sal_False );
@@ -453,7 +453,7 @@ OColumnTreeBox::OColumnTreeBox( Window* pParent, const ResId& rResId )
 //------------------------------------------------------------------------
 void OColumnTreeBox::InitEntry(SvLBoxEntry* pEntry, const String& rStr, const Image& rImg1, const Image& rImg2)
 {
-    SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2 );
+    DBTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2 );
     SvLBoxString* pString = new OColumnString(pEntry, 0, rStr,sal_False);
     if (pString)
         pEntry->ReplaceItem( pString, pEntry->ItemCount() - 1 );
@@ -465,10 +465,10 @@ sal_Bool OColumnTreeBox::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
     {
         OFieldDescription* pColumn = static_cast<OFieldDescription*>(pEntry->GetUserData());
         if(!(pColumn->IsAutoIncrement() && m_bReadOnly))
-            bSelect = SvTreeListBox::Select( pEntry,bSelect );
+            bSelect = DBTreeListBox::Select( pEntry,bSelect );
     }
     else
-        bSelect = SvTreeListBox::Select( pEntry,bSelect );
+        bSelect = DBTreeListBox::Select( pEntry,bSelect );
     return bSelect;
 }
 //------------------------------------------------------------------------
