@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 16:12:56 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 09:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
 #endif
-#ifndef DBAUI_DLGERR_HXX
-#include "dlgerr.hxx"
+#ifndef _DBAUI_SQLMESSAGE_HXX_
+#include "sqlmessage.hxx"
 #endif
 
 
@@ -129,7 +129,7 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
             m_aTitle.GrabFocus();
             String aText(m_aExists);
             aText.SearchAndReplace(String::CreateFromAscii("'$Name: not supported by cvs2svn $'"),m_aName);
-            OMsgBox aDlg(this,String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)),aText,WB_OK,OMsgBox::Query);
+            OSQLMessageBox aDlg(this, String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)), aText, WB_OK, OSQLMessageBox::Query);
         }
         else
             EndDialog(RET_OK);
