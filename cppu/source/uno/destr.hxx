@@ -2,9 +2,9 @@
  *
  *  $RCSfile: destr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:29:14 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ inline void _destructAny(
         _release( pAny->pReserved, release );
         break;
     }
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     pAny->pData = (void *)0xdeadbeef;
 #endif
 
