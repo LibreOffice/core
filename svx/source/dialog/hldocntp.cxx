@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: iha $ $Date: 2002-10-08 16:46:17 $
+ *  last change: $Author: iha $ $Date: 2002-10-15 11:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,21 +576,4 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
         maCbbPath.SetText ( aStrTmp );
     }
     return( 0L );
-}
-
-String SvxHyperlinkNewDocTp::CreateUiNameFromURL( const String& aStrURL )
-{
-    String          aStrUiURL;
-    INetURLObject   aURLObj( aStrURL );
-
-    if( aURLObj.GetProtocol() == INET_PROT_FILE )
-    {
-        utl::LocalFileHelper::ConvertURLToSystemPath( aURLObj.GetMainURL(INetURLObject::NO_DECODE), aStrUiURL );
-    }
-    else
-    {
-        aStrUiURL = aURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
-    }
-
-    return aStrUiURL;
 }

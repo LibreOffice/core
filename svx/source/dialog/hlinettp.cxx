@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: iha $ $Date: 2002-10-08 16:39:49 $
+ *  last change: $Author: iha $ $Date: 2002-10-15 11:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #define STD_DOC_NAME        "url_transfer.htm"
 
 sal_Char __READONLY_DATA sAnonymous[]    = "anonymous";
-sal_Char __READONLY_DATA sTelnet[]       = "telnet";
 sal_Char __READONLY_DATA sHTTPScheme[]   = INET_HTTP_SCHEME;
 sal_Char __READONLY_DATA sHTTPSScheme[]  = INET_HTTPS_SCHEME;
 sal_Char __READONLY_DATA sFTPScheme[]    = INET_FTP_SCHEME;
@@ -151,9 +150,9 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
 
     ///////////////////////////////////////
     // overload handlers
-    maRbtLinktypInternet.SetClickHdl( LINK ( this, SvxHyperlinkInternetTp, ClickTypeInternetHdl_Impl ) );
-    maRbtLinktypFTP.SetClickHdl     ( LINK ( this, SvxHyperlinkInternetTp, ClickTypeFTPHdl_Impl ) );
-    maRbtLinktypTelnet.SetClickHdl  ( LINK ( this, SvxHyperlinkInternetTp, ClickTypeTelnetHdl_Impl ) );
+    maRbtLinktypInternet.SetClickHdl( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
+    maRbtLinktypFTP.SetClickHdl     ( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
+    maRbtLinktypTelnet.SetClickHdl  ( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
     maCbAnonymous.SetClickHdl       ( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
     maBtBrowse.SetClickHdl          ( LINK ( this, SvxHyperlinkInternetTp, ClickBrowseHdl_Impl ) );
     maBtTarget.SetClickHdl          ( LINK ( this, SvxHyperlinkInternetTp, ClickTargetHdl_Impl ) );
@@ -178,130 +177,18 @@ SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp ()
 void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
 {
     INetURLObject aURL( aStrURL );
-    String aStrScheme;
+    String aStrScheme = GetSchemeFromURL( aStrURL );
 
-    // set protocoll-radiobuttons
-
-    INetProtocol aProtocol = ImplGetProtocol( aStrURL, aStrScheme );
-    switch ( aProtocol )
+    // set additional controls for FTP: Username / Password
+    if ( aStrScheme.SearchAscii( sFTPScheme ) == 0 )
     {
-        case INET_PROT_HTTP :
-        {
-            maRbtLinktypInternet.Check ();
-            maRbtLinktypFTP.Check (FALSE);
-            maRbtLinktypTelnet.Check (FALSE);
-
-            maFtLogin.Show( FALSE );
-            maFtPassword.Show( FALSE );
-            maEdLogin.Show( FALSE );
-            maEdPassword.Show( FALSE );
-            maCbAnonymous.Show( FALSE );
-
-            maBtTarget.Enable();
-
-            if ( mbMarkWndOpen )
-                ShowMarkWnd ();
-            maCbbTarget.SetSmartProtocol( INET_PROT_HTTP );
-        }
-        break;
-
-        case INET_PROT_HTTPS :
-        {
-            maRbtLinktypInternet.Check ();
-            maRbtLinktypFTP.Check (FALSE);
-            maRbtLinktypTelnet.Check (FALSE);
-
-            maFtLogin.Show( FALSE );
-            maFtPassword.Show( FALSE );
-            maEdLogin.Show( FALSE );
-            maEdPassword.Show( FALSE );
-            maCbAnonymous.Show( FALSE );
-
-            maBtTarget.Enable();
-
-            if ( mbMarkWndOpen )
-                HideMarkWnd ();
-            maCbbTarget.SetSmartProtocol( INET_PROT_HTTP );
-        }
-        break;
-
-        case INET_PROT_FTP :
-        {
-            maRbtLinktypInternet.Check (FALSE);
-            maRbtLinktypFTP.Check ();
-            maRbtLinktypTelnet.Check (FALSE);
-
-            maFtLogin.Show( TRUE );
-            maFtPassword.Show( TRUE );
-            maEdLogin.Show( TRUE );
-            maEdPassword.Show( TRUE );
-            maCbAnonymous.Show( TRUE );
-
-            maBtTarget.Disable();
-
-            if ( mbMarkWndOpen )
-                HideMarkWnd ();
-            maCbbTarget.SetSmartProtocol( INET_PROT_FTP );
-        }
-        break;
-
-        default :
-            String aStrTmp ( aStrURL );
-            if ( aStrTmp.ToLowerAscii().SearchAscii( sTelnet ) == 0 )
-            {
-                maRbtLinktypInternet.Check (FALSE);
-                maRbtLinktypFTP.Check (FALSE);
-                maRbtLinktypTelnet.Check ();
-
-                maBtTarget.Disable();
-
-            if ( mbMarkWndOpen )
-                HideMarkWnd ();
-
-                aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( sTelnetScheme ) );
-
-                maCbbTarget.SetSmartProtocol( INET_PROT_FILE );
-            }
-            else
-            {   // as default : HTTP-Protocoll
-                maRbtLinktypInternet.Check ();
-                maRbtLinktypFTP.Check (FALSE);
-                maRbtLinktypTelnet.Check (FALSE);
-            }
-
-            maFtLogin.Show( FALSE );
-            maFtPassword.Show( FALSE );
-            maEdLogin.Show( FALSE );
-            maEdPassword.Show( FALSE );
-            maCbAnonymous.Show( FALSE );
-            break;
-    }
-
-    // Username / Password
-    if ( aProtocol == INET_PROT_FTP )
-    {
-        String aUserName ( aURL.GetUser() );
-
-        if ( aUserName.ToLowerAscii().SearchAscii ( sAnonymous ) == 0 )
-        {
-            maCbAnonymous.Check();
-            maFtLogin.Disable ();
-            maFtPassword.Disable ();
-
-            maEdLogin.SetText ( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( sAnonymous ) ) );
-            SvAddressParser aAddress( SvtUserOptions().GetEmail() );
-            maEdPassword.SetText( aAddress.Count() ? aAddress.GetEmailAddress(0) : String() );
-        }
+        if ( aURL.GetUser().ToLowerAscii().SearchAscii ( sAnonymous ) == 0 )
+            setAnonymousFTPUser();
         else
-        {
-            maEdLogin.SetText ( aURL.GetUser() );
-            maEdPassword.SetText ( aURL.GetPass() );
-            maFtLogin.Enable ();
-            maFtPassword.Enable ();
+            setFTPUser(aURL.GetUser(), aURL.GetPass());
 
-            maStrOldUser = maEdLogin.GetText();
-            maStrOldPassword = maEdPassword.GetText();
-        }
+        //do not show password and user in url
+        aURL.SetUserAndPass(aEmptyStr,aEmptyStr);
     }
 
     // set URL-field
@@ -316,16 +203,32 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
     else
         maCbbTarget.SetText ( aEmptyStr );
 
-    // State of target-button
-    String aStrCurrentTarget( maCbbTarget.GetText() );
-    aStrCurrentTarget.EraseTrailingChars();
+    SetScheme( aStrScheme );
+}
 
-    if( aStrCurrentTarget == aEmptyStr ||
-        aStrCurrentTarget.EqualsIgnoreCaseAscii( sHTTPScheme ) ||
-        aStrCurrentTarget.EqualsIgnoreCaseAscii( sHTTPSScheme ) )
-        maBtTarget.Enable( FALSE );
-    else
-        maBtTarget.Enable( TRUE );
+void SvxHyperlinkInternetTp::setAnonymousFTPUser()
+{
+    maEdLogin.SetText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM ( sAnonymous ) ) );
+    SvAddressParser aAddress( SvtUserOptions().GetEmail() );
+    maEdPassword.SetText( aAddress.Count() ? aAddress.GetEmailAddress(0) : String() );
+
+    maFtLogin.Disable ();
+    maFtPassword.Disable ();
+    maEdLogin.Disable ();
+    maEdPassword.Disable ();
+    maCbAnonymous.Check();
+}
+
+void SvxHyperlinkInternetTp::setFTPUser(const String& rUser, const String& rPassword)
+{
+    maEdLogin.SetText ( rUser );
+    maEdPassword.SetText ( rPassword );
+
+    maFtLogin.Enable ();
+    maFtPassword.Enable ();
+    maEdLogin.Enable ();
+    maEdPassword.Enable ();
+    maCbAnonymous.Check(FALSE);
 }
 
 /*************************************************************************
@@ -338,38 +241,55 @@ void SvxHyperlinkInternetTp::GetCurentItemData ( String& aStrURL, String& aStrNa
                                                  String& aStrIntName, String& aStrFrame,
                                                  SvxLinkInsertMode& eMode )
 {
-    String aStrScheme;
+    aStrURL = CreateAbsoluteURL();
+    GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
+}
 
-    // get data from dialog-controls
-    aStrURL = maCbbTarget.GetText();
+String SvxHyperlinkInternetTp::CreateAbsoluteURL() const
+{
+    String aStrURL = maCbbTarget.GetText();
+    String aScheme = GetSchemeFromURL(aStrURL);
 
-    if ( maRbtLinktypInternet.IsChecked() && aStrURL.SearchAscii( sHTTPScheme ) != 0 )
+    //special handling for telnet (as it is not known as valid INetProtocol )
+    if( aScheme.SearchAscii( sTelnetScheme ) == 0 )
+        return aStrURL;
+
+
+    INetURLObject aURL(aStrURL);
+
+    if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        if ( aStrURL.SearchAscii( sHTTPSScheme ) != 0 )
-            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( sHTTPScheme ) );
+        aURL.SetSmartProtocol( GetSmartProtocolFromButtons() );
+        aURL.SetSmartURL(aStrURL);
 
-    } else if ( maRbtLinktypFTP.IsChecked() && aStrURL.SearchAscii( sFTPScheme ) != 0 )
-    {
-        aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( sFTPScheme ) );
+        if( aURL.GetProtocol() == INET_PROT_NOT_VALID
+            && aScheme.Len() == 0 )
+        {
+            //first check wether it should be telnet:
+            if( maRbtLinktypTelnet.IsChecked() ) //add 'telnet:'
+            {
+                String aTelnet;
+                aTelnet.AssignAscii( RTL_CONSTASCII_STRINGPARAM( sTelnetScheme ) );
+                aTelnet += aStrURL;
+                return aTelnet;
+            }
 
-    } else if ( maRbtLinktypTelnet.IsChecked() && aStrURL.SearchAscii( sTelnetScheme ) != 0 )
-    {
-        aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( sTelnetScheme ) );
+            //try wether this might be a relative link to the local fileystem
+            aURL.SetSmartURL( SvtPathOptions().GetWorkPath() );
+            if( !aURL.hasFinalSlash() )
+                aURL.setFinalSlash();
+            aURL.Append( aStrURL );
+        }
     }
-
-    String aStrTmp( aStrScheme );
-    aStrTmp += aStrURL;
-    INetURLObject aURL ( aStrTmp );
 
     // username and password for ftp-url
-    if ( maRbtLinktypFTP.IsChecked() )
-    {
+    if( aURL.GetProtocol() == INET_PROT_FTP )
         aURL.SetUserAndPass ( maEdLogin.GetText(), maEdPassword.GetText() );
-    }
-    if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
-        aStrURL = aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
 
-    GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
+    if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+        return aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+
+    return aEmptyStr;
 }
 
 /*************************************************************************
@@ -402,73 +322,9 @@ void SvxHyperlinkInternetTp::SetInitFocus()
 
 IMPL_LINK ( SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl, void *, EMPTYARG )
 {
-    String aStrCurrentTarget( maCbbTarget.GetText() );
-    aStrCurrentTarget.EraseTrailingChars();
-
-    if( aStrCurrentTarget == aEmptyStr                ||
-        aStrCurrentTarget.EqualsIgnoreCaseAscii( sHTTPScheme )  ||
-        aStrCurrentTarget.EqualsIgnoreCaseAscii( sHTTPSScheme ) )
-        maBtTarget.Enable( FALSE );
-    else
-        maBtTarget.Enable( TRUE );
-
-    // changed scheme ? - Then change radiobutton-settings
-    if( ( aStrCurrentTarget.SearchAscii( sHTTPScheme ) == 0 &&
-          !maRbtLinktypInternet.IsChecked() ) ||
-        ( aStrCurrentTarget.SearchAscii( sHTTPSScheme ) == 0 &&
-          !maRbtLinktypInternet.IsChecked() )  )
-    {
-        maRbtLinktypInternet.Check();
-        maRbtLinktypFTP.Check(FALSE);
-        maRbtLinktypTelnet.Check(FALSE);
-
-        maFtLogin.Show( FALSE );
-        maFtPassword.Show( FALSE );
-        maEdLogin.Show( FALSE );
-        maEdPassword.Show( FALSE );
-        maCbAnonymous.Show( FALSE );
-
-        maBtTarget.Enable();
-
-        if ( mbMarkWndOpen )
-            ShowMarkWnd ();
-    }
-    else if( aStrCurrentTarget.SearchAscii( sFTPScheme ) == 0 &&
-             !maRbtLinktypFTP.IsChecked() )
-    {
-        maRbtLinktypInternet.Check(FALSE);
-        maRbtLinktypFTP.Check();
-        maRbtLinktypTelnet.Check(FALSE);
-
-        maFtLogin.Show( TRUE );
-        maFtPassword.Show( TRUE );
-        maEdLogin.Show( TRUE );
-        maEdPassword.Show( TRUE );
-        maCbAnonymous.Show( TRUE );
-
-        maBtTarget.Disable();
-
-        if ( mbMarkWndOpen )
-            HideMarkWnd ();
-    }
-    else if( aStrCurrentTarget.SearchAscii( sTelnetScheme ) == 0 &&
-             !maRbtLinktypTelnet.IsChecked() )
-    {
-        maRbtLinktypInternet.Check(FALSE);
-        maRbtLinktypFTP.Check(FALSE);
-        maRbtLinktypTelnet.Check();
-
-        maFtLogin.Show( FALSE );
-        maFtPassword.Show( FALSE );
-        maEdLogin.Show( FALSE );
-        maEdPassword.Show( FALSE );
-        maCbAnonymous.Show( FALSE );
-
-        maBtTarget.Disable();
-
-        if ( mbMarkWndOpen )
-            HideMarkWnd ();
-    }
+    String aScheme = GetSchemeFromURL( maCbbTarget.GetText() );
+    if(aScheme.Len()!=0)
+        SetScheme( aScheme );
 
     // start timer
     maTimer.SetTimeout( 2500 );
@@ -485,19 +341,7 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK ( SvxHyperlinkInternetTp, TimeoutHdl_Impl, Timer *, EMPTYARG )
 {
-    if ( maRbtLinktypInternet.IsChecked() && IsMarkWndVisible() )
-    {
-        String aStrURL( maCbbTarget.GetText() );
-
-        if ( !aStrURL.EqualsIgnoreCaseAscii( sHTTPScheme ) &&
-             !aStrURL.EqualsIgnoreCaseAscii( sHTTPSScheme ) )
-        {
-            EnterWait();
-            mpMarkWnd->RefreshTree ( aStrURL );
-            LeaveWait();
-        }
-    }
-
+    RefreshMarkWindow();
     return( 0L );
 }
 
@@ -516,24 +360,79 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl, void *, EMPTYARG )
         ClickAnonymousHdl_Impl(NULL);
     }
 
-    ModifiedTargetHdl_Impl (NULL);
-
     return( 0L );
 }
 
 /*************************************************************************
+|************************************************************************/
+
+void SvxHyperlinkInternetTp::SetScheme( const String& aScheme )
+{
+    //if  aScheme is empty or unknown the default beaviour is like it where HTTP
+
+    BOOL bFTP = aScheme.SearchAscii( sFTPScheme ) == 0;
+    BOOL bTelnet = FALSE;
+    if( !bFTP )
+        bTelnet = aScheme.SearchAscii( sTelnetScheme ) == 0;
+    BOOL bInternet = !(bFTP || bTelnet);
+
+    //update protocol button selection:
+    maRbtLinktypFTP.Check(bFTP);
+    maRbtLinktypTelnet.Check(bTelnet);
+    maRbtLinktypInternet.Check(bInternet);
+
+    //update target:
+    RemoveImproperProtocol(aScheme);
+    maCbbTarget.SetSmartProtocol( GetSmartProtocolFromButtons() );
+
+    //show/hide  special fields for FTP:
+    maFtLogin.Show( bFTP );
+    maFtPassword.Show( bFTP );
+    maEdLogin.Show( bFTP );
+    maEdPassword.Show( bFTP );
+    maCbAnonymous.Show( bFTP );
+
+    //update 'link target in document'-window and opening-button
+    if( aScheme.SearchAscii( sHTTPScheme ) == 0 )
+    {
+        maBtTarget.Enable();
+        if ( mbMarkWndOpen )
+            ShowMarkWnd ();
+    }
+    else
+    {
+        //disable for https, ftp and telnet
+        maBtTarget.Disable();
+        if ( mbMarkWndOpen )
+            HideMarkWnd ();
+    }
+}
+
+/*************************************************************************
 |*
-|* Change Scheme-String
+|* Remove protocol if it does not fit to the current button selection
 |*
 |************************************************************************/
 
-void SvxHyperlinkInternetTp::ChangeScheme ( String& aStrURL, String aStrNewScheme )
+void SvxHyperlinkInternetTp::RemoveImproperProtocol(const String& aProperScheme)
 {
+    String aStrURL ( maCbbTarget.GetText() );
     if ( aStrURL != aEmptyStr )
     {
-        String aStrScheme;
+        String aStrScheme = GetSchemeFromURL( aStrURL );
+        if ( aStrScheme != aEmptyStr && aStrScheme != aProperScheme )
+        {
+            aStrURL.Erase ( 0, aStrScheme.Len() );
+            maCbbTarget.SetText ( aStrURL );
+        }
+    }
+}
 
-        // set protocoll-radiobuttons
+String SvxHyperlinkInternetTp::GetSchemeFromURL( String aStrURL ) const
+{
+    String aStrScheme;
+    if ( aStrURL != aEmptyStr )
+    {
         INetProtocol aProtocol = ImplGetProtocol( aStrURL, aStrScheme );
         switch ( aProtocol )
         {
@@ -543,117 +442,50 @@ void SvxHyperlinkInternetTp::ChangeScheme ( String& aStrURL, String aStrNewSchem
             break;
             default :
             {
-                String aStrTmp ( aStrURL );
-                if ( aStrTmp.ToLowerAscii().SearchAscii( sTelnet ) == 0 )
-                {
-                    aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( sTelnetScheme ) );
-                }
+                if ( aStrURL.EqualsIgnoreCaseAscii( INET_TELNET_SCHEME, 0, 9 ) )
+                    aStrScheme = String::CreateFromAscii( INET_TELNET_SCHEME );
             }
         }
-        if ( aStrScheme != aEmptyStr )
-        {
-            String aStrTmp( aStrURL.Erase ( 0, aStrScheme.Len() ) );
-            aStrURL = aStrNewScheme;
-            aStrURL += aStrTmp;
-        }
     }
+    return aStrScheme;
+}
+
+String SvxHyperlinkInternetTp::GetSchemeFromButtons() const
+{
+    if( maRbtLinktypFTP.IsChecked() )
+    {
+        return String::CreateFromAscii( INET_FTP_SCHEME );
+    }
+    else if( maRbtLinktypTelnet.IsChecked() )
+    {
+        return String::CreateFromAscii( INET_TELNET_SCHEME );
+    }
+    return String::CreateFromAscii( INET_HTTP_SCHEME );
+}
+
+INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const
+{
+    if( maRbtLinktypFTP.IsChecked() )
+    {
+        return INET_PROT_FTP;
+    }
+    else if( maRbtLinktypTelnet.IsChecked() )
+    {
+        return INET_PROT_NOT_VALID; //there is no INET_PROT_XXX known for telnet; to return invalid here is necessary for a correct detection in method 'CreateAbsoluteURL'
+    }
+    return INET_PROT_HTTP;
 }
 
 /*************************************************************************
 |*
-|* Click on Radiobutton : Type Internet
+|* Click on Radiobutton : Internet, FTP or Telnet
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkInternetTp, ClickTypeInternetHdl_Impl, void *, EMPTYARG )
+IMPL_LINK ( SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, void*, EMPTYARG )
 {
-    if ( maRbtLinktypInternet.IsChecked() )
-    {
-        maFtLogin.Show( FALSE );
-        maFtPassword.Show( FALSE );
-        maEdLogin.Show( FALSE );
-        maEdPassword.Show( FALSE );
-        maCbAnonymous.Show( FALSE );
-
-        maBtTarget.Enable();
-
-        if ( mbMarkWndOpen )
-            ShowMarkWnd ();
-
-        String aStrURL ( maCbbTarget.GetText() );
-        ChangeScheme ( aStrURL, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM ( sHTTPScheme ) ) );
-        maCbbTarget.SetText ( aStrURL );
-    }
-
-    maCbbTarget.SetSmartProtocol( INET_PROT_HTTP );
-    ModifiedTargetHdl_Impl (NULL);
-
-    return( 0L );
-}
-
-/*************************************************************************
-|*
-|* Click on Radiobutton : Type FTP
-|*
-|************************************************************************/
-
-IMPL_LINK ( SvxHyperlinkInternetTp, ClickTypeFTPHdl_Impl, void *, EMPTYARG )
-{
-    if ( maRbtLinktypFTP.IsChecked() )
-    {
-        maFtLogin.Show( TRUE );
-        maFtPassword.Show( TRUE );
-        maEdLogin.Show( TRUE );
-        maEdPassword.Show( TRUE );
-        maCbAnonymous.Show( TRUE );
-
-        maBtTarget.Disable();
-
-        if ( mbMarkWndOpen )
-            HideMarkWnd ();
-
-        ClickAnonymousHdl_Impl(NULL);
-
-        String aStrURL ( maCbbTarget.GetText() );
-        ChangeScheme ( aStrURL,  UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM ( sFTPScheme ) ) );
-        maCbbTarget.SetText ( aStrURL );
-    }
-
-    maCbbTarget.SetSmartProtocol( INET_PROT_FTP );
-    ModifiedTargetHdl_Impl (NULL);
-
-    return( 0L );
-}
-
-/*************************************************************************
-|*
-|* Click on Radiobutton : Type Telnet
-|*
-|************************************************************************/
-
-IMPL_LINK ( SvxHyperlinkInternetTp, ClickTypeTelnetHdl_Impl, void *, EMPTYARG )
-{
-    if ( maRbtLinktypTelnet.IsChecked() )
-    {
-        maFtLogin.Show( FALSE );
-        maFtPassword.Show( FALSE );
-        maEdLogin.Show( FALSE );
-        maEdPassword.Show( FALSE );
-        maCbAnonymous.Show( FALSE );
-
-        maBtTarget.Disable();
-
-        if ( mbMarkWndOpen )
-            HideMarkWnd ();
-
-        String aStrURL ( maCbbTarget.GetText() );
-        ChangeScheme ( aStrURL,  UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM ( sTelnetScheme ) ) );
-        maCbbTarget.SetText ( aStrURL );
-    }
-
-    maCbbTarget.SetSmartProtocol( INET_PROT_FILE );
-    ModifiedTargetHdl_Impl(NULL);
-
+    String aScheme = GetSchemeFromButtons();
+    SetScheme( aScheme );
     return( 0L );
 }
 
@@ -679,27 +511,10 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, void *, EMPTYARG )
             maStrOldPassword = maEdPassword.GetText();
         }
 
-        SvAddressParser aAddress( SvtUserOptions().GetEmail() );
-        maEdLogin.SetText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM ( sAnonymous ) ) );
-        maEdPassword.SetText( aAddress.Count() ? aAddress.GetEmailAddress(0) : String() );
-
-        maFtLogin.Disable ();
-        maFtPassword.Disable ();
-        maEdLogin.Disable ();
-        maEdPassword.Disable ();
+        setAnonymousFTPUser();
     }
     else
-    {
-        maEdLogin.SetText ( maStrOldUser );
-        maEdPassword.SetText ( maStrOldPassword );
-
-        maFtLogin.Enable ();
-        maFtPassword.Enable ();
-        maEdLogin.Enable ();
-        maEdPassword.Enable ();
-    }
-
-    ModifiedTargetHdl_Impl(NULL);
+        setFTPUser(maStrOldUser, maStrOldPassword);
 
     return( 0L );
 }
@@ -712,43 +527,7 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK ( SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl, void *, EMPTYARG )
 {
-    String aStrURL ( maCbbTarget.GetText() );
-    String aStrScheme;
-
-    if( maRbtLinktypInternet.IsChecked() &&
-         aStrURL.SearchAscii( sHTTPScheme ) != 0 )
-    {
-        if( aStrURL.SearchAscii( sHTTPSScheme ) != 0 )
-            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( sHTTPScheme ) );
-    } else if( maRbtLinktypFTP.IsChecked() &&
-               aStrURL.SearchAscii( sFTPScheme ) != 0 )
-    {
-        aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( sFTPScheme ) );
-    } else if( maRbtLinktypTelnet.IsChecked() &&
-               aStrURL.SearchAscii( sTelnetScheme ) != 0 )
-    {
-        aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( sTelnetScheme ) );
-    }
-
-    if( aStrURL != aEmptyStr )
-    {
-        String aStrTarget ( aStrScheme );
-        aStrTarget += aStrURL;
-        maCbbTarget.SetText ( aStrTarget );
-
-        // #95306# setting cursor to end of string
-        maCbbTarget.SetSelection ( Selection( aStrTarget.Len() ) );
-    }
-
-    if ( maRbtLinktypInternet.IsChecked() && aStrURL.Len()!=0 && IsMarkWndVisible() )
-    {
-        EnterWait();
-        mpMarkWnd->RefreshTree ( maCbbTarget.GetText() );
-        LeaveWait();
-    }
-
-    ModifiedTargetHdl_Impl ( NULL );
-
+    RefreshMarkWindow();
     return (0L);
 }
 
@@ -786,24 +565,26 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ClickBrowseHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK ( SvxHyperlinkInternetTp, ClickTargetHdl_Impl, void *, EMPTYARG )
 {
-    if ( maRbtLinktypInternet.IsChecked() )
+    RefreshMarkWindow();
+    ShowMarkWnd ();
+    mbMarkWndOpen = IsMarkWndVisible ();
+
+    return( 0L );
+}
+
+void SvxHyperlinkInternetTp::RefreshMarkWindow()
+{
+    if ( maRbtLinktypInternet.IsChecked() && IsMarkWndVisible() )
     {
-        String aStrURL( maCbbTarget.GetText() );
         EnterWait();
-        if ( !aStrURL.EqualsIgnoreCaseAscii( sHTTPScheme )  &&
-             !aStrURL.EqualsIgnoreCaseAscii(sHTTPSScheme ) &&
-             aStrURL != aEmptyStr )
+        String aStrURL( CreateAbsoluteURL() );
+        if ( aStrURL != aEmptyStr )
             mpMarkWnd->RefreshTree ( aStrURL );
         else
             mpMarkWnd->SetError( LERR_DOCNOTOPEN );
         LeaveWait();
     }
 
-    ShowMarkWnd ();
-
-    mbMarkWndOpen = IsMarkWndVisible ();
-
-    return( 0L );
 }
 
 /*************************************************************************
@@ -849,5 +630,3 @@ void SvxHyperlinkInternetTp::SetOnlineMode( BOOL bEnable )
     else
         maBtTarget.Enable( TRUE );
 }
-
-

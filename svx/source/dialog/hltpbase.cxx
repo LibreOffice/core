@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: iha $ $Date: 2002-10-08 16:36:09 $
+ *  last change: $Author: iha $ $Date: 2002-10-15 11:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
 #endif
 #include "hyperdlg.hrc"
 #ifndef _SVX_TAB_HYPERLINK_HXX
@@ -810,7 +813,39 @@ BOOL SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet& rOut)
 
 String SvxHyperlinkTabPageBase::CreateUiNameFromURL( const String& aStrURL )
 {
-    return aStrURL;
+    String          aStrUiURL;
+    INetURLObject   aURLObj( aStrURL );
+
+    switch(aURLObj.GetProtocol())
+    {
+        case INET_PROT_FILE:
+            utl::LocalFileHelper::ConvertURLToSystemPath( aURLObj.GetMainURL(INetURLObject::NO_DECODE), aStrUiURL );
+            break;
+        case INET_PROT_FTP :
+            {
+                //remove password from name
+                INetURLObject   aTmpURL(aURLObj);
+                aTmpURL.SetPass(aEmptyStr);
+                aStrUiURL = aTmpURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+            }
+            break;
+        case INET_PROT_HTTP :
+        case INET_PROT_HTTPS :
+        case INET_PROT_MAILTO :
+        case INET_PROT_NEWS :
+            aStrUiURL = aURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+            break;
+        default :
+            {
+                if ( aStrURL.EqualsIgnoreCaseAscii( INET_TELNET_SCHEME, 0, 9 ) )
+                    aStrUiURL = aStrURL;
+                else
+                {
+                    aStrUiURL = aURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+                }
+            }
+    }
+    return aStrUiURL;
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmailtp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: iha $ $Date: 2002-10-08 16:37:57 $
+ *  last change: $Author: iha $ $Date: 2002-10-15 11:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #include <sfx2/viewfrm.hxx>
 #endif
 
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+
 #include "hlmailtp.hxx"
 #include "hyperdlg.hrc"
 
@@ -123,11 +127,9 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rIte
     maRbtMail.Check ();
 
     // overload handlers
-    maRbtMail.SetClickHdl        ( LINK ( this, SvxHyperlinkMailTp, ClickTypeEMailHdl_Impl ) );
-    maRbtNews.SetClickHdl        ( LINK ( this, SvxHyperlinkMailTp, ClickTypeNewsHdl_Impl ) );
+    maRbtMail.SetClickHdl        ( LINK ( this, SvxHyperlinkMailTp, Click_SmartProtocol_Impl ) );
+    maRbtNews.SetClickHdl        ( LINK ( this, SvxHyperlinkMailTp, Click_SmartProtocol_Impl ) );
     maBtAdrBook.SetClickHdl      ( LINK ( this, SvxHyperlinkMailTp, ClickAdrBookHdl_Impl ) );
-
-    maCbbReceiver.SetLoseFocusHdl( LINK ( this, SvxHyperlinkMailTp, LostFocusReceiverHdl_Impl ) );
     maCbbReceiver.SetModifyHdl   ( LINK ( this, SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl) );
 }
 
@@ -143,41 +145,17 @@ SvxHyperlinkMailTp::~SvxHyperlinkMailTp ()
 
 void SvxHyperlinkMailTp::FillDlgFields ( String& aStrURL )
 {
-    String aStrScheme;
-    INetProtocol eProtocol = ImplGetProtocol( aStrURL, aStrScheme );
-    switch ( eProtocol )
-    {
-        case INET_PROT_MAILTO :
-            maRbtMail.Check ();
-            maRbtNews.Check (FALSE);
+    const sal_Char sMailtoScheme[] = INET_MAILTO_SCHEME;
 
-            maFtSubject.Enable();
-            maEdSubject.Enable();
+    INetURLObject aURL( aStrURL );
+    String aStrScheme = GetSchemeFromURL( aStrURL );
 
-            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( INET_MAILTO_SCHEME ) );
-
-            break;
-        case INET_PROT_NEWS :
-            maRbtMail.Check (FALSE);
-            maRbtNews.Check ();
-
-            maFtSubject.Disable();
-            maEdSubject.Disable();
-
-            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( INET_NEWS_SCHEME ) );
-
-            break;
-        default:
-            maRbtMail.Check ();
-            maRbtNews.Check (FALSE);
-
-            break;
-    }
-
+    // set URL-field and additional controls
     if ( aStrScheme != aEmptyStr )
     {
         String aStrURLc ( aStrURL );
-        if ( eProtocol == INET_PROT_MAILTO )
+        // set additional controls for EMail:
+        if ( aStrScheme.SearchAscii( sMailtoScheme ) == 0 )
         {
             // Find mail-subject
             String aStrSubject, aStrTmp ( aStrURLc );
@@ -199,7 +177,6 @@ void SvxHyperlinkMailTp::FillDlgFields ( String& aStrURL )
         else
         {
             maEdSubject.SetText (aEmptyStr);
-            maEdSubject.SetText ( aEmptyStr );
         }
 
         maCbbReceiver.SetText ( aStrURLc );
@@ -209,6 +186,8 @@ void SvxHyperlinkMailTp::FillDlgFields ( String& aStrURL )
         maCbbReceiver.SetText ( aEmptyStr );
         maEdSubject.SetText ( aEmptyStr );
     }
+
+    SetScheme( aStrScheme );
 }
 
 /*************************************************************************
@@ -221,31 +200,48 @@ void SvxHyperlinkMailTp::GetCurentItemData ( String& aStrURL, String& aStrName,
                                              String& aStrIntName, String& aStrFrame,
                                              SvxLinkInsertMode& eMode )
 {
-    const sal_Char sMailtoScheme[] = INET_MAILTO_SCHEME;
-    const sal_Char sNewsScheme[]   = INET_NEWS_SCHEME;
+    aStrURL = CreateAbsoluteURL();
+    GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
+}
 
-    // fill aStrURL
-    String aStrScheme, aText = maCbbReceiver.GetText();
-    if(aText.Len()!=0) //do not create a nonsense URL if no receiver is given
+String SvxHyperlinkMailTp::CreateAbsoluteURL() const
+{
+    String aStrURL = maCbbReceiver.GetText();
+    String aScheme = GetSchemeFromURL(aStrURL);
+
+    INetURLObject aURL(aStrURL);
+
+    if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        if ( maRbtMail.IsChecked() && aText.SearchAscii( sMailtoScheme ) != 0 )
-            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( INET_MAILTO_SCHEME ) );
-        else if ( maRbtNews.IsChecked() && aText.SearchAscii( sNewsScheme ) != 0 )
-            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( INET_NEWS_SCHEME ) );
-        aStrURL = aStrScheme;
-        aStrURL.Append( aText );
-        if ( maRbtMail.IsChecked() )
+        aURL.SetSmartProtocol( GetSmartProtocolFromButtons() );
+        aURL.SetSmartURL(aStrURL);
+
+        if( aURL.GetProtocol() == INET_PROT_NOT_VALID
+            && aScheme.Len() == 0 )
         {
-            if ( maEdSubject.GetText() != aEmptyStr )
-            {
-                aStrURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "?subject=" ) ) );
-                aStrURL.Append( maEdSubject.GetText() );
-            }
+            //try wether this might be a relative link to the local fileystem
+            aURL.SetSmartURL( SvtPathOptions().GetWorkPath() );
+            if( !aURL.hasFinalSlash() )
+                aURL.setFinalSlash();
+            aURL.Append( aStrURL );
         }
     }
 
-    // fill the other parameters
-    GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
+    // subject for EMail-url
+    if( aURL.GetProtocol() == INET_PROT_MAILTO )
+    {
+        if ( maEdSubject.GetText() != aEmptyStr )
+        {
+            String aQuery = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "subject=" ) );
+            aQuery.Append( maEdSubject.GetText() );
+            aURL.SetParam(aQuery);
+        }
+    }
+
+    if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+        return aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+
+    return aEmptyStr;
 }
 
 /*************************************************************************
@@ -271,22 +267,71 @@ void SvxHyperlinkMailTp::SetInitFocus()
 }
 
 /*************************************************************************
+|************************************************************************/
+
+void SvxHyperlinkMailTp::SetScheme( const String& aScheme )
+{
+    //if  aScheme is empty or unknown the default beaviour is like it where MAIL
+    const sal_Char sNewsScheme[]   = INET_NEWS_SCHEME;
+
+    BOOL bMail = aScheme.SearchAscii( sNewsScheme ) != 0;
+
+    //update protocol button selection:
+    maRbtMail.Check(bMail);
+    maRbtNews.Check(!bMail);
+
+    //update target:
+    RemoveImproperProtocol(aScheme);
+    maCbbReceiver.SetSmartProtocol( GetSmartProtocolFromButtons() );
+
+    //show/hide  special fields for MAIL:
+    maFtSubject.Enable(bMail);
+    maEdSubject.Enable(bMail);
+}
+
+/*************************************************************************
 |*
-|* Change Scheme-String
+|* Remove protocol if it does not fit to the current button selection
 |*
 |************************************************************************/
 
-void SvxHyperlinkMailTp::ChangeScheme ( String& aStrURL, String aStrNewScheme )
+void SvxHyperlinkMailTp::RemoveImproperProtocol(const String& aProperScheme)
 {
-    INetURLObject aURL ( aStrURL );
+    String aStrURL ( maCbbReceiver.GetText() );
+    if ( aStrURL != aEmptyStr )
+    {
+        String aStrScheme = GetSchemeFromURL( aStrURL );
+        if ( aStrScheme != aEmptyStr && aStrScheme != aProperScheme )
+        {
+            aStrURL.Erase ( 0, aStrScheme.Len() );
+            maCbbReceiver.SetText ( aStrURL );
+        }
+    }
+}
+
+String SvxHyperlinkMailTp::GetSchemeFromURL( String aStrURL ) const
+{
     String aStrScheme;
     INetProtocol aProtocol = ImplGetProtocol( aStrURL, aStrScheme );
-    if ( aStrScheme != aEmptyStr )
+    return aStrScheme;
+}
+
+String SvxHyperlinkMailTp::GetSchemeFromButtons() const
+{
+    if( maRbtNews.IsChecked() )
     {
-        String aStrTmp( aStrURL.Erase ( 0, aStrScheme.Len() ) );
-        aStrURL = aStrNewScheme;
-        aStrURL += aStrTmp;
+        return String::CreateFromAscii( INET_NEWS_SCHEME );
     }
+    return String::CreateFromAscii( INET_MAILTO_SCHEME );
+}
+
+INetProtocol SvxHyperlinkMailTp::GetSmartProtocolFromButtons() const
+{
+    if( maRbtNews.IsChecked() )
+    {
+        return INET_PROT_NEWS;
+    }
+    return INET_PROT_MAILTO;
 }
 
 /*************************************************************************
@@ -295,37 +340,10 @@ void SvxHyperlinkMailTp::ChangeScheme ( String& aStrURL, String aStrNewScheme )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkMailTp, ClickTypeEMailHdl_Impl, void *, EMPTYARG )
+IMPL_LINK ( SvxHyperlinkMailTp, Click_SmartProtocol_Impl, void *, EMPTYARG )
 {
-    maFtSubject.Enable();
-    maEdSubject.Enable();
-
-    String aStrURL ( maCbbReceiver.GetText() );
-    ChangeScheme ( aStrURL, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM ( INET_MAILTO_SCHEME ) ) );
-    maCbbReceiver.SetText ( aStrURL );
-
-    ModifiedReceiverHdl_Impl (NULL);
-
-    return( 0L );
-}
-
-/*************************************************************************
-|*
-|* Click on radiobutton : Type News
-|*
-|************************************************************************/
-
-IMPL_LINK ( SvxHyperlinkMailTp, ClickTypeNewsHdl_Impl, void *, EMPTYARG )
-{
-    maFtSubject.Disable();
-    maEdSubject.Disable();
-
-    String aStrURL ( maCbbReceiver.GetText() );
-    ChangeScheme ( aStrURL, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM ( INET_NEWS_SCHEME ) ) );
-    maCbbReceiver.SetText ( aStrURL );
-
-    ModifiedReceiverHdl_Impl (NULL);
-
+    String aScheme = GetSchemeFromButtons();
+    SetScheme( aScheme );
     return( 0L );
 }
 
@@ -337,62 +355,11 @@ IMPL_LINK ( SvxHyperlinkMailTp, ClickTypeNewsHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK ( SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl, void *, EMPTYARG )
 {
-    const sal_Char sMailtoScheme[] = INET_MAILTO_SCHEME;
-    const sal_Char sNewsScheme[]   = INET_NEWS_SCHEME;
-
-    String aStrCurrentReceiver( maCbbReceiver.GetText() );
-
-    // changed scheme ? - Then change radiobutton-settings
-    if( aStrCurrentReceiver.SearchAscii( sMailtoScheme ) == 0 && !maRbtMail.IsChecked() )
-    {
-        maRbtMail.Check();
-        maRbtNews.Check(FALSE);
-        maFtSubject.Enable();
-        maEdSubject.Enable();
-    }
-    else if( aStrCurrentReceiver.SearchAscii( sNewsScheme ) == 0 && !maRbtNews.IsChecked() )
-    {
-        maRbtMail.Check(FALSE);
-        maRbtNews.Check();
-        maFtSubject.Disable();
-        maEdSubject.Disable();
-    }
+    String aScheme = GetSchemeFromURL( maCbbReceiver.GetText() );
+    if(aScheme.Len()!=0)
+        SetScheme( aScheme );
 
     return( 0L );
-}
-
-/*************************************************************************
-|*
-|* Combobox Receiver lost the focus
-|*
-|************************************************************************/
-
-IMPL_LINK ( SvxHyperlinkMailTp, LostFocusReceiverHdl_Impl, void *, EMPTYARG )
-{
-    const sal_Char sMailtoScheme[] = INET_MAILTO_SCHEME;
-    const sal_Char sNewsScheme[]   = INET_NEWS_SCHEME;
-
-    String aStrURL ( maCbbReceiver.GetText() );
-    String aStrScheme;
-
-    if ( maRbtMail.IsChecked() && aStrURL.SearchAscii( sMailtoScheme ) != 0 )
-    {
-        aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( INET_MAILTO_SCHEME ) );
-    } else if ( maRbtNews.IsChecked() && aStrURL.SearchAscii( sNewsScheme ) != 0 )
-    {
-        aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( INET_NEWS_SCHEME ) );
-    }
-
-    if ( aStrURL != aEmptyStr )
-    {
-        String aStrTarget ( aStrScheme );
-        aStrTarget += aStrURL;
-        maCbbReceiver.SetText ( aStrTarget );
-    }
-
-    ModifiedReceiverHdl_Impl (NULL);
-
-    return (0L);
 }
 
 /*************************************************************************
