@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-17 12:14:58 $
+ *  last change: $Author: jp $ $Date: 2001-05-18 11:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4826,11 +4826,17 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
         { OLE_WINWORD_2_STARWRITER, "swriter",
             0x00020906L, 0x0000, 0x0000,
             0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
-        { OLE_EXCEL_2_STARCALC, "scalc",
+        { OLE_EXCEL_2_STARCALC, "scalc",                // Excel table
+            0x00020810L, 0x0000, 0x0000,
+            0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
+        { OLE_EXCEL_2_STARCALC, "scalc",                // Excel chart
             0x00020820L, 0x0000, 0x0000,
             0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
-        { OLE_POWERPOINT_2_STARIMPRESS, "simpress",
+        { OLE_POWERPOINT_2_STARIMPRESS, "simpress",     // PowerPoint presentation
             0x64818d10L, 0x4f9b, 0x11cf,
+            0x86,0xea,0x00,0xaa,0x00,0xb9,0x29,0xe8 },
+        { OLE_POWERPOINT_2_STARIMPRESS, "simpress",     // PowerPoint slide
+            0x64818d11L, 0x4f9b, 0x11cf,
             0x86,0xea,0x00,0xaa,0x00,0xb9,0x29,0xe8 },
         { 0,0 }
     };
@@ -4877,9 +4883,9 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
 
                             aDstStgName += String::CreateFromInt32( ++nMSOleObjCntr );
 
-                            SvStorageRef xObjStor( rDestStorage.OpenStorage(
+                            SvStorageRef xObjStor( rDestStorage.OpenUCBStorage(
                                                     aDstStgName,
-                                    STREAM_READWRITE| STREAM_SHARE_DENYALL ));
+                                    STREAM_READWRITE| STREAM_SHARE_DENYALL));
 
                             xDoc->DoLoad( pMed );
                             xDoc->DoSaveAs( xObjStor );
