@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 16:07:05 $
+ *  last change: $Author: fs $ $Date: 2001-05-16 14:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1808,6 +1808,38 @@ void FmGridControl::ShowColumn(sal_uInt16 nId)
             // ... -> mark it
             markColumn(nId);
     }
+}
+
+//------------------------------------------------------------------------------
+sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+        // need to lock the SolarMutex so that no paint call disturbs us ...
+
+    const Any* pBookmark = _rBookmarks.getConstArray();
+    const Any* pBookmarkEnd = pBookmark + _rBookmarks.getLength();
+
+    SetNoSelection();
+
+    sal_Bool bAllSuccessfull = sal_True;
+    try
+    {
+        for (; pBookmark != pBookmarkEnd; ++pBookmark)
+        {
+            // move the seek cursor to the row given
+            if (m_pSeekCursor->moveToBookmark(*pBookmark))
+                SelectRow( m_pSeekCursor->getRow() );
+            else
+                bAllSuccessfull = sal_False;
+        }
+    }
+    catch(Exception&)
+    {
+        DBG_ERROR("FmGridControl::selectBookmarks: could not move to one of the bookmarks!");
+        return sal_False;
+    }
+
+    return bAllSuccessfull;
 }
 
 //------------------------------------------------------------------------------
