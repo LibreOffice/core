@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 11:01:27 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_TEXTCOLOR,              "TextColor");
     PCR_CONSTASCII_STRING( PROPERTY_LINECOLOR,              "LineColor");
     PCR_CONSTASCII_STRING( PROPERTY_BORDER,                 "Border");
+    PCR_CONSTASCII_STRING( PROPERTY_ICONSIZE,               "IconSize");
     PCR_CONSTASCII_STRING( PROPERTY_DROPDOWN,               "Dropdown");
     PCR_CONSTASCII_STRING( PROPERTY_HSCROLL,                "HScroll");
     PCR_CONSTASCII_STRING( PROPERTY_VSCROLL,                "VScroll");
@@ -217,6 +218,10 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_SPINVALUE_MAX,          "SpinValueMax");
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_SPINVALUE,      "DefaultSpinValue");
     PCR_CONSTASCII_STRING( PROPERTY_SPININCREMENT,          "SpinIncrement");
+    PCR_CONSTASCII_STRING( PROPERTY_SHOW_POSITION,          "ShowPosition" );
+    PCR_CONSTASCII_STRING( PROPERTY_SHOW_NAVIGATION,        "ShowNavigation" );
+    PCR_CONSTASCII_STRING( PROPERTY_SHOW_RECORDACTIONS,     "ShowRecordActions" );
+    PCR_CONSTASCII_STRING( PROPERTY_SHOW_FILTERSORT,        "ShowFilterSort" );
 
     PCR_CONSTASCII_STRING( PROPERTY_BOUND_CELL,             "BoundCell");
     PCR_CONSTASCII_STRING( PROPERTY_LIST_CELL_RANGE,        "CellRange");
