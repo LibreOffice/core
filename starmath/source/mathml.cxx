@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:07:16 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,7 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
 
     if( rMedium.IsStorage())
     {
-        if( bEmbedded )
+        if( bEmbedded && !rMedium.GetStorage()->IsRoot() )
         {
             OUString aName( rMedium.GetStorage()->GetName() );
             if( aName.getLength() )
@@ -1132,7 +1132,7 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
         SvStorage *pStg = rMedium.GetOutputStorage(sal_True);
         sal_Bool bOASIS = pStg->GetVersion() > SOFFICE_FILEFORMAT_60;
 
-        if( bEmbedded )
+        if( bEmbedded && !pStg->IsRoot() )
         {
             OUString aName( pStg->GetName() );
             if( aName.getLength() )
