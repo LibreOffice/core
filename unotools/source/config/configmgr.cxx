@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: pb $ $Date: 2002-11-07 08:30:05 $
+ *  last change: $Author: jb $ $Date: 2002-12-03 12:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,32 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
     }
     return xConfigurationProvider;
 }
+/* -----------------------------03.12.02 -------------------------------------
+
+ ---------------------------------------------------------------------------*/
+namespace
+{
+    // helper to achieve exception - safe registration of a ConfigItem under construction
+    class RegisterConfigItemHelper // : Noncopyable
+    {
+        utl::ConfigManager & rCfgMgr;
+        utl::ConfigItem* pCfgItem;
+    public:
+        RegisterConfigItemHelper(utl::ConfigManager & rCfgMgr, utl::ConfigItem& rCfgItem)
+        : rCfgMgr(rCfgMgr)
+        , pCfgItem(&rCfgItem)
+        {
+            rCfgMgr.RegisterConfigItem(rCfgItem);
+        }
+
+        ~RegisterConfigItemHelper()
+        {
+            if (pCfgItem) rCfgMgr.RemoveConfigItem(*pCfgItem);
+        }
+
+        void keep() { pCfgItem = 0; }
+    };
+}
 /* -----------------------------12.12.00 17:19--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -212,8 +238,10 @@ Reference< XMultiServiceFactory > ConfigManager::GetLocalConfigurationProvider()
  ---------------------------------------------------------------------------*/
 Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigItem& rCfgItem)
 {
-    RegisterConfigItem(rCfgItem);
-    return AcquireTree(rCfgItem);
+    RegisterConfigItemHelper registeredItem(*this,rCfgItem);
+    Reference< XHierarchicalNameAccess > xTree = AcquireTree(rCfgItem);
+    registeredItem.keep();
+    return xTree;
 }
 /* -----------------------------21.06.01 12:20--------------------------------
 
@@ -292,9 +320,16 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
                     C2U(cAccessSrvc),
                     aArgs);
         }
-#ifdef DBG_UTIL
         catch(Exception& rEx)
         {
+            if (CONFIG_MODE_PROPAGATE_ERRORS & rCfgItem.GetMode())
+            {
+                OSL_TRACE("ConfigItem: Propagating creation error: %s\n",
+                            OUStringToOString(rEx.Message,RTL_TEXTENCODING_ASCII_US).getStr());
+
+                throw;
+            }
+#ifdef DBG_UTIL
             if(0 == (CONFIG_MODE_IGNORE_ERRORS & rCfgItem.GetMode()))
             {
                 OString sMsg("CreateInstance exception: ");
@@ -303,11 +338,8 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
                             RTL_TEXTENCODING_ASCII_US);
                 OSL_ENSURE(sal_False, sMsg.getStr());
             }
-        }
-#else
-        catch(Exception&)
-        {}
 #endif
+        }
     }
     return Reference<XHierarchicalNameAccess>(xIFace, UNO_QUERY);
 }
