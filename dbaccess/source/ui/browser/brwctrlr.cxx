@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-16 14:27:19 $
+ *  last change: $Author: vg $ $Date: 2001-05-22 14:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,7 +626,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
         return sal_False;
 
     // now that we have a view we can create the clipboard listener
-    m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard();
+    m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard(getView());
     m_aSystemClipboard.StartClipboardListening( );
 
     // late construction
