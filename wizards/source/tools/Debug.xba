@@ -174,4 +174,31 @@ Sub ShowCommands(oLocObject as Object)
 	Msgbox(&quot;Sorry, No &apos;QueryCommands&apos; - Property attached to the object&quot;, 16, GetProductName())
 	Resume LEAVEPROC
 	LEAVEPROC:
+End Sub
+
+
+Sub ProtectCurrentSheets()
+Dim oDocument as Object
+Dim sDocType as String
+Dim iResult as Integer
+Dim oSheets as Object
+Dim i as Integer
+Dim bDoProtect as Boolean
+	oDocument = StarDesktop.ActiveFrame.Controller.Model
+	sDocType = GetDocumentType(oDocument)
+	If sDocType = &quot;scalc&quot; Then
+		oSheets = oDocument.Sheets
+		bDoProtect = False
+		For i = 0 To oSheets.Count-1
+			If Not oSheets(i).IsProtected Then
+				bDoProtect = True
+			End If
+		Next i
+		If bDoProtect Then
+			iResult = Msgbox( &quot;Do you want to protect all sheets of this document?&quot;,35, GetProductName())
+			If iResult = 6 Then
+				ProtectSheets(oDocument.Sheets)
+			End If
+		End If
+	End If
 End Sub</script:module>

@@ -416,6 +416,7 @@ End Sub
 
 
 Function GetDocumentType(oDocument)
+	On Local Error GoTo NODOCUMENTTYPE
 	If oDocument.SupportsService(&quot;com.sun.star.sheet.SpreadsheetDocument&quot;) Then
 		GetDocumentType() = &quot;scalc&quot;
 	ElseIf oDocument.SupportsService(&quot;com.sun.star.text.TextDocument&quot;) Then
@@ -424,6 +425,12 @@ Function GetDocumentType(oDocument)
 		GetDocumentType() = &quot;sdraw&quot;
 	ElseIf oDocument.SupportsService(&quot;com.sun.star.formula.FormulaProperties&quot;) Then
 		GetDocumentType() = &quot;smath&quot;
+	End If
+	NODOCUMENTTYPE:
+	If Err &lt;&gt; 0 Then
+		GetDocumentType = &quot;&quot;
+		Resume GOON
+		GOON:
 	End If
 End Function
 
