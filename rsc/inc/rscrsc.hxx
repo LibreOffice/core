@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscrsc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:24:42 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ public:
     RscStrList          aSymbolList;    // Liste der Symbole
     ByteString          aPath;          // Liste der Pfade
     RSCBYTEORDER_TYPE   nByteOrder;
-    short               nCommands;      // Steuerbits
+    unsigned short      nCommands;      // Steuerbits
     ByteString          aOutputLst;     // Name der List-Ausgabedatei
     ByteString          aOutputSrs;     // Name der Srs-Ausgabedatei
     ByteString          aOutputSrc;     // Name der Src-Ausgabedatei
@@ -121,7 +121,7 @@ public:
     std::list<OutputFile>                                   m_aOutputFiles;
     std::list< std::pair< rtl::OString, rtl::OString > >    m_aReplacements;
 
-                    RscCmdLine( short argc, char ** argv, RscError * pEH );
+                    RscCmdLine( int argc, char ** argv, RscError * pEH );
                     RscCmdLine();
 
                     ~RscCmdLine();
