@@ -1,0 +1,157 @@
+/*************************************************************************
+ *
+ *  $RCSfile: TemplateDescription.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: tra $ $Date: 2001-08-30 10:20:29 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_dialogs_TemplateDescription_idl__
+#define __com_sun_star_ui_dialogs_TemplateDescription_idl__
+
+
+module com { module sun { module star { module ui { module dialogs {
+
+//=============================================================================
+/**
+ */
+
+constants TemplateDescription
+{
+    //---------------------------------------------------------------------
+    /** A FileOpen dialog without any additional controls.
+    */
+    const short FILEOPEN_SIMPLE                                = 0;
+
+    //---------------------------------------------------------------------
+    /** A FileSave dialog without any additional controls.
+    */
+    const short FILESAVE_SIMPLE                                = 1;
+
+    //---------------------------------------------------------------------
+    /** A FileSave dialog with:
+        1. A checkbox "Auto Extension"
+        2. A checkbox "Password"
+    */
+    const short FILESAVE_AUTOEXTENSION_PASSWORD                = 2;
+
+    //---------------------------------------------------------------------
+    /** A FileSave dialog with:
+        1. A checkbox "Auto Extension"
+        2. A checkbox "Password"
+        3. A checkbox "Filter Options"
+    */
+    const short FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS  = 3;
+
+    //---------------------------------------------------------------------
+    /** A FileSave dialog with:
+        1. A checkbox "Auto Extension"
+        2. A checkbox "Selection"
+    */
+    const short FILESAVE_AUTOEXTENSION_SELECTION               = 4;
+
+    //---------------------------------------------------------------------
+    /** A FileSave dialog with:
+        1. A checkbox "Auto Extension"
+        2. A listbox "Template" for selecting different templates
+    */
+    const short FILESAVE_AUTOEXTENSION_TEMPLATE                = 5;
+
+    //---------------------------------------------------------------------
+    /** A FileOpen dialog with:
+        1. A checkbox "Insert as link"
+        2. A checkbox "Show Preview"
+        3. A listbox  "Image Template" for inserting an image with
+           different styles.
+        4. A window for displaying a file preview
+    */
+    const short FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE           = 6;
+
+    //---------------------------------------------------------------------
+    /** A FileOpen dialog with:
+        1. A push button "Play"
+    */
+    const short FILEOPEN_PLAY                                  = 7;
+
+    //---------------------------------------------------------------------
+    /** A FileOpen dialog with:
+        1. A checkbox "Read only"
+        2. A listbox "Version" for selecting a document version
+    */
+    const short FILEOPEN_READONLY_VERSION                      = 8;
+
+    //---------------------------------------------------------------------
+    /**
+        A FileOpen dialog with:
+        1. A checkbox "Insert as link"
+        2. A checkbox "Show Preview"
+        3. A window for displaying a file preview
+    */
+    const short FILEOPEN_LINK_PREVIEW                          = 9;
+
+    //---------------------------------------------------------------------
+    /** A FileSave dialog with:
+        1. A checkbox "Auto Extension"
+    */
+    const short FILESAVE_AUTOEXTENSION                         = 10;
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

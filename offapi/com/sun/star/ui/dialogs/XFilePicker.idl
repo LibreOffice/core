@@ -1,0 +1,209 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XFilePicker.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: tra $ $Date: 2001-08-30 10:20:36 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ui_dialogs_XFilePicker_idl__
+#define __com_sun_star_ui_dialogs_XFilePicker_idl__
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_ui_dialogs_XExecutableDialog_idl__
+#include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module ui { module dialogs {
+
+//=============================================================================
+/** specifies an interface for a filepicker
+*/
+
+interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
+{
+
+    //-------------------------------------------------------------------------
+    /** enable/disable multiselection mode
+
+        <p>If the multiselection mode is enabled multiple files
+        may be selected else only one selection is possible</p>
+
+        @param bMode
+            True enables multiselection mode,
+            False disables multiselection mode this is the default
+            value
+    */
+    void setMultiSelectionMode( [in] boolean bMode );
+
+    //-------------------------------------------------------------------------
+    /** Sets the default string that appears in the edit field of the FilePicker
+        dialog where the user may enter a file name.
+
+        @param aName
+            <p> Specifies the default file name, displayed when the FilePicker
+                will be shown. The implementation may accept any string and doesn't
+                have to check for a valid file name, if the file exist etc.
+            </p>
+    */
+    void setDefaultName( [in] string aName );
+
+    //-------------------------------------------------------------------------
+    /** Sets the directory that the file dialog initially displays.
+
+        @param aDirectory
+            Specifies the initial directory in url format. The given URL has to
+            follow the rules of rfc1738.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            If the url is invalid (doesn't conform to rfc1738).
+    */
+    void setDisplayDirectory( [in] string aDirectory )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** Returns the directory that the file dialog is currently showing or
+        was lastly showing before closing the dialog with ok. If the user
+        did cancel the dialog the returned value is undefined.
+
+        @returns
+            The directory in url format.
+     */
+    string getDisplayDirectory();
+
+    //-------------------------------------------------------------------------
+    /** Returns a sequence of the selected files including path information in
+        url format.
+        If the user closed the dialog with cancel an empty sequence will be
+        returned.
+        If the dialogs is in execution mode only a single file url will be
+        returned or an empty sequence if multiple files have been selected or
+        the current selected file is not a valid file name or any other error
+        occurs.
+
+        @returns
+        <p> The complete path of the file or directory currently selected
+            in url format. There are two different cases:
+            1. Multiselection is disabled:
+            The first and only entry of the sequence contains the complete
+            path/filename in url format.
+
+            2. Multiselection is enabled:
+            If only one file is selected, the first entry
+            of the sequence contains the complet path/filename in url format.
+            If multiple files are selected, the first entry of the sequence contains
+            the path in url format, each other entry contains one of the selected
+            file names.
+
+            <p>Notes for the implementation of a FileSave dialog: If there exist
+            a checkbox "Automatic File Extension" and it is checked the dialog should
+            automatically add an extension to the file name if one is selected in the
+            filter listbox.</p>
+        </p>
+    */
+    sequence< string > getFiles();
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.4  2001/07/06 13:03:20  tra
+    documentation update
+
+    Revision 1.3  2001/06/28 13:46:32  tra
+    moved to offapi
+
+    Revision 1.2  2001/06/07 14:04:30  tra
+    *** empty log message ***
+
+    Revision 1.1  2001/06/06 15:01:02  tra
+    new dialogs interfaces
+
+    Revision 1.5  2001/04/26 13:11:14  tra
+    *** empty log message ***
+
+    Revision 1.4  2001/03/16 16:41:51  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
+    Revision 1.3  2000/11/08 12:45:14  mi
+    moved from api
+
+    Revision 1.2  2000/10/20 07:58:15  tra
+    minor changed and improvment of the documentation
+
+    Revision 1.1.1.1  2000/09/18 23:36:18  hjs
+    initial import
+
+    Revision 1.1  2000/09/05 14:55:11  tra
+    initial version filepicker interface
+
+
+=============================================================================*/
+
+#endif
+

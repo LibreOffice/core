@@ -1,0 +1,154 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XFilePickerListener.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: tra $ $Date: 2001-08-30 10:20:51 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_dialogs_XFilePickerListener_idl__
+#define __com_sun_star_ui_dialogs_XFilePickerListener_idl__
+
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
+#endif
+
+#ifndef __com_sun_star_ui_dialogs_FilePickerEvent_idl__
+#include <com/sun/star/ui/dialogs/FilePickerEvent.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module ui { module dialogs {
+
+//=============================================================================
+
+//=============================================================================
+/** Interface to be implemented by all FilePicker service clients.
+
+    <p> The <type>XFilePickerListener</type> interface must be implemented by
+    the clients of the FilePicker service which need to be informed about
+    events while the FilePicker service is displayed.</p>
+*/
+
+interface XFilePickerListener: com::sun::star::lang::XEventListener
+{
+    //-------------------------------------------------------------------------
+    /** A client receives this event if the file selection within the
+        FilePicker service dialog changes.
+
+        @param aEvent
+            of type <type>FilePickerEvent</type> that describes the event
+
+        @see FilePickerEvent
+    */
+    void fileSelectionChanged( [in] FilePickerEvent aEvent );
+
+
+    //-------------------------------------------------------------------------
+    /** A client receives this event if the directory selection within the
+        FilePicker service dialog changes.
+
+        @param aEvent
+            Of type <type>FilePickerEvent</type> that describes the event.
+
+        @see FilePickerEvent
+    */
+    void directoryChanged( [in] FilePickerEvent aEvent );
+
+    //-------------------------------------------------------------------------
+    /** A client receives this event if the F1 key or the help button was
+        pressed.
+
+        @param aEvent
+            of type <type>FilePickerEvent</type> that describes the event
+
+        @returns
+            A help string which the FilePicker dialog should display
+            in a tooltip window. If the returned string is empty it is
+            undefined how the FilePicker implementation will behave.
+            It may show a message 'no help available' or may show no
+            tooltip window at all etc.
+
+        @see FilePickerEvent
+    */
+    string helpRequested( [in] FilePickerEvent aEvent );
+
+    //-------------------------------------------------------------------------
+    /** A client receives this event if the state of a control within the
+        FilePicker service dialog changes.
+
+        @param aEvent
+            of type <type>FilePickerEvent</type> that describes the event.
+
+        @see FilePickerEvent
+    */
+    void controlStateChanged( [in] FilePickerEvent aEvent );
+
+    //-------------------------------------------------------------------------
+    /** A client receives this event if the size of the FilePicker dialog
+        has changed. If the FilePicker dialog contains a preview the client
+        may ask for the new dimension of the preview area.
+    */
+    void dialogSizeChanged( );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+
+#endif
