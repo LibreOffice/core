@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-31 13:09:48 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,26 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Size = MAP_APPFONT ( 255 , 8 ) ;
         Text = "Filtereinstellungen" ;
         Text [ ENGLISH ] = "Filter options" ;
+        Text[ english_us ] = "Filter settings";
+        Text[ portuguese ] = "Filter options";
+        Text[ russian ] = "Íàñòğîéêè ôèëüòğà";
+        Text[ greek ] = "Ñõèìßóåéò ößëôñùí";
+        Text[ dutch ] = "Filter options";
+        Text[ french ] = "Paramètres de filtre";
+        Text[ spanish ] = "Configuración de filtros";
+        Text[ finnish ] = "Filter options";
+        Text[ italian ] = "Impostazioni filtro";
+        Text[ danish ] = "Filter options";
+        Text[ swedish ] = "Filterinställningar";
+        Text[ polish ] = "Ustawienia filtra";
+        Text[ portuguese_brazilian ] = "Filter options";
+        Text[ japanese ] = "Ì¨ÙÀ‚Ìİ’è";
+        Text[ korean ] = "Filter options";
+        Text[ chinese_simplified ] = "Ñ¡ÏîÉè¶¨";
+        Text[ chinese_traditional ] = "Filter options";
+        Text[ turkish ] = "Filter options";
+        Text[ arabic ] = "Filter options";
+        Text[ catalan ] = "Filter options";
     };
     CheckBox CB_HIGHLIGHT_ACCEPT
     {
@@ -148,18 +168,18 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text [ portuguese_brazilian ] = "A~bgelehnte ?nderungen anzeigen" ;
         Text [ swedish ] = "Visa ~ej accepterade ändringar" ;
         Text [ danish ] = "Vis forkastede ændringer" ;
-        Text [ italian ] = "Mostra i cambiamenti ~non accettati" ;
+        Text [ italian ] = "Mostra i cambiamenti accettati" ;
         Text [ spanish ] = "~Mostrar las modificaciones rechazadas" ;
-        Text [ french ] = "Afficher les modifications refusées" ;
+        Text [ french ] = "Afficher les modifications ~refusées" ;
         Text [ dutch ] = "Niet-ge~accepteerde wijzigingen weergeven" ;
         Text [ portuguese ] = "Mostrar modificações ~rejeitadas" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾¾Ü¾øµÄ¸ü¸ÄÄÚÈİ(~R)";
         Text[ russian ] = "Ïîêàçàòü îòêëîíåííûå èçìåíåíèÿ";
-        Text[ polish ] = "Poka¿ zmiany odrzucone";
+        Text[ polish ] = "Poka¿ odrzucone zmiany";
         Text[ japanese ] = "”jŠü‚µ‚½•ÏX‰ÓŠ‚ğ•\\¦(~R)";
         Text[ chinese_traditional ] = "Åã¥Ü©Úµ´ªºÅÜ§ó(~R)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ ÇáãÑİæÖÉ";
-        Text[ greek ] = "ÅìöÜíéóç áğïññéğôİùí áëëáãşí";
+        Text[ greek ] = "ĞñïâïëŞ áğïññéğôİùí áëëáãşí";
         Text[ korean ] = "°ÅºÎµÈ º¯°æ»çÇ× º¸ÀÌ±â(~R)";
         Text[ turkish ] = "~Reddedilen değişiklikleri görüntüle";
         Text[ language_user1 ] = " ";
@@ -242,7 +262,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         QuickHelpText [ dutch ] = "Verkleinen/vergroten" ;
         QuickHelpText [ portuguese ] = "Afastar/Aproximar" ;
     QuickHelpText[ russian ] = "Óìåíüøèòü/Óâåëè÷èòü";
-        QuickHelpText[ polish ] = "Pomniejsz/Powiêksz";
+        QuickHelpText[ polish ] = "Pomniejsz/Powiêksz!";
         QuickHelpText[ japanese ] = "k¬/Šg‘å!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡/·Å´ó";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p/©ñ¤j";
@@ -277,3 +297,4 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     Text[ catalan ] = "Mostrar modificaciones";
     Text[ finnish ] = "Näytä muutokset";
 };
+
