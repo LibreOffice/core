@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swserv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:54:29 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,8 @@
 
 #pragma hdrstop
 
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
+
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
 #endif
@@ -324,7 +323,7 @@ BOOL SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
     if( nSttNd && nEndNd )
     {
         // LinkManager besorgen:
-        const ::so3::SvBaseLinks& rLnks = pNds->GetDoc()->GetLinkManager().GetLinks();
+        const ::sfx2::SvBaseLinks& rLnks = pNds->GetDoc()->GetLinkManager().GetLinks();
 
 // um Rekursionen zu Verhindern: ServerType umsetzen!
 SwServerObject::ServerModes eSave = eType;
@@ -336,7 +335,7 @@ if( !pChkLnk )
     ((SwServerObject*)this)->eType = NONE_SERVER;
         for( USHORT n = rLnks.Count(); n; )
         {
-            const ::so3::SvBaseLink* pLnk = &(*rLnks[ --n ]);
+            const ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
             if( pLnk && OBJECT_CLIENT_GRF != pLnk->GetObjType() &&
                 pLnk->ISA( SwBaseLink ) &&
                 !((SwBaseLink*)pLnk)->IsNoDataFlag() &&
@@ -385,11 +384,11 @@ SwDataChanged::~SwDataChanged()
     //              Eingabe)
     if( pDoc->GetRootFrm() )
     {
-        const ::so3::SvLinkSources& rServers = pDoc->GetLinkManager().GetServers();
+        const ::sfx2::SvLinkSources& rServers = pDoc->GetLinkManager().GetServers();
 
         for( USHORT nCnt = rServers.Count(); nCnt; )
         {
-            ::so3::SvLinkSourceRef refObj( rServers[ --nCnt ] );
+            ::sfx2::SvLinkSourceRef refObj( rServers[ --nCnt ] );
             // noch jemand am Object interessiert ?
             if( refObj->HasDataLinks() && refObj->ISA( SwServerObject ))
             {
