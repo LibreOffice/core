@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binarycache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:03:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef CONFIGMGR_BINARYCACHE_HXX
 #define CONFIGMGR_BINARYCACHE_HXX
 
+#ifndef CONFIGMGR_MATCHLOCALE_HXX
+#include "matchlocale.hxx"
+#endif
+
 #include <rtl/ustring.hxx>
 
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
@@ -106,7 +110,8 @@ namespace configmgr
                                     MultiServiceFactory const & aFactory,
                                     rtl::OUString const & aComponent,
                                     rtl::OUString const & aEntity,
-                                    rtl::OUString const & aLocale,
+                                    localehelper::Locale const & aRequestedLocale,
+                                    localehelper::LocaleSequence & outKnownLocales,
                                     const uno::Reference<backenduno::XLayer> * pLayers,
                                     sal_Int32 nNumLayers,
                                     bool bIncludeTemplates = true);
@@ -115,7 +120,7 @@ namespace configmgr
                                     MultiServiceFactory const & aFactory,
                                     rtl::OUString const & aComponent,
                                     rtl::OUString const & aEntity,
-                                    rtl::OUString const & aLocale,
+                                    localehelper::LocaleSequence const & aKnownLocales,
                                     const uno::Reference<backenduno::XLayer> * pLayers,
                                     sal_Int32 nNumLayers);
         private:
@@ -124,6 +129,10 @@ namespace configmgr
             bool mbCacheEnabled;
         };
 
+    // -----------------------------------------------------------------------------------
+    // helper for cache reader implementations - see backendaccess.cxx for implementation
+        uno::Sequence< rtl::OUString >
+            getAvailableLocales(const uno::Reference<backenduno::XLayer> * pLayers, sal_Int32 nNumLayers);
     // -----------------------------------------------------------------------------------
     }
 // -----------------------------------------------------------------------------------
