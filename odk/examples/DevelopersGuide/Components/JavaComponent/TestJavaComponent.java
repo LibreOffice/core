@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestJavaComponent.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:15:35 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 12:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -128,10 +128,6 @@ public class TestJavaComponent
             // and call the test method.
             String s= xSomethingB.methodTwo("Hello World!");
             System.out.println(s);
-
-            // wait until return is pressed
-//             System.out.println( "Press return to terminate" );
-//             while( System.in.read() != 10 );
 
             if ( bLocal )
             {
