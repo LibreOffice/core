@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.119 $
+#   $Revision: 1.120 $
 #
-#   last change: $Author: vg $ $Date: 2004-10-13 13:48:01 $
+#   last change: $Author: vg $ $Date: 2004-10-20 10:23:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.119 $ ';
+    $id_str = ' $Revision: 1.120 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -308,10 +308,6 @@ sub GetParentDeps {
             };
         };
     };
-    foreach $parent (keys %dead_parents) {
-        delete $global_deps_hash{$parent};
-        &RemoveFromDependencies($parent, $deps_hash);
-    };
     &check_deps_hash($deps_hash);
 };
 
@@ -334,32 +330,36 @@ sub BuildAll {
             return;
         };
         while ($Prj = &PickPrjToBuild(\%global_deps_hash)) {
-            if (!defined $module_announced{$Prj}) {
-                print $new_line;
-                my $module_type = $modules_types{$Prj};
+            if (!defined $dead_parents{$Prj}) {
+                if (!defined $module_announced{$Prj}) {
+                    print $new_line;
+                    my $module_type = $modules_types{$Prj};
 
-                &print_announce($Prj) if ($module_type eq 'lnk');
-                &print_announce($Prj . '.incomp') if ($module_type eq 'img');
-                if ($module_type eq 'mod') {
-                    if (scalar keys %broken_build) {
-                        print $echo . "Skipping project $Prj because of error(s)\n";
-                        &RemoveFromDependencies($Prj, \%global_deps_hash);
-                        next;
+
+                    &print_announce($Prj) if ($module_type eq 'lnk');
+                    &print_announce($Prj . '.incomp') if ($module_type eq 'img');
+                    if ($module_type eq 'mod') {
+                        if (scalar keys %broken_build) {
+                            print $echo . "Skipping project $Prj because of error(s)\n";
+                            &RemoveFromDependencies($Prj, \%global_deps_hash);
+                            next;
+                        };
+                        &print_announce($Prj);
+                        $PrjDir = &CorrectPath($StandDir.$Prj);
+                        &mark_force_deliver($Prj, $PrjDir) if (defined $ENV{CWS_WORK_STAMP} && defined($log));
+                        &get_deps_hash($Prj, \%LocalDepsHash);
+                        &BuildDependent(\%LocalDepsHash);
+                        my $deliver_commando = &get_deliver_commando($Prj);
+                        if ($cmd_file) {
+                            print "$deliver_commando\n";
+                        } else {
+                            system ("$deliver_commando") if (!$show && ($Prj ne $CurrentPrj) && !$deliver);
+                        };
+                        print $check_error_string;
                     };
-                    &print_announce($Prj);
-                    $PrjDir = &CorrectPath($StandDir.$Prj);
-                    &mark_force_deliver($Prj, $PrjDir) if (defined $ENV{CWS_WORK_STAMP} && defined($log));
-                    &get_deps_hash($Prj, \%LocalDepsHash);
-                    &BuildDependent(\%LocalDepsHash);
-                    my $deliver_commando = &get_deliver_commando($Prj);
-                    if ($cmd_file) {
-                        print "$deliver_commando\n";
-                    } else {
-                        system ("$deliver_commando") if (!$show && ($Prj ne $CurrentPrj) && !$deliver);
-                    };
-                    print $check_error_string;
                 };
             };
+
             &RemoveFromDependencies($Prj, \%global_deps_hash);
             $no_projects = 0;
         };
@@ -458,7 +458,6 @@ sub store_build_list_content {
 sub get_parents_array {
     my $module = shift;
     store_build_list_content($module);
-    return if (defined $dead_parents{$module});
     my $build_list_ref = $build_lists_hash{$module};
 
     if (ref($build_list_ref) eq 'XMLBuildListParser') {
@@ -477,7 +476,7 @@ sub get_parents_array {
             return pick_for_build_type($');
         };
     };
-    return [];
+    return ();
 };
 
 #
@@ -932,6 +931,7 @@ sub finish_logging {
 
 sub print_error {
     my $message = shift;
+    rmtree(CorrectPath($tmp_dir), 0, 1) if ($tmp_dir);
     $modules_number -= scalar keys %global_deps_hash;
     $modules_number -= 1;
     &finish_logging("FAILURE: " . $message);
@@ -1342,7 +1342,6 @@ sub checkout_module {
     $cws->child($ENV{CWS_WORK_STAMP});
     $cws->master($ENV{WORK_STAMP});
     my $cvs_module = &get_cvs_module($cws, $prj_name);
-    return '' if defined($dead_parents{$prj_name});
     &print_error("Cannot get cvs_module for $prj_name") if (!$cvs_module);
     my ($master_branch_tag, $cws_branch_tag, $cws_root_tag, $master_milestone_tag) = $cws->get_tags();
 
@@ -1355,11 +1354,11 @@ sub checkout_module {
     $cvs_module->checkout($path, $master_milestone_tag, '');
     # Quick hack, should not be there
     # if Heiner's Cws has error handling
-    if (!-d &CorrectPath($path.$prj_name)) {
+    if (!-d &CorrectPath($path.'/'.$prj_name)) {
         $cvs_module->checkout($path, '', '');
-        if (!-d &CorrectPath($path.$prj_name)) {
+        if (!-d &CorrectPath($path.'/'.$prj_name)) {
             $dead_parents{$prj_name}++;
-            print STDERR ("Cannot checkout $prj_name. Check if you have to login to server\n");
+            print STDERR ("Cannot checkout $prj_name. Check if you have to login to server or all build dependencies are consistent\n");
             return;
         };
     };
@@ -1679,11 +1678,12 @@ sub retrieve_build_list {
     # no need to announce this module
     print " ok\n";
     eval {
-        mkpath($solver_inc_dir) if (-e $solver_inc_dir);
+        mkpath($solver_inc_dir) if (!-e $solver_inc_dir);
     };
     print_error("Cannot create $solver_inc_dir") if (!-d $solver_inc_dir);
+    my $success;
     foreach (@possible_build_lists) {
-        my $tmp_build_lst = $tmp_dir . $module . '/prj/' . $_;
+        my $tmp_build_lst = $tmp_dir . '/' . $module . '/prj/' . $_;
         $possible_build_lst = undef;
         next if (!-e $tmp_build_lst);
         $possible_build_lst = $solver_inc_dir . '/' .$_;
@@ -1691,12 +1691,14 @@ sub retrieve_build_list {
         if (!File::Copy::move($tmp_build_lst, $solver_inc_dir)) {
             print_error("Cannot copy build list to $solver_inc_dir");
         };
+        $success++;
         my @to_stat = stat($possible_build_lst);
         $from_stat[9]-- if $from_stat[9] % 2;
         utime ($from_stat[9], $from_stat[9], $possible_build_lst);
         last;
-    }
-    rmtree($tmp_dir, 0, 1);
+    };
+    rmtree(CorrectPath($tmp_dir . '/' . $module), 0, 1);
+    return undef if (!$success);
     return $possible_build_lst;
 };
 
