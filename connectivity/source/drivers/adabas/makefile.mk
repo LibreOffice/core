@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-19 16:38:21 $
+#   last change: $Author: rt $ $Date: 2004-09-08 16:19:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,9 @@ ENVCFLAGS+=/FR$(SLO)$/
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/version.mk
 
+.IF "$(SYSTEM_ODBC_HEADERS)" == "YES"
+CFLAGS+=-DSYSTEM_ODBC_HEADERS
+.ENDIF
 
 # --- Files -------------------------------------
 
