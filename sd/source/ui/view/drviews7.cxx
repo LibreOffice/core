@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:13:09 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -859,6 +859,11 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             rSet.DisableItem(SID_TITLE_MASTERPAGE);
         }
+
+        rSet.DisableItem (SID_INSERT_MASTER_PAGE);
+        rSet.DisableItem (SID_DELETE_MASTER_PAGE);
+        rSet.DisableItem (SID_RENAME_MASTER_PAGE);
+        rSet.DisableItem (SID_CLOSE_MASTER_VIEW);
     }
     else
     {
@@ -943,7 +948,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.Put( SfxBoolItem( SID_RULER, HasRuler() ) );
 
     // nicht die letzte Seite oder eine Masterpage loeschen
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DELETE_PAGE ) )
+    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DELETE_PAGE )
+        || SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DELETE_MASTER_PAGE ) )
     {
         if (aTabControl.GetPageCount() == 1 ||
             eEditMode == EM_MASTERPAGE      ||
@@ -951,7 +957,10 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             ePageKind == PK_HANDOUT         ||
             IsLayerModeActive())
         {
-            rSet.DisableItem(SID_DELETE_PAGE);
+            if (rSet.GetItemState(SID_DELETE_PAGE) == SFX_ITEM_AVAILABLE)
+                rSet.DisableItem(SID_DELETE_PAGE);
+            if (rSet.GetItemState(SID_DELETE_MASTER_PAGE)==SFX_ITEM_AVAILABLE)
+                rSet.DisableItem(SID_DELETE_MASTER_PAGE);
         }
     }
 
