@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-27 10:36:46 $
+ *  last change: $Author: mt $ $Date: 2002-11-04 14:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             {
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "Align" ),              BASEPROPERTY_ALIGN,             ::getCppuType((const sal_Int16*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT|::com::sun::star::beans::PropertyAttribute::MAYBEVOID ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "Autocomplete" ),       BASEPROPERTY_AUTOCOMPLETE,      ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
+            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "AutoMnemonics" ),      BASEPROPERTY_AUTOMNEMONICS,     ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "AutoToggle" ),         BASEPROPERTY_AUTOTOGGLE,        ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "BackgroundColor" ),    BASEPROPERTY_BACKGROUNDCOLOR,   ::getCppuType((const sal_Int32*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT|::com::sun::star::beans::PropertyAttribute::MAYBEVOID ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "BlockIncrement" ),     BASEPROPERTY_BLOCKINCREMENT,    ::getCppuType((const sal_Int32*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT, sal_True ),

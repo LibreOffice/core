@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-27 12:10:35 $
+ *  last change: $Author: mt $ $Date: 2002-11-04 14:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1180,6 +1180,20 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 }
             }
             break;
+            case BASEPROPERTY_AUTOMNEMONICS:
+            {
+                sal_Bool bAutoMnemonics;
+                Value >>= bAutoMnemonics;
+                AllSettings aSettings = pWindow->GetSettings();
+                StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+                if ( aStyleSettings.GetAutoMnemonic() != bAutoMnemonics )
+                {
+                    aStyleSettings.SetAutoMnemonic( bAutoMnemonics );
+                    aSettings.SetStyleSettings( aStyleSettings );
+                    pWindow->SetSettings( aSettings );
+                }
+            }
+            break;
         }
     }
 }
@@ -1276,6 +1290,12 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             {
                 if ( eWinType == WINDOW_FIXEDTEXT )
                     aProp <<= (sal_Bool) ( GetWindow()->GetStyle() & WB_WORDBREAK ) ? sal_True : sal_False;
+            }
+            break;
+            case BASEPROPERTY_AUTOMNEMONICS:
+            {
+                sal_Bool bAutoMnemonics = GetWindow()->GetSettings().GetStyleSettings().GetAutoMnemonic();
+                aProp <<= bAutoMnemonics;
             }
             break;
         }
