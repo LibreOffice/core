@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-17 18:42:57 $
+ *  last change: $Author: pl $ $Date: 2000-11-18 17:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,23 +253,6 @@ static bool sendAFax( const String& rFaxNumber, const String& rFileName, const S
     ByteString aUseFileName( bPS ? aPSFileName : aFileName );
 
     bool bPipe = aCmdLine.Search( "(TMP)" ) != STRING_NOTFOUND ? false : true;
-    if( ! aFaxNumber.Len() )
-    // then the number must be embedded in the document
-    {
-        SvFileStream aStream( rFileName, STREAM_READ );
-        ByteString aLine;
-        while( aStream.IsEof() )
-        {
-            aStream.ReadLine( aLine );
-            if( aLine.GetChar( 0 ) == '%' &&
-                aLine.Search( "PhoneNumber(" ) != STRING_NOTFOUND )
-            {
-                aFaxNumber = aLine.GetToken( 1, '(' ).GetToken( 0, ')' );
-                break;
-            }
-        }
-    }
-
     if( ! aFaxNumber.Len() )
     {
         getPaLib();
@@ -834,6 +817,7 @@ SalGraphics* SalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL bNewJobData )
     maPrinterData.m_pGraphics = new SalGraphics();
     maPrinterData.m_pGraphics->maGraphicsData.m_pJobData    = &maPrinterData.m_aJobData;
     maPrinterData.m_pGraphics->maGraphicsData.m_pPrinterGfx = &maPrinterData.m_aPrinterGfx;
+    maPrinterData.m_pGraphics->maGraphicsData.m_pPhoneNr    = maPrinterData.m_bFax ? &maPrinterData.m_aFaxNr : NULL;
 
     maPrinterData.m_aPrintJob.StartPage( maPrinterData.m_aJobData, bNewJobData ? sal_True : sal_False );
     maPrinterData.m_aPrinterGfx.Init( maPrinterData.m_aPrintJob );
