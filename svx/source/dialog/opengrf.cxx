@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:10:57 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,6 @@
 #endif
 #ifndef _SVDOGRAF_HXX //autogen
 #include "svdograf.hxx"
-#endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
 #endif
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
