@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-29 14:16:26 $
+ *  last change: $Author: kso $ $Date: 2000-12-06 08:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <ucbhelper/providerhelper.hxx>
 #endif
 
+#ifndef _PKGURI_HXX
+#include "pkguri.hxx"
+#endif
+
 namespace com { namespace sun { namespace star { namespace container {
     class XHierarchicalNameAccess;
 } } } }
@@ -82,9 +86,9 @@ namespace package_ucp {
 
 // UCB Content Type.
 #define PACKAGE_FOLDER_CONTENT_TYPE \
-                "application/package-folder"
+                "application/" PACKAGE_URL_SCHEME "-folder"
 #define PACKAGE_STREAM_CONTENT_TYPE \
-                "application/package-stream"
+                "application/" PACKAGE_URL_SCHEME "-stream"
 
 //=========================================================================
 
