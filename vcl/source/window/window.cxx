@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.202 $
+ *  $Revision: 1.203 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:14:20 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@
 #ifndef _SV_SYSWIN_HXX
 #include <syswin.hxx>
 #endif
+#ifndef _SV_SYSCHILD_HXX
+#include <syschild.hxx>
+#endif
 #ifndef _SV_BRDWIN_HXX
 #include <brdwin.hxx>
 #endif
@@ -214,6 +217,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
+using namespace ::com::sun::star;
 using namespace com::sun;
 
 using ::com::sun::star::awt::XTopWindow;
@@ -720,6 +724,10 @@ void Window::ImplInitData( WindowType nType )
     mbSuppressAccessibilityEvents = FALSE; // TRUE: do not send any accessibility events
     mbEnableRTL         = TRUE;         // TRUE: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
     mbDrawSelectionBackground = FALSE;  // TRUE: draws transparent window background to indicate (toolbox) selection
+    mbIsCanvasCreated   = FALSE;        // TRUE: a canvas has been requested, thus, mxCanvasWindow must be
+                                        // checked for every pos or size change. Since mxCanvasWindow is
+                                        // a weak reference, checking for validity is somewhat expensive,
+                                        // and is now guarded by this cheap bool check.
 }
 
 // -----------------------------------------------------------------------
@@ -1096,9 +1104,13 @@ void Window::ImplCallResize()
     // Forward size to embedded java frame. As stated below, derived
     // classes don't always call our Resize, thus this extra step here
     // is required.
-    if( mxCanvasWindow.is() )
-        mxCanvasWindow->setPosSize( mnOutOffX, mnOutOffX,
-                                    mnOutWidth, mnOutHeight, 0 );
+    if( mbIsCanvasCreated )
+    {
+        Reference< awt::XWindow > xCanvasWindow( mxCanvasWindow );
+        if( xCanvasWindow.is() )
+            xCanvasWindow->setPosSize( mnOutOffX, mnOutOffY,
+                                       mnOutWidth, mnOutHeight, 0 );
+    }
 
     // #88419# Most classes don't call the base class in Resize() and Move(),
     // => Call ImpleResize/Move instead of Resize/Move directly...
@@ -1149,9 +1161,13 @@ void Window::ImplCallMove()
     // Forward physical position to embedded java frame. As stated
     // above, derived classes don't always call our Resize, thus this
     // extra step here is required.
-    if( mxCanvasWindow.is() )
-        mxCanvasWindow->setPosSize( mnOutOffX, mnOutOffX,
-                                    mnOutWidth, mnOutHeight, 0 );
+    if( mbIsCanvasCreated )
+    {
+        Reference< awt::XWindow > xCanvasWindow( mxCanvasWindow );
+        if( xCanvasWindow.is() )
+            xCanvasWindow->setPosSize( mnOutOffX, mnOutOffY,
+                                       mnOutWidth, mnOutHeight, 0 );
+    }
 
     ImplCallEventListeners( VCLEVENT_WINDOW_MOVE );
 }
@@ -4322,15 +4338,15 @@ Window::~Window()
 
     // Dispose of the canvas implementation (which, currently, has an
     // own wrapper window as a child to this one.
-    if( mxCanvas.is() )
+    Reference< ::drafts::com::sun::star::rendering::XCanvas >  xCanvas( mxCanvas );
+    if( xCanvas.is() )
     {
         ::com::sun::star::uno::Reference < ::com::sun::star::lang::XComponent >
-              xCanvasComponent( mxCanvas,
+              xCanvasComponent( xCanvas,
                                 ::com::sun::star::uno::UNO_QUERY );
-        xCanvasComponent->dispose();
+        if( xCanvasComponent.is() )
+            xCanvasComponent->dispose();
     }
-    mxCanvas = NULL;
-    mxCanvasWindow = NULL;
 
     mbInDtor = TRUE;
 
@@ -4759,9 +4775,13 @@ void Window::Move()
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     // Forward physical position to embedded java frame
-    if( mxCanvasWindow.is() )
-        mxCanvasWindow->setPosSize( mnOutOffX, mnOutOffX,
-                                    mnOutWidth, mnOutHeight, 0 );
+    if( mbIsCanvasCreated )
+    {
+        Reference< awt::XWindow > xCanvasWindow( mxCanvasWindow );
+        if( xCanvasWindow.is() )
+            xCanvasWindow->setPosSize( mnOutOffX, mnOutOffY,
+                                       mnOutWidth, mnOutHeight, 0 );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -4771,9 +4791,13 @@ void Window::Resize()
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     // Forward size to embedded java frame
-    if( mxCanvasWindow.is() )
-        mxCanvasWindow->setPosSize( mnOutOffX, mnOutOffX,
-                                    mnOutWidth, mnOutHeight, 0 );
+    if( mbIsCanvasCreated )
+    {
+        Reference< awt::XWindow > xCanvasWindow( mxCanvasWindow );
+        if( xCanvasWindow.is() )
+            xCanvasWindow->setPosSize( mnOutOffX, mnOutOffY,
+                                       mnOutWidth, mnOutHeight, 0 );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -4912,17 +4936,21 @@ void Window::StateChanged( StateChangedType nType )
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     // Forward visible state to embedded java frame
-    if( mxCanvasWindow.is() )
+    if( mbIsCanvasCreated )
     {
-        switch( nType )
+        Reference< awt::XWindow > xCanvasWindow( mxCanvasWindow );
+        if( xCanvasWindow.is() )
         {
-            case STATE_CHANGE_VISIBLE:
-                mxCanvasWindow->setVisible( mbVisible );
-                break;
+            switch( nType )
+            {
+                case STATE_CHANGE_VISIBLE:
+                    xCanvasWindow->setVisible( mbVisible );
+                    break;
 
-            case STATE_CHANGE_ENABLE:
-                mxCanvasWindow->setEnable( !mbDisabled );
-                break;
+                case STATE_CHANGE_ENABLE:
+                    xCanvasWindow->setEnable( !mbDisabled );
+                    break;
+            }
         }
     }
 }
@@ -9044,8 +9072,13 @@ BOOL Window::IsNativeWidgetEnabled() const
 
 Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetCanvas() const
 {
-    if( mxCanvas.is() )
-        return mxCanvas;
+    // try to retrieve hard reference from weak member
+    Reference< ::drafts::com::sun::star::rendering::XCanvas >  xCanvas( mxCanvas );
+
+    // canvas still valid? Then we're done.
+    if( xCanvas.is() )
+        return xCanvas;
+
 
     Sequence< Any > aArg( 4 );
 
@@ -9055,9 +9088,24 @@ Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetCanvas() co
     // common: first any is VCL pointer to window (for VCL canvas)
     aArg[ 0 ] = makeAny( reinterpret_cast<sal_Int64>(this) );
 
+    // Fetch system data structure
+    const SystemEnvData* pSysData;
+
+    // TODO(Q1): Make GetSystemData method virtual
+
+    // check whether we're a SysChild: have to fetch system data
+    // directly from SystemChildWindow, because the GetSystemData
+    // method is unfortunately not virtual
+    const SystemChildWindow* pSysChild = dynamic_cast< const SystemChildWindow* >( this );
+    if( pSysChild )
+        pSysData = pSysChild->GetSystemData();
+    else
+        pSysData = GetSystemData();
+
 #if defined( WIN ) || defined( WNT )
     // take HWND for Windows
-    aArg[ 1 ] = makeAny( reinterpret_cast<sal_Int32>(mpFrame->GetSystemData()->hWnd) );
+    if( pSysData )
+        aArg[ 1 ] = makeAny( reinterpret_cast<sal_Int32>(pSysData->hWnd) );
 #elif defined( UNX )
     // take XLIB window for X11, and fake a motif widget ID from
     // that.
@@ -9066,7 +9114,8 @@ Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetCanvas() co
     //aArg[ 0 ] = makeAny( vcl::createMotifHandle( mpFrame->maFrameData.GetWindow() ) );
 
     // feed the X11 window handle to canvas
-    aArg[ 1 ] = makeAny( static_cast<sal_Int32>(mpFrame->GetSystemData()->aWindow) );
+    if( pSysData )
+        aArg[ 1 ] = makeAny( static_cast<sal_Int32>(pSysData->aWindow) );
 #else
 # error Please forward window handle to canvas for your OS
 #endif
@@ -9081,25 +9130,50 @@ Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetCanvas() co
     // =========================================
     if ( xFactory.is() )
     {
-        mxCanvas = Reference< ::drafts::com::sun::star::rendering::XCanvas >(
-            xFactory->createInstanceWithArguments( OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.rendering.Canvas")),
-                                                   aArg ),
-            UNO_QUERY );
+        Reference<lang::XMultiServiceFactory> xCanvasFactory(
+            xFactory->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(
+                              "drafts.com.sun.star."
+                              "rendering.CanvasFactory") ) ), UNO_QUERY );
+        if (xCanvasFactory.is()) {
+            xCanvas.set( xCanvasFactory->createInstanceWithArguments(
+                             OUString() /* no preference */, aArg ),
+                         UNO_QUERY );
 
-        // now, try to retrieve an XWindow interface from the canvas
-        // (this is an implementation detail of the Java interface,
-        // which might vanish without notice).
-        mxCanvasWindow = Reference< ::com::sun::star::awt::XWindow >(mxCanvas, UNO_QUERY );
+            mxCanvas = xCanvas;
+
+            // now, try to retrieve an XWindow interface from the canvas
+            // (this is an implementation detail of the Java interface,
+            // which might vanish without notice).
+            Reference< awt::XWindow > xWindow( xCanvas, UNO_QUERY );
+            mxCanvasWindow = xWindow;
+
+            if( xWindow.is() )
+            {
+                // provide canvas with current window states
+                xWindow->setVisible( mbVisible );
+                xWindow->setEnable( !mbDisabled );
+                xWindow->setPosSize( mnOutOffX, mnOutOffY,
+                                     mnOutWidth, mnOutHeight, 0 );
+            }
+
+            const_cast<Window*>(this)->mbIsCanvasCreated = TRUE;
+        }
     }
 
     // no factory??? Empty reference, then.
-    return mxCanvas;
+    return xCanvas;
 }
 
 Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetFullscreenCanvas( const Size& rFullscreenSize ) const
 {
-    if( mxCanvas.is() )
-        return mxCanvas;
+    // try to retrieve hard reference from weak member
+    Reference< ::drafts::com::sun::star::rendering::XCanvas >  xCanvas( mxCanvas );
+
+    // canvas still valid? Then we're done.
+    if( xCanvas.is() )
+        return xCanvas;
+
 
     Sequence< Any > aArg( 4 );
 
@@ -9109,9 +9183,24 @@ Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetFullscreenC
     // common: first any is VCL pointer to window (for VCL canvas)
     aArg[ 0 ] = makeAny( reinterpret_cast<sal_Int64>(this) );
 
+    // Fetch system data structure
+    const SystemEnvData* pSysData;
+
+    // TODO(Q1): Make GetSystemData method virtual
+
+    // check whether we're a SysChild: have to fetch system data
+    // directly from SystemChildWindow, because the GetSystemData
+    // method is unfortunately not virtual
+    const SystemChildWindow* pSysChild = dynamic_cast< const SystemChildWindow* >( this );
+    if( pSysChild )
+        pSysData = pSysChild->GetSystemData();
+    else
+        pSysData = GetSystemData();
+
 #if defined( WIN ) || defined( WNT )
     // take HWND for Windows
-    aArg[ 1 ] = makeAny( reinterpret_cast<sal_Int32>(mpFrame->GetSystemData()->hWnd) );
+    if( pSysData )
+        aArg[ 1 ] = makeAny( reinterpret_cast<sal_Int32>(pSysData->hWnd) );
 #elif defined( UNX )
     // take XLIB window for X11, and fake a motif widget ID from
     // that.
@@ -9120,7 +9209,8 @@ Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetFullscreenC
     //aArg[ 0 ] = makeAny( vcl::createMotifHandle( mpFrame->maFrameData.GetWindow() ) );
 
     // feed the X11 window handle to canvas
-    aArg[ 1 ] = makeAny( static_cast<sal_Int32>(mpFrame->GetSystemData()->aWindow) );
+    if( pSysData )
+        aArg[ 1 ] = makeAny( static_cast<sal_Int32>(pSysData->aWindow) );
 #else
 # error Please forward window handle to canvas for your OS
 #endif
@@ -9137,19 +9227,39 @@ Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetFullscreenC
     // =========================================
     if ( xFactory.is() )
     {
-        mxCanvas = Reference< ::drafts::com::sun::star::rendering::XCanvas >(
-            xFactory->createInstanceWithArguments( OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.rendering.Canvas")),
-                                                   aArg ),
-            UNO_QUERY );
+        Reference<lang::XMultiServiceFactory> xCanvasFactory(
+            xFactory->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(
+                              "drafts.com.sun.star."
+                              "rendering.CanvasFactory") ) ), UNO_QUERY );
+        if (xCanvasFactory.is()) {
+            xCanvas.set( xCanvasFactory->createInstanceWithArguments(
+                             OUString() /* no preference */, aArg ),
+                         UNO_QUERY );
 
-        // now, try to retrieve an XWindow interface from the canvas
-        // (this is an implementation detail of the Java interface,
-        // which might vanish without notice).
-        mxCanvasWindow = Reference< ::com::sun::star::awt::XWindow >(mxCanvas, UNO_QUERY );
+            mxCanvas = xCanvas;
+
+            // now, try to retrieve an XWindow interface from the canvas
+            // (this is an implementation detail of the Java interface,
+            // which might vanish without notice).
+            Reference< awt::XWindow > xWindow( xCanvas, UNO_QUERY );
+            mxCanvasWindow = xWindow;
+
+            if( xWindow.is() )
+            {
+                // provide canvas with current window states
+                xWindow->setVisible( mbVisible );
+                xWindow->setEnable( !mbDisabled );
+                xWindow->setPosSize( mnOutOffX, mnOutOffY,
+                                     mnOutWidth, mnOutHeight, 0 );
+            }
+
+            const_cast<Window*>(this)->mbIsCanvasCreated = TRUE;
+        }
     }
 
     // no factory??? Empty reference, then.
-    return mxCanvas;
+    return xCanvas;
 }
 
 void Window::ImplPaintToMetaFile( GDIMetaFile* pMtf )
