@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-03 14:20:35 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,15 +894,15 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text [ portuguese ] = "Definição" ;
         Text [ finnish ] = "Määritys" ;
         Text [ danish ] = "Definition" ;
-        Text [ french ] = "Définition" ;
+        Text [ french ] = "Propriétés" ;
         Text [ swedish ] = "Egenskaper" ;
         Text [ dutch ] = "Definitie" ;
         Text [ spanish ] = "Propiedades" ;
         Text [ english_us ] = "Definition" ;
         Text[ chinese_simplified ] = "ÊôĞÔ";
-        Text[ russian ] = "Îïğåäåëåíèå";
+        Text[ russian ] = "Ñâîéñòâà";
         Text[ polish ] = "W³aœciwoœci";
-        Text[ japanese ] = "’è‹`";
+        Text[ japanese ] = "‘®«";
         Text[ chinese_traditional ] = "Äİ©Ê";
         Text[ arabic ] = "ÊÚÑíİ";
         Text[ greek ] = "Ïñéóìüò";
@@ -1414,13 +1414,13 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text [ portuguese ] = "Estilos de linha" ;
         Text [ finnish ] = "Viivatyylit" ;
         Text [ danish ] = "Stregtyper" ;
-        Text [ french ] = "Styles de ligne" ;
+        Text [ french ] = "Style de ligne" ;
         Text [ swedish ] = "Linjestil" ;
         Text [ dutch ] = "Lijntypen" ;
         Text [ spanish ] = "Estilo de línea" ;
         Text [ english_us ] = "Line styles" ;
         Text[ chinese_simplified ] = "ÏßÌõÊ½Ñù";
-        Text[ russian ] = "Ñòèëè ëèíèè";
+        Text[ russian ] = "Ñòèëü ëèíèè";
         Text[ polish ] = "Styl linii";
         Text[ japanese ] = "ü½À²Ù";
         Text[ chinese_traditional ] = "½u±ø¼Ë¦¡";
@@ -1672,15 +1672,15 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text [ portuguese ] = "Observação" ;
         Text [ finnish ] = "Huomautus" ;
         Text [ danish ] = "Tip" ;
-        Text [ french ] = "Remarque" ;
+        Text [ french ] = "Définition des extrémités de ligne" ;
         Text [ swedish ] = "Administrera linjeslut" ;
         Text [ dutch ] = "Tip" ;
         Text [ spanish ] = "Administrar fines de líneas" ;
         Text [ english_us ] = "Note" ;
         Text[ chinese_simplified ] = "¹ÜÀíÏßÌõ¼ıÍ·";
-        Text[ russian ] = "Óêàçàíèå";
+        Text[ russian ] = "Óïğàâëåíèå êîíöàìè ëèíèé";
         Text[ polish ] = "Zarz¹dzaj koñcówkami linii";
-        Text[ japanese ] = "w¦";
+        Text[ japanese ] = "ü‚ÌI“_‚ğŠÇ—";
         Text[ chinese_traditional ] = "ºŞ²z?±ø½bÀY";
         Text[ arabic ] = "ãáÇÍÙÉ";
         Text[ greek ] = "ÓõìâïõëŞ";
@@ -1733,15 +1733,15 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text [ portuguese ] = "Fim de linha" ;
         Text [ finnish ] = "Nuolenkärjet" ;
         Text [ danish ] = "Pil" ;
-        Text [ french ] = "Extrémité de ligne" ;
+        Text [ french ] = "Style des extrémités de ligne" ;
         Text [ swedish ] = "Linjeslutstil" ;
         Text [ dutch ] = "Lijnuiteinde" ;
         Text [ spanish ] = "Estilo del fin de línea" ;
         Text [ english_us ] = "Arrowheads" ;
         Text[ chinese_simplified ] = "ÏßÌõ¼ıÍ·Ê½Ñù";
-        Text[ russian ] = "Êîíöû ëèíèè";
+        Text[ russian ] = "Ñòèëü êîíöîâ ëèíèé";
         Text[ polish ] = "Styl koñcówek linii";
-        Text[ japanese ] = "ü‚ÌI“_";
+        Text[ japanese ] = "ü‚ÌI“_½À²Ù";
         Text[ chinese_traditional ] = "½u±ø½bÀY¼Ë¦¡";
         Text[ arabic ] = "äåÇíÉ ÇáÎØ";
         Text[ greek ] = "Ôİëïò ãñáììŞò";
@@ -1769,15 +1769,15 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text [ portuguese ] = "Fim de linha" ;
         Text [ finnish ] = "Nuolenkärjet" ;
         Text [ danish ] = "Pil" ;
-        Text [ french ] = "Extrémité de ligne" ;
+        Text [ french ] = "Titre" ;
         Text [ swedish ] = "Namn" ;
         Text [ dutch ] = "Lijnuiteinde" ;
         Text [ spanish ] = "Título" ;
         Text [ english_us ] = "Arrowheads" ;
         Text[ chinese_simplified ] = "±êÌâ";
-        Text[ russian ] = "Êîíöû ëèíèè";
+        Text[ russian ] = "Çàãîëîâîê";
         Text[ polish ] = "Tytu³";
-        Text[ japanese ] = "ü‚ÌI“_";
+        Text[ japanese ] = "À²ÄÙ";
         Text[ chinese_traditional ] = "¼ĞÃD";
         Text[ arabic ] = "äåÇíÉ ÇáÎØ";
         Text[ greek ] = "Ôİëïò ãñáììŞò";
@@ -1837,16 +1837,16 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text [ portuguese ] = "~Modificar" ;
         Text [ finnish ] = "~Muokkaa" ;
         Text [ danish ] = "Modificer" ;
-        Text [ french ] = "~Modifier" ;
+        Text [ french ] = "~Modifier..." ;
         Text [ swedish ] = "~Ändra" ;
         Text [ dutch ] = "Wij~zigen" ;
         Text [ spanish ] = "~Modificar..." ;
         Text [ english_us ] = "~Modify" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "¸ü¸Ä(~M)...";
-        Text[ russian ] = "Èçìåíèòü";
+        Text[ russian ] = "Èçìåíèòü...";
         Text[ polish ] = "Modyfikuj...";
-        Text[ japanese ] = "•ÏX(~M)";
+        Text[ japanese ] = "•ÏX(~M)...";
         Text[ chinese_traditional ] = "ÅÜ§ó(~M)...";
         Text[ arabic ] = "ÊÚÏíá";
         Text[ greek ] = "Ôñïğïğïßçóç";
@@ -2123,6 +2123,7 @@ TabDialog RID_SVXDLG_LINE
     Text[ catalan ] = "Línea";
 };
  // ********************************************************************** EOF
+
 
 
 
