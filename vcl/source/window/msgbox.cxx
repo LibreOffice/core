@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-18 08:04:36 $
+ *  last change: $Author: dr $ $Date: 2002-10-24 10:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,8 +467,7 @@ void MessBox::SetCheckBoxState( BOOL bCheck )
 
 void MessBox::SetDefaultCheckBoxText()
 {
-    XubString rText( ResId( SV_STDTEXT_DONTWARNAGAIN, ImplGetResMgr() ) );
-    maCheckBoxText = rText;
+    maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTHINTAGAIN, ImplGetResMgr() ) );
 }
 
 // -----------------------------------------------------------------------
@@ -561,6 +560,13 @@ WarningBox::WarningBox( Window* pParent, const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
+void WarningBox::SetDefaultCheckBoxText()
+{
+    maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTWARNAGAIN, ImplGetResMgr() ) );
+}
+
+// -----------------------------------------------------------------------
+
 Image WarningBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
@@ -630,6 +636,13 @@ QueryBox::QueryBox( Window* pParent, const ResId& rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_QUERYBOX ) )
 {
     ImplInitData();
+}
+
+// -----------------------------------------------------------------------
+
+void QueryBox::SetDefaultCheckBoxText()
+{
+    maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTASKAGAIN, ImplGetResMgr() ) );
 }
 
 // -----------------------------------------------------------------------

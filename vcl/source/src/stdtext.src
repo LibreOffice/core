@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2002-09-17 13:06:05 $
+ *  last change: $Author: dr $ $Date: 2002-10-24 10:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,23 @@ String SV_STDTEXT_SERVICENOTAVAILABLE
     Text[ thai ] = "ไม่สามารถโหลดส่วนประกอบโปรแกรม (%s) ได้\nกรุณาเริ่มติดตั้งตัวเลือกในการซ่อมใหม่";
 };
 
-String SV_STDTEXT_DONTWARNAGAIN
+String SV_STDTEXT_DONTHINTAGAIN
 {
     Text = "Diesen Hinweis nicht mehr anzeigen.";
+    Text[ english ] = "Do not show this information again.";
+    Text[ english_us ] = "Do not show this information again.";
+};
+
+String SV_STDTEXT_DONTASKAGAIN
+{
+    Text = "Diese Frage nicht mehr anzeigen.";
+    Text[ english ] = "Do not show this question again.";
+    Text[ english_us ] = "Do not show this question again.";
+};
+
+String SV_STDTEXT_DONTWARNAGAIN
+{
+    Text = "Diese Warnung nicht mehr anzeigen.";
     Text [English] = "Do not warn me again.";
     Text[ english_us ] = "Do not show warning again.";
     Text[ portuguese ] = "N�o mostrar mais esta observa��o.";
