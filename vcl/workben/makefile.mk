@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2003-11-05 12:39:54 $
+#   last change: $Author: vg $ $Date: 2004-01-06 14:58:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,11 +76,6 @@ TARGETTYPE=GUI
 # --- Files --------------------------------------------------------
 
 OBJFILES=		$(OBJ)$/svdem.obj
-.IF "$(remote)"!=""
-OBJFILES+=		$(OBJ)$/officeacceptthread.obj
-EXCEPTIONSFILES=$(OBJFILES)
-.ENDIF
-
 APP1NOSAL=		TRUE
 APP1TARGET= 	$(TARGET)
 APP1OBJS=		$(OBJFILES)
@@ -96,13 +91,6 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(VOSLIB)			\
                 $(SOTLIB)			\
                 $(SVLIB)
-
-.IF "$(remote)"!=""
-APP1STDLIBS+=	$(UNOLIBS)			\
-                $(UNOTOOLSLIB)		\
-                $(UCBHELPERLIB)		\
-                $(SALHELPERLIB)
-.ENDIF
 
 APP1DEPN=		$(L)$/itools.lib	\
                 $(L)$/sot.lib
