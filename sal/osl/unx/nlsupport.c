@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obr $ $Date: 2001-11-08 12:33:42 $
+ *  last change: $Author: svesik $ $Date: 2001-11-12 21:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,32 +813,50 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 
 int _imp_setProcessLocale( rtl_Locale * pLocale )
 {
+#ifdef IRIX
+    char env_buf[80];
+#endif
     char locale_buf[64];
 
     /* convert rtl_Locale to locale string */
     if( NULL != _compose_locale( pLocale, locale_buf, 64 ) )
     {
         /* only change env vars that exist already */
-        if( getenv( "LC_ALL" ) )
-#if defined ( FREEBSD ) || defined ( NETBSD )
-            setenv( "LC_ALL", locale_buf, 1 );
+        if( getenv( "LC_ALL" ) ) {
+#if defined( IRIX )
+            snprintf(env_buf, sizeof(env_buf), "LC_ALL=%s", locale_buf);
+            env_buf[sizeof(env_buf)] = '\0';
+            putenv(env_buf);
+#elif defined( FREEBSD ) || defined( NETBSD )
+            setenv( "LC_ALL", locale_buf, 1);
 #else
             setenv( "LC_ALL", locale_buf );
 #endif
+        }
 
-        if( getenv( "LC_CTYPE" ) )
-#if defined ( FREEBSD ) || defined ( NETBSD )
-            setenv( "LC_CTYPE", locale_buf, 1 );
+        if( getenv( "LC_CTYPE" ) ) {
+#if defined( IRIX )
+            snprintf(env_buf, sizeof(env_buf), "LC_CTYPE=%s", locale_buf);
+            env_buf[sizeof(env_buf)] = '\0';
+            putenv(env_buf);
+#elif defined( FREEBAD ) || defined( NETBSD )
+            setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LC_CTYPE", locale_buf );
 #endif
+        }
 
-        if( getenv( "LANG" ) )
-#if defined ( FREEBSD ) || defined ( NETBSD )
-            setenv( "LANG", locale_buf,1 );
+        if( getenv( "LANG" ) ) {
+#if defined( IRIX )
+            snprintf(env_buf, sizeof(env_buf), "LANG=%s", locale_buf);
+            env_buf[sizeof(env_buf)] = '\0';
+            putenv(env_buf);
+#elif defined( FREEBAD ) || defined( NETBSD )
+            setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LANG", locale_buf );
 #endif
+        }
     }
 
     return 0;
