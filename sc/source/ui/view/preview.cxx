@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 15:09:31 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,9 +160,10 @@ __EXPORT ScPreview::~ScPreview()
 void ScPreview::UpdateDrawView()        // nTab muss richtig sein
 {
     ScDocument* pDoc = pDocShell->GetDocument();
+    ScDrawLayer* pModel = pDoc->GetDrawLayer();     // ist nicht 0
 
-    Rectangle aFull( 0, 0, LONG_MAX, LONG_MAX );
-    if ( pDoc->HasControl( nTab, aFull ) )
+    // #114135#
+    if ( pModel )
     {
         if ( pDrawView && !pDrawView->GetPageViewPgNum(nTab) )
         {
@@ -173,7 +174,6 @@ void ScPreview::UpdateDrawView()        // nTab muss richtig sein
 
         if ( !pDrawView )                                   // neu anlegen?
         {
-            ScDrawLayer* pModel = pDoc->GetDrawLayer();     // ist nicht 0
             pDrawView = new FmFormView( pModel, this );
             // #55259# die DrawView uebernimmt den Design-Modus vom Model
             // (Einstellung "Im Entwurfsmodus oeffnen"), darum hier zuruecksetzen
