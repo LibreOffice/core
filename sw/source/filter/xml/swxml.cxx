@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:32:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,7 +447,7 @@ sal_Int32 ReadThroughComponent(
     }
 }
 
-sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
+sal_uInt32 XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
 {
     // Get service factory
     Reference< lang::XMultiServiceFactory > xServiceFactory =
@@ -695,14 +695,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     SfxMedium* pMedDescrMedium = pMedium ? pMedium : pDocSh->GetMedium();
     OSL_ENSURE( pMedDescrMedium, "There is no medium to get MediaDescriptor from!\n" );
 
-    ::rtl::OUString aBaseURL = OUString(INetURLObject::GetBaseURL());
-    if ( pMedDescrMedium && pMedDescrMedium->GetItemSet() )
-    {
-        const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>(
-                pMedDescrMedium->GetItemSet()->GetItem(SID_DOC_BASEURL) );
-        if ( pBaseURLItem )
-            aBaseURL = pBaseURLItem->GetValue();
-    }
+    ::rtl::OUString aBaseURL( rBaseURL );
     OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
     xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
 
