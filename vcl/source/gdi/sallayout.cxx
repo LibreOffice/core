@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2002-02-26 13:18:51 $
+ *  last change: $Author: hdu $ $Date: 2002-04-03 17:25:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,13 +196,63 @@ void GenericSalLayout::SetGlyphItems( GlyphItem* pGlyphItems, int nGlyphCount )
 
 // -----------------------------------------------------------------------
 
-int* GenericSalLayout::GetCharWidths() const
+Point GenericSalLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
 {
-    // allocate char width array
-    int nCharCapacity = mnEndCharIndex - mnFirstCharIndex;
-    int* pCharWidths = new int[ nCharCapacity ];
+    int nStartIndex = mnGlyphCount;
+    int nGlyphIndex = mnGlyphCount;
+    int nEndIndex = 0;
 
+    int nMaxIndex = 0;
+    const GlyphItem* pG = mpGlyphItems;
+    int i;
+    for( i = 0; i < mnGlyphCount; ++i, ++pG )
+    {
+        int n = pG->mnCharIndex;
+        if( n < mnFirstCharIndex || n >= mnEndCharIndex )
+            continue;
+
+        if( nStartIndex > i )
+            nStartIndex = i;
+        nMaxIndex = i;
+
+        if( (n <= nCharIndex) && (nGlyphIndex > i) )
+            nGlyphIndex = i;
+    }
+
+    long nXPos = 0;
+
+    if( !bRTL ) // relative to left edge
+    {
+        nXPos = mpGlyphItems[nGlyphIndex].maLinearPos.X();
+
+        // adjust start to cluster start
+        pG = mpGlyphItems + nStartIndex;
+        while( (pG > mpGlyphItems) && !(pG->mnFlags & GlyphItem::CLUSTER_START) )
+            --pG;
+        nXPos -= pG->maLinearPos.X();
+    }
+    else        // relative to right edge
+    {
+        // adjust end to cluster end
+        pG = mpGlyphItems + nMaxIndex;
+        const GlyphItem* pGLimit = mpGlyphItems + mnGlyphCount;
+        while( (pG < pGLimit) && !(pG->mnFlags & GlyphItem::CLUSTER_START) )
+            ++pG;
+
+        pGLimit = pG;
+        for( pG = mpGlyphItems + nStartIndex; pG < pGLimit; ++pG )
+            nXPos -= pG->mnWidth;
+    }
+
+    return Point( nXPos, 0 );
+}
+
+// -----------------------------------------------------------------------
+
+bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
+{
     // initialize character extents buffer
+    int nCharCapacity = mnEndCharIndex - mnFirstCharIndex;
     long* pMinPos = (long*)alloca( 2*nCharCapacity * sizeof(long) );
     long* pMaxPos = pMinPos + nCharCapacity;
 
@@ -219,7 +269,7 @@ int* GenericSalLayout::GetCharWidths() const
     for( i = mnGlyphCount; --i >= 0; ++pG )
     {
         // use cluster start to get char index
-        if( pG->mnFlags & GlyphItem::CLUSTER_START )
+        if( 0 != (pG->mnFlags & GlyphItem::CLUSTER_START) )
             nClusterIndex = pG->mnCharIndex;
 
         int n = nClusterIndex - mnFirstCharIndex;
@@ -270,14 +320,17 @@ int* GenericSalLayout::GetCharWidths() const
         i += nClusterSize;
     }
 
-    return pCharWidths;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
 long GenericSalLayout::FillDXArray( long* pDXArray ) const
 {
-    int* pCharWidths = GetCharWidths();
+    int nCharCapacity = mnEndCharIndex - mnFirstCharIndex;
+    long* pCharWidths = (long*)alloca( nCharCapacity * sizeof(long) );
+    if( !GetCharWidths( pCharWidths ) )
+        return 0;
 
     long nWidth = 0;
     for( int i = mnFirstCharIndex; i < mnEndCharIndex; ++i )
@@ -286,7 +339,6 @@ long GenericSalLayout::FillDXArray( long* pDXArray ) const
         if( pDXArray )
             pDXArray[ i - mnFirstCharIndex ] = nWidth;
     }
-    delete[] pCharWidths;
 
     return nWidth;
 }
@@ -297,8 +349,8 @@ void GenericSalLayout::ApplyDXArray( const long* pDXArray )
 {
     // get reference positions
     int nChars = mnEndCharIndex - mnFirstCharIndex;
-    long* pNewDX = (long*)alloca( nChars * sizeof(long) );
-    FillDXArray( pNewDX );
+    long* pOldDX = (long*)alloca( nChars * sizeof(long) );
+    FillDXArray( pOldDX );
 
     // initialize flags for touched character
     int i;
@@ -346,13 +398,18 @@ void GenericSalLayout::ApplyDXArray( const long* pDXArray )
     if( nDelta )
         for(; i < mnGlyphCount; ++i, ++pG )
             pG->maLinearPos += Point( nDelta, 0 );
+
+    // adjust character widths
 }
 
 // -----------------------------------------------------------------------
 
 void GenericSalLayout::Justify( long nNewWidth )
 {
-    int* pCharWidths = GetCharWidths();
+    int nCharCapacity = mnEndCharIndex - mnFirstCharIndex;
+    long* pCharWidths = (long*)alloca( nCharCapacity * sizeof(long) );
+    if( !GetCharWidths( pCharWidths ) )
+        return;
 
     int nOldWidth = FillDXArray( NULL );
     if( !nOldWidth || nNewWidth==nOldWidth )
@@ -379,7 +436,10 @@ void GenericSalLayout::Justify( long nNewWidth )
 
 int GenericSalLayout::GetTextBreak( long nMaxWidth ) const
 {
-    int* pCharWidths = GetCharWidths();
+    int nCharCapacity = mnEndCharIndex - mnFirstCharIndex;
+    long* pCharWidths = (long*)alloca( nCharCapacity * sizeof(long) );
+    if( !GetCharWidths( pCharWidths ) )
+        return STRING_LEN;
 
     long nWidth = 0;
     for( int i = mnFirstCharIndex; i < mnEndCharIndex; ++i )
@@ -388,7 +448,6 @@ int GenericSalLayout::GetTextBreak( long nMaxWidth ) const
         if( nWidth >= nMaxWidth )
             return i;
     }
-    delete[] pCharWidths;
 
     return STRING_LEN;
 }
