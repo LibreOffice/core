@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-20 12:38:45 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ public:
 
     void doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetParent )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    ContentInfo & doGetByName( const ::rtl::OUString& aName )
+    com::sun::star::packages::ContentInfo & doGetByName( const ::rtl::OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     static void copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource);
     static ::com::sun::star::uno::Sequence < sal_Int8 > static_getImplementationId()
