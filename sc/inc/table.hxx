@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 15:50:34 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 09:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,6 +543,7 @@ public:
     ULONG       GetRowOffset( USHORT nRow ) const;
 
     USHORT      GetOriginalWidth( USHORT nCol ) const;
+    USHORT      GetOriginalHeight( USHORT nRow ) const;
 
     USHORT      GetHiddenRowCount( USHORT nRow ) const;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 15:57:39 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 09:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2159,6 +2159,15 @@ USHORT ScDocument::GetOriginalWidth( USHORT nCol, USHORT nTab ) const
     if ( nTab<=MAXTAB && pTab[nTab] )
         return pTab[nTab]->GetOriginalWidth( nCol );
     DBG_ERROR("Falsche Tabellennummer");
+    return 0;
+}
+
+
+USHORT ScDocument::GetOriginalHeight( USHORT nRow, USHORT nTab ) const
+{
+    if ( nTab<=MAXTAB && pTab[nTab] )
+        return pTab[nTab]->GetOriginalHeight( nRow );
+    DBG_ERROR("Wrong table number");
     return 0;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 15:57:39 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 09:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2186,6 +2186,18 @@ USHORT ScTable::GetRowHeight( USHORT nRow ) const
     else
         return (USHORT) ScGlobal::nStdRowHeight;
 }
+
+
+USHORT ScTable::GetOriginalHeight( USHORT nRow ) const      // non-0 even if hidden
+{
+    DBG_ASSERT(VALIDROW(nRow),"wrong row number");
+
+    if (VALIDROW(nRow) && pRowHeight)
+        return pRowHeight[nRow];
+    else
+        return (USHORT) ScGlobal::nStdRowHeight;
+}
+
 
 //  Spalten-/Zeilen-Flags
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: er $ $Date: 2001-03-12 16:43:25 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 09:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1122,6 +1122,7 @@ public:
     ULONG           GetRowOffset( USHORT nRow, USHORT nTab ) const;
 
     USHORT          GetOriginalWidth( USHORT nCol, USHORT nTab ) const;
+    USHORT          GetOriginalHeight( USHORT nRow, USHORT nTab ) const;
 
     inline USHORT   FastGetRowHeight( USHORT nRow, USHORT nTab ) const;     // ohne Ueberpruefungen!
 
