@@ -21385,3 +21385,14 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?Type@FmFormView@@WBA@BEP6APAXXZXZ
 ?IsA@E3dView@@WBA@BEEP6APAXXZ@Z
 ?Type@E3dView@@WBA@BEP6APAXXZXZ
+?GetOffset@SvxAccessibleTextHelper@@UBEABVPoint@@XZ
+?GetViewForwarder@SvxAccessibleEditableTextPara@@ABEAAVSvxViewForwarder@@XZ
+?SetOffset@SvxAccessibleTextHelper@@UAEXABVPoint@@@Z
+?queryInterface@SvxAccessibleEditableTextPara@@UAA?AVAny@uno@star@sun@com@@ABVType@3456@@Z
+?queryInterface@SvxAccessibleEditableTextPara@@WBA@AA?AVAny@uno@star@sun@com@@ABVType@3456@@Z
+?queryInterface@SvxAccessibleEditableTextPara@@WBE@AA?AVAny@uno@star@sun@com@@ABVType@3456@@Z
+?queryInterface@SvxAccessibleEditableTextPara@@WBI@AA?AVAny@uno@star@sun@com@@ABVType@3456@@Z
+?queryInterface@SvxAccessibleEditableTextPara@@WBM@AA?AVAny@uno@star@sun@com@@ABVType@3456@@Z
+?queryInterface@SvxAccessibleEditableTextPara@@WCA@AA?AVAny@uno@star@sun@com@@ABVType@3456@@Z
+?queryInterface@SvxAccessibleEditableTextPara@@WCE@AA?AVAny@uno@star@sun@com@@ABVType@3456@@Z
+?queryInterface@SvxAccessibleEditableTextPara@@WCI@AA?AVAny@uno@star@sun@com@@ABVType@3456@@Z
