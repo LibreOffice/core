@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:54:29 $
+ *  last change: $Author: rt $ $Date: 2003-05-13 12:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         HelpId              = HID_XML_FILTER_OPEN;
         TabStop             = TRUE ;
         Text                = "~Paket öffnen...";
-        Text[ english_us ]  = "~Open Package";
+        Text[ english_us ]  = "~Open Package...";
         TabStop             = TRUE ;
         Text[ french ] = "Ouvrir le paquetage";
         Text[ spanish ] = "~Abrir paquete";
