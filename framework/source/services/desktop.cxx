@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-13 09:04:55 $
+ *  last change: $Author: as $ $Date: 2001-12-19 13:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,14 @@
 
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP_
 #include <com/sun/star/task/XInteractionAbort.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XINTERACTIONFILTERSELECT_HPP_
+#include <com/sun/star/document/XInteractionFilterSelect.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_AMBIGOUSFILTERREQUEST_HPP_
+#include <com/sun/star/document/AmbigousFilterRequest.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
@@ -1581,28 +1589,57 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    if( xRequest.is() == sal_True )
+    // Don't check incoming request!
+    // If somewhere starts interaction without right parameter - he maked something wrong.
+    // loadComponentFromURL() waits for thjese event - otherwise it yield for ever!
+
+    // get packed request and work on it first
+    // Attention: Don't set it on internal member BEFORE interaction is finished - because
+    // "loadComponentFromURL()" yield tills this member is changed. If we do it before
+    // interaction finish we can't guarantee right functionality. May be we cancel load process to erliear ...
+    css::uno::Any aRequest = xRequest->getRequest();
+
+    // extract continuations from request
+    css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
+    css::uno::Reference< css::task::XInteractionAbort >                              xAbort ;
+    css::uno::Reference< css::document::XInteractionFilterSelect >                   xSelect;
+
+    sal_Int32 nCount=lContinuations.getLength();
+    for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
     {
-        /* SAFE AREA ------------------------------------------------------------------------------------------- */
-        WriteGuard aWriteLock( m_aLock );
+        if( ! xAbort.is() )
+            xAbort  = css::uno::Reference< css::task::XInteractionAbort >( lContinuations[nStep], css::uno::UNO_QUERY );
 
-        m_eLoadState          = E_INTERACTION;
-        m_aInteractionRequest = xRequest->getRequest();
+        if( ! xSelect.is() )
+            xSelect = css::uno::Reference< css::document::XInteractionFilterSelect >( lContinuations[nStep], css::uno::UNO_QUERY );
+    }
 
-        css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
-        css::uno::Reference< css::task::XInteractionAbort >                              xAbort;
-
-        sal_Int32 nCount=lContinuations.getLength();
-        for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
+    // differ between abortable interactions (error, unknown filter ...)
+    // and other ones (ambigous but not unknown filter ...)
+    css::document::AmbigousFilterRequest aAmbigousFilterRequest;
+    if( aRequest >>= aAmbigousFilterRequest )
+    {
+        if( xSelect.is() )
         {
-            xAbort = css::uno::Reference< css::task::XInteractionAbort >( lContinuations[nStep], css::uno::UNO_QUERY );
-            if( xAbort.is() == sal_True )
-            {
-                xAbort->select();
-                break;
-            }
+            xSelect->setFilter( aAmbigousFilterRequest.SelectedFilter ); // user selected filter wins!
+            xSelect->select();
         }
     }
+    else
+    {
+        if( xAbort.is() )
+        {
+            xAbort->select();
+        }
+    }
+
+    /* SAFE AREA ------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    // Ok now it's time to break yield loop of loadComponentFromURL()!
+    m_eLoadState          = E_INTERACTION;
+    m_aInteractionRequest = aRequest     ;
+    aWriteLock.unlock();
+    /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 }
 
 /*-************************************************************************************************************//**
