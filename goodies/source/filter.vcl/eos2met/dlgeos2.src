@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeos2.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:03:15 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,7 @@ ModalDialog DLG_EXPORT_EMET
     Text[ hindi ] = "MET विकल्प";
     Text[ slovak ] = "Nastavenia pre formát MET";
 };
+
 
 
 
