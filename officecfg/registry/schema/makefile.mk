@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: tpf $ $Date: 2002-08-02 14:40:18 $
+#   last change: $Author: cd $ $Date: 2002-08-05 05:28:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ XCSFILES= \
     org$/openoffice$/Office$/Math.xcs \
     org$/openoffice$/Office$/ProtocolHandler.xcs \
     org$/openoffice$/Office$/SFX.xcs \
+    org$/openoffice$/Office$/Substitution.xcs \
     org$/openoffice$/Office$/TypeDetection.xcs \
     org$/openoffice$/Office$/UI.xcs \
     org$/openoffice$/Office$/Views.xcs \
