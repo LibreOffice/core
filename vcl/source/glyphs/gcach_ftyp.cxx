@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-03 19:57:14 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1450,8 +1450,8 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
 {
     CmapResult aResult;
-    aResult.mnCount     = 0;
-    aResult.mpCodes     = NULL;
+    aResult.mnPairCount = 0;
+    aResult.mpPairCodes = NULL;
     aResult.mbSymbolic  = mpFontInfo->IsSymbolFont();
 
     if( FT_IS_SFNT( maFaceFT ) )
@@ -1462,14 +1462,14 @@ ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
         {
             // copy the ranges into the provided array...
             if( pCodes )
-                for( int i = 0; i < 2*aResult.mnCount; ++i )
-                    pCodes[ i ] = aResult.mpCodes[ i ];
+                for( int i = 0; i < 2*aResult.mnPairCount; ++i )
+                    pCodes[ i ] = aResult.mpPairCodes[ i ];
 
-            delete[] aResult.mpCodes;
+            delete[] aResult.mpPairCodes;
         }
     }
 
-    if( aResult.mnCount <= 0 )
+    if( aResult.mnPairCount <= 0 )
     {
         if( aResult.mbSymbolic )
         {
@@ -1479,7 +1479,7 @@ ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
                 pCodes[ 0 ] = 0xF020;
                 pCodes[ 1 ] = 0xF100;
             }
-            aResult.mnCount = 1;
+            aResult.mnPairCount = 1;
         }
         else
         {
@@ -1489,7 +1489,7 @@ ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
                 for(; cCode<0xFFF0 && !GetGlyphIndex( cCode ); ++cCode );
                 if( cCode >= 0xFFF0 )
                     break;
-                ++aResult.mnCount;
+                ++aResult.mnPairCount;
                 if( pCodes )
                     *(pCodes++) = cCode;
                 for(; cCode<0xFFF0 && GetGlyphIndex( cCode ); ++cCode );
@@ -1499,7 +1499,7 @@ ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
         }
     }
 
-    return aResult.mnCount;
+    return aResult.mnPairCount;
 }
 // -----------------------------------------------------------------------
 // kerning stuff
