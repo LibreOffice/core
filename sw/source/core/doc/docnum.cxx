@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:38:19 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 12:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,52 +686,30 @@ USHORT lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
         return USHRT_MAX;
     SwTxtNode* pNd;
     nPos = 0;
-    BOOL bNextPos = FALSE;
-    for( BYTE n = 0; n < nLevel; ++n )
+    //search in the existing outline nodes for the required outline num array
+    for( ; nPos < rOutlNds.Count(); ++nPos )
     {
-        USHORT nOff = nLevelVal[ n ];
-        if( nOff )
+        pNd = rOutlNds[ nPos ]->GetTxtNode();
+        BYTE nLvl = pNd->GetTxtColl()->GetOutlineLevel();
+        if( nLvl == nLevel - 1 && 0 != pNd->GetNum())
         {
-            USHORT nLastPos = nPos;
-            if( bNextPos )
-                ++nPos;
-            bNextPos = FALSE;
-            for( ; nPos < rOutlNds.Count(); ++nPos )
+            // check for the outline num
+            const SwNodeNum* pNdNum = pNd->GetNum() ;
+            const USHORT* pLevelVal = pNdNum->GetLevelVal();
+            //now compare with the one searched for
+            bool bEqual = true;
+            for( BYTE n = 0; (n < nLevel) && bEqual; ++n )
             {
-                pNd = rOutlNds[ nPos ]->GetTxtNode();
-                BYTE nLvl = pNd->GetTxtColl()->GetOutlineLevel();
-                if( nLvl == n )
-                {
-                    nLastPos = nPos;
-                    if( !--nOff )
-                    {
-                        bNextPos = TRUE; // auf jedenfall mit dem nachsten weiter
-                        break;
-                    }
-                }
-                else if( nLvl < n )     // nicht ueber den Level hinaus
-                {
-                    nPos = nLastPos;
-                    break;
-                }
+                bEqual = pLevelVal[n] == nLevelVal[n];
             }
-            if( nPos >= rOutlNds.Count() )
+            if(bEqual)
             {
-                if( !n )                // auf oberster Ebene muss die
-                    return USHRT_MAX;   // Nummer gefunden werden
-                nPos = nLastPos;
+                break;
             }
-        }
-        else if( nPos+1 < rOutlNds.Count() )
-        {
-            pNd = rOutlNds[ nPos+1 ]->GetTxtNode();
-            if( n < pNd->GetTxtColl()->GetOutlineLevel() )
-                ++nPos, bNextPos = FALSE;
         }
     }
-
-    // jetzt sollte im nPos die richtige Position fuer den OutlineLevel
-    // stehen:
+    if( nPos >= rOutlNds.Count() )
+        nPos = USHRT_MAX;
     return nPos;
 }
 
