@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-23 13:56:50 $
+ *  last change: $Author: pl $ $Date: 2002-08-26 17:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,9 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator( SalFrame* pFrame )
     }
 #endif
 
-    nDtAtom = XInternAtom( pDisplay, "GNOME_PANEL_DESKTOP_AREA", False );
+    // actually this is not that good an indicator for a GNOME running
+    // but there currently does not seem to be a better one
+    nDtAtom = XInternAtom( pDisplay, "GNOME_SM_PROXY", True );
     if( nDtAtom )
     {
         int nProperties = 0;

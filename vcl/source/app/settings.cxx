@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-22 07:50:42 $
+ *  last change: $Author: pl $ $Date: 2002-08-26 17:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1202,15 +1202,17 @@ BOOL MiscSettings::GetEnableATToolSupport() const
 
 #ifndef REMOTE_APPSERVER
         DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator( NULL );
-//        if( pIntegrator && pIntegrator->GetDtType() == DtGNOME )
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
-        if( pEnv && *pEnv )
+        if( ( pIntegrator && pIntegrator->GetDtType() == DtGNOME ) ||
+            ( pEnv && *pEnv ) )
 #else
         if( 0 )
 #endif
         {
             char buf[16];
-            FILE* fp = popen( "gconftool-2 -g /desktop/gnome/interface/accessibility", "r" );
+            // use 2 shells to suppress the eventual "gcontool-2 not found" message
+            // of the shell trying to execute the command
+            FILE* fp = popen( "/bin/sh 2>/dev/null -c \"gconftool-2 -g /desktop/gnome/interface/accessibility\"", "r" );
             if( fp )
             {
                 if( fgets( buf, sizeof(buf), fp ) )
