@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-13 08:42:14 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 11:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_FONTPITCH_HPP
 #include <com/sun/star/awt/FontPitch.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP
+#include <com/sun/star/awt/FontUnderline.hpp>
 #endif
 #ifndef _XMLOFF_TXTEXPPR_HXX
 #include "txtexppr.hxx"
@@ -418,6 +421,11 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pVertOrientRelFrameState = NULL;
     XMLPropertyState* pVertOrientRelAsCharState = NULL;
 
+    // filter underline color
+    XMLPropertyState* pUnderlineState = NULL;
+    XMLPropertyState* pUnderlineColorState = NULL;
+    XMLPropertyState* pUnderlineHasColorState = NULL;
+
     sal_Bool bNeedsAnchor = sal_False;
 
     for( ::std::vector< XMLPropertyState >::iterator propertie = rProperties.begin();
@@ -508,6 +516,9 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_FONTFAMILY_CTL:        pFontFamilyCTLState = propertie; break;
         case CTF_FONTPITCH_CTL:         pFontPitchCTLState = propertie; break;
         case CTF_FONTCHARSET_CTL:       pFontCharsetCTLState = propertie; break;
+        case CTF_UNDERLINE:             pUnderlineState = propertie; break;
+        case CTF_UNDERLINE_COLOR:       pUnderlineColorState = propertie; break;
+        case CTF_UNDERLINE_HASCOLOR:    pUnderlineHasColorState = propertie; break;
         }
     }
 
@@ -535,6 +546,23 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         (pCharPropHeightCTLState || pCharDiffHeightCTLState ) )
         ContextFontHeightFilter( pCharHeightCTLState, pCharPropHeightCTLState,
                                  pCharDiffHeightCTLState  );
+    if( pUnderlineColorState || pUnderlineHasColorState )
+    {
+        sal_Bool bClear = !pUnderlineState;
+        if( !bClear )
+        {
+            sal_Int16 nUnderline;
+            pUnderlineState->maValue >>= nUnderline;
+            bClear = FontUnderline::NONE == nUnderline;
+        }
+        if( bClear )
+        {
+            if( pUnderlineColorState )
+                pUnderlineColorState->mnIndex = -1;
+            if( pUnderlineHasColorState )
+                pUnderlineHasColorState->mnIndex = -1;
+        }
+    }
 
     if( pParaLeftMarginState && pParaLeftMarginRelState )
     {

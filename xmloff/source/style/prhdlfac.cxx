@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-24 07:40:39 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 11:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,6 +297,13 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 
                 break;
             case XML_TYPE_TEXT_UNDERLINE:
                 pPropHdl = new XMLUnderlinePropHdl;
+                break;
+            case XML_TYPE_TEXT_UNDERLINE_COLOR:
+                pPropHdl = new XMLColorTransparentPropHdl( sXML_font_color );
+                break;
+            case XML_TYPE_TEXT_UNDERLINE_HASCOLOR:
+                pPropHdl = new XMLIsTransparentPropHdl( sXML_font_color,
+                                                         sal_False );
                 break;
             case XML_TYPE_TEXT_WEIGHT:
                 pPropHdl = new XMLFontWeightPropHdl;

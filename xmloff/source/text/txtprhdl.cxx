@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-15 14:01:55 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 11:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _VCL_VCLENUM_HXX
+#include <vcl/vclenum.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
@@ -888,19 +891,13 @@ XMLGrfMirrorPropHdl_Impl::~XMLGrfMirrorPropHdl_Impl()
 
 // ---------------------------------------------------------------------------
 
-enum XMLFontEmphasisMark { XML_EMPHASISMARK_NONE,
-                        XML_EMPHASISMARK_DOTS_ABOVE,
-                        XML_EMPHASISMARK_DOTS_BELOW,
-                        XML_EMPHASISMARK_SIDE_DOTS,
-                        XML_EMPHASISMARK_CIRCLE_ABOVE };
-
 SvXMLEnumMapEntry __READONLY_DATA pXML_Emphasize_Enum[] =
 {
-    { sXML_none,    XML_EMPHASISMARK_NONE },
-    { sXML_accent,  XML_EMPHASISMARK_SIDE_DOTS },
-    { sXML_dot,     XML_EMPHASISMARK_DOTS_ABOVE },
-    { sXML_circle,  XML_EMPHASISMARK_CIRCLE_ABOVE },
-    { sXML_disc,    XML_EMPHASISMARK_DOTS_ABOVE },
+    { sXML_none,    EMPHASISMARK_NONE },
+    { sXML_dot,     EMPHASISMARK_DOT },
+    { sXML_circle,  EMPHASISMARK_CIRCLE },
+    { sXML_disc,    EMPHASISMARK_DISC },
+    { sXML_accent,  EMPHASISMARK_ACCENT },
     { 0, 0 }
 };
 class XMLTextEmphasizePropHdl_Impl : public XMLPropertyHandler
@@ -925,7 +922,7 @@ sal_Bool XMLTextEmphasizePropHdl_Impl::importXML(
         const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_True;
-    sal_uInt16 nVal = XML_EMPHASISMARK_NONE;
+    sal_uInt16 nVal = EMPHASISMARK_NONE;
     sal_Bool bBelow = sal_False;
     sal_Bool bHasPos = sal_False, bHasType = sal_False;
     OUString aToken;
@@ -939,14 +936,14 @@ sal_Bool XMLTextEmphasizePropHdl_Impl::importXML(
             bBelow = sal_False;
             bHasPos = sal_True;
         }
-        else if( bHasPos &&
+        else if( !bHasPos &&
                  aToken.equalsAsciiL( sXML_below, sizeof(sXML_below)-1 ) )
         {
             bBelow = sal_True;
             bHasPos = sal_True;
         }
         else if( !bHasType &&
-                  rUnitConverter.convertEnum( nVal, rStrImpValue,
+                  rUnitConverter.convertEnum( nVal, aToken,
                                              pXML_Emphasize_Enum ))
         {
             bHasType = sal_True;
@@ -960,8 +957,8 @@ sal_Bool XMLTextEmphasizePropHdl_Impl::importXML(
 
     if( bRet )
     {
-        if( XML_EMPHASISMARK_NONE != nVal && bBelow )
-            nVal = XML_EMPHASISMARK_DOTS_BELOW;
+        if( EMPHASISMARK_NONE != nVal )
+            nVal |= (bBelow ? EMPHASISMARK_POS_BELOW : EMPHASISMARK_POS_ABOVE);
         rValue <<= (sal_Int16)nVal;
     }
 
@@ -976,30 +973,30 @@ sal_Bool XMLTextEmphasizePropHdl_Impl::exportXML(
     OUStringBuffer aOut( 15 );
     sal_Bool bRet = sal_True;
     sal_Int16 nType;
-    const sal_Char *pPos = sXML_above;
     if( rValue >>= nType )
     {
-        switch( nType )
+        bRet = rUnitConverter.convertEnum( aOut, nType & EMPHASISMARK_STYLE,
+                                           pXML_Emphasize_Enum,
+                                           sXML_dot );
+        if( bRet )
         {
-        case XML_EMPHASISMARK_NONE:
-            aOut.appendAscii( sXML_none );
-            break;
-        case XML_EMPHASISMARK_DOTS_BELOW:
-            aOut.appendAscii( sXML_dot );
-            pPos = sXML_below;
-            break;
-        default:
-            bRet = rUnitConverter.convertEnum( aOut, nType,
-                                               pXML_Emphasize_Enum,
-                                               sXML_dot );
-            break;
+            const sal_Char *pPos = 0;
+            switch( nType & ~EMPHASISMARK_STYLE )
+            {
+            case EMPHASISMARK_POS_ABOVE:
+                pPos = sXML_above;
+                break;
+            case EMPHASISMARK_POS_BELOW:
+                pPos = sXML_below;
+                break;
+            }
+            if( pPos )
+            {
+                aOut.append( (sal_Unicode)' ' );
+                aOut.appendAscii( pPos );
+            }
+            rStrExpValue = aOut.makeStringAndClear();
         }
-    }
-    if( bRet )
-    {
-        aOut.append( (sal_Unicode)' ' );
-        aOut.appendAscii( pPos );
-        rStrExpValue = aOut.makeStringAndClear();
     }
 
     return bRet;
@@ -1148,7 +1145,7 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
     case XML_TYPE_TEXT_COMBINE:
         pHdl = new XMLNamedBoolPropertyHdl(
                     OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_lines ) ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_lines ) ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_none ) ) );
         break;
     case XML_TYPE_TEXT_COMBINECHAR:
         pHdl = new XMLTextCombineCharPropHdl_Impl;

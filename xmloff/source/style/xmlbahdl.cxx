@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-24 08:34:00 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 11:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,6 +499,14 @@ sal_Bool XMLDoublePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
 // class XMLColorTransparentPropHdl
 //
 
+XMLColorTransparentPropHdl::XMLColorTransparentPropHdl(
+        const sal_Char *pTransparent ) :
+    sTransparent( OUString::createFromAscii( pTransparent ? pTransparent
+                                                          : sXML_transparent ) )
+{
+    // Nothing to do
+}
+
 XMLColorTransparentPropHdl::~XMLColorTransparentPropHdl()
 {
     // Nothing to do
@@ -508,7 +516,7 @@ sal_Bool XMLColorTransparentPropHdl::importXML( const OUString& rStrImpValue, An
 {
     sal_Bool bRet = sal_False;
 
-    if( rStrImpValue.compareToAscii( sXML_transparent ) != 0 )
+    if( rStrImpValue != sTransparent )
     {
         Color aColor;
         bRet = rUnitConverter.convertColor( aColor, rStrImpValue );
@@ -523,7 +531,7 @@ sal_Bool XMLColorTransparentPropHdl::exportXML( OUString& rStrExpValue, const An
     sal_Bool bRet = sal_False;
     sal_Int32 nColor;
 
-    if( rStrExpValue.compareToAscii( sXML_transparent ) == 0 )
+    if( rStrExpValue == sTransparent )
         bRet = sal_False;
     else if( rValue >>= nColor )
     {
@@ -543,6 +551,14 @@ sal_Bool XMLColorTransparentPropHdl::exportXML( OUString& rStrExpValue, const An
 // class XMLIsTransparentPropHdl
 //
 
+XMLIsTransparentPropHdl::XMLIsTransparentPropHdl(
+    const sal_Char *pTransparent, sal_Bool bTransPropVal ) :
+    sTransparent( OUString::createFromAscii( pTransparent ? pTransparent
+                                                      : sXML_transparent ) ),
+    bTransPropValue( bTransPropVal )
+{
+}
+
 XMLIsTransparentPropHdl::~XMLIsTransparentPropHdl()
 {
     // Nothing to do
@@ -550,7 +566,7 @@ XMLIsTransparentPropHdl::~XMLIsTransparentPropHdl()
 
 sal_Bool XMLIsTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bValue = (rStrImpValue.compareToAscii( sXML_transparent ) == 0);
+    sal_Bool bValue = ( (rStrImpValue == sTransparent) == bTransPropValue);
     rValue.setValue( &bValue, ::getBooleanCppuType() );
 
     return sal_True;
@@ -559,11 +575,11 @@ sal_Bool XMLIsTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& 
 sal_Bool XMLIsTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Bool bIsTrans = *(sal_Bool *)rValue.getValue();
+    sal_Bool bIsTrans = (*(sal_Bool *)rValue.getValue() == bTransPropValue);
 
     if( bIsTrans )
     {
-        rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_transparent ) );
+        rStrExpValue = sTransparent;
         bRet = sal_True;
     }
 

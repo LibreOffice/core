@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undlihdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 11:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,12 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#ifndef _VCL_VCLENUM_HXX
-#include <vcl/vclenum.hxx>
-#endif
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP
+#include <com/sun/star/awt/FontUnderline.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLEMENT_HXX
@@ -89,27 +89,28 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::awt;
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Underline_Enum[] =
 {
-    { sXML_underline_none,              UNDERLINE_NONE },
-    { sXML_underline_single,            UNDERLINE_SINGLE },
-    { sXML_underline_double,            UNDERLINE_DOUBLE },
-    { sXML_underline_dotted,            UNDERLINE_DOTTED },
-    { sXML_underline_dash,              UNDERLINE_DASH },
-    { sXML_underline_long_dash,         UNDERLINE_LONGDASH },
-    { sXML_underline_dot_dash,          UNDERLINE_DASHDOT },
-    { sXML_underline_dot_dot_dash,      UNDERLINE_DASHDOTDOT },
-    { sXML_underline_wave,              UNDERLINE_WAVE },
-    { sXML_underline_bold,              UNDERLINE_BOLD },
-    { sXML_underline_bold_dotted,       UNDERLINE_BOLDDOTTED },
-    { sXML_underline_bold_dash,         UNDERLINE_BOLDDASH },
-    { sXML_underline_bold_long_dash,    UNDERLINE_BOLDLONGDASH },
-    { sXML_underline_bold_dot_dash,     UNDERLINE_BOLDDASHDOT },
-    { sXML_underline_bold_dot_dot_dash, UNDERLINE_BOLDDASHDOTDOT },
-    { sXML_underline_bold_wave,         UNDERLINE_BOLDWAVE },
-    { sXML_underline_double_wave,       UNDERLINE_DOUBLEWAVE },
-    { sXML_underline_small_wave,        UNDERLINE_SMALLWAVE },
+    { sXML_underline_none,              FontUnderline::NONE },
+    { sXML_underline_single,            FontUnderline::SINGLE },
+    { sXML_underline_double,            FontUnderline::DOUBLE },
+    { sXML_underline_dotted,            FontUnderline::DOTTED },
+    { sXML_underline_dash,              FontUnderline::DASH },
+    { sXML_underline_long_dash,         FontUnderline::LONGDASH },
+    { sXML_underline_dot_dash,          FontUnderline::DASHDOT },
+    { sXML_underline_dot_dot_dash,      FontUnderline::DASHDOTDOT },
+    { sXML_underline_wave,              FontUnderline::WAVE },
+    { sXML_underline_bold,              FontUnderline::BOLD },
+    { sXML_underline_bold_dotted,       FontUnderline::BOLDDOTTED },
+    { sXML_underline_bold_dash,         FontUnderline::BOLDDASH },
+    { sXML_underline_bold_long_dash,    FontUnderline::BOLDLONGDASH },
+    { sXML_underline_bold_dot_dash,     FontUnderline::BOLDDASHDOT },
+    { sXML_underline_bold_dot_dot_dash, FontUnderline::BOLDDASHDOTDOT },
+    { sXML_underline_bold_wave,         FontUnderline::BOLDWAVE },
+    { sXML_underline_double_wave,       FontUnderline::DOUBLEWAVE },
+    { sXML_underline_small_wave,        FontUnderline::SMALLWAVE },
     { 0,                                0 }
 };
 
@@ -129,7 +130,7 @@ sal_Bool XMLUnderlinePropHdl::importXML( const OUString& rStrImpValue, uno::Any&
     sal_uInt16 eUnderline;
 
     if( ( bRet = rUnitConverter.convertEnum( eUnderline, rStrImpValue, pXML_Underline_Enum ) ) )
-        rValue <<= eUnderline;
+        rValue <<= (sal_Int16)eUnderline;
 
     return bRet;
 }
@@ -137,12 +138,13 @@ sal_Bool XMLUnderlinePropHdl::importXML( const OUString& rStrImpValue, uno::Any&
 sal_Bool XMLUnderlinePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Int32 nValue;
+    sal_Int16 nValue;
     OUStringBuffer aOut;
 
     if( rValue >>= nValue )
     {
-        if( ( bRet = rUnitConverter.convertEnum( aOut, nValue, pXML_Underline_Enum ) ) )
+        if( ( bRet = rUnitConverter.convertEnum( aOut, (sal_uInt16)nValue,
+                                                 pXML_Underline_Enum ) ) )
             rStrExpValue = aOut.makeStringAndClear();
     }
 

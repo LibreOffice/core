@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-22 13:56:21 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 11:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,9 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "CharShadowed",    FO,     text_shadow,        XML_TYPE_TEXT_SHADOWED, 0 ),
     // BIS HIER GEPRUEFT!
     // RES_CHRATR_UNDERLINE
-    M_E( "CharUnderline",   STYLE,  text_underline,     XML_TYPE_TEXT_UNDERLINE, 0 ),
+    M_E( "CharUnderline",   STYLE,  text_underline,     XML_TYPE_TEXT_UNDERLINE, CTF_UNDERLINE ),
+    M_E( "CharUnderlineColor",  STYLE,  text_underline_color,       XML_TYPE_TEXT_UNDERLINE_COLOR|MID_FLAG_MULTI_PROPERTY, CTF_UNDERLINE_COLOR  ),
+    M_E( "CharUnderlineHasColor",   STYLE,  text_underline_color,       XML_TYPE_TEXT_UNDERLINE_HASCOLOR|MID_FLAG_MERGE_ATTRIBUTE, CTF_UNDERLINE_HASCOLOR   ),
     // RES_CHRATR_WEIGHT
     M_E( "CharWeight",      FO,     font_weight,        XML_TYPE_TEXT_WEIGHT, 0 ),
     // RES_CHRATR_WORDLINEMODE
@@ -176,11 +178,11 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "CharWeightComplex",       STYLE,      font_weight_complex,        XML_TYPE_TEXT_WEIGHT, 0 ),
     // RES_CHRATR_WRITING_DIRECTION
     // RES_CHRATR_EMPHASIS_MARK
-    M_E( "CharEmphasisMark",        STYLE,      text_emphasize,             XML_TYPE_TEXT_EMPHASIZE, 0 ),
+    M_E( "CharEmphasize",           STYLE,      text_emphasize,             XML_TYPE_TEXT_EMPHASIZE, 0 ),
     // RES_CHRATR_TWO_LINES
-    M_E( "CharTwoLines",            STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE, 0 ),
-    M_E( "CharTwoLinesStartChar",   STYLE,      text_combine_start_char,    XML_TYPE_TEXT_COMBINECHAR, 0 ),
-    M_E( "CharTwoLinesEndChar",     STYLE,      text_combine_end_char,      XML_TYPE_TEXT_COMBINECHAR, 0 ),
+    M_E( "CharCombineIsOn",         STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE, 0 ),
+    M_E( "CharCombinePrefix",       STYLE,      text_combine_start_char,    XML_TYPE_TEXT_COMBINECHAR, 0 ),
+    M_E( "CharCombineSuffic",       STYLE,      text_combine_end_char,      XML_TYPE_TEXT_COMBINECHAR, 0 ),
     // RES_TXTATR_INETFMT
     // TODO
     // RES_TXTATR_REFMARK
@@ -367,7 +369,9 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_E( "CharShadowed",    FO,     text_shadow,        XML_TYPE_TEXT_SHADOWED, 0 ),
     // BIS HIER GEPRUEFT!
     // RES_CHRATR_UNDERLINE
-    M_E( "CharUnderline",   STYLE,  text_underline,     XML_TYPE_TEXT_UNDERLINE, 0 ),
+    M_E( "CharUnderline",   STYLE,  text_underline,     XML_TYPE_TEXT_UNDERLINE, CTF_UNDERLINE ),
+    M_E( "CharUnderlineColor",  STYLE,  text_underline_color,       XML_TYPE_TEXT_UNDERLINE_COLOR|MID_FLAG_MULTI_PROPERTY, CTF_UNDERLINE_COLOR  ),
+    M_E( "CharUnderlineHasColor",   STYLE,  text_underline_color,       XML_TYPE_TEXT_UNDERLINE_HASCOLOR|MID_FLAG_MERGE_ATTRIBUTE, CTF_UNDERLINE_HASCOLOR   ),
     // RES_CHRATR_WEIGHT
     M_E( "CharWeight",      FO,     font_weight,        XML_TYPE_TEXT_WEIGHT, 0 ),
     // RES_CHRATR_WORDLINEMODE
@@ -422,11 +426,11 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_E( "CharWeightComplex",       STYLE,      font_weight_complex,        XML_TYPE_TEXT_WEIGHT, 0 ),
     // RES_CHRATR_WRITING_DIRECTION
     // RES_CHRATR_EMPHASIS_MARK
-    M_E( "CharEmphasisMark",        STYLE,      text_emphasize,             XML_TYPE_TEXT_EMPHASIZE, 0 ),
+    M_E( "CharEmphasize",           STYLE,      text_emphasize,             XML_TYPE_TEXT_EMPHASIZE, 0 ),
     // RES_CHRATR_TWO_LINES
-    M_E( "CharTwoLines",            STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE, 0 ),
-    M_E( "CharTwoLinesStartChar",   STYLE,      text_combine_start_char,    XML_TYPE_TEXT_COMBINECHAR, 0 ),
-    M_E( "CharTwoLinesEndChar",     STYLE,      text_combine_end_char,      XML_TYPE_TEXT_COMBINECHAR, 0 ),
+    M_E( "CharCombineIsOn",         STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE, 0 ),
+    M_E( "CharCombinePrefix",       STYLE,      text_combine_start_char,    XML_TYPE_TEXT_COMBINECHAR, 0 ),
+    M_E( "CharCombineSuffix",       STYLE,      text_combine_end_char,      XML_TYPE_TEXT_COMBINECHAR, 0 ),
     // RES_TXTATR_INETFMT
     // TODO
     // RES_TXTATR_REFMARK

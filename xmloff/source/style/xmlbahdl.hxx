@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-23 09:54:37 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 11:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,10 @@ public:
 */
 class XMLColorTransparentPropHdl : public XMLPropertyHandler
 {
+    const ::rtl::OUString sTransparent;
+
 public:
+    XMLColorTransparentPropHdl( const sal_Char *pTransparent=0 );
     virtual ~XMLColorTransparentPropHdl();
 
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
@@ -206,7 +209,12 @@ public:
 */
 class XMLIsTransparentPropHdl : public XMLPropertyHandler
 {
+    const ::rtl::OUString sTransparent;
+    sal_Bool bTransPropValue;
+
 public:
+    XMLIsTransparentPropHdl( const sal_Char *pTransparent=0,
+                             sal_Bool bTransPropValue = sal_True );
     virtual ~XMLIsTransparentPropHdl();
 
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
