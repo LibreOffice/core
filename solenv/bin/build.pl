@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: vg $ $Date: 2002-06-27 12:06:10 $
+#   last change: $Author: vg $ $Date: 2002-06-28 14:26:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.58 $ ';
+$id_str = ' $Revision: 1.59 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -590,18 +590,12 @@ sub FindIndepPrj {
             if (&IsHashNative($Prj)) {
                 next;
             };
-            if (!(defined $$Dependencies{$Prj})) {
-                return $Prj;
-            };
             @PrjDeps = @{$$Dependencies{$Prj}};
-            if ($#PrjDeps == -1) {
-                return $Prj if defined $PathHash{$Prj};
-                &print_error("No path found for $Prj");
-            };
+            return $Prj if ($#PrjDeps == -1);
         };
         # If there are only dependent projects in hash - generate error
         return '' if ($build_from);
-        if (&children_number() <= $QuantityToBuild) {
+        if (&children_number) {
             $only_dependent = 1;
             return '';
         };
