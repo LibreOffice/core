@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:16:13 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1465,6 +1465,44 @@ public:
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
                                     const ::rtl::OUString& sLocalName);
+
+protected:
+
+    /// process attribute values
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const ::rtl::OUString& sAttrValue );
+
+    /// prepare XTextField for insertion into document
+    virtual void PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+};
+
+
+/** dropdown field (filter legacy) */
+class XMLDropDownFieldImportContext : public XMLTextFieldImportContext
+{
+    std::vector<rtl::OUString> aLabels;
+    rtl::OUString sName;
+    sal_Int32 nSelected;
+    bool bNameOK;
+
+    const rtl::OUString sPropertyItems;
+    const rtl::OUString sPropertySelectedItem;
+    const rtl::OUString sPropertyName;
+
+public:
+    TYPEINFO();
+
+    XMLDropDownFieldImportContext(SvXMLImport& rImport,
+                                    XMLTextImportHelper& rHlp,
+                                    sal_uInt16 nPrfx,
+                                    const ::rtl::OUString& sLocalName);
+
+    virtual SvXMLImportContext* CreateChildContext(
+        USHORT nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 protected:
 
