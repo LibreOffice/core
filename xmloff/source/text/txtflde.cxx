@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 12:37:11 $
+ *  last change: $Author: dvo $ $Date: 2001-10-30 16:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,8 +855,8 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
             // insert a list for our XText (if necessary)
             if (aMapIter == pUsedMasters->end())
             {
-                set<OUString> * pSet = new set<OUString> ;
-                (*pUsedMasters)[xOurText] = *pSet;
+                set<OUString> aSet;
+                (*pUsedMasters)[xOurText] = aSet;
                 aMapIter = pUsedMasters->find(xOurText);
             }
 
