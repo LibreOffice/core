@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdta.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-04 13:27:17 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 15:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _SVTOOLS_LNGMISC_HXX_
 #include <svtools/lngmisc.hxx>
 #endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 
 //using namespace utl;
 using namespace osl;
@@ -107,7 +110,20 @@ HyphenatedWord::HyphenatedWord(const OUString &rWord, INT16 nLang, INT16 nHPos,
     nHyphenationPos (nHPos),
     nHyphPos        (nPos)
 {
-    bIsAltSpelling = rWord != rHyphWord;
+    String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
+    DBG_ASSERT( 1 == aSingleQuote.Len(), "unexpectend length of quotation mark" );
+    if (aSingleQuote.Len())
+    {
+        // ignore typographical apostrophes (which got replaced in original
+        // word when being checked for hyphenation) in results.
+        OUString aTmpWord( rWord );
+        OUString aTmpHyphWord( rHyphWord );
+        aTmpWord        = aTmpWord    .replace( aSingleQuote.GetChar(0), '\'' );
+        aTmpHyphWord    = aTmpHyphWord.replace( aSingleQuote.GetChar(0), '\'' );
+        bIsAltSpelling  = aTmpWord != aTmpHyphWord;
+    }
+    else
+        bIsAltSpelling = rWord != rHyphWord;
 }
 
 
