@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-19 09:27:16 $
+ *  last change: $Author: oj $ $Date: 2001-07-25 06:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1071,7 +1071,7 @@ sal_Bool OQueryDesignView::GenerateCriterias(::rtl::OUString& rRetStr,::rtl::OUS
 
                     aWhereStr += ::rtl::OUString(' ');
                     // aCriteria could have some german numbers so I have to be sure here
-                    ::rtl::OUString aTmp(::rtl::OUString('='));
+                    ::rtl::OUString aTmp = ::rtl::OUString::createFromAscii(" = ");
                     aTmp += aCriteria;
                     OQueryTableWindow* pWin = static_cast<OQueryTableWindow*>(pEntryField->GetTabWindow());
 
