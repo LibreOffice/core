@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GridFieldValidator.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:28:12 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -58,19 +58,20 @@ import com.sun.star.task.*;
 */
 class GridFieldValidator implements XUpdateListener
 {
-    private DocumentHelper          m_aDocument;
-    private XMultiServiceFactory    m_xMSF;
-    private XPropertySet            m_xWatchedColumn;
+    private DocumentHelper      m_aDocument;
+    private XComponentContext   m_xCtx;
+    private XPropertySet        m_xWatchedColumn;
 
     private boolean         m_bWatching;
 
     /* ------------------------------------------------------------------ */
-    public GridFieldValidator( XMultiServiceFactory xMSF, XPropertySet xWatchedGridColumn )
+    public GridFieldValidator( XComponentContext xCtx, XPropertySet xWatchedGridColumn )
     {
         // remember
-        m_xMSF = xMSF;
+        m_xCtx = xCtx;
         m_xWatchedColumn = xWatchedGridColumn;
-        m_aDocument = DocumentHelper.getDocumentForComponent( xWatchedGridColumn, xMSF );
+        m_aDocument = DocumentHelper.getDocumentForComponent(xWatchedGridColumn,
+                                                             xCtx);
 
         m_bWatching = false;
     }
@@ -115,7 +116,9 @@ class GridFieldValidator implements XUpdateListener
 
             // instantiate an interaction handler who can handle SQLExceptions
             XInteractionHandler xHandler = (XInteractionHandler)UnoRuntime.queryInterface(
-                XInteractionHandler.class, m_xMSF.createInstance( "com.sun.star.sdb.InteractionHandler" ) );
+                XInteractionHandler.class,
+                m_xCtx.getServiceManager().createInstanceWithContext(
+                    "com.sun.star.sdb.InteractionHandler", m_xCtx ) );
 
             // create a new request and execute it
             InteractionRequest aRequest = new InteractionRequest( aError );

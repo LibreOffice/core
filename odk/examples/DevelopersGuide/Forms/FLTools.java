@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FLTools.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:27:47 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -65,13 +65,15 @@ public class FLTools
     /** translates a string containing an URL into a complete
         <type scope="com.sun.star.util">URL</type> object.
     */
-    static public URL parseURL( String sURL, XMultiServiceFactory xMSF ) throws java.lang.Exception
+    static public URL parseURL( String sURL, XComponentContext xCtx ) throws java.lang.Exception
     {
         URL[] aURL = new URL[] { new URL() };
         aURL[0].Complete = sURL;
         // need an URLTransformer
         XURLTransformer xTransformer = (XURLTransformer)UnoRuntime.queryInterface(
-            XURLTransformer.class, xMSF.createInstance( "com.sun.star.util.URLTransformer" ) );
+            XURLTransformer.class,
+            xCtx.getServiceManager().createInstanceWithContext(
+                "com.sun.star.util.URLTransformer", xCtx ) );
         xTransformer.parseStrict( aURL );
 
         return aURL[0];
