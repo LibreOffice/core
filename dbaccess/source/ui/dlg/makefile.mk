@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.27 $
+ #  $Revision: 1.28 $
  #
- #  last change: $Author: rt $ $Date: 2004-09-08 16:29:55 $
+ #  last change: $Author: pjunck $ $Date: 2004-10-27 13:04:41 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -78,9 +78,10 @@ CFLAGS+=-DSYSTEM_ODBC_HEADERS
 
 SRS1NAME=$(TARGET)
 SRC1FILES =	\
+        AutoControls.src	\
         ConnectionPage.src	\
-        UserAdmin.src	\
-        directsql.src	\
+        UserAdmin.src		\
+        directsql.src		\
         AdabasStat.src		\
         AdabasPage.src		\
         indexdialog.src		\
@@ -91,8 +92,9 @@ SRC1FILES =	\
         queryfilter.src		\
         paramdialog.src		\
         dsselect.src		\
-        dbadmin2.src		\
         dbadmin.src			\
+        dbadmin2.src    	\
+        dbadminsetup.src	\
         dbfindex.src		\
         dlgsize.src			\
         CollectionView.src	\
@@ -106,12 +108,14 @@ SRC1FILES =	\
 EXCEPTIONSFILES=						\
         $(SLO)$/directsql.obj			\
         $(SLO)$/dbwiz.obj				\
+        $(SLO)$/dbwizsetup.obj				\
         $(SLO)$/generalpage.obj			\
         $(SLO)$/indexfieldscontrol.obj	\
         $(SLO)$/indexdialog.obj			\
         $(SLO)$/RelationDlg.obj			\
         $(SLO)$/adtabdlg.obj			\
         $(SLO)$/dlgsave.obj				\
+        $(SLO)$/adminpages.obj			\
         $(SLO)$/queryorder.obj			\
         $(SLO)$/queryfilter.obj			\
         $(SLO)$/paramdialog.obj			\
@@ -120,6 +124,10 @@ EXCEPTIONSFILES=						\
         $(SLO)$/sqlmessage.obj			\
         $(SLO)$/finteraction.obj		\
         $(SLO)$/ConnectionPage.obj		\
+        $(SLO)$/ConnectionHelper.obj	\
+        $(SLO)$/TextConnectionHelper.obj	\
+        $(SLO)$/ConnectionPageSetup.obj	\
+        $(SLO)$/DBSetupConnectionPages.obj 	\
         $(SLO)$/AdvancedPageDlg.obj		\
         $(SLO)$/AdabasStatDlg.obj		\
         $(SLO)$/UserAdminDlg.obj		\
@@ -137,8 +145,7 @@ SLOFILES=								\
         $(SLO)$/DriverSettings.obj		\
         $(SLO)$/dlgsize.obj				\
         $(SLO)$/dlgattr.obj				\
-        $(SLO)$/odbcconfig.obj			\
-        $(SLO)$/adminpages.obj
+        $(SLO)$/odbcconfig.obj
 
 .IF "$(GUI)"=="WNT"
 SLOFILES+=		$(SLO)$/adodatalinks.obj
