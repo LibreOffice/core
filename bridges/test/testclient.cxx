@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testclient.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-19 15:16:14 $
+ *  last change: $Author: mfe $ $Date: 2001-02-01 13:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,11 +102,6 @@ using namespace ::com::sun::star::test::performance;
 #include "testcomp.h"
 
 
-#ifdef SOLARIS
-extern "C" void ChangeGlobalInit();
-#endif
-
-
 #ifdef UNX
 #define REG_PREFIX      "lib"
 #define DLL_POSTFIX     ".so"
@@ -168,9 +163,6 @@ void testLatency( const Reference < XConnection > &r , sal_Bool bReply )
 void main( int argc, char *argv[] )
 {
     sal_Bool bUseNew = ( 3 == argc );
-#ifdef SOLARIS
-    ChangeGlobalInit(); // Switch on threads !
-#endif
     if( argc < 2 )
     {
         printf(

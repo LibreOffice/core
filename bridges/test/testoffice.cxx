@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testoffice.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-19 15:16:14 $
+ *  last change: $Author: mfe $ $Date: 2001-02-01 13:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,6 @@ using namespace ::com::sun::star::text;
 #include <conio.h>
 #endif
 
-#ifdef SOLARIS
-extern "C" void ChangeGlobalInit();
-#endif
 
 void mygetchar()
 {
@@ -241,10 +238,6 @@ void doSomething( const  Reference < XInterface > &r )
 
 void main( int argc, char *argv[] )
 {
-
-#ifdef SOLARIS
-    ChangeGlobalInit(); // Switch on threads !
-#endif
     if( argc < 2 )
     {
         printf( "usage : testclient host:port" );
