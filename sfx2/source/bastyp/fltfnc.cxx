@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:11:18 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 10:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,13 +779,21 @@ const SfxFilter* SfxFilterMatcher::GetFilter4EA( const String& rType,SfxFilterFl
     if ( pImpl->pList )
     {
         sal_uInt16 nCount = ( sal_uInt16 ) pImpl->pList->Count();
+        const SfxFilter* pFirst = 0;
         for( sal_uInt16 n = 0; n < nCount; n++ )
         {
             const SfxFilter* pFilter = pImpl->pList->GetObject( n );
             SfxFilterFlags nFlags = pFilter->GetFilterFlags();
             if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) && pFilter->GetTypeName() == rType )
-                return pFilter;
+            {
+                if (nFlags & SFX_FILTER_PREFERED)
+                    return pFilter;
+                if (!pFirst)
+                    pFirst = pFilter;
+            }
         }
+        if (pFirst)
+            return pFirst;
 
         return 0;
     }
