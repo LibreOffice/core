@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-10 16:10:19 $
+ *  last change: $Author: jp $ $Date: 2001-11-23 15:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1024,13 +1024,14 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         SW_MOD()->ShowDBObj( *this, aData );
     }
 
-
-    if( aTimer.IsActive() )
+    // has anybody calls the attrchanged handler in the constructor?
+    if( bAttrChgNotifiedWithRegistrations )
     {
-        if( bAttrChgNotifiedWithRegistrations )
-            GetViewFrame()->GetBindings().LEAVEREGISTRATIONS();
-        aTimer.Stop();
+        GetViewFrame()->GetBindings().LEAVEREGISTRATIONS();
+        if( aTimer.IsActive() )
+            aTimer.Stop();
     }
+
     aTimer.SetTimeoutHdl(LINK(this, SwView, TimeoutHdl));
     bAttrChgNotified = bAttrChgNotifiedWithRegistrations = sal_False;
     pDocSh->EnableSetModified( bOldModifyFlag );
