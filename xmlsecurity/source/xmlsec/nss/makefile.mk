@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mmi $ $Date: 2004-07-23 03:00:41 $
+#   last change: $Author: pjunck $ $Date: 2004-10-27 14:57:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,10 @@ ENABLE_EXCEPTIONS = TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 .INCLUDE :	$(PRJ)$/util$/target.pmk
+
+.IF "$(SYSTEM_LIBXML)" == "YES"
+CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
+.ENDIF
 
 .IF "$(CRYPTO_ENGINE)" != "nss"
 LIBTARGET=NO
