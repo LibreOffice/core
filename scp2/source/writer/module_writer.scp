@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_writer.scp,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:43:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,7 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Bin_Cde_Sletter,gid_File_Bin_Cde_Smemo,gid_File_Bin_Cde_Svcard,
     gid_File_Extra_Cdewriter,gid_File_Lib_Jsreader, gid_File_Lib_Wps2star,
     gid_File_Lib_Hwpreader, gid_File_Exe_Swriter, gid_File_Exe_Sglobal,
-    gid_File_Exe_Sweb, gid_File_Lib_Swd, gid_File_Oo_Office_Filter_Writer_Pkg,
-    gid_File_Oo_Office_Filter_Web_Pkg, gid_File_Oo_Office_Filter_Global_Pkg,
+    gid_File_Exe_Sweb, gid_File_Lib_Swd,
     gid_File_Lib_Swui,
     gid_File_Share_Config_Sofficecfg_Writer_Menubar_Xml,
     gid_File_Share_Config_Sofficecfg_Writerweb_Menubar_Xml,
@@ -94,7 +93,10 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Oo_Office_Ui_Writerwebwindowstate_Xcs,
     gid_File_Oo_Office_Ui_Writerwindowstate_Xcu,
     gid_File_Oo_Office_Ui_Writerglobalwindowstate_Xcu,
-    gid_File_Oo_Office_Ui_Writerwebwindowstate_Xcu);
+    gid_File_Oo_Office_Ui_Writerwebwindowstate_Xcu,
+    gid_File_Registry_Spool_Oo_TypeDetection_Writer_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Writer_Filters_Xcu,
+    gid_File_Registry_Spool_Oo_TypeDetection_Web_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Web_Filters_Xcu,
+    gid_File_Registry_Spool_Oo_TypeDetection_Global_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Global_Filters_Xcu);
 End
 
 Module gid_Module_Prg_Wrt_Help
