@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hints.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:40:44 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ SwNumRuleInfo::SwNumRuleInfo( const String& rRuleName )
 
 void SwNumRuleInfo::AddNode( SwTxtNode& rNd )
 {
-    aList.Insert( rNd.GetIndex(), &rNd );
+    aList.Insert(rNd.GetIndex(), &rNd);
 }
 
 SwNRuleLowerLevel::SwNRuleLowerLevel( const String& rRuleName, BYTE nSrchLvl )
