@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exc_hlp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 12:50:24 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 15:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,23 +79,17 @@ namespace cppu
 void SAL_CALL throwException( const ::com::sun::star::uno::Any & rExc )
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
-/** @internal
-                Not for public use!
-
-    Currently under investigation if this function runs with all known
-    C++-UNO bridges.  Until now tested for:
-
-    - CC5, Solaris SPARC
-    - MSVC .NET 2002/2003, Windows
-    - gcc 3.2.2, Linux Intel
-
-
-    Use this function to get the dynamic type of a caught C++-UNO exception,
-    e.g.
+/** Use this function to get the dynamic type of a caught C++-UNO exception;
+    completes the above function throwing exceptions generically.
 
     try
     {
         ...
+    }
+    catch (::com::sun::star::uno::RuntimeException &)
+    {
+        // you ought not handle RuntimeExceptions:
+        throw;
     }
     catch (::com::sun::star::uno::Exception &)
     {
@@ -104,29 +98,33 @@ void SAL_CALL throwException( const ::com::sun::star::uno::Any & rExc )
     }
 
     Restrictions:
-
-    - only use for caught UNO exceptions
-      (C++ exceptions derived from com::sun::star::uno::Exception)
+    - use only for caught C++-UNO exceptions (UNOIDL defined)
     - only as first statement in a catch block!
-    - never do a C++ rethrow (throw;) again after you have called this function
-      and call getCaughtException() just once!
+    - don't do a C++ rethrow (throw;) after you have called this function
+    - call getCaughtException() just once in your catch block!
       (function internally uses a C++ rethrow)
 
     @return
               caught UNO exception
 
-    @attention
+    @attention Caution!
               This function is limited to the same C++ compiler runtime library.
               E.g. for MSVC, this means that the catch handler code (the one
               that calls getCaughtException()) needs to use the very same
-              msvcrt.dll as cppuhelper3MSC.dll and the bridge msci_uno.dll,
-              e.g. all them are compiled with the same compiler version.
-              This is because the msci_uno.dll gets a rethrown exception out
-              of the internal msvcrt.dll thread local data (tls).
-              Thus you must not use this function if your code needs to run
+              C++ runtime library, e.g. msvcrt.dll as cppuhelper, e.g.
+              cppuhelper3MSC.dll and the bridge library, e.g. msci_uno.dll.
+              This is the case if all of them are compiled with the same
+              compiler version.
+              Background: The msci_uno.dll gets a rethrown exception out
+              of the internal msvcrt.dll thread local storage (tls).
+              Thus you _must_ not use this function if your code needs to run
               in newer UDK versions without being recompiled, because those
-              newer UDK (-> OOo versions) potentially use a newer MSVC
-              (which potentially uses an incompatible msvcrt.dll).
+              newer UDK (-> OOo versions) potentially use newer C++ runtime
+              libraries which most often become incompatible!
+
+              But this function ought to be usable for most OOo internal C++-UNO
+              development, because the whole OOo code base is compiled using the
+              same C++ compiler (and linking against one runtime library).
 */
 ::com::sun::star::uno::Any SAL_CALL getCaughtException();
 
