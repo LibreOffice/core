@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mh $ $Date: 2002-04-09 10:35:59 $
+ *  last change: $Author: mh $ $Date: 2002-04-09 18:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2658,7 +2658,7 @@ sal_Bool __osl_socket_poll (
         return sal_False;
     }
 
-    return (FD_ISSET(pSockImpl->m_Socket, &fds) ? sal_True : sal_False);
+    return (FD_ISSET(pSocket->m_Socket, &fds) ? sal_True : sal_False);
 }
 
 #endif /* HAVE_POLL_H */
