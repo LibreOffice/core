@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2001-04-04 13:18:57 $
+ *  last change: $Author: gh $ $Date: 2001-06-08 13:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,7 +718,7 @@ IMPL_LINK( DisplayHidDlg, CopyToClipboard, void*, EMPTYARG )
             aSammel += '\n';
         aSammel += aMlbSlots.GetSelectEntry( i );
     }
-    ::svt::OStringTransfer::CopyString( aSammel );
+    ::svt::OStringTransfer::CopyString( aSammel, this );
     return 0;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2001-04-04 13:18:57 $
+ *  last change: $Author: gh $ $Date: 2001-06-08 13:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ long AppWin::InitMenu( Menu* pMenu )
     pMenu->EnableItem( RID_EDITREPEAT,  (aFind.Len() != 0 ) );
     pMenu->EnableItem( RID_EDITCUT,     bMarked );
     pMenu->EnableItem( RID_EDITCOPY,    bMarked );
-    pMenu->EnableItem( RID_EDITPASTE,   ( ::svt::OStringTransfer::PasteString( aTemp ) ) );
+    pMenu->EnableItem( RID_EDITPASTE,   ( ::svt::OStringTransfer::PasteString( aTemp, this ) ) );
     pMenu->EnableItem( RID_EDITDEL,     bMarked );
 //  pMenu->EnableItem( RID_HELPTOPIC,   bMarked );
 
@@ -337,7 +337,7 @@ void AppWin::Command( const CommandEvent& rCEvt )
         case RID_EDITPASTE:
             {
                 ::rtl::OUString aTemp;
-                if( ::svt::OStringTransfer::PasteString( aTemp ) )
+                if( ::svt::OStringTransfer::PasteString( aTemp, this ) )
                     pDataEdit->Paste();
             }
             break;
