@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-11 15:08:49 $
+ *  last change: $Author: vg $ $Date: 2001-09-18 14:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ protected:
 
 protected:
     sal_Bool    isUIEnabled() const { return m_bUIEnabled; }
-    sal_Bool    disabledUI() { m_bUIEnabled = sal_False; }
+    void    disabledUI() { m_bUIEnabled = sal_False; }
 
     /// select a (scheduled-to-be-)deleted data source, given by it's access key
     void implSelectDeleted(sal_Int32 _nKey);
@@ -367,6 +367,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2001/09/11 15:08:49  fs
+ *  #91304# +isUIEnabled / disableUI
+ *
  *  Revision 1.24  2001/08/30 16:11:51  fs
  *  #88427# +OnValidateName
  *
