@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:58:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,9 @@ BOOL ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const Strin
         if (pDBColl)
             if (pDBColl->SearchName( rAreaName, nPos ))
             {
-                USHORT nTab,nCol1,nRow1,nCol2,nRow2;
+                SCTAB nTab;
+                SCCOL nCol1, nCol2;
+                SCROW nRow1, nRow2;
                 (*pDBColl)[nPos]->GetArea(nTab,nCol1,nRow1,nCol2,nRow2);
                 rRange = ScRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab );
                 bFound = TRUE;
@@ -318,8 +320,8 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         aTempArea = rNewArea;
 
     // find total size of source area
-    USHORT nWidth = 0;
-    USHORT nHeight = 0;
+    SCCOL nWidth = 0;
+    SCROW nHeight = 0;
     xub_StrLen nTokenCnt = aTempArea.GetTokenCount( ';' );
     xub_StrLen nStringIx = 0;
     xub_StrLen nToken;
@@ -331,22 +333,22 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         if( FindExtRange( aTokenRange, pSrcDoc, aToken ) )
         {
             // columns: find maximum
-            nWidth = Max( nWidth, (USHORT)(aTokenRange.aEnd.Col() - aTokenRange.aStart.Col() + 1) );
+            nWidth = Max( nWidth, (SCCOL)(aTokenRange.aEnd.Col() - aTokenRange.aStart.Col() + 1) );
             // rows: add row range + 1 empty row
             nHeight += aTokenRange.aEnd.Row() - aTokenRange.aStart.Row() + 2;
         }
     }
     // remove the last empty row
-    if( nHeight )
+    if( nHeight > 0 )
         nHeight--;
 
     //  alte Daten loeschen / neue kopieren
 
     ScAddress aDestPos = aDestArea.aStart;
-    USHORT nDestTab = aDestPos.Tab();
+    SCTAB nDestTab = aDestPos.Tab();
     ScRange aOldRange = aDestArea;
     ScRange aNewRange = aDestArea;          // alter Bereich, wenn Datei nicht gefunden o.ae.
-    if (nWidth && nHeight)
+    if (nWidth > 0 && nHeight > 0)
     {
         aNewRange.aEnd.SetCol( aNewRange.aStart.Col() + nWidth - 1 );
         aNewRange.aEnd.SetRow( aNewRange.aStart.Row() + nHeight - 1 );
@@ -357,12 +359,12 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     {
         ScDocShellModificator aModificator( *pDocShell );
 
-        USHORT nStartX = aDestPos.Col();
-        USHORT nStartY = aDestPos.Row();
-        USHORT nOldEndX = aOldRange.aEnd.Col();
-        USHORT nOldEndY = aOldRange.aEnd.Row();
-        USHORT nNewEndX = aNewRange.aEnd.Col();
-        USHORT nNewEndY = aNewRange.aEnd.Row();
+        SCCOL nStartX = aDestPos.Col();
+        SCROW nStartY = aDestPos.Row();
+        SCCOL nOldEndX = aOldRange.aEnd.Col();
+        SCROW nOldEndY = aOldRange.aEnd.Row();
+        SCCOL nNewEndX = aNewRange.aEnd.Col();
+        SCROW nNewEndY = aNewRange.aEnd.Row();
         ScRange aMaxRange( aDestPos,
                     ScAddress(Max(nOldEndX,nNewEndX), Max(nOldEndY,nNewEndY), nDestTab) );
 
@@ -402,7 +404,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
 
         //  Daten kopieren
 
-        if (nWidth && nHeight)
+        if (nWidth > 0 && nHeight > 0)
         {
             ScDocument aClipDoc( SCDOCMODE_CLIP );
             ScRange aNewTokenRange( aNewRange.aStart );
@@ -413,7 +415,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
                 ScRange aTokenRange;
                 if( FindExtRange( aTokenRange, pSrcDoc, aToken ) )
                 {
-                    USHORT nSrcTab = aTokenRange.aStart.Tab();
+                    SCTAB nSrcTab = aTokenRange.aStart.Tab();
                     ScMarkData aSourceMark;
                     aSourceMark.SelectOneTable( nSrcTab );      // selektieren fuer CopyToClip
                     aSourceMark.SetMarkArea( aTokenRange );
@@ -483,8 +485,8 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         if ( nNewRefresh != GetRefreshDelay() )
             SetRefreshDelay( nNewRefresh );
 
-        USHORT nPaintEndX = Max( aOldRange.aEnd.Col(), aNewRange.aEnd.Col() );
-        USHORT nPaintEndY = Max( aOldRange.aEnd.Row(), aNewRange.aEnd.Row() );
+        SCCOL nPaintEndX = Max( aOldRange.aEnd.Col(), aNewRange.aEnd.Col() );
+        SCROW nPaintEndY = Max( aOldRange.aEnd.Row(), aNewRange.aEnd.Row() );
 
         if ( aOldRange.aEnd.Col() != aNewRange.aEnd.Col() )
             nPaintEndX = MAXCOL;
