@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:16:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pRefreshTimerControl = NULL;
     }
 
-    for (USHORT i=1; i<=MAXTAB; i++)
+    for (SCTAB i=1; i<=MAXTAB; i++)
         pTab[i] = NULL;
 
     pRangeName = new ScRangeName( 4, 4, FALSE, this );
@@ -669,7 +669,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
     {
         InitClipPtrs(pSourceDoc);
 
-        for (USHORT i = 0; i <= MAXTAB; i++)
+        for (SCTAB i = 0; i <= MAXTAB; i++)
             if (pSourceDoc->pTab[i])
                 if (!pMarks || pMarks->GetTableSelect(i))
                 {
@@ -684,7 +684,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
         DBG_ERROR("ResetClip");
 }
 
-void ScDocument::ResetClip( ScDocument* pSourceDoc, USHORT nTab )
+void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
 {
     if (bIsClip)
     {
@@ -745,8 +745,8 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
 
     BOOL bError = FALSE;
     USHORT nVersion = 0;
-    USHORT nVerMaxRow = MAXROW_30;      // 8191, wenn in der Datei nichts steht
-    USHORT nTab = 0;
+    SCROW nVerMaxRow = MAXROW_30;       // 8191, wenn in der Datei nichts steht
+    SCTAB nTab = 0;
     USHORT nEnumDummy;
     String aEmptyName;
     String aPageStyle;
@@ -781,12 +781,18 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
                         }
                         if ( aFlagsHdr.BytesLeft() )
                             rStream >> bAutoCalc;
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
                         if ( aFlagsHdr.BytesLeft() )
                             rStream >> nVisibleTab;
+#endif
                         if ( aFlagsHdr.BytesLeft() )
                             rStream >> nVersion;            // echte Version
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
                         if ( aFlagsHdr.BytesLeft() )
                             rStream >> nVerMaxRow;          // sonst auf 8191 lassen
+#endif
 
                         nSrcVer     = nVersion;             // Member
                         nSrcMaxRow  = nVerMaxRow;           // Member
@@ -980,7 +986,7 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
         ScStyleSheet*           pStyleSheet = NULL;
 
         nMaxTableNumber = 0;
-        for (USHORT i=0; i<=MAXTAB; i++)
+        for (SCTAB i=0; i<=MAXTAB; i++)
             if (pTab[i])
             {
                 // MaxTableNumber ermitteln
@@ -1098,7 +1104,6 @@ BOOL ScDocument::Save( SvStream& rStream, ScProgress* pProgress ) const
         ((ScDocument*)this)->nSrcVer = SC_40_EXPORT_VER;
     }
 
-    USHORT i;
     USHORT nOldBufSize = rStream.GetBufferSize();
     rStream.SetBufferSize( 32768 );
 
@@ -1144,12 +1149,18 @@ BOOL ScDocument::Save( SvStream& rStream, ScProgress* pProgress ) const
             rStream << (USHORT) eLanguage;
             rStream << bAutoCalc;
 
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
             rStream << nVisibleTab;
+#endif
 
             // und hier jetzt die echte Versionsnummer
             rStream << (USHORT) nSrcVer;
 
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
             rStream << nSrcMaxRow;                  // Zeilenanzahl
+#endif
         }
 
         //  Zeichensatz
@@ -1206,7 +1217,7 @@ BOOL ScDocument::Save( SvStream& rStream, ScProgress* pProgress ) const
 
         //  Tabellen (Daten)
 
-        for (i=0; i<=MAXTAB; i++)
+        for (SCTAB i=0; i<=MAXTAB; i++)
         {
             if (pTab[i])
             {
@@ -1329,7 +1340,7 @@ void ScDocument::DeleteNumberFormat( const ULONG* pDelKeys, ULONG nCount )
 */
 }
 
-void ScDocument::PutCell( USHORT nCol, USHORT nRow, USHORT nTab,
+void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                           ScBaseCell* pCell, ULONG nFormatIndex, BOOL bForceTab )
 {
     if (VALIDTAB(nTab))
@@ -1351,7 +1362,7 @@ void ScDocument::PutCell( USHORT nCol, USHORT nRow, USHORT nTab,
 void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell,
                             ULONG nFormatIndex, BOOL bForceTab )
 {
-    USHORT nTab = rPos.Tab();
+    SCTAB nTab = rPos.Tab();
     if ( bForceTab && !pTab[nTab] )
     {
         BOOL bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
@@ -1365,10 +1376,10 @@ void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell,
         pTab[nTab]->PutCell( rPos, nFormatIndex, pCell );
 }
 
-BOOL ScDocument::GetPrintArea( USHORT nTab, USHORT& rEndCol, USHORT& rEndRow,
+BOOL ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
                                 BOOL bNotes ) const
 {
-    if (nTab<=MAXTAB && pTab[nTab])
+    if (ValidTab(nTab) && pTab[nTab])
     {
         BOOL bAny = pTab[nTab]->GetPrintArea( rEndCol, rEndRow, bNotes );
         if (pDrawLayer)
@@ -1389,10 +1400,10 @@ BOOL ScDocument::GetPrintArea( USHORT nTab, USHORT& rEndCol, USHORT& rEndRow,
     return FALSE;
 }
 
-BOOL ScDocument::GetPrintAreaHor( USHORT nTab, USHORT nStartRow, USHORT nEndRow,
-                                        USHORT& rEndCol, BOOL bNotes ) const
+BOOL ScDocument::GetPrintAreaHor( SCTAB nTab, SCROW nStartRow, SCROW nEndRow,
+                                        SCCOL& rEndCol, BOOL bNotes ) const
 {
-    if (nTab<=MAXTAB && pTab[nTab])
+    if (ValidTab(nTab) && pTab[nTab])
     {
         BOOL bAny = pTab[nTab]->GetPrintAreaHor( nStartRow, nEndRow, rEndCol, bNotes );
         if (pDrawLayer)
@@ -1411,10 +1422,10 @@ BOOL ScDocument::GetPrintAreaHor( USHORT nTab, USHORT nStartRow, USHORT nEndRow,
     return FALSE;
 }
 
-BOOL ScDocument::GetPrintAreaVer( USHORT nTab, USHORT nStartCol, USHORT nEndCol,
-                                        USHORT& rEndRow, BOOL bNotes ) const
+BOOL ScDocument::GetPrintAreaVer( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol,
+                                        SCROW& rEndRow, BOOL bNotes ) const
 {
-    if (nTab<=MAXTAB && pTab[nTab])
+    if (ValidTab(nTab) && pTab[nTab])
     {
         BOOL bAny = pTab[nTab]->GetPrintAreaVer( nStartCol, nEndCol, rEndRow, bNotes );
         if (pDrawLayer)
@@ -1433,9 +1444,9 @@ BOOL ScDocument::GetPrintAreaVer( USHORT nTab, USHORT nStartCol, USHORT nEndCol,
     return FALSE;
 }
 
-BOOL ScDocument::GetDataStart( USHORT nTab, USHORT& rStartCol, USHORT& rStartRow ) const
+BOOL ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) const
 {
-    if (nTab<=MAXTAB && pTab[nTab])
+    if (ValidTab(nTab) && pTab[nTab])
     {
         BOOL bAny = pTab[nTab]->GetDataStart( rStartCol, rStartRow );
         if (pDrawLayer)
@@ -1456,7 +1467,7 @@ BOOL ScDocument::GetDataStart( USHORT nTab, USHORT& rStartCol, USHORT& rStartRow
     return FALSE;
 }
 
-BOOL ScDocument::MoveTab( USHORT nOldPos, USHORT nNewPos )
+BOOL ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
     if (nOldPos == nNewPos) return FALSE;
     BOOL bValid = FALSE;
@@ -1464,7 +1475,7 @@ BOOL ScDocument::MoveTab( USHORT nOldPos, USHORT nNewPos )
     {
         if (pTab[nOldPos])
         {
-            USHORT nTabCount = GetTableCount();
+            SCTAB nTabCount = GetTableCount();
             if (nTabCount > 1)
             {
                 BOOL bOldAutoCalc = GetAutoCalc();
@@ -1478,7 +1489,7 @@ BOOL ScDocument::MoveTab( USHORT nOldPos, USHORT nNewPos )
                 //  Referenz-Updaterei
                 //! mit UpdateReference zusammenfassen!
 
-                short nDz = ((short)nNewPos) - (short)nOldPos;
+                SCsTAB nDz = ((SCsTAB)nNewPos) - (SCsTAB)nOldPos;
                 ScRange aSourceRange( 0,0,nOldPos, MAXCOL,MAXROW,nOldPos );
                 pRangeName->UpdateTabRef(nOldPos, 3, nNewPos);
                 pDBCollection->UpdateMoveTab( nOldPos, nNewPos );
@@ -1501,7 +1512,7 @@ BOOL ScDocument::MoveTab( USHORT nOldPos, USHORT nNewPos )
                                     aSourceRange, 0,0,nDz ) );
 
                 ScTable* pSaveTab = pTab[nOldPos];
-                USHORT i;
+                SCTAB i;
                 for (i = nOldPos + 1; i < nTabCount; i++)
                     pTab[i - 1] = pTab[i];
                 pTab[i-1] = NULL;
@@ -1525,7 +1536,7 @@ BOOL ScDocument::MoveTab( USHORT nOldPos, USHORT nNewPos )
                 SetAutoCalc( bOldAutoCalc );
 
                 if (pDrawLayer)
-                    DrawMovePage( nOldPos, nNewPos );
+                    DrawMovePage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
                 bValid = TRUE;
             }
@@ -1534,7 +1545,7 @@ BOOL ScDocument::MoveTab( USHORT nOldPos, USHORT nNewPos )
     return bValid;
 }
 
-BOOL ScDocument::CopyTab( USHORT nOldPos, USHORT nNewPos, const ScMarkData* pOnlyMarked )
+BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyMarked )
 {
     if (SC_TAB_APPEND == nNewPos ) nNewPos = nMaxTableNumber;
     String aName;
@@ -1544,7 +1555,7 @@ BOOL ScDocument::CopyTab( USHORT nOldPos, USHORT nNewPos, const ScMarkData* pOnl
     //  wenn nicht, nur doppelte vermeiden
     BOOL bPrefix = ValidTabName( aName );
     DBG_ASSERT(bPrefix, "ungueltiger Tabellenname");
-    USHORT nDummy;
+    SCTAB nDummy;
 
     CreateValidTabName(aName);
 
@@ -1587,7 +1598,7 @@ BOOL ScDocument::CopyTab( USHORT nOldPos, USHORT nNewPos, const ScMarkData* pOnl
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,1 ) );
 
-                USHORT i;
+                SCTAB i;
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i] && i != nOldPos)
                         pTab[i]->UpdateInsertTab(nNewPos);
@@ -1621,7 +1632,7 @@ BOOL ScDocument::CopyTab( USHORT nOldPos, USHORT nNewPos, const ScMarkData* pOnl
         SetNoListening( TRUE );     // noch nicht bei CopyToTable/Insert
         pTab[nOldPos]->CopyToTable(0, 0, MAXCOL, MAXROW, IDF_ALL, (pOnlyMarked != NULL),
                                         pTab[nNewPos], pOnlyMarked );
-        short nDz;
+        SCsTAB nDz;
 /*      if (nNewPos < nOldPos)
             nDz = ((short)nNewPos) - (short)nOldPos + 1;
         else
@@ -1641,7 +1652,7 @@ BOOL ScDocument::CopyTab( USHORT nOldPos, USHORT nNewPos, const ScMarkData* pOnl
         SetAutoCalc( bOldAutoCalc );
 
         if (pDrawLayer)
-            DrawCopyPage( nOldPos, nNewPos );
+            DrawCopyPage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
         pTab[nNewPos]->SetPageStyle( pTab[nOldPos]->GetPageStyle() );
     }
@@ -1650,8 +1661,8 @@ BOOL ScDocument::CopyTab( USHORT nOldPos, USHORT nNewPos, const ScMarkData* pOnl
     return bValid;
 }
 
-ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, USHORT nSrcPos,
-                                USHORT nDestPos, BOOL bInsertNew,
+ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
+                                SCTAB nDestPos, BOOL bInsertNew,
                                 BOOL bResultsOnly )
 {
     ULONG nRetVal = 1;                      // 0 => Fehler 1 = ok
@@ -1696,7 +1707,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, USHORT nSrcPos,
             if (pExchangeList->Count() > 0)
                 pFormatExchangeList = pExchangeList;
         }
-        nDestPos = Min(nDestPos, (USHORT)(GetTableCount() - 1));
+        nDestPos = Min(nDestPos, (SCTAB)(GetTableCount() - 1));
         pSrcDoc->pTab[nSrcPos]->CopyToTable(0, 0, MAXCOL, MAXROW,
             ( bResultsOnly ? IDF_ALL & ~IDF_FORMULA : IDF_ALL),
             FALSE, pTab[nDestPos] );
@@ -1717,7 +1728,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, USHORT nSrcPos,
                 ScRangeData* pSrcData = (*pSrcDoc->pRangeName)[i];
                 USHORT nOldIndex = pSrcData->GetIndex();
                 BOOL bInUse = FALSE;
-                for (USHORT j = 0; !bInUse && (j <= MAXTAB); j++)
+                for (SCTAB j = 0; !bInUse && (j <= MAXTAB); j++)
                 {
                     if (pSrcDoc->pTab[j])
                         bInUse = pSrcDoc->pTab[j]->IsRangeNameInUse(0, 0, MAXCOL, MAXROW,
@@ -1769,7 +1780,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, USHORT nSrcPos,
             if ( pSrcRangeNames )
                 delete [] pSrcRangeNames;
 
-            short nDz = ((short)nDestPos) - (short)nSrcPos;
+            SCsTAB nDz = ((SCsTAB)nDestPos) - (SCsTAB)nSrcPos;
             pTab[nDestPos]->UpdateReference(URM_COPY, 0, 0, nDestPos,
                                                      MAXCOL, MAXROW, nDestPos,
                                                      0, 0, nDz, NULL);
@@ -1805,7 +1816,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, USHORT nSrcPos,
 
 //  ----------------------------------------------------------------------------
 
-void ScDocument::SetError( USHORT nCol, USHORT nRow, USHORT nTab, const USHORT nError)
+void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const USHORT nError)
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
@@ -1827,7 +1838,7 @@ void ScDocument::EraseNonUsedSharedNames(USHORT nLevel)
             {
                 USHORT nIndex = pRangeData->GetIndex();
                 BOOL bInUse = FALSE;
-                for (USHORT j = 0; !bInUse && (j <= MAXTAB); j++)
+                for (SCTAB j = 0; !bInUse && (j <= MAXTAB); j++)
                 {
                     if (pTab[j])
                         bInUse = pTab[j]->IsRangeNameInUse(0, 0, MAXCOL-1, MAXROW-1,
