@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-02 20:10:02 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 14:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,14 +78,14 @@
     Text [ dutch ] = "Opslaan" ; \
     Text [ portuguese ] = "Guardar" ; \
     Text [ finnish ] = "Tallenna" ; \
-    Text[ chinese_simplified ] = "´æÅÌ";    \
+    Text[ chinese_simplified ] = "å­˜ç›˜";  \
     Text[ russian ] = "Ñîõğàíèòü";  \
     Text[ polish ] = "Zapisz";  \
-    Text[ japanese ] = "•Û‘¶";  \
-    Text[ chinese_traditional ] = "Àx¦s";   \
+    Text[ japanese ] = "ä¿å­˜";    \
+    Text[ chinese_traditional ] = "å„²å­˜"; \
     Text[ arabic ] = "ÍİÙ"; \
     Text[ greek ] = "ÁğïèŞêåõóç";   \
-    Text[ korean ] = "ÀúÀå";    \
+    Text[ korean ] = "ì €ì¥";  \
     Text[ turkish ] = "Kaydet"; \
     Text[ catalan ] = "Guardar";
 
@@ -111,15 +111,15 @@ TabPage RID_SFXPAGE_SAVE
         Text[ french ] = "Charger";
         Text[ spanish ] = "Cargar";
         Text[ finnish ] = "Load";
-        Text[ italian ] = "Load";
+        Text[ italian ] = "Carica";
         Text[ danish ] = "Load";
         Text[ swedish ] = "Ladda";
         Text[ polish ] = "£aduj";
         Text[ portuguese_brazilian ] = "Load";
-        Text[ japanese ] = "“Ç‚İ‚Ş";
+        Text[ japanese ] = "èª­ã¿è¾¼ã‚€";
         Text[ korean ] = "Load";
-        Text[ chinese_simplified ] = "×°Èë";
-        Text[ chinese_traditional ] = "¸ü¤J";
+        Text[ chinese_simplified ] = "è£…å…¥";
+        Text[ chinese_traditional ] = "è¼‰å…¥";
         Text[ turkish ] = "Load";
         Text[ arabic ] = "Load";
         Text[ catalan ] = "Load";
@@ -138,15 +138,15 @@ TabPage RID_SFXPAGE_SAVE
         Text[ french ] = "Chargement des paramètres utilisateur avec le document";
         Text[ spanish ] = "Cargar la configuración de usuario al cargar el documento";
         Text[ finnish ] = "Load user-defined settings with the document";
-        Text[ italian ] = "Load user-defined settings with the document";
+        Text[ italian ] = "Carica le impostazioni personalizzate insieme al documento";
         Text[ danish ] = "Load user-defined settings with the document";
         Text[ swedish ] = "Ladda ~användarspecifika inställningar med dokumentet";
         Text[ polish ] = "£aduj dokument ³¹cznie z ustawieniami indywidualnymi";
         Text[ portuguese_brazilian ] = "Load user-defined settings with the document";
-        Text[ japanese ] = "Õ°»Ş°“Æ©‚Ìİ’è‚ğÄŞ·­ÒİÄ‚Æ‚Æ‚à‚É“Ç‚İ‚Ş";
+        Text[ japanese ] = "ï¾•ï½°ï½»ï¾ï½°ç‹¬è‡ªã®è¨­å®šã‚’ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã¨ã¨ã‚‚ã«èª­ã¿è¾¼ã‚€";
         Text[ korean ] = "Load user-defined settings with the document";
-        Text[ chinese_simplified ] = "Á¬Í¬Ê¹ÓÃÕßµÄÉè¶¨Ò»Æğ×°ÈëÎÄµµ";
-        Text[ chinese_traditional ] = "³s¦P¨Ï¥ÎªÌªº³]©w¤@°_¸ü¤J¤å¥ó";
+        Text[ chinese_simplified ] = "è¿åŒä½¿ç”¨è€…çš„è®¾å®šä¸€èµ·è£…å…¥æ–‡æ¡£";
+        Text[ chinese_traditional ] = "é€£åŒä½¿ç”¨è€…çš„è¨­å®šä¸€èµ·è¼‰å…¥æ–‡ä»¶";
         Text[ turkish ] = "Load user-defined settings with the document";
         Text[ arabic ] = "Load user-defined settings with the document";
         Text[ catalan ] = "Load user-defined settings with the document";
@@ -168,14 +168,14 @@ TabPage RID_SFXPAGE_SAVE
         Text [ dutch ] = "Opslaan" ;
         Text [ spanish ] = "Guardar" ;
         Text [ english_us ] = "Save" ;
-        Text[ chinese_simplified ] = "´æÅÌ";
+        Text[ chinese_simplified ] = "å­˜ç›˜";
         Text[ russian ] = "Ñîõğàíèòü";
         Text[ polish ] = "Zapisz";
-        Text[ japanese ] = "•Û‘¶";
-        Text[ chinese_traditional ] = "Àx¦s";
+        Text[ japanese ] = "ä¿å­˜";
+        Text[ chinese_traditional ] = "å„²å­˜";
         Text[ arabic ] = "ÍİÙ";
         Text[ greek ] = "ÁğïèŞêåõóç";
-        Text[ korean ] = "ÀúÀå";
+        Text[ korean ] = "ì €ì¥";
         Text[ turkish ] = "Kaydet";
         Text[ catalan ] = "Guardar";
     };
@@ -197,14 +197,14 @@ TabPage RID_SFXPAGE_SAVE
         Text [ spanish ] = "Edi~tar propiedades previamente" ;
         Text [ english_us ] = "~Edit document properties before saving" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÏÈ±à¼­ÊôĞÔ(~E)";
+        Text[ chinese_simplified ] = "å…ˆç¼–è¾‘å±æ€§(~E)";
         Text[ russian ] = "Ïğàâêà ñâîéñòâ äîêóìåíòà äî ñîõğàíåíèÿ";
         Text[ polish ] = "Edytuj wczeœniej w³aœciwoœci";
-        Text[ japanese ] = "•Û‘¶‚ÉÌßÛÊßÃ¨‚ÌŠm”F(~E)";
-        Text[ chinese_traditional ] = "¥ı½s¿èÄİ©Ê(~E)";
+        Text[ japanese ] = "ä¿å­˜æ™‚ã«ï¾Œï¾Ÿï¾›ï¾Šï¾Ÿï¾ƒï½¨ã®ç¢ºèª(~E)";
+        Text[ chinese_traditional ] = "å…ˆç·¨è¼¯å±¬æ€§(~E)";
         Text[ arabic ] = "ÊÍÑíÑ ÎÕÇÆÕ ÇáãÓÊäÏ ŞÈá ÇáÍİÙ";
         Text[ greek ] = "Åğåîåñã. ~éäéïôŞôùí åããñÜöïõ ğñéí ôçí áğïèŞêåõóç";
-        Text[ korean ] = "¹®¼­ µî·ÏÁ¤º¸ »çÀü ÆíÁı(~E)";
+        Text[ korean ] = "ë¬¸ì„œ ë“±ë¡ì •ë³´ ì‚¬ì „ í¸ì§‘(~E)";
         Text[ turkish ] = "Önce özellikleri düzenle";
         Text[ catalan ] = "Edi~tar propiedades previamente";
     };
@@ -225,14 +225,14 @@ TabPage RID_SFXPAGE_SAVE
         Text [ dutch ] = "Altijd een ~reservekopie maken" ;
         Text [ spanish ] = "Cre~ar siempre copia de seguridad" ;
         Text [ english_us ] = "Al~ways create backup copy" ;
-        Text[ chinese_simplified ] = "×Ô¶¯½¨Á¢°²È«±¸¼ş(~W)";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨å»ºç«‹å®‰å…¨å¤‡ä»¶(~W)";
         Text[ russian ] = "Ñîçäàâàòü âñåãäà ğåçåğâíóş êîïèş";
         Text[ polish ] = "Twórz zawsze kopiê zapasow¹";
-        Text[ japanese ] = "íÊŞ¯¸±¯ÌßºËß°‚Ìì¬(~W)";
-        Text[ chinese_traditional ] = "¦Û°Ê»s§@¦w¥ş³Æ¥÷(~W)";
+        Text[ japanese ] = "å¸¸æ™‚ï¾Šï¾ï½¯ï½¸ï½±ï½¯ï¾Œï¾Ÿï½ºï¾‹ï¾Ÿï½°ã®ä½œæˆ(~W)";
+        Text[ chinese_traditional ] = "è‡ªå‹•è£½ä½œå®‰å…¨å‚™ä»½(~W)";
         Text[ arabic ] = "Úãá äÓÎÉ ÇÍÊíÇØíÉ ÏæãÇğ";
         Text[ greek ] = "ĞÜíôá äçìéïõñãßá áíôéãñÜöïõ á~óöáëåßáò";
-        Text[ korean ] = "Ç×»ó ¹é¾÷ º¹»çÇÏ±â(~W)";
+        Text[ korean ] = "í•­ìƒ ë°±ì—… ë³µì‚¬í•˜ê¸°(~W)";
         Text[ turkish ] = "~Her zaman yedekle";
         Text[ catalan ] = "Cre~ar siempre copia de seguridad";
     };
@@ -253,14 +253,14 @@ TabPage RID_SFXPAGE_SAVE
         Text [ dutch ] = "~Automatisch opslaan alle" ;
         Text [ spanish ] = "~Guardar automáticamente cada" ;
         Text [ english_us ] = "~AutoSave every" ;
-        Text[ chinese_simplified ] = "È«²¿×Ô¶¯´æÅÌ(~A)";
+        Text[ chinese_simplified ] = "å…¨éƒ¨è‡ªåŠ¨å­˜ç›˜(~A)";
         Text[ russian ] = "Ñîõğàíÿòü àâòîìàòè÷åñêè êàæäûå";
         Text[ polish ] = "Zapisuj automatycznie co";
-        Text[ japanese ] = "‚·‚×‚Ä©“®“I‚É•Û‘¶(~A)";
-        Text[ chinese_traditional ] = "¥ş³¡¦Û°ÊÀx¦s(~A)";
+        Text[ japanese ] = "ã™ã¹ã¦è‡ªå‹•çš„ã«ä¿å­˜(~A)";
+        Text[ chinese_traditional ] = "å…¨éƒ¨è‡ªå‹•å„²å­˜(~A)";
         Text[ arabic ] = "ÇáÍİÙ ÊáŞÇÆíÇğ ßá";
         Text[ greek ] = "Áõôüìáôç áğïèŞêåõóç üëùí";
-        Text[ korean ] = "¸ğµÎ ÀÚµ¿À¸·Î ÀúÀå(~A)";
+        Text[ korean ] = "ëª¨ë‘ ìë™ìœ¼ë¡œ ì €ì¥(~A)";
         Text[ turkish ] = "Otomatik kaydetme sıklığı";
         Text[ catalan ] = "~Guardar automáticamente cada";
     };
@@ -297,14 +297,14 @@ TabPage RID_SFXPAGE_SAVE
         Text [ dutch ] = "Minuten" ;
         Text [ spanish ] = "Minutos" ;
         Text [ english_us ] = "Minutes" ;
-        Text[ chinese_simplified ] = "·ÖÖÓ";
+        Text[ chinese_simplified ] = "åˆ†é’Ÿ";
         Text[ russian ] = "Ìèíóò(û)";
         Text[ polish ] = "minut(y)";
-        Text[ japanese ] = "•ª–ˆ‚És‚¤";
-        Text[ chinese_traditional ] = "¤ÀÄÁ";
+        Text[ japanese ] = "åˆ†æ¯ã«è¡Œã†";
+        Text[ chinese_traditional ] = "åˆ†é˜";
         Text[ arabic ] = "ÏŞÇÆŞ";
         Text[ greek ] = "ËåğôÜ";
-        Text[ korean ] = "ºĞ";
+        Text[ korean ] = "ë¶„";
         Text[ turkish ] = "Dakika";
         Text[ catalan ] = "Minutos";
     };
@@ -325,14 +325,14 @@ TabPage RID_SFXPAGE_SAVE
         Text [ dutch ] = "~Met bevestiging" ;
         Text [ spanish ] = "Con c~onsulta" ;
         Text [ english_us ] = "~Prompt to save" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾Ñ¯ÎÊ(~P)";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºè¯¢é—®(~P)";
         Text[ russian ] = "Ñ çàïğîñîì";
         Text[ polish ] = "Potwierdzenie";
-        Text[ japanese ] = "Šm”FÒ¯¾°¼Ş‚Ì•\\¦(~P)";
-        Text[ chinese_traditional ] = "Åã¥Ü¸ß°İ(~P)";
+        Text[ japanese ] = "ç¢ºèªï¾’ï½¯ï½¾ï½°ï½¼ï¾ã®è¡¨ç¤º(~P)";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºè©¢å•(~P)";
         Text[ arabic ] = "ÇáãØÇáÈÉ ÈÇáÍİÙ";
         Text[ greek ] = "Ìå å~ñşôçóç äéåõêñßíéóçò";
-        Text[ korean ] = "ÀúÀåÇÒ ¶§ È®ÀÎ(~P)";
+        Text[ korean ] = "ì €ì¥í•  ë•Œ í™•ì¸(~P)";
         Text[ turkish ] = "~Önce sor";
         Text[ catalan ] = "Con c~onsulta";
     };
@@ -351,14 +351,14 @@ TabPage RID_SFXPAGE_SAVE
         Text [ danish ] = "Gem URLs relativt" ;
         Text [ portuguese_brazilian ] = "URLs relativ speichern" ;
         Text [ portuguese ] = "Guardar URLs relativamente" ;
-        Text[ chinese_simplified ] = "´æÅÌÏà¶ÔµÄURLµØÖ·";
+        Text[ chinese_simplified ] = "å­˜ç›˜ç›¸å¯¹çš„URLåœ°å€";
         Text[ russian ] = "Ñîõğàíÿòü URL îòíîñèòåëüíî";
         Text[ polish ] = "Zapisz adresy URL w sposób relatywny";
-        Text[ japanese ] = "URL ±ÄŞÚ½‚Ì‘Š‘Î•Û‘¶";
-        Text[ chinese_traditional ] = "Àx¦s¬Û¹ï¦¡ URL ¦a§}";
+        Text[ japanese ] = "URL ï½±ï¾„ï¾ï¾šï½½ã®ç›¸å¯¾ä¿å­˜";
+        Text[ chinese_traditional ] = "å„²å­˜ç›¸å°å¼ URL åœ°å€";
         Text[ arabic ] = "ÍİÙ ÇáÜ URLs ÍİÙÇğ äÓÈíÇğ İí";
         Text[ greek ] = "Ó÷åôéêŞ áğïèŞêåõóç ôùí URL";
-        Text[ korean ] = "URL »ó´ëÀû ÀúÀå";
+        Text[ korean ] = "URL ìƒëŒ€ì  ì €ì¥";
         Text[ turkish ] = "URL göreceli kayıt yeri";
         Text[ finnish ] = "URL-osoitteen viitelinkin aloituskohta";
         Text[ catalan ] = "Guardar URLs relativamente";
@@ -379,14 +379,14 @@ TabPage RID_SFXPAGE_SAVE
         Text [ danish ] = "i filsystemet" ;
         Text [ portuguese_brazilian ] = "im Da~teisystem" ;
         Text [ portuguese ] = "No sistema de ~ficheiros" ;
-        Text[ chinese_simplified ] = "ÔÚÎÄ¼şÏµÍ³ÄÚ(~F)";
+        Text[ chinese_simplified ] = "åœ¨æ–‡ä»¶ç³»ç»Ÿå†…(~F)";
         Text[ russian ] = "â ñèñòåìå ôàéëîâ";
         Text[ polish ] = "W systemie pli~ków";
-        Text[ japanese ] = "Ì§²Ù ¼½ÃÑ(~F)";
-        Text[ chinese_traditional ] = "¦bÀÉ®×¨t²Î¤º(~F)";
+        Text[ japanese ] = "ï¾Œï½§ï½²ï¾™ ï½¼ï½½ï¾ƒï¾‘(~F)";
+        Text[ chinese_traditional ] = "åœ¨æª”æ¡ˆç³»çµ±å…§(~F)";
         Text[ arabic ] = "äÙÇã Çáãáİ";
         Text[ greek ] = "óôï óıóôçìá áñ÷åßùí";
-        Text[ korean ] = "ÆÄÀÏ ½Ã½ºÅÛ(~F)";
+        Text[ korean ] = "íŒŒì¼ ì‹œìŠ¤í…œ(~F)";
         Text[ language_user1 ] = "LS 21.12.99 Vorsicht, nicht viel Platz! - - - -";
         Text[ turkish ] = "Dosya sistemi";
         Text[ finnish ] = "~Tiedostojärjestelmä";
@@ -407,14 +407,14 @@ TabPage RID_SFXPAGE_SAVE
         Text [ danish ] = "på Internettet" ;
         Text [ portuguese_brazilian ] = "im Int~ernet" ;
         Text [ portuguese ] = "Na Int~ernet" ;
-        Text[ chinese_simplified ] = "ÔÚ¹ú¼Ê»¥ÁªÍøÄÚ(~I)";
+        Text[ chinese_simplified ] = "åœ¨å›½é™…äº’è”ç½‘å†…(~I)";
         Text[ russian ] = "â Èíòåğíåòå";
         Text[ polish ] = "W I~nternecie";
-        Text[ japanese ] = "²İÀ°È¯Ä(~I)";
+        Text[ japanese ] = "ï½²ï¾ï¾€ï½°ï¾ˆï½¯ï¾„(~I)";
         Text[ chinese_traditional ] = "~Internet";
         Text[ arabic ] = "ÇáÅäÊÑäÊ";
         Text[ greek ] = "óôï Internet";
-        Text[ korean ] = "ÀÎÅÍ³İ(~I)";
+        Text[ korean ] = "ì¸í„°ë„·(~I)";
         Text[ turkish ] = "Internet";
         Text[ finnish ] = "~Internet";
         Text[ catalan ] = "En ~Internet";
@@ -437,10 +437,10 @@ TabPage RID_SFXPAGE_SAVE
         Text[ swedish ] = "Standardfilformat";
         Text[ polish ] = "Domyœlny format pliku";
         Text[ portuguese_brazilian ] = "Standard file format";
-        Text[ japanese ] = "•W€Ì§²ÙŒ`®";
-        Text[ korean ] = "±âº» ÆÄÀÏ Æ÷¸Ë";
-        Text[ chinese_simplified ] = "±ê×¼ÎÄ¼ş¸ñÊ½";
-        Text[ chinese_traditional ] = "¼Ğ·ÇÀÉ®×®æ¦¡";
+        Text[ japanese ] = "æ¨™æº–ï¾Œï½§ï½²ï¾™å½¢å¼";
+        Text[ korean ] = "ê¸°ë³¸ íŒŒì¼ í¬ë§·";
+        Text[ chinese_simplified ] = "æ ‡å‡†æ–‡ä»¶æ ¼å¼";
+        Text[ chinese_traditional ] = "æ¨™æº–æª”æ¡ˆæ ¼å¼";
         Text[ turkish ] = "Standard file format";
         Text[ arabic ] = "Standard file format";
         Text[ finnish ] = "Standard Dateiformat";
@@ -465,10 +465,10 @@ TabPage RID_SFXPAGE_SAVE
         Text[ swedish ] = "~Dokumenttyp";
         Text[ polish ] = "Typ dokumentu";
         Text[ portuguese_brazilian ] = "Document";
-        Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ìí—Ş(~O)";
-        Text[ korean ] = "¹®¼­ À¯Çü(~O)";
-        Text[ chinese_simplified ] = "ÎÄµµÀàĞÍ(~O)";
-        Text[ chinese_traditional ] = "¤å¥óÃş«¬(~O)";
+        Text[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã®ç¨®é¡(~O)";
+        Text[ korean ] = "ë¬¸ì„œ ìœ í˜•(~O)";
+        Text[ chinese_simplified ] = "æ–‡æ¡£ç±»å‹(~O)";
+        Text[ chinese_traditional ] = "æ–‡ä»¶é¡å‹(~O)";
         Text[ turkish ] = "Document";
         Text[ arabic ] = "Document";
         Text[ catalan ] = "Document";
@@ -492,10 +492,10 @@ TabPage RID_SFXPAGE_SAVE
         Text[ swedish ] = "Spara alltid s~om";
         Text[ polish ] = "Zapisuj zawsze jako";
         Text[ portuguese_brazilian ] = "File formats";
-        Text[ japanese ] = "í‚ÉŸ‚ÌŒ`®‚Å•Û‘¶(~V)";
-        Text[ korean ] = "Ç×»ó ..·Î ÀúÀå(~V)";
-        Text[ chinese_simplified ] = "×Ô¶¯±£´æÎª(~V)";
-        Text[ chinese_traditional ] = "¦Û°Ê¥t¦s¬°(~V)";
+        Text[ japanese ] = "å¸¸ã«æ¬¡ã®å½¢å¼ã§ä¿å­˜(~V)";
+        Text[ korean ] = "í•­ìƒ ..ë¡œ ì €ì¥(~V)";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨ä¿å­˜ä¸º(~V)";
+        Text[ chinese_traditional ] = "è‡ªå‹•å¦å­˜ç‚º(~V)";
         Text[ turkish ] = "File formats";
         Text[ arabic ] = "File formats";
         Text[ catalan ] = "File formats";
@@ -651,39 +651,39 @@ TabPage RID_SFXPAGE_SAVE
         };
     StringList [ japanese ] =
     {
-            < "•¶‘ÄŞ·­ÒİÄ" ;     APP_WRITER    ; > ;
-        < "HTML Œ`®ÄŞ·­ÒİÄ" ;    APP_WRITER_WEB;  > ;
-        < "•\\ŒvZÄŞ·­ÒİÄ" ; APP_CALC      ; > ;
-        < "ÌßÚ¾ŞİÃ°¼®İ" ;     APP_IMPRESS   ; > ;
-        < "}Œ`•`‰æ" ;        APP_DRAW      ; > ;
-        < "”®" ;           APP_MATH      ; > ;
+            < "æ–‡æ›¸ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„" ;     APP_WRITER    ; > ;
+        < "HTML å½¢å¼ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„" ;    APP_WRITER_WEB;  > ;
+        < "è¡¨è¨ˆç®—ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„" ; APP_CALC      ; > ;
+        < "ï¾Œï¾Ÿï¾šï½¾ï¾ï¾ï¾ƒï½°ï½¼ï½®ï¾" ;     APP_IMPRESS   ; > ;
+        < "å›³å½¢æç”»" ;        APP_DRAW      ; > ;
+        < "æ•°å¼" ;           APP_MATH      ; > ;
         };
     StringList [ korean ] =
     {
-            < "±Û¡¡¹®¼­" ;     APP_WRITER    ; > ;
-        < "HTMLÇü ¹®¼­" ;    APP_WRITER_WEB;  > ;
-        < "Å×ÀÌºí ¹®¼­" ; APP_CALC      ; > ;
-        < "½½¶óÀÌµå¼î" ;     APP_IMPRESS   ; > ;
+            < "ê¸€ã€€ë¬¸ì„œ" ;     APP_WRITER    ; > ;
+        < "HTMLí˜• ë¬¸ì„œ" ;    APP_WRITER_WEB;  > ;
+        < "í…Œì´ë¸” ë¬¸ì„œ" ; APP_CALC      ; > ;
+        < "ìŠ¬ë¼ì´ë“œì‡¼" ;     APP_IMPRESS   ; > ;
         < "draw" ;        APP_DRAW      ; > ;
-        < "¼ö½Ä" ;           APP_MATH      ; > ;
+        < "ìˆ˜ì‹" ;           APP_MATH      ; > ;
         };
     StringList [ chinese_simplified ] =
     {
-            < "ÎÄ±¾ÎÄµµ" ;     APP_WRITER    ; > ;
-        < "HTML ÎÄµµ" ;    APP_WRITER_WEB;  > ;
-        < "¹¤×÷±íÎÄµµ" ; APP_CALC      ; > ;
-        < "ÑİÊ¾ÎÄ¸å" ;     APP_IMPRESS   ; > ;
-        < "»æÍ¼" ;        APP_DRAW      ; > ;
-        < "¹«Ê½" ;           APP_MATH      ; > ;
+            < "æ–‡æœ¬æ–‡æ¡£" ;     APP_WRITER    ; > ;
+        < "HTML æ–‡æ¡£" ;    APP_WRITER_WEB;  > ;
+        < "å·¥ä½œè¡¨æ–‡æ¡£" ; APP_CALC      ; > ;
+        < "æ¼”ç¤ºæ–‡ç¨¿" ;     APP_IMPRESS   ; > ;
+        < "ç»˜å›¾" ;        APP_DRAW      ; > ;
+        < "å…¬å¼" ;           APP_MATH      ; > ;
         };
     StringList [ chinese_traditional ] =
     {
-            < "¤å¦r¤å¥ó" ;     APP_WRITER    ; > ;
-        < "HTML ¤å¥ó" ;    APP_WRITER_WEB;  > ;
-        < "¤u§@ªí¤å¥ó" ; APP_CALC      ; > ;
-        < "Â²³ø" ;     APP_IMPRESS   ; > ;
-        < "Ã¸¹Ï" ;        APP_DRAW      ; > ;
-        < "¤½¦¡" ;           APP_MATH      ; > ;
+            < "æ–‡å­—æ–‡ä»¶" ;     APP_WRITER    ; > ;
+        < "HTML æ–‡ä»¶" ;    APP_WRITER_WEB;  > ;
+        < "å·¥ä½œè¡¨æ–‡ä»¶" ; APP_CALC      ; > ;
+        < "ç°¡å ±" ;     APP_IMPRESS   ; > ;
+        < "ç¹ªåœ–" ;        APP_DRAW      ; > ;
+        < "å…¬å¼" ;           APP_MATH      ; > ;
         };
     StringList [ turkish ] =
     {
@@ -724,6 +724,7 @@ TabPage RID_SFXPAGE_SAVE
 };
 
 // ********************************************************************** EOF
+
 
 
 
