@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 17:42:35 $
+#   last change: $Author: kz $ $Date: 2003-12-11 12:36:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -206,6 +206,8 @@ IDLFILES=\
     UnoControlRadioButtonModel.idl\
     UnoControlScrollBar.idl\
     UnoControlScrollBarModel.idl\
+    UnoControlSpinButton.idl\
+    UnoControlSpinButtonModel.idl\
     UnoControlTimeField.idl\
     UnoControlTimeFieldModel.idl\
     VclContainerEvent.idl\
@@ -269,6 +271,7 @@ IDLFILES=\
     XScrollBar.idl\
     XSpinField.idl\
     XSpinListener.idl\
+    XSpinValue.idl\
     XSystemChildFactory.idl\
     XSystemDependentWindowPeer.idl\
     SystemDependentXWindow.idl\
