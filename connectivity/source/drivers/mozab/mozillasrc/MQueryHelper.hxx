@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQueryHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-09-26 10:07:07 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,9 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
-
+#ifndef _THREAD_HXX_
+#include <osl/thread.hxx>
+#endif
 
 namespace connectivity
 {
@@ -93,13 +95,20 @@ namespace connectivity
             DECLARE_STL_USTRINGACCESS_MAP(::rtl::OUString,fieldMap);
 
             fieldMap    m_Fields;
-
+            nsCOMPtr<nsIAbCard> m_Card;
+            sal_Int32   m_RowStates;
         public:
             MQueryHelperResultEntry();
             ~MQueryHelperResultEntry();
 
             void insert( const rtl::OUString &key, rtl::OUString &value );
             rtl::OUString getValue( const rtl::OUString &key ) const;
+            rtl::OUString setValue( const rtl::OUString &key, const rtl::OUString & rValue);
+
+            void setCard(nsIAbCard *card);
+            nsIAbCard *getCard();
+            sal_Bool setRowStates(sal_Int32 state){m_RowStates = state; return sal_True;};
+            sal_Int32 getRowStates()  { return m_RowStates;};
         };
 
         class MQueryHelper : public nsIAbDirectoryQueryResultListener
@@ -122,10 +131,15 @@ namespace connectivity
 
             void            clearResultOrComplete();
             void            notifyResultOrComplete();
-            sal_Bool        waitForResultOrComplete( ::rtl::OUString& _rError );
+            sal_Bool        waitForResultOrComplete( );
             void            addCardAttributeAndValue(const ::rtl::OUString& sName, nsXPIDLString sValue,MQueryHelperResultEntry *resEntry);
-            void            getCardValues(nsIAbCard  *card);
+            void            getCardAttributeAndValue(const ::rtl::OUString& sName, ::rtl::OUString &ouValue, MQueryHelperResultEntry *resEntry) ;
+            void            getCardValues(nsIAbCard  *card,sal_Int32 rowIndex=0);
+#if OSL_DEBUG_LEVEL > 0
+            oslThreadIdentifier m_oThreadID;
+#endif
 
+            mutable ::rtl::OUString         m_aErrorString;
         public:
 
             NS_DECL_ISUPPORTS
@@ -139,9 +153,9 @@ namespace connectivity
 
             void                            rewind();
 
-            MQueryHelperResultEntry*   next( ::rtl::OUString& _rError );
+            MQueryHelperResultEntry*   next( );
 
-            MQueryHelperResultEntry*   getByIndex( sal_Int32 nRow, ::rtl::OUString& _rError );
+            MQueryHelperResultEntry*   getByIndex( sal_Int32 nRow );
 
             sal_Bool                   isError() const;
 
@@ -151,15 +165,22 @@ namespace connectivity
 
             sal_Bool                   queryComplete() const;
 
-            sal_Bool                   waitForQueryComplete( rtl::OUString& _rError );
+            sal_Bool                   waitForQueryComplete(  );
 
-            sal_Bool                   waitForRow( sal_Int32 rowNum, rtl::OUString& _rError );
+            sal_Bool                   waitForRow( sal_Int32 rowNum );
 
             sal_Int32                  getResultCount() const;
 
             sal_uInt32                 getRealCount() const;
+            sal_Int32                  createNewCard(); //return Row count number
+            sal_Bool                   resyncRow(sal_Int32 rowIndex);
 
             void                       notifyQueryError() ;
+            sal_Bool                   setCardValues(const sal_Int32 rowIndex);
+            sal_Int32                  commitCard(const sal_Int32 rowIndex, nsIAbDirectory * directory);
+            sal_Int32                  deleteCard(const sal_Int32 rowIndex, nsIAbDirectory * directory);
+            const ::rtl::OUString&     getErrorString() const
+                                            { return m_aErrorString; };
         };
     }
 }
