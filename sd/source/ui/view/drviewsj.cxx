@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:03:03 $
+ *  last change: $Author: cl $ $Date: 2002-11-20 10:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,10 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
+#ifndef _IPOBJ_HXX
+#include <so3/ipobj.hxx>
+#endif
+
 #pragma hdrstop
 
 #include "app.hrc"
@@ -179,13 +183,24 @@ void SdDrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_FRAME_TO_BOTTOM ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BEFORE_OBJ ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BEHIND_OBJ ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REVERSE_ORDER ) )
+            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REVERSE_ORDER ) ||
+            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ORIGINAL_SIZE ) )
         {
             const SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
             UINT32 nInv = pObj->GetObjInventor();
             UINT16 nId = pObj->GetObjIdentifier();
             SdrObjTransformInfoRec aInfoRec;
             pObj->TakeObjInfo( aInfoRec );
+
+
+            // #91929#; don't show original size entry if not possible
+            if ( pObj->ISA( SdrOle2Obj ) )
+            {
+                SdrOle2Obj* pOleObj = PTR_CAST(SdrOle2Obj, pObj);
+                if (pOleObj->GetObjRef().Is() &&
+                    ((pOleObj->GetObjRef()->GetMiscStatus() & SVOBJ_MISCSTATUS_SERVERRESIZE) == SVOBJ_MISCSTATUS_SERVERRESIZE))
+                    rSet.DisableItem(SID_ORIGINAL_SIZE);
+            }
 
             // Wenn es sich um kein Gruppenobjekt oder 3D-Objekt handelt
             // wird "Gruppe betreten" disabled
