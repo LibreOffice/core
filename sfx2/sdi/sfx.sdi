@@ -3996,7 +3996,7 @@ SfxBoolItem LateInitDone SID_LATEINIT_DONE
 
 //--------------------------------------------------------------------------
 SfxStringItem LibLoaded SID_BASICIDE_LIBLOADED
-(SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
+(SfxObjectShellItem Shell SID_BASICIDE_ARG_SHELL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4024,7 +4024,7 @@ SfxStringItem LibLoaded SID_BASICIDE_LIBLOADED
 
 //--------------------------------------------------------------------------
 SfxStringItem LibRemoved SID_BASICIDE_LIBREMOVED
-(SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
+(SfxObjectShellItem Shell SID_BASICIDE_ARG_SHELL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4052,7 +4052,7 @@ SfxStringItem LibRemoved SID_BASICIDE_LIBREMOVED
 
 //--------------------------------------------------------------------------
 SfxStringItem LibSelect SID_BASICIDE_LIBSELECTED
-(SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
+(SfxObjectShellItem Shell SID_BASICIDE_ARG_SHELL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
     /* flags: */
     AutoUpdate = FALSE,
