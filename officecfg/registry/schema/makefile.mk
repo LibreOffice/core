@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: cd $ $Date: 2002-08-05 05:28:33 $
+#   last change: $Author: tpf $ $Date: 2002-08-07 14:58:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,6 +103,10 @@ XCDTRANSFORM=$(foreach,i,$(XCSFILES) $(MISC)$/xcdformat$/{$(subst,.xcs,.xcd $i)}
 # transform xcd format to output format
 OLDTRANSFORM=$(foreach,i,$(XCSFILES) $(MISC)$/instance$/{$(subst,.xcs,.xml $i)})
 
+# transform xcs format to properties format
+RESOURCES1=$(foreach,j,$(foreach,i,$(XCSFILES) $(MISC)$/registry$/res$/$i) $(foreach,k,$(alllangext) $(subst,$/res,$/res$/{$(iso_$(k))} $j)))
+RESOURCES=$(foreach,i,$(RESOURCES1) $(subst,.xcs,.properties $i))
+
 # remove unnecessary info from the component schemas
 TRIMXSL=$(foreach,i,$(XCSFILES) $(MISC)$/registry$/schema$/{$(subst,.xcs,.xcs $i)})
 
@@ -138,5 +142,6 @@ ALLTAR: \
     $(MISC)$/oo-component-list.conf \
     $(XCDTRANSFORM) \
     $(OLDTRANSFORM) \
-    $(COMPARE) 
+    $(COMPARE) \
+    $(RESOURCES)
     
