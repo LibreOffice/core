@@ -431,7 +431,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleWindow</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleWindow</supported-service>
     </component-description>
 
     <component-description>
@@ -441,7 +441,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleButton</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleButton</supported-service>
     </component-description>
 
     <component-description>
@@ -451,7 +451,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleRadioButton</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleRadioButton</supported-service>
     </component-description>
 
     <component-description>
@@ -461,7 +461,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleCheckBox</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleCheckBox</supported-service>
     </component-description>
 
     <component-description>
@@ -471,7 +471,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleFixedText</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleFixedText</supported-service>
     </component-description>
 
     <component-description>
@@ -481,7 +481,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleEdit</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleEdit</supported-service>
     </component-description>
 
     <component-description>
@@ -491,7 +491,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleScrollBar</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleScrollBar</supported-service>
     </component-description>
 
     <component-description>
@@ -501,7 +501,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleListBox</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleListBox</supported-service>
     </component-description>
 
     <component-description>
@@ -511,7 +511,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleList</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleList</supported-service>
     </component-description>
 
     <component-description>
@@ -521,7 +521,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleListItem</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleListItem</supported-service>
     </component-description>
 
     <component-description>
@@ -531,7 +531,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleDropDownListBox</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleDropDownListBox</supported-service>
     </component-description>
 
     <component-description>
@@ -541,7 +541,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleComboBox</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleComboBox</supported-service>
     </component-description>
 
     <component-description>
@@ -551,7 +551,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleDropDownComboBox</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleDropDownComboBox</supported-service>
     </component-description>
 
     <component-description>
@@ -561,7 +561,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleToolBox</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleToolBox</supported-service>
     </component-description>
 
     <component-description>
@@ -571,7 +571,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleToolBoxItem</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleToolBoxItem</supported-service>
     </component-description>
 
     <component-description>
@@ -581,7 +581,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessiblePopupMenu</supported-service>
+        <supported-service>com.sun.star.awt.AccessiblePopupMenu</supported-service>
     </component-description>
 
     <component-description>
@@ -591,7 +591,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleMenuBar</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleMenuBar</supported-service>
     </component-description>
 
     <component-description>
@@ -601,7 +601,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleMenu</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleMenu</supported-service>
     </component-description>
 
     <component-description>
@@ -611,7 +611,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleMenuItem</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleMenuItem</supported-service>
     </component-description>
 
     <component-description>
@@ -621,7 +621,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleMenuSeparator</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleMenuSeparator</supported-service>
     </component-description>
 
     <component-description>
@@ -631,7 +631,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleTabControl</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleTabControl</supported-service>
     </component-description>
 
     <component-description>
@@ -641,7 +641,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleTabPage</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleTabPage</supported-service>
     </component-description>
 
     <component-description>
@@ -651,7 +651,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleStatusBar</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleStatusBar</supported-service>
     </component-description>
 
     <component-description>
@@ -661,6 +661,6 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleStatusBarItem</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleStatusBarItem</supported-service>
     </component-description>
 </module-description>
