@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:03:16 $
+ *  last change: $Author: kz $ $Date: 2004-12-08 17:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,8 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     aCursorMoveTimer.SetTimeoutHdl(LINK(this, SmEditWindow, CursorMoveTimerHdl));
     aCursorMoveTimer.SetTimeout(500);
 
+    // if not called explicitly the this edit window within the
+    // command window will just show an empty gray panel.
     Show();
 }
 
