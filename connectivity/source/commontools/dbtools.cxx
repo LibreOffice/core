@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:14:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1208,7 +1208,9 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
     ::rtl::OUString sStatement;
     try
     {
-        Reference< XConnection> xConn( connectRowset( Reference< XRowSet >( _rxRowSet, UNO_QUERY ), _rxFactory, sal_True ) );
+        Reference< XConnection> xConn;
+        if ( !isEmbeddedInDatabase( _rxRowSet, xConn ) )
+            xConn = connectRowset( Reference< XRowSet >( _rxRowSet, UNO_QUERY ), _rxFactory, sal_True );
         if ( xConn.is() )       // implies _rxRowSet.is()
         {
             // build the statement the row set is based on (can't use the ActiveCommand property of the set
