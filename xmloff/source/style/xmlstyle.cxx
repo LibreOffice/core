@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-15 14:01:54 $
+ *  last change: $Author: cl $ $Date: 2000-11-28 14:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
     { XML_NAMESPACE_DRAW,   sXML_fill_image,    XML_TOK_STYLES_BITMAPSTYLES        },
     { XML_NAMESPACE_DRAW,   sXML_transparency,  XML_TOK_STYLES_TRANSGRADIENTSTYLES },
     { XML_NAMESPACE_DRAW,   sXML_marker,        XML_TOK_STYLES_MARKERSTYLES        },
+    { XML_NAMESPACE_DRAW,   sXML_stroke_dash,   XML_TOK_STYLES_DASHSTYLES        },
     { XML_NAMESPACE_TEXT,   sXML_footnotes_configuration,
       XML_TOK_TEXT_FOOTNOTE_CONFIG },
     { XML_NAMESPACE_TEXT,   sXML_endnotes_configuration,
@@ -596,6 +597,11 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
             case XML_TOK_STYLES_MARKERSTYLES:
             {
                 pStyle = new XMLMarkerStyleContext( GetImport(), nPrefix, rLocalName, xAttrList );
+                break;
+            }
+            case XML_TOK_STYLES_DASHSTYLES:
+            {
+                pStyle = new XMLDashStyleContext( GetImport(), nPrefix, rLocalName, xAttrList );
                 break;
             }
         }

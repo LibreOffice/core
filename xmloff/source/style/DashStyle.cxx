@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DashStyle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-10 11:03:22 $
+ *  last change: $Author: cl $ $Date: 2000-11-28 14:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,20 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_DRAWING_DASHSTYLE_HPP_
+#include <com/sun/star/drawing/DashStyle.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_LINEDASH_HPP_
+#include <com/sun/star/drawing/LineDash.hpp>
+#endif
+
 #ifndef _XMLOFF_DASHSTYLE_HXX
 #include "DashStyle.hxx"
 #endif
 
 #ifndef _XMLOFF_ATTRLIST_HXX
-#include"attrlist.hxx"
+#include "attrlist.hxx"
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
@@ -101,48 +109,40 @@
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
-/*
+
 enum SvXMLTokenMapAttrs
 {
-    XML_TOK_GRADIENT_NAME,
-    XML_TOK_GRADIENT_STYLE,
-    XML_TOK_GRADIENT_CX,
-    XML_TOK_GRADIENT_CY,
-    XML_TOK_GRADIENT_STARTCOLOR,
-    XML_TOK_GRADIENT_ENDCOLOR,
-    XML_TOK_GRADIENT_STARTINT,
-    XML_TOK_GRADIENT_ENDINT,
-    XML_TOK_GRADIENT_ANGLE,
-    XML_TOK_GRADIENT_BORDER,
-    XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
+    XML_TOK_DASH_NAME,
+    XML_TOK_DASH_STYLE,
+    XML_TOK_DASH_DOTS1,
+    XML_TOK_DASH_DOTS1LEN,
+    XML_TOK_DASH_DOTS2,
+    XML_TOK_DASH_DOTS2LEN,
+    XML_TOK_DASH_DISTANCE,
+    XML_TOK_DASH_END=XML_TOK_UNKNOWN
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aGradientAttrTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aDashStyleAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW, sXML_name, XML_TOK_GRADIENT_NAME },
-    { XML_NAMESPACE_DRAW, sXML_style, XML_TOK_GRADIENT_STYLE },
-    { XML_NAMESPACE_DRAW, sXML_cx, XML_TOK_GRADIENT_CX },
-    { XML_NAMESPACE_DRAW, sXML_cy, XML_TOK_GRADIENT_CY },
-    { XML_NAMESPACE_DRAW, sXML_start_color, XML_TOK_GRADIENT_STARTCOLOR },
-    { XML_NAMESPACE_DRAW, sXML_end_color, XML_TOK_GRADIENT_ENDCOLOR },
-    { XML_NAMESPACE_DRAW, sXML_start_intensity, XML_TOK_GRADIENT_STARTINT },
-    { XML_NAMESPACE_DRAW, sXML_end_intensity, XML_TOK_GRADIENT_ENDINT },
-    { XML_NAMESPACE_DRAW, sXML_gradient_angle, XML_TOK_GRADIENT_ANGLE },
-    { XML_NAMESPACE_DRAW, sXML_gradient_border, XML_TOK_GRADIENT_BORDER },
+    { XML_NAMESPACE_DRAW, sXML_name,            XML_TOK_DASH_NAME },
+    { XML_NAMESPACE_DRAW, sXML_style,           XML_TOK_DASH_STYLE },
+    { XML_NAMESPACE_DRAW, sXML_dots1,           XML_TOK_DASH_DOTS1 },
+    { XML_NAMESPACE_DRAW, sXML_dots1_length,    XML_TOK_DASH_DOTS1LEN },
+    { XML_NAMESPACE_DRAW, sXML_dots2,           XML_TOK_DASH_DOTS2 },
+    { XML_NAMESPACE_DRAW, sXML_dots2_length,    XML_TOK_DASH_DOTS2LEN },
+    { XML_NAMESPACE_DRAW, sXML_distance,        XML_TOK_DASH_DISTANCE },
     XML_TOKEN_MAP_END
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_GradientStyle_Enum[] =
+SvXMLEnumMapEntry __READONLY_DATA pXML_DashStyle_Enum[] =
 {
-    { sXML_gradientstyle_linear,        awt::GradientStyle_LINEAR },
-    { sXML_gradientstyle_axial,         awt::GradientStyle_AXIAL },
-    { sXML_gradientstyle_radial,        awt::GradientStyle_RADIAL },
-    { sXML_gradientstyle_ellipsoid,     awt::GradientStyle_ELLIPTICAL },
-    { sXML_gradientstyle_square,        awt::GradientStyle_SQUARE },
-    { sXML_gradientstyle_rectangular,   awt::GradientStyle_RECT },
+    { sXML_rect,        drawing::DashStyle_RECT },
+    { sXML_round,       drawing::DashStyle_ROUND },
+    { sXML_rect,        drawing::DashStyle_RECTRELATIVE },
+    { sXML_round,       drawing::DashStyle_ROUNDRELATIVE },
     { 0, 0 }
 };
-*/
+
 XMLDashStyle::XMLDashStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > * _pHandler,
                                         const SvXMLNamespaceMap& _rNamespaceMap, const SvXMLUnitConverter& _rUnitConverter )
 : mpHandler      ( _pHandler ),
@@ -179,87 +179,93 @@ sal_Bool XMLDashStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::c
                                            const OUString& rStrName, const uno::Any& rValue )
 {
     sal_Bool bRet = sal_False;
-/*
-    awt::Gradient aGradient;
+
+    drawing::LineDash aLineDash;
 
     if( rStrName.getLength() )
     {
-        if( rValue >>= aGradient )
+        if( rValue >>= aLineDash )
         {
-            mpAttrList = new SvXMLAttributeList();  // Do NOT delete me !!
-            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > xAttrList( mpAttrList );
+            sal_Bool bIsRel = aLineDash.Style == drawing::DashStyle_RECTRELATIVE || aLineDash.Style == drawing::DashStyle_ROUNDRELATIVE;
+
+            mpAttrList = new SvXMLAttributeList();
+            uno::Reference< xml::sax::XAttributeList > xAttrList( mpAttrList );
 
             OUString aStrValue;
             OUStringBuffer aOut;
 
             // Name
-            OUString aStrName( rStrName );
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_name, aStrName );
+            AddAttribute( XML_NAMESPACE_DRAW, sXML_name, rStrName );
 
             // Style
-            if( !rUnitConverter.convertEnum( aOut, aGradient.Style, pXML_GradientStyle_Enum ) )
-                return sal_False;
+            rUnitConverter.convertEnum( aOut, aLineDash.Style, pXML_DashStyle_Enum );
             aStrValue = aOut.makeStringAndClear();
             AddAttribute( XML_NAMESPACE_DRAW, sXML_style, aStrValue );
 
-            // Center x/y
-            if( aGradient.Style != awt::GradientStyle_LINEAR &&
-                aGradient.Style != awt::GradientStyle_AXIAL   )
-            {
-                rUnitConverter.convertPercent( aOut, aGradient.XOffset );
-                aStrValue = aOut.makeStringAndClear();
-                AddAttribute( XML_NAMESPACE_DRAW, sXML_cx, aStrValue );
 
-                rUnitConverter.convertPercent( aOut, aGradient.YOffset );
-                aStrValue = aOut.makeStringAndClear();
-                AddAttribute( XML_NAMESPACE_DRAW, sXML_cy, aStrValue );
+            // dots
+            if( aLineDash.Dots )
+            {
+                AddAttribute( XML_NAMESPACE_DRAW, sXML_dots1, OUString::valueOf( (sal_Int32)aLineDash.Dots ) );
+
+                if( aLineDash.DotLen )
+                {
+                    // dashes length
+                    if( bIsRel )
+                    {
+                        rUnitConverter.convertPercent( aOut, aLineDash.DotLen );
+                    }
+                    else
+                    {
+                        rUnitConverter.convertMeasure( aOut, aLineDash.DotLen );
+                    }
+                    aStrValue = aOut.makeStringAndClear();
+                    AddAttribute( XML_NAMESPACE_DRAW, sXML_dots1_length, aStrValue );
+                }
             }
 
-            Color aColor;
-
-            // Color start
-            aColor.SetColor( aGradient.StartColor );
-            rUnitConverter.convertColor( aOut, aColor );
-            aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_start_color, aStrValue );
-
-            // Color end
-            aColor.SetColor( aGradient.EndColor );
-            rUnitConverter.convertColor( aOut, aColor );
-            aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_end_color, aStrValue );
-
-            // Intensity start
-            rUnitConverter.convertPercent( aOut, aGradient.StartIntensity );
-            aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_start_intensity, aStrValue );
-
-            // Intensity end
-            rUnitConverter.convertPercent( aOut, aGradient.EndIntensity );
-            aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_end_intensity, aStrValue );
-
-            // Angle
-            if( aGradient.Style != awt::GradientStyle_RADIAL )
+            // dashes
+            if( aLineDash.Dashes )
             {
-                rUnitConverter.convertNumber( aOut, sal_Int32( aGradient.Angle ) );
-                aStrValue = aOut.makeStringAndClear();
-                AddAttribute( XML_NAMESPACE_DRAW, sXML_gradient_angle, aStrValue );
+                AddAttribute( XML_NAMESPACE_DRAW, sXML_dots2, OUString::valueOf( (sal_Int32)aLineDash.Dashes ) );
+
+                if( aLineDash.DashLen )
+                {
+                    // dashes length
+                    if( bIsRel )
+                    {
+                        rUnitConverter.convertPercent( aOut, aLineDash.DashLen );
+                    }
+                    else
+                    {
+                        rUnitConverter.convertMeasure( aOut, aLineDash.DashLen );
+                    }
+                    aStrValue = aOut.makeStringAndClear();
+                    AddAttribute( XML_NAMESPACE_DRAW, sXML_dots2_length, aStrValue );
+                }
             }
 
-            // Border
-            rUnitConverter.convertPercent( aOut, aGradient.Border );
+            // distance
+            if( bIsRel )
+            {
+                rUnitConverter.convertPercent( aOut, aLineDash.Distance );
+            }
+            else
+            {
+                rUnitConverter.convertMeasure( aOut, aLineDash.Distance );
+            }
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_gradient_border, aStrValue );
+            AddAttribute( XML_NAMESPACE_DRAW, sXML_distance, aStrValue );
+
 
             // Do Write
-            OUString aStrTmp( RTL_CONSTASCII_USTRINGPARAM( sXML_stroke_dasharray ) );
-            rHandler->startElement( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_SVG, aStrTmp ),
-                                    xAttrList );
-            rHandler->endElement( OUString::createFromAscii( sXML_gradient ) );
+            OUString sElem = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_DRAW,
+                                           OUString::createFromAscii(sXML_stroke_dash) );
+
+            rHandler->startElement( sElem, xAttrList );
+            rHandler->endElement( sElem );
         }
     }
-*/
     return bRet;
 }
 
@@ -267,22 +273,17 @@ sal_Bool XMLDashStyle::ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
                                            const uno::Reference< xml::sax::XAttributeList >& xAttrList,
                                            uno::Any& rValue, OUString& rStrName )
 {
-    sal_Bool bRet           = sal_False;
-/*
-    sal_Bool bHasName       = sal_False;
-    sal_Bool bHasStyle      = sal_False;
-    sal_Bool bHasStartColor = sal_False;
-    sal_Bool bHasEndColor   = sal_False;
+    drawing::LineDash aLineDash;
+    aLineDash.Style = drawing::DashStyle_RECT;
+    aLineDash.Dots = 0;
+    aLineDash.DotLen = 0;
+    aLineDash.Dashes = 0;
+    aLineDash.DashLen = 0;
+    aLineDash.Distance = 20;
 
-    awt::Gradient aGradient;
-    aGradient.XOffset = 0;
-    aGradient.YOffset = 0;
-    aGradient.StartIntensity = 100;
-    aGradient.EndIntensity = 100;
-    aGradient.Angle = 0;
-    aGradient.Border = 0;
+    sal_Bool bIsRel = sal_False;
 
-    SvXMLTokenMap aTokenMap( aGradientAttrTokenMap );
+    SvXMLTokenMap aTokenMap( aDashStyleAttrTokenMap );
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -296,72 +297,78 @@ sal_Bool XMLDashStyle::ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
 
         switch( aTokenMap.Get( nPrefix, aStrAttrName ) )
         {
-        case XML_TOK_GRADIENT_NAME:
+        case XML_TOK_DASH_NAME:
             {
                 rStrName = rStrValue;
-                bHasName = sal_True;
             }
             break;
-        case XML_TOK_GRADIENT_STYLE:
+        case XML_TOK_DASH_STYLE:
             {
                 sal_uInt16 eValue;
-                if( rUnitConverter.convertEnum( eValue, rStrValue, pXML_GradientStyle_Enum ) )
+                if( rUnitConverter.convertEnum( eValue, rStrValue, pXML_DashStyle_Enum ) )
                 {
-                    aGradient.Style = (awt::GradientStyle) eValue;
-                    bHasStyle = sal_True;
+                    aLineDash.Style = (drawing::DashStyle) eValue;
                 }
             }
             break;
-        case XML_TOK_GRADIENT_CX:
-            rUnitConverter.convertPercent( nTmpValue, rStrValue );
-            aGradient.XOffset = nTmpValue;
-            break;
-        case XML_TOK_GRADIENT_CY:
-            rUnitConverter.convertPercent( nTmpValue, rStrValue );
-            aGradient.YOffset = nTmpValue;
-            break;
-        case XML_TOK_GRADIENT_STARTCOLOR:
-            {
-                Color aColor;
-                if( bHasStartColor = rUnitConverter.convertColor( aColor, rStrValue ) )
-                    aGradient.StartColor = (sal_Int32)( aColor.GetColor() );
-            }
-            break;
-        case XML_TOK_GRADIENT_ENDCOLOR:
-            {
-                Color aColor;
-                if( bHasStartColor = rUnitConverter.convertColor( aColor, rStrValue ) )
-                    aGradient.EndColor = (sal_Int32)( aColor.GetColor() );
-            }
-            break;
-        case XML_TOK_GRADIENT_STARTINT:
-            rUnitConverter.convertPercent( nTmpValue, rStrValue );
-            aGradient.StartIntensity = nTmpValue;
-            break;
-        case XML_TOK_GRADIENT_ENDINT:
-            rUnitConverter.convertPercent( nTmpValue, rStrValue );
-            aGradient.EndIntensity = nTmpValue;
-            break;
-        case XML_TOK_GRADIENT_ANGLE:
-            {
-                sal_Int32 nValue;
-                rUnitConverter.convertNumber( nValue, rStrValue, 0, 360 );
-                aGradient.Angle = sal_Int16( nValue );
-            }
-            break;
-        case XML_TOK_GRADIENT_BORDER:
-            rUnitConverter.convertPercent( nTmpValue, rStrValue );
-            aGradient.Border = nTmpValue;
+        case XML_TOK_DASH_DOTS1:
+            aLineDash.Dots = (sal_Int16)rStrValue.toInt32();
             break;
 
+        case XML_TOK_DASH_DOTS1LEN:
+            {
+                if( rStrValue.indexOf( sal_Unicode('%') ) != -1 ) // its a percentage
+                {
+                    bIsRel = sal_True;
+                    rUnitConverter.convertPercent( aLineDash.DotLen, rStrValue );
+                }
+                else
+                {
+                    rUnitConverter.convertMeasure( aLineDash.DotLen, rStrValue );
+                }
+            }
+            break;
+
+        case XML_TOK_DASH_DOTS2:
+            aLineDash.Dashes = (sal_Int16)rStrValue.toInt32();
+            break;
+
+        case XML_TOK_DASH_DOTS2LEN:
+            {
+                if( rStrValue.indexOf( sal_Unicode('%') ) != -1 ) // its a percentage
+                {
+                    bIsRel = sal_True;
+                    rUnitConverter.convertPercent( aLineDash.DashLen, rStrValue );
+                }
+                else
+                {
+                    rUnitConverter.convertMeasure( aLineDash.DashLen, rStrValue );
+                }
+            }
+            break;
+
+        case XML_TOK_DASH_DISTANCE:
+            {
+                if( rStrValue.indexOf( sal_Unicode('%') ) != -1 ) // its a percentage
+                {
+                    bIsRel = sal_True;
+                    rUnitConverter.convertPercent( aLineDash.Distance, rStrValue );
+                }
+                else
+                {
+                    rUnitConverter.convertMeasure( aLineDash.Distance, rStrValue );
+                }
+            }
+            break;
         default:
             DBG_WARNING( "Unknown token at import gradient style" )
         }
     }
 
-    rValue <<= aGradient;
+    if( bIsRel )
+        aLineDash.Style = aLineDash.Style == drawing::DashStyle_RECT ? drawing::DashStyle_RECTRELATIVE : drawing::DashStyle_ROUNDRELATIVE;
 
-    bRet = bHasName && bHasStyle && bHasStartColor && bHasEndColor;
-*/
-    return bRet;
+    rValue <<= aLineDash;
+
+    return sal_True;
 }
