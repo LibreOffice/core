@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 07:55:27 $
+ *  last change: $Author: fs $ $Date: 2001-10-30 08:26:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,12 @@
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
+#ifndef _SV_OUTDEV_HXX
+#include <vcl/outdev.hxx>
 #endif
 
 using namespace dbaui;
@@ -336,8 +342,15 @@ void ODatabaseImportExport::initialize()
             throw;
         }
     }
-    if(!m_aFont.Name.getLength())
-        m_aFont.Name = Application::GetSettings().GetStyleSettings().GetAppFont().GetName();
+    if ( !m_aFont.Name.getLength() )
+    {
+        Font aApplicationFont = OutputDevice::GetDefaultFont(
+            DEFAULTFONT_SANS_UNICODE,
+            Application::GetSettings().GetUILanguage(),
+            DEFAULTFONT_FLAGS_ONLYONE
+        );
+        m_aFont = VCLUnoHelper::CreateFontDescriptor( aApplicationFont );
+    }
 }
 //======================================================================
 BOOL ORTFImportExport::Write()
