@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-27 08:47:40 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ chinese_traditional ] = "ΌΖ¦r";
                 Text[ arabic ] = "ΓΡήΗγ";
                 Text[ greek ] = "Αριθμοί";
-                Text[ korean ] = "ΉψΘ£";
+                Text[ korean ] = "ΌύΐΪ";
                 Text[ turkish ] = "Sayύ";
                 Text[ language_user1 ] = " ";
             };
@@ -412,7 +412,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ chinese_traditional ] = "¥u¦³¦b±zΏE¬΅«OΕ@¤u§@ªν«α΅Aΐx¦s®ζ¤~·|¨ό¨μ«OΕ@΅C\n\n½Π±z«φ¤@¤U³o­Σ¥\\―ΰªνªΊ©R¥O΅G\"«OΕ@¤ε¥σ\"΅A\"¤u§@ªν\"΅C";
         Text[ arabic ] = "αΗ ΚΥΘΝ ΝγΗνΙ ΗαΞαΗνΗ έΪψΗαΙ΅ ΕαΗ ΪδΟγΗ νίζδ ΗαΜΟζα ΗαΝΗαν γΝγν.\n\nαΚδένΠ Παί ΗαΡΜΗΑ ΗΞΚνΗΡ ΗαΓγΡ 'ΝγΗνΙ ΗαγΣΚδΟ' γδ ΗαήΗΖγΙ 'ΓΟζΗΚ'΅ Λγ ΗαΓγΡ 'ΜΟζα'.";
         Text[ greek ] = "Η προστασία κελιών ισχύει μόνο εφόσον τεθεί ο τρέχων πίνακας υπό προστασία.\n\nΓια να επιτευχθεί αυτό επιλέξτε στο μενού 'Εργαλεία' την εντολή 'Προστασία εγγράφου' και στη συνέχεια 'Πίνακας'.";
-        Text[ korean ] = "ΌΏ ΊΈΘ£΄Β ΗφΐηΐΗ ½ΓΖ®°΅ ΊΈΘ£µΗΎϊΐ»¶§ΈΈ ΐ―ΘΏΗΥ΄Ο΄Ω.  \n\n'µµ±Έ'Έή΄ΊΏ΅Ό­ 'Ή®Ό­ΊΈΘ£'Έ¦ Ό±ΕΓΗΟ½ΕµΪ ½ΓΖ®Έ¦ ΑφΑ¤ΗΟ½Κ½ΓΏΐ.";
+        Text[ korean ] = "ΌΏ ΊΈΘ£΄Β ΗφΐηΐΗ ½ΓΖ®°΅ ΊΈΘ£µΗΎϊΐ»¶§ΈΈ ΐ―ΘΏΗΥ΄Ο΄Ω.  \n\n'µµ±Έ'Έή΄ΊΏ΅Ό­ 'Ή®Ό­ΊΈΘ£'Έ¦ Ό±ΕΓΗΡ ΄Ωΐ½, '½ΓΖ®'Έ¦ ΑφΑ¤ΗΟ½Κ½ΓΏΐ.";
         Text[ turkish ] = "Hόcre korumasύ, yalnύzca aktif tablo da korunmuώsa etkindir.\n\nBunun iηin 'Araηlar' mφnόsόnden φnce 'belgeyi koru' sonra 'Tablo' komutunu seηin.";
         Text[ language_user1 ] = " ";
     };
