@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:11 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
 // include ---------------------------------------------------------------
 
@@ -78,6 +77,9 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XMEANING_HPP_
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 #endif
@@ -103,12 +105,14 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
 #define S2U(s)                      StringToOUString(s, CHARSET_SYSTEM)
 #define U2S(s)                      OUStringToString(s, CHARSET_SYSTEM)
+
 
 // GetReplaceEditString -------------------------------
 
@@ -297,6 +301,36 @@ SvxThesaurusDialog::~SvxThesaurusDialog()
 
 // -----------------------------------------------------------------------
 
+uno::Sequence< Reference< XMeaning > > SAL_CALL
+    SvxThesaurusDialog::queryMeanings_Impl(
+            OUString& rTerm,
+            const Locale& rLocale,
+            const beans::PropertyValues& rProperties )
+        throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    uno::Sequence< Reference< XMeaning > > aMeanings(
+            pImpl->xThesaurus->queryMeanings( rTerm, rLocale, rProperties ) );
+
+    // text with '.' at the end?
+    if (0 == aMeanings.getLength() && rTerm.getLength() &&
+        rTerm.getStr()[ rTerm.getLength() - 1 ] == '.')
+    {
+        // try again without trailing '.' chars. It may be a word at the
+        // end of a sentence and not an abbreviation...
+        String aTxt( rTerm );
+        aTxt.EraseTrailingChars( '.' );
+        aMeanings = pImpl->xThesaurus->queryMeanings( aTxt, rLocale, rProperties );
+        if (aMeanings.getLength())
+        {
+            rTerm = aTxt;
+        }
+    }
+
+    return aMeanings;
+}
+
+// -----------------------------------------------------------------------
+
 sal_uInt16 SvxThesaurusDialog::GetLanguage() const
 {
     return pImpl->nLookUpLanguage;
@@ -312,11 +346,14 @@ void SvxThesaurusDialog::UpdateMeaningBox_Impl( uno::Sequence< Reference< XMeani
     {
         bTmpSeq = sal_True;
         lang::Locale aLocale( SvxCreateLocale( pImpl->nLookUpLanguage ) );
-        uno::Sequence< Reference< XMeaning > > aTmpMean = pImpl->xThesaurus
-                    ->queryMeanings( pImpl->aLookUpText, aLocale,
-                                     Sequence< PropertyValue >() );
+        uno::Sequence< Reference< XMeaning > > aTmpMean = queryMeanings_Impl(
+                pImpl->aLookUpText, aLocale, Sequence< PropertyValue >() );
 
         pMeaningSeq = new Sequence< Reference< XMeaning >  > ( aTmpMean );
+
+        // set new replace edit text if a different look up text was used
+        // see: queryMeanings_Impl
+        aReplaceEdit.SetText( pImpl->aLookUpText );
     }
 
     sal_Int32 nMeaningCount = pMeaningSeq ? pMeaningSeq->getLength() : 0;
@@ -346,9 +383,8 @@ void SvxThesaurusDialog::UpdateSynonymBox_Impl()
     {
         // get Reference< XMeaning >  for selected meaning
         lang::Locale aLocale( SvxCreateLocale( pImpl->nLookUpLanguage ) );
-        Reference< XMeaning >  xMeaning =
-            pImpl->xThesaurus->queryMeanings(pImpl->aLookUpText, aLocale,
-                                             Sequence< PropertyValue >() )
+        Reference< XMeaning >  xMeaning = queryMeanings_Impl(
+                    pImpl->aLookUpText, aLocale, Sequence< PropertyValue >() )
                  .getConstArray()[ nPos ];
 
         uno::Sequence< OUString >   aSynonyms;
@@ -399,7 +435,7 @@ IMPL_LINK( SvxThesaurusDialog, LookUpHdl_Impl, Button *, pBtn )
 
     uno::Sequence< Reference< XMeaning >  > aMeanings;
     if (pImpl->xThesaurus.is())
-        aMeanings = pImpl->xThesaurus->queryMeanings(
+        aMeanings = queryMeanings_Impl(
                             pImpl->aLookUpText,
                             SvxCreateLocale( pImpl->nLookUpLanguage ),
                             Sequence< PropertyValue >() );
