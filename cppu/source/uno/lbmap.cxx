@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:10 $
+ *  last change: $Author: dbo $ $Date: 2001-04-12 13:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,8 +472,11 @@ static Mapping getMediateMapping(
     Environment aUno;
     Mapping aUno2To;
 
+    // backwards: from dest to source of mapping chain
+
     // connect to uno
-    if (rTo.getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO ) )) // to is uno
+    OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
+    if (rTo.getTypeName() == aUnoEnvTypeName) // to is uno
     {
         aUno = rTo;
         // no Uno2To mapping necessary
@@ -481,11 +484,12 @@ static Mapping getMediateMapping(
     else
     {
         // get registered uno env
-        OUString aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
-        uno_getEnvironment( (uno_Environment **)&aUno, aEnvTypeName.pData, 0 );
+        ::uno_getEnvironment( (uno_Environment **)&aUno, aUnoEnvTypeName.pData, 0 );
 
         aUno2To = getDirectMapping( aUno, rTo );
         // : uno <-> to
+        if (! aUno2To.is())
+            return Mapping();
     }
 
     // connect to uno
@@ -493,8 +497,7 @@ static Mapping getMediateMapping(
     {
         // create anonymous uno env
         Environment aAnUno;
-        OUString aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
-        uno_createEnvironment( (uno_Environment **)&aAnUno, aEnvTypeName.pData, 0 );
+        ::uno_createEnvironment( (uno_Environment **)&aAnUno, aUnoEnvTypeName.pData, 0 );
 
         Mapping aAnUno2Uno( getDirectMapping( aAnUno, aUno, rAddPurpose ) );
         if (! aAnUno2Uno.is())

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: dbo $ $Date: 2001-03-21 11:35:34 $
+#   last change: $Author: dbo $ $Date: 2001-04-12 13:39:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,7 @@ OBJFILES=	\
 APP1TARGET=	testcppu
 APP1OBJS=	\
         $(OBJ)$/testcppu.obj	\
-        $(OBJ)$/test_di.obj	
+        $(OBJ)$/test_di.obj
 #		$(OBJ)$/test_sec.obj
 
 APP1STDLIBS+=	\

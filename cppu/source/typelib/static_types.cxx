@@ -2,9 +2,9 @@
  *
  *  $RCSfile: static_types.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-30 13:39:19 $
+ *  last change: $Author: dbo $ $Date: 2001-04-12 13:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,12 +278,12 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
 
                     typelib_CompoundMember_Init aMembers[2];
                     OUString sMemberType0( RTL_CONSTASCII_USTRINGPARAM("string") );
-                    OUString sMemberName0( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.Exception::Message") );
+                    OUString sMemberName0( RTL_CONSTASCII_USTRINGPARAM("Message") );
                     aMembers[0].eTypeClass = typelib_TypeClass_STRING;
                     aMembers[0].pTypeName = sMemberType0.pData;
                     aMembers[0].pMemberName = sMemberName0.pData;
                     OUString sMemberType1( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XInterface") );
-                    OUString sMemberName1( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.Exception::Context") );
+                    OUString sMemberName1( RTL_CONSTASCII_USTRINGPARAM("Context") );
                     aMembers[1].eTypeClass = typelib_TypeClass_INTERFACE;
                     aMembers[1].pTypeName = sMemberType1.pData;
                     aMembers[1].pMemberName = sMemberName1.pData;
@@ -307,7 +307,7 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     // XInterface members
                     typelib_InterfaceMethodTypeDescription * pMethod = 0;
                     typelib_Parameter_Init aParameters[1];
-                    OUString sParamName0( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XInterface::aType") );
+                    OUString sParamName0( RTL_CONSTASCII_USTRINGPARAM("aType") );
                     OUString sParamType0( RTL_CONSTASCII_USTRINGPARAM("type") );
                     aParameters[0].pParamName = sParamName0.pData;
                     aParameters[0].eTypeClass = typelib_TypeClass_TYPE;

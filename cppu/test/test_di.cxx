@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-27 13:55:46 $
+ *  last change: $Author: dbo $ $Date: 2001-04-12 13:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,50 +590,118 @@ sal_Bool raiseException( const Reference< XLanguageBindingTest > & xLBT )
 }
 
 //==================================================================================================
-void test_di(void)
+static bool perform_test( Reference< XInterface > const & xObj, Reference< XInterface > const & xDummy )
 {
+    Reference< XLanguageBindingTest > xLBT( xObj, UNO_QUERY );
+    if (xLBT.is() && performTest( xLBT, xDummy ))
+    {
+        if (raiseException( xLBT ))
+        {
+            ::fprintf( stderr, "> dynamic invocation test succeeded!\n" );
+            return true;
+        }
+        else
+        {
+            ::fprintf( stderr, "> exception test failed!\n" );
+        }
+    }
+    else
+    {
+        ::fprintf( stderr, "> dynamic invocation test failed!\n" );
+    }
+    return false;
+}
+
+//==================================================================================================
+void test_Cpp(void)
+{
+    // C++-UNO test
+    {
     TestDummy * p = new TestDummy();
     Reference< XInterface > xDummy( *p );
     {
         Test_Impl * p = new Test_Impl();
-        Reference< XInterface > x( *p );
+        Reference< XInterface > xOriginal( *p );
         {
-            Reference<XLanguageBindingTest > xOriginal( x, UNO_QUERY );
-            Reference<XLanguageBindingTest > xLBT;
+            Reference< XInterface > xMapped;
 
             uno_Environment * pCppEnv1 = 0;
             uno_Environment * pCppEnv2 = 0;
-
             OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-            uno_getEnvironment( &pCppEnv1, aCppEnvTypeName.pData, 0 );
-            uno_createEnvironment( &pCppEnv2, aCppEnvTypeName.pData, 0 ); // anonymous
+            ::uno_getEnvironment( &pCppEnv1, aCppEnvTypeName.pData, 0 );
+            ::uno_createEnvironment( &pCppEnv2, aCppEnvTypeName.pData, 0 ); // anonymous
 
             Mapping aMapping( pCppEnv1, pCppEnv2, OUString( RTL_CONSTASCII_USTRINGPARAM("prot") ) );
-            aMapping.mapInterface( (void **)&xLBT, xOriginal.get(), ::getCppuType( &xOriginal ) );
-            OSL_ENSURE( aMapping.is(), "### cannot get mapping!" );
+            OSL_ENSURE( aMapping.is(), "### cannot get mapping C++ <-> prot <-> C++!" );
+            aMapping.mapInterface( (void **)&xMapped, xOriginal.get(), ::getCppuType( &xMapped ) );
 
-            (*pCppEnv2->release)( pCppEnv2 );
             (*pCppEnv1->release)( pCppEnv1 );
+            (*pCppEnv2->release)( pCppEnv2 );
 
-            OSL_ASSERT( xLBT.is() );
-
-            if (xLBT.is() && performTest( xLBT, xDummy ))
+            if (perform_test( xMapped, xDummy ))
             {
-                if (raiseException( xLBT ))
-                {
-                    printf( "> dynamic invocation test succeeded!\n" );
-                }
-                else
-                {
-                    printf( "> exception test failed!\n" );
-                }
+                ::fprintf( stderr, "> C++-UNO test succeeded!\n" );
             }
             else
             {
-                printf( "> dynamic invocation test failed!\n" );
+                ::fprintf( stderr, "### C++-UNO test failed!\n" );
+                exit( 1 );
             }
         }
         OSL_ENSURE( p->getRefCount() == 1, "### test object ref count > 1 !" );
     }
     OSL_ENSURE( p->getRefCount() == 1, "### dummy object ref count > 1 !" );
+    }
+}
+
+//==================================================================================================
+void test_C(void)
+{
+    // C-UNO test
+    {
+    TestDummy * p = new TestDummy();
+    Reference< XInterface > xDummy( *p );
+    {
+        Test_Impl * p = new Test_Impl();
+        Reference< XInterface > xOriginal( *p );
+        {
+            Reference< XInterface > xMapped;
+
+            uno_Environment * pCppEnv1 = 0;
+            uno_Environment * pCppEnv2 = 0;
+            uno_Environment * pCEnv1 = 0;
+            uno_Environment * pCEnv2 = 0;
+            OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+            OUString aCEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_C) );
+            ::uno_getEnvironment( &pCEnv1, aCEnvTypeName.pData, 0 );
+            ::uno_createEnvironment( &pCEnv2, aCEnvTypeName.pData, 0 ); // anonymous
+            ::uno_getEnvironment( &pCppEnv1, aCppEnvTypeName.pData, 0 );
+            ::uno_createEnvironment( &pCppEnv2, aCppEnvTypeName.pData, 0 ); // anonymous
+            Mapping aCpp1ToC1( pCppEnv1, pCEnv1 );
+            Mapping aC2ToCpp2( pCEnv2, pCppEnv2 );
+
+            void * pC = 0;
+            aCpp1ToC1.mapInterface( &pC, xOriginal.get(), ::getCppuType( &xOriginal ) );
+            aC2ToCpp2.mapInterface( (void **)&xMapped, pC, ::getCppuType( &xOriginal ) );
+            (*pCEnv1->pExtEnv->releaseInterface)( pCEnv1->pExtEnv, pC );
+
+            (*pCppEnv1->release)( pCppEnv1 );
+            (*pCppEnv2->release)( pCppEnv2 );
+            (*pCEnv1->release)( pCEnv1 );
+            (*pCEnv2->release)( pCEnv2 );
+
+            if (perform_test( xMapped, xDummy ))
+            {
+                ::fprintf( stderr, "> C-UNO test succeeded!\n" );
+            }
+            else
+            {
+                ::fprintf( stderr, "### C-UNO test failed!\n" );
+                exit( 1 );
+            }
+        }
+        OSL_ENSURE( p->getRefCount() == 1, "### test object ref count > 1 !" );
+    }
+    OSL_ENSURE( p->getRefCount() == 1, "### dummy object ref count > 1 !" );
+    }
 }

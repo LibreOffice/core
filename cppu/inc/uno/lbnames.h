@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbnames.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:51 $
+ *  last change: $Author: dbo $ $Date: 2001-04-12 13:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 */
 #define UNO_LB_JAVA_NAMESPACE   java
 #define UNO_LB_JAVA             "java"
+/** ANSI C compilers<br>
+*/
+#define UNO_LB_C_NAMESPACE      c_uno
+#define UNO_LB_C                "c"
 /** Miscrosoft VC++ 4.2 - 6.0 compiler; RTTI is not supported<br>
 */
 #define UNO_LB_MSCI_NAMESPACE   msci

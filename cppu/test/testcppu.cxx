@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-02 10:07:14 $
+ *  last change: $Author: dbo $ $Date: 2001-04-12 13:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1007,8 +1007,12 @@ int SAL_CALL main(int argc, char **argv)
 //  void test_security( const Reference< XMultiServiceFactory > & );
 //      test_security( xMgr );
     // perform test
-    void test_di(void);
-    test_di();
+
+    void test_Cpp(void);
+    void test_C(void);
+    test_Cpp();
+    test_C();
+
     testAssignment();
     testCppu();
     testArray();
