@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-22 10:54:25 $
+ *  last change: $Author: kso $ $Date: 2001-03-27 14:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,7 +572,7 @@ Any SAL_CALL Content::execute( const Command& aCommand,
           //////////////////////////////////////////////////////////////////
 
           // Note: Implemented by base class.
-          aRet <<= getPropertySetInfo();
+          aRet <<= getPropertySetInfo( Environment, sal_False );
        }
       else if ( aCommand.Name.compareToAscii( "getCommandInfo" ) == 0 )
        {
@@ -581,7 +581,7 @@ Any SAL_CALL Content::execute( const Command& aCommand,
           //////////////////////////////////////////////////////////////////
 
           // Note: Implemented by base class.
-          aRet <<= getCommandInfo();
+          aRet <<= getCommandInfo( Environment, sal_False );
        }
     else if ( aCommand.Name.compareToAscii( "open" ) == 0 )
     {

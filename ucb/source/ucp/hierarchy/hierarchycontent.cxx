@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-22 10:53:14 $
+ *  last change: $Author: kso $ $Date: 2001-03-27 14:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,7 +451,7 @@ Any SAL_CALL HierarchyContent::execute( const Command& aCommand,
         // getPropertySetInfo
         //////////////////////////////////////////////////////////////////
 
-        aRet <<= getPropertySetInfo();
+        aRet <<= getPropertySetInfo( Environment );
     }
     else if ( aCommand.Name.compareToAscii( "getCommandInfo" ) == 0 )
     {
@@ -459,7 +459,7 @@ Any SAL_CALL HierarchyContent::execute( const Command& aCommand,
         // getCommandInfo
         //////////////////////////////////////////////////////////////////
 
-        aRet <<= getCommandInfo();
+        aRet <<= getCommandInfo( Environment );
     }
     else if ( isFolder() && ( aCommand.Name.compareToAscii( "open" ) == 0 ) )
     {
@@ -530,7 +530,7 @@ Any SAL_CALL HierarchyContent::execute( const Command& aCommand,
         TransferInfo aInfo;
         if ( aCommand.Argument >>= aInfo )
         {
-            transfer( aInfo );
+            transfer( aInfo, Environment );
         }
         else
         {
@@ -1448,7 +1448,9 @@ void HierarchyContent::destroy( sal_Bool bDeletePhysical )
 }
 
 //=========================================================================
-void HierarchyContent::transfer( const TransferInfo& rInfo )
+void HierarchyContent::transfer( const TransferInfo& rInfo,
+                                    const Reference< XCommandEnvironment > & xEnv )
+
     throw( CommandAbortedException )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -1527,7 +1529,7 @@ void HierarchyContent::transfer( const TransferInfo& rInfo )
         //////////////////////////////////////////////////////////////////
 
         Sequence< Property > aProps
-                        = xSource->getPropertySetInfo()->getProperties();
+                        = xSource->getPropertySetInfo( xEnv )->getProperties();
         sal_Int32 nCount = aProps.getLength();
 
         if ( nCount )
@@ -1627,7 +1629,7 @@ void HierarchyContent::transfer( const TransferInfo& rInfo )
                 aInfo.NameClash = rInfo.NameClash;
 
                 // Transfer child to target.
-                xTarget->transfer( aInfo );
+                xTarget->transfer( aInfo, xEnv );
             }
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontentcaps.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-27 08:05:40 $
+ *  last change: $Author: kso $ $Date: 2001-03-27 14:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_COMMANDINFO_HPP_
+#include <com/sun/star/ucb/CommandInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #endif
@@ -124,11 +127,9 @@ using namespace webdav_ucp;
 //=========================================================================
 
 // virtual
-const ::ucb::PropertyInfoTableEntry
-& Content::getPropertyInfoTable()
+Sequence< Property > Content::getProperties(
+                            const Reference< XCommandEnvironment > & xEnv )
 {
-    // @@@ Add additional properties...
-
     // @@@ Note: If your data source supports adding/removing properties,
     //           you should implement the interface XPropertyContainer
     //           by yourself and supply your own logic here. The base class
@@ -145,153 +146,144 @@ const ::ucb::PropertyInfoTableEntry
     //
     //=================================================================
 
-    static ::ucb::PropertyInfoTableEntry aPropertyInfoTable[] =
+    static Property aPropertyInfoTable[] =
     {
         ///////////////////////////////////////////////////////////////
         // Required properties
         ///////////////////////////////////////////////////////////////
 
-        {
-            "ContentType",
+        Property(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
+            getCppuType( static_cast< const OUString * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            "IsDocument",
+        ),
+        Property(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
             -1,
-            &getCppuBooleanType(),
+            getCppuBooleanType(),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            "IsFolder",
+        ),
+        Property(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
             -1,
-            &getCppuBooleanType(),
+            getCppuBooleanType(),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            "Title",
+        ),
+        Property(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
+            getCppuType( static_cast< const OUString * >( 0 ) ),
             PropertyAttribute::BOUND
-        },
+        ),
 
         ///////////////////////////////////////////////////////////////
         // Optional standard properties
         ///////////////////////////////////////////////////////////////
 
-        {
-            "Size",
+        Property(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ),
             -1,
-            &getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+            getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            "DateCreated",
+        ),
+        Property(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ) ),
             -1,
-            &getCppuType( static_cast< const DateTime * >( 0 ) ),
+            getCppuType( static_cast< const DateTime * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            "DateModified",
+        ),
+        Property(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ),
             -1,
-            &getCppuType( static_cast< const DateTime * >( 0 ) ),
+            getCppuType( static_cast< const DateTime * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            "MediaType",
+        ),
+        Property(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
+            getCppuType( static_cast< const OUString * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
+        ),
 
         ///////////////////////////////////////////////////////////////
         // New properties
         ///////////////////////////////////////////////////////////////
 
-        {
-            *new OString(OUStringToOString(DAVProperties::CREATIONDATE,RTL_TEXTENCODING_ASCII_US)),
+        Property(
+            DAVProperties::CREATIONDATE,
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
+            getCppuType( static_cast< const OUString * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            *new OString(OUStringToOString(DAVProperties::DISPLAYNAME,RTL_TEXTENCODING_ASCII_US)),
+        ),
+        Property(
+            DAVProperties::DISPLAYNAME,
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
+            getCppuType( static_cast< const OUString * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            *new OString(OUStringToOString(DAVProperties::GETCONTENTLANGUAGE,RTL_TEXTENCODING_ASCII_US)),
+        ),
+        Property(
+            DAVProperties::GETCONTENTLANGUAGE,
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
+            getCppuType( static_cast< const OUString * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            *new OString(OUStringToOString(DAVProperties::GETCONTENTLENGTH,RTL_TEXTENCODING_ASCII_US)),
+        ),
+        Property(
+            DAVProperties::GETCONTENTLENGTH,
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
+            getCppuType( static_cast< const OUString * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            *new OString(OUStringToOString(DAVProperties::GETCONTENTTYPE,RTL_TEXTENCODING_ASCII_US)),
+        ),
+        Property(
+            DAVProperties::GETCONTENTTYPE,
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
+            getCppuType( static_cast< const OUString * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            *new OString(OUStringToOString(DAVProperties::GETETAG,RTL_TEXTENCODING_ASCII_US)),
+        ),
+        Property(
+            DAVProperties::GETETAG,
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
+            getCppuType( static_cast< const OUString * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            *new OString(OUStringToOString(DAVProperties::GETLASTMODIFIED,RTL_TEXTENCODING_ASCII_US)),
+        ),
+        Property(
+            DAVProperties::GETLASTMODIFIED,
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
+            getCppuType( static_cast< const OUString * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            *new OString(OUStringToOString(DAVProperties::LOCKDISCOVERY,RTL_TEXTENCODING_ASCII_US)),
+        ),
+        Property(
+            DAVProperties::LOCKDISCOVERY,
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
+            getCppuType( static_cast< const OUString * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            *new OString(OUStringToOString(DAVProperties::RESOURCETYPE,RTL_TEXTENCODING_ASCII_US)),
+        ),
+        Property(
+            DAVProperties::RESOURCETYPE,
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
+            getCppuType( static_cast< const OUString * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            *new OString(OUStringToOString(DAVProperties::SOURCE,RTL_TEXTENCODING_ASCII_US)),
+        ),
+        Property(
+            DAVProperties::SOURCE,
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
+            getCppuType( static_cast< const OUString * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            *new OString(OUStringToOString(DAVProperties::SUPPORTEDLOCK,RTL_TEXTENCODING_ASCII_US)),
+        ),
+        Property(
+            DAVProperties::SUPPORTEDLOCK,
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
+            getCppuType( static_cast< const OUString * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-
-        ///////////////////////////////////////////////////////////////
-        // EOT
-        ///////////////////////////////////////////////////////////////
-        {
-            0,  // name
-            0,  // handle
-            0,  // type
-            0   // attributes
-        }
+        )
     };
-    return *aPropertyInfoTable;
+    return Sequence< Property >( aPropertyInfoTable, 19 );
 }
 
 //=========================================================================
 // virtual
-const ::ucb::CommandInfoTableEntry& Content::getCommandInfoTable()
+Sequence< CommandInfo > Content::getCommands(
+                            const Reference< XCommandEnvironment > & xEnv )
 {
     // @@@ Add additional commands...
 
@@ -303,85 +295,76 @@ const ::ucb::CommandInfoTableEntry& Content::getCommandInfoTable()
     //
     //=================================================================
 
-    static ::ucb::CommandInfoTableEntry aCommandInfoTable[] =
+    static CommandInfo aCommandInfoTable[] =
     {
         ///////////////////////////////////////////////////////////////
         // Required commands
         ///////////////////////////////////////////////////////////////
 
-        {
-            "getCommandInfo",
+        CommandInfo(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
             -1,
-            &getCppuVoidType()
-        },
-        {
-            "getPropertySetInfo",
+            getCppuVoidType()
+        ),
+        CommandInfo(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
             -1,
-            &getCppuVoidType()
-        },
-        {
-            "getPropertyValues",
+            getCppuVoidType()
+        ),
+        CommandInfo(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
             -1,
-            &getCppuType( static_cast< Sequence< Property > * >( 0 ) )
-        },
-        {
-            "setPropertyValues",
+            getCppuType( static_cast< Sequence< Property > * >( 0 ) )
+        ),
+        CommandInfo(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
             -1,
-            &getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
-        },
+            getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
+        ),
 
         ///////////////////////////////////////////////////////////////
         // Optional standard commands
         ///////////////////////////////////////////////////////////////
 
-        {
-            "delete",
+        CommandInfo(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
             -1,
-            &getCppuBooleanType()
-        },
-        {
-            "insert",
+            getCppuBooleanType()
+        ),
+        CommandInfo(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
             -1,
-            &getCppuType( static_cast< InsertCommandArgument * >( 0 ) )
-        },
-        {
-            "open",
+            getCppuType( static_cast< InsertCommandArgument * >( 0 ) )
+        ),
+        CommandInfo(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
             -1,
-            &getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
-        },
-        {
-            "transfer",
+            getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
+        ),
+        CommandInfo(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
             -1,
-            &getCppuType( static_cast< TransferInfo * >( 0 ) )
-        },
+            getCppuType( static_cast< TransferInfo * >( 0 ) )
+        )
 
         ///////////////////////////////////////////////////////////////
         // New commands
         ///////////////////////////////////////////////////////////////
 
         /*
-        {
-            "COPY",
+        CommandInfo(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "COPY" ) ),
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
-        },
-        {
-            "MOVE",
+            getCppuType( static_cast< const OUString * >( 0 ) ),
+        ),
+        CommandInfo(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "MOVE" ) ),
             -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
-        },
+            getCppuType( static_cast< const OUString * >( 0 ) ),
+        )
         */
-
-        ///////////////////////////////////////////////////////////////
-        // EOT
-        ///////////////////////////////////////////////////////////////
-        {
-            0,  // name
-            0,  // handle
-            0   // type
-        }
     };
 
-    return *aCommandInfoTable;
+    return Sequence< CommandInfo >( aCommandInfoTable, 8 );
 }
 

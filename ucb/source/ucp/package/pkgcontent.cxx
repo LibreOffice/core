@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-22 10:57:52 $
+ *  last change: $Author: kso $ $Date: 2001-03-27 14:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,7 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         //////////////////////////////////////////////////////////////////
 
         // Note: Implemented by base class.
-        aRet <<= getPropertySetInfo();
+        aRet <<= getPropertySetInfo( Environment );
     }
     else if ( aCommand.Name.compareToAscii( "getCommandInfo" ) == 0 )
     {
@@ -521,7 +521,7 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         //////////////////////////////////////////////////////////////////
 
         // Note: Implemented by base class.
-        aRet <<= getCommandInfo();
+        aRet <<= getCommandInfo( Environment );
     }
     else if ( aCommand.Name.compareToAscii( "open" ) == 0 )
     {
@@ -584,7 +584,7 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         TransferInfo aInfo;
         if ( aCommand.Argument >>= aInfo )
         {
-            transfer( aInfo );
+            transfer( aInfo, Environment );
         }
         else
         {
@@ -1367,7 +1367,8 @@ void Content::destroy( sal_Bool bDeletePhysical )
 }
 
 //=========================================================================
-void Content::transfer( const TransferInfo& rInfo )
+void Content::transfer( const TransferInfo& rInfo,
+                        const Reference< XCommandEnvironment > & xEnv )
     throw( CommandAbortedException )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -1440,7 +1441,7 @@ void Content::transfer( const TransferInfo& rInfo )
         //////////////////////////////////////////////////////////////////
 
         Sequence< Property > aProps
-                        = xSource->getPropertySetInfo()->getProperties();
+                        = xSource->getPropertySetInfo( xEnv )->getProperties();
         sal_Int32 nCount = aProps.getLength();
 
         if ( nCount )
@@ -1558,7 +1559,7 @@ void Content::transfer( const TransferInfo& rInfo )
                         aInfo.NameClash = rInfo.NameClash;
 
                         // Transfer child to target.
-                        xTarget->transfer( aInfo );
+                        xTarget->transfer( aInfo, xEnv );
                     }
                     catch ( NoSuchElementException & )
                     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontentcaps.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-16 14:30:39 $
+ *  last change: $Author: kso $ $Date: 2001-03-27 14:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_COMMANDINFO_HPP_
+#include <com/sun/star/ucb/CommandInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #endif
@@ -133,7 +136,8 @@ using namespace package_ucp;
 //=========================================================================
 
 // virtual
-const ::ucb::PropertyInfoTableEntry& Content::getPropertyInfoTable()
+Sequence< Property > Content::getProperties(
+                            const Reference< XCommandEnvironment > & xEnv )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -145,64 +149,55 @@ const ::ucb::PropertyInfoTableEntry& Content::getPropertyInfoTable()
         //
         //=================================================================
 
-        static ::ucb::PropertyInfoTableEntry aFolderPropertyInfoTable[] =
+        static Property aFolderPropertyInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required properties
             ///////////////////////////////////////////////////////////////
-            {
-                "ContentType",
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
                 -1,
-                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                getCppuType( static_cast< const OUString * >( 0 ) ),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
-            {
-                "IsDocument",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
                 -1,
-                &getCppuBooleanType(),
+                getCppuBooleanType(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
-            {
-                "IsFolder",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
                 -1,
-                &getCppuBooleanType(),
+                getCppuBooleanType(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
-            {
-                "Title",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
                 -1,
-                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                getCppuType( static_cast< const OUString * >( 0 ) ),
                 PropertyAttribute::BOUND
-            },
+            ),
             ///////////////////////////////////////////////////////////////
             // Optional standard properties
             ///////////////////////////////////////////////////////////////
-            {
-                "MediaType",
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
                 -1,
-                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                getCppuType( static_cast< const OUString * >( 0 ) ),
                 PropertyAttribute::BOUND
-            },
-            {
-                "Size",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ),
                 -1,
-                &getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+                getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
+            )
             ///////////////////////////////////////////////////////////////
             // New properties
             ///////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////
-            // EOT
-            ///////////////////////////////////////////////////////////////
-            {
-                0,  // name
-                0,  // handle
-                0,  // type
-                0   // attributes
-            }
         };
-        return *aFolderPropertyInfoTable;
+        return Sequence< Property >( aFolderPropertyInfoTable, 6 );
     }
     else
     {
@@ -212,78 +207,74 @@ const ::ucb::PropertyInfoTableEntry& Content::getPropertyInfoTable()
         //
         //=================================================================
 
-        static ::ucb::PropertyInfoTableEntry aStreamPropertyInfoTable[] =
+        static Property aStreamPropertyInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required properties
             ///////////////////////////////////////////////////////////////
-            {
-                "ContentType",
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
                 -1,
-                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                getCppuType( static_cast< const OUString * >( 0 ) ),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
-            {
-                "IsDocument",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
                 -1,
-                &getCppuBooleanType(),
+                getCppuBooleanType(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
-            {
-                "IsFolder",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
                 -1,
-                &getCppuBooleanType(),
+                getCppuBooleanType(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
-            {
-                "Title",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
                 -1,
-                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                getCppuType( static_cast< const OUString * >( 0 ) ),
                 PropertyAttribute::BOUND
-            },
+            ),
             ///////////////////////////////////////////////////////////////
             // Optional standard properties
             ///////////////////////////////////////////////////////////////
-            {
-                "MediaType",
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
                 -1,
-                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                getCppuType( static_cast< const OUString * >( 0 ) ),
                 PropertyAttribute::BOUND
-            },
-            {
-                "Size",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ),
                 -1,
-                &getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+                getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
+#if SUPD>616
+            ),
             ///////////////////////////////////////////////////////////////
             // New properties
             ///////////////////////////////////////////////////////////////
-#if SUPD>616
-            {
-                "Compressed",
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ),
                 -1,
-                &getCppuType( static_cast< const sal_Bool * >( 0 ) ),
+                getCppuType( static_cast< const sal_Bool * >( 0 ) ),
                 PropertyAttribute::BOUND
-            },
 #endif
-            ///////////////////////////////////////////////////////////////
-            // EOT
-            ///////////////////////////////////////////////////////////////
-            {
-                0,  // name
-                0,  // handle
-                0,  // type
-                0   // attributes
-            }
+            )
         };
-        return *aStreamPropertyInfoTable;
+#if SUPD>616
+        return Sequence< Property >( aStreamPropertyInfoTable, 7 );
+#else
+        return Sequence< Property >( aStreamPropertyInfoTable, 6 );
+#endif
     }
 }
 
 //=========================================================================
 // virtual
-const ::ucb::CommandInfoTableEntry& Content::getCommandInfoTable()
+Sequence< CommandInfo > Content::getCommands(
+                            const Reference< XCommandEnvironment > & xEnv )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -295,73 +286,65 @@ const ::ucb::CommandInfoTableEntry& Content::getCommandInfoTable()
         //
         //=================================================================
 
-        static ::ucb::CommandInfoTableEntry aFolderCommandInfoTable[] =
+        static CommandInfo aFolderCommandInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required commands
             ///////////////////////////////////////////////////////////////
-            {
-                "getCommandInfo",
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
                 -1,
-                &getCppuVoidType()
-            },
-            {
-                "getPropertySetInfo",
+                getCppuVoidType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
                 -1,
-                &getCppuVoidType()
-            },
-            {
-                "getPropertyValues",
+                getCppuVoidType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
                 -1,
-                &getCppuType( static_cast< Sequence< Property > * >( 0 ) )
-            },
-            {
-                "setPropertyValues",
+                getCppuType( static_cast< Sequence< Property > * >( 0 ) )
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
                 -1,
-                &getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
-            },
+                getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
+            ),
             ///////////////////////////////////////////////////////////////
             // Optional standard commands
             ///////////////////////////////////////////////////////////////
-            {
-                "delete",
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
                 -1,
-                &getCppuBooleanType()
-            },
-            {
-                "flush",
+                getCppuBooleanType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
                 -1,
-                &getCppuVoidType()
-            },
-            {
-                "insert",
+                getCppuVoidType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
                 -1,
-                &getCppuVoidType()
-            },
-            {
-                "open",
+                getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
                 -1,
-                &getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
-            },
-            {
-                "transfer",
-                -1,
-                &getCppuType( static_cast< TransferInfo * >( 0 ) )
-            },
+                getCppuType( static_cast< TransferInfo * >( 0 ) )
+            ),
             ///////////////////////////////////////////////////////////////
             // New commands
             ///////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////
-            // EOT
-            ///////////////////////////////////////////////////////////////
-            {
-                0,  // name
-                0,  // handle
-                0   // type
-            }
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "flush" ) ),
+                -1,
+                getCppuVoidType()
+            )
         };
 
-        return *aFolderCommandInfoTable;
+        return Sequence< CommandInfo >( aFolderCommandInfoTable, 9 );
     }
     else
     {
@@ -371,63 +354,55 @@ const ::ucb::CommandInfoTableEntry& Content::getCommandInfoTable()
         //
         //=================================================================
 
-        static ::ucb::CommandInfoTableEntry aStreamCommandInfoTable[] =
+        static CommandInfo aStreamCommandInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required commands
             ///////////////////////////////////////////////////////////////
-            {
-                "getCommandInfo",
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
                 -1,
-                &getCppuVoidType()
-            },
-            {
-                "getPropertySetInfo",
+                getCppuVoidType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
                 -1,
-                &getCppuVoidType()
-            },
-            {
-                "getPropertyValues",
+                getCppuVoidType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
                 -1,
-                &getCppuType( static_cast< Sequence< Property > * >( 0 ) )
-            },
-            {
-                "setPropertyValues",
+                getCppuType( static_cast< Sequence< Property > * >( 0 ) )
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
                 -1,
-                &getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
-            },
+                getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
+            ),
             ///////////////////////////////////////////////////////////////
             // Optional standard commands
             ///////////////////////////////////////////////////////////////
-            {
-                "delete",
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
                 -1,
-                &getCppuBooleanType()
-            },
-            {
-                "insert",
+                getCppuBooleanType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
                 -1,
-                &getCppuVoidType()
-            },
-            {
-                "open",
+                getCppuVoidType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
                 -1,
-                &getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
-            },
+                getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
+            )
             ///////////////////////////////////////////////////////////////
             // New commands
             ///////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////
-            // EOT
-            ///////////////////////////////////////////////////////////////
-            {
-                0,  // name
-                0,  // handle
-                0   // type
-            }
         };
 
-        return *aStreamCommandInfoTable;
+        return Sequence< CommandInfo >( aStreamCommandInfoTable, 7 );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontentcaps.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:54:18 $
+ *  last change: $Author: kso $ $Date: 2001-03-27 14:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_COMMANDINFO_HPP_
+#include <com/sun/star/ucb/CommandInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #endif
@@ -130,8 +133,8 @@ using namespace rtl;
 //=========================================================================
 
 // virtual
-const ::ucb::PropertyInfoTableEntry&
-                        HierarchyContent::getPropertyInfoTable()
+Sequence< Property > HierarchyContent::getProperties(
+                            const Reference< XCommandEnvironment > & xEnv )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -143,58 +146,49 @@ const ::ucb::PropertyInfoTableEntry&
         //
         //=================================================================
 
-        static ::ucb::PropertyInfoTableEntry aLinkPropertyInfoTable[] =
+        static Property aLinkPropertyInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required properties
             ///////////////////////////////////////////////////////////////
-            {
-                "ContentType",
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
                 -1,
-                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                getCppuType( static_cast< const OUString * >( 0 ) ),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
-            {
-                "IsDocument",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
                 -1,
-                &getCppuBooleanType(),
+                getCppuBooleanType(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
-            {
-                "IsFolder",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
                 -1,
-                &getCppuBooleanType(),
+                getCppuBooleanType(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
-            {
-                "Title",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
                 -1,
-                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                getCppuType( static_cast< const OUString * >( 0 ) ),
                 PropertyAttribute::BOUND
-            },
+            ),
             ///////////////////////////////////////////////////////////////
             // Optional standard properties
             ///////////////////////////////////////////////////////////////
-            {
-                "TargetURL",
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ) ),
                 -1,
-                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                getCppuType( static_cast< const OUString * >( 0 ) ),
                 PropertyAttribute::BOUND
-            },
+            )
             ///////////////////////////////////////////////////////////////
             // New properties
             ///////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////
-            // EOT
-            ///////////////////////////////////////////////////////////////
-            {
-                0,  // name
-                0,  // handle
-                0,  // type
-                0   // attributes
-            }
         };
-        return *aLinkPropertyInfoTable;
+        return Sequence< Property >( aLinkPropertyInfoTable, 5 );
     }
     else if ( m_eKind == FOLDER )
     {
@@ -204,52 +198,43 @@ const ::ucb::PropertyInfoTableEntry&
         //
         //=================================================================
 
-        static ::ucb::PropertyInfoTableEntry aFolderPropertyInfoTable[] =
+        static Property aFolderPropertyInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required properties
             ///////////////////////////////////////////////////////////////
-            {
-                "ContentType",
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
                 -1,
-                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                getCppuType( static_cast< const OUString * >( 0 ) ),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
-            {
-                "IsDocument",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
                 -1,
-                &getCppuBooleanType(),
+                getCppuBooleanType(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
-            {
-                "IsFolder",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
                 -1,
-                &getCppuBooleanType(),
+                getCppuBooleanType(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
-            {
-                "Title",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
                 -1,
-                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                getCppuType( static_cast< const OUString * >( 0 ) ),
                 PropertyAttribute::BOUND
-            },
+            )
             ///////////////////////////////////////////////////////////////
             // Optional standard properties
             ///////////////////////////////////////////////////////////////
             ///////////////////////////////////////////////////////////////
             // New properties
             ///////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////
-            // EOT
-            ///////////////////////////////////////////////////////////////
-            {
-                0,  // name
-                0,  // handle
-                0,  // type
-                0   // attributes
-            }
         };
-        return *aFolderPropertyInfoTable;
+        return Sequence< Property >( aFolderPropertyInfoTable, 4 );
     }
     else
     {
@@ -259,59 +244,50 @@ const ::ucb::PropertyInfoTableEntry&
         //
         //=================================================================
 
-        static ::ucb::PropertyInfoTableEntry aRootFolderPropertyInfoTable[] =
+        static Property aRootFolderPropertyInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required properties
             ///////////////////////////////////////////////////////////////
-            {
-                "ContentType",
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
                 -1,
-                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                getCppuType( static_cast< const OUString * >( 0 ) ),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
-            {
-                "IsDocument",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
                 -1,
-                &getCppuBooleanType(),
+                getCppuBooleanType(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
-            {
-                "IsFolder",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
                 -1,
-                &getCppuBooleanType(),
+                getCppuBooleanType(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
-            {
-                "Title",
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
                 -1,
-                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                getCppuType( static_cast< const OUString * >( 0 ) ),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            },
+            )
             ///////////////////////////////////////////////////////////////
             // Optional standard properties
             ///////////////////////////////////////////////////////////////
             ///////////////////////////////////////////////////////////////
             // New properties
             ///////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////
-            // EOT
-            ///////////////////////////////////////////////////////////////
-            {
-                0,  // name
-                0,  // handle
-                0,  // type
-                0   // attributes
-            }
         };
-        return *aRootFolderPropertyInfoTable;
+        return Sequence< Property >( aRootFolderPropertyInfoTable, 4 );
     }
 }
 
 //=========================================================================
 // virtual
-const ::ucb::CommandInfoTableEntry&
-                        HierarchyContent::getCommandInfoTable()
+Sequence< CommandInfo > HierarchyContent::getCommands(
+                            const Reference< XCommandEnvironment > & xEnv )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -323,57 +299,49 @@ const ::ucb::CommandInfoTableEntry&
         //
         //=================================================================
 
-        static ::ucb::CommandInfoTableEntry aLinkCommandInfoTable[] =
+        static CommandInfo aLinkCommandInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required commands
             ///////////////////////////////////////////////////////////////
-            {
-                "getCommandInfo",
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
                 -1,
-                &getCppuVoidType()
-            },
-            {
-                "getPropertySetInfo",
+                getCppuVoidType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
                 -1,
-                &getCppuVoidType()
-            },
-            {
-                "getPropertyValues",
+                getCppuVoidType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
                 -1,
-                &getCppuType( static_cast< Sequence< Property > * >( 0 ) )
-            },
-            {
-                "setPropertyValues",
+                getCppuType( static_cast< Sequence< Property > * >( 0 ) )
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
                 -1,
-                &getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
-            },
+                getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
+            ),
             ///////////////////////////////////////////////////////////////
             // Optional standard commands
             ///////////////////////////////////////////////////////////////
-            {
-                "delete",
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
                 -1,
-                &getCppuBooleanType()
-            },
-            {
-                "insert",
+                getCppuBooleanType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
                 -1,
-                &getCppuVoidType()
-            },
+                getCppuVoidType()
+            )
             ///////////////////////////////////////////////////////////////
             // New commands
             ///////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////
-            // EOT
-            ///////////////////////////////////////////////////////////////
-            {
-                0,  // name
-                0,  // handle
-                0   // type
-            }
         };
-        return *aLinkCommandInfoTable;
+        return Sequence< CommandInfo >( aLinkCommandInfoTable, 6 );
     }
     else if ( m_eKind == FOLDER )
     {
@@ -383,67 +351,59 @@ const ::ucb::CommandInfoTableEntry&
         //
         //=================================================================
 
-        static ::ucb::CommandInfoTableEntry aFolderCommandInfoTable[] =
+        static CommandInfo aFolderCommandInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required commands
             ///////////////////////////////////////////////////////////////
-            {
-                "getCommandInfo",
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
                 -1,
-                &getCppuVoidType()
-            },
-            {
-                "getPropertySetInfo",
+                getCppuVoidType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
                 -1,
-                &getCppuVoidType()
-            },
-            {
-                "getPropertyValues",
+                getCppuVoidType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
                 -1,
-                &getCppuType( static_cast< Sequence< Property > * >( 0 ) )
-            },
-            {
-                "setPropertyValues",
+                getCppuType( static_cast< Sequence< Property > * >( 0 ) )
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
                 -1,
-                &getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
-            },
+                getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
+            ),
             ///////////////////////////////////////////////////////////////
             // Optional standard commands
             ///////////////////////////////////////////////////////////////
-            {
-                "delete",
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
                 -1,
-                &getCppuBooleanType()
-            },
-            {
-                "insert",
+                getCppuBooleanType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
                 -1,
-                &getCppuVoidType()
-            },
-            {
-                "open",
+                getCppuVoidType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
                 -1,
-                &getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
-            },
-            {
-                "transfer",
+                getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
                 -1,
-                &getCppuType( static_cast< TransferInfo * >( 0 ) )
-            },
+                getCppuType( static_cast< TransferInfo * >( 0 ) )
+            )
             ///////////////////////////////////////////////////////////////
             // New commands
             ///////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////
-            // EOT
-            ///////////////////////////////////////////////////////////////
-            {
-                0,  // name
-                0,  // handle
-                0   // type
-            }
         };
-        return *aFolderCommandInfoTable;
+        return Sequence< CommandInfo >( aFolderCommandInfoTable, 8 );
     }
     else
     {
@@ -453,57 +413,48 @@ const ::ucb::CommandInfoTableEntry&
         //
         //=================================================================
 
-        static ::ucb::CommandInfoTableEntry aRootFolderCommandInfoTable[] =
+        static CommandInfo aRootFolderCommandInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required commands
             ///////////////////////////////////////////////////////////////
-            {
-                "getCommandInfo",
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
                 -1,
-                &getCppuVoidType()
-            },
-            {
-                "getPropertySetInfo",
+                getCppuVoidType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
                 -1,
-                &getCppuVoidType()
-            },
-            {
-                "getPropertyValues",
+                getCppuVoidType()
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
                 -1,
-                &getCppuType( static_cast< Sequence< Property > * >( 0 ) )
-            },
-            {
-                "setPropertyValues",
+                getCppuType( static_cast< Sequence< Property > * >( 0 ) )
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
                 -1,
-                &getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
-            },
+                getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
+            ),
             ///////////////////////////////////////////////////////////////
             // Optional standard commands
             ///////////////////////////////////////////////////////////////
-            {
-                "open",
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
                 -1,
-                &getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
-            },
-            {
-                "transfer",
+                getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
+            ),
+            CommandInfo(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
                 -1,
-                &getCppuType( static_cast< TransferInfo * >( 0 ) )
-            },
+                getCppuType( static_cast< TransferInfo * >( 0 ) )
+            )
             ///////////////////////////////////////////////////////////////
             // New commands
-            ///////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////
-            // EOT
-            ///////////////////////////////////////////////////////////////
-            {
-                0,  // name
-                0,  // handle
-                0   // type
-            }
         };
-        return *aRootFolderCommandInfoTable;
+        return Sequence< CommandInfo >( aRootFolderCommandInfoTable, 6 );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-08 16:57:39 $
+ *  last change: $Author: kso $ $Date: 2001-03-27 14:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,8 +151,12 @@ private:
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
             const com::sun::star::ucb::ContentInfo& Info );
 
-    virtual const ::ucb::PropertyInfoTableEntry& getPropertyInfoTable();
-    virtual const ::ucb::CommandInfoTableEntry&  getCommandInfoTable();
+    virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
+    getProperties( const com::sun::star::uno::Reference<
+                    com::sun::star::ucb::XCommandEnvironment > & xEnv );
+    virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
+    getCommands( const com::sun::star::uno::Reference<
+                    com::sun::star::ucb::XCommandEnvironment > & xEnv );
     virtual ::rtl::OUString getParentURL();
 
     static sal_Bool hasData(
@@ -209,7 +213,9 @@ private:
     void destroy( sal_Bool bDeletePhysical )
         throw( ::com::sun::star::ucb::CommandAbortedException );
 
-    void transfer( const ::com::sun::star::ucb::TransferInfo& rInfo )
+    void transfer( const ::com::sun::star::ucb::TransferInfo& rInfo,
+                   const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( ::com::sun::star::ucb::CommandAbortedException );
 
 public:
