@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.69 $
+#   $Revision: 1.70 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-13 10:20:48 $
+#   last change: $Author: hjs $ $Date: 2001-09-24 11:22:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1011,18 +1011,8 @@ CDEFS+=-DTIMELOG
 .ENDIF
 
 #to be removed soon!!!
-.IF "$(TF_SVDATA)" != ""
-CDEFS+=-DTF_SVDATA
-.ENDIF
-
-#to be removed soon!!!
 .IF "$(TF_CFGDATA)" != ""
 CDEFS+=-DTF_CFGDATA
-.ENDIF
-
-#to be removed soon!!!
-.IF "$(TF_FILEURL)" != ""
-CDEFS+=-DTF_FILEURL
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
