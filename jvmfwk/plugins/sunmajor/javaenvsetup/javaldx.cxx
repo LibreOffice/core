@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaldx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-14 13:45:27 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,14 @@ int main(int argc, char **argv)
     }
 
     //Only do something if the sunjavaplugin created this JavaInfo
-    rtl::OUString sSunVendor(RTL_CONSTASCII_USTRINGPARAM("Sun Microsystems Inc."));
-    if (sSunVendor.equals(pInfo->sVendor) == sal_False)
+    rtl::OUString sVendor1(RTL_CONSTASCII_USTRINGPARAM("Sun Microsystems Inc."));
+    rtl::OUString sVendor2(RTL_CONSTASCII_USTRINGPARAM("IBM Corporation"));
+    rtl::OUString sVendor3(RTL_CONSTASCII_USTRINGPARAM("Blackdown Java-Linux Team"));
+    rtl::OUString sVendor4(RTL_CONSTASCII_USTRINGPARAM("Apple Computer, Inc."));
+    if ( ! (sVendor1.equals(pInfo->sVendor) == sal_True
+            || sVendor2.equals(pInfo->sVendor) == sal_True
+            || sVendor3.equals(pInfo->sVendor) == sal_True
+            || sVendor4.equals(pInfo->sVendor) == sal_True))
         return 0;
 
     rtl::OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
