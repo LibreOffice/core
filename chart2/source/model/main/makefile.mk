@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: bm $ $Date: 2003-11-04 12:37:25 $
+#   last change: $Author: bm $ $Date: 2003-11-21 16:58:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,7 @@ SLOFILES=	\
     $(SLO)$/SubGrid.obj \
     $(SLO)$/Title.obj \
     $(SLO)$/UserDefinedProperties.obj \
+    $(SLO)$/XYDataInterpreter.obj \
     $(SLO)$/Wall.obj \
     $(SLO)$/CharacterProperties.obj \
     $(SLO)$/_serviceregistration_model.obj
