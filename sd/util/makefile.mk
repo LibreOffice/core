@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 15:21:35 $
+#   last change: $Author: obo $ $Date: 2003-10-23 08:30:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -171,6 +171,20 @@ SHL2DEPN+=	makefile.mk
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+.IF "$(GUI)" == "WNT"
+
+$(MISC)$/$(SHL1TARGET).def:
+    @echo ------------------------------
+    @echo Making: $@
+    @echo LIBRARY     $(SHL1TARGET)                                  >$@
+    @echo DESCRIPTION 'SDRAW3 DLL'                                 >>$@
+    @echo DATA        READ WRITE NONSHARED                          >>$@
+    @echo EXPORTS                                                   >>$@
+    @echo component_getImplementationEnvironment 				   >>$@
+    @echo component_writeInfo									   >>$@
+    @echo component_getFactory									   >>$@
+.ENDIF
 
 $(MISCX)$/$(SHL1TARGET).flt:
     @echo ------------------------------
