@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 12:06:11 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,6 +604,15 @@ namespace framework
             rtl::OUString                                                               m_aCustomTbxPrefix;
             rtl::OUString                                                               m_aStatusBarAlias;
             rtl::OUString                                                               m_aProgressBarAlias;
+            rtl::OUString                                                               m_aPropDocked;
+            rtl::OUString                                                               m_aPropVisible;
+            rtl::OUString                                                               m_aPropDockingArea;
+            rtl::OUString                                                               m_aPropDockPos;
+            rtl::OUString                                                               m_aPropPos;
+            rtl::OUString                                                               m_aPropSize;
+            rtl::OUString                                                               m_aPropUIName;
+            rtl::OUString                                                               m_aPropStyle;
+            rtl::OUString                                                               m_aPropLocked;
             AddonsOptions*                                                              m_pAddonOptions;
             SvtMiscOptions*                                                             m_pMiscOptions;
             sal_Int16                                                                   m_eSymbolSet;
