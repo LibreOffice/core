@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:00:37 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,11 +508,14 @@ class WW8FormulaControl : public OCX_Control
 {
 public:
     WW8FormulaControl(const String& sN,SwWW8ImplReader &rR)
-        : OCX_Control(sN), rRdr(rR), fToolTip(0), fNoMark(0), fUseSize(0),
-    fNumbersOnly(0), fDateOnly(0), fUnused(0), nSize(0), hpsCheckBox(20),
-    nChecked(0)
+        : OCX_Control(sN), rRdr(rR), fUnknown(0), fDropdownIndex(0),
+        fToolTip(0), fNoMark(0), fUseSize(0), fNumbersOnly(0), fDateOnly(0),
+        fUnused(0), nSize(0), hpsCheckBox(20), nChecked(0)
     {
     }
+    UINT8 fUnknown:2;
+    UINT8 fDropdownIndex:6;
+    UINT8 nDefaultChecked;
     UINT8 fToolTip:1;
     UINT8 fNoMark:1;
     UINT8 fUseSize:1;
@@ -1009,7 +1012,7 @@ friend class wwSectionManager;
     void GetNoninlineNodeAttribs(const SwTxtNode *pNode,
         std::vector<const xub_StrLen*> &rPositions);
 
-    void Read_HdFt(BYTE nWhichItems, int nSect, SwPageDesc* pPD,
+    void Read_HdFt(BYTE nWhichItems, BYTE grpfIhdt, int nSect, SwPageDesc* pPD,
         const SwPageDesc *pPrev);
     void Read_HdFtText(long nStartCp, long nLen, SwFrmFmt* pHdFtFmt);
 
