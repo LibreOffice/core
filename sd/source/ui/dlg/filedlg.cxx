@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2001-09-04 16:36:03 $
+ *  last change: $Author: thb $ $Date: 2001-10-05 12:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ private:
 
     Sound                       maSound;
     BOOL                        mbUsableSelection;
-    BOOL                        mbSoundPlaying;
+    BOOL                        mbLabelPlaying;
 
     void                        CheckSelectionState();
     DECL_LINK( StopMusicHdl, void * );
@@ -185,39 +185,63 @@ void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::Fil
         case css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY:
             if( mxControlAccess.is() )
             {
-                if( mbSoundPlaying )
+                if( mbLabelPlaying )
                 {
-                    mbSoundPlaying = FALSE;
+                    // switch from playing to not playing
 
                     // reset, so that sound file gets unlocked
+                    maSound.Stop();
                     maSound.SetSoundName( String() );
 
-                    mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
-                                               String( SdResId( STR_PLAY ) ) );
+                    try
+                    {
+                        mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
+                                                   String( SdResId( STR_PLAY ) ) );
+
+                        mbLabelPlaying = FALSE;
+                    }
+                    catch( css::lang::IllegalArgumentException )
+                    {
+#ifdef DBG_UTIL
+                        DBG_ERROR( "Cannot access play button" );
+#endif
+                    }
                 }
                 else
                 {
+                    // switch from not playing to playing of current file
                     if( maSound.IsPlaying() )
                     {
+                        // reset, so that sound file gets unlocked
                         maSound.Stop();
+                        maSound.SetSoundName( String() );
                     }
-                    else
+
+                    INetURLObject   aUrl( GetPath() );
+                    String          aSoundFile( aUrl.GetMainURL( INetURLObject::NO_DECODE ) );
+
+                    if( aSoundFile.Len() > 0 )
                     {
-                        INetURLObject   aUrl( GetPath() );
-                        String          aSoundFile( aUrl.GetMainURL( INetURLObject::NO_DECODE ) );
+                        maSound.SetNotifyHdl( LINK( this, SdFileDialog_Imp, StopMusicHdl ) );
+                        maSound.SetSoundName( aSoundFile );
+                        maSound.Play();
 
-                        if( aSoundFile.Len() > 0 )
+                        // guard against early stopping
+                        if( maSound.IsPlaying() )
                         {
-                            mbSoundPlaying = TRUE;
-
-                            maSound.SetNotifyHdl( LINK( this, SdFileDialog_Imp, StopMusicHdl ) );
-                            maSound.SetSoundName( aSoundFile );
-                            maSound.Play();
-
-                            // guard against early stopping
-                            if( maSound.IsPlaying() )
+                            try
+                            {
                                 mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
                                                            String( SdResId( STR_STOP ) ) );
+
+                                mbLabelPlaying = TRUE;
+                            }
+                            catch( css::lang::IllegalArgumentException )
+                            {
+#ifdef DBG_UTIL
+                                DBG_ERROR( "Cannot access play button" );
+#endif
+                            }
                         }
                     }
                 }
@@ -231,8 +255,6 @@ IMPL_LINK( SdFileDialog_Imp, StopMusicHdl, void *, EMPTYARG )
 {
      ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    mbSoundPlaying = FALSE;
-
     // reset, so that sound file gets unlocked
     maSound.SetSoundName( String() );
 
@@ -242,6 +264,7 @@ IMPL_LINK( SdFileDialog_Imp, StopMusicHdl, void *, EMPTYARG )
         {
             mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
                                        String( SdResId( STR_PLAY ) ) );
+            mbLabelPlaying = FALSE;
         }
         catch( css::lang::IllegalArgumentException )
         {
@@ -282,7 +305,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
                                     sal_Bool        bUsableSelection    ) :
     FileDialogHelper( nDialogType, 0 ),
     mbUsableSelection( bUsableSelection ),
-    mbSoundPlaying(FALSE)
+    mbLabelPlaying(FALSE)
 {
     css::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker > xFileDlg = GetFilePicker();
 
