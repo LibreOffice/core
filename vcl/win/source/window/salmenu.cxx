@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salmenu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 14:49:53 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 16:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
