@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScDatabaseRangesObj.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-03 11:55:16 $
+ *  last change:$Date: 2003-05-27 13:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sheet.XDatabaseRanges;
 import com.sun.star.sheet.XSpreadsheetDocument;
@@ -102,7 +103,7 @@ public class ScDatabaseRangesObj extends TestCase {
     * Creates Spreadsheet document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a Spreadsheet document" );
