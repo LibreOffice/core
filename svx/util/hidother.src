@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:15:05 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 10:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,6 +461,8 @@ hidspecial HID_OFAPAGE_MSFLTR2_CLB                   { HelpId = HID_OFAPAGE_MSFL
 
 hidspecial UID_OFA_CONNPOOL_DRIVERLIST_BACK         { HelpId = UID_OFA_CONNPOOL_DRIVERLIST_BACK; };
 hidspecial HID_OFA_CONNPOOL_DRIVERLIST              { HelpId = HID_OFA_CONNPOOL_DRIVERLIST; };
+hidspecial HID_DBPATH_CTL_PATH                      { HelpId = HID_DBPATH_CTL_PATH; };
+hidspecial HID_DBPATH_HEADERBAR                     { HelpId = HID_DBPATH_HEADERBAR; };
 
 hidspecial HID_HANGULDLG_BUTTON_OPTIONS             { HelpId = HID_HANGULDLG_BUTTON_OPTIONS; };
 
