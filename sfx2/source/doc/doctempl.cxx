@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-07 17:01:23 $
+ *  last change: $Author: dv $ $Date: 2000-12-08 08:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2600,8 +2600,10 @@ void SfxDocTemplate_Impl::Construct( const String& rDirs )
 
     ReadFolderList();
 
-    CreateFromHierarchy( aTemplRoot );
-    Rescan( sal_False );
+    if ( bNewRoot )
+        Rescan( sal_False );
+    else
+        CreateFromHierarchy( aTemplRoot );
 }
 
 // -----------------------------------------------------------------------
@@ -2952,6 +2954,10 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
             while ( xResultSet->next() )
             {
                 OUString aTitle( xRow->getString(1) );
+
+                if ( aTitle.compareToAscii( "sfx.tlx" ) == 0 )
+                    continue;
+
                 OUString aId = xContentAccess->queryContentIdentifierString();
 
                 EntryData_Impl* pEntry = pRegion->GetByTargetURL( aId );
