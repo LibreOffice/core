@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:24:21 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 13:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1941,9 +1941,9 @@ Any SwXTextCursor::GetPropertyValue(
         if(!bDone)
         {
             SfxItemSet aSet(rPaM.GetDoc()->GetAttrPool(),
-                RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
-                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
+                RES_CHRATR_BEGIN, RES_FRMATR_END -1,
                 RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
+                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                 0L);
             SwXTextCursor::GetCrsrAttr(rPaM, aSet);
 
