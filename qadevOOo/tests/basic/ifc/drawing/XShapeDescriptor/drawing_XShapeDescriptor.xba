@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: drawing_XShapeDescriptor.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:48:29 $ 
+'*  last change:$Date: 2003-03-05 11:33:30 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -99,6 +99,7 @@ On Error Goto ErrHndl
     sType = oObj.getShapeType()
     bOK = bOK AND (VarType(sType = 8 ))
     if bOK then
+        On Error Goto NocShapeType
         if VarType(cShapeType) = 8 then
             Out.Log("Comparing expected shape type (" + cShapeType + ")")
             Out.Log("with obtained (" + sType + ")")
@@ -107,10 +108,14 @@ On Error Goto ErrHndl
             Out.Log("!!! No expected value for shape '" + sType + "'")
         endif
     endif
-
+    
+EndTest:
     Test.MethodTested("getShapeType()", bOK)
 
 Exit Sub
+NocShapeType:
+    Out.Log("!!! No expected value for shape '" + sType + "'")
+    goto EndTest
 ErrHndl:
     Test.Exception()
     bOK = false
