@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 13:15:38 $
+#   last change: $Author: hr $ $Date: 2004-02-03 12:47:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,10 +98,8 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=i$(TARGET)
 SHL1VERSIONMAP=..$/..$/bridge_exports.map
 
-SHL1OBJS= \
-    $(SLO)$/cpp2uno.obj		\
-    $(SLO)$/uno2cpp.obj		\
-    $(SLO)$/except.obj
+SHL1OBJS = $(SLOFILES)
+SHL1LIBS = $(SLB)$/cpp_uno_shared.lib
 
 SHL1STDLIBS= \
     $(CPPULIB)			\
