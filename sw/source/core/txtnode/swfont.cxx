@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:21:39 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,6 +571,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet, const SwDoc *pDoc )
     bNoColReplace = FALSE;
     bNoHyph = pAttrSet->GetNoHyphenHere().GetValue();
     bBlink = pAttrSet->GetBlink().GetValue();
+    bOrgChg = TRUE;
     {
         const SvxFontItem& rFont = pAttrSet->GetFont();
         aSub[SW_LATIN].SetFamily( rFont.GetFamily() );
