@@ -7962,3 +7962,4 @@ _real@4096800000000000
 ?lower_bound@_STL@@YAPBUFontNameAttr@FontSubstConfigItem@vcl@@PBU234@0ABU234@UStrictStringSort@@@Z
 ?IsPrefMapModeValid@GfxLink@@QAE_NXZ
 ?IsPrefSizeValid@GfxLink@@QAE_NXZ
+?GetTitleType@FloatingWindow@@QBEGXZ
