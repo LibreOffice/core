@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:39:55 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,7 +577,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_TABLE_SET_READ_ONLY      (FN_FORMAT + 116)  /* Tabelle: Tabelle schuetzen */
 #define FN_TABLE_SET_READ_ONLY_CELLS (FN_FORMAT + 117)  /* Tabelle: Tabellezellen schuetzen */
 #define FN_TABLE_UNSET_READ_ONLY_CELLS  (FN_FORMAT + 119)  /* Tabelle: Tabellezellen schuetzen aufheben */
-#define FN_TABLE_HEADLINE_REPEAT    (FN_FORMAT + 120)   /* used in SwXTextTable*/
+#define FN_TABLE_HEADLINE_REPEAT    (FN_FORMAT + 120)   /* also used in SwXTextTable*/
 #define FN_TABLE_ADJUST_CELLS       (FN_FORMAT + 121)  /* Tabelle: Zellen anpassen */
 
 #define FN_FRAME_UP                 (FN_FORMAT + 122)  /* Rahmen um eine Ebene nach oben */
@@ -589,7 +589,11 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_SET_FRM_ULSPACE          (FN_FORMAT + 126)  /* Rahmen Kopf-/Fussabstand      */
 #define FN_TABLE_SET_LRSPACE        (FN_FORMAT + 127)  /* Tabelle: linker / rechter Abstand einstellen */
 #define FN_TABLE_OPTIMAL_HEIGHT     (FN_FORMAT + 128)  /* Zellenhoehe optimal*/
-
+#define FN_TABLE_DELETE_TABLE       (FN_FORMAT + 129)  /* remove current table*/
+#define FN_TABLE_SELECT_CELL        (FN_FORMAT + 130)  /* selects the current table cell */
+#define FN_CONVERT_TEXT_TO_TABLE    (FN_FORMAT + 131)  /* convert selected text to table */
+#define FN_CONVERT_TABLE_TO_TEXT    (FN_FORMAT + 132)  /* convert a table to text */
+#define FN_TABLE_SORT_DIALOG        (FN_FORMAT + 133)  /* sorting in tables*/
 /*--------------------------------------------------------------------
     Bereich: Seitenvorlage
  --------------------------------------------------------------------*/
