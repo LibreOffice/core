@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 14:50:51 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1205,6 +1205,7 @@ EditDoc::EditDoc( SfxItemPool* pPool )
 
     nDefTab = DEFTAB;
     bIsVertical = FALSE;
+    bIsFixedCellHeight = FALSE;
 
     // Don't create a empty node, Clear() will be called in EditEngine-CTOR
 
