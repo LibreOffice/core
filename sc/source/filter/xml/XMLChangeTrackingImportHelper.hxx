@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-10-02 15:57:24 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 12:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ struct ScMyCellInfo
     ScBaseCell*     pCell;
     rtl::OUString   sFormulaAddress;
     rtl::OUString   sFormula;
-    String          sResult;
+    String          sInputString;
     double          fValue;
     sal_Int32       nMatrixCols;
     sal_Int32       nMatrixRows;
@@ -100,7 +100,7 @@ struct ScMyCellInfo
     sal_uInt8       nMatrixFlag;
 
     ScMyCellInfo();
-    ScMyCellInfo(ScBaseCell* pCell, const rtl::OUString& sFormulaAddress, const rtl::OUString& sFormula,
+    ScMyCellInfo(ScBaseCell* pCell, const rtl::OUString& sFormulaAddress, const rtl::OUString& sFormula, const rtl::OUString& sInputString,
                 const double& fValue, const sal_uInt16 nType, const sal_uInt8 nMatrixFlag, const sal_Int32 nMatrixCols,
                 const sal_Int32 nMatrixRows);
     ~ScMyCellInfo();
