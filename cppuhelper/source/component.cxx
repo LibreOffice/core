@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 10:41:40 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 using namespace osl;
 using namespace rtl;
