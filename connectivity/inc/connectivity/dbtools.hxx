@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-05 16:07:58 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 10:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ namespace sdbc {
     class XRowSet;
     class XDataSource;
     class SQLException;
+    class XParameters;
 }
 namespace beans {
     class XPropertySet;
@@ -108,6 +109,9 @@ namespace container {
 namespace util {
     class XNumberFormatTypes;
     class XNumberFormatsSupplier;
+}
+namespace task {
+    class XInteractionHandler;
 }
 
 } } }
@@ -276,6 +280,28 @@ namespace dbtools
     void showError( const SQLExceptionInfo& _rInfo,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+
+    /** ask the user for parameters if the prepared statement needs some and sets them in the prepared statement
+        @param _xConnection     the connection must support the iterface @see com::sun::star::sdb::XSQLQueryComposerFactory
+        @param _xPreparedStmt   the prepared statement where the parameters could be set when needed
+    */
+    void askForParameters(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> & _xComposer,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _xParameters,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler);
+
+    /** call the appropiate set method for the specific sql type @see com::sun::star::sdbc::DataType
+        @param  _xParams        the parameters where to set the value
+        @param  parameterIndex  the index of the parameter, 1 based
+        @param  x               the value to set
+        @param  sqlType         the corresponding sql type @see com::sun::star::sdbc::DataType
+        @param  scale           the scale of the sql type can be 0
+    */
+    void setObjectWithInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _xParameters,
+                            sal_Int32 parameterIndex,
+                            const ::com::sun::star::uno::Any& x,
+                            sal_Int32 sqlType,
+                            sal_Int32 scale=0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
 //.........................................................................
 }   // namespace dbtools

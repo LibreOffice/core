@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-21 11:08:16 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 10:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,39 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
+#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XPARAMETERSSUPPLIER_HPP_
+#include <com/sun/star/sdb/XParametersSupplier.hpp>
+#endif
+#ifndef _COMPHELPER_INTERACTION_HXX_
+#include <comphelper/interaction.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
+#include <com/sun/star/sdb/ParametersRequest.hpp>
+#endif
+#ifndef _COMPHELPER_INTERACTION_HXX_
+#include <comphelper/interaction.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONREQUEST_HPP_
+#include <com/sun/star/task/XInteractionRequest.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XINTERACTIONSUPPLYPARAMETERS_HPP_
+#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_ROWSETVETOEXCEPTION_HPP_
+#include <com/sun/star/sdb/RowSetVetoException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XPARAMETERS_HPP_
+#include <com/sun/star/sdbc/XParameters.hpp>
+#endif
 
 
 using namespace ::comphelper;
@@ -200,6 +233,7 @@ namespace dbtools
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::sdbc;
+    using namespace ::com::sun::star::task;
 //  using namespace cppu;
 //  using namespace osl;
 
@@ -1177,6 +1211,205 @@ void showError(const SQLExceptionInfo& _rInfo,
         }
     }
 }
+//==================================================================
+// OParameterContinuation
+//==================================================================
+class OParameterContinuation : public OInteraction< XInteractionSupplyParameters >
+{
+    Sequence< PropertyValue >       m_aValues;
+
+protected:
+    virtual ~OParameterContinuation();
+public:
+    OParameterContinuation() { }
+
+    Sequence< PropertyValue >   getValues() const { return m_aValues; }
+
+// XInteractionSupplyParameters
+    virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException);
+};
+
+OParameterContinuation::~OParameterContinuation()
+{
+}
+//------------------------------------------------------------------
+void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException)
+{
+    m_aValues = _rValues;
+}
+//..................................................................
+
+
+    // -----------------------------------------------------------------------------
+void askForParameters(const Reference<XSQLQueryComposer> & _xComposer,
+                      const Reference<XParameters>& _xParameters,
+                      const Reference< XConnection>& _xConnection,
+                      const Reference< XInteractionHandler >& _rxHandler)
+{
+    OSL_ENSURE(_xComposer.is(),"dbtools::askForParameters XSQLQueryComposer is null!");
+    OSL_ENSURE(_xParameters.is(),"dbtools::askForParameters XParameters is null!");
+    OSL_ENSURE(_xConnection.is(),"dbtools::askForParameters XConnection is null!");
+    OSL_ENSURE(_rxHandler.is(),"dbtools::askForParameters XInteractionHandler is null!");
+
+    // we have to set this here again because getCurrentSettingsComposer can force a setpropertyvalue
+    Reference<XParametersSupplier>  xParameters = Reference<XParametersSupplier> (_xComposer, UNO_QUERY);
+
+    Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();
+    Reference<XNameAccess>   xParamsAsNames(xParamsAsIndicies, UNO_QUERY);
+    sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
+    if (nParamCount)
+    {
+        // build an interaction request
+        // two continuations (Ok and Cancel)
+        OInteractionAbort* pAbort = new OInteractionAbort;
+        OParameterContinuation* pParams = new OParameterContinuation;
+        // the request
+        ParametersRequest aRequest;
+        aRequest.Parameters = xParamsAsIndicies;
+        aRequest.Connection = _xConnection;
+        OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
+        Reference< XInteractionRequest > xRequest(pRequest);
+        // some knittings
+        pRequest->addContinuation(pAbort);
+        pRequest->addContinuation(pParams);
+
+        // execute the request
+        _rxHandler->handle(xRequest);
+
+        if (!pParams->wasSelected())
+            // canceled by the user (i.e. (s)he canceled the dialog)
+            throw RowSetVetoException();
+
+        // now transfer the values from the continuation object to the parameter columns
+        Sequence< PropertyValue > aFinalValues = pParams->getValues();
+        const PropertyValue* pFinalValues = aFinalValues.getConstArray();
+        for (sal_Int32 i=0; i<aFinalValues.getLength(); ++i, ++pFinalValues)
+        {
+            Reference< XPropertySet > xParamColumn;
+            ::cppu::extractInterface(xParamColumn, xParamsAsIndicies->getByIndex(i));
+            if (xParamColumn.is())
+            {
+#ifdef DBG_UTIL
+                ::rtl::OUString sName;
+                xParamColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sName;
+                OSL_ENSURE(sName.equals(pFinalValues->Name), "::dbaui::askForParameters: inconsistent parameter names!");
+#endif
+                // determine the field type and ...
+                sal_Int32 nParamType = 0;
+                xParamColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nParamType;
+                // ... the scale of the parameter column
+                sal_Int32 nScale = 0;
+                if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE), xParamColumn))
+                    xParamColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)) >>= nScale;
+                // and set the value
+                _xParameters->setObjectWithInfo(i + 1, pFinalValues->Value, nParamType, nScale);
+                    // (the index of the parameters is one-based)
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void setObjectWithInfo(const Reference<XParameters>& _xParams,
+                       sal_Int32 parameterIndex,
+                       const Any& x,
+                       sal_Int32 sqlType,
+                       sal_Int32 scale)  throw(SQLException, RuntimeException)
+{
+    if(!x.hasValue())
+        _xParams->setNull(parameterIndex,sqlType);
+
+    switch(sqlType)
+    {
+        case DataType::CHAR:
+        case DataType::VARCHAR:
+        case DataType::DECIMAL:
+        case DataType::NUMERIC:
+            _xParams->setString(parameterIndex,::comphelper::getString(x));
+            break;
+
+        case DataType::FLOAT:
+        case DataType::REAL:
+            {
+                float nValue;
+                if(x >>= nValue)
+                {
+                    _xParams->setFloat(parameterIndex,nValue);
+                    break;
+                }
+            }
+            // run through if we couldn't set a float value
+        case DataType::DOUBLE:
+            _xParams->setDouble(parameterIndex,::comphelper::getDouble(x));
+            break;
+        case DataType::DATE:
+            {
+                ::com::sun::star::util::Date aValue;
+                if(x >>= aValue)
+                    _xParams->setDate(parameterIndex,aValue);
+            }
+            break;
+        case DataType::TIME:
+            {
+                ::com::sun::star::util::Time aValue;
+                if(x >>= aValue)
+                    _xParams->setTime(parameterIndex,aValue);
+            }
+            break;
+        case DataType::TIMESTAMP:
+            {
+                ::com::sun::star::util::DateTime aValue;
+                if(x >>= aValue)
+                    _xParams->setTimestamp(parameterIndex,aValue);
+            }
+            break;
+        case DataType::BINARY:
+        case DataType::VARBINARY:
+        case DataType::LONGVARBINARY:
+        case DataType::LONGVARCHAR:
+            {
+                Sequence< sal_Int8> aBytes;
+                if(x >>= aBytes)
+                    _xParams->setBytes(parameterIndex,aBytes);
+                else
+                {
+                    Reference< XBlob > xBlob;
+                    if(x >>= xBlob)
+                        _xParams->setBlob(parameterIndex,xBlob);
+                    else
+                    {
+                        Reference< XClob > xClob;
+                        if(x >>= xClob)
+                            _xParams->setClob(parameterIndex,xClob);
+                        else
+                        {
+                            Reference< ::com::sun::star::io::XInputStream > xBinStream;
+                            if(x >>= xBinStream)
+                                _xParams->setBinaryStream(parameterIndex,xBinStream,xBinStream->available());
+                        }
+                    }
+                }
+            }
+            break;
+        case DataType::BIT:
+            _xParams->setBoolean(parameterIndex,::cppu::any2bool(x));
+            break;
+        case DataType::TINYINT:
+            _xParams->setByte(parameterIndex,::comphelper::getINT32(x));
+            break;
+        case DataType::SMALLINT:
+            _xParams->setShort(parameterIndex,::comphelper::getINT32(x));
+            break;
+        case DataType::INTEGER:
+            _xParams->setInt(parameterIndex,::comphelper::getINT32(x));
+            break;
+        default:
+            {
+                ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("Unknown SQL Type for PreparedStatement.setObjectWithInfo (SQL Type=");
+                aVal += ::rtl::OUString::valueOf(sqlType);
+                throw SQLException( aVal,_xParams,::rtl::OUString(),0,Any());
+            }
+    }
+}
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
@@ -1259,6 +1492,7 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
             ++__first;
         return __first;
     }
+
 // -----------------------------------------------------------------------------
 } //namespace connexctivity
 // -----------------------------------------------------------------------------
@@ -1266,6 +1500,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.33  2001/06/21 11:08:16  oj
+ *  #87925# start at 1
+ *
  *  Revision 1.32  2001/06/15 09:55:48  fs
  *  #86986# moved css/ui/* to css/ui/dialogs/*
  *
