@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:14:03 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ class ODataSettings_Base
 public:
 // <properties>
     ::rtl::OUString                             m_sFilter;
+    ::rtl::OUString                             m_sHavingClause;
+    ::rtl::OUString                             m_sGroupBy;
     ::rtl::OUString                             m_sOrder;
     sal_Bool                                    m_bApplyFilter;     // no BitField ! the base class needs a pointer to this member !
     ::com::sun::star::awt::FontDescriptor       m_aFont;
@@ -120,9 +122,10 @@ protected:
 class ODataSettings : public ::comphelper::OPropertyStateContainer
                     , public ODataSettings_Base
 {
+    sal_Bool m_bQuery;
 protected:
-    ODataSettings(::cppu::OBroadcastHelper& _rBHelper);
-    ODataSettings(const ODataSettings& _rSource, ::cppu::OBroadcastHelper& _rBHelper);
+    ODataSettings(::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bQuery = sal_False);
+    ODataSettings(const ODataSettings& _rSource, ::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bQuery = sal_False);
     virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const;
 
     /** register the properties from the param given. The parameter instance must be alive as long as tis object live.
