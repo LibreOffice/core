@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mmaher $ $Date: 2000-10-10 18:15:43 $
+#   last change: $Author: obo $ $Date: 2000-10-31 13:13:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,8 @@ COMPRDB=$(SOLARBINDIR)$/applicat.rdb
 # ------------------------------------------------------------------
 
 SLOFILES= \
-    $(SLO)$/FileAccess.obj \
-    $(SLO)$/$(COMP1TYPELIST)_description.obj
+    $(SLO)$/FileAccess.obj 
+#	$(SLO)$/$(COMP1TYPELIST)_description.obj
 
 SHL1TARGET= $(TARGET)
 
