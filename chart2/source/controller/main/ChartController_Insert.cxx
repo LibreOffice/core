@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Insert.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 17:18:43 $
+ *  last change: $Author: bm $ $Date: 2003-10-16 14:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include "macros.hxx"
 #include "DrawModelWrapper.hxx"
 #include "MultipleChartConverters.hxx"
+#include "LegendItemConverter.hxx"
 
 //maybe superfluous in future:
 #include "ChartTypeItemConverter.hxx"
@@ -438,15 +439,18 @@ void SAL_CALL ChartController::executeDispatch_InsertTitle()
 
 void SAL_CALL ChartController::executeDispatch_InsertLegend()
 {
+    bool bChanged = false;
     try
     {
-        bool bChanged = false;
-
-        uno::Reference< beans::XPropertySet > xProp=NULL;
-        //@todo use correct ItemConverter if available
-        wrapper::ChartTypeItemConverter aItemConverter( xProp, m_pDrawModelWrapper->GetItemPool() );
+        uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram(m_aModel->getModel());
+        uno::Reference< beans::XPropertySet > xProp( xDiagram->getLegend(), uno::UNO_QUERY );
+        //todo: If there is no legend, the dialog must be opened to add one
+        if( ! xProp.is())
+            return;
+        wrapper::LegendItemConverter aItemConverter(
+            xProp, m_pDrawModelWrapper->GetItemPool(), m_pDrawModelWrapper->getSdrModel() );
         SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
-        //aItemConverter.FillItemSet( aItemSet );
+        aItemConverter.FillItemSet( aItemSet );
 
         //prepare and open dialog
         Window* pParent( NULL );
@@ -458,6 +462,15 @@ void SAL_CALL ChartController::executeDispatch_InsertLegend()
 
             bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
         }
+    }
+    catch( uno::RuntimeException& e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
+    //make sure that all objects using  m_pDrawModelWrapper or m_pChartView are already deleted
+    if(bChanged) try
+    {
+        impl_rebuildView();
     }
     catch( uno::RuntimeException& e)
     {
