@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OImageButtonModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:05 $
+ *  last change:$Date: 2003-05-27 12:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._forms;
 
 import com.sun.star.drawing.XControlShape;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
@@ -128,7 +129,7 @@ public class OImageButtonModel extends TestCase {
     * Creates Draw document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a draw document" );
@@ -167,7 +168,7 @@ public class OImageButtonModel extends TestCase {
         log.println( "creating a test environment" );
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
         String objName = "ImageButton";
         //get ImageButtonModel
 
