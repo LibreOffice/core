@@ -2,9 +2,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:10:01 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -989,6 +989,8 @@ USHORT _SaveTable::AddFmt( SwFrmFmt* pFmt )
 
 void _SaveTable::RestoreAttr( SwTable& rTbl, BOOL bMdfyBox )
 {
+    USHORT n;
+
     bModifyBox = bMdfyBox;
 
     // zuerst die Attribute des TabellenFrmFormates zurueck holen
@@ -1014,7 +1016,7 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, BOOL bMdfyBox )
 
     // FrmFmts mit Defaults (0) fuellen
     pFmt = 0;
-    for( USHORT n = aSets.Count(); n; --n )
+    for( n = aSets.Count(); n; --n )
         aFrmFmts.Insert( pFmt, aFrmFmts.Count() );
 
     USHORT nLnCnt = nLineCount;
@@ -1047,6 +1049,8 @@ void _SaveTable::SaveCntntAttrs( SwDoc* pDoc )
 void _SaveTable::CreateNew( SwTable& rTbl, BOOL bCreateFrms,
                             BOOL bRestoreChart )
 {
+    USHORT n;
+
     _FndBox aTmpBox( 0, 0 );
     if( bRestoreChart )
         aTmpBox.SaveChartData( rTbl );
@@ -1069,7 +1073,7 @@ void _SaveTable::CreateNew( SwTable& rTbl, BOOL bCreateFrms,
 
     // FrmFmts mit Defaults (0) fuellen
     pFmt = 0;
-    for( USHORT n = aSets.Count(); n; --n )
+    for( n = aSets.Count(); n; --n )
         aFrmFmts.Insert( pFmt, aFrmFmts.Count() );
 
     pLine->CreateNew( rTbl, aParent, *this );
@@ -1564,11 +1568,13 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
 {
     const SwTable& rTbl = rTblNd.GetTable();
     const SwTableSortBoxes& rTblBoxes = rTbl.GetTabSortBoxes();
+    USHORT n;
+    USHORT i;
 
     ASSERT( UNDO_TABLE_DELBOX != GetId(), "falsche Action" );
     Ptrs.pNewSttNds = new SvULongs( (BYTE)(rTblBoxes.Count() - rOld.Count()), 5 );
 
-    for( USHORT n = 0, i = 0; n < rOld.Count(); ++i )
+    for( n = 0, i = 0; n < rOld.Count(); ++i )
     {
         if( rOld[ n ] == rTblBoxes[ i ] )
             ++n;
@@ -1972,7 +1978,9 @@ CHECKTABLE(pTblNd->GetTable())
 
     SwSelBoxes aSelBoxes;
     SwTxtFmtColl* pColl = rDoc.GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
-    for( USHORT n = 0; n < aBoxes.Count(); ++n )
+    USHORT n;
+
+    for( n = 0; n < aBoxes.Count(); ++n )
     {
         aIdx = aBoxes[ n ];
         SwStartNode* pSttNd = rDoc.GetNodes().MakeTextSection( aIdx,
