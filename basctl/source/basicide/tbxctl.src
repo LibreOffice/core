@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:29:26 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 00:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ FloatingWindow RID_TBXCONTROLS
         Text [ french ] = "Champs de contrôle" ;
         Text [ portuguese ] = "Campos de controlo" ;
         Text [ portuguese_brazilian ] = "Kontrollfelder" ;
-        Text[ chinese_simplified ] = "¿ØÖÆ×Ö¶Î";
+        Text[ chinese_simplified ] = "¿ØÖÆ";
         Text[ russian ] = "İëåìåíòû óïğàâëåíèÿ";
         Text[ polish ] = "Pola kontrolne";
         Text[ japanese ] = "ºİÄÛ°Ù";
@@ -106,7 +106,7 @@ FloatingWindow RID_TBXCONTROLS
         Text[ catalan ] = "Campos de control";
         Text[ finnish ] = "Ohjaimet";
     };
-    Text[ chinese_simplified ] = "¿ØÖÆ×Ö¶Î";
+    Text[ chinese_simplified ] = "¿ØÖÆ";
     Text[ russian ] = "İëåìåíòû óïğàâëåíèÿ";
     Text[ polish ] = "Pola kontrolne";
     Text[ japanese ] = "ºİÄÛ°Ù";
@@ -150,7 +150,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_traditional ] = "«ü¥O«ö¶s";
             Text[ arabic ] = "ÒÑ";
             Text[ greek ] = "Ğåäßï åğéëïãŞò";
-            Text[ korean ] = "¸í·É ¹öÆ°";
+            Text[ korean ] = "¹öÆ°";
             Text[ turkish ] = "Komut düğmesi";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Botón de comando";
@@ -180,7 +180,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_traditional ] = "®Ö¨ú¤è¶ô";
             Text[ arabic ] = "ÎÇäÉ ÇÎÊíÇÑ";
             Text[ greek ] = "Ğåäßï óŞìáíóçò";
-            Text[ korean ] = "Ã¼Å©  ¹Ú½º";
+            Text[ korean ] = "È®ÀÎ¶õ";
             Text[ turkish ] = "Seçme kutusu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Casilla de verificación";
@@ -203,14 +203,14 @@ ToolBox RID_TOOLBOX
             Text [ portuguese ] = "Etiqueta" ;
             Text [ portuguese_brazilian ] = "Label" ;
             /* ### ACHTUNG: Neuer Text in Resource? Label einfügen : Label einf³gen */
-            Text[ chinese_simplified ] = "±êÇ©";
+            Text[ chinese_simplified ] = "±êÇ©×Ö¶Î";
             Text[ russian ] = "Íàäïèñü";
             Text[ polish ] = "Pole etykiety";
             Text[ japanese ] = "}•\\”Ô†ÎŞ¯¸½";
-            Text[ chinese_traditional ] = "¼ĞÅÒ";
+            Text[ chinese_traditional ] = "¼ĞÅÒÄæ¦ì";
             Text[ arabic ] = "ÈØÇŞÉ ÚäæäÉ";
             Text[ greek ] = "Ğåäßï åğéãñáöŞò";
-            Text[ korean ] = "¶óº§";
+            Text[ korean ] = "Ä¸¼Ç ÇÊµå";
             Text[ turkish ] = "Etiket";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Etiqueta";
@@ -237,10 +237,10 @@ ToolBox RID_TOOLBOX
             Text[ russian ] = "Ïîëå ñïèñêà";
             Text[ polish ] = "Pole listy";
             Text[ japanese ] = "Ø½ÄÎŞ¯¸½";
-            Text[ chinese_traditional ] = "²M³æ¤è®Ø";
+            Text[ chinese_traditional ] = "²M³æ¤è¶ô";
             Text[ arabic ] = "ãÑÈÚ ŞÇÆãÉ";
             Text[ greek ] = "Ğåäßï ëßóôáò";
-            Text[ korean ] = "¸®½ºÆ® ¹Ú½º";
+            Text[ korean ] = "¸ñ·Ï ÇÊµå";
             Text[ turkish ] = "Liste kutusu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Listado";
@@ -270,7 +270,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_traditional ] = "¤ô¥­¦V±²¶b";
             Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÃİŞíÇğ";
             Text[ greek ] = "Ïñéæüíôéá ãñáììŞ êıëéóçò";
-            Text[ korean ] = "¼öÆò ½ºÅ©·Ñ¹Ù";
+            Text[ korean ] = "¼öÆò ½ºÅ©·Ñ";
             Text[ turkish ] = "Yatay kaydırma çubuğu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "BarraDesplazHoriz.";
@@ -300,7 +300,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_traditional ] = "®Ø¬[±±¨î¶µ";
             Text[ arabic ] = "FrameControl";
             Text[ greek ] = "Ğëáßóéï ïìáäïğïßçóçò";
-            Text[ korean ] = "ÇÁ·¹ÀÓ ÄÁÆ®·Ñ";
+            Text[ korean ] = "±×·ì¹Ú½º";
             Text[ turkish ] = "FrameControl";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "FrameControl";
@@ -327,7 +327,7 @@ ToolBox RID_TOOLBOX
             Text[ polish ] = "Linia pozioma";
             Text[ portuguese_brazilian ] = "HFixedLine";
             Text[ japanese ] = "‰¡ü";
-            Text[ korean ] = "HFixedLine";
+            Text[ korean ] = "¼öÆò¼±";
             Text[ chinese_simplified ] = "Ë®Æ½ÏßÌõ";
             Text[ chinese_traditional ] = "¤ô¥­½u";
             Text[ turkish ] = "HFixedLine";
@@ -387,7 +387,7 @@ ToolBox RID_TOOLBOX
             Text[ polish ] = "Graficzne pole kontrolne";
             Text[ portuguese_brazilian ] = "ImageControl";
             Text[ japanese ] = "²Ò°¼ŞºİÄÛ°Ù";
-            Text[ korean ] = "ImageControl";
+            Text[ korean ] = "±×·¡ÇÈ ÄÁÆ®·Ñ ÇÊµå";
             Text[ chinese_simplified ] = "Í¼ĞÎ¿ØÖÆ";
             Text[ chinese_traditional ] = "¹Ï¦¡±±¨î¶µ";
             Text[ turkish ] = "ImageControl";
@@ -411,14 +411,14 @@ ToolBox RID_TOOLBOX
             Text [ portuguese ] = "Botão de opção" ;
             Text [ portuguese_brazilian ] = "OptionButton" ;
             /* ### ACHTUNG: Neuer Text in Resource? RadioButton einfügen : RadioButton einf³gen */
-            Text[ chinese_simplified ] = "Ñ¡Ïî°´Å¥";
+            Text[ chinese_simplified ] = "Ñ¡Ïî×Ö¶Î";
             Text[ russian ] = "Ïåğåêëş÷àòåëü";
             Text[ polish ] = "Pole opcji";
             Text[ japanese ] = "µÌß¼®İÎŞ¯¸½";
             Text[ chinese_traditional ] = "¿ï¶µÄæ¦ì";
             Text[ arabic ] = "ÒÑ ÎíÇÑ";
             Text[ greek ] = "Ğåäßï åğéëïãşí";
-            Text[ korean ] = "¿É¼Ç ¹öÆ°";
+            Text[ korean ] = "¿É¼Ç ÇÊµå";
             Text[ turkish ] = "Seçenek düğmesi";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Botón de opción";
@@ -448,7 +448,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
             Text[ arabic ] = "ãÑÈÚ äÕ";
             Text[ greek ] = "Ğëáßóéï êåéìİíïõ";
-            Text[ korean ] = "ÅØ½ºÆ® ¹Ú½º";
+            Text[ korean ] = "ÅØ½ºÆ® ÇÊµå";
             Text[ turkish ] = "Metin kutusu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Cuadro de texto";
@@ -478,7 +478,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_traditional ] = "²Õ¦X¤è¶ô";
             Text[ arabic ] = "ãÑÈÚ ÊÍÑíÑ æÓÑÏ";
             Text[ greek ] = "Ğåäßï óõíäõáóìïı";
-            Text[ korean ] = "ÄŞº¸ ¹Ú½º";
+            Text[ korean ] = "ÄŞº¸ ÇÊµå";
             Text[ turkish ] = "Kombinasyon alanı";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Cuadro combinado";
@@ -508,7 +508,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_traditional ] = "««ª½¦V±²¶b";
             Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÑÃÓíÇğ";
             Text[ greek ] = "Êáôáêüñõöç ãñáììŞ êıëéóçò";
-            Text[ korean ] = "¼öÁ÷ ½ºÅ©·Ñ¹Ù";
+            Text[ korean ] = "¼öÁ÷ ½ºÅ©·Ñ";
             Text[ turkish ] = "Dikey kaydırma çubuğu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Barra de desplazamiento vert.";
@@ -535,7 +535,7 @@ ToolBox RID_TOOLBOX
             Text[ polish ] = "Pasek postêpu";
             Text[ portuguese_brazilian ] = "ProgressBar";
             Text[ japanese ] = "is¸Ş×Ì";
-            Text[ korean ] = "ProgressBar";
+            Text[ korean ] = "ÁøÇàÇ¥½ÃÁÙ";
             Text[ chinese_simplified ] = "½ø³ÌÌõ¿é";
             Text[ chinese_traditional ] = "¶i®i¤è¶ô";
             Text[ turkish ] = "ProgressBar";
@@ -563,7 +563,7 @@ ToolBox RID_TOOLBOX
             Text[ polish ] = "Linia pionowa";
             Text[ portuguese_brazilian ] = "VFixedLine";
             Text[ japanese ] = "cü";
-            Text[ korean ] = "VFixedLine";
+            Text[ korean ] = "¼öÁ÷¼±";
             Text[ chinese_simplified ] = "´¹Ö±ÏßÌõ";
             Text[ chinese_traditional ] = "««ª½½u";
             Text[ turkish ] = "VFixedLine";
@@ -632,6 +632,7 @@ ToolBox RID_TOOLBOX
         };
     };
 };
+
 
 
 
