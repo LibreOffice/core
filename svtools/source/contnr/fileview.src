@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2002-07-30 08:29:49 $
+ *  last change: $Author: rt $ $Date: 2002-08-01 20:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ String STR_SVT_FILEVIEW_COLUMN_TITLE
     Text[ french ] = "Titre";
     Text[ spanish ] = "Título";
     Text[ italian ] = "Titolo";
-    Text[ danish ] = "Overskrift";
+    Text[ danish ] = "Titel";
     Text[ swedish ] = "Namn";
     Text[ polish ] = "Tytu³";
     Text[ portuguese_brazilian ] = "Title";
@@ -187,7 +187,7 @@ String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
     Text[ spanish ] = "No se pudo crear la carpeta %1.";
     Text[ finnish ] = "Kansion %1 luominen ei onnistunut.";
     Text[ italian ] = "Impossibile creare la cartella %1.";
-    Text[ danish ] = "Could not create the folder %1.";
+    Text[ danish ] = "Mappen %1 kunne ikke oprettes.";
     Text[ swedish ] = "Det gick inte att skapa mappen %1.";
     Text[ polish ] = "Utworzenie folderu %1 nie powiod³o siê.";
     Text[ portuguese_brazilian ] = "Could not create the folder %1.";
@@ -339,7 +339,7 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ spanish ] = "~Eliminar";
             Text[ finnish ] = "Delete";
             Text[ italian ] = "~Elimina";
-            Text[ danish ] = "Delete";
+            Text[ danish ] = "~Slet";
             Text[ swedish ] = "~Radera";
             Text[ polish ] = "~Usuñ";
             Text[ portuguese_brazilian ] = "Delete";
@@ -367,7 +367,7 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ spanish ] = "~Cambiar nombre";
             Text[ finnish ] = "Rename";
             Text[ italian ] = "~Rinomina";
-            Text[ danish ] = "Rename";
+            Text[ danish ] = "~Omdøb";
             Text[ swedish ] = "~Byt namn";
             Text[ polish ] = "~Zmieñ nazwê";
             Text[ portuguese_brazilian ] = "Rename";
@@ -462,7 +462,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text = "Sind Sie sicher, dass Sie die selektierten Daten löschen wollen?" ;
         Text [ english_us ] = "Are you sure you want to delete the selected data?" ;
         Text [ swedish ] = "Är du säker på att du vill radera de markerade data?" ;
-        Text [ danish ] = "Er du sikker på, at du vil slette de markerede data?" ;
+        Text [ danish ] = "Vil du virkelig slette de markerede data?" ;
         Text [ italian ] = "Volete davvero cancellare i dati selezionati?" ;
         Text [ spanish ] = "¿Desea realmente eliminar los datos seleccionados?" ;
         Text [ french ] = "Êtes vous sûr de vouloir supprimer les données sélectionnées ?" ;
@@ -502,7 +502,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ swedish ] = "~Radera";
         Text[ russian ] = "Óäàëèòü";
         Text[ italian ] = "E~limina";
-        Text[ danish ] = "Slet";
+        Text[ danish ] = "~Slet";
         Text[ polish ] = "Usuñ";
         Text[ portuguese_brazilian ] = "~Ja";
         Text[ japanese ] = "å‰Šé™¤(~D)";
@@ -533,7 +533,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ swedish ] = "Radera ~alla";
         Text[ russian ] = "Óäàëèòü âñå";
         Text[ italian ] = "~Elimina tutti";
-        Text[ danish ] = "Slet alle";
+        Text[ danish ] = "Slet ~alle";
         Text[ polish ] = "Usuñ wszystkie";
         Text[ portuguese_brazilian ] = "~Alle";
         Text[ japanese ] = "ã™ã¹ã¦å‰Šé™¤(~A)";
@@ -563,7 +563,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ swedish ] = "Radera i~nte";
         Text[ russian ] = "Íå óäàëÿòü";
         Text[ italian ] = "~Non eliminare";
-        Text[ danish ] = "Slet ikke";
+        Text[ danish ] = "Slet ~ikke";
         Text[ polish ] = "Nie usuwaj";
         Text[ portuguese_brazilian ] = "~Nein";
         Text[ japanese ] = "å‰Šé™¤ã—ãªã„(~N)";
