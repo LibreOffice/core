@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-08 18:21:21 $
+ *  last change: $Author: mtg $ $Date: 2001-09-05 18:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,9 @@ ByteChucker::ByteChucker(Reference<XOutputStream> xOstream)
 , a1Sequence ( 1 )
 , a2Sequence ( 2 )
 , a4Sequence ( 4 )
-, aBuffer ( n_ConstNonSpannableBufferSize )
 , p1Sequence ( a1Sequence.getArray() )
 , p2Sequence ( a2Sequence.getArray() )
 , p4Sequence ( a4Sequence.getArray() )
-, pBuffer ( aBuffer.getArray() )
-, nBufferSize ( n_ConstNonSpannableBufferSize )
-, nCurrentBufferPos ( 0 )
-, bSpannable ( sal_True )
 {
 }
 
@@ -95,23 +90,7 @@ ByteChucker::~ByteChucker()
 void SAL_CALL ByteChucker::writeBytes( const Sequence< sal_Int8 >& aData, sal_Int32 nLength, const sal_Int8 * const pData )
     throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
-    if ( !bSpannable )
-    {
-        if ( nLength < 0 )
-            nLength = aData.getLength();
-        if (nLength > nBufferSize )
-        {
-            do
-                nBufferSize *= 2;
-            while ( nLength > nBufferSize );
-
-            aBuffer.realloc ( nBufferSize );
-        }
-        memcpy ( pBuffer + nCurrentBufferPos, pData ? pData : aData.getConstArray(), nLength);
-        nCurrentBufferPos += nLength;
-    }
-    else
-        xStream->writeBytes(aData);
+    xStream->writeBytes(aData);
 }
 void SAL_CALL ByteChucker::flush(  )
     throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
@@ -128,32 +107,21 @@ void SAL_CALL ByteChucker::closeOutput(  )
 sal_Int64 SAL_CALL ByteChucker::seek( sal_Int64 location )
     throw(IllegalArgumentException, IOException, RuntimeException)
 {
-    if (xSeek.is() )
-    {
-        sal_Int64 nLen = xSeek->getLength();
-        if (location > nLen )
-            location = nLen;
-        xSeek->seek( location );
-        return location;
-    }
-    else
-        throw IOException();
+    sal_Int64 nLen = xSeek->getLength();
+    if (location > nLen )
+        location = nLen;
+    xSeek->seek( location );
+    return location;
 }
 sal_Int64 SAL_CALL ByteChucker::getPosition(  )
         throw(IOException, RuntimeException)
 {
-    if (xSeek.is() )
-        return xSeek->getPosition();
-    else
-        throw IOException();
+    return xSeek->getPosition();
 }
 sal_Int64 SAL_CALL ByteChucker::getLength(  )
         throw(IOException, RuntimeException)
 {
-    if (xSeek.is() )
-        return xSeek->getLength();
-    else
-        throw IOException();
+    return xSeek->getLength();
 }
 
 ByteChucker& ByteChucker::operator << (sal_Int8 nInt8)
