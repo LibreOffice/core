@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 13:07:48 $
+ *  last change: $Author: oj $ $Date: 2001-01-30 16:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,7 +454,7 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString, const SQLParseNodeP
         }
 
         else if(SQL_ISRULE(this,table_ref) &&
-            ((nCount == 4 && SQL_ISPUNCTUATION(m_aChilds[0],"("))|| (nCount == 6 && SQL_ISPUNCTUATION(m_aChilds[0],"("))))
+            (nCount == 4|| (nCount == 6 && SQL_ISPUNCTUATION(m_aChilds[0],"("))))
             tableRangeNodeToStr(rString, rParam);
         // je nachdem ob international angegeben wird oder nicht wird like anders behandelt
         // interanational: *, ? sind Platzhalter

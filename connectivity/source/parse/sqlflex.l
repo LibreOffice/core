@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.5 2001-01-29 09:25:48 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.6 2001-01-30 16:04:46 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-01-29 09:25:48 $ $Revision: 1.5 $
+//	$Author: oj $ $Date: 2001-01-30 16:04:46 $ $Revision: 1.6 $
 //
 // Description:
 //
@@ -502,7 +502,7 @@ static sal_uInt32 Intl_TokenID[] =
 	SQL_TOKEN_AND, SQL_TOKEN_AVG, SQL_TOKEN_COUNT, SQL_TOKEN_MAX,
 	SQL_TOKEN_MIN, SQL_TOKEN_SUM
 };
-
+static bool IN_SQLyyerror;
 //------------------------------------------------------------------------------
 OSQLScanner::OSQLScanner()
 			: m_nCurrentPos(0)
@@ -510,16 +510,20 @@ OSQLScanner::OSQLScanner()
 			, m_pContext(NULL)
 			, m_nRule(0) // 0 is INITIAL
 {
+	IN_SQLyyerror = false;
 }
 
 //------------------------------------------------------------------------------
 OSQLScanner::~OSQLScanner()
 {
 }
-
 //------------------------------------------------------------------------------
 void OSQLScanner::SQLyyerror(sal_Char *fmt)
 {
+	if(IN_SQLyyerror)
+		return;
+	IN_SQLyyerror = true;
+
 	OSL_ENSHURE(m_pContext, "OSQLScanner::SQLyyerror: No Context set");	
 	m_sErrorMessage = ::rtl::OUString(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
 	if (m_nCurrentPos < m_sStatement.getLength())
@@ -566,6 +570,7 @@ void OSQLScanner::SQLyyerror(sal_Char *fmt)
 		}
 		m_sErrorMessage += aError;
 	}
+	IN_SQLyyerror = false;
 }
 
 //------------------------------------------------------------------------------
@@ -578,7 +583,8 @@ void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, OParseConte
 	m_nCurrentPos	= 0;
 	m_bInternational = bInternational;
 	m_pContext		= pContext;
-	yy_hold_char	= 32;
+	if(yy_hold_char != 32)
+		yy_hold_char	= 0;
 }
 
 //------------------------------------------------------------------------------
