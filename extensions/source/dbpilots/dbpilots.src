@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 20:55:44 $
+ *  last change: $Author: kz $ $Date: 2001-09-26 20:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog RID_DLG_GROUPBOXWIZARD
     Text [ italian ] = "Pilota automatico - Elemento di gruppo";
     Text [ danish ] = "AutoPilot - gruppeelement";
     Text [ swedish ] = "AutoPilot f�r gruppelement";
-    Text [ polish ] = "AutoPilot - Element grupowy";
+    Text [ polish ] = "AutoPilot: Element grupy";
     Text [ portuguese_brazilian ] = "AutoPilot Gruppenelement";
     Text [ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄ 基本要素";
     Text [ chinese_simplified ] = "自动文件助理 小组单元";
@@ -124,7 +124,7 @@ ModalDialog RID_DLG_GRIDWIZARD
     Text [ italian ] = "Pilota automatico - Elemento tabella";
     Text [ danish ] = "AutoPilot - tabelelement";
     Text [ swedish ] = "AutoPilot f�r tabellelement";
-    Text [ polish ] = "AutoPilot - Element tabeli";
+    Text [ polish ] = "AutoPilot: Element tabeli";
     Text [ portuguese_brazilian ] = "AutoPilot Tabellenelement";
     Text [ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄ ﾃｰﾌﾞﾙの構成要素";
     Text [ chinese_simplified ] = "自动文件助理 表格单元";
@@ -152,7 +152,7 @@ String RID_STR_LISTWIZARD_TITLE
     Text[ italian ] = "Pilota automatico Casella di riepilogo";
     Text[ danish ] = "AutoPilot rulleliste";
     Text[ swedish ] = "AutoPilot f�r listruta";
-    Text[ polish ] = "AutoPilot - Pole listy";
+    Text[ polish ] = "AutoPilot: Pole listy";
     Text[ portuguese_brazilian ] = "Create group";
     Text[ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄ ﾘｽﾄﾌｨｰﾙﾄﾞ";
     Text[ chinese_simplified ] = "自动文档助理 列单栏";
@@ -179,7 +179,7 @@ String RID_STR_COMBOWIZARD_TITLE
     Text [ italian ] = "Pilota automatico Casella combinata";
     Text [ danish ] = "AutoPilot kombinationsboks";
     Text [ swedish ] = "AutoPilot f�r kombinationsf�lt";
-    Text [ polish ] = "AutoPilot - Pole kombi";
+    Text [ polish ] = "AutoPilot: Pole kombi";
     Text [ portuguese_brazilian ] = "Option Group AutoPilot";
     Text [ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄ ｺﾝﾎﾞﾎﾞｯｸｽ";
     Text [ chinese_simplified ] = "自动文件助理 组合栏";
@@ -224,6 +224,9 @@ String RID_STR_COULDNOTOPENTABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2001/08/29 20:55:44  kz
+ *  Merge SRC638: 29.08.01 - 22:54:45
+ *
  *  Revision 1.22  2001/08/29 09:16:33  vg
  *  Merge SRC638: 29.08.01 - 11:16:54
  *
@@ -293,6 +296,7 @@ String RID_STR_COULDNOTOPENTABLE
  *
  *  Revision 1.0 14.02.01 10:47:53  fs
  ************************************************************************/
+
 
 
 
