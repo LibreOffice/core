@@ -16874,3 +16874,11 @@ _real@8@3ffd820c49ba5e354000
 ?createItem@SvxUnoTransGradientTable@@UBEPAVNameOrIndex@@XZ
 ?createItem@SvxUnoDashTable@@UBEPAVNameOrIndex@@XZ
 ?_M_insert_overflow@?$vector@GV?$allocator@G@_STL@@@_STL@@IAEXPAGABGI@Z
+?SetNumberingSettings@SvxNumValueSet@@QAEXABV?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@AAV?$Reference@VXNumberingFormatter@text@star@sun@com@@@3456@ABULocale@lang@456@@Z
+?SetOutlineNumberingSettings@SvxNumValueSet@@QAEXAAV?$Sequence@V?$Reference@VXIndexAccess@container@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@AAV?$Reference@VXNumberingFormatter@text@star@sun@com@@@3456@ABULocale@lang@456@@Z
+?query@?$Reference@VXDefaultNumberingProvider@text@star@sun@com@@@uno@star@sun@com@@SA?AV12345@PAVXInterface@2345@@Z
+?query@?$Reference@VXNumberingFormatter@text@star@sun@com@@@uno@star@sun@com@@SA?AV12345@PAVXInterface@2345@@Z
+?s_pType@?$Sequence@V?$Reference@VXIndexAccess@container@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@2PAU_typelib_TypeDescriptionReference@@A
+?s_pType_com_sun_star_text_XDefaultNumberingProvider@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXDefaultNumberingProvider@text@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?s_pType_com_sun_star_text_XNumberingFormatter@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXNumberingFormatter@text@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+??0SvxUnoNameItemTable@@QAE@PAVSdrModel@@GE@Z
