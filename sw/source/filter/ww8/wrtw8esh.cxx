@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:11:26 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1413,7 +1413,8 @@ void WinwordAnchoring::WriteData( EscherEx& rEx ) const
 void SwWW8Writer::CreateEscher()
 {
     SfxItemState eBackSet =
-        pDoc->GetPageDesc(0).GetMaster().GetItemState(RES_BACKGROUND);
+        (const_cast<const SwDoc*>(pDoc))->GetPageDesc(0).GetMaster().
+        GetItemState(RES_BACKGROUND);
     if (pHFSdrObjs->size() || pSdrObjs->size() || SFX_ITEM_SET == eBackSet)
     {
         ASSERT( !pEscher, "wer hat den Pointer nicht geloescht?" );
@@ -2141,7 +2142,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
             AddShape( ESCHER_ShpInst_Rectangle, 0xe00, nSecondShapeId );
 
             EscherPropertyContainer aPropOpt;
-            const SwFrmFmt &rFmt = rWrt.pDoc->GetPageDesc(0).GetMaster();
+            const SwFrmFmt &rFmt = const_cast<const SwDoc *>(rWrt.pDoc)->GetPageDesc(0).GetMaster();
             const SfxPoolItem* pItem = 0;
             SfxItemState eState = rFmt.GetItemState(RES_BACKGROUND, true,
                 &pItem);
