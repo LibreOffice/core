@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2001-06-20 10:04:23 $
+ *  last change: $Author: gh $ $Date: 2001-11-21 15:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,14 @@
 class GSILine : public ByteString
 {
 private:
-    ULONG nUniqId;
+    ByteString aUniqId;
     ULONG nLineNumber;
     BOOL bOK;
 
 public:
     GSILine( const ByteString &rLine, ULONG nLine );
 
-    ULONG GetUniqId() { return nUniqId; }
+    ByteString GetUniqId() { return aUniqId; }
     ULONG GetLineNumber() { return nLineNumber; }
 
     BOOL IsOK() { return bOK; }
@@ -103,8 +103,8 @@ private:
 public:
     GSIBlock( BOOL PbPrintContext ) : pGermanLine( NULL ), bPrintContext( PbPrintContext ) {};
     ~GSIBlock();
-    void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ULONG nUniqueId );
-    void InsertLine( const ByteString &rLine, ULONG nLine );
+    void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
+    void InsertLine( const ByteString &rLine, ULONG nLine, BOOL bInternal );
     BOOL CheckSyntax( ULONG nLine );
 
     void WriteError( SvStream &aErrOut );
@@ -125,7 +125,7 @@ GSILine::GSILine( const ByteString &rLine, ULONG nLine )
     ByteString sTmp( rLine );
     sTmp.SearchAndReplaceAll( "($$)", "\t" );
 
-    nUniqId = sTmp.GetToken( 0, '\t' ).ToInt32();
+    aUniqId = sTmp.GetToken( 0, '\t' );
 }
 
 //
@@ -143,7 +143,7 @@ GSIBlock::~GSIBlock()
 }
 
 /*****************************************************************************/
-void GSIBlock::InsertLine( const ByteString &rLine, ULONG nLine )
+void GSIBlock::InsertLine( const ByteString &rLine, ULONG nLine, BOOL bInternal )
 /*****************************************************************************/
 {
     GSILine *pLine = new GSILine( rLine, nLine );
@@ -153,7 +153,7 @@ void GSIBlock::InsertLine( const ByteString &rLine, ULONG nLine )
 
     if ( sTmp.GetTokenCount( '\t' ) < 5 )
     {
-        PrintError( "Unable to determin languge and/or state", "Line format", rLine.Copy( 0,100 ), nLine, 0 );
+        PrintError( "Unable to determin languge and/or state", "Line format", rLine.Copy( 0,100 ), nLine );
         pLine->NotOK();
     }
 
@@ -163,7 +163,9 @@ void GSIBlock::InsertLine( const ByteString &rLine, ULONG nLine )
     else {
         ULONG nPos = 0;
 
-        if ( sTmp.GetToken( 3, '\t' ).ToLowerAscii() ==  "int")
+        BOOL bLineIsInternal = sTmp.GetToken( 3, '\t' ).EqualsIgnoreCaseAscii( "int" );
+        if ( (  bLineIsInternal &&  bInternal )
+           ||( !bLineIsInternal && !bInternal ) )
         {
             while (( nPos < Count()) &&
                     ( GetObject( nPos )->GetLineNumber() < pLine->GetLineNumber()))
@@ -176,13 +178,13 @@ void GSIBlock::InsertLine( const ByteString &rLine, ULONG nLine )
 
 /*****************************************************************************/
 void GSIBlock::PrintError( ByteString aMsg, ByteString aPrefix,
-    ByteString aContext, ULONG nLine, ULONG nUniqueId )
+    ByteString aContext, ULONG nLine, ByteString aUniqueId )
 /*****************************************************************************/
 {
     fprintf( stdout, "Error: %s, Line %lu", aPrefix.GetBuffer(),
         nLine );
-    if ( nUniqueId )
-        fprintf( stdout, ", UniqueID %lu", nUniqueId );
+    if ( aUniqueId.Len() )
+        fprintf( stdout, ", UniqueID %s", aUniqueId.GetBuffer() );
     fprintf( stdout, ": %s", aMsg.GetBuffer() );
 
     if ( bPrintContext )
@@ -222,7 +224,7 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine )
 
     if ( !pGermanLine )
     {
-        PrintError( "No German reference defined!", "File format", "", nLine, 0 );
+        PrintError( "No German reference defined!", "File format", "", nLine );
         aTester.ReferenceOK( "" );
     }
     else
@@ -308,9 +310,10 @@ void Help()
     fprintf( stdout, "\n" );
     fprintf( stdout, "Syntax: gsicheck [ -c ] [ -we ] [ -wc ] filename\n" );
     fprintf( stdout, "\n" );
-    fprintf( stdout, "-c    Add context to error message\n" );
+    fprintf( stdout, "-c    Add context to error message (Print the line containing the error)\n" );
     fprintf( stdout, "-we   Write GSI-File containing all errors\n" );
     fprintf( stdout, "-wc   Write GSI-File containing all correct parts\n" );
+    fprintf( stdout, "-i    Check records marked 'int' rather than marked 'ext' or similar\n" );
        fprintf( stdout, "\n" );
 }
 
@@ -325,13 +328,13 @@ ByteString GetLineType( const ByteString &rLine )
 }
 
 /*****************************************************************************/
-ULONG GetUniqId( const ByteString &rLine )
+ByteString GetUniqId( const ByteString &rLine )
 /*****************************************************************************/
 {
     ByteString sTmp( rLine );
     sTmp.SearchAndReplaceAll( "($$)", "\t" );
 
-    return sTmp.GetToken( 0, '\t' ).ToInt64();
+    return sTmp.GetToken( 0, '\t' );
 }
 
 /*****************************************************************************/
@@ -345,6 +348,7 @@ int _cdecl main( int argc, char *argv[] )
 
     BOOL bError = FALSE;
     BOOL bPrintContext = FALSE;
+    BOOL bInternal = FALSE;
     BOOL bWriteError = FALSE;
     BOOL bWriteCorrect = FALSE;
     ByteString aFilename;
@@ -368,6 +372,8 @@ int _cdecl main( int argc, char *argv[] )
                             bError = TRUE;
                         }
                     }
+                    break;
+                case 'i':bInternal = TRUE;
                     break;
                 default:
                     fprintf( stderr, "\nERROR: Unknown Switch %s!\n\n", argv[ i ] );
@@ -437,7 +443,7 @@ int _cdecl main( int argc, char *argv[] )
 
     ByteString sGSILine;
 
-    ULONG nOldId = 0;
+    ByteString aOldId;
     GSIBlock *pBlock = NULL;
     ULONG nLine = 0;
 
@@ -455,8 +461,8 @@ int _cdecl main( int argc, char *argv[] )
             }
             else
             {
-                ULONG nId = GetUniqId( sGSILine );
-                if ( nId != nOldId )
+                ByteString aId = GetUniqId( sGSILine );
+                if ( aId != aOldId )
                 {
                     if ( pBlock )
                     {
@@ -471,10 +477,10 @@ int _cdecl main( int argc, char *argv[] )
                     }
                     pBlock = new GSIBlock( bPrintContext );
 
-                    nOldId = nId;
+                    aOldId = aId;
                 }
 
-                pBlock->InsertLine( sGSILine, nLine );
+                pBlock->InsertLine( sGSILine, nLine, bInternal );
             }
         }
     }
