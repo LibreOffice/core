@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:36:10 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 11:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
         <value xml:lang="en-US">Flat Xml</value>
       </prop>
       <prop oor:name="Data">
-        <value>1,,,,xml,20002,</value>
+        <value>1,,doctype:office:document,,xml,20002,</value>
       </prop>
     </node>
     <node oor:name="writer_DocBook_File" oor:op="replace">
