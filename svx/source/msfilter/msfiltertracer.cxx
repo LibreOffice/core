@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msfiltertracer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 14:06:50 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ MSFilterTracer::MSFilterTracer( const ::rtl::OUString& rConfigPath, uno::Sequenc
 
             // creating the file stream
             mpStream = ::utl::UcbStreamHelper::CreateStream( aLogFile.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC | STREAM_SHARE_DENYNONE );
-            if ( mpStream )
+            if ( mpStream && !mpStream->GetError() )
             {
                 // creating a wrapper for our stream
                 utl::OOutputStreamWrapper* pHelper = new ::utl::OOutputStreamWrapper( *mpStream );
@@ -241,12 +241,14 @@ void MSFilterTracer::EndTracing()
 
 void MSFilterTracer::StartElement( const rtl::OUString& rName, uno::Reference< xml::sax::XAttributeList > xAttribs )
 {
-    mxHandler->startElement( rName, xAttribs );
+    if ( mxHandler.is() )
+        mxHandler->startElement( rName, xAttribs );
 }
 
 void MSFilterTracer::EndElement( const rtl::OUString& rName )
 {
-    mxHandler->endElement( rName );
+    if ( mxHandler.is() )
+        mxHandler->endElement( rName );
 }
 
 void MSFilterTracer::Trace( const rtl::OUString& rElement, const rtl::OUString& rMessage )
@@ -264,13 +266,15 @@ void MSFilterTracer::Trace( const rtl::OUString& rElement, const rtl::OUString& 
         if ( !bFilter )
         {
             uno::Reference < xml::sax::XAttributeList > xAttrList( new SvXMLAttributeList( *mpAttributeList ) );
-            mxHandler->startElement( rElement, xAttrList );
+            if ( mxHandler.is() )
+                mxHandler->startElement( rElement, xAttrList );
             if ( rMessage.getLength() )
             {
                 rtl::OUString aEmpty;
                 mxLogger->logp( 0, aEmpty, aEmpty, rMessage );
             }
-            mxHandler->endElement( rElement );
+            if ( mxHandler.is() )
+                mxHandler->endElement( rElement );
         }
     }
 }
