@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cd $ $Date: 2002-05-31 06:09:20 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 15:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ PushButton BTN_MANAGER
     Text[ chinese_simplified ] = "η®΅η†ε™¨(~M)...";
     Text[ russian ] = "Δθροεςχεπ...";
     Text[ polish ] = "MenedΏer...";
-    Text[ japanese ] = "γƒγƒγƒΌγ‚Έγƒ£(~M)...";
+    Text[ japanese ] = "γƒγƒγƒΌγ‚Έγƒ£γƒΌ(~M)...";
     Text[ chinese_traditional ] = "η®΅η†ε™¨(~M)...";
     Text[ arabic ] = "ΗαγΟνΡ...";
     Text[ greek ] = "Διαχειριστής...";
@@ -707,7 +707,7 @@ String STR_DELETE_STYLE_USED
     Text[ chinese_traditional ] = "ζ‚¨θ¦εªι™¤η„ζ―δΈ€ε€‹δ½Ώη”¨η„ζ¨£εΌοΉ—\n";
     Text[ arabic ] = "ΓδΚ ΗαΒδ ΘΥΟΟ ΝΠέ δγΨ ήνΟ ΗαΗΣΚΞΟΗγ!\n";
     Text[ greek ] = "Διαγράφετε ένα πρότυπο που εφαρμόστηκε!\n";
-    Text[ korean ] = "μ‚¬μ©λ μ¤νƒ€μΌμ„ μ‚­μ ν•κ³  μμµλ‹λ‹¤!\n";
+    Text[ korean ] = "μ‚¬μ©λ μ¤νƒ€μΌμ„ μ‚­μ ν•κ³  μμµλ‹λ‹¤.\n";
     Text[ turkish ] = "Kullanύlan bir ώablonu siliyorsunuz!\n";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     Text[ catalan ] = "΅Usted estα borrando un estilo que ha sido aplicado!\n";
@@ -958,7 +958,7 @@ ErrorBox MSG_ERR_CANT_EDIT_OPEN_DOCS
     Message[ chinese_simplified ] = "ζ–‡ζ΅£ε·²η»ε¤„δΊηΌ–θΎ‘η¶ζ€οΌ\nζ–‡ζ΅£η®΅η†ε™¨ζ— ζ³•ε¤„η†θΏ™δΊ›ζ–‡ζ΅£γ€‚";
     Message[ russian ] = "Δθροεςχεπ δξκσμενςξβ νε μξζες πεδΰκςθπξβΰςό\nθντξπμΰφθώ ξ δξκσμενςΰυ, νΰυξδÿωθυρÿ β ξαπΰαξςκε\n";
     Message[ polish ] = "Informacja o dokumencie dla edytowanych dokumentσw\nnie moΏe byζ edytowana przez menedΏera dokumentσw.";
-    Message[ japanese ] = "η·¨ι›†δΈ­γ®γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ‹γ‚‰γ®γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒζƒ…ε ±γ―\nγƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒ γƒγƒγƒΌγ‚Έγƒ£γ‹γ‚‰η·¨ι›†γγ§γγΎγ›γ‚“γ€‚";
+    Message[ japanese ] = "η·¨ι›†δΈ­γ®γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒζƒ…ε ±γ―\nγƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγƒγƒγƒΌγ‚Έγƒ£γƒΌγ‹γ‚‰γ§γ―η·¨ι›†γ§γγΎγ›γ‚“γ€‚";
     Message[ chinese_traditional ] = "ζ–‡δ»¶ε·²η¶“θ™•ζ–Όη·¨θΌ―η‹€ζ…‹οΉ\nζ–‡δ»¶η®΅η†ε™¨η„΅ζ³•θ™•η†ι€™δΊ›ζ–‡δ»¶γ€‚";
     Message[ arabic ] = "αΗ νγίδ αΕΟΗΡΙ ΗαγΣΚδΟΗΚ ΚΪΟνα γΪαζγΗΚ ΗαγΣΚδΟ\nααγΣΚδΟΗΚ ΗαΚν νΚγ ΚΝΡνΡεΗ ΝΗανΗπ.";
     Message[ greek ] = "Δεν είναι δυνατή η επεξεργασία με τον διαχειριστή εγγράφων της πληροφορίας εγγράφου για \n έγγραφα τα οποία είναι υπό επεξεργασία.";
