@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextEmbeddedObject.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-01-22 13:26:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef __com_sun_star_text_BaseFrame_idl__
 #include <com/sun/star/text/BaseFrame.idl>
 #endif
+#ifndef __com_sun_star_frame_XModel_idl__
+#include <com/sun/star/frame/XModel.idl>
+#endif
 
 
 //=============================================================================
@@ -87,6 +90,26 @@ service TextEmbeddedObject
     service BaseFrame;
     // DocMerge: empty anyway
     interface com::sun::star::document::XEmbeddedObjectSupplier;
+        /* If you get this property you get the CLSID of the OLE2 document stream
+                contained in this OLE2 shape. If you set it, an empty OLE2 document stream
+                with this CLSID is created within this OLE2 shape.
+            The property can only be set as long as the object is not inserted into the document.
+        */
+        [property] string CLSID;
+        //-------------------------------------------------------------------------
+
+        /** This is the model for the OLE2 object.
+            <p>This property if void if the ole2 is not an
+            Office component.</p>
+
+        */
+        [readonly, maybevoid, property] com::sun::star::frame::XModel Model;
+        //-------------------------------------------------------------------------
+
+        /** This is the component for the OLE2 object.
+
+        */
+        [readonly, maybevoid, property] com::sun::star::lang::XComponent Component;
 };
 
 //=============================================================================
