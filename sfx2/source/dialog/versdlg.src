@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ ModalDialog DLG_VERSIONS
         Text[ chinese_traditional ] = "ª`¸Ñ";
         Text[ arabic ] = "ÊÚáíŞ";
         Text[ greek ] = "Ó÷üëéï";
-        Text[ korean ] = "¼³¸í";
+        Text[ korean ] = "ÁÖ¼®";
         Text[ turkish ] = "Açıklama";
         Text[ language_user1 ] = " ";
     };
@@ -551,7 +551,7 @@ ModalDialog DLG_COMMENTS
     Text[ chinese_traditional ] = "Áä¤Jª©¥»ª`¸Ñ";
     Text[ arabic ] = "ÅÏÑÇÌ ÊÚáíŞ ÇáÅÕÏÇÑ";
     Text[ greek ] = "ÅéóáãùãŞ ó÷ïëßïõ İêäïóçò";
-    Text[ korean ] = "¹öÀü ¼³¸í ÀÔ·Â";
+    Text[ korean ] = "¹öÀü-ÁÖ¼® ÀÔ·Â";
     Text[ turkish ] = "Sürüm açıklaması ekle";
     Text[ language_user1 ] = " ";
 };
@@ -575,7 +575,7 @@ String DLG_COMMENTS
     Text[ chinese_traditional ] = "ª©¥»ª`¸Ñ";
     Text[ arabic ] = "ÊÚáíŞ ÇáÅÕÏÇÑ";
     Text[ greek ] = "Ó÷üëéï İêäïóçò";
-    Text[ korean ] = "¹öÀü ¼³¸í";
+    Text[ korean ] = "¹öÀü ÁÖ¼®";
     Text[ turkish ] = "Sürüm açıklaması";
     Text[ language_user1 ] = " ";
 };
