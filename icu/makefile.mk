@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2004-07-30 13:01:52 $
+#   last change: $Author: rt $ $Date: 2004-09-30 13:37:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,7 +131,9 @@ OUT2BIN= \
 CONFIGURE_DIR=source
 .IF "$(USE_SHELL)"=="4nt"
 BUILD_ACTION_SEP=^
+.IF "$(COMEX)"=="8"
 CONFIGURE_ACTION=$(BACK_PATH)..$/..$/convert.bat
+.ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 BUILD_ACTION_SEP=;
 CONFIGURE_ACTION=$(BACK_PATH)..$/..$/convert.sh
