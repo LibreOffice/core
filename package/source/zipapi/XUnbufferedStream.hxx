@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnbufferedStream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:13:45 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,10 @@
 #include <CRC32.hxx>
 #endif
 
+#define UNBUFF_STREAM_DATA          0
+#define UNBUFF_STREAM_RAW           1
+#define UNBUFF_STREAM_WRAPPEDRAW    2
+
 class EncryptionData;
 typedef void* rtlCipher;
 class XUnbufferedStream : public cppu::WeakImplHelper1
@@ -107,17 +111,24 @@ protected:
     vos::ORef < EncryptionData > mxData;
     rtlCipher maCipher;
     Inflater maInflater;
-    sal_Bool mbRawStream, mbFinished;
+    sal_Bool mbRawStream, mbWrappedRaw, mbFinished;
     sal_Int16 mnHeaderToRead;
     sal_Int64 mnZipCurrent, mnZipEnd, mnZipSize, mnMyCurrent;
     CRC32 maCRC;
+    sal_Bool mbCheckCRC;
 
 public:
     XUnbufferedStream( ZipEntry & rEntry,
                  com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
                  const vos::ORef < EncryptionData > &rData,
-                 sal_Bool bRawStream,
-                 sal_Bool bIsEncrypted);
+                 sal_Int8 nStreamMode,
+                 sal_Bool bIsEncrypted,
+                 const ::rtl::OUString& aMediaType );
+
+    // allows to read package raw stream
+    XUnbufferedStream( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xRawStream,
+                 const vos::ORef < EncryptionData > &rData );
+
 
     virtual ~XUnbufferedStream();
 
