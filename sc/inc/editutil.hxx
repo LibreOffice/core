@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:41:52 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 class OutputDevice;
 class ScDocument;
 class ScPatternAttr;
+class ScEditEngineDefaulter;
 
 class ScEditUtil
 {
@@ -133,13 +134,13 @@ public:
 
 class ScEditAttrTester
 {
-    EditEngine* pEngine;
+    ScEditEngineDefaulter* pEngine;
     SfxItemSet* pEditAttrs;
     BOOL        bNeedsObject;
     BOOL        bNeedsCellAttr;
 
 public:
-                ScEditAttrTester( EditEngine* pEng );
+                ScEditAttrTester( ScEditEngineDefaulter* pEng );
                 ~ScEditAttrTester();
 
     BOOL                NeedsObject() const     { return bNeedsObject; }
@@ -186,6 +187,9 @@ public:
                     /// if it doesn't exist yet.
                     /// The default ItemSet is then applied to each paragraph.
     void            SetDefaultItem( const SfxPoolItem& rItem );
+
+                    /// Returns the stored defaults, used to find non-default character attributes
+    const SfxItemSet& GetDefaults();
 
                     /// Overwritten method to be able to apply defaults already set
     void            SetText( const EditTextObject& rTextObject );
