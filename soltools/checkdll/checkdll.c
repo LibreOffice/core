@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkdll.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2001-06-22 12:36:23 $
+ *  last change: $Author: hr $ $Date: 2001-08-28 11:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,11 +60,6 @@
  ************************************************************************/
 
 
-/* NOTE: the special hack for GCC is necessary as long we keep
- * libusrxxxli.so. It's simply broken.
- */
-
-
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -74,6 +69,13 @@
 #else
 #include <dlfcn.h>
 #endif
+
+/*
+ * NOTE: Since no one is really interested in correct unload behavior I've
+ * disabled the shared library unload check. If you want to reenable it comment
+ * the following line out
+ */
+#define NO_UNLOAD_CHECK
 
 static const char *pprog_name   = "checkdll";
 static const char *psymbol      = "GetVersionInfo";
@@ -158,7 +160,7 @@ int main(int argc, char *argv[])
     if ( (phandle = dlopen(argv[1], RTLD_NOW)) != NULL ) {
         if  ( (pfun = (char *(*)(void))dlsym(phandle, psymbol)) != NULL ) {
             printf(": ok\n");
-#if !defined(IRIX) && defined(GCC)
+#ifdef NO_UNLOAD_CHECK
             _exit(0);
 #else
             dlclose(phandle);
@@ -168,7 +170,7 @@ int main(int argc, char *argv[])
     }
     printf(": ERROR: %s\n", dlerror());
     if (phandle)
-#ifdef GCC
+#ifdef NO_UNLOAD_CHECK
         _exit(3);
 #else
         dlclose(phandle);
