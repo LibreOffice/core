@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-08 15:21:16 $
+ *  last change: $Author: ssa $ $Date: 2002-09-13 16:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,11 +530,11 @@ BOOL OutputDevice::ImplHasMirroredGraphics()
 #endif
 }
 
-void    OutputDevice::ImplReMirror( Point &rPoint )
+void    OutputDevice::ImplReMirror( Point &rPoint ) const
 {
     rPoint.X() = mnOutOffX + mnOutWidth - 1 - rPoint.X() + mnOutOffX;
 }
-void    OutputDevice::ImplReMirror( Rectangle &rRect )
+void    OutputDevice::ImplReMirror( Rectangle &rRect ) const
 {
     long nWidth = rRect.nRight - rRect.nLeft;
 
@@ -545,7 +545,7 @@ void    OutputDevice::ImplReMirror( Rectangle &rRect )
     rRect.nLeft = mnOutOffX + mnOutWidth - nWidth - 1 - rRect.nLeft + mnOutOffX;
     rRect.nRight = rRect.nLeft + nWidth;
 }
-void    OutputDevice::ImplReMirror( Region &rRegion )
+void    OutputDevice::ImplReMirror( Region &rRegion ) const
 {
     long                nX;
     long                nY;
