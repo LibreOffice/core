@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-11-01 13:31:52 $
+ *  last change: $Author: jl $ $Date: 2001-11-19 18:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,12 +403,12 @@ void SjApplet2::settingsChanged(void)
 
         Sequence<sal_Int8> processID(16);
         rtl_getGlobalProcessId((sal_uInt8 *)processID.getArray());
-        JavaVM * pJVM = (JavaVM *)xJavaVM->getJavaVM(processID).getValue();
+        JavaVM * pJVM = *(JavaVM **)xJavaVM->getJavaVM(processID).getValue();
         TKTThreadAttach jenv(pJVM, xJavaThreadRegister_11.get());
 
         if( jenv.pEnv)
         {
-            DBG_ERROR( "SjApplet2::settingsChanged not implemented" );
+//          DBG_ERROR( "SjApplet2::settingsChanged not implemented" );
 #ifdef _OLD_FEATURE
 
             SjINetSettings aINetSettings;
