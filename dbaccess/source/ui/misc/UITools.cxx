@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:15:03 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 08:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@ SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
 // -----------------------------------------------------------------------------
 void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< XMultiServiceFactory >& _xFactory)
 {
+    OSL_ENSURE(_pParent,"showError: Parent window must be NOT NULL!");
     ::dbtools::showError(_rInfo,VCLUnoHelper::GetInterface(_pParent),_xFactory);
 }
 // -----------------------------------------------------------------------------
