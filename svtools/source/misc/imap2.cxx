@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imap2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-28 09:14:36 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,7 +440,6 @@ void ImageMap::ImpReadCERNLine( const ByteString& rLine )
 {
     ByteString  aStr( rLine );
     ByteString  aToken;
-    BOOL        bRet = FALSE;
 
     aStr.EraseLeadingChars( ' ' );
     aStr.EraseLeadingChars( '\t' );
@@ -619,7 +618,6 @@ void ImageMap::ImpReadNCSALine( const ByteString& rLine )
 {
     ByteString  aStr( rLine );
     ByteString  aToken;
-    BOOL        bRet = FALSE;
 
     aStr.EraseLeadingChars( ' ' );
     aStr.EraseLeadingChars( '\t' );
