@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-02 23:53:13 $
+ *  last change: $Author: vg $ $Date: 2002-05-16 14:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1157,7 +1157,7 @@ ModalDialog DLG_PUBLISHING
         Text[ swedish ] = "Låg upplösning (~640x480 pixel)";
         Text[ dutch ] = "Lage resolutie (~640x480 pixels)";
         Text[ spanish ] = "Resolución baja (~640x480 píxeles)";
-        Text[ english_us ] = "Low resolution (~640x480 pixel)";
+        Text[ english_us ] = "Low resolution (~640x480 pixels)";
         Text[ chinese_simplified ] = "ä½åˆ†è¾¨ç‡(640x480 åƒç´ )";
         Text[ russian ] = "Íèçêîå ğàçğåøåíèå (~640x480 ïèêñåëü)";
         Text[ polish ] = "Niska rozdzielczoœæ (640x480 pikseli)";
@@ -1215,7 +1215,7 @@ ModalDialog DLG_PUBLISHING
         Text[ swedish ] = "Hög upplösning (~1024x768 pixel)";
         Text[ dutch ] = "Hoge resolutie (~1024x768 pixels)";
         Text[ spanish ] = "Resolución alta (~1024x768 píxeles)";
-        Text[ english_us ] = "High resolution (~1024x768 pixel)";
+        Text[ english_us ] = "High resolution (~1024x768 pixels)";
         Text[ chinese_simplified ] = "é«˜åˆ†è¾¨ç‡(1024x768 åƒç´ )";
         Text[ russian ] = "Âûñîêîå ğàçğåøåíèå (~1024x768 ïèêñåëü)";
         Text[ polish ] = "Wysoka rozdzielczoœæ (1024x768 pikseli)";
