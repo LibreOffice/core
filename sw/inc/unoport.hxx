@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-04-03 07:16:44 $
+ *  last change: $Author: mib $ $Date: 2001-06-07 07:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,10 @@ class SwXTextPortion : public cppu::WeakImplHelper7
 protected:
     SwUnoCrsr*          GetCrsr() const { return (SwUnoCrsr*)GetRegisteredIn(); }
     SfxItemPropertySet& GetPropSet() { return aPropSet; }
+
+    void GetPropertyValues( const ::rtl::OUString *pPropertyNames,
+                                   ::com::sun::star::uno::Any *pValues,
+                                      sal_Int32 nLength );
 public:
     SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent, SwTextPortionType eType   );
     SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent, SwFrmFmt& rFmt );

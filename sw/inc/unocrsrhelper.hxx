@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-05-09 09:28:33 $
+ *  last change: $Author: mib $ $Date: 2001-06-07 07:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,7 @@ namespace SwUnoCursorHelper
 {
     sal_Bool                    getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                                         , SwPaM& rPam
-                                        , const SfxItemSet& rSet
-                                        , com::sun::star::uno::Any& rAny
+                                        , com::sun::star::uno::Any *pAny
                                         , com::sun::star::beans::PropertyState& eState
                                         , const SwTxtNode* pNode = 0 );
 
