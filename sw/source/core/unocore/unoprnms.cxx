@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-11 20:00:34 $
+ *  last change: $Author: os $ $Date: 2000-12-14 10:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,3 +619,13 @@ const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_CHARACTER_DISTANCE          (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_FORBIDDEN_RULES             (MAP_CHAR_LEN("ParaIsForbiddenRules"));
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_MAIN_ENTRY                       (MAP_CHAR_LEN("IsMainEntry"));
 
+const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_ROTATION                    (MAP_CHAR_LEN("GraphicRotation"));
+const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_LUMINANCE                   (MAP_CHAR_LEN("GraphicLuminance"));
+const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_CONTRAST                    (MAP_CHAR_LEN("GraphicContrast"));
+const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_RED                         (MAP_CHAR_LEN("GraphicRed"));
+const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_GREEN                       (MAP_CHAR_LEN("GraphicGreen"));
+const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_BLUE                        (MAP_CHAR_LEN("GraphicBlue"));
+const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_GAMMA                       (MAP_CHAR_LEN("GraphicGamma"));
+const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_INVERSION                   (MAP_CHAR_LEN("GraphicInversion"));
+const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_TRANSPARENCY                (MAP_CHAR_LEN("GraphicTransparency"));
+const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_COLOR_MODE                  (MAP_CHAR_LEN("GraphicColorMode"));
