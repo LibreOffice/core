@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-12 16:13:55 $
+ *  last change: $Author: ab $ $Date: 2001-06-15 13:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1963,45 +1963,53 @@ RTLFUNC(IsMissing)
 // Function looks for wildcards, removes them and always returns the pure path
 String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bool bHasUno )
 {
-    pRTLData->bNameCheck = sal_False;
+    static String aAsterisk = String::CreateFromAscii( "*" );
+
+    pRTLData->bDoCheck = sal_False;
+    pRTLData->bNeedsDot = sal_False;
     pRTLData->sExtension = String();
     pRTLData->sPreWildcard = String();
     pRTLData->sFullNameToBeChecked = String();
 
+    sal_Char cWild = '*';
     String aFileParam = rFileParam;
-    String aPathStr;
-    aPathStr = getFullPath( aFileParam );
+    sal_Bool bHasWildcards = ( aFileParam.SearchBackward( cWild ) != STRING_NOTFOUND );
 
-    // #85023 If it's now recognized as folder everything
-    // is fine and we don't have to check for wildcards
-    if( bHasUno )
+    String aPathStr;
+    if( !bHasWildcards )
     {
-        Reference< XSimpleFileAccess > xSFI = getFileAccess();
-        if( xSFI->isFolder( aPathStr ) )
-            return aPathStr;
-    }
-    else
-    {
-        if( aPathStr.Len() )
+        aPathStr = getFullPath( aFileParam );
+
+        // #85023 If it's now recognized as folder everything
+        // is fine and we don't have to check for wildcards
+        if( bHasUno )
         {
-            DirectoryItem aItem;
-            FileBase::RC nRet = DirectoryItem::get( aPathStr, aItem );
-            if( nRet == FileBase::E_None )
+            Reference< XSimpleFileAccess > xSFI = getFileAccess();
+            if( xSFI->isFolder( aPathStr ) )
+                return aPathStr;
+        }
+        else
+        {
+            if( aPathStr.Len() )
             {
-                FileStatus aFileStatus( FileStatusMask_Type );
-                nRet = aItem.getFileStatus( aFileStatus );
+                DirectoryItem aItem;
+                FileBase::RC nRet = DirectoryItem::get( aPathStr, aItem );
                 if( nRet == FileBase::E_None )
                 {
-                    FileStatus::Type aType = aFileStatus.getFileType();
-                    sal_Bool bFolder = (aType == FileStatus::Directory);
-                    if( bFolder )
-                        return aPathStr;
+                    FileStatus aFileStatus( FileStatusMask_Type );
+                    nRet = aItem.getFileStatus( aFileStatus );
+                    if( nRet == FileBase::E_None )
+                    {
+                        FileStatus::Type aType = aFileStatus.getFileType();
+                        sal_Bool bFolder = (aType == FileStatus::Directory);
+                        if( bFolder )
+                            return aPathStr;
+                    }
                 }
             }
         }
     }
 
-    sal_Char cWild = '*';
     sal_Char cDelim1 = (sal_Char)'/';
     sal_Char cDelim2 = (sal_Char)'\\';
     xub_StrLen nLen = aFileParam.Len();
@@ -2021,15 +2029,15 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bo
         aFileParam = aFileParam.Copy( 0, nLastDelim );
     }
 
-    if( !aPathStr.Len() || aPathStr.SearchBackward( cWild ) != STRING_NOTFOUND )
+    xub_StrLen nPureLen = aPureFileName.Len();
+    if( !aPathStr.Len() )
     {
         // Try again to get a valid URL/UNC-path with only the path
         aPathStr = getFullPath( aFileParam );
 
         // Is there a pure file name left? Otherwise the path is
         // invalid anyway because it was not accepted by OSL before
-        xub_StrLen nPureLen = aPureFileName.Len();
-        if( aPureFileName.Len() && aPureFileName != String::CreateFromAscii( "*.*" ) )
+        if( nPureLen && aPureFileName != aAsterisk )
         {
             // We make it very easy and search only for "anything*.xxx" patterns
             sal_Char cDot = '.';
@@ -2037,9 +2045,14 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bo
             xub_StrLen nLastWild = aPureFileName.SearchBackward( cWild );
             xub_StrLen nLastDot = aPureFileName.SearchBackward( cDot );
 
-            // Handle ".*" and "x*"
+            // Handle ".*" and "x*" extensions
             sal_Bool bAnyExtension = sal_False;
-            if( nLastWild == nPureLen-1 )
+            pRTLData->bNeedsDot = (nLastDot != STRING_NOTFOUND);
+            if( !pRTLData->bNeedsDot )
+            {
+                bAnyExtension = sal_True;
+            }
+            else if( nLastWild == nPureLen-1 )
             {
                 if( nLastDot == nPureLen-2 )
                 {
@@ -2055,7 +2068,7 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bo
             if( nLastWild == nLastDot-1 ||
                 ( nLastDot == STRING_NOTFOUND && bAnyExtension ) )
             {
-                pRTLData->bNameCheck = sal_True;
+                pRTLData->bDoCheck = sal_True;
                 if( !bAnyExtension )
                     pRTLData->sExtension = aPureFileName.Copy( nLastDot + 1 );
                 pRTLData->sPreWildcard = aPureFileName.Copy( 0, nLastWild );
@@ -2063,9 +2076,9 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bo
         }
     }
     // Check if a complete file name has to be checked
-    else if( aPureFileName.Len() )
+    else if( nPureLen )
     {
-        pRTLData->bNameCheck = sal_True;
+        pRTLData->bDoCheck = sal_True;
         pRTLData->sFullNameToBeChecked = aPureFileName;
     }
     return aPathStr;
@@ -2076,7 +2089,7 @@ sal_Bool implCheckWildcard( const String& rName, SbiRTLData* pRTLData )
     sal_Bool bMatch = sal_True;
 
     // #80200 HACK to provide minimum wildcard functionality (*.xxx)
-    if( pRTLData->bNameCheck )
+    if( pRTLData->bDoCheck )
     {
         bMatch = sal_False;
 
@@ -2092,10 +2105,20 @@ sal_Bool implCheckWildcard( const String& rName, SbiRTLData* pRTLData )
         {
             sal_Char cDot = '.';    // char -> sal_Char ok, because ASCII
             xub_StrLen nLastDot = rName.SearchBackward( cDot );
-            if( nLastDot  != STRING_NOTFOUND )
+
+            String sExtension, sMainName;
+            if( nLastDot == STRING_NOTFOUND )
             {
-                String sExtension = rName.Copy( nLastDot + 1 );
-                String sMainName = rName.Copy( 0, nLastDot );
+                sMainName = rName;
+            }
+            else
+            {
+                sExtension = rName.Copy( nLastDot + 1 );
+                sMainName = rName.Copy( 0, nLastDot );
+            }
+
+            if( nLastDot != STRING_NOTFOUND || !pRTLData->bNeedsDot )
+            {
                 if( !pRTLData->sExtension.Len() || sExtension == pRTLData->sExtension )
                 {
                     sal_Int32 nPreWildcardLen = pRTLData->sPreWildcard.Len();
