@@ -64,6 +64,7 @@ import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.util.Vector;
+import java.util.Enumeration;
 
 import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
@@ -527,13 +528,38 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         Debug.log(Debug.TRACE, "traverseColumn() : ");
         NamedNodeMap cellAtt = node.getAttributes();
         Node tableStyleNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_STYLE_NAME);
-
         Node tableNumColRepeatingNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_NUM_COLUMNS_REPEATED);
+        Node tableDefaultCellStyle = cellAtt.getNamedItem(ATTRIBUTE_DEFAULT_CELL_STYLE);
+
         int repeatedColumns = 1;
+        int columnWidth = 0;
+        ColumnRowInfo col = new ColumnRowInfo(ColumnRowInfo.COLUMN);
 
         if(tableNumColRepeatingNode!=null) {
             Debug.log(Debug.TRACE, "traverseColumn() repeated-cols : " + tableNumColRepeatingNode.getNodeValue());
             repeatedColumns = Integer.parseInt(tableNumColRepeatingNode.getNodeValue());
+            col.setRepeated(repeatedColumns);
+        }
+
+        String cellStyleName = new String("");
+
+        if(tableDefaultCellStyle!=null) {
+            cellStyleName = tableDefaultCellStyle.getNodeValue();
+
+            Debug.log(Debug.TRACE, "traverseColumn() default-cell-style : " + cellStyleName);
+        }
+
+        if(cellStyleName.equalsIgnoreCase("Default") || cellStyleName.length()==0) {
+
+            Debug.log(Debug.TRACE, "No default cell Style Attribute was found");
+
+        } else {
+
+            CellStyle cellStyle = (CellStyle)styleCat.lookup(cellStyleName,
+                                SxcConstants.TABLE_CELL_STYLE_FAMILY, null,
+                                CellStyle.class);
+            Format defaultFmt = new Format(cellStyle.getFormat());
+            col.setFormat(defaultFmt);
         }
 
         String styleName = new String("");
@@ -552,17 +578,12 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                                 SxcConstants.COLUMN_STYLE_FAMILY, null,
                                 ColumnStyle.class);
 
-            int columnWidth = cStyle.getColWidth();
-
+            columnWidth = cStyle.getColWidth();
+            col.setSize(columnWidth);
             Debug.log(Debug.TRACE, "traverseColumn() Column Width : " + columnWidth);
 
-            ColumnRowInfo col = new ColumnRowInfo(  columnWidth,
-                                                    repeatedColumns, ColumnRowInfo.COLUMN);
-            ColumnRowList.add(col);
-
         }
-
-
+        ColumnRowList.add(col);
     }
 
     /**
@@ -613,9 +634,23 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             styleName = tableStyleNode.getNodeValue();
         }
 
-        if(styleName.equalsIgnoreCase("Default") || styleName.length()==0) {
+        if(styleName.equalsIgnoreCase("Default")) {
 
             Debug.log(Debug.TRACE, "No defined Style Attribute was found");
+
+        // if there is no style we need to check to see if there is a default
+        // cell style defined in the table-column
+        } else if (styleName.length()==0) {
+            int index = 1;
+            for(Enumeration e = ColumnRowList.elements();e.hasMoreElements();) {
+                ColumnRowInfo cri = (ColumnRowInfo) e.nextElement();
+                if(cri.isColumn()) {
+                    if(colID>=index && colID<(index+cri.getRepeated())) {
+                        fmt = new Format(cri.getFormat());
+                    }
+                    index += cri.getRepeated();
+                }
+            }
 
         } else {
 

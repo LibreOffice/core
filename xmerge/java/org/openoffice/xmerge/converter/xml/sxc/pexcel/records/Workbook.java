@@ -69,7 +69,7 @@ import org.openoffice.xmerge.converter.xml.sxc.SheetSettings;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.IntArrayList;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
-
+import org.openoffice.xmerge.converter.xml.sxc.ColumnRowInfo;
 
 /**
  *  This class is used by <code> PxlDocument</code> to maintain pexcel
@@ -271,7 +271,11 @@ OfficeConstants {
      *
       * @param  f the font recrod to add
       */
-    public int addExtendedFormat(ExtendedFormat xf) {
+    public int addExtendedFormat(Format fmt) throws IOException {
+
+        FontDescription fd = new FontDescription(fmt);
+        int ixfnt = addFont(fd);
+        ExtendedFormat xf = new ExtendedFormat(ixfnt, fmt);
 
         boolean alreadyExists = false;
         int i = 0;
@@ -407,10 +411,7 @@ OfficeConstants {
     throws IOException {
 
         Worksheet currentWS = (Worksheet) worksheets.elementAt(worksheets.size()-1);
-        FontDescription fd = new FontDescription(fmt);
-        int ixfnt = addFont(fd);
-        ExtendedFormat xf = new ExtendedFormat(ixfnt, fmt);
-        int ixfe = addExtendedFormat(xf);
+        int ixfe = addExtendedFormat(fmt);
 
         String category = fmt.getCategory();
 
@@ -453,11 +454,41 @@ OfficeConstants {
       * Will create a number of ColInfo recrods based on the column widths
      * based in.
      *
-      * @param  an integer list representing the column widths
+      * @param  columnRows <code>Vector</code> of <code>ColumnRowInfo</code>
       */
-    public void addColInfo(Vector columnRows) {
+    public void addColInfo(Vector columnRows) throws IOException {
+
         Worksheet currentWS = (Worksheet) worksheets.elementAt(worksheets.size()-1);
-        currentWS.addColRows(columnRows);
+
+        int nCols = 0;
+        int nRows = 0;
+
+        Debug.log(Debug.TRACE,"Worksheet: addColInfo : " + columnRows);
+        for(Enumeration e = columnRows.elements();e.hasMoreElements();) {
+            ColumnRowInfo cri =(ColumnRowInfo) e.nextElement();
+            int ixfe = 0;
+            int size = cri.getSize();
+            int repeated = cri.getRepeated();
+            if(cri.isColumn()) {
+                Debug.log(Debug.TRACE,"Worksheet: adding ColInfo width = " + size);
+                ColInfo newColInfo = new ColInfo(   nCols,
+                                                    nCols+repeated,
+                                                    size, ixfe);
+                currentWS.addCol(newColInfo);
+                nCols += repeated;
+            } else if(cri.isRow()) {
+                Debug.log(Debug.TRACE,"Worksheet: adding Row Height = " + size);
+                if(size!=255) {
+                    for(int i=0;i<repeated;i++) {
+                        Row newRow = new Row(nRows++, size);
+                        currentWS.addRow(newRow);
+                    }
+                } else {
+                    // If it is the Default Row we don't need to add it
+                    nRows += repeated;
+                }
+            }
+        }
     }
 
     /**

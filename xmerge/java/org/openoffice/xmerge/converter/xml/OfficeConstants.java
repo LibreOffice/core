@@ -276,8 +276,15 @@ public interface OfficeConstants {
     public final static String ATTRIBUTE_TABLE_VALUE_TYPE = "table:value-type";
 
     /**
+     *  Attribute tag for <i>table:default-cell-style-name</i>
+     *  of element <i>table:table-column</i>.
+     */
+    public final static String ATTRIBUTE_DEFAULT_CELL_STYLE =
+        "table:default-cell-style-name";
+
+    /**
      *  Attribute tag for <i>table:number-columns-repeated</i>
-     *  of element <i>table:table-cell</i>.
+     *  of element <i>table:table-column</i>.
      */
     public final static String ATTRIBUTE_TABLE_NUM_COLUMNS_REPEATED =
         "table:number-columns-repeated";

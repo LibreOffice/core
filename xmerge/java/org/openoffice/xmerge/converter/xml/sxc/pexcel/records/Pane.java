@@ -82,7 +82,7 @@ public class Pane implements BIFFRecord {
      * Default Constructor
      */
     public Pane() {
-
+        pnnAcct = (byte) 0x02;  // Default setting
     }
 
     /**

@@ -65,7 +65,6 @@ import java.awt.Point;
 import org.openoffice.xmerge.util.IntArrayList;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.converter.xml.sxc.SheetSettings;
-import org.openoffice.xmerge.converter.xml.sxc.ColumnRowInfo;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 
@@ -275,38 +274,19 @@ public class Worksheet {
      *
       * @param  list of column widths
       */
-    public void addColRows(Vector columnWidths) {
-
-        int nCols = 0;
-        int nRows = 0;
-
-        Debug.log(Debug.TRACE,"Worksheet: addColInfo : " + columnWidths);
-        for(Enumeration e = columnWidths.elements();e.hasMoreElements();) {
-            ColumnRowInfo cri =(ColumnRowInfo) e.nextElement();
-            int size = cri.getSize();
-            int repeated = cri.getRepeated();
-            if(cri.isColumn()) {
-                Debug.log(Debug.TRACE,"Worksheet: adding ColInfo width = " + size);
-                ColInfo newColInfo = new ColInfo(   nCols,
-                                                    nCols+repeated,
-                                                    size, (byte) 2);
-                colInfo.add(newColInfo);
-                nCols += repeated;
-            } else if(cri.isRow()) {
-                Debug.log(Debug.TRACE,"Worksheet: adding Row Height = " + size);
-                if(size!=255) {
-                    for(int i=0;i<repeated;i++) {
-                        Row newRow = new Row(nRows++, size);
-                        rows.add(newRow);
-                    }
-                } else {
-                    // If it is the Default Row we don't need to add it
-                    nRows += repeated;
-                }
-            }
-        }
+    public void addRow(Row r) {
+        rows.add(r);
     }
 
+    /**
+      * Adds a number of ColInfo Records to the worksheet base on a list of
+     * clumnwidths passed in
+     *
+      * @param  list of column widths
+      */
+    public void addCol(ColInfo c) {
+        colInfo.add(c);
+    }
     /**
      * Returns an <code>Enumeration</code> to the ColInfo's for this worksheet
      *

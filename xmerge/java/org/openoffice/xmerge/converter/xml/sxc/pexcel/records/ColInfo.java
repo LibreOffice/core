@@ -86,13 +86,13 @@ public class ColInfo implements BIFFRecord {
       * @param  coldx       column width
       * @param  grbit       options flags
       */
-    public ColInfo(int colFirst, int colLast, int colDX, byte grbit) {
+    public ColInfo(int colFirst, int colLast, int colDX, int ixfe) {
         this.colFirst   = EndianConverter.writeShort((short)colFirst);
         this.colLast    = EndianConverter.writeShort((short)colLast);
         colDX *= scale;
         this.colDX      = EndianConverter.writeShort((short)colDX);
-        this.ixfe       = EndianConverter.writeShort((short)0);
-        this.grbit  = grbit;
+        this.ixfe       = EndianConverter.writeShort((short)ixfe);
+        this.grbit      = 0x00;
     }
 
     /**
