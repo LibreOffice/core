@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:01:13 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ public:
     virtual void enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const;
     virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const;
     virtual void showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const;
+    virtual void frameIsMapping( X11SalFrame* pFrame ) const;
 };
 
 class GnomeWMAdaptor : public WMAdaptor
@@ -1149,6 +1150,8 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
             aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_SHADED ];
         if( pFrame->mbFullScreen && m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ] )
             aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ];
+        if( pFrame->meWindowType == windowType_Utility && m_aWMAtoms[ NET_WM_STATE_SKIP_TASKBAR ] )
+            aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_SKIP_TASKBAR ];
 
         if( nStateAtoms )
         {
@@ -2199,4 +2202,21 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
         }
     }
     else WMAdaptor::showFullScreen( pFrame, bFullScreen );
+}
+
+/*
+ * WMAdaptor::frameIsMapping
+ */
+void WMAdaptor::frameIsMapping( X11SalFrame* pFrame ) const
+{
+}
+
+extern "C" int sleep( int );
+
+/*
+ * NetWMAdaptor::frameIsMapping
+ */
+void NetWMAdaptor::frameIsMapping( X11SalFrame* pFrame ) const
+{
+    setNetWMState( pFrame );
 }
