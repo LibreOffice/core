@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registrationhelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 15:22:15 $
+ *  last change: $Author: vg $ $Date: 2001-05-22 14:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,8 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rServiceManager,
             const ::rtl::OUString & _rComponentName,
             ::cppu::ComponentInstantiation _pCreateFunction,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString > & _rServiceNames
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString > & _rServiceNames,
+            rtl_ModuleCount* _p
         );
 
 //==========================================================================
