@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-10 14:47:31 $
+ *  last change: $Author: fs $ $Date: 2001-12-10 15:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,10 +181,6 @@
 #include <svtools/rngitem.hxx>
 #endif
 
-//#ifndef _EXCHOBJ_HXX
-//#include <sfx2/exchobj.hxx>
-//#endif
-
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
 #endif
@@ -279,6 +275,8 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::util;
 using namespace ::dbaui;
 using namespace ::dbtools;
 using namespace ::svx;
@@ -532,27 +530,40 @@ void SAL_CALL SbaXGridControl::dispatch(const ::com::sun::star::util::URL& aURL,
         xDisp->dispatch(aURL, aArgs);
 }
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridControl::addStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( RuntimeException )
+void SAL_CALL SbaXGridControl::addStatusListener( const Reference< XStatusListener > & _rxListener, const URL& _rURL ) throw( RuntimeException )
 {
-    SbaXStatusMultiplexer*& pMultiplexer = m_aStatusMultiplexer[aURL];
-    if (!pMultiplexer)
+    ::osl::MutexGuard aGuard( GetMutex() );
+    if ( _rxListener.is() )
     {
-        pMultiplexer = new SbaXStatusMultiplexer(*this,GetMutex());
-        pMultiplexer->acquire();
-    }
+        SbaXStatusMultiplexer*& pMultiplexer = m_aStatusMultiplexer[ _rURL ];
+        if ( !pMultiplexer )
+        {
+            pMultiplexer = new SbaXStatusMultiplexer( *this, GetMutex() );
+            pMultiplexer->acquire();
+        }
 
-    pMultiplexer->addInterface(xControl);
-    if (mxPeer.is() && pMultiplexer->getLength() == 1)
-    {
-        Reference< ::com::sun::star::frame::XDispatch >  xDisp(mxPeer, UNO_QUERY);
-        xDisp->addStatusListener(pMultiplexer, aURL);
+        pMultiplexer->addInterface( _rxListener );
+        if ( mxPeer.is() )
+        {
+            if ( 1 == pMultiplexer->getLength() )
+            {   // the first external listener for this URL
+                Reference< XDispatch >  xDisp( mxPeer, UNO_QUERY );
+                xDisp->addStatusListener( pMultiplexer, _rURL );
+            }
+            else
+            {   // already have other listeners for this URL
+                _rxListener->statusChanged( pMultiplexer->getLastEvent() );
+            }
+        }
     }
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( RuntimeException )
+void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & _rxListener, const ::com::sun::star::util::URL& _rURL) throw( RuntimeException )
 {
-    SbaXStatusMultiplexer*& pMultiplexer = m_aStatusMultiplexer[aURL];
+    ::osl::MutexGuard aGuard( GetMutex() );
+
+    SbaXStatusMultiplexer*& pMultiplexer = m_aStatusMultiplexer[_rURL];
     if (!pMultiplexer)
     {
         pMultiplexer = new SbaXStatusMultiplexer(*this,GetMutex());
@@ -562,9 +573,9 @@ void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< ::com::sun:
     if (mxPeer.is() && pMultiplexer->getLength() == 1)
     {
         Reference< ::com::sun::star::frame::XDispatch >  xDisp(mxPeer, UNO_QUERY);
-        xDisp->removeStatusListener(pMultiplexer, aURL);
+        xDisp->removeStatusListener(pMultiplexer, _rURL);
     }
-    pMultiplexer->removeInterface(xControl);
+    pMultiplexer->removeInterface( _rxListener );
 }
 
 //---------------------------------------------------------------------------------------
