@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 12:44:07 $
+ *  last change: $Author: mba $ $Date: 2001-12-20 11:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include "childwin.hxx"
 #include "viewsh.hxx"
 #include "sfxhelp.hxx"
+#include "workwin.hxx"
 
 static String aEmptyString;
 
@@ -100,6 +101,7 @@ class SfxModelessDialog_Impl
 public:
     ByteString      aWinState;
     SfxChildWindow* pMgr;
+    BOOL                bConstructed;
 };
 
 class SfxFloatingWindow_Impl
@@ -107,6 +109,7 @@ class SfxFloatingWindow_Impl
 public:
     ByteString      aWinState;
     SfxChildWindow* pMgr;
+    BOOL                bConstructed;
 };
 
 // class SfxModalDefParentHelper -----------------------------------------
@@ -328,6 +331,8 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
                 SetPosPixel( aPos );
             }
         }
+
+        pImp->bConstructed = TRUE;
     }
 
     ModelessDialog::StateChanged( nStateChange );
@@ -359,8 +364,29 @@ void SfxModelessDialog::Resize()
 
 {
     ModelessDialog::Resize();
-    if ( !IsRollUp() )
-        aSize = GetSizePixel();
+    if ( pImp->bConstructed && pImp->pMgr )
+    {
+        if ( !IsRollUp() )
+            aSize = GetSizePixel();
+        ULONG nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
+        if ( GetStyle() & WB_SIZEABLE )
+            nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
+        pImp->aWinState = GetWindowState( nMask );
+        GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SFX_CHILDWIN_DOCKINGWINDOW, SFX_ALIGNDOCKINGWINDOW, pImp->pMgr->GetType() );
+    }
+}
+
+void SfxModelessDialog::Move()
+{
+    ModelessDialog::Move();
+    if ( pImp->bConstructed && pImp->pMgr )
+    {
+        ULONG nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
+        if ( GetStyle() & WB_SIZEABLE )
+            nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
+        pImp->aWinState = GetWindowState( nMask );
+        GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SFX_CHILDWIN_DOCKINGWINDOW, SFX_ALIGNDOCKINGWINDOW, pImp->pMgr->GetType() );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -373,6 +399,7 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
     pImp( new SfxModelessDialog_Impl )
 {
     pImp->pMgr = pCW;
+    pImp->bConstructed = FALSE;
     sal_uInt32 nId = GetHelpId();
     SetHelpId(0);
     SetUniqueId( nId );
@@ -388,6 +415,7 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
     pImp( new SfxModelessDialog_Impl )
 {
     pImp->pMgr = pCW;
+    pImp->bConstructed = FALSE;
     sal_uInt32 nId = GetHelpId();
     SetHelpId(0);
     SetUniqueId( nId );
@@ -570,6 +598,7 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     pImp( new SfxFloatingWindow_Impl )
 {
     pImp->pMgr = pCW;
+    pImp->bConstructed = FALSE;
     sal_uInt32 nId = GetHelpId();
     SetHelpId(0);
     SetUniqueId( nId );
@@ -586,6 +615,7 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     pImp( new SfxFloatingWindow_Impl )
 {
     pImp->pMgr = pCW;
+    pImp->bConstructed = FALSE;
     sal_uInt32 nId = GetHelpId();
     SetHelpId(0);
     SetUniqueId( nId );
@@ -644,8 +674,29 @@ void SfxFloatingWindow::Resize()
 
 {
     FloatingWindow::Resize();
-    if ( !IsRollUp() )
-        aSize = GetSizePixel();
+    if ( pImp->bConstructed && pImp->pMgr )
+    {
+        if ( !IsRollUp() )
+            aSize = GetSizePixel();
+        ULONG nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
+        if ( GetStyle() & WB_SIZEABLE )
+            nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
+        pImp->aWinState = GetWindowState( nMask );
+        GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SFX_CHILDWIN_DOCKINGWINDOW, SFX_ALIGNDOCKINGWINDOW, pImp->pMgr->GetType() );
+    }
+}
+
+void SfxFloatingWindow::Move()
+{
+    FloatingWindow::Move();
+    if ( pImp->bConstructed && pImp->pMgr )
+    {
+        ULONG nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
+        if ( GetStyle() & WB_SIZEABLE )
+            nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
+        pImp->aWinState = GetWindowState( nMask );
+        GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SFX_CHILDWIN_DOCKINGWINDOW, SFX_ALIGNDOCKINGWINDOW, pImp->pMgr->GetType() );
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -656,6 +707,7 @@ void SfxFloatingWindow::StateChanged( StateChangedType nStateChange )
         // FloatingWindows are not centered by default
         if ( pImp->aWinState.Len() )
             SetWindowState( pImp->aWinState );
+        pImp->bConstructed = TRUE;
     }
 
     FloatingWindow::StateChanged( nStateChange );
