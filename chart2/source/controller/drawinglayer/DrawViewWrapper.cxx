@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewWrapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-10 18:26:22 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut)
             , m_pMarkHandleProvider(NULL)
             , m_apOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pSdrModel ) )
 {
+    // #114898#
+    SetBufferedOutputAllowed(sal_True);
+
     ReInit();
 }
 
