@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipivot.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:33:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,18 +564,17 @@ const sal_Int16* XclImpPCField::GetDateGroupStep() const
 
 // ============================================================================
 
-XclImpPivotCache::XclImpPivotCache( const XclImpRoot& rRoot, sal_uInt16 nStrmId ) :
-    XclImpRoot( rRoot ),
+XclImpPivotCache::XclImpPivotCache( const XclImpStream& rBookStrm, sal_uInt16 nStrmId ) :
+    XclImpRoot( rBookStrm.GetRoot() ),
     mnSrcType( EXC_SXVS_UNKNOWN )
 {
-    if( SvStorage* pSt = mpRD->pPivotCacheStorage )
+    SvStorageRef xSvStrg = OpenStorage( EXC_STORAGE_PTCACHE );
+    SvStorageStreamRef xSvStrm = OpenStream( xSvStrg, ScfTools::GetHexStr( nStrmId ) );
+    if( xSvStrm.Is() )
     {
-        SvStorageStreamRef pStIn = pSt->OpenStream( ScfTools::GetHexStr( nStrmId ), STREAM_STD_READ );
-        if( pStIn.Is() )
-        {
-            XclImpStream aStrm( *pStIn, GetRoot() );
-            ReadPivotCacheStream( aStrm );
-        }
+        XclImpStream aStrm( *xSvStrm, GetRoot() );
+        aStrm.CopyDecrypterFrom( rBookStrm );
+        ReadPivotCacheStream( aStrm );
     }
 }
 
@@ -1285,7 +1284,7 @@ void XclImpPivotTableManager::ReadSxidstm( XclImpStream& rStrm )
 {
     sal_uInt16 nStrmId;
     rStrm >> nStrmId;
-    maPCacheList.Append( new XclImpPivotCache( GetRoot(), nStrmId ) );
+    maPCacheList.Append( new XclImpPivotCache( rStrm, nStrmId ) );
 }
 
 void XclImpPivotTableManager::ReadDconref( XclImpStream& rStrm )
