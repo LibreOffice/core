@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: as $ $Date: 2001-08-16 09:45:37 $
+ *  last change: $Author: as $ $Date: 2001-08-16 12:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ namespace framework{
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_16                (   Frame                                                                   ,
+DEFINE_XINTERFACE_17                (   Frame                                                                   ,
                                         OWeakObject                                                             ,
                                         DIRECT_INTERFACE(css::lang::XTypeProvider                               ),
                                         DIRECT_INTERFACE(css::lang::XServiceInfo                                ),
@@ -253,10 +253,11 @@ DEFINE_XINTERFACE_16                (   Frame                                   
                                         DIRECT_INTERFACE(css::awt::XWindowListener                              ),
                                         DIRECT_INTERFACE(css::awt::XTopWindowListener                           ),
                                         DIRECT_INTERFACE(css::awt::XFocusListener                               ),
-                                        DERIVED_INTERFACE(css::lang::XEventListener, css::awt::XWindowListener  )
+                                        DERIVED_INTERFACE(css::lang::XEventListener, css::awt::XWindowListener  ),
+                                        DIRECT_INTERFACE(css::document::XActionLockable                         )
                                     )
 
-DEFINE_XTYPEPROVIDER_16             (   Frame                                                                   ,
+DEFINE_XTYPEPROVIDER_17             (   Frame                                                                   ,
                                         css::lang::XTypeProvider                                                ,
                                         css::lang::XServiceInfo                                                 ,
                                         css::frame::XFramesSupplier                                             ,
@@ -272,7 +273,8 @@ DEFINE_XTYPEPROVIDER_16             (   Frame                                   
                                         css::awt::XWindowListener                                               ,
                                         css::awt::XTopWindowListener                                            ,
                                         css::awt::XFocusListener                                                ,
-                                        css::lang::XEventListener
+                                        css::lang::XEventListener                                               ,
+                                        css::document::XActionLockable
                                     )
 
 DEFINE_XSERVICEINFO_MULTISERVICE    (   Frame                                                                   ,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: as $ $Date: 2001-08-16 09:45:06 $
+ *  last change: $Author: as $ $Date: 2001-08-16 12:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,12 +594,6 @@ class Frame :   // interfaces
         {
             ReadGuard aReadLock( m_aLock );
             return m_xParent;
-        }
-
-        inline sal_Int16 impl_getExternalLockCount()
-        {
-            ReadGuard aReadLock( m_aLock );
-            return m_nExternalLockCount;
         }
 
 };      // class Frame
