@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementparser.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:58:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 
 #include <com/sun/star/configuration/backend/SchemaAttribute.hpp>
 #include <com/sun/star/configuration/backend/NodeAttribute.hpp>
+
+#include <rtl/ustrbuf.hxx>
 
 // -----------------------------------------------------------------------------
 
@@ -364,14 +366,18 @@ ElementInfo::FlagsType ElementParser::getNodeFlags(SaxAttributeList const& xAttr
 }
 // -----------------------------------------------------------------------------
 static
-void badValueType(Logger const & logger, sal_Char const * _pMsg, OUString const & _sExtra)
+void badValueType(Logger const & logger, sal_Char const * _pMsg, OUString const & _sType)
 {
-    rtl::OString sMessage( "Configuration XML parser: Bad value type attribute:" );
-    sMessage += _pMsg;
-    sMessage += rtl::OUStringToOString(_sExtra,RTL_TEXTENCODING_ASCII_US);
+    rtl::OUStringBuffer sMessageBuf;
+    sMessageBuf.appendAscii( "Configuration XML parser: Bad value type attribute: " );
+    if (_pMsg) sMessageBuf.appendAscii(_pMsg);
 
+    const sal_Unicode kQuote = '"';
+    sMessageBuf.append(kQuote).append(_sType).append(kQuote);
+
+    OUString const sMessage = sMessageBuf.makeStringAndClear();
     logger.error(sMessage);
-//    throw sax::SAXException(sMessage, NULL, uno::Any());
+    throw ElementParser::BadValueType(sMessage);
 }
 // -----------------------------------------------------------------------------
 static
@@ -420,7 +426,7 @@ OUString stripTypeName(Logger const & logger, OUString const & _sString, OUStrin
     if ( matchNsPrefix(_sString,_sPrefix))
         return stripNsPrefix(_sString, _sPrefix);
 
-    badValueType(logger, "Missing expected namespace prefix: ", _sPrefix);
+    badValueType(logger, "Missing expected namespace prefix on type name: ", _sString);
 
     return _sString;
 }
