@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:16:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 10:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,73 +65,443 @@ ModalDialog RID_PDF_EXPORT_DLG
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
+    Size = MAP_APPFONT ( 230, 187 );
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text = "PDF Optionen";
+    Text [ ENGLISH ] = "PDF Options";
+    FixedLine FL_PAGES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 162 , 8 ) ;
+        Text = "Seiten" ;
+        Text [ ENGLISH ] = "Pages" ;
+        Text[ english_us ] = "Pages";
+        Text[ portuguese ] = "P·ginas";
+        Text[ russian ] = "—Ú‡ÌËˆ˚";
+        Text[ greek ] = "”ÂÎﬂ‰ÂÚ";
+        Text[ dutch ] = "Pagina's";
+        Text[ french ] = "Pages";
+        Text[ spanish ] = "P·ginas";
+        Text[ finnish ] = "Sivut";
+        Text[ italian ] = "Pagine";
+        Text[ danish ] = "Sider";
+        Text[ swedish ] = "Sidor";
+        Text[ polish ] = "Strony";
+        Text[ portuguese_brazilian ] = "P·ginas";
+        Text[ japanese ] = "„Éö„Éº„Ç∏";
+        Text[ korean ] = "ÌéòÏù¥ÏßÄ";
+        Text[ chinese_simplified ] = "È°µ";
+        Text[ chinese_traditional ] = "È†Å";
+        Text[ turkish ] = "Sayfa";
+        Text[ arabic ] = "’›Õ« ";
+        Text[ catalan ] = "P‡gines";
+        Text[ thai ] = "‡∏´‡∏ô‡πâ‡∏≤";
+        Text[ czech ] = "Str√°nky";
+        Text[ hebrew ] = "‚ÄÆ◊¢◊û◊ï◊ì◊ô◊ù‚Ä¨";
+        Text[ hindi ] = "‡§™‡•É‡§∑‡•ç‡§†‡•á‡§Ç";
+        Text[ slovak ] = "Str√°nky";
+        Text[ hungarian ] = "Oldalak";
+        Text[ slovenian ] = "Strani";
+    };
+    RadioButton RB_ALL
+    {
+        Pos = MAP_APPFONT ( 12 , 12 ) ;
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Text = "~Alle" ;
+        Text [ ENGLISH ] = "~All" ;
+        Text[ english_us ] = "~All";
+        Text[ portuguese ] = "~Todas";
+        Text[ russian ] = "~¬ÒÂ";
+        Text[ greek ] = "ºÎ~·";
+        Text[ dutch ] = "a~lle";
+        Text[ french ] = "Tout";
+        Text[ spanish ] = "~Todas";
+        Text[ finnish ] = "~Kaikki";
+        Text[ italian ] = "~Tutte";
+        Text[ danish ] = "~Alle";
+        Text[ swedish ] = "~Alla";
+        Text[ polish ] = "Wszystkie";
+        Text[ portuguese_brazilian ] = "~Todos";
+        Text[ japanese ] = "„Åô„Åπ„Å¶(~A)";
+        Text[ korean ] = "Î™®Îëê(~A)";
+        Text[ chinese_simplified ] = "ÂÖ®ÈÉ®(~A)";
+        Text[ chinese_traditional ] = "ÂÖ®ÈÉ®(~A)";
+        Text[ turkish ] = "T¸m¸";
+        Text[ arabic ] = "«·ﬂ·";
+        Text[ catalan ] = "~Tots";
+        Text[ thai ] = "~‡∏ó‡∏±‡πâ‡∏á‡∏´‡∏°‡∏î";
+        Text[ czech ] = "V≈°e";
+        Text[ hebrew ] = "‚ÄÆ◊î◊õ◊ú‚Ä¨";
+        Text[ hindi ] = "~‡§∏‡§¨";
+        Text[ slovak ] = "~V≈°etko";
+        Text[ hungarian ] = "√ñss~zes";
+        Text[ slovenian ] = "~Vse";
+    };
+    RadioButton RB_RANGE
+    {
+        Pos = MAP_APPFONT ( 12 , 24 ) ;
+        Size = MAP_APPFONT ( 86, 10 ) ;
+        Text = "~Bereich" ;
+        Text [ ENGLISH ] = "~Range" ;
+        Text[ english_us ] = "~Range";
+        Text[ portuguese ] = "Intervalo";
+        Text[ russian ] = "Œ·Î‡ÒÚ¸";
+        Text[ greek ] = "–ÂÒÈÔ˜ﬁ";
+        Text[ dutch ] = "~Bereik";
+        Text[ french ] = "Plage";
+        Text[ spanish ] = "~¡rea";
+        Text[ finnish ] = "~Alue";
+        Text[ italian ] = "~Area";
+        Text[ danish ] = "~OmrÂde";
+        Text[ swedish ] = "~OmrÂde";
+        Text[ polish ] = "Zakres";
+        Text[ portuguese_brazilian ] = "I~ntervalo";
+        Text[ japanese ] = "ÁØÑÂõ≤(~R)";
+        Text[ korean ] = "Î≤îÏúÑ(~R)";
+        Text[ chinese_simplified ] = "ËåÉÂõ¥(~R)";
+        Text[ chinese_traditional ] = "ÁØÑÂúç(~R)";
+        Text[ turkish ] = "~Aral˝k";
+        Text[ arabic ] = "«·‰ÿ«ﬁ";
+        Text[ catalan ] = "¿rea";
+        Text[ thai ] = "‡∏ä‡πà‡∏ß‡∏á";
+        Text[ czech ] = "Rozsah";
+        Text[ hebrew ] = "‚ÄÆ◊ò◊ï◊ï◊ó‚Ä¨";
+        Text[ hindi ] = "~‡§´‡§º‡•à‡§≤‡§æ‡§µ";
+        Text[ slovak ] = "~Rozsah";
+        Text[ hungarian ] = "~Tartom√°ny";
+        Text[ slovenian ] = "~Obseg";
+    };
+    RadioButton RB_SELECTION
+    {
+        Pos = MAP_APPFONT ( 12 , 36 ) ;
+        Size = MAP_APPFONT ( 86, 10 ) ;
+        Text = "A~uswahl" ;
+        Text [ ENGLISH ] = "~Selection" ;
+        Text[ english_us ] = "~Selection";
+        Text[ portuguese ] = "S~elecÁ„o";
+        Text[ russian ] = "¬˚‰ÂÎÂÌËÂ";
+        Text[ greek ] = "≈ÈÎÔ„ﬁ";
+        Text[ dutch ] = "~Selectie";
+        Text[ french ] = "SÈlection";
+        Text[ spanish ] = "~SelecciÛn";
+        Text[ finnish ] = "~Valinta";
+        Text[ italian ] = "Selezione";
+        Text[ danish ] = "Markeri~ng";
+        Text[ swedish ] = "~Markering";
+        Text[ polish ] = "Selekcja";
+        Text[ portuguese_brazilian ] = "S~eleÁ„o";
+        Text[ japanese ] = "ÈÅ∏Êäû„Åó„ÅüÈÉ®ÂàÜ(~S)";
+        Text[ korean ] = "ÏÑ†ÌÉù(~S)";
+        Text[ chinese_simplified ] = "ÈÄâÊã©(~S)";
+        Text[ chinese_traditional ] = "ÈÅ∏Êìá(~S)";
+        Text[ turkish ] = "~SeÁilen aral˝k";
+        Text[ arabic ] = "«· ÕœÌœ";
+        Text[ catalan ] = "SelecciÛ";
+        Text[ thai ] = "‡πÄ~‡∏•‡∏∑‡∏≠‡∏Å";
+        Text[ czech ] = "V√Ωbƒõr";
+        Text[ hebrew ] = "‚ÄÆ◊ë◊ó◊ô◊®◊î‚Ä¨";
+        Text[ hindi ] = "~‡§ö‡•Å‡§®‡§æ‡§µ";
+        Text[ slovak ] = "~V√Ωber";
+        Text[ hungarian ] = "~Kijel√∂l√©s";
+        Text[ slovenian ] = "~Izbor";
+    };
+    Edit ED_PAGES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 101, 23 ) ;
+        Size = MAP_APPFONT ( 67 , 12 ) ;
+    };
+    FixedLine FL_IMAGES
+    {
+        Pos = MAP_APPFONT ( 6 , 52 ) ;
+        Size = MAP_APPFONT ( 162 , 8 ) ;
+        Text = "Grafiken";
+        Text[ english_us ] = "Images";
+    };
+    RadioButton RB_LOSSLESSCOMPRESSION
+    {
+        Pos = MAP_APPFONT ( 12 , 61 ) ;
+        Size = MAP_APPFONT ( 156 , 10 ) ;
+        Text = "~Verlustfreie Komprimierung" ;
+        Text[ english_us ] = "~Lossless compression";
+    };
+    RadioButton RB_JPEGCOMPRESSION
+    {
+        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Size = MAP_APPFONT ( 156, 10 ) ;
+        Text = "Optimiert f¸r ~JPEG Komprimierung" ;
+        Text[ english_us ] = "~JPEG compression";
+    };
+    FixedText FT_QUALITY
+    {
+        Pos = MAP_APPFONT ( 30 , 85 ) ;
+        Size = MAP_APPFONT ( 70, 10 ) ;
+        Text = "~Qualit‰t" ;
+        Text[ english_us ] = "~Quality";
+    };
+    NumericField NF_QUALITY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103, 85 ) ;
+        Size = MAP_APPFONT ( 65, 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Last = 100 ;
+        Repeat = TRUE ;
+    };
+    CheckBox CB_REDUCEIMAGERESOLUTION
+    {
+        Pos = MAP_APPFONT ( 12 , 99 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_REDUCEIMAGERESOLUTION
+    {
+        Pos = MAP_APPFONT ( 25 , 99 ) ;
+        Size = MAP_APPFONT ( 93, 10 ) ;
+        Text = "~Grafikauflˆsung verringern" ;
+        Text[ english_us ] = "~reduce image resolution";
+    };
+    ComboBox CO_REDUCEIMAGERESOLUTION
+    {
+        Pos = MAP_APPFONT ( 120 , 99 ) ;
+        Size = MAP_APPFONT ( 48 , 50 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            "75 DPI" ;
+            "150 DPI" ;
+            "300 DPI" ;
+            "600 DPI" ;
+            "1200 DPI" ;
+        };
+    };
+    FixedLine FL_GENERAL
+    {
+        Pos = MAP_APPFONT ( 6 , 115 ) ;
+        Size = MAP_APPFONT ( 162 , 8 ) ;
+        Text = "Allgemein";
+        Text[ english_us ] = "General";
+    };
+    CheckBox CB_TAGGEDPDF
+    {
+        Pos = MAP_APPFONT ( 12 , 125 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_TAGGEDPDF
+    {
+        Pos = MAP_APPFONT ( 25 , 125 ) ;
+        Size = MAP_APPFONT ( 143 , 10 ) ;
+        Text = "~tagged PDF" ;
+        Text[ english_us ] = "~tagged PDF";
+    };
+    CheckBox CB_EXPORTNOTES
+    {
+        Pos = MAP_APPFONT ( 12 , 139 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_EXPORTNOTES
+    {
+        Pos = MAP_APPFONT ( 25 , 139 ) ;
+        Size = MAP_APPFONT ( 143 , 10 ) ;
+        Text = "~Notizen exportieren" ;
+        Text[ english_us ] = "export ~notes";
+    };
+    CheckBox CB_TRANSITIONEFFECTS
+    {
+        Pos = MAP_APPFONT ( 12 , 153 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_TRANSITIONEFFECTS
+    {
+        Pos = MAP_APPFONT ( 25 , 153 ) ;
+        Size = MAP_APPFONT ( 143, 10 ) ;
+        Text = "~‹bergangseffekte benutzen" ;
+        Text[ english_us ] = "~use transitional effects";
+    };
+    FixedText FT_FORMSFORMAT
+    {
+        Pos = MAP_APPFONT ( 12 , 167 ) ;
+        Size = MAP_APPFONT ( 116, 10 ) ;
+        Text = "~Format f¸r Formular¸bermittlung:" ;
+        Text[ english_us ] = "Submit forms in ~format:";
+    };
+    ListBox LB_FORMSFORMAT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 130, 167 ) ;
+        Size = MAP_APPFONT ( 38, 48 ) ;
+        DeltaLang = < Default ; Default ; Default ; Default ; > ;
+        DeltaLang [ ENGLISH ] = < Default ; Default ; Default ; Default ; > ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "FDF" ; Default; > ;
+            < "PDF" ; > ;
+            < "HTML" ; > ;
+            < "XML" ; > ;
+        };
+    };
+    OKButton BT_OK
+    {
+        Text = "E~xportieren" ;
+        Text [ ENGLISH ] = "E~xport" ;
+        Pos = MAP_APPFONT( 174, 6 );
+        Size = MAP_APPFONT( 50 , 14 );
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text[ english_us ] = "E~xport";
+        Text[ portuguese ] = "E~xport";
+        Text[ russian ] = "E~xport";
+        Text[ greek ] = "≈~Ó·„˘„ﬁ";
+        Text[ dutch ] = "E~xporteren";
+        Text[ french ] = "Exporter";
+        Text[ spanish ] = "E~xportar";
+        Text[ finnish ] = "E~xport";
+        Text[ italian ] = "Esporta";
+        Text[ danish ] = "E~ksporter";
+        Text[ swedish ] = "E~xportera";
+        Text[ polish ] = "E~xport";
+        Text[ portuguese_brazilian ] = "E~xportar";
+        Text[ japanese ] = "„Ç®„ÇØ„Çπ„Éù„Éº„Éà(~X)";
+        Text[ korean ] = "ÎÇ¥Î≥¥ÎÇ¥Í∏∞(~X)";
+        Text[ chinese_simplified ] = "ËæìÂá∫(~X)";
+        Text[ chinese_traditional ] = "ÂåØÂá∫(~X)";
+        Text[ turkish ] = "~D˝˛a Aktar";
+        Text[ arabic ] = "E~xport";
+        Text[ catalan ] = "E~xport";
+        Text[ thai ] = "E~xport";
+        Text[ czech ] = "Export";
+        Text[ hebrew ] = "E~xport";
+        Text[ hindi ] = "E~xport";
+        Text[ slovak ] = "E~xport";
+        Text[ hungarian ] = "~Export√°l√°s";
+        Text[ slovenian ] = "I~zvoz";
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT( 174, 23 );
+        Size = MAP_APPFONT( 50 , 14 );
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT( 174, 43 );
+        Size = MAP_APPFONT( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    Text[ english_us ] = "PDF Options";
+    Text[ portuguese ] = "PDF Options";
+    Text[ russian ] = "PDF Options";
+    Text[ greek ] = "PDF Options";
+    Text[ dutch ] = "PDF Opties";
+    Text[ french ] = "Options PDF";
+    Text[ spanish ] = "Opciones PDF ";
+    Text[ finnish ] = "PDF Options";
+    Text[ italian ] = "Opzioni PDF";
+    Text[ danish ] = "PDF-indstillinger";
+    Text[ swedish ] = "PDF-alternativ";
+    Text[ polish ] = "PDF Options";
+    Text[ portuguese_brazilian ] = "OpÁıes do PDF";
+    Text[ japanese ] = "PDF „Ç™„Éó„Ç∑„Éß„É≥";
+    Text[ korean ] = "PDF ÏòµÏÖò";
+    Text[ chinese_simplified ] = "PDF ÈÄâÈ°π";
+    Text[ chinese_traditional ] = "PDF ÈÅ∏È†Ö";
+    Text[ turkish ] = "PDF Options";
+    Text[ arabic ] = "PDF Options";
+    Text[ catalan ] = "PDF Options";
+    Text[ thai ] = "PDF Options";
+    Text[ czech ] = "Volby PDF";
+    Text[ hebrew ] = "PDF Options";
+    Text[ hindi ] = "PDF Options";
+    Text[ slovak ] = "PDF voƒæby";
+    Text[ hungarian ] = "PDF-be√°ll√≠t√°sok";
+    Text[ slovenian ] = "Mo≈ænosti za PDF";
+};
+
+ModalDialog RID_PDF_OLD_EXPORT_DLG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
     Size = MAP_APPFONT ( 179, 101 );
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text [ de ] = "PDF Optionen";
-    FixedLine FL_PAGES
+    Text [ de ]= "PDF Optionen";
+    Text [ en-US ] = "PDF Options";
+    FixedLine FL_OLD_PAGES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 111 , 8 ) ;
         Text [ de ] = "Seiten" ;
         Text [ en-US ] = "Pages";
     };
-    RadioButton RB_ALL
+    RadioButton RB_OLD_ALL
     {
         Pos = MAP_APPFONT ( 12 , 12 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text [ de ] = "~Alle" ;
         Text [ en-US ] = "~All";
     };
-    RadioButton RB_RANGE
+    RadioButton RB_OLD_RANGE
     {
         Pos = MAP_APPFONT ( 12 , 24 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text [ de ] = "~Bereich" ;
         Text [ en-US ] = "~Range";
     };
-    RadioButton RB_SELECTION
+    RadioButton RB_OLD_SELECTION
     {
         Pos = MAP_APPFONT ( 12 , 36 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text [ de ] = "A~uswahl" ;
         Text [ en-US ] = "~Selection";
     };
-    Edit ED_PAGES
+    Edit ED_OLD_PAGES
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 65 , 23 ) ;
         Size = MAP_APPFONT ( 52 , 12 ) ;
     };
-    FixedLine FL_COMPRESSION
+    FixedLine FL_OLD_COMPRESSION
     {
         Pos = MAP_APPFONT ( 6 , 52 ) ;
         Size = MAP_APPFONT ( 111 , 8 ) ;
         Text [ de ] = "Komprimierung";
         Text [ en-US ] = "Compression";
     };
-    RadioButton RB_SCREEN
+    RadioButton RB_OLD_SCREEN
     {
         Pos = MAP_APPFONT ( 12 , 61 ) ;
         Size = MAP_APPFONT ( 165 , 10 ) ;
         Text [ de ] = "Optimiert f¸r ~Bildschirm (kleinste Dateigrˆﬂe)" ;
         Text [ en-US ] = "S~creen optimized (smallest file size)";
     };
-    RadioButton RB_PRINT
+    RadioButton RB_OLD_PRINT
     {
         Pos = MAP_APPFONT ( 12 , 73 ) ;
         Size = MAP_APPFONT ( 165, 10 ) ;
         Text [ de ] = "Optimiert f¸r ~Druck" ;
         Text [ en-US ] = "~Print optimized";
     };
-    RadioButton RB_PRESS
+    RadioButton RB_OLD_PRESS
     {
         Pos = MAP_APPFONT ( 12 , 85 ) ;
         Size = MAP_APPFONT ( 165, 10 ) ;
         Text [ de ] = "Optimiert f¸r Druck~vorstufe" ;
         Text [ en-US ] = "Pr~ess optimized";
     };
-    OKButton BT_OK
+    OKButton BT_OLD_OK
     {
         Text [ de ] = "E~xportieren" ;
         Pos = MAP_APPFONT( 123, 6 );
@@ -140,14 +510,14 @@ ModalDialog RID_PDF_EXPORT_DLG
         DefButton = TRUE ;
         Text [ en-US ] = "E~xport";
     };
-    CancelButton BT_CANCEL
+    CancelButton BT_OLD_CANCEL
     {
         Pos = MAP_APPFONT( 123, 23 );
         Size = MAP_APPFONT( 50 , 14 );
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
-    HelpButton BT_HELP
+    HelpButton BT_OLD_HELP
     {
         Pos = MAP_APPFONT( 123, 43 );
         Size = MAP_APPFONT( 50 , 14 ) ;
