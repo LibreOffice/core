@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taborder.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:07:33 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,28 +74,8 @@ ModalDialog RID_DLG_TABORDER
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 168 , 158 ) ;
-    Text = "Aktivierungsreihenfolge" ;
-    Text [ english ] = "Tab order" ;
-    Text [ english_us ] = "Tab Order" ;
-    Text [ portuguese_brazilian ] = "Ordem da Tabulação" ;
-    Text [ swedish ] = "Aktiveringsordningsföljd" ;
-    Text [ danish ] = "Aktiveringsrækkefølge" ;
-    Text [ italian ] = "Sequenza di attivazione" ;
-    Text [ spanish ] = "Secuencia de activación" ;
-    Text [ french ] = "Séquence d'activation" ;
-    Text [ dutch ] = "Volgorde van activering" ;
-    Text [ portuguese ] = "Sequência de activação" ;
-    Text[ chinese_simplified ] = "è½®æ¢é¡ºåº";
-    Text[ russian ] = "Ïîğÿäîê àêòèâèğîâàíèÿ";
-    Text[ polish ] = "Kolejnoœæ aktywacji";
-    Text[ japanese ] = "ã‚¿ãƒ–ã‚ªãƒ¼ãƒ€ãƒ¼";
-    Text[ chinese_traditional ] = "å•Ÿå‹•é †åº";
-    Text[ arabic ] = "ÊÑÊíÈ ÇáÊäÔíØ";
-    Text[ greek ] = "ÓåéñÜ åíåñãïğïßçóçò";
-    Text[ korean ] = "íƒ­ ìˆœì„œ";
-    Text[ turkish ] = "Etkinleştirme sırası";
-    Text[ catalan ] = "Ordre de les pestanyes";
-    Text[ finnish ] = "Sarkainjärjestys";
+    Text [ de ] = "Aktivierungsreihenfolge" ;
+    Text [ en-US ] = "Tab Order" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
 
@@ -103,33 +83,8 @@ ModalDialog RID_DLG_TABORDER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text = "Kontrollelemente" ;
-        Text [ english ] = "Controls" ;
-        Text [ english_us ] = "Controls" ;
-        Text [ portuguese_brazilian ] = "Controles" ;
-        Text [ swedish ] = "Kontrollelement" ;
-        Text [ danish ] = "Kontrolelementer" ;
-        Text [ italian ] = "Elementi di controllo" ;
-        Text [ spanish ] = "Elementos de control" ;
-        Text [ french ] = "Éléments de contrôle" ;
-        Text [ dutch ] = "Controle-elementen" ;
-        Text [ portuguese ] = "Controlos" ;
-        Text[ chinese_simplified ] = "æ§åˆ¶å•å…ƒ";
-        Text[ russian ] = "İëåìåíòû óïğàâëåíèÿ";
-        Text[ polish ] = "Formanty";
-        Text[ japanese ] = "ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«è¦ç´ ";
-        Text[ chinese_traditional ] = "æ§åˆ¶å–®å…ƒ";
-        Text[ arabic ] = "ÚäÇÕÑ ÊÍßã";
-        Text[ greek ] = "Óôïé÷åßá åëİã÷ïõ";
-        Text[ korean ] = "ì»¨íŠ¸ë¡¤ ìš”ì†Œ";
-        Text[ turkish ] = "Kontroller";
-        Text[ catalan ] = "Elements de control";
-        Text[ finnish ] = "Ohjausobjektit";
-        Text[ thai ] = "à¸•à¸±à¸§à¸„à¸§à¸šà¸„à¸¸à¸¡";
-        Text[ czech ] = "OvlÃ¡dacÃ­ prvky";
-        Text[ hebrew ] = "â€®×¤×§×“×™×â€¬";
-        Text[ hindi ] = "à¤¨à¤¿à¤¯à¤‚à¤¤à¥à¤°à¤£";
-        Text[ slovak ] = "OvlÃ¡dacie prvky";
+        Text [ de ] = "Kontrollelemente" ;
+        Text [ en-US ] = "Controls" ;
     };
 
     Control CTRL_TREE
@@ -166,105 +121,25 @@ ModalDialog RID_DLG_TABORDER
     {
         Pos = MAP_APPFONT ( 102 , 14 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text = "Index kleiner" ;
-        Text [ english ] = "Move up" ;
-        Text [ portuguese ] = "Mover para cima" ;
-        Text [ english_us ] = "Move Up" ;
-        Text [ portuguese_brazilian ] = "Mover para cima" ;
-        Text [ swedish ] = "Index mindre" ;
-        Text [ danish ] = "Indeks mindre" ;
-        Text [ italian ] = "Index minore" ;
-        Text [ spanish ] = "Hacia arriba" ;
-        Text [ french ] = "Index plus petit" ;
-        Text [ dutch ] = "Index kleiner" ;
-        Text[ chinese_simplified ] = "ä¸Šç§»";
-        Text[ russian ] = "Ïåğåìåñòèòü ââåğõ";
-        Text[ polish ] = "Przenieœ w górê";
-        Text[ japanese ] = "ä¸Šã¸ç§»å‹•";
-        Text[ chinese_traditional ] = "ä¸Šç§»";
-        Text[ arabic ] = "ÊÕÛíÑ ÇáİåÑÓ";
-        Text[ greek ] = "ÅõñåôŞñéï ìéêñüôåñï";
-        Text[ korean ] = "ìœ„ë¡œ";
-        Text[ turkish ] = "Yukarı taşı";
-        Text[ catalan ] = "Mou cap amunt";
-        Text[ finnish ] = "Siirrä ylemmäs";
-        Text[ thai ] = "à¹€à¸¥à¸·à¹ˆà¸­à¸™à¸‚à¸¶à¹‰à¸™";
-        Text[ czech ] = "PÅ™esunout nahoru";
-        Text[ hebrew ] = "â€®×”×–×– ×œ××¢×œ×”â€¬";
-        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨à¤¾à¤¨à¥à¤¤à¤° à¤Šà¤ªà¤°";
-        Text[ slovak ] = "PresunÃºÅ¥ nahor";
+        Text [ de ] = "Index kleiner" ;
+        Text [ en-US ] = "Move Up" ;
     };
 
     PushButton PB_MOVE_DOWN
     {
         Pos = MAP_APPFONT ( 102 , 32 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text = "Index größer" ;
-        Text [ english ] = "Move down" ;
-        Text [ portuguese ] = "Mover para baixo" ;
-        Text [ english_us ] = "Move Down" ;
-        Text [ portuguese_brazilian ] = "Mover para baixo" ;
-        Text [ swedish ] = "Index större" ;
-        Text [ danish ] = "Indeks større" ;
-        Text [ italian ] = "Index maggiore" ;
-        Text [ spanish ] = "Hacia abajo" ;
-        Text [ french ] = "Index plus grand" ;
-        Text [ dutch ] = "Index groter" ;
-        Text[ chinese_simplified ] = "ä¸‹ç§»";
-        Text[ russian ] = "Ïåğåìåñòèòü âíèç";
-        Text[ polish ] = "Przenieœ w dó³";
-        Text[ japanese ] = "ä¸‹ã¸ç§»å‹•";
-        Text[ chinese_traditional ] = "ä¸‹ç§»";
-        Text[ arabic ] = "ÊßÈíÑ ÇáİåÑÓ";
-        Text[ greek ] = "Ìåôáêßíçóç êÜôù";
-        Text[ korean ] = "ì•„ë˜ë¡œ";
-        Text[ turkish ] = "Aşağı taşı";
-        Text[ catalan ] = "Mou cap avall";
-        Text[ finnish ] = "Siirrä alemmas";
-        Text[ thai ] = "à¹€à¸¥à¸·à¹ˆà¸­à¸™à¸¥à¸‡";
-        Text[ czech ] = "PÅ™esunout dolÅ¯";
-        Text[ hebrew ] = "â€®×”×–×– ×œ××˜×”â€¬";
-        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨à¤¾à¤¨à¥à¤¤à¤° à¤¨à¥€à¤šà¥‡";
-        Text[ slovak ] = "PresunÃºÅ¥ dole";
+        Text [ de ] = "Index größer" ;
+        Text [ en-US ] = "Move Down" ;
     };
 
     PushButton PB_AUTO_ORDER
     {
         Pos = MAP_APPFONT ( 102 , 50 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text = "Auto Sortierung" ;
-        Text [ english ] = "Auto order" ;
-        Text [ portuguese ] = "Ordem autom." ;
-        Text [ english_us ] = "Automatic Sort" ;
-        Text [ portuguese_brazilian ] = "Ordenação Automática" ;
-        Text [ swedish ] = "Autosortering" ;
-        Text [ danish ] = "Autosortering" ;
-        Text [ italian ] = "Ordine autom." ;
-        Text [ spanish ] = "Orden automático" ;
-        Text [ french ] = "Tri automatique" ;
-        Text [ dutch ] = "AutoSortering" ;
-        Text[ chinese_simplified ] = "è‡ªåŠ¨æ’åº";
-        Text[ russian ] = "Àâòîñîğòèğîâêà";
-        Text[ polish ] = "Sortuj automatycznie";
-        Text[ japanese ] = "è‡ªå‹•çš„ã«ä¸¦ã¹æ›¿ãˆ";
-        Text[ chinese_traditional ] = "è‡ªå‹•æ’åº";
-        Text[ arabic ] = "İÑÒ ÊáŞÇÆí";
-        Text[ greek ] = "Áõôüìáôç Ôáîéíüìçóç";
-        Text[ korean ] = "ìë™ ì •ë ¬";
-        Text[ turkish ] = "Otomatik sıralama";
-        Text[ catalan ] = "Ordre automàtic";
-        Text[ finnish ] = "Automaattinen järjestys";
-        Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-        Text[ czech ] = "Automaticky seÅ™adit";
-        Text[ hebrew ] = "â€®××™×•×Ÿ ××•×˜×•××˜×™â€¬";
-        Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤¸à¥‹à¤°à¥à¤Ÿ";
-        Text[ slovak ] = "Automaticky zoradiÅ¥";
+        Text [ de ] = "Auto Sortierung" ;
+        Text [ en-US ] = "Automatic Sort" ;
     };
 
-    Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸£à¸°à¸¢à¸°à¸à¸±à¹‰à¸™";
-    Text[ czech ] = "PoÅ™adÃ­ aktivace";
-    Text[ hebrew ] = "â€®×¡×“×¨ ×˜××‘×™×â€¬";
-    Text[ hindi ] = "à¤Ÿà¥‰à¤¬ à¤•à¥à¤°à¤®";
-    Text[ slovak ] = "Poradie aktivÃ¡cie";
 };
 
