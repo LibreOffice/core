@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-20 20:52:33 $
+ *  last change: $Author: pluby $ $Date: 2000-12-22 17:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,6 @@
 #ifndef _SV_VCLGRAPHICS_H
 #include <VCLGraphics.h>
 #endif
-
-#include <premac.h>
-#include <QD/QD.h>
-#include <postmac.h>
 
 // =======================================================================
 
