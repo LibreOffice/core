@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInterfaceTypeDescription.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:19:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 
     @see XInterfaceMemberTypeDescription
 */
-interface XInterfaceTypeDescription: com::sun::star::reflection::XTypeDescription
+published interface XInterfaceTypeDescription: com::sun::star::reflection::XTypeDescription
 {
     /** Returns the base interface or null, if the reflected interface is not
         inherited from another.
