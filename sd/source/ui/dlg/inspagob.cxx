@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-12-06 16:51:17 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,10 @@
 #include "res_bmp.hrc"
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
-#include "docshell.hxx"
-#include "viewshel.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "inspagob.hrc"
 
 
@@ -78,20 +80,21 @@
 |*
 \************************************************************************/
 
-SdInsertPagesObjsDlg::SdInsertPagesObjsDlg( Window* pWindow,
-                                            const SdDrawDocument* pInDoc,
-                                            SfxMedium* pSfxMedium,
-                                            const String& rFileName ) :
-            ModalDialog     ( pWindow, SdResId( DLG_INSERT_PAGES_OBJS ) ),
-        aLbTree         ( this, SdResId( LB_TREE ) ),
-        aBtnOk          ( this, SdResId( BTN_OK ) ),
-        aBtnCancel      ( this, SdResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, SdResId( BTN_HELP ) ),
-        aCbxLink        ( this, SdResId( CBX_LINK ) ),
-        aCbxMasters     ( this, SdResId( CBX_CHECK_MASTERS ) ),
-        pDoc            ( pInDoc ),
-        pMedium         ( pSfxMedium ),
-        rName           ( rFileName )
+SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
+    ::Window* pWindow,
+    const SdDrawDocument* pInDoc,
+    SfxMedium* pSfxMedium,
+    const String& rFileName )
+    : ModalDialog     ( pWindow, SdResId( DLG_INSERT_PAGES_OBJS ) ),
+      aLbTree         ( this, SdResId( LB_TREE ) ),
+      aBtnOk          ( this, SdResId( BTN_OK ) ),
+      aBtnCancel      ( this, SdResId( BTN_CANCEL ) ),
+      aBtnHelp        ( this, SdResId( BTN_HELP ) ),
+      aCbxLink        ( this, SdResId( CBX_LINK ) ),
+      aCbxMasters     ( this, SdResId( CBX_CHECK_MASTERS ) ),
+      pDoc          ( pInDoc ),
+      pMedium       ( pSfxMedium ),
+      rName         ( rFileName )
 {
     FreeResource();
 
