@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-14 20:28:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 // System - Includes -----------------------------------------------------
 
 #ifdef PCH
@@ -99,7 +98,24 @@ BOOL lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const String& r
     return FALSE;
 }
 
+ScServerObjectSvtListenerForwarder::ScServerObjectSvtListenerForwarder(
+        ScServerObject* pObjP)
+    : pObj(pObjP)
+{
+}
+
+ScServerObjectSvtListenerForwarder::~ScServerObjectSvtListenerForwarder()
+{
+    //! do NOT access pObj
+}
+
+void ScServerObjectSvtListenerForwarder::Notify( SvtBroadcaster& rBC, const SfxHint& rHint)
+{
+    pObj->Notify( aBroadcaster, rHint);
+}
+
 ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
+    aForwarder( this ),
     pDocSh( pShell ),
     bRefreshListener( FALSE )
 {
@@ -113,7 +129,7 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
     {
         //  parse ref
         ScDocument* pDoc = pDocSh->GetDocument();
-        USHORT nTab = pDocSh->GetCurTab();
+        SCTAB nTab = pDocSh->GetCurTab();
         aRange.aStart.SetTab( nTab );
 
         if ( aRange.Parse( rItem, pDoc ) & SCA_VALID )
@@ -132,7 +148,7 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
     }
 
     pDocSh->GetDocument()->GetLinkManager()->InsertServer( this );
-    pDocSh->GetDocument()->StartListeningArea( aRange, this );
+    pDocSh->GetDocument()->StartListeningArea( aRange, &aForwarder );
 
     StartListening(*pDocSh);        // um mitzubekommen, wenn die DocShell geloescht wird
     StartListening(*SFX_APP());     // for SC_HINT_AREAS_CHANGED
@@ -150,11 +166,17 @@ void ScServerObject::Clear()
         ScDocShell* pTemp = pDocSh;
         pDocSh = NULL;
 
-        pTemp->GetDocument()->EndListeningArea( aRange, this );
+        pTemp->GetDocument()->EndListeningArea( aRange, &aForwarder );
         pTemp->GetDocument()->GetLinkManager()->RemoveServer( this );
         EndListening(*pTemp);
         EndListening(*SFX_APP());
     }
+}
+
+void ScServerObject::EndListeningAll()
+{
+    aForwarder.EndListeningAll();
+    SfxListener::EndListeningAll();
 }
 
 BOOL __EXPORT ScServerObject::GetData(
@@ -180,7 +202,7 @@ BOOL __EXPORT ScServerObject::GetData(
         //  refresh the listeners now (this is called from a timer)
 
         EndListeningAll();
-        pDocSh->GetDocument()->StartListeningArea( aRange, this );
+        pDocSh->GetDocument()->StartListeningArea( aRange, &aForwarder );
         StartListening(*pDocSh);
         StartListening(*SFX_APP());
         bRefreshListener = FALSE;
