@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:47:11 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3818,3 +3818,7 @@ BOOL ScCompiler::DeQuote( String& rStr )
 }
 
 
+String* GetScCompilerpSymbolTableNative() //CHINA001
+{
+    return ScCompiler::pSymbolTableNative;
+}
