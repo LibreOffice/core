@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:09:11 $
+ *  last change: $Author: rt $ $Date: 2004-08-02 09:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@
 
 #include "comifaces.hxx"
 #include "jscriptclasses.hxx"
+#include "unotypewrapper.hxx"
 #include "oleobjw.hxx"
 #include "unoobjw.hxx"
 #include "servprov.hxx"
@@ -296,6 +297,12 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID riid,
             *rgdispid= DISPID_GET_STRUCT_FUNC;
             return S_OK;
         }
+        else if( ! _wcsicmp( *rgszNames, BRIDGE_CREATE_TYPE_FUNC))
+        {
+            *rgdispid= DISPID_CREATE_TYPE_FUNC;
+            return S_OK;
+        }
+
         // ----------------------------------------
         if (m_xInvocation.is() && (cNames > 0))
         {
@@ -618,18 +625,20 @@ Reference<XInterface> InterfaceOleWrapper_Impl::createComWrapperInstance()
 
 // "getType" is used in convertValueObject to map the string denoting the type
 // to an actual Type object.
-Type getType( const BSTR type)
+bool getType( const BSTR name, Type & type)
 {
     Type retType;
+    bool ret = false;
     typelib_TypeDescription * pDesc= NULL;
-    OUString str( type);
+    OUString str( name);
     typelib_typedescription_getByName( &pDesc, str.pData );
     if( pDesc)
     {
-        retType= Type( pDesc->pWeakRef );
+        type = Type( pDesc->pWeakRef );
         typelib_typedescription_release( pDesc);
+        ret = true;
     }
-    return retType;
+    return ret;
 }
 
 static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
@@ -1187,6 +1196,35 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
                 }
             }
             ret= bStruct == sal_True ? S_OK : DISP_E_EXCEPTION;
+        }
+        else if (dispidMember == DISPID_CREATE_TYPE_FUNC)
+        {
+            bHandled= sal_True;
+            if( !pvarResult)
+                ret= E_POINTER;
+            // the first parameter is in DISPPARAMS rgvargs contains the name of the struct.
+            CComVariant arg;
+            if( pdispparams->cArgs != 1)
+                return DISP_E_BADPARAMCOUNT;
+            if (FAILED( arg.ChangeType( VT_BSTR, &pdispparams->rgvarg[0])))
+                return DISP_E_BADVARTYPE;
+
+            //check if the provided name represents a valid type
+            Type type;
+            if (getType(arg.bstrVal, type) == false)
+            {
+                writeExcepinfo(pexcepinfo,OUString(
+                                   OUSTR("[automation bridge] A UNO type with the name ") +
+                                   OUString(arg.bstrVal) + OUSTR(" does not exist!")));
+                return DISP_E_EXCEPTION;
+            }
+
+            if (createUnoTypeWrapper(arg.bstrVal, pvarResult) == false)
+            {
+                writeExcepinfo(pexcepinfo,OUSTR("[automation bridge] InterfaceOleWrapper_Impl::InvokeGeneral\n"
+                                                "Could not initialize UnoTypeWrapper object!"));
+                return DISP_E_EXCEPTION;
+            }
         }
     }
     catch(BridgeRuntimeError & e)
