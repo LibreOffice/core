@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.22 $
+*  $Revision: 1.23 $
 *
-*  last change: $Author: kz $ $Date: 2004-06-11 17:53:00 $
+*  last change: $Author: rt $ $Date: 2004-06-17 15:45:41 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -59,9 +59,7 @@
 *
 ************************************************************************/
 #include "macros.inc"
-
 STD_UNO_LIB_FILE( gid_File_Lib_Abp, abp)
-
 File gid_File_Lib_Acceptor
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
@@ -248,7 +246,10 @@ End
 
 #endif
 */
-SPECIAL_UNO_LIB_FILE( gid_File_Lib_Cmdmail, cmdmail )
+
+#if ! defined WNT // no longer supported on Windows
+SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Cmdmail, cmdmail.uno )
+#endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Cnt, cnt )
 
@@ -1497,7 +1498,7 @@ File gid_File_Lib_Smplmail
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
-    Name = "smplmail.dll";
+    Name = "smplmail.uno.dll";
 End
 
 #endif
@@ -1610,7 +1611,7 @@ File gid_File_Lib_Sysdtrans
   #endif
 End
 
-SPECIAL_UNO_LIB_FILE( gid_File_Lib_Syssh, syssh )
+SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Syssh, syssh.uno )
 
 File gid_File_Lib_Tcv
     TXT_FILE_BODY;
