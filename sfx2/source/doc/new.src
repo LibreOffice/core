@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:42:40 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ ModalDialog DLG_NEW_FILE
         Text [ portuguese ] = "~Previsualização" ;
         Text [ finnish ] = "Esi~katselu" ;
         Text [ danish ] = "Eksempel" ;
-        Text [ french ] = "~Aperçu" ;
+        Text [ french ] = "Aperçu" ;
         Text [ swedish ] = "Förhandsvi~sning" ;
         Text [ dutch ] = "~Voorbeeld" ;
         Text [ spanish ] = "Pre~visualización" ;
@@ -310,7 +310,7 @@ ModalDialog DLG_NEW_FILE
         Text [ English ] = "Frame" ;
         Text [ english_us ] = "~Frame" ;
         Text [ italian ] = "Co~rnice" ;
-        Text [ spanish ] = "~Marco" ;
+        Text [ spanish ] = "Marco" ;
         Text [ french ] = "Cadre" ;
         Text [ dutch ] = "~Kader" ;
         Text [ swedish ] = "~Ram" ;
@@ -478,7 +478,7 @@ ModalDialog DLG_NEW_FILE
         Text [ portuguese ] = "~Título" ;
         Text [ finnish ] = "~Otsikko" ;
         Text [ danish ] = "Titel" ;
-        Text [ french ] = "~Titre" ;
+        Text [ french ] = "Titre" ;
         Text [ swedish ] = "~Rubrik" ;
         Text [ dutch ] = "~Titel" ;
         Text [ spanish ] = "~Título" ;
@@ -519,7 +519,7 @@ ModalDialog DLG_NEW_FILE
         Text [ french ] = "S~ujet" ;
         Text [ swedish ] = "Te~ma" ;
         Text [ dutch ] = "~Onderwerp" ;
-        Text [ spanish ] = "~Tema" ;
+        Text [ spanish ] = "Tema" ;
         Text [ english_us ] = "Subject" ;
         Hide = TRUE ;
         Text[ chinese_simplified ] = "ä¸»é¢˜";
