@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
+ *  last change: $Author: oj $ $Date: 2000-10-26 09:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,7 @@ sal_Bool OTableContainer::isNameValid(  const ::rtl::OUString& _rName,
 {
     sal_Int32 nTableFilterLen = _rTableFilter.getLength();
 
-    sal_Bool bFilterMatch = (NULL != bsearch(_rName, _rTableFilter.getConstArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare));
+    sal_Bool bFilterMatch = (NULL != bsearch(&_rName, _rTableFilter.getConstArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare));
     // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
     if (!bFilterMatch && _rWCSearch.size())
     {   // or if one of the wildcrad expression matches
