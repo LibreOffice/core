@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2002-01-10 09:34:41 $
+#   last change: $Author: hr $ $Date: 2003-03-19 17:53:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ TARGET=dba
 TARGET2=dbu
 USE_LDUMP2=TRUE
 GEN_HID=TRUE
+GEN_HID_OTHER=TRUE
 
 USE_DEFFILE=TRUE
 
@@ -167,7 +168,6 @@ DEF2EXPORTFILE=$(TARGET2).dxp
 
 ALL: \
     $(LIB2TARGET)	\
-    $(SRS)$/hidother.hid	\
     ALLTAR
 
 # --- .res file ----------------------------------------------------------
@@ -187,15 +187,4 @@ RESLIB2SRSFILES=$(RES2FILELIST)
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
-
-$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
-
-$(SRS)$/hidother.hid: hidother.src
-.IF "$(GUI)$(CPU)"=="WNTI"
-.IF "$(BUILD_SOSL)"==""
-    @+-mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)
-.ENDIF
-.ELSE
-    @+echo nix
-.ENDIF
 

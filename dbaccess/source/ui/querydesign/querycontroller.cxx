@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-12 13:44:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,7 +828,7 @@ void OQueryController::setTitle(const ::rtl::OUString& _sName)
             sName = ::dbtools::createUniqueName(getElements(),aDefaultName);
         }
         String aName = String(ModuleRes(m_bCreateView ? STR_VIEWDESIGN : STR_QUERYDESIGN));
-        sName = aName + ::rtl::OUString::createFromAscii(": ") + sName;
+        sName = aName + ::rtl::OUString::createFromAscii(" ") + sName;
         xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sName));
     }
 }

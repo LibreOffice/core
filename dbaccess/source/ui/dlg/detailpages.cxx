@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-09 09:11:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,15 +168,10 @@ namespace dbaui
             m_pCharset->SetSelectHdl(getControlModifiedLink());
             m_pCharset->SetDropDownLineCount( 14 );
 
-            sal_Bool bCJKEnabled = SvtCJKOptions().IsAnyEnabled();
-
             OCharsetDisplay::const_iterator aLoop = m_aCharsets.begin();
             while (aLoop != m_aCharsets.end())
             {
-                if  (   ( RTL_TEXTENCODING_BIG5_HKSCS != (*aLoop).getEncoding() )   // not the asian encoding
-                    ||  ( bCJKEnabled )                                             // or asian enabled
-                    )
-                    m_pCharset->InsertEntry((*aLoop).getDisplayName());
+                m_pCharset->InsertEntry((*aLoop).getDisplayName());
                 ++aLoop;
             }
         }
@@ -242,8 +237,7 @@ namespace dbaui
     // -----------------------------------------------------------------------
     namespace
     {
-        sal_Bool implAdjust( const SfxItemSet& _rSet, const rtl_TextEncoding _eEncoding,
-            const OCharsetDisplay& _rMap, ListBox* _pCharsets, sal_Bool _bAllowInGeneral = sal_True )
+        void adjustCharSets( const SfxItemSet& _rSet, const OCharsetDisplay& _rCharSets, ListBox* _pCharsets )
         {
             // determine the type of the current URL
             DATASOURCE_TYPE eDSType = DST_UNKNOWN;
@@ -254,38 +248,44 @@ namespace dbaui
             if (pTypeCollection && pConnectUrl && pConnectUrl->GetValue().Len())
                 eDSType = pTypeCollection->getType(pConnectUrl->GetValue());
 
-            // is the given encoding allowed?
-            const sal_Bool bAllowIt = _bAllowInGeneral && (DST_DBASE != eDSType) && (DST_TEXT != eDSType);
-
-            // get the display name for UTF8 to check if we currently include it in the list
-            OCharsetDisplay::const_iterator aEncodingPos = _rMap.find( _eEncoding );
-            DBG_ASSERT( _rMap.end() != aEncodingPos, "OCommonBehaviourTabPage::implAdjust: invalid charset map!" );
-            if ( _rMap.end() != aEncodingPos )
+            // the only types we're interested in is TEXT and DBASE
+            if ( ( DST_DBASE == eDSType ) || ( DST_TEXT == eDSType ) )
             {
-                String sDisplayName = (*aEncodingPos).getDisplayName();
-                const sal_Bool bHaveIt = LISTBOX_ENTRY_NOTFOUND != _pCharsets->GetEntryPos( sDisplayName );
-                if ( bAllowIt != bHaveIt )
-                {   // really need to adjust the list
-                    if ( !bAllowIt )
-                        _pCharsets->RemoveEntry( sDisplayName );
+                // for these types, we need to exclude all encodings which do not have a fixed character
+                // length (such as UTF-8)
+                rtl_TextEncodingInfo aEncodingInfo; aEncodingInfo.StructSize = sizeof( rtl_TextEncodingInfo );
+
+                OCharsetDisplay::const_iterator aLoop = _rCharSets.begin();
+                OCharsetDisplay::const_iterator aLoopEnd = _rCharSets.end();
+                while ( aLoop != aLoopEnd )
+                {
+                    rtl_TextEncoding eEncoding = (*aLoop).getEncoding();
+                    sal_Bool bAllowIt = sal_False;
+                    if ( RTL_TEXTENCODING_DONTKNOW == eEncoding )
+                        bAllowIt = sal_True;
                     else
-                        _pCharsets->InsertEntry( sDisplayName );
+                    {
+                        // check if we should include the current encoding in the list
+                        OSL_VERIFY( rtl_getTextEncodingInfo( eEncoding, &aEncodingInfo ) );
+                        bAllowIt = aEncodingInfo.MinimumCharSize == aEncodingInfo.MaximumCharSize;
+                    }
+
+                    // get the display name for the encoding to check if we currently include it in the list
+                    String sDisplayName = (*aLoop).getDisplayName();
+                    const sal_Bool bHaveIt = LISTBOX_ENTRY_NOTFOUND != _pCharsets->GetEntryPos( sDisplayName );
+                    if ( bAllowIt != bHaveIt )
+                    {   // we need to adjust the list
+                        if ( !bAllowIt )
+                            _pCharsets->RemoveEntry( sDisplayName );
+                        else
+                            _pCharsets->InsertEntry( sDisplayName );
+                    }
+
+                    // next
+                    ++aLoop;
                 }
             }
-            return bAllowIt;
         }
-    }
-
-    // -----------------------------------------------------------------------
-    sal_Bool OCommonBehaviourTabPage::adjustBig5( const SfxItemSet& _rSet )
-    {
-        return implAdjust( _rSet, RTL_TEXTENCODING_BIG5_HKSCS, m_aCharsets, m_pCharset, SvtCJKOptions().IsAnyEnabled() );
-    }
-
-    // -----------------------------------------------------------------------
-    sal_Bool OCommonBehaviourTabPage::adjustUTF8( const SfxItemSet& _rSet )
-    {
-        return implAdjust( _rSet, RTL_TEXTENCODING_UTF8, m_aCharsets, m_pCharset );
     }
 
     // -----------------------------------------------------------------------
@@ -364,8 +364,8 @@ namespace dbaui
 
             if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
             {
-                sal_Bool bAllowUTF8 = adjustUTF8(_rSet);
-                sal_Bool bAllowBig5 = adjustBig5(_rSet);
+                // adjust the list of available character sets according to the data source type
+                adjustCharSets( _rSet, m_aCharsets, m_pCharset );
 
                 OCharsetDisplay::const_iterator aFind = m_aCharsets.find(pCharsetItem->GetValue(), OCharsetDisplay::IANA());
                 if (aFind == m_aCharsets.end())
@@ -375,21 +375,25 @@ namespace dbaui
                     // fallback: system language
                 }
 
-                if  (   (   !bAllowUTF8
-                        &&  ( RTL_TEXTENCODING_UTF8 == (*aFind).getEncoding() )
-                        )
-                    ||  (   !bAllowBig5
-                        &&  ( RTL_TEXTENCODING_BIG5_HKSCS == (*aFind).getEncoding() )
-                        )
-                    )
-                {   // the current char set is UTF-8 or Big5, but it's not allowed for the current URL
-                    aFind = m_aCharsets.find(RTL_TEXTENCODING_DONTKNOW);
-                }
 
                 if (aFind == m_aCharsets.end())
-                    m_pCharset->SelectEntry(String());
+                {
+                    m_pCharset->SelectEntry( String() );
+                }
                 else
-                    m_pCharset->SelectEntry((*aFind).getDisplayName());
+                {
+                    String sDisplayName = (*aFind).getDisplayName();
+                    if ( LISTBOX_ENTRY_NOTFOUND == m_pCharset->GetEntryPos( sDisplayName ) )
+                    {
+                        // in our settings, there was an encoding selected which is not valid for the current
+                        // data source type
+                        // This is worth at least an assertion.
+                        DBG_ERROR( "OCommonBehaviourTabPage::implInitControls: invalid character set!" );
+                        sDisplayName = String();
+                    }
+
+                    m_pCharset->SelectEntry( sDisplayName );
+                }
 
                 if (_bSaveValue)
                     m_pCharset->SaveValue();
@@ -883,6 +887,71 @@ namespace dbaui
             m_aUseCatalog.Disable();
     }
     //========================================================================
+    //= OOdbcDetailsPage
+    //========================================================================
+    OUserDriverDetailsPage::OUserDriverDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+        :OCommonBehaviourTabPage(pParent, PAGE_USERDRIVER, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET | CBTP_USE_OPTIONS | CBTP_USE_SQL92CHECK| CBTP_USE_AUTOINCREMENT)
+        ,m_aSeparator1  (this, ResId(FL_SEPARATOR2))
+        ,m_aUseCatalog  (this, ResId(CB_USECATALOG))
+    {
+        m_aUseCatalog.SetToggleHdl(getControlModifiedLink());
+        FreeResource();
+    }
+
+    // -----------------------------------------------------------------------
+    SfxTabPage* OUserDriverDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
+    {
+        return ( new OUserDriverDetailsPage( pParent, _rAttrSet ) );
+    }
+
+    // -----------------------------------------------------------------------
+    sal_Int32* OUserDriverDetailsPage::getDetailIds()
+    {
+        static sal_Int32* pRelevantIds = NULL;
+        if (!pRelevantIds)
+        {
+            static sal_Int32 nRelevantIds[] =
+            {
+                DSID_ADDITIONALOPTIONS,
+                DSID_CHARSET,
+                DSID_USECATALOG,
+                DSID_SQL92CHECK,
+                DSID_AUTOINCREMENTVALUE,
+                DSID_AUTORETRIEVEVALUE,
+                DSID_AUTORETRIEVEENABLED,
+                0
+            };
+            pRelevantIds = nRelevantIds;
+        }
+        return pRelevantIds;
+    }
+    // -----------------------------------------------------------------------
+    sal_Bool OUserDriverDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    {
+        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+        _rSet.Put(SfxBoolItem(DSID_USECATALOG, m_aUseCatalog.IsChecked()));
+        return bChangedSomething;
+    }
+    // -----------------------------------------------------------------------
+    void OUserDriverDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    {
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+
+        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        sal_Bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
+
+        SFX_ITEMSET_GET(_rSet, pUseCatalogItem, SfxBoolItem, DSID_USECATALOG, sal_True);
+
+        m_aUseCatalog.Check(pUseCatalogItem->GetValue());
+
+        if (_bSaveValue)
+            m_aUseCatalog.SaveValue();
+
+        if (bReadonly)
+            m_aUseCatalog.Disable();
+    }
+    //========================================================================
     //= OMySQLDetailsPage
     //========================================================================
     OMySQLDetailsPage::OMySQLDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
@@ -899,7 +968,6 @@ namespace dbaui
         ,m_sJDBCDefaultUrl      (ResId(STR_JDBC_DEFAULT_URL))
     {
         m_aUseODBC.SetToggleHdl(LINK(this, OMySQLDetailsPage,OnToggle));
-
         m_aUrl.SetModifyHdl(getControlModifiedLink());
         m_aEDDriverClass.SetModifyHdl(getControlModifiedLink());
         m_aBrowseConnection.SetClickHdl(LINK(this, OMySQLDetailsPage, OnBrowseConnections));
@@ -968,10 +1036,11 @@ namespace dbaui
         SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
 
         sal_Bool bODBC = pUrlItem->GetValue().EqualsIgnoreCaseAscii("sdbc:mysql:odbc:",0,16);
+        m_aBrowseConnection.Enable( bODBC );
+
         m_aUseODBC.Check(bODBC);
         m_aUseJDBC.Check(!bODBC);
 
-        m_aBrowseConnection.Enable( bODBC );
         m_aFTDriverClass.Enable( !bODBC );
         m_aEDDriverClass.Enable( !bODBC );
 
@@ -998,6 +1067,7 @@ namespace dbaui
             m_aUseJDBC.SaveValue();
             m_aUrl.SaveValue();
             m_aUrl.SaveValueNoPrefix();
+            m_aEDDriverClass.SaveValue();
         }
 
         if ( bReadonly )
@@ -1006,12 +1076,16 @@ namespace dbaui
             m_aUseJDBC.Disable();
             m_aUrlLabel.Disable();
             m_aUrl.Disable();
+            m_aEDDriverClass.Disable();
         }
     }
     //------------------------------------------------------------------------
     IMPL_LINK( OMySQLDetailsPage, OnToggle, RadioButton*, pRadioButton )
     {
         sal_Bool bODBC = &m_aUseODBC == pRadioButton && pRadioButton->IsChecked();
+        if ( m_aBrowseConnection.IsEnabled() && bODBC )
+            return 0;
+
         m_aBrowseConnection.Enable(  bODBC );
         m_aFTDriverClass.Enable(    !bODBC );
         m_aEDDriverClass.Enable(    !bODBC );
@@ -1047,6 +1121,7 @@ namespace dbaui
         {
             m_aUrl.SetTextNoPrefix(sDataSource);
             callModifiedHdl();
+            return 0L;
         }
         else
             return 1L;
@@ -1164,12 +1239,12 @@ namespace dbaui
 
         FILL_STRING_ITEM(m_aETHostname,_rSet,DSID_CONN_LDAP_HOSTNAME,bChangedSomething)
         FILL_STRING_ITEM(m_aETBaseDN,_rSet,DSID_CONN_LDAP_BASEDN,bChangedSomething)
-        if (m_aNFPortNumber.GetValue() != m_aNFPortNumber.GetSavedValue())
+        if ( m_aNFPortNumber.GetValue() != m_aNFPortNumber.GetSavedValue() )
         {
             _rSet.Put(SfxInt32Item(DSID_CONN_LDAP_PORTNUMBER, m_aNFPortNumber.GetValue()));
             bChangedSomething = sal_True;
         }
-        if (m_aNFRowCount.GetValue() != m_aNFRowCount.GetSavedValue())
+        if ( m_aNFRowCount.GetValue() != m_aNFRowCount.GetSavedValue() )
         {
             _rSet.Put(SfxInt32Item(DSID_CONN_LDAP_ROWCOUNT, m_aNFRowCount.GetValue()));
             bChangedSomething = sal_True;
@@ -1527,74 +1602,3 @@ namespace dbaui
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.21  2002/11/21 15:23:00  oj
- *  #105213# impl new feature of rown mysql driver page
- *
- *  Revision 1.20  2002/11/15 12:28:32  oj
- *  #105175# insert none for empty string
- *
- *  Revision 1.19  2002/10/15 09:52:21  oj
- *  #98982# disable thousand seperator
- *
- *  Revision 1.18  2002/08/30 06:05:15  oj
- *  #102756# move checkbox inside invalid class
- *
- *  Revision 1.17  2002/08/26 08:53:54  oj
- *  #102576# move chweckbox to fixedline
- *
- *  Revision 1.16  2002/08/19 07:40:35  oj
- *  #99473# change string resource files
- *
- *  Revision 1.15  2002/07/26 09:33:29  oj
- *  #95146# new controls inserted for auto retrieving
- *
- *  Revision 1.14  2002/07/09 12:39:05  oj
- *  #99921# check if datasource allows to check names
- *
- *  Revision 1.13  2002/04/30 15:47:28  fs
- *  #97118# remove user/password - not used at the moment
- *
- *  Revision 1.12  2002/03/22 09:05:42  oj
- *  #98142# remove charset for jdbc drivers
- *
- *  Revision 1.11  2002/03/14 15:14:36  fs
- *  #97788# Big5-HKSCS only when asian languages are enabled
- *
- *  Revision 1.10  2002/03/14 10:22:18  fs
- *  #97788# allow Big5-HKSCS only if asian functionallity is enabled
- *
- *  Revision 1.9  2001/08/30 15:14:33  fs
- *  #91731# adjustUTF : InsertEntry instead of RemoveEntry
- *
- *  Revision 1.8  2001/06/25 08:28:43  oj
- *  #88699# new control for ldap rowcount
- *
- *  Revision 1.7  2001/05/31 11:37:57  oj
- *  #87149# correct ldap protocol
- *
- *  Revision 1.6  2001/05/29 13:11:52  oj
- *  #87149# addressbook ui impl
- *
- *  Revision 1.5  2001/05/23 14:16:42  oj
- *  #87149# new helpids
- *
- *  Revision 1.4  2001/04/27 08:07:31  fs
- *  #86370# disallow UTF-8 for dBase and text data sources
- *
- *  Revision 1.3  2001/04/20 13:38:06  oj
- *  #85736# new checkbox for odbc
- *
- *  Revision 1.2  2001/02/05 15:42:07  fs
- *  enlargen the tab pages -> some redesigns
- *
- *  Revision 1.1  2001/01/26 16:14:12  fs
- *  initial checkin - administration tab pages used for special DSN types
- *
- *
- *  Revision 1.0 26.01.01 10:41:45  fs
- ************************************************************************/
-

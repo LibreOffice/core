@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-26 10:49:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,10 +102,10 @@ namespace dbaui
 
         virtual ::com::sun::star::lang::Locale  GetLocale() const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const;
-        virtual const OTypeInfo*    getTypeInfo(sal_Int32 _nPos);
+        virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos);
         virtual const OTypeInfoMap* getTypeInfo() const;
-        virtual sal_Bool isAutoIncrementValueEnabled() const;
-        virtual ::rtl::OUString getAutoIncrementValue() const;
+        virtual sal_Bool            isAutoIncrementValueEnabled() const;
+        virtual ::rtl::OUString     getAutoIncrementValue() const;
 
     public:
         OWizTypeSelectControl(Window* pParent, OTableDesignHelpBar* pHelpBar=NULL);
@@ -160,6 +160,7 @@ namespace dbaui
         Image                   m_imgPKey;
         SvStream*               m_pParserStream; // stream to read the tokens from or NULL
         ::rtl::OUString         m_sAutoIncrementValue;
+        sal_Int32               m_nDisplayRow;
         sal_Bool                m_bAutoIncrementEnabled;
 
         void                    fillColumnList(sal_uInt32 nRows);
@@ -175,6 +176,8 @@ namespace dbaui
 
         OWizTypeSelect(Window* pParent,SvStream*    _pStream = NULL);
         virtual ~OWizTypeSelect();
+
+        inline void setDisplayRow(sal_Int32 _nRow) { m_nDisplayRow = _nRow - 1; }
 
     };
 }

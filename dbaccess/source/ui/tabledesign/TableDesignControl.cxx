@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignControl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:45:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,10 +200,10 @@ void OTableRowView::Command(const CommandEvent& rEvt)
                 switch (aContextMenu.Execute(this, rEvt.GetMousePosPixel()))
                 {
                     case SID_CUT:
-                        Cut();
+                        cut();
                         break;
                     case SID_COPY:
-                        Copy();
+                        copy();
                         break;
                     case SID_PASTE:
                         Paste( nRow );
@@ -234,20 +234,20 @@ void OTableRowView::Command(const CommandEvent& rEvt)
 }
 
 //------------------------------------------------------------------------------
-void OTableRowView::Cut()
+void OTableRowView::cut()
 {
     CopyRows();
     DeleteRows();
 }
 
 //------------------------------------------------------------------------------
-void OTableRowView::Copy()
+void OTableRowView::copy()
 {
     CopyRows();
 }
 
 //------------------------------------------------------------------------------
-void OTableRowView::Paste()
+void OTableRowView::paste()
 {
     OSL_ENSURE(0,"OTableRowView::Paste : (pseudo-) abstract method called !");
 }

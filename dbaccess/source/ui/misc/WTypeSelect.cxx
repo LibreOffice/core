@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-10 09:17:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ Reference< XNumberFormatter > OWizTypeSelectControl::GetFormatter() const
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->GetFormatter();
 }
 // -----------------------------------------------------------------------------
-const OTypeInfo*    OWizTypeSelectControl::getTypeInfo(sal_Int32 _nPos)
+TOTypeInfoSP    OWizTypeSelectControl::getTypeInfo(sal_Int32 _nPos)
 {
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->getDestTypeInfo(_nPos);
 }
@@ -291,6 +291,7 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent,SvStream*   _pStream)
                ,m_pbAuto( this, ModuleRes( PB_AUTO ) )
                ,m_pParserStream(_pStream)
                ,m_bAutoIncrementEnabled(sal_False)
+               ,m_nDisplayRow(0)
 {
     DBG_CTOR(OWizTypeSelect,NULL);
     m_lbColumnNames.SetSelectHdl(LINK(this,OWizTypeSelect,ColumnSelectHdl));
@@ -378,7 +379,8 @@ void OWizTypeSelect::ActivatePage( )
     Reset();
     m_bFirstTime = bOldFirstTime;
 
-    m_lbColumnNames.SelectEntryPos(0);
+    m_lbColumnNames.SelectEntryPos(m_nDisplayRow);
+    m_nDisplayRow = 0;
     m_lbColumnNames.GetSelectHdl().Call(&m_lbColumnNames);
 }
 // -----------------------------------------------------------------------
@@ -398,7 +400,8 @@ void OWizTypeSelect::EnableAuto(sal_Bool bEnable)
 //------------------------------------------------------------------------------
 IMPL_LINK( OWizTypeSelect, ButtonClickHdl, Button *, pButton )
 {
-    m_pParent->CheckColumns();
+    sal_Int32 nBreakPos;
+    m_pParent->CheckColumns(nBreakPos);
     fillColumnList(m_etAuto.GetText().ToInt32());
 
     ActivatePage();
@@ -423,7 +426,6 @@ void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr,sal_uInt1
     String sColumnName = GetEntry(_nPos);
     RemoveEntry(_nPos);
     _pFieldDescr->SetPrimaryKey(_bSet);
-    _pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
     if( _bSet )
         InsertEntry(sColumnName,((OWizTypeSelect*)GetParent())->m_imgPKey,_nPos);
     else if( _pFieldDescr->getTypeInfo()->bNullable )

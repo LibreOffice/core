@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignControl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:18:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,12 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
+#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
+#include "IClipBoardTest.hxx"
+#endif
+#ifndef DBAUI_TYPEINFO_HXX
+#include "TypeInfo.hxx"
+#endif
 
 #define TABPAGESIZE 70
 namespace dbaui
@@ -79,6 +85,7 @@ namespace dbaui
     class OTypeInfo;
     //==================================================================
     class OTableRowView : public ::svt::EditBrowseBox
+                        ,public IClipboardTest
     {
         friend class OTableDesignUndoAct;
 
@@ -96,7 +103,7 @@ namespace dbaui
         OTableRowView(Window* pParent);
         virtual ~OTableRowView();
 
-        virtual void                SetData( long nRow, USHORT nColId, const OTypeInfo* _pTypeInfo ) = 0;
+        virtual void                SetData( long nRow, USHORT nColId, const TOTypeInfoSP& _pTypeInfo ) = 0;
         virtual void                SetData( long nRow, USHORT nColId, const ::com::sun::star::uno::Any& _rNewData ) = 0;
         virtual ::com::sun::star::uno::Any          GetData( long nRow, USHORT nColId ) = 0;
         virtual void                SetControlText( long nRow, USHORT nColId, const String& rText ) = 0;
@@ -106,9 +113,10 @@ namespace dbaui
 
         USHORT  GetCurUndoActId(){ return m_nCurUndoActId; }
 
-        virtual void Cut();
-        virtual void Copy();
-        virtual void Paste();
+        // IClipboardTest
+        virtual void cut();
+        virtual void copy();
+        virtual void paste();
 
     protected:
         void Paste( long nRow );

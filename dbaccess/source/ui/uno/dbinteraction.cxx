@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:54:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,32 +436,4 @@ namespace dbaui
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.7  2001/05/17 09:09:44  fs
- *  #86509# acquire the solar mutex in all implHandle methods (needed for opening the dialogs)
- *
- *  Revision 1.6  2001/01/05 12:16:07  fs
- *  adjusted the implementation name
- *
- *  Revision 1.5  2000/12/15 15:48:13  fs
- *  #82151# two instances of the registration helper module - one for every library in this project
- *
- *  Revision 1.4  2000/11/08 11:01:05  fs
- *  set the account only the the requests states that there is an account ...
- *
- *  Revision 1.3  2000/10/26 18:08:16  fs
- *  handling of parameter requests
- *
- *  Revision 1.2  2000/10/26 07:32:32  fs
- *  special login request text, with interpreting the ServerName as data source name
- *
- *  Revision 1.1  2000/10/25 12:59:42  fs
- *  initial checkin - InteractionHandler for common database related interaction requests
- *
- *
- *  Revision 1.0 25.10.00 10:18:21  fs
- ************************************************************************/
 

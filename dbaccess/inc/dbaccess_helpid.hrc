@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:43:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,12 @@
 #define HID_DSADMIN_PAGE_MYSQL                      (HID_DBACCESS_START + 231)
 #define HID_TAB_PAGE_TABLEPRIVILEGES                (HID_DBACCESS_START + 232)
 
+#define HID_DSADMIN_PAGE_USERDRIVER                 (HID_DBACCESS_START + 233)
+#define HID_DSADMIN_USER_DEFINED                    (HID_DBACCESS_START + 234)
+#define HID_DSADMIN_USERDEF_OPTIONS                 (HID_DBACCESS_START + 235)
+#define HID_DSADMIN_CHARSET_USERDEF                 (HID_DBACCESS_START + 236)
+
+
 
 // don't forget to update the file util/hidother.src
 
@@ -329,25 +335,4 @@
 
 #endif // _DBA_DBACCESS_HELPID_HRC_
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.50  2002/07/25 06:28:50  oj
- *  #100280# #95146# new helpids for report and autoincrement fields
- *
- *  Revision 1.49  2002/07/09 12:54:58  oj
- *  #99921# check if datasource allows to check names
- *
- *  Revision 1.48  2002/07/09 07:41:23  oj
- *  #96306# remove unused helpids
- *
- *  Revision 1.47  2002/07/04 14:45:50  jmarmion
- *  #100796##100798# insert new helpids
- *
- *  Revision 1.46  2002/02/27 10:20:16  oj
- *  #97666##97667# insert new helpids and unique ids
- *
- *
- *  Revision 1.0 30.10.00 14:03:48  fs
- ************************************************************************/
 

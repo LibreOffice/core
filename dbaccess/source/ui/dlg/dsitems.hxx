@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsitems.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:23:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,47 +113,4 @@
 #define DSID_LAST_ITEM_ID   DSID_AUTORETRIEVEENABLED
 
 #endif // _DBAUI_DATASOURCEITEMS_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.12  2002/07/25 07:00:13  oj
- *  #95146# new defines for auto fields
- *
- *  Revision 1.11  2002/07/09 12:39:11  oj
- *  #99921# check if datasource allows to check names
- *
- *  Revision 1.10  2001/06/25 08:27:36  oj
- *  #88699# new control for ldap rowcount
- *
- *  Revision 1.9  2001/05/29 13:11:52  oj
- *  #87149# addressbook ui impl
- *
- *  Revision 1.8  2001/04/20 13:38:06  oj
- *  #85736# new checkbox for odbc
- *
- *  Revision 1.7  2001/03/27 07:34:29  oj
- *  impl new page for adabas
- *
- *  Revision 1.6  2001/02/05 13:57:41  fs
- *  #83430# +DSID_DATASOURCE_UNO
- *
- *  Revision 1.5  2000/10/20 09:53:17  fs
- *  handling for the SuppresVersionColumns property of a data source
- *
- *  Revision 1.4  2000/10/12 16:20:42  fs
- *  new implementations ... still under construction
- *
- *  Revision 1.3  2000/10/11 11:31:03  fs
- *  new implementations - still under construction
- *
- *  Revision 1.2  2000/10/09 12:39:29  fs
- *  some (a lot of) new imlpementations - still under development
- *
- *  Revision 1.1  2000/10/05 10:05:55  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 22.09.00 08:10:45  fs
- ************************************************************************/
 

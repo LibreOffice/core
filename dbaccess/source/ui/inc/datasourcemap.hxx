@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasourcemap.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-25 16:02:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,11 +314,4 @@ namespace dbaui
 //.........................................................................
 
 #endif DBAUI_DATASOURCEMAP_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 25.06.01 16:32:23  fs
- ************************************************************************/
 

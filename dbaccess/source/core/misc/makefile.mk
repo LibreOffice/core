@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: fs $ $Date: 2002-03-04 11:53:41 $
+#   last change: $Author: hr $ $Date: 2003-03-19 17:52:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ SLOFILES=	\
         $(SLO)$/sdbcoretools.obj				\
         $(SLO)$/commandbase.obj				\
         $(SLO)$/configurationflushable.obj	\
+        $(SLO)$/propertyhelper.obj			\
         $(SLO)$/services.obj				\
         $(SLO)$/userinformation.obj
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-15 09:00:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,20 +473,20 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     for(;aIter != m_pColumnNames->end();++aIter)
     {
         if((*_rInsertRow)[aIter->second.first].isModified())
-            setParameter(i++,xParameter,(*_rInsertRow)[aIter->second.first]);
+            setParameter(i++,xParameter,(*_rInsertRow)[aIter->second.first],aIter->second.second);
     }
     // and then the values of the where condition
     aIter = (*m_pKeyColumnNames).begin();
     for(;aIter != (*m_pKeyColumnNames).end();++aIter,++i)
     {
-        setParameter(i,xParameter,(*_rOrginalRow)[aIter->second.first]);
+        setParameter(i,xParameter,(*_rOrginalRow)[aIter->second.first],aIter->second.second);
     }
 
     // now we have to set the index values
     ::std::vector<sal_Int32>::iterator aIdxColIter = aIndexColumnPositions.begin();
     for(;aIdxColIter != aIndexColumnPositions.end();++aIdxColIter,++i)
     {
-        setParameter(i,xParameter,(*_rOrginalRow)[*aIdxColIter]);
+        setParameter(i,xParameter,(*_rOrginalRow)[*aIdxColIter],aIter->second.second);
     }
 
      m_bUpdated = xPrep->executeUpdate() > 0;
@@ -545,7 +545,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
             if((*_rInsertRow)[aPosIter->second.first].isNull())
                 xParameter->setNull(i++,(*_rInsertRow)[aPosIter->second.first].getTypeKind());
             else
-                setParameter(i++,xParameter,(*_rInsertRow)[aPosIter->second.first]);
+                setParameter(i++,xParameter,(*_rInsertRow)[aPosIter->second.first],aPosIter->second.second);
         }
     }
 
@@ -719,7 +719,7 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
     aIter = (*m_pKeyColumnNames).begin();
     for(sal_Int32 i = 1;aIter != (*m_pKeyColumnNames).end();++aIter,++i)
     {
-        setParameter(i,xParameter,(*_rDeleteRow)[aIter->second.first]);
+        setParameter(i,xParameter,(*_rDeleteRow)[aIter->second.first],aIter->second.second);
     }
 
     m_bDeleted = xPrep->executeUpdate() > 0;
@@ -1392,69 +1392,5 @@ namespace dbaccess
         }
     }
 }
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.39  2002/10/11 07:23:16  oj
-    #i6529# use real table name instead of alias for update,delete and insert statements
-
-    Revision 1.38  2002/10/08 12:46:28  oj
-    #i3289# correct table name quoting so that in every situation the correct schema, catalog is used
-
-    Revision 1.37  2002/10/01 09:03:59  oj
-    #97524# remember column type for reuse
-
-    Revision 1.36  2002/08/30 08:59:39  oj
-    #100839# clear variables before use them again
-
-    Revision 1.35  2002/08/26 12:35:31  oj
-    #98671# change type for sequence to VARBINARY
-
-    Revision 1.34  2002/08/22 10:07:04  oj
-    #102394# insert even into key row if no auto increment exists
-
-    Revision 1.33  2002/07/25 06:38:47  oj
-    #95146# ask for generated values after insert new row
-
-    Revision 1.32  2002/03/18 13:59:43  oj
-    #97987# append index columns only when not null
-
-    Revision 1.31  2001/12/17 12:51:16  oj
-    #96052# quote tablename
-
-    Revision 1.30  2001/12/11 09:09:42  oj
-    #95779# use of alias tablename
-
-    Revision 1.29  2001/12/05 14:56:24  oj
-    #95610# fetch autoincrement values after insert with max
-
-    Revision 1.28  2001/11/29 16:35:26  oj
-    #95225# changes for bookmarkable resultset
-
-    Revision 1.27  2001/10/30 14:22:10  oj
-    #93939# add late ctor
-
-    Revision 1.26  2001/09/20 12:56:18  oj
-    #92232# fixes for BIGINT type and new property HELPTEXT
-
-    Revision 1.25  2001/09/13 10:38:45  hr
-    #92075#: can't take address from temporary
-
-    Revision 1.24  2001/08/14 11:51:34  oj
-    #91006# check index values as well
-
-    Revision 1.23  2001/07/24 13:25:25  oj
-    #89430# move ORowSetValue into dbtools
-
-    Revision 1.22  2001/07/19 09:29:22  oj
-    #86186# check parsetree for joins
-
-    Revision 1.21  2001/07/09 07:00:18  oj
-    #89364# provide the parameter row to the keyset
-
-    Revision 1.20  2001/07/05 11:58:54  oj
-    #87744# check non casesensitive for table privs
-
-------------------------------------------------------------------------*/
 
 

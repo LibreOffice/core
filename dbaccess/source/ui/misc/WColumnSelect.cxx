@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:51:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ void OWizColumnSelect::Reset()
         m_lbOrgColumnNames.SetEntryData(nPos,(*aIter)->second);
     }
 
-    m_pParent->clearDestColumns();
+    // m_pParent->clearDestColumns();
 
     if(m_lbOrgColumnNames.GetEntryCount())
         m_lbOrgColumnNames.SelectEntryPos(0);
@@ -360,8 +360,9 @@ void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
                                                                 _nMaxNameLen);
     OFieldDescription* pNewField = new OFieldDescription(*_pSrcField);
     pNewField->SetName(sConvertedName);
-    pNewField->SetType(m_pParent->convertType(_pSrcField->getTypeInfo()));
-    if(!m_pParent->supportsPrimaryKey())
+    sal_Bool bNotConvert;
+    pNewField->SetType(m_pParent->convertType(_pSrcField->getTypeInfo(),bNotConvert));
+    if ( !m_pParent->supportsPrimaryKey() )
         pNewField->SetPrimaryKey(sal_False);
 
     _pListbox->SetEntryData(_pListbox->InsertEntry(sConvertedName),pNewField);

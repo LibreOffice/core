@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 07:42:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef DBAUI_TYPEINFO_HXX
+#include "TypeInfo.hxx"
+#endif
 
 
 namespace dbaui
@@ -100,7 +103,7 @@ namespace dbaui
         inline OFieldDescription* GetActFieldDescr() const { return m_pActFieldDescr; }
         inline bool isValid() const { return GetActFieldDescr() != NULL; }
 
-        void SetFieldType( const OTypeInfo* _pType, sal_Bool _bForce = sal_False );
+        void SetFieldType( const TOTypeInfoSP& _pType, sal_Bool _bForce = sal_False );
 
         void SetPrimaryKey( BOOL bSet );
         BOOL IsPrimaryKey() const;

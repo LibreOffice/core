@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 17:07:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ String STR_TABLE_PRIV_NAME
     Text[ russian ] = "Èìÿ òàáëèöû";
     Text[ greek ] = "¼íïìá ğßíáêá";
     Text[ dutch ] = "Tabelnaam";
-    Text[ french ] = "Nom de table";
+    Text[ french ] = "Nom de la table";
     Text[ spanish ] = "Nombre de tabla";
     Text[ italian ] = "Nome tabella";
     Text[ danish ] = "Tabelnavn";
@@ -80,7 +80,7 @@ String STR_TABLE_PRIV_NAME
     Text[ polish ] = "Nazwa tabeli";
     Text[ portuguese_brazilian ] = "Tablename";
     Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«å";
-    Text[ korean ] = "ì‹œíŠ¸ ì´ë¦„";
+    Text[ korean ] = "í…Œì´ë¸” ì´ë¦„";
     Text[ chinese_simplified ] = "è¡¨æ ¼åç§°";
     Text[ chinese_traditional ] = "è¡¨æ ¼åç¨±";
     Text[ arabic ] = "ÇÓã ÇáÌÏæá";
@@ -127,7 +127,7 @@ String STR_TABLE_PRIV_DELETE
     Text[ greek ] = "ÄéáãñáöŞ";
     Text[ dutch ] = "Gegevens wissen";
     Text[ french ] = "Supprimer les données";
-    Text[ spanish ] = "Eliminar datos";
+    Text[ spanish ] = "Borrar datos";
     Text[ finnish ] = "Poista tietoja";
     Text[ italian ] = "Elimina dati";
     Text[ danish ] = "Slet data";
@@ -162,7 +162,7 @@ String STR_TABLE_PRIV_UPDATE
     Text[ polish ] = "Modyfikuj dane";
     Text[ portuguese_brazilian ] = "Update";
     Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›´";
-    Text[ korean ] = "ë°ì´í„° ìˆ˜ì •";
+    Text[ korean ] = "ë°ì´í„° ë³€ê²½";
     Text[ chinese_simplified ] = "æ›´æ”¹æ•°æ®";
     Text[ chinese_traditional ] = "è®Šæ›´è³‡æ–™";
     Text[ turkish ] = "Değiştir";
@@ -261,7 +261,7 @@ String STR_TABLE_PRIV_DROP
     Text[ greek ] = "Droping";
     Text[ dutch ] = "Structuur wissen";
     Text[ french ] = "Supprimer la structure";
-    Text[ spanish ] = "Eliminar estructura";
+    Text[ spanish ] = "Borrar la estructura";
     Text[ finnish ] = "Pudota rakenne";
     Text[ italian ] = "Elimina struttura";
     Text[ danish ] = "Slet struktur";
@@ -277,6 +277,12 @@ String STR_TABLE_PRIV_DROP
     Text[ catalan ] = "Elimina l'estructura";
     Text[ thai ] = "à¸›à¸¥à¹ˆà¸­à¸¢à¹‚à¸„à¸£à¸‡à¸ªà¸£à¹‰à¸²à¸‡";
 };
+
+
+
+
+
+
 
 
 

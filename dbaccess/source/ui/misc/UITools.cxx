@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-29 12:29:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,14 +405,15 @@ void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< 
 }
 // -----------------------------------------------------------------------------
 
-const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
+TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                                sal_Int32 _nType,
                                const ::rtl::OUString& _sTypeName,
                                sal_Int32 _nPrecision,
                                sal_Int32 _nScale,
+                               sal_Bool _bAutoIncrement,
                                sal_Bool& _brForceToType)
 {
-    const OTypeInfo* pTypeInfo = NULL;
+    TOTypeInfoSP pTypeInfo;
     _brForceToType = sal_False;
     // search for type
     ::std::pair<OTypeInfoMap::const_iterator, OTypeInfoMap::const_iterator> aPair = _rTypeInfo.equal_range(_nType);
@@ -423,15 +424,17 @@ const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
         {
             // search the best matching type
     #ifdef DBG_UTIL
-            ::rtl::OUString sDBTypeName = aIter->second->aTypeName;
-            sal_Int32       nDBTypePrecision = aIter->second->nPrecision;
-            sal_Int32       nDBTypeScale = aIter->second->nMaximumScale;
+            ::rtl::OUString sDBTypeName         = aIter->second->aTypeName;
+            sal_Int32       nDBTypePrecision    = aIter->second->nPrecision;
+            sal_Int32       nDBTypeScale        = aIter->second->nMaximumScale;
+            sal_Bool        bDBAutoIncrement    = aIter->second->bAutoIncrement;
     #endif
             if  (   (   !_sTypeName.getLength()
                     ||  (aIter->second->aTypeName.equalsIgnoreAsciiCase(_sTypeName))
                     )
                 &&  (aIter->second->nPrecision      >= _nPrecision)
                 &&  (aIter->second->nMaximumScale   >= _nScale)
+                &&  (aIter->second->bAutoIncrement  == _bAutoIncrement)
                 )
                 break;
         }
@@ -440,10 +443,13 @@ const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
         {
             for(aIter = aPair.first; aIter != aPair.second; ++aIter)
             {
+                sal_Int32 nPrec = aIter->second->nPrecision;
+                sal_Int32 nScale = aIter->second->nMaximumScale;
                 // search the best matching type (now comparing the local names)
                 if  (   (aIter->second->aLocalTypeName.equalsIgnoreAsciiCase(_sTypeName))
-                    &&  (aIter->second->nPrecision      >= _nPrecision)
-                    &&  (aIter->second->nMaximumScale   >= _nScale)
+                    &&  (nPrec  >= _nPrecision)
+                    &&  (nScale >= _nScale)
+                    &&  (aIter->second->bAutoIncrement  == _bAutoIncrement)
                     )
                 {
 // we can not assert here because we could be in d&d
@@ -473,8 +479,56 @@ const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                 +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
                 +=  ::rtl::OString(")! Defaulting to the first matching type.")).getStr());
 */
-            pTypeInfo = aPair.first->second;
-            _brForceToType = sal_True;
+            for(aIter = aPair.first; aIter != aPair.second; ++aIter)
+            {
+                // search the best matching type (now comparing the local names)
+#ifdef DBG_UTIL
+                ::rtl::OUString sDBTypeName = aIter->second->aTypeName;
+#endif
+                sal_Int32 nPrec = aIter->second->nPrecision;
+                sal_Int32 nScale = aIter->second->nMaximumScale;
+                if  (   (nPrec  >= _nPrecision)
+                    &&  (nScale >= _nScale)
+                    &&  (aIter->second->bAutoIncrement  == _bAutoIncrement)
+                    )
+                    break;
+            }
+        }
+        if (aIter == aPair.second)
+        {
+            if ( _bAutoIncrement )
+            {
+                for(aIter = aPair.first; aIter != aPair.second; ++aIter)
+                {
+                    // search the best matching type (now comparing the local names)
+#ifdef DBG_UTIL
+                    ::rtl::OUString sDBTypeName = aIter->second->aTypeName;
+#endif
+                    sal_Int32 nScale = aIter->second->nMaximumScale;
+                    if  (   (nScale >= _nScale)
+                        &&  (aIter->second->bAutoIncrement  == _bAutoIncrement)
+                        )
+                        break;
+                }
+                if ( aIter == aPair.second )
+                {
+                    // try it without the auto increment flag
+                    pTypeInfo = getTypeInfoFromType(_rTypeInfo,
+                                   _nType,
+                                   _sTypeName,
+                                   _nPrecision,
+                                   _nScale,
+                                   sal_False,
+                                   _brForceToType);
+                }
+                else
+                    pTypeInfo = aIter->second;
+            }
+            else
+            {
+                pTypeInfo = aPair.first->second;
+                _brForceToType = sal_True;
+            }
         }
         else
             pTypeInfo = aIter->second;
@@ -483,17 +537,16 @@ const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
     {
         ::comphelper::TStringMixEqualFunctor aCase(sal_False);
         // search for typeinfo where the typename is equal _sTypeName
-        OTypeInfoMap::const_iterator aFind = ::std::find_if(_rTypeInfo.begin(),
-                                                            _rTypeInfo.end(),
-                                                            ::std::compose1(
-                                                                ::std::bind2nd(aCase, _sTypeName),
-                                                                ::std::compose1(
-                                                                    ::std::mem_fun(&OTypeInfo::getDBName),
-                                                                    ::std::select2nd<OTypeInfoMap::value_type>())
-                                                                )
-                                                            );
-        if(aFind != _rTypeInfo.end())
-            pTypeInfo = aFind->second;
+        OTypeInfoMap::const_iterator aIter = _rTypeInfo.begin();
+        OTypeInfoMap::const_iterator aEnd  = _rTypeInfo.end();
+        for (; aIter != aEnd ; ++aIter)
+        {
+            if ( aCase(aIter->second->getDBName() , _sTypeName) )
+                break;
+        }
+
+        if ( aIter != aEnd )
+            pTypeInfo = aIter->second;
     }
 
 // we can not assert here because we could be in d&d
@@ -518,7 +571,7 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
         // Loop on the result set until we reach end of file
         while (xRs->next())
         {
-            OTypeInfo* pInfo = new OTypeInfo();
+            TOTypeInfoSP pInfo(new OTypeInfo());
             pInfo->aTypeName        = xRow->getString (1);
             pInfo->nType            = xRow->getShort (2);
             pInfo->nPrecision       = xRow->getInt (3);
@@ -1290,9 +1343,9 @@ void setEvalDateFormatForFormatter(Reference< XNumberFormatter >& _rxFormatter)
     }
 }
 // -----------------------------------------------------------------------------
-const OTypeInfo* queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo)
+TOTypeInfoSP queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo)
 {
-    const OTypeInfo* pTypeInfo = NULL;
+    TOTypeInfoSP pTypeInfo;
     // first we search for a type which supports autoIncrement
     OTypeInfoMap::const_iterator aIter = _rTypeInfo.begin();
     OTypeInfoMap::const_iterator aEnd  = _rTypeInfo.end();
@@ -1309,27 +1362,47 @@ const OTypeInfo* queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo)
                 pTypeInfo = aIter->second; // alternative
                 break;
             }
-            else if ( !pTypeInfo && aIter->second->nType == DataType::DOUBLE )
+            else if ( !pTypeInfo.get() && aIter->second->nType == DataType::DOUBLE )
                 pTypeInfo = aIter->second; // alternative
-            else if ( !pTypeInfo && aIter->second->nType == DataType::REAL )
+            else if ( !pTypeInfo.get() && aIter->second->nType == DataType::REAL )
                 pTypeInfo = aIter->second; // alternative
         }
     }
-    if ( !pTypeInfo ) // just a fallback
+    if ( !pTypeInfo.get() ) // just a fallback
         pTypeInfo = queryTypeInfoByType(DataType::VARCHAR,_rTypeInfo);
 
-    OSL_ENSURE(pTypeInfo,"checkColumns: cann't find a type which is useable as a key!");
+    OSL_ENSURE(pTypeInfo.get(),"checkColumns: cann't find a type which is useable as a key!");
     return pTypeInfo;
 }
 // -----------------------------------------------------------------------------
-const OTypeInfo* queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rTypeInfo)
+TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rTypeInfo)
 {
     OTypeInfoMap::const_iterator aIter = _rTypeInfo.find(_nDataType);
     if(aIter != _rTypeInfo.end())
         return aIter->second;
     OSL_ENSURE(0,"Wrong DataType supplied!");
-    return NULL;
+    return TOTypeInfoSP();
 }
+// -----------------------------------------------------------------------------
+::rtl::OUString getUserDefinedDriverNodeName()
+{
+    static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/UserDefinedDriverSettings"));
+    return s_sNodeName;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString getDriverTypeDisplayNodeName()
+{
+    static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DriverTypeDisplayName"));
+    return s_sNodeName;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString getDriverDsnPrefixNodeName()
+{
+    static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DriverDsnPrefix"));
+    return s_sNodeName;
+}
+// -----------------------------------------------------------------------------
+
 // .........................................................................
 }
 // .........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-26 18:08:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,14 +172,4 @@ namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_INTERACTION_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2000/10/25 12:59:51  fs
- *  initial checkin - InteractionHandler for common database related interaction requests
- *
- *
- *  Revision 1.0 25.10.00 10:18:27  fs
- ************************************************************************/
 

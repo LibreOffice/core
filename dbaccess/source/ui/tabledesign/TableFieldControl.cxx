@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldControl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-26 10:49:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ Reference< XNumberFormatter >   OTableFieldControl::GetFormatter() const
     return GetCtrl()->GetView()->getController()->getNumberFormatter();
 }
 // -----------------------------------------------------------------------------
-const OTypeInfo* OTableFieldControl::getTypeInfo(sal_Int32 _nPos)
+TOTypeInfoSP OTableFieldControl::getTypeInfo(sal_Int32 _nPos)
 {
     return GetCtrl()->GetView()->getController()->getTypeInfo(_nPos);
 }

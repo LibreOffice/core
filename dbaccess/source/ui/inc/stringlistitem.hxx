@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringlistitem.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:09:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,11 +103,4 @@ public:
 //.........................................................................
 
 #endif // _DBAUI_STRINGLISTITEM_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 02.10.00 10:57:48  fs
- ************************************************************************/
 

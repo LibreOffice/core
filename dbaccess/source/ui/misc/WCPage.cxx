@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-10 09:17:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,17 +411,18 @@ sal_Bool OCopyTable::checkAppendData()
         ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
         m_pParent->m_vColumnPos.reserve(pDestColumns->size()+1);
         m_pParent->m_vColumnTypes.reserve(pDestColumns->size()+1);
+        sal_Bool bNotConvert;
         for(sal_Int32 nPos = 1;aDestIter != pDestColumns->end();++aDestIter,++nPos)
         {
             m_pParent->m_vColumnPos.push_back( ODatabaseExport::TPositions::value_type(nPos,nPos) );
-            const OTypeInfo* pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo());
-            if(pTypeInfo)
+            TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo(),bNotConvert);
+            if ( pTypeInfo.get() )
                 m_pParent->m_vColumnTypes.push_back(pTypeInfo->nType);
             else
                 m_pParent->m_vColumnTypes.push_back(DataType::VARCHAR);
         }
     }
-    if(!m_pParent->m_xDestObject.is())
+    if ( !m_pParent->m_xDestObject.is() )
     {
         ErrorBox(this, ModuleRes(ERROR_INVALID_TABLE_NAME)).Execute();
         return sal_False;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:23:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,10 @@
 #ifndef DBAUI_USERADMIN_HXX
 #include "UserAdmin.hxx"
 #endif
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
+#endif
+
 
 #include <algorithm>
 #include <functional>
@@ -461,6 +465,16 @@ IMPL_LINK( ODbAdminDialog, OnAsyncSelectDetailsPage, void*, NOTINTERESTEDIN )
         case DST_ADDRESSBOOK: nDetailPageId = PAGE_LDAP; /* juest a guess */ break;
         case DST_MYSQL_ODBC :
         case DST_MYSQL_JDBC : nDetailPageId = PAGE_MYSQL; break;
+        case DST_USERDEFINE1:   /// first user defined driver
+        case DST_USERDEFINE2:
+        case DST_USERDEFINE3:
+        case DST_USERDEFINE4:
+        case DST_USERDEFINE5:
+        case DST_USERDEFINE6:
+        case DST_USERDEFINE7:
+        case DST_USERDEFINE8:
+        case DST_USERDEFINE9:
+        case DST_USERDEFINE10:nDetailPageId = PAGE_USERDRIVER; break;
     }
     if (nDetailPageId)
     {
@@ -667,6 +681,17 @@ void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
             static_cast<OUserAdmin&>(_rPage).setServiceFactory(m_xORB);
             static_cast<OUserAdmin&>(_rPage).SetAdminDialog(this);
             break;
+        case PAGE_DBASE:
+        case PAGE_JDBC:
+        case PAGE_ODBC:
+        case PAGE_TEXT:
+        case PAGE_ADABAS:
+        case PAGE_ADO:
+        case PAGE_MYSQL:
+        case PAGE_USERDRIVER:
+            static_cast<OCommonBehaviourTabPage&>(_rPage).setServiceFactory(m_xORB);
+            break;
+
     }
 
     AdjustLayout();
@@ -999,7 +1024,40 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
             }
             _pTabPage->disableConnectionURL();
         }
-        break;
+            break;
+        case DST_USERDEFINE1:   /// first user defined driver
+        case DST_USERDEFINE2:
+        case DST_USERDEFINE3:
+        case DST_USERDEFINE4:
+        case DST_USERDEFINE5:
+        case DST_USERDEFINE6:
+        case DST_USERDEFINE7:
+        case DST_USERDEFINE8:
+        case DST_USERDEFINE9:
+        case DST_USERDEFINE10:
+            {
+                ::utl::OConfigurationTreeRoot aUserDefinedDriverRoot = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
+                    m_xORB, ::dbaui::getUserDefinedDriverNodeName(), -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+
+                ::rtl::OUString sTitle;
+                if ( aUserDefinedDriverRoot.isValid() )
+                {
+                    Sequence< ::rtl::OUString > aDriverKeys = aUserDefinedDriverRoot.getNodeNames();
+                    const ::rtl::OUString* pDriverKeys = aDriverKeys.getConstArray();
+                    const ::rtl::OUString* pDriverKeysEnd = pDriverKeys + aDriverKeys.getLength();
+                    for (sal_Int32 i=DST_USERDEFINE1;pDriverKeys != pDriverKeysEnd && i <= _pTabPage->GetSelectedType(); ++pDriverKeys,++i)
+                        ;
+                    if ( pDriverKeys != pDriverKeysEnd )
+                    {
+                        ::utl::OConfigurationNode aThisDriverSettings = aUserDefinedDriverRoot.openNode(*pDriverKeys);
+
+                        aThisDriverSettings.getNodeValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DriverPageDisplayName"))) >>= sTitle;
+                    }
+                }
+                AddTabPage(PAGE_USERDRIVER, sTitle, OUserDriverDetailsPage::Create, 0, sal_False, 1);
+                m_aCurrentDetailPages.push(PAGE_USERDRIVER);
+            }
+            break;
     }
 
     if (bResetPasswordRequired)
@@ -1558,6 +1616,18 @@ const sal_Int32* ODbAdminDialog::getRelevantItems(const SfxItemSet& _rSet) const
                 static sal_Int32 nRelevantIds[] = { 0 };
                 pRelevantItems = nRelevantIds;
             }
+            break;
+        case DST_USERDEFINE1:   /// first user defined driver
+        case DST_USERDEFINE2:
+        case DST_USERDEFINE3:
+        case DST_USERDEFINE4:
+        case DST_USERDEFINE5:
+        case DST_USERDEFINE6:
+        case DST_USERDEFINE7:
+        case DST_USERDEFINE8:
+        case DST_USERDEFINE9:
+        case DST_USERDEFINE10:
+            pRelevantItems = OUserDriverDetailsPage::getDetailIds();
             break;
     }
     return pRelevantItems;
@@ -2157,136 +2227,4 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.82  2002/11/15 12:29:30  oj
- *  #105175# check size of poolitems
- *
- *  Revision 1.81  2002/08/19 07:40:36  oj
- *  #99473# change string resource files
- *
- *  Revision 1.80  2002/07/25 07:01:22  oj
- *  #95146# new SfxItems for autoinc
- *
- *  Revision 1.79  2002/07/09 12:43:20  oj
- *  #99921# check if datasource allows to check names
- *
- *  Revision 1.78  2002/01/30 14:15:30  fs
- *  #97122# when selecting a data source, make sure it is no no-op causing unnecessary things
- *
- *  Revision 1.77  2001/10/26 16:36:25  hr
- *  #92924#: includes
- *
- *  Revision 1.76  2001/10/24 10:31:05  fs
- *  #93684# in implTranslateProperty, check for the correct SfxItem types (in case a data source has invalid indirect property types)
- *
- *  Revision 1.75  2001/09/18 15:07:35  fs
- *  #65293# syntax for SOLS
- *
- *  Revision 1.74  2001/09/11 15:08:33  fs
- *  #91304# disableUI before applying the changes in OK
- *
- *  Revision 1.73  2001/08/30 16:12:08  fs
- *  #88427# +OnValidateName
- *
- *  Revision 1.72  2001/08/27 06:57:23  oj
- *  #90015# some speedup's
- *
- *  Revision 1.71  2001/08/23 14:48:13  fs
- *  #88637# corrected error message
- *
- *  Revision 1.70  2001/08/14 14:11:33  fs
- *  #86945# +getCurrentDataSource
- *
- *  Revision 1.69  2001/08/01 08:32:04  fs
- *  #88530# if the address book type is initially selected, default the sub-type to something meaningfull
- *
- *  Revision 1.68  2001/07/31 16:01:33  fs
- *  #88530# changes to operate the dialog in a mode where no type change is possible
- *
- *  Revision 1.67  2001/07/30 11:31:52  fs
- *  #88530# changes to allow operating the dialog in a 'edit one single data source only' mode
- *
- *  Revision 1.66  2001/07/25 14:05:44  oj
- *  #90201# check ldap name
- *
- *  Revision 1.65  2001/07/17 07:30:50  oj
- *  #89533# GetMainURL changed
- *
- *  Revision 1.64  2001/07/11 10:10:30  oj
- *  #87257# change GetUILanguage
- *
- *  Revision 1.63  2001/07/06 11:33:29  oj
- *  #89359# now dialog saves password temp
- *
- *  Revision 1.62  2001/06/25 16:04:40  fs
- *  #88004# outsourced ODataSourceMap and ODataSourceSelector / adjusted fillDatasourceInfo so that settings without and UI are do not survive the method
- *
- *  Revision 1.61  2001/06/25 08:27:18  oj
- *  #88699# new control for ldap rowcount
- *
- *  Revision 1.60  2001/06/20 13:43:42  fs
- *  #88447# corrected order of detail pages
- *
- *  Revision 1.59  2001/06/20 07:08:33  oj
- *  #88434# new page for user admin
- *
- *  Revision 1.58  2001/06/14 14:18:10  fs
- *  #88242# corrected adding/removing detail pages
- *
- *  Revision 1.57  2001/06/07 15:12:36  fs
- *  #87934# removed a wrong assertion
- *
- *  Revision 1.56  2001/06/01 08:41:31  oj
- *  #87149# changed order for tabpages
- *
- *  Revision 1.55  2001/05/31 11:37:57  oj
- *  #87149# correct ldap protocol
- *
- *  Revision 1.54  2001/05/31 11:09:07  oj
- *  #87149# change subprotocol and Propertynames
- *
- *  Revision 1.53  2001/05/29 13:33:12  oj
- *  #87149# addressbook ui impl
- *
- *  Revision 1.52  2001/05/29 10:18:26  fs
- *  #86082# set the service factory on the general page
- *
- *  Revision 1.51  2001/05/23 14:16:42  oj
- *  #87149# new helpids
- *
- *  Revision 1.50  2001/05/15 15:07:06  fs
- *  #86991# save the current (modified) settings when inserting a new data source
- *
- *  Revision 1.49  2001/05/15 11:25:35  fs
- *  #86996# use the connection pool instead of the driver manager
- *
- *  Revision 1.48  2001/05/10 13:37:04  fs
- *  #86223# restore view settings after applying (no matter if syncronously or asynchronously / +successfullyConnected to make the password persistent
- *
- *  Revision 1.47  2001/04/27 15:47:03  fs
- *  resetPages: do a ShowPage(GENERAL) before removing pages
- *
- *  Revision 1.46  2001/04/26 11:40:21  fs
- *  file is alive, again - added support for data source associated bookmarks
- *
- *  Revision 1.45  2001/04/20 13:38:06  oj
- *  #85736# new checkbox for odbc
- *
- *  Revision 1.44  2001/04/04 10:38:43  oj
- *  reading uninitialized memory
- *
- *  Revision 1.43  2001/03/30 11:54:34  fs
- *  #65293# missing include
- *
- *  Revision 1.42  2001/03/29 07:44:43  fs
- *  #84826# +clearPassword
- *
- *  Revision 1.41  2001/03/29 07:34:00  oj
- *  dispose connection in dtor and type casts
- *
- *  Revision 1.0 20.09.00 10:55:58  fs
- ************************************************************************/
 

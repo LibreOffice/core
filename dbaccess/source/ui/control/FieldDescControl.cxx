@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-04 08:16:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,9 @@
 #include <memory>
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
+#endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
 #endif
 
 using namespace dbaui;
@@ -862,7 +865,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
     if(pListBox == m_pType)
     {
         pListBox->SaveValue();
-        const OTypeInfo* pTypeInfo = getTypeInfo(m_pType->GetSelectEntryPos());
+        TOTypeInfoSP pTypeInfo = getTypeInfo(m_pType->GetSelectEntryPos());
         pActFieldDescr->SetType(pTypeInfo);
 
         DisplayData(pActFieldDescr);
@@ -1484,7 +1487,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         DeactivateAggregate( tpColumnName );
         DeactivateAggregate( tpType );
         DeactivateAggregate( tpAutoIncrementValue );
-        m_pPreviousType = NULL;
+        m_pPreviousType = TOTypeInfoSP();
         //////////////////////////////////////////////////////////////////////
         // Zeiger des gespeicherten Focus zuruecksetzen
         pLastFocusWindow = NULL;
@@ -1494,14 +1497,14 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::AddWindow));
 
-    const OTypeInfo* pFieldType = NULL;
+    TOTypeInfoSP pFieldType;
     if( pFieldDescr )
         pFieldType = pFieldDescr->getTypeInfo();
 
     ActivateAggregate( tpColumnName );
     ActivateAggregate( tpType );
 
-    OSL_ENSURE(pFieldType,"We need a type information here!");
+    OSL_ENSURE(pFieldType.get(),"We need a type information here!");
     //////////////////////////////////////////////////////////////////////
     // Wenn sich der Typ geaendert hat, Controls austauschen
     if( m_pPreviousType != pFieldType )
@@ -1545,7 +1548,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         if (pFieldType->nPrecision)
         {
             ActivateAggregate( tpLength );
-            pLength->SetMax(pFieldType->nPrecision);
+            pLength->SetMax(::std::max<sal_Int32>(pFieldType->nPrecision,pFieldDescr->GetPrecision()));
             pLength->SetSpecialReadOnly(pFieldType->aCreateParams.getLength()==0);
         }
         else
@@ -1554,7 +1557,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         if (pFieldType->nMaximumScale)
         {
             ActivateAggregate( tpScale );
-            pScale->SetMax(pFieldType->nMaximumScale);
+            pScale->SetMax(::std::max<sal_Int32>(pFieldType->nMaximumScale,pFieldDescr->GetScale()));
             pScale->SetMin(pFieldType->nMinimumScale);
             pScale->SetSpecialReadOnly(pFieldType->aCreateParams.getLength()==0);
         }
@@ -1575,7 +1578,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
                 if (pFieldType->nPrecision)
                 {
                     ActivateAggregate( tpTextLen );
-                    pTextLen->SetMax(pFieldType->nPrecision);
+                    pTextLen->SetMax(::std::max<sal_Int32>(pFieldType->nPrecision,pFieldDescr->GetPrecision()));
                     pTextLen->SetSpecialReadOnly(pFieldType->aCreateParams.getLength()==0);
                 }
                 else
@@ -1647,9 +1650,9 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         {
             DeactivateAggregate( tpRequired );
         }
-        else if(!pAutoIncrement && pFieldType)
+        else if ( !pAutoIncrement && pFieldType.get() )
         {
-            if(pFieldType->bNullable)
+            if ( pFieldType->bNullable )
                 ActivateAggregate( tpRequired );
             else
                 DeactivateAggregate( tpRequired );
@@ -1691,12 +1694,12 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         String sDef = BoolStringUI(::comphelper::getString(pFieldDescr->GetControlDefault()));
 
         // sicher stellen das <<keiner>> nur vorhanden ist, wenn das Feld NULL sein darf
-        if(pFieldType && !pFieldType->bNullable || !pFieldDescr->IsNullable() )
+        if ( pFieldType.get() && !pFieldType->bNullable || !pFieldDescr->IsNullable() )
         {
             pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS); // der Typ sagt das
 
             pBoolDefault->RemoveEntry(String(ModuleRes(STR_VALUE_NONE)));
-            if (!sDef.Equals(aYes) && !sDef.Equals(aNo))
+            if ( !sDef.Equals(aYes) && !sDef.Equals(aNo) )
                 pBoolDefault->SelectEntryPos(1);  // nein als Default
             else
                 pBoolDefault->SelectEntry(sDef);
@@ -1934,10 +1937,8 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
     else
         pFieldDescr->SetIsNullable( ColumnValue::NULLABLE );
 
-    if(pAutoIncrement && pAutoIncrement->GetSelectEntryPos() == 0 )
-        pFieldDescr->SetAutoIncrement( sal_True );
-    else
-        pFieldDescr->SetAutoIncrement( sal_False );
+    if ( pAutoIncrement )
+        pFieldDescr->SetAutoIncrement( pAutoIncrement->GetSelectEntryPos() == 0 );
 
     if( pTextLen )
         pFieldDescr->SetPrecision( pTextLen->GetValue() );
@@ -2028,6 +2029,21 @@ sal_Bool OFieldDescControl::isCutAllowed()
     return bAllowed;
 }
 // -----------------------------------------------------------------------------
+sal_Bool OFieldDescControl::isPasteAllowed()
+{
+    sal_Bool bAllowed = (m_pActFocusWindow != NULL) &&
+                        (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
+                        m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
+                        m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
+                        m_pActFocusWindow == m_pAutoIncrementValue);
+    if ( bAllowed )
+    {
+        TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
+        bAllowed = aTransferData.HasFormat(SOT_FORMAT_STRING);
+    }
+    return bAllowed;
+}
+// -----------------------------------------------------------------------------
 void OFieldDescControl::cut()
 {
     if(isCutAllowed())
@@ -2036,7 +2052,7 @@ void OFieldDescControl::cut()
 // -----------------------------------------------------------------------------
 void OFieldDescControl::copy()
 {
-    if(isCutAllowed()) // this only checks if the focus window is valid
+    if(isCopyAllowed()) // this only checks if the focus window is valid
         reinterpret_cast<Edit*>(m_pActFocusWindow)->Copy();
 }
 // -----------------------------------------------------------------------------

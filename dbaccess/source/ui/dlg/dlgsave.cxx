@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-04 13:00:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,7 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
             aText.SearchAndReplace(String::CreateFromAscii("$#$"),m_aName);
             OSQLMessageBox aDlg(this, String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)), aText, bOverwrite ? WB_YES_NO : WB_OK, OSQLMessageBox::Query);
 
-            if(aDlg.Execute() == RET_YES)
+            if ( aDlg.Execute() == RET_YES && bOverwrite )
                 EndDialog(RET_OK);
         }
         else

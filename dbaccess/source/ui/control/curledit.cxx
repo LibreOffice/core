@@ -2,9 +2,9 @@
  *
  *  $RCSfile: curledit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-28 14:53:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,26 +187,4 @@ String OConnectionURLEdit::GetText() const
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.5  2001/08/16 13:35:33  hr
- *  #65293#: syntax
- *
- *  Revision 1.4  2001/08/15 13:17:57  oj
- *  #88644# insert some DBG's
- *
- *  Revision 1.3  2000/10/24 12:08:19  fs
- *  S/GetTextNoPrefix
- *
- *  Revision 1.2  2000/10/18 16:00:47  fs
- *  use the system's DialogColor as background for the fixed text - looks much better
- *
- *  Revision 1.1  2000/10/05 09:59:38  fs
- *  edit control for connection urls
- *
- *
- *  Revision 1.0 28.09.00 13:12:21  fs
- ************************************************************************/
 

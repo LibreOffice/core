@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:24:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,19 @@
 #ifndef _DBU_MISCRES_HRC_
 #include "dbumiscres.hrc"
 #endif
-
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
 
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::lang;
 //=========================================================================
 //= ODsnTypeCollection
 //=========================================================================
@@ -115,11 +122,54 @@ ODsnTypeCollection::~ODsnTypeCollection()
     DBG_ASSERT(0 == m_nLivingIterators, "ODsnTypeCollection::~ODsnTypeCollection : there are still living iterator objects!");
     DBG_DTOR(ODsnTypeCollection,NULL);
 }
+// -----------------------------------------------------------------------------
+void ODsnTypeCollection::initUserDriverTypes(const Reference< XMultiServiceFactory >& _rxORB)
+{
+    // read the user driver out of the configuration
+    // the config node where all pooling relevant info are stored under
+    ::utl::OConfigurationTreeRoot aUserDefinedDriverRoot = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
+        _rxORB, ::dbaui::getUserDefinedDriverNodeName(), -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+
+    if ( aUserDefinedDriverRoot.isValid() )
+    {
+        Sequence< ::rtl::OUString > aDriverKeys = aUserDefinedDriverRoot.getNodeNames();
+        const ::rtl::OUString* pDriverKeys = aDriverKeys.getConstArray();
+        const ::rtl::OUString* pDriverKeysEnd = pDriverKeys + aDriverKeys.getLength();
+        for (sal_Int32 i=0;pDriverKeys != pDriverKeysEnd && i <= DST_USERDEFINE10; ++pDriverKeys)
+        {
+            ::utl::OConfigurationNode aThisDriverSettings = aUserDefinedDriverRoot.openNode(*pDriverKeys);
+            if ( aUserDefinedDriverRoot.isValid() )
+            {
+                // read the needed information
+                ::rtl::OUString sDsnPrefix,sDsnTypeDisplayName;
+                aThisDriverSettings.getNodeValue(getDriverTypeDisplayNodeName()) >>= sDsnTypeDisplayName;
+                aThisDriverSettings.getNodeValue(getDriverDsnPrefixNodeName()) >>= sDsnPrefix;
+
+                m_aDsnTypesDisplayNames.push_back(sDsnTypeDisplayName);
+                m_aDsnPrefixes.push_back(sDsnPrefix);
+                m_aDsnTypes.push_back(static_cast<DATASOURCE_TYPE>(DST_USERDEFINE1 + i++));
+            }
+        }
+    }
+}
 
 //-------------------------------------------------------------------------
 DATASOURCE_TYPE ODsnTypeCollection::getType(const String& _rDsn)
 {
-    return implDetermineType(_rDsn);
+    DATASOURCE_TYPE eType = DST_UNKNOWN;
+    // look for user defined driver types
+    StringVector::iterator aIter = m_aDsnPrefixes.begin();
+    StringVector::iterator aEnd = m_aDsnPrefixes.end();
+    for (; aIter != aEnd; ++aIter)
+    {
+        if ( aIter->EqualsIgnoreCaseAscii(_rDsn,0, ::std::min<sal_Int32>(static_cast<sal_Int32>(_rDsn.Len()),aIter->Len())) )
+        {
+            size_t nPos = (aIter - m_aDsnPrefixes.begin());
+            if ( nPos < m_aDsnTypes.size() )
+                eType = m_aDsnTypes[nPos];
+        }
+    }
+    return eType;
 }
 
 //-------------------------------------------------------------------------
@@ -156,7 +206,7 @@ String ODsnTypeCollection::cutPrefix(const String& _rDsn)
 //-------------------------------------------------------------------------
 String ODsnTypeCollection::getTypeDisplayName(const String& _rDsn)
 {
-    return getTypeDisplayName(implDetermineType(_rDsn));
+    return getTypeDisplayName(getType(_rDsn));
 }
 
 //-------------------------------------------------------------------------
@@ -179,6 +229,16 @@ sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType)
 {
     switch (_eType)
     {
+        case DST_USERDEFINE1:   /// first user defined driver
+        case DST_USERDEFINE2:
+        case DST_USERDEFINE3:
+        case DST_USERDEFINE4:
+        case DST_USERDEFINE5:
+        case DST_USERDEFINE6:
+        case DST_USERDEFINE7:
+        case DST_USERDEFINE8:
+        case DST_USERDEFINE9:
+        case DST_USERDEFINE10:
         case DST_ADABAS:
         case DST_JDBC:
         case DST_MYSQL_ODBC:
@@ -295,7 +355,7 @@ sal_Int32 ODsnTypeCollection::implDetermineTypeIndex(DATASOURCE_TYPE _eType)
 //-------------------------------------------------------------------------
 sal_Int32 ODsnTypeCollection::implDetermineTypeIndex(const String& _rDsn)
 {
-    return implDetermineTypeIndex(implDetermineType(_rDsn));
+    return implDetermineTypeIndex(getType(_rDsn));
 }
 
 //-------------------------------------------------------------------------
@@ -455,53 +515,4 @@ ADDRESSBOOK_TYPE AddressBookTypes::getAddressType( const String& _rAddressURL )
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.14  2002/08/19 07:51:11  oj
- *  #99473# change string resource files
- *
- *  Revision 1.13  2001/08/16 13:00:02  hr
- *  #65293#: syntax
- *
- *  Revision 1.12  2001/08/15 13:16:25  oj
- *  #88644# insert some DBG's
- *
- *  Revision 1.11  2001/08/07 15:55:24  fs
- *  #88431# +isFileSystemBased
- *
- *  Revision 1.10  2001/08/01 08:32:49  fs
- *  #88530# getAddressType: allow for invalid URLs without assertion
- *
- *  Revision 1.9  2001/07/31 15:59:13  fs
- *  #88530# +AddressBookType(s)
- *
- *  Revision 1.8  2001/05/29 13:11:51  oj
- *  #87149# addressbook ui impl
- *
- *  Revision 1.7  2001/05/23 14:16:41  oj
- *  #87149# new helpids
- *
- *  Revision 1.6  2001/01/29 16:02:05  nn
- *  added DST_CALC
- *
- *  Revision 1.5  2001/01/04 11:20:23  fs
- *  #81485# +DST_ADO
- *
- *  Revision 1.4  2000/11/21 15:02:06  oj
- *  #80549# wrong dsn for text
- *
- *  Revision 1.3  2000/10/30 07:59:18  fs
- *  + hasAuthentification(DATASOURCE_TYPE)
- *
- *  Revision 1.2  2000/10/20 07:01:39  fs
- *  sdbc:text -> sdbc:flat:file
- *
- *  Revision 1.1  2000/10/05 10:09:11  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 26.09.00 08:05:35  fs
- ************************************************************************/
 

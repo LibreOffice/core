@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescGenWin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-31 07:47:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,11 @@ sal_Bool OFieldDescGenWin::isCopyAllowed()
 sal_Bool OFieldDescGenWin::isCutAllowed()
 {
     return (m_pFieldControl && m_pFieldControl->isCutAllowed());
+}
+// -----------------------------------------------------------------------------
+sal_Bool OFieldDescGenWin::isPasteAllowed()
+{
+    return (m_pFieldControl && m_pFieldControl->isPasteAllowed());
 }
 // -----------------------------------------------------------------------------
 void OFieldDescGenWin::cut()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetRow.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-05 14:10:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,40 @@ namespace dbaccess
     typedef ::vos::ORef< ORowSetValueVector >                       ORowSetRow;
     typedef ::std::vector< ORowSetRow >                             ORowSetMatrix;
 
+    class ORowSetOldRowHelper
+    {
+        oslInterlockedCount         m_refCount;
+        ORowSetRow                  m_aRow;
+
+        ORowSetOldRowHelper& operator=(const ORowSetOldRowHelper& _rRH);
+        ORowSetOldRowHelper(const ORowSetOldRowHelper& _rRh);
+    public:
+        ORowSetOldRowHelper() : m_refCount(0){}
+        ORowSetOldRowHelper(const ORowSetRow& _rRow)
+            : m_refCount(0)
+            , m_aRow(_rRow)
+        {}
+//      ORowSetOldRowHelper(const ORowSetOldRowHelper& _rRh)
+//          : m_refCount(0)
+//          , m_aRow(_rRh.m_aRow)
+//      {}
+
+        void acquire()
+        {
+            osl_incrementInterlockedCount( &m_refCount );
+        }
+        void release()
+        {
+            if (! osl_decrementInterlockedCount( &m_refCount ))
+                delete this;
+        }
+        inline ORowSetRow getRow() const { return m_aRow; }
+        inline void clearRow() { m_aRow = NULL; }
+        inline void setRow(const ORowSetRow& _rRow) { m_aRow = _rRow; }
+    };
+
+    typedef ::vos::ORef< ORowSetOldRowHelper >  TORowSetOldRowHelperRef;
+
     class ORowSetValueCompare
     {
         const ::com::sun::star::uno::Any& m_rAny;
@@ -106,27 +140,4 @@ namespace dbaccess
     };
 }
 #endif // DBACCESS_CORE_API_ROWSETROW_HXX
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/07/24 13:25:25  oj
-    #89430# move ORowSetValue into dbtools
-
-    Revision 1.3  2001/05/18 11:48:25  oj
-    #86528# size changes
-
-    Revision 1.2  2000/10/11 11:18:11  fs
-    replace unotools with comphelper
-
-    Revision 1.1.1.1  2000/09/19 00:15:38  hr
-    initial import
-
-    Revision 1.2  2000/09/18 14:52:47  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.1  2000/09/01 15:24:38  oj
-    rowset addon
-
-    Revision 1.0 27.07.2000 13:23:15  oj
-------------------------------------------------------------------------*/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-15 13:09:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,29 +332,4 @@ void OOdbcManagement::manageDataSources(void* _pParentSysWindowHandle)
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.6  2001/03/23 13:29:31  jl
- *  replaced: OSL_ENSHURE->OSL_ENSURE
- *
- *  Revision 1.5  2001/01/10 12:09:37  oj
- *  #82620# calling convention of windows changed
- *
- *  Revision 1.4  2000/10/30 15:36:51  fs
- *  don't append the description of the ODBC data source to the DSN name
- *
- *  Revision 1.3  2000/10/26 13:47:46  kz
- *  chg. cast & ifdef WIN
- *
- *  Revision 1.2  2000/10/26 13:11:36  obo
- *  #65293# cant compile for linux
- *
- *  Revision 1.1  2000/10/24 12:48:36  fs
- *  initial checkin - wrapping (system) data source related ODBC functionality
- *
- *
- *  Revision 1.0 24.10.00 10:14:13  fs
- ************************************************************************/
 

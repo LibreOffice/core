@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:40:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -979,29 +979,4 @@ namespace dbaui
 //......................................................................
 }   // namespace dbaui
 //......................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.14  2002/07/30 09:45:49  oj
- *  #101836# enable sql92 namechecking when needed!
- *
- *  Revision 1.13  2002/04/29 08:27:33  oj
- *  #98772# impl toolbox hi contrast
- *
- *  Revision 1.12  2001/11/05 10:12:52  oj
- *  #94031# set unique flag every time
- *
- *  Revision 1.11  2001/05/23 14:50:18  fs
- *  #86860# OnIndexSelected: don't cancel the editing of the previously selected index
- *
- *  Revision 1.10  2001/05/11 16:23:16  fs
- *  #86862# allow reset for new indexes - mapped a drop without confirmation
- *
- *  Revision 1.9  2001/05/11 15:22:33  fs
- *  #86788# recognize an active editing when closing / #86860# property check for index name conflicts
- *
- *
- *  Revision 1.0 07.03.01 12:16:06  fs
- ************************************************************************/
 

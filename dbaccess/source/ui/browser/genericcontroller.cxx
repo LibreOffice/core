@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-19 09:28:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1161,6 +1161,24 @@ void OGenericUnoController::openHelpAgent(sal_Int32 _nHelpId)
     {
         OSL_ENSURE(sal_False, "SbaTableQueryBrowser::openHelpAgent: caught an exception while executing the dispatch!");
     }
+}
+// -----------------------------------------------------------------------------
+Reference< ::com::sun::star::awt::XWindow> OGenericUnoController::getTopMostContainerWindow() const
+{
+    Reference< ::com::sun::star::awt::XWindow> xWindow;
+    // get the top most window
+    if ( m_xCurrentFrame.is() )
+    {
+        xWindow = m_xCurrentFrame->getContainerWindow();
+        Reference<XFrame> xFrame = m_xCurrentFrame;
+        while ( xFrame.is() && !xFrame->isTop() )
+        {
+            xFrame = Reference<XFrame>(xFrame->getCreator(),UNO_QUERY);
+        }
+        if ( xFrame.is() )
+            xWindow = xFrame->getContainerWindow();
+    }
+    return xWindow;
 }
 // -----------------------------------------------------------------------------
 

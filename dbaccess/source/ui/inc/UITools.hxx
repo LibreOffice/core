@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 07:53:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,7 @@ namespace dbaui
         @return
             The type info which can be used to create a primary key column.
     */
-    const OTypeInfo* queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo);
+    TOTypeInfoSP queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo);
 
     /** query for a specific type.
         @param  _nDataType
@@ -339,7 +339,25 @@ namespace dbaui
         @return
             The type or <NULL/> if we can't find it.
     */
-    const OTypeInfo* queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rTypeInfo);
+    TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rTypeInfo);
+
+    /** returns the configuration node name of user defined drivers.
+        @return
+            the configuration node name of user defined drivers.
+    */
+    ::rtl::OUString getUserDefinedDriverNodeName();
+
+    /** returns the configuration node name of user defined driver type display name.
+        @return
+            the configuration node name of user defined driver type display name.
+    */
+    ::rtl::OUString getDriverTypeDisplayNodeName();
+
+    /** returns the configuration node name of user defined driver DSN prefix.
+        @return
+            the configuration node name of user defined driver DSN prefix.
+    */
+    ::rtl::OUString getDriverDsnPrefixNodeName();
 
 // .........................................................................
 }

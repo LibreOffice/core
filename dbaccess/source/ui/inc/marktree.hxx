@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktree.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:13:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,23 +116,4 @@ private:
 //.........................................................................
 
 #endif // _DBAUI_MARKTREE_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4  2001/04/27 08:09:23  fs
- *  +implDeterminedState - needed to correctly implement CheckButtons
- *
- *  Revision 1.3  2001/01/30 08:28:00  fs
- *  +checkedButton_noBroadcast
- *
- *  Revision 1.2  2000/10/09 12:41:31  fs
- *  use a different font when painting a disabled control
- *
- *  Revision 1.1  2000/10/05 10:08:43  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 28.09.00 13:19:31  fs
- ************************************************************************/
 

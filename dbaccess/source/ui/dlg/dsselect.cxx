@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:23:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,23 +212,4 @@ void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4  2002/08/19 07:40:34  oj
- *  #99473# change string resource files
- *
- *  Revision 1.3  2001/10/18 06:50:39  oj
- *  #93260# reload odbc datasources
- *
- *  Revision 1.2  2000/10/26 13:11:36  obo
- *  #65293# cant compile for linux
- *
- *  Revision 1.1  2000/10/24 12:13:30  fs
- *  initial checkin - dialog for selecting system datasources
- *
- *
- *  Revision 1.0 24.10.00 09:25:01  fs
- ************************************************************************/
 

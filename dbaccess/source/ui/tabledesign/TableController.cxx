@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 14:39:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,18 +265,13 @@ OTableController::OTableController(const Reference< XMultiServiceFactory >& _rM)
     ,m_bAllowAutoIncrementValue(sal_False)
 {
     InvalidateAll();
-    m_pTypeInfo = new OTypeInfo();
+    m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
     m_pTypeInfo->aUIName = m_sTypeNames.GetToken(TYPE_OTHER);
 }
 // -----------------------------------------------------------------------------
 OTableController::~OTableController()
 {
-    DELETEZ(m_pTypeInfo);
     m_aTypeInfoIndex.clear();
-    OTypeInfoMap::iterator aIter = m_aTypeInfo.begin();
-    for(;aIter != m_aTypeInfo.end();++aIter)
-        delete aIter->second;
-
     m_aTypeInfo.clear();
 }
 
@@ -348,7 +343,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = m_bFrameUiActive && getView() && static_cast<OTableDesignView*>(getView())->isCopyAllowed();
             break;
         case ID_BROWSER_PASTE:
-            aReturn.bEnabled = isEditable() && m_bFrameUiActive;
+            aReturn.bEnabled = isEditable() && m_bFrameUiActive && getView() && static_cast<OTableDesignView*>(getView())->isPasteAllowed();
             break;
         case SID_INDEXDESIGN:
             aReturn.bEnabled =
@@ -903,7 +898,7 @@ void OTableController::reconnect(sal_Bool _bUI)
     }
 }
 // -----------------------------------------------------------------------------
-const OTypeInfo* OTableController::getTypeInfoByType(sal_Int32 _nDataType) const
+TOTypeInfoSP OTableController::getTypeInfoByType(sal_Int32 _nDataType) const
 {
     return queryTypeInfoByType(_nDataType,m_aTypeInfo);
 }
@@ -1044,8 +1039,8 @@ void OTableController::loadData()
             xColumn->getPropertyValue(PROPERTY_NAME)            >>= sName;
             xColumn->getPropertyValue(PROPERTY_TYPENAME)        >>= sTypeName;
             xColumn->getPropertyValue(PROPERTY_ISNULLABLE)      >>= nNullable;
-            bIsAutoIncrement    = ::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT));
-            bIsCurrency         = ::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISCURRENCY));
+            xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT) >>= bIsAutoIncrement;
+            xColumn->getPropertyValue(PROPERTY_ISCURRENCY)      >>= bIsCurrency;
             xColumn->getPropertyValue(PROPERTY_TYPE)            >>= nType;
             xColumn->getPropertyValue(PROPERTY_SCALE)           >>= nScale;
             xColumn->getPropertyValue(PROPERTY_PRECISION)       >>= nPrecision;
@@ -1064,8 +1059,8 @@ void OTableController::loadData()
             pTabEdRow->SetReadOnly(!bIsAlterAllowed);
             // search for type
             sal_Bool bForce;
-            const OTypeInfo* pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,nPrecision,nScale,bForce);
-            if(!pTypeInfo)
+            TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,nPrecision,nScale,bIsAutoIncrement,bForce);
+            if ( !pTypeInfo.get() )
                 pTypeInfo = m_pTypeInfo;
             pTabEdRow->SetFieldType( pTypeInfo, bForce );
 
@@ -1214,9 +1209,9 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
             if (nReturn == RET_YES)
             {
                 OTableRow* pNewRow = new OTableRow();
-                const OTypeInfo* pTypeInfo = ::dbaui::queryPrimaryKeyType(m_aTypeInfo);
+                TOTypeInfoSP pTypeInfo = ::dbaui::queryPrimaryKeyType(m_aTypeInfo);
 
-                if ( pTypeInfo )
+                if ( pTypeInfo.get() )
                 {
                     pNewRow->SetFieldType( pTypeInfo );
                     OFieldDescription* pActFieldDescr = pNewRow->GetActFieldDescr();
@@ -1293,7 +1288,7 @@ void OTableController::alterColumns()
             xColumn->getPropertyValue(PROPERTY_PRECISION)       >>= nPrecision;
             xColumn->getPropertyValue(PROPERTY_SCALE)           >>= nScale;
             xColumn->getPropertyValue(PROPERTY_ISNULLABLE)      >>= nNullable;
-            bAutoIncrement = ::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT));
+            xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT) >>= bAutoIncrement;
             //  xColumn->getPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(pField->IsCurrency()));
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
                 xColumn->getPropertyValue(PROPERTY_HELPTEXT) >>= sDescription;
@@ -1570,7 +1565,6 @@ void OTableController::assignTable()
                 startTableListening();
 
                 // check if we set the table editable
-                Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
                 setEditable( isAlterAllowed() || isDropAllowed() || isAddAllowed() );
                 if(!isEditable())
                 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 07:52:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ namespace dbaui
         ::com::sun::star::uno::Any      m_aDefaultValue;    // the default value from the database
         ::com::sun::star::uno::Any      m_aControlDefault;  // the value which the control inserts as default
 
-        const OTypeInfo*    m_pType;
+        TOTypeInfoSP    m_pType;
 
         ::rtl::OUString     m_sName;
         ::rtl::OUString     m_sTypeName;
@@ -112,7 +112,7 @@ namespace dbaui
                             const ::com::sun::star::uno::Any&   _aDefaultValue,
                             const ::com::sun::star::uno::Any&   _aControlDefault,
                             const ::rtl::OUString&  _sAutoIncrementValue,
-                            const OTypeInfo*        _pType,
+                            const TOTypeInfoSP&     _pType,
                             sal_Int32               _nPrecision,
                             sal_Int32               _nScale,
                             sal_Int32               _nIsNullable,
@@ -130,31 +130,31 @@ namespace dbaui
         void SetDefaultValue(const ::com::sun::star::uno::Any& _rDefaultValue)      { m_aDefaultValue = _rDefaultValue; }
         void SetControlDefault(const ::com::sun::star::uno::Any& _rControlDefault)  { m_aControlDefault = _rControlDefault; }
         void SetAutoIncrementValue(const ::rtl::OUString& _sAutoIncValue)   { m_sAutoIncrementValue = _sAutoIncValue; }
-        void SetType(const OTypeInfo* _pType)                               { m_pType = _pType; if (m_pType) m_nType = m_pType->nType; }
-        void SetTypeValue(sal_Int32 _nType)                                 { m_nType = _nType; OSL_ENSURE(!m_pType,"Invalid call here!");}
+        void SetType(TOTypeInfoSP _pType)                                   { m_pType = _pType; if ( m_pType.get() ) m_nType = m_pType->nType; }
+        void SetTypeValue(sal_Int32 _nType)                                 { m_nType = _nType; OSL_ENSURE(!m_pType.get(),"Invalid call here!");}
         void SetPrecision(const sal_Int32& _rPrecision)                     { m_nPrecision = _rPrecision; }
         void SetScale(const sal_Int32& _rScale)                             { m_nScale = _rScale; }
         void SetIsNullable(const sal_Int32& _rIsNullable)                   { m_nIsNullable = _rIsNullable; }
         void SetFormatKey(const sal_Int32& _rFormatKey)                     { m_nFormatKey = _rFormatKey; }
         void SetHorJustify(const SvxCellHorJustify& _rHorJustify)           { m_eHorJustify = _rHorJustify; }
         void SetAutoIncrement(sal_Bool _bAuto)                              { m_bIsAutoIncrement = _bAuto; }
-        void SetPrimaryKey(sal_Bool _bPKey)                                 { m_bIsPrimaryKey = _bPKey; }
+        void SetPrimaryKey(sal_Bool _bPKey)                                 { m_bIsPrimaryKey = _bPKey; if ( _bPKey ) SetIsNullable(::com::sun::star::sdbc::ColumnValue::NO_NULLS); }
         void SetCurrency(sal_Bool _bIsCurrency)                             { m_bIsCurrency = _bIsCurrency; }
 
-        void FillFromTypeInfo(const OTypeInfo* _pType,sal_Bool _bForce,sal_Bool _bReset);
+        void FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bForce,sal_Bool _bReset);
 
         ::rtl::OUString             GetName()               const { return m_sName; }
         ::rtl::OUString             GetDescription()        const { return m_sDescription; }
         ::com::sun::star::uno::Any  GetDefaultValue()       const { return m_aDefaultValue; }
         ::com::sun::star::uno::Any  GetControlDefault()     const { return m_aControlDefault; }
         ::rtl::OUString             GetAutoIncrementValue() const { return m_sAutoIncrementValue; }
-        sal_Int32                   GetType()               const { return m_pType ? m_pType->nType : m_nType; }
+        sal_Int32                   GetType()               const { return m_pType.get() ? m_pType->nType : m_nType; }
         sal_Int32                   GetPrecision()          const { return m_nPrecision; }
         sal_Int32                   GetScale()              const { return m_nScale; }
         sal_Int32                   GetIsNullable()         const { return m_nIsNullable; }
         sal_Int32                   GetFormatKey()          const { return m_nFormatKey; }
         SvxCellHorJustify           GetHorJustify()         const { return m_eHorJustify; }
-        const OTypeInfo*            getTypeInfo()           const { return m_pType; }
+        TOTypeInfoSP            getTypeInfo()           const { return m_pType; }
         sal_Bool                    IsAutoIncrement()       const { return m_bIsAutoIncrement; }
         sal_Bool                    IsPrimaryKey()          const { return m_bIsPrimaryKey; }
         sal_Bool                    IsCurrency()            const { return m_bIsCurrency; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 10:52:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,10 @@ const String g_strZero = String::CreateFromAscii("0");
 #define CHECKBOX_SIZE       10
 #define HANDLE_ID            0
 #define HANDLE_COLUMN_WITDH 70
+
+#define SQL_ISRULEOR2(pParseNode, e1,e2)    ((pParseNode)->isRule() && (\
+                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::##e1) || \
+                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::##e2)))
 
 
 // -----------------------------------------------------------------------------
@@ -825,18 +829,48 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                         // append the whole text as field name
                         // so we first clear the function field
                         clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
+                        sal_Bool bQuote = sal_False;
+                        if (    SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct)
+                            ||  SQL_ISRULEOR2(pColumnRef,position_exp,extract_exp) )
+                        {
+                            bQuote = sal_True;
+                            sal_Int32 nDataType = DataType::DOUBLE;
+                            OSQLParseNode* pFunctionName = pColumnRef->getChild(0);
+                            if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
+                            {
+                                if ( SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
+                                    pFunctionName = pFunctionName->getChild(0);
 
-                        // now parse teh hole statement
+                                if ( pFunctionName )
+                                {
+                                    ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
+                                    if ( !sFunctionName.getLength() )
+                                        sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_MS_1252);
+
+                                    nDataType = OSQLParser::getFunctionReturnType(
+                                                        sFunctionName
+                                                        ,&pController->getParser()->getContext());
+                                    aSelEntry->SetDataType(nDataType);
+                                }
+                            }
+                        }
+
+                        // now parse the hole statement
                         sal_uInt32 nFunCount = pColumnRef->count();
                         ::rtl::OUString sParameters;
                         for(sal_uInt32 i = 0; i < nFunCount; ++i)
-                            pColumnRef->getChild(i)->parseNodeToStr(sParameters,xMetaData,&pParser->getContext(),sal_True,sal_False);
+                            pColumnRef->getChild(i)->parseNodeToStr(sParameters,xMetaData,&pParser->getContext(),sal_True,bQuote);
 
                         ::rtl::OUString sOldAlias = aSelEntry->GetAlias();
                         aSelEntry->SetAlias(::rtl::OUString());
 
                         sal_Int32 nNewFunctionType = aSelEntry->GetFunctionType() | FKT_NUMERIC;
                         aSelEntry->SetFunctionType(nNewFunctionType);
+
+
+                        aSelEntry->SetFieldType(TAB_NORMAL_FIELD);
+
+                        aSelEntry->SetTabWindow(NULL);
 
                         aSelEntry->SetField(sParameters);
                         notifyTableFieldChanged(sOldAlias,aSelEntry->GetAlias(),_bListAction, nColumnId);
@@ -2177,7 +2211,8 @@ String OSelectionBrowseBox::GetCellContents(sal_Int32 nCellIndex, USHORT nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     //  DBG_ASSERT(nCellIndex < (GetRowCount()-1),"CellIndex ist zu gross");
-    SaveModified();
+    if ( GetCurColumnId() == nColId )
+        SaveModified();
 
     USHORT nPos = GetColumnPos(nColId);
     OTableFieldDescRef pEntry = getFields()[nPos - 1];
@@ -2219,8 +2254,6 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, USHORT nColId, const S
             break;
         case BROW_FIELD_ROW:
             pEntry->SetField(strNewText);
-            if (strNewText.Len() == 0)          // bei leerem Feld auch den Tabellennamen loeschen
-                pEntry->SetAlias(strNewText);
             break;
         case BROW_TABLE_ROW:
             pEntry->SetAlias(strNewText);
@@ -2425,6 +2458,7 @@ void OSelectionBrowseBox::appendUndoAction(const String& _rOldValue,const String
     {
         OTabFieldCellModifiedUndoAct* pUndoAct = new OTabFieldCellModifiedUndoAct(this);
         pUndoAct->SetCellIndex(_nRow);
+        OSL_ENSURE(GetColumnPos(GetCurColumnId()) != BROWSER_INVALIDID,"Current position isn't valid!");
         pUndoAct->SetColumnPosition( GetColumnPos(GetCurColumnId()) );
         pUndoAct->SetCellContents(_rOldValue);
         getDesignView()->getController()->addUndoActionAndInvalidate(pUndoAct);

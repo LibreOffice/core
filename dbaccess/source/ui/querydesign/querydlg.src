@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:31:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ ModalDialog DLG_QRY_JOIN
         Text [ ENGLISH ] = "Options" ;
         Text[ english_us ] = "Options";
         Text[ portuguese ] = "Opηυes";
-        Text[ russian ] = "Οΰπΰμεςπϋ";
+        Text[ russian ] = "Οΰπΰμεςπϋ ρξεδθνενθÿ";
         Text[ dutch ] = "Opties";
         Text[ french ] = "Options";
         Text[ spanish ] = "Opciones";
@@ -355,10 +355,10 @@ ModalDialog DLG_QRY_JOIN
     };
     StringList [ korean ] =
     {
-         < "λ‚΄λ¶€ κ²°ν•©" ; Default; > ;
-        < "μΆμΈ΅ κ²°ν•©" ; Default; > ;
-        < "μ°μΈ΅ κ²°ν•©" ; Default; > ;
-        < "μ™„μ „ μ™Έλ¶€ κ²°ν•©"  ; Default; > ;
+         < "λ‚΄λ¶€ μ΅°μΈ" ; Default; > ;
+        < "μ™Όμª½ μ΅°μΈ" ; Default; > ;
+        < "μ¤λ¥Έμª½ μ΅°μΈ" ; Default; > ;
+        < "μ™„μ „ μ™Έλ¶€ μ΅°μΈ"  ; Default; > ;
     };
     StringList [ chinese_simplified ] =
     {
@@ -450,7 +450,7 @@ ModalDialog DLG_QRY_JOIN
     Text[ dutch ] = "Verbindingseigenschappen";
     Text[ chinese_simplified ] = "θΏη»“ε±ζ€§";
     Text[ greek ] = "Ιδιότητες συνδέσμου";
-    Text[ korean ] = "μ΅°μΈ μ†μ„±";
+    Text[ korean ] = "μ΅°μΈ λ“±λ΅ μ •λ³΄";
     Text[ arabic ] = "ΞΥΗΖΥ ΗαΡΘΨ";
     Text[ turkish ] = "Birleώme φzellikleri";
     Text[ language_user1 ] = " ";
@@ -480,7 +480,7 @@ String STR_QUERY_INNER_JOIN
     Text[ dutch ] = "Bevat alleen records waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
     Text[ chinese_simplified ] = "εªε…ε«δΈ¤δΈªθ΅¨ζ ΌδΈ­εΌ•η”¨ε­—ζ®µη›Έεη„ζ•°ζ®ζ΅η›®γ€‚";
     Text[ greek ] = "Περιέχει μόνο τις εγγραφές των δεδομένων στις οποίες ταυτίζονται τα περιεχόμενα των συνδεδεμένων πεδίων και στους δύο πίνακες.";
-    Text[ korean ] = "λ‘ κ° μ‹νΈμ λ§ν¬λ ν•„λ“ λ‚΄μ©μ΄ κ°™μ€ λ μ½”λ“λ§μ„ ν¬ν•¨ν•©λ‹λ‹¤.";
+    Text[ korean ] = "λ‘ ν…μ΄λΈ”μ κ΄€κ³„λ ν•„λ“ λ‚΄μ©μ΄ μΌμΉν•λ” λ μ½”λ“λ§μ„ ν¬ν•¨ν•©λ‹λ‹¤.";
     Text[ arabic ] = "ύαΗ νΝΚζν ΕαΗ Ϊαμ ΗαΣΜαΗΚ ΗαΚν νΚΨΗΘή ένεΗ γΝΚζνΗΚ ΗαΝήζα ΗαγΡΚΘΨΙ έν ίαΗ ΗαΜΟζανδ.";
     Text[ turkish ] = "Yalnύzca her iki tablodaki iliώkili alan iηeriklerinin aynύ olduπu kayύtlarύ iηerir.";
     Text[ language_user1 ] = " ";
@@ -510,7 +510,7 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ dutch ] = "Bevat ALLE records uit '%1' en alleen de records uit '%2' waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
     Text[ chinese_simplified ] = "ε«ζ‰'%1'δΈ­η„ζ‰€ζ‰ζ•°ζ®ζ΅η›®ε’'%2'δΈ­δΈ¤δΈªθ΅¨ζ ΌεΌ•η”¨ε­—ζ®µη›Έεη„ζ•°ζ®ζ΅η›®γ€‚";
     Text[ greek ] = "Περιέχει ΟΛΕΣ τις εγγραφές του πίνακα '%1' και τις εγγραφές του πίνακα '%2' στις οποίες ταυτίζονται τα περιεχόμενα των συνδεδεμένων πεδίων των ";
-    Text[ korean ] = "μ‹νΈ'%1'μ—λ” λª¨λ“  λ μ½”λ“, μ‹νΈ '%2'μ—λ” λ‘ κ° μ‹νΈμ λ§ν¬λ ν•„λ“ λ‚΄μ©μ΄ κ°™μ€ λ μ½”λ“λ§μ΄ ν¬ν•¨λ©λ‹λ‹¤ .";
+    Text[ korean ] = "ν…μ΄λΈ” '%1'μ—λ” λª¨λ“  λ μ½”λ“κ°€ ν…μ΄λΈ” '%2'μ—λ” λ‘ ν…μ΄λΈ”μ κ΄€κ³„λ ν•„λ“ λ‚΄μ©μ΄ μΌμΉν•λ” λ μ½”λ“λ§μ΄ ν¬ν•¨λ©λ‹λ‹¤.";
     Text[ arabic ] = "νΝΚζν Ϊαμ ία ΣΜαΗΚ '%1'΅ ζΣΜαΗΚ '%2' ΗαΚν ΚΚΨΗΘή ένεΗ γΝΚζνΗΚ ΗαΝήζα ΗαγΡΚΘΨΙ έν ίαΗ ΗαΜΟζανδ έήΨ.";
     Text[ turkish ] = "'%1' tablosundaki kayύtlarύn TAMAMINI ve '%2' tablosundaki kayύtlardan yalnύzca her iki tablodaki iliώkili alan iηerikleri aynύ olan kayύtlarύ iηerir.";
     Text[ language_user1 ] = " ";
@@ -540,7 +540,7 @@ String STR_QUERY_FULL_JOIN
     Text[ dutch ] = "Bevat ALLE records uit '%1' en '%2'.";
     Text[ chinese_simplified ] = "ε«ζ‰ '%1'ε’'%2'ε†…ε…¨ιƒ¨η„ζ•°ζ®ζ΅η›®";
     Text[ greek ] = "Περιέχει ΟΛΕΣ τις εγγραφές των '%1' και '%2'.";
-    Text[ korean ] = "μ‹νΈ'%1' μ™€(κ³Ό) '%2'μ λª¨λ“  λ μ½”λ“λ¥Ό ν¬ν•¨ν•©λ‹λ‹¤.";
+    Text[ korean ] = "'%1' μ™€(κ³Ό) '%2'μ λª¨λ“  λ μ½”λ“λ¥Ό ν¬ν•¨ν•©λ‹λ‹¤.";
     Text[ arabic ] = "νΝΚζν Ϊαμ ία ΗαΣΜαΗΚ γδ '%1' ζ '%2'.";
     Text[ turkish ] = "'%1' ve '%2' tablolarύndaki TάM kayύtlarύ iηerir.";
     Text[ language_user1 ] = " ";
@@ -548,6 +548,12 @@ String STR_QUERY_FULL_JOIN
     Text[ finnish ] = "Sisδltδδ KAIKKI tietueet kohteista '%1' ja '%2'.";
     Text[ thai ] = "ΰΈ΅ΰΈµΰΈ£ΰΈ°ΰΉ€ΰΈΰΈµΰΈΆΰΈ™ΰΈ—ΰΈ±ΰΉ‰ΰΈ‡ΰΈ«ΰΈ΅ΰΈ”ΰΈΰΈ²ΰΈ '%1' ΰΉΰΈ¥ΰΈ°ΰΈΰΈ²ΰΈ '%2'";
 };
+
+
+
+
+
+
 
 
 

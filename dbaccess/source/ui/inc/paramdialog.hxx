@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 11:26:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,23 +181,4 @@ namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_PARAMDIALOG_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4  2002/04/09 14:45:02  fs
- *  #98181# use a ::dbtools::OPredicateInputController
- *
- *  Revision 1.3  2001/06/07 15:09:31  fs
- *  #87912# redesigned the dialog
- *
- *  Revision 1.2  2000/10/27 08:07:40  fs
- *  OSQLParser interface was changed - adjustments
- *
- *  Revision 1.1  2000/10/26 18:08:45  fs
- *  initial checkin - parameter dialog
- *
- *
- *  Revision 1.0 26.10.00 11:54:07  fs
- ************************************************************************/
 

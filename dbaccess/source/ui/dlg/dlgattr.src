@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 17:02:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ TabDialog DLG_ATTR
         Text[ chinese_traditional ] = "è¿”å›(~K)";
         Text[ arabic ] = "ÇáÓÇÈŞ";
         Text[ greek ] = "Ğßóù";
-        Text[ korean ] = "ì´ì „(~K)";
+        Text[ korean ] = "ë’¤ë¡œ(~K)";
         Text[ turkish ] = "Geri";
         Text[ catalan ] = "Enre~re";
         Text[ thai ] = "~à¸à¸¥à¸±à¸šà¹„à¸›";
@@ -217,7 +217,7 @@ TabDialog DLG_ATTR
         Text[ chinese_traditional ] = "å°é½Š";
         Text[ arabic ] = "ãÍÇĞÇÉ";
         Text[ greek ] = "Óôïß÷éóç";
-        Text[ korean ] = "ë°°ì—´";
+        Text[ korean ] = "ë§ì¶¤";
         Text[ turkish ] = "Hizalama";
         Text[ catalan ] = "Alineament";
         Text[ thai ] = "à¸à¸²à¸£à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
@@ -242,7 +242,7 @@ TabDialog DLG_ATTR
         Text[ chinese_traditional ] = "è¡¨æ ¼æ ¼å¼";
         Text[ arabic ] = "ÊäÓíŞ ÇáÌÏæá";
         Text[ greek ] = "Ìïñöïğïßçóç ğßíáêá";
-        Text[ korean ] = "ì‹œíŠ¸ ì„œì‹";
+        Text[ korean ] = "í…Œì´ë¸” ì„œì‹";
         Text[ turkish ] = "Tablo formatı";
         Text[ catalan ] = "Format de la taula";
         Text[ finnish ] = "Taulun muotoilu";
@@ -260,6 +260,12 @@ TabDialog DLG_ATTR
     Text[ catalan ] = "Format del camp";
     Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
+
+
+
+
+
+
 
 
 

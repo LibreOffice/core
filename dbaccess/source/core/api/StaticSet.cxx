@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StaticSet.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,46 +382,4 @@ void SAL_CALL OStaticSet::moveToCurrentRow(  ) throw(SQLException, RuntimeExcept
 {
 }
 // -------------------------------------------------------------------------
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.10  2001/05/21 11:24:49  oj
-    #87082# check if type need literals
-
-    Revision 1.9  2001/05/18 12:02:50  oj
-    #86528# size changes
-
-    Revision 1.8  2001/01/24 09:50:49  oj
-    #82628# rowset modifications
-
-    Revision 1.7  2001/01/22 07:38:24  oj
-    #82632# change member
-
-    Revision 1.6  2000/11/29 10:23:32  oj
-    #80219# wrong use of keys
-
-    Revision 1.5  2000/11/15 15:57:40  oj
-    change for rowset
-
-    Revision 1.4  2000/11/14 13:28:20  oj
-    change for rowset when getRow returns 0
-
-    Revision 1.3  2000/10/25 07:30:24  oj
-    make strings unique for lib's
-
-    Revision 1.2  2000/10/11 11:18:11  fs
-    replace unotools with comphelper
-
-    Revision 1.1.1.1  2000/09/19 00:15:38  hr
-    initial import
-
-    Revision 1.2  2000/09/18 14:52:47  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.1  2000/09/01 15:24:08  oj
-    rowset addon
-
-    Revision 1.0 01.08.2000 09:05:11  oj
-------------------------------------------------------------------------*/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odbcconfig.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-26 13:11:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,14 +170,4 @@ public:
 //.........................................................................
 
 #endif // _DBAUI_ODBC_CONFIG_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2000/10/24 12:48:44  fs
- *  initial checkin - wrapping (system) data source related ODBC functionality
- *
- *
- *  Revision 1.0 24.10.00 10:11:51  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2002-09-05 10:52:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,20 +72,20 @@ String STR_REMEMBERPASSWORD_SESSION
     Text[ chinese_simplified ] = "ç»“æŸç¨‹åºä¹‹å‰ä¸€ç›´è®°ä½å¯†ç (~R)";
     Text[ chinese_traditional ] = "çµæŸç¨‹å¼ä¹‹å‰ä¸€ç›´è¨˜ä½å¯†ç¢¼(~R)";
     Text[ danish ] = "~Husk adgangskode til lukning af programmet";
-    Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van het programma";
-    Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van het programma";
+    Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van programma";
+    Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van programma";
     Text[ english_us ] = "~Remember password till end of session";
-    Text[ french ] = "Se rappeler du ~mot de passe jusqu'à la fin de la session";
+    Text[ french ] = "Mémoriser le ~mot de passe jusqu'à la fin de la session";
     Text[ greek ] = "Áğï~ìíçìüíåõóç êùäéêïı İùò ôï ôİëïò ôçò åöáñìïãŞò";
-    Text[ italian ] = "An~nota password fino alla fine dell'applicazione";
-    Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¯ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†ã¾ã§è¨˜æ†¶ã—ã¦ãŠã(~R)";
-    Text[ korean ] = "ì‘ìš© í”„ë¡œê·¸ë¨ì„ ì¢…ë£Œí•  ë•Œê¹Œì§€ íŒ¨ìŠ¤ì›Œë“œ ê¸°ì–µ(~R)";
+    Text[ italian ] = "Memorizza password fino alla fine dell'applicazione";
+    Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†ã¾ã§ä¿å­˜ã—ã¦ãŠã(~R)";
+    Text[ korean ] = "ì‘ìš© í”„ë¡œê·¸ë¨ ì¢…ë£Œê¹Œì§€ ì•”í˜¸ ë³´ì¡´(~R)";
     Text[ polish ] = "Zapamiêtaj has³o do koñca aplikacji";
     Text[ portuguese ] = "~Lembrar senha até terminar a aplicação";
     Text[ portuguese_brazilian ] = "Passwort ~merken";
-    Text[ russian ] = "Çàïîìíèòü ïàğîëü äî êîíöà ïğèëîæåíèÿ";
-    Text[ spanish ] = "~Recordar contraseña hasta finalizar la aplicación";
-    Text[ swedish ] = "Ko~m ihåg lösenordet tills tillämpningen avslutas";
+    Text[ russian ] = "Çàïîìíèòü ïàğîëü äî êîíöà ñåàíñà";
+    Text[ spanish ] = "~Recordar la contraseña hasta el fin de la aplicación";
+    Text[ swedish ] = "Ko~m ihåg lösenordet tills programmet avslutas";
     Text[ turkish ] = "~Remember password till end of session";
     Text[ catalan ] = "~Recorda la contrasenya fins a la fi de la sessió";
     Text[ finnish ] = "~Muista salasana istunnon loppuun asti";
@@ -106,9 +106,9 @@ String STR_REMEMBERPASSWORD_PERSISTENT
     Text[ english_us ] = "~Remember password";
     Text[ french ] = "~Enregistrer le mot de passe";
     Text[ greek ] = "Ìüíéìç áğïèŞêåõ~óç êùäéêïı ğñüóâáóçò";
-    Text[ italian ] = "Salva pa~ssword ";
-    Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ãšã£ã¨ä¿å­˜(~R)";
-    Text[ korean ] = "íŒ¨ìŠ¤ì›Œë“œ ì˜êµ¬ ì €ì¥(~R)";
+    Text[ italian ] = "Memorizza pa~ssword";
+    Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ä¿å­˜ã—ã¦ãŠã(~R)";
+    Text[ korean ] = "ì•”í˜¸ ë³´ì¡´(~R)";
     Text[ polish ] = "Zapisz has³o na sta³e";
     Text[ portuguese ] = "~Guardar senha";
     Text[ portuguese_brazilian ] = "Passwort ~speichern";
@@ -125,6 +125,26 @@ String STR_REMEMBERPASSWORD_PERSISTENT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17.4.3.2.1  2003/02/22 15:51:55  hr
+ *  INTEGRATION: CWS mergep (1.17.4.3.20); FILE MERGED
+ *  2003/02/22 10:44:41 nf 1.17.4.3.20.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
+ *  2003/01/31 12:51:32 hjs 1.17.4.3.20.1: #107113# merge on SRX644p
+ *
+ *  Revision 1.17.4.3.20.2  2003/02/22 10:44:41  nf
+ *  #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
+ *
+ *  Revision 1.17.4.3.20.1  2003/01/31 12:51:32  hjs
+ *  #107113# merge on SRX644p
+ *
+ *  Revision 1.17.4.3  2002/11/27 16:56:38  kz
+ *  Merge SRX644: 27.11.02 - 17:53:26
+ *
+ *  Revision 1.17.4.2  2002/09/13 14:36:44  kz
+ *  Merge SRX643: 13.09.02 - 16:33:06
+ *
+ *  Revision 1.17.4.1  2002/09/05 13:43:54  kz
+ *  Merge SRX643: 05.09.02 - 15:40:32
+ *
  *  Revision 1.17  2002/08/19 07:54:08  oj
  *  #99473# change string resource files
  *
@@ -179,6 +199,8 @@ String STR_REMEMBERPASSWORD_PERSISTENT
  *
  *  Revision 1.0 25.10.00 14:10:52  fs
  ************************************************************************/
+
+
 
 
 

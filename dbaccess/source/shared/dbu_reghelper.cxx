@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_reghelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 15:24:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,4 @@ namespace dbaui
     #undef _REGISTRATIONHELPER_CXX_INCLUDED_INDIRECTLY_
 
 }
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 15.12.00 16:00:45  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:22:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,8 @@
 #ifndef _DBAUI_ODBC_CONFIG_HXX_
 #include "odbcconfig.hxx"
 #endif
-#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
-#include <svtools/localresaccess.hxx>
+#ifndef _DBAUI_LOCALRESACCESS_HXX_
+#include "localresaccess.hxx"
 #endif
 
 
@@ -318,8 +318,7 @@ namespace dbaui
         if (!aEnumeration.isLoaded())
         {
             // show an error message
-            ModuleRes aModuleRes(PAGE_GENERAL);
-            OLocalResourceAccess aLocRes(aModuleRes, RSC_TABPAGE);
+            OLocalResourceAccess aLocRes( PAGE_GENERAL, RSC_TABPAGE );
             String sError(ResId(STR_COULDNOTLOAD_ODBCLIB));
             sError.SearchAndReplaceAscii("#lib#", aEnumeration.getLibraryName());
             ErrorBox aDialog(this, WB_OK, sError);
@@ -341,49 +340,4 @@ namespace dbaui
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.32  2002/08/19 07:43:44  oj
- *  #99473# change string resource files
- *
- *  Revision 1.31  2001/08/15 08:49:16  fs
- *  #89822# added functionality to accelerate toolbox functions with key codes
- *
- *  Revision 1.30  2001/05/23 13:47:00  fs
- *  #86444# +prepareConnectionAction
- *
- *  Revision 1.29  2001/05/10 13:34:28  fs
- *  #86223# +OPageSettings/createViewSettings/filleViewSettings/restoreViewSettings
- *
- *  Revision 1.28  2001/01/26 16:12:12  fs
- *  split up the file
- *
- *  Revision 1.27  2001/01/26 06:59:12  fs
- *  some basics for the query administration page - not enabled yet
- *
- *  Revision 1.26  2001/01/25 12:14:03  fs
- *  #83192# initialization of m_sDsn corrected
- *
- *  Revision 1.25  2001/01/04 11:21:45  fs
- *  #81485# +OAdoDetailsPage
- *
- *  Revision 1.24  2001/01/04 09:43:26  fs
- *  #81615# auto completion for the extension checkbox is case sensitive
- *
- *  Revision 1.23  2000/12/11 16:33:15  fs
- *  reversed the semantics of the SuppressVersionColumns checkbox
- *
- *  Revision 1.22  2000/12/07 15:04:40  fs
- *  #81490# reset the password when changing the user
- *
- *  Revision 1.21  2000/12/07 14:27:53  fs
- *  #80939# clear the tables list when cancelling the password dialog
- *
- *  Revision 1.20  2000/12/07 14:15:42  oj
- *  #81131# check installed adabas dbs
- *
- *  Revision 1.0 26.09.00 11:47:18  fs
- ************************************************************************/
 

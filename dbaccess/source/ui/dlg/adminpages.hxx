@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:22:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,33 +258,4 @@ namespace dbaui
 
 #endif // _DBAUI_ADMINPAGES_HXX_
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.23  2001/08/15 08:49:16  fs
- *  #89822# added functionality to accelerate toolbox functions with key codes
- *
- *  Revision 1.22  2001/05/29 10:17:26  fs
- *  #86082# +OToolboxedPageViewSettings
- *
- *  Revision 1.21  2001/05/23 13:47:00  fs
- *  #86444# +prepareConnectionAction
- *
- *  Revision 1.20  2001/05/10 13:34:29  fs
- *  #86223# +OPageSettings/createViewSettings/filleViewSettings/restoreViewSettings
- *
- *  Revision 1.19  2001/01/26 16:12:12  fs
- *  split up the file
- *
- *  Revision 1.18  2001/01/26 06:59:12  fs
- *  some basics for the query administration page - not enabled yet
- *
- *  Revision 1.17  2001/01/04 11:21:45  fs
- *  #81485# +OAdoDetailsPage
- *
- *  Revision 1.16  2000/12/07 14:15:42  oj
- *  #81131# check installed adabas dbs
- *
- *  Revision 1.0 26.09.00 11:46:15  fs
- ************************************************************************/
 

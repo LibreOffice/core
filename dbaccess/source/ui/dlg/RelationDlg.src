@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.30 2002-12-05 10:36:43 kz Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.31 2003-03-19 17:52:19 hr Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: kz $ $Date: 2002-12-05 10:36:43 $ $Revision: 1.30 $
+ //  $Author: hr $ $Date: 2003-03-19 17:52:19 $ $Revision: 1.31 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -174,7 +174,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_traditional ] = "η„΅ε‹•δ½(~N)";
         Text[ arabic ] = "ΘΟζδ ΕΜΡΗΑ";
         Text[ greek ] = "~Καμιά ενέργεια";
-        Text[ korean ] = "μ‹¤ν–‰ μ—†μ(~N)";
+        Text[ korean ] = "μ‘λ™ μ—†μ(~N)";
         Text[ turkish ] = "έώlem yok";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cap acciσ";
@@ -234,7 +234,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_traditional ] = "θ¨­ε®ι›¶(~S)";
         Text[ arabic ] = "ΚΪννδ ήνγΙ ΞΗανΙ";
         Text[ greek ] = "Ορισμός μηδέ~ν";
-        Text[ korean ] = "λ„ μ„¤μ •(~S)";
+        Text[ korean ] = "0 κ°’ μ„¤μ •(~S)";
         Text[ turkish ] = "Sύfύr belirle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Defineix com a nul";
@@ -283,7 +283,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text [ swedish ] = "Raderingsalternativ" ;
         Text [ danish ] = "Sletningsindstillinger" ;
         Text [ italian ] = "Opzioni di eliminazione" ;
-        Text [ spanish ] = "Opciones de eliminaciσn" ;
+        Text [ spanish ] = "Opciones para borrar" ;
         Text [ french ] = "Options de suppression" ;
         Text [ dutch ] = "Wisopties" ;
         Text [ portuguese ] = "Opηυes de eliminaηγo" ;
@@ -294,7 +294,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_traditional ] = "εªι™¤η„ιΈι …";
         Text[ arabic ] = "ΞνΗΡΗΚ ΗαΝΠέ";
         Text[ greek ] = "Επιλογές διαγραφής";
-        Text[ korean ] = "μ‚­μ  μµμ…";
+        Text[ korean ] = "μµμ… μ‚­μ ";
         Text[ turkish ] = "Silme seηenekleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions d'eliminaciσ";
@@ -325,7 +325,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_traditional ] = "η„΅ε‹•δ½(~N)";
         Text[ arabic ] = "ΘΟζδ ΕΜΡΗΑ";
         Text[ greek ] = "Καμιά ~ενέργεια";
-        Text[ korean ] = "μ‹¤ν–‰ μ—†μ(~N)";
+        Text[ korean ] = "μ‘λ™ μ—†μ(~N)";
         Text[ turkish ] = "έώlem yok";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cap acciσ";
@@ -345,7 +345,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text [ swedish ] = "Radera ka~skad" ;
         Text [ danish ] = "Opdater kaskade" ;
         Text [ italian ] = "Elimina ca~scata" ;
-        Text [ spanish ] = "Eliminar c~ascada" ;
+        Text [ spanish ] = "Borrar c~ascada" ;
         Text [ french ] = "~Supprimer la cascade" ;
         Text [ dutch ] = "~Casc. wissen" ;
         Text[ chinese_simplified ] = "ε ι™¤ε±‚ε (~C)";
@@ -385,7 +385,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_traditional ] = "θ¨­ε®ι›¶(~S)";
         Text[ arabic ] = "ΚΪννδ ήνγΙ ΞΗανΙ";
         Text[ greek ] = "Ορισμός μηδέν";
-        Text[ korean ] = "λ„ μ„¤μ •(~S)";
+        Text[ korean ] = "0 κ°’ μ„¤μ •(~S)";
         Text[ turkish ] = "Sύfύr belirle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Defineix com a nul";
@@ -466,6 +466,12 @@ ModalDialog DLG_REL_PROPERTIES
     Text[ finnish ] = "Yhteydet";
     Text[ thai ] = "ΰΈ„ΰΈ§ΰΈ²ΰΈ΅ΰΈªΰΈ±ΰΈ΅ΰΈΰΈ±ΰΈ™ΰΈΰΉ";
 };
+
+
+
+
+
+
 
 
 

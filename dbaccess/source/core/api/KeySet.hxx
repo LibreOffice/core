@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-11 07:23:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,57 +219,4 @@ namespace dbaccess
     };
 }
 #endif // DBACCESS_CORE_API_KEYSET_HXX
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.14  2002/10/01 09:03:59  oj
-    #97524# remember column type for reuse
-
-    Revision 1.13  2001/12/05 14:56:24  oj
-    #95610# fetch autoincrement values after insert with max
-
-    Revision 1.12  2001/10/30 14:22:10  oj
-    #93939# add late ctor
-
-    Revision 1.11  2001/07/24 13:25:25  oj
-    #89430# move ORowSetValue into dbtools
-
-    Revision 1.10  2001/07/19 09:29:22  oj
-    #86186# check parsetree for joins
-
-    Revision 1.9  2001/07/09 07:00:18  oj
-    #89364# provide the parameter row to the keyset
-
-    Revision 1.8  2001/06/22 13:07:17  oj
-    #88012# change rowdeleted
-
-    Revision 1.7  2001/02/01 14:23:57  oj
-    change for insert , delete and update rows
-
-    Revision 1.6  2001/01/30 14:27:47  oj
-    new member which holds the column names
-
-    Revision 1.5  2001/01/24 09:50:49  oj
-    #82628# rowset modifications
-
-    Revision 1.4  2001/01/22 07:38:23  oj
-    #82632# change member
-
-    Revision 1.3  2000/10/17 10:18:12  oj
-    some changes for the rowset
-
-    Revision 1.2  2000/10/11 11:18:10  fs
-    replace unotools with comphelper
-
-    Revision 1.1.1.1  2000/09/19 00:15:38  hr
-    initial import
-
-    Revision 1.2  2000/09/18 14:52:46  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.1  2000/09/01 15:19:40  oj
-    rowset addons
-
-    Revision 1.0 01.08.2000 09:07:41  oj
-------------------------------------------------------------------------*/
 

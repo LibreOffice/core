@@ -2,9 +2,9 @@
  *
  *  $RCSfile: directsql.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:35:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ ModalDialog DLG_DIRECTSQL
         Text[ greek ] = "SQL command";
         Text[ dutch ] = "SQL-commando";
         Text[ french ] = "Instruction SQL";
-        Text[ spanish ] = "Comando SQL";
+        Text[ spanish ] = "Orden SQL";
         Text[ finnish ] = "SQL-lause";
         Text[ italian ] = "SQL command";
         Text[ danish ] = "SQL-kommando";
@@ -120,7 +120,7 @@ ModalDialog DLG_DIRECTSQL
         Text[ greek ] = "Command to execute";
         Text[ dutch ] = "uit te voeren commando";
         Text[ french ] = "Instruction � ex�cuter";
-        Text[ spanish ] = "Comando que ejecutar";
+        Text[ spanish ] = "Orden que ejecutar";
         Text[ finnish ] = "Suoritettava lause";
         Text[ italian ] = "Comando da eseguire";
         Text[ danish ] = "Kommando, der skal eksekveres";
@@ -186,7 +186,7 @@ ModalDialog DLG_DIRECTSQL
         Text[ greek ] = "Previous commands";
         Text[ dutch ] = "Vorige commando's";
         Text[ french ] = "Instructions pr�c�dentes";
-        Text[ spanish ] = "Comandos anteriores";
+        Text[ spanish ] = "�rdenes anteriores";
         Text[ finnish ] = "Edelliset lauseet";
         Text[ italian ] = "Comando precedente";
         Text[ danish ] = "Forrige kommandoer";
@@ -294,7 +294,7 @@ ModalDialog DLG_DIRECTSQL
     Text[ greek ] = "Excecute SQL statement";
     Text[ dutch ] = "SQL-instructie uitvoeren";
     Text[ french ] = "Ex�cuter l'instruction SQL";
-    Text[ spanish ] = "Ejecutar comando SQL";
+    Text[ spanish ] = "Ejecutar orden SQL";
     Text[ finnish ] = "Suorita SQL-lause";
     Text[ italian ] = "Esegui il comando SQL";
     Text[ danish ] = "Udf�r SQL-s�tning";
@@ -302,7 +302,7 @@ ModalDialog DLG_DIRECTSQL
     Text[ polish ] = "Wykonaj polecenie SQL";
     Text[ portuguese_brazilian ] = "Excecute SQL statement";
     Text[ japanese ] = "SQL ステートメントの実行";
-    Text[ korean ] = "SQL 문 실행";
+    Text[ korean ] = "SQL문 실행";
     Text[ chinese_simplified ] = "直接执行 SQL 命令";
     Text[ chinese_traditional ] = "直接執行 SQL 指令";
     Text[ turkish ] = "Excecute SQL statement";
@@ -321,7 +321,7 @@ String STR_COMMAND_EXECUTED_SUCCESSFULLY
     Text [ swedish ] = "Kommando utf�rt." ;
     Text [ danish ] = "Kommando gennemf�rt." ;
     Text [ italian ] = "Comando eseguito con successo." ;
-    Text [ spanish ] = "Comando ejecutado satisfactoriamente." ;
+    Text [ spanish ] = "Orden ejecutada satisfactoriamente." ;
     Text [ french ] = "Commande ex�cut�e avec succ�s" ;
     Text [ dutch ] = "Opdracht is uitgevoerd." ;
     Text[ chinese_simplified ] = "执行命令已经成功。";
@@ -331,7 +331,7 @@ String STR_COMMAND_EXECUTED_SUCCESSFULLY
     Text[ chinese_traditional ] = "執行指令已經成功。";
     Text[ arabic ] = "�� ����� ����� �����.";
     Text[ greek ] = "� ������ ����������� ��������.";
-    Text[ korean ] = "명령을 성공적으로 실행하였습니다.";
+    Text[ korean ] = "명령을 성공적으로 실행했습니다.";
     Text[ finnish ] = "K�skyn suoritus onnistui.";
     Text[ turkish ] = "Command successfully executed.";
     Text[ catalan ] = "Comanda executada amb �xit.";
@@ -356,7 +356,7 @@ String STR_DIRECTSQL_CONNECTIONLOST
     Text[ polish ] = "Po��czenie z baz� danych przerwano. Okno dialogowe zostanie zamkni�te.";
     Text[ portuguese_brazilian ] = "The connection to the database has been lost. This dialog will be closed.";
     Text[ japanese ] = "データベースへの接続は削除されています。このダイアログを閉じます。";
-    Text[ korean ] = "데이터베이스와의 연결이 해제되었습니다. 이 대화상자가 닫힐 것입니다.";
+    Text[ korean ] = "데이터베이스와의 연결이 해제되었습니다. 이 대화 상자가 닫힙니다.";
     Text[ chinese_simplified ] = "已经结束和数据库的连接。现在关闭这个对话框。";
     Text[ chinese_traditional ] = "已經結束與資料庫的連線。現在關閉這個對話方塊。";
     Text[ turkish ] = "The connection to the database has been lost. This dialog will be closed.";
@@ -368,6 +368,26 @@ String STR_DIRECTSQL_CONNECTIONLOST
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15.2.3  2003/02/23 12:00:59  nf
+ *  trasnlation 6.1 Beta / OOo 1.1 Beta / final wave
+ *
+ *  Revision 1.15.2.2  2003/02/23 11:00:50  nf
+ *  6.1 Beta 1/OOo 1.1 Beta translation, second wave
+ *
+ *  Revision 1.15.2.1  2003/02/22 15:47:19  hr
+ *  INTEGRATION: CWS mergep (1.15.20); FILE MERGED
+ *  2003/02/22 10:44:28 nf 1.15.20.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
+ *  2003/01/31 12:51:11 hjs 1.15.20.1: #107113# merge on SRX644p
+ *
+ *  Revision 1.15.20.2  2003/02/22 10:44:28  nf
+ *  #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
+ *
+ *  Revision 1.15.20.1  2003/01/31 12:51:11  hjs
+ *  #107113# merge on SRX644p
+ *
+ *  Revision 1.15  2002/12/05 10:35:58  kz
+ *  Merge SRX644: 12/05/02 - 11:32:03
+ *
  *  Revision 1.14  2002/11/25 15:17:52  kz
  *  Merge SRX644: 25.11.02 - 16:14:03
  *
@@ -413,6 +433,12 @@ String STR_DIRECTSQL_CONNECTIONLOST
  *
  *  Revision 1.0 18.06.01 17:01:52  fs
  ************************************************************************/
+
+
+
+
+
+
 
 
 

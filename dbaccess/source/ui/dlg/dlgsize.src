@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsize.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 17:08:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  // JN
  //
  // Letzte Aenderung:
- // $Author: kz $ $Date: 2002-11-27 17:08:09 $ $Revision: 1.21 $
+ // $Author: hr $ $Date: 2003-03-19 17:52:23 $ $Revision: 1.22 $
  //
  //---------------------------------------------------------------------------
 
@@ -322,6 +322,12 @@ ModalDialog DLG_COLWIDTH
     Text[ finnish ] = "Sarakkeen leveys";
     Text[ thai ] = "ความกว้างของคอลัมน์";
 };
+
+
+
+
+
+
 
 
 

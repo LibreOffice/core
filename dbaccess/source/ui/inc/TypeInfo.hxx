@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeInfo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 12:04:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,9 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
-#ifndef _MAP_
+#include <boost/shared_ptr.hpp>
 #include <map>
-#endif
+
 
 
 namespace dbaui
@@ -157,25 +157,27 @@ const sal_uInt16 TYPE_OTHER     = 30;
         {}
         sal_Bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
         sal_Bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
-        ::rtl::OUString getDBName() const { return aTypeName; }
+        inline ::rtl::OUString  getDBName() const { return aTypeName; }
 
     };
 
-
-    typedef ::std::multimap<sal_Int32,OTypeInfo*> OTypeInfoMap;
+    typedef ::boost::shared_ptr<OTypeInfo>          TOTypeInfoSP;
+    typedef ::std::multimap<sal_Int32,TOTypeInfoSP> OTypeInfoMap;
     /** return the most suitable typeinfo for a requested type
         @param  _rTypeInfo      contains a map of type to typeinfo
         @param  _nType          the requested type
         @param  _sTypeName      the typename
         @param  _nPrecision     the precision
         @param  _nScale         the scale
+        @param  _bAutoIncrement if it is a auto increment
         @param  _brForceToType  true when type was found which has some differenes
     */
-    const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
+    TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                                sal_Int32 _nType,
                                const ::rtl::OUString& _sTypeName,
                                sal_Int32 _nPrecision,
                                sal_Int32 _nScale,
+                               sal_Bool _bAutoIncrement,
                                sal_Bool& _brForceToType);
 }
 

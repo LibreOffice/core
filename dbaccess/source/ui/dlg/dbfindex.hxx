@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,26 +197,4 @@ public:
 //.........................................................................
 
 #endif // _DBAUI_DBFINDEX_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.5  2001/05/14 13:25:15  fs
- *  #86942# +checkButtons / OnListEntrySelected
- *
- *  Revision 1.4  2001/03/07 16:44:40  fs
- *  added a parameter to implRemoveIndex controlling the assertion / correct collecting the indexes in Init
- *
- *  Revision 1.3  2000/11/23 01:59:15  svesik
- *  Remove stl/ from #include statement
- *
- *  Revision 1.2  2000/10/11 11:31:03  fs
- *  new implementations - still under construction
- *
- *  Revision 1.1  2000/10/05 10:05:38  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 26.09.00 15:49:08  fs
- ************************************************************************/
 

@@ -1,63 +1,63 @@
 /*************************************************************************
- *
- *  $RCSfile: dbumiscres.src,v $
- *
- *  $Revision: 1.52 $
- *
- *  last change: $Author: vg $ $Date: 2002-12-09 09:52:15 $
- *
- *  The Contents of this file are made available subject to the terms of
- *  either of the following licenses
- *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
- *
- *  Sun Microsystems Inc., October, 2000
- *
- *  GNU Lesser General Public License Version 2.1
- *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
- *
- *
- *  Sun Industry Standards Source License Version 1.1
- *  =================================================
- *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
- *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
- *
- *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
- *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
- *  See the License for the specific provisions governing your rights and
- *  obligations concerning the Software.
- *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
- *
- *  Copyright: 2000 by Sun Microsystems, Inc.
- *
- *  All Rights Reserved.
- *
- *  Contributor(s): _______________________________________
- *
- *
- ************************************************************************/
+*
+*  $RCSfile: dbumiscres.src,v $
+*
+*  $Revision: 1.53 $
+*
+*  last change: $Author: hr $ $Date: 2003-03-19 17:52:53 $
+*
+*  The Contents of this file are made available subject to the terms of
+*  either of the following licenses
+*
+*         - GNU Lesser General Public License Version 2.1
+*         - Sun Industry Standards Source License Version 1.1
+*
+*  Sun Microsystems Inc., October, 2000
+*
+*  GNU Lesser General Public License Version 2.1
+*  =============================================
+*  Copyright 2000 by Sun Microsystems, Inc.
+*  901 San Antonio Road, Palo Alto, CA 94303, USA
+*
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License version 2.1, as published by the Free Software Foundation.
+*
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+*  MA  02111-1307  USA
+*
+*
+*  Sun Industry Standards Source License Version 1.1
+*  =================================================
+*  The contents of this file are subject to the Sun Industry Standards
+*  Source License Version 1.1 (the "License"); You may not use this file
+*  except in compliance with the License. You may obtain a copy of the
+*  License at http://www.openoffice.org/license.html.
+*
+*  Software provided under this License is provided on an "AS IS" basis,
+*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+*  See the License for the specific provisions governing your rights and
+*  obligations concerning the Software.
+*
+*  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+*
+*  Copyright: 2000 by Sun Microsystems, Inc.
+*
+*  All Rights Reserved.
+*
+*  Contributor(s): _______________________________________
+*
+*
+************************************************************************/
 
 #ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
@@ -69,586 +69,286 @@
 //-------------------------------------------------------------------------
 Resource RSC_DATASOURCE_TYPES
 {
-    String STR_CONNTYPES
-    {
-        Text = "sdbc:mysql:odbc:;sdbc:mysql:jdbc:;sdbc:adabas:;jdbc:;sdbc:odbc:;sdbc:dbase:;sdbc:ado:;sdbc:flat:;sdbc:calc:;sdbc:address:" ;
-    };
-    String STR_CONNUINAMES
-    {
-        Text = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument;Adressbuch" ;
-        Text [ english ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
-        Text [ english_us ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Address book" ;
-        Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
-        Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;Òåêñò;İëåêòğîííàÿ òàáëèöà;Àäğåñíàÿ êíèãà";
-        Text[ finnish ] = "Adabas;JDBC;ODBC;dBase;ADO;Teksti;Laskentataulut;Osoitteisto";
-    };
+String STR_CONNTYPES
+{
+    Text = "sdbc:mysql:odbc:;sdbc:mysql:jdbc:;sdbc:adabas:;jdbc:;sdbc:odbc:;sdbc:dbase:;sdbc:ado:;sdbc:flat:;sdbc:calc:;sdbc:address:" ;
+};
+String STR_CONNUINAMES
+{
+    Text = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument;Adressbuch" ;
+    Text [ english ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
+    Text [ english_us ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Address book" ;
+    Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
+    Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;Òåêñò;İëåêòğîííàÿ òàáëèöà;Àäğåñíàÿ êíèãà";
+    Text[ finnish ] = "Adabas;JDBC;ODBC;dBase;ADO;Teksti;Laskentataulut;Osoitteisto";
+    Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;FolhaCálculo;LivroEndereços";
+    Text[ greek ] = "Adabas;JDBC;ODBC;dBase;ADO;Êåßìåíï;¸ããñáöï ğßíáêá;Áôæİíôá äéåõèıíóåùí";
+    Text[ dutch ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Werkbladdocument;Adresboek";
+    Text[ french ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Texte;Classeur;Carnet d'adresses";
+    Text[ spanish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Texto;Hoja de cálculo;Libreta de direcciones";
+    Text[ italian ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Testo;Foglio elettronico;Rubrica";
+    Text[ danish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Regneark;Adressekartotek";
+    Text[ swedish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Tabelldokument;Adressbok";
+    Text[ polish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Arkusz kalkulacyjny;Ksi¹¿ka adresowa";
+    Text[ japanese ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«;è¡¨è¨ˆç®—ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ;ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³";
+    Text[ korean ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;í…ìŠ¤íŠ¸;ìŠ¤í”„ë ˆë“œì‹œíŠ¸;ì£¼ì†Œë¡";
+    Text[ chinese_simplified ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;æ–‡å­—;å·¥ä½œè¡¨;é€šè®¯ç°¿";
+    Text[ chinese_traditional ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;æ–‡å­—;å·¥ä½œè¡¨æ–‡ä»¶;é€šè¨ŠéŒ„";
+    Text[ turkish ] = "Adabas;JDBC;ODBC;dBase;Text";
+    Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;ADO;äÕ;ãÓÊäÏ ÌÏÇæá";
+    Text[ catalan ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet";
+    Text[ thai ] = "Adabas;JDBC;ODBC;à¸”à¸µà¹€à¸šà¸ª;ADO;à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡;à¸à¸£à¸°à¸”à¸²à¸©à¸„à¸³à¸™à¸§à¸“;à¸ªà¸¡à¸¸à¸”à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ";
+};
 };
 
 Resource RSC_CHARSETS
 {
-    String 1
-    {
-        Text = "Ansi";
-        Text [ english ] = "Ansi";
-        Text [ english_us ] = "Ansi";
-        Text[ portuguese ] = "Ansi";
-        Text[ russian ] = "Ansi";
-        Text[ greek ] = "Ansi";
-        Text[ dutch ] = "Ansi";
-        Text[ french ] = "Ansi";
-        Text[ spanish ] = "Ansi";
-        Text[ finnish ] = "Ansi";
-        Text[ italian ] = "Ansi";
-        Text[ danish ] = "Ansi";
-        Text[ swedish ] = "Ansi";
-        Text[ polish ] = "Ansi";
-        Text[ portuguese_brazilian ] = "Ansi";
-        Text[ japanese ] = "Ansi";
-        Text[ korean ] = "Ansi";
-        Text[ chinese_simplified ] = "Ansi";
-        Text[ chinese_traditional ] = "Ansi";
-        Text[ turkish ] = "Ansi";
-        Text[ arabic ] = "Ansi";
-        Text[ catalan ] = "Ansi";
-        Text[ thai ] = "Ansi";
-    };
-    String 2
-    {
-        Text = "Mac";
-        Text [ english ] = "Mac";
-        Text [ english_us ] = "Mac";
-        Text[ portuguese ] = "Mac";
-        Text[ russian ] = "Mac";
-        Text[ greek ] = "Mac";
-        Text[ dutch ] = "Mac";
-        Text[ french ] = "Mac";
-        Text[ spanish ] = "Mac";
-        Text[ finnish ] = "Mac";
-        Text[ italian ] = "Mac";
-        Text[ danish ] = "Mac";
-        Text[ swedish ] = "Mac";
-        Text[ polish ] = "Mac";
-        Text[ portuguese_brazilian ] = "Mac";
-        Text[ japanese ] = "Mac";
-        Text[ korean ] = "Mac";
-        Text[ chinese_simplified ] = "Mac";
-        Text[ chinese_traditional ] = "Mac";
-        Text[ turkish ] = "Mac";
-        Text[ arabic ] = "Mac";
-        Text[ catalan ] = "Mac";
-        Text[ thai ] = "Mac";
-    };
-    String 3
-    {
-        Text = "IBMPC (437)";
-        Text [ english ] = "IBMPC (437)";
-        Text [ english_us ] = "IBMPC (437)";
-        Text[ portuguese ] = "IBMPC (437)";
-        Text[ russian ] = "IBMPC (437)";
-        Text[ greek ] = "IBMPC (437)";
-        Text[ dutch ] = "IBMPC (437)";
-        Text[ french ] = "IBMPC (437)";
-        Text[ spanish ] = "IBMPC (437)";
-        Text[ finnish ] = "IBMPC (437)";
-        Text[ italian ] = "IBMPC (437)";
-        Text[ danish ] = "IBMPC (437)";
-        Text[ swedish ] = "IBMPC (437)";
-        Text[ polish ] = "IBMPC (437)";
-        Text[ portuguese_brazilian ] = "IBMPC (437)";
-        Text[ japanese ] = "IBMPC (437)";
-        Text[ korean ] = "IBMPC (437)";
-        Text[ chinese_simplified ] = "IBMPC (437)";
-        Text[ chinese_traditional ] = "IBMPC (437)";
-        Text[ turkish ] = "IBMPC (437)";
-        Text[ arabic ] = "IBMPC (437)";
-        Text[ catalan ] = "IBMPC (437)";
-        Text[ thai ] = "IBMPC (437)";
-    };
-    String 4
-    {
-        Text = "IBMPC (850) / DOS";
-        Text [ english ] = "IBMPC (850) / DOS";
-        Text [ english_us ] = "IBMPC (850) / DOS";
-        Text[ portuguese ] = "IBMPC (850) / DOS";
-        Text[ russian ] = "IBMPC (850) / DOS";
-        Text[ greek ] = "IBMPC (850) / DOS";
-        Text[ dutch ] = "IBMPC (850) / DOS";
-        Text[ french ] = "IBMPC (850) / DOS";
-        Text[ spanish ] = "IBMPC (850) / DOS";
-        Text[ finnish ] = "IBMPC (850) / DOS";
-        Text[ italian ] = "IBMPC (850) / DOS";
-        Text[ danish ] = "IBMPC (850) / DOS";
-        Text[ swedish ] = "IBMPC (850)/DOS";
-        Text[ polish ] = "IBMPC (850) / DOS";
-        Text[ portuguese_brazilian ] = "IBMPC (850) / DOS";
-        Text[ japanese ] = "IBMPC (850) / DOS";
-        Text[ korean ] = "IBMPC (850) / DOS";
-        Text[ chinese_simplified ] = "IBMPC (850) / DOS";
-        Text[ chinese_traditional ] = "IBMPC (850) / DOS";
-        Text[ turkish ] = "IBMPC (850) / DOS";
-        Text[ arabic ] = "IBMPC (850) / DOS";
-        Text[ catalan ] = "IBMPC (850) / DOS";
-        Text[ thai ] = "IBMPC (850) / DOS";
-    };
-    String 5
-    {
-        Text = "IBMPC (860)";
-        Text [ english ] = "IBMPC (860)";
-        Text [ english_us ] = "IBMPC (860)";
-        Text[ portuguese ] = "IBMPC (860)";
-        Text[ russian ] = "IBMPC (860)";
-        Text[ greek ] = "IBMPC (860)";
-        Text[ dutch ] = "IBMPC (860)";
-        Text[ french ] = "IBMPC (860)";
-        Text[ spanish ] = "IBMPC (860)";
-        Text[ finnish ] = "IBMPC (860)";
-        Text[ italian ] = "IBMPC (860)";
-        Text[ danish ] = "IBMPC (860)";
-        Text[ swedish ] = "IBMPC (860)";
-        Text[ polish ] = "IBMPC (860)";
-        Text[ portuguese_brazilian ] = "IBMPC (860)";
-        Text[ japanese ] = "IBMPC (860)";
-        Text[ korean ] = "IBMPC (860)";
-        Text[ chinese_simplified ] = "IBMPC (860)";
-        Text[ chinese_traditional ] = "IBMPC (860)";
-        Text[ turkish ] = "IBMPC (860)";
-        Text[ arabic ] = "IBMPC (860)";
-        Text[ catalan ] = "IBMPC (860)";
-        Text[ thai ] = "IBMPC (860)";
-    };
-    String 6
-    {
-        Text = "IBMPC (861)";
-        Text [ english ] = "IBMPC (861)";
-        Text [ english_us ] = "IBMPC (861)";
-        Text[ portuguese ] = "IBMPC (861)";
-        Text[ russian ] = "IBMPC (861)";
-        Text[ greek ] = "IBMPC (861)";
-        Text[ dutch ] = "IBMPC (861)";
-        Text[ french ] = "IBMPC (861)";
-        Text[ spanish ] = "IBMPC (861)";
-        Text[ finnish ] = "IBMPC (861)";
-        Text[ italian ] = "IBMPC (861)";
-        Text[ danish ] = "IBMPC (861)";
-        Text[ swedish ] = "IBMPC (861)";
-        Text[ polish ] = "IBMPC (861)";
-        Text[ portuguese_brazilian ] = "IBMPC (861)";
-        Text[ japanese ] = "IBMPC (861)";
-        Text[ korean ] = "IBMPC (861)";
-        Text[ chinese_simplified ] = "IBMPC (861)";
-        Text[ chinese_traditional ] = "IBMPC (861)";
-        Text[ turkish ] = "IBMPC (861)";
-        Text[ arabic ] = "IBMPC (861)";
-        Text[ catalan ] = "IBMPC (861)";
-        Text[ thai ] = "IBMPC (861)";
-    };
-    String 7
-    {
-        Text = "IBMPC (863)";
-        Text [ english ] = "IBMPC (863)";
-        Text [ english_us ] = "IBMPC (863)";
-        Text[ portuguese ] = "IBMPC (863)";
-        Text[ russian ] = "IBMPC (863)";
-        Text[ greek ] = "IBMPC (863)";
-        Text[ dutch ] = "IBMPC (863)";
-        Text[ french ] = "IBMPC (863)";
-        Text[ spanish ] = "IBMPC (863)";
-        Text[ finnish ] = "IBMPC (863)";
-        Text[ italian ] = "IBMPC (863)";
-        Text[ danish ] = "IBMPC (863)";
-        Text[ swedish ] = "IBMPC (863)";
-        Text[ polish ] = "IBMPC (863)";
-        Text[ portuguese_brazilian ] = "IBMPC (863)";
-        Text[ japanese ] = "IBMPC (863)";
-        Text[ korean ] = "IBMPC (863)";
-        Text[ chinese_simplified ] = "IBMPC (863)";
-        Text[ chinese_traditional ] = "IBMPC (863)";
-        Text[ turkish ] = "IBMPC (863)";
-        Text[ arabic ] = "IBMPC (863)";
-        Text[ catalan ] = "IBMPC (863)";
-        Text[ thai ] = "IBMPC (863)";
-    };
-    String 8
-    {
-        Text = "IBMPC (865)";
-        Text [ english ] = "IBMPC (865)";
-        Text [ english_us ] = "IBMPC (865)";
-        Text[ portuguese ] = "IBMPC (865)";
-        Text[ russian ] = "IBMPC (865)";
-        Text[ greek ] = "IBMPC (865)";
-        Text[ dutch ] = "IBMPC (865)";
-        Text[ french ] = "IBMPC (865)";
-        Text[ spanish ] = "IBMPC (865)";
-        Text[ finnish ] = "IBMPC (865)";
-        Text[ italian ] = "IBMPC (865)";
-        Text[ danish ] = "IBMPC (865)";
-        Text[ swedish ] = "IBMPC (865)";
-        Text[ polish ] = "IBMPC (865)";
-        Text[ portuguese_brazilian ] = "IBMPC (865)";
-        Text[ japanese ] = "IBMPC (865)";
-        Text[ korean ] = "IBMPC (865)";
-        Text[ chinese_simplified ] = "IBMPC (865)";
-        Text[ chinese_traditional ] = "IBMPC (865)";
-        Text[ turkish ] = "IBMPC (865)";
-        Text[ arabic ] = "IBMPC (865)";
-        Text[ catalan ] = "IBMPC (865)";
-        Text[ thai ] = "IBMPC (865)";
-    };
-    String 9
-    {
-        Text = "IBMPC (866)";
-        Text [ english ] = "IBMPC (866)";
-        Text [ english_us ] = "IBMPC (866)";
-        Text[ portuguese ] = "IBMPC (866)";
-        Text[ russian ] = "IBMPC (866)";
-        Text[ greek ] = "IBMPC (866)";
-        Text[ dutch ] = "IBMPC (866)";
-        Text[ french ] = "IBMPC (866)";
-        Text[ spanish ] = "IBMPC (866)";
-        Text[ finnish ] = "IBMPC (866)";
-        Text[ italian ] = "IBMPC (866)";
-        Text[ danish ] = "IBMPC (866)";
-        Text[ swedish ] = "IBMPC (866)";
-        Text[ polish ] = "IBMPC (866)";
-        Text[ portuguese_brazilian ] = "IBMPC (866)";
-        Text[ japanese ] = "IBMPC (866)";
-        Text[ korean ] = "IBMPC (866)";
-        Text[ chinese_simplified ] = "IBMPC (866)";
-        Text[ chinese_traditional ] = "IBMPC (866)";
-        Text[ turkish ] = "IBMPC (866)";
-        Text[ arabic ] = "IBMPC (866)";
-        Text[ catalan ] = "IBMPC (866)";
-        Text[ thai ] = "IBMPC (866)";
-    };
-    String 10
-    {
-        Text = "System";
-        Text [ english ] = "System";
-        Text [ english_us ] = "System";
-        Text[ portuguese ] = "Sistema";
-        Text[ russian ] = "System";
-        Text[ greek ] = "Óıóôçìá";
-        Text[ dutch ] = "Systeem";
-        Text[ french ] = "Système";
-        Text[ spanish ] = "Sistema";
-        Text[ finnish ] = "Järjestelmä";
-        Text[ italian ] = "Sistema";
-        Text[ danish ] = "System";
-        Text[ swedish ] = "System";
-        Text[ polish ] = "System";
-        Text[ portuguese_brazilian ] = "System";
-        Text[ japanese ] = "ã‚·ã‚¹ãƒ†ãƒ ";
-        Text[ korean ] = "ì‹œìŠ¤í…œ";
-        Text[ chinese_simplified ] = "ç³»ç»Ÿ";
-        Text[ chinese_traditional ] = "ç³»çµ±";
-        Text[ turkish ] = "Sistem";
-        Text[ arabic ] = "ÇáäÙÇã";
-        Text[ catalan ] = "System";
-        Text[ thai ] = "à¸£à¸°à¸šà¸š";
-    };
-    String 11
-    {
-        Text = "UTF-8";
-        Text [ english ] = "UTF-8";
-        Text [ english_us ] = "UTF-8";
-        Text[ portuguese ] = "UTF-8";
-        Text[ russian ] = "UTF-8";
-        Text[ greek ] = "UTF-8";
-        Text[ dutch ] = "UTF-8";
-        Text[ french ] = "UTF-8";
-        Text[ spanish ] = "UTF-8";
-        Text[ finnish ] = "UTF-8";
-        Text[ italian ] = "UTF-8";
-        Text[ danish ] = "UTF-8";
-        Text[ swedish ] = "UTF-8";
-        Text[ polish ] = "UTF-8";
-        Text[ portuguese_brazilian ] = "UTF-8";
-        Text[ japanese ] = "UTF-8";
-        Text[ korean ] = "UTF-8";
-        Text[ chinese_simplified ] = "UTF-8";
-        Text[ chinese_traditional ] = "UTF-8";
-        Text[ turkish ] = "UTF-8";
-        Text[ arabic ] = "UTF-8";
-        Text[ catalan ] = "UTF-8";
-        Text[ thai ] = "UTF-8";
-    };
-    String 12
-    {
-        Text = "Big5-HKSCS";
-        Text [ english ] = "Big5-HKSCS";
-        Text [ english_us ] = "Big5-HKSCS";
-        Text[ portuguese ] = "Big5-HKSCS";
-        Text[ russian ] = "Big5-HKSCS";
-        Text[ greek ] = "Big5-HKSCS";
-        Text[ dutch ] = "Big5-HKSCS";
-        Text[ french ] = "Big5-HKSCS";
-        Text[ spanish ] = "Big5 HKSCS";
-        Text[ finnish ] = "Big5-HKSCS";
-        Text[ italian ] = "Big5-HKSCS";
-        Text[ danish ] = "Big5-HKSCS";
-        Text[ swedish ] = "Big5-HKSCS";
-        Text[ polish ] = "Big5-HKSCS";
-        Text[ portuguese_brazilian ] = "Big5-HKSCS";
-        Text[ japanese ] = "Big5-HKSCS";
-        Text[ korean ] = "Big5-HKSCS";
-        Text[ chinese_simplified ] = "Big5-HKSCS";
-        Text[ chinese_traditional ] = "Big5-HKSCS";
-        Text[ turkish ] = "Big5-HKSCS";
-        Text[ arabic ] = "Big5-HKSCS";
-        Text[ catalan ] = "Big5-HKSCS";
-        Text[ thai ] = "Big5-HKSCS";
-    };
+String 1
+{
+    Text = "System";
+    Text [ english ] = "System";
+    Text [ english_us ] = "System";
+    Text[ portuguese ] = "Sistema";
+    Text[ russian ] = "Ansi";
+    Text[ greek ] = "Óıóôçìá";
+    Text[ dutch ] = "Ansi";
+    Text[ french ] = "Système";
+    Text[ spanish ] = "Sistema";
+    Text[ finnish ] = "Ansi";
+    Text[ italian ] = "Sistema";
+    Text[ danish ] = "Ansi";
+    Text[ swedish ] = "System";
+    Text[ polish ] = "Ansi";
+    Text[ portuguese_brazilian ] = "System";
+    Text[ japanese ] = "Ansi";
+    Text[ korean ] = "ì‹œìŠ¤í…œ";
+    Text[ chinese_simplified ] = "ç³»ç»Ÿ";
+    Text[ chinese_traditional ] = "ç³»çµ±";
+    Text[ turkish ] = "Sistem";
+    Text[ arabic ] = "ÇáäÙÇã";
+    Text[ catalan ] = "Ansi";
+    Text[ thai ] = "à¸£à¸°à¸šà¸š";
+};
 };
 
 //-------------------------------------------------------------------------
 String STR_GENERAL_SDB_ERROR
 {
-    Text = "Fehler bei der Verbindung mit der Datenquelle";
-    Text [ english ] = "Error while connecting to the data source";
-    Text [ english_us ] = "Error while connecting to the data source";
-    Text[ portuguese ] = "Erro na ligação à fonte de dados";
-    Text[ russian ] = "Îøèáêà ïîäêëş÷åíèÿ ê èñòî÷íèêó äàííûõ";
-    Text[ greek ] = "ĞáñïõóéÜóôçêå óöÜëìá êáôÜ ôç óıíäåóç ìå ôçí ğñïİëåõóç ôùí äåäïìİíùí";
-    Text[ dutch ] = "Fout bij verbinding met gegevensbron";
-    Text[ french ] = "Erreur lors de la connexion à la source de données";
-    Text[ spanish ] = "Error durante la conexión con la fuente de datos";
-    Text[ italian ] = "Errore durante il collegamento alla sorgente dati";
-    Text[ danish ] = "Fejl under forbindelsen med datakilden";
-    Text[ swedish ] = "Fel vid anslutningen till datakällan";
-    Text[ polish ] = "B³¹d w ³¹czeniu ze Ÿród³em danych";
-    Text[ portuguese_brazilian ] = "Error while connecting to the data source";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¸æ¥ç¶šæ™‚ã®ã‚¨ãƒ©ãƒ¼";
-    Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤ì— ì—°ê²°ì‹œì— ì˜¤ë¥˜";
-    Text[ chinese_simplified ] = "åœ¨å’Œæ•°æ®æºè¿æ¥æ—¶å‘ç”Ÿä¸€ä¸ªé”™è¯¯";
-    Text[ chinese_traditional ] = "é€£ç·šåˆ°è³‡æ–™æºæ™‚ç™¼ç”Ÿä¸€å€‹éŒ¯èª¤";
-    Text[ turkish ] = "Error while connecting to the data source";
-    Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÇáÇÊÕÇá ÈãÕÏÑ ÇáÈíÇäÇÊ";
-    Text[ finnish ] = "On ilmennyt virhe muodostettaessa yhteyttä tietolähteeseen";
-    Text[ catalan ] = "S'ha produït un error en connectar amb la font de dades";
-    Text[ thai ] = "à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸‚à¸“à¸°à¸à¸³à¸¥à¸±à¸‡à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­à¸à¸±à¸šà¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+Text = "Fehler bei der Verbindung mit der Datenquelle";
+Text [ english ] = "Error while connecting to the data source";
+Text [ english_us ] = "Error while connecting to the data source";
+Text[ portuguese ] = "Erro na ligação à fonte de dados";
+Text[ russian ] = "Îøèáêà ïîäêëş÷åíèÿ ê èñòî÷íèêó äàííûõ";
+Text[ greek ] = "ĞáñïõóéÜóôçêå óöÜëìá êáôÜ ôç óıíäåóç ìå ôçí ğñïİëåõóç ôùí äåäïìİíùí";
+Text[ dutch ] = "Fout bij verbinding met gegevensbron";
+Text[ french ] = "Erreur lors de la connexion à la source de données";
+Text[ spanish ] = "Error durante la conexión con la fuente de datos";
+Text[ italian ] = "Errore durante il collegamento alla sorgente dati";
+Text[ danish ] = "Fejl under forbindelsen med datakilden";
+Text[ swedish ] = "Fel vid anslutningen till datakällan";
+Text[ polish ] = "B³¹d w ³¹czeniu ze Ÿród³em danych";
+Text[ portuguese_brazilian ] = "Error while connecting to the data source";
+Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¸æ¥ç¶šæ™‚ã®ã‚¨ãƒ©ãƒ¼";
+Text[ korean ] = "ë°ì´í„° ì›ë³¸ìœ¼ë¡œ ì—°ê²°í•˜ë˜ ì¤‘ ì˜¤ë¥˜";
+Text[ chinese_simplified ] = "åœ¨å’Œæ•°æ®æºè¿æ¥æ—¶å‘ç”Ÿä¸€ä¸ªé”™è¯¯";
+Text[ chinese_traditional ] = "é€£ç·šåˆ°è³‡æ–™æºæ™‚ç™¼ç”Ÿä¸€å€‹éŒ¯èª¤";
+Text[ turkish ] = "Error while connecting to the data source";
+Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÇáÇÊÕÇá ÈãÕÏÑ ÇáÈíÇäÇÊ";
+Text[ finnish ] = "On ilmennyt virhe muodostettaessa yhteyttä tietolähteeseen";
+Text[ catalan ] = "S'ha produït un error en connectar amb la font de dades";
+Text[ thai ] = "à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸‚à¸“à¸°à¸à¸³à¸¥à¸±à¸‡à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­à¸à¸±à¸šà¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
 
 String STR_OBJECT_ALREADY_EXSISTS
 {
-    Text = "Fehler beim Erzeugen!";
-    Text [ english ] = "Error while creating!";
-    Text [ english_us ] = "Error during creation!";
-    Text[ portuguese ] = "Erro ao criar objecto!";
-    Text[ russian ] = "Îøèáêà ñîçäàíèÿ!";
-    Text[ greek ] = "ÓöÜëìá êáôÜ ôçí äçìéïõñãßá!";
-    Text[ dutch ] = "Fout bij definiëren!";
-    Text[ french ] = "Erreur durant le processus de création !";
-    Text[ spanish ] = "¡Error al crear el objeto!";
-    Text[ italian ] = "Errore nella creazione dell'oggetto";
-    Text[ danish ] = "Fejl under genereringen!";
-    Text[ swedish ] = "Fel när objekt skulle skapas!";
-    Text[ polish ] = "B³¹d w trakcie tworzenia!";
-    Text[ portuguese_brazilian ] = "Error while creating!";
-    Text[ japanese ] = "ä½œæˆã™ã‚‹ã¨ãã®ã‚¨ãƒ©ãƒ¼ã€‚";
-    Text[ korean ] = "ì‘ì„± ì˜¤ë¥˜!";
-    Text[ chinese_simplified ] = "åœ¨ç”Ÿæˆæ—¶å‘ç”Ÿä¸€ä¸ªé”™è¯¯ï¼";
-    Text[ chinese_traditional ] = "åœ¨å»ºç«‹æ™‚ç™¼ç”ŸéŒ¯èª¤";
-    Text[ turkish ] = "Error while creating!";
-    Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÇáÅäÔÇÁ!";
-    Text[ finnish ] = "Virhe luonnin aikana.";
-    Text[ catalan ] = "S'ha produït un error durant el procés de creació";
-    Text[ thai ] = "à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¹ƒà¸™à¸£à¸°à¸«à¸§à¹ˆà¸²à¸‡à¸à¸²à¸£à¸ªà¸£à¹‰à¸²à¸‡!";
+Text = "Fehler beim Erzeugen!";
+Text [ english ] = "Error while creating!";
+Text [ english_us ] = "Error during creation!";
+Text[ portuguese ] = "Erro ao criar objecto!";
+Text[ russian ] = "Îøèáêà ñîçäàíèÿ!";
+Text[ greek ] = "ÓöÜëìá êáôÜ ôçí äçìéïõñãßá!";
+Text[ dutch ] = "Fout bij definiëren!";
+Text[ french ] = "Erreur durant le processus de création !";
+Text[ spanish ] = "¡Error al crear el objeto!";
+Text[ italian ] = "Errore nella creazione dell'oggetto";
+Text[ danish ] = "Fejl under genereringen!";
+Text[ swedish ] = "Fel när objekt skulle skapas!";
+Text[ polish ] = "B³¹d w trakcie tworzenia!";
+Text[ portuguese_brazilian ] = "Error while creating!";
+Text[ japanese ] = "ä½œæˆã™ã‚‹ã¨ãã®ã‚¨ãƒ©ãƒ¼ã€‚";
+Text[ korean ] = "ë§Œë“œëŠ” ì¤‘ ì˜¤ë¥˜";
+Text[ chinese_simplified ] = "åœ¨ç”Ÿæˆæ—¶å‘ç”Ÿä¸€ä¸ªé”™è¯¯ï¼";
+Text[ chinese_traditional ] = "åœ¨å»ºç«‹æ™‚ç™¼ç”ŸéŒ¯èª¤";
+Text[ turkish ] = "Error while creating!";
+Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÇáÅäÔÇÁ!";
+Text[ finnish ] = "Virhe luonnin aikana.";
+Text[ catalan ] = "S'ha produït un error durant el procés de creació";
+Text[ thai ] = "à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¹ƒà¸™à¸£à¸°à¸«à¸§à¹ˆà¸²à¸‡à¸à¸²à¸£à¸ªà¸£à¹‰à¸²à¸‡!";
 };
 
 String STR_UNEXPECTED_ERROR
 {
-    Text = "Ein unerwarteter Fehler ist aufgetreten. Die operation kann nicht ausgeführt werden.";
-    Text [ english ] = "An unexpected error occured. The operation could not be completed.";
-    Text [ english_us ] = "An unexpected error occurred. The operation could not be performed.";
-    Text[ portuguese ] = "Ocorreu um erro imprevisto. É impossível executar a operação.";
-    Text[ russian ] = "Ïğîèçîøëà íåîæèäàííàÿ îøèáêà. Íåâîçìîæíî âûïîëíèòü äàííóş îïåğàöèş.";
-    Text[ greek ] = "ĞáñïõóéÜóôçêå İíá ìç áíáìåíüìåíï óöÜëìá. Äåí Şôáí äõíáôüí íá åêôåëåóôåß ç åíôïëŞ.";
-    Text[ dutch ] = "Er is een onverwachte fout opgetreden. De opdracht kan niet worden uitgevoerd.";
-    Text[ french ] = "Une erreur imprévue s'est produite : impossible d'exécuter l'opération !";
-    Text[ spanish ] = "Se ha producido un error. Imposible ejecutar la operación.";
-    Text[ finnish ] = "On ilmennyt odottamaton virhe. Toimintoa ei voitu suorittaa.";
-    Text[ italian ] = "Si è verificato un errore inaspettato. Impossibile terminare l'operazione.";
-    Text[ danish ] = "Der er opstået en uventet fejl. Operationen kan ikke udføres.";
-    Text[ swedish ] = "Ett oväntat fel har uppstått. Det går inte att utföra operationen.";
-    Text[ polish ] = "Wyst¹pi³ nieoczekiwany b³¹d. Operacji nie mo¿na wykonaæ.";
-    Text[ portuguese_brazilian ] = "An unexpected error occured. The operation could not be completed.";
-    Text[ japanese ] = "äºˆæœŸã—ãªã„ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚æ“ä½œã®å®Ÿè¡Œã¯ã§ãã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ì˜ˆìƒì¹˜ ëª»í–ˆë˜ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤. ì‘ì—…ì„ ì‹¤í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤";
-    Text[ chinese_simplified ] = "å‘ç”Ÿä¸€ä¸ªæ„å¤–çš„é”™è¯¯ã€‚æ— æ³•æ‰§è¡Œè¿™ä¸ªæ“ä½œã€‚";
-    Text[ chinese_traditional ] = "ç™¼ç”Ÿä¸€å€‹æ„å¤–çš„éŒ¯èª¤ã€‚ç„¡æ³•åŸ·è¡Œé€™å€‹å‹•ä½œã€‚";
-    Text[ turkish ] = "An unexpected error occured. The operation could not be completed.";
-    Text[ arabic ] = "An unexpected error occured. The operation could not be completed.";
-    Text[ catalan ] = "S'ha produït un error inesperat. L'operació no s'ha pogut realitzar.";
-    Text[ thai ] = "à¹€à¸à¸´à¸”à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸„à¸²à¸”à¸„à¸´à¸” à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹à¸ªà¸”à¸‡à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£à¹„à¸”à¹‰";
+Text = "Ein unerwarteter Fehler ist aufgetreten. Die operation kann nicht ausgeführt werden.";
+Text [ english ] = "An unexpected error occured. The operation could not be completed.";
+Text [ english_us ] = "An unexpected error occurred. The operation could not be performed.";
+Text[ portuguese ] = "Ocorreu um erro imprevisto. É impossível executar a operação.";
+Text[ russian ] = "Ïğîèçîøëà íåîæèäàííàÿ îøèáêà. Íåâîçìîæíî âûïîëíèòü äàííóş îïåğàöèş.";
+Text[ greek ] = "ĞáñïõóéÜóôçêå İíá ìç áíáìåíüìåíï óöÜëìá. Äåí Şôáí äõíáôüí íá åêôåëåóôåß ç åíôïëŞ.";
+Text[ dutch ] = "Er is een onverwachte fout opgetreden. De opdracht kan niet worden uitgevoerd.";
+Text[ french ] = "Une erreur imprévue s'est produite : impossible d'exécuter l'opération !";
+Text[ spanish ] = "Se ha producido un error. Imposible ejecutar la operación.";
+Text[ finnish ] = "On ilmennyt odottamaton virhe. Toimintoa ei voitu suorittaa.";
+Text[ italian ] = "Si è verificato un errore inaspettato. Impossibile terminare l'operazione.";
+Text[ danish ] = "Der er opstået en uventet fejl. Operationen kan ikke udføres.";
+Text[ swedish ] = "Ett oväntat fel har uppstått. Det går inte att utföra operationen.";
+Text[ polish ] = "Wyst¹pi³ nieoczekiwany b³¹d. Operacji nie mo¿na wykonaæ.";
+Text[ portuguese_brazilian ] = "An unexpected error occured. The operation could not be completed.";
+Text[ japanese ] = "äºˆæœŸã—ãªã„ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚æ“ä½œã®å®Ÿè¡Œã¯ã§ãã¾ã›ã‚“ã€‚";
+Text[ korean ] = "ì˜ˆìƒì¹˜ ëª»í–ˆë˜ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤. ì‘ì—…ì„ ì‹¤í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
+Text[ chinese_simplified ] = "å‘ç”Ÿä¸€ä¸ªæ„å¤–çš„é”™è¯¯ã€‚æ— æ³•æ‰§è¡Œè¿™ä¸ªæ“ä½œã€‚";
+Text[ chinese_traditional ] = "ç™¼ç”Ÿä¸€å€‹æ„å¤–çš„éŒ¯èª¤ã€‚ç„¡æ³•åŸ·è¡Œé€™å€‹å‹•ä½œã€‚";
+Text[ turkish ] = "An unexpected error occured. The operation could not be completed.";
+Text[ arabic ] = "An unexpected error occured. The operation could not be completed.";
+Text[ catalan ] = "S'ha produït un error inesperat. L'operació no s'ha pogut realitzar.";
+Text[ thai ] = "à¹€à¸à¸´à¸”à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸„à¸²à¸”à¸„à¸´à¸” à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹à¸ªà¸”à¸‡à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£à¹„à¸”à¹‰";
 };
 
 String STR_COULDNOTOPEN_LINKEDDOC
 {
-    Text = "Das Dokument\n\n$file$\n\nkonnte nicht geöffnet werden.";
-    Text [ english ] = "Th document\n\n$file$\n\ncould not be opened.";
-    Text [ english_us ] = "The document\n\n$file$\n\ncould not be opened.";
-    Text[ portuguese ] = "Foi impossível abrir o documento\n\n$file$\n\n.";
-    Text[ russian ] = "Íåâîçìîæíî îòêğûòü äîêóìåíò\n\n$file$\n\n.";
-    Text[ greek ] = "Äåí Şôáí äõíáôüí íá áíïé÷ôåß ôï İããñáöï\n\n$file$.";
-    Text[ dutch ] = "Het document\n\n$file$\n\nkan niet worden geopend.";
-    Text[ french ] = "Impossible d'ouvrir\n\nle document\n\n$file$ !";
-    Text[ spanish ] = "No se pudo abrir el documento\n\n$file$\n\n.";
-    Text[ finnish ] = "Asiakirjan\n\n$file$\n\navaaminen ei onnistunut.";
-    Text[ italian ] = "Impossibile\naprire il documento\n\n$file$.";
-    Text[ danish ] = "Dokumentet\n\n$file$\n\nkunne ikke åbnes.";
-    Text[ swedish ] = "Det gick inte att öppna dokumentet\n\n$file$\n\n.";
-    Text[ polish ] = "Otwarcie dokumentu\n\n$file$\n\nnie powiod³o siê.";
-    Text[ portuguese_brazilian ] = "Th document\n\n$file$\n\ncould not be opened.";
-    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ\n\n$file$ ã¯\n\né–‹ã‘ã¾ã›ã‚“ã§ã—ãŸã€‚";
-    Text[ korean ] = "\n\n$íŒŒì¼$\n\në¬¸ì„œë¥¼ ì—´ìˆ˜ ì—†ì—ˆìŠµë‹ˆë‹¤";
-    Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡æ¡£\n\n$file$\n\næ— æ³•è¢«æ‰“å¼€ã€‚";
-    Text[ chinese_traditional ] = "é€™å€‹æ–‡ä»¶\n\n$file$\n\nç„¡æ³•é–‹å•Ÿã€‚";
-    Text[ turkish ] = "Th document\n\n$file$\n\ncould not be opened.";
-    Text[ arabic ] = "Th document\n\n$file$\n\ncould not be opened.";
-    Text[ catalan ] = "No s'ha pogut obrir el document\n\n$file$.\n\n";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸´à¸”à¹€à¸­à¸à¸ªà¸²à¸£\n\n$file$\n\nà¹„à¸”à¹‰";
+Text = "Das Dokument\n\n$file$\n\nkonnte nicht geöffnet werden.";
+Text [ english ] = "Th document\n\n$file$\n\ncould not be opened.";
+Text [ english_us ] = "The document\n\n$file$\n\ncould not be opened.";
+Text[ portuguese ] = "Foi impossível abrir o documento\n\n$file$\n\n.";
+Text[ russian ] = "Íåâîçìîæíî îòêğûòü äîêóìåíò\n\n$file$\n\n.";
+Text[ greek ] = "Äåí Şôáí äõíáôüí íá áíïé÷ôåß ôï İããñáöï\n\n$file$.";
+Text[ dutch ] = "Het document\n\n$file$\n\nkan niet worden geopend.";
+Text[ french ] = "Impossible d'ouvrir\n\nle document\n\n$file$ !";
+Text[ spanish ] = "No se pudo abrir el documento\n\n$file$\n\n.";
+Text[ finnish ] = "Asiakirjan\n\n$file$\n\navaaminen ei onnistunut.";
+Text[ italian ] = "Impossibile\naprire il documento\n\n$file$.";
+Text[ danish ] = "Dokumentet\n\n$file$\n\nkunne ikke åbnes.";
+Text[ swedish ] = "Det gick inte att öppna dokumentet\n\n$file$\n\n.";
+Text[ polish ] = "Otwarcie dokumentu\n\n$file$\n\nnie powiod³o siê.";
+Text[ portuguese_brazilian ] = "Th document\n\n$file$\n\ncould not be opened.";
+Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ\n\n$file$ ã¯\n\né–‹ã‘ã¾ã›ã‚“ã§ã—ãŸã€‚";
+Text[ korean ] = "\n\n$file$\n\në¬¸ì„œë¥¼ ì—´ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
+Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡æ¡£\n\n$file$\n\næ— æ³•è¢«æ‰“å¼€ã€‚";
+Text[ chinese_traditional ] = "é€™å€‹æ–‡ä»¶\n\n$file$\n\nç„¡æ³•é–‹å•Ÿã€‚";
+Text[ turkish ] = "Th document\n\n$file$\n\ncould not be opened.";
+Text[ arabic ] = "Th document\n\n$file$\n\ncould not be opened.";
+Text[ catalan ] = "No s'ha pogut obrir el document\n\n$file$.\n\n";
+Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸´à¸”à¹€à¸­à¸à¸ªà¸²à¸£\n\n$file$\n\nà¹„à¸”à¹‰";
 };
 
 String STR_MISSING_TABLES_XDROP
 {
-    Text = "Die Tabelle kann nicht gelöscht werden, da die Datenbankverbindung diese nicht unterstützt.";
-    Text [ english ] = "The table can't be dropped, 'cause the database connection does not support this.";
-    Text [ english_us ] = "The table cannot be deleted because the database connection does not support this.";
-    Text[ portuguese ] = "A tabela não tem suporte na ligação da base de dados e por isso impossível de eliminar.";
-    Text[ russian ] = "Íåâîçìîæíî óäàëèòü òàáëèöó, òàê êàê ïîäêëş÷åíèå ê áàçå äàííûõ ıòî íå ïîääåğæèâàåò.";
-    Text[ greek ] = "Äåí åßíáé äõíáôüí íá äéáãñáöåß ï ğßíáêáò, åğåéäŞ äåí õğÜñ÷åé óıíäåóç ìå ôçí âÜóç äåäïìİíùí.";
-    Text[ dutch ] = "De tabel kan niet worden gewist omdat deze niet wordt ondersteund door de database.";
-    Text[ french ] = "Impossible de supprimer la table : elle n'est pas supportée par la connexion de BD.";
-    Text[ spanish ] = "No se puede eliminar la tabla porque la conexión con la base de datos no apoya esta operación.";
-    Text[ finnish ] = "Taulua ei voi poistaa, koska tietokantayhteys ei tue poistamista.";
-    Text[ italian ] = "Impossibile eliminare la tabella perché non è supportata dal collegamento al database.";
-    Text[ danish ] = "Tabellen kan ikke slettes, da databaseforbindelsen ikke understøtter den.";
-    Text[ swedish ] = "Det går inte att radera tabellen eftersom databasförbindelsen inte stödjer den.";
-    Text[ polish ] = "Tabeli nie mo¿na usun¹æ, poniewa¿ nie jest ona os³ugiwana przez po³¹czenie z baz¹ danych.";
-    Text[ portuguese_brazilian ] = "The table can't be dropped, 'cause the database connection does not support this.";
-    Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã¯ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®æ¥ç¶šãŒã“ã‚Œã‚’æ”¯æ´ã—ãªã„ãŸã‚å‰Šé™¤ã§ãã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ì—°ê²°ì—ì„œ ì§€ì›ë˜ì§€ ì•Šê¸° ë•Œë¬¸ì— ì‹œíŠ¸ì„ ì‚­ì œí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤";
-    Text[ chinese_simplified ] = "å› ä¸ºæ•°æ®åº“çš„è¿æ¥ä¸æ”¯æŒè¿™ä¸ªåŠŸèƒ½è€Œæ— æ³•åˆ é™¤è¿™ä¸ªè¡¨æ ¼ã€‚";
-    Text[ chinese_traditional ] = "å› ç‚ºè³‡æ–™åº«é€£ç·šä¸æ”¯æ´é€™å€‹å‹•ä½œè€Œç„¡æ³•åˆªé™¤é€™å€‹è¡¨æ ¼ã€‚";
-    Text[ turkish ] = "The table can't be dropped, 'cause the database connection does not support this.";
-    Text[ arabic ] = "The table can't be dropped, 'cause the database connection does not support this.";
-    Text[ catalan ] = "No es pot suprimir la taula perquè la connexió de la base de dades no ho permet.";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸¥à¸šà¸•à¸²à¸£à¸²à¸‡à¹„à¸”à¹‰à¹€à¸™à¸·à¹ˆà¸­à¸‡à¸ˆà¸²à¸à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸¡à¹ˆà¸ªà¸™à¸±à¸šà¸ªà¸™à¸¸à¸™à¸ªà¸´à¹ˆà¸‡à¸™à¸µà¹‰";
+Text = "Die Tabelle kann nicht gelöscht werden, da die Datenbankverbindung diese nicht unterstützt.";
+Text [ english ] = "The table can't be dropped, 'cause the database connection does not support this.";
+Text [ english_us ] = "The table cannot be deleted because the database connection does not support this.";
+Text[ portuguese ] = "A tabela não tem suporte na ligação da base de dados e por isso impossível de eliminar.";
+Text[ russian ] = "Íåâîçìîæíî óäàëèòü òàáëèöó, òàê êàê ıòî íå ïîääåğæèâàåòñÿ ïîäêëş÷åíèåì ê áàçå äàííûõ.";
+Text[ greek ] = "Äåí åßíáé äõíáôüí íá äéáãñáöåß ï ğßíáêáò, åğåéäŞ äåí õğÜñ÷åé óıíäåóç ìå ôçí âÜóç äåäïìİíùí.";
+Text[ dutch ] = "De tabel kan niet worden gewist omdat deze niet wordt ondersteund door de database.";
+Text[ french ] = "Impossible de supprimer la table : elle n'est pas supportée par la connexion de BD.";
+Text[ spanish ] = "No se puede borrar la tabla porque la conexión con la base de datos no admite esta operación.";
+Text[ finnish ] = "Taulua ei voi poistaa, koska tietokantayhteys ei tue poistamista.";
+Text[ italian ] = "Impossibile eliminare la tabella perché non è supportata dal collegamento al database.";
+Text[ danish ] = "Tabellen kan ikke slettes, da databaseforbindelsen ikke understøtter den.";
+Text[ swedish ] = "Det går inte att radera tabellen eftersom databasförbindelsen inte stödjer den.";
+Text[ polish ] = "Tabeli nie mo¿na usun¹æ, poniewa¿ nie jest ona os³ugiwana przez po³¹czenie z baz¹ danych.";
+Text[ portuguese_brazilian ] = "The table can't be dropped, 'cause the database connection does not support this.";
+Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã¯ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®æ¥ç¶šãŒã“ã‚Œã‚’æ”¯æ´ã—ãªã„ãŸã‚å‰Šé™¤ã§ãã¾ã›ã‚“ã€‚";
+Text[ korean ] = "í…Œì´ë¸”ì„ ë°ì´í„°ë² ì´ìŠ¤ ì—°ê²°ì—ì„œ ì§€ì›ë˜ì§€ ì•Šê¸° ë•Œë¬¸ì— ì‚­ì œí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
+Text[ chinese_simplified ] = "å› ä¸ºæ•°æ®åº“çš„è¿æ¥ä¸æ”¯æŒè¿™ä¸ªåŠŸèƒ½è€Œæ— æ³•åˆ é™¤è¿™ä¸ªè¡¨æ ¼ã€‚";
+Text[ chinese_traditional ] = "å› ç‚ºè³‡æ–™åº«é€£ç·šä¸æ”¯æ´é€™å€‹å‹•ä½œè€Œç„¡æ³•åˆªé™¤é€™å€‹è¡¨æ ¼ã€‚";
+Text[ turkish ] = "The table can't be dropped, 'cause the database connection does not support this.";
+Text[ arabic ] = "The table can't be dropped, 'cause the database connection does not support this.";
+Text[ catalan ] = "No es pot suprimir la taula perquè la connexió de la base de dades no ho permet.";
+Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸¥à¸šà¸•à¸²à¸£à¸²à¸‡à¹„à¸”à¹‰à¹€à¸™à¸·à¹ˆà¸­à¸‡à¸ˆà¸²à¸à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸¡à¹ˆà¸ªà¸™à¸±à¸šà¸ªà¸™à¸¸à¸™à¸ªà¸´à¹ˆà¸‡à¸™à¸µà¹‰";
 };
 
 String STR_BUTTON_TEXT_ALL
 {
-    Text = "~Alle";
-    Text [ english ] = "~All";
-    Text [ english_us ] = "~All";
+Text = "~Alle";
+Text [ english ] = "~All";
+Text [ english_us ] = "~All";
 
-    Text[ language_user1 ] = "This will be a button text in a dialog asking for confirmation. Something like 'Yes/All/No/Cancel'";
-    Text[ portuguese ] = "~Tudo";
-    Text[ russian ] = "~Âñå";
-    Text[ greek ] = "¼ë~á";
-    Text[ dutch ] = "~Alle";
-    Text[ french ] = "~Tout";
-    Text[ spanish ] = "~Todos";
-    Text[ finnish ] = "~Kaikki";
-    Text[ italian ] = "~Tutti";
-    Text[ danish ] = "~Alle";
-    Text[ swedish ] = "~Alla";
-    Text[ polish ] = "~Wszystkie";
-    Text[ portuguese_brazilian ] = "~All";
-    Text[ japanese ] = "ã™ã¹ã¦(~A)";
-    Text[ korean ] = "ëª¨ë‘(~A)";
-    Text[ chinese_simplified ] = "å…¨éƒ¨(~A)";
-    Text[ chinese_traditional ] = "å…¨éƒ¨(~A)";
-    Text[ turkish ] = "~All";
-    Text[ arabic ] = "~All";
-    Text[ catalan ] = "~Tots";
-    Text[ thai ] = "~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
+Text[ language_user1 ] = "This will be a button text in a dialog asking for confirmation. Something like 'Yes/All/No/Cancel'";
+Text[ portuguese ] = "~Tudo";
+Text[ russian ] = "~Âñå";
+Text[ greek ] = "¼ë~á";
+Text[ dutch ] = "~Alle";
+Text[ french ] = "~Tout";
+Text[ spanish ] = "~Todos";
+Text[ finnish ] = "~Kaikki";
+Text[ italian ] = "~Tutti";
+Text[ danish ] = "~Alle";
+Text[ swedish ] = "~Alla";
+Text[ polish ] = "~Wszystkie";
+Text[ portuguese_brazilian ] = "~All";
+Text[ japanese ] = "ã™ã¹ã¦(~A)";
+Text[ korean ] = "ëª¨ë‘(~A)";
+Text[ chinese_simplified ] = "å…¨éƒ¨(~A)";
+Text[ chinese_traditional ] = "å…¨éƒ¨(~A)";
+Text[ turkish ] = "~All";
+Text[ arabic ] = "~All";
+Text[ catalan ] = "~Tots";
+Text[ thai ] = "~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
 };
 
 String STR_UNDO_COLON
 {
-    Text = "Rückgängig:" ;
-    Text [ ENGLISH ] = "Undo:" ;
-    Text[ english_us ] = "Undo:";
-    Text[ portuguese ] = "Anular:";
-    Text[ russian ] = "Îòìåíèòü";
-    Text[ greek ] = "Áíáßñåóç";
-    Text[ dutch ] = "Ongedaan";
-    Text[ french ] = "Annuler:";
-    Text[ spanish ] = "Deshacer:";
-    Text[ italian ] = "Annulla:";
-    Text[ danish ] = "Fortryd:";
-    Text[ swedish ] = "Ångra:";
-    Text[ polish ] = "Cofnij";
-    Text[ portuguese_brazilian ] = "Undo:";
-    Text[ japanese ] = "å…ƒã«æˆ»ã™:";
-    Text[ korean ] = "ì‹¤í–‰ ì·¨ì†Œ:";
-    Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤ï¼š";
-    Text[ chinese_traditional ] = "å¾©åŸï¼š";
-    Text[ turkish ] = "Undo";
-    Text[ arabic ] = "ÊÑÇÌÚ";
-    Text[ catalan ] = "Desfés:";
-    Text[ finnish ] = "Peruuta:";
-    Text[ thai ] = "à¹€à¸¥à¸´à¸à¸—à¸³";
+Text = "Rückgängig:" ;
+Text [ ENGLISH ] = "Undo:" ;
+Text[ english_us ] = "Undo:";
+Text[ portuguese ] = "Anular:";
+Text[ russian ] = "Îòìåíèòü";
+Text[ greek ] = "Áíáßñåóç";
+Text[ dutch ] = "Ongedaan";
+Text[ french ] = "Annuler :";
+Text[ spanish ] = "Deshacer:";
+Text[ italian ] = "Annulla:";
+Text[ danish ] = "Fortryd:";
+Text[ swedish ] = "Ångra:";
+Text[ polish ] = "Cofnij";
+Text[ portuguese_brazilian ] = "Undo:";
+Text[ japanese ] = "å…ƒã«æˆ»ã™:";
+Text[ korean ] = "ì‹¤í–‰ ì·¨ì†Œ:";
+Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤ï¼š";
+Text[ chinese_traditional ] = "å¾©åŸï¼š";
+Text[ turkish ] = "Undo";
+Text[ arabic ] = "ÊÑÇÌÚ";
+Text[ catalan ] = "Desfés:";
+Text[ finnish ] = "Peruuta:";
+Text[ thai ] = "à¹€à¸¥à¸´à¸à¸—à¸³";
 };
 
 String STR_REDO_COLON
 {
-    Text = "Wiederherstellen:" ;
-    Text [ ENGLISH ] = "Redo:" ;
-    Text[ english_us ] = "Redo:";
-    Text[ portuguese ] = "Restaurar:";
-    Text[ russian ] = "Âîññòàíîâèòü";
-    Text[ greek ] = "ÅğáíáöïñÜ";
-    Text[ dutch ] = "Herstellen:";
-    Text[ french ] = "Restaurer:";
-    Text[ spanish ] = "Restaurar:";
-    Text[ italian ] = "Ripristina:";
-    Text[ danish ] = "Gendan:";
-    Text[ swedish ] = "Återställ:";
-    Text[ polish ] = "Przywróæ";
-    Text[ portuguese_brazilian ] = "Redo:";
-    Text[ japanese ] = "ã‚„ã‚Šç›´ã—:";
-    Text[ korean ] = "ë‹¤ì‹œ ì‹¤í–‰:";
-    Text[ chinese_simplified ] = "æ¢å¤æ’¤æ¶ˆå‘½ä»¤ï¼š";
-    Text[ chinese_traditional ] = "æ¢å¾©æ’¤æ¶ˆæŒ‡ä»¤:";
-    Text[ turkish ] = "Redo";
-    Text[ arabic ] = "ÅÚÇÏÉ";
-    Text[ catalan ] = "Refés";
-    Text[ finnish ] = "Toista ";
-    Text[ thai ] = "à¸—à¸³à¸‹à¹‰à¸³";
+Text = "Wiederherstellen:" ;
+Text [ ENGLISH ] = "Redo:" ;
+Text[ english_us ] = "Redo:";
+Text[ portuguese ] = "Restaurar:";
+Text[ russian ] = "Âîññòàíîâèòü";
+Text[ greek ] = "ÅğáíáöïñÜ";
+Text[ dutch ] = "Herstellen:";
+Text[ french ] = "Restaurer :";
+Text[ spanish ] = "Restaurar:";
+Text[ italian ] = "Ripristina:";
+Text[ danish ] = "Gendan:";
+Text[ swedish ] = "Återställ:";
+Text[ polish ] = "Przywróæ";
+Text[ portuguese_brazilian ] = "Redo:";
+Text[ japanese ] = "ã‚„ã‚Šç›´ã—:";
+Text[ korean ] = "ë‹¤ì‹œ ì‹¤í–‰:";
+Text[ chinese_simplified ] = "æ¢å¤æ’¤æ¶ˆå‘½ä»¤ï¼š";
+Text[ chinese_traditional ] = "æ¢å¾©æ’¤æ¶ˆæŒ‡ä»¤:";
+Text[ turkish ] = "Redo";
+Text[ arabic ] = "ÅÚÇÏÉ";
+Text[ catalan ] = "Refés";
+Text[ finnish ] = "Toista ";
+Text[ thai ] = "à¸—à¸³à¸‹à¹‰à¸³";
 };
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.51  2002/12/05 10:31:17  kz
- *  Merge SRX644: 05.12.02 - 11:27:53
- *
- *  Revision 1.50  2002/11/25 15:12:13  kz
- *  Merge SRX644: 25.11.02 - 16:08:20
- *
- *  Revision 1.49  2002/11/21 15:27:11  oj
- *  #105213# impl new feature of rown mysql driver page
- *
- *  Revision 1.48  2002/09/05 10:53:01  kz
- *  Merge SRX643: 05.09.02 - 12:49:41
- *
- *  Revision 1.47  2002/08/19 07:51:10  oj
- *  #99473# change string resource files
- *
- *  Revision 1.46  2002/08/01 20:27:29  kz
- *  Merge SRX643: 01.08.02 - 22:24:17
- *
- *  Revision 1.45  2002/07/22 07:39:28  oj
- *  #101514# remove resource entries for PLUS and MINUS
- *
- *  Revision 1.0 26.09.00 08:26:13  fs
- ************************************************************************/
-
-
-
-
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 07:53:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@
 #define TAB_PAGE_USERADMIN              RID_PAGE_START + 16
 #define PAGE_MYSQL                      RID_PAGE_START + 17
 #define TAB_PAGE_TABLEPRIVILEGES        RID_PAGE_START + 18
+#define PAGE_USERDRIVER                 RID_PAGE_START + 19
 
 //========================================================================
 // error boxes
@@ -375,6 +376,16 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.80.2.1  2003/02/20 22:52:47  hr
+ *  INTEGRATION: CWS dba02 (1.80.18); FILE MERGED
+ *  2003/01/29 10:30:44 oj 1.80.18.1: #i11039# allow user defined driver types to appear in the data source admin dialog
+ *
+ *  Revision 1.80.18.1  2003/01/29 10:30:44  oj
+ *  #i11039# allow user defined driver types to appear in the data source admin dialog
+ *
+ *  Revision 1.80  2002/11/14 07:53:12  oj
+ *  #105110# new methods inserted
+ *
  *  Revision 1.79  2002/08/19 07:28:26  oj
  *  #99473# change string resource files
  *

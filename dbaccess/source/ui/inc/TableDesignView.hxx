@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 06:59:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _SV_SPLIT_HXX
 #include <vcl/split.hxx>
 #endif
+#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
+#include "IClipBoardTest.hxx"
+#endif
 
 namespace dbaui
 {
@@ -104,6 +107,7 @@ namespace dbaui
     };
     //==================================================================
     class OTableDesignView : public ODataView
+                            ,public IClipboardTest
     {
         enum ChildFocusState
         {
@@ -117,6 +121,7 @@ namespace dbaui
         OTableController*                   m_pController;
         ChildFocusState                     m_eChildFocus;
 
+        IClipboardTest* getActiveChild() const;
     protected:
 
 
@@ -139,11 +144,15 @@ namespace dbaui
 
         ::com::sun::star::lang::Locale      getLocale() const { return m_aLocale;}
 
+        // IClipboardTest
         virtual sal_Bool isCutAllowed();
         virtual sal_Bool isCopyAllowed();
+        virtual sal_Bool isPasteAllowed();
+        virtual sal_Bool hasChildPathFocus() { return HasChildPathFocus(); }
         virtual void copy();
         virtual void cut();
         virtual void paste();
+
         // set the view readonly or not
         virtual void setReadOnly(sal_Bool _bReadOnly);
 

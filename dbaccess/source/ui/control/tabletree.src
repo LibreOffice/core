@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:31:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ String STR_COULDNOTCREATE_DRIVERMANAGER
     Text[ polish ] = "Brak po��czenia z mened�erem sterownika SDCB (#servicename#).";
     Text[ portuguese_brazilian ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
     Text[ japanese ] = "SDBC ドライバマネジャー(#servicename#)へ接続できませんでした。";
-    Text[ korean ] = "SDBC 드라이버 관리자 (#servicename#)에 대한 연결을) 구축하지 못했습니다.";
+    Text[ korean ] = "SDBC 드라이버 관리자(#servicename#)로 연결하지 못했습니다.";
     Text[ chinese_simplified ] = "无法和 SDBC 驱动程式管理器(#servicename#)建立连接。";
     Text[ chinese_traditional ] = "無法連線到 SDBC 驅動程式管理(#servicename#) 。";
     Text[ turkish ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
@@ -209,7 +209,7 @@ String STR_NOREGISTEREDDRIVER
     Text[ polish ] = "Brak zarejestrowanego sterownika dla URL #connurl# !";
     Text[ portuguese_brazilian ] = "There is no registered driver for the URL #connurl#";
     Text[ japanese ] = "URL #connurl# のドライバが登録されていません。";
-    Text[ korean ] = "URL #connurl#에 대해 등록된 드라이버가 없습니다!";
+    Text[ korean ] = "URL #connurl#에 대해 등록된 드라이버가 없습니다.";
     Text[ chinese_simplified ] = "没有为 URL #connurl# 登记驱动程序。";
     Text[ chinese_traditional ] = "不存在任何登記的 URL #connurl# 驅動程序。";
     Text[ turkish ] = "There is no registered driver for the URL #connurl#";
@@ -236,7 +236,7 @@ String STR_COULDNOTCONNECT
     Text[ polish ] = "Brak po��czenia z URL #connurl#.";
     Text[ portuguese_brazilian ] = "A connection could not be established for URL #connurl#.";
     Text[ japanese ] = "URL #connurl# へ接続できませんでした。";
-    Text[ korean ] = "URL #connurl#에 연결하지 못했습니다 .";
+    Text[ korean ] = "URL #connurl#에 연결하지 못했습니다.";
     Text[ chinese_simplified ] = "无法和 URL #connurl# 建立连接。";
     Text[ chinese_traditional ] = "無法連線到 URL #connurl# 。";
     Text[ turkish ] = "A connection could not be established for URL #connurl#.";
@@ -262,7 +262,7 @@ String STR_COULDNOTCONNECT_PLEASECHECK
     Text[ polish ] = "Sprawd� bie��ce konfiguracje, np. nazw� u�ytkownika i has�o.";
     Text[ portuguese_brazilian ] = "Please check the current settings, e.g. with respect to user name and password.";
     Text[ japanese ] = "ユーザー名やパスワードなど、現在設定されている内容をもう一度チェックしてください。";
-    Text[ korean ] = "사용자 이름과 암호 등에 관한 현재 설정을 점검하십시오.";
+    Text[ korean ] = "사용자 이름과 암호 등에 관한 현재 설정을 확인해 보십시오.";
     Text[ chinese_simplified ] = "请您检查当前的设定，如使用名和密码。";
     Text[ chinese_traditional ] = "請您檢查目前的設定，如使用者和密碼。";
     Text[ turkish ] = "Please check the current settings, e.g. with respect to user name and password.";
@@ -288,7 +288,7 @@ String STR_NOTABLEINFO
     Text[ polish ] = "Po��czenie zosta�o pomy�lnie ustanowione, ale nadal brak informacji o tabelach w bazie danych.";
     Text[ portuguese_brazilian ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
     Text[ japanese ] = "正常に接続できましたが、データベースのテーブルに関する情報がありません。";
-    Text[ korean ] = "연결은 성공적으로 구축되었지만, 시트 및 보기에 대한 정보를 수집하지 못했습니다.";
+    Text[ korean ] = "성공적으로 연결이 되었지만 데이터베이스 테이블에 관한 정보는 없습니다.";
     Text[ chinese_simplified ] = "连接已经成功，但是无法获得相关的数据库表格数据。";
     Text[ chinese_traditional ] = "已經成功連線，但是沒有找到資料庫的表格內容。";
     Text[ turkish ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
@@ -314,7 +314,7 @@ String STR_ALL_TABLES
     Text[ polish ] = "Wszystkie tabele";
     Text[ portuguese_brazilian ] = "All tables";
     Text[ japanese ] = "すべてのテーブル";
-    Text[ korean ] = "모든 시트";
+    Text[ korean ] = "모든 테이블";
     Text[ chinese_simplified ] = "全部的表格";
     Text[ chinese_traditional ] = "全部的表格";
     Text[ turkish ] = "All tables";
@@ -340,7 +340,7 @@ String STR_ALL_VIEWS
     Text[ polish ] = "Wszystkie widoki tabeli";
     Text[ portuguese_brazilian ] = "All views";
     Text[ japanese ] = "すべてのテーブルビュー";
-    Text[ korean ] = "모든 시트 보기";
+    Text[ korean ] = "모두 보기";
     Text[ chinese_simplified ] = "全部的表格视图";
     Text[ chinese_traditional ] = "所有的表格檢視";
     Text[ turkish ] = "All views";
@@ -366,7 +366,7 @@ String STR_ALL_TABLES_AND_VIEWS
     Text[ polish ] = "Wszystkie tabele i widoki tabeli";
     Text[ portuguese_brazilian ] = "All tables and views";
     Text[ japanese ] = "すべてのテーブルとテーブルビュー";
-    Text[ korean ] = "모든 시트와 시트 보기";
+    Text[ korean ] = "모든 테이블 및 테이블 보기";
     Text[ chinese_simplified ] = "全部的表格和表格视图";
     Text[ chinese_traditional ] = "所有的表格和表格檢視";
     Text[ turkish ] = "All tables and views";
@@ -379,6 +379,26 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.32.2.3  2003/02/23 12:00:54  nf
+ *  trasnlation 6.1 Beta / OOo 1.1 Beta / final wave
+ *
+ *  Revision 1.32.2.2  2003/02/23 11:00:44  nf
+ *  6.1 Beta 1/OOo 1.1 Beta translation, second wave
+ *
+ *  Revision 1.32.2.1  2003/02/22 15:45:16  hr
+ *  INTEGRATION: CWS mergep (1.32.20); FILE MERGED
+ *  2003/02/22 10:44:23 nf 1.32.20.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
+ *  2003/01/31 12:51:05 hjs 1.32.20.1: #107113# merge on SRX644p
+ *
+ *  Revision 1.32.20.2  2003/02/22 10:44:23  nf
+ *  #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
+ *
+ *  Revision 1.32.20.1  2003/01/31 12:51:05  hjs
+ *  #107113# merge on SRX644p
+ *
+ *  Revision 1.32  2002/12/05 10:31:18  kz
+ *  Merge SRX644: 05.12.02 - 11:27:18
+ *
  *  Revision 1.31  2002/11/25 15:12:07  kz
  *  Merge SRX644: 25.11.02 - 16:08:58
  *
@@ -475,6 +495,12 @@ String STR_ALL_TABLES_AND_VIEWS
  *
  *  Revision 1.0 28.09.00 13:36:13  fs
  ************************************************************************/
+
+
+
+
+
+
 
 
 

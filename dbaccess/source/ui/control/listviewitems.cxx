@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listviewitems.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-30 08:29:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,11 +114,4 @@ namespace dbaui
 //........................................................................
 }   // namespace dbaui
 //........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 29.01.01 10:26:53  fs
- ************************************************************************/
 

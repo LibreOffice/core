@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 11:53:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
+#endif
+#ifndef _DBA_CORE_PROPERTYHELPER_HXX_
+#include "propertyhelper.hxx"
 #endif
 #ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #include <unotools/confignode.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-05 14:05:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ String STR_QUERY_REL_EDIT_RELATION
     Text[ polish ] = "Relacja ju¿ istnieje. Czy chcesz j¹ edytowaæ?";
     Text[ portuguese_brazilian ] = "This relation already exsits. Do you want to edit it?";
     Text[ japanese ] = "ã“ã®ãƒªãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚ã“ã‚Œã‚’ç·¨é›†ã—ã¾ã™ã‹ã€‚";
-    Text[ korean ] = "ì´ ê´€ê³„ê°€ ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤. ì´ ê´€ê³„ë¥¼ í¸ì§‘í•˜ê² ìŠµë‹ˆê¹Œ ?";
+    Text[ korean ] = "ì´ ê´€ê³„ëŠ” ì´ë¯¸ ìˆìŠµë‹ˆë‹¤. ì´ ê´€ê³„ë¥¼ í¸ì§‘í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Text[ chinese_simplified ] = "è¿™ä¸ªå…³ç³»å·²ç»å­˜åœ¨ã€‚æ‚¨æƒ³ç¼–è¾‘å®ƒï¼Ÿ";
     Text[ chinese_traditional ] = "é€™å€‹é—œä¿‚å·²ç¶“å­˜åœ¨ã€‚è¦ç·¨è¼¯å®ƒï¼Ÿ";
     Text[ arabic ] = "åĞå ÇáÚáÇŞÉ ãæÌæÏÉ ÈÇáİÚá. åá ÊÑíÏ ÊÍÑíÑåÇ¿";
@@ -267,7 +267,7 @@ String STR_RELATIONDESIGN
     Text [ English ] = "Relation design" ;
     Text [ english_us ] = "Relation design" ;
     Text[ portuguese ] = "Esboçar relação";
-    Text[ russian ] = "Ïğîåêò ñâÿçåé";
+    Text[ russian ] = "Ïğîåêòèğîâàíèå ñâÿçåé";
     Text[ greek ] = "Ó÷åäéáóìüò ó÷İóçò";
     Text[ dutch ] = "Relatie-ontwerp";
     Text[ french ] = "Ébauche de relation";
@@ -297,14 +297,14 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
     Text[ greek ] = "Ç âÜóç äåäïìİíùí äåí õğïóôçñßæåé ó÷İóåéò!";
     Text[ dutch ] = "De database ondersteunt geen relaties! ";
     Text[ french ] = "La base de données ne supporte pas les relations !";
-    Text[ spanish ] = "La base de datos no apoya ninguna relación.";
+    Text[ spanish ] = "La base de datos no admite ninguna relación.";
     Text[ italian ] = "Il database non supporta alcuna relazione.";
     Text[ danish ] = "Databasen understøtter ingen relationer!";
     Text[ swedish ] = "Databasen understöder inte några relationer.";
     Text[ polish ] = "Baza danych nie obs³uguje relacji.";
     Text[ portuguese_brazilian ] = "The database doesn't support any relations. The relation design will be closed!";
     Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã¯ãƒªãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚’æ”¯æ´ã—ã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ëŠ” ì–´ë– í•œ ê´€ê³„ë„ ì§€ì›í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤!";
+    Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ëŠ” ê´€ê³„ë¥¼ ì§€ì›í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.";
     Text[ chinese_simplified ] = "è¿™ä¸ªæ•°æ®åº“ä¸æ”¯æŒå…³ç³»åŠŸèƒ½ï¼";
     Text[ chinese_traditional ] = "é€™å€‹è³‡æ–™åº«ä¸æ”¯æ´é—œä¿‚åŠŸèƒ½ï¼";
     Text[ turkish ] = "The database doesn't support any relations. The relation design will be closed!";
@@ -321,7 +321,7 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message [ English ] = "The relation design has been modified.\nDo you want to save your changes?" ;
     Message [ english_us ] = "The relation design has been changed.\nDo you want to save the changes?" ;
     Message[ portuguese ] = "O esboço de relações foi modificado.\nGuardar as modificações?";
-    Message[ russian ] = "Ïğîåêò ñâÿçåé èçìåíåí.\nÑîõğàíèòü èçìåíåíèÿ?";
+    Message[ russian ] = "Ñâÿçè áûëè èçìåíåíû.\nÑîõğàíèòü èçìåíåíèÿ?";
     Message[ greek ] = "Ôï ó÷İäéï ôçò ó÷İóçò ôñïğïğïéŞèçêå.\nÈİëåôå íá áğïèçêåõôïıí ïé áëëáãİò;";
     Message[ dutch ] = "Het relatie-ontwerp is gewijzigd.\nWilt u de wijzigingen opslaan?";
     Message[ french ] = "L'ébauche de relation a été modifiée.\nVoulez-vous enregistrer les modifications ?";
@@ -332,7 +332,7 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message[ polish ] = "Zmieniono projekt relacji.\nZapisaæ zmiany?";
     Message[ portuguese_brazilian ] = "The relation design has been changed.\nDo you want to save the changes?";
     Message[ japanese ] = "ãƒªãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒ‡ã‚¶ã‚¤ãƒ³ãŒå¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ã€‚\nå¤‰æ›´ã‚’ä¿å­˜ã—ã¾ã™ã‹ã€‚";
-    Message[ korean ] = "ê´€ê³„ ë””ìì¸ì´ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\në³€ê²½ ì‚¬í•­ì„ ì €ì¥í•˜ê² ìŠµë‹ˆê¹Œ?";
+    Message[ korean ] = "ê´€ê³„ ë””ìì¸ì´ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\në³€ê²½ ë‚´ìš©ì„ ì €ì¥í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Message[ chinese_simplified ] = "è¿™ä¸ªå…³ç³»æ•°æ®å·²ç»æ›´æ”¹ã€‚\nè¦å­˜ç›˜è¿™äº›æ›´æ”¹å†…å®¹ï¼Ÿ";
     Message[ chinese_traditional ] = "é€™å€‹é—œä¿‚è¨­è¨ˆå·²ç¶“è®Šæ›´ã€‚\nè¦å„²å­˜è®Šæ›´å…§å®¹ï¼Ÿ";
     Message[ turkish ] = "The relation design has been changed.\nDo you want to save the changes?";
@@ -459,7 +459,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ polish ] = "Przywróæ";
                     Text[ portuguese_brazilian ] = "Redo";
                     Text[ japanese ] = "ã‚„ã‚Šç›´ã—";
-                    Text[ korean ] = "ì‚­ì œ ì·¨ì†Œ";
+                    Text[ korean ] = "ë‹¤ì‹œ ì‹¤í–‰";
                     Text[ chinese_simplified ] = "æ¢å¤æ’¤æ¶ˆå‘½ä»¤";
                     Text[ chinese_traditional ] = "æ¢å¾©æ’¤æ¶ˆæŒ‡ä»¤";
                     Text[ turkish ] = "Redo";
@@ -599,7 +599,7 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ greek ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ dutch ] = "Als u deze tabel wist, worden alle bijbehorende relaties eveneens gewist. Wilt u doorgaan?";
     Text[ french ] = "Supprimer cette table entraîne la suppression des relations associées. Continuer ?";
-    Text[ spanish ] = "Si elimina esta tabla se eliminarán también todas las relaciones correspondientes. ¿Desea continuar?";
+    Text[ spanish ] = "Si borra esta tabla se borrarán también todas las relaciones correspondientes. ¿Desea continuar?";
     Text[ finnish ] = "Kun poistat tämän taulun, kaikki vastaavat yhteydet poistetaan myös. Jatketaanko?";
     Text[ italian ] = "Eliminando questa tabella eliminerete anche tutte le relazioni corrispondenti. Volete procedere comunque?";
     Text[ danish ] = "Hvis du sletter denne tabel, slettes også alle tilhørende relationer. Vil du fortsætte?";
@@ -607,7 +607,7 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ polish ] = "Wraz z tabel¹ usuniête zostan¹ wszystkie przynale¿ne relacje. Kontynuowaæ?";
     Text[ portuguese_brazilian ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ japanese ] = "ã“ã®ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’å‰Šé™¤ã™ã‚‹ã¨ã€ã“ã‚Œã«å±ã™ã‚‹ã™ã¹ã¦ã®ãƒªãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚‚å‰Šé™¤ã•ã‚Œã¦ã—ã¾ã™ã€‚ç¶šè¡Œã—ã¾ã™ã‹ã€‚";
-    Text[ korean ] = "ì´ ì‹œíŠ¸ë¥¼ ì‚­ì œí•˜ë©´ í•´ë‹¹í•˜ëŠ” ëª¨ë“  ê´€ê³„ë“¤ë„ ì‚­ì œë©ë‹ˆë‹¤. ê³„ì†í•˜ê² ìŠµë‹ˆê¹Œ?";
+    Text[ korean ] = "ì´ í…Œì´ë¸”ì„ ì‚­ì œí•˜ë©´ í•´ë‹¹í•˜ëŠ” ëª¨ë“  ê´€ê³„ ì—­ì‹œ ì‚­ì œë©ë‹ˆë‹¤. ê³„ì†í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Text[ chinese_simplified ] = "å¦‚æœåˆ é™¤è¿™ä¸ªè¡¨æ ¼ï¼Œå°±ä¼šä¸€åŒåˆ é™¤æ‰€æœ‰çš„ä»å±å…³ç³»ã€‚è¦ç»§ç»­ï¼Ÿ";
     Text[ chinese_traditional ] = "å¦‚æœåˆªé™¤é€™å€‹è¡¨æ ¼ï¼Œä¹Ÿå°±æœƒä¸€èµ·åˆªé™¤å…¨éƒ¨çš„å¾å±¬é—œä¿‚ã€‚è¦ç¹¼çºŒï¼Ÿ";
     Text[ turkish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
@@ -615,6 +615,12 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ catalan ] = "Quan s'elimini aquesta taula també de suprimiran les seves relacions associades. Voleu continuar?";
     Text[ thai ] = "à¹€à¸¡à¸·à¹ˆà¸­à¸„à¸¸à¸“à¸¥à¸šà¸•à¸²à¸£à¸²à¸‡à¸™à¸µà¹‰ à¸„à¸§à¸²à¸¡à¸ªà¸±à¸¡à¸à¸±à¸™à¸˜à¹Œà¸—à¸µà¹ˆà¸ªà¸­à¸”à¸„à¸¥à¹‰à¸­à¸‡à¸à¸±à¸™à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸ˆà¸°à¸–à¸¹à¸à¸¥à¸šà¹„à¸›à¸”à¹‰à¸§à¸¢ à¸—à¸³à¸•à¹ˆà¸­à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
+
+
+
+
+
+
 
 
 

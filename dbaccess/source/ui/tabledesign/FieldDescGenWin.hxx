@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescGenWin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2002-09-25 11:26:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 #ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
 #endif
-
+#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
+#include "IClipBoardTest.hxx"
+#endif
 
 namespace dbaui
 {
@@ -74,6 +76,7 @@ namespace dbaui
     class OTableEditorCtrl;
     //==================================================================
     class OFieldDescGenWin : public TabPage
+                            ,public IClipboardTest
     {
 
         OTableFieldControl  *m_pFieldControl;
@@ -103,12 +106,15 @@ namespace dbaui
         String BoolStringPersistent(const String& rUIString) const;
         String BoolStringUI(const String& rPersistentString) const;
 
-        sal_Bool isCutAllowed();
-        sal_Bool isCopyAllowed();
+        // IClipboardTest
+        virtual sal_Bool isCutAllowed();
+        virtual sal_Bool isCopyAllowed();
+        virtual sal_Bool isPasteAllowed();
+        virtual sal_Bool hasChildPathFocus() { return HasChildPathFocus(); }
 
-        void    cut();
-        void    copy();
-        void    paste();
+        virtual void copy();
+        virtual void cut();
+        virtual void paste();
 
         inline OTableFieldControl*  getFieldControl() const { return m_pFieldControl; }
     };

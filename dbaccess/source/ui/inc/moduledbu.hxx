@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduledbu.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:53:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,14 +138,4 @@ public:
 //.........................................................................
 
 #endif // _DBAUI_MODULE_DBU_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2000/10/05 10:08:51  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 20.09.00 15:26:10  fs
- ************************************************************************/
 

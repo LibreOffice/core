@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-09 09:11:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ namespace dbaui
     class OCommonBehaviourTabPage : public OGenericAdministrationPage
     {
     protected:
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
+
         FixedText*          m_pUserNameLabel;
         Edit*               m_pUserName;
         FixedText*          m_pPasswordLabel;
@@ -127,15 +129,15 @@ namespace dbaui
         virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
         virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 
+        virtual void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
+        {
+            m_xORB = _rxORB;
+        }
+
     protected:
         OCommonBehaviourTabPage(Window* pParent, USHORT nResId, const SfxItemSet& _rCoreAttrs, USHORT nControlFlags);
             // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
         virtual ~OCommonBehaviourTabPage();
-
-        sal_Bool adjustUTF8(const SfxItemSet& _rSet);
-            // returns sal_True if with the settings in _rSet, a charset UTF-8 is allowed
-        sal_Bool adjustBig5(const SfxItemSet& _rSet);
-            // returns sal_True if with the settings in _rSet, a charset Big5-HKSCS is allowed
     };
 
     //========================================================================
@@ -178,6 +180,12 @@ namespace dbaui
         static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
         virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
+        virtual void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
+        {
+            OCommonBehaviourTabPage::setServiceFactory(_rxORB);
+            m_aJdbcUrl.initializeTypeCollection(_rxORB);
+        }
+
         /// get the SfxPoolItem ids used by this tab page
         static sal_Int32* getDetailIds();
 
@@ -202,6 +210,12 @@ namespace dbaui
     public:
         static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
         virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+
+        virtual void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
+        {
+            OCommonBehaviourTabPage::setServiceFactory(_rxORB);
+            m_aAdoUrl.initializeTypeCollection(_rxORB);
+        }
 
         /// get the SfxPoolItem ids used by this tab page
         static sal_Int32* getDetailIds();
@@ -239,6 +253,28 @@ namespace dbaui
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
     };
 
+
+    //========================================================================
+    //= OUserDriverDetailsPage
+    //========================================================================
+    class OUserDriverDetailsPage : public OCommonBehaviourTabPage
+    {
+    public:
+        static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
+        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+
+        /// get the SfxPoolItem ids used by this tab page
+        static sal_Int32* getDetailIds();
+
+    private:
+        FixedLine           m_aSeparator1;
+        CheckBox            m_aUseCatalog;
+
+        OUserDriverDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+    };
+
     //========================================================================
     //= OMySQLDetailsPage
     //========================================================================
@@ -247,6 +283,12 @@ namespace dbaui
     public:
         static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
         virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+
+        virtual void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
+        {
+            OCommonBehaviourTabPage::setServiceFactory(_rxORB);
+            m_aUrl.initializeTypeCollection(_rxORB);
+        }
 
         /// get the SfxPoolItem ids used by this tab page
         static sal_Int32* getDetailIds();
@@ -366,53 +408,3 @@ namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_DETAILPAGES_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.14  2002/11/21 15:23:01  oj
- *  #105213# impl new feature of rown mysql driver page
- *
- *  Revision 1.13  2002/11/15 12:28:32  oj
- *  #105175# insert none for empty string
- *
- *  Revision 1.12  2002/07/26 09:33:29  oj
- *  #95146# new controls inserted for auto retrieving
- *
- *  Revision 1.11  2002/07/09 12:39:07  oj
- *  #99921# check if datasource allows to check names
- *
- *  Revision 1.10  2002/04/30 15:55:26  fs
- *  #97118# remove user/password - not used at the moment
- *
- *  Revision 1.9  2002/03/22 09:05:42  oj
- *  #98142# remove charset for jdbc drivers
- *
- *  Revision 1.8  2002/03/14 15:14:36  fs
- *  #97788# Big5-HKSCS only when asian languages are enabled
- *
- *  Revision 1.7  2001/06/25 08:28:43  oj
- *  #88699# new control for ldap rowcount
- *
- *  Revision 1.6  2001/05/29 13:11:52  oj
- *  #87149# addressbook ui impl
- *
- *  Revision 1.5  2001/05/23 14:16:42  oj
- *  #87149# new helpids
- *
- *  Revision 1.4  2001/04/27 08:07:01  fs
- *  #86370# +adjustUTF8
- *
- *  Revision 1.3  2001/04/20 13:38:06  oj
- *  #85736# new checkbox for odbc
- *
- *  Revision 1.2  2001/02/05 15:42:07  fs
- *  enlargen the tab pages -> some redesigns
- *
- *  Revision 1.1  2001/01/26 16:14:21  fs
- *  initial checkin - administration tab pages used for special DSN types
- *
- *
- *  Revision 1.0 26.01.01 10:38:51  fs
- ************************************************************************/
-

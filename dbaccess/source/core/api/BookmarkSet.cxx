@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-29 16:35:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,44 +251,4 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
         }
     }
 }
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.8  2001/10/30 14:22:10  oj
-    #93939# add late ctor
-
-    Revision 1.7  2001/09/20 12:59:25  oj
-    #92232# fixes for BIGINT type and new property HELPTEXT
-
-    Revision 1.6  2001/07/24 13:25:26  oj
-    #89430# move ORowSetValue into dbtools
-
-    Revision 1.5  2001/05/03 07:15:56  oj
-    #86526# fetch decimal and numeric as string
-
-    Revision 1.4  2000/11/14 13:28:20  oj
-    change for rowset when getRow returns 0
-
-    Revision 1.3  2000/10/11 11:18:10  fs
-    replace unotools with comphelper
-
-    Revision 1.2  2000/09/29 15:20:51  oj
-    rowset impl
-
-    Revision 1.1.1.1  2000/09/19 00:15:37  hr
-    initial import
-
-    Revision 1.3  2000/09/18 14:52:45  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.2  2000/09/05 13:23:34  rt
-    typo
-
-    Revision 1.1  2000/09/01 15:20:46  oj
-    rowset addons
-
-    Revision 1.0 01.08.2000 09:54:37  oj
-------------------------------------------------------------------------*/
 

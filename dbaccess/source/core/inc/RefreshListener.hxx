@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RefreshListener.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 10:32:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,4 @@ namespace dbaccess
 //.........................................................................
 
 #endif // DBA_CORE_REFRESHLISTENER_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-08 13:18:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,35 +575,4 @@ namespace dbaui
 //........................................................................
 }   // namespace dbaui
 //........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.8  2002/08/19 07:51:11  oj
- *  #99473# change string resource files
- *
- *  Revision 1.7  2002/07/08 08:15:44  oj
- *  #97156# check if we are already suspended
- *
- *  Revision 1.6  2002/05/06 08:50:00  oj
- *  #96363# impl new interface
- *
- *  Revision 1.5  2001/09/07 10:03:53  fs
- *  ::disposing: don't reconnect if we're InDispose
- *
- *  Revision 1.4  2001/08/16 13:00:02  hr
- *  #65293#: syntax
- *
- *  Revision 1.3  2001/08/15 13:36:51  fs
- *  #88637# add a separator above the toolbox
- *
- *  Revision 1.2  2001/08/15 13:16:25  oj
- *  #88644# insert some DBG's
- *
- *  Revision 1.1  2001/08/14 12:00:02  fs
- *  initial checkin - base class for controller which work on one single object belonging to a data source connection
- *
- *
- *  Revision 1.0 14.08.01 09:45:39  fs
- ************************************************************************/
 

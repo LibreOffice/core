@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-09 09:52:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ ImageList IMG_DOCUMENTLINKS_LCH
         Text[ polish ] = "Re~trieve generated values";\
         Text[ portuguese_brazilian ] = "Re~trieve generated values";\
         Text[ japanese ] = "ç”Ÿæˆå€¤ã‚’å›å¾©ã™ã‚‹";\
-        Text[ korean ] = "ìƒì„±ëœ ê°’ íšŒë³µ";\
+        Text[ korean ] = "ìƒì„±ê°’ì„ íšŒë³µ";\
         Text[ chinese_simplified ] = "é¡¾åŠç”Ÿæˆçš„æ•°å€¼";\
         Text[ chinese_traditional ] = "é¡§åŠç”Ÿæˆçš„æ•¸å€¼";\
         Text[ turkish ] = "Re~trieve generated values";\
@@ -328,7 +328,7 @@ ImageList IMG_DOCUMENTLINKS_LCH
         Text[ russian ] = "~Auto-increment statement";\
         Text[ greek ] = "~Auto-increment statement";\
         Text[ dutch ] = "~Auto-increment statement";\
-        Text[ french ] = "Expression auto-incrément";\
+        Text[ french ] = "Expression d'auto-incrément";\
         Text[ spanish ] = "~Expresión incremento automático";\
         Text[ finnish ] = "~Auto-increment statement";\
         Text[ italian ] = "Espressione incremento automatico";\
@@ -337,7 +337,7 @@ ImageList IMG_DOCUMENTLINKS_LCH
         Text[ polish ] = "~Auto-increment statement";\
         Text[ portuguese_brazilian ] = "~Auto-increment statement";\
         Text[ japanese ] = "ã‚ªãƒ¼ãƒˆã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆå‘½ä»¤æ–‡";\
-        Text[ korean ] = "ìë™ ì¦ê°€ëŸ‰ ëª…ë ¹ë¬¸";\
+        Text[ korean ] = "ìë™ ì¦ë¶„ ëª…ë ¹ë¬¸";\
         Text[ chinese_simplified ] = "è‡ªåŠ¨é€’å¢é™ˆè¿°";\
         Text[ chinese_traditional ] = "è‡ªå‹•éå¢é™³è¿°";\
         Text[ turkish ] = "~Auto-increment statement";\
@@ -434,7 +434,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
             Text [ polish ] = "Nowe Ÿród³o danych";
             Text [ portuguese_brazilian ] = "New data source";
             Text [ japanese ] = "æ–°ã—ã„ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹";
-            Text [ korean ] = "ìƒˆë¡œìš´ ë°ì´í„° ì†ŒìŠ¤";
+            Text [ korean ] = "ìƒˆ ë°ì´í„° ì›ë³¸ ";
             Text [ chinese_simplified ] = "æ–°æ•°æ®æº";
             Text [ chinese_traditional ] = "æ–°è³‡æ–™æº";
             Text [ turkish ] = "New data source";
@@ -666,8 +666,8 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text [ russian ] = "Íàñòğîéêà Adabas D";
         Text [ greek ] = "ÓôáôéóôéêŞ ôïõ Adabas D";
         Text [ dutch ] = "Adabas D Statistiek";
-        Text [ french ] = "Statistique Adabas D";
-        Text [ spanish ] = "Estadística Adabas D";
+        Text [ french ] = "Statistiques Adabas D";
+        Text [ spanish ] = "Estadísticas de Adabas D";
         Text [ italian ] = "Statistica Adabas D";
         Text [ danish ] = "Adabas D Statistic";
         Text [ swedish ] = "Statistik Adabas D";
@@ -760,7 +760,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text [ polish ] = "Tabele";
         Text [ portuguese_brazilian ] = "Tabellen";
         Text [ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«";
-        Text [ korean ] = "ì‹œíŠ¸";
+        Text [ korean ] = "í…Œì´ë¸”";
         Text [ chinese_simplified ] = "è¡¨æ ¼";
         Text [ chinese_traditional ] = "è¡¨æ ¼";
         Text [ turkish ] = "Tablolar";
@@ -833,7 +833,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     Text [ polish ] = "Administracja Ÿróde³ danych";
     Text [ portuguese_brazilian ] = "Datasource administration";
     Text [ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®ç®¡ç†";
-    Text [ korean ] = "ë°ì´í„° ì†ŒìŠ¤ ê´€ë¦¬";
+    Text [ korean ] = "ë°ì´í„° ì›ë³¸ ê´€ë¦¬";
     Text [ chinese_simplified ] = "ç®¡ç†æ•°æ®æº";
     Text [ chinese_traditional ] = "ç®¡ç†è³‡æ–™æº";
     Text [ turkish ] = "Datasource administration";
@@ -912,7 +912,7 @@ TabPage PAGE_GENERAL
         Text [ polish ] = "~Nazwa";
         Text [ portuguese_brazilian ] = "~Name:";
         Text [ japanese ] = "åå‰(~N)";
-        Text [ korean ] = "ì´ë¦„(~N):";
+        Text [ korean ] = "ì´ë¦„(~N)";
         Text [ chinese_simplified ] = "åç§°(~N)";
         Text [ chinese_traditional ] = "åç¨±(~N)";
         Text [ turkish ] = "Ad:";
@@ -1007,7 +1007,7 @@ TabPage PAGE_GENERAL
         Text [ english ] = "~Data source URL" ;
         Text [ english_us ] = "~Data source URL" ;
         Text [ portuguese ] = "~Fonte de dados URL";
-        Text [ russian ] = "URL ~èñòî÷íèêà äàííûõ ";
+        Text [ russian ] = "URL èñòî~÷íèêà äàííûõ ";
         Text [ greek ] = "URL ôçò ğñïİëåõóçò äåäïìİíùí:";
         Text [ dutch ] = "~Gegevensbronnen URL";
         Text [ french ] = "URL de la source de données" ;
@@ -1018,7 +1018,7 @@ TabPage PAGE_GENERAL
         Text [ polish ] = "URL Ÿród³a danych";
         Text [ portuguese_brazilian ] = "~Data source URL:";
         Text [ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ URL(~D)";
-        Text [ korean ] = "ë°ì´í„° ì†ŒìŠ¤ URL(~D):";
+        Text [ korean ] = "ë°ì´í„° ì›ë³¸ URL(~D):";
         Text [ chinese_simplified ] = "æ•°æ®æº URL(~D)";
         Text [ chinese_traditional ] = "è³‡æ–™æº URL(~D)";
         Text [ turkish ] = "~Data source URL:";
@@ -1083,7 +1083,7 @@ TabPage PAGE_GENERAL
         Text [ polish ] = "Chwilowa przerwa:";
         Text [ portuguese_brazilian ] = "Timeout:";
         Text [ japanese ] = "ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆ:";
-        Text [ korean ] = "ì‹œê°„ ì´ˆê³¼:";
+        Text [ korean ] = "ì œí•œ ì‹œê°„ ì´ˆê³¼:";
         Text [ chinese_simplified ] = "è¶…è¿‡æ—¶é™ï¼š";
         Text [ chinese_traditional ] = "è¶…éæ™‚é™ï¼š";
         Text [ turkish ] = "Timeout:";
@@ -1154,7 +1154,7 @@ TabPage PAGE_GENERAL
                 "globally unique, you have to choose another one.";
         Text [ english_us ] = "Another data source already has this name. As data sources have to have globally unique names, please choose another one.";
         Text [ portuguese ] = "Já existe uma fonte de dados com este nome. Os nomes das fontes de dados devem ser únicos, por esta razão é recomendável seleccionar outro nome.";
-        Text [ russian ] = "Èñòî÷íèê äàííûõ ñ òàêèì èìåíåì óæå ñóùåñòâóåò. Íåîáõîäèìî ïğèñâîèòü äğóãîå èìÿ, òàê êàê èìåíà èñòî÷íèêà äàííûõ äîëæíû áûòü óíèêàëüíûìè.";
+        Text [ russian ] = "Èñòî÷íèê äàííûõ ñ òàêèì èìåíåì óæå ñóùåñòâóåò. Íåîáõîäèìî ïğèñâîèòü äğóãîå èìÿ, òàê êàê èìåíà èñòî÷íèêîâ äàííûõ äîëæíû áûòü óíèêàëüíûìè.";
         Text [ greek ] = "ÕğÜñ÷åé Şäç ìéá ğñïİëåõóç äåäïìİíùí ìå áõôü ôï üíïìá. ÊÜèå üíïìá ôùí ğñïåëåıóåùí ôùí äåäïìİíùí åğéôñİğåôáé íá õğÜñ÷åé ìüíï ìéá öïñÜ. Ğáñáêá ";
         Text [ dutch ] = "Er bestaat reeds een andere gegevensbron met deze naam. Kies een andere naam.";
         Text [ french ] = "Ce nom a déjà été attribué à une autre source de données. Étant donné que les sources de données doivent avoir des noms globalement uniques, vous devez en choisir un autre.";
@@ -1165,7 +1165,7 @@ TabPage PAGE_GENERAL
         Text [ polish ] = "Istnieje inne Ÿród³o danych o tej samej nazwie. Poniewa¿ nazwy Ÿrode³ danych musz¹ byæ globalnie jednoznaczne, nale¿y wybraæ inn¹ nazwê.";
         Text [ portuguese_brazilian ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
         Text [ japanese ] = "ã“ã®åå‰ã®ä»˜ã„ãŸåˆ¥ã®ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ãŒã™ã§ã«ã‚ã‚Šã¾ã™ã€‚ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹åã‚’ã¯ã£ãã‚Šã¨åŒºåˆ¥ã™ã‚‹ãŸã‚ã«ã¯ã€ã»ã‹ã®åå‰ã‚’é¸æŠã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚";
-        Text [ korean ] = "ì´ë¯¸ ì´ ì´ë¦„ì˜ ë‹¤ë¥¸ ë°ì´í„° ì†ŒìŠ¤ê°€ ì¡´ì¬í•©ë‹ˆë‹¤. ë°ì´í„° ì†ŒìŠ¤ ì´ë¦„ì€ ì „ì²´ì—ì„œ ìœ ì¼í•´ì•¼ í•˜ë¯€ë¡œ ë‹¤ë¥¸ ì´ë¦„ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤.";
+        Text [ korean ] = "ì´ë¯¸ ê°™ì€ ì´ë¦„ì˜ ë°ì´í„° ì›ë³¸ì´ ìˆìŠµë‹ˆë‹¤. ë°ì´í„° ì›ë³¸ì˜ ì´ë¦„ì€ í•­ìƒ ê³ ìœ í•´ì•¼ í•©ë‹ˆë‹¤. ë‹¤ë¥¸ ì´ë¦„ì„ ì„ íƒí•´ì£¼ì‹­ì‹œì˜¤.";
         Text [ chinese_simplified ] = "å·²ç»å­˜åœ¨ä¸€ä¸ªåŒåçš„æ•°æ®æºã€‚å› ä¸ºæ•°æ®æºåç§°å¿…é¡»æ˜¯ä¸€ä¸ªé€šç”¨çš„æœ‰æ•ˆåç§°ï¼Œå»ºè®®æ‚¨é‡‡ç”¨å¦ä¸€ä¸ªåç§°ã€‚";
         Text [ chinese_traditional ] = "å·²ç¶“å­˜åœ¨ä¸€å€‹åŒåçš„è³‡æ–™æºã€‚å› ç‚ºä¸€å€‹è³‡æ–™æºçš„åç¨±å¿…é ˆé€šç”¨æ˜ç¢ºï¼Œè«‹æ‚¨æ¡ç”¨å¦å¤–ä¸€å€‹æœ‰æ•ˆçš„åç¨±ã€‚";
         Text [ turkish ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
@@ -1184,14 +1184,14 @@ TabPage PAGE_GENERAL
         Text [ greek ] = "ÁõôŞ ç ğñïİëåõóç äåäïìİíùí İ÷åé äéáãñáöåß.";
         Text [ dutch ] = "U heeft deze gegevensbron gewist.";
         Text [ french ] = "Vous avez supprimé cette source de données.";
-        Text [ spanish ] = "Ha eliminado esta fuente de datos.";
+        Text [ spanish ] = "Ha borrado esta fuente de datos.";
         Text [ italian ] = "La sorgente dati è stata cancellata.";
         Text [ danish ] = "Denne datakilde er blevet slettet.";
         Text [ swedish ] = "Du har raderat den här datakällan.";
         Text [ polish ] = "To Ÿród³o danych zosta³o usuniête.";
         Text [ portuguese_brazilian ] = "This data source is scheduled to be deleted.";
         Text [ japanese ] = "ã“ã®ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¯ãƒ¦ãƒ¼ã‚¶ãƒ¼ã«ã‚ˆã£ã¦å‰Šé™¤ã•ã‚Œã¾ã—ãŸã€‚";
-        Text [ korean ] = "ì´ ë°ì´í„° ì†ŒìŠ¤ë¥¼ ì‚­ì œí–ˆìŠµë‹ˆë‹¤.";
+        Text [ korean ] = "ì´ ë°ì´í„° ì›ë³¸ì€ ì‚­ì œí•˜ì…¨ìŠµë‹ˆë‹¤.";
         Text [ chinese_simplified ] = "æ‚¨å·²ç»åˆ é™¤äº†è¿™ä¸ªæ•°æ®æºã€‚";
         Text [ chinese_traditional ] = "æ‚¨å·²ç¶“åˆªé™¤äº†é€™å€‹è³‡æ–™æºã€‚";
         Text [ turkish ] = "This data source is scheduled to be deleted.";
@@ -1217,7 +1217,7 @@ TabPage PAGE_GENERAL
         Text [ polish ] = "Za³adowanie biblioteki programu #lib# nie by³o mo¿liwe. Jest ona byæ mo¿e uszkodzona. Wybór Ÿród³a danych ODBC nie jest mo¿liwy.";
         Text [ portuguese_brazilian ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source selection is not available.";
         Text [ japanese ] = "#lib# ãƒ—ãƒ­ã‚°ãƒ©ãƒ ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’èª­ã¿è¾¼ã‚ãªã‹ã£ãŸã‹ã€ã¾ãŸã¯ãã‚Œè‡ªä½“ã«ãƒˆãƒ©ãƒ–ãƒ«ãŒã‚ã‚Šã¾ã™ã€‚ ODBC ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¯é¸æŠã§ãã¾ã›ã‚“ã€‚";
-        Text [ korean ] = "í”„ë¡œê·¸ë¨ ë¼ì´ë¸ŒëŸ¬ë¦¬ #lib#ì„(ë¥¼) ë¡œë“œí•˜ì§€ ëª»í–ˆê±°ë‚˜ ë¼ì´ë¸ŒëŸ¬ë¦¬ì— ì˜¤ë¥˜ê°€ ìˆìŠµë‹ˆë‹¤. ODBC ë°ì´í„° ì†ŒìŠ¤ë¥¼ ì„ íƒí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
+        Text [ korean ] = "í”„ë¡œê·¸ë¨ ë¼ì´ë¸ŒëŸ¬ë¦¬ #lib#ì„(ë¥¼) ë¡œë“œí•˜ì§€ ëª»í–ˆê±°ë‚˜ ë¼ì´ë¸ŒëŸ¬ë¦¬ì— ì˜¤ë¥˜ê°€ ìˆìŠµë‹ˆë‹¤. ODBC ë°ì´í„° ì›ë³¸ ì„ íƒì„ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
         Text [ chinese_simplified ] = "æ— æ³•è£…å…¥ç¨‹åºåº“ #lib# æˆ–å·²ç»æŸåã€‚æ— æ³•é€‰æ‹© ODBC æ•°æ®æºã€‚";
         Text [ chinese_traditional ] = "ç„¡æ³•è¼‰å…¥ç¨‹å¼åº« #lib# æˆ–å·²ç¶“å·²ç¶“æåã€‚ç„¡æ³•é¸æ“‡ ODBC è³‡æ–™æºã€‚";
         Text [ turkish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source selection is not available.";
@@ -1243,7 +1243,7 @@ TabPage PAGE_GENERAL
         Text [ polish ] = "W systemie komputera u¿ytkownika nie znaleziono Ÿróde³ danych Adabas.";
         Text [ portuguese_brazilian ] = "No Adabas data sources have been found on your system.";
         Text [ japanese ] = "ãŠä½¿ã„ã®ã‚·ã‚¹ãƒ†ãƒ ä¸Šã« Adabas ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚";
-        Text [ korean ] = "ì‚¬ìš©ìì˜ ì‹œìŠ¤í…œì—ì„œ Adabas ë°ì´í„° ì†ŒìŠ¤ë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
+        Text [ korean ] = "ì‚¬ìš©ìì˜ ì‹œìŠ¤í…œì—ì„œ Adabas ë°ì´í„° ì›ë³¸ì„ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
         Text [ chinese_simplified ] = "åœ¨æ‚¨çš„ç³»ç»Ÿä¸Šæ²¡æœ‰å®‰è£… Adabas æ•°æ®åº“ã€‚";
         Text [ chinese_traditional ] = "åœ¨æ‚¨çš„ç³»çµ±ä¸Šæ²’æœ‰å®‰è£ Adabas è³‡æ–™æºã€‚";
         Text [ turkish ] = "No Adabas data sources have been found on your system.";
@@ -1258,11 +1258,11 @@ TabPage PAGE_GENERAL
         Text [ english ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text [ english_us ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably will not be able to connect to the database.";
         Text[ portuguese ] = "Esta plataforma não tem suporte para este tipo de fonte de dados.\nPoderá modificar as definições, contudo a ligação à base de dados é improvável.";
-        Text[ russian ] = "Òèï ıòèõ èñòî÷íèêîâ äàííûõ íà ıòîé ïëàòôîğìå íå ïîääåğæèâàåòñÿ.\nÂû ìîæåòå èçìåíèòü íàñòğîéêè, íî, âåğîÿòíî, ñîåäèíèòüñÿ ñ ıòîé áàçîé äàííûõ áóäåò íåâîçìîæíî.";
+        Text[ russian ] = "Äàííûé òèï èñòî÷íèêîâ äàííûõ íà ıòîé ïëàòôîğìå íå ïîääåğæèâàåòñÿ.\nÂû ìîæåòå èçìåíèòü íàñòğîéêè, íî, âåğîÿòíî, ñîåäèíèòüñÿ ñ ıòîé áàçîé äàííûõ áóäåò íåâîçìîæíî.";
         Text[ greek ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text[ dutch ] = "Dit type gegevensbron wordt op dit platform niet ondersteund.\nU kunt wel de instellingen wijzigen, maar vermoedelijk geen verbinding met de database tot stand brengen.";
         Text[ french ] = "Ce type de source de données n'est pas supporté par la plateforme en question.\nMême si les paramètres sont modifiables, une connexion à la BD n'est pas garantie.";
-        Text[ spanish ] = "Esta plataforma no apoya este tipo de fuente de datos.\nPuede modificar los datos, pero seguramente no podrá establecer una conexión con la base de datos.";
+        Text[ spanish ] = "Esta plataforma no admite este tipo de fuente de datos.\nPuede modificar los datos, pero seguramente no podrá establecer una conexión con la base de datos.";
         Text[ finnish ] = "Tämä käyttöympäristö ei tue tätä tietolähdettä.\nVoit muuttaa asetuksia, mutta et todennäköisesti pysty muodostamaan yhteyttä tietokantaan.";
         Text[ italian ] = "Questo tipo di sorgente dati non è supportata dal presente sistema.\nPotete modificare le impostazioni ma è probabile che non riusciate ad effettuare un collegamento con il database.";
         Text[ danish ] = "Denne datakildetype understøttes ikke på denne platform.\nDu kan ændre indstillingerne, men kan sandsynligvis ikke oprette forbindelse til databasen.";
@@ -1270,7 +1270,7 @@ TabPage PAGE_GENERAL
         Text[ polish ] = "Platforma ta nie obs³uguje niniejszego typu Ÿród³a danych.\nMo¿na zmodyfiowaæ ustawienia, ale wówczas po³¹czanie z baz¹ danych nie bêdzie mo¿liwe.";
         Text[ portuguese_brazilian ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text[ japanese ] = "ã“ã®ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®ç¨®é¡ã¯ã“ã®ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã§ã¯æ”¯æ´ã•ã‚Œã¾ã›ã‚“ã€‚\nè¨­å®šã‚’å¤‰æ›´ã—ã¦ã‚‚ã‹ã¾ã„ã¾ã›ã‚“ãŒã€ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã¸ã¯æ¥ç¶šã§ããªã„ã‹ã‚‚ã—ã‚Œã¾ã›ã‚“ã€‚";
-        Text[ korean ] = "ì´ëŸ¬í•œ ì¢…ë¥˜ì˜ ë°ì´í„° ì†ŒìŠ¤ëŠ” ì´ í”Œë«í¼ì—ì„œ ì§€ì›ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\nì„¤ì •ì„ ë³€ê²½í•  ìˆ˜ëŠ” ìˆì§€ë§Œ ì•„ë§ˆë„ ë°ì´í„°ë² ì´ìŠ¤ì— ì—°ê²°í•˜ì§€ ëª»í•  ê²ƒì…ë‹ˆë‹¤.";
+        Text[ korean ] = "ì´ëŸ¬í•œ ìœ í˜•ì˜ ë°ì´í„° ì›ë³¸ì€ ì´ í”Œë«í¼ì—ì„œ ì§€ì›ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\nì„¤ì •ì„ ë³€ê²½í•  ìˆ˜ëŠ” ìˆì§€ë§Œ ë°ì´í„°ë² ì´ìŠ¤ë¡œ ì—°ê²°í•˜ì§€ ëª»í•  ìˆ˜ë„ ìˆìŠµë‹ˆë‹¤.";
         Text[ chinese_simplified ] = "è¿™ä¸ªæ“ä½œç³»ç»Ÿä¸æ”¯æŒè¿™ä¸ªæ•°æ®åº“ç±»å‹ã€‚\næ‚¨å¯ä»¥æ›´æ”¹è®¾å®šï¼Œä½†æ˜¯ä¸å¤ªå¯èƒ½å’Œä¸€ä¸ªæ•°æ®åº“å»ºç«‹è¿æ¥ã€‚";
         Text[ chinese_traditional ] = "é€™å€‹æ“ä½œç³»çµ±ä¸æ”¯æ´é€™å€‹é¡å‹çš„è³‡æ–™åº«é¡å‹ã€‚\næ‚¨å¯ä»¥è®Šæ›´é€™äº›è¨­å®šï¼Œä½†ä¸å¤ªå¯èƒ½é€£ç·šåˆ°ä¸€å€‹è³‡æ–™åº«ã€‚";
         Text[ turkish ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
@@ -1284,23 +1284,23 @@ TabPage PAGE_GENERAL
         Text [ english ] = "To adjust the settings, go to the MySQL tab page." ;
         Text[ portuguese ] = "To adjust the settings, go to the MySQL tab page.";
         Text[ russian ] = "To adjust the settings, go to the MySQL tab page.";
-        Text[ spanish ] = "To adjust the settings, go to the MySQL tab page.";
-        Text[ italian ] = "To adjust the settings, go to the MySQL tab page.";
-        Text[ swedish ] = "To adjust the settings, go to the MySQL tab page.";
+        Text[ spanish ] = "Vaya a la ficha MySQL para realizar la configuración.";
+        Text[ italian ] = "Per corregere le impostazioni andate alla scheda MySQL.";
+        Text[ swedish ] = "Gå till MySQL-fliken för att göra inställningarna.";
         Text[ polish ] = "To adjust the settings, go to the MySQL tab page.";
         Text[ portuguese_brazilian ] = "To adjust the settings, go to the MySQL tab page.";
-        Text[ japanese ] = "To adjust the settings, go to the MySQL tab page.";
-        Text[ korean ] = "To adjust the settings, go to the MySQL tab page.";
+        Text[ japanese ] = "è¨­å®šã‚’èª¿æ•´ã™ã‚‹ã«ã¯ã€MySQL ã‚¿ãƒ–ãƒšãƒ¼ã‚¸ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚";
+        Text[ korean ] = "ì„¤ì •í•˜ê¸° ìœ„í•´ MySQL íƒ­ í˜ì´ì§€ë¡œ ì´ë™í•˜ì‹­ì‹œì˜¤.";
         Text[ turkish ] = "To adjust the settings, go to the MySQL tab page.";
         Text[ thai ] = "To adjust the settings, go to the MySQL tab page.";
         Text[ english_us ] = "To adjust the settings, go to the MySQL tab page.";
         Text[ greek ] = "To adjust the settings, go to the MySQL tab page.";
         Text[ dutch ] = "To adjust the settings, go to the MySQL tab page.";
-        Text[ french ] = "To adjust the settings, go to the MySQL tab page.";
+        Text[ french ] = "Passez à l'onglet MySQL afin de procéder au paramétrage.";
         Text[ finnish ] = "To adjust the settings, go to the MySQL tab page.";
         Text[ danish ] = "To adjust the settings, go to the MySQL tab page.";
-        Text[ chinese_simplified ] = "To adjust the settings, go to the MySQL tab page.";
-        Text[ chinese_traditional ] = "To adjust the settings, go to the MySQL tab page.";
+        Text[ chinese_simplified ] = "è¦è°ƒæ•´è®¾å®šï¼Œè¯·è½¬åˆ° MySQL é€‰é¡¹é¡µã€‚";
+        Text[ chinese_traditional ] = "å¦‚æœè¦èª¿æ•´è¨­å®šï¼Œè½‰åˆ° MySQL æ¨™ç±¤é ã€‚";
         Text[ arabic ] = "To adjust the settings, go to the MySQL tab page.";
         Text[ catalan ] = "To adjust the settings, go to the MySQL tab page.";
     };
@@ -1354,7 +1354,7 @@ TabPage PAGE_DBASE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 7 , 31 ) ;
-        Size = MAP_APPFONT ( 105 , 60 ) ;
+        Size = MAP_APPFONT ( 130 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
@@ -1441,7 +1441,7 @@ TabPage PAGE_DBASE
         Text[ swedish ] = "Använd SQL92-namnbegränsningar";
         Text[ polish ] = "Use SQL92 naming convention";
         Text[ japanese ] = "SQL92 ã§è¨±ã•ã‚ŒãŸå‹ã®åå‰ã‚’ä½¿ç”¨ã™ã‚‹";
-        Text[ korean ] = "SQL92 ì´ë¦„ ë¶€ì—¬ í˜‘ì • ì‚¬ìš©";
+        Text[ korean ] = "SQL92 ì´ë¦„ ì œì•½ ì¡°ê±´ ì‚¬ìš©";
         Text[ chinese_simplified ] = "ä½¿ç”¨ SQL92 å‘½åè§„åˆ™";
         Text[ chinese_traditional ] = "ä½¿ç”¨ SQL92 å‘½åè¦å‰‡";
         Text[ turkish ] = "Use SQL92 naming convention";
@@ -1458,7 +1458,7 @@ TabPage PAGE_DBASE
         Text [ chinese_traditional ] = "æ¨™èªŒ...";
         Text [ arabic ] = "İåÇÑÓ...";
         Text [ greek ] = "ÅõñåôŞñ~éá...";
-        Text [ korean ] = "ìƒ‰ì¸";
+        Text [ korean ] = "ìƒ‰ì¸...";
         Text [ turkish ] = "Dizinler...";
         Text [ language_user1 ] = " ";
         Text [ italian ] = "I~ndici...";
@@ -1591,7 +1591,7 @@ TabPage PAGE_ADO
         Text [ polish ] = "Podaj has³o";
         Text [ portuguese_brazilian ] = "beim ?ffnen ~fragen";
         Text [ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒå¿…è¦";
-        Text [ korean ] = "ì•”í˜¸ê°€ í•„ìš”";
+        Text [ korean ] = "ì•”í˜¸ í•„ìš”";
         Text [ chinese_simplified ] = "å¿…é¡»è¾“å…¥å¯†ç ";
         Text [ chinese_traditional ] = "å¿…é ˆè¼¸å…¥å¯†ç¢¼";
         Text [ turkish ] = "Açarken sor";
@@ -1651,7 +1651,7 @@ TabPage PAGE_ADO
         Text[ swedish ] = "Använd SQL92-namnbegränsningar";
         Text[ polish ] = "Use SQL92 naming convention";
         Text[ japanese ] = "SQL92 ã§è¨±ã•ã‚ŒãŸå‹ã®åå‰ã‚’ä½¿ç”¨ã™ã‚‹";
-        Text[ korean ] = "SQL92 ì´ë¦„ ë¶€ì—¬ í˜‘ì • ì‚¬ìš© ";
+        Text[ korean ] = "SQL92 ì´ë¦„ ì œì•½ ì¡°ê±´ ì‚¬ìš© ";
         Text[ chinese_simplified ] = "ä½¿ç”¨ SQL92 å‘½åè§„åˆ™";
         Text[ chinese_traditional ] = "ä½¿ç”¨ SQL92 å‘½åè¦å‰‡";
         Text[ turkish ] = "Use SQL92 naming convention";
@@ -1802,7 +1802,7 @@ TabPage PAGE_JDBC
         Text [ polish ] = "Podaj has³o";
         Text [ portuguese_brazilian ] = "beim ?ffnen ~fragen";
         Text [ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒå¿…è¦";
-        Text [ korean ] = "ì•”í˜¸ê°€ í•„ìš”";
+        Text [ korean ] = "ì•”í˜¸ í•„ìš”";
         Text [ chinese_simplified ] = "å¿…é¡»è¾“å…¥å¯†ç ";
         Text [ chinese_traditional ] = "å¿…é ˆè¼¸å…¥å¯†ç¢¼";
         Text [ turkish ] = "Açarken sor";
@@ -1863,7 +1863,7 @@ TabPage PAGE_JDBC
         Text[ swedish ] = "Använd SQL92-namnbegränsningar";
         Text[ polish ] = "Use SQL92 naming convention";
         Text[ japanese ] = "SQL92 ã§è¨±ã•ã‚ŒãŸå‹ã®åå‰ã‚’ä½¿ç”¨ã™ã‚‹";
-        Text[ korean ] = "SQL92 ì´ë¦„ ë¶€ì—¬ í˜‘ì • ì‚¬ìš©";
+        Text[ korean ] = "SQL92 ì´ë¦„ ì œì•½ ì¡°ê±´ ì‚¬ìš©";
         Text[ chinese_simplified ] = "ä½¿ç”¨ SQL92 å‘½åè§„åˆ™";
         Text[ chinese_traditional ] = "ä½¿ç”¨ SQL92 å‘½åè¦å‰‡";
         Text[ turkish ] = "Use SQL92 naming convention";
@@ -1914,7 +1914,7 @@ TabPage PAGE_ODBC
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 90 , 6 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_USER_ODBC;
     };
@@ -1938,7 +1938,7 @@ TabPage PAGE_ODBC
         Text [ polish ] = "Podaj has³o";
         Text [ portuguese_brazilian ] = "Password required";
         Text [ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒå¿…è¦";
-        Text [ korean ] = "ì•”í˜¸ê°€ í•„ìš”";
+        Text [ korean ] = "ì•”í˜¸ í•„ìš”";
         Text [ chinese_simplified ] = "å¿…é¡»è¾“å…¥å¯†ç ";
         Text [ chinese_traditional ] = "å¿…é ˆè¼¸å…¥å¯†ç¢¼";
         Text [ turkish ] = "Password required";
@@ -1986,7 +1986,7 @@ TabPage PAGE_ODBC
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 91 , 37 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_ODBC_OPTIONS;
     };
@@ -2024,7 +2024,7 @@ TabPage PAGE_ODBC
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 91 , 52 ) ;
-        Size = MAP_APPFONT ( 105 , 60 ) ;
+        Size = MAP_APPFONT ( 130 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
@@ -2083,7 +2083,7 @@ TabPage PAGE_ODBC
         Text[ swedish ] = "Använd SQL92-namnbegränsningar";
         Text[ polish ] = "Use SQL92 naming convention";
         Text[ japanese ] = "SQL92 ã§è¨±ã•ã‚ŒãŸå‹ã®åå‰ã‚’ä½¿ç”¨ã™ã‚‹";
-        Text[ korean ] = "SQL92 ì´ë¦„ ë¶€ì—¬ í˜‘ì • ì‚¬ìš©";
+        Text[ korean ] = "SQL92 ì´ë¦„ ì œì•½ ì¡°ê±´ ì‚¬ìš©";
         Text[ chinese_simplified ] = "ä½¿ç”¨ SQL92 å‘½åè§„åˆ™";
         Text[ chinese_traditional ] = "ä½¿ç”¨ SQL92 å‘½åè¦å‰‡";
         Text[ turkish ] = "Use SQL92 naming convention";
@@ -2097,7 +2097,7 @@ TabPage PAGE_ODBC
         Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_USECATALOG;
-        Text = "Catalog verwenden bei dateibasierten Datenbanken";
+        Text = "Katalog verwenden bei dateibasierten Datenbanken";
         Text [ english ] = "Use catalog on filebased databases";
         Text[ english_us ] = "Use catalog for file-based databases";
         Text[ portuguese ] = "Utilizar catálogo em bases de dados baseadas em ficheiros";
@@ -2143,23 +2143,23 @@ TabPage PAGE_MYSQL
         Text [ english ] = "Type of connection";
         Text[ portuguese ] = "Type of connection";
         Text[ russian ] = "Type of connection";
-        Text[ spanish ] = "Type of connection";
-        Text[ italian ] = "Type of connection";
-        Text[ swedish ] = "Type of connection";
+        Text[ spanish ] = "Tipo de conexión";
+        Text[ italian ] = "Tipo di collegamento";
+        Text[ swedish ] = "Typ av förbindelse";
         Text[ polish ] = "Type of connection";
         Text[ portuguese_brazilian ] = "Type of connection";
-        Text[ japanese ] = "Type of connection";
-        Text[ korean ] = "Type of connection";
+        Text[ japanese ] = "æ¥ç¶šã‚¿ã‚¤ãƒ—";
+        Text[ korean ] = "ì—°ê²° ìœ í˜•";
         Text[ turkish ] = "Type of connection";
         Text[ thai ] = "Type of connection";
         Text[ english_us ] = "Type of connection";
         Text[ greek ] = "Type of connection";
         Text[ dutch ] = "Type of connection";
-        Text[ french ] = "Type of connection";
+        Text[ french ] = "Type de connexion";
         Text[ finnish ] = "Type of connection";
         Text[ danish ] = "Type of connection";
-        Text[ chinese_simplified ] = "Type of connection";
-        Text[ chinese_traditional ] = "Type of connection";
+        Text[ chinese_simplified ] = "è¿æ¥çš„ç±»å‹";
+        Text[ chinese_traditional ] = "é€£ç·šé¡å‹";
         Text[ arabic ] = "Type of connection";
         Text[ catalan ] = "Type of connection";
     };
@@ -2172,23 +2172,23 @@ TabPage PAGE_MYSQL
         Text [ english ]    = "Use existing My~ODBC data source";
         Text[ portuguese ] = "Use existing My~ODBC data source";
         Text[ russian ] = "Use existing My~ODBC data source";
-        Text[ spanish ] = "Use existing My~ODBC data source";
-        Text[ italian ] = "Use existing My~ODBC data source";
-        Text[ swedish ] = "Use existing My~ODBC data source";
+        Text[ spanish ] = "Utilizar la fuente de datos My~ODBC existente";
+        Text[ italian ] = "Usa la sorgente dati My~ODBC presente";
+        Text[ swedish ] = "Använd existerande My~ODBC-datakälla";
         Text[ polish ] = "Use existing My~ODBC data source";
         Text[ portuguese_brazilian ] = "Use existing My~ODBC data source";
-        Text[ japanese ] = "Use existing My~ODBC data source";
-        Text[ korean ] = "Use existing My~ODBC data source";
+        Text[ japanese ] = "æ—¢å­˜ã® MyODBC ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã‚’ä½¿ç”¨(~O)";
+        Text[ korean ] = "í˜„ì¬ My~ODBC ë°ì´í„° ì›ë³¸ ì‚¬ìš©";
         Text[ turkish ] = "Use existing My~ODBC data source";
         Text[ thai ] = "Use existing My~ODBC data source";
         Text[ english_us ] = "Use existing My~ODBC data source";
         Text[ greek ] = "Use existing My~ODBC data source";
         Text[ dutch ] = "Use existing My~ODBC data source";
-        Text[ french ] = "Use existing My~ODBC data source";
+        Text[ french ] = "Utiliser la source de données My~ODBC existante";
         Text[ finnish ] = "Use existing My~ODBC data source";
         Text[ danish ] = "Use existing My~ODBC data source";
-        Text[ chinese_simplified ] = "Use existing My~ODBC data source";
-        Text[ chinese_traditional ] = "Use existing My~ODBC data source";
+        Text[ chinese_simplified ] = "ä½¿ç”¨ç°æœ‰çš„ My~ODBC æ•°æ®æº";
+        Text[ chinese_traditional ] = "ä½¿ç”¨ç¾æœ‰çš„ MyODBC è³‡æ–™æº(~O)";
         Text[ arabic ] = "Use existing My~ODBC data source";
         Text[ catalan ] = "Use existing My~ODBC data source";
     };
@@ -2202,23 +2202,23 @@ TabPage PAGE_MYSQL
         Text[ language_user1 ] = "EM Dec 2002: Connector/J3 is the JDBC driver from MySQL. Do not translate or change “Connector/J3”-- it is a product name.";
         Text[ portuguese ] = "Use Connector/~J3";
         Text[ russian ] = "Use Connector/~J3";
-        Text[ spanish ] = "Use Connector/~J3";
-        Text[ italian ] = "Use Connector/~J3";
-        Text[ swedish ] = "Use Connector/~J3";
+        Text[ spanish ] = "Utilizar Connector/~J3";
+        Text[ italian ] = "Usa Connector/~J3";
+        Text[ swedish ] = "Använd Connector/~J3";
         Text[ polish ] = "Use Connector/~J3";
         Text[ portuguese_brazilian ] = "Use Connector/~J3";
-        Text[ japanese ] = "Use Connector/~J3";
-        Text[ korean ] = "Use Connector/~J3";
+        Text[ japanese ] = "ã‚³ãƒã‚¯ã‚¿ãƒ¼/J3ã‚’ä½¿ç”¨(~J)";
+        Text[ korean ] = "Connector/~J3 ì‚¬ìš©";
         Text[ turkish ] = "Use Connector/~J3";
         Text[ thai ] = "Use Connector/~J3";
         Text[ english_us ] = "Use Connector/~J3";
         Text[ greek ] = "Use Connector/~J3";
         Text[ dutch ] = "Use Connector/~J3";
-        Text[ french ] = "Use Connector/~J3";
+        Text[ french ] = "Utiliser Connector/~J3";
         Text[ finnish ] = "Use Connector/~J3";
         Text[ danish ] = "Use Connector/~J3";
-        Text[ chinese_simplified ] = "Use Connector/~J3";
-        Text[ chinese_traditional ] = "Use Connector/~J3";
+        Text[ chinese_simplified ] = "ä½¿ç”¨ Connector/~J3";
+        Text[ chinese_traditional ] = "ä½¿ç”¨é€£çµå™¨/J3(~J)";
         Text[ arabic ] = "Use Connector/~J3";
         Text[ catalan ] = "Use Connector/~J3";
     };
@@ -2231,23 +2231,23 @@ TabPage PAGE_MYSQL
         Text [ english ] = "MySQL JDBC d~river class";
         Text[ portuguese ] = "MySQL JDBC d~river class";
         Text[ russian ] = "MySQL JDBC d~river class";
-        Text[ spanish ] = "MySQL JDBC d~river class";
-        Text[ italian ] = "MySQL JDBC d~river class";
-        Text[ swedish ] = "MySQL JDBC d~river class";
+        Text[ spanish ] = "Clase de ~controlador MySQL JDBC";
+        Text[ italian ] = "Classe driver JDBC per MySQL";
+        Text[ swedish ] = "D~rivrutinsklass MySQL JDBC";
         Text[ polish ] = "MySQL JDBC d~river class";
         Text[ portuguese_brazilian ] = "MySQL JDBC d~river class";
-        Text[ japanese ] = "MySQL JDBC d~river class";
-        Text[ korean ] = "MySQL JDBC d~river class";
+        Text[ japanese ] = "MySQL JDBC ãƒ‰ãƒ©ã‚¤ãƒã‚¯ãƒ©ã‚¹(~R)";
+        Text[ korean ] = "MySQL JDBC ë“œë¼ì´ë²„ í´ë˜ìŠ¤";
         Text[ turkish ] = "MySQL JDBC d~river class";
         Text[ thai ] = "MySQL JDBC d~river class";
         Text[ english_us ] = "MySQL JDBC d~river class";
         Text[ greek ] = "MySQL JDBC d~river class";
         Text[ dutch ] = "MySQL JDBC d~river class";
-        Text[ french ] = "MySQL JDBC d~river class";
+        Text[ french ] = "Classe de pilote JDBC pour MySQL";
         Text[ finnish ] = "MySQL JDBC d~river class";
         Text[ danish ] = "MySQL JDBC d~river class";
-        Text[ chinese_simplified ] = "MySQL JDBC d~river class";
-        Text[ chinese_traditional ] = "MySQL JDBC d~river class";
+        Text[ chinese_simplified ] = "MySQL JDBC é©±åŠ¨ç¨‹åºç±»";
+        Text[ chinese_traditional ] = "MySQL JDBC é©…å‹•ç¨‹å¼é¡(~R)";
         Text[ arabic ] = "MySQL JDBC d~river class";
         Text[ catalan ] = "MySQL JDBC d~river class";
     };
@@ -2269,21 +2269,21 @@ TabPage PAGE_MYSQL
         Text[ russian ] = "General";
         Text[ spanish ] = "General";
         Text[ italian ] = "General";
-        Text[ swedish ] = "General";
+        Text[ swedish ] = "Allmänt";
         Text[ polish ] = "General";
         Text[ portuguese_brazilian ] = "General";
-        Text[ japanese ] = "General";
-        Text[ korean ] = "General";
+        Text[ japanese ] = "å…¨èˆ¬";
+        Text[ korean ] = "ì¼ë°˜";
         Text[ turkish ] = "General";
         Text[ thai ] = "General";
         Text[ english_us ] = "General";
         Text[ greek ] = "General";
         Text[ dutch ] = "General";
-        Text[ french ] = "General";
+        Text[ french ] = "Général";
         Text[ finnish ] = "General";
         Text[ danish ] = "General";
-        Text[ chinese_simplified ] = "General";
-        Text[ chinese_traditional ] = "General";
+        Text[ chinese_simplified ] = "ä¸€èˆ¬";
+        Text[ chinese_traditional ] = "ä¸€èˆ¬";
         Text[ arabic ] = "General";
         Text[ catalan ] = "General";
     };
@@ -2297,23 +2297,23 @@ TabPage PAGE_MYSQL
         Text [ english ] = "~Data source URL";
         Text[ portuguese ] = "~Data source URL";
         Text[ russian ] = "~Data source URL";
-        Text[ spanish ] = "~Data source URL";
-        Text[ italian ] = "~Data source URL";
-        Text[ swedish ] = "~Data source URL";
+        Text[ spanish ] = "~URL de la fuente de datos";
+        Text[ italian ] = "~Sorgente dati URL";
+        Text[ swedish ] = "~URL för datakälla";
         Text[ polish ] = "~Data source URL";
         Text[ portuguese_brazilian ] = "~Data source URL";
-        Text[ japanese ] = "~Data source URL";
-        Text[ korean ] = "~Data source URL";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ URL(~D)";
+        Text[ korean ] = "ë°ì´í„° ì›ë³¸ URL(~D):";
         Text[ turkish ] = "~Data source URL";
         Text[ thai ] = "~Data source URL";
         Text[ english_us ] = "~Data source URL";
         Text[ greek ] = "~Data source URL";
         Text[ dutch ] = "~Data source URL";
-        Text[ french ] = "~Data source URL";
+        Text[ french ] = "URL de la source de données";
         Text[ finnish ] = "~Data source URL";
         Text[ danish ] = "~Data source URL";
-        Text[ chinese_simplified ] = "~Data source URL";
-        Text[ chinese_traditional ] = "~Data source URL";
+        Text[ chinese_simplified ] = "æ•°æ®æº URL(~D)";
+        Text[ chinese_traditional ] = "è³‡æ–™æº URL(~D)";
         Text[ arabic ] = "~Data source URL";
         Text[ catalan ] = "~Data source URL";
     };
@@ -2342,23 +2342,23 @@ TabPage PAGE_MYSQL
         Text [ english ] = "~User name";
         Text[ portuguese ] = "~User name";
         Text[ russian ] = "~User name";
-        Text[ spanish ] = "~User name";
-        Text[ italian ] = "~User name";
-        Text[ swedish ] = "~User name";
+        Text[ spanish ] = "~Nombre de usuario";
+        Text[ italian ] = "Nome ~utente";
+        Text[ swedish ] = "A~nvändarnamn";
         Text[ polish ] = "~User name";
         Text[ portuguese_brazilian ] = "~User name";
-        Text[ japanese ] = "~User name";
-        Text[ korean ] = "~User name";
+        Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å(~U)";
+        Text[ korean ] = "ì‚¬ìš©ì ì´ë¦„(~U)";
         Text[ turkish ] = "~User name";
         Text[ thai ] = "~User name";
         Text[ english_us ] = "~User name";
         Text[ greek ] = "~User name";
         Text[ dutch ] = "~User name";
-        Text[ french ] = "~User name";
+        Text[ french ] = "Nom d'utilisateur";
         Text[ finnish ] = "~User name";
         Text[ danish ] = "~User name";
-        Text[ chinese_simplified ] = "~User name";
-        Text[ chinese_traditional ] = "~User name";
+        Text[ chinese_simplified ] = "ä½¿ç”¨å(~U)";
+        Text[ chinese_traditional ] = "ä½¿ç”¨è€…åç¨±(~U)";
         Text[ arabic ] = "~User name";
         Text[ catalan ] = "~User name";
     };
@@ -2378,23 +2378,23 @@ TabPage PAGE_MYSQL
         Text [ english ] = "Password r~equired";
         Text[ portuguese ] = "Password r~equired";
         Text[ russian ] = "Password r~equired";
-        Text[ spanish ] = "Password r~equired";
-        Text[ italian ] = "Password r~equired";
-        Text[ swedish ] = "Password r~equired";
+        Text[ spanish ] = "Se requiere ~contraseña";
+        Text[ italian ] = "Password necessaria";
+        Text[ swedish ] = "Lösenord k~rävs";
         Text[ polish ] = "Password r~equired";
         Text[ portuguese_brazilian ] = "Password r~equired";
-        Text[ japanese ] = "Password r~equired";
-        Text[ korean ] = "Password r~equired";
+        Text[ japanese ] = "å¿…é ˆãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰(~E)";
+        Text[ korean ] = "ì•”í˜¸ í•„ìš”";
         Text[ turkish ] = "Password r~equired";
         Text[ thai ] = "Password r~equired";
         Text[ english_us ] = "Password r~equired";
         Text[ greek ] = "Password r~equired";
         Text[ dutch ] = "Password r~equired";
-        Text[ french ] = "Password r~equired";
+        Text[ french ] = "Mot de passe requis";
         Text[ finnish ] = "Password r~equired";
         Text[ danish ] = "Password r~equired";
-        Text[ chinese_simplified ] = "Password r~equired";
-        Text[ chinese_traditional ] = "Password r~equired";
+        Text[ chinese_simplified ] = "éœ€è¦è¾“å…¥å¯†ç (~E)";
+        Text[ chinese_traditional ] = "éœ€è¦å¯†ç¢¼(~E)";
         Text[ arabic ] = "Password r~equired";
         Text[ catalan ] = "Password r~equired";
     };
@@ -2406,23 +2406,23 @@ TabPage PAGE_MYSQL
         Text [ english ] = "~Character set";
         Text[ portuguese ] = "~Character set";
         Text[ russian ] = "~Character set";
-        Text[ spanish ] = "~Character set";
-        Text[ italian ] = "~Character set";
-        Text[ swedish ] = "~Character set";
+        Text[ spanish ] = "J~uego de caracteres";
+        Text[ italian ] = "~Tipo di carattere";
+        Text[ swedish ] = "Te~ckenuppsättning";
         Text[ polish ] = "~Character set";
         Text[ portuguese_brazilian ] = "~Character set";
-        Text[ japanese ] = "~Character set";
-        Text[ korean ] = "~Character set";
+        Text[ japanese ] = "æ–‡å­—ã‚»ãƒƒãƒˆ(~C)";
+        Text[ korean ] = "ë¬¸ìì§‘í•©(~C)";
         Text[ turkish ] = "~Character set";
         Text[ thai ] = "~Character set";
         Text[ english_us ] = "~Character set";
         Text[ greek ] = "~Character set";
         Text[ dutch ] = "~Character set";
-        Text[ french ] = "~Character set";
+        Text[ french ] = "Jeu de caractères";
         Text[ finnish ] = "~Character set";
         Text[ danish ] = "~Character set";
-        Text[ chinese_simplified ] = "~Character set";
-        Text[ chinese_traditional ] = "~Character set";
+        Text[ chinese_simplified ] = "å­—ç¬¦é›†(~C)";
+        Text[ chinese_traditional ] = "å­—å…ƒé›†(~C)";
         Text[ arabic ] = "~Character set";
         Text[ catalan ] = "~Character set";
     };
@@ -2443,23 +2443,23 @@ TabPage PAGE_MYSQL
         Text [ english ] = "<host>:<3306>/<DBNAME>";
         Text[ portuguese ] = "<host>:<3306>/<DBNAME>";
         Text[ russian ] = "<host>:<3306>/<DBNAME>";
-        Text[ spanish ] = "<host>:<3306>/<DBNAME>";
+        Text[ spanish ] = "<ordenador>:<3306>/<DBNAME>";
         Text[ italian ] = "<host>:<3306>/<DBNAME>";
-        Text[ swedish ] = "<host>:<3306>/<DBNAME>";
+        Text[ swedish ] = "<värddator>:<3306>/<DBNAME>";
         Text[ polish ] = "<host>:<3306>/<DBNAME>";
         Text[ portuguese_brazilian ] = "<host>:<3306>/<DBNAME>";
         Text[ japanese ] = "<host>:<3306>/<DBNAME>";
-        Text[ korean ] = "<host>:<3306>/<DBNAME>";
+        Text[ korean ] = "<í˜¸ìŠ¤íŠ¸>:<3306>/<DBNAME>";
         Text[ turkish ] = "<host>:<3306>/<DBNAME>";
         Text[ thai ] = "<host>:<3306>/<DBNAME>";
         Text[ english_us ] = "<host>:<3306>/<DBNAME>";
         Text[ greek ] = "<host>:<3306>/<DBNAME>";
         Text[ dutch ] = "<host>:<3306>/<DBNAME>";
-        Text[ french ] = "<host>:<3306>/<DBNAME>";
+        Text[ french ] = "<ordinateur>:<3306>/<DBNAME>";
         Text[ finnish ] = "<host>:<3306>/<DBNAME>";
         Text[ danish ] = "<host>:<3306>/<DBNAME>";
-        Text[ chinese_simplified ] = "<host>:<3306>/<DBNAME>";
-        Text[ chinese_traditional ] = "<host>:<3306>/<DBNAME>";
+        Text[ chinese_simplified ] = "<ä¸»æœº>:<3306>/<æ•°æ®åº“åç§°>";
+        Text[ chinese_traditional ] = "<ä¸»æ©Ÿ>:<3306>/<DBNAME>";
         Text[ arabic ] = "<host>:<3306>/<DBNAME>";
         Text[ catalan ] = "<host>:<3306>/<DBNAME>";
     };
@@ -2612,7 +2612,7 @@ TabPage PAGE_LDAP
         Text[ polish ] = "~Rekordy (maks.)";
         Text[ portuguese_brazilian ] = "~Rows (max.)";
         Text[ japanese ] = "æœ€å¤§ãƒ¬ã‚³ãƒ¼ãƒ‰æ•°(~R)";
-        Text[ korean ] = "ë°ì´í„° ë ˆì½”ë“œ(ìµœëŒ€)(~R)";
+        Text[ korean ] = "ë ˆì½”ë“œ(ìµœëŒ€)(~R)";
         Text[ chinese_simplified ] = "æ•°æ®æ¡ç›®(æœ€å¤š)(~R)";
         Text[ chinese_traditional ] = "è³‡æ–™æ¢ç›®(æœ€å¤š)(~R)";
         Text[ turkish ] = "~Rows (max.)";
@@ -2693,7 +2693,7 @@ TabPage PAGE_TEXT
         Text [ chinese_traditional ] = "å…§æ–‡å«æœ‰é é¦–(~T)";
         Text [ arabic ] = "íÔÊãá ÇáäÕ Úáì ÑÃÓ ÇáÕİÍÉ";
         Text [ greek ] = "Ôï êåßìåíï ğåñéİ÷åé êåöáëßäá";
-        Text [ korean ] = "ë¨¸ë¦¬ê¸€ì´ í¬í•¨ë˜ì–´ ìˆëŠ” í…ìŠ¤íŠ¸(~T)";
+        Text [ korean ] = "ë¬¸ì„œê°€ ë¨¸ë¦¬ê¸€ì„ í¬í•¨(~T)";
         Text [ turkish ] = "Metin üstbilgi içeriyor";
         Text [ language_user1 ] = " ";
         Text[ catalan ] = "El ~text conté encapçalament";
@@ -2802,7 +2802,7 @@ TabPage PAGE_TEXT
         Text [ chinese_traditional ] = "å°æ•¸é»ç¬¦è™Ÿ";
         Text [ arabic ] = "İÇÕá ÚÔÑí";
         Text [ greek ] = "~Äéá÷ùñéóôéêü äåêáäéêşí";
-        Text [ korean ] = "ì†Œìˆ˜ì  êµ¬ë¶„ ê¸°í˜¸";
+        Text [ korean ] = "ì†Œìˆ˜ êµ¬ë¶„ ê¸°í˜¸";
         Text [ turkish ] = "Ondalık ayırıcısı";
         Text[ catalan ] = "Separador decimal";
         Text[ thai ] = "à¸•à¸±à¸§à¹à¸¢à¸à¸—à¸¨à¸™à¸´à¸¢à¸¡";
@@ -2976,7 +2976,7 @@ TabPage PAGE_TEXT
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 125 , 131 ) ;
-        Size = MAP_APPFONT ( 61 , 60 ) ;
+        Size = MAP_APPFONT ( 130 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
@@ -2990,19 +2990,19 @@ TabPage PAGE_TEXT
         Text [ NORWEGIAN ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Space}\t32" ;
         Text [ DANISH ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{tom}\t32" ;
         Text [ english_US ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Space}\t32" ;
-        Text [ SPANISH ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{vacío}\t32" ;
+        Text [ SPANISH ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{espacio}\t32" ;
         Text [ FINNISH ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{empty}\t32" ;
-        Text [ FRENCH ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Leer}\t32" ;
+        Text [ FRENCH ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Espace}\t32" ;
         Text [ ITALIAN ] = ";\t59\t,\t44\t:\t58\t{tab}\t9\t{spazio}\t32" ;
         Text [ DUTCH ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{leeg}\t32" ;
         Text [ PORTUGUESE_BRAZILIAN ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Space}\t32" ;
-        Text [ SWEDISH ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{tom}\t32" ;
+        Text [ SWEDISH ] = ";\t59\t,\t44\t:\t58\t{Tabb}\t9\t{Mellanslag}\t32" ;
         Text [ PORTUGUESE ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{vazio}\t32" ;
-        Text [ chinese_simplified ] = ";\t59\t,\t44\t:\t58\t{åˆ¶è¡¨é”®}\t9\t{ç©ºç¼º}\t32";
+        Text [ chinese_simplified ] = ";\t59\t,\t44\t:\t58\t{åˆ¶è¡¨é”®}\t9\t{ç©ºæ ¼}\t32";
         Text [ russian ] = ";\t59\t,\t44\t:\t58\t{Taá}\t9\t{ïóñòî}\t32";
         Text [ polish ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Pusty}\t32";
         Text [ japanese ] = ";\t59\t,\t44\t:\t58\t{ã‚¿ãƒ–}\t9\t{ç©ºç™½}\t32";
-        Text [ chinese_traditional ] = ";\t59\t,\t44\t:\t58\t{å®šä½éµ}\t9\t{ç©ºç¼º}\t32";
+        Text [ chinese_traditional ] = ";\t59\t,\t44\t:\t58\t{å®šä½éµ}\t9\t{ç©ºæ ¼}\t32";
         Text [ arabic ] = ";\t59\t,\t44\t:\t58\t{ÚáÇãÉ ÌÏæáÉ}\t9\t{İÇÑÛ\t32";
         Text [ greek ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{êåíü}\t32";
         Text [ korean ] = ";\t59\t,\t44\t:\t58\t{íƒ­}\t9\t{ê³µë°±}\t32";
@@ -3022,14 +3022,14 @@ TabPage PAGE_TEXT
         Text = "{Keiner}" ;
         Text [ english ] = "{None}" ;
         Text[ english_us ] = "{None}";
-        Text[ french ] = "{None}";
-        Text[ spanish ] = "{None}";
-        Text[ italian ] = "{None}";
-        Text[ swedish ] = "{None}";
-        Text[ japanese ] = "{None}";
-        Text[ korean ] = "{None}";
-        Text[ chinese_simplified ] = "{None}";
-        Text[ chinese_traditional ] = "{None}";
+        Text[ french ] = "{Aucun}";
+        Text[ spanish ] = "{Ninguno}";
+        Text[ italian ] = "{Nessuno}";
+        Text[ swedish ] = "{Ingen}";
+        Text[ japanese ] = "{ãªã—}";
+        Text[ korean ] = "{ì—†ìŒ}";
+        Text[ chinese_simplified ] = "{æ— }";
+        Text[ chinese_traditional ] = "{ç„¡}";
         Text[ portuguese ] = "{None}";
         Text[ russian ] = "{None}";
         Text[ greek ] = "{None}";
@@ -3091,7 +3091,7 @@ TabPage PAGE_TEXT
         Text [ chinese_traditional ] = "#1 å’Œ #2 å¿…é ˆä¸ç›¸åŒã€‚";
         Text [ arabic ] = "íÌÈ Ãä íßæä #1 æ #2 ãÎÊáİíä.";
         Text [ greek ] = "#1 êáé #2 ğñİğåé íá äéáöİñïõí.";
-        Text [ korean ] = "#1ê³¼ #2ëŠ” ë°˜ë“œì‹œ ì„œë¡œ ë‹¬ë¼ì•¼ í•©ë‹ˆë‹¤.";
+        Text [ korean ] = "#1ê³¼ #2ëŠ” êµ¬ë¶„ë˜ì–´ì•¼ í•©ë‹ˆë‹¤.";
         Text [ turkish ] = "#1 ve #2 farklı olmalı.";
         Text [ language_user1 ] = " ";
         Text[ finnish ] = "Arvot #1 ja #2 eivät saa olla identtiset.";
@@ -3118,7 +3118,7 @@ TabPage PAGE_TEXT
         Text [ chinese_traditional ] = "#1 ä¸èƒ½å¤ å«æœ‰è¬ç”¨å­—å…ƒ<*,?>ã€‚";
         Text [ arabic ] = "áÇ íõÓãÍ ÈÃÍÑİ ÇáÈÏá¡ ãËá *,?¡ İí #1.";
         Text [ greek ] = "Äåí åğéôñİğïíôáé ôá óıìâïëá êñÜôçóçò èİóçò üğùò (?,*) óôï #1.";
-        Text [ korean ] = "#1 ì—ì„œ ? ë° *ì™€ ê°™ì€ ì™€ì¼ë“œì¹´ë“œ ë¬¸ì ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
+        Text [ korean ] = "#1 ì—ì„œëŠ” ? ë° *ì™€ ê°™ì€ íŒ¨í„´ ì¼ì¹˜(ì™€ì¼ë“œì¹´ë“œ)ë¥¼ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
         Text [ turkish ] = "*,? gibi değişkenler #1 için kullanılamaz.";
         Text [ language_user1 ] = " ";
         Text[ finnish ] = "Yleismerkkejä, esimerkiksi ? ja *, ei sallita kohteessa #1.";
@@ -3176,7 +3176,7 @@ TabPage PAGE_TEXT
         Text[ swedish ] = "Använd SQL92-namnbegränsningar";
         Text[ polish ] = "Use SQL92 naming convention";
         Text[ japanese ] = "SQL92 ã§è¨±ã•ã‚ŒãŸå‹ã®åå‰ã‚’ä½¿ç”¨ã™ã‚‹";
-        Text[ korean ] = "SQL92 ì´ë¦„ ë¶€ì—¬ í˜‘ì • ì‚¬ìš©";
+        Text[ korean ] = "SQL92 ì´ë¦„ ì œì•½ ì¡°ê±´ ì‚¬ìš©";
         Text[ chinese_simplified ] = "ä½¿ç”¨ SQL92 å‘½åè§„åˆ™";
         Text[ chinese_traditional ] = "ä½¿ç”¨ SQL92 å‘½åè¦å‰‡";
         Text[ turkish ] = "Use SQL92 naming convention";
@@ -3212,7 +3212,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ polish ] = "Tabele i filtry tabel";
         Text[ portuguese_brazilian ] = "Tables and Table filter";
         Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã¨ãƒ†ãƒ¼ãƒ–ãƒ«ãƒ•ã‚£ãƒ«ã‚¿";
-        Text[ korean ] = "ì‹œíŠ¸ì™€ ì‹œíŠ¸ í•„í„°";
+        Text[ korean ] = "í…Œì´ë¸” ë° í•„í„°";
         Text[ chinese_simplified ] = "è¡¨æ ¼å’Œè¡¨æ ¼ç­›é€‰";
         Text[ chinese_traditional ] = "è¡¨æ ¼åŠè¡¨æ ¼ç¯©é¸";
         Text[ turkish ] = "Tables and Table filter";
@@ -3276,7 +3276,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ polish ] = "Na powy¿szej liœcie nale¿y zaznaczyæ krzy¿ykiem tabele, które maj¹ byæ widoczne w aplikacjach.";
         Text[ portuguese_brazilian ] = "In the list above, please check the tables which should be visible for the applications.";
         Text[ japanese ] = "ä¸Šè¨˜ã®ãƒªã‚¹ãƒˆã®ä¸­ã‹ã‚‰ã€ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã§è¡¨ç¤ºã•ã›ã‚‹ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚";
-        Text[ korean ] = "ìœ„ì˜ ëª©ë¡ì—ì„œ ì‘ìš© í”„ë¡œê·¸ë¨ìš©ìœ¼ë¡œ í‘œì‹œë˜ì–´ì•¼ í•˜ëŠ” ì‹œíŠ¸ë¥¼ ì„ íƒí•˜ì‹­ì‹œì˜¤.";
+        Text[ korean ] = "ìœ„ì˜ ëª©ë¡ì—ì„œ ì‘ìš© í”„ë¡œê·¸ë¨ìš©ìœ¼ë¡œ í‘œì‹œë˜ì–´ì•¼ í•˜ëŠ” í…Œì´ë¸”ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤.";
         Text[ chinese_simplified ] = "è¯·åœ¨ä»¥ä¸Šçš„åˆ—å•ä¹‹ä¸­æŒ‘é€‰è¦æ˜¾ç¤ºç»™åº”ç”¨ç¨‹åºçš„è¡¨æ ¼ã€‚";
         Text[ chinese_traditional ] = "è«‹åœ¨ä»¥ä¸Šçš„æ¸…å–®ä¹‹ä¸­æŒ‘é¸è¦é¡¯ç¤ºçµ¦æ‡‰ç”¨ç¨‹å¼çš„è¡¨æ ¼ã€‚";
         Text[ turkish ] = "In the list above, please check the tables which should be visible for the applications.";
@@ -3304,7 +3304,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ polish ] = "Kolumny";
         Text[ portuguese_brazilian ] = "Columns";
         Text[ japanese ] = "åˆ—";
-        Text[ korean ] = "ë‹¨";
+        Text[ korean ] = "ì—´";
         Text[ chinese_simplified ] = "åˆ—";
         Text[ chinese_traditional ] = "æ¬„";
         Text[ turkish ] = "Columns";
@@ -3334,7 +3334,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text [ polish ] = "Poka¿ wersje kolumn (jeœli s¹ dostêpne)";
         Text [ portuguese_brazilian ] = "Suppress version columns";
         Text [ japanese ] = "ãƒãƒ¼ã‚¸ãƒ§ãƒ³æ¬„ã®è¡¨ç¤º(ã‚ã‚‹å ´åˆ)";
-        Text [ korean ] = "ë²„ì „ ì—´ í‘œì‹œ (ê°€ëŠ¥í•  ê²½ìš°)";
+        Text [ korean ] = "ë²„ì „ ì—´ í‘œì‹œ (ìˆëŠ” ê²½ìš°)";
         Text [ chinese_simplified ] = "æ˜¾ç¤ºéšå…¥ç‰ˆæœ¬æ ä½(å¦‚æœå­˜åœ¨)";
         Text [ chinese_traditional ] = "éš±å…¥ç‰ˆæœ¬æ¬„ä½(å¦‚æœå­˜åœ¨)";
         Text [ turkish ] = "Suppress version columns";
@@ -3373,7 +3373,7 @@ TabPage PAGE_QUERYADMINISTRATION
         Text [ polish ] = "Kwerendy";
         Text [ portuguese_brazilian ] = "Queries";
         Text [ japanese ] = "ã‚¯ã‚¨ãƒªãƒ¼";
-        Text [ korean ] = "ì§ˆì˜";
+        Text [ korean ] = "ì¿¼ë¦¬";
         Text [ chinese_simplified ] = "æŸ¥è¯¢";
         Text [ chinese_traditional ] = "æŸ¥è©¢";
         Text [ turkish ] = "Queries";
@@ -3541,7 +3541,7 @@ WarningBox ERR_NOREGISTEREDDATASOURCES
     Message[ polish ] = "Brak na razie zarejestrowanych Ÿróde³ danych.";
     Message[ portuguese_brazilian ] = "Currently, there are no registered data sources.";
     Message[ japanese ] = "ç¾æ™‚ç‚¹ã§ã¯ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¯ç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
-    Message[ korean ] = "í˜„ì¬ ë“±ë¡ëœ ë°ì´í„° ì†ŒìŠ¤ê°€ ì—†ìŠµë‹ˆë‹¤.";
+    Message[ korean ] = "í˜„ì¬ ë“±ë¡ëœ ë°ì´í„° ì›ë³¸ì´ ì—†ìŠµë‹ˆë‹¤.";
     Message[ chinese_simplified ] = "å½“å‰æ²¡æœ‰ç™»è®°ä»»ä½•æ•°æ®æºã€‚";
     Message[ chinese_traditional ] = "ç¾åœ¨ä¸å­˜åœ¨ä»»ä½•ç™»è¨˜çš„è³‡æ–™æºã€‚";
     Message[ turkish ] = "Currently, there are no registered data sources.";
@@ -3560,14 +3560,14 @@ ErrorBox ERR_COULDNOTRESTOREDS
     Message[ greek ] = "Ôï üíïìá ôçò ğñïİëåõóçò äåäïìİíùí ğïõ äéáãñÜöçêå, äüèçêå Şäç óå ìéá Üëëç ğñïİëåõóç äåäïìİíùí! Èá ğñİğåé íá ìåôïíïìÜóåôå ôçí õğÜñ÷ïõóá ğñïİ? ";
     Message[ dutch ] = "De naam van de gewiste gegevensbron heeft u reeds gebruikt voor een andere bron! Wilt u de gewiste gegevensbron weer herstellen, dan moet u eerst de naam van de andere bron wijzigen.";
     Message[ french ] = "Le nom de la source de données supprimée a déjà été attribué à une autre source que vous devez commencer par renommer afin de pouvoir restaurer l'ancienne.";
-    Message[ spanish ] = "El nombre de la fuente de datos eliminada se ha asignado ya a otra fuente. Deberá cambiarle el nombre para poder restaurar la antigua fuente de datos.";
+    Message[ spanish ] = "El nombre de la fuente de datos borrada se ha asignado ya a otra fuente. Deberá cambiarle el nombre para poder restaurar la antigua fuente de datos.";
     Message[ italian ] = "Il nome della sorgente dati eliiminata è già stato attribuito a un'altra. Prima di procedere, è necessario cambiare nome alla seconda sorgente dati prima di poter ripristinare quella eliminata.";
     Message[ danish ] = "Du har allerede givet en anden datakilde den slettede datakildes navn! Du skal omdøbe den første datakilde for at kunne gendanne den aktuelle.";
     Message[ swedish ] = "Du har redan gett namnet på den raderade datakällan till en annan datakälla! Du måste byta namn på den andra datakällan för att kunna återställa den aktuella datakällan.";
     Message[ polish ] = "Nazwa usuniêtego Ÿród³a danych przypisana zosta³a innemu plikowi! Nale¿y zmieniæ jego nazwê, aby móc odtworzyæ aktualne Ÿród³o danych.";
     Message[ portuguese_brazilian ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
     Message[ japanese ] = "ã™ã§ã«å‰Šé™¤ã—ãŸãƒ‡ãƒ¼ã‚¿ã®åå‰ãŒåˆ¥ã®ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã«å…¥åŠ›ã•ã‚Œã¾ã—ãŸã€‚ç¾åœ¨ã®ã‚‚ã®ã‚’å¾©å…ƒã™ã‚‹ã«ã¯ã€ã¾ãšæ—§ãƒ‡ãƒ¼ã‚¿ã®åå‰ã‚’å¤‰æ›´ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚";
-    Message[ korean ] = "ì‚¬ìš©ìê°€ ì‚­ì œëœ ë°ì´í„° ì†ŒìŠ¤ì˜ ì´ë¦„ì„ ì´ë¯¸ ë‹¤ë¥¸ ë°ì´í„° ì†ŒìŠ¤ì— ë¶€ì—¬í•˜ì˜€ìŠµë‹ˆë‹¤. ì´ ë°ì´í„° ì†ŒìŠ¤ ì´ë¦„ì„ ë³€ê²½í•´ì•¼ë§Œ ì‚­ì œëœ ë°ì´í„° ì†ŒìŠ¤ë¥¼ ë³µêµ¬í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
+    Message[ korean ] = "ì‚­ì œëœ ë°ì´í„° ì›ë³¸ì˜ ì´ë¦„ì„ ì´ë¯¸ ë‹¤ë¥¸ ë°ì´í„° ì›ë³¸ì˜ ì´ë¦„ìœ¼ë¡œ ì§€ì •í•˜ì…¨ìŠµë‹ˆë‹¤. ì‚­ì œëœ ë°ì´í„° ì›ë³¸ì„ ë³µêµ¬í•˜ê¸° ì „ì— ì´ ë°ì´í„° ì›ë³¸ì˜ ì´ë¦„ì„ ë°”ê¾¸ì–´ì•¼ë§Œ í•©ë‹ˆë‹¤.";
     Message[ chinese_simplified ] = "æ‚¨å·²ç»ç”¨ä¸€ä¸ªè¢«åˆ é™¤çš„æ•°æ®æºåç§°å‘½åäº†ä¸€ä¸ªå…¶ä»–çš„æ•°æ®æºï¼æ‚¨å¿…é¡»é‡å‘½åé‚£ä¸€ä¸ªæ•°æ®æºï¼Œç„¶åæ‰èƒ½æ¢å¤å½“å‰çš„æ•°æ®æºã€‚";
     Message[ chinese_traditional ] = "æ‚¨å·²ç¶“ç‚ºå¦ä¸€å€‹è³‡æ–™æºè¨­å®šäº†é€™å€‹åç¨±ï¼æ‚¨å¿…é ˆå…ˆåŸ·è¡Œé‡æ–°å‘½åï¼Œç„¶åæ‰èƒ½å¤ é‚„åŸç¾åœ¨çš„è³‡æ–™æºã€‚";
     Message[ turkish ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
@@ -3594,7 +3594,7 @@ String STR_ENTER_CONNECTION_PASSWORD
     Text [ polish ] = "Po³¹czenie ze Ÿród³em danych \"$name$\" wymaga wprowadzenia has³a.";
     Text [ portuguese_brazilian ] = "Connecting to data source \"$name$\" requires you to enter a password.";
     Text [ japanese ] = "\"$name$\" ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¸ã®æ¥ç¶šã«ã¯ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®å…¥åŠ›ãŒå¿…è¦ã§ã™ã€‚";
-    Text [ korean ] = "ë°ì´í„° ì†ŒìŠ¤ \"$name$\" ì— ì—°ê²°í•˜ë ¤ë©´ íŒ¨ìŠ¤ì›Œë“œë¥¼ ì…ë ¥í•´ì•¼ í•©ë‹ˆë‹¤.";
+    Text [ korean ] = "ë°ì´í„° ì›ë³¸ \"$name$\"(ìœ¼)ë¡œ ì—°ê²°í•˜ë ¤ë©´ ì•”í˜¸ë¥¼ ì…ë ¥í•´ì•¼ í•©ë‹ˆë‹¤.";
     Text [ chinese_simplified ] = "è¯»å–æ•°æ®æº \"$name$\" è¦æ±‚æ‚¨è¾“å…¥å¯†ç ã€‚";
     Text [ chinese_traditional ] = "é€£ç·šåˆ°è³‡æ–™æº<$name$>å¿…é ˆè¼¸å…¥ä¸€å€‹å¯†ç¢¼ã€‚";
     Text [ turkish ] = "Connecting to data source \"$name$\" requires you to enter a password.";
@@ -3620,7 +3620,7 @@ String STR_DATASOURCE_DEFAULTNAME
     Text [ polish ] = "ród³o danych";
     Text [ portuguese_brazilian ] = "datas source";
     Text [ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹";
-    Text [ korean ] = "ë°ì´í„° ì†ŒìŠ¤";
+    Text [ korean ] = "ë°ì´í„° ì›ë³¸";
     Text [ chinese_simplified ] = "æ•°æ®æº";
     Text [ chinese_traditional ] = "è³‡æ–™æº";
     Text [ turkish ] = "datas source";
@@ -3646,7 +3646,7 @@ String STR_ERR_EMPTY_DSN_NAME
     Text [ polish ] = "Nazwa Ÿród³a danych nie mo¿e byæ pusta!";
     Text [ portuguese_brazilian ] = "The data source name must not be empty!";
     Text [ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹åãŒç©ºç™½ã§ã¯ã„ã‘ã¾ã›ã‚“ã€‚";
-    Text [ korean ] = "ë°ì´í„° ì†ŒìŠ¤ ì´ë¦„ì„ ì§€ì •í•´ì•¼ í•©ë‹ˆë‹¤.!";
+    Text [ korean ] = "ë°ì´í„° ì›ë³¸ ì´ë¦„ì„ ì§€ì •í•˜ì…”ì•¼ í•©ë‹ˆë‹¤.";
     Text [ chinese_simplified ] = "æ•°æ®æºåç§°ä¸å¯ä»¥ç©ºç¼ºï¼";
     Text [ chinese_traditional ] = "è³‡æ–™æºåç¨±ä¸å¯ä»¥ç©ºç¼ºï¼";
     Text [ turkish ] = "The data source name must not be empty!";
@@ -3672,14 +3672,14 @@ Menu MENU_DATASOURCELIST_POPUP
             Text [ greek ] = "Äçìéïõñãßá ğñïİëåõóçò äåäïìİíùí";
             Text [ dutch ] = "nieuwe gegevensbron";
             Text [ french ] = "Nouvelle source de données";
-            Text [ spanish ] = "nueva fuente de datos";
+            Text [ spanish ] = "Nueva fuente de datos";
             Text [ italian ] = "Nuova sorgente dati";
             Text [ danish ] = "Ny datakilde";
             Text [ swedish ] = "Ny datakälla";
             Text [ polish ] = "nowe Ÿród³o danych";
             Text [ portuguese_brazilian ] = "new data source";
             Text [ japanese ] = "æ–°ã—ã„ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹";
-            Text [ korean ] = "ìƒˆ ë°ì´í„° ì†ŒìŠ¤";
+            Text [ korean ] = "ìƒˆ ë°ì´í„° ì›ë³¸";
             Text [ chinese_simplified ] = "æ–°çš„æ•°æ®æº";
             Text [ chinese_traditional ] = "æ–°è³‡æ–™æº";
             Text [ turkish ] = "new data source";
@@ -3700,14 +3700,14 @@ Menu MENU_DATASOURCELIST_POPUP
             Text [ greek ] = "ÄéáãñáöŞ ğñïİëåõóçò äåäïìİíùí";
             Text [ dutch ] = "Gegevensbron wissen";
             Text [ french ] = "Source de données supprimée";
-            Text [ spanish ] = "Eliminar la fuente de datos";
+            Text [ spanish ] = "Borrar la fuente de datos";
             Text [ italian ] = "Elimina sorgente dati";
             Text [ danish ] = "Slet datakilde";
             Text [ swedish ] = "Radera datakälla";
             Text [ polish ] = "Usuñ Ÿród³o danych";
             Text [ portuguese_brazilian ] = "delete data source";
             Text [ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®å‰Šé™¤";
-            Text [ korean ] = "ë°ì´í„° ì†ŒìŠ¤ ì‚­ì œ";
+            Text [ korean ] = "ë°ì´í„° ì›ë³¸ ì‚­ì œ";
             Text [ chinese_simplified ] = "åˆ é™¤æ•°æ®æº";
             Text [ chinese_traditional ] = "åˆªé™¤è³‡æ–™æº";
             Text [ turkish ] = "delete data source";
@@ -3735,7 +3735,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text [ polish ] = "Odtwórz Ÿród³o danych";
             Text [ portuguese_brazilian ] = "restore data source";
             Text [ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®å¾©å…ƒ";
-            Text [ korean ] = "ë°ì´í„° ì†ŒìŠ¤ ë³µêµ¬";
+            Text [ korean ] = "ë°ì´í„° ì›ë³¸ ë³µêµ¬";
             Text [ chinese_simplified ] = "æ¢å¤æ•°æ®æº";
             Text [ chinese_traditional ] = "é‚„åŸè³‡æ–™æº";
             Text [ turkish ] = "restore data source";
@@ -3867,7 +3867,7 @@ Menu RID_NEW_FORM
             Text[ polish ] = "Na podstawie ~szablonu...";
             Text[ portuguese_brazilian ] = "From Templ~ate";
             Text[ japanese ] = "ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‹ã‚‰(~A)";
-            Text[ korean ] = "í…œí”Œë¦¿ì—ì„œ(~A)";
+            Text[ korean ] = "ì„œì‹ íŒŒì¼ë¡œë¶€í„°(~A)...";
             Text[ chinese_simplified ] = "é‡‡ç”¨æ ·å¼(~A)...";
             Text[ chinese_traditional ] = "æ¡ç”¨æ¨£å¼(~A)...";
             Text[ turkish ] = "From Templ~ate";
@@ -3909,7 +3909,7 @@ WarningBox WARN_SAVEFORQUERIES
     Message[ turkish ] = "To administrate the queries of a data source, it must be saved.\nShould all changes made in this dialog now be saved?";
     Message[ arabic ] = "áÅÏÇÑÉ ÇÓÊİÓÇÑÇÊ ãÕÏÑ ÈíÇäÇÊ¡ íÌÈ ÍİÙ åĞÇ ÇáãÕÏÑ.\nåá ÊÑíÏ ÍİÙ ßÇİÉ ÇáÊÛííÑÇÊ ÇáÊí ÊãÊ ÍÊì ÇáÂä İí ãÑÈÚ ÇáÍæÇÑ åĞÇ¿";
     Message[ catalan ] = "Per poder administrar les consultes d'una font de dades, aquesta s'ha de desar.\nVoleu desar totes les modificacions realitzades fins ara en aquest diàleg?";
-    Message[ korean ] = "ë°ì´í„° ì†ŒìŠ¤ì˜ $ê°œì²´$ë¥¼ ê´€ë¦¬í•˜ë ¤ë©´ ë°˜ë“œì‹œ ì €ì¥í•´ì•¼ í•©ë‹ˆë‹¤.\nì§€ê¸ˆê¹Œì§€ ì´ ëŒ€í™”ìƒìì—ì„œ ì‹¤ì‹œí•œ ëª¨ë“  ë³€ê²½ ì‚¬í•­ì„ ì§€ê¸ˆ ì €ì¥í•˜ê² ìŠµë‹ˆê¹Œ?";
+    Message[ korean ] = "ë°ì´í„° ì›ë³¸ì˜ $objects$ë¥¼ ê´€ë¦¬í•˜ë ¤ë©´ ê¼­ ì €ì¥í•´ì•¼ë§Œ í•©ë‹ˆë‹¤.\nì§€ê¸ˆê¹Œì§€ ì´ ëŒ€í™” ìƒìì—ì„œ ì‹¤í–‰í•œ ëª¨ë“  ë³€ê²½ ë‚´ìš©ì„ ì €ì¥í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Message[ thai ] = "à¸à¸²à¸£à¸ˆà¸±à¸”à¸à¸²à¸£ $objects$ à¸‚à¸­à¸‡à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸™à¸±à¹‰à¸™  à¸ˆà¸°à¸•à¹‰à¸­à¸‡à¸šà¸±à¸™à¸—à¸¶à¸à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥\nà¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸—à¸³à¹ƒà¸™à¹„à¸”à¸­à¸°à¸¥à¹‡à¸­à¸à¸™à¸µà¹‰à¸‚à¸“à¸°à¸™à¸µà¹‰à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 
@@ -3925,7 +3925,7 @@ ErrorBox ERR_CANTADMINQUERIES
 
     Message[ language_user1 ] = "For ; For ; For $objects$, there will be used one of the strings STR_QUERY_OBJECTS and STR_DOCUMENT_OBJECTS.";
     Message[ portuguese ] = "É necessário guardar a fonte de dados para poder gerir os respectivos $objects$.\nNo entanto, os parâmetros actuais não permitem guardar as modificações (há conflito de nomes).\n\nNão é possível gerir $objects$ enquanto estes conflitos não forem resolvidos e as modificações guardadas.";
-    Message[ russian ] = "Íåîáõîäèìî ñîõğàíèòü èñòî÷íèê äàííûõ äëÿ óïğàâëåíèÿ $objects$.\nÎäíàêî, òåêóùèå íàñòğîéêè íå ïîçâîëÿşò ñîõğàíèòü èçìåíåíèÿ (êîíôëèêò èìåí).\n\nÍåâîçìîæíî óïğàâëåíèå $objects$, ïîêà ıòîò êîíôëèêò íå óñòğàíåí, à èçìåíåíèÿ íå ñîõğàíåíû.";
+    Message[ russian ] = "Íåîáõîäèìî ñîõğàíèòü èñòî÷íèê äàííûõ äëÿ óïğàâëåíèÿ $objects$.\nÎäíàêî òåêóùèå íàñòğîéêè íå ïîçâîëÿşò ñîõğàíèòü èçìåíåíèÿ (êîíôëèêò èìåí).\n\nÓïğàâëåíèå $objects$ íåâîçìîæíî, ïîêà ıòîò êîíôëèêò íå óñòğàíåí, à èçìåíåíèÿ íå ñîõğàíåíû.";
     Message[ greek ] = "Ãéá íá åßíáé äõíáôŞ ç äéá÷åßñéóç ôùí åñùôçìÜôùí ìéáò ğñïİëåõóçò äåäïìİíùí, áõôŞ èá ğñİğåé ğñşôá íá áğïèçêåõôåß.\nÏé ôñİ÷ïõóåò åéóáãùãİò äåí åğéôñİğïõí üìùò ôçí áğïèŞêåõóç ôùí áëëáãşí åğåéäŞ õğÜñ÷ïõí äéåíİîåéò ïíïìÜôùí.\n\nÇ äéá÷åßñéóç ôùí åñùôçìÜôùí äåí åßíáé äõíáôŞ üóï óõíå÷ßæïõí íá õğÜñ÷ïõí áõôİò ïé äéåíİîåéò êáé äåí ìğïñïıí íá áğïèçêåõôïıí ïé áëëáãİò.";
     Message[ dutch ] = "Om de $objects$ van een gegevensbron te beheren, moet deze opgeslagen zijn.\nMaar met de huidige instellingen is het opslaan van wijzigingen niet mogelijk (problemen met naamgeving).\n\nU kunt de $objects$ niet beheren zolang deze problemen niet zijn opgelost en de wijzigingen niet zijn opgeslagen.";
     Message[ french ] = "Vous devez enregistrer la source de données afin de pouvoir en gérer les $objects$.\nLes paramètres actifs ne permettent cependant pas d'enregistrer les modifications car il y a des conflits de noms.\n\nTant que ces conflits persisteront et que les modifications n'auront pas été enregistrées, la gestion des $objects$ sera impossible.";
@@ -3936,7 +3936,7 @@ ErrorBox ERR_CANTADMINQUERIES
     Message[ polish ] = "Administracja $objects$ okreœlonego Ÿród³a danych wymaga jego uprzedniego zapisania.\nAktualne wpisy nie pozwalaj¹ jednak zapisaæ Ÿród³a danych (wyst¹pi³ konflikt nazw).\n\nAdministracja $objects$ mo¿liwa bêdzie dopiero po rozwi¹zaniu konfliktu i zapisaniu zmian.";
     Message[ portuguese_brazilian ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
     Message[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã® $objects$ ã‚’ç®¡ç†ã™ã‚‹ãŸã‚ã«ã€ã“ã‚Œã‚’ä¿å­˜ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚\nã¨ã“ã‚ãŒã€åå‰ã®å…±æœ‰é•åãŒèµ·ã“ã£ãŸãŸã‚ã€ç¾åœ¨ã®å…¥åŠ›ã§ã¯å¤‰æ›´ã®ä¿å­˜ã¯ã§ãã¾ã›ã‚“ã€‚\n\nã“ã®å…±æœ‰é•åãŒå‰Šé™¤ã•ã‚Œã¦å¤‰æ›´ãŒä¿å­˜ã•ã‚Œãªã„ã†ã¡ã¯ã€$objects$ ã®ç®¡ç†ã¯ã§ãã¾ã›ã‚“ã€‚";
-    Message[ korean ] = "ë°ì´í„° ì†ŒìŠ¤ì˜ $ê°œì²´$ë¥¼ ê´€ë¦¬í•˜ë ¤ë©´ ë°˜ë“œì‹œ ì €ì¥í•´ì•¼ í•©ë‹ˆë‹¤\nê·¸ëŸ¬ë‚˜ í˜„ì¬ ì„¤ì •ì—ì„œëŠ” ì´ë¦„ ì¶©ëŒë¡œ ì¸í•´ ë³€ê²½ ì‚¬í•­ì„ ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n\nì´ ì¶©ëŒì„ ì œê±°í•˜ê³  ë³€ê²½ ì‚¬í•­ì„ ì €ì¥í•˜ì§€ ì•ŠëŠ” í•œ ì‚¬ìš©ìëŠ” $ê°œì²´$ë¥¼ ê´€ë¦¬í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
+    Message[ korean ] = "ë°ì´í„° ì›ë³¸ì˜ $objects$ì„(ë¥¼) ê´€ë¦¬í•˜ë ¤ë©´ ë°˜ë“œì‹œ ì €ì¥í•´ì•¼ í•©ë‹ˆë‹¤\nê·¸ëŸ¬ë‚˜ í˜„ì¬ ì„¤ì •ì—ì„œëŠ” ì´ë¦„ ì¶©ëŒë¡œ ì¸í•´ ë³€ê²½ ì‚¬í•­ì„ ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n\nì´ ì¶©ëŒì„ ì œê±°í•˜ê³  ë³€ê²½ ë‚´ìš©ì„ ì €ì¥í•˜ì§€ ì•ŠëŠ” í•œ $objects$ì„(ë¥¼) ê´€ë¦¬í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     Message[ chinese_simplified ] = "è¦ç®¡ç†ä¸€ä¸ªèµ„æ–™æºçš„ $objects$ ï¼Œå¿…é¡»å…ˆå‚¨å­˜å®ƒã€‚\nä½†æ˜¯ç°åœ¨æ‚¨ä¸å¯ä»¥å­˜ç›˜æ›´æ”¹çš„å†…å®¹ï¼Œå› ä¸ºå­˜åœ¨ä¸€ä¸ªåç§°å†²çªçš„é”™è¯¯ã€‚\n\nåœ¨æ’é™¤é”™è¯¯ä¹‹å‰æ‚¨æ— æ³•å­˜ç›˜æ›´æ”¹ $objects$ ã€‚";
     Message[ chinese_traditional ] = "è¦ç®¡ç†ä¸€å€‹è³‡æ–™æºçš„ $objects$ ï¼Œå¿…é ˆå…ˆå„²å­˜å®ƒã€‚\nä½†æ˜¯ç¾åœ¨æ‚¨ä¸å¯ä»¥å„²å­˜è®Šæ›´å…§å®¹ï¼Œå› ç‚ºå­˜åœ¨åç¨±æ²–çªéŒ¯èª¤ã€‚\n\nåœ¨æ’é™¤éŒ¯èª¤ä¹‹å‰æ‚¨ç„¡æ³•å­˜å„²è®Šæ›´ $objects$ ã€‚";
     Message[ turkish ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
@@ -3956,7 +3956,7 @@ ErrorBox ERR_CANTDOTABLEACTION
         "As long as these conflicts aren't resolved, you won't be able to do the requested operation.";
     Message [ english_us ] = "For this operation, the changes to the data source must be saved.\nHowever, they cannot be saved due to conflicting names of different data sources.\n\nYou must resolve this conflict in order to perform the operation.";
     Message[ portuguese ] = "Para poder executar esta operação terá que guardar as modificações na fonte de dados.\nContudo, as actuais indicações não o permitem, uma vez que existe conflito de nomes entre várias fontes de dados.\n\nTerá que solucionar primeiro estes conflitos para poder executar a operação.";
-    Message[ russian ] = "Äëÿ âûïîëíåíèÿ äàííîé îïåğàöèè íåîáõîäèìî ñîõğàíèòü èçìåíåíèÿ â èñòî÷íèêàõ äàííûõ.\nÎäíàêî, òåêóùèå íàñòğîéêè íå ïîçâîëÿşò ıòîãî (êîíôëèêò èìåí ğàçëè÷íûõ èñòî÷íèêîâ äàííûõ).\n\nÍåâîçìîæíî âûïîëíèòü ıòó îïåğàöèş, ïîêà ıòè êîíôëèêòû íå ğàçğåøåíû.";
+    Message[ russian ] = "Äëÿ âûïîëíåíèÿ äàííîé îïåğàöèè íåîáõîäèìî ñîõğàíèòü èçìåíåíèÿ â èñòî÷íèêàõ äàííûõ.\nÎäíàêî òåêóùèå íàñòğîéêè íå ïîçâîëÿşò ıòîãî (êîíôëèêò èìåí ğàçëè÷íûõ èñòî÷íèêîâ äàííûõ).\n\nÍåâîçìîæíî âûïîëíèòü ıòó îïåğàöèş, ïîêà ıòè êîíôëèêòû íå ğàçğåøåíû.";
     Message[ greek ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
     Message[ dutch ] = "Om dit commando te kunnen uitvoeren, moet de gegevensbron opgeslagen worden.\nMet de bestaande gegevens is dit niet mogelijk omdat er problemen zijn met de namen van de verschillende gegevensbronnen.\n\nU moet deze problemen eerst oplossen voordat u dit commando kunt uitvoeren.";
     Message[ french ] = "Vous devez enregistrer les modifications apportées à la source de données afin de pouvoir exécuter cette opération.\nLes paramètres actifs ne permettent cependant pas de le faire car il y a des conflits de noms entre plusieurs sources de données.\n\nTant que ces conflits persisteront, l'exécution de cette opération sera impossible.";
@@ -3968,7 +3968,7 @@ ErrorBox ERR_CANTDOTABLEACTION
     Message[ polish ] = "Operacja ta wymaga zapisania zmian dokonanych w Ÿródle danych.\nNiestety, bie¿¹ce dane uniemo¿liwiaj¹ zapisania zmian, poniewa¿ miêdzy ró¿nymi Ÿród³ami danych powsta³y konflikty nazw.\n\nWykonanie operacji mo¿liwe bêdzie dopiero po rozwi¹zaniu wymienionych konfliktów.";
     Message[ portuguese_brazilian ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
     Message[ japanese ] = "ã“ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã«ã¯ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®å¤‰æ›´ã‚’ä¿å­˜ã—ã¦ãŠãå¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚\nã¨ã“ã‚ãŒã€ç•°ãªã£ãŸãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹é–“ã§åå‰ã®ã‚³ãƒ³ãƒ•ãƒªã‚¯ãƒˆãŒèµ·ã“ã£ã¦ã„ã‚‹ãŸã‚ã€ç¾åœ¨ã®å…¥åŠ›ã®ã¾ã¾ã§ã¯ç„¡ç†ã§ã™ã€‚\n\nã“ã®ã‚³ãƒ³ãƒ•ãƒªã‚¯ãƒˆãŒå‰Šé™¤ã•ã‚Œãªã„ã¾ã§ã¯ã€ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®å®Ÿè¡Œã¯ä¸å¯èƒ½ã§ã™ã€‚";
-    Message[ korean ] = "ì´ ì‘ì—…ì„ ìœ„í•´ ë°ì´í„° ì†ŒìŠ¤ì— ëŒ€í•œ ë³€ê²½ ì‚¬í•­ì„ ì €ì¥í•´ì•¼ í•©ë‹ˆë‹¤.\nê·¸ëŸ¬ë‚˜ í˜„ì¬ ì„¤ì •ì—ì„œëŠ” ì„œë¡œ ë‹¤ë¥¸ ë°ì´í„° ì†ŒìŠ¤ ì´ë¦„ë“¤ì´ ì¶©ëŒí•˜ê¸° ë•Œë¬¸ì— ë°ì´í„° ì†ŒìŠ¤ë¥¼ ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n\nì¶©ëŒì´ í•´ê²°ë˜ì§€ ì•Šìœ¼ë©´ ì´ ì‘ì—…ì„ ì‹¤í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
+    Message[ korean ] = "ì´ ì‘ë™ì„ ìœ„í•´ ë°ì´í„° ì›ë³¸ì˜ ë³€ê²½ ë‚´ìš©ì„ ì €ì¥í•´ì•¼ í•©ë‹ˆë‹¤.\nê·¸ëŸ¬ë‚˜ í˜„ì¬ ì„¤ì • ë‚´ì—ì„œëŠ” ë‹¤ë¥¸ ë°ì´í„° ì›ë³¸ ì´ë¦„ë¼ë¦¬ ì„œë¡œ ì¶©ëŒí•˜ê¸° ë•Œë¬¸ì— ë°ì´í„° ì›ë³¸ì„ ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n\nì¶©ëŒì„ í•´ê²°í•˜ì§€ ì•Šìœ¼ë©´ ì´ ì‘ë™ì„ ì‹¤í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     Message[ chinese_simplified ] = "è¦æ‰§è¡Œè¿™ä¸ªå‘½ä»¤å¿…é¡»å…ˆå­˜ç›˜æ•°æ®æºçš„æ›´æ”¹å†…å®¹ã€‚\nä½†æ˜¯ï¼Œå½“å‰çš„è¾“å…¥èµ„æ–™ä¸å…è®¸æ‰§è¡Œè¿™ä¸ªå‘½ä»¤ï¼Œå› ä¸ºåœ¨å„ä¸ªæ•°æ®æºä¹‹é—´å­˜åœ¨ä¸€ä¸ªåç§°å†²çªçš„é”™è¯¯ã€‚\n\nåœ¨æ’é™¤è¿™ä¸ªé”™è¯¯ä¹‹å‰æ˜¯æ— æ³•æ‰§è¡Œè¿™ä¸ªå‘½ä»¤çš„ã€‚";
     Message[ chinese_traditional ] = "è¦åŸ·è¡Œé€™å€‹å‹•ä½œå¿…é ˆå…ˆå„²å­˜è³‡æ–™æºçš„è®Šæ›´å…§å®¹ã€‚\nä½†æ˜¯ï¼Œç›®å‰çš„è¼¸å…¥è³‡æ–™ä¸å…è¨±åŸ·è¡Œé€™å€‹å‹•ä½œï¼Œå› ç‚ºåœ¨å„å€‹è³‡æ–™æºä¹‹é–“å­˜åœ¨ä¸€å€‹åç¨±æ²–çªçš„éŒ¯èª¤ã€‚\n\nåœ¨æ’é™¤é€™å€‹éŒ¯èª¤ä¹‹å‰æ˜¯ç„¡æ³•åŸ·è¡Œé€™å€‹å‹•ä½œçš„ã€‚";
     Message[ turkish ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
@@ -3997,7 +3997,7 @@ String STR_QUERY_OBJECTS
     Text[ polish ] = "Kwerendy";
     Text[ portuguese_brazilian ] = "queries";
     Text[ japanese ] = "ã‚¯ã‚¨ãƒªãƒ¼";
-    Text[ korean ] = "ì§ˆì˜";
+    Text[ korean ] = "ì¿¼ë¦¬";
     Text[ chinese_simplified ] = "æŸ¥è¯¢";
     Text[ chinese_traditional ] = "æŸ¥è©¢";
     Text[ turkish ] = "queries";
@@ -4045,7 +4045,7 @@ String STR_QUERY_DROP_ALL
     Text[ greek ] = "Do you want to delete all selected?";
     Text[ dutch ] = "Wilt u alle geselecteerde items wissen?";
     Text[ french ] = "Supprimer la totalité de la sélection ?";
-    Text[ spanish ] = "¿Desea eliminar toda la selección?";
+    Text[ spanish ] = "¿Desea borrar toda la selección?";
     Text[ finnish ] = "Haluatko poistaa kaikki valitut kohteet?";
     Text[ italian ] = "Volete eliminare tutta la selezione?";
     Text[ danish ] = "Vil du slette alle de markerede?";
@@ -4074,7 +4074,7 @@ String STR_QUERY_DROP_DOCUMENT_LINK
     Text[ greek ] = "Do you want to delete the document link \"$name$\"?\n\nNote: Only the assigment of the document to the data source will be dropped, not the document itself.";
     Text[ dutch ] = "Wilt u de documentenkoppeling \"$name$\" wissen?\n\nLet op: alleen de koppeling van dit document met de gegevensbron wordt gewist.";
     Text[ french ] = "Voulez-vous supprimer le lien \"$name$\" (document) ?\n\nRemarque : la suppression ne concernera que l'assignation de ce document à la base de données et pas le document en soi.";
-    Text[ spanish ] = "¿Desea eliminar el vínculo del documento \"$name$\"?\n\nNota: Sólo se eliminará la asignación de este documento a la fuente de datos, no el documento en sí.";
+    Text[ spanish ] = "¿Desea borrar el vínculo del documento \"$name$\"?\n\nNota: Sólo se borrará la asignación de este documento a la fuente de datos, no el documento en sí.";
     Text[ finnish ] = "Haluatko poistaa asiakirjalinkin $name$?\n\nHuomautus: Vain asiakirjassa oleva liitos lähdetietoihin poistetaan. Itse asiakirjaa ei poisteta.";
     Text[ italian ] = "Volete eliminare il collegamento al documento \"$name$\"?\n\nNota: l'operazione annulla solo l'assegnazione del documento alla sorgente, non il documento stesso.";
     Text[ danish ] = "Vil du slette dokumentgenvejen \"$name$\"?\n\nBemærk! Kun kæden mellem dokumentet og datakilden slettes, ikke selve dokumentet.";
@@ -4082,7 +4082,7 @@ String STR_QUERY_DROP_DOCUMENT_LINK
     Text[ polish ] = "Usun¹æ ³¹cze do dokumentu \"$name$\"?\n\nUwaga: Usuniête zostanie tylko ³¹cze, a nie dokument.";
     Text[ portuguese_brazilian ] = "Do you want to delete the document link \"$name$\"?\n\nNote: Only the assigment of the document to the data source will be dropped, not the document itself.";
     Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ãƒªãƒ³ã‚¯ \"$name$\" ã‚’å‰Šé™¤ã—ã¾ã™ã‹ã€‚\n\næŒ‡ç¤º: ã“ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¸ã®å‰²ã‚Šå½“ã¦ãŒå‰Šé™¤ã•ã‚Œã‚‹ã ã‘ã§ã€ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãã®ã‚‚ã®ã¯å‰Šé™¤ã•ã‚Œã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ë¬¸ì„œ ë§í¬ \"$name$\"ì„(ë¥¼) ì‚­ì œí•˜ê² ìŠµë‹ˆê¹Œ?\n\nì°¸ê³ : ë¬¸ì„œ ìì²´ê°€ ì•„ë‹Œ ë°ì´í„° ì†ŒìŠ¤ì— ëŒ€í•œ ë¬¸ì„œ ë§ì¶¤ë§Œ ì‚­ì œë©ë‹ˆë‹¤";
+    Text[ korean ] = "ë¬¸ì„œ ë§í¬ \"$name$\"ì„(ë¥¼) ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?\n\nì°¸ê³ : ë¬¸ì„œ ì „ì²´ê°€ ì•„ë‹ˆë¼ ë°ì´í„° ì›ë³¸ì— ëŒ€í•œ ë¬¸ì„œì˜ ì§€ì • ë‚´ìš©ë§Œ ì‚­ì œë©ë‹ˆë‹¤.";
     Text[ chinese_simplified ] = "è¦åˆ é™¤æ–‡æ¡£é“¾æ¥ \"$name$\"?\n\næ³¨æ„ï¼šè¿™ä»…ä»…ä¼šç§»é™¤æ–‡æ¡£çš„é“¾æ¥ï¼Œè€Œä¸æ˜¯æ–‡æ¡£æœ¬èº«ã€‚";
     Text[ chinese_traditional ] = "è¦åˆªé™¤æ–‡ä»¶æ·å¾‘<$name$>ï¼Ÿ\n\næ³¨æ„ï¼šé€™å€‹å‹•ä½œåƒ…åƒ…æœƒç§»é™¤æ–‡ä»¶çš„æ·å¾‘ï¼Œè€Œä¸æ˜¯æ–‡ä»¶æœ¬èº«ã€‚";
     Text[ turkish ] = "Do you want to delete the document link \"$name$\"?\n\nNote: Only the assigment of the document to the data source will be dropped, not the document itself.";
@@ -4109,7 +4109,7 @@ String STR_ASK_FOR_DIRECTORY_CREATION
     Text[ polish ] = "Katalog\n\n$path$\n\nnie istnieje. Utworzyæ go?";
     Text[ portuguese_brazilian ] = "The directory\n\n$path$\n\ndoes not exist. Do you wish to create it?";
     Text[ japanese ] = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª \n\n$path$\n\n ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚ä½œæˆã—ã¾ã™ã‹ã€‚";
-    Text[ korean ] = "ë””ë ‰í† ë¦¬\n\n$ê²½ë¡œ$\n\nì´(ê°€) ì—†ìŠµë‹ˆë‹¤. ìƒˆë¡œ ë§Œë“œì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ korean ] = "ë””ë ‰í† ë¦¬\n\n$path$\n\nì´(ê°€) ì—†ìŠµë‹ˆë‹¤. ìƒˆë¡œ ë§Œë“œì‹œê² ìŠµë‹ˆê¹Œ?";
     Text[ chinese_simplified ] = "è¿™ä¸ªç›®å½•\n\n$path$\n\nä¸å­˜åœ¨ã€‚è¦æ–°å»ºè¿™ä¸ªç›®å½•ï¼Ÿ";
     Text[ chinese_traditional ] = "é€™å€‹ç›®éŒ„\n\n$path$\n\nä¸å­˜åœ¨ã€‚è¦æ–°å¢é€™å€‹ç›®éŒ„ï¼Ÿ";
     Text[ turkish ] = "The directory\n\n$path$\n\ndoes not exist. Do you wish to create it?";
@@ -4136,7 +4136,7 @@ String STR_COULD_NOT_CREATE_DIRECTORY
     Text[ polish ] = "Utworzenie katalogu $name$ nie powiod³o siê.";
     Text[ portuguese_brazilian ] = "The directory $name$ could not be created.";
     Text[ japanese ] = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª $name$ ã¯æ ¼ç´ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
-    Text[ korean ] = "ë””ë ‰í† ë¦¬ $name$ì„(ë¥¼) ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤";
+    Text[ korean ] = "ë””ë ‰í† ë¦¬ $name$ì„(ë¥¼) ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     Text[ chinese_simplified ] = "æ— æ³•åˆ›å»ºç›®å½• $name$ ã€‚";
     Text[ chinese_traditional ] = "ç„¡æ³•æ–°å¢é€™å€‹ç›®éŒ„ $name$ ã€‚";
     Text[ turkish ] = "The directory $name$ could not be created.";
@@ -4166,7 +4166,7 @@ QueryBox QUERY_NEED_TO_SAVE_FILTER
     Message[ polish ] = "W celu wykonania operacji nale¿y zapisaæ zmiany dokonane w danym oknie dialogowym.\nKontynuowaæ?";
     Message[ portuguese_brazilian ] = "For this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
     Message[ japanese ] = "ã“ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’å®Ÿè¡Œã™ã‚‹ã«ã¯ã€ã“ã®ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã§è¡Œã£ãŸå¤‰æ›´ã‚’ä¿å­˜ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚\næ¬¡ã¸é€²ã¿ã¾ã™ã‹ã€‚";
-    Message[ korean ] = "ì´ ì‘ì—…ì„ ì‹¤í–‰í•˜ë ¤ë©´ ì´ ëŒ€í™” ìƒì ì•ˆì—ì„œ ì§€ê¸ˆê¹Œì§€ ë³€ê²½ëœ ë‚´ìš©ì„ ì €ì¥í•´ì•¼ í•©ë‹ˆë‹¤. ì‘ì—…ì„ ê³„ì† ì§„í–‰í•˜ê² ìŠµë‹ˆê¹Œ?";
+    Message[ korean ] = "ì´ ì‘ë™ì„ ì‹¤í–‰í•˜ë ¤ë©´ ì´ ëŒ€í™” ìƒì ì•ˆì—ì„œ ì§€ê¸ˆê¹Œì§€ ë³€ê²½í•œ ë‚´ìš©ì„ ì €ì¥í•´ì•¼ í•©ë‹ˆë‹¤. ê³„ì† ì§„í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Message[ chinese_simplified ] = "åœ¨æ‰§è¡Œè¿™ä¸ªæ“ä½œä¹‹å‰å¿…é¡»å­˜ç›˜å·²ç»è®¾å®šçš„æ›´æ”¹å†…å®¹ã€‚\nè¦ç»§ç»­ï¼Ÿ";
     Message[ chinese_traditional ] = "åœ¨åŸ·è¡Œé€™å€‹å‹•ä½œä¹‹å‰å¿…é ˆå„²å­˜å·²ç¶“è¨­å®šçš„è®Šæ›´ã€‚\næ‚¨è¦ç¹¼çºŒï¼Ÿ";
     Message[ turkish ] = "For this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
@@ -4296,7 +4296,7 @@ String STR_CALCDOC_DOESNOTEXIST
     Text[ polish ] = "Plik \"$file$\" nie istnieje.";
     Text[ portuguese_brazilian ] = "The file \"$file$\" does not exist.";
     Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ« \"$file$\" ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "íŒŒì¼ \"$file$\"ì´(ê°€) ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.";
+    Text[ korean ] = "íŒŒì¼ \"$file$\"ì´(ê°€) ì—†ìŠµë‹ˆë‹¤.";
     Text[ chinese_simplified ] = "æ–‡ä»¶ \"$file$\" ä¸å­˜åœ¨ã€‚";
     Text[ chinese_traditional ] = "æª”æ¡ˆ<$file$>ä¸å­˜åœ¨ã€‚";
     Text[ turkish ] = "The file \"$file$\" does not exist.";
@@ -4342,7 +4342,7 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
     Text[ greek ] = "(not supported by this connection)";
     Text[ dutch ] = "(niet ondersteund door deze verbinding)";
     Text[ french ] = "(Non supporté par cette connexion)";
-    Text[ spanish ] = "(no apoyado por esta conexión)";
+    Text[ spanish ] = "(no admitido por esta conexión)";
     Text[ finnish ] = "(Tämä yhteys ei tue tätä toimintoa)";
     Text[ italian ] = "(non supportato dal presente collegamento)";
     Text[ danish ] = "(understøttes ikke af denne forbindelse)";
@@ -4358,181 +4358,4 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
     Text[ catalan ] = "(aquesta connexió no ho suporta)";
     Text[ thai ] = "(Not supported by this connection)";
 };
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.118  2002/12/05 10:35:01  kz
- *  Merge SRX644: 12/05/02 - 11:31:03
- *
- *  Revision 1.117  2002/11/26 07:52:34  oj
- *  #105424# change string
- *
- *  Revision 1.116  2002/11/25 15:16:13  kz
- *  Merge SRX644: 25.11.02 - 16:12:20
- *
- *  Revision 1.115  2002/11/22 07:52:17  oj
- *  #105213# insert english strings
- *
- *  Revision 1.114  2002/11/21 15:23:00  oj
- *  #105213# impl new feature of rown mysql driver page
- *
- *  Revision 1.113  2002/11/15 12:28:31  oj
- *  #105175# insert none for empty string
- *
- *  Revision 1.112  2002/11/04 18:07:16  rt
- *  Merge SRX644: 04.11.02 - 19:03:18
- *
- *  Revision 1.111  2002/09/25 09:19:24  gh
- *  #103161#changes to fix confusion of the HID-generation
- *
- *  Revision 1.110  2002/09/13 14:37:58  kz
- *  Merge SRX643: 13.09.02 - 16:34:30
- *
- *  Revision 1.109  2002/09/05 13:48:59  kz
- *  Merge SRX643: 05.09.02 - 15:45:41
- *
- *  Revision 1.108  2002/08/29 12:07:36  gt
- *  #99281# new mask color magenta
- *
- *  Revision 1.107  2002/08/19 07:47:20  oj
- *  #99473# change string resource files
- *
- *  Revision 1.106  2002/08/15 20:10:05  kz
- *  Merge SRX643: 15.08.02 - 22:06:52
- *
- *  Revision 1.105  2002/08/05 20:53:20  kz
- *  Merge SRX643: 05.08.02 - 22:49:45
- *
- *  Revision 1.104  2002/08/01 20:43:18  kz
- *  Merge SRX643: 01.08.02 - 22:40:24
- *
- *  Revision 1.103  2002/07/26 09:33:28  oj
- *  #95146# new controls inserted for auto retrieving
- *
- *  Revision 1.102  2002/07/15 10:44:13  oj
- *  #99921# check if datasource allows to check names
- *
- *  Revision 1.101  2002/07/09 12:39:03  oj
- *  #99921# check if datasource allows to check names
- *
- *  Revision 1.100  2002/06/13 12:47:08  kz
- *  Merge SRX642: 13.06.02 - 14:46:36
- *
- *  Revision 1.99  2002/05/28 13:30:01  oj
- *  #99603# set maskcolor to magenta
- *
- *  Revision 1.98  2002/05/21 09:13:24  kz
- *  Merge SRX642: 21.05.02 - 11:12:54
- *
- *  Revision 1.97  2002/05/07 20:06:47  kz
- *  Merge SRX642: 07.05.02 - 22:06:14
- *
- *  Revision 1.96  2002/04/30 15:38:27  fs
- *  #97118# remove user/password - not used at the moment
- *
- *  Revision 1.95  2002/04/29 08:33:13  oj
- *  #98772# new resources
- *
- *  Revision 1.94  2002/02/26 14:16:22  kz
- *  Merge SRC641: 26.02.02 - 15:15:57
- *
- *  Revision 1.93  2002/02/22 21:06:32  vg
- *  Merge SRC641: 22.02.02 - 22:05:53
- *
- *  Revision 1.92  2002/02/20 11:54:18  kz
- *  Merge SRC641: 02/20/02 - 12:53:54
- *
- *  Revision 1.91  2002/02/19 21:06:45  kz
- *  Merge SRC641: 19.02.02 - 22:06:19
- *
- *  Revision 1.90  2002/02/08 21:08:26  kz
- *  Merge SRC641: 08.02.02 - 22:07:54
- *
- *  Revision 1.89  2002/02/06 21:06:53  kz
- *  Merge SRC641: 06.02.02 - 22:06:22
- *
- *  Revision 1.88  2002/02/05 21:08:26  kz
- *  Merge SRC641: 02/05/02 - 22:07:58
- *
- *  Revision 1.87  2002/02/04 10:33:48  kz
- *  Merge SRC641: 04.02.02 - 11:33:12
- *
- *  Revision 1.86  2002/01/25 21:09:14  kz
- *  Merge SRC641: 25.01.02 - 22:07:21
- *
- *  Revision 1.85  2002/01/10 13:08:03  fs
- *  #96387# changed the widths of some fixed texts (were too small for french texts)
- *
- *  Revision 1.84  2002/01/09 21:12:47  kz
- *  Merge SRC641: 09.01.02 - 22:08:38
- *
- *  Revision 1.83  2001/12/14 16:50:53  kz
- *  Merge SRC641: 14.12.01 - 17:51:09
- *
- *  Revision 1.82  2001/12/04 18:41:04  kz
- *  Merge SRC641: 04.12.01 - 18:38:44
- *
- *  Revision 1.81  2001/11/22 23:24:07  obo
- *  Merge SRC641: 22.11.01 - 23:24:16
- *
- *  Revision 1.80  2001/11/13 23:23:22  rt
- *  Merge SRC641: 13.11.01 - 23:24:02
- *
- *  Revision 1.79  2001/11/02 21:11:11  kz
- *  Merge SRC641: 02.11.01 - 22:11:16
- *
- *  Revision 1.78  2001/10/31 22:22:21  kz
- *  Merge SRC641: 31.10.01 - 23:21:57
- *
- *  Revision 1.77  2001/10/25 20:30:04  vg
- *  Merge SRC641: 25.10.01 - 22:30:11
- *
- *  Revision 1.76  2001/10/19 22:07:41  kz
- *  Merge SRC641: 20.10.01 - 00:06:18
- *
- *  Revision 1.75  2001/10/05 06:57:19  oj
- *  #84000# impl multiselction for queries and link docs
- *
- *  Revision 1.74  2001/10/02 21:00:57  kz
- *  Merge SRC641: 02.10.01 - 23:00:14
- *
- *  Revision 1.73  2001/09/27 20:40:25  kz
- *  Merge SRC641: 27.09.01 - 22:39:41
- *
- *  Revision 1.72  2001/09/25 13:24:37  oj
- *  #91719# implementing the XRename handling
- *
- *  Revision 1.71  2001/09/06 20:22:00  kz
- *  Merge SRC640: 06.09.01 - 22:22:04 (NoBranch)
- *
- *  Revision 1.70  2001/08/28 08:21:37  fs
- *  #91573# STR_HINT_READONLY_CONNECTION / STR_HINT_CONNECTION_NOT_CAPABL
- *
- *  Revision 1.69  2001/08/27 09:01:19  fs
- *  #91538# minor spelling issues
- *
- *  Revision 1.0 20.09.00 10:58:47  fs
- ************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 13:57:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,7 +671,7 @@ sal_Bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
                 if (pActFieldDescr)
                 {
                     GetUndoManager()->AddUndoAction(new OTableEditorTypeSelUndoAct(this, nRow, FIELD_TYPE, pActFieldDescr->getTypeInfo()));
-                    SwitchType(NULL);
+                    SwitchType(TOTypeInfoSP());
                     pActFieldDescr = pActRow->GetActFieldDescr();
                 }
                 else
@@ -815,7 +815,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
         if ( !pTypeInfoMap->empty() )
         {
             OTypeInfoMap::const_iterator aTypeIter = pTypeInfoMap->find(DataType::VARCHAR);
-            if(aTypeIter == pTypeInfoMap->end())
+            if ( aTypeIter == pTypeInfoMap->end() )
                 aTypeIter = pTypeInfoMap->begin();
             pActRow->SetFieldType( aTypeIter->second );
         }
@@ -825,7 +825,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
         nInvalidateTypeEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, InvalidateFieldType) );
         pActFieldDescr = pActRow->GetActFieldDescr();
         pDescrWin->DisplayData( pActFieldDescr );
-        GetUndoManager()->AddUndoAction( new OTableEditorTypeSelUndoAct(this, nRow, nColId+1, NULL) );
+        GetUndoManager()->AddUndoAction( new OTableEditorTypeSelUndoAct(this, nRow, nColId+1, TOTypeInfoSP()) );
     }
 
     if( nColId != FIELD_TYPE )
@@ -837,7 +837,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
         if(nPos != LISTBOX_ENTRY_NOTFOUND)
             SwitchType( GetView()->getController()->getTypeInfo(nPos) );
         else
-            SwitchType(NULL);
+            SwitchType(TOTypeInfoSP());
 
     }
 
@@ -1113,7 +1113,7 @@ void OTableEditorCtrl::SetControlText( long nRow, sal_uInt16 nColId, const Strin
     }
 }
 //------------------------------------------------------------------------------
-void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const OTypeInfo* _pTypeInfo )
+void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     //////////////////////////////////////////////////////////////////////
@@ -1134,7 +1134,7 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const OTypeInfo* _
         default:
             OSL_ENSURE(sal_False, "OTableEditorCtrl::SetData: invalid column!");
     }
-    SetControlText(nRow,nColId,_pTypeInfo ? _pTypeInfo->aUIName : ::rtl::OUString());
+    SetControlText(nRow,nColId,_pTypeInfo.get() ? _pTypeInfo->aUIName : ::rtl::OUString());
 }
 //------------------------------------------------------------------------------
 void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rNewData )
@@ -1389,11 +1389,22 @@ sal_Bool OTableEditorCtrl::IsCopyAllowed( long nRow )
 sal_Bool OTableEditorCtrl::IsPasteAllowed( long nRow )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    return GetView()->getController()->isAddAllowed();
+    sal_Bool bAllowed = GetView()->getController()->isAddAllowed();
+    if ( bAllowed )
+    {
+        TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
+        sal_Bool bRowFormat = aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_TABED);
+        if ( m_eChildFocus == ROW )
+            bAllowed = bRowFormat;
+        else
+            bAllowed = !bRowFormat && aTransferData.HasFormat(SOT_FORMAT_STRING);
+    }
+
+    return bAllowed;
 }
 
 //------------------------------------------------------------------------------
-void OTableEditorCtrl::Cut()
+void OTableEditorCtrl::cut()
 {
     if(m_eChildFocus == NAME)
     {
@@ -1422,10 +1433,10 @@ void OTableEditorCtrl::Cut()
 }
 
 //------------------------------------------------------------------------------
-void OTableEditorCtrl::Copy()
+void OTableEditorCtrl::copy()
 {
     if(GetSelectRowCount())
-        OTableRowView::Copy();
+        OTableRowView::copy();
     else if(m_eChildFocus == NAME)
         pNameCell->Copy();
     else if(m_eChildFocus == DESCRIPTION)
@@ -1433,7 +1444,7 @@ void OTableEditorCtrl::Copy()
 }
 
 //------------------------------------------------------------------------------
-void OTableEditorCtrl::Paste()
+void OTableEditorCtrl::paste()
 {
     TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
     if(aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_TABED))
@@ -1545,7 +1556,7 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long nRow )
             // Wenn Feldtyp Memo oder Image, kein PrimKey
             // oder wenn Spalten nicht gedroped werden können und das Required Flag ist nicht gesetzt
             // oder wenn eine ::com::sun::star::sdbcx::View vorhanden ist und das Required Flag nicht gesetzt ist
-            const OTypeInfo* pTypeInfo = pFieldDescr->getTypeInfo();
+            TOTypeInfoSP pTypeInfo = pFieldDescr->getTypeInfo();
             if( pTypeInfo->nSearchType == ColumnSearch::NONE                    ||
                 (pFieldDescr->IsNullable() && pRow->IsReadOnly())
               )
@@ -1641,13 +1652,13 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                     switch (aContextMenu.Execute(this, aMenuPos))
                     {
                         case SID_CUT:
-                            Cut();
+                            cut();
                             break;
                         case SID_COPY:
-                            Copy();
+                            copy();
                             break;
                         case SID_PASTE:
-                            Paste();
+                            paste();
                             break;
                         case SID_DELETE:
                             if( nDeleteEvent )
@@ -1679,7 +1690,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
 IMPL_LINK( OTableEditorCtrl, DelayedCut, void*, EMPTYTAG )
 {
     nCutEvent = 0;
-    OTableRowView::Cut();
+    OTableRowView::cut();
     return 0;
 }
 
@@ -1827,7 +1838,7 @@ sal_Bool OTableEditorCtrl::IsPrimaryKey()
 }
 
 //------------------------------------------------------------------------------
-void OTableEditorCtrl::SwitchType( const OTypeInfo* _pType )
+void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     //////////////////////////////////////////////////////////////////////
@@ -1843,7 +1854,7 @@ void OTableEditorCtrl::SwitchType( const OTypeInfo* _pType )
     // Neue Beschreibung darstellen
     OTableRow* pRow = (*m_pRowList)[nRow];
     pRow->SetFieldType( _pType, sal_True );
-    if(_pType)
+    if ( _pType.get() )
     {
         sal_uInt16 nCurrentlySelected = pTypeCell->GetSelectEntryPos();
         OTableController* pController = GetView()->getController();

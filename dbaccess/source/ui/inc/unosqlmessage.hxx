@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosqlmessage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 12:34:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,23 +122,4 @@ protected:
 //.........................................................................
 
 #endif // _DBAUI_UNOSQLMESSAGE_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2000/11/01 16:31:30  fs
- *  migrated from awt::XDialog to ui::XExecutableDialog / removed the star* namespace shortcuts
- *
- *  Revision 1.1  2000/10/25 12:49:21  fs
- *  moved herein from ..\dlg
- *
- *  Revision 1.2  2000/10/11 11:31:03  fs
- *  new implementations - still under construction
- *
- *  Revision 1.1  2000/10/05 10:07:51  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 02.10.00 13:59:31  fs
- ************************************************************************/
 

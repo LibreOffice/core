@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:23:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,13 @@
 namespace dbaui
 {
 //.........................................................................
+    // #106016# --------------
+    enum IS_PATH_EXIST
+    {
+        PATH_NOT_EXIST = 0,
+        PATH_EXIST,
+        PATH_NOT_KNOWN
+    };
 
     class ODbAdminDialog;
     //=========================================================================
@@ -144,12 +151,15 @@ namespace dbaui
         String          GetCurrentName() const { return m_aName.GetText(); }
 
         // set the parent dialog typesafe
-        void SetAdminDialog(ODbAdminDialog* _pDialog) { m_pAdminDialog = _pDialog; }
+        inline void SetAdminDialog(ODbAdminDialog* _pDialog) { m_pAdminDialog = _pDialog; }
         void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
-            { m_xORB = _rxORB; }
+        {
+            m_xORB = _rxORB;
+            m_aConnection.initializeTypeCollection(m_xORB);
+        }
 
-        void enableConnectionURL() { m_aConnection.SetReadOnly(sal_False); }
-        void disableConnectionURL() { m_aConnection.SetReadOnly(); }
+        inline void enableConnectionURL() { m_aConnection.SetReadOnly(sal_False); }
+        inline void disableConnectionURL() { m_aConnection.SetReadOnly(); }
 
         /** changes the connection URL.
             <p>The new URL must be of the type which is currently selected, only the parts which do not
@@ -171,6 +181,7 @@ namespace dbaui
         virtual long PreNotify( NotifyEvent& _rNEvt );
 
     protected:
+
         void onTypeSelected(const DATASOURCE_TYPE _eType);
         void initializeHistory();
         void initializeTypeList();
@@ -182,8 +193,8 @@ namespace dbaui
         sal_Int32       checkPathExistence(const String& _rURL);
         sal_Bool        commitURL();
         sal_Bool        createDirectoryDeep(const String& _rPathNormalized);
-        sal_Bool        directoryExists(const ::rtl::OUString& _rURL) const;
-        sal_Bool        fileExists(const ::rtl::OUString& _rURL) const;
+        // #106016# ----------------
+        IS_PATH_EXIST pathExists(const ::rtl::OUString& _rURL, sal_Bool bIsFile) const;
 
         void checkCreateDatabase(DATASOURCE_TYPE _eType);
         sal_Bool isBrowseable(DATASOURCE_TYPE _eType) const;
@@ -211,32 +222,3 @@ namespace dbaui
 }   // namespace dbaui
 //.........................................................................
 #endif // _DBAUI_GENERALPAGE_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.7  2001/08/30 16:12:30  fs
- *  #88427# check for a valid name in implInitControls
- *
- *  Revision 1.6  2001/08/07 15:56:26  fs
- *  #88431# centralized methods for setting/retrieving the URL in m_aConnection - this way we can translate URLs so that they're displayed in a decoded version
- *
- *  Revision 1.5  2001/08/01 08:30:41  fs
- *  #88530# changeConnectionURL / getConnectionURL / minor corrections in the handling of m_eCurrentType
- *
- *  Revision 1.4  2001/07/31 16:01:33  fs
- *  #88530# changes to operate the dialog in a mode where no type change is possible
- *
- *  Revision 1.3  2001/07/23 13:13:38  oj
- *  #90074# check if calc doc exists
- *
- *  Revision 1.2  2001/05/29 13:33:12  oj
- *  #87149# addressbook ui impl
- *
- *  Revision 1.1  2001/05/29 09:59:32  fs
- *  initial checkin - outsourced the class from commonpages
- *
- *
- *  Revision 1.0 29.05.01 11:31:35  fs
- ************************************************************************/
-

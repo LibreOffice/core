@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 06:26:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
     };\
     StringList [ danish ] = \
     {\
-        < "OG " ; Default ; > ; \
+        < "OG" ; Default ; > ; \
         < "ELLER" ; Default ; > ; \
     };\
     StringList [ french ] = \
@@ -182,8 +182,13 @@ StringList [ language_user1 ] =\
     };\
 StringList [ catalan ] = \
     {\
-            < "Y" ; Default ; > ;\
-        < "O" ; Default ; > ;\
+            < "AND" ; Default ; > ;\
+        < "OR" ; Default ; > ;\
+    };\
+    StringList [ thai ] = \
+    {\
+         < "à¹à¸¥à¸°" ; Default ; > ;\
+        < "à¸«à¸£à¸·à¸­" ; Default ; > ;\
     };
 
 ModalDialog DLG_FILTERCRIT
@@ -196,29 +201,29 @@ ModalDialog DLG_FILTERCRIT
     Text ="Standardfilter" ;
     Text [ ENGLISH ] ="Standardfilter" ;
     Text[ english_us ] ="Default Filter";
-    Text[ portuguese ] ="Filtro padrão";
-    Text[ russian ] ="Ñòàíäàğòíûé ôèëüòğ";
-    Text[ dutch ] ="Standaardfilter";
+    Text[ portuguese ] ="Filtro";
+    Text[ russian ] ="Ôèëüòğ";
+    Text[ dutch ] ="Filter";
     Text[ french ] ="Filtre standard";
     Text[ spanish ] ="Filtro predeterminado";
     Text[ italian ] ="Filtro standard";
-    Text[ danish ] ="Standardfilter";
+    Text[ danish ] ="Filter";
     Text[ swedish ] ="Standardfilter";
-    Text[ polish ] ="Filtr standardowy";
-    Text[ portuguese_brazilian ] ="Filter";
+    Text[ polish ] ="Filtr";
+    Text[ portuguese_brazilian ] ="Filtro Padrão";
     Text[ japanese ] ="æ¨™æº–ãƒ•ã‚£ãƒ«ã‚¿";
     Text[ chinese_simplified ] ="æ ‡å‡†ç­›é€‰";
     Text[ chinese_traditional ] ="æ¨™æº–ç¯©é¸";
-    Text[ arabic ] ="İáÊÑ ŞíÇÓí";
-    Text[ dutch ] ="Standaardfilter";
+    Text[ arabic ] ="İáÊÑ";
+    Text[ dutch ] ="Filter";
     Text[ chinese_simplified ] ="æ ‡å‡†ç­›é€‰";
-    Text[ greek ] ="Ößëôñï ğñïåğéëïãŞò";
+    Text[ greek ] ="Ößëôñá";
     Text[ korean ] ="ê¸°ë³¸ í•„í„°";
-    Text[ turkish ] ="Standart filtre";
+    Text[ turkish ] ="Filtre";
     Text[ language_user1 ] ="";
-    Text[ finnish ] ="Oletussuodatin";
-    Text[ catalan ] ="Default Filter";
-    Text[ thai ] ="à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¸•à¸±à¸§à¸à¸£à¸­à¸‡";
+    Text[ finnish ] ="Suodatus";
+    Text[ catalan ] ="Filtre";
+    Text[ thai ] ="à¸•à¸±à¸§à¸à¸£à¸­à¸‡";
 
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -339,14 +344,15 @@ ModalDialog DLG_FILTERCRIT
         Text[ chinese_simplified ] = "å­—æ®µåç§°";
         Text[ russian ] = "Èìÿ ïîëÿ";
         Text[ polish ] = "Nazwa pola";
-        Text[ japanese ] = "ï¾Œï½¨ï½°ï¾™ï¾„ï¾å";
+        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å";
         Text[ chinese_traditional ] = "æ¬„ä½åç¨±";
         Text[ arabic ] = "ÇÓã ÇáÍŞá";
         Text[ greek ] = "¼íïìá ğåäßïõ";
         Text[ korean ] = "í•„ë“œ ì´ë¦„";
         Text[ turkish ] = "Alan adı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombre del campo";
+        Text[ catalan ] = "Nom del camp";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
     };
     FixedText FT_WHERECOMP
     {
@@ -376,7 +382,8 @@ ModalDialog DLG_FILTERCRIT
         Text[ korean ] = "ì¡°ê±´";
         Text[ turkish ] = "Koşul";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Condición";
+        Text[ catalan ] = "Condició";
+        Text[ thai ] = "à¹€à¸‡à¸·à¹ˆà¸­à¸™à¹„à¸‚";
     };
     FixedText FT_WHEREVALUE
     {
@@ -406,7 +413,8 @@ ModalDialog DLG_FILTERCRIT
         Text[ korean ] = "ê°’";
         Text[ turkish ] = "Değer";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Valor";
+        Text[ catalan ] = "valor";
+        Text[ thai ] = "à¸„à¹ˆà¸²";
     };
     FixedText FT_WHEREOPER
     {
@@ -434,10 +442,11 @@ ModalDialog DLG_FILTERCRIT
         Text[ chinese_traditional ] = "æ·å¾‘";
         Text[ arabic ] = "ÇÑÊÈÇØ";
         Text[ greek ] = "Óıíäåóç";
-        Text[ korean ] = "ë§í¬";
+        Text[ korean ] = "ì—°ì‚°ì";
         Text[ turkish ] = "Bağlantı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Vínculo";
+        Text[ catalan ] = "Operador";
+        Text[ thai ] = "à¸•à¸±à¸§à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£";
     };
     FixedLine FL_FIELDS
     {
@@ -466,7 +475,8 @@ ModalDialog DLG_FILTERCRIT
         Text[ korean ] = "ê¸°ì¤€";
         Text[ turkish ] = "Ölçütler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Criterios";
+        Text[ catalan ] = "Criteris";
+        Text[ thai ] = "à¹€à¸à¸“à¸‘à¹Œ";
     };
     OKButton BT_OK
     {
@@ -501,7 +511,7 @@ ModalDialog DLG_FILTERCRIT
         Text [ portuguese ] = "- nenhum -" ;
         Text [ portuguese_brazilian ] = "- keiner -" ;
         Text[ chinese_simplified ] = "- æ—  -";
-        Text[ russian ] = "- áåç -";
+        Text[ russian ] = "- íåò -";
         Text[ polish ] = "- brak -";
         Text[ japanese ] = "-ãªã—-";
         Text[ chinese_traditional ] = "- ç„¡ -";
@@ -510,8 +520,9 @@ ModalDialog DLG_FILTERCRIT
         Text[ korean ] = "- ì—†ìŒ -";
         Text[ turkish ] = "- Yok -";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "- ninguno -";
+        Text[ catalan ] = "- cap -";
         Text[ finnish ] = "- ei mitään -";
+        Text[ thai ] = "- à¹„à¸¡à¹ˆà¸¡à¸µ -";
     };
     String STR_COMPARE_OPERATORS
     {
@@ -528,7 +539,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ swedish ] = "=;<>;<;<=;>;>=;lika med;inte lika med;noll;inte noll";
         Text[ polish ] = "=;<>;<;<=;>;>=;równy;nie równy;zero;nie zero";
         Text[ portuguese_brazilian ] = "=;<>;<;<=;>;>=;like;not like;null;not null";
-        Text[ japanese ] = "=;<>;<;<=;>;>=;åŒã˜;åŒã˜ã§ãªã„;ç©º;ç©ºã§ãªã„";
+        Text[ japanese ] = "=;<>;<;<=;>;>=;like;not like;ç©º;ç©ºã§ãªã„";
         Text[ chinese_simplified ] = "=;<>;<;<=;>;>=;ç­‰äº;ä¸ç­‰äº;ç©ºç¼º;ä¸ç©ºç¼º";
         Text[ chinese_traditional ] = "=;<>;<;<=;>;>=;ç­‰æ–¼;ä¸ç­‰æ–¼;ç©ºç¼º;ä¸ç©ºç¼º";
         Text[ arabic ] = "=;<>;<;<=;>;>=;ãËá;áíÓ ãËá;ÎÇáí;áíÓ ÎÇáíÇğ";
@@ -536,10 +547,18 @@ ModalDialog DLG_FILTERCRIT
         Text[ korean ] = "=;<>;<;<=;>;>=;ê°™ìŒ;ê°™ì§€ ì•ŠìŒ;ë¹„ì–´ ìˆëŠ”;ë¹„ì–´ìˆì§€ì•ŠìŒ";
         Text[ turkish ] = "=;<>;<;<=;>;>=;gibi;gibi değil;boş;boş değil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "=;<>;<;<=;>;>=;como;no como;vacío;no vacío";
+        Text[ catalan ] = "=;<>;<;<=;>;>=;com;no com;nul;no nul";
         Text[ finnish ] = "=;<>;<;<=;>;>=;kuten;ei kuten;tyhjä;ei tyhjä";
+        Text[ thai ] = "=;<>;<;<=;>;>=;à¹€à¸«à¸¡à¸·à¸­à¸™;à¹„à¸¡à¹ˆà¹€à¸«à¸¡à¸·à¸­à¸™;à¸§à¹ˆà¸²à¸‡;à¹„à¸¡à¹ˆà¸§à¹ˆà¸²à¸‡";
     };
 };
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commontypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:11:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,20 +80,4 @@ namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_COMMON_TYPES_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2000/10/30 14:44:34  fs
- *  moved from ../dlg
- *
- *  Revision 1.2  2000/10/26 18:06:21  fs
- *  ByteVector
- *
- *  Revision 1.1  2000/10/24 12:14:48  fs
- *  initial checkin - types commonly used in this project
- *
- *
- *  Revision 1.0 24.10.00 11:56:23  fs
- ************************************************************************/
 

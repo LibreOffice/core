@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexcollection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:10:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,17 +177,4 @@ namespace dbaui
 //......................................................................
 
 #endif // _DBAUI_INDEXCOLLECTION_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/03/19 06:01:51  fs
- *  move OIndexField and OIndex into indexes.hxx
- *
- *  Revision 1.1  2001/03/16 16:21:44  fs
- *  initial checkin - index design related classes
- *
- *
- *  Revision 1.0 07.03.01 15:07:15  fs
- ************************************************************************/
 

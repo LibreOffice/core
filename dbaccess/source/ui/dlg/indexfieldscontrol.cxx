@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-10 14:34:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,41 +540,4 @@ namespace dbaui
 //......................................................................
 }   // namespace dbaui
 //......................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.10  2002/08/19 07:40:33  oj
- *  #99473# change string resource files
- *
- *  Revision 1.9  2002/04/09 07:43:43  oj
- *  #98286# new virtual method GetCellText
- *
- *  Revision 1.8  2002/03/19 07:21:01  oj
- *  #97274# disable traveling with tab to allow control change
- *
- *  Revision 1.7  2001/08/06 07:44:33  fs
- *  #90529# help ids
- *
- *  Revision 1.6  2001/06/29 08:38:00  fs
- *  #86721# DbBrowseBox replaced by svt::EditBrowseBox
- *
- *  Revision 1.5  2001/05/02 11:48:41  fs
- *  #86450# disable m_nMaxColumnsIndex for the moment - need more comprehensive handling for this
- *
- *  Revision 1.4  2001/04/27 14:20:33  fs
- *  #86464# no SaveModified if not IfModified
- *
- *  Revision 1.3  2001/03/30 14:10:22  oj
- *  #85298##85297# correct index impl
- *
- *  Revision 1.2  2001/03/19 06:00:13  fs
- *  no controller if not enabled
- *
- *  Revision 1.1  2001/03/16 16:23:31  fs
- *  initial checkin - index design dialog and friends
- *
- *
- *  Revision 1.0 07.03.01 14:26:26  fs
- ************************************************************************/
 

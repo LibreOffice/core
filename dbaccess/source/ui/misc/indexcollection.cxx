@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexcollection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:12:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,21 +449,4 @@ namespace dbaui
 //......................................................................
 }   // namespace dbaui
 //......................................................................
-
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2001/03/30 13:56:42  avy
- *  Temporary variable added because of error during compiling under the Lunux
- *
- *  Revision 1.2  2001/03/19 06:03:23  fs
- *  ensure that no fields occure twice when committing
- *
- *  Revision 1.1  2001/03/16 16:22:20  fs
- *  initial checkin - non-UNO index collection
- *
- *
- *  Revision 1.0 07.03.01 15:09:42  fs
- ************************************************************************/
 

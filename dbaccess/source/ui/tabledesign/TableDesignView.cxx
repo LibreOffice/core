@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 07:03:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,70 +361,58 @@ long OTableDesignView::PreNotify( NotifyEvent& rNEvt )
     return bHandled ? 1L : ODataView::PreNotify(rNEvt);
 }
 // -----------------------------------------------------------------------------
-sal_Bool OTableDesignView::isCopyAllowed()
+IClipboardTest* OTableDesignView::getActiveChild() const
 {
-    sal_Bool bAllowed = sal_False;
+    IClipboardTest* pTest = NULL;
     switch(m_eChildFocus)
     {
         case DESCRIPTION:
-            bAllowed = GetDescWin()->isCopyAllowed();
+            pTest = GetDescWin();
             break;
         case EDITOR:
-            bAllowed = GetEditorCtrl()->IsCopyAllowed();
+            pTest = GetEditorCtrl();
             break;
     }
-    return bAllowed;
+    return pTest;
+}
+// -----------------------------------------------------------------------------
+sal_Bool OTableDesignView::isCopyAllowed()
+{
+    IClipboardTest* pTest = getActiveChild();
+    return pTest && pTest->isCopyAllowed();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableDesignView::isCutAllowed()
 {
-    sal_Bool bAllowed = sal_False;
-    switch(m_eChildFocus)
-    {
-        case DESCRIPTION:
-            bAllowed = GetDescWin()->isCutAllowed();
-            break;
-        case EDITOR:
-            bAllowed = GetEditorCtrl()->IsCutAllowed();
-            break;
-    }
-    return bAllowed;
+    IClipboardTest* pTest = getActiveChild();
+    return pTest && pTest->isCutAllowed();
+}
+// -----------------------------------------------------------------------------
+sal_Bool OTableDesignView::isPasteAllowed()
+{
+    IClipboardTest* pTest = getActiveChild();
+    return pTest && pTest->isPasteAllowed();
 }
 // -----------------------------------------------------------------------------
 void OTableDesignView::copy()
 {
-    if( m_eChildFocus == DESCRIPTION)
-    {
-        GetDescWin()->copy();
-    }
-    else if( m_eChildFocus == EDITOR)
-    {
-        GetEditorCtrl()->Copy();
-    }
+    IClipboardTest* pTest = getActiveChild();
+    if ( pTest )
+        pTest->copy();
 }
 // -----------------------------------------------------------------------------
 void OTableDesignView::cut()
 {
-    if( m_eChildFocus == DESCRIPTION)
-    {
-        GetDescWin()->cut();
-    }
-    else if( m_eChildFocus == EDITOR)
-    {
-        GetEditorCtrl()->Cut();
-    }
+    IClipboardTest* pTest = getActiveChild();
+    if ( pTest )
+        pTest->cut();
 }
 // -----------------------------------------------------------------------------
 void OTableDesignView::paste()
 {
-    if( m_eChildFocus == DESCRIPTION)
-    {
-        GetDescWin()->paste();
-    }
-    else if( m_eChildFocus == EDITOR)
-    {
-        GetEditorCtrl()->Paste();
-    }
+    IClipboardTest* pTest = getActiveChild();
+    if ( pTest )
+        pTest->paste();
 }
 // -----------------------------------------------------------------------------
 // set the view readonly or not

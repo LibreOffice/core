@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 08:32:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,7 +668,7 @@ OHTMLImportExport::OHTMLImportExport(const ODataAccessDescriptor& _aDataDescript
     ,m_bCheckFont(FALSE)
 #endif
 {
-    strcpy( sIndent, sIndentSource );
+    strncpy( sIndent, sIndentSource ,std::min(sizeof(sIndent),sizeof(sIndentSource)));
     sIndent[0] = 0;
 }
 //-------------------------------------------------------------------

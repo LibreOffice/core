@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-15 06:32:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -654,26 +654,4 @@ namespace dbaui
 //......................................................................
 }   // namespace dbaui
 //......................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.5  2002/08/19 07:51:11  oj
- *  #99473# change string resource files
- *
- *  Revision 1.4  2002/07/25 06:53:40  oj
- *  #100280# new method to start report autopilot
- *
- *  Revision 1.3  2001/08/16 14:10:12  fs
- *  #88813# +newFormWithPilot
- *
- *  Revision 1.2  2001/08/07 14:37:48  fs
- *  #87029# use the new template dialog for selecting a template
- *
- *  Revision 1.1  2001/04/26 11:54:33  fs
- *  initial checkin - access to the data source associated bookmarks
- *
- *
- *  Revision 1.0 24.04.01 14:56:54  fs
- ************************************************************************/
 

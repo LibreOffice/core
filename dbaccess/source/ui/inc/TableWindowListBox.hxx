@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-26 09:18:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
 #endif
-#ifndef DBAUI_SCROLLHELPER_HXX
-#include "ScrollHelper.hxx"
-#endif
 
 struct AcceptDropEvent;
 struct ExecuteDropEvent;
@@ -102,7 +99,7 @@ namespace dbaui
         DECL_LINK( ScrollDownHdl, SvTreeListBox* );
         DECL_LINK( DropHdl, void* );
 
-        OScrollHelper               m_aScrollHelper;
+        Timer                       m_aScrollTimer;
         Point                       m_aMousePos;
 
         OTableWindow*               m_pTabWin;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 06:50:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,17 +122,4 @@ protected:
 //.........................................................................
 
 #endif // _DBAUI_DSSELECT_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/06/20 13:44:02  fs
- *  #88447# +Select
- *
- *  Revision 1.1  2000/10/24 12:13:53  fs
- *  initial checkin - dialog for selecting system datasources
- *
- *
- *  Revision 1.0 24.10.00 09:21:20  fs
- ************************************************************************/
 

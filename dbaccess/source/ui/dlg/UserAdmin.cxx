@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-05 07:05:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ IMPL_LINK( OPasswordDialog, OKHdl_Impl, OKButton *, EMPTYARG )
 // -----------------------------------------------------------------------------
 IMPL_LINK( OPasswordDialog, ModifiedHdl, Edit *, pEdit )
 {
-    aOKBtn.Enable(pEdit->GetText().Len());
+    aOKBtn.Enable(pEdit->GetText().Len() != 0);
     return 0;
 }
 

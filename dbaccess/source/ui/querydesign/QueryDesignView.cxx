@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:06:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,7 +727,7 @@ namespace
                     {
                         // we have to look if we have alias.* here
                         String sTemp = rFieldName;
-                        if(sTemp.GetTokenCount('.') == 2)
+                        if ( sTemp.GetTokenCount('.') == 2 && sTemp.GetToken(1,'.').Len() )
                             rFieldName = sTemp.GetToken(1,'.');
                         if ( rFieldName.toChar() != '*' )
                         {
@@ -2013,7 +2013,11 @@ namespace
                                                         sal_True); // quote is to true because we need quoted elements inside the function
 
                             sal_Int32 nFunctionType = FKT_NONE;
-                            ::connectivity::OSQLParseNode * pParamRef = pColumnRef->getChild(pColumnRef->count()-2);
+                            ::connectivity::OSQLParseNode* pParamRef = NULL;
+                            sal_Int32 nColumnRefPos = pColumnRef->count() - 2;
+                            if ( nColumnRefPos >= 0 && nColumnRefPos < pColumnRef->count() )
+                                pParamRef = pColumnRef->getChild(nColumnRefPos);
+
                             if (    SQL_ISRULE(pColumnRef,general_set_fct)
                                 &&  SQL_ISRULE(pParamRef,column_ref) )
                             {
@@ -2066,7 +2070,7 @@ namespace
                                 OSQLParseNode* pFunctionName = pColumnRef->getChild(0);
                                 if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
                                 {
-                                    if ( SQL_ISRULE(pColumnRef,char_value_fct) )
+                                    if ( SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
                                         pFunctionName = pFunctionName->getChild(0);
 
                                     ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
@@ -2610,7 +2614,10 @@ long OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
 // check if the statement is correct when not returning false
 sal_Bool OQueryDesignView::checkStatement()
 {
-    return m_pSelectionBox->Save(); // a error occured so we return no
+    sal_Bool bRet = sal_True;
+    if ( m_pSelectionBox )
+        bRet = m_pSelectionBox->Save(); // a error occured so we return no
+    return bRet;
 }
 //-------------------------------------------------------------------------------
 ::rtl::OUString OQueryDesignView::getStatement()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-30 09:45:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,32 +237,4 @@ namespace dbaui
 //......................................................................
 
 #endif // _DBAUI_INDEXDIALOG_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.7  2002/04/29 08:08:41  oj
- *  #98772# overload window method for hi contrast
- *
- *  Revision 1.6  2001/05/11 16:24:08  fs
- *  #86788# +m_bEditAgain / #86863# allow a drop without confirmation (mapped from resetting a new index)
- *
- *  Revision 1.5  2001/05/02 11:45:08  fs
- *  #86434# OnEditIndexAgain
- *
- *  Revision 1.4  2001/04/02 12:04:40  fs
- *  #85275# added a help button
- *
- *  Revision 1.3  2001/03/30 14:10:22  oj
- *  #85298##85297# correct index impl
- *
- *  Revision 1.2  2001/03/19 06:02:09  fs
- *  +implCheckPlausibility
- *
- *  Revision 1.1  2001/03/16 16:21:52  fs
- *  initial checkin - index design related classes
- *
- *
- *  Revision 1.0 07.03.01 11:51:22  fs
- ************************************************************************/
 

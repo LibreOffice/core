@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 17:03:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text[ dutch ] = "~Tabelnaam";
         Text[ chinese_simplified ] = "θ΅¨ζ Όεη§°(~T)";
         Text[ greek ] = "Όνομα πίνακα";
-        Text[ korean ] = "μ‹νΈ μ΄λ¦„(~T)";
+        Text[ korean ] = "ν…μ΄λΈ” μ΄λ¦„(~T)";
         Text[ turkish ] = "Tablo adύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nom de la ~taula";
@@ -233,7 +233,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text[ dutch ] = "Tabel";
         Text[ chinese_simplified ] = "θ΅¨ζ Ό";
         Text[ greek ] = "Πίνακας";
-        Text[ korean ] = "μ‹νΈ";
+        Text[ korean ] = "ν…μ΄λΈ”";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Taula";
@@ -263,7 +263,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text[ dutch ] = "<Standaard>";
         Text[ chinese_simplified ] = "<ι»θ®¤>";
         Text[ greek ] = "<Προεπιλογή>";
-        Text[ korean ] = "<κΈ°λ³Έ>";
+        Text[ korean ] = "<κΈ°λ³Έκ°’>";
         Text[ turkish ] = "<Standart>";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "<per defecte>";
@@ -278,12 +278,18 @@ ModelessDialog DLG_JOIN_TABADD
     Text[ dutch ] = "Tabellen toevoegen";
     Text[ chinese_simplified ] = "ζ–°εΆθ΅¨ζ Ό";
     Text[ greek ] = "Προσθήκη πίνακα";
-    Text[ korean ] = "μ‹νΈ μ¶”κ°€";
+    Text[ korean ] = "ν…μ΄λΈ” μ¶”κ°€";
     Text[ turkish ] = "Tablo ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Afegeix taules";
     Text[ thai ] = "ΰΉ€ΰΈΰΈ΄ΰΉΰΈ΅ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
+
+
+
+
+
+
 
 
 

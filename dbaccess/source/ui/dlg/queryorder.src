@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:07:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,8 +220,13 @@ ModalDialog DLG_ORDERCRIT
     };
     StringList [ catalan ] =
     {
-            < "ascendente" ; Default ; > ;
-        < "descendente" ; Default ; > ;
+            < "ascendent" ; Default ; > ;
+        < "descendent" ; Default ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "‡∏à‡∏≤‡∏Å‡∏ô‡πâ‡∏≠‡∏¢‡πÑ‡∏õ‡∏°‡∏≤‡∏Å" ; Default ; > ;
+        < "‡∏à‡∏≤‡∏Å‡∏°‡∏≤‡∏Å‡πÑ‡∏õ‡∏ô‡πâ‡∏≠‡∏¢" ; Default ; > ;
     };
     };
     ListBox LB_ORDERFIELD2
@@ -358,8 +363,13 @@ ModalDialog DLG_ORDERCRIT
     };
     StringList [ catalan ] =
     {
-            < "ascendente" ; Default ; > ;
-        < "descendente" ; Default ; > ;
+            < "ascendent" ; Default ; > ;
+        < "descendent" ; Default ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "‡∏à‡∏≤‡∏Å‡∏ô‡πâ‡∏≠‡∏¢‡πÑ‡∏õ‡∏°‡∏≤‡∏Å" ; Default ; > ;
+        < "‡∏à‡∏≤‡∏Å‡∏°‡∏≤‡∏Å‡πÑ‡∏õ‡∏ô‡πâ‡∏≠‡∏¢" ; Default ; > ;
     };
     };
     ListBox LB_ORDERFIELD3
@@ -496,8 +506,13 @@ ModalDialog DLG_ORDERCRIT
     };
     StringList [ catalan ] =
     {
-            < "ascendente" ; Default ; > ;
-        < "descendente" ; Default ; > ;
+            < "ascendent" ; Default ; > ;
+        < "descendent" ; Default ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "‡∏à‡∏≤‡∏Å‡∏ô‡πâ‡∏≠‡∏¢‡πÑ‡∏õ‡∏°‡∏≤‡∏Å" ; Default ; > ;
+        < "‡∏à‡∏≤‡∏Å‡∏°‡∏≤‡∏Å‡πÑ‡∏õ‡∏ô‡πâ‡∏≠‡∏¢" ; Default ; > ;
     };
     };
     FixedText FT_ORDERFIELD
@@ -521,14 +536,15 @@ ModalDialog DLG_ORDERCRIT
         Text[ chinese_simplified ] = "Â≠óÊÆµÂêçÁß∞";
         Text[ russian ] = "»Ïˇ ÔÓÎˇ";
         Text[ polish ] = "Nazwa pola";
-        Text[ japanese ] = "ÔæåÔΩ®ÔΩ∞ÔæôÔæÑÔæûÂêç";
+        Text[ japanese ] = "„Éï„Ç£„Éº„É´„ÉâÂêç";
         Text[ chinese_traditional ] = "Ê¨Ñ‰ΩçÂêçÁ®±";
         Text[ arabic ] = "«”„ «·Õﬁ·";
         Text[ greek ] = "ºÌÔÏ· Â‰ﬂÔı";
         Text[ korean ] = "ÌïÑÎìú Ïù¥Î¶Ñ";
         Text[ turkish ] = "Alan ad˝";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombre de campo";
+        Text[ catalan ] = "Nom del camp";
+        Text[ thai ] = "‡∏ä‡∏∑‡πà‡∏≠‡πÄ‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
     };
 
     FixedText FT_ORDERAFTER1
@@ -545,7 +561,7 @@ ModalDialog DLG_ORDERCRIT
         Text [ danish ] = "derefter" ;
         Text [ french ] = "puis" ;
         Text [ swedish ] = "d‰refter" ;
-        Text [ dutch ] = "en vervolgens" ;
+        Text [ dutch ] = "vervolgens" ;
         Text [ spanish ] = "despuÈs" ;
         Text [ ENGLISH_US ] = "and then" ;
         Text[ chinese_simplified ] = "‰πãÂêé";
@@ -558,7 +574,8 @@ ModalDialog DLG_ORDERCRIT
         Text[ korean ] = "Í∑∏ Îã§Ïùå";
         Text[ turkish ] = "Sonra";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "detr·s";
+        Text[ catalan ] = "i desprÈs";
+        Text[ thai ] = "‡πÅ‡∏•‡∏∞  ‡∏à‡∏≤‡∏Å‡∏ô‡∏±‡πâ‡∏ô";
     };
     FixedText FT_ORDERAFTER2
     {
@@ -574,7 +591,7 @@ ModalDialog DLG_ORDERCRIT
         Text [ danish ] = "derefter" ;
         Text [ french ] = "puis" ;
         Text [ swedish ] = "d‰refter" ;
-        Text [ dutch ] = "en vervolgens" ;
+        Text [ dutch ] = "vervolgens" ;
         Text [ spanish ] = "despuÈs" ;
         Text [ ENGLISH_US ] = "and then" ;
         Text[ chinese_simplified ] = "‰πãÂêé";
@@ -587,7 +604,8 @@ ModalDialog DLG_ORDERCRIT
         Text[ korean ] = "Í∑∏ Îã§Ïùå";
         Text[ turkish ] = "Sonra";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "detr·s";
+        Text[ catalan ] = "i desprÈs";
+        Text[ thai ] = "‡πÅ‡∏•‡∏∞  ‡∏à‡∏≤‡∏Å‡∏ô‡∏±‡πâ‡∏ô";
     };
     FixedText FT_ORDEROPER
     {
@@ -614,10 +632,11 @@ ModalDialog DLG_ORDERCRIT
         Text[ chinese_traditional ] = "Êç∑Âæë";
         Text[ arabic ] = "«— »«ÿ";
         Text[ greek ] = "”˝Ì‰ÂÛÁ";
-        Text[ korean ] = "ÎßÅÌÅ¨";
+        Text[ korean ] = "Ïó∞ÏÇ∞Ïûê";
         Text[ turkish ] = "›˛leÁ";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "VÌnculo";
+        Text[ catalan ] = "Operador";
+        Text[ thai ] = "‡∏ï‡∏±‡∏ß‡∏õ‡∏è‡∏¥‡∏ö‡∏±‡∏ï‡∏¥‡∏Å‡∏≤‡∏£";
     };
     FixedText FT_ORDERDIR
     {
@@ -647,7 +666,8 @@ ModalDialog DLG_ORDERCRIT
         Text[ korean ] = "ÏàúÏÑú";
         Text[ turkish ] = "S˝ra";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Orden";
+        Text[ catalan ] = "Ordre";
+        Text[ thai ] = "‡∏•‡∏≥‡∏î‡∏±‡∏ö";
     };
     OKButton BT_OK
     {
@@ -692,10 +712,11 @@ ModalDialog DLG_ORDERCRIT
         Text[ chinese_traditional ] = "ÊéíÂ∫è";
         Text[ arabic ] = "«·›—“";
         Text[ greek ] = "‘·ÓÈÌ¸ÏÁÛÁ";
-        Text[ korean ] = "Ï†ïÎ†¨";
+        Text[ korean ] = "Ï†ïÎ†¨ ÏàúÏÑú";
         Text[ turkish ] = "S˝ralama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Orden";
+        Text[ catalan ] = "Ordre";
+        Text[ thai ] = "‡πÄ‡∏£‡∏µ‡∏¢‡∏á‡∏•‡∏≥‡∏î‡∏±‡∏ö";
     };
     String STR_NOENTRY
     {
@@ -706,14 +727,14 @@ ModalDialog DLG_ORDERCRIT
         Text [ portuguese_brazilian ] = "<nenhum>" ;
         Text [ portuguese ] = "<nenhum>" ;
         Text [ finnish ] = "<ei mit‰‰n>" ;
-        Text [ danish ] = "<ingen>" ;
+        Text [ danish ] = "<intet>" ;
         Text [ french ] = "<aucun(e)>" ;
-        Text [ swedish ] = "<ingen>" ;
+        Text [ swedish ] = "<inget>" ;
         Text [ dutch ] = "<geen>" ;
         Text [ spanish ] = "<ninguno>" ;
         Text [ ENGLISH_US ] = "<none>" ;
         Text[ chinese_simplified ] = "<Êó†>";
-        Text[ russian ] = "<·ÂÁ>";
+        Text[ russian ] = "<ÌÂÚ>";
         Text[ polish ] = "<brak>";
         Text[ japanese ] = "<„Å™„Åó>";
         Text[ chinese_traditional ] = "<ÁÑ°>";
@@ -722,7 +743,8 @@ ModalDialog DLG_ORDERCRIT
         Text[ korean ] = "<ÏóÜÏùå>";
         Text[ turkish ] = "<hiÁbiri>";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "<ninguno>";
+        Text[ catalan ] = "<cap>";
+        Text[ thai ] = "<‡πÑ‡∏°‡πà‡∏°‡∏µ>";
     };
     Text[ chinese_simplified ] = "ÊéíÂ∫è";
     Text[ russian ] = "—ÓÚËÓ‚Í‡";
@@ -731,11 +753,18 @@ ModalDialog DLG_ORDERCRIT
     Text[ chinese_traditional ] = "ÊéíÂ∫è";
     Text[ arabic ] = " — Ì» «·›—“";
     Text[ greek ] = "‘·ÓÈÌ¸ÏÁÛÁ";
-    Text[ korean ] = "Ï†ïÎ†¨";
+    Text[ korean ] = "Ï†ïÎ†¨ ÏàúÏÑú";
     Text[ turkish ] = "S˝ralama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Orden";
+    Text[ catalan ] = "OrdenaciÛ";
+    Text[ thai ] = "‡πÄ‡∏£‡∏µ‡∏¢‡∏á‡∏•‡∏≥‡∏î‡∏±‡∏ö";
 };
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-31 16:02:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,10 @@ void ODatabaseAdministrationDialog::destroyDialog()
 Dialog* ODatabaseAdministrationDialog::createDialog(Window* _pParent)
 {
     if (!m_pCollection)
-        m_pCollection = new ODsnTypeCollection;
+    {
+        m_pCollection = new ODsnTypeCollection();
+        m_pCollection->initUserDriverTypes(m_xORB);
+    }
 
     ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection);
     ODbAdminDialog* pDialog = new ODbAdminDialog(_pParent, m_pDatasourceItems, m_xORB);
@@ -292,50 +295,4 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.10  2001/07/30 11:32:08  fs
- *  #88530# changes to allow operating the dialog in a 'edit one single data source only' mode
- *
- *  Revision 1.9  2001/06/18 12:35:37  fs
- *  #88389# OGenericUnoDialog moved to svtools
- *
- *  Revision 1.8  2001/05/17 09:16:26  fs
- *  #86511# hold the type collection as pointer, not as object - allows construction in createDialog, where it can be guarded by the solar mutex
- *
- *  Revision 1.7  2001/03/15 08:27:03  fs
- *  cppuhelper/extract -> comphelper/extract
- *
- *  Revision 1.6  2001/01/05 12:16:07  fs
- *  adjusted the implementation name
- *
- *  Revision 1.5  2000/12/15 15:48:13  fs
- *  #82151# two instances of the registration helper module - one for every library in this project
- *
- *  Revision 1.4  2000/11/01 16:34:16  fs
- *  migrated from awt::XDialog to ui::XExecutableDialog / removed the star* namespace shortcuts
- *
- *  Revision 1.3  2000/10/31 08:08:48  fs
- *  support an initial selection
- *
- *  Revision 1.2  2000/10/27 08:08:47  fs
- *  don't include stringconstants.hrc directly anymore
- *
- *  Revision 1.1  2000/10/25 12:56:26  fs
- *  moved herein from ..\dlg
- *
- *  Revision 1.3  2000/10/16 10:46:59  fs
- *  service name changed
- *
- *  Revision 1.2  2000/10/11 11:31:03  fs
- *  new implementations - still under construction
- *
- *  Revision 1.1  2000/10/05 10:07:23  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 20.09.00 12:12:44  fs
- ************************************************************************/
 

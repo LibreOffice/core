@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StaticSet.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 14:22:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,30 +124,4 @@ namespace dbaccess
     };
 }
 #endif //DBACCESS_CORE_API_STATICSET_HXX
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/01/24 09:50:49  oj
-    #82628# rowset modifications
-
-    Revision 1.4  2000/11/14 13:28:20  oj
-    change for rowset when getRow returns 0
-
-    Revision 1.3  2000/10/17 10:19:03  oj
-    some changes for the rowset
-
-    Revision 1.2  2000/10/11 11:18:11  fs
-    replace unotools with comphelper
-
-    Revision 1.1.1.1  2000/09/19 00:15:38  hr
-    initial import
-
-    Revision 1.2  2000/09/18 14:52:47  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.1  2000/09/01 15:24:02  oj
-    rowset addon
-
-    Revision 1.0 01.08.2000 08:58:17  oj
-------------------------------------------------------------------------*/
 

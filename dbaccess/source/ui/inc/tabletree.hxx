@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:19:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,35 +202,4 @@ protected:
 //.........................................................................
 
 #endif // _DBAUI_TABLETREE_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.8  2001/08/28 08:20:14  fs
- *  #91573# UpdateTableList returns the driver used for connecting
- *
- *  Revision 1.7  2001/08/14 14:10:59  fs
- *  #86945# removed the tables container parameter from UpdateTableList
- *
- *  Revision 1.6  2001/08/14 12:00:23  fs
- *  preparations for #86945#
- *
- *  Revision 1.5  2001/06/05 12:39:02  fs
- *  #87680# implEmphasize signature changed
- *
- *  Revision 1.4  2001/02/05 14:45:04  oj
- *  new member for hiding first entry
- *
- *  Revision 1.3  2001/01/30 08:28:15  fs
- *  'wildcard checking'
- *
- *  Revision 1.2  2000/10/30 15:20:02  fs
- *  #79816# second UpdateTableList got other parameters
- *
- *  Revision 1.1  2000/10/05 10:09:23  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 28.09.00 13:15:45  fs
- ************************************************************************/
 

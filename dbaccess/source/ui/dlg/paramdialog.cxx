@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:40:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,32 +482,4 @@ namespace dbaui
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.7  2002/04/09 14:52:06  fs
- *  #98181# use a ::dbtools::OPredicateInputController
- *
- *  Revision 1.6  2001/07/11 10:10:30  oj
- *  #87257# change GetUILanguage
- *
- *  Revision 1.5  2001/06/07 15:09:39  fs
- *  #87912# redesigned the dialog
- *
- *  Revision 1.4  2001/03/13 08:23:17  oj
- *  #84710# use stream operators instead of cast
- *
- *  Revision 1.3  2001/02/14 14:34:01  oj
- *  tabledesign changes
- *
- *  Revision 1.2  2000/10/27 08:07:57  fs
- *  OSQLParser interface was changed - adjustments
- *
- *  Revision 1.1  2000/10/26 18:06:51  fs
- *  initial checkin - parameter dialog
- *
- *
- *  Revision 1.0 26.10.00 11:56:41  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-05 14:10:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,111 +471,4 @@ namespace dbaccess
 
 }
 #endif // DBACCESS_CORE_API_ROWSET_HXX
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.32  2002/12/05 09:53:00  fs
-    #105390# #i8481# defined order of notifications for operations on a RowSet
-
-    Revision 1.31  2002/08/13 11:13:00  oj
-    #98095# clear mutex before calling our listeners
-
-    Revision 1.30  2002/07/11 07:02:26  oj
-    #100984# cancel insert after refreshRow
-
-    Revision 1.29  2001/11/15 10:42:42  oj
-    #94384# change &m_rMutex in m_pMutex to avoid illegal member access
-
-    Revision 1.28  2001/11/01 15:27:20  hr
-    #92924#: gcc-3.0.1 needs lvalue, exception specifications
-
-    Revision 1.27  2001/08/24 06:25:57  oj
-    #90015# code corrcetions for some speedup's
-
-    Revision 1.26  2001/08/06 11:01:19  fs
-    #87960# moved the listers from the base class herein / call the listers in :disposing()
-
-    Revision 1.25  2001/07/30 08:53:02  oj
-    #90015# use ORowSetValue as const ref
-
-    Revision 1.24  2001/07/24 13:25:25  oj
-    #89430# move ORowSetValue into dbtools
-
-    Revision 1.23  2001/06/26 10:12:40  oj
-    #87808# setObject corrected and some more
-
-    Revision 1.22  2001/05/07 11:11:15  oj
-    #86483# set columns only null
-
-    Revision 1.21  2001/04/12 09:32:26  fs
-    #84852# make ActiveConnection a bound property
-
-    Revision 1.20  2001/04/06 11:23:52  oj
-    #85809# getStatement now returns null
-
-    Revision 1.19  2001/04/06 10:19:13  oj
-    no correct handling of approve listener
-
-    Revision 1.18  2001/04/05 07:51:27  oj
-    #85735# insert more exceptions when using in wrong order
-
-    Revision 1.17  2001/02/23 15:22:32  oj
-    import export changes
-
-    Revision 1.16  2001/01/26 15:00:05  oj
-    dispose connection when it's our
-
-    Revision 1.15  2001/01/24 09:50:49  oj
-    #82628# rowset modifications
-
-    Revision 1.14  2001/01/22 07:38:23  oj
-    #82632# change member
-
-    Revision 1.13  2001/01/09 12:29:09  oj
-    two new properties
-
-    Revision 1.12  2000/12/06 09:52:12  oj
-    #80219# correted deleterow(s) and remeber position
-
-    Revision 1.11  2000/12/01 14:16:46  oj
-    #81017# use of xinteractionhandler
-
-    Revision 1.10  2000/11/22 14:56:33  oj
-    #80276# resolve some trouble with positioning
-
-    Revision 1.9  2000/11/15 15:57:40  oj
-    change for rowset
-
-    Revision 1.8  2000/11/03 14:40:45  oj
-    some problems with refcount resolved
-
-    Revision 1.7  2000/10/31 15:21:51  fs
-    added XCompletedExecution interface & implementation
-
-    Revision 1.6  2000/10/30 09:24:02  oj
-    use tablecontainer if no tablesupplier is supported
-
-    Revision 1.5  2000/10/17 12:24:43  oj
-    remove some header
-
-    Revision 1.4  2000/10/17 10:18:12  oj
-    some changes for the rowset
-
-    Revision 1.3  2000/10/11 11:18:11  fs
-    replace unotools with comphelper
-
-    Revision 1.2  2000/09/29 15:20:51  oj
-    rowset impl
-
-    Revision 1.1.1.1  2000/09/19 00:15:38  hr
-    initial import
-
-    Revision 1.2  2000/09/18 14:52:46  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.1  2000/09/01 15:19:29  oj
-    rowset addons
-
-    Revision 1.0 25.07.2000 13:24:59  oj
-------------------------------------------------------------------------*/
 

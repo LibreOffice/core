@@ -2,9 +2,9 @@
  *
  *  $RCSfile: directsql.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-06-22 14:17:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,14 +192,4 @@ namespace dbaui
 //........................................................................
 
 #endif // _DBACCESS_UI_DIRECTSQL_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/06/19 10:54:55  fs
- *  initial checkin - dialog for executing SQL statements
- *
- *
- *  Revision 1.0 18.06.01 15:46:43  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-10 12:50:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,8 @@ namespace dbaccess
         friend class ORowSetClone;
         friend class ORowSetCacheIterator;
 
+        typedef ::std::vector< TORowSetOldRowHelperRef >    TOldRowSetRows;
+
         ::osl::Mutex            m_aRowCountMutex, // mutex for rowcount changes
                                 // we need a extra mutex for columns to prevend deadlock when setting new values
                                 // for a row
@@ -168,6 +170,7 @@ namespace dbaccess
         ORowSetMatrix::iterator         m_aMatrixIter;          // represent a row of the table
         ORowSetMatrix::iterator         m_aMatrixEnd;           // present the row behind the last row of the table
         ORowSetCacheMap                 m_aCacheIterators;
+        TOldRowSetRows                  m_aOldRows;
 
         ORowSetMatrix*                  m_pInsertMatrix;        // represent the rows which should be inserted normally this is only one
         ORowSetMatrix::iterator         m_aInsertRow;           // represent a insert row
@@ -194,6 +197,8 @@ namespace dbaccess
         sal_Bool&                   m_bModified ;           // points to the rowset member m_bModified
         sal_Bool&                   m_bNew ;                // points to the rowset member m_bNew
 
+        sal_Bool fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix::iterator& _aEnd,sal_Int32& _nPos,sal_Bool _bCheck);
+        sal_Bool reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 nNewEndPos);
         sal_Bool fillMatrix(sal_Int32 &_nNewStartPos,sal_Int32 _nNewEndPos);
         sal_Bool moveWindow();
 
@@ -212,6 +217,7 @@ namespace dbaccess
         // clears the insert row
         void                    clearInsertRow();
         ORowSetMatrix::iterator calcPosition() const;
+
     protected:
         ORowSetMatrix::iterator& getIterator() { return m_aMatrixIter;}
         ORowSetMatrix::iterator& getEnd() { return m_aMatrixEnd;}
@@ -233,6 +239,10 @@ namespace dbaccess
         ORowSetCacheIterator createIterator();
         // sets the size of the matrix
         void setMaxRowSize(sal_Int32 _nSize);
+
+        TORowSetOldRowHelperRef registerOldRow();
+        void deregisterOldRow(const TORowSetOldRowHelperRef& _rRow);
+
 
     // OComponentHelper
         void disposing(void);
@@ -331,66 +341,4 @@ namespace dbaccess
     };
 }
 #endif
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.18  2002/12/05 14:10:10  oj
-    #106008# copy row content instead of remember ref
-
-    Revision 1.17  2002/12/05 09:54:54  fs
-    #105390# #i8481# cancelInsert renamed to cancelRowModification
-
-    Revision 1.16  2001/11/29 16:35:26  oj
-    #95225# changes for bookmarkable resultset
-
-    Revision 1.15  2001/08/24 06:25:57  oj
-    #90015# code corrcetions for some speedup's
-
-    Revision 1.14  2001/08/09 13:12:51  oj
-    #90801# clear insertrow after insert
-
-    Revision 1.13  2001/07/24 13:25:25  oj
-    #89430# move ORowSetValue into dbtools
-
-    Revision 1.12  2001/07/19 09:29:22  oj
-    #86186# check parsetree for joins
-
-    Revision 1.11  2001/07/12 07:56:32  oj
-    #89437# positioning cache when standing on a row outside the cache
-
-    Revision 1.9  2001/06/26 10:30:55  oj
-    #87808# setObject corrected and some more
-
-    Revision 1.8  2001/06/26 09:32:05  fs
-    #88392# added columnModified for diagnostics
-
-    Revision 1.7  2001/02/01 14:23:57  oj
-    change for insert , delete and update rows
-
-    Revision 1.6  2001/01/22 07:38:24  oj
-    #82632# change member
-
-    Revision 1.5  2000/10/17 10:18:12  oj
-    some changes for the rowset
-
-    Revision 1.4  2000/10/11 11:18:11  fs
-    replace unotools with comphelper
-
-    Revision 1.3  2000/10/05 09:33:39  fs
-    using comphelper::OPropertyContainer instead of connectivity::OSimplePropertyContainer
-
-    Revision 1.2  2000/09/29 15:20:51  oj
-    rowset impl
-
-    Revision 1.1.1.1  2000/09/19 00:15:38  hr
-    initial import
-
-    Revision 1.2  2000/09/18 14:52:47  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.1  2000/09/01 15:20:59  oj
-    rowset addons
-
-    Revision 1.0 25.07.2000 16:37:44  oj
-------------------------------------------------------------------------*/
 

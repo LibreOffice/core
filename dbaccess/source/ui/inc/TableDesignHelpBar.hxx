@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignHelpBar.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:36:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
 #endif
+#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
+#include "IClipBoardTest.hxx"
+#endif
 
 class MultiLineEdit;
 namespace dbaui
@@ -78,6 +81,7 @@ namespace dbaui
     // Ableitung von TabPage ist ein Trick von TH,
     // um Aenderungen der Systemfarben zu bemerken (Bug #53905)
     class OTableDesignHelpBar : public TabPage
+                                ,public IClipboardTest
     {
     private:
         String          m_sHelpText;
@@ -95,6 +99,16 @@ namespace dbaui
         String GetHelpText() const { return m_sHelpText; }
 
         virtual long PreNotify( NotifyEvent& rNEvt );
+
+        // IClipboardTest
+        virtual sal_Bool isCutAllowed();
+        virtual sal_Bool isCopyAllowed();
+        virtual sal_Bool isPasteAllowed();
+        virtual sal_Bool hasChildPathFocus() { return HasChildPathFocus(); }
+
+        virtual void copy();
+        virtual void cut();
+        virtual void paste();
     };
 
     //==================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 06:53:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,17 +147,4 @@ namespace dbaui
 //......................................................................
 
 #endif // _DBAUI_LINKEDDOCUMENTS_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/08/16 14:08:29  fs
- *  #88813# +newFormWithPilot
- *
- *  Revision 1.1  2001/04/26 11:52:20  fs
- *  initial checkin - access to the data source associated bookmarks
- *
- *
- *  Revision 1.0 24.04.01 14:53:19  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-15 09:00:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,11 +485,13 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     m_bDeleted = xPrep->executeUpdate() > 0;
 }
 // -------------------------------------------------------------------------
-void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter,const ORowSetValue& _rValue) throw(SQLException, RuntimeException)
+void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter,const ORowSetValue& _rValue,sal_Int32 _nType)
 {
+    sal_Int32 nType = ( _nType != DataType::OTHER ) ? _nType : _rValue.getTypeKind();
     if(!_rValue.isNull())
     {
-        switch(_rValue.getTypeKind())
+
+        switch(nType)
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
@@ -551,7 +553,7 @@ void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter
         }
     }
     else
-        _xParameter->setNull(nPos,_rValue.getTypeKind());
+        _xParameter->setNull(nPos,nType);
 }
 // -------------------------------------------------------------------------
 void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:33:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,14 +181,14 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ greek ] = "���������� ����������";
                 Text[ dutch ] = "nieuwe index";
                 Text[ french ] = "Nouvel index";
-                Text[ spanish ] = "nuevo �ndice";
+                Text[ spanish ] = "�ndice nuevo";
                 Text[ italian ] = "Nuovo indice";
                 Text[ danish ] = "Nyt indeks";
                 Text[ swedish ] = "Nytt index";
                 Text[ polish ] = "Nowy indeks";
                 Text[ portuguese_brazilian ] = "new index";
                 Text[ japanese ] = "新規作成インデックス";
-                Text[ korean ] = "새로운 색인";
+                Text[ korean ] = "새 색인";
                 Text[ chinese_simplified ] = "新建索引";
                 Text[ chinese_traditional ] = "開啟新索引";
                 Text[ turkish ] = "new index";
@@ -210,14 +210,14 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ greek ] = "�������� ��������� ����������";
                 Text[ dutch ] = "Huidig register wissen";
                 Text[ french ] = "Supprimer l'index actif";
-                Text[ spanish ] = "Eliminar el �ndice actual";
+                Text[ spanish ] = "Borrar el �ndice actual";
                 Text[ italian ] = "Elimina l'indice attuale";
                 Text[ danish ] = "Slet aktuelt indeks";
                 Text[ swedish ] = "Radera aktuellt index";
                 Text[ polish ] = "Usu� bie��cy indeks";
                 Text[ portuguese_brazilian ] = "drop current index";
                 Text[ japanese ] = "現在のインデックスの削除";
-                Text[ korean ] = "현재의 색인 삭제";
+                Text[ korean ] = "현재 색인 삭제";
                 Text[ chinese_simplified ] = "删除当前的索引";
                 Text[ chinese_traditional ] = "刪除目前的索引";
                 Text[ turkish ] = "drop current index";
@@ -246,7 +246,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ polish ] = "Zmie� nazw� bie��cego indeksu";
                 Text[ portuguese_brazilian ] = "rename current index";
                 Text[ japanese ] = "現在のインデックスの名前を変更";
-                Text[ korean ] = "현재의 색인 이름 바꾸기";
+                Text[ korean ] = "현재 색인 이름 바꾸기";
                 Text[ chinese_simplified ] = "重命名当前的索引";
                 Text[ chinese_traditional ] = "重新命名目前的索引";
                 Text[ turkish ] = "rename current index";
@@ -275,7 +275,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ polish ] = "Zapisz bie��cy indeks";
                 Text[ portuguese_brazilian ] = "save current index";
                 Text[ japanese ] = "現在のインデックスの保存";
-                Text[ korean ] = "현재의 색인 저장";
+                Text[ korean ] = "현재 색인 저장";
                 Text[ chinese_simplified ] = "存盘当前的索引";
                 Text[ chinese_traditional ] = "儲存目前的索引";
                 Text[ turkish ] = "save current index";
@@ -304,7 +304,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ polish ] = "Zresetuj bie��cy indeks";
                 Text[ portuguese_brazilian ] = "reset current index";
                 Text[ japanese ] = "現在のインデックスを元に戻す";
-                Text[ korean ] = "현재의 색인 리셋";
+                Text[ korean ] = "현재 색인을 원래대로";
                 Text[ chinese_simplified ] = "重设当前的索引";
                 Text[ chinese_traditional ] = "重設目前的索引";
                 Text[ turkish ] = "reset current index";
@@ -333,7 +333,7 @@ ModalDialog DLG_INDEXDESIGN
         Text [ english ] = "Index details";
         Text [ english_us ] = "Index details";
         Text[ portuguese ] = "�ndice: detalhes";
-        Text[ russian ] = "����������� �������";
+        Text[ russian ] = "������";
         Text[ greek ] = "������������ ����������";
         Text[ dutch ] = "Indexdetails";
         Text[ french ] = "Index : d�tails";
@@ -344,7 +344,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ polish ] = "Szczeg�y indeksu";
         Text[ portuguese_brazilian ] = "Index details";
         Text[ japanese ] = "インデックスの詳細";
-        Text[ korean ] = "색인 세부사항";
+        Text[ korean ] = "색인 세부 정보";
         Text[ chinese_simplified ] = "索引细节";
         Text[ chinese_traditional ] = "索引細節";
         Text[ turkish ] = "Index details";
@@ -369,7 +369,7 @@ ModalDialog DLG_INDEXDESIGN
         Text [ dutch ] = "Indexidentificator:";
         Text [ portuguese ] = "Identificador de �ndice:";
         Text [ chinese_simplified ] = "索引标志：";
-        Text [ russian ] = "������������� �������:";
+        Text [ russian ] = "�������������:";
         Text [ polish ] = "Identyfikator indeksu:";
         Text [ japanese ] = "インデックス ID:";
         Text [ chinese_traditional ] = "索引標誌：";
@@ -397,7 +397,7 @@ ModalDialog DLG_INDEXDESIGN
         Text [ english ] = "~Unique";
         Text [ english_us ] = "~Unique";
         Text[ portuguese ] = "�~nico";
-        Text[ russian ] = "����������";
+        Text[ russian ] = "����������";
         Text[ greek ] = "��������";
         Text[ dutch ] = "~Duidelijk";
         Text[ french ] = "~Unique";
@@ -408,7 +408,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ polish ] = "Unikatowy";
         Text[ portuguese_brazilian ] = "Unique";
         Text[ japanese ] = "固有(~U)";
-        Text[ korean ] = "단일(~U)";
+        Text[ korean ] = "고유(~U)";
         Text[ chinese_simplified ] = "明确的(~U)";
         Text[ chinese_traditional ] = "明確的(~U)";
         Text[ turkish ] = "Unique";
@@ -533,7 +533,7 @@ String STR_TAB_INDEX_SORTORDER
     Text [ dutch ] = "Sorteervolgorde";
     Text [ chinese_simplified ] = "排序规则";
     Text [ greek ] = "����� �����������";
-    Text [ korean ] = "정렬순서";
+    Text [ korean ] = "정렬 순서";
     Text[ turkish ] = "Sort order";
     Text[ catalan ] = "Ordenaci�";
     Text[ finnish ] = "Lajitteluj�rjestys";
@@ -632,14 +632,14 @@ String STR_CONFIRM_DROP_INDEX
     Text[ greek ] = "������ ������� �� ��������� �� ��������� '$name$';";
     Text[ dutch ] = "Wilt u de index '$name$' werkelijk wissen?";
     Text[ french ] = "Voulez-vous vraiment supprimer l'index '$name$' ?";
-    Text[ spanish ] = "�Desea eliminar realmente el �ndice '$name$'?";
+    Text[ spanish ] = "�Desea borrar realmente el �ndice '$name$'?";
     Text[ italian ] = "Volete davvero eliminare l'indice '$name$'?";
     Text[ danish ] = "Er du sikker p�, at du vil slette indekset '$name$'?";
     Text[ swedish ] = "Vill du verkligen radera indexet '$name$'?";
     Text[ polish ] = "Na pewno usun�� indeks '$name$'?";
     Text[ portuguese_brazilian ] = "Do you really want to drop the index '$name$'?";
     Text[ japanese ] = "インデックス '$name$' を削除しますか。";
-    Text[ korean ] = "색인 '$name$'(을)를 정말 삭제하겠습니까?";
+    Text[ korean ] = "색인 '$name$'(을)를 정말로 삭제하시겠습니까?";
     Text[ chinese_simplified ] = "真要删除索引'$name$'？";
     Text[ chinese_traditional ] = "真要刪除索引<$name$>？";
     Text[ turkish ] = "Do you really want to drop the index '$name$'?";
@@ -710,7 +710,7 @@ ErrorBox ERR_NEED_INDEX_FIELDS
     Message[ polish ] = "Indeks musi zawiera� co najmniej jedno pole.";
     Message[ portuguese_brazilian ] = "Der Index mu? mindestens ein Feld enthalten.";
     Message[ japanese ] = "インデックスにはフィールドが最低１つは必要です。";
-    Message[ korean ] = "색인에 최소 하나의 필드를 포함해야 합니다.";
+    Message[ korean ] = "색인에 최소한 하나의 필드를 포함해야 합니다.";
     Message[ chinese_simplified ] = "索引必须至少含有一个字段。";
     Message[ chinese_traditional ] = "索引必須至少含有一個欄位。";
     Message[ turkish ] = "Der Index mu� mindestens ein Feld enthalten.";
@@ -764,7 +764,7 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     Message[ polish ] = "Zapisa� modyfikacje bie��cego indeksu?";
     Message[ portuguese_brazilian ] = "Do you want to save the changes made on the current index?";
     Message[ japanese ] = "現在のインデックスで行った変更を保存しますか。";
-    Message[ korean ] = "현재 색인의 변경된 사항을 저장하겠습니까?";
+    Message[ korean ] = "현재 색인의 변경된 내용을 저장하시겠습니까?";
     Message[ chinese_simplified ] = "要存盘当前索引的修改内容？";
     Message[ chinese_traditional ] = "要儲存目前索引的變更內容？";
     Message[ turkish ] = "Do you want to save the changes made on the current index?";
@@ -811,7 +811,7 @@ String STR_INDEX_NAME_ALREADY_USED
     Text[ polish ] = "Istnieje ju� inny indeks o nazwie \"$name$\".";
     Text[ portuguese_brazilian ] = "There's already another index named \"$name$\".";
     Text[ japanese ] = "\"$name$\" のインデックス名はすでにあります。";
-    Text[ korean ] = "이미 \"$name$\"라는 다른 색인 이름이 존재합니다";
+    Text[ korean ] = "\"$name$\"의 색인 이름이 이미 있습니다.";
     Text[ chinese_simplified ] = "There's already another index named \"$name$\".";
     Text[ chinese_traditional ] = "已經存在一個索引<$name$>。";
     Text[ turkish ] = "There's already another index named \"$name$\".";
@@ -839,7 +839,7 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
     Text[ polish ] = "U�y�e� dwa razy kolumny \"$name$\" - uwzgl�dnij, �e pojedyncze kolumny tabeli wyst�powa� mog� w definicji indeksu tylko raz!";
     Text[ portuguese_brazilian ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
     Text[ japanese ] = "インデックスの定義では、テーブルの列の見出しは各一回ずつしか使えません。列の見出し \"$name$\" は、二回目の入力です。";
-    Text[ korean ] = "색인 정의에 따라 각 시트의 열을 한 번만 입력할 수 있는데 사용자가 열 \"$name$\"(을)를 두 번 입력하였습니다.";
+    Text[ korean ] = "색인 정의에 따라 각 테이블의 열을 한 번만 지정할 수 있습니다. 열 \"$name$\"은(는) 두 번 지정되었습니다.";
     Text[ chinese_simplified ] = "在一个索引定义之中仅允许一次使用一个列名称。但是您第二次使用列名称 \"$name$\" 。";
     Text[ chinese_traditional ] = "在一個索引定義之中僅允許最多一次使用一個欄名稱。但現在是第二次使用欄名稱<$name$>。";
     Text[ turkish ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
@@ -852,6 +852,26 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31.2.3  2003/02/23 12:01:01  nf
+ *  trasnlation 6.1 Beta / OOo 1.1 Beta / final wave
+ *
+ *  Revision 1.31.2.2  2003/02/23 11:00:53  nf
+ *  6.1 Beta 1/OOo 1.1 Beta translation, second wave
+ *
+ *  Revision 1.31.2.1  2003/02/22 15:48:39  hr
+ *  INTEGRATION: CWS mergep (1.31.20); FILE MERGED
+ *  2003/02/22 10:44:30 nf 1.31.20.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
+ *  2003/01/31 12:51:14 hjs 1.31.20.1: #107113# merge on SRX644p
+ *
+ *  Revision 1.31.20.2  2003/02/22 10:44:30  nf
+ *  #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
+ *
+ *  Revision 1.31.20.1  2003/01/31 12:51:14  hjs
+ *  #107113# merge on SRX644p
+ *
+ *  Revision 1.31  2002/12/05 10:33:17  kz
+ *  Merge SRX644: 12/05/02 - 11:29:20
+ *
  *  Revision 1.30  2002/11/25 15:14:27  kz
  *  Merge SRX644: 25.11.02 - 16:10:35
  *
@@ -945,6 +965,12 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
  *
  *  Revision 1.0 07.03.01 12:17:10  fs
  ************************************************************************/
+
+
+
+
+
+
 
 
 

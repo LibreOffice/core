@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-10 09:19:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ namespace dbaui
         ScrollBar*              m_pVertScroll;
         ScrollBar*              m_pHorzScroll;
 
-        const OTypeInfo*        m_pPreviousType;
+        TOTypeInfoSP        m_pPreviousType;
         USHORT                  nCurChildId;
         short                   nPos;
         short                   nOldDefaultPos;
@@ -201,19 +201,19 @@ namespace dbaui
 
         virtual ::com::sun::star::lang::Locale  GetLocale() const = 0;
 
-        virtual void        CellModified(long nRow, USHORT nColId ) = 0;
-        virtual void        SetModified(BOOL bModified)             = 0;
+        virtual void                            CellModified(long nRow, USHORT nColId ) = 0;
+        virtual void                            SetModified(BOOL bModified)             = 0;
 
-        virtual const OTypeInfo*    getTypeInfo(sal_Int32 _nPos)        = 0;
-        virtual const OTypeInfoMap* getTypeInfo() const  = 0;
+        virtual TOTypeInfoSP                    getTypeInfo(sal_Int32 _nPos)        = 0;
+        virtual const OTypeInfoMap*             getTypeInfo() const  = 0;
 
-        virtual sal_Bool isAutoIncrementValueEnabled() const = 0;
-        virtual ::rtl::OUString getAutoIncrementValue() const = 0;
+        virtual sal_Bool                        isAutoIncrementValueEnabled() const = 0;
+        virtual ::rtl::OUString                 getAutoIncrementValue() const = 0;
 
-        String  BoolStringPersistent(const String& rUIString) const;
-        String  BoolStringUI(const String& rPersistentString) const;
+        String                                  BoolStringPersistent(const String& rUIString) const;
+        String                                  BoolStringUI(const String& rPersistentString) const;
 
-        const OPropColumnEditCtrl* getColumnCtrl() const { return m_pColumnName; }
+        const OPropColumnEditCtrl*              getColumnCtrl() const { return m_pColumnName; }
 
     public:
         OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHelpBar);
@@ -237,6 +237,7 @@ namespace dbaui
         void                CheckScrollBars();
         sal_Bool            isCutAllowed();
         sal_Bool            isCopyAllowed();
+        sal_Bool            isPasteAllowed();
 
         void                cut();
         void                copy();

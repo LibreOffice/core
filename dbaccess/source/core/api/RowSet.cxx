@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-10 15:49:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,7 +682,8 @@ void ORowSet::freeResources()
         m_bNew          = sal_False;
         m_bModified     = sal_False;
         m_nRowCount     = 0;
-        m_aOldRow       = NULL;
+        if ( m_aOldRow.isValid() )
+            m_aOldRow->clearRow();
     }
 }
 
@@ -1051,7 +1052,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
             m_pCache->updateRow(m_aCurrentRow.operator ->());
             m_aBookmark     = m_pCache->getBookmark();
             m_aCurrentRow   = m_pCache->m_aMatrixIter;
-            m_aOldRow       = (*m_aCurrentRow);
+            m_aOldRow->setRow(*m_aCurrentRow);
 
             // notification order
             // - column values
@@ -1450,15 +1451,11 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
 
     ResettableMutexGuard aGuard( m_aMutex );
 
-    // create and fill a composer
-    Reference<XSQLQueryComposer>  xComposer = getCurrentSettingsComposer(this, m_xServiceManager);
-
-    // we have to set this here again because getCurrentSettingsComposer can force a setpropertyvalue
-
-    // OJ: why? When the ActiveConnection is set again, m_bOwnConnection should be true
-    //  m_bOwnConnection = sal_True;
     try
     {
+        // create and fill a composer
+        Reference<XSQLQueryComposer>  xComposer = getCurrentSettingsComposer(this, m_xServiceManager);
+
         freeResources();
 
         // calc the connection to be used
@@ -1594,6 +1591,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     m_pCache = new ORowSetCache(xRs,m_xComposer,m_xServiceManager,m_aParameterRow,aComposedTableName,m_bModified,m_bNew);
                     m_pCache->setMaxRowSize(m_nFetchSize);
                     m_aCurrentRow   = m_pCache->createIterator();
+                    m_aOldRow = m_pCache->registerOldRow();
                     // now we can clear the parameter row
                     m_aParameterRow.clear();
 
@@ -1896,7 +1894,7 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
                 notifyClonesRowDeleted(*pBegin);
                 if(compareBookmarks( m_aBookmark,*pBegin) == 0)
                 {
-                    m_aOldRow       = NULL;
+                    m_aOldRow->clearRow();
                     m_aCurrentRow   = m_pCache->getEnd();
                     m_aBookmark     = Any();
                     m_aCurrentRow.setBookmark(m_aBookmark);
@@ -2414,6 +2412,8 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex* _pMutex)
     m_aBookmark             = rParent.m_aBookmark;
     m_aCurrentRow           = m_pCache->createIterator();
     m_xNumberFormatTypes    = rParent.m_xNumberFormatTypes;
+
+    m_aOldRow = m_pCache->registerOldRow();
 
     ::vos::ORef< ::connectivity::OSQLColumns> aColumns = new ::connectivity::OSQLColumns();
     ::std::vector< ::rtl::OUString> aNames;

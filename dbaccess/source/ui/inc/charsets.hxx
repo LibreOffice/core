@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charsets.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 08:05:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _DBHELPER_DBCHARSET_HXX_
 #include <connectivity/dbcharset.hxx>
 #endif
+#ifndef _SVX_TXENCTAB_HXX
+#include <svx/txenctab.hxx>
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -83,10 +86,10 @@ namespace dbaui
     typedef ::dbtools::OCharsetMap OCharsetDisplay_Base;
     class OCharsetDisplay
             :protected OCharsetDisplay_Base
-            ,public Resource
+            ,protected SvxTextEncodingTable
     {
-    private:
-        StringVector    m_aDisplayNames;
+    protected:
+        ::rtl::OUString m_aSystemDisplayName;
 
     public:
         class ExtendedCharsetIterator;
@@ -98,13 +101,11 @@ namespace dbaui
         OCharsetDisplay();
 
         struct IANA     { };
-        struct Logical  { };
         struct Display  { };
 
         // various find operations
         const_iterator find(const rtl_TextEncoding _eEncoding) const;
         const_iterator find(const ::rtl::OUString& _rIanaName, const IANA&) const;
-        const_iterator find(const ::rtl::OUString& _rLogicalName, const Logical&) const;
         const_iterator find(const ::rtl::OUString& _rDisplayName, const Display&) const;
 
         /// get access to the first element of the charset collection
@@ -113,6 +114,9 @@ namespace dbaui
         const_iterator  end() const;
         // size of the map
         sal_Int32   size() const { return OCharsetDisplay_Base::size(); }
+
+    protected:
+        virtual sal_Bool approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const;
     };
 
     //-------------------------------------------------------------------------
@@ -130,7 +134,6 @@ namespace dbaui
 
         rtl_TextEncoding    getEncoding() const         { return CharsetDisplayDerefHelper_Base::getEncoding(); }
         ::rtl::OUString     getIanaName() const         { return CharsetDisplayDerefHelper_Base::getIanaName(); }
-        ::rtl::OUString     getName() const             { return CharsetDisplayDerefHelper_Base::getName(); }
         ::rtl::OUString     getDisplayName() const      { return m_sDisplayName; }
 
     protected:
@@ -154,7 +157,6 @@ namespace dbaui
     protected:
         const OCharsetDisplay*      m_pContainer;
         base_iterator               m_aPosition;
-        sal_Int32                   m_nPosition;    // redundant
 
     public:
         ExtendedCharsetIterator(const ExtendedCharsetIterator& _rSource);
@@ -172,7 +174,7 @@ namespace dbaui
         const ExtendedCharsetIterator   operator--(int) { ExtendedCharsetIterator hold(*this); --*this; return hold; }
 
     protected:
-        ExtendedCharsetIterator(const OCharsetDisplay* _pContainer, const base_iterator& _rPosition, const sal_Int32 _nPosition);
+        ExtendedCharsetIterator( const OCharsetDisplay* _pContainer, const base_iterator& _rPosition );
     };
 
 //.........................................................................
@@ -180,20 +182,4 @@ namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_CHARSETS_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2000/11/29 22:26:20  fs
- *  #80003# re-implemented, now base on dbtools::OCharsetMap
- *
- *  Revision 1.2  2000/10/11 11:31:54  fs
- *  replace unotools with comphelper
- *
- *  Revision 1.1  2000/10/05 10:07:57  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 26.09.00 12:16:37  fs
- ************************************************************************/
 

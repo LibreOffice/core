@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldControl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-26 10:49:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,10 +86,10 @@ namespace dbaui
 
         virtual ::com::sun::star::lang::Locale  GetLocale() const;
 
-        virtual const OTypeInfo*    getTypeInfo(sal_Int32 _nPos);
-        virtual const OTypeInfoMap* getTypeInfo() const;
-        virtual sal_Bool isAutoIncrementValueEnabled() const;
-        virtual ::rtl::OUString getAutoIncrementValue() const;
+        virtual TOTypeInfoSP                    getTypeInfo(sal_Int32 _nPos);
+        virtual const OTypeInfoMap*             getTypeInfo() const;
+        virtual sal_Bool                        isAutoIncrementValueEnabled() const;
+        virtual ::rtl::OUString                 getAutoIncrementValue() const;
 
     public:
         OTableFieldControl( Window* pParent, OTableDesignHelpBar* pHelpBar);

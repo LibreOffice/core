@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: warnings.hxx,v $
+ *  $RCSfile: IClipBoardTest.hxx,v $
  *
  *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -37,18 +37,18 @@
  *  Sun Industry Standards Source License Version 1.1
  *  =================================================
  *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
+ *  Source License Version 1.1 (the License); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
  *  License at http://www.openoffice.org/license.html.
  *
- *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
  *  Copyright: 2000 by Sun Microsystems, Inc.
  *
@@ -58,34 +58,23 @@
  *
  *
  ************************************************************************/
+#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
+#define DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
 
-#ifndef DBA_CORE_WARNINGS_HXX
-#define DBA_CORE_WARNINGS_HXX
-
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
-#include <com/sun/star/sdb/SQLContext.hpp>
-#endif
-
-//.........................................................................
-namespace dbaccess
+namespace dbaui
 {
-//.........................................................................
-
-    //=====================================================================
-    //= IWarningsContainer
-    //=====================================================================
-    class SAL_NO_VTABLE IWarningsContainer
+    class SAL_NO_VTABLE IClipboardTest
     {
     public:
-        virtual void appendWarning(const ::com::sun::star::sdbc::SQLException& _rWarning) = 0;
-        virtual void appendWarning(const ::com::sun::star::sdbc::SQLWarning& _rWarning) = 0;
-        virtual void appendWarning(const ::com::sun::star::sdb::SQLContext& _rContext) = 0;
+        virtual sal_Bool isCutAllowed()         = 0;
+        virtual sal_Bool isCopyAllowed()        = 0;
+        virtual sal_Bool isPasteAllowed()       = 0;
+
+        virtual sal_Bool hasChildPathFocus()    = 0;
+
+        virtual void copy()     = 0;
+        virtual void cut()      = 0;
+        virtual void paste()    = 0;
     };
-
-
-//.........................................................................
-}   // namespace dbaccess
-//.........................................................................
-
-#endif // DBA_CORE_WARNINGS_HXX
-
+}
+#endif // DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-09 07:43:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,26 +141,4 @@ namespace dbaui
 //......................................................................
 
 #endif // _DBAUI_INDEXFIELDSCONTROL_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.5  2002/03/19 07:21:30  oj
- *  #97274# disable traveling with tab to allow control change
- *
- *  Revision 1.4  2001/06/29 08:35:25  fs
- *  #86721# DbBrowseBox replaced by svt::EditBrowseBox
- *
- *  Revision 1.3  2001/05/02 11:47:20  fs
- *  #86464# +IsModified
- *
- *  Revision 1.2  2001/03/30 14:10:22  oj
- *  #85298##85297# correct index impl
- *
- *  Revision 1.1  2001/03/16 16:22:00  fs
- *  initial checkin - index design related classes
- *
- *
- *  Revision 1.0 07.03.01 14:21:34  fs
- ************************************************************************/
 

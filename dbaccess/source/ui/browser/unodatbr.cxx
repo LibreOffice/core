@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-26 11:57:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3245,10 +3245,16 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
     {
         // the parameters:
         Sequence< Any > aArgs(2);
+
+        Reference< ::com::sun::star::awt::XWindow> xWindow = getTopMostContainerWindow();
+        if ( !xWindow.is() )
+            xWindow = VCLUnoHelper::GetInterface(m_pTreeView->getListBox()->Window::GetParent());
         // the parent window
-        aArgs[0] <<= PropertyValue(
-            ::rtl::OUString::createFromAscii("ParentWindow"), 0,
-            makeAny(VCLUnoHelper::GetInterface(m_pTreeView->getListBox()->Window::GetParent())), PropertyState_DIRECT_VALUE);
+        aArgs[0] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")),
+                                    0,
+                                    makeAny(xWindow),
+                                    PropertyState_DIRECT_VALUE);
+
         // the initial selection
         SvLBoxEntry* pTopLevelSelected = _pApplyTo;
         while (pTopLevelSelected && m_pTreeView->getListBox()->GetParent(pTopLevelSelected))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-05 14:10:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ namespace dbaccess
 
         ::com::sun::star::uno::Any              m_aBookmark;
         ORowSetCacheIterator                    m_aCurrentRow;      // contains the actual fetched row
-        ORowSetRow                              m_aOldRow;
+        TORowSetOldRowHelperRef                 m_aOldRow;
         TDataColumns                            m_aDataColumns;     // holds the columns as m_pColumns but know the implementation class
         connectivity::ORowSetValue              m_aEmptyValue;      // only for error case
 
@@ -229,6 +229,7 @@ namespace dbaccess
         // m_aOldRow to NULL
         void movementFailed();
 
+        ORowSetRow getOldRow(sal_Bool _bWasNew);
         /** move the cache the postion defined by the member functor
             @param  _aCheckFunctor
                 Return <TRUE/> when we already stand on the row we want to.

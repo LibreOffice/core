@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:40:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,47 +601,4 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.12  2002/04/29 14:27:24  oj
- *  #98772# new images
- *
- *  Revision 1.11  2001/07/17 07:30:50  oj
- *  #89533# GetMainURL changed
- *
- *  Revision 1.10  2001/06/21 15:07:11  fme
- *  Fix #86988#: Redesign of dialogs
- *
- *  Revision 1.9  2001/06/12 15:42:44  fs
- *  #88079# catch the property exceptions
- *
- *  Revision 1.8  2001/05/29 06:44:52  fs
- *  #87037# Init: don't cut the extension from the index URLs
- *
- *  Revision 1.7  2001/05/16 10:02:38  fs
- *  #87037# Config requires system notation / correct loop ranges / Init: RemoveFreeIndex after doing the complete loop
- *
- *  Revision 1.6  2001/05/14 13:25:31  fs
- *  #86942# +checkButtons / OnListEntrySelected
- *
- *  Revision 1.5  2001/04/04 10:38:43  oj
- *  reading uninitialized memory
- *
- *  Revision 1.4  2001/03/07 16:44:40  fs
- *  added a parameter to implRemoveIndex controlling the assertion / correct collecting the indexes in Init
- *
- *  Revision 1.3  2000/12/14 15:43:32  oj
- *  use ucb instead of DirEntry
- *
- *  Revision 1.2  2000/11/09 12:55:31  fs
- *  no usage of the SfxIniManager anymore - MUST change
- *
- *  Revision 1.1  2000/10/05 10:05:22  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 26.09.00 15:54:26  fs
- ************************************************************************/
 

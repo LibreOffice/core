@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableUndo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:19:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ OTableEditorUndoAct::~OTableEditorUndoAct()
 // class OTableEditorTypeSelUndoAct
 //==============================================================================
 DBG_NAME(OTableEditorTypeSelUndoAct);
-OTableEditorTypeSelUndoAct::OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, USHORT nColumn, const OTypeInfo* _pOldType ) :
+OTableEditorTypeSelUndoAct::OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, USHORT nColumn, const TOTypeInfoSP& _pOldType ) :
      OTableEditorUndoAct( pOwner ,STR_TABED_UNDO_TYPE_CHANGED)
     ,m_nRow( nRowID )
     ,m_nCol( nColumn )
@@ -239,7 +239,7 @@ void OTableEditorTypeSelUndoAct::Undo()
     if(pFieldDesc)
         m_pNewType = pFieldDesc->getTypeInfo();
     else
-        m_pNewType = NULL;
+        m_pNewType = TOTypeInfoSP();
     pTabEdCtrl->SetData(m_nRow,m_nCol,m_pOldType);
     pTabEdCtrl->SwitchType( m_pOldType );
 

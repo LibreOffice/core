@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-10 09:17:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,16 @@
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
+#include <com/sun/star/sdbc/SQLWarning.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
+#include <com/sun/star/sdb/SQLContext.hpp>
+#endif
+
 
 #define CONTAINER_ENTRY_NOTFOUND    ((ULONG)0xFFFFFFFF)
 
@@ -285,7 +295,7 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
             sal_Int16 nType = xRow->getShort(2);
             if( nType == DataType::VARCHAR)
             {
-                m_pTypeInfo                 = new OTypeInfo();
+                m_pTypeInfo                 = TOTypeInfoSP(new OTypeInfo());
                 m_pTypeInfo->aTypeName      = sTypeName;
                 m_pTypeInfo->nType          = nType;
                 m_pTypeInfo->nPrecision     = xRow->getInt (3);
@@ -311,7 +321,6 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
 //---------------------------------------------------------------------------
 ODatabaseExport::~ODatabaseExport()
 {
-    delete m_pTypeInfo;
     DBG_DTOR(ODatabaseExport,NULL);
 }
 //------------------------------------------------------------------------------
@@ -669,49 +678,72 @@ sal_Bool ODatabaseExport::createRowSet()
 sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _sTableName,const Any& _aTextColor,const FontDescriptor& _rFont)
 {
     sal_Bool bError = sal_False;
-    OCopyTableWizard aWizard(NULL,_sTableName,m_aDestColumns,m_vDestVector,m_xConnection,m_xFormatter,m_xFactory);
-
-    OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, sal_False,OCopyTableWizard::WIZARD_DEF_DATA);
-    OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
-    OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
-    OWizTypeSelect*     pPage4 = createPage(&aWizard);
-
-    aWizard.AddWizardPage(pPage1);
-    aWizard.AddWizardPage(pPage2);
-    aWizard.AddWizardPage(pPage3);
-    aWizard.AddWizardPage(pPage4);
-
-    aWizard.ActivatePage();
-
-    if (aWizard.Execute())
+    try
     {
-        switch(aWizard.getCreateStyle())
-        {
-            case OCopyTableWizard::WIZARD_DEF_DATA:
-            case OCopyTableWizard::WIZARD_APPEND_DATA:
-                {
-                    m_xTable = aWizard.createTable();
-                    bError = !m_xTable.is();
-                    if(m_xTable.is())
-                    {
-                        m_xTable->setPropertyValue(PROPERTY_FONT,makeAny(_rFont));
-                        if(_aTextColor.hasValue())
-                            m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,_aTextColor);
-                    }
-                    m_bIsAutoIncrement  = aWizard.isAutoincrementEnabled();
-                    m_vColumns          = aWizard.GetColumnPositions();
-                    m_vColumnTypes      = aWizard.GetColumnTypes();
-                }
-                break;
-            default:
-                bError = sal_True; // there is no error but I have nothing more to do
-        }
-    }
-    else
-        bError = sal_True;
+        OCopyTableWizard aWizard(NULL,_sTableName,m_aDestColumns,m_vDestVector,m_xConnection,m_xFormatter,m_xFactory);
+        aWizard.fillTypeInfo();
 
-    if(!bError)
-        bError = !createRowSet();
+        OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, sal_False,OCopyTableWizard::WIZARD_DEF_DATA);
+        OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
+        OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
+        OWizTypeSelect*     pPage4 = createPage(&aWizard);
+
+        aWizard.AddWizardPage(pPage1);
+        aWizard.AddWizardPage(pPage2);
+        aWizard.AddWizardPage(pPage3);
+        aWizard.AddWizardPage(pPage4);
+
+        aWizard.ActivatePage();
+
+        if (aWizard.Execute())
+        {
+            switch(aWizard.getCreateStyle())
+            {
+                case OCopyTableWizard::WIZARD_DEF_DATA:
+                case OCopyTableWizard::WIZARD_APPEND_DATA:
+                    {
+                        m_xTable = aWizard.createTable();
+                        bError = !m_xTable.is();
+                        if(m_xTable.is())
+                        {
+                            m_xTable->setPropertyValue(PROPERTY_FONT,makeAny(_rFont));
+                            if(_aTextColor.hasValue())
+                                m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,_aTextColor);
+                        }
+                        m_bIsAutoIncrement  = aWizard.isAutoincrementEnabled();
+                        m_vColumns          = aWizard.GetColumnPositions();
+                        m_vColumnTypes      = aWizard.GetColumnTypes();
+                    }
+                    break;
+                default:
+                    bError = sal_True; // there is no error but I have nothing more to do
+            }
+        }
+        else
+            bError = sal_True;
+
+        if(!bError)
+            bError = !createRowSet();
+    }
+    catch(SQLContext& e)
+    {
+        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),NULL,m_xFactory);
+        bError = sal_True;
+    }
+    catch(SQLWarning& e)
+    {
+        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),NULL,m_xFactory);
+        bError = sal_True;
+    }
+    catch(SQLException& e)
+    {
+        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),NULL,m_xFactory);
+        bError = sal_True;
+    }
+    catch(Exception& )
+    {
+        OSL_ENSURE(sal_False, "ODatabaseExport::executeWizard: caught a generic exception!");
+    }
 
     return bError;
 }

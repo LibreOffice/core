@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-10 13:03:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,12 +228,14 @@ void SAL_CALL ORowSetBase::disposing(void)
 {
     MutexGuard aGuard(*m_pMutex);
 
-    if(m_pColumns)
+    if ( m_pColumns )
     {
         TDataColumns().swap(m_aDataColumns);
         m_pColumns->disposing();
     }
-    m_pCache            = NULL;
+    if ( m_pCache )
+        m_pCache->deregisterOldRow(m_aOldRow);
+    m_pCache = NULL;
 }
 // -------------------------------------------------------------------------
 // comphelper::OPropertyArrayUsageHelper
@@ -263,7 +265,7 @@ const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
-    OSL_ENSURE(!(m_bBeforeFirst || m_bAfterLast),"Illegal call here!");
+    OSL_ENSURE(!(m_bBeforeFirst || m_bAfterLast),"ORowSetBase::getValue: Illegal call here (we're before first or after last)!");
 
     if ( m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd() && !m_aCurrentRow.isNull() && m_aCurrentRow->isValid() )
     {
@@ -462,9 +464,7 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
         ORowSetNotifier aNotifier( this );
             // this will call cancelRowModification on the cache if necessary
 
-        ORowSetRow aOldValues;
-        if(!bWasNew && m_aOldRow.isValid())
-            aOldValues = new ORowSetValueVector( m_aOldRow.getBody());   // remember the old values
+        ORowSetRow aOldValues = getOldRow(bWasNew);
 
         bRet = m_pCache->moveToBookmark(bookmark);
         if(bRet)
@@ -505,9 +505,7 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
         ORowSetNotifier aNotifier( this );
             // this will call cancelRowModification on the cache if necessary
 
-        ORowSetRow aOldValues;
-        if(!bWasNew && m_aOldRow.isValid())
-            aOldValues = new ORowSetValueVector( m_aOldRow.getBody());   // remember the old values
+        ORowSetRow aOldValues = getOldRow(bWasNew);
 
         bRet = m_pCache->moveRelativeToBookmark(bookmark,rows);
         if(bRet)
@@ -609,15 +607,13 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
         ORowSetNotifier aNotifier( this );
             // this will call cancelRowModification on the cache if necessary
 
-        ORowSetRow aOldValues;
-        if(!bWasNew && m_aOldRow.isValid())
-            aOldValues = new ORowSetValueVector( m_aOldRow.getBody());   // remember the old values
+        ORowSetRow aOldValues = getOldRow(bWasNew);
 
         if ( m_aBookmark.hasValue() ) // #104474# OJ
             positionCache();
         bRet = m_pCache->next();
 
-        if(bRet || (!m_bBeforeFirst && !m_bAfterLast))
+        if ( bRet )
         {
             // notification order
             // - column values
@@ -716,9 +712,7 @@ void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
         ORowSetNotifier aNotifier( this );
             // this will call cancelRowModification on the cache if necessary
 
-        ORowSetRow aOldValues;
-        if(!bWasNew && m_aOldRow.isValid())
-            aOldValues = new ORowSetValueVector( m_aOldRow.getBody());   // remember the old values
+        ORowSetRow aOldValues = getOldRow(bWasNew);
 
         if(!m_bBeforeFirst)
         {
@@ -741,7 +735,7 @@ void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
         aNotifier.fire();
 
         // to be done _after_ the notifications!
-        m_aOldRow       = NULL;
+        m_aOldRow->clearRow();
     }
 }
 // -------------------------------------------------------------------------
@@ -762,9 +756,7 @@ void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException)
 
         if(!m_bAfterLast)
         {
-            ORowSetRow aOldValues;
-            if(!bWasNew && m_aOldRow.isValid())
-                aOldValues = new ORowSetValueVector( m_aOldRow.getBody());   // remember the old values
+            ORowSetRow aOldValues = getOldRow(bWasNew);
 
             m_pCache->afterLast();
 
@@ -799,9 +791,7 @@ sal_Bool SAL_CALL ORowSetBase::move(    ::std::mem_fun_t<sal_Bool,ORowSetBase>& 
         ORowSetNotifier aNotifier( this );
             // this will call cancelRowModification on the cache if necessary
 
-        ORowSetRow aOldValues;
-        if(!bWasNew && m_aOldRow.isValid())
-            aOldValues = new ORowSetValueVector( m_aOldRow.getBody());   // remember the old values
+        ORowSetRow aOldValues = getOldRow(bWasNew);
 
         sal_Bool bMoved = ( bWasNew || !_aCheckFunctor(this) );
 
@@ -891,9 +881,7 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
         ORowSetNotifier aNotifier( this );
             // this will call cancelRowModification on the cache if necessary
 
-        ORowSetRow aOldValues;
-        if(!bWasNew && m_aOldRow.isValid())
-            aOldValues = new ORowSetValueVector( m_aOldRow.getBody());   // remember the old values
+        ORowSetRow aOldValues = getOldRow(bWasNew);
 
         bRet = m_pCache->absolute(row);
 
@@ -941,9 +929,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
         ORowSetNotifier aNotifier( this );
             // this will call cancelRowModification on the cache if necessary
 
-        ORowSetRow aOldValues;
-        if(!bWasNew && m_aOldRow.isValid())
-            aOldValues = new ORowSetValueVector( m_aOldRow.getBody());   // remember the old values
+        ORowSetRow aOldValues = getOldRow(bWasNew);
 
         if ( m_aBookmark.hasValue() ) // #104474# OJ
             positionCache();
@@ -988,9 +974,7 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
         ORowSetNotifier aNotifier( this );
             // this will call cancelRowModification on the cache if necessary
 
-        ORowSetRow aOldValues;
-        if(!bWasNew && m_aOldRow.isValid())
-            aOldValues = new ORowSetValueVector( m_aOldRow.getBody());   // remember the old values
+        ORowSetRow aOldValues = getOldRow(bWasNew);
 
         if ( m_aBookmark.hasValue() ) // #104474# OJ
             positionCache();
@@ -1038,7 +1022,7 @@ void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetRow& _rOldValues,:
     }
     else
     {
-        m_aOldRow       = NULL;
+        m_aOldRow->clearRow();
         m_aCurrentRow   = m_pCache->getEnd();
         m_aBookmark     = Any();
         m_aCurrentRow.setBookmark(m_aBookmark);
@@ -1062,7 +1046,7 @@ void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetRow& _rOldValues,:
 
     // TODO: can this be done before the notifications?
     if(!(m_bBeforeFirst || m_bAfterLast) && !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd())
-        m_aOldRow       = (*m_aCurrentRow);
+        m_aOldRow->setRow(*m_aCurrentRow);
 
     if ( _bMoved )
         // - cursorMoved
@@ -1196,7 +1180,7 @@ void ORowSetBase::checkCache()
 // -----------------------------------------------------------------------------
 void ORowSetBase::movementFailed()
 {
-    m_aOldRow       = NULL;
+    m_aOldRow->clearRow();
     m_aCurrentRow   = m_pCache->getEnd();
     m_bBeforeFirst  = m_pCache->isBeforeFirst();
     m_bAfterLast    = m_pCache->isAfterLast();
@@ -1205,7 +1189,14 @@ void ORowSetBase::movementFailed()
     OSL_ENSURE(m_bBeforeFirst || m_bAfterLast,"BeforeFirst or AfterLast is wrong!");
 }
 // -----------------------------------------------------------------------------
-
+ORowSetRow ORowSetBase::getOldRow(sal_Bool _bWasNew)
+{
+    OSL_ENSURE(m_aOldRow.isValid(),"RowSetRowHElper isn't valid!");
+    ORowSetRow aOldValues;
+    if ( !_bWasNew && m_aOldRow->getRow().isValid() )
+        aOldValues = new ORowSetValueVector( m_aOldRow->getRow().getBody());     // remember the old values
+    return aOldValues;
+}
 // =============================================================================
 // -----------------------------------------------------------------------------
 ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )

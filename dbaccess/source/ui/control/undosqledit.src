@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undosqledit.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2002-09-05 10:52:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ String STR_QUERY_UNDO_MODIFYSQLEDIT
     Text = "SQL modifizieren" ;
     Text [ ENGLISH ] = "Modify SQL" ;
     Text [ english_us ] = "Modify SQL statement(s)" ;
-    Text [ portuguese_brazilian ] = "SQL modifizieren" ;
+    Text [ portuguese_brazilian ] = "Modificar as instruções SQL" ;
     Text [ swedish ] = "Modifiera SQL" ;
     Text [ danish ] = "Modificer SQL" ;
     Text [ italian ] = "Modifica SQL" ;
@@ -77,21 +77,27 @@ String STR_QUERY_UNDO_MODIFYSQLEDIT
     Text [ dutch ] = "SQL modificeren" ;
     Text [ portuguese ] = "Modificar SQL" ;
     Text[ chinese_simplified ] = "ä¿®æ”¹ SQL";
-    Text[ russian ] = "Èçìåíèòü SQL";
+    Text[ russian ] = "Èçìåíèòü èíñòğóêöèè SQL";
     Text[ polish ] = "Modyfikuj SQL";
     Text[ japanese ] = "SQL ã®å¤‰æ›´";
     Text[ chinese_traditional ] = "ä¿®æ”¹ SQL";
     Text[ dutch ] = "SQL modificeren";
     Text[ chinese_simplified ] = "ä¿®æ”¹ SQL";
     Text[ greek ] = "Ôñïğïğïßçóç ôïõ SQL";
-    Text[ korean ] = "SQL ìˆ˜ì •";
+    Text[ korean ] = "SQL ë³€ê²½";
     Text[ arabic ] = "SQL ÊÚÏíá";
     Text[ turkish ] = "SQL deyimini değiştir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modifica les expressions SQL";
-    Text[ finnish ] = "Muokkaa SQL-lauseketta tai -lausekkeita ";
+    Text[ finnish ] = "Muuta SQL-lausetta tai -lauseita";
     Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¸›à¸£à¸°à¹‚à¸¢à¸„ SQL ";
 };
+
+
+
+
+
+
 
 
 

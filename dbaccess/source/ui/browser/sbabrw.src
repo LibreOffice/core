@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:32:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,7 +397,7 @@ QueryBox QUERY_BRW_SAVEMODIFIED
     Message[ dutch ] = "De huidige record is gewijzigd.\nWilt u de wijzigingen opslaan?";
     Message[ chinese_simplified ] = "数据条目已经被更改。\n您要存盘更改后的数据记录吗？";
     Message[ greek ] = "� �������� ������� �������������.\n�� ������������ �� �������;";
-    Message[ korean ] = "현재의  데이터 레코드가 변경되었습니다.\n 변경 사항을 저장하겠습니까?";
+    Message[ korean ] = "현재 데이터 레코드가 변경되었습니다.\n 변경 내용을 저장하시겠습니까?";
     Message[ turkish ] = "G�ncel veri k�mesi de�i�tirildi.\nDe�i�iklikler saklans�n m�?";
     Message[ language_user1 ] = " ";
     Message[ finnish ] = "Nykyist� tietuetta on muutettu.\nHaluatko tallentaa muutokset?";
@@ -417,7 +417,7 @@ QueryBox QUERY_BRW_DELETE_ROWS
     Message [ swedish ] = "Skall de markerade data raderas?" ;
     Message [ danish ] = "Skal de markerede data slettes?" ;
     Message [ italian ] = "Eliminare i dati selezionati?" ;
-    Message [ spanish ] = "�Desea eliminar los datos seleccionados?" ;
+    Message [ spanish ] = "�Desea borrar los datos seleccionados?" ;
     Message [ french ] = "Voulez-vous supprimer les donn�es s�lectionn�es ?" ;
     Message [ dutch ] = "Wilt u de geselecteerde gegevens verwijderen?" ;
     Message[ chinese_simplified ] = "您要删除选中的数据吗？";
@@ -427,7 +427,7 @@ QueryBox QUERY_BRW_DELETE_ROWS
     Message[ chinese_traditional ] = "您要刪除選中的資料﹖";
     Message[ arabic ] = "�� ���� ��� �������� ������ɿ";
     Message[ greek ] = "������ �� ���������� �� ���������� ��������;";
-    Message[ korean ] = "선택된 데이터를 삭제하겠습니까?";
+    Message[ korean ] = "선택한 데이터를 삭제하시겠습니까?";
     Message[ turkish ] = "Se�ilen veriler silinsin mi?";
     Message[ language_user1 ] = " ";
     Message[ finnish ] = "Haluatko poistaa valitut tiedot?";
@@ -482,7 +482,7 @@ String SBA_BROWSER_SETTING_ORDER
     Text[ polish ] = "B��d podczas osadzania kryteri�w sortowania";
     Text[ portuguese_brazilian ] = "error setting the sort criteria";
     Text[ japanese ] = "並べ替え条件の設定時のエラー";
-    Text[ korean ] = "정렬 기준 설정시에 오류";
+    Text[ korean ] = "정렬 기준 설정 중 오류";
     Text[ chinese_simplified ] = "在设定排序条件时发生错误";
     Text[ chinese_traditional ] = "設定編排條件時發生一個錯誤";
     Text[ arabic ] = "��� ��� ����� ����� ������ �����";
@@ -508,7 +508,7 @@ String SBA_BROWSER_SETTING_FILTER
     Text[ polish ] = "B��d podczas osadzania kryteri�w filtra";
     Text[ portuguese_brazilian ] = "error setting the filter criteria";
     Text[ japanese ] = "フィルタ条件の設定時のエラー";
-    Text[ korean ] = "필터 기준 설정시에 오류";
+    Text[ korean ] = "필터 기준 설정 중 오류";
     Text[ chinese_simplified ] = "在设定筛选条件时发生错误";
     Text[ chinese_traditional ] = "設定篩選條件時發生一個錯誤";
     Text[ arabic ] = "��� ��� ����� ����� ������ �������";
@@ -610,7 +610,7 @@ String RID_STR_QUERIES_CONTAINER
     Text[ polish ] = "Kwerendy";
     Text[ portuguese_brazilian ] = "Queries";
     Text[ japanese ] = "クエリー";
-    Text[ korean ] = "질의";
+    Text[ korean ] = "쿼리";
     Text[ chinese_simplified ] = "查询";
     Text[ chinese_traditional ] = "查詢";
     Text[ turkish ] = "Queries";
@@ -637,7 +637,7 @@ String RID_STR_TABLES_CONTAINER
     Text[ polish ] = "Tabele";
     Text[ portuguese_brazilian ] = "Tables";
     Text[ japanese ] = "テーブル";
-    Text[ korean ] = "표";
+    Text[ korean ] = "테이블";
     Text[ chinese_simplified ] = "表格";
     Text[ chinese_traditional ] = "表格";
     Text[ turkish ] = "Tables";
@@ -692,7 +692,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ polish ] = "~Administracja �r�de� danych..."; \
     Text[ portuguese_brazilian ] = "administrate ~data sources ...";    \
     Text[ japanese ] = "データソースの管理(~D)...";    \
-    Text[ korean ] = "데이터 소스 관리(~D)...";  \
+    Text[ korean ] = "데이터 원본 관리(~D)...";  \
     Text[ chinese_simplified ] = "管理数据源(~D)...";  \
     Text[ chinese_traditional ] = "管理資料源(~D)..."; \
     Text[ turkish ] = "administrate ~data sources ..."; \
@@ -740,14 +740,14 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ greek ] = "�������� �������~�";   \
     Text[ dutch ] = "~Verbinding verbreken";    \
     Text[ french ] = "D�~connecter";    \
-    Text[ spanish ] = "Cerrar cone~xi�n";   \
+    Text[ spanish ] = "D~esconectar";   \
     Text[ italian ] = "C~hiudi collegamento";   \
     Text[ danish ] = "A~fbryd forbindelse"; \
     Text[ swedish ] = "St�n~g f�rbindelse"; \
     Text[ polish ] = "~Roz��cz";    \
     Text[ portuguese_brazilian ] = "~close connection"; \
     Text[ japanese ] = "接続を切断する(~N)"; \
-    Text[ korean ] = "연결 종료(~N)";   \
+    Text[ korean ] = "연결 끊기(~N)";   \
     Text[ chinese_simplified ] = "结束连接(~N)";    \
     Text[ chinese_traditional ] = "結束連線(~N)";   \
     Text[ turkish ] = "~close connection";  \
@@ -775,7 +775,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ polish ] = "~Odtw�rz po��czenie"; \
     Text[ portuguese_brazilian ] = "~refresh connection";   \
     Text[ japanese ] = "接続を更新(~R)";   \
-    Text[ korean ] = "새로 연결(~R)";   \
+    Text[ korean ] = "연결 새로 고침(~R)";    \
     Text[ chinese_simplified ] = "重新连接(~R)";    \
     Text[ chinese_traditional ] = "重新連線(~R)";   \
     Text[ turkish ] = "~refresh connection";    \
@@ -921,7 +921,7 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text [ english ] = "relatio~n design" ;
             Text [ english_us ] = "Rel~ation Design" ;
             Text[ portuguese ] = "Es~bo�ar rela��o";
-            Text[ russian ] = "������ ������";
+            Text[ russian ] = "�������������� ������";
             Text[ greek ] = "�������~��� ������";
             Text[ dutch ] = "Relatie-~ontwerp";
             Text[ french ] = "�bauche de relatio~n";
@@ -932,7 +932,7 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text[ polish ] = "~Projekt relacji";
             Text[ portuguese_brazilian ] = "relatio~n design";
             Text[ japanese ] = "リレーションデザイン(~A)";
-            Text[ korean ] = "디자인 관계(~A)";
+            Text[ korean ] = "관계 디자인(~A)";
             Text[ chinese_simplified ] = "关联设计(~A)";
             Text[ chinese_traditional ] = "關聯設計(~A)";
             Text[ turkish ] = "relatio~n design";
@@ -985,7 +985,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
             Text [ english ] = "relatio~n design" ;
             Text [ english_us ] = "Rel~ation Design" ;
             Text[ portuguese ] = "Es~bo�ar rela��o";
-            Text[ russian ] = "������ ������";
+            Text[ russian ] = "�������������� ������";
             Text[ greek ] = "�������~��� ������";
             Text[ dutch ] = "~Relatie-ontwerp";
             Text[ french ] = "�bauche de relatio~n";
@@ -996,7 +996,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
             Text[ polish ] = "~Projekt relacji";
             Text[ portuguese_brazilian ] = "relatio~n design";
             Text[ japanese ] = "リレーションデザイン(~A)";
-            Text[ korean ] = "디자인 관계 생성(~A)";
+            Text[ korean ] = "관계 디자인(~A)";
             Text[ chinese_simplified ] = "关联设计(~A)";
             Text[ chinese_traditional ] = "關聯設計(~A)";
             Text[ turkish ] = "relatio~n design";
@@ -1041,7 +1041,7 @@ String STR_TITLE_CONFIRM_DELETION
     Text[ greek ] = "����������� ���������";
     Text[ dutch ] = "Wissen bevestigen";
     Text[ french ] = "Confirmation de suppression";
-    Text[ spanish ] = "Confirmar eliminaci�n";
+    Text[ spanish ] = "Confirma 'borrar'";
     Text[ italian ] = "Conferma 'Elimina'";
     Text[ danish ] = "Bekr�ft sletning";
     Text[ swedish ] = "Bekr�fta radering";
@@ -1068,14 +1068,14 @@ String STR_QUERY_DELETE_QUERY
     Text[ greek ] = "������ �� ��������� �� ������� '$name$';";
     Text[ dutch ] = "Wilt u query '$naam$' wissen?";
     Text[ french ] = "Voulez-vous supprimer la requ�te '$name$' ?";
-    Text[ spanish ] = "�Desea eliminar la consulta '$name$'?";
+    Text[ spanish ] = "�Desea borrar la consulta '$name$'?";
     Text[ italian ] = "Volete eliminare la ricerca '$name$'?";
     Text[ danish ] = "Skal foresp�rgslen '$name$' slettes?";
     Text[ swedish ] = "Ska s�kningen '$name$' raderas?";
     Text[ polish ] = "Usun�� kwerend�'$name$'?";
     Text[ portuguese_brazilian ] = "Do you want to delete the query '%1'?";
     Text[ japanese ] = "クエリー '%1' を削除しますか。";
-    Text[ korean ] = "질의 '$name$'을(를) 삭제하겠습니까?";
+    Text[ korean ] = "쿼리 '$name$'을(를) 삭제하시겠습니까?";
     Text[ chinese_simplified ] = "要删除这个查询 '$name$' ?";
     Text[ chinese_traditional ] = "要刪除這個查詢<$name$>?";
     Text[ turkish ] = "Do you want to delete the query '%1'?";
@@ -1095,14 +1095,14 @@ String STR_QUERY_DELETE_TABLE
     Text[ greek ] = "������ �� ��������� � ������� '%1';";
     Text[ dutch ] = "Wilt u tabel '%1' wissen?";
     Text[ french ] = "Voulez-vous supprimer la table '%1' ?";
-    Text[ spanish ] = "�Desea eliminar la tabla '%1'?";
+    Text[ spanish ] = "�Desea borrar la tabla '%1'?";
     Text[ italian ] = "Volete eliminare la tabella '%1'?";
     Text[ danish ] = "Skal tabellen '%1' slettes?";
     Text[ swedish ] = "Ska tabellen '%1' raderas?";
     Text[ polish ] = "Usun�� tabel�'%1'?";
     Text[ portuguese_brazilian ] = "Do you want to delete the table '%1'?";
     Text[ japanese ] = "テーブル '%1' を削除しますか。";
-    Text[ korean ] = "시트 '%1'을(를) 삭제하겠습니까?";
+    Text[ korean ] = "테이블 '%1'을(를) 삭제하시겠습니까?";
     Text[ chinese_simplified ] = "要删除这个表格 '%1'?";
     Text[ chinese_traditional ] = "要刪除表格<%1>?";
     Text[ turkish ] = "Do you want to delete the table '%1'?";
@@ -1123,14 +1123,14 @@ QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
     Message[ greek ] = "�� ������� ������� ���. ������ �� ���������;";
     Message[ dutch ] = "De query bestaat reeds. Wilt u deze wissen?";
     Message[ french ] = "La requ�te existe d�j�. Voulez-vous la supprimer ?";
-    Message[ spanish ] = "Ya existe la consulta. �Desea eliminarla?";
+    Message[ spanish ] = "La consulta ya existe. �Desea borrarla?";
     Message[ italian ] = "La ricerca esiste gi�. Volete eliminarla?";
     Message[ danish ] = "Foresp�rgslen findes allerede. Skal den slettes?";
     Message[ swedish ] = "S�kningen finns redan. Ska den raderas?";
     Message[ polish ] = "Kwerenda ju� istnieje. Usun�� j�?";
     Message[ portuguese_brazilian ] = "The query already exists. Do you want to delete the query?";
     Message[ japanese ] = "クエリーはすでにあります。クエリーを削除しますか。";
-    Message[ korean ] = "이 질의가 이미 존재합니다. 삭제하겠습니까?";
+    Message[ korean ] = "이 쿼리는 이미 있습니다. 삭제하시겠습니까?";
     Message[ chinese_simplified ] = "这个查询已经存在。要删除它？";
     Message[ chinese_traditional ] = "這個查詢已經存在。要刪除它？";
     Message[ turkish ] = "The query already exists. Do you want to delete the query?";
@@ -1151,14 +1151,14 @@ QueryBox QUERY_CONNECTION_LOST
     Message[ greek ] = "� ������� �� �� ���� ��������� ������. ������ �� ���������������;";
     Message[ dutch ] = "De verbinding naar de database is opgeheven! Wilt u deze weer tot stand brengen?";
     Message[ french ] = "La connexion � la base de donn�es a �t� annul�e ! R�tablir la connexion ?";
-    Message[ spanish ] = "�Se elimin� la conexi�n a la base de datos! �Desea restablecerla?";
+    Message[ spanish ] = "�Se suspendi� la conexi�n a la base de datos! �Desea restablecerla?";
     Message[ italian ] = "Il collegamento al database � stato terminato. Volete ristabilirlo?";
     Message[ danish ] = "Forbindelsen til databasen blev slettet! Skal den genoprettes?";
     Message[ swedish ] = "F�rbindelsen till databasen har raderats! Ska den uppr�ttas igen?";
     Message[ polish ] = "Po��czenie z baz� danych zosta�o przerwane! Czy po��czy� ponownie?";
     Message[ portuguese_brazilian ] = "The connection to the database was lost! Reconnect";
     Message[ japanese ] = "データベースへの接続は削除されました。接続しなおしますか。";
-    Message[ korean ] = "데이터베이스와의 연결이 끊어졌습니다! 다시 연결하겠습니까?";
+    Message[ korean ] = "데이터베이스와의 연결이 끊어졌습니다. 다시 연결하시겠습니까?";
     Message[ chinese_simplified ] = "和数据库的连接已经中断。要重新连接数据库？";
     Message[ chinese_traditional ] = "和資料庫的連線已經關閉。要重新連線？";
     Message[ turkish ] = "The connection to the database was lost! Reconnect";
@@ -1212,7 +1212,7 @@ String STR_OPENTABLES_WARNINGS_DETAILS
     Text[ polish ] = "W trakcie ustalania tabel, po��czenie z baz� danych wysy�a�o ostrze�enia.";
     Text[ portuguese_brazilian ] = "While retrieving the tables, warnings were provided by the connection.";
     Text[ japanese ] = "テーブルの転送中に、データベースの接続から警告がありました。";
-    Text[ korean ] = "시트를 검색하는 동안 데이터 연결에서 경고 메시지를 표시되었습니다.";
+    Text[ korean ] = "테이블을 검색 중 데이터 연결에서 경고를 했습니다.";
     Text[ chinese_simplified ] = "读取表格时发出一个数据库连接的警告。";
     Text[ chinese_traditional ] = "在存取表格時發出資料庫連線的警告。";
     Text[ turkish ] = "While retrieving the tables, warnings were provided by the connection.";
@@ -1239,7 +1239,7 @@ String STR_CONNECTING_DATASOURCE
     Text[ polish ] = "Trwa ��czenie z \"$name$\" ...";
     Text[ portuguese_brazilian ] = "connecting to \"$name$\" ...";
     Text[ japanese ] = "\"$name$\" に接続中...";
-    Text[ korean ] = "\"$name$\"에 연결하는 중 ...";
+    Text[ korean ] = "\"$name$\"에 연결하는 중...";
     Text[ chinese_simplified ] = "连接到 \"$name$\" ...";
     Text[ chinese_traditional ] = "連線到<$name$>...";
     Text[ turkish ] = "connecting to \"$name$\" ...";
@@ -1266,7 +1266,7 @@ String STR_LOADING_QUERY
     Text[ polish ] = "Trwa �adowanie kwerendy $name$ ...";
     Text[ portuguese_brazilian ] = "loading query $name$ ...";
     Text[ japanese ] = "クエリー $name$ の読み込み中...";
-    Text[ korean ] = "질의 $name$을(를) 로드하는 중 ...";
+    Text[ korean ] = "쿼리 $name$을(를) 로드 중...";
     Text[ chinese_simplified ] = "正在载入查询 $name$ ...";
     Text[ chinese_traditional ] = "載入查詢 $name$ ...";
     Text[ turkish ] = "loading query $name$ ...";
@@ -1293,7 +1293,7 @@ String STR_LOADING_TABLE
     Text[ polish ] = "Trwa �adowanie tabeli $name$ ...";
     Text[ portuguese_brazilian ] = "loading table $name$ ...";
     Text[ japanese ] = "テーブル $name$ の読み込み中...";
-    Text[ korean ] = "시트 $name$을(를) 로드하는 중 ...";
+    Text[ korean ] = "테이블 $name$을(를) 로드 중 ...";
     Text[ chinese_simplified ] = "正在载入表格 $name$ ...";
     Text[ chinese_traditional ] = "載入表格 $name$ ...";
     Text[ turkish ] = "loading table $name$ ...";
@@ -1321,7 +1321,7 @@ String STR_DSBROWSER_TITLE
         Text[ polish ] = "Widok �r�de� danych";
         Text[ portuguese_brazilian ] = "Data source browser";
         Text[ japanese ] = "データソースの表示";
-        Text[ korean ] = "데이터 소스 보기";
+        Text[ korean ] = "데이터 원본 보기";
         Text[ chinese_simplified ] = "数据源检视";
         Text[ chinese_traditional ] = "資料源檢視";
         Text[ turkish ] = "Data source browser";
@@ -1348,7 +1348,7 @@ String STR_NO_TABLE_FORMAT_INSIDE
         Text[ polish ] = "Nie znaleziono �adnego formatu tabeli.";
         Text[ portuguese_brazilian ] = "No table format found.";
         Text[ japanese ] = "テーブル書式は見つかりませんでした。";
-        Text[ korean ] = "시트 서식을 찾지 못했습니다.";
+        Text[ korean ] = "테이블 서식을 찾지 못했습니다.";
         Text[ chinese_simplified ] = "无法找到表格格式。";
         Text[ chinese_traditional ] = "無法找到表格格式。";
         Text[ turkish ] = "No table format found.";
@@ -1375,7 +1375,7 @@ String STR_COULDNOTCONNECT_DATASOURCE
         Text[ polish ] = "Brak po��czenia ze �r�d�em danych \"$name$\".";
         Text[ portuguese_brazilian ] = "The connection to the data source \"$name$\" could not be established.";
         Text[ japanese ] = "データソース \"$name$\" へ接続できませんでした。";
-        Text[ korean ] = "데이터 소스 \"$name$\"와의 연결을 설정하지 못했습니다.";
+        Text[ korean ] = "데이터 원본 \"$name$\"(으)로 연결하지 못했습니다.";
         Text[ chinese_simplified ] = "无法与数据源 \"$name$\" 建立连接。";
         Text[ chinese_traditional ] = "無法連線到資料源 \"$name$\" 。";
         Text[ turkish ] = "The connection to the data source \"$name$\" could not be established.";
@@ -1413,7 +1413,7 @@ Menu RID_MENU_REFRESH_DATA
                 Text[ polish ] = "Od�wie�";
                 Text[ portuguese_brazilian ] = "reconstruct";
                 Text[ japanese ] = "最新の情報に更新";
-                Text[ korean ] = "재생성";
+                Text[ korean ] = "최신 정보로 업데이트";
                 Text[ chinese_simplified ] = "重建";
                 Text[ chinese_traditional ] = "重建";
                 Text[ turkish ] = "reconstruct";
@@ -1423,6 +1423,12 @@ Menu RID_MENU_REFRESH_DATA
             };
     };
 };
+
+
+
+
+
+
 
 
 

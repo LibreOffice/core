@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosqlmessage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 12:35:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,41 +202,4 @@ Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.7  2001/03/23 13:33:59  jl
- *  replaced: OSL_ENSHURE->OSL_ENSURE
- *
- *  Revision 1.6  2001/01/05 12:16:07  fs
- *  adjusted the implementation name
- *
- *  Revision 1.5  2000/12/15 15:48:13  fs
- *  #82151# two instances of the registration helper module - one for every library in this project
- *
- *  Revision 1.4  2000/11/06 17:47:01  fs
- *  forgot a property attribute in ctor
- *
- *  Revision 1.3  2000/11/01 16:34:16  fs
- *  migrated from awt::XDialog to ui::XExecutableDialog / removed the star* namespace shortcuts
- *
- *  Revision 1.2  2000/10/27 08:08:47  fs
- *  don't include stringconstants.hrc directly anymore
- *
- *  Revision 1.1  2000/10/25 12:56:32  fs
- *  moved herein from ..\dlg
- *
- *  Revision 1.3  2000/10/16 10:46:59  fs
- *  service name changed
- *
- *  Revision 1.2  2000/10/11 11:31:03  fs
- *  new implementations - still under construction
- *
- *  Revision 1.1  2000/10/05 10:07:40  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 02.10.00 13:59:29  fs
- ************************************************************************/
 

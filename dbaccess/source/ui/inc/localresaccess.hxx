@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localresaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:08:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,11 @@
 #ifndef _DBAUI_LOCALRESACCESS_HXX_
 #define _DBAUI_LOCALRESACCESS_HXX_
 
-#ifndef _TOOLS_RC_HXX
-#include <tools/rc.hxx>
-#endif
-#ifndef _TOOLS_RCID_H
-#include <tools/rcid.h>
-#endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
+#endif
+#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
+#include <svtools/localresaccess.hxx>
 #endif
 
 //.........................................................................
@@ -82,17 +79,13 @@ namespace dbaui
 //=========================================================================
 /** helper class for acessing local resources
 */
-class OLocalResourceAccess : public Resource
+typedef ::svt::OLocalResourceAccess LRA_Base;
+class OLocalResourceAccess : protected LRA_Base
 {
 public:
-    OLocalResourceAccess(sal_uInt16 _nId, RESOURCE_TYPE _rType)
-        :Resource(ModuleRes(_nId).SetRT(_rType).SetAutoRelease(sal_False))
+    inline OLocalResourceAccess( sal_uInt16 _nId, RESOURCE_TYPE _rType )
+        :LRA_Base( ModuleRes( _nId ), _rType )
     {
-    }
-    ~OLocalResourceAccess()
-    {
-        OModule::getResManager()->Increment(OModule::getResManager()->GetRemainSize());
-        FreeResource();
     }
 };
 
@@ -101,11 +94,4 @@ public:
 //.........................................................................
 
 #endif // _DBAUI_LOCALRESACCESS_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 28.09.00 10:43:07  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-10 09:35:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,8 +326,11 @@ namespace dbaui
                 for(sal_Int32 i = 1;aPosIter != _rvColumns.end();++aPosIter)
                 {
                     sal_Int32 nPos = aPosIter->second;
-                    if(nPos == CONTAINER_ENTRY_NOTFOUND)
+                    if ( nPos == CONTAINER_ENTRY_NOTFOUND )
+                    {
+                        ++i; // otherwise we don't get the correct value when only the 2nd source column was selected
                         continue;
+                    }
                     if ( bIsAutoIncrement && bInsertAutoIncrement )
                     {
                         xParameter->setInt(1,nRowCount);
@@ -743,6 +746,8 @@ namespace dbaui
                                              xDestConnection,
                                              getNumberFormatter(),
                                              getORB());
+                    aWizard.fillTypeInfo();
+                    aWizard.loadData();
                     OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, bIsView,OCopyTableWizard::WIZARD_DEF_DATA);
                     OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
                     OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
@@ -1425,174 +1430,3 @@ namespace dbaui
 }   // namespace dbaui
 // .........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.58  2002/11/14 07:57:50  oj
- *  #105110# some reorg and code movements
- *
- *  Revision 1.57  2002/11/05 08:33:33  oj
- *  #104698# use new ctor and check if entry is container
- *
- *  Revision 1.56  2002/10/31 12:48:33  oj
- *  #104392# insert waitobject before inserting data
- *
- *  Revision 1.55  2002/10/08 06:46:22  oj
- *  #104025# check if name is empty
- *
- *  Revision 1.54  2002/10/07 13:06:32  oj
- *  #i3289# correct table name quoting so that in every situation the correct schema, catalog is used
- *
- *  Revision 1.53  2002/08/19 07:32:51  oj
- *  #99473# change string resource files
- *
- *  Revision 1.52  2002/07/11 06:53:41  oj
- *  #95978# check if name for table is valid
- *
- *  Revision 1.51  2002/07/09 12:46:11  oj
- *  #99921# check if datasource allows to check names
- *
- *  Revision 1.50  2002/07/08 09:47:23  oj
- *  #98087# check d&d entries
- *
- *  Revision 1.49  2002/07/08 08:11:22  oj
- *  #97156# saveData and d&d source corrected
- *
- *  Revision 1.48  2002/06/11 12:28:27  fs
- *  #65293# correct an error which came in in the merge ->1.43
- *
- *  Revision 1.47  2002/05/29 11:36:54  oj
- *  #96792# new methods for pasting tables
- *
- *  Revision 1.46  2002/05/29 11:11:26  oj
- *  #96792# new methods for pasting tables
- *
- *  Revision 1.45  2002/05/29 11:07:40  hr
- *  #65293#: fixed typo
- *
- *  Revision 1.44  2002/05/29 10:32:21  oj
- *  #96792# new methods for pasting tables
- *
- *  Revision 1.43  2002/05/28 08:30:06  oj
- *  #96792# new methods for pasting tables
- *
- *  Revision 1.42  2002/05/23 12:32:39  fs
- *  use the (member) view clipboard instead of an explicitly created one - during #99030#
- *
- *  Revision 1.41  2002/05/23 11:00:10  oj
- *  #99407# check columns to set
- *
- *  Revision 1.40  2002/05/10 10:06:53  oj
- *  #95472# showError mesg when table isn't any longer in container
- *
- *  Revision 1.39  2002/04/16 17:01:04  hr
- *  #65293#: syntax
- *
- *  Revision 1.38  2002/04/02 06:45:52  oj
- *  #98146# mapping of columns corrected
- *
- *  Revision 1.34  2001/12/07 13:13:04  oj
- *  #95728# insert try catch
- *
- *  Revision 1.33  2001/11/23 14:51:40  oj
- *  #95142# check eState of parser
- *
- *  Revision 1.32  2001/11/15 15:15:05  oj
- *  #94820# check type of dest database and adjust if possible
- *
- *  Revision 1.31  2001/11/12 10:34:55  oj
- *  #94391# exclude tablefilter and enable schema name again
- *
- *  Revision 1.30  2001/10/08 07:26:29  oj
- *  #92786# refcount implemented for connectiondata and sqlexception catched
- *
- *  Revision 1.29  2001/09/25 13:24:38  oj
- *  #91719# implementing the XRename handling
- *
- *  Revision 1.28  2001/09/20 12:56:17  oj
- *  #92232# fixes for BIGINT type and new property HELPTEXT
- *
- *  Revision 1.27  2001/08/27 06:57:24  oj
- *  #90015# some speedup's
- *
- *  Revision 1.26  2001/08/24 06:31:34  oj
- *  #90015# code corrcetions for some speedup's
- *
- *  Revision 1.25  2001/07/30 06:20:24  oj
- *  #90291# check if table should be appended
- *
- *  Revision 1.24  2001/07/26 14:12:01  oj
- *  #90291# check if table should be appended
- *
- *  Revision 1.23  2001/07/19 09:27:12  oj
- *  #86186# check parsetree for joins
- *
- *  Revision 1.22  2001/07/18 11:33:57  oj
- *  #85664# enable copy/cut/paste/delete keys
- *
- *  Revision 1.21  2001/07/17 10:31:48  oj
- *  #89128# look if connection is readonly
- *
- *  Revision 1.20  2001/07/16 13:40:03  oj
- *  #89650# check if table was created for html/rtf format
- *
- *  Revision 1.19  2001/07/05 12:46:52  oj
- *  #87744# use HTML_SIMPLE
- *
- *  Revision 1.18  2001/07/05 12:19:25  oj
- *  #87744# check for right HTML_TYPE
- *
- *  Revision 1.17  2001/07/02 13:22:11  oj
- *  #88476# save name of object before recursive call
- *
- *  Revision 1.16  2001/06/22 10:53:59  oj
- *  #88455# serveral fixes for parameters
- *
- *  Revision 1.15  2001/06/12 13:19:24  fs
- *  #65293# linux ambiguity
- *
- *  Revision 1.14  2001/06/07 12:53:46  fs
- *  #87905# don't DnD bookmarks
- *
- *  Revision 1.13  2001/06/01 11:23:45  oj
- *  #86520# insert of tabledata corrected
- *
- *  Revision 1.12  2001/05/14 11:58:35  oj
- *  #86744# some changes for entries and views
- *
- *  Revision 1.11  2001/05/10 12:24:47  fs
- *  the clipboard changes are SUPD-dependent
- *
- *  Revision 1.10  2001/05/07 14:09:00  fs
- *  MUST changes regarding the system clipboard access
- *
- *  Revision 1.9  2001/04/26 11:36:16  fs
- *  added support for data source associated bookmarks
- *
- *  Revision 1.8  2001/04/11 12:58:38  fs
- *  use the ODataAccessDescriptor instead of the dbatools functions
- *
- *  Revision 1.7  2001/04/06 13:48:34  oj
- *  #85664# match copy/cut/paste with the right window
- *
- *  Revision 1.6  2001/04/03 14:15:53  fs
- *  corrected some wrong OSL_ASSERTs
- *
- *  Revision 1.5  2001/03/30 13:42:02  oj
- *  remove <:
- *
- *  Revision 1.4  2001/03/30 08:47:18  oj
- *  correct the creation of views
- *
- *  Revision 1.3  2001/03/28 15:44:58  fs
- *  changed the ctor of ODataClipboard
- *
- *  Revision 1.2  2001/03/27 07:09:19  oj
- *  use of new initialize
- *
- *  Revision 1.1  2001/03/23 10:59:09  fs
- *  initial checkin - DnD related implementations for the data source browser controller
- *
- *
- *  Revision 1.0 23.03.01 09:03:17  fs
- ************************************************************************/

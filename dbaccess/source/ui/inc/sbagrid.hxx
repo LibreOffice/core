@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 12:49:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ namespace dbaui
     //------------------------------------------------------------------
     struct SbaURLCompare : public binary_function< ::com::sun::star::util::URL, ::com::sun::star::util::URL, bool>
     {
-        bool operator() (const ::com::sun::star::util::URL& x, const ::com::sun::star::util::URL& y) const {return x.Complete < y.Complete ? true : false;}
+        bool operator() (const ::com::sun::star::util::URL& x, const ::com::sun::star::util::URL& y) const {return x.Complete == y.Complete ? true : false;}
     };
 
     struct SbaURLHash

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:32:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ String STR_HTML_TITLE
     Text[ polish ] = "Kopiuj tabelκ HTML";
     Text[ portuguese_brazilian ] = "Copy HTML table";
     Text[ japanese ] = "HTML γƒ†γƒΌγƒ–γƒ«γ®γ‚³γƒ”γƒΌ";
-    Text[ korean ] = "HTML ν‘ λ³µμ‚¬";
+    Text[ korean ] = "HTML ν…μ΄λΈ” λ³µμ‚¬";
     Text[ chinese_simplified ] = "ε¤ε¶ HTML θ΅¨ζ Ό";
     Text[ chinese_traditional ] = "θ¤‡θ£½ HTML θ΅¨ζ Ό";
     Text[ arabic ] = "δΣΞ ΜΟζα HTML";
@@ -123,7 +123,7 @@ String STR_RTF_TITLE
     Text[ polish ] = "Kopiuj tabelκ RTF";
     Text[ portuguese_brazilian ] = "Copy RTF table";
     Text[ japanese ] = "RTF γƒ†γƒΌγƒ–γƒ«γ®γ‚³γƒ”γƒΌ";
-    Text[ korean ] = "RTF ν‘ λ³µμ‚¬";
+    Text[ korean ] = "RTF ν…μ΄λΈ” λ³µμ‚¬";
     Text[ chinese_simplified ] = "ε¤ε¶ RTF θ΅¨ζ Ό";
     Text[ chinese_traditional ] = "θ¤‡θ£½RTFθ΅¨ζ Ό";
     Text[ arabic ] = "δΣΞ ΜΟζα RTF";
@@ -143,7 +143,7 @@ String STR_WIZ_COLUMN_SELECT_TITEL
     Text[ greek ] = "Εφαρμογή στηλών";
     Text[ dutch ] = "Kolom overnemen";
     Text[ french ] = "Application de colonnes";
-    Text[ spanish ] = "Aplicaciσn de columnas";
+    Text[ spanish ] = "Aplicar columnas";
     Text[ italian ] = "Applica colonne";
     Text[ danish ] = "Overtag kolonner";
     Text[ swedish ] = "Φverta kolumner";
@@ -177,7 +177,7 @@ String STR_WIZ_TYPE_SELECT_TITEL
     Text[ polish ] = "Formatowanie typu";
     Text[ portuguese_brazilian ] = "Undo";
     Text[ japanese ] = "γ‚Ώγ‚¤γƒ—γ®ζ›ΈεΌθ¨­ε®";
-    Text[ korean ] = "ν•μ‹ μ§€μ •";
+    Text[ korean ] = "μ ν• μ„μ‹";
     Text[ chinese_simplified ] = "η±»ε‹ζ ΌεΌε–";
     Text[ chinese_traditional ] = "ι΅ε‹ζ ΌεΌε–";
     Text[ arabic ] = "ΚδΣνήΗΚ ΗαδζΪ";
@@ -204,7 +204,7 @@ String STR_WIZ_PKEY_ALREADY_DEFINED
     Text[ polish ] = "Jako klucze g³σwne osadzono juΏ nastκpujΉce pola:\n";
     Text[ portuguese_brazilian ] = "There are already primary keys defined for this fields:\n";
     Text[ japanese ] = "δ»¥δΈ‹γ®γƒ•γ‚£γƒΌγƒ«γƒ‰γ―γ™γ§γ«γƒ—γƒ©γ‚¤γƒγƒªγ‚­γƒΌγ¨γ—γ¦θ¨­ε®γ•γ‚γ¦γ„γΎγ™γ€‚\n";
-    Text[ korean ] = "λ‹¤μ ν•„λ“μ—λ” κΈ°λ³Έ ν‚¤κ°€ μ΄λ―Έ μ •μλμ–΄ μμµλ‹λ‹¤.:\n";
+    Text[ korean ] = "λ‹¤μ ν•„λ“μ—λ” κΈ°λ³Έ ν‚¤κ°€ μ΄λ―Έ μ§€μ •λμ–΄ μμµλ‹λ‹¤:\n";
     Text[ chinese_simplified ] = "ε·²η»δΈΊδΈ‹ε—ε­—ζ®µθ®Ύε®δΊ†δΈ»ε…³ι”®ε­—οΌ\n";
     Text[ chinese_traditional ] = "δ»¥δΈ‹η„ζ¬„δ½ε·²η¶“ζ‡ε®ζδΈ»ι—ιµε­—οΌ\n";
     Text[ arabic ] = "Κγ ΚΪννδ ΗαΝήζα ΗαΚΗανΙ γΣΘήΗπ ίγέΚΗΝ ΓΣΗΣν:\n";
@@ -342,7 +342,7 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ polish ] = "< Wstecz";
         Text[ portuguese_brazilian ] = "< ~Back";
         Text[ japanese ] = "< ζ»γ‚‹(~B)";
-        Text[ korean ] = "<λ’¤λ΅(~B)";
+        Text[ korean ] = "< λ’¤λ΅(~B)";
         Text[ chinese_simplified ] = "< θΏ”ε›(~B)";
         Text[ chinese_traditional ] = "< θΏ”ε›(~B)";
         Text[ arabic ] = "<ΗαΣΗΘή";
@@ -370,7 +370,7 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ polish ] = "Dalej>";
         Text[ portuguese_brazilian ] = "~Next>";
         Text[ japanese ] = "ζ¬΅γΈ(~N)>";
-        Text[ korean ] = "λ‹¤μ(~N)";
+        Text[ korean ] = "λ‹¤μ>(~N)";
         Text[ chinese_simplified ] = "η»§η»­ (~N)>";
         Text[ chinese_traditional ] = "ηΉΌηΊ (~N)>";
         Text[ arabic ] = "ΗαΚΗαν>";
@@ -399,7 +399,7 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ polish ] = "Utwσrz";
         Text[ portuguese_brazilian ] = "Finish";
         Text[ japanese ] = "ε®δΊ†(~R)";
-        Text[ korean ] = "μ™„λ£(~R)";
+        Text[ korean ] = "λ§λ“¤κΈ°(~R)";
         Text[ chinese_simplified ] = "ε®ζ(~R)";
         Text[ chinese_traditional ] = "ε®ζ(~R)";
         Text[ arabic ] = "ΕδΤΗΑ";
@@ -410,7 +410,7 @@ ModalDialog WIZ_RTFCOPYTABLE
     };
 
     Text[ greek ] = "Αντιγραφή πίνακα RTF";
-    Text[ korean ] = "RTF ν‘ λ³µμ‚¬";
+    Text[ korean ] = "RTF ν…μ΄λΈ” λ³µμ‚¬";
     Text[ chinese_traditional ] = "θ¤‡θ£½RTFθ΅¨ζ Ό";
     Text[ arabic ] = "δΣΞ ΜΟζα RTF";
     Text[ turkish ] = "RTF tablosunu kopyala";
@@ -635,14 +635,14 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ greek ] = "Αυτόματη αναγνώριση τύπου";
         Text[ dutch ] = "Autom. herkenning van type";
         Text[ french ] = "Reconnaissance automatique du type";
-        Text[ spanish ] = "Autoreconocimiento de tipo";
+        Text[ spanish ] = "Reconocimiento automαtico del tipo";
         Text[ italian ] = "Riconoscimento autom. tipo";
         Text[ danish ] = "Automatisk typegenkendelse";
         Text[ swedish ] = "Autom. typigenkδnning";
         Text[ polish ] = "Automat. identyfikacja typu";
         Text[ portuguese_brazilian ] = "Tablename:";
         Text[ japanese ] = "η¨®ι΅γ®θ‡ªε‹•θªθ­";
-        Text[ korean ] = "μλ™ ν•μ‹ μΈμ‹";
+        Text[ korean ] = "μλ™ μ ν• μΈμ‹";
         Text[ chinese_simplified ] = "θ‡ªε¨θ―†ε«η±»ε‹";
         Text[ chinese_traditional ] = "θ‡ªε‹•θ­ε¥ι΅ε‹";
         Text[ arabic ] = "ΗαΚΪΡέ Ϊαμ ΗαδγΨ ΚαήΗΖνΗπ";
@@ -672,7 +672,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ polish ] = "Wiersze (maks.)";
         Text[ portuguese_brazilian ] = "Tablename:";
         Text[ japanese ] = "ζ€ε¤§θ΅ζ•°(~X)";
-        Text[ korean ] = "(μµλ€)μ¤„(~X):";
+        Text[ korean ] = "μµλ€ μ¤„ μ(~X)";
         Text[ chinese_simplified ] = "(ζ€ε¤η„)θ΅(~X)";
         Text[ chinese_traditional ] = "(ζ€ε¤η„)ε—(~X)";
         Text[ turkish ] = "Satύrlar (azami):";
@@ -764,7 +764,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ polish ] = "Tabela rσd³owa: \n";
         Text[ portuguese_brazilian ] = "Source table: \n";
         Text[ japanese ] = "γ‚½γƒΌγ‚Ήγƒ†γƒΌγƒ–γƒ«: \n";
-        Text[ korean ] = "μ‹νΈ(μ†μ¤): \n";
+        Text[ korean ] = "μ›λ³Έ ν…μ΄λΈ”: \n";
         Text[ chinese_simplified ] = "ζΊθ΅¨ζ ΌοΌ\n";
         Text[ chinese_traditional ] = "ζΊθ΅¨ζ ΌοΌ\n";
         Text[ turkish ] = "Kaynak tablo: \n";
@@ -781,7 +781,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text [ ENGLISH ]    = "Destination table: \n" ;
         Text[ english_us ] = "Destination table: \n";
         Text[ portuguese ] = "Tabela de destino: \n";
-        Text[ russian ] = "Φελεβΰÿ ςΰαλθφΰ: \n";
+        Text[ russian ] = "Òΰαλθφΰ νΰηνΰχενθÿ: \n";
         Text[ greek ] = "Πίνακας προορισμού: \n";
         Text[ dutch ] = "Doeltabel: \n";
         Text[ french ] = "Table cible : \n";
@@ -793,7 +793,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ polish ] = "Tabela docelowa: \n";
         Text[ portuguese_brazilian ] = "Destination table: \n";
         Text[ japanese ] = "γ‚ΏγƒΌγ‚²γƒƒγƒγƒ†γƒΌγƒ–γƒ«: \n";
-        Text[ korean ] = "μ‹νΈ(λ€μƒ): \n";
+        Text[ korean ] = "λ€μƒ ν…μ΄λΈ”: \n";
         Text[ chinese_simplified ] = "η›®ζ ‡θ΅¨ζ ΌοΌ\n";
         Text[ chinese_traditional ] = "η›®ζ¨™θ΅¨ζ ΌοΌ\n";
         Text[ turkish ] = "Hedef tablo: \n";
@@ -914,7 +914,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ greek ] = "ό~λα";
         Text[ dutch ] = "a~lle";
         Text[ french ] = "~Tous";
-        Text[ spanish ] = "to~dos";
+        Text[ spanish ] = "To~dos";
         Text[ italian ] = "Tutti";
         Text[ danish ] = "a~lle";
         Text[ swedish ] = "A~lla";
@@ -989,7 +989,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ polish ] = "Nazwa tabeli";
         Text[ portuguese_brazilian ] = "Tabellenname:";
         Text[ japanese ] = "γƒ†γƒΌγƒ–γƒ«ε(~B)";
-        Text[ korean ] = "μ‹νΈ μ΄λ¦„(~B):";
+        Text[ korean ] = "ν…μ΄λΈ” μ΄λ¦„(~B)";
         Text[ chinese_simplified ] = "θ΅¨ζ Όεη§°(~B)";
         Text[ chinese_traditional ] = "θ΅¨ζ Όεη¨±(~B)";
         Text[ turkish ] = "Tablo adύ:";
@@ -1057,7 +1057,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ chinese_traditional ] = "ε®ηΎ©ε’θ³‡ζ–™(~F)";
         Text[ arabic ]      = "ΗαΚΪΡνέ ζΗαΘνΗδΗΚ";
         Text[ greek ] = "Ορισμός και δεδομέν~α";
-        Text[ korean ] = "μ •μμ™€ λ°μ΄ν„°(~F)";
+        Text[ korean ] = "μ •μ λ° λ°μ΄ν„°(~F)";
         Text[ turkish ] = "Tanύm ve veriler";
         Text[ catalan ] = "De~finiciσ i dades";
         Text[ finnish ] = "M~δδritys ja tiedot";
@@ -1100,7 +1100,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text [ ENGLISH ]    = "A~s View" ;
         Text[ english_us ] = "A~s table view";
         Text[ portuguese ] = "Como ~vista de tabela";
-        Text[ russian ] = "Β βθδε ςΰαλθφϋ";
+        Text[ russian ] = "Οπεδρςΰβλενθε";
         Text[ greek ] = "Ω~ς προβολή πίνακα";
         Text[ dutch ] = "Al~s tabelmodus";
         Text[ french ] = "Comme ~vue";
@@ -1111,7 +1111,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ polish ] = "Jako widok tabeli";
         Text[ portuguese_brazilian ] = "A~s View";
         Text[ japanese ] = "γƒ†γƒΌγƒ–γƒ«γƒ“γƒ¥γƒΌγ¨γ—γ¦(~S)";
-        Text[ korean ] = "μ‹νΈ λ³΄κΈ°λ΅(~S)";
+        Text[ korean ] = "ν…μ΄λΈ” λ³΄κΈ°λ΅(~S)";
         Text[ chinese_simplified ] = "ε½“δ½θ΅¨ζ Όθ§†ε›Ύ(~S)";
         Text[ chinese_traditional ] = "η•¶δ½θ΅¨ζ ΌζªΆθ¦–(~S)";
         Text[ arabic ] = "γΛα ΨΡνήΙ ΪΡΦ ΗαΜΟζα";
@@ -1143,7 +1143,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ chinese_traditional ] = "ι™„ε θ³‡ζ–™(~D)";
         Text[ arabic ]      = "ΕΡέΗή ΘνΗδΗΚ";
         Text[ greek ] = "Προσκόλληση δεδομέ~νων";
-        Text[ korean ] = "λ°μ΄ν„° μμ •(~D)";
+        Text[ korean ] = "λ°μ΄ν„° μ²¨λ¶€(~D)";
         Text[ turkish ] = "Verileri ekle";
         Text[ catalan ] = "~Adjunta dades";
         Text[ finnish ] = "~Liitδ tiedot";
@@ -1198,7 +1198,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ polish ] = "Nazwa";
         Text[ portuguese_brazilian ] = "Name:";
         Text[ japanese ] = "εε‰";
-        Text[ korean ] = "μ΄λ¦„:";
+        Text[ korean ] = "μ΄λ¦„";
         Text[ chinese_simplified ] = "εη§°";
         Text[ chinese_traditional ] = "εη¨±";
         Text[ turkish ] = "Ad:";
@@ -1222,7 +1222,7 @@ String STR_WIZ_TABLE_COPY
     Text [ ENGLISH ]    = "Copy table" ;
     Text [ english_us ] = "Copy table" ;
     Text[ portuguese ] = "Copiar tabela";
-    Text[ russian ] = "Κξοθπξβΰςό ςΰαλθφσ";
+    Text[ russian ] = "Κξοθπξβΰνθε";
     Text[ greek ] = "Αντιγραφή πίνακα";
     Text[ dutch ] = "Tabel kopiλren";
     Text[ french ] = "Copier la table";
@@ -1233,7 +1233,7 @@ String STR_WIZ_TABLE_COPY
     Text[ polish ] = "Kopiuj tabelκ";
     Text[ portuguese_brazilian ] = "Copy table";
     Text[ japanese ] = "γƒ†γƒΌγƒ–γƒ«γ®γ‚³γƒ”γƒΌ";
-    Text[ korean ] = "μ‹νΈ λ³µμ‚¬";
+    Text[ korean ] = "ν…μ΄λΈ” λ³µμ‚¬";
     Text[ chinese_simplified ] = "ε¤ε¶θ΅¨ζ Ό";
     Text[ chinese_traditional ] = "θ¤‡θ£½θ΅¨ζ Ό";
     Text[ arabic ] = "δΣΞ ΗαΜΟζα";
@@ -1257,13 +1257,13 @@ String STR_COPYTABLE_TITLE_COPY
     Text [ french ] = "Copier la table" ;
     Text [ dutch ] = "Tabel kopiλren" ;
     Text[ chinese_simplified ] = "ε¤ε¶θ΅¨ζ Ό";
-    Text[ russian ] = "Κξοθπξβΰςό ςΰαλθφσ";
+    Text[ russian ] = "Κξοθπξβΰνθε";
     Text[ polish ] = "Kopiuj tabelκ";
     Text[ japanese ] = "γƒ†γƒΌγƒ–γƒ«γ®γ‚³γƒ”γƒΌ";
     Text[ chinese_traditional ] = "θ¤‡θ£½θ΅¨ζ Ό";
     Text[ arabic ] = "δΣΞ ΗαΜΟζα";
     Text[ greek ] = "Αντιγραφή πίνακα";
-    Text[ korean ] = "μ‹νΈ λ³µμ‚¬";
+    Text[ korean ] = "ν…μ΄λΈ” λ³µμ‚¬";
     Text[ turkish ] = "Tabloyu kopyala";
     Text[ catalan ] = "Copia taula";
     Text[ finnish ] = "Kopioi taulu";
@@ -1290,7 +1290,7 @@ String STR_COPYTABLE_TITLE_MOVE
     Text[ chinese_traditional ] = "η§»ε‹•θ΅¨ε–®";
     Text[ arabic ] = "ΚΝΡνί ΗαΜΟζα";
     Text[ greek ] = "Μετακίνηση πίνακα";
-    Text[ korean ] = "μ‹νΈ μ΄λ™";
+    Text[ korean ] = "ν…μ΄λΈ” μ΄λ™";
     Text[ turkish ] = "Tabloyu taώύ";
     Text[ catalan ] = "Mou la taula";
     Text[ finnish ] = "Siirrδ taulu";
@@ -1317,7 +1317,7 @@ ErrorBox ERROR_INVALID_TABLE_NAME
     Message[ chinese_traditional ] = "δ½Ώη”¨δΈ­η„θ³‡ζ–™εΊ«η„΅ζ³•ζ¥ε—ι€™ε€‹η„΅ζ•η„θ®ζ›΄εη¨±γ€‚";
     Message[ arabic ] = "ύεΠΗ ΗΣγ ΜΟζα ΫνΡ ΥΗαΝ έν ήΗΪΟΙ ΗαΘνΗδΗΚ ΗαΝΗανΙ.";
     Message[ greek ] = "Αυτό το όνομα του πίνακα δεν είναι έγκυρο στην τρέχουσα βάση δεδομένων.";
-    Message[ korean ] = "ν„μ¬ λ°μ΄ν„°λ² μ΄μ¤μ—μ„ μ ν¨ν•μ§€ μ•μ€ μ‹νΈ μ΄λ¦„μ…λ‹λ‹¤.";
+    Message[ korean ] = "ν„μ¬ λ°μ΄ν„°λ² μ΄μ¤μ—μ„ μ ν¨ν•μ§€ μ•μ€ ν…μ΄λΈ” μ΄λ¦„μ…λ‹λ‹¤.";
     Message[ turkish ] = "Bu veritabanύnda bu ad geηerli deπil.";
     Message[ catalan ] = "Aquest nom de taula no ιs vΰlid en la base de dades actual.";
     Message[ finnish ] = "Tδmδ taulun nimi ei ole kelvollinen nykyisessδ tietokannassa.";
@@ -1343,7 +1343,7 @@ String STR_ERR_DUPL_TABLENAME
     Text[ chinese_traditional ] = "θ΅¨ζ Όεη¨± \'$name$\' ε·²η¶“ε­ε¨γ€‚\nζ‚¨θƒ½ε¤ θΌΈε…¥δΈ€ε€‹ζ–°εη¨±\nζ–θ€…ε°‡θ³‡ζ–™ι™„ε ε¨ηΎε­η„θ΅¨ζ Όε…§γ€‚";
     Text[ arabic ] = "ΗΣγ ΗαΜΟζα \'$name$\' γζΜζΟ γΣΘήΗπ.\nνγίδί ΕΟΞΗα ΗΣγ ΜΟνΟ\nΓζ ΕαΝΗή ΗαΘνΗδΗΚ ΘΗαΜΟζα ΗαγζΜζΟ.";
     Text[ greek ] = "Το όνομα του πίνακα \'$name$\' υπάρχει ήδη.\nΜπορείτε να εισάγετε ένα νέο όνομα\nή να προσκολλήσετε τα δεδομένα στον ήδη υπάρχων πίνακα.";
-    Text[ korean ] = "μ‹νΈ μ΄λ¦„ \'$name$\'μ΄(κ°€) μ΄λ―Έ μ΅΄μ¬ν•©λ‹λ‹¤.\nμƒ μ΄λ¦„μ„ μ…λ ¥ν•κ±°λ‚\nλ°μ΄ν„°λ¥Ό κΈ°μ΅΄ μ‹νΈμ— μ¶”κ°€ν•  μ μμµλ‹λ‹¤.";
+    Text[ korean ] = "ν…μ΄λΈ” μ΄λ¦„ \'$name$\'μ€(λ”) μ΄λ―Έ μμµλ‹λ‹¤.\nμƒ μ΄λ¦„μ„ μ…λ ¥ν•κ±°λ‚\nλ°μ΄ν„°λ¥Ό κΈ°μ΅΄ ν…μ΄λΈ”μ— μ¶”κ°€ν•  μ μμµλ‹λ‹¤.";
     Text[ turkish ] = "Tablo adύ \'$name$\' mevcut durumda.\nBaώka bir ad girebilir ya da verileri mevcut tabloya ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El nom de taula \'$name$\' ja existeix.\nPot escriure un altre nom\no adjuntar les dades a la taula existent.";
@@ -1369,7 +1369,7 @@ ErrorBox ERROR_INVALID_TABLE_NAME_LENGTH
     Message[ swedish ] = "Δndra tabellnamnet. Det δr fφr lεngt.";
     Message[ polish ] = "Please change the table name. It is too long.";
     Message[ japanese ] = "θ΅¨εγ‚’ε¤‰ζ›΄γ—γ¦γγ γ•γ„γ€‚εε‰γι•·γ™γγΎγ™γ€‚";
-    Message[ korean ] = "μ΄λ¦„μ΄ λ„λ¬΄ κΉλ‹λ‹¤. ν…μ΄λΈ” μ΄λ¦„μ„ λ°”κΏ”μ£Όμ‹­μ‹μ¤.";
+    Message[ korean ] = "μ΄λ¦„μ΄ λ„λ¬΄ κΉλ‹λ‹¤. ν…μ΄λΈ” μ΄λ¦„μ„ λ³€κ²½ν•΄μ£Όμ‹­μ‹μ¤.";
     Message[ chinese_simplified ] = "θ―·ζ‚¨ζ›΄ζ”Ήθ΅¨ζ Όη„εη§°γ€‚ε½“ε‰η„εη§°ε¤ªι•ΏδΊ†γ€‚";
     Message[ chinese_traditional ] = "θ«‹θ®ζ›΄θ΅¨ζ Όεη¨±γ€‚η›®ε‰η„εη¨±ε¤ªι•·δΊ†γ€‚";
     Message[ turkish ] = "Please change the table name. It is too long.";
@@ -1403,6 +1403,12 @@ Image IMG_SORTDOWN_H
         Blue = 0xFFFF ;
     };
 };
+
+
+
+
+
+
 
 
 

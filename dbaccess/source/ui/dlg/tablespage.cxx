@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:06:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1473,20 +1473,4 @@ namespace dbaui
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.13  2002/08/19 07:40:31  oj
- *  #99473# change string resource files
- *
- *  Revision 1.12  2002/04/29 08:27:33  oj
- *  #98772# impl toolbox hi contrast
- *
- *  Revision 1.11  2001/11/16 15:25:04  oj
- *  #94891# use &Class::method instead of Class::method
- *
- *
- *  Revision 1.0 29.05.01 11:10:11  fs
- ************************************************************************/
 

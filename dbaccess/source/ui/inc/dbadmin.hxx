@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-24 10:30:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,110 +367,4 @@ private:
 //.........................................................................
 
 #endif // _DBAUI_DBADMIN_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.26  2001/09/18 14:55:45  vg
- *  #65293# changed to void type of function
- *
- *  Revision 1.25  2001/09/11 15:08:49  fs
- *  #91304# +isUIEnabled / disableUI
- *
- *  Revision 1.24  2001/08/30 16:11:51  fs
- *  #88427# +OnValidateName
- *
- *  Revision 1.23  2001/08/14 14:08:55  fs
- *  #86945# +getCurrentDataSource
- *
- *  Revision 1.22  2001/07/31 15:58:55  fs
- *  #88530# +omSingleEditFixedType
- *
- *  Revision 1.21  2001/07/30 11:31:03  fs
- *  #88530# changes to allow operating the dialog in a 'edit one single data source only' mode
- *
- *  Revision 1.20  2001/06/25 16:03:39  fs
- *  #88004# outsourced ODataSourceMap and ODataSourceSelector
- *
- *  Revision 1.19  2001/06/20 07:04:10  oj
- *  #88434# new method to get the driver
- *
- *  Revision 1.18  2001/05/29 13:11:51  oj
- *  #87149# addressbook ui impl
- *
- *  Revision 1.17  2001/05/15 15:06:25  fs
- *  #86991# +prepareSwitchDatasource
- *
- *  Revision 1.16  2001/05/10 12:12:46  fs
- *  #86223# remember view settings while applying (no matter if synchron or asynchronously
- *
- *  Revision 1.15  2001/04/26 11:49:58  fs
- *  file is alive, again - added support for data source associated bookmarks
- *
- *  Revision 1.14  2001/03/29 07:44:46  fs
- *  #84826# +clearPassword
- *
- *  Revision 1.13  2001/03/27 06:59:28  oj
- *  new method createConnection and export of ORB
- *
- *  Revision 1.12  2001/03/13 10:21:25  fs
- *  #84827# #84908# allow changes to be applied without re-initializing the page (which could lead to opening a connection)
- *
- *  Revision 1.11  2001/02/20 13:15:59  fs
- *  #84151# applyChanges -> applyChangesAsync / +OnAsyncapplyChanges
- *
- *  Revision 1.10  2001/02/05 13:47:11  fs
- *  #83430# +applyChanges / +isApplyable
- *
- *  Revision 1.9  2000/11/30 08:33:51  fs
- *  #80003# changed some sal_uInt16 to sal_Int32 (need some -1's)
- *
- *  Revision 1.8  2000/11/28 13:49:41  fs
- *  #80152# +ODatasourceSelector::count
- *
- *  Revision 1.7  2000/11/28 11:45:46  oj
- *  #80827# check dbroot if dbconfig failed
- *
- *  Revision 1.6  2000/11/23 02:04:35  svesik
- *  Remove stl/ from #include statement
- *
- *  Revision 1.5  2000/11/10 17:36:50  fs
- *  small bug fixes
- *
- *  Revision 1.4  2000/10/31 08:03:33  fs
- *  +selectDataSource - supporting an initial selecting when creating as service
- *
- *  Revision 1.3  2000/10/30 08:00:23  fs
- *  +getDatasourceType / +getRelevantItems / +hasAuthentication
- *
- *  Revision 1.2  2000/10/26 07:33:19  fs
- *  fillDatasourceInfo
- *
- *  Revision 1.1  2000/10/25 12:49:01  fs
- *  moved herein from ..\dlg
- *
- *  Revision 1.7  2000/10/24 12:12:26  fs
- *  ODatasourceMap::update takes a non-constant set (to reset the ORIGINALNAME item)
- *
- *  Revision 1.6  2000/10/23 12:56:50  fs
- *  added apply functionality
- *
- *  Revision 1.5  2000/10/13 16:06:21  fs
- *  implemented the usage if the 'Info' property of the data sources / allow key usage in the data source list
- *
- *  Revision 1.4  2000/10/12 16:20:42  fs
- *  new implementations ... still under construction
- *
- *  Revision 1.3  2000/10/11 11:31:03  fs
- *  new implementations - still under construction
- *
- *  Revision 1.2  2000/10/09 12:39:29  fs
- *  some (a lot of) new imlpementations - still under development
- *
- *  Revision 1.1  2000/10/05 10:04:54  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 20.09.00 13:09:03  fs
- ************************************************************************/
 

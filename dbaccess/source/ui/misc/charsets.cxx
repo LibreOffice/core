@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charsets.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:51:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _TOOLS_RCID_H
 #include <tools/rcid.h>
 #endif
+#ifndef _DBAUI_LOCALRESACCESS_HXX_
+#include "localresaccess.hxx"
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -90,79 +93,63 @@ namespace dbaui
     //-------------------------------------------------------------------------
     OCharsetDisplay::OCharsetDisplay()
         :OCharsetMap()
-        ,Resource(RSC_CHARSETS)
+        ,SvxTextEncodingTable()
     {
-#ifdef DBG_UTIL
-        sal_Bool bAlreadyAsserted = sal_False;
-#endif
-
-        sal_Int32 nSize = size();
-        m_aDisplayNames.reserve( nSize );
-        for (sal_Int32 i=1; i<=nSize; ++i)
         {
-            ResId aLocalId( (USHORT)i );
-
-            if ( IsAvailableRes( aLocalId.SetRT( RSC_STRING ) ) )
-                m_aDisplayNames.push_back( String( aLocalId ) );
-            else
-            {
-                DBG_ASSERT( bAlreadyAsserted, "OCharsetDisplay::OCharsetDisplay: invalid resources!" );
-#ifdef DBG_UTIL
-                bAlreadyAsserted = sal_True;
-#endif
-                m_aDisplayNames.push_back( ::rtl::OUString::createFromAscii( "<unknown>" ) );
-            }
+            OLocalResourceAccess aCharsetStrings( RSC_CHARSETS, RSC_RESOURCE );
+            m_aSystemDisplayName = String( ResId( 1 ) );
         }
+    }
 
-        FreeResource();
+    //-------------------------------------------------------------------------
+    sal_Bool OCharsetDisplay::approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const
+    {
+        if ( !OCharsetMap::approveEncoding( _eEncoding, _rInfo ) )
+            return sal_False;
+
+        if ( RTL_TEXTENCODING_DONTKNOW == _eEncoding )
+            return sal_True;
+
+        return 0 != GetTextString( _eEncoding ).Len();
     }
 
     //-------------------------------------------------------------------------
     OCharsetDisplay::const_iterator OCharsetDisplay::begin() const
     {
-        return const_iterator(this, OCharsetMap::begin(), 0);
+        return const_iterator( this, OCharsetMap::begin() );
     }
 
     //-------------------------------------------------------------------------
     OCharsetDisplay::const_iterator OCharsetDisplay::end() const
     {
-        return const_iterator(this, OCharsetMap::end(), size());
+        return const_iterator( this, OCharsetMap::end() );
     }
 
     //-------------------------------------------------------------------------
     OCharsetDisplay::const_iterator OCharsetDisplay::find(const rtl_TextEncoding _eEncoding) const
     {
         OCharsetMap::const_iterator aBaseIter = OCharsetMap::find(_eEncoding);
-        return const_iterator(this, aBaseIter, aBaseIter - OCharsetMap::begin());
+        return const_iterator( this, aBaseIter );
     }
 
     //-------------------------------------------------------------------------
     OCharsetDisplay::const_iterator OCharsetDisplay::find(const ::rtl::OUString& _rIanaName, const IANA&) const
     {
         OCharsetMap::const_iterator aBaseIter = OCharsetMap::find(_rIanaName, OCharsetMap::IANA());
-        return const_iterator(this, aBaseIter, aBaseIter - OCharsetMap::begin());
-    }
-
-    //-------------------------------------------------------------------------
-    OCharsetDisplay::const_iterator OCharsetDisplay::find(const ::rtl::OUString& _rLogicalName, const Logical&) const
-    {
-        OCharsetMap::const_iterator aBaseIter = OCharsetMap::find(_rLogicalName, OCharsetMap::Logical());
-        return const_iterator(this, aBaseIter, aBaseIter - OCharsetMap::begin());
+        return const_iterator( this, aBaseIter );
     }
 
     //-------------------------------------------------------------------------
     OCharsetDisplay::const_iterator OCharsetDisplay::find(const ::rtl::OUString& _rDisplayName, const Display&) const
     {
-        OCharsetMap::CharsetIterator aBasePos = OCharsetMap::begin();
-        sal_Int32 nIndex = 0;
-        for (   ConstStringVectorIterator aSearch = m_aDisplayNames.begin();
-                aSearch != m_aDisplayNames.end();
-                ++aSearch, ++aBasePos, ++nIndex
-            )
-            if (*aSearch == _rDisplayName)
-                break;
-
-        return const_iterator(this, aBasePos, nIndex);
+        rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
+        if ( _rDisplayName != m_aSystemDisplayName )
+        {
+            eEncoding = GetTextEncoding( _rDisplayName );
+            OSL_ENSURE( RTL_TEXTENCODING_DONTKNOW != eEncoding,
+                "OCharsetDisplay::find: non-empty display name, but DONTKNOW!" );
+        }
+        return const_iterator( this, OCharsetMap::find( eEncoding ) );
     }
 
     //=========================================================================
@@ -180,6 +167,7 @@ namespace dbaui
         :CharsetDisplayDerefHelper_Base(_rBase)
         ,m_sDisplayName(_rDisplayName)
     {
+        DBG_ASSERT( m_sDisplayName.getLength(), "CharsetDisplayDerefHelper::CharsetDisplayDerefHelper: invalid display name!" );
     }
 
     //-------------------------------------------------------------------------
@@ -191,82 +179,57 @@ namespace dbaui
     //= OCharsetDisplay::ExtendedCharsetIterator
     //=========================================================================
     //-------------------------------------------------------------------------
-    OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator(const OCharsetDisplay* _pContainer, const base_iterator& _rPosition, const sal_Int32 _nPosition)
+    OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator( const OCharsetDisplay* _pContainer, const base_iterator& _rPosition )
         :m_pContainer(_pContainer)
         ,m_aPosition(_rPosition)
-        ,m_nPosition(_nPosition)
     {
         DBG_ASSERT(m_pContainer, "OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator : invalid container!");
     }
 
     //-------------------------------------------------------------------------
     OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator(const ExtendedCharsetIterator& _rSource)
-        :m_pContainer(_rSource.m_pContainer)
-        ,m_aPosition(_rSource.m_aPosition)
-        ,m_nPosition(_rSource.m_nPosition)
+        :m_pContainer( _rSource.m_pContainer )
+        ,m_aPosition( _rSource.m_aPosition )
     {
     }
 
     //-------------------------------------------------------------------------
     CharsetDisplayDerefHelper OCharsetDisplay::ExtendedCharsetIterator::operator*() const
     {
-        DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDisplayNames.size(), "OCharsetDisplay::ExtendedCharsetIterator::operator* : invalid position!");
-        return CharsetDisplayDerefHelper(*m_aPosition, m_pContainer->m_aDisplayNames[m_nPosition]);
+        DBG_ASSERT( m_aPosition != m_pContainer->OCharsetDisplay_Base::end(), "OCharsetDisplay::ExtendedCharsetIterator::operator* : invalid position!");
+
+        rtl_TextEncoding eEncoding = (*m_aPosition).getEncoding();
+        return CharsetDisplayDerefHelper(
+            *m_aPosition,
+            RTL_TEXTENCODING_DONTKNOW == eEncoding ? m_pContainer->m_aSystemDisplayName : (::rtl::OUString)m_pContainer->GetTextString( eEncoding )
+        );
     }
 
     //-------------------------------------------------------------------------
     const OCharsetDisplay::ExtendedCharsetIterator& OCharsetDisplay::ExtendedCharsetIterator::operator++()
     {
-        DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDisplayNames.size(), "OCharsetDisplay::ExtendedCharsetIterator::operator++ : invalid position!");
-        if (m_nPosition < (sal_Int32)m_pContainer->m_aDisplayNames.size())
-        {
-            ++m_nPosition;
+        DBG_ASSERT( m_aPosition != m_pContainer->OCharsetDisplay_Base::end(), "OCharsetDisplay::ExtendedCharsetIterator::operator++ : invalid position!");
+        if ( m_aPosition != m_pContainer->OCharsetDisplay_Base::end() )
             ++m_aPosition;
-        }
         return *this;
     }
 
     //-------------------------------------------------------------------------
     const OCharsetDisplay::ExtendedCharsetIterator& OCharsetDisplay::ExtendedCharsetIterator::operator--()
     {
-        DBG_ASSERT(m_nPosition >= 0, "OCharsetDisplay::ExtendedCharsetIterator::operator-- : invalid position!");
-        if (m_nPosition >= 0)
-        {
-            --m_nPosition;
+        DBG_ASSERT( m_aPosition != m_pContainer->OCharsetDisplay_Base::begin(), "OCharsetDisplay::ExtendedCharsetIterator::operator-- : invalid position!");
+        if ( m_aPosition != m_pContainer->OCharsetDisplay_Base::begin() )
             --m_aPosition;
-        }
         return *this;
     }
 
     //-------------------------------------------------------------------------
     bool operator==(const OCharsetDisplay::ExtendedCharsetIterator& lhs, const OCharsetDisplay::ExtendedCharsetIterator& rhs)
     {
-        return (lhs.m_pContainer == rhs.m_pContainer) && (lhs.m_nPosition == rhs.m_nPosition);
+        return (lhs.m_pContainer == rhs.m_pContainer) && (lhs.m_aPosition == rhs.m_aPosition);
     }
 
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.5  2002/03/14 08:54:05  fs
- *  #97788# assertion for invalid character set maps corrected
- *
- *  Revision 1.4  2001/10/15 13:38:09  fs
- *  #93204# new supported charset IBM866 (cyrillic)
- *
- *  Revision 1.3  2001/05/10 12:02:10  fs
- *  #86849# be a little more tolerant when display names are missing
- *
- *  Revision 1.2  2000/11/29 22:26:32  fs
- *  #80003# re-implemented, now base on dbtools::OCharsetMap
- *
- *  Revision 1.1  2000/10/05 10:08:39  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 26.09.00 12:18:36  fs
- ************************************************************************/
 

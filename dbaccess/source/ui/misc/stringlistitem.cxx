@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringlistitem.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:09:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,11 +115,4 @@ SfxPoolItem* OStringListItem::Clone(SfxItemPool* /* _pPool */) const
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 02.10.00 11:02:21  fs
- ************************************************************************/
 

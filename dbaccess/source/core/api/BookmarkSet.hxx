@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 14:22:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,33 +106,4 @@ namespace dbaccess
     };
 }
 #endif // DBACCESS_CORE_API_BOOKMARKSET_HXX
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2001/07/24 13:25:26  oj
-    #89430# move ORowSetValue into dbtools
-
-    Revision 1.5  2000/11/14 13:28:20  oj
-    change for rowset when getRow returns 0
-
-    Revision 1.4  2000/11/03 14:40:45  oj
-    some problems with refcount resolved
-
-    Revision 1.3  2000/10/17 10:19:03  oj
-    some changes for the rowset
-
-    Revision 1.2  2000/10/11 11:18:10  fs
-    replace unotools with comphelper
-
-    Revision 1.1.1.1  2000/09/19 00:15:37  hr
-    initial import
-
-    Revision 1.2  2000/09/18 14:52:45  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.1  2000/09/01 15:20:52  oj
-    rowset addons
-
-    Revision 1.0 01.08.2000 08:55:50  oj
-------------------------------------------------------------------------*/
 

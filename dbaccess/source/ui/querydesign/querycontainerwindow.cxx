@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 08:04:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,10 @@ namespace dbaui
     OQueryContainerWindow::~OQueryContainerWindow()
     {
 
+        {
+            ::std::auto_ptr<OQueryViewSwitch> aTemp(m_pViewSwitch);
+            m_pViewSwitch = NULL;
+        }
         if ( m_pBeamer )
             ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         m_pBeamer = NULL;
@@ -145,10 +149,7 @@ namespace dbaui
             ::std::auto_ptr<Window> aTemp(m_pSplitter);
             m_pSplitter = NULL;
         }
-        {
-            ::std::auto_ptr<OQueryViewSwitch> aTemp(m_pViewSwitch);
-            m_pViewSwitch = NULL;
-        }
+
         DBG_DTOR(OQueryContainerWindow,NULL);
     }
     // -----------------------------------------------------------------------------
@@ -319,34 +320,4 @@ namespace dbaui
 }   // namespace dbaui
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.8  2002/05/29 08:28:58  oj
- *  #99650# use of auto_ptr when deleting window
- *
- *  Revision 1.7  2002/05/06 09:52:47  oj
- *  #96363# change return type of switchView
- *
- *  Revision 1.6  2002/05/02 07:54:11  oj
- *  #98916# enable F6 key
- *
- *  Revision 1.5  2002/03/01 14:42:07  oj
- *  #97850# correct F6 handling
- *
- *  Revision 1.4  2002/02/11 12:58:53  oj
- *  #90580# enable F6 key for components
- *
- *  Revision 1.3  2001/09/20 12:56:16  oj
- *  #92232# fixes for BIGINT type and new property HELPTEXT
- *
- *  Revision 1.2  2001/09/07 10:05:58  fs
- *  #65293# syntax
- *
- *  Revision 1.1  2001/08/23 14:39:40  fs
- *  initial checkin - outsourced from QueryTextView.hxx (the container window for the query design)
- *
- *
- *  Revision 1.0 23.08.01 12:15:26  fs
- ************************************************************************/
 

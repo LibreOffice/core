@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-10 09:19:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ namespace dbaui
         DECL_LINK( ImplNextHdl  , PushButton* );
         DECL_LINK( ImplOKHdl    , OKButton* );
         DECL_LINK( ImplActivateHdl, WizardDialog* );
-        void CheckColumns();
+        sal_Bool CheckColumns(sal_Int32& _rnBreakPos);
         void loadData(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xTable,
                         ODatabaseExport::TColumns& _rColumns,
                         ODatabaseExport::TColumnVector& _rColVector);
@@ -220,7 +220,7 @@ namespace dbaui
         ::rtl::OUString                 m_sName;    // for a table the name is composed
         ::rtl::OUString                 m_sSourceName;
         ::rtl::OUString                 m_aKeyName;
-        OTypeInfo*                      m_pTypeInfo; // default type
+        TOTypeInfoSP                    m_pTypeInfo; // default type
     public:
         enum Wizard_Create_Style
         {
@@ -269,6 +269,12 @@ namespace dbaui
         void                AddWizardPage(OWizardPage* pPage); // Page wird von OCopyTableWizard gelöscht
         void                RemoveWizardPage(OWizardPage* pPage); // Page goes again to user
         void                CheckButtons(); // checks which button can be disabled, enabled
+
+        void                fillTypeInfo();
+        /** has to be called after fillTypeInfo() and only when using the 1st ctor
+        */
+        void                loadData();
+
         // returns a vector where the position of a column and if the column is in the selection
         // when not the value is CONTAINER_ENTRY_NOTFOUND == (sal_uInt32)-1
         ODatabaseExport::TPositions GetColumnPositions()    const { return m_vColumnPos; }
@@ -290,10 +296,10 @@ namespace dbaui
         */
         ::rtl::OUString getPrimaryKeyName() const { return m_aKeyName; }
 
-        const OTypeInfo*    getTypeInfo(sal_Int32 _nPos)        const { return m_aTypeInfoIndex[_nPos]->second; }
+        TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos)        const { return m_aTypeInfoIndex[_nPos]->second; }
         const OTypeInfoMap* getTypeInfo()                       const { return &m_aTypeInfo; }
 
-        const OTypeInfo*    getDestTypeInfo(sal_Int32 _nPos)    const { return m_aDestTypeInfoIndex[_nPos]->second; }
+        TOTypeInfoSP        getDestTypeInfo(sal_Int32 _nPos)    const { return m_aDestTypeInfoIndex[_nPos]->second; }
         const OTypeInfoMap* getDestTypeInfo()                   const { return &m_aDestTypeInfo; }
 
         ::com::sun::star::lang::Locale  GetLocale() const { return m_aLocale; }
@@ -323,7 +329,7 @@ namespace dbaui
                                             const ::rtl::OUString&  _sColumnName,
                                             const ::rtl::OUString&  _sExtraChars,
                                             sal_Int32               _nMaxNameLen);
-        const OTypeInfo* convertType(const OTypeInfo* _pType);
+        TOTypeInfoSP convertType(const TOTypeInfoSP&_pType,sal_Bool& _bNotConvert);
 
         ::rtl::OUString createUniqueName(const ::rtl::OUString& _sName);
     };

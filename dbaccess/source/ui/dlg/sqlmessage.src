@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:59:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ polish ] = "Szczeg�y";
         Text[ portuguese_brazilian ] = "details";
         Text[ japanese ] = "詳細";
-        Text[ korean ] = "상세";
+        Text[ korean ] = "자세히";
         Text[ chinese_simplified ] = "细节";
         Text[ chinese_traditional ] = "細節";
         Text[ arabic ] = "��������";
@@ -164,7 +164,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ polish ] = "~Lista b��d�w:";
         Text[ portuguese_brazilian ] = "error ~list:";
         Text[ japanese ] = "エラーリスト(~L):";
-        Text[ korean ] = "오류 목록(~L)";
+        Text[ korean ] = "오류 목록(~L):";
         Text[ chinese_simplified ] = "错误列单(~L)：";
         Text[ chinese_traditional ] = "錯誤清單(~L)：";
         Text[ arabic ] = "����� �������:";
@@ -348,7 +348,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ polish ] = "Stan SQL";
         Text[ portuguese_brazilian ] = "SQL State";
         Text[ japanese ] = "SQL ステータス";
-        Text[ korean ] = "SQL-상태";
+        Text[ korean ] = "SQL 상태";
         Text[ chinese_simplified ] = "SQL 状态";
         Text[ chinese_traditional ] = "SQL 狀態";
         Text[ turkish ] = "SQL State";
@@ -409,6 +409,26 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.35.2.3  2003/02/23 12:01:04  nf
+ *  trasnlation 6.1 Beta / OOo 1.1 Beta / final wave
+ *
+ *  Revision 1.35.2.2  2003/02/23 11:00:58  nf
+ *  6.1 Beta 1/OOo 1.1 Beta translation, second wave
+ *
+ *  Revision 1.35.2.1  2003/02/22 15:49:45  hr
+ *  INTEGRATION: CWS mergep (1.35.20); FILE MERGED
+ *  2003/02/22 10:44:32 nf 1.35.20.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
+ *  2003/01/31 12:51:17 hjs 1.35.20.1: #107113# merge on SRX644p
+ *
+ *  Revision 1.35.20.2  2003/02/22 10:44:32  nf
+ *  #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
+ *
+ *  Revision 1.35.20.1  2003/01/31 12:51:17  hjs
+ *  #107113# merge on SRX644p
+ *
+ *  Revision 1.35  2002/11/27 16:59:19  kz
+ *  Merge SRX644: 27.11.02 - 17:55:26
+ *
  *  Revision 1.34  2002/08/19 07:47:24  oj
  *  #99473# change string resource files
  *
@@ -514,6 +534,12 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
  *
  *  Revision 1.0 02.10.00 12:43:18  fs
  ************************************************************************/
+
+
+
+
+
+
 
 
 

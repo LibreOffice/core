@@ -2,9 +2,9 @@
  *
  *  $RCSfile: curledit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-08 09:55:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,9 @@ public:
     /// set a new text, leave the current prefix unchanged
     virtual void    SetTextNoPrefix(const String& _rText);
 
-    void    SaveValueNoPrefix()             { m_sSaveValueNoPrefix = GetTextNoPrefix(); }
-    String  GetSavedValueNoPrefix() const   { return m_sSaveValueNoPrefix; }
+    inline void     SaveValueNoPrefix()             { m_sSaveValueNoPrefix = GetTextNoPrefix(); }
+    inline String   GetSavedValueNoPrefix() const   { return m_sSaveValueNoPrefix; }
+    inline void     initializeTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB) { m_aTypeCollection.initUserDriverTypes(_rxORB); }
 };
 
 //.........................................................................
@@ -115,17 +116,4 @@ public:
 //.........................................................................
 
 #endif // _DBAUI_CURLEDIT_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2000/10/24 12:07:36  fs
- *  S/GetTextNoPrefix
- *
- *  Revision 1.1  2000/10/05 10:08:07  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 28.09.00 13:11:23  fs
- ************************************************************************/
 

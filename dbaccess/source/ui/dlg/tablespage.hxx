@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:27:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,26 +252,4 @@ namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_TABLESPAGE_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.5  2001/08/28 08:21:15  fs
- *  #91573# enable the items (drop/add/edit) only if the connection is capable
- *
- *  Revision 1.4  2001/08/15 08:49:57  fs
- *  #89822# doToolboxAction -> onToolBoxAction (now virtual in the base class)
- *
- *  Revision 1.3  2001/08/14 14:12:22  fs
- *  #86945# add notifiers to the tables container of newly opened table design components
- *
- *  Revision 1.2  2001/08/14 12:10:12  fs
- *  preparations for #86945# (be a container listener ...)
- *
- *  Revision 1.1  2001/05/29 09:59:46  fs
- *  initial checkin - outsourced the class from commonpages
- *
- *
- *  Revision 1.0 29.05.01 11:08:49  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignFieldUndoAct.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-30 11:15:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,15 @@ namespace dbaui
         virtual void    Redo() = 0;
 
     public:
-        OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, USHORT nCommentID) : OCommentUndoAction(nCommentID), pOwner(pSelBrwBox), m_nColumnPostion(BROWSER_INVALIDID) { }
+        OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, USHORT nCommentID);
+        virtual ~OQueryDesignFieldUndoAct();
 
-        inline void SetColumnPosition(USHORT _nColumnPostion) { m_nColumnPostion = _nColumnPostion; }
+        inline void SetColumnPosition(USHORT _nColumnPostion)
+        {
+            m_nColumnPostion = _nColumnPostion;
+            OSL_ENSURE(m_nColumnPostion != BROWSER_INVALIDID,"Column position was not set add the undo action!");
+            OSL_ENSURE(m_nColumnPostion < pOwner->GetColumnCount(),"Position outside the column count!");
+        }
     };
 
     // ================================================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-30 11:30:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,32 +141,4 @@ private:
 //.........................................................................
 
 #endif // _DBAUI_UNOADMIN_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.5  2001/06/18 12:34:56  fs
- *  #88389# OGenericUnoDialog moved to svtools
- *
- *  Revision 1.4  2001/05/17 09:16:15  fs
- *  #86511# hold the type collection as pointer, not as object - allows construction in createDialog, where it can be guarded by the solar mutex
- *
- *  Revision 1.3  2000/11/01 16:31:30  fs
- *  migrated from awt::XDialog to ui::XExecutableDialog / removed the star* namespace shortcuts
- *
- *  Revision 1.2  2000/10/31 08:07:47  fs
- *  support an initial selection
- *
- *  Revision 1.1  2000/10/25 12:49:14  fs
- *  moved herein from ..\dlg
- *
- *  Revision 1.2  2000/10/11 11:31:03  fs
- *  new implementations - still under construction
- *
- *  Revision 1.1  2000/10/05 10:07:32  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 20.09.00 12:15:14  fs
- ************************************************************************/
 

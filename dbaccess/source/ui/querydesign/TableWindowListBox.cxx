@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 07:09:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,10 +115,10 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent, const String& r
     ,m_nDropEvent(0)
 {
     DBG_CTOR(OTableWindowListBox,NULL);
+    m_aScrollTimer.SetTimeout( SCROLLING_TIMESPAN );
     SetDoubleClickHdl( LINK(this, OTableWindowListBox, DoubleClickHdl) );
 
-    m_aScrollHelper.setUpScrollMethod( LINK(this, OTableWindowListBox, ScrollUpHdl) );
-    m_aScrollHelper.setDownScrollMethod( LINK(this, OTableWindowListBox, ScrollDownHdl) );
+    SetSelectionMode(SINGLE_SELECTION);
 
     SetHighlightRange( );
 }
@@ -138,7 +138,8 @@ OTableWindowListBox::~OTableWindowListBox()
 {
     if (m_nDropEvent)
         Application::RemoveUserEvent(m_nDropEvent);
-
+    if( m_aScrollTimer.IsActive() )
+        m_aScrollTimer.Stop();
     m_pTabWin = NULL;
     DBG_DTOR(OTableWindowListBox,NULL);
 }
@@ -229,30 +230,40 @@ long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
         return SvTreeListBox::PreNotify(rNEvt);
     return 1L;
 }
-// -----------------------------------------------------------------------------
-void scrollWindow(OTableWindowListBox* _pListBox, const Point& _rPos,sal_Bool _bUp)
-{
-    SvLBoxEntry* pEntry = _pListBox->GetEntry( _rPos );
 
-    if( pEntry && pEntry != _pListBox->Last() )
-    {
-        _pListBox->ScrollOutputArea( _bUp ? -1 : 1 );
-        pEntry = _pListBox->GetEntry( _rPos );
-        _pListBox->Select( pEntry, TRUE );
-    }
-}
 //------------------------------------------------------------------------------
-IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, EMPTY_ARG )
+IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, pBox )
 {
-    scrollWindow(this,m_aMousePos,sal_True);
+    SvLBoxEntry* pEntry = GetEntry( m_aMousePos );
+    if( !pEntry )
+        return 0;
+
+    if( pEntry != Last() )
+    {
+        ScrollOutputArea( -1 );
+        pEntry = GetEntry( m_aMousePos );
+        Select( pEntry, TRUE );
+//      m_aScrollTimer.Start();
+    }
 
     return 0;
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, EMPTY_ARG )
+IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, pBox )
 {
-    scrollWindow(this,m_aMousePos,sal_False);
+    SvLBoxEntry* pEntry = GetEntry( m_aMousePos );
+    if( !pEntry )
+        return 0;
+
+    if( pEntry != Last() )
+    {
+        ScrollOutputArea( 1 );
+        pEntry = GetEntry( m_aMousePos );
+        Select( pEntry, TRUE );
+//      m_aScrollTimer.Start();
+    }
+
     return 0;
 }
 
@@ -285,6 +296,7 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
         && OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_JOIN) )
     {   // don't drop into the window if it's the drag source itself
 
+
         // remove the selection if the dragging operation is leaving the window
         if (_rEvt.mbLeaving)
             SelectAll(FALSE);
@@ -292,19 +304,49 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
         {
             // hit test
             m_aMousePos = _rEvt.maPosPixel;
+            Size aOutputSize = GetOutputSizePixel();
             SvLBoxEntry* pEntry = GetEntry( m_aMousePos );
-            if( pEntry )
-            {
-                m_aScrollHelper.scroll(m_aMousePos,GetOutputSizePixel());
-                // Beim Drag automatisch den richtigen Eintrag selektieren
-                if ((FirstSelected() != pEntry) || (FirstSelected() && NextSelected(FirstSelected())))
-                    SelectAll(FALSE);
-                Select(pEntry, TRUE);
+            if( !pEntry )
+                return DND_ACTION_NONE;
 
-                // Auf den ersten Eintrag (*) kann nicht gedroppt werden
-                if(!( m_pTabWin->GetData()->IsShowAll() && (pEntry==First()) ))
-                    nDND_Action = DND_ACTION_LINK;
+            // Scrolling Areas
+            Rectangle aBottomScrollArea( Point(0, aOutputSize.Height()-LISTBOX_SCROLLING_AREA),
+                                         Size(aOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
+            Rectangle aTopScrollArea( Point(0,0), Size(aOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
+
+            // Wenn Zeiger auf der oberen ScrollingArea steht, nach oben scrollen
+            if( aBottomScrollArea.IsInside(m_aMousePos) )
+            {
+                if( !m_aScrollTimer.IsActive() )
+                {
+                    m_aScrollTimer.SetTimeoutHdl( LINK(this, OTableWindowListBox, ScrollUpHdl) );
+                    ScrollUpHdl( this );
+                }
             }
+
+            // Wenn Zeiger auf der oberen ScrollingArea steht, nach unten scrollen
+            else if( aTopScrollArea.IsInside(m_aMousePos) )
+            {
+                if( !m_aScrollTimer.IsActive() )
+                {
+                    m_aScrollTimer.SetTimeoutHdl( LINK(this, OTableWindowListBox, ScrollDownHdl) );
+                    ScrollDownHdl( this );
+                }
+            }
+            else
+            {
+                if( m_aScrollTimer.IsActive() )
+                    m_aScrollTimer.Stop();
+            }
+
+            // Beim Drag automatisch den richtigen Eintrag selektieren
+            if ((FirstSelected() != pEntry) || (FirstSelected() && NextSelected(FirstSelected())))
+                SelectAll(FALSE);
+            Select(pEntry, TRUE);
+
+            // Auf den ersten Eintrag (*) kann nicht gedroppt werden
+            if(!( m_pTabWin->GetData()->IsShowAll() && (pEntry==First()) ))
+                nDND_Action = DND_ACTION_LINK;
         }
     }
     return nDND_Action;
@@ -320,7 +362,7 @@ IMPL_LINK( OTableWindowListBox, DropHdl, void *, EMPTY_ARG)
     try
     {
         OJoinTableView* pCont = m_pTabWin->getTableView();
-        OSL_ENSURE(pCont,"No OJoinTableView!");
+        OSL_ENSURE(pCont,"No QueryTableView!");
         pCont->AddConnection(m_aDropInfo.aSource, m_aDropInfo.aDest);
     }
     catch(const SQLException& e)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableUndo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:19:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
+#ifndef DBAUI_TYPEINFO_HXX
+#include "TypeInfo.hxx"
+#endif
 
 namespace dbaui
 {
@@ -125,15 +128,15 @@ namespace dbaui
     class OTableEditorTypeSelUndoAct : public OTableEditorUndoAct
     {
     protected:
-        USHORT              m_nCol;
-        long                m_nRow;
-        const OTypeInfo*    m_pOldType;
-        const OTypeInfo*    m_pNewType;
+        USHORT          m_nCol;
+        long            m_nRow;
+        TOTypeInfoSP    m_pOldType;
+        TOTypeInfoSP    m_pNewType;
 
         virtual void    Undo();
         virtual void    Redo();
     public:
-        OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, USHORT nColumn, const OTypeInfo* _pOldType );
+        OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, USHORT nColumn, const TOTypeInfoSP& _pOldType );
         virtual ~OTableEditorTypeSelUndoAct();
     };
 

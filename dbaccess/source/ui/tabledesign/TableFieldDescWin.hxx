@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescWin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:19:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef DBAUI_TABLEFIELDDESCGENPAGE_HXX
 #include "FieldDescGenWin.hxx"
 #endif
+#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
+#include "IClipBoardTest.hxx"
+#endif
 
 class FixedText;
 namespace dbaui
@@ -78,11 +81,21 @@ namespace dbaui
     // Ableitung von TabPage ist ein Trick von TH,
     // um Aenderungen der Systemfarben zu bemerken (Bug #53905)
     class OTableFieldDescWin : public TabPage
+                                ,public IClipboardTest
     {
+        enum ChildFocusState
+        {
+            DESCRIPTION,
+            HELP,
+            NONE
+        };
     private:
         OTableDesignHelpBar*    m_pHelpBar;
         OFieldDescGenWin*       m_pGenPage;
         FixedText*              m_pHeader;
+        ChildFocusState         m_eChildFocus;
+
+        IClipboardTest* getActiveChild() const;
 
     protected:
         virtual void Resize();
@@ -98,8 +111,11 @@ namespace dbaui
         void SaveData( OFieldDescription* pFieldDescr );
         void SetReadOnly( BOOL bReadOnly );
 
+        // window overloads
+        virtual long PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
         virtual void LoseFocus();
+
         void SetControlText( USHORT nControlId, const String& rText )
                 { m_pGenPage->SetControlText(nControlId,rText); }
         String GetControlText( USHORT nControlId )
@@ -113,14 +129,18 @@ namespace dbaui
         String  BoolStringPersistent(const String& rUIString) const { return m_pGenPage->BoolStringPersistent(rUIString); }
         String  BoolStringUI(const String& rPersistentString) const { return m_pGenPage->BoolStringUI(rPersistentString); }
 
-        sal_Bool isCutAllowed();
-        sal_Bool isCopyAllowed();
+        // IClipboardTest
+        virtual sal_Bool isCutAllowed();
+        virtual sal_Bool isCopyAllowed();
+        virtual sal_Bool isPasteAllowed();
+        virtual sal_Bool hasChildPathFocus() { return HasChildPathFocus(); }
 
-        void    cut();
-        void    copy();
-        void    paste();
+        virtual void copy();
+        virtual void cut();
+        virtual void paste();
 
         inline OFieldDescGenWin* getGenPage() const { return m_pGenPage; }
+        inline OTableDesignHelpBar* getHelpBar() const { return m_pHelpBar; }
 
     };
 }

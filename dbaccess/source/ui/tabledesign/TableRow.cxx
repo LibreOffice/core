@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 07:55:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,10 +137,10 @@ sal_Bool OTableRow::IsPrimaryKey() const
     return m_pActFieldDescr && m_pActFieldDescr->IsPrimaryKey();
 }
 // -----------------------------------------------------------------------------
-void OTableRow::SetFieldType( const OTypeInfo* _pType, sal_Bool _bForce )
+void OTableRow::SetFieldType( const TOTypeInfoSP& _pType, sal_Bool _bForce )
 {
     DBG_CHKTHIS(OTableRow,NULL);
-    if ( _pType )
+    if ( _pType.get() )
     {
         if( !m_pActFieldDescr )
         {

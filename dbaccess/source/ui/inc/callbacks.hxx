@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callbacks.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-30 13:05:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,17 +115,4 @@ namespace dbaui
 //........................................................................
 
 #endif // _DBACCESS_UI_CALLBACKS_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/03/23 10:52:50  fs
- *  new DnD implementations
- *
- *  Revision 1.1  2001/03/22 10:40:44  fs
- *  initial checkin - callbacks
- *
- *
- *  Revision 1.0 22.03.01 10:12:22  fs
- ************************************************************************/
 

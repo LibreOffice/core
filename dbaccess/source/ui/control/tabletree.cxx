@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:06:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,74 +637,4 @@ void OTableTreeListBox::removedTable( const Reference< XConnection >& _rxConn, c
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.21  2002/08/19 07:41:26  oj
- *  #99473# change string resource files
- *
- *  Revision 1.20  2002/04/29 08:49:26  oj
- *  #98772# hi contrast changes
- *
- *  Revision 1.19  2001/08/28 08:21:51  fs
- *  #91573# UpdateTableList returns the driver used for connecting
- *
- *  Revision 1.18  2001/08/14 14:13:33  fs
- *  #86945# removed the tables container parameter from UpdateTableList
- *
- *  Revision 1.17  2001/08/14 12:13:53  fs
- *  preparations for #86945#
- *
- *  Revision 1.16  2001/07/16 15:43:24  fs
- *  #89709# special emphasizing handling for the 'all objects' entry
- *
- *  Revision 1.15  2001/06/25 09:05:56  fs
- *  #88417# insert the 'all object' entry even if there currently are no objects
- *
- *  Revision 1.14  2001/06/05 12:39:45  fs
- *  #87680# implEmphasize corrected / #87771# UpdateTableList: ask for VIEW, TABLE and
- *
- *  Revision 1.13  2001/05/22 06:31:30  oj
- *  #87081# show all tabletypes
- *
- *  Revision 1.12  2001/05/15 11:25:48  fs
- *  #86996# use the connection pool instead of the driver manager
- *
- *  Revision 1.11  2001/03/29 08:06:35  oj
- *  only assign array when length != 0
- *
- *  Revision 1.10  2001/03/29 07:09:53  oj
- *  show views the correct way
- *
- *  Revision 1.9  2001/02/23 15:16:28  oj
- *  use namespace
- *
- *  Revision 1.8  2001/02/05 14:44:53  oj
- *  new member for hiding first entry
- *
- *  Revision 1.7  2001/01/30 08:29:43  fs
- *  'wildcard checking'
- *
- *  Revision 1.6  2001/01/15 10:55:43  oj
- *  wrong image for table used
- *
- *  Revision 1.5  2000/10/30 15:37:48  fs
- *  #79816# no need for a XDataDefinitionSupplier anymore - collect table/view names from the meta data
- *
- *  Revision 1.4  2000/10/26 14:55:04  oj
- *  local strings for dll
- *
- *  Revision 1.3  2000/10/13 16:02:21  fs
- *  typo in error message
- *
- *  Revision 1.2  2000/10/09 12:36:50  fs
- *  reinserted the code for connecting in UpdateTableList
- *
- *  Revision 1.1  2000/10/05 10:00:59  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 28.09.00 13:32:32  fs
- ************************************************************************/
 

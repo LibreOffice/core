@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 07:55:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ OFieldDescription::OFieldDescription(   const ::rtl::OUString&  _sName,
                     const ::com::sun::star::uno::Any&   _aDefaultValue,
                     const ::com::sun::star::uno::Any&   _aControlDefault,
                     const ::rtl::OUString&  _sAutoIncrementValue,
-                    const OTypeInfo*        _pType,
+                    const TOTypeInfoSP&     _pType,
                     sal_Int32               _nPrecision,
                     sal_Int32               _nScale,
                     sal_Int32               _nIsNullable,
@@ -225,9 +225,9 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
     }
 }
 // -----------------------------------------------------------------------------
-void OFieldDescription::FillFromTypeInfo(const OTypeInfo* _pType,sal_Bool _bForce,sal_Bool _bReset)
+void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bForce,sal_Bool _bReset)
 {
-    const OTypeInfo* pOldType = getTypeInfo();
+    TOTypeInfoSP pOldType = getTypeInfo();
     if ( _pType != pOldType )
     {
         // reset type depending information
@@ -237,7 +237,7 @@ void OFieldDescription::FillFromTypeInfo(const OTypeInfo* _pType,sal_Bool _bForc
             SetControlDefault(Any());
         }
 
-        sal_Bool bForce = _bForce || pOldType == NULL || pOldType->nType != _pType->nType;
+        sal_Bool bForce = _bForce || pOldType.get() == NULL || pOldType->nType != _pType->nType;
         switch ( _pType->nType )
         {
             case DataType::CHAR:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:42:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,19 +321,11 @@ hidspecial HID_DSADMIN_AUTORETRIEVEENABLED              { HelpId = HID_DSADMIN_A
 hidspecial HID_DSADMIN_PAGE_MYSQL                       { HelpId = HID_DSADMIN_PAGE_MYSQL ; };
 hidspecial HID_TAB_PAGE_TABLEPRIVILEGES                 { HelpId = HID_TAB_PAGE_TABLEPRIVILEGES ; };
 
+hidspecial HID_DSADMIN_PAGE_USERDRIVER                  { HelpId = HID_DSADMIN_PAGE_USERDRIVER ; };
+hidspecial HID_DSADMIN_USER_DEFINED                     { HelpId = HID_DSADMIN_USER_DEFINED ; };
+hidspecial HID_DSADMIN_USERDEF_OPTIONS                  { HelpId = HID_DSADMIN_USERDEF_OPTIONS ; };
+hidspecial HID_DSADMIN_CHARSET_USERDEF                  { HelpId = HID_DSADMIN_CHARSET_USERDEF ; };
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.44  2002/07/25 06:28:25  oj
- *  #100280# #95146# new helpids for report and autoincrement fields
- *
- *  Revision 1.43  2002/07/09 12:54:27  oj
- *  #99921# check if datasource allows to check names
- *
- *  Revision 1.42  2002/07/09 07:42:45  oj
- *  #96306# remove unused helpids
- *
- ************************************************************************/
+
 
 

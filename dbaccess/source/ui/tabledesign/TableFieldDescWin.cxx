@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescWin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:45:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,8 @@ OTableFieldDescWin::OTableFieldDescWin( Window* pParent)
     m_pHelpBar->Show();
 
     m_pGenPage = new OFieldDescGenWin( this, m_pHelpBar );
-    m_pGenPage->SetHelpId( HID_TABLE_DESIGN_TABPAGE_GENERAL );
-    m_pGenPage->Show();
+    getGenPage()->SetHelpId( HID_TABLE_DESIGN_TABPAGE_GENERAL );
+    getGenPage()->Show();
 }
 
 //------------------------------------------------------------------------------
@@ -139,7 +139,7 @@ OTableFieldDescWin::~OTableFieldDescWin()
     //////////////////////////////////////////////////////////////////////
     // Childs zerstoeren
     m_pHelpBar->Hide();
-    m_pGenPage->Hide();
+    getGenPage()->Hide();
     m_pHeader->Hide();
 
     {
@@ -159,29 +159,29 @@ OTableFieldDescWin::~OTableFieldDescWin()
 //------------------------------------------------------------------------------
 void OTableFieldDescWin::Init()
 {
-    DBG_ASSERT(m_pGenPage != NULL, "OTableFieldDescWin::Init : ups ... no GenericPage ... this will crash ...");
-    m_pGenPage->Init();
+    DBG_ASSERT(getGenPage() != NULL, "OTableFieldDescWin::Init : ups ... no GenericPage ... this will crash ...");
+    getGenPage()->Init();
 }
 
 //------------------------------------------------------------------------------
 void OTableFieldDescWin::SetReadOnly( sal_Bool bRead )
 {
     DBG_CHKTHIS(OTableFieldDescWin,NULL);
-    m_pGenPage->SetReadOnly( bRead );
+    getGenPage()->SetReadOnly( bRead );
 }
 
 //------------------------------------------------------------------------------
 void OTableFieldDescWin::DisplayData( OFieldDescription* pFieldDescr )
 {
     DBG_CHKTHIS(OTableFieldDescWin,NULL);
-    m_pGenPage->DisplayData( pFieldDescr );
+    getGenPage()->DisplayData( pFieldDescr );
 }
 
 //------------------------------------------------------------------------------
 void OTableFieldDescWin::SaveData( OFieldDescription* pFieldDescr )
 {
     DBG_CHKTHIS(OTableFieldDescWin,NULL);
-    m_pGenPage->SaveData( pFieldDescr );
+    getGenPage()->SaveData( pFieldDescr );
 }
 
 //------------------------------------------------------------------------------
@@ -264,7 +264,7 @@ void OTableFieldDescWin::Resize()
 
     m_pHeader->SetPosSizePixel( Point(0, STANDARD_MARGIN), Size(nOutputWidth, 15) );
 
-    m_pGenPage->SetPosSizePixel(Point   (   STANDARD_MARGIN,
+    getGenPage()->SetPosSizePixel(Point (   STANDARD_MARGIN,
                                         STANDARD_MARGIN + DETAILS_HEADER_HEIGHT
                                     ),
                               Size  (   nPageWidth,
@@ -289,46 +289,80 @@ void OTableFieldDescWin::Resize()
     Invalidate();
 }
 // -----------------------------------------------------------------------------
+IClipboardTest* OTableFieldDescWin::getActiveChild() const
+{
+    IClipboardTest* pTest = NULL;
+    switch(m_eChildFocus)
+    {
+        case DESCRIPTION:
+            pTest = getGenPage();
+            break;
+        default:
+            pTest = getHelpBar();
+            break;
+    }
+    return pTest;
+}
+// -----------------------------------------------------------------------------
 sal_Bool OTableFieldDescWin::isCopyAllowed()
 {
-    return (m_pGenPage && m_pGenPage->isCutAllowed());
+    return getActiveChild() && getActiveChild()->isCopyAllowed();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableFieldDescWin::isCutAllowed()
 {
-    return (m_pGenPage && m_pGenPage->isCutAllowed());
+    return (getGenPage() && getGenPage()->HasChildPathFocus() && getGenPage()->isCutAllowed());
+}
+// -----------------------------------------------------------------------------
+sal_Bool OTableFieldDescWin::isPasteAllowed()
+{
+    return (getGenPage() && getGenPage()->HasChildPathFocus() && getGenPage()->isPasteAllowed());
 }
 // -----------------------------------------------------------------------------
 void OTableFieldDescWin::cut()
 {
-    if(m_pGenPage)
-        m_pGenPage->cut();
+    if ( getGenPage() && getGenPage()->HasChildPathFocus() )
+        getGenPage()->cut();
 }
 // -----------------------------------------------------------------------------
 void OTableFieldDescWin::copy()
 {
-    if(m_pGenPage)
-        m_pGenPage->copy();
+    if ( getActiveChild() )
+        getActiveChild()->copy();
 }
 // -----------------------------------------------------------------------------
 void OTableFieldDescWin::paste()
 {
-    if(m_pGenPage)
-        m_pGenPage->paste();
+    if ( getGenPage() && getGenPage()->HasChildPathFocus() )
+        getGenPage()->paste();
 }
 // -----------------------------------------------------------------------------
 void OTableFieldDescWin::GetFocus()
 {
-    if ( m_pGenPage )
-        m_pGenPage->GetFocus();
+    if ( getGenPage() )
+        getGenPage()->GetFocus();
 }
 // -----------------------------------------------------------------------------
 void OTableFieldDescWin::LoseFocus()
 {
-    if ( m_pGenPage )
-        m_pGenPage->LoseFocus();
+    if ( getGenPage() )
+        getGenPage()->LoseFocus();
 }
 // -----------------------------------------------------------------------------
+long OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
+{
+    BOOL bHandled = FALSE;
+    switch(rNEvt.GetType())
+    {
+        case EVENT_GETFOCUS:
+            if( getGenPage() && getGenPage()->HasChildPathFocus() )
+                m_eChildFocus = DESCRIPTION;
+            else
+                m_eChildFocus = HELP;
+            break;
+    }
 
+    return bHandled ? 1L : TabPage::PreNotify(rNEvt);
+}
 
 

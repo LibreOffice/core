@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 14:22:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ namespace dbaccess
         {
         }
 
-        void setParameter(sal_Int32 nPos,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters > _xParameter,const connectivity::ORowSetValue& _rValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        void setParameter(sal_Int32 nPos,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters > _xParameter,const connectivity::ORowSetValue& _rValue,sal_Int32 _nType = ::com::sun::star::sdbc::DataType::OTHER);
         void fillTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     public:
         virtual ~OCacheSet();
@@ -184,42 +184,4 @@ namespace dbaccess
     };
 }
 #endif //DBACCESS_CORE_API_CACHESET_HXX
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.9  2001/10/26 07:50:50  oj
-    #93524# insert/delete corrected
-
-    Revision 1.8  2001/07/24 13:25:25  oj
-    #89430# move ORowSetValue into dbtools
-
-    Revision 1.7  2001/01/22 07:38:23  oj
-    #82632# change member
-
-    Revision 1.6  2000/12/12 12:15:41  oj
-    use paramter instead of member and set member to ull
-
-    Revision 1.5  2000/11/14 13:28:20  oj
-    change for rowset when getRow returns 0
-
-    Revision 1.4  2000/11/03 14:32:31  oj
-    some problems with refcount resolved
-
-    Revision 1.3  2000/10/17 10:18:12  oj
-    some changes for the rowset
-
-    Revision 1.2  2000/10/11 11:18:10  fs
-    replace unotools with comphelper
-
-    Revision 1.1.1.1  2000/09/19 00:15:38  hr
-    initial import
-
-    Revision 1.2  2000/09/18 14:52:46  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.1  2000/09/01 15:24:14  oj
-    rowset addon
-
-    Revision 1.0 26.07.2000 14:45:35  oj
-------------------------------------------------------------------------*/
 

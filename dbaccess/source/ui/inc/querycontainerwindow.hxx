@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-06 09:30:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,20 +168,4 @@ namespace dbaui
 //.........................................................................
 
 #endif // DBAUI_QUERYCONTAINERWINDOW_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2001/10/23 12:30:27  oj
- *  #93566# slot fixes
- *
- *  Revision 1.2  2001/09/27 06:19:05  oj
- *  #92325# impl new sql functions
- *
- *  Revision 1.1  2001/08/23 14:25:36  fs
- *  initial checkin - outsourced from QueryTextView.hxx (the container window for the query design)
- *
- *
- *  Revision 1.0 23.08.01 12:08:57  fs
- ************************************************************************/
 

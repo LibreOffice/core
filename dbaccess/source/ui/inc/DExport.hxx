@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-28 08:05:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
 
         String              m_sTextToken;       // Zellen Inhalt
-        OTypeInfo*          m_pTypeInfo;    // contains the default type
+        TOTypeInfoSP        m_pTypeInfo;    // contains the default type
         sal_Int32           m_nColumnPos;       // aktuelle Spaltenposition
         sal_Int32           m_nRows;        // Anzahl der Zeilen die durchsucht werden sollen
         sal_Int32           m_nRowCount;    // current count of rows

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-09 08:53:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ namespace dbaui
         ::rtl::OUString m_sName;                // table for update data
         ::rtl::OUString m_sAutoIncrementValue;  // the autoincrement value set in the datasource
         String          m_sTypeNames;           // these type names are the ones out of the resource file
-        OTypeInfo*      m_pTypeInfo;            // fall back when type is unkown because database driver has a failure
+        TOTypeInfoSP    m_pTypeInfo;            // fall back when type is unkown because database driver has a failure
 
         sal_Bool        m_bAllowAutoIncrementValue; // no : 1 NO BIT , is true when the datasource has a AutoIncrementValue property in their info property
         sal_Bool        m_bModified : 1;        // is the data modified
@@ -171,20 +171,20 @@ namespace dbaui
         //  const ::connectivity::OSQLParseNode* getParseTree() const { return m_aSqlIterator.getParseTree();}
         // need for undo's and redo's
         SfxUndoManager* getUndoMgr();
-        ::std::vector<OTableRow*>*  getRows() { return &m_vRowList; }
-        const OTypeInfoMap*         getTypeInfo() const { return &m_aTypeInfo; }
+        inline ::std::vector<OTableRow*>*   getRows() { return &m_vRowList; }
+        inline const OTypeInfoMap*          getTypeInfo() const { return &m_aTypeInfo; }
 
-        const OTypeInfo* getTypeInfo(sal_Int32 _nPos) const { return m_aTypeInfoIndex[_nPos]->second; }
-        const OTypeInfo* getTypeInfoByType(sal_Int32 _nDataType) const;
+        inline TOTypeInfoSP                 getTypeInfo(sal_Int32 _nPos) const { return m_aTypeInfoIndex[_nPos]->second; }
+        TOTypeInfoSP                        getTypeInfoByType(sal_Int32 _nDataType) const;
 
-        const OTypeInfo* getTypeInfoFallBack() const { return m_pTypeInfo; }
+        inline TOTypeInfoSP                 getTypeInfoFallBack() const { return m_pTypeInfo; }
 
-        virtual sal_Bool Construct(Window* pParent);
+        virtual sal_Bool                    Construct(Window* pParent);
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL               disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::frame::XController
-        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
+        virtual sal_Bool SAL_CALL           suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::lang::XComponent
         virtual void        SAL_CALL disposing();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-18 15:48:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,7 +514,7 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt
 
 //  if (0 == m_nPeerCreationLevel)
     {
-        Reference< ::com::sun::star::frame::XDispatch >  xDisp(mxPeer, UNO_QUERY);
+        Reference< ::com::sun::star::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
         for (   StatusMultiplexerArray::iterator aIter = m_aStatusMultiplexer.begin();
                 aIter != m_aStatusMultiplexer.end();
                 ++aIter)
@@ -528,7 +528,7 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt
 //---------------------------------------------------------------------------------------
 void SAL_CALL SbaXGridControl::dispatch(const ::com::sun::star::util::URL& aURL, const Sequence< PropertyValue >& aArgs) throw( RuntimeException )
 {
-    Reference< ::com::sun::star::frame::XDispatch >  xDisp(mxPeer, UNO_QUERY);
+    Reference< ::com::sun::star::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
     if (xDisp.is())
         xDisp->dispatch(aURL, aArgs);
 }
@@ -546,11 +546,11 @@ void SAL_CALL SbaXGridControl::addStatusListener( const Reference< XStatusListen
         }
 
         pMultiplexer->addInterface( _rxListener );
-        if ( mxPeer.is() )
+        if ( getPeer().is() )
         {
             if ( 1 == pMultiplexer->getLength() )
             {   // the first external listener for this URL
-                Reference< XDispatch >  xDisp( mxPeer, UNO_QUERY );
+                Reference< XDispatch >  xDisp( getPeer(), UNO_QUERY );
                 xDisp->addStatusListener( pMultiplexer, _rURL );
             }
             else
@@ -573,9 +573,9 @@ void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< ::com::sun:
         pMultiplexer->acquire();
     }
 
-    if (mxPeer.is() && pMultiplexer->getLength() == 1)
+    if (getPeer().is() && pMultiplexer->getLength() == 1)
     {
-        Reference< ::com::sun::star::frame::XDispatch >  xDisp(mxPeer, UNO_QUERY);
+        Reference< ::com::sun::star::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
         xDisp->removeStatusListener(pMultiplexer, _rURL);
     }
     pMultiplexer->removeInterface( _rxListener );

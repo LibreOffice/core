@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 17:01:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ ModalDialog DLG_PARAMETERS
         Text[ polish ] = "Parametr";
         Text[ portuguese_brazilian ] = "~Parameters";
         Text[ japanese ] = "ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿(~P)";
-        Text[ korean ] = "íŒŒë¼ë¯¸í„°(~P)";
+        Text[ korean ] = "ë§¤ê°œ ë³€ìˆ˜(~P)";
         Text[ chinese_simplified ] = "å‚æ•°(~P)";
         Text[ chinese_traditional ] = "åƒæ•¸(~P)";
         Text[ arabic ] = "ÇáãÚáãÇÊ";
@@ -165,7 +165,7 @@ ModalDialog DLG_PARAMETERS
         Text[ greek ] = "åğüìå~íï";
         Text[ dutch ] = "~volgende";
         Text[ french ] = "Suivant";
-        Text[ spanish ] = "~siguiente";
+        Text[ spanish ] = "~Siguiente";
         Text[ italian ] = "Successi~vo";
         Text[ danish ] = "~næste";
         Text[ swedish ] = "~nästa";
@@ -211,7 +211,7 @@ ModalDialog DLG_PARAMETERS
     Text[ chinese_traditional ] = "è¼¸å…¥åƒæ•¸å€¼";
     Text[ arabic ] = "ÅÏÎÇá ÇáãÚáãÉ";
     Text[ greek ] = "ÅéóáãùãŞ ğáñáìİôñùí";
-    Text[ korean ] = "íŒŒë¼ë¯¸í„° ì…ë ¥";
+    Text[ korean ] = "ë§¤ê°œ ë³€ìˆ˜ ì…ë ¥";
     Text[ turkish ] = "Parametre girişi";
 
     String STR_COULD_NOT_CONVERT_PARAM
@@ -231,7 +231,7 @@ ModalDialog DLG_PARAMETERS
         Text[ polish ] = "Nie mo¿na by³o zamieniæ wpisu na wa¿n¹ wartoœæ kolumny \"$name$\".";
         Text[ portuguese_brazilian ] = "The given input could no be converted into a valid value for column \"$value$\".";
         Text[ japanese ] = "å…¥åŠ›å€¤ã¯ <$name$> åˆ—ã§æœ‰åŠ¹ãªå€¤ã«å¤‰æ›ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
-        Text[ korean ] = "ì…ë ¥ì´ ì—´\"$name$\"ì˜ ìœ íš¨í•œ ê°’ìœ¼ë¡œ ë³€í™˜ë˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
+        Text[ korean ] = "ì…ë ¥ í•­ëª©ì´ \"$name$\" ì—´ì˜ ìœ íš¨ê°’ìœ¼ë¡œ ë³€í™˜í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
         Text[ chinese_simplified ] = "è¾“å…¥çš„å†…å®¹æ— æ³•è½¬æ¢æˆä¸€ä¸ªç”¨äºåˆ—\"$name$\"çš„æœ‰æ•ˆæ•°å€¼ã€‚";
         Text[ chinese_traditional ] = "é€™å€‹è¼¸å…¥å€¼ç„¡æ³•è½‰æ›æˆæ¬„<$name$>çš„æœ‰æ•ˆå€¼ã€‚";
         Text[ arabic ] = "ÊÚĞÑ ÊÍæíá ÇáÅÏÎÇá Åáì ŞíãÉ ÕÇáÍÉ ááÚãæÏ \"$name$\".";
@@ -248,6 +248,26 @@ ModalDialog DLG_PARAMETERS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25.2.3  2003/02/23 12:01:03  nf
+ *  trasnlation 6.1 Beta / OOo 1.1 Beta / final wave
+ *
+ *  Revision 1.25.2.2  2003/02/23 11:00:54  nf
+ *  6.1 Beta 1/OOo 1.1 Beta translation, second wave
+ *
+ *  Revision 1.25.2.1  2003/02/22 15:49:06  hr
+ *  INTEGRATION: CWS mergep (1.25.20); FILE MERGED
+ *  2003/02/22 10:44:31 nf 1.25.20.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
+ *  2003/01/31 12:51:15 hjs 1.25.20.1: #107113# merge on SRX644p
+ *
+ *  Revision 1.25.20.2  2003/02/22 10:44:31  nf
+ *  #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
+ *
+ *  Revision 1.25.20.1  2003/01/31 12:51:15  hjs
+ *  #107113# merge on SRX644p
+ *
+ *  Revision 1.25  2002/11/27 17:01:08  kz
+ *  Merge SRX644: 27.11.02 - 17:57:16
+ *
  *  Revision 1.24  2002/09/05 13:56:30  kz
  *  Merge SRX643: 05.09.02 - 15:53:13
  *
@@ -323,6 +343,12 @@ ModalDialog DLG_PARAMETERS
  *
  *  Revision 1.0 26.10.00 15:14:44  fs
  ************************************************************************/
+
+
+
+
+
+
 
 
 

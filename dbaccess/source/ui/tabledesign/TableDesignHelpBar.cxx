@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignHelpBar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 09:54:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,36 @@ long OTableDesignHelpBar::PreNotify( NotifyEvent& rNEvt )
         SetHelpText(String());
     return TabPage::PreNotify(rNEvt);
 }
+// -----------------------------------------------------------------------------
+sal_Bool OTableDesignHelpBar::isCopyAllowed()
+{
+    return m_pTextWin && m_pTextWin->GetSelected().Len();
+}
+// -----------------------------------------------------------------------------
+sal_Bool OTableDesignHelpBar::isCutAllowed()
+{
+    return sal_False;
+}
+// -----------------------------------------------------------------------------
+sal_Bool OTableDesignHelpBar::isPasteAllowed()
+{
+    return sal_False;
+}
+// -----------------------------------------------------------------------------
+void OTableDesignHelpBar::cut()
+{
+}
+// -----------------------------------------------------------------------------
+void OTableDesignHelpBar::copy()
+{
+    if ( m_pTextWin )
+        m_pTextWin->Copy();
+}
+// -----------------------------------------------------------------------------
+void OTableDesignHelpBar::paste()
+{
+}
+
 
 //==================================================================
 // class OFieldPropTabCtrl

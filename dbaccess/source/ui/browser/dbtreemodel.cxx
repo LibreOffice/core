@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:44:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,22 +116,4 @@ namespace dbaui
 
 };
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.10  2001/08/16 14:22:02  hr
- *  #65293#: syntax
- *
- *  Revision 1.9  2001/08/15 13:14:59  oj
- *  #88644# correct getImplementationId and insert some DBG's
- *
- *  Revision 1.8  2001/05/14 11:58:35  oj
- *  #86744# some changes for entries and views
- *
- *  Revision 1.7  2001/04/26 11:37:51  fs
- *  file is alive, again - added support for data source associated bookmarks
- *
- *
- *  Revision 1.0 25.04.01 14:00:45  fs
- ************************************************************************/
 

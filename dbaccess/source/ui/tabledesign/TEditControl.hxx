@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:19:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
+#endif
+#ifndef DBAUI_TYPEINFO_HXX
+#include "TypeInfo.hxx"
 #endif
 
 class Edit;
@@ -185,12 +188,12 @@ namespace dbaui
 
         void            SetDescrWin( OTableFieldDescWin* pWin ){ pDescrWin = pWin; if (pDescrWin && pActRow) pDescrWin->DisplayData(pActRow->GetActFieldDescr()); }
         BOOL            SaveCurRow();
-        void            SwitchType( const OTypeInfo* _pType );
+        void            SwitchType( const TOTypeInfoSP& _pType );
 
         void            DisplayData( long nRow, BOOL bGrabFocus = TRUE );
             // erzwingt das Anzeigen der genannten Zeile (selbst wenn es eigentlich schon die aktuelle ist)
 
-        virtual void    SetData( long nRow, USHORT nColId, const OTypeInfo* _pTypeInfo );
+        virtual void    SetData( long nRow, USHORT nColId, const TOTypeInfoSP& _pTypeInfo );
         virtual void    SetData( long nRow, USHORT nColId, const ::com::sun::star::uno::Any& _rSaveData );
         virtual ::com::sun::star::uno::Any  GetData( long nRow, USHORT nColId );
         virtual void    SetControlText( long nRow, USHORT nColId, const String& rText );
@@ -215,9 +218,15 @@ namespace dbaui
         // window overloads
         virtual long            PreNotify( NotifyEvent& rNEvt );
 
-        virtual void Cut();
-        virtual void Copy();
-        virtual void Paste();
+        // IClipboardTest
+        virtual sal_Bool isCutAllowed() { return IsCutAllowed(); }
+        virtual sal_Bool isCopyAllowed() { return IsCopyAllowed(); }
+        virtual sal_Bool isPasteAllowed() { return IsPasteAllowed(); }
+        virtual sal_Bool hasChildPathFocus() { return HasChildPathFocus(); }
+
+        virtual void cut();
+        virtual void copy();
+        virtual void paste();
     private:
         DECL_LINK( StartIndexing, void* );
         DECL_LINK( DelayedCut, void* );

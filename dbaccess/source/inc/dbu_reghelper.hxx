@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_reghelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-19 16:35:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,14 +91,4 @@ namespace dbaui
 }
 
 #endif // _DBU_REGHELPER_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2000/12/15 15:23:07  fs
- *  initial checkin - library-dependent wrapper for the registration helper classes
- *
- *
- *  Revision 1.0 15.12.00 15:54:22  fs
- ************************************************************************/
 
