@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XContainer.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:40 $
+ *  last change:$Date: 2003-09-08 10:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,20 @@
 
 package ifc.container;
 
-import com.sun.star.awt.XControlContainer;
+import java.io.PrintWriter;
+
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.awt.XControl;
+import com.sun.star.awt.XControlContainer;
 import com.sun.star.container.ContainerEvent;
 import com.sun.star.container.XContainer;
 import com.sun.star.container.XContainerListener;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
-import java.io.PrintWriter;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 import com.sun.star.uno.XNamingService;
 
 
@@ -302,9 +304,10 @@ public class _XContainer extends MultiMethodTest {
     */
     protected boolean performChanges3() {
         boolean res = true;
+        Object reg = null;
 
         try {
-            Object reg = NV.getRegisteredObject("MyFactory");
+            reg = NV.getRegisteredObject("MyFactory");
             NV.revokeObject("MyFactory");
         } catch (Exception e) {
 
@@ -312,7 +315,7 @@ public class _XContainer extends MultiMethodTest {
 
         try {
             NV.registerObject("MyFactory", inst);
-            Object reg = NV.getRegisteredObject("MyFactory");
+            reg = NV.getRegisteredObject("MyFactory");
             res &= (reg != null);
         } catch (Exception e) {
             e.printStackTrace(log);
@@ -322,7 +325,7 @@ public class _XContainer extends MultiMethodTest {
 
         try {
             NV.revokeObject("MyFactory");
-            Object reg = NV.getRegisteredObject("MyFactory");
+            reg = NV.getRegisteredObject("MyFactory");
             log.println("revokeObject failed");
             res &= false;
         } catch (Exception e) {
