@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.71 $
- *  last change: $Author: hdu $ $Date: 2002-04-30 16:47:35 $
+ *  $Revision: 1.72 $
+ *  last change: $Author: hdu $ $Date: 2002-05-08 12:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1386,8 +1386,6 @@ PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, USHORT nMaxPoints )
 {
     mpPointAry  = new Point [ mnMaxPoints ];
     mpFlagAry   = new BYTE  [ mnMaxPoints ];
-
-    mrPolyPoly.Clear();
 }
 
 // -----------------------------------------------------------------------
@@ -1488,6 +1486,8 @@ static int FT_cubic_to( FT_Vector* /*const*/ p1, FT_Vector* /*const*/ p2, FT_Vec
 
 bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPoly ) const
 {
+    rPolyPoly.Clear();
+
     int nGlyphFlags;
     SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
 
@@ -1504,11 +1504,14 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPol
     if( pGlyphFT->format != ft_glyph_format_outline )
         return false;
 
-    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT );
-
     FT_Outline& rOutline = reinterpret_cast<FT_OutlineGlyphRec*>(pGlyphFT)->outline;
+    if( !rOutline.n_points )    // blank glyphs are ok
+        return true;
+
     long nMaxPoints = 1 + rOutline.n_points * 3;
     PolyArgs aPolyArg( rPolyPoly, nMaxPoints );
+
+    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT );
 
     FT_Outline_Funcs aFuncs;
     aFuncs.move_to  = &FT_move_to;
