@@ -60,6 +60,7 @@
 package installer::epmfile;
 
 use Cwd;
+use installer::converter;
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -368,19 +369,33 @@ sub create_epm_header
     if ( $onepackage->{$provides} )
     {
         my $providesstring = $onepackage->{$provides};
-        installer::packagelist::resolve_packagevariables(\$providesstring, $variableshashref, 1);
-        installer::packagelist::adapt_packagename(\$providesstring);
-        $line = "%provides" . " " . $providesstring . "\n";
-        push(@epmheader, $line);
+
+        my $allprovides = installer::converter::convert_stringlist_into_array(\$providesstring, ",");
+
+        for ( my $i = 0; $i <= $#{$allprovides}; $i++ )
+        {
+            my $oneprovides = ${$allprovides}[$i];
+            installer::packagelist::resolve_packagevariables(\$oneprovides, $variableshashref, 1);
+            installer::packagelist::adapt_packagename(\$oneprovides);
+            $line = "%provides" . " " . $oneprovides . "\n";
+            push(@epmheader, $line);
+        }
     }
 
     if ( $onepackage->{$requires} )
     {
         my $requiresstring = $onepackage->{$requires};
-        installer::packagelist::resolve_packagevariables(\$requiresstring, $variableshashref, 1);
-        installer::packagelist::adapt_packagename(\$requiresstring);
-        $line = "%requires" . " " . $requiresstring . "\n";
-        push(@epmheader, $line);
+
+        my $allrequires = installer::converter::convert_stringlist_into_array(\$requiresstring, ",");
+
+        for ( my $i = 0; $i <= $#{$allrequires}; $i++ )
+        {
+            my $onerequires = ${$allrequires}[$i];
+            installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 1);
+            installer::packagelist::adapt_packagename(\$onerequires);
+            $line = "%requires" . " " . $onerequires . "\n";
+            push(@epmheader, $line);
+        }
     }
 
     return \@epmheader;
@@ -1398,13 +1413,13 @@ sub put_systemintegration_into_installset
     {
         if ($installer::globals::product =~ /OpenOffice/i )
         {
-            push(@systemfiles, "openofficeorg-gnome.tar.gz");
+            push(@systemfiles, "openofficeorg-desktop-integratn.tar.gz");
             push(@systemfiles, "openofficeorg-cde.tar.gz");
         }
         else
         {
             my $productname = lc($variables->{'PRODUCTNAME'});
-            push(@systemfiles, "SUNW$productname-gnome-beta.tar.gz");
+            push(@systemfiles, "SUNW$productname-desktop-integratn.tar.gz");
             push(@systemfiles, "SUNW$productname-cde-beta.tar.gz");
         }
     }
@@ -1450,6 +1465,34 @@ sub put_systemintegration_into_installset
             my $systemcall = "cd $destdir; cat $systemfiles[$i] | gunzip | tar -xf -";
 
             make_systemcall($systemcall);
+
+            # compressing packages
+
+            my $faspac = "faspac-so.sh";
+
+            my $compressorref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$faspac, $includepatharrayref, 0);
+            if ($$compressorref ne "")
+            {
+                $faspac = $$compressorref;
+                $infoline = "Found compressor: $faspac\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                print "... $faspac ...\n";
+                installer::logger::include_timestamp_into_logfile("Starting $faspac");
+
+                my $package = $systemfiles[$i];
+                $package =~ s/\.tar\.gz$//;
+
+                 $systemcall = "/bin/sh $faspac -a -d $destdir $package";    # $faspac has to be the absolute path!
+                 make_systemcall($systemcall);
+
+                installer::logger::include_timestamp_into_logfile("End of $faspac");
+            }
+            else
+            {
+                $infoline = "Not found: $faspac\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
 
             # deleting the tar.gz files
 
