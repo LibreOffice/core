@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.29 2001-07-26 13:42:56 rt Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.30 2001-08-14 13:23:51 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: rt $ $Date: 2001-07-26 13:42:56 $ $Revision: 1.29 $
+//	$Author: oj $ $Date: 2001-08-14 13:23:51 $ $Revision: 1.30 $
 //
 // Description:
 //
@@ -629,9 +629,10 @@ manipulative_statement_list:
 	;
 ***/
 
-sql:
+/*sql:
 		{$$ = SQL_NEW_LISTRULE;}
 	;
+*/
 not:
 	{$$ = SQL_NEW_RULE;}
 	|	SQL_TOKEN_NOT

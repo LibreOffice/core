@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.12 2001-07-25 06:13:55 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.13 2001-08-14 13:23:51 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-07-25 06:13:55 $ $Revision: 1.12 $
+//	$Author: oj $ $Date: 2001-08-14 13:23:51 $ $Revision: 1.13 $
 //
 // Description:
 //
@@ -584,6 +584,7 @@ void OSQLScanner::SQLyyerror(sal_Char *fmt)
 //------------------------------------------------------------------------------
 void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, const OParseContext* pContext, sal_Bool bInternational)
 {
+	YY_FLUSH_BUFFER;
 	BEGIN(m_nRule);
 
 	m_sErrorMessage = ::rtl::OUString();	
