@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-08 14:14:08 $
+ *  last change: $Author: dr $ $Date: 2001-02-14 11:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5167,7 +5167,8 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             }
                 break;
             case 0x1C: // Error Value                           [314 266]
-                ADD("ERROR VALUE")
+                ADD("ERROR VALUE ")
+                __AddHex( t, pIn->ReaduInt8() );
                 break;
             case 0x1D: // Boolean                               [315 266]
             {
