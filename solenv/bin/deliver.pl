@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: vg $ $Date: 2004-05-26 14:12:05 $
+#   last change: $Author: rt $ $Date: 2004-05-27 14:49:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.64 $ ';
+$id_str = ' $Revision: 1.65 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -575,7 +575,7 @@ sub parse_dlst
 sub get_imagelists
 {
     my $common_outdir = shift;
-    chdir("$base_dir") or die "Cannot change into $basedir";
+    chdir("$base_dir") or die "Cannot change into $base_dir";
     my @ilst = glob("$common_outdir/bin/*.$ilst_ext");
     return wantarray ? @ilst : \@ilst;
 }
@@ -610,7 +610,7 @@ sub parse_imagelists
             push(@action_data, ['copy', $dlst_line]);
         }
         close(IMGLST);
-        push(@action_data, ['copy', "..\\%__SRC%\\$common_outdir" . "bin\\*.$ilst_ext $destdir"]);
+        push(@action_data, ['copy', "..\\%__SRC%\\%COMMON_OUTDIR%" . "bin\\*.$ilst_ext $destdir"]);
     }
     return;
 }
