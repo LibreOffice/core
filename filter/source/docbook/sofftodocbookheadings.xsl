@@ -151,7 +151,7 @@
 </xsl:template>
 
 <xsl:template match="office:meta">
-	<xsl:apply-templates/>
+	<!--<xsl:apply-templates/>-->
 </xsl:template>
 
 <xsl:template match="text:ordered-list">
