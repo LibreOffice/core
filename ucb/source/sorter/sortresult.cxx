@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortresult.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2001-08-06 14:42:20 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1096,7 +1096,8 @@ long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
         case DataType::SMALLINT :
         case DataType::INTEGER :
             {
-                sal_Int32 aOne, aTwo;
+                sal_Int32 aOne = 0;
+                sal_Int32 aTwo = 0;
 
                 if ( xResultOne->absolute( nIndexOne ) )
                     aOne = xRowOne->getInt( nColumn );
@@ -1114,7 +1115,8 @@ long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
             }
         case DataType::BIGINT :
             {
-                sal_Int64 aOne, aTwo;
+                sal_Int64 aOne = 0;
+                sal_Int64 aTwo = 0;
 
                 if ( xResultOne->absolute( nIndexOne ) )
                     aOne = xRowOne->getLong( nColumn );
@@ -1242,7 +1244,8 @@ long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
             }
         case DataType::REAL :
             {
-                float aOne, aTwo;
+                float aOne = 0;
+                float aTwo = 0;
 
                 if ( xResultOne->absolute( nIndexOne ) )
                     aOne = xRowOne->getFloat( nColumn );
@@ -1261,7 +1264,8 @@ long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
         case DataType::FLOAT :
         case DataType::DOUBLE :
             {
-                double aOne, aTwo;
+                double aOne = 0;
+                double aTwo = 0;
 
                 if ( xResultOne->absolute( nIndexOne ) )
                     aOne = xRowOne->getDouble( nColumn );
