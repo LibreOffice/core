@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-25 13:31:06 $
+ *  last change: $Author: fme $ $Date: 2002-09-26 13:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,31 +248,9 @@ SV_IMPL_PTRARR( _FndLines, _FndLine* )
 struct _Sort_CellFrm
 {
     const SwCellFrm* pFrm;
-    BOOL bVert;
 
-    _Sort_CellFrm( const SwCellFrm& rCFrm, BOOL bVertical )
-        : pFrm( &rCFrm ), bVert( bVertical ) {}
-
-    int operator< ( const _Sort_CellFrm& rCmp ) const
-    {
-        if ( bVert )
-            return pFrm->Frm().Right() > rCmp.pFrm->Frm().Right() ||
-                    ( pFrm->Frm().Right() == rCmp.pFrm->Frm().Right() &&
-                      pFrm->Frm().Top() < rCmp.pFrm->Frm().Top() );
-        else
-            return pFrm->Frm().Top() < rCmp.pFrm->Frm().Top() ||
-                    ( pFrm->Frm().Top() == rCmp.pFrm->Frm().Top() &&
-                      pFrm->Frm().Left() < rCmp.pFrm->Frm().Left() );
-    }
-    int operator==( const _Sort_CellFrm& rCmp ) const
-    {
-        if ( bVert )
-            return pFrm->Frm().Right() == rCmp.pFrm->Frm().Right() &&
-                   pFrm->Frm().Top() == rCmp.pFrm->Frm().Top();
-        else
-            return pFrm->Frm().Top() == rCmp.pFrm->Frm().Top() &&
-                   pFrm->Frm().Left() == rCmp.pFrm->Frm().Left();
-    }
+    _Sort_CellFrm( const SwCellFrm& rCFrm )
+        : pFrm( &rCFrm ) {}
 };
 
 SV_DECL_VARARR( _Sort_CellFrms, _Sort_CellFrm, 16, 16 )
@@ -553,6 +531,9 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
             const SwTabFrm *pTable = pUnion->GetTable();
 
             SWRECTFN( pTable )
+#ifdef BIDI
+            sal_Bool bRTL = pTable->IsRightToLeft();
+#endif
 
             if( !pTable->IsValid() && nLoopMax  )
             {
@@ -624,7 +605,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                                 nFrmBottom      <= nUnionBottom+ nYFuzzy )
 
                                 aCellFrms.Insert(
-                                        _Sort_CellFrm( *(SwCellFrm*)pCell, bVert ),
+                                        _Sort_CellFrm( *(SwCellFrm*)pCell ),
                                         aCellFrms.Count() );
                             else
                             {
@@ -672,6 +653,23 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                     nCellCnt = 1;
                     nYPos = (rCF.pFrm->Frm().*fnRect->fnGetTop)();
                     nHeight = (rCF.pFrm->Frm().*fnRect->fnGetHeight)();
+
+#ifdef BIDI
+                    nXPos = bRTL ?
+                            (rCF.pFrm->Frm().*fnRect->fnGetLeft)() :
+                            (rCF.pFrm->Frm().*fnRect->fnGetRight)();
+                }
+                else if( nXPos == ( bRTL ?
+                                    (rCF.pFrm->Frm().*fnRect->fnGetRight)() :
+                                    (rCF.pFrm->Frm().*fnRect->fnGetLeft)() ) &&
+                         nHeight == (rCF.pFrm->Frm().*fnRect->fnGetHeight)() )
+                {
+                    nXPos += ( bRTL ? (-1) : 1 ) *
+                             (rCF.pFrm->Frm().*fnRect->fnGetWidth)();
+                    ++nCellCnt;
+                }
+
+#else
                     nXPos = (rCF.pFrm->Frm().*fnRect->fnGetRight)();
                 }
                 else if( nXPos == (rCF.pFrm->Frm().*fnRect->fnGetLeft)() &&
@@ -680,6 +678,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                     nXPos += (rCF.pFrm->Frm().*fnRect->fnGetWidth)();
                     ++nCellCnt;
                 }
+#endif
                 else
                 {
                     bValidChartSel = FALSE;
@@ -1610,16 +1609,31 @@ SV_IMPL_PTRARR( SwSelUnions, SwSelUnion* );
 SwTwips lcl_CalcWish( const SwLayoutFrm *pCell, long nWish,
                                                 const long nAct )
 {
-    SwTwips nRet = 0;
     const SwLayoutFrm *pTmp = pCell;
     if ( !nWish )
         nWish = 1;
+
+#ifdef BIDI
+    const sal_Bool bRTL = pCell->IsRightToLeft();
+    SwTwips nRet = bRTL ?
+                   nAct - pCell->GetFmt()->GetFrmSize().GetWidth() * nAct / nWish :
+                   0;
+#else
+    SwTwips nRet = 0;
+#endif
+
+
     while ( pTmp )
     {
         while ( pTmp->GetPrev() )
-        {   pTmp = (SwLayoutFrm*)pTmp->GetPrev();
+        {
+            pTmp = (SwLayoutFrm*)pTmp->GetPrev();
             long nTmp = pTmp->GetFmt()->GetFrmSize().GetWidth();
+#ifdef BIDI
+            nRet += ( bRTL ? ( -1 ) : 1 ) * nTmp * nAct / nWish;
+#else
             nRet += nTmp * nAct / nWish;
+#endif
         }
         pTmp = pTmp->GetUpper()->GetUpper();
         if ( pTmp && !pTmp->IsCellFrm() )
@@ -1741,6 +1755,10 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
 
     SWRECTFN( pTab )
 
+#ifdef BIDI
+    sal_Bool bRTL = pTab->IsRightToLeft();
+#endif
+
     const long nWish = pOrg->GetFmt()->GetFrmSize().GetWidth();
     while ( pTab->IsFollow() )
     {
@@ -1750,17 +1768,27 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     }
 
     SwTwips nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
-    const SwTwips nSX = ::lcl_CalcWish( rpStart, nWish, nPrtWidth )
-                        + (pTab->*fnRect->fnGetPrtLeft)();
+    const SwTwips nSX = ::lcl_CalcWish( rpStart, nWish, nPrtWidth ) +
+                        (pTab->*fnRect->fnGetPrtLeft)();
 
     const SwTwips nSX2= nSX + (rpStart->GetFmt()->GetFrmSize().GetWidth() *
                                             nPrtWidth / nWish);
 
     const SwLayoutFrm *pTmp = pTab->FirstCell();
+
+#ifdef BIDI
+    while ( pTmp &&
+            (!pTmp->IsCellFrm() ||
+             ( ( ! bRTL && (pTmp->Frm().*fnRect->fnGetLeft)() < nSX &&
+                           (pTmp->Frm().*fnRect->fnGetRight)()< nSX2 ) ||
+                   bRTL && (pTmp->Frm().*fnRect->fnGetLeft)() > nSX &&
+                           (pTmp->Frm().*fnRect->fnGetRight)()> nSX2 ) ) )
+#else
     while ( pTmp &&
             (!pTmp->IsCellFrm() ||
              ( (pTmp->Frm().*fnRect->fnGetLeft)() < nSX &&
-               (pTmp->Frm().*fnRect->fnGetRight)()< nSX2)))
+               (pTmp->Frm().*fnRect->fnGetRight)()< nSX2 ) ) )
+#endif
         pTmp = pTmp->GetNextLayoutLeaf();
 
     if ( pTmp )
@@ -1776,7 +1804,13 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     rpEnd = pTab->FindLastCntnt()->GetUpper();
     while( !rpEnd->IsCellFrm() )
         rpEnd = rpEnd->GetUpper();
-    while ( (rpEnd->Frm().*fnRect->fnGetLeft)() > nEX )
+
+#ifdef BIDI
+    while ( (   bRTL && (rpEnd->Frm().*fnRect->fnGetLeft)() < nEX ) ||
+            ( ! bRTL && (rpEnd->Frm().*fnRect->fnGetLeft)() > nEX ) )
+#else
+    while ( (rpEnd->Frm().*fnRect->fnGetLeft)() > nEX ) )
+#endif
     {
         const SwLayoutFrm* pTmp = rpEnd->GetPrevLayoutLeaf();
         if( !pTmp || !pTab->IsAnLower( pTmp ) )

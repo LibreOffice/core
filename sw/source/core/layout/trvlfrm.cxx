@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-19 11:16:14 $
+ *  last change: $Author: fme $ $Date: 2002-09-26 13:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,17 +702,25 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
     const BOOL bTab = pStTab || (pCnt && pCnt->IsInTab()) ? TRUE : FALSE;
     BOOL bEnd = bTab ? FALSE : TRUE;
 
+    SWRECTFN( pStart )
+
     SwTwips nX;
     if ( bTab )
     {
         SwRect aRect( pStart->Frm() );
         pStart->GetCharRect( aRect, *pPam->GetPoint() );
-        nX = aRect.Center().X();
+        Point aCenter = aRect.Center();
+        nX = bVert ? aCenter.Y() : aCenter.X();
 
         const SwTabFrm *pTab = pCnt ? pCnt->FindTabFrm() : 0;
         if ( !pTab )
             pTab = pStTab;
         pTable = pTab;
+
+#ifdef BIDI
+        const sal_Bool bRTL = pTable->IsRightToLeft();
+#endif
+
         if ( pStTab )
         {
             //Der Fluss fuehrt von einer Tabelle in die nachste. Der X-Wert
@@ -722,19 +730,40 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             while ( pCell && !pCell->IsCellFrm() )
                 pCell = pCell->GetUpper();
             ASSERT( pCell, "Zelle nicht gefunden." );
-            nX = pCell->Frm().Left() + pCell->Frm().Width() / 2;
-            nX += pTab->Frm().Left() - pStTab->Frm().Left();
+            nX =  (pCell->Frm().*fnRect->fnGetLeft)() +
+                  (pCell->Frm().*fnRect->fnGetWidth)() / 2;
+            nX += (pTab->Frm().*fnRect->fnGetLeft)() -
+                  (pStTab->Frm().*fnRect->fnGetLeft)();
         }
 
         const SwCntntFrm *pTmp = pTab->ContainsCntnt();
-        if ( nX < (pTmp->Frm().Left() + pTmp->Prt().Left()) )
-            nX = pTmp->Frm().Left() + pTmp->Prt().Left();
+#ifdef BIDI
+        const long nPrtLeft = bRTL ?
+                              (pTmp->*fnRect->fnGetPrtRight)() :
+                              (pTmp->*fnRect->fnGetPrtLeft)();
+        if ( bRTL != nX < nPrtLeft )
+            nX = nPrtLeft;
         else
         {
             pTmp = pTab->FindLastCntnt();
-            if ( nX > (pTmp->Frm().Left() + pTmp->Prt().Right()) )
-                nX = pTmp->Frm().Left() + pTmp->Prt().Right();
+            const long nPrtRight = bRTL ?
+                                   (pTmp->*fnRect->fnGetPrtLeft)() :
+                                   (pTmp->*fnRect->fnGetPrtRight)();
+            if ( bRTL != nX > nPrtRight )
+                nX = nPrtRight;
         }
+#else
+        const long nPrtLeft = (pTmp->*fnRect->fnGetPrtLeft)();
+        if ( nX < nPrtLeft )
+            nX = nPrtLeft;
+        else
+        {
+            pTmp = pTab->FindLastCntnt();
+            const long nPrtRight = (pTmp->*fnRect->fnGetPrtRight)();
+            if ( nX > nPrtRight )
+                nX = nPrtRight;
+        }
+#endif
     }
     do
     {
@@ -807,13 +836,36 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                     const SwLayoutFrm *pCell = pTab ? pCnt->GetUpper() : 0;
                     while ( pCell && !pCell->IsCellFrm() )
                         pCell = pCell->GetUpper();
-                    if ( pCell &&
-                         pCell->Frm().IsInside( Point( nX, pCell->Frm().Top())) )
+
+                    Point aInsideCell;
+                    Point aInsideCnt;
+                    long nTop = (pCell->Frm().*fnRect->fnGetTop)();
+                    if ( bVert )
+                    {
+                        if ( nTop )
+                            --nTop;
+
+                        aInsideCell = Point( nTop, nX );
+                        nTop = (pCnt->Frm().*fnRect->fnGetTop)();
+
+                        if ( nTop )
+                            --nTop;
+
+                        aInsideCnt = Point( nTop, nX );
+                    }
+                    else
+                    {
+                        aInsideCell = Point( nX, nTop );
+                        nTop = pCnt->Frm().Top();
+                        aInsideCnt = Point( nTop, nX );
+                    }
+
+                    if ( pCell && pCell->Frm().IsInside( aInsideCell ) )
                     {
                         bEnd = TRUE;
                         //Jetzt noch schnell den richtigen Cntnt in der Zelle
                         //greifen.
-                        if ( !pCnt->Frm().IsInside( Point( nX, pCnt->Frm().Top())))
+                        if ( ! pCnt->Frm().IsInside( aInsideCnt ) )
                         {
                             pCnt = pCell->ContainsCntnt();
                             if ( fnNxtPrv == lcl_GetPrvCnt )
@@ -821,7 +873,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                                     pCnt = pCnt->GetNextCntntFrm();
                         }
                     }
-                    else if ( pCnt->Frm().IsInside( Point( nX, pCnt->Frm().Top())))
+                    else if ( pCnt->Frm().IsInside( aInsideCnt ) )
                         bEnd = TRUE;
                 }
             }
