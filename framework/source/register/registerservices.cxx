@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: as $ $Date: 2001-12-05 13:27:37 $
+ *  last change: $Author: as $ $Date: 2002-04-22 13:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,14 @@
 #include <dispatch/soundhandler.hxx>
 #endif
 
+#ifndef __FRAMEWORK_RECORDING_DISPATCHRECORDERSUPPLIER_HXX_
+#include <recording/dispatchrecordersupplier.hxx>
+#endif
+
+#ifndef __FRAMEWORK_RECORDING_DISPATCHRECORDER_HXX_
+#include <recording/dispatchrecorder.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              )
@@ -136,6 +144,8 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::DocumentProperties          )
                         COMPONENTINFO( ::framework::SoundHandler                )
                         COMPONENTINFO( ::framework::JobExecutor                 )
+                        COMPONENTINFO( ::framework::DispatchRecorderSupplier    )
+                        COMPONENTINFO( ::framework::DispatchRecorder            )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
@@ -145,5 +155,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::Frame                           )   else
                         IFFACTORY( ::framework::DocumentProperties              )   else
                         IFFACTORY( ::framework::SoundHandler                    )   else
-                        IFFACTORY( ::framework::JobExecutor                     )
+                        IFFACTORY( ::framework::JobExecutor                     )   else
+                        IFFACTORY( ::framework::DispatchRecorderSupplier        )   else
+                        IFFACTORY( ::framework::DispatchRecorder                )
                     )
