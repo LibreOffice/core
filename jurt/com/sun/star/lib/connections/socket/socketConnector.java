@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socketConnector.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-07 13:17:19 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,21 +176,35 @@ public final class socketConnector implements XConnector {
         if (desc.getHost() == null) {
             throw new ConnectionSetupException("host parameter missing");
         }
-        InetAddress adr;
+        // Try all (IPv4 and IPv6) addresses, in case this client is on a
+        // dual-stack host and the server process is an IPv4-only process, also
+        // on a dual-stack host (see Stevens, Fenner, Rudoff: "Unix Network
+        // Programming, Volume 1: The Sockets Networking API, 3rd Edition",
+        // p. 359):
+        InetAddress[] adr;
         try {
-            adr = InetAddress.getByName(desc.getHost());
+            adr = InetAddress.getAllByName(desc.getHost());
         } catch (UnknownHostException e) {
             throw new ConnectionSetupException(e.toString());
         }
+        Socket socket = null;
+        for (int i = 0; i < adr.length; ++i) {
+            try {
+                socket = new Socket(adr[i], desc.getPort());
+                break;
+            } catch (IOException e) {
+                if (i == adr.length - 1) {
+                    throw new NoConnectException(e.toString());
+                }
+            }
+        }
         XConnection con;
         try {
-            Socket socket = new Socket(adr, desc.getPort());
             if (desc.getTcpNoDelay() != null) {
                 socket.setTcpNoDelay(desc.getTcpNoDelay().booleanValue());
             }
             con = new SocketConnection(connectionDescription, socket);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new NoConnectException(e.toString());
         }
         connected = true;
