@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-22 13:18:45 $
+ *  last change: $Author: mt $ $Date: 2001-02-27 12:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ static VCLRegServiceInfo aVCLComponentsArray[] =
     {NULL,              sal_False}
 };
 
-uno::Reference< lang::XMultiServiceFactory > ImplGetMultiServiceFactory()
+uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFactory()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maAppData.mxMSF.is() )
@@ -191,7 +191,7 @@ uno::Reference< lang::XMultiServiceFactory > ImplGetMultiServiceFactory()
 uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
 {
     uno::Reference < i18n::XBreakIterator > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ImplGetMultiServiceFactory();
+    uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
     if ( xMSF.is() )
     {
         uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
@@ -207,7 +207,7 @@ uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
 uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacterClassification()
 {
     uno::Reference < i18n::XCharacterClassification > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ImplGetMultiServiceFactory();
+    uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
     if ( xMSF.is() )
     {
         uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.CharacterClassification" ) );
@@ -223,7 +223,7 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
 uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
 {
     uno::Reference < i18n::XCollator > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ImplGetMultiServiceFactory();
+    uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
     if ( xMSF.is() )
     {
         uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.Collator" ) );
