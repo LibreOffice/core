@@ -497,17 +497,26 @@
                     <value xml:lang="de">Druckbereich festlegen</value>
                     <value xml:lang="en-US">Define Print Range</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:DeletePrintArea" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Druckbereich entfernen</value>
                     <value xml:lang="en-US">Clear Print Range</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:EditPrintArea" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Druckbereich bearbeiten</value>
                     <value xml:lang="en-US">Edit Print Range</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ToggleRelative" oor:op="replace">
@@ -668,8 +677,33 @@
             </node>
             <node oor:name=".uno:InputLineVisible" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">R~echenleiste</value>
-                    <value xml:lang="en-US">For~mula Bar</value>
+                    <value xml:lang="de">~Rechenleiste</value>
+                    <value xml:lang="en-US">~Formula Bar</value>
+                    <value xml:lang="ar">شريط الصيغة</value>
+                    <value xml:lang="no">For~mula Bar</value>
+                    <value xml:lang="ca">Barra de fór~mules</value>
+                    <value xml:lang="zh-TW">編輯列(~M)</value>
+                    <value xml:lang="cs">Panel vzorců</value>
+                    <value xml:lang="da">Form~ellinje</value>
+                    <value xml:lang="el">Γραμμή τύπ~ων</value>
+                    <value xml:lang="es">Barra de ~fórmulas</value>
+                    <value xml:lang="fi">Kaava~rivi</value>
+                    <value xml:lang="fr">Barre de ~calcul</value>
+                    <value xml:lang="he">R~echenleiste</value>
+                    <value xml:lang="it">~Barra di calcolo</value>
+                    <value xml:lang="ja">数式バー(~M)</value>
+                    <value xml:lang="ko">수식 표시줄(~M)</value>
+                    <value xml:lang="nl">~Rekenbalk</value>
+                    <value xml:lang="pl">Pasek for~muły</value>
+                    <value xml:lang="pt-BR">Barra de ~Fórmulas</value>
+                    <value xml:lang="ru">Панель формулы</value>
+                    <value xml:lang="sk">Pa~nel vzorcov</value>
+                    <value xml:lang="sv">For~mellist</value>
+                    <value xml:lang="th">แถบสู~ตร</value>
+                    <value xml:lang="tr">Formül çubuğu</value>
+                    <value xml:lang="hi">सू~त्र पट्टी</value>
+                    <value xml:lang="zh-CN">编辑栏(~M)</value>
+                    <value xml:lang="pt">~Barra de fórmulas</value>
                 </prop>
             </node>
             <node oor:name=".uno:ViewRowColumnHeaders" oor:op="replace">
@@ -688,6 +722,12 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Werte hervorheben</value>
                     <value xml:lang="en-US">~Value Highlighting</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:NormalViewMode" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Normal</value>
+                    <value xml:lang="en-US">~Normal</value>
                 </prop>
             </node>
             <node oor:name=".uno:PagebreakMode" oor:op="replace">
@@ -769,6 +809,9 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Druckbereich hinzufügen</value>
                     <value xml:lang="en-US">Add Print Range</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertColumnBreak" oor:op="replace">
@@ -973,6 +1016,15 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Zelle teilen</value>
                     <value xml:lang="en-US">Split Cells</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ToggleMergeCells" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Zellen verbinden</value>
+                    <value xml:lang="en-US">Merge Cells</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1377,6 +1429,18 @@
                     <value xml:lang="en-US">Sheet right-to-left</value>
                 </prop>
             </node>
+            <node oor:name=".uno:SetAnchorToPage" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">An der Seite</value>
+                    <value xml:lang="en-US">To P~age</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SetAnchorToCell" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">An der Zelle</value>
+                    <value xml:lang="en-US">To ~Cell</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:AuditMenu" oor:op="replace">
@@ -1455,6 +1519,43 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Gliederung</value>
                     <value xml:lang="en-US">~Outline</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:RowMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Zeile</value>
+                    <value xml:lang="en-US">~Row</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ColumnMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Spalte</value>
+                    <value xml:lang="en-US">~Column</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SheetMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Tabelle</value>
+                    <value xml:lang="en-US">~Sheet</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:MergeCellsMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Zellen zusammenfassen</value>
+                    <value xml:lang="en-US">M~erge Cells</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:PrintRangesMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">D~ruckbereiche</value>
+                    <value xml:lang="en-US">Pri~nt Ranges</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DrawGraphicMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Grafik</value>
+                    <value xml:lang="en-US">Graph~ic</value>
+
                 </prop>
             </node>
         </node>
