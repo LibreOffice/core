@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-26 13:59:34 $
+ *  last change: $Author: od $ $Date: 2002-10-11 11:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2941,7 +2941,7 @@ sal_Bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
 
     OD 22.08.2002 - overloading virtual method and its default implementation,
     because format of fly frame provides transparent backgrounds.
-    Method determines, if background of fly frame has to be drawn transparent.
+    Method determines, if background of fly frame is transparent.
 
     @author OD
 
@@ -2952,10 +2952,9 @@ const sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
 {
     sal_Bool bReturn = sal_False;
 
-    /// NOTE: If background color is "no fill"/"auto fill" (COL_TRANSPARENT),
-    ///     it isn't drawn transparent, because in this case, it "inherites"
-    ///     the background color of its anchor, if there is no background
-    ///     graphic.
+    /// NOTE: If background color is "no fill"/"auto fill" (COL_TRANSPARENT)
+    ///     and there is no background graphic, it "inherites" the background
+    ///     from its anchor.
     if ( (GetBackground().GetColor().GetTransparency() != 0) &&
          (GetBackground().GetColor() != COL_TRANSPARENT)
        )
@@ -2964,7 +2963,8 @@ const sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
     }
     else
     {
-        GraphicObject *pTmpGrf = (GraphicObject*)GetBackground().GetGraphicObject();
+        const GraphicObject *pTmpGrf =
+                static_cast<const GraphicObject*>(GetBackground().GetGraphicObject());
         if ( (pTmpGrf) &&
              (pTmpGrf->GetAttr().GetTransparency() != 0)
            )
@@ -2975,6 +2975,32 @@ const sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
 
     return bReturn;
 }
+
+/** SwFlyFrmFmt::IsBackgroundBrushInherited - for #103898#
+
+    OD 08.10.2002 - method to determine, if the brush for drawing the
+    background is "inherited" from its parent/grandparent.
+    This is the case, if no background graphic is set and the background
+    color is "no fill"/"auto fill"
+    NOTE: condition is "copied" from method <SwFrm::GetBackgroundBrush(..).
+
+    @author OD
+
+    @return true, if background brush is "inherited" from parent/grandparent
+*/
+const sal_Bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
+{
+    sal_Bool bReturn = sal_False;
+
+    if ( (GetBackground().GetColor() == COL_TRANSPARENT) &&
+         !(GetBackground().GetGraphicObject()) )
+    {
+        bReturn = sal_True;
+    }
+
+    return bReturn;
+}
+
 
 //  class SwDrawFrmFmt
 //  Implementierung teilweise inline im hxx
