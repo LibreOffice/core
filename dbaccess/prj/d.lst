@@ -1,5 +1,6 @@
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
+..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
