@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-29 20:26:23 $
+ *  last change: $Author: nn $ $Date: 2001-07-26 15:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1100,6 +1100,7 @@ void lcl_DoDragObject( ScDocShell* pSrcShell, const String& rName, USHORT nType,
             pTransferObj->SetDragSourceFlags( SC_DROP_NAVIGATOR );
 
             SC_MOD()->SetDragObject( NULL, pTransferObj );
+            pWin->ReleaseMouse();
             pTransferObj->StartDrag( pWin, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
         }
     }
@@ -1134,6 +1135,7 @@ void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, USHORT nFlag
         pTransferObj->SetDragSourceFlags( nFlags );
 
         SC_MOD()->SetDragObject( pTransferObj, NULL );      // for internal D&D
+        pWin->ReleaseMouse();
         pTransferObj->StartDrag( pWin, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
     }
 }
@@ -1270,6 +1272,7 @@ void ScContentTree::DoDrag()
 
             //  SetDragJump / SetDragLink has been done above
 
+            ReleaseMouse();
             pTransferObj->StartDrag( this, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
         }
     }
