@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:43:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,8 +388,8 @@ ToolBox RID_TOOLS_TOOLBOX
         };
         ToolBoxItem
         {
-            Identifier = FN_SPELLING_DLG ;
-            HelpID = FN_SPELLING_DLG ;
+            Identifier = SID_SPELL_DIALOG;
+            HelpID = SID_SPELL_DIALOG;
         };
         ToolBoxItem
         {
