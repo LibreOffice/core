@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-19 14:27:17 $
+ *  last change: $Author: mib $ $Date: 2001-10-22 12:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLExport;
+    return (cppu::OWeakObject*)new SmXMLExport( EXPORT_CONTENT );
 }
 
 
@@ -547,7 +547,7 @@ rtl::OUString SAL_CALL SmXMLExport::getImplementationName()
     switch( getExportFlags() )
     {
         default:
-        case EXPORT_ALL:
+        case EXPORT_CONTENT:
             return SmXMLExport_getImplementationName();
             break;
         case EXPORT_META:
@@ -949,6 +949,13 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
         }
 
         GetDocHandler()->startDocument();
+
+        if( (getExportFlags() & EXPORT_NODOCTYPE) == 0 &&
+            GetExtDocHandler().is() )
+        {
+            OUString aDocType( RTL_CONSTASCII_USTRINGPARAM( "<!DOCTYPE math:math PUBLIC \"-//OpenOffice.org//DTD Modified W3C MathML 1.01//EN\" \"math.dtd\">" ) );
+            GetExtDocHandler()->unknown( aDocType );
+        }
 
         /*Add xmlns line*/
         SvXMLAttributeList &rList = GetAttrList();
