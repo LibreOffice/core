@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-07 14:34:09 $
+ *  last change: $Author: pb $ $Date: 2001-11-12 09:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
-//!using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::view;
 
 extern ::rtl::OUString CreateExactSizeText_Impl( sal_Int64 nSize ); // fileview.cxx
@@ -473,6 +472,21 @@ void SvtIconWindow_Impl::SetCursorPos( ULONG nPos )
 void SvtIconWindow_Impl::SetFocus()
 {
     aIconCtrl.GrabFocus();
+}
+
+long SvtIconWindow_Impl::CalcHeight() const
+{
+    // calculate the required height of the IconControl
+    long nHeight = 0;
+    ULONG nCount = aIconCtrl.GetEntryCount();
+    if ( nCount > 0 )
+        // bottom of the last icon
+        nHeight = aIconCtrl.GetEntry(nCount-1)->GetBoundRect().Bottom();
+
+    // + headerbar height
+    nHeight += aDummyHeaderBar.GetSizePixel().Height();
+
+    return nHeight;
 }
 
 sal_Bool SvtIconWindow_Impl::IsRootURL( const String& rURL ) const
@@ -1047,6 +1061,8 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
     Application::PostUserEvent( LINK( this, SvtTemplateWindow, ResizeHdl_Impl ) );
 }
 
+// ------------------------------------------------------------------------
+
 SvtTemplateWindow::~SvtTemplateWindow()
 {
     WriteViewSettings( );
@@ -1062,6 +1078,8 @@ SvtTemplateWindow::~SvtTemplateWindow()
     }
 }
 
+// ------------------------------------------------------------------------
+
 IMPL_LINK ( SvtTemplateWindow , IconClickHdl_Impl, SvtIconChoiceCtrl *, pCtrl )
 {
     String aURL = pIconWin->GetSelectedIconURL();
@@ -1073,11 +1091,15 @@ IMPL_LINK ( SvtTemplateWindow , IconClickHdl_Impl, SvtIconChoiceCtrl *, pCtrl )
     return 0;
 }
 
+// ------------------------------------------------------------------------
+
 IMPL_LINK ( SvtTemplateWindow , FileSelectHdl_Impl, SvtFileView *, pView )
 {
     aSelectTimer.Start();
     return 0;
 }
+
+// ------------------------------------------------------------------------
 
 IMPL_LINK ( SvtTemplateWindow , FileDblClickHdl_Impl, SvtFileView *, pView )
 {
@@ -1097,6 +1119,8 @@ IMPL_LINK ( SvtTemplateWindow , FileDblClickHdl_Impl, SvtFileView *, pView )
     return 0;
 }
 
+// ------------------------------------------------------------------------
+
 IMPL_LINK ( SvtTemplateWindow , NewFolderHdl_Impl, SvtFileView *, pView )
 {
     String aTemp;
@@ -1106,12 +1130,16 @@ IMPL_LINK ( SvtTemplateWindow , NewFolderHdl_Impl, SvtFileView *, pView )
     return 0;
 }
 
+// ------------------------------------------------------------------------
+
 IMPL_LINK ( SvtTemplateWindow , ResetHdl_Impl, Timer *, EMPTYARG )
 {
     pFileWin->ResetCursor();
     aSelectHdl.Call( this );
     return 0;
 }
+
+// ------------------------------------------------------------------------
 
 IMPL_LINK ( SvtTemplateWindow , TimeoutHdl_Impl, Timer *, EMPTYARG )
 {
@@ -1125,17 +1153,23 @@ IMPL_LINK ( SvtTemplateWindow , TimeoutHdl_Impl, Timer *, EMPTYARG )
     return 0;
 }
 
+// ------------------------------------------------------------------------
+
 IMPL_LINK ( SvtTemplateWindow , ClickHdl_Impl, ToolBox *, pToolBox )
 {
     DoAction( pToolBox->GetCurItemId() );
     return 0;
 }
 
+// ------------------------------------------------------------------------
+
 IMPL_LINK ( SvtTemplateWindow , ResizeHdl_Impl, SplitWindow *, EMPTYARG )
 {
     Resize();
     return 0;
 }
+
+// ------------------------------------------------------------------------
 
 void SvtTemplateWindow::PrintFile( const String& rURL )
 {
@@ -1157,6 +1191,8 @@ void SvtTemplateWindow::PrintFile( const String& rURL )
     }
 }
 
+// ------------------------------------------------------------------------
+
 void SvtTemplateWindow::AppendHistoryURL( const String& rURL )
 {
     if ( !pHistoryList )
@@ -1165,6 +1201,8 @@ void SvtTemplateWindow::AppendHistoryURL( const String& rURL )
     pHistoryList->Insert( pEntry, LIST_APPEND );
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_BACK, pHistoryList->Count() > 1 );
 }
+
+// ------------------------------------------------------------------------
 
 void SvtTemplateWindow::OpenHistory()
 {
@@ -1175,6 +1213,8 @@ void SvtTemplateWindow::OpenHistory()
     delete pEntry;
     pFileWin->OpenFolder( aURL );
 }
+
+// ------------------------------------------------------------------------
 
 void SvtTemplateWindow::DoAction( USHORT nAction )
 {
@@ -1212,6 +1252,8 @@ void SvtTemplateWindow::DoAction( USHORT nAction )
     }
 }
 
+// ------------------------------------------------------------------------
+
 long SvtTemplateWindow::PreNotify( NotifyEvent& rNEvt )
 {
     USHORT nType = rNEvt.GetType();
@@ -1231,6 +1273,8 @@ long SvtTemplateWindow::PreNotify( NotifyEvent& rNEvt )
 
     return nRet ? nRet : Window::PreNotify( rNEvt );
 }
+
+// ------------------------------------------------------------------------
 
 void SvtTemplateWindow::Resize()
 {
@@ -1262,10 +1306,14 @@ void SvtTemplateWindow::Resize()
     aSplitWin.SetPosSizePixel( Point( 0, nToolBoxHeight  ), aSize );
 }
 
+// ------------------------------------------------------------------------
+
 String SvtTemplateWindow::GetSelectedFile() const
 {
     return pFileWin->GetSelectedFile();
 }
+
+// ------------------------------------------------------------------------
 
 sal_Bool SvtTemplateWindow::IsFileSelected() const
 {
@@ -1274,12 +1322,16 @@ sal_Bool SvtTemplateWindow::IsFileSelected() const
     return bRet;
 }
 
+// ------------------------------------------------------------------------
+
 void SvtTemplateWindow::OpenFile( sal_Bool bNotAsTemplate )
 {
     String aURL = pFileWin->GetSelectedFile();
     if ( aURL.Len() > 0 && !::utl::UCBContentHelper::IsFolder( aURL ) )
         pFrameWin->OpenFile( aURL, sal_False, pFileWin->IsTemplateFolder(), !bNotAsTemplate );
 }
+
+// ------------------------------------------------------------------------
 
 String SvtTemplateWindow::GetFolderTitle() const
 {
@@ -1291,6 +1343,8 @@ String SvtTemplateWindow::GetFolderTitle() const
     return aTitle;
 }
 
+// ------------------------------------------------------------------------
+
 void SvtTemplateWindow::SetFocus( sal_Bool bIconWin )
 {
     if ( bIconWin )
@@ -1299,15 +1353,21 @@ void SvtTemplateWindow::SetFocus( sal_Bool bIconWin )
         pFileWin->SetFocus();
 }
 
+// ------------------------------------------------------------------------
+
 void SvtTemplateWindow::OpenTemplateRoot()
 {
     pFileWin->OpenFolder( pIconWin->GetTemplateRootURL() );
 }
 
+// ------------------------------------------------------------------------
+
 void SvtTemplateWindow::SetPrevLevelButtonState( const String& rURL )
 {
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_PREV, !pIconWin->IsRootURL( rURL ) );
 }
+
+// ------------------------------------------------------------------------
 
 void SvtTemplateWindow::ClearHistory()
 {
@@ -1316,7 +1376,21 @@ void SvtTemplateWindow::ClearHistory()
 }
 
 // ------------------------------------------------------------------------
-void SvtTemplateWindow::ReadViewSettings( )
+
+long SvtTemplateWindow::CalcHeight() const
+{
+    // toolbox height
+    long nHeight = aFileViewTB.GetSizePixel().Height();
+    // + iconwin height
+    nHeight += pIconWin->CalcHeight();
+    // + little offset
+    nHeight += 8;
+    return nHeight;
+}
+
+// ------------------------------------------------------------------------
+
+void SvtTemplateWindow::ReadViewSettings()
 {
     // defaults
     sal_Int32 nSelectedGroup    =   ICON_POS_TEMPLATES;
@@ -1363,7 +1437,8 @@ void SvtTemplateWindow::ReadViewSettings( )
 }
 
 // ------------------------------------------------------------------------
-void SvtTemplateWindow::WriteViewSettings( )
+
+void SvtTemplateWindow::WriteViewSettings()
 {
     // collect
     Sequence< NamedValue > aSettings(3);
@@ -1460,12 +1535,40 @@ void SvtDocumentTemplateDialog::InitImpl( )
     pImpl->pWin->SetNewFolderHdl( LINK( this, SvtDocumentTemplateDialog, NewFolderHdl_Impl ) );
     pImpl->pWin->SetSendFocusHdl( LINK( this, SvtDocumentTemplateDialog, SendFocusHdl_Impl ) );
 
+    // dynamic height adjustment
+    long nHeight = pImpl->pWin->CalcHeight();
+
     Size aSize = GetOutputSizePixel();
     Point aPos = aLine.GetPosPixel();
     Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-    aSize.Height() = aPos.Y() - a6Size.Height();
+    aPos.Y() -= a6Size.Height();
+    long nDelta = aPos.Y() - nHeight;
+    aSize.Height() -= nDelta;
+    SetOutputSizePixel( aSize );
+
+    aSize.Height() = nHeight;
     aSize.Width() -= a6Size.Width();
     pImpl->pWin->SetPosSizePixel( Point( a6Size.Width() / 2, 0 ), aSize );
+
+    aPos = aLine.GetPosPixel();
+    aPos.Y() -= nDelta;
+    aLine.SetPosPixel( aPos );
+    aPos = aManageBtn.GetPosPixel();
+    aPos.Y() -= nDelta;
+    aManageBtn.SetPosPixel( aPos );
+    aPos = aEditBtn.GetPosPixel();
+    aPos.Y() -= nDelta;
+    aEditBtn.SetPosPixel( aPos );
+    aPos = aOKBtn.GetPosPixel();
+    aPos.Y() -= nDelta;
+    aOKBtn.SetPosPixel( aPos );
+    aPos = aCancelBtn.GetPosPixel();
+    aPos.Y() -= nDelta;
+    aCancelBtn.SetPosPixel( aPos );
+    aPos = aHelpBtn.GetPosPixel();
+    aPos.Y() -= nDelta;
+    aHelpBtn.SetPosPixel( aPos );
+
     pImpl->pWin->Show();
 
     SelectHdl_Impl( NULL );
