@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-08 13:27:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef _BIFFDUMP_HXX
 #define _BIFFDUMP_HXX
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #define DEBUGGING________
 #endif
 
