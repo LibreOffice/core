@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:32:38 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,224 +62,47 @@
 #include <outliner.hrc>
 String RID_OUTLUNDO_HEIGHT
 {
-    TEXT = "Verschieben" ;
-    TEXT [ English ] = "Move" ;
-    TEXT [ norwegian ] = "Flytt" ;
-    TEXT [ italian ] = "Sposta" ;
-    TEXT [ portuguese_brazilian ] = "Mover" ;
-    TEXT [ portuguese ] = "Mover" ;
-    TEXT [ finnish ] = "Siirrä" ;
-    TEXT [ danish ] = "Flyt" ;
-    TEXT [ french ] = "Déplacer" ;
-    TEXT [ swedish ] = "Flytta" ;
-    TEXT [ dutch ] = "Verplaatsen" ;
-    TEXT [ spanish ] = "Desplazar" ;
-    TEXT [ english_us ] = "Move" ;
-    TEXT[ chinese_simplified ] = "ç§»åŠ¨";
-    TEXT[ russian ] = "Ïåğåìåñòèòü";
-    TEXT[ polish ] = "Przesuñ";
-    TEXT[ japanese ] = "ç§»å‹•";
-    TEXT[ chinese_traditional ] = "ç§»å‹•";
-    TEXT[ arabic ] = "ÅÒÇÍÉ";
-    TEXT[ dutch ] = "Verplaatsen";
-    TEXT[ chinese_simplified ] = "ç§»åŠ¨";
-    TEXT[ greek ] = "Ìåôáêßíçóç";
-    TEXT[ korean ] = "ì´ë™";
-    TEXT[ turkish ] = "Taşı";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Mou";
-    TEXT[ thai ] = "à¸¢à¹‰à¸²à¸¢";
-    TEXT[ czech ] = "PÅ™esunout";
-    TEXT[ hebrew ] = "â€®×”×–×–×”â€¬";
-    TEXT[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨à¤¾à¤¨à¥à¤¤à¤°";
-    TEXT[ slovak ] = "PresunÃºÅ¥";
-    TEXT[ hungarian ] = "ÃthelyezÃ©s";
-    TEXT[ slovenian ] = "Premakni";
+    Text [ de ] = "Verschieben" ;
+    Text [ en-US ] = "Move" ;
+    Text [ x-comment ] = " ";
 };
 String RID_OUTLUNDO_DEPTH
 {
     /* ### ACHTUNG: Neuer Text in Resource? Einrücken : Einr³cken */
     /* ### ACHTUNG: Neuer Text in Resource? Einrücken : Einr³cken */
-    TEXT = "Einrücken" ;
-    TEXT [ English ] = "Indent" ;
-    Text [ english_us ] = "Indent" ;
-    Text [ italian ] = "Rientra" ;
-    Text [ spanish ] = "Sangría" ;
-    Text [ french ] = "Mettre en retrait" ;
-    Text [ dutch ] = "Inspringing" ;
-    Text [ swedish ] = "Dra in" ;
-    Text [ danish ] = "Indryk" ;
-    Text [ portuguese ] = "Avançar" ;
-    Text [ portuguese_brazilian ] = "Recuo" ;
-    Text[ chinese_simplified ] = "ç¼©è¿›";
-    Text[ russian ] = "Îòñòóï";
-    Text[ polish ] = "Wciêcie";
-    Text[ japanese ] = "ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆ";
-    Text[ chinese_traditional ] = "ç¸®æ’";
-    Text[ arabic ] = "ÅÒÇÍÉ";
-    Text[ dutch ] = "Inspringing";
-    Text[ chinese_simplified ] = "ç¼©è¿›";
-    Text[ greek ] = "Åóï÷Ş";
-    Text[ korean ] = "ë“¤ì—¬ì“°ê¸°";
-    Text[ turkish ] = "Girinti";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sagnat";
-    Text[ finnish ] = "Sisennä";
-    Text[ thai ] = "à¸£à¸°à¸¢à¸°à¹€à¸¢à¸·à¹‰à¸­à¸‡";
-    Text[ czech ] = "Odsadit";
-    Text[ hebrew ] = "â€®×›× ×™×¡×”â€¬";
-    Text[ hindi ] = "à¤‡à¤¨à¥à¤¡à¥‡à¤¨à¥à¤Ÿ";
-    Text[ slovak ] = "Odsadenie";
-    Text[ hungarian ] = "BehÃºzÃ¡s";
-    Text[ slovenian ] = "Zamik";
+    Text [ de ] = "Einrücken" ;
+    Text [ en-US ] = "Indent" ;
+    Text [ x-comment ] = " ";
 };
 String RID_OUTLUNDO_EXPAND
 {
     /* ### ACHTUNG: Neuer Text in Resource? Unterabsätze zeigen : Unterabsõtze zeigen */
     /* ### ACHTUNG: Neuer Text in Resource? Unterabsätze zeigen : Unterabsõtze zeigen */
-    TEXT = "Unterabsätze zeigen" ;
-    TEXT [ English ] = "Expand" ;
-    Text [ english_us ] = "Show subpoints" ;
-    Text [ italian ] = "Mostra i sottoparagrafi" ;
-    Text [ spanish ] = "Mostrar subpárrafos" ;
-    Text [ french ] = "Afficher les sous-paragraphes" ;
-    Text [ dutch ] = "Subalinea's weergeven" ;
-    Text [ swedish ] = "Visa understycken" ;
-    Text [ danish ] = "Vis underafsnit" ;
-    Text [ portuguese ] = "Mostrar subparágrafos" ;
-    Text [ portuguese_brazilian ] = "Mostrar sub pontos" ;
-    Text[ chinese_simplified ] = "æ˜¾ç¤ºåˆ†æ®µè½";
-    Text[ russian ] = "Ğàçâåğíóòü ïîäàáçàöû";
-    Text[ polish ] = "Poka¿ podpunkty";
-    Text[ japanese ] = "ä¸‹ä½æ®µè½ã®è¡¨ç¤º";
-    Text[ chinese_traditional ] = "é¡¯ç¤ºåˆ†æ®µè½";
-    Text[ arabic ] = "ÅÙåÇÑ ÇáİŞÑÇÊ ÇáİÑÚíÉ";
-    Text[ dutch ] = "Subalinea's weergeven";
-    Text[ chinese_simplified ] = "æ˜¾ç¤ºåˆ†æ®µè½";
-    Text[ greek ] = "ÅìöÜíéóç õğïğáñáãñÜöùí";
-    Text[ korean ] = "í•˜ìœ„ ë‹¨ë½ í‘œì‹œ";
-    Text[ turkish ] = "Alt bölümleri göster";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Mostra els subpunts";
-    Text[ finnish ] = "Näytä alipisteet";
-    Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸ˆà¸¸à¸”à¸¢à¹ˆà¸­à¸¢";
-    Text[ czech ] = "Zobrazit podbody";
-    Text[ hebrew ] = "â€®×”×¦×’×ª ×ª×ª × ×§×•×“×•×ªâ€¬";
-    Text[ hindi ] = "à¤…à¤§à¥€à¤¨à¤¬à¤¿à¤¨à¥à¤¦à¥à¤“à¤‚ à¤•à¥‹ à¤¦à¤¿à¤–à¤¾à¤“";
-    Text[ slovak ] = "ZobraziÅ¥ podbody";
-    Text[ hungarian ] = "Alpontok megjelenÃ­tÃ©se";
-    Text[ slovenian ] = "PokaÅ¾i podtoÄke";
+    Text [ de ] = "Unterabsätze zeigen" ;
+    Text [ en-US ] = "Show subpoints" ;
+    Text [ x-comment ] = " ";
 };
 String RID_OUTLUNDO_COLLAPSE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Unterabsätze verstecken : Unterabsõtze verstecken */
     /* ### ACHTUNG: Neuer Text in Resource? Unterabsätze verstecken : Unterabsõtze verstecken */
-    TEXT = "Unterabsätze verstecken" ;
-    TEXT [ English ] = "Collapse" ;
-    Text [ english_us ] = "Collapse" ;
-    Text [ italian ] = "Nascondi i sottoparagrafi" ;
-    Text [ spanish ] = "Ocultar subpárrafos" ;
-    Text [ french ] = "Masquer les sous-paragraphes" ;
-    Text [ dutch ] = "Subalinea's verbergen" ;
-    Text [ swedish ] = "Dölj understycken" ;
-    Text [ danish ] = "Skjul underafsnit" ;
-    Text [ portuguese ] = "Ocultar subparágrafos" ;
-    Text [ portuguese_brazilian ] = "Contrair" ;
-    Text[ chinese_simplified ] = "éšå…¥åˆ†æ®µè½";
-    Text[ russian ] = "Ñâåğíóòü ïîäàáçàöû";
-    Text[ polish ] = "Zwiñ akapity podrzêdne";
-    Text[ japanese ] = "ä¸‹ä½æ®µè½ã®éè¡¨ç¤º";
-    Text[ chinese_traditional ] = "éš±å…¥åˆ†æ®µè½";
-    Text[ arabic ] = "ÇÎÊİÇÁ ÇáİŞÑÇÊ ÇáİÑÚíÉ";
-    Text[ dutch ] = "Subalinea's verbergen";
-    Text[ chinese_simplified ] = "éšå…¥åˆ†æ®µè½";
-    Text[ greek ] = "Áğüêñõøç õğïğáñáãñÜöùí";
-    Text[ korean ] = "í•˜ìœ„ ë‹¨ë½ ìˆ¨ê¸°ê¸°";
-    Text[ turkish ] = "Alt bölümleri gizle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Redueix";
-    Text[ finnish ] = "Pienennä";
-    Text[ thai ] = "à¸¢à¸¸à¸š";
-    Text[ czech ] = "Srolovat";
-    Text[ hebrew ] = "â€®×›×™×•×•×¥â€¬";
-    Text[ hindi ] = "à¤¦à¤¬à¤¾à¤“";
-    Text[ slovak ] = "SkryÅ¥ vÅ¡etky sÃºÄasti";
-    Text[ hungarian ] = "Ã–sszecsukÃ¡s";
-    Text[ slovenian ] = "Strni";
+    Text [ de ] = "Unterabsätze verstecken" ;
+    Text [ en-US ] = "Collapse" ;
+    Text [ x-comment ] = " ";
 };
 String RID_OUTLUNDO_ATTR
 {
-    TEXT = "Attribute anwenden" ;
-    TEXT [ English ] = "Apply attributes" ;
-    TEXT [ norwegian ] = "Bruk attributter" ;
-    TEXT [ italian ] = "Applica attributi" ;
-    TEXT [ portuguese_brazilian ] = "Aplicar atributos" ;
-    TEXT [ portuguese ] = "Aplicar atributos" ;
-    TEXT [ finnish ] = "Käytä määritteitä" ;
-    TEXT [ danish ] = "Anvend attributter" ;
-    TEXT [ french ] = "Appliquer les attributs" ;
-    TEXT [ swedish ] = "Använd attribut" ;
-    TEXT [ dutch ] = "Attributen toepassen" ;
-    TEXT [ spanish ] = "Aplicar atributos" ;
-    TEXT [ english_us ] = "Apply attributes" ;
-    TEXT[ chinese_simplified ] = "ä½¿ç”¨å±æ€§";
-    TEXT[ russian ] = "Ïğèìåíèòü àòğèáóòû";
-    TEXT[ polish ] = "Zastosuj atrybuty";
-    TEXT[ japanese ] = "å±æ€§ã®é©ç”¨";
-    TEXT[ chinese_traditional ] = "ä½¿ç”¨å±¬æ€§";
-    TEXT[ arabic ] = "ÇÓÊÎÏÇã ÇáÓãÇÊ";
-    TEXT[ dutch ] = "Attributen toepassen";
-    TEXT[ chinese_simplified ] = "ä½¿ç”¨å±æ€§";
-    TEXT[ greek ] = "ÅöáñìïãŞ éäéïôŞôùí";
-    TEXT[ korean ] = "ì†ì„± ì ìš©";
-    TEXT[ turkish ] = "Öznitelikleri uygula";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Aplica els atributs";
-    TEXT[ thai ] = "à¹ƒà¸Šà¹‰à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°";
-    TEXT[ czech ] = "PouÅ¾Ã­t atributy";
-    TEXT[ hebrew ] = "â€®×™×™×©×•× ×ª×›×•× ×•×ªâ€¬";
-    TEXT[ hindi ] = "à¤à¤Ÿà¥à¤°à¤¿à¤¬à¥à¤¯à¥‚à¤Ÿà¥à¤¸ à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹";
-    TEXT[ slovak ] = "PouÅ¾iÅ¥ atribÃºty";
-    TEXT[ hungarian ] = "JellemzÅ‘k alkalmazÃ¡sa";
-    TEXT[ slovenian ] = "Uporabi atribute";
+    Text [ de ] = "Attribute anwenden" ;
+    Text [ en-US ] = "Apply attributes" ;
+    Text [ x-comment ] = " ";
 };
 String RID_OUTLUNDO_INSERT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
     /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
-    TEXT = "Einfügen" ;
-    TEXT [ English ] = "Insert" ;
-    TEXT [ norwegian ] = "Sett inn" ;
-    TEXT [ italian ] = "Inserisci" ;
-    TEXT [ portuguese_brazilian ] = "Inserir" ;
-    TEXT [ portuguese ] = "Inserir" ;
-    TEXT [ finnish ] = "Lisää" ;
-    TEXT [ danish ] = "Indsæt" ;
-    TEXT [ french ] = "Insérer" ;
-    TEXT [ swedish ] = "Infoga" ;
-    TEXT [ dutch ] = "Invoegen" ;
-    TEXT [ spanish ] = "Insertar" ;
-    TEXT [ english_us ] = "Insert" ;
-    TEXT[ chinese_simplified ] = "æ’å…¥";
-    TEXT[ russian ] = "Âñòàâèòü";
-    TEXT[ polish ] = "Wstaw";
-    TEXT[ japanese ] = "æŒ¿å…¥";
-    TEXT[ chinese_traditional ] = "æ’å…¥";
-    TEXT[ arabic ] = "ÅÏÑÇÌ";
-    TEXT[ dutch ] = "Invoegen";
-    TEXT[ chinese_simplified ] = "æ’å…¥";
-    TEXT[ greek ] = "ÅéóáãùãŞ";
-    TEXT[ korean ] = "ì‚½ì…";
-    TEXT[ turkish ] = "Ekle";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Insereix";
-    TEXT[ thai ] = "à¹à¸—à¸£à¸";
-    TEXT[ czech ] = "VloÅ¾it";
-    TEXT[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
-    TEXT[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¥‹";
-    TEXT[ slovak ] = "VloÅ¾iÅ¥";
-    TEXT[ hungarian ] = "BeszÃºrÃ¡s";
-    TEXT[ slovenian ] = "Vstavi";
+    Text [ de ] = "Einfügen" ;
+    Text [ en-US ] = "Insert" ;
+    Text [ x-comment ] = " ";
 };
 
 
