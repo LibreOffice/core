@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:34:34 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 08:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,14 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         < "De un lado al otro" ; Default ; > ;
         < "Entrar" ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Ei vaikutusta" ; Default ; > ;
+        < "Vilkutus" ; Default ; > ;
+        < "Vieritä läpi" ; Default ; > ;
+        < "Vieritä edestakaisin" ; Default ; > ;
+        < "Vieritä sisään" ; Default ; > ;
+    };
     };
     ImageButton BTN_UP
     {
@@ -296,6 +304,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Nach Oben";
         QuickHelpText[ catalan ] = "Hacia arriba";
+        QuickHelpText[ finnish ] = "Yläosaan!";
     };
     ImageButton BTN_LEFT
     {
@@ -325,6 +334,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Nach Links";
         QuickHelpText[ catalan ] = "Hacia la izquierda";
+        QuickHelpText[ finnish ] = "Vasemmalle!";
     };
     ImageButton BTN_RIGHT
     {
@@ -354,6 +364,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Nach Rechts";
         QuickHelpText[ catalan ] = "Hacia la derecha";
+        QuickHelpText[ finnish ] = "Oikealle!";
     };
     ImageButton BTN_DOWN
     {
@@ -383,6 +394,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Nach Unten";
         QuickHelpText[ catalan ] = "Hacia abajo";
+        QuickHelpText[ finnish ] = "Alaosaan!";
     };
     TriStateBox TSB_START_INSIDE
     {
@@ -411,6 +423,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ turkish ] = "Metni, canlandýrma baþlarken ~görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Texto visible al ~iniciar";
+        Text[ finnish ] = "~Aloita kohteessa";
     };
     TriStateBox TSB_STOP_INSIDE
     {
@@ -439,6 +452,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ turkish ] = "Metni, canlandýrma bittiðinde gö~rüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Texto visible al ~finalizar";
+        Text[ finnish ] = "Teksti näkyvissä muokattaessa";
     };
     TriStateBox TSB_ENDLESS
     {
@@ -467,6 +481,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ turkish ] = "~Sonsuz";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Continuo";
+        Text[ finnish ] = "~Jatkuva";
     };
     NumericField NUM_FLD_COUNT
     {
@@ -505,6 +520,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ turkish ] = "Efekt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Efecto";
+        Text[ finnish ] = "Tehosteet";
     };
     GroupBox GRP_COUNT
     {
@@ -532,6 +548,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ turkish ] = "Adet sayýsý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cantidad";
+        Text[ finnish ] = "Laske";
     };
     TriStateBox TSB_PIXEL
     {
@@ -560,6 +577,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ turkish ] = "~Piksel";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pí~xel";
+        Text[ finnish ] = "~Kuvapisteet";
     };
     GroupBox GRP_AMOUNT
     {
@@ -587,6 +605,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ turkish ] = "Adým";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Incremento";
+        Text[ finnish ] = "Lisäys";
     };
     MetricField MTR_FLD_AMOUNT
     {
@@ -631,6 +650,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ turkish ] = "~Otomatik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Automático";
+        Text[ finnish ] = "~Automaattinen";
     };
     MetricField MTR_FLD_DELAY
     {
@@ -675,6 +695,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ turkish ] = "Gecikme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Retardo";
+        Text[ finnish ] = "Viivytä";
     };
     Text[ chinese_simplified ] = "»î¶¯ÎÄ×Ö";
     Text[ russian ] = "Àíèìàöèÿ òåêñòà";
@@ -687,6 +708,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     Text[ turkish ] = "Metin canlandýrma";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Animación de texto";
+    Text[ finnish ] = "Animaatio";
 };
  // RID_SVXDLG_TEXT -------------------------------------------------------
 TabDialog RID_SVXDLG_TEXT
@@ -739,6 +761,7 @@ TabDialog RID_SVXDLG_TEXT
                 Text[ turkish ] = "Metin";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Texto";
+                Text[ finnish ] = "Teksti";
             };
             PageItem
             {
@@ -766,6 +789,7 @@ TabDialog RID_SVXDLG_TEXT
                 Text[ turkish ] = "Metin canlandýrma";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Animación de texto";
+                Text[ finnish ] = "Tekstin animaatio";
             };
         };
     };
@@ -780,5 +804,6 @@ TabDialog RID_SVXDLG_TEXT
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto";
+    Text[ finnish ] = "Teksti";
 };
  // ******************************************************************* EOF
