@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:24:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,12 @@
  ************************************************************************/
 
 #include <cstring>
+#include <sys/stat.h>
 #include <unistd.h>
 
 #include <psprint/helper.hxx>
 #include <tools/string.hxx>
+#include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
@@ -72,37 +74,39 @@
 #include <sal/config.h>
 #include "jvmaccess/javainfo.hxx"
 
+using namespace rtl;
+
 namespace psp {
 
 enum whichOfficePath { NetPath, UserPath };
 
-static const ::rtl::OUString& getOfficePath( enum whichOfficePath ePath )
+static const OUString& getOfficePath( enum whichOfficePath ePath )
 {
-    static ::rtl::OUString aNetPath;
-    static ::rtl::OUString aUserPath;
-    static ::rtl::OUString aEmpty;
+    static OUString aNetPath;
+    static OUString aUserPath;
+    static OUString aEmpty;
     static bool bOnce = false;
 
     if( ! bOnce )
     {
         bOnce = true;
-        rtl::OUString aIni;
+        OUString aIni;
         osl_getExecutableFile( &aIni.pData );
         aIni = aIni.copy( 0, aIni.lastIndexOf( '/' )+1 );
-        aIni += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "bootstrap" ) ) );
-        rtl::Bootstrap aBootstrap( aIni );
-        aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseInstallation" ) ), aNetPath );
-        aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserInstallation" ) ), aUserPath );
+        aIni += OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "bootstrap" ) ) );
+        Bootstrap aBootstrap( aIni );
+        aBootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseInstallation" ) ), aNetPath );
+        aBootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "UserInstallation" ) ), aUserPath );
 
         if( ! aNetPath.compareToAscii( "file://", 7 ) )
         {
-            rtl::OUString aSysPath;
+            OUString aSysPath;
             if( osl_getSystemPathFromFileURL( aNetPath.pData, &aSysPath.pData ) == osl_File_E_None )
                 aNetPath = aSysPath;
         }
         if( ! aUserPath.compareToAscii( "file://", 7 ) )
         {
-            rtl::OUString aSysPath;
+            OUString aSysPath;
             if( osl_getSystemPathFromFileURL( aUserPath.pData, &aSysPath.pData ) == osl_File_E_None )
                 aUserPath = aSysPath;
         }
@@ -116,91 +120,156 @@ static const ::rtl::OUString& getOfficePath( enum whichOfficePath ePath )
     return aEmpty;
 }
 
-static ::rtl::OUString getEnvironmentPath( const char* pKey, sal_Unicode cPrefix )
+static OUString getEnvironmentPath( const char* pKey, sal_Unicode cPrefix )
 {
-    ::rtl::OUString aPath;
+    OUString aPath;
 
     const char* pValue = getenv( pKey );
     if( pValue && *pValue )
     {
-        aPath  = ::rtl::OUString( cPrefix );
-        aPath += ::rtl::OUString( pValue, strlen( pValue ), gsl_getSystemTextEncoding() );
+        aPath  = OUString( cPrefix );
+        aPath += OUString( pValue, strlen( pValue ), gsl_getSystemTextEncoding() );
     }
     return aPath;
 }
 
 } // namespace psp
 
-const ::rtl::OUString& psp::getPrinterPath()
+const OUString& psp::getPrinterPath()
 {
-    static ::rtl::OUString aPath;
+    static OUString aPath;
 
     if( ! aPath.getLength() )
     {
-        aPath  = getOfficePath( psp::NetPath );
-        aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/share/psprint:" ) );
-        aPath += getOfficePath( psp::UserPath );
-        aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/psprint" ) );
+        OUString aNetPath = getOfficePath( psp::NetPath );
+        OUString aUserPath = getOfficePath( psp::UserPath );
+        if( aNetPath.getLength() )
+        {
+            aPath += aNetPath;
+            aPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/share/psprint" ) );
+        }
+        if( aUserPath.getLength() )
+        {
+            if( aPath.getLength() )
+                aPath += OUString( RTL_CONSTASCII_USTRINGPARAM( ":" ) );
+            aPath += aUserPath;
+            aPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/psprint" ) );
+        }
         aPath += ::psp::getEnvironmentPath( "SAL_PSPRINT", (sal_Unicode)':' );
 
 #ifdef DEBUG
-        fprintf( stderr, "initalizing printer path to \"%s\"\n", ::rtl::OUStringToOString( aPath, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+        fprintf( stderr, "initalizing printer path to \"%s\"\n", OUStringToOString( aPath, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
     }
     return aPath;
 }
 
-const ::rtl::OUString& psp::getFontPath()
+void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSubDir )
 {
-    static ::rtl::OUString aPath;
+    rPathList.clear();
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+
+    OString aPath( OUStringToOString( getPrinterPath(), aEncoding ) );
+    sal_Int32 nIndex = 0;
+    do
+    {
+        OString aDir( aPath.getToken( 0, ':', nIndex ) );
+        if( ! aDir.getLength() )
+            continue;
+
+        if( pSubDir )
+        {
+            aDir += "/";
+            aDir += pSubDir;
+        }
+        struct stat aStat;
+        if( stat( aDir.getStr(), &aStat ) || ! S_ISDIR( aStat.st_mode ) )
+            continue;
+
+        rPathList.push_back( OStringToOUString( aDir, aEncoding ) );
+    } while( nIndex != -1 );
+
+    if( rPathList.empty() )
+    {
+        // last resort: next to program file (mainly for setup)
+        OUString aExe;
+        if( osl_getExecutableFile( &aExe.pData ) == osl_Process_E_None )
+        {
+            INetURLObject aDir( aExe );
+            aDir.removeSegment();
+            aExe = aDir.GetMainURL( INetURLObject::NO_DECODE );
+            OUString aSysPath;
+            if( osl_getSystemPathFromFileURL( aExe.pData, &aSysPath.pData ) == osl_File_E_None )
+            {
+                rPathList.push_back( aSysPath );
+            }
+        }
+    }
+}
+
+const OUString& psp::getFontPath()
+{
+    static OUString aPath;
 
     if( ! aPath.getLength() )
     {
-        aPath  = getOfficePath( psp::NetPath );
-        aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/truetype;") );
-        aPath += getOfficePath( psp::NetPath );
-        aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/type1;") );
-        aPath += getOfficePath( psp::UserPath );
-        aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/fonts" ) );
+        OUString aNetPath = getOfficePath( psp::NetPath );
+        OUString aUserPath = getOfficePath( psp::UserPath );
+        if( aNetPath.getLength() )
+        {
+            aPath  = aNetPath;
+            aPath += OUString( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/truetype;") );
+            aPath += aNetPath;
+            aPath += OUString( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/type1;") );
+        }
+        if( aUserPath.getLength() )
+        {
+            aPath += aUserPath;
+            aPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/fonts" ) );
+        }
         aPath += ::psp::getEnvironmentPath( "SAL_FONTPATH_PRIVATE", (sal_Unicode)';' );
 
         // append jre/jdk fonts if possible
-        rtl::OUString aJavaRc( getOfficePath( psp::UserPath ) );
-        aJavaRc += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/config/" SAL_CONFIGFILE( "java" ) ) );
-        Config aConfig( aJavaRc );
-        aConfig.SetGroup( "Java" );
-        rtl::OString aJREpath = aConfig.ReadKey( "Home" );
-        if( aJREpath.compareTo( "file:", 5 ) == 0 )
+        OString aJREpath;
+        if( aUserPath.getLength() )
         {
-            rtl::OUString aURL( rtl::OStringToOUString( aJREpath, osl_getThreadTextEncoding() ) );
-            rtl::OUString aSys;
-            if( osl_getSystemPathFromFileURL( aURL.pData, &aSys.pData ) == osl_File_E_None )
-                aJREpath = rtl::OUStringToOString( aSys, osl_getThreadTextEncoding() );
-        }
-        if( aJREpath.getLength() > 0 )
-        {
-            ::rtl::OString aTestPath( aJREpath );
-            aTestPath += "/jre/lib/fonts";
-            if( access( aTestPath.getStr(), R_OK ) )
+            OUString aJavaRc( aUserPath );
+            aJavaRc += OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/config/" SAL_CONFIGFILE( "java" ) ) );
+            Config aConfig( aJavaRc );
+            aConfig.SetGroup( "Java" );
+            aJREpath = aConfig.ReadKey( "Home" );
+            if( aJREpath.compareTo( "file:", 5 ) == 0 )
             {
-                aTestPath = aJREpath;
-                aTestPath += "/lib/fonts";
+                OUString aURL( OStringToOUString( aJREpath, osl_getThreadTextEncoding() ) );
+                OUString aSys;
+                if( osl_getSystemPathFromFileURL( aURL.pData, &aSys.pData ) == osl_File_E_None )
+                    aJREpath = OUStringToOString( aSys, osl_getThreadTextEncoding() );
+            }
+            if( aJREpath.getLength() > 0 )
+            {
+                OString aTestPath( aJREpath );
+                aTestPath += "/jre/lib/fonts";
                 if( access( aTestPath.getStr(), R_OK ) )
-                    aJREpath = ::rtl::OString();
+                {
+                    aTestPath = aJREpath;
+                    aTestPath += "/lib/fonts";
+                    if( access( aTestPath.getStr(), R_OK ) )
+                        aJREpath = OString();
+                    else
+                        aJREpath = aTestPath;
+                }
                 else
                     aJREpath = aTestPath;
             }
-            else
-                aJREpath = aTestPath;
         }
 
         // if no javarc (e.g. in setup) exists or it failed try the UDK method
         if( ! aJREpath.getLength() )
         {
-            rtl::OString aJavaLib;
+            OString aJavaLib;
             try
             {
-                rtl::OUString aLib;
+                OUString aLib;
                 if (osl::FileBase::getSystemPathFromFileURL(
                             jvmaccess::JavaInfo::createBestInfo(true).
                                 getRuntimeLibLocation(),
@@ -220,7 +289,7 @@ const ::rtl::OUString& psp::getFontPath()
                 while( ( nIndex = aJavaLib.lastIndexOf( '/' ) ) != -1 )
                 {
                     aJavaLib = aJavaLib.copy( 0, nIndex );
-                    rtl::OString aTmpPath = aJavaLib;
+                    OString aTmpPath = aJavaLib;
                     aTmpPath += "/lib/fonts";
                     if( access( aTmpPath.getStr(), R_OK ) == 0 )
                     {
@@ -233,11 +302,11 @@ const ::rtl::OUString& psp::getFontPath()
 
         if( aJREpath.getLength() )
         {
-            aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+            aPath += OUString( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
             aPath += OStringToOUString( aJREpath, osl_getThreadTextEncoding() );
         }
 #ifdef DEBUG
-        fprintf( stderr, "initalizing font path to \"%s\"\n", ::rtl::OUStringToOString( aPath, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+        fprintf( stderr, "initalizing font path to \"%s\"\n", OUStringToOString( aPath, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
     }
     return aPath;
