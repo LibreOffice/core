@@ -2,9 +2,9 @@
 *
 *   $RCSfile: ListBox.cxx,v $
 *
-*   $Revision: 1.29 $
+*   $Revision: 1.30 $
 *
-*   last change: $Author: kz $ $Date: 2003-12-11 12:29:45 $
+*   last change: $Author: rt $ $Date: 2004-04-02 10:54:18 $
 *
 *   The Contents of this file are made available subject to the terms of
 *   either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _FORMS_BASELISTBOX_HXX_
 #include "BaseListBox.hxx"
+#endif
+#ifndef _COMPHELPER_BASIC_IO_HXX_
+#include <comphelper/basicio.hxx>
 #endif
 #ifndef _COMPHELPER_CONTAINER_HXX_
 #include <comphelper/container.hxx>
@@ -168,7 +171,7 @@ namespace frm
     using namespace ::com::sun::star::io;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
-    using namespace ::drafts::com::sun::star::form;
+    using namespace ::com::sun::star::form::binding;
     using namespace ::dbtools;
 
     //==================================================================
@@ -197,7 +200,7 @@ namespace frm
     DBG_NAME(OListBoxModel);
     //------------------------------------------------------------------
     OListBoxModel::OListBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
-        :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_CONTROL_LISTBOX, sal_True, sal_True )
+        :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_CONTROL_LISTBOX, sal_True, sal_True, sal_True )
         // use the old control name for compytibility reasons
         ,OEntryListHelper( m_aMutex )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
@@ -250,12 +253,22 @@ namespace frm
     StringSequence SAL_CALL OListBoxModel::getSupportedServiceNames() throw(RuntimeException)
     {
         StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
-        aSupported.realloc(aSupported.getLength() + 3);
 
-        ::rtl::OUString* pArray = aSupported.getArray();
-        pArray[aSupported.getLength()-3] = FRM_SUN_COMPONENT_BINDDB_LISTBOX;
-        pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_LISTBOX;
-        pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_LISTBOX;
+        sal_Int32 nOldLen = aSupported.getLength();
+        aSupported.realloc( nOldLen + 8 );
+        ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+
+        *pStoreTo++ = BINDABLE_CONTROL_MODEL;
+        *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
+        *pStoreTo++ = VALIDATABLE_CONTROL_MODEL;
+
+        *pStoreTo++ = BINDABLE_DATA_AWARE_CONTROL_MODEL;
+        *pStoreTo++ = VALIDATABLE_BINDABLE_CONTROL_MODEL;
+
+        *pStoreTo++ = FRM_SUN_COMPONENT_LISTBOX;
+        *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_LISTBOX;
+        *pStoreTo++ = BINDABLE_DATABASE_LIST_BOX;
+
         return aSupported;
     }
 
@@ -457,25 +470,18 @@ namespace frm
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
     {
-        FRM_BEGIN_PROP_HELPER(14)
+        BEGIN_DESCRIBE_PROPERTIES( 7, OBoundControlModel )
             RemoveProperty( _rAggregateProps, PROPERTY_STRINGITEMLIST );
                 // we want to "override" this property
 
-            DECL_PROP2(CLASSID,             sal_Int16,                      READONLY, TRANSIENT);
-            DECL_PROP1(NAME,                ::rtl::OUString,                BOUND);
-            DECL_PROP1(TAG,                 ::rtl::OUString,                BOUND);
             DECL_PROP1(TABINDEX,            sal_Int16,                      BOUND);
             DECL_PROP2(BOUNDCOLUMN,         sal_Int16,                      BOUND, MAYBEVOID);
             DECL_PROP1(LISTSOURCETYPE,      ListSourceType,                 BOUND);
             DECL_PROP1(LISTSOURCE,          StringSequence,                 BOUND);
             DECL_PROP3(VALUE_SEQ,           StringSequence,                 BOUND, READONLY, TRANSIENT);
             DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,            BOUND);
-            DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,                BOUND);
-            DECL_IFACE_PROP3(BOUNDFIELD,    XPropertySet,                   BOUND,READONLY, TRANSIENT);
-            DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,                   BOUND, MAYBEVOID);
-            DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,              READONLY, TRANSIENT);
             DECL_PROP1(STRINGITEMLIST,      Sequence< ::rtl::OUString >,    BOUND);
-        FRM_END_PROP_HELPER();
+        END_DESCRIBE_PROPERTIES();
     }
 
     //------------------------------------------------------------------------------
@@ -485,8 +491,8 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    void SAL_CALL OListBoxModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
-        throw(stario::IOException, RuntimeException)
+    void SAL_CALL OListBoxModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+        throw(IOException, RuntimeException)
     {
         OBoundControlModel::write(_rxOutStream);
 
@@ -522,7 +528,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    void SAL_CALL OListBoxModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException)
+    void SAL_CALL OListBoxModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
     {
         // Bei manchen Variblen muessen Abhaengigkeiten beruecksichtigt werden.
         // Deshalb muessen sie explizit ueber setPropertyValue() gesetzt werden.
