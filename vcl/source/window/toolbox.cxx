@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-05 13:32:16 $
+ *  last change: $Author: ssa $ $Date: 2002-04-15 12:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4624,6 +4624,21 @@ BOOL ToolBox::ImplActivateItem( KeyCode aKeyCode )
         {
             mnDownItemId = mnCurItemId = mnHighItemId;
             ImplToolItem* pItem = ImplGetItem( mnHighItemId );
+            if ( pItem->mnBits & TIB_AUTOCHECK )
+            {
+                if ( pItem->mnBits & TIB_RADIOCHECK )
+                {
+                    if ( pItem->meState != STATE_CHECK )
+                        SetItemState( pItem->mnId, STATE_CHECK );
+                }
+                else
+                {
+                    if ( pItem->meState != STATE_CHECK )
+                        pItem->meState = STATE_CHECK;
+                    else
+                        pItem->meState = STATE_NOCHECK;
+                }
+            }
             mnMouseModifier = aKeyCode.GetModifier();
             mbDummy2_KeyEvt = TRUE;
             Activate();
@@ -4705,8 +4720,8 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
     {
         case KEY_UP:
         {
-            // Ctrl-Left/Ctrl-Up activates next toolbox, indicated by a blue arrow pointing to the left/up
-            if( !IsHorizontal() && aKeyCode.IsMod1() && !maNextToolRect.IsEmpty() )
+            // Ctrl-Cursor activates next toolbox, indicated by a blue arrow pointing to the left/up
+            if( !IsHorizontal() && (aKeyCode.IsMod1() || aKeyCode.IsMod2()) && !maNextToolRect.IsEmpty() )
             {
                 ImplDrawNext( TRUE );
                 ImplDrawNext( FALSE );
@@ -4714,6 +4729,8 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             }
             else
             {
+                if( aKeyCode.GetModifier() )    // allow only pure cursor keys
+                    break;
                 if( !IsHorizontal() )
                     ImplChangeHighlightUpDn( TRUE );
                 else
@@ -4723,8 +4740,8 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         break;
         case KEY_LEFT:
         {
-            // Ctrl-Left/Ctrl-Up activates next toolbox, indicated by a blue arrow pointing to the left/up
-            if( IsHorizontal() && aKeyCode.IsMod1() && !maNextToolRect.IsEmpty() )
+            // Ctrl-Cursor activates next toolbox, indicated by a blue arrow pointing to the left/up
+            if( IsHorizontal() && (aKeyCode.IsMod1() || aKeyCode.IsMod2()) && !maNextToolRect.IsEmpty() )
             {
                 ImplDrawNext( TRUE );
                 ImplDrawNext( FALSE );
@@ -4732,6 +4749,8 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             }
             else
             {
+                if( aKeyCode.GetModifier() )    // allow only pure cursor keys
+                    break;
                 if( IsHorizontal() )
                     ImplChangeHighlightUpDn( TRUE );
                 else
@@ -4741,18 +4760,42 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         break;
         case KEY_DOWN:
         {
-            if( !IsHorizontal() )
-                ImplChangeHighlightUpDn( FALSE );
+            // Ctrl-Cursor activates next toolbox, indicated by a blue arrow pointing to the left/up
+            if( !IsHorizontal() && (aKeyCode.IsMod1() || aKeyCode.IsMod2()) && !maNextToolRect.IsEmpty() )
+            {
+                ImplDrawNext( TRUE );
+                ImplDrawNext( FALSE );
+                NextToolBox();
+            }
             else
-                ImplOpenItem( aKeyCode );
+            {
+                if( aKeyCode.GetModifier() )    // allow only pure cursor keys
+                    break;
+                if( !IsHorizontal() )
+                    ImplChangeHighlightUpDn( FALSE );
+                else
+                    ImplOpenItem( aKeyCode );
+            }
         }
         break;
         case KEY_RIGHT:
         {
-            if( IsHorizontal() )
-                ImplChangeHighlightUpDn( FALSE );
+            // Ctrl-Cursor activates next toolbox, indicated by a blue arrow pointing to the left/up
+            if( IsHorizontal() && (aKeyCode.IsMod1() || aKeyCode.IsMod2()) && !maNextToolRect.IsEmpty() )
+            {
+                ImplDrawNext( TRUE );
+                ImplDrawNext( FALSE );
+                NextToolBox();
+            }
             else
-                ImplOpenItem( aKeyCode );
+            {
+                if( aKeyCode.GetModifier() )    // allow only pure cursor keys
+                    break;
+                if( IsHorizontal() )
+                    ImplChangeHighlightUpDn( FALSE );
+                else
+                    ImplOpenItem( aKeyCode );
+            }
         }
         break;
         case KEY_PAGEUP:
