@@ -2,9 +2,9 @@
  *
  *  $RCSfile: permissions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-05 12:21:00 $
+ *  last change: $Author: dbo $ $Date: 2002-03-05 15:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,15 +88,6 @@ using ::rtl::OUStringBuffer;
 
 namespace stoc_sec
 {
-
-// static stuff initialized when loading lib
-static OUString s_filePermission = OUSTR("com.sun.star.io.FilePermission");
-static OUString s_socketPermission = OUSTR("com.sun.star.connection,SocketPermission");
-static OUString s_runtimePermission = OUSTR("com.sun.star.security.RuntimePermission");
-static OUString s_allPermission = OUSTR("com.sun.star.security.AllPermission");
-static OUString s_allFiles = OUSTR("<<ALL FILES>>");
-
-//##################################################################################################
 
 //--------------------------------------------------------------------------------------------------
 static inline sal_Int32 makeMask(
@@ -370,7 +361,7 @@ FilePermission::FilePermission(
     : Permission( FILE, next )
     , m_actions( makeMask( perm.Actions, s_actions ) )
     , m_url( perm.URL )
-    , m_allFiles( sal_False != perm.URL.equals( s_allFiles ) )
+    , m_allFiles( sal_False != perm.URL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("<<ALL FILES>>")) )
 {
     if (! m_allFiles)
     {
