@@ -81,7 +81,7 @@ AccessibilityWorkBench : $(JAVA_FILES:b:+".class")
 # Create a jar file of all files neccessary to build and run the work bench.
 dist: AccessibilityWorkBench.jar
 
-AccessibilityWorkBench.jar: $(JAVA_FILES:b:+".class")
+AccessibilityWorkBench.jar: $(JAVA_FILES:b:+".class") jawb.mf
     +jar -cfm AccessibilityWorkBench.jar jawb.mf *.class
 
 # Example of how to run the work bench.
