@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2001-10-02 13:01:03 $
+#   last change: $Author: jp $ $Date: 2001-11-02 12:33:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -197,8 +197,6 @@ SHL2STDLIBS= \
     $(UNOTOOLSLIB) \
     $(VOSLIB) \
     $(TKLIB) \
-    $(SDLIB) \
-    $(SCLIB) \
     $(UCBHELPERLIB) \
     $(XMLOFFLIB) \
     $(COMPHELPERLIB)
@@ -238,16 +236,6 @@ SHL2OBJS= \
     $(OUT)$/slo$/swmodule.obj \
     $(OUT)$/slo$/swdll.obj
 #	$(SLO)$/.obj		  ^ \ nicht vergessen!
-
-.IF "$(OS)"!="LINUX"
-.IF "$(OS)"!="FREEBSD"
-.IF "$(OS)"!="NETBSD"
-SHL2OBJS+= \
-            $(SLO)$/atrfrm.obj      \
-            $(SLO)$/fmtatr2.obj
-.ENDIF
-.ENDIF
-.ENDIF
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
 SHL2OBJS +=  $(SOLARLIBDIR)$/autorec.o

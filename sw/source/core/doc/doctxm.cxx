@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-10-02 11:22:25 $
+ *  last change: $Author: jp $ $Date: 2001-11-02 12:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,17 +85,8 @@
 #ifndef _SVX_LRSPITEM_HXX
 #include <svx/lrspitem.hxx>
 #endif
-#ifndef SMDLL0_HXX
-#include <starmath/smdll0.hxx>
-#endif
-#ifndef SC_SCDLL_HXX
-#include <sc/scdll.hxx>
-#endif
-#ifndef _SCHDLL0_HXX
-#include <sch/schdll0.hxx>
-#endif
-#ifndef _SDDLL_HXX
-#include <sd/sddll.hxx>
+#ifndef _SOT_CLSIDS_HXX
+#include <sot/clsids.hxx>
 #endif
 
 #ifndef _SWDOCSH_HXX
@@ -771,7 +762,7 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
             if( rNm.Match( aName ) == nNmLen )
             {
                 // Nummer bestimmen und das Flag setzen
-                nNum = rNm.Copy( nNmLen ).ToInt32();
+                nNum = (USHORT)rNm.Copy( nNmLen ).ToInt32();
                 if( nNum-- && nNum < pSectionFmtTbl->Count() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
@@ -1463,6 +1454,55 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTxtNode* pOwnChapterNode,
 
 
  */
+
+long lcl_IsSOObject( const SvGlobalName& rFactoryNm )
+{
+    static struct _SoObjType {
+        long nFlag;
+        // GlobalNameId
+        struct _GlobalNameIds {
+            UINT32 n1;
+            USHORT n2, n3;
+            BYTE b8, b9, b10, b11, b12, b13, b14, b15;
+        } aGlNmIds[4];
+    } aArr[] = {
+        { TOO_MATH,
+            {SO3_SM_CLASSID_60, SO3_SM_CLASSID_50,
+                SO3_SM_CLASSID_40, SO3_SM_CLASSID_30 }},
+        { TOO_CHART,
+            {SO3_SCH_CLASSID_60, SO3_SCH_CLASSID_50,
+                SO3_SCH_CLASSID_40, SO3_SCH_CLASSID_30 }},
+        { TOO_CALC,
+            {SO3_SC_CLASSID_60, SO3_SC_CLASSID_50,
+                SO3_SC_CLASSID_40, SO3_SC_CLASSID_30 }},
+        { TOO_DRAW_IMPRESS,
+            {SO3_SIMPRESS_CLASSID_60, SO3_SIMPRESS_CLASSID_50,
+                SO3_SIMPRESS_CLASSID_40, SO3_SIMPRESS_CLASSID_30 }},
+        { TOO_DRAW_IMPRESS,
+            {SO3_SDRAW_CLASSID_60, SO3_SDRAW_CLASSID_50 }},
+        { 0,0 }
+    };
+
+    long nRet = 0;
+    for( const _SoObjType* pArr = aArr; !nRet && pArr->nFlag; ++pArr )
+        for ( int n = 0; n < 4; ++n )
+        {
+            const _SoObjType::_GlobalNameIds& rId = pArr->aGlNmIds[ n ];
+            if( !rId.n1 )
+                break;
+            SvGlobalName aGlbNm( rId.n1, rId.n2, rId.n3,
+                        rId.b8, rId.b9, rId.b10, rId.b11,
+                        rId.b12, rId.b13, rId.b14, rId.b15 );
+            if( rFactoryNm == aGlbNm )
+            {
+                nRet = pArr->nFlag;
+                break;
+            }
+        }
+
+    return nRet;
+}
+
 void SwTOXBaseSection::UpdateCntnt( SwTOXElement eType,
                                     const SwTxtNode* pOwnChapterNode )
 {
@@ -1498,38 +1538,28 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eType,
         case TOX_OLE:
             if( pNd->IsOLENode() )
             {
-                BOOL bInclude = FALSE;
+                BOOL bInclude = TRUE;
                 if(TOX_OBJECTS == SwTOXBase::GetType())
                 {
                     SwOLENode* pOLENode = pNd->GetOLENode();
                     long nOLEOptions = GetOLEOptions();
-                    //
                     const SwOLEObj& rOLEObj = pOLENode->GetOLEObj();
 
-                    if ( pOLENode->GetOLEObj().IsOleRef() ) //Noch nicht geladen
+                    if( rOLEObj.IsOleRef() )    //Noch nicht geladen
                     {
-                        const SotFactory* pFact = pOLENode->GetOLEObj().
-                                                GetOleRef()->GetSvFactory();
-                        BOOL bMath = SmModuleDummy::HasID( *pFact );
-                        BOOL bChart = SchModuleDummy::HasID( *pFact );
-                        BOOL bCalc = ScModuleDummy::HasID( *pFact );
-                        BOOL bDrawImage = SdModuleDummy::HasID( *pFact );
-                        if(
-                            ((nOLEOptions & TOO_MATH) && bMath ) ||
-                            ((nOLEOptions & TOO_CHART)&& bChart ) ||
-                            ((nOLEOptions & TOO_CALC) && bCalc ) ||
-                            ((nOLEOptions & TOO_DRAW_IMPRESS) && bDrawImage ) ||
-                            ((nOLEOptions & TOO_OTHER) &&
-                                !bMath && !bChart && !bCalc && !bDrawImage))
-                            bInclude = TRUE;
+                        const SotFactory* pFact = rOLEObj.GetOleRef()->GetSvFactory();
+                        long nObj = ::lcl_IsSOObject( *pFact );
+                        bInclude = ( nOLEOptions & TOO_OTHER )
+                                        ? 0 == nObj
+                                        : 0 != (nOLEOptions & nObj);
                     }
                     else
                     {
-                        DBG_ERROR("OLE-object nicht geladen?")
+                        DBG_ERROR("OLE-object nicht geladen?");
+                        bInclude = FALSE;
                     }
                 }
-                else
-                    bInclude = TRUE;
+
                 if(bInclude)
                     pCNd = (SwCntntNode*)pNd;
             }
