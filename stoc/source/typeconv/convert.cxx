@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:35 $
+ *  last change: $Author: lla $ $Date: 2000-10-09 14:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,87 @@ static sal_Bool getNumericValue( double & rfVal, const OUString & rStr )
 }
 
 //==================================================================================================
+static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
+{
+    sal_Int64 nRet = rStr.toInt64();
+    if (nRet == 0)
+    {
+        sal_Int32 nLen = rStr.getLength();
+        if (!nLen || (nLen == 1 && rStr[0] == '0')) // common case
+        {
+            rnVal = 0.0;
+            return sal_True;
+        }
+
+        OUString trim( rStr.trim() );
+
+        // try hex
+        sal_Int32 nX = trim.indexOf( 'x' );
+        if (nX < 0)
+            nX = trim.indexOf( 'X' );
+
+        if (nX > 0 && trim[nX-1] == '0') // 0x
+        {
+            sal_Bool bNeg = sal_False;
+            switch (nX)
+            {
+            case 2: // (+|-)0x...
+                if (trim[0] == '-')
+                    bNeg = sal_True;
+                else if (trim[0] != '+')
+                    return sal_False;
+            case 1: // 0x...
+                break;
+            default:
+                return sal_False;
+            }
+
+            OUString aHexRest( trim.copy( nX+1 ) );
+            sal_Int64 nRet = aHexRest.toInt64( 16 );
+
+            if (nRet == 0)
+            {
+                for ( sal_Int32 nPos = aHexRest.getLength(); nPos--; )
+                {
+                    if (aHexRest[nPos] != '0')
+                        return sal_False;
+                }
+            }
+
+            rnVal = (bNeg ? -nRet : nRet);
+            return sal_True;
+        }
+
+        nLen = trim.getLength();
+        sal_Int32 nPos = 0;
+
+        // skip +/-
+        if (nLen && (trim[0] == '-' || trim[0] == '+'))
+            ++nPos;
+
+        while (nPos < nLen) // skip leading zeros
+        {
+            if (trim[nPos] != '0')
+            {
+                if (trim[nPos] != '.')
+                    return sal_False;
+                ++nPos;
+                while (nPos < nLen) // skip trailing zeros
+                {
+                    if (trim[nPos] != '0')
+                        return sal_False;
+                    ++nPos;
+                }
+                break;
+            }
+            ++nPos;
+        }
+    }
+    rnVal = nRet;
+    return sal_True;
+}
+
+//==================================================================================================
 class TypeConverter_Impl : public WeakImplHelper2< XTypeConverter, XServiceInfo >
 {
     // ...misc helpers...
@@ -352,8 +433,9 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     // STRING
     case TypeClass_STRING:
     {
-        double fVal;
-        if (! getNumericValue( fVal, *(OUString *)rAny.getValue() ))
+        // here is the BUG, a double can't get a real hyper value.
+        sal_Int64 fVal;
+        if (! getHyperValue( fVal, *(OUString *)rAny.getValue() ))
         {
             throw CannotConvertException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("invalid STRING value!") ),
@@ -808,6 +890,15 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         case TypeClass_LONG:
             {
                 sal_Int32 nInt(0);
+                rVal >>= nInt;
+                aRet <<= OUString::valueOf( nInt );
+            }
+            break;
+
+        // convert from 64bit to String c&p from long to string
+        case TypeClass_HYPER:
+            {
+                sal_Int64 nInt(0);
                 rVal >>= nInt;
                 aRet <<= OUString::valueOf( nInt );
             }
