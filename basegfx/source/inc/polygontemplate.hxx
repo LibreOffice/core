@@ -1,0 +1,572 @@
+/*************************************************************************
+ *
+ *  $RCSfile: polygontemplate.hxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: aw $ $Date: 2003-04-15 16:02:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _POLYGON_TEMPLATE_HXX
+#define _POLYGON_TEMPLATE_HXX
+
+#include <vector>
+
+//////////////////////////////////////////////////////////////////////////////
+
+template < class Point > class ImplSimplePointEntry
+{
+    Point                                           maPoint;
+
+public:
+    ImplSimplePointEntry()
+    :   maPoint(Point::GetEmptyPoint())
+    {
+    }
+
+    ImplSimplePointEntry(const Point& rInitPoint)
+    :   maPoint(rInitPoint)
+    {
+    }
+
+    const Point& GetPoint() const
+    {
+        return maPoint;
+    }
+
+    void SetPoint(const Point& rValue)
+    {
+        maPoint = rValue;
+    }
+
+    sal_Bool operator==(const ImplSimplePointEntry& rEntry) const
+    {
+        return (maPoint == rEntry.maPoint);
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+template < class Vector > class ImplSimpleBezierEntry
+{
+    Vector                                          maBackward;
+    Vector                                          maForward;
+
+public:
+    ImplSimpleBezierEntry()
+    :   maBackward(Vector::GetEmptyVector()),
+        maForward(Vector::GetEmptyVector())
+    {
+    }
+
+    ImplSimpleBezierEntry(const Vector& rInitBackward, const Vector& rInitForward)
+    :   maBackward(rInitBackward),
+        maForward(rInitForward)
+    {
+    }
+
+    const Vector& GetBackwardVector() const
+    {
+        return maBackward;
+    }
+
+    void SetBackwardVector(const Vector& rValue)
+    {
+        maBackward = rValue;
+    }
+
+    const Vector& GetForwardVector() const
+    {
+        return maForward;
+    }
+
+    void SetForwardVector(const Vector& rValue)
+    {
+        maForward = rValue;
+    }
+
+    sal_Bool IsBezierNeeded()
+    {
+        if(maBackward != Vector::GetEmptyVector() || maForward != Vector::GetEmptyVector())
+            return sal_True;
+        return sal_False;
+    }
+
+    sal_Bool operator==(const ImplSimpleBezierEntry& rEntry) const
+    {
+        return ((maBackward == rEntry.maBackward) && (maForward == rEntry.maForward));
+    }
+
+    void DoInvertForFlip()
+    {
+        maBackward = -maBackward;
+        maForward = -maForward;
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+template < class Point, class Vector > class ImplPolygonTemplate
+{
+    typedef ImplSimplePointEntry< Point > LocalImplSimplePointEntry;
+    typedef ImplSimpleBezierEntry< Vector > LocalImplSimpleBezierEntry;
+    typedef ::std::vector< LocalImplSimplePointEntry > SimplePointVector;
+    typedef ::std::vector< LocalImplSimpleBezierEntry > SimpleBezierVector;
+
+    sal_uInt32                                      mnBezierCount;
+    SimplePointVector                               maPoints;
+    SimpleBezierVector*                             mpVectors;
+
+    unsigned                                        mbIsClosed : 1;
+
+    void ImplTryToReduceToPointVector()
+    {
+        if(!mnBezierCount && mpVectors)
+        {
+            delete mpVectors;
+            mpVectors = 0L;
+        }
+    }
+
+public:
+    sal_Bool IsBezier() const
+    {
+        return sal_Bool(mnBezierCount);
+    }
+
+    sal_Bool IsClosed() const
+    {
+        return sal_Bool(mbIsClosed);
+    }
+
+    void SetClosed(sal_Bool bNew)
+    {
+        mbIsClosed = bNew;
+    }
+
+    sal_uInt32 Count() const
+    {
+        return maPoints.size();
+    }
+
+    ImplPolygonTemplate()
+    :   mnBezierCount(0L),
+        mpVectors(0L),
+        mbIsClosed(sal_False)
+    {
+        // complete initialization with defaults
+    }
+
+    ImplPolygonTemplate(const ImplPolygonTemplate& rSource)
+    :   mnBezierCount(0L),
+        maPoints(rSource.maPoints),
+        mpVectors(0L),
+        mbIsClosed(rSource.mbIsClosed)
+    {
+        // complete initialization using copy
+        if(rSource.mpVectors && rSource.mnBezierCount)
+        {
+            mpVectors = new SimpleBezierVector(*rSource.mpVectors);
+            mnBezierCount = rSource.mnBezierCount;
+        }
+    }
+
+    ImplPolygonTemplate(const ImplPolygonTemplate& rSource, sal_uInt32 nIndex, sal_uInt32 nCount)
+    :   mnBezierCount(0L),
+        maPoints(nCount),
+        mpVectors(0L),
+        mbIsClosed(rSource.mbIsClosed)
+    {
+        // complete initialization using partly copy
+        if(nCount)
+        {
+            // copy point data
+            {
+                SimplePointVector::const_iterator aStart(rSource.maPoints.begin());
+                aStart += nIndex;
+                SimplePointVector::const_iterator aEnd(aStart);
+                aEnd += nCount;
+                maPoints.insert(0L, aStart, aEnd);
+            }
+
+            // copy bezier data
+            if(rSource.mpVectors && rSource.mnBezierCount)
+            {
+                mpVectors = new SimpleBezierVector();
+                mpVectors->reserve(nCount);
+
+                SimpleBezierVector::iterator aStart(mpVectors->begin());
+                aStart += nIndex;
+                SimpleBezierVector::iterator aEnd(aStart);
+                aEnd += nCount;
+
+                for( ; aStart != aEnd; ++aStart )
+                {
+                    if(aStart->IsBezierNeeded())
+                    {
+                        mnBezierCount++;
+                    }
+
+                    mpVectors->push_back(*aStart);
+                }
+
+                // maybe vectors are not needed anymore, try to reduce memory footprint
+                ImplTryToReduceToPointVector();
+            }
+        }
+    }
+
+    ~ImplPolygonTemplate()
+    {
+        if(mpVectors)
+        {
+            delete mpVectors;
+        }
+    }
+
+    sal_Bool IsEqual(const ImplPolygonTemplate& rPointList) const
+    {
+        // same point count?
+        if(maPoints.size() != rPointList.maPoints.size())
+            return sal_False;
+
+        // if zero points the polys are equal
+        if(!maPoints.size())
+            return sal_True;
+
+        // if bezier count used it needs to be equal
+        if(mnBezierCount != rPointList.mnBezierCount)
+            return sal_False;
+
+        // compare point content
+        if(maPoints != rPointList.maPoints)
+            return sal_False;
+
+        // beziercounts are equal: if it's zero, we are done
+        if(!mnBezierCount)
+            return sal_True;
+
+        // beziercounts are equal and not zero; compare them
+        DBG_ASSERT(0L != mpVectors, "Error: Bezier list needs to exist here(!)");
+        DBG_ASSERT(0L != rPointList.mpVectors, "Error: Bezier list needs to exist here(!)");
+
+        return (*mpVectors == *rPointList.mpVectors);
+    }
+
+    const Point& GetPoint(sal_uInt32 nIndex) const
+    {
+        return maPoints[nIndex].GetPoint();
+    }
+
+    void SetPoint(sal_uInt32 nIndex, const Point& rValue)
+    {
+        maPoints[nIndex].SetPoint(rValue);
+    }
+
+    const Vector& GetBackwardVector(sal_uInt32 nIndex) const
+    {
+        if(mpVectors)
+            return ((*mpVectors)[nIndex]).GetBackwardVector();
+        else
+            return Vector::GetEmptyVector();
+    }
+
+    void SetBackwardVector(sal_uInt32 nIndex, const Vector& rValue)
+    {
+        if(mpVectors)
+        {
+            LocalImplSimpleBezierEntry& rDest = (*mpVectors)[nIndex];
+            sal_Bool bBezierNeededBefore(rDest.IsBezierNeeded());
+            ((*mpVectors)[nIndex]).SetBackwardVector(rValue);
+            sal_Bool bBezierNeededAfter(rDest.IsBezierNeeded());
+
+            if(bBezierNeededBefore != bBezierNeededAfter)
+            {
+                if(bBezierNeededAfter)
+                    mnBezierCount++;
+                else
+                    mnBezierCount--;
+            }
+        }
+        else
+        {
+            sal_Bool bEmptyVector(rValue == Vector::GetEmptyVector());
+
+            if(bEmptyVector)
+                return;
+
+            mpVectors = new SimpleBezierVector(maPoints.size());
+            ((*mpVectors)[nIndex]).SetBackwardVector(rValue);
+            mnBezierCount++;
+        }
+    }
+
+    const Vector& GetForwardVector(sal_uInt32 nIndex) const
+    {
+        if(mpVectors)
+            return ((*mpVectors)[nIndex]).GetForwardVector();
+        else
+            return Vector::GetEmptyVector();
+    }
+
+    void SetForwardVector(sal_uInt32 nIndex, const Vector& rValue)
+    {
+        if(mpVectors)
+        {
+            LocalImplSimpleBezierEntry& rDest = (*mpVectors)[nIndex];
+            sal_Bool bBezierNeededBefore(rDest.IsBezierNeeded());
+            ((*mpVectors)[nIndex]).SetForwardVector(rValue);
+            sal_Bool bBezierNeededAfter(rDest.IsBezierNeeded());
+
+            if(bBezierNeededBefore != bBezierNeededAfter)
+            {
+                if(bBezierNeededAfter)
+                    mnBezierCount++;
+                else
+                    mnBezierCount--;
+            }
+        }
+        else
+        {
+            sal_Bool bEmptyVector(rValue == Vector::GetEmptyVector());
+
+            if(bEmptyVector)
+                return;
+
+            mpVectors = new SimpleBezierVector(maPoints.size());
+            ((*mpVectors)[nIndex]).SetForwardVector(rValue);
+            mnBezierCount++;
+        }
+    }
+
+    void Insert(sal_uInt32 nIndex, const Point& rPoint, sal_uInt32 nCount)
+    {
+        if(nCount)
+        {
+            // maybe vectors are not needed anymore, try to reduce memory footprint
+            ImplTryToReduceToPointVector();
+
+            // add nCount copies of rPoint
+            {
+                LocalImplSimplePointEntry aNode(rPoint);
+                SimplePointVector::iterator aIndex(maPoints.begin());
+                aIndex += nIndex;
+                maPoints.insert(aIndex, nCount, aNode);
+            }
+
+            // add nCount empty entries to keep indices synchronized
+            if(mpVectors)
+            {
+                LocalImplSimpleBezierEntry aNode;
+                SimpleBezierVector::iterator aIndex(mpVectors->begin());
+                aIndex += nIndex;
+                mpVectors->insert(aIndex, nCount, aNode);
+            }
+        }
+    }
+
+    void Insert(sal_uInt32 nIndex, const ImplPolygonTemplate& rSource)
+    {
+        const sal_uInt32 nCount(rSource.maPoints.size());
+
+        if(nCount)
+        {
+            // instert point data
+            {
+                SimplePointVector::iterator aIndex(maPoints.begin());
+                aIndex += nIndex;
+
+                SimplePointVector::const_iterator aStart(rSource.maPoints.begin());
+                SimplePointVector::const_iterator aEnd(rSource.maPoints.end());
+
+                maPoints.insert(aIndex, aStart, aEnd);
+            }
+
+            // insert bezier data
+            if(rSource.mpVectors && rSource.mnBezierCount)
+            {
+                SimpleBezierVector::iterator aIndex(mpVectors->begin());
+                aIndex += nIndex;
+
+                SimpleBezierVector::iterator aStart(rSource.mpVectors->begin());
+                SimpleBezierVector::iterator aEnd(rSource.mpVectors->end());
+
+                if(!mpVectors)
+                {
+                    mpVectors = new SimpleBezierVector(maPoints.size() - nCount);
+                }
+
+                mpVectors->insert(aIndex, aStart, aEnd);
+
+                mnBezierCount += rSource.mnBezierCount;
+            }
+            else
+            {
+                // maybe vectors are not needed anymore, try to reduce memory footprint
+                ImplTryToReduceToPointVector();
+
+                // add nCount empty entries to keep indices synchronized
+                if(mpVectors)
+                {
+                    LocalImplSimpleBezierEntry aNode;
+                    SimpleBezierVector::iterator aIndex(mpVectors->begin());
+                    aIndex += nIndex;
+                    mpVectors->insert(aIndex, nCount, aNode);
+                }
+            }
+        }
+    }
+
+    void Remove(sal_uInt32 nIndex, sal_uInt32 nCount)
+    {
+        if(nCount)
+        {
+            // maybe vectors are not needed anymore, try to reduce memory footprint
+            ImplTryToReduceToPointVector();
+
+            // remove point data
+            {
+                SimplePointVector::iterator aStart(maPoints.begin());
+                aStart += nIndex;
+                const SimplePointVector::iterator aEnd(aStart + nCount);
+
+                maPoints.erase(aStart, aEnd);
+            }
+
+            // remove bezier data
+            if(mpVectors)
+            {
+                SimpleBezierVector::iterator aStart(mpVectors->begin());
+                aStart += nIndex;
+                const SimpleBezierVector::iterator aEnd(aStart + nCount);
+
+                // take care for correct mnBezierCount BEFORE erase
+                if(mnBezierCount)
+                {
+                    SimpleBezierVector::iterator aTestIter(aStart);
+
+                    for( ; mnBezierCount && aTestIter != aEnd; ++aTestIter)
+                    {
+                        if(aTestIter->IsBezierNeeded())
+                            mnBezierCount--;
+                    }
+                }
+
+                if(mnBezierCount)
+                {
+                    // erase nodes
+                    mpVectors->erase(aStart, aEnd);
+                }
+                else
+                {
+                    // try to reduce, maybe 0L == mnBezierCount
+                    ImplTryToReduceToPointVector();
+                }
+            }
+        }
+    }
+
+    void Flip()
+    {
+        if(maPoints.size() > 1)
+        {
+            // maybe vectors are not needed anymore, try to reduce memory footprint
+            ImplTryToReduceToPointVector();
+
+            // calculate half size
+            const sal_uInt32 nHalfSize(maPoints.size() >> 1L);
+
+            // flip point data
+            {
+                SimplePointVector::iterator aStart(maPoints.begin());
+                SimplePointVector::iterator aEnd(maPoints.end());
+
+                for(sal_uInt32 a(0); a < nHalfSize; a++)
+                {
+                    LocalImplSimplePointEntry aTemp = *aStart;
+                    *aStart++ = *aEnd;
+                    *aEnd-- = aTemp;
+                }
+            }
+
+            // flip bezier data
+            if(mpVectors)
+            {
+                SimpleBezierVector::iterator aStart(mpVectors->begin());
+                SimpleBezierVector::iterator aEnd(mpVectors->end());
+
+                for(sal_uInt32 a(0); a < nHalfSize; a++)
+                {
+                    LocalImplSimpleBezierEntry aTemp = *aStart;
+                    aTemp.DoInvertForFlip();
+                    *aStart = *aEnd;
+                    aStart->DoInvertForFlip();
+                    aStart++;
+                    *aEnd-- = aTemp;
+                }
+
+                // also flip vectors of middle point (if existing)
+                if(maPoints.size() % 2)
+                {
+                    (*mpVectors)[nHalfSize].DoInvertForFlip();
+                }
+            }
+        }
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+#endif _POLYGON_TEMPLATE_HXX
