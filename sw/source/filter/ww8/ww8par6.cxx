@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:28:27 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3651,9 +3651,6 @@ void SwWW8ImplReader::NeedAdjustTextTabStops(short nLeft, short nFirstLineOfst,
     SwPosition *pPosition = new SwPosition(*pPos);
     pPosition->nContent.Assign(pNode, nIndex);
 
-    if (nFirstLineOfst == 1)
-        nFirstLineOfst = 0;
-
     const SvxTabStopItem* pTStop =
         (const SvxTabStopItem*)GetFmtAttr( RES_PARATR_TABSTOP );
 
@@ -3673,7 +3670,7 @@ void SwWW8ImplReader::NeedAdjustTextTabStops(short nLeft, short nFirstLineOfst,
         const SvxLRSpaceItem* pLR = (const SvxLRSpaceItem*)pAttr;
         nOldLeft = pLR->GetTxtLeft();
 
-        if (lcl_AdjustTabs(nLeft,nFirstLineOfst,nOldLeft,aTStop))
+        if (lcl_AdjustTabs(nLeft, nFirstLineOfst, nOldLeft, aTStop))
         {
             pCtrlStck->NewAttr(*pPosition, aTStop);
             pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_PARATR_TABSTOP);
@@ -3685,9 +3682,6 @@ void SwWW8ImplReader::NeedAdjustTextTabStops(short nLeft, short nFirstLineOfst,
 void SwWW8ImplReader::NeedAdjustStyleTabStops(short nLeft, short nFirstLineOfst,
     SwWW8StyInf *pWWSty)
 {
-    if (nFirstLineOfst == 1)
-        nFirstLineOfst = 0;
-
     const SfxPoolItem* pTabs=0;
     bool bOnMarginStyle(false);
     if (pWWSty->pFmt)
@@ -3727,9 +3721,34 @@ void SwWW8ImplReader::NeedAdjustStyleTabStops(short nLeft, short nFirstLineOfst,
             }
         }
 
-        if (lcl_AdjustTabs(nLeft,nFirstLineOfst,nOldLeft,aTStop))
+        if (lcl_AdjustTabs(nLeft, nFirstLineOfst, nOldLeft, aTStop))
             pWWSty->pFmt->SetAttr(aTStop);
     }
+}
+
+bool lcl_HasExplicitLeft(const WW8RStyle *pStyles, bool bVer67)
+{
+    if (pStyles)
+    {
+        if (bVer67)
+            return pStyles->HasParaSprm(17);
+        else
+            return (pStyles->HasParaSprm(0x840F) || pStyles->HasParaSprm(0x845E));
+    }
+    return false;
+}
+
+bool lcl_HasExplicitLeft(const WW8PLCFMan *pPlcxMan, bool bVer67)
+{
+    WW8PLCFx_Cp_FKP *pPap = pPlcxMan ? pPlcxMan->GetPapPLCF() : 0;
+    if (pPap)
+    {
+        if (bVer67)
+            return pPap->HasSprm(17);
+        else
+            return (pPap->HasSprm(0x840F) || pPap->HasSprm(0x845E));
+    }
+    return false;
 }
 
 // Sprm 16, 17
@@ -3742,7 +3761,7 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
     {
         if (pTabNode)
         {
-            NeedAdjustTextTabStops(nLeftParaMgn,nTxtFirstLineOfst,pTabNode,
+            NeedAdjustTextTabStops(nLeftParaMgn, nTxtFirstLineOfst, pTabNode,
                 nTabCntnt);
             delete pTabNode, pTabNode=0;
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_PARATR_TABSTOP );
@@ -3797,9 +3816,6 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
         case     17:
         case 0x840F:
         case 0x845E:
-            if( !aLR.GetTxtFirstLineOfst() )
-                aLR.SetTxtFirstLineOfst( 1 );
-
             aLR.SetTxtLeft( nPara );
             if( pAktColl )
             {
@@ -3840,7 +3856,20 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
                 }
             }
 
-            aLR.SetTxtFirstLineOfst( nPara );
+            //Setting hanging implies a body of 0 e.g. #109702# when numbered paragraph
+            aLR.SetTxtFirstLineOfst(nPara);
+            if (!pAktColl)
+            {
+                if (const SwTxtNode* pNode = pPaM->GetNode()->GetTxtNode())
+                {
+                    if (GetNumFmtFromTxtNode(*pNode, rDoc))
+                    {
+                        if (!lcl_HasExplicitLeft(pPlcxMan, bVer67))
+                            aLR.SetTxtLeft(-nPara);
+                    }
+                }
+            }
+
             if( pAktColl )
             {
                 pCollA[nAktColl].bListReleventIndentSet = true;
