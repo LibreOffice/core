@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:33:46 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #ifndef _WW8STRUC_HXX
 #define _WW8STRUC_HXX
 
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
+
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -72,7 +76,7 @@
 #include <sal/config.h>
 #endif
 
-#if defined  __BIGENDIAN || __ALIGNMENT4 > 2 || defined UNX
+#if defined  OSL_BIGENDIAN || SAL_TYPES_ALIGNMENT4 > 2 || defined UNX
 #   define __WW8_NEEDS_COPY
 #endif
 
