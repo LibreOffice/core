@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:58 $
+ *  last change: $Author: os $ $Date: 2001-02-08 16:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,12 +159,9 @@ public:
     virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet );
 
-    void                HideSnapGrid();
-
 private:
     CheckBox            aCbxUseGridsnap;
     CheckBox            aCbxGridVisible;
-    CheckBox            aCbxSynchronize;
     GroupBox            aGrpOptions; // Neu
 
     FixedText           aFtResolution;
@@ -175,14 +172,8 @@ private:
     FixedText           aFtDivision;
     MetricField         aMtrFldDivisionX;
     MetricField         aMtrFldDivisionY;
+    CheckBox            aCbxSynchronize;
     GroupBox            aGrpDrawGrid; // Neu
-
-    CheckBox            aCbxEqualGrid; // Neu
-    FixedText           aFtSnapX; // Neu
-    MetricField         aMtrFldSnapX; // Neu
-    FixedText           aFtSnapY; // Neu
-    MetricField         aMtrFldSnapY; // Neu
-    GroupBox            aGrpSnapGrid; // Neu
 
     BOOL                bAttrModified;
     BOOL                bEqualGrid; // Neu
@@ -193,7 +184,6 @@ private:
     DECL_LINK( ChangeSnapXHdl_Impl, void * );
     DECL_LINK( ChangeSnapYHdl_Impl, void * );
     DECL_LINK( ChangeGridsnapHdl_Impl, void * );
-    DECL_LINK( ChangeEqualGridHdl_Impl, void * );
     DECL_LINK( ChangeDivisionXHdl_Impl, void * );
     DECL_LINK( ChangeDivisionYHdl_Impl, void * );
 

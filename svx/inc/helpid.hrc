@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-01-25 10:22:56 $
+ *  last change: $Author: os $ $Date: 2001-02-08 16:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,6 @@
 #define HID_HYPERLINK_MARKWND_APPLY             (HID_SVX_START + 327)
 #define HID_HYPERLINK_MARKWND_CLOSE             (HID_SVX_START + 328)
 #define HID_HYPERLINK_MARKWND_TREE              (HID_SVX_START + 329)
-#define HID_OPTIONS_EXTERNAL_LINGU              (HID_SVX_START + 330)
 
 #define HID_AUTOCORR_HELP_START                 (HID_SVX_START + 331)
 #define HID_AUTOCORR_HELP_END                   (HID_SVX_START + 350)
