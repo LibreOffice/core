@@ -37,22 +37,22 @@
   LIBXML_LIBS=""
   LIBXML_FOUND="no"
 ***************
-*** 25683,25689 ****
+*** 25682,25688 ****
+  NSPR_MIN_VERSION="4.0"
   NSS_CFLAGS=""
   NSS_LIBS=""
-  NSS_LIBS_LIST="-lnss3 -lsmime3"
-! NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
+! NSS_LIBS_LIST="-lnss3 -lsmime3"
+  NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
   NSS_CRYPTO_LIB="$PACKAGE-nss"
   NSS_FOUND="no"
-  
---- 25683,25689 ----
+--- 25682,25688 ----
+  NSPR_MIN_VERSION="4.0"
   NSS_CFLAGS=""
   NSS_LIBS=""
-  NSS_LIBS_LIST="-lnss3 -lsmime3"
-! NSPR_LIBS_LIST="-lnspr4"
+! NSS_LIBS_LIST="-lnss3 -lsoftokn3 -lsmime3"
+  NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
   NSS_CRYPTO_LIB="$PACKAGE-nss"
   NSS_FOUND="no"
-  
 ***************
 *** 25817,25824 ****
           ac_mozilla_name=mozilla-$MOZILLA_MIN_VERSION
@@ -72,6 +72,40 @@
   
       echo "$as_me:$LINENO: checking for nspr libraries >= $NSPR_MIN_VERSION" >&5
   echo $ECHO_N "checking for nspr libraries >= $NSPR_MIN_VERSION... $ECHO_C" >&6
+***************
+*** 25853,25859 ****
+  	done
+  
+  	for dir in $ac_nss_lib_dir ; do
+!     	    if test -f $dir/libnspr4.so ; then
+  		        	if test "z$dir" = "z/usr/lib" ; then
+              	    NSPR_LIBS="$NSPR_LIBS_LIST"
+      		else
+--- 25853,25859 ----
+  	done
+  
+  	for dir in $ac_nss_lib_dir ; do
+!     	    if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib ; then
+  		        	if test "z$dir" = "z/usr/lib" ; then
+              	    NSPR_LIBS="$NSPR_LIBS_LIST"
+      		else
+***************
+*** 25939,25945 ****
+          done
+  
+          for dir in $ac_nss_lib_dir ; do
+!     	    if test -f $dir/libnss3.so ; then
+          	    		if test "z$dir" = "z/usr/lib" ; then
+          	    NSS_LIBS="$NSS_LIBS_LIST"
+                  else
+--- 25939,25945 ----
+          done
+  
+          for dir in $ac_nss_lib_dir ; do
+!     	    if test -f $dir/libnss3.so -o -f $dir/libnss3.dylib ; then
+          	    		if test "z$dir" = "z/usr/lib" ; then
+          	    NSS_LIBS="$NSS_LIBS_LIST"
+                  else
 *** misc/xmlsec1-1.2.6/configure.in	2004-08-26 10:49:24.000000000 +0800
 --- misc/build/xmlsec1-1.2.6/configure.in	2005-02-23 11:06:37.000000000 +0800
 ***************
@@ -92,22 +126,22 @@
   LIBXML_LIBS=""
   LIBXML_FOUND="no"
 ***************
-*** 508,514 ****
+*** 507,513 ****
+  NSPR_MIN_VERSION="4.0"
   NSS_CFLAGS=""
   NSS_LIBS=""
-  NSS_LIBS_LIST="-lnss3 -lsmime3"
-! NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
+! NSS_LIBS_LIST="-lnss3 -lsmime3"
+  NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
   NSS_CRYPTO_LIB="$PACKAGE-nss"
   NSS_FOUND="no"
-  
---- 508,514 ----
+--- 507,513 ----
+  NSPR_MIN_VERSION="4.0"
   NSS_CFLAGS=""
   NSS_LIBS=""
-  NSS_LIBS_LIST="-lnss3 -lsmime3"
-! NSPR_LIBS_LIST="-lnspr4"
+! NSS_LIBS_LIST="-lnss3 -lsoftokn3 -lsmime3"
+  NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
   NSS_CRYPTO_LIB="$PACKAGE-nss"
   NSS_FOUND="no"
-  
 ***************
 *** 534,541 ****
           ac_mozilla_name=mozilla-$MOZILLA_MIN_VERSION
@@ -127,6 +161,40 @@
   
       AC_MSG_CHECKING(for nspr libraries >= $NSPR_MIN_VERSION)
       NSPR_INCLUDES_FOUND="no"
+***************
+*** 570,576 ****
+  	done
+  	
+  	for dir in $ac_nss_lib_dir ; do
+!     	    if test -f $dir/libnspr4.so ; then
+  		dnl do not add -L/usr/lib because compiler does it anyway
+          	if test "z$dir" = "z/usr/lib" ; then
+              	    NSPR_LIBS="$NSPR_LIBS_LIST"
+--- 570,576 ----
+  	done
+  	
+  	for dir in $ac_nss_lib_dir ; do
+!     	    if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib ; then
+  		dnl do not add -L/usr/lib because compiler does it anyway
+          	if test "z$dir" = "z/usr/lib" ; then
+              	    NSPR_LIBS="$NSPR_LIBS_LIST"
+***************
+*** 641,647 ****
+          done
+         
+          for dir in $ac_nss_lib_dir ; do
+!     	    if test -f $dir/libnss3.so ; then
+          	dnl do not add -L/usr/lib because compiler does it anyway
+      		if test "z$dir" = "z/usr/lib" ; then
+          	    NSS_LIBS="$NSS_LIBS_LIST"
+--- 641,647 ----
+          done
+         
+          for dir in $ac_nss_lib_dir ; do
+!     	    if test -f $dir/libnss3.so -o -f $dir/libnss3.dylib ; then
+          	dnl do not add -L/usr/lib because compiler does it anyway
+      		if test "z$dir" = "z/usr/lib" ; then
+          	    NSS_LIBS="$NSS_LIBS_LIST"
 *** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	2005-02-23 11:06:57.000000000 +0800
 --- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	2005-02-23 11:06:37.000000000 +0800
 ***************
