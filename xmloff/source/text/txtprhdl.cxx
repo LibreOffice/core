@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2000-09-27 15:16:36 $
+ *  last change: $Author: mib $ $Date: 2000-10-24 14:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,8 +813,9 @@ class XMLGrfMirrorPropHdl_Impl : public XMLPropertyHandler
     sal_Bool bHori;
 
 public:
-    XMLGrfMirrorPropHdl_Impl( const sal_Char *pVal, sal_Bool bHori ) :
-           sVal( OUString::createFromAscii(pVal) ) {}
+    XMLGrfMirrorPropHdl_Impl( const sal_Char *pVal, sal_Bool bH ) :
+           sVal( OUString::createFromAscii(pVal) ),
+        bHori( bH ) {}
     virtual ~XMLGrfMirrorPropHdl_Impl ();
 
     virtual sal_Bool importXML(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-24 07:41:59 $
+ *  last change: $Author: mib $ $Date: 2000-10-24 14:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "TopBorder",           FO,     border_top,               XML_TYPE_BORDER, CTF_TOPBORDER ),
     M_E( "BottomBorder",        FO,     border_bottom,            XML_TYPE_BORDER, CTF_BOTTOMBORDER ),
     // RES_SHADOW
-    M_E( "ShadowFormat",        STYLE,  shadow,     XML_TYPE_TEXT_SHADOW, 0 ),
+    M_E( "ParaShadowFormat",    STYLE,  shadow,     XML_TYPE_TEXT_SHADOW, 0 ),
     // RES_FRMMACRO
     // not required
     // RES_COL
@@ -492,8 +492,8 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // RES_UNKNOWNATR_CONTAINER
 //  M_E_SE( TEXT, xmlns, RES_UNKNOWNATR_CONTAINER, 0 ),
     // RES_GRFATR_MIRRORGRF (vertical MUST be processed after horizontal!)
-    M_E( "HoriMirroredLeft",        STYLE,  mirror,     XML_TYPE_TEXT_MIRROR_HORIZONTAL_LEFT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    M_E( "HoriMirroredRight",       STYLE,  mirror,     XML_TYPE_TEXT_MIRROR_HORIZONTAL_RIGHT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    M_E( "HoriMirroredOnEvenPages",     STYLE,  mirror,     XML_TYPE_TEXT_MIRROR_HORIZONTAL_LEFT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    M_E( "HoriMirroredOnOddPages",      STYLE,  mirror,     XML_TYPE_TEXT_MIRROR_HORIZONTAL_RIGHT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
     M_E( "VertMirrored",        STYLE,  mirror,     XML_TYPE_TEXT_MIRROR_VERTICAL|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
     // RES_GRFATR_CROPGRF
     M_E( "GraphicCrop",         FO,     clip,       XML_TYPE_TEXT_CLIP, 0 ),
