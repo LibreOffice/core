@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdXPresentation.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:26 $
+ *  last change:$Date: 2003-05-27 13:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@ package mod._sd;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.presentation.XCustomPresentationSupplier;
 import com.sun.star.presentation.XPresentationSupplier;
 import com.sun.star.uno.UnoRuntime;
@@ -99,7 +100,8 @@ public class SdXPresentation extends TestCase {
     */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                    (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println( "creating a draw document" );

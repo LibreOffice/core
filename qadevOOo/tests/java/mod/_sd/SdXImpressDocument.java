@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdXImpressDocument.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:26 $
+ *  last change:$Date: 2003-05-27 13:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sd;
 
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
@@ -136,7 +137,8 @@ public class SdXImpressDocument extends TestCase {
 
         log.println( "creating a test environment" );
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                    (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println( "creating a impress document" );
