@@ -164,25 +164,24 @@ main( int argc, char* argv[])
     }
 
     if ( !pOutput ) {
-		fprintf( stdout, "Syntax: CFGEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-f][-d DoneFile][-g[:dtd] ][-NOUTF8][-L l1,l2,...][-ISO99 IsoCode]\n" );
+		fprintf( stdout, "Syntax: CFGEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-f][-d DoneFile][-g[:dtd] ][-L l1,l2,...]\n" );
 		fprintf( stdout, " Prj:      Project\n" );
 		fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
 		fprintf( stdout, " FileIn:   Source files (*.src)\n" );
 		fprintf( stdout, " FileOut:  Destination file (*.*)\n" );
 		fprintf( stdout, " DataBase: Mergedata (*.sdf)\n" );
-		fprintf( stdout, " -e: Disable writing errorlog\n" );
+		fprintf( stdout, " -QQ: quiet output\n" );
+        fprintf( stdout, " -e: Disable writing errorlog\n" );
 		fprintf( stdout, " -b: Break when Token \"HelpText\" found in source\n" );
 		fprintf( stdout, " -u: [english] and [german] are allowed, Id is Taken from DataBase \n" );
 		fprintf( stdout, " -f: force extraction and merge even if only one language is existent\n" );
 		fprintf( stdout, " -g[:dtd]: enables generation of properties (dtds if :dtd is set) - in this case FileOut is the output path\n" );
 		fprintf( stdout, " -d: enables generation of *.don if work is done\n" );
-		fprintf( stdout, " -NOUTF8: disable UTF8 as language independent encoding\n" );
-		fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (01,33,46,49...)\n" );
+		fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (de,en-US...)\n" );
 		fprintf( stdout, "     A fallback language can be defined like this: l1=f1.\n" );
-		fprintf( stdout, "     f1, f2,... are also elements of (01,33,46,49...)\n" );
-		fprintf( stdout, "     Example: -L 01,99=35\n" );
-		fprintf( stdout, "              Restriction to 01 and 99, 35 will be fallback for 99\n" );
-		fprintf( stdout, " -ISO99: IsoCode is the full qualified ISO language code for language 99" );
+		fprintf( stdout, "     f1, f2,... are also elements of (de,en-US...)\n" );
+		fprintf( stdout, "     Example: -L de,es=en-US\n" );
+		fprintf( stdout, "              Restriction to de and es, en-US will be fallback for es\n" );
 		return 1;
 	}
 
