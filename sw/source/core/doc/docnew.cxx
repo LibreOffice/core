@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:24:06 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,8 +360,6 @@ SwDoc::SwDoc() :
     bUpdateTOX =
     bInLoadAsynchron =
     bHTMLMode =
-    bHeadInBrowse =
-    bFootInBrowse =
     bInCallModified =
     bIsGlobalDoc =
     bGlblDocSaveLinks =
