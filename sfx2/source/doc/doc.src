@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-08 21:51:43 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ QueryBox MSG_CONFIRM_FILTER
     Message [ finnish ] = "Tallennus ulkoiseen muotoon on saattanut\naiheuttaa tietojen katoamista. Haluatko silti sulkea?" ;
     Message [ danish ] = "Lagring i fremmedformater kan have forεrsaget\ninformationstab. Vil du lukke alligevel?" ;
     Message [ french ] = "L'enregistrement dans un format externe peut entraξner\nune perte de certaines informations. Voulez-vous vraiment poursuivre ?" ;
-    Message [ swedish ] = "Sparar Du i ett frδmmande format kan\ninformation gε fφrlorad. Stδnga δndε?" ;
+    Message [ swedish ] = "Om du sparar i ett externt format kan\ninformation gε fφrlorad. Stδnga δndε?" ;
     Message [ dutch ] = "Bij het opslaan in een extern formaat kan\ninformatie verloren gegaan zijn. Toch sluiten?" ;
     Message [ spanish ] = "Al guardar en formatos extraρos podrνa haberse provocado una pιrdida\nde informaciσn. ΏDesea cerrar de todas formas?" ;
     Message [ english_us ] = "Saving in external formats may have caused\n information loss. Do you still want to close?" ;
@@ -146,7 +146,7 @@ QueryBox MSG_QUERY_LOAD_TEMPLATE
     MESSAGE[ swedish ] = "Det hδr dokumentets formatmall stδmmer inte φverens med den aktuella mallen. Skall Din aktuella mall anvδndas i det hδr dokumentet?";
     MESSAGE[ polish ] = "Style uΏyte w tym dokumencie nie zgadzajΉ siκ z aktualnymi stylami.\nCzy zastosowaζ w dokumencie aktualne style?";
     MESSAGE[ portuguese_brazilian ] = "O modelo do documento foi modificado.\nDeseja atualizar o modelo no documento?";
-    MESSAGE[ japanese ] = "‚±‚ΜΔή·­ÒέΔ‚Μ‘®½ΐ²Ω‚Ν»έ‚Μ½ΐ²Ω‚Ζκ’v‚µ‚ά‚Ή‚ρB\n»έ‚Μ½ΐ²Ω‚π‚±‚ΜΔή·­ÒέΔ‚Ι“K—p‚µ‚ά‚·‚©H";
+    MESSAGE[ japanese ] = "‚±‚ΜΔή·­ÒέΔ‚Μ‘®½ΐ²Ω‚Ν»έ‚Μ½ΐ²Ω‚Ζκ’v‚µ‚ά‚Ή‚ρB\n»έ‚Μ½ΐ²Ω‚π‚±‚ΜΔή·­ÒέΔ‚Ι“K—p‚µ‚ά‚·‚©B";
     MESSAGE[ chinese_simplified ] = "ΥβΈφΞΔµµµΔΈρΚ½ΡωΚ½ÒΡΎ­±»ΈόΈΔ΅£\nΔϊÒªΣΓµ±Η°µΔΠΒΡωΚ½ΐ΄Έ²Π΄ΥβΈφΞΔµµΒπ£Ώ";
     MESSAGE[ chinese_traditional ] = "³o­ΣΐΙ®ΧΌΛ¦΅¤wΈgΕά§σ΅C\n±z­n§σ·s³o­ΣΌΛ¦΅΅H";
     MESSAGE[ arabic ] = "αΗ ΚΚΨΗΘή ΓδγΗΨ ΚδΣνή εΠΗ ΗαγΣΚδΟ γΪ ΗαΓδγΗΨ ΗαΝΗανΙ ΗαΞΗΥΙ Θί. εα ΚΡνΟ ΚΨΘνή ΗαΓδγΗΨ ΗαΝΗανΙ ΗαΞΗΥΙ Θί Ϊαμ εΠΗ ΗαγΣΚδΟΏ";
@@ -181,7 +181,7 @@ String STR_DELETE_REGION
     Text[ dutch ] = "Wilt u het bereik \"$1\" wissen?";
     Text[ chinese_simplified ] = "ÒªΙΎ³ύΗψΣς΅° $1΅± £Ώ";
     Text[ greek ] = "Θέλετε σίγουρα να διαγραφεί η κατηγορία $1?";
-    Text[ korean ] = "ΏµΏª$1ΐ»£¨Έ¦£© »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "ΏµΏª\"$1\"ΐ»(Έ¦£©»θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "\"$1\" bφlόmό silinsin mi?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "ΏDesea eliminar el αrea \"$1\"?";
@@ -209,7 +209,7 @@ String STR_DELETE_TEMPLATE
     Text[ dutch ] = "Wilt u item \"$1\" wissen?";
     Text[ chinese_simplified ] = "ÒªΙΎ³ύΜυΔΏ΅° $1΅± £Ώ";
     Text[ greek ] = "Θέλετε πραγματικά να διαγραφεί η καταχώριση $1;";
-    Text[ korean ] = "ΗΧΈρ$1ΐ»£¨Έ¦£© »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "ΗΧΈρ\"$1\"ΐ»(Έ¦£©»θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "\"$1\" giriώi silinsin mi?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "ΏDesea eliminar la entrada \"$1\"?";
@@ -270,7 +270,7 @@ String STR_QUERY_SAVE_DOCUMENT
     Text[ dutch ] = "Het document \"$(DOC)\" is gewijzigd.\nWilt u uw wijzigingen opslaan?";
     Text[ chinese_simplified ] = "ΞΔµµ΅°$(DOC)΅±ÒΡΎ­±»ΠήΈΔ΅£\nΔϊÒª΄ζΕΜΥβΠ©ΈόΈΔΒπ£Ώ";
     Text[ greek ] = "Το αρχείο '$(DOC)' τροποποιήθηκε.\nΘέλετε να αποθηκευτούν οι αλλαγές;";
-    Text[ korean ] = "Ή®Ό­'$(DOC)'ΐΜ£¨°΅£© Ί―°ζµΗΎϊ½ΐ΄Ο΄Ω.\nΊ―°ζ »ηΗΧΐ» ΐϊΐεΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "Ή®Ό­'$(DOC)'ΐΜ(°΅) Ί―°ζµΗΎϊ½ΐ΄Ο΄Ω.\nΊ―°ζ »ηΗΧΐ» ΐϊΐεΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Belge \"$(DOC)\" deπiώtirildi.\nDeπiώiklikler kaydedilsin mi?";
     Text[ catalan ] = "El documento \"$(DOC)\" ha sido modificado.\nΏDesea guardar las modificaciones?";
 };
@@ -658,7 +658,7 @@ String STR_ERROR_COPY_TEMPLATE
     Text[ dutch ] = "Fout bij kopiλren van sjabloon \"$1\".\nEventueel bestaat deze reeds.";
     Text[ chinese_simplified ] = "ΤΪΈ΄ΦΖΡωΚ½΅°$1΅±Κ±·ΆΙϊ΄νΞσ΅£\nΏΙΔάΡωΚ½ÒΡΎ­΄ζΤΪ΅£";
     Text[ greek ] = "Σφάλμα κατά την αντιγραφή του προτύπου \"$1\". \nΊσως το πρότυπο αυτό να υπάρχει ήδη.";
-    Text[ korean ] = "Ό­½Δ ΖΔΐΟ\"$1\" ΊΉ»η½ΓΏ΅ Ώΐ·ω. \nΐΜ Ό­½Δ ΖΔΐΟΐΜ ΐΜΉΜ ΑΈΐηΗÒΌφµµ ΐΦ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "Ό­½Δ ΖΔΐΟ \"$1\" ΊΉ»η Ώΐ·ω.\nΐΜ Ό­½Δ ΖΔΐΟΐΜ ΐΜΉΜ ΑΈΐηΗÒ Όφµµ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "\"$1\" ώablonu kopyalanύrken hata oluώtu.\nBu ώablon zaten mevcut olabilir.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Error al copiar la plantilla \"$1\".\nEs posible que esta ya exista.";
@@ -685,7 +685,7 @@ String STR_ERROR_DELETE_TEMPLATE
     Text[ dutch ] = "De sjabloon \"$1\" kan niet worden gewist.";
     Text[ chinese_simplified ] = "Ξή·¨ΙΎ³ύΡωΚ½΅° $1΅±΅£";
     Text[ greek ] = "Αδύνατον να διαγραφεί το πρότυπο \"$1\".";
-    Text[ korean ] = "Ό­½Δ ΖΔΐΟ\"$1\"ΐ»£¨Έ¦£© »θΑ¦ΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "Ό­½Δ ΖΔΐΟ\"$1\"ΐ»(Έ¦) »θΑ¦ΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "\"$1\" ώablonu silinemiyor.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No es posible eliminar la plantilla \"$1\".";
@@ -715,7 +715,7 @@ String STR_ERROR_MOVE_TEMPLATE
     Text[ dutch ] = "Fout bij verplaatsen van sjabloon \"$1\".";
     Text[ chinese_simplified ] = "ΤΪÒΖ¶―ΡωΚ½΅°$1΅±Κ±·ΆΙϊ΄νΞσ";
     Text[ greek ] = "Σφάλμα κατά την μετακίνηση του προτύπου \"$1\".";
-    Text[ korean ] = "Ό­½Δ ΖΔΐΟ \"$1\" ΐΜµΏ½Γ Ώΐ·ω.";
+    Text[ korean ] = "Ό­½Δ ΖΔΐΟ \"$1\" ΐΜµΏ Ώΐ·ω.";
     Text[ turkish ] = "\"$1\" ώablonu taώύnύrken hata oluώtu.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Error al desplazar la plantilla \"$1\" ";
@@ -928,7 +928,7 @@ String STR_QUERY_DEFAULT_TEMPLATE
     TEXT[ dutch ] = "Moet de sjabloon \"$(TEKST)\" de standaardsjabloon worden?";
     TEXT[ chinese_simplified ] = "ΔϊÒª½«ΡωΚ½΅°$(TEXT)΅±Ιθ¶¨³Ι±κΧΌΡωΚ½Βπ£Ώ";
     TEXT[ greek ] = "Θέλετε να οριστεί το πρότυπο $(TEXT) ως πρότυπο προεπιλογής;";
-    TEXT[ korean ] = "Ό­½Δ ΖΔΐΟ$(TEXT)ΐ» ±βΊ» Ό­½Δ ΖΔΐΟ·Ξ ΈΈµε½Γ°Ϊ½ΐ΄Ο±ξ?";
+    TEXT[ korean ] = "Ό­½Δ ΖΔΐΟ \"$(TEXT)\"ΐ»(Έ¦) ±βΊ» Ό­½Δ ΖΔΐΟ·Ξ ΈΈµε½Γ°Ϊ½ΐ΄Ο±ξ?";
     TEXT[ turkish ] = "\"$(TEXT)\" ώablonu, standart ώablon olarak belirlensin mi?";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "ΏDesea convertir la plantilla \"$(TEXT)\" en una plantilla predeterminada?";
@@ -1073,8 +1073,8 @@ String STR_QUERY_SAVEOWNFORMAT
     Text[ arabic ] = "γδ Ηαγγίδ Γδ ΗαΚδΣνήΗΚ ζΗαγΪαζγΗΚ΅ ΗαΚν νΝΚζν ΪανεΗ εΠΗ ΗαγΣΚδΟ΅\nΫνΡ ήΗΘαΙ ααΝέΩ ΘΗαΚδΣνή $(FORMAT). εα ΚΡνΟ ΝέΩ ΗαΚΫννΡΗΚ\nΘΗαΚδΣνή $(OWNFORMAT)Ώ";
     Text[ dutch ] = "Dit document kan opmaakattributen en gegevens \nbevatten die niet in $(FORMAT) formaat opgeslagen\nkunnen worden. Wilt u deze wijzigingen in\n$(OWNFORMAT) formaat opslaan?";
     Text[ chinese_simplified ] = "ΥβΈφΞΔµµΏΙΔάΊ¬ΣΠÒ»Π©Ξή·¨ΣΓ $(FORMAT) ΈρΚ½΄ζΕΜµΔΈρΚ½ΊΝΠΕΟΆ΅£\nΔϊÒªΚΉΣΓ $(OWNFORMAT) ΈρΚ½΄ζΕΜΞΔµµµΔΈόΈΔΒπ£Ώ";
-    Text[ greek ] = "Πιθανόν το έγγραφο αυτό νε περιέχει μορφές και πληροφορίες\nοι οποίες δεν είναι δυνατόν να αποθηκευτούν με τη \nμορφή $(FORMAT). Θέλετε να αποθηκ";
-    Text[ korean ] = "ΐΜ Ή®Ό­Ώ΅΄Β $(FORMAT) Ό­½ΔΏ΅ ΐϊΐεΗÒ Όφ Ύψ΄Β ΖχΈΛ°ϊ Α¤ΊΈ°΅ \nΖχΗΤµΗΎξ ΐΦΐ» Όφ ΐΦ½ΐ΄Ο΄Ω. Ί―°ζ»ηΗΧΐ» \n$(OWNFORMAT) Ό­½ΔΏ΅ ΐϊΐεΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ greek ] = "Πιθανόν το έγγραφο αυτό νε περιέχει μορφές και πληροφορίες\nοι οποίες δεν είναι δυνατόν να αποθηκευτούν με τη \nμορφή $(FORMAT). Θέλετε να αποθηκ ";
+    Text[ korean ] = "ΐΜ Ή®Ό­Ώ΅΄Β $(FORMAT) Ό­½ΔΏ΅ ΐϊΐεΗÒ Όφ Ύψ΄Β ΖχΈΛ°ϊ Α¤ΊΈ°΅\nΖχΗΤµΗΎξ ΐΦΐ» Όφ ΐΦ½ΐ΄Ο΄Ω. Ί―°ζ »ηΗΧΐ»\n$(OWNFORMAT) Ό­½ΔΏ΅ ΐϊΐεΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Bu belgede, $(FORMAT) formatύnda kaydedilemeyen\n formatlamalar ve bilgiler bulunabilir. Deπiώiklikleri \n$(OWNFORMAT) formatύnda kaydetmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Este documento puede contener informaciones y formatos\nque no se pueden guardar en el formato $(FORMAT).\nΏDesea guardar los cambios en formato\n$(OWNFORMAT)?";
@@ -1377,7 +1377,7 @@ String RID_STR_WARNSTYLEOVERWRITE
     Text[ chinese_simplified ] = "ÒªΈόΜζΡωΚ½΅°$(ARG1)΅±£Ώ";
     Text[ russian ] = "Ηΰμενθςό ρςθλό \"$(ARG1)\"?";
     Text[ polish ] = "ZastΉpiζ styl \"$(ARG1)\"?";
-    Text[ japanese ] = "½ΐ²Ω\"$(ARG1)\"‚π’u·‚µ‚ά‚·‚©?";
+    Text[ japanese ] = "½ΐ²Ω \"$(ARG1)\" ‚π’u·‚µ‚ά‚·‚©B";
     Text[ chinese_traditional ] = "­n΄ΐ¥NΌΛ¦΅΅u$(ARG1)΅v΅H";
     Text[ arabic ] = "εα ΚΡνΟ ΗΣΚΘΟΗα ΗαδγΨ \"$(ARG1)\"Ώ";
     Text[ dutch ] = "Wilt u opmaakprofiel \"$(ARG1)\" vervangen?";
@@ -1497,7 +1497,7 @@ Resource RID_DLSTATUS
         Text[ dutch ] = "Geladen wordt: $(TARGET) van $(HOST). Gelezen: $(BYTE)";
         Text[ chinese_simplified ] = "΄«µέ£Ί$(HOST)µΔ$(TARGET)΅£ÒΡΎ­ΤΔ¶Α£Ί$(BYTE)";
         Text[ greek ] = "Μετάδοση: $(TARGET) από $(HOST). Έγινε ανάγνωση: $(BYTE)";
-        Text[ korean ] = "ΐόΌΫ Αί: $(HOST)·Ξ ΊΞΕΝ $(TARGET) . ΐΠΎϊΐ½: $(BYTE)";
+        Text[ korean ] = "ΐόΌΫ Αί: $(HOST)·ΞΊΞΕΝ $(TARGET) . ΐΠΎϊΐ½: $(BYTE)";
         Text[ turkish ] = "Aktarύlan:  $(HOST) sunucusundan $(TARGET). Okunan: $(BYTE)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Transfiriendo: $(TARGET) desde $(HOST). Leνdo: $(BYTE)";
@@ -1737,7 +1737,7 @@ String STR_TEMPL_MOVED
     Text[ arabic ] = "ΚΪΠΡ ΗαΪΛζΡ Ϊαμ ΗαήΗαΘ \"$(TEMPLATE)\" έν γζΦΪε ΗαΓΥαν. νζΜΟ ήΗαΘ ΘδέΣ ΗαΗΣγ έν ΗαγζΦΪ \"$(FOUND)\". εα ΚΡνΟ ΗΣΚΞΟΗγ εΠΗ ΗαήΗαΘ ααΚΝΟνΛ έν ΗαγΣΚήΘαΏ";
     Text[ dutch ] = "Sjabloon \"$(TEMPLATE)\" werd niet op de oorspronkelijke plaats gevonden. Een sjabloon met dezelfde naam bevindt zich op \"$(FOUND)\". Wilt u deze sjabloon in de toekomst voor het synchroniseren gebruiken?";
     Text[ chinese_simplified ] = "Γ»ΣΠΤΪΤ­ΐ΄Ξ»ΦΓΥÒµ½ΡωΚ½΅°$(TEMPLATE)΅±΅£ΣΠÒ»ΈφΝ¬ΓϋµΔΡωΚ½ΤΪ΅°$(FOUND)΅±΄¦΅£½ρΊσΔϊÒªΚΉΣΓΥβΈφΡωΚ½½ψΠΠµχΥϋΒπ£Ώ";
-    Text[ greek ] = "Το πρότυπο $(TEMPLATE) δεν βρέθηκε στον αρχική του θέση. Υπάρχει ένα ομόνυμο πρότυπο στη θέση $(FOUND). Θέλετε να χρησιμοποιηθεί στο μέλλον αυτό το π?";
+    Text[ greek ] = "Το πρότυπο $(TEMPLATE) δεν βρέθηκε στον αρχική του θέση. Υπάρχει ένα ομόνυμο πρότυπο στη θέση $(FOUND). Θέλετε να χρησιμοποιηθεί στο μέλλον αυτό το π? ";
     Text[ korean ] = "Ό­½ΔΖΔΐΟ$(TEMPLATE)ΐ» Ώψ·΅ ΐ§Δ΅Ώ΅Ό­ Γ£Αφ ΈψΗί½ΐ΄Ο΄Ω. ΐΜΈ§ΐΜ °°ΐΊ Ό­½ΔΖΔΐΟΐΜ $(FOUND)Ώ΅ ΐΦ½ΐ΄Ο΄Ω. ΎΥΐΈ·Ξ ΐΜ ΖΔΐΟΐ» µΏ±βΘ­Ώ΅ ΐΜΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "\"$(TEMPLATE)\" ώablonu asύl yerinde bulunamadύ. Aynύ adlύ ώablonun bulunduπu yerin adύ: \"$(FOUND)\". Bu ώablon gelecekte karώύlaώtύrma iηin kullanύlsύn mύ?";
     Text[ language_user1 ] = " ";
@@ -1993,7 +1993,7 @@ String STR_NOSAVEANDCLOSE
     Text[ dutch ] = "~Verwerpen";
     Text[ french ] = "~Ignorer";
     Text[ spanish ] = "~Rechazar";
-    Text[ italian ] = "~Rigetta";
+    Text[ italian ] = "~Esci";
     Text[ danish ] = "Forkast";
     Text[ swedish ] = "A~vslε";
     Text[ polish ] = "Odrzuζ";
@@ -2055,7 +2055,7 @@ String STR_PACKNGO_NEWMEDIUM
     Text[ polish ] = "Wsuρ nastκpny nonik danych i nacinij przycisk OK.";
     Text[ portuguese_brazilian ] = "Insert the next media and press OK.";
     Text[ japanese ] = "‚Μ”}‘Μ‚π“ό‚κ‚ΔmOKnΞήΐέ‚πΈΨ―Έ‚µ‚ά‚·B";
-    Text[ korean ] = "΄Ωΐ½ µ¥ΐΜΕΝ ΈΕΓΌΈ¦ »πΐΤΗΡ΄Ωΐ½£Ο£Λ ΉφΖ°ΐ» ΄©Έ£½Κ½ΓΏΐ.";
+    Text[ korean ] = "΄Ωΐ½ µ¥ΐΜΕΝ ΈΕΓΌΈ¦ »πΐΤΗΡ ΄Ωΐ½ ΐϋΏλ(OK) ΉφΖ°ΐ» ΄©Έ£½Κ½ΓΏΐ.";
     Text[ chinese_simplified ] = "Ηλ²εΘλΟΒÒ»ΈφΘνΕΜ²Ά°΄»χΘ·¶¨(OK)°΄Ε¥΅£";
     Text[ chinese_traditional ] = "½Π±z©ρ¤J¤U¤@­ΣΊΟ¤ω΅AµM¦Z«φ¤@¤U½T©w΅C";
     Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗαήΡΥ ΗαΚΗαν΅ Λγ ΗαδήΡ έζή ΗαÒΡ \"ΝΣδΗπ\".";
@@ -2065,5 +2065,6 @@ String STR_PACKNGO_NEWMEDIUM
 };
 
 // ******************************************************************* EOF
+
 
 
