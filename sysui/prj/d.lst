@@ -21,10 +21,8 @@ mkdir: %_DEST%\bin%_EXT%\so
 ..\%__SRC%\bin\update-redhat-user-menus.sh %_DEST%\bin%_EXT%\update-redhat-user-menus
 ..\%__SRC%\bin\update-suse-user-menus.sh %_DEST%\bin%_EXT%\update-suse-user-menus
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\bin\01\quickstart.exe %_DEST%\bin%_EXT%\quickstart.exe
-..\%__SRC%\bin\01\quickstart.exe %_DEST%\bin%_EXT%\install_quickstart.exe
-..\%__SRC%\bin\01\soquickstart.exe %_DEST%\bin%_EXT%\so\quickstart.exe
-..\%__SRC%\bin\01\soquickstart.exe %_DEST%\bin%_EXT%\so\install_quickstart.exe
-
-..\win32\office\icons\001_star_butterfly.ico %_DEST%\res%_EXT%\icons\001_star_butterfly.ico
+..\%__SRC%\bin\quickstart.exe %_DEST%\bin%_EXT%\quickstart.exe
+..\%__SRC%\bin\quickstart.exe %_DEST%\bin%_EXT%\install_quickstart.exe
+..\%__SRC%\bin\soquickstart.exe %_DEST%\bin%_EXT%\so\quickstart.exe
+..\%__SRC%\bin\soquickstart.exe %_DEST%\bin%_EXT%\so\install_quickstart.exe
 
