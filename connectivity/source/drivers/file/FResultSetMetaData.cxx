@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 15:37:38 $
+ *  last change: $Author: oj $ $Date: 2001-01-26 15:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
 
 sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return getBOOL((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_TYPE));
+    return getBOOL((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_ISCURRENCY));
 }
 // -------------------------------------------------------------------------
 
