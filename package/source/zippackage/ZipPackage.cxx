@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:37 $
+ *  last change: $Author: hr $ $Date: 2001-07-12 11:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,7 +762,7 @@ sal_Int32 ZipPackage::RequestDisk ( OUString &rMountPath, sal_Int16 nDiskNum)
 
         if ( aRC != FileBase::E_None )
         {
-            if ( ! HandleError ( osl_File_E_ACCES, EC_RETRY|EC_ABORT, rURL ) )
+            if ( ! HandleError ( osl_File_E_ACCES, EC_RETRY|EC_ABORT, rMountPath ) )
                 return -1;
         }
     }
