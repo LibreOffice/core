@@ -1,45 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
-
-<COMPONENTDESCRIPTION
-    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
-
-<Author> Juergen Schmidt </Author>
-
-<Name>  example.ExampleComponent1.Impl  </Name>
-
-<Description>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   excomp1 </module-name>
+    <component-description>
+        <author> Juergen Schmidt </author>
+        <name>  example.ExampleComponent1.Impl  </name>
+        <description>
     This component provides a simple demo component.
-</Description>
-
-<ModuleName>    excomp1 </ModuleName>
-
-<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
-
-<Language>  c++ </Language>
-
-<Status StatusValue="final"/>
-
-<SupportedService>  example.ExampleComponent1   </SupportedService>
-
-<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
-<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
-<ProjectBuildDependency>    vos         </ProjectBuildDependency>
-<ProjectBuildDependency>    sal         </ProjectBuildDependency>
-
-<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
-<RuntimeModuleDependency>   cppu        </RuntimeModuleDependency>
-<RuntimeModuleDependency>   vos         </RuntimeModuleDependency>
-<RuntimeModuleDependency>   sal         </RuntimeModuleDependency>
-
-<Type>  com.sun.star.lang.XTypeProvider                 </Type>
-<Type>  com.sun.star.lang.XServiceInfo                  </Type>
-<Type>  com.sun.star.lang.XSingleServiceFactory         </Type>
-<Type>  com.sun.star.lang.XMultiServiceFactory          </Type>
-<Type>  com.sun.star.registry.XRegistryKey              </Type>
-<Type>  com.sun.star.uno.XAggregation                   </Type>
-<Type>  com.sun.star.uno.XWeak                          </Type>
-<Type>  com.sun.star.uno.TypeClass                      </Type>
-<Type>  example.XTest                                   </Type>
-
-</COMPONENTDESCRIPTION>
+</description>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  c++ </language>
+        <status value="final"/>
+        <supported-service> example.ExampleComponent1   </supported-service>
+        <type>  com.sun.star.lang.XTypeProvider                 </type>
+        <type>  com.sun.star.lang.XServiceInfo                  </type>
+        <type>  com.sun.star.lang.XSingleServiceFactory         </type>
+        <type>  com.sun.star.lang.XMultiServiceFactory          </type>
+        <type>  com.sun.star.registry.XRegistryKey              </type>
+        <type>  com.sun.star.uno.XAggregation                   </type>
+        <type>  com.sun.star.uno.XWeak                          </type>
+        <type>  com.sun.star.uno.TypeClass                      </type>
+        <type>  example.XTest                                   </type>
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  vos         </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
+    <runtime-module-dependency> cppu        </runtime-module-dependency>
+    <runtime-module-dependency> vos         </runtime-module-dependency>
+    <runtime-module-dependency> sal         </runtime-module-dependency>
+</module-description>
