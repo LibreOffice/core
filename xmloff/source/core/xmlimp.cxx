@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 17:46:09 $
+ *  last change: $Author: cl $ $Date: 2001-02-08 14:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,7 +571,7 @@ XMLTextImportHelper* SvXMLImport::CreateTextImport()
 
 XMLShapeImportHelper* SvXMLImport::CreateShapeImport()
 {
-    return new XMLShapeImportHelper( xModel );
+    return new XMLShapeImportHelper( *this, xModel );
 }
 
 SchXMLImportHelper* SvXMLImport::CreateChartImport()
