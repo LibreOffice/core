@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-17 09:28:23 $
+ *  last change: $Author: vg $ $Date: 2001-10-19 08:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,12 +349,12 @@ uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType ) 
     return aAny;
 }
 
-void SAL_CALL SdXImpressDocument::acquire() throw(uno::RuntimeException)
+void SAL_CALL SdXImpressDocument::acquire() throw ( )
 {
     SfxBaseModel::acquire();
 }
 
-void SAL_CALL SdXImpressDocument::release() throw(uno::RuntimeException)
+void SAL_CALL SdXImpressDocument::release() throw ( )
 {
     SfxBaseModel::release();
 }
