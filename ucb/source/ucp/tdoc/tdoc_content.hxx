@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_content.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-05 10:40:51 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ private:
                         com::sun::star::ucb::XContentIdentifier >& xNewId );
     bool removeData();
 
-    bool copyData( const Uri & rSourceUri );
+    bool copyData( const Uri & rSourceUri, const rtl::OUString & rNewName );
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::ucb::XContentIdentifier >
