@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tra $ $Date: 2001-04-27 13:55:30 $
+#   last change: $Author: tra $ $Date: 2001-05-14 08:19:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=		sysshell
 TARGET=			testsyssh
+TARGET1=		testsmplmail
 LIBTARGET=		NO
 TARGETTYPE=		CUI
 
@@ -79,10 +80,14 @@ TARGETTYPE=		CUI
 
 CFLAGS+=/GX
 
-OBJFILES=   	$(OBJ)$/TestSysShExec.obj
+OBJFILES1=$(OBJ)$/TestSysShExec.obj
+OBJFILES2=$(OBJ)$/TestSmplMail.obj
+
+OBJFILES=$(OBJFILES1)\
+         $(OBJFILES2)
 
 APP1TARGET=$(TARGET)
-APP1OBJS=		$(OBJFILES)
+APP1OBJS=$(OBJFILES1)
 
 APP1STDLIBS+=	$(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
@@ -91,6 +96,21 @@ APP1STDLIBS+=	$(CPPULIB)			\
                 
 APP1DEF=		$(MISC)$/$(APP1TARGET).def
 
+
+# --- TestSmplMail ---
+
+APP2TARGET=$(TARGET1)
+APP2OBJS=$(OBJFILES2)
+
+APP2STDLIBS+=	$(CPPULIB)			\
+                $(CPPUHELPERLIB)	\
+                $(SALLIB) 	 		\
+                user32.lib
+                
+APP2DEF=		$(MISC)$/$(APP2TARGET).def
+
 # --- Targets ------------------------------------------------------
+
 .INCLUDE :		target.mk
-#.INCLUDE :		$(PRJ)$/util$/target.pmk
+
+
