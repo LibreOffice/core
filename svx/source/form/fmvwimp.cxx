@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:51:27 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1239,7 +1239,9 @@ sal_Int16 FmXFormView::implInitializeNewControlModel( const Reference< XProperty
                 const ::Rectangle& rBoundRect = _pObject->GetCurrentBoundRect();
                 if ( !( rBoundRect.GetWidth() > 4 * rBoundRect.GetHeight() ) )  // heuristics
                 {
-                    _rxModel->setPropertyValue( FM_PROP_MULTILINE, makeAny( (sal_Bool)sal_True ) );
+                    Reference< XPropertySetInfo > xProps( _rxModel->getPropertySetInfo() );
+                    if ( xProps.is() && xProps->hasPropertyByName( FM_PROP_MULTILINE ) )
+                        _rxModel->setPropertyValue( FM_PROP_MULTILINE, makeAny( (sal_Bool)sal_True ) );
                 }
             }
             break;
