@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-17 08:36:30 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 20:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ ModalDialog DLG_FLD_INPUT
         Readonly = TRUE ;
         Text[ chinese_simplified ] = " ‰»Î";
         Text[ russian ] = "¬‚Ó‰";
-        Text[ polish ] = "Wej?cie";
+        Text[ polish ] = "Wejúcie";
         Text[ japanese ] = "ì¸óÕ";
         Text[ chinese_traditional ] = "øÈ§J";
         Text[ arabic ] = "≈œŒ«·";
