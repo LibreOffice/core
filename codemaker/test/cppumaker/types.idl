@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 10:29:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,5 +621,20 @@ exception TestException1: com::sun::star::uno::RuntimeException {
 };
 
 exception TestException2: TestException1 {};
+
+constants Constants {
+    const short shortMin = -32768;
+    const short shortMax = 32767;
+    const unsigned short unsignedShortMin = 0;
+    const unsigned short unsignedShortMax = 65535;
+    const long longMin = -2147483648;
+    const long longMax = 2147483647;
+    const unsigned long unsignedLongMin = 0;
+    const unsigned long unsignedLongMax = 4294967295;
+    const hyper hyperMin = -9223372036854775808;
+    const hyper hyperMax = 9223372036854775807;
+    const unsigned hyper unsignedHyperMin = 0;
+    const unsigned hyper unsignedHyperMax = 18446744073709551615;
+};
 
 }; }; };
