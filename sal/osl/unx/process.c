@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-06 14:07:14 $
+ *  last change: $Author: mfe $ $Date: 2000-12-18 10:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1524,7 +1524,7 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
 
     if ( pArguments == 0 && nArguments > 0 )
     {
-        pArguments = (sal_Char**) malloc(nArguments+2 * sizeof(sal_Char*));
+        pArguments = (sal_Char**) malloc( ( nArguments + 2 ) * sizeof(sal_Char*) );
     }
 
 
@@ -1550,7 +1550,7 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
 
         if ( pEnvironment == 0 )
         {
-            pEnvironment = (sal_Char**) malloc(nEnvironmentVars+2 * sizeof(sal_Char*));
+            pEnvironment = (sal_Char**) malloc( ( nEnvironmentVars + 2 ) * sizeof(sal_Char*) );
         }
 
         rtl_uString2String( &strEnv,
