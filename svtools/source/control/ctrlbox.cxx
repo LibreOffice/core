@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-03-09 15:43:51 $
+ *  last change: $Author: pb $ $Date: 2001-03-22 06:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,14 @@ USHORT ColorListBox::InsertEntry( const Color& rColor, const XubString& rStr,
         pColorList->Insert( pData, nPos );
     }
     return nPos;
+}
+
+// -----------------------------------------------------------------------
+
+void ColorListBox::InsertAutomaticEntry()
+{
+    // insert the "Automatic"-entry always on the first position
+    InsertEntry( Color( COL_AUTO ), SvtResId( STR_SVT_AUTOMATIC_COLOR ), 0 );
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-03-09 15:42:06 $
+ *  last change: $Author: pb $ $Date: 2001-03-22 06:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@ public:
                                  USHORT nPos = LISTBOX_APPEND );
     USHORT          InsertEntry( const Color& rColor, const XubString& rStr,
                                  USHORT nPos = LISTBOX_APPEND );
+    void            InsertAutomaticEntry();
     void            RemoveEntry( USHORT nPos );
     void            Clear();
     void            CopyEntries( const ColorListBox& rBox );
