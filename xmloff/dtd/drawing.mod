@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.39 2001-02-28 10:58:37 cl Exp $
+	$Id: drawing.mod,v 1.40 2001-02-28 11:03:05 mtg Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -710,4 +710,58 @@
 <!ATTLIST presentation:event xlink:actuate (onRequest) #IMPLIED>
 <!ATTLIST presentation:event presentation:verb %nonNegativeInteger; #IMPLIED>
 
+<!-- applets -->
+<!ELEMENT draw:applet (draw:param*, svg:desc?)>
+<!ATTLIST draw:applet xlink:href %uriReference; #IMPLIED>
+<!ATTLIST draw:applet xlink:type (simple) #IMPLIED>
+<!ATTLIST draw:applet xlink:show (new|replace) #IMPLIED>
+<!ATTLIST draw:applet xlink:actuate (onRequest) #IMPLIED>
+<!ATTLIST draw:applet draw:code CDATA #REQUIRED>
+<!ATTLIST draw:applet draw:object CDATA #IMPLIED>
+<!ATTLIST draw:applet draw:archive CDATA #IMPLIED>
+<!ATTLIST draw:applet draw:mayscript %boolean; "false">
+<!ATTLIST draw:applet office:name CDATA #IMPLIED>
+<!ATTLIST draw:applet %draw-style-name;>
+<!ATTLIST draw:applet svg:width %lengthOrPercentage; #IMPLIED>
+<!ATTLIST draw:applet svg:height %lengthOrPercentage; #IMPLIED>
+<!ATTLIST draw:applet %zindex;>
+<!ATTLIST draw:applet draw:layer %layerName; #IMPLIED>
+<!ATTLIST draw:applet %draw-position;>
+<!ATTLIST draw:applet %draw-end-position; >
+
+<!-- plugins -->
+<!ELEMENT draw:plugin (draw:param*, svg:desc?)>
+<!ATTLIST draw:plugin xlink:href %uriReference; #IMPLIED>
+<!ATTLIST draw:plugin xlink:type (simple) #IMPLIED>
+<!ATTLIST draw:plugin xlink:show (new|replace) #IMPLIED>
+<!ATTLIST draw:plugin xlink:actuate (onRequest) #IMPLIED>
+<!ATTLIST draw:plugin draw:mimetype CDATA #REQUIRED>
+<!ATTLIST draw:plugin office:name CDATA #IMPLIED>
+<!ATTLIST draw:plugin %draw-style-name;>
+<!ATTLIST draw:plugin svg:width %lengthOrPercentage; #IMPLIED>
+<!ATTLIST draw:plugin svg:height %lengthOrPercentage; #IMPLIED>
+<!ATTLIST draw:plugin %zindex;>
+<!ATTLIST draw:plugin draw:layer %layerName; #IMPLIED>
+<!ATTLIST draw:plugin %draw-position;>
+<!ATTLIST draw:plugin %draw-end-position; >
+
+<!-- Paramaters -->
+<!ELEMENT draw:param EMPTY>
+<!ATTLIST draw:param office:name CDATA #IMPLIED>
+<!ATTLIST draw:param draw:name CDATA #IMPLIED>
+
+<!-- Floating Frames -->
+<!ELEMENT draw:floating-frame (svg:desc?)>
+<!ATTLIST draw:floating-frame xlink:href %uriReference; #IMPLIED>
+<!ATTLIST draw:floating-frame xlink:type (simple) #IMPLIED>
+<!ATTLIST draw:floating-frame xlink:show (new|replace) #IMPLIED>
+<!ATTLIST draw:floating-frame xlink:actuate (onRequest) #IMPLIED>
+<!ATTLIST draw:floating-frame office:name CDATA #IMPLIED>
+<!ATTLIST draw:floating-frame %draw-style-name;>
+<!ATTLIST draw:floating-frame svg:width %lengthOrPercentage; #IMPLIED>
+<!ATTLIST draw:floating-frame svg:height %lengthOrPercentage; #IMPLIED>
+<!ATTLIST draw:floating-frame %zindex;>
+<!ATTLIST draw:floating-frame draw:layer %layerName; #IMPLIED>
+<!ATTLIST draw:floating-frame %draw-position;>
+<!ATTLIST draw:floating-frame %draw-end-position; >
 <!-- view settings -->
