@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:19:13 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,6 +454,8 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
     }
 
     // update frame data
+    pWindow->mpFrameData->mnBeforeLastMouseX = pWindow->mpFrameData->mnLastMouseX;
+    pWindow->mpFrameData->mnBeforeLastMouseY = pWindow->mpFrameData->mnLastMouseY;
     pWindow->mpFrameData->mnLastMouseX = nX;
     pWindow->mpFrameData->mnLastMouseY = nY;
     pWindow->mpFrameData->mnMouseCode  = nCode;
@@ -672,6 +674,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                 ImplDelData aDelData;
                 ImplDelData aDelData2;
                 pWindow->mpFrameData->mbInMouseMove = TRUE;
+                pMouseMoveWin->ImplGetWinData()->mbMouseOver = FALSE;
                 pMouseMoveWin->ImplAddDel( &aDelData );
                 // Durch MouseLeave kann auch dieses Fenster zerstoert
                 // werden
@@ -703,6 +706,8 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
             nMode |= MOUSE_ENTERWINDOW;
         }
         pWindow->mpFrameData->mpMouseMoveWin = pChild;
+        if( pChild )
+            pChild->ImplGetWinData()->mbMouseOver = TRUE;
 
         // MouseLeave
         if ( !pChild )
