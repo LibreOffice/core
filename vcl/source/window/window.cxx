@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-18 15:18:11 $
+ *  last change: $Author: ssa $ $Date: 2002-07-22 07:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5885,6 +5885,24 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
     ImplCallEventListeners( mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE,
         ( bNativeFrameRegistered || !ImplIsAccessibleCandidate() || !bVisible || !mbReallyVisible ) ? NULL : this );
 }
+
+// -----------------------------------------------------------------------
+
+Size Window::GetSizePixel() const
+{
+    return Size( mnOutWidth+mnLeftBorder+mnRightBorder,
+                 mnOutHeight+mnTopBorder+mnBottomBorder );
+}
+
+void Window::GetBorder( long& rLeftBorder, long& rTopBorder,
+                               long& rRightBorder, long& rBottomBorder ) const
+{
+    rLeftBorder     = mnLeftBorder;
+    rTopBorder      = mnTopBorder;
+    rRightBorder    = mnRightBorder;
+    rBottomBorder   = mnBottomBorder;
+}
+
 
 // -----------------------------------------------------------------------
 
