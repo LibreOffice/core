@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 12:48:14 $
+ *  last change: $Author: tbe $ $Date: 2001-09-20 13:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -968,6 +968,20 @@ void __EXPORT BasicIDEShell::GetState(SfxItemSet &rSet)
         pCurWin->GetState( rSet );
 }
 
+BOOL BasicIDEShell::HasUIFeature( ULONG nFeature )
+{
+    BOOL bResult = FALSE;
+
+    if ( (nFeature & BASICIDE_UI_FEATURE_SHOW_BROWSER) == BASICIDE_UI_FEATURE_SHOW_BROWSER )
+    {
+        // fade out (in) property browser in module (dialog) windows
+        if ( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) )
+            bResult = TRUE;
+    }
+
+    return bResult;
+}
+
 void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar, BOOL bRememberAsCurrent )
 {
     // Es muss ein EditWindow am Sfx gesetzt sein, sonst kommt kein
@@ -1061,6 +1075,8 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar, BO
         SetMDITitle();
         EnableScrollbars( pCurWin ? TRUE : FALSE );
 
+        // fade out (in) property browser in module (dialog) windows
+        UIFeatureChanged();
     }
 }
 
