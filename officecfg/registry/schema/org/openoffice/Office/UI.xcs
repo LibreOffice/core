@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcs,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-02-11 15:32:28 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,7 @@
 					<info>
 						<desc>List specifying the order of the global filters within their group.</desc>
 					</info>
-					<value oor:separator=";">com.sun.star.text.TextDocument;com.sun.star.sheet.SpreadsheetDocument;com.sun.star.presentation.PresentationDocument;com.sun.star.drawing.DrawingDocument;com.sun.star.text.WebDocument;com.sun.star.text.GlobalDocument;com.sun.star.formula.FormularProperties;com.sun.star.sdb.DatabaseDocument</value>
+					<value oor:separator=";">com.sun.star.text.TextDocument;com.sun.star.sheet.SpreadsheetDocument;com.sun.star.presentation.PresentationDocument;com.sun.star.drawing.DrawingDocument;com.sun.star.text.WebDocument;com.sun.star.text.GlobalDocument;com.sun.star.formula.FormularProperties;com.sun.star.sdb.OfficeDatabaseDocument</value>
 				</prop>
 				<set oor:name="Classes" oor:node-type="FilterClass">
 					<info>
