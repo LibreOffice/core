@@ -67,7 +67,7 @@ mkdir: %_DEST%\pck%_EXT%
 ..\%__SRC%\slb\gpc.lib %_DEST%\lib%_EXT%\gpc.lib
 ..\%__SRC%\lib\libgpc.a %_DEST%\lib%_EXT%\libgpc.a
 
-..\%__SRC%\obj\autorec.o %_DEST%\lib%_EXT%\autorec.o
+..\%__SRC%\lib\libautorec*.* %_DEST%\lib%_EXT%\lib*.*
 
 ..\freetype\freetype-2.0.2\include\ft2build.h %_DEST%\inc%_EXT%\external\ft2build.h
 ..\freetype\freetype-2.0.2\include\freetype\* %_DEST%\inc%_EXT%\external\freetype\*
