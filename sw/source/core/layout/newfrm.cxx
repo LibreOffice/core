@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-12 14:36:58 $
+ *  last change: $Author: ama $ $Date: 2001-12-13 12:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,7 @@ static SwRectFnCollection aHorizontal = {
     &SwFrm::SetMaxBottom,
     &SwRect::OverStepBottom,
 
+    &SwRect::SetUpperLeftCorner,
     &SwFrm::MakeBelowPos,
     &FirstMinusSecond,
     &FirstMinusSecond,
@@ -253,6 +254,7 @@ static SwRectFnCollection aVertical = {
     &SwFrm::SetMinLeft,
     &SwRect::OverStepLeft,
 
+    &SwRect::SetUpperRightCorner,
     &SwFrm::MakeLeftPos,
     &FirstMinusSecond,
     &SecondMinusFirst,
@@ -307,6 +309,7 @@ static SwRectFnCollection aBottomToTop = {
     &SwFrm::SetMinTop,
     &SwRect::OverStepTop,
 
+    &SwRect::SetLowerLeftCorner,
     &SwFrm::MakeUpperPos,
     &FirstMinusSecond,
     &SecondMinusFirst,
@@ -361,6 +364,7 @@ static SwRectFnCollection aVerticalRightToLeft = {
     &SwFrm::SetMaxRight,
     &SwRect::OverStepRight,
 
+    &SwRect::SetLowerLeftCorner,
     &SwFrm::MakeRightPos,
     &FirstMinusSecond,
     &FirstMinusSecond,

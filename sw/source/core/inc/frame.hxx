@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-12 14:36:29 $
+ *  last change: $Author: ama $ $Date: 2001-12-13 12:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,7 @@ struct SwRectFnCollection
     SwFrmMax      fnSetLimit;
     SwRectMax     fnOverStep;
 
+    SwRectSetPos  fnSetPos;
     SwFrmMakePos  fnMakePos;
     SwOperator    fnXDiff;
     SwOperator    fnYDiff;

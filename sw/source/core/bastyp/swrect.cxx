@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-12 14:36:04 $
+ *  last change: $Author: ama $ $Date: 2001-12-13 12:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,14 @@ void SwRect::SetRightAndWidth( long nRight, long nNew )
     { nX = nRight - nNew; nWidth = nNew; }
 void SwRect::SetBottomAndHeight( long nBottom, long nNew )
     { nY = nBottom - nNew; nHeight = nNew; }
+void SwRect::SetUpperLeftCorner(  const Point& rNew )
+    { nX = rNew.nA; nY = rNew.nB; }
+void SwRect::SetUpperRightCorner(  const Point& rNew )
+    { nX = rNew.nA - nWidth; nY = rNew.nB; }
+void SwRect::SetLowerLeftCorner(  const Point& rNew )
+    { nX = rNew.nA; nY = rNew.nB - nHeight; }
+void SwRect::SetLowerRightCorner(  const Point& rNew )
+    { nX = rNew.nA - nWidth; nY = rNew.nB - nHeight; }
 #endif
 
 #ifndef PRODUCT

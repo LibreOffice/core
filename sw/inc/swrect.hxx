@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-16 11:35:18 $
+ *  last change: $Author: ama $ $Date: 2001-12-13 12:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,10 @@ public:
     void SetTopAndHeight( long nTop, long nNew );
     void SetRightAndWidth( long nRight, long nNew );
     void SetBottomAndHeight( long nBottom, long nNew );
+    void SetUpperLeftCorner(  const Point& rNew );
+    void SetUpperRightCorner(  const Point& rNew );
+    void SetLowerLeftCorner(  const Point& rNew );
+    void SetLowerRightCorner(  const Point& rNew );
     const Point _Pos()  const;
     const Size  _Size() const;
     const Point TopLeft()  const;
@@ -210,6 +214,7 @@ typedef const Size (SwRect:: *SwRectSize)() const;
 typedef BOOL (SwRect:: *SwRectMax)( long ) const;
 typedef long (SwRect:: *SwRectDist)( long ) const;
 typedef void (SwRect:: *SwRectSetTwice)( long, long );
+typedef void (SwRect:: *SwRectSetPos)( const Point& );
 #endif
 
 //---------------------------------- Set-Methoden
