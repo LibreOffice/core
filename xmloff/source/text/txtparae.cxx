@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:41:31 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 07:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2258,8 +2258,10 @@ void XMLTextParagraphExport::exportAnyTextFrame(
     {
         if( FT_EMBEDDED == eType )
             _collectTextEmbeddedAutoStyles( xPropSet );
-        else
+        // --> OD 2004-08-09 #i28745# - no text frame style for shapes
+        else if ( FT_SHAPE != eType )
             Add( XML_STYLE_FAMILY_TEXT_FRAME, xPropSet );
+        // <--
 
         if( pRangePropSet && lcl_txtpara_isBoundAsChar( xPropSet,
                                             xPropSet->getPropertySetInfo() ) )
