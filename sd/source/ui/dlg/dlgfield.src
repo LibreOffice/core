@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 08:45:56 $
+ *  last change: $Author: cl $ $Date: 2002-10-21 15:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@ ModalDialog DLG_FIELD_MODIFY
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 138 , 136 ) ;
+    Size = MAP_APPFONT ( 138 , 154 ) ;
     Text = "Feldbefehl bearbeiten" ;
     Text [ ENGLISH ] = "Modify field" ;
     Moveable = TRUE ;
@@ -158,16 +158,34 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ finnish ] = "~Muuttuja";
         Text[ thai ] = "~ตัวแปร";
     };
+    FixedText FT_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( 6 , 67 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "~Sprache" ;
+        Text [ ENGLISH ] = "~Language" ;
+        Text [ english_us ] = "~Language" ;
+    };
+
+    ListBox LB_LANGUAGE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 52 , 65 ) ;
+        Size = MAP_APPFONT ( 80 , 70 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+
     ListBox LB_FORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 60 ) ;
-        Size = MAP_APPFONT ( 126 , 70 ) ;
+        Pos = MAP_APPFONT ( 6 , 94 ) ;
+        Size = MAP_APPFONT ( 126 , 54 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_FORMAT
     {
-        Pos = MAP_APPFONT ( 6 , 49 ) ;
+        Pos = MAP_APPFONT ( 6 , 83 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "F~ormat" ;
         Text [ ENGLISH ] = "F~ormat" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:16:52 $
+ *  last change: $Author: cl $ $Date: 2002-10-21 15:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
 #endif
+#ifndef _SVX_LANGBOX_HXX
+#include <svx/langbox.hxx>
+#endif
 class SvxFieldData;
 
 /*************************************************************************
@@ -93,21 +96,28 @@ private:
     RadioButton         aRbtFix;
     RadioButton         aRbtVar;
     FixedLine           aGrpType;
+    FixedText           maFtLanguage;
+    SvxLanguageBox      maLbLanguage;
     FixedText           aFtFormat;
     ListBox             aLbFormat;
     OKButton            aBtnOK;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
+    SfxItemSet          maInputSet;
 
     const SvxFieldData* pField;
 
+    void                FillFormatList();
     void                FillControls();
 
+    DECL_LINK( LanguageChangeHdl, void * );
+
 public:
-    SdModifyFieldDlg( Window* pWindow, const SvxFieldData* pInField );
+    SdModifyFieldDlg( Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet );
     ~SdModifyFieldDlg() {}
 
     SvxFieldData*       GetField();
+    SfxItemSet          GetItemSet();
 };
 
 
