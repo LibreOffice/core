@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.86 $
- *  last change: $Author: hdu $ $Date: 2002-12-06 11:50:40 $
+ *  $Revision: 1.87 $
+ *  last change: $Author: hdu $ $Date: 2002-12-12 18:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,10 +681,14 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
     }
 }
 
-static inline void SplitGlyphFlags( int& nGlyphIndex, int& nGlyphFlags )
+static inline void SplitGlyphFlags( const FreetypeServerFont& rFont, int& nGlyphIndex, int& nGlyphFlags )
 {
     nGlyphFlags = nGlyphIndex & GF_FLAGMASK;
-    nGlyphIndex &= GF_IDXMASK;
+
+    if( !(nGlyphIndex & GF_ISCHAR) )
+        nGlyphIndex &= GF_IDXMASK;
+    else
+        nGlyphIndex = rFont.GetRawGlyphIndex( nGlyphIndex & GF_IDXMASK );
 }
 
 int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGlyphFT ) const
@@ -859,7 +863,7 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
 void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 {
     int nGlyphFlags;
-    SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
+    SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
 
     int nLoadFlags = mnLoadFlags;
     if( nGlyphFlags & GF_UNHINTED )
@@ -936,7 +940,7 @@ bool FreetypeServerFont::GetAntialiasAdvice( void ) const
 bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 {
     int nGlyphFlags;
-    SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
+    SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
 
     FT_Int nLoadFlags = mnLoadFlags;
 
@@ -1027,7 +1031,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 {
     int nGlyphFlags;
-    SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
+    SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
 
     FT_Int nLoadFlags = mnLoadFlags;
 
@@ -1498,6 +1502,8 @@ void PolyArgs::ClosePolygon()
 
 // -----------------------------------------------------------------------
 
+extern "C" {
+
 // TODO: wait till all compilers accept that calling conventions
 // for functions are the same independent of implementation constness,
 // then uncomment the const-tokens in the function interfaces below
@@ -1545,6 +1551,8 @@ static int FT_cubic_to( FT_Vector* /*const*/ p1, FT_Vector* /*const*/ p2, FT_Vec
     return 0;
 }
 
+}; // extern "C"
+
 // -----------------------------------------------------------------------
 
 bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPoly ) const
@@ -1552,7 +1560,7 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPol
     rPolyPoly.Clear();
 
     int nGlyphFlags;
-    SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
+    SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
 
     FT_Int nLoadFlags = FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP;
     FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
