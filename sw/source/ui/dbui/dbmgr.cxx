@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: os $ $Date: 2002-10-10 13:47:15 $
+ *  last change: $Author: obo $ $Date: 2002-10-17 14:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,6 +726,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
 BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
 {
     BOOL bRet = FALSE;
+    rtl::OUString tmpDBName;
     String sOldTableName(pListBox->GetSelectEntry());
     pListBox->Clear();
     SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
@@ -733,7 +734,8 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
     if(pParam && pParam->xConnection.is())
         xConnection = pParam->xConnection;
     else
-        xConnection = RegisterConnection(rtl::OUString(rDBName));
+    tmpDBName = rtl::OUString(rDBName);
+        xConnection = RegisterConnection( tmpDBName );
     if(xConnection.is())
     {
         Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
@@ -777,10 +779,12 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
         pListBox->Clear();
     SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
     Reference< XConnection> xConnection;
+    rtl::OUString tmpDBName;
     if(pParam && pParam->xConnection.is())
         xConnection = pParam->xConnection;
     else
-        xConnection = RegisterConnection(rtl::OUString(rDBName));
+    tmpDBName = rtl::OUString(rDBName);
+        xConnection = RegisterConnection( tmpDBName );
     Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
     if(xColsSupp.is())
     {
@@ -1264,6 +1268,7 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
         Reference< XDataSource> xSource;
         Reference< XConnection> xConnection;
         sal_Bool bUseMergeData = sal_False;
+    rtl::OUString tmpDBName;
         if(pImpl->pMergeData &&
             pImpl->pMergeData->sDataSource.equals(rDBName) && pImpl->pMergeData->sCommand.equals(rTableName))
         {
@@ -1277,7 +1282,8 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
             if(pParam && pParam->xConnection.is())
                 xConnection = pParam->xConnection;
             else
-                xConnection = RegisterConnection(rtl::OUString(rDBName));
+        tmpDBName = rtl::OUString(rDBName);
+                xConnection = RegisterConnection( tmpDBName );
             if(bUseMergeData)
                 pImpl->pMergeData->xConnection = xConnection;
         }
@@ -1394,10 +1400,12 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
     sal_Int32 nRet = DataType::SQLNULL;
     SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
     Reference< XConnection> xConnection;
+    rtl::OUString tmpDBName;
     if(pParam && pParam->xConnection.is())
         xConnection = pParam->xConnection;
     else
-        xConnection = RegisterConnection(rtl::OUString(rDBName));
+    tmpDBName = rtl::OUString(rDBName);
+        xConnection = RegisterConnection( tmpDBName );
     Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
     if(xColsSupp.is())
     {
@@ -1802,6 +1810,7 @@ void lcl_ExtractMembers(const String& rDBName, String& sSource, String& sTable, 
 BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType)
 {
     SwDBData aData;
+    rtl::OUString tmpDataSource;
     aData.sDataSource = rDataSource;
     aData.sCommand = rTableOrQuery;
     aData.nCommandType = nCommandType;
@@ -1815,7 +1824,8 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
     if(pParam && pParam->xConnection.is())
         pFound->xConnection = pParam->xConnection;
     else
-        pFound->xConnection = RegisterConnection(rtl::OUString(rDataSource));
+    tmpDataSource = rtl::OUString(rDataSource);
+        pFound->xConnection = RegisterConnection( tmpDataSource );
     if(pFound->xConnection.is())
     {
         try
