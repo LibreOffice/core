@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-08 21:11:03 $
+ *  last change: $Author: kz $ $Date: 2002-02-21 21:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ String STR_OUTLINE_TOOLBOX
     Text[ polish ] = "Pasek narzκdzi konspektu";
     Text[ japanese ] = "γ‚Άγ‚¦γƒγƒ©γ‚¤γƒ³γƒ„γƒΌγƒ«γƒγƒΌ";
     Text[ greek ] = "Γραμμή εργαλειών διάρθρωσης";
-    Text[ korean ] = "λ‹¤λ‹¨κ³„ λ„κµ¬λª¨μ";
+    Text[ korean ] = "μ•„μ›ƒνΈλΌμΈ λ„κµ¬λª¨μ";
     Text[ chinese_traditional ] = "ε¤§η¶±ε·¥ε…·ε—";
     Text[ arabic ] = "ΤΡνΨ ΓΟζΗΚ ΗαΚήΣνγ";
     Text[ turkish ] = "Anahat araη ηubuπu";
@@ -308,7 +308,7 @@ String STR_DRAW_COMMONTASK_TOOLBOX
     Text[ polish ] = "Prezentacja";
     Text[ japanese ] = "γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³";
     Text[ greek ] = "Παρουσίαση";
-    Text[ korean ] = "ν”„λ¦¬μ  ν…μ΄μ…";
+    Text[ korean ] = "ν”„λ μ  ν…μ΄μ…";
     Text[ chinese_traditional ] = "η°΅ε ±";
     Text[ arabic ] = "ΪΡΦ ΚήΟνγν";
     Text[ turkish ] = "Sunu";
@@ -2512,7 +2512,7 @@ String STR_OUTLINE_MODE
     Text[ polish ] = "Tryb konspektu";
     Text[ japanese ] = "γ‚Άγ‚¦γƒγƒ©γ‚¤γƒ³γƒΆγƒΌγƒ‰";
     Text[ greek ] = "Προβολή διάρθρωσης";
-    Text[ korean ] = "λ‹¤λ‹¨κ³„ λ³΄κΈ°";
+    Text[ korean ] = "μ•„μ›ƒνΈλΌμΈ λ³΄κΈ°";
     Text[ chinese_traditional ] = "ε¤§η¶±ι θ¦½";
     Text[ arabic ] = "ΪΡΦ ΗαΚήΣνγ";
     Text[ turkish ] = "Anahat gφrόnόmό";
@@ -2595,7 +2595,7 @@ String STR_PRESENTATION_LAYOUT
     Text[ polish ] = "Uk³ad prezentacji";
     Text[ japanese ] = "γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³ γƒ¬γ‚¤γ‚Άγ‚¦γƒ";
     Text[ greek ] = "Διάταξη παρουσίασης";
-    Text[ korean ] = "ν”„λ¦¬μ  ν…μ΄μ… λ μ΄μ•„μ›ƒ";
+    Text[ korean ] = "ν”„λ μ  ν…μ΄μ… λ μ΄μ•„μ›ƒ";
     Text[ chinese_traditional ] = "η°΅ε ±η‰εΌ";
     Text[ arabic ] = "ΚΞΨνΨ ΗαΪΡΦ ΗαΚήΟνγν";
     Text[ turkish ] = "Sunu dόzeni";
@@ -4940,7 +4940,7 @@ String STR_UNDO_CHANGE_TITLE_AND_LAYOUT
     Text[ polish ] = "Zmieρ tytu³ i konspekt";
     Text[ japanese ] = "γ‚Ώγ‚¤γƒγƒ«γ¨γ‚Άγ‚¦γƒγƒ©γ‚¤γƒ³γ‚’ε¤‰ζ›΄";
     Text[ greek ] = "Τροποποίηση τίτλου και διάρθρωσης";
-    Text[ korean ] = "μ λª©κ³Ό λ‹¤λ‹¨κ³„ λ³€κ²½";
+    Text[ korean ] = "μ λª©κ³Ό μ•„μ›ƒνΈλΌμΈ λ³€κ²½";
     Text[ chinese_traditional ] = "θ®ζ›΄ζ¨™ι΅ε’ε¤§η¶±";
     Text[ arabic ] = "ΚΪΟνα ΗαΪδζΗδ ζΗαΚήΣνγ";
     Text[ turkish ] = "Baώlύk ve anahattύ deπiώtir";
@@ -5353,7 +5353,7 @@ String STR_DLG_INSERT_PAGES_FROM_OUTLINE
     Text[ polish ] = "Wstaw slajdy z konspektu";
     Text[ japanese ] = "γ‚Άγ‚¦γƒγƒ©γ‚¤γƒ³γ‹γ‚‰γ‚Ήγƒ©γ‚¤γƒ‰γ‚’ζΏε…¥";
     Text[ greek ] = "Εισαγωγή σελιδών από διάρθρωση";
-    Text[ korean ] = "λ‹¤λ‹¨κ³„ μ¬λΌμ΄λ“ μ‚½μ…";
+    Text[ korean ] = "μ•„μ›ƒνΈλΌμΈ μ¬λΌμ΄λ“ μ‚½μ…";
     Text[ chinese_traditional ] = "εΎε¤§η¶±ζ’ε…¥";
     Text[ arabic ] = "ΕΟΡΗΜ ΥέΝΗΚ γδ ΚήΣνγ";
     Text[ turkish ] = "Anahattan sayfa ekle";
@@ -6430,7 +6430,7 @@ String STR_UNDO_CHANGE_PRES_OBJECT
     Text[ polish ] = "Zmieρ obiekt prezentacji '$'";
     Text[ japanese ] = "γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³γ®γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ'$'γ®ε¤‰ζ›΄";
     Text[ greek ] = "Τροποποίηση αντικειμένου παρουσίασης '$'";
-    Text[ korean ] = "ν”„λ¦¬μ  ν…μ΄μ… κ°μ²΄'$' λ³€κ²½";
+    Text[ korean ] = "ν”„λ μ  ν…μ΄μ… κ°μ²΄'$' λ³€κ²½";
     Text[ chinese_traditional ] = "θ®ζ›΄η°΅ε ±η‰©δ»¶<$>";
     Text[ arabic ] = "ΚΪΟνα ίΗΖδ ΗαΪΡΦ ΗαΚήΟνγν '$'";
     Text[ turkish ] = "'$' sunu nesnesini deπiώtir";
@@ -6586,7 +6586,7 @@ String STR_UNDO_SET_PRESLAYOUT
     Text[ polish ] = "Zastosuj uk³ad prezentacji";
     Text[ japanese ] = "γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³ γƒ¬γ‚¤γ‚Άγ‚¦γƒγ®ζ‡ε®";
     Text[ greek ] = "Εφαρμογή διάταξης παρουσίασης";
-    Text[ korean ] = "ν”„λ¦¬μ  ν…μ΄μ… λ μ΄μ•„μ›ƒ μ μ©";
+    Text[ korean ] = "ν”„λ μ  ν…μ΄μ… λ μ΄μ•„μ›ƒ μ μ©";
     Text[ chinese_traditional ] = "ζ‡ε®η°΅ε ±η‰εΌ";
     Text[ arabic ] = "ΚΪννδ ΚΞΨνΨ ΗαΪΡΦ ΗαΚήΟνγν";
     Text[ turkish ] = "Sunu biηimini uygula";
@@ -6891,7 +6891,7 @@ String STR_PRINT_OUTLINE
     Text[ polish ] = "(Konspekt)";
     Text[ japanese ] = "(γ‚Άγ‚¦γƒγƒ©γ‚¤γƒ³)";
     Text[ greek ] = "(Διάρθρωση)";
-    Text[ korean ] = "(λ‹¤λ‹¨κ³„)";
+    Text[ korean ] = " (μ•„μ›ƒνΈλΌμΈ)";
     Text[ chinese_traditional ] = "(ε¤§η¶±)";
     Text[ arabic ] = "(ΚήΣνγ)";
     Text[ turkish ] = "(Anahat)";
@@ -7272,7 +7272,7 @@ String STR_CLICK_ACTION_STOPPRESENTATION
     Text[ polish ] = "Zakoρcz prezentacjκ";
     Text[ japanese ] = "γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³γ®ηµ‚δΊ†";
     Text[ greek ] = "Τερματισμός παρουσίασης";
-    Text[ korean ] = "ν”„λ¦¬μ  ν…μ΄μ… μΆ…λ£";
+    Text[ korean ] = "ν”„λ μ  ν…μ΄μ… μΆ…λ£";
     Text[ chinese_traditional ] = "ηµζη°΅ε ±";
     Text[ arabic ] = "ΕδεΗΑ ΗαΪΡΦ ΗαΚήΟνγν";
     Text[ turkish ] = "Sunudan ηύk";
@@ -12018,7 +12018,7 @@ String STR_IMPRESS_DOCUMENT
     Text[ polish ] = "Prezentacja";
     Text[ japanese ] = "γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³";
     Text[ greek ] = "Παρουσίαση";
-    Text[ korean ] = "ν”„λ¦¬μ  ν…μ΄μ…";
+    Text[ korean ] = "ν”„λ μ  ν…μ΄μ…";
     Text[ chinese_traditional ] = "η°΅ε ±";
     Text[ arabic ] = "ΪΡΦ ΚήΟνγν";
     Text[ turkish ] = "Sunu";
@@ -12043,7 +12043,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_60
     Text[ polish ] = "%PRODUCTNAME 6.0 - Prezentacja";
     Text[ japanese ] = "%PRODUCTNAME 6.0 γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³";
     Text[ greek ] = "%PRODUCTNAME 6.0 Παρουσίαση";
-    Text[ korean ] = "%PRODUCTNAME 6.0 ν”„λ¦¬μ  ν…μ΄μ…";
+    Text[ korean ] = "%PRODUCTNAME 6.0 ν”„λ μ  ν…μ΄μ…";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 η°΅ε ±";
     Text[ arabic ] = "ΪΡΦ ΚήΟνγν γδ %PRODUCTNAME 6.0";
     Text[ turkish ] = "Sunu (%PRODUCTNAME 6.0)";
@@ -12068,7 +12068,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_50
     Text[ polish ] = "%PRODUCTNAME 5.0 - Prezentacja";
     Text[ japanese ] = "%PRODUCTNAME 5.0 γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³";
     Text[ greek ] = "Παρουσίαση (%PRODUCTNAME 5.0)";
-    Text[ korean ] = "%PRODUCTNAME 5.0 ν”„λ¦¬μ  ν…μ΄μ…";
+    Text[ korean ] = "%PRODUCTNAME 5.0 ν”„λ μ  ν…μ΄μ…";
     Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 η°΅ε ±";
     Text[ arabic ] = "ΪΡΦ ΚήΟνγν γδ %PRODUCTNAME 5.0";
     Text[ turkish ] = "Sunu (%PRODUCTNAME 5.0)";
@@ -12094,7 +12094,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_40
     Text[ polish ] = "Prezentacja w %PRODUCTNAME 4.0";
     Text[ japanese ] = "%PRODUCTNAME 4.0 γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³";
     Text[ greek ] = "Παρουσίαση (%PRODUCTNAME 4.0)";
-    Text[ korean ] = "%PRODUCTNAME 4.0 ν”„λ¦¬μ  ν…μ΄μ…";
+    Text[ korean ] = "%PRODUCTNAME 4.0 ν”„λ μ  ν…μ΄μ…";
     Text[ chinese_traditional ] = "%PRODUCTNAME 4.0 η°΅ε ±";
     Text[ arabic ] = "ΪΡΦ ΚήΟνγν γδ %PRODUCTNAME 4.0";
     Text[ turkish ] = "Sunu (%PRODUCTNAME 4.0)";
@@ -12120,7 +12120,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_31
     Text[ polish ] = "Grafika / Prezentacja w %PRODUCTNAME 3.0";
     Text[ japanese ] = "%PRODUCTNAME 3.0 ε›³/γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³";
     Text[ greek ] = "Γραφικά/Παρουσίαση (%PRODUCTNAME 3.0)";
-    Text[ korean ] = "%PRODUCTNAME 3.0 κ·Έλν”½/ν”„λ¦¬μ  ν…μ΄μ…";
+    Text[ korean ] = "%PRODUCTNAME 3.0 κ·Έλν”½/ν”„λ μ  ν…μ΄μ…";
     Text[ chinese_traditional ] = "%PRODUCTNAME 3.0 ε–ε½Ά/η°΅ε ±";
     Text[ arabic ] = "ΡΣγΙ / ΪΡΦ ΚήΟνγν γδ %PRODUCTNAME 3.0";
     Text[ turkish ] = "Grafik/Sunu (%PRODUCTNAME 3.0)";
@@ -12712,7 +12712,7 @@ String STR_HTMLEXP_DOWNLOAD
     Text[ japanese ] = "γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³γ®γ‚½γƒΌγ‚Ήγ‚’γƒ€γ‚¦γƒ³γƒ­γƒΌγƒ‰";
     Text[ language_user1 ] = "Οπξθηβερςθ Download - - - -";
     Text[ greek ] = "Λήψη αρχείων προορισμού παρουσίασης";
-    Text[ korean ] = "ν”„λ¦¬μ  ν…μ΄μ… μ†μ¤ λ‹¤μ΄λ΅λ“";
+    Text[ korean ] = "ν”„λ μ  ν…μ΄μ… μ†μ¤ λ‹¤μ΄λ΅λ“";
     Text[ chinese_traditional ] = "δΈ‹θΌ‰η°΅ε ±δΎ†ζΊ";
     Text[ arabic ] = "ΚδÒνα γΥΟΡ ΗαΪΡΦ ΗαΚήΟνγν";
     Text[ turkish ] = "Sunu kaynaπύnύ indir";
@@ -12972,7 +12972,7 @@ String STR_PRES_SOFTEND
     Text[ japanese ] = "γƒγ‚¦γ‚Ήγ‚―γƒªγƒƒγ‚―γ§γ‚Ήγƒ©γ‚¤γƒ‰γ‚·γƒ§γƒΌγ®ηµ‚δΊ†...";
     Text[ chinese_simplified ] = "θ―·ε•ε‡»ιΌ ζ ‡ε™¨ε·¦ι”®οΌη»“ζζ”Ύζ ζΌ”η¤Ίζ–‡η¨Ώ...";
     Text[ greek ] = "Παρακαλώ κάνετε κλικ για το τέλος την παρουσίασης...";
-    Text[ korean ] = "ν”„λ¦¬μ  ν…μ΄μ…μ„ μΆ…λ£ν•λ ¤λ©΄ ν΄λ¦­ν•μ‹­μ‹μ¤...";
+    Text[ korean ] = "ν”„λ μ  ν…μ΄μ…μ„ μΆ…λ£ν•λ ¤λ©΄ ν΄λ¦­ν•μ‹­μ‹μ¤...";
     Text[ chinese_traditional ] = "θ«‹ζ‰δΈ€δΈ‹ζ»‘ιΌ ζ‰ι•οΌηµζζ”Ύζ η°΅ε ±...";
     Text[ arabic ] = "ΗδήΡ εδΗ αΕδεΗΑ ΗαΪΡΦ ΗαΚήΟνγν...";
     Text[ turkish ] = "Sunudan ηύkmak iηin tύklayύn...";
