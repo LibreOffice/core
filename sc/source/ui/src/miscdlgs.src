@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dr $ $Date: 2001-12-18 11:24:10 $
+ *  last change: $Author: dr $ $Date: 2001-12-19 08:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2766,7 +2766,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     RadioButton BTN_ARITHMETIC
     {
         Pos = MAP_APPFONT ( 78 , 14 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Size = MAP_APPFONT ( 69 , 10 ) ;
         Text = "~Arithmetisch" ;
         Text [ ENGLISH ] = "~Linear" ;
         Text [ norwegian ] = "~Linear" ;
@@ -2796,7 +2796,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     RadioButton BTN_GEOMETRIC
     {
         Pos = MAP_APPFONT ( 78 , 28 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Size = MAP_APPFONT ( 69 , 10 ) ;
         Text = "~Geometrisch" ;
         Text [ ENGLISH ] = "~Growth" ;
         Text [ norwegian ] = "~Growth" ;
@@ -2826,7 +2826,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     RadioButton BTN_DATE
     {
         Pos = MAP_APPFONT ( 78 , 42 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Size = MAP_APPFONT ( 69 , 10 ) ;
         Text = "~Datum" ;
         Text [ ENGLISH ] = "Da~te" ;
         Text [ norwegian ] = "Da~te" ;
@@ -2856,7 +2856,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     RadioButton BTN_AUTOFILL
     {
         Pos = MAP_APPFONT ( 78 , 56 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Size = MAP_APPFONT ( 69 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Auto-Aus~füllen : Auto-Aus~f³llen */
         Text = "Auto-Aus~füllen" ;
         Text [ ENGLISH ] = "~Autofill" ;
