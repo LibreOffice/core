@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:11:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1390,6 +1390,7 @@ ResMgr* ResMgr::SearchCreateResMgr(
         LANGUAGE_JAPANESE,
         LANGUAGE_HUNGARIAN,
         LANGUAGE_CZECH,
+        LANGUAGE_SLOVAK,
         LANGUAGE_RUSSIAN,
         LANGUAGE_ARABIC,
         LANGUAGE_GREEK,
