@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elapsedtime.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:02:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,17 @@
 #include <sal/types.h>
 #endif
 
+#include "boost/shared_ptr.hpp"
+
 namespace canvas
 {
     namespace tools
     {
-        /** Calculate elapsed time
+        /** Calculate elapsed time.
+
+            This class provides several time-measurement and
+            -management functions. In its simplest use-case, it
+            measures the time from its creation.
          */
         class ElapsedTime
         {
@@ -83,6 +89,22 @@ namespace canvas
                 creation and getElapsedTime() call.
              */
             ElapsedTime();
+
+            /** Creates a new ElapsedTime object based on another
+                timer.
+
+                The moment of construction starts the time
+                measurement. That means, a subsequent getElapsedTime()
+                call will return the time difference between object
+                creation and getElapsedTime() call. All time values
+                are not taken from the system's time base, but from
+                the provided timer.
+             */
+            ElapsedTime( ::boost::shared_ptr<ElapsedTime> const & pTimeBase );
+
+            /** Gets this timer's base timer.
+             */
+            ::boost::shared_ptr<ElapsedTime> const & getTimeBase() const;
 
             /** Reset the time
 
@@ -97,15 +119,97 @@ namespace canvas
 
                 This method returns the elapsed time in seconds
                 between either the construction of this object, or the
-                last reset() call, if any.
+                last reset() call, if any (but see the time modulation
+                methods below, for means to modify the otherwise
+                continuous flow of time).
 
                 @return the elapsed time in seconds.
              */
             double getElapsedTime() const;
 
+            /** Pauses the running timer.
+
+                This method stops the time, as returned by this
+                object, until continueTimer() is called. During this
+                period, getElapsedTime() will always return the same
+                time value (i.e. the instant when pauseTimer() was
+                called).
+             */
+            void pauseTimer();
+
+            /** Continues the paused timer.
+
+                This method re-enables the time flow, that is, time
+                starts running again for clients calling
+                getElapsedTime(). The (subtle) difference to the
+                holdTimer/releaseTimer() methods below is, that there
+                is no perceived time 'jump' between the pauseTimer()
+                call and the continueTimer() call, i.e. the time
+                starts over with the same value it has stopped on
+                pauseTimer().
+             */
+            void continueTimer();
+
+            /** Adjusts the timer, hold and pause times.
+
+                This method modifies the time as returned by this
+                object by the specified amount. This affects the time
+                as returned by getElapsedTime(), regardless of the
+                mode (e.g. paused, or on hold).
+
+                @param fOffset
+                This value will be added to the current time, i.e. the
+                next call to getElapsedTime() (when performed
+                immediately) will be adjusted by fOffset.
+
+                @param bLimitToLastQueriedTime
+                Limits the given offset to the time that has been
+                taken via getElapsedTime()
+            */
+            void adjustTimer( double fOffset,
+                              bool bLimitToLastQueriedTime = true );
+
+            /** Holds the current time.
+
+                This call makes the timer hold the current time
+                (e.g. getElapsedTime() will return the time when
+                holdTimer() was called), while the underlying time is
+                running on. When releaseTimer() is called, the time
+                will 'jump' to the then-current, underlying time. This
+                is equivalent to pressing the "interim time" button on
+                a stop watch, which shows this stopped time, while the
+                clock keeps running internally.
+            */
+            void holdTimer();
+
+            /** Releases a held timer.
+
+                After this call, the timer again returns the running
+                time on getElapsedTime().
+             */
+            void releaseTimer();
+
         private:
-            sal_uInt64  mnStartTime;    // implementation-dependent start time representation
-            double      mfTimeFactor;   // correction factor to get the time in seconds from mnStartTime
+            static double getSystemTime();
+            double getCurrentTime() const;
+            double getElapsedTimeImpl() const; // does not set m_fLastQueriedTime
+
+            const ::boost::shared_ptr<ElapsedTime>  m_pTimeBase;
+
+            /// To validate adjustTimer() calls with bLimitToLastQueriedTime=true
+            mutable double                          m_fLastQueriedTime;
+
+            /// Start time, from which the difference to the time base is returned
+            double                                  m_fStartTime;
+
+            /// Instant, when last pause or hold started, relative to m_fStartTime
+            double                                  m_fFrozenTime;
+
+            /// True, when in pause mode
+            bool                                    m_bInPauseMode;
+
+            /// True, when in hold mode
+            bool                                    m_bInHoldMode;
         };
 
     }
