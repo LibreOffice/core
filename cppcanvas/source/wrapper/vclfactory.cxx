@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclfactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:32:58 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,6 @@
 #include <implsprite.hxx>
 
 
-using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 namespace cppcanvas
