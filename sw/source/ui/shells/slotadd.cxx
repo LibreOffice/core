@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 16:06:37 $
+ *  last change: $Author: tbe $ $Date: 2000-11-10 15:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,6 @@
 #ifndef _SVX_RULRITEM_HXX //autogen
 #include <svx/rulritem.hxx>
 #endif
-//#ifndef _IDETEMP_HXX //autogen
-//#include <basctl/idetemp.hxx>
-//#endif
 #ifndef _SVX_ZOOMITEM_HXX //autogen
 #include <svx/zoomitem.hxx>
 #endif
@@ -321,6 +318,9 @@
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/31 16:06:37  hr
+    #65293#: includes
+
     Revision 1.2  2000/10/23 10:51:17  tbe
     idetemp.hxx include removed
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 12:27:09 $
+ *  last change: $Author: tbe $ $Date: 2000-11-10 15:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,6 @@
 #ifndef _EDITSTAT_HXX //autogen
 #include <svx/editstat.hxx>
 #endif
-//#ifndef _IDETEMP_HXX
-//#include <basctl/idetemp.hxx>
-//#endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
