@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2001-02-08 14:04:28 $
+ *  last change: $Author: iha $ $Date: 2001-02-26 15:47:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ if( !m_aCache.hasRow( nRow ) )                          \
         m_bLastReadWasFromCache = sal_False;            \
         aGuard.clear();                                 \
         applyPositionToOrigin( nRow );                  \
+        impl_init_xRowOrigin();                         \
         return m_xRowOrigin->getXXX( columnIndex );     \
     }                                                   \
 }                                                       \
@@ -1115,11 +1116,14 @@ void SAL_CALL CachedContentResultSet
     }
     else
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if( !m_xPropertySetOrigin.is() )
+        impl_init_xPropertySetOrigin();
         {
-            OSL_ENSURE( sal_False, "broadcaster was disposed already" );
-            return;
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            if( !m_xPropertySetOrigin.is() )
+            {
+                OSL_ENSURE( sal_False, "broadcaster was disposed already" );
+                return;
+            }
         }
         m_xPropertySetOrigin->setPropertyValue( aPropertyName, aValue );
     }
@@ -1171,6 +1175,7 @@ Any SAL_CALL CachedContentResultSet
     }
     else
     {
+        impl_init_xPropertySetOrigin();
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             if( !m_xPropertySetOrigin.is() )
@@ -1945,7 +1950,7 @@ sal_Bool SAL_CALL CachedContentResultSet
            RuntimeException )
 {
     impl_EnsureNotDisposed();
-
+    impl_init_xRowOrigin();
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_bLastReadWasFromCache )
@@ -2121,6 +2126,7 @@ Any SAL_CALL CachedContentResultSet
             m_bLastReadWasFromCache = sal_False;
             aGuard.clear();
             applyPositionToOrigin( nRow );
+            impl_init_xRowOrigin();
             return m_xRowOrigin->getObject( columnIndex, typeMap );
         }
     }

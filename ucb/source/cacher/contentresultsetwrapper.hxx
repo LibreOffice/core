@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentresultsetwrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 10:37:35 $
+ *  last change: $Author: iha $ $Date: 2001-02-26 15:47:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,13 +208,17 @@ protected:
                             m_xResultSetOrigin;
     com::sun::star::uno::Reference< com::sun::star::sdbc::XRow >
                             m_xRowOrigin; //XRow-interface from m_xOrigin
+                            //!! call impl_init_xRowOrigin() bevor you access this member
     com::sun::star::uno::Reference< com::sun::star::ucb::XContentAccess >
                             m_xContentAccessOrigin; //XContentAccess-interface from m_xOrigin
+                            //!! call impl_init_xContentAccessOrigin() bevor you access this member
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >
                             m_xPropertySetOrigin; //XPropertySet-interface from m_xOrigin
+                            //!! call impl_init_xPropertySetOrigin() bevor you access this member
 
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >
                             m_xPropertySetInfo;
+                            //call impl_initPropertySetInfo() bevor you access this member
 
     sal_Int32               m_nForwardOnly;
 
@@ -257,6 +261,12 @@ protected:
 
     void SAL_CALL impl_init();
     void SAL_CALL impl_deinit();
+
+    //--
+
+    void SAL_CALL impl_init_xRowOrigin();
+    void SAL_CALL impl_init_xContentAccessOrigin();
+    void SAL_CALL impl_init_xPropertySetOrigin();
 
     //--
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentresultsetwrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 10:37:35 $
+ *  last change: $Author: iha $ $Date: 2001-02-26 15:47:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,17 +127,64 @@ ContentResultSetWrapper::ContentResultSetWrapper(
 
     OSL_ENSURE( m_xResultSetOrigin.is(), "XResultSet is required" );
 
-    m_xRowOrigin = Reference< XRow >( m_xResultSetOrigin, UNO_QUERY );
-    OSL_ENSURE( m_xRowOrigin.is(), "interface XRow is required" );
-
-    m_xContentAccessOrigin = Reference< XContentAccess >( m_xResultSetOrigin, UNO_QUERY );
-    OSL_ENSURE( m_xContentAccessOrigin.is(), "interface XContentAccess is required" );
-
-    m_xPropertySetOrigin = Reference< XPropertySet >( m_xResultSetOrigin, UNO_QUERY );
-    OSL_ENSURE( m_xPropertySetOrigin.is(), "interface XPropertySet is required" );
-
-    //call impl_init() at the end of constructor of derived class
+    //!! call impl_init() at the end of constructor of derived class
 };
+
+
+void SAL_CALL ContentResultSetWrapper::impl_init_xRowOrigin()
+{
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        if(m_xRowOrigin.is())
+            return;
+    }
+
+    Reference< XRow > xOrgig =
+        Reference< XRow >( m_xResultSetOrigin, UNO_QUERY );
+
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        m_xRowOrigin = xOrgig;
+        OSL_ENSURE( m_xRowOrigin.is(), "interface XRow is required" );
+    }
+}
+
+void SAL_CALL ContentResultSetWrapper::impl_init_xContentAccessOrigin()
+{
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        if(m_xContentAccessOrigin.is())
+            return;
+    }
+
+    Reference< XContentAccess > xOrgig =
+        Reference< XContentAccess >( m_xResultSetOrigin, UNO_QUERY );
+
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        m_xContentAccessOrigin = xOrgig;
+        OSL_ENSURE( m_xContentAccessOrigin.is(), "interface XContentAccess is required" );
+    }
+}
+
+
+void SAL_CALL ContentResultSetWrapper::impl_init_xPropertySetOrigin()
+{
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        if( m_xPropertySetOrigin.is() )
+            return;
+    }
+
+    Reference< XPropertySet > xOrig =
+        Reference< XPropertySet >( m_xResultSetOrigin, UNO_QUERY );
+
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        m_xPropertySetOrigin = xOrig;
+        OSL_ENSURE( m_xPropertySetOrigin.is(), "interface XPropertySet is required" );
+    }
+}
 
 void SAL_CALL ContentResultSetWrapper::impl_init()
 {
@@ -175,6 +222,7 @@ void SAL_CALL ContentResultSetWrapper
         if( m_xPropertySetInfo.is() )
             return;
 
+        impl_init_xPropertySetOrigin();
         if( !m_xPropertySetOrigin.is() )
             return;
     }
@@ -329,6 +377,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
         rtl::OUString aName = OUString::createFromAscii( "ResultSetType" );
         //find out, if we are ForwardOnly and cache the value:
 
+        impl_init_xPropertySetOrigin();
         if( !m_xPropertySetOrigin.is() )
         {
             OSL_ENSURE( sal_False, "broadcaster was disposed already" );
@@ -546,7 +595,7 @@ void SAL_CALL ContentResultSetWrapper
            RuntimeException )
 {
     impl_EnsureNotDisposed();
-
+    impl_init_xPropertySetOrigin();
     if( !m_xPropertySetOrigin.is() )
     {
         OSL_ENSURE( sal_False, "broadcaster was disposed already" );
@@ -564,7 +613,7 @@ Any SAL_CALL ContentResultSetWrapper
            RuntimeException )
 {
     impl_EnsureNotDisposed();
-
+    impl_init_xPropertySetOrigin();
     if( !m_xPropertySetOrigin.is() )
     {
         OSL_ENSURE( sal_False, "broadcaster was disposed already" );
@@ -603,6 +652,7 @@ void SAL_CALL ContentResultSetWrapper
     m_pPropertyChangeListeners->addInterface( aPropertyName, xListener );
     if( bNeedRegister )
     {
+        impl_init_xPropertySetOrigin();
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             if( !m_xPropertySetOrigin.is() )
@@ -653,6 +703,7 @@ void SAL_CALL ContentResultSetWrapper
     m_pVetoableChangeListeners->addInterface( rPropertyName, xListener );
     if( bNeedRegister )
     {
+        impl_init_xPropertySetOrigin();
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             if( !m_xPropertySetOrigin.is() )
@@ -712,6 +763,7 @@ void SAL_CALL ContentResultSetWrapper
 
     if( !m_pPropertyChangeListeners->getContainedTypes().getLength() )
     {
+        impl_init_xPropertySetOrigin();
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             if( !m_xPropertySetOrigin.is() )
@@ -770,6 +822,7 @@ void SAL_CALL ContentResultSetWrapper
 
     if( !m_pVetoableChangeListeners->getContainedTypes().getLength() )
     {
+        impl_init_xPropertySetOrigin();
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             if( !m_xPropertySetOrigin.is() )
@@ -808,11 +861,15 @@ void SAL_CALL ContentResultSetWrapper
 
     //release all references to the broadcaster:
     m_xResultSetOrigin.clear();
-    m_xRowOrigin.clear();
-    m_xContentAccessOrigin.clear();
-    m_xPropertySetOrigin.clear();
+    if(m_xRowOrigin.is())
+        m_xRowOrigin.clear();
+    if(m_xContentAccessOrigin.is())
+        m_xContentAccessOrigin.clear();
+    if(m_xPropertySetOrigin.is())
+        m_xPropertySetOrigin.clear();
     m_xMetaDataFromOrigin.clear();
-    m_xPropertySetInfo.clear();
+    if(m_xPropertySetInfo.is())
+        m_xPropertySetInfo.clear();
 }
 
 //virtual
@@ -853,7 +910,7 @@ OUString SAL_CALL ContentResultSetWrapper
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
-
+    impl_init_xContentAccessOrigin();
     if( !m_xContentAccessOrigin.is() )
     {
         OSL_ENSURE( sal_False, "broadcaster was disposed already" );
@@ -869,7 +926,7 @@ Reference< XContentIdentifier > SAL_CALL ContentResultSetWrapper
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
-
+    impl_init_xContentAccessOrigin();
     if( !m_xContentAccessOrigin.is() )
     {
         OSL_ENSURE( sal_False, "broadcaster was disposed already" );
@@ -885,7 +942,7 @@ Reference< XContent > SAL_CALL ContentResultSetWrapper
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
-
+    impl_init_xContentAccessOrigin();
     if( !m_xContentAccessOrigin.is() )
     {
         OSL_ENSURE( sal_False, "broadcaster was disposed already" );
@@ -1188,6 +1245,7 @@ Reference< XInterface > SAL_CALL ContentResultSetWrapper
 
 #define XROW_GETXXX( getXXX )                                   \
 impl_EnsureNotDisposed();                                       \
+impl_init_xRowOrigin();                                         \
 if( !m_xRowOrigin.is() )                                        \
 {                                                               \
     OSL_ENSURE( sal_False, "broadcaster was disposed already" );\
@@ -1202,6 +1260,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
            RuntimeException )
 {
     impl_EnsureNotDisposed();
+    impl_init_xRowOrigin();
     if( !m_xRowOrigin.is() )
     {
         OSL_ENSURE( sal_False, "broadcaster was disposed already" );
@@ -1350,6 +1409,7 @@ Any SAL_CALL ContentResultSetWrapper
     //define XROW_GETXXX, where this is similar implemented
 
     impl_EnsureNotDisposed();
+    impl_init_xRowOrigin();
     if( !m_xRowOrigin.is() )
     {
         OSL_ENSURE( sal_False, "broadcaster was disposed already" );

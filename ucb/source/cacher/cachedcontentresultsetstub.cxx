@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultsetstub.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 10:37:35 $
+ *  last change: $Author: iha $ $Date: 2001-02-26 15:47:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
     , sal_Int32 nRowCount, sal_Bool bDirection )
     throw( RuntimeException )
 {
+    impl_init_xRowOrigin();
     FETCH_XXX( impl_getCurrentRowContent, m_xRowOrigin );
 }
 
@@ -363,6 +364,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
         , sal_Int32 nRowCount, sal_Bool bDirection )
         throw( com::sun::star::uno::RuntimeException )
 {
+    impl_init_xContentAccessOrigin();
     FETCH_XXX( impl_getCurrentContentIdentifierString, m_xContentAccessOrigin );
 }
 
@@ -372,6 +374,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
         , sal_Int32 nRowCount, sal_Bool bDirection )
         throw( com::sun::star::uno::RuntimeException )
 {
+    impl_init_xContentAccessOrigin();
     FETCH_XXX( impl_getCurrentContentIdentifier, m_xContentAccessOrigin );
 }
 
@@ -381,6 +384,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
         , sal_Int32 nRowCount, sal_Bool bDirection )
         throw( com::sun::star::uno::RuntimeException )
 {
+    impl_init_xContentAccessOrigin();
     FETCH_XXX( impl_getCurrentContent, m_xContentAccessOrigin );
 }
 
