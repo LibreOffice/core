@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-25 16:10:05 $
+ *  last change: $Author: sj $ $Date: 2002-03-27 14:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3348,8 +3348,9 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                             aSet.Put( SdrTextMinFrameHeightItem( aBoundRect.GetHeight() ) );
                         pRet->SetModel( pSdrModel );
                         pRet->SetItemSet(aSet);
-
                         // Rotieren
+                        if ( pRet->ISA( SdrCaptionObj ) )       // sj: #96758# SetModel is changing
+                            pRet->SetSnapRect( aBoundRect );    // the original snaprect
                         if( mnFix16Angle && !bIsConnector )
                         {
                             double a = mnFix16Angle * nPi180;
