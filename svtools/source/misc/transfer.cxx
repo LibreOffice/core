@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-02 11:17:30 $
+ *  last change: $Author: jp $ $Date: 2001-02-02 13:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _FILELIST_HXX
+#include <sot/filelist.hxx>
 #endif
 
 #include "urlbmk.hxx"
@@ -416,26 +419,35 @@ sal_Bool TransferableHelper::SetTransferableObjectDescriptor( const Transferable
 sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
                                               const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
+    rtl_TextEncoding eSysCSet = gsl_getSystemTextEncoding();
+
     switch( SotExchange::GetFormat( rFlavor ) )
     {
         case( SOT_FORMATSTR_ID_SOLK ):
         {
-            String aString( String::CreateFromInt32( rBmk.GetURL().Len() ) );
+            ByteString sURL( rBmk.GetURL(), eSysCSet ),
+                       sDesc( rBmk.GetDescription(), eSysCSet );
+            ByteString sOut( ByteString::CreateFromInt32( sURL.Len() ));
+            ( sOut += '@' ) += sURL;
+            sOut += ByteString::CreateFromInt32( sDesc.Len() );
+            ( sOut += '@' ) += sDesc;
 
-            aString += '@';
-            aString += rBmk.GetURL();
-            aString += String::CreateFromInt32( rBmk.GetDescription().Len() );
-            aString += '@';
-            aString += rBmk.GetDescription();
-
-            maAny <<= ::rtl::OUString( aString );
+            Sequence< sal_Int8 > aSeq( sOut.Len() );
+            memcpy( aSeq.getArray(), sOut.GetBuffer(), sOut.Len() );
+            maAny <<= aSeq;
         }
         break;
 
         case( FORMAT_STRING ):
+            maAny <<= ::rtl::OUString( rBmk.GetURL() );
+            break;
+
         case( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ):
         {
-            maAny <<= ::rtl::OUString( rBmk.GetURL() );
+            ByteString sURL( rBmk.GetURL(), eSysCSet );
+            Sequence< sal_Int8 > aSeq( sURL.Len() );
+            memcpy( aSeq.getArray(), sURL.GetBuffer(), sURL.Len() );
+            maAny <<= aSeq;
         }
         break;
 
@@ -444,8 +456,8 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
             Sequence< sal_Int8 > aSeq( 2048 );
 
             memset( aSeq.getArray(), 0, 2048 );
-            strcpy( (char*) aSeq.getArray(), ByteString( rBmk.GetURL(), gsl_getSystemTextEncoding() ).GetBuffer() );
-            strcpy( (char*) aSeq.getArray() + 1024, ByteString( rBmk.GetDescription(), gsl_getSystemTextEncoding() ).GetBuffer() );
+            strcpy( (char*) aSeq.getArray(), ByteString( rBmk.GetURL(), eSysCSet).GetBuffer() );
+            strcpy( (char*) aSeq.getArray() + 1024, ByteString( rBmk.GetDescription(), eSysCSet ).GetBuffer() );
 
             maAny <<= aSeq;
         }
@@ -462,7 +474,7 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
             memset( &rFDesc1, 0, sizeof( FILEDESCRIPTOR ) );
             rFDesc1.dwFlags = FD_LINKUI;
 
-            ByteString aStr( rBmk.GetDescription(), gsl_getSystemTextEncoding() );
+            ByteString aStr( rBmk.GetDescription(), eSysCSet );
             for( USHORT nChar = 0; nChar < aStr.Len(); ++nChar )
                 if( strchr( "\\/:*?\"<>|", aStr.GetChar( nChar ) ) )
                     aStr.Erase( nChar--, 1 );
@@ -495,9 +507,31 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
 sal_Bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
                 const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    maAny <<= ::rtl::OUString( rINtImg.CopyExchange() );
+    SvMemoryStream aMemStm( 1024, 1024 );
 
-    return( maAny.hasValue() );
+    aMemStm.SetVersion( SOFFICE_FILEFORMAT_NOW );
+    rINtImg.Write( aMemStm, SotExchange::GetFormat( rFlavor ) );
+
+    maAny <<= Sequence< sal_Int8 >( (sal_Int8*) aMemStm.GetData(),
+                            aMemStm.Seek( STREAM_SEEK_TO_END ) );
+
+    return( maAny.hasValue() != NULL );
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool TransferableHelper::SetFileList( const FileList& rFileList,
+                const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+{
+    SvMemoryStream aMemStm( 4096, 4096 );
+
+    aMemStm.SetVersion( SOFFICE_FILEFORMAT_NOW );
+    aMemStm << rFileList;
+
+    maAny <<= Sequence< sal_Int8 >( (sal_Int8*) aMemStm.GetData(),
+                            aMemStm.Seek( STREAM_SEEK_TO_END ) );
+
+    return( maAny.hasValue() != NULL );
 }
 
 // -----------------------------------------------------------------------------
@@ -668,13 +702,27 @@ sal_Bool TransferableDataHelper::GetString( SotFormatStringId nFormat, String& r
 
 sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, String& rStr )
 {
-    const Any       aAny( GetAny( rFlavor ) );
-    ::rtl::OUString aOUString;
-    sal_Bool        bRet = aAny.hasValue() && ( aAny >>= aOUString );
+    const Any aAny( GetAny( rFlavor ) );
+    sal_Bool bRet = sal_False;
+    if( aAny.hasValue() )
+    {
+        ::rtl::OUString aOUString;
+        Sequence< sal_Int8 > aSeq;
+        bRet = sal_True;
+        if( aAny >>= aOUString )
+            rStr = aOUString;
+        else if( aAny >>= aSeq )
+        {
+            // depends on the dataflavour which kind of charset we use
+            // default to UTF8
+            // in other cases its better to use system charset
+            rtl_TextEncoding eCSet = gsl_getSystemTextEncoding();
 
-    if( bRet )
-        rStr = aOUString;
-
+            rStr = String( (sal_Char*)aSeq.getArray(), eCSet );
+        }
+        else
+            bRet = sal_False;
+    }
     return bRet;
 }
 
@@ -743,7 +791,24 @@ sal_Bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfe
 
     if( bRet )
     {
-        *xStm >> rGraphic;
+        DataFlavor aFlavor;
+        if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_BITMAP, aFlavor ) &&
+            aFlavor.MimeType == rFlavor.MimeType )
+        {
+            Bitmap aBmp;
+            *xStm >> aBmp;
+            rGraphic = aBmp;
+        }
+        else if( SotExchange::GetFormatDataFlavor(
+                            SOT_FORMAT_GDIMETAFILE, aFlavor ) &&
+                aFlavor.MimeType == rFlavor.MimeType )
+        {
+            GDIMetaFile aMtf;
+            *xStm >> aMtf;
+            rGraphic = aMtf;
+        }
+        else
+            *xStm >> rGraphic;
         bRet = ( xStm->GetError() == ERRCODE_NONE );
     }
 
@@ -819,7 +884,6 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
         case( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ):
         {
             String aString;
-
             if( GetString( rFlavor, aString ) )
             {
                 if( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR == nFormat )
@@ -941,6 +1005,54 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
         break;
     }
 
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool TransferableDataHelper::GetINetImage( SotFormatStringId nFormat,
+                                                INetImage& rINtImg )
+{
+    DataFlavor aFlavor;
+    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) &&
+             GetINetImage( aFlavor, rINtImg ) );
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool TransferableDataHelper::GetINetImage(
+        const ::com::sun::star::datatransfer::DataFlavor& rFlavor,
+        INetImage& rINtImg )
+{
+    SotStorageStreamRef xStm;
+    sal_Bool bRet = GetSotStorageStream( rFlavor, xStm );
+
+    if( bRet )
+        bRet = rINtImg.Read( *xStm, SotExchange::GetFormat( rFlavor ) );
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool TransferableDataHelper::GetFileList( SotFormatStringId nFormat,
+                                                FileList& rFileList )
+{
+    DataFlavor aFlavor;
+    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) &&
+             GetFileList( aFlavor, rFileList ) );
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool TransferableDataHelper::GetFileList(
+            const ::com::sun::star::datatransfer::DataFlavor& rFlavor,
+            FileList& rFileList )
+{
+    SotStorageStreamRef xStm;
+    sal_Bool bRet = GetSotStorageStream( rFlavor, xStm );
+
+    if( bRet )
+        bRet = ERRCODE_NONE == ( *xStm >> rFileList ).GetError();
     return bRet;
 }
 
