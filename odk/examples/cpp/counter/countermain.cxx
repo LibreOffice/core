@@ -2,9 +2,9 @@
  *
  *  $RCSfile: countermain.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:53:08 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -95,7 +95,11 @@ int SAL_CALL main(int argc, char **argv)
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), // loader for component
 #ifdef UNX
+#ifdef MACOSX
+            OUString::createFromAscii("counter.uno.dylib"),     // component location
+#else
             OUString::createFromAscii("counter.uno.so"),        // component location
+#endif
 #else
             OUString::createFromAscii("counter.uno.dll"),       // component location
 #endif
