@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-06 11:22:50 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 14:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,9 @@
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
+#ifndef _UNTOOLS_UCBLOCKBYTES_HXX
+#include <unotools/ucblockbytes.hxx>
+#endif
 
 // compatiblity: DatabaseCursorType is dead, but for compatiblity reasons we still have to write it ...
 namespace com {
@@ -247,7 +250,6 @@ enum DatabaseCursorType
 };
 
 } } } }
-
 
 #ifndef _COMPHELPER_INTERACTION_HXX_
 #include <comphelper/interaction.hxx>
@@ -1466,7 +1468,7 @@ sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const ::rtl::O
             DirEntry aDirEntry( aFileName );
             if( aDirEntry.Exists() )
             {
-                pStream = new SvFileStream( aFileName, STREAM_READ );
+                pStream = ::utl::UcbStreamHelper::CreateStream(aFileName, STREAM_READ);
                 if( pStream->GetError() != ERRCODE_NONE )
                 {
                     delete pStream;
