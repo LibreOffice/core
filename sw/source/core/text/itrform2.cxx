@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-08 13:42:08 $
+ *  last change: $Author: fme $ $Date: 2002-03-19 08:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,7 +652,11 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 #endif
 
         // the multi-portion has it's own format function
+#ifdef BIDI
+        if( pPor->IsMultiPortion() && ( !pMulti || pMulti->IsBidi() ) )
+#else
         if( pPor->IsMultiPortion() && !pMulti )
+#endif
             bFull = BuildMultiPortion( rInf, *((SwMultiPortion*)pPor) );
         else
             bFull = pPor->Format( rInf );
@@ -712,7 +716,6 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         if( pPor->IsFlyCntPortion() || ( pPor->IsMultiPortion() &&
             ((SwMultiPortion*)pPor)->HasFlyInCntnt() ) )
             SetFlyInCntBase();
-
         // 5964: bUnderFlow muss zurueckgesetzt werden, sonst wird beim
         //       naechsten Softhyphen wieder umgebrochen!
         if ( !bFull )
@@ -803,7 +806,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             }
             else if ( pPor->IsMultiPortion() || pPor->InFixMargGrp() ||
                       pPor->IsFlyCntPortion() || pPor->InNumberGrp() ||
-                      nCurrScript != nNextScript )
+                      pPor->InFldGrp() || nCurrScript != nNextScript )
                 // next portion should snap to grid
                 pGridKernPortion = 0;
         }
@@ -969,6 +972,12 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     xub_StrLen nNextChg = Min( nNextAttr, rInf.GetTxt().Len() );
 
     nNextAttr = pScriptInfo->NextScriptChg( rInf.GetIdx() );
+
+#ifdef BIDI
+    xub_StrLen nNextDir = pScriptInfo->NextDirChg( rInf.GetIdx() );
+    nNextAttr = Min( nNextAttr, nNextDir );
+#endif
+
     if( nNextChg > nNextAttr )
         nNextChg = nNextAttr;
 
@@ -1268,16 +1277,32 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
     if( !pPor )
     {
+#ifdef BIDI
+        if( !pMulti || pMulti->IsBidi() )
+#else
         if( !pMulti )
+#endif
         {   // We open a multiportion part, if we enter a multi-line part
             // of the paragraph.
             xub_StrLen nEnd = rInf.GetIdx();
+#ifdef BIDI
+            SwMultiCreator* pCreate = rInf.GetMultiCreator( nEnd, pMulti );
+#else
             SwMultiCreator* pCreate = rInf.GetMultiCreator( nEnd );
+#endif
             if( pCreate )
             {
                 SwMultiPortion* pTmp = NULL;
+
+#ifdef BIDI
+                if ( SW_MC_BIDI == pCreate->nId )
+                    pTmp = new SwBidiPortion( *pCreate, nEnd );
+                else if ( SW_MC_RUBY == pCreate->nId )
+                {
+#else
                 if( SW_MC_RUBY == pCreate->nId )
                 {
+#endif
                     Seek( rInf.GetIdx() );
 #ifdef VERTICAL_LAYOUT
                     sal_Bool bRubyTop;
