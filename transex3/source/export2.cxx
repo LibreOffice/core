@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-18 08:16:50 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,10 @@
 #include <tools/isofallback.hxx>
 #include <stdio.h>
 #include <osl/file.hxx>
+#include <osl/file.h>
 #include <rtl/ustring.hxx>
 #include <iostream>
+#include <tools/urlobj.hxx>
 
 using namespace std;
 //
@@ -541,15 +543,29 @@ DirEntry Export::GetTempFile()
 //  String sTempDir( GetEnv( "HOME" ), RTL_TEXTENCODING_ASCII_US );
     String sTempDir( String::CreateFromAscii( "/tmp" ));
 #endif
-
     rtl::OUString* sTempFilename = new rtl::OUString();
+
+    // Create a temp file
     int nRC = osl::FileBase::createTempFile( 0 , 0 , sTempFilename );
     if( nRC ) printf(" osl::FileBase::createTempFile RC = %d",nRC);
-    ByteString sTmp( sTempFilename->getStr() , RTL_TEXTENCODING_UTF8 );
+
+    String strTmp( *sTempFilename  );
+
+    INetURLObject::DecodeMechanism eMechanism = INetURLObject::DECODE_TO_IURI;
+    String sDecodedStr = INetURLObject::decode( strTmp , '%' , eMechanism );
+    ByteString sTmp( sDecodedStr , RTL_TEXTENCODING_UTF8 );
+
 #ifdef WNT
     sTmp.SearchAndReplace("file:///","");
     sTmp.SearchAndReplaceAll('/','\\');
 #else
+    // Set file permission to 644
+     const sal_uInt64 nPerm = osl_File_Attribute_OwnRead | osl_File_Attribute_OwnWrite |
+                             osl_File_Attribute_GrpRead | osl_File_Attribute_OthRead ;
+
+    nRC = osl::File::setAttributes( *sTempFilename , nPerm );
+    if( nRC ) printf(" osl::File::setAttributes RC = %d",nRC);
+
     sTmp.SearchAndReplace("file://","");
 #endif
     DirEntry aDirEntry( sTmp );
