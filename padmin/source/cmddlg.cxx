@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmddlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:44:08 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,8 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
     // configuring as printer is only sensible in default print system
     if( PrinterInfoManager::get().getType() == PrinterInfoManager::Default )
         m_nPrinterEntry = m_aConfigureBox.InsertEntry( String( PaResId( RID_RTS_CMD_STR_CONFIGURE_PRINTER ) ) );
+    else
+        m_nPrinterEntry = -1;
     m_nFaxEntry = m_aConfigureBox.InsertEntry( String( PaResId( RID_RTS_CMD_STR_CONFIGURE_FAX ) ) );
     m_nPdfEntry = m_aConfigureBox.InsertEntry( String( PaResId( RID_RTS_CMD_STR_CONFIGURE_PDF ) ) );
 
