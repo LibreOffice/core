@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:59:49 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,10 @@ ULONG SmXMLWrapper::ReadThroughComponent(
     catch ( packages::WrongPasswordException& )
     {
         return ERRCODE_SFX_WRONGPASSWORD;
+    }
+    catch( packages::zip::ZipIOException& )
+    {
+        return ERRCODE_IO_BROKENPACKAGE;
     }
     catch ( uno::Exception& )
     {
