@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:04:19 $
+ *  last change: $Author: obo $ $Date: 2001-08-29 20:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
     text[ korean ] = "ì—°ê²°ë˜ì§€ ì•Šì€ ê·¸ë˜í”½";   \
     text[ turkish ] = "Bağlantısız grafik"; \
     text[ language_user1 ] = " ";   \
-    text[ finnish ] = "Linkittämätön kuva"; \
+    text[ finnish ] = "Linkitt?m?t? kuva";  \
     text[ catalan ] = "Imagen no vinculada";
 
  // pragma ----------------------------------------------------------------
@@ -137,7 +137,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "í˜•íƒœ(~S)";
         Text[ turkish ] = "~Artalan";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Nimellä";
+        Text[ finnish ] = "~Nimell?";
         Text[ catalan ] = "~Como";
     };
     ListBox LB_SELECTOR
@@ -254,8 +254,8 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     StringList [ finnish ] =
     {
-            < "Väri" ; Default ; > ;
-        < "Kuva" ; Default ; > ;
+            < "V?ri" ; Default ; > ;
+        < "Grafiikka" ; Default ; > ;
     };
     StringList [ catalan ] =
     {
@@ -700,7 +700,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "ì—°ê²°(~L)";
         Text[ turkish ] = "Bağla";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Linkitä";
+        Text[ finnish ] = "~Linkki";
         Text[ catalan ] = "~Vincular";
     };
     FixedText FT_FILE
@@ -824,7 +824,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "ë°”ë‘‘íŒì‹(~T)";
         Text[ turkish ] = "~Döşe";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Vierekkäin";
+        Text[ finnish ] = "~Vierekk?in";
         Text[ catalan ] = "~Mosaico";
     };
     Control WND_POSITION
@@ -876,7 +876,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ chinese_traditional ] = "é è¦½(~V)";
         Text[ arabic ] = "ãÚÇíäÉ";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Esikatselu";
+        Text[ finnish ] = "Esi~katselu";
         Text[ catalan ] = "Previsuali~zación";
     };
     String STR_BROWSE
@@ -922,6 +922,7 @@ TabPage RID_SVXPAGE_BACKGROUND
     Text[ catalan ] = "Fondo";
 };
  // ********************************************************************** EOF
+
 
 
 
