@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl2.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-07 10:33:55 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,7 +592,7 @@ IcnGridMap_Impl::IcnGridMap_Impl(SvxIconChoiceCtrl_Impl* pView)
 
 IcnGridMap_Impl::~IcnGridMap_Impl()
 {
-    DELETEZ(_pGridMap);
+    delete[] _pGridMap, _pGridMap=0;
 }
 
 void IcnGridMap_Impl::Expand()
@@ -611,7 +611,7 @@ void IcnGridMap_Impl::Expand()
         BOOL* pNewGridMap = new BOOL[nNewGridRows*nNewGridCols];
         memset( pNewGridMap, 0, nNewGridRows * nNewGridCols * sizeof(BOOL) );
         memcpy( pNewGridMap, _pGridMap, _nGridRows * _nGridCols * sizeof(BOOL) );
-        delete _pGridMap;
+        delete[] _pGridMap;
         _pGridMap = pNewGridMap;
         _nGridRows = nNewGridRows;
         _nGridCols = nNewGridCols;
@@ -820,7 +820,7 @@ void IcnGridMap_Impl::Clear()
 {
     if( _pGridMap )
     {
-        DELETEZ(_pGridMap);
+        delete[] _pGridMap, _pGridMap=0;
         _nGridRows = 0;
         _nGridCols = 0;
         _aLastOccupiedGrid.SetEmpty();
