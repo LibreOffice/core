@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:39:08 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,8 @@
 #ifndef _SV_SALINST_HXX
 #include <salinst.hxx>
 #endif
-#ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#ifndef _SV_SALFRAME_H
+#include <salframe.h>
 #endif
 #ifndef _OSL_SIGNAL_H_
 #include <osl/signal.h>
@@ -361,11 +361,6 @@ END_C
 
 SalData::SalData()
 {
-    argv_           = 0;
-    argc_           = 0;
-
-    pTimerProc_     = 0;
-
     memset( sig_, 0, sizeof( sig_ ) ); // SIG_DFL
     bNoExceptions_  = !!getenv( "SAL_NOSEGV" );
 
@@ -375,7 +370,7 @@ SalData::SalData()
 
     hMainThread_    = pthread_self();
 
-    pFirstInstance_ = NULL;
+    pInstance_      = NULL;
     pFirstFrame_    = NULL;
 }
 
@@ -401,12 +396,12 @@ long SalData::Close() const
     if( !pFirstFrame_ )
         return 1;
 
-    SalFrame *pFrame = pFirstFrame_;
+    X11SalFrame *pFrame = pFirstFrame_;
     while( pFrame )
     {
-        if( !pFrame->maFrameData.Close() )
+        if( !pFrame->Close() )
             return 0;
-        pFrame = pFrame->maFrameData.GetNextFrame();
+        pFrame = pFrame->GetNextFrame();
     }
     return 1;
 }
@@ -416,21 +411,14 @@ long SalData::ShutDown() const
     if( !pFirstFrame_ )
         return 1;
 
-    SalFrame *pFrame = pFirstFrame_;
+    X11SalFrame *pFrame = pFirstFrame_;
     while( pFrame )
     {
-        if( !pFrame->maFrameData.ShutDown() )
+        if( !pFrame->ShutDown() )
             return 0;
-        pFrame = pFrame->maFrameData.GetNextFrame();
+        pFrame = pFrame->GetNextFrame();
     }
     return 1;
-}
-
-XubString SalData::GetCommandLineParam( USHORT nParam ) const
-{
-    if( !nParam ) { return aBinaryPath_; }
-    if( nParam >= argc_ ) return String();
-    return String( argv_[nParam], osl_getThreadTextEncoding() );
 }
 
 SalDisplay *SalData::GetDisplay( Display *pDisplay )
@@ -444,18 +432,9 @@ SalDisplay *SalData::GetDisplay( Display *pDisplay )
     return pSalDisplay;
 }
 
-void SalData::Init( int *pArgc, char *ppArgv[] )
+void SalData::Init()
 {
-    // Pfad zum Executable bestimmen
-    char aFilePath[ PATH_MAX ];
-    ::rtl::OUString aPath;
-    osl_getExecutableFile( &aPath.pData );
-
-    aBinaryPath_ = aPath;
-
-    argc_           = *pArgc;
-    argv_           = ppArgv;
-    pXLib_->Init( pArgc, ppArgv );
+    pXLib_->Init();
 }
 
 // -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -519,9 +498,8 @@ SalXLib::~SalXLib()
 }
 
 
-void SalXLib::Init( int *pArgc, char *ppArgv[] )
+void SalXLib::Init()
 {
-    SalData *pSalData = GetSalData();
     SalI18N_InputMethod* pInputMethod = new SalI18N_InputMethod;
     pInputMethod->SetLocale();
     XrmInitialize();
@@ -577,7 +555,8 @@ void SalXLib::Init( int *pArgc, char *ppArgv[] )
 
     if ( !pDisp )
     {
-        rtl::OUString aProgramFileURL = pSalData->GetCommandLineParam(0);
+        rtl::OUString aProgramFileURL;
+        osl_getExecutableFile( &aProgramFileURL.pData );
         rtl::OUString aProgramSystemPath;
         osl_getSystemPathFromFileURL (aProgramFileURL.pData, &aProgramSystemPath.pData);
         rtl::OString  aProgramName = rtl::OUStringToOString(
@@ -648,15 +627,15 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
 
     if( ! bIgnoreXErrors_ )
     {
-        SalFrame* pFrame = GetSalData()->pFirstFrame_;
+        X11SalFrame* pFrame = GetSalData()->pFirstFrame_;
         while( pFrame )
         {
-            if( pFrame->maFrameData.GetStyle() & SAL_FRAME_STYLE_CHILD )
+            if( pFrame->GetStyle() & SAL_FRAME_STYLE_CHILD )
             {
                 bIgnoreXErrors_ = TRUE;
                 break;
             }
-            pFrame = pFrame->maFrameData.GetNextFrame();
+            pFrame = pFrame->GetNextFrame();
         }
     }
 
