@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 12:23:18 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2115,10 +2115,9 @@ void SwFrm::AppendDrawObj( SwDrawContact *pNew )
         SwDoc* pDoc = pNew->GetFmt()->GetDoc();
         if ( pDoc )
         {
-            if ( !pDoc->IsVisibleLayerId( pObj->GetLayer() ) )
-            {
-                pObj->SetLayer( pDoc->GetVisibleLayerIdByInvisibleOne( pObj->GetLayer() ) );
-            }
+            // OD 21.08.2003 #i18447# - in order to consider group object correct
+            // use new method <SwDrawContact::MoveObjToVisibleLayer(..)>
+            pNew->MoveObjToVisibleLayer( pObj );
         }
     }
 
