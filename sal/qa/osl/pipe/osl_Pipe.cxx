@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Pipe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $  $Date: 2003-11-18 16:39:46 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@ using namespace rtl;
 */
 inline void printBool( sal_Bool bOk )
 {
-    printf( "#printBool# " );
-    ( sal_True == bOk ) ? printf( "YES!\n" ): printf( "NO!\n" );
+    t_print("#printBool# " );
+    ( sal_True == bOk ) ? t_print("YES!\n" ): t_print("NO!\n" );
 }
 
 /** print a UNI_CODE String.
@@ -89,9 +89,9 @@ inline void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    printf( "#printUString_u# " );
+    t_print("#printUString_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    printf( "%s\n", aString.getStr( ) );
+    t_print("%s\n", aString.getStr( ) );
 }
 
 /** print last error of pipe system.
@@ -99,43 +99,43 @@ inline void printUString( const ::rtl::OUString & str )
 inline void printPipeError( ::osl::Pipe aPipe )
 {
     oslPipeError nError = aPipe.getError( );
-    printf( "#printPipeError# " );
+    t_print("#printPipeError# " );
     switch ( nError ) {
         case osl_Pipe_E_None:
-            printf( "Success!\n" );
+            t_print("Success!\n" );
             break;
         case osl_Pipe_E_NotFound:
-            printf( "The returned error is: Not found!\n" );
+            t_print("The returned error is: Not found!\n" );
             break;
         case osl_Pipe_E_AlreadyExists:
-            printf( "The returned error is: Already exist!\n" );
+            t_print("The returned error is: Already exist!\n" );
             break;
         case osl_Pipe_E_NoProtocol:
-            printf( "The returned error is: No protocol!\n" );
+            t_print("The returned error is: No protocol!\n" );
             break;
         case osl_Pipe_E_NetworkReset:
-            printf( "The returned error is: Network reset!\n" );
+            t_print("The returned error is: Network reset!\n" );
             break;
         case osl_Pipe_E_ConnectionAbort:
-            printf( "The returned error is: Connection aborted!\n" );
+            t_print("The returned error is: Connection aborted!\n" );
             break;
         case osl_Pipe_E_ConnectionReset:
-            printf( "The returned error is: Connection reset!\n" );
+            t_print("The returned error is: Connection reset!\n" );
             break;
         case osl_Pipe_E_NoBufferSpace:
-            printf( "The returned error is: No buffer space!\n" );
+            t_print("The returned error is: No buffer space!\n" );
             break;
         case osl_Pipe_E_TimedOut:
-            printf( "The returned error is: Timeout!\n" );
+            t_print("The returned error is: Timeout!\n" );
             break;
         case osl_Pipe_E_ConnectionRefused:
-            printf( "The returned error is: Connection refused!\n" );
+            t_print("The returned error is: Connection refused!\n" );
             break;
         case osl_Pipe_E_invalidError:
-            printf( "The returned error is: Invalid error!\n" );
+            t_print("The returned error is: Invalid error!\n" );
             break;
         default:
-            printf( "The returned error is: Number %d, Unknown Error\n", nError );
+            t_print("The returned error is: Number %d, Unknown Error\n", nError );
             break;
     }
 }
@@ -569,6 +569,7 @@ namespace osl_Pipe
 
     /** testing the method:
         inline oslPipeError SAL_CALL accept(StreamPipe& Connection);
+        please refer to StreamPipe::recv
     */
     class accept : public CppUnit::TestFixture
     {
@@ -875,24 +876,12 @@ namespace osl_StreamPipe
     };*/ // class assign
 
 
-
-    /**  tester comment:
-
-        begin of pipe transmission test, this test code will block in accept operation thus can not test further
-        function as well as send recv read write. the pure implementation of this pipe message transmission
-        will work perfect on all platforms, but it will not run through within the testshl2 environment.
-        the same problem occured in Socket test, also the transmission part of read and write, the thread
-        mechanism is OK on Mutex test, but it will block in data transmission. we will dig further into for this
-        bugs. the five member functions are untested:
-            read(),             write(),            send(),         recv(),         accept().
-    */
-
     /** wait _nSec seconds.
     */
     void thread_sleep( sal_Int32 _nSec )
     {
         /// print statement in thread process must use fflush() to force display.
-        printf( "# wait %d seconds. ", _nSec );
+        t_print("# wait %d seconds. ", _nSec );
         fflush(stdout);
 
 #ifdef WNT                               //Windows
@@ -901,7 +890,7 @@ namespace osl_StreamPipe
 #if ( defined UNX ) || ( defined OS2 )   //Unix
         sleep( _nSec );
 #endif
-        printf( "# done\n" );
+        t_print("# done\n" );
     }
     // test read/write & send/recv data to pipe
     class PipeClientThread : public Thread
@@ -920,19 +909,19 @@ namespace osl_StreamPipe
 
             ::osl::StreamPipe aSenderPipe( aTestPipe, osl_Pipe_OPEN );  // aTestPipe is a string = "TestPipe"
             if ( aSenderPipe.is() == sal_False )
-            printf("# pipe open failed! \n");
+            t_print("pipe open failed! \n");
 
         nChars = aSenderPipe.read( buf, strlen( pTestString1 ) + 1 );
         if ( nChars < 0 )
         {
-            printf("# read failed! \n");
+            t_print("read failed! \n");
             return;
         }
-        printf("# buffer is %s \n", buf);
+        t_print("buffer is %s \n", buf);
         nChars = aSenderPipe.send( pTestString2, strlen( pTestString2 ) + 1 );
         if ( nChars < 0 )
         {
-            printf("# client send failed! \n");
+            t_print("client send failed! \n");
             return;
         }
         }
@@ -943,39 +932,49 @@ namespace osl_StreamPipe
     {
     public:
         sal_Char buf[256];
+        ::osl::StreamPipe aListenPipe;  //( aTestPipe, osl_Pipe_CREATE );
+        ::osl::StreamPipe aConnectionPipe;
+        PipeServerThread( )
+        {
+            aListenPipe.create( aTestPipe, osl_Pipe_CREATE );
+        }
         ~PipeServerThread( )
         {
+            aListenPipe.close();
         }
     protected:
         void SAL_CALL run( )
         {
             //create pipe.
             sal_Int32 nChars;
-            ::osl::StreamPipe aListenPipe( aTestPipe, osl_Pipe_CREATE );
+            //::osl::StreamPipe aListenPipe( aTestPipe, osl_Pipe_CREATE );
             if ( aListenPipe.is() == sal_False )
-            printf("# pipe create failed! \n");
-            ::osl::StreamPipe aConnectionPipe;
+            t_print("pipe create failed! \n");
+            //::osl::StreamPipe aConnectionPipe;
 
             //start server and wait for connection.
             if ( osl_Pipe_E_None != aListenPipe.accept( aConnectionPipe ) )
-                printf("# pipe accept failed!");
+            {
+        t_print("pipe accept failed!");
+        return;
+        }
         // write to pipe
         nChars = aConnectionPipe.write( pTestString1, strlen( pTestString1 ) + 1 );
         if ( nChars < 0)
         {
-            printf("# server write failed! \n");
+            t_print("server write failed! \n");
             return;
         }
         nChars = aConnectionPipe.recv( buf, 256 );
 
           if ( nChars < 0)
         {
-            printf("# server receive failed! \n");
+            t_print("server receive failed! \n");
             return;
         }
         //thread_sleep( 2 );
-        printf( "# received message is: %s\n", buf );
-        aConnectionPipe.close();
+        t_print("# received message is: %s\n", buf );
+        //aConnectionPipe.close();
         }
     };
 
@@ -1001,9 +1000,22 @@ namespace osl_StreamPipe
 
             CPPUNIT_ASSERT_MESSAGE( "test send/recv/write/read.", strcmp( myClientThread.buf, pTestString1 ) == 0 && strcmp( myServerThread.buf, pTestString2 ) == 0 );
         }
+        //close pipe when accept
+        void recv_002()
+        {
+            PipeServerThread myServerThread;
+            PipeClientThread myClientThread;
+            myServerThread.create( );
+            thread_sleep( 1 );
+            myServerThread.aListenPipe.close();
+            myServerThread.join( );
+            //no condition judgement here, if the case could finish excuting within 1 or 2 seconds, it passes.
+
+        }
 
         CPPUNIT_TEST_SUITE( recv );
         CPPUNIT_TEST( recv_001 );
+        CPPUNIT_TEST( recv_002 );
         CPPUNIT_TEST_SUITE_END( );
     }; // class recv
 
