@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 15:52:33 $
+ *  last change: $Author: fs $ $Date: 2001-01-30 08:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,31 +87,6 @@ namespace com { namespace sun { namespace star { namespace lang { class XMultiSe
 
 namespace dbaui
 {
-    #define SV_ITEM_ID_DBTEXTITEM   SV_ITEM_ID_LBOXSTRING
-
-    //========================================================================
-    //= DSBrowserString
-    //========================================================================
-    class DSBrowserString : public SvLBoxString
-    {
-        sal_Bool    m_bSelected;
-
-    public:
-        DSBrowserString(SvLBoxEntry* _pEntry, sal_uInt16 _nFlags, const XubString& _rStr)
-            :SvLBoxString(_pEntry, _nFlags, _rStr)
-            ,m_bSelected(sal_False)
-        {
-        }
-
-        virtual USHORT IsA();
-
-        virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
-        virtual void InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* _pViewData);
-
-        sal_Bool    isSelected() const { return m_bSelected; }
-        void        Select(sal_Bool _bSelect) { m_bSelected = _bSelect; }
-    };
-
     //========================================================================
     //= DBTreeListModel
     //========================================================================
@@ -125,7 +100,9 @@ namespace dbaui
             sal_Bool    bTable;
         };
 
-        DBTreeListModel();
+        DBTreeListModel()
+        {
+        }
     };
 }
 
