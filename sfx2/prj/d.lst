@@ -145,6 +145,7 @@ hedabu: ..\inc\xmlmetae.hxx %_DEST%\inc%_EXT%\sfx2\xmlmetae.hxx
 hedabu: ..\inc\xmlmetai.hxx %_DEST%\inc%_EXT%\sfx2\xmlmetai.hxx
 hedabu: ..\inc\cntids.hrc %_DEST%\inc%_EXT%\sfx2\cntids.hrc
 hedabu: ..\inc\basmgr.hxx %_DEST%\inc%_EXT%\sfx2\basmgr.hxx
+hedabu: ..\inc\imagemgr.hxx %_DEST%\inc%_EXT%\sfx2\imagemgr.hxx
 
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
