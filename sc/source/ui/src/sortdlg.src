@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:19:43 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 20:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ chinese_simplified ] = "Θ»Ίσ°΄";
         Text[ russian ] = "Ηΰςεμ οξ";
         Text[ polish ] = "Nastκpnie wed³ug";
-        Text[ japanese ] = "2”Τ–Ϊ‚Ι—Dζ‚³‚κ‚ι·°";
+        Text[ japanese ] = "‚Q”Τ–Ϊ‚Ι—Dζ‚³‚κ‚ι·°";
         Text[ chinese_traditional ] = "µM«α«φ·Σ";
         Text[ arabic ] = "Λγ ΝΣΘ";
         Text[ greek ] = "Κατόπιν κατά";
@@ -342,7 +342,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ chinese_simplified ] = "Θ»Ίσ°΄";
         Text[ russian ] = "Β οξρλεδνώώ ξχεπεδό οξ";
         Text[ polish ] = "Nastκpnie wed³ug";
-        Text[ japanese ] = "3”Τ–Ϊ‚Ι—Dζ‚³‚κ‚ι·°";
+        Text[ japanese ] = "‚R”Τ–Ϊ‚Ι—Dζ‚³‚κ‚ι·°";
         Text[ chinese_traditional ] = "µM«α«φ·Σ";
         Text[ arabic ] = "Λγ ΝΣΘ";
         Text[ greek ] = "Κατόπιν κατά";
@@ -410,11 +410,11 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ chinese_simplified ] = "ΗψΣςΊ¬ΣΠ XX ±κΗ©(~H)";
         Text[ russian ] = "Ξαλΰρςό ρξδεπζθς ηΰγξλξβκθXX";
         Text[ polish ] = "Obszar zawiera XXnag³σwki (σw)";
-        Text[ japanese ] = "”ΝΝ‚ΙXX‚Μ€–Ϊ—“‚πά‚ή(~H)";
+        Text[ japanese ] = "”ΝΝ‚Ι XX ‚Μ€–Ϊ—“‚πά‚ή(~H)";
         Text[ chinese_traditional ] = "°Ο°μ§t¦³ XX ΌΠΕÒ(~H)";
         Text[ arabic ] = "ΡΓΣΗπXX ΚΚΦγδ ΗαγδΨήΙ";
         Text[ greek ] = "Η περιοχή περιέχει  XX κεφαλίδες";
-        Text[ korean ] = "ΏµΏªΐΊ  XX ~ ΈΣΈ®±Ϋΐ» ΖχΗΤΗΥ΄Ο΄Ω.";
+        Text[ korean ] = "Ήόΐ§Ώ΅΄Β  XX ~ ΈΣΈ®±ΫΐΜ ΖχΗΤµΗΎξ ΐΦ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Bφlόm  XXbaώlύklarύ iηeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -441,7 +441,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ chinese_traditional ] = "°Ο°μ§t¦³ΔζΌΠΓD(~H)";
         Text[ arabic ] = "ΚΚΦγδ ΗαγδΨήΙ ΡΔζΣ ΓΪγΟΙ";
         Text[ greek ] = "Η περιοχή περιέχει κεφαλίδες στηλών";
-        Text[ korean ] = "ΏµΏªΐΊ Ώ­ ΈΣΈ®±Ϋΐ» ΖχΗΤΗΟ°ν ΐΦ½ΐ΄Ο΄Ω.(~H)";
+        Text[ korean ] = "Ήόΐ§Ώ΅΄Β Ώ­ ΈΣΈ®±ΫΐΜ ΖχΗΤµΗΎξ ΐΦ½ΐ΄Ο΄Ω.(~H)";
         Text[ turkish ] = "Bφlόm ~sόtun baώlύklarύ iηeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -468,7 +468,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ chinese_traditional ] = "°Ο°μ§t¦³¦CΌΠΓD(~R)";
         Text[ arabic ] = "ΚΚΦγδ ΗαγδΨήΙ ΡΔζΣ Υέζέ";
         Text[ greek ] = "Η περιοχή περιέχει κεφαλίδες γραμμών";
-        Text[ korean ] = "ΏµΏªΐΊ Ηΰ ΈΣΈ®±Ϋΐ» ΖχΗΤΗΟ°ν ΐΦ½ΐ΄Ο΄Ω.(~R)";
+        Text[ korean ] = "Ήόΐ§Ώ΅΄Β Ηΰ ΈΣΈ®±ΫΐΜ ΖχΗΤµΗΎξ ΐΦ½ΐ΄Ο΄Ω.(~R)";
         Text[ turkish ] = "Bφlόm sa~tύr baώlύklarύ iηeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -527,7 +527,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ chinese_traditional ] = "½Ζ»s±Ζ§Ηµ²ªG¨μ(~C)";
         Text[ arabic ] = "δΣΞ δΚνΜΙ ΗαέΡÒ Εαμ";
         Text[ greek ] = "Αντιγραφή αποτελεσμάτων ταξινόμησης στο";
-        Text[ korean ] = "Ώ΅ Α¤·ΔµΘ °α°ϊΈ¦ΊΉ»η :(~C)";
+        Text[ korean ] = "Α¤·Δ °α°ϊΈ¦ ...Ώ΅ ΊΉ»η :(~C)";
         Text[ turkish ] = "Sύralama sonuηlarύnύn kopyalanacaπύ ~yer";
         Text[ language_user1 ] = " ";
     };
@@ -572,7 +572,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ chinese_traditional ] = "¦Ϋ­q±Ζ§Η³W«h(~O)";
         Text[ arabic ] = "ΚΡΚνΘ ΗαέΡÒ ΚΘΪΗπ αΚΪΡνέ ΗαγΣΚΞΟγ";
         Text[ greek ] = "Σειρά ταξινόμησης οριζόμενη από τον χρήστη";
-        Text[ korean ] = "ΏάΊΞ Α¤·Δ ΌψΌ­(~O)";
+        Text[ korean ] = "»ηΏλΐΪ°΅ Α¤ΐΗΗΡ Α¤·Δ ΌψΌ­(~O)";
         Text[ turkish ] = "~Kullanύcύ tanύmlύ sύralama dόzeni";
         Text[ language_user1 ] = " ";
     };
@@ -606,7 +606,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ chinese_simplified ] = "΄ΣΙΟΟςΟΒ(ΠΠΕΕΠς) (~T)";
         Text[ russian ] = "Ρβεπυσ βνθη (ρξπςθπξβκΰ ρςπξκ)";
         Text[ polish ] = "Sortuj wiersze od gσry do do³u";
-        Text[ japanese ] = "γ‚©‚η‰Ί‚Φ(s‚π•ΐ‚Χ‘Φ‚¦‚ι) (~T)";
+        Text[ japanese ] = "γ‚©‚η‰Ί‚Φ(s‚π•ΐ‚Χ‘Φ‚¦‚ι)(~T)";
         Text[ chinese_traditional ] = "±q¤W¦V¤U(±Ζ§Η¦C) (~T)";
         Text[ arabic ] = "γδ ΓΪαμ Εαμ ΓΣέα (έΡÒ ΗαΥέζέ)";
         Text[ greek ] = "Από πάνω πρ~ος τα κάτω (ταξινόμηση γραμμών)";
@@ -635,7 +635,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ chinese_simplified ] = "΄ΣΧσΟςΣÒ(ΑΠΕΕΠς) (~L)";
         Text[ russian ] = "Ρλεβΰ νΰοπΰβξ (ρξπςθπξβκΰ ρςξλαφξβ)";
         Text[ polish ] = "Sortuj kolumny od lewej do prawej";
-        Text[ japanese ] = "¶‚©‚η‰E‚Φ(—ρ‚π•ΐ‚Χ‘Φ‚¦‚ι) (~L)";
+        Text[ japanese ] = "¶‚©‚η‰E‚Φ(—ρ‚π•ΐ‚Χ‘Φ‚¦‚ι)(~L)";
         Text[ chinese_traditional ] = "±q¥ª¦V¥k(Δζ±Ζ§Η)(~L)";
         Text[ arabic ] = "γδ ΗανΣΗΡ Εαμ Ηανγνδ (έΡÒ ΗαΓΪγΟΙ)";
         Text[ greek ] = "Από αριστερά προς δεξιά (Ταξινόμηση στηλών)";
