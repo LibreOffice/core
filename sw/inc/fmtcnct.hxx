@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtcnct.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 12:52:37 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ SwFmtChain &SwFmtChain::operator=( const SwFmtChain &rCpy )
 }
 
 
-#ifndef MACOSX
+#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
 // GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwFmtChain &SwAttrSet::GetChain(BOOL bInP) const
     { return (const SwFmtChain&)Get( RES_CHAIN,bInP); }
