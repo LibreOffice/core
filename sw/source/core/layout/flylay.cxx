@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:47:26 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,7 +687,7 @@ void SwPageFrm::AppendFly( SwFlyFrm *pNew )
         for ( USHORT i = 0; i < rObjs.Count(); ++i )
         {
             SdrObject *pO = rObjs[i];
-            if( pO->IsWriterFlyFrame() )
+            if( pO->ISA(SwVirtFlyDrawObj) )
             {
                 SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                 if( pFly->IsFlyFreeFrm() && !((SwFlyFreeFrm*)pFly)->GetPage() )
@@ -1005,7 +1005,7 @@ SwFrm *SwPageFrm::PlaceFly( SwFlyFrm *pFly, SwFrmFmt *pFmt,
 BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
 {
     BOOL bRet = TRUE;
-    if ( pSdrObj->IsWriterFlyFrame() )
+    if ( pSdrObj->ISA(SwVirtFlyDrawObj) )
     {
         const SwFlyFrm *pFly = ((const SwVirtFlyDrawObj*)pSdrObj)->GetFlyFrm();
         if( pFly->IsFlyLayFrm() )
@@ -1211,8 +1211,8 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             {
                 nTop = (*fnRect->fnYInc)( (aSnapRect.*fnRect->fnGetTop)(),
                                           rUL.GetLower() + nTmpH - nHeight );
-                nTmpH = bVert ? pSdrObj->GetBoundRect().GetWidth() :
-                                pSdrObj->GetBoundRect().GetHeight();
+                nTmpH = bVert ? pSdrObj->GetCurrentBoundRect().GetWidth() :
+                                pSdrObj->GetCurrentBoundRect().GetHeight();
             }
             nHeight = 2*nHeight - nTmpH - rUL.GetLower() - rUL.GetUpper();
             (rRect.*fnRect->fnSetTopAndHeight)( nTop, nHeight );
