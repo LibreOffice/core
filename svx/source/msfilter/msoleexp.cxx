@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *  last change: $Author: dr $ $Date: 2001-06-06 12:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,17 +98,20 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
                 UINT32 n1;
                 USHORT n2, n3;
                 BYTE b8, b9, b10, b11, b12, b13, b14, b15;
-            } aGlNmIds[3];
+            } aGlNmIds[4];
         } aArr[] = {
             { OLE_STARMATH_2_MATHTYPE, "MathType 3.x",
-                {SO3_SM_CLASSID_50, SO3_SM_CLASSID_40, SO3_SM_CLASSID_30 }},
+                {SO3_SM_CLASSID_60, SO3_SM_CLASSID_50,
+                 SO3_SM_CLASSID_40, SO3_SM_CLASSID_30 }},
             { OLE_STARWRITER_2_WINWORD, "MS Word 97",
-                {SO3_SW_CLASSID_50, SO3_SW_CLASSID_40, SO3_SW_CLASSID_30 }},
+                {SO3_SW_CLASSID_60, SO3_SW_CLASSID_50,
+                 SO3_SW_CLASSID_40, SO3_SW_CLASSID_30 }},
             { OLE_STARCALC_2_EXCEL, "MS Excel 97",
-                {SO3_SC_CLASSID_50, SO3_SC_CLASSID_40, SO3_SC_CLASSID_30 }},
+                {SO3_SC_CLASSID_60, SO3_SC_CLASSID_50,
+                 SO3_SC_CLASSID_40, SO3_SC_CLASSID_30 }},
             { OLE_STARIMPRESS_2_POWERPOINT, "MS PowerPoint 97",
-                {SO3_SIMPRESS_CLASSID_50, SO3_SIMPRESS_CLASSID_40,
-                 SO3_SIMPRESS_CLASSID_30 }},
+                {SO3_SIMPRESS_CLASSID_60, SO3_SIMPRESS_CLASSID_50,
+                 SO3_SIMPRESS_CLASSID_40, SO3_SIMPRESS_CLASSID_30 }},
             { 0,0 }
         };
 
@@ -116,7 +119,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
         for( const _ObjExpType* pArr = aArr; !bFnd && pArr->nFlag; ++pArr )
             if( GetFlags() & pArr->nFlag )
             {
-                for ( int n = 0; !bFnd && n < 3; ++n )
+                for ( int n = 0; !bFnd && n < 4; ++n )
                 {
                     const _ObjExpType::_GlobalNameIds& rId = pArr->aGlNmIds[ n ];
                     SvGlobalName aGlbNm( rId.n1, rId.n2, rId.n3,
