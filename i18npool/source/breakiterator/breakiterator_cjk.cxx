@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_cjk.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:33:55 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
         const LineBreakHyphenationOptions& hOptions,
         const LineBreakUserOptions& bOptions ) throw(RuntimeException)
 {
-        LineBreakResults result;
+        LineBreakResults lbr;
 
         if (bOptions.allowPunctuationOutsideMargin &&
                 bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 &&
@@ -140,9 +140,9 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
                 nStartPos--;
         }
 
-        result.breakIndex = nStartPos;
-        result.breakType = BreakType::WORDBOUNDARY;
-        return result;
+        lbr.breakIndex = nStartPos;
+        lbr.breakType = BreakType::WORDBOUNDARY;
+        return lbr;
 }
 //      ----------------------------------------------------
 //      class BreakIterator_zh
@@ -164,6 +164,7 @@ BreakIterator_zh::~BreakIterator_zh()
 BreakIterator_ja::BreakIterator_ja()
 {
         dict = new xdictionary("ja");
+        dict->setJapaneseWordBreak();
         cBreakIterator = "com.sun.star.i18n.BreakIterator_ja";
 }
 
