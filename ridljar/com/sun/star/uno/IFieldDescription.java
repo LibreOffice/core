@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IFieldDescription.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-18 14:04:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,11 @@ import java.lang.reflect.Field;
 /**
  * The <code>IFieldDescription</code> describes non
  * method members.
- * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2002-01-18 14:04:55 $
+ *
+ * @deprecated This interface does not cover all the features supported by the
+ * corresponding (unpublished) implementation.  But no client code should need
+ * to access this functionality, anyway.
+ *
  * @since       UDK3.0
  */
 public interface IFieldDescription extends IMemberDescription {
