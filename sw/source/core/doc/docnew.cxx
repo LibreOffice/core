@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-05 14:37:15 $
+ *  last change: $Author: jp $ $Date: 2001-04-06 17:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,7 +865,9 @@ void SwDoc::SetForbiddenCharacters( USHORT nLang,
     xForbiddenCharsTable->SetForbiddenCharacters( nLang, rFChars );
     if( pDrawModel )
     {
-        // add missing code - set Forbidden character table at the SdrModel
+        pDrawModel->SetForbiddenCharsTable( xForbiddenCharsTable );
+        if( !bInReading )
+            pDrawModel->ReformatAllTextObjects();
     }
 
     if( pLayout && !bInReading )
@@ -886,7 +888,9 @@ void SwDoc::ClearForbiddenCharacters( USHORT nLang )
 
         if( pDrawModel )
         {
-            // add missing code - set Forbidden character table at the SdrModel
+            pDrawModel->SetForbiddenCharsTable( xForbiddenCharsTable );
+            if( !bInReading )
+                pDrawModel->ReformatAllTextObjects();
         }
 
         if( pLayout && !bInReading )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-03 11:11:26 $
+ *  last change: $Author: jp $ $Date: 2001-04-06 17:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
+#endif
+#ifndef _FORBIDDENCHARACTERSTABLE_HXX
+#include <svx/forbiddencharacterstable.hxx>
 #endif
 
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
@@ -195,6 +198,8 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
                     delete pCpy;
                 }
     }
+
+    SetForbiddenCharsTable( pD->GetForbiddenCharacterTbl() );
 }
 
 /*************************************************************************
