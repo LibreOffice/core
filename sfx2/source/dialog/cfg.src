@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-05-17 12:08:38 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 21:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,8 @@
     Text[ korean ] = "ÀúÀå(~S)..."; \
     Text[ turkish ] = "~Kaydet..."; \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Guardar...";
+    Text[ catalan ] = "~Guardar...";    \
+    Text[ finnish ] = "~Tallenna";
 
 #define PUSHBUTTON_TEXT_RESET \
     Text = "Zur~ücksetzen" ; \
@@ -98,7 +99,7 @@
     Text [ french ] = "Re~staurer" ; \
     Text [ swedish ] = "~Återställ" ; \
     Text [ danish ] = "Nulstil" ; \
-    Text [ portuguese_brazilian ] = "~Zurücksetzen" ; \
+    Text [ portuguese_brazilian ] = "~Zur?ksetzen" ; \
     Text [ portuguese ] = "~Restaurar" ; \
     Text[ chinese_simplified ] = "ÖØÉè(~E)";    \
     Text[ russian ] = "Âîññòàíîâèòü";   \
@@ -110,7 +111,8 @@
     Text[ korean ] = "¿ø·¡´ë·Î(~E)";    \
     Text[ turkish ] = "Başa al";    \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Restablecer";
+    Text[ catalan ] = "~Restablecer";   \
+    Text[ finnish ] = "P~alauta";
 
 #define PUSHBUTTON_TEXT_LOAD \
 /* ### ACHTUNG: Neuer Text in Resource? La~den... : ~Laden... */\
@@ -135,7 +137,8 @@
     Text[ korean ] = "·Îµå(~L)..."; \
     Text[ turkish ] = "Yükle...";   \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Cargar...";
+    Text[ catalan ] = "~Cargar..."; \
+    Text[ finnish ] = "~Lataa";
 
 #define PUSHBUTTON_TEXT_REMOVE \
 /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
@@ -172,7 +175,7 @@
     Text [ italian ] = "~Cambia" ; \
     Text [ portuguese_brazilian ] = "~Mudar" ; \
     Text [ portuguese ] = "~Modificar" ; \
-    Text [ finnish ] = "~Muuta" ; \
+    Text [ finnish ] = "~Muokkaa" ; \
     Text [ danish ] = "Modificer" ; \
     Text [ french ] = "~Modifier" ; \
     Text [ swedish ] = "~Ändra" ; \
@@ -224,7 +227,7 @@
     Text [ italian ] = "Area" ; \
     Text [ portuguese_brazilian ] = "~Agrupar" ; \
     Text [ portuguese ] = "~Categoria" ; \
-    Text [ finnish ] = "~Ryhmitä" ; \
+    Text [ finnish ] = "~Luokka" ; \
     Text [ danish ] = "Område" ; \
     Text [ french ] = "~Catégorie" ; \
     Text [ swedish ] = "~Kategori" ; \
@@ -248,9 +251,9 @@
     Text [ ENGLISH ] = "~Function" ; \
     Text [ norwegian ] = "~Function" ; \
     Text [ italian ] = "~Funzione" ; \
-    Text [ portuguese_brazilian ] = "~Função" ; \
+    Text [ portuguese_brazilian ] = "~Fun??o" ; \
     Text [ portuguese ] = "~Função" ; \
-    Text [ finnish ] = "~Funktio" ; \
+    Text [ finnish ] = "Funktio" ; \
     Text [ danish ] = "Funktion" ; \
     Text [ french ] = "~Fonction" ; \
     Text [ swedish ] = "~Funktion" ; \
@@ -274,7 +277,7 @@
     Text [ ENGLISH ] = "Functions" ; \
     Text [ norwegian ] = "Funksjoner" ; \
     Text [ italian ] = "Funzioni" ; \
-    Text [ portuguese_brazilian ] = "Funções" ; \
+    Text [ portuguese_brazilian ] = "Fun??s" ; \
     Text [ portuguese ] = "Funções" ; \
     Text [ finnish ] = "Toiminnot" ; \
     Text [ danish ] = "Funktioner" ; \
@@ -307,6 +310,26 @@ TabPage TP_CONFIG_MENU
         Size = MAP_APPFONT ( 214 , 8 ) ;
         Text = "Menüeinträge" ;
         Text [ ENGLISH ] = "Menu entries" ;
+        Text[ english_us ] = "Menu entries";
+        Text[ portuguese ] = "Menu entries";
+        Text[ russian ] = "Ïóíêòû ìåíş";
+        Text[ greek ] = "Menu entries";
+        Text[ dutch ] = "Menu entries";
+        Text[ french ] = "Entrées de menu";
+        Text[ spanish ] = "Entradas de menú";
+        Text[ finnish ] = "Menu entries";
+        Text[ italian ] = "Voci del menu";
+        Text[ danish ] = "Menu entries";
+        Text[ swedish ] = "Menyposter";
+        Text[ polish ] = "Wpisy menu";
+        Text[ portuguese_brazilian ] = "Menu entries";
+        Text[ japanese ] = "ÒÆ­°€–Ú";
+        Text[ korean ] = "Menu entries";
+        Text[ chinese_simplified ] = "²Ëµ¥ÌõÄ¿";
+        Text[ chinese_traditional ] = "¥\\¯àªí¶µ¥Ø";
+        Text[ turkish ] = "Menu entries";
+        Text[ arabic ] = "Menu entries";
+        Text[ catalan ] = "Menu entries";
     };
     PushButton BTN_MN_NEW
     {
@@ -328,7 +351,7 @@ TabPage TP_CONFIG_MENU
         Text [ spanish ] = "Nue~vo menú" ;
         Text [ french ] = "Nouveau ~menu" ;
         Text [ dutch ] = "Nieuw ~menu" ;
-        Text [ portuguese_brazilian ] = "Neues ~Menü" ;
+        Text [ portuguese_brazilian ] = "Neues ~Men" ;
         Text [ portuguese ] = "Novo ~menu" ;
         Text[ chinese_simplified ] = "ĞÂ²Ëµ¥(~U)";
         Text[ russian ] = "Íîâîå ìåíş";
@@ -341,6 +364,7 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "Yeni mönü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nue~vo menú";
+        Text[ finnish ] = "Uusi va~likko";
     };
     PushButton BTN_MN_CHANGE
     {
@@ -417,11 +441,11 @@ TabPage TP_CONFIG_MENU
         Text [ danish ] = "Funktioner" ;
         Text [ italian ] = "Funzioni" ;
         Text [ spanish ] = "Funciones" ;
-        Text [ french ] = "Ensemble de fonctions" ;
+        Text [ french ] = "Fonctions" ;
         Text [ dutch ] = "Functies" ;
         Text[ chinese_simplified ] = "¹¦ÄÜ";
         Text[ russian ] = "Ôóíêöèè";
-        Text[ polish ] = "Funkcja";
+        Text[ polish ] = "Funkcje";
         Text[ japanese ] = "‹@”\\";
         Text[ chinese_traditional ] = "¥\\¯à";
         Text[ arabic ] = "ãåÇã";
@@ -430,6 +454,7 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "İşlevler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Funciones";
+        Text[ finnish ] = "Functions";
     };
     FixedText TXT_MN_GROUP
     {
@@ -459,6 +484,7 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "Ka~tegori";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Área";
+        Text[ finnish ] = "L~uokka";
     };
     Control BOX_MN_GROUP
     {
@@ -512,6 +538,26 @@ TabPage TP_CONFIG_ACCEL
         Text = "Tastenkombinationen" ;
         Text [ ENGLISH ] = "Keyboard shortcuts" ;
         Group = TRUE ;
+        Text[ english_us ] = "Shortcut keys";
+        Text[ portuguese ] = "Keyboard shortcuts";
+        Text[ russian ] = "Êîìáèíàöèè êëàâèø";
+        Text[ greek ] = "Keyboard shortcuts";
+        Text[ dutch ] = "Keyboard shortcuts";
+        Text[ french ] = "Raccourcis clavier";
+        Text[ spanish ] = "Combinación de teclas";
+        Text[ finnish ] = "Keyboard shortcuts";
+        Text[ italian ] = "Combinazione tasti";
+        Text[ danish ] = "Keyboard shortcuts";
+        Text[ swedish ] = "Tangentkombinationer";
+        Text[ polish ] = "Skróty klawiaturowe";
+        Text[ portuguese_brazilian ] = "Keyboard shortcuts";
+        Text[ japanese ] = "¼®°Ä¶¯Ä·°";
+        Text[ korean ] = "Keyboard shortcuts";
+        Text[ chinese_simplified ] = "×éºÏ¼ü";
+        Text[ chinese_traditional ] = "²Õ¦XÁä";
+        Text[ turkish ] = "Keyboard shortcuts";
+        Text[ arabic ] = "Keyboard shortcuts";
+        Text[ catalan ] = "Keyboard shortcuts";
     };
     Control BOX_ACC_ENTRIES
     {
@@ -642,14 +688,14 @@ TabPage TP_CONFIG_STATBAR
         Text [ finnish ] = "Tilarivi" ;
         Text [ danish ] = "Statuslinje " ;
         Text [ french ] = "Barre d'état " ;
-        Text [ swedish ] = "Statuslist  " ;
+        Text [ swedish ] = "Statuslist " ;
         Text [ dutch ] = "Statusbalk  " ;
-        Text [ spanish ] = "Barra de estado  " ;
+        Text [ spanish ] = "Barra de estado " ;
         Text [ english_us ] = "Status bar " ;
         Text[ chinese_simplified ] = "×´Ì¬À¸ ";
         Text[ russian ] = "Ñòğîêà ñîñòîÿíèÿ ";
         Text[ polish ] = "Pasek stanu ";
-        Text[ japanese ] = "½Ã°À½ ÊŞ° ";
+        Text[ japanese ] = "½Ã°À½ÊŞ°";
         Text[ chinese_traditional ] = "ª¬ºA¦C ";
         Text[ arabic ] = "ÔÑíØ ÇáãÚáæãÇÊ ";
         Text[ greek ] = "ÃñáììŞ êáôÜóôáóçò ";
@@ -706,9 +752,9 @@ TabDialog DLG_CONFIG
     Text [ English ] = "Configuration" ;
     Text [ norwegian ] = "Konfigurasjon" ;
     Text [ italian ] = "Configura" ;
-    Text [ portuguese_brazilian ] = "Configuração" ;
+    Text [ portuguese_brazilian ] = "Configura??o" ;
     Text [ portuguese ] = "Configuração" ;
-    Text [ finnish ] = "Asetukset" ;
+    Text [ finnish ] = "Kokoonpano" ;
     Text [ danish ] = "Tilpas" ;
     Text [ french ] = "Adaptation" ;
     Text [ swedish ] = "Anpassa" ;
@@ -737,7 +783,7 @@ TabDialog DLG_CONFIG
                 Text [ french ] = "Menu" ;
                 Text [ swedish ] = "Meny" ;
                 Text [ danish ] = "Menu" ;
-                Text [ portuguese_brazilian ] = "Menü" ;
+                Text [ portuguese_brazilian ] = "Men" ;
                 Text [ portuguese ] = "Menu" ;
                 Text[ chinese_simplified ] = "²Ëµ¥";
                 Text[ russian ] = "Ìåíş";
@@ -750,6 +796,7 @@ TabDialog DLG_CONFIG
                 Text[ turkish ] = "Mönü";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Menú";
+                Text[ finnish ] = "Valikko";
             };
             PageItem
             {
@@ -816,9 +863,9 @@ TabDialog DLG_CONFIG
                 Text [ ENGLISH ] = "Toolbox Options" ;
                 Text [ norwegian ] = "Verktøyalternativer" ;
                 Text [ italian ] = "Barre dei simboli" ;
-                Text [ portuguese_brazilian ] = "Opções do Quadro de Ferramentas" ;
+                Text [ portuguese_brazilian ] = "Op??s do Quadro de Ferramentas" ;
                 Text [ portuguese ] = "Barras de ferramentas" ;
-                Text [ finnish ] = "Työkalurivin määritykset" ;
+                Text [ finnish ] = "Työkalurivit" ;
                 Text [ danish ] = "Ikonlinjer" ;
                 Text [ french ] = "Barres d'outils" ;
                 Text [ swedish ] = "Symbollister" ;
@@ -946,7 +993,7 @@ String STR_SAVE
     Text [ italian ] = "Salva" ;
     Text [ portuguese_brazilian ] = "Gravar" ;
     Text [ portuguese ] = "Guardar" ;
-    Text [ finnish ] = "Tallennus" ;
+    Text [ finnish ] = "Tallenna" ;
     Text [ danish ] = "Gem" ;
     Text [ french ] = "Enregistrer" ;
     Text [ swedish ] = "Spara" ;
@@ -975,7 +1022,7 @@ String STR_SAVEAS
     Text [ portuguese ] = "Guardar como" ;
     Text [ finnish ] = "Tallenna nimellä" ;
     Text [ danish ] = "Gem som" ;
-    Text [ french ] = "Enregistrer sous" ;
+    Text [ french ] = "Enregistrer comme" ;
     Text [ swedish ] = "Spara som" ;
     Text [ dutch ] = "Opslaan als" ;
     Text [ spanish ] = "Guardar como" ;
@@ -1193,7 +1240,7 @@ String STR_FINDBACKWARD
     Text [ ENGLISH ] = "Find backward" ;
     Text [ norwegian ] = "Søk bakover" ;
     Text [ italian ] = "Cerca all'indietro" ;
-    Text [ portuguese_brazilian ] = "Procurar Para Trás" ;
+    Text [ portuguese_brazilian ] = "Procurar Para Tr?s" ;
     Text [ portuguese ] = "Localizar para trás" ;
     Text [ finnish ] = "Etsi taaksepäin" ;
     Text [ danish ] = "Søg baglæns" ;
@@ -1249,7 +1296,7 @@ String STR_FRONT
     Text [ italian ] = "In avanti" ;
     Text [ portuguese_brazilian ] = "Primeiro plano" ;
     Text [ portuguese ] = "Para a frente" ;
-    Text [ finnish ] = "Edustalle" ;
+    Text [ finnish ] = "Eteen" ;
     Text [ danish ] = "Fremad" ;
     Text [ french ] = "Premier plan" ;
     Text [ swedish ] = "Framåt" ;
@@ -1279,9 +1326,9 @@ QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
     Message [ ENGLISH ] = "There are still undefined functions (???).\n\nContinue anyway?" ;
     Message [ norwegian ] = "Det er fremdeles udefinerte funksjoner are still undefined functions (???).\n\nFortsett likevel?" ;
     Message [ italian ] = "Vi sono ancora funzioni non definite (???).\n\nContinuare lo stesso?" ;
-    Message [ portuguese_brazilian ] = "Ainda existem Funções indefinidas (???).\n\nContinuar de qualquer forma?" ;
+    Message [ portuguese_brazilian ] = "Ainda existem Fun??s indefinidas (???).\n\nContinuar de qualquer forma?" ;
     Message [ portuguese ] = "Ainda existem funções indefinidas (???).\n\nDeseja continuar?" ;
-    Message [ finnish ] = "Määrittämättömiä toimintoja on vieläkin (???).\n\nJatketaanko silti?" ;
+    Message [ finnish ] = "Osa toiminnoista on vielä määrittämättä (???).\n\nHyväksytäänkö kokoonpano?" ;
     Message [ danish ] = "Der eksisterer stadig udefinerede funktioner (???).\n\nVil du overtage denne konfiguration alligevel?" ;
     Message [ french ] = "Certaines fonctions n'ont pas été définies (???).\n\nPoursuivre malgré tout ?" ;
     Message [ swedish ] = "Det finns fortfarande odefinierade funktioner (???). \n\nVill Du ändå överta den här konfigurationen?" ;
@@ -1310,9 +1357,9 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message [ ENGLISH ] = "There are still entries with functions that can only be assigned to popups.\n\nContinue anyway?" ;
     Message [ norwegian ] = "Det er fremdeles oppføringer med funksjoner som bare kan tilordnes tilleggsmenyenps.\n\nFortsett likevel?" ;
     Message [ italian ] = "Vi sono ancora voci con funzioni che possono essere assegnate solo a menu di scelta rapida.\n\nContinuare lo stesso?" ;
-    Message [ portuguese_brazilian ] = "Existem entradas com Funções que só podem ser atribuidas a popupps.\n\nContinuar de qualquer forma?" ;
+    Message [ portuguese_brazilian ] = "Existem entradas com Fun??s que s?podem ser atribuidas a popupps.\n\nContinuar de qualquer forma?" ;
     Message [ portuguese ] = "Existem ainda entradas com funções que só podem ser atribuídas a janelas instantâneas.\n\nContinuar?" ;
-    Message [ finnish ] = "Luettelossa on vieläkin toimintoja, jotka voidaan liittää vain kohovalikoihin..\n\nJatketaanko silti?" ;
+    Message [ finnish ] = "Osa merkintöjen toiminnoista voidaan yhä liittää vain ponnahdusobjekteihin.\n\nJatketaanko?" ;
     Message [ danish ] = "Der findes stadig elementer med funktioner, som kun kan tildeles popups.\n\nVil du overtage denne konfiguration alligevel?" ;
     Message [ french ] = "Certaines entrées sont encore associées à des fonctions réservées à des menus déroulants\n\nPoursuivre malgré tout ?" ;
     Message [ swedish ] = "Det finns fortfarande poster med funktioner som bara kan tilldelas popups.\n\nVill Du ändå överta den här konfigurationen?" ;
@@ -1325,8 +1372,8 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message[ japanese ] = "‚Ü‚¾Îß¯Ìß±¯Ìß‚Ì‚İ‚ÉŠ„‚è“–‚Ä‚ç‚ê‚é‹@”\\‚Ì€–Ú‚ª‚ ‚è‚Ü‚·B\n\n‚±‚Ìİ’è‚ğ“K—p‚µ‚Ä‚à‚¢‚¢‚Å‚·‚©?";
     Message[ chinese_traditional ] = "ÁÙ¦s¦b¤@¨Ç¥u¯àÅıµ¹§ÖÅã¥\\¯àªí°õ¦æªº¶µ¥Ø¡C\n±zÁÙ¬O­n±µ¨ü³o­Ó°t¸m¡H";
     Message[ arabic ] = "ãÇÒÇáÊ åäÇáß ÅÏÎÇáÇÊ ÈåÇ ãåÇã áÇ íãßä ÊÚííäåÇ ÅáÇ áŞæÇÆã ÇäÈËÇŞíÉ İŞØ.\n\nåá ÊÑíÏ ŞÈæá ÇáÊßæíä Úáì ÇáÑÛã ãä Ğáß¿";
-    Message[ greek ] = "ÕğÜñ÷ïõí áêüìç åããñáöİò ìå ëåéôïõñãßåò ôùí ïğïßùí ìğïñåß íá ãßíåé ìüíï áíôéóôïß÷éóç ìå áíáäõüìåíá ğáñÜèõñá.\n\nÈİëåôå íá áğïäå÷ôåßôå ôç äéáìüñöùóç áõôŞ;";
-    Message[ korean ] = "ÆË¾÷¿¡¸¸ ÁöÁ¤µÉ ¼ö ÀÖ´Â ±â´ÉµéÀ» °¡Áø Ç×¸ñµéÀÌ ¾ÆÁ÷ ÀÖ½À´Ï´Ù. \n\n±×·¡µµ ÀÌ ±¸¼ºÀ» Àû¿ëÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ greek ] = "ÕğÜñ÷ïõí áêüìç åããñáöİò ìå ëåéôïõñãßåò ôùí ïğïßùí ìğïñåß íá ãßíåé ìüíï áíôéóôïß÷éóç ìå áíáäõüìåíá ğáñÜèõñá.\n\nÈİëåôå íá áğïäå÷ôåßôå ôç äéá";
+    Message[ korean ] = "ÆË¾÷¸¸ ÇÒ´çµÉ ¼ö ÀÖ´Â ±â´ÉµéÀ» °¡Áø Ç×¸ñµéÀÌ ¾ÆÁ÷ ÀÖ½À´Ï´Ù. \n\n±×·¡µµ ÀÌ ±¸¼ºÀ» Àû¿ëÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Yalnızca açılan mönülere atanabilen işlevleri olan girişler mevcut.\n\nBu konfigürasyon ile devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Todavía hay entradas con funciones que solo pueden ser asignadas a emergentes.\n\n¿Desea continuar de todos modos?";
@@ -1337,9 +1384,9 @@ InfoBox IBX_MNUCFG_ALREADY_INCLUDED
     Message [ ENGLISH ] = "Function is already included in this popup." ;
     Message [ norwegian ] = "Funksjon er allerede inkludert i denne tilleggsmenyen." ;
     Message [ italian ] = "Funzione già inclusa in questo elenco." ;
-    Message [ portuguese_brazilian ] = "A função já está incluída neste popup." ;
+    Message [ portuguese_brazilian ] = "A fun??o j? est? inclu?da neste popup." ;
     Message [ portuguese ] = "A função já está incluída neste menu instantâneo." ;
-    Message [ finnish ] = "Toiminto on jo lisätty tähän kohovalikkoon." ;
+    Message [ finnish ] = "Toiminto on jo tässä valikossa." ;
     Message [ danish ] = "Funktionen er allerede indeholdt i denne popup." ;
     Message [ french ] = "Cette fonction est déjà incluse dans ce Pop-up." ;
     Message [ swedish ] = "Funktionen ingår redan i denna snabbmeny." ;
@@ -1371,7 +1418,7 @@ String STR_LOADMENUCONFIG
     Text [ dutch ] = "Menuconfiguratie laden" ;
     Text [ swedish ] = "Ladda menykonfiguration" ;
     Text [ danish ] = "Indlæs menukonfiguration" ;
-    Text [ portuguese_brazilian ] = "Menükonfiguration laden" ;
+    Text [ portuguese_brazilian ] = "Men?onfiguration laden" ;
     Text [ portuguese ] = "Carregar configuração do menu" ;
     Text[ chinese_simplified ] = "×°Èë²Ëµ¥ÅäÖÃ";
     Text[ russian ] = "Çàãğóçèòü êîíôèãóğàöèş ìåíş";
@@ -1384,6 +1431,7 @@ String STR_LOADMENUCONFIG
     Text[ turkish ] = "Mönü konfigürasyonunu yükle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cargar configuración del menú";
+    Text[ finnish ] = "Lataa valikkomääritys";
 };
 String STR_SAVEMENUCONFIG
 {
@@ -1396,7 +1444,7 @@ String STR_SAVEMENUCONFIG
     Text [ dutch ] = "Menuconfiguratie opslaan" ;
     Text [ swedish ] = "Spara menykonfiguration" ;
     Text [ danish ] = "Gem menukonfiguration" ;
-    Text [ portuguese_brazilian ] = "Menükonfiguration speichern" ;
+    Text [ portuguese_brazilian ] = "Men?onfiguration speichern" ;
     Text [ portuguese ] = "Guardar configuração do menu" ;
     Text[ chinese_simplified ] = "´æÅÌ²Ëµ¥ÅäÖÃ";
     Text[ russian ] = "Ñîõğàíèòü êîíôèãóğàöèş ìåíş";
@@ -1408,6 +1456,7 @@ String STR_SAVEMENUCONFIG
     Text[ korean ] = "¸Ş´º±¸¼º ÀúÀå";
     Text[ turkish ] = "Mönü konfigürasyonunu kaydet";
     Text[ catalan ] = "Guardar configuración del menú";
+    Text[ finnish ] = "Tallenna valikkomääritys";
 };
 String STR_LOADACCELCONFIG
 {
@@ -1433,6 +1482,7 @@ String STR_LOADACCELCONFIG
     Text[ turkish ] = "Klavye konfigürasyonunu yükle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cargar configuración del teclado";
+    Text[ finnish ] = "Lataa näppäimistömääritys";
 };
 String STR_SAVEACCELCONFIG
 {
@@ -1457,6 +1507,7 @@ String STR_SAVEACCELCONFIG
     Text[ korean ] = "Å°º¸µå±¸¼º ÀúÀå";
     Text[ turkish ] = "Klavye konfigürasyonunu kaydet";
     Text[ catalan ] = "Guardar configuración del teclado";
+    Text[ finnish ] = "Tallenna näppäimistömääritys";
 };
 String STR_LOADSTATBARCONFIG
 {
@@ -1482,6 +1533,7 @@ String STR_LOADSTATBARCONFIG
     Text[ turkish ] = "Durum çubuğu konfigürasyonunu yükle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cargar configuración de la barra de estado";
+    Text[ finnish ] = "Lataa tilarivimääritys";
 };
 String STR_SAVESTATBARCONFIG
 {
@@ -1506,6 +1558,7 @@ String STR_SAVESTATBARCONFIG
     Text[ korean ] = "»óÅÂ¸ğÀ½ ±¸¼º ÀúÀå";
     Text[ turkish ] = "Durum çubuğu konfigürasyonunu kaydet";
     Text[ catalan ] = "Guardar configuración de la barra de estado";
+    Text[ finnish ] = "Tallenna tilarivin kokoonpanomääritykset";
 };
 String STR_MENU
 {
@@ -1518,7 +1571,7 @@ String STR_MENU
     Text [ spanish ] = "Menú" ;
     Text [ french ] = "Menu" ;
     Text [ dutch ] = "Menu" ;
-    Text [ portuguese_brazilian ] = "Menü" ;
+    Text [ portuguese_brazilian ] = "Men" ;
     Text [ portuguese ] = "Menu" ;
     Text[ chinese_simplified ] = "²Ëµ¥";
     Text[ russian ] = "Ìåíş";
@@ -1531,5 +1584,7 @@ String STR_MENU
     Text[ turkish ] = "Mönü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Menú";
+    Text[ finnish ] = "Valikko";
 };
  // ********************************************************************** EOF
+
