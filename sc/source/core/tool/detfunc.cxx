@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-08 14:52:56 $
+ *  last change: $Author: nn $ $Date: 2002-05-16 07:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,9 @@
 
 //------------------------------------------------------------------------
 
-// #68927# created line ends must have a name
-#define SC_LINEEND_NAME     '*'
+// #99319# line ends are now created with an empty name.
+// The checkForUniqueItem method then finds a unique name for the item's value.
+#define SC_LINEEND_NAME     EMPTY_STRING
 
 //------------------------------------------------------------------------
 
@@ -200,16 +201,18 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     //  #66479# Standard-Linienenden (wie aus XLineEndList::Create) selber zusammenbasteln,
     //  um von den konfigurierten Linienenden unabhaengig zu sein
 
-    XPolygon aTriangle(3);
+    XPolygon aTriangle(4);
     aTriangle[0].X()=10; aTriangle[0].Y()= 0;
     aTriangle[1].X()= 0; aTriangle[1].Y()=30;
     aTriangle[2].X()=20; aTriangle[2].Y()=30;
+    aTriangle[3].X()=10; aTriangle[3].Y()= 0;   // #99319# line end polygon must be closed
 
-    XPolygon aSquare(4);
+    XPolygon aSquare(5);
     aSquare[0].X()= 0; aSquare[0].Y()= 0;
     aSquare[1].X()=10; aSquare[1].Y()= 0;
     aSquare[2].X()=10; aSquare[2].Y()=10;
     aSquare[3].X()= 0; aSquare[3].Y()=10;
+    aSquare[4].X()= 0; aSquare[4].Y()= 0;       // #99319# line end polygon must be closed
 
     XPolygon aCircle(Point(0,0),100,100);
 
@@ -246,10 +249,11 @@ ScCommentData::ScCommentData( ScDocument* pDoc, SdrModel* pModel ) :
     aCaptionSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END,
                                         EE_CHAR_START, EE_CHAR_END, 0 )
 {
-    XPolygon aTriangle(3);
+    XPolygon aTriangle(4);
     aTriangle[0].X()=10; aTriangle[0].Y()= 0;
     aTriangle[1].X()= 0; aTriangle[1].Y()=30;
     aTriangle[2].X()=20; aTriangle[2].Y()=30;
+    aTriangle[3].X()=10; aTriangle[3].Y()= 0;   // #99319# line end polygon must be closed
 
     String aName = SC_LINEEND_NAME;
 
@@ -348,6 +352,26 @@ Point ScDetectiveFunc::GetDrawPos( USHORT nCol, USHORT nRow, BOOL bArrow )
     return aPos;
 }
 
+BOOL lcl_IsOtherTab( const XPolygon& rPolygon )
+{
+    //  test if rPolygon is the line end for "other table" (rectangle)
+
+    USHORT nCount = rPolygon.GetPointCount();
+    if ( nCount == 4 )
+    {
+        //  4 points -> it is a rectangle (not closed) only if the first and last point are different
+
+        return rPolygon[0] != rPolygon[3];
+    }
+    else if ( nCount == 5 )
+    {
+        //  5 points -> it is a rectangle (closed) only if the first and last point are equal
+
+        return rPolygon[0] == rPolygon[4];
+    }
+    return FALSE;
+}
+
 BOOL ScDetectiveFunc::HasArrow( USHORT nStartCol, USHORT nStartRow, USHORT nStartTab,
                                     USHORT nEndCol, USHORT nEndRow, USHORT nEndTab )
 {
@@ -392,9 +416,9 @@ BOOL ScDetectiveFunc::HasArrow( USHORT nStartCol, USHORT nStartRow, USHORT nStar
                 pObject->IsPolyObj() && pObject->GetPointCount()==2 )
         {
             BOOL bObjStartAlien =
-                (4 == ((const XLineStartItem&)pObject->GetItem(XATTR_LINESTART)).GetValue().GetPointCount());
+                lcl_IsOtherTab( ((const XLineStartItem&)pObject->GetItem(XATTR_LINESTART)).GetValue() );
             BOOL bObjEndAlien =
-                (4 == ((const XLineEndItem&)pObject->GetItem(XATTR_LINEEND)).GetValue().GetPointCount());
+                lcl_IsOtherTab( ((const XLineEndItem&)pObject->GetItem(XATTR_LINEEND)).GetValue() );
 
 //-/            BOOL bObjStartAlien = FALSE;
 //-/            BOOL bObjEndAlien = FALSE;
@@ -429,9 +453,9 @@ BOOL ScDetectiveFunc::IsNonAlienArrow( SdrObject* pObject )         // static
             pObject->IsPolyObj() && pObject->GetPointCount()==2 )
     {
         BOOL bObjStartAlien =
-            (4 == ((const XLineStartItem&)pObject->GetItem(XATTR_LINESTART)).GetValue().GetPointCount());
+            lcl_IsOtherTab( ((const XLineStartItem&)pObject->GetItem(XATTR_LINESTART)).GetValue() );
         BOOL bObjEndAlien =
-            (4 == ((const XLineEndItem&)pObject->GetItem(XATTR_LINEEND)).GetValue().GetPointCount());
+            lcl_IsOtherTab( ((const XLineEndItem&)pObject->GetItem(XATTR_LINEEND)).GetValue() );
 
 //-/        BOOL bObjStartAlien = FALSE;
 //-/        BOOL bObjEndAlien = FALSE;
