@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-23 09:12:05 $
+ *  last change: $Author: tl $ $Date: 2001-07-26 11:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2340,7 +2340,7 @@ void SmXMLRootContext_Impl::EndElement()
         "Root tag is missing component");
 
     SmToken aToken;
-    aToken.cMathChar = 0xF087;  //Temporary: alert, based on old starmath font
+    aToken.cMathChar = MS_SQRT;  //Temporary: alert, based on StarSymbol font
     aToken.nGroup = 0;
     aToken.nLevel = 0;
     aToken.eType = TNROOT;
@@ -2364,7 +2364,7 @@ void SmXMLSqrtContext_Impl::EndElement()
         SmXMLRowContext_Impl::EndElement();
 
     SmToken aToken;
-    aToken.cMathChar = 0xF087;  //Temporary: alert, based on old starmath font
+    aToken.cMathChar = MS_SQRT;  //Temporary: alert, based on StarSymbol font
     aToken.nGroup = 0;
     aToken.nLevel = 0;
     aToken.eType = TSQRT;
