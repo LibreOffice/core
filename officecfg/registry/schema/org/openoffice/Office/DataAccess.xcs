@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:27:10 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,13 +313,13 @@
 						<value/>
 						<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 					</prop>
-					<prop oor:name="PabDescription" oor:type="xs:string">
+					<prop oor:name="PabDescription" oor:type="xs:string" oor:localized="true">
 						<info>
 							<desc>Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
 						</info>
 						<value/>
 					</prop>
-					<prop oor:name="HisDescription" oor:type="xs:string">
+					<prop oor:name="HisDescription" oor:type="xs:string" oor:localized="true">
 						<info>
 							<desc>Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
 						</info>
