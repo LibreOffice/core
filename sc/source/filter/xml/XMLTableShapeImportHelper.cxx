@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-05 15:55:29 $
+ *  last change: $Author: sab $ $Date: 2001-05-08 12:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,72 +120,75 @@ void XMLTableShapeImportHelper::finishShape(
     uno::Reference< drawing::XShapes >& rShapes )
 {
     XMLShapeImportHelper::finishShape( rShape, xAttrList, rShapes );
-    sal_Bool bBackground(sal_False);
-    Rectangle* pRect = NULL;
-    sal_Int32 nEndX(-1);
-    sal_Int32 nEndY(-1);
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    table::CellAddress aEndCell;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    if (rShapes == static_cast<ScXMLImport&>(mrImporter).GetTables().GetCurrentXShapes())
     {
-        const rtl::OUString& rAttrName = xAttrList->getNameByIndex( i );
-        const rtl::OUString& rValue = xAttrList->getValueByIndex( i );
-
-        rtl::OUString aLocalName;
-        sal_uInt16 nPrefix =
-            static_cast<ScXMLImport&>(mrImporter).GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        if(nPrefix = XML_NAMESPACE_TABLE)
+        sal_Bool bBackground(sal_False);
+        Rectangle* pRect = NULL;
+        sal_Int32 nEndX(-1);
+        sal_Int32 nEndY(-1);
+        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        table::CellAddress aEndCell;
+        for( sal_Int16 i=0; i < nAttrCount; i++ )
         {
-            if (aLocalName.compareToAscii(sXML_end_cell_address) == 0)
+            const rtl::OUString& rAttrName = xAttrList->getNameByIndex( i );
+            const rtl::OUString& rValue = xAttrList->getValueByIndex( i );
+
+            rtl::OUString aLocalName;
+            sal_uInt16 nPrefix =
+                static_cast<ScXMLImport&>(mrImporter).GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                                &aLocalName );
+            if(nPrefix = XML_NAMESPACE_TABLE)
             {
-                sal_Int32 nOffset(0);
-                ScXMLConverter::GetAddressFromString(aEndCell, rValue, static_cast<ScXMLImport&>(mrImporter).GetDocument(), nOffset);
+                if (aLocalName.compareToAscii(sXML_end_cell_address) == 0)
+                {
+                    sal_Int32 nOffset(0);
+                    ScXMLConverter::GetAddressFromString(aEndCell, rValue, static_cast<ScXMLImport&>(mrImporter).GetDocument(), nOffset);
+                }
+                else if (aLocalName.compareToAscii(sXML_end_x) == 0)
+                    static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndX, rValue);
+                else if (aLocalName.compareToAscii(sXML_end_y) == 0)
+                    static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndY, rValue);
+                else if (aLocalName.compareToAscii(sXML_table_background) == 0)
+                    if (rValue.compareToAscii(sXML_true) == 0)
+                        bBackground = sal_True;
             }
-            else if (aLocalName.compareToAscii(sXML_end_x) == 0)
-                static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndX, rValue);
-            else if (aLocalName.compareToAscii(sXML_end_y) == 0)
-                static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndY, rValue);
-            else if (aLocalName.compareToAscii(sXML_table_background) == 0)
-                if (rValue.compareToAscii(sXML_true) == 0)
-                    bBackground = sal_True;
         }
-    }
-    if (bBackground)
-    {
-        uno::Reference< beans::XPropertySet > xShapeProp( rShape, uno::UNO_QUERY );
-        if( xShapeProp.is() )
+        if (bBackground)
         {
-            sal_Int16 nLayerID = SC_LAYER_BACK;
-            uno::Any aPropAny;
-            aPropAny <<= nLayerID;
-            xShapeProp->setPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ), aPropAny );
+            uno::Reference< beans::XPropertySet > xShapeProp( rShape, uno::UNO_QUERY );
+            if( xShapeProp.is() )
+            {
+                sal_Int16 nLayerID = SC_LAYER_BACK;
+                uno::Any aPropAny;
+                aPropAny <<= nLayerID;
+                xShapeProp->setPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ), aPropAny );
+            }
         }
-    }
 
-    if (!bOnTable)
-    {
-        if (nEndX >= 0 && nEndY >= 0)
-            static_cast<ScXMLImport&>(mrImporter).GetTables().AddShape(rShape, aStartCell, aEndCell,
-                nEndX, nEndY);
-        else
-            DBG_ERROR("no or wrong position given");
-        SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
-        if (pShapeImp)
+        if (!bOnTable)
         {
-            SdrObject *pSdrObj = pShapeImp->GetSdrObject();
-            if (pSdrObj)
-                ScDrawLayer::SetAnchor(pSdrObj, SCA_CELL);
+            if (nEndX >= 0 && nEndY >= 0)
+                static_cast<ScXMLImport&>(mrImporter).GetTables().AddShape(rShape, aStartCell, aEndCell,
+                    nEndX, nEndY);
+            else
+                DBG_ERROR("no or wrong position given");
+            SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
+            if (pShapeImp)
+            {
+                SdrObject *pSdrObj = pShapeImp->GetSdrObject();
+                if (pSdrObj)
+                    ScDrawLayer::SetAnchor(pSdrObj, SCA_CELL);
+            }
         }
-    }
-    else
-    {
-        SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
-        if (pShapeImp)
+        else
         {
-            SdrObject *pSdrObj = pShapeImp->GetSdrObject();
-            if (pSdrObj)
-                ScDrawLayer::SetAnchor(pSdrObj, SCA_PAGE);
+            SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
+            if (pShapeImp)
+            {
+                SdrObject *pSdrObj = pShapeImp->GetSdrObject();
+                if (pSdrObj)
+                    ScDrawLayer::SetAnchor(pSdrObj, SCA_PAGE);
+            }
         }
     }
 }
