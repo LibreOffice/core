@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:00:08 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,11 +808,11 @@ Any ManagerImpl::getByHierarchicalName( const OUString & rName )
         sal_Int32 nIndex;
         if (rName[0] == '[') // test for sequence
         {
-            Reference< XTypeDescription > xElemType;
-            if (getByHierarchicalName( rName.copy( 2 ) ) >>= xElemType)
-                aRet <<= Reference< XTypeDescription >( new SequenceTypeDescriptionImpl( xElemType ) );
-            else
-                return Any(); // further lookup makes no sense
+            Reference< XTypeDescription > xElemType(
+                getByHierarchicalName( rName.copy( 2 ) ),
+                UNO_QUERY_THROW );
+            aRet <<= Reference< XTypeDescription >(
+                new SequenceTypeDescriptionImpl( xElemType ) );
         }
         else if (rName[rName.getLength()-1] == ']') // test for array
         {
@@ -820,32 +820,38 @@ Any ManagerImpl::getByHierarchicalName( const OUString & rName )
             do { rName.getToken( 0, '[', nIndex ); nTokens++; } while( nIndex != -1 );
             sal_Int32 nDims = nTokens - 1;
             sal_Int32 dimOffset = rName.indexOf('[');
-            Reference< XTypeDescription > xElemType;
-            if (getByHierarchicalName( rName.copy( 0, dimOffset ) ) >>= xElemType)
-                aRet <<= Reference< XTypeDescription >( new ArrayTypeDescriptionImpl( xElemType, nDims, rName.copy(dimOffset) ) );
-            else
-                return Any(); // further lookup makes no sense
+            Reference< XTypeDescription > xElemType(
+                getByHierarchicalName( rName.copy( 0, dimOffset ) ),
+                UNO_QUERY_THROW );
+            aRet <<= Reference< XTypeDescription >(
+                new ArrayTypeDescriptionImpl(
+                    xElemType, nDims, rName.copy(dimOffset) ) );
         }
-        else if ((nIndex = rName.indexOf( ':' )) >= 0) // test for interface member names
+        // test for interface member names:
+        else if ((nIndex = rName.indexOf( ':' )) >= 0)
         {
-            Reference< XInterfaceTypeDescription > xIfaceTD;
-            if (getByHierarchicalName( rName.copy( 0, nIndex ) ) >>= xIfaceTD)
-            {
-                const Sequence< Reference< XInterfaceMemberTypeDescription > > & rMembers =
-                    xIfaceTD->getMembers();
-                const Reference< XInterfaceMemberTypeDescription > * pMembers =
-                    rMembers.getConstArray();
+            Reference< XInterfaceTypeDescription > xIfaceTD(
+                getByHierarchicalName( rName.copy( 0, nIndex ) ),
+                UNO_QUERY_THROW );
+            const Sequence< Reference< XInterfaceMemberTypeDescription > > &
+                rMembers = xIfaceTD->getMembers();
+            const Reference< XInterfaceMemberTypeDescription > * pMembers =
+                rMembers.getConstArray();
 
-                for ( sal_Int32 nPos = rMembers.getLength(); nPos--; )
+            for ( sal_Int32 nPos = rMembers.getLength(); nPos--; )
+            {
+                if (rName == pMembers[nPos]->getName())
                 {
-                    if (rName == pMembers[nPos]->getName())
-                    {
-                        aRet <<= Reference< XTypeDescription >::query( pMembers[nPos] );
-                        break;
-                    }
+                    aRet <<= Reference< XTypeDescription >(
+                        pMembers[nPos], UNO_QUERY_THROW );
+                    break;
                 }
-                if (! aRet.hasValue())
-                    return Any(); // further lookup makes no sense
+            }
+            if (! aRet.hasValue())
+            {
+                // member not found:
+                throw NoSuchElementException(
+                    rName, static_cast< OWeakObject * >(this) );
             }
         }
         else if (rName.indexOf( '.' ) < 0) // test for simple/ build in types
@@ -861,8 +867,11 @@ Any ManagerImpl::getByHierarchicalName( const OUString & rName )
             {
                 try
                 {
-                    if ((aRet = (*iPos)->getByHierarchicalName( rName )).hasValue())
+                    if ((aRet = (*iPos)->getByHierarchicalName(
+                             rName )).hasValue())
+                    {
                         break;
+                    }
                 }
                 catch (NoSuchElementException &)
                 {
@@ -877,9 +886,8 @@ Any ManagerImpl::getByHierarchicalName( const OUString & rName )
 
     if (! aRet.hasValue())
     {
-        NoSuchElementException aExc;
-        aExc.Message = rName;
-        throw aExc;
+        throw NoSuchElementException(
+            rName, static_cast< OWeakObject * >(this) );
     }
     return aRet;
 }
