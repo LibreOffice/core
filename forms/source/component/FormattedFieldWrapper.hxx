@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedFieldWrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-04-11 14:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,12 @@
 #ifndef _FORMS_FORMCOMPONENT_HXX_
 #include "FormComponent.hxx"
 #endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 
 //.........................................................................
 namespace frm
@@ -74,9 +80,11 @@ class OEditModel;
 //==================================================================
 //= OFormattedFieldWrapper
 //==================================================================
-class OFormattedFieldWrapper
-        :public ::com::sun::star::io::XPersistObject
-        ,public ::cppu::OWeakAggObject
+typedef ::cppu::WeakAggImplHelper2  <   ::com::sun::star::io::XPersistObject
+                                    ,   ::com::sun::star::lang::XServiceInfo
+                                    >   OFormattedFieldWrapper_Base;
+
+class OFormattedFieldWrapper : public OFormattedFieldWrapper_Base
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xServiceFactory;
 
@@ -101,6 +109,11 @@ public:
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OFormattedFieldWrapper, OWeakAggObject);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::io::XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);

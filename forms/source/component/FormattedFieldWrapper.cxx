@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedFieldWrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-04-11 14:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType) throw 
 
     if (_rType.equals( ::getCppuType( static_cast< Reference< XTypeProvider >* >(NULL) ) ) )
     {   // a XTypeProvider interface needs a working aggregate - we don't want to give the type provider
-        // of our base class (OWeakAggObject) to the caller as it supplies nearly nothing
+        // of our base class (OFormattedFieldWrapper_Base) to the caller as it supplies nearly nothing
         ensureAggregate();
         if (m_xAggregate.is())
             aReturn = m_xAggregate->queryAggregation(_rType);
@@ -178,7 +178,13 @@ Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType) throw 
 
     if (!aReturn.hasValue())
     {
-        aReturn = OWeakAggObject::queryAggregation(_rType);
+        aReturn = OFormattedFieldWrapper_Base::queryAggregation(_rType);
+
+        if ((_rType.equals( ::getCppuType( static_cast< Reference< XServiceInfo >* >(NULL) ) ) ) && aReturn.hasValue())
+        {   // somebody requested an XServiceInfo interface and our base class provided it
+            // check our aggregate if it has one, too
+            ensureAggregate();
+        }
 
         if (!aReturn.hasValue())
         {
@@ -203,6 +209,30 @@ Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType) throw 
 {
     // return the old compatibility name for an EditModel
     return FRM_COMPONENT_EDIT;
+}
+
+//------------------------------------------------------------------
+::rtl::OUString SAL_CALL OFormattedFieldWrapper::getImplementationName(  ) throw (RuntimeException)
+{
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.forms.OFormattedFieldWrapper");
+}
+
+//------------------------------------------------------------------
+sal_Bool SAL_CALL OFormattedFieldWrapper::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+{
+    DBG_ASSERT(m_xAggregate.is(), "OFormattedFieldWrapper::supportsService: should never have made it 'til here without an aggregate!");
+    Reference< XServiceInfo > xSI;
+    m_xAggregate->queryAggregation(::getCppuType(static_cast< Reference< XServiceInfo >* >(NULL))) >>= xSI;
+    return xSI->supportsService(_rServiceName);
+}
+
+//------------------------------------------------------------------
+Sequence< ::rtl::OUString > SAL_CALL OFormattedFieldWrapper::getSupportedServiceNames(  ) throw (RuntimeException)
+{
+    DBG_ASSERT(m_xAggregate.is(), "OFormattedFieldWrapper::getSupportedServiceNames: should never have made it 'til here without an aggregate!");
+    Reference< XServiceInfo > xSI;
+    m_xAggregate->queryAggregation(::getCppuType(static_cast< Reference< XServiceInfo >* >(NULL))) >>= xSI;
+    return xSI->getSupportedServiceNames();
 }
 
 //------------------------------------------------------------------
@@ -348,6 +378,15 @@ void OFormattedFieldWrapper::ensureAggregate()
 
         m_xAggregate = Reference<XAggregation> (xEditModel, UNO_QUERY);
         DBG_ASSERT(m_xAggregate.is(), "OFormattedFieldWrapper::ensureAggregate : the OEditModel didn't have an XAggregation interface !");
+
+        {
+            Reference< XServiceInfo > xSI(m_xAggregate, UNO_QUERY);
+            if (!xSI.is())
+            {
+                DBG_ERROR("OFormattedFieldWrapper::ensureAggregate: the aggregate has nbo XServiceInfo!");
+                m_xAggregate.clear();
+            }
+        }
     }
     if (m_xAggregate.is())
     {   // has to be in it's own block because of the temporary variable created by *this
