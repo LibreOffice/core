@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:17:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1395,7 +1395,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
                        KS_NextCell, KS_PrevCell, KS_OutlineUp, KS_OutlineDown,
                        KS_GlossaryExpand, KS_NextPrevGlossary,
-                       KS_AutoFmtByInput, KS_DontExpand,
+                       KS_AutoFmtByInput,
                        KS_NextObject, KS_PrevObject,
                        KS_KeyToView,
                        KS_LaunchOLEObject, KS_GoIntoFly, KS_GoIntoDrawing,
@@ -1772,28 +1772,16 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     break;
 
-                case KEY_END:
-                    if( !rSh.HasReadonlySel() && rSh.IsEndPara() &&
-                        rSh.DontExpandFmt() )
-                        eKeyState = KS_DontExpand;
-                    break;
-
                 case KEY_RIGHT:
                     {
                         SwPaM * pCrsr = rSh.GetCrsr(); // #i27615#
-                        if( rSh.IsEndPara() && rSh.DontExpandFmt() &&
-                                 !rSh.HasReadonlySel())
-                            eKeyState = KS_DontExpand;
-                        else
-                        {
-                            BOOL bMod1 = 0 !=
-                                (rKeyCode.GetModifier() & KEY_MOD1);
-                            eFlyState = KS_Fly_Change;
-                            nDir = MOVE_RIGHT_BIG;
-                            eTblChgMode = WH_FLAG_INSDEL | WH_COL_RIGHT;
-                            nTblChgSize = pModOpt->GetTblVInsert();
-                            goto KEYINPUT_CHECKTABLE_INSDEL;
-                        }
+                        BOOL bMod1 = 0 !=
+                            (rKeyCode.GetModifier() & KEY_MOD1);
+                        eFlyState = KS_Fly_Change;
+                        nDir = MOVE_RIGHT_BIG;
+                        eTblChgMode = WH_FLAG_INSDEL | WH_COL_RIGHT;
+                        nTblChgSize = pModOpt->GetTblVInsert();
+                        goto KEYINPUT_CHECKTABLE_INSDEL;
                     }
                     break;
                 case KEY_TAB:
@@ -2006,7 +1994,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
         case KS_KeyToView:
             {
                 eKeyState = KS_Ende;
-                bNormalChar = !rKeyCode.IsControlMod() &&
+                bNormalChar =
+                        (0 == ((KEY_MOD1 | KEY_MOD2 | KEY_CONTROLMOD) & rKeyCode.GetAllModifier())) &&
                                 SW_ISPRINTABLE( aCh );
 
                 if (bNormalChar && rSh.IsInFrontOfLabel())
@@ -2222,7 +2211,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
 
 //          case KS_NumOrNoNum:
-//          case KS_DontExpand:
 //              break;
             case KS_NextObject:
             case KS_PrevObject:
