@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustrbuf.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 14:03:06 $
+ *  last change: $Author: sb $ $Date: 2001-10-15 08:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,6 @@ void SAL_CALL rtl_uStringbuffer_newFromStr_WithLength( rtl_uString ** newStr,
         return;
     }
 
-    if (*newStr)
-        rtl_uString_release(*newStr);
-
     rtl_uString_new_WithLength( newStr, count + 16 );
     (*newStr)->length = count;
     rtl_copyMemory( (*newStr)->buffer, value, count * sizeof(sal_Unicode));
@@ -109,9 +106,6 @@ sal_Int32 SAL_CALL rtl_uStringbuffer_newFromStringBuffer( rtl_uString ** newStr,
                                                           rtl_uString * oldStr )
 {
     sal_Int32 newCapacity = capacity;
-
-    if (*newStr)
-        rtl_uString_release(*newStr);
 
     if (newCapacity < oldStr->length)
         newCapacity = oldStr->length;
