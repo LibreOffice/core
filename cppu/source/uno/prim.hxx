@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prim.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
+ *  last change: $Author: dbo $ $Date: 2001-06-25 08:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ inline typelib_TypeDescriptionReference * __getVoidType()
 #else
 #define __CONSTRUCT_EMPTY_ANY( pAny ) \
 (pAny)->pType = __getVoidType(); \
-(pAny)->pData = 0;
+(pAny)->pData = (pAny);
 #endif
 
 //--------------------------------------------------------------------------------------------------
