@@ -44,7 +44,7 @@ use File::Basename;
 #
 my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment, $comment4nt, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps, $cur_dir, 
      $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $Solaris, $Linux, $FreeBSD, $NetBSD, $Tru64, $Irix, $Irix64, $Winnt, $Macosx, $MINGWIN32, $USE_SHELL,
-     $WScomp, $GNUcomp, $platform, $cygwinver, $machine_type, $empty, $no_jdk, $no_ant, $no_stl, $no_tcsh, $no_cl, $no_gcc, $no_gcc_home, $no_gcc_include, 
+     $WScomp, $GNUcomp, $platform, $cygwinver, $machine_type, $empty, $no_ant, $no_stl, $no_gcc_home, $no_gcc_include, 
      $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $exportvars, $win_format_var, $perl_os);
 #
 #-------------------------------------------------
@@ -79,7 +79,7 @@ my ( $USR, $ETC, $BIN, $LIB, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVE
      $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH );
 
 # Environment variables.
-my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $ANT_HOME, $SHELL, $GCC_HOME,
+my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $SHELL, $GCC_HOME,
      $UPD, $SOLARUPD, $WORK_STAMP, $TF_ONE51, $TF_UCB, 
      $URD_ONLY, $SOLARROOT, $SOLARSRC, $RSCRES, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
@@ -87,7 +87,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $ANT_HOME, $SHELL, $GCC_HOME,
      $LD_LIBRARY_PATH, $PATH, $SOLARDEF, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARINCLUDES, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $MAC_LIB, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
      $COMP_ENV, $IENV, $ILIB, $WIN_INCLUDE, $JAVAHOME, $WIN_LIB, $WIN_HOME, $PSDK_HOME, $USE_NEW_SDK, $NO_HIDS,
-     $BISON_HAIRY, $BISON_SIMPLE, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
+     $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $USE_GCC3, $ENABLE_DEBUG );
 #
 #-------------------------------------------
@@ -124,12 +124,8 @@ $Irix64         = "IRIX64";         # return of uname command of Irix on a 64 bi
 $Winnt          = "WINNT";          # return of uname command on Windows NT
 $Macosx         = "Darwin";         # return of uname command on Mac OS X/Darwin
 $empty          = "";               # used as argument
-$no_jdk         = "NO_JAVA_HOME";   # possible argument
 $no_ant         = "NO_ANT_HOME";    # possible argument
 $no_stl		= "NO_STLPORT4";    # possible argument
-$no_tcsh        = "NO_TCSH";        # possible argument
-$no_cl          = "NO_CL";
-$no_gcc         = "NO_GCC";
 $no_gcc_home    = "NO_GCC_HOME";
 $warnfile       = "warn";           # logfile configure warnings.
 $Warning        = "";               # container for warning messages
@@ -390,7 +386,7 @@ elsif ( $platform eq "$Linux" )
    {  print "Setting Linux Alpha specific values... ";
       $outfile        = "LinuxAlphaEnv.Set"; 
       $CPU            = "A";
-      $CPUNAME        = "ALPHA";
+      $CPUNAME        = "ALPHA_";
       $DLLSUFFIX      = "la";
       $OUTPATH        = "unxlnga";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha";
@@ -449,7 +445,7 @@ elsif ( $platform eq "$Tru64" )
       $COM            = "CXX";
       $COMPATH        = '@COMPATH@'; 
       $CPU            = "A";
-      $CPUNAME        = "ALPHA";
+      $CPUNAME        = "ALPHA_";
       $CVER           = "C62";
       $DLLSUFFIX      = "t64";
       $GUI            = "UNX";
@@ -613,111 +609,39 @@ else
 }
 
 # 2. Java home directory.
-# Check whether autoconf found the JAVA_HOME directory.
-if ( '@JAVA_HOME@' eq $no_jdk ) 
-{  AddWarning( "set_soenv", "Autoconf did not find correct JDK, prompted for value" );
-   $JAVA_HOME = GetValue( "Please enter the Java home directory: " );
-   CheckPathExist( $JAVA_HOME );
-}
-else 
-{  # JAVA_HOME as argument from autoconf.
-   $JAVA_HOME = PosixFormat('@JAVA_HOME@') ;
-}
+# JAVA_HOME as argument from autoconf.
+$JAVA_HOME = PosixFormat('@JAVA_HOME@') ;
 
 if ( $platform eq "$Winnt" ) {
    $JAVA_HOME =~ s/[\s\/]+$//;	# remove trailing \n or \/ if there is any.
 }
 # 3. Tcsh path.
 # Check whether autoconf found the Tcsh path.
-if ( '@TCSH@' eq $no_tcsh and $USE_SHELL eq "tcsh" ) 
-{  AddWarning( "set_soenv", "Autoconf did not find tcsh, prompted for value" );
-   $SHELL = GetValue( "Please enter the path where tcsh is located: " );
-   CheckPathExist( $SHELL );
-   $TCSH_PATH = $SHELL;
-   $SHELL = $SHELL."\/tcsh";
-}
-elsif ($USE_SHELL eq "tcsh") 
+if ($USE_SHELL eq "tcsh") 
 {  # SHELL as argument from autoconf.
    $SHELL = '@TCSH@'."\/tcsh";
    $TCSH_PATH = '@TCSH@';
 }
-# Microsoft C/C++ compiler path for Windows NT users.
-if ($platform eq "$Winnt" and $MINGWIN32 ne "yes")
-{  if ( '@COMPATH@' eq $no_cl) 
-   {  AddWarning( "set_soenv", "Autoconf did not find Microsoft C/C++ compiler, prompted for value" );
-      $COMPATH = GetValue( "Please enter the MS-DOS format path for the Microsoft C/C++ compiler home directory: " );
-      until ((grep / /, $COMPATH) eq 0)
-      {   printf "No spaces and names < 8 characters in MS-DOS format paths.\n"; 
-          $COMPATH = GetValue( "Please enter the MS-DOS format path for the Microsoft C/C++ compiler home directory: " );
-      }
-      CheckPathExist( $COMPATH );
-   }
-}
+
 if ( '@STLPORT4@' eq $no_stl )
-{  AddWarning( "set_soenv", "No path to STLport was given with the --with-stlport4-home option. The one provided with OOo will be build." );
+{
    $STLPORT4 = "$no_stl";
 }
 
 # ml.exe assembler path for Windows users.
 if ($platform eq "$Winnt")
-{  if ( '@ASM_HOME@' eq "NO_ASM_HOME" )
-   {  AddWarning( "set_soenv", "Autoconf did not find ml.exe assembler path, prompted for value" );
-      $ASM_PATH = GetValue( "Please enter the path where the ml.exe assembler is located: " );
-      CheckPathExist( $ASM_PATH );
-   }
-   else
-   {  $ASM_PATH = PosixFormat('@ASM_HOME@');
-   }
+{  $ASM_PATH = PosixFormat('@ASM_HOME@');
 }
 # unzip.exe path for Windows users.
 if ($platform eq "$Winnt")
-{  if ( '@UNZIP_HOME@' eq "NO_UNZIP_HOME" )
-   {  AddWarning( "set_soenv", "Autoconf did not find unzip.exe path, prompted for value" );
-      $UNZIP_PATH = GetValue( "Please enter the path where unzip.exe is located: " );
-      CheckPathExist( $UNZIP_PATH );
-   }
-   else
-   {  $UNZIP_PATH = PosixFormat('@UNZIP_HOME@');
-   }
-
+{  $UNZIP_PATH = PosixFormat('@UNZIP_HOME@');
 }
 # 4. Gcc path.
 # Check whether autoconf found the compiler path.
 if (($platform eq $Linux) or ($platform eq $NetBSD) or ($platform eq $FreeBSD) or 
     ( ($platform eq $Irix ) or ($platform eq $Irix64) and ($compiler eq "gcc")) ) 
-{  if ( '@COMPATH@' eq $no_gcc) 
-   {  AddWarning( "set_soenv", "Autoconf did not find correct gcc compiler, prompted for value" );
-      printf "Did you build gcc 2.95.2 from source using the --prefix and --enable-shared flags (y/n)?: ";
-      my $answer = <STDIN>; 
-      chomp( $answer );
-      if ( $answer eq "y" || $answer eq "Y" ) 
-      {  $GCC_HOME = GetValue( "Please enter the gcc 2.95.2 --prefix value: " );
-         $result = CheckPathExist( $GCC_HOME );
-         if ($result eq "false") 
-         {  AddWarning( "set_soenv", "The path $GCC_HOME does not exist on your system." );
-         }
-         else 
-         {  $COMPATH = $GCC_HOME."/bin";
-            }
-      }
-      else 
-      {  AddWarning( "set_soenv", "gcc 2.95.2 does not exist on your system." );
-      }
-   }
-   else 
-   {  # GCC_HOME is not needed.
+{    # GCC_HOME is not needed.
       $GCC_HOME = $no_gcc_home;
-   }
-}
-
-# Ant Home directory
-if ( '@ANT_HOME@' eq $no_ant )
-{  AddWarning( "set_soenv", "Ant was not found in the path.  Some Java projects will not build." );
-   $ANT_HOME = "$no_ant";
-}
-else 
-{  # ANT_HOME as argument from autoconf.
-   $ANT_HOME = '@ANT_HOME@';
 }
 
 #
@@ -1065,6 +989,8 @@ elsif (($platform eq "$Linux") or ($platform eq "$NetBSD")
       $PATH .=          $ps.'$JAVA_HOME'.$BIN;
    }
 
+   $PATH             .= $ps.$oldPATH;
+
    if ( $JAVA_HOME ne "" )
    {
       $PATH .=          $ps.'$JAVA_HOME'.$BIN;
@@ -1072,8 +998,6 @@ elsif (($platform eq "$Linux") or ($platform eq "$NetBSD")
 
    $PATH             .= GetCorrectPath($COMPATH.$BIN, $PERL_PATH, $TCSH_PATH, $compiler);
 
-
-   $PATH             .= $ps.$oldPATH;
 }
 
 elsif ($platform eq "$Winnt")
@@ -1362,7 +1286,7 @@ CreateFileHeader( *OUT_BAT, $UPD, $platform, "4nt", "rem" ) if defined($outfile_
 ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
 ToFile( "SHELL",             $SHELL,             "e" );
 ToFile( "JAVA_HOME",         $JAVA_HOME,         "e" );
-ToFile( "ANT_HOME",          $ANT_HOME,          "e" );
+ToFile( "ANT_HOME",          "@ANT_HOME@",       "e" );
 ToFile( "JDKLIB",            $JAVA_LIB,          "e" );
 ToFile( "STLPORT4",          $STLPORT4,          "e" );
 ToFile( "ASM_PATH",          $ASM_PATH,          "e" );
@@ -1685,9 +1609,8 @@ ToFile( "CXX",               $CXX,               "e" );
 if ( $COM ne "MSC" ) {
   ToFile( "LINK",			 $CC,				 "e" );
 }
+ToFile( "ENVCFLAGSCXX",      "@ENVCFLAGSCXX@",    "e" );
 ToFile( "GXX_INCLUDE_PATH",  "@GXX_INCLUDE_PATH@","e" );
-ToFile( "BISON_HAIRY",       $BISON_HAIRY,       "e" );
-ToFile( "BISON_SIMPLE",      $BISON_SIMPLE,      "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS, "e" );
 if ($platform ne "$Winnt")
 {  ToFile( "TEMP",              $TEMP,              "e" );
@@ -1904,20 +1827,6 @@ if ($platform ne "$Winnt") {
 # XII. Functions.
 #-----------------
 #
-#------------------------------------------------------------
-# Function name: GetValue 
-# Description:   Ask the user to enter certain information 
-#                and stores that information in a variable. 
-# Arguments:     1. Path (string)
-# Return value:  Path (string)
-#------------------------------------------------------------
-sub GetValue 
-{  my $value;
-   print "$_[ 0 ]"; 
-   $value = <STDIN>; 
-   chomp( $value );                  # cut off new line
-   return( CheckPathName( $value ) ); 
-}
 #-------------------------------------------------------------
 # Function name: CheckPathName 
 # Description:   chops off the '/' character if it's the last
@@ -2009,11 +1918,11 @@ sub ToFile
 {  if ( $_[ 2 ] eq "e" ) 
    {  # Write an environment variable to file.
       if (defined $_[ 1 ])
-      {  printf("%-12s %-17s %-10s %-39s\n", "The variable", $_[ 0 ], "is set to:", $_[ 1 ]) ; # to stdout
-         print OUT "$setenv $_[ 0 ] \"$_[ 1 ]\"$newline";          # to tcsh file
+      {  printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", $_[ 1 ]) ; # to stdout
+         print OUT "$setenv $_[ 0 ] \"$_[ 1 ]\"$newline";  # to tcsh file
          if(defined($outfile_sh))
-         {  print OUT_SH "$_[ 0 ]=\"$_[ 1 ]\"$newline";            # to sh file
-            $exportvars .= " $_[ 0 ]";                             # add to export list for sh file
+         {  print OUT_SH "$_[ 0 ]=\"$_[ 1 ]\"$newline";    # to sh file
+            $exportvars .= " $_[ 0 ]";                     # add to export list for sh file
          }
          if(defined($outfile_bat))
          {   $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
@@ -2022,9 +1931,9 @@ sub ToFile
          }
       }
       else
-      {  printf("%-12s %-17s %-10s %-39s\n", "The variable", $_[ 0 ], "is set to:", "unset") ; # to stdout
-         $unsetvars .= "$unsetenv $_[ 0 ] >& /dev/null$newline";            # for tcsh file
-         $unsetvarssh .= " $_[ 0 ]";                                        # for sh file
+      {  printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", "unset") ; # to stdout
+         $unsetvars .= "$unsetenv $_[ 0 ] >& /dev/null$newline"; # for tcsh file
+         $unsetvarssh .= " $_[ 0 ]";                             # for sh file
          if(defined($outfile_bat))
          {  $unsetvarsbat .= "$unset $_[ 0 ] >& NUL$newline";
          }
@@ -2033,7 +1942,7 @@ sub ToFile
    elsif ( $_[ 2 ] eq "a" ) 
    {  # Write an alias to file.
       print "The $_[ 0 ] is set to: $_[ 1 ]\n";     # to stdout
-      print OUT "$_[ 0 ] $_[ 1 ] $newline";                            # to tcsh file
+      print OUT "$_[ 0 ] $_[ 1 ] $newline";         # to tcsh file
       print OUT_SH "$_[ 0 ]=$_[ 1 ] $newline" if defined($outfile_sh); # to sh file
       if(defined($outfile_bat)) # create the correct 4nt alias format
       {  my $aliastmp = $_[ 1 ];
