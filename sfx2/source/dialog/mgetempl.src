@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:47:49 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,36 +74,9 @@ TabPage TP_MANAGE_STYLES
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text = "~Name" ;
-        Text [ English ] = "~Name" ;
-        Text [ english_us ] = "~Name" ;
-        Text [ italian ] = "~Nome" ;
-        Text [ spanish ] = "~Nombre" ;
-        Text [ french ] = "Nom" ;
-        Text [ dutch ] = "~Naam" ;
-        Text [ swedish ] = "~Namn" ;
-        Text [ danish ] = "~Navn" ;
-        Text [ portuguese ] = "~Nome" ;
-        Text [ portuguese_brazilian ] = "~Nome" ;
-        Text[ chinese_simplified ] = "åç§°(~N)";
-        Text[ russian ] = "Èìÿ";
-        Text[ polish ] = "~Nazwa";
-        Text[ japanese ] = "åå‰(~N)";
-        Text[ chinese_traditional ] = "åç¨±(~N)";
-        Text[ arabic ] = "ÇáÇÓã";
-        Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ì´ë¦„(~N)";
-        Text[ turkish ] = "~Ad";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nom";
-        Text[ finnish ] = "~Nimi";
-        Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­";
-        Text[ czech ] = "NÃ¡zev";
-        Text[ hebrew ] = "â€®×©×â€¬";
-        Text[ hindi ] = "~à¤¨à¤¾à¤®";
-        Text[ slovak ] = "~NÃ¡zov";
-        Text[ hungarian ] = "~NÃ©v";
-        Text[ slovenian ] = "~Ime";
+        Text [ de ] = "~Name" ;
+        Text [ en-US ] = "~Name" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_NAME
     {
@@ -116,72 +89,17 @@ TabPage TP_MANAGE_STYLES
         Pos = MAP_APPFONT ( 164 , 8 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Hide = TRUE ;
-        Text = "~Autom. aktualisieren" ;
-        Text [ ENGLISH ] = "~Automatically update" ;
-        Text [ english_us ] = "~AutoUpdate" ;
-        Text [ portuguese_brazilian ] = "Atualização ~automática" ;
-        Text [ swedish ] = "~Autom. uppdatering" ;
-        Text [ danish ] = "~Opdater automatisk" ;
-        Text [ italian ] = "Aggiorna automaticamente" ;
-        Text [ spanish ] = "~Actualización automática" ;
-        Text [ french ] = "Actualisation ~automatique" ;
-        Text [ dutch ] = "~Autom. bijwerken" ;
-        Text [ portuguese ] = "Actualizar ~automaticamente" ;
-        Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ–°(~A)";
-        Text[ russian ] = "Àâòîîáíîâëåíèå";
-        Text[ polish ] = "~Autoaktualizacja";
-        Text[ japanese ] = "è‡ªå‹•çš„ã«æ›´æ–°(~A)";
-        Text[ chinese_traditional ] = "è‡ªå‹•æ›´æ–°(~A)";
-        Text[ arabic ] = "ÊÍÏíË ÊáŞÇÆí";
-        Text[ greek ] = "Áõôüìáôç åíçìİñùóç";
-        Text[ korean ] = "ìë™ìœ¼ë¡œ ìƒˆë¡œ ê³ ì¹¨(~A)";
-        Text[ turkish ] = "~Otomatik güncelleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Actualitza automàticament";
-        Text[ finnish ] = "~Automaattinen päivitys";
-        Text[ thai ] = "à¸›à¸£à¸±à¸šà¸›à¸£à¸¸à¸‡~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-        Text[ czech ] = "AutomatickÃ¡ aktualizace";
-        Text[ hebrew ] = "â€®×¢×™×“×›×•×Ÿ ××•×˜×•××˜×™â€¬";
-        Text[ hindi ] = "~à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤…à¤ªà¤¡à¥‡à¤Ÿà¥";
-        Text[ slovak ] = "~AutomatickÃ¡ aktualizÃ¡cia";
-        Text[ hungarian ] = "Auto~matikus frissÃ­tÃ©s";
-        Text[ slovenian ] = "S~amoposodobi";
+        Text [ de ] = "~Autom. aktualisieren" ;
+        Text [ en-US ] = "~AutoUpdate" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_NEXT
     {
         Pos = MAP_APPFONT ( 6 , 26 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text = "~Folgevorlage" ;
-        Text [ ENGLISH ] = "~Next" ;
-        Text [ norwegian ] = "~Neste" ;
-        Text [ italian ] = "Modello successivo" ;
-        Text [ portuguese_brazilian ] = "Próximo ~Estilo" ;
-        Text [ portuguese ] = "~Estilo seguinte" ;
-        Text [ finnish ] = "Seu~raava tyyli" ;
-        Text [ danish ] = "Næ~ste typografi" ;
-        Text [ french ] = "~Style de suite" ;
-        Text [ swedish ] = "Nästa ~formatmall" ;
-        Text [ dutch ] = "V~olgend profiel" ;
-        Text [ spanish ] = "~Estilo siguiente" ;
-        Text [ english_us ] = "Ne~xt Style" ;
-        Text[ chinese_simplified ] = "ä¸‹ä¸€ä¸ªæ ·å¼(~X)";
-        Text[ russian ] = "Ñëåäóşùèé ñòèëü";
-        Text[ polish ] = "Nas~têpny styl";
-        Text[ japanese ] = "æ¬¡ã«ç¶šãã‚¹ã‚¿ã‚¤ãƒ«(~X)";
-        Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹æ¨£å¼(~X)";
-        Text[ arabic ] = "äãØ ÊÇáí";
-        Text[ greek ] = "Åğüìåíï ğñüô~õğï";
-        Text[ korean ] = "ë‹¤ìŒ ìŠ¤íƒ€ì¼(~X)";
-        Text[ turkish ] = "So~nraki biçim";
-        Text[ language_user1 ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
-        Text[ catalan ] = "~Estil següent";
-        Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸–à¸±~à¸”à¹„à¸›";
-        Text[ czech ] = "DalÅ¡Ã­ styl";
-        Text[ hebrew ] = "â€®×¡×’× ×•×Ÿ ×”×‘×â€¬";
-        Text[ hindi ] = "à¤…à¤—~à¤²à¤¾ à¤¶à¥ˆà¤²à¥€";
-        Text[ slovak ] = "Äa~lÅ¡Ã­ Å¡tÃ½l";
-        Text[ hungarian ] = "KÃ¶~vetkezÅ‘ stÃ­lus";
-        Text[ slovenian ] = "N~aslednji slog";
+        Text [ de ] = "~Folgevorlage" ;
+        Text [ en-US ] = "Ne~xt Style" ;
+        Text [ x-comment ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
     };
     ListBox LB_NEXT
     {
@@ -197,37 +115,9 @@ TabPage TP_MANAGE_STYLES
         Size = MAP_APPFONT ( 61 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Verknüpft mit : ~Verkn³pft mit */
         /* ### ACHTUNG: Neuer Text in Resource? ~Verknüpft mit : ~Verkn³pft mit */
-        Text = "~Verknüpft mit" ;
-        Text [ ENGLISH ] = "~Based on" ;
-        Text [ norwegian ] = "~Basert på" ;
-        Text [ italian ] = "~Basato su" ;
-        Text [ portuguese_brazilian ] = "~Vinculado com" ;
-        Text [ portuguese ] = "~Baseado em" ;
-        Text [ finnish ] = "Perusta" ;
-        Text [ danish ] = "Sammenkædet med" ;
-        Text [ french ] = "~Lié à" ;
-        Text [ swedish ] = "~Länkad med" ;
-        Text [ dutch ] = "~Gebaseerd op" ;
-        Text [ spanish ] = "~Vinculado con" ;
-        Text [ english_us ] = "Linked with" ;
-        Text[ chinese_simplified ] = "é“¾æ¥åˆ°";
-        Text[ russian ] = "Ñâÿçàí ñ";
-        Text[ polish ] = "Po³¹czony z";
-        Text[ japanese ] = "åŸå‹ã‚¹ã‚¿ã‚¤ãƒ«";
-        Text[ chinese_traditional ] = "é€£çµåˆ°";
-        Text[ arabic ] = "ãÑÊÈØ ÈÜ";
-        Text[ greek ] = "~Óıíäåóç ìå";
-        Text[ korean ] = "ì—°ê²°(~L)";
-        Text[ turkish ] = "~Bağlanılan";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Basat en";
-        Text[ thai ] = "à¸šà¸™~à¸à¸·à¹‰à¸™à¸à¸²à¸™";
-        Text[ czech ] = "Spojeno s";
-        Text[ hebrew ] = "â€®×§×©×•×¨ ×œâ€¬";
-        Text[ hindi ] = "à¤•à¥‡ ~à¤†à¤§à¤¾à¤° à¤ªà¤°";
-        Text[ slovak ] = "SpojenÃ© s";
-        Text[ hungarian ] = "Ezen alapul:";
-        Text[ slovenian ] = "Povezano z";
+        Text [ de ] = "~Verknüpft mit" ;
+        Text [ en-US ] = "Linked with" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_BASE
     {
@@ -241,37 +131,9 @@ TabPage TP_MANAGE_STYLES
     {
         Pos = MAP_APPFONT ( 6 , 62 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text = "~Bereich" ;
-        Text [ ENGLISH ] = "~Region" ;
-        Text [ norwegian ] = "~Område" ;
-        Text [ italian ] = "Area" ;
-        Text [ portuguese_brazilian ] = "~Categoria" ;
-        Text [ portuguese ] = "~Categoria" ;
-        Text [ finnish ] = "~Luokka" ;
-        Text [ danish ] = "~Kategori" ;
-        Text [ french ] = "~Catégorie" ;
-        Text [ swedish ] = "~Kategori" ;
-        Text [ dutch ] = "~Bereik" ;
-        Text [ spanish ] = "~Categoría" ;
-        Text [ english_us ] = "~Category" ;
-        Text[ chinese_simplified ] = "åˆ†ç±»(~C)";
-        Text[ russian ] = "Êàòåãîğèÿ";
-        Text[ polish ] = "~Kategoria";
-        Text[ japanese ] = "ç¯„å›²(~C)";
-        Text[ chinese_traditional ] = "åˆ†é¡(~C)";
-        Text[ arabic ] = "ÇáäØÇŞ";
-        Text[ greek ] = "Êáôçãïñßá";
-        Text[ korean ] = "ì˜ì—­(~C)";
-        Text[ turkish ] = "~Kategori";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Categoria";
-        Text[ thai ] = "~à¸›à¸£à¸°à¹€à¸ à¸—";
-        Text[ czech ] = "Kategorie";
-        Text[ hebrew ] = "â€®×¡×™×•×•×’â€¬";
-        Text[ hindi ] = "~à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "K~ategÃ³rie";
-        Text[ hungarian ] = "~KategÃ³ria";
-        Text[ slovenian ] = "~Kategorija";
+        Text [ de ] = "~Bereich" ;
+        Text [ en-US ] = "~Category" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_REGION
     {
@@ -298,37 +160,9 @@ TabPage TP_MANAGE_STYLES
     {
         Pos = MAP_APPFONT ( 6 , 77  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Enthält" ;
-        Text [ ENGLISH ] = "Contains" ;
-        Text [ norwegian ] = "Inneholder" ;
-        Text [ italian ] = "Contiene" ;
-        Text [ portuguese_brazilian ] = "Contém" ;
-        Text [ portuguese ] = "Contém" ;
-        Text [ finnish ] = "Sisältö" ;
-        Text [ danish ] = "Indeholder" ;
-        Text [ french ] = "Contient" ;
-        Text [ swedish ] = "Innehåller" ;
-        Text [ dutch ] = "Bevat" ;
-        Text [ spanish ] = "Contiene" ;
-        Text [ english_us ] = "Contains" ;
-        Text[ chinese_simplified ] = "å«æœ‰";
-        Text[ russian ] = "Ñîäåğæèò";
-        Text[ polish ] = "Zawiera";
-        Text[ japanese ] = "èª¬æ˜";
-        Text[ chinese_traditional ] = "å«æœ‰";
-        Text[ arabic ] = "íÍÊæí Úáì";
-        Text[ greek ] = "Ğåñéİ÷åé";
-        Text[ korean ] = "í¬í•¨";
-        Text[ turkish ] = "İçerir";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Conté";
-        Text[ thai ] = "à¸¡à¸µ";
-        Text[ czech ] = "Obsah";
-        Text[ hebrew ] = "â€®××›×™×œâ€¬";
-        Text[ hindi ] = "à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤";
-        Text[ slovak ] = "Obsahuje";
-        Text[ hungarian ] = "Tartalma:";
-        Text[ slovenian ] = "Vsebuje";
+        Text [ de ] = "Enthält" ;
+        Text [ en-US ] = "Contains" ;
+        Text [ x-comment ] = " ";
     };
 };
  // ********************************************************************** EOF
