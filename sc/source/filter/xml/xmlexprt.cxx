@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-30 09:04:15 $
+ *  last change: $Author: sab $ $Date: 2000-11-30 13:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_NAMEDRANGEFLAG_HPP_
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
 #endif
 
 //! not found in unonames.hxx
@@ -1875,6 +1878,39 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
             GetProgressBarHelper()->SetValue(++nProgressValue);
 }
 
+void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, awt::Point* pPoint)
+{
+    uno::Reference < beans::XPropertySet > xShapeProps ( xShape, uno::UNO_QUERY );
+    sal_Bool bMemChart(sal_False);
+    rtl::OUString sPropCLSID (RTL_CONSTASCII_USTRINGPARAM("CLSID"));
+    if (xShapeProps.is())
+    {
+        uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xShapeProps->getPropertySetInfo();
+        if( xPropSetInfo->hasPropertyByName( sPropCLSID ) )
+        {
+            uno::Any aAny = xShapeProps->getPropertyValue( sPropCLSID );
+            rtl::OUString sCLSID;
+            if (aAny >>= sCLSID)
+            {
+                if ( sCLSID.equalsIgnoreCase(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bf884321-85dd-11d1-89d0-008029e4b0b1"))) )
+                {
+                    uno::Reference < container::XNamed > xNamed (xShape, uno::UNO_QUERY );
+                    rtl::OUString sOUName ( xNamed->getName() );
+                    String sName(sOUName);
+                    SchMemChart* pMemChart = pDoc->FindChartData(sName);
+                    if (pMemChart)
+                    {
+                        bMemChart = sal_True;
+                        GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA, pPoint);
+                    }
+                }
+            }
+        }
+    }
+    if (!bMemChart)
+        GetShapeExport()->exportShape(xShape, SEF_DEFAULT, pPoint);
+}
+
 void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
 {
     if( rMyCell.bHasShape && xCurrentShapes.is() && rMyCell.aShapeVec.size() && pDoc )
@@ -1909,7 +1945,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                 AddAttribute(XML_NAMESPACE_TABLE, sXML_end_x, sBuffer.makeStringAndClear());
                 GetMM100UnitConverter().convertMeasure(sBuffer, nEndY);
                 AddAttribute(XML_NAMESPACE_TABLE, sXML_end_y, sBuffer.makeStringAndClear());
-                GetShapeExport()->exportShape(xShape, SEF_DEFAULT, pPoint);
+                ExportShape(xShape, pPoint);
             }
             aItr++;
         }
@@ -1928,7 +1964,7 @@ void ScXMLExport::WriteTableShapes()
             uno::Any aAny = xCurrentShapes->getByIndex(*aItr);
             uno::Reference<drawing::XShape> xShape;
             if (aAny >>= xShape)
-                GetShapeExport()->exportShape(xShape);
+                ExportShape(xShape, NULL);
             aItr = aTableShapes[nCurrentTable].erase(aItr);
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-30 09:04:15 $
+ *  last change: $Author: sab $ $Date: 2000-11-30 13:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ class ScXMLExport : public SvXMLExport
     void WriteAreaLink(const ScMyCell& rMyCell);
     void WriteAnnotation(const ScMyCell& rMyCell);
     void WriteDetective(const ScMyCell& rMyCell);
+    void ExportShape(const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape, com::sun::star::awt::Point* pPoint);
     void WriteShapes(const ScMyCell& rMyCell);
     void WriteTableShapes();
     void SetRepeatAttribute (const sal_Int32 nEqualCellCount);
