@@ -2,9 +2,9 @@
  *
  *  $RCSfile: player.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date:
+ *  last change: $Author: vg $ $Date:
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,14 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     }
 
     return xRet;
+}
+
+// ------------------------------------------------------------------------------
+
+uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return NULL;
 }
 
 // ------------------------------------------------------------------------------
