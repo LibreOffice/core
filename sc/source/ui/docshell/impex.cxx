@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:32:38 $
+ *  last change: $Author: hr $ $Date: 2004-10-11 12:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,20 +810,21 @@ BOOL ScImportExport::Text2Doc( SvStream& rStrm )
         //
 
 
-void lcl_PutString( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
+bool lcl_PutString( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                     const String& rStr, BYTE nColFormat,
                     ::utl::TransliterationWrapper& rTransliteration,
                     CalendarWrapper& rCalendar,
                     ::utl::TransliterationWrapper* pSecondTransliteration,
                     CalendarWrapper* pSecondCalendar )
 {
+    bool bMultiLine = false;
     if ( nColFormat == SC_COL_SKIP || !rStr.Len() || !ValidCol(nCol) || !ValidRow(nRow) )
-        return;
+        return bMultiLine;
 
     if ( nColFormat == SC_COL_TEXT )
     {
-        pDoc->PutCell( nCol, nRow, nTab, new ScStringCell( rStr ) );
-        return;
+        pDoc->PutCell( nCol, nRow, nTab, ScBaseCell::CreateTextCell( rStr, pDoc ) );
+        return bMultiLine;
     }
 
     if ( nColFormat == SC_COL_ENGLISH )
@@ -837,36 +838,16 @@ void lcl_PutString( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             //  Zahlformat wird nicht auf englisch gesetzt
             pDoc->SetValue( nCol, nRow, nTab, fVal );
-            return;
+            return bMultiLine;
         }
         //  sonst weiter mit SetString
     }
     else if ( nColFormat != SC_COL_STANDARD )                   // Datumsformate
     {
-        //  nach genau drei Teilen suchen
-
+        const USHORT nMaxNumberParts = 7;   // Y-M-D h:m:s.t
         xub_StrLen nLen = rStr.Len();
-        xub_StrLen nStart[3];
-        xub_StrLen nEnd[3];
-        USHORT nFound = 0;
-        BOOL bInNum = FALSE;
-        for ( xub_StrLen nPos=0; nPos<nLen; nPos++ )
-        {
-            if ( ScGlobal::pCharClass->isLetterNumeric( rStr, nPos ) )
-            {
-                if (!bInNum)
-                {
-                    if ( nFound >= 3 )
-                        break;                  // zuviele Teile
-                    bInNum = TRUE;
-                    nStart[nFound] = nPos;
-                    ++nFound;
-                }
-                nEnd[nFound-1] = nPos;
-            }
-            else
-                bInNum = FALSE;
-        }
+        xub_StrLen nStart[nMaxNumberParts];
+        xub_StrLen nEnd[nMaxNumberParts];
 
         USHORT nDP, nMP, nYP;
         switch ( nColFormat )
@@ -875,6 +856,30 @@ void lcl_PutString( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
             case SC_COL_MDY: nDP = 1; nMP = 0; nYP = 2; break;
             case SC_COL_DMY:
             default:         nDP = 0; nMP = 1; nYP = 2; break;
+        }
+
+        USHORT nFound = 0;
+        BOOL bInNum = FALSE;
+        for ( xub_StrLen nPos=0; nPos<nLen && (bInNum ||
+                    nFound<nMaxNumberParts); nPos++ )
+        {
+            if (bInNum && nFound == 3 && nColFormat == SC_COL_YMD &&
+                    nPos <= nStart[nFound]+2 && rStr.GetChar(nPos) == 'T')
+                bInNum = FALSE;     // ISO-8601: YYYY-MM-DDThh:mm...
+            else if ((((!bInNum && nFound==nMP) || (bInNum && nFound==nMP+1))
+                        && ScGlobal::pCharClass->isLetterNumeric( rStr, nPos))
+                    || ScGlobal::pCharClass->isDigit( rStr, nPos))
+            {
+                if (!bInNum)
+                {
+                    bInNum = TRUE;
+                    nStart[nFound] = nPos;
+                    ++nFound;
+                }
+                nEnd[nFound-1] = nPos;
+            }
+            else
+                bInNum = FALSE;
         }
 
         if ( nFound == 1 )
@@ -911,7 +916,7 @@ void lcl_PutString( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
             }
         }
 
-        if ( nFound == 3 )              // exactly 3 parts found?
+        if ( nFound >= 3 )
         {
             using namespace ::com::sun::star;
             BOOL bSecondCal = FALSE;
@@ -977,12 +982,30 @@ void lcl_PutString( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                 pCalendar->setValue( i18n::CalendarFieldIndex::DAY_OF_MONTH, nDay );
                 pCalendar->setValue( i18n::CalendarFieldIndex::MONTH, nMonth );
                 pCalendar->setValue( i18n::CalendarFieldIndex::YEAR, nYear );
+                sal_Int16 nHour, nMinute, nSecond, nMilli;
                 // #i14974# The imported value should have no fractional value, so set the
                 // time fields to zero (ICU calendar instance defaults to current date/time)
-                pCalendar->setValue( i18n::CalendarFieldIndex::HOUR, 0 );
-                pCalendar->setValue( i18n::CalendarFieldIndex::MINUTE, 0 );
-                pCalendar->setValue( i18n::CalendarFieldIndex::SECOND, 0 );
-                pCalendar->setValue( i18n::CalendarFieldIndex::MILLISECOND, 0 );
+                nHour = nMinute = nSecond = nMilli = 0;
+                if (nFound > 3)
+                    nHour = (sal_Int16) rStr.Copy( nStart[3], nEnd[3]+1-nStart[3]).ToInt32();
+                if (nFound > 4)
+                    nMinute = (sal_Int16) rStr.Copy( nStart[4], nEnd[4]+1-nStart[4]).ToInt32();
+                if (nFound > 5)
+                    nSecond = (sal_Int16) rStr.Copy( nStart[5], nEnd[5]+1-nStart[5]).ToInt32();
+                if (nFound > 6)
+                {
+                    sal_Unicode cDec = '.';
+                    rtl::OUString aT( &cDec, 1);
+                    aT += rStr.Copy( nStart[6], nEnd[6]+1-nStart[6]);
+                    rtl_math_ConversionStatus eStatus;
+                    double fV = rtl::math::stringToDouble( aT, cDec, 0, &eStatus, 0);
+                    if (eStatus == rtl_math_ConversionStatus_Ok)
+                        nMilli = (sal_Int16) (1000.0 * fV + 0.5);
+                }
+                pCalendar->setValue( i18n::CalendarFieldIndex::HOUR, nHour );
+                pCalendar->setValue( i18n::CalendarFieldIndex::MINUTE, nMinute );
+                pCalendar->setValue( i18n::CalendarFieldIndex::SECOND, nSecond );
+                pCalendar->setValue( i18n::CalendarFieldIndex::MILLISECOND, nMilli );
                 if ( pCalendar->isValid() )
                 {
                     double fDiff = DateTime(*pFormatter->GetNullDate()) -
@@ -996,19 +1019,29 @@ void lcl_PutString( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                     pDoc->GetLanguage( eLatin, eCjk, eCtl );
                     LanguageType eDocLang = eLatin;     //! which language for date formats?
 
-                    long nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, eDocLang );
+                    short nType = (nFound > 3 ? NUMBERFORMAT_DATETIME : NUMBERFORMAT_DATE);
+                    ULONG nFormat = pFormatter->GetStandardFormat( nType, eDocLang );
+                    // maybe there is a special format including seconds or milliseconds
+                    if (nFound > 5)
+                        nFormat = pFormatter->GetStandardFormat( fDays, nFormat, nType, eDocLang);
 
                     pDoc->PutCell( nCol, nRow, nTab, new ScValueCell(fDays), nFormat, FALSE );
 
-                    return;     // success
+                    return bMultiLine;     // success
                 }
             }
         }
     }
 
-    //  Standard oder Datum nicht erkannt -> SetString
-
-    pDoc->SetString( nCol, nRow, nTab, rStr );
+    // Standard or date not determined -> SetString / EditCell
+    if( rStr.Search( _LF ) == STRING_NOTFOUND )
+        pDoc->SetString( nCol, nRow, nTab, rStr );
+    else
+    {
+        bMultiLine = true;
+        pDoc->PutCell( nCol, nRow, nTab, new ScEditCell( rStr, pDoc ) );
+    }
+    return bMultiLine;
 }
 
 
@@ -1028,7 +1061,6 @@ String lcl_GetFixed( const String& rLine, xub_StrLen nStart, xub_StrLen nNext )
 
     return rLine.Copy( nStart, nSpace-nStart );
 }
-
 
 BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
 {
@@ -1051,7 +1083,8 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
     SCTAB nTab = aRange.aStart.Tab();
 
     BOOL    bFixed          = pExtOptions->IsFixedLen();
-    const sal_Unicode* pSeps = pExtOptions->GetFieldSeps().GetBuffer();
+    const String& rSeps     = pExtOptions->GetFieldSeps();
+    const sal_Unicode* pSeps = rSeps.GetBuffer();
     BOOL    bMerge          = pExtOptions->IsMergeSeps();
     USHORT  nInfoCount      = pExtOptions->GetInfoCount();
     const xub_StrLen* pColStart = pExtOptions->GetColStart();
@@ -1087,18 +1120,19 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     while(--nSkipLines>0)
     {
-        rStrm.ReadUniOrByteStringLine( aLine );     // content is ignored
+        rStrm.ReadCsvLine( aLine, !bFixed, rSeps, cStr); // content is ignored
         if ( rStrm.IsEof() )
             break;
     }
     for( ;; )
     {
-        rStrm.ReadUniOrByteStringLine( aLine );
+        rStrm.ReadCsvLine( aLine, !bFixed, rSeps, cStr);
         if ( rStrm.IsEof() )
             break;
 
         xub_StrLen nLineLen = aLine.Len();
         SCCOL nCol = nStartCol;
+        bool bMultiLine = false;
         if ( bFixed )               //  Feste Satzlaenge
         {
             for ( i=0; i<nInfoCount; i++ )
@@ -1108,7 +1142,7 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
                     xub_StrLen nStart = pColStart[i];
                     xub_StrLen nNext = ( i+1 < nInfoCount ) ? pColStart[i+1] : nLineLen;
                     aCell = lcl_GetFixed( aLine, nStart, nNext );
-                    lcl_PutString( pDoc, nCol, nRow, nTab, aCell, pColFormat[i],
+                    bMultiLine |= lcl_PutString( pDoc, nCol, nRow, nTab, aCell, pColFormat[i],
                         aTransliteration, aCalendar, pEnglishTransliteration, pEnglishCalendar );
                     ++nCol;
                 }
@@ -1135,7 +1169,7 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
                 }
                 if ( nFmt != SC_COL_SKIP )
                 {
-                    lcl_PutString( pDoc, nCol, nRow, nTab, aCell, nFmt,
+                    bMultiLine |= lcl_PutString( pDoc, nCol, nRow, nTab, aCell, nFmt,
                         aTransliteration, aCalendar, pEnglishTransliteration, pEnglishCalendar );
                     ++nCol;
                 }
@@ -1143,6 +1177,8 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
                 ++nSourceCol;
             }
         }
+        if (bMultiLine && pDocSh)
+            pDocSh->AdjustRowHeight( nRow, nRow, nTab);
 
         aProgress.SetStateOnPercent( rStrm.Tell() - nOldPos );
         ++nRow;
@@ -1170,9 +1206,14 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
     rField.Erase();
     if ( *p == cStr )           // String in Anfuehrungszeichen
     {
-        p = lcl_ScanString( p, rField, cStr, DQM_ESCAPE );
+        const sal_Unicode* p1;
+        p1 = p = lcl_ScanString( p, rField, cStr, DQM_ESCAPE );
         while ( *p && !ScGlobal::UnicodeStrChr( pSeps, *p ) )
             p++;
+        // Append remaining unquoted and undelimited data (dirty, dirty) to
+        // this field.
+        if (p > p1)
+            rField.Append( p1, p - p1);
         if( *p )
             p++;
     }
