@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepct.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-13 20:11:54 $
+ *  last change: $Author: kz $ $Date: 2001-08-08 09:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,16 +128,16 @@ ModalDialog DLG_EXPORT_EPCT
         Text [ danish ] = "Størrelse" ;
         Text [ portuguese ] = "Tamanho" ;
         Text [ portuguese_brazilian ] = "Tamanho" ;
-        Text[ chinese_simplified ] = "´óĞ¡";
+        Text[ chinese_simplified ] = "å¤§å°";
         Text[ russian ] = "Ğàçìåğ";
         Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "»²½Ş";
-        Text[ chinese_traditional ] = "¤j¤p";
+        Text[ japanese ] = "ï½»ï½²ï½½ï¾";
+        Text[ chinese_traditional ] = "å¤§å°";
         Text[ arabic ] = "ÇáÍÌã";
         Text[ dutch ] = "Grootte";
-        Text[ chinese_simplified ] = "´óĞ¡";
+        Text[ chinese_simplified ] = "å¤§å°";
         Text[ greek ] = "Ìİãåèïò";
-        Text[ korean ] = "Å©±â";
+        Text[ korean ] = "í¬ê¸°";
         Text[ turkish ] = "Boyut";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tamaño";
@@ -158,16 +158,16 @@ ModalDialog DLG_EXPORT_EPCT
         Text [ danish ] = "Bredde" ;
         Text [ portuguese ] = "Largura" ;
         Text [ portuguese_brazilian ] = "Largura" ;
-        Text[ chinese_simplified ] = "¿í¶È";
+        Text[ chinese_simplified ] = "å®½åº¦";
         Text[ russian ] = "Øèğèíà";
         Text[ polish ] = "Szer.";
-        Text[ japanese ] = "•";
-        Text[ chinese_traditional ] = "¼e«×";
+        Text[ japanese ] = "å¹…";
+        Text[ chinese_traditional ] = "å¯¬åº¦";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ dutch ] = "Breedte";
-        Text[ chinese_simplified ] = "¿í¶È";
+        Text[ chinese_simplified ] = "å®½åº¦";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ";
+        Text[ korean ] = "ë„ˆë¹„";
         Text[ turkish ] = "Genişlik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ancho";
@@ -188,16 +188,16 @@ ModalDialog DLG_EXPORT_EPCT
         Text [ danish ] = "Højde" ;
         Text [ portuguese_brazilian ] = "H?de" ;
         Text [ portuguese ] = "Altura" ;
-        Text[ chinese_simplified ] = "¸ß¶È";
+        Text[ chinese_simplified ] = "é«˜åº¦";
         Text[ russian ] = "Âûñîòà";
         Text[ polish ] = "Wys.";
-        Text[ japanese ] = "‚‚³";
-        Text[ chinese_traditional ] = "°ª«×";
+        Text[ japanese ] = "é«˜ã•";
+        Text[ chinese_traditional ] = "é«˜åº¦";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ dutch ] = "Hoogte";
-        Text[ chinese_simplified ] = "¸ß¶È";
+        Text[ chinese_simplified ] = "é«˜åº¦";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ";
+        Text[ korean ] = "ë†’ì´";
         Text[ turkish ] = "Yükseklik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Altura";
@@ -238,16 +238,16 @@ ModalDialog DLG_EXPORT_EPCT
         Text [ danish ] = "~Original" ;
         Text [ portuguese_brazilian ] = "~Original" ;
         Text [ portuguese ] = "~Original" ;
-        Text[ chinese_simplified ] = "Ô­¼ş(~O)";
+        Text[ chinese_simplified ] = "åŸä»¶(~O)";
         Text[ russian ] = "Îğèãèíàë";
         Text[ polish ] = "Orygina³";
-        Text[ japanese ] = "µØ¼ŞÅÙ(~O)";
-        Text[ chinese_traditional ] = "­ì¥ó(~O)";
+        Text[ japanese ] = "ï½µï¾˜ï½¼ï¾ï¾…ï¾™(~O)";
+        Text[ chinese_traditional ] = "åŸä»¶(~O)";
         Text[ arabic ] = "ÇáÃÕá";
         Text[ dutch ] = "~Origineel";
-        Text[ chinese_simplified ] = "Ô­¼ş(~O)";
+        Text[ chinese_simplified ] = "åŸä»¶(~O)";
         Text[ greek ] = "Áñ÷éêü";
-        Text[ korean ] = "¿À¸®Áö³Î(~O)";
+        Text[ korean ] = "ì˜¤ë¦¬ì§€ë„(~O)";
         Text[ turkish ] = "Aslı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Original";
@@ -269,16 +269,16 @@ ModalDialog DLG_EXPORT_EPCT
         Text [ danish ] = "~Størrelse" ;
         Text [ portuguese ] = "~Tamanho" ;
         Text [ portuguese_brazilian ] = "~Tamanho" ;
-        Text[ chinese_simplified ] = "´óĞ¡(~S)";
+        Text[ chinese_simplified ] = "å¤§å°(~S)";
         Text[ russian ] = "Ğàçìåğ";
         Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "»²½Ş(~S)";
-        Text[ chinese_traditional ] = "¤j¤p(~S)";
+        Text[ japanese ] = "ï½»ï½²ï½½ï¾(~S)";
+        Text[ chinese_traditional ] = "å¤§å°(~S)";
         Text[ arabic ] = "ÇáÍÌã";
         Text[ dutch ] = "~Grootte";
-        Text[ chinese_simplified ] = "´óĞ¡(~S)";
+        Text[ chinese_simplified ] = "å¤§å°(~S)";
         Text[ greek ] = "Ìİãåèïò";
-        Text[ korean ] = "Å©±â(~S)";
+        Text[ korean ] = "í¬ê¸°(~S)";
         Text[ turkish ] = "Boyut";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tamaño";
@@ -299,36 +299,37 @@ ModalDialog DLG_EXPORT_EPCT
         Text [ danish ] = "Modus" ;
         Text [ portuguese_brazilian ] = "Modus" ;
         Text [ portuguese ] = "Modo" ;
-        Text[ chinese_simplified ] = "Ä£Ê½";
+        Text[ chinese_simplified ] = "æ¨¡å¼";
         Text[ russian ] = "Ğåæèì";
         Text[ polish ] = "Tryb";
-        Text[ japanese ] = "Ó°ÄŞ";
-        Text[ chinese_traditional ] = "¼Ò¦¡";
+        Text[ japanese ] = "ï¾“ï½°ï¾„ï¾";
+        Text[ chinese_traditional ] = "æ¨¡å¼";
         Text[ arabic ] = "ÇáæÖÚ";
         Text[ dutch ] = "Modus";
-        Text[ chinese_simplified ] = "Ä£Ê½";
+        Text[ chinese_simplified ] = "æ¨¡å¼";
         Text[ greek ] = "ÊáôÜóôáóç ëåéôïõñãßáò";
-        Text[ korean ] = "¸ğµå";
+        Text[ korean ] = "ëª¨ë“œ";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Modo";
         Text[ finnish ] = "Tila";
     };
-    Text[ chinese_simplified ] = "PICT Ñ¡Ïî";
+    Text[ chinese_simplified ] = "PICT é€‰é¡¹";
     Text[ russian ] = "Ïàğàìåòğû PICT";
     Text[ polish ] = "Opcje PICT";
-    Text[ japanese ] = "PICT µÌß¼®İ";
-    Text[ chinese_traditional ] = "PICT¿ï¶µ";
+    Text[ japanese ] = "PICT ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+    Text[ chinese_traditional ] = "PICTé¸é …";
     Text[ arabic ] = "PICT ÎíÇÑÇÊ";
     Text[ dutch ] = "PICT-opties";
-    Text[ chinese_simplified ] = "PICT Ñ¡Ïî";
+    Text[ chinese_simplified ] = "PICT é€‰é¡¹";
     Text[ greek ] = "Åğéëïãİò PICT";
-    Text[ korean ] = "PICT ¿É¼Ç";
+    Text[ korean ] = "PICT ì˜µì…˜";
     Text[ turkish ] = "PICT seçenekleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opciones PICT";
     Text[ finnish ] = "PICT-asetukset";
 };
+
 
 
 
