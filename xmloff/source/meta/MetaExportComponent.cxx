@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaExportComponent.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:31 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,10 @@
 #include <com/sun/star/uno/Exception.hpp>
 #endif
 
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
+// #110680#
+//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+//#include <comphelper/processfactory.hxx>
+//#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -119,8 +120,10 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-XMLMetaExportComponent::XMLMetaExportComponent() :
-    SvXMLExport( MAP_INCH, XML_META )
+// #110680#
+XMLMetaExportComponent::XMLMetaExportComponent(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory)
+:   SvXMLExport( xServiceFactory, MAP_INCH, XML_META )
 {
 }
 
@@ -180,6 +183,8 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new XMLMetaExportComponent;
+    // #110680#
+    // return (cppu::OWeakObject*)new XMLMetaExportComponent;
+    return (cppu::OWeakObject*)new XMLMetaExportComponent(rSMgr);
 }
 
