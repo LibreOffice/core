@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkdll.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mhu $ $Date: 2003-04-16 10:19:57 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <errno.h>
 #include <unistd.h>
 #ifdef MACOSX
-#include <CoreFoundation/CoreFoundation.h>
+#include <mach-o/dyld.h>
 #else
 #include <dlfcn.h>
 #endif
@@ -90,10 +90,7 @@ int main(int argc, char *argv[])
 {
     int     rc;
 #ifdef MACOSX
-    CFStringRef     bundlePath;
-    CFURLRef        bundleURL;
-    CFBundleRef     bundle;
-    CFStringRef     symbolName;
+        struct mach_header *pLib;
 #else
     void    *phandle;
 #endif
@@ -115,68 +112,60 @@ int main(int argc, char *argv[])
 
 #ifdef MACOSX
 
-    /* Convert char pointers to CFStringRefs */
-    bundlePath = CFStringCreateWithCStringNoCopy(NULL, argv[1],
-        CFStringGetSystemEncoding(), kCFAllocatorNull);
-    symbolName = CFStringCreateWithCStringNoCopy(NULL, psymbol,
-        CFStringGetSystemEncoding(), kCFAllocatorNull);
-
-    /* Get the framework's URL using its path */
-    if ((bundleURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault,
-        bundlePath, kCFURLPOSIXPathStyle, true)) != NULL) {
-            /* Load the framework */
-            if ((bundle = CFBundleCreate( kCFAllocatorDefault,
-                bundleURL)) != NULL) {
-                    /* Load the shared library */
-                    if (CFBundleLoadExecutable(bundle)) {
-                        if ((pfun = CFBundleGetFunctionPointerForName(bundle,
-                            symbolName)) != NULL) {
-                                printf(": ok\n");
-                                CFRelease(bundlePath);
-                                CFRelease(bundleURL);
-                                CFRelease(bundle);
-                                CFRelease(symbolName);
-                                return 0;
-                        }
-                        else
-                            printf(": ERROR: symbol %s not found\n", psymbol);
-                    }
-                    /* No message printed since CFLog prints its own message */
-            }
-            else
-                printf(": ERROR: %s is not a bundle\n", argv[1]);
-    }
-    else
-        printf(": ERROR: %s is not a valid bundle name\n", argv[1]);
-
-    CFRelease(bundlePath);
-    if (bundleURL != NULL) CFRelease(bundleURL);
-    if (bundle != NULL) CFRelease(bundle);
-    CFRelease(symbolName);
+        // Check if library is already loaded
+        pLib = NSAddImage(argv[1], NSADDIMAGE_OPTION_RETURN_ONLY_IF_LOADED);
+        if (!pLib) {
+                // Check DYLD_LIBRARY_PATH
+                pLib = NSAddImage(argv[1], NSADDIMAGE_OPTION_WITH_SEARCHING);
+        }
+        if (pLib) {
+                // Prefix symbol name with '_'
+                char *name = malloc(1+strlen(psymbol)+1);
+                NSSymbol *symbol;
+                void *address = NULL;
+                strcpy(name, "_");
+                strcat(name, psymbol);
+                symbol = NSLookupSymbolInImage(pLib, name, NSLOOKUPSYMBOLINIMAGE_OPTION_BIND);
+                free(name);
+                if (symbol) address = NSAddressOfSymbol(symbol);
+                if (address != NULL) {
+                        printf(": ok\n");
+#ifdef NO_UNLOAD_CHECK
+                        _exit(0);
+#else
+                        // Mac OS X can't unload dylibs
+#endif
+                        return 0;
+                } else {
+                        printf(": ERROR: symbol %s not found\n", psymbol);
+                }
+        } else {
+                printf(": ERROR: %s is not a valid dylib name\n", argv[1]);
+        }
     return 3;
+
+        // fixme use NSLinkEditError() for better error messages
 
 #else /* MACOSX */
 
-    if ( (phandle = dlopen(argv[1], RTLD_NOW)) != NULL )
-    {
-        if  ( (pfun = (char *(*)(void))dlsym(phandle, psymbol)) != NULL )
-        {
+    if ( (phandle = dlopen(argv[1], RTLD_NOW)) != NULL ) {
+        if  ( (pfun = (char *(*)(void))dlsym(phandle, psymbol)) != NULL ) {
             printf(": ok\n");
-        }
-        else
-        {
-            printf(": WARNING: %s\n", dlerror());
-        }
-
 #ifdef NO_UNLOAD_CHECK
-        _exit(0);
+            _exit(0);
+#else
+            dlclose(phandle);
+#endif
+            return 0;
+        }
+    }
+    printf(": ERROR: %s\n", dlerror());
+    if (phandle)
+#ifdef NO_UNLOAD_CHECK
+        _exit(3);
 #else
         dlclose(phandle);
 #endif
-        return 0;
-    }
-
-    printf(": ERROR: %s\n", dlerror());
     return 3;
 
 #endif /* MACOSX */
