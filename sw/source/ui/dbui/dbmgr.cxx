@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 13:51:01 $
+ *  last change: $Author: os $ $Date: 2001-07-18 13:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1301,8 +1301,16 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
         Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
         if(xColsSupp.is())
         {
-            Reference <XNameAccess> xCols = xColsSupp->getColumns();
-            if(!xCols->hasByName(rColNm))
+            Reference <XNameAccess> xCols;
+            try
+            {
+                xCols = xColsSupp->getColumns();
+            }
+            catch(Exception&)
+            {
+                DBG_ERROR("Exception in getColumns()")
+            }
+            if(!xCols || !xCols->hasByName(rColNm))
                 return nRet;
             Any aCol = xCols->getByName(rColNm);
             Reference< XPropertySet > xColumn;

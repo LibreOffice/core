@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-07-11 12:10:53 $
+ *  last change: $Author: os $ $Date: 2001-07-18 13:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,8 +256,10 @@ BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& rSet)
 {
     String sTableName, sColumnName;
     SwDBData aData;
-    aData.sDataSource = aDatabaseTLB.GetDBName(sTableName, sColumnName);
+    sal_Bool bIsTable;
+    aData.sDataSource = aDatabaseTLB.GetDBName(sTableName, sColumnName, &bIsTable);
     aData.sCommand = sTableName;
+    aData.nCommandType = bIsTable ? 0 : 1;
     SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
 
     if (!aData.sDataSource.getLength())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfldui.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-22 08:29:13 $
+ *  last change: $Author: os $ $Date: 2001-07-18 13:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,8 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
         rtl::OUString sDummy;
         xConnection = (*pxSource)->getConnection(sDummy, sDummy);
     }
-    catch(...) {}
+    catch(Exception&)
+    {}
     Reference<XColumnsSupplier> xColsSupplier;
 
     if(bIsTable)
@@ -153,7 +154,7 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
                 Reference<XPropertySet> xPropSet = *(Reference<XPropertySet>*)aTable.getValue();
                 xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
             }
-            catch(...){}
+            catch(Exception&){}
         }
     }
     else
@@ -169,13 +170,21 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
                 Reference<XPropertySet> xPropSet = *(Reference<XPropertySet>*)aQuery.getValue();
                 xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
             }
-            catch(...){}
+            catch(Exception&){}
         }
     }
 
     if(xColsSupplier.is())
     {
-        Reference <XNameAccess> xCols = xColsSupplier->getColumns();
+        Reference <XNameAccess> xCols;
+        try
+        {
+            xCols = xColsSupplier->getColumns();
+        }
+        catch(Exception& )
+        {
+            DBG_ERROR("Exception in getColumns()")
+        }
         if(xCols.is() && xCols->hasByName(rFldName))
         {
             Any aCol = xCols->getByName(rFldName);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 13:47:31 $
+ *  last change: $Author: os $ $Date: 2001-07-18 13:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,8 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
                 SwDBData aData;
                 aData.sDataSource = rPar1.GetToken(0, DB_DELIM);
                 aData.sCommand = rPar1.GetToken(1, DB_DELIM);
-                String sColumn = rPar1.GetToken(2, DB_DELIM);
+                aData.nCommandType = rPar1.GetToken(2, DB_DELIM).ToInt32();
+                String sColumn = rPar1.GetToken(3, DB_DELIM);
 
                 SwDBFieldType* pOldTyp = (SwDBFieldType*)pCurFld->GetTyp();
                 SwDBFieldType* pTyp = (SwDBFieldType*)pSh->InsertFldType(
