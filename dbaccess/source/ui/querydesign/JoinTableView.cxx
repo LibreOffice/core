@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 13:45:42 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 13:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1109,35 +1109,21 @@ void OJoinTableView::ClearAll()
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
     SetUpdateMode(FALSE);
-    OTableWindowMapIterator aTableIter = m_aTableMap.begin();
 
-    for(;aTableIter != m_aTableMap.end();++aTableIter)
-    {
-        OTableWindow* pEntry = aTableIter->second;
-        ::std::vector< OTableWindowData*>::iterator aFind = ::std::find(m_pView->getController()->getTableWindowData()->begin(),m_pView->getController()->getTableWindowData()->end(),pEntry->GetData());
-        if(aFind != m_pView->getController()->getTableWindowData()->end())
-        {
-            delete *aFind;
-            m_pView->getController()->getTableWindowData()->erase(aFind);
-        }
-        delete pEntry;
-    }
-    m_aTableMap.clear();
+    HideTabWins();
 
     // und das selbe mit den Connections
     ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
     for(;aIter != m_vTableConnection.end();++aIter)
-    {
-        ::std::auto_ptr<OTableConnectionData> pData((*aIter)->GetData());
-        m_pView->getController()->removeConnectionData(pData);
-        delete (*aIter);
-    }
+        RemoveConnection(*aIter);
     m_vTableConnection.clear();
+
     m_pLastFocusTabWin = NULL;
 
     // scroll to the upper left
     Scroll(-GetScrollOffset().X(), TRUE, TRUE);
     Scroll(-GetScrollOffset().Y(), FALSE, TRUE);
+    Invalidate();
 }
 
 //------------------------------------------------------------------------
@@ -1568,6 +1554,28 @@ void OJoinTableView::StateChanged( StateChangedType nType )
         Resize();
     }
 }
+//------------------------------------------------------------------------------
+void OJoinTableView::HideTabWins()
+{
+    DBG_CHKTHIS(OJoinTableView,NULL);
+    SetUpdateMode(sal_False);
+
+    OTableWindowMap* pTabWins = GetTabWinMap();
+    if (pTabWins)
+    {
+        OTableWindowMap::const_iterator aIter = pTabWins->begin();
+        for(;aIter != pTabWins->end();++aIter)
+            RemoveTabWin(aIter->second);
+    }
+
+    m_pView->getController()->setModified(sal_True);
+
+    SetUpdateMode(sal_True);
+
+}
+// -----------------------------------------------------------------------------
+
+
 
 
 

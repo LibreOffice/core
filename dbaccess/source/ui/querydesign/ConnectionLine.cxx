@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLine.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 13:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,12 @@ OConnectionLine::OConnectionLine( OTableConnection* _pConn, const String& _rSour
     : m_pTabConn( _pConn )
      ,m_pSourceEntry( NULL )
      ,m_pDestEntry( NULL )
+     ,m_pData(NULL)
 {
     DBG_CTOR(OConnectionLine,NULL);
-    m_pData->SetSourceFieldName( _rSourceFieldName );
-    m_pData->SetDestFieldName( _rDestFieldName );
+    m_pData = new OConnectionLineData( _rSourceFieldName,_rDestFieldName);
+//  m_pData->SetSourceFieldName( _rSourceFieldName );
+//  m_pData->SetDestFieldName( _rDestFieldName );
 }
 
 //------------------------------------------------------------------------
@@ -444,7 +446,7 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
 //------------------------------------------------------------------------
 BOOL OConnectionLine::IsValid()
 {
-    return m_pData->IsValid();
+    return m_pData && m_pData->IsValid();
 }
 //------------------------------------------------------------------------
 double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)

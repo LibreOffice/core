@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 13:16:33 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 13:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,8 @@ namespace dbaui
         long                        GetBrowseRow(long nRowId) const;
         sal_Bool                    GetFunktionName(String& rFkt);
         void                        appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow);
+        void                        PreFill();
+        ::std::vector<OTableFieldDesc*>* getFields() const;
     };
 }
 #endif // DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX

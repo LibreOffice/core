@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-26 13:34:47 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 13:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,10 +465,15 @@ void OQueryController::Execute(sal_uInt16 _nId)
             }
             break;
         case ID_BROWSER_CLEAR_QUERY:
-            m_pWindow->getView()->clear();
-            m_sStatement = ::rtl::OUString();
-            if(m_bDesign)
-                InvalidateFeature(ID_BROWSER_ADDTABLE);
+            {
+                m_aUndoManager.EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
+                m_pWindow->getView()->clear();
+                m_aUndoManager.LeaveListAction();
+
+                m_sStatement = ::rtl::OUString();
+                if(m_bDesign)
+                    InvalidateFeature(ID_BROWSER_ADDTABLE);
+            }
             //  InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
             break;
         case ID_BROWSER_QUERY_VIEW_FUNCTIONS:

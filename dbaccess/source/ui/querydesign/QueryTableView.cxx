@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-10 11:11:49 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 13:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,7 +849,7 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
     pUndoMgr->AddUndoAction( pUndoAction );
     pUndoMgr->LeaveListAction();
 
-    m_pView->getController()->InvalidateFeature(ID_BROWSER_UNDORECORD);
+    m_pView->getController()->InvalidateFeature(ID_BROWSER_UNDO);
     m_pView->getController()->InvalidateFeature(ID_BROWSER_REDO);
     //  GetViewShell()->GetViewShell()->UIFeatureChanged();
 
@@ -858,26 +858,6 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
         TabWinsChangeNotification aHint(TabWinsChangeNotification::AT_REMOVED_WIN, static_cast< OQueryTableWindow*>(pTabWin)->GetAliasName());
         m_lnkTabWinsChangeHandler.Call(&aHint);
     }
-}
-
-//------------------------------------------------------------------------------
-void OQueryTableView::HideTabWins()
-{
-    DBG_CHKTHIS(OQueryTableView,NULL);
-    SetUpdateMode(sal_False);
-
-    OTableWindowMap* pTabWins = GetTabWinMap();
-    if (pTabWins)
-    {
-        OTableWindowMap::const_iterator aIter = GetTabWinMap()->begin();
-        for(;aIter != GetTabWinMap()->end();++aIter)
-            RemoveTabWin(aIter->second);
-    }
-
-    m_pView->getController()->setModified(sal_True);
-
-    SetUpdateMode(sal_True);
-
 }
 
 //------------------------------------------------------------------------

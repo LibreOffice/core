@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 13:16:33 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 13:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ void OQueryDesignView::initialize()
         m_aSplitter.SetSplitPosPixel(static_cast<OQueryController*>(getController())->getSplitPos());
     }
     m_pSelectionBox->initialize();
-    m_pSelectionBox->ClearAll();
+    m_pSelectionBox->PreFill();
     m_pSelectionBox->SetReadOnly(static_cast<OQueryController*>(getController())->isReadOnly());
     m_pSelectionBox->Fill();
 }
@@ -273,9 +273,9 @@ void OQueryDesignView::setReadOnly(sal_Bool _bReadOnly)
 // -----------------------------------------------------------------------------
 void OQueryDesignView::clear()
 {
-    SfxUndoManager* pUndoMgr = static_cast<OQueryController*>(getController())->getUndoMgr();
+
     m_pSelectionBox->ClearAll(); // clear the whole selection
-    m_pSelectionBox->Fill();    // fill with empty the fields
+    //  m_pSelectionBox->Fill();    // fill with empty the fields
     m_pTableView->ClearAll();
 }
 // -----------------------------------------------------------------------------
@@ -1867,7 +1867,7 @@ sal_Bool OQueryDesignView::isSlotEnabled(sal_Int32 _nSlotId)
 // -----------------------------------------------------------------------------
 void OQueryDesignView::InitFromParseNode()
 {
-    m_pSelectionBox->ClearAll();
+    m_pSelectionBox->PreFill();
     m_pSelectionBox->Fill();
 
     ::connectivity::OSQLParseTreeIterator& aIterator = static_cast<OQueryController*>(getController())->getParseIterator();
