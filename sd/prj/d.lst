@@ -1,26 +1,18 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %COMMON_DEST%\res%_EXT%
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
+..\%COMMON_OUTDIR%\srs\core_srs.hid %COMMON_DEST%\res%_EXT%\sdcore_srs.hid
+
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
-..\inc\sd.lst %_DEST%\inc%_EXT%\sd.lst
-..\inc\sddll.hxx %_DEST%\inc%_EXT%\sddll.hxx
-..\%__SRC%\misc\sd.csv %_DEST%\inc%_EXT%\sd.csv
 ..\%__SRC%\lib\sdi.lib %_DEST%\lib%_EXT%\sdi.lib
 ..\%__SRC%\lib\sdlib.lib %_DEST%\lib%_EXT%\sdlib.lib
 ..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\bin\sdraw3.exe %_DEST%\bin%_EXT%\sdraw3.exe
-..\%__SRC%\bin\sdraw3.sym %_DEST%\bin%_EXT%\sdraw3.sym
-..\%__SRC%\bin\sdslots.tlb %_DEST%\bin%_EXT%\sdslots.tlb
 ..\%__SRC%\bin\sd?????.dll %_DEST%\bin%_EXT%\sd?????.dll
 ..\%__SRC%\bin\sd?????.res %_DEST%\bin%_EXT%\sd?????.res
 ..\%__SRC%\bin\emp?????.* %_DEST%\bin%_EXT%\emp?????.*
-..\%__SRC%\bin\sdslots.tlb %_DEST%\bin%_EXT%\sdslots.tlb
-..\%__SRC%\bin\sdgslots.tlb %_DEST%\bin%_EXT%\sdgslots.tlb
-..\%__SRC%\lib\sdl.lib %_DEST%\lib%_EXT%\sdl.lib
-..\%__SRC%\lib\libsdl.a %_DEST%\lib%_EXT%\libsdl.a
 ..\%__SRC%\srs\core.srs %_DEST%\res%_EXT%\sdcore.srs
-..\%COMMON_OUTDIR%\srs\core_srs.hid %COMMON_DEST%\res%_EXT%\sdcore_srs.hid
 
 mkdir: %_DEST%\pck%_EXT%
 ..\res\webview\common.inc %_DEST%\pck%_EXT%\common.inc
@@ -40,25 +32,7 @@ mkdir: %_DEST%\pck%_EXT%
 ..\res\webview\webview.pl %_DEST%\pck%_EXT%\webcast.pl
 
 mkdir: %_DEST%\inc%_EXT%\sd
-hedabu: ..\inc\sddll.hxx %_DEST%\inc%_EXT%\sd\sddll.hxx
-hedabu: ..\inc\fadedef.h %_DEST%\inc%_EXT%\sd\fadedef.h
-hedabu: ..\inc\pres.hxx %_DEST%\inc%_EXT%\sd\pres.hxx
-hedabu: ..\inc\sdpage.hxx %_DEST%\inc%_EXT%\sd\sdpage.hxx
-hedabu: ..\inc\fadedef.hxx %_DEST%\inc%_EXT%\sd\fadedef.hxx
-hedabu: ..\inc\diadef.h %_DEST%\inc%_EXT%\sd\diadef.h
-hedabu: ..\inc\anmdef.hxx %_DEST%\inc%_EXT%\sd\anmdef.hxx
-hedabu: ..\inc\anminfo.hxx %_DEST%\inc%_EXT%\sd\anminfo.hxx
-hedabu: ..\inc\fadedef.h %_DEST%\inc%_EXT%\sd\fadedef.h
-hedabu: ..\inc\strmname.h %_DEST%\inc%_EXT%\sd\strmname.h
-hedabu: ..\inc\movedef.hxx %_DEST%\inc%_EXT%\sd\movedef.hxx
-hedabu: ..\inc\sdattr.hxx %_DEST%\inc%_EXT%\sd\sdattr.hxx
-hedabu: ..\inc\cusshow.hxx %_DEST%\inc%_EXT%\sd\cusshow.hxx
-hedabu: ..\inc\glob.hxx %_DEST%\inc%_EXT%\sd\glob.hxx
-hedabu: ..\inc\glob.hrc %_DEST%\inc%_EXT%\sd\glob.hrc
-hedabu: ..\inc\eetext.hxx %_DEST%\inc%_EXT%\sd\eetext.hxx
-hedabu: ..\inc\sdiocmpt.hxx %_DEST%\inc%_EXT%\sd\sdiocmpt.hxx
-hedabu: ..\inc\app.hrc %_DEST%\inc%_EXT%\sd\app.hrc
-hedabu: ..\inc\sdobjfac.hxx %_DEST%\inc%_EXT%\sd\sdobjfac.hxx
+..\inc\sddll.hxx %_DEST%\inc%_EXT%\sd\sddll.hxx
 
 ..\xml\SdDocLinkTargets.xml %_DEST%\xml%_EXT%\SdDocLinkTargets.xml
 ..\xml\SdDrawPage.xml %_DEST%\xml%_EXT%\SdDrawPage.xml
@@ -95,5 +69,3 @@ hedabu: ..\inc\sdobjfac.hxx %_DEST%\inc%_EXT%\sd\sdobjfac.hxx
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
 ..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
-dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
