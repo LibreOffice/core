@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hdu $ $Date: 2000-10-19 09:10:58 $
+ *  last change: $Author: rt $ $Date: 2000-10-24 12:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ void SvxShowCharSet::Command( const CommandEvent& rCEvt )
 #define LAST_SURROGATE  sal_Unicode(0xDFFF)
 #define COUNT_SURROGATE (LAST_SURROGATE - FIRST_SURROGATE + 1);
 
-inline int SvxShowCharSet::FirstInMap( void) const
+int SvxShowCharSet::FirstInMap( void) const
 {
     return 0;
 }
@@ -282,7 +282,7 @@ inline Point SvxShowCharSet::MapIndexToPixel( int index) const
     return Point( x, y);
 }
 
-inline int SvxShowCharSet::PixelToMapIndex( const Point point) const
+int SvxShowCharSet::PixelToMapIndex( const Point point) const
 {
     int base = FirstInView();
     return (base + (point.X()/nX) + (point.Y()/nY) * COLUMN_COUNT);
