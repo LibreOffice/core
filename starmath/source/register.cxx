@@ -2,9 +2,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:56:50 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 
 #include "smdll.hxx"
 #include "document.hxx"
+#include "unomodel.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
