@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-19 10:24:37 $
+ *  last change: $Author: tl $ $Date: 2001-04-19 14:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ class SmDocShell : public SfxObjectShell, public SfxInPlaceObject,
     SmParser            aInterpreter;
     SvDataTypeList      aDataTypeList;
     SvStorageStreamRef  aDocStream;
+    SmSymSetManager    *pSymSetMgr;
     SmNode             *pTree;
     SvInPlaceMenuBar   *pMenuBar;
     SfxMenuBarManager  *pMenuMgr;
@@ -265,6 +266,12 @@ public:
 
     EditEngine &    GetEditEngine();
     SfxItemPool &   GetEditEngineItemPool();
+
+    SmSymSetManager &       GetSymSetManager();
+    const SmSymSetManager & GetSymSetManager() const
+    {
+        return ((SmDocShell *) this)->GetSymSetManager();
+    }
 
     void        Draw(OutputDevice &rDev, Point &rPosition);
     Size        GetSize();

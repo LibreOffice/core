@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-30 12:09:29 $
+ *  last change: $Author: tl $ $Date: 2001-04-19 14:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,8 +305,17 @@ void SmDocShell::LoadSymbols()
     sURL = aOpt.SubstituteVariable( sURL );
     if( !FStatHelper::IsDocument( sURL ) )
         aOpt.SearchFile( sURL, SvtPathOptions::PATH_USERCONFIG );
-    pp->GetSymSetManager()->Load( sURL );
+    GetSymSetManager().Load( sURL );
 }
+
+
+SmSymSetManager & SmDocShell::GetSymSetManager()
+{
+    if (!pSymSetMgr)
+        pSymSetMgr = new SmSymSetManager;
+    return *pSymSetMgr;
+}
+
 
 const String &SmDocShell::GetTitle() const
 {
@@ -385,7 +394,7 @@ void SmDocShell::ArrangeFormula()
                "Sm : falscher MapMode");
 
     const SmFormat &rFormat = GetFormat();
-    pTree->Prepare(rFormat);
+    pTree->Prepare(rFormat, *this);
     pTree->Arrange(*pOutDev, rFormat);
 
     SetFormulaArranged(TRUE);
@@ -622,6 +631,7 @@ void SmDocShell::Resize()
 SmDocShell::SmDocShell(SfxObjectCreateMode eMode) :
     SfxObjectShell(eMode),
     aDataTypeList(SvEmbeddedObject::GetStdFormatList()),
+    pSymSetMgr          ( 0 ),
     pTree               ( 0 ),
     pPrinter            ( 0 ),
     pTmpPrinter         ( 0 ),
@@ -879,13 +889,12 @@ BOOL SmDocShell::Insert(SvStorage *pStor)
 void SmDocShell::ImplSave( SvStorageStreamRef xStrm )
 {
     ByteString exString (ExportString(aText));
-    SmModule *pp = SM_MOD1();
 
     *xStrm  << SM304AIDENT << SM50VERSION
             << 'T';
     xStrm->WriteByteString(exString);
     *xStrm  << 'F' << aFormat
-            << 'S' << pp->GetSymSetManager()->GetAccessedSymbols()
+            << 'S' << GetSymSetManager().GetAccessedSymbols()
             << '\0';
 }
 
@@ -1081,11 +1090,8 @@ BOOL SmDocShell::ImportSM20File(SvStream *pStream, BOOL bInsert)
                 case 'S':
                     pSymbolSet = new SmSymSet();
                     ReadSM20SymSet(pStream, pSymbolSet);
-                    if (! bInsert)
-                    {
-                        SmModule *pp = SM_MOD1();
-                        pp->GetSymSetManager()->AppendExtraSymbolSet(pSymbolSet);
-                    }
+                    if (!bInsert)
+                        GetSymSetManager().AppendExtraSymbolSet(pSymbolSet);
                     else
                         delete pSymbolSet;
                     break;
@@ -1146,15 +1152,15 @@ void SmDocShell::Execute(SfxRequest& rReq)
             if ( RET_OK == pFileDialog->Execute() )
             {
                 // save old symbols and sets if necessary
-                if (pp->GetSymSetManager()->IsModified())
-                    pp->GetSymSetManager()->Save();
+                if (GetSymSetManager().IsModified())
+                    GetSymSetManager().Save();
                 // load new symbols and sets from file
                 INetURLObject aURLObj;
                 aURLObj.SetSmartProtocol( INET_PROT_FILE );
                 aURLObj.SetSmartURL( pFileDialog->GetPath() );
-                pp->GetSymSetManager()->Load( aURLObj.GetMainURL() );
+                GetSymSetManager().Load( aURLObj.GetMainURL() );
                 // make that file the new default symbolfile
-                pp->GetConfig()->SetSymbolFile( pFileDialog->GetPath() );
+                SM_MOD1()->GetConfig()->SetSymbolFile( pFileDialog->GetPath() );
             }
 
             delete pFileDialog;
@@ -1171,8 +1177,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_SYMBOLS_CATALOGUE:
         {
-            SmSymSetManager *pSymSetMgr    = SM_MOD1()->GetSymSetManager();
-            SmSymbolDialog(NULL, *pSymSetMgr).Execute();
+            SmSymbolDialog(NULL, GetSymSetManager()).Execute();
             RestartFocusTimer();
             break;
         }
@@ -1476,8 +1481,7 @@ SfxUndoManager *SmDocShell::GetUndoManager()
 
 void SmDocShell::SaveSymbols()
 {
-    SmModule *pp = SM_MOD1();
-    pp->GetSymSetManager()->Save();
+    GetSymSetManager().Save();
 }
 
 
@@ -1637,9 +1641,7 @@ BOOL SmDocShell::Try3x (SvStorage *pStor,
                         pSymbolSet = new SmSymSet();
                         *pSvStream >> *pSymbolSet;
 
-                        SmModule *pp = SM_MOD1();
-
-                        pp->GetSymSetManager()->AppendExtraSymbolSet(pSymbolSet);
+                        GetSymSetManager().AppendExtraSymbolSet(pSymbolSet);
                         break;
                     }
 
@@ -1737,9 +1739,7 @@ BOOL SmDocShell::Try2x (SvStorage *pStor,
                         pSymbolSet = new SmSymSet();
                         ReadSM20SymSet(pSvStream, pSymbolSet);
 
-                        SmModule *pp = SM_MOD1();
-
-                        pp->GetSymSetManager()->AppendExtraSymbolSet(pSymbolSet);
+                        GetSymSetManager().AppendExtraSymbolSet(pSymbolSet);
                         break;
                     }
 
