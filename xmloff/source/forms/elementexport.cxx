@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 16:30:53 $
+ *  last change: $Author: fs $ $Date: 2001-11-02 11:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,6 +666,9 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OControlExport::exportDatabaseAttributes()
     {
+#ifdef _DEBUG
+        sal_Int32 nIncludeDatabase = m_nIncludeDatabase;
+#endif
         // the only string property: DataField
         if (DA_DATA_FIELD & m_nIncludeDatabase)
         {
@@ -673,9 +676,9 @@ namespace xmloff
                 getDatabaseAttributeNamespace(DA_DATA_FIELD),
                 getDatabaseAttributeName(DA_DATA_FIELD),
                 PROPERTY_DATAFIELD);
-        #ifdef DBG_UTIL
+        #ifdef _DEBUG
             //  reset the bit for later checking
-            m_nIncludeDatabase = m_nIncludeDatabase & ~DA_DATA_FIELD;
+            nIncludeDatabase = nIncludeDatabase & ~DA_DATA_FIELD;
         #endif
         }
 
@@ -687,9 +690,9 @@ namespace xmloff
                 getDatabaseAttributeName(DA_BOUND_COLUMN),
                 PROPERTY_BOUNDCOLUMN,
                 0);
-        #ifdef DBG_UTIL
+        #ifdef _DEBUG
             //  reset the bit for later checking
-            m_nIncludeDatabase = m_nIncludeDatabase & ~DA_BOUND_COLUMN;
+            nIncludeDatabase = nIncludeDatabase & ~DA_BOUND_COLUMN;
         #endif
         }
 
@@ -702,9 +705,9 @@ namespace xmloff
                 PROPERTY_EMPTY_IS_NULL,
                 BOOLATTR_DEFAULT_FALSE
                 );
-        #ifdef DBG_UTIL
+        #ifdef _DEBUG
             //  reset the bit for later checking
-            m_nIncludeDatabase = m_nIncludeDatabase & ~DA_CONVERT_EMPTY;
+            nIncludeDatabase = nIncludeDatabase & ~DA_CONVERT_EMPTY;
         #endif
         }
 
@@ -718,25 +721,27 @@ namespace xmloff
                 OEnumMapper::getEnumMap(OEnumMapper::epListSourceType),
                 ListSourceType_VALUELIST
                 );
-        #ifdef DBG_UTIL
+        #ifdef _DEBUG
             //  reset the bit for later checking
-            m_nIncludeDatabase = m_nIncludeDatabase & ~DA_LIST_SOURCE_TYPE;
+            nIncludeDatabase = nIncludeDatabase & ~DA_LIST_SOURCE_TYPE;
         #endif
         }
 
         if (m_nIncludeDatabase & DA_LIST_SOURCE)
         {
             exportListSourceAsAttribute();
-        #ifdef DBG_UTIL
+        #ifdef _DEBUG
             //  reset the bit for later checking
-            m_nIncludeDatabase = m_nIncludeDatabase & ~DA_LIST_SOURCE;
+            nIncludeDatabase = nIncludeDatabase & ~DA_LIST_SOURCE;
         #endif
         }
 
-        OSL_ENSURE(0 == m_nIncludeDatabase,
+#ifdef _DEBUG
+        OSL_ENSURE(0 == nIncludeDatabase,
             "OControlExport::exportDatabaseAttributes: forgot some flags!");
             // in the dbg_util version, we should have removed every bit we handled from the mask, so it should
             // be 0 now ...
+#endif
     }
 
     //---------------------------------------------------------------------
@@ -922,7 +927,9 @@ namespace xmloff
         m_xProps->getPropertyValue(PROPERTY_STRING_ITEM_LIST) >>= aItems;
 
         DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_LISTSOURCE, Sequence< ::rtl::OUString >);
-        m_xProps->getPropertyValue(PROPERTY_LISTSOURCE) >>= aValues;
+        if ( 0 == ( m_nIncludeDatabase & DA_LIST_SOURCE ) )
+            m_xProps->getPropertyValue(PROPERTY_LISTSOURCE) >>= aValues;
+        // if we exported the list source as attribute, we do not repeat it as sub elements
 
         // the selection lists
         Int16Set aSelection, aDefaultSelection;
@@ -1212,13 +1219,11 @@ namespace xmloff
                     // for a list box, if the ListSourceType is VALUE_LIST, no ListSource is stored, but instead
                     // a sequence of pairs which is build from the StringItemList and the ValueList
                     ListSourceType eListSourceType = ListSourceType_VALUELIST;
-                #ifdef DBG_UTIL
+                #ifdef _DEBUG
                     sal_Bool bSuccess =
                 #endif
                     m_xProps->getPropertyValue(PROPERTY_LISTSOURCETYPE) >>= eListSourceType;
-                #ifdef DBG_UTIL
                     OSL_ENSURE(bSuccess, "OControlExport::examineControl: could not retrieve the ListSourceType!");
-                #endif
                     if (ListSourceType_VALUELIST != eListSourceType)
                     {
                         m_nIncludeDatabase |= DA_LIST_SOURCE;
@@ -1538,6 +1543,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2001/10/12 16:30:53  hr
+ *  #92830#: required change: std::min()/std::max()
+ *
  *  Revision 1.19  2001/07/04 14:03:11  mib
  *  #89118#: Don't export xlink:href twice
  *
