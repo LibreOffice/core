@@ -2,9 +2,9 @@
  *
  *  $RCSfile: difimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-30 10:26:38 $
+ *  last change: $Author: er $ $Date: 2002-10-31 18:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,10 +520,7 @@ DATASET DifParser::GetNextDataset( void )
                 if( bPlain )
                 {
                     if( ScanFloatVal( pAkt ) )
-                    {
-                        rIn.ReadLine( aData );
                         eRet = D_NUMERIC;
-                    }
                     else
                         eRet = D_SYNT_ERROR;
                 }
@@ -535,7 +532,6 @@ DATASET DifParser::GetNextDataset( void )
                     double          fTmpVal;
                     if( pNumFormatter->IsNumberFormat( aTestVal, nFormat, fTmpVal ) )
                     {
-                        rIn.ReadLine( aData );
                         fVal = fTmpVal;
                         nNumFormat = nFormat;
                         eRet = D_NUMERIC;
@@ -543,6 +539,7 @@ DATASET DifParser::GetNextDataset( void )
                     else
                         eRet = D_SYNT_ERROR;
                 }
+                rIn.ReadLine( aData );
             }
             break;
         case '1':                   // String Data
