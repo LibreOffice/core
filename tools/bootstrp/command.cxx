@@ -2,9 +2,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-25 11:43:58 $
+ *  last change: $Author: nf $ $Date: 2000-09-28 13:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,8 +602,8 @@ ByteString CCommand::Search(ByteString aEnv, ByteString sItem)
         }
     }
     if ( sReturn == "" )
-        fprintf(stderr, "WARNING: %s not found in %s\n",
-                                    sItem.GetBuffer(), sEnv.GetBuffer() );
+        sReturn = sItem;
+
     return sReturn;
 }
 
