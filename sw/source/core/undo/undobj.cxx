@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2002-10-10 10:18:41 $
+ *  last change: $Author: dvo $ $Date: 2002-11-28 17:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,10 +962,6 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     rDoc.SetRedlineMode_intern( eOld | REDLINE_DONTCOMBINE_REDLINES );
     rDoc.AppendRedline( pRedl );
     rDoc.SetRedlineMode_intern( eOld );
-
-    // #101656# check redline count against count saved in undo object
-    DBG_ASSERT( nRedlineCount == rDoc.GetRedlineTbl().Count(),
-                "redline count not restored properly" );
 }
 
 BOOL SwUndo::FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
@@ -1035,8 +1031,15 @@ void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
     SwRedlineMode eOld = rDoc.GetRedlineMode();
     rDoc.SetRedlineMode_intern( ( eOld & ~REDLINE_IGNORE) | REDLINE_ON );
     SwPaM aPam( rDoc.GetNodes().GetEndOfContent() );
+
     for( USHORT n = rSData.Count(); n; )
         rSData[ --n ]->RedlineToDoc( aPam );
+
+    // check redline count against count saved in RedlineSaveData object
+    DBG_ASSERT( (rSData.Count() == 0) ||
+                (rSData[0]->nRedlineCount == rDoc.GetRedlineTbl().Count()),
+                "redline count not restored properly" );
+
     rDoc.SetRedlineMode_intern( eOld );
 }
 
