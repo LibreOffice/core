@@ -2,9 +2,9 @@
  *
  *  $RCSfile: languageoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:03:44 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,17 +86,20 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 // global ----------------------------------------------------------------------
 
-static ::osl::Mutex aALMutex;
+namespace { struct ALMutex : public rtl::Static< ::osl::Mutex, ALMutex > {}; }
 
 // class SvtLanguageOptions ----------------------------------------------------
 
 SvtLanguageOptions::SvtLanguageOptions( sal_Bool _bDontLoad )
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( aALMutex );
+    ::osl::MutexGuard aGuard( ALMutex::get() );
 
     m_pCJKOptions = new SvtCJKOptions( _bDontLoad );
     m_pCTLOptions = new SvtCTLOptions( _bDontLoad );
@@ -106,7 +109,7 @@ SvtLanguageOptions::SvtLanguageOptions( sal_Bool _bDontLoad )
 SvtLanguageOptions::~SvtLanguageOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( aALMutex );
+    ::osl::MutexGuard aGuard( ALMutex::get() );
 
     delete m_pCJKOptions;
     delete m_pCTLOptions;
