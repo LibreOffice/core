@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:15:36 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ class SvxTwoLinesItem;
 class SvxCharScaleWidthItem;
 class SvxCharRotateItem;
 class SvxCharReliefItem;
+class SvxCharHiddenItem;
 
 // Frame-Attribute
 class SwFmtFillOrder;
@@ -297,6 +298,7 @@ public:
     inline const SvxCharScaleWidthItem  &GetCharScaleW( BOOL = TRUE ) const;
     inline const SvxCharRotateItem      &GetCharRotate( BOOL = TRUE ) const;
     inline const SvxCharReliefItem      &GetCharRelief( BOOL = TRUE ) const;
+    inline const SvxCharHiddenItem      &GetCharHidden( BOOL = TRUE ) const;
 
     // Frame-Attribute  - impl. steht im frmatr.hxx
     INLINE const SwFmtFillOrder         &GetFillOrder( BOOL = TRUE ) const;
