@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:05:19 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,15 @@
 #ifndef SC_STLSHEET_HXX
 #include "stlsheet.hxx"
 #endif
+#ifndef SC_SCEXTOPT_HXX
+#include "scextopt.hxx"
+#endif
 
 #ifndef SC_XLFORMULA_HXX
 #include "xlformula.hxx"
+#endif
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
 #endif
 #ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
@@ -155,9 +161,6 @@
 #endif
 #ifndef SC_XINAME_HXX
 #include "xiname.hxx"
-#endif
-#ifndef SC_XLTRACER_HXX
-#include "xltracer.hxx"
 #endif
 
 #include "excform.hxx"
@@ -289,16 +292,16 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rURL, SCCOL nScCol, SC
 void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
 {
     const XclImpRoot& rRoot = rStrm.GetRoot();
-    DBG_ASSERT_BIFF( rRoot.GetBiff() == xlBiff8 );
+    DBG_ASSERT_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
 
     ScDocument& rDoc = rRoot.GetDoc();
     SfxObjectShell* pDocShell = rRoot.GetDocShell();
 
-    sal_uInt16 nRow1, nRow2, nCol1, nCol2;
+    XclRange aXclRange( ScAddress::UNINITIALIZED );
     sal_uInt32 nFlags;
     XclGuid aGuid;
 
-    rStrm >> nRow1 >> nRow2 >> nCol1 >> nCol2 >> aGuid;
+    rStrm >> aXclRange >> aGuid;
     rStrm.Ignore( 4 );
     rStrm >> nFlags;
 
@@ -394,15 +397,13 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
         }
 
         SCTAB nScTab = rRoot.GetCurrScTab();
-        ScRange aRange( static_cast<SCCOL>(nCol1), static_cast<SCROW>(nRow1),
-                nScTab, static_cast<SCCOL>(nCol2), static_cast<SCROW>(nRow2),
-                nScTab );
-        if( rRoot.CheckCellRange( aRange ) )
+        ScRange aScRange( ScAddress::UNINITIALIZED );
+        if( rRoot.GetAddressConverter().ConvertRange( aScRange, aXclRange, nScTab, nScTab, true ) )
         {
             SCCOL nScCol1, nScCol2;
             SCROW nScRow1, nScRow2;
-            aRange.GetVars( nScCol1, nScRow1, nScTab, nScCol2, nScRow2, nScTab );
-            for( SCCOL nScCol = nScCol1; nScCol <= nScCol2 ; ++nScCol )
+            aScRange.GetVars( nScCol1, nScRow1, nScTab, nScCol2, nScRow2, nScTab );
+            for( SCCOL nScCol = nScCol1; nScCol <= nScCol2; ++nScCol )
                 for( SCROW nScRow = nScRow1; nScRow <= nScRow2; ++nScRow )
                     lclInsertUrl( rRoot, *xLongName, nScCol, nScRow );
         }
@@ -414,21 +415,24 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
 void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
 {
     const XclImpRoot& rRoot = rStrm.GetRoot();
-    DBG_ASSERT_BIFF( rRoot.GetBiff() == xlBiff8 );
+    DBG_ASSERT_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
 
     ScDocument& rDoc = rRoot.GetDoc();
-    ScRangeList aRanges;
+    SCTAB nScTab = rRoot.GetCurrScTab();
+    XclImpAddressConverter& rAddrConv = rRoot.GetAddressConverter();
     ScRangePairListRef xLabelRangesRef;
-    const ScRange* pRange;
+    const ScRange* pScRange = 0;
+
+    XclRangeList aRowXclRanges, aColXclRanges;
+    rStrm >> aRowXclRanges >> aColXclRanges;
 
     // row label ranges
+    ScRangeList aRowScRanges;
+    rAddrConv.ConvertRangeList( aRowScRanges, aRowXclRanges, nScTab, false );
     xLabelRangesRef = rDoc.GetRowNameRangesRef();
-
-    rStrm >> aRanges;
-    rRoot.CheckCellRangeList( aRanges );
-    for( pRange = aRanges.First(); pRange; pRange = aRanges.Next() )
+    for( pScRange = aRowScRanges.First(); pScRange; pScRange = aRowScRanges.Next() )
     {
-        ScRange aDataRange( *pRange );
+        ScRange aDataRange( *pScRange );
         if( aDataRange.aEnd.Col() < MAXCOL )
         {
             aDataRange.aStart.SetCol( aDataRange.aEnd.Col() + 1 );
@@ -439,18 +443,16 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
             aDataRange.aEnd.SetCol( aDataRange.aStart.Col() - 1 );
             aDataRange.aStart.SetCol( 0 );
         }
-        xLabelRangesRef->Append( ScRangePair( *pRange, aDataRange ) );
+        xLabelRangesRef->Append( ScRangePair( *pScRange, aDataRange ) );
     }
 
     // column label ranges
+    ScRangeList aColScRanges;
+    rAddrConv.ConvertRangeList( aColScRanges, aColXclRanges, nScTab, false );
     xLabelRangesRef = rDoc.GetColNameRangesRef();
-
-    aRanges.RemoveAll();
-    rStrm >> aRanges;
-    rRoot.CheckCellRangeList( aRanges );
-    for( pRange = aRanges.First(); pRange; pRange = aRanges.Next() )
+    for( pScRange = aColScRanges.First(); pScRange; pScRange = aColScRanges.Next() )
     {
-        ScRange aDataRange( *pRange );
+        ScRange aDataRange( *pScRange );
         if( aDataRange.aEnd.Row() < MAXROW )
         {
             aDataRange.aStart.SetRow( aDataRange.aEnd.Row() + 1 );
@@ -461,7 +463,7 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
             aDataRange.aEnd.SetRow( aDataRange.aStart.Row() - 1 );
             aDataRange.aStart.SetRow( 0 );
         }
-        xLabelRangesRef->Append( ScRangePair( *pRange, aDataRange ) );
+        xLabelRangesRef->Append( ScRangePair( *pScRange, aDataRange ) );
     }
 }
 
@@ -482,10 +484,11 @@ XclImpCondFormat::~XclImpCondFormat()
 void XclImpCondFormat::ReadCondfmt( XclImpStream& rStrm )
 {
     DBG_ASSERT( !mnCondCount, "XclImpCondFormat::ReadCondfmt - already initialized" );
+    XclRangeList aXclRanges;
     rStrm >> mnCondCount;
     rStrm.Ignore( 10 );
-    rStrm >> maRanges;
-    CheckCellRangeList( maRanges );
+    rStrm >> aXclRanges;
+    GetAddressConverter().ConvertRangeList( maRanges, aXclRanges, GetCurrScTab(), true );
 }
 
 void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
@@ -632,12 +635,12 @@ void XclImpCondFormat::Apply()
         aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nKey ) );
 
         // maRanges contains only valid cell ranges
-        for( const ScRange* pRange = maRanges.First(); pRange; pRange = maRanges.Next() )
+        for( const ScRange* pScRange = maRanges.First(); pScRange; pScRange = maRanges.Next() )
         {
             rDoc.ApplyPatternAreaTab(
-                pRange->aStart.Col(), pRange->aStart.Row(),
-                pRange->aEnd.Col(), pRange->aEnd.Row(),
-                pRange->aStart.Tab(), aPattern );
+                pScRange->aStart.Col(), pScRange->aStart.Row(),
+                pScRange->aEnd.Col(), pScRange->aEnd.Row(),
+                pScRange->aStart.Tab(), aPattern );
         }
     }
 }
@@ -675,7 +678,7 @@ void XclImpCondFormatManager::Apply()
 void XclImpValidation::ReadDval( XclImpStream& rStrm )
 {
     const XclImpRoot& rRoot = rStrm.GetRoot();
-    DBG_ASSERT_BIFF( rRoot.GetBiff() == xlBiff8 );
+    DBG_ASSERT_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
 
     sal_uInt32 nObjId;
     rStrm.Ignore( 10 );
@@ -690,9 +693,10 @@ void XclImpValidation::ReadDval( XclImpStream& rStrm )
 void XclImpValidation::ReadDV( XclImpStream& rStrm )
 {
     const XclImpRoot& rRoot = rStrm.GetRoot();
-    DBG_ASSERT_BIFF( rRoot.GetBiff() == xlBiff8 );
+    DBG_ASSERT_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
 
     ScDocument& rDoc = rRoot.GetDoc();
+    SCTAB nScTab = rRoot.GetCurrScTab();
     ExcelToSc& rFmlaConv = rRoot.GetFmlaConverter();
 
     // flags
@@ -746,11 +750,15 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
         }
 
         // read all cell ranges
-        ScRangeList aRanges;
-        rStrm >> aRanges;
-        rRoot.CheckCellRangeList( aRanges );
+        XclRangeList aXclRanges;
+        rStrm >> aXclRanges;
 
-        if( aRanges.Count() )
+        // convert to Calc range list
+        ScRangeList aScRanges;
+        rRoot.GetAddressConverter().ConvertRangeList( aScRanges, aXclRanges, nScTab, true );
+
+        // only continue if there are valid ranges
+        if( aScRanges.Count() )
         {
             bool bIsValid = true;   // valid settings in flags field
 
@@ -783,15 +791,16 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
                 default:                    bIsValid = false;
             }
 
-            // first range for base address for relative references
-            const ScRange* pRange = aRanges.GetObject( 0 );
-            if( bIsValid && pRange )
+            if( bIsValid )
             {
+                // first range for base address for relative references
+                const ScRange& rScRange = *aScRanges.GetObject( 0 );    // aScRanges is not empty
+
                 // process string list of a list validity (convert to list of string tokens)
                 if( xTokArr1.get() && (eValMode == SC_VALID_LIST) && ::get_flag( nFlags, EXC_DV_STRINGLIST ) )
                     XclTokenArrayHelper::ConvertStringToList( *xTokArr1, '\n' );
 
-                ScValidationData aValidData( eValMode, eCondMode, xTokArr1.get(), xTokArr2.get(), &rDoc, pRange->aStart );
+                ScValidationData aValidData( eValMode, eCondMode, xTokArr1.get(), xTokArr2.get(), &rDoc, rScRange.aStart );
 
                 aValidData.SetIgnoreBlank( ::get_flag( nFlags, EXC_DV_IGNOREBLANK ) );
                 aValidData.SetListType( ::get_flagvalue( nFlags, EXC_DV_SUPPRESSDROPDOWN, ValidListType::INVISIBLE, ValidListType::UNSORTED ) );
@@ -823,10 +832,9 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
                 aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nHandle ) );
 
                 // apply all ranges
-                SCTAB nScTab = rRoot.GetCurrScTab();
-                for( pRange = aRanges.First(); pRange; pRange = aRanges.Next() )
-                    rDoc.ApplyPatternAreaTab( pRange->aStart.Col(), pRange->aStart.Row(),
-                        pRange->aEnd.Col(), pRange->aEnd.Row(), nScTab, aPattern );
+                for( const ScRange* pScRange = aScRanges.First(); pScRange; pScRange = aScRanges.Next() )
+                    rDoc.ApplyPatternAreaTab( pScRange->aStart.Col(), pScRange->aStart.Row(),
+                        pScRange->aEnd.Col(), pScRange->aEnd.Row(), nScTab, aPattern );
             }
         }
     }
@@ -921,7 +929,7 @@ XclImpWebQueryBuffer::XclImpWebQueryBuffer( const XclImpRoot& rRoot ) :
 
 void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
 {
-    if( GetBiff() == xlBiff8 )
+    if( GetBiff() == EXC_BIFF8 )
     {
         rStrm.Ignore( 10 );
         String aXclName( rStrm.ReadUniString() );
@@ -1063,15 +1071,17 @@ ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
 
     switch( rStrm.GetRoot().GetBiff() )
     {
-        case xlBiff2:
-        case xlBiff3:
-        case xlBiff4:
-        case xlBiff5:
-        case xlBiff7:   xDecr = lclReadFilepass5( rStrm );  break;
-        case xlBiff8:   xDecr = lclReadFilepass8( rStrm );  break;
+        case EXC_BIFF2:
+        case EXC_BIFF3:
+        case EXC_BIFF4:
+        case EXC_BIFF5: xDecr = lclReadFilepass5( rStrm );  break;
+        case EXC_BIFF8: xDecr = lclReadFilepass8( rStrm );  break;
         default:        DBG_ERROR_BIFF();
     };
+    // set decrypter at import stream
     rStrm.SetDecrypter( xDecr );
+    // remember encryption for export
+    rStrm.GetRoot().GetExtDocOptions().GetDocSettings().mbEncrypted = true;
 
     return xDecr.is() ? xDecr->GetError() : EXC_ENCR_ERROR_UNSUPP_CRYPT;
 }
