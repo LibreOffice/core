@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:12:09 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ void SdrRectObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 //////////////////////////////////////////////////////////////////////////////
 // #i25616#
 
-void SdrRectObj::ImpDoPaintRectObjShadow(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec,
+void SdrRectObj::ImpDoPaintRectObjShadow(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec,
     sal_Bool bPaintFill, sal_Bool bPaintLine) const
 {
     const sal_Bool bHideContour(IsHideContour());
@@ -379,7 +379,7 @@ void SdrRectObj::ImpDoPaintRectObjShadow(ExtOutputDevice& rXOut, const SdrPaintI
 //////////////////////////////////////////////////////////////////////////////
 // #i25616#
 
-void SdrRectObj::ImpDoPaintRectObj(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec,
+void SdrRectObj::ImpDoPaintRectObj(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec,
     sal_Bool bPaintFill, sal_Bool bPaintLine) const
 {
     const sal_Bool bHideContour(IsHideContour());
@@ -447,7 +447,7 @@ void SdrRectObj::ImpDoPaintRectObj(ExtOutputDevice& rXOut, const SdrPaintInfoRec
 
 //////////////////////////////////////////////////////////////////////////////
 
-sal_Bool SdrRectObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrRectObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     if (bTextFrame && aGeo.nShearWink!=0) {
         DBG_WARNING("Shearwinkel vom TextFrame innerhalb von SdrRectObj::DoPaintObject() auf 0 gesetzt");
@@ -515,7 +515,8 @@ SdrObject* SdrRectObj::ImpCheckHit(const Point& rPnt, USHORT nTol, const SetOfBy
                     INT32 nRad=nEckRad;
                     if (bFilled) nRad+=nMyTol; // um korrekt zu sein ...
                     XPolygon aXPoly(ImpCalcXPoly(aR,nRad));
-                    aPol=XOutCreatePolygon(aXPoly,NULL);
+//BFS09                 aPol=XOutCreatePolygon(aXPoly,NULL);
+                    aPol=XOutCreatePolygon(aXPoly);
                 } else {
                     if (aGeo.nShearWink!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);
                     if (aGeo.nDrehWink!=0) RotatePoly(aPol,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
@@ -932,44 +933,45 @@ void SdrRectObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetXPolyDirty();
 }
 
-void SdrRectObj::WriteData(SvStream& rOut) const
-{
-    SdrTextObj::WriteData(rOut);
-    SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrRectObj");
-#endif
-}
+//BFS01void SdrRectObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 SdrTextObj::WriteData(rOut);
+//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrRectObj");
+//BFS01#endif
+//BFS01}
 
-void SdrRectObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    if (rIn.GetError()!=0) return;
-    SdrTextObj::ReadData(rHead,rIn);
-    if (IsTextFrame() && rHead.GetVersion()<3 && !HAS_BASE(SdrCaptionObj,this)) {
-        // Bis einschl. Version 2 wurden Textrahmen mit SdrTextObj dargestellt, ausser CaptionObj
-        SfxItemPool* pPool=GetItemPool();
-        if (pPool!=NULL) {
-            // Umrandung und Hintergrund des importierten Textrahmens ausschalten
-            SfxItemSet aSet(*pPool);
-            aSet.Put(XFillColorItem(String(),Color(COL_WHITE))); // Falls einer auf Solid umschaltet
-            aSet.Put(XFillStyleItem(XFILL_NONE));
-            aSet.Put(XLineColorItem(String(),Color(COL_BLACK))); // Falls einer auf Solid umschaltet
-            aSet.Put(XLineStyleItem(XLINE_NONE));
+//BFS01void SdrRectObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return;
+//BFS01 SdrTextObj::ReadData(rHead,rIn);
+//BFS01 if (IsTextFrame() && rHead.GetVersion()<3 && !HAS_BASE(SdrCaptionObj,this)) {
+//BFS01     // Bis einschl. Version 2 wurden Textrahmen mit SdrTextObj dargestellt, ausser CaptionObj
+//BFS01     SfxItemPool* pPool=GetItemPool();
+//BFS01     if (pPool!=NULL) {
+//BFS01         // Umrandung und Hintergrund des importierten Textrahmens ausschalten
+//BFS01         SfxItemSet aSet(*pPool);
+//BFS01         aSet.Put(XFillColorItem(String(),Color(COL_WHITE))); // Falls einer auf Solid umschaltet
+//BFS01         aSet.Put(XFillStyleItem(XFILL_NONE));
+//BFS01         aSet.Put(XLineColorItem(String(),Color(COL_BLACK))); // Falls einer auf Solid umschaltet
+//BFS01         aSet.Put(XLineStyleItem(XLINE_NONE));
+//BFS01
+//BFS01         SetObjectItemSet(aSet);
+//BFS01     }
+//BFS01 } else {
+//BFS01     SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01     aCompat.SetID("SdrRectObj");
+//BFS01#endif
+//BFS01     if (rHead.GetVersion()<=5) {
+//BFS01         long nEckRad;
+//BFS01         rIn>>nEckRad;
+//BFS01         long nAltRad=GetEckenradius();
+//BFS01         if (nEckRad!=nAltRad) NbcSetEckenradius(nEckRad);
+//BFS01     }
+//BFS01 }
+//BFS01 SetXPolyDirty();
+//BFS01}
 
-            SetObjectItemSet(aSet);
-        }
-    } else {
-        SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-        aCompat.SetID("SdrRectObj");
-#endif
-        if (rHead.GetVersion()<=5) {
-            long nEckRad;
-            rIn>>nEckRad;
-            long nAltRad=GetEckenradius();
-            if (nEckRad!=nAltRad) NbcSetEckenradius(nEckRad);
-        }
-    }
-    SetXPolyDirty();
-}
-
+// eof
