@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-17 12:29:40 $
+ *  last change: $Author: os $ $Date: 2002-01-28 13:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,21 +186,21 @@ SvxFrameSelector::SvxFrameSelector( Window* pParent,
         bIsDontCare     ( bDontCare ),
         bIsClicked      ( FALSE )
 {
-    Size aSzParent( pParent->GetSizePixel() );
-    aSzParent.Width() -= 4;
-    aSzParent.Height() -= 4;
-    InitBitmap_Impl( aSzParent );
+    InitBitmap_Impl();
     SetPosSizePixel( Point(), theBmp.GetSizePixel() );
     Show();
 }
 
 // -----------------------------------------------------------------------
 
-void SvxFrameSelector::InitBitmap_Impl( const Size& rSize )
+void SvxFrameSelector::InitBitmap_Impl()
 {
+    Size aSzParent( GetParent()->GetSizePixel() );
+    aSzParent.Width() -= 4;
+    aSzParent.Height() -= 4;
     VirtualDevice   aVirDev;
-    long            nX  = rSize.Width();
-    long            nY  = rSize.Height();
+    const long      nX  = aSzParent.Width();
+    const long      nY  = aSzParent.Height();
     long            nXMid = nX / 2;
     long            nYMid = nY / 2;
 
@@ -236,7 +236,7 @@ void SvxFrameSelector::InitBitmap_Impl( const Size& rSize )
     // HotSpot-Rectangles:
     aSpotLeft   = Rectangle( Point( 0, 0 ),
                              Size( theLeftLine.aStartPos.X() + 3,
-                                   rSize.Height() ) );
+                                   nY ) );
     aSpotRight  = Rectangle( Point( theRightLine.aStartPos.X() - 3, 0 ),
                              aSpotLeft.GetSize() );
     aSpotTop        = Rectangle( Point( theTopLine.aStartPos.X(), 0 ),
@@ -253,20 +253,22 @@ void SvxFrameSelector::InitBitmap_Impl( const Size& rSize )
                                Size( 5, aRectFrame.GetHeight() ) )
                   : Rectangle( Point( -1, -1 ), Size( -1, -1 ) );
 
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     /*
      * Initialisieren der Bitmap:
      */
-    aVirDev.SetOutputSizePixel( rSize );
+    aVirDev.SetOutputSizePixel( aSzParent );
     aVirDev.SetLineColor();
-    aVirDev.SetFillColor( Color( COL_WHITE ) );
-    aVirDev.DrawRect( Rectangle( Point( 0, 0 ), rSize ) );
+
+    aVirDev.SetFillColor( rStyleSettings.GetFieldColor() );
+    aVirDev.DrawRect( Rectangle( Point( 0, 0 ), aSzParent ) );
 
     DrawContents_Impl( aVirDev );
 
     /*
      * Malen der vier Eck-Winkel:
      */
-    aVirDev.SetLineColor( Color( COL_GRAY ) );
+    aVirDev.SetLineColor( rStyleSettings.GetFieldTextColor() );
 
     // links/rechts oben:
     aVirDev.DrawLine( Point( 10, 15 ), Point( 15, 15 ) );
@@ -297,7 +299,7 @@ void SvxFrameSelector::InitBitmap_Impl( const Size& rSize )
         aVirDev.DrawLine( Point( nXMid, nY-10 ),    Point( nXMid, nY-15 ) );
         aVirDev.DrawLine( Point( nXMid-2, nY-15 ),  Point( nXMid+2, nY-15 ) );
     }
-    theBmp = aVirDev.GetBitmap( Point( 0, 0 ), rSize );
+    theBmp = aVirDev.GetBitmap( Point( 0, 0 ), aSzParent );
 }
 
 // -----------------------------------------------------------------------
@@ -425,13 +427,16 @@ void SvxFrameSelector::ShowLines()
 {
     VirtualDevice   aVirDev;
     Color           aFillColor;
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const Color aFieldColor = rStyleSettings.GetFieldColor();
+    Color aBackgroundColor = aFieldColor; //was: COL_WHITE
 
     aVirDev.SetOutputSizePixel( theBmp.GetSizePixel() );
     aVirDev.DrawBitmap( Point( 0, 0 ), theBmp );
 
     // gesamten Rahmen loeschen und Inhalt malen
     aVirDev.SetLineColor();
-    aVirDev.SetFillColor( Color( COL_WHITE ) );
+    aVirDev.SetFillColor( aBackgroundColor );
     aVirDev.DrawRect( theBoundingRect );
     DrawContents_Impl( aVirDev );
     theBoundingRect = aRectFrame;
@@ -456,6 +461,8 @@ void SvxFrameSelector::ShowLines()
             aFillColor = Color( COL_LIGHTGRAY );
 
         aVirDev.SetLineColor();
+        if(aFieldColor == aFillColor)
+            aFillColor.Invert();
         aVirDev.SetFillColor( aFillColor );
 
         DrawFrameLine_Impl( aVirDev,
@@ -495,6 +502,8 @@ void SvxFrameSelector::ShowLines()
             aFillColor = Color( COL_LIGHTGRAY );
 
         aVirDev.SetLineColor();
+        if(aFieldColor == aFillColor)
+            aFillColor.Invert();
         aVirDev.SetFillColor( aFillColor );
 
         DrawFrameLine_Impl( aVirDev,
@@ -535,6 +544,8 @@ void SvxFrameSelector::ShowLines()
             aFillColor = Color( COL_LIGHTGRAY );
 
         aVirDev.SetLineColor();
+        if(aFieldColor == aFillColor)
+            aFillColor.Invert();
         aVirDev.SetFillColor( aFillColor );
 
         DrawFrameLine_Impl( aVirDev,
@@ -573,6 +584,8 @@ void SvxFrameSelector::ShowLines()
             aFillColor = Color( COL_LIGHTGRAY );
 
         aVirDev.SetLineColor();
+        if(aFieldColor == aFillColor)
+            aFillColor.Invert();
         aVirDev.SetFillColor( aFillColor );
 
         DrawFrameLine_Impl( aVirDev,
@@ -611,6 +624,8 @@ void SvxFrameSelector::ShowLines()
             aFillColor = Color( COL_LIGHTGRAY );
 
         aVirDev.SetLineColor();
+        if(aFieldColor == aFillColor)
+            aFillColor.Invert();
         aVirDev.SetFillColor( aFillColor );
 
         DrawFrameLine_Impl( aVirDev,
@@ -649,6 +664,8 @@ void SvxFrameSelector::ShowLines()
             aFillColor = Color( COL_LIGHTGRAY );
 
         aVirDev.SetLineColor();
+        if(aFieldColor == aFillColor)
+            aFillColor.Invert();
         aVirDev.SetFillColor( aFillColor );
 
         DrawFrameLine_Impl( aVirDev,
@@ -800,8 +817,12 @@ void SvxFrameSelector::DrawContents_Impl( OutputDevice& rVirDev )
 void SvxFrameSelector::SelectLine( SvxFrameSelectorLine eNewLine, BOOL bSet )
 {
     VirtualDevice aVirDev;
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
     Color aDrawColor(
-        ( bSet && ( eNewLine != SVX_FRMSELLINE_NONE ) ) ? COL_BLACK : COL_WHITE );
+        ( bSet && ( eNewLine != SVX_FRMSELLINE_NONE ) ) ?
+            rStyleSettings.GetFieldTextColor() : rStyleSettings.GetFieldColor() );
+
     long nX    = theBmp.GetSizePixel().Width();
     long nY    = theBmp.GetSizePixel().Height();
     long nXMid = theVerLine.aStartPos.X();
@@ -1254,5 +1275,14 @@ BOOL    SvxFrameSelector::IsAnyLineSet() const
     else
         return FALSE;
 }
+/* -----------------------------25.01.2002 10:25------------------------------
 
+ ---------------------------------------------------------------------------*/
+void SvxFrameSelector::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            InitBitmap_Impl();
 
+    Window::DataChanged( rDCEvt );
+}
