@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-24 11:33:59 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 09:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,6 +812,7 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
                 {
                     xDoc->RestoreNoDelete();
                     xDoc->OwnerLock( TRUE );
+                    xDoc->Get_Impl()->bHiddenLockedByAPI = TRUE;
                 }
 
                 if ( pFrame->GetCurrentDocument() != xDoc )
