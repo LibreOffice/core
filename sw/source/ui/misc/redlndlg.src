@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:53:33 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ ModalDialog DLG_MOD_REDLINE_ACCEPT
     Text[ chinese_simplified ] = "ΧΤ¶―ΈρΚ½: ½ΣΚά»ςΥίΎάΎψΈόΈΔ";
     Text[ russian ] = "ΐβςξτξπμΰς: οπθνÿςό θλθ ξςκλξνθςό θημενενθÿ";
     Text[ polish ] = "Autoformatowanie: Zaakceptuj lub odrzuζ zmiany";
-    Text[ japanese ] = "µ°ΔΜ«°Ο―Δ‚Ι‚ζ‚ι•ΟX‚Μΐs‚ ‚ι‚Ά‚Ν·¬έΎΩ";
+    Text[ japanese ] = "µ°ΔΜ«°Ο―Δ: •ΟX‚πσ‚―“ό‚κ‚ι‚©Aσ‚―“ό‚κ‚Θ‚Ά‚©B";
     Text[ chinese_traditional ] = "¦Ϋ°Κ®ζ¦΅: ±µ¨ό©Ξ©Ϊµ΄Εά§σ";
     Text[ arabic ] = "ήΘζα Γζ ΡέΦ ΚΫννΡΗΚ ΗαΚδΣνή ΗαΚαήΗΖν";
     Text[ greek ] = "ΑυτοΜορφή:Αποδοχή ή απόρριψη αλλαγών";
