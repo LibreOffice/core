@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:16:47 $
+ *  last change: $Author: hr $ $Date: 2003-11-06 12:36:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ namespace pcr
                 DEF_INFO( IMAGEALIGN,       RID_STR_ALIGN,              HID_PROP_IMAGE_ALIGN,               PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
                 DEF_INFO( SCALEIMAGE,       RID_STR_SCALEIMAGE,         HID_PROP_SCALEIMAGE,                PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
                 DEF_INFO( DEFAULT_SELECT_SEQ,RID_STR_DEFAULT_SELECT_SEQ,HID_PROP_DEFAULT_SELECT_SEQ,        PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( SELECTEDITEMS,    RID_STR_SELECTEDITEMS,      HID_PROP_SELECTEDITEMS,                                    PROP_DIALOG_VISIBLE),
+                DEF_INFO( SELECTEDITEMS,    RID_STR_SELECTEDITEMS,      HID_PROP_SELECTEDITEMS,                                    PROP_FLAG_DIALOG_VISIBLE),
                 DEF_INFO( ECHO_CHAR,        RID_STR_ECHO_CHAR,          HID_PROP_ECHO_CHAR,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
                 DEF_INFO( TRISTATE,         RID_STR_TRISTATE,           HID_PROP_TRISTATE,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
                 DEF_INFO( HASNAVIGATION,    RID_STR_NAVIGATION,         HID_PROP_NAVIGATIONBAR,             PROP_FLAG_FORM_VISIBLE                         ),
