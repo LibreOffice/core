@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-21 11:59:30 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,8 @@
 #include "sfxresid.hxx"
 #include "doc.hrc"
 
+#include "sfxurlrelocator.hxx"
+
 //-----------------------------------------------------------------------------
 
 //=============================================================================
@@ -244,7 +246,6 @@ class SfxDocTplService_Impl
     Reference< XCommandEnvironment >            maCmdEnv;
     Reference< XPersist >                       mxInfo;
     Reference< XTypeDetection >                 mxType;
-    Reference< XOfficeInstallationDirectories > mxOfficeInstDirs;
 
     ::osl::Mutex                maMutex;
     Sequence< OUString >        maTemplateDirs;
@@ -256,6 +257,7 @@ class SfxDocTplService_Impl
     sal_Bool                    mbIsInitialized : 1;
     sal_Bool                    mbLocaleSet     : 1;
 
+    SfxURLRelocator_Impl        maRelocator;
 
     void                        init_Impl();
     void                        getDefaultLocale();
@@ -301,11 +303,6 @@ class SfxDocTplService_Impl
     void                        addGroupToHierarchy( GroupData_Impl *pGroup );
 
     void                        updateData( DocTemplates_EntryData_Impl *pData );
-
-    static bool                 propertyCanContainOfficeDir( const rtl::OUString & rPropName );
-    void                        initOfficeInstDirs();
-    void                        makeRelocatableURL( rtl::OUString & rURL );
-    void                        makeAbsoluteURL( rtl::OUString & rURL );
 
 public:
                                  SfxDocTplService_Impl( Reference< XMultiServiceFactory > xFactory );
@@ -852,12 +849,12 @@ sal_Bool SfxDocTplService_Impl::setProperty( Content& rContent,
 
         // To ensure a reloctable office installation, the path to the
         // office installtion directory must never be stored directly.
-        if ( propertyCanContainOfficeDir( rPropName ) )
+        if ( SfxURLRelocator_Impl::propertyCanContainOfficeDir( rPropName ) )
         {
             OUString aValue;
             if ( rPropValue >>= aValue )
             {
-                makeRelocatableURL( aValue );
+                maRelocator.makeRelocatableURL( aValue );
                 aPropValue = makeAny( aValue );
             }
             else
@@ -867,7 +864,7 @@ sal_Bool SfxDocTplService_Impl::setProperty( Content& rContent,
                 {
                     for ( sal_Int32 n = 0; n < aValues.getLength(); n++ )
                     {
-                        makeRelocatableURL( aValues[ n ] );
+                        maRelocator.makeRelocatableURL( aValues[ n ] );
                     }
                     aPropValue = makeAny( aValues );
                 }
@@ -913,12 +910,12 @@ sal_Bool SfxDocTplService_Impl::getProperty( Content& rContent,
 
         // To ensure a reloctable office installation, the path to the
         // office installtion directory must never be stored directly.
-        if ( propertyCanContainOfficeDir( rPropName ) )
+        if ( SfxURLRelocator_Impl::propertyCanContainOfficeDir( rPropName ) )
         {
             OUString aValue;
             if ( rPropValue >>= aValue )
             {
-                makeAbsoluteURL( aValue );
+                maRelocator.makeAbsoluteURL( aValue );
                 rPropValue = makeAny( aValue );
             }
             else
@@ -928,7 +925,7 @@ sal_Bool SfxDocTplService_Impl::getProperty( Content& rContent,
                 {
                     for ( sal_Int32 n = 0; n < aValues.getLength(); n++ )
                     {
-                        makeAbsoluteURL( aValues[ n ] );
+                        maRelocator.makeAbsoluteURL( aValues[ n ] );
                     }
                     rPropValue = makeAny( aValues );
                 }
@@ -949,7 +946,7 @@ sal_Bool SfxDocTplService_Impl::getProperty( Content& rContent,
 
 // -----------------------------------------------------------------------
 // static
-bool SfxDocTplService_Impl::propertyCanContainOfficeDir(
+bool SfxURLRelocator_Impl::propertyCanContainOfficeDir(
                                         const rtl::OUString & rPropName )
 {
     // Note: TargetURL is handled by UCB itself (because it is a property
@@ -962,71 +959,12 @@ bool SfxDocTplService_Impl::propertyCanContainOfficeDir(
                 RTL_CONSTASCII_STRINGPARAM( PROPERTY_DIRLIST ) ) );
 }
 
-// -----------------------------------------------------------------------
-void SfxDocTplService_Impl::initOfficeInstDirs()
-{
-    if ( !mxOfficeInstDirs.is() )
-    {
-        osl::MutexGuard aGuard( maMutex );
-        if ( !mxOfficeInstDirs.is() )
-        {
-            OSL_ENSURE( mxFactory.is(), "No service manager!" );
-
-            Reference< XComponentContext > xCtx;
-            Reference< XPropertySet > xPropSet( mxFactory, UNO_QUERY );
-            if ( xPropSet.is() )
-            {
-                xPropSet->getPropertyValue(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) )
-                >>= xCtx;
-            }
-
-            OSL_ENSURE( xCtx.is(),
-                        "Unable to obtain component context from "
-                        "service manager!" );
-
-            if ( xCtx.is() )
-            {
-                xCtx->getValueByName(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "/singletons/"
-                        "com.sun.star.util.theOfficeInstallationDirectories" ) ) )
-                >>= mxOfficeInstDirs;
-            }
-
-            OSL_ENSURE( mxOfficeInstDirs.is(),
-                        "Unable to obtain office installation directory "
-                        "singleton!" );
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-void SfxDocTplService_Impl::makeRelocatableURL( rtl::OUString & rURL )
-{
-    if ( rURL.getLength() > 0 )
-    {
-        initOfficeInstDirs();
-        rURL = mxOfficeInstDirs->makeRelocatableURL( rURL );
-    }
-}
-
-// -----------------------------------------------------------------------
-void SfxDocTplService_Impl::makeAbsoluteURL( rtl::OUString & rURL )
-{
-    if ( rURL.getLength() > 0 )
-    {
-        initOfficeInstDirs();
-        rURL = mxOfficeInstDirs->makeAbsoluteURL( rURL );
-    }
-}
-
 //-----------------------------------------------------------------------------
 // public SfxDocTplService_Impl
 //-----------------------------------------------------------------------------
 
 SfxDocTplService_Impl::SfxDocTplService_Impl( Reference< XMultiServiceFactory > xFactory )
+: maRelocator( xFactory )
 {
     mxFactory       = xFactory;
     mpUpdater       = NULL;
@@ -2268,3 +2206,76 @@ DocTemplates_EntryData_Impl::DocTemplates_EntryData_Impl( const OUString& rTitle
     mbUpdateType    = sal_False;
     mbUpdateLink    = sal_False;
 }
+
+// -----------------------------------------------------------------------
+SfxURLRelocator_Impl::SfxURLRelocator_Impl( Reference< XMultiServiceFactory > xFactory )
+: mxFactory( xFactory )
+{
+}
+
+// -----------------------------------------------------------------------
+SfxURLRelocator_Impl::~SfxURLRelocator_Impl()
+{
+}
+
+// -----------------------------------------------------------------------
+void SfxURLRelocator_Impl::initOfficeInstDirs()
+{
+    if ( !mxOfficeInstDirs.is() )
+    {
+        osl::MutexGuard aGuard( maMutex );
+        if ( !mxOfficeInstDirs.is() )
+        {
+            OSL_ENSURE( mxFactory.is(), "No service manager!" );
+
+            Reference< XComponentContext > xCtx;
+            Reference< XPropertySet > xPropSet( mxFactory, UNO_QUERY );
+            if ( xPropSet.is() )
+            {
+                xPropSet->getPropertyValue(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) )
+                >>= xCtx;
+            }
+
+            OSL_ENSURE( xCtx.is(),
+                        "Unable to obtain component context from "
+                        "service manager!" );
+
+            if ( xCtx.is() )
+            {
+                xCtx->getValueByName(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "/singletons/"
+                        "com.sun.star.util.theOfficeInstallationDirectories" ) ) )
+                >>= mxOfficeInstDirs;
+            }
+
+            OSL_ENSURE( mxOfficeInstDirs.is(),
+                        "Unable to obtain office installation directory "
+                        "singleton!" );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+void SfxURLRelocator_Impl::makeRelocatableURL( rtl::OUString & rURL )
+{
+    if ( rURL.getLength() > 0 )
+    {
+        initOfficeInstDirs();
+        rURL = mxOfficeInstDirs->makeRelocatableURL( rURL );
+    }
+}
+
+// -----------------------------------------------------------------------
+void SfxURLRelocator_Impl::makeAbsoluteURL( rtl::OUString & rURL )
+{
+    if ( rURL.getLength() > 0 )
+    {
+        initOfficeInstDirs();
+        rURL = mxOfficeInstDirs->makeAbsoluteURL( rURL );
+    }
+}
+
+
