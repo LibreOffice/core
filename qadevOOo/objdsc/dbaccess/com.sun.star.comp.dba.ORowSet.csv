@@ -103,6 +103,7 @@
 "ORowSet";"com::sun::star::sdb::RowSet";"DataSourceName"
 "ORowSet";"com::sun::star::sdb::RowSet";"Command"
 "ORowSet";"com::sun::star::sdb::RowSet";"CommandType"
+"ORowSet";"com::sun::star::sdb::RowSet";"EscapeProcessing#optional"
 "ORowSet";"com::sun::star::sdb::RowSet";"ActiveCommand"
 "ORowSet";"com::sun::star::sdb::RowSet";"IgnoreResult"
 "ORowSet";"com::sun::star::sdb::RowSet";"Filter"
