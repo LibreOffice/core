@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 17:57:49 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,26 +77,29 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text = "Seiten" ;
         Text [ ENGLISH ] = "Pages" ;
         Text[ english_us ] = "Pages";
-        Text[ portuguese ] = "Pages";
-        Text[ russian ] = "Pages";
-        Text[ greek ] = "Pages";
-        Text[ dutch ] = "Pages";
+        Text[ portuguese ] = "P�ginas";
+        Text[ russian ] = "��������";
+        Text[ greek ] = "�������";
+        Text[ dutch ] = "Pagina's";
         Text[ french ] = "Pages";
         Text[ spanish ] = "P�ginas";
-        Text[ finnish ] = "Pages";
+        Text[ finnish ] = "Sivut";
         Text[ italian ] = "Pagine";
-        Text[ danish ] = "Pages";
+        Text[ danish ] = "Sider";
         Text[ swedish ] = "Sidor";
-        Text[ polish ] = "Pages";
-        Text[ portuguese_brazilian ] = "Pages";
+        Text[ polish ] = "Strony";
+        Text[ portuguese_brazilian ] = "P�ginas";
         Text[ japanese ] = "ページ";
         Text[ korean ] = "페이지";
         Text[ chinese_simplified ] = "页";
         Text[ chinese_traditional ] = "頁";
-        Text[ turkish ] = "Pages";
-        Text[ arabic ] = "Pages";
-        Text[ catalan ] = "Pages";
-        Text[ thai ] = "Pages";
+        Text[ turkish ] = "Sayfa";
+        Text[ arabic ] = "�����";
+        Text[ catalan ] = "P�gines";
+        Text[ thai ] = "หน้า";
+        Text[ czech ] = "Stránky";
+        Text[ hebrew ] = "‮עמודים‬";
+        Text[ hindi ] = "पृष्ठें";
     };
     RadioButton RB_ALL
     {
@@ -105,26 +108,29 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text = "~Alle" ;
         Text [ ENGLISH ] = "~All" ;
         Text[ english_us ] = "~All";
-        Text[ portuguese ] = "~All";
-        Text[ russian ] = "~All";
-        Text[ greek ] = "~All";
-        Text[ dutch ] = "~All";
+        Text[ portuguese ] = "~Todas";
+        Text[ russian ] = "~���";
+        Text[ greek ] = "��~�";
+        Text[ dutch ] = "a~lle";
         Text[ french ] = "Tout";
-        Text[ spanish ] = "~Todo";
-        Text[ finnish ] = "~All";
+        Text[ spanish ] = "~Todas";
+        Text[ finnish ] = "~Kaikki";
         Text[ italian ] = "~Tutte";
-        Text[ danish ] = "~All";
+        Text[ danish ] = "Alle";
         Text[ swedish ] = "~Alla";
-        Text[ polish ] = "~All";
-        Text[ portuguese_brazilian ] = "~All";
+        Text[ polish ] = "Wszystkie";
+        Text[ portuguese_brazilian ] = "~Todos";
         Text[ japanese ] = "すべて(~A)";
         Text[ korean ] = "모두(~A)";
         Text[ chinese_simplified ] = "全部(~A)";
         Text[ chinese_traditional ] = "全部(~A)";
-        Text[ turkish ] = "~All";
-        Text[ arabic ] = "~All";
-        Text[ catalan ] = "~All";
-        Text[ thai ] = "~All";
+        Text[ turkish ] = "T�m�";
+        Text[ arabic ] = "����";
+        Text[ catalan ] = "~Tots";
+        Text[ thai ] = "~ทั้งหมด";
+        Text[ czech ] = "Vše";
+        Text[ hebrew ] = "‮הכל‬";
+        Text[ hindi ] = "~सब";
     };
     RadioButton RB_RANGE
     {
@@ -133,26 +139,29 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text = "~Bereich" ;
         Text [ ENGLISH ] = "~Range" ;
         Text[ english_us ] = "~Range";
-        Text[ portuguese ] = "~Range";
-        Text[ russian ] = "~Range";
-        Text[ greek ] = "~Range";
-        Text[ dutch ] = "~Range";
+        Text[ portuguese ] = "Intervalo";
+        Text[ russian ] = "�������";
+        Text[ greek ] = "�������";
+        Text[ dutch ] = "~Bereik";
         Text[ french ] = "Plage";
         Text[ spanish ] = "~�rea";
-        Text[ finnish ] = "~Range";
+        Text[ finnish ] = "~Alue";
         Text[ italian ] = "~Area";
-        Text[ danish ] = "~Range";
+        Text[ danish ] = "Omr�de";
         Text[ swedish ] = "~Omr�de";
-        Text[ polish ] = "~Range";
-        Text[ portuguese_brazilian ] = "~Range";
+        Text[ polish ] = "Zakres";
+        Text[ portuguese_brazilian ] = "I~ntervalo";
         Text[ japanese ] = "範囲(~R)";
         Text[ korean ] = "범위(~R)";
         Text[ chinese_simplified ] = "范围(~R)";
         Text[ chinese_traditional ] = "範圍(~R)";
-        Text[ turkish ] = "~Range";
-        Text[ arabic ] = "~Range";
-        Text[ catalan ] = "~Range";
-        Text[ thai ] = "~Range";
+        Text[ turkish ] = "~Aral�k";
+        Text[ arabic ] = "������";
+        Text[ catalan ] = "�rea";
+        Text[ thai ] = "ช่วง";
+        Text[ czech ] = "Rozsah";
+        Text[ hebrew ] = "‮טווח‬";
+        Text[ hindi ] = "~फ़ैलाव";
     };
     RadioButton RB_SELECTION
     {
@@ -161,26 +170,29 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text = "A~uswahl" ;
         Text [ ENGLISH ] = "~Selection" ;
         Text[ english_us ] = "~Selection";
-        Text[ portuguese ] = "~Selection";
-        Text[ russian ] = "~Selection";
-        Text[ greek ] = "~Selection";
+        Text[ portuguese ] = "S~elec��o";
+        Text[ russian ] = "���������";
+        Text[ greek ] = "�������";
         Text[ dutch ] = "~Selection";
         Text[ french ] = "S�lection";
         Text[ spanish ] = "~Selecci�n";
-        Text[ finnish ] = "~Selection";
-        Text[ italian ] = "Scelta";
-        Text[ danish ] = "~Selection";
+        Text[ finnish ] = "~Valinta";
+        Text[ italian ] = "Selezione";
+        Text[ danish ] = "Markering";
         Text[ swedish ] = "~Markering";
-        Text[ polish ] = "~Selection";
-        Text[ portuguese_brazilian ] = "~Selection";
+        Text[ polish ] = "Selekcja";
+        Text[ portuguese_brazilian ] = "S~ele��o";
         Text[ japanese ] = "選択した部分";
         Text[ korean ] = "선택";
         Text[ chinese_simplified ] = "选择";
         Text[ chinese_traditional ] = "選擇";
-        Text[ turkish ] = "~Selection";
-        Text[ arabic ] = "~Selection";
-        Text[ catalan ] = "~Selection";
-        Text[ thai ] = "~Selection";
+        Text[ turkish ] = "~Se�ilen aral�k";
+        Text[ arabic ] = "�������";
+        Text[ catalan ] = "Selecci�";
+        Text[ thai ] = "เ~ลือก";
+        Text[ czech ] = "Výběr";
+        Text[ hebrew ] = "‮בחירה‬";
+        Text[ hindi ] = "~चुनाव";
     };
     Edit ED_PAGES
     {
@@ -196,25 +208,28 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text [ ENGLISH ] = "Compression";
         Text[ english_us ] = "Compression";
         Text[ portuguese ] = "Compression";
-        Text[ russian ] = "Compression";
-        Text[ greek ] = "Compression";
+        Text[ russian ] = "������";
+        Text[ greek ] = "��������";
         Text[ dutch ] = "Compression";
         Text[ french ] = "Compression";
         Text[ spanish ] = "Compresi�n";
-        Text[ finnish ] = "Compression";
+        Text[ finnish ] = "Tiivistys";
         Text[ italian ] = "Compressione";
-        Text[ danish ] = "Compression";
+        Text[ danish ] = "Komprimering";
         Text[ swedish ] = "Komprimering";
-        Text[ polish ] = "Compression";
+        Text[ polish ] = "Kompresja";
         Text[ portuguese_brazilian ] = "Compression";
         Text[ japanese ] = "圧縮";
         Text[ korean ] = "압축";
         Text[ chinese_simplified ] = "压缩";
         Text[ chinese_traditional ] = "壓縮";
-        Text[ turkish ] = "Compression";
-        Text[ arabic ] = "Compression";
+        Text[ turkish ] = "S�k��t�rma";
+        Text[ arabic ] = "���";
         Text[ catalan ] = "Compression";
-        Text[ thai ] = "Compression";
+        Text[ thai ] = "การบีบอัด";
+        Text[ czech ] = "Komprese";
+        Text[ hebrew ] = "‮דחיסה‬";
+        Text[ hindi ] = "दबाव";
     };
     RadioButton RB_SCREEN
     {
@@ -236,13 +251,16 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ polish ] = "S~creen optimized (smallest file size)";
         Text[ portuguese_brazilian ] = "S~creen optimized (smallest file size)";
         Text[ japanese ] = "画面用に最適化する (最小ファイルサイズ)";
-        Text[ korean ] = "스크린용으로 최적화 (최소 파일 크기)";
+        Text[ korean ] = "화면용으로 최적화(최소 파일 크기)";
         Text[ chinese_simplified ] = "优化屏幕显示(最小的文件大小)";
         Text[ chinese_traditional ] = "優化屏幕顯示(最小的檔案大小)";
-        Text[ turkish ] = "S~creen optimized (smallest file size)";
+        Text[ turkish ] = "En uygun ~ekran (en k���k dosya boyutu)";
         Text[ arabic ] = "S~creen optimized (smallest file size)";
         Text[ catalan ] = "S~creen optimized (smallest file size)";
         Text[ thai ] = "S~creen optimized (smallest file size)";
+        Text[ czech ] = "Optimalizováno pro obrazovku (nejmenší velikost souboru)";
+        Text[ hebrew ] = "Optimiert für ~Bildschirm (kleinste Dateigröße)";
+        Text[ hindi ] = "S~creen optimized (smallest file size)";
     };
     RadioButton RB_PRINT
     {
@@ -260,17 +278,20 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ finnish ] = "~Print optimized";
         Text[ italian ] = "Stampa ottimizzata";
         Text[ danish ] = "~Print optimized";
-        Text[ swedish ] = "~Utskriftsoptimerad";
+        Text[ swedish ] = "Optimerad f�r ~utskrift";
         Text[ polish ] = "~Print optimized";
         Text[ portuguese_brazilian ] = "~Print optimized";
         Text[ japanese ] = "印刷用に最適化する";
         Text[ korean ] = "인쇄용으로 최적화";
         Text[ chinese_simplified ] = "优化打印效果";
         Text[ chinese_traditional ] = "優化列印效果";
-        Text[ turkish ] = "~Print optimized";
+        Text[ turkish ] = "~En uygun �ekilde yazd�r";
         Text[ arabic ] = "~Print optimized";
         Text[ catalan ] = "~Print optimized";
         Text[ thai ] = "~Print optimized";
+        Text[ czech ] = "Optimalizováno pro tisk";
+        Text[ hebrew ] = "Optimiert für ~Druck";
+        Text[ hindi ] = "~Print optimized";
     };
     RadioButton RB_PRESS
     {
@@ -284,21 +305,24 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ greek ] = "Pr~ess optimized";
         Text[ dutch ] = "Pr~ess optimized";
         Text[ french ] = "Optimis� pour presse � imprimer";
-        Text[ spanish ] = "~Optimizado para la impresi�n";
+        Text[ spanish ] = "~Optimizado para la imprenta";
         Text[ finnish ] = "Pr~ess optimized";
         Text[ italian ] = "Prestampa ottimizzata";
         Text[ danish ] = "Pr~ess optimized";
-        Text[ swedish ] = "Tr~yckoptimerad";
+        Text[ swedish ] = "Optimerad f�r tr~yck";
         Text[ polish ] = "Pr~ess optimized";
         Text[ portuguese_brazilian ] = "Pr~ess optimized";
         Text[ japanese ] = "印刷準備用に最適化する";
-        Text[ korean ] = "인쇄 단계를 최적화";
+        Text[ korean ] = "인쇄 단계용으로 최적화";
         Text[ chinese_simplified ] = "优化新闻印刷";
         Text[ chinese_traditional ] = "優化新聞印刷";
         Text[ turkish ] = "Pr~ess optimized";
         Text[ arabic ] = "Pr~ess optimized";
         Text[ catalan ] = "Pr~ess optimized";
         Text[ thai ] = "Pr~ess optimized";
+        Text[ czech ] = "Optimalizováno pro sazbu";
+        Text[ hebrew ] = "Optimiert für Druck~vorstufe";
+        Text[ hindi ] = "Pr~ess optimized";
     };
     OKButton BT_OK
     {
@@ -325,10 +349,13 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ korean ] = "내보내기";
         Text[ chinese_simplified ] = "输出";
         Text[ chinese_traditional ] = "匯出";
-        Text[ turkish ] = "E~xport";
+        Text[ turkish ] = "~D��a Aktar";
         Text[ arabic ] = "E~xport";
         Text[ catalan ] = "E~xport";
         Text[ thai ] = "E~xport";
+        Text[ czech ] = "Export";
+        Text[ hebrew ] = "E~xport";
+        Text[ hindi ] = "E~xport";
     };
     CancelButton BT_CANCEL
     {
@@ -365,6 +392,22 @@ ModalDialog RID_PDF_EXPORT_DLG
     Text[ arabic ] = "PDF Options";
     Text[ catalan ] = "PDF Options";
     Text[ thai ] = "PDF Options";
+    Text[ czech ] = "Volby PDF";
+    Text[ hebrew ] = "PDF Options";
+    Text[ hindi ] = "PDF Options";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
