@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sspellimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:03:05 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ using namespace ::com::sun::star::linguistic2;
 
 #define OU2ISO_1(rtlOUString)     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), RTL_TEXTENCODING_ISO_8859_1).getStr()
 
-#define OU2ENC(rtlOUString, rtlEncoding)     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), rtlEncoding).getStr()
+#define OU2ENC(rtlOUString, rtlEncoding)     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), rtlEncoding, RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK).getStr()
 
 
 ///////////////////////////////////////////////////////////////////////////
