@@ -42,7 +42,8 @@ Public DialogModel as Object
 
 Sub Main
 &apos;On Local Error Goto GlobalErrorHandler
-        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+	Dim SOBitmapPath,sBitmapPath as String
+	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	oBaseDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter/web&quot;, &quot;_blank&quot;, 0, NoArgs())
 	oViewSettings = oBaseDocument.CurrentController.ViewSettings
@@ -71,7 +72,10 @@ Sub Main
 	LoadWebPageStyles(oBaseDocument)
 	SetProgressValue(98)
 	SetProgressValue(0)
-	oBaseDocument.UnlockControllers
+	oBaseDocument.UnlockControllers	
+	SOBitmapPath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
+	sBitmapPath = SOBitmapPath &amp; &quot;webwizard.bmp&quot;
+	DialogModel.ImagePreview.ImageURL = sBitmapPath
 	MainDialog.Execute
 
 GLOBALERRORHANDLER:
@@ -528,6 +532,14 @@ Sub SetTileBackgroundorNot(DialogModel as Object, oStyle as Object)
   	Else
     	oStyle.BackGraphicLocation = com.sun.star.style.GraphicLocation.AREA
   	End If
+End Sub
+
+
+Sub RepaintHeaderPreview()
+Dim Bitmap As Object
+Dim sBitmapPath as String
+	sBitmapPath = SOBitmapPath &amp; &quot;webwizard.bmp&quot;
+	WebWzrd.ImagePreview.ImageURL = sBitmapPath
 End Sub
 
 </script:module>
