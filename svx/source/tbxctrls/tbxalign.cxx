@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxalign.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:29:10 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+
+#include <sfx2/app.hxx>
+#include <vcl/toolbox.hxx>
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlAlign, SfxAllEnumItem);
 
