@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 13:11:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 14:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 #include "cmdid.h"
-#include "offmgr/ofaids.hrc"
+#include "svx/svxids.hrc"
 #include "globals.hrc"
 
 SfxSlotInfo FN_ABSTRACT_NEWDOC
