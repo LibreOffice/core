@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: od $ $Date: 2002-09-25 13:14:36 $
+ *  last change: $Author: fme $ $Date: 2002-09-27 14:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,7 +795,9 @@ void SwNoTxtFrm::Format( const SwBorderAttrs * )
     const Size aNewSize( GetSize() );
 
     // hat sich die Hoehe geaendert?
-    SwTwips nChgHght = (SwTwips)(aNewSize.Height() - Prt().Height());
+    SwTwips nChgHght = IsVertical() ?
+        (SwTwips)(aNewSize.Width() - Prt().Width()) :
+        (SwTwips)(aNewSize.Height() - Prt().Height());
 #ifdef VERTICAL_LAYOUT
     if( nChgHght > 0)
         Grow( nChgHght );

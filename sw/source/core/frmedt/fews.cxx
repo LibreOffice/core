@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:50:47 $
+ *  last change: $Author: fme $ $Date: 2002-09-27 14:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1032,7 +1032,10 @@ Size SwFEShell::GetGraphicDefaultSize() const
 
         SwRect aBound;
         CalcBoundRect( aBound, pFly->GetFmt()->GetAnchor().GetAnchorId());
-        aRet.Height() = aBound.Height();
+        if ( pFly->GetAnchor()->IsVertical() )
+            aRet.Width() = aBound.Width();
+        else
+            aRet.Height() = aBound.Height();
     }
     return aRet;
 }

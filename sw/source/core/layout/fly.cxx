@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-23 14:09:06 $
+ *  last change: $Author: fme $ $Date: 2002-09-27 14:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1828,9 +1828,15 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, BOOL bTst )
         if ( nDist > nHeight )
             nDist = nHeight;
 
-        SwTwips nVal = IsMinHeight() ?
-            Min( nDist, nHeight - GetFmt()->GetFrmSize().GetHeight() ) :
-            nDist;
+        SwTwips nVal = nDist;
+        if ( IsMinHeight() )
+        {
+            const SwFmtFrmSize& rFmtSize = GetFmt()->GetFrmSize();
+            SwTwips nFmtHeight = bVert ? rFmtSize.GetWidth() : rFmtSize.GetHeight();
+
+            nVal = Min( nDist, nHeight - nFmtHeight );
+        }
+
         if ( nVal <= 0L )
             return 0L;
 
