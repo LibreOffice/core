@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storcach.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2001-11-26 21:20:36 $
+ *  last change: $Author: mhu $ $Date: 2002-08-17 17:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,14 @@
  *
  ************************************************************************/
 
-#define _STORE_STORCACH_CXX "$Revision: 1.3 $"
+#define _STORE_STORCACH_CXX "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
 
-#ifndef _RTL_MEMORY_H_
-#include <rtl/memory.h>
+#ifndef _RTL_ALLOC_H_
+#include <rtl/alloc.h>
 #endif
 
 #ifndef _OSL_DIAGNOSE_H_
@@ -87,21 +87,12 @@
 #include <storcach.hxx>
 #endif
 
-using namespace store;
+#ifndef INCLUDED_CSTDDEF
+#include <cstddef>
+#define INCLUDED_CSTDDEF
+#endif
 
-/*========================================================================
- *
- * OStorePageCache internals.
- *
- *======================================================================*/
-/*
- * __store_memcpy.
- */
-#include <string.h>
-inline void __store_memcpy (void *dst, const void *src, sal_uInt32 n)
-{
-    ::memcpy (dst, src, n);
-}
+using namespace store;
 
 /*========================================================================
  *
@@ -123,6 +114,17 @@ struct OStorePageCacheEntry
     data *m_pData;
     self *m_pNext;
     self *m_pPrev;
+
+    /** Allocation.
+     */
+    static void * operator new (std::size_t n) SAL_THROW(())
+    {
+        return rtl_allocateMemory (sal_uInt32(n));
+    }
+    static void operator delete (void * p, std::size_t) SAL_THROW(())
+    {
+        rtl_freeMemory (p);
+    }
 
     /** Construction.
     */
@@ -305,6 +307,19 @@ static sal_uInt16 __store_find_entry (
  *
  *======================================================================*/
 /*
+ * Allocation.
+ */
+void * OStorePageCache::operator new (std::size_t n) SAL_THROW(())
+{
+    return rtl_allocateMemory (sal_uInt32(n));
+}
+
+void OStorePageCache::operator delete (void * p, std::size_t) SAL_THROW(())
+{
+    rtl_freeMemory (p);
+}
+
+/*
  * OStorePageCache.
  */
 OStorePageCache::OStorePageCache (sal_uInt16 nPages)
@@ -370,7 +385,7 @@ void OStorePageCache::move (sal_uInt16 nSI, sal_uInt16 nDI)
     if (nSI < nDI)
     {
         // shift left.
-        rtl_moveMemory (
+        __store_memmove (
             &m_pData[nSI    ],
             &m_pData[nSI + 1],
             (nDI - nSI) * sizeof(entry*));
@@ -382,7 +397,7 @@ void OStorePageCache::move (sal_uInt16 nSI, sal_uInt16 nDI)
     if (nSI > nDI)
     {
         // shift right.
-        rtl_moveMemory (
+        __store_memmove (
             &m_pData[nDI + 1],
             &m_pData[nDI    ],
             (nSI - nDI) * sizeof(entry*));

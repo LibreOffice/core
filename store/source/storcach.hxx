@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storcach.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 20:54:25 $
+ *  last change: $Author: mhu $ $Date: 2002-08-17 17:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORCACH_HXX
-#define _STORE_STORCACH_HXX "$Revision: 1.2 $"
+#define _STORE_STORCACH_HXX "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -72,6 +72,11 @@
 
 #ifndef _STORE_TYPES_H_
 #include <store/types.h>
+#endif
+
+#ifndef INCLUDED_CSTDDEF
+#include <cstddef>
+#define INCLUDED_CSTDDEF
 #endif
 
 namespace store
@@ -97,6 +102,11 @@ class OStorePageCache
     typedef OStorePageCacheEntry entry;
 
 public:
+    /** Allocation.
+     */
+    static void * operator new (std::size_t n) SAL_THROW(());
+    static void   operator delete (void * p, std::size_t) SAL_THROW(());
+
     /** Construction.
     */
     OStorePageCache (
