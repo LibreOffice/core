@@ -72,7 +72,6 @@ hedabu: ..\inc\linkmgr.hxx %_DEST%\inc%_EXT%\svx\linkmgr.hxx
 hedabu: ..\inc\svdsob.hxx %_DEST%\inc%_EXT%\svx\svdsob.hxx
 hedabu: ..\inc\svdlayer.hxx %_DEST%\inc%_EXT%\svx\svdlayer.hxx
 hedabu: ..\inc\adjitem.hxx %_DEST%\inc%_EXT%\svx\adjitem.hxx
-hedabu: ..\inc\adritem.hxx %_DEST%\inc%_EXT%\svx\adritem.hxx
 hedabu: ..\inc\akrnitem.hxx %_DEST%\inc%_EXT%\svx\akrnitem.hxx
 hedabu: ..\inc\algitem.hxx %_DEST%\inc%_EXT%\svx\algitem.hxx
 hedabu: ..\inc\align.hxx %_DEST%\inc%_EXT%\svx\align.hxx
@@ -200,7 +199,6 @@ hedabu: ..\inc\optspell.hxx %_DEST%\inc%_EXT%\svx\optspell.hxx
 hedabu: ..\inc\optinet2.hxx %_DEST%\inc%_EXT%\svx\optinet2.hxx
 hedabu: ..\inc\optmail.hxx %_DEST%\inc%_EXT%\svx\optmail.hxx
 hedabu: ..\inc\optldap.hxx %_DEST%\inc%_EXT%\svx\optldap.hxx
-hedabu: ..\inc\optextbr.hxx %_DEST%\inc%_EXT%\svx\optextbr.hxx
 hedabu: ..\inc\orphitem.hxx %_DEST%\inc%_EXT%\svx\orphitem.hxx
 hedabu: ..\inc\p2dobj3d.hxx %_DEST%\inc%_EXT%\svx\p2dobj3d.hxx
 hedabu: ..\inc\page.hxx %_DEST%\inc%_EXT%\svx\page.hxx
