@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-03 15:49:03 $
+ *  last change: $Author: mib $ $Date: 2001-05-07 06:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,41 +282,73 @@ sal_uInt32 SwXMLWriter::_Write()
     }
 
     // export sub streams for package, else full stream into a file
+    sal_Bool bWarn = sal_False, bErr = sal_False;
+    String sWarnFile, sErrFile;
+
     if (NULL != pStg)
     {
         if( !bOrganizerMode &&
             SFX_CREATE_MODE_EMBEDDED != pDoc->GetDocShell()->GetCreateMode() )
-            WriteThroughComponent(
-                xModelComp, "meta.xml", xServiceFactory,
-                "com.sun.star.comp.Writer.XMLMetaExporter",
-                aEmptyArgs, aProps, sal_True );
+        {
+            if( !WriteThroughComponent(
+                    xModelComp, "meta.xml", xServiceFactory,
+                    "com.sun.star.comp.Writer.XMLMetaExporter",
+                    aEmptyArgs, aProps, sal_True ) )
+            {
+                bWarn = sal_True;
+                sWarnFile = String( RTL_CONSTASCII_STRINGPARAM("meta.xml"),
+                                    RTL_TEXTENCODING_ASCII_US );
+            }
+        }
 
-        WriteThroughComponent(
-            xModelComp, "styles.xml", xServiceFactory,
-            "com.sun.star.comp.Writer.XMLStylesExporter",
-            aFilterArgs, aProps, sal_False );
+        if( !WriteThroughComponent(
+                xModelComp, "styles.xml", xServiceFactory,
+                "com.sun.star.comp.Writer.XMLStylesExporter",
+                aFilterArgs, aProps, sal_False ) )
+        {
+            bErr = sal_True;
+            sErrFile = String( RTL_CONSTASCII_STRINGPARAM("styles.xml"),
+                               RTL_TEXTENCODING_ASCII_US );
+        }
 
-        WriteThroughComponent(
-            xModelComp, "settings.xml", xServiceFactory,
-            "com.sun.star.comp.Writer.XMLSettingsExporter",
-            aFilterArgs, aProps, sal_False );
+        if( !bErr )
+        {
+            if( !WriteThroughComponent(
+                    xModelComp, "settings.xml", xServiceFactory,
+                    "com.sun.star.comp.Writer.XMLSettingsExporter",
+                    aFilterArgs, aProps, sal_False ) )
+            {
+                if( !bWarn )
+                {
+                    bWarn = sal_True;
+                    sWarnFile = String( RTL_CONSTASCII_STRINGPARAM("settings.xml"),
+                                        RTL_TEXTENCODING_ASCII_US );
+                }
+            }
+        }
 
-        if( !bOrganizerMode )
-            WriteThroughComponent(
-                xModelComp, "content.xml", xServiceFactory,
-                "com.sun.star.comp.Writer.XMLContentExporter",
-                aFilterArgs, aProps, sal_False );
-
+        if( !bOrganizerMode && !bErr )
+        {
+            if( !WriteThroughComponent(
+                    xModelComp, "content.xml", xServiceFactory,
+                    "com.sun.star.comp.Writer.XMLContentExporter",
+                    aFilterArgs, aProps, sal_False ) )
+            {
+                bErr = sal_True;
+                sErrFile = String( RTL_CONSTASCII_STRINGPARAM("content.xml"),
+                                   RTL_TEXTENCODING_ASCII_US );
+            }
+        }
     }
     else
     {
         // create single stream and do full export
         Reference<io::XOutputStream> xOut =
             new utl::OOutputStreamWrapper( *pStrm );
-        WriteThroughComponent(
-            xOut, xModelComp, xServiceFactory,
-            "com.sun.star.comp.Writer.XMLExporter",
-            aEmptyArgs, aProps );
+        bErr = !WriteThroughComponent(
+                    xOut, xModelComp, xServiceFactory,
+                    "com.sun.star.comp.Writer.XMLExporter",
+                    aEmptyArgs, aProps );
     }
 
     if( pGraphicHelper )
@@ -332,8 +364,26 @@ sal_uInt32 SwXMLWriter::_Write()
         xStatusIndicator->end();
     }
 
+    if( bErr )
+    {
+        if( sErrFile.Len() )
+            return *new StringErrorInfo( ERR_WRITE_ERROR_FILE, sErrFile,
+                                         ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+        else
+            return ERR_SWG_WRITE_ERROR;
+    }
+    else if( bWarn )
+    {
+        if( sWarnFile.Len() )
+            return *new StringErrorInfo( WARN_WRITE_ERROR_FILE, sWarnFile,
+                                         ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+        else
+            return WARN_SWG_FEATURES_LOST;
+    }
+
     return 0;
 }
+
 sal_uInt32 SwXMLWriter::WriteStream()
 {
     return _Write();
@@ -357,7 +407,7 @@ sal_Bool SwXMLWriter::IsStgWriter() const
     return !bPlain;
 }
 
-sal_uInt32 SwXMLWriter::WriteThroughComponent(
+sal_Bool SwXMLWriter::WriteThroughComponent(
     const Reference<XComponent> & xComponent,
     const sal_Char* pStreamName,
     const Reference<lang::XMultiServiceFactory> & rFactory,
@@ -379,7 +429,7 @@ sal_uInt32 SwXMLWriter::WriteThroughComponent(
                                    STREAM_WRITE | STREAM_SHARE_DENYWRITE );
     DBG_ASSERT(xDocStream.Is(), "Can't create output stream in package!");
     if (! xDocStream.Is())
-        return ERR_SWG_WRITE_ERROR;
+        return sal_False;
 
     xDocStream->SetSize( 0 );
 
@@ -396,6 +446,7 @@ sal_uInt32 SwXMLWriter::WriteThroughComponent(
         aAny.setValue( &bFalse, ::getBooleanCppuType() );
         xDocStream->SetProperty( aPropName, aAny );
     }
+#if SUPD > 630
     else
     {
         aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Encrypted") );
@@ -403,6 +454,7 @@ sal_uInt32 SwXMLWriter::WriteThroughComponent(
         aAny.setValue( &bTrue, ::getBooleanCppuType() );
         xDocStream->SetProperty( aPropName, aAny );
     }
+#endif
 
 
     // set buffer and create outputstream
@@ -410,19 +462,19 @@ sal_uInt32 SwXMLWriter::WriteThroughComponent(
     xOutputStream = new utl::OOutputStreamWrapper( *xDocStream );
 
     // write the stuff
-    sal_Int32 nRet = WriteThroughComponent(
+    sal_Bool bRet = WriteThroughComponent(
         xOutputStream, xComponent, rFactory,
         pServiceName, rArguments, rMediaDesc );
 
     // finally, commit stream.
-    if( 0 == nRet )
+    if( bRet )
         xDocStream->Commit();
 
-    return nRet;
+    return bRet;
 
 }
 
-sal_uInt32 SwXMLWriter::WriteThroughComponent(
+sal_Bool SwXMLWriter::WriteThroughComponent(
     const Reference<io::XOutputStream> & xOutputStream,
     const Reference<XComponent> & xComponent,
     const Reference<XMultiServiceFactory> & rFactory,
@@ -442,7 +494,7 @@ sal_uInt32 SwXMLWriter::WriteThroughComponent(
         UNO_QUERY );
     ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
     if(!xSaxWriter.is())
-        return ERR_SWG_WRITE_ERROR;
+        return sal_False;
 
     // connect XML writer to output stream
     xSaxWriter->setOutputStream( xOutputStream );
@@ -461,7 +513,7 @@ sal_uInt32 SwXMLWriter::WriteThroughComponent(
     ASSERT( xExporter.is(),
             "can't instantiate export filter component" );
     if( !xExporter.is() )
-        return ERR_SWG_WRITE_ERROR;
+        return sal_False;
 
     // set block mode (if appropriate)
     if( bBlock )
@@ -482,9 +534,7 @@ sal_uInt32 SwXMLWriter::WriteThroughComponent(
 
     // filter!
     Reference<XFilter> xFilter( xExporter, UNO_QUERY );
-    xFilter->filter( rMediaDesc );
-
-    return 0;
+    return xFilter->filter( rMediaDesc );
 }
 
 
@@ -501,11 +551,15 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.27 2001-05-03 15:49:03 dvo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.28 2001-05-07 06:01:50 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.27  2001/05/03 15:49:03  dvo
+      - support for encrypting streams added
+      - turned functions into private methods
+
       Revision 1.26  2001/04/30 14:13:15  mib
       Don't export doc info in OLE objects
 

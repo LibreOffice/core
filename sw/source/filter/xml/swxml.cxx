@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 16:26:26 $
+ *  last change: $Author: mib $ $Date: 2001-05-07 06:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,10 +158,12 @@ int XMLReader::GetReaderType()
 sal_Int32 ReadThroughComponent(
     Reference<io::XInputStream> xInputStream,
     Reference<XComponent> xModelComponent,
+    const String& rStreamName,
     Reference<lang::XMultiServiceFactory> & rFactory,
     const sal_Char* pFilterName,
     Sequence<Any> rFilterArguments,
     const OUString& rName,
+    sal_Bool bMustBeSuccessfull,
 
     // parameters for special modes
     sal_Bool bBlockMode,
@@ -240,24 +242,48 @@ sal_Int32 ReadThroughComponent(
     }
     catch( xml::sax::SAXParseException& r )
     {
+#ifdef DEBUG
+        ByteString aError( "SAX parse exception catched while importing:\n" );
+        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aError.GetBuffer() );
+#endif
+
         String sErr( String::CreateFromInt32( r.LineNumber ));
         sErr += ',';
         sErr += String::CreateFromInt32( r.ColumnNumber );
 
-        return *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
-                                     ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+        if( rStreamName.Len() )
+            return *new TwoStringErrorInfo( ERR_FORMAT_FILE_ROWCOL, rStreamName, sErr,
+                                         ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+        else
+            return *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
+                                         ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
     }
-//  catch( xml::sax::SAXParseException& r )
-//  {
-//      return ERR_SWG_READ_ERROR;
-//  }
-    catch( xml::sax::SAXException& )
+    catch( xml::sax::SAXException& r )
     {
+#ifdef DEBUG
+        ByteString aError( "SAX exception catched while importing:\n" );
+        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aError.GetBuffer() );
+#endif
         return ERR_SWG_READ_ERROR;
     }
-    catch( io::IOException& )
+    catch( io::IOException& r )
     {
+#ifdef DEBUG
+        ByteString aError( "IO exception catched while importing:\n" );
+        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aError.GetBuffer() );
+#endif
         return ERR_SWG_READ_ERROR;
+    }
+    catch( uno::Exception& r )
+    {
+#ifdef DEBUG
+        ByteString aError( "uno exception catched while importing:\n" );
+        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aError.GetBuffer() );
+#endif
     }
 
     // success!
@@ -274,6 +300,7 @@ sal_Int32 ReadThroughComponent(
     const sal_Char* pFilterName,
     Sequence<Any> rFilterArguments,
     const OUString& rName,
+    sal_Bool bMustBeSuccessfull,
 
     // parameters for special modes
     sal_Bool bBlockMode,
@@ -312,8 +339,9 @@ sal_Int32 ReadThroughComponent(
 
     // read from the stream
     return ReadThroughComponent(
-        xInputStream, xModelComponent, rFactory, pFilterName, rFilterArguments,
-        rName, bBlockMode, rInsertTextRange, bFormatsOnly,
+        xInputStream, xModelComponent, sStreamName, rFactory,
+        pFilterName, rFilterArguments,
+        rName, bMustBeSuccessfull, bBlockMode, rInsertTextRange, bFormatsOnly,
         nStyleFamilyMask, bMergeStyles, bOrganizerMode );
 }
 
@@ -533,19 +561,21 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 
     if ( NULL != pStorage )
     {
+        sal_uInt32 nWarn = 0;
+        sal_uInt32 nWarn2 = 0;
         // read storage streams
         if( !IsOrganizerMode() )
-            ReadThroughComponent(
+            nWarn = ReadThroughComponent(
                 pStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
                 "com.sun.star.comp.Writer.XMLMetaImporter",
-                aEmptyArgs, rName, IsBlockMode(), xInsertTextRange,
+                aEmptyArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
                 aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
                 sal_False );
 
-        ReadThroughComponent(
+        nWarn2 = ReadThroughComponent(
             pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
             "com.sun.star.comp.Writer.XMLSettingsImporter",
-            aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
+            aFilterArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
             aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
             IsOrganizerMode() );
 
@@ -554,20 +584,27 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         aAny.setValue( &bTmp, ::getBooleanCppuType() );
         xInfoSet->setPropertyValue( sShowChanges, aAny );
 
-        ReadThroughComponent(
+        nRet = ReadThroughComponent(
             pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
             "com.sun.star.comp.Writer.XMLStylesImporter",
-            aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
+            aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
             aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
             IsOrganizerMode() );
 
-        if( !IsOrganizerMode() )
+        if( !nRet && !IsOrganizerMode() )
             nRet = ReadThroughComponent(
                pStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
                "com.sun.star.comp.Writer.XMLContentImporter",
-               aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
+               aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
                aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
                sal_False );
+        if( !nRet )
+        {
+            if( nWarn )
+                nRet = nWarn;
+            else if( nWarn2 )
+                nRet = nWarn2;
+        }
     }
     else
     {
@@ -582,9 +619,9 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         }
 
         nRet = ReadThroughComponent(
-            xInputStream, xModelComp, xServiceFactory,
+            xInputStream, xModelComp, aEmptyStr, xServiceFactory,
             "com.sun.star.comp.Writer.XMLImporter",
-            aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
+            aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
             aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
             IsOrganizerMode() );
     }

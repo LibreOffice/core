@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:33:18 $
+ *  last change: $Author: mib $ $Date: 2001-05-07 06:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,6 +540,11 @@ Resource RID_SW_ERRHDL
         TEXT[ arabic ] = "åÐÇ ÇáãáÝ áíÓ ãáÝ WinWord97";
         TEXT[ catalan ] = "El archivo no es de WinWord97";
     };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL )
+    {
+        TEXT = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt" ;
+        TEXT [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
+    };
      // Export-Errors
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_WRITE_ERROR )
     {
@@ -669,6 +674,11 @@ Resource RID_SW_ERRHDL
         Text[ turkish ] = "Belge izin verilen 3.1/4.0 metin belgesi büyüklüðünü aþýyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El documento sobrepasa el tamaño posible 3.1/4.0 de documento";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_WRITE_ERROR_FILE )
+    {
+        TEXT = "Fehler beim Schreiben des Teildokuments $(ARG1)" ;
+        TEXT [ English ] = "Error in writing sub-document $(ARG1)" ;
     };
      // Import-/Export-Errors
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_INTERNAL_ERROR )
@@ -1303,6 +1313,16 @@ Resource RID_SW_ERRHDL
         Text[ turkish ] = "HTML belgesinde StarBasic makrolarý var.\nBu makrolar, yürürlükteki verme ayarlarý ile kaydedilmemiþ.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El documento HTML contiene macros %PRODUCTNAME Basic.\nNo se guardaron con la configuración actual de exportación.";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_WRITE_ERROR_FILE )
+    {
+        TEXT = "Fehler beim Schreiben des Teildokuments $(ARG1)" ;
+        TEXT [ English ] = "Error in writing sub-document $(ARG1)" ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_FORMAT_FILE_ROWCOL )
+    {
+        TEXT = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt" ;
+        TEXT [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
     };
 };
 

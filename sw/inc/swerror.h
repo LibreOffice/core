@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swerror.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: mib $ $Date: 2001-05-07 05:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,12 +95,15 @@
 #define ERR_SWG_NEW_VERSION             (ERROR_SW_READ_BASE | 13)
 #define ERR_WW8_NO_WW8_FILE_ERR         (ERROR_SW_READ_BASE | 14)
 
+#define ERR_FORMAT_FILE_ROWCOL          (ERROR_SW_READ_BASE | 15)
+
 // Export Fehler
 #define ERR_SWG_WRITE_ERROR             (ERROR_SW_WRITE_BASE | 30 )
 #define ERR_SWG_OLD_GLOSSARY            (ERROR_SW_WRITE_BASE | 31 )
 #define ERR_SWG_CANNOT_WRITE            (ERROR_SW_WRITE_BASE | 32 )
 #define ERR_W4W_READ_TMP_ERROR          (ERROR_SW_WRITE_BASE | 33 )
 #define ERR_SWG_LARGE_DOC_ERROR         (ERROR_SW_WRITE_BASE | 34 )
+#define ERR_WRITE_ERROR_FILE            (ERROR_SW_WRITE_BASE | 35 )
 
 // Import/Export Fehler
 #define ERR_SWG_INTERNAL_ERROR          (ERROR_SW_BASE  | 50 )
@@ -123,6 +126,7 @@
 // Import - Warnings
 #define WARN_SWG_NO_DRAWINGS            (WARN_SW_READ_BASE | 70 )
 #define WARN_WW6_FASTSAVE_ERR           (WARN_SW_READ_BASE | 71 )
+// continued below
 
 // Import & Export - Warnings
 #define WARN_SWG_FEATURES_LOST          (WARN_SW_BASE | 72 )
@@ -131,6 +135,10 @@
 
 // Export warnings
 #define WARN_SWG_HTML_NO_MACROS         (WARN_SW_WRITE_BASE |75)
+#define WARN_WRITE_ERROR_FILE           (WARN_SW_WRITE_BASE |76)
+
+// More Import - Warnings
+#define WARN_FORMAT_FILE_ROWCOL         (WARN_SW_READ_BASE | 77)
 
 #ifndef __RSC
 

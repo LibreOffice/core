@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-03 15:49:03 $
+ *  last change: $Author: mib $ $Date: 2001-05-07 06:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ private:
     // helper methods to write XML streams
 
     /// write a single XML stream into the package
-    sal_uInt32 WriteThroughComponent(
+    sal_Bool WriteThroughComponent(
         /// the component we export
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent> & xComponent,
@@ -123,7 +123,7 @@ private:
 
     /// write a single output stream
     /// (to be called either directly or by WriteThroughComponent(...))
-    sal_uInt32 WriteThroughComponent(
+    sal_Bool WriteThroughComponent(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::io::XOutputStream> & xOutputStream,
         const ::com::sun::star::uno::Reference<
