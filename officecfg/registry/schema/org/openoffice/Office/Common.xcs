@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:04:14 $
+ *  last change: $Author: os $ $Date: 2002-05-24 11:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4470,6 +4470,14 @@
         <info>
           <desc xml:lang="en-US">This option defaults the new contrast mode of Draw/Impress, when high contrast mode is "active".</desc>
           <label xml:lang="en-US">For drawings and presentations</label>
+        </info>
+      </prop>
+      <prop oor:name="IsForBorders" oor:type="xs:boolean">
+        <!-- Responsible: -->
+        <value>true</value>
+        <info>
+          <desc xml:lang="en-US">This option defaults the new contrast mode of borders, when high contrast mode is "active".</desc>
+          <label xml:lang="en-US">For borders and shadows of pages, paragraphs, tables and frames</label>
         </info>
       </prop>
       <prop oor:name="IsForPagePreviews" oor:type="xs:boolean">
