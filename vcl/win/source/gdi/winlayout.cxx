@@ -3,9 +3,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hdu $ $Date: 2002-07-26 16:42:25 $
+ *  last change: $Author: hdu $ $Date: 2002-07-29 17:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     if( 0 == (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG) )
     {
         if( nMaxGlyphCount > 1 )
-            aGCP.lpOrder = mpChars2Glyphs = new UINT[ nMaxGlyphCount ];
+            aGCP.lpOrder = mpGlyphs2Chars = new UINT[ nMaxGlyphCount ];
 
         // LLA: #100683# gpf in setup, looks like memory overwriter
         //      we set lpClass to size of nMaxGlyphCount
@@ -260,18 +260,30 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     if( 0 == (~rArgs.mnFlags & (SAL_LAYOUT_BIDI_RTL|SAL_LAYOUT_BIDI_RTL))
     && (1 < nMaxGlyphCount) )
     {
-        mpChars2Glyphs = new UINT[ nMaxGlyphCount ];
+        mpGlyphs2Chars = new UINT[ nMaxGlyphCount ];
         for( int i = 0, j = nMaxGlyphCount; --j >= i; ++i )
         {
             WCHAR nTempGlyph = mpOutGlyphs[ i ];
             int nTempAdvance = mpGlyphAdvances[ i ];
             mpOutGlyphs[ i ]        = mpOutGlyphs[ j ];
             mpGlyphAdvances[ i ]    = mpGlyphAdvances[ j ];
-            mpChars2Glyphs[ i ]     = j;
+            mpGlyphs2Chars[ i ]     = j;
             mpOutGlyphs[ j ]        = nTempGlyph;
             mpGlyphAdvances[ j ]    = nTempAdvance;
-            mpChars2Glyphs[ j ]     = i;
+            mpGlyphs2Chars[ j ]     = i;
         }
+    }
+
+    // calculate mpChars2Glyphs
+    // note: glyph to char mapping is relative to first character
+    if( mpGlyphs2Chars != NULL )
+    {
+        mpChars2Glyphs = new UINT[ nMaxGlyphCount ];
+        int i;
+        for( i = 0; i < mnGlyphCount; ++i )
+            mpChars2Glyphs[ mpGlyphs2Chars[ i ] ] = i;
+        for( ; i < nMaxGlyphCount; ++i )
+            mpChars2Glyphs[ i ] = -1;
     }
 
     // adjust positions if requested
@@ -331,9 +343,6 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
     Point aRelativePos( nXOffset, 0 );
     rPos = GetDrawPosition( aRelativePos );
 
-    if( !mpGlyphs2Chars )
-        ; // TODO: ####
-
     int nCount = 0;
     while( nCount < nLen )
     {
@@ -342,7 +351,12 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
         if( pGlyphAdvances )
             *(pGlyphAdvances++) = mpGlyphAdvances[ nStart ];
         if( pCharIndexes )
-            *(pCharIndexes++) = mpGlyphs2Chars ? mpGlyphs2Chars[nStart] : nStart;
+        {
+            int nCharIndex = mpGlyphs2Chars ? mpGlyphs2Chars[nStart] : nStart;
+            if( nCharIndex >= 0 )
+                nCharIndex += mnFirstCharIndex;
+            *(pCharIndexes++) =  nCharIndex;
+        }
 
         // stop at last glyph
         ++nCount;
