@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-06 17:20:47 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 11:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,7 +589,10 @@ BOOL __EXPORT ScDocShell::Load( SvStorage* pStor )
 
             bRet = LoadXML( NULL, pStor );
             if ( bRet )
+            {
+                CalcOutputFactor();
                 UpdateAllRowHeights();
+            }
         }
         else
             bRet = LoadCalc( pStor );

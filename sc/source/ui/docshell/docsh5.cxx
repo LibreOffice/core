@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-09 20:03:36 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 11:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,6 +496,7 @@ void ScDocShell::UpdateAllRowHeights()
     Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
     double nPPTX = aLogic.X() / 1000.0;
     double nPPTY = aLogic.Y() / 1000.0;
+    nPPTX /= GetOutputFactor();         // needed for screen or VDev
     Fraction aZoom(1,1);
     USHORT nTabCnt = aDocument.GetTableCount();
     for (USHORT nTab=0; nTab<nTabCnt; nTab++)
