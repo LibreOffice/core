@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinearRegressionCurveCalculator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 14:31:17 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 14:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVE_HPP_
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVECALCULATOR_HPP_
 #include <drafts/com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #endif
 
@@ -79,6 +79,7 @@ public:
     LinearRegressionCurveCalculator();
     virtual ~LinearRegressionCurveCalculator();
 
+protected:
     // ____ XRegressionCurveCalculator ____
     virtual void SAL_CALL recalculateRegression(
         const ::com::sun::star::uno::Sequence< double >& aXValues,
