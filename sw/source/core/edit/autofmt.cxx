@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: iha $ $Date: 2002-08-02 13:52:30 $
+ *  last change: $Author: os $ $Date: 2002-09-23 12:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,6 +446,13 @@ String SwAutoFormat::GoNextPara()
 {
     SwNode* pNewNd = 0;
     do {
+        //has to be checed twice before and after incrementation
+        if( aNdIdx.GetIndex() >= aEndNdIdx.GetIndex() )
+        {
+            bEnde = TRUE;
+            return aEmptyStr;
+        }
+
         aNdIdx++;
         if( aNdIdx.GetIndex() >= aEndNdIdx.GetIndex() )
         {
@@ -2107,6 +2114,15 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                         if( pATst->FnChgWeightUnderl( aACorrDoc, *pTxt,
                                                             nSttPos, nPos ))
                         {
+                            if( aFlags.bWithRedlining )
+                            {
+                                aNdIdx = aDelPam.GetPoint()->nNode;
+                                pAktTxtNd = aNdIdx.GetNode().GetTxtNode();
+                                pTxt = &pAktTxtNd->GetTxt();
+                                aDelPam.SetMark();
+                                aDelPam.DeleteMark();
+                                aFInfo.SetFrm( 0 );
+                            }
                             nPos = aDelPam.GetPoint()->nContent.GetIndex() - 1;
                             // wurde vorm Start ein Zeichen entfernt?
                             if( cBlank && cBlank != pTxt->GetChar(nSttPos - 1) )
