@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-18 13:58:13 $
+ *  last change: $Author: ssa $ $Date: 2002-10-22 09:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1163,7 +1163,7 @@ void Application::PostKeyEvent( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent 
             // unknown key event
             return;
     };
-    ImplWindowFrameProc( (void*) pWin, NULL, nEvent, (const void*) pKeyEvent );
+    ImplWindowFrameProc( (void*) pWin, NULL, (USHORT) nEvent, (const void*) pKeyEvent );
 }
 
 // -----------------------------------------------------------------------
@@ -1537,7 +1537,44 @@ void Application::SetDefDialogParent( Window* pWindow )
 
 Window* Application::GetDefDialogParent()
 {
-    return ImplGetSVData()->maWinData.mpDefDialogParent;
+    ImplSVData* pSVData = ImplGetSVData();
+    // #103442# find some useful dialog parent if there
+    // was no default set
+    // NOTE: currently even the default is not used
+    if( FALSE && pSVData->maWinData.mpDefDialogParent != NULL )
+        return pSVData->maWinData.mpDefDialogParent;
+    else
+    {
+        // always use the topmost parent of the candidate
+        // window to avoid using dialogs or floaters
+        // as DefDialogParent
+
+        // current focus frame
+        Window *pWin = NULL;
+        if( pWin = pSVData->maWinData.mpFocusWin )
+        {
+            while( pWin->mpParent )
+                pWin = pWin->mpParent;
+            return pWin->mpFrameWindow->ImplGetWindow();
+        }
+        else
+        {
+            // first visible top window
+            pWin = pSVData->maWinData.mpFirstFrame;
+            while( pWin )
+            {
+                if( pWin->ImplGetWindow()->IsTopWindow() && pWin->mbReallyVisible )
+                {
+                    while( pWin->mpParent )
+                        pWin = pWin->mpParent;
+                    return pWin->mpFrameWindow->ImplGetWindow();
+                }
+                pWin = pWin->mpFrameData->mpNextFrame;
+            }
+            // use the desktop
+            return NULL;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
