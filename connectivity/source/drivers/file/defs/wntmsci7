@@ -2321,3 +2321,7 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?deallocate@?$allocator@U?$_Rb_tree_node@U?$pair@$$CBJJ@_STL@@@_STL@@@_STL@@QBEXPAU?$_Rb_tree_node@U?$pair@$$CBJJ@_STL@@@2@I@Z
 ?insert_unique@?$_Rb_tree@JU?$pair@$$CBJJ@_STL@@U?$_Select1st@U?$pair@$$CBJJ@_STL@@@2@U?$less@J@2@V?$allocator@U?$pair@$$CBJJ@_STL@@@2@@_STL@@QAE?AU?$pair@U?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_Nonconst_traits@U?$pair@$$CBJJ@_STL@@@2@@_STL@@_N@2@ABU?$pair@$$CBJJ@2@@Z
 ?upper_bound@?$_Rb_tree@JU?$pair@$$CBJJ@_STL@@U?$_Select1st@U?$pair@$$CBJJ@_STL@@@2@U?$less@J@2@V?$allocator@U?$pair@$$CBJJ@_STL@@@2@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_Nonconst_traits@U?$pair@$$CBJJ@_STL@@@2@@2@ABJ@Z
+??1?$Reference@VXRowUpdate@sdbc@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?getValue@OResultSet@file@connectivity@@IAEABVORowSetValue@3@J@Z
+?updateValue@OResultSet@file@connectivity@@IAEXJABVORowSetValue@3@@Z
+?checkColumnIndex@OResultSetMetaData@file@connectivity@@AAEXJ@Z
