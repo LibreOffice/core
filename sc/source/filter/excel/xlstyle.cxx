@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:58:51 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,9 +570,11 @@ const sal_uInt16 EXC_BUILTIN_NOFORMAT = 0xFFFF;
 const NfIndexTableOffset PRV_NF_INDEX_REUSE = NF_INDEX_TABLE_ENTRIES;
 
 /** German primary language not defined, LANGUAGE_GERMAN belongs to Germany. */
-const LanguageType PRV_LANGUAGE_GERMAN_PRIM = LANGUAGE_GERMAN & 0x03FF;
+const LanguageType PRV_LANGUAGE_GERMAN_PRIM = LANGUAGE_GERMAN & LANGUAGE_MASK_PRIMARY;
 /** French primary language not defined, LANGUAGE_FRENCH belongs to France. */
-const LanguageType PRV_LANGUAGE_FRENCH_PRIM = LANGUAGE_FRENCH & 0x03FF;
+const LanguageType PRV_LANGUAGE_FRENCH_PRIM = LANGUAGE_FRENCH & LANGUAGE_MASK_PRIMARY;
+/** Parent language identifier for Asian languages (LANGUAGE_CHINESE is a primary only ID). */
+const LanguageType PRV_LANGUAGE_ASIAN_PRIM = LANGUAGE_CHINESE;
 
 // ----------------------------------------------------------------------------
 
@@ -609,12 +611,12 @@ struct XclBuiltInFormat
 #define UTF8_EURO       "\342\202\254"
 
 // Japanese/Chinese date/time characters
-#define UTF8_YEAR       "\345\271\264"
-#define UTF8_MON        "\346\234\210"
-#define UTF8_DAY        "\346\227\245"
-#define UTF8_HOUR       "\346\231\202"
-#define UTF8_MIN        "\345\210\206"
-#define UTF8_SEC        "\347\247\222"
+#define UTF8_CJ_YEAR    "\345\271\264"
+#define UTF8_CJ_MON     "\346\234\210"
+#define UTF8_CJ_DAY     "\346\227\245"
+#define UTF8_CJ_HOUR    "\346\231\202"
+#define UTF8_CJ_MIN     "\345\210\206"
+#define UTF8_CJ_SEC     "\347\247\222"
 
 // Chinese Simplified date/time characters
 #define UTF8_CS_HOUR    "\346\227\266"
@@ -887,7 +889,7 @@ static const XclBuiltInFormat spBuiltInFormats_ITALIAN_SWISS[] =
 // ASIAN ----------------------------------------------------------------------
 
 /** Base table for Asian locales. */
-static const XclBuiltInFormat spBuiltInFormats_CHINESE[] =
+static const XclBuiltInFormat spBuiltInFormats_ASIAN[] =
 {
     EXC_NUMFMT_STRING(  18, "h:mm AM/PM" ),
     EXC_NUMFMT_STRING(  19, "h:mm:ss AM/PM" ),
@@ -919,13 +921,13 @@ static const XclBuiltInFormat spBuiltInFormats_JAPANESE[] =
     EXC_NUMFMT_STRING(  17, "MMM-YY" ),
     EXC_NUMFMT_STRING(  22, "YYYY/M/D h:mm" ),
     EXC_NUMFMT_STRING(  27, "[$-0411]GE.M.D" ),
-    EXC_NUMFMT_STRING(  28, "[$-0411]GGGE" UTF8_YEAR "M" UTF8_MON "D" UTF8_DAY ),
+    EXC_NUMFMT_STRING(  28, "[$-0411]GGGE" UTF8_CJ_YEAR "M" UTF8_CJ_MON "D" UTF8_CJ_DAY ),
     EXC_NUMFMT_STRING(  30, "[$-0411]M/D/YY" ),
-    EXC_NUMFMT_STRING(  31, "[$-0411]YYYY" UTF8_YEAR "M" UTF8_MON "D" UTF8_DAY ),
-    EXC_NUMFMT_STRING(  32, "[$-0411]h" UTF8_HOUR "mm" UTF8_MIN ),
-    EXC_NUMFMT_STRING(  33, "[$-0411]h" UTF8_HOUR "mm" UTF8_MIN "ss" UTF8_SEC ),
-    EXC_NUMFMT_STRING(  34, "[$-0411]YYYY" UTF8_YEAR "M" UTF8_MON ),
-    EXC_NUMFMT_STRING(  35, "[$-0411]M" UTF8_MON "D" UTF8_DAY ),
+    EXC_NUMFMT_STRING(  31, "[$-0411]YYYY" UTF8_CJ_YEAR "M" UTF8_CJ_MON "D" UTF8_CJ_DAY ),
+    EXC_NUMFMT_STRING(  32, "[$-0411]h" UTF8_CJ_HOUR "mm" UTF8_CJ_MIN ),
+    EXC_NUMFMT_STRING(  33, "[$-0411]h" UTF8_CJ_HOUR "mm" UTF8_CJ_MIN "ss" UTF8_CJ_SEC ),
+    EXC_NUMFMT_STRING(  34, "[$-0411]YYYY" UTF8_CJ_YEAR "M" UTF8_CJ_MON ),
+    EXC_NUMFMT_STRING(  35, "[$-0411]M" UTF8_CJ_MON "D" UTF8_CJ_DAY ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -936,7 +938,7 @@ static const XclBuiltInFormat spBuiltInFormats_KOREAN[] =
     EXC_NUMFMT_STRING(  16, "DD-MMM" ),
     EXC_NUMFMT_STRING(  17, "MMM-YY" ),
     EXC_NUMFMT_STRING(  22, "YYYY-MM-DD h:mm" ),
-    EXC_NUMFMT_STRING(  27, "[$-0412]YYYY" UTF8_YEAR " MM" UTF8_MON " DD" UTF8_DAY ),
+    EXC_NUMFMT_STRING(  27, "[$-0412]YYYY" UTF8_CJ_YEAR " MM" UTF8_CJ_MON " DD" UTF8_CJ_DAY ),
     EXC_NUMFMT_STRING(  28, "[$-0412]MM-DD" ),
     EXC_NUMFMT_STRING(  30, "[$-0412]MM-DD-YY" ),
     EXC_NUMFMT_STRING(  31, "[$-0412]YYYY" UTF8_KO_YEAR " MM" UTF8_KO_MON " DD" UTF8_KO_DAY ),
@@ -954,14 +956,14 @@ static const XclBuiltInFormat spBuiltInFormats_CHINESE_SIMPLIFIED[] =
     EXC_NUMFMT_STRING(  16, "D-MMM" ),
     EXC_NUMFMT_STRING(  17, "MMM-YY" ),
     EXC_NUMFMT_STRING(  22, "YYYY-M-D h:mm" ),
-    EXC_NUMFMT_STRING(  27, "[$-0804]YYYY" UTF8_YEAR "M" UTF8_MON ),
-    EXC_NUMFMT_STRING(  28, "[$-0804]M" UTF8_MON "D" UTF8_DAY ),
+    EXC_NUMFMT_STRING(  27, "[$-0804]YYYY" UTF8_CJ_YEAR "M" UTF8_CJ_MON ),
+    EXC_NUMFMT_STRING(  28, "[$-0804]M" UTF8_CJ_MON "D" UTF8_CJ_DAY ),
     EXC_NUMFMT_STRING(  30, "[$-0804]M-D-YY" ),
-    EXC_NUMFMT_STRING(  31, "[$-0804]YYYY" UTF8_YEAR "M" UTF8_MON "D" UTF8_DAY ),
-    EXC_NUMFMT_STRING(  32, "[$-0804]h" UTF8_CS_HOUR "mm" UTF8_MIN ),
-    EXC_NUMFMT_STRING(  33, "[$-0804]h" UTF8_CS_HOUR "mm" UTF8_MIN "ss" UTF8_SEC ),
-    EXC_NUMFMT_STRING(  34, "[$-0804]AM/PMh" UTF8_CS_HOUR "mm" UTF8_MIN ),
-    EXC_NUMFMT_STRING(  35, "[$-0804]AM/PMh" UTF8_CS_HOUR "mm" UTF8_MIN "ss" UTF8_SEC ),
+    EXC_NUMFMT_STRING(  31, "[$-0804]YYYY" UTF8_CJ_YEAR "M" UTF8_CJ_MON "D" UTF8_CJ_DAY ),
+    EXC_NUMFMT_STRING(  32, "[$-0804]h" UTF8_CS_HOUR "mm" UTF8_CJ_MIN ),
+    EXC_NUMFMT_STRING(  33, "[$-0804]h" UTF8_CS_HOUR "mm" UTF8_CJ_MIN "ss" UTF8_CJ_SEC ),
+    EXC_NUMFMT_STRING(  34, "[$-0804]AM/PMh" UTF8_CS_HOUR "mm" UTF8_CJ_MIN ),
+    EXC_NUMFMT_STRING(  35, "[$-0804]AM/PMh" UTF8_CS_HOUR "mm" UTF8_CJ_MIN "ss" UTF8_CJ_SEC ),
     EXC_NUMFMT_REUSE(   52, 27 ),
     EXC_NUMFMT_REUSE(   53, 28 ),
     EXC_NUMFMT_ENDTABLE()
@@ -982,13 +984,13 @@ static const XclBuiltInFormat spBuiltInFormats_CHINESE_TRADITIONAL[] =
     EXC_NUMFMT_STRING(  25, "US$#,##0.00_);(US$#,##0.00)" ),
     EXC_NUMFMT_STRING(  26, "US$#,##0.00_);[RED](US$#,##0.00)" ),
     EXC_NUMFMT_STRING(  27, "[$-0404]E/M/D" ),
-    EXC_NUMFMT_STRING(  28, "[$-0404]E" UTF8_YEAR "M" UTF8_MON "D" UTF8_DAY ),
+    EXC_NUMFMT_STRING(  28, "[$-0404]E" UTF8_CJ_YEAR "M" UTF8_CJ_MON "D" UTF8_CJ_DAY ),
     EXC_NUMFMT_STRING(  30, "[$-0404]M/D/YY" ),
-    EXC_NUMFMT_STRING(  31, "[$-0404]YYYY" UTF8_YEAR "M" UTF8_MON "D" UTF8_DAY ),
-    EXC_NUMFMT_STRING(  32, "[$-0404]hh" UTF8_HOUR "mm" UTF8_MIN ),
-    EXC_NUMFMT_STRING(  33, "[$-0404]hh" UTF8_HOUR "mm" UTF8_MIN "ss" UTF8_SEC ),
-    EXC_NUMFMT_STRING(  34, "[$-0404]AM/PMhh" UTF8_HOUR "mm" UTF8_MIN ),
-    EXC_NUMFMT_STRING(  35, "[$-0404]AM/PMhh" UTF8_HOUR "mm" UTF8_MIN "ss" UTF8_SEC ),
+    EXC_NUMFMT_STRING(  31, "[$-0404]YYYY" UTF8_CJ_YEAR "M" UTF8_CJ_MON "D" UTF8_CJ_DAY ),
+    EXC_NUMFMT_STRING(  32, "[$-0404]hh" UTF8_CJ_HOUR "mm" UTF8_CJ_MIN ),
+    EXC_NUMFMT_STRING(  33, "[$-0404]hh" UTF8_CJ_HOUR "mm" UTF8_CJ_MIN "ss" UTF8_CJ_SEC ),
+    EXC_NUMFMT_STRING(  34, "[$-0404]AM/PMhh" UTF8_CJ_HOUR "mm" UTF8_CJ_MIN ),
+    EXC_NUMFMT_STRING(  35, "[$-0404]AM/PMhh" UTF8_CJ_HOUR "mm" UTF8_CJ_MIN "ss" UTF8_CJ_SEC ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -1052,11 +1054,11 @@ static const XclBuiltInFormatTable spBuiltInFormatTables[] =
     {   LANGUAGE_ITALIAN,               LANGUAGE_DONTKNOW,          spBuiltInFormats_ITALIAN_ITALY          },
     {   LANGUAGE_ITALIAN_SWISS,         LANGUAGE_DONTKNOW,          spBuiltInFormats_ITALIAN_SWISS          },
 
-    {   LANGUAGE_CHINESE,               LANGUAGE_DONTKNOW,          spBuiltInFormats_CHINESE                },
-    {   LANGUAGE_JAPANESE,              LANGUAGE_CHINESE,           spBuiltInFormats_JAPANESE               },
-    {   LANGUAGE_KOREAN,                LANGUAGE_CHINESE,           spBuiltInFormats_KOREAN                 },
-    {   LANGUAGE_CHINESE_SIMPLIFIED,    LANGUAGE_CHINESE,           spBuiltInFormats_CHINESE_SIMPLIFIED     },
-    {   LANGUAGE_CHINESE_TRADITIONAL,   LANGUAGE_CHINESE,           spBuiltInFormats_CHINESE_TRADITIONAL    },
+    {   PRV_LANGUAGE_ASIAN_PRIM,        LANGUAGE_DONTKNOW,          spBuiltInFormats_ASIAN                  },
+    {   LANGUAGE_JAPANESE,              PRV_LANGUAGE_ASIAN_PRIM,    spBuiltInFormats_JAPANESE               },
+    {   LANGUAGE_KOREAN,                PRV_LANGUAGE_ASIAN_PRIM,    spBuiltInFormats_KOREAN                 },
+    {   LANGUAGE_CHINESE_SIMPLIFIED,    PRV_LANGUAGE_ASIAN_PRIM,    spBuiltInFormats_CHINESE_SIMPLIFIED     },
+    {   LANGUAGE_CHINESE_TRADITIONAL,   PRV_LANGUAGE_ASIAN_PRIM,    spBuiltInFormats_CHINESE_TRADITIONAL    },
 
     {   LANGUAGE_HEBREW,                LANGUAGE_DONTKNOW,          spBuiltInFormats_HEBREW                 }
 };
@@ -1162,24 +1164,110 @@ bool operator==( const XclCellProt& rLeft, const XclCellProt& rRight )
 // ----------------------------------------------------------------------------
 
 XclCellAlign::XclCellAlign() :
-    meHorAlign( xlHAlign_Default ),
-    meVerAlign( xlVAlign_Default ),
-    meTextDir( xlTextDir_Default ),
-    meOrient( xlTextOrient_Default ),
+    mnHorAlign( EXC_XF_HOR_GENERAL ),
+    mnVerAlign( EXC_XF_VER_BOTTOM ),
+    mnOrient( EXC_XF_TEXTROT_NONE ),
+    mnTextDir( EXC_XF_TEXTDIR_CONTEXT ),
     mnRotation( 0 ),
     mnIndent( 0 ),
-    mbWrapped( false ),
+    mbLineBreak( false ),
     mbShrink( false )
 {
+}
+
+SvxCellHorJustify XclCellAlign::GetScHorAlign() const
+{
+    SvxCellHorJustify eHorJust = SVX_HOR_JUSTIFY_STANDARD;
+    switch( mnHorAlign )
+    {
+        case EXC_XF_HOR_GENERAL:    eHorJust = SVX_HOR_JUSTIFY_STANDARD;    break;
+        case EXC_XF_HOR_LEFT:       eHorJust = SVX_HOR_JUSTIFY_LEFT;        break;
+        case EXC_XF_HOR_CENTER_AS:
+        case EXC_XF_HOR_CENTER:     eHorJust = SVX_HOR_JUSTIFY_CENTER;      break;
+        case EXC_XF_HOR_RIGHT:      eHorJust = SVX_HOR_JUSTIFY_RIGHT;       break;
+        case EXC_XF_HOR_FILL:       eHorJust = SVX_HOR_JUSTIFY_REPEAT;      break;
+        case EXC_XF_HOR_JUSTIFY:
+        case EXC_XF_HOR_DISTRIB:    eHorJust = SVX_HOR_JUSTIFY_BLOCK;       break;
+        default:    DBG_ERRORFILE( "XclCellAlign::GetScHorAlign - unknown horizontal alignment" );
+    }
+    return eHorJust;
+}
+
+SvxCellVerJustify XclCellAlign::GetScVerAlign() const
+{
+    SvxCellVerJustify eVerJust = SVX_VER_JUSTIFY_STANDARD;
+    switch( mnVerAlign )
+    {
+        case EXC_XF_VER_TOP:        eVerJust = SVX_VER_JUSTIFY_TOP;         break;
+        case EXC_XF_VER_CENTER:     eVerJust = SVX_VER_JUSTIFY_CENTER;      break;
+        case EXC_XF_VER_BOTTOM:     eVerJust = SVX_VER_JUSTIFY_STANDARD;    break;
+        case EXC_XF_VER_JUSTIFY:
+        case EXC_XF_VER_DISTRIB:    eVerJust = SVX_VER_JUSTIFY_TOP;         break;
+        default:    DBG_ERRORFILE( "XclCellAlign::GetScVerAlign - unknown vertical alignment" );
+    }
+    return eVerJust;
+}
+
+SvxFrameDirection XclCellAlign::GetScFrameDir() const
+{
+    SvxFrameDirection eFrameDir = FRMDIR_ENVIRONMENT;
+    switch( mnTextDir )
+    {
+        case EXC_XF_TEXTDIR_CONTEXT:    eFrameDir = FRMDIR_ENVIRONMENT;     break;
+        case EXC_XF_TEXTDIR_LTR:        eFrameDir = FRMDIR_HORI_LEFT_TOP;   break;
+        case EXC_XF_TEXTDIR_RTL:        eFrameDir = FRMDIR_HORI_RIGHT_TOP;  break;
+        default:    DBG_ERRORFILE( "XclCellAlign::GetScFrameDir - unknown CTL text direction" );
+    }
+    return eFrameDir;
+}
+
+void XclCellAlign::SetScHorAlign( SvxCellHorJustify eHorJust )
+{
+    switch( eHorJust )
+    {
+        case SVX_HOR_JUSTIFY_STANDARD:  mnHorAlign = EXC_XF_HOR_GENERAL;    break;
+        case SVX_HOR_JUSTIFY_LEFT:      mnHorAlign = EXC_XF_HOR_LEFT;       break;
+        case SVX_HOR_JUSTIFY_CENTER:    mnHorAlign = EXC_XF_HOR_CENTER;     break;
+        case SVX_HOR_JUSTIFY_RIGHT:     mnHorAlign = EXC_XF_HOR_RIGHT;      break;
+        case SVX_HOR_JUSTIFY_BLOCK:     mnHorAlign = EXC_XF_HOR_JUSTIFY;    break;
+        case SVX_HOR_JUSTIFY_REPEAT:    mnHorAlign = EXC_XF_HOR_FILL;       break;
+        default:                        mnHorAlign = EXC_XF_HOR_GENERAL;
+            DBG_ERROR( "XclCellAlign::SetScHorAlign - unknown horizontal alignment" );
+    }
+}
+
+void XclCellAlign::SetScVerAlign( SvxCellVerJustify eVerJust )
+{
+    switch( eVerJust )
+    {
+        case SVX_VER_JUSTIFY_STANDARD:  mnVerAlign = EXC_XF_VER_BOTTOM; break;
+        case SVX_VER_JUSTIFY_TOP:       mnVerAlign = EXC_XF_VER_TOP;    break;
+        case SVX_VER_JUSTIFY_CENTER:    mnVerAlign = EXC_XF_VER_CENTER; break;
+        case SVX_VER_JUSTIFY_BOTTOM:    mnVerAlign = EXC_XF_VER_BOTTOM; break;
+        default:                        mnVerAlign = EXC_XF_VER_BOTTOM;
+            DBG_ERROR( "XclCellAlign::SetScVerAlign - unknown vertical alignment" );
+    }
+}
+
+void XclCellAlign::SetScFrameDir( SvxFrameDirection eFrameDir )
+{
+    switch( eFrameDir )
+    {
+        case FRMDIR_ENVIRONMENT:    mnTextDir = EXC_XF_TEXTDIR_CONTEXT; break;
+        case FRMDIR_HORI_LEFT_TOP:  mnTextDir = EXC_XF_TEXTDIR_LTR;     break;
+        case FRMDIR_HORI_RIGHT_TOP: mnTextDir = EXC_XF_TEXTDIR_RTL;     break;
+        default:                    mnTextDir = EXC_XF_TEXTDIR_CONTEXT;
+            DBG_ERRORFILE( "XclCellAlign::SetScFrameDir - unknown CTL text direction" );
+    }
 }
 
 bool operator==( const XclCellAlign& rLeft, const XclCellAlign& rRight )
 {
     return
-        (rLeft.meHorAlign == rRight.meHorAlign) && (rLeft.meVerAlign == rRight.meVerAlign)   &&
-        (rLeft.meTextDir  == rRight.meTextDir)  && (rLeft.meOrient   == rRight.meOrient)     &&
-        (rLeft.mnRotation == rRight.mnRotation) && (rLeft.mnIndent   == rRight.mnIndent)     &&
-        (rLeft.mbWrapped  == rRight.mbWrapped)  && (rLeft.mbShrink   == rRight.mbShrink);
+        (rLeft.mnHorAlign  == rRight.mnHorAlign)  && (rLeft.mnVerAlign == rRight.mnVerAlign) &&
+        (rLeft.mnTextDir   == rRight.mnTextDir)   && (rLeft.mnOrient   == rRight.mnOrient)   &&
+        (rLeft.mnRotation  == rRight.mnRotation)  && (rLeft.mnIndent   == rRight.mnIndent)   &&
+        (rLeft.mbLineBreak == rRight.mbLineBreak) && (rLeft.mbShrink   == rRight.mbShrink);
 }
 
 // ----------------------------------------------------------------------------
@@ -1239,6 +1327,10 @@ XclXFBase::XclXFBase( bool bCellXF ) :
     mbCellXF( bCellXF )
 {
     SetAllUsedFlags( false );
+}
+
+XclXFBase::~XclXFBase()
+{
 }
 
 void XclXFBase::SetAllUsedFlags( bool bUsed )
