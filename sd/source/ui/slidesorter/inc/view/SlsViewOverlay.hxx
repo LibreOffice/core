@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsViewOverlay.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:23:54 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ class SlideSorterViewShell;
 } }
 
 namespace sd { namespace slidesorter { namespace model {
+class PageDescriptor;
 class PageEnumeration;
 } } }
 
@@ -91,7 +92,7 @@ class SubstitutionOverlay;
 
 /** This base class of overlay graphics keeps track of the visibility of
     graphical objects that possibly are drawn in XOR paint mode.  This makes
-    it possibly to switch such an overlay on or off without knowing wether
+    it possibly to switch such an overlay on or off without knowing whether
     it is visible.
 */
 class OverlayBase
@@ -179,6 +180,9 @@ private:
 
 
 
+/** The insertion indicator is painted as a vertical or horizonal bar
+    in the space between slides.
+*/
 class InsertionIndicatorOverlay
     : public OverlayBase
 {
@@ -205,6 +209,32 @@ private:
 
 
 
+/** Paint a frame around the slide preview under the mouse.  The actual
+    painting is done by the PageObjectViewObjectContact of the slidesorter.
+    This class is responsible for the coordination of the right time for the
+    painting.
+*/
+class MouseOverIndicatorOverlay
+    : public OverlayBase
+{
+public:
+    MouseOverIndicatorOverlay (ViewOverlay& rViewOverlay);
+
+    /** Set the page object for which to paint a mouse over indicator.
+        @param pContact
+            A value of <NULL/> indicates to not paint the mouse over indicator.
+    */
+    void SetSlideUnderMouse (const model::PageDescriptor* pDescriptor);
+
+    virtual void Paint (void);
+
+private:
+    const model::PageDescriptor* mpPageUnderMouse;
+};
+
+
+
+
 /** The view overlay manages and paints some indicators that are painted on
     top of the regular view content (the page objects).  It is separated
     from the view to allow the indicators to be altered in position and size
@@ -222,6 +252,7 @@ public:
     ~ViewOverlay (void);
 
     SelectionRectangleOverlay& GetSelectionRectangleOverlay (void);
+    MouseOverIndicatorOverlay& GetMouseOverIndicatorOverlay (void);
     InsertionIndicatorOverlay& GetInsertionIndicatorOverlay (void);
     SubstitutionOverlay& GetSubstitutionOverlay (void);
 
@@ -251,6 +282,7 @@ public:
 private:
     SlideSorterViewShell& mrViewShell;
     SelectionRectangleOverlay maSelectionRectangleOverlay;
+    MouseOverIndicatorOverlay maMouseOverIndicatorOverlay;
     InsertionIndicatorOverlay maInsertionIndicatorOverlay;
     SubstitutionOverlay maSubstitutionOverlay;
 
@@ -261,6 +293,7 @@ private:
     OverlayPaintType meSavedStateType;
 
     bool mbSelectionRectangleWasVisible;
+    bool mbMouseOverIndicatorWasVisible;
     bool mbInsertionIndicatorWasVisible;
     bool mbSubstitutionDisplayWasVisible;
 };
