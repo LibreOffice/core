@@ -2,9 +2,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:32:06 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-10-15 14:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,7 +551,7 @@ void SwUndoTblToTxt::Undo( SwUndoIter& rUndoIter )
         SwDDEFieldType* pNewType = (SwDDEFieldType*)rDoc.InsertFldType(
                                                             *pDDEFldType);
         SwDDETable* pDDETbl = new SwDDETable( pTblNd->GetTable(), pNewType );
-        pTblNd->SetNewTable( pDDETbl );     // setze die DDE-Tabelle
+        pTblNd->SetNewTable( pDDETbl, FALSE );      // setze die DDE-Tabelle
         delete pDDEFldType, pDDEFldType = 0;
     }
 
@@ -596,13 +596,17 @@ SwTableNode* SwNodes::UndoTableToText( ULONG nSttNd, ULONG nEndNd,
 
     aEndIdx = *pEndNd;
 
-    // alle im Bereich liegdenden Nodes den TabellenNode als StartNode setzen
+    /* Set pTblNd as start of section for all nodes in [nSttNd, nEndNd].
+       Delete all Frames attached to the nodes in that range. */
     SwNode* pNd;
     {
         ULONG n, nTmpEnd = aEndIdx.GetIndex();
         for( n = pTblNd->GetIndex() + 1; n < nTmpEnd; ++n )
+        {
             if( ( pNd = (*this)[ n ] )->IsCntntNode() )
                 ((SwCntntNode*)pNd)->DelFrms();
+            pNd->pStartOfSection = pTblNd;
+        }
     }
 
     // dann die Tabellen Struktur teilweise aufbauen. Erstmal eine Line
@@ -619,6 +623,7 @@ SwTableNode* SwNodes::UndoTableToText( ULONG nSttNd, ULONG nEndNd,
         SwTblToTxtSave* pSave = rSavedData[ --n ];
         aSttIdx = pSave->nNode;
         SwTxtNode* pTxtNd = aSttIdx.GetNode().GetTxtNode();
+
         if( USHRT_MAX != pSave->nCntnt )
         {
             // an der ContentPosition splitten, das vorherige Zeichen
