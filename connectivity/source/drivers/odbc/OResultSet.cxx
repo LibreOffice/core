@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:51:55 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 09:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,16 +158,23 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
                         ,m_pStatement(pStmt)
 {
     osl_incrementInterlockedCount( &m_refCount );
-    m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
-    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);
+    try
+    {
+        m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
+        N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);
 
-    SQLUINTEGER nValueLen = 0;
-    OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,nValueLen,*(Reference< XInterface >*)this);
+        SQLUINTEGER nValueLen = 0;
+        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,nValueLen,*(Reference< XInterface >*)this);
 
-    SQLINTEGER nCurType = 0;
-    N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nCurType,SQL_IS_UINTEGER,0);
+        SQLINTEGER nCurType = 0;
+        N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nCurType,SQL_IS_UINTEGER,0);
 
-    m_bFetchData = !((SQL_GD_ANY_ORDER & nValueLen) == SQL_GD_ANY_ORDER && nCurType != SQL_CURSOR_FORWARD_ONLY);
+        m_bFetchData = !((SQL_GD_ANY_ORDER & nValueLen) == SQL_GD_ANY_ORDER && nCurType != SQL_CURSOR_FORWARD_ONLY);
+    }
+    catch(Exception&)
+    { // we don't want our result destroy here
+        m_bFetchData = sal_True;
+    }
 
     osl_decrementInterlockedCount( &m_refCount );
 }

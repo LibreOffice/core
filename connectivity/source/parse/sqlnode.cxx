@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-24 11:34:51 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 09:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,8 +181,8 @@ OSQLParseNode::SQLParseNodeParameter::SQLParseNodeParameter(const ::rtl::OUStrin
 
     sal_Int32 nIndex = 0;
     sal_uInt16 nYear    = (sal_uInt16)rString.getToken(0,sDateSep,nIndex).toInt32();
-    sal_uInt16 nMonth   = (sal_uInt16)rString.getToken(1,sDateSep,nIndex).toInt32();
-    sal_uInt16 nDay     = (sal_uInt16)rString.getToken(2,sDateSep,nIndex).toInt32();
+    sal_uInt16 nMonth   = (sal_uInt16)rString.getToken(0,sDateSep,nIndex).toInt32();
+    sal_uInt16 nDay     = (sal_uInt16)rString.getToken(0,sDateSep,nIndex).toInt32();
 
     Date aDate(nDay,nMonth,nYear);
     Reference< XNumberFormatsSupplier > xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
@@ -201,11 +201,11 @@ OSQLParseNode::SQLParseNodeParameter::SQLParseNodeParameter(const ::rtl::OUStrin
 
     sal_Int32 nIndex = 0;
     sal_uInt16 nYear    = (sal_uInt16)rString.getToken(0,sDateSep,nIndex).toInt32();
-    sal_uInt16 nMonth   = (sal_uInt16)rString.getToken(1,sDateSep,nIndex).toInt32();
-    sal_uInt16 nDay     = (sal_uInt16)rString.getToken(2,sDateSep,nIndex).toInt32();
+    sal_uInt16 nMonth   = (sal_uInt16)rString.getToken(0,sDateSep,nIndex).toInt32();
+    sal_uInt16 nDay     = (sal_uInt16)rString.getToken(0,sDateSep,nIndex).toInt32();
     sal_uInt16 nHour    = (sal_uInt16)rString.getToken(0,sTimeSep,nIndex).toInt32();
-    sal_uInt16 nMinute  = (sal_uInt16)rString.getToken(1,sTimeSep,nIndex).toInt32();
-    sal_uInt16 nSecond  = (sal_uInt16)rString.getToken(2,sTimeSep,nIndex).toInt32();
+    sal_uInt16 nMinute  = (sal_uInt16)rString.getToken(0,sTimeSep,nIndex).toInt32();
+    sal_uInt16 nSecond  = (sal_uInt16)rString.getToken(0,sTimeSep,nIndex).toInt32();
 
     DateTime aDate(0,nSecond,nMinute,nHour,nDay,nMonth,nYear);
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
@@ -223,8 +223,8 @@ OSQLParseNode::SQLParseNodeParameter::SQLParseNodeParameter(const ::rtl::OUStrin
 
     sal_Int32 nIndex = 0;
     sal_uInt16 nHour    = (sal_uInt16)rString.getToken(0,sTimeSep,nIndex).toInt32();
-    sal_uInt16 nMinute  = (sal_uInt16)rString.getToken(1,sTimeSep,nIndex).toInt32();
-    sal_uInt16 nSecond  = (sal_uInt16)rString.getToken(2,sTimeSep,nIndex).toInt32();
+    sal_uInt16 nMinute  = (sal_uInt16)rString.getToken(0,sTimeSep,nIndex).toInt32();
+    sal_uInt16 nSecond  = (sal_uInt16)rString.getToken(0,sTimeSep,nIndex).toInt32();
 
     Time aTime(0,nHour,nMinute,nSecond);
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
@@ -353,13 +353,15 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString, const SQLParseNodeP
                 aNewParam.bQuote = sal_False;
 
                 m_aChilds[0]->parseNodeToStr(rString, aNewParam);
+                aNewParam.bQuote = rParam.bQuote;
+                aNewParam.bPredicate = sal_False; // disable [ ] around names
                 ::rtl::OUString aStringPara;
                 for (sal_uInt32 i=1; i<nCount; i++)
                 {
                     const OSQLParseNode * pSubTree = m_aChilds[i];
                     if (pSubTree)
                     {
-                        pSubTree->parseNodeToStr(aStringPara, rParam);
+                        pSubTree->parseNodeToStr(aStringPara, aNewParam);
 
                         // bei den CommaListen zwischen alle Subtrees Commas setzen
                         if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i < (nCount - 1)))
@@ -384,7 +386,7 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString, const SQLParseNodeP
                     if (rParam.xField.is() && SQL_ISRULE(pSubTree,subquery))
                         aNewParam.xField = NULL;
 
-                    // if there is a field given we don't display the fieldname, if there are any
+                    // if there is a field given we don't display the fieldname, if there is any
                     if (rParam.xField.is() && SQL_ISRULE(pSubTree,column_ref))
                     {
                         sal_Bool bFilter = sal_False;
@@ -399,10 +401,13 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString, const SQLParseNodeP
                         {
                         }
 
-                        const OSQLParseNode* pCol = pSubTree->m_aChilds[pSubTree->count()-1];
-                        if ((SQL_ISRULE(pCol,column_val) && pCol->getChild(0)->getTokenValue().equalsIgnoreAsciiCase(aFieldName)) ||
-                            pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName))
-                            bFilter = sal_True;
+                        if(pSubTree->count())
+                        {
+                            const OSQLParseNode* pCol = pSubTree->m_aChilds[pSubTree->count()-1];
+                            if ((SQL_ISRULE(pCol,column_val) && pCol->getChild(0)->getTokenValue().equalsIgnoreAsciiCase(aFieldName)) ||
+                                pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName))
+                                bFilter = sal_True;
+                        }
 
                         // ok we found the field, if the following node is the
                         // comparision operator '=' we filter it as well
@@ -1129,7 +1134,7 @@ Any getNumberFormatProperty(const Reference< ::com::sun::star::util::XNumberForm
             Reference< XPropertySet > xProperties(xFormats->getByKey(nKey));
             return xProperties->getPropertyValue(aPropertyName);
         }
-        catch( ... )
+        catch( Exception& )
         {
         }
     }
