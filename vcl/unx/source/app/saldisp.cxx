@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:55:43 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ extern "C" { int gethostname(char*,int); }
 #include <salgdi.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <salframe.h>
 #endif
 #ifndef _SV_KEYCODES_HXX
 #include <keycodes.hxx>
@@ -277,26 +277,26 @@ extern "C" { int gethostname(char*,int); }
 #ifndef _SV_SALBTYPE_HXX
 #include <salbtype.hxx>
 #endif
-#ifndef _SV_SALBMP_HXX
-#include <salbmp.hxx>
+#ifndef _SV_SALBMP_H
+#include <salbmp.h>
 #endif
-#ifndef _SV_SALSYS_HXX
-#include <salsys.hxx>
-#endif
-#ifndef _SV_SALOGL_HXX
-#include <salogl.hxx>
+#ifndef _SV_SALOGL_H
+#include <salogl.h>
 #endif
 #ifndef _OSL_THREADMUTEX_H_
 #include <osl/mutex.h>
 #endif
-#ifndef _SV_SALOBJ_HXX
-#include <salobj.hxx>
+#ifndef _SV_SALOBJ_H
+#include <salobj.h>
 #endif
 #ifndef _VCL_SM_HXX
 #include <sm.hxx>
 #endif
 #ifndef _VCL_WMADAPTOR_HXX_
 #include <wmadaptor.hxx>
+#endif
+#ifndef _SV_DTINT_HXX
+#include <dtint.hxx>
 #endif
 
 #include <osl/socket.h>
@@ -562,9 +562,9 @@ extern "C" srv_vendor_t
 sal_GetServerVendor( Display *p_display )
 {
     typedef struct {
-        srv_vendor_t  e_vendor; // vendor as enum
-        char         *p_name;   // vendor name as returned by VendorString()
-        unsigned int  n_len;    // number of chars to compare
+        srv_vendor_t    e_vendor;   // vendor as enum
+        const char      *p_name;    // vendor name as returned by VendorString()
+        unsigned int    n_len;  // number of chars to compare
     } vendor_t;
 
     const vendor_t p_vendorlist[] = {
@@ -694,7 +694,7 @@ BOOL SalDisplay::BestVisual( Display     *pDisplay,
         pWeight[ i ] -= pVInfos[ i ].visualid;
     }
 
-    SalOpenGL::MakeVisualWeights( pDisplay, pVInfos, pWeight, nVisuals );
+    X11SalOpenGL::MakeVisualWeights( pDisplay, pVInfos, pWeight, nVisuals );
 
     int nBestVisual = 0;
     int nBestWeight = -1024;
@@ -788,7 +788,7 @@ SalDisplay::~SalDisplay( )
     SalData *pSalData = GetSalData();
 
     delete m_pWMAdaptor;
-    SalBitmap::ImplDestroyCache();
+    X11SalBitmap::ImplDestroyCache();
     DestroyFontCache();
 
     if( IsDisplay() )
@@ -865,8 +865,8 @@ static int DisplayHasEvent( int fd, SalDisplay *pDisplay  )
   if( ! pDisplay->IsDisplay() )
       return 0;
 
-  SalYieldMutex* pSalInstYieldMutex =
-      GetSalData()->pFirstInstance_->maInstData.mpSalYieldMutex;
+  vos::IMutex* pSalInstYieldMutex   =
+      GetSalData()->pInstance_->GetYieldMutex();
   ::vos::OGuard aGuard( *pSalInstYieldMutex );
   return pDisplay->IsEvent();
 }
@@ -874,8 +874,8 @@ static int DisplayQueue( int fd, SalDisplay *pDisplay )
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" )
-  SalYieldMutex* pSalInstYieldMutex =
-      GetSalData()->pFirstInstance_->maInstData.mpSalYieldMutex;
+  vos::IMutex* pSalInstYieldMutex   =
+      GetSalData()->pInstance_->GetYieldMutex();
   ::vos::OGuard aGuard( *pSalInstYieldMutex );
   return XEventsQueued( pDisplay->GetDisplay(),
                         QueuedAfterReading );
@@ -884,8 +884,8 @@ static int DisplayYield( int fd, SalDisplay *pDisplay )
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" );
-  SalYieldMutex* pSalInstYieldMutex =
-      GetSalData()->pFirstInstance_->maInstData.mpSalYieldMutex;
+  vos::IMutex* pSalInstYieldMutex   =
+      GetSalData()->pInstance_->GetYieldMutex();
   ::vos::OGuard aGuard( *pSalInstYieldMutex );
   pDisplay->Yield( TRUE );
   return TRUE;
@@ -940,7 +940,7 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
         nMaxRequestSize_ = XMaxRequestSize( pDisp_ ) * 4;
 
     SetServerVendor();
-    SalBitmap::ImplCreateCache();
+    X11SalBitmap::ImplCreateCache();
 
     if( IsDisplay() )
     {
@@ -1001,10 +1001,10 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
                              );
 
             ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
-            char* argv[2];
+            const char* argv[2];
             argv[0] = "/bin/sh";
-            argv[1] = const_cast<char*>(aExec.GetBuffer());
-            XSetCommand( pDisp_, hRefWindow_, argv, 2 );
+            argv[1] = aExec.GetBuffer();
+            XSetCommand( pDisp_, hRefWindow_, const_cast<char**>(argv), 2 );
 
             XSelectInput( pDisp_, hRefWindow_, PropertyChangeMask );
 
@@ -1338,6 +1338,10 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
     }
 
     InitXinerama();
+
+    // initialize system settings update
+    DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator();
+    pIntegrator->Acquire();
 
 #ifdef DBG_UTIL
     PrintInfo();
@@ -2380,7 +2384,7 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
     return aCur;
 }
 
-int SalDisplay::CaptureMouse( SalFrameData *pCapture )
+int SalDisplay::CaptureMouse( SalFrame *pCapture )
 {
     if( !pCapture )
     {
@@ -2394,14 +2398,15 @@ int SalDisplay::CaptureMouse( SalFrameData *pCapture )
         //pCapture_->CaptureMouse( FALSE );
         pCapture_ = NULL;
 
+    // FIXME: get rid of X11SalFrame
     int ret = XGrabPointer( GetDisplay(),
-                            pCapture->GetWindow(),
+                            static_cast<X11SalFrame*>(pCapture)->GetWindow(),
                             False,
                             PointerMotionMask| ButtonPressMask|ButtonReleaseMask,
                             GrabModeAsync,
                             GrabModeAsync,
                             None,
-                            pCapture->GetCursor(),
+                            static_cast<X11SalFrame*>(pCapture)->GetCursor(),
                             CurrentTime );
 
     if( ret != GrabSuccess )
@@ -2609,11 +2614,7 @@ void SalDisplay::Yield( BOOL bWait )
 
         nStateOfYield_ = 1;
 
-        SalData *pSalData       = GetSalData();
-        SalYieldMutex* pSalInstYieldMutex   =
-            pSalData->pFirstInstance_->maInstData.mpSalYieldMutex;
-
-        DBG_ASSERT( pSalInstYieldMutex->GetThreadId() ==
+        DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->pInstance_->GetYieldMutex()->GetThreadId()) ==
                    NAMESPACE_VOS(OThread)::getCurrentIdentifier(),
                     "will crash soon since solar mutex not locked in SalDisplay::Yield" );
 
@@ -2660,28 +2661,26 @@ long SalDisplay::Dispatch( XEvent *pEvent )
     if( pEvent->type == XLIB_KeyPress || pEvent->type == KeyRelease )
       {
         XLIB_Window aWindow = pEvent->xkey.window;
-        SalFrame* pFrame = NULL;
+        X11SalFrame* pFrame = NULL;
         for( pFrame = GetSalData()->pFirstFrame_;
-                pFrame
-             && pFrame->maFrameData.GetWindow()      != aWindow
-             && pFrame->maFrameData.GetShellWindow() != aWindow;
-             pFrame = pFrame->maFrameData.GetNextFrame() )
-          ;
+             pFrame && pFrame->GetWindow() != aWindow && pFrame->GetShellWindow() != aWindow;
+             pFrame = pFrame->GetNextFrame() )
+            ;
         if( pFrame ) {
-          XLIB_Window window= pFrame->maFrameData.GetWindow();
-          if ( mpInputMethod->FilterEvent( pEvent , window) )
-        return 0;
+            XLIB_Window window= pFrame->GetWindow();
+            if ( mpInputMethod->FilterEvent( pEvent , window) )
+                return 0;
         }
       }
     else
-      if ( mpInputMethod->FilterEvent( pEvent, None ) )
-        return 0;
+        if ( mpInputMethod->FilterEvent( pEvent, None ) )
+            return 0;
 
-    SalInstance* pInstance = GetSalData()->pFirstInstance_;
-    if( pInstance->maInstData.mpEventCallback )
+    SalInstance* pInstance = GetSalData()->pInstance_;
+    if( pInstance->GetEventCallback() )
     {
         YieldMutexReleaser aReleaser;
-        pInstance->maInstData.mpEventCallback( pInstance->maInstData.mpEventInst, pEvent, sizeof( XEvent ) );
+        pInstance->CallEventCallback( pEvent, sizeof( XEvent ) );
     }
 
     switch( pEvent->type )
@@ -2697,11 +2696,11 @@ long SalDisplay::Dispatch( XEvent *pEvent )
             if( pEvent->xproperty.window == hRefWindow_ &&
                 pEvent->xproperty.atom == getWMAdaptor()->getAtom( WMAdaptor::VCL_SYSTEM_SETTINGS ) )
             {
-                SalFrame *pFrame = GetSalData()->pFirstFrame_;
+                X11SalFrame *pFrame = GetSalData()->pFirstFrame_;
                 while( pFrame )
                 {
-                    pFrame->maFrameData.Call( SALEVENT_SETTINGSCHANGED, NULL );
-                    pFrame = pFrame->maFrameData.GetNextFrame();
+                    pFrame->CallCallback( SALEVENT_SETTINGSCHANGED, NULL );
+                    pFrame = pFrame->GetNextFrame();
                 }
                 return 0;
             }
@@ -2737,27 +2736,27 @@ long SalDisplay::Dispatch( XEvent *pEvent )
             break;
     }
 
-    SalFrame *pFrame = GetSalData()->pFirstFrame_;
+    X11SalFrame *pFrame = GetSalData()->pFirstFrame_;
 
     while( pFrame )
     {
         XLIB_Window aDispatchWindow = pEvent->xany.window;
-        if( pFrame->maFrameData.GetWindow() == aDispatchWindow
-            || pFrame->maFrameData.GetShellWindow() == aDispatchWindow
-            || pFrame->maFrameData.GetForeignParent() == aDispatchWindow
+        if( pFrame->GetWindow() == aDispatchWindow
+            || pFrame->GetShellWindow() == aDispatchWindow
+            || pFrame->GetForeignParent() == aDispatchWindow
             )
         {
-            return pFrame->maFrameData.Dispatch( pEvent );
+            return pFrame->Dispatch( pEvent );
         }
-        if( pEvent->type == ConfigureNotify && pEvent->xconfigure.window == pFrame->maFrameData.GetStackingWindow() )
+        if( pEvent->type == ConfigureNotify && pEvent->xconfigure.window == pFrame->GetStackingWindow() )
         {
-            return pFrame->maFrameData.Dispatch( pEvent );
+            return pFrame->Dispatch( pEvent );
         }
-        pFrame = pFrame->maFrameData.GetNextFrame();
+        pFrame = pFrame->GetNextFrame();
     }
 
     // dispatch to salobjects
-    SalObjectData::Dispatch( pEvent );
+    X11SalObject::Dispatch( pEvent );
 
     return 0;
 }
