@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.21 $
+*  $Revision: 1.22 $
 *
-*  last change: $Author: kz $ $Date: 2004-06-11 11:57:28 $
+*  last change: $Author: kz $ $Date: 2004-06-11 17:53:00 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1263,6 +1263,17 @@ File gid_File_Lib_Rdbtdp
   #endif
 End
 
+#ifdef UNX
+
+File gid_File_Lib_Recentfile
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = "librecentfile.so";
+End
+
+#endif
+
 File gid_File_Lib_Reg
     TXT_FILE_BODY;
   #ifdef UNX
@@ -1277,6 +1288,17 @@ End
 #ifdef WNT
 
 STD_SETUPZIP_LIB_FILE( gid_File_Lib_Reg4msdoc, reg4msdoc )
+
+#endif
+
+#ifdef WNT
+
+File gid_File_Lib_Reg4msdocmsi
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = "reg4msdocmsi.dll";
+End
 
 #endif
 
