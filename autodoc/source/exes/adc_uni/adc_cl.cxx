@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:02:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-15 18:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ CommandLine::~CommandLine()
 int
 CommandLine::Run() const
 {
-    Cout() << "\nAutodoc version 2.2.1"
+    Cout() << "\nAutodoc version 2.2.2"
            << "\n---------------------"
            << "\n" << Endl();
 
@@ -419,6 +419,7 @@ CommandLine::load_IncludedCommands( StringVector &      out,
     aFile.close();
 
     bool bInToken = false;
+    StreamLock aTransmit(200);
     for ( ; NOT aIncludedCommands.IsFinished(); aIncludedCommands.MoveOn() )
     {
         if (bInToken)
@@ -430,7 +431,13 @@ CommandLine::load_IncludedCommands( StringVector &      out,
                 bInToken = false;
 
                  if ( strncmp(pToken, "-I:", 3) != 0 )
-                    out.push_back(String(pToken));
+                 {
+                     aTransmit().seekp(0);
+                     aTransmit() << pToken;
+                     aTransmit().replace_all('\\', *csv::ploc::Delimiter());
+                     aTransmit().replace_all('/', *csv::ploc::Delimiter());
+                    out.push_back(String(aTransmit().c_str()));
+                 }
                 else
                     load_IncludedCommands(out, pToken+3);
             }
@@ -443,6 +450,7 @@ CommandLine::load_IncludedCommands( StringVector &      out,
                 bInToken = true;
             }
         }   // endif (bInToken) else
+
     }   // end while()
 }
 
