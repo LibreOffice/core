@@ -39,7 +39,7 @@ CFLAGSOPT=-O2
 CFLAGSNOOPT=-O
 CFLAGSOUTOBJ=-o
 
-SOLARVERSHLLIBS=$(shell find $(SOLARVERSION)$/$(INPATH)$/lib -name $(DLLPRE)\*$(DLLPOST))
+SOLARVERSHLLIBS=$(shell -$(FIND) $(SOLARVERSION)$/$(INPATH)$/lib -name $(DLLPRE)\*$(DLLPOST))
 LINK=cc
 LINKFLAGS=-dynamic -framework System -framework Cocoa -lcc_dynamic \
   -lstdc++ $(foreach,i,$(SOLARVERSHLLIBS) '-dylib_file @executable_path$/$(i:f):$i')
