@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-18 15:46:26 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,10 @@ namespace configmgr
         void implConnect(OProviderImpl& rFreshProviderImpl, const ContextReader& _rSettings) throw (uno::Exception);
 
     protected:
+        // disambuiguated access
+        cppu::OBroadcastHelper & getBroadcastHelper()
+        { return ServiceComponentImpl::rBHelper; }
+
         /// Component Helper override
         virtual void SAL_CALL disposing();
         virtual void SAL_CALL disposing(lang::EventObject const& rEvt) throw();
