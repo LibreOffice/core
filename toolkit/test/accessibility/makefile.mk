@@ -1,25 +1,22 @@
 # This is the dmake version.
 
+# copied from settings.mk
+SOLARBINDIR=$(SOLARVERSION)$/$(INPATH)$/bin$(UPDMINOREXT)
 
 # Please modify the following lines to match your environment:
-#   If you use the run: target at the end of the file, then adapt port number
-#   and file URL.
+#   If you use the run: target at the end of the file, then adapt port number.
 PORT_NUMBER = 5678
-FILE_NAME = "file:///tmp/impress-test-document.sxi"
-#   The JAR_PATH points to the jar files of your local office installation.
-JAR_PATH = $(STAR_RESOURCEPATH)$/
-
-
 
 # The following variables probably don't need to be changed.
 JAVAC = javac
 JAVA = java
-
+#   The JAR_PATH points to the jar files of your local office installation.
+JAR_PATH = $(SOLARBINDIR)$/
 
 
 # The rest of this makefile should not need to be touched.
 
-all : AccessibilityWorkBench
+all : AccessibilityWorkBench dist
 
 JAR_FILES =		\
     unoil.jar	\
@@ -29,17 +26,60 @@ JAR_FILES =		\
     juh.jar		\
     java_uno.jar
 
-JAVA_FILES = \
-    AccessibilityWorkBench.java	\
-    AccessibleObject.java		\
-    AccessibilityTree.java		\
-    Canvas.java					\
-    InformationWriter.java		\
-    FrameActionListener.java	\
-    MessageInterface.java		\
-    OfficeConnection.java		\
-    Print.java					\
-    SimpleOffice.java
+JAVA_FILES = 								\
+    AccTreeNode.java						\
+    AccessibilityTree.java					\
+    AccessibilityTreeModel.java 			\
+    AccessibilityTreeModelBase.java 		\
+    AccessibilityWorkBench.java				\
+    AccessibleActionHandler.java			\
+    AccessibleActionNode.java				\
+    AccessibleCellHandler.java				\
+    AccessibleComponentHandler.java			\
+    AccessibleContextHandler.java			\
+    AccessibleEditableTextHandler.java		\
+    AccessibleExtendedComponentHandler.java	\
+    AccessibleHyperlinkHandler.java			\
+    AccessibleHypertextHandler.java			\
+    AccessibleImageHandler.java				\
+    AccessibleRelationHandler.java			\
+    AccessibleSelectionHandler.java			\
+    AccessibleTableHandler.java				\
+    AccessibleTextHandler.java				\
+    AccessibleTreeCellRenderer.java			\
+    AccessibleTreeHandler.java				\
+    AccessibleTreeNode.java					\
+    AccessibleUNOHandler.java				\
+    Canvas.java								\
+    CanvasShape.java						\
+    ChildEventHandler.java					\
+    ContextEventHandler.java				\
+    EventHandler.java						\
+    EventListener.java						\
+    EventLogger.java						\
+    EventQueue.java							\
+    FrameActionListener.java				\
+    GeometryEventHandler.java				\
+    HelpWindow.java							\
+    InformationWriter.java					\
+    MessageArea.java						\
+    NameProvider.java						\
+    NodeFactory.java						\
+    NodeHandler.java						\
+    NodeMap.java							\
+    OfficeConnection.java					\
+    Options.java							\
+    QueuedListener.java						\
+    QueuedTopWindowListener.java			\
+    SelectionDialog.java					\
+    SimpleOffice.java						\
+    StringNode.java							\
+    TableEventHandler.java					\
+    TextLogger.java							\
+    TextUpdateListener.java					\
+    TopWindowListener.java					\
+    VectorNode.java
+
 
 JAVA_CLASSPATHS := 			\
     .						\
@@ -51,16 +91,18 @@ CLASSPATH !:=$(JAVA_CLASSPATHS:t$(PATH_SEPERATOR))
 JFLAGS = -deprecation -classpath $(CLASSPATH)
 
 %.class : %.java
-    $(JAVAC) $(JFLAGS) $<
+    +$(JAVAC) $(JFLAGS) $<
 
 AccessibilityWorkBench : $(JAVA_FILES:b:+".class")
 
+
 # Create a jar file of all files neccessary to build and run the work bench.
-dist:
-    jar -cf AccessibilityWorkBench.jar \
-        $(JAVA_FILES)\
-        $(JAVA_FILES:b:+".class")
+dist: AccessibilityWorkBench.jar
+
+AccessibilityWorkBench.jar: $(JAVA_FILES:b:+".class") jawb.mf
+    +jar -cfm AccessibilityWorkBench.jar jawb.mf *.class
 
 # Example of how to run the work bench.
-run:
-    $(JAVA) -classpath $(CLASSPATH) AccessibilityWorkBench -p $(PORT_NUMBER) -f $(FILE_NAME)
+run: all
+    +$(JAVA) -classpath $(CLASSPATH) AccessibilityWorkBench -p $(PORT_NUMBER)
+
