@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-05 10:49:18 $
+ *  last change: $Author: hr $ $Date: 2002-08-23 13:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,12 @@ public:
                                    nWhichId == RES_DRAWFRMFMT||
                                    nWhichId == RES_FRMFMT; }
 
+#ifdef MACOSX
+#define INLINE /* GrP revisit with gcc3 */
+#else
+#define INLINE inline
+#endif
+
     // GetMethoden: das Bool gibt an, ob nur im Set (FALSE) oder auch in
     //              den Parents gesucht werden soll. Wird nichts gefunden,
     //              wird das deflt. Attribut returnt.
@@ -221,7 +227,7 @@ public:
     inline const SvxCrossedOutItem   &GetCrossedOut( BOOL = TRUE ) const;
     inline const SvxFontHeightItem   &GetSize( BOOL = TRUE ) const;
     inline const SvxPropSizeItem     &GetPropSize( BOOL = TRUE ) const;
-    inline const SvxFontItem         &GetFont( BOOL = TRUE ) const;
+    INLINE const SvxFontItem         &GetFont( BOOL = TRUE ) const;
     inline const SvxColorItem        &GetColor( BOOL = TRUE ) const;
     inline const SvxCharSetColorItem &GetCharSetColor( BOOL = TRUE ) const;
     inline const SvxLanguageItem     &GetLanguage( BOOL = TRUE ) const;
@@ -249,43 +255,43 @@ public:
     inline const SvxCharReliefItem   &GetCharRelief( BOOL = TRUE ) const;
 
     // Frame-Attribute  - impl. steht im frmatr.hxx,
-    inline const SwFmtFillOrder         &GetFillOrder( BOOL = TRUE ) const;
-    inline const SwFmtFrmSize           &GetFrmSize( BOOL = TRUE ) const;
-    inline const SwFmtHeader            &GetHeader( BOOL = TRUE ) const;
-    inline const SwFmtFooter            &GetFooter( BOOL = TRUE ) const;
-    inline const SwFmtSurround          &GetSurround( BOOL = TRUE ) const;
-    inline const SwFmtHoriOrient        &GetHoriOrient( BOOL = TRUE ) const;
-    inline const SwFmtAnchor            &GetAnchor( BOOL = TRUE ) const;
-    inline const SwFmtCol               &GetCol( BOOL = TRUE ) const;
-    inline const SvxPaperBinItem        &GetPaperBin( BOOL = TRUE ) const;
-    inline const SvxLRSpaceItem         &GetLRSpace( BOOL = TRUE ) const;
-    inline const SvxULSpaceItem         &GetULSpace( BOOL = TRUE ) const;
-    inline const SwFmtCntnt             &GetCntnt( BOOL = TRUE ) const;
-    inline const SvxPrintItem           &GetPrint( BOOL = TRUE ) const;
-    inline const SvxOpaqueItem          &GetOpaque( BOOL = TRUE ) const;
-    inline const SvxProtectItem         &GetProtect( BOOL = TRUE ) const;
-    inline const SwFmtVertOrient        &GetVertOrient( BOOL = TRUE ) const;
-    inline const SvxBoxItem             &GetBox( BOOL = TRUE ) const;
-    inline const SvxFmtKeepItem         &GetKeep( BOOL = TRUE ) const;
-    inline const SvxBrushItem           &GetBackground( BOOL = TRUE ) const;
-    inline const SvxShadowItem          &GetShadow( BOOL = TRUE ) const;
-    inline const SwFmtPageDesc          &GetPageDesc( BOOL = TRUE ) const;
-    inline const SvxFmtBreakItem        &GetBreak( BOOL = TRUE ) const;
-    inline const SvxMacroItem           &GetMacro( BOOL = TRUE ) const;
-    inline const SwFmtURL               &GetURL( BOOL = TRUE ) const;
-    inline const SwFmtEditInReadonly    &GetEditInReadonly( BOOL = TRUE ) const;
-    inline const SwFmtLayoutSplit       &GetLayoutSplit( BOOL = TRUE ) const;
-    inline const SwFmtChain             &GetChain( BOOL = TRUE ) const;
-    inline const SwFmtLineNumber        &GetLineNumber( BOOL = TRUE ) const;
-    inline const SwFmtFtnAtTxtEnd       &GetFtnAtTxtEnd( BOOL = TRUE ) const;
-    inline const SwFmtEndAtTxtEnd       &GetEndAtTxtEnd( BOOL = TRUE ) const;
-    inline const SwFmtNoBalancedColumns &GetBalancedColumns( BOOL = TRUE ) const;
-    inline const SvxFrameDirectionItem  &GetFrmDir( BOOL = TRUE ) const;
-    inline const SwTextGridItem         &GetTextGrid( BOOL = TRUE ) const;
+    INLINE const SwFmtFillOrder         &GetFillOrder( BOOL = TRUE ) const;
+    INLINE const SwFmtFrmSize           &GetFrmSize( BOOL = TRUE ) const;
+    INLINE const SwFmtHeader            &GetHeader( BOOL = TRUE ) const;
+    INLINE const SwFmtFooter            &GetFooter( BOOL = TRUE ) const;
+    INLINE const SwFmtSurround          &GetSurround( BOOL = TRUE ) const;
+    INLINE const SwFmtHoriOrient        &GetHoriOrient( BOOL = TRUE ) const;
+    INLINE const SwFmtAnchor            &GetAnchor( BOOL = TRUE ) const;
+    INLINE const SwFmtCol               &GetCol( BOOL = TRUE ) const;
+    INLINE const SvxPaperBinItem        &GetPaperBin( BOOL = TRUE ) const;
+    INLINE const SvxLRSpaceItem         &GetLRSpace( BOOL = TRUE ) const;
+    INLINE const SvxULSpaceItem         &GetULSpace( BOOL = TRUE ) const;
+    INLINE const SwFmtCntnt             &GetCntnt( BOOL = TRUE ) const;
+    INLINE const SvxPrintItem           &GetPrint( BOOL = TRUE ) const;
+    INLINE const SvxOpaqueItem          &GetOpaque( BOOL = TRUE ) const;
+    INLINE const SvxProtectItem         &GetProtect( BOOL = TRUE ) const;
+    INLINE const SwFmtVertOrient        &GetVertOrient( BOOL = TRUE ) const;
+    INLINE const SvxBoxItem             &GetBox( BOOL = TRUE ) const;
+    INLINE const SvxFmtKeepItem         &GetKeep( BOOL = TRUE ) const;
+    INLINE const SvxBrushItem           &GetBackground( BOOL = TRUE ) const;
+    INLINE const SvxShadowItem          &GetShadow( BOOL = TRUE ) const;
+    INLINE const SwFmtPageDesc          &GetPageDesc( BOOL = TRUE ) const;
+    INLINE const SvxFmtBreakItem        &GetBreak( BOOL = TRUE ) const;
+    INLINE const SvxMacroItem           &GetMacro( BOOL = TRUE ) const;
+    INLINE const SwFmtURL               &GetURL( BOOL = TRUE ) const;
+    INLINE const SwFmtEditInReadonly    &GetEditInReadonly( BOOL = TRUE ) const;
+    INLINE const SwFmtLayoutSplit       &GetLayoutSplit( BOOL = TRUE ) const;
+    INLINE const SwFmtChain             &GetChain( BOOL = TRUE ) const;
+    INLINE const SwFmtLineNumber        &GetLineNumber( BOOL = TRUE ) const;
+    INLINE const SwFmtFtnAtTxtEnd       &GetFtnAtTxtEnd( BOOL = TRUE ) const;
+    INLINE const SwFmtEndAtTxtEnd       &GetEndAtTxtEnd( BOOL = TRUE ) const;
+    INLINE const SwFmtNoBalancedColumns &GetBalancedColumns( BOOL = TRUE ) const;
+    INLINE const SvxFrameDirectionItem  &GetFrmDir( BOOL = TRUE ) const;
+    INLINE const SwTextGridItem         &GetTextGrid( BOOL = TRUE ) const;
     inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( BOOL = TRUE ) const;
 
     // Grafik-Attribute - impl. steht im grfatr.hxx
-    inline const SwMirrorGrf            &GetMirrorGrf( BOOL = TRUE ) const;
+    INLINE const SwMirrorGrf            &GetMirrorGrf( BOOL = TRUE ) const;
     inline const SwCropGrf              &GetCropGrf( BOOL = TRUE ) const;
     inline const SwRotationGrf          &GetRotationGrf(BOOL = TRUE ) const;
     inline const SwLuminanceGrf         &GetLuminanceGrf(BOOL = TRUE ) const;
@@ -316,9 +322,9 @@ public:
     inline const SvxParaGridItem        &GetParaGrid(BOOL = TRUE) const;
 
     // TabellenBox-Attribute    - impl. steht im cellatr.hxx
-    inline const SwTblBoxNumFormat      &GetTblBoxNumFmt( BOOL = TRUE ) const;
-    inline const SwTblBoxFormula        &GetTblBoxFormula( BOOL = TRUE ) const;
-    inline const SwTblBoxValue          &GetTblBoxValue( BOOL = TRUE ) const;
+        INLINE  const SwTblBoxNumFormat     &GetTblBoxNumFmt( BOOL = TRUE ) const;
+        INLINE  const SwTblBoxFormula       &GetTblBoxFormula( BOOL = TRUE ) const;
+        INLINE  const SwTblBoxValue         &GetTblBoxValue( BOOL = TRUE ) const;
 };
 
 // --------------- Inline Implementierungen ------------------------
@@ -342,5 +348,6 @@ inline SfxItemState SwFmt::GetItemState( USHORT nWhich, BOOL bSrchInParent,
     return aSet.GetItemState( nWhich, bSrchInParent, ppItem );
 }
 
+#undef INLINE
 
 #endif // _FORMAT_HXX
