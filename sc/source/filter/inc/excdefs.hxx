@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:41:03 $
+ *  last change: $Author: dr $ $Date: 2002-04-09 14:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 //___________________________________________________________________
 // excdefs.hxx: defines for Excel import/export
 
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+
 //___________________________________________________________________
 // unicode strings
 
@@ -105,7 +109,7 @@
 //___________________________________________________________________
 // Style info
 
-/// Horizontal alignment of cell contents.
+/** Horizontal alignment of cell contents. */
 enum XclHorAlign
 {
     xlHAlignGeneral                 = 0x00,
@@ -118,7 +122,7 @@ enum XclHorAlign
     xlHAlignParent                  = 0xFF
 };
 
-/// Vertical alignment of cell contents.
+/** Vertical alignment of cell contents. */
 enum XclVerAlign
 {
     xlVAlignTop                     = 0x00,
@@ -128,7 +132,7 @@ enum XclVerAlign
     xlVAlignParent                  = 0xFF
 };
 
-/// Text orientation.
+/** Text orientation. */
 enum XclTextOrient
 {
     xlTextOrientNoRot               = 0x00,
@@ -139,7 +143,7 @@ enum XclTextOrient
     xlTextOrientParent              = 0xFF
 };
 
-/// Text wrap (automatic line break).
+/** Text wrap (automatic line break). */
 enum XclTextWrap
 {
     xlTextWrapNo                    = 0x00,
@@ -472,6 +476,42 @@ enum XclEscapement
 #define EXC_WIN2_FROZENNOSPLIT      0x0100
 #define EXC_WIN2_SELECTED           0x0200
 #define EXC_WIN2_DISPLAYED          0x0400
+
+// ----------------------------------------------------------------------------
+// (0x01B2) DVAL, (0x01BE) DV
+
+// data validation flags
+const sal_uInt32 EXC_DV_IGNOREBLANK     = 0x00000100;
+const sal_uInt32 EXC_DV_SHOWPROMPT      = 0x00040000;
+const sal_uInt32 EXC_DV_SHOWERROR       = 0x00080000;
+
+// data validation data mode
+const sal_uInt32 EXC_DV_MODE_MASK       = 0x0000000F;
+const sal_uInt32 EXC_DV_MODE_ANY        = 0x00000000;
+const sal_uInt32 EXC_DV_MODE_WHOLE      = 0x00000001;
+const sal_uInt32 EXC_DV_MODE_DECIMAL    = 0x00000002;
+const sal_uInt32 EXC_DV_MODE_LIST       = 0x00000003;
+const sal_uInt32 EXC_DV_MODE_DATE       = 0x00000004;
+const sal_uInt32 EXC_DV_MODE_TIME       = 0x00000005;
+const sal_uInt32 EXC_DV_MODE_TEXTLEN    = 0x00000006;
+const sal_uInt32 EXC_DV_MODE_CUSTOM     = 0x00000007;
+
+// data validation conditions
+const sal_uInt32 EXC_DV_COND_MASK       = 0x00F00000;
+const sal_uInt32 EXC_DV_COND_BETWEEN    = 0x00000000;
+const sal_uInt32 EXC_DV_COND_NOTBETWEEN = 0x00100000;
+const sal_uInt32 EXC_DV_COND_EQUAL      = 0x00200000;
+const sal_uInt32 EXC_DV_COND_NOTEQUAL   = 0x00300000;
+const sal_uInt32 EXC_DV_COND_GREATER    = 0x00400000;
+const sal_uInt32 EXC_DV_COND_LESS       = 0x00500000;
+const sal_uInt32 EXC_DV_COND_EQGREATER  = 0x00600000;
+const sal_uInt32 EXC_DV_COND_EQLESS     = 0x00700000;
+
+// data validation error style
+const sal_uInt32 EXC_DV_ERROR_MASK      = 0x00000070;
+const sal_uInt32 EXC_DV_ERROR_STOP      = 0x00000000;
+const sal_uInt32 EXC_DV_ERROR_WARNING   = 0x00000010;
+const sal_uInt32 EXC_DV_ERROR_INFO      = 0x00000020;
 
 //___________________________________________________________________
 // Specials for outlines

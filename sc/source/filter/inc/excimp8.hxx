@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:41:03 $
+ *  last change: $Author: dr $ $Date: 2002-04-09 14:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,25 +148,6 @@ class ExcCondFormList : protected List
 
 
 
-
-
-struct DVData;
-
-
-class DVList : protected List
-{
-private:
-public:
-    virtual                     ~DVList();
-
-    void                        Add( DVData* );
-    void                        Reset( void );
-    void                        Apply( ScDocument&, UINT16 nTabNum );
-};
-
-
-
-
 class ImportExcel8 : public ImportExcel
 {
     protected:
@@ -185,8 +166,6 @@ class ImportExcel8 : public ImportExcel
 
         ExcCondForm*            pActCondForm;
         ExcCondFormList*        pCondFormList;
-
-        DVList*                 pDVList;
 
         XclImpAutoFilterBuffer* pAutoFilterBuffer;  // ranges for autofilter and advanced filter
         XclImpWebQueryBuffer*   pWebQBuffer;        // data for web queries
