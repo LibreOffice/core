@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:07:20 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#ifdef SOLARIS
+#if defined(SOLARIS) || defined(IRIX)
 #include <alloca.h>
 #endif
 #include <prex.h>
