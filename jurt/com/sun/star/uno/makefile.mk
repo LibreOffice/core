@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jl $ $Date: 2002-04-11 15:41:56 $
+#   last change: $Author: rt $ $Date: 2004-03-30 16:23:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,14 +74,7 @@ TARGET  = com_sun_star_uno
 JAVACLASSFILES= 											\
     $(CLASSDIR)$/$(PACKAGE)$/Ascii.class					\
     $(CLASSDIR)$/$(PACKAGE)$/AsciiString.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/BridgeTurner.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/IBridge.class					\
-    $(CLASSDIR)$/$(PACKAGE)$/IEnvironment.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/IQueryInterface.class			\
-    $(CLASSDIR)$/$(PACKAGE)$/IMapping.class					\
     $(CLASSDIR)$/$(PACKAGE)$/MappingException.class 		\
-    $(CLASSDIR)$/$(PACKAGE)$/MappingWrapper.class			\
-    $(CLASSDIR)$/$(PACKAGE)$/UnoRuntime.class			\
     $(CLASSDIR)$/$(PACKAGE)$/AnyConverter.class			\
     $(CLASSDIR)$/$(PACKAGE)$/WeakReference.class 
 
