@@ -1,9 +1,12 @@
 mkdir: %_DEST%\inc%_EXT%\bridges
 mkdir: %_DEST%\inc%_EXT%\bridges\remote
+mkdir: %_DEST%\inc%_EXT%\bridges\java
 
 ..\inc\bridges\remote\connection.h %_DEST%\inc%_EXT%\bridges\remote\connection.h
 ..\inc\bridges\remote\context.h %_DEST%\inc%_EXT%\bridges\remote\context.h
 ..\inc\bridges\remote\remote.h %_DEST%\inc%_EXT%\bridges\remote\remote.h
+
+..\inc\bridges\java\jvmcontext.hxx %_DEST%\inc%_EXT%\bridges\java\jvmcontext.hxx
 
 ..\%__SRC%\lib\irmcxt* %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\librmcxt* %_DEST%\lib%_EXT%\*
