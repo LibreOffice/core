@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-03 12:59:32 $
+ *  last change: $Author: jp $ $Date: 2001-04-04 09:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
     SvXub_StrLens aSortArr( 8, 8 );
     SwDoc* pDoc = rIdx.GetNode().GetDoc();
 
+    USHORT nChkType = bSort ? FLY_AUTO_CNTNT : FLY_AT_CNTNT;
     const SwCntntFrm* pCFrm;
     const SwCntntNode* pCNd;
     if( pDoc->GetRootFrm() &&
@@ -362,18 +363,24 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
             {
                 const SdrObject *pO = (*pObjs)[ i ];
                 const SwFlyFrm *pFly;
-                if( pO->IsWriterFlyFrame() && (pFly =
-                    ((SwVirtFlyDrawObj*)pO)->GetFlyFrm())->IsFlyAtCntFrm() &&
-                     (bSort ? pFly->IsAutoPos() : !pFly->IsAutoPos() ) )
+                SwFrmFmt* pFmt;
+
+                if( pO->IsWriterFlyFrame()
+                    ? ( (pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm())
+                                ->IsFlyAtCntFrm() &&
+                        (bSort ? pFly->IsAutoPos() : !pFly->IsAutoPos() ) &&
+                        0 != ( pFmt = (SwFrmFmt*)pFly->GetFmt()) )
+                    : ( 0 != (pFmt=((SwDrawContact*)GetUserCall(pO))->GetFmt())
+                        && pFmt->GetAnchor().GetAnchorId() == nChkType )
+                    )
                 {
                     //jetzt einen SwDepend anlegen und in das Array einfuegen
-                    SwDepend* pNewDepend = new SwDepend( &rClnt,
-                                            (SwFrmFmt*)pFly->GetFmt() );
+                    SwDepend* pNewDepend = new SwDepend( &rClnt, pFmt );
 
                     USHORT nInsPos = rFrameArr.Count();
                     if( bSort )
                     {
-                        xub_StrLen nInsertIndex = pFly->GetFmt()->GetAnchor().
+                        xub_StrLen nInsertIndex = pFmt->GetAnchor().
                                     GetCntntAnchor()->nContent.GetIndex();
 
                         USHORT nEnd = nInsPos;
@@ -390,7 +397,6 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
     {
         const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
         USHORT nSize = rFmts.Count();
-        USHORT nChkType = bSort ? FLY_AUTO_CNTNT : FLY_AT_CNTNT;
         for ( USHORT i = 0; i < nSize; i++)
         {
             const SwFrmFmt* pFmt = rFmts[ i ];
