@@ -1,0 +1,48 @@
+#ifndef __drafts_com_sun_star_ui_ModuleUICommandDescription_idl__
+#define __drafts_com_sun_star_ui_ModuleUICommandDescription_idl__
+
+#ifndef __com_sun_star_container_XNameAccess_idl__
+#include <com/sun/star/container/XNameAccess.idl>
+#endif
+
+//=============================================================================
+
+/** a service which provides information about the user interface command
+    categories of a single module.
+
+    <p>
+    Every OpenOffice.org module has an amount of commands that can be used by
+    user interface elements. This service provides access to the user interface
+    commands that are part of a single OpenOffice.org module, like Writer
+    or Calc.
+    </p>
+*/
+
+//=============================================================================
+
+module com { module sun { module star { module ui {
+
+service ModuleUICategoryDescription
+{
+    /** provides access to user interface command categories of an installed
+        module.
+
+        <p>
+        An implementation must provide a language dependent string which
+        can be used by a UI to display the category name.
+        The key to a user interface command category depends on the specific
+        implementation. OpenOffice.org uses a pre-defined number of
+        identifiers defined in <type scope="::com::sun:star::frame">
+        CommandGroup</type>.
+        </p>
+
+        @see ::drafts::com::sun::star::frame::ModuleManager
+        @see ::com::sun::star::frame::CommandGroup
+    */
+
+    interface com::sun::star::container::XNameAccess;
+};
+
+}; }; }; };
+
+#endif
