@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-26 18:15:47 $
+ *  last change: $Author: sab $ $Date: 2002-09-02 14:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #include "AccessibleDocumentPagePreview.hxx"
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#endif
+#ifndef SC_ACCESSIBILITYHINTS_HXX
+#include "AccessibilityHints.hxx"
 #endif
 
 // STATIC DATA -----------------------------------------------------------
@@ -533,7 +536,7 @@ void ScPreview::DataChanged(BOOL bNewTime)
     }
 
     bValid = FALSE;
-    InvalidateLocationData();
+    InvalidateLocationData( SC_HINT_DATACHANGED );
     Invalidate();
 }
 
@@ -583,7 +586,7 @@ void ScPreview::SetZoom(USHORT nNewZoom)
         bInPaint = FALSE;
 
         bStateValid = FALSE;
-        InvalidateLocationData();
+        InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
         DoInvalidate();
         Invalidate();
     }
@@ -595,7 +598,7 @@ void ScPreview::SetPageNo( long nPage )
     nPageNo = nPage;
     RecalcPages();
     UpdateDrawView();       // Tabelle evtl. geaendert
-    InvalidateLocationData();
+    InvalidateLocationData( SC_HINT_DATACHANGED );
     Invalidate();
 }
 
@@ -700,7 +703,7 @@ void ScPreview::SetXOffset( long nX )
         if (!bInPaint)
             Invalidate();
     }
-    InvalidateLocationData();
+    InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
 }
 
 
@@ -726,7 +729,7 @@ void ScPreview::SetYOffset( long nY )
         if (!bInPaint)
             Invalidate();
     }
-    InvalidateLocationData();
+    InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
 }
 
 
@@ -790,14 +793,24 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
         }
 
         Invalidate();
-        InvalidateLocationData();
+        InvalidateLocationData( SC_HINT_DATACHANGED );
     }
 }
 
-void ScPreview::InvalidateLocationData()
+void ScPreview::InvalidateLocationData(ULONG nId)
 {
     bLocationValid = FALSE;
-    pViewShell->BroadcastAccessibility( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+    pViewShell->BroadcastAccessibility( SfxSimpleHint( nId ) );
+}
+
+void ScPreview::GetFocus()
+{
+    pViewShell->BroadcastAccessibility( ScAccWinFocusGotHint(GetAccessible()) );
+}
+
+void ScPreview::LoseFocus()
+{
+    pViewShell->BroadcastAccessibility( ScAccWinFocusLostHint(GetAccessible()) );
 }
 
 com::sun::star::uno::Reference<drafts::com::sun::star::accessibility::XAccessible> ScPreview::CreateAccessible()

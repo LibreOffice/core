@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-02-27 19:34:18 $
+ *  last change: $Author: sab $ $Date: 2002-09-02 14:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,12 +113,15 @@ private:
     void    UpdateDrawView();
     void    DoPrint( ScPreviewLocationData* pFillLocation );
 
-    void    InvalidateLocationData();
+    void    InvalidateLocationData( ULONG nId );
 
 protected:
     virtual void    Paint( const Rectangle& rRect );
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    KeyInput( const KeyEvent& rKEvt );
+
+    virtual void    GetFocus();
+    virtual void    LoseFocus();
 
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
