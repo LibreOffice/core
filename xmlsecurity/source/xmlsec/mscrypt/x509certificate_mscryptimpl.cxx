@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:35:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,55 @@
 #include "oid.hxx"
 //MM : end
 
+//CP : added by CP
+#include <rtl/locale.h>
+#include <osl/nlsupport.h>
+
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+
+//CP : end
+
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
 using ::rtl::OUString ;
 
 using ::com::sun::star::security::XCertificate ;
 using ::com::sun::star::util::DateTime ;
+
+/*
+ * mmi : because MS Crypto use the 'S' tag (equal to the 'ST' tag in NSS), but the NSS can't recognise
+ *      it, so the 'S' tag should be changed to 'ST' tag
+ *
+ */
+OUString replaceTagSWithTagST(OUString oldDN)
+{
+
+    sal_Int32 nIndex = 0;
+    OUString newDN;
+    do
+    {
+        OUString aToken = oldDN.getToken( 0, ',', nIndex ).trim();
+        if (aToken.compareToAscii("S=",2) == 0)
+        {
+            newDN+=OUString::createFromAscii("ST=");
+            newDN+=aToken.copy(2);
+        }
+        else
+        {
+            newDN+=aToken;
+        }
+
+        if (nIndex >= 0)
+        {
+            newDN+=OUString::createFromAscii(",");
+        }
+    } while ( nIndex >= 0 );
+
+    return newDN;
+}
+/* end */
 
 X509Certificate_MSCryptImpl :: X509Certificate_MSCryptImpl() :
     m_pCertContext( NULL )
@@ -130,6 +173,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
             NULL, 0
         ) ;
 
+        // Here the cbIssuer count the last 0x00 , take care.
         if( cbIssuer != 0 ) {
             issuer = new char[ cbIssuer ] ;
             if( issuer == NULL )
@@ -147,10 +191,18 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
                 throw RuntimeException() ;
             }
 
-            OUString xIssuer = OUString::createFromAscii( issuer ) ;
+            // By CP , for correct encoding
+            sal_uInt16 encoding ;
+            rtl_Locale *pLocale = NULL ;
+            osl_getProcessLocale( &pLocale ) ;
+            encoding = osl_getTextEncodingFromLocale( pLocale ) ;
+            // CP end
+
+            if(issuer[cbIssuer-1] == 0) cbIssuer--; //delimit the last 0x00;
+            OUString xIssuer(issuer , cbIssuer ,encoding ) ; //By CP
             delete issuer ;
 
-            return xIssuer ;
+            return replaceTagSWithTagST(xIssuer) ;
         } else {
             return OUString() ;
         }
@@ -188,10 +240,18 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
                 throw RuntimeException() ;
             }
 
-            OUString xSubject = OUString::createFromAscii( subject ) ;
+            // By CP , for correct encoding
+            sal_uInt16 encoding ;
+            rtl_Locale *pLocale = NULL ;
+            osl_getProcessLocale( &pLocale ) ;
+            encoding = osl_getTextEncodingFromLocale( pLocale ) ;
+            // CP end
+
+            if(subject[cbSubject-1] == 0) cbSubject--; //delimit the last 0x00;
+            OUString xSubject(subject , cbSubject ,encoding ) ; //By CP
             delete subject ;
 
-            return xSubject ;
+            return replaceTagSWithTagST(xSubject) ;
         } else {
             return OUString() ;
         }
