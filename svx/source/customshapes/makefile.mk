@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-21 16:46:11 $
+#   last change: $Author: kz $ $Date: 2005-03-01 19:06:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,12 +98,12 @@ UNOTYPES=	com.sun.star.uno.XWeak									\
             com.sun.star.util.XTextSearch							\
             com.sun.star.util.SearchResult							\
             com.sun.star.xml.sax.XDocumentHandler					\
-            drafts.com.sun.star.drawing.XCustomShapeEngine			\
-            drafts.com.sun.star.drawing.XCustomShapeHandle
+            com.sun.star.drawing.XCustomShapeEngine			\
+            com.sun.star.drawing.XCustomShapeHandle
 
 
 # --- Files -------------------------------------
-        
+
 SLOFILES=	$(SLO)$/EnhancedCustomShapeEngine.obj			\
             $(SLO)$/EnhancedCustomShapeTypeNames.obj		\
             $(SLO)$/EnhancedCustomShapeGeometry.obj			\
