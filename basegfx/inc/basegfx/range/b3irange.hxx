@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3irange.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:39:46 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,10 +106,7 @@ namespace basegfx
                  sal_Int32 z1,
                  sal_Int32 x2,
                  sal_Int32 y2,
-                 sal_Int32 z2,
-                 sal_Int32 x3,
-                 sal_Int32 y3,
-                 sal_Int32 z3)
+                 sal_Int32 z2)
         :   maRangeX(x1),
             maRangeY(y1),
             maRangeZ(z1)
@@ -117,20 +114,15 @@ namespace basegfx
             maRangeX.expand(x2);
             maRangeY.expand(y2);
             maRangeZ.expand(z2);
-            maRangeX.expand(x3);
-            maRangeY.expand(y3);
-            maRangeZ.expand(z3);
         }
 
         B3IRange(const B3ITuple& rTuple1,
-                 const B3ITuple& rTuple2,
-                 const B3ITuple& rTuple3)
+                 const B3ITuple& rTuple2)
         :   maRangeX(rTuple1.getX()),
             maRangeY(rTuple1.getY()),
             maRangeZ(rTuple1.getZ())
         {
             expand(rTuple2);
-            expand(rTuple3);
         }
 
         B3IRange(const B3IRange& rRange)
@@ -293,6 +285,13 @@ namespace basegfx
             maRangeX.expand(rRange.maRangeX);
             maRangeY.expand(rRange.maRangeY);
             maRangeZ.expand(rRange.maRangeZ);
+        }
+
+        void grow(sal_Int32 nValue)
+        {
+            maRangeX.grow(nValue);
+            maRangeY.grow(nValue);
+            maRangeZ.grow(nValue);
         }
     };
 } // end of namespace basegfx
