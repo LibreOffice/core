@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:30:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ void BasicIDEDLL::Init()
     ByteString aResMgrName( "basctl" );
     aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
     ResMgr* pMgr = ResMgr::CreateResMgr(
-        aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
+        aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 
     BASIC_MOD() = new BasicIDEModule( pMgr, &BasicDocShell::Factory() );
 
