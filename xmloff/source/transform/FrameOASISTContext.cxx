@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameOASISTContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:09:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,7 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
                                                                 rQName,
                                                                 sal_True, sal_True );
                 }
+                break;
             default:
                 OSL_ENSURE( !this, "unknown action" );
                 break;
