@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:04:33 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ TabDialog TAB_PARAGRAPH
                 Text [ ENGLISH ] = "Indent and Spacing" ;
                 Text [ norwegian ] = "Indent and Spacing" ;
                 Text [ italian ] = "Rientro e spaziatura" ;
-                Text [ portuguese_brazilian ] = "Recuos & Afastamento" ;
+                Text [ portuguese_brazilian ] = "Recuo & Afastamento" ;
                 Text [ portuguese ] = "Avan�os e espa�amento" ;
                 Text [ finnish ] = "Sisennykset ja v�lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -314,6 +314,7 @@ TabDialog TAB_PARAGRAPH
     Text[ hindi ] = "परिच्छेद";
     Text[ slovak ] = "Odstavec";
 };
+
 
 
 
