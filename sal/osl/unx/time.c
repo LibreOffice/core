@@ -2,9 +2,9 @@
  *
  *  $RCSfile: time.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-08 22:27:08 $
+ *  last change: $Author: pluby $ $Date: 2001-03-11 02:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,6 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, Time
 
 
 static struct timeval startTime;
-static struct timezone timeZone;
 static sal_Bool bGlobalTimer = sal_False;
 
 sal_uInt32 SAL_CALL osl_getGlobalTimer()
@@ -262,11 +261,11 @@ sal_uInt32 SAL_CALL osl_getGlobalTimer()
 
   if ( bGlobalTimer == sal_False )
   {
-      gettimeofday( &startTime, &timeZone );
+      gettimeofday( &startTime, NULL );
       bGlobalTimer=sal_True;
   }
 
-  gettimeofday( &currentTime, &timeZone );
+  gettimeofday( &currentTime, NULL );
 
   nSeconds = (sal_uInt32)( currentTime.tv_sec - startTime.tv_sec );
 
