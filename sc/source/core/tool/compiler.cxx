@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: nn $ $Date: 2000-09-26 13:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,12 +356,12 @@ String ScCompiler::MakeColStr( USHORT nCol )
         else
         {
             String aString;
-            sal_Unicode* pCol = aString.AllocBuffer( 3 );
+            sal_Unicode* pCol = aString.AllocBuffer( 2 );
             USHORT nLoCol = nCol % 26;
             USHORT nHiCol = (nCol / 26) - 1;
             pCol[0] = 'A' + (sal_uChar)nHiCol;
             pCol[1] = 'A' + (sal_uChar)nLoCol;
-            pCol[2] = 0;
+            // terminating null character is set in AllocBuffer
             return aString;
         }
     }
