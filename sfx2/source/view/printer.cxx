@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-20 13:35:53 $
+ *  last change: $Author: os $ $Date: 2001-09-05 10:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,17 +580,19 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
     pPage->Show();
 
     // Dialoggr"o\se bestimmen
+    Size a6Sz = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
+    Size aBtnSz = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
     Size aOutSz( pPage->GetSizePixel() );
     aOutSz.Height() += 6;
-    aOutSz.Width() += 108;
+    long nWidth = aBtnSz.Width();
+    nWidth += a6Sz.Width();
+    aOutSz.Width() += nWidth;
     if ( aOutSz.Height() < 90 )
         // mindestens die H"ohe der 3 Buttons
         aOutSz.Height() = 90;
     SetOutputSizePixel( aOutSz );
 
     // set position and size of the buttons
-    Size aBtnSz = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
-    Size a6Sz = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
     Point aBtnPos( aOutSz.Width() - aBtnSz.Width() - a6Sz.Width(), a6Sz.Height() );
     aOkBtn.SetPosSizePixel( aBtnPos, aBtnSz );
     aBtnPos.Y() += aBtnSz.Height() + ( a6Sz.Height() / 2 );
