@@ -2,9 +2,9 @@
  *
  *  $RCSfile: barcfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 06:34:45 $
+ *  last change: $Author: os $ $Date: 2000-10-12 15:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,14 +89,15 @@ using namespace com::sun::star::uno;
 #define SEL_TYPE_LIST_TEXT      1
 #define SEL_TYPE_TABLE_LIST     2
 #define SEL_TYPE_BEZIER         3
+#define SEL_TYPE_GRAPHIC        4
 
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
 SwToolbarConfigItem::SwToolbarConfigItem( BOOL bWeb ) :
-    ConfigItem(bWeb ? C2U("Office.WriterWeb/ObjectBarSelection") :  C2U("Office.Writer/ObjectBarSelection"))
+    ConfigItem(bWeb ? C2U("Office.WriterWeb/ObjectBar") :  C2U("Office.Writer/ObjectBar"))
 {
-    for(USHORT i = 0; i <= SEL_TYPE_BEZIER; i++ )
+    for(USHORT i = 0; i <= SEL_TYPE_GRAPHIC; i++ )
         aTbxIdArray[i] = (USHORT)-1;
 
     Sequence<OUString> aNames = GetPropertyNames();
@@ -139,6 +140,8 @@ sal_Int32 lcl_getArrayIndex(int nSelType)
         nRet = SEL_TYPE_TABLE_TEXT;
     else if(nSelType & SwWrtShell::SEL_BEZ)
         nRet = SEL_TYPE_BEZIER;
+    else if(nSelType & SwWrtShell::SEL_GRF)
+        nRet = SEL_TYPE_GRAPHIC;
     return nRet;
 }
 /* -----------------------------10.10.00 14:38--------------------------------
@@ -171,12 +174,13 @@ Sequence<OUString> SwToolbarConfigItem::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Table",                   //  SEL_TYPE_TABLE_TEXT
-        "Numberdlist",            //  SEL_TYPE_LIST_TEXT
-        "Numberdlist_InTable",     //  SEL_TYPE_TABLE_LIST
-        "BezierObject_EditMode"   //  SEL_TYPE_BEZIER
+        "Selection/Table",                   //  SEL_TYPE_TABLE_TEXT
+        "Selection/NumberedList",            //  SEL_TYPE_LIST_TEXT
+        "Selection/NumberedList_InTable",     //  SEL_TYPE_TABLE_LIST
+        "Selection/BezierObject",           //  SEL_TYPE_BEZIER
+        "Selection/Graphic"                 //SEL_TYPE_GRAPHIC
     };
-    const int nCount = 4;
+    const int nCount = 5;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
