@@ -136,10 +136,12 @@ Dim sOldExtension as String
 			
 			sOldExtension = GetFileNameExtension(sFullName, &quot;/&quot;)
 			Select Case sOldExtension
+&apos; Todo: This code should be simplified as soon as it is clear how &apos;LoadComponentfromUrl&apos; exactly works with 
+&apos; templates and documents
 				Case &quot;vor&quot;, &quot;dot&quot;, &quot;xlt&quot;, &quot;pot&quot;
 					OpenProperties(1).Value = False
 				Case Else
-					OpenProperties(1).Value = True
+					OpenProperties(1).Value = False
 			End Select
 			oDocument = StarDesktop.LoadComponentFromURL(sFullName, &quot;_blank&quot;, 0, OpenProperties())
 			If bSetFonts Then
@@ -325,7 +327,6 @@ Dim bLogExists as Boolean
 		oLogCursor = oLogTable.GetCellbyPosition(1,0).createTextCursor
 		oLogCursor.SetString(sTargetDocuments)
 		bInsertRow = False
-&apos; Todo: Strings in Resourcen
 		sLogUrl = SOWorkPath &amp; &quot;/Logfile.sxw&quot;
 		Do
 			bLogExists = oUcb.Exists(sLogUrl)

@@ -63,6 +63,7 @@ Dim iCurStep as Integer
 	End If
 	bConversionIsRunnig = False
 	iCurStep = ImportDialog.Step
+
 	Select Case iCurStep
 		Case 1
 			FillStep_InputPaths(0, True)

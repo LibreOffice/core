@@ -219,7 +219,7 @@ Sub ToggleInputPaths(aEvent as Object, Optional sDocType)
 Dim bDoEnable as Boolean
 Dim sLocDocType as String
 Dim oCheckBox as Object
-	If IsEmpty(aEvent) Then
+	If Not IsNull(aEvent) Then
 		sLocDocType = aEvent.Source.Model.Tag
 	Else
 		sLocDocType = sDocType
