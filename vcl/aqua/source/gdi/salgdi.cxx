@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.43 $
- *  last change: $Author: bmahbod $ $Date: 2001-01-17 23:12:23 $
+ *  $Revision: 1.44 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-23 05:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ static inline BOOL Boolean2BOOL ( const Boolean bBooleanValue )
 
 // =======================================================================
 
-static void SetWhiteBackColor()
+static inline void SetWhiteBackColor()
 {
     RGBColor aWhiteBackColor;
 
@@ -137,7 +137,7 @@ static void SetWhiteBackColor()
 
 // -----------------------------------------------------------------------
 
-static void SetBlackForeColor()
+static inline void SetBlackForeColor()
 {
     RGBColor aBlackForeColor;
 
@@ -711,86 +711,6 @@ static OSStatus GetGDeviceResolution ( long  *rGDeviceHRes,
 
 // =======================================================================
 
-static BOOL LockGraphicsPort ( SalGraphicsDataPtr rSalGraphicsData )
-{
-    BOOL  bCGrafPortLocked = FALSE;
-
-    if (    ( rSalGraphicsData              != NULL )
-         && ( rSalGraphicsData->mpCGrafPort != NULL )
-       )
-    {
-        rSalGraphicsData->mnOSStatus
-            = LockPortBits( rSalGraphicsData->mpCGrafPort );
-
-        if ( rSalGraphicsData->mnOSStatus == noErr )
-        {
-            rSalGraphicsData->mhGWorldPixMap
-                = GetPortPixMap( rSalGraphicsData->mpCGrafPort );
-
-            rSalGraphicsData->mnOSStatus = QDErr();
-
-            if (    ( rSalGraphicsData->mnOSStatus     == noErr )
-                 && ( rSalGraphicsData->mhGWorldPixMap != NULL  )
-               )
-            {
-                rSalGraphicsData->mnGWorldFlags
-                    = GetPixelsState( rSalGraphicsData->mhGWorldPixMap );
-
-                if ( rSalGraphicsData->mnGWorldFlags == noErr )
-                {
-                    Boolean bGWorldPixelsLocked = false;
-
-                    bGWorldPixelsLocked
-                        = LockPixels( rSalGraphicsData->mhGWorldPixMap );
-
-                    rSalGraphicsData->mbGWorldPixelsLocked
-                        = Boolean2BOOL( bGWorldPixelsLocked );
-
-                    bCGrafPortLocked = TRUE;
-                } // if
-            } // if
-        } // if
-    } // if
-
-    return  bCGrafPortLocked;
-} // LockGraphicsPort
-
-// -----------------------------------------------------------------------
-
-static BOOL UnlockGraphicsPort ( SalGraphicsDataPtr rSalGraphicsData )
-{
-    BOOL  bCGrafPortUnlocked = FALSE;
-
-    if (    ( rSalGraphicsData                 != NULL  )
-         && ( rSalGraphicsData->mhGWorldPixMap != NULL  )
-         && ( rSalGraphicsData->mnGWorldFlags  == noErr )
-         && ( rSalGraphicsData->mbGWorldPixelsLocked    )
-       )
-    {
-        SetPixelsState( rSalGraphicsData->mhGWorldPixMap,
-                        rSalGraphicsData->mnGWorldFlags
-                      );
-
-        rSalGraphicsData->mnOSStatus = QDErr();
-
-        if (    ( rSalGraphicsData->mpCGrafPort != NULL  )
-             && ( rSalGraphicsData->mnOSStatus  == noErr )
-           )
-        {
-            rSalGraphicsData->mnOSStatus
-                = UnlockPortBits( rSalGraphicsData->mpCGrafPort );
-
-            bCGrafPortUnlocked = TRUE;
-        } // if
-    } // if
-
-    return bCGrafPortUnlocked;
-} // UnlockGraphicsPort
-
-// =======================================================================
-
-// =======================================================================
-
 static BOOL LockGraphics ( SalGraphics *rSalGraphics )
 {
     BOOL  bCGrafPortLocked = FALSE;
@@ -910,40 +830,79 @@ static BOOL BeginGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 
             if ( rSalGraphicsData->mnOSStatus == noErr )
             {
-                // Lock our GWorld
+                // Lock our CGrafPort bits
 
-                if ( LockGraphicsPort( rSalGraphicsData ) )
+                rSalGraphicsData->mnOSStatus
+                    = LockPortBits( rSalGraphicsData->mpCGrafPort );
+
+                if ( rSalGraphicsData->mnOSStatus == noErr )
                 {
-                    // Set background color to white on this GWorld
+                    // Get the PixMap associated with this particular CGrafPort
 
-                    SetWhiteBackColor();
+                    rSalGraphicsData->mhGWorldPixMap
+                        = GetPortPixMap( rSalGraphicsData->mpCGrafPort );
 
-                    // Set foreground color to black on this GWorld
+                    rSalGraphicsData->mnOSStatus = QDErr();
 
-                    SetBlackForeColor();
-
-                    // If we get here then we may safely start drawing
-                    // to our GWorld
-
-                    bStartGraphics = TRUE;
-
-                    // Now begin to set the clip region
-
-                    if (    ( rSalGraphicsData->mbClipRgnChanged == TRUE )
-                         && ( rSalGraphicsData->mhClipRgn        != NULL )
-                       )
+                    if (    ( rSalGraphicsData->mnOSStatus     == noErr )
+                         && ( rSalGraphicsData->mhGWorldPixMap != NULL  )
+                      )
                     {
-                        // Set to the clip region
+                        // Get the current PixMap state, i.e.,
+                        // is it the memory associated with this
+                        // PixMap is marked to be moved?
 
-                        SetClip( rSalGraphicsData->mhClipRgn );
+                        rSalGraphicsData->mnGWorldFlags
+                            = GetPixelsState( rSalGraphicsData->mhGWorldPixMap );
 
-                        // Was there an error after setting the clip region?
+                        if ( rSalGraphicsData->mnGWorldFlags == noErr )
+                        {
+                            Boolean bGWorldPixelsLocked = false;
 
-                        rSalGraphicsData->mnOSStatus = QDErr();
+                            // if the PixMap is a relocatable block,
+                            // then mark it as locked.
 
-                        // Set the new status flag for our port
+                            bGWorldPixelsLocked
+                                = LockPixels( rSalGraphicsData->mhGWorldPixMap );
 
-                        rSalGraphicsData->mbClipRgnChanged = FALSE;
+                            // convert the locked flag from C boolean
+                            // to C++ BOOL
+
+                            rSalGraphicsData->mbGWorldPixelsLocked
+                                = Boolean2BOOL( bGWorldPixelsLocked );
+
+                            // Set background color to white on this GWorld
+
+                            SetWhiteBackColor();
+
+                            // Set foreground color to black on this GWorld
+
+                            SetBlackForeColor();
+
+                            // If we get here then we may safely start drawing
+                            // to our GWorld
+
+                            bStartGraphics = TRUE;
+
+                            // Now begin to set the clip region
+
+                            if (    ( rSalGraphicsData->mbClipRgnChanged == TRUE )
+                                 && ( rSalGraphicsData->mhClipRgn        != NULL )
+                               )
+                            {
+                                // Set to the clip region
+
+                                SetClip( rSalGraphicsData->mhClipRgn );
+
+                                // Was there an error after setting the clip region?
+
+                                rSalGraphicsData->mnOSStatus = QDErr();
+
+                                // Set the new status flag for our port
+
+                                rSalGraphicsData->mbClipRgnChanged = FALSE;
+                            } // if
+                        } // if
                     } // if
                 } // if
             } // if
@@ -963,15 +922,38 @@ static BOOL EndGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 
     if ( rSalGraphicsData->mnOSStatus == noErr )
     {
+        // Unlock our CGrafPort
+
+        if (    ( rSalGraphicsData->mhGWorldPixMap != NULL  )
+             && ( rSalGraphicsData->mnGWorldFlags  == noErr )
+             && ( rSalGraphicsData->mbGWorldPixelsLocked    )
+           )
+        {
+            // Set pixel state to its original state
+            // thus unlocking the PixMap
+
+            SetPixelsState( rSalGraphicsData->mhGWorldPixMap,
+                            rSalGraphicsData->mnGWorldFlags
+                          );
+
+            rSalGraphicsData->mnOSStatus = QDErr();
+
+            if (    ( rSalGraphicsData->mpCGrafPort != NULL  )
+                 && ( rSalGraphicsData->mnOSStatus  == noErr )
+               )
+            {
+                // Unlock the CGrafPort bits
+
+                rSalGraphicsData->mnOSStatus
+                    = UnlockPortBits( rSalGraphicsData->mpCGrafPort );
+            } // if
+        } // if
+
         // Reset the port to its original attributes
 
         SetPortPenMode( rSalGraphicsData->mpCGrafPort,
                         rSalGraphicsData->mnPenModePort
                       );
-
-        // Flush the QuickDraw buffer
-
-        QDFlushPortBuffer( rSalGraphicsData->mpCGrafPort, NULL );
 
         // Unlock focus on the current NSView
 
@@ -984,9 +966,13 @@ static BOOL EndGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 
         PortChanged( rSalGraphicsData->mpCGrafPort );
 
-        // Unlock the port bits
+        // Flush the QuickDraw buffer
 
-        UnlockGraphicsPort( rSalGraphicsData );
+        QDFlushPortBuffer( rSalGraphicsData->mpCGrafPort, NULL );
+
+        // Was there an error after flushing the QuickDraw buffer
+
+        rSalGraphicsData->mnOSStatus = QDErr();
 
         // Set the new status flag for clip region
 
@@ -2038,7 +2024,7 @@ void SalGraphics::DrawMask( const SalTwoRect*  pPosAry,
                         ::CopyDeepMask(  pSrcBitMap,
                                          pSrcBitMap,
                                          pDstBitMap,
-                                &aSrcRect,
+                                        &aSrcRect,
                                         &aSrcRect,
                                         &aDstRect,
                                          nCopyMode,
