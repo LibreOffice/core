@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2001-04-12 13:15:48 $
+ *  last change: $Author: er $ $Date: 2001-04-23 11:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,6 +551,23 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
         {
             case SsStart:
             {
+                // Fetch any currency longer than one character and don't get
+                // confused later on by "E/" or other combinations of letters
+                // and meaningful symbols.
+                if ( nCurrPos != STRING_NOTFOUND && sCurString.Len() > 1 &&
+                        nPos-1 + sCurString.Len() <= rStr.Len() )
+                {
+                    String aTest( rStr.Copy( nPos-1, sCurString.Len() ) );
+                    pChrCls->toUpper( aTest );
+                    if ( aTest == sCurString )
+                    {
+                        sSymbol = rStr.Copy( --nPos, sCurString.Len() );
+                        nPos += sSymbol.Len();
+                        eState = SsStop;
+                        eType = SYMBOLTYPE_STRING;
+                        return eType;
+                    }
+                }
                 switch (cToken)
                 {
                     case '#':
@@ -622,8 +639,9 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
                             {
                                 BOOL bCurrency = FALSE;
                                 // "Automatic" currency may start with keyword,
-                                // like "Esc." and 'E'
-                                if ( nPos-1 + sCurString.Len() <= rStr.Len() &&
+                                // like "R" (Rand) and 'R' (era)
+                                if ( nCurrPos != STRING_NOTFOUND &&
+                                    nPos-1 + sCurString.Len() <= rStr.Len() &&
                                     sCurString.Search( sKeyword[nTmpType] ) == 0 )
                                 {
                                     String aTest( rStr.Copy( nPos-1, sCurString.Len() ) );
@@ -712,18 +730,6 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
                     BOOL bDontStop = FALSE;
                     switch (cToken)
                     {
-                        case '.':                       // Sf. currency
-                        {
-                            String TestStr = pChrCls->upper(sSymbol);
-                            TestStr += cToken;
-                            if ( TestStr == sCurString )
-                            {
-                                sSymbol += cToken;
-                                eState = SsStop;
-                                eType = SYMBOLTYPE_STRING;
-                            }
-                        }
-                        break;
                         case '/':                       // AM/PM, A/P
                         {
                             sal_Unicode cNext = rStr.GetChar(nPos);
