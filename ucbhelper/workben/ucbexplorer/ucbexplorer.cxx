@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbexplorer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-15 08:00:04 $
+ *  last change: $Author: kso $ $Date: 2000-11-29 09:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1215,8 +1215,9 @@ void MyApp::Main()
     // Create UCB.
     //////////////////////////////////////////////////////////////////////
 
-    Sequence< Any > aArgs(1);
-    aArgs[0] <<= sal_True;
+    Sequence< Any > aArgs( 2 );
+    aArgs[ 0 ] <<= OUString::createFromAscii( "Local" );
+    aArgs[ 1 ] <<= OUString::createFromAscii( "Office" );
     sal_Bool bSuccess = ::ucb::ContentBroker::initialize( xFac, aArgs );
 
     if ( !bSuccess )
