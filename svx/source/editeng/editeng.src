@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:12:31 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 19:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ String RID_EDITUNDO_TRANSLITERATE
     TEXT[ russian ] = "Заглавная/строчная буква";
     TEXT[ greek ] = "КецблбЯб/РежЬ";
     TEXT[ dutch ] = "Change case";
-    TEXT[ french ] = "Change case";
+    TEXT[ french ] = "Casse/Caractиres";
     TEXT[ spanish ] = "Mayъsculas/minъsculas";
     TEXT[ italian ] = "Change case";
     TEXT[ danish ] = "Change case";
