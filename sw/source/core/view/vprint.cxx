@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:14:18 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,11 @@
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
 #endif
+
+#ifndef _SFX_OBJSH_HXX //autogen
+#include <sfx2/objsh.hxx>
+#endif
+
 #ifndef _INTN_HXX //autogen
 // #include <tools/intn.hxx>
 #endif
@@ -89,9 +94,6 @@
 #endif
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
-#endif
-#ifndef _EMBOBJ_HXX //autogen
-#include <so3/embobj.hxx>
 #endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
@@ -864,14 +866,14 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
 
 /******************************************************************************/
 
-SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SvEmbeddedObjectRef &rDocShellRef)
+SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellRef)
 {
     ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
     SwFEShell* pFESh = (SwFEShell*)this;
     // Wir bauen uns ein neues Dokument
     SwDoc *pPrtDoc = new SwDoc;
     pPrtDoc->AddLink();
-    pPrtDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)rDocShellRef );
+    pPrtDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)rDocShellRef );
     pPrtDoc->LockExpFlds();
 
     // Der Drucker wird uebernommen
@@ -1107,7 +1109,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
 
     //!! muss warum auch immer hier in diesem scope existieren !!
     //!! (hängt mit OLE Objekten im Dokument zusammen.)
-    SvEmbeddedObjectRef aDocShellRef;
+    SfxObjectShellRef aDocShellRef;
 
     // PDF export for (multi-)selection has already generated a temporary document
     // with the selected text. (see XRenderable implementation in unotxdoc.cxx)
