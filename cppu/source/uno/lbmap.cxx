@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-19 13:02:55 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,53 +59,23 @@
  *
  ************************************************************************/
 
-#ifdef CPPU_ASSERTIONS
-#define CPPU_TRACE OSL_TRACE
-#else
-#define CPPU_TRACE
-#endif
-
-#ifndef _RTL_UNLOAD_H_
-#include <rtl/unload.h>
-#endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _OSL_MODULE_H_
-#include <osl/module.h>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
-#endif
-#ifndef _OSL_INTERLOCK_H_
-#include <osl/interlck.h>
-#endif
-
-#ifndef _UNO_DISPATCHER_H_
-#include <uno/dispatcher.h>
-#endif
-#ifndef _UNO_MAPPING_HXX_
-#include <uno/mapping.hxx>
-#endif
-#ifndef _UNO_ENVIRONMENT_HXX_
-#include <uno/environment.hxx>
-#endif
-
-#ifndef _TYPELIB_TYPEDESCRIPTION_H_
-#include <typelib/typedescription.h>
-#endif
-
-#include <com/sun/star/uno/XInterface.hpp>
-
 #include <hash_map>
 #include <set>
 #include <algorithm>
+
+#include "rtl/unload.h"
+#include "rtl/ustring.hxx"
+#include "rtl/ustrbuf.hxx"
+#include "osl/module.h"
+#include "osl/diagnose.h"
+#include "osl/mutex.hxx"
+#include "osl/interlck.h"
+
+#include "uno/dispatcher.h"
+#include "uno/mapping.hxx"
+#include "uno/environment.hxx"
+
+#include "typelib/typedescription.h"
 
 
 using namespace std;
@@ -148,8 +118,10 @@ struct FctPtrHash : public unary_function< uno_Mapping *, size_t >
         { return (size_t)pKey; }
 };
 
-typedef hash_map< OUString, MappingEntry *, FctOUStringHash, equal_to< OUString > > t_OUString2Entry;
-typedef hash_map< uno_Mapping *, MappingEntry *, FctPtrHash, equal_to< uno_Mapping * > > t_Mapping2Entry;
+typedef hash_map<
+    OUString, MappingEntry *, FctOUStringHash, equal_to< OUString > > t_OUString2Entry;
+typedef hash_map<
+    uno_Mapping *, MappingEntry *, FctPtrHash, equal_to< uno_Mapping * > > t_Mapping2Entry;
 
 typedef set< uno_getMappingFunc > t_CallbackSet;
 typedef set< OUString > t_OUStringSet;
@@ -171,21 +143,21 @@ struct MappingsData
 //__________________________________________________________________________________________________
 MappingsData::~MappingsData() SAL_THROW( () )
 {
-#ifdef CPPU_ASSERTIONS
+#if defined DEBUG
     OSL_ENSURE( aName2Entry.empty() && aMapping2Entry.empty(), "### unrevoked mappings!" );
     t_OUString2Entry::const_iterator iPos( aName2Entry.begin() );
     while (iPos != aName2Entry.end())
     {
         MappingEntry * pEntry = (*iPos).second;
         OString aName( OUStringToOString( pEntry->aMappingName, RTL_TEXTENCODING_ASCII_US ) );
-        CPPU_TRACE( "### unrevoked mapping: %s", aName.getStr() );
+        OSL_TRACE( "### unrevoked mapping: %s", aName.getStr() );
         ++iPos;
     }
     OSL_ENSURE( aCallbacks.empty(), "### callbacks left!" );
     if (aCallbacks.size())
     {
         OString aSize( OString::valueOf( (sal_Int32)aCallbacks.size() ) );
-        CPPU_TRACE( "### %d unrevoked callbacks", aSize.getStr() );
+        OSL_TRACE( "### %d unrevoked callbacks", aSize.getStr() );
     }
 #endif
 }
@@ -269,14 +241,26 @@ static void SAL_CALL mediate_mapInterface(
     OSL_ENSURE( pMapping && ppOut, "### null ptr!" );
     if (pMapping && ppOut)
     {
+        uno_Mediate_Mapping * that = static_cast< uno_Mediate_Mapping * >( pMapping );
+        uno_Mapping * pFrom2Uno = that->aFrom2Uno.get();
+
         uno_Interface * pUnoI = 0;
-
-        uno_Mapping * pFrom2Uno = static_cast< uno_Mediate_Mapping * >( pMapping )->aFrom2Uno.get();
-        uno_Mapping * pUno2To   = static_cast< uno_Mediate_Mapping * >( pMapping )->aUno2To.get();
-
-        (*pFrom2Uno->mapInterface)( pFrom2Uno, (void **)&pUnoI, pInterface, pInterfaceTypeDescr );
-        if (pUnoI)
+        (*pFrom2Uno->mapInterface)( pFrom2Uno, (void **) &pUnoI, pInterface, pInterfaceTypeDescr );
+        if (0 == pUnoI)
         {
+            void * pOut = *ppOut;
+            if (0 != pOut)
+            {
+                uno_ExtEnvironment * pTo = that->aTo.get()->pExtEnv;
+                OSL_ENSURE( 0 != pTo, "### cannot release out interface: leaking!" );
+                if (0 != pTo)
+                    (*pTo->releaseInterface)( pTo, pOut );
+                *ppOut = 0; // set to 0 anyway, because mapping was not successfull!
+            }
+        }
+        else
+        {
+            uno_Mapping * pUno2To = that->aUno2To.get();
             (*pUno2To->mapInterface)( pUno2To, ppOut, pUnoI, pInterfaceTypeDescr );
             (*pUnoI->release)( pUnoI );
         }
@@ -357,21 +341,12 @@ static inline oslModule loadModule( const OUString & rBridgeName )
 
     if (! bNeg)
     {
-        OUStringBuffer aLibName( 32 );
-#ifdef SAL_UNX
-        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("lib") );
+        OUStringBuffer aLibName( rBridgeName.getLength() + 12 );
+#if defined SAL_DLLPREFIX
+        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLPREFIX) );
+#endif
         aLibName.append( rBridgeName );
-#ifdef MACOSX
-        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dylib") );
-#else
-        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(".so") );
-#endif
-#else
-        aLibName.append( rBridgeName );
-#ifndef OS2
-        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dll") );
-#endif
-#endif
+        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLEXTENSION) );
         OUString aModule( aLibName.makeStringAndClear() );
 
         oslModule hModule = ::osl_loadModule(
@@ -638,9 +613,9 @@ void SAL_CALL uno_registerMapping(
     {
         OUString aMappingName(
             getMappingName( pFrom, pTo, pAddPurpose ? OUString(pAddPurpose) : OUString() ) );
-#ifdef CPPU_ASSERTIONS
-        OString aMappingName8( OUStringToOString( aMappingName, RTL_TEXTENCODING_ASCII_US ) );
-        CPPU_TRACE( "> inserting new mapping: %s", aMappingName8.getStr() );
+#if defined DEBUG
+        OString cstr( OUStringToOString( aMappingName, RTL_TEXTENCODING_ASCII_US ) );
+        OSL_TRACE( "> inserting new mapping: %s", cstr.getStr() );
 #endif
         // count initially 1
         MappingEntry * pEntry = new MappingEntry( *ppMapping, freeMapping, aMappingName );
@@ -678,9 +653,9 @@ void SAL_CALL uno_revokeMapping(
         rData.aMapping2Entry.erase( pEntry->pMapping );
         rData.aName2Entry.erase( pEntry->aMappingName );
         aGuard.clear();
-#ifdef CPPU_ASSERTIONS
-        OString aMappingName( OUStringToOString( pEntry->aMappingName, RTL_TEXTENCODING_ASCII_US  ) );
-        CPPU_TRACE( "> revoking mapping %s", aMappingName.getStr() );
+#if defined DEBUG
+        OString cstr( OUStringToOString( pEntry->aMappingName, RTL_TEXTENCODING_ASCII_US  ) );
+        OSL_TRACE( "> revoking mapping %s", cstr.getStr() );
 #endif
         (*pEntry->freeMapping)( pEntry->pMapping );
         delete pEntry;
