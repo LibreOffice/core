@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-13 12:57:30 $
+ *  last change: $Author: pb $ $Date: 2002-08-15 12:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2513,6 +2513,27 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     Hide = TRUE ;
     Text = "Asiatische Typographie" ;
     Text [ English ] = "Asian typography" ;
+    Text[ english_us ] = "Asian Typography";
+    Text[ portuguese ] = "Tipografia asi·tica";
+    Text[ russian ] = "¿ÁË‡ÚÒÍËÂ ¯ËÙÚ˚";
+    Text[ greek ] = "¡ÛÈ·ÙÈÍﬁ ÙıÔ„Ò·ˆﬂ·";
+    Text[ dutch ] = "Aziatische typografie";
+    Text[ french ] = "Typographie asiatique";
+    Text[ spanish ] = "TipografÌa asi·tica";
+    Text[ italian ] = "Tipografia asiatica";
+    Text[ danish ] = "Asiatisk typografi";
+    Text[ swedish ] = "Asiatisk typografi";
+    Text[ polish ] = "Typografia azjatycka";
+    Text[ portuguese_brazilian ] = "Asian typography";
+    Text[ japanese ] = "Êó•Êú¨Ë™ûÊñá„ÅÆ‰ΩìË£Å";
+    Text[ korean ] = "ÏïÑÏãúÏïÑÏñ¥ ÌÉÄÏù¥Ìè¨Í∑∏ÎûòÌîº";
+    Text[ chinese_simplified ] = "‰∏≠Êó•Èü©ÊñáÂ≠ó";
+    Text[ chinese_traditional ] = "‰∏≠Êó•ÈüìÊñáÂ≠ó";
+    Text[ turkish ] = "Asian typography";
+    Text[ arabic ] = "√”·Ê» «·ÿ»«⁄… «·¬”ÌÊÌ…";
+    Text[ catalan ] = "Tipografia asi‡tica";
+    Text[ finnish ] = "Aasialaiset merkit";
+    Text[ thai ] = "‡∏Å‡∏≤‡∏£‡∏û‡∏¥‡∏°‡∏û‡πå‡πÅ‡∏ö‡∏ö‡πÄ‡∏≠‡πÄ‡∏ä‡∏µ‡∏¢";
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedLine FL_AS_OPTIONS
     {
@@ -2738,274 +2759,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ finnish ] = "S‰‰d‰ automaattisesti v‰lit aasialaisen tekstin ja numeroiden v‰liss‰";
         Text[ thai ] = "‡∏õ‡∏£‡∏±‡∏ö‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥‡∏£‡∏∞‡∏´‡∏ß‡πà‡∏≤‡∏á‡∏Ç‡∏≠‡∏á‡∏Ñ‡∏ß‡∏≤‡∏°‡πÅ‡∏•‡∏∞‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏Ç‡∏†‡∏≤‡∏©‡∏≤‡πÄ‡∏≠‡πÄ‡∏ä‡∏µ‡∏¢";
     };
-/*  FixedText FT_TEXT_ALIGN
-    {
-        Pos = MAP_APPFONT ( 12 , 113 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "Te~xtausrichtung" ;
-        Text [ ENGLISH ] = "Text alignment" ;
-        Text[ english_us ] = "~Text alignment";
-        Text[ portuguese ] = "A~linhamento do texto";
-        Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ ÚÂÍÒÚ‡";
-        Text[ greek ] = "”ÙÔﬂ~˜ÈÛÁ ÍÂÈÏ›ÌÔı";
-        Text[ dutch ] = "~Tekstuitlijning";
-        Text[ french ] = "Alignement du te~xte";
-        Text[ spanish ] = "AlineaciÛn de texto";
-        Text[ italian ] = "Allineamento testo";
-        Text[ danish ] = "Te~kstjustering";
-        Text[ swedish ] = "Te~xtjustering";
-        Text[ polish ] = "WyrÛwnanie tekstu";
-        Text[ portuguese_brazilian ] = "Text alignment";
-        Text[ japanese ] = "„ÉÜ„Ç≠„Çπ„Éà„ÅÆÈÖçÁΩÆ(~T)";
-        Text[ korean ] = "ÌÖçÏä§Ìä∏ Ï†ïÎ†¨(~T)";
-        Text[ chinese_simplified ] = "ÊñáÂ≠óÂØπÈΩê(~T)";
-        Text[ chinese_traditional ] = "ÊñáÂ≠óÂ∞çÈΩä(~T)";
-        Text[ turkish ] = "Text alignment";
-        Text[ arabic ] = "„Õ«–«… «·‰’";
-        Text[ catalan ] = "Alineament de text";
-        Text[ finnish ] = "~Tekstin tasaus";
-        Text[ thai ] = "‡∏à‡∏±‡∏î‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á~‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°";
-    };
-    ListBox LB_TEXT_ALIGN
-    {
-        Pos = MAP_APPFONT ( 75 , 111 ) ;
-        Size = MAP_APPFONT ( 60 , 12 ) ;
-        DropDown = TRUE;
-        StringList =
-        {
-            < "Automatisch" ; Default ; > ;
-            < "??Manuell" ; Default ; > ;
-        };
-        StringList [English] =
-        {
-            < "Automatic" ; Default ; > ;
-            < "??Manual" ; Default ; > ;
-        };
-        StringList [ language_user1 ] =
-        {
-            < "Automatisch" ; Default ; > ;
-            < "??Manuell" ; Default ; > ;
-        };
-        StringList [ english_us ] =
-        {
-            < "Automatic" ; Default ; > ;
-            < "??Manual" ; Default ; > ;
-        };
-        StringList [ portuguese ] =
-        {
-            < "Autom·tico" ; Default ; > ;
-            < "??Manual" ; Default ; > ;
-        };
-        StringList [ russian ] =
-        {
-            < "¿‚ÚÓÏ‡ÚË˜ÂÒÍË" ; Default ; > ;
-            < "¬Û˜ÌÛ˛" ; Default ; > ;
-        };
-        StringList [ greek ] =
-        {
-            < "¡ıÙ¸Ï·Ù·" ; Default ; > ;
-            < "??Manuell" ; Default ; > ;
-        };
-        StringList [ dutch ] =
-        {
-            < "Automatisch" ; Default ; > ;
-            < "??Handmatig" ; Default ; > ;
-        };
-        StringList [ french ] =
-        {
-            < "Automatique" ; Default ; > ;
-            < "Manuel" ; Default ; > ;
-        };
-        StringList [ spanish ] =
-        {
-            < "Autom·tico" ; Default ; > ;
-            < "??Manualmente" ; Default ; > ;
-        };
-        StringList [ italian ] =
-        {
-            < "Automatico" ; Default ; > ;
-            < "??Manuale" ; Default ; > ;
-        };
-        StringList [ danish ] =
-        {
-            < "Automatisk" ; Default ; > ;
-            < "??Manuel" ; Default ; > ;
-        };
-        StringList [ swedish ] =
-        {
-            < "Automatiskt" ; Default ; > ;
-            < "Manuellt" ; Default ; > ;
-        };
-        StringList [ polish ] =
-        {
-            < "Automatycznie" ; Default ; > ;
-            < "??RÍcznie" ; Default ; > ;
-        };
-        StringList [ portuguese_brazilian ] =
-        {
-            < "Automatisch" ; Default ; > ;
-            < "??Manuell" ; Default ; > ;
-        };
-        StringList [ japanese ] =
-        {
-            < "Ëá™Âãï" ; Default ; > ;
-            < "ÊâãÂãï" ; Default ; > ;
-        };
-        StringList [ korean ] =
-        {
-            < "ÏûêÎèô" ; Default ; > ;
-            < "ÏàòÎèô" ; Default ; > ;
-        };
-        StringList [ chinese_simplified ] =
-        {
-            < "Ëá™Âä®" ; Default ; > ;
-            < "ÊâãÂä®" ; Default ; > ;
-        };
-        StringList [ chinese_traditional ] =
-        {
-            < "Ëá™Âãï" ; Default ; > ;
-            < "ÊâãÂãï" ; Default ; > ;
-        };
-        StringList [ turkish ] =
-        {
-            < "Otomatik" ; Default ; > ;
-            < "??Manuell" ; Default ; > ;
-        };
-        StringList [ arabic ] =
-        {
-            < " ·ﬁ«∆Ì" ; Default ; > ;
-            < "??ÌœÊÌ" ; Default ; > ;
-        };
-        StringList [ catalan ] =
-        {
-            < "Autom‡tic" ; Default ; > ;
-            < "Manual" ; Default ; > ;
-        };
-        StringList [ finnish ] =
-        {
-            < "Automaattinen" ; Default ; > ;
-            < "??Manuaalinen" ; Default ; > ;
-        };
-        StringList [ thai ] =
-        {
-            < "‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥" ; Default ; > ;
-            < "??‡∏Å‡∏≥‡∏´‡∏ô‡∏î‡πÄ‡πÄ‡∏≠‡∏á" ; Default ; > ;
-        };
-    };
-    FixedLine   FL_PROPERTIES
-    {
-        Pos = MAP_APPFONT ( 6 , 154 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Hide = TRUE ;
-        Text = "Eigenschaften" ;
-        Text [ ENGLISH ] = "Properties" ;
-        Text[ english_us ] = "Properties";
-        Text[ portuguese ] = "Properties";
-        Text[ russian ] = "Properties";
-        Text[ greek ] = "Properties";
-        Text[ dutch ] = "Properties";
-        Text[ french ] = "Properties";
-        Text[ spanish ] = "Properties";
-        Text[ finnish ] = "Properties";
-        Text[ italian ] = "Properties";
-        Text[ danish ] = "Properties";
-        Text[ swedish ] = "Properties";
-        Text[ polish ] = "Properties";
-        Text[ japanese ] = "Â±ûÊÄß";
-        Text[ korean ] = "Properties";
-        Text[ chinese_simplified ] = "Properties";
-        Text[ chinese_traditional ] = "Properties";
-        Text[ turkish ] = "Properties";
-        Text[ arabic ] = "Properties";
-        Text[ catalan ] = "Opcions";
-        Text[ thai ] = "‡∏Ñ‡∏∏‡∏ì‡∏™‡∏°‡∏ö‡∏±‡∏ï‡∏¥";
-    };
-    FixedText   FT_TEXTDIRECTION
-    {
-        Pos = MAP_APPFONT ( 12 , 167 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
-        Hide = TRUE ;
-        Text = "~Textfluss" ;
-        Text [ ENGLISH ] = "Text ~direction" ;
-        Text[ english_us ] = "Text ~direction";
-        Text[ portuguese ] = "Text ~direction";
-        Text[ russian ] = "Text ~direction";
-        Text[ greek ] = "Text ~direction";
-        Text[ dutch ] = "Text ~direction";
-        Text[ french ] = "Text ~direction";
-        Text[ spanish ] = "Text ~direction";
-        Text[ finnish ] = "Text ~direction";
-        Text[ italian ] = "Text ~direction";
-        Text[ danish ] = "Text ~direction";
-        Text[ swedish ] = "Text ~direction";
-        Text[ polish ] = "Text ~direction";
-        Text[ japanese ] = "ÊñáÂ≠óÊñπÂêë";
-        Text[ korean ] = "Text ~direction";
-        Text[ chinese_simplified ] = "Text ~direction";
-        Text[ chinese_traditional ] = "Text ~direction";
-        Text[ turkish ] = "Text ~direction";
-        Text[ arabic ] = "Text ~direction";
-    };
-    ListBox     LB_TEXTDIRECTION
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 105 , 165 ) ;
-        Size = MAP_APPFONT ( 146 , 50 ) ;
-        DropDown = TRUE ;
-        Hide = TRUE ;
-        StringList =
-        {
-            < "Links nach rechts" ; 0; > ;
-            < "Rechts nach links" ; 1; > ;
-            < "Einstellungen des ¸bergeordneten Objektes verwenden" ; 4; > ;
-        };
-        StringList [ ENGLISH ] =
-        {
-            < "Left-to-right" ; 0; > ;
-            < "Right-to-left" ; 1; > ;
-            < "Use superordinate settings" ; 4; > ;
-        };
-        StringList [ language_user1 ] =
-        {
-            < "Links nach rechts" ; 0; > ;
-            < "Rechts nach links" ; 1; > ;
-            < "Einstellungen des ¸bergeordneten Objektes verwenden" ; 4; > ;
-        };
-        StringList [ japanese ] =
-        {
-            < "Â∑¶„Åã„ÇâÂè≥„Å∏" ; 0; > ;
-            < "Âè≥„Åã„ÇâÂ∑¶„Å∏" ; 1; > ;
-            < "Âë®„Çä„ÅÆ„ÉÜ„Ç≠„Çπ„Éà„ÅÆÊñáÂ≠óÊñπÂêë„Å´Âêà„Çè„Åõ„Çã" ; 4; > ;
-        };
-        StringList [ english_us ] =
-        {
-            < "Left-to-right" ; 0; > ;
-            < "Right-to-left" ; 1; > ;
-        };
-    };*/
-    Text[ english_us ] = "Asian Typography";
-    Text[ portuguese ] = "Tipografia asi·tica";
-    Text[ russian ] = "¿ÁË‡ÚÒÍËÂ ¯ËÙÚ˚";
-    Text[ greek ] = "¡ÛÈ·ÙÈÍﬁ ÙıÔ„Ò·ˆﬂ·";
-    Text[ dutch ] = "Aziatische typografie";
-    Text[ french ] = "Typographie asiatique";
-    Text[ spanish ] = "TipografÌa asi·tica";
-    Text[ italian ] = "Tipografia asiatica";
-    Text[ danish ] = "Asiatisk typografi";
-    Text[ swedish ] = "Asiatisk typografi";
-    Text[ polish ] = "Typografia azjatycka";
-    Text[ portuguese_brazilian ] = "Asian typography";
-    Text[ japanese ] = "Êó•Êú¨Ë™ûÊñá„ÅÆ‰ΩìË£Å";
-    Text[ korean ] = "ÏïÑÏãúÏïÑÏñ¥ ÌÉÄÏù¥Ìè¨Í∑∏ÎûòÌîº";
-    Text[ chinese_simplified ] = "‰∏≠Êó•Èü©ÊñáÂ≠ó";
-    Text[ chinese_traditional ] = "‰∏≠Êó•ÈüìÊñáÂ≠ó";
-    Text[ turkish ] = "Asian typography";
-    Text[ arabic ] = "√”·Ê» «·ÿ»«⁄… «·¬”ÌÊÌ…";
-    Text[ catalan ] = "Tipografia asi‡tica";
-    Text[ finnish ] = "Aasialaiset merkit";
-    Text[ thai ] = "‡∏Å‡∏≤‡∏£‡∏û‡∏¥‡∏°‡∏û‡πå‡πÅ‡∏ö‡∏ö‡πÄ‡∏≠‡πÄ‡∏ä‡∏µ‡∏¢";
 };
 
- // ********************************************************************** EOF
-
+// ********************************************************************** EOF
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-15 11:47:42 $
+ *  last change: $Author: pb $ $Date: 2002-08-15 12:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2223,9 +2223,8 @@ SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aCharDistFL(        this, ResId(FL_AS_CHAR_DIST     )),
     aPuntuationCB(      this, ResId(CB_AS_PUNCTUATION   )),
     aScriptSpaceCB(     this, ResId(CB_AS_SCRIPT_SPACE  )),
-    aAdjustNumbersCB(   this, ResId(CB_AS_ADJUST_NUMBERS))/*,
-    aTextAlignFT(       this, ResId(FT_TEXT_ALIGN       )),
-    aTextAlignLB(       this, ResId(LB_TEXT_ALIGN       ))*/
+    aAdjustNumbersCB(   this, ResId(CB_AS_ADJUST_NUMBERS))
+
 {
     FreeResource();
 
@@ -2239,8 +2238,6 @@ SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aCharDistFL.Hide();
     aPuntuationCB.Hide();
     aAdjustNumbersCB.Hide();
-/*  aTextAlignFT.Hide();
-    aTextAlignLB.Hide(); */
     aScriptSpaceCB.SetPosPixel( aHangingPunctCB.GetPosPixel() );
     aHangingPunctCB.SetPosPixel( aAllowWordBreakCB.GetPosPixel() );
 //JP 28.3.2001 - these options currently not available!
@@ -2342,9 +2339,6 @@ void SvxAsianTabPage::Reset( const SfxItemSet& rSet )
     aAllowWordBreakCB   .Enable(FALSE);
     aPuntuationCB       .Enable(FALSE);
     aAdjustNumbersCB    .Enable(FALSE);
-/*  aTextAlignFT.Enable(FALSE);
-    aTextAlignLB.Enable(FALSE); */
-
 }
 /* -----------------------------19.12.00 12:59--------------------------------
 
