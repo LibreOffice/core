@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 11:49:36 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 09:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,13 +898,13 @@ ModelessDialog RID_SVXDLG_IMAP
 
     ImageList IL_IMAPDLG
     {
-        ImageBitmap = Bitmap { File = "id_imagelist.bmp" ; };
+        Prefix = "id";
         MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
         IMAPDLG_IDLIST
     };
     ImageList ILH_IMAPDLG
     {
-        ImageBitmap = Bitmap { File = "idh_imagelist.bmp" ; };
+        Prefix = "idh";
         MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
         IMAPDLG_IDLIST
     };
