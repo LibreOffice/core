@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:15:48 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,7 +721,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pTmp = new typelib_StructTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount( &aInit.nCompoundTypeDescriptionCount );
+            osl_incrementInterlockedCount( &rInit.nCompoundTypeDescriptionCount );
 #endif
             pTmp->aBase.pBaseTypeDescription = 0;
             pTmp->aBase.nMembers = 0;
