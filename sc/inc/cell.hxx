@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2002-10-01 17:10:37 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,6 +338,7 @@ public:
 
     void            SetDirty();
     inline void     SetDirtyVar() { bDirty = TRUE; }
+    inline void     ResetTableOpDirtyVar() { bTableOpDirty = FALSE; }
     void            SetTableOpDirty();
     BOOL            IsDirtyOrInTableOpDirty();
     BOOL            GetDirty() const { return bDirty; }
