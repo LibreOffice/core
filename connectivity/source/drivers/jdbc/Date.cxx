@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 09:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,25 +76,6 @@ using namespace connectivity;
 
 jclass java_util_Date::theClass = 0;
 
-java_util_Date::java_util_Date( const ::com::sun::star::util::Date& _rOut ) //: java_lang_Object( NULL, (jobject)NULL ){
-{
-    SDBThreadAttach t;
-    if( !t.pEnv )
-        return;
-    jvalue args[1];
-    // Parameter konvertieren
-    args[0].j = ::dbtools::DBTypeConversion::toINT32(_rOut);
-    // Java-Call fuer den Konstruktor absetzen
-    // temporaere Variable initialisieren
-    char * cSignature = "(J)V";
-    jobject tempObj;
-    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
-    tempObj = t.pEnv->NewObjectA( getMyClass(), mID, args );
-    saveRef( t.pEnv, tempObj );
-    t.pEnv->DeleteLocalRef( tempObj );
-    // und aufraeumen
-}
-
 java_util_Date::~java_util_Date()
 {}
 
@@ -119,106 +100,6 @@ void java_util_Date::saveClassRef( jclass pClass )
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
     theClass = pClass;
 }
+// -----------------------------------------------------------------------------
 
-sal_Int32 java_util_Date::getMinutes()
-{
-    jint out(0);
-    SDBThreadAttach t;
-    if( t.pEnv ){
-        // temporaere Variable initialisieren
-        char * cSignature = "()I";
-        char * cMethodName = "getMinutes";
-        // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallIntMethod( object, mID);
-        } //mID
-    } //t.pEnv
-    return (sal_Int32)out;
-}
-
-sal_Int32 java_util_Date::getMonth()
-{
-    jint out(0);
-    SDBThreadAttach t;
-    if( t.pEnv ){
-        // temporaere Variable initialisieren
-        char * cSignature = "()I";
-        char * cMethodName = "getMonth";
-        // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallIntMethod( object, mID);
-        } //mID
-    } //t.pEnv
-    return (sal_Int32)out;
-}
-
-sal_Int32 java_util_Date::getSeconds()
-{
-    jint out(0);
-    SDBThreadAttach t;
-    if( t.pEnv ){
-        // temporaere Variable initialisieren
-        char * cSignature = "()I";
-        char * cMethodName = "getSeconds";
-        // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallIntMethod( object, mID);
-        } //mID
-    } //t.pEnv
-    return (sal_Int32)out;
-}
-
-sal_Int32 java_util_Date::getYear()
-{
-    jint out(0);
-    SDBThreadAttach t;
-    if( t.pEnv ){
-        // temporaere Variable initialisieren
-        char * cSignature = "()I";
-        char * cMethodName = "getYear";
-        // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallIntMethod( object, mID);
-        } //mID
-    } //t.pEnv
-    return (sal_Int32)out;
-}
-
-sal_Int32 java_util_Date::getDate()
-{
-    jint out(0);
-    SDBThreadAttach t;
-    if( t.pEnv ){
-        // temporaere Variable initialisieren
-        char * cSignature = "()I";
-        char * cMethodName = "getDate";
-        // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallIntMethod( object, mID);
-        } //mID
-    } //t.pEnv
-    return (sal_Int32)out;
-}
-
-sal_Int32 java_util_Date::getHours()
-{
-    jint out(0);
-    SDBThreadAttach t;
-    if( t.pEnv ){
-        // temporaere Variable initialisieren
-        char * cSignature = "()I";
-        char * cMethodName = "getHours";
-        // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallIntMethod( object, mID);
-        } //mID
-    } //t.pEnv
-    return (sal_Int32)out;
-}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Timestamp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 09:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,29 @@ using namespace connectivity;
 //**************************************************************
 //************ Class: java.sql.Date
 //**************************************************************
-
+const double fMilliSecondsPerDay = 86400000.0;
 jclass java_sql_Date::theClass = 0;
+java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java_util_Date( NULL, (jobject)NULL )
+{
+    SDBThreadAttach t;
+    if( !t.pEnv )
+        return;
+    jvalue args[1];
+    // Parameter konvertieren
+    double nVal = ::dbtools::DBTypeConversion::toDouble(_rOut,::com::sun::star::util::Date(1,1,1970));
+    nVal *= fMilliSecondsPerDay;
+
+    args[0].j = (jlong)nVal;
+    // Java-Call fuer den Konstruktor absetzen
+    // temporaere Variable initialisieren
+    char * cSignature = "(J)V";
+    jobject tempObj;
+    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+    tempObj = t.pEnv->NewObject( getMyClass(), mID, args[0].j );
+    saveRef( t.pEnv, tempObj );
+    t.pEnv->DeleteLocalRef( tempObj );
+    // und aufraeumen
+}
 
 java_sql_Date::~java_sql_Date()
 {}
@@ -96,6 +117,7 @@ jclass java_sql_Date::getMyClass()
     }
     return theClass;
 }
+// -----------------------------------------------------------------------------
 
 void java_sql_Date::saveClassRef( jclass pClass )
 {
@@ -103,6 +125,11 @@ void java_sql_Date::saveClassRef( jclass pClass )
         return;
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
     theClass = pClass;
+}
+// -----------------------------------------------------------------------------
+java_sql_Date::operator ::com::sun::star::util::Date()
+{
+    return ::dbtools::DBTypeConversion::toDate(toString());
 }
 
 //**************************************************************
@@ -143,18 +170,25 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
         return;
     jvalue args[1];
     // Parameter konvertieren
-    args[0].j = ::dbtools::DBTypeConversion::toINT32(_rOut);
+    double nVal = ::dbtools::DBTypeConversion::getMsFromTime(_rOut);
+    //  nVal = nVal * 8640000;
+
+    args[0].j = (jlong)nVal;
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
     char * cSignature = "(J)V";
     jobject tempObj;
     jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
-    tempObj = t.pEnv->NewObjectA( getMyClass(), mID, args );
+    tempObj = t.pEnv->NewObject( getMyClass(), mID, args[0].j );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
     // und aufraeumen
 }
-
+// -----------------------------------------------------------------------------
+java_sql_Time::operator ::com::sun::star::util::Time()
+{
+    return ::dbtools::DBTypeConversion::toTime(toString());
+}
 //**************************************************************
 //************ Class: java.sql.Timestamp
 //**************************************************************
@@ -193,14 +227,20 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
     if( !t.pEnv )
         return;
     jvalue args[1];
-        // Parameter konvertieren
-    args[0].j = (jlong)::dbtools::DBTypeConversion::toINT64(_rOut);
+    // Parameter konvertieren
+    ::com::sun::star::util::Date aDate(_rOut.Day,_rOut.Month,_rOut.Year);
+    double nVal = ::dbtools::DBTypeConversion::toDouble(aDate,::com::sun::star::util::Date(1,1,1970));
+    nVal *= fMilliSecondsPerDay;
+    ::com::sun::star::util::Time aTime(_rOut.HundredthSeconds,_rOut.Seconds,_rOut.Minutes,_rOut.Hours);
+    nVal += ::dbtools::DBTypeConversion::getMsFromTime(aTime);
+
+    args[0].j = (jlong)nVal;
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
     char * cSignature = "(J)V";
     jobject tempObj;
     jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
-    tempObj = t.pEnv->NewObjectA( getMyClass(), mID, args );
+    tempObj = t.pEnv->NewObject( getMyClass(), mID, args[0].j );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
     // und aufraeumen
@@ -242,4 +282,11 @@ void java_sql_Timestamp::setNanos( sal_Int32 _par0 )
         } //mID
     } //t.pEnv
 }
+// -----------------------------------------------------------------------------
+java_sql_Timestamp::operator ::com::sun::star::util::DateTime()
+{
+    return ::dbtools::DBTypeConversion::toDateTime(toString());
+}
+// -----------------------------------------------------------------------------
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Timestamp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:10:28 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 09:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,12 +89,10 @@ namespace connectivity
         static jclass getMyClass();
         virtual ~java_sql_Date();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_Date( JNIEnv * pEnv, jobject myObj ) : java_util_Date( pEnv, myObj ){}
-        java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java_util_Date(_rOut) {}
-        operator ::com::sun::star::util::Date()
-        {
-            return ::com::sun::star::util::Date((sal_uInt16)getYear(),(sal_uInt16)getMonth(),(sal_uInt16)getDate());
-        }
+        java_sql_Date( JNIEnv * pEnv, jobject myObj ) : java_util_Date(pEnv,myObj){}
+        java_sql_Date( const ::com::sun::star::util::Date& _rOut );
+
+        operator ::com::sun::star::util::Date();
     };
 
 
@@ -115,10 +113,7 @@ namespace connectivity
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_Time( JNIEnv * pEnv, jobject myObj ) : java_util_Date( pEnv, myObj ){}
         java_sql_Time( const ::com::sun::star::util::Time& _rOut );
-        operator ::com::sun::star::util::Time()
-        {
-            return ::com::sun::star::util::Time(0,(sal_uInt16)getSeconds(),(sal_uInt16)getMinutes(),(sal_uInt16)getHours());
-        }
+        operator ::com::sun::star::util::Time();
     };
 
     //**************************************************************
@@ -137,11 +132,7 @@ namespace connectivity
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_Timestamp( JNIEnv * pEnv, jobject myObj ) : java_util_Date( pEnv, myObj ){}
         java_sql_Timestamp( const ::com::sun::star::util::DateTime& _rOut);
-        operator ::com::sun::star::util::DateTime()
-        {
-            return ::com::sun::star::util::DateTime((sal_uInt16)getYear(),(sal_uInt16)getMonth(),(sal_uInt16)getDate(),
-                                                    (sal_uInt16)getHours(),(sal_uInt16)getMinutes(),(sal_uInt16)getSeconds(),(sal_uInt16)getNanos());
-        }
+        operator ::com::sun::star::util::DateTime();
 
         sal_Int32 getNanos();
         void  setNanos(sal_Int32 n);

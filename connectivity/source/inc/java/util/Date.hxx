@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:27 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 09:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,15 +88,6 @@ namespace connectivity
         virtual ~java_util_Date();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_util_Date( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
-        java_util_Date( const ::com::sun::star::util::Date& _rOut );
-
-        sal_Int32 getMonth();
-        sal_Int32 getYear();
-        sal_Int32 getDate();
-
-        sal_Int32 getMinutes();
-        sal_Int32 getSeconds();
-        sal_Int32 getHours();
     };
 }
 #endif // _CONNECTIVITY_JAVA_UTIL_DATE_HXX_
