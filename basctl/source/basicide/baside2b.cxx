@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-07 08:35:22 $
+ *  last change: $Author: tbe $ $Date: 2001-10-04 16:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1362,6 +1362,7 @@ void __EXPORT WatchWindow::Resize()
         aBoxSz.Height() = 0;
 
     aTreeListBox.SetSizePixel( aBoxSz );
+    aTreeListBox.GetHScroll()->SetPageSize( aTreeListBox.GetHScroll()->GetVisibleSize() );
 
     Invalidate();   //Wegen DrawLine im Paint...
 }
