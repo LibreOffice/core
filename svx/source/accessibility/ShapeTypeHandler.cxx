@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeTypeHandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-08 17:56:09 $
+ *  last change: $Author: af $ $Date: 2002-03-06 16:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ ShapeTypeHandler* ShapeTypeHandler::instance = NULL;
 uno::Reference<XAccessible>
     createEmptyShapeReference (const uno::Reference<XAccessible>& rxParent,
         const uno::Reference<drawing::XShape>& rxShape,
+        const uno::Reference<document::XEventBroadcaster>& rxBroadcaster,
         ShapeTypeId nId)
 {
     return uno::Reference<XAccessible>();
@@ -159,12 +160,14 @@ const OUString& ShapeTypeHandler::getServiceName (ShapeTypeId aTypeId) const
 uno::Reference<XAccessible>
     ShapeTypeHandler::createAccessibleObject (
         const uno::Reference<drawing::XShape>& rxShape,
-        const uno::Reference<XAccessible>& rxParent) const
+        const uno::Reference<XAccessible>& rxParent,
+        const uno::Reference<document::XEventBroadcaster>& rxBroadcaster) const
 {
     ShapeTypeId nSlotId (getSlotId (rxShape));
     return maShapeTypeDescriptorList[nSlotId].maCreateFunction (
         rxParent,
         rxShape,
+        rxBroadcaster,
         maShapeTypeDescriptorList[nSlotId].mnShapeTypeId);
 }
 
@@ -212,12 +215,12 @@ ShapeTypeHandler::~ShapeTypeHandler (void)
 
 
 
-bool ShapeTypeHandler::operator== (const ShapeTypeHandler& aHandler)
+ShapeTypeHandler& ShapeTypeHandler::operator= (const ShapeTypeHandler& aHandler)
 {
     // Don't call this operator.  This class is a singleton.
     OSL_ENSURE (sal_False, "Assignment operator of singleton ShapeTypeHandler called."
         "  Don't do that again.");
-    return false;
+    return *this;
 }
 
 
