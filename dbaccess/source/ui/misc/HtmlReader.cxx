@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:10:55 $
+ *  last change: $Author: vg $ $Date: 2001-02-27 15:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 #ifndef DBAUI_HTMLREADER_HXX
-#include "HTMLReader.hxx"
+#include "HtmlReader.hxx"
 #endif
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
