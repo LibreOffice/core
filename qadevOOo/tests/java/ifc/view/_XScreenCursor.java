@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScreenCursor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:08 $
+ *  last change:$Date: 2003-09-08 11:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 
 package ifc.view;
 
-import com.sun.star.view.XScreenCursor;
 import lib.MultiMethodTest;
+
+import com.sun.star.view.XScreenCursor;
 
 
 /**
