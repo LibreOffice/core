@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: jl $ $Date: 2002-08-12 10:46:10 $
+ *  last change: $Author: jbu $ $Date: 2002-08-13 16:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,48 @@
  *
  *
  ************************************************************************/
+
+/** Code generation bug within Sun CC 5.2 on solaris sparc
+    Please check the following code against your compiler version before enabling
+    the optimization (when the program runs correct, it should print
+    1
+    2
+    ), otherwise nothing. The bug has crashed the
+    initVMConfiguration function, which can be found in this file.
+
+#include <stdio.h>
+
+static void b() {};
+struct E { ~E(){ b(); }  };
+
+void a()
+{
+    throw 42;
+}
+
+
+int main( int argc, char * argv[])
+{
+    E e1;
+    try
+    {
+        a();
+    }
+    catch( int i )
+    {
+    }
+    try
+    {
+        // this output never appears with CC -O test.cxx
+        fprintf( stderr,"1\n" );
+    }
+    catch( E & e )
+    {
+    }
+    // this output never appears with CC -O test.cxx
+    fprintf( stderr, "2\n" );
+}
+*/
 
 #ifdef UNX
 #include <signal.h>
