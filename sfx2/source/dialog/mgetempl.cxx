@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 17:36:15 $
+ *  last change: $Author: pb $ $Date: 2001-02-15 07:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,7 @@ IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
 */
 
 {
-    aBuf = pEdit->GetText();
+    aBuf = pEdit->GetText().EraseLeadingChars();
     return 0;
 }
 IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
@@ -430,7 +430,8 @@ IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 */
 
 {
-    const String aStr( pEdit->GetText() );
+    const String aStr( pEdit->GetText().EraseLeadingChars() );
+    pEdit->SetText( aStr );
     // ggf. Listbox der Basisvorlagen aktualisieren
     if ( aStr != aBuf )
         UpdateName_Impl( &aFollowLb, aStr );
