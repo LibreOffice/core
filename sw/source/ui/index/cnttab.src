@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:46:57 $
+ *  last change: $Author: rt $ $Date: 2000-11-27 08:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2692,7 +2692,7 @@ TabPage TP_TOX_ENTRY
         Text = "~Eintragstext" ;
         Text [ ENGLISH ] = "Entry text" ;
         Text[ english_us ] = "Entry text";
-        Text[ portuguese ] = "E~ntrada";
+        Text[ portuguese ] = "~Texto";
         Text[ russian ] = "Òεκρς ύλεμενςΰ";
         Text[ greek ] = "Κείμενο καταχώρισης";
         Text[ dutch ] = "Tekst~item";
@@ -2832,7 +2832,7 @@ TabPage TP_TOX_ENTRY
         Text[ english_us ] = "~Insert";
         Text[ portuguese ] = "~Inserir";
         Text[ russian ] = "Βρςΰβθςό";
-        Text[ greek ] = "Εισαγωγή";
+        Text[ greek ] = "~Εισαγωγή";
         Text[ dutch ] = "~Invoegen";
         Text[ french ] = "~Insιrer";
         Text[ spanish ] = "In~sertar";
@@ -2945,7 +2945,7 @@ TabPage TP_TOX_ENTRY
         Text = "~Fόllzeichen" ;
         Text [ ENGLISH ] = "Fill character" ;
         Text[ english_us ] = "Fill character";
-        Text[ portuguese ] = "Caracter de ~preenchimento";
+        Text[ portuguese ] = "Carαcter de ~preenchimento";
         Text[ russian ] = "Ηΰοξλνθςελό";
         Text[ greek ] = "Χαρακτήρας γεμίσματος";
         Text[ dutch ] = "Opv~ulteken";
