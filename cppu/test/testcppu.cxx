@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-09 14:23:29 $
+ *  last change: $Author: dbo $ $Date: 2001-07-02 11:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 #include <uno/dispatcher.h>
 #include <rtl/alloc.h>
+#include <rtl/unload.h>
 
 #include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -918,6 +919,7 @@ static void testCurrentContext()
     OUString aEnvName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
     OSL_VERIFY( ::uno_getCurrentContext( (void **)&pContext, aEnvName.pData, 0 ) );
     (*pContext->release)( pContext );
+    setCurrentContext( Reference< XCurrentContext >() );
 }
 
 void testArray(void)
@@ -1073,14 +1075,18 @@ void testArray(void)
  */
 int SAL_CALL main(int argc, char **argv)
 {
+    {
     typelib_setCacheSize( 200 );
 #ifdef SAL_W32
     Reference< registry::XSimpleRegistry > xRegistry( ::cppu::createSimpleRegistry() );
     xRegistry->open( OUString( RTL_CONSTASCII_USTRINGPARAM("testcppu.rdb") ), sal_True, sal_False );
-    Reference< XComponentContext > xContext( ::cppu::bootstrap_InitialComponentContext( xRegistry ) );
+    Reference< XComponentContext > xContext(
+        ::cppu::bootstrap_InitialComponentContext( xRegistry ) );
 #endif
     testEnvironments();
+    ::rtl_unloadUnusedModules( 0 );
     testMappingCallback();
+    ::rtl_unloadUnusedModules( 0 );
 
 //      // security test
 //  void test_security( const Reference< XMultiServiceFactory > & );
@@ -1089,6 +1095,7 @@ int SAL_CALL main(int argc, char **argv)
     // C++, C bridges test
     void test_CppBridge(void);
     test_CppBridge();
+    ::rtl_unloadUnusedModules( 0 );
 //      void test_CBridge(void);
 //      void test_CBridge2(void);
 //      test_CBridge();
@@ -1097,7 +1104,7 @@ int SAL_CALL main(int argc, char **argv)
     testCurrentContext();
     testAssignment();
     testCppu();
-//  testArray();
+//      testArray();
 #ifndef SAL_W32 // cache test not possible if types are loaded dynamically...
     test_cache();
 #endif
@@ -1106,14 +1113,16 @@ int SAL_CALL main(int argc, char **argv)
 
       // shutdown
 #ifdef SAL_W32
-    {
     Reference< XComponent > xComp( xContext, UNO_QUERY );
     OSL_ENSURE( xComp.is(), "### root component context implement XComponent!" );
     xComp->dispose();
-    }
 #endif
+    }
+
     typelib_setCacheSize( 0 );
+    ::rtl_unloadUnusedModules( 0 );
     testEnvironments();
+    ::rtl_unloadUnusedModules( 0 );
 
     return 0;
 }
