@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:48:09 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ private:
     static void initPPDFiles();
     static String getPPDFile( const String& rFile );
 public:
-    static const PPDParser* getParser( String aFile );
+    static const PPDParser* getParser( const String& rFile );
     static String getPPDPrinterName( const String& rFile );
     static void freeAll();
 
