@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2000-11-21 17:18:13 $
+#   last change: $Author: rt $ $Date: 2000-12-01 15:55:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -245,7 +245,7 @@ DBTOOLSLIB=-ldbtools$(DBTOOLS_MAJOR)
 HM2LIBSH=-lhmwrpdll
 HM2LIBST=-lhmwrap
 LINGULIB=$(HM2LIBST)
-LNGLIB=-llng
+LNGLIB=-llng$(UPD)$(DLLPOSTFIX)
 EXPAT3RDLIB=-lexpat_xmlparse -lexpat_xmltok
 EXPATASCII3RDLIB=-lascii_expat_xmlparse -lexpat_xmltok
 ZLIB3RDLIB=-lzlib
