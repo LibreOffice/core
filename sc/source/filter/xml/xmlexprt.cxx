@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-19 13:41:38 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 15:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1296,7 +1296,7 @@ void ScXMLExport::_ExportContent()
                         uno::Reference<drawing::XDrawPage> xDrawPage;
                         if (pSharedData->HasForm(nTable, xDrawPage) && xDrawPage.is())
                         {
-                            SvXMLElementExport aForms(*this, XML_NAMESPACE_OFFICE, sXML_forms, sal_True, sal_True);
+                            ::xmloff::OOfficeFormsExport aForms(*this);
                             GetFormExport()->exportForms( xDrawPage );
                             sal_Bool bRet = GetFormExport()->seekPage( xDrawPage );
                             DBG_ASSERT( bRet, "OFormLayerXMLExport::seekPage failed!" );
