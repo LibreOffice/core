@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-27 14:38:03 $
+ *  last change: $Author: fs $ $Date: 2001-05-14 12:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1408,6 +1408,16 @@ void DbGridControl::EnablePermanentCursor(sal_Bool bEnable)
 sal_Bool DbGridControl::IsPermanentCursorEnabled() const
 {
     return ((m_nMode & BROWSER_CURSOR_WO_FOCUS) != 0) && ((m_nMode & BROWSER_HIDECURSOR) == 0);
+}
+
+//------------------------------------------------------------------------------
+void DbGridControl::refreshController(sal_uInt16 _nColId, GrantCellControlAccess _aAccess)
+{
+    if ((GetCurColumnId() == _nColId) && IsEditing())
+    {   // the controller which is currently active needs to be refreshed
+        DeactivateCell();
+        ActivateCell();
+    }
 }
 
 //------------------------------------------------------------------------------
