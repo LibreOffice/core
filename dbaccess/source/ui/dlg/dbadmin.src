@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:49:03 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1187,16 +1187,6 @@ TabPage PAGE_GENERAL
         Size = MAP_APPFONT ( 248, 24 );
         WordBreak = TRUE;
         HelpId = HID_DSADMIN_SPECIAL_MESSAGE;
-    };
-    PushButton PB_CONVERTDATABASE
-    {
-        TabStop = TRUE ;
-        Hide = TRUE;
-        Pos = MAP_APPFONT ( 154 , 165 ) ;
-        Size = MAP_APPFONT ( 100 , 14 ) ;
-        Text = "Datenbank kon~vertieren" ;
-        Text [ english ] = "Con~vert Database" ;
-        Text [ english_us ] = "Con~vert Database" ;
     };
     PushButton PB_CREATEDATABASE
     {
