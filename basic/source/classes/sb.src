@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 15:36:47 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Syntaxisfout";
         Text[ chinese_simplified ] = "Σο·¨΄νΞσ";
         Text[ greek ] = "Σφάλμα σύνταξης";
-        Text[ korean ] = "½ΕΕΨ½Ί Ώ΅·―";
+        Text[ korean ] = "±ΈΉ®΅΅Ώΐ·ω";
         Text[ turkish ] = "Sφzdizim hatasύ";
         Text[ language_user1 ] = " ";
     };
@@ -147,7 +147,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Incorrecte gegevens, herhalen a.u.b.";
         Text[ chinese_simplified ] = "ΚδΘλΞήΠ§£¬ΗλΦΨΈ΄΅£";
         Text[ greek ] = "Λανθασμένη εισαγωγή, παρακαλώ ξαναπροσπαθήστε";
-        Text[ korean ] = "µξ·ΟΐΜ ΐίΈψµΗΎϊ½ΐ΄Ο΄Ω. ΄Ω½Γ µξ·ΟΗΨ ΑΦ½Κ½ΓΏΐ.";
+        Text[ korean ] = "ΐΤ·ΒΐΜ ΐίΈψµΗΎϊ½ΐ΄Ο΄Ω. ΉέΊΉΗΟ½Κ½ΓΏΐ.";
         Text[ turkish ] = "Giriώ yanlύώ, lόtfen yeniden girin";
         Text[ language_user1 ] = " ";
     };
@@ -176,7 +176,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Ongeldige oproep van procedure";
         Text[ chinese_simplified ] = "ΞήΠ§µΔµχΣΓΉύ³Μ";
         Text[ greek ] = "Μη έγκυρη κλήση διαδικασίας";
-        Text[ korean ] = "ΐίΈψµΘ ΗΑ·Ξ½ΓΑ® Θ£Γβ";
+        Text[ korean ] = "ΐ―ΘΏΗΟΑφΎΚΐΊ ΗΑ·Ξ½Γΐϊ Θ£Γβ";
         Text[ turkish ] = "Geηersiz yordam ηaπrύsύ";
         Text[ language_user1 ] = " ";
     };
@@ -257,7 +257,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "Πΰημεπνξρςό μΰρρθβΰ σζε ηΰδΰνΰ";
         Text[ polish ] = "Macierz juΏ zosta³a zwymiarowana";
         Text[ japanese ] = "”z—ρ‚Μ³‰»Ο‚έ";
-        Text[ chinese_traditional ] = "¦ζ¦C¤wΈg³Q©w¤Ψ«Χ";
+        Text[ chinese_traditional ] = "¦ζ¦C¤wΈg³]©w¦nΌΖ­Θ";
         Text[ arabic ] = "ΓΘΪΗΟ ΗαΥένέ γΪνδΙ γΣΘήΗπ";
         Text[ dutch ] = "Het aantal dimensies van de matrix is al bepaald";
         Text[ chinese_simplified ] = "ΚύΧιÒΡΎ­±»¶¨³ί¶Θ";
@@ -404,7 +404,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Gegevenstypen komen niet overeen";
         Text[ chinese_simplified ] = "ΚύΎέΐΰΠΝ²»Ζ¥Εδ";
         Text[ greek ] = "Ασυμφωνία τύπων δεδομένων";
-        Text[ korean ] = "µ¥ΐΜΕΝ ΕΈΐΤΐΜ ΈΒΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "µ¥ΐΜΕΝ ΐ―ΗόΐΜ ΈΒΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Veri tipleri arasύnda uyuώmazlύk";
         Text[ language_user1 ] = " ";
     };
@@ -433,7 +433,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Ongeldige parameter";
         Text[ chinese_simplified ] = "ΞήΠ§µΔΦϊ±δΚύ";
         Text[ greek ] = "Μη έγκυρη παράμετρος";
-        Text[ korean ] = "ΐίΈψµΘ ΖΫ¶σΉΜΕΝ";
+        Text[ korean ] = "ΐ―ΘΏΗΟΑφ΅΅ΎΚΐΊ ΖΔ¶σΉΜΕΝ";
         Text[ turkish ] = "Geηersiz parametre";
         Text[ language_user1 ] = " ";
     };
@@ -461,7 +461,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Onderbreking door gebruiker";
         Text[ chinese_simplified ] = "ΚΉΣΓΥίΦΠ¶ΟΤΛΛγΉύ³Μ΅£";
         Text[ greek ] = "Η διαδικασία έχει διακοπεί από τον χρήστη";
-        Text[ korean ] = "»ηΏλΐΪΏ΅ΐΗΗΡ ΗΑ·ΞΌΌ½Ί ΐΞΕΝ·΄Ζ®";
+        Text[ korean ] = "»ηΏλΐΪΏ΅ΐΗΗΨ ΑψΗΰ°ϊΑ¤΅΅Αί΄άµΚ";
         Text[ turkish ] = "Sόreη kullanύcύ tarafύndan kesildi";
         Text[ language_user1 ] = " ";
     };
@@ -489,7 +489,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Hervatten zonder fout";
         Text[ chinese_simplified ] = "Resume ²»΄ψ error";
         Text[ greek ] = "Σύνοψη χωρίς σφάλματα";
-        Text[ korean ] = "Ώΐ·ωΎψΐΜ ΄Ω½Γ ½ΓΐΫ";
+        Text[ korean ] = "Ώΐ·ωΎψΐΜ ΐη°³";
         Text[ turkish ] = "Resume ohne Fehler";
         Text[ language_user1 ] = " ";
     };
@@ -546,7 +546,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Sub- of functieprocedure niet gedefinieerd";
         Text[ chinese_simplified ] = "Γ»ΣΠ¶¨Òε·ΦΉύ³Μ»ςΊ―ΚύΉύ³Μ";
         Text[ greek ] = "Δεν ορίστηκε η διαδικασία υπό (Sub) ή λειτουργίας (Function)";
-        Text[ korean ] = "Α¤ΐΗ µΗΑφΎΚΐΊ Ό­Ίκ ΗΑ·Ξ½ΓΑ® ¶Η΄Β ΖγΌΗ  ΗΑ·Ξ½ΓΑ®";
+        Text[ korean ] = "Α¤ΐΗµΗΑφΎΚΐΊ Ό­Ίκ ΗΑ·Ξ½Γΐϊ ¶Η΄Β ±β΄Ι  ΗΑ·Ξ½Γΐϊ";
         Text[ turkish ] = "Alt yordam ya da iώlev yordamύ tanύmlanmadύ";
         Text[ language_user1 ] = " ";
     };
@@ -574,7 +574,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Fout bei laden van DLL-bestand";
         Text[ chinese_simplified ] = "Χ°Θλ DLL ΞΔΌώΚ±·ΆΙϊ΄νΞσ";
         Text[ greek ] = "Σφάλμα κατά τη φόρτωση ενός αρχείου DLL";
-        Text[ korean ] = "DLLΖΔΐΟ ·Ξµω Ώΐ·ω";
+        Text[ korean ] = "DLLΖΔΐΟ ·Ξµε½ΓΏ΅ Ώΐ·ω";
         Text[ turkish ] = "DLL dosyasύnύ yόkleme sύrasύnda hata";
         Text[ language_user1 ] = " ";
     };
@@ -602,7 +602,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Foutieve DLL-oproepconventie";
         Text[ chinese_simplified ] = "΄νΞσµΔ DLLµχΣΓΤΌ¶¨";
         Text[ greek ] = "Λάθος συνθήκη κλήσης DLL";
-        Text[ korean ] = "Ζ²Έ° DLL Θ£Γβ ΗωΑ¤";
+        Text[ korean ] = "Ζ²Έ° DLL Θ£Γβ °ό½ΐ";
         Text[ turkish ] = "Yanlύώ DLL ηaπrύ kuralύ";
         Text[ language_user1 ] = " ";
     };
@@ -686,7 +686,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Bestand niet gevonden";
         Text[ chinese_simplified ] = "Γ»ΣΠΥÒµ½ΞΔΌώ";
         Text[ greek ] = "Το αρχείο δεν βρέθηκε";
-        Text[ korean ] = "ΖΔΐΟΐΜ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟΐ»΅΅Γ£Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dosya bulunamadύ";
         Text[ language_user1 ] = " ";
     };
@@ -743,7 +743,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Bestand reeds geopend";
         Text[ chinese_simplified ] = "ÒΡΎ­΄ςΏªΞΔΌώ";
         Text[ greek ] = "Το αρχείο είναι ήδη ανοιχτό";
-        Text[ korean ] = "ΖΔΐΟΐΜ ΐΜΉΜ Ώ­·ΑΐΦ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟΐΊ ΐΜΉΜ Ώ­·ΑΐΦ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dosya aηύk durumda";
         Text[ language_user1 ] = " ";
     };
@@ -800,7 +800,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Bestand bestaat reeds";
         Text[ chinese_simplified ] = "ΞΔΌώÒΡΎ­΄ζΤΪ";
         Text[ greek ] = "Το αρχείο υπάρχει ήδη";
-        Text[ korean ] = "ΖΔΐΟΐΜ ΐΜΉΜ ΑΈΐηΗΥ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟΐΊ ΐΜΉΜ ΑΈΐηΗΥ΄Ο΄Ω.";
         Text[ turkish ] = "Dosya mevcut durumda";
         Text[ language_user1 ] = " ";
     };
@@ -829,7 +829,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Onjuiste record-lengte";
         Text[ chinese_simplified ] = "ΚύΎέΜυΔΏ³¤¶Θ΄νΞσ";
         Text[ greek ] = "Μη αποδεκτό μήκος εγγραφής";
-        Text[ korean ] = "ΐίΈψµΘ µ¥ΐΜΕΝ ·ΉΔΪµε ±ζΐΜ";
+        Text[ korean ] = "Ζ²Έ°΅΅µ¥ΐΜΕΝ ·ΉΔΪµε ±ζΐΜ";
         Text[ turkish ] = "Yanlύώ veri kόmesi uzunluπu";
         Text[ language_user1 ] = " ";
     };
@@ -999,7 +999,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Toegang geweigerd";
         Text[ chinese_simplified ] = "ΎάΎψ¶ΑΘ΅";
         Text[ greek ] = "Δεν επιτρέπεται η πρόσβαση";
-        Text[ korean ] = "ΑΆ±Ω °ΕΊΞ";
+        Text[ korean ] = "ΑΆ±Ω °ΕΊΞµΚ";
         Text[ turkish ] = "Eriώim engellendi";
         Text[ language_user1 ] = " ";
     };
@@ -1050,7 +1050,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "Νε πεΰλθηθπξβΰνξ";
         Text[ polish ] = "Nie zaimplementowane";
         Text[ japanese ] = "ΐ‘•‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρ";
-        Text[ chinese_traditional ] = "©|¥ΌΉκ¬I";
+        Text[ chinese_traditional ] = "©|¥ΌΉκ²{";
         Text[ arabic ] = "αγ νΚγ ΗαΚΨΘνή";
         Text[ dutch ] = "Niet ingevoerd";
         Text[ chinese_simplified ] = "ΙΠΞ΄ΚµΚ©";
@@ -1084,7 +1084,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Namen wijzigen op verschillende stations niet mogelijk";
         Text[ chinese_simplified ] = "Ξή·¨ΦΨΓόΓϋ³Ι²»Ν¬µΔΗύ¶―ΕΜ";
         Text[ greek ] = "Δεν είναι δυνατή η μετονομασία σε διαφορετικούς δίσκους";
-        Text[ korean ] = "΄ΩΈ¥ µε¶σΐΜΉφ»σΐΗ »υ·ΞΏξ ΐΜΈ§ΐΊ ΊÒ°΅΄ΙΗΥ΄Ο΄Ω.";
+        Text[ korean ] = "Ώ©·― µε¶σΐΜΉφ»σΏ΅Ό­ΐΗ ΐΜΈ§΅΅Ί―°ζΐΊ ΊÒ°΅΄ΙΗΥ΄Ο΄Ω.";
         Text[ turkish ] = "Farklύ sόrόcόlerde yeniden adlandύrma yapύlamaz";
         Text[ language_user1 ] = " ";
     };
@@ -1112,7 +1112,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Fout bij toegang tot pad/bestand";
         Text[ chinese_simplified ] = "¶ΑΘ΅Β·Ύ¶/ΞΔΌώΚ±·ΆΙϊ΄νΞσ";
         Text[ greek ] = "Σφάλμα πρόσβασης διαδρομής/αρχείου";
-        Text[ korean ] = "ΖΠ½Ί/ΖΔΐΟ ΑΆ±Ω Ώΐ·ω";
+        Text[ korean ] = "°ζ·Ξ/ΖΔΐΟ ΑΆ±Ω Ώΐ·ω";
         Text[ turkish ] = "Veri yolu/eriώim hatasύ";
         Text[ language_user1 ] = " ";
     };
@@ -1140,7 +1140,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Pad niet gevonden";
         Text[ chinese_simplified ] = "Γ»ΣΠΥÒµ½Β·Ύ¶";
         Text[ greek ] = "Δεν βρέθηκε η διαδρομή";
-        Text[ korean ] = "ΖΠ½Ί°΅ Ήί°ίµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "°ζ·ΞΈ¦΅΅Γ£Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Veri yolu bulunamadύ";
         Text[ language_user1 ] = " ";
     };
@@ -1197,7 +1197,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Ongeldig tekenreekpatroon";
         Text[ chinese_simplified ] = "ΞήΠ§µΔΧΦ΄®Δ£Κ½";
         Text[ greek ] = "Εσφαλμένη συμβολοσειρά μοτίβου";
-        Text[ korean ] = "ΐ―ΘΏΗΟΑφΎΚΐΊ Ή®ΐΪΏ­ ΐ―Ηό";
+        Text[ korean ] = "Ή®ΐΪΏ­ΖΠΕΟ΅΅ΗγΏλµΗΑφ΅΅ΎΚΐ½";
         Text[ turkish ] = "Dizilim φrneπi geηerli deπil";
         Text[ language_user1 ] = " ";
     };
@@ -1226,7 +1226,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Gebruik van nul niet toegestaan";
         Text[ chinese_simplified ] = "²»ΤΚΠνΚΉΣΓΣΓΑγΦµ";
         Text[ greek ] = "Δεν επιτρέπεται η χρήση του μηδενός";
-        Text[ korean ] = "0ΐΗ »ηΏλΐΜ ΗγΏλµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "0 »ηΏλ ΗγΏλµΗΑφ ΎΚΐ½.";
         Text[ turkish ] = "Sύfύr kullanύmύ geηerli deπil";
         Text[ language_user1 ] = " ";
     };
@@ -1311,7 +1311,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Geen vrije DDE-kanalen";
         Text[ chinese_simplified ] = "Γ»ΣΠΏΙΣΓµΔ DDE-ΠΕµΐ";
         Text[ greek ] = "Δεν υπάρχουν διαθέσιμα κανάλια DDE";
-        Text[ korean ] = "DDE Γ¤³ΞΐΜ ΊÒ°΅΄Ι";
+        Text[ korean ] = "DDE Γ¤³Ξ ΊÒ°΅΄Ι";
         Text[ turkish ] = "Boώ DDE kanallarύ yok";
         Text[ language_user1 ] = " ";
     };
@@ -1339,7 +1339,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Geen enkele applicatie antwoordt op DDE-verbindingsoproep";
         Text[ chinese_simplified ] = "Γ»ΣΠΘΞΊΞΣ¦ΣΓ³ΜΠς»ΨΣ¦ DDE Α¬½ΣΗλΗσ";
         Text[ greek ] = "Δεν απαντά καμία εφαρμογή κατά την επιχείρηση σύνδεσης DDE";
-        Text[ korean ] = "DDE ΑΆΌΣΐΗ ΓΚ±βΘ­Ώ΅ ΐΐ΄δΗΟ΄Β  ΐΐΏλΗΑ·Ξ±Χ·¥ΐΜ Ύψΐ½";
+        Text[ korean ] = "DDE ΑΆΌΣΏδΓ»Ώ΅ ΐΐ΄δΗΟ΄Β  ΐΐΏλΗΑ·Ξ±Χ·¥ΐΜ Ύψΐ½";
         Text[ turkish ] = "Hiηbir uygulama DDE baπlantύ talebine yanύt vermiyor";
         Text[ language_user1 ] = " ";
     };
@@ -1367,7 +1367,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Teveel toepassingen antwoorden op de DDE-verbindingsoproep";
         Text[ chinese_simplified ] = "Μ«¶ΰµΔΣ¦ΣΓ³ΜΠς»ΨΣ¦ DDE Α¬½ΣΗλΗσ";
         Text[ greek ] = "Απάντησαν υπερβολικά πολλές εφαρμογές κατά την επιχείρηση σύνδεσης DDE";
-        Text[ korean ] = "DDE ΑΆΌΣΐΗ ΓΚ±βΘ­Ώ΅ ΐΐ΄δΗΟ΄Β  ΐΐΏλΗΑ·Ξ±Χ·¥ΐΜ ³ΚΉ« ΈΉΐ½";
+        Text[ korean ] = "DDE ΑΆΌΣΏδΓ»Ώ΅ ΐΐ΄δΗΟ΄Β  ΐΐΏλΗΑ·Ξ±Χ·¥ΐΜ ³ΚΉ« ΈΉΐ½";
         Text[ turkish ] = "DDE baπlantύ talebine ηok fazla uygulama yanύt veriyor";
         Text[ language_user1 ] = " ";
     };
@@ -1395,7 +1395,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "DDE-kanaal vergrendeld";
         Text[ chinese_simplified ] = "DDE ΠΕµΐÒΡΎ­±»Λψ¶¨";
         Text[ greek ] = "Το κανάλι DDE είναι κλειδωμένο";
-        Text[ korean ] = "DDE Γ¤³ΞΐΜ ΄έΗϋΐ½";
+        Text[ korean ] = "DDE Γ¤³Ξ΅΅ΐα°εΐ½";
         Text[ turkish ] = "DDE kanalύ kilitli";
         Text[ language_user1 ] = " ";
     };
@@ -1483,7 +1483,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Gebruiker drukte Escape tijdens uitvoering DDE";
         Text[ chinese_simplified ] = "ΤΪΦ΄ΠΠ DDE ΤΛΛγΉύ³ΜΦΠΚΉΣΓΥί°΄»χΑΛ ESCAPE Όό";
         Text[ greek ] = "Ο χρήστης πάτησε ESCAPE κατά τη διάρκεια της λειτουργίας DDE.";
-        Text[ korean ] = "DDE ΐΫµΏ»ηΐΜΏ΅ Escape ΐΜ ΄­·―Α³ΐ½.";
+        Text[ korean ] = "DDE ΐΫµΏΗΟ΄ΒµΏΎΘ »ηΏλΐΪ°΅EscapeΈ¦ ΄­·¶ΐ½.";
         Text[ turkish ] = "DDE iώlemi sύrasύnda ESCAPE tuώuna basύldύ";
     };
     String SbERR_DDE_BUSY & ERRCODE_RES_MASK
@@ -1510,7 +1510,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Doelapplicatie is niet bereid";
         Text[ chinese_simplified ] = "Νβ²ΏΣ¦ΣΓ³ΜΠςΓ¦Βµ";
         Text[ greek ] = "Η εξωτερική εφαρμογή δεν είναι έτοιμη.";
-        Text[ korean ] = "³»ΊΞ ΐΐΏλΗΑ·Ξ±Χ·¥ΐΜ ΑΨΊρ°΅ ΎΘµΗΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΏάΊΞ ΐΐΏλΗΑ·Ξ±Χ·¥ΐΜ ΑΨΊρµΗΑφ΅΅ΎΚΎÒ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Harici uygulama hazύr deπil";
         Text[ language_user1 ] = " ";
     };
@@ -1566,7 +1566,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Gegevens hebben foutief formaat";
         Text[ chinese_simplified ] = "ΚύΎέΈρΚ½΄νΞσ";
         Text[ greek ] = "Λάθος μορφή δεδομένων";
-        Text[ korean ] = "ΐίΈψµΘ ΖχΈΛΐΗ µ¥ΐΜΕΝ";
+        Text[ korean ] = "Ζ²Έ° ΖχΈΛΐΗ µ¥ΐΜΕΝ";
         Text[ turkish ] = "Verilerin formatύ yanlύώ";
         Text[ language_user1 ] = " ";
     };
@@ -1594,7 +1594,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Externe toepassing werd beλindigd";
         Text[ chinese_simplified ] = "Νβ²ΏΣ¦ΣΓ³ΜΠςÒΡΎ­½αΚψ";
         Text[ greek ] = "Η εξωτερική εφαρμογή τερματίστηκε.";
-        Text[ korean ] = "ΏάΊΞ ΐΐΏλΗΑ·Ξ±Χ·¥ΐΜ Α¦°ΕµΗΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΏάΊΞ ΐΐΏλΗΑ·Ξ±Χ·¥ΐΊ΅΅ΑΎ·αµΗΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Harici uygulamadan ηύkύldύ";
         Text[ language_user1 ] = " ";
     };
@@ -1623,7 +1623,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "DDE-verbinding verbroken of veranderd";
         Text[ chinese_simplified ] = "DDEΑ¬½ΣÒΡΎ­ΦΠ¶Ο»ςΥίÒΡΎ­ΈόΈΔ";
         Text[ greek ] = "Η σύνδεση DDE διακόπηκε ή άλλαξε";
-        Text[ korean ] = "DDE ΑΆΌΣΐΜ ΐΞΕΝ·΄Ζ®µΗ°Ε³ª ΌφΑ¤µΗΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "DDE ΑΆΌΣΐΜ Αί΄άµΗΎϊ°Ε³ª ΌφΑ¤µΗΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "DDE baπlantύsύ kesildi ya da deπiώtirildi";
         Text[ language_user1 ] = " ";
     };
@@ -1680,7 +1680,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Ongeldig DDE-koppelingsformaat";
         Text[ chinese_simplified ] = "ΞήΠ§µΔ DDE Α΄½ΣΈρΚ½";
         Text[ greek ] = "Μη έγκυρη μορφή σύνδεσης DDE";
-        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ DDE Ώ¬°α Ό­½Δ";
+        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ DDE ΈµΕ© ΖχΈΛ";
         Text[ turkish ] = "Geηersiz DDE baπlantύ formatύ";
         Text[ language_user1 ] = " ";
     };
@@ -1708,7 +1708,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "DDE-resultaat verloren gegaan";
         Text[ chinese_simplified ] = "DDE ΠΕΟΆÒΕΚ§";
         Text[ greek ] = "Το μήνυμα του DDE χάθηκε";
-        Text[ korean ] = "DDE Έή½ΓΑφ°΅ »η¶σΑ³ΐ½";
+        Text[ korean ] = "DDE Έή½ΓΑφ°΅ »σ½ΗµΗΎϊΐ½";
         Text[ turkish ] = "DDE iletisi kayboldu";
         Text[ language_user1 ] = " ";
     };
@@ -1738,7 +1738,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Koppeling plakken reeds uitgevoerd";
         Text[ chinese_simplified ] = "Υ³ΜωΑ΄½ΣÒΡΎ­Νκ³Ι";
         Text[ greek ] = "Το 'Paste link' εκτελέστηκε ήδη";
-        Text[ korean ] = "Ώ¬°α ΊΩΏ©³Φ±β΄Β ΐΜΉΜ ΌφΗΰµΗΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΈµΕ© ΊΩΏ©³Φ±β΄Β ΐΜΉΜ ΌφΗΰµΗΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Paste Link iώlemi yόrόtόldό";
     };
     String SbERR_DDE_LINK_INV_TOPIC & ERRCODE_RES_MASK
@@ -1766,7 +1766,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Ongeldig koppeling-onderwerp; koppelingmodus kan niet worden ingesteld";
         Text[ chinese_simplified ] = "ΣΙΣΪΞήΠ§µΔΑ΄½Σ±κΜβ¶ψΞή·¨Ιθ¶¨Α΄½Σ±κΜβ";
         Text[ greek ] = "Δεν είναι δυνατόν να οριστεί το LinkMode εξαιτίας μη έγκυρων Link-Topics.";
-        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ Ώ¬°α  ΕδΗΘΐΈ·Ξ ΐΞΗΟΏ© Ώ¬°α ΐ―ΗόΐΜ Ό³Α¤µΙΌφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΈµΕ©  ΕδΗΘΐΈ·Ξ ΐΞΗΨ ΈµΕ©Έπµε°΅ Ό³Α¤µΙΌφ Ύψ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "LinkMode, geηersiz Link-Topics nedeniyle belirlenemez";
         Text[ language_user1 ] = " ";
     };
@@ -1795,7 +1795,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "DDE benodigt DDEML.DLL";
         Text[ chinese_simplified ] = "DDE ÒªΗσ DDEML.DLL";
         Text[ greek ] = "Για το DDE απαιτείται το αρχείο DDEML.DLL";
-        Text[ korean ] = "DDE ΄Β DDEML.DLL ΖΔΐΟΐ» ΗΚΏδ·ΞΗΥ΄Ο΄Ω.";
+        Text[ korean ] = "DDE ΄Β DDEML.DLL ΐ» ΗΚΏδ·ΞΗΥ΄Ο΄Ω.";
         Text[ turkish ] = "DDE iηin DDEML.DLL gerekli";
         Text[ language_user1 ] = " ";
     };
@@ -1824,7 +1824,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "De module kan niet worden geladen, ongeldig formaat";
         Text[ chinese_simplified ] = "ΈρΚ½ΞήΠ§£¬Òς¶ψΞή·¨Χ°ΘλΥβΈφ³ΜΠςΔ£Ώι";
         Text[ greek ] = "Δεν ήταν δυνατόν να φορτωθεί η λειτουργική μονάδα, μη έγκυρη μορφή";
-        Text[ korean ] = "ΈπµβΐΜ ·ΞµεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω. ; ΐίΈψµΘ ΖχΈΛ";
+        Text[ korean ] = "ΈπµβΐΜ ·ΞµεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω. ; ΐ―ΘΏΗΟΑφ΅΅ΎΚΐΊ ΖχΈΛ";
         Text[ turkish ] = "Modόl yόklenemiyor; geηersiz format";
         Text[ language_user1 ] = " ";
     };
@@ -1882,7 +1882,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Object niet beschikbaar";
         Text[ chinese_simplified ] = "¶ΤΟσ²»΄ζΤΪ";
         Text[ greek ] = "Το αντικείμενο δεν είναι διαθέσιμο";
-        Text[ korean ] = "°³ΓΌ°΅ ΐ―ΘΏΗΟΑφ ΎΘ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "°³ΓΌ°΅ »ηΏλ°΅΄ΙΗΟΑφ΅΅ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Nesne mevcut deπil";
         Text[ language_user1 ] = " ";
     };
@@ -1998,7 +1998,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Ongeldige objectverwijzing";
         Text[ chinese_simplified ] = "ΞήΠ§µΔ¶ΤΟσÒύΣΓ";
         Text[ greek ] = "Μη έγκυρη αναφορά αντικειμένου";
-        Text[ korean ] = "ΐίΈψµΘ °³ΓΌ ΒόΑ¶";
+        Text[ korean ] = "ΐ―ΘΏΗΟΑφ΅΅ΎΚΐΊ °³ΓΌ ΒόΑ¶";
         Text[ turkish ] = "Geηersiz nesne referansύ";
         Text[ language_user1 ] = " ";
     };
@@ -2111,7 +2111,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "OLE-automatisering wordt niet ondersteund door het aangegeven object";
         Text[ chinese_simplified ] = "ΥβΈφ¶ΤΟσ²»Φ§³ΦOLEΧΤ¶―»―";
         Text[ greek ] = "Η αυτοματοποίηση του OLE δεν υποστηρίζεται από αυτό το αντικείμενο";
-        Text[ korean ] = "OLE ΐΪµΏΘ­΄Β °³ΓΌΏ΅Ό­ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "OLE ΐΪµΏΘ­΄Β ΐΜ΅΅°³ΓΌΏ΅ΐΗΗΨ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "OLE otomasyonu bu nesne tarafύndan desteklenmiyor";
         Text[ language_user1 ] = " ";
     };
@@ -2197,7 +2197,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Deze handeling wordt niet ondersteund door het aangegeven object";
         Text[ chinese_simplified ] = "Έψ¶¨µΔ¶ΤΟσ²»Φ§³ΦΥβΈφ²ΩΧχ";
         Text[ greek ] = "Η ενέργεια αυτή δεν υποστηρίζεται από το δεδομένο αντικείμενο";
-        Text[ korean ] = "ΐΜ µΏΐΫΐΊ ΑΦΎξΑψ °³ΓΌΏ΅ΐΗΗΨΌ­ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΜ µΏΐΫΐΊ ΑΦΎξΑψ °³ΓΌΏ΅ΐΗΗΨ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Bu iώlem belirtilen nesne tarafύndan desteklenmiyor";
         Text[ language_user1 ] = " ";
     };
@@ -2226,7 +2226,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Genoemde argumenten wordt niet ondersteund door het aangegeven object";
         Text[ chinese_simplified ] = "Έψ¶¨¶ΤΟσ²»Φ§³ΦΦΈ¶¨µΔΧΤ±δΑΏ";
         Text[ greek ] = "Τα ονομαζόμενα ορίσματα δεν υποστηρίζονται από το δεδομένο αντικείμενο";
-        Text[ korean ] = "ΑφΑ¤µΘ µ¶Έ³ Ί―Όφ΄Β ΑΦΎξΑψ °³ΓΌΐΗ ΑφΏψΐ» ΉήΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΑφΑ¤µΘ µ¶Έ³ Ί―Όφ΄Β ΑΦΎξΑψ °³ΓΌΏ΅ΐΗΗΨ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Adlandύrύlmύώ argόmanlar, belirtilen nesne tarafύndan desteklenmiyor";
         Text[ language_user1 ] = " ";
     };
@@ -2255,7 +2255,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "De huidige lokale instellingen worden niet ondersteund door het aangegeven object";
         Text[ chinese_simplified ] = "µ±Η°µΔΎΦ²ΏΙθ¶¨²»ΚάΈψ¶¨¶ΤΟσµΔΦ§³Φ";
         Text[ greek ] = "Οι τρέχουσες τοπικές ρυθμίσεις δεν υποστηρίζονται από το δεδομένο αντικείμενο";
-        Text[ korean ] = "ΗφΐηΐΗ ·ΞΔΓ Ό³Α¤ΐΊ ΑΦΎξΑψ °³ΓΌΏ΅ΐΗΗΨΌ­ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΗφΐηΐΗ ·ΞΔΓ Ό³Α¤ΐΊ Α¤ΐΗµΘ °³ΓΌΏ΅ΐΗΗΨ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Yόrόlόkteki yerel ayarlar, belirtilen nesne tarafύndan desteklenmiyor";
         Text[ language_user1 ] = " ";
     };
@@ -2283,7 +2283,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Genoemd argument niet gevonden";
         Text[ chinese_simplified ] = "Γ»ΣΠΥÒµ½ΦΈ¶¨µΔΧΤ±δΑΏ";
         Text[ greek ] = "Το ονομαζόμενο όρισμα δεν βρέθηκε";
-        Text[ korean ] = "ΑφΑ¤µΘ µ¶Έ³ Ί―Όφ°΅ Ήί°ίµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΑφΑ¤µΘ µ¶Έ³ Ί―ΌφΈ¦΅΅Γ£Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Adlandύrύlan argόman bulunamadύ";
         Text[ language_user1 ] = " ";
     };
@@ -2339,7 +2339,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Ongeldig aantal argumenten";
         Text[ chinese_simplified ] = "ΞήΠ§µΔΧΤ±δΑΏΚύΔΏ";
         Text[ greek ] = "Λάθος πλήθος ορισμάτων";
-        Text[ korean ] = "µ¶Έ³Ί―Όφ °³Όφ°΅ Ζ²Έ²";
+        Text[ korean ] = "µ¶Έ³΅΅Ί―Όφ °³Όφ°΅ Ζ²Έ²";
         Text[ turkish ] = "Argόman sayύsύ yanlύώ";
         Text[ language_user1 ] = " ";
     };
@@ -2367,7 +2367,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Object is geen lijst";
         Text[ chinese_simplified ] = "¶ΤΟσ²»ΚΗÒ»ΈφΑΠµ¥";
         Text[ greek ] = "Το αντικείμενο δεν είναι λίστα";
-        Text[ korean ] = "°³ΓΌ°΅ µξ·ΟµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "°³ΓΌ°΅ Έρ·ΟΏ΅ ΐΫΌΊµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Nesne bir liste deπil";
         Text[ language_user1 ] = " ";
     };
@@ -2396,7 +2396,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Ongeldig ranggetal";
         Text[ chinese_simplified ] = "ΠςΊΕΞήΠ§";
         Text[ greek ] = "Μη έγκυρος αριθμός τάξης";
-        Text[ korean ] = "ΐίΈψµΘ Ό­Όφ";
+        Text[ korean ] = "ΐ―ΘΏΗΟΑφ΅΅ΎΚΐΊ Ό­Όφ";
         Text[ turkish ] = "Sύra sayύsύ geηersiz";
         Text[ language_user1 ] = " ";
     };
@@ -2424,7 +2424,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Aangegeven DLL- functie niet gevonden";
         Text[ chinese_simplified ] = "Γ»ΣΠΥÒµ½ΦΈ¶¨µΔ DLL Ή¦Δά";
         Text[ greek ] = "Δεν βρέθηκε η αναφερόμενη λειτουργία DLL";
-        Text[ korean ] = "Έν±βµΘ DLL ΗΤΌφ°΅ Ήί°ίµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "Α¤ΐΗµΘ DLL ΗΤΌφΈ¦΅΅Γ£Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Belirtilen DLL iώlevi bulunamadύ";
         Text[ language_user1 ] = " ";
     };
@@ -2481,7 +2481,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Object heeft deze eigenschap niet";
         Text[ chinese_simplified ] = "¶ΤΟσ²»Ύί±ΈΥβΈφΚτΠΤ";
         Text[ greek ] = "Το αντικείμενο δεν έχει αυτή την ιδιότητα";
-        Text[ korean ] = "°³ΓΌ°΅ ΐΜ  µξ·ΟΑ¤ΊΈΈ¦ °΅Αφ°ν ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "°³ΓΌ΄Β ΐΜ  µξ·ΟΑ¤ΊΈΈ¦ °΅Αφ°ν ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Nesne bu φzelliπe sahip deπil";
         Text[ language_user1 ] = " ";
     };
@@ -2509,7 +2509,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Object kent deze methode niet";
         Text[ chinese_simplified ] = "¶ΤΟσ²»Ύί±ΈΥβΈφ·½·¨";
         Text[ greek ] = "Το αντικείμενο δεν έχει αυτή τη μέθοδο";
-        Text[ korean ] = "°³ΓΌ°΅ ΐΜ ΈήΌÒµεΈ¦ °΅Αφ°ν ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "°³ΓΌ΄Β ΐΜ ΈήΌÒµεΈ¦ °΅Αφ°ν ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Nesne bu yφnteme sahip deπil";
         Text[ language_user1 ] = " ";
     };
@@ -2623,7 +2623,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Eigenschap kon niet worden ingesteld";
         Text[ chinese_simplified ] = "Ξή·¨Θ·¶¨ΚτΠΤ";
         Text[ greek ] = "Δεν ήταν δυνατόν να οριστεί αυτή η ιδιότητα";
-        Text[ korean ] = "µξ·ΟΑ¤ΊΈ  Ό³Α¤ΐ» ΗÒ Όφ ΎψΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "µξ·ΟΑ¤ΊΈΈ¦  Ό³Α¤ΗÒ Όφ ΎψΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Φzellik tanύmlanamadύ";
         Text[ language_user1 ] = " ";
     };
@@ -2680,7 +2680,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Onverwacht symbool: $(ARG1)";
         Text[ chinese_simplified ] = "ÒβΝβµΔΝΌ±κ£Ί$(ARG1)";
         Text[ greek ] = "Μη αναμενόμενο σύμβολο: $(ARG1)";
-        Text[ korean ] = "ΏΉΓψµΗΑφ ΎΚΐΊ ±βΘ£  :  $(ARG1)";
+        Text[ korean ] = "Ώδ±ΈµΗΑφΎΚΐΊ ±βΘ£ :  $(ARG1)";
         Text[ turkish ] = "Beklenmeyen simge: $(ARG1)";
         Text[ language_user1 ] = " ";
     };
@@ -2708,7 +2708,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Verwacht: $(ARG1)";
         Text[ chinese_simplified ] = "µΘ΄ύ£Ί$(ARG1)";
         Text[ greek ] = "Αναμένεται: $(ARG1)";
-        Text[ korean ] = "ΏΉΓψµΘ: $(ARG1)";
+        Text[ korean ] = "Ώδ±ΈµΚ: $(ARG1)";
         Text[ turkish ] = "Beklenen: $(ARG1)";
         Text[ language_user1 ] = " ";
     };
@@ -2736,7 +2736,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Symbool verwacht";
         Text[ chinese_simplified ] = "µΘ΄ύΝΌ±κ";
         Text[ greek ] = "Αναμένεται σύμβολο";
-        Text[ korean ] = "ΏΉΓψµΘ ±βΘ£";
+        Text[ korean ] = "±βΘ£΅΅Ώδ±ΈµΚ";
         Text[ turkish ] = "Simge bekleniyor";
         Text[ language_user1 ] = " ";
     };
@@ -2764,7 +2764,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Variabele verwacht";
         Text[ chinese_simplified ] = "µΘ΄ύ±δΑΏ";
         Text[ greek ] = "Αναμένεται μεταβλητή";
-        Text[ korean ] = "ΏΉΓψµΘ Ί―Όφ";
+        Text[ korean ] = "Ί―Όφ΅΅Ώδ±ΈµΚ";
         Text[ turkish ] = "Deπiώken bekleniyor";
         Text[ language_user1 ] = " ";
     };
@@ -2792,7 +2792,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Naam verwacht";
         Text[ chinese_simplified ] = "µΘ΄ύ±κΊΕ";
         Text[ greek ] = "Απαιτείται επιγραφή";
-        Text[ korean ] = "ΏΉΓψµΘ ¶σΊ§";
+        Text[ korean ] = "¶σΊ§΅΅Ώδ±ΈµΚ";
         Text[ turkish ] = "Etiket bekleniyor";
         Text[ language_user1 ] = " ";
     };
@@ -2820,7 +2820,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Waarde kan niet worden toegewezen";
         Text[ chinese_simplified ] = "Ξή·¨ΦΈ¶¨ΚύΦµ";
         Text[ greek ] = "Δεν είναι δυνατόν να γίνει εφαρμογή της τιμής";
-        Text[ korean ] = "°ªΐΜ ΐϋΏλµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "°ªΐ»΅΅ΗÒ΄ηΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Deπer atanamύyor";
         Text[ language_user1 ] = " ";
     };
@@ -2848,7 +2848,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Variabele $(ARG1) reeds gedefinieerd";
         Text[ chinese_simplified ] = "ÒΡΎ­¶¨ÒεΑΛ±δΑΏ $(ARG1)";
         Text[ greek ] = "Η μεταβλητή $(ARG1) έχει ήδη οριστεί";
-        Text[ korean ] = "Ί―Όφ$(ARG1)΄Β ΐΜΉΜ Α¤ΐΗµΗΎξΐΦ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "Ί―Όφ$(ARG1)ΐΊ£¨΄Β£© ΐΜΉΜ Α¤ΐΗµΗΎξΐΦ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Deπiώken $(ARG1) tanύmlanmύώ durumda";
         Text[ language_user1 ] = " ";
     };
@@ -2876,7 +2876,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Sub- of functieprocedure $(ARG1) reeds gedefinieerd";
         Text[ chinese_simplified ] = "ÒΡΎ­¶¨ÒεΑΛ·ΦΉύ³Μ»ςΊ―ΚύΉύ³Μ $(ARG1)";
         Text[ greek ] = "Η διαδικασία υπό (Sub) ή λειτουργίας (Function) $(ARG1) ορίστηκε ήδη";
-        Text[ korean ] = "Ό­Ίκ ¶Η΄Β ΗΤΌφ ΗΑ·Ξ½ΓΑ® $(ARG1) °΅ ΐΜΉΜ Α¤ΐΗ µΗΎξΐΦ½ΐ΄Ο΄Ω";
+        Text[ korean ] = "Ό­Ίκ ΗΑ·Ξ½Γΐϊ΅΅¶Η΄Β ±β΄Ι ΗΑ·Ξ½Γΐϊ $(ARG1) ΐΊ£¨΄Β£©ΐΜΉΜ Α¤ΐΗµΗΎξΐΦ½ΐ΄Ο΄Ω";
         Text[ turkish ] = "Alt yordam ya da iώlev yordamύ $(ARG1) tanύmlanmύώ durumda";
         Text[ language_user1 ] = " ";
     };
@@ -2904,7 +2904,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Naam $(ARG1) reeds gedefinieerd";
         Text[ chinese_simplified ] = "ÒΡΎ­¶¨ÒεΑΛ±κΌΗ $(ARG1)";
         Text[ greek ] = "Η επιγραφή $(ARG1) ορίστηκε ήδη";
-        Text[ korean ] = "¶σΊ§ $(ARG1) ΐΜ ΐΜΉΜ Α¤ΐΗ µΗΎξΐΦ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "¶σΊ§ $(ARG1) ΐΊ£¨΄Β£© ΐΜΉΜ Α¤ΐΗµΗΎξΐΦ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Etiket $(ARG1) tanύmlanmύώ durumda";
         Text[ language_user1 ] = " ";
     };
@@ -2932,7 +2932,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Variabele $(ARG1) niet gevonden";
         Text[ chinese_simplified ] = "Γ»ΣΠΥÒµ½±δΑΏ $(ARG1)";
         Text[ greek ] = "Η μεταβλητή $(ARG1) δεν βρέθηκε";
-        Text[ korean ] = "Ί―Όφ $(ARG1) °΅ Ήί°ίµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "Ί―Όφ $(ARG1)ΐ»£¨Έ¦£©Γ£Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Deπiώken $(ARG1) bulunamadύ";
         Text[ language_user1 ] = " ";
     };
@@ -2960,7 +2960,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Matrix of procedure $(ARG1) niet gevonden";
         Text[ chinese_simplified ] = "Γ»ΣΠΥÒµ½ΚύΧι»ςΉύ³Μ $(ARG1)";
         Text[ greek ] = "Δεν βρέθηκε η μήτρα ή η διαδικασία $(ARG1)";
-        Text[ korean ] = "ΉθΏ­ ¶Η΄Β ΗΤΌφ $(ARG1) °΅ Ήί°ίµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω. ";
+        Text[ korean ] = "ΉθΏ­ ¶Η΄Β ΗΑ·Ξ½Γΐϊ $(ARG1)ΐ»£¨Έ¦£©Γ£Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dizi ya da yordam $(ARG1) bulunamadύ";
         Text[ language_user1 ] = " ";
     };
@@ -2988,7 +2988,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Procedure $(ARG1) niet gevonden";
         Text[ chinese_simplified ] = "Γ»ΣΠΥÒµ½Ήύ³Μ $(ARG1)";
         Text[ greek ] = "Η διαδικασία $(ARG1) δεν βρέθηκε";
-        Text[ korean ] = "ΗΑ·Ξ½Γΐϊ $(ARG1) °΅ Ήί°ίµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΗΑ·Ξ½Γΐϊ $(ARG1)ΐ»£¨Έ¦£©Γ£Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Yordam $(ARG1) bulunamadύ";
         Text[ language_user1 ] = " ";
     };
@@ -3016,7 +3016,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Naam $(ARG1) niet gedefinieerd";
         Text[ chinese_simplified ] = "ΙΠΞ΄¶¨Òε±κΌΗ $(ARG1)";
         Text[ greek ] = "Δεν ορίστηκε η επιγραφή $(ARG1)";
-        Text[ korean ] = "¶σΊ§ $(ARG1) ΐΜ Α¤ΐΗµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "¶σΊ§ $(ARG1) ΐΜ£¨°΅£©Α¤ΐΗµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Etiket $(ARG1) tanύmlanmadύ";
         Text[ language_user1 ] = " ";
     };
@@ -3044,7 +3044,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Onbekend gegevenstype $(ARG1)";
         Text[ chinese_simplified ] = "²»ΓχµΔΚύΎέΐΰΠΝ $(ARG1)";
         Text[ greek ] = "Άγνωστος τύπος δεδομένων $(ARG1)";
-        Text[ korean ] = "ΎΛ·ΑΑφΑφ ΎΚΐΊ µ¥ΐΜΕΝ ΕΈΐΤ $(ARG1)";
+        Text[ korean ] = "ΎΛ·ΑΑ®΅΅ΐΦΑφ ΎΚΐΊ µ¥ΐΜΕΝΐ―Ηό $(ARG1)";
         Text[ turkish ] = "Bilinmeyen veri tipi $(ARG1)";
         Text[ language_user1 ] = " ";
     };
@@ -3072,7 +3072,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Afsluiten $(ARG1) verwacht";
         Text[ chinese_simplified ] = "µΘΊςΝΛ³φ $(ARG1)";
         Text[ greek ] = "Αναμένεται Exit $(ARG1)";
-        Text[ korean ] = "ΏΉΓψµΘ ΑΎ·α$(ARG1)";
+        Text[ korean ] = "ΑΎ·α$(ARG1)Ώδ±ΈµΚ";
         Text[ turkish ] = "Ηύkύώ $(ARG1) bekleniyor";
         Text[ language_user1 ] = " ";
     };
@@ -3100,7 +3100,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Instructieblok nog open: $(ARG1) ontbreekt";
         Text[ chinese_simplified ] = "»ΉΘ±ΙΩΞ΄½αΚψµΔ·Φ³ΜΠςΏι£Ί$(ARG1)";
         Text[ greek ] = "Λείπει τμήμα ορίσματος: $(ARG1) το οποίο παραμένει ανοιχτό.";
-        Text[ korean ] = "Ή®ΐεΐΜ ΎΖΑχ Ώ­·ΑΐΦ½ΐ΄Ο΄Ω. :$(ARG1) °΅ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "Αφ½ΓΉ®΅΅Ίν·ΟΏ΅ ΎΖΑχ ΐΤ·Β»ηΗΧ΅΅Ύψΐ½. :$(ARG1) ΐΜ£¨°΅£© Ύψ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Aηύk deyim bloku: $(ARG1) eksik";
         Text[ language_user1 ] = " ";
     };
@@ -3128,7 +3128,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Fout in het plaatsen van haakjes";
         Text[ chinese_simplified ] = "ΐ¨ΊΕΧι΄νΞσ";
         Text[ greek ] = "Σφάλμα παρενθέσεων";
-        Text[ korean ] = "°ύΘ£°΅ ΈΒΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "°ύΘ£΅΅ΑίΓΈΏ΅΅΅Ώΐ·ω";
         Text[ turkish ] = "Ayraηlar uyumsuz";
         Text[ language_user1 ] = " ";
     };
@@ -3156,7 +3156,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Symbool $(ARG1) reeds anders gedefinieerd";
         Text[ chinese_simplified ] = "ÒΡΎ­ΑνΠΠ¶¨ÒεΑΛΝΌ±κ $(ARG1)";
         Text[ greek ] = "Το σύμβολο $(ARG1) ορίστηκε ήδη με διαφορετικό τρόπο";
-        Text[ korean ] = "±βΘ£$(ARG1) °΅ ΐΜΉΜ ΄ΩΈ£°Τ Α¤ΐΗµΗΎξ ΐΦ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "±βΘ£$(ARG1) ΐΜ£¨°΅£© ΐΜΉΜ ΄ΩΈ£°Τ Α¤ΐΗµΗΎξ ΐΦ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Simge $(ARG1) farklύ bir biηimde tanύmlanmύώ durumda";
         Text[ language_user1 ] = " ";
     };
@@ -3184,7 +3184,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Parameters passen niet bij procedure";
         Text[ chinese_simplified ] = "Φϊ±δΑΏΊΝΉύ³Μ²»Ζ¥Εδ";
         Text[ greek ] = "Οι παράμετροι δεν ταιριάζουν στη διαδικασία";
-        Text[ korean ] = "ΖΔ¶σΉΜΕΝ°΅ ΗΑ·Ξ½ΓΐϊΏ΅ ΈΒΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔ¶σΉΜΕΝ°΅ ΐύΒχΏ΅ ΈΒΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Parametreler yordama uymuyor";
         Text[ language_user1 ] = " ";
     };
@@ -3213,7 +3213,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Ongeldig teken in getal";
         Text[ chinese_simplified ] = "ΚύΧΦΔΪΊ¬ΣΠΞήΠ§µΔΧΦ·ϋ";
         Text[ greek ] = "Μη έγκυρος χαρακτήρας στον αρθιμό";
-        Text[ korean ] = "ΌύΐΪΏ΅ ΐ―ΘΏΗΟΑφ ΎΚΐΊ Ή®ΐΪ";
+        Text[ korean ] = "ΌύΐΪΏ΅ ΐ―ΘΏΗΟΑφ ΎΚΐΊ Ή®ΐΪ΅΅ΐΦΐ½";
         Text[ turkish ] = "Numara geηersiz bir karakter iηeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -3237,12 +3237,12 @@ Resource RID_BASIC_START
         Text[ russian ] = "Νεξαυξδθμξ ηΰδΰςό πΰημεπνξρςό μΰρρθβΰ";
         Text[ polish ] = "Macierz naleΏy zwymiarowaζ";
         Text[ japanese ] = "”z—ρ‚Μ³‰»‚ª•K—v‚Ε‚·";
-        Text[ chinese_traditional ] = "¦ζ¦C¥²¶·©w¤Ψ«Χ";
+        Text[ chinese_traditional ] = "¦ζ¦C¥²¶·³]©w¦nΌΖ­Θ";
         Text[ arabic ] = "νΜΘ ΚΪννδ ΓΘΪΗΟ ΗαΥένέ";
         Text[ dutch ] = "Het aantal dimensies van de matrix moet worden nog bepaald";
         Text[ chinese_simplified ] = "±ΨΠλΞªΚύΧι¶¨³ί¶Θ";
         Text[ greek ] = "Πρέπει να οριστούν οι διαστάσεις της μήτρας";
-        Text[ korean ] = "ΉθΏ­ΐΊ Ήέµε½Γ ΌφΔ΅°΅ ΐΦΎξΎίΗΡ΄Ω.";
+        Text[ korean ] = "ΉθΏ­ΐΗ ΒχΏψ Ε©±β°΅  Ήέµε½Γ Α¤ΗΨΑ®ΎίΗΡ΄Ω.";
         Text[ turkish ] = "Dizinin boyutlandύrύlmasύ gerekir";
         Text[ language_user1 ] = " ";
     };
@@ -3299,7 +3299,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "$(ARG1) binnen een procedure niet toegestaan";
         Text[ chinese_simplified ] = "ΤΪÒ»ΈφΉύ³ΜΔΪ²Ώ²»ΤΚΠν $(ARG1)";
         Text[ greek ] = "$(ARG1) δεν επιτρέπεται εντός μιας διαδικασίας";
-        Text[ korean ] = "$(ARG1) ΄Β ΗΑ·Ξ½Γΐϊ »ηΐΜΏ΅ ΗγΏλµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "$(ARG1) ΐΊ£¨΄Β£© ΗΑ·Ξ½ΓΐϊΏ΅Ό­ ΗγΏλµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Yordamda $(ARG1) geηerli deπil";
         Text[ language_user1 ] = " ";
     };
@@ -3328,7 +3328,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "$(ARG1) buiten een procedure niet toegestaan";
         Text[ chinese_simplified ] = "ΤΪÒ»ΈφΉύ³ΜΝβ²»ΤΚΠν $(ARG1)";
         Text[ greek ] = "$(ARG1) δεν επιτρέπεται εκτός μιας διαδικασίας";
-        Text[ korean ] = "$(ARG1) ΄Β ΗΑ·Ξ½ΓΐϊΉΫΏ΅Ό­ ΗγΏλµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "$(ARG1) ΐΊ£¨΄Β£© ΗΑ·Ξ½ΓΐϊΉΫΏ΅Ό­ ΗγΏλµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Yordam dύώύnda $(ARG1) geηerli deπil";
         Text[ language_user1 ] = " ";
     };
@@ -3356,7 +3356,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Dimensiegegevens passen niet bij elkaar";
         Text[ chinese_simplified ] = "¶¨³ί¶ΘµΔΙθ¶¨²»Ζ¥Εδ";
         Text[ greek ] = "Οι διαστάσεις που ορίστηκαν δεν συνδυάζονται.";
-        Text[ korean ] = "ΏµΏªΐΗ Α¤ΐΗ°΅ ΈΒΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΒχΏψ Α¤ΐΗ°΅ ΈΒΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Boyut verileri arasύnda uyuώmazlύk";
         Text[ language_user1 ] = " ";
     };
@@ -3384,7 +3384,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Onbekende optie: $(ARG1)";
         Text[ chinese_simplified ] = "²»ΓχµΔΡ΅Οξ£Ί$(ARG1)";
         Text[ greek ] = "Άγνωστη επιλογή: $(ARG1)";
-        Text[ korean ] = "ΎΛ·ΑΑφΑφ ΎΚΐΊ ΏΙΌΗ:$(ARG1)";
+        Text[ korean ] = "ΎΛ·ΑΑ®΅΅ΐΦΑφ ΎΚΐΊ ΏΙΌΗ:$(ARG1)";
         Text[ turkish ] = "Bilinmeyen seηenek: $(ARG1)";
         Text[ language_user1 ] = " ";
     };
@@ -3441,7 +3441,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Programma is te groot";
         Text[ chinese_simplified ] = "³ΜΠςΜ«΄σ";
         Text[ greek ] = "Το πρόγραμμα είναι υπερβολικά μεγάλο";
-        Text[ korean ] = "ΗΑ·Ξ±Χ·¥ΐΜ³ΚΉ« Ε®΄Ο΄Ω.";
+        Text[ korean ] = "ΗΑ·Ξ±Χ·¥ΐΜ΅΅³ΚΉ« Ε®΄Ο΄Ω.";
         Text[ turkish ] = "Program ηok bόyόk";
         Text[ language_user1 ] = " ";
     };
@@ -3470,7 +3470,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Tekenreeksen en matrices niet toegestaan";
         Text[ chinese_simplified ] = "²»ΤΚΠνΧΦ΄®»ςΚύΧι";
         Text[ greek ] = "Δεν επιτρέπονται ακολουθίες χαρακτήρων ή μήτρες";
-        Text[ korean ] = "Ή®ΐΪ ¶Η΄Β ΉθΏ­ΐΜ ΗγΏλµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "½ΊΖ®Έµ ¶Η΄Β ΉθΏ­ΐΜ ΐ―ΘΏΗΟΑφ΅΅ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dizilimler ya da diziler geηerli deπil";
         Text[ language_user1 ] = " ";
     };
@@ -3499,7 +3499,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Bevindt zich niet in VBScript";
         Text[ chinese_simplified ] = "Γ»ΣΠ°όΊ¬ΤΪ VB script ΔΪ";
         Text[ greek ] = "Δεν περιέχεται στο VB script";
-        Text[ korean ] = "VB ½ΊΕ©Έ³Ζ®Έ¦ ΖχΗΤΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "VB ½ΊΕ©Έ³Ζ®Ώ΅΅΅ΖχΗΤµΗΎξΐΦΑφ΅΅ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "VBScript'te mevcut deπil";
         Text[ language_user1 ] = " ";
     };
@@ -3589,7 +3589,7 @@ String ERRCODE_BASMGR_LIBLOAD & ERRCODE_RES_MASK
     Text[ dutch ] = "Fout bij laden van bibliotheek '$(ARG1)'";
     Text[ chinese_simplified ] = "Χ°ΘλΏβΚ±·ΆΙϊ΄νΞσ'$(ARG1)'";
     Text[ greek ] = "Σφάλμα κατά τη φόρτωση της βιβλιοθήκης '$(ARG1)'";
-    Text[ korean ] = "¶σΐΜΊκ·―Έ® $(ARG1) ·Ξµω Ώΐ·ω";
+    Text[ korean ] = "¶σΐΜΊκ·―Έ® $(ARG1) ·Ξµε½ΓΏ΅ Ώΐ·ω";
     Text[ turkish ] = "Kitaplύπύ yόkleme sύrasύnda hata '$(ARG1)'";
     Text[ language_user1 ] = " ";
 };
@@ -3619,7 +3619,7 @@ String ERRCODE_BASMGR_LIBSAVE & ERRCODE_RES_MASK
     Text[ dutch ] = "Fout bij het opslaan van bibliotheek: '$(ARG1)'";
     Text[ chinese_simplified ] = "΄ζΕΜΏβΚ±·ΆΙϊ΄νΞσ '$(ARG1)'";
     Text[ greek ] = "Σφάλμα κατά την αποθήκευση της βιβλιοθήκης: '$(ARG1)'";
-    Text[ korean ] = "¶σΐΜΊκ·―Έ® $(ARG1) ΐϊΐε Ώΐ·ω";
+    Text[ korean ] = "¶σΐΜΊκ·―Έ® $(ARG1) ΐϊΐε½ΓΏ΅ Ώΐ·ω";
     Text[ turkish ] = "Kitaplύπύ kaydetme sύrasύnda hata: '$(ARG1)'";
     Text[ language_user1 ] = " ";
 };
@@ -3649,7 +3649,7 @@ String ERRCODE_BASMGR_MGROPEN & ERRCODE_RES_MASK
     Text[ dutch ] = "BASIC in bestand '$(ARG1)' kon niet worden geοnitialiseerd";
     Text[ chinese_simplified ] = "Ξή·¨΄ΣΞΔΌώ'$(ARG1)' ³υΚΌ»― BASIC";
     Text[ greek ] = "Δεν ήταν δυνατόν να γίνει αναγνώριση του BASIC από το αρχείο '$(ARG1)'.";
-    Text[ korean ] = "ΖΔΐΟ $(ARG1)  ·Ξ ΊΞΕΝΐΗ BASICΐΊ ΓΚ±βΘ­ µΗΑφΎΚΎÒ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΖΔΐΟ $(ARG1)  ·Ξ ΊΞΕΝΐΗ BASICΐ» ΓΚ±βΘ­ΗΟΑφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "'$(ARG1)' dosyasύndan BASIC kurulamadύ";
     Text[ language_user1 ] = " ";
 };
@@ -3675,7 +3675,7 @@ String ERRCODE_BASMGR_MGRSAVE & ERRCODE_RES_MASK
     Text[ dutch ] = "Fout bij het opslaan van BASIC: '$(ARG1)'";
     Text[ chinese_simplified ] = "΄ζΕΜBASICΚ±·ΆΙϊ΄νΞσ£Ί'$(ARG1)'";
     Text[ greek ] = "Σφάλμα κατά την αποθήκευση του BASIC: '$(ARG1)'";
-    Text[ korean ] = "BASIC ΐϊΐε Ώΐ·ω :$(ARG1)";
+    Text[ korean ] = "BASIC ΐϊΐε½ΓΏ΅ Ώΐ·ω :$(ARG1)";
     Text[ turkish ] = "BASIC'i kaydetme sύrasύnda hata: '$(ARG1)'";
     Text[ language_user1 ] = " ";
 };
@@ -3701,7 +3701,7 @@ String ERRCODE_BASMGR_REMOVELIB & ERRCODE_RES_MASK
     Text[ dutch ] = "Fout bij verwijderen van bibliotheek";
     Text[ chinese_simplified ] = "ΙΎ³ύΏβΚ±·ΆΙϊ΄νΞσ";
     Text[ greek ] = "Σφάλμα κατά τη διαγραφή βιβλιοθήκης";
-    Text[ korean ] = "¶σΐΜΊκ·―Έ® »θΑ¦ Ώΐ·ω";
+    Text[ korean ] = "¶σΐΜΊκ·―Έ® »θΑ¦½ΓΏ΅ Ώΐ·ω";
     Text[ turkish ] = "Kitaplύπύ kaldύrma sύrasύnda hata";
     Text[ language_user1 ] = " ";
 };
