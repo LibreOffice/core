@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:23:19 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,12 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMultiServiceFactory_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTEVENT_HPP_
+#include <com/sun/star/frame/DispatchResultEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
+#include <com/sun/star/frame/DispatchResultState.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
 #include <com/sun/star/task/XJobExecutor.hpp>
@@ -1081,7 +1087,13 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     Sequence < com::sun::star::beans::PropertyValue > aSeq;
                     if ( rReq.GetArgs() )
                         TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
-                    xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
+                    Any aResult = xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
+                    ::com::sun::star::frame::DispatchResultEvent aEvent;
+                    sal_Bool bSuccess = (
+                                         (aResult >>= aEvent) &&
+                                         (aEvent.State == ::com::sun::star::frame::DispatchResultState::SUCCESS)
+                                        );
+                    rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bSuccess ) );
                 }
             }
         }
@@ -1108,7 +1120,13 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     Sequence < com::sun::star::beans::PropertyValue > aSeq;
                     if ( rReq.GetArgs() )
                         TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
-                    xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
+                    Any aResult = xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
+                    ::com::sun::star::frame::DispatchResultEvent aEvent;
+                    sal_Bool bSuccess = (
+                                         (aResult >>= aEvent) &&
+                                         (aEvent.State == ::com::sun::star::frame::DispatchResultState::SUCCESS)
+                                        );
+                    rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bSuccess ) );
                 }
             }
         }
