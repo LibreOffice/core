@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 16:16:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 08:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #endif
 #ifndef _SVX_WRITINGMODEITEM_HXX
-#include <svx/writingmodeitem.hxx>
+#include <writingmodeitem.hxx>
 #endif
 
 //      textitem.hxx        editdata.hxx
