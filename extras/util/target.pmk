@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.pmk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: va $ $Date: 2002-05-29 15:45:49 $
+#   last change: $Author: kz $ $Date: 2004-05-19 16:47:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -161,6 +161,8 @@ TEMPLATE_WIZARD_LETTER_TARGET   = tplwizletter
 TEMPLATE_WIZARD_MEMO_TARGET     = tplwizmemo
 TEMPLATE_WIZARD_REPORT_TARGET   = tplwizreport
 TEMPLATE_WIZARD_STYLES_TARGET   = tplwizstyles
+TEMPLATE_WIZARD_WEB_TARGET		= tplwizweb
+
 
 WORDBOOK_ALL_TARGET             = wordbook
 WORDBOOK_USER_TARGET            = wordbookuser
@@ -226,4 +228,6 @@ KDE_ICONS_TARGET                = kdeicons
 KDE_ICONS_MINI_TARGET           = kdemini
 KDE_MIMELNK_APPL_TARGET         = kdemimeappl
 KDE_MIMELNK_TEXT_TARGET         = kdemimetext
+
+
 
