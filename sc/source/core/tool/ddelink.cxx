@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:44:51 $
+ *  last change: $Author: nn $ $Date: 2000-10-18 13:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,12 +286,14 @@ void __EXPORT ScDdeLink::ListenersGone()
     BOOL bWas = bIsInUpdate;
     bIsInUpdate = TRUE;             // Remove() kann Reschedule ausloesen??!?
 
+    ScDocument* pStackDoc = pDoc;   // member pDoc can't be used after removing the link
+
     SvxLinkManager* pLinkMgr = pDoc->GetLinkManager();
-    pLinkMgr->Remove(*this);
+    pLinkMgr->Remove(*this);        // deletes this
 
     if ( !pLinkMgr->GetLinks().Count() )            // letzten geloescht ?
     {
-        SfxBindings* pBindings = pDoc->GetViewBindings();
+        SfxBindings* pBindings = pStackDoc->GetViewBindings();      // don't use member pDoc!
         if (pBindings)
             pBindings->Invalidate( SID_LINKS );
     }
