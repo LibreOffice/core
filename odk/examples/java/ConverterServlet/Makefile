@@ -1,40 +1,66 @@
-# Builds the ConvertServlet java demo.
+# Builds the Java ConverterServlet example of the SDK.
 
-PRJ=..$(PS)..$(PS)..
-SETTINGS=../../../settings
+PRJ=../../..
+SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
-
-include $(SETTINGS)/dk.mk
 include $(SETTINGS)/std.mk
+include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
+COMPONENT_NAME=ConverterServletExample
+OUT_COMP_CLASS=$(OUT_CLASS)/$(COMPONENT_NAME)
 
 JAVAFILES  = \
-	ConverterServlet.java \
+	ConverterServlet.java
 
-CLASSFILES = $(patsubst %.java,$(OUT_CLASS)$(PS)%.class,$(JAVAFILES) )
+CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
 
-SDK_CLASSPATH =	$(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)$(PS)jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)juh.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)servlet.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)cos.jar\
-		$(PATH_SEPARATOR)$(OUT_CLASS))
-
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/cos.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/servlet.jar\
+		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
 # Targets
 .PHONY: ALL
-ALL : converterservlet
+ALL : \
+    ConverterServletExample
 
 include $(SETTINGS)/stdtarget.mk
 
-$(CLASSFILES) : $(OUT) $(OUT_CLASS) $(JAVAFILES)
-	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_CLASS) $(JAVAFILES) 
+$(OUT_COMP_CLASS) : $(OUT)
+	$(MKDIR) $(subst /,$(PS),$@)
 
-converterservlet: $(CLASSFILES)
+$(OFFICE_CLASSES_DIR)/cos.jar : 
 	@echo --------------------------------------------------------------------------------
-	@echo Please make the resulting class known to your web server
+	@echo You need the servlet support Java archive (cos.jar) for this example.
+	@echo You can download it from http://www.servlets.com/cos/index.html
+	@echo and then please copy it into your $(OFFICE_CLASSES_DIR) directory.
 	@echo --------------------------------------------------------------------------------
+
+$(OFFICE_CLASSES_DIR)/servlet.jar : 
+	@echo --------------------------------------------------------------------------------
+	@echo You need the servlet API (servlet.jar) for this example.
+	@echo You can download it from http://java.sun.com/products/servlet/index.html
+	@echo and then please copy it into your $(OFFICE_CLASSES_DIR) directory.
+	@echo --------------------------------------------------------------------------------
+
+$(CLASSFILES) : $(OUT_COMP_CLASS) $(JAVAFILES) $(OFFICE_CLASSES_DIR)/cos.jar $(OFFICE_CLASSES_DIR)/servlet.jar
+	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+
+ConverterServletExample : $(CLASSFILES)
+	@echo --------------------------------------------------------------------------------
+	@echo Please see the README file for more information how to use the converter 
+	@echo servlet.
+	@echo --------------------------------------------------------------------------------
+
+%.run: $(OUT_COMP_CLASS)/%.class
+	java -classpath "$(SDK_CLASSPATH)" $(basename $@)
+
+.PHONY: clean
+clean :
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))

@@ -3,20 +3,20 @@ Servlet for converting documents
 Installation instructions:
 - If no web server is available you should install your favourite web server.
 - Download the servlet support Java archive (cos.jar) from 
-http://www.servlets.com/cos/index.html and copy the file to the directory 
-<OFFICE_HOME>/program/classes. Also make these classes known to your web server.
+  http://www.servlets.com/cos/index.html and copy the file to the directory 
+  <OFFICE_HOME>/program/classes. Also make these classes known to your web server.
 - Make sure the Servlet API is in the classpath of your web server. You can 
-download the Servlet API from http://java.sun.com/products/servlet/index.html . 
-Also, you must copy the file "servlet.jar" to the directory <OFFICE_HOME>/program/classes.
+  download the Servlet API from http://java.sun.com/products/servlet/index.html . 
+  Also, you must copy the file "servlet.jar" to the directory <OFFICE_HOME>/program/classes.
 - Use your GNU make (http://www.gnu.org) to build the servlet class.
 - Make the servlet class known to your web server.
 
 Converting documents with the servlet:
 - In the file "ConverterServlet.html", search for the following line:
-<form action="http://127.0.0.1:8100/servlet/ConverterServlet" method=post enctype="multipart/form-data">
-Replace the existing IP address with your intended IP address.
+  <form action="http://127.0.0.1:8100/servlet/ConverterServlet" method=post enctype="multipart/form-data">
+  Replace the existing IP address with your intended IP address.
 - Open the file "ConverterServlet.html" in your web browser and select a file,
-a type to convert the file to, and the extension for the converted file.
+  a type to convert the file to, and the extension for the converted file.
 - Press the button. The document will be uploaded to the server, converted and
-pushed back to the client. Your browser will open a dialog for saving the
-converted document.
+  pushed back to the client. Your browser will open a dialog for saving the
+  converted document.
