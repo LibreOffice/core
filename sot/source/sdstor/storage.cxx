@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:21:23 $
+ *  last change: $Author: rt $ $Date: 2005-02-07 14:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1579,13 +1579,19 @@ sal_Int32 SotStorage::GetVersion( const com::sun::star::uno::Reference < com::su
     switch( nSotFormatID )
     {
         case SOT_FORMATSTR_ID_STARWRITER_8:
+        case SOT_FORMATSTR_ID_STARWRITER_8_TEMPLATE:
         case SOT_FORMATSTR_ID_STARWRITERWEB_8:
         case SOT_FORMATSTR_ID_STARWRITERGLOB_8:
         case SOT_FORMATSTR_ID_STARDRAW_8:
+        case SOT_FORMATSTR_ID_STARDRAW_8_TEMPLATE:
         case SOT_FORMATSTR_ID_STARIMPRESS_8:
+        case SOT_FORMATSTR_ID_STARIMPRESS_8_TEMPLATE:
         case SOT_FORMATSTR_ID_STARCALC_8:
+        case SOT_FORMATSTR_ID_STARCALC_8_TEMPLATE:
         case SOT_FORMATSTR_ID_STARCHART_8:
+        case SOT_FORMATSTR_ID_STARCHART_8_TEMPLATE:
         case SOT_FORMATSTR_ID_STARMATH_8:
+        case SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE:
             return SOFFICE_FILEFORMAT_8;
         case SOT_FORMATSTR_ID_STARWRITER_60:
         case SOT_FORMATSTR_ID_STARWRITERWEB_60:
