@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dobject.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-18 08:40:43 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,8 @@ public:
         sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
+        sal_Bool bTemporaryShape);
     virtual ~SdXML3DObjectContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
@@ -147,7 +148,8 @@ public:
     SdXML3DCubeObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
+        sal_Bool bTemporaryShape);
     virtual ~SdXML3DCubeObjectShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
@@ -170,7 +172,8 @@ public:
     SdXML3DSphereObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
+        sal_Bool bTemporaryShape);
     virtual ~SdXML3DSphereObjectShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
@@ -191,7 +194,8 @@ public:
     SdXML3DPolygonBasedShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
+        sal_Bool bTemporaryShape);
     virtual ~SdXML3DPolygonBasedShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
@@ -209,7 +213,8 @@ public:
     SdXML3DLatheObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
+        sal_Bool bTemporaryShape);
     virtual ~SdXML3DLatheObjectShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
@@ -227,7 +232,8 @@ public:
     SdXML3DExtrudeObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
+        sal_Bool bTemporaryShape);
     virtual ~SdXML3DExtrudeObjectShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
