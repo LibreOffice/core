@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:18:43 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1209,7 +1209,7 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
         for ( USHORT i = 0; i < pPage->GetSortedObjs()->Count(); ++i )
         {
             SdrObject *pObj = (*pPage->GetSortedObjs())[i];
-            if ( pObj->IsWriterFlyFrame() )
+            if ( pObj->ISA(SwVirtFlyDrawObj) )
             {
                 SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
                 const SwRect aFlyRect = pFly->AddSpacesToFrm();
@@ -2247,7 +2247,7 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
             for ( USHORT i = 0; i < pTmp->GetDrawObjs()->Count(); ++i )
             {
                 const SdrObject *pO = (*pTmp->GetDrawObjs())[i];
-                if ( pO->IsWriterFlyFrame() )
+                if ( pO->ISA(SwVirtFlyDrawObj) )
                 {
                     const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                     if( !pFly->IsFlyInCntFrm() && pFly->Frm().Top()!=WEIT_WECH )
@@ -2686,7 +2686,7 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                 for ( USHORT i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
                 {
                     SdrObject *pO = (*pFrm->GetDrawObjs())[i];
-                    if ( pO->IsWriterFlyFrame() )
+                    if ( pO->ISA(SwVirtFlyDrawObj) )
                     {
                         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                         if( WEIT_WECH != pFly->Frm().Top() )
@@ -2853,7 +2853,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
             for ( USHORT i = 0; i < pPg->GetSortedObjs()->Count(); ++i )
             {
                 const SdrObject *pObj = (*pPg->GetSortedObjs())[i];
-                SwRect aTmp( pObj->GetBoundRect() );
+                SwRect aTmp( pObj->GetCurrentBoundRect() );
                 if ( aTmp.IsOver( aRect ) )
                 {
                     SdrObjUserCall *pUserCall;
@@ -2862,7 +2862,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                     if ( SURROUND_THROUGHT != rSur.GetSurround() )
                     {
                         const SwFrm *pAnch;
-                        if ( pObj->IsWriterFlyFrame() )
+                        if ( pObj->ISA(SwVirtFlyDrawObj) )
                         {
                             const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
                             if ( pFly->IsAnLower( this ) )
