@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-05 14:48:16 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 05:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,8 +340,22 @@
 #define HID_TP_COMMONPRINTOPTIONS                   (HID_SFX_START + 275)
 #define HID_FILEDLG_LINK_CB                         (HID_SFX_START + 276)
 #define HID_FILEDLG_PREVIEW_CB                      (HID_SFX_START + 277)
+#define HID_HELP_WINDOW                             (HID_SFX_START + 278)
+#define HID_HELP_LISTBOX                            (HID_SFX_START + 279)
+#define HID_HELP_TABCONTROL                         (HID_SFX_START + 280)
+#define HID_HELP_TOOLBOX                            (HID_SFX_START + 281)
+#define HID_HELP_TOOLBOXITEM_INDEX                  (HID_SFX_START + 282)
+#define HID_HELP_TOOLBOXITEM_START                  (HID_SFX_START + 283)
+#define HID_HELP_TOOLBOXITEM_BACKWARD               (HID_SFX_START + 284)
+#define HID_HELP_TOOLBOXITEM_FORWARD                (HID_SFX_START + 285)
+#define HID_HELP_TOOLBOXITEM_PRINT                  (HID_SFX_START + 286)
+#define HID_HELP_TOOLBOXITEM_BOOKMARKS              (HID_SFX_START + 287)
+#define HID_HELP_TABPAGE_CONTENTS                   (HID_SFX_START + 288)
+#define HID_HELP_TABPAGE_INDEX                      (HID_SFX_START + 289)
+#define HID_HELP_TABPAGE_SEARCH                     (HID_SFX_START + 290)
+#define HID_HELP_TABPAGE_BOOKMARKS                  (HID_SFX_START + 291)
 
-#define ACT_SFX_HID_END HID_TP_COMMONPRINTOPTIONS
+#define ACT_SFX_HID_END HID_HELP_TOOLBOXITEM_BOOKMARKS
 
 // "Uberlaufpr"ufung --------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-01 06:31:52 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 05:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,4 +212,12 @@ hidspecial HID_CNT_SENT_VIEW_MARKED_ARTICLES    { HelpID = HID_CNT_SENT_VIEW_MAR
 hidspecial HID_TABDLG_APPLY_BTN                 { HelpID = HID_TABDLG_APPLY_BTN; };
 hidspecial HID_FILEDLG_LINK_CB                  { HelpID = HID_FILEDLG_LINK_CB; };
 hidspecial HID_FILEDLG_PREVIEW_CB               { HelpID = HID_FILEDLG_PREVIEW_CB; };
+hidspecial HID_HELP_WINDOW                      { HelpID = HID_HELP_WINDOW; };
+hidspecial HID_HELP_TOOLBOX                     { HelpID = HID_HELP_TOOLBOX; };
+hidspecial HID_HELP_TOOLBOXITEM_INDEX           { HelpID = HID_HELP_TOOLBOXITEM_INDEX; };
+hidspecial HID_HELP_TOOLBOXITEM_START           { HelpID = HID_HELP_TOOLBOXITEM_START; };
+hidspecial HID_HELP_TOOLBOXITEM_BACKWARD        { HelpID = HID_HELP_TOOLBOXITEM_BACKWARD; };
+hidspecial HID_HELP_TOOLBOXITEM_FORWARD         { HelpID = HID_HELP_TOOLBOXITEM_FORWARD; };
+hidspecial HID_HELP_TOOLBOXITEM_PRINT           { HelpID = HID_HELP_TOOLBOXITEM_PRINT; };
+hidspecial HID_HELP_TOOLBOXITEM_BOOKMARKS       { HelpID = HID_HELP_TOOLBOXITEM_BOOKMARKS; };
 
