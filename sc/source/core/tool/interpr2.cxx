@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:52:12 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1484,7 +1484,7 @@ void ScInterpreter::ScBackSolver()
             {
                 ScRange aVRange( aVAdr, aVAdr );    // fuer SetDirty
                 double nSaveVal;
-                ScPostIt aNote;
+                ScPostIt aNote(pDok);
                 BOOL bHasNote;
                 if ( bTempCell )
                 {
