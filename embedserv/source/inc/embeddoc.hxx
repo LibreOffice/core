@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddoc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2003-04-10 14:55:58 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ class EmbedDocument_Impl : public IPersistStorage
                          , public IDataObject
                          , public IOleObject
                          , public IPersistFile
+                         , public IDispatch
 {
 protected:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
@@ -162,6 +163,11 @@ public:
     STDMETHOD(SaveCompleted) ( LPCOLESTR pszFileName );
     STDMETHOD(GetCurFile) ( LPOLESTR *ppszFileName );
 
+    /* IDispatch methods */
+    STDMETHOD(GetTypeInfoCount) ( unsigned int FAR*  pctinfo );
+    STDMETHOD(GetTypeInfo) ( unsigned int iTInfo, LCID lcid, ITypeInfo FAR* FAR* ppTInfo );
+    STDMETHOD(GetIDsOfNames) ( REFIID riid, OLECHAR FAR* FAR* rgszNames, unsigned int cNames, LCID lcid, DISPID FAR* rgDispId );
+    STDMETHOD(Invoke) ( DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS FAR* pDispParams, VARIANT FAR* pVarResult, EXCEPINFO FAR* pExcepInfo, unsigned int FAR* puArgErr );
 
     // c++ - methods
 
@@ -178,6 +184,7 @@ protected:
 
     CComPtr< IStorage >                 m_pMasterStorage;
     CComPtr< IStream >                  m_pOwnStream;
+    CComPtr< IStream >                  m_pExtStream;
     GUID                                m_guid;
 
     sal_Bool                            m_bIsDirty;
