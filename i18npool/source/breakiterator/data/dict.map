@@ -1,0 +1,13 @@
+OOO_1.1 {
+global:
+    GetVersionInfo;
+    component_getDescriptionFunc;
+    getDataArea;
+    getExistMark;
+    getIndex1;
+    getIndex2;
+    getLenArray;
+
+local:
+    *;
+};
