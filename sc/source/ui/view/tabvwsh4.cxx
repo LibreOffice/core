@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:30:48 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ void __EXPORT ScTabViewShell::Deactivate(BOOL bMDI)
         DeActivateOlk( GetViewData() );
         ActivateView( FALSE, FALSE );
 
-        if ( GetViewFrame()->ISA(SfxInPlaceFrame) )                         // inplace
+        if ( GetViewFrame()->GetFrame()->IsInPlace() ) // inplace
             GetViewData()->GetDocShell()->UpdateOle(GetViewData(),TRUE);
 
         if ( pHdl )
@@ -378,7 +378,8 @@ void ScTabViewShell::UpdateOleZoom()
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     if ( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
     {
-        Size aObjSize = ((SfxInPlaceObject*)pDocSh)->GetVisArea().GetSize();
+        //TODO/LATER: is there a difference between the two GetVisArea methods?
+        Size aObjSize = ((const SfxObjectShell*)pDocSh)->GetVisArea().GetSize();
         if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
         {
             Window* pWin = GetActiveWin();
@@ -396,13 +397,39 @@ void __EXPORT ScTabViewShell::AdjustPosSizePixel( const Point &rPos, const Size 
 
 void __EXPORT ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
 {
-    SvBorder aBorder;
-    GetBorderSize( aBorder, rSize );
-    SetBorderPixel( aBorder );
+    Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
+    if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
+    {
+        SvBorder aBorder( GetBorderPixel() );
+        Size aSize( rSize );
+        aSize.Width() -= (aBorder.Left() + aBorder.Right());
+        aSize.Height() -= (aBorder.Top() + aBorder.Bottom());
+        Size aObjSizePixel = GetWindow()->LogicToPixel( aObjSize, MAP_100TH_MM );
+        SfxViewShell::SetZoomFactor( Fraction( aSize.Width(),aObjSizePixel.Width() ),
+                        Fraction( aSize.Height(),aObjSizePixel.Height() ) );
+    }
 
     Size aNewSize( rSize );
-    aNewSize.Width()  += aBorder.Left() + aBorder.Right();
-    aNewSize.Height() += aBorder.Top() + aBorder.Bottom();
+    SvBorder aBorder;
+    GetBorderSize( aBorder, rSize );
+    if ( GetViewFrame()->GetFrame()->IsInPlace() )
+    {
+        Size aViewSize( aNewSize );
+        aViewSize.Width()  -= (aBorder.Left() + aBorder.Right());
+        aViewSize.Height() -= (aBorder.Top() + aBorder.Bottom());
+        Point aPos( rOfs );
+        aPos.X() += aBorder.Left();
+        aPos.Y() += aBorder.Top();
+        GetWindow()->SetPosSizePixel( aPos, aViewSize );
+    }
+    else
+    {
+        SvBorder aBorder;
+        GetBorderSize( aBorder, rSize );
+        SetBorderPixel( aBorder );
+        aNewSize.Width()  += aBorder.Left() + aBorder.Right();
+        aNewSize.Height() += aBorder.Top() + aBorder.Bottom();
+    }
 
     DoResize( rOfs, aNewSize, TRUE );                   // rSize = Groesse von gridwin
 
@@ -1462,7 +1489,7 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         //  container app and are executed during Window::KeyInput.
         //  -> don't pass keys to input handler that would be used there
         //  but should call slots instead.
-        BOOL bParent = ( GetViewFrame()->ISA(SfxInPlaceFrame) && eFunc != KEYFUNC_DONTKNOW );
+        BOOL bParent = ( GetViewFrame()->GetFrame()->IsInPlace() && eFunc != KEYFUNC_DONTKNOW );
 
         if( !bUsed && !bDraw && nCode != KEY_RETURN && !bParent )
             bUsed = pScMod->InputKeyEvent( rKEvt, TRUE );       // Eingabe
@@ -1657,7 +1684,8 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
 
     if ( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
     {
-        Rectangle aVisArea = ((SfxInPlaceObject*)pDocSh)->GetVisArea();
+        //TODO/LATER: is there a difference between the two GetVisArea methods?
+        Rectangle aVisArea = ((const SfxObjectShell*)pDocSh)->GetVisArea();
 
         SCTAB nVisTab = pDoc->GetVisibleTab();
         if (!pDoc->HasTable(nVisTab))
@@ -1670,7 +1698,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
         // show the right cells
         GetViewData()->SetScreenPos( bNegativePage ? aVisArea.TopRight() : aVisArea.TopLeft() );
 
-        if ( GetViewFrame()->ISA(SfxInPlaceFrame) )             // inplace
+        if ( GetViewFrame()->GetFrame()->IsInPlace() )                         // inplace
         {
             pDocSh->SetInplace( TRUE );             // schon so initialisiert
             if (pDoc->IsEmbedded())
@@ -1832,6 +1860,9 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
         xFrame->setComponent( uno::Reference<awt::XWindow>(), new ScTabViewObj( this ) );
 
     SetCurSubShell(OST_Cell);
+    SvBorder aBorder;
+    GetBorderSize( aBorder, Size() );
+    SetBorderPixel( aBorder );
 }
 
 //------------------------------------------------------------------
@@ -1878,6 +1909,9 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
         xFrame->setComponent( uno::Reference<awt::XWindow>(), new ScTabViewObj( this ) );
 
     SetCurSubShell(OST_Cell);
+    SvBorder aBorder;
+    GetBorderSize( aBorder, Size() );
+    SetBorderPixel( aBorder );
 }
 
 #undef __INIT_ScTabViewShell
