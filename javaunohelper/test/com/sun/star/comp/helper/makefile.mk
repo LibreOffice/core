@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2001-06-14 11:58:23 $
+#   last change: $Author: dbo $ $Date: 2002-10-21 15:30:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,10 +76,12 @@ JARFILES = sandbox.jar jurt.jar ridl.jar
 JAVACLASSFILES=	\
     $(CLASSDIR)$/$(PACKAGE)$/ComponentContext_Test.class \
     $(CLASSDIR)$/$(PACKAGE)$/SharedLibraryLoader_Test.class \
-    $(CLASSDIR)$/$(PACKAGE)$/RegistryServiceFactory_Test.class
+    $(CLASSDIR)$/$(PACKAGE)$/RegistryServiceFactory_Test.class \
+    $(CLASSDIR)$/$(PACKAGE)$/Bootstrap_Test.class
 
 JAVAFILES= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+

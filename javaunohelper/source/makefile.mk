@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jbu $ $Date: 2001-05-15 07:47:44 $
+#   last change: $Author: dbo $ $Date: 2002-10-21 15:30:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,22 +90,25 @@ INCPRE+=	$(OUT)$/inc
 .ENDIF
 
 UNOTYPES= \
+        com.sun.star.container.XHierarchicalNameAccess	\
         com.sun.star.loader.XImplementationLoader	\
         com.sun.star.registry.XRegistryKey			\
+        com.sun.star.registry.XSimpleRegistry			\
         com.sun.star.lang.IllegalArgumentException	\
         com.sun.star.lang.XTypeProvider				\
         com.sun.star.lang.XServiceInfo				\
         com.sun.star.lang.XMultiServiceFactory		\
         com.sun.star.lang.XSingleServiceFactory		\
-        com.sun.star.lang.XSingleComponentFactory   \
+            com.sun.star.lang.XSingleComponentFactory   \
         com.sun.star.uno.TypeClass					\
         com.sun.star.uno.XWeak						\
         com.sun.star.uno.XAggregation				\
-        com.sun.star.uno.XComponentContext          \
+            com.sun.star.uno.XComponentContext          \
         com.sun.star.lang.XInitialization
 
 SLOFILES= \
-        $(SLO)$/javaunohelper.obj
+        $(SLO)$/javaunohelper.obj		\
+        $(SLO)$/bootstrap.obj
 
 SHL1TARGET=	$(TARGET)
 

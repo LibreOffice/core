@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bootstrap.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2002-01-22 10:49:27 $
+ *  last change: $Author: dbo $ $Date: 2002-10-21 15:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ import com.sun.star.loader.XImplementationLoader;
 import com.sun.star.uno.UnoRuntime;
 
 import java.util.Hashtable;
+import java.util.Enumeration;
 
 /** Bootstrap offers functionality to obtain a context or simply
     a service manager.
@@ -190,4 +191,56 @@ public class Bootstrap {
         return (XMultiServiceFactory)UnoRuntime.queryInterface(
             XMultiServiceFactory.class, createInitialComponentContext( null ).getServiceManager() );
     }
+
+
+    /** Bootstraps the initial component context from a native UNO installation.
+
+        @see cppuhelper/defaultBootstrap_InitialComponentContext()
+    */
+    static public final XComponentContext defaultBootstrap_InitialComponentContext()
+        throws Exception
+    {
+        return defaultBootstrap_InitialComponentContext( null, null );
+    }
+    /** Bootstraps the initial component context from a native UNO installation.
+
+        @param ini_file
+               ini_file (may be null: uno.rc besides cppuhelper lib)
+        @param bootstrap_parameters
+               bootstrap parameters (maybe null)
+
+        @see cppuhelper/defaultBootstrap_InitialComponentContext()
+    */
+    static public final XComponentContext defaultBootstrap_InitialComponentContext(
+        String ini_file, Hashtable bootstrap_parameters )
+        throws Exception
+    {
+        // jni convenience: easier to iterate over array than calling Hashtable
+        String pairs [] = null;
+        if (null != bootstrap_parameters)
+        {
+            pairs = new String [ 2 * bootstrap_parameters.size() ];
+            Enumeration enum = bootstrap_parameters.keys();
+            int n = 0;
+            while (enum.hasMoreElements())
+            {
+                String name = (String)enum.nextElement();
+                pairs[ n++ ] = name;
+                pairs[ n++ ] = (String)bootstrap_parameters.get( name );
+            }
+        }
+
+        if (! m_loaded_juh)
+        {
+            System.loadLibrary( "juh" );
+            m_loaded_juh = true;
+        }
+        return (XComponentContext)UnoRuntime.queryInterface(
+            XComponentContext.class, cppuhelper_bootstrap( ini_file, pairs ) );
+    }
+
+    static private boolean m_loaded_juh = false;
+    static private native final Object cppuhelper_bootstrap(
+        String ini_file, String bootstrap_parameters [] )
+        throws Exception;
 }
