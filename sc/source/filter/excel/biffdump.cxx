@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: gt $ $Date: 2001-03-14 14:49:00 $
+ *  last change: $Author: gt $ $Date: 2001-03-28 13:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2916,7 +2916,13 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     ADDFLAG( 0x00040000, " fShowInputMsg" );
                     ADDFLAG( 0x00080000, " fShowErrorMsg" );
                 }
-                PRINT();                LINESTART();
+                PRINT();
+                LINESTART();
+                ADDTEXT( "error style: " );
+                const char*     pErrStyle[] = { "stop", "warning", "info", "4" };
+                ADDTEXT( pErrStyle[ ( __nFlags >> 4 ) & 0x03 ] );
+                PRINT();
+                LINESTART();
                 const char*     pValType[] =
                 {
                     "all", "integer", "decimal", "list", "date", "time", "text len", "user",
@@ -2955,7 +2961,33 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 AddUNICODEString( t, rIn );
                 PRINT();
                 if( rIn.GetRecLeft() > 8 )
-                    ContDump( rIn.GetRecLeft() - 8 );
+                {
+                    UINT16      nLen;
+                    rIn >> nLen;
+                    LINESTART();
+                    ADDTEXT( "Len1: " );
+                    __AddDec( t, nLen );
+                    ADDTEXT( "   (unknown1: " );
+                    ADDHEX( 2 );
+                    ADDTEXT( ")" );
+                    PRINT();
+                    FormulaDump( nLen, FT_RangeName );
+
+                    rIn >> nLen;
+                    LINESTART();
+                    ADDTEXT( "Len2: " );
+                    __AddDec( t, nLen );
+                    ADDTEXT( "   (unknown2: " );
+                    ADDHEX( 2 );
+                    ADDTEXT( ")" );
+                    PRINT();
+                    FormulaDump( nLen, FT_RangeName );
+
+                    LINESTART();
+                    ADDTEXT( "unknown3: " );
+                    ADDHEX( 2 );
+                    PRINT();
+                }
 
                 // Row-Row / Col-Col
                 UINT16  nR1, nR2, nC1, nC2;
@@ -4962,7 +4994,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
 
     t += pPre;
 
-    while( (pIn->GetRecLeft() > 0) && !bError )
+    while( ( pIn->GetRecPos() < nAfterPos ) && !bError )
     {
         *pIn >> nOp;
 
