@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:41:51 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1079,10 +1079,6 @@ SmTextForwarder::SmTextForwarder( SmEditAccessible& rAcc, SmEditSource & rSource
 
 SmTextForwarder::~SmTextForwarder()
 {
-    //  die EditEngine muss ggf. von aussen geloescht werden
-    EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    if (pEditEngine)
-        pEditEngine->SetNotifyHdl( Link() );
 }
 
 IMPL_LINK(SmTextForwarder, NotifyHdl, EENotify*, aNotify)
@@ -1764,6 +1760,12 @@ SmDocShell * SmEditAccessible::GetDoc_Impl()
 
 void SmEditAccessible::ClearWin()
 {
+    // #112565# remove handler before current object gets destroyed
+    // (avoid handler being called for already dead object)
+    EditEngine *pEditEngine = GetEditEngine();
+    if (pEditEngine)
+        pEditEngine->SetNotifyHdl( Link() );
+
     pWin = 0;   // implicitly results in AccessibleStateType::DEFUNC set
 
     //! make TextHelper implicitly release C++ references to some core objects
