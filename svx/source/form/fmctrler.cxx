@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 18:10:46 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 14:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3316,7 +3316,6 @@ void FmXFormController::deleteInterceptor(const Reference< ::com::sun::star::fra
     }
     if (aIter == m_aControlDispatchInterceptors.end())
     {
-        DBG_ERROR("FmXFormController::deleteInterceptor : we're not registered for this object !");
         return;
     }
 
