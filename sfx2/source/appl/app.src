@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-16 14:34:02 $
+ *  last change: $Author: cd $ $Date: 2002-05-22 07:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,8 +361,8 @@ ErrorBox MSG_ERR_WEBBROWSER_NOT_STARTED
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message = "Fehler beim Starten des Webbrowsers.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME und die des Webbrowsers." ;
-    Message [ ENGLISH ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings." ;
+    Message = "Beim Starten des Web-Browsers ist ein Fehler aufgetreten. Bitte überprüfen Sie die Einstellungen von %PRODUCTNAME unter 'Extras - Optionen - %PRODUCTNAME - Hilfsprogramme' und die Einstellungen Ihres Web-Browsers." ;
+    Message [ ENGLISH ] = "An error occurred in starting the web browser. Please check the %PRODUCTNAME settings under 'Tools - Options - %PRODUCTNAME - External Programs' and the settings for your web browser." ;
     Message[ english_us ] = "An error occurred in starting the web browser.\nPlease check the %PRODUCTNAME and web browser settings.";
     Message[ portuguese ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
     Message[ russian ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
