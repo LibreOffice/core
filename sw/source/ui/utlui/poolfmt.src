@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2001-06-11 10:50:12 $
+ *  last change: $Author: rt $ $Date: 2001-06-13 23:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2299,7 +2299,7 @@ String STR_POOLCOLL_BUL_LEVEL2E
     Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹ 2 µ²§À";
     Text[ arabic ] = "ÊÚÏÇÏ 2 äåÇíÉ";
     Text[ greek ] = "ÊáôÜëïãïò 2 Ôİëïò";
-    Text[ korean ] = "±Û¸Ó¸®±âÈ£  2 ³¡";
+    Text[ korean ] = "±Û¸Ó¸®±âÈ£ 2 ³¡";
     Text[ turkish ] = "Liste 2 Son";
     Text[ catalan ] = "Enumeración 2 fin";
     Text[ finnish ] = "Luettelon 2 loppu";
@@ -5302,11 +5302,32 @@ String STR_POOLCHR_RUBYTEXT
 {
     Text = "Rubys" ;
     Text [ English ] = "Rubies" ;
+    Text[ english_us ] = "Phonetic Symbols";
+    Text[ portuguese ] = "Símbolos fonéticos";
+    Text[ russian ] = "Ôîíåòè÷åñêèå çíàêè";
+    Text[ greek ] = "ÖùíçôéêÜ óıìâïëá";
+    Text[ dutch ] = "Fonetische tekens";
+    Text[ french ] = "Symboles phonétiques";
+    Text[ spanish ] = "Símbolos fonéticos";
+    Text[ finnish ] = "Foneettiset merkit";
+    Text[ italian ] = "Simboli fonetici";
+    Text[ danish ] = "Phonetic Symbols";
+    Text[ swedish ] = "Fonetiska symboler";
+    Text[ polish ] = "Symbole fonetyczne";
+    Text[ portuguese_brazilian ] = "Phonetic Symbols";
+    Text[ japanese ] = "‚Ó‚è‚ª‚È";
+    Text[ korean ] = "¹ßÀ½ ±âÈ£";
+    Text[ chinese_simplified ] = "×¢Òô·ûºÅ";
+    Text[ chinese_traditional ] = "µù­µ¦r¤¸";
+    Text[ turkish ] = "Phonetic Symbols";
+    Text[ arabic ] = "ÑãæÒ ÕæÊíÉ";
+    Text[ catalan ] = "Símbolos fonéticos";
 };
 
 String STR_POOLCHR_PRGM_RUBYTEXT
 {
     Text  = "Rubies" ;
 };
+
 
 
