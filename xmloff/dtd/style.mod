@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.14 2000-12-04 12:15:09 sab Exp $
+	$Id: style.mod,v 1.15 2000-12-05 15:16:17 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -313,13 +313,21 @@
 	style:cell-protect CDATA #IMPLIED
 	fo:wrap-option (no-wrap | wrap) #IMPLIED
 >
-<!ELEMENT style:columns (style:column*)>
+<!ELEMENT style:columns (style:column-sep?,style:column*)>
 <!ATTLIST style:columns fo:column-count %nonNegativeInteger; #IMPLIED>
 
 <!ELEMENT style:column EMPTY>
 <!ATTLIST style:column style:rel-width CDATA #IMPLIED>
 <!ATTLIST style:column fo:margin-left %positiveLength; #IMPLIED>
 <!ATTLIST style:column fo:margin-right %positiveLength; #IMPLIED>
+
+<!ELEMENT style:column-sep EMPTY>
+<!ATTLIST style:column-sep style:style (none|solid|dotted|dashed|dot-dashed) 
+																	"solid">
+<!ATTLIST style:column-sep style:width %length; #REQUIRED>
+<!ATTLIST style:column-sep style:height %percentage; "100%">
+<!ATTLIST style:column-sep style:vertical-align (top|middle|bottom) "top">
+<!ATTLIST style:column-sep style:color %color; "#000000">
 
 <!-- page master properties -->
 <!ELEMENT style:page-master (style:properties?, style:header-style?, style:footer-style?, style:footnote-layout?)>
