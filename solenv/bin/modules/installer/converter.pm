@@ -2,9 +2,9 @@
 #
 #   $RCSfile: converter.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-18 08:33:45 $
+#   last change: $Author: rt $ $Date: 2005-03-29 15:35:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,6 +131,46 @@ sub convert_stringlist_into_array
     push(@newarray, "$last\n");
 
     return \@newarray;
+}
+
+#############################################################################
+# Converting an array into a comma separated string
+#############################################################################
+
+sub convert_array_to_comma_separated_string
+{
+    my ( $arrayref ) = @_;
+
+    my $newstring = "";
+
+    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
+    {
+        $newstring = $newstring . ${$arrayref}[$i] . ",";
+    }
+
+    $newstring =~ s/\,\s*$//;
+
+    return $newstring;
+}
+
+#############################################################################
+# Converting an array into a space separated string
+#############################################################################
+
+sub convert_array_to_space_separated_string
+{
+    my ( $arrayref ) = @_;
+
+    my $newstring = "";
+
+    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
+    {
+        $newstring = $newstring . ${$arrayref}[$i] . " ";
+    }
+
+    $newstring =~ s/\s*$//;
+
+    return $newstring;
 }
 
 #############################################################################
