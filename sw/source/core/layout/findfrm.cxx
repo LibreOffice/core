@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:18:41 $
+ *  last change: $Author: ama $ $Date: 2001-11-07 13:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,7 +408,8 @@ SwPageFrm* SwFrm::FindPageFrm()
             pRet = pRet->GetUpper();
         else if ( pRet->IsFlyFrm() )
         {
-            if ( ((SwFlyFrm*)pRet)->IsFlyFreeFrm() )
+            if ( ((SwFlyFrm*)pRet)->IsFlyFreeFrm() &&
+                 ((SwFlyFreeFrm*)pRet)->GetPage() )
                 pRet = ((SwFlyFreeFrm*)pRet)->GetPage();
             else
                 pRet = ((SwFlyFrm*)pRet)->GetAnchor();
