@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-04 13:53:26 $
+ *  last change: $Author: thb $ $Date: 2002-11-07 12:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,7 +378,7 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
         for( i=0; i<aGeometry.Count(); ++i )
         {
             const XPolygon& rPoly = aGeometry.GetObject(i);
-            if( rPoly[0] == rPoly[ rPoly.GetSize()-1 ] )
+            if( rPoly[0] == rPoly[ rPoly.GetPointCount()-1 ] )
             {
                 // polygon is closed - use for fillings
                 aPolyPoly.Insert( rPoly );
