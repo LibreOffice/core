@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:03 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
         Text [ swedish ] = "Standar~d" ; \
         Text [ danish ] = "Standar~d" ; \
         Text [ portuguese ] = "~Padrão" ; \
-        Text [ portuguese_brazilian ] = "Standar~d" ; \
+        Text [ portuguese_brazilian ] = "~Padrão" ; \
         Text[ chinese_simplified ] = "æ ‡å‡†(~D)";\
         Text[ russian ] = "~Ñòàíäàğò";\
         Text[ polish ] = "~Domyœlnie";\
@@ -89,11 +89,14 @@
         Text[ arabic ] = "~ŞíÇÓí";\
         Text[ greek ] = "~ĞñïåğéëïãŞ";\
         Text[ korean ] = "ê¸°ë³¸ê°’(~D)";\
-        Text[ turkish ] = "Standar~t";\
+        Text[ turkish ] = "~Varsayılan";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Per ~defecte";\
         Text[ finnish ] = "~Palauta oletustyyli";\
         Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";\
+        Text[ czech ] = "StandardnÃ­";\
+        Text[ hebrew ] = "â€®×‘×¨×™×¨×ª ××’×“×œâ€¬";\
+        Text[ hindi ] = "~à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿";\
     };
 
  // Font (SID_ATTR_CHAR_FONT) und Groesse (SID_ATTR_CHAR_FONTHEIGHT) duerfen nicht im
@@ -167,7 +170,7 @@
                     Text [ english_us ] = "~Superscript" ; \
                     Text[ chinese_simplified ] = "ä¸Šæ ‡(~S)";\
                     Text[ russian ] = "Âåğõíèé èíäåêñ";\
-                    Text[ polish ] = "Indeks górny";\
+                    Text[ polish ] = "~Indeks górny";\
                     Text[ japanese ] = "ä¸Šä»˜ã(~S)";\
                     Text[ chinese_traditional ] = "ä¸Šæ¨™(~S)";\
                     Text[ arabic ] = "ãÑÊİÚ";\
@@ -177,6 +180,9 @@
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "~Superíndex";\
                     Text[ thai ] = "~à¸•à¸±à¸§à¸¢à¸";\
+                    Text[ czech ] = "HornÃ­ index";\
+                    Text[ hebrew ] = "~Hochstellen";\
+                    Text[ hindi ] = "~à¤¸à¥‚à¤ªà¤°à¤¸à¥à¤•à¥à¤°à¤¿à¤ªà¥à¤Ÿà¥";\
                 };\
                 MenuItem\
                 {\
@@ -197,7 +203,7 @@
                     Text [ english_us ] = "S~ubscript" ; \
                     Text[ chinese_simplified ] = "ä¸‹æ ‡(~U)";\
                     Text[ russian ] = "Íèæíèé èíäåêñ";\
-                    Text[ polish ] = "Indeks dolny";\
+                    Text[ polish ] = "Indeks ~dolny";\
                     Text[ japanese ] = "ä¸‹ä»˜ã(~U)";\
                     Text[ chinese_traditional ] = "ä¸‹æ¨™(~U)";\
                     Text[ arabic ] = "ãäÎİÖ";\
@@ -207,21 +213,27 @@
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "S~ubíndex";\
                     Text[ thai ] = "à¸•à¸±~à¸§à¸¢à¸";\
+                    Text[ czech ] = "DolnÃ­ index";\
+                    Text[ hebrew ] = "~Tiefstellen";\
+                    Text[ hindi ] = "à¤¸~à¤¬à¤¸à¥à¤•à¥à¤°à¤¿à¤ªà¥à¤Ÿà¥";\
                 };\
             };\
         };\
         Text[ chinese_simplified ] = "å¼æ ·(~S)";\
         Text[ russian ] = "Ñòèëü";\
-        Text[ polish ] = "Styl";\
+        Text[ polish ] = "~Styl";\
         Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«(~S)";\
         Text[ chinese_traditional ] = "æ¨£å¼(~S)";\
         Text[ arabic ] = "äãØ";\
         Text[ greek ] = "Óôõ~ë";\
         Text[ korean ] = "ìŠ¤íƒ€ì¼(~S)";\
-        Text[ turkish ] = "Bi~çim";\
+        Text[ turkish ] = "~Biçim";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "E~stil";\
         Text[ thai ] = "~à¸¥à¸±à¸à¸©à¸“à¸°";\
+        Text[ czech ] = "Styl";\
+        Text[ hebrew ] = "Sti~l";\
+        Text[ hindi ] = "~à¤¶à¥ˆà¤²à¥€";\
     };\
     MenuItem\
     {\
@@ -273,10 +285,13 @@
                     Text[ chinese_simplified ] = "å‘å·¦(~L)";  \
                     Text[ greek ] = "Á~ñéóôåñÜ";    \
                     Text[ korean ] = "ì™¼ìª½ ë§ì¶¤(~L)";   \
-                    Text[ turkish ] = "S~ola";  \
+                    Text[ turkish ] = "~Sol";   \
                     Text[ language_user1 ] = " ";   \
                     Text[ catalan ] = "~Esquerra";  \
                     Text[ thai ] = "~à¸‹à¹‰à¸²à¸¢"; \
+                    Text[ czech ] = "Vlevo";\
+                    Text[ hebrew ] = "~Links";\
+                    Text[ hindi ] = "~à¤¬à¤¾à¤¯à¤¾à¤";\
                 };\
                 MenuItem\
                 {\
@@ -306,9 +321,12 @@
                     Text[ chinese_simplified ] = "å‘å³(~R)";  \
                     Text[ greek ] = "Äå~îéÜ";   \
                     Text[ korean ] = "ì˜¤ë¥¸ìª½ ë§ì¶¤(~R)";    \
-                    Text[ turkish ] = "S~ağa";  \
+                    Text[ turkish ] = "~Sağ";   \
                     Text[ catalan ] = "~Dreta"; \
                     Text[ thai ] = "~à¸‚à¸§à¸²"; \
+                    Text[ czech ] = "Vpravo";\
+                    Text[ hebrew ] = "~Rechts";\
+                    Text[ hindi ] = "~à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾";\
                 };\
                 MenuItem\
                 {\
@@ -338,9 +356,12 @@
                     Text[ chinese_simplified ] = "å±…ä¸­(~C)";  \
                     Text[ greek ] = "Êåíôñáñé~óìİíá";   \
                     Text[ korean ] = "ê°€ìš´ë° ë§ì¶¤(~C)";    \
-                    Text[ turkish ] = "Ortala"; \
+                    Text[ turkish ] = "~Ortalanmış";    \
                     Text[ catalan ] = "~Centrat";   \
                     Text[ thai ] = "~à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡";\
+                    Text[ czech ] = "Na stÅ™ed";\
+                    Text[ hebrew ] = "~Zentriert";\
+                    Text[ hindi ] = "~à¤•à¥‡à¤¨à¥à¤¦à¥à¤°à¤¿à¤¤";\
                 };\
                 MenuItem\
                 {\
@@ -368,16 +389,19 @@
                     Text[ arabic ] = "ÖÈØ";\
                     Text[ greek ] = "~ĞëŞñçò óôïß÷éóç";\
                     Text[ korean ] = "ì–‘ìª½ ë§ì¶¤(~J)";\
-                    Text[ turkish ] = "~İki yana yasla";\
+                    Text[ turkish ] = "~Hizalamak";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "~Justificat";\
                     Text[ thai ] = "~à¸Šà¸´à¸”à¸‚à¸­à¸š";\
+                    Text[ czech ] = "Do bloku";\
+                    Text[ hebrew ] = "~Blocksatz";\
+                    Text[ hindi ] = "à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤†";\
                 };\
             };\
         };\
         Text[ chinese_simplified ] = "å¯¹é½(~A)";\
         Text[ russian ] = "Âûğàâíèâàíèå";\
-        Text[ polish ] = "Wyrównanie";\
+        Text[ polish ] = "~Wyrównanie";\
         Text[ japanese ] = "é…ç½®(~A)";\
         Text[ chinese_traditional ] = "å°é½Š(~A)";\
         Text[ arabic ] = "ãÍÇĞÇÉ";\
@@ -387,6 +411,9 @@
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "~Alineament";\
         Text[ thai ] = "~à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";\
+        Text[ czech ] = "ZarovnÃ¡nÃ­";\
+        Text[ hebrew ] = "â€®×™×©×•×¨â€¬";\
+        Text[ hindi ] = "~à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤•à¤°à¤£";\
     };\
     MenuItem\
     {\
@@ -396,7 +423,7 @@
         Text [ English ] = "~Line Spacing" ; \
         Text [ norwegian ] = "~Linjeavstand" ; \
         Text [ italian ] = "Interli~nea" ; \
-        Text [ portuguese_brazilian ] = "~Espa?amento de linha" ; \
+        Text [ portuguese_brazilian ] = "~Entrelinhas" ; \
         Text [ portuguese ] = "~Entrelinhas" ; \
         Text [ finnish ] = "~Riviväli" ; \
         Text [ danish ] = "~Linjeafstand" ; \
@@ -429,7 +456,7 @@
         };\
         Text[ chinese_simplified ] = "è¡Œè·(~L)";\
         Text[ russian ] = "Øàã ñòğîê";\
-        Text[ polish ] = "Odstêp wierszy";\
+        Text[ polish ] = "Inter~linia";\
         Text[ japanese ] = "è¡Œé–“(~L)";\
         Text[ chinese_traditional ] = "åˆ—é–“éš”(~L)";\
         Text[ arabic ] = "ÊÈÇÚÏ ÇáÃÓØÑ";\
@@ -439,6 +466,9 @@
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Inter~lineat";\
         Text[ thai ] = "à¸Šà¹ˆà¸­à¸‡à¸§à¹ˆà¸²à¸‡~à¸šà¸£à¸£à¸—à¸±à¸”";\
+        Text[ czech ] = "Å˜Ã¡dkovÃ¡nÃ­";\
+        Text[ hebrew ] = "â€®×¨×™×•×•×— ×©×•×¨×”â€¬";\
+        Text[ hindi ] = "~à¤°à¥‡à¤–à¤¾ à¤…à¤‚à¤¤à¤° à¤¦à¥‡à¤¨à¤¾";\
     };
 
 #define MN_DRWTXT \
@@ -467,20 +497,23 @@
         Text [ swedish ] = "~Text..." ; \
         Text [ danish ] = "~Tekst..." ; \
         Text [ portuguese ] = "Te~xto..." ; \
-        Text [ portuguese_brazilian ] = "Te~xt..." ; \
+        Text [ portuguese_brazilian ] = "Te~xto..." ; \
         Text[ chinese_simplified ] = "æ–‡å­—(~X)...";\
         Text[ russian ] = "~Òåêñò...";\
-        Text[ polish ] = "~Tekst...";\
+        Text[ polish ] = "Tek~st...";\
         Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ(~X)...";\
         Text[ chinese_traditional ] = "æ–‡å­—(~X)...";\
         Text[ arabic ] = "~äÕ...";\
         Text[ greek ] = "~Êåßìåíï...";\
         Text[ korean ] = "í…ìŠ¤íŠ¸(~X)...";\
-        Text[ turkish ] = "~Metin...";\
+        Text[ turkish ] = "Me~tin...";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Te~xt...";\
         Text[ finnish ] = "Teks~ti...";\
         Text[ thai ] = "à¸‚à¹‰à¸­~à¸„à¸§à¸²à¸¡...";\
+        Text[ czech ] = "Text...";\
+        Text[ hebrew ] = "~Text...";\
+        Text[ hindi ] = "à¤Ÿà¥‡~à¤•à¥à¤¸à¥à¤Ÿà¥...";\
     };
 
 #define MN_ORIGINALSIZE \
@@ -493,7 +526,7 @@
         Text [ ENGLISH ] = "Real Size" ; \
         Text [ norwegian ] = "Real Size" ; \
         Text [ italian ] = "Dimensione ori~ginale" ; \
-        Text [ portuguese_brazilian ] = "Tamanho real" ; \
+        Text [ portuguese_brazilian ] = "Tamanho ~Original" ; \
         Text [ portuguese ] = "Tamanho original" ; \
         Text [ finnish ] = "~Alkuperäinen koko" ; \
         Text [ danish ] = "Oprindelig størrelse" ; \
@@ -504,16 +537,19 @@
         Text [ english_us ] = "~Original Size" ; \
         Text[ chinese_simplified ] = "åŸä»¶å¤§å°(~O)";\
         Text[ russian ] = "Èñõîäíûé ğàçìåğ";\
-        Text[ polish ] = "Rozmiar oryginalny";\
-        Text[ japanese ] = "ã‚ªãƒªã‚¸ãƒŠãƒ«ã‚µã‚¤ã‚º(~O)";\
+        Text[ polish ] = "Ro~zmiar oryginalny";\
+        Text[ japanese ] = "åŸå¯¸å¤§(~O)";\
         Text[ chinese_traditional ] = "åŸä»¶å¤§å°(~O)";\
         Text[ arabic ] = "ÇáÍÌã ÇáÃÕáí";\
         Text[ greek ] = "Áñ÷éêü ìİ~ãåèïò";\
         Text[ korean ] = "ì›ë˜ í¬ê¸°(~O)";\
-        Text[ turkish ] = "Gerçek ~boyut";\
+        Text[ turkish ] = "~Gerçek boyut";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Mida ~original";\
         Text[ thai ] = "à¸‚à¸™à¸²à¸”à¹€~à¸”à¸´à¸¡";\
+        Text[ czech ] = "PÅ¯vodnÃ­ velikost";\
+        Text[ hebrew ] = "Original~grÃ¶ÃŸe";\
+        Text[ hindi ] = "~à¤¯à¤¥à¤¾à¤°à¥à¤¥ à¤ªà¤°à¤¿à¤®à¤¾à¤£";\
     };
 
 #define MN_RENAME_OBJECT \
@@ -534,16 +570,19 @@
         Text[ italian ] = "~Nome oggetto...";\
         Text[ danish ] = "Navngiv ob~jekt...";\
         Text[ swedish ] = "Namnge ob~jekt...";\
-        Text[ polish ] = "~Name Object...";\
-        Text[ portuguese_brazilian ] = "~Name Object...";\
+        Text[ polish ] = "Nazwij obiek~t...";\
+        Text[ portuguese_brazilian ] = "~Nomear Objeto...";\
         Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«åå‰ã‚’ä»˜ã‘ã‚‹...";\
         Text[ korean ] = "ê°œì²´ ì´ë¦„ ì§€ì •(~N)...";\
         Text[ chinese_simplified ] = "å‘½åå¯¹è±¡...";\
         Text[ chinese_traditional ] = "å‘½åç‰©ä»¶...";\
-        Text[ turkish ] = "~Name Object...";\
+        Text[ turkish ] = "~Nesne Adlandır...";\
         Text[ arabic ] = "~Name Object...";\
         Text[ catalan ] = "~Nom de l'objecte...";\
         Text[ thai ] = "~Name Object...";\
+        Text[ czech ] = "Pojmenovat objekt...";\
+        Text[ hebrew ] = "Ob~jekt benennen...";\
+        Text[ hindi ] = "~Name Object...";\
     };
 
 #define MN_MIRRORSUB \
@@ -555,7 +594,7 @@
         Text [ ENGLISH ] = "~Mirror" ; \
         Text [ norwegian ] = "~Mirror" ; \
         Text [ italian ] = "Ri~specchia" ; \
-        Text [ portuguese_brazilian ] = "~Espelho" ; \
+        Text [ portuguese_brazilian ] = "~Refletir" ; \
         Text [ portuguese ] = "~Reflectir" ; \
         Text [ finnish ] = "~Käännä" ; \
         Text [ danish ] = "Spejl~vend" ; \
@@ -576,7 +615,7 @@
                     Text [ ENGLISH ] = "~Vertical" ; \
                     Text [ norwegian ] = "~Vertikal" ; \
                     Text [ italian ] = "~Verticale" ; \
-                    Text [ portuguese_brazilian ] = "~Vertical" ; \
+                    Text [ portuguese_brazilian ] = "~Verticalmente" ; \
                     Text [ portuguese ] = "~Vertical" ; \
                     Text [ finnish ] = "~Pystytaso" ; \
                     Text [ danish ] = "~Lodret" ; \
@@ -587,7 +626,7 @@
                     Text [ english_us ] = "~Vertically" ; \
                     Text[ chinese_simplified ] = "å‚ç›´æ–¹å‘(~V)";\
                     Text[ russian ] = "~Ïî âåğòèêàëè";\
-                    Text[ polish ] = "~W pionie";\
+                    Text[ polish ] = "~Pionowo";\
                     Text[ japanese ] = "ä¸Šä¸‹åè»¢(~V)";\
                     Text[ chinese_traditional ] = "å‚ç›´æ–¹å‘(~V)";\
                     Text[ arabic ] = "ÑÃÓí~";\
@@ -597,6 +636,9 @@
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "~Verticalment";\
                     Text[ thai ] = "à¹~à¸™à¸§à¸•à¸±à¹‰à¸‡";\
+                    Text[ czech ] = "Svisle";\
+                    Text[ hebrew ] = "~Vertikal";\
+                    Text[ hindi ] = "~à¤²à¤‚à¤¬à¤°à¥‚à¤ª à¤ªà¥à¤°à¤•à¤¾à¤° à¤¸à¥‡";\
                 };\
                 MenuItem\
                 {\
@@ -617,7 +659,7 @@
                     Text [ english_us ] = "~Horizontal" ; \
                     Text[ chinese_simplified ] = "æ°´å¹³æ–¹å‘(~H)";\
                     Text[ russian ] = "Ïî ãîğèçîíòàëè";\
-                    Text[ polish ] = "W pionie";\
+                    Text[ polish ] = "P~oziomo";\
                     Text[ japanese ] = "å·¦å³åè»¢(~H)";\
                     Text[ chinese_traditional ] = "æ°´å¹³æ–¹å‘(~H)";\
                     Text[ arabic ] = "ÃİŞí";\
@@ -627,6 +669,9 @@
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "~Horitzontal";\
                     Text[ thai ] = "à¹à¸™~à¸§à¸™à¸­à¸™";\
+                    Text[ czech ] = "VodorovnÄ›";\
+                    Text[ hebrew ] = "~Horizontal";\
+                    Text[ hindi ] = "~à¤¸à¤®à¤¤à¤²";\
                 };\
             };\
         };\
@@ -642,6 +687,9 @@
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "In~verteix";\
         Text[ thai ] = "~à¸à¸¥à¸´à¸";\
+        Text[ czech ] = "PÅ™eklopit";\
+        Text[ hebrew ] = "Sp~iegeln";\
+        Text[ hindi ] = "~à¤ªà¥à¤²à¤¿à¤ª";\
     };
 
 #define MN_ARRANGESUB \
@@ -653,7 +701,7 @@
         Text [ ENGLISH ] = "Arrange" ; \
         Text [ norwegian ] = "Arrange" ; \
         Text [ italian ] = "~Disponi" ; \
-        Text [ portuguese_brazilian ] = "Organizar" ; \
+        Text [ portuguese_brazilian ] = "~Organizar" ; \
         Text [ portuguese ] = "~Dispoção" ; \
         Text [ finnish ] = "~Järjestä" ; \
         Text [ danish ] = "Pl~acering" ; \
@@ -679,7 +727,7 @@
                     Text [ ENGLISH ] = "Bring Forward" ; \
                     Text [ norwegian ] = "Flytt Framover" ; \
                     Text [ italian ] = "Porta più ~avanti" ; \
-                    Text [ portuguese_brazilian ] = "Tazer Para Frente" ; \
+                    Text [ portuguese_brazilian ] = "A~vançar" ; \
                     Text [ portuguese ] = "~Trazer para a frente" ; \
                     Text [ finnish ] = "Siirrä ~eteenpäin" ; \
                     Text [ danish ] = "F~lyt fremad" ; \
@@ -690,16 +738,19 @@
                     Text [ english_us ] = "Bring ~Forward" ; \
                     Text[ chinese_simplified ] = "ä¸Šç§»ä¸€å±‚(~F)";\
                     Text[ russian ] = "Ïåğåìåñòèòü ~âïåğåä";\
-                    Text[ polish ] = "~Wysuñ do przodu";\
+                    Text[ polish ] = "P~rzesuñ do przodu";\
                     Text[ japanese ] = "å‰é¢ã¸ç§»å‹•(~F)";\
                     Text[ chinese_traditional ] = "ä¸Šç§»ä¸€å±¤(~F)";\
                     Text[ arabic ] = "ÅÍÖÇÑ ÃãÇãÇğ";\
                     Text[ greek ] = "Ì~åôáöïñÜ İíá åğßğåäï åìğñüò";\
                     Text[ korean ] = "ì•ìœ¼ë¡œ ì´ë™(~F)";\
-                    Text[ turkish ] = "B~ir öne getir";\
+                    Text[ turkish ] = "~Öne getir";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "Porta al ~davant";\
                     Text[ thai ] = "à¸ªà¹ˆà¸‡~à¸•à¹ˆà¸­";\
+                    Text[ czech ] = "PÅ™enÃ©st do popÅ™edÃ­";\
+                    Text[ hebrew ] = "W~eiter nach vorn";\
+                    Text[ hindi ] = "~à¤†à¤—à¥‡ à¤•à¥€ à¤“à¤° à¤²à¤¾à¤“";\
                 };\
                 MenuItem\
                 {\
@@ -710,7 +761,7 @@
                     Text [ ENGLISH ] = "Send Backward" ; \
                     Text [ norwegian ] = "Send Bakover" ; \
                     Text [ italian ] = "Porta più indietro" ; \
-                    Text [ portuguese_brazilian ] = "Enviar Para o Fundo" ; \
+                    Text [ portuguese_brazilian ] = "Rec~uar" ; \
                     Text [ portuguese ] = "Enviar para o ~fundo" ; \
                     Text [ finnish ] = "Siirrä taakse~päin" ; \
                     Text [ danish ] = "Flyt bag~ud" ; \
@@ -721,16 +772,19 @@
                     Text [ english_us ] = "Send Back~ward" ; \
                     Text[ chinese_simplified ] = "ä¸‹ç§»ä¸€å±‚(~W)";\
                     Text[ russian ] = "Ïåğåìåñòèòü ~íàçàä";\
-                    Text[ polish ] = "Przesuñ do ty³u";\
+                    Text[ polish ] = "Pr~zesuñ do ty³u";\
                     Text[ japanese ] = "èƒŒé¢ã«ç§»å‹•(~W)";\
                     Text[ chinese_traditional ] = "ä¸‹ç§»ä¸€å±¤(~W)";\
                     Text[ arabic ] = "ÅÑÓÇá ÎáİÇğ";\
                     Text[ greek ] = "~ÌåôáöïñÜ ğßóù";\
                     Text[ korean ] = "ë’¤ë¡œ ì´ë™(~W)";\
-                    Text[ turkish ] = "Bir  ~geri gönder";\
+                    Text[ turkish ] = "~Geri gönder";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "En~via cap enrere";\
                     Text[ thai ] = "à¸ªà¹ˆà¸‡~à¸à¸¥à¸±à¸š";\
+                    Text[ czech ] = "PÅ™enÃ©st do pozadÃ­";\
+                    Text[ hebrew ] = "Weiter ~nach hinten";\
+                    Text[ hindi ] = "à¤ªà¥€~à¤›à¥‡ à¤•à¥€ à¤“à¤° à¤­à¥‡à¤œà¥‹";\
                 };\
                 MenuItem\
                 {\
@@ -749,16 +803,19 @@
         };\
         Text[ chinese_simplified ] = "æ’åº(~A)";\
         Text[ russian ] = "Ğ~àñïîëîæèòü";\
-        Text[ polish ] = "~Rozmieszczenie";\
+        Text[ polish ] = "Roz~mieœæ";\
         Text[ japanese ] = "æ•´åˆ—(~A)";\
         Text[ chinese_traditional ] = "æ’åº(~A)";\
         Text[ arabic ] = "ÊÑÊíÈ~";\
         Text[ greek ] = "ÄéÜô~áîç";\
         Text[ korean ] = "ë°°ì¹˜(~A)";\
-        Text[ turkish ] = "~Sıralama";\
+        Text[ turkish ] = "~Düzenle";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "~Organitza";\
         Text[ thai ] = "~à¸ˆà¸±à¸”à¹€à¸£à¸µà¸¢à¸‡";\
+        Text[ czech ] = "UspoÅ™Ã¡dat";\
+        Text[ hebrew ] = "â€®×¡×™×“×•×¨â€¬";\
+        Text[ hindi ] = "~à¤•à¥à¤°à¤® à¤®à¥‡à¤‚ à¤°à¤–à¥‹";\
     };
 
 #define MN_ANCHORSUB \
@@ -790,21 +847,24 @@
                     Text [ french ] = "À la ~page" ; \
                     Text [ swedish ] = "Vid ~sidan" ; \
                     Text [ danish ] = "Til ~siden" ; \
-                    Text [ portuguese_brazilian ] = "An der ~Seite" ; \
+                    Text [ portuguese_brazilian ] = "Na Págin~a" ; \
                     Text [ portuguese ] = "~Na página" ; \
                     Text[ chinese_simplified ] = "åœ¨é¡µé¢ä¸Š(~A)";\
                     Text[ russian ] = "~Ê ñòğàíèöå";\
-                    Text[ polish ] = "~Na stronie";\
+                    Text[ polish ] = "Do ~strony";\
                     Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã«(~A)";\
                     Text[ chinese_traditional ] = "åœ¨é é¢ä¸Š(~A)";\
                     Text[ arabic ] = "Úáì Çá~ÕİÍÉ";\
                     Text[ greek ] = "~Óôç óåëßäá";\
                     Text[ korean ] = "í˜ì´ì§€ì—(~A)";\
-                    Text[ turkish ] = "Sayfa~da";\
+                    Text[ turkish ] = "Sayfa~ya";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "A la p~àgina";\
                     Text[ finnish ] = "Sivul~le";\
                     Text[ thai ] = "à¹„à¸›à¸¢à¸±à¸‡à¸«~à¸™à¹‰à¸²";\
+                    Text[ czech ] = "Ke strÃ¡nce";\
+                    Text[ hebrew ] = "An der ~Seite";\
+                    Text[ hindi ] = "à¤ªà¥ƒ~à¤·à¥à¤  à¤•à¥‡à¤²à¤¿à¤";\
                 };\
                 MenuItem\
                 {\
@@ -820,30 +880,33 @@
                     Text [ swedish ] = "Vid ~cellen" ; \
                     Text [ danish ] = "Til cellen" ; \
                     Text [ portuguese ] = "~Célula" ; \
-                    Text [ portuguese_brazilian ] = "An der ~Zelle" ; \
+                    Text [ portuguese_brazilian ] = "Na ~Célula" ; \
                     Text[ chinese_simplified ] = "åœ¨å•å…ƒæ ¼ä¸Š(~C)";\
                     Text[ russian ] = "Ê ÿ÷åéêå";\
-                    Text[ polish ] = "Przy komórce";\
+                    Text[ polish ] = "Do ~komórki";\
                     Text[ japanese ] = "ã‚»ãƒ«ã«(~C)";\
                     Text[ chinese_traditional ] = "åœ¨å„²å­˜æ ¼ä¸Š(~C)";\
                     Text[ arabic ] = "ÎáíÉ";\
                     Text[ greek ] = "Óôï ~êåëß";\
                     Text[ korean ] = "ì…€ì—ì„œ(~C)";\
-                    Text[ turkish ] = "Hücre~de";\
+                    Text[ turkish ] = "Hücre~ye";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "A la ~cel.la";\
                     Text[ finnish ] = "So~luun";\
                     Text[ thai ] = "à¹„à¸›à¸¢à¸±à¸‡à¹€~à¸‹à¸¥à¸¥à¹Œ";\
+                    Text[ czech ] = "K buÅˆce";\
+                    Text[ hebrew ] = "An der ~Zelle";\
+                    Text[ hindi ] = "~à¤•à¥‹à¤·à¥à¤  à¤•à¥‡à¤²à¤¿à¤";\
                 };\
             };\
         };\
         Text [ swedish ] = "~Förankring" ; \
         Text [ danish ] = "~Forankring" ; \
         Text [ portuguese ] = "~Âncora" ; \
-        Text [ portuguese_brazilian ] = "~Verankerung" ; \
+        Text [ portuguese_brazilian ] = "Âncor~a" ; \
         Text[ chinese_simplified ] = "é”å®š(~C)";\
         Text[ russian ] = "~ßêîğü";\
-        Text[ polish ] = "~Zakotwiczenie";\
+        Text[ polish ] = "Z~akotwiczenie";\
         Text[ japanese ] = "ã‚¢ãƒ³ã‚«ãƒ¼(~C)";\
         Text[ chinese_traditional ] = "é–å®š(~C)";\
         Text[ arabic ] = "~ÅÑÓÇÁ";\
@@ -854,6 +917,9 @@
         Text[ catalan ] = "An~cora";\
         Text[ finnish ] = "Ank~kuri";\
         Text[ thai ] = "à¸ª~à¸¡à¸­";\
+        Text[ czech ] = "Ukotvit";\
+        Text[ hebrew ] = "~Verankerung";\
+        Text[ hindi ] = "à¤~à¤¨à¥à¤•à¤°";\
     };
 
 #define MN_ALIGNSUB \
@@ -920,6 +986,9 @@
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "A~lineació";\
         Text[ thai ] = "à¸ˆà¸±~à¸”à¹€à¸£à¸µà¸¢à¸‡";\
+        Text[ czech ] = "ZarovnÃ¡nÃ­";\
+        Text[ hebrew ] = "Aus~richtung";\
+        Text[ hindi ] = "à¤ªà¤‚~à¤•à¥à¤¤à¤¿à¤•à¤°à¤£";\
     };
 
  //
@@ -934,7 +1003,7 @@ String RID_DRAW_OBJECTBAR
     Text [ ENGLISH ] = "Toolbar for drawing objects" ;
     Text [ norwegian ] = "Verktøylinje for tegneobjekter " ;
     Text [ italian ] = "Barra degli oggetti per disegno" ;
-    Text [ portuguese_brazilian ] = "Barra de Ferramentas para desenhar objetos" ;
+    Text [ portuguese_brazilian ] = "Barra de Objetos de Desenho" ;
     Text [ portuguese ] = "Barra de objectos de desenho" ;
     Text [ finnish ] = "Piirroksen muotoilurivi" ;
     Text [ danish ] = "Tegneobjektlinje" ;
@@ -945,7 +1014,7 @@ String RID_DRAW_OBJECTBAR
     Text [ english_us ] = "Drawing Object Bar" ;
     Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡æ ";
     Text[ russian ] = "Êîíòåêñòíàÿ ïàíåëü ğèñóíêà";
-    Text[ polish ] = "Pasek obiektów graficznych";
+    Text[ polish ] = "Pasek obiektów rysunkowych";
     Text[ japanese ] = "å›³å½¢æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼";
     Text[ chinese_traditional ] = "ç¹ªåœ–ç‰©ä»¶åˆ—";
     Text[ arabic ] = "ÔÑíØ ÇáßÇÆäÇÊ ÇáÑÓæãíÉ";
@@ -955,6 +1024,9 @@ String RID_DRAW_OBJECTBAR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra d'objectes de dibuix";
     Text[ thai ] = "à¹à¸–à¸šà¸§à¸±à¸•à¸–à¸¸à¸§à¸²à¸”à¸£à¸¹à¸›";
+    Text[ czech ] = "Panel nÃ¡strojÅ¯ KreslenÃ­";
+    Text[ hebrew ] = "Zeichenobjektleiste";
+    Text[ hindi ] = "à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤° à¤µà¤¸à¥à¤¤à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
 };
 ToolBox RID_DRAW_OBJECTBAR
 {
@@ -1109,7 +1181,7 @@ String RID_TEXT_TOOLBOX
     Text [ ENGLISH ] = "Toolbar for text objects" ;
     Text [ norwegian ] = "Verktøylinje for tekstobjekter" ;
     Text [ italian ] = "Barra degli oggetti di testo" ;
-    Text [ portuguese_brazilian ] = "Barra de ferramentas para objetos de texto" ;
+    Text [ portuguese_brazilian ] = "Barra de Objetos de Texto" ;
     Text [ portuguese ] = "Barra de objectos de texto" ;
     Text [ finnish ] = "Tekstin muotoilurivi" ;
     Text [ danish ] = "Tekstobjektlinje" ;
@@ -1130,6 +1202,9 @@ String RID_TEXT_TOOLBOX
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra d'objectes de text";
     Text[ thai ] = "à¹à¸–à¸šà¸§à¸±à¸•à¸–à¸¸à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+    Text[ czech ] = "Panel nÃ¡strojÅ¯ Text";
+    Text[ hebrew ] = "Textobjektleiste";
+    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤µà¤¸à¥à¤¤à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
 };
 ToolBox RID_TEXT_TOOLBOX
 {
@@ -1647,16 +1722,19 @@ String RID_GRAPHIC_OBJECTBAR
     Text[ danish ] = "Grafikobjektlinje";
     Text[ swedish ] = "Grafikobjektlist";
     Text[ polish ] = "Pasek obiektów graficznych";
-    Text[ portuguese_brazilian ] = "Toolbar for graphic objects";
+    Text[ portuguese_brazilian ] = "Barra de Objetos de Figuras";
     Text[ japanese ] = "å›³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼";
     Text[ korean ] = "ê·¸ë¦¼ ê°œì²´ ëª¨ìŒ";
     Text[ chinese_simplified ] = "å›¾å½¢å¯¹è±¡æ ";
     Text[ chinese_traditional ] = "åœ–å½¢ç‰©ä»¶åˆ—";
-    Text[ turkish ] = "Toolbar for graphic objects";
+    Text[ turkish ] = "Grafik Araç Çubuğu";
     Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÕæÑÉ";
     Text[ catalan ] = "Barra d'objectes gràfics";
     Text[ finnish ] = "Grafiikan muotoilurivi";
     Text[ thai ] = "à¹à¸–à¸šà¸§à¸±à¸•à¸–à¸¸à¸à¸£à¸²à¸Ÿà¸´à¸„";
+    Text[ czech ] = "Panel nÃ¡strojÅ¯ ObrÃ¡zky";
+    Text[ hebrew ] = "Grafikobjektleiste";
+    Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤µà¤¸à¥à¤¤à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
 };
 ToolBox RID_GRAPHIC_OBJECTBAR
 {
@@ -1898,7 +1976,7 @@ String RID_POPUP_DRAW
     Text [ ENGLISH ] = "Toolbar for drawing objects" ;
     Text [ norwegian ] = "Verktøylinje for tegneobjekter " ;
     Text [ italian ] = "Menu a comparsa per oggetti di disegno" ;
-    Text [ portuguese_brazilian ] = "Barra de Ferramentas para desenhar objetos" ;
+    Text [ portuguese_brazilian ] = "Menu pop-up para objetos de desenho" ;
     Text [ portuguese ] = "Menu instantâneo para objectos de desenho" ;
     Text [ french ] = "Menu Pop-up pour les objets de dessin" ;
     Text [ dutch ] = "PopUp-menu voor tekenobjecten" ;
@@ -1909,16 +1987,19 @@ String RID_POPUP_DRAW
     Text [ english_us ] = "Pop-up menu for drawing objects" ;
     Text[ chinese_simplified ] = "ç»˜å›¾å¼¹å‡ºå¼èœå•";
     Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ğèñóíêîâ";
-    Text[ polish ] = "Menu podrêczne obiektów graficznych";
+    Text[ polish ] = "Menu podrêczne obiektów rysunkowych";
     Text[ japanese ] = "å›³å½¢æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼";
     Text[ chinese_traditional ] = "ç¹ªåœ–å¿«é¡¯åŠŸèƒ½è¡¨";
     Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ ááßÇÆäÇÊ ÇáÑÓæãíÉ";
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá áíôéêåßìåíá ó÷åäßáóçò";
     Text[ korean ] = "ê·¸ë¦¬ê¸° ê°œì²´ë¥¼ ìœ„í•œ íŒì—… ë©”ë‰´";
-    Text[ turkish ] = "Çizim nesneleri için açılan mönü";
+    Text[ turkish ] = "Çizim nesneleri için açılan menü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Menú emergent per a objectes de dibuix";
     Text[ thai ] = "à¹€à¸¡à¸™à¸¹à¹à¸šà¸šà¸œà¸¸à¸”à¸‚à¸¶à¹‰à¸™à¸ªà¸³à¸«à¸£à¸±à¸šà¸§à¸±à¸•à¸–à¸¸à¸§à¸²à¸”à¸£à¸¹à¸›";
+    Text[ czech ] = "RozbalovacÃ­ menu pro kresby";
+    Text[ hebrew ] = "Popup-MenÃ¼ fÃ¼r Zeichenobjekte";
+    Text[ hindi ] = "à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤° à¤µà¤¸à¥à¤¤à¥à¤“à¤‚ à¤•à¥‡à¤²à¤¿à¤ à¤ªà¤¾à¤ªà¥-à¤…à¤ªà¥ à¤®à¥‡à¤¨à¥";
 };
  //
  //     Popup-Menue fuer (allgemeine) Zeichenobjekte
@@ -2064,11 +2145,11 @@ Menu RID_POPUP_CHART
             Text [ dutch ] = "~Gegevensbereik wijzigen..." ;
             Text [ swedish ] = "Ändra ~dataområde..." ;
             Text [ danish ] = "Rediger dataområde..." ;
-            Text [ portuguese_brazilian ] = "Datenbereich ?ndern..." ;
+            Text [ portuguese_brazilian ] = "~Modificar Intervalo de Dados..." ;
             Text [ portuguese ] = "~Modificar área de dados..." ;
             Text[ chinese_simplified ] = "æ›´æ”¹æ•°æ®åŒºåŸŸ(~M)...";
                                                 Text[ russian ] = "Èçìåíèòü äèàïàçîí äàííûõ...";
-                                                Text[ polish ] = "Zmieñ obszar danych..";
+                                                Text[ polish ] = "~Modyfikuj zakres danych...";
                                                 Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ç¯„å›²ã®å¤‰æ›´(~M)...";
                                                 Text[ chinese_traditional ] = "ä¿®æ”¹è³‡æ–™å€åŸŸ(~M)...";
                                                 Text[ arabic ] = "...ÊÚÏíá äØÇŞ ÇáÈíÇäÇÊ";
@@ -2079,6 +2160,9 @@ Menu RID_POPUP_CHART
             Text[ catalan ] = "~Modifica l'àrea de dades...";
             Text[ finnish ] = "~Muuta tietoaluetta...";
             Text[ thai ] = "~à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¸Šà¹ˆà¸§à¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥...";
+            Text[ czech ] = "Upravit oblast dat...";
+            Text[ hebrew ] = "~Datenbereich Ã¤ndern...";
+            Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤«à¥ˆà¤²à¤¾à¤µ à¤•à¥‹ ~à¤¸à¥à¤§à¤¾à¤°à¥‹...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -2103,7 +2187,7 @@ String RID_POPUP_DRAWTEXT
     Text [ dutch ] = "PopUp-menu voor tekstobjecten" ;
     Text [ swedish ] = "Popup-meny för textobjekt" ;
     Text [ danish ] = "Popup-menu for tekstobjekter" ;
-    Text [ portuguese_brazilian ] = "Popup-Men?f? Text-Objekte" ;
+    Text [ portuguese_brazilian ] = "Menu pop-up para objetos de texto" ;
     Text [ portuguese ] = "Menu instantâneo para objectos de texto" ;
     Text[ chinese_simplified ] = "æ–‡å­—å¯¹è±¡çš„å¼¹å‡ºå¼èœå•";
                                         Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ îáúåêòîâ òåêñòà";
@@ -2113,11 +2197,14 @@ String RID_POPUP_DRAWTEXT
                                         Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ ááßÇÆäÇÊ ÇáäÕíÉ";
                                         Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá áíôêåßìåíá êåéìİíïõ";
     Text[ korean ] = "í…ìŠ¤íŠ¸ ê°œì²´ì˜ íŒì—… ë©”ë‰´";
-    Text[ turkish ] = "Metin nesneleri için açılan mönü";
+    Text[ turkish ] = "Metin nesneleri için açılan menü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Menú emergent per a objectes de text";
     Text[ finnish ] = "Tekstiobjektien ponnahdusvalikko";
     Text[ thai ] = "à¹€à¸¡à¸™à¸¹à¹à¸šà¸šà¸œà¸¸à¸”à¸‚à¸¶à¹‰à¸™à¸ªà¸³à¸«à¸£à¸±à¸šà¸§à¸±à¸•à¸–à¸¸à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+    Text[ czech ] = "RozbalovacÃ­ menu pro text";
+    Text[ hebrew ] = "Popup-MenÃ¼ fÃ¼r Text-Objekte";
+    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤µà¤¸à¥à¤¤à¥à¤“à¤‚ à¤•à¥‡à¤²à¤¿à¤ à¤ªà¤¾à¤ªà¥-à¤…à¤ªà¥ à¤®à¥‡à¤¨à¥";
 };
 
 Menu RID_POPUP_DRAWTEXT
@@ -2148,6 +2235,19 @@ Menu RID_POPUP_DRAWTEXT
         };
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
