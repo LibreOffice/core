@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-20 14:10:00 $
+ *  last change: $Author: af $ $Date: 2002-06-28 08:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,8 +247,11 @@ public:
             template files to update the dialog in order to display the
             found impress templates.  This sets the flag m_bTemplatesReady
             to TRUE.
+        @param rTemplateFolders
+            This is a list of template folders that has been created by the
+            template thread.
     */
-    void    TemplateScanDone    (void);
+    void TemplateScanDone (std::vector<TemplateDir*>& rTemplateFolders);
 
     /** @descr  Flag that is set to TRUE after the impress templates have been
             scanned.
@@ -754,9 +757,11 @@ void AssistentDlgImpl::EndDialog( long nResult )
 
 
 
-void    TemplateScanDoneCallback    (void * pObject)
+void TemplateScanDoneCallback (void* pObject,
+    std::vector<TemplateDir*>& rTemplateFolder)
 {
-    reinterpret_cast<AssistentDlgImpl*>(pObject)->TemplateScanDone ();
+    reinterpret_cast<AssistentDlgImpl*>(pObject)->TemplateScanDone (
+        rTemplateFolder);
 }
 
 
@@ -821,7 +826,6 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
 void    AssistentDlgImpl::ScanTemplates (void)
 {
     m_aThread = new TemplateThread (
-        m_aPresentList,
         TemplateScanDoneCallback,
         this);
     //  This starts the thread.  It exists until it is, depending on wether
@@ -830,10 +834,14 @@ void    AssistentDlgImpl::ScanTemplates (void)
 }
 
 
-void    AssistentDlgImpl::TemplateScanDone  (void)
+void    AssistentDlgImpl::TemplateScanDone  (
+    std::vector<TemplateDir*>& rTemplateFolder)
 {
     //  This method is called from a thread.  Therefore we get the solar mutex.
     ::vos::OGuard aGuard (Application::GetSolarMutex());
+
+    // Copy the contents of the given template folders to a local list.
+    m_aPresentList.swap (rTemplateFolder);
 
     //  Fill in the list box on the first page.
     int nFirstEntry = 0;
