@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-10 10:18:33 $
+ *  last change: $Author: kz $ $Date: 2001-05-15 11:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ String GetSystemTempDir_Impl()
 #ifdef TF_FILEURL
     FileBase::getFileURLFromSystemPath( aTmp, aRet );
 #else
-    FileBase::normalize( aTmp, aRet );
+    FileBase::normalizePath( aTmp, aRet );
 #endif
     String aName = aRet;
     sal_Int32 i = aName.Len();
