@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:45:57 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,16 +268,19 @@ String PPDParser::getPPDPrinterName( const String& rFile )
     return aName;
 }
 
-const PPDParser* PPDParser::getParser( String aFile )
+const PPDParser* PPDParser::getParser( const String& rFile )
 {
     static ::osl::Mutex aMutex;
     ::osl::Guard< ::osl::Mutex > aGuard( aMutex );
 
-    if( aFile.CompareToAscii( "CUPS:", 5 ) != COMPARE_EQUAL )
-        aFile = getPPDFile( aFile );
+    String aFile = rFile;
+    if( rFile.CompareToAscii( "CUPS:", 5 ) != COMPARE_EQUAL )
+        aFile = getPPDFile( rFile );
     if( ! aFile.Len() )
     {
-        fprintf( stderr, "Could not get printer PPD file!\n" );
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "Could not get printer PPD file \"%s\" !\n", OUStringToOString( rFile, osl_getThreadTextEncoding() ).getStr() );
+#endif
         return NULL;
     }
 
@@ -294,12 +297,16 @@ const PPDParser* PPDParser::getParser( String aFile )
         if( rMgr.getType() == PrinterInfoManager::CUPS )
         {
             pNewParser = const_cast<PPDParser*>(static_cast<CUPSManager&>(rMgr).createCUPSParser( aFile ));
-            if( pNewParser )
-                pNewParser->m_aFile = aFile;
         }
     }
     if( pNewParser )
-        aAllParsers.push_back( pNewParser );
+    {
+        // this may actually be the SGENPRT parser,
+        // so ensure uniquness here
+        aAllParsers.remove( pNewParser );
+        // insert new parser to list
+        aAllParsers.push_front( pNewParser );
+    }
     return pNewParser;
 }
 
