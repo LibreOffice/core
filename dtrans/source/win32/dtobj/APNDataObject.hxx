@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APNDataObject.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:39:21 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,7 @@
 #ifndef _APNDATAOBJECT_HXX_
 #define _APNDATAOBJECT_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
-#include <comdef.h>
+#include <systools/win32/comtools.hxx>
 
 //------------------------------------------------------------------------
 // deklarations
