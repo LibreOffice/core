@@ -2,9 +2,9 @@
  *
  *  $RCSfile: createaddresslistdialog.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:10:18 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 13:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,13 +137,13 @@ ModalDialog DLG_MM_CREATEADDRESSLIST
         Pos = MAP_APPFONT ( 6 , 183 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text [ de ] = "Eintragsnummer anzeigen";
-        Text [ en-US ] = "Sho~ entry number";
+        Text [ en-US ] = "Sho~w entry number";
     };
     PushButton              PB_START
     {
         Pos = MAP_APPFONT ( 60 , 180 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
-        Text [ de ] = "|<";
+        Text = "|<";
     };
     PushButton              PB_PREV
     {
