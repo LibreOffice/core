@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:17:27 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,12 @@
 #endif
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
+#endif
+#ifndef _REDLINE_HXX
+#include <redline.hxx>      // SwRedline
+#endif
+#ifndef _DOCARY_HXX
+#include <docary.hxx>       // SwRedlineTbl
 #endif
 
 using namespace ::com::sun::star::i18n;
@@ -1429,44 +1435,66 @@ FASTBOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
     if( pTxtNd && pBreakIt->xBreak.is() )
     {
+        //mask deleted redlines
+        String sNodeText(pTxtNd->GetTxt());
+        const SwDoc& rDoc = *pTxtNd->GetDoc();
+        const sal_Bool bShowChg = ::IsShowChanges( rDoc.GetRedlineMode() );
+        if ( bShowChg )
+        {
+            USHORT nAct = rDoc.GetRedlinePos( *pTxtNd );
+            for ( ; nAct < rDoc.GetRedlineTbl().Count(); nAct++ )
+            {
+                const SwRedline* pRed = rDoc.GetRedlineTbl()[ nAct ];
+                if ( pRed->Start()->nNode > pTxtNd->GetIndex() )
+                    break;
+
+                if( REDLINE_DELETE == pRed->GetType() )
+                {
+                    xub_StrLen nStart, nEnd;
+                    pRed->CalcStartEnd( pTxtNd->GetIndex(), nStart, nEnd );
+
+                    while ( nStart < nEnd && nStart < sNodeText.Len() )
+                        sNodeText.SetChar( nStart++, CH_TXTATR_INWORD );
+                }
+            }
+        }
         SwCrsrSaveState aSave( *this );
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
         switch ( eMoveType )
         {
         case END_SENT:
             nPtPos = (xub_StrLen)pBreakIt->xBreak->endOfSentence(
-                                    pTxtNd->GetTxt(),
+                                    sNodeText,
                                     nPtPos, pBreakIt->GetLocale(
                                                 pTxtNd->GetLang( nPtPos ) ));
             break;
         case NEXT_SENT:
             {
-                String aTxt( pTxtNd->GetTxt() );
                 nPtPos = (xub_StrLen)pBreakIt->xBreak->endOfSentence(
-                                        aTxt,
+                                        sNodeText,
                                         nPtPos, pBreakIt->GetLocale(
                                                     pTxtNd->GetLang( nPtPos ) ));
-                while (nPtPos != (USHORT) -1 && ++nPtPos < aTxt.Len()
-                       && aTxt.GetChar(nPtPos)== ' ' /*isWhiteSpace( aTxt.GetChar(nPtPos)*/ )
+                while (nPtPos != (USHORT) -1 && ++nPtPos < sNodeText.Len()
+                       && sNodeText.GetChar(nPtPos)== ' ' /*isWhiteSpace( aTxt.GetChar(nPtPos)*/ )
                     ;
                 break;
             }
         case START_SENT:
             nPtPos = (xub_StrLen)pBreakIt->xBreak->beginOfSentence(
-                                    pTxtNd->GetTxt(),
+                                    sNodeText,
                                     nPtPos, pBreakIt->GetLocale(
                                             pTxtNd->GetLang( nPtPos ) ));
             break;
         case PREV_SENT:
             nPtPos = (xub_StrLen)pBreakIt->xBreak->beginOfSentence(
-                                    pTxtNd->GetTxt(),
+                                    sNodeText,
                                     nPtPos, pBreakIt->GetLocale(
                                                 pTxtNd->GetLang( nPtPos ) ));
             if (nPtPos == 0)
                 return FALSE;   // the previous sentence is not in this paragraph
             if (nPtPos > 0)
                 nPtPos = (xub_StrLen)pBreakIt->xBreak->beginOfSentence(
-                                    pTxtNd->GetTxt(),
+                                    sNodeText,
                                     nPtPos - 1, pBreakIt->GetLocale(
                                                 pTxtNd->GetLang( nPtPos ) ));
             break;
