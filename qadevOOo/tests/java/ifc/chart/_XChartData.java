@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XChartData.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:19:49 $
+ *  last change:$Date: 2003-12-11 11:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,7 @@
  *
  *
  ************************************************************************/
-
 package ifc.chart;
-
-import lib.MultiMethodTest;
 
 import com.sun.star.chart.ChartDataChangeEvent;
 import com.sun.star.chart.XChartData;
@@ -69,6 +66,9 @@ import com.sun.star.chart.XChartDataArray;
 import com.sun.star.chart.XChartDataChangeEventListener;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
+
+import lib.MultiMethodTest;
+
 
 /**
 * Testing <code>com.sun.star.chart.XChartData</code>
@@ -82,32 +82,11 @@ import com.sun.star.uno.UnoRuntime;
 * @see com.sun.star.chart.XChartData
 */
 public class _XChartData extends MultiMethodTest {
-
-    public XChartData    oObj = null;
-    boolean    result = true;
+    public XChartData oObj = null;
+    boolean result = true;
     double nan = 0;
     XChartDataArray dataArray = null;
-
-    boolean dataChanged[] = new boolean[2];
-
-    class MyEventListener implements XChartDataChangeEventListener {
-            public void disposing ( EventObject oEvent ) {
-                System.out.println("Listener1 disposed");
-            }
-        public void chartDataChanged(ChartDataChangeEvent ev) {
-            dataChanged[0] = true;
-        }
-    }
-
-    class MyEventListener2 implements XChartDataChangeEventListener {
-            public void disposing ( EventObject oEvent ) {
-                System.out.println("Listener2 disposed");
-            }
-        public void chartDataChanged(ChartDataChangeEvent ev) {
-            dataChanged[1] = true;
-        }
-    }
-
+    boolean[] dataChanged = new boolean[2];
     XChartDataChangeEventListener listener1 = new MyEventListener();
     XChartDataChangeEventListener listener2 = new MyEventListener2();
 
@@ -120,20 +99,28 @@ public class _XChartData extends MultiMethodTest {
         dataChanged[0] = false;
         dataChanged[1] = false;
 
-        oObj.addChartDataChangeEventListener( listener1 );
-        oObj.addChartDataChangeEventListener( listener2 );
+        oObj.addChartDataChangeEventListener(listener1);
+        oObj.addChartDataChangeEventListener(listener2);
 
-        dataArray = (XChartDataArray)
-            UnoRuntime.queryInterface(XChartDataArray.class, oObj);
-        double data[][] = dataArray.getData();
+        dataArray = (XChartDataArray) UnoRuntime.queryInterface(
+                            XChartDataArray.class, oObj);
+
+        double[][] data = dataArray.getData();
         data[0][0] += 0.1;
         dataArray.setData(data);
-        if (!dataChanged[0]) log.println("ChartDataChangeEventListener1 "+
-            "isn't called after changing data");
-        if (!dataChanged[1]) log.println("ChartDataChangeEventListener2 "+
-            "isn't called after changing data");
+
+        if (!dataChanged[0]) {
+            log.println("ChartDataChangeEventListener1 " +
+                        "isn't called after changing data");
+        }
+
+        if (!dataChanged[1]) {
+            log.println("ChartDataChangeEventListener2 " +
+                        "isn't called after changing data");
+        }
+
         tRes.tested("addChartDataChangeEventListener()",
-            dataChanged[0] && dataChanged[1]);
+                    dataChanged[0] && dataChanged[1]);
     }
 
     /**
@@ -152,17 +139,22 @@ public class _XChartData extends MultiMethodTest {
         dataChanged[0] = false;
         dataChanged[1] = false;
 
-        oObj.removeChartDataChangeEventListener( listener1 );
-        dataArray = (XChartDataArray)
-            UnoRuntime.queryInterface(XChartDataArray.class, oObj);
-        double data[][] = dataArray.getData();
+        oObj.removeChartDataChangeEventListener(listener1);
+        dataArray = (XChartDataArray) UnoRuntime.queryInterface(
+                            XChartDataArray.class, oObj);
+
+        double[][] data = dataArray.getData();
         data[0][0] += 0.1;
         dataArray.setData(data);
-        oObj.removeChartDataChangeEventListener( listener2 );
-        if (dataChanged[0]) log.println("ChartDataChangeEventListener1 is "+
-            "called after removing listener");
+        oObj.removeChartDataChangeEventListener(listener2);
+
+        if (dataChanged[0]) {
+            log.println("ChartDataChangeEventListener1 is " +
+                        "called after removing listener");
+        }
+
         tRes.tested("removeChartDataChangeEventListener()",
-            ((!dataChanged[0]) && (dataChanged[1])));
+                    ((!dataChanged[0]) && (dataChanged[1])));
     }
 
     /**
@@ -174,7 +166,7 @@ public class _XChartData extends MultiMethodTest {
 
         nan = oObj.getNotANumber();
         log.println("Current NotANumber is " + nan);
-        result = nan!=1;
+        result = nan != 1;
 
         tRes.tested("getNotANumber()", result);
     }
@@ -196,6 +188,31 @@ public class _XChartData extends MultiMethodTest {
 
         tRes.tested("isNotANumber()", result);
     }
+
+    /**
+    * Forces environment recreation.
+    */
+    protected void after() {
+        disposeEnvironment();
+    }
+
+    class MyEventListener implements XChartDataChangeEventListener {
+        public void disposing(EventObject oEvent) {
+            System.out.println("Listener1 disposed");
+        }
+
+        public void chartDataChanged(ChartDataChangeEvent ev) {
+            dataChanged[0] = true;
+        }
+    }
+
+    class MyEventListener2 implements XChartDataChangeEventListener {
+        public void disposing(EventObject oEvent) {
+            System.out.println("Listener2 disposed");
+        }
+
+        public void chartDataChanged(ChartDataChangeEvent ev) {
+            dataChanged[1] = true;
+        }
+    }
 }
-
-
