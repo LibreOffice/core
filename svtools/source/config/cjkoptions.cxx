@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cjkoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-04-18 06:54:05 $
+ *  last change: $Author: os $ $Date: 2001-04-23 06:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@ using namespace ::rtl;
  ---------------------------------------------------------------------------*/
 class SvtCJKOptions_Impl : public utl::ConfigItem
 {
+    static Sequence<OUString> aPropertyNames;
+
     sal_Bool        bIsLoaded;
     sal_Bool        bCJKFont;
     sal_Bool        bVerticalText;
@@ -119,10 +121,17 @@ public:
     sal_Bool IsDoubleLinesEnabled() const       { return bDoubleLines;      }
     sal_Bool IsEmphasisMarksEnabled() const     { return bEmphasisMarks;    }
     sal_Bool IsVerticalCallOutEnabled() const   { return bVerticalCallOut;  }
+
+    sal_Bool IsAnyEnabled() const {
+        return  bCJKFont||bVerticalText||bAsianTypography||bJapaneseFind||
+                bRuby||bChangeCaseMap||bDoubleLines||bEmphasisMarks||bVerticalCallOut;   }
+    void    SetAll(sal_Bool bSet);
 };
 /*-- 10.04.01 12:41:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+Sequence<OUString> SvtCJKOptions_Impl::aPropertyNames;
+
 SvtCJKOptions_Impl::SvtCJKOptions_Impl() :
     utl::ConfigItem(C2U("Setup/CJK/Enable")),
     bIsLoaded(sal_False),
@@ -143,12 +152,20 @@ SvtCJKOptions_Impl::SvtCJKOptions_Impl() :
 SvtCJKOptions_Impl::~SvtCJKOptions_Impl()
 {
 }
+/* -----------------------------20.04.01 14:34--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void    SvtCJKOptions_Impl::SetAll(sal_Bool bSet)
+{
+    bCJKFont = bVerticalText = bAsianTypography = bJapaneseFind =
+            bRuby = bChangeCaseMap = bDoubleLines = bEmphasisMarks = bVerticalCallOut = bSet;
+    SetModified();
+}
 /*-- 10.04.01 12:41:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SvtCJKOptions_Impl::Load()
 {
-    static Sequence<OUString> aPropertyNames;
     if(!aPropertyNames.getLength())
     {
         aPropertyNames.realloc(9);
@@ -203,7 +220,28 @@ void    SvtCJKOptions_Impl::Notify( const Sequence< OUString >& aPropertyNames )
   -----------------------------------------------------------------------*/
 void    SvtCJKOptions_Impl::Commit()
 {
-    // not intended to change any values
+    OUString* pNames = aPropertyNames.getArray();
+    Sequence<Any> aValues(aPropertyNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    const Type& rType = ::getBooleanCppuType();
+    BOOL bVal;
+    for(int nProp = 0; nProp < aPropertyNames.getLength(); nProp++)
+    {
+        switch(nProp)
+        {
+            case  0: bVal = bCJKFont; break;
+            case  1: bVal = bVerticalText; break;
+            case  2: bVal = bAsianTypography; break;
+            case  3: bVal = bJapaneseFind; break;
+            case  4: bVal = bRuby; break;
+            case  5: bVal = bChangeCaseMap; break;
+            case  6: bVal = bDoubleLines; break;
+            case  7: bVal = bEmphasisMarks; break;
+            case  8: bVal = bVerticalCallOut; break;
+        }
+    }
+    PutProperties(aPropertyNames, aValues);
 }
 // global ----------------------------------------------------------------
 
@@ -288,6 +326,22 @@ sal_Bool SvtCJKOptions::IsVerticalCallOutEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
     return pCJKOptions->IsVerticalCallOutEnabled();
+}
+/*-- 20.04.01 14:32:04---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void        SvtCJKOptions::SetAll(sal_Bool bSet)
+{
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
+    pCJKOptions->SetAll(bSet);
+}
+/*-- 20.04.01 14:32:06---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool    SvtCJKOptions::IsAnyEnabled() const
+{
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
+    return pCJKOptions->IsAnyEnabled();
 }
 
 
