@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-06 13:23:04 $
+#   last change: $Author: hjs $ $Date: 2002-07-10 09:53:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,7 @@ CXXFILES=   \
             astexpression.cxx
 
 YACCTARGET=$(MISC)$/parser.cxx
-YACCFILES=parser.yy
+YACCFILES=parser.y
 
 OBJFILES=   \
             $(OBJ)$/scanner.obj	\
