@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:17:42 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,10 @@ ZipPackageEntry::ZipPackageEntry ( bool bNewFolder )
 
 ZipPackageEntry::~ZipPackageEntry()
 {
+    // When the entry is destroyed it must be already disconnected from the parent
+    OSL_ENSURE( !pParent, "The parent must be disconnected already! Memory corruption is possible!\n" );
 }
+
 // XChild
 OUString SAL_CALL ZipPackageEntry::getName(  )
     throw(RuntimeException)
@@ -120,12 +123,14 @@ void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
 Reference< XInterface > SAL_CALL ZipPackageEntry::getParent(  )
         throw(RuntimeException)
 {
-    return Reference< XInterface >( xParent, UNO_QUERY );
+    // return Reference< XInterface >( xParent, UNO_QUERY );
+    return Reference< XInterface >( static_cast< ::cppu::OWeakObject* >( pParent ), UNO_QUERY );
 }
 
 void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent, sal_Bool bInsert )
 {
-    xParent = pParent = pNewParent;
+    // xParent = pParent = pNewParent;
+    pParent = pNewParent;
     if ( bInsert && !pNewParent->hasByName ( aEntry.sName ) )
         pNewParent->doInsertByName ( this, sal_False );
 }
