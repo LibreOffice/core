@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-16 12:15:24 $
+ *  last change: $Author: mtg $ $Date: 2001-10-09 14:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,8 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
         break;
         case FN_UNO_PAGE_STYLE :
         {
-            String sVal = GetCurPageStyle(rPam);
+            String sVal;
+            GetCurPageStyle(rPam, sVal);
             if( pAny )
                 *pAny <<= OUString(sVal);
             if(!sVal.Len())
@@ -305,9 +306,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
         break;
         case FN_UNO_NUM_RULES  :
             if( pAny )
-            {
-                *pAny = getNumberingProperty(rPam, eNewState);
-            }
+                getNumberingProperty(rPam, eNewState, pAny);
             else
             {
                 if( !rPam.GetDoc()->GetCurrNumRule( *rPam.GetPoint() ) )
@@ -622,32 +621,27 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 /* -----------------25.05.98 11:40-------------------
  *
  * --------------------------------------------------*/
-Any  getNumberingProperty(SwPaM& rPam, PropertyState& eState)
+void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
 {
-    Any aAny;
     const SwNumRule* pNumRule = rPam.GetDoc()->GetCurrNumRule( *rPam.GetPoint() );
     if(pNumRule)
     {
         Reference< XIndexReplace >  xNum = new SwXNumberingRules(*pNumRule);
-        aAny.setValue(&xNum, ::getCppuType((const Reference<XIndexReplace>*)0));
+        if ( pAny )
+            pAny->setValue(&xNum, ::getCppuType((const Reference<XIndexReplace>*)0));
         eState = PropertyState_DIRECT_VALUE;
     }
     else
         eState = PropertyState_DEFAULT_VALUE;
-    return aAny;
 }
 /* -----------------04.07.98 15:15-------------------
  *
  * --------------------------------------------------*/
-String GetCurPageStyle(SwPaM& rPaM)
+void GetCurPageStyle(SwPaM& rPaM, String &rString)
 {
-    String sRet;
     const SwPageFrm* pPage = rPaM.GetCntntNode()->GetFrm()->FindPageFrm();
     if(pPage)
-    {
-        SwStyleNameMapper::FillProgName( pPage->GetPageDesc()->GetName(), sRet, GET_POOLID_PAGEDESC, sal_True );
-    }
-    return sRet;
+        SwStyleNameMapper::FillProgName( pPage->GetPageDesc()->GetName(), rString, GET_POOLID_PAGEDESC, sal_True );
 }
 /* -----------------30.03.99 10:52-------------------
  * spezielle Properties am Cursor zuruecksetzen
