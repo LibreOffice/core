@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mapping.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,7 +340,7 @@ inline sal_Bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI ) SAL_TH
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ),
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ) );
     OSL_ASSERT( aMapping.is() );
-    aMapping.mapInterface( (void **)ppRet, pUnoI, ::getCppuType( ppRet ) );
+    aMapping.mapInterface( (void **)ppRet, pUnoI, getCppuType( ppRet ) );
     return (0 != *ppRet);
 }
 /** Maps an UNO interface of the currently used compiler environment to binary C UNO.
@@ -357,7 +357,7 @@ inline sal_Bool mapToUno( uno_Interface ** ppRet, const Reference< C > & x ) SAL
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ),
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ) );
     OSL_ASSERT( aMapping.is() );
-    aMapping.mapInterface( (void **)ppRet, x.get(), ::getCppuType( &x ) );
+    aMapping.mapInterface( (void **)ppRet, x.get(), getCppuType( &x ) );
     return (0 != *ppRet);
 }
 
