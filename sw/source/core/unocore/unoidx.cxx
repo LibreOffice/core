@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:34:33 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,18 +183,18 @@ String lcl_AnyToString(uno::Any rVal) throw(IllegalArgumentException)
 //-----------------------------------------------------------------------------
 sal_Int16 lcl_AnyToInt16(uno::Any rVal) throw(IllegalArgumentException)
 {
-    if(rVal.getValueType() != ::getCppuType((sal_Int16*)0))
-        throw IllegalArgumentException();
     sal_Int16 nRet;
-    rVal >>= nRet;
+    if(!(rVal >>= nRet))
+        throw IllegalArgumentException();
     return nRet;
 }
 //-----------------------------------------------------------------------------
 sal_Bool lcl_AnyToBool(uno::Any rVal) throw(IllegalArgumentException)
 {
-    if(rVal.getValueType() != ::getCppuBooleanType())
+    sal_Bool bRet;
+    if(!(rVal >>= bRet))
         throw IllegalArgumentException();
-    return *(sal_Bool*) rVal.getValue();
+    return bRet;
 }
 /******************************************************************************
  *
