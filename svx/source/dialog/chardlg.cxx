@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-19 07:43:19 $
+ *  last change: $Author: dr $ $Date: 2001-07-19 09:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1476,7 +1476,8 @@ void SvxCharEffectsPage::Initialize()
 
     m_aEffects2LB.SelectEntryPos( 0 );
 
-    aLink = LINK( this, SvxCharEffectsPage, ClickHdl_Impl );
+    m_aIndividualWordsBtn.SetClickHdl( LINK( this, SvxCharEffectsPage, CbClickHdl_Impl ) );
+    aLink = LINK( this, SvxCharEffectsPage, TristClickHdl_Impl );
     m_aOutlineBtn.SetClickHdl( aLink );
     m_aShadowBtn.SetClickHdl( aLink );
     SvtCJKOptions aCJKOptions;
@@ -1525,6 +1526,9 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
         rFont.SetCaseMap( (SvxCaseMap)nCapsPos );
         rCJKFont.SetCaseMap( (SvxCaseMap)nCapsPos );
     }
+    BOOL bWordLine = m_aIndividualWordsBtn.IsChecked();
+    rFont.SetWordLineMode( bWordLine );
+    rCJKFont.SetWordLineMode( bWordLine );
     m_aPreviewWin.Invalidate();
 }
 
@@ -1586,7 +1590,15 @@ IMPL_LINK( SvxCharEffectsPage, UpdatePreview_Impl, ListBox*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharEffectsPage, ClickHdl_Impl, TriStateBox*, EMPTYARG )
+IMPL_LINK( SvxCharEffectsPage, CbClickHdl_Impl, CheckBox*, EMPTYARG )
+{
+    UpdatePreview_Impl();
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxCharEffectsPage, TristClickHdl_Impl, TriStateBox*, EMPTYARG )
 {
     UpdatePreview_Impl();
     return 0;
