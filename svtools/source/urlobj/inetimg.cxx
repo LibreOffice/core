@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetimg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 13:58:34 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 14:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ sal_Bool INetImage::Read( SvStream& rIStm, ULONG nFormat )
     case SOT_FORMATSTR_ID_NETSCAPE_IMAGE:
         {
 /*
-    --> structure size
+    --> structure size  MUST - alignment of 4!
     int     iSize;              // size of all data, including variable length strings
     BOOL    bIsMap;             // For server side maps
     INT32   iWidth;             // Fixed size data correspond to fields in LO_ImageDataStruct
@@ -309,26 +309,6 @@ sal_Bool INetImage::Read( SvStream& rIStm, ULONG nFormat )
             sal_Int32 nVal, nAnchorOffset, nAltOffset, nFilePos;
             int nLen;
             ByteString sData;
-
-/*
-            rIStm >> nLen;
-            rIStm.SeekRel( -sizeof( int ));
-            sal_Char* pBuf = new sal_Char[ nLen ];
-            rIStm.Read( pBuf, nLen );
-            ImageData_Impl* pImgData = (ImageData_Impl*)pBuf;
-
-            const sal_Char* pStart = (const sal_Char*)pImgData;
-            aImageURL = String( (const sal_Char*)&(pImgData->pImageURL[0]),
-                                eSysCSet );
-            if( pImgData->iAltOffset )
-                aAlternateText = String( (pStart + pImgData->iAltOffset), eSysCSet );
-            if( pImgData->iAnchorOffset )
-                aTargetURL = String( (pStart + pImgData->iAnchorOffset), eSysCSet );
-
-            aSizePixel.Width() = pImgData->iWidth;
-            aSizePixel.Height() = pImgData->iHeight;
-            delete pBuf;
-*/
 
             nFilePos = rIStm.Tell();
             // skip over iSize (int), bIsMao ( BOOL ) alignment of 4 !!!!
@@ -358,7 +338,7 @@ sal_Bool INetImage::Read( SvStream& rIStm, ULONG nFormat )
             }
             else if( aTargetURL.Len() )
                 aTargetURL.Erase();
-/**/
+
             bRet = 0 == rIStm.GetError();
         }
         break;
