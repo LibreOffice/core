@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2424,6 +2424,27 @@ void OSelectionBrowseBox::paste()
     }
     RowModified(GetBrowseRow(nRow), GetCurColumnId());
     invalidateUndoRedo();
+}
+// -----------------------------------------------------------------------------
+sal_Bool OSelectionBrowseBox::isPasteAllowed()
+{
+    sal_Bool bPasteAllowed = sal_True;
+    long nRow = GetRealRow(GetCurRow());
+    switch (nRow)
+    {
+        case BROW_VIS_ROW:
+        case BROW_ORDER_ROW:
+        case BROW_TABLE_ROW:
+        case BROW_FUNCTION_ROW:
+            bPasteAllowed = sal_False;
+            break;
+    }
+    return bPasteAllowed;
+}
+// -----------------------------------------------------------------------------
+sal_Bool OSelectionBrowseBox::isCopyAllowed()
+{
+    return isCutAllowed();
 }
 // -----------------------------------------------------------------------------
 void OSelectionBrowseBox::copy()
