@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-06 08:32:56 $
+ *  last change: $Author: ka $ $Date: 2001-09-13 09:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2147,7 +2147,7 @@ void SdrModel::AfterRead()
                         SdrObject* pObj = aIter.Next();
                         if( pObj->ISA(SdrOle2Obj) )
                         {
-                            if ( aName == ( (SdrOle2Obj*) pObj )->GetName() )
+                            if( aName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() )
                                 bFound = TRUE;
                         }
                     }
@@ -2163,7 +2163,7 @@ void SdrModel::AfterRead()
                         SdrObject* pObj = aIter.Next();
                         if( pObj->ISA(SdrOle2Obj) )
                         {
-                            if ( aName == ( (SdrOle2Obj*) pObj )->GetName() )
+                            if( aName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() )
                                 bFound = TRUE;
                         }
                     }

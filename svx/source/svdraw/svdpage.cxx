@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-08 15:03:29 $
+ *  last change: $Author: ka $ $Date: 2001-09-13 09:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1123,7 +1123,7 @@ void SdrObjList::Load(SvStream& rIn, SdrPage& rPage)
                         bImageOLE = TRUE;
                     else if( pModel->GetPersist() )
                     {
-                        SvInfoObjectRef     xInfo( pModel->GetPersist()->Find( pOLEObj->GetName() ) );
+                        SvInfoObjectRef     xInfo( pModel->GetPersist()->Find( pOLEObj->GetPersistName() ) );
                         const SvGlobalName  aSim30Name( SO3_SIM_CLASSID_30 );
                         const SvGlobalName  aSim40Name( SO3_SIM_CLASSID_40 );
                         const SvGlobalName  aSim50Name( SO3_SIM_CLASSID_50 );
@@ -1137,10 +1137,10 @@ void SdrObjList::Load(SvStream& rIn, SdrPage& rPage)
                         }
                     }
 
-                    if( bImageOLE && pOLEObj->GetName().Len() )
+                    if( bImageOLE && pOLEObj->GetPersistName().Len() )
                     {
                         SotStorage*     pModelStorage = pModel->GetModelStorage();
-                        const String    aSimStorageName( pOLEObj->GetName() );
+                        const String    aSimStorageName( pOLEObj->GetPersistName() );
 
                         if( pModelStorage && pModelStorage->IsStorage( aSimStorageName ) )
                         {
