@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConfigAccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:27:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ namespace connectivity
             Reference< XPropertySet > xNode;
             try
             {
-                //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+                //=============================================================
                 // create the config provider
                 Reference< XMultiServiceFactory > xConfigProvider(
                     _rxORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider" )) ),
@@ -97,7 +97,7 @@ namespace connectivity
                     ::rtl::OUString sCompleteNodePath = ::rtl::OUString::createFromAscii ("/org.openoffice.Office.DataAccess/DriverSettings/" );
                     sCompleteNodePath += OConnection::getDriverImplementationName();
 
-                    //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+                    //=========================================================
                     // arguments for creating the config access
                     Sequence< Any > aArguments(2);
                     // the path to the node to open
@@ -115,7 +115,7 @@ namespace connectivity
                         PropertyState_DIRECT_VALUE
                     );
 
-                    //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+                    //=========================================================
                     // create the access
                     Reference< XInterface > xAccess = xConfigProvider->createInstanceWithArguments(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess" )),
