@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 14:41:29 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 16:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@
 #include "document.hxx"
 #include "docpool.hxx"
 #include "patattr.hxx"
+#include "scmod.hxx"
+#include "inputopt.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -165,7 +167,8 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToT
     long nTopMargin = (long) ( pMargin->GetTopMargin() * nPPTY );
     SvxCellVerJustify eJust = (SvxCellVerJustify) ((const SvxVerJustifyItem&)pPattern->
                                                 GetItem(ATTR_VER_JUSTIFY)).GetValue();
-    if ( eJust == SVX_VER_JUSTIFY_TOP )
+    if ( eJust == SVX_VER_JUSTIFY_TOP ||
+            ( bForceToTop && SC_MOD()->GetInputOptions().GetTextWysiwyg() ) )
         nPixDifY = nTopMargin;
     else
     {

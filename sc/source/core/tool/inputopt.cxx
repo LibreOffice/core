@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputopt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 16:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,8 @@ void ScInputOptions::SetDefaults()
     bExpandRefs     = FALSE;
     bMarkHeader     = TRUE;
     bUseTabCol      = FALSE;        //! ja wie denn nun?
+//  bTextWysiwyg    = TRUE;
+    bTextWysiwyg    = FALSE;    //! TRUE when options dialog is finished
 }
 
 //------------------------------------------------------------------------
@@ -138,6 +140,7 @@ const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
     bExpandRefs     = rCpy.bExpandRefs;
     bMarkHeader     = rCpy.bMarkHeader;
     bUseTabCol      = rCpy.bUseTabCol;
+    bTextWysiwyg    = rCpy.bTextWysiwyg;
 
     return *this;
 }
@@ -167,6 +170,8 @@ SvStream& operator>>( SvStream& rStream, ScInputOptions& rOpt )
     if (aHdr.BytesLeft())
         rStream >> rOpt.bUseTabCol;             // ab 373d
 
+    // newer additions are not in old file format
+
     return rStream;
 }
 
@@ -184,6 +189,8 @@ SvStream& operator<<( SvStream& rStream, const ScInputOptions& rOpt )
     rStream << rOpt.bExpandRefs;
     rStream << rOpt.bMarkHeader;
     rStream << rOpt.bUseTabCol;
+
+    // newer additions are not in old file format
 
     return rStream;
 }
@@ -246,7 +253,7 @@ ScInputCfg::ScInputCfg() :
                 {
                     case SCINPUTOPT_MOVEDIR:
                         if ( pValues[nProp] >>= nIntVal )
-                            SetMoveDir( nIntVal );
+                            SetMoveDir( (USHORT)nIntVal );
                         break;
                     case SCINPUTOPT_MOVESEL:
                         SetMoveSelection( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );

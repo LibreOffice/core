@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputopt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 16:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ private:
     BOOL        bExpandRefs;
     BOOL        bMarkHeader;
     BOOL        bUseTabCol;
+    BOOL        bTextWysiwyg;
 
 public:
                 ScInputOptions();
@@ -109,6 +110,8 @@ public:
     BOOL        GetMarkHeader() const       { return bMarkHeader;    }
     void        SetUseTabCol(BOOL bSet)     { bUseTabCol = bSet;     }
     BOOL        GetUseTabCol() const        { return bUseTabCol;     }
+    void        SetTextWysiwyg(BOOL bSet)   { bTextWysiwyg = bSet;   }
+    BOOL        GetTextWysiwyg() const      { return bTextWysiwyg;   }
 
     const ScInputOptions&   operator=   ( const ScInputOptions& rOpt );
     friend SvStream&        operator>>  ( SvStream& rStream, ScInputOptions& rOpt );
