@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-01 17:08:44 $
+ *  last change: $Author: cd $ $Date: 2001-11-02 14:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,8 +352,8 @@ ErrorBox MSG_ERR_WEBBROWSER_NOT_STARTED
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message = "Fehler beim Starten des externen Webbrowsers.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME und die des Webbrowsers." ;
-    Message [ ENGLISH ] = "An error occurred in starting an external webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings." ;
+    Message = "Fehler beim Starten des Webbrowsers.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME und die des Webbrowsers." ;
+    Message [ ENGLISH ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings." ;
 };
 
 ErrorBox MSG_ERR_EXTERNAL_APP_NOT_FOUND
