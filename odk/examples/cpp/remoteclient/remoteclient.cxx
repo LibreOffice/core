@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remoteclient.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:53:34 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -199,7 +199,7 @@ sal_Int32 PipeClientMain::run( const Sequence< OUString > & aArguments ) throw (
     else
     {
         printf( "usage: (uno remoteclient-component --) uno-url\n"
-                "e.g.:  uno:socket,host=localhost,port=2002;urp;MyPipe\n" );
+                "e.g.:  uno:socket,host=localhost,port=2083;urp;MyPipe\n" );
         return 1;
     }
     return 0;
