@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 09:16:31 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,11 +225,10 @@ FASTBOOL SwUnoCrsr::IsSelOvr( int eFlags )
 
 /*  */
 
-SwUnoTableCrsr::SwUnoTableCrsr( const SwPosition& rPos )
-    : SwTableCursor( rPos ), SwUnoCrsr( rPos ), SwCursor( rPos ),
-    aTblSel( rPos )
+SwUnoTableCrsr::SwUnoTableCrsr(const SwPosition& rPos)
+    : SwCursor(rPos), SwUnoCrsr(rPos), SwTableCursor(rPos), aTblSel(rPos)
 {
-    SetRemainInSection( FALSE );
+    SetRemainInSection(FALSE);
 }
 
 SwUnoTableCrsr::~SwUnoTableCrsr()
