@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:31:20 $
+ *  last change: $Author: cl $ $Date: 2000-11-17 11:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,9 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #endif
-#include <unotools/processfactory.hxx>
-
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #include "sdresid.hxx"
 #include "app.hrc"
 #include "res_bmp.hrc"
@@ -971,7 +972,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag)
 
                 pOutl->SetControlWord(nCntrl);
 
-                Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+                Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
                 Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
                     OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
                                                                     uno::UNO_QUERY );

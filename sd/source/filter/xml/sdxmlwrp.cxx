@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-13 09:18:29 $
+ *  last change: $Author: cl $ $Date: 2000-11-17 11:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
-
 #include "pkgurl.hxx"
 
 using namespace com::sun::star;
@@ -139,7 +138,7 @@ BOOL SdXMLWrapper::Import()
         return FALSE;
     }
 
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory(utl::getProcessServiceFactory());
+    uno::Reference<lang::XMultiServiceFactory> xServiceFactory(::comphelper::getProcessServiceFactory());
     if(!xServiceFactory.is())
     {
         DBG_ERROR("XMLReader::Read: got no service manager");
@@ -292,7 +291,7 @@ BOOL SdXMLWrapper::Export()
         return FALSE;
     }
 
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory(utl::getProcessServiceFactory());
+    uno::Reference<lang::XMultiServiceFactory> xServiceFactory(::comphelper::getProcessServiceFactory());
     if(!xServiceFactory.is())
     {
         DBG_ERROR("got no service manager");

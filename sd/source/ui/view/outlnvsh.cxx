@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:50:43 $
+ *  last change: $Author: cl $ $Date: 2000-11-17 11:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,10 +144,9 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
-
 #ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
 #endif
@@ -1211,7 +1210,7 @@ void SdOutlineViewShell::GetMenuState( SfxItemSet &rSet )
         else
         {
             LanguageType eLang = pDoc->GetLanguage();
-            Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
             Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
                                                                 uno::UNO_QUERY );

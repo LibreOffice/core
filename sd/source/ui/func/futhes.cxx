@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futhes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-31 15:42:38 $
+ *  last change: $Author: cl $ $Date: 2000-11-17 11:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,9 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-#include <unotools/processfactory.hxx>
-
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #include "app.hrc"
 #include "strings.hrc"
 #include "drawdoc.hxx"
@@ -152,7 +153,7 @@ FuThesaurus::FuThesaurus( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         {
             if ( !pOutliner->GetSpeller().is() )
             {
-                Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+                Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
                 Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
                     OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
                                                                     uno::UNO_QUERY );
@@ -189,7 +190,7 @@ FuThesaurus::FuThesaurus( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
         if ( !pOutliner->GetSpeller().is() )
         {
-            Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
             Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
                                                                 uno::UNO_QUERY );

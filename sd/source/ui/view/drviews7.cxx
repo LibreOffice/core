@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-10-25 10:27:01 $
+ *  last change: $Author: cl $ $Date: 2000-11-17 11:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,9 @@
 #include <svx/unolingu.hxx>
 #endif
 
-#include <unotools/processfactory.hxx>
-
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #pragma hdrstop
 
 #include <svx/pfiledlg.hxx>
@@ -474,7 +475,7 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         else
         {
             LanguageType eLang = pDoc->GetLanguage();
-            Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
             Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
                                                                 uno::UNO_QUERY );
