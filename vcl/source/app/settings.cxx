@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: th $ $Date: 2001-06-29 10:11:26 $
+ *  last change: $Author: th $ $Date: 2001-07-06 15:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
@@ -73,10 +76,6 @@
 #endif
 #ifndef _SV_SETTINGS_HXX
 #include <settings.hxx>
-#endif
-
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
 #endif
 
 #pragma hdrstop
@@ -189,20 +188,6 @@ BOOL MachineSettings::operator ==( const MachineSettings& rSet ) const
         return TRUE;
     else
         return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rIStream, MachineSettings& rSet )
-{
-    return rIStream;
-}
-
-// -----------------------------------------------------------------------
-
-SvStream& operator<<( SvStream& rOStream, const MachineSettings& rSet )
-{
-    return rOStream;
 }
 
 // =======================================================================
@@ -352,20 +337,6 @@ BOOL MouseSettings::operator ==( const MouseSettings& rSet ) const
         return FALSE;
 }
 
-// -----------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rIStream, MouseSettings& rSet )
-{
-    return rIStream;
-}
-
-// -----------------------------------------------------------------------
-
-SvStream& operator<<( SvStream& rOStream, const MouseSettings& rSet )
-{
-    return rOStream;
-}
-
 // =======================================================================
 
 ImplKeyboardData::ImplKeyboardData()
@@ -454,20 +425,6 @@ BOOL KeyboardSettings::operator ==( const KeyboardSettings& rSet ) const
         return TRUE;
     else
         return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rIStream, KeyboardSettings& rSet )
-{
-    return rIStream;
-}
-
-// -----------------------------------------------------------------------
-
-SvStream& operator<<( SvStream& rOStream, const KeyboardSettings& rSet )
-{
-    return rOStream;
 }
 
 // =======================================================================
@@ -1080,20 +1037,6 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
         return FALSE;
 }
 
-// -----------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rIStream, StyleSettings& rSet )
-{
-    return rIStream;
-}
-
-// -----------------------------------------------------------------------
-
-SvStream& operator<<( SvStream& rOStream, const StyleSettings& rSet )
-{
-    return rOStream;
-}
-
 // =======================================================================
 
 ImplMiscData::ImplMiscData()
@@ -1182,20 +1125,6 @@ BOOL MiscSettings::operator ==( const MiscSettings& rSet ) const
         return TRUE;
     else
         return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rIStream, MiscSettings& rSet )
-{
-    return rIStream;
-}
-
-// -----------------------------------------------------------------------
-
-SvStream& operator<<( SvStream& rOStream, const MiscSettings& rSet )
-{
-    return rOStream;
 }
 
 // =======================================================================
@@ -1288,20 +1217,6 @@ BOOL SoundSettings::operator ==( const SoundSettings& rSet ) const
         return FALSE;
 }
 
-// -----------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rIStream, SoundSettings& rSet )
-{
-    return rIStream;
-}
-
-// -----------------------------------------------------------------------
-
-SvStream& operator<<( SvStream& rOStream, const SoundSettings& rSet )
-{
-    return rOStream;
-}
-
 // =======================================================================
 
 ImplNotificationData::ImplNotificationData()
@@ -1390,20 +1305,6 @@ BOOL NotificationSettings::operator ==( const NotificationSettings& rSet ) const
         return TRUE;
     else
         return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rIStream, NotificationSettings& rSet )
-{
-    return rIStream;
-}
-
-// -----------------------------------------------------------------------
-
-SvStream& operator<<( SvStream& rOStream, const NotificationSettings& rSet )
-{
-    return rOStream;
 }
 
 // =======================================================================
@@ -1503,20 +1404,6 @@ BOOL HelpSettings::operator ==( const HelpSettings& rSet ) const
         return TRUE;
     else
         return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rIStream, HelpSettings& rSet )
-{
-    return rIStream;
-}
-
-// -----------------------------------------------------------------------
-
-SvStream& operator<<( SvStream& rOStream, const HelpSettings& rSet )
-{
-    return rOStream;
 }
 
 // =======================================================================
@@ -1724,7 +1611,13 @@ ULONG AllSettings::Update( ULONG nFlags, const AllSettings& rSet )
     {
         if ( mpData->maInternational != rSet.mpData->maInternational )
         {
-            SetInternational( rSet.mpData->maInternational );
+            CopyData();
+            mpData->maInternational = rSet.mpData->maInternational;
+            mpData->meLanguage = mpData->maInternational.GetFormatLanguage();
+            mpData->meUILanguage = mpData->maInternational.GetLanguage();
+            // Will be calculated in GetLocale()/GetUILocale()
+            mpData->maLocale = ::com::sun::star::lang::Locale();
+            mpData->maUILocale = ::com::sun::star::lang::Locale();
             nChangeFlags |= SETTINGS_INTERNATIONAL;
         }
     }
@@ -1827,21 +1720,6 @@ BOOL AllSettings::operator ==( const AllSettings& rSet ) const
         }
     }
     return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
-void AllSettings::SetInternational( const International& rIntn )
-{
-    CopyData();
-
-    mpData->maInternational = rIntn;
-
-    mpData->meLanguage = rIntn.GetFormatLanguage();
-    mpData->meUILanguage = rIntn.GetLanguage();
-    // Will be calculated in GetLocale()/GetUILocale()
-    mpData->maLocale = ::com::sun::star::lang::Locale();
-    mpData->maUILocale = ::com::sun::star::lang::Locale();
 }
 
 // -----------------------------------------------------------------------
@@ -1950,18 +1828,4 @@ LanguageType AllSettings::GetUILanguage() const
         return GetSystemLanguage();
 
     return mpData->meUILanguage;
-}
-
-// -----------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rIStream, AllSettings& rSet )
-{
-    return rIStream;
-}
-
-// -----------------------------------------------------------------------
-
-SvStream& operator<<( SvStream& rOStream, const AllSettings& rSet )
-{
-    return rOStream;
 }
