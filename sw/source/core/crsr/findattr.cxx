@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findattr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:45:15 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,115 +555,6 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
         else
             break;
     }
-// --------------------------------------------------------------
-#ifdef USED
-    {
-        SfxItemState eState = aCmpSet.GetItemState( rAttr.Which(), FALSE, &pItem );
-        if( SFX_ITEM_DONTCARE != eState && SFX_ITEM_SET != eState )
-            return Found();
-
-        register USHORT n, nWhich = rAttr.Which();
-        _SwSrchChrAttr* pCmp;
-
-        // loesche erstmal alle, die bis zu der Start Position schon wieder
-        // ungueltig sind:
-
-        _SwSrchChrAttr* pArrPtr;
-        if( nFound )
-            for( pArrPtr = pFndArr, n = 0; n < nArrLen;
-                ++n, ++pArrPtr )
-                if( pArrPtr->nWhich && pArrPtr->nEnd <= aTmp.nStt )
-                {
-                    pArrPtr->nWhich = 0;        // geloescht
-                    nFound--;
-                }
-
-        // loesche erstmal alle, die bis zu der Start Position schon wieder
-        // ungueltig sind. Und verschiebe alle die "offen" sind, heisst ueber
-        // die Start Position ragen, vom Stack in den FndSet
-
-        if( nStackCnt )
-            for( pArrPtr = pStackArr, n=0; n < nArrLen; ++n, ++pArrPtr )
-            {
-                if( !pArrPtr->nWhich )
-                    continue;
-
-                if( pArrPtr->nEnd <= aTmp.nStt )
-                {
-                    pArrPtr->nWhich = 0;        // geloescht
-                    if( !--nStackCnt )
-                        break;
-                }
-                else if( pArrPtr->nStt <= aTmp.nStt )
-                {
-                    if( ( pCmp = &pFndArr[ n ])->nWhich )
-                    {
-                        if( pCmp->nEnd < pArrPtr->nEnd )        // erweitern
-                            pCmp->nEnd = pArrPtr->nEnd;
-                    }
-                    else
-                    {
-                        *pCmp = *pArrPtr;
-                        nFound++;
-                    }
-                    pArrPtr->nWhich = 0;
-                    if( !--nStackCnt )
-                        break;
-                }
-            }
-
-
-        if( SFX_ITEM_DONTCARE == eState  )
-        {
-            // wird Attribut gueltig ?
-            if( !CmpAttr( aCmpSet.GetPool()->GetDefaultItem( nWhich ),
-                rAttr.GetAttr() ))
-            {
-                // suche das Attribut und erweiter es gegebenenfalls
-                if( !( pCmp = &pFndArr[ nWhich - nArrStart ])->nWhich )
-                {
-                    *pCmp = aTmp;               // nicht gefunden, eintragen
-                    nFound++;
-                }
-                else if( pCmp->nEnd < aTmp.nEnd )       // erweitern ?
-                    pCmp->nEnd = aTmp.nEnd;
-
-                return Found();
-            }
-        }
-        // wird Attribut gueltig ?
-        else if(  CmpAttr( *pItem, rAttr.GetAttr() ) )
-        {
-            pFndArr[ nWhich - nArrStart ] = aTmp;
-            return ++nFound == aCmpSet.Count();
-        }
-
-        // tja, dann muss es auf den Stack
-        if( ( pCmp = &pFndArr[ nWhich - nArrStart ])->nWhich )
-        {
-            // vorhanden, auf den Stack. Aber nur wenn es noch grosser ist
-            if( pCmp->nEnd > aTmp.nEnd )
-            {
-                ASSERT( !pStackArr[ nWhich - nArrStart ].nWhich,
-                                "Stack-Platz ist noch belegt" );
-
-    // ---------
-    // JP 22.08.96: nur Ende manipulieren reicht nicht. Bug 30547
-    //          pCmp->nStt = aTmp.nEnd;
-                if( aTmp.nStt <= pCmp->nStt )
-                    pCmp->nStt = aTmp.nEnd;
-                else
-                    pCmp->nEnd = aTmp.nStt;
-    // ---------
-
-                pStackArr[ nWhich - nArrStart ] = *pCmp;
-                nStackCnt++;
-            }
-            pCmp->nWhich = 0;
-            nFound--;
-        }
-    }
-#endif
     return Found();
 }
 
