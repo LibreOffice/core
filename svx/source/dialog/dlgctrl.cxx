@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:24:59 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:14:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,7 +713,7 @@ void SvxRectCtl::SetActualRP( RECT_POINT eNewRP )
     Invalidate( Rectangle( aPtLast - Point( nRadius, nRadius ), aPtLast + Point( nRadius, nRadius ) ) );
     Invalidate( Rectangle( aPtNew - Point( nRadius, nRadius ), aPtNew + Point( nRadius, nRadius ) ) );
 
-    // notify accessability object about change
+    // notify accessibility object about change
     if( pAccContext )
         pAccContext->selectChild( eNewRP );
 }
