@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: od $ $Date: 2002-09-05 16:07:05 $
+ *  last change: $Author: fme $ $Date: 2002-09-12 12:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4082,22 +4082,29 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
             //Um Rekursionen zu vermeiden muss mein Retouche Flag zuerst
             //zurueckgesetzt werden!
             ResetRetouche();
-            SwRect aRetouche( rRetouche );
-            ::SizeBorderRect( aRetouche );
-            /// OD 30.08.2002 #102450#
-            /// determine background color of page for <PaintLayer> method
-            /// calls, painting <hell> or <heaven>
-            const Color aPageBackgrdColor = pPage->GetDrawBackgrdColor();
-            /// OD 29.08.2002 #102450#
-            /// add 3rd parameter to <PaintLayer> method calls
-            pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHellId(), aRetouche, &aPageBackgrdColor );
-            pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(), aRetouche, &aPageBackgrdColor );
-            pSh->Imp()->PaintLayer( pSh->GetDoc()->GetControlsId(), aRetouche );
+            SwRect aRetouchePart( rRetouche );
+            ::SizeBorderRect( aRetouchePart );
+            if ( aRetouchePart.HasArea() )
+            {
+                /// OD 30.08.2002 #102450#
+                /// determine background color of page for <PaintLayer> method
+                /// calls, painting <hell> or <heaven>
+                const Color aPageBackgrdColor = pPage->GetDrawBackgrdColor();
+                /// OD 29.08.2002 #102450#
+                /// add 3rd parameter to <PaintLayer> method calls
+                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHellId(),
+                                        aRetouchePart, &aPageBackgrdColor );
+                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(),
+                                        aRetouchePart, &aPageBackgrdColor );
+                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetControlsId(),
+                                        aRetouchePart );
+            }
+
             SetRetouche();
 
             //Da wir uns ausserhalb aller Paint-Bereiche begeben muessen hier
             //leider die Hilfslinien erneuert werden.
-            pPage->RefreshSubsidiary( aRetouche );
+            pPage->RefreshSubsidiary( aRetouchePart );
         }
     }
     if ( ViewShell::IsLstEndAction() )
