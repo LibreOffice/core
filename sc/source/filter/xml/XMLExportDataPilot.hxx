@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-15 13:56:21 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 18:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,9 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #endif
 
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
