@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACatalog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:15:37 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,121 +94,57 @@ OCatalog::OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon) : connectivity::sd
                 ,m_aCatalog(_pCatalog)
 {
 }
-// -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 void OCatalog::refreshTables()
 {
     TStringVector aVector;
 
-    ADOTables* pTables = m_aCatalog.get_Tables();
-    if(pTables)
-    {
-        pTables->Refresh();
-
-        sal_Int32 nCount = 0;
-        pTables->get_Count(&nCount);
-        for(sal_Int32 i=0;i< nCount;++i)
-        {
-            ADOTable* pTable = NULL;
-            pTables->get_Item(OLEVariant(i),&pTable);
-            if(pTable)
-            {
-                WpADOTable aTable(pTable);
-                aVector.push_back(aTable.get_Name());
-            }
-        }
-    }
+    WpADOTables aTables(m_aCatalog.get_Tables());
+    aTables.fillElementNames(aVector);
 
     if(m_pTables)
         m_pTables->reFill(aVector);
     else
-        m_pTables = new OTables(this,m_aMutex,aVector,pTables,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+        m_pTables = new OTables(this,m_aMutex,aVector,aTables,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 }
 // -------------------------------------------------------------------------
 void OCatalog::refreshViews()
 {
     TStringVector aVector;
 
-    ADOViews* pViews = m_aCatalog.get_Views();
-    if(pViews)
-    {
-        pViews->Refresh();
-
-        sal_Int32 nCount = 0;
-        pViews->get_Count(&nCount);
-        for(sal_Int32 i=0;i< nCount;++i)
-        {
-            ADOView* pView = NULL;
-            pViews->get_Item(OLEVariant(i),&pView);
-            if(pView)
-            {
-                WpADOView aView(pView);
-                aVector.push_back(aView.get_Name());
-            }
-        }
-    }
+    WpADOViews aViews = m_aCatalog.get_Views();
+    aViews.fillElementNames(aVector);
 
     if(m_pViews)
         m_pViews->reFill(aVector);
     else
-        m_pViews = new OViews(this,m_aMutex,aVector,pViews,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+        m_pViews = new OViews(this,m_aMutex,aVector,aViews,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 }
 // -------------------------------------------------------------------------
 void OCatalog::refreshGroups()
 {
     TStringVector aVector;
 
-    ADOGroups* pGroups = m_aCatalog.get_Groups();
-    if(pGroups)
-    {
-        pGroups->Refresh();
-
-        sal_Int32 nCount = 0;
-        pGroups->get_Count(&nCount);
-        for(sal_Int32 i=0;i< nCount;++i)
-        {
-            ADOGroup* pGroup = NULL;
-            pGroups->get_Item(OLEVariant(i),&pGroup);
-            if(pGroup)
-            {
-                WpADOGroup aGroup(pGroup);
-                aVector.push_back(aGroup.get_Name());
-            }
-        }
-    }
+    WpADOGroups aGroups = m_aCatalog.get_Groups();
+    aGroups.fillElementNames(aVector);
 
     if(m_pGroups)
         m_pGroups->reFill(aVector);
     else
-        m_pGroups = new OGroups(this,m_aMutex,aVector,pGroups,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+        m_pGroups = new OGroups(this,m_aMutex,aVector,aGroups,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 }
 // -------------------------------------------------------------------------
 void OCatalog::refreshUsers()
 {
     TStringVector aVector;
 
-    ADOUsers* pUsers = m_aCatalog.get_Users();
-    if(pUsers)
-    {
-        pUsers->Refresh();
-
-        sal_Int32 nCount = 0;
-        pUsers->get_Count(&nCount);
-        for(sal_Int32 i=0;i< nCount;++i)
-        {
-            ADOUser* pUser = NULL;
-            pUsers->get_Item(OLEVariant(i),&pUser);
-            if(pUser)
-            {
-                WpADOUser aUser(pUser);
-                aVector.push_back(aUser.get_Name());
-            }
-        }
-    }
+    WpADOUsers aUsers = m_aCatalog.get_Users();
+    aUsers.fillElementNames(aVector);
 
     if(m_pUsers)
         m_pUsers->reFill(aVector);
     else
-        m_pUsers = new OUsers(this,m_aMutex,aVector,pUsers,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+        m_pUsers = new OUsers(this,m_aMutex,aVector,aUsers,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 }
 // -------------------------------------------------------------------------
 

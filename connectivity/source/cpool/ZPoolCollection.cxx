@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPoolCollection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 13:58:57 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,8 +513,15 @@ Any OPoolCollection::getNodeValue(const ::rtl::OUString& _rPath,const Reference<
 void SAL_CALL OPoolCollection::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
+    Reference<XPropertySet> xProp(Source.Source,UNO_QUERY);
     if(Source.Source == m_xConfigNode)
+    {
+        if(xProp.is())
+            xProp->removePropertyChangeListener(getEnablePoolingNodeName(),this);
         m_xConfigNode = NULL;
+    }
+    else if(xProp.is())
+        xProp->removePropertyChangeListener(getEnableNodeName(),this);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TSkipDeletedSet.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:39:22 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,8 +250,8 @@ void OSkipDeletedSet::clear()
 // -----------------------------------------------------------------------------
 sal_Int32 OSkipDeletedSet::getMappedPosition(sal_Int32 _nPos) const
 {
-    ::std::map<sal_Int32,sal_Int32>::const_iterator aFind = m_aBookmarks.find(_nPos);
-    OSL_ENSURE(aFind != m_aBookmarks.end(),"OResultSet::getRow() invalid bookmark!");
+    TInt2IntMap::const_iterator aFind = m_aBookmarks.find(_nPos);
+    OSL_ENSURE(aFind != m_aBookmarks.end(),"OSkipDeletedSet::getMappedPosition() invalid bookmark!");
     return aFind->second;
 }
 // -----------------------------------------------------------------------------
@@ -263,7 +263,7 @@ void OSkipDeletedSet::insertNewPosition(sal_Int32 _nPos)
 void OSkipDeletedSet::deletePosition(sal_Int32 _nPos)
 {
     TInt2IntMap::iterator aFind = m_aBookmarks.find(_nPos);
-    OSL_ENSURE(aFind != m_aBookmarks.end(),"OResultSet::deleteRow() bookmark not found!");
+    OSL_ENSURE(aFind != m_aBookmarks.end(),"OSkipDeletedSet::deletePosition() bookmark not found!");
     TInt2IntMap::iterator aIter = aFind;
     ++aIter;
     for (; aIter != m_aBookmarks.end() ; ++aIter)

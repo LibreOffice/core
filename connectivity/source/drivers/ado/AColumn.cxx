@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumn.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 13:18:02 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                     ADOProperties* pProps = m_aColumn.get_Properties();
                     pProps->AddRef();
                     ADOProperty* pProp = NULL;
-                    pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("AutoIncrement")),&pProp);
+                    pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Autoincrement")),&pProp);
                     WpADOProperty aProp(pProp);
                     if(pProp)
                         aProp.PutValue(getString(rValue));
@@ -291,7 +291,7 @@ void OAdoColumn::fillPropertyValues()
             {
                 pProps->AddRef();
                 ADOProperty* pProp = NULL;
-                pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("AutoIncrement")),&pProp);
+                pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Autoincrement")),&pProp);
                 WpADOProperty aProp(pProp);
                 if(pProp)
                     m_IsAutoIncrement = aProp.GetValue();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TSortIndex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 14:23:23 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,9 +118,6 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
 // -----------------------------------------------------------------------------
 ::vos::ORef<OKeySet> OSortIndex::CreateKeySet()
 {
-
-    OSL_ENSURE(! m_bFrozen,"OSortIndex::Freeze: already frozen!");
-
     Freeze();
 
     ::vos::ORef<OKeySet> pKeySet = new OKeySet();
