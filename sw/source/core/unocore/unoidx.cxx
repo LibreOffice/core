@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2000-11-10 10:18:36 $
+ *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,7 +616,7 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
                     SfxItemPropertySet aPropSet(_pMap);
                     const SwAttrSet& rSet = m_pDoc->GetTOXBaseAttrSet(*pTOXBase);
                     pAttrSet = new SfxItemSet(rSet);
-                    aPropSet.setPropertyValue(rPropertyName, aValue, *pAttrSet);
+                    aPropSet.setPropertyValue(*pMap, aValue, *pAttrSet);
 
                     const SwSectionFmts& rSects = m_pDoc->GetSections();
                     const SwSectionFmt* pOwnFmt = GetFmt();
@@ -897,7 +897,7 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 {
                     SfxItemPropertySet aPropSet(_pMap);
                     const SwAttrSet& rSet = m_pDoc->GetTOXBaseAttrSet(*pTOXBase);
-                    aRet = aPropSet.getPropertyValue(rPropertyName, rSet);
+                    aRet = aPropSet.getPropertyValue(*pMap, rSet);
                 }
         }
         if(bBOOL)

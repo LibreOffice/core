@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2000-11-09 14:13:20 $
+ *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_CONTOURED                         
 const SwPropNameLen __FAR_DATA  UNO_NAME_CONTOUR_OUTSIDE                        (MAP_CHAR_LEN("ContourOutside"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CONTENT_PROTECTED                      (MAP_CHAR_LEN("ContentProtected"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_COUNT_EMPTY_LINES                      (MAP_CHAR_LEN("CountEmptyLines"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_RESTART_AT_EACH_PAGE                   (MAP_CHAR_LEN("RestartAtEachPage"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_DATA_BASE_NAME                         (MAP_CHAR_LEN("DataBaseName"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_DATA_TABLE_NAME                        (MAP_CHAR_LEN("DataTableName"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_DATA_COLUMN_NAME                       (MAP_CHAR_LEN("DataColumnName"));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-15 14:11:07 $
+ *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1777,7 +1777,7 @@ put_itemset:
                     SfxItemSet& rStyleSet = aBase.GetItemSet();
                     SfxItemSet aSet(*rStyleSet.GetPool(), pMap->nWID, pMap->nWID);
                     aSet.Put(rStyleSet);
-                    aPropSet.setPropertyValue(rPropertyName, aValue, aSet);
+                    aPropSet.setPropertyValue(*pMap, aValue, aSet);
 
                     aBase.SetItemSet(aSet);
                 }
@@ -1928,7 +1928,7 @@ Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
 query_itemset:
                 {
                     SfxItemSet& rSet = aStyle.GetItemSet();
-                    aRet = aPropSet.getPropertyValue(rPropertyName, rSet);
+                    aRet = aPropSet.getPropertyValue(*pMap, rSet);
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2000-11-09 10:59:02 $
+ *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2592,7 +2592,7 @@ Any SwXTextCursor::GetPropertyValue(
         PropertyState eTemp;
         bDone = lcl_getCrsrPropertyValue(pMap, rPaM, aSet, aAny, eTemp );
         if(!bDone)
-            aAny = rPropSet.getPropertyValue(aPropertyName, aSet);
+            aAny = rPropSet.getPropertyValue(*pMap, aSet);
     }
     else
         throw UnknownPropertyException();
@@ -2620,7 +2620,7 @@ void SwXTextCursor::SetPropertyValue(
         BOOL bDef = FALSE;
         BOOL bPut;
         if(!lcl_setCrsrPropertyValue(pMap, rPaM, rSet, aValue, bPut ))
-            rPropSet.setPropertyValue(rPropertyName, aValue, rSet);
+            rPropSet.setPropertyValue(*pMap, aValue, rSet);
         if(bPut)
             SwXTextCursor::SetCrsrAttr(rPaM, rSet);
     }
@@ -4633,7 +4633,7 @@ uno::Any SwXParagraph::getPropertyValue(const OUString& rPropertyName)
                 PropertyState eTemp;
                 bDone = lcl_getCrsrPropertyValue(pMap, *pUnoCrsr, rAttrSet, aAny, eTemp );
                 if(!bDone)
-                    aAny = aPropSet.getPropertyValue(aPropertyName, rAttrSet);
+                    aAny = aPropSet.getPropertyValue(*pMap, rAttrSet);
             }
             else
                 throw UnknownPropertyException();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-08 12:42:49 $
+ *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,7 +543,7 @@ void SwXTextSection::setPropertyValue(
                         pNewAttrSet = new SfxItemSet(*rOldAttrSet.GetPool(),
                                                     pMap->nWID, pMap->nWID, 0);
                         pNewAttrSet->Put(rOldAttrSet);
-                        aPropSet.setPropertyValue(rPropertyName, aValue, *pNewAttrSet);
+                        aPropSet.setPropertyValue(*pMap, aValue, *pNewAttrSet);
                     }
                     else
                     {
@@ -681,7 +681,7 @@ uno::Any SwXTextSection::getPropertyValue(const OUString& rPropertyName)
                 break;
                 default:
                     if(pFmt)
-                        aRet = aPropSet.getPropertyValue(rPropertyName, pFmt->GetAttrSet());
+                        aRet = aPropSet.getPropertyValue(*pMap, pFmt->GetAttrSet());
                     else
                     {
                         const SfxPoolItem* pQueryItem = 0;

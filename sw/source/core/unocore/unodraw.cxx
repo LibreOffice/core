@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-02 09:44:01 $
+ *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -879,7 +879,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 }
                 else
                 {
-                    aPropSet.setPropertyValue(rPropertyName, aValue, aSet);
+                    aPropSet.setPropertyValue(*pMap, aValue, aSet);
                     pFmt->SetAttr(aSet);
                 }
             }
@@ -952,7 +952,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
             if(pFmt)
             {
                 const SwAttrSet& rSet = pFmt->GetAttrSet();
-                aRet = aPropSet.getPropertyValue(rPropertyName, rSet);
+                aRet = aPropSet.getPropertyValue(*pMap, rSet);
             }
             else
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-31 08:53:34 $
+ *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,7 @@ const SfxItemPropertyMap* GetNumberingRulesMap()
 //#define WID_CHARACTER_STYLE             7
 #define WID_COUNT_EMPTY_LINES           8
 #define WID_COUNT_LINES_IN_FRAMES       9
+#define WID_RESTART_AT_EACH_PAGE        10
 
 const SfxItemPropertyMap* GetLineNumberingMap()
 {
@@ -305,6 +306,7 @@ const SfxItemPropertyMap* GetLineNumberingMap()
         { SW_PROP_NAME(UNO_NAME_NUMBER_POSITION),         WID_NUMBER_POSITION,    &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),          WID_NUMBERING_TYPE ,    &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_ON),                        WID_NUM_ON,             &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_RESTART_AT_EACH_PAGE),      WID_RESTART_AT_EACH_PAGE, &::getBooleanCppuType()  ,        PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_DISTANCE), WID_SEPARATOR_LINE_DISTANCE, &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
         {0,0,0,0}
     };
@@ -1133,6 +1135,12 @@ void SwXLineNumberingProperties::setPropertyValue(
                     aInfo.SetCountInFlys(bVal);
                 }
                 break;
+                case WID_RESTART_AT_EACH_PAGE :
+                {
+                    sal_Bool bVal = *(sal_Bool*)aValue.getValue();
+                    aInfo.SetRestartEachPage(bVal);
+                }
+                break;
             }
             pDoc->SetLineNumberInfo(aInfo);
         }
@@ -1218,6 +1226,12 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
                 case WID_COUNT_LINES_IN_FRAMES :
                 {
                     sal_Bool bTemp = rInfo.IsCountInFlys();
+                    aRet.setValue(&bTemp, ::getCppuBooleanType());
+                }
+                break;
+                case WID_RESTART_AT_EACH_PAGE :
+                {
+                    sal_Bool bTemp = rInfo.IsRestartEachPage();
                     aRet.setValue(&bTemp, ::getCppuBooleanType());
                 }
                 break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-11-08 14:56:39 $
+ *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1034,6 +1034,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
     {
         sal_Bool bNextFrame = sal_False;
         const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
+        if(!pCur)
+            throw UnknownPropertyException();
         SwDoc* pDoc = pFmt->GetDoc();
         if( eType == FLYCNTTYPE_GRF &&
                     (COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ALTERNATIVE_TEXT)||
@@ -1081,7 +1083,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 else
                 {
                     SfxItemSet aSet(pNoTxt->GetSwAttrSet());
-                    aPropSet.setPropertyValue(rPropertyName, aValue, aSet);
+                    aPropSet.setPropertyValue(*pCur, aValue, aSet);
                     pNoTxt->SetAttr(aSet);
                 }
             }
@@ -1178,7 +1180,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 RES_FRMATR_BEGIN, RES_FRMATR_END - 1 );
 
             aSet.SetParent(&pFmt->GetAttrSet());
-            aPropSet.setPropertyValue(rPropertyName, aValue, aSet);
+            aPropSet.setPropertyValue(*pCur, aValue, aSet);
             if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPE))
                 pFmt->GetDoc()->SetFlyFrmAttr( *pFmt, aSet );
             else
@@ -1216,6 +1218,8 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     else if(pFmt)
     {
         const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
+        if(!pCur)
+            throw UnknownPropertyException();
         if(eType == FLYCNTTYPE_GRF &&
                 pCur &&
                 (pCur->nWID == RES_GRFATR_CROPGRF ||
@@ -1252,7 +1256,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 else
                 {
                     SfxItemSet aSet(pNoTxt->GetSwAttrSet());
-                    aAny = aPropSet.getPropertyValue(rPropertyName, aSet);
+                    aAny = aPropSet.getPropertyValue(*pCur, aSet);
                 }
             }
         }
@@ -1298,7 +1302,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         else
         {
             const SwAttrSet& rSet = pFmt->GetAttrSet();
-            aAny = aPropSet.getPropertyValue(rPropertyName, rSet);
+            aAny = aPropSet.getPropertyValue(*pCur, rSet);
         }
     }
     else if(IsDescriptor())
@@ -2636,6 +2640,9 @@ sal_uInt16 SwXOLEListener::FindEntry( const EventObject& rEvent,SwOLENode** ppNd
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2000/11/08 14:56:39  os
+    #80121# createTextCursor in frames: skip tables
+
     Revision 1.6  2000/10/27 13:52:45  mib
     #79648#: Conversion to twip for crop property
 

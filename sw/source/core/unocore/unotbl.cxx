@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-11-02 12:11:49 $
+ *  last change: $Author: os $ $Date: 2000-11-15 15:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1251,7 +1251,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName,
                 {
                     SwFrmFmt* pLnFmt = pLn->ClaimFrmFmt();
                     SwAttrSet aSet(pLnFmt->GetAttrSet());
-                    aPropSet.setPropertyValue(rPropertyName, aValue, aSet);
+                    aPropSet.setPropertyValue(*pMap, aValue, aSet);
                     pDoc->SetAttr(aSet, *pLnFmt);
                 }
             }
@@ -1299,7 +1299,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
                 default:
                 {
                     const SwAttrSet& rSet = pLn->GetFrmFmt()->GetAttrSet();
-                    aRet = aPropSet.getPropertyValue(rPropertyName, rSet);
+                    aRet = aPropSet.getPropertyValue(*pMap, rSet);
                 }
             }
         }
@@ -1686,11 +1686,13 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
                         RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                         0L);
                     SwXTextCursor::GetCrsrAttr(pTblCrsr->GetSelRing(), rSet);
-                    aPropSet.setPropertyValue(rPropertyName, aValue, rSet);
+                    aPropSet.setPropertyValue(*pMap, aValue, rSet);
                     SwXTextCursor::SetCrsrAttr(pTblCrsr->GetSelRing(), rSet, sal_True);
                 }
             }
         }
+        else
+            throw UnknownPropertyException();
     }
 }
 /*-- 11.12.98 12:16:17---------------------------------------------------
@@ -1744,10 +1746,12 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
                         0L);
                     // erstmal die Attribute des Cursors
                     SwXTextCursor::GetCrsrAttr(pTblCrsr->GetSelRing(), aSet);
-                    aRet = aPropSet.getPropertyValue(rPropertyName, aSet);
+                    aRet = aPropSet.getPropertyValue(*pMap, aSet);
                 }
             }
         }
+        else
+            throw UnknownPropertyException();
     }
     return aRet;
 }
@@ -3002,7 +3006,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                 default:
                 {
                     SwAttrSet aSet(pFmt->GetAttrSet());
-                    aPropSet.setPropertyValue(rPropertyName, aValue, aSet);
+                    aPropSet.setPropertyValue(*pMap, aValue, aSet);
                     pFmt->GetDoc()->SetAttr(aSet, *pFmt);
                 }
             }
@@ -3125,7 +3129,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                 default:
                 {
                     const SwAttrSet& rSet = pFmt->GetAttrSet();
-                    aRet = aPropSet.getPropertyValue(rPropertyName, rSet);
+                    aRet = aPropSet.getPropertyValue(*pMap, rSet);
                 }
             }
         }
@@ -3625,11 +3629,13 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                         0L);
                     SwUnoTableCrsr* pCrsr = *pTblCrsr;
                     SwXTextCursor::GetCrsrAttr(pCrsr->GetSelRing(), rSet);
-                    aPropSet.setPropertyValue(rPropertyName, aValue, rSet);
+                    aPropSet.setPropertyValue(*pMap, aValue, rSet);
                     SwXTextCursor::SetCrsrAttr(pCrsr->GetSelRing(), rSet, sal_True);
                 }
             }
         }
+        else
+            throw UnknownPropertyException();
     }
 }
 /*-- 11.12.98 14:27:35---------------------------------------------------
@@ -3689,10 +3695,12 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                     // erstmal die Attribute des Cursors
                     SwUnoTableCrsr* pCrsr = *pTblCrsr;
                     SwXTextCursor::GetCrsrAttr(pCrsr->GetSelRing(), aSet);
-                    aRet = aPropSet.getPropertyValue(rPropertyName, aSet);
+                    aRet = aPropSet.getPropertyValue(*pMap, aSet);
                 }
             }
         }
+        else
+            throw UnknownPropertyException();
     }
     return aRet;
 }
