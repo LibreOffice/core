@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ghiggins $ $Date: 2002-07-05 06:54:12 $
+ *  last change: $Author: cd $ $Date: 2002-07-10 06:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@ enum PipeMode
 };
 
 String GetURL_Impl( const String& rName );
+
+extern desktop::CommandLineArgs*    GetCommandLineArgs();
 
 namespace desktop
 {
@@ -671,8 +673,9 @@ void SAL_CALL OfficeIPCThread::run()
                     mbBlockRequests )
                     return;
 
-                String          aEmpty;
-                CommandLineArgs aCmdLineArgs( OUString( aArguments.GetBuffer(), aArguments.Len(), gsl_getSystemTextEncoding() ));
+                String              aEmpty;
+                CommandLineArgs     aCmdLineArgs( OUString( aArguments.GetBuffer(), aArguments.Len(), gsl_getSystemTextEncoding() ));
+                CommandLineArgs*    pCurrentCmdLineArgs = GetCommandLineArgs();
 
                 if ( aCmdLineArgs.IsQuickstart() )
                 {
@@ -683,20 +686,28 @@ void SAL_CALL OfficeIPCThread::run()
                     ImplPostForeignAppEvent( pAppEvent );
                 }
 
+                sal_Bool bDocRequestSent = sal_False;
                 ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest;
 
-                // Read cmdline args that can open/print documents
-                sal_Bool bDocRequestSent = sal_False;
-                if ( aCmdLineArgs.GetOpenList( pRequest->aOpenList )            ||
-                     aCmdLineArgs.GetPrintList( pRequest->aPrintList )          ||
-                     aCmdLineArgs.GetForceOpenList( pRequest->aForceOpenList )  ||
-                     aCmdLineArgs.GetForceNewList( pRequest->aForceNewList )    ||
-                     ( aCmdLineArgs.GetPrintToList( pRequest->aPrintToList ) &&
-                       aCmdLineArgs.GetPrinterName( pRequest->aPrinterName )) )
+                // Print requests are not dependent on the -invisible cmdline argument as they are
+                // loaded with the "hidden" flag! So they are always checked.
+                bDocRequestSent |= aCmdLineArgs.GetPrintList( pRequest->aPrintList );
+                bDocRequestSent |= ( aCmdLineArgs.GetPrintToList( pRequest->aPrintToList ) &&
+                                     aCmdLineArgs.GetPrinterName( pRequest->aPrinterName )      );
+
+                if ( !pCurrentCmdLineArgs->IsInvisible() )
+                {
+                    // Read cmdline args that can open/create documents. As they would open a window
+                    // they are only allowed if the "-invisible" is currently not used!
+                    bDocRequestSent |= aCmdLineArgs.GetOpenList( pRequest->aOpenList );
+                    bDocRequestSent |= aCmdLineArgs.GetForceOpenList( pRequest->aForceOpenList );
+                    bDocRequestSent |= aCmdLineArgs.GetForceNewList( pRequest->aForceNewList );
+                }
+
+                if ( bDocRequestSent )
                  {
                     // Send requests to dispatch watcher if we have at least one. The receiver
                     // is responsible to delete the request after processing it.
-                    bDocRequestSent = sal_True;
                     ImplPostProcessDocumentsEvent( pRequest );
                 }
                 else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-09 05:17:28 $
+ *  last change: $Author: cd $ $Date: 2002-07-10 06:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1515,7 +1515,8 @@ void Desktop::Main()
 
             InitTestToolLib();
 
-            if ( !bTerminateRequested )
+            if ( !bTerminateRequested &&
+                 !pCmdLineArgs->IsInvisible() )
             {
                 try
                 {
@@ -2086,7 +2087,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         // remove this pending request
         OfficeIPCThread::RequestsCompleted( 1 );
     }
-    else if ( rAppEvent.GetEvent() == "APPEAR" )
+    else if ( rAppEvent.GetEvent() == "APPEAR" && !GetCommandLineArgs()->IsInvisible() )
     {
         // find active task - the active task is always a visible task
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >
@@ -2110,26 +2111,22 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             // no visible task that could be activated found
             OpenDefault();
     }
-    else if ( rAppEvent.GetEvent() == "QUICKSTART" )
+    else if ( rAppEvent.GetEvent() == "QUICKSTART" && !GetCommandLineArgs()->IsInvisible() )
     {
-        CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
+        // If the office has been started the second time its command line arguments are sent through a pipe
+        // connection to the first office. We want to reuse the quickstart option for the first office.
+        // NOTICE: The quickstart service must be initialized inside the "main thread", so we use the
+        // application events to do this (they are executed inside main thread)!!!
+        // Don't start quickstart service if the user specified "-invisible" on the command line!
+        sal_Bool bQuickstart( sal_True );
+        Sequence< Any > aSeq( 1 );
+        aSeq[0] <<= bQuickstart;
 
-        if ( !pCmdLineArgs->IsQuickstart() )
-        {
-            // If the office has been started the second time its command line arguments are sent through a pipe
-            // connection to the first office. We want to reuse the quickstart option for the first office.
-            // NOTICE: The quickstart service must be initialized inside the "main thread", so we use the
-            // application events to do this (they are executed inside main thread)!!!
-            sal_Bool bQuickstart( sal_True );
-            Sequence< Any > aSeq( 1 );
-            aSeq[0] <<= bQuickstart;
-
-            Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                    DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" )),
-                                                  UNO_QUERY );
-            if ( xQuickstart.is() )
-                xQuickstart->initialize( aSeq );
-        }
+        Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
+                                                DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" )),
+                                              UNO_QUERY );
+        if ( xQuickstart.is() )
+            xQuickstart->initialize( aSeq );
     }
 }
 
