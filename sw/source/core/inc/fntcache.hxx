@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:42:44 $
+ *  last change: $Author: ama $ $Date: 2001-05-04 13:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ class SwFntObj : public SwCacheObj
     USHORT nZoom;
     BOOL bSymbol : 1;
     BOOL bPaintBlank : 1;
-    BOOL ChooseFont( ViewShell *pSh, OutputDevice *pOut );
+    void ChooseFont( ViewShell *pSh, OutputDevice *pOut );
 
     static long nPixWidth;
     static MapMode *pPixMap;

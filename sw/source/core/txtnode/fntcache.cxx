@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-18 12:22:09 $
+ *  last change: $Author: ama $ $Date: 2001-05-04 13:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,12 +305,11 @@ USHORT SwFntObj::GetHeight( ViewShell *pSh, const OutputDevice *pOut )
 // liegt, wird eingestellt, wobei ein zu schmaler Font gegenueber einem zu
 // breiten bevorzugt wird.
 
-BOOL SwFntObj::ChooseFont( ViewShell *pSh, OutputDevice *pOut )
+void SwFntObj::ChooseFont( ViewShell *pSh, OutputDevice *pOut )
 {
 static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
 
     nScrHeight = USHRT_MAX;
-    BOOL bRet = FALSE;
 
     Printer *pPrt;
     // "No screen adj"
@@ -327,6 +326,7 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
         CheckScrPrtFont( pOut );
     bSymbol = CHARSET_SYMBOL == pPrtFont->GetCharSet();
     nLeading = 0;
+    pScrFont = pPrtFont;
 #else
     {
         CheckPrtFont( pPrt );
@@ -334,6 +334,7 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
         Font aOldFnt( pPrt->GetFont() );
         pPrt->SetFont( *pPrtFont );
         FontMetric aMet = pPrt->GetFontMetric( );
+        pScrFont = pPrtFont;
         bSymbol = RTL_TEXTENCODING_SYMBOL == aMet.GetCharSet();
         if ( nLeading == USHRT_MAX )
         {
@@ -397,25 +398,71 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
                     // aber genau einer der beiden Screenfonts ein Symbolfont ist.
                     // Wir nehmen dann eben den anderen.
                     if ( bScrSymbol )
-                        bRet = TRUE; // mit Abgleich
+                        pScrFont = new Font( aMet ); // mit Abgleich
                     else
-                        pOut->SetFont( aFont ); // ohne Abgleich
+                        pOut->SetFont( *pPrtFont ); // ohne Abgleich
                 }
                 else
                 {
                     long nPWidth =
                         nOWidth - pOut->GetTextWidth( aStandardStr );
                     // lieber schmaler als breiter
-                    if ( nSWidth<0 ) { nSWidth *= -2; }
-                    if ( nPWidth<0 ) { nPWidth *= -2; }
+                    BYTE nNeg = 0;
+                    if ( nSWidth<0 ) { nSWidth *= -2; nNeg = 1; }
+                    if ( nPWidth<0 ) { nPWidth *= -2; nNeg |= 2; }
                     if ( nSWidth <= nPWidth )
-                        pOut->SetFont( aFont ); // ohne Abgleich
+                    {
+                        pOut->SetFont( *pPrtFont ); // ohne Abgleich
+                        nPWidth = nSWidth;
+                        nNeg &= 1;
+                    }
                     else
-                        bRet = TRUE; // mit Abgleich
+                    {
+                        pScrFont = new Font( aMet ); // mit Abgleich
+                        nSWidth = nPWidth;
+                        nNeg &= 2;
+                    }
+                    if( nNeg && nOWidth )
+                    {
+                        nPWidth *= 100;
+                        nPWidth /= nOWidth;
+                        // if the screen font is too wide, we try to reduce
+                        // the font height and get a smaller one
+                        if( nPWidth > 15 )
+                        {
+                            if( nPWidth > 80 )
+                                nPWidth = 80;
+                            nPWidth = 100 - nPWidth/4;
+                            Size aTmp = pScrFont->GetSize();
+                            aTmp.Height() *= nPWidth;
+                            aTmp.Height() /= 100;
+                            if( aTmp.Width() )
+                            {
+                                aTmp.Width() *= nPWidth;
+                                aTmp.Width() /= 100;
+                            }
+                            Font *pNew = new Font( *pScrFont );
+                            pNew->SetSize( aTmp );
+                            pOut->SetFont( *pNew );
+                            nPWidth = nOWidth -
+                                      pOut->GetTextWidth( aStandardStr );
+                            if( nPWidth < 0 ) { nPWidth *= -2; }
+                            if( nPWidth < nSWidth )
+                            {
+                                if( pScrFont != pPrtFont )
+                                    delete pScrFont;
+                                pScrFont = pNew;
+                            }
+                            else
+                            {
+                                delete pNew;
+                                pOut->SetFont( *pScrFont );
+                            }
+                        }
+                    }
                 }
             }
         }
-
         pPrt->SetFont( aOldFnt );
     }
     else
@@ -424,7 +471,9 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
         if ( nLeading == USHRT_MAX )
             nLeading = 0;
         if( !pPrinter )
-            CheckScrPrtFont( pOut );    }
+            CheckScrPrtFont( pOut );
+        pScrFont = pPrtFont;
+    }
 #endif
     // Zoomfaktor ueberpruefen, z.B. wg. PrtOle2 beim Speichern
     {
@@ -445,7 +494,7 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
         if( nTmp != nZoom )
             nZoom = USHRT_MAX - 1;
     }
-    return bRet;
+    nScrAscent = (USHORT)pOut->GetFontMetric().GetAscent();
 }
 
 void SwFntObj::CreateScrFont( ViewShell *pSh, const OutputDevice *pOut )
@@ -453,13 +502,7 @@ void SwFntObj::CreateScrFont( ViewShell *pSh, const OutputDevice *pOut )
     Font aOldFnt( pOut->GetFont() );
     ((OutputDevice *)pOut)->SetFont( *pPrtFont );
     // Jetzt wird der "bessere" Font eingestellt.
-    const BOOL bChoosePrt = ChooseFont( pSh, (OutputDevice *)pOut );
-    const FontMetric aMet = pOut->GetFontMetric( );
-    if ( bChoosePrt )
-        pScrFont = new Font( aMet );
-    else
-        pScrFont = pPrtFont;
-    nScrAscent = (USHORT) aMet.GetAscent( );
+    ChooseFont( pSh, (OutputDevice *)pOut );
     ((OutputDevice *)pOut)->SetFont( aOldFnt );
 }
 
