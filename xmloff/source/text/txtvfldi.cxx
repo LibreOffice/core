@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2001-10-17 10:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,7 +902,15 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
                 }
                 break;
             case VarTypeSimple:
-                break; // nothing
+                {
+                    // set string or non-string SubType (#93192#)
+                    // The SubType was already set in the FindFieldMaster
+                    // method, but it needs to be adjusted if it's a string.
+                    aAny <<= aValueHelper.IsStringValue()
+                        ? SetVariableType::STRING : SetVariableType::VAR;
+                    xFieldMaster->setPropertyValue(sPropertySubType, aAny);
+                }
+                break;
             case VarTypeUserField:
             {
                 sal_Bool bTmp = !aValueHelper.IsStringValue();
