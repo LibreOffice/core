@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsize.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:31:06 $
+ *  last change: $Author: fs $ $Date: 2002-05-24 12:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,9 @@ namespace dbaui
         HelpButton      aPB_HELP;
 
     public:
-        DlgSize(Window * pParent, sal_Int32 nVal, BOOL bRow);
+        DlgSize( Window * pParent, sal_Int32 nVal, BOOL bRow, sal_Int32 _nAlternativeStandard = -1 );
         ~DlgSize();
+
         sal_Int32 GetValue();
     };
 //.........................................................................
