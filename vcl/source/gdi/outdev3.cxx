@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: cp $ $Date: 2001-10-05 14:33:15 $
+ *  last change: $Author: cd $ $Date: 2001-10-08 12:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6022,13 +6022,16 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                 if ( !xBI.is() )
                     xBI = vcl::unohelper::CreateBreakIterator();
 
-                xub_StrLen nSoftBreak = GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
-                DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
-                i18n::LineBreakResults aLBR = xBI->getLineBreak( aText, nSoftBreak, GetSettings().GetLocale(), nPos, aHyphOptions, aUserOptions );
-                nBreakPos = (xub_StrLen)aLBR.breakIndex;
-                if ( nBreakPos <= nPos )
-                    nBreakPos = nSoftBreak;
-                nLineWidth = GetTextWidth( rStr, nPos, nBreakPos-nPos );
+                if ( xBI.is() )
+                {
+                    xub_StrLen nSoftBreak = GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
+                    DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
+                    i18n::LineBreakResults aLBR = xBI->getLineBreak( aText, nSoftBreak, GetSettings().GetLocale(), nPos, aHyphOptions, aUserOptions );
+                    nBreakPos = (xub_StrLen)aLBR.breakIndex;
+                    if ( nBreakPos <= nPos )
+                        nBreakPos = nSoftBreak;
+                    nLineWidth = GetTextWidth( rStr, nPos, nBreakPos-nPos );
+                }
             }
 
             if ( nLineWidth > nMaxLineWidth )
