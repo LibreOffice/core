@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:24:40 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ czech ] = "Tabulátory";
         TEXT[ hebrew ] = "~Tabulator";
         TEXT[ hindi ] = "~टेब्स";
+        TEXT[ slovak ] = "~Tabulátory";
     };
     RadioButton CB_SEMI
     {
@@ -152,6 +153,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ czech ] = "Středníky";
         TEXT[ hebrew ] = "~Semikolon";
         TEXT[ hindi ] = "~अर्ध विराम का चिह्न";
+        TEXT[ slovak ] = "~Bodkočiarky";
     };
     RadioButton CB_PARA
     {
@@ -186,6 +188,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ czech ] = "Odstavec";
         TEXT[ hebrew ] = "‮פסקאות‬";
         TEXT[ hindi ] = "~परिच्छेद";
+        TEXT[ slovak ] = "O~dstavec";
     };
     RadioButton RB_OTHER
     {
@@ -218,6 +221,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ czech ] = "Jiné: ";
         Text[ hebrew ] = "An~dere:";
         Text[ hindi ] = "~अन्य: ";
+        Text[ slovak ] = "~Iné: ";
     };
     Edit ED_OTHER
     {
@@ -261,6 +265,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ czech ] = "Stejná šířka všech sloupců";
         Text[ hebrew ] = "Gleiche ~Breite aller Spalten";
         Text[ hindi ] = "सब स्तंभों केलिए समान चौड़ाई";
+        Text[ slovak ] = "Rovnaká šírka všetkých stĺpcov";
     };
     FixedLine FL_DELIM
     {
@@ -295,6 +300,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ czech ] = "Oddělit text na";
         TEXT[ hebrew ] = "Trennzeichen im Text";
         TEXT[ hindi ] = "में अलग टेक्स्ट्";
+        TEXT[ slovak ] = "Oddeliť text";
     };
     CheckBox CB_HEADER
     {
@@ -328,6 +334,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ czech ] = "Záhlaví";
         Text[ hebrew ] = "‮כותרת עליונה‬";
         Text[ hindi ] = "शीर्षक";
+        Text[ slovak ] = "Záhlavie";
     };
     CheckBox CB_REPEAT_HEADER
     {
@@ -361,6 +368,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ czech ] = "Opakovat záhlaví";
         Text[ hebrew ] = "Auf jeder Seite ~wiederholen";
         Text[ hindi ] = "शीर्षक ~दुहराना";
+        Text[ slovak ] = "O~pakovať záhlavie";
     };
     CheckBox CB_DONT_SPLIT
     {
@@ -394,6 +402,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ czech ] = "Nerozdělovat tabulku";
         Text[ hebrew ] = "Tabelle ~nicht trennen";
         Text[ hindi ] = "सारणी को मत अलगाना";
+        Text[ slovak ] = "Nerozdeľovať tabuľku";
     };
     CheckBox CB_BORDER
     {
@@ -427,6 +436,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ czech ] = "Okraj";
         Text[ hebrew ] = "~Umrandung";
         Text[ hindi ] = "किनारा";
+        Text[ slovak ] = "Okraj";
     };
     FixedLine FL_OPTIONS
     {
@@ -459,6 +469,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ czech ] = "Volby";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
+        Text[ slovak ] = "Nastavenia";
     };
     String STR_CONVERT_TEXT_TABLE
     {
@@ -490,6 +501,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ czech ] = "Převést text na tabulku";
         TEXT[ hebrew ] = "Text in Tabelle umwandeln";
         TEXT[ hindi ] = "टेक्स्ट् को सारणी में बदलो";
+        TEXT[ slovak ] = "Previesť text na tabuľku";
     };
     OkButton BT_OK
     {
@@ -544,6 +556,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ czech ] = "Automatický formát...";
         Text[ hebrew ] = "‮עיצוב אוטומטי...‬";
         Text[ hindi ] = "स्वचालित ~रचना...";
+        Text[ slovak ] = "Automatický ~formát...";
     };
     TEXT[ chinese_simplified ] = "转换表格成文字";
     TEXT[ russian ] = "������������� ������� � �����";
@@ -560,7 +573,10 @@ ModalDialog DLG_CONV_TEXT_TABLE
     TEXT[ czech ] = "Převést tabulku na text";
     TEXT[ hebrew ] = "Tabelle in Text umwandeln";
     TEXT[ hindi ] = "सारणी को टेक्स्ट् में बदलो";
+    TEXT[ slovak ] = "Previesť tabuľku na text";
 };
+
+
 
 
 
