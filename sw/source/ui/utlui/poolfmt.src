@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-20 21:21:51 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ String STR_POOLCHR_TOXJUMP
     Text [ french ] = "Saut d'index" ;
     Text [ portuguese ] = "Salto ao índice" ;
     Text [ portuguese_brazilian ] = "Verzeichnissprung" ;
-    Text[ chinese_simplified ] = "Ë÷ÒıÁ´½Ó";
+    Text[ chinese_simplified ] = "Ä¿Â¼Á´½Ó";
     Text[ russian ] = "Ññûëêà óêàçàòåëÿ";
     Text[ polish ] = "Skok w indeksie";
     Text[ japanese ] = "õˆø¼Ş¬İÌß";
@@ -397,7 +397,7 @@ String STR_POOLCHR_IDX_MAIN_ENTRY
     Text[ portuguese_brazilian ] = "Main index entry";
     Text[ japanese ] = "õˆø‚Ìå€–Ú";
     Text[ korean ] = "Å°¿öµå »öÀÎ ÁÖÇ×¸ñ";
-    Text[ chinese_simplified ] = "Ë÷ÒıÖ÷ÌõÄ¿";
+    Text[ chinese_simplified ] = "Ë÷ÒıÄ¿Â¼ Ö÷ÌõÄ¿";
     Text[ chinese_traditional ] = "¯Á¤Ş¥Ø¿ı¥D±ø¥Ø";
     Text[ arabic ] = "ÅÏÎÇá ÑÆíÓí İí ÇáİåÑÓ ÇáÃÈÌÏí";
     Text[ turkish ] = "Alfabetik dizin ana girişi";
@@ -3016,7 +3016,7 @@ String STR_POOLCOLL_TOX_IDXH
     Text [ danish ] = "Stikordsregisteroverskrift" ;
     Text [ portuguese ] = "Título do índice remissivo" ;
     Text [ portuguese_brazilian ] = "Stichwortverzeichnis ?berschrift" ;
-    Text[ chinese_simplified ] = "Ë÷Òı±êÌâ";
+    Text[ chinese_simplified ] = "Ë÷ÒıÄ¿Â¼ ±êÌâ";
     Text[ russian ] = "Çàãîëîâîê óêàçàòåëÿ";
     Text[ polish ] = "Tytu³ skorowidza";
     Text[ japanese ] = "õˆø Œ©o‚µ";
@@ -3042,7 +3042,7 @@ String STR_POOLCOLL_TOX_IDX1
     Text [ danish ] = "Stikordsregister 1" ;
     Text [ portuguese ] = "Índice remissivo 1" ;
     Text [ portuguese_brazilian ] = "Stichwortverzeichnis 1" ;
-    Text[ chinese_simplified ] = "Ë÷Òı 1";
+    Text[ chinese_simplified ] = "Ë÷ÒıÄ¿Â¼ 1";
     Text[ russian ] = "Óêàçàòåëü 1";
     Text[ polish ] = "Skorowidz 1";
     Text[ japanese ] = "õˆø 1";
@@ -3068,7 +3068,7 @@ String STR_POOLCOLL_TOX_IDX2
     Text [ danish ] = "Stikordsregister 2" ;
     Text [ portuguese ] = "Índice remissivo 2" ;
     Text [ portuguese_brazilian ] = "Stichwortverzeichnis 2" ;
-    Text[ chinese_simplified ] = "Ë÷Òı 2";
+    Text[ chinese_simplified ] = "Ë÷ÒıÄ¿Â¼ 2";
     Text[ russian ] = "Óêàçàòåëü 2";
     Text[ polish ] = "Skorowidz 2";
     Text[ japanese ] = "õˆø 2";
@@ -3094,7 +3094,7 @@ String STR_POOLCOLL_TOX_IDX3
     Text [ danish ] = "Stikordsregister 3" ;
     Text [ portuguese ] = "Índice remissivo 3" ;
     Text [ portuguese_brazilian ] = "Stichwortverzeichnis 3" ;
-    Text[ chinese_simplified ] = "Ë÷Òı 3";
+    Text[ chinese_simplified ] = "Ë÷ÒıÄ¿Â¼ 3";
     Text[ russian ] = "Óêàçàòåëü 3";
     Text[ polish ] = "Skorowidz 3";
     Text[ japanese ] = "õˆø 3";
@@ -3120,7 +3120,7 @@ String STR_POOLCOLL_TOX_IDXBREAK
     Text [ danish ] = "Stikordsregister separator" ;
     Text [ portuguese ] = "Separador de índice remissivo" ;
     Text [ portuguese_brazilian ] = "Stichwortverzeichnis Trenner" ;
-    Text[ chinese_simplified ] = "Ë÷Òı·Ö¸ô·û";
+    Text[ chinese_simplified ] = "Ë÷ÒıÄ¿Â¼ ·Ö¸ô·û";
     Text[ russian ] = "Ğàçäåëèòåëü ïğåäìåòíîãî óêàçàòåëÿ";
     Text[ polish ] = "Separator skorowidza";
     Text[ japanese ] = "õˆø ¾ÊßÚ°À";
@@ -4627,4 +4627,5 @@ String STR_POOLCHR_RUBYTEXT
     Text[ arabic ] = "ÑãæÒ ÕæÊíÉ";
     Text[ catalan ] = "Símbolos fonéticos";
 };
+
 
