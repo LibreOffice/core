@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:23:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,26 +421,7 @@ USHORT SwGlossaryHdl::GetGlossaryCnt()
 {
     return pCurGrp ? pCurGrp->GetCount() : 0;
 }
-/*------------------------------------------------------------------------
-    Beschreibung:   Anzahl Textbausteine aus dem Basic erfragen
-------------------------------------------------------------------------*/
 
-
-USHORT SwGlossaryHdl::GetGlossaryCnt(const String& rGroupName)
-{
-    String sGroupName(rGroupName);
-    if(STRING_NOTFOUND == sGroupName.Search(GLOS_DELIM))
-        FindGroupName(sGroupName);
-    SwTextBlocks* pGrp = rStatGlossaries.GetGroupDoc(sGroupName, FALSE);
-    USHORT nCount = 0;
-    if(pGrp)
-    {
-        nCount = pGrp->GetCount();
-        rStatGlossaries.PutGroupDoc(pGrp);
-
-    }
-    return nCount;
-}
 /*------------------------------------------------------------------------
     Beschreibung:
 ------------------------------------------------------------------------*/
@@ -460,26 +441,7 @@ String  SwGlossaryHdl::GetGlossaryShortName(USHORT nId)
     return pCurGrp->GetShortName( nId );
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
-
-String SwGlossaryHdl::GetGlossaryName( USHORT nId, const String& rGroupName )
-{
-    String sGroupName(rGroupName);
-    if(STRING_NOTFOUND == sGroupName.Search(GLOS_DELIM))
-        FindGroupName(sGroupName);
-    SwTextBlocks* pGrp = rStatGlossaries.GetGroupDoc(sGroupName, FALSE);
-    String sName;
-    if(pGrp)
-    {
-        if( nId < pGrp->GetCount())
-            sName = pGrp->GetLongName( nId );
-        rStatGlossaries.PutGroupDoc(pGrp);
-    }
-    return sName;
-}
 /*------------------------------------------------------------------------
     Beschreibung:   Kurzname erfragen
 ------------------------------------------------------------------------*/
@@ -642,29 +604,6 @@ BOOL SwGlossaryHdl::ExpandGlossary(BOOL bUseStandard, BOOL bApi)
     }
     return pGlossary ? Expand( aShortName, &rStatGlossaries, pGlossary, bApi ) : FALSE;
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung: Expansion aus Basic aufrufen
-------------------------------------------------------------------------*/
-
-
-BOOL SwGlossaryHdl::ExpandGlossary( const String& rShortName, BOOL bApi )
-{
-    ASSERT(pWrtShell->CanInsert(), illegal);
-    //CHINA001 String sGroup(SwGlossaryDlg::GetCurrGroup());
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    ::GlossaryGetCurrGroup fnGetCurrGroup = pFact->GetGlossaryCurrGroupFunc( DLG_RENAME_GLOS );
-    DBG_ASSERT(fnGetCurrGroup, "Dialogdiet fail!");//CHINA001
-    String sGroup( (*fnGetCurrGroup)() );
-    //CHINA001 end
-    if(STRING_NOTFOUND == sGroup.Search(GLOS_DELIM))
-        FindGroupName(sGroup);
-
-    SwTextBlocks *pGlossary = rStatGlossaries.GetGroupDoc(sGroup);
-    return pGlossary ? Expand( rShortName, &rStatGlossaries, pGlossary, bApi ) : FALSE;
-}
-
 
 BOOL SwGlossaryHdl::Expand( const String& rShortName,
                             SwGlossaries *pGlossaries,
