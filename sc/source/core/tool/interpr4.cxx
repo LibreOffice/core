@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-02-26 13:03:14 $
+ *  last change: $Author: er $ $Date: 2001-02-28 14:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,7 +843,6 @@ void ScInterpreter::PushTempToken( const ScToken& r )
 }
 
 
-//! Only for PushDouble/PushInt!
 //! The Token had to be allocated with `new' and must not be used after this
 //! call because eventually it gets deleted in case of a errStackOverflow if
 //! no RefCount was set!
@@ -1314,7 +1313,7 @@ void ScInterpreter::SetNoValue()
 }
 
 
-BYTE ScInterpreter::GetStackType()
+StackVar ScInterpreter::GetStackType()
 {
     StackVar eRes;
     if( sp )
@@ -3507,7 +3506,7 @@ StackVar ScInterpreter::Interpret()
                         {
                             if (bIsString)
                             {
-                                aResult = *pMatVal->pS;
+                                aResult = pMatVal->GetString();
                                 eResult = svString;
                                 nRetTypeExpr = NUMBERFORMAT_TEXT;
                                 nRetIndexExpr = 0;

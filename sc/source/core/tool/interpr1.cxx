@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-02-22 15:50:23 $
+ *  last change: $Author: er $ $Date: 2001-02-28 14:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,8 +407,8 @@ ScMatrix* ScInterpreter::CompareMat()
             pResMat = GetNewMat( nC, nR, nResMatInd );
             if ( !pResMat )
                 return NULL;
-            USHORT n = nC * nR;
-            for ( USHORT j=0; j<n; j++ )
+            ULONG n = (ULONG) nC * nR;
+            for ( ULONG j=0; j<n; j++ )
             {
                 if ( pMat[i]->IsValue(j) )
                 {
@@ -1828,7 +1828,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
     double fVal = 0.0;
     double fMem = 0.0;
     BOOL bNull = TRUE;
-    long nCount = 0;
+    ULONG nCount = 0;
     ScAddress aAdr;
     ScRange aRange;
     for (short i = 0; i < nParamCount; i++)
@@ -2023,7 +2023,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                     nFuncFmtType = NUMBERFORMAT_NUMBER;
                     pMat->GetDimensions(nC, nR);
                     if( eFunc == ifCOUNT2 )
-                        nCount += nC * nR;
+                        nCount += (ULONG) nC * nR;
                     else
                     {
                         for (USHORT i = 0; i < nC; i++)

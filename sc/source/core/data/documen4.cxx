@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:29:35 $
+ *  last change: $Author: er $ $Date: 2001-02-28 14:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ void ScDocument::InsertMatrixFormula(USHORT nCol1, USHORT nRow1,
         DBG_ERROR("ScDocument::InsertMatrixFormula Keine Tabelle markiert");
         return;
     }
+
     ScFormulaCell* pCell;
     ScAddress aPos( nCol1, nRow1, nTab1 );
     if (pArr)
@@ -205,6 +206,7 @@ void ScDocument::InsertMatrixFormula(USHORT nCol1, USHORT nRow1,
     {
         if (pTab[i] && rMark.GetTableSelect(i))
         {
+            pTab[i]->DoColResize( nCol1, nCol2, nRow2 - nRow1 + 1 );
             if (i != nTab1)
             {
                 aRefData.nTab = i;

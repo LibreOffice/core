@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:31:53 $
+ *  last change: $Author: er $ $Date: 2001-02-28 14:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ void PushSingleRef(USHORT nCol, USHORT nRow, USHORT nTab);
 void PushDoubleRef(USHORT nCol1, USHORT nRow1, USHORT nTab1,
                                  USHORT nCol2, USHORT nRow2, USHORT nTab2);
 void PushMatrix(ScMatrix* pMat);
-BYTE GetStackType();
+StackVar GetStackType();
 // peek StackType of Parameter, Parameter 1 == TOS, 2 == TOS-1, ...
 StackVar GetStackType( BYTE nParam );
 BYTE GetByte() { return cPar; }
@@ -570,7 +570,7 @@ void MFastTrans(ScMatrix* pA, ScMatrix* pR, USHORT n, USHORT m);
 BOOL MFastBackSubst(ScMatrix* pA, ScMatrix* pR, USHORT n, BOOL bIsUpper);
 BOOL ScMatLUP(ScMatrix* mA, USHORT m, USHORT p,
               ScMatrix* mL, ScMatrix* mU, ScMatrix* mP,
-              USHORT& rPermutCounter, BOOL& bIsInvertable);
+              ULONG& rPermutCounter, BOOL& bIsInvertable);
 void ScMatDet();
 void ScMatInv();
 void ScMatMult();

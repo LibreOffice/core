@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-05 18:26:27 $
+ *  last change: $Author: er $ $Date: 2001-02-28 14:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1483,7 +1483,8 @@ void ScInterpreter::ScZTest()
                 pMat->GetDimensions(nC, nR);
                 if (pMat->IsNumeric())
                 {
-                    for (USHORT i = 0; i < nC*nR; i++)
+                    ULONG nCount = (ULONG) nC * nR;
+                    for ( ULONG i = 0; i < nCount; i++ )
                     {
                         fVal= pMat->GetDouble(i);
                         fSum += fVal;
@@ -3411,7 +3412,8 @@ void ScInterpreter::ScProbability()
             double fRes = 0.0;
             BOOL bStop = FALSE;
             double fP, fW;
-            for (USHORT i = 0; i < nC1*nR1 && !bStop; i++)
+            ULONG nCount1 = (ULONG) nC1 * nR1;
+            for ( ULONG i = 0; i < nCount1 && !bStop; i++ )
             {
                 if (pMatP->IsValue(i) && pMatW->IsValue(i))
                 {
