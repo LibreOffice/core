@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CurrentMasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:43:25 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,15 @@
 namespace sd { namespace toolpanel { namespace controls {
 
 
+/** Adaption of a value set control that shows previews of master pages that
+    are currently used by the document of the application.
+
+    It does not use the approach of the base class of storing tokens as item
+    data in the value set that identify entries in the MasterPageContainer.
+    Instead it stores pointers directly to master pages in the document.
+    The base class is used to have access to the code that assigns master
+    pages to the document.
+*/
 class CurrentMasterPagesSelector
     : public MasterPagesSelector
 {
@@ -93,6 +102,24 @@ public:
         with anew.
     */
     virtual void Fill (void);
+    virtual void Clear (void);
+
+    virtual void InvalidatePreview (const SdPage* pPage);
+
+protected:
+    /** Return the master page whose preview is currently selected in the
+        value set control.
+        @return
+            The returned page belongs to the main document, not to the local
+            document of the MasterPageContainer.
+    */
+    virtual SdPage* GetSelectedMasterPage (void);
+
+    /** For all currently used master pages a new preview is rendered and
+        put into the value set control.
+    */
+    virtual void UpdateAllPreviews (void);
+    virtual void UpdatePreview (USHORT nIndex);
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>
