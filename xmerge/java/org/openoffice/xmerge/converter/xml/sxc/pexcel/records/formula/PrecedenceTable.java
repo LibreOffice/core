@@ -61,8 +61,8 @@ package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 import java.util.HashMap;
 
 /**
- * This class defines the precedence applied to each operator when performing a conversion {@link
- org.openoffice.xmerge.converter.xml.sxc.pexce.Records.formula.FormulaCompiler.infix2   from infix to RPN.}.
+ * This class defines the precedence applied to each operator when performing a conversion
+ * {@link org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.formula.FormulaCompiler.infix2 from infix to RPN.}.
  */
 public class PrecedenceTable {
     public static final int DEFAULT_PRECEDENCE  = 0;
