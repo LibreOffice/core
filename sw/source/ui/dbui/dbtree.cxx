@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:24:06 $
+ *  last change: $Author: hr $ $Date: 2000-10-31 15:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                 return;
             Any aDBSource = xDBContext->getByName(sSourceName);
             Reference<XDataSource>* pxSource = (Reference<XDataSource>*)aDBSource.getValue();
-            BOOL bTable = pParent->GetUserData != 0;
+            BOOL bTable = pParent->GetUserData() != 0;
             Reference<XConnection> xConnection;
             try
             {
