@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.19 2000-12-11 12:05:26 sab Exp $
+	$Id: drawing.mod,v 1.20 2000-12-13 19:17:31 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -66,6 +66,7 @@
 <!ENTITY % draw-text "(text:p|text:unordered-list|text:ordered-list)*">
 <!ENTITY % zindex "draw:z-index %nonNegativeInteger; #IMPLIED">
 <!ENTITY % distance "CDATA">
+<!ENTITY % rectanglePoint "(top-left|top|top-right|left|center|right|bottom-left|bottom|bottom-right)">
 
 <!-- commont presentation shape attributes -->
 <!ENTITY % presentation-style-name "presentation:style-name %styleName; #IMPLIED">
@@ -265,12 +266,12 @@
 <!ATTLIST style:properties draw:fill-hatch-name %styleName; #IMPLIED>
 <!ATTLIST style:properties draw:fill-image-name %styleName; #IMPLIED>
 <!ATTLIST style:properties style:repeat (no-repeat|repeat|stretch) #IMPLIED>
-<!ATTLIST style:properties draw:fill-image-width %length; #IMPLIED>
-<!ATTLIST style:properties draw:fill-image-height %length; #IMPLIED>
-<!ATTLIST style:properties draw:refX %percentage; #IMPLIED>
-<!ATTLIST style:properties draw:refY %percentage; #IMPLIED>
+<!ATTLIST style:properties draw:fill-image-width %lengthOrPercentage; #IMPLIED>
+<!ATTLIST style:properties draw:fill-image-height %lengthOrPercentage; #IMPLIED>
+<!ATTLIST style:properties draw:fill-image-ref-point-x %percentage; #IMPLIED>
+<!ATTLIST style:properties draw:fill-image-ref-point-y %percentage; #IMPLIED>
+<!ATTLIST style:properties draw:fill-image-ref-point %rectanglePoint; #IMPLIED>
 <!ATTLIST style:properties draw:tile-repeat-offset CDATA #IMPLIED>
-<!ENTITY % noneOrFloatOrPercentage "CDATA">
 <!ATTLIST style:properties draw:transparency %percentage; #IMPLIED>
 <!ATTLIST style:properties draw:transparency-name %styleName; #IMPLIED>
 
