@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-26 12:44:09 $
+ *  last change: $Author: dl $ $Date: 2001-11-23 11:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,6 +562,18 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                                             pObj->SendRepaintBroadcast();
                                     }
                                 }
+                            }
+                        }
+
+                        if( pDoc->GetOnlineSpell() )
+                        {
+                            const SfxPoolItem* pItem;
+                            if( SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE, FALSE, &pItem ) ||
+                                SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CJK, FALSE, &pItem ) ||
+                                SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CTL, FALSE, &pItem ) )
+                            {
+                                pDoc->StopOnlineSpelling();
+                                pDoc->StartOnlineSpelling();
                             }
                         }
 
