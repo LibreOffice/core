@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: od $ $Date: 2002-11-07 09:03:24 $
+ *  last change: $Author: od $ $Date: 2002-11-12 09:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1498,6 +1498,8 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
 
     BOOL bChanged = FALSE;
     BOOL bAlreadyPainted = FALSE;
+    // OD 11.11.2002 #104414# - remember frame at complete paint
+    SwRect aFrmAtCompletePaint;
 
     if ( !pLay->IsValid() || pLay->IsCompletePaint() )
     {
@@ -1529,10 +1531,13 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
         if ( !bNoPaint && IsPaint() && bAddRect && (pLay->IsCompletePaint() || bChanged) )
         {
             SwRect aPaint( pLay->Frm() );
+            // OD 11.11.2002 #104414# - not necessary to enlarge paint area
+            /*
             aPaint.Pos().Y() -= 1;
             aPaint.Pos().X() -= 1;
             aPaint.SSize().Height() += 2;
             aPaint.SSize().Width()  += 2;
+            */
             if ( pLay->IsPageFrm() && pLay->GetFmt()->GetDoc()->IsBrowseMode() )
             {
                 //Ist die Aenderung ueberhaupt sichtbar?
@@ -1576,6 +1581,8 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
             {
                 pImp->GetShell()->AddPaintRect( aPaint );
                 bAlreadyPainted = TRUE;
+                // OD 11.11.2002 #104414# - remember frame at complete paint
+                aFrmAtCompletePaint = pLay->Frm();
             }
         }
         pLay->ResetCompletePaint();
@@ -1624,6 +1631,16 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
         if ( IsAgain() )
             return FALSE;
         pLow = pLow->GetNext();
+    }
+    // OD 11.11.2002 #104414# - add complete frame area as paint area, if frame
+    // area has been already added and after formating its lowers the frame area
+    // is enlarged.
+    if ( bAlreadyPainted &&
+         ( pLay->Frm().Width() > aFrmAtCompletePaint.Width() ||
+           pLay->Frm().Height() > aFrmAtCompletePaint.Height() )
+       )
+    {
+        pImp->GetShell()->AddPaintRect( pLay->Frm() );
     }
     return bChanged || bTabChanged;
 }
