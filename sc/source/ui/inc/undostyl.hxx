@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undostyl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:44:55 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,16 +124,12 @@ public:
 
 class ScUndoApplyPageStyle: public ScSimpleUndo
 {
-private:
-    SCTAB           nTab;
-    String          aOldStyle;
-    String          aNewStyle;
-
 public:
                     TYPEINFO();
-                    ScUndoApplyPageStyle( ScDocShell* pDocSh, SCTAB nT,
-                                        const String& rOld, const String& rNew );
+                    ScUndoApplyPageStyle( ScDocShell* pDocSh, const String& rNewStyle );
     virtual         ~ScUndoApplyPageStyle();
+
+    void            AddSheetAction( SCTAB nTab, const String& rOld );
 
     virtual void    Undo();
     virtual void    Redo();
@@ -141,6 +137,18 @@ public:
     virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
 
     virtual String  GetComment() const;
+
+private:
+    struct ApplyStyleEntry
+    {
+        SCTAB           mnTab;
+        String          maOldStyle;
+        explicit        ApplyStyleEntry( SCTAB nTab, const String& rOldStyle );
+    };
+    typedef ::std::vector< ApplyStyleEntry > ApplyStyleVec;
+
+    ApplyStyleVec   maEntries;
+    String          maNewStyle;
 };
 
 
