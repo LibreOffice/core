@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cp $ $Date: 2002-08-16 17:16:27 $
+ *  last change: $Author: obr $ $Date: 2002-08-23 10:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -965,7 +965,21 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
 
     // allow application key listeners to remove the key event
     KeyEvent aKeyEvent( (xub_Unicode)nCharCode, aKeyCode, nRepeat );
-    if( pSVData->mpApp->HandleKey( nSVEvent, pWindow, &aKeyEvent ) )
+    USHORT nVCLEvent;
+    switch( nSVEvent )
+    {
+    case EVENT_KEYINPUT:
+        nVCLEvent = VCLEVENT_WINDOW_KEYINPUT;
+        break;
+    case EVENT_KEYUP:
+        nVCLEvent = VCLEVENT_WINDOW_KEYUP;
+        break;
+    default:
+        DBG_ASSERT( 0 , "ImplHandleKey: Unknown event !");
+        nVCLEvent = 0;
+        break;
+    }
+    if( nVCLEvent && pSVData->mpApp->HandleKey( nVCLEvent, pWindow, &aKeyEvent ) )
         return 1;
 
     BOOL bCtrlF6 = (aKeyCode.GetCode() == KEY_F6) && aKeyCode.IsMod1();
