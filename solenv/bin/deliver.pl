@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-15 16:27:34 $
+#   last change: $Author: rt $ $Date: 2004-09-20 12:27:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.72 $ ';
+$id_str = ' $Revision: 1.73 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -403,8 +403,8 @@ sub parse_options
         $arg =~ /^-delete$/ and $opt_delete = 1 and next;
         $arg =~ /^-link$/ and $ENV{GUI} ne 'WNT' and $opt_link = 1 and next;
         $arg =~ /^-deloutput$/ and $opt_deloutput = 1 and next;
-        print_error("invalid option $arg") if ( $arg =~ /-/ );
-        if ( $arg =~ /-/ || $#ARGV > -1 ) {
+        print_error("invalid option $arg") if ( $arg =~ /^-/ );
+        if ( $arg =~ /^-/ || $#ARGV > -1 ) {
             usage();
             exit(1);
         }
