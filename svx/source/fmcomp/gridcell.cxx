@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:20:34 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
                 m_bDateTime = sal_True;
 
             case DataType::BIT:
+            case DataType::BOOLEAN:
             case DataType::TINYINT:
             case DataType::SMALLINT:
             case DataType::INTEGER:
@@ -405,6 +406,7 @@ sal_Int16 DbGridColumn::SetAlignment(sal_Int16 _nAlign)
                     _nAlign = ::com::sun::star::awt::TextAlign::RIGHT;
                     break;
                 case DataType::BIT:
+                case DataType::BOOLEAN:
                     _nAlign = ::com::sun::star::awt::TextAlign::CENTER;
                     break;
                 default:
@@ -1038,6 +1040,8 @@ DbTextField::DbTextField(DbGridColumn& _rColumn)
             :DbLimitedLengthField(_rColumn)
             ,m_nKeyType(::com::sun::star::util::NumberFormat::TEXT)
             ,m_pEdit( NULL )
+            ,m_pPainterImplementation( NULL )
+            ,m_bIsSimpleEdit( sal_True )
 {
 }
 
@@ -1081,6 +1085,7 @@ void DbTextField::Init(Window* pParent, const Reference< XRowSet >& xCursor)
         OSL_ENSURE( sal_False, "DbTextField::Init: caught an exception while determining the multi-line capabilities!" );
     }
 
+    m_bIsSimpleEdit = !bIsMultiLine;
     if ( bIsMultiLine )
     {
         m_pWindow = new MultiLineTextCell( pParent, nStyle );
@@ -1129,10 +1134,7 @@ void DbTextField::Paint( OutputDevice& _rDev, const Rectangle& _rRect, const Ref
     if ( m_pPainterImplementation )
         m_pPainterImplementation->SetText( GetFormatText( _rxField, _rxFormatter, NULL ) );
 
-    if ( m_pPainter->GetParent() != &_rDev )
-        m_pPainter->Draw( &_rDev, _rRect.TopLeft(), _rRect.GetSize(), 0 );
-    else
-        DbLimitedLengthField::Paint( _rDev, _rRect, _rxField, _rxFormatter );
+    DbLimitedLengthField::Paint( _rDev, _rRect, _rxField, _rxFormatter );
 }
 
 //------------------------------------------------------------------------------
@@ -2363,7 +2365,6 @@ void DbComboBox::Init(Window* pParent, const Reference< XRowSet >& xCursor)
     m_rColumn.SetAlignmentFromModel(::com::sun::star::awt::TextAlign::LEFT);
 
     m_pWindow = new ComboBoxControl(pParent);
-    m_pPainter = new Edit( pParent, WB_NOBORDER );
 
     // selection von rechts nach links
     AllSettings     aSettings = m_pWindow->GetSettings();
@@ -3195,6 +3196,12 @@ void FmXTextCell::Paint(OutputDevice& rDev,
                         const Reference< ::com::sun::star::sdb::XColumn >& _rxField,
                         const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
+    if ( !m_bFastPaint )
+    {
+        FmXDataCell::Paint( rDev, rRect, _rxField, xFormatter );
+        return;
+    }
+
     sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_VCENTER;
     if (!((Window&)rDev).IsEnabled())
         nStyle |= TEXT_DRAW_DISABLE;
@@ -3239,9 +3246,13 @@ FmXEditCell::FmXEditCell(DbGridColumn* pColumn, DbCellControl* pControl)
 {
     DBG_CTOR(FmXEditCell,NULL);
 
-    if ( pControl->ISA( DbTextField ) )
+    DbTextField* pTextField = PTR_CAST( DbTextField, pControl );
+    if ( pTextField )
     {
-        m_pEditImplementation = PTR_CAST( DbTextField, pControl )->GetEditImplementation();
+
+        m_pEditImplementation = pTextField->GetEditImplementation();
+        if ( !pTextField->IsSimpleEdit() )
+            m_bFastPaint = sal_False;
     }
     else
     {
@@ -3250,12 +3261,6 @@ FmXEditCell::FmXEditCell(DbGridColumn* pColumn, DbCellControl* pControl)
     }
 
     m_pEditImplementation->SetModifyHdl( LINK( this, FmXEditCell, OnTextChanged ) );
-}
-
-//------------------------------------------------------------------
-void FmXEditCell::Paint( OutputDevice& _rDev, const Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter )
-{
-    m_pCellControl->Paint( _rDev, _rRect, _rxField, _rxFormatter );
 }
 
 //------------------------------------------------------------------
