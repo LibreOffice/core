@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 10:47:14 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,8 +188,12 @@ public:
 
     /** Returns the length in twips calculated from a length in inches. */
     static sal_uInt16           GetTwipsFromInch( double fInches );
+    /** Returns the length in twips calculated from a length in 1/100 mm. */
+    static sal_uInt16           GetTwipsFromHmm( sal_Int32 nHmm );
     /** Returns the length in inches calculated from a length in twips. */
     static double               GetInchFromTwips( sal_uInt16 nTwips );
+    /** Returns the length in 1/100 mm calculated from a length in twips. */
+    static sal_Int32            GetHmmFromTwips( sal_uInt16 nTwips );
 
     /** Returns the Calc column width (twips) for the passed Excel width.
         @param nScCharWidth  Width of the '0' character in Calc (twips). */
@@ -259,10 +263,33 @@ public:
         @param pnNextChar  If not 0, the index of the char after the evaluated substring will be returned here. */
     static bool                 IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNextChar = NULL );
 
+// form control tag for linked range address ----------------------------------
+
+    /** Returns the tag for a form control that is linked to the document.
+        @descr  This is used to restore a linked ranges on export of form controls.
+        @param rCellLink  The address of the cell linked with the form control.
+        @param pSrcRange  The source data cell range linked with the form control (i.e. list box). */
+    static String               GetCtrlLinkTag(
+                                    ScDocument& rDoc, const ScAddress* pCellLink, const ScRange* pSrcRange );
+    /** Returns true, if the passed string contains the address of a linked cell of a form control.
+        @param rCellLink  (out-param) The cell address is returned here, if found.
+        @param rnRefFlags  (out-param) The reference flags are returned here (SCA_*, see global.hxx). */
+    static bool                 GetCtrlCellLinkFromTag(
+                                    ScAddress& rCellLink, ScDocument& rDoc, const String& rTag );
+    /** Returns true, if the passed string contains the address of a source data range of a form control.
+        @param rSrcRange  (out-param) The range address is returned here, if found.
+        @param rnRefFlags  (out-param) The reference flags are returned here (SCA_*, see global.hxx). */
+    static bool                 GetCtrlSrcRangeFromTag(
+                                    ScRange& rSrcRange, ScDocument& rDoc, const String& rTag );
+
+// ----------------------------------------------------------------------------
+
 private:
     static const String         maDefNamePrefix;        /// Prefix for built-in defined names.
     static const String         maStyleNamePrefix;      /// Prefix for built-in cell style names.
     static const String         maCFStyleNamePrefix;    /// Prefix for cond. formatting style names.
+    static const String         maCtrlCellLinkPrefix;   /// Prefix for form controls tag "Linked cell".
+    static const String         maCtrlSrcRangePrefix;   /// Prefix for form controls tag "Source range".
 };
 
 
