@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:56:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2871,8 +2871,6 @@ BOOL SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
 
     {
         String sText = aURLED.GetText();
-        if( sText.Len() )
-            sText = URIHelper::SmartRelToAbs( sText );
 
         if( pFmtURL->GetURL() != sText ||
             pFmtURL->GetName() != aNameED.GetText() ||
@@ -2930,9 +2928,7 @@ IMPL_LINK( SwFrmURLPage, InsertFileHdl, PushButton *, pBtn )
     }
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
-        aURLED.SetText( URIHelper::SmartRelToAbs( xFP->getFiles().getConstArray()[0], FALSE,
-                                        INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_UNAMBIGUOUS));
+        aURLED.SetText( xFP->getFiles().getConstArray()[0] );
     }
 
     return 0;
