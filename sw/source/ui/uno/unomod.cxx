@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-27 13:22:40 $
+ *  last change: $Author: mtg $ $Date: 2001-08-08 21:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ Reference< XPropertySet >  SwXModule::getPrintSettings(void) throw( uno::Runtime
     {
         ((SwXModule*)this)->pxPrintSettings = new Reference< XPropertySet > ;
         DBG_ERROR("Web oder Text?")
-        *pxPrintSettings = new SwXPrintSettings( sal_False );
+        *pxPrintSettings = new SwXPrintSettings( PRINT_SETTINGS_MODULE );
     }
     return *pxPrintSettings;
 }
@@ -350,10 +350,11 @@ Sequence< OUString > SwXModule::getSupportedServiceNames(void) throw( RuntimeExc
 /*-- 17.12.98 12:54:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXPrintSettings::SwXPrintSettings(sal_Bool bWebView )
+SwXPrintSettings::SwXPrintSettings(SwXPrintSettingsType eType, SwDoc* pDoc)
 : ChainablePropertySet ( lcl_createPrintSettingsInfo (), &Application::GetSolarMutex() )
-, mbWeb(bWebView)
+, meType(eType)
 , mpPrtOpt ( NULL )
+, mpDoc ( pDoc )
 {
 }
 /*-- 17.12.98 12:54:05---------------------------------------------------
@@ -389,7 +390,28 @@ void SwXPrintSettings::release ()
 void SwXPrintSettings::_preSetValues ()
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    mpPrtOpt = SW_MOD()->GetPrtOptions(mbWeb);
+    switch (meType)
+    {
+        case PRINT_SETTINGS_MODULE:
+            mpPrtOpt = SW_MOD()->GetPrtOptions( sal_False );
+        break;
+        case PRINT_SETTINGS_WEB:
+            mpPrtOpt = SW_MOD()->GetPrtOptions( sal_True );
+        break;
+        case PRINT_SETTINGS_DOCUMENT:
+        {
+            if (!mpDoc)
+                throw IllegalArgumentException ();
+            if ( !mpDoc->GetPrintData() )
+            {
+                mpPrtOpt = new SwPrintData;
+                mpDoc->SetPrintData ( *mpPrtOpt );
+                delete mpPrtOpt;
+            }
+            mpPrtOpt = mpDoc->GetPrintData();
+        }
+        break;
+    }
 }
 
 void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue )
@@ -506,7 +528,28 @@ void SwXPrintSettings::_postSetValues ()
 void SwXPrintSettings::_preGetValues ()
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    mpPrtOpt = SW_MOD()->GetPrtOptions(mbWeb);
+    switch (meType)
+    {
+        case PRINT_SETTINGS_MODULE:
+            mpPrtOpt = SW_MOD()->GetPrtOptions( sal_False );
+        break;
+        case PRINT_SETTINGS_WEB:
+            mpPrtOpt = SW_MOD()->GetPrtOptions( sal_True );
+        break;
+        case PRINT_SETTINGS_DOCUMENT:
+        {
+            if (!mpDoc)
+                throw IllegalArgumentException ();
+            if ( !mpDoc->GetPrintData() )
+            {
+                mpPrtOpt = new SwPrintData;
+                mpDoc->SetPrintData ( *mpPrtOpt );
+                delete mpPrtOpt;
+            }
+            mpPrtOpt = mpDoc->GetPrintData();
+        }
+        break;
+    }
 }
 void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, ::com::sun::star::uno::Any & rValue )
     throw(UnknownPropertyException, WrappedTargetException )
@@ -515,18 +558,42 @@ void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, 
     sal_Bool bBoolVal;
     switch( rInfo.mnHandle )
     {
-        case HANDLE_PRINTSET_LEFT_PAGES     : bBoolVal = mpPrtOpt->IsPrintLeftPage();       break;
-        case HANDLE_PRINTSET_RIGHT_PAGES    : bBoolVal = mpPrtOpt->IsPrintRightPage();  break;
-        case HANDLE_PRINTSET_REVERSED       : bBoolVal = mpPrtOpt->IsPrintReverse();        break;
-        case HANDLE_PRINTSET_PROSPECT       : bBoolVal = bBoolVal = mpPrtOpt->IsPrintProspect();
-        case HANDLE_PRINTSET_GRAPHICS       : bBoolVal = mpPrtOpt->IsPrintGraphic();
-        case HANDLE_PRINTSET_TABLES         : bBoolVal = mpPrtOpt->IsPrintTable();
-        case HANDLE_PRINTSET_DRAWINGS       : bBoolVal = mpPrtOpt->IsPrintDraw();
-        case HANDLE_PRINTSET_CONTROLS       : bBoolVal = mpPrtOpt->IsPrintControl();
-        case HANDLE_PRINTSET_PAGE_BACKGROUND: bBoolVal = mpPrtOpt->IsPrintPageBackground();
-        case HANDLE_PRINTSET_BLACK_FONTS    : bBoolVal = mpPrtOpt->IsPrintBlackFont();
-        case HANDLE_PRINTSET_SINGLE_JOBS    : bBoolVal = mpPrtOpt->IsPrintSingleJobs();
-        case HANDLE_PRINTSET_PAPER_FROM_SETUP: bBoolVal = mpPrtOpt->IsPaperFromSetup();
+        case HANDLE_PRINTSET_LEFT_PAGES:
+            bBoolVal = mpPrtOpt->IsPrintLeftPage();
+        break;
+        case HANDLE_PRINTSET_RIGHT_PAGES:
+            bBoolVal = mpPrtOpt->IsPrintRightPage();
+        break;
+        case HANDLE_PRINTSET_REVERSED:
+            bBoolVal = mpPrtOpt->IsPrintReverse();
+        break;
+        case HANDLE_PRINTSET_PROSPECT:
+            bBoolVal = mpPrtOpt->IsPrintProspect();
+        break;
+        case HANDLE_PRINTSET_GRAPHICS:
+            bBoolVal = mpPrtOpt->IsPrintGraphic();
+        break;
+        case HANDLE_PRINTSET_TABLES:
+            bBoolVal = mpPrtOpt->IsPrintTable();
+        break;
+        case HANDLE_PRINTSET_DRAWINGS:
+            bBoolVal = mpPrtOpt->IsPrintDraw();
+        break;
+        case HANDLE_PRINTSET_CONTROLS:
+            bBoolVal = mpPrtOpt->IsPrintControl();
+        break;
+        case HANDLE_PRINTSET_PAGE_BACKGROUND:
+            bBoolVal = mpPrtOpt->IsPrintPageBackground();
+        break;
+        case HANDLE_PRINTSET_BLACK_FONTS:
+            bBoolVal = mpPrtOpt->IsPrintBlackFont();
+        break;
+        case HANDLE_PRINTSET_SINGLE_JOBS:
+            bBoolVal = mpPrtOpt->IsPrintSingleJobs();
+        break;
+        case HANDLE_PRINTSET_PAPER_FROM_SETUP:
+            bBoolVal = mpPrtOpt->IsPaperFromSetup();
+        break;
         case HANDLE_PRINTSET_ANNOTATION_MODE:
         {
             bBool = FALSE;
