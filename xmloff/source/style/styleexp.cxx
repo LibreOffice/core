@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleexp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-11 08:05:22 $
+ *  last change: $Author: dvo $ $Date: 2000-12-20 15:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSUPPLIER_HPP
+#include <com/sun/star/document/XEventSupplier.hpp>
+#endif
 
 #ifndef _XMLOFF_XMLASTPLP_HXX
 #include "xmlaustp.hxx"
@@ -127,6 +130,9 @@
 #ifndef _XMLOFF_XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
+#ifndef _XMLOFF_XMLEVENTEXPORT_HXX
+#include "XMLEventExport.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -135,6 +141,7 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 //using namespace ::com::sun::star::text;
+using ::com::sun::star::document::XEventSupplier;
 
 XMLStyleExport::XMLStyleExport(
         SvXMLExport& rExp,
@@ -278,6 +285,10 @@ sal_Bool XMLStyleExport::exportStyle(
                                      GetExport().GetNamespaceMap(),
                                      XML_EXPORT_FLAG_IGN_WS );
         exportStyleContent( rStyle );
+
+        // <script:events>, if they are supported by this style
+        Reference<XEventSupplier> xEventSupp(rStyle, UNO_QUERY);
+        GetExport().GetEventExport().Export(xEventSupp);
     }
     return sal_True;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventExport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 18:56:45 $
+ *  last change: $Author: dvo $ $Date: 2000-12-20 15:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,8 +161,12 @@ void XMLEventExport::AddTranslationTable(
 void XMLEventExport::Export( Reference<XEventSupplier> & rSupplier,
                              sal_Bool bWhitespace)
 {
-    Reference<XNameAccess> xAccess(rSupplier->getEvents(), UNO_QUERY);
-    Export(xAccess, bWhitespace);
+    if (rSupplier.is())
+    {
+        Reference<XNameAccess> xAccess(rSupplier->getEvents(), UNO_QUERY);
+        Export(xAccess, bWhitespace);
+    }
+    // else: no supplier, no export -> ignore!
 }
 
 void XMLEventExport::Export( Reference<XNameReplace> & rReplace,

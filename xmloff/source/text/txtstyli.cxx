@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
+ *  last change: $Author: dvo $ $Date: 2000-12-20 15:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_STYLE_PARAGRAPHSTYLECATEGORY_HPP_
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSUPPLIER_HPP
+#include <com/sun/star/document/XEventSupplier.hpp>
+#endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
@@ -102,6 +105,11 @@
 #ifndef _XMLOFF_ATTRLIST_HXX
 #include "attrlist.hxx"
 #endif
+
+#ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
+#include "XMLEventsImportContext.hxx"
+#endif
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -169,6 +177,7 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
     XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles ),
     bAutoUpdate( sal_False ),
     bHasMasterPageName( sal_False ),
+    pEventContext( NULL ),
     sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) ),
     sCategory( RTL_CONSTASCII_USTRINGPARAM( "Category" ) ),
     sNumberingStyleName( RTL_CONSTASCII_USTRINGPARAM( "NumberingStyleName" ) ),
@@ -199,6 +208,16 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
                                                     GetProperties(),
                                                     xImpPrMap,
                                                     sDropCapTextStyleName );
+    }
+    else if ( (XML_NAMESPACE_SCRIPT == nPrefix) &&
+              rLocalName.equalsAsciiL( sXML_events, sizeof(sXML_events)-1 ) )
+    {
+        // create and remember events import context
+        // (for delayed processing of events)
+        pEventContext = new XMLEventsImportContext( GetImport(), nPrefix,
+                                                   rLocalName);
+        pEventContext->AddRef();
+        pContext = pEventContext;
     }
 
     if( !pContext )
@@ -235,6 +254,15 @@ void XMLTextStyleContext::CreateAndInsert( sal_Bool bOverwrite )
         Any aAny;
         aAny <<= (sal_Int16)nCategory;
         xPropSet->setPropertyValue( sCategory, aAny );
+    }
+
+    // tell the style about it's events (if applicable)
+    if (NULL != pEventContext)
+    {
+        // set event suppplier and release reference to context
+        Reference<document::XEventSupplier> xEventSupplier(xStyle, UNO_QUERY);
+        pEventContext->SetEvents(xEventSupplier);
+        pEventContext->ReleaseRef();
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventsImportContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 18:56:45 $
+ *  last change: $Author: dvo $ $Date: 2000-12-20 15:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,6 @@
 #include "xmlkywd.hxx"
 #endif
 
-
-
 using namespace ::com::sun::star::uno;
 
 using ::rtl::OUString;
@@ -103,6 +101,16 @@ using ::com::sun::star::document::XEventSupplier;
 
 
 TYPEINIT1(XMLEventsImportContext,  SvXMLImportContext);
+
+
+XMLEventsImportContext::XMLEventsImportContext(
+    SvXMLImport& rImport,
+    sal_uInt16 nPrfx,
+    const OUString& rLocalName) :
+        SvXMLImportContext(rImport, nPrfx, rLocalName)
+{
+}
+
 
 XMLEventsImportContext::XMLEventsImportContext(
     SvXMLImport& rImport,
@@ -123,6 +131,21 @@ XMLEventsImportContext::XMLEventsImportContext(
         SvXMLImportContext(rImport, nPrfx, rLocalName),
         xEvents(xNameReplace)
 {
+}
+
+XMLEventsImportContext::~XMLEventsImportContext()
+{
+//  // if, for whatever reason, the object gets destroyed prematurely,
+//  // we need to delete the collected events
+//  EventsVector::iterator aEnd = aCollectEvents.end();
+//  for(EventsVector::iterator aIter = aCollectEvents.begin();
+//      aIter != aEnd;
+//      aIter++)
+//  {
+//      EventNameValuesPair* pPair = &(*aIter);
+//      delete pPair;
+//  }
+//  aCollectEvents.clear();
 }
 
 
@@ -181,15 +204,57 @@ SvXMLImportContext* XMLEventsImportContext::CreateChildContext(
         this, sEventName, sLanguage);
 }
 
+void XMLEventsImportContext::SetEvents(
+    const Reference<XEventSupplier> & xEventSupplier)
+{
+    if (xEventSupplier.is())
+    {
+        SetEvents(xEventSupplier->getEvents());
+    }
+}
+
+void XMLEventsImportContext::SetEvents(
+    const Reference<XNameReplace> & xNameRepl)
+{
+    if (xNameRepl.is())
+    {
+        xEvents = xNameRepl;
+
+        // now iterate over vector and a) insert b) delete all elements
+        EventsVector::iterator aEnd = aCollectEvents.end();
+        for(EventsVector::iterator aIter = aCollectEvents.begin();
+            aIter != aEnd;
+            aIter++)
+        {
+            AddEventValues(aIter->first, aIter->second);
+//          EventNameValuesPair* pPair = &(*aIter);
+//          delete pPair;
+        }
+        aCollectEvents.clear();
+    }
+}
+
 void XMLEventsImportContext::AddEventValues(
     const OUString& rEventName,
     const Sequence<PropertyValue> & rValues )
 {
-    // set event (if name is known)
-    if (xEvents->hasByName(rEventName))
+    // if we already have the events, set them; else just collect
+    if (xEvents.is())
     {
-        Any aAny;
-        aAny <<= rValues;
-        xEvents->replaceByName(rEventName, aAny);
+        // set event (if name is known)
+        if (xEvents->hasByName(rEventName))
+        {
+            Any aAny;
+            aAny <<= rValues;
+            xEvents->replaceByName(rEventName, aAny);
+        }
+    }
+    else
+    {
+//      EventNameValuesPair* aPair = new EventNameValuesPair(rEventName,
+//                                                          rValues);
+//      aCollectEvents.push_back(*aPair);
+        EventNameValuesPair aPair(rEventName, rValues);
+        aCollectEvents.push_back(aPair);
     }
 }
