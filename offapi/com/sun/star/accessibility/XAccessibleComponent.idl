@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleComponent.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:31:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessible;
+ published interface XAccessible;
 
 /** The <type>XAccessibleComponent</type> interface should be supported by
     any class that can be rendered on the screen.
@@ -134,7 +134,7 @@ interface XAccessible;
 
     @since #107627#
 */
-interface XAccessibleComponent : ::com::sun::star::uno::XInterface
+published interface XAccessibleComponent : ::com::sun::star::uno::XInterface
 {
     /** Tests whether the specified point lies within this object's bounds.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleContext.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:49:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,10 @@
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessible;
-interface XAccessibleRelationSet;
-interface XAccessibleSelection;
-interface XAccessibleStateSet;
+ published interface XAccessible;
+ published interface XAccessibleRelationSet;
+ published interface XAccessibleSelection;
+ published interface XAccessibleStateSet;
 
 /** Implement this interface for exposing various aspects of a class'
     content.
@@ -99,7 +99,7 @@ interface XAccessibleStateSet;
 
     @since #107627#
 */
-interface XAccessibleContext : ::com::sun::star::uno::XInterface
+published interface XAccessibleContext : ::com::sun::star::uno::XInterface
 {
     /** Return the number of children.
 
