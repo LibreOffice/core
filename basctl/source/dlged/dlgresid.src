@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgresid.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:43:54 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 23:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ String RID_STR_BRWTITLE_PROPERTIES
     Text[ greek ] = "Ιδιότητες: ";
     Text[ dutch ] = "Eigenschappen:";
     Text[ french ] = "Propriιtιs : ";
-    Text[ spanish ] = "Properties: ";
+    Text[ spanish ] = "Propiedades: ";
     Text[ italian ] = "Proprietΰ: ";
     Text[ danish ] = "Properties: ";
     Text[ swedish ] = "Egenskaper: ";
@@ -139,7 +139,7 @@ String RID_STR_BRWTITLE_NO_PROPERTIES
     Text[ greek ] = "Δεν έγινε επιλογή στοιχείου ελέγχου";
     Text[ dutch ] = "Geen controle-element";
     Text[ french ] = "Aucun ιlιment de contrτle marquι";
-    Text[ spanish ] = "No Control marked";
+    Text[ spanish ] = "Ningϊn elemento de control seleccionado";
     Text[ italian ] = "Nessun elemento di controllo selezionato";
     Text[ danish ] = "No Control marked";
     Text[ swedish ] = "Inget kontrollelement markerat";
@@ -162,7 +162,7 @@ String RID_STR_BRWTITLE_MULTISELECT
     Text[ greek ] = "Πολλαπλή επιλογή";
     Text[ dutch ] = "Meervoudige selectie";
     Text[ french ] = "Sιlection multiple";
-    Text[ spanish ] = "Multiselection";
+    Text[ spanish ] = "Selecciσn mϊltiple";
     Text[ italian ] = "Selezione multipla";
     Text[ danish ] = "Multiselection";
     Text[ swedish ] = "Multimarkering";
