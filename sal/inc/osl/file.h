@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:12 $
+ *  last change: $Author: mfe $ $Date: 2001-02-06 17:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,6 +694,7 @@ oslFileError SAL_CALL osl_setFileSize( oslFileHandle Handle, sal_uInt64 uSize );
 
     @see    osl_openFile
     @see    osl_writeFile
+    @see    osl_readLine
     @see    osl_setFilePos
 */
 
@@ -703,7 +704,7 @@ oslFileError SAL_CALL osl_readFile( oslFileHandle Handle, void *pBuffer, sal_uIn
 /** Writes a number of bytes to a file. The internal file pointer is increased by the number of bytes
     read.
     @param  Handle [in] Handle to an open file.
-    @param  pBuffer [int] Points to a buffer which contains the data.
+    @param  pBuffer [in] Points to a buffer which contains the data.
     @param  uBytesToWrite [in] Number of bytes which should be written.
     @param  pBytesWritten [out] On success the number of bytes which have actually been written.
 
@@ -729,6 +730,30 @@ oslFileError SAL_CALL osl_readFile( oslFileHandle Handle, void *pBuffer, sal_uIn
 */
 
 oslFileError SAL_CALL osl_writeFile( oslFileHandle Handle, const void *pBuffer, sal_uInt64 uBytesToWrite, sal_uInt64 *pBytesWritten );
+
+/** Reads a line from given file. The new line delemeter(s) are NOT returned!
+
+    @param  Handle [in] Handle to an open file.
+    @param  ppSequence [in/out] a pointer to a valid sequence. Will hold the line read on return.
+    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
+    osl_File_E_INVAL        the format of the parameters was not valid<br>
+
+    These errorcodes can (eventually) be returned:<p>
+    osl_File_E_INTR         function call was interrupted<br>
+    osl_File_E_IO           I/O error<br>
+    osl_File_E_ISDIR        Is a directory<br>
+    osl_File_E_BADF         Bad file<br>
+    osl_File_E_FAULT        Bad address<br>
+    osl_File_E_AGAIN        Operation would block<br>
+    osl_File_E_NOLINK       Link has been severed<p>
+
+    @see    osl_openFile
+    @see    osl_readFile
+    @see    osl_writeFile
+    @see    osl_setFilePos
+*/
+
+oslFileError SAL_CALL osl_readLine( oslFileHandle Handle, sal_Sequence** ppSequence );
 
 
 /** Closes an open file.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2000-11-13 11:52:19 $
+ *  last change: $Author: mfe $ $Date: 2001-02-06 17:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,11 @@
 #include <osl/file.h>
 #include <osl/macros.hxx>
 
+#ifndef _RTL_BYTESEQ_HXX_
+#   include <rtl/byteseq.hxx>
+#endif
+
+#include <stdio.h>
 
 #ifdef _USE_NAMESPACE
 namespace osl
@@ -910,6 +915,40 @@ public:
     {
         return (RC) osl_writeFile( _pData, pBuffer, uBytesToWrite, &rBytesWritten );
     }
+
+
+    /** Reads a line from given file. The new line delemeter(s) are NOT returned!
+
+        @param  Handle [in] Handle to an open file.
+        @param  ppSequence [in/out] a pointer to a valid sequence. Will hold the line read on return.
+        @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
+        osl_File_E_INVAL        the format of the parameters was not valid<br>
+
+        These errorcodes can (eventually) be returned:<p>
+        osl_File_E_INTR         function call was interrupted<br>
+        osl_File_E_IO           I/O error<br>
+        osl_File_E_ISDIR        Is a directory<br>
+        osl_File_E_BADF         Bad file<br>
+        osl_File_E_FAULT        Bad address<br>
+        osl_File_E_AGAIN        Operation would block<br>
+        osl_File_E_NOLINK       Link has been severed<p>
+
+        @see    osl_openFile
+        @see    osl_readFile
+        @see    osl_writeFile
+        @see    osl_setFilePos
+    */
+
+    inline RC readLine( ::rtl::ByteSequence& aSeq )
+    {
+        sal_Sequence* pSeq = 0;
+        rtl_byte_sequence_construct(&pSeq,0);
+        FileBase::RC aErr = (RC) osl_readLine( _pData, &pSeq );
+        aSeq.realloc(pSeq->nElements);
+        aSeq = pSeq;
+        return aErr;
+    }
+
 
     /** Copies a file to a new destination. Copies only files not directories. No assumptions should
      be made about preserving attributes or file time.
