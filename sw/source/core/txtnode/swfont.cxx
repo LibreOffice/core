@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:58:49 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,11 +172,11 @@
 #ifndef _FNTCACHE_HXX
 #include <fntcache.hxx>     // FontCache
 #endif
-#ifndef _DRAWFONT_HXX
-#include <drawfont.hxx>     // SwDrawTextInfo
-#endif
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>       // SwTxtFrm
+#endif
+#ifndef _SCRIPTINFO_HXX
+#include <scriptinfo.hxx>
 #endif
 
 #if defined(WIN) || defined(WNT) || defined(PM2)
