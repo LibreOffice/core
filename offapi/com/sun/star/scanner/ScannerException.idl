@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScannerException.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com { module sun { module star { module scanner {
 /** A ScannerException gets thrown if an object of type XScannerManager
        could not complete a specific action.
 */
-exception ScannerException: com::sun::star::uno::Exception
+published exception ScannerException: com::sun::star::uno::Exception
 {
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR ScannerException::Error
