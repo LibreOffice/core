@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 12:11:15 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 15:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,9 +253,6 @@ protected:
     OCommonBehaviourTabPage(Window* pParent, USHORT nResId, const SfxItemSet& _rCoreAttrs, USHORT nControlFlags);
         // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
     virtual ~OCommonBehaviourTabPage();
-
-private:
-    DECL_LINK(OnPasswordRequired, Control*);
 };
 
 //========================================================================
@@ -326,7 +323,6 @@ public:
     static sal_Int32* getDetailIds();
 
 private:
-    FixedLine           m_aSeparator2;
     FixedLine           m_aSeparator1;
 
     OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
@@ -344,7 +340,6 @@ public:
     static sal_Int32* getDetailIds();
 
 private:
-    FixedLine           m_aSeparator2;
     FixedLine           m_aSeparator1;
 
     OAdabasDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
@@ -458,6 +453,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/10/24 12:11:15  fs
+ *  functionality added: browsing for system data sources (ODBC/Adabas/dbase/text)
+ *
  *  Revision 1.6  2000/10/20 09:53:17  fs
  *  handling for the SuppresVersionColumns property of a data source
  *

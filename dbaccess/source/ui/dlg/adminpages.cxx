@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 13:48:29 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 15:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,8 +582,6 @@ OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nRe
     :OGenericAdministrationPage(pParent, ModuleRes(nResId), _rCoreAttrs)
     ,m_pUserNameLabel(NULL)
     ,m_pUserName(NULL)
-    ,m_pPasswordLabel(NULL)
-    ,m_pPassword(NULL)
     ,m_pPasswordRequired(NULL)
     ,m_pOptionsLabel(NULL)
     ,m_pOptions(NULL)
@@ -598,11 +596,7 @@ OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nRe
         m_pUserName->SetModifyHdl(getControlModifiedLink());
 
         m_pPasswordRequired = new CheckBox(this, ResId(CB_PASSWORD_REQUIRED));
-        m_pPasswordRequired->SetClickHdl(LINK(this, OCommonBehaviourTabPage, OnPasswordRequired));
-
-        m_pPasswordLabel = new FixedText(this, ResId(FT_PASSWORD));
-        m_pPassword = new Edit(this, ResId(ET_PASSWORD));
-        m_pPassword->SetModifyHdl(getControlModifiedLink());
+        m_pPasswordRequired->SetClickHdl(getControlModifiedLink());
     }
 
     if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
@@ -632,8 +626,6 @@ OCommonBehaviourTabPage::~OCommonBehaviourTabPage()
 {
     DELETEZ(m_pUserNameLabel);
     DELETEZ(m_pUserName);
-    DELETEZ(m_pPasswordLabel);
-    DELETEZ(m_pPassword);
     DELETEZ(m_pPasswordRequired);
 
     DELETEZ(m_pOptionsLabel);
@@ -663,21 +655,15 @@ void OCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool
         if ((m_nControlFlags & CBTP_USE_UIDPWD) == CBTP_USE_UIDPWD)
         {
             m_pUserName->SetText(pUidItem->GetValue());
-            m_pPassword->SetText(pPwdItem->GetValue());
             m_pPasswordRequired->Check(pAllowEmptyPwd->GetValue());
 
             m_pUserName->ClearModifyFlag();
-            m_pPassword->ClearModifyFlag();
 
             if (_bSaveValue)
             {
                 m_pUserName->SaveValue();
-                m_pPassword->SaveValue();
                 m_pPasswordRequired->SaveValue();
             }
-
-            LINK(this, OCommonBehaviourTabPage, OnPasswordRequired).Call(NULL);
-                // for the initial state
         }
 
         if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
@@ -702,8 +688,6 @@ void OCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool
         {
             m_pUserNameLabel->Disable();
             m_pUserName->Disable();
-            m_pPasswordLabel->Disable();
-            m_pPassword->Disable();
             m_pPasswordRequired->Disable();
         }
 
@@ -733,12 +717,6 @@ sal_Bool OCommonBehaviourTabPage::FillItemSet(SfxItemSet& _rSet)
             bChangedSomething = sal_True;
         }
 
-        if (m_pPassword->GetText() != m_pPassword->GetSavedValue())
-        {
-            _rSet.Put(SfxStringItem(DSID_PASSWORD, m_pPassword->GetText()));
-            bChangedSomething = sal_True;
-        }
-
         if (m_pPasswordRequired->IsChecked() != m_pPasswordRequired->GetSavedValue())
         {
             _rSet.Put(SfxBoolItem(DSID_PASSWORDREQUIRED, m_pPasswordRequired->IsChecked()));
@@ -765,20 +743,6 @@ sal_Bool OCommonBehaviourTabPage::FillItemSet(SfxItemSet& _rSet)
     }
 
     return bChangedSomething;
-}
-
-//------------------------------------------------------------------------
-IMPL_LINK( OCommonBehaviourTabPage, OnPasswordRequired, Control*, pControl)
-{
-    DBG_ASSERT((m_nControlFlags & CBTP_USE_UIDPWD) == CBTP_USE_UIDPWD, "OCommonBehaviourTabPage::OnPasswordRequired : wrong mode, will probably crash!");
-
-    m_pPassword->Enable(m_pPasswordRequired->IsChecked());
-    m_pPasswordLabel->Enable(m_pPasswordRequired->IsChecked());
-
-    if (pControl)
-        // it really came from the control, it was no implicit call
-        callModifiedHdl();
-    return 0L;
 }
 
 //========================================================================
@@ -924,8 +888,7 @@ OJdbcDetailsPage::OJdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAtt
     m_aJdbcUrl.SetModifyHdl(getControlModifiedLink());
 
     m_pUserName->SetZOrder(&m_aJdbcUrl, WINDOW_ZORDER_BEHIND);
-    m_pPassword->SetZOrder(m_pUserName, WINDOW_ZORDER_BEHIND);
-    m_pPasswordRequired->SetZOrder(m_pPassword, WINDOW_ZORDER_BEHIND);
+    m_pPasswordRequired->SetZOrder(m_pUserName, WINDOW_ZORDER_BEHIND);
     m_pCharset->SetZOrder(m_pPasswordRequired, WINDOW_ZORDER_BEHIND);
 
     FreeResource();
@@ -1014,7 +977,6 @@ sal_Bool OJdbcDetailsPage::FillItemSet( SfxItemSet& _rSet )
 //========================================================================
 OOdbcDetailsPage::OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
     :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET | CBTP_USE_OPTIONS)
-    ,m_aSeparator2  (this, ResId(FL_SEPARATOR2))
     ,m_aSeparator1  (this, ResId(FL_SEPARATOR1))
 {
     FreeResource();
@@ -1050,7 +1012,6 @@ OAdabasDetailsPage::OAdabasDetailsPage( Window* pParent, const SfxItemSet& _rCor
     :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET)
         // Yes, we're using the resource for the ODBC page here. It contains two controls which we don't use
         // and except that it's excatly what we need here.
-    ,m_aSeparator2  (this, ResId(FL_SEPARATOR2))
     ,m_aSeparator1  (this, ResId(FL_SEPARATOR1))
 {
     // move the charset related control some pixel up (as they are positioned as if above them there are the option
@@ -1765,6 +1726,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2000/10/30 13:48:29  fs
+ *  some help ids
+ *
  *  Revision 1.8  2000/10/24 12:11:15  fs
  *  functionality added: browsing for system data sources (ODBC/Adabas/dbase/text)
  *

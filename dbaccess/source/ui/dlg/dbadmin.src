@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 13:48:17 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 15:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,45 +697,9 @@ TabPage PAGE_JDBC
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_USER_JDBC;
     };
-    FixedText FT_PASSWORD
-    {
-        Pos = MAP_APPFONT ( 6 , 52 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
-        Text = "~Passwort" ;
-        Text [ ENGLISH ] = "~Password" ;
-        Text [ NORWEGIAN ] = "~Passord" ;
-        Text [ DANISH ] = "Adgangskode" ;
-        Text [ ENGLISH_US ] = "~Password" ;
-        Text [ SPANISH ] = "~Contraseña" ;
-        Text [ FINNISH ] = "~Salasana" ;
-        Text [ FRENCH ] = "~Mot de passe" ;
-        Text [ ITALIAN ] = "~Password" ;
-        Text [ DUTCH ] = "~Wachtwoord" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Senha" ;
-        Text [ SWEDISH ] = "~Lösenord" ;
-        Text [ PORTUGUESE ] = "~Senha" ;
-        Text[ chinese_simplified ] = "¿ÚÁî(~P)";
-        Text[ russian ] = "Ïàðîëü";
-        Text[ polish ] = "Has³o";
-        Text[ japanese ] = "Êß½Ü°ÄÞ(~P)";
-        Text[ chinese_traditional ] = "±K½X(~P)";
-        Text[ arabic ] = "ßáãÉ ÇáÓÑ";
-        Text[ greek ] = "Êùäéêüò ðñüóâáóçò";
-        Text[ korean ] = "ÆÐ½º¿öµå(~P)";
-        Text[ turkish ] = "Þifre";
-        Text[ language_user1 ] = " ";
-    };
-    Edit ET_PASSWORD
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 51 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
-        TabStop = TRUE ;
-        PassWord = TRUE ;
-    };
     CheckBox CB_PASSWORD_REQUIRED
     {
-        Pos = MAP_APPFONT ( 90 , 66 ) ;
+        Pos = MAP_APPFONT ( 90 , 51 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "Passwort erforderlich";
         Text [ english ] = "Password required";
@@ -744,12 +708,12 @@ TabPage PAGE_JDBC
     };
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 6 , 79 ) ;
+        Pos = MAP_APPFONT ( 6 , 64 ) ;
         Size = MAP_APPFONT ( 248 , 1 ) ;
     };
     FixedText FT_CHARSET
     {
-        Pos = MAP_APPFONT ( 6 , 85 ) ;
+        Pos = MAP_APPFONT ( 6 , 70 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Text = "~Zeichensatz" ;
         Text [ ENGLISH ] = "~Character set" ;
@@ -778,7 +742,7 @@ TabPage PAGE_JDBC
     ListBox LB_CHARSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 85 ) ;
+        Pos = MAP_APPFONT ( 90 , 70 ) ;
         Size = MAP_APPFONT ( 105 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -797,7 +761,7 @@ TabPage PAGE_ODBC
     FixedText FT_USERNAME
     {
         Pos = MAP_APPFONT ( 6 , 7 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Benutzername" ;
         Text [ ENGLISH ] = "~Username" ;
         Text [ NORWEGIAN ] = "~Username" ;
@@ -825,70 +789,29 @@ TabPage PAGE_ODBC
     Edit ET_USERNAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 110 , 6 ) ;
+        Pos = MAP_APPFONT ( 90 , 6 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_USER_ODBC;
     };
-    FixedLine FL_SEPARATOR2
-    {
-        Pos = MAP_APPFONT ( 6 , 21 ) ;
-        Size = MAP_APPFONT ( 248 , 1 ) ;
-    };
     CheckBox CB_PASSWORD_REQUIRED
     {
-        Pos = MAP_APPFONT ( 6 , 27 ) ;
+        Pos = MAP_APPFONT ( 90 , 21 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "Passwort erforderlich";
         Text [ english ] = "Password required";
         Text [ english_us ] = "Password required";
         HelpId = HID_DSADMIN_PWDREC_JDBC;
     };
-    FixedText FT_PASSWORD
-    {
-        Pos = MAP_APPFONT ( 12 , 41 ) ;
-        Size = MAP_APPFONT ( 94 , 10 ) ;
-        Text = "~Passwort" ;
-        Text [ ENGLISH ] = "~Password" ;
-        Text [ NORWEGIAN ] = "~Passord" ;
-        Text [ DANISH ] = "Adgangskode" ;
-        Text [ ENGLISH_US ] = "~Password" ;
-        Text [ SPANISH ] = "~Contraseña" ;
-        Text [ FINNISH ] = "~Salasana" ;
-        Text [ FRENCH ] = "~Mot de passe" ;
-        Text [ ITALIAN ] = "~Password" ;
-        Text [ DUTCH ] = "~Wachtwoord" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Senha" ;
-        Text [ SWEDISH ] = "~Lösenord" ;
-        Text [ PORTUGUESE ] = "~Senha" ;
-        Text[ chinese_simplified ] = "¿ÚÁî(~P)";
-        Text[ russian ] = "Ïàðîëü";
-        Text[ polish ] = "Has³o";
-        Text[ japanese ] = "Êß½Ü°ÄÞ(~P)";
-        Text[ chinese_traditional ] = "±K½X(~P)";
-        Text[ arabic ] = "ßáãÉ ÇáÓÑ";
-        Text[ greek ] = "Êùäéêüò ðñüóâáóçò";
-        Text[ korean ] = "ÆÐ½º¿öµå(~P)";
-        Text[ turkish ] = "Þifre";
-        Text[ language_user1 ] = " ";
-    };
-    Edit ET_PASSWORD
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 110 , 40 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
-        TabStop = TRUE ;
-        PassWord = TRUE ;
-    };
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 6 , 55 ) ;
+        Pos = MAP_APPFONT ( 6 , 34 ) ;
         Size = MAP_APPFONT ( 248 , 1 ) ;
     };
     FixedText FT_OPTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 61 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 40 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Treibereinstellungen" ;
         Text [ ENGLISH ] = "ODBC ~options" ;
         Text [ NORWEGIAN ] = "ODBC ~options" ;
@@ -916,14 +839,14 @@ TabPage PAGE_ODBC
     Edit ET_OPTIONS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 110 , 60 ) ;
+        Pos = MAP_APPFONT ( 91 , 39 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_CHARSET
     {
-        Pos = MAP_APPFONT ( 6 , 76 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 55 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Zeichensatz" ;
         Text [ ENGLISH ] = "~Character set" ;
         Text [ NORWEGIAN ] = "~Character set" ;
@@ -951,7 +874,7 @@ TabPage PAGE_ODBC
     ListBox LB_CHARSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 110 , 75 ) ;
+        Pos = MAP_APPFONT ( 91 , 54 ) ;
         Size = MAP_APPFONT ( 105 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -1460,6 +1383,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2000/10/30 13:48:17  fs
+ *  #79820# some help ids
+ *
  *  Revision 1.8  2000/10/30 13:01:23  fs
  *  #79823# minor changes
  *
