@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:46:56 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,6 @@
 #endif
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
-#endif
-#ifndef SD_SUB_SHELL_MANAGER_HXX
-#include "SubShellManager.hxx"
 #endif
 #ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
@@ -750,11 +747,9 @@ long SdNavigatorWin::Notify(NotifyEvent& rNEvt)
             else
             {
                 ::sd::ViewShellBase* pBase =
-                      static_cast< ::sd::ViewShellBase*>(
-                          pBindings->GetDispatcher()->GetFrame()
-                          ->GetViewShell());
-                ::sd::ViewShell* pViewShell =
-                      pBase->GetSubShellManager().GetMainSubShell();
+                    ::sd::ViewShellBase::GetViewShellBase(
+                        pBindings->GetDispatcher()->GetFrame());
+                ::sd::ViewShell* pViewShell = pBase->GetMainViewShell();
 
                 if (pViewShell != NULL)
                 {
@@ -797,10 +792,9 @@ void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
         else
         {
             ::sd::ViewShellBase* pBase =
-                  static_cast< ::sd::ViewShellBase*>(
-                      pBindings->GetDispatcher()->GetFrame()->GetViewShell());
-            ::sd::ViewShell* pViewShell =
-                  pBase->GetSubShellManager().GetMainSubShell();
+                ::sd::ViewShellBase::GetViewShellBase(
+                    pBindings->GetDispatcher()->GetFrame());
+            ::sd::ViewShell* pViewShell = pBase->GetMainViewShell();
             if (pViewShell != NULL)
             {
                 ::sd::FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
