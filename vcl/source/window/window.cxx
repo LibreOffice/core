@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-13 11:23:03 $
+ *  last change: $Author: ssa $ $Date: 2002-08-13 14:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8186,10 +8186,11 @@ BOOL Window::IsScrollable() const
 
 BOOL Window::IsTopWindow() const
 {
-    // check for decorated frames
-    if( mbFrame && (mnStyle & (WB_MOVEABLE | WB_CLOSEABLE | WB_SIZEABLE)) )
-        return TRUE;
-    else
+    // topwindows must be frames or they must have a borderwindow which is a frame
+    if( !mbFrame && (!mpBorderWindow || (mpBorderWindow && !mpBorderWindow->mbFrame) ) )
         return FALSE;
+
+    Reference< XTopWindow > xTopWindow( ((Window*)this)->GetComponentInterface(), UNO_QUERY );
+    return xTopWindow.is() ? TRUE : FALSE;
 }
 
