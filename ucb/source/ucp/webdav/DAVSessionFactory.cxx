@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSessionFactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-26 16:05:04 $
+ *  last change: $Author: kso $ $Date: 2001-02-02 07:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,21 +68,30 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
+DAVSessionFactory::~DAVSessionFactory()
+{
+    if ( m_xProxySettings.isValid() )
+    {
+        m_xProxySettings->dispose();
+        m_xProxySettings = 0;
+    }
+}
+
 vos::ORef< DAVSession > DAVSessionFactory::createDAVSession(
                 const ::rtl::OUString & inUri,
                 const uno::Reference< lang::XMultiServiceFactory > & rxSMgr )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( !m_pProxySettings )
-        m_pProxySettings = new ProxySettings( rxSMgr );
+    if ( !m_xProxySettings.isValid() )
+        m_xProxySettings = new ProxySettings( rxSMgr );
 
     DAVSession * theSession = GetExistingSession( inUri );
     if ( theSession == NULL )
     {
         theSession = new NeonSession( this,
                                       inUri,
-                                      m_pProxySettings->getProxy( inUri ) );
+                                      m_xProxySettings->getProxy( inUri ) );
         sActiveSessions.push_back( theSession );
     }
 

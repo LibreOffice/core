@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSessionFactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-26 16:05:04 $
+ *  last change: $Author: kso $ $Date: 2001-02-02 07:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,12 +85,11 @@ class DAVSession;
 class DAVSessionFactory
 {
         osl::Mutex m_aMutex;
-        ProxySettings* m_pProxySettings;
+        ::vos::ORef< ProxySettings > m_xProxySettings;
         std::vector< DAVSession * > sActiveSessions;
 
     public:
-        DAVSessionFactory() : m_pProxySettings( 0 ) {}
-        ~DAVSessionFactory() { delete m_pProxySettings; }
+        ~DAVSessionFactory();
 
         ::vos::ORef< DAVSession >
         createDAVSession( const ::rtl::OUString & inUri,
