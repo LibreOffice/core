@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:35:06 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 07:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1269,6 +1269,7 @@ private:
     const OUString      maStrSoundURL;
     const OUString      maStrSpeed;
     const OUString      maStrStarBasic;
+    const OUString      maStrScript;
 
     SdXShape*   mpShape;
     uno::Reference< document::XEventsSupplier > mxShape;
@@ -1314,6 +1315,7 @@ SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) throw()
   maStrSoundURL( RTL_CONSTASCII_USTRINGPARAM("SoundURL") ),
   maStrSpeed( RTL_CONSTASCII_USTRINGPARAM("Speed") ),
   maStrStarBasic( RTL_CONSTASCII_USTRINGPARAM("StarBasic") ),
+  maStrScript( RTL_CONSTASCII_USTRINGPARAM("Script") ),
   maStrLibrary(RTL_CONSTASCII_USTRINGPARAM("Library")),
   maStrMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName"))
 {
@@ -1387,7 +1389,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 continue;
             }
         }
-        else if( ( ( nFound & FOUND_MACRO ) == 0 ) && pProperties->Name == maStrMacroName )
+        else if( ( ( nFound & FOUND_MACRO ) == 0 ) && ( pProperties->Name == maStrMacroName || pProperties->Name == maStrScript ) )
         {
             if( pProperties->Value >>= aStrMacro )
             {
@@ -1577,30 +1579,37 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             clearEventsInAnimationInfo( pInfo );
             pInfo->eClickAction = presentation::ClickAction_MACRO;
 
-            String aMacro = aStrMacro;
-
-            String aLibName   = aMacro.GetToken(0, sal_Unicode('.'));
-            String aModulName = aMacro.GetToken(1, sal_Unicode('.'));
-            String aMacroName = aMacro.GetToken(2, sal_Unicode('.'));
-
-            OUStringBuffer sBuffer;
-            sBuffer.append( aMacroName );
-            sBuffer.append( sal_Unicode('.') );
-            sBuffer.append( aModulName );
-            sBuffer.append( sal_Unicode('.') );
-            sBuffer.append( aLibName );
-            sBuffer.append( sal_Unicode('.') );
-
-            if( aStrLibrary.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StarOffice" ) ) )
+            if ( SfxApplication::IsXScriptURL( aStrMacro ) )
             {
-                sBuffer.append( OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
+                pInfo->aBookmark = aStrMacro;
             }
             else
             {
-                sBuffer.append( aStrLibrary );
-            }
+                String aMacro = aStrMacro;
 
-            pInfo->aBookmark = sBuffer.makeStringAndClear();
+                String aLibName   = aMacro.GetToken(0, sal_Unicode('.'));
+                String aModulName = aMacro.GetToken(1, sal_Unicode('.'));
+                String aMacroName = aMacro.GetToken(2, sal_Unicode('.'));
+
+                OUStringBuffer sBuffer;
+                sBuffer.append( aMacroName );
+                sBuffer.append( sal_Unicode('.') );
+                sBuffer.append( aModulName );
+                sBuffer.append( sal_Unicode('.') );
+                sBuffer.append( aLibName );
+                sBuffer.append( sal_Unicode('.') );
+
+                if( aStrLibrary.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StarOffice" ) ) )
+                {
+                    sBuffer.append( OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
+                }
+                else
+                {
+                    sBuffer.append( aStrLibrary );
+                }
+
+                pInfo->aBookmark = sBuffer.makeStringAndClear();
+            }
             bOk = sal_True;
         }
     }
@@ -1639,7 +1648,8 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
     case presentation::ClickAction_BOOKMARK:
     case presentation::ClickAction_DOCUMENT:
     case presentation::ClickAction_MACRO:
-        nPropertyCount += 1;
+        if ( !SfxApplication::IsXScriptURL( pInfo->aBookmark ) )
+            nPropertyCount += 1;
         break;
 
     case presentation::ClickAction_SOUND:
@@ -1658,42 +1668,63 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
 
     if( eClickAction == presentation::ClickAction_MACRO )
     {
-        aAny <<= maStrStarBasic;;
-        pProperties->Name = maStrEventType;
-        pProperties->Handle = -1;
-        pProperties->Value = aAny;
-        pProperties->State = beans::PropertyState_DIRECT_VALUE;
-        pProperties++;
+        if ( SfxApplication::IsXScriptURL( pInfo->aBookmark ) )
+        {
+            // Scripting Framework URL
+            aAny <<= maStrScript;;
+            pProperties->Name = maStrEventType;
+            pProperties->Handle = -1;
+            pProperties->Value = aAny;
+            pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            pProperties++;
 
-        String aMacro = pInfo->aBookmark;
+            aAny <<= OUString( pInfo->aBookmark );
+            pProperties->Name = maStrScript;
+            pProperties->Handle = -1;
+            pProperties->Value = aAny;
+            pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            pProperties++;
+        }
+        else
+        {
+            // Old Basic macro URL
+            aAny <<= maStrStarBasic;;
+            pProperties->Name = maStrEventType;
+            pProperties->Handle = -1;
+            pProperties->Value = aAny;
+            pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            pProperties++;
 
-        // aMacro has got following format:
-        // "Macroname.Modulname.Libname.Documentname" or
-        // "Macroname.Modulname.Libname.Applicationsname"
-        String aMacroName = aMacro.GetToken(0, sal_Unicode('.'));
-        String aModulName = aMacro.GetToken(1, sal_Unicode('.'));
-        String aLibName   = aMacro.GetToken(2, sal_Unicode('.'));
-        String aDocName   = aMacro.GetToken(3, sal_Unicode('.'));
+            String aMacro = pInfo->aBookmark;
 
-        OUStringBuffer sBuffer;
-        sBuffer.append( aLibName );
-        sBuffer.append( sal_Unicode('.') );
-        sBuffer.append( aModulName );
-        sBuffer.append( sal_Unicode('.') );
-        sBuffer.append( aMacroName );
+            // aMacro has got following format:
+            // "Macroname.Modulname.Libname.Documentname" or
+            // "Macroname.Modulname.Libname.Applicationsname"
+            String aMacroName = aMacro.GetToken(0, sal_Unicode('.'));
+            String aModulName = aMacro.GetToken(1, sal_Unicode('.'));
+            String aLibName   = aMacro.GetToken(2, sal_Unicode('.'));
+            String aDocName   = aMacro.GetToken(3, sal_Unicode('.'));
 
-        aAny <<= OUString( sBuffer.makeStringAndClear() );
-        pProperties->Name = maStrMacroName;
-        pProperties->Handle = -1;
-        pProperties->Value = aAny;
-        pProperties->State = beans::PropertyState_DIRECT_VALUE;
-        pProperties++;
+            OUStringBuffer sBuffer;
+            sBuffer.append( aLibName );
+            sBuffer.append( sal_Unicode('.') );
+            sBuffer.append( aModulName );
+            sBuffer.append( sal_Unicode('.') );
+            sBuffer.append( aMacroName );
 
-        aAny <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice" ) );
-        pProperties->Name = maStrLibrary;
-        pProperties->Handle = -1;
-        pProperties->Value = aAny;
-        pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            aAny <<= OUString( sBuffer.makeStringAndClear() );
+            pProperties->Name = maStrMacroName;
+            pProperties->Handle = -1;
+            pProperties->Value = aAny;
+            pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            pProperties++;
+
+            aAny <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice" ) );
+            pProperties->Name = maStrLibrary;
+            pProperties->Handle = -1;
+            pProperties->Value = aAny;
+            pProperties->State = beans::PropertyState_DIRECT_VALUE;
+        }
     }
     else
     {
