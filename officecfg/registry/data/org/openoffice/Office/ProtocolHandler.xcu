@@ -3,9 +3,9 @@
  *
  *  $RCSfile: ProtocolHandler.xcu,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:38:16 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,11 @@
     <node oor:name="com.sun.star.comp.framework.jobs.JobDispatch" oor:op="replace">
       <prop oor:name="Protocols">
         <value>vnd.sun.star.job:*</value>
+      </prop>
+    </node>
+    <node oor:name="com.sun.star.comp.ScriptProtocolHandler" oor:op="replace">
+      <prop oor:name="Protocols">
+        <value>vnd.sun.star.script:*</value>
       </prop>
     </node>
   </node>
