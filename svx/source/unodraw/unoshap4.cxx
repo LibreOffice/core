@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-14 16:34:37 $
+ *  last change: $Author: cl $ $Date: 2001-06-18 09:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #include <sfx2/frmdescr.hxx>
 #endif
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 #ifndef _SVDMODEL_HXX
 #include "svdmodel.hxx"
@@ -115,6 +121,8 @@ SvxOle2Shape::~SvxOle2Shape() throw()
 //XPropertySet
 void SAL_CALL SvxOle2Shape::setPropertyValue( const OUString& aPropertyName, const Any& aValue )    throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CLSID" ) ) )
     {
 #ifndef SVX_LIGHT
@@ -163,6 +171,8 @@ void SAL_CALL SvxOle2Shape::setPropertyValue( const OUString& aPropertyName, con
 
 Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) throw( UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ThumbnailGraphicURL" ) ) )
     {
         OUString aURL;
@@ -332,6 +342,8 @@ void SvxAppletShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw (
 //XPropertySet
 void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, const Any& aValue )  throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(aPropertyName);
 
     if( pObj && pModel )
@@ -416,6 +428,8 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
 
 Any SAL_CALL SvxAppletShape::getPropertyValue( const OUString& PropertyName ) throw( UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(PropertyName);
 
     if( pObj && pModel )
@@ -481,6 +495,8 @@ void SvxPluginShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw (
 void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(aPropertyName);
 
     if( pObj && pModel )
@@ -544,6 +560,8 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, c
 
 Any SAL_CALL SvxPluginShape::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(PropertyName);
 
     if( pObj && pModel )
@@ -611,6 +629,8 @@ void SvxFrameShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw ()
 void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(aPropertyName);
 
     Any aAny;
@@ -715,6 +735,8 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
 
 Any SAL_CALL SvxFrameShape::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(PropertyName);
 
     Any aAny;
