@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:07:28 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ void PackageManagerImpl::initActivationLayer(
         // user|share:
         OSL_ASSERT( m_activePackages.getLength() > 0 );
         m_activePackages_expanded = expandUnoRcUrl( m_activePackages );
-        create_folder( 0, m_activePackages_expanded, xCmdEnv );
+        create_folder( 0, m_activePackages_expanded, xCmdEnv, !m_readOnly );
         m_activePackagesDB.reset(
             new PersistentMap(
                 m_activePackages_expanded + OUSTR(".db"), m_readOnly ) );
