@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:41:42 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 18:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,23 +70,8 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     Size = MAP_APPFONT ( 200 , 128 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Seiten/Objekte einfügen : Seiten/Objekte einf³gen */
     Moveable = TRUE ;
-    Text = "Seiten/Objekte einfügen" ;
-    Text [ ENGLISH ] = "Insert pages/objects" ;
-    Text [ english_us ] = "Insert Slides/Objects" ;
-    Text [ italian ] = "Inserisci pagine/oggetti" ;
-    Text [ spanish ] = "Insertar diapositivas/objetos" ;
-    Text [ french ] = "Insertion de pages/d'objets" ;
-    Text [ dutch ] = "Pagina/objecten invoegen" ;
-    Text [ swedish ] = "Infoga sidor/objekt" ;
-    Text [ danish ] = "Indsæt dias/objekter" ;
-    Text [ portuguese ] = "Inserir páginas/objectos" ;
-    Text [ portuguese_brazilian ] = "Inserir Slides/Objetos" ;
-    Text[ chinese_simplified ] = "æ’å…¥é¡µé¢æˆ–å¯¹è±¡";
-    Text[ russian ] = "Âñòàâèòü ñëàéäû/îáúåêòû";
-    Text[ polish ] = "Wstaw slajdy/obiekty";
-    Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã¾ãŸã¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ¿å…¥";
-    Text[ chinese_traditional ] = "æ’å…¥é é¢æˆ–ç‰©ä»¶";
-    Text[ arabic ] = "ÅÏÑÇÌ ÕİÍÇÊ/ßÇÆäÇÊ";
+    Text [ de ] = "Seiten/Objekte einfügen" ;
+    Text [ en-US ] = "Insert Slides/Objects" ;
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 144 , 6 ) ;
@@ -116,88 +101,22 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     };
     CheckBox CBX_LINK
     {
-        Text = "~Verknüpfung" ;
-        Text [ ENGLISH ] = "~Link" ;
+        Text [ de ] = "~Verknüpfung" ;
         Pos = MAP_APPFONT ( 6 , 100 ) ;
         Size = MAP_APPFONT ( 140 , 12 ) ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Link" ;
-        Text [ italian ] = "Collegamento" ;
-        Text [ spanish ] = "~Vínculo" ;
-        Text [ french ] = "~Lien" ;
-        Text [ dutch ] = "~Koppeling" ;
-        Text [ swedish ] = "~Länk" ;
-        Text [ danish ] = "~Kæde" ;
-        Text [ portuguese ] = "~Ligação" ;
-        Text [ portuguese_brazilian ] = "~Vínculo" ;
-        Text[ chinese_simplified ] = "é“¾æ¥(~L)";
-        Text[ russian ] = "~Ññûëêà";
-        Text[ polish ] = "~Po³¹cz";
-        Text[ japanese ] = "ãƒªãƒ³ã‚¯(~L)";
-        Text[ chinese_traditional ] = "æ·å¾‘(~L)";
-        Text[ arabic ] = "ÇÑÊÈÇØ";
-        Text[ greek ] = "Óıíäåóç";
-        Text[ korean ] = "ë§í¬(~L)";
-        Text[ turkish ] = "Bağlantı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Enllaç";
-        Text[ finnish ] = "~Linkitä tiedostoon";
-        Text[ thai ] = "à¹€~à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
-        Text[ czech ] = "Odkaz";
-        Text[ hebrew ] = "~VerknÃ¼pfung";
-        Text[ hindi ] = "~à¤•à¤¡à¤¼à¥€";
-        Text[ slovak ] = "~Odkaz";
-        Text[ hungarian ] = "~HivatkozÃ¡s";
-        Text[ slovenian ] = "~Povezava";
+        Text [ en-US ] = "~Link" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CBX_CHECK_MASTERS
     {
         Pos = MAP_APPFONT ( 6 , 114 ) ;
         Size = MAP_APPFONT ( 140 , 12 ) ;
-        Text = "~Nicht verwendete Hintergrundseiten löschen" ;
-        Text [ ENGLISH ] = "~Remove not used master pages" ;
+        Text [ de ] = "~Nicht verwendete Hintergrundseiten löschen" ;
         TabStop = TRUE ;
-        Text[ english_us ] = "Delete unused backg~rounds";
-        Text[ portuguese ] = "~Eliminar páginas de fundo não utilizadas";
-        Text[ russian ] = "Óäàëèòü íåèñïîëüçóşùèåñÿ ôîíû";
-        Text[ dutch ] = "~Niet-gebruikte achtergrondpagina's wissen";
-        Text[ french ] = "Supprimer les pages d'arrière-plan ~inutilisées";
-        Text[ spanish ] = "~Borrar las páginas de fondo no utilizadas";
-        Text[ italian ] = "Elimi~na pagine di sfondo non utilizzate";
-        Text[ danish ] = "Slet ubrugte baggrundssider";
-        Text[ swedish ] = "Radera ej a~nvända bakgrundssidor";
-        Text[ polish ] = "Usuñ nieu¿ywane ~t³a";
-        Text[ portuguese_brazilian ] = "~Excluir planos de fundo não utilizados";
-        Text[ japanese ] = "æœªä½¿ç”¨ã®ãƒã‚¹ã‚¿ãƒ¼ãƒ¼ãƒšãƒ¼ã‚¸ã¯å‰Šé™¤ã™ã‚‹(~R)";
-        Text[ chinese_simplified ] = "æ¸…é™¤ä¸é‡‡ç”¨çš„èƒŒæ™¯é¡µé¢(~R)";
-        Text[ chinese_traditional ] = "åˆªé™¤ä¸ç”¨çš„èƒŒæ™¯é é¢(~R)";
-        Text[ arabic ] = "ÍĞİ ÕİÍÇÊ ÇáÎáİíÉ ÇáÊí áã ÊõÓÊÚãá";
-        Text[ greek ] = "ÄéáãñáöŞ ìç ÷ñçóéìïğïéïõìİ~íùí óåëéäşí öüíôïõ.";
-        Text[ korean ] = "ì‚¬ìš©í•˜ì§€ ì•Šì€ ë°°ê²½ ì‚­ì œ(~R)";
-        Text[ turkish ] = "Artalandaki kullanılmayan sayfaları sil";
-        Text[ catalan ] = "Suprimeix els ~fons no utilitzats";
-        Text[ finnish ] = "Poista käyttämättömät taus~tat";
-        Text[ thai ] = "à¸¥à¸šà¸à¸·à¹‰à¸™~à¸«à¸¥à¸±à¸‡à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¹ƒà¸Šà¹‰";
-        Text[ czech ] = "Smazat nepouÅ¾itÃ¡ pozadÃ­";
-        Text[ hebrew ] = "~Nicht verwendete Hintergrundseiten lÃ¶schen";
-        Text[ hindi ] = "~à¤…à¤¨à¥à¤­à¥à¤¯à¤¸à¥à¤¤ à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤— à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "~ZmazaÅ¥ nepouÅ¾itÃ© pozadia";
-        Text[ hungarian ] = "Nem hasznÃ¡lt ~hÃ¡tterek tÃ¶rlÃ©se";
-        Text[ slovenian ] = "IzbriÅ¡i neupo~rabljena ozadja";
+        Text [ en-US ] = "Delete unused backg~rounds";
     };
-    Text[ greek ] = "ÅéóáãùãŞ äéáöáíåéşí/áíôéêåéìİíùí";
-    Text[ korean ] = "ìŠ¬ë¼ì´ë“œ/ê°œì²´ ì‚½ì…";
-    Text[ turkish ] = "Sayfa/nesne ekle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insereix diapositives/objectes";
-    Text[ finnish ] = "Lisää dioja tai objekteja";
-    Text[ thai ] = "à¹à¸—à¸£à¸à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡/à¸§à¸±à¸•à¸–à¸¸";
-    Text[ czech ] = "VloÅ¾it snÃ­mky/objekty";
-    Text[ hebrew ] = "Seiten/Objekte einfÃ¼gen";
-    Text[ hindi ] = "à¤¸à¥à¤²à¤‡à¤¡à¥‹à¤‚/à¤µà¤¸à¥à¤¤à¥à¤“à¤‚ à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¥‹";
-    Text[ slovak ] = "VloÅ¾iÅ¥ snÃ­mky/objekty";
-    Text[ hungarian ] = "DiÃ¡k/objektumok beszÃºrÃ¡sa";
-    Text[ slovenian ] = "Vstavi diapozitive/predmete";
+    Text [ x-comment ] = " ";
 };
 
 
