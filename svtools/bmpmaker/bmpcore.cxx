@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpcore.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 11:11:18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,20 +143,13 @@ void BmpCreator::ImplCreate( SvStream& rStm,
         else
             aPrefix = String( aName, 0, 2 );
 
-        if( rLang.mnLangNum != 49 )
-        {
-            // add country id, if not german
-            DirEntry    aTmpDirEntry( aName );
-            String      aNumStr( String::CreateFromInt32( rLang.mnLangNum ) );
+            String aNumStr( String::CreateFromAscii( rLang.maLangDir )) ;
 
             if( aNumStr.Len() == 1 )
                 aNumStr.Insert( '0', 0 );
 
-            aName = aTmpDirEntry.GetBase();
-            aName += aNumStr;
-            aName += '.';
-            aName += aTmpDirEntry.GetExtension();
-        }
+            aName = DirEntry( aName ).GetBase();
+            aName += String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) );
 
         // create output file name
         aOutFile += DirEntry( aName );
@@ -445,11 +438,11 @@ void BmpCreator::Create( const String& rSRSName,
                 bDone = TRUE;
                 ImplCreate( *pSRS, aInDirs, aOutDir, aName, rLang );
             }
-            else if( ( rLang.mnLangNum != 49 ) && !bLangDep )
+/*          else if( ( rLang.mnLangNum != 49 ) && !bLangDep )
             {
                 Message( String( RTL_CONSTASCII_USTRINGPARAM( "INFO: ImageList is not language dependent! Nothing to do for this language." ) ) );
                 bDone = TRUE;
-            }
+            }*/
         }
         while ( aText.Len() );
     }
