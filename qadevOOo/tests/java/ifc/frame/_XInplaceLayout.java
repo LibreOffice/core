@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XInplaceLayout.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-03-19 14:33:20 $
+ *  last change: $Date: 2005-03-01 20:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@ package ifc.frame;
 
 import com.sun.star.awt.XPopupMenu;
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.frame.XInplaceLayout;
+import com.sun.star.frame.XInplaceLayout;
 import lib.MultiMethodTest;
 
 public class _XInplaceLayout extends MultiMethodTest {

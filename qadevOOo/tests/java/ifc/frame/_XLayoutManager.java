@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XLayoutManager.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-03-19 14:33:30 $
+ *  last change: $Date: 2005-03-01 20:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,13 +64,13 @@ package ifc.frame;
 import com.sun.star.awt.Point;
 import com.sun.star.frame.XFrame;
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.frame.XLayoutManager;
+import com.sun.star.frame.XLayoutManager;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.XWindow;
-import drafts.com.sun.star.ui.DockingArea;
-import drafts.com.sun.star.ui.XDockingAreaAcceptor;
-import drafts.com.sun.star.ui.XUIElement;
+import com.sun.star.ui.DockingArea;
+import com.sun.star.ui.XDockingAreaAcceptor;
+import com.sun.star.ui.XUIElement;
 import lib.MultiMethodTest;
 import util.utils;
 
