@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 15:56:55 $
+ *  last change: $Author: fs $ $Date: 2001-06-05 10:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::form;
 using namespace ::svxform;
 
 DBG_NAME(FmFormPageImpl);
@@ -361,8 +364,8 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::SetDefaults(const Re
     if (!rContent.is() || rContent->getParent().is())
         return NULL;
 
-    Reference< ::com::sun::star::form::XForm >  xForm;
-    Reference< ::com::sun::star::beans::XPropertySet >  xSet;
+    Reference< XForm >  xForm;
+    Reference< XPropertySet >  xSet;
 
     // Wenn Datenbank und CursorSource gesetzt sind, dann wird
     // die ::com::sun::star::form anhand dieser Kriterien gesucht, ansonsten nur aktuelle
@@ -443,48 +446,75 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::SetDefaults(const Re
 }
 
 //------------------------------------------------------------------------------
-Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::FindForm(const Reference< ::com::sun::star::form::XForm > & rForm,
-                              const Reference< XDataSource > & rDatabase,
-                                  const ::rtl::OUString& rCursorSource,
-                                  sal_Int32 nCommandType)
+Reference< XForm >  FmFormPageImpl::FindForm(
+        const Reference< XForm > & rForm, const Reference< XDataSource > & _rxDatabase,
+        const ::rtl::OUString& _rCursorSource, sal_Int32 nCommandType)
 {
-    Reference< ::com::sun::star::form::XForm >  xResultForm;
-    Reference< XRowSet >  xDBForm(rForm, UNO_QUERY);
-    if (!xDBForm.is())
-        return NULL;
+    Reference< XForm >          xResultForm;
+    Reference< XRowSet >        xDBForm(rForm, UNO_QUERY);
+    Reference< XPropertySet >   xFormProps(rForm, UNO_QUERY);
+    if (!xDBForm.is() || !xFormProps.is())
+        return xResultForm;
 
-    Reference< ::com::sun::star::container::XChild >  xConnAsChild;
+    OSL_ENSURE(_rxDatabase.is(), "FmFormPageImpl::FindForm: invalid data source!");
+    ::rtl::OUString sLookupName;            // the name of the data source we're looking for
+    ::rtl::OUString sFormDataSourceName;    // the name of the data source the current connection in the form is based on
     try
     {
-        xConnAsChild = Reference< ::com::sun::star::container::XChild > (::dbtools::calcConnection(xDBForm,::comphelper::getProcessServiceFactory()), UNO_QUERY);
+        Reference< XPropertySet > xDSProps(_rxDatabase, UNO_QUERY);
+        if (xDSProps.is())
+            xDSProps->getPropertyValue(FM_PROP_NAME) >>= sLookupName;
+
+        xFormProps->getPropertyValue(FM_PROP_DATASOURCE) >>= sFormDataSourceName;
+        if (0 == sFormDataSourceName.getLength())
+        {
+            // check if it has an active connection
+            Reference< XConnection > xFormConnection = dbtools::getConnection(xDBForm);
+            if (xFormConnection.is())
+            {
+                OSL_ENSURE(sal_False, "FmFormPageImpl::FindForm: a connection without data source name?");
+                    // don't know if this is allowed to happen (don't think so, that's why asserting this).
+                    // 05.06.2001 - 87688 - frank.schoenheit@sun.com
+                Reference< XChild > xConnAsChild(xFormConnection, UNO_QUERY);
+                if (xConnAsChild.is())
+                {
+                    Reference< XDataSource > xFormDS(xConnAsChild->getParent(), UNO_QUERY);
+                        // the data source which created the connection
+                    if (xFormDS.is())
+                    {
+                        xDSProps = xDSProps.query(xFormDS);
+                        if (xDSProps.is())
+                            xDSProps->getPropertyValue(FM_PROP_NAME) >>= sFormDataSourceName;
+                    }
+                }
+            }
+        }
     }
-    catch(Exception&)
+    catch(const Exception& e)
     {
-        OSL_ENSURE(0,"Exception occured!");
+        e;
+        OSL_ENSURE(sal_False, "FmFormPageImpl::FindForm: caught an exception!");
     }
 
-    Reference< XDataSource >  xDB;
-    if (xConnAsChild.is())
-        xDB = Reference< XDataSource > (xConnAsChild->getParent(), UNO_QUERY);
-    if (xDB.is() && xDB == rDatabase)
+    if (sLookupName == sFormDataSourceName)
     {
         // jetzt noch ueberpruefen ob CursorSource und Type uebereinstimmen
-        Reference< ::com::sun::star::beans::XPropertySet >  xSet(rForm, UNO_QUERY);
-        ::rtl::OUString aCursorSource = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_COMMAND));
-        sal_Int32 nType = ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_COMMANDTYPE));
-        if (!aCursorSource.getLength() || ((nType == nCommandType) && (aCursorSource == rCursorSource))) // found the form
+        ::rtl::OUString aCursorSource = ::comphelper::getString(xFormProps->getPropertyValue(FM_PROP_COMMAND));
+        sal_Int32 nType = ::comphelper::getINT32(xFormProps->getPropertyValue(FM_PROP_COMMANDTYPE));
+        if (!aCursorSource.getLength() || ((nType == nCommandType) && (aCursorSource == _rCursorSource))) // found the form
         {
             xResultForm = rForm;
             // Ist noch keine Datenquelle gesetzt, wird dieses hier nachgeholt
             if (!aCursorSource.getLength())
             {
-                xSet->setPropertyValue(FM_PROP_COMMAND, makeAny(rCursorSource));
-                xSet->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny((sal_Int32)nCommandType));
+                xFormProps->setPropertyValue(FM_PROP_COMMAND, makeAny(_rCursorSource));
+                xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny((sal_Int32)nCommandType));
             }
         }
     }
 
-    Reference< ::com::sun::star::container::XIndexAccess >  xComponents(rForm, UNO_QUERY);
+    // as long as xResultForm is NULL, search the child forms of rForm
+    Reference< XIndexAccess >  xComponents(rForm, UNO_QUERY);
     sal_Int32 nCount = xComponents->getCount();
     for (sal_Int32 i = 0; !xResultForm.is() && i < nCount; ++i)
     {
@@ -492,7 +522,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::FindForm(const Refer
         xComponents->getByIndex(i) >>= xSearchForm;
         // jetzt innerhalb der ::com::sun::star::form weitersuchen
         if (xSearchForm.is())
-            xResultForm = FindForm(xSearchForm, rDatabase, rCursorSource, nCommandType);
+            xResultForm = FindForm(xSearchForm, _rxDatabase, _rCursorSource, nCommandType);
     }
     return xResultForm;
 }
