@@ -2,7 +2,6 @@ sc	sc	:	offmgr boost NULL
 sc	sc										usr1	-	all	sc_mkout NULL
 sc	sc\inc									get		-	all	sc_inc NULL
 sc	sc\prj									get		-	all	sc_prj NULL
-sc	sc\jobs									get		-	all	sc_jobs NULL
 sc	sc\res									get		-	all	sc_res NULL
 sc	sc\res\imglst\inputwin					get		-	all	sc_resiw NULL
 sc	sc\res\imglst\navipi					get		-	all	sc_resna NULL
