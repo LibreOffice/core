@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 12:15:15 $
+#   last change: $Author: obo $ $Date: 2004-11-19 09:40:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,6 @@
 #
 #*************************************************************************
 PRJ=..$/..
-
 PRJNAME=extensions
 TARGET=scn
 ENABLE_EXCEPTIONS=TRUE
@@ -115,6 +114,8 @@ SLOFILES+=\
                 $(SLO)$/scanunx.obj		\
                 $(SLO)$/grid.obj
 
+.ENDIF
+
 SRS1NAME=$(TARGET)
 SRC1FILES=\
     sanedlg.src		\
@@ -124,7 +125,6 @@ RESLIB1NAME=san
 RESLIB1IMAGES=$(PRJ)$/source$/scanner
 RESLIB1SRSFILES= $(SRS)$/scn.srs
 RESLIB1DEPN= sanedlg.src sanedlg.hrc grid.src grid.hrc
-.ENDIF
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1STDLIBS=\
