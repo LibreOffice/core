@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:27:25 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ TabDialog DLG_FRM_STD
                 Text [ danish ] = "Ombrydning" ;
                 Text [ french ] = "Adaptation du texte" ;
                 Text [ swedish ] = "Textanpassning" ;
-                Text [ dutch ] = "Om beeld" ;
+                Text [ dutch ] = "Omloop" ;
                 Text [ spanish ] = "Ajuste" ;
                 Text [ english_us ] = "Wrap" ;
                 Text[ chinese_simplified ] = "їЈ»∆";
@@ -397,7 +397,7 @@ TabDialog DLG_FRM_GRF
                 Text [ danish ] = "Ombrydning" ;
                 Text [ french ] = "Adaptation du texte" ;
                 Text [ swedish ] = "Textanpassning" ;
-                Text [ dutch ] = "Om beeld" ;
+                Text [ dutch ] = "Omloop" ;
                 Text [ spanish ] = "Ajuste" ;
                 Text [ english_us ] = "Wrap" ;
                 Text[ chinese_simplified ] = "їЈ»∆";
@@ -472,8 +472,8 @@ TabDialog DLG_FRM_GRF
                 Text [ english_us ] = "Crop" ;
                 Text [ italian ] = "Taglia" ;
                 Text [ spanish ] = "Recortar" ;
-                Text [ french ] = "Recadrer" ;
-                Text [ swedish ] = "Skдra till" ;
+                Text [ french ] = "Rogner" ;
+                Text [ swedish ] = "Beskдra" ;
                 Text [ danish ] = "Beskжr" ;
                 Text [ portuguese_brazilian ] = "Zuschneiden" ;
                 Text [ portuguese ] = "Recortar" ;
@@ -666,7 +666,7 @@ TabDialog DLG_FRM_OLE
                 Text [ danish ] = "Ombrydning" ;
                 Text [ french ] = "Adaptation du texte" ;
                 Text [ swedish ] = "Textanpassning" ;
-                Text [ dutch ] = "Om beeld" ;
+                Text [ dutch ] = "Omloop" ;
                 Text [ spanish ] = "Ajuste" ;
                 Text [ english_us ] = "Wrap" ;
                 Text[ chinese_simplified ] = "їЈ»∆";
@@ -1004,7 +1004,7 @@ TabPage TP_FRM_STD
         Text [ danish ] = "Auto. hшjde" ;
         Text [ french ] = "Hau~teur auto." ;
         Text [ swedish ] = "auto. h~цjd" ;
-        Text [ dutch ] = "Auto. h~oogte" ;
+        Text [ dutch ] = "Autom. h~oogte" ;
         Text [ spanish ] = "Altura auto~m." ;
         Text [ english_us ] = "AutoHei~ght" ;
         Text[ chinese_simplified ] = "„‘ґѓЄяґ»(~G)";
@@ -1616,7 +1616,7 @@ TabPage TP_FRM_STD
         Text [ italian ] = "a" ;
         Text [ spanish ] = "a" ;
         Text [ french ] = "de" ;
-        Text [ dutch ] = "naar" ;
+        Text [ dutch ] = "van" ;
         Text [ portuguese ] = "para" ;
         Text[ chinese_simplified ] = "÷Ѕ";
         Text[ russian ] = "к";
@@ -1740,9 +1740,9 @@ TabPage TP_GRF_EXT
         Text [ finnish ] = "[Ei ole]" ;
         Text [ danish ] = "[Ingen]" ;
         Text [ french ] = "[Aucun(e)]" ;
-        Text [ swedish ] = "[Inga]" ;
+        Text [ swedish ] = "[Ingen]" ;
         Text [ dutch ] = "[Geen]" ;
-        Text [ spanish ] = "[Sin]" ;
+        Text [ spanish ] = "[Ninguno]" ;
         Text [ english_us ] = "[None]" ;
         Readonly = TRUE ;
         Left = TRUE ;
@@ -1823,7 +1823,7 @@ TabPage TP_GRF_EXT
         Text [ english ] = "hori~zontal" ;
         Text[ english_us ] = "hori~zontally";
         Text[ portuguese ] = "~horizontal";
-        Text[ russian ] = "горизонтально, на";
+        Text[ russian ] = "горизонтально";
         Text[ greek ] = "псй~жьнфйб";
         Text[ dutch ] = "~horizontaal";
         Text[ french ] = "~horizontalement";
@@ -1831,7 +1831,7 @@ TabPage TP_GRF_EXT
         Text[ italian ] = "~orizzontalmente su ";
         Text[ danish ] = "vandret";
         Text[ swedish ] = "h~orisontalt";
-        Text[ polish ] = "p~oziomo, na";
+        Text[ polish ] = "p~oziomo";
         Text[ portuguese_brazilian ] = "verti~calmente";
         Text[ japanese ] = "НґЙE(~H)";
         Text[ korean ] = "Љц∆тјЄЈќ, јІ(~Z)";
@@ -1849,7 +1849,7 @@ TabPage TP_GRF_EXT
         Text [ ENGLISH ] = "on all pages" ;
         Text [ english_us ] = "on all pages" ;
         Text[ portuguese ] = "~em todas as pбginas";
-        Text[ russian ] = "on all pages";
+        Text[ russian ] = "на всех страницах";
         Text[ greek ] = "уе ьлет фйт уелядет";
         Text[ dutch ] = "~op alle pagina's";
         Text[ french ] = "~sur toutes les pages";
@@ -1857,7 +1857,7 @@ TabPage TP_GRF_EXT
         Text[ italian ] = "on all pages";
         Text[ danish ] = "pе alle sider";
         Text[ swedish ] = "pе ~alla sidor";
-        Text[ polish ] = "on all pages";
+        Text[ polish ] = "na wszystkich stronach";
         Text[ portuguese_brazilian ] = "on all pages";
         Text[ japanese ] = "ВЈВ„ВƒВћЌя∞ЉёВ…";
         Text[ korean ] = "on all pages";
@@ -1875,7 +1875,7 @@ TabPage TP_GRF_EXT
         Text [ ENGLISH ] = "on even pages" ;
         Text [ english_us ] = "on even pages" ;
         Text[ portuguese ] = "~nas pбginas da esquerda";
-        Text[ russian ] = "on even pages";
+        Text[ russian ] = "на нечетных страницах";
         Text[ greek ] = "уе бсйуфесЁт уе~лядет";
         Text[ dutch ] = "op e~ven pagina's";
         Text[ french ] = "sur les pages de ~gauche";
@@ -1883,7 +1883,7 @@ TabPage TP_GRF_EXT
         Text[ italian ] = "on even pages";
         Text[ danish ] = "pе venstre sider";
         Text[ swedish ] = "pе vд~nstersidor";
-        Text[ polish ] = "on even pages";
+        Text[ polish ] = "na lewych stronach";
         Text[ portuguese_brazilian ] = "on even pages";
         Text[ japanese ] = "НґЌя∞ЉёВ…";
         Text[ korean ] = "on even pages";
@@ -1901,7 +1901,7 @@ TabPage TP_GRF_EXT
         Text [ ENGLISH ] = "on odd pages" ;
         Text [ english_us ] = "on odd pages" ;
         Text[ portuguese ] = "nas pбg~inas da direita";
-        Text[ russian ] = "on odd pages";
+        Text[ russian ] = "на четных страницах";
         Text[ greek ] = "уе деойЁт уелядет";
         Text[ dutch ] = "op o~neven pagina's";
         Text[ french ] = "sur les pages de ~droite";
@@ -1909,7 +1909,7 @@ TabPage TP_GRF_EXT
         Text[ italian ] = "on odd pages";
         Text[ danish ] = "pе hшjre sider";
         Text[ swedish ] = "pе hцge~rsidor";
-        Text[ polish ] = "on odd pages";
+        Text[ polish ] = "na prawych stronach";
         Text[ portuguese_brazilian ] = "on odd pages";
         Text[ japanese ] = "ЙEЌя∞ЉёВ…";
         Text[ korean ] = "on odd pages";
