@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:22:43 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1790,18 +1790,18 @@ void ToolBox::ImplLoadRes( const ResId& rResId )
 {
     DockingWindow::ImplLoadRes( rResId );
 
-    USHORT              nObjMask;
+    ULONG              nObjMask;
 
-    nObjMask = ReadShortRes();
+    nObjMask = ReadLongRes();
 
     if ( nObjMask & RSC_TOOLBOX_BUTTONTYPE )
-        SetButtonType( (ButtonType)ReadShortRes() );
+        SetButtonType( (ButtonType)ReadLongRes() );
 
     if ( nObjMask & RSC_TOOLBOX_ALIGN )
-        SetAlign( (WindowAlign)ReadShortRes() );
+        SetAlign( (WindowAlign)ReadLongRes() );
 
     if ( nObjMask & RSC_TOOLBOX_LINECOUNT )
-        SetLineCount( ReadShortRes() );
+        SetLineCount( ReadLongRes() );
 
     if ( nObjMask & RSC_TOOLBOX_CUSTOMIZE )
     {
@@ -1826,10 +1826,10 @@ void ToolBox::ImplLoadRes( const ResId& rResId )
 
     if ( nObjMask & RSC_TOOLBOX_ITEMLIST )
     {
-        USHORT nEle = ReadShortRes();
+        ULONG nEle = ReadLongRes();
 
         // Item hinzufuegen
-        for ( USHORT i = 0; i < nEle; i++ )
+        for ( ULONG i = 0; i < nEle; i++ )
         {
             InsertItem( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
             IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
