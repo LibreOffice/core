@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-01-31 15:14:53 $
+ *  last change: $Author: dfoster $ $Date: 2003-02-12 14:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
+#include <com/sun/star/awt/XDialog.hpp>
+#include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>
+#include <drafts/com/sun/star/script/framework/storage/XScriptInfoAccess.hpp>
 #include "ScriptSecurityManager.hxx"
 #include <util/util.hxx>
 #include <util/scriptingconstants.hxx>
@@ -74,7 +77,11 @@ using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-//using namespace ::drafts::com::sun::star::script::framework;
+using namespace ::drafts::com::sun::star::script::framework;
+
+// is this in the utils?
+const char* const SCRIPTSTORAGEMANAGER_SERVICE =
+    "/singletons/drafts.com.sun.star.script.framework.storage.theScriptStorageManager";
 
 namespace scripting_securitymgr
 {
@@ -84,6 +91,9 @@ static OUString s_configProv = ::rtl::OUString::createFromAscii(
 
 static OUString s_configAccess = ::rtl::OUString::createFromAscii(
     "com.sun.star.configuration.ConfigurationAccess");
+
+static OUString s_securityDialog = ::rtl::OUString::createFromAscii(
+    "com.sun.star.script.framework.security.SecurityDialog");
 
 //*************************************************************************
 // ScriptSecurityManager Constructor
@@ -108,36 +118,98 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
 
     // we err on the side of caution!!
     newPerm.execPermission=sal_False;
-    switch( m_officeBasic )
+
+    Reference< XInterface > xInterface;
+    //need to check if storage has any scripts
+    Any a = m_xContext->getValueByName(
+            OUString::createFromAscii( SCRIPTSTORAGEMANAGER_SERVICE ) );
+    if ( sal_False == ( a >>= xInterface ) )
     {
-        case 0:         // never
-            break;
-        case 1:         // according to path list
-            {
-                // check path
-                rtl::OUString path = url.copy( 0, url.lastIndexOf( '/' ) );
-                for(int j=m_secureURL.getLength();j>0;j--)
+        throw RuntimeException(
+            OUSTR( "ScriptSecurityManager::addScriptStorage: could not obtain ScriptStorageManager singleton" ),
+        Reference< XInterface >() );
+    }
+    validateXRef( xInterface,
+        "ScriptSecurityManager::addScriptStorage: cannot get Storage service" );
+    Reference< storage::XScriptStorageManager > xScriptStorageManager(
+        xInterface, UNO_QUERY_THROW );
+    Reference< XInterface > xScriptStorage =
+        xScriptStorageManager->getScriptStorage( storageID );
+    validateXRef( xScriptStorage,
+      "ScriptNameResolverImpl::getStorageInstance: cannot get Script Storage service" );
+    Reference< storage::XScriptInfoAccess > xScriptInfoAccess =
+        Reference< storage::XScriptInfoAccess > ( xScriptStorage,
+        UNO_QUERY_THROW );
+    Sequence< ::rtl::OUString > logicalNames = xScriptInfoAccess->getScriptLogicalNames();
+    if( logicalNames.getLength() ) // we have some logical names
+    {
+        // get the serice manager from the context
+        Reference< lang::XMultiComponentFactory > xMgr = m_xContext->getServiceManager();
+        validateXRef( xMgr,
+            "ScriptSecurityManager::addScriptStorage: cannot get ServiceManager" );
+        switch( m_officeBasic )
+        {
+            case 0:         // never
+                break;
+            case 1:         // according to path list
                 {
-                    if( path.equals( m_secureURL[j-1] ) )
+                    // check path
+                    rtl::OUString path = url.copy( 0, url.lastIndexOf( '/' ) );
+                    for(int j=m_secureURL.getLength();j>0;j--)
+                    {
+                        if( path.equals( m_secureURL[j-1] ) )
+                        {
+                            if( m_warning == sal_True )
+                            {
+                                OUString dummyStr;
+                                short result = executeDialog( dummyStr );
+                                if ( result&1 == 1 )
+                                {
+                                    newPerm.execPermission=sal_True;
+                                }
+                            }
+                            else
+                            {
+                                newPerm.execPermission=sal_True;
+                            }
+                            break;
+                        }
+                    }
+                    if( m_confirmationRequired == sal_True )
+                    {
+                        short result = executeDialog( path );
+                        if ( result&1 == 1 )
+                        {
+                            newPerm.execPermission=sal_True;
+                        }
+                        if ( result&2 == 2 )
+                        {
+                            /* if checkbox clicked then need to add path to registry*/
+                        }
+                    }
+                    break;
+                }
+            case 2:         // always
+                if( m_warning == sal_True )
+                {
+                    OUString dummyStr;
+                    short result = executeDialog(  dummyStr );
+                    if ( result&1 == 1 )
                     {
                         newPerm.execPermission=sal_True;
-                        break;
                     }
                 }
-                // confirm dialog presumably only if this doc actually
-                // contains scripts???
+                else
+                {
+                    newPerm.execPermission=sal_True;
+                }
                 break;
-            }
-        case 2:         // always
-            // warning dialog presumably only if this doc actually
-            // contains scripts???
-            newPerm.execPermission=sal_True;
-            break;
-        default:
-            //
-            throw RuntimeException(
-                OUSTR( "ScriptSecurityManager::addScriptStorage got invalid OfficeBasic setting"),
-                Reference< XInterface > ());
+            default:
+                //
+                throw RuntimeException(
+                    OUSTR( "ScriptSecurityManager::addScriptStorage got invalid OfficeBasic setting"),
+                    Reference< XInterface > ());
+        }
     }
     if ( newPerm.execPermission == sal_True )
     {
@@ -151,6 +223,8 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
             ::rtl::OUStringToOString( url,
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer);
     }
+
+    /* need to clear out vector in case we've seen this doc before */
     ::std::vector< StoragePerm >::iterator iter;
     ::std::vector< StoragePerm >::iterator iterEnd =
         m_permissionSettings.end();
@@ -163,6 +237,26 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
     }
     m_permissionSettings.push_back(newPerm);
 }
+
+short ScriptSecurityManager::executeDialog( const OUString & path )
+{
+    Sequence < Any > aArgs;
+    if( path )
+    {
+        aArgs.realloc(1);
+        aArgs[ 0 ] <<= path;
+    }
+    Reference< lang::XMultiComponentFactory > xMgr = m_xContext->getServiceManager();
+    validateXRef( xMgr,
+        "ScriptSecurityManager::executeDialog: cannot get ServiceManager" );
+    Reference< XInterface > xInterface =
+        xMgr->createInstanceWithArgumentsAndContext( s_securityDialog,
+            aArgs, m_xContext );
+    validateXRef( xInterface, "ScriptSecurityManager::executeDialog: Can't create SecurityDialog" );
+    Reference< awt::XDialog > xDialog( xInterface, UNO_QUERY_THROW );
+    return xDialog->execute();
+}
+
 /**
  * checks to see whether the requested ScriptPeremission is allowed.
  * This was modelled after the Java AccessController, but at this time

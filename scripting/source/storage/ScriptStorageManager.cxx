@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.18 $
+*  $Revision: 1.19 $
 *
-*  last change: $Author: toconnor $ $Date: 2003-01-29 12:58:10 $
+*  last change: $Author: dfoster $ $Date: 2003-02-12 14:59:01 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -373,7 +373,8 @@ throw( RuntimeException )
 }
 
 //*************************************************************************
-sal_Bool ScriptStorageManager::checkPermission( const OUString &
+sal_Bool SAL_CALL
+ScriptStorageManager::checkPermission( const OUString &
 scriptStorageURI, const OUString & permissionRequest )
 throw ( css::uno::RuntimeException )
 {
