@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:09:02 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,12 +163,6 @@ sal_Bool makeValidTypeFile(const ::rtl::OString& targetFileName,
                            const ::rtl::OString& tmpFileName,
                            sal_Bool bFileCheck);
 sal_Bool removeTypeFile(const ::rtl::OString& fileName);
-
-const ::rtl::OString inGlobalSet(const ::rtl::OUString & r);
-inline const ::rtl::OString inGlobalSet(sal_Char* p)
-{
-    return inGlobalSet( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(p) ) );
-}
 
 ::rtl::OUString convertToFileUrl(const ::rtl::OString& fileName);
 
