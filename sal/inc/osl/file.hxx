@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hro $ $Date: 2001-11-30 16:51:30 $
+ *  last change: $Author: hro $ $Date: 2002-01-10 10:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,13 +174,13 @@ public:
         return (RC) osl_getCanonicalName( strRequested.pData, &strValid.pData );
     }
 
-    /** Converts a path relative to a given directory into an full qualified UNC path.
+    /** Converts a file URL relative to a given file directory URL into an full qualified URL.
 
-     @param strDirBase [in] Base directory to which the relative path is related to.
-     @param strRelative[in] Path of a file or directory relative to the directory path
+     @param strDirBase [in] Base directory URL to which the relative URL is related to.
+     @param strRelative[in] URL of a file or directory relative to the base directory URL
      specified by <code>strDirBase</code>.
-     @param strAbsolute [out] On success it receives the full qualified UNC path of the
-     requested relative path.
+     @param strAbsolute [out] On success it receives the full qualified URL of the
+     requested relative URL.
 
      @return E_None on success otherwise one of the following errorcodes:<p>
      E_INVAL        the format of the parameters was not valid<br>
@@ -207,15 +207,15 @@ public:
         return (RC) osl_getAbsoluteFileURL( strDirBase.pData, strRelative.pData, &strAbsolute.pData );
     }
 
-    /** Converts a File URL into a full qualified UNC path
+    /** Converts a file URL into a full qualified system path
 
      @param urlPath[in] System dependent path of a file or a directory
-     @param strPath[out] On success it receives the full qualified UNC path
+     @param strPath[out] On success it receives the full qualified system path
 
      @return E_None on success otherwise one of the following errorcodes:<p>
      E_INVAL        the format of the parameters was not valid<br>
 
-     @see   normalizePath
+     @see   getFileURLFromSystemPath
     */
 
     static inline RC getSystemPathFromFileURL( const ::rtl::OUString& strFileURL, ::rtl::OUString& strSystemPath )
@@ -223,16 +223,15 @@ public:
         return (RC) osl_getSystemPathFromFileURL( strFileURL.pData, &strSystemPath.pData );
     }
 
-    /** Converts a full qualified UNC path into a FileURL
+    /** Converts a full qualified system path into a file URL
 
      @param dir[in] System dependent path of a file or a directory
-     @param strPath[out] On success it receives the full qualified UNC path
+     @param strPath[out] On success it receives the full qualified file URL
 
      @return E_None on success otherwise one of the following errorcodes:<p>
      E_INVAL        the format of the parameters was not valid<br>
 
-     @see   normalizePath
-     @see   getNormalizedPathFromFileURL
+     @see   getSystemPathFromFileURL
     */
 
     static inline RC getFileURLFromSystemPath( const ::rtl::OUString& strSystemPath, ::rtl::OUString& strFileURL )
@@ -240,20 +239,23 @@ public:
         return (RC) osl_getFileURLFromSystemPath( strSystemPath.pData, &strFileURL.pData );
     }
 
-    /** Searches a full qualified UNC-Path/File
+    /** Searches a full qualified system path / file URL
 
-     @param filePath[in] System dependent path / Normalized Path / File-URL or file or relative directory
+     @param filePath[in] System dependent path / file URL or file or relative directory
      @param searchPath[in] Paths, in which a given file has to be searched. These paths are only for the search of a
      file or a relative path, otherwise it will be ignored. If it is set to NULL or while using the
      search path the search failed the function searches for a matching file in all system directories and in the directories
-     listed in the PATH environment variable
-     @param strPath[out] On success it receives the full qualified UNC path
+     listed in the PATH environment variable. Path list has to be in common system path list notation. F.e. on UNIX systems
+     "/bin:/usr/bin" or on Windows "C:\BIN;C:\BATCH".
+     @param strPath[out] On success it receives the full qualified file URL
 
      @return E_None on success otherwise one of the following errorcodes:<p>
      E_INVAL        the format of the parameters was not valid<br>
      E_NOTDIR       Not a directory<br>
      E_NOENT        No such file or directory not found<br>
-     @see   normalizePath
+
+     @see   getFileURLFromSystemPath
+     @see   getAbsoluteFileURL
     */
 
     static inline RC searchFileURL( const ::rtl::OUString& strFileName, const ::rtl::OUString& strSystemSearchPath, ::rtl::OUString& strFileURL )
@@ -329,11 +331,6 @@ public:
 
 // -----------------------------------------------------------------------------
 
-/** The VolumeInfo class
-
-    @see Directory::getVolumeInfo
-*/
-
 #define VolumeInfoMask_Attributes     osl_VolumeInfo_Mask_Attributes
 #define VolumeInfoMask_TotalSpace     osl_VolumeInfo_Mask_TotalSpace
 #define VolumeInfoMask_UsedSpace      osl_VolumeInfo_Mask_UsedSpace
@@ -343,6 +340,12 @@ public:
 #define VolumeInfoMask_FileSystemName osl_VolumeInfo_Mask_FileSystemName
 
 class Directory;
+
+/** The VolumeInfo class
+
+    @see Directory::getVolumeInfo
+*/
+
 
 class VolumeInfo
 {
@@ -396,7 +399,7 @@ public:
 
     inline sal_Bool getRemoteFlag() const
     {
-        return (sal_Bool) (_aInfo.uAttributes & osl_Volume_Attribute_Remote);
+        return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_Remote);
     }
 
     /** @return sal_True if attributes are valid and the volume is removable,
@@ -405,7 +408,7 @@ public:
 
     inline sal_Bool getRemoveableFlag() const
     {
-        return (sal_Bool) (_aInfo.uAttributes & osl_Volume_Attribute_Removeable);
+        return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_Removeable);
     }
 
     /** @return sal_True if attributes are valid and the volume is a CDROM,
@@ -414,7 +417,7 @@ public:
 
     inline sal_Bool getCompactDiscFlag() const
     {
-        return (sal_Bool) (_aInfo.uAttributes & osl_Volume_Attribute_CompactDisc);
+        return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_CompactDisc);
     }
 
     /** @return sal_True if attributes are valid and the volume is a floppy disk,
@@ -423,7 +426,7 @@ public:
 
     inline sal_Bool getFloppyDiskFlag() const
     {
-        return (sal_Bool) (_aInfo.uAttributes & osl_Volume_Attribute_FloppyDisk);
+        return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_FloppyDisk);
     }
 
     /** @return sal_True if attributes are valid and the volume is a fixed disk,
@@ -432,7 +435,7 @@ public:
 
     inline sal_Bool getFixedDiskFlag() const
     {
-        return (sal_Bool) (_aInfo.uAttributes & osl_Volume_Attribute_FixedDisk);
+        return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_FixedDisk);
     }
 
     /** @return sal_True if attributes are valid and the volume is a RAM disk,
@@ -441,7 +444,7 @@ public:
 
     inline sal_Bool getRAMDiskFlag() const
     {
-        return (sal_Bool) (_aInfo.uAttributes & osl_Volume_Attribute_RAMDisk);
+        return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_RAMDisk);
     }
 
     /** @return the total diskspace of this volume if this information is valid,
@@ -513,11 +516,6 @@ public:
 
 // -----------------------------------------------------------------------------
 
-/** The FileStatus class
-
-    @see DirectoryItem::getFileStatus
-*/
-
 #define FileStatusMask_Type             osl_FileStatus_Mask_Type
 #define FileStatusMask_Attributes       osl_FileStatus_Mask_Attributes
 #define FileStatusMask_CreationTime     osl_FileStatus_Mask_CreationTime
@@ -544,6 +542,12 @@ public:
 #define Attribute_OthExe       osl_File_Attribute_OthExe
 
 class DirectoryItem;
+
+/** The FileStatus class
+
+    @see DirectoryItem::getFileStatus
+*/
+
 
 class FileStatus
 {
@@ -722,6 +726,10 @@ public:
         close();
     }
 
+    #define OpenFlag_Read   osl_File_OpenFlag_Read
+    #define OpenFlag_Write  osl_File_OpenFlag_Write
+    #define OpenFlag_Create osl_File_OpenFlag_Create
+
     /** Opens a file.
      @param uFlags [in] Specifies the open mode.
      @return E_None on success otherwise one of the following errorcodes:<p>
@@ -761,10 +769,6 @@ public:
      @see   setSize
     */
 
-    #define OpenFlag_Read   osl_File_OpenFlag_Read
-    #define OpenFlag_Write  osl_File_OpenFlag_Write
-    #define OpenFlag_Create osl_File_OpenFlag_Create
-
     inline RC open( sal_uInt32 uFlags )
     {
         return (RC) osl_openFile( _aPath.pData, &_pData, uFlags );
@@ -797,6 +801,10 @@ public:
     }
 
 
+    #define Pos_Absolut osl_Pos_Absolut
+    #define Pos_Current osl_Pos_Current
+    #define Pos_End     osl_Pos_End
+
     /** Sets the internal position pointer of an open file.
      @param uHow [in] Distance to move the internal position pointer (from uPos).
      @param uPos [in] Absolute position from the beginning of the file.
@@ -808,10 +816,6 @@ public:
      @see    open
      @see    getPos
     */
-
-    #define Pos_Absolut osl_Pos_Absolut
-    #define Pos_Current osl_Pos_Current
-    #define Pos_End     osl_Pos_End
 
     inline RC setPos( sal_uInt32 uHow, sal_Int64 uPos )
     {
