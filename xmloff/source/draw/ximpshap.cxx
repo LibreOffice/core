@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:53:12 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
 #endif
 
 #ifndef _XEXPTRANSFORM_HXX
@@ -283,7 +286,7 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext * pContext = NULL;
 
-    if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENTS ) )
+    if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
         pContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
     }
@@ -659,6 +662,9 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
 
                             if( XML_STYLE_FAMILY_SD_PRESENTATION_ID == mnStyleFamily )
                             {
+                                aStyleName = GetImport().GetStyleDisplayName(
+                                    XML_STYLE_FAMILY_SD_PRESENTATION_ID,
+                                    aStyleName );
                                 sal_Int32 nPos = aStyleName.lastIndexOf( sal_Unicode('-') );
                                 if( -1 != nPos )
                                 {
@@ -670,8 +676,11 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                             }
                             else
                             {
-                                    // get graphics familie
-                                    xFamilies->getByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) ) ) >>= xFamily;
+                                // get graphics familie
+                                xFamilies->getByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) ) ) >>= xFamily;
+                                aStyleName = GetImport().GetStyleDisplayName(
+                                    XML_STYLE_FAMILY_SD_GRAPHICS_ID,
+                                    aStyleName );
                             }
 
                             if( xFamily.is() )
@@ -1455,7 +1464,7 @@ void SdXMLTextBoxShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)
 {
     // create textbox shape
     sal_Bool bIsPresShape = sal_False;
@@ -1583,7 +1592,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             }
         }
 
-        SdXMLShapeContext::StartElement(xAttrList);
+        SdXMLShapeContext::StartElement(mxAttrList);
     }
 }
 
@@ -1613,9 +1622,9 @@ SdXMLControlShapeContext::~SdXMLControlShapeContext()
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLControlShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
 {
-    if( XML_NAMESPACE_FORM == nPrefix )
+    if( XML_NAMESPACE_DRAW == nPrefix )
     {
-        if( IsXMLToken( rLocalName, XML_ID ) )
+        if( IsXMLToken( rLocalName, XML_CONTROL ) )
         {
             maFormId = rValue;
             return;
@@ -2166,7 +2175,7 @@ void SdXMLGraphicObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& )
 {
     // create graphic object shape
     char *pService;
@@ -2228,7 +2237,7 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
         // set pos, size, shear and rotate
         SetTransformation();
 
-        SdXMLShapeContext::StartElement(xAttrList);
+        SdXMLShapeContext::StartElement(mxAttrList);
     }
 }
 
@@ -2433,7 +2442,7 @@ SdXMLObjectShapeContext::~SdXMLObjectShapeContext()
 {
 }
 
-void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& )
 {
     // #96717# in theorie, if we don't have a url we shouldn't even
     // export this ole shape. But practical its to risky right now
@@ -2622,7 +2631,7 @@ SdXMLAppletShapeContext::~SdXMLAppletShapeContext()
 {
 }
 
-void SdXMLAppletShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+void SdXMLAppletShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& )
 {
     char* pService = "com.sun.star.drawing.AppletShape";
     AddShape( pService );
@@ -2776,7 +2785,7 @@ SdXMLPluginShapeContext::~SdXMLPluginShapeContext()
 {
 }
 
-void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& )
 {
     char* pService = "com.sun.star.drawing.PluginShape";
     AddShape( pService );
@@ -2893,9 +2902,9 @@ SvXMLImportContext * SdXMLPluginShapeContext::CreateChildContext( USHORT nPrefix
 
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( SdXMLFrameShapeContext, SdXMLShapeContext );
+TYPEINIT1( SdXMLFloatingFrameShapeContext, SdXMLShapeContext );
 
-SdXMLFrameShapeContext::SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+SdXMLFloatingFrameShapeContext::SdXMLFloatingFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes)
@@ -2903,11 +2912,11 @@ SdXMLFrameShapeContext::SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16
 {
 }
 
-SdXMLFrameShapeContext::~SdXMLFrameShapeContext()
+SdXMLFloatingFrameShapeContext::~SdXMLFloatingFrameShapeContext()
 {
 }
 
-void SdXMLFrameShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+void SdXMLFloatingFrameShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& )
 {
     char* pService = "com.sun.star.drawing.FrameShape";
     AddShape( pService );
@@ -2944,7 +2953,7 @@ void SdXMLFrameShapeContext::StartElement( const ::com::sun::star::uno::Referenc
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-void SdXMLFrameShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+void SdXMLFloatingFrameShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
 {
     switch( nPrefix )
     {
@@ -2967,10 +2976,76 @@ void SdXMLFrameShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-void SdXMLFrameShapeContext::EndElement()
+void SdXMLFloatingFrameShapeContext::EndElement()
 {
     SetThumbnail();
     SdXMLShapeContext::EndElement();
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+TYPEINIT1( SdXMLFrameShapeContext, SdXMLShapeContext );
+
+SdXMLFrameShapeContext::SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes)
+: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+{
+    uno::Reference < util::XCloneable > xClone( xAttrList, uno::UNO_QUERY );
+    if( xClone.is() )
+        mxAttrList.set( xClone->createClone(), uno::UNO_QUERY );
+    else
+        mxAttrList = new SvXMLAttributeList( xAttrList );
+
+}
+
+SdXMLFrameShapeContext::~SdXMLFrameShapeContext()
+{
+}
+
+SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( USHORT nPrefix,
+    const OUString& rLocalName,
+    const uno::Reference< xml::sax::XAttributeList>& xAttrList )
+{
+    SvXMLImportContext * pContext = 0;
+
+    if( !mxImplContext.Is() )
+    {
+        pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
+                        GetImport(), nPrefix, rLocalName, xAttrList, mxShapes, mxAttrList );
+    }
+    else if( (nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) ) ||
+             (nPrefix == XML_NAMESPACE_DRAW && (IsXMLToken( rLocalName, XML_GLUE_POINT ) ||
+                                                IsXMLToken( rLocalName, XML_THUMBNAIL ) ) ) )
+    {
+        SvXMLImportContext *pImplContext = &mxImplContext;
+        pContext = PTR_CAST( SdXMLShapeContext, pImplContext )->CreateChildContext( nPrefix,
+                                                                        rLocalName, xAttrList );
+    }
+
+    // call parent for content
+    if(!pContext)
+        pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+
+    return pContext;
+}
+
+void SdXMLFrameShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)
+{
+    // ignore
+}
+
+void SdXMLFrameShapeContext::EndElement()
+{
+    mxImplContext = 0;
+    SdXMLShapeContext::EndElement();
+}
+
+void SdXMLFrameShapeContext::processAttribute( sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    // ignore
 }
 
 TYPEINIT1( SdXMLCustomShapeContext, SdXMLShapeContext );
