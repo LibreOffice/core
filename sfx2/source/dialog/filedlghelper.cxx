@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-18 13:29:12 $
+ *  last change: $Author: cd $ $Date: 2002-10-18 13:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -950,6 +950,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent, const s
 
     mpMatcher = NULL;
     mpGraphicFilter = NULL;
+    mnPostUserEventId = 0;
 
     mxFileDlg = Reference < XFilePicker > ( xFactory->createInstance( aService ), UNO_QUERY );
     mbSystemPicker = lcl_isSystemFilePicker( mxFileDlg );
@@ -1077,6 +1078,11 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent, const s
 // ------------------------------------------------------------------------
 FileDialogHelper_Impl::~FileDialogHelper_Impl()
 {
+    // Remove user event if we haven't received it yet
+    if ( mnPostUserEventId )
+        Application::RemoveUserEvent( mnPostUserEventId );
+    mnPostUserEventId = 0;
+
     delete mpGraphicFilter;
 
     if ( mbDeleteMatcher )
@@ -1181,6 +1187,7 @@ void FileDialogHelper_Impl::setDialogHelpId( const sal_Int32 _nHelpId )
 // ------------------------------------------------------------------------
 IMPL_LINK( FileDialogHelper_Impl, InitControls, void*, NOTINTERESTEDIN )
 {
+    mnPostUserEventId = 0;
     enablePasswordBox( sal_True );
     updateFilterOptionsBox( );
     updateSelectionBox( );
@@ -1197,7 +1204,7 @@ void FileDialogHelper_Impl::preExecute()
 
     // allow for dialog implementations which need to be executed before they return valid values for
     // current filter and such
-    Application::PostUserEvent( LINK( this, FileDialogHelper_Impl, InitControls ) );
+    mnPostUserEventId = Application::PostUserEvent( LINK( this, FileDialogHelper_Impl, InitControls ) );
 }
 
 // ------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlgimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-15 11:12:35 $
+ *  last change: $Author: cd $ $Date: 2002-10-18 13:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,8 @@ namespace sfx2
 
         SfxFilterFlags              m_nMustFlags;
         SfxFilterFlags              m_nDontFlags;
+
+        ULONG                       mnPostUserEventId;
 
         ErrCode                     mnError;
 
