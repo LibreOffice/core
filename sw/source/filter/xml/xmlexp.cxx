@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-09 13:15:58 $
+ *  last change: $Author: dvo $ $Date: 2001-02-13 17:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,6 +348,24 @@ sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
         aAny.setValue(&bTmp, ::getBooleanCppuType());
         xPropSet->setPropertyValue(sShowChanges, aAny);
     }
+
+    // adjust document class (pClass)
+    if (pDoc->IsGlobalDoc())
+    {
+        pClass = sXML_text_global;
+
+        // additionally, we take care of the save-linked-sections-thingy
+        bSaveLinkedSections = pDoc->IsGlblDocSaveLinks();
+    }
+    else if (pDoc->IsLabelDoc())
+    {
+        pClass = sXML_label;
+    }
+    else if (pDoc->IsHTMLMode())
+    {
+        pClass = sXML_html;
+    }
+    // else: keep default pClass that we received
 
     sal_uInt32 nRet = SvXMLExport::exportDoc( pClass );
 

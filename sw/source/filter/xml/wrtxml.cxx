@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 15:41:55 $
+ *  last change: $Author: dvo $ $Date: 2001-02-13 17:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,73 @@ __EXPORT SwXMLWriter::~SwXMLWriter()
 {
 }
 
+sal_uInt32 WriteThroughComponent(
+    SvStorage* pStorage,
+    Reference<XComponent> xComponent,
+    const sal_Char* pStreamName,
+    Reference<lang::XMultiServiceFactory> & rFactory,
+    const sal_Char* pComponentName,
+    const Sequence<Any> & rArguments,
+    const Sequence<beans::PropertyValue> & rMediaDesc)
+{
+    ASSERT(NULL != pStorage, "Need storage!");
+    ASSERT(xComponent.is(), "Need component!");
+    ASSERT(NULL != pStreamName, "Need stream name!");
+    ASSERT(NULL != pComponentName, "Need component name!");
+    ASSERT(rMediaDesc.getLength() > 0, "Need media descriptor");
+
+    Reference< io::XOutputStream > xOutputStream;
+    SvStorageStreamRef xDocStream;
+
+    // open stream, etc.
+    OUString sStreamName = OUString::createFromAscii(pStreamName);
+    xDocStream = pStorage->OpenStream( sStreamName,
+                                       STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+    xDocStream->SetBufferSize( 16*1024 );
+    xOutputStream = new utl::OOutputStreamWrapper( *xDocStream );
+
+    // get component
+    Reference< io::XActiveDataSource > xSaxWriter(
+        rFactory->createInstance(
+            OUString::createFromAscii("com.sun.star.xml.sax.Writer") ),
+        UNO_QUERY );
+    ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
+    if(!xSaxWriter.is())
+        return ERR_SWG_WRITE_ERROR;
+
+    // connect XML writer to output stream
+    xSaxWriter->setOutputStream( xOutputStream );
+
+    // prepare arguments (prepend doc handler to given arguments)
+    Reference<xml::sax::XDocumentHandler> xDocHandler( xSaxWriter,UNO_QUERY);
+    Sequence<Any> aArgs( 1 + rArguments.getLength() );
+    aArgs[0] <<= xDocHandler;
+    for(sal_Int32 i = 0; i < rArguments.getLength(); i++)
+        aArgs[i+1] = rArguments[i];
+
+    // get filter component
+    Reference< document::XExporter > xExporter(
+        rFactory->createInstanceWithArguments(
+            OUString::createFromAscii(pComponentName), aArgs), UNO_QUERY);
+    ASSERT( xExporter.is(),
+            "can't instantiate export filter component" );
+    if( !xExporter.is() )
+        return ERR_SWG_WRITE_ERROR;
+
+    // connect model and filter
+    xExporter->setSourceDocument( xComponent );
+
+    // filter!
+    Reference < XFilter > xFilter( xExporter, UNO_QUERY );
+    xFilter->filter( rMediaDesc );
+
+    // finally, commit stream.
+    if( xDocStream.Is() )
+        xDocStream->Commit();
+
+    return 0;
+}
+
 sal_uInt32 SwXMLWriter::_Write()
 {
     // Get service factory
@@ -239,52 +306,21 @@ sal_uInt32 SwXMLWriter::_Write()
     if( xDocStream.Is() )
         xDocStream->Commit();
 
-    // export auto text events (needs package + model)
-    if ( bBlock && (NULL != pStg) )
+    // export sub streams for: auto text events, meta data
+    Sequence < Any > aEmptyArgs( 0 );
+    if (NULL != pStg)
     {
-        Reference< io::XOutputStream > xATEOut;
-        SvStorageStreamRef xATEDocStream;
+        // export auto text events (if in block mode)
+        if ( bBlock  )
+            WriteThroughComponent(
+                pStg, xModelComp, "AutoTextEvents.xml", xServiceFactory,
+                "com.sun.star.office.sax.exporter.AutoTextEventWriter",
+                aEmptyArgs, aProps );
 
-        // open stream, etc.
-        OUString sATEName(
-            RTL_CONSTASCII_USTRINGPARAM( "AutoTextEvents.xml" ) );
-        xATEDocStream = pStg->OpenStream( sATEName,
-                                  STREAM_WRITE | STREAM_SHARE_DENYWRITE );
-        xATEDocStream->SetBufferSize( 16*1024 );
-        xATEOut = new utl::OOutputStreamWrapper( *xATEDocStream );
-
-        // get XML writer
-        Reference< io::XActiveDataSource > xATEWriter(
-            xServiceFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.xml.sax.Writer") ),
-            UNO_QUERY );
-        ASSERT( xATEWriter.is(), "can't instantiate XML writer" );
-        if(!xATEWriter.is())
-            return ERR_SWG_WRITE_ERROR;
-
-        // connect XML writer to output stream
-        xATEWriter->setOutputStream( xATEOut );
-
-        // get filter
-        Reference< xml::sax::XDocumentHandler > xATEHandler(xATEWriter,UNO_QUERY);
-        Sequence < Any > aArgs( 1 );
-        aArgs[0] <<= xATEHandler;
-        Reference< document::XExporter > xATEExporter(
-            xServiceFactory->createInstanceWithArguments(
-                OUString::createFromAscii("com.sun.star.office.sax.exporter.AutoTextEventWriter"), aArgs ), UNO_QUERY );
-        ASSERT( xATEExporter.is(),
-                "XMLReader::Read: can't instantiate auto text event Writer" );
-        if( !xATEExporter.is() )
-            return ERR_SWG_WRITE_ERROR;
-
-        // connect model and filter (same model, different filter)
-        xATEExporter->setSourceDocument( xModelComp );
-
-        Reference < XFilter > xATEFilter( xATEExporter, UNO_QUERY );
-        xATEFilter->filter( aProps );
-
-        if( xATEDocStream.Is() )
-            xATEDocStream->Commit();
+        WriteThroughComponent(
+            pStg, xModelComp, "Meta.xml", xServiceFactory,
+            "com.sun.star.office.sax.exporter.MetaInformation",
+            aEmptyArgs, aProps );
     }
 
     if( pGraphicHelper )
@@ -333,11 +369,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.15 2001-02-06 15:41:55 dvo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.16 2001-02-13 17:54:54 dvo Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.15  2001/02/06 15:41:55  dvo
+      - added: auto text event ex- and import
+
       Revision 1.14  2001/01/26 11:22:48  mib
       ole objects continued
 
