@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2002-09-17 13:16:15 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 16:23:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ QueryBox MSG_CONFIRM_FILTER
     Message[ korean ] = "외부 서식을 저장할 때 \n 정보가 손실될 수도 있습니다. 그래도 닫으시겠습니까?";
     Message[ turkish ] = "Yabanc� formatla kaydederken verin\nkayb� olu�mu� olabilir. Yine de kapatmak istiyor musunuz?";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Al guardar en formatos extra�os podr�a haberse provocado una p�rdida\nde informaci�n. �Desea cerrar de todas formas?";
+    Message[ catalan ] = "Al desar en formats estranys es podria haver provocat una p�rdua\nd'informaci�. Voleu tancar de totes maneres?";
     Message[ thai ] = "กำลังบันทึกในรูปแบบภายนอกที่อาจมีผลต่อ\n การสูญหายของข้อมูล  คุณยังต้องการปิดอยู่หรือไม่?";
 };
 QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
@@ -126,7 +126,7 @@ QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
     Message[ korean ] = "이 이름을 가진 템플릿이 이미 존재합니다.\n덮어쓰겠습니까?";
     Message[ turkish ] = "Ayn� ad� ta��yan bir �ablon zaten mevcut.\nBu �ablonun �zerine yaz�ls�n m�?";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Ya existe una plantilla con este nombre.\n�Desea sobrescribirla?";
+    Message[ catalan ] = "Ja existeix una plantilla amb aquest nom.\nVoleu sobrescriure-la?";
     Message[ thai ] = "ชื่อถูกใช้อยู่\nคุณต้องการเขียนทับเอกสารแม่แบบหรือไม่?";
 };
 QueryBox MSG_QUERY_LOAD_TEMPLATE
@@ -144,11 +144,11 @@ QueryBox MSG_QUERY_LOAD_TEMPLATE
     MESSAGE[ french ] = "Les styles de format utilis�s dans ce document ne concordent pas avec les styles actifs.\nSouhaitez-vous appliquer les styles actifs dans ce document ?";
     MESSAGE[ spanish ] = "Los estilos de este documento no coinciden con sus estilos actuales.\n�Desea aplicar sus estilos actuales a este documento?";
     MESSAGE[ italian ] = "I modelli del documento non corrispondono ai modelli attuali.\nApplicare i modelli attuali al documento?";
-    MESSAGE[ danish ] = "Dette dokuments formattypografi svarer ikke til din aktuelle skabelon. Skal den aktuelle skabelon anvendes p� dette dokument?";
+    MESSAGE[ danish ] = "Formatskabelonerne i dette dokument svarer ikke til de aktuelle typografier. Skal de aktuelle skabeloner anvendes p� dette dokument?";
     MESSAGE[ swedish ] = "Formatmallarna i det h�r dokumentet st�mmer inte �verens med dina aktuella mallar. Ska dina aktuella mallar anv�ndas i det h�r dokumentet?";
     MESSAGE[ polish ] = "Style u�yte w tym dokumencie nie zgadzaj� si� z aktualnymi stylami.\nCzy zastosowa� w dokumencie aktualne style?";
     MESSAGE[ portuguese_brazilian ] = "O modelo do documento foi modificado.\nDeseja atualizar o modelo no documento?";
-    MESSAGE[ japanese ] = "このドキュメントの書式スタイルは現在のスタイルと一致しません。\n現在のスタイルをこのドキュメントに適用しますか。";
+    MESSAGE[ japanese ] = "このドキュメントの書式スタイルは現在のスタイルと一致していません。\n現在のスタイルをこのドキュメントに適用しますか。";
     MESSAGE[ chinese_simplified ] = "这个文档的格式样式已经被更改。\n要用当前的新样式来改写这个文档？";
     MESSAGE[ chinese_traditional ] = "這個檔案樣式已經變更。\n您要更新這個樣式？";
     MESSAGE[ arabic ] = "�� ������ ����� ����� ��� ������� �� ������� ������� ������ ��. �� ���� ����� ������� ������� ������ �� ��� ��� ������Ͽ";
@@ -158,7 +158,7 @@ QueryBox MSG_QUERY_LOAD_TEMPLATE
     MESSAGE[ korean ] = "이 문서의 서식 템플릿은 현재 템플릿과 일치하지 않습니다. 현재 템플릿을 이 문서에 적용하겠습니까?";
     MESSAGE[ turkish ] = "Bu belgenin bi�imleri, y�r�rl�kteki bi�imlerle �rt��m�yor. Y�r�rl�kteki bi�imler bu belgenize uygulans�n m�?";
     MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ catalan ] = "Los estilos de este documento no coinciden con sus estilos actuales.\n�Desea aplicar sus estilos actuales a este documento?";
+    MESSAGE[ catalan ] = "Els estils en aquest document no coincideixen amb els vostres estils actuals. S'haurien d'aplicar els vostres estils actuals en aquest document?";
     MESSAGE[ finnish ] = "Asiakirjan tyylit eiv�t vastaa nykyisi� tyylej�. K�ytet��nk� nykyisi� tyylej� asiakirjassa?";
     MESSAGE[ thai ] = "ลักษณะในเอกสารนี้ไม่ตรงกับลักษณะปัจจุบันของคุณ  ต้องการใช้ลักษณะปัจจุบันไปที่เอกสารนี้หรือไม่?";
 };
@@ -178,7 +178,7 @@ String STR_DELETE_REGION
     Text[ chinese_simplified ] = "要删除区域 $1 ？";
     Text[ russian ] = "������� ������� \"$1\"?";
     Text[ polish ] = "Czy usun�� obszar \"$1\"?";
-    Text[ japanese ] = "範囲\"$1\"を削除しますか?";
+    Text[ japanese ] = "グループ「$1」を削除しますか?";
     Text[ chinese_traditional ] = "要刪除這個區域 $1？";
     Text[ arabic ] = "�� ���� ������ ��� ������ \"$1\"�";
     Text[ dutch ] = "Wilt u het bereik \"$1\" wissen?";
@@ -187,7 +187,7 @@ String STR_DELETE_REGION
     Text[ korean ] = "영역\"$1\"을(를）삭제하겠습니까?";
     Text[ turkish ] = "\"$1\" b�l�m� silinsin mi?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "�Desea eliminar el �rea \"$1\"?";
+    Text[ catalan ] = "Voleu eliminar l'�rea \"$1\"?";
     Text[ finnish ] = "Haluatko varmasti poistaa alueen $1?";
     Text[ thai ] = "คุณแน่ใจหรือไม่ที่จะลบบริเวณ \"$1\"?";
 };
@@ -207,7 +207,7 @@ String STR_DELETE_TEMPLATE
     Text[ chinese_simplified ] = "要删除条目 $1 ？";
     Text[ russian ] = "������� ������ \"$1\"?";
     Text[ polish ] = "Usun�� wpis \"$1\"?";
-    Text[ japanese ] = "入力項目\"$1\"を削除しますか?";
+    Text[ japanese ] = "テンプレート「$1」を削除しますか?";
     Text[ chinese_traditional ] = "要刪除這個項目 $1 ？";
     Text[ arabic ] = "�� ���� ������ ��� ������� \"$1\"�";
     Text[ dutch ] = "Wilt u item \"$1\" wissen?";
@@ -216,7 +216,7 @@ String STR_DELETE_TEMPLATE
     Text[ korean ] = "항목\"$1\"을(를）삭제하겠습니까?";
     Text[ turkish ] = "\"$1\" giri�i silinsin mi?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "�Desea eliminar la entrada \"$1\"?";
+    Text[ catalan ] = "Esteu segur que voleu suprimir l'entrada \"$1\"?";
     Text[ finnish ] = "Haluatko varmasti poistaa merkinn�n $1?";
     Text[ thai ] = "คุณแน่ใจหรือไม่ที่ต้องการจะลบรายการ \"$1\"?";
 };
@@ -249,7 +249,7 @@ QueryBox MSG_REGION_NOTEMPTY
     Message[ korean ] = "영역이 비어 있지 않습니다.\n그래도 삭제하겠습니까?";
     Message[ turkish ] = "Kategori bo� de�il.\nYine de silinsin mi?";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "El �rea no est� vac�a.\n�Desea eliminarla de todas formas?";
+    Message[ catalan ] = "Aquesta �rea no est� buida.\nVoleu eliminar-la de totes maneres?";
     Message[ thai ] = "ประเภทไม่ว่าง \nลบหรือไม่?";
 };
 String STR_QUERY_SAVE_DOCUMENT
@@ -278,7 +278,7 @@ String STR_QUERY_SAVE_DOCUMENT
     Text[ greek ] = "�� ������ '$(DOC)' �������������.\n������ �� ������������ �� �������;";
     Text[ korean ] = "문서'$(DOC)'이(가) 변경되었습니다.\n변경 사항을 저장하겠습니까?";
     Text[ turkish ] = "Belge \"$(DOC)\" de�i�tirildi.\nDe�i�iklikler kaydedilsin mi?";
-    Text[ catalan ] = "El documento \"$(DOC)\" ha sido modificado.\n�Desea guardar las modificaciones?";
+    Text[ catalan ] = "El document \"$(DOC)\" ha estat modificat.\nVoleu desar els canvis?";
     Text[ thai ] = "ดัดแปลงแก้ไขเอกสาร \"$(DOC)\" แล้ว\nคุณต้องการบันทึกการเปลี่ยนแปลงหรือไม่?";
 };
 Bitmap BMP_STYLES_CLOSED { File = "newex.bmp" ; };
@@ -314,7 +314,7 @@ String STR_STYLES
     Text[ korean ] = "템플릿";
     Text[ turkish ] = "Bi�imler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Estilos";
+    Text[ catalan ] = "Estils";
     Text[ thai ] = "ลักษณะ";
 };
 String STR_MACROS
@@ -374,7 +374,7 @@ String STR_CONFIG
     Text[ korean ] = "구성";
     Text[ turkish ] = "Konfig�rasyon";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Configuraci�n";
+    Text[ catalan ] = "Configuraci�";
     Text[ thai ] = "โครงแบบ";
 };
 String STR_PRINT_STYLES_HEADER
@@ -404,7 +404,7 @@ String STR_PRINT_STYLES_HEADER
     Text[ korean ] = "서식 문서";
     Text[ turkish ] = "Bi�imler: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Estilos en  ";
+    Text[ catalan ] = "Estils a ";
     Text[ thai ] = "ลักษณะใน ";
 };
 String STR_PRINT_STYLES
@@ -434,7 +434,7 @@ String STR_PRINT_STYLES
     Text[ korean ] = "서식 템플릿 인쇄 출력";
     Text[ turkish ] = "Bi�imler yazd�r�l�yor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imprimiento estilos de impresi�n";
+    Text[ catalan ] = "S'estan imprimint els estils";
     Text[ thai ] = "ลักษณะการพิมพ์";
 };
 Bitmap BMP_STYLES_FAMILY1 { File = "styfam1.bmp" ; };
@@ -476,7 +476,7 @@ ErrorBox MSG_PRINT_ERROR
     Message[ korean ] = "인쇄과정을 시작하지 못했습니다.";
     Message[ turkish ] = "Yazd�rma i�lemi ba�lat�lamad�.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "No se pudo inicializar la impresi�n.";
+    Message[ catalan ] = "No s'ha pogut iniciar la impressi�.";
     Message[ thai ] = "ไม่สามารถเริ่มงานพิมพ์";
 };
 String STR_BACKUP_COPY
@@ -538,7 +538,7 @@ WarningBox MSG_WARNING_BACKUP
     Message[ korean ] = "백업 복사를 하지 못했습니다.";
     Message[ turkish ] = "Yedekleme kopyas� olu�turulamad�.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "No se pudo crear la copia de seguridad.";
+    Message[ catalan ] = "No s'ha pogut crear la c�pia de seguretat.";
     Message[ thai ] = "ไม่สามารถสร้างสำเนาสำรองได้";
 };
 InfoBox MSG_CANT_OPEN_TEMPLATE
@@ -568,7 +568,7 @@ InfoBox MSG_CANT_OPEN_TEMPLATE
     Message[ korean ] = "문서 템플릿을 열지 못했습니다.";
     Message[ turkish ] = "Belge �ablonu a��lam�yor.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "No se puede abrir la plantilla del documento.";
+    Message[ catalan ] = "No s'ha pogut obrir la plantilla.";
     Message[ thai ] = "ไม่สามารถเปิดแม่แบบ";
 };
 InfoBox MSG_VIEW_OPEN_CANT_SAVE
@@ -600,7 +600,7 @@ InfoBox MSG_VIEW_OPEN_CANT_SAVE
     MESSAGE[ korean ] = "문서가 편집을 위해 이미 열려 있습니다.";
     MESSAGE[ turkish ] = "Belge zaten d�zenlenmek �zere a��ld�.";
     MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ catalan ] = "Este documento ya est� abierto para editar.";
+    MESSAGE[ catalan ] = "Aquest document ja est� obert per editar.";
     MESSAGE[ thai ] = "เปิดเอกสารสำหรับการแก้ไขแล้ว";
 };
 String STR_ERROR_SAVE
@@ -630,7 +630,7 @@ String STR_ERROR_SAVE
     Text[ korean ] = "문서 쓰기에서 오류 발생. ";
     Text[ turkish ] = "Belge yaz�l�rken hata olu�tu ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Error al escribir documento  ";
+    Text[ catalan ] = "S'ha produ�t un error en escriure al document  ";
     Text[ thai ] = "เอกสารการบันทึกผิดพลาด ";
 };
 String STR_TEMPLATE_FILTER
@@ -660,7 +660,7 @@ String STR_TEMPLATE_FILTER
     Text[ korean ] = "문서 템플릿";
     Text[ turkish ] = "Belge �ablonlar�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Plantillas";
+    Text[ catalan ] = "Plantilles";
     Text[ thai ] = "แม่แบบ";
 };
 String STR_ERROR_COPY_TEMPLATE
@@ -690,7 +690,7 @@ String STR_ERROR_COPY_TEMPLATE
     Text[ korean ] = "템플릿 \"$1\" 복사 오류.\n이 템플릿이 이미 존재할 수도 있습니다.";
     Text[ turkish ] = "\"$1\" �ablonu kopyalan�rken hata olu�tu.\nBu �ablon zaten mevcut olabilir.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Error al copiar la plantilla \"$1\".\nEs posible que esta ya exista.";
+    Text[ catalan ] = "S'ha produ�t un error al copiar la plantilla \"$1\".\n�s possible que aquesta ja existeixi.";
     Text[ thai ] = "คัดลอกแม่แบบ \"$1\"ผิดพลาด \nชื่อแม่แบบนี้อาจมีอยู่แล้ว";
 };
 String STR_ERROR_DELETE_TEMPLATE
@@ -718,7 +718,7 @@ String STR_ERROR_DELETE_TEMPLATE
     Text[ korean ] = "템플릿\"$1\"을(를) 삭제할 수 없습니다.";
     Text[ turkish ] = "\"$1\" �ablonu silinemiyor.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No es posible eliminar la plantilla \"$1\".";
+    Text[ catalan ] = "La plantilla \"$1\" no s'ha pogut suprimir.";
     Text[ finnish ] = "Mallipohjaa $1 ei voi poistaa.";
     Text[ thai ] = "ไม่สามารถลบแม่แบบ \"$1\" ได้";
 };
@@ -749,7 +749,7 @@ String STR_ERROR_MOVE_TEMPLATE
     Text[ korean ] = "템플릿 \"$1\" 이동 오류.";
     Text[ turkish ] = "\"$1\" �ablonu ta��n�rken hata olu�tu.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Error al desplazar la plantilla \"$1\" ";
+    Text[ catalan ] = "S'ha produ�t un error en moure la plantilla \"$1\" ";
     Text[ thai ] = "ย้ายแม่แบบ \"$1\"ผิดพลาด";
 };
 ErrorBox MSG_ERROR_RESCAN
@@ -781,7 +781,7 @@ ErrorBox MSG_ERROR_RESCAN
     Message[ korean ] = "업데이트를 저장하지 못했습니다.";
     Message[ turkish ] = "G�ncellemeler kaydedilemedi.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "No se pudieron guardar las actualizaciones.";
+    Message[ catalan ] = "No s'ha pogut desar les actualitzacions.";
     Message[ thai ] = "ไม่สามารถบันทึกการปรับปรุงได้";
 };
 String STR_ERROR_SAVE_TEMPLATE
@@ -811,7 +811,7 @@ String STR_ERROR_SAVE_TEMPLATE
     Text[ korean ] = "템플릿 쓰기에서 오류 발생 ";
     Text[ turkish ] = "�ablon yaz�l�rken hata olu�tu ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Error de escritura de plantilla  ";
+    Text[ catalan ] = "S'ha produ�t un error al desar la plantilla  ";
     Text[ thai ] = "บันทึกแม่แบบผิดพลาด ";
 };
 ErrorBox MSG_ERROR_RENAME_TEMPLATE
@@ -843,7 +843,7 @@ ErrorBox MSG_ERROR_RENAME_TEMPLATE
     Message[ korean ] = "템플릿 이름 변경시 오류 발생.";
     Message[ turkish ] = "�ablon yeniden adland�r�l�rken hata olu�tu.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Error al cambiar el nombre de la plantilla.";
+    Message[ catalan ] = "S'ha produ�t un error en renombrar la plantilla.";
     Message[ thai ] = "เปลี่ยนชื่อแม่แบบผิดพลาด";
 };
 ErrorBox MSG_ERROR_RENAME_TEMPLATE_REGION
@@ -875,7 +875,7 @@ ErrorBox MSG_ERROR_RENAME_TEMPLATE_REGION
     Message[ korean ] = "영역 이름 변경시 오류 발생.";
     Message[ turkish ] = "Kategori yeniden adland�r�l�rken hata olu�tu.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Error al cambiar el nombre del �rea.";
+    Message[ catalan ] = "S'ha produ�t un error al canviar el nom de l'�rea.";
     Message[ thai ] = "เปลี่ยนชื่อประเภทแม่แบบผิดพลาด";
 };
 ErrorBox MSG_ERROR_EMPTY_NAME
@@ -907,7 +907,7 @@ ErrorBox MSG_ERROR_EMPTY_NAME
     Message[ korean ] = "이름을 지정해야 합니다.";
     Message[ turkish ] = "Bir ad girin.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Es necesario introducir un nombre.";
+    Message[ catalan ] = "Especifiqueu un nom.";
     Message[ thai ] = "กรุณาระบุชื่อ";
 };
 ErrorBox MSG_ERROR_UNIQ_NAME
@@ -939,7 +939,7 @@ ErrorBox MSG_ERROR_UNIQ_NAME
     Message[ korean ] = "분명한 이름을 지정해야 합니다.\n대문자와 소문자 구분없이 입력합니다.";
     Message[ turkish ] = "Benzersiz bir ad girin.\nGirilen ad b�y�k/k���k harf duyarl� olmamal�d�r.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Debe especificar un nombre �nico.\nNo se distingue entre may�sculas y min�sculas.";
+    Message[ catalan ] = "Heu d'especificar un nom �nic.\nNo es distingeix entre maj�scules i min�scules.";
     Message[ thai ] = "กรุณาระบุชื่อเฉพาะ\nรายการต้องไม่เป็นกรณีเฉพาะ";
 };
 String STR_QUERY_DEFAULT_TEMPLATE
@@ -969,7 +969,7 @@ String STR_QUERY_DEFAULT_TEMPLATE
     TEXT[ korean ] = "템플릿 \"$(TEXT)\"을(를) 기본 템플릿로 만들겠습니까?";
     TEXT[ turkish ] = "\"$(TEXT)\" �ablonu, standart �ablon olarak belirlensin mi?";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "�Desea convertir la plantilla \"$(TEXT)\" en una plantilla predeterminada?";
+    TEXT[ catalan ] = "Ha d'esdevenir la plantilla \"$(TEXT)\" la plantilla per defecte?";
     TEXT[ thai ] = "ต้องการให้แม่แบบ \"$(TEXT)\" กลายเป็นค่าเริ่มต้นแม่แบบหรือไม่?";
 };
 QueryBox MSG_QUERY_RESET_DEFAULT_TEMPLATE
@@ -1001,7 +1001,7 @@ QueryBox MSG_QUERY_RESET_DEFAULT_TEMPLATE
     Message[ korean ] = "기본 템플릿을 원래대로 되돌리겠습니까?";
     Message[ turkish ] = "Standart �ablonu ba�a almak istiyor musunuz?";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "�Desea usted restablecer la plantilla predeterminada?";
+    Message[ catalan ] = "Voleu reiniciar la plantilla per defecte?";
     Message[ thai ] = "คุณต้องการตั้งค่าเริ่มต้นแม่แบบใหม่หรือไม่?";
 };
 InfoBox MSG_TEMPLATE_DIR_NOT_EXIST
@@ -1031,7 +1031,7 @@ InfoBox MSG_TEMPLATE_DIR_NOT_EXIST
     Message[ korean ] = "템플릿 디렉토리\n$(DIR)\n이(가) 없습니다.";
     Message[ turkish ] = "\n$(DIR)\n�ablon dizini mevcut de�il.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "El directorio de plantillas\n$(DIR)\nno existe.";
+    Message[ catalan ] = "El directori de plantilles\n$(DIR)\nno existeix.";
     Message[ thai ] = "ไดเร็กทอรี่แม่แบบ\n$(DIR)\nไม่มีอยู่";
 };
 InfoBox MSG_DOCINFO_CANTREAD
@@ -1059,7 +1059,7 @@ InfoBox MSG_DOCINFO_CANTREAD
     Message[ korean ] = "문서 등록정보를 읽을 수 없습니다.";
     Message[ turkish ] = "Belge �zellikleri okunam�yor.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "No se pueden leer las informaciones sobre el documento.";
+    Message[ catalan ] = "No es poden llegir les propietats del document.";
     Message[ finnish ] = "Asiakirjan tietoja ei voi lukea.";
     Message[ thai ] = "ไม่สามารถอ่านข้อมูลเอกสารได้";
 };
@@ -1092,7 +1092,7 @@ String STR_ERROR_NOSTORAGE
     Text[ korean ] = "선택한 파일의 형식이 올바르지 않습니다.";
     Text[ turkish ] = "Se�ilen dosyan�n format� yanl��.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El archivo seleccionado tiene un formato incorrecto.";
+    Text[ catalan ] = "El fitxer seleccionat t� un format incorrecte.";
     Text[ thai ] = "แฟ้มที่เลือกมีรูปแบบไม่ถูกต้อง";
 };
 String STR_QUERY_SAVEOWNFORMAT
@@ -1120,7 +1120,7 @@ String STR_QUERY_SAVEOWNFORMAT
     Text[ korean ] = "이 문서에는 $(FORMAT) 형식에 저장할 수 없는 형식과 정보가\n포함되어 있을 수 있습니다. 변경 사항을\n$(OWNFORMAT) 형식에 저장하겠습니까?";
     Text[ turkish ] = "Bu belgede, $(FORMAT) format�nda kaydedilemeyen\n formatlamalar ve bilgiler bulunabilir. De�i�iklikleri \n$(OWNFORMAT) format�nda kaydetmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Este documento puede contener informaciones y formatos\nque no se pueden guardar en el formato $(FORMAT).\n�Desea guardar los cambios en formato\n$(OWNFORMAT)?";
+    Text[ catalan ] = "Aquest document pot contenir informaci� i formats\nque no es poden desar en el format $(FORMAT).\nVoleu desar els canvis en el format\n$(OWNFORMAT)?";
     Text[ finnish ] = "T�m� tiedosto saattaa sis�lt�� ominaisuuksia ja tietoja, joita ei voi tallentaa muotoon\n$(FORMAT). Haluatko tallentaa muutokset k�ytt�m�ll� muotoa\n$(OWNFORMAT)?";
     Text[ thai ] = "เอกสารนี้อาจมีคุณลักษณะและข้อมูลที่ไม่สามารถบันทึกได้ภายใต้\n$(FORMAT). คุณต้องการบันทึกการเปลี่ยนแปลงการใช้รูปแบบ\n$(OWNFORMAT) หรือไม่?";
 };
@@ -1148,7 +1148,7 @@ String STR_QUERY_MUSTOWNFORMAT
     Text[ greek ] = "�� ������� ��� ����� ������� �� ������������ �� �� ����� $(FORMAT).\n ������ �� ����������� �� ������� �� �� ����� $(OWNFORMAT);";
     Text[ korean ] = "문서를 $(FORMAT) 형식으로 저장할 수 없습니다. 문서를 $(OWNFORMAT) 형식으로\n저장하겠습니까?";
     Text[ turkish ] = "Belgeler $(FORMAT) format�nda kaydedilemiyor\n. Belgeyi $(OWNFORMAT) format�nda\nkaydetmek ister misiniz?";
-    Text[ catalan ] = "Los documentos no se pueden guardar en el formato $(FORMAT).\n�Desea guardar el documento en formato $(OWNFORMAT)?";
+    Text[ catalan ] = "Els documents no es poden desar en el format $(FORMAT). Voleu\n desar els canvis utilitzant el format $(OWNFORMAT)?";
     Text[ finnish ] = "Asiakirjoja ei voi tallentaa muodossa $(FORMAT). Haluatko\ntallentaa muutokset k�ytt�m�ll� muotoa $(OWNFORMAT)?";
     Text[ thai ] = "ไม่สามารถบันทึกเอกสารในรูปแบบ $(FORMAT)  คุณ\nต้องการบันทึกการเปลี่ยนแปลงการใช้รูปแบบ $(OWNFORMAT) หรือไม่?";
 };
@@ -1177,7 +1177,7 @@ String STR_SAVEDOC
     Text[ korean ] = "저장(~S)";
     Text[ turkish ] = "~Kaydet";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Guardar";
+    Text[ catalan ] = "~Desa";
     Text[ finnish ] = "~Tallenna";
     Text[ thai ] = "~บันทึก";
 };
@@ -1206,7 +1206,7 @@ String STR_UPDATEDOC
     Text[ korean ] = "업데이트(~U)";
     Text[ turkish ] = "G�n~celle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Actuali~zaci�n";
+    Text[ catalan ] = "~Actualitza";
     Text[ finnish ] = "~P�ivit�";
     Text[ thai ] = "~ปรับปรุง";
 };
@@ -1235,7 +1235,7 @@ String STR_SAVEASDOC
     Text[ korean ] = "다른 이름으로 저장(~A)...";
     Text[ turkish ] = "~Farkl� kaydet...";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "G~uardar como...";
+    Text[ catalan ] = "~Anomena i desa";
     Text[ finnish ] = "Tallenna~ nimell�";
     Text[ thai ] = "บันทึกเ~ป็น...";
 };
@@ -1264,7 +1264,7 @@ String STR_SAVECOPYDOC
     Text[ korean ] = "복사를 다른 이름으로 저장(~A)...";
     Text[ turkish ] = "Kopyas�n� farkl�  ka~ydet...";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Guardar copia ~como...";
+    Text[ catalan ] = "Desa-ho en c�pia ~com a...";
     Text[ finnish ] = "~Tallenna kopio nimell�...";
     Text[ thai ] = "บันทึกสำเนาเ~ป็น...";
 };
@@ -1293,7 +1293,7 @@ String STR_CLOSEDOC
     Text[ korean ] = "닫기(~C)";
     Text[ turkish ] = "~Kapat";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Cerrar";
+    Text[ catalan ] = "~Tanca";
     Text[ finnish ] = "~Sulje";
     Text[ thai ] = "~ปิด";
 };
@@ -1324,7 +1324,7 @@ String STR_CLOSEDOC_ANDRETURN
     Text[ korean ] = "닫고 돌아갈 위치 (~C)";
     Text[ turkish ] = "Kapat ve geri d�n ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "C~errar y regresar a  ";
+    Text[ catalan ] = "~Tanca i retorna a ";
     Text[ finnish ] = "~Sulje ja palauta";
     Text[ thai ] = "~ปิดและกลับไปยัง ";
 };
@@ -1353,7 +1353,7 @@ String STR_WIZARD
     Text[ korean ] = "마법사";
     Text[ turkish ] = "Sihirbaz";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "asistente";
+    Text[ catalan ] = " AutoPilot";
     Text[ finnish ] = " Automaattinen ohjaus";
     Text[ thai ] = " นำร่องอัตโนมัติ";
 };
@@ -1382,7 +1382,7 @@ String RID_STR_FILTCONFIG
     Text[ korean ] = "구성";
     Text[ turkish ] = "Konfig�rasyonlar";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Configuraciones";
+    Text[ catalan ] = "Configuracions";
     Text[ finnish ] = "Kokoonpanot";
     Text[ thai ] = "โครงแบบ";
 };
@@ -1396,7 +1396,7 @@ String RID_STR_FILTBASIC
     Text [ spanish ] = "Bibliotecas %PRODUCTNAME Basic" ;
     Text [ french ] = "Bibiloth�ques %PRODUCTNAME Basic" ;
     Text [ swedish ] = "%PRODUCTNAME Basic-bibliotek" ;
-    Text [ danish ] = "%PRODUCTNAME Basic biblioteker" ;
+    Text [ danish ] = "%PRODUCTNAME Basic-biblioteker" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME Basic Bibliotheken" ;
     Text [ portuguese ] = "Bibliotecas %PRODUCTNAME Basic" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME Basic 库";
@@ -1411,7 +1411,7 @@ String RID_STR_FILTBASIC
     Text[ korean ] = "%PRODUCTNAME Basic 라이브러리";
     Text[ turkish ] = "%PRODUCTNAME Basic kitapl�klar�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Bibliotecas %PRODUCTNAME Basic";
+    Text[ catalan ] = "Biblioteques %PRODUCTNAME Basic";
     Text[ finnish ] = "Ohjelman %PRODUCTNAME peruskirjastot";
     Text[ thai ] = "ไลบรารีพื้นฐาน %PRODUCTNAME ";
 };
@@ -1440,7 +1440,7 @@ String RID_STR_WARNSTYLEOVERWRITE
     Text[ korean ] = "유형 $(ARG1)을(를) 변경하겠습니까?";
     Text[ turkish ] = "\"$(ARG1)\" bi�imi ba�kas� ile de�i�tirilsin mi?";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
-    Text[ catalan ] = "�Desea substituir el estilo \"$(ARG1)\"?";
+    Text[ catalan ] = "Voleu substituir l'estil \"$(ARG1)\"?";
     Text[ finnish ] = "Korvataanko tyyli $(ARG1)?";
     Text[ thai ] = "ต้องการแทนที่ลักษณะ \"$(ARG1)\" หรือไม่?";
 };
@@ -1469,7 +1469,7 @@ String STR_DOC_LOADING
     Text[ korean ] = "문서를 로드하고 있습니다.";
     Text[ turkish ] = "Belge y�kleniyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cargando el documento";
+    Text[ catalan ] = "S'est� carregant el document";
     Text[ finnish ] = "Ladataan asiakirja";
     Text[ thai ] = "กำลังโหลดเอกสาร";
 };
@@ -1500,7 +1500,7 @@ Resource RID_DLSTATUS
         Text[ korean ] = "연결 대상: $(HOST). 회답을 기다리십시오...";
         Text[ turkish ] = "Ba�lan�lan: $(HOST). Yan�t bekleniyor...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Conexi�n con: $(HOST). Esperando respuesta...";
+        Text[ catalan ] = "Connectant amb: $(HOST). Esperant resposta...";
         Text[ finnish ] = "Yhdistet��n kohteeseen: $(HOST).Odotetaan vastausta";
         Text[ thai ] = "เชื่อมต่อ: $(HOST) กำลังรอการตอบสนอง...";
     };
@@ -1529,7 +1529,7 @@ Resource RID_DLSTATUS
         Text[ korean ] = "$(HOST)에서 $(TARGET)를 여는 중";
         Text[ turkish ] = "A��lan:  $(HOST) �zerinde bulunan $(TARGET)";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Abriendo: $(TARGET) en $(HOST)";
+        Text[ catalan ] = "Obrint $(TARGET) en $(HOST)";
         Text[ finnish ] = "Avataan $(TARGET) koneelta $(HOST)";
         Text[ thai ] = "กำลังเปิด $(TARGET) ที่ $(HOST)";
     };
@@ -1558,7 +1558,7 @@ Resource RID_DLSTATUS
         Text[ korean ] = "전송 중: $(HOST)로부터 $(TARGET) . 읽었음: $(BYTE)";
         Text[ turkish ] = "Aktar�lan:  $(HOST) sunucusundan $(TARGET). Okunan: $(BYTE)";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Transfiriendo: $(TARGET) desde $(HOST). Le�do: $(BYTE)";
+        Text[ catalan ] = "Carregant: $(TARGET) des de $(HOST). Carregat: $(BYTE)";
         Text[ finnish ] = "Ladataan $(TARGET) koneelta $(HOST). Ladattu: $(BYTE)";
         Text[ thai ] = "กำลังโหลด: $(TARGET) จาก $(HOST). โหลด: $(BYTE)";
     };
@@ -1587,7 +1587,7 @@ Resource RID_DLSTATUS
         Text[ korean ] = "연결 해제";
         Text[ turkish ] = "Ba�lant� kesildi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Desconectado";
+        Text[ catalan ] = "Desconnectat";
         Text[ finnish ] = "Istunto lopetettu";
         Text[ thai ] = "ไม่เชื่อมต่อ";
     };
@@ -1621,7 +1621,7 @@ QueryBox MSG_OPEN_READONLY
     MESSAGE[ korean ] = "문서를 열어 편집할 수 없습니다.\n문서를 열어서 읽으시겠습니까?";
     MESSAGE[ turkish ] = "Belge d�zenleme i�in a��lam�yor.\nBelge okuma i�in a��ls�n m�?";
     MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ catalan ] = "El documento no se puede abrir para editar.\n�Desea abrirlo solo para leer?";
+    MESSAGE[ catalan ] = "El documento no es pot obrir per editar.\nVoleu obrir-lo nom�s per lectura?";
     MESSAGE[ thai ] = "ไม่สามารถเปิดเอกสารเพื่อแก้ไขได้\nคุณต้องการเปิดมันเป็นการอ่านอย่างเดียวหรือไม่?";
 };
 String STR_EDIT
@@ -1649,7 +1649,7 @@ String STR_EDIT
     Text[ korean ] = "편집";
     Text[ turkish ] = "D�zenle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Editar";
+    Text[ catalan ] = "Edita";
     Text[ finnish ] = "Muokkaa";
     Text[ thai ] = "แก้ไข";
 };
@@ -1678,7 +1678,7 @@ String RID_OFFICEFILTER
     Text[ korean ] = "%PRODUCTNAME 문서";
     Text[ turkish ] = "%PRODUCTNAME belgeleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "%PRODUCTNAME Documentos";
+    Text[ catalan ] = "%PRODUCTNAME Documents";
     Text[ finnish ] = " Ohjelman %PRODUCTNAME asiakirjat";
     Text[ thai ] = "เอกสาร %PRODUCTNAME ";
 };
@@ -1719,7 +1719,7 @@ String STR_FRAMEOBJECT_PROPERTIES
     Text[ korean ] = "등록정보(~I)...";
     Text[ turkish ] = "~�zellikler ...";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Prop~iedades...";
+    Text[ catalan ] = "Prop~ietats ...";
     Text[ finnish ] = "Ominai~suudet";
     Text[ thai ] = "คุณ~สมบัติ ...";
 };
@@ -1748,7 +1748,7 @@ String STR_FSET_FILTERNAME0
     Text[ korean ] = "HTML (프레임셋）";
     Text[ turkish ] = "HTML (FrameSet)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "HTML (FrameSet)";
+    Text[ catalan ] = "HTML (conjunt de marcs)";
     Text[ finnish ] = "HTML (kehys)";
     Text[ thai ] = "HTML (FrameSet)";
 };
@@ -1775,10 +1775,10 @@ String STR_FSET_FILTERNAME1
     Text[ dutch ] = "%PRODUCTNAME Frame-document";
     Text[ chinese_simplified ] = "%PRODUCTNAME 框对象文档";
     Text[ greek ] = "������� ��� %PRODUCTNAMEFrame";
-    Text[ korean ] = "%PRODUCTNAME Frame 문서";
+    Text[ korean ] = "%PRODUCTNAME 프레임 문서";
     Text[ turkish ] = "%PRODUCTNAME frame belgesi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "%PRODUCTNAME Frame Documento";
+    Text[ catalan ] = "%PRODUCTNAME Document de marcs";
     Text[ finnish ] = "Ohjelman %PRODUCTNAME kehysasiakirja";
     Text[ thai ] = "เอกสารกรอบ%PRODUCTNAME ";
 };
@@ -1807,7 +1807,7 @@ String STR_TEMPL_MOVED
     Text[ korean ] = "템플릿$(TEMPLATE)을 원래 위치에서 찾지 못했습니다. 이름이 같은 템플릿이 $(FOUND)에 있습니다. 앞으로 이 파일을 동기화에 사용하겠습니까?";
     Text[ turkish ] = "\"$(TEMPLATE)\" �ablonu as�l yerinde bulunamad�. Ayn� adl� �ablonun bulundu�u yerin ad�: \"$(FOUND)\". Bu �ablon gelecekte kar��la�t�rma i�in kullan�ls�n m�?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "La plantilla \"$(TEMPLATE)\" no se encontr� en su ubicaci�n original. Una plantilla con el mismo nombre se encontr� en \"$(FOUND)\". �Desea utilizar esta plantilla al sincronizar en el futuro?";
+    Text[ catalan ] = "La plantilla \"$(TEMPLATE)\" no s'ha trobat en la seva ubicaci� original. Una plantilla amb el mateix nom s'ha trobat a \"$(FOUND)\". Voleu utilitzar aquesta plantilla al sincronitzar a partir d'ara?";
     Text[ finnish ] = "Mallipohjaa $(TEMPLATE) ei l�ytynyt alkuper�isest� sijainnista. Samanniminen mallipohja on kohteessa $(FOUND). K�ytet��nk� t�t� mallipohjaa vastaisuudessa vertailuihin?";
     Text[ thai ] = "ไม่พบแม่แบบ \"$(TEMPLATE)\" ที่ที่ตั้งเดิม  มีชื่อแม่แบบเหมือนกันอยู่ที่ \"$(FOUND)\" ต้องการใช้แม่แบบนี้ในอนาคตเมื่อทำการเปรียบเทียบหรือไม่?";
 };
@@ -1836,7 +1836,7 @@ String STR_TEMPL_RESET
     Text[ korean ] = "템플릿$(TEMPLATE)을 찾지 못했습니다. 이 파일을 계속 찾으시겠습니까?";
     Text[ turkish ] = "\"$(TEMPLATE)\" �ablonu bulunamad�. Bu �ablon gelecekte de arans�n m�?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No se encontr� la plantilla \"$(TEMPLATE)\". �Desea que se busque la pr�xima vez que abra el documento?";
+    Text[ catalan ] = "No s'ha trobat la plantilla \"$(TEMPLATE)\". Voleu que es cerqui la propera vegada que s'obri el document?";
     Text[ finnish ] = "Mallipohjaa $(TEMPLATE) ei l�ytynyt. Etsit��nk� mallipohjaa seuraavan kerran, kun asiakirja avataan?";
     Text[ thai ] = "ไม่พบแม่แบบ \"$(TEMPLATE)\"   ต้องการมองหาแม่แบบสำหรับเอกสารครั้งถัดไปที่ถูกเปิดหรือไม่ ?";
 };
@@ -1865,7 +1865,7 @@ String STR_AUTOMATICVERSION
     Text[ korean ] = "자동 저장된 버전";
     Text[ turkish ] = "Otomatik kaydedilen s�r�m";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Versi�n guardada autom�ticamente";
+    Text[ catalan ] = "Versi� desada autom�ticament";
     Text[ finnish ] = "Automaattisesti tallennettu versio";
     Text[ thai ] = "บันทึกเวอร์ชั่นอัตโนมัติ";
 };
@@ -1892,7 +1892,7 @@ String STR_DOCTYPENAME_SW
     Text[ chinese_traditional ] = "文字文件";
     Text[ turkish ] = "Metin belgesi";
     Text[ arabic ] = "����� ��";
-    Text[ catalan ] = "Documento de texto";
+    Text[ catalan ] = "Document de text";
     Text[ finnish ] = "Tekstiasiakirja";
     Text[ thai ] = "เอกสารข้อความ";
 };
@@ -1919,7 +1919,7 @@ String STR_DOCTYPENAME_SWWEB
     Text[ chinese_traditional ] = "HTML 文件";
     Text[ turkish ] = "HTML belgesi";
     Text[ arabic ] = "�����HTML ";
-    Text[ catalan ] = "Documento HTML";
+    Text[ catalan ] = "Document HTML";
     Text[ finnish ] = "HTML-asiakirja";
     Text[ thai ] = "เอกสาร HTML ";
 };
@@ -1946,7 +1946,7 @@ String STR_DOCTYPENAME_SWGLOB
     Text[ chinese_traditional ] = "主控文件";
     Text[ turkish ] = "Ana belge";
     Text[ arabic ] = "����� ����";
-    Text[ catalan ] = "Documento maestro";
+    Text[ catalan ] = "Document mestre";
     Text[ finnish ] = "P��asiakirja";
     Text[ thai ] = "เอกสารต้นฉบับ";
 };
@@ -1973,7 +1973,7 @@ String STR_DOCTYPENAME_SC
     Text[ chinese_traditional ] = "工作表文件";
     Text[ turkish ] = "Hesap tablosu";
     Text[ arabic ] = "����� ����";
-    Text[ catalan ] = "Hoja de c�lculo";
+    Text[ catalan ] = "Full de c�lcul";
     Text[ finnish ] = "Laskentataulukko";
     Text[ thai ] = "กระดาษคำนวณ";
 };
@@ -2000,7 +2000,7 @@ String STR_DOCTYPENAME_SI
     Text[ chinese_traditional ] = "簡報文件";
     Text[ turkish ] = "Sunu";
     Text[ arabic ] = "��� ������";
-    Text[ catalan ] = "Presentaci�n";
+    Text[ catalan ] = "Presentaci�";
     Text[ finnish ] = "Esitys";
     Text[ thai ] = "การนำเสนอ";
 };
@@ -2027,7 +2027,7 @@ String STR_DOCTYPENAME_SD
     Text[ chinese_traditional ] = "繪圖文件";
     Text[ turkish ] = "�izim";
     Text[ arabic ] = "����";
-    Text[ catalan ] = "Dibujo";
+    Text[ catalan ] = "Dibuix";
     Text[ finnish ] = "Piirros";
     Text[ thai ] = "วาดรูป";
 };
@@ -2054,7 +2054,7 @@ String STR_DOCTYPENAME_MESSAGE
     Text[ chinese_traditional ] = "電子郵件";
     Text[ turkish ] = "�leti";
     Text[ arabic ] = "�����";
-    Text[ catalan ] = "Mensaje";
+    Text[ catalan ] = "Missatge";
     Text[ finnish ] = "Viesti";
     Text[ thai ] = "ข้อความ";
 };
@@ -2084,7 +2084,7 @@ String STR_NOSAVEANDCLOSE
     Text[ korean ] = "아니오(~D)";
     Text[ turkish ] = "~Sil";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Rechazar";
+    Text[ catalan ] = "~Descarta";
     Text[ finnish ] = "~Hylk��";
     Text[ thai ] = "~ละทิ้ง";
 };
@@ -2111,7 +2111,7 @@ String STR_PACKNGO_NOACCESS
     Text[ chinese_traditional ] = "無法存取目前的數據載體。";
     Text[ arabic ] = "���� ������ ��� ����� ������.";
     Text[ turkish ] = "Kullan�lan veri ta��y�c�s�na eri�im sa�lanamad�.";
-    Text[ catalan ] = "No se pudo acceder al medio actual.";
+    Text[ catalan ] = "No s'ha pogut accedir al mitj� actual.";
     Text[ finnish ] = "Nykyinen tietojen tallennusv�line ei ole k�ytett�viss�.";
     Text[ thai ] = "ไม่น่าจะเข้าถึงข้อมูลปัจจุบันระดับกลางได้";
 };
@@ -2138,7 +2138,7 @@ String STR_PACKNGO_NEWMEDIUM
     Text[ chinese_traditional ] = "請您放入下一個磁片，然后按一下確定。";
     Text[ arabic ] = "������ ����� ����� ������� �� ����� ��� ���� \"�����\".";
     Text[ turkish ] = "Bir sonraki veri ta��y�c�s�n� tak�p Tamam d��mesine t�klay�n�z.";
-    Text[ catalan ] = "Inserte el siguiente medio y pulse el bot�n Aceptar.";
+    Text[ catalan ] = "Inserteu el mitj� seg�ent i feu clic a Acceptar.";
     Text[ finnish ] = "Lis�� seuraava tietov�line ja valitse OK.";
     Text[ thai ] = "แทรกข้อมูลถัดไปหรือกด ตกลง";
 };
@@ -2151,7 +2151,7 @@ String STR_OBJECT
     Text [ english_us ] = "Object" ;
     Text [ portuguese_brazilian ] = "Objekt" ;
     Text [ swedish ] = "Objekt" ;
-    Text [ danish ] = "Object" ;
+    Text [ danish ] = "Objekt" ;
     Text [ italian ] = "Oggetto" ;
     Text [ spanish ] = "Objeto" ;
     Text [ french ] = "Objet" ;
@@ -2168,7 +2168,7 @@ String STR_OBJECT
     Text[ korean ] = "개체";
     Text[ turkish ] = "Nesne";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objeto";
+    Text[ catalan ] = "Objecte";
     Text[ finnish ] = "Objekti";
     Text[ thai ] = "วัตถุ";
 };
@@ -2184,7 +2184,7 @@ String STR_EDITOBJECT
     Text[ french ] = "�diter";
     Text[ spanish ] = "~Editar";
     Text[ italian ] = "~Modifica";
-    Text[ danish ] = "Rediger";
+    Text[ danish ] = "~Rediger";
     Text[ swedish ] = "~Redigera";
     Text[ polish ] = "~Edytuj";
     Text[ portuguese_brazilian ] = "~Edit";
@@ -2198,7 +2198,7 @@ String STR_EDITOBJECT
     Text[ korean ] = "편집(~E)";
     Text[ turkish ] = "~D�zenle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Editar";
+    Text[ catalan ] = "~Edita";
     Text[ finnish ] = "~Muokkaa";
     Text[ thai ] = "~แก้ไข";
 };
@@ -2214,7 +2214,7 @@ String STR_OPENOBJECT
     Text[ french ] = "~Ouvrir";
     Text[ spanish ] = "~Abrir";
     Text[ italian ] = "~Apri";
-    Text[ danish ] = "�bn";
+    Text[ danish ] = "~�bn";
     Text[ swedish ] = "~�ppna";
     Text[ polish ] = "Otw�rz";
     Text[ portuguese_brazilian ] = "~Open";
@@ -2228,7 +2228,7 @@ String STR_OPENOBJECT
     Text[ korean ] = "열기(~O)";
     Text[ turkish ] = "~A�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Abrir";
+    Text[ catalan ] = "~Obre";
     Text[ finnish ] = "~Avaa";
     Text[ thai ] = "~เปิด";
 };
@@ -2259,7 +2259,7 @@ QueryBox DLG_MACROQUERY
     Title[ korean ] = "매크로 실행";
     Title[ turkish ] = "Makroyu �al��t�r";
     Title[ language_user1 ] = " ";
-    Title[ catalan ] = "Ejecutar macro";
+    Title[ catalan ] = "Executa macro";
     Title[ finnish ] = "Suorita makro";
 
     Message = "Dieses Dokument enth�lt Makros. $(TEXT)";
@@ -2275,10 +2275,10 @@ QueryBox DLG_MACROQUERY
     Message[ greek ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
     Message[ dutch ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
     Message[ finnish ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
-    Message[ danish ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
+    Message[ danish ] = "Dette dokument indeholder makroer. $(TEXT)";
     Message[ swedish ] = "Det h�r dokumentet inneh�ller makron. $(TEXT)";
     Message[ polish ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
-    Message[ portuguese_brazilian ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
+    Message[ portuguese_brazilian ] = "Este documento cont�m macros. $(TEXT)";
     Message[ chinese_simplified ] = "这个文档含有宏。$(TEXT)";
     Message[ chinese_traditional ] = "這個文件含有巨集。$(TEXT)";
     Message[ turkish ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
@@ -2313,7 +2313,7 @@ String BTN_OK
     Text[ korean ] = "실행";
     Text[ turkish ] = "�al��t�r";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ejecutar";
+    Text[ catalan ] = "Executa";
     Text[ finnish ] = "Suorita";
     Text[ thai ] = "Run";
 };
@@ -2342,7 +2342,7 @@ String BTN_CANCEL
     Text[ korean ] = "실행 안함";
     Text[ turkish ] = "�al��t�rma";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No ejecutar";
+    Text[ catalan ] = "No executis";
     Text[ finnish ] = "�l� suorita";
     Text[ thai ] = "Do Not Run";
 };
@@ -2361,7 +2361,7 @@ String FT_CANCEL
     Text[ greek ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgef�hrt werden. M�chten Sie sie trotzdem ausf�hren?";
     Text[ dutch ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgef�hrt werden. M�chten Sie sie trotzdem ausf�hren?";
     Text[ finnish ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgef�hrt werden. M�chten Sie sie trotzdem ausf�hren?";
-    Text[ danish ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgef�hrt werden. M�chten Sie sie trotzdem ausf�hren?";
+    Text[ danish ] = "If�lge sikkerhedsindstillingerne skal makroerne i dette dokument ikke udf�res. Vil du alligevel udf�re dem?";
     Text[ swedish ] = "Enligt s�kerhetsinst�llningarna ska makrona i det h�r dokumentet inte k�ras. Vill du k�ra dem i alla fall?";
     Text[ polish ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgef�hrt werden. M�chten Sie sie trotzdem ausf�hren?";
     Text[ portuguese_brazilian ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgef�hrt werden. M�chten Sie sie trotzdem ausf�hren?";
@@ -2386,7 +2386,7 @@ String FT_OK
     Text[ greek ] = "M�chten Sie erlauben, dass diese Makros ausgef�hrt werden?";
     Text[ dutch ] = "M�chten Sie erlauben, dass diese Makros ausgef�hrt werden?";
     Text[ finnish ] = "M�chten Sie erlauben, dass diese Makros ausgef�hrt werden?";
-    Text[ danish ] = "M�chten Sie erlauben, dass diese Makros ausgef�hrt werden?";
+    Text[ danish ] = "Vil du tillade, at disse makroer udf�res?";
     Text[ swedish ] = "Vill du till�ta att de h�r makrona k�rs?";
     Text[ polish ] = "M�chten Sie erlauben, dass diese Makros ausgef�hrt werden?";
     Text[ portuguese_brazilian ] = "M�chten Sie erlauben, dass diese Makros ausgef�hrt werden?";
@@ -2411,6 +2411,19 @@ String STR_EXPORTASPDF_TITLE
     Text[ chinese_simplified ] = "输出成 PDF";
     Text[ french ] = "Exporter au format PDF";
     Text[ italian ] = "Esporta come file PDF";
+    Text[ portuguese ] = "Export as PDF";
+    Text[ russian ] = "Export as PDF";
+    Text[ greek ] = "Export as PDF";
+    Text[ dutch ] = "Export as PDF";
+    Text[ finnish ] = "Export as PDF";
+    Text[ danish ] = "Export as PDF";
+    Text[ polish ] = "Export as PDF";
+    Text[ portuguese_brazilian ] = "Export as PDF";
+    Text[ chinese_traditional ] = "匯出成 PDF";
+    Text[ turkish ] = "Export as PDF";
+    Text[ arabic ] = "Export as PDF";
+    Text[ catalan ] = "Export as PDF";
+    Text[ thai ] = "Export as PDF";
 };
 
 String STR_EXPORTWITHCFGBUTTON
@@ -2425,6 +2438,19 @@ String STR_EXPORTWITHCFGBUTTON
     Text[ chinese_simplified ] = "输出...";
     Text[ french ] = "Exporter...";
     Text[ italian ] = "~Esporta...";
+    Text[ portuguese ] = "Export...";
+    Text[ russian ] = "Export...";
+    Text[ greek ] = "Export...";
+    Text[ dutch ] = "Export...";
+    Text[ finnish ] = "Export...";
+    Text[ danish ] = "Export...";
+    Text[ polish ] = "Export...";
+    Text[ portuguese_brazilian ] = "Export...";
+    Text[ chinese_traditional ] = "匯出...";
+    Text[ turkish ] = "Export...";
+    Text[ arabic ] = "Export...";
+    Text[ catalan ] = "Export...";
+    Text[ thai ] = "Export...";
 };
 
 String STR_EXPORTBUTTON
@@ -2439,6 +2465,19 @@ String STR_EXPORTBUTTON
     Text[ chinese_simplified ] = "输出";
     Text[ french ] = "Exporter";
     Text[ italian ] = "Esporta";
+    Text[ portuguese ] = "Export";
+    Text[ russian ] = "Export";
+    Text[ greek ] = "Export";
+    Text[ dutch ] = "Export";
+    Text[ finnish ] = "Export";
+    Text[ danish ] = "Export";
+    Text[ polish ] = "Export";
+    Text[ portuguese_brazilian ] = "Export";
+    Text[ chinese_traditional ] = "匯出";
+    Text[ turkish ] = "Export";
+    Text[ arabic ] = "Export";
+    Text[ catalan ] = "Export";
+    Text[ thai ] = "Export";
 };
 
 String RID_SVXSTR_SECURITY_ADDPATH
