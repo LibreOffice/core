@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-03 20:25:01 $
+#   last change: $Author: vg $ $Date: 2005-03-11 10:51:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,11 +94,7 @@ TARGETOBJS=	\
             $(OBJ)$/cmdlinehelp.obj         \
             $(OBJ)$/langselect.obj          \
             $(OBJ)$/userinstall.obj         \
-            $(OBJ)$/desktopcontext.obj      \
-            $(OBJ)$/migration.obj           \
-            $(OBJ)$/cfgfilter.obj           \
-            $(OBJ)$/wizard.obj              \
-            $(OBJ)$/pages.obj
+            $(OBJ)$/desktopcontext.obj      
             
 
 
