@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:45:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1333,13 +1333,15 @@ void CppuType::dumpConstantValue(FileStream& o, sal_uInt16 index)
         case RT_TYPE_INT64:
             {
                 ::rtl::OString tmp( OString::valueOf(constValue.m_value.aHyper) );
-                o << "(sal_Int64)" << tmp.getStr() << "L";
+                // o << "(sal_Int64)" << tmp.getStr() << "L";
+                o << "(sal_Int64) SAL_CONST_INT64(" << tmp.getStr() << ")";
             }
             break;
         case RT_TYPE_UINT64:
             {
                 ::rtl::OString tmp( OString::valueOf((sal_Int64)constValue.m_value.aUHyper) );
-                o << "(sal_uInt64)" << tmp.getStr() << "L";
+                // o << "(sal_uInt64)" << tmp.getStr() << "L";
+                o << "(sal_Int64) SAL_CONST_UINT64(" << tmp.getStr() << ")";
             }
             break;
         case RT_TYPE_FLOAT:
