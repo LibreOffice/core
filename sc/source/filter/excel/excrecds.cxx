@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-13 12:36:44 $
+ *  last change: $Author: dr $ $Date: 2001-06-27 14:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1919,7 +1919,8 @@ ExcNameListEntry::ExcNameListEntry() :
     pData( NULL ),
     nFormLen( 0 ),
     nTabNum( 0 ),
-    nBuiltInKey( EXC_BUILTIN_UNKNOWN )
+    nBuiltInKey( EXC_BUILTIN_UNKNOWN ),
+    bDummy( FALSE )
 {
 }
 
@@ -1928,7 +1929,8 @@ ExcNameListEntry::ExcNameListEntry( RootData& rRootData, UINT16 nScTab, UINT8 nK
     pData( NULL ),
     nFormLen( 0 ),
     nTabNum( rRootData.pTabBuffer->GetExcTable( nScTab ) + 1 ),
-    nBuiltInKey( nKey )
+    nBuiltInKey( nKey ),
+    bDummy( FALSE )
 {
 }
 
@@ -1953,7 +1955,6 @@ void ExcNameListEntry::SetCode( const ExcUPN& rUPN )
     DeleteData();
 
     nFormLen = rUPN.GetLen();
-    DBG_ASSERT( nFormLen, "ExcNameListEntry::SetCode - No Data, no Name!" );
     if( nFormLen )
     {
         pData = new UINT8[ nFormLen ];
@@ -1964,7 +1965,6 @@ void ExcNameListEntry::SetCode( const ExcUPN& rUPN )
 
 void ExcNameListEntry::SaveCont( XclExpStream& rStrm )
 {
-    DBG_ASSERT( pData, "ExcNameListEntry::SaveCont - no formula data" );
     rStrm   << (UINT16) EXC_NAME_BUILTIN    // grbit (built in only)
             << (UINT8)  0x00                // chKey (keyboard shortcut)
             << (UINT8)  0x01                // cch (string len)
@@ -2038,7 +2038,7 @@ ExcName::ExcName( RootData& rRootData, ScRangeData* pRange ) :
 
     SetName( aRangeName );
     const ScTokenArray* pTokArray = pRange->GetCode();
-    if( pTokArray )
+    if( pTokArray && pTokArray->GetLen() )
     {
         EC_Codetype eDummy;
         SetCode( ExcUPN( pExcRoot, *pTokArray, eDummy ) );
@@ -2122,6 +2122,7 @@ BOOL ExcName::SetBuiltInName( const String& rName, UINT8 nKey )
     if( ScFilterTools::IsBuiltInName( nTabNum, rName, nKey ) )
     {
         nBuiltInKey = nKey;
+        bDummy = TRUE;
         return TRUE;
     }
     return FALSE;
@@ -2130,10 +2131,10 @@ BOOL ExcName::SetBuiltInName( const String& rName, UINT8 nKey )
 
 void ExcName::SaveCont( XclExpStream& rStrm )
 {
-    DBG_ASSERT( pData, "ExcNameListEntry::SaveCont - no formula data" );
-
-    UINT8       nNameLen = (UINT8) Min( aName.Len(), (xub_StrLen)255 );
-    UINT16      nGrbit = (bHidden ? EXC_NAME_HIDDEN : 0) | (bBuiltIn ? EXC_NAME_BUILTIN : 0);
+    UINT8   nNameLen = (UINT8) Min( aName.Len(), (xub_StrLen)255 );
+    UINT16  nGrbit = (bHidden ? EXC_NAME_HIDDEN : 0) | (bBuiltIn ? EXC_NAME_BUILTIN : 0);
+    if( !nFormLen )
+        nGrbit |= EXC_NAME_VB | EXC_NAME_PROC;
 
     rStrm   << nGrbit                   // grbit
             << (BYTE) 0x00              // chKey
@@ -2179,6 +2180,8 @@ void XclBuildInName::CreateFormula( RootData& rRootData )
         SetCode( *pUPN );
         delete pUPN;
     }
+    else
+        bDummy = TRUE;
 }
 
 

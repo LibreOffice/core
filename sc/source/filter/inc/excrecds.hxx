@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-13 12:38:00 $
+ *  last change: $Author: dr $ $Date: 2001-06-27 14:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -886,6 +886,8 @@ protected:
     UINT16                  nTabNum;            // Excel index, 1-based, 0==none
     UINT8                   nBuiltInKey;
 
+    BOOL                    bDummy;
+
     void                    DeleteData();
     void                    SetCode( const ExcUPN& rUPN );
 
@@ -899,7 +901,7 @@ public:
 
     inline UINT16           GetTabIndex() const     { return nTabNum; }
     inline UINT8            GetBuiltInKey() const   { return nBuiltInKey; }
-    inline BOOL             IsDummy() const         { return pData == NULL; }
+    inline BOOL             IsDummy() const         { return bDummy; }
 
     virtual UINT16          GetNum() const;
     virtual ULONG           GetLen() const;
