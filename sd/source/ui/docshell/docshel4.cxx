@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-07 13:36:07 $
+ *  last change: $Author: aw $ $Date: 2001-08-07 13:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,12 +482,34 @@ BOOL SdDrawDocShell::LoadFrom(SvStorage* pStor)
     }
     else
     {
+        // #90691# return to old behaviour (before #80365#): construct own medium
+        SfxMedium aMedium(pStor);
+
+        // #90691# for having a progress bar nonetheless for XML copy it
+        // from the local DocShell medium (GetMedium()) to the constructed one
+        SfxMedium* pLocalMedium = GetMedium();
+        if(pLocalMedium)
+        {
+            SfxItemSet* pLocalItemSet = pLocalMedium->GetItemSet();
+            SfxItemSet* pDestItemSet = aMedium.GetItemSet();
+
+            if(pLocalItemSet && pDestItemSet)
+            {
+                const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
+                    pLocalItemSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL));
+
+                if(pItem)
+                {
+                    pDestItemSet->Put(*pItem);
+                }
+            }
+        }
+
         pDoc->NewOrLoadCompleted( NEW_DOC );
         pDoc->CreateFirstPages();
         pDoc->StopWorkStartupDelay();
 
-        // #80365# use the medium from the DrawDocShell, do not construct an own one
-        SdFilter*   pFilter = new SdXMLFilter( *GetMedium(), *this, sal_True, SDXMLMODE_Organizer );
+        SdFilter* pFilter = new SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Organizer );
 
         bRet = pFilter ? pFilter->Import() : FALSE;
         delete pFilter;
