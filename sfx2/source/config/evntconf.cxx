@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-24 14:30:20 $
+ *  last change: $Author: mba $ $Date: 2001-08-15 15:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,7 +579,8 @@ int SfxEventConfigItem_Impl::Load(SvStream& rStream)
         for (i=0; i<nCount; i++)
         {
             SfxMacroInfo aInfo( GetConfigManager()->GetObjectShell() );
-            rStream >> nId >> aInfo;
+            rStream >> nId;
+            aInfo.Load( rStream );
 
             USHORT nCount = aSlotArray.Count();
             for (USHORT n=0; n<nCount; n++)
