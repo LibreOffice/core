@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdcgmfilter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-13 12:01:15 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,11 @@
 class SdCGMFilter : public SdFilter
 {
 public:
-
-                            SdCGMFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress );
-                            ~SdCGMFilter();
+    SdCGMFilter (
+        SfxMedium& rMedium,
+        ::sd::DrawDocShell& rDocShell,
+        sal_Bool bShowProgress );
+    virtual ~SdCGMFilter (void);
 
     virtual sal_Bool        Import();
     virtual sal_Bool        Export();
