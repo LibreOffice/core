@@ -2,9 +2,9 @@
  *
  *  $RCSfile: concustomshape.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:23:33 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@ class ConstCustomShape : public SwDrawBase
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
     virtual void Activate(const USHORT nSlotId);    // Function aktivieren
+
+    // #i33136#
+    virtual bool doConstructOrthogonal() const;
 };
 
 
