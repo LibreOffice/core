@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 10:26:17 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 11:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -916,10 +916,8 @@ friend class WW8FormulaControl;
     BOOL ReadGrafFile( String& rFileName, Graphic*& rpGraphic,
        const WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos, BOOL* pDelIt );
 
-    SwFrmFmt* MakeGrafByFlyFmt( SdrTextObj* pReplaceTextObj,
-        const SwFrmFmt& rOldFmt,const WW8PicDesc& rPD, const Graphic* pGraph,
-        const String& rFileName, const String& rGrName,
-        const SfxItemSet& rGrfSet, const BOOL  bSetToBackground );
+    void ReplaceObjWithGraphicLink(const SdrObject &rReplaceTextObj,
+        const String& rFileName);
 
     SwFrmFmt* MakeGrafNotInCntnt(const WW8PicDesc& rPD, const Graphic* pGraph,
         const String& rFileName, const String& rGrName,

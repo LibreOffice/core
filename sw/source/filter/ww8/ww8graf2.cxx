@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 10:26:17 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 11:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,121 +358,40 @@ WW8PicDesc::WW8PicDesc( const WW8_PIC& rPic )
     nHeight = nAddHeight * rPic.my / 1000;
 }
 
-// MakeGrafByFlyFmt setzt eine nicht-Zeichengebundene Grafik
-SwFrmFmt* SwWW8ImplReader::MakeGrafByFlyFmt( SdrTextObj* pReplaceTextObj,
-                                        const SwFrmFmt& rOldFmt, const WW8PicDesc& rPD,
-                                        const Graphic* pGraph, const String& rFileName,
-                                        const String& rGrName, const SfxItemSet& rGrfSet,
-                                        const BOOL bSetToBackground )
+void SwWW8ImplReader::ReplaceObjWithGraphicLink(const SdrObject &rReplaceObj,
+    const String& rFileName)
 {
-    SwFrmFmt* pRet = 0;
-    if( pReplaceTextObj )
+    // SdrGrafObj anstatt des SdrTextObj in dessen Gruppe einsetzen
+    if(SdrObject* pGroupObject = rReplaceObj.GetUpGroup())
     {
-        // SdrGrafObj anstatt des SdrTextObj in dessen Gruppe einsetzen
-        SdrObject* pGroupObject = pReplaceTextObj->GetUpGroup();
-        if( pGroupObject )
+        SdrObjList* pObjectList = pGroupObject->GetSubList();
+
+        // neues Sdr-Grafik-Objekt erzeugen und konfigurieren
+        SdrGrafObj* pGrafObj = new SdrGrafObj;
+
+        if( !pDrawModel )   // 1. GrafikObjekt des Docs
+            GrafikCtor();
+
+        pGrafObj->SetModel(pDrawModel);
+
+        pGrafObj->SetLogicRect(rReplaceObj.GetBoundRect());
+
+        pGrafObj->SetLayer(rReplaceObj.GetLayer());
+
+        if (rFileName.Len())
         {
-            SdrObjList* pObjectList = pGroupObject->GetSubList();
-
-            // neues Sdr-Grafik-Objekt erzeugen und konfigurieren
-            SdrGrafObj* pGrafObj = new SdrGrafObj;
-
-            if( pGraph )
-                pGrafObj->SetGraphic( *pGraph );
-
-            if( !pDrawModel )   // 1. GrafikObjekt des Docs
-                GrafikCtor();
-
-            pGrafObj->SetModel( pDrawModel );
-
-            pGrafObj->SetLogicRect( pReplaceTextObj->GetBoundRect() );
-
-            pGrafObj->SetLayer( pReplaceTextObj->GetLayer() );
-
-
-            /*
-                schade: Wir koennen bisher keine SdrGrafObjekte mit Umrandung,
-                        Schatten oder Hintergrundfuellung,
-                        entsprechende Imports aus dem MS-Office muessen daher
-                        auf die UEbernahme dieser Attribute verzichten.  :-(
-
-            SfxItemSet aOldSet(pDrawModel->GetItemPool(),
-                            // Box
-                            XATTR_LINE_FIRST, XATTR_LINE_LAST,
-                            // Shadow
-                            SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,
-                            // Fill
-                            XATTR_FILL_FIRST, XATTR_FILL_LAST,
-                            0 );
-            pReplaceTextObj->TakeAttributes( aOldSet, FALSE, TRUE );
-            */
-
-
-            if( rFileName.Len() )
-            {
-                ((SdrGrafObj*)pGrafObj)->SetFileName( rFileName );
-                if( !pGraph )
-                    pGrafObj->SetGraphicLink( rFileName, aEmptyStr );
-            }
-            // altes Objekt raus aus Gruppen-Liste und neues rein
-            // (dies tauscht es ebenfalls in der Drawing-Page aus)
-            pObjectList->ReplaceObject(pGrafObj, pReplaceTextObj->GetOrdNum());
-
-
-            /*
-                schade: Wir koennen bisher keine SdrGrafObjekte mit Umrandung,
-                        Schatten oder Hintergrundfuellung,
-                        entsprechende Imports aus dem MS-Office muessen daher
-                        auf die UEbernahme dieser Attribute verzichten.  :-(
-
-            // Attribute aus dem alten SdrTextObjekt am SdrGrafObjekt setzen
-            pGrafObj->SetAttributes( aOldSet, FALSE );
-            */
-
+            pGrafObj->SetFileName(rFileName);
+            pGrafObj->SetGraphicLink(rFileName, aEmptyStr);
         }
-        else
-        {
-            // Riesenmist !!!
-            ASSERT( !this, "keine Gruppe ? (wieso dann Ersetzen?)" );
-
-            // wir haben derzeit nur Ersetzen vorgesehen, falls es ein Gruppen-Obj. ist !!!
-        }
+        // altes Objekt raus aus Gruppen-Liste und neues rein
+        // (dies tauscht es ebenfalls in der Drawing-Page aus)
+        pObjectList->ReplaceObject(pGrafObj, rReplaceObj.GetOrdNum());
     }
     else
     {
-        SfxItemSet aFlySet( rOldFmt.GetAttrSet() );
-
-        if( bSetToBackground )
-            aFlySet.Put( SvxOpaqueItem(RES_OPAQUE, FALSE) );
-
-        // Groesse des alten Frames als Grafik-Groesse nehmen
-        aFlySet.Put( SwFmtFrmSize( ATT_FIX_SIZE, rPD.nWidth, rPD.nHeight ) );
-
-        // ggfs. horiz. Positionierungs-Relation korrigieren
-        const SwFmtHoriOrient &rHori = rOldFmt.GetHoriOrient();
-        if( FRAME == rHori.GetRelationOrient() )
-            aFlySet.Put( SwFmtHoriOrient( rHori.GetPos(), HORI_NONE,
-                                                          REL_PG_PRTAREA ) );
-        // und rein damit ins Doc
-        pRet = rDoc.Insert( *pPaM,  rFileName, aEmptyStr,
-                            pGraph, &aFlySet,  &rGrfSet );
-
-        // ggfs. fuer eindeutigen Grafik-Namen sorgen
-        if( rGrName.Len() )
-        {
-            String aName;
-            if(MakeUniqueGraphName(aName, rGrName))
-                pRet->SetName( aName );
-        }
-
-        // bei Einfuegen in existierendes Doc: Frames erzeugen:
-        if(     rDoc.GetRootFrm()
-            &&  (FLY_AT_CNTNT == pRet->GetAnchor().GetAnchorId()) )
-            pRet->MakeFrms();
+        ASSERT( !this, "Impossible!");
     }
-    return pRet;
 }
-
 
 // MakeGrafNotInCntnt setzt eine nicht-Zeichengebundene Grafik
 // ( bGrafApo == TRUE )
@@ -926,9 +845,9 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                                         Sdr-Text-Objekt einen Grafik- Link
                                         einbauen )
                                     */
-                                    pNewFlyFmt= MakeGrafByFlyFmt( pTextObj,
-                                        *pOldFlyFmt, aPD, 0, aGrName,
-                                        aEmptyStr, aGrSet, bSetToBackground );
+                                    ReplaceObjWithGraphicLink(*pTextObj,
+                                        aGrName);
+                                    pNewFlyFmt= 0;
                                 }
                                 else
                                 {
