@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XWindow.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 10:14:25 $
+ *  last change:$Date: 2003-11-18 16:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 package ifc.awt;
 
-import lib.MultiMethodTest;
-import util.ValueComparer;
-
 import com.sun.star.awt.FocusEvent;
 import com.sun.star.awt.KeyEvent;
 import com.sun.star.awt.MouseEvent;
@@ -82,6 +79,8 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowListener;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.lang.EventObject;
+import lib.MultiMethodTest;
+import util.ValueComparer;
 
 /**
 * Testing <code>com.sun.star.awt.XWindow</code>
@@ -157,6 +156,8 @@ public class _XWindow extends MultiMethodTest {
         Rectangle gPS = oObj.getPosSize();
         log.println("Was : (" + posSize.X + ", " + posSize.Y + ", " +
             posSize.Width + ", " + posSize.Height + "), ");
+        log.println("Set : (" + newRec.X + ", " + newRec.Y + ", " +
+            newRec.Width + ", " + newRec.Height + "), ");
         log.println("Get : (" + gPS.X + ", " + gPS.Y + ", " +
             gPS.Width + ", " + gPS.Height + "). ");
         tRes.tested("setPosSize()", ValueComparer.equalValue(newRec, gPS) );
@@ -265,6 +266,7 @@ public class _XWindow extends MultiMethodTest {
         // testing wListener.windowMoved()
         XControlShape ctrlShape = (XControlShape)
             tEnv.getObjRelation("XWindow.ControlShape");
+        log.println("change object position and size...");
 
         if (ctrlShape != null) {
             try {
@@ -288,7 +290,10 @@ public class _XWindow extends MultiMethodTest {
             !wListener.hidden && !wListener.shown;
         result &= res;
         if (!res) {
-            log.println("windowMoved() or windowResized() wasn't called");
+            log.println("\twindowHidden()  wasn't called: " + !wListener.hidden);
+            log.println("\twindowShown()   wasn't called: " + !wListener.shown);
+            log.println("\twindowResized()    was called: " + wListener.resized);
+            log.println("\twindowMoved()      was called: " + wListener.moved);
         } else {
             log.println("windowMoved() and windowResized() was called");
         }
@@ -296,14 +301,17 @@ public class _XWindow extends MultiMethodTest {
         // testing wListener.windowHidden()
         wListener.init();
         shortWait();
+        log.println("set object invisible...");
         oObj.setVisible(false);
         shortWait();
-        res = wListener.hidden;
-        //!wListener.resized && !wListener.moved &&
-        //                            wListener.hidden && !wListener.shown;
+        res = wListener.hidden && !wListener.resized
+                        && !wListener.moved && !wListener.shown;
         result &= res;
         if (!res) {
-            log.println("windowHidden() wasn't called");
+            log.println("\twindowHidden()     was called: " + wListener.hidden);
+            log.println("\twindowShown()   wasn't called: " + !wListener.shown);
+            log.println("\twindowResized() wasn't called: " + !wListener.resized);
+            log.println("\twindowMoved()   wasn't called: " + !wListener.moved);
         } else {
             log.println("windowHidden() was called");
         }
@@ -311,12 +319,17 @@ public class _XWindow extends MultiMethodTest {
         // testing wListener.windowShown()
         wListener.init() ;
         shortWait();
+        log.println("set object visible...");
         oObj.setVisible(true) ;
         shortWait();
-        res = !wListener.resized && !wListener.hidden && wListener.shown;
+        res = wListener.shown && !wListener.resized &&
+                !wListener.hidden && !wListener.moved;
         result &= res;
         if (!res) {
-            log.println("windowShown() wasn't called");
+            log.println("\twindowHidden()  wasn't called: " + !wListener.hidden);
+            log.println("\twindowShown()      was called: " + wListener.shown);
+            log.println("\twindowResized() wasn't called: " + !wListener.resized);
+            log.println("\twindowMoved()   wasn't called: " + !wListener.moved);
         } else {
             log.println("windowShown() was called");
         }
