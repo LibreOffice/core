@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: nn $ $Date: 2000-09-29 10:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 #include <sfx2/passwd.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svtools/sbxcore.hxx>
+#include <svtools/useroptions.hxx>
 #include <vcl/waitobj.hxx>
 
 #include "cellsh.hxx"
@@ -1587,10 +1588,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_RANGE_NOTETEXT:
             if (pReqArgs)
             {
+                SvtUserOptions aUserOpt;
+
                 String aNoteStr = ((const SfxStringItem&)pReqArgs->
                                     Get( SID_RANGE_NOTETEXT )).GetValue();
                 String aDateStr = ScGlobal::pScInternational->GetDate( Date() );
-                String aAuthorStr = SFX_INIMANAGER()->Get(SFX_KEY_USER_ID);
+                String aAuthorStr = aUserOpt.GetID();
                 ScPostIt aNote( aNoteStr, aDateStr, aAuthorStr );
 
                 USHORT nCol, nRow, nTab;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:44:06 $
+ *  last change: $Author: nn $ $Date: 2000-09-29 10:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,15 +629,12 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdundo.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <so3/ipobj.hxx>
 #include <so3/svstor.hxx>
-#include <svtools/iniman.hxx>
+#include <svtools/pathoptions.hxx>
 #include <svtools/itempool.hxx>
 #include <vcl/virdev.hxx>
-#include <tools/shl.hxx>
 
 #include "drwlayer.hxx"
 #include "drawpage.hxx"
@@ -765,7 +762,7 @@ inline void TwipsToMM( long& nVal )
 
 
 ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
-    FmFormModel( SFX_APP()->GetAppIniManager()->Get( SFX_KEY_PALETTE_PATH ),
+    FmFormModel( SvtPathOptions().GetPalettePath(),
                  NULL,                          // SfxItemPool* Pool
                 pGlobalDrawPersist ?
                     pGlobalDrawPersist :

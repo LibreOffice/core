@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: nn $ $Date: 2000-09-29 10:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,8 @@
 #include <svx/xtable.hxx>
 #include <sfx2/inimgr.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/iniman.hxx>
+#include <svtools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
-#include <segmentc.hxx>
 
 #include "global.hxx"
 #include "globstr.hrc"
@@ -83,10 +82,7 @@
 #include "scendlg.hrc"
 #include "scendlg.hxx"
 
-SEG_EOFGLOBALS()
-
 //========================================================================
-#pragma SEG_FUNCDEF(scendlg_01)
 
 ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL bEdit )
 
@@ -133,10 +129,14 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
         }
     }
 
+    SvtUserOptions aUserOpt;
+
     String aComment( ScResId( STR_CREATEDBY ) );
 
     aComment += ' ';
-    aComment += SFX_INIMANAGER()->Get( SFX_KEY_USER_NAME );
+    aComment += aUserOpt.GetFirstName();
+    aComment += ' ';
+    aComment += aUserOpt.GetLastName();
     aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
     aComment += String( ScResId( STR_ON ) );
     aComment += ' ';
@@ -170,14 +170,12 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(scendlg_03)
 
 __EXPORT ScNewScenarioDlg::~ScNewScenarioDlg()
 {
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(scendlg_02)
 
 void ScNewScenarioDlg::GetScenarioData( String& rName, String& rComment,
                                         Color& rColor, USHORT& rFlags ) const
@@ -225,7 +223,6 @@ void ScNewScenarioDlg::SetScenarioData( const String& rName, const String& rComm
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(scendlg_04)
 
 IMPL_LINK( ScNewScenarioDlg, OkHdl, OKButton *, EMPTYARG )
 {
@@ -255,88 +252,5 @@ IMPL_LINK( ScNewScenarioDlg, OkHdl, OKButton *, EMPTYARG )
 
     //! beim Editieren testen, ob eine andere Tabelle den Namen hat!
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.24  2000/09/17 14:08:57  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.23  2000/08/31 16:38:20  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.22  2000/04/14 17:38:03  nn
-    unicode changes
-
-    Revision 1.21  2000/02/11 12:24:00  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.20  1998/03/16 18:23:02  ANK
-    Neues Outfit
-
-
-      Rev 1.19   16 Mar 1998 19:23:02   ANK
-   Neues Outfit
-
-      Rev 1.18   10 Mar 1998 22:05:40   NN
-   Controls fuer neue Einstellungen
-
-      Rev 1.17   08 Mar 1998 21:16:20   NN
-   Szenario-Einstellungen
-
-      Rev 1.16   05 Dec 1997 19:56:10   ANK
-   Includes geaendert
-
-      Rev 1.15   29 Oct 1996 14:03:56   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.14   22 Mar 1996 12:06:16   ER
-   GetUserName --> Get SFX_KEY_USER_NAME
-
-      Rev 1.13   29 Jan 1996 15:12:30   MO
-   neuer Link
-
-      Rev 1.12   08 Nov 1995 13:06:24   MO
-   301-Aenderungen
-
-      Rev 1.11   26 Jul 1995 08:11:52   STE
-   Compilefehler behoben
-
-      Rev 1.10   25 Jul 1995 19:15:58   HJS
-   GetAppInternational => pInternational
-
-      Rev 1.9   24 Jul 1995 14:11:52   MO
-   EXPORT
-
-      Rev 1.8   04 May 1995 08:16:28   TRI
-   pApp -> Application::
-
-      Rev 1.7   27 Apr 1995 15:35:48   MO
-   Fehlermeldung, wenn TabName ungueltig
-
-      Rev 1.6   27 Apr 1995 10:01:16   MO
-   Leerzeichn im Namen durch '_' ersetzen
-
-      Rev 1.5   31 Mar 1995 10:16:24   MO
-   Ueberpruefung auf doppelte Tabellennamen
-
-      Rev 1.4   29 Mar 1995 16:39:40   MO
-   Defautlname im Ctor
-
-      Rev 1.3   28 Mar 1995 17:29:18   MO
-   Benutzername ueber Sfx-Inimanager
-
-      Rev 1.2   24 Mar 1995 13:27:14   TRI
-   Segmentierung
-
-      Rev 1.1   21 Mar 1995 14:09:44   TRI
-   sfx.hxx included
-
-      Rev 1.0   20 Mar 1995 16:46:08   MO
-   Dialog zum Anlegen eines Szenarios
-
------------------------------------------------------------------------- */
-
-#pragma SEG_EOFMODULE
 
 

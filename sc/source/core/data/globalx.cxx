@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globalx.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: nn $ $Date: 2000-09-29 10:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 #include "callform.hxx"
 #include "global.hxx"
 
-#ifndef _SFX_INIMGR_HXX
-#include <sfx2/inimgr.hxx>
-#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -75,6 +72,9 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
+
+#include <tools/debug.hxx>
+#include <svtools/pathoptions.hxx>
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -92,7 +92,8 @@ using namespace ::com::sun::star::ucb;
 void ScGlobal::InitAddIns()
 {
     // multi paths separated by semicolons
-    String aMultiPath( SFX_INIMANAGER()->Get( SFX_KEY_ADDINS_PATH ) );
+    SvtPathOptions aPathOpt;
+    String aMultiPath = aPathOpt.GetAddinPath();
     if ( aMultiPath.Len() > 0 )
     {
         xub_StrLen nTokens = aMultiPath.GetTokenCount( ';' );

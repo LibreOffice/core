@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notemark.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: nn $ $Date: 2000-09-29 10:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,8 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/xoutx.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/printer.hxx>
-#include <svtools/iniman.hxx>
+#include <svtools/pathoptions.hxx>
 #include <svtools/itempool.hxx>
 
 #include "notemark.hxx"
@@ -119,7 +118,9 @@ IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, pTimer )
 {
     if (!bVisible)
     {
-        pModel = new SdrModel(SFX_APP()->GetAppIniManager()->Get(SFX_KEY_PALETTE_PATH));
+        SvtPathOptions aPathOpt;
+        String aPath = aPathOpt.GetPalettePath();
+        pModel = new SdrModel(aPath);
         pModel->SetScaleUnit(MAP_100TH_MM);
         SfxItemPool& rPool = pModel->GetItemPool();
         rPool.SetDefaultMetric(SFX_MAPUNIT_100TH_MM);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: nn $ $Date: 2000-09-29 10:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,6 @@
 #ifndef _TOOLS_SOLMATH_HXX      // DoubleToString()
 #include <tools/solmath.hxx>
 #endif
-#ifndef _SFX_INIMGR_HXX         // SFX_INIMAMAGER()
-#include <sfx2/inimgr.hxx>
-#endif
 #ifndef _URLOBJ_HXX             // INetURLObject
 #include <tools/urlobj.hxx>
 #endif
@@ -121,6 +118,8 @@
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
+
+#include <svtools/useroptions.hxx>
 
 #include <stdio.h>
 
@@ -2494,7 +2493,10 @@ ExcEScenario::ExcEScenario( ScDocument& rDoc, UINT16 nTab )
         nRecLen += 3 + sComment.GetByteCount();
 
     if( !sUsername.GetLen() )
-        sUsername.Assign( SFX_INIMANAGER()->Get( SFX_KEY_USER_NAME ) );
+    {
+        SvtUserOptions aUserOpt;
+        sUsername.Assign( aUserOpt.GetLastName() );
+    }
     if( !sUsername.GetLen() )
         sUsername.Assign( String::CreateFromAscii( "SC" ) );
     nRecLen += 3 + sUsername.GetByteCount();
@@ -2873,6 +2875,9 @@ UINT16 XclHlink::GetLen() const
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:45:15  hr
+    initial import
+
     Revision 1.32  2000/09/17 14:08:51  willem.vandorp
     OpenOffice header added.
 

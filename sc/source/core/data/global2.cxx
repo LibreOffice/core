@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: nn $ $Date: 2000-09-29 10:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,11 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <sfx2/docfile.hxx>
-#include <sfx2/inimgr.hxx>
 #include <sfx2/objsh.hxx>
 #include <sdb/sdbstat.hxx>      // enum DBObject
 #include <svtools/txtcmp.hxx>
+#include <svtools/pathoptions.hxx>
+#include <svtools/useroptions.hxx>
 #include <tools/intn.hxx>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
@@ -1474,7 +1475,8 @@ void ScPostIt::AutoSetText( const String& rNewText )
 //  aStrDate  += ", ";
 //  aStrDate  += ScGlobal::pScInternational->GetTime( Time() );
 
-    aStrAuthor = SFX_INIMANAGER()->Get( SFX_KEY_USER_ID );
+    SvtUserOptions aUserOpt;
+    aStrAuthor = aUserOpt.GetID();
 }
 
 //========================================================================
@@ -1486,7 +1488,8 @@ String ScGlobal::GetAbsDocName( const String& rFileName,
     if ( !pShell->HasName() )
     {   // maybe relative to document path working directory
         INetURLObject aObj;
-        aObj.SetSmartURL( SFX_INIMANAGER()->Get( SFX_KEY_WORK_PATH ) );
+        SvtPathOptions aPathOpt;
+        aObj.SetSmartURL( aPathOpt.GetWorkPath() );
         aObj.setFinalSlash();       // it IS a path
         bool bWasAbs = true;
         aAbsName = aObj.smartRel2Abs( rFileName, bWasAbs ).GetMainURL();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:26:47 $
+ *  last change: $Author: nn $ $Date: 2000-09-29 10:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,7 @@
 #include <offmgr/app.hxx>
 #include <so3/clsids.hxx>
 #include <sot/formats.hxx>
-#include <svtools/iniman.hxx>
+#include <svtools/pathoptions.hxx>
 #include <svtools/ptitem.hxx>
 #include <svtools/stritem.hxx>
 #include <vcl/drag.hxx>
@@ -567,7 +567,8 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId, SvDataObject* pObject,
             {
                 MakeDrawLayer();    // vorher, damit die 3D-Factory angelegt ist
 
-                String aPath = SFX_APP()->GetAppIniManager()->Get(SFX_KEY_PALETTE_PATH);
+                SvtPathOptions aPathOpt;
+                String aPath = aPathOpt.GetPalettePath();
                 FmFormModel* pModel = new FmFormModel(
                                         aPath, NULL, GetViewData()->GetDocShell() );
                 pModel->GetItemPool().FreezeIdRanges();
