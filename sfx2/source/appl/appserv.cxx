@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:53:19 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,108 +527,44 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_CONFIGACCEL:
         case SID_CONFIGEVENT:
         {
-            // Check configuration to see whether new Configure dialog
-            // should be shown.
-            Any value;
-            sal_Bool tmp;
+            SfxAbstractDialogFactory* pFact =
+                SfxAbstractDialogFactory::Create();
 
-            value = ::utl::ConfigManager::GetConfigManager()->GetLocalProperty(
-                ::rtl::OUString::createFromAscii(
-            "Office.Scripting/ScriptDisplaySettings/UseNewToolsConfigure" ) );
+            if ( pFact )
+            {
+                SFX_REQUEST_ARG(rReq, pStringItem,
+                    SfxStringItem, SID_CONFIG, sal_False);
 
-            value >>= tmp;
+                SfxItemSet aSet(
+                    GetPool(), SID_CONFIG, SID_CONFIG );
 
-            if (tmp == sal_True) {
-                SfxAbstractDialogFactory* pFact =
-                    SfxAbstractDialogFactory::Create();
-
-                if ( pFact )
+                if ( pStringItem )
                 {
-                    SFX_REQUEST_ARG(rReq, pStringItem,
-                        SfxStringItem, SID_CONFIG, sal_False);
-
-                    SfxItemSet aSet(
-                        GetPool(), SID_CONFIG, SID_CONFIG );
-
-                    if ( pStringItem )
-                    {
-                        aSet.Put( SfxStringItem(
-                            SID_CONFIG, pStringItem->GetValue() ) );
-                    }
-
-                    SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog(
-                        ResId( RID_SVXDLG_CUSTOMIZE ),
-                        NULL, &aSet, pViewFrame );
-
-                      if ( pDlg )
-                    {
-                        const short nRet = pDlg->Execute();
-
-                        for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst();
-                              pFrame;
-                              pFrame = SfxViewFrame::GetNext( *pFrame ) )
-                        {
-                            pFrame->GetDispatcher()->Update_Impl( TRUE );
-                        }
-
-                        if ( nRet )
-                            bDone = TRUE;
-
-                        delete pDlg;
-                    }
+                    aSet.Put( SfxStringItem(
+                        SID_CONFIG, pStringItem->GetValue() ) );
                 }
-            }
-            else
-            {
-            SfxItemSet aSet( GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM );
-            SfxConfigDialog *pDlg = new SfxConfigDialog( NULL, &aSet, pViewFrame );
 
-            switch ( rReq.GetSlot() )
-            {
-                case SID_TOOLBOXOPTIONS:
+                SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog(
+                    ResId( RID_SVXDLG_CUSTOMIZE ),
+                    NULL, &aSet, pViewFrame );
+
+                  if ( pDlg )
                 {
-                    // Versuche, eine "ubergebene ConfigID zu holen
-                    SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, SID_CONFIGITEMID, FALSE );
-                    if ( pItem )
+                    const short nRet = pDlg->Execute();
+
+                    for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst();
+                             pFrame;
+                             pFrame = SfxViewFrame::GetNext( *pFrame ) )
                     {
+                        pFrame->GetDispatcher()->Update_Impl( TRUE );
+                    }
+
+                    if ( nRet )
                         bDone = TRUE;
-                        USHORT nId = pItem->GetValue();
-                        if ( nId )
-                            // Es soll eine Objektleiste vorselektiert werden
-                            pDlg->ActivateToolBoxConfig(nId);
-                    }
-                    break;
-                }
 
-                default:
-                {
-                    // Soll ein Macro vorselektiert werden ?
-                    SFX_REQUEST_ARG( rReq, pMacroItem, SfxMacroInfoItem, SID_MACROINFO, FALSE );
-                    if ( pMacroItem )
-                        pDlg->ActivateMacroConfig( pMacroItem );
-                    pDlg->ActivateTabPage( rReq.GetSlot() );
-                    break;
+                    delete pDlg;
                 }
             }
-
-            const short nRet = pDlg->Execute();
-//          DBG_ERROR("Notify is missing!");
-
-            for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame ) )
-                pFrame->GetDispatcher()->Update_Impl( TRUE );
-
-            if ( nRet )
-                bDone = TRUE;
-
-            if ( nRet == 3 )
-            {
-                pViewFrame->SetChildWindow( SfxToolboxCustomWindow::GetChildWindowId(), TRUE );
-                Invalidate(rReq.GetSlot());
-            }
-
-            delete pDlg;
-            }
-
             break;
         }
 
