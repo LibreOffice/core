@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:11:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,8 +475,8 @@ void XMLTextStyleContext::FillPropertySet(
 
         if( IsDefaultStyle() && GetFamily() == XML_STYLE_FAMILY_TABLE_TABLE )
         {
-            OUString sCollapsingBorders =
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "CollapsingBorders" ) );
+            OUString sCollapsingBorders(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "CollapsingBorders" ) ) );
             DBG_ASSERT( rPropSet->getPropertySetInfo()->hasPropertyByName( sCollapsingBorders ),
                         "property missing?" );
             rPropSet->setPropertyValue( sCollapsingBorders,
@@ -488,6 +488,9 @@ void XMLTextStyleContext::FillPropertySet(
 
 #ifdef CONV_STAR_FONTS
         // check for StarBats and StarMath fonts
+
+        if (!xInfo.is())
+            xInfo.set(rPropSet->getPropertySetInfo());
 
         // iterate over aContextIDs entries 1..3
         for ( sal_Int32 i = 2; i < 5; i++ )
