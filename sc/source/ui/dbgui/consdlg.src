@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-29 11:48:43 $
+ *  last change: $Author: vg $ $Date: 2002-11-04 17:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,7 +586,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ swedish ] = "~Konsolideringsområden" ;
         Text [ dutch ] = "~Consolideringsbereik" ;
         Text [ spanish ] = "Áreas de consolidación" ;
-        Text [ english_us ] = "~Consolidation areas" ;
+        Text [ english_us ] = "~Consolidation ranges" ;
         Text[ chinese_simplified ] = "åˆå¹¶è®¡ç®—åŒºåŸŸ(~C)";
         Text[ russian ] = "Îáëàñòè êîíñîëèäàöèè";
         Text[ polish ] = "Obszary konsolidacji";
@@ -616,7 +616,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ swedish ] = "Källdata~område" ;
         Text [ dutch ] = "~Brongegevensbereik" ;
         Text [ spanish ] = "~Área de datos fuente" ;
-        Text [ english_us ] = "~Source data area" ;
+        Text [ english_us ] = "~Source data range" ;
         Text[ chinese_simplified ] = "æºæ•°æ®åŒºåŸŸ(~S)";
         Text[ russian ] = "Îáëàñòü èñõîäíûõ äàííûõ";
         Text[ polish ] = "Obszar danych Ÿród³a";
@@ -707,7 +707,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ swedish ] = "Kolum~nhuvuden" ;
         Text [ dutch ] = "~Kolomkoppen" ;
         Text [ spanish ] = "Títulos de ~columna" ;
-        Text [ english_us ] = "C~olumn headers" ;
+        Text [ english_us ] = "C~olumn labels" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ—æ ‡é¢˜(~O)";
         Text[ russian ] = "íàçâàíèş ñòîëáöîâ";
