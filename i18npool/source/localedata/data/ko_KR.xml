@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Locale SYSTEM 'locale.dtd'>
 <Locale  version="1.2">
+
 <LC_INFO>
 <Language>
 <LangID>ko</LangID>
@@ -11,6 +12,7 @@
 <DefaultName>Korea</DefaultName>
 </Country>
 </LC_INFO>
+
 <LC_CTYPE unoid="generic">
 <Separators>
 <DateSeparator>-</DateSeparator>
@@ -34,330 +36,294 @@
 <TimePM>오후</TimePM>
 <MeasurementSystem>metric</MeasurementSystem>
 </LC_CTYPE>
+
 <LC_FORMAT>
 <!-- Formats for number, code range is from 0 to 5, compatible with en_US.xml -->
 <FormatElement msgid="NumberFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
 <FormatCode>General</FormatCode>
-<DefaultName>System default</DefaultName>
 </FormatElement>
 <FormatElement msgid="NumberFormatskey2" default="false" type="medium" usage="FIXED_NUMBER" formatindex="1">
 <FormatCode>0</FormatCode>
-<DefaultName>Only integer part for fixed number</DefaultName>
 </FormatElement>
 <FormatElement msgid="NumberFormatskey3" default="false" type="medium" usage="FIXED_NUMBER" formatindex="2">
 <FormatCode>0.00</FormatCode>
-<DefaultName>Two bits of decimal fraction for fixed number</DefaultName>
 </FormatElement>
 <FormatElement msgid="NumberFormatskey4" default="false" type="medium" usage="FIXED_NUMBER" formatindex="3">
 <FormatCode>#,##0</FormatCode>
-<DefaultName>Thousand separator used in fixed number</DefaultName>
 </FormatElement>
 <FormatElement msgid="NumberFormatskey5" default="false" type="medium" usage="FIXED_NUMBER" formatindex="4">
 <FormatCode>#,##0.00</FormatCode>
-<DefaultName>Fixed number with two bits of decimal fraction and thousand separator</DefaultName>
 </FormatElement>
 <FormatElement msgid="NumberFormatskey6" default="false" type="medium" usage="FIXED_NUMBER" formatindex="5">
 <FormatCode>#,###.00</FormatCode>
-<DefaultName></DefaultName>
 </FormatElement>
 
 <!--Formats for science number. Code range is from 6 to 7, compatible with en_US.xml -->
-<FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
+<FormatElement msgid="ScientificFormatskey1" default="true" type="long" usage="SCIENTIFIC_NUMBER" formatindex="6">
 <FormatCode>0.00E+000</FormatCode>
-<DefaultName/>
 </FormatElement>
-<FormatElement msgid="ScientificFormatskey2" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="7">
+<FormatElement msgid="ScientificFormatskey2" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="7">
 <FormatCode>0.00E+00</FormatCode>
-<DefaultName/>
 </FormatElement>
 
 <!-- Percent formats. Code range is from 8 to 9. -->
-<FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER" formatindex="8">
+<FormatElement msgid="PercentFormatskey1" default="true" type="medium" usage="PERCENT_NUMBER" formatindex="8">
 <FormatCode>0%</FormatCode>
-<DefaultName/>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER" formatindex="9">
 <FormatCode>0.00%</FormatCode>
-<DefaultName/>
 </FormatElement>
 
 <!-- Currency formats. Code range is from 12 to 17. -->
 <FormatElement msgid="CurrencyFormatskey1" default="false" type="medium" usage="CURRENCY" formatindex="12">
 <FormatCode>[$￦-412]#,##0;-[$￦-412]#,##0</FormatCode>
-<DefaultName/>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
 <FormatCode>[$￦-412]#,##0.00;-[$￦-412]#,##0.00</FormatCode>
-<DefaultName/>
 </FormatElement>
-<FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
+<FormatElement msgid="CurrencyFormatskey3" default="true" type="medium" usage="CURRENCY" formatindex="14">
 <FormatCode>[$￦-412]#,##0;[RED]-[$￦-412]#,##0</FormatCode>
-<DefaultName/>
 </FormatElement>
-<FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
+<FormatElement msgid="CurrencyFormatskey4" default="false" type="medium" usage="CURRENCY" formatindex="15">
 <FormatCode>[$￦-412]#,##0.00;[RED]-[$￦-412]#,##0.00</FormatCode>
-<DefaultName/>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
 <FormatCode>#,##0.00 CCC</FormatCode>
-<DefaultName/>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
 <FormatCode>[$￦-412]#,##0.--;[RED]-[$￦-412]#,##0.--</FormatCode>
-<DefaultName/>
 </FormatElement>
-
 
 <!-- Date formats compatible with en_US.xml. Format range is from 18 to 38 -->
 <FormatElement msgid="DateFormatskey1" default="false" type="medium" usage="DATE" formatindex="18">
-<FormatCode>YY"년"M"월"D"일"</FormatCode>
-<DefaultName>Short year Arabic Hangul DateFormat</DefaultName>
+<FormatCode>YY"년" M"월" D"일"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="19">
-<FormatCode>YYYY"년"M"월"D"일" NNNN</FormatCode>
-<DefaultName>Long year Arabic Hangul DateFormat</DefaultName>
+<FormatCode>YYYY"년" M"월" D"일" NNNN</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="20">
-<FormatCode>YY"年"M"月"D"日"</FormatCode>
-<DefaultName>Short year Arabic Hanja dataformat</DefaultName>
+<FormatCode>YY"年" M"月" D"日"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey4" default="true" type="medium" usage="DATE" formatindex="25">
-<FormatCode>YYYY"년"M"월"D"일"</FormatCode>
-<DefaultName>Long year Arabic Hangul dateformat</DefaultName>
+<FormatCode>YYYY"년" M"월" D"일"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey5" default="true" type="short" usage="DATE" formatindex="22">
 <FormatCode>YY/M/D</FormatCode>
-<DefaultName>Date format with Arabic number and slash separator</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="23">
-<FormatCode>YYYY"年"M"月"D"日"</FormatCode>
-<DefaultName>Long year Arabic Hanja date format</DefaultName>
+<FormatCode>YYYY"年" M"月" D"日"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="24">
-<FormatCode>YY"년"M"월"</FormatCode>
-<DefaultName>Short year Arabic Hangul date format</DefaultName>
+<FormatCode>YY"년" M"월"</FormatCode>
 </FormatElement>
 <!-- Formatindex 21 is the edit date format -->
 <FormatElement msgid="DateFormatskey8" default="false" type="medium" usage="DATE" formatindex="21">
 <FormatCode>YYYY/M/D</FormatCode>
-<DefaultName>Long year and slash separator date format</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey9" default="false" type="medium" usage="DATE" formatindex="26">
 <FormatCode>[~hanja_yoil]YYYY/M/D NNNN</FormatCode>
-<DefaultName>Long year Arabic slash separator hanja date format</DefaultName>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="27">
-<FormatCode>YY"년"M"월"D"일" NNNN</FormatCode>
-<DefaultName>Short year Arabic Hangul date format</DefaultName>
+<FormatCode>YY"년" M"월" D"일" NNNN</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey11" default="false" type="medium" usage="DATE" formatindex="28">
-<FormatCode>[~hanja_yoil]YY"年"M"月"D"日" NNNN</FormatCode>
-<DefaultName>Short year Hanja date format</DefaultName>
+<FormatCode>[~hanja_yoil]YY"年" M"月" D"日" NNNN</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey12" default="false" type="medium" usage="DATE" formatindex="29">
-<FormatCode>[~hanja_yoil]YYYY"年"M"月"D"日" NNNN </FormatCode>
-<DefaultName>Long year Arabic Hanja DateFormat</DefaultName>
+<FormatCode>[~hanja_yoil]YYYY"年" M"月" D"日" NNNN </FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey13" default="false" type="medium" usage="DATE" formatindex="30">
 <FormatCode>YY-M-D NNNN</FormatCode>
-<DefaultName>Short year dash separator date format</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey14" default="false" type="medium" usage="DATE" formatindex="31">
-<FormatCode>M"월"D"일"</FormatCode>
-<DefaultName>No year Hangul date format</DefaultName>
+<FormatCode>M"월" D"일"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey15" default="false" type="medium" usage="DATE" formatindex="32">
 <FormatCode>YY-M-D</FormatCode>
-<DefaultName>Short year dash separator date format</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey16" default="false" type="medium" usage="DATE" formatindex="33">
-<FormatCode>YY"년"M"월"</FormatCode>
-<DefaultName>Short year Hangul date format</DefaultName>
+<FormatCode>YY"년" M"월"</FormatCode>
 </FormatElement>
-
-
 <FormatElement msgid="DateFormatskey17" default="false" type="medium" usage="DATE" formatindex="34">
-<FormatCode>M"月"D"日"</FormatCode>
-<DefaultName>Short year Hanja date format</DefaultName>
+<FormatCode>M"月" D"日"</FormatCode>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey18" default="false" type="medium" usage="DATE" formatindex="35">
 <FormatCode>M-D</FormatCode>
-<DefaultName>No year dash separator date format</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey19" default="false" type="medium" usage="DATE" formatindex="36">
 <FormatCode>M"월"</FormatCode>
-<DefaultName>No year No day Hangul DateFormat</DefaultName>
 </FormatElement>
 <FormatElement msgid="DataFormatskey20" default="false" type="medium" usage="DATE" formatindex="37">
 <FormatCode>YY"년도 제"QQ"사분기"</FormatCode>
-<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DataFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
 <FormatCode>"제"WW"주"</FormatCode>
-<DefaultName></DefaultName>
 </FormatElement>
 
-<!-- Time formats. Format index range is from 39 to 45-->
+<!-- Time formats. Format index range is from 39 to 45 -->
 <FormatElement msgid="TimeFormatskey1" default="false" type="medium" usage="TIME" formatindex="39">
-<FormatCode>HH"시"MM"분"</FormatCode>
-<DefaultName/>
+<FormatCode>H"시" M"분"</FormatCode>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey2" default="true" type="medium" usage="TIME" formatindex="40">
-<FormatCode>HH"시"MM"분"SS"초"</FormatCode>
-<DefaultName/>
+<FormatCode>H"시" M"분" S"초"</FormatCode>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey3" default="false" type="medium" usage="TIME" formatindex="41">
-<FormatCode>AM/PM HH"시"MM"분"</FormatCode>
-<DefaultName/>
+<FormatCode>AM/PM H"시" M"분"</FormatCode>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey4" default="false" type="medium" usage="TIME" formatindex="42">
-<FormatCode>AM/PM HH"시"MM"분"SS"초"</FormatCode>
-<DefaultName/>
+<FormatCode>AM/PM H"시" M"분" S"초"</FormatCode>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME" formatindex="43">
-<FormatCode>[HH]"시"MM"분"SS"초"</FormatCode>
-<DefaultName/>
+<FormatCode>[H]"시" M"분" S"초"</FormatCode>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey6" default="false" type="medium" usage="TIME" formatindex="44">
-<FormatCode>MM:SS.00</FormatCode>
-<DefaultName/>
+<FormatCode>M:S.00</FormatCode>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME" formatindex="45">
-<FormatCode>[HH]:MM:SS.00</FormatCode>
-<DefaultName/>
+<FormatCode>[H]:M:S.00</FormatCode>
 </FormatElement>
 
-<!-- Datetime format. Format index range is from 46 to 47. -->
+<!-- Datetime format. Format index range is from 46 to 50 -->
 <FormatElement msgid="DateTimeFormatskey1" default="false" type="medium" usage="DATE_TIME" formatindex="46">
-<FormatCode>YY"년"M"월"D"일"HH"시"MM"분"</FormatCode>
-<DefaultName/>
+<FormatCode>YY"년" M"월" D"일" H"시" M"분"</FormatCode>
 </FormatElement>
 <!-- Formatindex 47 is the edit combined date/time format -->
 <FormatElement msgid="DateTimeFormatskey3" default="false" type="medium" usage="DATE_TIME" formatindex="47">
-<FormatCode>YYYY-M-D HH:MM:SS</FormatCode>
-<DefaultName/>
+<FormatCode>YYYY. M. D. H:M:S</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey2" default="true" type="medium" usage="DATE_TIME" formatindex="50">
-<FormatCode>YYYY"년"M"월"D"일"HH"시"MM"분"SS"초"</FormatCode>
-<DefaultName/>
+<FormatCode>YYYY"년" M"월" D"일" H"시" M"분" S"초"</FormatCode>
 </FormatElement>
 
 <!--End of en_US compatible format code definition. -->
 
-<!--The following format definition is CJK extension. The index is from 50 to ...-->
-
-<!--Date format definitions. Index range is from 50 to ...-->
+<!--The following format definition is CJK extension. The index is from 51 to 64-->
 <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="51">
-<FormatCode>YYYY"년"M"월"</FormatCode>
-<DefaultName>Long year Arabic Hangul Quarter DateFormat</DefaultName>
+<FormatCode>YYYY"년" M"월"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey23" default="false" type="medium" usage="DATE" formatindex="52">
 <FormatCode>YYYY"년도 제"QQ"사분기"</FormatCode>
-<DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateFormatskey24" default="false" type="medium" usage="DATE" formatindex="53">
-<FormatCode>YY"年"M"月"</FormatCode>
-<DefaultName/>
+<FormatCode>YY"年" M"月"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey25" default="false" type="medium" usage="DATE" formatindex="54">
-<FormatCode>YYYY"年"M"月"</FormatCode>
-<DefaultName/>
+<FormatCode>YYYY"年" M"月"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey26" default="false" type="medium" usage="DATE" formatindex="55">
 <FormatCode>YYYY"年度 第"QQ"四分期"</FormatCode>
-<DefaultName>Short year Arabic Hanja Quarter DateFormat</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey27" default="false" type="medium" usage="DATE" formatindex="56">
 <FormatCode>YY"年度 第"QQ"四分期"</FormatCode>
-<DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateFormatskey28" default="false" type="medium" usage="DATE" formatindex="57">
 <FormatCode>M"月"</FormatCode>
-<DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateFormatskey29" default="false" type="medium" usage="DATE" formatindex="58">
 <FormatCode>"第"WW"週"</FormatCode>
-<DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateFormatskey30" default="false" type="medium" usage="DATE" formatindex="59">
 <FormatCode>YY-M</FormatCode>
-<DefaultName/>
 </FormatElement>
-
-
 <FormatElement msgid="DateFormatskey31" default="false" type="long" usage="DATE" formatindex="60">
 <FormatCode>YYYY-M</FormatCode>
-<DefaultName>Week of Year DateFormat</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey33" default="false" type="long" usage="DATE" formatindex="61">
 <FormatCode>YY/M/D NNNN</FormatCode>
-<DefaultName>Week of Year Hangul DateFormat</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey34" default="true" type="long" usage="DATE" formatindex="62">
 <FormatCode>YYYY/M/D NNNN </FormatCode>
-<DefaultName>Week of Year Hangul DateFormat</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey35" default="false" type="long" usage="DATE" formatindex="63">
 <FormatCode>YY/M</FormatCode>
-<DefaultName>Week of Year DateFormat</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey36" default="false" type="long" usage="DATE" formatindex="64">
 <FormatCode>M/D</FormatCode>
-<DefaultName>Week of Year DateFormat</DefaultName>
 </FormatElement>
 
-<!-- The following is the Korean extensive time format. Index range is from 64 to 71 -->
+<!-- The following is the Korean extensive time format. Index range is from 65 to 72 -->
 <FormatElement msgid="TimeFormatskey8" default="false" type="medium" usage="TIME" formatindex="65">
-<FormatCode>HH"時"MM"分"</FormatCode>
-<DefaultName/>
+<FormatCode>H"時" M"分"</FormatCode>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey9" default="false" type="medium" usage="TIME" formatindex="66">
-<FormatCode>HH:MM</FormatCode>
-<DefaultName/>
+<FormatCode>H:M</FormatCode>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey10" default="false" type="medium" usage="TIME" formatindex="67">
-<FormatCode>HH"時"MM"分"SS"秒"</FormatCode>
-<DefaultName/>
+<FormatCode>H"時" M"分" S"秒"</FormatCode>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey11" default="false" type="medium" usage="TIME" formatindex="68">
-<FormatCode>HH:MM:SS</FormatCode>
-<DefaultName/>
+<FormatCode>H:M:S</FormatCode>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey12" default="false" type="medium" usage="TIME" formatindex="69">
-<FormatCode>AM/PM HH"時"MM"分"SS"秒"</FormatCode>
-<DefaultName/>
+<FormatCode>AM/PM H"時" M"分" S"秒"</FormatCode>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey13" default="false" type="medium" usage="TIME" formatindex="70">
-<FormatCode>AM/PM HH:MM:SS</FormatCode>
-<DefaultName/>
+<FormatCode>AM/PM H:M:S</FormatCode>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey14" default="false" type="medium" usage="TIME" formatindex="71">
-<FormatCode>AM/PM HH"時"MM"分"</FormatCode>
-<DefaultName/>
+<FormatCode>AM/PM H"時" M"分"</FormatCode>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey15" default="false" type="medium" usage="TIME" formatindex="72">
-<FormatCode>AM/PM HH:MM</FormatCode>
-<DefaultName/>
+<FormatCode>AM/PM H:M</FormatCode>
 </FormatElement>
 
-<!-- The following is Korean extensive DateTime formats. Index range is from 72 to 77. -->
+<!-- The following is Korean extensive DateTime formats. Index range is from 73 to 76. -->
 <FormatElement msgid="DateTimeFormatskey4" default="false" type="medium" usage="DATE_TIME" formatindex="73">
-<FormatCode>YY"年"M"月"D"日"HH"時"MM"分"SS"秒"</FormatCode>
-<DefaultName/>
+<FormatCode>YY"年" M"月" D"日" H"時" M"分" S"秒"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey5" default="false" type="medium" usage="DATE_TIME" formatindex="74">
-<FormatCode>YY/M/D HH:MM</FormatCode>
-<DefaultName/>
+<FormatCode>YY/M/D H:M</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey6" default="false" type="medium" usage="DATE_TIME" formatindex="75">
-<FormatCode>YY-M-D HH:MM</FormatCode>
-<DefaultName/>
+<FormatCode>YY. M. D. H:M</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey7" default="false" type="medium" usage="DATE_TIME" formatindex="76">
-<FormatCode>YYYY"年"M"月"D"日"HH"時"MM"分"SS"秒"</FormatCode>
-<DefaultName/>
+<FormatCode>YYYY"年" M"月" D"日" H"時" M"分" S"秒"</FormatCode>
+</FormatElement>
+
+
+<!-- The following is Korean extensive Date formats. Index range is from 77 to 82-->
+<FormatElement msgid="DataFormatskey37" default="false" type="medium" usage="DATE" formatindex="77">
+<FormatCode>YYYY. M. D.</FormatCode>
+</FormatElement>
+<FormatElement msgid="DateFormatskey38" default="false" type="medium" usage="DATE" formatindex="78">
+<FormatCode>YYYY. M. D. (NN)</FormatCode>
+</FormatElement>
+<FormatElement msgid="DateFormatskey39" default="false" type="medium" usage="DATE" formatindex="79">
+<FormatCode>YYYY. M. D. NNNN</FormatCode>
+</FormatElement>
+<FormatElement msgid="DateFormatskey40" default="false" type="medium" usage="DATE" formatindex="80">
+<FormatCode>[~hanja_yoil]YYYY. M. D. (NN)</FormatCode>
+</FormatElement>
+<FormatElement msgid="DateFormatskey41" default="false" type="medium" usage="DATE" formatindex="81">
+<FormatCode>[~hanja_yoil]YYYY. M. D. NNNN</FormatCode>
+</FormatElement>
+<FormatElement msgid="DataFormatskey42" default="false" type="medium" usage="DATE" formatindex="82">
+<FormatCode>YY. M. D.</FormatCode>
+</FormatElement>
+<FormatElement msgid="DateFormatskey43" default="false" type="medium" usage="DATE" formatindex="83">
+<FormatCode>YY. M. D. (NN)</FormatCode>
+</FormatElement>
+<FormatElement msgid="DateFormatskey44" default="false" type="medium" usage="DATE" formatindex="84">
+<FormatCode>YY. M. D. NNNN</FormatCode>
+</FormatElement>
+<FormatElement msgid="DateFormatskey45" default="false" type="medium" usage="DATE" formatindex="85">
+<FormatCode>[~hanja_yoil]YY. M. D. (NN)</FormatCode>
+</FormatElement>
+<FormatElement msgid="DateFormatskey46" default="false" type="medium" usage="DATE" formatindex="86">
+<FormatCode>[~hanja_yoil]YY. M. D. NNNN</FormatCode>
+</FormatElement>
+<FormatElement msgid="DateFormatskey47" default="false" type="medium" usage="DATE" formatindex="87">
+<FormatCode>YY"년" M"월" D"일" (NN)</FormatCode>
+</FormatElement>
+<FormatElement msgid="DateFormatskey48" default="false" type="medium" usage="DATE" formatindex="88">
+<FormatCode>YYYY"년" M"월" D"일" (NN)</FormatCode>
+</FormatElement>
+<FormatElement msgid="DateFormatskey49" default="false" type="medium" usage="DATE" formatindex="89">
+<FormatCode>[~hanja_yoil]YYYY"年" M"月" D"日" (NN)</FormatCode>
+</FormatElement>
+<FormatElement msgid="DateFormatskey50" default="false" type="medium" usage="DATE" formatindex="90">
+<FormatCode>[~hanja_yoil]YY"年" M"月" D"日" (NN)</FormatCode>
 </FormatElement>
 </LC_FORMAT>
 
@@ -612,7 +578,7 @@
 <CurrencySymbol>￦</CurrencySymbol>
 <BankSymbol>KRW</BankSymbol>
 <CurrencyName>South Korean Won</CurrencyName>
-<DecimalPlaces>2</DecimalPlaces>
+<DecimalPlaces>0</DecimalPlaces>
 </Currency>
 </LC_CURRENCY>
 <LC_TRANSLITERATION>
@@ -649,10 +615,7 @@
 </ReservedWords>
 </LC_MISC>
 
-
 <LC_NumberingLevel>
-
-
 <NumberingLevel Prefix=" " NumType="11" Suffix=")" />
 <NumberingLevel Prefix=" " NumType="4" Suffix="." />
 <NumberingLevel Prefix="(" NumType="4" Suffix="." />
@@ -662,8 +625,6 @@
 <NumberingLevel Prefix="(" NumType="1" Suffix=")" />
 <NumberingLevel Prefix=" " NumType="3" Suffix="." />
 </LC_NumberingLevel>
-
-
 
 <LC_OutLineNumberingLevel>
 
