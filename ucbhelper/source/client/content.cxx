@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-11 07:55:59 $
+ *  last change: $Author: kso $ $Date: 2001-02-05 15:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,9 @@
 #endif
 #ifndef _UCBHELPER_CONTENTBROKER_HXX
 #include <ucbhelper/contentbroker.hxx>
+#endif
+#ifndef _UCBHELPER_ACTIVEDATASINK_HXX
+#include <ucbhelper/activedatasink.hxx>
 #endif
 
 using namespace com::sun::star::container;
@@ -954,6 +957,31 @@ Reference< XDynamicResultSet > Content::createDynamicCursor(
     VOS_ENSURE( xSet.is(), "Content::createDynamicCursor - no cursor!" );
 
     return xSet;
+}
+
+//=========================================================================
+Reference< XInputStream > Content::openStream()
+    throw( CommandAbortedException, RuntimeException, Exception )
+{
+    if ( !isDocument() )
+        return Reference< XInputStream >();
+
+    Reference< XActiveDataSink > xSink = new ActiveDataSink;
+
+    OpenCommandArgument2 aArg;
+    aArg.Mode       = OpenMode::DOCUMENT;
+    aArg.Priority   = 0; // unused
+    aArg.Sink       = xSink;
+    aArg.Properties = Sequence< Property >( 0 ); // unused
+
+    Command aCommand;
+    aCommand.Name     = OUString::createFromAscii( "open" );
+    aCommand.Handle   = -1; // n/a
+    aCommand.Argument <<= aArg;
+
+    m_xImpl->executeCommand( aCommand );
+
+    return xSink->getInputStream();
 }
 
 //=========================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-11 07:55:08 $
+ *  last change: $Author: kso $ $Date: 2001-02-05 15:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,6 +580,19 @@ public:
                          sal_Int32 >& rPropertyHandles,
                            ResultSetInclude eMode
                              = INCLUDE_FOLDERS_AND_DOCUMENTS )
+        throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
+    /**
+      * This methods gives read access to the content stream of a content (i.e
+      * the content of a file located at the local file system).
+      * Internally it executes the command "open" at the content.
+      *
+      * @return an implementation of the interface XInputStream, which can
+      *         be used to read the content's data.
+      */
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+    openStream()
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
