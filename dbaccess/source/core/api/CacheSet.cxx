@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-30 15:58:20 $
+ *  last change: $Author: oj $ $Date: 2000-12-01 13:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,12 +245,24 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     ::rtl::OUString aCondition;
     ::std::list< sal_Int32> aOrgValues;
     sal_Int32 nCheckCount = 1; // index for the orginal values
-    for(; aIter != _rInsertRow->end();++aIter,++nCheckCount)
+    for(; aIter != _rInsertRow->end();++aIter,++nCheckCount,++i)
     {
-        if(aIter->isModified())
+        aColumnName = m_xSetMetaData->getColumnName(i);
+        if(xKeyColumns.is() && xKeyColumns->hasByName(aColumnName))
         {
-            aColumnName = m_xSetMetaData->getColumnName(i++);
-            if(xKeyColumns.is() && xKeyColumns->hasByName(aColumnName))
+            ((aCondition += aQuote) += aColumnName) += aQuote;
+            if(aIter->isNull())
+                aCondition += ::rtl::OUString::createFromAscii(" IS NULL");
+            else
+                aCondition += ::rtl::OUString::createFromAscii(" = ?");
+            aCondition += aAnd;
+            aOrgValues.push_back(nCheckCount);
+
+        }
+        for( ::std::vector< Reference<XNameAccess> >::const_iterator aIndexIter = aAllIndexColumns.begin();
+                aIndexIter != aAllIndexColumns.end();++aIndexIter)
+        {
+            if((*aIndexIter)->hasByName(aColumnName))
             {
                 ((aCondition += aQuote) += aColumnName) += aQuote;
                 if(aIter->isNull())
@@ -259,23 +271,11 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
                     aCondition += ::rtl::OUString::createFromAscii(" = ?");
                 aCondition += aAnd;
                 aOrgValues.push_back(nCheckCount);
-
+                break;
             }
-            for( ::std::vector< Reference<XNameAccess> >::const_iterator aIndexIter = aAllIndexColumns.begin();
-                    aIndexIter != aAllIndexColumns.end();++aIndexIter)
-            {
-                if((*aIndexIter)->hasByName(aColumnName))
-                {
-                    ((aCondition += aQuote) += aColumnName) += aQuote;
-                    if(aIter->isNull())
-                        aCondition += ::rtl::OUString::createFromAscii(" IS NULL");
-                    else
-                        aCondition += ::rtl::OUString::createFromAscii(" = ?");
-                    aCondition += aAnd;
-                    aOrgValues.push_back(nCheckCount);
-                    break;
-                }
-            }
+        }
+        if(aIter->isModified())
+        {
             ((aSql += aQuote) += aColumnName) += aQuote;
             aSql += aPara;
         }
@@ -295,9 +295,10 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
     i = 1;
-    for(aIter = _rInsertRow->begin()+1; aIter != _rInsertRow->end();++aIter,++i)
+    for(aIter = _rInsertRow->begin()+1; aIter != _rInsertRow->end();++aIter)
     {
-        setParameter(i,xParameter,*aIter);
+        if(aIter->isModified())
+            setParameter(i++,xParameter,*aIter);
     }
     for(::std::list< sal_Int32>::const_iterator aOrgValue = aOrgValues.begin(); aOrgValue != aOrgValues.end();++aOrgValue,++i)
     {
@@ -530,6 +531,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2000/11/30 15:58:20  oj
+    #80934# standarddate is no longer public
+
     Revision 1.8  2000/11/29 10:23:32  oj
     #80219# wrong use of keys
 
