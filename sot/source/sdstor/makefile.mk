@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mh $ $Date: 2001-11-06 21:36:12 $
+#   last change: $Author: hjs $ $Date: 2002-04-22 14:10:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ TARGET=sdstor
 UNOTYPES=   \
         com.sun.star.sdbc.XRow  \
         com.sun.star.datatransfer.DataFlavor    \
-        com.sun.star.datatransfer/dnd/DNDConstants   \
+        com.sun.star.datatransfer.dnd.DNDConstants   \
         com.sun.star.packages.manifest.XManifestWriter \
         com.sun.star.packages.manifest.XManifestReader  \
         com.sun.star.uno.XWeak  \
