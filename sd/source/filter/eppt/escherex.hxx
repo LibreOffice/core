@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-12 17:32:56 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ class PptEscherEx : public EscherEx
         void    OpenContainer( UINT16 n_EscherContainer, int nRecInstance = 0 );
         void    CloseContainer();
 
-        void    EnterGroup( Rectangle* pBoundRect = NULL, SvMemoryStream* pClientData = NULL );
+        sal_uInt32 EnterGroup( Rectangle* pBoundRect = NULL, SvMemoryStream* pClientData = NULL );
 
         UINT32  DrawingGroupContainerSize();
         void    WriteDrawingGroupContainer( SvStream& rSt );
