@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: tl $ $Date: 2001-02-02 10:49:13 $
+#   last change: $Author: sab $ $Date: 2001-02-22 17:36:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,7 +114,8 @@ LIB2OBJFILES=\
     $(SLO)$/iniadrtk.obj \
     $(SLO)$/loginerr.obj \
     $(SLO)$/strcrypt.obj \
-    $(SLO)$/strmadpt.obj
+    $(SLO)$/strmadpt.obj \
+    $(SLO)$/PasswordHelper.obj
 
 LIB3TARGET=$(SLB)$/misc2.lib
 LIB3OBJFILES=\
@@ -137,12 +138,12 @@ LIB3OBJFILES=\
     $(SLO)$/pver.obj		\
     $(SLO)$/urihelper.obj	\
     $(SLO)$/vcldata.obj		\
-    $(SLO)$/transfer.obj	
+    $(SLO)$/transfer.obj
 
 EXCEPTIONSFILES=\
     $(SLO)$/strmadpt.obj	\
     $(SLO)$/iniman.obj		\
-    $(SLO)$/transfer.obj	
+    $(SLO)$/transfer.obj
 
 UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
@@ -161,7 +162,7 @@ UNOTYPES=\
     com.sun.star.datatransfer.XTransferable				\
     com.sun.star.datatransfer.DataFlavor				\
     com.sun.star.datatransfer.clipboard.XClipboard		\
-    com.sun.star.datatransfer.clipboard.XClipboardOwner	
+    com.sun.star.datatransfer.clipboard.XClipboardOwner
 
 # --- Targets -------------------------------------------------------
 

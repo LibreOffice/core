@@ -290,4 +290,6 @@ hedabu: ..\inc\lingucfg.hxx %_DEST%\inc%_EXT%\svtools\lingucfg.hxx
 hedabu: ..\inc\linguprops.hxx %_DEST%\inc%_EXT%\svtools\linguprops.hxx
 hedabu: ..\inc\searchopt.hxx %_DEST%\inc%_EXT%\svtools\searchopt.hxx
 
+hedabu: ..\inc\PasswordHelper.hxx %_DEST%\inc%_EXT%\svtools\PasswordHelper.hxx
+
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\bin%_EXT%\bmp=%__PRJROOT%\%__SRC%\bin%_EXT%; fi"
