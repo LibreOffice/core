@@ -200,6 +200,7 @@
 </LC_FORMAT>
 <LC_COLLATION ref="de_DE"/>
 <LC_SEARCH ref="en_US"/>
+<LC_INDEX ref="de_DE"/>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek ref="de_DE_gregorian"/>
