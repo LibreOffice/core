@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmresids.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 10:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@
 #define RID_SVXERR_SEARCH_GENERAL_ERROR             (RID_FORMS_START + 16)
 #define RID_SVX_DLG_INPUTRECORDNO                   (RID_FORMS_START + 17)
 #define RID_SVX_DLG_SHOWGRIDCOLUMNS                 (RID_FORMS_START + 18)
-#define RID_SVX_DLG_QUERYPARAMS                     (RID_FORMS_START + 19)
+// --------- free id -----------------
 #define RID_SVX_DLG_LABELCONTROL                    (RID_FORMS_START + 20)
 #define RID_SVX_DLG_SQLEXCEPTIONDETAILS             (RID_FORMS_START + 21)
 
