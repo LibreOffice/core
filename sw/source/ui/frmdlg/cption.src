@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:45:41 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,7 +441,7 @@ ModalDialog DLG_CAPTION
         Text [ finnish ] = "Yläpuolella" ;
         Text [ danish ] = "Over" ;
         Text [ french ] = "Supra" ;
-        Text [ swedish ] = "Över" ;
+        Text [ swedish ] = "Ovanför" ;
         Text [ dutch ] = "Boven" ;
         Text [ spanish ] = "Encima" ;
         Text [ english_us ] = "Above" ;
@@ -483,7 +483,7 @@ ModalDialog DLG_CAPTION
         Text[ language_user1 ] = " ";
     };
     Text[ chinese_simplified ] = "±êÇ©";
-    Text[ russian ] = "Íàçâàíèå";
+    Text[ russian ] = "Ïîäïèñü";
     Text[ polish ] = "Opis";
     Text[ japanese ] = "×ÍÞÙ";
     Text[ chinese_traditional ] = "¼ÐÅÒ";
