@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_app.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-03-09 04:33:09 $
-#*    $Revision: 1.21 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-03-09 18:29:48 $
+#*    $Revision: 1.22 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_app.mkv  $
 #*
@@ -79,7 +79,11 @@ USE_APP$(TNR)DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
+# Allow certain executables to not link to libstatic*.dylib. This is only used
+# by build tools that are built in the bootstrap process.
+.IF "$(NOSHAREDSTATICLIB)"==""
 APP$(TNR)STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(APP$(TNR)TARGETN)"!=""

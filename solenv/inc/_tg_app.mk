@@ -33,7 +33,11 @@ USE_APP1DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
+# Allow certain executables to not link to libstatic*.dylib. This is only used
+# by build tools that are built in the bootstrap process.
+.IF "$(NOSHAREDSTATICLIB)"==""
 APP1STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(APP1TARGETN)"!=""
@@ -212,7 +216,11 @@ USE_APP2DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
+# Allow certain executables to not link to libstatic*.dylib. This is only used
+# by build tools that are built in the bootstrap process.
+.IF "$(NOSHAREDSTATICLIB)"==""
 APP2STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(APP2TARGETN)"!=""
@@ -391,7 +399,11 @@ USE_APP3DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
+# Allow certain executables to not link to libstatic*.dylib. This is only used
+# by build tools that are built in the bootstrap process.
+.IF "$(NOSHAREDSTATICLIB)"==""
 APP3STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(APP3TARGETN)"!=""
@@ -570,7 +582,11 @@ USE_APP4DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
+# Allow certain executables to not link to libstatic*.dylib. This is only used
+# by build tools that are built in the bootstrap process.
+.IF "$(NOSHAREDSTATICLIB)"==""
 APP4STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(APP4TARGETN)"!=""
@@ -749,7 +765,11 @@ USE_APP5DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
+# Allow certain executables to not link to libstatic*.dylib. This is only used
+# by build tools that are built in the bootstrap process.
+.IF "$(NOSHAREDSTATICLIB)"==""
 APP5STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(APP5TARGETN)"!=""
@@ -928,7 +948,11 @@ USE_APP6DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
+# Allow certain executables to not link to libstatic*.dylib. This is only used
+# by build tools that are built in the bootstrap process.
+.IF "$(NOSHAREDSTATICLIB)"==""
 APP6STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(APP6TARGETN)"!=""
@@ -1107,7 +1131,11 @@ USE_APP7DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
+# Allow certain executables to not link to libstatic*.dylib. This is only used
+# by build tools that are built in the bootstrap process.
+.IF "$(NOSHAREDSTATICLIB)"==""
 APP7STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(APP7TARGETN)"!=""
@@ -1286,7 +1314,11 @@ USE_APP8DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
+# Allow certain executables to not link to libstatic*.dylib. This is only used
+# by build tools that are built in the bootstrap process.
+.IF "$(NOSHAREDSTATICLIB)"==""
 APP8STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(APP8TARGETN)"!=""
@@ -1465,7 +1497,11 @@ USE_APP9DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
+# Allow certain executables to not link to libstatic*.dylib. This is only used
+# by build tools that are built in the bootstrap process.
+.IF "$(NOSHAREDSTATICLIB)"==""
 APP9STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(APP9TARGETN)"!=""
@@ -1644,7 +1680,11 @@ USE_APP10DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
+# Allow certain executables to not link to libstatic*.dylib. This is only used
+# by build tools that are built in the bootstrap process.
+.IF "$(NOSHAREDSTATICLIB)"==""
 APP10STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(APP10TARGETN)"!=""
