@@ -8628,3 +8628,5 @@ lpfnInsertMenuItemW
 ?__query@?$Reference@VXFrame@frame@star@sun@com@@@uno@star@sun@com@@CAPAVXFrame@frame@345@PAVXInterface@2345@@Z
 ?__query@?$Reference@VXMultiPropertySet@beans@star@sun@com@@@uno@star@sun@com@@CAPAVXMultiPropertySet@beans@345@PAVXInterface@2345@@Z
 ?s_pType_com_sun_star_io_XPersist@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXPersist@io@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+??1?$Reference@VXNameContainer@container@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?s_pType_com_sun_star_container_XNameContainer@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXNameContainer@container@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
