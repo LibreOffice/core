@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:28:07 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #include <svunx.h>
 #endif
 
-#ifndef _SV_SALDATA_HXX
-#include <saldata.hxx>
-#endif
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -164,33 +161,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-
-#ifdef REMOTE_APPSERVER
-#include <config.hxx>
-#include <ooffice.hxx>
-#include <rversion.h>
-#include <xevthdl.hxx>
-#include <rmevents.hxx>
-#include <rmprint.hxx>
-#include <outdev.h>
-#include <vos/mutex.hxx>
-#include <vos/timer.hxx>
-#include "rvp.hxx"
-#include <unotools/atom.hxx>
-
-
-#include <com/sun/star/portal/client/XRmStatus.hpp>
-#include <com/sun/star/portal/client/XRmSync.hpp>
-
-using namespace ::cppu;
-using namespace ::com::sun::star::portal::client;
-
-#ifdef UNX
-void SalData::Init (int *pIPointer, char *pCPointer[] )
-{};
-#endif /* UNX */
-
-#endif /* REMOTE_APPSERVER */
 
 #include <fontcfg.hxx>
 
@@ -316,20 +286,6 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     InitSalMain();
 #endif
 
-#ifdef WNT
-    // remember data, copied from WinMain
-    SalData* pData = GetAppSalData();
-    if ( pData )    // Im AppServer NULL
-    {
-        STARTUPINFO aSI;
-        aSI.cb = sizeof( aSI );
-        GetStartupInfo( &aSI );
-        pData->mhInst                   = GetModuleHandle( NULL );
-        pData->mhPrevInst               = NULL;
-        pData->mnCmdShow                = aSI.wShowWindow;
-    }
-#endif
-
     /*AllSettings aAS;
     Application::SetSettings( aAS );// ???
     */
@@ -427,12 +383,6 @@ void DeInitVCL()
         delete pList;
         pSVData->maAppData.mpAccessList = NULL;
     }
-
-    // globale daten wieder freigeben
-#ifndef REMOTE_APPSERVER
-    SalSound::Release();
-    SalOpenGL::Release();
-#endif
 
     // free global data
     delete pSVData->maGDIData.mpGrfConverter;
