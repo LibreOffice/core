@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:15:47 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1145,37 +1145,83 @@ input for the following reasons:
                 switch (nMonthPos)  // where is the month
                 {
                     case 0:             // not found
-                        switch (DateFmt)
-                        {
-                            case MDY:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
-                                pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
-                                break;
-                            case DMY:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
-                                pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
-                                if ( !pCal->isValid() )             // 2nd try
-                                {
-                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
-                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
-                                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
-                                }
-                                break;
-                            case YMD:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
-                                pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
-                                if ( !pCal->isValid() )             // 2nd try
-                                {
-                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
-                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
+                    {
+                        bool bHadExact;
+                        sal_uInt32 nExactDateOrder = (bFormatTurn ? pFormat->GetExactDateOrder() : 0);
+                        if ( 0xff < nExactDateOrder && nExactDateOrder <= 0xffff )
+                        {   // formatted as date and exactly 2 parts
+                            bHadExact = true;
+                            switch ( (nExactDateOrder >> 8) & 0xff )
+                            {
+                                case 'Y':
                                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
-                                }
                                 break;
-                            default:
-                                res = FALSE;
+                                case 'M':
+                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
                                 break;
+                                case 'D':
+                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                                break;
+                                default:
+                                    bHadExact = false;
+                            }
+                            switch ( nExactDateOrder & 0xff )
+                            {
+                                case 'Y':
+                                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
+                                break;
+                                case 'M':
+                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
+                                break;
+                                case 'D':
+                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                                break;
+                                default:
+                                    bHadExact = false;
+                            }
                         }
-                        break;
+                        else
+                            bHadExact = false;
+                        if ( !bHadExact || !pCal->isValid() )
+                        {
+                            if ( !bHadExact && nExactDateOrder )
+                                pCal->setGregorianDateTime( Date() );   // reset today
+                            switch (DateFmt)
+                            {
+                                case MDY:
+                                    // M D
+                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                                    break;
+                                case DMY:
+                                    // D M
+                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
+                                    if ( !pCal->isValid() )             // 2nd try
+                                    {                                   // M Y
+                                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
+                                        pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                                        pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
+                                    }
+                                    break;
+                                case YMD:
+                                    // M D
+                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                                    if ( !pCal->isValid() )             // 2nd try
+                                    {                                   // Y M
+                                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
+                                        pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
+                                        pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
+                                    }
+                                    break;
+                                default:
+                                    res = FALSE;
+                                    break;
+                            }
+                        }
+                    }
+                    break;
                     case 1:             // month at the beginning (Jan 01 01)
                         switch (DateFmt)
                         {
