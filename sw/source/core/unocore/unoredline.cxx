@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-25 14:01:09 $
+ *  last change: $Author: mtg $ $Date: 2001-11-01 18:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
     if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_TEXT)))
     {
         SwNodeIndex* pNodeIdx = pRedline->GetContentIdx();
-        if(pNodeIdx)
+        if(pNodeIdx && 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
         {
             SwUnoCrsr* pUnoCrsr = GetCrsr();
             Reference<XText> xRet = new SwXRedlineText(pUnoCrsr->GetDoc(), *pNodeIdx);
@@ -634,7 +634,7 @@ Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_TEXT)))
     {
         SwNodeIndex* pNodeIdx = pRedline->GetContentIdx();
-        if(pNodeIdx)
+        if(pNodeIdx && 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
         {
             Reference<XText> xRet = new SwXRedlineText(pDoc, *pNodeIdx);
             aRet <<= xRet;
