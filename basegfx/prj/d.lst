@@ -38,6 +38,7 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\range
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\vector
 ..\inc\basegfx\vector\b2dvector.hxx %_DEST%\inc%_EXT%\basegfx\vector\b2dvector.hxx
+..\inc\basegfx\vector\b2enums.hxx %_DEST%\inc%_EXT%\basegfx\vector\b2enums.hxx
 ..\inc\basegfx\vector\b2dsize.hxx %_DEST%\inc%_EXT%\basegfx\vector\b2dsize.hxx
 ..\inc\basegfx\vector\b3dvector.hxx %_DEST%\inc%_EXT%\basegfx\vector\b3dvector.hxx
 ..\inc\basegfx\vector\b3dsize.hxx %_DEST%\inc%_EXT%\basegfx\vector\b3dsize.hxx
