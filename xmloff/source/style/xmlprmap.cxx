@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlprmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
+ *  last change: $Author: sab $ $Date: 2001-03-01 13:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,25 @@ sal_Int32 XMLPropertySetMapper::FindEntryIndex(
         else
             nIndex++;
 
-    } while( nIndex<nEntries );
+    } while( nIndex < nEntries );
+
+    return -1;
+}
+
+sal_Int32 XMLPropertySetMapper::FindEntryIndex( const sal_Int16 nContextId ) const
+{
+    sal_Int32 nIndex = 0;
+    sal_Int32 nEntries = GetEntryCount();
+
+    do
+    {
+        const XMLPropertySetMapperEntry_Impl& rEntry = aMapEntries[nIndex];
+        if( rEntry.nContextId == nContextId )
+            return nIndex;
+        else
+            nIndex++;
+
+    } while( nIndex < nEntries );
 
     return -1;
 }
