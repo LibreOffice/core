@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-10-22 11:41:40 $
+#   last change: $Author: vg $ $Date: 2005-02-17 10:43:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,6 @@ SLOFILES=	$(SLO)$/limitedformats.obj \
             $(SLO)$/frm_strings.obj \
             $(SLO)$/listenercontainers.obj \
             $(SLO)$/componenttools.obj \
-            $(SLO)$/asyncnotification.obj
 
 # --- Targets ----------------------------------
 
