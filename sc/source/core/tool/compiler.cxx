@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: er $ $Date: 2002-11-19 22:07:08 $
+ *  last change: $Author: er $ $Date: 2002-11-21 14:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ ScOpCodeList::ScOpCodeList( USHORT nRID, String pSymbolTable[], ScOpCodeHashMap&
         if (IsAvailableRes(aRes))
         {
             pSymbolTable[i] = aRes;
-            rHashMap.insert( ScOpCodeHashMap::value_type( pSymbolTable[i], i ) );
+            rHashMap.insert( ScOpCodeHashMap::value_type( pSymbolTable[i], (OpCode) i ) );
         }
     }
     FreeResource();
