@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFunctionParser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:23:03 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 #include <algorithm>
 #include <stack>
 using namespace com::sun::star;
-using namespace drafts::com::sun::star::drawing;
+using namespace com::sun::star::drawing;
 
 void FillEquationParameter( const EnhancedCustomShapeParameter& rSource, const sal_Int32 nDestPara, EnhancedCustomShapeEquation& rDest )
 {
@@ -103,7 +103,7 @@ void FillEquationParameter( const EnhancedCustomShapeParameter& rSource, const s
 
     switch( rSource.Type )
     {
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION :
         {
             if ( nValue & 0x40000000 )
             {
@@ -113,13 +113,13 @@ void FillEquationParameter( const EnhancedCustomShapeParameter& rSource, const s
             nValue |= 0x400;
         }
         break;
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT : nValue += DFF_Prop_adjustValue; break;
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM : nValue = DFF_Prop_geoBottom; break;
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT : nValue = DFF_Prop_geoRight; break;
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::TOP : nValue = DFF_Prop_geoTop; break;
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT : nValue = DFF_Prop_geoLeft; break;
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT : nValue += DFF_Prop_adjustValue; break;
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM : nValue = DFF_Prop_geoBottom; break;
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT : nValue = DFF_Prop_geoRight; break;
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::TOP : nValue = DFF_Prop_geoTop; break;
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT : nValue = DFF_Prop_geoLeft; break;
     }
-    if ( rSource.Type != drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL )
+    if ( rSource.Type != com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL )
         rDest.nOperation |= ( 0x2000 << nDestPara );
     rDest.nPara[ nDestPara ] = nValue;
 }
