@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JAccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:54:04 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 08:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ namespace dbaui
     */
     class OJoinDesignViewAccess     :   public OAccessibleBase
     {
-        OJoinTableView*                     m_pTableView; // the window which I should give accessibility to
+        OJoinTableView* m_pTableView; // the window which I should give accessibility to
 
     protected:
         /** isEditable returns the current editable state

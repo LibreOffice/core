@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 08:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include "querycontroller.hxx"
 #endif
 
-
 namespace dbaui
 {
 
@@ -118,7 +117,8 @@ namespace dbaui
 
         // Basisklasse ueberschrieben : Connections kreieren und loeschen
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest);
-        virtual BOOL RemoveConnection(OTableConnection* pConn);
+
+        virtual ::std::vector<OTableConnection*>::const_iterator RemoveConnection( OTableConnection* _pConn ,sal_Bool _bDelete);
 
         // Transfer von Connections von/zu einer UndoAction
         void GetConnection(OQueryTableConnection* pConn);

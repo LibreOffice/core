@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 08:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,15 +76,16 @@
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
-#ifndef _VECTOR_
-#include <vector>
-#endif
+
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
 #endif
+
+#include <memory>
+#include <vector>
 
 struct AcceptDropEvent;
 struct ExecuteDropEvent;
@@ -96,17 +97,7 @@ namespace dbaui
     struct OJoinExchangeData;
     class OJoinDesignView;
     class OTableWindowData;
-
-    ////////////////////////////////////////////////////////////////
-    // Konstanten fuer das Fensterlayout
-    const long TABWIN_SPACING_X  = 17;
-    const long TABWIN_SPACING_Y  = 17;
-
-    const long TABWIN_WIDTH_STD  = 120;
-    const long TABWIN_HEIGHT_STD = 120;
-
-    const long TABWIN_WIDTH_MIN  = 90;
-    const long TABWIN_HEIGHT_MIN = 80;
+    class IAccessibleHelper;
 
     // this class conatins only the scrollbars to avoid that the tablewindows clip the scrollbars
     class OJoinTableView;
@@ -151,11 +142,12 @@ namespace dbaui
         Size                m_aOutputSize;
 
 
-        OTableWindow*       m_pDragWin;
-        OTableWindow*       m_pSizingWin;
-        OTableConnection*   m_pSelectedConn;
+        OTableWindow*           m_pDragWin;
+        OTableWindow*           m_pSizingWin;
+        OTableConnection*       m_pSelectedConn;
+        IAccessibleHelper*      m_pAccessible;
 
-        BOOL                m_bTrackingInitiallyMoved;
+        BOOL                    m_bTrackingInitiallyMoved;
 
         DECL_LINK(OnDragScrollTimer, void*);
 
@@ -195,7 +187,24 @@ namespace dbaui
         virtual void    HideTabWins();
 
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest);
-        virtual BOOL RemoveConnection(OTableConnection* pConn);
+
+        /** RemoveConnection allows to remove connections from join table view, it implies that the same as addConnection
+
+            @param  _pConnection
+                    the connection which should be removed
+            @param  _bDelete
+                    when truie then the connection will be deleted
+
+            @return an iterator to next valid connection, so it can be used in any loop
+        */
+        virtual ::std::vector<OTableConnection*>::const_iterator RemoveConnection(OTableConnection* _pConnection,sal_Bool _bDelete);
+
+        /** allows to add new connections to join table view, it implies an invalidation of the features
+            ID_BROWSER_ADDTABLE and ID_RELATION_ADD_RELATION also the modified flag will be set to true
+            @param  _pConnection
+                    the connection which should be added
+        */
+        void addConnection(OTableConnection* _pConnection);
 
         BOOL            Scroll( long nDelta, BOOL bHoriz, BOOL bPaintScrollBars );
         ULONG           GetTabWinCount();
@@ -210,7 +219,10 @@ namespace dbaui
 
         OTableWindowMap*            GetTabWinMap() { return &m_aTableMap; }
         const OTableWindowMap*      GetTabWinMap() const { return &m_aTableMap; }
-        ::std::vector<OTableConnection*>*       GetTabConnList() { return &m_vTableConnection; }
+
+        /** gives a read only access to the connection vector
+        */
+        const ::std::vector<OTableConnection*>* getTableConnections() const { return &m_vTableConnection; }
 
 
         BOOL                        ExistsAConn(const OTableWindow* pFromWin) const;
@@ -267,6 +279,12 @@ namespace dbaui
             // auch wenn er einen Punkt oberhalb des aktuell sichtbaren Bereichs bezeichnet, dessen physische Ordinate eigentlich
             // negativ ist.
         virtual void TabWinSized(OTableWindow* ptWhich, const Point& ptOldPosition, const Size& szOldSize);
+
+        /** should be called when the table or connection count changed
+            @param  _nOldCount
+                    the old child count
+        */
+        void childCountChanged(sal_Int32 _nOldCount);
 
     protected:
         virtual void MouseButtonUp( const MouseEvent& rEvt );

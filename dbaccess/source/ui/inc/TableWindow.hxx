@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 07:44:03 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 08:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ namespace dbaui
     class OTableWindowListBox;
     class OJoinDesignView;
     class OJoinTableView;
+    class IAccessibleHelper;
 
     class OTableWindow : public Window,
                          public ::utl::OEventListenerAdapter
@@ -112,6 +113,7 @@ namespace dbaui
         // und die Tabelle selber (brauche ich, da ich sie locken will, solange das Fenster lebt)
         OTableWindowTitle       m_aTitle;
         OTableWindowListBox*    m_pListBox;
+        IAccessibleHelper*      m_pAccessible;
     private:
         // the columns of the table
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xTable;
@@ -161,6 +163,7 @@ namespace dbaui
         void                        SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
 
         void                        SetTitle( const ::rtl::OUString& rTit );
+        String                      getTitle() const;
         void                        SetBoldTitle( BOOL bBold );
         void                        setActive(sal_Bool _bActive = sal_True);
 

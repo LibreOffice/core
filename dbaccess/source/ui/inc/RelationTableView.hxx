@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationTableView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 06:56:48 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 08:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ namespace dbaui
         //  virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL bNewTable = FALSE);
         virtual void RemoveTabWin( OTableWindow* pTabWin );
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest);
-        virtual BOOL RemoveConnection(OTableConnection* pConn);
+        virtual ::std::vector<OTableConnection*>::const_iterator RemoveConnection(OTableConnection* pConn,sal_Bool _bDelete);
 
         virtual void ReSync();
 

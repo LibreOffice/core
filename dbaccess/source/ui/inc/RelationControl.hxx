@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationControl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 07:13:01 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 08:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,8 @@ namespace dbaui
         void fillListBoxes();
 
         /** fillAndDisable fill the listboxes only with one entry and then disable them
-            @param _pConnectionData contains the data which should be filled into the listboxes
+            @param  _pConnectionData
+                    contains the data which should be filled into the listboxes
         */
         void fillAndDisable(OTableConnectionData* _pConnectionData);
 
@@ -115,7 +116,8 @@ namespace dbaui
         void NotifyCellChange();
 
         /** Init is a call through to the control inside this one
-            @param  _pConnData  the connection data which is used to init the control
+            @param  _pConnData
+                    the connection data which is used to init the control
         */
         void Init(OTableConnectionData* _pConnData);
 
