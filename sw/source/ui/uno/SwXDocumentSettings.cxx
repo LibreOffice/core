@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:25:16 $
+ *  last change: $Author: aw $ $Date: 2004-08-10 13:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,14 +613,6 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->SetUseFormerTextWrapping( bTmp );
         }
         break;
-        // --> OD 2004-07-08 #i28701#
-        case HANDLE_CONSIDER_WRAP_ON_OBJPOS:
-        {
-            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
-            mpDoc->SetConsiderWrapOnObjPos( bTmp );
-        }
-        break;
-        // <--
         case HANDLE_CHANGES_PASSWORD:
         {
             Sequence <sal_Int8> aNew;
@@ -636,6 +628,14 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        // --> OD 2004-07-08 #i28701#
+        case HANDLE_CONSIDER_WRAP_ON_OBJPOS:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetConsiderWrapOnObjPos( bTmp );
+        }
+        break;
+        // <--
         default:
             throw UnknownPropertyException();
     }
@@ -853,6 +853,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Bool bTmp = mpDoc->IsFormerTextWrapping();
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_CHANGES_PASSWORD:
+        {
+            rValue <<= mpDoc->GetRedlinePasswd();
         }
         break;
         // --> OD 2004-07-08 #i28701#
