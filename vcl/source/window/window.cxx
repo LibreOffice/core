@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-27 13:03:30 $
+ *  last change: $Author: th $ $Date: 2001-07-30 10:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,7 +598,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         pSVData->maWinData.mpFirstFrame = this;
         mpFrameData->mpFirstOverlap     = NULL;
         mpFrameData->mpFocusWin         = NULL;
-        mpFrameData->mpExtTextInputWin  = NULL;
         mpFrameData->mpMouseMoveWin     = NULL;
         mpFrameData->mpMouseDownWin     = NULL;
         mpFrameData->mpFirstBackWin     = NULL;
@@ -3560,6 +3559,11 @@ void Window::ImplGrabFocus( USHORT nFlags )
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maWinData.mpFocusWin != this )
     {
+        // EndExtTextInput if it is not the same window
+        if ( pSVData->maWinData.mpExtTextInputWin &&
+             (pSVData->maWinData.mpExtTextInputWin != this) )
+            pSVData->maWinData.mpExtTextInputWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
+
         // Dieses Fenster als letztes FocusWindow merken
         Window* pOverlapWindow = ImplGetFirstOverlapWindow();
         pOverlapWindow->mpLastFocusWindow = this;
@@ -3720,7 +3724,6 @@ void Window::ImplGrabFocus( USHORT nFlags )
             if ( pOldFocusWindow->IsTracking() &&
                  (pSVData->maWinData.mnTrackFlags & STARTTRACK_FOCUSCANCEL) )
                 pOldFocusWindow->EndTracking( ENDTRACK_CANCEL | ENDTRACK_FOCUS );
-            pOldFocusWindow->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
             NotifyEvent aNEvt( EVENT_LOSEFOCUS, pOldFocusWindow );
             if ( !ImplCallPreNotify( aNEvt ) )
                 pOldFocusWindow->LoseFocus();
@@ -3729,11 +3732,6 @@ void Window::ImplGrabFocus( USHORT nFlags )
 
         if ( pSVData->maWinData.mpFocusWin == this )
         {
-            // EndExtTextInput if it is not the same window
-            if ( mpFrameData->mpExtTextInputWin &&
-                 mpFrameData->mpExtTextInputWin != this )
-                mpFrameData->mpExtTextInputWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
-
 #ifndef REMOTE_APPSERVER
             if ( mpSysObj )
             {
@@ -4014,6 +4012,14 @@ Window::~Window()
     Notify( aNEvt );
     }
 
+    // EndExtTextInputMode
+    if ( pSVData->maWinData.mpExtTextInputWin == this )
+    {
+        EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
+        if ( pSVData->maWinData.mpExtTextInputWin == this )
+            pSVData->maWinData.mpExtTextInputWin = NULL;
+    }
+
     // Wenn wir den Focus haben, dann den Focus auf ein anderes Fenster setzen
     Window* pOverlapWindow = ImplGetFirstOverlapWindow();
     if ( pSVData->maWinData.mpFocusWin == this )
@@ -4057,8 +4063,6 @@ Window::~Window()
     // gemerkte Fenster zuruecksetzen
     if ( mpFrameData->mpFocusWin == this )
         mpFrameData->mpFocusWin = NULL;
-    if ( mpFrameData->mpExtTextInputWin == this )
-        mpFrameData->mpExtTextInputWin = NULL;
     if ( mpFrameData->mpMouseMoveWin == this )
         mpFrameData->mpMouseMoveWin = NULL;
     if ( mpFrameData->mpMouseDownWin == this )
@@ -5259,11 +5263,6 @@ void Window::SetParent( Window* pNewParent )
         {
             if ( IsWindowOrChild( mpFrameData->mpFocusWin ) )
                 mpFrameData->mpFocusWin = NULL;
-        }
-        if ( mpFrameData->mpExtTextInputWin )
-        {
-            if ( IsWindowOrChild( mpFrameData->mpExtTextInputWin ) )
-                mpFrameData->mpExtTextInputWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
         }
         if ( mpFrameData->mpMouseMoveWin )
         {

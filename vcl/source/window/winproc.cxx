@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-27 13:04:24 $
+ *  last change: $Author: th $ $Date: 2001-07-30 10:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,10 +506,10 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
         }
 
         // End ExtTextInput-Mode, if the user click in the same TopLevel Window
-        if ( pChild->mpFrameData->mpExtTextInputWin &&
+        if ( pSVData->maWinData.mpExtTextInputWin &&
              ((nSVEvent == EVENT_MOUSEBUTTONDOWN) ||
               (nSVEvent == EVENT_MOUSEBUTTONUP)) )
-            pChild->mpFrameData->mpExtTextInputWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
+            pSVData->maWinData.mpExtTextInputWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
     }
 
     // determine mouse event data
@@ -1118,11 +1118,10 @@ static long ImplHandleExtTextInput( Window* pWindow, ULONG nTime,
                                     const USHORT* pTextAttr,
                                     ULONG nCursorPos, USHORT nCursorFlags )
 {
-    Window* pChild;
+    ImplSVData* pSVData = ImplGetSVData();
+    Window*     pChild = pSVData->maWinData.mpExtTextInputWin;
 
-    if ( pWindow->mpFrameData->mpExtTextInputWin )
-        pChild = pWindow->mpFrameData->mpExtTextInputWin;
-    else
+    if ( !pChild )
     {
         pChild = ImplGetKeyInputWindow( pWindow );
         if ( !pChild )
@@ -1144,7 +1143,7 @@ static long ImplHandleExtTextInput( Window* pWindow, ULONG nTime,
             delete pWinData->mpExtOldAttrAry;
             pWinData->mpExtOldAttrAry = NULL;
         }
-        pChild->mpFrameData->mpExtTextInputWin = pChild;
+        pSVData->maWinData.mpExtTextInputWin = pChild;
         ImplCallCommand( pChild, COMMAND_STARTEXTTEXTINPUT );
     }
 
@@ -1201,15 +1200,16 @@ static long ImplHandleExtTextInput( Window* pWindow, ULONG nTime,
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleEndExtTextInput( Window* pWindow )
+static long ImplHandleEndExtTextInput( Window* /* pWindow */ )
 {
-    Window* pChild = pWindow->mpFrameData->mpExtTextInputWin;
-    long    nRet = 0;
+    ImplSVData* pSVData = ImplGetSVData();
+    Window*     pChild = pSVData->maWinData.mpExtTextInputWin;
+    long        nRet = 0;
 
     if ( pChild )
     {
         pChild->mbExtTextInput = FALSE;
-        pChild->mpFrameData->mpExtTextInputWin = NULL;
+        pSVData->maWinData.mpExtTextInputWin = NULL;
         ImplWinData* pWinData = pChild->ImplGetWinData();
         if ( pWinData->mpExtOldText )
         {
@@ -1232,9 +1232,17 @@ static long ImplHandleEndExtTextInput( Window* pWindow )
 static void ImplHandleExtTextInputPos( Window* pWindow,
                                        Rectangle& rRect, long& rInputWidth )
 {
-    Window* pChild = pWindow->mpFrameData->mpExtTextInputWin;
+    ImplSVData* pSVData = ImplGetSVData();
+    Window*     pChild = pSVData->maWinData.mpExtTextInputWin;
+
     if ( !pChild )
         pChild = ImplGetKeyInputWindow( pWindow );
+    else
+    {
+        // Test, if the Window is related to the frame
+        if ( !pWindow->ImplIsWindowOrChild( pChild ) )
+            pChild = ImplGetKeyInputWindow( pWindow );
+    }
 
     if ( pChild )
     {
