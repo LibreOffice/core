@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:05:42 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ sal_Bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
     if( pDView )
     {
         // Ein Fly ist genau dann erreichbar, wenn er selektiert ist.
-        const SdrMarkList &rMarkList = pDView->GetMarkList();
+        const SdrMarkList &rMarkList = pDView->GetMarkedObjectList();
 
         if (rMarkList.GetMark(0))
         {
@@ -285,7 +285,7 @@ sal_Bool SwWrtShell::SetURLToButton( const String& rURL, const String& rDescr )
     if( pDView )
     {
         // Ein Fly ist genau dann erreichbar, wenn er selektiert ist.
-        const SdrMarkList &rMarkList = pDView->GetMarkList();
+        const SdrMarkList &rMarkList = pDView->GetMarkedObjectList();
         if (rMarkList.GetMark(0))
         {
             SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetObj());
