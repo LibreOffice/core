@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:44:47 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,8 @@ ULONG SwXMLTextBlocks::GetDoc( USHORT nIdx )
         try
         {
             xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
-            SwReader aReader(xRoot, aFolderName, pDoc );
+            xMedium = new SfxMedium(xRoot, GetBaseURL());
+            SwReader aReader(*xMedium,aFolderName, pDoc );
             ReadXML->SetBlockMode( sal_True );
             aReader.Read( *ReadXML );
             ReadXML->SetBlockMode( sal_False );
