@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,8 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
+
+#include <algorithm>
 
 using namespace dbaccess;
 using namespace connectivity;
@@ -767,7 +769,8 @@ void SAL_CALL OColumns::disposing(void)
 void OColumns::clearColumnSettings()
 {
     ::std::for_each( m_aSettings.begin(), m_aSettings.end(), DeleteColumnSettings() );
-    m_aSettings.swap( MapName2Settings() );
+    m_aSettings.clear();
+    MapName2Settings(m_aSettings).swap(m_aSettings);
 }
 
 //------------------------------------------------------------------------------
