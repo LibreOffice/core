@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetaData.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:41:45 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:22:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,7 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
     public ScriptMetaData( Parcel parent, ScriptEntry entry,
                            String source )
     {
-        super( entry.getLanguage(), entry.getLanguageName(),
-               entry.getLogicalName(), entry.getLocation(),
-               entry.getLanguageProperties() );
+        super( entry );
         this.parent = parent;
         if ( source != null )
         {
@@ -456,8 +454,8 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
         String parcelLocation = parent.getPathToParcel();
         String sourceFileName = getLanguageName();
         boolean result = false;
-
-        if ( parcelLocation.startsWith( "file://" ) ) // its a document
+        boolean isDocument = getLocationPlaceHolder().equals( "document" );
+        if ( isDocument ) // its a document
         {
             XStorageHelper xParcelDirStorageHelper = null;
             boolean commitFlag = true;
