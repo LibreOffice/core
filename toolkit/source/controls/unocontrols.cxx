@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-02 12:25:06 $
+ *  last change: $Author: tbe $ $Date: 2001-05-02 15:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3944,10 +3944,10 @@ UnoControlProgressBarModel::UnoControlProgressBarModel()
     ImplRegisterProperty( BASEPROPERTY_FILLCOLOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_PROGRESSVALUE );
     ImplRegisterProperty( BASEPROPERTY_PROGRESSVALUE_MAX );
     ImplRegisterProperty( BASEPROPERTY_PROGRESSVALUE_MIN );
-    ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
 }
 
 ::rtl::OUString UnoControlProgressBarModel::getServiceName() const
