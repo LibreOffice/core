@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:38:10 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,7 @@ SwRTFParser::SwRTFParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     mbIsFootnote = mbReadNoTbl = bReadSwFly = bSwPageDesc = bStyleTabValid =
     bInPgDscTbl = bNewNumList = false;
     bFirstContinue = true;
+    bContainsPara = false;
 
     pPam = new SwPaM( *rCrsr.GetPoint() );
     SetInsPos( SwxPosition( pPam ) );
@@ -1475,6 +1476,7 @@ SETCHDATEFIELD:
 
 void SwRTFParser::InsertText()
 {
+    bContainsPara = false;
     // dann fuege den String ein, ohne das Attribute am Ende
     // aufgespannt werden.
     CheckInsNewTblLine();
@@ -1484,6 +1486,7 @@ void SwRTFParser::InsertText()
 
 void SwRTFParser::InsertPara()
 {
+    bContainsPara = true;
     CheckInsNewTblLine();
     pDoc->AppendTxtNode(*pPam->GetPoint());
 
@@ -1860,6 +1863,8 @@ void SwRTFParser::SetBorderLine(SvxBoxItem& rBox, sal_uInt16 nLine)
         case RTF_BRDRDASHD:
         case RTF_BRDRDASHDD:
         case RTF_BRDRDASHDOTSTR:
+        case RTF_BRDRSH:            // shading not supported
+        case RTF_BRDRCF:            // colors not supported
             break;
 
         case RTF_BRDRW:
@@ -2570,6 +2575,9 @@ void SwRTFParser::ReadSectControls( int nToken )
     if (bNewSection || maSegments.empty())
     {
         AttrGroupEnd(); //#106493#
+        if(!bContainsPara)
+            pDoc->AppendTxtNode(*pPam->GetPoint());
+        bContainsPara = false;
         maSegments.push_back(rtfSection(*pPam->GetPoint(), aNewSection));
     }
     else //modifying/replacing the current section
