@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:04:29 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef _ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
 #include "EnhancedCustomShapeGeometry.hxx"
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEGLUEPOINTTYPE_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
 #endif
 
 /*
@@ -5329,6 +5332,26 @@ const sal_Bool IsCustomShapeFilledByDefault( MSO_SPT eSpType )
     if ( i < 0x100 )
         bIsFilledByDefault = ( mso_DefaultFillingTable[ i >> 4 ] & ( 1 << ( i & 0xf ) ) ) == 0;
     return bIsFilledByDefault;
+}
+const sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
+{
+    sal_Int16 nGluePointType = drafts::com::sun::star::drawing::EnhancedCustomShapeGluePointType::SEGMENTS;
+    const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eSpType );
+    if ( pDefCustomShape && pDefCustomShape->nGluePoints )
+        nGluePointType = drafts::com::sun::star::drawing::EnhancedCustomShapeGluePointType::CUSTOM;
+    else
+    {
+        switch( eSpType )
+        {
+            case mso_sptRectangle :
+            case mso_sptPictureFrame :
+            case mso_sptFlowChartProcess :
+            case mso_sptTextPlainText :
+            case mso_sptTextBox :
+                nGluePointType = drafts::com::sun::star::drawing::EnhancedCustomShapeGluePointType::RECT;
+        }
+    }
+    return nGluePointType;
 }
 static const sal_uInt16 msoSortFilledObjectsToBackTable[] =
 {
