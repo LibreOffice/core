@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 09:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,11 @@ public:
 
     // XContentAccess
     virtual rtl::OUString SAL_CALL
+#if SUPD>611
+    queryContentIdentifierString()
+#else
     queryContentIdentfierString()
+#endif
         throw( com::sun::star::uno::RuntimeException );
     virtual com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier > SAL_CALL

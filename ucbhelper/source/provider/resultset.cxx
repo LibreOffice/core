@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 09:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1312,7 +1312,11 @@ void SAL_CALL ResultSet::close()
 //=========================================================================
 
 // virtual
+#if SUP>611
+OUString SAL_CALL ResultSet::queryContentIdentifierString()
+#else
 OUString SAL_CALL ResultSet::queryContentIdentfierString()
+#endif
     throw( RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )

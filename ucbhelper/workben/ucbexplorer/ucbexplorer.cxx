@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbexplorer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:38 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 09:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,7 +687,11 @@ void UcbExplorerTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
                             Application::AcquireSolarMutex( n );
 
                             InsertEntry(
+#if SUPD>611
+                                xContentAccess->queryContentIdentifierString(),
+#else
                                 xContentAccess->queryContentIdentfierString(),
+#endif
                                 pParent );
 
                             n = Application::ReleaseSolarMutex();
