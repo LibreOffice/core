@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-24 08:12:30 $
+ *  last change: $Author: as $ $Date: 2002-07-05 12:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,7 +812,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Timeout, Timer *, pTimer )
 
     if( pMenu )
     {
-        pMenu->SetSelectHdl( Link( this, Select_Impl ) );
+        pMenu->SetSelectHdl( Link( &(this->GetBindings()), Select_Impl ) );
         pMenu->SetActivateHdl( LINK( this, SfxAppToolBoxControl_Impl, Activate ));
         rBox.SetItemDown( GetId(), TRUE );
         USHORT nSelected = pMenu->Execute( &rBox, aRect, POPUPMENU_EXECUTE_UP );

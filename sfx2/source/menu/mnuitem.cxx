@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2002-04-12 13:12:33 $
+ *  last change: $Author: as $ $Date: 2002-07-05 12:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,7 +513,7 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
     pMenu = aConf.CreateBookmarkMenu( aXFrame, GetId() == SID_NEWDOCDIRECT ? BOOKMARK_NEWMENU : BOOKMARK_WIZARDMENU );
     if( pMenu )
     {
-        pMenu->SetSelectHdl( Link( this, Select_Impl ) );
+        pMenu->SetSelectHdl( Link( &(this->GetBindings()), Select_Impl ) );
         pMenu->SetActivateHdl( LINK(this, SfxAppMenuControl_Impl, Activate) );
         rMenu.SetPopupMenu( nPos, pMenu );
     }
