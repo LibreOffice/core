@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-26 14:17:08 $
+ *  last change: $Author: fs $ $Date: 2001-10-30 14:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,7 @@ private:
 
     DECL_LINK( TimeOutHdl_Impl, Timer* );
     DECL_LINK( HandleEvent, FileDialogHelper* );
+    DECL_LINK( InitControls, void* );
 
 public:
     // XFilePickerListener methods
@@ -1153,6 +1154,15 @@ void FileDialogHelper_Impl::popPicker()
 }
 
 // ------------------------------------------------------------------------
+IMPL_LINK( FileDialogHelper_Impl, InitControls, void*, NOTINTERESTEDIN )
+{
+    enablePasswordBox( );
+    updateFilterOptionsBox( );
+
+    return 0L;
+}
+
+// ------------------------------------------------------------------------
 void FileDialogHelper_Impl::preExecute()
 {
     loadConfig( );
@@ -1160,6 +1170,10 @@ void FileDialogHelper_Impl::preExecute()
     enablePasswordBox( );
     updateFilterOptionsBox( );
     pushBackPicker( );
+
+    // allow for dialog implementations which need to be executed before they return valid values for
+    // current filter and such
+    Application::PostUserEvent( LINK( this, FileDialogHelper_Impl, InitControls ) );
 }
 
 // ------------------------------------------------------------------------
