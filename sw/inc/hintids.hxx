@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:23:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,9 @@ RES_FRMATR_BEGIN = RES_PARATR_END,
     RES_ROW_SPLIT,                                  // 109
     // OD 18.09.2003 #i18732# - insert new item and 5 dummies
     RES_FOLLOW_TEXT_FLOW,                           // 110
-    RES_FRMATR_DUMMY1,                              // 111
+// --> collapsing borders FME 2005-05-27 #i29550#
+    RES_COLLAPSING_BORDERS,                         // 111
+// <-- collapsing
     RES_FRMATR_DUMMY2,                              // 112
     RES_FRMATR_DUMMY3,                              // 113
     RES_FRMATR_DUMMY4,                              // 114
