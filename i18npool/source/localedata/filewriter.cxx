@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filewriter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-11 17:24:37 $
+ *  last change: $Author: khong $ $Date: 2002-07-13 01:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ void OFileWriter::writeFunction(const char *func, const char *count, const char 
     fprintf(m_f, "\treturn (sal_Unicode**)%s;\n}\n", array);
 }
 
-void OFileWriter::writeUseFunction(const char *func, const ::rtl::OUString& useLocale) const
+void OFileWriter::writeRefFunction(const char *func, const ::rtl::OUString& useLocale) const
 {
     const char* locale = OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US).getStr();
     fprintf(m_f, "extern sal_Unicode **  SAL_CALL %s%s(sal_Int16& count);\n", func, locale);
@@ -118,15 +118,14 @@ void OFileWriter::writeFunction(const char *func, const char *count, const char 
     fprintf(m_f, "\treturn (sal_Unicode**)%s;\n}\n", array);
 }
 
-void OFileWriter::writeUseFunction(const char *func, const ::rtl::OUString& useLocale, const char *from, const char *to) const
+void OFileWriter::writeRefFunction(const char *func, const ::rtl::OUString& useLocale, const char *to) const
 {
     const char* locale = OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US).getStr();
     fprintf(m_f, "extern sal_Unicode **  SAL_CALL %s%s(sal_Int16& count, const sal_Unicode*& from, const sal_Unicode*& to);\n", func, locale);
     fprintf(m_f, "sal_Unicode **  SAL_CALL %s%s(sal_Int16& count, const sal_Unicode*& from, const sal_Unicode*& to)\n{\n", func, theLocale);
-    fprintf(m_f, "\tfrom = %s;\n", from);
     fprintf(m_f, "\tto = %s;\n", to);
-    fprintf(m_f, "\tconst sal_Unicode* str;\n");
-    fprintf(m_f, "\treturn %s%s(count, str, str);\n}\n", func, locale);
+    fprintf(m_f, "\tconst sal_Unicode* tmp;\n");
+    fprintf(m_f, "\treturn %s%s(count, from, tmp);\n}\n", func, locale);
 }
 
 void OFileWriter::writeFunction2(const char *func, const char *style, const char* attr, const char *array) const
@@ -137,7 +136,7 @@ void OFileWriter::writeFunction2(const char *func, const char *style, const char
     fprintf(m_f, "\treturn %s;\n}\n", array);
 }
 
-void OFileWriter::writeUseFunction2(const char *func, const ::rtl::OUString& useLocale) const
+void OFileWriter::writeRefFunction2(const char *func, const ::rtl::OUString& useLocale) const
 {
     const char* locale = OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US).getStr();
     fprintf(m_f, "extern const sal_Unicode ***  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nAttributes);\n", func, locale);
@@ -154,7 +153,7 @@ void OFileWriter::writeFunction3(const char *func, const char *style, const char
     fprintf(m_f, "\treturn %s;\n}\n", array);
 }
 
-void OFileWriter::writeUseFunction3(const char *func, const ::rtl::OUString& useLocale) const
+void OFileWriter::writeRefFunction3(const char *func, const ::rtl::OUString& useLocale) const
 {
     const char* locale = OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US).getStr();
     fprintf(m_f, "extern const sal_Unicode ****  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes);\n", func, locale);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-11 17:24:36 $
+ *  last change: $Author: khong $ $Date: 2002-07-13 01:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,13 +100,13 @@ OFileWriter(const char *pcFile, const char *locale );
     virtual void  writeAsciiString(const char *str)const ;
     virtual void  writeInt(sal_Int16 nb) const;
     virtual void  writeFunction(const char *func, const char *count, const char *array) const;
-    virtual void  writeUseFunction(const char *func, const ::rtl::OUString& useLocale) const;
+    virtual void  writeRefFunction(const char *func, const ::rtl::OUString& useLocale) const;
     virtual void  writeFunction(const char *func, const char *count, const char *array, const char *from, const char *to) const;
-    virtual void  writeUseFunction(const char *func, const ::rtl::OUString& useLocale, const char *from, const char *to) const;
+    virtual void  writeRefFunction(const char *func, const ::rtl::OUString& useLocale, const char *to) const;
     virtual void  writeFunction2(const char *func, const char *style, const char* attr, const char *array) const;
-    virtual void  writeUseFunction2(const char *func, const ::rtl::OUString& useLocale) const;
+    virtual void  writeRefFunction2(const char *func, const ::rtl::OUString& useLocale) const;
     virtual void  writeFunction3(const char *func, const char *style, const char* levels, const char* attr, const char *array) const;
-    virtual void  writeUseFunction3(const char *func, const ::rtl::OUString& useLocale) const;
+    virtual void  writeRefFunction3(const char *func, const ::rtl::OUString& useLocale) const;
     virtual void  writeIntParameter(const sal_Char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const;
     virtual void  writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str, sal_Int16 count) const;
     virtual void  writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-11 17:24:35 $
+ *  last change: $Author: khong $ $Date: 2002-07-13 01:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,9 +268,9 @@ void LCInfoNode::generateCode (const OFileWriter &of) {
 }
 
 void LCCTYPENode::generateCode (const OFileWriter &of) {
-    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
-        of.writeUseFunction("getLocaleItem_", useLocale);
+        of.writeRefFunction("getLocaleItem_", useLocale);
         return;
     }
     ::rtl::OUString str =   getAttr() -> getValueByName("unoid");
@@ -335,11 +335,11 @@ void LCCTYPENode::generateCode (const OFileWriter &of) {
 }
 
 void LCFormatNode::generateCode (const OFileWriter &of) {
-    of.writeParameter("currencyFrom", getAttr() -> getValueByName("from"));
-    of.writeParameter("currencyTo", getAttr() -> getValueByName("to"));
-    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    of.writeParameter("replaceFrom", getAttr() -> getValueByName("replaceFrom"));
+    of.writeParameter("replaceTo", getAttr() -> getValueByName("replaceTo"));
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
-        of.writeUseFunction("getAllFormats_", useLocale, "currencyFrom", "currencyTo");
+        of.writeRefFunction("getAllFormats_", useLocale, "replaceTo");
         return;
     }
     sal_Int32 formatCount = 0;
@@ -419,14 +419,14 @@ void LCFormatNode::generateCode (const OFileWriter &of) {
         }
         of.writeAsciiString("};\n\n");
 
-        of.writeFunction("getAllFormats_", "FormatElementsCount", "FormatElementsArray", "currencyFrom", "currencyTo");
+        of.writeFunction("getAllFormats_", "FormatElementsCount", "FormatElementsArray", "replaceFrom", "replaceTo");
 }
 
 void LCCollationNode::generateCode (const OFileWriter &of) {
-    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
-        of.writeUseFunction("getCollatorImplementation_", useLocale);
-        of.writeUseFunction("getCollationOptions_", useLocale);
+        of.writeRefFunction("getCollatorImplementation_", useLocale);
+        of.writeRefFunction("getCollationOptions_", useLocale);
         return;
     }
     sal_Int16 nbOfCollations = 0;
@@ -488,9 +488,9 @@ void LCCollationNode::generateCode (const OFileWriter &of) {
 
 void LCSearchNode::generateCode (const OFileWriter &of)
 {
-    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
-        of.writeUseFunction("getSearchOptions_", useLocale);
+        of.writeRefFunction("getSearchOptions_", useLocale);
         return;
     }
 
@@ -522,9 +522,9 @@ void LCSearchNode::generateCode (const OFileWriter &of)
 }
 
 void LCCalendarNode::generateCode (const OFileWriter &of) {
-    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
-        of.writeUseFunction("getAllCalendars_", useLocale);
+        of.writeRefFunction("getAllCalendars_", useLocale);
         return;
     }
     sal_Int16 nbOfCalendars = getNumberOfChildren();
@@ -658,9 +658,9 @@ void LCCalendarNode::generateCode (const OFileWriter &of) {
 }
 
 void LCCurrencyNode :: generateCode (const OFileWriter &of) {
-    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
-        of.writeUseFunction("getAllCurrencies_", useLocale);
+        of.writeRefFunction("getAllCurrencies_", useLocale);
         return;
     }
     sal_Int16 nbOfCurrencies = 0;
@@ -717,9 +717,9 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) {
 }
 
 void LCTransliterationNode::generateCode (const OFileWriter &of) {
-    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
-        of.writeUseFunction("getTransliterations_", useLocale);
+        of.writeRefFunction("getTransliterations_", useLocale);
         return;
     }
     sal_Int16 nbOfModules = 0;
@@ -744,10 +744,10 @@ void LCTransliterationNode::generateCode (const OFileWriter &of) {
 }
 
 void LCMiscNode::generateCode (const OFileWriter &of) {
-    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
-    of.writeUseFunction("getForbiddenCharacters_", useLocale);
-    of.writeUseFunction("getReservedWords_", useLocale);
+    of.writeRefFunction("getForbiddenCharacters_", useLocale);
+    of.writeRefFunction("getReservedWords_", useLocale);
     return;
     }
     LocaleNode * reserveNode = findNode("ReservedWords");
@@ -790,9 +790,9 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of)
 {
      of.writeAsciiString("// ---> ContinuousNumbering\n");
 #if SUPD > 618
-    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
-    of.writeUseFunction2("getContinuousNumberingLevels_", useLocale);
+    of.writeRefFunction2("getContinuousNumberingLevels_", useLocale);
     return;
     }
 
@@ -861,9 +861,9 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of)
 {
      of.writeAsciiString("// ---> OutlineNumbering\n");
 #if SUPD > 618
-    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
-    of.writeUseFunction3("getOutlineNumberingLevels_", useLocale);
+    of.writeRefFunction3("getOutlineNumberingLevels_", useLocale);
     return;
     }
 
