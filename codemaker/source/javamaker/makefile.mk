@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 03:14:26 $
+#   last change: $Author: kz $ $Date: 2005-03-01 11:58:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,7 @@ APP1STDLIBS= \
              $(REGLIB)
 
 APP1LIBS= \
-          $(LB)$/codemaker.lib
+          $(LB)$/codemaker.lib $(LB)$/commonjava.lib
 
 .INCLUDE :  target.mk
 
