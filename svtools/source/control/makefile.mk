@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 12:27:09 $
+#   last change: $Author: kz $ $Date: 2004-05-19 16:48:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,10 +81,11 @@ SRC1FILES=	ctrltool.src		\
 
 EXCEPTIONSFILES=\
             $(SLO)$/filectrl2.obj	\
-            $(SLO)$/valueacc.obj	
+            $(SLO)$/valueacc.obj
 
 SLOFILES=	$(EXCEPTIONSFILES) \
             $(SLO)$/fileurlbox.obj \
+            $(SLO)$/roadmap.obj \
             $(SLO)$/wizardheader.obj \
             $(SLO)$/ctrltool.obj  \
             $(SLO)$/ctrlbox.obj  \
@@ -106,7 +107,8 @@ SLOFILES=	$(EXCEPTIONSFILES) \
             $(SLO)$/collatorres.obj \
             $(SLO)$/indexentryres.obj \
             $(SLO)$/fmtfield.obj \
-            $(SLO)$/scriptedtext.obj
+            $(SLO)$/scriptedtext.obj\
+            $(SLO)$/hyperlabel.obj			
 
 # statisch fuer setup
 
