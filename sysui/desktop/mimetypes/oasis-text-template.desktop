@@ -2,8 +2,8 @@
 Version=1.0
 Encoding=UTF-8
 Hidden=false
-Icon=text-template
+Icon=oasis-text-template
 Type=MimeType
 Patterns=*.ott
-MimeType=application/x-vnd.oasis.openoffice.text-template
-Comment=Open Office Text Template
+MimeType=application/vnd.oasis.opendocument.text-template
+Comment=OpenDocument Text Template
