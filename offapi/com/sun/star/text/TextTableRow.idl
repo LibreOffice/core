@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextTableRow.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:18:15 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,15 @@ service TextTableRow
         depends on the content of the table cells.
      */
     [property] boolean IsAutoHeight;
+
+        //-------------------------------------------------------------------------
+
+        /** If <TRUE/>, the row is allowed to be split at page or column breaks.
+
+                @since #i2109#
+         */
+        [optional, property, maybevoid] boolean IsSplitAllowed;
+
 
 };
 
