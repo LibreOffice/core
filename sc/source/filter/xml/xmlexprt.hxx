@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-21 09:48:35 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 15:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ class ScXMLExport : public SvXMLExport
     virtual void _ExportStyles( sal_Bool bUsed );
     virtual void _ExportAutoStyles();
     virtual void _ExportMasterStyles();
+    virtual void SetBodyAttributes();
     virtual void _ExportContent();
     virtual void _ExportMeta();
 

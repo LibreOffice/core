@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:10:43 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 15:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,9 +296,9 @@ static __FAR_DATA SvXMLTokenMapEntry aTableAttrTokenMap[] =
 {
     { XML_NAMESPACE_TABLE, sXML_name,                       XML_TOK_TABLE_NAME              },
     { XML_NAMESPACE_TABLE, sXML_style_name,                 XML_TOK_TABLE_STYLE_NAME        },
-    { XML_NAMESPACE_TABLE, sXML_use_cell_protection,        XML_TOK_TABLE_PROTECTION        },
+    { XML_NAMESPACE_TABLE, sXML_protected,                  XML_TOK_TABLE_PROTECTION        },
     { XML_NAMESPACE_TABLE, sXML_print_ranges,               XML_TOK_TABLE_PRINT_RANGES      },
-    { XML_NAMESPACE_TABLE, sXML_password,                   XML_TOK_TABLE_PASSWORD          },
+    { XML_NAMESPACE_TABLE, sXML_protection_key,             XML_TOK_TABLE_PASSWORD          },
     XML_TOKEN_MAP_END
 };
 
@@ -759,7 +759,7 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
         pContext = GetScImport().CreateScriptContext( rLocalName );
         break;
     case XML_TOK_DOC_BODY:
-        pContext = GetScImport().CreateBodyContext( rLocalName );
+        pContext = GetScImport().CreateBodyContext( rLocalName, xAttrList );
         break;
     }
 
@@ -1506,14 +1506,15 @@ SvXMLImportContext *ScXMLImport::CreateStylesContext(const NAMESPACE_RTL(OUStrin
     return pContext;
 }
 
-SvXMLImportContext *ScXMLImport::CreateBodyContext(const NAMESPACE_RTL(OUString)& rLocalName)
+SvXMLImportContext *ScXMLImport::CreateBodyContext(const NAMESPACE_RTL(OUString)& rLocalName,
+                                                const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
     GetStyles()->CopyStylesToDoc(sal_True);
     //GetShapeImport()->SetAutoStylesContext((XMLTableStylesContext *)&xAutoStyles);
     //GetChartImport()->SetAutoStylesContext(GetAutoStyles()/*(XMLTableStylesContext *)&xAutoStyles*/);
 
     SvXMLImportContext *pContext = 0;
-    pContext = new ScXMLBodyContext(*this, XML_NAMESPACE_OFFICE, rLocalName);
+    pContext = new ScXMLBodyContext(*this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList);
     return pContext;
 }
 

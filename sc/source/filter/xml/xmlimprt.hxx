@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:10:43 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 15:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,7 +784,8 @@ public:
 //  SvXMLImportContext *CreateUseStylesContext(const NAMESPACE_RTL(OUString)& rLocalName ,
 //                                  const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateBodyContext(
-                                    const NAMESPACE_RTL(OUString)& rLocalName );
+                                    const NAMESPACE_RTL(OUString)& rLocalName,
+                                    const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void SetStatisticAttributes( const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:10:42 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 15:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1157,6 +1157,18 @@ void ScXMLExport::FillColumnRowGroups()
     }
 }
 
+void ScXMLExport::SetBodyAttributes()
+{
+    if (pDoc->IsDocProtected())
+    {
+        AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_structure_protected, sXML_true);
+        rtl::OUStringBuffer aBuffer;
+        SvXMLUnitConverter::encodeBase64(aBuffer, pDoc->GetDocPassword());
+        if (aBuffer.getLength())
+            AddAttribute(XML_NAMESPACE_TABLE, sXML_protection_key, aBuffer.makeStringAndClear());
+    }
+}
+
 void ScXMLExport::_ExportContent()
 {
     nOldProgressValue = nProgressValue;
@@ -1212,11 +1224,11 @@ void ScXMLExport::_ExportContent()
                         if (xProtectable.is())
                             if (xProtectable->isProtected())
                             {
-                                AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_use_cell_protection, sXML_true);
+                                AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_protected, sXML_true);
                                 rtl::OUStringBuffer aBuffer;
                                 SvXMLUnitConverter::encodeBase64(aBuffer, pDoc->GetTabPassword(nTable));
                                 if (aBuffer.getLength())
-                                    AddAttribute(XML_NAMESPACE_TABLE, sXML_password, aBuffer.makeStringAndClear());
+                                    AddAttribute(XML_NAMESPACE_TABLE, sXML_protection_key, aBuffer.makeStringAndClear());
                             }
                         rtl::OUString sPrintRanges( GetPrintRanges() );
                         if( sPrintRanges.getLength() )

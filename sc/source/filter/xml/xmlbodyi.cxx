@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 07:13:41 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 15:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,18 @@
 #endif
 
 #include <xmloff/xmltkmap.hxx>
+#ifndef _XMLOFF_XMLKYWD_HXX
+#include <xmloff/xmlkywd.hxx>
+#endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include <xmloff/xmlnmspe.hxx>
+#endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include <xmloff/nmspmap.hxx>
+#endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -107,10 +119,33 @@ using namespace com::sun::star;
 
 ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
                                               USHORT nPrfx,
-                                                   const NAMESPACE_RTL(OUString)& rLName ) :
+                                                   const NAMESPACE_RTL(OUString)& rLName,
+                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    pChangeTrackingImportHelper(NULL)
+    pChangeTrackingImportHelper(NULL),
+    bProtected(sal_False),
+    sPassword()
 {
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        rtl::OUString aLocalName;
+        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                            sAttrName, &aLocalName );
+        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+
+        if (nPrefix == XML_NAMESPACE_TABLE)
+        {
+            if (aLocalName.compareToAscii(sXML_structure_protected) == 0)
+            {
+                if (sValue.compareToAscii(sXML_true) == 0)
+                    bProtected = sal_True;
+            }
+            else if (aLocalName.compareToAscii(sXML_protection_key) == 0)
+                sPassword = sValue;
+        }
+    }
 }
 
 ScXMLBodyContext::~ScXMLBodyContext()
@@ -209,5 +244,13 @@ void ScXMLBodyContext::EndElement()
 
     if (pChangeTrackingImportHelper)
         pChangeTrackingImportHelper->CreateChangeTrack(GetScImport().GetDocument());
+
+    if (bProtected)
+    {
+        uno::Sequence<sal_Int8> aPass;
+        if (sPassword.getLength())
+            SvXMLUnitConverter::decodeBase64(aPass, sPassword);
+        pDoc->SetDocProtection(bProtected, aPass);
+    }
 }
 
