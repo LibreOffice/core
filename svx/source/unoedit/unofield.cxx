@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-03 15:06:04 $
+ *  last change: $Author: cl $ $Date: 2001-05-09 14:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
     case ID_TIMEFIELD:
         mpImpl->mbBoolean2 = sal_False;
         mpImpl->mbBoolean1 = sal_False;
-        mpImpl->mnInt16 = SVXTIMEFORMAT_STANDARD;
+        mpImpl->mnInt32 = SVXTIMEFORMAT_STANDARD;
         break;
 
     case ID_URLFIELD:
@@ -389,7 +389,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
                 mpImpl->mbBoolean2 = sal_False;
                 mpImpl->maDateTime = getTime( ((SvxExtTimeField*)pData)->GetFixTime() );
                 mpImpl->mbBoolean1 = ((SvxExtTimeField*)pData)->GetType() == SVXTIMETYPE_FIX;
-                mpImpl->mnInt16 = ((SvxExtTimeField*)pData)->GetFormat();
+                mpImpl->mnInt32 = ((SvxExtTimeField*)pData)->GetFormat();
                 break;
 
             case ID_URLFIELD:
