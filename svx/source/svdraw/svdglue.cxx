@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdglue.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,11 @@ void SdrGluePoint::Invalidate(Window& rWin, const SdrObject* pObj) const
     aPt=rWin.LogicToPixel(aPt);
     rWin.EnableMapMode(FALSE);
     long x=aPt.X(),y=aPt.Y(); // Groesse erstmal fest auf 7 Pixel
-    rWin.Invalidate(Rectangle(Point(x-3,y-3),Point(x+3,y+3)));
+
+    // #111096#
+    // do not erase background, that causes flicker (!)
+    rWin.Invalidate(Rectangle(Point(x-3,y-3),Point(x+3,y+3)), INVALIDATE_NOERASE);
+
     rWin.EnableMapMode(bMapMerk);
 }
 
