@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:20:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,8 +848,8 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                     break;                  // todo: supporting all 256 ternary rasterops
                 }
                 pOut->Push();
-                UINT32 nOldRop = pOut->SetRasterOp( nNewRop );
-                pOut->DrawRect( Rectangle( aDestOrg, aDestExt ) );
+                sal_uInt32 nOldRop = pOut->SetRasterOp( nNewRop );
+                pOut->DrawRect( Rectangle( aDestOrg, aDestExt ), sal_False );   // SJ: 118798, not using edge for bitblit
                 pOut->SetRasterOp( nOldRop );
                 pOut->Pop();
             }
@@ -867,6 +867,9 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 *pWMF >> xDest >> yDest >> cxDest >> cyDest >> dwRop >> xSrc >> ySrc
                         >> xformSrc >> nColor >> iUsageSrc >> offBmiSrc >> cbBmiSrc
                             >> offBitsSrc >> cbBitsSrc >> cxSrc >> cySrc;
+
+                cxDest = abs( cxDest );     // sj: i37894, size can be negative
+                cyDest = abs( cyDest );
 
                 Bitmap      aBitmap;
                 Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
@@ -914,6 +917,9 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 pWMF->SeekRel( 0x10 );
                 *pWMF >> xDest >> yDest >> xSrc >> ySrc >> cxSrc >> cySrc >> offBmiSrc >> cbBmiSrc >> offBitsSrc
                     >> cbBitsSrc >> iUsageSrc >> dwRop >> cxDest >> cyDest;
+
+                cxDest = abs( cxDest );     // sj: i37894, size can be negative
+                cyDest = abs( cyDest );
 
                 Bitmap      aBitmap;
                 Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
