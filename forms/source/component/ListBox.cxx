@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:34 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ void SAL_CALL OListBoxModel::refresh() throw(RuntimeException)
         ::osl::MutexGuard aGuard(m_aMutex);
         if (m_eListSourceType != ListSourceType_VALUELIST)
         {
-            if (m_xField.is())
+            if (getField().is())
                 m_aValueSeq = StringSequence();
 
             if (m_xCursor.is())
@@ -359,7 +359,7 @@ void OListBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
 
             if (m_eListSourceType == ListSourceType_VALUELIST)
                 m_aValueSeq = m_aListSourceSeq;
-            else if (m_xCursor.is() && !m_xField.is()) // Listbox bereits mit Datenbank verbunden
+            else if (m_xCursor.is() && !getField().is()) // Listbox bereits mit Datenbank verbunden
                 // Aenderung der Datenquelle -> neu laden
                 loadData();
 
@@ -453,14 +453,14 @@ void OListBoxModel::fillProperties(
         DECL_PROP1(TAG,                 ::rtl::OUString,                BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,                      BOUND);
         DECL_PROP2(BOUNDCOLUMN,         sal_Int16,                      BOUND, MAYBEVOID);
-        DECL_PROP1(LISTSOURCETYPE,      ListSourceType,     BOUND);
+        DECL_PROP1(LISTSOURCETYPE,      ListSourceType,                 BOUND);
         DECL_PROP1(LISTSOURCE,          StringSequence,                 BOUND);
         DECL_PROP3(VALUE_SEQ,           StringSequence,                 BOUND, READONLY, TRANSIENT);
-        DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,    BOUND);
+        DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,            BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,                BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,                READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,                BOUND, MAYBEVOID);
-        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
+        DECL_IFACE_PROP3(BOUNDFIELD,    XPropertySet,                   BOUND,READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,                   BOUND, MAYBEVOID);
+        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,              READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
 
@@ -800,7 +800,7 @@ void OListBoxModel::loadData()
     vector< ::rtl::OUString >   aValueList, aStringList;
     aValueList.reserve(16);
     aStringList.reserve(16);
-    sal_Bool bUseNULL = m_xField.is() && !m_bRequired;
+    sal_Bool bUseNULL = getField().is() && !m_bRequired;
     try
     {
         switch (m_eListSourceType)
@@ -971,14 +971,14 @@ void OListBoxModel::loadData()
 void OListBoxModel::_loaded(const EventObject& rEvent)
 {
     // an Felder gebundene Listboxen haben keine Multiselektion
-    if (m_xField.is())
+    if (getField().is())
     {
         setFastPropertyValue(PROPERTY_ID_MULTISELECTION, ::cppu::bool2any((sal_False)));
     }
 
     if (m_eListSourceType != ListSourceType_VALUELIST)
     {
-        if (m_xField.is())
+        if (getField().is())
             m_aValueSeq = StringSequence();
 
         if (m_xCursor.is())
