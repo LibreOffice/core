@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokintpr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:33 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ class Tok_at_gloss;
 class Tok_at_global;
 class Tok_at_include;
 class Tok_at_label;
+class Tok_at_since;
 class Tok_at_HTML;          // Sets default to: Use HTML in DocuText
 class Tok_at_NOHTML;        // Sets default to: Don't use HTML in DocuText
 
@@ -127,6 +128,7 @@ class TokenInterpreter
                         DECL_TOK_HANDLER(at_global);
                         DECL_TOK_HANDLER(at_include);
                         DECL_TOK_HANDLER(at_label);
+                        DECL_TOK_HANDLER(at_since);
                         DECL_TOK_HANDLER(at_HTML);
                         DECL_TOK_HANDLER(at_NOHTML);
                         DECL_TOK_HANDLER(DocWord);
