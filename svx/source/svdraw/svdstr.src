@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:15:35 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 07:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1913,7 +1913,7 @@ String STR_ObjNameSingulTEXT
     Text[ chinese_simplified ] = "ÎÄ±¾¿ò";
     Text[ russian ] = "Òåêñòîâàÿ ğàìêà";
     Text[ polish ] = "Ramka tekstu";
-    Text[ japanese ] = "Ã·½Ä˜g";
+    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½";
     Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
     Text[ arabic ] = "ßÇÏÑ äÕ";
     Text[ dutch ] = "Tekstkader";
@@ -1941,7 +1941,7 @@ String STR_ObjNamePluralTEXT
     Text[ chinese_simplified ] = "ÎÄ±¾¿ò";
     Text[ russian ] = "Òåêñòîâûå ğàìêè";
     Text[ polish ] = "Ramka tekstu";
-    Text[ japanese ] = "Ã·½Ä˜g";
+    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½";
     Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
     Text[ arabic ] = "ßæÇÏÑ äÕ";
     Text[ dutch ] = "Tekstkader";
@@ -1967,7 +1967,7 @@ String STR_ObjNameSingulTEXTLNK
     Text[ chinese_simplified ] = "Á´½ÓµÄÎÄ±¾¿ò";
     Text[ russian ] = "ñâÿçàííàÿ òåêñòîâàÿ ğàìêà";
     Text[ polish ] = "Po³¹czona ramka tekstu";
-    Text[ japanese ] = "Øİ¸‚³‚ê‚½Ã·½Ä˜g";
+    Text[ japanese ] = "˜AŒ‹‚³‚ê‚½Ã·½ÄÎŞ¯¸½";
     Text[ chinese_traditional ] = "³sµ²¤å¦r¤è¶ô";
     Text[ arabic ] = "ßÇÏÑ ÇáäÕ ÇáãÑÊÈØ";
     Text[ dutch ] = "Gekoppeld tekstkader";
@@ -1993,7 +1993,7 @@ String STR_ObjNamePluralTEXTLNK
     Text[ chinese_simplified ] = "Á¬½ÓµÄÎÄ±¾¿ò";
     Text[ russian ] = "ñâÿçàííûå òåêñòîâûå ğàìêè";
     Text[ polish ] = "Po³¹czone ramki tekstu";
-    Text[ japanese ] = "Øİ¸‚³‚ê‚½Ã·½Ä˜g";
+    Text[ japanese ] = "˜AŒ‹‚³‚ê‚½Ã·½ÄÎŞ¯¸½";
     Text[ chinese_traditional ] = "³sµ²ªº¤å¦r¤è¶ô";
     Text[ arabic ] = "ßæÇÏÑ ÇáäÕ ÇáãÑÊÈØÉ";
     Text[ dutch ] = "Gekoppelde tekstkaders";
@@ -12583,7 +12583,7 @@ String SIP_SA_TEXT_LEFTDIST
     Text[ swedish ] = "Vänster textramavstånd";
     Text[ polish ] = "Lewy odstêp ramki tekstu";
     Text[ portuguese_brazilian ] = "Left text frame distance";
-    Text[ japanese ] = "Ã·½Ä˜g‚Ì¶‘¤ŠÔŠu";
+    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½‚Ì¶—]”’";
     Text[ chinese_simplified ] = "×ó±ßÎÄ×Ö¿ò¼ä¸ô";
     Text[ chinese_traditional ] = "¥ª¤å¦r¤è¶ô¶¡¹j";
     Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÃíÓÑ áßÇÏÑ ÇáäÕ";
@@ -12610,7 +12610,7 @@ String SIP_SA_TEXT_RIGHTDIST
     Text[ swedish ] = "Högra textramavståndet";
     Text[ polish ] = "Prawy odstêp ramki tekstu";
     Text[ portuguese_brazilian ] = "Right text frame distance";
-    Text[ japanese ] = "Ã·½Ä˜g‚Ì‰E‘¤ŠÔŠu";
+    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½‚Ì‰E—]”’";
     Text[ chinese_simplified ] = "ÓÒ±ßÎÄ×Ö¿ò¼ä¸ô";
     Text[ chinese_traditional ] = "¥k¤å¦r¤è¶ô¶¡¹j";
     Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÃíãä áßÇÏÑ ÇáäÕ";
@@ -12636,7 +12636,7 @@ String SIP_SA_TEXT_UPPERDIST
     Text[ swedish ] = "Övre textramens avstånd";
     Text[ polish ] = "Górny odstêp ramki tekstu";
     Text[ portuguese_brazilian ] = "Upper text frame distance";
-    Text[ japanese ] = "Ã·½Ä˜g‚Ìã•”ŠÔŠu";
+    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½‚Ìã—]”’";
     Text[ chinese_simplified ] = "ÉÏ±ßÎÄ×Ö¿ò¼ä¸ô";
     Text[ chinese_traditional ] = "¤W¤å¦r¤è¶ô¶¡¹j";
     Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÚáæí áßÇÏÑ ÇáäÕ";
@@ -12662,7 +12662,7 @@ String SIP_SA_TEXT_LOWERDIST
     Text[ swedish ] = "Nedre textramavstånd";
     Text[ polish ] = "Dolny odstêp ramki tekstu";
     Text[ portuguese_brazilian ] = "Lower text frame distance";
-    Text[ japanese ] = "Ã·½Ä˜g‚Ì‰º•”ŠÔŠu";
+    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½‚Ì‰º—]”’";
     Text[ chinese_simplified ] = "ÏÂ±ßÎÄ×Ö¿ò¼ä¸ô";
     Text[ chinese_traditional ] = "¤U¤å¦r¤è¶ô¶¡¹j";
     Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÓİáí áßÇÏÑ ÇáäÕ";
