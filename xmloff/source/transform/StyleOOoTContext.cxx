@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOOoTContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:39:43 $
+ *  last change: $Author: obo $ $Date: 2004-11-21 13:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,11 +894,11 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
 
         case XML_ATACTION_CAPTION_ESCAPE_OOO:
             {
-                OUString aAttrValue( rAttrValue );
+                OUString aAttrValue( sAttrValue );
                 if( aAttrValue.indexOf( sal_Unicode('%') ) != -1 )
                 {
                     sal_Int32 nValue = 0;
-                    SvXMLUnitConverter::convertPercent( nValue, rAttrValue );
+                    SvXMLUnitConverter::convertPercent( nValue, sAttrValue );
                     if( nValue )
                     {
                         nValue /= 100;
@@ -912,20 +912,20 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                     XMLTransformerBase::ReplaceSingleInchWithIn( aAttrValue );
                 }
 
-                pContext->AddAttribute( rAttrName, aAttrValue );
+                pContext->AddAttribute( sAttrName, aAttrValue );
             }
             break;
         case XML_ATACTION_MOVE_PROTECT:
-            bMoveProtect = IsXMLToken( rAttrValue, XML_TRUE );
+            bMoveProtect = IsXMLToken( sAttrValue, XML_TRUE );
             pProtectContext = pContext;
             break;
         case XML_ATACTION_SIZE_PROTECT:
-            bSizeProtect = IsXMLToken( rAttrValue, XML_TRUE );
+            bSizeProtect = IsXMLToken( sAttrValue, XML_TRUE );
             pProtectContext = pContext;
             break;
         case XML_ATACTION_DRAW_MIRROR_OOO:   // renames draw:mirror to style:mirror and adapts values
             {
-                const OUString aAttrValue( GetXMLToken( IsXMLToken( rAttrValue, XML_TRUE ) ? XML_HORIZONTAL : XML_NONE ) );
+                const OUString aAttrValue( GetXMLToken( IsXMLToken( sAttrValue, XML_TRUE ) ? XML_HORIZONTAL : XML_NONE ) );
                 pContext->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey(
                                             XML_NAMESPACE_STYLE, GetXMLToken( XML_MIRROR )),
                                             aAttrValue);
@@ -934,13 +934,13 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             break;
         case XML_ATACTION_GAMMA_OOO:        // converts double value to percentage
             {
-                double fValue = rAttrValue.toDouble();
+                double fValue = sAttrValue.toDouble();
                 sal_Int32 nValue = (sal_Int32)((fValue * 100.0) + ( fValue > 0 ? 0.5 : - 0.5 ) );
 
                 rtl::OUStringBuffer aOut;
                 SvXMLUnitConverter::convertPercent( aOut, nValue );
                 OUString aAttrValue( aOut.makeStringAndClear() );
-                pContext->AddAttribute( rAttrName, aAttrValue );
+                pContext->AddAttribute( sAttrName, aAttrValue );
             }
             break;
         default:
