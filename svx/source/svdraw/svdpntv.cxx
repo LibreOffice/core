@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:43:08 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1329,11 +1329,11 @@ void SdrPaintView::SetAllLayersPrintable(BOOL bPrn)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrPaintView::InitRedraw(OutputDevice* pOut, const Region& rReg, USHORT nPaintMode)
+void SdrPaintView::InitRedraw(OutputDevice* pOut, const Region& rReg, USHORT nPaintMode, const Link* pPaintProc)
 {
     for (USHORT i=0; i<GetPageViewCount(); i++) {
         SdrPageView* pPV=GetPageViewPvNum(i);
-        pPV->InitRedraw(pOut,rReg,nPaintMode,NULL);
+        pPV->InitRedraw(pOut,rReg,nPaintMode,pPaintProc);
     }
     USHORT nWinNum=aWinList.Find(pOut);
     if (nWinNum!=SDRVIEWWIN_NOTFOUND) {
