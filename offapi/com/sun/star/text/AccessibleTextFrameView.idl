@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextFrameView.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:19:29 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,31 +91,40 @@ service AccessibleTextFrameView
         partially visible on the screen.
 
         <ul>
-            <li>The parent returned by <type>getAccessibleParent</type>
-                is the accessible view of a paragraph if the text frame
-                is bound as character, and the accessible view (or of a page
-                in the page preview) of the document in any other case.
-            <li>The children returned by <type>getAccessibleChild</type> all
-                support the interface XAccessible. Calling
-                <type>getAccessibleContext</type> for these children returns
-                an object that supports one of the following services.
+            <li>The parent returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleParent</type> is the
+                accessible view of a paragraph if the text frame is bound as
+                character, and the accessible view (or of a page in the page
+                preview) of the document in any other case.
+            <li>The children returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleChild</type> all support the
+                interface XAccessible. Calling
+                <method scope="::com::sun::star::accessibility"
+                >XAccessible::getAccessibleContext</type> for these children
+                returns an object that supports one of the following
+                services.
                 <ul>
-                    <li><type>com.sun.star.text.AccessibleParagraphView</type>:
-                        A child of this kind is returned for every paragraph
-                        fragment that is contained in the document body and
-                        is at least partially visible. A paragraph fragment is
-                        the part of a paragraph that is displayed on a
-                        certain page or a certain column.
-                    <li><type>com.sun.star.table.AccessibleTableView</type>:
-                        A child of this kind is returned for every table
-                        fragment that is contained in the document body
-                        and is at least partially visible. A table fragment is
-                        the part of a table that is displayed on a certain page
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleParagraphView</type>: A child of this
+                        kind is returned for every paragraph fragment that
+                        is contained in the document body and is at least
+                        partially visible. A paragraph fragment is the part
+                        of a paragraph that is displayed on a certain page
                         or a certain column.
+                    <li><type scope="::com::sun::star::table"
+                        >AccessibleTableView</type>: A child of this kind is
+                        returned for every table fragment that is contained
+                        in the document body and is at least partially
+                        visible. A table fragment is the part of a table
+                        that is displayed on a certain page or a certain
+                        column.
                 </ul>
                 <p>The logical order of paragraph and table fragments is never
                    changed.
-            <li>The role is <type>TEXT_FRAME</type>
+            <li>The role is <const scope="::com::sun::star::accessibility"
+                >AccessibleRole::TEXT_FRAME</const>
             <li>The name is the one assigned to the text frame in the text
                 document. This means that it is not internationalized.
             <li>The description is the one assigned to the text frame in the
@@ -123,20 +132,32 @@ service AccessibleTextFrameView
                 no description has been set, the description equals the name.
             <li>There are no relations.
             <li>The following states might be contained in the state set
-                returned by <type>getAccessibleStateSet</type>:
+                returned by <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleStateSet</method>:
                 <ul>
-                    <li><type>DEFUNC</type> (indicates that the document
-                        window has been closed or the graphic is
-                        not existing any longer)
-                    <li><type>EDITABLE</type>
-                    <li><type>ENABLED</type> (always contained)
-                    <li><type>OPAQUE</type>
-                    <li><type>SELECTABLE</type>
-                    <li><type>SELECTED</type>
-                    <li><type>FOCUSABLE</type>
-                    <li><type>FOCUSED</type>
-                    <li><type>SHOWING</type>
-                    <li><type>VISIBLE</type>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::DEFUNC</const> (indicates that
+                        the document window has been closed or the graphic
+                        is not existing any longer)
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::EDITABLE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::ENABLED</const> (always
+                        contained)
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::OPAQUE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::SELECTABLE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::SELECTED</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::FOCUSABLE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::FOCUSED</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::SHOWING</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::VISIBLE</const>
                 </ul>
             <li>The locale is the one the text document itself.
             <li>There are the two relations CONTENT_FLOWS_FROM and
