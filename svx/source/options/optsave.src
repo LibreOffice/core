@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-16 20:16:34 $
+ *  last change: $Author: kz $ $Date: 2001-08-17 20:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,7 +664,7 @@ TabPage RID_SFXPAGE_SAVE
         < "HTML형 문서" ;    APP_WRITER_WEB;  > ;
         < "테이블 문서" ; APP_CALC      ; > ;
         < "슬라이드쇼" ;     APP_IMPRESS   ; > ;
-        < "draw" ;        APP_DRAW      ; > ;
+        < "그리기" ;        APP_DRAW      ; > ;
         < "수식" ;           APP_MATH      ; > ;
         };
     StringList [ chinese_simplified ] =
@@ -724,6 +724,7 @@ TabPage RID_SFXPAGE_SAVE
 };
 
 // ********************************************************************** EOF
+
 
 
 
