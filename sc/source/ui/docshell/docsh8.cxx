@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:54:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ long lcl_GetRowCount( const uno::Reference<sdbc::XConnection>& xConnection,
 }
 
 ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
-                                BOOL bSimpleColWidth[MAXCOL+1] )
+                                BOOL bSimpleColWidth[MAXCOLCOUNT] )
 {
     ULONG nErr = eERR_OK;
     long i;
@@ -359,7 +359,8 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         }
 
         if ( nColCount > 0 )
-            aDocument.DoColResize( 0, 0, nColCount - 1, nRowCount + 1 );
+            aDocument.DoColResize( 0, 0, static_cast<SCCOL>(nColCount) - 1,
+                    static_cast<SCSIZE>(nRowCount) + 1 );
 
         uno::Reference<sdbc::XRow> xRow( xRowSet, uno::UNO_QUERY );
         DBG_ASSERT( xRow.is(), "can't get Row" );
@@ -407,16 +408,16 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
                     break;
             }
 
-            aDocument.SetString( i, 0, 0, aHeader );
+            aDocument.SetString( static_cast<SCCOL>(i), 0, 0, aHeader );
         }
 
-        USHORT nRow = 1;        // 0 is column titles
+        SCROW nRow = 1;     // 0 is column titles
         BOOL bEnd = FALSE;
         while ( !bEnd && xRowSet->next() )
         {
             if ( nRow <= MAXROW )
             {
-                USHORT nCol = 0;
+                SCCOL nCol = 0;
                 for (i=0; i<nColCount; i++)
                 {
                     ScDatabaseDocUtil::PutData( &aDocument, nCol, nRow, 0,
@@ -478,17 +479,17 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
     ScDocument* pDoc = rDocShell.GetDocument();
     SvNumberFormatter* pNumFmt = pDoc->GetFormatTable();
 
-    USHORT nTab = rDataRange.aStart.Tab();
-    USHORT nFirstCol = rDataRange.aStart.Col();
-    USHORT nFirstRow = rDataRange.aStart.Row();
-    USHORT nLastCol = rDataRange.aEnd.Col();
-    USHORT nLastRow = rDataRange.aEnd.Row();
+    SCTAB nTab = rDataRange.aStart.Tab();
+    SCCOL nFirstCol = rDataRange.aStart.Col();
+    SCROW nFirstRow = rDataRange.aStart.Row();
+    SCCOL nLastCol = rDataRange.aEnd.Col();
+    SCROW nLastRow = rDataRange.aEnd.Row();
 
     StrCollection aFieldNamesCollection;
 
     long nField = 0;
-    USHORT nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );
-    for ( USHORT nCol = nFirstCol; nCol <= nLastCol; nCol++ )
+    SCROW nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );
+    for ( SCCOL nCol = nFirstCol; nCol <= nLastCol; nCol++ )
     {
         BOOL bTypeDefined = FALSE;
         BOOL bPrecDefined = FALSE;
@@ -749,8 +750,9 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
     ULONG nErr = eERR_OK;
     uno::Any aAny;
 
-    USHORT nFirstCol, nFirstRow, nLastCol, nLastRow;
-    USHORT nTab = GetSaveTab();
+    SCCOL nFirstCol, nLastCol;
+    SCROW  nFirstRow, nLastRow;
+    SCTAB nTab = GetSaveTab();
     aDocument.GetDataStart( nTab, nFirstCol, nFirstRow );
     aDocument.GetCellArea( nTab, nLastCol, nLastRow );
     if ( nFirstCol > nLastCol )
@@ -762,7 +764,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
     SvNumberFormatter* pNumFmt = aDocument.GetFormatTable();
 
     BOOL bHasFieldNames = TRUE;
-    for ( USHORT nDocCol = nFirstCol; nDocCol <= nLastCol && bHasFieldNames; nDocCol++ )
+    for ( SCCOL nDocCol = nFirstCol; nDocCol <= nLastCol && bHasFieldNames; nDocCol++ )
     {   // nur Strings in erster Zeile => sind Feldnamen
         if ( !aDocument.HasStringData( nDocCol, nFirstRow, nTab ) )
             bHasFieldNames = FALSE;
@@ -964,18 +966,18 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
         DBG_ASSERT( xRowUpdate.is(), "can't get XRowUpdate" );
         if (!xRowUpdate.is()) return SCERR_EXPORT_CONNECT;
 
-        USHORT nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );
+        SCROW nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );
         ScFieldEditEngine aEditEngine( aDocument.GetEditPool() );
         String aString;
         double fVal;
 
-        for ( USHORT nDocRow = nFirstDataRow; nDocRow <= nLastRow; nDocRow++ )
+        for ( SCROW nDocRow = nFirstDataRow; nDocRow <= nLastRow; nDocRow++ )
         {
             xResultUpdate->moveToInsertRow();
 
             for (nCol=0; nCol<nColCount; nCol++)
             {
-                USHORT nDocCol = nFirstCol + nCol;
+                SCCOL nDocCol = nFirstCol + nCol;
 
                 switch (pColTypes[nCol])
                 {
