@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnum.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:20:01 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,10 +180,11 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
             if (0 != pNum)
                 aNum = *pNum;
 
+            aNum.SetNoNum(FALSE);
             aNum.SetLevel(rTxtNd.GetTxtColl()->GetOutlineLevel());
             rTxtNd.UpdateNum(aNum);
 
-            GetDoc()->SetNumRule(aPam, *GetDoc()->GetOutlineNumRule());
+            //GetDoc()->SetNumRule(aPam, *GetDoc()->GetOutlineNumRule());
         }
         else
         {
