@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-01 13:24:03 $
+ *  last change: $Author: cmc $ $Date: 2002-11-06 15:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ public:
         : mpWwSprmTab(pWwSprmTab), mnNoElems(nNoElems)
     {
         ASSERT(mnNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
-        ::std::sort(mpWwSprmTab, mpWwSprmTab + mnNoElems);
+        std::sort(mpWwSprmTab, mpWwSprmTab + mnNoElems);
 #ifdef DEBUG
         bool bBroken=false;
         rtl::OUString sError;
@@ -2413,118 +2413,118 @@ long WW8PLCFpcd_Iter::Where() const
 }
 
 //-----------------------------------------
+bool WW8PLCFx_Fc_FKP::WW8Fkp::Entry::operator<
+    (const WW8PLCFx_Fc_FKP::WW8Fkp::Entry& rSecond) const
+{
+    return (mnFC < rSecond.mnFC);
+}
 
-WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp( BYTE nFibVer, SvStream* pSt, SvStream* pDataSt,
-    long _nFilePos, long nItemSiz, ePLCFT ePl, WW8_FC nStartFc )
-    : nItemSize( nItemSiz ), nFilePos( _nFilePos ), ePLCF( ePl ), nIdx( 0 ),
+WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(BYTE nFibVer, SvStream* pSt, SvStream* pDataSt,
+    long _nFilePos, long nItemSiz, ePLCFT ePl, WW8_FC nStartFc)
+    : nItemSize(nItemSiz), nFilePos(_nFilePos), ePLCF(ePl), nIdx(0),
     maSprmParser(nFibVer)
 {
-    pFCFkp = new INT32[128]; // 512 Byte
-    BYTE *pScratch=(BYTE *)pFCFkp;
-
     long nOldPos = pSt->Tell();
 
-    pSt->Seek( nFilePos );
-    pSt->Read( pFCFkp, 512 );
-    nIMax = pScratch[511];
-#ifdef __BIGENDIAN
-    for( nIdx = 0; nIdx <= nIMax; nIdx++ )
-        pFCFkp[nIdx] = SWAPLONG( pFCFkp[nIdx] );
-#endif // __BIGENDIAN
+    pSt->Seek(nFilePos);
+    pSt->Read(maRawData, 512);
+    nIMax = maRawData[511];
 
-    // Pointer auf Offset-Bereich in *pFCFkp
-    BYTE* pOfs = pScratch + (nIMax + 1) * 4;
+    sal_uInt8 *pStart = maRawData;
+    // Pointer to Offset-Location in maRawData
+    sal_uInt8* pOfs = maRawData + (nIMax + 1) * 4;
 
-    pGrpprl = new WW8Grpprl[nIMax];
-    memset( pGrpprl, 0, sizeof( WW8Grpprl )*nIMax );
-
-    WW8Grpprl* pTmpGrpprl = pGrpprl;
-    for( nIdx = 0; nIdx < nIMax; nIdx++, pTmpGrpprl++ )
+    for (nIdx = 0; nIdx < nIMax; ++nIdx)
     {
         USHORT nOfs = (*(pOfs + nIdx * nItemSize)) * 2;
+        Entry aEntry(Get_Long(pStart));
 
-        if ( nOfs )
+        if (nOfs)
         {
-            switch ( ePLCF )
+            switch (ePLCF)
             {
                 case CHP:
-                    pTmpGrpprl->nLen  = pScratch[ nOfs ];
-                    pTmpGrpprl->pData = pScratch + nOfs + 1;
+                    aEntry.mnLen  = maRawData[nOfs];
+                    aEntry.mpData = maRawData + nOfs + 1;
                     break;
                 case PAP:
-                    BYTE nDelta = 0;
+                    sal_uInt8 nDelta = 0;
 
-                    pTmpGrpprl->nLen = pScratch[ nOfs ];
-                    if( 8 <= nFibVer && !pTmpGrpprl->nLen )
+                    aEntry.mnLen = maRawData[nOfs];
+                    if (8 <= nFibVer && !aEntry.mnLen)
                     {
-                        pTmpGrpprl->nLen = pScratch[ nOfs+1 ];
+                        aEntry.mnLen = maRawData[ nOfs+1 ];
                         nDelta++;
                     }
 
-                    pTmpGrpprl->nIStd = SVBT16ToShort(pScratch+nOfs+1+nDelta);
+                    aEntry.mnIStd = SVBT16ToShort(maRawData+nOfs+1+nDelta);
 
-                    pTmpGrpprl->pData = pScratch + nOfs + 3+nDelta ;
+                    aEntry.mpData = maRawData + nOfs + 3+ nDelta;
 
-                    USHORT nSpId = maSprmParser.GetSprmId(pTmpGrpprl->pData);
+                    USHORT nSpId = maSprmParser.GetSprmId(aEntry.mpData);
 
-                    if( 0x6645 == nSpId || 0x6646 == nSpId )
+                    if (0x6645 == nSpId || 0x6646 == nSpId)
                     {
-                        UINT32 nPos  = SVBT32ToLong(pTmpGrpprl->pData + 2);
                         UINT32 nCurr = pDataSt->Tell();
-                        pDataSt->Seek( nPos );
-                        *pDataSt >> pTmpGrpprl->nLen;
-                        pTmpGrpprl->pData = new BYTE[pTmpGrpprl->nLen];
-                        pTmpGrpprl->bMustDelete = true;
-                        pDataSt->Read( pTmpGrpprl->pData, pTmpGrpprl->nLen );
+
+                        UINT32 nPos = SVBT32ToLong(aEntry.mpData + 2);
+                        pDataSt->Seek(nPos);
+                        *pDataSt >> aEntry.mnLen;
+                        aEntry.mpData = new sal_uInt8[aEntry.mnLen];
+                        aEntry.mbMustDelete = true;
+                        pDataSt->Read(aEntry.mpData, aEntry.mnLen);
 
                         pDataSt->Seek( nCurr );
                     }
                     else
                     {
-                        pTmpGrpprl->nLen *= 2;
-                        pTmpGrpprl->nLen -= 2;
+                        aEntry.mnLen *= 2;
+                        aEntry.mnLen -= 2;
                     }
                     break;
             }
         }
+
+        maEntries.push_back(aEntry);
     }
+
+    //one more FC than grrpl entries
+    maEntries.push_back(Entry(Get_Long(pStart)));
+
+    //#104773#, we expect them sorted, but it appears possible
+    //for them to arive unsorted
+    std::sort(maEntries.begin(), maEntries.end());
 
     nIdx = 0;
 
-    if( nStartFc >= 0 )
-        SeekPos( nStartFc );
+    if (nStartFc >= 0)
+        SeekPos(nStartFc);
 
-    pSt->Seek( nOldPos );
+    pSt->Seek(nOldPos);
 }
 
-WW8PLCFx_Fc_FKP::WW8Fkp::~WW8Fkp()
+WW8PLCFx_Fc_FKP::WW8Fkp::Entry::~Entry()
 {
-    WW8Grpprl* pTmpGrpprl = pGrpprl;
-    for( nIdx = 0; nIdx < nIMax; nIdx++, pTmpGrpprl++ )
-    {
-        if( pTmpGrpprl->bMustDelete )
-            delete[] pTmpGrpprl->pData;
-    }
-    delete[] pGrpprl;
-    delete[] pFCFkp;
+    if (mbMustDelete)
+        delete[] mpData;
 }
 
 void WW8PLCFx_Fc_FKP::WW8Fkp::Reset(WW8_FC nFc)
 {
     SetIdx(0);
-    if (nFc >= 0 )
+    if (nFc >= 0)
         SeekPos(nFc);
 }
 
 bool WW8PLCFx_Fc_FKP::WW8Fkp::SeekPos(WW8_FC nFc)
 {
-    if( nFc < pFCFkp[0] )
+    if (nFc < maEntries[0].mnFC)
     {
         nIdx = 0;
         return false;       // Nicht gefunden: nPos unterhalb kleinstem Eintrag
     }
     // Search from beginning?
-    if( (1 > nIdx) || (nFc < pFCFkp[nIdx-1]) )
+    if( (1 > nIdx) || (nFc < maEntries[nIdx-1].mnFC) )
         nIdx = 1;
 
     long nI   = nIdx ? nIdx : 1;
@@ -2534,7 +2534,7 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::SeekPos(WW8_FC nFc)
     {
         for( ; nI <=nEnd; ++nI)
         {                               // Suchen mit um 1 erhoehtem Index
-            if( nFc < pFCFkp[nI] )
+            if (nFc < maEntries[nI].mnFC)
             {                           // Position gefunden
                 nIdx = nI - 1;          // nI - 1 ist der richtige Index
                 return true;            // ... und fertig
@@ -2558,8 +2558,8 @@ BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::Get( WW8_FC& rStart, WW8_FC& rEnd, long& rLen )
         return 0;
     }
 
-    rStart = pFCFkp[nIdx  ];
-    rEnd   = pFCFkp[nIdx+1];
+    rStart = maEntries[nIdx].mnFC;
+    rEnd   = maEntries[nIdx + 1].mnFC;
 
     BYTE* pSprms = GetLenAndIStdAndSprms( rLen );
     return pSprms;
@@ -2573,11 +2573,8 @@ void WW8PLCFx_Fc_FKP::WW8Fkp::SetIdx( ULONG nI )
 
 BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::GetLenAndIStdAndSprms(long& rLen) const
 {
-    WW8Grpprl* pTmpGrpprl = pGrpprl + nIdx;
-
-    rLen = pTmpGrpprl->nLen;
-
-    return pTmpGrpprl->pData;
+    rLen = maEntries[nIdx].mnLen;
+    return maEntries[nIdx].mpData;
 }
 
 const BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( USHORT nId )
@@ -3797,8 +3794,8 @@ bool WW8PLCFx_FLD::GetPara(long nIdx, WW8FieldDesc& rF)
 
 /*  to be optimized like this:    */
 void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
-    USHORT nExtraLen, rtl_TextEncoding eCS, ::std::vector<String> &rArray,
-    ::std::vector<String>* pExtraArray)
+    USHORT nExtraLen, rtl_TextEncoding eCS, std::vector<String> &rArray,
+    std::vector<String>* pExtraArray)
 {
     ULONG nOldPos = rStrm.Tell();
     rStrm.Seek( nStart );
@@ -4418,7 +4415,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, short nType, long nStartCp,
         if( p->pPLCFx->IsSprm() )
         {
             // Vorsicht: nEndPos muss bereits
-            p->pIdStk = new ::std::stack<USHORT>;
+            p->pIdStk = new std::stack<USHORT>;
             if ((p == pChp) || (p == pPap))
             {
                 WW8_CP nTemp = p->nEndPos+p->nCpOfs;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-01 13:24:04 $
+ *  last change: $Author: cmc $ $Date: 2002-11-06 15:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,7 +477,6 @@ public:
     bool IsVersion67() const { return bVer67; }
 };
 
-
 /*
  Iterator for Piece Table Exceptions of Fkps
  works only with FCs, not with CPs !  ( Low-Level )
@@ -488,17 +487,26 @@ public:
     class WW8Fkp        // Iterator for Formatted Disk Page
     {
     private:
-        struct WW8Grpprl
+        class Entry
         {
-            BYTE*  pData;
-            USHORT nLen;
-            USHORT nIStd; // nur bei Fkp.Papx gueltig (aktuelle Style-Nr)
-            bool bMustDelete;
+        public:
+            WW8_FC mnFC;
+
+            //mpData is a pointer to the maRawData pool, so bitwise copying is
+            //exactly what we want
+            sal_uInt8* mpData;
+            sal_uInt16 mnLen;
+            sal_uInt16 mnIStd; // only for Fkp.Papx (actualy Style-Nr)
+            bool mbMustDelete;
+
+            explicit Entry(WW8_FC nFC) : mnFC(nFC), mpData(0), mnLen(0),
+                mnIStd(0), mbMustDelete(false) {}
+            ~Entry();
+            bool operator<(const Entry& rSecond) const;
         };
 
-        WW8Grpprl* pGrpprl; // Pointer of Meta Array (pointing
-
-        WW8_FC* pFCFkp;     // gesamter Fkp
+        sal_uInt8 maRawData[512];
+        std::vector<Entry> maEntries;
 
         long nItemSize;     // entweder 1 Byte oder ein komplettes BX
 
@@ -513,12 +521,14 @@ public:
         WW8Fkp (BYTE nFibVer,SvStream* pFKPStrm,SvStream* pDataStrm,
             long _nFilePos,long nItemSiz,ePLCFT ePl,WW8_FC nStartFc = -1);
         void Reset(WW8_FC nPos);
-        ~WW8Fkp();
         long GetFilePos() const { return nFilePos; }
         ULONG GetIdx() const { return nIdx; }
         void SetIdx( ULONG nI );
         bool SeekPos( long nPos );
-        WW8_FC Where() const { return (nIdx < nIMax) ? pFCFkp[nIdx] : LONG_MAX; }
+        WW8_FC Where() const
+        {
+            return (nIdx < nIMax) ? maEntries[nIdx].mnFC : LONG_MAX;
+        }
         WW8Fkp& operator ++( int )
         {
             if( nIdx < nIMax )
@@ -526,7 +536,7 @@ public:
             return *this;
         }
         BYTE* Get( WW8_FC& rStart, WW8_FC& rEnd, long& rLen ) const;
-        USHORT GetIstd() const { return pGrpprl[ nIdx ].nIStd; }
+        USHORT GetIstd() const { return maEntries[nIdx].mnIStd; }
 
         /*
             liefert einen echten Pointer auf das Sprm vom Typ nId,
