@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:13:12 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,7 +541,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ English ] = "Drag mode" ;
         Text [ dutch ] = "Dragmodus" ;
         Text [ english_us ] = "Drag Mode" ;
-        Text [ italian ] = "Modo trascina" ;
+        Text [ italian ] = "Modo drag" ;
         Text [ spanish ] = "Modo Arrastrar" ;
         Text [ french ] = "Mode Glisser" ;
         Text [ swedish ] = "Dral‰ge" ;
@@ -948,7 +948,7 @@ String SCSTR_CONTENT_GRAPHIC
     Text[ russian ] = "–ËÒÛÌÍË";
     Text[ polish ] = "Grafiki";
     Text[ japanese ] = "ê}";
-    Text[ chinese_traditional ] = "ºvπ≥";
+    Text[ chinese_traditional ] = "πœßŒ";
     Text[ arabic ] = "’Ê—";
     Text[ dutch ] = "Afbeeldingen";
     Text[ chinese_simplified ] = "Õº–Œ";
@@ -1074,7 +1074,7 @@ Menu RID_POPUP_DROPMODE
             Text[ dutch ] = "Als Hyperlink invoegen";
             Text[ chinese_simplified ] = "µ±◊˜≥¨¡¥Ω”≤Â»Î";
             Text[ greek ] = "≈ÈÛ·„˘„ﬁ ˘Ú ıÂÒ-Û˝Ì‰ÂÛÁ";
-            Text[ korean ] = "«œ¿Ã∆€∏µ≈©∑Œº≠ ª¿‘";
+            Text[ korean ] = "«œ¿Ã∆€∏µ≈© ª¿‘";
             Text[ turkish ] = "Hyperlink olarak ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Insertar como hiperenlace";
@@ -1211,6 +1211,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
         };
     };
 };
+
 
 
 
