@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-09 09:09:49 $
+#   last change: $Author: hr $ $Date: 2004-10-11 12:48:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ XCUFILES= \
     BibliographyCommands.xcu \
     CalcCommands.xcu \
     ChartCommands.xcu \
+    ChartWindowState.xcu \
     DbuCommands.xcu \
     BaseWindowState.xcu \
     DrawImpressCommands.xcu \
@@ -92,14 +93,15 @@ XCUFILES= \
     WriterWindowState.xcu \
     WriterGlobalWindowState.xcu \
     WriterWebWindowState.xcu \
-     WriterCommands.xcu\
-     Effects.xcu
+    WriterCommands.xcu\
+    Effects.xcu
 
 LOCALIZEDFILES= \
     BasicIDECommands.xcu \
     BibliographyCommands.xcu \
     CalcCommands.xcu \
     ChartCommands.xcu \
+    ChartWindowState.xcu \
     DbuCommands.xcu \
     DrawImpressCommands.xcu \
     GenericCommands.xcu \
