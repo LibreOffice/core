@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Organigram.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:56:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,15 +38,20 @@
  *
  *************************************************************************/
 
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
+
 import com.sun.star.bridge.XUnoUrlResolver;
+
+import com.sun.star.frame.XComponentLoader;
+
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiComponentFactory;
+
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.beans.PropertyValue;
+
 
 /*
  * OpenQuery.java
@@ -83,30 +88,38 @@ public class Organigram {
         }
     }
     public void drawOrganigram() throws java.lang.Exception {
-        xRemoteServiceManager = this.getRemoteServiceManager(
-                "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
+        // get the remote office component context
+        xRemoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+        System.out.println("Connected to a running office ...");
+        // get the remote service manager
+        xRemoteServiceManager = xRemoteContext.getServiceManager();
+
         Object desktop = xRemoteServiceManager.createInstanceWithContext(
             "com.sun.star.frame.Desktop", xRemoteContext);
-        XComponentLoader xComponentLoader = (XComponentLoader)UnoRuntime.queryInterface(
-            XComponentLoader.class, desktop);
+        XComponentLoader xComponentLoader = (XComponentLoader)
+            UnoRuntime.queryInterface(XComponentLoader.class, desktop);
 
         PropertyValue[] loadProps = new PropertyValue[0];
-        XComponent xDrawComponent = xComponentLoader.loadComponentFromURL("private:factory/sdraw", "_blank", 0, loadProps);
+        XComponent xDrawComponent = xComponentLoader.loadComponentFromURL(
+            "private:factory/sdraw", "_blank", 0, loadProps);
 
         // get draw page by index
-        com.sun.star.drawing.XDrawPagesSupplier xDrawPagesSupplier = (com.sun.star.drawing.XDrawPagesSupplier)UnoRuntime.queryInterface(
-            com.sun.star.drawing.XDrawPagesSupplier.class, xDrawComponent );
-        com.sun.star.drawing.XDrawPages xDrawPages = xDrawPagesSupplier.getDrawPages();
+        com.sun.star.drawing.XDrawPagesSupplier xDrawPagesSupplier =
+            (com.sun.star.drawing.XDrawPagesSupplier)UnoRuntime.queryInterface(
+                com.sun.star.drawing.XDrawPagesSupplier.class, xDrawComponent );
+        com.sun.star.drawing.XDrawPages xDrawPages =
+            xDrawPagesSupplier.getDrawPages();
         Object drawPage = xDrawPages.getByIndex(0);
         com.sun.star.drawing.XDrawPage xDrawPage = (com.sun.star.drawing.XDrawPage)
-            UnoRuntime.queryInterface(com.sun.star.drawing.XDrawPage.class, drawPage);
+            UnoRuntime.queryInterface(com.sun.star.drawing.XDrawPage.class,
+                                      drawPage);
 
-        com.sun.star.lang.XMultiServiceFactory xDocumentFactory = (com.sun.star.lang.XMultiServiceFactory)
-            UnoRuntime.queryInterface(
+        com.sun.star.lang.XMultiServiceFactory xDocumentFactory =
+            (com.sun.star.lang.XMultiServiceFactory)UnoRuntime.queryInterface(
                 com.sun.star.lang.XMultiServiceFactory.class, xDrawComponent);
 
-        com.sun.star.beans.XPropertySet xPageProps = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface(
+        com.sun.star.beans.XPropertySet xPageProps =
+            (com.sun.star.beans.XPropertySet)UnoRuntime.queryInterface(
                 com.sun.star.beans.XPropertySet.class, xDrawPage);
 
         int pageWidth = AnyConverter.toInt(xPageProps.getPropertyValue("Width"));
@@ -141,7 +154,9 @@ public class Organigram {
         for (int level = 0; level <= 1; level++) {
             levelY = pageBorderTop + 2000 + level * (shapeHeight + verSpace);
             for (int i = levelCount[level] - 1; i > -1; i--) {
-                shapeX = horCenter - (levelCount[level] * shapeWidth + (levelCount[level] - 1) * horSpace) / 2 + i * shapeWidth + i * horSpace;
+                shapeX = horCenter - (levelCount[level] * shapeWidth +
+                         (levelCount[level] - 1) * horSpace) / 2
+                         + i * shapeWidth + i * horSpace;
                 Object shape = xDocumentFactory.createInstance("com.sun.star.drawing.RectangleShape");
                 com.sun.star.drawing.XShape xShape = (com.sun.star.drawing.XShape)
                     UnoRuntime.queryInterface(
@@ -162,51 +177,21 @@ public class Organigram {
 
                 if (level == 1) {
                     Object connector = xDocumentFactory.createInstance("com.sun.star.drawing.ConnectorShape");
-                    com.sun.star.beans.XPropertySet xConnectorProps = (com.sun.star.beans.XPropertySet)
-                        UnoRuntime.queryInterface(
+                    com.sun.star.beans.XPropertySet xConnectorProps =
+                        (com.sun.star.beans.XPropertySet)UnoRuntime.queryInterface(
                             com.sun.star.beans.XPropertySet.class, connector);
-                com.sun.star.drawing.XShape xConnector = (com.sun.star.drawing.XShape)
-                    UnoRuntime.queryInterface(
+                com.sun.star.drawing.XShape xConnector =
+                    (com.sun.star.drawing.XShape)UnoRuntime.queryInterface(
                         com.sun.star.drawing.XShape.class, connector);
                     xDrawPage.add(xConnector);
                     xConnectorProps.setPropertyValue("StartShape", xStartShape);
                     xConnectorProps.setPropertyValue("EndShape", xShape);
-                    xConnectorProps.setPropertyValue("StartGluePointIndex", new Integer(2)); // 2 = bottom glue point
-                    xConnectorProps.setPropertyValue("EndGluePointIndex", new Integer(0));   // 0 = top glue point
+                    xConnectorProps.setPropertyValue("StartGluePointIndex",
+                                      new Integer(2)); // 2 = bottom glue point
+                    xConnectorProps.setPropertyValue("EndGluePointIndex",
+                                      new Integer(0));   // 0 = top glue point
                 }
-
             }
         }
     }
-
-
-
-    protected XMultiComponentFactory getRemoteServiceManager(String unoUrl) throws java.lang.Exception {
-        if (xRemoteContext == null) {
-            // First step: create local component context, get local servicemanager and
-            // ask it to create a UnoUrlResolver object with an XUnoUrlResolver interface
-            XComponentContext xLocalContext =
-            com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(null);
-
-            XMultiComponentFactory xLocalServiceManager = xLocalContext.getServiceManager();
-
-            Object urlResolver  = xLocalServiceManager.createInstanceWithContext(
-            "com.sun.star.bridge.UnoUrlResolver", xLocalContext );
-            // query XUnoUrlResolver interface from urlResolver object
-            XUnoUrlResolver xUnoUrlResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
-            XUnoUrlResolver.class, urlResolver );
-            //XUnoUrlResolver xUnoUrlResolver = (XUnoUrlResolver)urlResolver;
-
-            // Second step: use xUrlResolver interface to import the remote StarOffice.ServiceManager,
-            // retrieve its property DefaultContext and get the remote servicemanager
-            Object initialObject = xUnoUrlResolver.resolve( unoUrl );
-            XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(
-            XPropertySet.class, initialObject);
-            Object context = xPropertySet.getPropertyValue("DefaultContext");
-            xRemoteContext = (XComponentContext)UnoRuntime.queryInterface(
-            XComponentContext.class, context);
-        }
-        return xRemoteContext.getServiceManager();
-    }
-
 }

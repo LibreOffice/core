@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ObjectTransformationDemo.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:55:45 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,29 +40,20 @@
 
 // __________ Imports __________
 
-// base classes
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.*;
+import com.sun.star.lang.XComponent;
 
-// property access
-import com.sun.star.beans.*;
+import com.sun.star.awt.Point;
+import com.sun.star.awt.Size;
 
-// name access
-import com.sun.star.container.*;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 
+import com.sun.star.drawing.XShape;
+import com.sun.star.drawing.XShapes;
+import com.sun.star.drawing.XDrawPage;
+import com.sun.star.drawing.HomogenMatrix3;
 
-// application specific classes
-import com.sun.star.drawing.*;
-
-// presentation specific classes
-import com.sun.star.presentation.*;
-
-// Point, Size, ..
-import com.sun.star.awt.*;
-import java.io.File;
-
-
-//
 import java.awt.geom.AffineTransform;
 
 // __________ Implementation __________
@@ -78,26 +69,23 @@ public class ObjectTransformationDemo
         XComponent xDrawDoc = null;
         try
         {
-            String sConnection;
-            if ( args.length >= 1 )
-                sConnection = args[ 1 ];
-            else
-                sConnection = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
-            XMultiServiceFactory xServiceFactory =
-                Helper.connect( sConnection );
+            // get the remote office context of a running office (a new office
+            // instance is started if necessary)
+            com.sun.star.uno.XComponentContext xOfficeContext = Helper.connect();
 
             // suppress Presentation Autopilot when opening the document
-            // properties are the same as described for com.sun.star.document.MediaDescriptor
+            // properties are the same as described for
+            // com.sun.star.document.MediaDescriptor
             PropertyValue[] pPropValues = new PropertyValue[ 1 ];
             pPropValues[ 0 ] = new PropertyValue();
             pPropValues[ 0 ].Name = "Silent";
             pPropValues[ 0 ].Value = new Boolean( true );
 
-            xDrawDoc = Helper.createDocument( xServiceFactory,
+            xDrawDoc = Helper.createDocument( xOfficeContext,
                 "private:factory/simpress", "_blank", 0, pPropValues );
 
-            XDrawPage       xPage       = PageHelper.getDrawPageByIndex( xDrawDoc, 0 );
-            XPropertySet    xPagePropSet= (XPropertySet)
+            XDrawPage xPage = PageHelper.getDrawPageByIndex( xDrawDoc, 0 );
+            XPropertySet xPagePropSet= (XPropertySet)
                     UnoRuntime.queryInterface( XPropertySet.class, xPage );
 
             XShapes xShapes = (XShapes)
@@ -112,11 +100,14 @@ public class ObjectTransformationDemo
             XPropertySet xPropSet = (XPropertySet)
                     UnoRuntime.queryInterface( XPropertySet.class, xShape );
 
-            HomogenMatrix3 aHomogenMatrix3 = (HomogenMatrix3)xPropSet.getPropertyValue( "Transformation" );
-            java.awt.geom.AffineTransform aOriginalMatrix = new java.awt.geom.AffineTransform(
-                aHomogenMatrix3.Line1.Column1, aHomogenMatrix3.Line2.Column1,
+            HomogenMatrix3 aHomogenMatrix3 = (HomogenMatrix3)
+                xPropSet.getPropertyValue( "Transformation" );
+
+            java.awt.geom.AffineTransform aOriginalMatrix =
+                new java.awt.geom.AffineTransform(
+                    aHomogenMatrix3.Line1.Column1, aHomogenMatrix3.Line2.Column1,
                     aHomogenMatrix3.Line1.Column2, aHomogenMatrix3.Line2.Column2,
-                        aHomogenMatrix3.Line1.Column3, aHomogenMatrix3.Line2.Column3 );
+                    aHomogenMatrix3.Line1.Column3, aHomogenMatrix3.Line2.Column3 );
 
 
             AffineTransform aNewMatrix1 = new AffineTransform();
