@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLineNumberingProperties.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 
 /** contains the settings of the line numbering in a text document.
  */
-interface XLineNumberingProperties: com::sun::star::uno::XInterface
+published interface XLineNumberingProperties: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
