@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: oj $ $Date: 2000-10-11 12:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2393,7 +2393,7 @@ void FmXGridPeer::resetted(const ::com::sun::star::lang::EventObject& rEvent) th
         // let an ::com::sun::star::util::URL-transformer normalize the URLs
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >  xTransformer(
             ::utl::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString::createFromAscii("com.sun.star.util.::com::sun::star::util::URLTransformer")),
+                ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")),
             ::com::sun::star::uno::UNO_QUERY);
         pSupported = aSupported.getArray();
         if (xTransformer.is())
