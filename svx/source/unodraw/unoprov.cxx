@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-19 12:35:02 $
+ *  last change: $Author: cl $ $Date: 2002-10-01 13:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,30 @@ SfxItemPropertyMap* ImplGetSvxShapePropertyMap()
     };
 
     return aShapePropertyMap_Impl;
+}
+
+SfxItemPropertyMap* ImplGetSvxTextShapePropertyMap()
+{
+    static SfxItemPropertyMap aTextShapePropertyMap_Impl[] =
+    {
+        EDGERADIUS_PROPERTIES
+        FILL_PROPERTIES
+        LINE_PROPERTIES
+        LINE_PROPERTIES_START_END
+        SHAPE_DESCRIPTOR_PROPERTIES
+        MISC_OBJ_PROPERTIES_NO_SHEAR
+        LINKTARGET_PROPERTIES
+        SHADOW_PROPERTIES
+        TEXT_PROPERTIES
+        // #FontWork#
+        FONTWORK_PROPERTIES
+        AUTOSHAPE_PROPERTIES
+        { MAP_CHAR_LEN("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
+        {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
+        {0,0,0,0,0}
+    };
+
+    return aTextShapePropertyMap_Impl;
 }
 
 SfxItemPropertyMap* ImplGetSvxConnectorPropertyMap()
@@ -256,7 +280,7 @@ SfxItemPropertyMap* ImplGetSvxGraphicObjectPropertyMap()
         LINE_PROPERTIES
         LINE_PROPERTIES_START_END
         SHAPE_DESCRIPTOR_PROPERTIES
-        MISC_OBJ_PROPERTIES
+        MISC_OBJ_PROPERTIES_NO_SHEAR
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
@@ -817,6 +841,7 @@ SfxItemPropertyMap* SvxUnoPropertyMapProvider::GetMap(UINT16 nPropertyId)
             case SVXMAP_FRAME: aMapArr[SVXMAP_FRAME]=ImplGetSvxFramePropertyMap(); break;
             case SVXMAP_APPLET: aMapArr[SVXMAP_APPLET]=ImplGetSvxAppletPropertyMap(); break;
             case SVXMAP_CONTROL: aMapArr[SVXMAP_CONTROL]=ImplGetSvxControlShapePropertyMap(); break;
+            case SVXMAP_TEXT: aMapArr[SVXMAP_TEXT]=ImplGetSvxTextShapePropertyMap(); break;
 
             default:
                 DBG_ERROR( "Unknown property map for SvxUnoPropertyMapProvider!" );
