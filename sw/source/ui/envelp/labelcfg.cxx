@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labelcfg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-05-11 13:57:18 $
+ *  last change: $Author: os $ $Date: 2001-07-11 06:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ Sequence<PropertyValue> lcl_CreateProperties(
     PropertyValue* pValues = aRet.getArray();
     OUString sColon(C2U(";"));
 
-    for(sal_Int32 nProp = 0; nProp < 10; nProp++)
+    for(sal_Int32 nProp = 0; nProp < rPropNames.getLength(); nProp++)
     {
         pValues[nProp].Name = pNames[nProp];
         switch(nProp)
