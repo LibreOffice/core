@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportPropMapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
+ *  last change: $Author: sab $ $Date: 2000-10-26 07:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,10 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
     XMLPropertyState* pAllFooterPaddingProperty = NULL;
     XMLPropertyState* pAllFooterBorderProperty = NULL;
     XMLPropertyState* pAllFooterBorderWidthProperty = NULL;
+    XMLPropertyState* pHeaderHeight = NULL;
+    XMLPropertyState* pHeaderMinHeight = NULL;
+    XMLPropertyState* pFooterHeight = NULL;
+    XMLPropertyState* pFooterMinHeight = NULL;
     ::std::vector< XMLPropertyState >::iterator i = rProperties.begin();
     for (i; i != rProperties.end(); i++)
     {
@@ -168,6 +172,26 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
             case CTF_PM_FOOTERBORDERWIDTHALL :
             {
                 pAllFooterBorderWidthProperty = new XMLPropertyState(i->mnIndex, i->maValue);
+            }
+            break;
+            case CTF_PM_HEADERHEIGHT :
+            {
+                pHeaderHeight = new XMLPropertyState(i->mnIndex, i->maValue);
+            }
+            break;
+            case CTF_PM_HEADERMINHEIGHT :
+            {
+                pHeaderMinHeight = new XMLPropertyState(i->mnIndex, i->maValue);
+            }
+            break;
+            case CTF_PM_FOOTERHEIGHT :
+            {
+                pFooterHeight = new XMLPropertyState(i->mnIndex, i->maValue);
+            }
+            break;
+            case CTF_PM_FOOTERMINHEIGHT :
+            {
+                pFooterMinHeight = new XMLPropertyState(i->mnIndex, i->maValue);
             }
             break;
         }
@@ -261,6 +285,38 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
             aNewProperty.mnIndex = nIndex++;
             rProperties.push_back(aNewProperty);
         }
+    }
+    if (pHeaderHeight)
+    {
+        sal_Bool bValue(sal_False);
+        uno::Any aAny;
+        aAny.setValue( &bValue, ::getBooleanCppuType() );
+        XMLPropertyState aNewProperty(pHeaderHeight->mnIndex + 2, aAny);
+        rProperties.push_back(aNewProperty);
+    }
+    if (pHeaderMinHeight)
+    {
+        sal_Bool bValue(sal_True);
+        uno::Any aAny;
+        aAny.setValue( &bValue, ::getBooleanCppuType() );
+        XMLPropertyState aNewProperty(pHeaderMinHeight->mnIndex + 1, aAny);
+        rProperties.push_back(aNewProperty);
+    }
+    if (pFooterHeight)
+    {
+        sal_Bool bValue(sal_False);
+        uno::Any aAny;
+        aAny.setValue( &bValue, ::getBooleanCppuType() );
+        XMLPropertyState aNewProperty(pFooterHeight->mnIndex + 2, aAny);
+        rProperties.push_back(aNewProperty);
+    }
+    if (pFooterMinHeight)
+    {
+        sal_Bool bValue(sal_True);
+        uno::Any aAny;
+        aAny.setValue( &bValue, ::getBooleanCppuType() );
+        XMLPropertyState aNewProperty(pFooterMinHeight->mnIndex + 1, aAny);
+        rProperties.push_back(aNewProperty);
     }
 }
 
