@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 10:59:10 $
+ *  last change: $Author: nn $ $Date: 2000-10-18 18:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@
 #include "globstr.hrc"
 #include "unonames.hxx"
 #include "styleuno.hxx"
+#include "rangeseq.hxx"
 
 using namespace com::sun::star;
 
@@ -815,6 +816,115 @@ void lcl_ApplyBorder( ScDocShell* pDocShell, const ScRangeList& rRanges,
         pDocShell->PostPaint( *rRanges.GetObject(i), PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
 
     pDocShell->SetDocumentModified();
+}
+
+//! move lcl_PutDataArray to docfunc?
+//! merge loop with ScFunctionAccess::callFunction
+
+BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
+                        const uno::Sequence< uno::Sequence<uno::Any> >& aData )
+{
+    BOOL bUndo = TRUE;
+//  BOOL bApi = TRUE;
+
+    ScDocument* pDoc = rDocShell.GetDocument();
+    USHORT nTab = rRange.aStart.Tab();
+    USHORT nStartCol = rRange.aStart.Col();
+    USHORT nStartRow = rRange.aStart.Row();
+    USHORT nEndCol = rRange.aEnd.Col();
+    USHORT nEndRow = rRange.aEnd.Row();
+
+    if ( !pDoc->IsBlockEditable( nTab, nStartCol,nStartRow, nEndCol,nEndRow ) )
+    {
+        //! error message
+        return FALSE;
+    }
+
+    long nCols = 0;
+    long nRows = aData.getLength();
+    const uno::Sequence<uno::Any>* pArray = aData.getConstArray();
+    if ( nRows )
+        nCols = pArray[0].getLength();
+
+    if ( nCols != nEndCol-nStartCol+1 || nRows != nEndRow-nStartRow+1 )
+    {
+        //! error message?
+        return FALSE;
+    }
+
+    ScDocument* pUndoDoc = NULL;
+    if ( bUndo )
+    {
+        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc->InitUndo( pDoc, nTab, nTab );
+        pDoc->CopyToDocument( rRange, IDF_CONTENTS, FALSE, pUndoDoc );
+    }
+
+    pDoc->DeleteAreaTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, IDF_CONTENTS );
+
+    BOOL bError = FALSE;
+    USHORT nDocRow = nStartRow;
+    for (long nRow=0; nRow<nRows; nRow++)
+    {
+        const uno::Sequence<uno::Any>& rColSeq = pArray[nRow];
+        if ( rColSeq.getLength() == nCols )
+        {
+            USHORT nDocCol = nStartCol;
+            const uno::Any* pColArr = rColSeq.getConstArray();
+            for (long nCol=0; nCol<nCols; nCol++)
+            {
+                const uno::Any& rElement = pColArr[nCol];
+                uno::TypeClass eElemClass = rElement.getValueTypeClass();
+                if ( eElemClass == uno::TypeClass_VOID )
+                {
+                    // void = "no value"
+                    pDoc->SetError( nDocCol, nDocRow, nTab, NOVALUE );
+                }
+                else if ( eElemClass == uno::TypeClass_SHORT ||
+                            eElemClass == uno::TypeClass_LONG ||
+                            eElemClass == uno::TypeClass_DOUBLE )
+                {
+                    double fVal;
+                    rElement >>= fVal;
+                    pDoc->SetValue( nDocCol, nDocRow, nTab, fVal );
+                }
+                else if ( eElemClass == uno::TypeClass_STRING )
+                {
+                    rtl::OUString aUStr;
+                    rElement >>= aUStr;
+                    if ( aUStr.getLength() )
+                        pDoc->PutCell( nDocCol, nDocRow, nTab, new ScStringCell( aUStr ) );
+                }
+                else
+                    bError = TRUE;      // invalid type
+
+                ++nDocCol;
+            }
+        }
+        else
+            bError = TRUE;                          // wrong size
+
+        ++nDocRow;
+    }
+
+    BOOL bHeight = rDocShell.AdjustRowHeight( nStartRow, nEndRow, nTab );
+
+    if ( pUndoDoc )
+    {
+        ScMarkData aDestMark;
+        aDestMark.SelectOneTable( nTab );
+        rDocShell.GetUndoManager()->AddUndoAction(
+            new ScUndoPaste( &rDocShell,
+                nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab, aDestMark,
+                pUndoDoc, NULL, IDF_CONTENTS, NULL,NULL,NULL,NULL, FALSE ) );
+    }
+
+    if (!bHeight)
+        rDocShell.PostPaint( rRange, PAINT_GRID );      // AdjustRowHeight may have painted already
+
+    rDocShell.SetDocumentModified();
+
+    return !bError;
 }
 
 //------------------------------------------------------------------------
@@ -3323,6 +3433,7 @@ uno::Any SAL_CALL ScCellRangeObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( table::XCellRange )
     SC_QUERYINTERFACE( sheet::XSheetCellRange )
     SC_QUERYINTERFACE( sheet::XArrayFormulaRange )
+    SC_QUERYINTERFACE( sheet::XCellRangeData )
     SC_QUERYINTERFACE( sheet::XMultipleOperation )
     SC_QUERYINTERFACE( util::XMergeable )
     SC_QUERYINTERFACE( sheet::XCellSeries )
@@ -3357,21 +3468,22 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangeObj::getTypes() throw(uno::RuntimeE
         long nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
-        aTypes.realloc( nParentLen + 13 );
+        aTypes.realloc( nParentLen + 14 );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XCellRangeAddressable>*)0);
         pPtr[nParentLen + 1] = getCppuType((const uno::Reference<sheet::XSheetCellRange>*)0);
         pPtr[nParentLen + 2] = getCppuType((const uno::Reference<sheet::XArrayFormulaRange>*)0);
-        pPtr[nParentLen + 3] = getCppuType((const uno::Reference<sheet::XMultipleOperation>*)0);
-        pPtr[nParentLen + 4] = getCppuType((const uno::Reference<util::XMergeable>*)0);
-        pPtr[nParentLen + 5] = getCppuType((const uno::Reference<sheet::XCellSeries>*)0);
-        pPtr[nParentLen + 6] = getCppuType((const uno::Reference<table::XAutoFormattable>*)0);
-        pPtr[nParentLen + 7] = getCppuType((const uno::Reference<util::XSortable>*)0);
-        pPtr[nParentLen + 8] = getCppuType((const uno::Reference<sheet::XSheetFilterableEx>*)0);
-        pPtr[nParentLen + 9] = getCppuType((const uno::Reference<sheet::XSubTotalCalculatable>*)0);
-        pPtr[nParentLen +10] = getCppuType((const uno::Reference<table::XColumnRowRange>*)0);
-        pPtr[nParentLen +11] = getCppuType((const uno::Reference<util::XImportable>*)0);
-        pPtr[nParentLen +12] = getCppuType((const uno::Reference<sheet::XCellFormatRangesSupplier>*)0);
+        pPtr[nParentLen + 3] = getCppuType((const uno::Reference<sheet::XCellRangeData>*)0);
+        pPtr[nParentLen + 4] = getCppuType((const uno::Reference<sheet::XMultipleOperation>*)0);
+        pPtr[nParentLen + 5] = getCppuType((const uno::Reference<util::XMergeable>*)0);
+        pPtr[nParentLen + 6] = getCppuType((const uno::Reference<sheet::XCellSeries>*)0);
+        pPtr[nParentLen + 7] = getCppuType((const uno::Reference<table::XAutoFormattable>*)0);
+        pPtr[nParentLen + 8] = getCppuType((const uno::Reference<util::XSortable>*)0);
+        pPtr[nParentLen + 9] = getCppuType((const uno::Reference<sheet::XSheetFilterableEx>*)0);
+        pPtr[nParentLen +10] = getCppuType((const uno::Reference<sheet::XSubTotalCalculatable>*)0);
+        pPtr[nParentLen +11] = getCppuType((const uno::Reference<table::XColumnRowRange>*)0);
+        pPtr[nParentLen +12] = getCppuType((const uno::Reference<util::XImportable>*)0);
+        pPtr[nParentLen +13] = getCppuType((const uno::Reference<sheet::XCellFormatRangesSupplier>*)0);
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -3548,7 +3660,7 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScCellRangeObj::getSpreadsheet()
     return NULL;
 }
 
-// XFormulaArray
+// XArrayFormulaRange
 
 rtl::OUString SAL_CALL ScCellRangeObj::getArrayFormula() throw(uno::RuntimeException)
 {
@@ -3610,6 +3722,54 @@ void SAL_CALL ScCellRangeObj::setArrayFormula( const rtl::OUString& aFormula )
             aFunc.DeleteContents( aMark, IDF_CONTENTS, TRUE, TRUE );
         }
     }
+}
+
+// XCellRangeData
+
+uno::Sequence< uno::Sequence<uno::Any> > SAL_CALL ScCellRangeObj::getDataArray()
+                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    if ( ScTableSheetObj::getImplementation( (cppu::OWeakObject*)this ) )
+    {
+        //  don't create a data array for the sheet
+        throw uno::RuntimeException();
+    }
+
+    ScDocShell* pDocSh = GetDocShell();
+    if (pDocSh)
+    {
+        uno::Any aAny;
+        // bAllowNV = TRUE: errors as void
+        if ( ScRangeToSequence::FillMixedArray( aAny, pDocSh->GetDocument(), aRange, TRUE ) )
+        {
+            uno::Sequence< uno::Sequence<uno::Any> > aSeq;
+            if ( aAny >>= aSeq )
+                return aSeq;            // success
+        }
+    }
+
+    throw uno::RuntimeException();      // no other exceptions specified
+    return uno::Sequence< uno::Sequence<uno::Any> >(0);
+}
+
+void SAL_CALL ScCellRangeObj::setDataArray(
+                        const uno::Sequence< uno::Sequence<uno::Any> >& aArray )
+                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    BOOL bDone = FALSE;
+    ScDocShell* pDocSh = GetDocShell();
+    if (pDocSh)
+    {
+        //! move lcl_PutDataArray to docfunc?
+        bDone = lcl_PutDataArray( *pDocSh, aRange, aArray );
+    }
+
+    if (!bDone)
+        throw uno::RuntimeException();      // no other exceptions specified
 }
 
 // XMultipleOperation
