@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2003-07-28 10:56:56 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,16 +145,16 @@ using ::rtl::OUString;
 // Byte/Unicode Strings =======================================================
 
 /** All allowed flags for exporting a BIFF2-BIFF7 byte string. */
-const XclStrFlags nAllowedFlags27 = EXC_STR_8BITLENGTH | EXC_STR_KEEPZEROCHARS;
+const XclStrFlags nAllowedFlags27 = EXC_STR_8BITLENGTH;
 /** All allowed flags for export. */
 const XclStrFlags nAllowedFlags = nAllowedFlags27 | EXC_STR_FORCEUNICODE | EXC_STR_SMARTFLAGS;
 
 
-// ----------------------------------------------------------------------------
+// constructors ---------------------------------------------------------------
 
-XclExpString::XclExpString( XclStrFlags nFlags )
+XclExpString::XclExpString( XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    Init( nFlags, 0, 0, true );
+    Init( 0, nFlags, nMaxLen, true );
 }
 
 XclExpString::XclExpString( const String& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
@@ -181,9 +181,12 @@ XclExpString::XclExpString(
     Assign( rString, rFormats, nFlags, nMaxLen );
 }
 
+
+// assign ---------------------------------------------------------------------
+
 void XclExpString::Assign( const String& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    Build( rString.GetBuffer(), nFlags, rString.Len(), nMaxLen );
+    Build( rString.GetBuffer(), rString.Len(), nFlags, nMaxLen );
 }
 
 void XclExpString::Assign(
@@ -196,7 +199,7 @@ void XclExpString::Assign(
 
 void XclExpString::Assign( const OUString& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    Build( rString.getStr(), nFlags, rString.getLength(), nMaxLen );
+    Build( rString.getStr(), rString.getLength(), nFlags, nMaxLen );
 }
 
 void XclExpString::Assign(
@@ -207,16 +210,72 @@ void XclExpString::Assign(
     SetFormats( rFormats );
 }
 
-void XclExpString::Assign( sal_Unicode cChar, XclStrFlags nFlags )
+void XclExpString::Assign( sal_Unicode cChar, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    Build( &cChar, nFlags, 1, 1 );
+    Build( &cChar, 1, nFlags, nMaxLen );
 }
 
 void XclExpString::AssignByte(
         const String& rString, CharSet eCharSet, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    Build( ByteString( rString, eCharSet ).GetBuffer(), nFlags, rString.Len(), nMaxLen );
+    ByteString aByteStr( rString, eCharSet );   // length may differ from length of rString
+    Build( aByteStr.GetBuffer(), aByteStr.Len(), nFlags, nMaxLen );
 }
+
+void XclExpString::AssignByte( sal_Unicode cChar, CharSet eCharSet, XclStrFlags nFlags, sal_uInt16 nMaxLen )
+{
+    if( !cChar )
+    {
+        sal_Char cByteChar = 0;
+        Build( &cByteChar, 1, nFlags, nMaxLen );
+    }
+    else
+    {
+        ByteString aByteStr( &cChar, 1, eCharSet );     // length may be >1
+        Build( aByteStr.GetBuffer(), aByteStr.Len(), nFlags, nMaxLen );
+    }
+}
+
+
+// append ---------------------------------------------------------------------
+
+void XclExpString::Append( const String& rString )
+{
+    BuildAppend( rString.GetBuffer(), rString.Len() );
+}
+
+void XclExpString::Append( const ::rtl::OUString& rString )
+{
+    BuildAppend( rString.getStr(), rString.getLength() );
+}
+
+void XclExpString::Append( sal_Unicode cChar )
+{
+    BuildAppend( &cChar, 1 );
+}
+
+void XclExpString::AppendByte( const String& rString, CharSet eCharSet )
+{
+    ByteString aByteStr( rString, eCharSet );   // length may differ from length of rString
+    BuildAppend( aByteStr.GetBuffer(), aByteStr.Len() );
+}
+
+void XclExpString::AppendByte( sal_Unicode cChar, CharSet eCharSet )
+{
+    if( !cChar )
+    {
+        sal_Char cByteChar = 0;
+        BuildAppend( &cByteChar, 1 );
+    }
+    else
+    {
+        ByteString aByteStr( &cChar, 1, eCharSet );     // length may be >1
+        BuildAppend( aByteStr.GetBuffer(), aByteStr.Len() );
+    }
+}
+
+
+// formatting runs ------------------------------------------------------------
 
 void XclExpString::SetFormats( const XclFormatRunVec& rFormats )
 {
@@ -250,6 +309,9 @@ void XclExpString::LimitFormatCount( sal_uInt16 nMaxCount )
         maFormats.erase( maFormats.begin() + nMaxCount, maFormats.end() );
 }
 
+
+// get data -------------------------------------------------------------------
+
 sal_uInt16 XclExpString::GetFormatsCount() const
 {
     return static_cast< sal_uInt16 >( mbIsBiff8 ? maFormats.size() : 0 );
@@ -273,6 +335,9 @@ sal_uInt32 XclExpString::GetSize() const
         GetBufferSize() +                               // character buffer
         (IsRich() ? (4 * GetFormatsCount() + 2) : 0);   // richtext formattting
 }
+
+
+// streaming ------------------------------------------------------------------
 
 void XclExpString::WriteFlagField( XclExpStream& rStrm ) const
 {
@@ -350,27 +415,59 @@ void XclExpString::WriteBuffer( void* pDest ) const
     }
 }
 
+
+// ----------------------------------------------------------------------------
+
 bool XclExpString::IsWriteFlags() const
 {
     return mbIsBiff8 && (!IsEmpty() || !mbSmartFlags);
 }
 
-sal_uInt16 XclExpString::CalcStrLen( sal_Int32 nCurrLen, sal_uInt16 nMaxLen )
+void XclExpString::SetStrLen( sal_Int32 nNewLen )
 {
-    sal_Int32 nAllowedLen = (mb8BitLen && (nMaxLen > 255)) ? 255 : nMaxLen;
-    return static_cast< sal_uInt16 >( ::std::min( ::std::max( nCurrLen, 0L ), nAllowedLen ) );
+    sal_Int32 nAllowedLen = (mb8BitLen && (mnMaxLen > 255)) ? 255 : mnMaxLen;
+    mnLen = static_cast< sal_uInt16 >( ::std::min( ::std::max( nNewLen, 0L ), nAllowedLen ) );
 }
 
-void XclExpString::Init( XclStrFlags nFlags, sal_Int32 nCurrLen, sal_uInt16 nMaxLen, bool bBiff8 )
+void XclExpString::CharsToBuffer( const sal_Unicode* pcSource, sal_Int32 nBegin, sal_Int32 nLen )
+{
+    DBG_ASSERT( maUniBuffer.size() >= static_cast< size_t >( nBegin + nLen ),
+        "XclExpString::CharsToBuffer - char buffer invalid" );
+    ScfUInt16Vec::iterator aBegin = maUniBuffer.begin() + nBegin;
+    ScfUInt16Vec::iterator aEnd = aBegin + nLen;
+    const sal_Unicode* pcSrcChar = pcSource;
+    for( ScfUInt16Vec::iterator aIter = aBegin; aIter != aEnd; ++aIter, ++pcSrcChar )
+    {
+        *aIter = static_cast< sal_uInt16 >( *pcSrcChar );
+        if( *aIter & 0xFF00 )
+            mbIsUnicode = true;
+    }
+    mbWrapped = ::std::find( aBegin, aEnd, EXC_LF ) != aEnd;
+}
+
+void XclExpString::CharsToBuffer( const sal_Char* pcSource, sal_Int32 nBegin, sal_Int32 nLen )
+{
+    DBG_ASSERT( maCharBuffer.size() >= static_cast< size_t >( nBegin + nLen ),
+        "XclExpString::CharsToBuffer - char buffer invalid" );
+    ScfUInt8Vec::iterator aBegin = maCharBuffer.begin() + nBegin;
+    ScfUInt8Vec::iterator aEnd = aBegin + nLen;
+    const sal_Char* pcSrcChar = pcSource;
+    for( ScfUInt8Vec::iterator aIter = aBegin; aIter != aEnd; ++aIter, ++pcSrcChar )
+        *aIter = static_cast< sal_uInt8 >( *pcSrcChar );
+    mbIsUnicode = false;
+    mbWrapped = ::std::find( aBegin, aEnd, EXC_LF_C ) != aEnd;
+}
+
+void XclExpString::Init( sal_Int32 nCurrLen, XclStrFlags nFlags, sal_uInt16 nMaxLen, bool bBiff8 )
 {
     DBG_ASSERT( (nFlags & ~(bBiff8 ? nAllowedFlags : nAllowedFlags27)) == 0, "XclExpString::Init - unknown flag" );
     mbIsBiff8 = bBiff8;
     mbIsUnicode = bBiff8 && ::get_flag( nFlags, EXC_STR_FORCEUNICODE );
     mb8BitLen = ::get_flag( nFlags, EXC_STR_8BITLENGTH );
     mbSmartFlags = bBiff8 && ::get_flag( nFlags, EXC_STR_SMARTFLAGS );
-    mbKeepZero = ::get_flag( nFlags, EXC_STR_KEEPZEROCHARS );
     mbWrapped = false;
-    mnLen = CalcStrLen( nCurrLen, nMaxLen );
+    mnMaxLen = nMaxLen;
+    SetStrLen( nCurrLen );
 
     maFormats.clear();
     if( mbIsBiff8 )
@@ -385,31 +482,47 @@ void XclExpString::Init( XclStrFlags nFlags, sal_Int32 nCurrLen, sal_uInt16 nMax
     }
 }
 
-void XclExpString::Build( const sal_Unicode* pSource, XclStrFlags nFlags, sal_Int32 nCurrLen, sal_uInt16 nMaxLen )
+void XclExpString::Build( const sal_Unicode* pcSource, sal_Int32 nCurrLen, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    Init( nFlags, nCurrLen, nMaxLen, true );
-
-    const sal_Unicode* pSrcChar = pSource;
-    for( ScfUInt16Vec::iterator aIter = maUniBuffer.begin(), aEnd = maUniBuffer.end(); aIter != aEnd; ++aIter, ++pSrcChar )
-    {
-        *aIter = static_cast< sal_uInt16 >( (*pSrcChar || mbKeepZero) ? *pSrcChar : '?' );
-        if( *aIter & 0xFF00 )
-            mbIsUnicode = true;
-    }
-
-    mbWrapped = ::std::find( maUniBuffer.begin(), maUniBuffer.end(), EXC_NEWLINE ) != maUniBuffer.end();
+    Init( nCurrLen, nFlags, nMaxLen, true );
+    CharsToBuffer( pcSource, 0, mnLen );
 }
 
-void XclExpString::Build( const sal_Char* pSource, XclStrFlags nFlags, sal_Int32 nCurrLen, sal_uInt16 nMaxLen )
+void XclExpString::Build( const sal_Char* pcSource, sal_Int32 nCurrLen, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    Init( nFlags, nCurrLen, nMaxLen, false );
+    Init( nCurrLen, nFlags, nMaxLen, false );
+    CharsToBuffer( pcSource, 0, mnLen );
+}
 
-    const sal_Char* pSrcChar = pSource;
-    for( ScfUInt8Vec::iterator aIter = maCharBuffer.begin(), aEnd = maCharBuffer.end(); aIter != aEnd; ++aIter, ++pSrcChar )
-        *aIter = static_cast< sal_uInt8 >( (*pSrcChar || mbKeepZero) ? *pSrcChar : '?' );
+void XclExpString::InitAppend( sal_Int32 nAddLen )
+{
+    SetStrLen( static_cast< sal_Int32 >( mnLen ) + nAddLen );
+    if( mbIsBiff8 )
+        maUniBuffer.resize( mnLen );
+    else
+        maCharBuffer.resize( mnLen );
+}
 
-    mbIsUnicode = false;
-    mbWrapped = ::std::find( maCharBuffer.begin(), maCharBuffer.end(), EXC_NEWLINE_CHAR ) != maCharBuffer.end();
+void XclExpString::BuildAppend( const sal_Unicode* pcSource, sal_Int32 nAddLen )
+{
+    DBG_ASSERT( mbIsBiff8, "XclExpString::BuildAppend - must not be called at byte strings" );
+    if( mbIsBiff8 )
+    {
+        sal_uInt16 nOldLen = mnLen;
+        InitAppend( nAddLen );
+        CharsToBuffer( pcSource, nOldLen, mnLen - nOldLen );
+    }
+}
+
+void XclExpString::BuildAppend( const sal_Char* pcSource, sal_Int32 nAddLen )
+{
+    DBG_ASSERT( !mbIsBiff8, "XclExpString::BuildAppend - must not be called at unicode strings" );
+    if( !mbIsBiff8 )
+    {
+        sal_uInt16 nOldLen = mnLen;
+        InitAppend( nAddLen );
+        CharsToBuffer( pcSource, nOldLen, mnLen - nOldLen );
+    }
 }
 
 void XclExpString::PrepareWrite( XclExpStream& rStrm, sal_uInt32 nBytes ) const
@@ -456,14 +569,10 @@ XclExpHlinkHelper::XclExpHlinkHelper( const XclExpRoot& rRoot, bool bCreateHlink
 
 XclExpHlinkHelper::~XclExpHlinkHelper()
 {
-    if( mbCreateHlinkRecs && mbMultipleHlink && maNoteText.Len() )
-    {
-        /*  Append the note text to 'mpRD->sAddNoteText'. This string will be appended
-            to the note of the cell currently exported and cleared afterwards. */
-        if( mpRD->sAddNoteText.Len() )
-            mpRD->sAddNoteText.Append( EXC_NEWLINE ).Append( EXC_NEWLINE );
-        mpRD->sAddNoteText.Append( maNoteText );
-    }
+    /*  Append the note text to 'mpRD->sAddNoteText'. This string will be appended
+        to the note of the cell currently exported and cleared afterwards. */
+    if( mbCreateHlinkRecs && mbMultipleHlink )
+        ScGlobal::AddToken( mpRD->sAddNoteText, maNoteText, '\n', 2 );
 }
 
 String XclExpHlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
@@ -487,7 +596,7 @@ String XclExpHlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
             mrpLastHlink = pNewHlink;       // pNewHlink was first hyperlink
 
         // add URL to note text
-        ScfTools::AddToken( maNoteText, rUrlField.GetURL(), EXC_NEWLINE );
+        ScGlobal::AddToken( maNoteText, rUrlField.GetURL(), '\n' );
     }
     // no hyperlink representation from Excel HLINK record -> use it from text field
     if( !aRepr.Len() )
@@ -596,7 +705,7 @@ XclExpString* lcl_xehelper_CreateString(
         }
         // add trailing newline (important for correct character index calculation)
         if( nPara + 1 < nParaCount )
-            aXclText.Append( EXC_NEWLINE );
+            aXclText.Append( '\n' );
     }
 
     return new XclExpString( aXclText, aFormats, nFlags, nMaxLen );
@@ -842,7 +951,7 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
             aSel.nStartPos = aSel.nEndPos;
         }
 
-        ScfTools::AddToken( aText, aParaText, EXC_NEWLINE );
+        ScGlobal::AddToken( aText, aParaText, '\n' );
     }
 
     mrEE.SetUpdateMode( bOldUpdateMode );
