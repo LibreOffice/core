@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-06 11:00:00 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: nf $ $Date: 2000-12-06 11:00:00 $ $Revision: 1.5 $
+// $Author: kz $ $Date: 2001-01-19 20:13:54 $ $Revision: 1.6 $
 //============================================================================
 
 #ifndef UUI_IDS_HRC
@@ -74,8 +74,8 @@ String RID_KEEP_PASSWORD
     Text = "Passwort bis Applikationsende ~merken";
     Text[ english ] = "~Remember password until application ends";
     Text[ arabic ] = "ÊĞßøÑ ßáãÉ ÇáÓÑ ÍÊì äåÇíÉ ÌáÓÉ ÇáÚãá";
-    Text[ chinese_simplified ] = "½áÊø³ÌĞòÖ®Ç°Ò»Ö±¼Ç×¡¿ÚÁî(~R)";
-    Text[ chinese_simplified ] = "½áÊø³ÌĞòÖ®Ç°Ò»Ö±¼Ç×¡¿ÚÁî(~R)";
+    Text[ chinese_simplified ] = "½áÊø³ÌĞòÖ®Ç°Ò»Ö±¼Ç×¡ÃÜÂë(~R)";
+    Text[ chinese_simplified ] = "½áÊø³ÌĞòÖ®Ç°Ò»Ö±¼Ç×¡ÃÜÂë(~R)";
     Text[ chinese_traditional ] = "µ²§ôµ{§Ç¤§«e¤@ª½°O¦í±K½X(~R)";
     Text[ danish ] = "Husk adgangskoden til applikationen afsluttes";
     Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van het programma";
@@ -100,8 +100,8 @@ String RID_SAVE_PASSWORD
     Text = "Passwort dauerhaft ~speichern";
     Text[ english ] = "~Save password permanently";
     Text[ arabic ] = "ÍİÙ ÏÇÆã áßáãÉ ÇáÓÑ";
-    Text[ chinese_simplified ] = "±£´æ¿ÚÁî(~S)";
-    Text[ chinese_simplified ] = "±£´æ¿ÚÁî(~S)";
+    Text[ chinese_simplified ] = "±£´æÃÜÂë(~S)";
+    Text[ chinese_simplified ] = "±£´æÃÜÂë(~S)";
     Text[ chinese_traditional ] = "Àx¦s±K½X(~S)";
     Text[ danish ] = "Gem adgangskoden permanent";
     Text[ dutch ] = "Wachtwoord ~opslaan";
