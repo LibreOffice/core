@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputsequencechecker.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:03:04 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/i18n/XInputSequenceChecker.hpp>
 
-#include <tools/list.hxx>
+#include <vector>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -97,7 +97,7 @@ public:
 
 protected:
     sal_Int16 checkMode;
-    sal_Char *serviceName;
+    const sal_Char *serviceName;
 
 private :
     struct lookupTableItem {
@@ -106,7 +106,7 @@ private :
         const sal_Char* aLanguage;
         com::sun::star::uno::Reference < com::sun::star::i18n::XInputSequenceChecker > xISC;
     };
-    List lookupTable;
+    std::vector<lookupTableItem*> lookupTable;
     lookupTableItem *cachedItem;
 
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
