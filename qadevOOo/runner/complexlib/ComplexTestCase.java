@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComplexTestCase.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2003-03-26 14:53:53 $
+ *  last change: $Date: 2003-04-01 09:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ import lib.TestParameters;
 import com.sun.star.lang.XMultiServiceFactory;
 import share.LogWriter;
 import share.ComplexTest;
+import java.io.PrintWriter;
 
 public abstract class ComplexTestCase implements ComplexTest {
 
@@ -109,6 +110,7 @@ public abstract class ComplexTestCase implements ComplexTest {
             if (errorMsg == null)
                 errorMsg = "";
             log.println("Message: " + errorMsg);
+            t.printStackTrace((PrintWriter)log);
         }
 
         //executeMethodTests
@@ -134,6 +136,7 @@ public abstract class ComplexTestCase implements ComplexTest {
                 log.println(t.toString());
                 String msg = t.getMessage();
                 log.println("Message: " + msg);
+                t.printStackTrace((PrintWriter)log);
                 subEntry.State=message + (msg == null?"":msg);
                 subEntry.hasErrorMsg = true;
                 subEntry.ErrorMsg = message + "\n" + msg;
@@ -144,6 +147,7 @@ public abstract class ComplexTestCase implements ComplexTest {
                 log.println("Message: " + e.getMessage());
                 String msg = e.getMessage();
                 log.println("Message: " + msg);
+                e.printStackTrace((PrintWriter)log);
                 subEntry.State="SKIPPED.FAILED";
                 subEntry.hasErrorMsg = true;
                 subEntry.ErrorMsg = (msg == null?"":msg);
@@ -174,6 +178,7 @@ public abstract class ComplexTestCase implements ComplexTest {
                 if (errorMsg == null)
                     errorMsg = "";
                 log.println("Message: " + errorMsg);
+                t.printStackTrace((PrintWriter)log);
             }
         }
     }
