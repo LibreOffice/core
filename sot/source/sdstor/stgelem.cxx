@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgelem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 16:59:14 $
+ *  last change: $Author: mm $ $Date: 2001-05-14 11:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #include <string.h> // memset(), memcpy()
 #include <rtl/ustring.hxx>
+#include <com/sun/star/lang/Locale.hpp>
+#include <unotools/charclass.hxx>
 #include "stg.hxx"
 #include "stgelem.hxx"
 #include "stgcache.hxx"
@@ -288,11 +290,24 @@ BOOL StgEntry::Init()
     return TRUE;
 }
 
+static String ToUpperUnicode( const String & rStr )
+{
+    // I don't know the locale, so en_US is hopefully fine
+    /*
+    com.sun.star.lang.Locale aLocale;
+    aLocale.Language = OUString::createFromAscii( "en" );
+    aLocale.Country  = OUString::createFromAscii( "US" );
+    */
+    static CharClass aCC( com::sun::star::lang::Locale( rtl::OUString::createFromAscii( "en" ),
+                            rtl::OUString::createFromAscii( "US" ), rtl::OUString() ) );
+    return aCC.toUpper( rStr, 0, rStr.Len() );
+}
+
+
 BOOL StgEntry::SetName( const String& rName )
 {
-    // make upper case character in current language
-    aName = rName;
-    aName = rtl::OUString( aName ).toAsciiUpperCase();
+    // I don't know the locale, so en_US is hopefully fine
+    aName = ToUpperUnicode( rName );
     aName.Erase( 31 );
 
     int i;
@@ -401,9 +416,10 @@ BOOL StgEntry::Load( const void* pFrom )
         return FALSE;
 
     aName = String( nName, n );
-    // make upper case character in current language
-    aName = rtl::OUString( aName ).toAsciiUpperCase();
+    // I don't know the locale, so en_US is hopefully fine
+    aName = ToUpperUnicode( aName );
     aName.Erase( 31 );
+
     return TRUE;
 }
 
