@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-22 11:43:09 $
+ *  last change: $Author: jp $ $Date: 2001-03-28 12:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
+#endif
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
 
 #ifndef _SHL_HXX
@@ -373,7 +376,7 @@ class OptionsBreakSet : public ModalDialog
 {
     OKButton        aOKPB;
     CancelButton    aCancelPB;
-    GroupBox        aValGB;
+    FixedLine       aValGB;
     NumericField    aValNF;
 
 public:
