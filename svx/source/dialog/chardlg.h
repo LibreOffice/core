@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:07 $
+ *  last change: $Author: pb $ $Date: 2000-11-27 09:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,15 @@
 #define CHRDLG_STRIKEOUT_SLASH              5
 #define CHRDLG_STRIKEOUT_X                  6
 
+#define CHRDLG_ENCLOSE_NONE                 0
+#define CHRDLG_ENCLOSE_ROUND                1
+#define CHRDLG_ENCLOSE_SQUARE               2
+#define CHRDLG_ENCLOSE_POINTED              3
+#define CHRDLG_ENCLOSE_CURVED               4
+#define CHRDLG_ENCLOSE_SPECIAL_CHAR         5
+
+#define CHRDLG_POSITION_OVER                0
+#define CHRDLG_POSITION_UNDER               1
 
 #endif
 
