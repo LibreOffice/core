@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 16:15:35 $
+#   last change: $Author: obo $ $Date: 2004-11-16 12:25:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ SLOFILES =	\
     $(SLO)$/attributesmap.obj \
     $(SLO)$/saxbuilder.obj
 
-    
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
