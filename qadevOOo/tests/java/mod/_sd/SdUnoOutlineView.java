@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:23:53 $
+ *  last change:$Date: 2003-09-08 12:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,16 @@
 
 package mod._sd;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.DesktopTools;
+import util.SOfficeFactory;
+import util.utils;
+
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
@@ -74,14 +84,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.DesktopTools;
-import util.SOfficeFactory;
-import util.utils;
 /**
 * Test for object which is represented by service
 * <code>com.sun.star.present.OutlineView</code>. <p>
