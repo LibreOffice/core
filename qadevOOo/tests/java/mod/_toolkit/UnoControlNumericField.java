@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlNumericField.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-01-05 20:55:13 $
+ *  last change:$Date: 2004-03-19 14:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,17 @@
  ************************************************************************/
 package mod._toolkit;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.FormTools;
+import util.SOfficeFactory;
+import util.WriterTools;
+import util.utils;
+
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
@@ -77,25 +88,12 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 import com.sun.star.view.XControlAccess;
 
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-
-import util.FormTools;
-import util.SOfficeFactory;
-import util.WriterTools;
-import util.utils;
-
 
 public class UnoControlNumericField extends TestCase {
     XTextDocument xTextDoc;
 
     protected void initialize(TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     (XMultiServiceFactory) Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) Param.getMSF());
 
         try {
             log.println("creating a textdocument");
@@ -110,7 +108,15 @@ public class UnoControlNumericField extends TestCase {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
-        util.DesktopTools.closeDoc(xTextDoc);
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xTextDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
     }
 
     protected TestEnvironment createTestEnvironment(TestParameters Param,
@@ -189,6 +195,8 @@ public class UnoControlNumericField extends TestCase {
                                           XTextComponent.class, oObj);
         textComp.addTextListener(listener);
         tEnv.addObjRelation("TestTextListener", listener);
+
+        tEnv.addObjRelation("XTextComponent.onlyNumbers", "");
 
         log.println("ImplementationName: " + utils.getImplName(oObj));
 
