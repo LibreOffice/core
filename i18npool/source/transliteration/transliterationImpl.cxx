@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationImpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:43:29 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@ static struct TMlist {
   TmItem1 (ignoreMinusSign_ja_JP),              // 5. (1<<13     16384) (12)
   TmItem1 (ignoreIterationMark_ja_JP),          // 6. (1<<14     32768) (13)
   TmItem1 (ignoreSeparator_ja_JP),              // 7. (1<<15     65536) (14)
+  TmItem1 (ignoreSize_ja_JP),                   // 15. (1<<23  16777216) (22)
+  TmItem1 (ignoreMiddleDot_ja_JP),              // 17. (1<<25  67108864) (24)
+  TmItem1 (ignoreSpace_ja_JP),                  // 18. (1<<26 134217728) (25)
   TmItem1 (ignoreZiZu_ja_JP),                   // 8. (1<<16    131072) (15)
   TmItem1 (ignoreBaFa_ja_JP),                   // 9. (1<<17    262144) (16)
   TmItem1 (ignoreTiJi_ja_JP),                   // 10. (1<<18    524288) (17)
@@ -117,10 +120,7 @@ static struct TMlist {
   TmItem1 (ignoreSeZe_ja_JP),                   // 12. (1<<20   2097152) (19)
   TmItem1 (ignoreIandEfollowedByYa_ja_JP),      // 13. (1<<21   4194304) (20)
   TmItem1 (ignoreKiKuFollowedBySa_ja_JP),       // 14. (1<<22   8388608) (21)
-  TmItem1 (ignoreSize_ja_JP),                   // 15. (1<<23  16777216) (22)
   TmItem1 (ignoreProlongedSoundMark_ja_JP),     // 16. (1<<24  33554432) (23)
-  TmItem1 (ignoreMiddleDot_ja_JP),              // 17. (1<<25  67108864) (24)
-  TmItem1 (ignoreSpace_ja_JP),                  // 18. (1<<26 134217728) (25)
 
   TmItem1 (UPPERCASE_LOWERCASE),        // 19. (1) (1)
   TmItem1 (LOWERCASE_UPPERCASE),        // 20. (2) (2)
