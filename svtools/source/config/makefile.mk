@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: pb $ $Date: 2001-01-18 08:11:58 $
+#   last change: $Author: tl $ $Date: 2001-02-19 10:59:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,8 @@ SLOFILES = \
     $(SLO)$/fontoptions.obj				\
     $(SLO)$/addxmltostorageoptions.obj	\
     $(SLO)$/miscopt.obj					\
-    $(SLO)$/defaultoptions.obj
+    $(SLO)$/defaultoptions.obj			\
+    $(SLO)$/searchopt.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
