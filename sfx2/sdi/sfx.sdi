@@ -2787,29 +2787,6 @@ SfxStringItem Comments SID_DOCINFO_COMMENTS
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Optimize SID_OPTIMIZEWIN
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
 SfxObjectItem Open SID_DOCINFO_TITLE
 
 [
@@ -5611,30 +5588,6 @@ SfxRectangleItem Area SID_WIN_POSSIZE
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem Minimized SID_WIN_MINIMIZED
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    Synchron;
-
-    Readonly = FALSE,
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
 SfxObjectItem AddDirect SID_NEWDOCDIRECT
 ()
 [
@@ -5658,30 +5611,6 @@ SfxObjectItem AddDirect SID_NEWDOCDIRECT
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_APPLICATION;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem Maximized SID_WIN_MAXIMIZED
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    Synchron;
-
-    Readonly = FALSE,
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
 ]
 
 //--------------------------------------------------------------------------
@@ -6419,29 +6348,6 @@ SfxBoolItem ShowPopups SID_SHOWPOPUPS
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem BrowseHome SID_BROWSE_HOME
-()
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_NAVIGATOR;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem AddWatch SID_BASICIDE_ADDWATCH
 ()
 [
@@ -6768,29 +6674,6 @@ SfxVoidItem MailNotifyReset SID_MAIL_NOTIFY_RESET
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem Restore SID_RESTOREWIN
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
 ]
 
 //--------------------------------------------------------------------------

@@ -2,7 +2,7 @@
     shell SfxViewFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: pb $ $Date: 2001-09-06 09:58:12 $ $Revision: 1.7 $
+    $Author: mba $ $Date: 2001-09-13 11:40:49 $ $Revision: 1.8 $
     $Logfile:   T:/sfx2/sdi/frmslots.sdv  $ $Workfile:   FRMSLOTS.SDI  $
 =========================================================================*/
 
@@ -358,34 +358,6 @@ interface TopWindow : BrowseWindow
         StateMethod = GetState_Impl ;
     ]
 
-    //---------------------------------------------------------------------{
-    SID_OPTIMIZEWIN // ole(no) api(final/play/rec)
-    [
-        ExecMethod = Exec_Impl ;
-        StateMethod = GetState_Impl ;
-    ]
-
-    //---------------------------------------------------------------------{
-    SID_WIN_MINIMIZED // ole(no) api(final/play/rec)
-    [
-        ExecMethod = Exec_Impl ;
-        StateMethod = GetState_Impl ;
-    ]
-
-    //---------------------------------------------------------------------{
-    SID_WIN_MAXIMIZED // ole(no) api(final/play/rec)
-    [
-        ExecMethod = Exec_Impl ;
-        StateMethod = GetState_Impl ;
-    ]
-
-    //---------------------------------------------------------------------{
-    SID_RESTOREWIN // ole(no) api(final/play/rec)
-    [
-        ExecMethod = Exec_Impl ;
-        StateMethod = GetState_Impl ;
-    ]
-
     //---------------------------------------------------------------------
     SID_CLOSEWIN // ole(no) api(final/play/rec)
     [
@@ -408,13 +380,6 @@ interface TopWindow : BrowseWindow
 
     //---------------------------------------------------------------------
     SID_BROWSE_BACKWARD // ole(no) api()
-    [
-        ExecMethod = INetExecute_Impl ;
-        StateMethod = INetState_Impl ;
-    ]
-
-    //---------------------------------------------------------------------
-    SID_BROWSE_HOME // ole(no) api()
     [
         ExecMethod = INetExecute_Impl ;
         StateMethod = INetState_Impl ;
@@ -458,6 +423,9 @@ shell SfxViewFrame
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/09/06 09:58:12  pb
+    fix: #91191# SID_HELP_PI removed
+
     Revision 1.6  2001/06/27 12:30:14  mba
     #86347#: SID_NEWDOCDIRECT depends on document type
 
