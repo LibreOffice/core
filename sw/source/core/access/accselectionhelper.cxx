@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accselectionhelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:38:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 
 #pragma hdrstop
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
 #ifndef _ACCSELECTIONHELPER_HXX_
 #include <accselectionhelper.hxx>
@@ -97,9 +97,9 @@
 
 using namespace ::com::sun::star::uno;
 using ::com::sun::star::uno::RuntimeException;
-using ::drafts::com::sun::star::accessibility::XAccessible;
-using ::drafts::com::sun::star::accessibility::XAccessibleContext;
-using ::drafts::com::sun::star::accessibility::XAccessibleSelection;
+using ::com::sun::star::accessibility::XAccessible;
+using ::com::sun::star::accessibility::XAccessibleContext;
+using ::com::sun::star::accessibility::XAccessibleSelection;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 
 
@@ -373,7 +373,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     return xChild;
 }
 
-void SwAccessibleSelectionHelper::deselectSelectedAccessibleChild(
+void SwAccessibleSelectionHelper::deselectAccessibleChild(
     sal_Int32 nSelectedChildIndex )
     throw ( IndexOutOfBoundsException,
             RuntimeException )
