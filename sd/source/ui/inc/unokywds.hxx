@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-22 15:08:45 $
+ *  last change: $Author: cl $ $Date: 2001-05-29 12:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,5 +246,6 @@ SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaLeft,                "VisibleAreaLeft
 SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaWidth,               "VisibleAreaWidth" );
 SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaHeight,              "VisibleAreaHeight" );
 
+SD_CONSTASCII_ACTION( sUNO_View_ZoomOnPage,                     "ZoomOnPage" );
 #endif
 

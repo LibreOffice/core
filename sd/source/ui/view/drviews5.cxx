@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-26 12:40:27 $
+ *  last change: $Author: cl $ $Date: 2001-05-29 12:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@
 #include "sdoutl.hxx"
 #include "sdclient.hxx"
 #include "fuslshow.hxx"
+#include "unokywds.hxx"
 
 #define TABCONTROL_INITIAL_SIZE     350
 
@@ -670,6 +671,11 @@ void SdDrawViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < 
     WriteFrameViewData();
 
     SdViewShell::WriteUserDataSequence( rSequence, bBrowse );
+
+    const sal_Int32 nIndex = rSequence.getLength();
+    rSequence.realloc( nIndex + 1 );
+    rSequence[nIndex].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_ZoomOnPage ) );
+    rSequence[nIndex].Value <<= (sal_Bool)bZoomOnPage;
 }
 
 void SdDrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
@@ -677,6 +683,20 @@ void SdDrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequen
     WriteFrameViewData();
 
     SdViewShell::ReadUserDataSequence( rSequence, bBrowse );
+
+    const sal_Int32 nLength = rSequence.getLength();
+    const com::sun::star::beans::PropertyValue *pValue = rSequence.getConstArray();
+    for (sal_Int16 i = 0 ; i < nLength; i++, pValue++ )
+    {
+        if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_ZoomOnPage ) ) )
+        {
+            sal_Bool bZoomPage;
+            if( pValue->Value >>= bZoomPage )
+            {
+                bZoomOnPage = bZoomPage;
+            }
+        }
+    }
 
     if( pFrameView->GetPageKind() != ePageKind )
     {
@@ -710,7 +730,26 @@ void SdDrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequen
 
     ReadFrameViewData( pFrameView );
 
-    SetZoomRect(pFrameView->GetVisArea());
+    if( !bZoomOnPage )
+    {
+        const Rectangle aVisArea( pFrameView->GetVisArea() );
+
+        if ( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        {
+            pDocSh->SetVisArea(aVisArea);
+        }
+
+        VisAreaChanged(aVisArea);
+
+        SdView* pView = GetView();
+
+        if (pView)
+        {
+            pView->VisAreaChanged(pWindow);
+        }
+
+        SetZoomRect(aVisArea);
+    }
 
     ChangeEditMode( eEditMode, !bLayerMode );
     ChangeEditMode( eEditMode, !bLayerMode );
