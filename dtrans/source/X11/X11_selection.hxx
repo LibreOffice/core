@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 17:10:08 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,7 @@ namespace x11 {
                                     m_xDisplayConnection;
         Reference< com::sun::star::script::XInvocation >
                                     m_xBitmapConverter;
+        sal_Int32                   m_nSelectionTimeout;
 
 
         // members used for Xdnd
@@ -477,6 +478,7 @@ namespace x11 {
         ::rtl::OUString convertFromCompound( const char* pText, int nLen = -1 );
 
         sal_Int8 getUserDragAction() const;
+        sal_Int32 getSelectionTimeout();
     public:
         static SelectionManager& get( const ::rtl::OUString& rDisplayName = ::rtl::OUString() );
 
