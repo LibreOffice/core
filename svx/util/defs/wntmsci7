@@ -16692,3 +16692,4 @@ _real@4@40088dc0000000000000
 ?getSupportedServiceNames@SvxUnoNumberingRules@@UAA?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@XZ
 ?pSvxUnoNumberingRulesService@@3PBDB
 ?supportsService@SvxUnoNumberingRules@@UAAEABVOUString@rtl@@@Z
+?deallocate@?$allocator@VString@@@_STL@@QBEXPAVString@@I@Z

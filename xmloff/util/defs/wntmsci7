@@ -6453,3 +6453,10 @@ _real@8@401683d6000000000000
 ??_C@_0DF@GKEN@O?3?2SRC616?2src?2xmloff?2source?2form@
 ?PROPERTY_ALIGN@xmloff@@3U_ConstAsciiString_@@B
 ?PROPERTY_BORDER@xmloff@@3U_ConstAsciiString_@@B
+_real@8@3feb8637bd05af6c6800
+??0?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@QAE@ABVOUString@rtl@@ABQAVXMLEventExportHandler@@@Z
+?end@?$map@VOUString@rtl@@PAVXMLEventExportHandler@@U?$less@VOUString@rtl@@@_STL@@V?$allocator@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@@5@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@U?$_N_Tr@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@@2@@2@XZ
+?lower_bound@?$map@VOUString@rtl@@PAVXMLEventExportHandler@@U?$less@VOUString@rtl@@@_STL@@V?$allocator@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@@5@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@U?$_N_Tr@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@@2@@2@ABVOUString@rtl@@@Z
+?deallocate@?$allocator@UConnectionHint@@@_STL@@QBEXPAUConnectionHint@@I@Z
+_real@8@3ffbccccccccccccd000
+?end@?$_Rb_tree@VOUString@rtl@@U?$pair@$$CBVOUString@rtl@@UAttributeAssignment@OAttribute2Property@xmloff@@@_STL@@U?$_S1st@U?$pair@$$CBVOUString@rtl@@UAttributeAssignment@OAttribute2Property@xmloff@@@_STL@@@4@UUStringLess@comphelper@@V?$allocator@U?$pair@$$CBVOUString@rtl@@UAttributeAssignment@OAttribute2Property@xmloff@@@_STL@@@4@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVOUString@rtl@@UAttributeAssignment@OAttribute2Property@xmloff@@@_STL@@U?$_N_Tr@U?$pair@$$CBVOUString@rtl@@UAttributeAssignment@OAttribute2Property@xmloff@@@_STL@@@2@@2@XZ
