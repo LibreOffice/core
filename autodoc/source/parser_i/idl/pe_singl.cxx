@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_singl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:42:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,11 @@ PE_Singleton::Process_MetaType( const TokMetaType & i_rToken )
                     else
                         On_Default();
                     break;
+        default:
+            // KORR
+            // Should throw syntax error warning
+                    ;
+
     }   // end switch
 }
 
