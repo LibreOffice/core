@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 09:47:14 $
+#   last change: $Author: hr $ $Date: 2003-04-04 16:29:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ IDLFILES=\
     Events.idl\
     ExportFilter.idl\
     ExtendedTypeDetection.idl\
+    ExtendedTypeDetectionFactory.idl\
     FilterAdapter.idl\
     FilterFactory.idl\
     FilterOptionsRequest.idl\
