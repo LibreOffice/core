@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cf_service.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:04:16 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,17 +58,20 @@
  *
  *
  ************************************************************************/
-
 #include "osl/mutex.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase3.hxx"
+#include "vcl/configsettings.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
 #include "com/sun/star/container/XContentEnumerationAccess.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
+
+#include <vector>
+#include <algorithm>
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define ARLEN(x) (sizeof (x) / sizeof *(x))
@@ -149,6 +152,7 @@ CanvasFactory::CanvasFactory(
     Reference<XComponentContext> const & xContext )
     : m_xContext(xContext)
 {
+    ::rtl::OUString preferredServices;
     // read out configuration for preferred services:
     Reference<lang::XMultiServiceFactory> xConfigProvider(
         m_xContext->getServiceManager()->createInstanceWithContext(
@@ -165,7 +169,7 @@ CanvasFactory::CanvasFactory(
                 OUSTR("com.sun.star.configuration.ConfigurationAccess"),
                 Sequence<Any>( &propValue, 1 ) ), UNO_QUERY );
         if (xNameAccess.is())
-            xNameAccess->getByName( OUSTR("PreferredServices") ) >>= m_services;
+            xNameAccess->getByName( OUSTR("PreferredServices") ) >>= preferredServices;
     }
     catch (RuntimeException &) {
         throw;
@@ -173,6 +177,17 @@ CanvasFactory::CanvasFactory(
     catch (Exception & exc) {
         (void) exc;
     }
+    ::std::vector< ::rtl::OUString > services;
+    sal_Int32 tokenPos = 0;
+    do
+    {
+        ::rtl::OUString oneService = preferredServices.getToken( 0, ';', tokenPos );
+        if ( oneService.getLength() )
+            services.push_back( oneService );
+    }
+    while ( tokenPos > 0 );
+    m_services.realloc( services.size() );
+    ::std::copy( services.begin(), services.end(), m_services.getArray() );
 
     // append the usual preferred ones:
     sal_Int32 pos = m_services.getLength();
