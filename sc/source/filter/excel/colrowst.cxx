@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:31:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 11:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
 #endif
+
+// for filter manager
+#include "excimp8.hxx"
 
 
 ColRowSettings::ColRowSettings( RootData& rRootData ) :
@@ -273,6 +276,19 @@ void ColRowSettings::SetHiddenFlags( SCTAB nScTab )
         }
     }
 
+    // #i38093# rows hidden by filter need extra flag
+    SCROW nFirstFilterScRow = SCROW_MAX;
+    SCROW nLastFilterScRow = SCROW_MAX;
+    if( pExcRoot->pIR->GetBiff() >= xlBiff8 )
+    {
+        const XclImpAutoFilterData* pFilter = pExcRoot->pIR->GetFilterManager().GetByTab( nScTab );
+        if( pFilter && pFilter->IsActive() )
+        {
+            nFirstFilterScRow = pFilter->StartRow();
+            nLastFilterScRow = pFilter->EndRow();
+        }
+    }
+
     for( SCROW nScRow = 0; nScRow <= nMaxRow; ++nScRow )
     {
         if( pRowFlags[ nScRow ] & ROWFLAG_HIDDEN )
@@ -282,6 +298,9 @@ void ColRowSettings::SetHiddenFlags( SCTAB nScTab )
                 rDoc.SetRowHeight( nScRow, nScTab, pHeight[ nScRow ] );
             // really hide the row
             rDoc.ShowRow( nScRow, nScTab, FALSE );
+            // #i38093# rows hidden by filter need extra flag
+            if( (nFirstFilterScRow <= nScRow) && (nScRow <= nLastFilterScRow) )
+                rDoc.SetRowFlags( nScRow, nScTab, rDoc.GetRowFlags( nScRow, nScTab ) | CR_FILTERED );
         }
     }
 }
