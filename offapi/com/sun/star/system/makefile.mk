@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tra $ $Date: 2001-05-03 12:10:04 $
+#   last change: $Author: tra $ $Date: 2001-05-03 13:20:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,11 +77,11 @@ IDLFILES=\
     SystemShellExecuteException.idl\
     SystemShellExecuteFlags.idl\
     XSystemShellExecute.idl\
-    MailClientFlags.idl\
-    XMailMessage.idl\
-    XMailClient.idl\
-    XMailClientSupplier.idl\
-    SystemMail.idl
+    SimpleMailClientFlags.idl\
+    XSimpleMailMessage.idl\
+    XSimpleMailClient.idl\
+    XSimpleMailClientSupplier.idl\
+    SimpleSystemMail.idl
 
 # ------------------------------------------------------------------
 
