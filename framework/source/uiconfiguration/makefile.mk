@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-25 17:49:31 $
+#   last change: $Author: obo $ $Date: 2004-07-06 16:58:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,11 @@ BOOTSTRAP_SERVICE=	FALSE
 SLOFILES=			\
                     $(SLO)$/uiconfigurationmanager.obj          \
                     $(SLO)$/moduleuiconfigurationmanager.obj    \
-                    $(SLO)$/moduleuicfgsupplier.obj
+                    $(SLO)$/moduleuicfgsupplier.obj             \
+                    $(SLO)$/windowstateconfiguration.obj        \
+                    $(SLO)$/moduleimagemanager.obj              \
+                    $(SLO)$/imagemanager.obj                    \
+                    $(SLO)$/graphicnameaccess.obj
 
 # --- Targets ------------------------------------------------------
 
