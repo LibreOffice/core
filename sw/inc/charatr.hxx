@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charatr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-05 13:50:48 $
+ *  last change: $Author: os $ $Date: 2001-05-15 09:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,8 @@ inline const SvxPropSizeItem         &SwFmt::GetPropSize(BOOL bInP) const
     {   return aSet.GetPropSize(bInP); }
 inline const SvxFontItem             &SwFmt::GetFont(BOOL bInP) const
     {   return aSet.GetFont(bInP); }
+inline const SvxFontItem         &SwFmt::GetCJKFont(BOOL bInP) const
+    {   return aSet.GetCJKFont(bInP); }
 inline const SvxColorItem            &SwFmt::GetColor(BOOL bInP) const
     {   return aSet.GetColor(bInP); }
 inline const SvxCharSetColorItem     &SwFmt::GetCharSetColor(BOOL bInP) const
