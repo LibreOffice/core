@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-21 07:32:26 $
+ *  last change: $Author: tl $ $Date: 2001-06-21 09:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,8 +397,8 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
 
     FreeResource();
 
-    m_pWestFontLanguageLB->SetLanguageList( LANG_LIST_WESTERN, TRUE, FALSE );
-    m_aEastFontLanguageLB.SetLanguageList( LANG_LIST_CJK,     TRUE, FALSE );
+    m_pWestFontLanguageLB->SetLanguageList( LANG_LIST_WESTERN, TRUE, FALSE, TRUE );
+    m_aEastFontLanguageLB .SetLanguageList( LANG_LIST_CJK,     TRUE, FALSE, TRUE );
 
     Initialize();
 }
