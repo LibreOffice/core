@@ -1,5 +1,5 @@
 <!--
-	$Id: settings.mod,v 1.1 2001-03-23 08:01:14 sab Exp $
+	$Id: settings.mod,v 1.2 2001-05-04 13:03:16 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -65,7 +65,7 @@
 
 <!ELEMENT config:config-item (#PCDATA)>
 <!ATTLIST config:config-item config:name CDATA #REQUIRED
-			config:type (boolean | short | int | long | double | string | datetime) #REQUIRED>
+			config:type (boolean | short | int | long | double | string | datetime | base64Binary) #REQUIRED>
 
 <!ELEMENT config:config-item-map-named (config:config-item-map-entry)+>
 <!ATTLIST config:config-item-map-named config:name CDATA #REQUIRED>
