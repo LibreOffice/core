@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmmodel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:58:02 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ struct FmFormModelImplData
 |* Ctor
 |*
 \************************************************************************/
-FmFormModel::FmFormModel(SfxItemPool* pPool, SvPersist* pPers)
+FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
             :SdrModel(pPool, pPers, LOADREFCOUNTS)
             ,pObjShell(0)
             ,bStreamingOldVersion(sal_False)
@@ -132,7 +132,7 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SvPersist* pPers)
 |* Ctor
 |*
 \************************************************************************/
-FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SvPersist* pPers)
+FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers)
             :SdrModel(rPath, pPool, pPers)
             ,pObjShell(0)
             ,bStreamingOldVersion(sal_False)
@@ -152,7 +152,7 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SvPersist* 
 |* Ctor
 |*
 \************************************************************************/
-FmFormModel::FmFormModel(SfxItemPool* pPool, SvPersist* pPers,
+FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers,
                          FASTBOOL bUseExtColorTable
                          )
             :SdrModel(pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
@@ -172,7 +172,7 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SvPersist* pPers,
 |* Ctor
 |*
 \************************************************************************/
-FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SvPersist* pPers,
+FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
                          FASTBOOL bUseExtColorTable)
             :SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
             ,pObjShell(0)
@@ -213,6 +213,7 @@ FmFormModel::~FmFormModel()
 |* Copy-Ctor
 |*
 \************************************************************************/
+
 FmFormModel::FmFormModel(const FmFormModel&)
 {
     DBG_ERROR("FmFormModel: CopyCtor not implemented");
