@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-03 16:21:37 $
+ *  last change: $Author: jp $ $Date: 2001-08-29 09:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,24 +224,32 @@ sal_uInt32 SwXMLWriter::_Write()
 
     if (bShowProgress)
     {
-        uno::Reference<frame::XModel> xModel( pDoc->GetDocShell()->GetModel());
-        if (xModel.is())
+        try
         {
-            uno::Reference<frame::XController> xController(
-                xModel->getCurrentController());
-            if( xController.is())
+            uno::Reference<frame::XModel> xModel( pDoc->GetDocShell()->GetModel());
+            if (xModel.is())
             {
-                uno::Reference<frame::XFrame> xFrame( xController->getFrame());
-                if( xFrame.is())
+                uno::Reference<frame::XController> xController(
+                    xModel->getCurrentController());
+                if( xController.is())
                 {
-                    uno::Reference<task::XStatusIndicatorFactory> xFactory(
-                        xFrame, uno::UNO_QUERY );
-                    if( xFactory.is())
+                    uno::Reference<frame::XFrame> xFrame( xController->getFrame());
+                    if( xFrame.is())
                     {
-                        xStatusIndicator = xFactory->createStatusIndicator();
+                        uno::Reference<task::XStatusIndicatorFactory> xFactory(
+                            xFrame, uno::UNO_QUERY );
+                        if( xFactory.is())
+                        {
+                            xStatusIndicator =
+                                xFactory->createStatusIndicator();
+                        }
                     }
                 }
             }
+        }
+        catch( const RuntimeException& e )
+        {
+            xStatusIndicator = 0;
         }
 
         // set progress range and start status indicator
