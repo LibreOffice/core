@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2002-09-17 13:26:03 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,7 +686,7 @@
                     Text [ french ] = "V~ers l'avant" ; \
                     Text [ swedish ] = "Flytta l~дngre fram" ; \
                     Text [ dutch ] = "Verder naar ~voren" ; \
-                    Text [ spanish ] = "Traer mбs a~delante" ; \
+                    Text [ spanish ] = "Traer a~delante" ; \
                     Text [ english_us ] = "Bring ~Forward" ; \
                     Text[ chinese_simplified ] = "дёЉз§»дёЂе±‚(~F)";\
                     Text[ russian ] = "Переместить ~вперед";\
@@ -717,7 +717,7 @@
                     Text [ french ] = "~Vers l'arriиre" ; \
                     Text [ swedish ] = "Flytta lд~ngre bak" ; \
                     Text [ dutch ] = "Verder naar ~achteren" ; \
-                    Text [ spanish ] = "Enviar hacia a~trбs" ; \
+                    Text [ spanish ] = "Enviar a~trбs" ; \
                     Text [ english_us ] = "Send Back~ward" ; \
                     Text[ chinese_simplified ] = "дё‹з§»дёЂе±‚(~W)";\
                     Text[ russian ] = "Переместить ~назад";\
