@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 13:20:19 $
+ *  last change: $Author: mav $ $Date: 2002-06-27 07:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,8 @@ static OUString makeComponentPath( const OUString & rLibName, const OUString & r
         {
             buf.append( (sal_Unicode)'/' );
         }
-        else if (rPath[ rPath.getLength() -1 ] != (sal_Unicode)'\\')
+        else if (rPath[ rPath.getLength() -1 ] != (sal_Unicode)'\\' &&
+            rPath[ rPath.getLength() -1 ] != (sal_Unicode)'/')
         {
             buf.append( (sal_Unicode)'\\' );
         }
