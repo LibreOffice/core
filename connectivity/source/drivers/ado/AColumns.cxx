@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 15:18:23 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,15 +133,21 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
 
         sal_Bool bForceTo = sal_True;
         const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
-        const OExtendedTypeInfo* pTypeInfo = OConnection::getTypeInfoFromType(  *m_pConnection->getTypeInfo()
-                                                                                ,nType
-                                                                                ,sTypeName
-                                                                                ,nPrecision
-                                                                                ,nScale
-                                                                                ,eType
-                                                                                ,bForceTo);
-        if ( pTypeInfo && static_cast<DataTypeEnum>(pTypeInfo->eType) != eType ) // change column type if necessary
-            aColumn.put_Type(static_cast<DataTypeEnum>(pTypeInfo->eType));
+        ::comphelper::TStringMixEqualFunctor aCase(sal_False);
+        // search for typeinfo where the typename is equal sTypeName
+        OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
+                                                            pTypeInfoMap->end(),
+                                                            ::std::compose1(
+                                                                ::std::bind2nd(aCase, sTypeName),
+                                                                ::std::compose1(
+                                                                    ::std::mem_fun(&OExtendedTypeInfo::getDBName),
+                                                                    ::std::select2nd<OTypeInfoMap::value_type>())
+                                                                )
+
+                                                    );
+
+        if ( aFind != pTypeInfoMap->end() ) // change column type if necessary
+            aColumn.put_Type(aFind->first);
 
         if ( SUCCEEDED(((ADOColumns*)m_aCollection)->Append(OLEVariant(aColumn.get_Name()),aColumn.get_Type(),aColumn.get_DefinedSize())) )
         {
@@ -153,6 +159,8 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
                 if ( bAutoIncrement )
                     OTools::putValue( aAddedColumn.get_Properties(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Autoincrement")), bAutoIncrement );
 
+                if ( aFind != pTypeInfoMap->end() &&  aColumn.get_Type() != aAddedColumn.get_Type() ) // change column type if necessary
+                    aColumn.put_Type(aFind->first);
                 aAddedColumn.put_Precision(aColumn.get_Precision());
                 aAddedColumn.put_NumericScale(aColumn.get_NumericScale());
                 aAddedColumn.put_Attributes(aColumn.get_Attributes());
