@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:08:11 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,6 @@ StringSequence SAL_CALL ODateControl::getSupportedServiceNames() throw()
 }
 
 /*************************************************************************/
-sal_Int32   ODateModel::nDateHandle = -1;
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL ODateModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -145,16 +144,14 @@ Sequence<Type> ODateModel::_getTypes()
 DBG_NAME( ODateModel )
 //------------------------------------------------------------------
 ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
-            :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_CONTROL_DATEFIELD )
+            :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_CONTROL_DATEFIELD, sal_False )
                         // use the old control name for compytibility reasons
-            ,OLimitedFormats(_rxFactory, FormComponentType::DATEFIELD)
+            ,OLimitedFormats( _rxFactory, FormComponentType::DATEFIELD )
 {
     DBG_CTOR( ODateModel, NULL );
 
     m_nClassId = FormComponentType::DATEFIELD;
-    m_sDataFieldConnectivityProperty = PROPERTY_DATE;
-    if (ODateModel::nDateHandle == -1)
-        ODateModel::nDateHandle = getOriginalHandle(PROPERTY_ID_DATE);
+    initValueProperty( PROPERTY_DATE, PROPERTY_ID_DATE );
 
     setAggregateSet(m_xAggregateFastSet, getOriginalHandle(PROPERTY_ID_DATEFORMAT));
 }
@@ -271,9 +268,9 @@ void SAL_CALL ODateModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, c
 
 // XLoadListener
 //------------------------------------------------------------------------------
-void ODateModel::_loaded(const EventObject& rEvent)
+void ODateModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
-    OBoundControlModel::_loaded(rEvent);
+    OBoundControlModel::onConnectedDbColumn( _rxForm );
     Reference<XPropertySet> xField = getField();
     if (xField.is())
     {
@@ -290,36 +287,35 @@ void ODateModel::_loaded(const EventObject& rEvent)
     }
 }
 
-// XBoundComponent
 //------------------------------------------------------------------------------
-sal_Bool ODateModel::_commit()
+sal_Bool ODateModel::commitControlValueToDbColumn( bool _bPostReset )
 {
-    Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( ODateModel::nDateHandle );
-    if (!compare(aNewValue, m_aSaveValue))
+    Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
+    if ( !compare( aControlValue, m_aSaveValue ) )
     {
-        if (!aNewValue.hasValue())
+        if ( !aControlValue.hasValue() )
             m_xColumnUpdate->updateNull();
         else
         {
             try
             {
                 starutil::Date aDate;
-                if (!(aNewValue >>= aDate))
+                if ( !( aControlValue >>= aDate ) )
                 {
                     sal_Int32 nAsInt(0);
-                    aNewValue >>= nAsInt;
+                    aControlValue >>= nAsInt;
                     aDate = DBTypeConversion::toDate(nAsInt);
                 }
 
-                if (!m_bDateTimeField)
-                    m_xColumnUpdate->updateDate(aDate);
+                if ( !m_bDateTimeField )
+                    m_xColumnUpdate->updateDate( aDate );
                 else
                 {
                     starutil::DateTime aDateTime = m_xColumn->getTimestamp();
                     aDateTime.Day = aDate.Day;
                     aDateTime.Month = aDate.Month;
                     aDateTime.Year = aDate.Year;
-                    m_xColumnUpdate->updateTimestamp(aDateTime);
+                    m_xColumnUpdate->updateTimestamp( aDateTime );
                 }
             }
             catch(Exception&)
@@ -327,13 +323,13 @@ sal_Bool ODateModel::_commit()
                 return sal_False;
             }
         }
-        m_aSaveValue = aNewValue;
+        m_aSaveValue = aControlValue;
     }
     return sal_True;
 }
 
 //------------------------------------------------------------------------------
-void ODateModel::_onValueChanged()
+Any ODateModel::translateDbColumnToControlValue()
 {
     starutil::Date aDate = m_xColumn->getDate();
     if (m_xColumn->wasNull())
@@ -342,17 +338,11 @@ void ODateModel::_onValueChanged()
         // the aggregated set expects an Int32 as value ...
         m_aSaveValue <<= DBTypeConversion::toINT32(aDate);
 
-    {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-        // our own mutex locked
-        // FS - 72451 - 31.01.00
-        MutexRelease aRelease(m_aMutex);
-        m_xAggregateFastSet->setFastPropertyValue(ODateModel::nDateHandle, m_aSaveValue);
-    }
+    return m_aSaveValue;
 }
 
 //------------------------------------------------------------------------------
-void ODateModel::_reset()
+Any ODateModel::getDefaultForReset() const
 {
     Any aValue;
     if (m_aDefault.getValueType().getTypeClass() == TypeClass_LONG)
@@ -363,13 +353,7 @@ void ODateModel::_reset()
         aValue <<= (sal_Int32)aCurrentDate.GetDate();
     }
 
-    {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-        // our own mutex locked
-        // FS - 72451 - 31.01.00
-        MutexRelease aRelease(m_aMutex);
-        m_xAggregateFastSet->setFastPropertyValue(ODateModel::nDateHandle, aValue);
-    }
+    return aValue;
 }
 
 //.........................................................................
