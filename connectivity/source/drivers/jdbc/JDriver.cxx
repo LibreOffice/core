@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 06:38:50 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 08:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
         char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;";
         char * cMethodName = "connect";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         ThrowSQLException(t.pEnv,*this);
         if( mID )
         {
@@ -278,7 +278,7 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
         char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)[Ljava/sql/DriverPropertyInfo;";
         char * cMethodName = "getPropertyInfo";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             jvalue args[2];
@@ -310,7 +310,7 @@ sal_Int32 SAL_CALL java_sql_Driver::getMajorVersion(  ) throw(RuntimeException)
         char * cSignature = "()I";
         char * cMethodName = "getMajorVersion";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
             out = t.pEnv->CallIntMethod( object, mID);
             ThrowSQLException(t.pEnv,*this);
@@ -330,7 +330,7 @@ sal_Int32 SAL_CALL java_sql_Driver::getMinorVersion(  ) throw(RuntimeException)
         char * cSignature = "()I";
         char * cMethodName = "getMinorVersion";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
             out = t.pEnv->CallIntMethod( object, mID);
             ThrowSQLException(t.pEnv,*this);

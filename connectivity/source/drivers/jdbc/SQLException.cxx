@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SQLException.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 17:03:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
         char * cSignature = "()Ljava/sql/Exception;";
         char * cMethodName = "getNextException";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,0);
@@ -154,7 +154,7 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
         char * cSignature = "()Ljava/lang/String;";
         char * cMethodName = "getSQLState";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = (jstring) t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,0);
@@ -175,7 +175,7 @@ sal_Int32 java_sql_SQLException_BASE::getErrorCode() const
         char * cSignature = "()I";
         char * cMethodName = "getErrorCode";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
             ThrowSQLException(t.pEnv,0);

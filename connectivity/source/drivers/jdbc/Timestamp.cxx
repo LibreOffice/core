@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Timestamp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:10:30 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
     // temporaere Variable initialisieren
     char * cSignature = "(J)V";
     jobject tempObj;
-    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );
+    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->NewObjectA( getMyClass(), mID, args );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
@@ -199,7 +199,7 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
     // temporaere Variable initialisieren
     char * cSignature = "(J)V";
     jobject tempObj;
-    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );
+    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->NewObjectA( getMyClass(), mID, args );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
@@ -216,7 +216,7 @@ sal_Int32 java_sql_Timestamp::getNanos()
         char * cSignature = "()I";
         char * cMethodName = "getNanos";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
         } //mID
@@ -235,7 +235,7 @@ void java_sql_Timestamp::setNanos( sal_Int32 _par0 )
         char * cSignature = "(I)V";
         char * cMethodName = "setNanos";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID, args[0].i );
             // und aufraeumen

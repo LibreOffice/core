@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-09 12:58:20 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,12 @@ void java_util_Properties::setProperty(const ::rtl::OUString key, const ::rtl::O
         char * cSignature = "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;";
         char * cMethodName = "setProperty";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
+        {
             out = t.pEnv->CallObjectMethod(object, mID, args[0].l,args[1].l);
+            ThrowSQLException(t.pEnv,NULL);
+        }
         t.pEnv->DeleteLocalRef((jstring)args[1].l);
         t.pEnv->DeleteLocalRef((jstring)args[0].l);
         ThrowSQLException(t.pEnv,0);
@@ -149,7 +152,7 @@ java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)
     // temporaere Variable initialisieren
     char * cSignature = "()V";
     jobject tempObj;
-    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );
+    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->NewObject( getMyClass(), mID);
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );

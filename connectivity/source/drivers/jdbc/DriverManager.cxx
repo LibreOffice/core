@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DriverManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 17:03:17 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ jobject java_sql_DriverManager::getDriver(const ::rtl::OUString &url)
         char * cSignature = "(Ljava/lang/String;)Ljava/sql/Driver;";
         char * cMethodName = "getDriver";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetStaticMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetStaticMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             out = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
@@ -136,7 +136,7 @@ void java_sql_DriverManager::setLoginTimeout(sal_Int32 _par0)
         char * cSignature = "(I)V";
         char * cMethodName = "setLoginTimeout";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
             t.pEnv->CallStaticVoidMethod(getMyClass(), mID, _par0);
             ThrowSQLException(t.pEnv,0);

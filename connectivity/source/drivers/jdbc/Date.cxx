@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:12 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ java_util_Date::java_util_Date( const ::com::sun::star::util::Date& _rOut ) //: 
     // temporaere Variable initialisieren
     char * cSignature = "(J)V";
     jobject tempObj;
-    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );
+    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->NewObjectA( getMyClass(), mID, args );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
@@ -129,7 +129,7 @@ sal_Int32 java_util_Date::getMinutes()
         char * cSignature = "()I";
         char * cMethodName = "getMinutes";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
         } //mID
@@ -146,7 +146,7 @@ sal_Int32 java_util_Date::getMonth()
         char * cSignature = "()I";
         char * cMethodName = "getMonth";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
         } //mID
@@ -163,7 +163,7 @@ sal_Int32 java_util_Date::getSeconds()
         char * cSignature = "()I";
         char * cMethodName = "getSeconds";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
         } //mID
@@ -180,7 +180,7 @@ sal_Int32 java_util_Date::getYear()
         char * cSignature = "()I";
         char * cMethodName = "getYear";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
         } //mID
@@ -197,7 +197,7 @@ sal_Int32 java_util_Date::getDate()
         char * cSignature = "()I";
         char * cMethodName = "getDate";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
         } //mID
@@ -214,7 +214,7 @@ sal_Int32 java_util_Date::getHours()
         char * cSignature = "()I";
         char * cMethodName = "getHours";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
         } //mID

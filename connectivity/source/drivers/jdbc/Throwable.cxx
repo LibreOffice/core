@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Throwable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 17:03:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,10 @@ void java_lang_Throwable::saveClassRef( jclass pClass )
         char * cSignature = "()Ljava/lang/String;";
         char * cMethodName = "getMessage";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID);
+            ThrowSQLException(t.pEnv,NULL);
 
             if(out)
                 aStr = JavaString2String(t.pEnv,out);
@@ -129,9 +130,10 @@ void java_lang_Throwable::saveClassRef( jclass pClass )
         char * cSignature = "()Ljava/lang/String;";
         char * cMethodName = "getLocalizedMessage";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID);
+            ThrowSQLException(t.pEnv,NULL);
 
             if(out)
                 aStr = JavaString2String(t.pEnv,out);
@@ -150,9 +152,10 @@ void java_lang_Throwable::saveClassRef( jclass pClass )
         char * cSignature = "()Ljava/lang/String;";
         char * cMethodName = "toString";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID);
+            ThrowSQLException(t.pEnv,NULL);
 
             if(out)
                 aStr = JavaString2String(t.pEnv,out);

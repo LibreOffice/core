@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 17:03:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnDisplaySize( sal_Int32 c
         char * cSignature = "(I)I";
         char * cMethodName = "getColumnDisplaySize";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID,column);
             ThrowSQLException(t.pEnv,*this);
@@ -135,7 +135,7 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnType( sal_Int32 column )
         char * cSignature = "(I)I";
         char * cMethodName = "getColumnType";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID,column);
             ThrowSQLException(t.pEnv,*this);
@@ -155,7 +155,7 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnCount(  ) throw(SQLExcep
         char * cSignature = "()I";
         char * cMethodName = "getColumnCount";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
             ThrowSQLException(t.pEnv,*this);
@@ -177,9 +177,9 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
         char * cSignature = "(I)Z";
         char * cMethodName = "isCaseSensitive";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
-            out = (sal_Bool)t.pEnv->CallIntMethod( object, mID, column );
+            out = t.pEnv->CallBooleanMethod( object, mID, column );
             ThrowSQLException(t.pEnv,*this);
             // und aufraeumen
     } //t.pEnv
@@ -195,7 +195,7 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
         char * cSignature = "(I)Ljava/lang/String;";
         char * cMethodName = "getSchemaName";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID, column );
@@ -219,7 +219,7 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
         char * cSignature = "(I)Ljava/lang/String;";
         char * cMethodName = "getColumnName";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID, column );
@@ -242,7 +242,7 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
         char * cSignature = "(I)Ljava/lang/String;";
         char * cMethodName = "getTableName";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID, column );
@@ -265,7 +265,7 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
         char * cSignature = "(I)Ljava/lang/String;";
         char * cMethodName = "getCatalogName";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID, column );
@@ -288,7 +288,7 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
         char * cSignature = "(I)Ljava/lang/String;";
         char * cMethodName = "getColumnTypeName";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID, column );
@@ -311,7 +311,7 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
         char * cSignature = "(I)Ljava/lang/String;";
         char * cMethodName = "getColumnLabel";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID, column );
@@ -334,7 +334,7 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
         char * cSignature = "(I)Ljava/lang/String;";
         char * cMethodName = "getColumnClassName";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID, column );
@@ -354,16 +354,13 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCurrency( sal_Int32 column ) thr
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
-        jvalue args[1];
-        // Parameter konvertieren
-        args[0].i = (sal_Int32)column;
         // temporaere Variable initialisieren
         char * cSignature = "(I)Z";
         char * cMethodName = "isCurrency";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
-            out = (sal_Bool)t.pEnv->CallIntMethod( object, mID, column );
+            out = t.pEnv->CallBooleanMethod( object, mID, column );
             ThrowSQLException(t.pEnv,*this);
             // und aufraeumen
     } //t.pEnv
@@ -376,16 +373,13 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isAutoIncrement( sal_Int32 column 
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
-        jvalue args[1];
-        // Parameter konvertieren
-        args[0].i = (sal_Int32)column;
         // temporaere Variable initialisieren
         char * cSignature = "(I)Z";
         char * cMethodName = "isAutoIncrement";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
-            out = (sal_Bool)t.pEnv->CallIntMethod( object, mID, column);
+            out = t.pEnv->CallBooleanMethod( object, mID, column);
             ThrowSQLException(t.pEnv,*this);
             // und aufraeumen
     } //t.pEnv
@@ -406,9 +400,9 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSigned( sal_Int32 column ) throw
         char * cSignature = "(I)Z";
         char * cMethodName = "isSigned";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
-            out = (sal_Bool)t.pEnv->CallIntMethod( object, mID, column);
+            out = t.pEnv->CallBooleanMethod( object, mID, column);
             ThrowSQLException(t.pEnv,*this);
             // und aufraeumen
     } //t.pEnv
@@ -427,7 +421,7 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getPrecision( sal_Int32 column ) 
         char * cSignature = "(I)I";
         char * cMethodName = "getPrecision";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID, column );
             ThrowSQLException(t.pEnv,*this);
@@ -449,7 +443,7 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getScale( sal_Int32 column ) thro
         char * cSignature = "(I)I";
         char * cMethodName = "getScale";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID, column );
             ThrowSQLException(t.pEnv,*this);
@@ -471,7 +465,7 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::isNullable( sal_Int32 column ) th
         char * cSignature = "(I)I";
         char * cMethodName = "isNullable";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID, column );
             ThrowSQLException(t.pEnv,*this);
@@ -491,7 +485,7 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSearchable( sal_Int32 column ) t
         char * cSignature = "(I)Z";
         char * cMethodName = "isSearchable";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallBooleanMethod( object, mID, column );
             ThrowSQLException(t.pEnv,*this);
@@ -511,7 +505,7 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isReadOnly( sal_Int32 column ) thr
         char * cSignature = "(I)Z";
         char * cMethodName = "isReadOnly";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallBooleanMethod( object, mID, column );
             ThrowSQLException(t.pEnv,*this);
@@ -531,7 +525,7 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isDefinitelyWritable( sal_Int32 co
         char * cSignature = "(I)Z";
         char * cMethodName = "isDefinitelyWritable";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallBooleanMethod( object, mID, column );
             ThrowSQLException(t.pEnv,*this);
@@ -550,7 +544,7 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isWritable( sal_Int32 column ) thr
         char * cSignature = "(I)Z";
         char * cMethodName = "isWritable";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallBooleanMethod( object, mID, column );
             ThrowSQLException(t.pEnv,*this);

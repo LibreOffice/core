@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Array.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 17:03:16 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
         args[0].l = XNameAccess2Map(t.pEnv,typeMap);
         // temporaere Variable initialisieren
         char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
-        char * cMethodName = "getResultSet";
+        char * cMethodName = "getResultSetAtIndex";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
         if( mID ){

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: String.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 17:03:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ java_lang_String::java_lang_String( const ::rtl::OUString& _par0 ): java_lang_Ob
     // temporaere Variable initialisieren
     char * cSignature = "(Ljava/lang/String;)V";
     jobject tempObj;
-    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );
+    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->NewObjectA( getMyClass(), mID, args );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Class.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 09:58:43 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ java_lang_Class * java_lang_Class::forName( const ::rtl::OUString& _par0 )
         char * cSignature = "(Ljava/lang/String;)Ljava/lang/Class;";
         char * cMethodName = "forName";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetStaticMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetStaticMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
             if(!out)
@@ -138,7 +138,7 @@ sal_Bool java_lang_Class::isAssignableFrom( java_lang_Class * _par0 )
         char * cSignature = "(Ljava/lang/Class;)Z";
         char * cMethodName = "isAssignableFrom";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallBooleanMethod( object, mID, args[0].l );
             ThrowSQLException(t.pEnv,0);
@@ -157,7 +157,7 @@ java_lang_Object * java_lang_Class::newInstance()
         char * cSignature = "()Ljava/lang/Object;";
         char * cMethodName = "newInstance";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,0);
@@ -177,7 +177,7 @@ jobject java_lang_Class::newInstanceObject()
         char * cSignature = "()Ljava/lang/Object;";
         char * cMethodName = "newInstance";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,0);
@@ -197,7 +197,7 @@ jobject java_lang_Class::newInstanceObject()
         char * cSignature = "()Ljava/lang/String;";
         char * cMethodName = "getName";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = (jstring)t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,0);

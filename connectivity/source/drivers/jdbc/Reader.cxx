@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 17:03:17 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ void SAL_CALL java_io_Reader::skipBytes( sal_Int32 nBytesToSkip ) throw(::com::s
         char * cSignature = "(I)I";
         char * cMethodName = "skip";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             out = t.pEnv->CallIntMethod( object, mID,nBytesToSkip);
@@ -129,7 +129,7 @@ sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(::com::sun::star::io::Not
         char * cSignature = "()Z";
         char * cMethodName = "available";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             out = t.pEnv->CallBooleanMethod( object, mID);
@@ -138,6 +138,7 @@ sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(::com::sun::star::io::Not
     } //t.pEnv
     return out;
 }
+
 void SAL_CALL java_io_Reader::closeInput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
@@ -146,7 +147,7 @@ void SAL_CALL java_io_Reader::closeInput(  ) throw(::com::sun::star::io::NotConn
         char * cSignature = "()V";
         char * cMethodName = "close";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             t.pEnv->CallVoidMethod( object, mID);
@@ -166,7 +167,7 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( ::com::sun::star::uno::Sequence< s
         char * cSignature = "([CII)I";
         char * cMethodName = "read";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             while(!(out = t.pEnv->CallIntMethod( object, mID,pCharArray,0,nBytesToRead)))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InputStream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 17:03:17 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ void SAL_CALL java_io_InputStream::skipBytes( sal_Int32 nBytesToSkip ) throw(::c
         char * cSignature = "(I)I";
         char * cMethodName = "skip";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             out = t.pEnv->CallIntMethod( object, mID,nBytesToSkip);
@@ -132,7 +132,7 @@ sal_Int32 SAL_CALL java_io_InputStream::available(  ) throw(::com::sun::star::io
         char * cSignature = "()Z";
         char * cMethodName = "available";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             out = t.pEnv->CallBooleanMethod( object, mID);
@@ -149,7 +149,7 @@ void SAL_CALL java_io_InputStream::closeInput(  ) throw(::com::sun::star::io::No
         char * cSignature = "()V";
         char * cMethodName = "close";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             t.pEnv->CallVoidMethod( object, mID);
@@ -168,7 +168,7 @@ sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequen
         char * cSignature = "([BII)I";
         char * cMethodName = "read";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             while(!(out = t.pEnv->CallIntMethod( object, mID,pByteArray,0,nBytesToRead)))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Clob.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 17:03:16 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(::com::sun::star::sdbc::SQLEx
         char * cSignature = "()J";
         char * cMethodName = "length";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallLongMethod( object, mID );
             ThrowSQLException(t.pEnv,*this);
@@ -128,9 +128,9 @@ sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     if( t.pEnv ){
         // temporaere Variable initialisieren
         char * cSignature = "(JI)Ljava/lang/String;";
-        char * cMethodName = "getBaseTypeName";
+        char * cMethodName = "getSubString";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = (jstring)t.pEnv->CallObjectMethod( object, mID,pos,length);
             ThrowSQLException(t.pEnv,*this);
@@ -152,7 +152,7 @@ sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(::com::sun::star::sdbc::SQLEx
         char * cSignature = "()Ljava/io/Reader;";
         char * cMethodName = "getCharacterStream";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,*this);
@@ -175,7 +175,7 @@ sal_Int64 SAL_CALL java_sql_Clob::position( const ::rtl::OUString& searchstr, sa
         char * cSignature = "(Ljava/lang/String;I)J";
         char * cMethodName = "position";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallLongMethod( object, mID, args[0].l,start );
             ThrowSQLException(t.pEnv,*this);
@@ -197,9 +197,9 @@ sal_Int64 SAL_CALL java_sql_Clob::positionOfClob( const ::com::sun::star::uno::R
         args[0].l = 0;
         // temporaere Variable initialisieren
         char * cSignature = "(Ljava/sql/Clob;I)J";
-        char * cMethodName = "position";
+        char * cMethodName = "positionOfClob";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallLongMethod( object, mID,args[0].l,start );
             ThrowSQLException(t.pEnv,*this);

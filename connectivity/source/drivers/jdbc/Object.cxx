@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-09 12:58:20 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ java_lang_Object::java_lang_Object(const Reference<XMultiServiceFactory >& _rxFa
 //  // temporaere Variable initialisieren
 //  char * cSignature = "()V";
 //  jclass tempClass;
-//  jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );
+//  jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
 //  tempClass = (jclass)t.pEnv->NewObjectA( getMyClass(), mID, NULL );
 //  saveRef( t.pEnv, tempClass );
 //  t.pEnv->DeleteLocalRef( tempClass );
@@ -342,11 +342,11 @@ java_lang_Class * java_lang_Object::getClass()
         char * cSignature = "()Ljava/lang/Class;";
         char * cMethodName = "getClass";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             out = t.pEnv->CallObjectMethodA( object, mID, NULL );
-
+            ThrowSQLException(t.pEnv,NULL);
             return new java_lang_Class( t.pEnv, out );
         } //mID
     } //pEnv
@@ -364,12 +364,12 @@ java_lang_Class * java_lang_Object::getClass()
         char * cSignature = "()Ljava/lang/String;";
         char * cMethodName = "toString";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             jstring out(0);
             out = (jstring)t.pEnv->CallObjectMethod( object, mID);
-
+            ThrowSQLException(t.pEnv,NULL);
             if(out)
                 aStr = JavaString2String(t.pEnv,out);
         } //mID
