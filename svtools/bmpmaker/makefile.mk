@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2001-06-26 11:14:11 $
+#   last change: $Author: obo $ $Date: 2001-06-27 08:42:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,6 @@ APP1STDLIBS =		\
     $(SVLIB)		\
     $(TOOLSLIB)		\
     $(VOSLIB) 		\
-    $(SALHELPERLIB)		\
     $(SALLIB)
 
 APP1DEPN=   $(L)$/itools.lib  $(SVLIBDEPEND)
