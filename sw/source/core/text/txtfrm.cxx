@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-19 15:05:39 $
+ *  last change: $Author: fme $ $Date: 2002-02-27 17:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,32 @@ SwFrmSwapper::~SwFrmSwapper()
         ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
 }
 
+#endif
+
+#ifdef BIDI
+void SwTxtFrm::SwitchRTLtoLTR( SwRect& rRect ) const
+{
+    long nWidth = rRect.Width();
+    rRect.Left( Frm().Left() + Frm().Right() - rRect.Right() );
+    rRect.Width( nWidth );
+}
+
+void SwTxtFrm::SwitchLTRtoRTL( SwRect& rRect ) const
+{
+    long nWidth = rRect.Width();
+    rRect.Left( 2 * Frm().Left() + Frm().Width() - rRect.Left() - rRect.Width() );
+    rRect.Width( nWidth );
+}
+
+void SwTxtFrm::SwitchLTRtoRTL( Point& rPoint ) const
+{
+    rPoint.X() = 2 * Frm().Left() + Frm().Width() - rPoint.X();
+}
+
+void SwTxtFrm::SwitchRTLtoLTR( Point& rPoint ) const
+{
+    rPoint.X() = 2 * Frm().Left() + Frm().Width() - rPoint.X();
+}
 #endif
 
 /*************************************************************************
@@ -2259,6 +2285,9 @@ void SwTxtFrm::VisitPortions( SwPortionHandler& rPH ) const
 
     if( pPara )
     {
+        if ( IsFollow() )
+            rPH.Skip( GetOfst() );
+
         const SwLineLayout* pLine = pPara;
         while ( pLine )
         {
