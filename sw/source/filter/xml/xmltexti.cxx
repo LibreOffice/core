@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:58:53 $
+ *  last change: $Author: dvo $ $Date: 2001-01-25 11:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,9 +118,11 @@ using namespace ::com::sun::star::xml::sax;
 
 SwXMLTextImportHelper::SwXMLTextImportHelper(
         const Reference < XModel>& rModel,
-        sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress ) :
+        sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress,
+        sal_Bool bBlockM) :
     XMLTextImportHelper( rModel, bInsertM, bStylesOnlyM, bProgress ),
-    pRedlineHelper(NULL)
+    pRedlineHelper(NULL),
+    bBlockMode(bBlockM)
 {
 }
 
@@ -219,7 +221,8 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 XMLTextImportHelper* SwXMLImport::CreateTextImport()
 {
     return new SwXMLTextImportHelper( GetModel(), IsInsertMode(),
-                                      IsStylesOnlyMode(), bShowProgress );
+                                      IsStylesOnlyMode(), bShowProgress,
+                                      IsBlockMode() );
 }
 
 
@@ -235,7 +238,8 @@ void SwXMLTextImportHelper::RedlineAdd(
 {
     // create redline helper on demand
     if (NULL == pRedlineHelper)
-        pRedlineHelper = new XMLRedlineImportHelper(IsInsertMode());
+        pRedlineHelper = new XMLRedlineImportHelper(IsInsertMode() ||
+                                                    IsBlockMode() );
 
     pRedlineHelper->Add(rType, rId, rAuthor, rComment, rDateTime);
 }

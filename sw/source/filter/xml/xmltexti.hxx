@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:58:53 $
+ *  last change: $Author: dvo $ $Date: 2001-01-25 11:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@ class XMLRedlineImportHelper;
 
 class SwXMLTextImportHelper : public XMLTextImportHelper
 {
+    sal_Bool bBlockMode;
+
     XMLRedlineImportHelper *pRedlineHelper;
 
 protected:
@@ -84,7 +86,8 @@ public:
     SwXMLTextImportHelper(
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::frame::XModel>& rModel,
-            sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress );
+            sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress,
+            sal_Bool bBlockM);
     ~SwXMLTextImportHelper();
 
     virtual ::com::sun::star::uno::Reference<
@@ -94,6 +97,8 @@ public:
                                          const ::rtl::OUString& rClassId );
 
     virtual sal_Bool IsInHeaderFooter() const;
+
+    virtual sal_Bool IsBlockMode() { return bBlockMode; }
 
 
     // redlining helper methods
