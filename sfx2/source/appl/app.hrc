@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:26 $
+ *  last change: $Author: pb $ $Date: 2000-11-20 12:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,37 @@
 #define STR_OPENOBJECT                      (RID_SFX_APP_START+93)
 #define STR_CORRUPT_INSTALLATION            (RID_SFX_APP_START+94)
 #define IDS_SBERR_STOREREF                  (RID_SFX_APP_START+97)
+
+#define WIN_HELP_INDEX                          (RID_SFX_APP_START+99)
+#define FT_ACTIVE                               10
+#define LB_ACTIVE                               11
+#define FL_ACTIVE                               12
+#define TC_INDEX                                13
+
+#define TP_HELP_CONTENT                         (RID_SFX_APP_START+100)
+
+#define TP_HELP_INDEX                           (RID_SFX_APP_START+101)
+#define GB_SEARCH                               10
+#define FT_EXPRESSION                           11
+#define ED_EXPRESSION                           12
+#define LB_RESULTS                              13
+
+#define TP_HELP_SEARCH                          (RID_SFX_APP_START+102)
+#define FT_SEARCH                               10
+#define ED_SEARCH                               11
+#define PB_OPERATOR                             12
+#define FT_RESULT                               13
+#define LB_RESULT                               14
+#define CB_PREVIOUS                             15
+#define CB_MATCH                                16
+#define CB_TITLE                                17
+
+#define IMG_HELP_TOOLBOX_INDEX                  (RID_SFX_APP_START+110)
+#define IMG_HELP_TOOLBOX_START                  (RID_SFX_APP_START+111)
+#define IMG_HELP_TOOLBOX_PREV                   (RID_SFX_APP_START+112)
+#define IMG_HELP_TOOLBOX_NEXT                   (RID_SFX_APP_START+113)
+#define IMG_HELP_TOOLBOX_CONTEXT                (RID_SFX_APP_START+114)
+#define IMG_HELP_TOOLBOX_PRINT                  (RID_SFX_APP_START+115)
 
 #define RID_IMAGE_USER1                        1
 #define RID_IMAGE_USER2                        2

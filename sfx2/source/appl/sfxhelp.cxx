@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:30:58 $
+ *  last change: $Author: pb $ $Date: 2000-11-20 12:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,28 @@
 #include "macrconf.hxx"
 #include "viewfrm.hxx"
 #include "objface.hxx"
+#include "newhelp.hxx"
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
+#include <com/sun/star/awt/XWindow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
+#include <com/sun/star/awt/PosSize.hpp>
+#endif
+#include <toolkit/helper/vclunohelper.hxx>
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
 
 #ifdef MAC
 #define HELP_APP_NAME "StarHelp 4.0"
@@ -728,7 +750,26 @@ IMPL_LINK( SfxHelp_Impl, DialogDetectHdl, Timer* , EMPTYARG )
 
 BOOL SfxHelp_Impl::Start( ULONG nHelpId )
 {
-    return ImplStart( nHelpId, TRUE, TRUE, TRUE );
+//  return ImplStart( nHelpId, TRUE, TRUE, TRUE );
+
+    Reference < XFrame > xDesktop;
+    xDesktop = Reference < XFrame > ( ::comphelper::getProcessServiceFactory()->createInstance(
+            DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    Reference < XFrame > xTask = xDesktop->findFrame( ::rtl::OUString::createFromAscii( "_blank" ), 0 );
+    Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
+    pWin->SetText( DEFINE_CONST_UNICODE("StarOffice Help 0.8") );
+    SfxHelpWindow* pHlpWin = new SfxHelpWindow( pWin, WB_DOCKBORDER );
+    pHlpWin->Show();
+    Reference< ::com::sun::star::awt::XWindow > xWindow = VCLUnoHelper::GetInterface( pHlpWin );
+    xWindow->setPosSize( 50, 50, 300, 200, ::com::sun::star::awt::PosSize::SIZE );
+    if ( !xTask->setComponent( xWindow, Reference < XController >() ) )
+        return FALSE;
+    else
+    {
+        pHlpWin->setContainerWindow( xTask->getContainerWindow() );
+        xTask->getContainerWindow()->setVisible( sal_True );
+    }
+    return TRUE;
 }
 
 BOOL SfxHelp_Impl::ImplStart( ULONG nHelpId, BOOL bCheckHelpFile, BOOL bChangeHelpFile, BOOL bHelpAgent )

@@ -1,0 +1,163 @@
+#include "app.hrc"
+
+Window WIN_HELP_INDEX
+{
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 120 , 200 ) ;
+    FixedText FT_ACTIVE
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text = "~Active Subset" ;
+    };
+    ListBox LB_ACTIVE
+    {
+        Border = TRUE ;
+        DropDown = TRUE;
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 108 , 40 ) ;
+    };
+    FixedLine FL_ACTIVE
+    {
+        Pos = MAP_APPFONT ( 2, 36 ) ;
+        Size = MAP_APPFONT ( 118 , 1 ) ;
+    };
+    TabControl TC_INDEX
+    {
+        Pos = MAP_APPFONT ( 0, 40 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = 1 ;
+                PageResID = 1 ;
+                Text = "Inhalte" ;
+                Text [ ENGLISH ] = "Contents" ;
+            };
+            PageItem
+            {
+                Identifier = 2 ;
+                PageResID = 3 ;
+                Text = "Index" ;
+                Text [ ENGLISH ] = "Index" ;
+            };
+            PageItem
+            {
+                Identifier = 3 ;
+                PageResID = 3 ;
+                Text = "Suchen" ;
+                Text [ ENGLISH ] = "Search" ;
+            };
+        };
+    };
+};
+
+TabPage TP_HELP_INDEX
+{
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 120 , 200 ) ;
+    FixedText FT_EXPRESSION
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text = "~Suchbegriff" ;
+    };
+    Edit ED_EXPRESSION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 108 , 12 ) ;
+    };
+    ListBox LB_RESULTS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 34 ) ;
+        Size = MAP_APPFONT ( 108 , 80 ) ;
+    };
+};
+
+TabPage TP_HELP_SEARCH
+{
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 120 , 122 ) ;
+    FixedText FT_SEARCH
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text = "S~uchbegriff" ;
+    };
+    ComboBox ED_SEARCH
+    {
+        Border = TRUE ;
+        DropDown = TRUE;
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 93 , 40 ) ;
+    };
+    PushButton PB_OPERATOR
+    {
+        Pos = MAP_APPFONT ( 102 , 19 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+    };
+    FixedText FT_RESULT
+    {
+        Pos = MAP_APPFONT ( 6 , 34 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text = "S~elect topic: %1, Found: %2" ;
+    };
+    ListBox LB_RESULT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 47 ) ;
+        Size = MAP_APPFONT ( 108 , 30 ) ;
+    };
+    CheckBox CB_PREVIOUS
+    {
+        Pos = MAP_APPFONT ( 6 , 80 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text = "~Search previous results" ;
+    };
+    CheckBox CB_MATCH
+    {
+        Pos = MAP_APPFONT ( 6 , 93 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text = "~Match similar words" ;
+    };
+    CheckBox CB_TITLE
+    {
+        Pos = MAP_APPFONT ( 6 , 106 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text = "Search ~titles only" ;
+    };
+};
+
+Image IMG_HELP_TOOLBOX_INDEX
+{
+    ImageBitmap = Bitmap { File = "sc05401.bmp" ; };
+    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+};
+Image IMG_HELP_TOOLBOX_START
+{
+    ImageBitmap = Bitmap { File = "sc05411.bmp" ; };
+    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+};
+Image IMG_HELP_TOOLBOX_PREV
+{
+    ImageBitmap = Bitmap { File = "sc06301.bmp" ; };
+    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+};
+Image IMG_HELP_TOOLBOX_NEXT
+{
+    ImageBitmap = Bitmap { File = "sc06300.bmp" ; };
+    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+};
+Image IMG_HELP_TOOLBOX_CONTEXT
+{
+    ImageBitmap = Bitmap { File = "sc05414.bmp" ; };
+    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+};
+Image IMG_HELP_TOOLBOX_PRINT
+{
+    ImageBitmap = Bitmap { File = "sc05504.bmp" ; };
+    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+};
+
