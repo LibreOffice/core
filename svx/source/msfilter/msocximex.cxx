@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:49:32 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
+#include <com/sun/star/style/VerticalAlignment.hpp>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -460,6 +463,7 @@ void lclReadCharArray( SvStorageStream& rStrm, char*& rpcCharArr, sal_uInt32 nLe
     sal_uInt32 nBufSize = lclGetBufferSize( nLenFld );
     if( nBufSize )
     {
+        DBG_ASSERT( nBufSize <= 0xFFFF, "lclReadCharArray - possible read error: char array is too big" );
         rpcCharArr = new char[ nBufSize ];
         ReadAlign( &rStrm, nPos, 4 );
         rStrm.Read( rpcCharArr, nBufSize );
@@ -1741,6 +1745,10 @@ sal_Bool OCX_OptionButton::Import(com::sun::star::uno::Reference<
         aTmp <<= lclCreateOUString( pCaption, nCaptionLen );
         rPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
     }
+
+    // #i40279# always centered vertically
+    aTmp <<= ::com::sun::star::style::VerticalAlignment_MIDDLE;
+    rPropSet->setPropertyValue( WW8_ASCII2STR("VerticalAlign"), aTmp );
 
     aFontData.Import(rPropSet);
     return sal_True;
@@ -4788,6 +4796,10 @@ sal_Bool OCX_CheckBox::Import(com::sun::star::uno::Reference<
         rPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
     }
 
+    // #i40279# always centered vertically
+    aTmp <<= ::com::sun::star::style::VerticalAlignment_MIDDLE;
+    rPropSet->setPropertyValue( WW8_ASCII2STR("VerticalAlign"), aTmp );
+
     aFontData.Import(rPropSet);
     return(sal_True);
 }
@@ -5313,6 +5325,12 @@ sal_Bool OCX_Image::Import( uno::Reference< beans::XPropertySet > &rPropSet )
         aTmp <<= sImageUrl;
         rPropSet->setPropertyValue( WW8_ASCII2STR("ImageURL"), aTmp);
     }
+    return sal_True;
+}
+
+sal_Bool OCX_Image::ReadFontData( SvStorageStream *pS )
+{
+    // image does not support font data
     return sal_True;
 }
 
