@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: as $ $Date: 2001-03-09 14:42:25 $
+ *  last change: $Author: mba $ $Date: 2001-03-15 10:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,8 +660,14 @@ void SAL_CALL Frame::setName( const OUString& sName ) throw( RuntimeException )
     // Safe impossible cases
     LOG_ASSERT( impldbg_checkParameter_setName( sName ), "Frame::setName()\nInvalid parameter detected.\n" )
 
-    // Take the new one.
-    m_sName = sName;
+    if ( sName != SPECIALTARGET_BLANK &&
+         sName != SPECIALTARGET_SELF &&
+         sName != SPECIALTARGET_PARENT &&
+         sName != SPECIALTARGET_TOP )
+    {
+        // Take the new one.
+        m_sName = sName;
+    }
 }
 
 //*****************************************************************************************************************
