@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-21 16:17:44 $
+ *  last change: $Author: sj $ $Date: 2001-10-01 16:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,12 +545,15 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                                         // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), FALSE );
 
                 Size aDestSize( ReadYXExt() );
-                if ( !bWinExtSet )              // sj, this is also possible: a wmf consisting of
-                    aDestSize = Size( 1, 1 );   // only one STRETCHDIB action (92115)
-                Rectangle   aDestRect( ReadYX(), aDestSize );
-                if ( nWinROP != PATCOPY )
-                    aBmp.Read( *pWMF, FALSE );
-                aBmpSaveList.Insert( new BSaveStruct( aBmp, aDestRect, nWinROP ), LIST_APPEND );
+                if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
+                {
+                    if ( !bWinExtSet )              // sj, this is also possible: a wmf consisting of
+                        aDestSize = Size( 1, 1 );   // only one STRETCHDIB action (92115)
+                    Rectangle aDestRect( ReadYX(), aDestSize );
+                    if ( nWinROP != PATCOPY )
+                        aBmp.Read( *pWMF, FALSE );
+                    aBmpSaveList.Insert( new BSaveStruct( aBmp, aDestRect, nWinROP ), LIST_APPEND );
+                }
             }
         }
         break;
