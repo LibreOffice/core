@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:31:34 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 15:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ String RID_SVXSTR_GRAFIKLINK
     Text [ ENGLISH ] = "Graphic" ;
     Text [ norwegian ] = "Graphic" ;
     Text [ italian ] = "Immagine" ;
-    Text [ portuguese_brazilian ] = "Gráfico" ;
+    Text [ portuguese_brazilian ] = "Gr?fico" ;
     Text [ portuguese ] = "Imagem" ;
     Text [ finnish ] = "Kuva" ;
     Text [ danish ] = "Grafik" ;
@@ -126,7 +126,7 @@ String RID_SVXSTR_EDITGRFLINK
     Text [ ENGLISH ] = "Link to Graphic" ;
     Text [ norwegian ] = "Koble til Grafikk" ;
     Text [ italian ] = "Collega immagine" ;
-    Text [ portuguese_brazilian ] = "Ligar a Gráfico" ;
+    Text [ portuguese_brazilian ] = "Ligar a Gr?fico" ;
     Text [ portuguese ] = "Ligar imagem" ;
     Text [ finnish ] = "Linkitä kuvat" ;
     Text [ danish ] = "Kæd grafik" ;
