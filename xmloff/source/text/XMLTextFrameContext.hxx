@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-15 11:28:36 $
+ *  last change: $Author: mtg $ $Date: 2001-02-23 14:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,10 @@ namespace com { namespace sun { namespace star {
 #define XML_TEXT_FRAME_TEXTBOX 1
 #define XML_TEXT_FRAME_GRAPHIC 2
 #define XML_TEXT_FRAME_STAR 3
-#define XML_TEXT_FRAME_OLE 3
+#define XML_TEXT_FRAME_OLE 4
+#define XML_TEXT_FRAME_APPLET 5
+#define XML_TEXT_FRAME_PLUGIN 6
+#define XML_TEXT_FRAME_FLOATING_FRAME 7
 
 class XMLTextFrameContext : public SvXMLImportContext
 {
@@ -108,6 +111,7 @@ class XMLTextFrameContext : public SvXMLImportContext
     const ::rtl::OUString sGraphicServiceName;
 
     ::rtl::OUString sDesc;
+    sal_uInt16 nType;
 
 public:
 

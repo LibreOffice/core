@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-12 12:20:34 $
+ *  last change: $Author: mtg $ $Date: 2001-02-23 14:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,52 @@ void XMLTextFrameDescContext_Impl::Characters( const OUString& rText )
 
 // ------------------------------------------------------------------------
 
+class XMLTextFrameParam_Impl : public SvXMLImportContext
+{
+public:
+
+    TYPEINFO();
+
+    XMLTextFrameParam_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
+                                  const ::rtl::OUString& rLName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            USHORT nType);
+    virtual ~XMLTextFrameParam_Impl();
+};
+TYPEINIT1( XMLTextFrameParam_Impl, SvXMLImportContext );
+XMLTextFrameParam_Impl::~XMLTextFrameParam_Impl()
+{
+}
+XMLTextFrameParam_Impl::XMLTextFrameParam_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
+                                  const ::rtl::OUString& rLName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            USHORT nType) :
+    SvXMLImportContext( rImport, nPrfx, rLName )
+{
+    OUString sName, sValue;
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString& rValue = xAttrList->getValueByIndex( i );
+
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
+        if ( XML_NAMESPACE_DRAW == nPrefix && aLocalName.equalsAsciiL( sXML_value, sizeof(sXML_value) -1 ) )
+                sValue = rValue;
+        else if ( XML_NAMESPACE_OFFICE == nPrefix && aLocalName.equalsAsciiL( sXML_name, sizeof( sXML_name) -1 ) )
+                sName = rValue;
+    }
+    if (sName.getLength() && sValue.getLength())
+    {
+        if (nType == XML_TEXT_FRAME_APPLET)
+            GetImport().GetTextImport()->addParam( sName, sValue, sal_True );
+        else if (nType == XML_TEXT_FRAME_PLUGIN)
+            GetImport().GetTextImport()->addParam( sName, sValue, sal_False );
+    }
+}
 class XMLTextFrameContourContext_Impl : public SvXMLImportContext
 {
     Reference < XPropertySet > xPropSet;
@@ -309,7 +355,8 @@ XMLTextFrameContext::XMLTextFrameContext(
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         TextContentAnchorType eATyp,
-        sal_uInt16 nType ) :
+        sal_uInt16 nNewType ) :
+    nType( nNewType ),
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sWidth(RTL_CONSTASCII_USTRINGPARAM("Width")),
     sRelativeWidth(RTL_CONSTASCII_USTRINGPARAM("RelativeWidth")),
@@ -337,6 +384,12 @@ XMLTextFrameContext::XMLTextFrameContext(
     OUString    sHRef;
     OUString    sFilterName;
     OUString    sClassId;
+    OUString    sCode;
+    OUString    sObject;
+    OUString    sArchive;
+    OUString    sOfficeName;
+    sal_Bool    bMayScript = sal_False;
+    OUString    sMimeType;
 
     sal_Int32   nX = 0;
     sal_Int32   nY = 0;
@@ -515,12 +568,33 @@ XMLTextFrameContext::XMLTextFrameContext(
         case XML_TOK_TEXT_FRAME_CLASS_ID:
             sClassId = rValue;
             break;
+        case XML_TOK_TEXT_FRAME_CODE:
+            sCode = rValue;
+            break;
+        case XML_TOK_TEXT_FRAME_OBJECT:
+            sObject = rValue;
+            break;
+        case XML_TOK_TEXT_FRAME_ARCHIVE:
+            sArchive = rValue;
+            break;
+        case XML_TOK_TEXT_FRAME_OFFICE_NAME:
+            sOfficeName = rValue;
+            break;
+        case XML_TOK_TEXT_FRAME_MAY_SCRIPT:
+            if ( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( sXML_true ) ) )
+                bMayScript = sal_True;
+            else
+                bMayScript = sal_False;
+            break;
+        case XML_TOK_TEXT_FRAME_MIME_TYPE:
+            sMimeType = rValue;
+            break;
         }
     }
 
     if( (XML_TEXT_FRAME_GRAPHIC == nType || XML_TEXT_FRAME_OLE == nType)
         && !sHRef.getLength() )
-        return; // no URL, no image or OLE object
+        return; // no URL: no image or OLE object
 
     if( XML_TEXT_FRAME_OLE == nType )
     {
@@ -531,6 +605,22 @@ XMLTextFrameContext::XMLTextFrameContext(
                                                         GetImport(), sURL,
                                                         sClassId, nWidth,
                                                         nHeight );
+    }
+    else if (XML_TEXT_FRAME_APPLET == nType)
+    {
+        xPropSet = GetImport().GetTextImport()->createApplet(
+                                sCode, sName, bMayScript, sHRef, nWidth, nHeight);
+    }
+    else if (XML_TEXT_FRAME_PLUGIN == nType)
+    {
+        xPropSet = GetImport().GetTextImport()->createPlugin(
+                                sMimeType, sHRef, nWidth, nHeight);
+
+    }
+    else if (XML_TEXT_FRAME_FLOATING_FRAME == nType)
+    {
+        xPropSet = GetImport().GetTextImport()->createFloatingFrame(
+                                sHRef, nWidth, nHeight);
     }
     else
     {
@@ -670,7 +760,10 @@ XMLTextFrameContext::XMLTextFrameContext(
         xPropSet->setPropertyValue( sGraphicRotation, aAny );
     }
 
-    if( XML_TEXT_FRAME_OLE != nType )
+    if( XML_TEXT_FRAME_OLE != nType
+        && XML_TEXT_FRAME_APPLET != nType
+        && XML_TEXT_FRAME_PLUGIN!= nType
+        && XML_TEXT_FRAME_FLOATING_FRAME != nType)
     {
         Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
         xTxtImport->InsertTextContent( xTxtCntnt );
@@ -705,15 +798,26 @@ XMLTextFrameContext::~XMLTextFrameContext()
 void XMLTextFrameContext::EndElement()
 {
     // alternative text
-    if( sDesc.getLength() && xPropSet.is() )
+    if( sDesc.getLength() )
     {
-        Reference< XPropertySetInfo > xPropSetInfo =
-            xPropSet->getPropertySetInfo();
-        if( xPropSetInfo->hasPropertyByName( sAlternativeText ) )
+        if ( xPropSet.is() )
         {
-            Any aAny;
-            aAny <<= sDesc;
-            xPropSet->setPropertyValue( sAlternativeText, aAny );
+            Reference< XPropertySetInfo > xPropSetInfo =
+                xPropSet->getPropertySetInfo();
+            if( xPropSetInfo->hasPropertyByName( sAlternativeText ) )
+            {
+                Any aAny;
+                aAny <<= sDesc;
+                xPropSet->setPropertyValue( sAlternativeText, aAny );
+            }
+        }
+        if ( nType == XML_TEXT_FRAME_APPLET )
+        {
+            GetImport().GetTextImport()->setAlternateText( sDesc, sal_True );
+        }
+        else if ( nType == XML_TEXT_FRAME_PLUGIN )
+        {
+            GetImport().GetTextImport()->setAlternateText( sDesc, sal_False );
         }
     }
 
@@ -727,6 +831,14 @@ void XMLTextFrameContext::EndElement()
                 sal_True );
         }
         GetImport().GetTextImport()->SetCursor( xOldTextCursor );
+    }
+    if ( nType == XML_TEXT_FRAME_APPLET )
+    {
+        GetImport().GetTextImport()->endApplet();
+    }
+    else if ( nType == XML_TEXT_FRAME_PLUGIN )
+    {
+        GetImport().GetTextImport()->endPlugin();
     }
 }
 
@@ -746,6 +858,13 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
     }
     else if( XML_NAMESPACE_DRAW == nPrefix )
     {
+        if ( (nType == XML_TEXT_FRAME_APPLET || nType == XML_TEXT_FRAME_PLUGIN) &&
+              rLocalName.equalsAsciiL (  sXML_param, sizeof (sXML_param) -1 ) )
+        {
+            pContext = new XMLTextFrameParam_Impl( GetImport(),
+                                              nPrefix, rLocalName,
+                                               xAttrList, nType );
+        }
         if( xPropSet.is() )
         {
             if( rLocalName.equalsAsciiL( sXML_contour_polygon,
