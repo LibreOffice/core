@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:51:52 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <svx/svxenum.hxx>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
+
 class Font;
 class OutputDevice;
 class Fraction;
@@ -100,7 +104,7 @@ enum ScAutoFontColorMode
 };
 
 
-class ScPatternAttr: public SfxSetItem
+class SC_DLLPUBLIC ScPatternAttr: public SfxSetItem
 {
     String*         pName;
     ScStyleSheet*   pStyle;
