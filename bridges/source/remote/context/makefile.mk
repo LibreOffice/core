@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2001-04-18 12:02:45 $
+#   last change: $Author: jbu $ $Date: 2001-05-02 15:00:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,6 @@ SLOFILES= $(SLO)$/context.obj
 SHL1TARGET= $(RMCXT_TARGET)$(RMCXT_MAJOR)
 
 SHL1STDLIBS= \
-        $(VOSLIB)	\
         $(SALLIB)
 
 SHL1DEPN=
