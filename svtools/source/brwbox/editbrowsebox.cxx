@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:28 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1379,7 +1379,7 @@ namespace svt
 
     DBG_NAME(CellController);
     //------------------------------------------------------------------------------
-    CellController::CellController(Window* pW)
+    CellController::CellController(Control* pW)
                    :pWindow( pW )
                    ,bSuspended( sal_True )
     {
