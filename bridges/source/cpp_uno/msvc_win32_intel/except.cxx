@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-30 12:06:53 $
+ *  last change: $Author: dbo $ $Date: 2001-05-15 08:41:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,11 +103,16 @@ static inline OString toUNOname( const OString & rRTTIname ) throw ()
 {
     OStringBuffer aRet( 64 );
     OString aStr( rRTTIname.copy( 4, rRTTIname.getLength()-4-2 ) ); // filter .?AUzzz@yyy@xxx@@
-    for ( sal_Int32 nToken = aStr.getTokenCount( '@' ); nToken--; )
+    sal_Int32 nPos = aStr.getLength();
+    while (nPos > 0)
     {
-        aRet.append( aStr.getToken( nToken, '@' ) );
-        if (nToken)
+        sal_Int32 n = aStr.lastIndexOf( '@', nPos );
+        aRet.append( aStr.copy( n +1, nPos -n -1 ) );
+        if (n >= 0)
+        {
             aRet.append( '.' );
+        }
+        nPos = n;
     }
     return aRet.makeStringAndClear();
 }
@@ -116,10 +121,13 @@ static inline OString toRTTIname( const OString & rUNOname ) throw ()
 {
     OStringBuffer aRet( 64 );
     aRet.append( RTL_CONSTASCII_STRINGPARAM(".?AV") ); // class ".?AV"; struct ".?AU"
-    for ( sal_Int32 nToken = rUNOname.getTokenCount( '.' ); nToken--; )
+    sal_Int32 nPos = rUNOname.getLength();
+    while (nPos > 0)
     {
-        aRet.append( rUNOname.getToken( nToken, '.' ) );
+        sal_Int32 n = rUNOname.lastIndexOf( '.', nPos );
+        aRet.append( rUNOname.copy( n +1, nPos -n -1 ) );
         aRet.append( '@' );
+        nPos = n;
     }
     aRet.append( '@' );
     return aRet.makeStringAndClear();
