@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: tbe $ $Date: 2002-03-18 17:37:33 $
+#   last change: $Author: vg $ $Date: 2002-06-14 12:42:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,7 @@ EXCEPTIONSFILES=					\
             $(SLO)$/help.obj		\
             $(SLO)$/resmgr.obj		\
             $(SLO)$/sound.obj		\
+            $(SLO)$/svdata.obj		\
             $(SLO)$/svmain.obj		\
             $(SLO)$/system.obj		\
             $(SLO)$/idlemgr.obj 	\
@@ -115,6 +116,7 @@ EXCEPTIONSFILES=					\
 .ELSE
 EXCEPTIONSFILES=					\
             $(SLO)$/svapp.obj		\
+            $(SLO)$/svdata.obj		\
             $(SLO)$/dndhelp.obj 	\
             $(SLO)$/unohelp.obj 	\
             $(SLO)$/unohelp2.obj    \
