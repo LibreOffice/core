@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedhlp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-13 14:13:09 $
+ *  last change: $Author: thb $ $Date: 2002-11-29 10:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,13 @@ void SvxEditSourceHint::SetEndValue( ULONG n )
 
             case EE_NOTIFY_TEXTVIEWSELECTIONCHANGED:
                 return ::std::auto_ptr<SfxHint>( new SvxEditSourceHint( EDITSOURCE_HINT_SELECTIONCHANGED ) );
+
+            case EE_NOTIFY_BLOCKNOTIFICATION_START:
+            case EE_NOTIFY_BLOCKNOTIFICATION_END:
+            case EE_NOTIFY_INPUT_START:
+            case EE_NOTIFY_INPUT_END:
+                // TODO
+                break;
 
             default:
                 DBG_ERROR( "SvxEditSourceHelper::EENotification2Hint unknown notification" );
