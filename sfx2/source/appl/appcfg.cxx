@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-24 09:49:53 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,10 +479,24 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                         bRet = TRUE;
                     break;
                 case SID_ATTR_QUICKLAUNCHER :
-                    if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_ATTR_QUICKLAUNCHER ),
-                        ShutdownIcon::GetAutostart()  ) ) )
+                {
+#ifdef WNT
+                    if ( ShutdownIcon::IsQuickstarterInstalled() )
+                    {
+#endif
+                        if ( rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_QUICKLAUNCHER ),
+                                                    ShutdownIcon::GetAutostart() ) ) )
+                            bRet = TRUE;
+#ifdef WNT
+                    }
+                    else
+                    {
+                        rSet.DisableItem( rPool.GetWhich( SID_ATTR_QUICKLAUNCHER ) );
                         bRet = TRUE;
+                    }
+#endif
                     break;
+                }
                 case SID_SAVEREL_INET :
                     {
                         bRet = TRUE;
