@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 15:44:53 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.14 $ $ $Date: 2003-03-26 15:44:53 $
+ * @version     $Revision: 1.15 $ $ $Date: 2003-08-07 14:37:35 $
  * @author      Kay Ramme
  * @since       UDK2.0
  */
@@ -737,27 +737,40 @@ public class TypeDescription implements ITypeDescription {
 
             for(int i = 0; i < methods.length; ++ i) {
                 Class parameters[] = methods[i].getParameterTypes();
-                ParameterTypeInfo parameterTypeInfos[] = new ParameterTypeInfo[parameters.length];
-
-                MethodTypeInfo methodTypeInfo = __findMethodTypeInfo(typeInfos, methods[i].getName());
+                ParameterTypeInfo[] parameterTypeInfos = null;
+                String name = methods[i].getName();
+                MethodTypeInfo methodTypeInfo = __findMethodTypeInfo(typeInfos,
+                                                                     name);
                 MethodDescription methodDescription = null;
 
                 if(methodTypeInfo != null) { // this is a idl method
                     methodDescription = new MethodDescription(methodTypeInfo);
-
+                    parameterTypeInfos = new ParameterTypeInfo[
+                        parameters.length];
                     for(int j = 0; j < parameters.length; ++ j)
-                        parameterTypeInfos[j] = __findParameterTypeInfo(typeInfos, methods[i].getName(), j);
-                }
-                else {
-                    AttributeTypeInfo attributeTypeInfo = __findAttributeTypeInfo(typeInfos, methods[i].getName().substring(3));
-
-                    if(attributeTypeInfo != null) {
-                        if(methods[i].getName().substring(0, 3).equals("get")) // is the current a get method?
-                            methodDescription = new MethodDescription(methods[i].getName(), attributeTypeInfo.getIndex(), attributeTypeInfo.getFlags());
-
-                        else {
-                            methodDescription = new MethodDescription(methods[i].getName(), attributeTypeInfo.getIndex() + 1, 0);
-                            parameterTypeInfos = new ParameterTypeInfo[]{new ParameterTypeInfo("", methods[i].getName(), 0, attributeTypeInfo.getFlags())};
+                        parameterTypeInfos[j] = __findParameterTypeInfo(
+                            typeInfos, name, j);
+                } else {
+                    final int NO_ATTRIBUTE = 0;
+                    final int GET_ATTRIBUTE = 1;
+                    final int SET_ATTRIBUTE = 2;
+                    int attr = name.startsWith("get") ? GET_ATTRIBUTE
+                        : name.startsWith("set") ? SET_ATTRIBUTE
+                        : NO_ATTRIBUTE;
+                    if (attr != NO_ATTRIBUTE) {
+                        AttributeTypeInfo ati = __findAttributeTypeInfo(
+                            typeInfos, name.substring("?et".length()));
+                        if (ati != null) {
+                            if (attr == GET_ATTRIBUTE) {
+                                methodDescription = new MethodDescription(
+                                    name, ati.getIndex(), ati.getFlags());
+                            } else {
+                                methodDescription = new MethodDescription(
+                                    name, ati.getIndex() + 1, 0);
+                                parameterTypeInfos = new ParameterTypeInfo[] {
+                                    new ParameterTypeInfo("", name, 0,
+                                                          ati.getFlags()) };
+                            }
                         }
                     }
                 }
