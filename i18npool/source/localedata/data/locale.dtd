@@ -43,21 +43,23 @@
 <!ATTLIST Locale  version CDATA #REQUIRED>
 <!-- Valid number -->
 
-<!ELEMENT LC_INFO (Language, Country, Platform?, Varient?)>
+<!ELEMENT LC_INFO (Language, Country, Platform?, Variant?)>
 
 <!ELEMENT Language (LangID, DefaultName) >
 <!ELEMENT LangID (#PCDATA) >
-<!-- LangID must be valid two letter language identifier  defined by ISO-639 -->
+<!-- LangID must be valid two or three letter language identifier defined by ISO-639
+    Use ISO 639-1 two letter code where available.
+-->
 
 <!ELEMENT Country (CountryID, DefaultName) >
 <!ELEMENT CountryID (#PCDATA) >
-<!-- CountryID must be valid two letter country identifier  defined by ISO-3166 -->
+<!-- CountryID must be valid two letter country identifier defined by ISO-3166 -->
 
 <!ELEMENT Platform (PlatformID) >
 <!ELEMENT PlatformID (#PCDATA) >
 <!-- can be generic|unix|win32|macos -->
 
-<!ELEMENT Varient (#PCDATA) >
+<!ELEMENT Variant (#PCDATA) >
 
 <!ELEMENT LC_FORMAT (FormatElement*) >
 <!ATTLIST LC_FORMAT %RefLocale;>
@@ -170,7 +172,7 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 <!-- Sequence of days is important, MUST start with Sunday -->
 <!ELEMENT Day (DayID, DefaultAbbrvName, DefaultFullName)>
 <!ELEMENT DayID (#PCDATA)>
-<!-- preferably the lower case abbreviated English name like sun for Sunday -->
+<!-- DayID is preferably the lower case abbreviated English name like sun for Sunday -->
 <!ELEMENT DefaultAbbrvName (#PCDATA)>
 <!ELEMENT DefaultFullName (#PCDATA)>
 <!ELEMENT MonthsOfYear (Month*)>
@@ -340,6 +342,7 @@ the parameter NumType can have one of the following values:
 <!ATTLIST NumberingLevel NumType CDATA #REQUIRED>
 <!ATTLIST NumberingLevel Suffix CDATA  #REQUIRED>
 <!ATTLIST NumberingLevel Transliteration CDATA #IMPLIED>
+<!ATTLIST NumberingLevel NatNum CDATA #IMPLIED>
 
 
 <!ELEMENT LC_OutLineNumberingLevel (OutlineStyle* )>
@@ -356,4 +359,4 @@ the parameter NumType can have one of the following values:
 <!ATTLIST OutLineNumberingLevel SymbolTextDistance CDATA  #REQUIRED >
 <!ATTLIST OutLineNumberingLevel FirstLineOffset CDATA  #REQUIRED >
 <!ATTLIST OutLineNumberingLevel Transliteration CDATA #IMPLIED >
-
+<!ATTLIST OutLineNumberingLevel NatNum CDATA #IMPLIED>
