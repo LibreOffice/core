@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:08:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,6 +748,9 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
     aStrHidden += ')';                                      // " (versteckt)"
 
     aTitleBase = GetText();
+
+    long nListboxYPos = aTbxCmd.GetPosPixel().Y() + aTbxCmd.GetSizePixel().Height() + 4;
+    aLbEntries.SetPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y);
 
     nBorderOffset = aLbEntries.GetPosPixel().X();
 
