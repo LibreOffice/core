@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-18 11:59:01 $
+ *  last change: $Author: svesik $ $Date: 2001-01-30 10:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,11 @@ OString makeTempName(sal_Char* prefix)
     strcat(tmpPattern, "\\");
     strcat(tmpPattern, pPrefix);
     strcat(tmpPattern, "XXXXXX");
+#ifdef FREEBSD
+    pTmpName = mkstemp(tmpPattern);
+#else
     pTmpName = mktemp(tmpPattern);
+#endif
 #endif
 
     return OString(pTmpName);
