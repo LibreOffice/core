@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:54:12 $
+ *  last change: $Author: oj $ $Date: 2001-02-16 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,7 +602,10 @@ void OQueryController::Execute(sal_uInt16 _nId)
         case ID_BROWSER_ADDTABLE:
             if(!m_pAddTabDlg)
                 m_pAddTabDlg = static_cast<OQueryViewSwitch*>(m_pView)->getAddTableDialog();
-            m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
+            if(m_pAddTabDlg->IsVisible())
+                m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
+            else if(static_cast<OQueryViewSwitch*>(getQueryView())->IsAddAllowed())
+                m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
             break;
         case ID_BROWSER_CLEAR_QUERY:
             getQueryView()->clear();
@@ -852,6 +855,8 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
         }
         getView()->initialize();
         getUndoMgr()->Clear();
+        if(m_bDesign)
+            Execute(ID_BROWSER_ADDTABLE);
         setModified(sal_False);
     }
     catch(SQLException&)
