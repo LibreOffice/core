@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:44:17 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ polish ] = "Numeracja";
         Text[ portuguese_brazilian ] = "Numbering";
         Text[ japanese ] = "î‘çÜïtÇØ(~B)";
-        Text[ korean ] = "Num~bering";
+        Text[ korean ] = "π¯»£∏≈±‚±‚";
         Text[ chinese_simplified ] = "±‡∫≈(~B)";
         Text[ chinese_traditional ] = "Ωs∏π(~B)";
         Text[ turkish ] = "Numbering";
@@ -290,7 +290,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ polish ] = "Liczenie";
         Text[ portuguese_brazilian ] = "Counting";
         Text[ japanese ] = "êîÇ¶ÇÈ(~C)";
-        Text[ korean ] = "~Counting";
+        Text[ korean ] = "~ƒ´øÓ∆Æ";
         Text[ chinese_simplified ] = "º∆ ˝(~C)";
         Text[ chinese_traditional ] = "≠pº∆(~C)";
         Text[ turkish ] = "Counting";
@@ -556,7 +556,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "PosiciÛn";
-        Text[ finnish ] = "Position";
+        Text[ finnish ] = "Sijainti";
     };
     RadioButton RB_POS_PAGE
     {
@@ -994,7 +994,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ polish ] = "Numeracja";
         Text[ portuguese_brazilian ] = "Numbering";
         Text[ japanese ] = "î‘çÜïtÇØ(~N)";
-        Text[ korean ] = "~Numbering";
+        Text[ korean ] = "~π¯»£∏≈±‚±‚";
         Text[ chinese_simplified ] = "±‡∫≈(~N)";
         Text[ chinese_traditional ] = "Ωs∏π(~N)";
         Text[ turkish ] = "Numbering";
