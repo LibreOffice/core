@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inidef.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:51 $
+ *  last change: $Author: hr $ $Date: 2000-12-07 14:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ class SfxIniEntry;
 class SfxIniDefaulterList;
 class SfxIniDefaultManager;
 
-#if __PRIVATE
+#if _SOLAR__PRIVATE
 #include "svarray.hxx"
 
 class SfxIniDefaulter;
@@ -126,7 +126,7 @@ public:
                             SfxIniDefaultManager();
                             ~SfxIniDefaultManager();
 
-#if __PRIVATE
+#if _SOLAR__PRIVATE
     void                    Insert( SfxIniDefaulter *pDefaulter )
                             { _pList->C40_INSERT( SfxIniDefaulter, pDefaulter, _pList->Count() ); }
     void                    Remove( SfxIniDefaulter *pDefaulter )
