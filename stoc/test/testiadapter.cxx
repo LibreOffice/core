@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testiadapter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-19 14:14:04 $
+ *  last change: $Author: dbo $ $Date: 2002-08-22 14:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
+#include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
@@ -982,18 +983,39 @@ static sal_Bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
 {
     Reference< XInvocationAdapterFactory > xAdapFac(
         xMgr->createInstance( OUString::createFromAscii("com.sun.star.script.InvocationAdapterFactory") ), UNO_QUERY );
+    Reference< XInvocationAdapterFactory2 > xAdapFac2( xAdapFac, UNO_QUERY_THROW );
 
     Reference< XLanguageBindingTest > xOriginal( (XLanguageBindingTest *)new Test_Impl() );
     Reference< XInvocation > xInvok( new XLB_Invocation( xMgr, xOriginal ) );
     Reference< XLanguageBindingTest > xLBT( xAdapFac->createAdapter(
         xInvok, ::getCppuType( (const Reference< XLanguageBindingTest > *)0 ) ), UNO_QUERY );
+    Reference< XLanguageBindingTest > xLBT2(
+        xAdapFac->createAdapter(
+            xInvok, ::getCppuType( (const Reference< XLanguageBindingTest > *)0 ) ), UNO_QUERY );
+    if (xLBT != xLBT2)
+        return sal_False;
+    Reference< XInterface > xLBT3(
+        xAdapFac->createAdapter(
+            xInvok, ::getCppuType( (const Reference< XInterface > *)0 ) ), UNO_QUERY );
+    if (xLBT != xLBT3)
+        return sal_False;
+    Type ar[ 2 ] = {
+        ::getCppuType( (const Reference< XLBTestBase > *)0 ),
+        ::getCppuType( (const Reference< XInterface > *)0 ) };
+    Reference< XInterface > xLBT4(
+        xAdapFac2->createAdapter( xInvok, Sequence< Type >( ar, 2 ) ), UNO_QUERY );
+    if (xLBT != xLBT4)
+        return sal_False;
+    Reference< XSimpleRegistry > xInvalidAdapter(
+        xAdapFac->createAdapter(
+            xInvok, ::getCppuType( (const Reference< XSimpleRegistry > *)0 ) ), UNO_QUERY );
+    if (xLBT == xInvalidAdapter)
+        return sal_False;
 
-    Reference< XSimpleRegistry > xInvalidAdapter( xAdapFac->createAdapter(
-        xInvok, ::getCppuType( (const Reference< XSimpleRegistry > *)0 ) ), UNO_QUERY );
     try
     {
         xInvalidAdapter->isValid();
-        OSL_ENSURE( 0, "### invalid adapter created, but call succeeded!" );
+        return sal_False;
     }
     catch (RuntimeException &)
     {
@@ -1053,6 +1075,10 @@ int __cdecl main( int argc, char * argv[] )
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
             OUString::createFromAscii(REG_PREFIX "invadp" DLL_POSTFIX),
+            Reference< XSimpleRegistry >() );
+        xImplReg->registerImplementation(
+            OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
+            OUString::createFromAscii(REG_PREFIX "tcv" DLL_POSTFIX),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
