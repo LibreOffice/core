@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-13 13:27:22 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <sfx2/basedlgs.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
+#include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <hash_map>
@@ -118,12 +118,11 @@ private:
     Image m_macImage_hc;
     Image m_docImage;
     Image m_docImage_hc;
-
     ::rtl::OUString m_sMyMacros;
     ::rtl::OUString m_sProdMacros;
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode >
-        getLangNodeFromRootNode( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode >& root, ::rtl::OUString& language );
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
+        getLangNodeFromRootNode( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& root, ::rtl::OUString& language );
     void delUserData( SvLBoxEntry* pEntry );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
@@ -135,14 +134,14 @@ protected:
     virtual void            ExpandedHdl();
     SvLBoxEntry*            FindEntry( SvLBoxEntry* pParent, const String& rText, BYTE nType );
     virtual long            ExpandingHdl();
-    static BOOL             dialogSort1( com::sun::star::uno::Reference< drafts::com::sun::star::script::browse::XBrowseNode > node1,
-            com::sun::star::uno::Reference< drafts::com::sun::star::script::browse::XBrowseNode > node2 );
-    static BOOL             dialogSort2( com::sun::star::uno::Reference< drafts::com::sun::star::script::browse::XBrowseNode > node1,
-            com::sun::star::uno::Reference< drafts::com::sun::star::script::browse::XBrowseNode > node2 );
+    static BOOL             dialogSort1( com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node1,
+            com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node2 );
+    static BOOL             dialogSort2( com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node1,
+            com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node2 );
 
 public:
     void                    Init( const ::rtl::OUString& language );
-    void  RequestSubEntries(  SvLBoxEntry* pRootEntry, ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode >& node );
+    void  RequestSubEntries(  SvLBoxEntry* pRootEntry, ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node );
                     SFTreeListBox( Window* pParent, const ResId& rRes );
                     ~SFTreeListBox();
 
@@ -186,14 +185,14 @@ class SFEntry
 private:
     BYTE            nType;
     bool            loaded;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode > nodes;
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > nodes;
     SFEntry(){}
 public:
                     SFEntry( BYTE nT )              { nType = nT; loaded=false; }
-                    SFEntry( BYTE nT, const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode >& entryNodes ) { nType = nT; nodes = entryNodes; loaded=false; }
+                    SFEntry( BYTE nT, const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& entryNodes ) { nType = nT; nodes = entryNodes; loaded=false; }
                     SFEntry( const SFEntry& r ) { nType = r.nType; nodes = r.nodes; loaded = r.loaded; }
     virtual         ~SFEntry() { OSL_TRACE("*** in SFEntry dtor ***" );}
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode > GetNode() { return nodes ;}
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > GetNode() { return nodes ;}
 
     BYTE            GetType() const                     { return nType; }
     bool            isLoaded() const                    { return loaded; }
@@ -232,16 +231,16 @@ protected:
     DECL_LINK( ScriptSelectHdl, SvTreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
     BOOL                getBoolProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps, ::rtl::OUString& propName );
-    void                CheckButtons(  ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode >& node );
+    void                CheckButtons(  ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node );
 
     void        createEntry( SvLBoxEntry* pEntry );
     void        renameEntry( SvLBoxEntry* pEntry );
     void        deleteEntry( SvLBoxEntry* pEntry );
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode >
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
                 getBrowseNode( SvLBoxEntry* pEntry );
 
     void        EnableButton( Button& rButton, BOOL bEnable );
-    String      getListOfChildren( ::com::sun::star::uno::Reference< drafts::com::sun::star::script::browse::XBrowseNode > node, int depth );
+    String      getListOfChildren( ::com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node, int depth );
     void        StoreCurrentSelection();
     void        RestorePreviousSelection();
     //String                GetInfo( SbxVariable* pVar );
