@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:43:02 $
+ *  last change: $Author: kz $ $Date: 2001-09-13 12:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ namespace sd
     {
     public:
         DocumentSettings( SdXImpressDocument* pModel );
-        virtual ~DocumentSettings();
+        virtual ~DocumentSettings() throw();
 
         // XInterface
         virtual Any SAL_CALL queryInterface( const Type& aType ) throw (RuntimeException);
@@ -301,7 +301,7 @@ DocumentSettings::DocumentSettings( SdXImpressDocument* pModel )
 {
 }
 
-DocumentSettings::~DocumentSettings()
+DocumentSettings::~DocumentSettings() throw()
 {
 }
 

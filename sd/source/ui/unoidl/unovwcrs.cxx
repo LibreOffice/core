@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unovwcrs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:52:59 $
+ *  last change: $Author: kz $ $Date: 2001-09-13 12:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ public:
     virtual sal_Bool SAL_CALL goRight(sal_Int16 nCount, sal_Bool Expand) throw( uno::RuntimeException );
     virtual void SAL_CALL gotoStart(sal_Bool Expand) throw( uno::RuntimeException );
     virtual void SAL_CALL gotoEnd(sal_Bool Expand) throw( uno::RuntimeException );
-    virtual void SAL_CALL gotoRange(const uno::Reference< text::XTextRange > & rRange, sal_Bool bExpand );
+    virtual void SAL_CALL gotoRange(const uno::Reference< text::XTextRange > & rRange, sal_Bool bExpand ) throw (::com::sun::star::uno::RuntimeException);
 
     //XTextRange
     virtual uno::Reference< text::XText >  SAL_CALL getText(void) throw( uno::RuntimeException );
@@ -187,7 +187,7 @@ sal_Bool SdXTextViewCursor::goRight(sal_Int16 nCount, sal_Bool bExpand) throw( u
     return sal_False;
 }
 
-void SdXTextViewCursor::gotoRange(const uno::Reference< text::XTextRange > & xRange, sal_Bool bExpand)
+void SdXTextViewCursor::gotoRange(const uno::Reference< text::XTextRange > & xRange, sal_Bool bExpand) throw (::com::sun::star::uno::RuntimeException)
 {
     DBG_WARNING("not implemented")
 }

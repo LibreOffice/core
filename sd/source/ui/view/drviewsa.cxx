@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-19 19:42:35 $
+ *  last change: $Author: kz $ $Date: 2001-09-13 13:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ public:
                             ~ScannerEventListener();
 
     // XEventListener
-    virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& rEventObject );
+    virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& rEventObject ) throw (::com::sun::star::uno::RuntimeException);
 
     void                    ParentDestroyed() { mpParent = NULL; }
 };
@@ -165,7 +165,7 @@ ScannerEventListener::~ScannerEventListener()
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ScannerEventListener::disposing( const ::com::sun::star::lang::EventObject& rEventObject )
+void SAL_CALL ScannerEventListener::disposing( const ::com::sun::star::lang::EventObject& rEventObject ) throw (::com::sun::star::uno::RuntimeException)
 {
     if( mpParent )
         mpParent->ScannerEvent( rEventObject );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-13 16:24:52 $
+ *  last change: $Author: kz $ $Date: 2001-09-13 12:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,7 +790,7 @@ void SAL_CALL SdGenericDrawPage::removePropertyChangeListener( const OUString& a
 void SAL_CALL SdGenericDrawPage::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 void SAL_CALL SdGenericDrawPage::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 
-uno::Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj ) const
+uno::Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj ) const throw()
 {
     PresObjKind eKind = GetPage()->GetPresObjKind(pObj);
 
