@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-07 14:18:10 $
+ *  last change: $Author: gt $ $Date: 2002-08-12 09:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,9 +848,9 @@ void SvxRubyDialog::AssertOneEntry()
 void SvxRubyDialog::UpdateColors( void )
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    Font aFnt( aPreviewWin.GetFont() );
-    Color aNewTextCol( rStyleSettings.GetWindowTextColor() );
-    Color aNewFillCol( rStyleSettings.GetWindowColor() );
+    Font                    aFnt( aPreviewWin.GetFont() );
+    Color                   aNewTextCol( rStyleSettings.GetWindowTextColor() );
+    Color                   aNewFillCol( rStyleSettings.GetWindowColor() );
 
     if( aNewFillCol != aFnt.GetFillColor() || aNewTextCol != aFnt.GetColor() )
     {
@@ -894,13 +894,14 @@ RubyPreview::RubyPreview(SvxRubyDialog& rParent, const ResId& rResId) :
         Window(&rParent, rResId),
         rParentDlg(rParent)
 {
-    SetStyle( GetStyle() | WB_3DLOOK | WB_BORDER );
     SetMapMode(MAP_TWIP);
     Size aWinSize = GetOutputSize();
 
     Font aFont = GetFont();
     aFont.SetHeight(aWinSize.Height() / 4);
     SetFont(aFont);
+
+    SetBorderStyle( WINDOW_BORDER_MONO );
 }
 /* -----------------------------29.01.01 14:05--------------------------------
 
@@ -913,6 +914,7 @@ void RubyPreview::Paint( const Rectangle& rRect )
 
     Size aWinSize = GetOutputSize();
     Rectangle aRect(Point(0, 0), aWinSize);
+    SetLineColor();
     SetFillColor( aSaveFont.GetFillColor() );
     DrawRect(aRect);
 

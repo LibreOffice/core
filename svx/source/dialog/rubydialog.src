@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:28:03 $
+ *  last change: $Author: gt $ $Date: 2002-08-12 09:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,6 +672,7 @@ ModelessDialog RID_SVXDLG_RUBY
     {
         Pos = MAP_APPFONT ( 6 , 121 ) ;
         Size = MAP_APPFONT ( 215 , 50 ) ;
+        Border = TRUE ;
     };
     OKButton PB_APPLY
     {
