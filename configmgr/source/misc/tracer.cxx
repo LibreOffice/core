@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-26 15:53:00 $
+ *  last change: $Author: jb $ $Date: 2001-02-27 14:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,16 +504,10 @@ void OConfigTracer::implTrace(const sal_Char* _pType, const sal_Char* _pFormat, 
             static sal_Char szMessage[1024] = "";
             fprintf(s_pImpl->m_pOutputMedium, "(%06lu)", getGlobalTimer());
         }
-
-        fprintf(s_pImpl->m_pOutputMedium, ": ");
-
-        indent();
     }
-    if (_pType && strlen(_pType))
-    {
-        fprintf(s_pImpl->m_pOutputMedium, "%s", _pType);
-        indent();
-    }
+    fprintf(s_pImpl->m_pOutputMedium, ": ");
+
+    indent();
 
     vfprintf(s_pImpl->m_pOutputMedium, _pFormat, args);
     fprintf(s_pImpl->m_pOutputMedium,"\n");
@@ -527,6 +521,9 @@ void OConfigTracer::implTrace(const sal_Char* _pType, const sal_Char* _pFormat, 
 //**************************************************************************
 // history:
 //  $Log: not supported by cvs2svn $
+//  Revision 1.5  2001/02/26 15:53:00  jb
+//  Add thread-sensitive tracing
+//
 //  Revision 1.4  2001/02/13 09:48:02  dg
 //  #83239# timing output
 //
