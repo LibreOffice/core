@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:57:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ void xforms::copy( const Reference<XPropertySet>& xFrom,
             try
             {
                 Property aProperty = xFromInfo->getPropertyByName( rName );
-                if ( ( aProperty.Attributes && READONLY ) == 0 )
+                if ( ( aProperty.Attributes & READONLY ) == 0 )
                     xTo->setPropertyValue(rName, xFrom->getPropertyValue( rName ));
             }
             catch( const Exception& )
