@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-17 10:41:29 $
+ *  last change: $Author: hdu $ $Date: 2000-11-22 12:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,46 @@
 
 long VirtDevServerFont::FetchFontList( ImplDevFontList* pToAdd )
 {
-    long nCount = 0;
+#if 0
     // TODO: add fonts on server but not on client to the list
+    long nCount = 0;
+#else
+    // TODO: get fonts on server but not on client,
+    // problem is that currently there is no serverside virtual device...
+    VirtualDevice vdev( 1 );
+    long nCount = vdev.GetDevFontCount();
+
+    for( int i = 0; i < nCount; ++ i)
+    {
+        const FontInfo aFontInfo = vdev.GetDevFont( i );
+
+        ImplFontData rData;
+        rData.mpNext        = NULL;
+        rData.mpSysData     = SERVERFONT_MAGIC;
+
+        rData.maName        = aFontInfo.GetName();
+        rData.maStyleName   = aFontInfo.GetStyleName();
+        rData.mnWidth       = aFontInfo.GetWidth();
+        rData.mnHeight      = aFontInfo.GetHeight();
+        rData.meFamily      = aFontInfo.GetFamily();
+        rData.meCharSet     = aFontInfo.GetCharSet();
+        rData.meScript      = SCRIPT_DONTKNOW;
+        rData.mePitch       = aFontInfo.GetPitch();
+        rData.meWidthType   = aFontInfo.GetWidthType();
+        rData.meWeight      = aFontInfo.GetWeight();
+        rData.meItalic      = aFontInfo.GetItalic();
+        rData.meType        = aFontInfo.GetType();
+        rData.meFamily      = aFontInfo.GetFamily();
+
+        rData.mnVerticalOrientation = 0;    // TODO: where to get this info?
+        rData.mbOrientation = true;         // TODO: where to get this info?
+        rData.mbDevice      = false;
+        rData.mnQuality     = 0;            // prefer client-side fonts if available
+
+        pToAdd->Add( new ImplFontData( rData ) );   // TODO: avoid copy if possible
+    }
+#endif
+
     return nCount;
 }
 
@@ -115,11 +153,12 @@ void VirtDevServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor 
     aFont.SetHeight     ( aFSD.mnHeight );
     aFont.SetWidth      ( aFSD.mnWidth );
     aFont.SetOrientation( aFSD.mnOrientation );
+    aFont.SetVertical   ( GetFontSelData().mbVertical );
 
     VirtualDevice vdev( 1 );
     FontMetric aMetric( vdev.GetFontMetric( aFont ) );
 
-    rFactor = 1;
+    rFactor = 0x100;
 
     rTo.mnAscent        = aMetric.GetAscent();
     rTo.mnDescent       = aMetric.GetDescent();
@@ -158,6 +197,7 @@ void VirtDevServerFont::SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphDa
     aFont.SetHeight     ( GetFontSelData().mnHeight );
     aFont.SetWidth      ( GetFontSelData().mnWidth );
     aFont.SetOrientation( GetFontSelData().mnOrientation );
+    aFont.SetVertical   ( GetFontSelData().mbVertical );
 
     VirtualDevice vdev( 1 );
     vdev.SetFont( aFont );
@@ -195,6 +235,7 @@ ULONG VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs ) cons
     aFont.SetHeight     ( GetFontSelData().mnHeight );
     aFont.SetWidth      ( GetFontSelData().mnWidth );
     aFont.SetOrientation( GetFontSelData().mnOrientation );
+    aFont.SetVertical   ( GetFontSelData().mbVertical );
 
     VirtualDevice vdev( 1 );
     vdev.SetFont( aFont );
@@ -233,6 +274,7 @@ bool VirtDevServerFont::GetGlyphOutline( int nGlyphIndex, bool bOptimize, PolyPo
     aFont.SetHeight     ( GetFontSelData().mnHeight );
     aFont.SetWidth      ( GetFontSelData().mnWidth );
     aFont.SetOrientation( GetFontSelData().mnOrientation );
+    aFont.SetVertical   ( GetFontSelData().mbVertical );
 
     VirtualDevice vdev( 1 );
     vdev.SetFont( aFont );
