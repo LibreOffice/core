@@ -2,9 +2,9 @@
  *
  *  $RCSfile: font.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-02-23 16:00:22 $
+ *  last change: $Author: th $ $Date: 2001-03-23 11:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,18 +93,18 @@ Impl_Font::Impl_Font() :
     meAlign             = ALIGN_TOP;
     meWeight            = WEIGHT_DONTKNOW;
     meWidthType         = WIDTH_DONTKNOW;
+    meItalic            = ITALIC_NONE;
     meUnderline         = UNDERLINE_NONE;
     meStrikeout         = STRIKEOUT_NONE;
     meRelief            = RELIEF_NONE;
     meEmphasisMark      = EMPHASISMARK_NONE;
-    meItalic            = ITALIC_NONE;
+    mnOrientation       = 0;
+    mnKerning           = 0;
     mbWordLine          = FALSE;
     mbOutline           = FALSE;
     mbShadow            = FALSE;
-    mbKerning           = FALSE;
-    mbTransparent       = TRUE;
-    mnOrientation       = 0;
     mbVertical          = FALSE;
+    mbTransparent       = TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -125,18 +125,18 @@ Impl_Font::Impl_Font( const Impl_Font& rImplFont ) :
     meAlign             = rImplFont.meAlign;
     meWeight            = rImplFont.meWeight;
     meWidthType         = rImplFont.meWidthType;
+    meItalic            = rImplFont.meItalic;
     meUnderline         = rImplFont.meUnderline;
     meStrikeout         = rImplFont.meStrikeout;
     meRelief            = rImplFont.meRelief;
     meEmphasisMark      = rImplFont.meEmphasisMark;
-    meItalic            = rImplFont.meItalic;
+    mnOrientation       = rImplFont.mnOrientation;
+    mnKerning           = rImplFont.mnKerning;
     mbWordLine          = rImplFont.mbWordLine;
     mbOutline           = rImplFont.mbOutline;
     mbShadow            = rImplFont.mbShadow;
-    mbKerning           = rImplFont.mbKerning;
-    mbTransparent       = rImplFont.mbTransparent;
-    mnOrientation       = rImplFont.mnOrientation;
     mbVertical          = rImplFont.mbVertical;
+    mbTransparent       = rImplFont.mbTransparent;
 }
 
 // -----------------------------------------------------------------------
@@ -378,12 +378,12 @@ void Font::SetVertical( BOOL bVertical )
 
 // -----------------------------------------------------------------------
 
-void Font::SetKerning( BOOL bKerning )
+void Font::SetKerning( FontKerning nKerning )
 {
     DBG_CHKTHIS( Font, NULL );
 
     MakeUnique();
-    mpImplFont->mbKerning = bKerning;
+    mpImplFont->mnKerning = nKerning;
 }
 
 // -----------------------------------------------------------------------
@@ -545,7 +545,7 @@ BOOL Font::operator==( const Font& rFont ) const
          (mpImplFont->mbWordLine        == rFont.mpImplFont->mbWordLine         ) &&
          (mpImplFont->mbOutline         == rFont.mpImplFont->mbOutline          ) &&
          (mpImplFont->mbShadow          == rFont.mpImplFont->mbShadow           ) &&
-         (mpImplFont->mbKerning         == rFont.mpImplFont->mbKerning          ) &&
+         (mpImplFont->mnKerning         == rFont.mpImplFont->mnKerning          ) &&
          (mpImplFont->mbTransparent     == rFont.mpImplFont->mbTransparent      ) )
         return TRUE;
     else
@@ -603,6 +603,7 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
     VersionCompat   aCompat( rIStm, STREAM_READ );
     UINT16          nTmp16;
     BOOL            bTmp;
+    BYTE            nTmp8;
 
     rIStm.ReadByteString( rImpl_Font.maName, rIStm.GetStreamCharSet() );
     rIStm.ReadByteString( rImpl_Font.maStyleName, rIStm.GetStreamCharSet() );
@@ -626,7 +627,7 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
     rIStm >> bTmp; rImpl_Font.mbWordLine = bTmp;
     rIStm >> bTmp; rImpl_Font.mbOutline = bTmp;
     rIStm >> bTmp; rImpl_Font.mbShadow = bTmp;
-    rIStm >> bTmp; rImpl_Font.mbKerning = bTmp;
+    rIStm >> nTmp8; rImpl_Font.mnKerning = nTmp8;
 //  rIStm >> bTmp; rImpl_Font.mbTransparent = bTmp;                 // removed since SUPD396
 
     // Relief
@@ -662,7 +663,7 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
     rOStm << (BOOL) rImpl_Font.mbWordLine;
     rOStm << (BOOL) rImpl_Font.mbOutline;
     rOStm << (BOOL) rImpl_Font.mbShadow;
-    rOStm << (BOOL) rImpl_Font.mbKerning;
+    rOStm << (BYTE) rImpl_Font.mnKerning;
 //  rOStm << (BOOL) rImpl_Font.mbTransparent;   // removed since SUPD396
 
     // Relief
