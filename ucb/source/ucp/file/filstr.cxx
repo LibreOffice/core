@@ -391,29 +391,12 @@ XStream_impl::getLength(
     throw( io::IOException,
            uno::RuntimeException )
 {
-    osl::FileBase::RC   err;
-    sal_uInt64          uCurrentPos, uEndPos;
-
-    err = m_aFile.getPos( uCurrentPos );
-    if( err != osl::FileBase::E_None )
-        throw io::IOException();
-
-    err = m_aFile.setPos( Pos_End, 0 );
-    if( err != osl::FileBase::E_None )
-        throw io::IOException();
-
-    err = m_aFile.getPos( uEndPos );
-    if( err != osl::FileBase::E_None )
-        throw io::IOException();
-
-    err = m_aFile.setPos( Pos_Absolut, uCurrentPos );
-    if( err != osl::FileBase::E_None )
-        throw io::IOException();
-    else
-        return sal_Int64( uEndPos );
-
+        sal_uInt64 uEndPos;
+        if ( m_aFile.getSize(uEndPos) != osl::FileBase::E_None )
+                throw io::IOException();
+        else
+                return sal_Int64( uEndPos );
 }
-
 
 void SAL_CALL
 XStream_impl::flush()
