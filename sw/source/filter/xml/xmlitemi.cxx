@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitemi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:08:12 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,8 @@ SvXMLImportContext *SwXMLItemSetContext_Impl::CreateChildContext(
 
 void SwXMLImport::_InitItemImport()
 {
-    pTwipUnitConv = new SvXMLUnitConverter( MAP_TWIP, MAP_TWIP );
+    // #110680#
+    pTwipUnitConv = new SvXMLUnitConverter( MAP_TWIP, MAP_TWIP, getServiceFactory() );
 
     xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );
     xTableColItemMap = new SvXMLItemMapEntries( aXMLTableColItemMap );
