@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:38:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,11 +500,11 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
         if( xTunnel.is() )
         {
-            SwXTextCursor* pCrsr = (SwXTextCursor*)xTunnel->getSomething(
-                                        SwXTextCursor::getUnoTunnelId() );
+            OTextCursorHelper* pCrsr = (OTextCursorHelper*)xTunnel->getSomething(
+                                        OTextCursorHelper::getUnoTunnelId() );
             if( pCrsr )
             {
-                SwEditShell* pSh = pCrsr->GetCrsr()->GetDoc()->GetEditShell();
+                SwEditShell* pSh = pCrsr->GetDoc()->GetEditShell();
                 if( pSh->ActionCount() )
                 {
                     pSh->EndAllAction();
@@ -527,11 +527,11 @@ void SwOneExampleFrame::ClearDocument( BOOL bStartUpdateTimer )
     uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
     if( xTunnel.is() )
     {
-        SwXTextCursor* pCrsr = (SwXTextCursor*)xTunnel->getSomething(
-                                        SwXTextCursor::getUnoTunnelId() );
+        OTextCursorHelper* pCrsr = (OTextCursorHelper*)xTunnel->getSomething(
+                                        OTextCursorHelper::getUnoTunnelId() );
         if( pCrsr )
         {
-            SwDoc* pDoc = pCrsr->GetCrsr()->GetDoc();
+            SwDoc* pDoc = pCrsr->GetDoc();
             SwEditShell* pSh = pDoc->GetEditShell();
             pSh->LockPaint();
             pSh->StartAllAction();
