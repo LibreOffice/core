@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pl $ $Date: 2001-04-04 17:19:16 $
+ *  last change: $Author: hdu $ $Date: 2001-04-05 07:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,8 +448,7 @@ SalDisplay::GetXlfdList()
             }
             // exclude fonts already managed by fontmanager, anyway keep
             // gui fonts: they are candidates for GetInterfaceFont ()
-            if (pXlfdList[i].Fonttype() == eTypeScalable)
-                ((VirtualXlfd*)mpFallbackFactory)->FilterInterfaceFont (pXlfdList + i);
+            ((VirtualXlfd*)mpFallbackFactory)->FilterInterfaceFont (pXlfdList + i);
             #if defined(USE_PSPRINT) && defined(USE_BUILTIN_RASTERIZER)
             if (FontLookup::InSet (aSet, pXlfdList[i]))
                 continue;
@@ -497,7 +496,6 @@ SalDisplay::GetXlfdList()
         // flush the merged list into the global list
         mpFontList->Add( pScalableFont );
         mpFontList->Add( &aBitmapList );
-        mpFontList->Add( mpFallbackFactory );
 
         // cleanup the list of simple font information
         if ( pXlfdList != NULL )
@@ -889,11 +887,13 @@ DrawVerticalTextItem( Display *pDisplay, Drawable nDrawable, GC nGC,
     }
 }
 
+//--------------------------------------------------------------------------
+
 #ifdef USE_BUILTIN_RASTERIZER
 #ifdef USE_XRENDER
 
-void SalGraphicsData::DrawServerAAFontString( int nX, int nY,
-    const sal_Unicode *pStr, int nLength )
+void SalGraphicsData::DrawServerAAFontString(
+    int nX, int nY, const sal_Unicode* pStr, int nLength, const long* pDXAry )
 {
     // translate unicode to glyph ids and make sure they are already on the server
     unsigned short* pGlyphString = (unsigned short*)alloca( 2*nLength );
@@ -902,7 +902,6 @@ void SalGraphicsData::DrawServerAAFontString( int nX, int nY,
         const int nGlyphIndex = mpServerSideFont->GetGlyphIndex( pStr[i] );
         pGlyphString[ i ] = aX11GlyphPeer.GetGlyphId( *mpServerSideFont, nGlyphIndex );
     }
-
 
     Display* pDisplay = GetXDisplay();
     Visual* pVisual = DefaultVisual( pDisplay, 0 );
@@ -942,10 +941,24 @@ void SalGraphicsData::DrawServerAAFontString( int nX, int nY,
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
         (*aX11GlyphPeer.pXRenderSetPictureClipRegion)( pDisplay, aDst, pClipRegion_ );
 
-    // draw the string
     GlyphSet aGlyphSet = aX11GlyphPeer.GetGlyphSet( *mpServerSideFont );
-    (*aX11GlyphPeer.pXRenderCompositeString16)( pDisplay, PictOpOver,
-        aSrc, aDst, 0, aGlyphSet, 0, 0, nX, nY, pGlyphString, nLength );
+    if( pDXAry == NULL )
+    {
+        // draw the whole string
+        (*aX11GlyphPeer.pXRenderCompositeString16)( pDisplay, PictOpOver,
+            aSrc, aDst, 0, aGlyphSet, 0, 0, nX, nY, pGlyphString, nLength );
+    }
+    else
+    {
+        Point aPos( nX, nY );
+        // draw the string glyph by glyph
+        for( int i = 0; i < nLength; ++i )
+        {
+            (*aX11GlyphPeer.pXRenderCompositeString16)( pDisplay, PictOpOver,
+                aSrc, aDst, 0, aGlyphSet, 0, 0, aPos.X(), aPos.Y(), pGlyphString+i, 1 );
+            aPos = Point(nX,nY) + mpServerSideFont->TransformPoint( Point(pDXAry[i],0) );
+        }
+    }
 
     // cleanup
     (*aX11GlyphPeer.pXRenderFreePicture)( pDisplay, aDst );
@@ -953,17 +966,162 @@ void SalGraphicsData::DrawServerAAFontString( int nX, int nY,
 
 #endif // USE_XRENDER
 
-void SalGraphicsData::DrawServerFontString(
-    int nX, int nY, const sal_Unicode *pStr, int nLength )
-{
-#ifdef USE_XRENDER
-    if( aX11GlyphPeer.GetGlyphSet( *mpServerSideFont ) )
-    {
-        DrawServerAAFontString( nX, nY, pStr, nLength );
-        return;
-    }
-#endif // USE_XRENDER
+//--------------------------------------------------------------------------
 
+bool SalGraphicsData::DrawServerAAForcedString(
+    int nX, int nY, const sal_Unicode* pStr, int nLength, const long* pDXAry )
+{
+    // prepare glyphs and get extent of operation
+    int nXmin, nXmax, nYmin, nYmax;
+    Point aPos( nX, nY );
+    int i = 0;
+    for( bool bFirst = true; i < nLength; ++i )
+    {
+        const int nGlyphIndex = mpServerSideFont->GetGlyphIndex( pStr[i] );
+        const RawBitmap* const pRawBitmap = aX11GlyphPeer.GetRawBitmap( *mpServerSideFont, nGlyphIndex );
+        if( !pRawBitmap )
+            continue;
+
+        const int nX1 = aPos.X() + pRawBitmap->mnXOffset;
+        const int nY1 = aPos.Y() + pRawBitmap->mnYOffset;
+        const int nX2 = nX1 + pRawBitmap->mnWidth;
+        const int nY2 = nY1 + pRawBitmap->mnHeight;
+
+        if( bFirst )
+        {
+            bFirst = false;
+            nXmin = nX1;
+            nXmax = nX2;
+            nYmin = nY1;
+            nYmax = nY2;
+        }
+        else
+        {
+            if( nXmin > nX1 ) nXmin = nX1;
+            if( nXmax < nX2 ) nXmax = nX2;
+            if( nYmin > nY1 ) nYmin = nY1;
+            if( nYmax < nY2 ) nYmax = nY2;
+        }
+
+        if( pDXAry != NULL )
+            aPos = Point(nX,nY) + mpServerSideFont->TransformPoint( Point(pDXAry[i],0) );
+        else {
+            const GlyphMetric& rGM = mpServerSideFont->GetGlyphMetric( nGlyphIndex );
+            aPos += mpServerSideFont->TransformPoint( Point(rGM.GetCharWidth(),0) );
+        }
+    }
+
+    // get XImage
+    GetDisplay()->GetXLib()->SetIgnoreXErrors( true );
+    Display* pDisplay = GetXDisplay();
+
+    if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
+    {
+        XRectangle aXRect;
+        XClipBox( pClipRegion_, &aXRect );
+        if( nXmin < aXRect.x )  nXmin = aXRect.x;
+        if( nYmin < aXRect.y )  nYmin = aXRect.y;
+        if( nXmax >= aXRect.x+aXRect.width )    nXmax = aXRect.x + aXRect.width - 1;
+        if( nYmax >= aXRect.y+aXRect.height )   nYmax = aXRect.y + aXRect.height - 1;
+    }
+
+    XImage* const pImg = XGetImage( pDisplay, hDrawable_,
+        nXmin, nYmin, (nXmax-nXmin+1), (nYmax-nYmin+1), ~0, ZPixmap );
+    if( pImg == NULL )
+        return false;
+
+    // prepare context
+    GC nGC = SelectFont();
+    XGCValues aGCVal;
+    XGetGCValues( pDisplay, nGC, GCForeground, &aGCVal );
+
+    unsigned long nOrigColor = XGetPixel( pImg, 0, 0 );
+    XPutPixel( pImg, 0, 0, aGCVal.foreground );
+    unsigned char aColor[4];
+    aColor[0] = pImg->data[0];
+    aColor[1] = pImg->data[1];
+    aColor[2] = pImg->data[2];
+    aColor[3] = pImg->data[3];
+    XPutPixel( pImg, 0, 0, nOrigColor );
+
+    // work on XImage
+    aPos = Point( nX, nY );
+    const int bpp = pImg->bits_per_pixel >> 3;
+    for( i = 0; i < nLength; ++i )
+    {
+        const int nGlyphIndex = mpServerSideFont->GetGlyphIndex( pStr[i] );
+        const RawBitmap* const pRawBitmap = aX11GlyphPeer.GetRawBitmap( *mpServerSideFont, nGlyphIndex );
+        if( !pRawBitmap )
+            continue;
+
+        const int nX1 = aPos.X() + pRawBitmap->mnXOffset;
+        const int nY1 = aPos.Y() + pRawBitmap->mnYOffset;
+
+        if( (nX1 <= nXmax) && ((nX1 + pRawBitmap->mnWidth) > nXmin)
+        &&  (nY1 <= nYmax) && ((nY1 + pRawBitmap->mnHeight) > nYmin) )
+        {
+            const unsigned char* p10 = pRawBitmap->mpBits;
+            unsigned char* p20 = (unsigned char*)pImg->data;                // dest left limit
+            p20 += (nY1 - nYmin) * pImg->bytes_per_line;
+            unsigned char* p21 = p20 + (nX1 - nXmin + pImg->xoffset) * bpp;
+            int y = pRawBitmap->mnHeight;
+            if( y > nYmax - nY1 )
+                y = nYmax - nY1 + 1;
+            while( --y >= 0 )
+            {
+                if( p20 >= (unsigned char*)pImg->data )
+                {
+                    unsigned char* const p22 = p20 + pImg->bytes_per_line;  // dest right limit
+                    unsigned char* pDst = p21;
+                    const unsigned char* pSrc = p10;
+                    for( int x = pRawBitmap->mnWidth; (--x >= 0) && (p22 > pDst); ++pSrc )
+                    {
+                        if( (*pSrc == 0) || (p20 > pDst) )          // keep background
+                            pDst += bpp;
+                        else if( *pSrc == 0xFF )                    // paint foreground
+                        {
+                            const unsigned char* pColor = aColor;
+                            for( int z = bpp; --z >= 0; ++pColor, ++pDst )
+                                *pDst = *pColor;
+                        }
+                        else                                        // blend fg into bg
+                        {
+                            const unsigned char* pColor = aColor;
+                            for( int z = bpp; --z >= 0; ++pColor, ++pDst )
+                                // theoretically it should be *257) >> 16
+                                // but the error is <0.4% worst case and we are in
+                                // the innermost loop of very perf-sensitive code
+                                *pDst += (*pSrc * ((int)*pColor - *pDst)) >> 8;
+                        }
+                    }
+                }
+                p10 += pRawBitmap->mnScanlineSize;
+                p20 += pImg->bytes_per_line;
+                p21 += pImg->bytes_per_line;
+            }
+        }
+        if( pDXAry != NULL )
+            aPos = Point(nX,nY) + mpServerSideFont->TransformPoint( Point(pDXAry[i],0) );
+        else {
+            const GlyphMetric& rGM = mpServerSideFont->GetGlyphMetric( nGlyphIndex );
+            aPos += mpServerSideFont->TransformPoint( Point(rGM.GetCharWidth(),0) );
+        }
+    }
+
+    // put XImage
+    XPutImage( pDisplay, hDrawable_, nGC, pImg,
+        0, 0, nXmin, nYmin, (nXmax - nXmin + 1), (nYmax - nYmin + 1) );
+    XDestroyImage( pImg );
+
+    GetDisplay()->GetXLib()->SetIgnoreXErrors( false );
+    return true;
+}
+
+//--------------------------------------------------------------------------
+
+void SalGraphicsData::DrawServerSimpleFontString(
+    int nX, int nY, const sal_Unicode* pStr, int nLength, const long* pDXAry )
+{
     Display* pDisplay   = GetXDisplay();
     GC nGC = SelectFont();
 
@@ -995,21 +1153,34 @@ void SalGraphicsData::DrawServerFontString(
             const int nHeight   = rGM.GetSize().Height();
             XFillRectangle( pDisplay, hDrawable_, tmpGC, nDestX, nDestY, nWidth, nHeight );
         }
-#if 0
-        aPos += rGM.GetDelta();
-#elif 0
-        aPos = Point( nX, nY );
-        aPos = pServerFont->TransformPoint( Point( pDXAry[i], 0 ) );
-        aPos += Point( pDXAry[i], 0 );
-#else
-        aPos += mpServerSideFont->TransformPoint( Point(rGM.GetCharWidth(),0) );
-#endif
+        if( pDXAry != NULL )
+            aPos = Point(nX,nY) + mpServerSideFont->TransformPoint( Point(pDXAry[i],0) );
+        else
+            aPos += mpServerSideFont->TransformPoint( Point(rGM.GetCharWidth(),0) );
     }
 
     XFreeGC( pDisplay, tmpGC );
 }
 
-#endif
+//--------------------------------------------------------------------------
+
+void SalGraphicsData::DrawServerFontString(
+    int nX, int nY, const sal_Unicode* pStr, int nLength, const long* pDXAry )
+{
+#ifdef USE_XRENDER
+    if( aX11GlyphPeer.GetGlyphSet( *mpServerSideFont ) )
+        DrawServerAAFontString( nX, nY, pStr, nLength, pDXAry );
+    else
+#endif // USE_XRENDER
+    if( aX11GlyphPeer.ForcedAntialiasing( *mpServerSideFont ) )
+        DrawServerAAForcedString( nX, nY, pStr, nLength, pDXAry );
+    else
+        DrawServerSimpleFontString( nX, nY, pStr, nLength, pDXAry );
+}
+
+#endif // USE_BUILTIN_RASTERIZER
+
+//--------------------------------------------------------------------------
 
 void
 SalGraphicsData::DrawStringUCS2( int nX, int nY, const sal_Unicode* pStr, int nLength )
@@ -1118,31 +1289,18 @@ SalGraphicsData::DrawText( long nX, long nY,
     if (nLength == 0)
         return;
 
-    #ifdef USE_BUILTIN_RASTERIZER
-    if( mpServerSideFont != NULL )
+    if( xFont_ != NULL )
     {
-        DrawServerFontString( nX, nY, pStr, nLength );
-    }
-    else
-    #endif
-    if ( xFont_ != NULL )
-    {
-        if ( xFont_->GetAsciiEncoding() == RTL_TEXTENCODING_UNICODE )
+        if( xFont_->GetAsciiEncoding() == RTL_TEXTENCODING_UNICODE )
         {
-            if ( bFontVertical_ )
-            {
-                DrawVerticalString( GetXDisplay(), hDrawable_, SelectFont(),
-                        nX, nY, pStr, nLength, xFont_ );
-            }
+            if( bFontVertical_ )
+                DrawVerticalString( GetXDisplay(), hDrawable_,
+                        SelectFont(), nX, nY, pStr, nLength, xFont_ );
             else
-            {
                 DrawStringUCS2( nX, nY, pStr, nLength );
-            }
         }
         else
-        {
-            DrawStringMB ( nX, nY, pStr, nLength );
-        }
+            DrawStringMB( nX, nY, pStr, nLength );
     }
 }
 
@@ -1154,16 +1312,17 @@ SalGraphics::DrawText( long nX, long nY, const xub_Unicode* pStr, USHORT nLen )
     maGraphicsData.FaxPhoneComment( pStr, nLen );
 #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
-         maGraphicsData.m_pPrinterGfx->DrawText (Point(nX, nY), pStr, nLen);
+         maGraphicsData.m_pPrinterGfx->DrawText( Point(nX, nY), pStr, nLen);
     else
+#endif
     {
+#ifdef USE_BUILTIN_RASTERIZER
+        if( maGraphicsData.mpServerSideFont != NULL )
+            maGraphicsData.DrawServerFontString( nX, nY, pStr, nLen, NULL );
+        else
 #endif
-
-    maGraphicsData.DrawText( nX, nY, pStr, nLen );
-
-#if defined(USE_PSPRINT)
+            maGraphicsData.DrawText( nX, nY, pStr, nLen );
     }
-#endif
 }
 
 //--------------------------------------------------------------------------
@@ -1220,6 +1379,7 @@ void SalGraphicsData::DrawText( long nX, long nY,
         aPolygon.SetPoint( aCharPos, 0 );
         aPolygon.Rotate( aOrigin, nFontOrientation_ );
         aCharPos = aPolygon.GetPoint( 0 );
+                                                  // when the display's visuals are
 
         DrawText( aCharPos.X(), aCharPos.Y(), pStr+i, 1 );
     }
@@ -1255,7 +1415,9 @@ SalGraphics::SetFont( ImplFontSelectData *pEntry )
 #endif
     {
         maGraphicsData.SetFont( pEntry );
-        return _IsPrinter() ? SAL_SETFONT_USEDRAWTEXTARRAY : 0;
+        if( _IsPrinter() || (maGraphicsData.mpServerSideFont != NULL) )
+            return SAL_SETFONT_USEDRAWTEXTARRAY;
+        return 0;
     }
 }
 
@@ -1270,14 +1432,15 @@ SalGraphics::DrawTextArray( long nX, long nY,
     if (maGraphicsData.m_pPrinterGfx != NULL)
          maGraphicsData.m_pPrinterGfx->DrawText (Point(nX, nY), pStr, nLen, pDXAry);
     else
-    {
 #endif
-
-    maGraphicsData.DrawText( nX, nY, pStr, nLen, pDXAry );
-
-    #if defined(USE_PSPRINT)
+    {
+#ifdef USE_BUILTIN_RASTERIZER
+        if( maGraphicsData.mpServerSideFont != NULL )
+            maGraphicsData.DrawServerFontString( nX, nY, pStr, nLen, pDXAry );
+        else
+#endif
+            maGraphicsData.DrawText( nX, nY, pStr, nLen, pDXAry );
     }
-    #endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1286,7 +1449,8 @@ void
 SalGraphics::SetTextColor( SalColor nSalColor )
 {
     #if defined(USE_PSPRINT)
-    if (maGraphicsData.m_pPrinterGfx != NULL)
+    if (maGraphicsData.m_pPrinterGfx != NULL)   // when the display's visuals are
+
     {
         psp::PrinterColor aColor (SALCOLOR_RED   (nSalColor),
                                   SALCOLOR_GREEN (nSalColor),
@@ -1452,13 +1616,14 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
         // store data to bootstrap an X fallback font
 
 #ifdef USE_BUILTIN_RASTERIZER
-        aX11GlyphPeer.SetDisplay( maGraphicsData.GetXDisplay() );
+        aX11GlyphPeer.SetDisplay( maGraphicsData.GetXDisplay(),
+            maGraphicsData.GetDisplay()->GetVisual()->GetVisual() );
         GlyphCache::EnsureInstance( aX11GlyphPeer, false );
         GlyphCache& rGC = GlyphCache::GetInstance();
 
+        const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
         ::std::list< psp::fontID > aList;
         ::std::list< psp::fontID >::iterator it;
-        const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
         rMgr.getFontList( aList );
         for( it = aList.begin(); it != aList.end(); ++it )
         {
@@ -1685,10 +1850,6 @@ SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
             delete[] pTmpKernPairs;
             return nGotPairs;
         }
-        else
-            return 0;
-#else
-        return 0;
 #endif //USE_BUILTIN_RASTERIZER
 
 #ifdef USE_PSPRINT
@@ -1745,6 +1906,7 @@ SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
 
     return nCurPair;
 #endif
+    return 0;
 }
 
 // ---------------------------------------------------------------------------
