@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selglos.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 20:41:59 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ ModalDialog DLG_SEL_GLOS
     Text [ italian ] = "Inserisci testo automatico" ;
     Text [ portuguese_brazilian ] = "Inserir Texto Automático" ;
     Text [ portuguese ] = "Inserir AutoTexto" ;
-    Text [ finnish ] = "Lisää automaattiteksti" ;
+    Text [ finnish ] = "Lisää automaattinen teksti" ;
     Text [ danish ] = "Indsæt AutoTekst" ;
     Text [ french ] = "Insérer AutoTexte" ;
     Text [ swedish ] = "Infoga AutoText" ;
@@ -116,7 +116,7 @@ ModalDialog DLG_SEL_GLOS
         Text [ italian ] = "Testo automatico per la sigla " ;
         Text [ portuguese_brazilian ] = "Entadas para Abreviações " ;
         Text [ portuguese ] = "AutoTexto para abreviatura  " ;
-        Text [ finnish ] = "Lyhenteen vastineet " ;
+        Text [ finnish ] = "Automaattiset tekstit pikavalinnalle " ;
         Text [ danish ] = "AutoTekst til genvej " ;
         Text [ french ] = "AutoTextes pour raccourci " ;
         Text [ swedish ] = "AutoText till genvägen " ;
