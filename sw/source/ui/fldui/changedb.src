@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:54:07 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ ModalDialog DLG_CHANGE_DB
     Text [ dutch ] = "Database wisselen" ;
     Text [ swedish ] = "Byt databas" ;
     Text [ danish ] = "Udskift database" ;
-    Text [ portuguese_brazilian ] = "Trocar Banco de Dados" ;
+    Text [ portuguese_brazilian ] = "Trocar de banco de dados" ;
     Text [ portuguese ] = "Substituir base de dados" ;
     Moveable = TRUE ;
     FixedLine FL_DBLIST
@@ -95,7 +95,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ french ] = "Changer de base de donnιes" ;
         Text [ swedish ] = "Byt databas" ;
         Text [ danish ] = "Udskift database" ;
-        Text [ portuguese_brazilian ] = "Trocar banco de dados" ;
+        Text [ portuguese_brazilian ] = "Trocar de banco de dados" ;
         Text [ portuguese ] = "Substituir base de dados" ;
         Text[ chinese_simplified ] = "ζ›΄ζΆζ•°ζ®εΊ“";
         Text[ russian ] = "Θρςξχνθκθ δΰννϋυ";
@@ -230,7 +230,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ arabic ] = "έν γΡΘΪ ΗαΝζΗΡ εΠΗ΅ νγίδί ΗΣΚΘΟΗα ήζΗΪΟ ΗαΘνΗδΗΚ΅ ΗαΚν ΚΥα ΕανεΗ έν γΣΚδΟί ΘζΗΣΨΙ Νήζα ήζΗΪΟ ΗαΘνΗδΗΚ΅ ΘΓΞΡμ. αΗΝΩ Γδε νγίδί Ϊγα ΚΫννΡ ζΗΝΟ";
         Text[ dutch ] = "In dit dialoogvenster kunt u een database waarop de databasevelden in uw document betrekking hebben, vervangen door een andere database. U kunt slechts ιιn wijziging tegelijk aanbrengen. In de linkerlijst is ook een meervoudige keuze mogelijk.";
         Text[ chinese_simplified ] = "ε¨θΏ™δΈªε―Ήθ―ζ΅†ε†…ζ‚¨θƒ½ε¤δ½Ώη”¨ε¦δΈ€δΈªζ•°ζ®εΊ“ζ¥δ»£ζ›Ώε½“ε‰ηΌ–θΎ‘η„ζ–‡ζ΅£θ―»ε–η„ζ•°ζ®εΊ“γ€‚ζ―ζ¬΅ηΌ–θΎ‘ζ–‡ζ΅£ζ—¶εªθƒ½δΈ€ζ¬΅ζ›ΏζΆζ•°ζ®εΊ“γ€‚ε¨ε·¦ζ–Ήη„ε—ε•ε†…ε―δ»¥ζ‰§θ΅ε¤ι‡ι€‰ζ‹©η„εθƒ½γ€‚";
-        Text[ greek ] = "Σε αυτόν τον διάλογο μπορείτε να αλλάξετε τις βάσεις δεδομένων, τις οποίες χρησιμοποιείτε στο έγγραφό σας μέσω των πεδίων βάσεων δεδομένων. Επιτρέπεται μόνο μια αλλαγή κάθε φορά. Στο αριστερό τμήμα μπορούν να γίνουν πολλαλές επιλογές.";
+        Text[ greek ] = "Σε αυτόν τον διάλογο μπορείτε να αλλάξετε τις βάσεις δεδομένων, τις οποίες χρησιμοποιείτε στο έγγραφό σας μέσω των πεδίων βάσεων δεδομένων. Επιτρέπεται μόνο μια αλλαγή κάθε φορά. Στο αριστερό τμήμα μπορούν να γίνουν πολλαπλές επιλογές.";
         Text[ korean ] = "μ΄ λ€ν™” μƒμμ—μ„λ” λ¬Έμ„μ—μ„ λ°μ΄ν„°λ² μ΄μ¤ ν•„λ“λ¥Ό ν†µν•΄ λ°μ΄ν„°λ² μ΄μ¤λ¥Ό μ•΅μ„Έμ¤ν•κ±°λ‚ λ°”κΎΈλ” λ°μ΄ν„°λ² μ΄μ¤ ν•„λ“λ¥Ό μ‚¬μ©ν•  μ μμµλ‹λ‹¤.ν•λ‚μ μ‘μ—… κ³Όμ •μ—μ„ λ³€κ²½ μ‘μ—…μ΄ ν• λ² μν–‰λ©λ‹λ‹¤. μ™Όμª½μ λª©λ΅μ—μ„λ” μ—¬λ¬ ν•­λª©μ„ μ„ νƒν•  μ μμµλ‹λ‹¤.";
         Text[ turkish ] = "Dokόmanύnύzdaki veritabanύ alanlarύ ile eriώtiπiniz veritabanύnύ, diπer veritab anlarύ ile deπiώtirmek iηin bu diyalog kutusunu kullan. Bir seferde bir deπiώiklik yapabilirsiniz. Ηoklu seηim listenin solunda olasύdύr.";
         Text[ language_user1 ] = " ";
@@ -454,6 +454,7 @@ ModalDialog DLG_CHANGE_DB
     Text[ hindi ] = "ΰ¤²ΰ¥‡ΰ¤–ΰ¤Ύΰ¤Έΰ¤‚ΰ¤ΰ¤―ΰ¥‹ΰ¤‚ ΰ¤•ΰ¥‹ ΰ¤…ΰ¤¦ΰ¤²ΰ¤Ύ-ΰ¤¬ΰ¤¦ΰ¤²ΰ¤Ύ ΰ¤•ΰ¤°ΰ¥‹";
     Text[ slovak ] = "VymeniΕ¥ databΓ΅zy";
 };
+
 
 
 
