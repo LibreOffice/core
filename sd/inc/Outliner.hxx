@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:45:03 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ private:
 
     /** Switch on edit mode for the currently selected text object.
     */
-    void EnterEditMode (void);
+    void EnterEditMode (BOOL bGrabFocus=TRUE);
 
     /** Return the position at which a new search is started with respect to
         the search direction as specified by the argument.
