@@ -59,32 +59,36 @@ sal_Bool test5();
 sal_Bool test6();
 sal_Bool test7();
 sal_Bool test8();
+sal_Bool test9();
 void SAL_CALL listenerCallback( void* id);
 
 void main(int argc, char* argv[])
 {
 
-    sal_Bool ret1= test1();
-    if( ret1) printf( "\n Test 1 successful \n");
-    else printf("\n !!!!!! Test 1 failed\n");
-    sal_Bool ret2= test2();
-    if( ret2) printf( "\n Test 2 successful \n");
-    else printf("\n !!!!!! Test 2 failed\n");
-    sal_Bool ret3= test3();
-    if( ret3) printf( "\n Test 3 successful \n");
-    else printf("\n !!!!!! Test 3 failed\n");
-    sal_Bool ret4= test4();
-    if( ret4) printf( "\n Test 4 successful \n");
-    else printf("\n !!!!!! Test 4 failed\n");
-    sal_Bool ret5= test5();
-    if( ret5) printf( "\n Test 5 successful \n");
-    else printf("\n !!!!!! Test 5 failed\n");
-// takes some time (10s)
-    sal_Bool ret6= test6();
-    sal_Bool ret7= test7(); // prints message itself
-    sal_Bool ret8= test8();
-    if( ret8) printf( "\n Test 8 successful \n");
-    else printf("\n !!!!!! Test 8 failed\n");
+//  sal_Bool ret1= test1();
+//  if( ret1) printf( "\n Test 1 successful \n");
+//  else printf("\n !!!!!! Test 1 failed\n");
+//  sal_Bool ret2= test2();
+//  if( ret2) printf( "\n Test 2 successful \n");
+//  else printf("\n !!!!!! Test 2 failed\n");
+//  sal_Bool ret3= test3();
+//  if( ret3) printf( "\n Test 3 successful \n");
+//  else printf("\n !!!!!! Test 3 failed\n");
+//  sal_Bool ret4= test4();
+//  if( ret4) printf( "\n Test 4 successful \n");
+//  else printf("\n !!!!!! Test 4 failed\n");
+//  sal_Bool ret5= test5();
+//  if( ret5) printf( "\n Test 5 successful \n");
+//  else printf("\n !!!!!! Test 5 failed\n");
+//  // takes some time (10s)
+//  sal_Bool ret6= test6();
+//  sal_Bool ret7= test7(); // prints message itself
+//  sal_Bool ret8= test8();
+//  if( ret8) printf( "\n Test 8 successful \n");
+//  else printf("\n !!!!!! Test 8 failed\n");
+    sal_Bool ret9= test9();
+    if( ret9) printf( "\n Test 9 successful: service manager is unloading listener\n");
+    else printf("\n !!!!! Test 9 failed\n");
 }
 
 /* Create an instance of SERVICENAME1, call a function and unload module.
@@ -523,4 +527,41 @@ sal_Bool test8()
 void SAL_CALL listenerCallback( void* id)
 {
     printf(" listener called with id= %i\n", *(sal_Int32*)id);
+}
+
+/*
+
+  */
+sal_Bool test9()
+{
+    printf("Test 9 ####################################################\n");
+    oslModule handleMod=0;
+    sal_Bool retval=sal_False;
+    OUString lib1Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
+
+    Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
+         OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
+
+    Reference<XInterface> xint= serviceManager->createInstance( OUString(
+                RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
+    // Release the service. The library refcount should be 1
+    xint=0;
+
+    handleMod=  osl_loadModule( lib1Name.pData, 0);
+    osl_unloadModule( handleMod);
+    //-----------------------------------------------------------
+
+    // the service manager is still alive
+    rtl_unloadUnusedModules( NULL);
+    // Try to get a symbol, must fail
+    OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    void* pSymbol= osl_getSymbol(  handleMod, sSymbol.pData);
+
+    if( pSymbol)
+    {
+        retval= sal_False;
+    }
+    else
+        retval= sal_True;
+    return retval;
 }
