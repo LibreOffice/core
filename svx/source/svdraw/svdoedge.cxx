@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:56:59 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,18 +321,19 @@ sdr::properties::BaseProperties* SdrEdgeObj::CreateObjectSpecificProperties()
 
 TYPEINIT1(SdrEdgeObj,SdrTextObj);
 
-SdrEdgeObj::SdrEdgeObj():
-    SdrTextObj()
+SdrEdgeObj::SdrEdgeObj()
+:   SdrTextObj(),
+    bEdgeTrackDirty(sal_False),
+    nNotifyingCount(0),
+    // #109007# Default is to allow default connects
+    mbSuppressDefaultConnect(sal_False),
+    // #110649#
+    mbBoundRectCalculationRunning(sal_False)
 {
     bClosedObj=FALSE;
     bIsEdge=TRUE;
-    bEdgeTrackDirty=FALSE;
-    nNotifyingCount=0;
     pEdgeTrack=new XPolygon;
 
-    // #109007#
-    // Default is to allow default connects
-    mbSuppressDefaultConnect = (FASTBOOL)sal_False;
 }
 
 SdrEdgeObj::~SdrEdgeObj()
@@ -530,17 +531,21 @@ UINT16 SdrEdgeObj::GetObjIdentifier() const
 
 const Rectangle& SdrEdgeObj::GetCurrentBoundRect() const
 {
-    if (bEdgeTrackDirty) {
+    if(bEdgeTrackDirty)
+    {
         ((SdrEdgeObj*)this)->ImpRecalcEdgeTrack();
     }
+
     return SdrTextObj::GetCurrentBoundRect();
 }
 
 const Rectangle& SdrEdgeObj::GetSnapRect() const
 {
-    if (bEdgeTrackDirty) {
+    if(bEdgeTrackDirty)
+    {
         ((SdrEdgeObj*)this)->ImpRecalcEdgeTrack();
     }
+
     return SdrTextObj::GetSnapRect();
 }
 
@@ -690,8 +695,9 @@ SdrGluePoint SdrEdgeObj::GetVertexGluePoint(USHORT nNum) const
 {
     Point aPt;
     USHORT nPntAnz=pEdgeTrack->GetPointCount();
-    if (nPntAnz>0) {
-        Point aOfs(GetSnapRect().Center());
+    if (nPntAnz>0)
+    {
+        Point aOfs = GetSnapRect().Center();
         if (nNum==2 && GetConnectedNode(TRUE)==NULL) aPt=(*pEdgeTrack)[0];
         else if (nNum==3 && GetConnectedNode(FALSE)==NULL) aPt=(*pEdgeTrack)[nPntAnz-1];
         else {
@@ -811,18 +817,36 @@ void SdrEdgeObj::ImpUndirtyEdgeTrack()
 
 void SdrEdgeObj::ImpRecalcEdgeTrack()
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    SetRectsDirty();
-    // #110094#-14 if (!bEdgeTrackDirty) SendRepaintBroadcast();
-    *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
-    ImpSetEdgeInfoToAttr(); // Die Werte aus aEdgeInfo in den Pool kopieren
-    bEdgeTrackDirty=FALSE;
+    // #110649#
+    if(IsBoundRectCalculationRunning())
+    {
+        // this object is involved into another ImpRecalcEdgeTrack() call
+        // from another SdrEdgeObj. Do not calculate again to avoid loop.
+        // Also, do not change bEdgeTrackDirty so that it gets recalculated
+        // later at the first non-looping call.
+    }
+    else
+    {
+        // To not run in a depth loop, use a coloring algorythm on
+        // SdrEdgeObj BoundRect calculations
+        ((SdrEdgeObj*)this)->mbBoundRectCalculationRunning = sal_True;
 
-    // Only redraw here, no object change
-    ActionChanged();
-    // BroadcastObjectChange();
+        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        SetRectsDirty();
+        // #110094#-14 if (!bEdgeTrackDirty) SendRepaintBroadcast();
+        *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
+        ImpSetEdgeInfoToAttr(); // Die Werte aus aEdgeInfo in den Pool kopieren
+        bEdgeTrackDirty=FALSE;
 
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        // Only redraw here, no object change
+        ActionChanged();
+        // BroadcastObjectChange();
+
+        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+
+        // #110649#
+        ((SdrEdgeObj*)this)->mbBoundRectCalculationRunning = sal_False;
+    }
 }
 
 USHORT SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt) const
@@ -959,10 +983,14 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     const SfxItemSet& rSet = GetObjectItemSet();
 
     if (bCon1) {
-        if (rCon1.pObj==(SdrObject*)this) { // sicherheitshalber Abfragen #44515#
+        if (rCon1.pObj==(SdrObject*)this)
+        {
+            // sicherheitshalber Abfragen #44515#
             aBoundRect1=aOutRect;
-        } else {
-            aBoundRect1=rCon1.pObj->GetCurrentBoundRect();
+        }
+        else
+        {
+            aBoundRect1 = rCon1.pObj->GetCurrentBoundRect();
         }
         aBoundRect1.Move(rCon1.aObjOfs.X(),rCon1.aObjOfs.Y());
         aBewareRect1=aBoundRect1;
@@ -982,8 +1010,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     if (bCon2) {
         if (rCon2.pObj==(SdrObject*)this) { // sicherheitshalber Abfragen #44515#
             aBoundRect2=aOutRect;
-        } else {
-            aBoundRect2=rCon2.pObj->GetCurrentBoundRect();
+        }
+        else
+        {
+            aBoundRect2 = rCon2.pObj->GetCurrentBoundRect();
         }
         aBoundRect2.Move(rCon2.aObjOfs.X(),rCon2.aObjOfs.Y());
         aBewareRect2=aBoundRect2;
