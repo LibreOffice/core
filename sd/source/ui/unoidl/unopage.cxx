@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-12 16:25:40 $
+ *  last change: $Author: cl $ $Date: 2001-10-17 08:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1131,6 +1131,34 @@ void SdGenericDrawPage::SetLwrBorder( sal_Int32 nValue )
     }
 }
 
+static void refreshpage( SdDrawDocument* pDoc, const PageKind ePageKind )
+{
+    SdDrawDocShell* pDocShell = pDoc->GetDocSh();
+    if ( pDocShell )
+    {
+        SdViewShell* pViewSh = pDocShell->GetViewShell();
+
+        if( pViewSh )
+        {
+            if( pViewSh->ISA( SdDrawViewShell ) )
+                ((SdDrawViewShell*) pViewSh)->ResetActualPage();
+
+            Size aPageSize = pDoc->GetSdPage(0, ePageKind)->GetSize();
+            const long nWidth = aPageSize.Width();
+            const long nHeight = aPageSize.Height();
+
+            Point aPageOrg = Point(nWidth, nHeight / 2);
+            Size aViewSize = Size(nWidth * 3, nHeight * 2);
+
+            pDoc->SetMaxObjSize(aViewSize);
+
+            pViewSh->InitWindows(aPageOrg, aViewSize, Point(-1, -1), TRUE);
+
+            pViewSh->UpdateScrollBars();
+        }
+    }
+}
+
 void SdGenericDrawPage::SetWidth( sal_Int32 nWidth )
 {
     Size aSize( GetPage()->GetSize() );
@@ -1155,6 +1183,8 @@ void SdGenericDrawPage::SetWidth( sal_Int32 nWidth )
             SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
             pPage->SetSize(aSize);
         }
+
+        refreshpage( pDoc, ePageKind );
     }
 }
 
@@ -1182,6 +1212,8 @@ void SdGenericDrawPage::SetHeight( sal_Int32 nHeight )
             SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
             pPage->SetSize(aSize);
         }
+
+        refreshpage( pDoc, ePageKind );
     }
 }
 
