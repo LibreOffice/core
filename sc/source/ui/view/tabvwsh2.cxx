@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-22 09:59:27 $
+ *  last change: $Author: nn $ $Date: 2002-03-26 17:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include "global.hxx"
 #include "sc.hrc"
 #include "scmod.hxx"
+#include "appoptio.hxx"
 
 // #98185# Create default drawing objects via keyboard
 #ifndef _SVDPAGV_HXX
@@ -204,9 +205,11 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     BOOL bSelectFirst = ( nNewId == SID_OBJECT_SELECT && (rReq.GetModifier() & KEY_MOD1) );
 
     BOOL bEx = IsDrawSelMode();
-    if ( bSelectFirst )
+    if ( rReq.GetModifier() & KEY_MOD1 )
     {
         //  #97016# always allow keyboard selection also on background layer
+        //  #98185# also allow creation of default objects if the same object type
+        //  was already active
         bEx = TRUE;
     }
     else if ( nNewId == nDrawSfxId && ( nNewId != SID_FM_CREATE_CONTROL ||
@@ -356,18 +359,10 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     if(pFuActual && (rReq.GetModifier() & KEY_MOD1))
     {
-        // get ScAppOptions
-
         // #98185# Create default drawing objects via keyboard
-        // Here the width and height needs to be read from the settings.
-        // This needs to be done by the calc.
-
-        // SdOptions* pOptions = SD_MOD()->GetSdOptions(pDoc->GetDocumentType());
-        // sal_uInt32 nDefaultObjectSizeWidth(pOptions->GetDefaultObjectSizeWidth());
-        // sal_uInt32 nDefaultObjectSizeHeight(pOptions->GetDefaultObjectSizeHeight());
-
-        sal_uInt32 nDefaultObjectSizeWidth(8000);
-        sal_uInt32 nDefaultObjectSizeHeight(6000);
+        const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
+        sal_uInt32 nDefaultObjectSizeWidth = rAppOpt.GetDefaultObjectSizeWidth();
+        sal_uInt32 nDefaultObjectSizeHeight = rAppOpt.GetDefaultObjectSizeHeight();
 
         // calc position and size
         Rectangle aVisArea = pWin->PixelToLogic(Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
