@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.66 $
+#   $Revision: 1.67 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-03 12:48:31 $
+#   last change: $Author: hjs $ $Date: 2002-04-03 17:10:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -345,7 +345,11 @@ $(SHL$(TNR)TARGETN) : \
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)"!=""
 .IF "$(SHL$(TNR)ALLRES)"!=""
+.IF "$(USE_SHELL)"=="4nt"
     +$(COPY) /b $(SHL$(TNR)ALLRES:s/res /res+/) $(SHL$(TNR)LINKRES)
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(SHL$(TNR)ALLRES) > $(SHL$(TNR)LINKRES)
+.ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
