@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optmemory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:02:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,9 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ofapch.hxx"
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
 #endif
-
-#pragma hdrstop
 
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
