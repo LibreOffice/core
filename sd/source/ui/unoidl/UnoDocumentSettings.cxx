@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:33:16 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 09:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,9 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT,
     HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT, HANDLE_UPDATEFROMTEMPLATE,
     HANDLE_PRINTER_INDEPENDENT_LAYOUT
+    // --> PB 2004-08-23 #i33095#
+    ,HANDLE_LOAD_READONLY
+    // <--
 };
 
 #define MID_PRINTER 1
@@ -296,6 +299,9 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("IsKernAsianPunctuation"),HANDLE_ASIANPUNCT,          &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("UpdateFromTemplate"),    HANDLE_UPDATEFROMTEMPLATE,  &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("PrinterIndependentLayout"),HANDLE_PRINTER_INDEPENDENT_LAYOUT,&::getCppuType((const sal_Int16*)0), 0,  0 },
+            // --> PB 2004-08-23 #i33095#
+            { MAP_LEN("LoadReadonly"),          HANDLE_LOAD_READONLY,       &::getBooleanCppuType(),                0,  0 },
+            // <--
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
@@ -841,6 +847,22 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             }
             break;
 
+            // --> PB 2004-08-23 #i33095#
+            case HANDLE_LOAD_READONLY:
+            {
+                SfxDocumentInfo& rDocInfo = pDocSh->GetDocInfo();
+                sal_Bool bOldValue = rDocInfo.IsLoadReadonly();
+                sal_Bool bNewValue;
+                if ( *pValues >>= bNewValue )
+                {
+                    rDocInfo.SetLoadReadonly( bNewValue );
+                    bChanged = ( bOldValue != bNewValue );
+                    bOk = sal_True;
+                }
+            }
+            break;
+            // <--
+
             default:
                 throw UnknownPropertyException();
 
@@ -1095,6 +1117,15 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                 *pValue <<= nPrinterIndependentLayout;
             }
             break;
+
+            // --> PB 2004-08-23 #i33095#
+            case HANDLE_LOAD_READONLY:
+            {
+                sal_Bool bLoadReadonly = pDocSh->GetDocInfo().IsLoadReadonly();
+                *pValue <<= bLoadReadonly;
+            }
+            break;
+            // <--
 
             default:
                 throw UnknownPropertyException();
