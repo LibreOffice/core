@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-21 12:47:30 $
+ *  last change: $Author: mt $ $Date: 2001-06-22 10:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,13 +556,13 @@ void EditEngine::TransliterateText( const ESelection& rSelection, sal_Int32 nTra
     pImpEditEngine->TransliterateText( pImpEditEngine->CreateSel( rSelection ), nTransliterationMode );
 }
 
-void EditEngine::SetAsianCompressionMode( EEAsianCompression e )
+void EditEngine::SetAsianCompressionMode( USHORT n )
 {
     DBG_CHKTHIS( EditView, 0 );
-    pImpEditEngine->SetAsianCompressionMode( e );
+    pImpEditEngine->SetAsianCompressionMode( n );
 }
 
-EEAsianCompression EditEngine::GetAsianCompressionMode() const
+USHORT EditEngine::GetAsianCompressionMode() const
 {
     DBG_CHKTHIS( EditView, 0 );
     return pImpEditEngine->GetAsianCompressionMode();

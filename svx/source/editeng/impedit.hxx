@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-21 12:47:30 $
+ *  last change: $Author: mt $ $Date: 2001-06-22 10:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,11 @@ DBG_NAMEEX( EditEngine );
 #define DEL_RIGHT   2
 #define TRAVEL_X_DONTKNOW   0xFFFFFFFF
 #define MAXCHARSINPARA      0x3FFF-CHARPOSGROW  // Max 16K, because WYSIWYG array
+
+// Remove when defined in OFFAPI
+#define EE_ASIANCOMPRESSION_NONE                0
+#define EE_ASIANCOMPRESSION_PUNCTUATION         1
+#define EE_ASIANCOMPRESSION_PUNCTIONANDKANA     2
 
 #define ATTRSPECIAL_WHOLEWORD   1
 #define ATTRSPECIAL_EDGE        2
@@ -444,7 +449,7 @@ private:
     sal_uInt16          nStretchX;
     sal_uInt16          nStretchY;
 
-    EEAsianCompression  eAsianCompressionMode;
+    USHORT              nAsianCompressionMode;
 
     sal_uInt16          nBigTextObjectStart;
     ::com::sun::star::uno::Reference<
@@ -866,8 +871,8 @@ public:
 
     void                TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
 
-    void                SetAsianCompressionMode( EEAsianCompression e );
-    EEAsianCompression  GetAsianCompressionMode() const { return eAsianCompressionMode; }
+    void                SetAsianCompressionMode( USHORT n );
+    USHORT              GetAsianCompressionMode() const { return nAsianCompressionMode; }
 
     vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable( BOOL bGetInternal = TRUE ) const;
     void                SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
