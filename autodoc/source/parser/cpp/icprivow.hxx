@@ -2,9 +2,9 @@
  *
  *  $RCSfile: icprivow.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:30 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,11 @@ class Owner_Namespace : public ary::cpp::InputContext::Owner
     void                SetAnotherNamespace(
                             ary::cpp::Namespace &
                                                 io_rScope );
+    virtual bool        HasClass(
+                                const udmstri &     i_sLocalName );
+    virtual bool        HasOperation(
+                                const udmstri &     i_sLocalName,
+                                OSid                i_nSignature );
 
   private:
     virtual void        do_Add_Class(
@@ -119,6 +124,18 @@ class Owner_Class : public ary::cpp::InputContext::Owner
                         Owner_Class();
     void                SetAnotherClass(
                             ary::cpp::Class &   io_rScope );
+
+    /** @attention Only a dummy for use at ary::cpp::Gate!
+        Will work nerver!
+    */
+    virtual bool        HasClass(
+                                const udmstri &     i_sLocalName );
+    /** @attention Only a dummy for use at ary::cpp::Gate!
+        Will work nerver!
+    */
+    virtual bool        HasOperation(
+                                const udmstri &     i_sLocalName,
+                                OSid                i_nSignature );
   private:
     virtual void        do_Add_Class(
                             const udmstri &     i_sLocalName,

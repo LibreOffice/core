@@ -2,9 +2,9 @@
  *
  *  $RCSfile: icprivow.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:29 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,19 @@ Owner_Namespace::SetAnotherNamespace( ary::cpp::Namespace & io_rScope )
     pScope = &io_rScope;
 }
 
+bool
+Owner_Namespace::HasClass( const udmstri & i_sLocalName )
+{
+    return pScope->Search_LocalClass(i_sLocalName) != 0;
+}
+
+bool
+Owner_Namespace::HasOperation( const udmstri &     i_sLocalName,
+                               OSid                i_nSignature )
+{
+    return pScope->Search_LocalOperation(i_sLocalName, i_nSignature) != 0;
+}
+
 void
 Owner_Namespace::do_Add_Class( const udmstri &     i_sLocalName,
                                Cid                 i_nId )
@@ -155,6 +168,20 @@ Owner_Class::SetAnotherClass( ary::cpp::Class & io_rScope )
 {
     pScope = &io_rScope;
 }
+
+bool
+Owner_Class::HasClass( const udmstri & i_sLocalName )
+{
+    return false;
+}
+
+bool
+Owner_Class::HasOperation( const udmstri &     i_sLocalName,
+                               OSid                i_nSignature )
+{
+    return false;
+}
+
 
 void
 Owner_Class::do_Add_Class( const udmstri &     i_sLocalName,
