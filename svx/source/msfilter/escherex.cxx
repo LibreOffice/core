@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-20 14:58:40 $
+ *  last change: $Author: sj $ $Date: 2000-12-21 17:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,20 @@
 #ifndef _COM_SUN_STAR_DRAWING_LINEDASH_HPP_
 #include <com/sun/star/drawing/LineDash.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_BEZIERPOINT_HPP_
+#include <com/sun/star/drawing/BezierPoint.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONBEZIERCOORDS_HPP_
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCE_HPP_
 #include <com/sun/star/drawing/PointSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FLAGSEQUENCE_HPP_
+#include <com/sun/star/drawing/FlagSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_POLYGONFLAGS_HPP_
+#include <com/sun/star/drawing/PolygonFlags.hpp>
 #endif
 #ifndef _SV_HATCH_HXX_
 #include <vcl/hatch.hxx>
@@ -844,6 +856,244 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
     return bRetValue;
 }
 
+sal_Bool EscherPropertyContainer::CreatePolygonProperties(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+        sal_uInt32 nFlags,
+            sal_Bool bBezier,
+                ::com::sun::star::awt::Rectangle& rGeoRect,
+                    Polygon* pPolygon )
+{
+    static String sPolyPolygonBezier( RTL_CONSTASCII_USTRINGPARAM( "PolyPolygonBezier" ) );
+    static String sPolyPolygon      ( RTL_CONSTASCII_USTRINGPARAM( "PolyPolygon" ) );
+
+    sal_Bool    bRetValue = sal_True;
+    sal_Bool    bNoLine = ( nFlags & ESCHER_CREATEPOLYGON_LINE ) == 0;
+
+    PolyPolygon aPolyPolygon;
+    Polygon     aPolygon;
+
+    if ( pPolygon )
+        aPolyPolygon.Insert( *pPolygon, POLYPOLY_APPEND );
+    else
+    {
+        ::com::sun::star::uno::Any aAny;
+        if ( bBezier )
+        {
+            bRetValue = EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, sPolyPolygonBezier, sal_True );
+            if ( bRetValue )
+            {
+                ::com::sun::star::drawing::PolyPolygonBezierCoords* pSourcePolyPolygon
+                    = (::com::sun::star::drawing::PolyPolygonBezierCoords*)aAny.getValue();
+                sal_uInt16 nOuterSequenceCount = (sal_uInt16)pSourcePolyPolygon->Coordinates.getLength();
+
+                // Zeiger auf innere sequences holen
+                ::com::sun::star::drawing::PointSequence* pOuterSequence = pSourcePolyPolygon->Coordinates.getArray();
+                ::com::sun::star::drawing::FlagSequence*  pOuterFlags = pSourcePolyPolygon->Flags.getArray();
+
+                bRetValue = pOuterSequence && pOuterFlags;
+                if ( bRetValue )
+                {
+                    sal_uInt16  a, b, nInnerSequenceCount;
+                    ::com::sun::star::awt::Point* pArray;
+
+                    // dies wird ein Polygon set
+                    for ( a = 0; a < nOuterSequenceCount; a++ )
+                    {
+                        ::com::sun::star::drawing::PointSequence* pInnerSequence = pOuterSequence++;
+                        ::com::sun::star::drawing::FlagSequence*  pInnerFlags = pOuterFlags++;
+
+                        bRetValue = pInnerSequence && pInnerFlags;
+                        if  ( bRetValue )
+                        {
+                            // Zeiger auf Arrays holen
+                            pArray = pInnerSequence->getArray();
+                            ::com::sun::star::drawing::PolygonFlags* pFlags = pInnerFlags->getArray();
+
+                            if ( pArray && pFlags )
+                            {
+                                nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
+                                aPolygon = Polygon( nInnerSequenceCount );
+                                for( b = 0; b < nInnerSequenceCount; b++)
+                                {
+                                    PolyFlags   ePolyFlags( *( (PolyFlags*)pFlags++ ) );
+                                    ::com::sun::star::awt::Point aPoint( (::com::sun::star::awt::Point)*(pArray++) );
+                                    aPolygon[ b ] = Point( aPoint.X, aPoint.Y );
+                                    aPolygon.SetFlags( b, ePolyFlags );
+
+                                    if ( ePolyFlags == POLY_CONTROL )
+                                        continue;
+                                }
+                                aPolyPolygon.Insert( aPolygon, POLYPOLY_APPEND );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            bRetValue = EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, sPolyPolygon, sal_True );
+            if ( bRetValue )
+            {
+                ::com::sun::star::drawing::PointSequenceSequence* pSourcePolyPolygon
+                    = (::com::sun::star::drawing::PointSequenceSequence*)aAny.getValue();
+                sal_uInt16 nOuterSequenceCount = (sal_uInt16)pSourcePolyPolygon->getLength();
+
+                // Zeiger auf innere sequences holen
+                ::com::sun::star::drawing::PointSequence* pOuterSequence = pSourcePolyPolygon->getArray();
+                bRetValue = pOuterSequence != NULL;
+                if ( bRetValue )
+                {
+                    // ist dies ein Polygon oder gar ein PolyPolygon ?
+                    // sogar eine einfache Line wird als Polygon verpackt !!! ????
+
+                    if ( !bNoLine )
+                    {
+                        ::com::sun::star::drawing::PointSequence* pInnerSequence = pOuterSequence++;
+                        bRetValue = pInnerSequence != NULL;
+                        if ( bRetValue )
+                        {
+                            ::com::sun::star::awt::Point* pArray = pInnerSequence->getArray();
+                            if ( pArray )
+                            {
+                                ::com::sun::star::awt::Point aTopLeft( pArray[ 0 ] );
+                                ::com::sun::star::awt::Point aBottomRight( pArray[ 1 ] );
+                                rGeoRect = ::com::sun::star::awt::Rectangle(
+                                                aTopLeft.X, aTopLeft.Y, aBottomRight.X - aTopLeft.X, aBottomRight.Y - aTopLeft.Y );
+                            }
+                        }
+                    }
+                    sal_uInt16 a, b, nInnerSequenceCount;
+                    ::com::sun::star::awt::Point* pArray;
+
+                    // dies wird ein Polygon set
+                    for( a = 0; a < nOuterSequenceCount; a++ )
+                    {
+                        ::com::sun::star::drawing::PointSequence* pInnerSequence = pOuterSequence++;
+                        bRetValue = pInnerSequence != NULL;
+                        if ( bRetValue )
+                        {
+                            // Zeiger auf Arrays holen
+                            if ( pArray = pInnerSequence->getArray() )
+                            {
+                                nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
+                                aPolygon = Polygon( nInnerSequenceCount );
+                                for( b = 0; b < nInnerSequenceCount; b++)
+                                {
+                                    aPolygon[ b ] = Point( pArray->X, pArray->Y );
+                                    pArray++;
+                                }
+                                aPolyPolygon.Insert( aPolygon, POLYPOLY_APPEND );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if ( bRetValue && bNoLine )
+    {
+        sal_uInt16 i, j, k, nPoints, nBezPoints, nPolyCount = aPolyPolygon.Count();
+        Rectangle aRect( aPolyPolygon.GetBoundRect() );
+        rGeoRect = ::com::sun::star::awt::Rectangle( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight() );
+
+        for ( nBezPoints = nPoints = i = 0; i < nPolyCount; i++ )
+        {
+            k = aPolyPolygon[ i ].GetSize();
+            nPoints += k;
+            for ( j = 0; j < k; j++ )
+            {
+                if ( aPolyPolygon[ i ].GetFlags( j ) != POLY_CONTROL )
+                    nBezPoints++;
+            }
+        }
+        sal_uInt32 nVerticesBufSize = ( nPoints << 2 ) + 6;
+        sal_uInt8* pVerticesBuf = new sal_uInt8[ nVerticesBufSize ];
+
+
+        sal_uInt32 nSegmentBufSize = ( ( nBezPoints << 2 ) + 8 );
+        if ( nPolyCount > 1 )
+            nSegmentBufSize += ( nPolyCount << 1 );
+        sal_uInt8* pSegmentBuf = new sal_uInt8[ nSegmentBufSize ];
+
+        sal_uInt8* pPtr = pVerticesBuf;
+        *pPtr++ = (sal_uInt8)( nPoints );                    // Little endian
+        *pPtr++ = (sal_uInt8)( nPoints >> 8 );
+        *pPtr++ = (sal_uInt8)( nPoints );
+        *pPtr++ = (sal_uInt8)( nPoints >> 8 );
+        *pPtr++ = (sal_uInt8)0xf0;
+        *pPtr++ = (sal_uInt8)0xff;
+
+        for ( j = 0; j < nPolyCount; j++ )
+        {
+            aPolygon = aPolyPolygon[ j ];
+            nPoints = aPolygon.GetSize();
+            for ( i = 0; i < nPoints; i++ )             // Punkte aus Polygon in Buffer schreiben
+            {
+                Point aPoint = aPolygon[ i ];
+                aPoint.X() -= rGeoRect.X;
+                aPoint.Y() -= rGeoRect.Y;
+
+                *pPtr++ = (sal_uInt8)( aPoint.X() );
+                *pPtr++ = (sal_uInt8)( aPoint.X() >> 8 );
+                *pPtr++ = (sal_uInt8)( aPoint.Y() );
+                *pPtr++ = (sal_uInt8)( aPoint.Y() >> 8 );
+            }
+        }
+
+        pPtr = pSegmentBuf;
+        *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 1 );
+        *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 9 );
+        *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 1 );
+        *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 9 );
+        *pPtr++ = (sal_uInt8)2;
+        *pPtr++ = (sal_uInt8)0;
+
+        for ( j = 0; j < nPolyCount; j++ )
+        {
+            *pPtr++ = 0x0;          // Polygon start
+            *pPtr++ = 0x40;
+            aPolygon = aPolyPolygon[ j ];
+            nPoints = aPolygon.GetSize();
+            for ( i = 0; i < nPoints; i++ )         // Polyflags in Buffer schreiben
+            {
+                *pPtr++ = 0;
+                if ( bBezier )
+                    *pPtr++ = 0xb3;
+                else
+                    *pPtr++ = 0xac;
+                if ( ( i + 1 ) != nPoints )
+                {
+                    *pPtr++ = 1;
+                    if ( aPolygon.GetFlags( i + 1 ) == POLY_CONTROL )
+                    {
+                        *pPtr++ = 0x20;
+                        i += 2;
+                    }
+                    else
+                        *pPtr++ = 0;
+                }
+            }
+            if ( nPolyCount > 1 )
+            {
+                *pPtr++ = 1;                        // end of polygon
+                *pPtr++ = 0x60;
+            }
+        }
+        *pPtr++ = 0;
+        *pPtr++ = 0x80;
+
+        AddOpt( ESCHER_Prop_geoRight, rGeoRect.Width );
+        AddOpt( ESCHER_Prop_geoBottom, rGeoRect.Height );
+
+        AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
+        AddOpt( ESCHER_Prop_pVertices, TRUE, nVerticesBufSize - 6, (sal_uInt8*)pVerticesBuf, nVerticesBufSize );
+        AddOpt( ESCHER_Prop_pSegmentInfo, TRUE, nSegmentBufSize, (sal_uInt8*)pSegmentBuf, nSegmentBufSize );
+    }
+    return bRetValue;
+}
+
+
 sal_Bool EscherPropertyContainer::CreateShadowProperties(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet )
 {
@@ -1486,7 +1736,7 @@ void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
         {
             *mpOutStrm << mnCurrentShapeID << (UINT32)( mnFIDCLs + 1 ) << mnTotalShapesDgg << mnDrawings;
         }
-        if ( mnBlibEntrys )
+        if ( HasGraphics() )
         {
             if ( DoSeek( ESCHER_Persist_BlibStoreContainer ) )          // ESCHER_BlibStoreContainer schreiben
             {
