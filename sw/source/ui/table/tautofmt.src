@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 07:28:32 $
+ *  last change: $Author: vg $ $Date: 2001-05-17 08:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     Text [ ENGLISH ] = "Autoformat" ;
     Text [ norwegian ] = "Autoformat" ;
     Text [ italian ] = "Formattazione automatica" ;
-    Text [ portuguese_brazilian ] = "Formatação Automática" ;
+    Text [ portuguese_brazilian ] = "Formata??o Autom?tica" ;
     Text [ portuguese ] = "AutoFormato" ;
     Text [ finnish ] = "Automaattinen muotoilu" ;
     Text [ danish ] = "AutoFormat" ;
@@ -160,7 +160,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ ENGLISH ] = "~Numberformat" ;
         Text [ norwegian ] = "~Numberformat" ;
         Text [ italian ] = "Formato ~numero" ;
-        Text [ portuguese_brazilian ] = "~Formatodonúmero" ;
+        Text [ portuguese_brazilian ] = "~Formatodon?ero" ;
         Text [ portuguese ] = "~Formato numérico" ;
         Text [ finnish ] = "~Numeromuoto" ;
         Text [ danish ] = "Talformat" ;
@@ -284,7 +284,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ ENGLISH ] = "Orien~tation" ;
         Text [ norwegian ] = "Orien~tation" ;
         Text [ italian ] = "~Allineamento" ;
-        Text [ portuguese_brazilian ] = "Orien~tação" ;
+        Text [ portuguese_brazilian ] = "Orien~ta??o" ;
         Text [ portuguese ] = "~Alinhamento" ;
         Text [ finnish ] = "~Tasaus" ;
         Text [ danish ] = "Justering" ;
@@ -482,7 +482,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ ENGLISH ] = "Add Autoformat" ;
         Text [ norwegian ] = "Add Autoformat" ;
         Text [ italian ] = "Aggiungi formattazione automatica" ;
-        Text [ portuguese_brazilian ] = "Acrescentar Formato automático" ;
+        Text [ portuguese_brazilian ] = "Acrescentar Formato autom?tico" ;
         Text [ portuguese ] = "Adicionar AutoFormato" ;
         Text [ finnish ] = "Lisää automaattinen muotoilu" ;
         Text [ danish ] = "Tilføj AutoFormat" ;
@@ -536,7 +536,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ ENGLISH ] = "Delete Autoformat" ;
         Text [ norwegian ] = "Delete Autoformat" ;
         Text [ italian ] = "Cancella formattazione automatica" ;
-        Text [ portuguese_brazilian ] = "Apagar Formato Automático" ;
+        Text [ portuguese_brazilian ] = "Apagar Formato Autom?tico" ;
         Text [ portuguese ] = "Eliminar AutoFormato" ;
         Text [ finnish ] = "Poista automaattinen muotoilu" ;
         Text [ danish ] = "Slet AutoFormat" ;
@@ -563,7 +563,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ ENGLISH ] = "This autoformat will be deleted:" ;
         Text [ norwegian ] = "Dette Autoformat vil bli slettet:" ;
         Text [ italian ] = "Questa formattazione automatica verrà cancellata:" ;
-        Text [ portuguese_brazilian ] = "Esta formatação Automática ser  apagada:" ;
+        Text [ portuguese_brazilian ] = "Esta formata??o Autom?tica ser  apagada:" ;
         Text [ portuguese ] = "Será eliminado o seguinte AutoFormato:" ;
         Text [ finnish ] = "Seuraava automaattisen muotoilun merkintä poistetaan:" ;
         Text [ danish ] = "Følgende AutoFormat slettes:" ;
@@ -762,7 +762,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ english_us ] = "Mid" ;
         Text[ chinese_simplified ] = "ÖÐ";
         Text[ russian ] = "Ñåðåäèíà";
-        Text[ polish ] = "Poœrodku";
+        Text[ polish ] = "Po?rodku";
         Text[ japanese ] = "’†‰›";
         Text[ chinese_traditional ] = "¤¤";
         Text[ arabic ] = "ÇáæÓØ";
