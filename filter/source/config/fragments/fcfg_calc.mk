@@ -1,3 +1,5 @@
+all_fragments+=calc
+
 # -----------------------------------------------
 # count = 27
 T4_CALC = \
@@ -79,6 +81,6 @@ CONTENTHANDLERS_4fcfg_calc = $(foreach,i,$(C4_CALC) contenthandlers$/$i.xcu)
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_calc = \
     $(TYPES_4fcfg_calc) \
-    $(FILTERS_4fcfg_calc) \
+    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
     $(FRAMELOADERS_4fcfg_calc) \
     $(CONTENTHANDLERS_4fcfg_calc)
