@@ -1,0 +1,118 @@
+/*************************************************************************
+ *
+ *  $RCSfile: mailconfigpage.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:08:12 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _MAILCONFIGPAGE_HRC
+#define _MAILCONFIGPAGE_HRC
+
+#define FL_IDENTITY                 1
+#define FT_DISPLAYNAME              2
+#define ED_DISPLAYNAME              3
+#define FT_ADDRESS                  4
+#define ED_ADDRESS                  5
+#define CB_REPLYTO                  6
+#define FT_REPLYTO                  7
+#define ED_REPLYTO                  8
+#define FL_SMTP                     9
+#define FT_SERVER                   10
+#define ED_SERVER                   11
+#define FT_PORT                     12
+#define NF_PORT                     13
+#define FT_SECURE                   14
+#define LB_SECURE                   15
+#define PB_AUTHENTICATION           16
+#define FL_SEPARATOR                17
+#define PB_TEST                     21
+
+#define FI_INFO                     31
+#define LB_STATUS                   32
+#define FI_ERROR                    33
+#define ED_ERROR                    34
+#define FL_SEPAPARATOR              35
+#define PB_STOP                     36
+#define PB_CANCEL                   37
+#define PB_HELP                     38
+#define ST_TASK                     39
+#define ST_STATUS                   40
+#define ST_ESTABLISH                41
+#define ST_FINDSERVER               42
+#define ST_COMPLETED                43
+#define ST_FAILED                   44
+#define ST_ERROR_SERVER             46
+#define ILIST                       47
+#define ILIST_HC                    48
+
+#define CB_AUTHENTICATION           50
+#define RB_SEP_AUTHENTICATION       51
+#define RB_SMPTAFTERPOP             52
+#define FT_OUTGOINGSERVER           53
+#define FT_USERNAME                 54
+#define ED_USERNAME                 55
+#define FT_OUTPASSWORD              56
+#define ED_OUTPASSWORD              57
+#define FT_INCOMINGSERVER           58
+#define FT_INUSERNAME               59
+#define ED_INUSERNAME               60
+#define FT_INPASSWORD               63
+#define ED_INPASSWORD               64
+#define PB_OK                       65
+#define FT_PROTOCOL                 66
+#define RB_POP3                     67
+#define RB_IMAP                     68
+#endif
