@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelperfunctions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:33:28 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,18 +59,23 @@
  *
  ************************************************************************/
 
-#ifndef _FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_
-#define _FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_
+#ifndef __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_
+#define __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <drafts/com/sun/star/ui/XUIElement.hpp>
 #include <rtl/ustring.hxx>
-#include <vcl/window.hxx>
+#include <vcl/toolbox.hxx>
+#include <svtools/toolboxcontroller.hxx>
 
-typedef com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIElement > ( *pfunc_setToolBoxCreator)( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& rParent, const ::rtl::OUString& aURL );
+typedef svt::ToolboxController* ( *pfunc_setToolBoxControllerCreator)( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL );
 
-pfunc_setToolBoxCreator SAL_CALL SetToolBoxCreator( pfunc_setToolBoxCreator pSetToolBoxCreator );
+namespace framework
+{
 
-com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIElement > SAL_CALL CreateToolBox( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& rParent, const ::rtl::OUString& aURL );
+pfunc_setToolBoxControllerCreator SAL_CALL SetToolBoxControllerCreator( pfunc_setToolBoxControllerCreator pSetToolBoxControllerCreator );
 
-#endif // _FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_
+svt::ToolboxController* SAL_CALL CreateToolBoxController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL );
+
+}
+
+#endif // __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_
