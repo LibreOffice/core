@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:38:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1248,15 +1248,15 @@ void BreakPointWindow::setBackgroundColor(Color aColor)
 }
 
 
-const long ITEM_ID_VARIABLE = 1;
-const long ITEM_ID_VALUE = 2;
-const long ITEM_ID_TYPE = 3;
+const USHORT ITEM_ID_VARIABLE = 1;
+const USHORT ITEM_ID_VALUE = 2;
+const USHORT ITEM_ID_TYPE = 3;
 
 WatchWindow::WatchWindow( Window* pParent ) :
     BasicDockingWindow( pParent ),
     aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HASBUTTONS | WB_HASLINES | WB_HSCROLL | WB_TABSTOP
                                   | WB_HASLINESATROOT | WB_HASBUTTONSATROOT ),
-    aHeaderBar( this ),
+    aHeaderBar( this, WB_BUTTONSTYLE | WB_BORDER ),
     aXEdit( this, IDEResId( RID_EDT_WATCHEDIT ) ),
     aWatchStr( IDEResId( RID_STR_REMOVEWATCH ) ),
     aRemoveWatchButton( this, IDEResId( RID_IMGBTN_REMOVEWATCH ) )
@@ -1274,17 +1274,14 @@ WatchWindow::WatchWindow( Window* pParent ) :
     aHeaderBar.SetPosPixel( aPnt );
     aHeaderBar.SetEndDragHdl( LINK( this, WatchWindow, implEndDragHdl ) );
 
-    int nVarTabWidth = 220;
-    int nValueTabWidth = 100;
-    int nTypeTabWidth = 1250;
-    aHeaderBar.InsertItem( ITEM_ID_VARIABLE,
-        String( RTL_CONSTASCII_USTRINGPARAM( "Variable" ) ), nVarTabWidth );
-    aHeaderBar.InsertItem( ITEM_ID_VALUE,
-        String( RTL_CONSTASCII_USTRINGPARAM( "Value" ) ), nValueTabWidth );
-    aHeaderBar.InsertItem( ITEM_ID_TYPE,
-        String( RTL_CONSTASCII_USTRINGPARAM( "Type" ) ), nTypeTabWidth );
+    long nVarTabWidth = 220;
+    long nValueTabWidth = 100;
+    long nTypeTabWidth = 1250;
+    aHeaderBar.InsertItem( ITEM_ID_VARIABLE, String( IDEResId( RID_STR_WATCHVARIABLE ) ), nVarTabWidth );
+    aHeaderBar.InsertItem( ITEM_ID_VALUE, String( IDEResId( RID_STR_WATCHVALUE ) ), nValueTabWidth );
+    aHeaderBar.InsertItem( ITEM_ID_TYPE, String( IDEResId( RID_STR_WATCHTYPE ) ), nTypeTabWidth );
 
-    sal_Int32 tabs[ 4 ];
+    long tabs[ 4 ];
     tabs[ 0 ] = 3; // two tabs
     tabs[ 1 ] = 0;
     tabs[ 2 ] = nVarTabWidth;
