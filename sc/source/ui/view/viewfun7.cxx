@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:33:25 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <so3/ipobj.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
@@ -80,6 +79,11 @@
 #include <svx/xoutbmp.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
 
 #include "document.hxx"     // fuer MapMode Initialisierung in PasteDraw
 #include "viewfunc.hxx"
@@ -95,6 +99,8 @@ extern Point aDragStartDiff;
 // STATIC DATA -----------------------------------------------------------
 
 BOOL bPasteIsMove = FALSE;
+
+using namespace com::sun::star;
 
 //==================================================================
 
@@ -232,7 +238,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
         ULONG nOptions = 0;
         SfxInPlaceClient* pClient = GetViewData()->GetViewShell()->GetIPClient();
-        if ( pClient && pClient->IsInPlaceActive() )
+        if ( pClient && pClient->IsObjectInPlaceActive() )
             nOptions |= SDRINSERT_DONTMARK;
 
         // #89247# Set flag for ScDocument::UpdateChartListeners() which is
@@ -285,25 +291,36 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
 }
 
-BOOL ScViewFunc::PasteObject( const Point& rPos, SvInPlaceObject* pObj,
+BOOL ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::XEmbeddedObject >& xObj,
                                 const Size* pDescSize )
 {
     MakeDrawLayer();
-    if ( pObj )
+    if ( xObj.is() )
     {
-        SvEmbeddedInfoObject* pInfoObj = GetViewData()->GetViewShell()->
-                                            GetViewFrame()->GetObjectShell()->
-                                            InsertObject(pObj, String());
-        String aName = pInfoObj->GetObjName();
+        ::rtl::OUString aName;
+        //TODO/MBA: is that OK?
+        comphelper::EmbeddedObjectContainer& aCnt = GetViewData()->GetViewShell()->GetObjectShell()->GetEmbeddedObjectContainer();
+        if ( !aCnt.HasEmbeddedObject( xObj ) )
+            aCnt.InsertEmbeddedObject( xObj, aName );
+        else
+            aName = aCnt.GetEmbeddedObjectName( xObj );
 
-        MapMode aMap100( MAP_100TH_MM );
-        MapMode aMapObj( pObj->GetMapUnit() );
+        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+        MapUnit aMapObj = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+        MapUnit aMap100 = MAP_100TH_MM;
 
-        // use size from object descriptor if given
         if ( pDescSize && pDescSize->Width() && pDescSize->Height() )
-            pObj->SetVisAreaSize(OutputDevice::LogicToLogic( *pDescSize, aMap100, aMapObj ));
+        {
+            // use size from object descriptor if given
+            Size aSize = OutputDevice::LogicToLogic( *pDescSize, aMap100, aMapObj );
+            awt::Size aSz;
+            aSz.Width = aSize.Width();
+            aSz.Height = aSize.Height();
+            xObj->setVisualAreaSize( nAspect, aSz );
+        }
 
-        Size aSize = pObj->GetVisArea().GetSize();
+        awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+        Size aSize( aSz.Width, aSz.Height );
         aSize = OutputDevice::LogicToLogic( aSize, aMapObj, aMap100 );  // fuer SdrOle2Obj
 
         if( aSize.Height() == 0 || aSize.Width() == 0 )
@@ -312,8 +329,11 @@ BOOL ScViewFunc::PasteObject( const Point& rPos, SvInPlaceObject* pObj,
             aSize.Width() = 5000;
             aSize.Height() = 5000;
             aSize = OutputDevice::LogicToLogic( aSize, aMap100, aMapObj );
-            pObj->SetVisAreaSize(aSize);
+            aSz.Width = aSize.Width();
+            aSz.Height = aSize.Height();
+            xObj->setVisualAreaSize( nAspect, aSz );
         }
+
         // don't call AdjustInsertPos
         Point aInsPos = rPos;
         if ( GetViewData()->GetDocument()->IsNegativePage( GetViewData()->GetTabNo() ) )
@@ -321,7 +341,7 @@ BOOL ScViewFunc::PasteObject( const Point& rPos, SvInPlaceObject* pObj,
         Rectangle aRect( aInsPos, aSize );
 
         ScDrawView* pDrView = GetScDrawView();
-        SdrOle2Obj* pSdrObj = new SdrOle2Obj( pObj, aName, aRect );
+        SdrOle2Obj* pSdrObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect );
         SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
         pDrView->InsertObjectSafe( pSdrObj, *pPV );             // nicht markieren wenn Ole
         GetViewData()->GetViewShell()->SetDrawShell( TRUE );
