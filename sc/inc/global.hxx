@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:42:06 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:32:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,6 +918,7 @@ struct SC_DLLPUBLIC ScQueryParam
     BOOL            bInplace;
     BOOL            bCaseSens;
     BOOL            bRegExp;
+    BOOL            bMixedComparison;   // whether numbers are smaller than strings
     BOOL            bDuplicate;
     BOOL            bDestPers;          // nicht gespeichert
     SCTAB           nDestTab;
