@@ -1,12 +1,17 @@
 ### 114242 ### -o sc.ScPageObj
 ### 111147 ### -o sc.AccessibleEditableTextPara_PreviewNote
+-o sc.ScSpreadsheetSettings
+-o sc.ScTabViewObj
+-o sc.ScAccessibleCell
+-o sc.ScSpreadsheetSettingsObj
+-o sc.ScShapeObj
+-o sc.ScDocumentConfiguration
 -o sc.ScCellCursorObj
 -o sc.ScCellRangeObj
 -o sc.ScCellRangesObj
 -o sc.ScTableSheetObj
 -o sc.AccessibleEditableTextPara_HeaderFooter
 -o sc.AccessibleEditableTextPara_PreviewCell
--o sc.ScAccessibleCell
 -o sc.ScAccessibleDocumentPagePreview
 -o sc.ScAccessiblePageHeader
 -o sc.ScAccessiblePageHeaderArea
@@ -79,14 +84,11 @@
 -o sc.ScScenariosObj
 -o sc.ScSheetLinkObj
 -o sc.ScSheetLinksObj
--o sc.ScSpreadsheetSettings
--o sc.ScSpreadsheetSettingsObj
 -o sc.ScStyleFamiliesObj
 -o sc.ScStyleFamilyObj
 -o sc.ScStyleObj
 -o sc.ScSubTotalDescriptorBase
 -o sc.ScSubTotalFieldObj
--o sc.ScTabViewObj
 -o sc.ScTableColumnObj
 -o sc.ScTableColumnsObj
 -o sc.ScTableConditionalEntry
