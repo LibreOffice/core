@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_UnoControlContainer.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:05:37 $ 
+'*  last change:$Date: 2003-03-05 16:22:54 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -78,7 +78,10 @@ Global oContext as Object
 Global oWinpeer as Object
 Global oToolkit as Object
 Global oModel as Object
+
 Global oXWindow as Object
+Global oCtrlShape as Object
+
 Global oXControl1 as Object
 Global oXControl2 as Object
 

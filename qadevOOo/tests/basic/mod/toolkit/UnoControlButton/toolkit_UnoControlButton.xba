@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_UnoControlButton.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:05:29 $ 
+'*  last change:$Date: 2003-03-05 16:20:51 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -88,6 +88,7 @@ option explicit
 
 ' Required for  com.sun.star.awt.XWindow:
   Global oXWindow as Object
+  Global oCtrlShape as Object
 
 
 Sub CreateObj()

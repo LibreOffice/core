@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_UnoControlListBox.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:06:05 $ 
+'*  last change:$Date: 2003-03-05 16:27:59 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -78,11 +78,11 @@ Global oContext As Object
 Global oWinpeer As Object
 Global oToolkit As Object
 Global oModel As Object
-Global oXWindow As Object
+  Global oXWindow As Object
+  Global oCtrlShape as Object
 
 Global bIL_itemStateChanged As Boolean
 Global oEventItemListener As Object
-
 
 Sub CreateObj()
 

@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sd_SdUnoPresView.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:01:44 $ 
+'*  last change:$Date: 2003-03-05 16:18:23 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -92,6 +92,7 @@ Global oPages As Variant
 
 ' Required for awt.XWindow
 Global oXWindow As Object
+Global oCtrlShape as Object
 
 Global oSecDoc As Object
 
