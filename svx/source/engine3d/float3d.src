@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-27 12:33:31 $
+ *  last change: $Author: cl $ $Date: 2002-06-03 09:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #define BUTTON_SIZE             MAP_APPFONT( BUTTON_WIDTH, BUTTON_WIDTH );
 #ifndef STD_MASKCOLOR
 #define STD_MASKCOLOR Color { Red=0xC000; Green=0xC000; Blue=0xC000; }
+#endif
+#ifndef STD_MASKCOLOR_HC
+#define STD_MASKCOLOR_HC Color { Red=0xf000; Green=0x0000; Blue=0xf000; }
 #endif
 DockingWindow RID_SVXFLOAT_3D
 {
@@ -3398,17 +3401,197 @@ DockingWindow RID_SVXFLOAT_3D
     Text[ turkish ] = "3B efektler";
     Text[ catalan ] = "Efectos 3D";
     Text[ finnish ] = "Kolmiulotteiset tehosteet";
+
+    Bitmap BMP_FAVORITES_H
+    {
+        File = "3dfavor_h.bmp";
+    };
+
+    Bitmap BMP_GEO_H
+    {
+        File = "3dgeo_h.bmp";
+    };
+
+    Bitmap BMP_REPRESENTATION_H
+    {
+        File = "3drepres_h.bmp";
+    };
+
+    Bitmap BMP_3DLIGHT_H
+    {
+        File = "3dlight_h.bmp";
+    };
+
+    Bitmap BMP_TEXTURE_H
+    {
+        File = "3dtextur_h.bmp";
+    };
+
+    Bitmap BMP_MATERIAL_H
+    {
+        File = "material_h.bmp";
+    };
+
+    Bitmap BMP_UPDATE_H
+    {
+        File = "sc10350_h.bmp";
+    };
+
+    Bitmap BMP_ASSIGN_H
+    {
+        File = "apply_h.bmp";
+    };
+
+    Bitmap BMP_CHANGE_TO_3D_H
+    {
+        File = "convrt3d_h.bmp";
+    };
+
+    Bitmap BMP_LATHE_OBJ_H
+    {
+        File = "rotate3d_h.bmp";
+    };
+
+    Bitmap BMP_PERSPECTIVE_H
+    {
+        File = "persp3d_h.bmp";
+    };
+
+    Bitmap BMP_ONLY_3D_H
+    {
+        File = "only3d_h.bmp";
+    };
+
+    Bitmap BMP_ALL_ATTRIBUTES_H
+    {
+        File = "allattri_h.bmp";
+    };
+
+    Bitmap BMP_NORMALS_OBJ_H
+    {
+        File = "normobjs_h.bmp";
+    };
+
+    Bitmap BMP_NORMALS_FLAT_H
+    {
+        File = "normflat_h.bmp";
+    };
+
+    Bitmap BMP_NORMALS_SPHERE_H
+    {
+        File = "normsphe_h.bmp";
+    };
+
+    Bitmap BMP_NORMALS_INVERT_H
+    {
+        File = "invert3d_h.bmp";
+    };
+
+    Bitmap BMP_TWO_SIDED_LIGHTING_H
+    {
+        File = "lght2sid_h.bmp";
+    };
+
+    Bitmap BMP_DOUBLE_SIDED_H
+    {
+        File = "doublesi_h.bmp";
+    };
+
+    Bitmap BMP_SHADOW_3D_H
+    {
+        File = "shadow3d_h.bmp";
+    };
+
+    Bitmap BMP_LIGHT_H
+    {
+        File = "light_h.bmp";
+    };
+
+    Bitmap BMP_LIGHT_COLOR_H
+    {
+        File = "colordlg_h.bmp";
+    };
+
+    Bitmap BMP_AMBIENT_COLOR_H
+    {
+        File = "colordlg_h.bmp";
+    };
+
+    Bitmap BMP_TEX_LUMINANCE_H
+    {
+        File = "luminanc_h.bmp";
+    };
+
+    Bitmap BMP_TEX_COLOR_H
+    {
+        File = "color_h.bmp";
+    };
+
+    Bitmap BMP_TEX_REPLACE_H
+    {
+        File = "replac3d_h.bmp";
+    };
+
+    Bitmap BMP_TEX_MODULATE_H
+    {
+        File = "modula3d_h.bmp";
+    };
+
+    Bitmap BMP_TEX_BLEND_H
+    {
+        File = "blend3d_h.bmp";
+    };
+
+    Bitmap BMP_TEX_OBJECT_H
+    {
+        File = "objspc3d_h.bmp";
+    };
+
+    Bitmap BMP_TEX_PARALLEL_H
+    {
+        File = "parallel_h.bmp";
+    };
+
+    Bitmap BMP_TEX_CIRCLE_H
+    {
+        File = "sphere3d_h.bmp";
+    };
+
+    Bitmap BMP_TEX_FILTER_H
+    {
+        File = "filter3d_h.bmp";
+    };
+
+    Bitmap BMP_COLORDLG_H
+    {
+        File = "colordlg_h.bmp";
+    };
 };
+
 Image RID_SVXIMAGE_LIGHT_ON
 {
     ImageBitmap = Bitmap { File = "lighton.bmp" ; };
     MaskColor = STD_MASKCOLOR ;
 };
+
 Image RID_SVXIMAGE_LIGHT_OFF
 {
     ImageBitmap = Bitmap { File = "light.bmp" ; };
     MaskColor = STD_MASKCOLOR ;
 };
+
+Image RID_SVXIMAGE_LIGHT_ON_H
+{
+    ImageBitmap = Bitmap { File = "lighton_h.bmp" ; };
+    MaskColor = STD_MASKCOLOR_HC ;
+};
+
+Image RID_SVXIMAGE_LIGHT_OFF_H
+{
+    ImageBitmap = Bitmap { File = "light_h.bmp" ; };
+    MaskColor = STD_MASKCOLOR_HC ;
+};
+
 /*Image RID_SVXIMAGE_LIGHT_ON_SELECTED {
       ImageBitmap = Bitmap { File = "lightons.bmp" ; };
       MaskColor = STD_MASKCOLOR ;
@@ -3593,6 +3776,7 @@ String RID_SVXFLOAT3D_FIX_B
     Text[ arabic ] = "B:";
     Text[ catalan ] = "A:";
     Text[ finnish ] = "B:";
+
 };
 
 

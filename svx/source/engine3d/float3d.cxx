@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-15 07:35:38 $
+ *  last change: $Author: cl $ $Date: 2002-06-03 09:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,20 @@
 
 SFX_IMPL_DOCKINGWINDOW( Svx3DChildWindow, SID_3D_WIN )
 
+struct Svx3DWinImpl
+{
+    SfxItemPool*        pPool;
+    Image               maImgLightOnH;
+    Image               maImgLightOffH;
+};
+
+#define SETHCIMAGE(btn,res) \
+{ \
+    Bitmap aBmp( SVX_RES( res ) ); \
+    Image aImage( aBmp, COL_LIGHTMAGENTA ); \
+    btn.SetModeImage( aImage, BMP_COLOR_HIGHCONTRAST ); \
+}
+
 /*************************************************************************
 |*  Svx3DWin - FloatingWindow
 \************************************************************************/
@@ -295,10 +309,60 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         pMatFavSetList      ( NULL ),
 
         pBindings           ( pInBindings ),
-        pPool               ( NULL ),
+//      pPool               ( NULL ),
+        mpImpl              ( new Svx3DWinImpl() ),
         mpRemember2DAttributes(NULL),
         bOnly3DChanged      ( FALSE )
 {
+    SETHCIMAGE( aBtnFavorites, BMP_FAVORITES_H );
+    SETHCIMAGE( aBtnGeo, BMP_GEO_H );
+    SETHCIMAGE( aBtnRepresentation, BMP_REPRESENTATION_H );
+    SETHCIMAGE( aBtnLight, BMP_3DLIGHT_H );
+    SETHCIMAGE( aBtnTexture, BMP_TEXTURE_H );
+    SETHCIMAGE( aBtnMaterial, BMP_MATERIAL_H );
+    SETHCIMAGE( aBtnUpdate, BMP_UPDATE_H );
+    SETHCIMAGE( aBtnAssign, BMP_ASSIGN_H );
+    SETHCIMAGE( aBtnOnly3D, BMP_ONLY_3D_H );
+    SETHCIMAGE( aBtnAllAttributes, BMP_ALL_ATTRIBUTES_H );
+    SETHCIMAGE( aBtnNormalsObj, BMP_NORMALS_OBJ_H );
+    SETHCIMAGE( aBtnNormalsFlat, BMP_NORMALS_FLAT_H );
+    SETHCIMAGE( aBtnNormalsSphere, BMP_NORMALS_SPHERE_H );
+    SETHCIMAGE( aBtnTwoSidedLighting, BMP_TWO_SIDED_LIGHTING_H );
+    SETHCIMAGE( aBtnNormalsInvert, BMP_NORMALS_INVERT_H );
+    SETHCIMAGE( aBtnDoubleSided, BMP_DOUBLE_SIDED_H );
+    SETHCIMAGE( aBtnShadow3d, BMP_SHADOW_3D_H );
+    SETHCIMAGE( aBtnLight1, BMP_LIGHT_H );
+    SETHCIMAGE( aBtnLight2, BMP_LIGHT_H );
+    SETHCIMAGE( aBtnLight3, BMP_LIGHT_H );
+    SETHCIMAGE( aBtnLight4, BMP_LIGHT_H );
+    SETHCIMAGE( aBtnLight5, BMP_LIGHT_H );
+    SETHCIMAGE( aBtnLight6, BMP_LIGHT_H );
+    SETHCIMAGE( aBtnLight7, BMP_LIGHT_H );
+    SETHCIMAGE( aBtnLight8, BMP_LIGHT_H );
+    SETHCIMAGE( aBtnLightColor, BMP_LIGHT_COLOR_H );
+    SETHCIMAGE( aBtnAmbientColor, BMP_AMBIENT_COLOR_H );
+    SETHCIMAGE( aBtnTexLuminance, BMP_TEX_LUMINANCE_H );
+    SETHCIMAGE( aBtnTexColor, BMP_TEX_COLOR_H );
+    SETHCIMAGE( aBtnTexReplace, BMP_TEX_REPLACE_H );
+    SETHCIMAGE( aBtnTexModulate, BMP_TEX_MODULATE_H );
+    SETHCIMAGE( aBtnTexBlend, BMP_TEX_BLEND_H );
+    SETHCIMAGE( aBtnTexParallelX, BMP_TEX_PARALLEL_H );
+    SETHCIMAGE( aBtnTexCircleX, BMP_TEX_CIRCLE_H );
+    SETHCIMAGE( aBtnTexObjectX, BMP_TEX_OBJECT_H );
+    SETHCIMAGE( aBtnTexParallelY, BMP_TEX_PARALLEL_H );
+    SETHCIMAGE( aBtnTexCircleY, BMP_TEX_CIRCLE_H );
+    SETHCIMAGE( aBtnTexObjectY, BMP_TEX_OBJECT_H );
+    SETHCIMAGE( aBtnTexFilter, BMP_TEX_FILTER_H );
+    SETHCIMAGE( aBtnMatColor, BMP_COLORDLG_H );
+    SETHCIMAGE( aBtnEmissionColor, BMP_COLORDLG_H );
+    SETHCIMAGE( aBtnSpecularColor, BMP_COLORDLG_H );
+    SETHCIMAGE( aBtnPerspective, BMP_PERSPECTIVE_H );
+    SETHCIMAGE( aBtnConvertTo3D, BMP_CHANGE_TO_3D_H );
+    SETHCIMAGE( aBtnLatheObject, BMP_LATHE_OBJ_H );
+
+    mpImpl->pPool = NULL;
+    mpImpl->maImgLightOnH = Image( SVX_RES( RID_SVXIMAGE_LIGHT_ON_H ) );
+    mpImpl->maImgLightOffH = Image( SVX_RES( RID_SVXIMAGE_LIGHT_OFF_H ) );
     FreeResource();
 
     // Metrik einstellen
@@ -438,6 +502,8 @@ __EXPORT Svx3DWin::~Svx3DWin()
 
     if(mpRemember2DAttributes)
         delete mpRemember2DAttributes;
+
+    delete mpImpl;
 }
 
 // -----------------------------------------------------------------------
@@ -526,6 +592,17 @@ void Svx3DWin::Reset()
     aCtlLightPreview.GetPreviewControl().SelectLight(Base3DLight0);
 }
 
+bool Svx3DWin::GetUILightState( ImageButton& aBtn ) const
+{
+    return (aBtn.GetImage() == aImgLightOn) || (aBtn.GetImage() == mpImpl->maImgLightOnH);
+}
+
+void Svx3DWin::SetUILightState( ImageButton& aBtn, bool bState )
+{
+    aBtn.SetImage( bState ? aImgLightOn : aImgLightOff );
+    aBtn.SetModeImage( bState ? mpImpl->maImgLightOnH : mpImpl->maImgLightOffH, BMP_COLOR_HIGHCONTRAST );
+}
+
 // -----------------------------------------------------------------------
 void Svx3DWin::Update( SfxItemSet& rAttrs )
 {
@@ -559,11 +636,11 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     BOOL bUpdate = FALSE;
 
     // evtl. PoolUnit ermitteln
-    if( !pPool )
+    if( !mpImpl->pPool )
     {
-        pPool = rAttrs.GetPool();
-        DBG_ASSERT( pPool, "Wo ist der Pool?" );
-        ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
+        mpImpl->pPool = rAttrs.GetPool();
+        DBG_ASSERT( mpImpl->pPool, "Wo ist der Pool?" );
+        ePoolUnit = mpImpl->pPool->GetMetric( SID_ATTR_LINE_WIDTH );
     }
     eFUnit = GetModuleFieldUnit( &rAttrs );
 
@@ -841,7 +918,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_END_ANGLE);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            UINT32 nValue = ((const Svx3DEndAngleItem&)rAttrs.Get(SDRATTR_3DOBJ_END_ANGLE)).GetValue();
+            INT32 nValue = ((const Svx3DEndAngleItem&)rAttrs.Get(SDRATTR_3DOBJ_END_ANGLE)).GetValue();
             if( nValue != aMtrEndAngle.GetValue() )
             {
                 aMtrEndAngle.SetValue( nValue );
@@ -1073,11 +1150,11 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_1);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const Svx3DLightOnOff1Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue();
-        if( ( bOn && aBtnLight1.GetImage() != aImgLightOn ) ||
-            ( !bOn && aBtnLight1.GetImage() != aImgLightOff ) )
+        bool bOn = ((const Svx3DLightOnOff1Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue() != 0;
+        if( ( bOn && !GetUILightState( aBtnLight1 )) ||
+            ( !bOn && GetUILightState( aBtnLight1 )) )
         {
-            aBtnLight1.SetImage( bOn ? aImgLightOn : aImgLightOff );
+            SetUILightState( aBtnLight1, bOn );
             pLightGroup->Enable( bOn, Base3DLight0 );
             bUpdate = TRUE;
         }
@@ -1131,11 +1208,11 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_2);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const Svx3DLightOnOff2Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue();
-        if( ( bOn && aBtnLight2.GetImage() != aImgLightOn ) ||
-            ( !bOn && aBtnLight2.GetImage() != aImgLightOff ) )
+        bool bOn = ((const Svx3DLightOnOff2Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue() != 0;
+        if( ( bOn && !GetUILightState( aBtnLight2 )) ||
+            ( !bOn && GetUILightState( aBtnLight2 )) )
         {
-            aBtnLight2.SetImage( bOn ? aImgLightOn : aImgLightOff );
+            SetUILightState( aBtnLight2, bOn );
             pLightGroup->Enable( bOn, Base3DLight1 );
             bUpdate = TRUE;
         }
@@ -1189,11 +1266,11 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_3);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const Svx3DLightOnOff3Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue();
-        if( ( bOn && aBtnLight3.GetImage() != aImgLightOn ) ||
-            ( !bOn && aBtnLight3.GetImage() != aImgLightOff ) )
+        bool bOn = ((const Svx3DLightOnOff3Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue() != 0;
+        if( ( bOn && !GetUILightState( aBtnLight3)) ||
+            ( !bOn && GetUILightState( aBtnLight3)) )
         {
-            aBtnLight3.SetImage( bOn ? aImgLightOn : aImgLightOff );
+            SetUILightState( aBtnLight3, bOn );
             pLightGroup->Enable( bOn, Base3DLight2 );
             bUpdate = TRUE;
         }
@@ -1247,11 +1324,11 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_4);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const Svx3DLightOnOff4Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue();
-        if( ( bOn && aBtnLight4.GetImage() != aImgLightOn ) ||
-            ( !bOn && aBtnLight4.GetImage() != aImgLightOff ) )
+        bool bOn = ((const Svx3DLightOnOff4Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue() != 0;
+        if( ( bOn && !GetUILightState( aBtnLight4 )) ||
+            ( !bOn && GetUILightState( aBtnLight4 )) )
         {
-            aBtnLight4.SetImage( bOn ? aImgLightOn : aImgLightOff );
+            SetUILightState( aBtnLight4, bOn );
             pLightGroup->Enable( bOn, Base3DLight3 );
             bUpdate = TRUE;
         }
@@ -1305,11 +1382,11 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_5);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const Svx3DLightOnOff5Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue();
-        if( ( bOn && aBtnLight5.GetImage() != aImgLightOn ) ||
-            ( !bOn && aBtnLight5.GetImage() != aImgLightOff ) )
+        bool bOn = ((const Svx3DLightOnOff5Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue() != 0;
+        if( ( bOn && !GetUILightState( aBtnLight5 )) ||
+            ( !bOn && GetUILightState( aBtnLight5 )) )
         {
-            aBtnLight5.SetImage( bOn ? aImgLightOn : aImgLightOff );
+            SetUILightState( aBtnLight5, bOn );
             pLightGroup->Enable( bOn, Base3DLight4 );
             bUpdate = TRUE;
         }
@@ -1363,11 +1440,11 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_6);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const Svx3DLightOnOff6Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue();
-        if( ( bOn && aBtnLight6.GetImage() != aImgLightOn ) ||
-            ( !bOn && aBtnLight6.GetImage() != aImgLightOff ) )
+        bool bOn = ((const Svx3DLightOnOff6Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue() != 0;
+        if( ( bOn && !GetUILightState( aBtnLight6 )) ||
+            ( !bOn && GetUILightState( aBtnLight6 )) )
         {
-            aBtnLight6.SetImage( bOn ? aImgLightOn : aImgLightOff );
+            SetUILightState( aBtnLight6, bOn );
             pLightGroup->Enable( bOn, Base3DLight5 );
             bUpdate = TRUE;
         }
@@ -1421,11 +1498,11 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_7);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const Svx3DLightOnOff7Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue();
-        if( ( bOn && aBtnLight7.GetImage() != aImgLightOn ) ||
-            ( !bOn && aBtnLight7.GetImage() != aImgLightOff ) )
+        bool bOn = ((const Svx3DLightOnOff7Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue() != 0;
+        if( ( bOn && !GetUILightState( aBtnLight7 )) ||
+            ( !bOn && GetUILightState( aBtnLight7 )) )
         {
-            aBtnLight7.SetImage( bOn ? aImgLightOn : aImgLightOff );
+            SetUILightState( aBtnLight7 , bOn );
             pLightGroup->Enable( bOn, Base3DLight6 );
             bUpdate = TRUE;
         }
@@ -1479,11 +1556,11 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_8);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const Svx3DLightOnOff8Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue();
-        if( ( bOn && aBtnLight8.GetImage() != aImgLightOn ) ||
-            ( !bOn && aBtnLight8.GetImage() != aImgLightOff ) )
+        bool bOn = ((const Svx3DLightOnOff8Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue() != 0;
+        if( ( bOn && !GetUILightState( aBtnLight8 )) ||
+            ( !bOn && GetUILightState( aBtnLight8 )) )
         {
-            aBtnLight8.SetImage( bOn ? aImgLightOn : aImgLightOff );
+            SetUILightState( aBtnLight8, bOn );
             pLightGroup->Enable( bOn, Base3DLight7 );
             bUpdate = TRUE;
         }
@@ -1862,12 +1939,12 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
 // Geometrie
     // evtl. PoolUnit ermitteln (Falls dies in Update() nicht passiert ist)
-    if( !pPool )
+    if( !mpImpl->pPool )
     {
         DBG_ERROR( "Kein Pool in GetAttr()! Evtl. inkompatibel zu drviewsi.cxx ?" );
-        pPool = rAttrs.GetPool();
-        DBG_ASSERT( pPool, "Wo ist der Pool?" );
-        ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
+        mpImpl->pPool = rAttrs.GetPool();
+        DBG_ASSERT( mpImpl->pPool, "Wo ist der Pool?" );
+        ePoolUnit = mpImpl->pPool->GetMetric( SID_ATTR_LINE_WIDTH );
 
         eFUnit = GetModuleFieldUnit( &rAttrs );
     }
@@ -1930,7 +2007,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Endwinkel
     if( !aMtrEndAngle.IsEmptyFieldValue() )
     {
-        UINT16 nValue = (UINT32)aMtrEndAngle.GetValue();
+        UINT16 nValue = (UINT16)aMtrEndAngle.GetValue();
         rAttrs.Put(Svx3DEndAngleItem(nValue));
     }
     else
@@ -2037,10 +2114,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight1.GetState();
     if( eState != STATE_DONTKNOW )
     {
-        aImg = aBtnLight1.GetImage();
-        BOOL bValue = FALSE;
-        if( aImg == aImgLightOn )
-            bValue = TRUE;
+        BOOL bValue = GetUILightState( aBtnLight1 );
         rAttrs.Put(Svx3DLightOnOff1Item(bValue));
 
         // Licht 1 (Richtung)
@@ -2066,10 +2140,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight2.GetState();
     if( eState != STATE_DONTKNOW )
     {
-        aImg = aBtnLight2.GetImage();
-        BOOL bValue = FALSE;
-        if( aImg == aImgLightOn )
-            bValue = TRUE;
+        BOOL bValue = GetUILightState( aBtnLight2 );
         rAttrs.Put(Svx3DLightOnOff2Item(bValue));
 
         // Licht 2 (Richtung)
@@ -2094,10 +2165,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight3.GetState();
     if( eState != STATE_DONTKNOW )
     {
-        aImg = aBtnLight3.GetImage();
-        BOOL bValue = FALSE;
-        if( aImg == aImgLightOn )
-            bValue = TRUE;
+        BOOL bValue = GetUILightState( aBtnLight3 );
         rAttrs.Put(Svx3DLightOnOff3Item(bValue));
 
         // Licht 3 (Richtung)
@@ -2122,10 +2190,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight4.GetState();
     if( eState != STATE_DONTKNOW )
     {
-        aImg = aBtnLight4.GetImage();
-        BOOL bValue = FALSE;
-        if( aImg == aImgLightOn )
-            bValue = TRUE;
+        BOOL bValue = GetUILightState( aBtnLight4 );
         rAttrs.Put(Svx3DLightOnOff4Item(bValue));
 
         // Licht 4 (Richtung)
@@ -2150,10 +2215,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight5.GetState();
     if( eState != STATE_DONTKNOW )
     {
-        aImg = aBtnLight5.GetImage();
-        BOOL bValue = FALSE;
-        if( aImg == aImgLightOn )
-            bValue = TRUE;
+        BOOL bValue = GetUILightState( aBtnLight5 );
         rAttrs.Put(Svx3DLightOnOff5Item(bValue));
 
         // Licht 5 (Richtung)
@@ -2178,10 +2240,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight6.GetState();
     if( eState != STATE_DONTKNOW )
     {
-        aImg = aBtnLight6.GetImage();
-        BOOL bValue = FALSE;
-        if( aImg == aImgLightOn )
-            bValue = TRUE;
+        BOOL bValue = GetUILightState( aBtnLight6 );
         rAttrs.Put(Svx3DLightOnOff6Item(bValue));
 
         // Licht 6 (Richtung)
@@ -2206,10 +2265,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight7.GetState();
     if( eState != STATE_DONTKNOW )
     {
-        aImg = aBtnLight7.GetImage();
-        BOOL bValue = FALSE;
-        if( aImg == aImgLightOn )
-            bValue = TRUE;
+        BOOL bValue = GetUILightState( aBtnLight7 );
         rAttrs.Put(Svx3DLightOnOff7Item(bValue));
 
         // Licht 7 (Richtung)
@@ -2234,10 +2290,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight8.GetState();
     if( eState != STATE_DONTKNOW )
     {
-        aImg = aBtnLight8.GetImage();
-        BOOL bValue = FALSE;
-        if( aImg == aImgLightOn )
-            bValue = TRUE;
+        BOOL bValue = GetUILightState( aBtnLight8 );
         rAttrs.Put(Svx3DLightOnOff8Item(bValue));
 
         // Licht 8 (Richtung)
@@ -2839,12 +2892,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
 
             if( pBtn->IsChecked() )
             {
-                Image aImg( pBtn->GetImage() );
-
-                if( aImg == aImgLightOn )
-                    pBtn->SetImage( aImgLightOff );
-                else
-                    pBtn->SetImage( aImgLightOn );
+                SetUILightState( *(ImageButton*)pBtn, !GetUILightState( *(ImageButton*)pBtn ) );
             }
             else
             {
@@ -2891,7 +2939,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
                     aLbLight8.Hide();
                 }
             }
-            BOOL bEnable = pBtn->GetImage() == aImgLightOn;
+            BOOL bEnable = GetUILightState( *(ImageButton*)pBtn );
             aBtnLightColor.Enable( bEnable );
             pLb->Enable( bEnable );
 
@@ -3175,9 +3223,7 @@ IMPL_LINK( Svx3DWin, ClickLightHdl, PushButton*, pBtn )
                         Base3DMaterialDiffuse,
                         (Base3DLightNumber) nLightSource );
 
-        Image aImg( pBtn->GetImage() );
-        pLightGroup->Enable( aImg == aImgLightOn,
-                        (Base3DLightNumber) nLightSource );
+        pLightGroup->Enable( GetUILightState( *(ImageButton*)pBtn ),    (Base3DLightNumber) nLightSource );
 
         aCtlLightPreview.GetPreviewControl().SetLightGroup( pLightGroup );
         aCtlLightPreview.GetPreviewControl().SelectLight( (Base3DLightNumber) nLightSource );
