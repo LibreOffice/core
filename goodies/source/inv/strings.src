@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 19:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,19 +67,19 @@ String STR_APP_TITLE {
 };
 
 String STR_HERO1 {
-            Text = "Eine gute Wahl!\n\nTriminatoren sind Spezialisten in\nder Bekämpfung tötlicher CXXe.";
+            Text = "Eine gute Wahl!\n\nTriminatoren sind Spezialisten in\nder BekÃ¤mpfung tÃ¶tlicher CXXe.";
 };
 
 String STR_HERO2 {
-            Text = "Weise entschieden!\n\nHuge Jelly Stars bekämpfen wirkungsvoll\ngefährliche Makefiles!";
+            Text = "Weise entschieden!\n\nHuge Jelly Stars bekÃ¤mpfen wirkungsvoll\ngefÃ¤hrliche Makefiles!";
 };
 
 String STR_HERO3 {
-            Text = "Zu dieser Entscheidung ist zu gratulieren!\n\nMega Hunter bekämpfen alles immer überall!";
+            Text = "Zu dieser Entscheidung ist zu gratulieren!\n\nMega Hunter bekÃ¤mpfen alles immer Ã¼berall!";
 };
 
 String STR_HERO4 {
-            Text = "Gut gewählt!\n\nNatural Fighter vernichten gerne tötliche HXXe!";
+            Text = "Gut gewÃ¤hlt!\n\nNatural Fighter vernichten gerne tÃ¶tliche HXXe!";
 };
 
 String STR_HERO5 {
@@ -139,11 +139,11 @@ String STR_FIGHTDEST1 {
 };
 
 String STR_FIGHTDEST2 {
-            Text = "\nViel Glück....";
+            Text = "\nViel GlÃ¼ck....";
 };
 
 String STR_GAMEOVER {
-            Text = "Tödlicher Fehler !!\n\nIhr Fighter wurde zerstört!\nSie kommen in den Updaterhimmel...\nBegeben Sie sich direkt dorthin,\nziehen Sie nich über Los,\nziehen Sie nicht DM 4000!\n\nGAME OVER!!!";
+            Text = "TÃ¶dlicher Fehler !!\n\nIhr Fighter wurde zerstÃ¶rt!\nSie kommen in den Updaterhimmel...\nBegeben Sie sich direkt dorthin,\nziehen Sie nich Ã¼ber Los,\nziehen Sie nicht DM 4000!\n\nGAME OVER!!!";
 };
 
 String STR_HIGHSCORE1 {
@@ -159,7 +159,7 @@ String STR_HIGHSCORE3 {
 };
 
 String STR_PAUSE {
-            Text = " Spiel wegen wichtiger Mussänderung unterbrochen... ";
+            Text = " Spiel wegen wichtiger MussÃ¤nderung unterbrochen... ";
 };
 
 String STR_CHOOSEHERO {
