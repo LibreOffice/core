@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsccont.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,10 +129,10 @@ public:
                                  const RscId & rRscId);
     SUBINFO_STRUCT  GetInfoEle( const RSCINST & rInst, USHORT nPos );
     ERRTYPE         SetString( const RSCINST &, char * pStr );
-    ERRTYPE         SetNumber( const RSCINST &, long lValue );
+    ERRTYPE         SetNumber( const RSCINST &, INT32 lValue );
     ERRTYPE         SetBool( const RSCINST & rInst, BOOL bValue );
     ERRTYPE         SetConst( const RSCINST & rInst, HASHID nValueId,
-                              long nValue );
+                              INT32 nValue );
     ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId );
 
                     // Gibt die Groesse der Klasse in Bytes
