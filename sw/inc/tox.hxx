@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:38:25 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,11 +367,6 @@ public:
        @return vector of tokens
     */
     const SwFormTokens & GetTokens() const { return aTokens; }
-
-    /**
-       Returns string representation of the vector of tokens.
-     */
-    String GetPatternString() const;
 };
 // <- #i21237#
 
@@ -418,7 +413,6 @@ public:
     void SetFirstTabPos( USHORT n );    //{ nFirstTabPos = n; }
 
     BOOL IsFirstTabPosFlag() const  ;   //{ return bHasFirstTabPos; }
-    void SetFirstTabPosFlag( BOOL b );  //{ bHasFirstTabPos = b; }
 
     BOOL IsGenerateTabPos() const       { return bGenerateTabPos; }
     void SetGenerateTabPos( BOOL b )    { bGenerateTabPos = b; }
@@ -592,8 +586,6 @@ public:
                                 DBG_ASSERT( nLevel < MAXLEVEL, "Which level?");
                                 aStyleNames[nLevel] = rSet;
                                 }
-    BOOL                    HasAnyStyleNames() const;
-
     BOOL                    IsFromChapter() const { return bFromChapter;}
     void                    SetFromChapter(BOOL bSet) { bFromChapter = bSet;}
 
