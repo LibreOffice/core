@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-24 11:10:59 $
+ *  last change: $Author: dv $ $Date: 2001-07-25 11:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #include <vcl/msgbox.hxx>
 #endif
 
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
@@ -252,6 +255,7 @@ private:
     void                    saveConfig();
 
     ErrCode                 getGraphic( const OUString& rURL, Graphic& rGraphic ) const;
+    void                    setDefaultValues();
 
     DECL_LINK( TimeOutHdl_Impl, Timer* );
 
@@ -754,17 +758,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
 
     loadConfig();
 
-    // when no filter is set, we set the curentFilter to <all>
-    if ( !maCurFilter.getLength() && maSelectFilter.getLength() )
-    {
-        Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
-        try
-        {
-            xFltMgr->setCurrentFilter( maSelectFilter );
-        }
-        catch( IllegalArgumentException )
-        {}
-    }
+    setDefaultValues();
 
     // show the dialog
     sal_Int16 nRet = mxFileDlg->execute();
@@ -884,18 +878,7 @@ ErrCode FileDialogHelper_Impl::execute()
         return ERRCODE_ABORT;
 
     loadConfig();
-
-    // when no filter is set, we set the curentFilter to <all>
-    if ( !maCurFilter.getLength() && maSelectFilter.getLength() )
-    {
-        Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
-        try
-        {
-            xFltMgr->setCurrentFilter( maSelectFilter );
-        }
-        catch( IllegalArgumentException )
-        {}
-    }
+    setDefaultValues();
 
     // show the dialog
     sal_Int16 nRet = mxFileDlg->execute();
@@ -1346,6 +1329,32 @@ void FileDialogHelper_Impl::loadConfig()
             }
             catch( IllegalArgumentException ){}
         }
+    }
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper_Impl::setDefaultValues()
+{
+    // when no filter is set, we set the curentFilter to <all>
+    if ( !maCurFilter.getLength() && maSelectFilter.getLength() )
+    {
+        Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+        try
+        {
+            xFltMgr->setCurrentFilter( maSelectFilter );
+        }
+        catch( IllegalArgumentException )
+        {}
+    }
+
+    // when no path is set, we use the standard 'work' folder
+    if ( ! maPath.getLength() )
+    {
+        OUString aWorkFolder = SvtPathOptions().GetWorkPath();
+        mxFileDlg->setDisplayDirectory( aWorkFolder );
+
+        // INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
+        //SetStandardDir( aStdDirObj.GetMainURL( INetURLObject::NO_DECODE ) );
     }
 }
 
