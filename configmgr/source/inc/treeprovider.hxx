@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-08 11:45:19 $
+ *  last change: $Author: jb $ $Date: 2001-03-12 15:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,11 +147,25 @@ namespace configmgr
         TreeChangeList( const vos::ORef < OOptions >& _xOptions,
                         const rtl::OUString& _rPathToRoot,
                         const rtl::OUString& _rLocalName,
-                        const rtl::OUString& _rChildTemplateName,
                         const configuration::Attributes& _rAttr)
                 : m_xOptions(_xOptions)
                 , pathToRoot(_rPathToRoot)
-                , root(_rLocalName, _rChildTemplateName, _rAttr)
+                , root(_rLocalName, _rAttr)
+        {}
+
+        /** ctor
+        @param      _rPathToRoot        path to the root of the whole to-be-updated subtree
+        @param      _rLocalName         relative path within the to-be-updated subtree
+        */
+        TreeChangeList( const vos::ORef < OOptions >& _xOptions,
+                        const rtl::OUString& _rPathToRoot,
+                        const rtl::OUString& _rLocalName,
+                        const rtl::OUString& _rChildTemplateName,
+                        const rtl::OUString& _rChildTemplateModule,
+                        const configuration::Attributes& _rAttr)
+                : m_xOptions(_xOptions)
+                , pathToRoot(_rPathToRoot)
+                , root(_rLocalName, _rChildTemplateName, _rChildTemplateModule, _rAttr)
         {}
 
         /** ctor

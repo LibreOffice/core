@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-23 10:50:58 $
+ *  last change: $Author: jb $ $Date: 2001-03-12 15:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,7 +627,6 @@ std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::doPreCommitChanges()
     {
         // get the name of this node
         aRet.reset( new SubtreeChange(this->getOriginalNodeName(),
-                                      rtl::OUString(),
                                       this->getAttributes()) );
     }
     return aRet;
@@ -1204,7 +1203,8 @@ std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::doPreCommitChanges()
 
     // and make a SubtreeChange
     std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(aName,
-                                                               getElementTemplate()->getPath().toString(),
+                                                               getElementTemplate()->getName().toString(),
+                                                               getElementTemplate()->getModule().toString(),
                                                                this->getAttributes()) );
 
     // commit preexisting nodes
@@ -1271,8 +1271,10 @@ std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::doPreCommitChanges()
 void DeferredTreeSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-    OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+    OSL_ENSURE( rChanges.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
                 "ERROR: Element template of change does not match the template of the set");
+    OSL_ENSURE( rChanges.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
+                "ERROR: Element template module of change does not match the template of the set");
 
 
     for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
@@ -1358,8 +1360,10 @@ void DeferredTreeSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
 void DeferredTreeSetNodeImpl::doRevertCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-    OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+    OSL_ENSURE( rChanges.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
                 "ERROR: Element template of change does not match the template of the set");
+    OSL_ENSURE( rChanges.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
+                "ERROR: Element template module of change does not match the template of the set");
 
 
     for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
@@ -1428,8 +1432,10 @@ void DeferredTreeSetNodeImpl::doRevertCommit(SubtreeChange& rChanges)
 void DeferredTreeSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-    OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+    OSL_ENSURE( rChanges.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
                 "ERROR: Element template of change does not match the template of the set");
+    OSL_ENSURE( rChanges.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
+                "ERROR: Element template module of change does not match the template of the set");
 
 
     for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
@@ -1951,7 +1957,8 @@ std::auto_ptr<SubtreeChange> DeferredValueSetNodeImpl::doPreCommitChanges()
 {
     // and make a SubtreeChange
     std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(this->getOriginalNodeName(),
-                                                                getElementTemplate()->getPath().toString(),
+                                                                getElementTemplate()->getName().toString(),
+                                                                getElementTemplate()->getModule().toString(),
                                                                 this->getAttributes()) );
 
     // commit preexisting nodes
@@ -2018,8 +2025,10 @@ std::auto_ptr<SubtreeChange> DeferredValueSetNodeImpl::doPreCommitChanges()
 void DeferredValueSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-    OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+    OSL_ENSURE( rChanges.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
                 "ERROR: Element template of change does not match the template of the set");
+    OSL_ENSURE( rChanges.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
+                "ERROR: Element template module of change does not match the template of the set");
 
 
     for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
@@ -2105,8 +2114,10 @@ void DeferredValueSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
 void DeferredValueSetNodeImpl::doRevertCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-    OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+    OSL_ENSURE( rChanges.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
                 "ERROR: Element template of change does not match the template of the set");
+    OSL_ENSURE( rChanges.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
+                "ERROR: Element template module of change does not match the template of the set");
 
 
     for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
@@ -2175,8 +2186,10 @@ void DeferredValueSetNodeImpl::doRevertCommit(SubtreeChange& rChanges)
 void DeferredValueSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-    OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+    OSL_ENSURE( rChanges.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
                 "ERROR: Element template of change does not match the template of the set");
+    OSL_ENSURE( rChanges.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
+                "ERROR: Element template module of change does not match the template of the set");
 
 
     for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();

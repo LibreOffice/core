@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-23 10:50:58 $
+ *  last change: $Author: jb $ $Date: 2001-03-12 15:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,7 +510,9 @@ std::auto_ptr<SubtreeChange> SetNodeImpl::doPreCommitChanges()
 void SetNodeImpl::doFinishCommit(SubtreeChange& rChange)
 {
     OSL_ENSURE(rChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-    OSL_ENSURE( rChange.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+    OSL_ENSURE( rChange.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
+                "ERROR: Element template of change does not match the template of the set");
+    OSL_ENSURE( rChange.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
                 "ERROR: Element template of change does not match the template of the set");
 
     OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes are lost");
@@ -520,7 +522,9 @@ void SetNodeImpl::doFinishCommit(SubtreeChange& rChange)
 void SetNodeImpl::doRevertCommit(SubtreeChange& rChange)
 {
     OSL_ENSURE(rChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-    OSL_ENSURE( rChange.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+    OSL_ENSURE( rChange.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
+                "ERROR: Element template of change does not match the template of the set");
+    OSL_ENSURE( rChange.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
                 "ERROR: Element template of change does not match the template of the set");
 
     OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not restored");
@@ -530,7 +534,9 @@ void SetNodeImpl::doRevertCommit(SubtreeChange& rChange)
 void SetNodeImpl::doFailedCommit(SubtreeChange& rChange)
 {
     OSL_ENSURE(rChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-    OSL_ENSURE( rChange.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+    OSL_ENSURE( rChange.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
+                "ERROR: Element template of change does not match the template of the set");
+    OSL_ENSURE( rChange.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
                 "ERROR: Element template of change does not match the template of the set");
 
     OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not recovered");

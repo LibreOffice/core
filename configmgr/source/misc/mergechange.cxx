@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-17 15:02:33 $
+ *  last change: $Author: jb $ $Date: 2001-03-12 15:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ namespace configmgr
                 if (!pChange)
                 {
                     // create a correspondens for the name, we not found.
-                    auto_ptr<SubtreeChange> pNewChange(new SubtreeChange(*it, OUString(), configuration::Attributes()));
+                    auto_ptr<SubtreeChange> pNewChange(new SubtreeChange(*it, configuration::Attributes()));
                     pCurrentParent->addChange(auto_ptr<Change>(pNewChange.release()));
 
                     pChange = a.searchForChange(m_aTreeChangeList.root);
@@ -617,7 +617,7 @@ namespace configmgr
                 if (!pChange)
                 {
                     // create a correspondens for the name, we not found.
-                    auto_ptr<SubtreeChange> pNewChange(new SubtreeChange(*it, OUString(), configuration::Attributes()));
+                    auto_ptr<SubtreeChange> pNewChange(new SubtreeChange(*it, configuration::Attributes()));
                     pCurrentParent->addChange(auto_ptr<Change>(pNewChange.release()));
 
                     pChange = a.searchForChange(m_aSubtreeChange);

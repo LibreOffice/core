@@ -2,9 +2,9 @@
  *
  *  $RCSfile: committer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-07 14:49:34 $
+ *  last change: $Author: jb $ $Date: 2001-03-12 15:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,6 @@ void Committer::commit()
     TreeChangeList  aChangeList(m_rTree.getOptions(),
                                 aTree.getContextPath().toString(),
                                 aTree.getRootNode().getName().toString(),
-                                rtl::OUString(),
                                 aTree.getRootNode().getAttributes());
 
     ITreeManager* pUpdateProvider = getUpdateProvider();

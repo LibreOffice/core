@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodefactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 11:54:51 $
+ *  last change: $Author: jb $ $Date: 2001-03-12 15:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ namespace
         OSL_ENSURE(pTemplate,"ERROR: Trying to instantiate a set without a template");
         if (!pTemplate) throw Exception("ERROR: Trying to instantiate a set without a template");
 
-        OSL_ENSURE(pTemplate->getName() == Path::parse(rOriginal.getChildTemplateName()).back(),
+        OSL_ENSURE(pTemplate->getName().toString() == rOriginal.getElementTemplateName(),
                     "WARNING: Template name mismatch creating a set node");
 
         return ! pTemplate->isInstanceValue();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-10 13:25:01 $
+ *  last change: $Author: jb $ $Date: 2001-03-12 15:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,10 @@ void OMergeTreeAction::handle(SubtreeChange& _rChange)
     // otherwise we have to create the node
     else
     {
-        Subtree* pNode = new Subtree(_rChange.getNodeName(), _rChange.getChildTemplateName(), _rChange.getAttributes());
+        Subtree* pNode = new Subtree(_rChange.getNodeName(),
+                                     _rChange.getElementTemplateName(),
+                                     _rChange.getElementTemplateModule(),
+                                     _rChange.getAttributes());
 
         // add the subnodes
         OCreateSubtreeAction aNextLevel(pNode);
@@ -348,7 +351,10 @@ void OCreateSubtreeAction::handle(SubtreeChange& _rChange)
     ensure();
 
     // create a node by a ValueChange
-    Subtree* pNode = new Subtree(_rChange.getNodeName(), _rChange.getChildTemplateName(), _rChange.getAttributes());
+    Subtree* pNode = new Subtree(_rChange.getNodeName(),
+                                 _rChange.getElementTemplateName(),
+                                 _rChange.getElementTemplateModule(),
+                                 _rChange.getAttributes());
 
     // add it to the tree
     m_pTree->addChild(auto_ptr<INode>(pNode));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 12:40:41 $
+ *  last change: $Author: jb $ $Date: 2001-03-12 15:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ Name SetElementInfo::getTemplateName() const
 
 Name SetElementInfo::getTemplatePackage() const
 {
-    return m_aTemplate->getPackage();
+    return m_aTemplate->getModule();
 }
 //-----------------------------------------------------------------------------
 
