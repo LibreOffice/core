@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-23 11:58:00 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 12:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
+#endif
+#ifndef _SVX_EMPHITEM_HXX //autogen
+#include <svx/emphitem.hxx>
 #endif
 
 #ifndef _TXTINET_HXX //autogen
@@ -279,6 +282,10 @@ SwTxtAttr* SwTxtNode::MakeTxtAttr( const SfxPoolItem& rAttr,
     case RES_CHRATR_WEIGHT:
         pNew = new SwTxtWeight( (SvxWeightItem&)rNew, nStt, nEnd, nScript );
         break;
+    case RES_CHRATR_EMPHASIS_MARK:
+        pNew = new SwTxtEmphasisMark( (SvxEmphasisMarkItem&)rNew, nStt, nEnd );
+        break;
+
     case RES_TXTATR_CHARFMT:
         {
             SwFmtCharFmt &rFmtCharFmt = (SwFmtCharFmt&) rNew;

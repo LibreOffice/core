@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-23 11:58:08 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 12:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
+#endif
+#ifndef _SVX_EMPHITEM_HXX //autogen
+#include <svx/emphitem.hxx>
 #endif
 
 #ifndef _TXTINET_HXX //autogen
@@ -765,4 +768,32 @@ SwTxt2Lines::SwTxt2Lines( const SwFmt2Lines& rAttr,
 {
 }
 
+// ******************************
+
+SwTxtEmphasisMark::SwTxtEmphasisMark( const SvxEmphasisMarkItem& rAttr,
+                                    xub_StrLen nStart, xub_StrLen nEnd )
+    : SwTxtAttrEnd( rAttr, nStart, nEnd )
+{}
+
+void SwTxtEmphasisMark::ChgFnt(SwFont *pFont)
+{
+    ePrevEmphasis = pFont->GetEmphasisMark();
+    pFont->SetEmphasisMark( GetEmphasisMark().GetEmphasisMark() );
+}
+
+void SwTxtEmphasisMark::RstFnt(SwFont *pFont)
+{
+    pFont->SetEmphasisMark( ePrevEmphasis );
+}
+
+void SwTxtEmphasisMark::ChgTxtAttr( SwTxtAttr &rAttr )
+{
+    ePrevEmphasis = ((SwTxtEmphasisMark&)rAttr).ePrevEmphasis;
+    ((SwTxtEmphasisMark&)rAttr).ePrevEmphasis = GetEmphasisMark().GetEmphasisMark();
+}
+
+void SwTxtEmphasisMark::RstTxtAttr( SwTxtAttr &rAttr )
+{
+    ((SwTxtEmphasisMark&)rAttr).ePrevEmphasis = ePrevEmphasis;
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-25 12:02:56 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 12:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ class SwSubFont : public SvxFont
     inline void SetShadow( const BOOL bShadow );
     inline void SetAutoKern( const BOOL bAutoKern );
     inline void SetWordLineMode( const BOOL bWordLineMode );
+    inline void SetEmphasisMark( const FontEmphasisMark eValue );
 
     // Methoden fuer die Hoch-/Tiefstellung
     inline void SetEscapement( const short nNewEsc );
@@ -266,6 +267,7 @@ public:
     inline void SetWordLineMode( const BOOL bWordLineMode );
     inline void SetFixKerning( const short nNewKern );
     inline void SetCaseMap( const SvxCaseMap eNew );
+    inline void SetEmphasisMark( const FontEmphasisMark eValue );
 
     // Methoden fuer die Hoch-/Tiefstellung
     inline void SetEscapement( const short nNewEsc );
@@ -341,6 +343,8 @@ public:
     rtl_TextEncoding GetCharSet() const { return aSub[nActual].GetCharSet(); }
     long GetHeight() const { return aSub[nActual].GetSize().Height(); }
     FontWeight GetWeight() const { return aSub[nActual].GetWeight(); }
+    FontEmphasisMark GetEmphasisMark() const
+        { return aSub[nActual].GetEmphasisMark(); }
 
     inline const XubString& GetName( const BYTE nWhich ) const
         { return aSub[nWhich].GetName(); }
@@ -360,6 +364,8 @@ public:
         { return aSub[nWhich].GetSize().Height(); }
     inline FontWeight GetWeight( const BYTE nWhich ) const
         { return aSub[nWhich].GetWeight(); }
+    inline FontEmphasisMark GetEmphasisMark( const BYTE nWhich ) const
+        { return aSub[nWhich].GetEmphasisMark(); }
 
     // Macht den logischen Font im OutputDevice wirksam.
     void ChgPhysFnt( ViewShell *pSh, OutputDevice *pOut );
@@ -683,6 +689,20 @@ inline void SwFont::SetWordLineMode( const BOOL bWordLineMode )
     aSub[0].SetWordLineMode( bWordLineMode );
     aSub[1].SetWordLineMode( bWordLineMode );
     aSub[2].SetWordLineMode( bWordLineMode );
+}
+// gekapselte SV-Font-Methode
+inline void SwSubFont::SetEmphasisMark( const FontEmphasisMark eValue )
+{
+    pMagic = 0;
+    Font::SetEmphasisMark( eValue );
+}
+
+inline void SwFont::SetEmphasisMark( const FontEmphasisMark eValue )
+{
+    bFntChg = TRUE;
+    aSub[0].SetEmphasisMark( eValue );
+    aSub[1].SetEmphasisMark( eValue );
+    aSub[2].SetEmphasisMark( eValue );
 }
 
 // ueberladene Font-Methode

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 12:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 #endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
+#endif
+#ifndef _SVX_EMPHITEM_HXX //autogen
+#include <svx/emphitem.hxx>
 #endif
 #ifndef _CHARATR_HXX
 #include <charatr.hxx>
@@ -304,6 +307,7 @@ void SwFont::SetFnt( const SwAttrSet *pAttrSet )
             aSub[SW_CTL].SetLanguage( pAttrSet->GetCTLLanguage().GetLanguage() );
         }
         SetUnderline( pAttrSet->GetUnderline().GetUnderline() );
+        SetEmphasisMark( pAttrSet->GetEmphasisMark().GetEmphasisMark() );
         SetStrikeout( pAttrSet->GetCrossedOut().GetStrikeout() );
         SetColor( pAttrSet->GetColor().GetValue() );
         SetTransparent( TRUE );
@@ -442,6 +446,10 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet )
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_COLOR,
             TRUE, &pItem ))
             SetColor( ((SvxColorItem*)pItem)->GetValue() );
+        if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_EMPHASIS_MARK,
+            TRUE, &pItem ))
+            SetEmphasisMark( ((SvxEmphasisMarkItem*)pItem)->GetEmphasisMark() );
+
         SetTransparent( TRUE );
         SetAlign( ALIGN_BASELINE );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CONTOUR,
@@ -572,6 +580,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet )
     }
 
     SetUnderline( pAttrSet->GetUnderline().GetUnderline() );
+    SetEmphasisMark( pAttrSet->GetEmphasisMark().GetEmphasisMark() );
     SetStrikeout( pAttrSet->GetCrossedOut().GetStrikeout() );
     SetColor( pAttrSet->GetColor().GetValue() );
     SetTransparent( TRUE );

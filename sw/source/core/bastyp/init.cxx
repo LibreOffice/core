@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-23 11:57:23 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 12:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,9 @@
 #endif
 #ifndef _SVX_AKRNITEM_HXX //autogen
 #include <svx/akrnitem.hxx>
+#endif
+#ifndef _SVX_EMPHITEM_HXX //autogen
+#include <svx/emphitem.hxx>
 #endif
 #ifndef _SVX_CMAPITEM_HXX //autogen
 #include <svx/cmapitem.hxx>
@@ -444,7 +447,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_CTL_POSTURE
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_CTL_WEIGHT
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_WRITING_DIRECTION
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY2
+    { SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEM_POOLABLE },  // RES_CHRATR_EMPHASIS_MARK
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY3
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY4
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY5
@@ -669,9 +672,11 @@ void _InitCore()
     aAttrTab[ RES_CHRATR_WRITING_DIRECTION - POOLATTR_BEGIN ] =
                 new SfxBoolItem( RES_CHRATR_WRITING_DIRECTION );
 
+    aAttrTab[ RES_CHRATR_EMPHASIS_MARK - POOLATTR_BEGIN ] =
+                new SvxEmphasisMarkItem();
+
 // CharakterAttr - Dummies
     aAttrTab[ RES_CHRATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY1 );
-    aAttrTab[ RES_CHRATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY2 );
     aAttrTab[ RES_CHRATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY3 );
     aAttrTab[ RES_CHRATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY4 );
     aAttrTab[ RES_CHRATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY5 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-23 11:58:55 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 12:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,6 +462,21 @@ public:
                     xub_StrLen nStart, xub_StrLen nEnd );
 };
 
+// EMPHASIS_MARK ************************************************************
+
+class SwTxtEmphasisMark : public SwTxtAttrEnd
+{
+    // Hier merkt es sich das SV-Attribut Weight aus dem Font.
+    FontEmphasisMark ePrevEmphasis;
+public:
+    SwTxtEmphasisMark( const SvxEmphasisMarkItem& rAttr,
+                        xub_StrLen nStart, xub_StrLen nEnd );
+
+    virtual void ChgFnt(SwFont *);
+    virtual void RstFnt(SwFont *);
+    virtual void ChgTxtAttr( SwTxtAttr & );
+    virtual void RstTxtAttr( SwTxtAttr & );
+};
 
 
 // --------------- Inline Implementierungen ------------------------

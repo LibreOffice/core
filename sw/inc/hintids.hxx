@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-16 10:29:28 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 12:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ RES_CHRATR_BEGIN = HINT_BEGIN,
     RES_CHRATR_CTL_POSTURE,                 // 30
     RES_CHRATR_CTL_WEIGHT,                  // 31
     RES_CHRATR_WRITING_DIRECTION,           // 32
-    RES_CHRATR_DUMMY2,                      // 33
+    RES_CHRATR_EMPHASIS_MARK,               // 33
     RES_CHRATR_DUMMY3,                      // 34
     RES_CHRATR_DUMMY4,                      // 35
     RES_CHRATR_DUMMY5,                      // 36
@@ -442,6 +442,7 @@ BOOL IsInRange( const USHORT* pRange, const USHORT nId );
 #define ITEMID_NOHYPHENHERE RES_CHRATR_NOHYPHEN
 #define ITEMID_NOLINEBREAK  RES_CHRATR_NOLINEBREAK
 #define ITEMID_WORDLINEMODE RES_CHRATR_WORDLINEMODE
+#define ITEMID_EMPHASISMARK RES_CHRATR_EMPHASIS_MARK
 
 //Defines fuer die ehemaligen FrmAttribute, die jetzt in frmitems.hxx
 //von svx zu finden sind.

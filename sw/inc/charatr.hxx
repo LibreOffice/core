@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charatr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:24 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 12:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,12 @@
 #ifndef _CHARATR_HXX
 #define _CHARATR_HXX
 
-#include "format.hxx"
-#include "hintids.hxx"      // fuer die WhichIds
+#ifndef _FORMAT_HXX
+#include <format.hxx>
+#endif
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>      // fuer die WhichIds
+#endif
 
 
 /******************************************************************************
@@ -130,6 +134,8 @@ inline const SvxBlinkItem  &SwAttrSet::GetBlink(BOOL bInP) const
     {   return (const SvxBlinkItem&)Get( RES_CHRATR_BLINK,bInP); }
 inline const SvxBrushItem &SwAttrSet::GetChrBackground( BOOL bInP ) const
     {   return (const SvxBrushItem&)Get( RES_CHRATR_BACKGROUND, bInP ); }
+inline const SvxEmphasisMarkItem &SwAttrSet::GetEmphasisMark( BOOL bInP ) const
+    {   return (const SvxEmphasisMarkItem&)Get( RES_CHRATR_EMPHASIS_MARK, bInP ); }
 
 /******************************************************************************
  *  Implementierung der Charakter-Attribut Methoden vom SwFmt
@@ -176,5 +182,7 @@ inline const SvxBlinkItem            &SwFmt::GetBlink(BOOL bInP) const
     {   return aSet.GetBlink(bInP); }
 inline const SvxBrushItem            &SwFmt::GetChrBackground(BOOL bInP) const
     {   return aSet.GetChrBackground(bInP); }
+inline const SvxEmphasisMarkItem    &SwFmt::GetEmphasisMark( BOOL bInP ) const
+    {   return aSet.GetEmphasisMark(bInP); }
 
 #endif
