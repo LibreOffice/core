@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edredln.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:02:02 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,25 +130,6 @@ BOOL SwEditShell::AcceptRedline( USHORT nPos )
     return bRet;
 }
 
-BOOL SwEditShell::AcceptRedline()
-{
-    SET_CURR_SHELL( this );
-    StartAllAction();
-
-    GetDoc()->StartUndo();
-    BOOL bRet = FALSE;
-    FOREACHPAM_START(this)
-        if( PCURCRSR->HasMark() && GetDoc()->AcceptRedline( *PCURCRSR ) )
-            bRet = TRUE;
-    FOREACHPAM_END()
-    GetDoc()->EndUndo();
-    if( !::IsExtraData( GetDoc() ) )
-        lcl_InvalidateAll( this );
-
-    EndAllAction();
-    return bRet;
-}
-
 BOOL SwEditShell::RejectRedline( USHORT nPos )
 {
     SET_CURR_SHELL( this );
@@ -156,25 +137,6 @@ BOOL SwEditShell::RejectRedline( USHORT nPos )
     BOOL bRet = GetDoc()->RejectRedline( nPos );
     if( !nPos && !::IsExtraData( GetDoc() ) )
         lcl_InvalidateAll( this );
-    EndAllAction();
-    return bRet;
-}
-
-BOOL SwEditShell::RejectRedline()
-{
-    SET_CURR_SHELL( this );
-    StartAllAction();
-
-    GetDoc()->StartUndo();
-    BOOL bRet = FALSE;
-    FOREACHPAM_START(this)
-        if( PCURCRSR->HasMark() && GetDoc()->RejectRedline( *PCURCRSR ) )
-            bRet = TRUE;
-    FOREACHPAM_END()
-    GetDoc()->EndUndo();
-    if( !::IsExtraData( GetDoc() ) )
-        lcl_InvalidateAll( this );
-
     EndAllAction();
     return bRet;
 }
