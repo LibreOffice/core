@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 14:19:20 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 14:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,9 +357,11 @@ namespace svt
             }
         }
 
+        m_aFieldsFrame.SetStyle((m_aFieldsFrame.GetStyle() | WB_TABSTOP | WB_DIALOGCONTROL) & ~WB_NODIALOGCONTROL);
+
         // correct the z-order
         m_aFieldScroller.SetZOrder(m_pFields[FIELD_CONTROLS_VISIBLE - 1], WINDOW_ZORDER_BEHIND);
-        m_aOK.SetZOrder(&m_aFieldScroller, WINDOW_ZORDER_BEHIND);
+        m_aOK.SetZOrder(&m_aFieldsFrame, WINDOW_ZORDER_BEHIND);
         m_aCancel.SetZOrder(&m_aOK, WINDOW_ZORDER_BEHIND);
 
         initializeDatasources();
