@@ -399,28 +399,30 @@ sub set_childproductnames
     if ( $installer::globals::iswindowsbuild )
     {
         $installer::globals::adafilename = "adabasd1201";       # Adabas is a complete directory
-        $installer::globals::javafilename = "j2re-1_4_2_05-windows-i586-p.exe";
+        $installer::globals::javafilename = "jre-1_5_0_01-windows-i586-p.exe";
         # $installer::globals::javafilename = 'Java 2 Runtime Environment, SE v1.4.2.msi';
     }
 
     if ( $installer::globals::islinuxrpmbuild )
     {
         $installer::globals::adafilename = "adabas-12.0.1-1.i586.rpm";
-        $installer::globals::javafilename = "j2re-1_4_2_05-linux-i586.rpm";
+        $installer::globals::javafilename = "jre-1_5_0_01-linux-i586.rpm";
     }
 
     if ( $installer::globals::issolarissparcbuild )
     {
         $installer::globals::adafilename = "SUNWadabas.tar.gz";
-        $installer::globals::javafilename = "SUNWj3rt_1_4_2_05_sparc.tar.gz";
-        $installer::globals::javafilename2 = "SUNWj3cfg_1_4_2_05_sparc.tar.gz";
+        $installer::globals::javafilename = "SUNWj5rt_1_5_0_01_sparc.tar.gz";
+        $installer::globals::javafilename2 = "SUNWj5cfg_1_5_0_01_sparc.tar.gz";
+        $installer::globals::javafilename3 = "SUNWj5man_1_5_0_01_sparc.tar.gz";
     }
 
     if ( $installer::globals::issolarisx86build )
     {
         $installer::globals::adafilename = "";
-        $installer::globals::javafilename = "SUNWj3rt_1_4_2_05_x86.tar.gz";
-        $installer::globals::javafilename2 = "SUNWj3cfg_1_4_2_05_x86.tar.gz";
+        $installer::globals::javafilename = "SUNWj5rt_1_5_0_01_x86.tar.gz";
+        $installer::globals::javafilename2 = "SUNWj5cfg_1_5_0_01_x86.tar.gz";
+        $installer::globals::javafilename3 = "SUNWj5man_1_5_0_01_x86.tar.gz";
     }
 
 }
