@@ -1,0 +1,24 @@
+#ifndef __com_sun_star_i18n_ChapterCollator_idl__
+#define __com_sun_star_i18n_ChapterCollator_idl__
+
+#ifndef __com_sun_star_i18n_XCollator_idl__
+#include <com/sun/star/i18n/XCollator.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module i18n {
+
+//=============================================================================
+
+/// specific Collator
+service ChapterCollator
+{
+    interface com::sun::star::i18n::XCollator;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
