@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2001-02-22 17:15:08 $
+#   last change: $Author: hr $ $Date: 2001-02-23 14:06:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,15 +122,6 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/util.obj
 #.ENDIF
 
-.IF "$(OS)$(CPU)"=="SOLARISS"
-SLOFILES+= \
-            $(SLO)$/interlck_sparc_cas.obj \
-            $(SLO)$/interlck_sparc_swap.obj 
-OBJFILES+= \
-            $(OBJ)$/interlck_sparc_cas.obj \
-            $(OBJ)$/interlck_sparc_swap.obj
-.ENDIF
-
 # --- Targets ------------------------------------------------------
 
 .IF "$(COM)"=="C50"
@@ -140,12 +131,8 @@ APP1STDLIBS+=-lC
 .INCLUDE :  target.mk
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
-$(SLO)$/interlck_sparc_cas.obj: asm/interlck_sparc_cas.s
-        as -q -K PIC -o $(SLO)$/interlck_sparc_cas.o asm/interlck_sparc_cas.s ; touch $(SLO)$/interlck_sparc_cas.obj
-$(OBJ)$/interlck_sparc_cas.obj: asm/interlck_sparc_cas.s
-        as -q -o $(OBJ)$/interlck_sparc_cas.o asm/interlck_sparc_cas.s ; touch $(OBJ)$/interlck_sparc_cas.obj
-$(SLO)$/interlck_sparc_swap.obj: asm/interlck_sparc_swap.s
-        as -q -K PIC -o $(SLO)$/interlck_sparc_swap.o asm/interlck_sparc_swap.s ; touch $(SLO)$/interlck_sparc_swap.obj
-$(OBJ)$/interlck_sparc_swap.obj: asm/interlck_sparc_swap.s
-        as -q -o $(OBJ)$/interlck_sparc_swap.o asm/interlck_sparc_swap.s ; touch $(OBJ)$/interlck_sparc_swap.obj
+$(SLO)$/interlck.obj: asm/interlck_sparc.s
+        as -q -o $(SLO)$/interlck.o asm/interlck_sparc.s ; touch $(SLO)$/interlck.obj
+$(OBJ)$/interlck.obj: asm/interlck_sparc.s
+        as -q -o $(OBJ)$/interlck.o asm/interlck_sparc.s ; touch $(OBJ)$/interlck.obj
 .ENDIF
