@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:58:46 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ const USHORT MAXFILTER =
         1 +
 #endif
         //21;
-        18;
+        19;
 
 #define FORAMTNAME_SW4      "StarWriter 4.0"
 #define FORAMTNAME_SW3      "StarWriter 3.0"
@@ -199,6 +199,7 @@ const sal_Char __FAR_DATA FILTER_XML[]  = "CXML";
 const sal_Char __FAR_DATA FILTER_XMLV[]     = "CXMLV";
 const sal_Char __FAR_DATA FILTER_XMLVW[]    = "CXMLVWEB";
 const sal_Char __FAR_DATA sSwDos[]      = "SW6";
+const sal_Char __FAR_DATA sWPD[]        = "WPD";
 
 #ifdef _DLL_
 const sal_Char* GetFILTER_XML()
@@ -236,7 +237,8 @@ SwIoDetect aReaderWriter[ MAXFILTER ] =
 /* 16*/ SwIoEntry(sWW1,             STRING_LEN, 0,                  TRUE),
 /* 17*/ SwIoEntry(sWW5,             STRING_LEN, 0,                  FALSE),
 /* 18*/ SwIoEntry(sSwg1,            4,          0,                  FALSE),
-/* 19*/ SwIoEntry(FILTER_XML,       4,          &::GetXMLWriter,    TRUE)
+/* 19*/ SwIoEntry(sWPD,             4,          0,                  TRUE),
+/* 20*/ SwIoEntry(FILTER_XML,       4,          &::GetXMLWriter,    TRUE)
 /* opt*/ DEB_SH_SwIoEntry(sW4W_Int, STRING_LEN, 0,                  TRUE),
 /*last*/ SwIoEntry(FILTER_TEXT,     4,          &::GetASCWriter,    TRUE)
 };
@@ -322,6 +324,11 @@ const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, ULONG nLen_,
         bRet = 0 == strncmp( sSw6_FormatStt, pHeader, 12 ) &&
                   0 == strncmp( sSw6_FormatEnd, pHeader + 12 + 1, 4 );
     }
+    else if( sWPD == pName )
+    {
+        sal_Char __READONLY_DATA aWPD_Magic[] = "WPC";
+        bRet = 0 == strncmp( aWPD_Magic, pHeader + 1, 3);
+    }
     else if (FILTER_TEXT == pName)
         bRet = SwIoSystem::IsDetectableText(pHeader, nLen_);
     else if (FILTER_W4W == pName)
@@ -351,6 +358,9 @@ const String SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
     if( rUserData.EqualsAscii(sExcel) || rUserData.EqualsAscii(sCExcel) )
         return String::CreateFromAscii(
                 RTL_CONSTASCII_STRINGPARAM( "Book" ));
+    if( rUserData.EqualsAscii(sWPD) )
+         return String::CreateFromAscii(
+                RTL_CONSTASCII_STRINGPARAM( "PerfectOffice_MAIN" ));
     return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "" ));
 }
 const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
