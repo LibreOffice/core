@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: bmahbod $ $Date: 2000-10-06 23:53:15 $
+#   last change: $Author: hr $ $Date: 2000-11-07 09:47:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,12 +93,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files -------------------------------------
 
-SLOFILES=	$(SLO)$/basicio.obj             \
-        $(SLO)$/streamsection.obj       \
-        $(SLO)$/streamhelper.obj        \
-        $(SLO)$/streamwrap.obj          \
-        $(SLO)$/seqstream.obj           \
-        $(SLO)$/oslfile2streamwrap.obj
+SLOFILES= $(SLO)$/streamhelper.obj        \
+        $(SLO)$/streamwrap.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism 
