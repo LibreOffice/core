@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 06:11:24 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,7 +543,7 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text[ italian ] = "Testo sorgente HTML";
     Text[ danish ] = "HTML-kildetekst";
     Text[ swedish ] = "HTML-källtext";
-    Text[ polish ] = "Tekst Ÿród³owy HTML";
+    Text[ polish ] = "Tekst ?ród³owy HTML";
     Text[ portuguese_brazilian ] = "FramesetSource";
     Text[ japanese ] = "HTML ¿°½Ã·½Ä";
     Text[ chinese_simplified ] = "HTML Ô´ÎÄ±¾";
