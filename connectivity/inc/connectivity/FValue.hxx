@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-26 12:31:09 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,6 +354,29 @@ namespace connectivity
         ::com::sun::star::uno::Any                  makeAny()       const;
     };
 
+    /// ORowSetValueDecorator decorates a ORowSetValue so the value is "refcounted"
+    class ORowSetValueDecorator : public ::vos::OReference
+    {
+        ORowSetValue    m_aValue;   // my own value
+    public:
+        ORowSetValueDecorator(){m_aValue.setBound(sal_True);}
+        ORowSetValueDecorator(const ORowSetValue& _aValue) : m_aValue(_aValue){m_aValue.setBound(sal_True);}
+        ORowSetValueDecorator& operator=(const ORowSetValue& _aValue);
+
+        inline operator const ORowSetValue&()   const               { return m_aValue; }
+        inline sal_Bool operator ==( const ORowSetValue & _rRH )    { return m_aValue == _rRH; }
+        inline const ORowSetValue& getValue()   const               { return m_aValue; }
+        inline ORowSetValue& get()                                  { return m_aValue; }
+        inline void setValue(const ORowSetValue& _aValue)           { m_aValue = _aValue; }
+        inline void setNull()                                       { m_aValue.setNull(); }
+        inline void setBound(sal_Bool _bBound )                     { m_aValue.setBound(_bBound);}
+        inline sal_Bool isBound( ) const                            { return m_aValue.isBound();}
+        inline void setTypeKind(sal_Int32 _nType)                   { m_aValue.setTypeKind(_nType); }
+        inline void setModified(sal_Bool _bModified)                { m_aValue.setModified(_bModified); }
+
+    };
+    typedef ::vos::ORef<ORowSetValueDecorator> ORowSetValueDecoratorRef;
+
     // -------------------------------------------------------------------------
     /// TSetBound is a unary_function to set the bound value with e.q. for_each call
     struct TSetBound : ::std::unary_function<ORowSetValue,void>
@@ -364,44 +387,50 @@ namespace connectivity
 
     };
 
-    /// ORowSetValueDecorator decorates a ORowSetValue so the value is "refcounted"
-    class ORowSetValueDecorator : public ::vos::OReference
+    // -------------------------------------------------------------------------
+    /// TSetBound is a unary_function to set the bound value with e.q. for_each call
+    struct TSetRefBound : ::std::unary_function<ORowSetValueDecoratorRef,void>
     {
-        ORowSetValue    m_aValue;   // my own value
-    public:
-        ORowSetValueDecorator(){m_aValue.setBound(sal_True);}
-        ORowSetValueDecorator(const ORowSetValue& _aValue) : m_aValue(_aValue){m_aValue.setBound(sal_True);}
-        ORowSetValueDecorator& operator=(const ORowSetValue& _aValue);
-
-        operator const ORowSetValue&()  const   { return m_aValue; }
-        const ORowSetValue& getValue()  const   { return m_aValue; }
-        void setValue(const ORowSetValue& _aValue) { m_aValue = _aValue; }
-        void setNull() { m_aValue.setNull(); }
+        sal_Bool m_bBound;
+        TSetRefBound(sal_Bool _bBound) : m_bBound(_bBound){}
+        void operator()(ORowSetValueDecoratorRef& _rValue) const { _rValue->setBound(m_bBound); }
 
     };
 
-    typedef ::vos::ORef<ORowSetValueDecorator> ORowSetValueDecoratorRef;
     // ----------------------------------------------------------------------------
     // Vector for file based rows
     // ----------------------------------------------------------------------------
-    class  OValueVector : public connectivity::ORowVector< ORowSetValue >
+    template< class VectorVal > class  ODeleteVector : public connectivity::ORowVector< VectorVal >
     {
         sal_Bool    m_bDeleted;
     public:
-        OValueVector()              : connectivity::ORowVector< ORowSetValue >()    ,m_bDeleted(sal_False)  {}
-        OValueVector(size_t _st)    : connectivity::ORowVector< ORowSetValue >(_st) ,m_bDeleted(sal_False)  {}
+        ODeleteVector()             : connectivity::ORowVector< VectorVal >()       ,m_bDeleted(sal_False)  {}
+        ODeleteVector(size_t _st)   : connectivity::ORowVector< VectorVal >(_st)    ,m_bDeleted(sal_False)  {}
 
         sal_Bool    isDeleted() const               { return m_bDeleted;        }
         void        setDeleted(sal_Bool _bDeleted)  { m_bDeleted = _bDeleted;   }
     };
 
+    typedef ODeleteVector< ORowSetValue >               OValueVector;
+
+    class OValueRefVector : public ODeleteVector< ORowSetValueDecoratorRef >
+    {
+    public:
+        OValueRefVector(){}
+        OValueRefVector(size_t _st) : ODeleteVector< ORowSetValueDecoratorRef >(_st)
+        {
+            for(OValueRefVector::iterator aIter = begin() ; aIter != end() ;++aIter)
+                *aIter = new ORowSetValueDecorator;
+        }
+    };
+
 #define SQL_NO_PARAMETER (ULONG_MAX)
-    class OAssignValues : public OValueVector
+    class OAssignValues : public OValueRefVector
     {
         ::std::vector<sal_Int32> m_nParameterIndexes;
     public:
         OAssignValues() : m_nParameterIndexes(1,SQL_NO_PARAMETER){}
-        OAssignValues(size_type n) : OValueVector(n),m_nParameterIndexes(n+1,SQL_NO_PARAMETER){}
+        OAssignValues(size_type n) : OValueRefVector(n),m_nParameterIndexes(n+1,SQL_NO_PARAMETER){}
 
         void setParameterIndex(sal_Int32 _nId,sal_Int32 _nParameterIndex) { m_nParameterIndexes[_nId] = _nParameterIndex;}
         sal_Int32 getParameterIndex(sal_Int32 _nId) const { return m_nParameterIndexes[_nId]; }
@@ -409,7 +438,10 @@ namespace connectivity
 
     typedef ::vos::ORef< OAssignValues > ORefAssignValues;
 
-    typedef ::vos::ORef< OValueVector > OValueRow;
+
+
+    typedef ::vos::ORef< OValueVector >                 OValueRow;
+    typedef ::vos::ORef< OValueRefVector >              OValueRefRow;
 }
 
 #endif // #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
