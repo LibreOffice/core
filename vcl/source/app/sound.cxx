@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sound.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-14 13:15:49 $
+ *  last change: $Author: ka $ $Date: 2001-02-10 15:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,13 @@ BOOL Sound::SetSoundName( const XubString& rSoundName )
         String          aSoundName, aTmp;
 
         if( aSoundURL.GetProtocol() != INET_PROT_NOT_VALID )
+        {
+#ifdef REMOTE_APPSERVER
+            aSoundName = aSoundURL.GetMainURL();
+#else
             ::utl::LocalFileHelper::ConvertURLToPhysicalName( aSoundURL.GetMainURL(), aSoundName );
+#endif
+        }
         else if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rSoundName, aTmp ) )
             aSoundName = rSoundName;
         else
