@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXHeadFootText.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:35 $
+ *  last change:$Date: 2003-02-06 11:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@ import util.ParagraphDsc;
 import util.SOfficeFactory;
 import util.TableDsc;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 
 /**
  * Object implements the following interfaces :
@@ -153,8 +156,7 @@ public class SwXHeadFootText extends TestCase {
     *    {@link ifc.text._XRelativeTextContentInsert} : paragraph creator</li>
     * </ul>
     */
-    public synchronized TestEnvironment createTestEnvironment(
-            TestParameters Param, PrintWriter log) throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         XPropertySet PropSet;
         XPropertySetInfo PropSetInfo;
@@ -172,14 +174,19 @@ public class SwXHeadFootText extends TestCase {
 
         // obtains style 'Standatd' from style family 'PageStyles'
         try {
-            PageStyles = (XNameAccess) StyleFamNames.getByName("PageStyles");
-            StdStyle = (XStyle) PageStyles.getByName("Standard");
+            PageStyles = (XNameAccess) AnyConverter.toObject(
+                new Type(XNameAccess.class),StyleFamNames.getByName("PageStyles"));
+            StdStyle = (XStyle) AnyConverter.toObject(
+                    new Type(XStyle.class),PageStyles.getByName("Standard"));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             e.printStackTrace(log);
             throw new StatusException("Error getting style by name!", e);
         } catch ( com.sun.star.container.NoSuchElementException e ) {
             e.printStackTrace(log);
             throw new StatusException("Error, no such style name! ", e);
+        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
+            e.printStackTrace(log);
+            throw new StatusException("Error getting style by name!", e);
         }
 
         PropSet = (XPropertySet)
@@ -229,4 +236,3 @@ public class SwXHeadFootText extends TestCase {
     } // finish method getTestEnvironment
 
 }    // finish class SwXHeadFootText
-
