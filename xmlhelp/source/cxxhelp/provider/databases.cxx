@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-23 13:54:35 $
+ *  last change: $Author: abi $ $Date: 2001-11-23 15:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,56 +538,11 @@ Databases::getCollator( const rtl::OUString& Language,
 }
 
 
-KeywordInfo::KeywordElement::KeywordElement( Databases *pDatabases,
-                                             Db* pDb,
-                                             Reference< XCollator > xCollator,
-                                             rtl::OUString& ky,
-                                             rtl::OUString& data )
-    :  m_xCollator( xCollator ),
-       key( ky )
+
+bool KeywordInfo::KeywordElementComparator::operator()( const KeywordInfo::KeywordElement& la,
+                                                        const KeywordInfo::KeywordElement& ra) const
 {
-    pDatabases->replaceName( key );
-    init( pDatabases,pDb,data );
-}
-
-
-//  std::vector<KeywordInfo::KeywordElement> *globSet = 0;
-
-//  bool check(const KeywordInfo::KeywordElement& aElement)
-//  {
-//      std::vector<KeywordInfo::KeywordElement> aVec = *globSet;
-
-//      if( aElement.key.getLength() == 0 )
-//          fprintf(stderr,"...found zero element at position %d\n",aVec.size());
-
-//      for(int i = 0; i < aVec.size(); ++i)
-//      {
-//          for(int j = i; j < aVec.size(); ++j)
-//          {
-//              bool b12 = aVec[i]<aVec[j];
-//              bool b13 = aVec[i]<aElement;
-//              bool b21 = aVec[j]<aVec[i];
-//              bool b23 = aVec[j]<aElement;
-//              bool b31 = aElement<aVec[i];
-//              bool b32 = aElement<aVec[j];
-
-//              if( b12 && b23 && ! b13 ||
-//                  b13 && b32 && ! b12 ||
-//                  b21 && b13 && ! b23 ||
-//                  b31 && b12 && ! b32 ||
-//                  b23 && b31 && ! b21 ||
-//                  b32 && b21 && ! b31 )
-//                  fprintf(stderr,"found index tripel not matching weak ordering requirement");
-//          }
-//      }
-
-//      aVec.push_back( aElement );
-//  }
-
-
-bool KeywordInfo::KeywordElement::operator<( const KeywordElement& ra ) const
-{
-    const rtl::OUString& l = key;
+    const rtl::OUString& l = la.key;
     const rtl::OUString& r = ra.key;
 
     bool ret;
@@ -618,6 +573,20 @@ bool KeywordInfo::KeywordElement::operator<( const KeywordElement& ra ) const
 
     return ret;
 }
+
+
+
+
+KeywordInfo::KeywordElement::KeywordElement( Databases *pDatabases,
+                                             Db* pDb,
+                                             rtl::OUString& ky,
+                                             rtl::OUString& data )
+    : key( ky )
+{
+    pDatabases->replaceName( key );
+    init( pDatabases,pDb,data );
+}
+
 
 
 void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl::OUString& ids )
@@ -666,7 +635,8 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
 }
 
 
-KeywordInfo::KeywordInfo( const std::set< KeywordElement >& aSet )
+
+KeywordInfo::KeywordInfo( const std::set< KeywordElement,KeywordElementComparator >& aSet )
     : listKey( aSet.size() ),
       listId( aSet.size() ),
       listAnchor( aSet.size() ),
@@ -682,22 +652,6 @@ KeywordInfo::KeywordInfo( const std::set< KeywordElement >& aSet )
         listTitle[idx] = it->listTitle;
         ++idx;
         ++it;
-    }
-}
-
-
-KeywordInfo::KeywordInfo( const std::vector< KeywordElement >& aVec )
-    : listKey( aVec.size() ),
-      listId( aVec.size() ),
-      listAnchor( aVec.size() ),
-      listTitle( aVec.size() )
-{
-    for( int i = 0; i < aVec.size(); ++i )
-    {
-        listKey[i] = aVec[i].key;
-        listId[i] = aVec[i].listId;
-        listAnchor[i] = aVec[i].listAnchor;
-        listTitle[i] = aVec[i].listTitle;
     }
 }
 
@@ -729,9 +683,12 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
         Db table( 0,DB_CXX_NO_EXCEPTIONS );
         if( 0 == table.open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
         {
-            std::vector<KeywordInfo::KeywordElement> aVector;
-            Db* idmap = getBerkeley( Database,Language );
             Reference< XCollator > xCollator = getCollator( Language,rtl::OUString() );
+
+            KeywordInfo::KeywordElementComparator aComparator( xCollator );
+
+            std::set<KeywordInfo::KeywordElement,KeywordInfo::KeywordElementComparator> aSet( aComparator );
+            Db* idmap = getBerkeley( Database,Language );
 
             bool first = true;
 
@@ -749,11 +706,10 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                                        data.get_size(),
                                        RTL_TEXTENCODING_UTF8 );
 
-                aVector.push_back( KeywordInfo::KeywordElement( this,
-                                                                idmap,
-                                                                xCollator,
-                                                                keyword,
-                                                                doclist ) );
+                aSet.insert( KeywordInfo::KeywordElement( this,
+                                                          idmap,
+                                                          keyword,
+                                                          doclist ) );
                 if( first )
                 {
                     key.set_flags( DB_DBT_REALLOC );
@@ -761,16 +717,15 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                     first = false;
                 }
             }
-            std::sort( aVector.begin(),aVector.end() );
+
             if( cursor ) cursor->close();
-            KeywordInfo* info = it->second = new KeywordInfo( aVector );
+            KeywordInfo* info = it->second = new KeywordInfo( aSet );
         }
         table.close( 0 );
     }
 
     return it->second;
 }
-
 
 
 
