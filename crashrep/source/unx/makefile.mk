@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-26 03:10:27 $
+#   last change: $Author: kz $ $Date: 2004-12-16 11:17:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,6 +59,9 @@ LIBSALCPPRT=$(0)
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+PKGCONFIG_MODULES=gtk+-2.0
+.INCLUDE: pkg_config.mk
+
 # ------------------------------------------------------------------
 
 .IF "$(OS)"=="MACOSX"
@@ -68,12 +71,10 @@ dummy:
 
 .ELSE		# "$(OS)"=="MACOSX"
 
-# Only build crash reporter if either a product build with debug info 
+# Only build crash reporter if either a product build with debug info
 # or a non-pro build is done.
 
 .IF "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == ""
-
-CFLAGS+=`pkg-config --cflags gtk+-2.0`
 
 SOLARLIB!:=$(SOLARLIB:s/jre/jnore/)
 
@@ -86,15 +87,11 @@ APP1NOSAL=TRUE
 APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJFILES)
 
-APP1STDLIBS=`pkg-config --libs gtk+-2.0` $(DYNAMIC) -lXext -lX11 -ldl -lnsl
+APP1STDLIBS=$(PKGCONFIG_LIBS)
+APP1STDLIBS+=$(DYNAMIC) -lXext -lX11 -ldl -lnsl
 .IF "$(OS)" == "SOLARIS"
 APP1STDLIBS+=-lsocket
 .ENDIF
-.IF "$(OS)" == "FREEBSD"
-APP1STDLIBS=`pkg-config --libs gtk+-2.0` $(DYNAMIC) -lXext -lX11
-.ENDIF
-
-
 
 # Build statically linked version for special builds and non-pros
 
@@ -102,20 +99,24 @@ APP1STDLIBS=`pkg-config --libs gtk+-2.0` $(DYNAMIC) -lXext -lX11
 APP2NOSAL=TRUE
 APP2TARGET=$(TARGET2)
 APP2OBJS=$(OBJFILES)
-
+.IF "$(OS)"=="SOLARIS"
+LINKFLAGSAPP!:=$(LINKFLAGSAPP:s/-z defs/-z nodefs/)
+.ENDIF          # "$(OS)"=="SOLARIS"
+APP2STDLIBS=$(PKGCONFIG_LIBS)
+APP2STDLIBS+=$(STATIC)
 .IF "$(SYSTEM_ZLIB)"=="YES"
-APP2STDLIBS=$(STATIC) `pkg-config --only-mod-libs --libs gtk+-2.0` -lpng $(ZLIB3RDLIB) -ljpeg -ltiff $(DYNAMIC) -lXext -lX11 -ldl -lnsl
+APP2STDLIBS+=-lpng $(ZLIB3RDLIB) -ljpeg -ltiff $(DYNAMIC) -lXext -lX11 -ldl -lnsl
 .ELSE
-APP2STDLIBS=$(STATIC) `pkg-config --only-mod-libs --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff $(DYNAMIC) -lXext -lX11 -ldl -lnsl
+APP2STDLIBS+=-lpng -lzlib -ljpeg -ltiff $(DYNAMIC) -lXext -lX11 -ldl -lnsl
 .ENDIF
 .IF "$(OS)" == "SOLARIS"
 APP2STDLIBS+=-lsocket
 .ENDIF
 .IF "$(OS)" == "FREEBSD"
 .IF "$(SYSTEM_ZLIB)"=="YES"
-APP2STDLIBS=$(STATIC) `pkg-config --libs gtk+-2.0` -lpng $(ZLIB3RDLIB) -ljpeg -ltiff $(DYNAMIC) -lXext -lX11
+APP2STDLIBS+=-lpng $(ZLIB3RDLIB) -ljpeg -ltiff $(DYNAMIC) -lXext -lX11
 .ELSE
-APP2STDLIBS=$(STATIC) `pkg-config --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff $(DYNAMIC) -lXext -lX11
+APP2STDLIBS+=-lpng -lzlib -ljpeg -ltiff $(DYNAMIC) -lXext -lX11
 .ENDIF
 .ENDIF
 
