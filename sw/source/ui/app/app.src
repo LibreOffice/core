@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:06:38 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 20:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1698,7 +1698,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_40
     Text[ dutch ] = "%PRODUCTNAME 4.0 Tekst";
     Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 ÎÄ±¾";
     Text[ greek ] = "Êåßìåíï (%PRODUCTNAME 4.0)";
-    Text[ korean ] = "%PRODUCTNAME 4.0¡¡Text ";
+    Text[ korean ] = "%PRODUCTNAME 4.0 Text ";
     Text[ turkish ] = "%PRODUCTNAME 4.0 metni";
     Text[ catalan ] = "%PRODUCTNAME 4.0 texto";
     Text[ finnish ] = "Teksti (%PRODUCTNAME 4.0)";
@@ -1739,7 +1739,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE
     Text[ english_us ] = "%PRODUCTNAME 6.0 Text Document";
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Texto";
     Text[ russian ] = "Òåêñòîâûé äîêóìåíò (%PRODUCTNAME 6.0)";
-    Text[ greek ] = "Êåßìåíï %PRODUCTNAME 6.0";
+    Text[ greek ] = "¸ããñáöï êåéìİíïõ %PRODUCTNAME 6.0";
     Text[ dutch ] = "%PRODUCTNAME 6.0 Tekstdocument";
     Text[ french ] = "%PRODUCTNAME 6.0 Texte";
     Text[ spanish ] = "%PRODUCTNAME 6.0 Documento de texto";
@@ -1894,7 +1894,7 @@ String STR_LOAD_GLOBAL_DOC
     Text [ portuguese ] = "Nome e atalho do documento-mestre" ;
     Text[ chinese_simplified ] = "Ö÷¿ØÎÄµµµÄÃû³ÆºÍÂ·¾¶";
     Text[ russian ] = "Èìÿ è ïóòü ãëàâíîãî äîêóìåíòà";
-    Text[ polish ] = "Nazwa i ?cie¿ka dokumentu g³ównego";
+    Text[ polish ] = "Nazwa i œcie¿ka dokumentu g³ównego";
     Text[ japanese ] = "Ï½À°ÄŞ·­ÒİÄ‚Ì–¼‘O‚ÆÊß½";
     Text[ chinese_traditional ] = "¥D±±¤å¥óªº¦WºÙ©M¸ô®|";
     Text[ arabic ] = "ÇÓã æãÓÇÑ ÇáãÓÊäÏ ÇáÔÇãá";
@@ -1923,7 +1923,7 @@ String STR_LOAD_HTML_DOC
     Text [ portuguese ] = "Nome e atalho do documento HTML" ;
     Text[ chinese_simplified ] = "HTML ÎÄµµÃû³ÆºÍÂ·¾¶";
     Text[ russian ] = "Èìÿ è ïóòü äîêóìåíòà HTML";
-    Text[ polish ] = "Nazwa i ?cie¿ka dokumentu HTML";
+    Text[ polish ] = "Nazwa i œcie¿ka dokumentu HTML";
     Text[ japanese ] = "HTML Œ`®ÄŞ·­ÒİÄ‚Ì–¼‘O‚ÆÊß½";
     Text[ chinese_traditional ] = "HTML ¤å¥ó¦WºÙ©M¸ô®|";
     Text[ arabic ] = "ÇÓã æãÓÇÑ ãÓÊäÏ   HTML";
@@ -1957,7 +1957,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE[ chinese_simplified ] = "ÔÚ¼Ä·¢µç×ÓÓÊ¼şÊ±·¢Éú´íÎó¡£";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ russian ] = "Îøèáêà ïğè îòïğàâëåíèè ñîîáùåíèÿ.";
-    MESSAGE[ polish ] = "B³¹d przy wysy³aniu wiadomo?ci.";
+    MESSAGE[ polish ] = "B³¹d przy wysy³aniu wiadomoœci.";
     MESSAGE[ japanese ] = "Ò°Ù‘—M‚ÌÛ‚Ì´×°";
     MESSAGE[ chinese_traditional ] = "¦b±Hµo¹q¤l¶l¥ó®Éµo¥Í¿ù»~¡C";
     MESSAGE[ arabic ] = "ÎØÃ ÃËäÇÁ ÅÑÓÇá ÇáÑÓÇáÉ.";
@@ -2703,7 +2703,7 @@ QueryBox MSG_COMCORE_ASKSEARCH
     Message [ english_us ] = "A large amount of memory is required to undo this action.\nDo you want to cancel the undo?" ;
     Message[ chinese_simplified ] = "³·ÏûÃüÁî¹¦ÄÜĞèÒªºÜ¶àµÄÄÚ´æ¡£\nÄúÒªÊ§»î³·ÏûÃüÁî¹¦ÄÜÂğ£¿";
     Message[ russian ] = "İòîìó äåéñòâèş íåîáõîäèìî äëÿ îòìåíû ñëèøêîì ìíîãî ïàìÿòè.\nÂû õîòèòå îòêëş÷èòü îòìåíó?";
-    Message[ polish ] = "Cofniêcie tej akcji wymaga du¿ej ilo?ci pamiêci.\nCzy chcesz przerwaæ cofniêcie?";
+    Message[ polish ] = "Cofniêcie tej akcji wymaga du¿ej iloœci pamiêci.\nCzy chcesz przerwaæ cofniêcie?";
     Message[ japanese ] = "‚±‚Ìì‹Æ‚Í¤Œ³‚É–ß‚·‚½‚ß‚É”ñí‚É‘½‚­‚ÌÒÓØ‚ª•K—v‚Å‚·B\nŒ³‚É–ß‚·‚±‚Æ‚ğæ‚è‚â‚ß‚Ü‚·‚©?";
     Message[ chinese_traditional ] = "´_­ì¥\\¯à»İ­n«Ü¦hªº°O¾ĞÅé¡C\n±z­nÃö³¬´_­ì¥\\¯à¡H";
     Message[ arabic ] = "ÇáÊÑÇÌÚ Úä åĞÇ ÇáÅÌÑÇÁ íÊØáÈ ĞÇßÑÉ ßÈíÑÉ ÌÏÇğ.\nåá ÊÑíÏ ÅáÛÇÁ ÇáÊÑÇÌÚ¿";
@@ -2952,7 +2952,7 @@ QueryBox MSG_CLPBRD_CLEAR
     MESSAGE[ chinese_simplified ] = "Äú½«Ò»¸ö½Ï´óµÄÊı¾İ¸´ÖÆµ½¼ôÌù°å¡£\nÄúÏëÒªÈÃÆäËûµÄÓ¦ÓÃ³ÌĞòÒ²ÄÜ¹»Ê¹ÓÃÕâ¸öÊı¾İÂğ£¿";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ russian ] = "Âû ñîõğàíèëè áîëüøåå êîëè÷åñòâî äàííûõ â áóôåğå îáìåíà.\nÄîëæíî ëè ñîäåğæèìîå áóôåğà îáìåíà áûòü äîñòóïíûì äëÿ äğóãèõ ïğèëîæåíèé?";
-    MESSAGE[ polish ] = "W schowku zosta³y umieszczone wiêksze ilo?ci danych.\nCzy tre?æ tych danych ma zostaæ udostêpniona innym aplikacjom?";
+    MESSAGE[ polish ] = "W schowku zosta³y umieszczone wiêksze iloœci danych.\nCzy treœæ tych danych ma zostaæ udostêpniona innym aplikacjom?";
     MESSAGE[ japanese ] = "¸Ø¯ÌßÎŞ°ÄŞ‚É‘å—Ê‚ÌÃŞ°À‚ª•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚·B\n¸Ø¯ÌßÎŞ°ÄŞ‚Ì“à—e‚ğ‘¼‚Ì±ÌßØ¹°¼®İ‚Ég—p‚µ‚Ü‚·‚©?";
     MESSAGE[ chinese_traditional ] = "±z¤w¸g±N¤@­Ó¸û¤jªº¸ê®Æ½Æ»s¨ì°Å¶KÃ¯¡C\n±z·Q­nÅı¨ä¥LªºÀ³¥Îµ{§Ç¤]¯à°÷¨Ï¥Î³o­Ó¸ê®Æ¡H";
     MESSAGE[ arabic ] = "áŞÏ ŞãÊ ÈÍİÙ ßãíÇÊ ßÈíÑÉ ãä ÇáÈíÇäÇÊ İí ÇáÍÇİÙÉ.\nåá ÊÑíÏ æÖÚ ãÍÊæíÇÊ ÇáÍÇİÙÉ ÊÍÊ ÊÕÑİ ÊØÈíŞÇÊ ÃÎÑì¿";
@@ -3064,7 +3064,7 @@ String STR_FDLG_TEMPLATE_NAME
     Text [ danish ] = "Aktuel skabelon: " ;
     Text [ italian ] = "Modello corrente: " ;
     Text [ spanish ] = "Plantilla actual:  " ;
-    Text [ french ] = "Style actif : " ;
+    Text [ french ] = "Modèle actif : " ;
     Text [ dutch ] = "Actuele sjabloon  " ;
     Text [ portuguese ] = "Modelo actual: " ;
     Text[ chinese_simplified ] = "µ±Ç°µÄÑùÊ½£º ";
