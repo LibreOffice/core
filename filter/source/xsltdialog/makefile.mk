@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-09 10:15:04 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:39:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,8 @@ GEN_HID_OTHER=TRUE
 
 # --- Files -------------------------------------
 
-SRCFILES =	xmlfiltersettingsdialog.src							\
+SRS1NAME=$(TARGET)
+SRC1FILES =	xmlfiltersettingsdialog.src							\
             xmlfiltertabdialog.src								\
             xmlfiltertabpagebasic.src							\
             xmlfiltertabpagexslt.src							\
