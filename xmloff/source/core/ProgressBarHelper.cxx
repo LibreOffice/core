@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-10 18:12:55 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 18:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,9 @@ void ProgressBarHelper::SetValue(sal_Int32 nValue)
 {
     if (xStatusIndicator.is())
     {
-//      sal_Int32 nNewValue = (((100 / nReference) * nValue) * nProgressBarRange) / 100;
-        sal_Int32 nNewValue = (nValue * nProgressBarRange) / nReference;
-        xStatusIndicator->setValue(nNewValue);
+        double fValue(nValue);
+        double fNewValue = (fValue * nProgressBarRange) / nReference;
+        xStatusIndicator->setValue((sal_Int32)fNewValue);
     }
 }
 
