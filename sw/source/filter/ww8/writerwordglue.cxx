@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:10:57 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ namespace
             else
             {
                 const SwFmtFrmSize& rSz = rFmt.GetFrmSize();
-                if (ATT_VAR_SIZE != rSz.GetSizeType())
+                if (ATT_VAR_SIZE != rSz.GetHeightSizeType())
                     nDist += rSz.GetHeight();
                 else
                 {
