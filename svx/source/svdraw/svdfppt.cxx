@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-26 16:14:05 $
+ *  last change: $Author: sj $ $Date: 2002-04-02 13:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1257,14 +1257,32 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         eTHA = SDRTEXTHORZADJUST_LEFT;
                     break;
                 }
+
                 // if there is a 100% use of following attributes, the textbox can been aligned also in vertical direction
-                if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT )
-                    eTVA = SDRTEXTVERTADJUST_BOTTOM;
-                else if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER )
-                    eTVA = SDRTEXTVERTADJUST_CENTER;
-                else if ( ( nTextFlags & ( PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT ) )
-                            == ( PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT ) )
-                    eTVA = SDRTEXTVERTADJUST_CENTER;
+                switch ( eTextAnchor )
+                {
+                    case mso_anchorTopCentered :
+                    case mso_anchorMiddleCentered :
+                    case mso_anchorBottomCentered :
+                    case mso_anchorTopCenteredBaseline:
+                    case mso_anchorBottomCenteredBaseline:
+                    {
+                        // check if it is sensible to use the centered alignment
+                        sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;
+                        if ( ( nTextFlags & nMask ) != nMask )  // if the textobject has left and also right aligned pararagraphs
+                            eTVA = SDRTEXTVERTADJUST_CENTER;    // the text has to be displayed using the full width;
+                    }
+                    break;
+
+                    default :
+                    {
+                        if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER )
+                            eTVA = SDRTEXTVERTADJUST_CENTER;
+                        else if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT )
+                            eTVA = SDRTEXTVERTADJUST_BOTTOM;
+                    }
+                    break;
+                }
                 nMinFrameWidth = rTextRect.GetWidth() - ( nTextLeft + nTextRight );
             }
             else
