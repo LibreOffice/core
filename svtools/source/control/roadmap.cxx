@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roadmap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:23:08 $
+ *  last change: $Author: kz $ $Date: 2004-11-26 20:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 
 #define RMENTRYPOINT_X      4
 #define RMENTRYPOINT_Y      27
-#define RMITEMDISTANCE_Y    18
+#define RMITEMDISTANCE_Y    6
 #define RMINCOMPLETE        -1
 #define NREMOVERMITEM       -1
 #define NADDITEM            1
@@ -97,29 +97,29 @@ namespace svt
 //.........................................................................
 
     typedef std::vector< ::rtl::OUString > S_Vector;
-    typedef std::vector< HyperLabel* > HL_Vector;
+    typedef std::vector< ORoadmapHyperLabel* > HL_Vector;
 
     //=====================================================================
     //= FontChanger
     //=====================================================================
-    class FontChanger
-    {
-    protected:
-        OutputDevice*   m_pDev;
-
-    public:
-        FontChanger( OutputDevice* _pDev, const Font& _rNewFont )
-            :m_pDev( _pDev )
-        {
-            m_pDev->Push( PUSH_FONT );
-            m_pDev->SetFont( _rNewFont );
-        }
-
-        ~FontChanger()
-        {
-            m_pDev->Pop( );
-        }
-    };
+//  class FontChanger
+//  {
+//  protected:
+//      OutputDevice*   m_pDev;
+//
+//  public:
+//      FontChanger( OutputDevice* _pDev, const Font& _rNewFont )
+//          :m_pDev( _pDev )
+//      {
+//          m_pDev->Push( PUSH_FONT );
+//          m_pDev->SetFont( _rNewFont );
+//      }
+//
+//      ~FontChanger()
+//      {
+//          m_pDev->Pop( );
+//      }
+//  };
 
 
     //=====================================================================
@@ -165,14 +165,14 @@ namespace svt
             m_bComplete( sal_True ) {}
 
         Size aHyperLabelPixelSize;
-        HyperLabel* InCompleteHyperLabel;
+        ORoadmapHyperLabel* InCompleteHyperLabel;
 
-        void                addHyperLabel( HyperLabel*  _rRoadmapStep ) { m_aRoadmapSteps.push_back(_rRoadmapStep); }
+        void                addHyperLabel( ORoadmapHyperLabel*  _rRoadmapStep ) { m_aRoadmapSteps.push_back(_rRoadmapStep); }
 
         HL_Vector&          getHyperLabels() { return m_aRoadmapSteps; }
         const HL_Vector&    getHyperLabels() const { return m_aRoadmapSteps; }
 
-        void                insertHyperLabel( ItemIndex _Index, HyperLabel* _rRoadmapStep ) { m_aRoadmapSteps.insert( m_aRoadmapSteps.begin() + _Index, _rRoadmapStep ); }
+        void                insertHyperLabel( ItemIndex _Index, ORoadmapHyperLabel* _rRoadmapStep ) { m_aRoadmapSteps.insert( m_aRoadmapSteps.begin() + _Index, _rRoadmapStep ); }
 
         ItemIndex           getItemCount() const { return m_aRoadmapSteps.size();}
 
@@ -201,8 +201,6 @@ namespace svt
         }
     };
 
-    //---------------------------------------------------------------------
-
 
     //=====================================================================
     //= Roadmap
@@ -226,11 +224,14 @@ namespace svt
     //---------------------------------------------------------------------
     void ORoadmap::implInit()
     {
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        Color aTextColor = rStyleSettings.GetFieldTextColor();
         Font aFont = GetFont( );
+        aFont.SetColor( aTextColor );
         aFont.SetWeight( WEIGHT_BOLD );
         aFont.SetUnderline( UNDERLINE_SINGLE );
         SetFont( aFont );
-
+        SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
         m_pImpl->InCompleteHyperLabel = NULL;
         m_pImpl->setCurItemID(-1 );
         m_pImpl->setComplete( sal_True );
@@ -265,41 +266,40 @@ namespace svt
         Size aSize = GetSizePixel();
         Size aLogicSize = PixelToLogic( aSize, MAP_APPFONT );
         aLogicSize.Height() = LABELBASEMAPHEIGHT;
-        aLogicSize.Width() -= 10;
+        aLogicSize.Width() -= (2*RMENTRYPOINT_X);
         m_pImpl->aHyperLabelPixelSize = LogicToPixel( aLogicSize, MAP_APPFONT );
         EnableMapMode( sal_False );
     }
 
 
-    ::rtl::OUString ORoadmap::ConcatenateRMItemLabel( ItemIndex _RMIndex, ::rtl::OUString _sLabel )
+    ORoadmapHyperLabel* ORoadmap::GetPreviousHyperLabel( ItemIndex _Index)
     {
-        ::rtl::OUString aStr = ::rtl::OUString::createFromAscii("");
-        aStr = ::rtl::OUString::valueOf( (sal_Int32)( _RMIndex + 1 ) ) +  ::rtl::OUString::createFromAscii( ". " );
-        aStr += _sLabel;
-        return aStr;
+        ORoadmapHyperLabel* OldHyperLabel = NULL;
+        if (_Index > 0)
+            OldHyperLabel = m_pImpl->getHyperLabels().at( _Index - 1 );
+        return OldHyperLabel;
     }
 
 
        //---------------------------------------------------------------------
 
-    HyperLabel* ORoadmap::InsertHyperLabel( ItemIndex _Index, ::rtl::OUString _sLabel, ItemId _RMID, sal_Bool _bEnabled)
+    ORoadmapHyperLabel* ORoadmap::InsertHyperLabel( ItemIndex _Index, ::rtl::OUString _sLabel, ItemId _RMID, sal_Bool _bEnabled)
     {
-        sal_Int32 _YPos = RMENTRYPOINT_Y + ( _Index * RMITEMDISTANCE_Y);
         if (m_pImpl->getItemCount() == 0 )
             InitializeHyperLabelSize();
-        HyperLabel* CurHyperLabel;
-        HyperLabel* OldHyperLabel;
-        ::rtl::OUString sLabel = ConcatenateRMItemLabel( _Index, _sLabel );
+        ORoadmapHyperLabel* CurHyperLabel;
+        ORoadmapHyperLabel* OldHyperLabel = GetPreviousHyperLabel( _Index);
+
         if (_RMID != RMINCOMPLETE )
         {
-            if (_Index == 0){        // Todo: Wie mache ich die Controls über Key up and down accessible
-                CurHyperLabel = new HyperLabel(this, WB_TABSTOP | WB_WORDBREAK);     //WB_GROUP |
+            if (_Index == 0)
+            {
+                CurHyperLabel = new ORoadmapHyperLabel(this, WB_TABSTOP | WB_WORDBREAK);     //WB_GROUP |
                 CurHyperLabel->SetZOrder( NULL, WINDOW_ZORDER_FIRST );
             }
             else
             {
-                CurHyperLabel = new HyperLabel(this, WB_TABSTOP | WB_WORDBREAK);
-                OldHyperLabel = m_pImpl->getHyperLabels().at( _Index - 1 );
+                CurHyperLabel = new ORoadmapHyperLabel(this, WB_TABSTOP | WB_WORDBREAK);
                 CurHyperLabel->SetZOrder( OldHyperLabel, WINDOW_ZORDER_BEHIND );
             }
             CurHyperLabel->SetInteractive( m_pImpl->isInteractive() );
@@ -307,11 +307,11 @@ namespace svt
         }
         else
         {
-            CurHyperLabel = new HyperLabel(this);
+            CurHyperLabel = new ORoadmapHyperLabel(this);
             CurHyperLabel->SetInteractive( sal_False );
         }
-        CurHyperLabel->SetHyperLabelPosition( RMENTRYPOINT_X, _YPos );
-        CurHyperLabel->SetLabelAndSize( sLabel, m_pImpl->aHyperLabelPixelSize );
+        CurHyperLabel->SetPosition( OldHyperLabel );
+        CurHyperLabel->SetLabelAndSize( _Index, _sLabel, m_pImpl->aHyperLabelPixelSize );
         CurHyperLabel->SetClickHdl(LINK( this, ORoadmap, ImplClickHdl ) );
         CurHyperLabel->SetID( _RMID );
         CurHyperLabel->SetIndex( _Index );
@@ -338,7 +338,7 @@ namespace svt
     void ORoadmap::SetRoadmapInteractive( sal_Bool _bInteractive )
     {
         m_pImpl->setInteractive( _bInteractive );
-        HyperLabel* CurHyperLabel;
+        ORoadmapHyperLabel* CurHyperLabel;
         HL_Vector pLocRoadmapItems = m_pImpl->getHyperLabels();
         for ( HL_Vector::iterator i = pLocRoadmapItems.begin(); i< pLocRoadmapItems.end(); i++)
         {
@@ -376,12 +376,13 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void ORoadmap::SetRoadmapLabel(HyperLabel* CurHyperLabel, sal_Int32 _nPrefix, String _sDescription)
+    void ORoadmap::SetRoadmapLabel(ORoadmapHyperLabel* CurHyperLabel, sal_Int32 _nPrefix, String _sDescription)
     {
         xub_StrLen n_Pos = _sDescription.Search( String::CreateFromAscii(".") );
         String sID = ::String::CreateFromInt32( _nPrefix );
         _sDescription.Replace(0 , n_Pos, sID );
-        CurHyperLabel->SetLabelAndSize( _sDescription, m_pImpl->aHyperLabelPixelSize );
+        CurHyperLabel->SetLabelAndSize( _nPrefix, _sDescription, m_pImpl->aHyperLabelPixelSize );
+        ItemIndex Index = _nPrefix;
     }
 
     //---------------------------------------------------------------------
@@ -392,34 +393,35 @@ namespace svt
             Point aPos;
             String sLabel;
             HL_Vector pLocRoadmapItems = m_pImpl->getHyperLabels();
-            HyperLabel* CurHyperLabel = NULL;
+            ORoadmapHyperLabel* CurHyperLabel = NULL;
             ItemIndex n_CurPrefix = _Index + 1 ;
             for ( HL_Vector::iterator i = pLocRoadmapItems.begin()+ _Index; i< pLocRoadmapItems.end(); i++)
             {
                 CurHyperLabel = *i;
-                aPos = CurHyperLabel->GetHyperLabelPosition();
+                aPos = CurHyperLabel->GetLogicalPosition();
                 CurHyperLabel->SetIndex( n_CurPrefix - 1);
                 sLabel = CurHyperLabel->GetLabel();
                 SetRoadmapLabel(CurHyperLabel, n_CurPrefix, sLabel);
-                CurHyperLabel->SetHyperLabelPosition( RMENTRYPOINT_X, aPos.Y() + (RMITEMDISTANCE_Y * _n_add ) );
+                ORoadmapHyperLabel* OldHyperLabel = GetPreviousHyperLabel( n_CurPrefix-1);
+                CurHyperLabel->SetPosition( OldHyperLabel);
                 n_CurPrefix++;
             }
         }
         if ( ! m_pImpl->isComplete() )
         {
-            sal_Int32 n_YPos = RMENTRYPOINT_Y + ( m_pImpl->getItemCount()) * RMITEMDISTANCE_Y ;
-            m_pImpl->InCompleteHyperLabel->SetHyperLabelPosition( RMENTRYPOINT_X, n_YPos );
-            m_pImpl->InCompleteHyperLabel->SetLabelAndSize( ConcatenateRMItemLabel( m_pImpl->getItemCount(), ::String::CreateFromAscii("...") ), m_pImpl->aHyperLabelPixelSize );
+            ORoadmapHyperLabel* OldHyperLabel = GetPreviousHyperLabel( m_pImpl->getItemCount());
+            m_pImpl->InCompleteHyperLabel->SetPosition( OldHyperLabel );
+            m_pImpl->InCompleteHyperLabel->SetLabelAndSize( m_pImpl->getItemCount(), ::String::CreateFromAscii("..."), m_pImpl->aHyperLabelPixelSize );
         }
     }
 
     //---------------------------------------------------------------------
     void ORoadmap::ReplaceRoadmapItem( ItemIndex _Index, ::rtl::OUString _RoadmapItem, ItemId _RMID, sal_Bool _bEnabled )
     {
-        HyperLabel* CurHyperLabel = GetByIndex( _Index);
+        ORoadmapHyperLabel* CurHyperLabel = GetByIndex( _Index);
         if ( CurHyperLabel != NULL )
         {
-            CurHyperLabel->SetLabelAndSize( ConcatenateRMItemLabel( _Index,  _RoadmapItem ), m_pImpl->aHyperLabelPixelSize );
+            CurHyperLabel->SetLabelAndSize( _Index,  _RoadmapItem, m_pImpl->aHyperLabelPixelSize );
             CurHyperLabel->SetID( _RMID );
             CurHyperLabel->Enable( _bEnabled );
         }
@@ -434,7 +436,7 @@ namespace svt
     //---------------------------------------------------------------------
     RoadmapTypes::ItemId ORoadmap::GetItemID( ItemIndex _nIndex ) const
     {
-        const HyperLabel* pHyperLabel = GetByIndex( _nIndex );
+        const ORoadmapHyperLabel* pHyperLabel = GetByIndex( _nIndex );
         if ( pHyperLabel )
             return pHyperLabel->GetID();
         return -1;
@@ -443,7 +445,7 @@ namespace svt
     //---------------------------------------------------------------------
     void ORoadmap::InsertRoadmapItem( ItemIndex _Index, ::rtl::OUString _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled )
     {
-        HyperLabel* CurHyperLabel;
+        ORoadmapHyperLabel* CurHyperLabel;
         CurHyperLabel = InsertHyperLabel(_Index, _RoadmapItem, _nUniqueId, _bEnabled);
             // Todo: YPos is superfluous, if items are always appended
         UpdatefollowingHyperLabels( _Index + 1);
@@ -454,7 +456,6 @@ namespace svt
     {
         if ( m_pImpl->getItemCount() > 0 && ( _Index > -1)  &&  ( _Index < m_pImpl->getItemCount() ) )
         {
-            sal_Int32 n_YPos =  RMENTRYPOINT_Y + ( m_pImpl->getItemCount() * RMITEMDISTANCE_Y );
             m_pImpl->removeHyperLabel( _Index );
             UpdatefollowingHyperLabels( _Index, NREMOVERMITEM);
         }
@@ -469,14 +470,14 @@ namespace svt
     //---------------------------------------------------------------------
     sal_Bool ORoadmap::IsRoadmapItemEnabled( ItemId _nItemId, ItemIndex _nStartIndex  ) const
     {
-        const HyperLabel* _pLabelItem = GetByID( _nItemId, _nStartIndex  );
+        const ORoadmapHyperLabel* _pLabelItem = GetByID( _nItemId, _nStartIndex  );
         return _pLabelItem ? _pLabelItem->IsEnabled() : sal_False;
     }
 
     //---------------------------------------------------------------------
     void ORoadmap::EnableRoadmapItem( ItemId _nItemId, sal_Bool _bEnable, ItemIndex _nStartIndex )
     {
-        HyperLabel* CurHyperLabel = GetByID( _nItemId, _nStartIndex );
+        ORoadmapHyperLabel* CurHyperLabel = GetByID( _nItemId, _nStartIndex );
         if ( CurHyperLabel != NULL )
             CurHyperLabel->Enable( _bEnable );
     }
@@ -484,23 +485,34 @@ namespace svt
     //---------------------------------------------------------------------
     void ORoadmap::ChangeRoadmapItemLabel( ItemId _nID, ::rtl::OUString _sLabel, ItemIndex _nStartIndex )
     {
-        HyperLabel* CurHyperLabel = GetByID( _nID, _nStartIndex );
+        ORoadmapHyperLabel* CurHyperLabel = GetByID( _nID, _nStartIndex );
         if ( CurHyperLabel != NULL )
-            CurHyperLabel->SetLabelAndSize( ConcatenateRMItemLabel( CurHyperLabel->GetIndex(), _sLabel ), m_pImpl->aHyperLabelPixelSize );
+        {
+            CurHyperLabel->SetLabelAndSize( CurHyperLabel->GetIndex(), _sLabel, m_pImpl->aHyperLabelPixelSize );
+            HL_Vector pLocRoadmapItems = m_pImpl->getHyperLabels();
+            ItemIndex Index = _nStartIndex;
+            for ( HL_Vector::iterator i = pLocRoadmapItems.begin()+ Index; i< pLocRoadmapItems.end(); i++)
+            {
+                CurHyperLabel = *i;
+                ORoadmapHyperLabel* OldHyperLabel = GetPreviousHyperLabel( Index );
+                CurHyperLabel->SetPosition( OldHyperLabel);
+                Index++;
+            }
+        }
     }
 
     //---------------------------------------------------------------------
     void ORoadmap::ChangeRoadmapItemID( ItemId _nID, ItemId _NewID, ItemIndex _nStartIndex )
     {
-        HyperLabel* CurHyperLabel = GetByID( _nID, _nStartIndex );
+        ORoadmapHyperLabel* CurHyperLabel = GetByID( _nID, _nStartIndex );
         if ( CurHyperLabel != NULL )
             CurHyperLabel->SetID( _NewID );
     }
 
     //---------------------------------------------------------------------
-    HyperLabel* ORoadmap::GetByID( ItemId _nID, ItemIndex _nStartIndex)
+    ORoadmapHyperLabel* ORoadmap::GetByID( ItemId _nID, ItemIndex _nStartIndex)
     {
-        HyperLabel* CurHyperLabel;
+        ORoadmapHyperLabel* CurHyperLabel;
         ItemId nLocID = 0;
         HL_Vector &LocHyperLabels = m_pImpl->getHyperLabels();
         for ( HL_Vector::iterator i = LocHyperLabels.begin()+ _nStartIndex; i< LocHyperLabels.end(); i++)
@@ -514,25 +526,25 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    const HyperLabel* ORoadmap::GetByID( ItemId _nID, ItemIndex _nStartIndex  ) const
+    const ORoadmapHyperLabel* ORoadmap::GetByID( ItemId _nID, ItemIndex _nStartIndex  ) const
     {
         return const_cast< ORoadmap* >( this )->GetByID( _nID, _nStartIndex );
     }
 
     //---------------------------------------------------------------------
-    HyperLabel* ORoadmap::GetByIndex( ItemIndex _nItemIndex)
+    ORoadmapHyperLabel* ORoadmap::GetByIndex( ItemIndex _nItemIndex)
     {
         HL_Vector &LocHyperLabels = m_pImpl->getHyperLabels();
         if ((_nItemIndex > -1) && (_nItemIndex < m_pImpl->getItemCount( ) ) )
         {
-            HyperLabel* CurHyperLabel = LocHyperLabels.at(_nItemIndex);    // Vectors are one-based
+            ORoadmapHyperLabel* CurHyperLabel = LocHyperLabels.at(_nItemIndex);    // Vectors are one-based
             return CurHyperLabel;
         }
         return NULL;
     }
 
     //---------------------------------------------------------------------
-    const HyperLabel* ORoadmap::GetByIndex( ItemIndex _nItemIndex ) const
+    const ORoadmapHyperLabel* ORoadmap::GetByIndex( ItemIndex _nItemIndex ) const
     {
         return const_cast< ORoadmap* >( this )->GetByIndex( _nItemIndex );
     }
@@ -540,7 +552,7 @@ namespace svt
     //---------------------------------------------------------------------
     RoadmapTypes::ItemId ORoadmap::GetNextAvailableItemId( ItemIndex _nNewIndex )
     {
-        HyperLabel* CurHyperLabel;
+        ORoadmapHyperLabel* CurHyperLabel;
 
         ItemIndex searchIndex = ++_nNewIndex;
         while ( searchIndex < m_pImpl->getItemCount() )
@@ -557,7 +569,7 @@ namespace svt
     //---------------------------------------------------------------------
     RoadmapTypes::ItemId ORoadmap::GetPreviousAvailableItemId( ItemIndex _nNewIndex )
     {
-        HyperLabel* CurHyperLabel;
+        ORoadmapHyperLabel* CurHyperLabel;
         ItemIndex searchIndex = --_nNewIndex;
         while ( searchIndex > -1 )
         {
@@ -574,11 +586,11 @@ namespace svt
     void ORoadmap::DeselectOldRoadmapItems()
     {
         HL_Vector pLocRoadmapItems = m_pImpl->getHyperLabels();
-        HyperLabel* CurHyperLabel = NULL;
+        ORoadmapHyperLabel* CurHyperLabel = NULL;
         for ( HL_Vector::iterator i = pLocRoadmapItems.begin(); i< pLocRoadmapItems.end(); i++)
         {
             CurHyperLabel = *i;
-            CurHyperLabel->ToggleBackgroundColor( COL_WHITE );
+            CurHyperLabel->ToggleBackgroundColor( COL_TRANSPARENT );
         }
     }
 
@@ -605,12 +617,14 @@ namespace svt
     sal_Bool ORoadmap::SelectRoadmapItemByID( ItemId _nNewID )
     {
         DeselectOldRoadmapItems();
-        HyperLabel* CurHyperLabel = GetByID( _nNewID );
+        ORoadmapHyperLabel* CurHyperLabel = GetByID( _nNewID );
         if (CurHyperLabel != NULL)
         {
             if (CurHyperLabel->IsEnabled())
             {
-                CurHyperLabel->ToggleBackgroundColor( Color ( 194, 211, 238 ) );
+                const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+                CurHyperLabel->ToggleBackgroundColor( rStyleSettings.GetHighlightColor() ); //HighlightColor
+
                 CurHyperLabel->GrabFocus();
                 m_pImpl->setCurItemID(_nNewID);
 
@@ -626,17 +640,7 @@ namespace svt
     {
         Control::Paint( _rRect );
 
-        //.................................................................
-        // draw the background
-        {
-            ColorChanger aColors( this, COL_TRANSPARENT, COL_WHITE );
-            DrawRect( _rRect );
-        }
 
-        // the x pos for drawing our elements: starting at col 7 (counted in APPFONT units)
-        sal_Int32 nElementXPos = LogicToPixel( Point( 7, 0 ), MAP_APPFONT ).X();
-
-        //.................................................................
         // draw the bitmap
         if ( !!m_pImpl->getPicture() )
         {
@@ -663,20 +667,21 @@ namespace svt
 
         // draw it
         DrawText( Rectangle( aTextPos, aOutputSize ), GetText(), TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
-
         DrawTextLine( aTextPos, aOutputSize.Width(), STRIKEOUT_NONE, UNDERLINE_SINGLE, sal_False );
-
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        SetLineColor( rStyleSettings.GetFieldTextColor());
+        SetTextColor(rStyleSettings.GetFieldTextColor());
     }
 
     //---------------------------------------------------------------------
-    HyperLabel* ORoadmap::GetByPointer(Window* pWindow)
+    ORoadmapHyperLabel* ORoadmap::GetByPointer(Window* pWindow)
     {
-        HyperLabel* CurHyperLabel;
+        ORoadmapHyperLabel* CurHyperLabel;
         HL_Vector &LocHyperLabels = m_pImpl->getHyperLabels();
         for ( HL_Vector::iterator i = LocHyperLabels.begin(); i< LocHyperLabels.end(); i++)
         {
             CurHyperLabel = *i;
-            if ( CurHyperLabel == pWindow )
+            if ( (CurHyperLabel->GetIDLabel() == pWindow) || (CurHyperLabel->GetDescriptionHyperLabel() == pWindow) )
                 return CurHyperLabel;
         }
         return NULL;
@@ -689,7 +694,7 @@ namespace svt
         if ( _rNEvt.GetType() == EVENT_KEYINPUT )
         {
             Window* pWindow = _rNEvt.GetWindow();
-            HyperLabel* CurHyperLabel = GetByPointer( pWindow );
+            ORoadmapHyperLabel* CurHyperLabel = GetByPointer( pWindow );
             if ( CurHyperLabel != NULL )
             {
                 sal_Int16 nKeyCode = _rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
@@ -724,6 +729,237 @@ namespace svt
     {
        return SelectRoadmapItemByID( _CurHyperLabel->GetID() );
     }
+
+
+
+    void ORoadmap::DataChanged( const DataChangedEvent& rDCEvt )
+    {
+        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
+            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
+            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+        {
+            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+            SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
+            Color aTextColor = rStyleSettings.GetFieldTextColor();
+            Font aFont = GetFont();
+            aFont.SetColor( aTextColor );
+            SetFont( aFont );
+            RoadmapTypes::ItemId curItemID = GetCurrentRoadmapItemID();
+            ORoadmapHyperLabel* pLabelItem = GetByID( curItemID );
+            pLabelItem->ToggleBackgroundColor(rStyleSettings.GetHighlightColor());
+            Invalidate();
+        }
+    }
+
+
+    ORoadmapHyperLabel::ORoadmapHyperLabel( Window* _pParent, const ResId& _rId)
+        :OutputDevice()
+    {
+        mpIDLabel = new ORoadmapIDHyperLabel(_pParent, WB_TABSTOP | WB_WORDBREAK);
+        mpDescHyperLabel = new HyperLabel(_pParent, WB_TABSTOP | WB_WORDBREAK);
+    }
+
+
+    ORoadmapHyperLabel::ORoadmapHyperLabel( Window* _pParent, WinBits _nWinStyle)
+        :OutputDevice()
+    {
+        mpIDLabel = new ORoadmapIDHyperLabel(_pParent, WB_TABSTOP | WB_WORDBREAK);
+        mpIDLabel->SetTextColor( mpIDLabel->GetSettings().GetStyleSettings().GetFieldTextColor( ) );
+        mpDescHyperLabel = new HyperLabel(_pParent, WB_TABSTOP | WB_WORDBREAK);
+    }
+
+
+    void ORoadmapHyperLabel::SetInteractive( sal_Bool _bInteractive )
+    {
+        mpDescHyperLabel->SetInteractive(_bInteractive);
+    }
+
+    void ORoadmapHyperLabel::SetID( sal_Int16 _ID )
+    {
+        mpDescHyperLabel->SetID(_ID);
+    }
+
+    sal_Int16 ORoadmapHyperLabel::GetID() const
+    {
+        return mpDescHyperLabel->GetID();
+    }
+
+    void ORoadmapHyperLabel::SetIndex( sal_Int32 _Index )
+    {
+        mpDescHyperLabel->SetIndex(_Index);
+    }
+
+
+    sal_Int32 ORoadmapHyperLabel::GetIndex() const
+    {
+        return mpDescHyperLabel->GetIndex();
+    }
+
+
+    void ORoadmapHyperLabel::SetLabel( ::rtl::OUString _rText )
+    {
+        mpDescHyperLabel->SetText(_rText);
+    }
+
+
+    ::rtl::OUString ORoadmapHyperLabel::GetLabel( )
+    {
+        return mpDescHyperLabel->GetText();
+    }
+
+
+    void ORoadmapHyperLabel::SetPosition(ORoadmapHyperLabel* OldHyperLabel)
+    {
+        Point aNewLogicalPoint;
+        Point aNewPoint;
+        if (OldHyperLabel == NULL)
+        {
+            aNewLogicalPoint = Point( RMENTRYPOINT_X, RMENTRYPOINT_Y);
+            aNewPoint = mpIDLabel->LogicToPixel(aNewLogicalPoint, MAP_APPFONT );
+        }
+        else
+        {
+            Size aOldSize = OldHyperLabel->GetDescriptionHyperLabel()->GetSizePixel();
+            Point aOldLogicalPoint = OldHyperLabel->GetLogicalPosition();
+            aNewLogicalPoint = Point(aOldLogicalPoint.X(), (aOldLogicalPoint.Y() + RMITEMDISTANCE_Y));
+            aNewPoint = mpIDLabel->LogicToPixel(aNewLogicalPoint, MAP_APPFONT );
+            aNewPoint = Point(aNewPoint.X(),aNewPoint.Y() + aOldSize.Height());
+        }
+        mpIDLabel->SetPosPixel( aNewPoint );
+        sal_Int32 xDescPos = aNewPoint.X() + mpIDLabel->GetSizePixel().Width();
+        mpDescHyperLabel->SetPosPixel( Point(xDescPos, aNewPoint.Y()) );
+    }
+
+
+    void ORoadmapHyperLabel::SetZOrder( ORoadmapHyperLabel* pRefRoadmapHyperLabel, USHORT nFlags )
+    {
+        if (pRefRoadmapHyperLabel == NULL)
+            mpDescHyperLabel->SetZOrder( NULL, nFlags); //WINDOW_ZORDER_FIRST );
+        else
+            mpDescHyperLabel->SetZOrder( pRefRoadmapHyperLabel->mpDescHyperLabel, nFlags); //, WINDOW_ZORDER_BEHIND );
+    }
+
+
+    void ORoadmapHyperLabel::Enable( BOOL _bEnable)
+    {
+        mpIDLabel->Enable(_bEnable);
+        mpDescHyperLabel->Enable(_bEnable);
+    }
+
+    BOOL ORoadmapHyperLabel::IsEnabled() const
+    {
+        return mpIDLabel->IsEnabled();
+    }
+
+    void ORoadmapHyperLabel::GrabFocus()
+    {
+        mpDescHyperLabel->GrabFocus();
+
+    }
+
+    void ORoadmapHyperLabel::ToggleBackgroundColor( const Color& _rGBColor )
+    {
+        if (_rGBColor == COL_TRANSPARENT)
+        {
+            mpIDLabel->SetTextColor( mpIDLabel->GetSettings().GetStyleSettings().GetFieldTextColor( ) );
+            mpIDLabel->SetControlBackground( COL_TRANSPARENT );
+        }
+        else
+        {
+            mpIDLabel->SetControlBackground( mpIDLabel->GetSettings().GetStyleSettings().GetHighlightColor() );
+            mpIDLabel->SetTextColor( mpIDLabel->GetSettings().GetStyleSettings().GetHighlightTextColor( ) );
+        }
+        mpDescHyperLabel->ToggleBackgroundColor(_rGBColor);
+    }
+
+
+    Point ORoadmapHyperLabel::GetLogicalPosition()
+    {
+        Point aPoint = mpIDLabel->GetPosPixel( );
+        Size aSize = Size(aPoint.X(), aPoint.Y());
+        aSize = mpIDLabel->PixelToLogic( aSize, MAP_APPFONT );
+        aPoint = Point(aSize.Width(), aSize.Height());
+        return aPoint;
+    }
+
+
+    void ORoadmapHyperLabel::SetLabelAndSize( ItemIndex _RMIndex, ::rtl::OUString _rText, const Size& _rNewSize)
+    {
+        Size rIDSize = _rNewSize;
+        rIDSize.Width() = (sal_Int32) 15;
+        ::rtl::OUString aStr = ::rtl::OUString::createFromAscii("");
+        aStr = ::rtl::OUString::valueOf( (sal_Int32)( _RMIndex + 1 ) ) +  ::rtl::OUString::createFromAscii( "." );
+        mpIDLabel->SetSizePixel(mpIDLabel->LogicToPixel( rIDSize));
+        mpIDLabel->SetText( aStr);
+        mpIDLabel->Show();
+        Size rDescSize = _rNewSize;
+        rDescSize.Width() -= rIDSize.Width();
+        sal_Int32 xDescPos = mpIDLabel->GetPosPixel().X() + mpIDLabel->GetSizePixel().Width();
+        sal_Int32 yDescPos = mpIDLabel->GetPosPixel().Y();
+        Point aPoint = Point(xDescPos, yDescPos);
+        mpDescHyperLabel->SetPosPixel( aPoint );
+        mpDescHyperLabel->SetLabelAndSize(_rText, rDescSize);
+        mpIDLabel->SetSizePixel( Size( mpIDLabel->GetSizePixel().Width(), mpDescHyperLabel->GetSizePixel().Height() ) );
+    }
+
+    ORoadmapHyperLabel::~ORoadmapHyperLabel( )
+    {
+        delete mpIDLabel;
+        delete mpDescHyperLabel;
+
+    }
+
+
+    void ORoadmapHyperLabel::SetClickHdl( const Link& rLink )
+    {
+        mpDescHyperLabel->SetClickHdl( rLink);
+    }
+
+    const Link& ORoadmapHyperLabel::GetClickHdl( ) const
+    {
+        return mpDescHyperLabel->GetClickHdl();
+    }
+
+
+    ORoadmapIDHyperLabel::ORoadmapIDHyperLabel( Window* _pParent, const ResId& _rId )
+        :FixedText( _pParent, _rId )
+    {
+    }
+
+    ORoadmapIDHyperLabel::ORoadmapIDHyperLabel( Window* _pParent, WinBits _nWinStyle )
+        :FixedText( _pParent, _nWinStyle )
+    {
+
+    }
+
+
+    ORoadmapIDHyperLabel::~ORoadmapIDHyperLabel( )
+    {
+    }
+
+
+    void ORoadmapIDHyperLabel::DataChanged( const DataChangedEvent& rDCEvt )
+    {
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        FixedText::DataChanged( rDCEvt );
+        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
+            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
+            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+        {
+            const Color& rGBColor = GetControlBackground();
+            if (rGBColor == COL_TRANSPARENT)
+                SetTextColor( rStyleSettings.GetFieldTextColor( ) );
+            else
+            {
+                SetControlBackground(rStyleSettings.GetHighlightColor());
+                SetTextColor( rStyleSettings.GetHighlightTextColor( ) );
+            }
+            Invalidate();
+        }
+    }
+
+
+
 
 //.........................................................................
 }   // namespace svt
