@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:38:44 $
+ *  last change: $Author: kz $ $Date: 2002-08-17 20:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1688,7 +1688,7 @@ TabPage TP_STD_FONT
         Text[ japanese ] = "CTL";
         Text[ korean ] = "CTL";
         Text[ chinese_simplified ] = "CTL";
-        Text[ chinese_traditional ] = "CTL";
+        Text[ chinese_traditional ] = "è¤‡é›œçš„æ–‡å­—";
         Text[ turkish ] = "CTL";
         Text[ arabic ] = "CTL";
     };
@@ -2779,7 +2779,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ russian ] = "Ñâîáîäíûé êóğñîğ";
         Text[ polish ] = "Kursor bezpoœredni";
         Text[ japanese ] = "ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚«ãƒ¼ã‚½ãƒ«";
-        Text[ chinese_traditional ] = "ç›´æ¥å®šä½å…‰æ¨™";
+        Text[ chinese_traditional ] = "ç›´æ¥å®šä½æ¸¸æ¨™";
         Text[ arabic ] = "ãÄÔÑ ãÈÇÔÑ";
         Text[ greek ] = "¢ìåóïò äñïìİáò";
         Text[ korean ] = "ì§ì ‘ï¼ì»¤ì„œ";
@@ -2810,7 +2810,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ russian ] = "Ñâîáîäíûé êóğñîğ";
         Text[ polish ] = "Kursor bezpoœredni";
         Text[ japanese ] = "ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚«ãƒ¼ã‚½ãƒ«(~D)";
-        Text[ chinese_traditional ] = "ç›´æ¥å®šä½å…‰æ¨™(~D)";
+        Text[ chinese_traditional ] = "ç›´æ¥å®šä½æ¸¸æ¨™(~D)";
         Text[ arabic ] = "ãÄÔÑ ãÈÇÔÑ";
         Text[ greek ] = "¢ìåóïò äñïìİáò";
         Text[ korean ] = "ë‹¤ì´ë ‰íŠ¸ ì»¤ì„œ(~D)";
@@ -2989,7 +2989,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ japanese ] = "ä¿è­·ç¯„å›²ã¸ã®ã‚«ãƒ¼ã‚½ãƒ«é€²å…¥";
         Text[ korean ] = "ë³´í˜¸ëœ ì˜ì—­ì˜ ì»¤ì„œ";
         Text[ chinese_simplified ] = "å…‰æ ‡å®šä½åœ¨ä¿æŠ¤åŒºåŸŸ";
-        Text[ chinese_traditional ] = "å…‰æ¨™åœ¨ä¿è­·å€åŸŸä¹‹ä¸­";
+        Text[ chinese_traditional ] = "æ¸¸æ¨™åœ¨ä¿è­·å€åŸŸä¹‹ä¸­";
         Text[ turkish ] = "Cursor in protected areas";
         Text[ arabic ] = "ÇáãÄÔÑ İí ãäÇØŞ ãÍãíÉ";
         Text[ finnish ] = "Kohdistin suojatuilla alueilla";
