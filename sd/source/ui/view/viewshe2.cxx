@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-30 12:39:50 $
+ *  last change: $Author: cl $ $Date: 2002-05-07 10:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1386,11 +1386,10 @@ void SdViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::co
     pValue->Value <<= sBuffer.makeStringAndClear();
     pValue++;nIndex++;
 
-/* now in svx::ColorConfig
     pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_GridIsVisible ) );
     pValue->Value <<= (sal_Bool)pFrameView->IsGridVisible();
     pValue++;nIndex++;
-*/
+
     pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_GridIsFront ) );
     pValue->Value <<= (sal_Bool)pFrameView->IsGridFront();
     pValue++;nIndex++;
@@ -1942,7 +1941,7 @@ void SdViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence <
                     pFrameView->SetVisArea( aVisArea );
                 }
             }
-/* now in svx::ColorConfig
+
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_GridIsVisible ) ) )
             {
                 if( pValue->Value >>= bBool )
@@ -1950,7 +1949,7 @@ void SdViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence <
                     pFrameView->SetGridVisible( bBool );
                 }
             }
-*/
+
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsSnapToGrid ) ) )
             {
                 if( pValue->Value >>= bBool )
