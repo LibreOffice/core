@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:08:13 $
+ *  last change: $Author: cd $ $Date: 2001-12-10 11:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_FRAME_XDISPATCHINFORMATIONPROVIDER_HPP_
 #include <drafts/com/sun/star/frame/XDispatchInformationProvider.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XSTRINGWIDTH_HPP_
+#include <com/sun/star/util/XStringWidth.hpp>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -146,12 +149,24 @@
 #include <toolkit/unohlp.hxx>
 #endif
 
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vos/mutex.hxx>
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -167,6 +182,20 @@ using namespace ::com::sun::star::frame;
 using namespace ::drafts::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 
+
+class StringLength : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XStringWidth >
+{
+    public:
+        StringLength() {}
+        virtual ~StringLength() {}
+
+        // XStringWidth
+        sal_Int32 SAL_CALL queryStringWidth( const ::rtl::OUString& aString )
+            throw (::com::sun::star::uno::RuntimeException)
+        {
+            return aString.getLength();
+        }
+};
 
 namespace framework
 {
@@ -572,9 +601,10 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
     // update picklist
     Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( ePICKLIST );
     ::std::vector< MenuItemHandler* > aNewPickVector;
+    Reference< XStringWidth > xStringLength( new StringLength );
 
     USHORT  nPickItemId = START_ITEMID_PICKLIST;
-    int     nPickListMenuItems = ( aHistoryList.getLength() > 9 ) ? 9 : aHistoryList.getLength();
+    int     nPickListMenuItems = ( aHistoryList.getLength() > 99 ) ? 99 : aHistoryList.getLength();
 
     for ( int i = 0; i < nPickListMenuItems; i++ )
     {
@@ -595,20 +625,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
             else if ( aPickListEntry[j].Name == HISTORY_PROPERTYNAME_FILTER )
                 a >>= pNewMenuItemHandler->aFilter;
             else if ( aPickListEntry[j].Name == HISTORY_PROPERTYNAME_TITLE )
-            {
-                char menuShortCut[5] = "~n: ";
-
-                if ( i == 10 )
-                    menuShortCut[1] = '0';
-                else
-                    menuShortCut[1] = ( '1' + i );
-
-                ::rtl::OUString aMenuShortCut( RTL_CONSTASCII_USTRINGPARAM( menuShortCut ));
-                ::rtl::OUString aTitle;
-
-                a >>= aTitle;
-                pNewMenuItemHandler->aTitle = aMenuShortCut + aTitle;
-            }
+                a >>= pNewMenuItemHandler->aTitle;
             else if ( aPickListEntry[j].Name == HISTORY_PROPERTYNAME_PASSWORD )
                 a >>= pNewMenuItemHandler->aPassword;
         }
@@ -681,10 +698,62 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
             pMenu->InsertSeparator();
             for ( sal_uInt32 i = 0; i < aNewPickVector.size(); i++ )
             {
+                char menuShortCut[5] = "~n: ";
+
+                ::rtl::OUString aMenuShortCut;
+                if ( i <= 9 )
+                {
+                    if ( i == 9 )
+                        aMenuShortCut = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "1~0: " ));
+                    else
+                    {
+                        menuShortCut[1] = (char)( '1' + i );
+                        aMenuShortCut = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( menuShortCut ));
+                    }
+                }
+                else
+                {
+                    aMenuShortCut = rtl::OUString::valueOf((sal_Int32)( i + 1 ));
+                    aMenuShortCut += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": " ));
+                }
+
+                // Abbreviate URL
+                rtl::OUString   aURLString( aNewPickVector.at( i )->aMenuItemURL );
+                rtl::OUString   aTipHelpText;
+                rtl::OUString   aMenuTitle;
+                INetURLObject   aURL( aURLString );
+
+                if ( aURL.GetProtocol() == INET_PROT_FILE )
+                {
+                    // Do handle file URL differently => convert it to a system
+                    // path and abbreviate it with a special function:
+                    String aPhysicalName;
+                    ::utl::LocalFileHelper::ConvertURLToPhysicalName( aURLString, aPhysicalName );
+
+                    ::rtl::OUString aSystemPath( aPhysicalName );
+                    ::rtl::OUString aCompactedSystemPath;
+
+                    aTipHelpText = aSystemPath;
+                    oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
+                    if ( !nError )
+                        aMenuTitle = String( aCompactedSystemPath );
+                    else
+                        aMenuTitle = aPhysicalName;
+                }
+                else
+                {
+                    // Use INetURLObject to abbreviate all other URLs
+                    String  aShortURL;
+                    aShortURL = aURL.getAbbreviated( xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
+                    aMenuTitle += aShortURL;
+                    aTipHelpText = aURLString;
+                }
+
+                ::rtl::OUString aTitle( aMenuShortCut + aMenuTitle );
+
                 MenuItemHandler* pMenuItemHandler = aNewPickVector.at( i );
-                pMenu->InsertItem(
-                    pMenuItemHandler->nItemId,
-                    pMenuItemHandler->aTitle );
+                pMenu->InsertItem( pMenuItemHandler->nItemId, aTitle );
+                pMenu->SetTipHelpText( pMenuItemHandler->nItemId, aTipHelpText );
                 m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
             }
         }
