@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepgm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:12 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 10:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #pragma hdrstop
 #include <tools/ref.hxx>
-#include <vcl/config.hxx>
+#include <svtools/FilterConfigItem.hxx>
 #include <vcl/msgbox.hxx>
 #include "dlgepgm.hxx"
 #include "dlgepgm.hrc"
@@ -81,15 +81,15 @@ DlgExportEPGM::DlgExportEPGM( FltCallDialogParameter& rPara ) :
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP ) ),
-                pConfig             ( rPara.pCfg ),
                 pMgr                ( rPara.pResMgr )
 {
     FreeResource();
 
     // Config-Parameter lesen
 
-    String      aFormatStr( ResId( KEY_FORMAT, pMgr ) );
-    sal_Int32   nFormat = pConfig->ReadKey( ByteString( aFormatStr, RTL_TEXTENCODING_UTF8 ) ).ToInt32();
+    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/PGM" ) );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath );
+    sal_Int32   nFormat = pConfigItem->ReadInt32( String( ResId( KEY_FORMAT, pMgr ) ), 0 );
 
     BOOL bCheck = FALSE;
     if ( !nFormat )
@@ -101,6 +101,11 @@ DlgExportEPGM::DlgExportEPGM( FltCallDialogParameter& rPara ) :
     aBtnOK.SetClickHdl( LINK( this, DlgExportEPGM, OK ) );
 }
 
+DlgExportEPGM::~DlgExportEPGM()
+{
+    delete pConfigItem;
+}
+
 /*************************************************************************
 |*
 |* Speichert eingestellte Werte in ini-Datei
@@ -109,14 +114,11 @@ DlgExportEPGM::DlgExportEPGM( FltCallDialogParameter& rPara ) :
 
 IMPL_LINK( DlgExportEPGM, OK, void *, EMPTYARG )
 {
-
     // Config-Parameter schreiben
-    sal_Int32 nCheck = 0;
+    sal_Int32 nFormat = 0;
     if ( aRBASCII.IsChecked() )
-        nCheck++;
-    String aFormatStr( ResId( KEY_FORMAT, pMgr ) );
-    pConfig->WriteKey( ByteString( aFormatStr, RTL_TEXTENCODING_UTF8 ), ByteString::CreateFromInt32( nCheck ) );
-
+        nFormat++;
+    pConfigItem->WriteInt32( String( ResId( KEY_FORMAT, pMgr ) ), nFormat );
     EndDialog( RET_OK );
 
     return 0;

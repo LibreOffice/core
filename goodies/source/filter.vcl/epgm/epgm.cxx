@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epgm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:12 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 10:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
-#include <vcl/config.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/solar.hrc>
 #include <svtools/fltcall.hxx>
+#include <svtools/FilterConfigItem.hxx>
 #include "strings.hrc"
 #include "dlgepgm.hrc"
 #include "dlgepgm.hxx"
@@ -97,8 +97,8 @@ public:
                         ~PGMWriter();
 
     BOOL                WritePGM( const Graphic& rGraphic, SvStream& rPGM,
-                                  PFilterCallback pCallback, void* pCallerdata,
-                                  Config* pOptionsConfig );
+                                    PFilterCallback pCallback, void* pCallerdata,
+                                        FilterConfigItem* pConfigItem );
 };
 
 //=================== Methoden von PGMWriter ==============================
@@ -134,17 +134,15 @@ BOOL PGMWriter::ImplCallback( USHORT nPercent )
 
 BOOL PGMWriter::WritePGM( const Graphic& rGraphic, SvStream& rPGM,
                           PFilterCallback pCallback, void* pCallerdata,
-                          Config* pOptionsConfig )
+                          FilterConfigItem* pConfigItem )
 {
 
     mpOStm = &rPGM;
     mpCallback = pCallback;
     mpCallerData = pCallerdata;
 
-    if ( pOptionsConfig )
-    {
-        mnMode = pOptionsConfig->ReadKey( "PGM-EXPORT-FORMAT", "0" ).ToInt32();
-    }
+    if ( pConfigItem )
+        mnMode = pConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), 0 );
 
     BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
     Bitmap      aBmp = aBmpEx.GetBitmap();
@@ -260,7 +258,7 @@ void PGMWriter::ImplWriteNumber( sal_Int32 nNumber )
 {
     const ByteString aNum( ByteString::CreateFromInt32( nNumber ) );
 
-    for( sal_Int32 n = 0UL, nLen = aNum.Len(); n < nLen; n++  )
+    for( sal_Int16 n = 0UL, nLen = aNum.Len(); n < nLen; n++  )
         *mpOStm << aNum.GetChar( n );
 
 }
@@ -273,11 +271,11 @@ void PGMWriter::ImplWriteNumber( sal_Int32 nNumber )
 
 extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic,
                                                PFilterCallback pCallback, void* pCallerData,
-                                               Config* pOptionsConfig, BOOL )
+                                               FilterConfigItem* pConfigItem, BOOL )
 {
     PGMWriter aPGMWriter;
 
-    return aPGMWriter.WritePGM( rGraphic, rStream, pCallback, pCallerData, pOptionsConfig );
+    return aPGMWriter.WritePGM( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
 }
 
 // ------------------------------------------------------------------------
@@ -286,7 +284,7 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
 {
     BOOL bRet = FALSE;
 
-    if ( rPara.pWindow && rPara.pCfg )
+    if ( rPara.pWindow )
     {
         ByteString  aResMgrName( "epg" );
         ResMgr* pResMgr;
