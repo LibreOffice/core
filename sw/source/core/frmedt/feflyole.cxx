@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feflyole.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:08:57 $
+ *  last change: $Author: jp $ $Date: 2001-02-07 13:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,29 +64,46 @@
 
 #pragma hdrstop
 
-#ifndef _IPOBJ_HXX //autogen
+#ifndef _IPOBJ_HXX
 #include <so3/ipobj.hxx>
 #endif
-#ifndef _EMBOBJ_HXX //autogen
+#ifndef _EMBOBJ_HXX
 #include <so3/embobj.hxx>
 #endif
 
-
-#ifndef _FMTCNTNT_HXX //autogen
+#ifndef _FMTCNTNT_HXX
 #include <fmtcntnt.hxx>
 #endif
-#ifndef _FMTANCHR_HXX //autogen
+#ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
 #endif
-#include "fesh.hxx"
-#include "cntfrm.hxx"
-#include "frmfmt.hxx"
-#include "flyfrm.hxx"
-#include "pam.hxx"
-#include "edimp.hxx"
-#include "ndtxt.hxx"
-#include "notxtfrm.hxx"
-#include "ndole.hxx"
+#ifndef _FESH_HXX
+#include <fesh.hxx>
+#endif
+#ifndef _CNTFRM_HXX
+#include <cntfrm.hxx>
+#endif
+#ifndef _FRMFMT_HXX
+#include <frmfmt.hxx>
+#endif
+#ifndef _FLYFRM_HXX
+#include <flyfrm.hxx>
+#endif
+#ifndef _PAM_HXX
+#include <pam.hxx>
+#endif
+#ifndef _EDIMP_HXX
+#include <edimp.hxx>
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
+#ifndef _NOTXTFRM_HXX
+#include <notxtfrm.hxx>
+#endif
+#ifndef _NDOLE_HXX
+#include <ndole.hxx>
+#endif
 
 
 
@@ -105,6 +122,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const SvEmbeddedObject *pIPObj ) const
     if ( !pFly )
     {
         //Kein Fly oder der falsche selektiert. Ergo muessen wir leider suchen.
+        BOOL bExist = FALSE;
         SwStartNode *pStNd;
         ULONG nSttIdx = GetNodes().GetEndOfAutotext().StartOfSectionIndex() + 1,
               nEndIdx = GetNodes().GetEndOfAutotext().GetIndex();
@@ -113,10 +131,11 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const SvEmbeddedObject *pIPObj ) const
         {
             SwNode *pNd = GetNodes()[ nSttIdx+1 ];
             if ( pNd->IsOLENode() &&
-                                        //do not load Objects! must not be neccessary here
+                //do not load Objects! must not be neccessary here
                  ((SwOLENode*)pNd)->GetOLEObj().IsOleRef() &&
                  &((SwOLENode*)pNd)->GetOLEObj().GetOleRef() == pIPObj )
             {
+                bExist = TRUE;
                 SwFrm *pFrm = ((SwOLENode*)pNd)->GetFrm();
                 if ( pFrm )
                     pFly = pFrm->FindFlyFrm();
@@ -125,11 +144,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const SvEmbeddedObject *pIPObj ) const
             nSttIdx = pStNd->EndOfSectionIndex() + 1;
         }
 
-        if ( !pFly )
-        {
-            ASSERT( !this, "FlyFrm not found." );
-            return 0;
-        }
+        ASSERT( bExist, "OLE-Object unknown and FlyFrm not found." );
     }
     return pFly;
 }
