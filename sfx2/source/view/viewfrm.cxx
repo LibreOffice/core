@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-17 13:33:36 $
+ *  last change: $Author: mba $ $Date: 2000-10-19 17:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2288,13 +2288,21 @@ void SfxViewFrame::MakeActive_Impl( BOOL bGrabFocus )
         {
             if ( GetViewShell() )
             {
+                BOOL bPreview = FALSE;
                 SfxApplication *pSfxApp = SFX_APP();
-                SfxViewFrame* pParent = GetParentViewFrame();
-                if ( pParent )
-                    pParent->SetActiveChildFrame_Impl( this );
+                if ( GetObjectShell()->IsPreview() )
+                {
+                    bPreview = TRUE;
+                }
+                else
+                {
+                    SfxViewFrame* pParent = GetParentViewFrame();
+                    if ( pParent )
+                        pParent->SetActiveChildFrame_Impl( this );
+                }
 
                 SfxViewFrame* pCurrent = SfxViewFrame::Current();
-                if ( !pCurrent || bGrabFocus || GetFrame()->GetFrameInterface()->isActive() )
+                if ( GetFrame()->GetFrameInterface()->isActive() || !bPreview && ( !pCurrent || bGrabFocus ) )
                 {
                     pSfxApp->SetViewFrame( this );
                     if ( bGrabFocus )
@@ -3428,6 +3436,8 @@ SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( USHORT nId )
         if( !GetDispatcher()->GetShellAndSlot_Impl( nId, &pShell, &pSlot, FALSE, TRUE ) && GetParentViewFrame_Impl() )
             // Containerslot !
             pWork = GetParentViewFrame_Impl()->GetFrame()->GetWorkWindow_Impl();
+        else
+            pWork = GetFrame()->GetWorkWindow_Impl();
     }
     else
         pWork = GetFrame()->GetWorkWindow_Impl();
