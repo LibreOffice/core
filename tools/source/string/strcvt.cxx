@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strcvt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:04:50 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,7 +436,7 @@ static void ImplStringConvert( ByteString* pString,
                                        RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 |
                                        RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE |
                                        RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE );
-        delete pTempBuf;
+        delete [] pTempBuf;
     }
 }
 
