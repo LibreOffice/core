@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-27 08:25:19 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1277,7 +1277,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Zaz~naczanie indeksów";
         Text[ portuguese_brazilian ] = "Index entries";
         Text[ japanese ] = "õˆø‘I‘ğ€–Ú";
-        Text[ korean ] = "ÀÎµ¦½º Ç¥±â(~X)";
+        Text[ korean ] = "»öÀÎ ¸¶Å© (~X)";
         Text[ chinese_simplified ] = "±ê¼ÇÄ¿Â¼ÌõÄ¿";
         Text[ chinese_traditional ] = "¥Ø¿ı¼Ğ°O";
         Text[ arabic ] = "ÊÍÏíÏÇÊ ÇáİåÑÓ";
@@ -2718,7 +2718,7 @@ TabPage TP_TOX_ENTRY
         Text = "~Kapitelinfo" ;
         Text [ ENGLISH ] = "Chapter info" ;
         Text[ english_us ] = "~Chapter info";
-        Text[ portuguese ] = "Inform. sobre ~capítulo";
+        Text[ portuguese ] = "Info. ~capítulo";
         Text[ russian ] = "Èíôîğìàöèÿ ãëàâû";
         Text[ greek ] = "Ğëçñïöïñßåò êåöáëáßïõ";
         Text[ dutch ] = "Hoo~fdstukinfo";
@@ -2856,7 +2856,7 @@ TabPage TP_TOX_ENTRY
         Text = "~Entfernen" ;
         Text [ ENGLISH ] = "Remove" ;
         Text[ english_us ] = "~Remove";
-        Text[ portuguese ] = "E~liminar";
+        Text[ portuguese ] = "~Remover";
         Text[ russian ] = "Óáğàòü";
         Text[ greek ] = "ÊáôÜñãçóç";
         Text[ dutch ] = "~Verwijderen";
@@ -2993,7 +2993,7 @@ TabPage TP_TOX_ENTRY
         Text[ korean ] = "Àå Ç×¸ñ";
         Text[ chinese_simplified ] = "ÕÂ½ÚÌõÄ¿";
         Text[ chinese_traditional ] = "³¹¸`±ø¥Ø";
-        Text[ arabic ] = "ÅÏÎÇá İí İÕá";
+        Text[ arabic ] = "ÅÏÎÇá İí ÇáİÕá";
         Text[ turkish ] = "Bölüm girişi";
         Text[ language_user1 ] = " ";
     };
@@ -3272,7 +3272,7 @@ TabPage TP_TOX_ENTRY
         Text[ spanish ] = "Posición relati~va a sangría de estilo de párrafo";
         Text[ italian ] = "P~osizione relativa al rientro del modello di paragrafo";
         Text[ danish ] = "Tabulatorernes position relativ til indrykningen fra afsnitstypografien";
-        Text[ swedish ] = "Tabulatorernas p~osition relativ till indraget från styckeformatmallen";
+        Text[ swedish ] = "Tabbarnas p~osition relativ till indraget från styckeformatmallen";
         Text[ polish ] = "Pozycja relatywna do wciêcia ze stylu akapitu";
         Text[ portuguese_brazilian ] = "Position relativ to the paragraph style indent";
         Text[ japanese ] = "ÀÌŞˆÊ’u‚Í’i—½À²Ù‚Ì²İÃŞİÄ‚©‚ç";
@@ -3298,7 +3298,7 @@ TabPage TP_TOX_ENTRY
         Text = "Zeichenvorla~ge für Haupteinträge" ;
         Text [ ENGLISH ] = "Character style of main entries" ;
         Text[ english_us ] = "Character Style for main entries";
-        Text[ portuguese ] = "Estilo de ~caracteres para entradas principais";
+        Text[ portuguese ] = "~Caracteres para entradas principais";
         Text[ russian ] = "Ñòèëü çíàêîâ äëÿ ãëàâíûõ ıëåìåíòîâ";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí ôùí êõñßùí åããñáöşí";
         Text[ dutch ] = "~Tekenopmaakprofiel voor hoofditems";
@@ -3313,7 +3313,7 @@ TabPage TP_TOX_ENTRY
         Text[ korean ] = "ÁÖ Ç×¸ñ¿¡´ëÇÑ ¹®ÀÚ À¯Çü";
         Text[ chinese_simplified ] = "Ö÷ÌõÄ¿µÄ×Ö·ûÑùÊ½";
         Text[ chinese_traditional ] = "¥D¶µ¥Øªº¦r«¬¼Ë¦¡";
-        Text[ arabic ] = "äãØ ÇáÃÍÑİ ááÅÏÎÇáÇÊ ÇáÃÓÇÓíÉ";
+        Text[ arabic ] = "äãØ ÇáÃÍÑİ ááÅÏÎÇáÇÊ ÇáÑÆíÓíÉ";
         Text[ turkish ] = "Ana girişler için karakter şablonu";
         Text[ language_user1 ] = " ";
     };
@@ -3410,7 +3410,7 @@ TabPage TP_TOX_ENTRY
         Text = "Dokument~position " ;
         Text [ ENGLISH ] = "document position" ;
         Text[ english_us ] = "Document ~position ";
-        Text[ portuguese ] = "~Posição do documento ";
+        Text[ portuguese ] = "~Posição no documento  ";
         Text[ russian ] = "Ïîëîæåíèå äîêóìåíòà  ";
         Text[ greek ] = "Èİóç åããñÜöïõ ";
         Text[ dutch ] = "Document~positie  ";
@@ -3425,7 +3425,7 @@ TabPage TP_TOX_ENTRY
         Text[ korean ] = "¹®¼­ À§Ä¡ (~P)";
         Text[ chinese_simplified ] = "ÎÄµµÎ»ÖÃ (~P)";
         Text[ chinese_traditional ] = "¤å¥ó¦ì¸m (~P)";
-        Text[ arabic ] = "ãæÖÚ ÇáãÓÊäÏ ";
+        Text[ arabic ] = "ÇáãæÖÚ İí ÇáãÓÊäÏ ";
         Text[ turkish ] = "Belge konumu ";
     };
     RadioButton RB_SORTCONTENT
@@ -3461,7 +3461,7 @@ TabPage TP_TOX_ENTRY
         Text = "Sortierung nach" ;
         Text [ ENGLISH ] = "Sort by" ;
         Text[ english_us ] = "Sort by";
-        Text[ portuguese ] = "Ordenar por ...";
+        Text[ portuguese ] = "Ordenar por";
         Text[ russian ] = "Ñîğòèğîâàòü ïî";
         Text[ greek ] = "Ôáîéíüìçóç êáôÜ ...";
         Text[ dutch ] = "Sorteren op";
@@ -4294,7 +4294,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text = "Exakt" ;
             Text [ ENGLISH ] = "Match case" ;
             Text[ english_us ] = "Match case";
-            Text[ portuguese ] = "Respeitar maiúsc./minúsculas";
+            Text[ portuguese ] = "Maiúsc./minúsculas";
             Text[ russian ] = "Òî÷íûé ïîèñê";
             Text[ greek ] = "Áêñéâşò";
             Text[ dutch ] = "Exact";
