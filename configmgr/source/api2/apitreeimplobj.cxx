@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
+ *  last change: $Author: tl $ $Date: 2000-11-29 15:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include "nodechangeinfo.hxx"
 #include "broadcaster.hxx"
 #include "roottree.hxx"
+#include "noderef.hxx"
 
 #include <cppuhelper/queryinterface.hxx>
 
@@ -461,15 +462,23 @@ void disposeOneRemovedNode(configuration::NodeChange const& , configuration::Nod
     {
         configuration::ElementTree aElementTree( aRemoveInfo.oldElement.getBodyPtr() );
 
-        SetElement* pSetElement = aFactory.findSetElement(aElementTree );
+        // dispose the element representing the removed node
+        configuration::Tree aTree = aElementTree.getTree();
+        OSL_ENSURE(!aTree.isEmpty(),"disposeOneRemovedNode: Element Tree has no Tree");
+        configuration::NodeRef aRoot = aTree.getRootNode();
+        OSL_ENSURE(aRoot.isValid(),"disposeOneRemovedNode: Tree has no root node");
+        if (!configuration::isSimpleValue(aTree,aRoot))
+        {   // (only if it is not a value node, i.e. a child of a value set)
+            SetElement* pSetElement = aFactory.findSetElement(aElementTree );
 
-        if (pSetElement)
-        {
-            // factory always does an extra acquire
-            UnoInterfaceRef xReleaseSetElement(pSetElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
+            if (pSetElement)
+            {
+                // factory always does an extra acquire
+                UnoInterfaceRef xReleaseSetElement(pSetElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
 
-            pSetElement->haveNewParent(0);
-            pSetElement->disposeTree(true);
+                pSetElement->haveNewParent(0);
+                pSetElement->disposeTree(true);
+            }
         }
     }
 }
