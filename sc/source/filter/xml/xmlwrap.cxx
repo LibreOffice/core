@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-03 18:38:43 $
+ *  last change: $Author: sab $ $Date: 2001-10-08 08:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@
 #ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
 #endif
+#ifndef _SCERRORS_HXX
+#include "scerrors.hxx"
+#endif
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
@@ -208,11 +211,12 @@ uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
     return xStatusIndicator;
 }
 
-sal_Bool ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServiceFactory>& xServiceFactory,
+sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServiceFactory>& xServiceFactory,
     uno::Reference<frame::XModel>& xModel, uno::Reference<uno::XInterface>& xXMLParser,
     xml::sax::InputSource& aParserInput,
     const rtl::OUString& sComponentName, const rtl::OUString& sDocName,
-    const rtl::OUString& sOldDocName, uno::Sequence<uno::Any>& aArgs)
+    const rtl::OUString& sOldDocName, uno::Sequence<uno::Any>& aArgs,
+    sal_Bool bMustBeSuccessfull)
 {
     SvStorageStreamRef xDocStream;
     if ( !pStorage && pMedium )
@@ -299,7 +303,70 @@ sal_Bool ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServ
     {
         xParser->parseStream( aParserInput );
     }
-    catch( xml::sax::SAXParseException e )
+    catch( xml::sax::SAXParseException& r )
+    {
+        if( bEncrypted )
+            return ERRCODE_SFX_WRONGPASSWORD;
+
+#ifdef DEBUG
+        ByteString aError( "SAX parse exception catched while importing:\n" );
+        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aError.GetBuffer() );
+#endif
+
+        String sErr( String::CreateFromInt32( r.LineNumber ));
+        sErr += ',';
+        sErr += String::CreateFromInt32( r.ColumnNumber );
+
+        if( sDocName.getLength() )
+        {
+            return *new TwoStringErrorInfo(
+                            (bMustBeSuccessfull ? SCERR_IMPORT_FILE_ROWCOL
+                                                    : SCWARN_IMPORT_FILE_ROWCOL),
+                            sDocName, sErr,
+                            ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+        }
+        else
+        {
+            DBG_ASSERT( bMustBeSuccessfull, "Warnings are not supported" );
+            return *new StringErrorInfo( SCERR_IMPORT_FORMAT_ROWCOL, sErr,
+                             ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+        }
+    }
+    catch( xml::sax::SAXException& r )
+    {
+        if( bEncrypted )
+            return ERRCODE_SFX_WRONGPASSWORD;
+
+#ifdef DEBUG
+        ByteString aError( "SAX exception catched while importing:\n" );
+        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aError.GetBuffer() );
+#endif
+        return SCERR_IMPORT_FORMAT;
+    }
+    catch( io::IOException& r )
+    {
+#ifdef DEBUG
+        ByteString aError( "IO exception catched while importing:\n" );
+        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aError.GetBuffer() );
+#endif
+        return SCERR_IMPORT_OPEN;
+    }
+    catch( uno::Exception& r )
+    {
+#ifdef DEBUG
+        ByteString aError( "uno exception catched while importing:\n" );
+        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aError.GetBuffer() );
+#endif
+        return SCERR_IMPORT_UNKNOWN;
+    }
+
+    // success!
+    return 0;
+/*  catch( xml::sax::SAXParseException e )
     {
         bRet = sal_False;
         bFormatError = sal_True;
@@ -325,7 +392,7 @@ sal_Bool ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServ
             pMedium->SetError( ERRCODE_SFX_WRONGPASSWORD );
     }
 
-    return bRet;
+    return bRet;*/
 }
 
 sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
@@ -379,6 +446,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
             xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), aProgRange);
         }
 
+        sal_uInt32 nMetaRetval(0);
         if(!bStylesOnly)
         {
             uno::Sequence<uno::Any> aMetaArgs(1);
@@ -387,10 +455,11 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import start" );
 
-            sal_Bool bMetaRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
+            nMetaRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLMetaImporter")),
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta.xml")),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Meta.xml")), aMetaArgs);
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Meta.xml")), aMetaArgs,
+                sal_False);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import end" );
         }
@@ -420,33 +489,34 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         pStylesArgs[2] <<= xObjectResolver;
         pStylesArgs[3] <<= xInfoSet;
 
-        sal_Bool bStylesRetval(sal_False);
+        sal_uInt32 nStylesRetval(0);
         {
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles import start" );
 
-            bStylesRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
+            nStylesRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLStylesImporter")),
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("styles.xml")),
-                sEmpty, aStylesArgs);
+                sEmpty, aStylesArgs, sal_True);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles import end" );
         }
 
+        sal_uInt32 nSettingsRetval(0);
         if (!bStylesOnly)
         {
             uno::Sequence<uno::Any> aSettingsArgs(0);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings import start" );
 
-            sal_Bool bSettingsRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
+            nSettingsRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLSettingsImporter")),
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("settings.xml")),
-                sEmpty, aSettingsArgs);
+                sEmpty, aSettingsArgs, sal_False);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings import end" );
         }
 
-        sal_Bool bDocRetval(sal_False);
+        sal_uInt32 nDocRetval(0);
         if (!bStylesOnly)
         {
             uno::Sequence<uno::Any> aDocArgs(4);
@@ -458,10 +528,11 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "content import start" );
 
-            bDocRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
+            nDocRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLContentImporter")),
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml")),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Content.xml")), aDocArgs);
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Content.xml")), aDocArgs,
+                sal_True);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "content import end" );
         }
@@ -474,8 +545,30 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         if (xStatusIndicator.is())
             xStatusIndicator->end();
 
+        sal_Bool bRet(sal_False);
+        if (bStylesOnly)
+        {
+            if (nStylesRetval)
+                pStorage->SetError(nStylesRetval);
+            else
+                bRet = sal_True;
+        }
+        else
+        {
+            if (nDocRetval)
+                pStorage->SetError(nDocRetval);
+            else if (nStylesRetval)
+                pStorage->SetError(nStylesRetval);
+            else if (nMetaRetval)
+                pStorage->SetError(nMetaRetval);
+            else if (nSettingsRetval)
+                pStorage->SetError(nSettingsRetval);
+            else
+                bRet = sal_True;
+        }
+
         // Don't test bStylesRetval and bMetaRetval, because it could be an older file which not contain such streams
-        return !bStylesOnly ? bDocRetval : bStylesRetval;
+        return bRet;//!bStylesOnly ? bDocRetval : bStylesRetval;
     }
     return sal_False;
 }

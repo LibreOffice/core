@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 14:08:37 $
+ *  last change: $Author: sab $ $Date: 2001-10-08 08:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,12 +87,13 @@ class ScXMLImportWrapper
         com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel);
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator> GetStatusIndicator();
 
-    sal_Bool ImportFromComponent(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceFactory,
+    sal_uInt32 ImportFromComponent(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceFactory,
         com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,
         com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xXMLParser,
         com::sun::star::xml::sax::InputSource& aParserInput,
         const rtl::OUString& sComponentName, const rtl::OUString& sDocName, const rtl::OUString& sOldDocName,
-        com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs);
+        com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs,
+        sal_Bool bMustBeSuccessfull);
 
     sal_Bool ExportToComponent(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceFactory,
         com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-27 11:12:54 $
+ *  last change: $Author: sab $ $Date: 2001-10-08 08:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
+#endif
+#ifndef _XMLOFF_XMLERROR_HXX
+#include <xmloff/xmlerror.hxx>
 #endif
 
 #include "xmlimprt.hxx"
@@ -1917,13 +1920,13 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
 
 sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUString& rCurrency)
 {
-    rtl::OUString sTemp;
     uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetNumberFormatsSupplier();
     if (xNumberFormatsSupplier.is())
     {
         uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
         if (xNumberFormats.is())
         {
+            rtl::OUString sFormatString;
             try
             {
                 uno::Reference <beans::XPropertySet> xProperties = xNumberFormats->getByKey(nKey);
@@ -1944,14 +1947,21 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
                         aBuffer.append(rCurrency);
                         aBuffer.appendAscii("]");
                         UnlockSolarMutex();
-                        sTemp = aBuffer.makeStringAndClear();
-                        return xNumberFormats->addNew(sTemp, aLocale);
+                        sFormatString = aBuffer.makeStringAndClear();
+                        return xNumberFormats->addNew(sFormatString, aLocale);
                     }
                 }
             }
-            catch ( uno::Exception& )
+            catch ( util::MalformedNumberFormatException& rException )
             {
-                DBG_ERROR("Numberformat not found");
+                rtl::OUString sErrorMessage(RTL_CONSTASCII_USTRINGPARAM("Fehler im Formatstring "));
+                sErrorMessage += sFormatString;
+                sErrorMessage += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" an Position "));
+                sErrorMessage += rtl::OUString::valueOf(rException.CheckPos);
+                uno::Sequence<rtl::OUString> aSeq(1);
+                aSeq[0] = sErrorMessage;
+                uno::Reference<xml::sax::XLocator> xLocator;
+                SetError(XMLERROR_API | XMLERROR_FLAG_ERROR, aSeq, rException.Message, xLocator);
             }
         }
     }
@@ -1966,17 +1976,13 @@ sal_Bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const rtl:
         uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
         if (xNumberFormats.is())
         {
-            try
+            uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
+            if (xNumberPropertySet.is())
             {
-                uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
                 uno::Any aCurrencySymbol = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CURRENCYSYMBOL)));
                 rtl::OUString sTemp;
                 if ( aCurrencySymbol >>= sTemp)
                     return sCurrencySymbol.equals(sTemp);
-            }
-            catch ( uno::Exception& )
-            {
-                DBG_ERROR("Numberformat not found");
             }
         }
     }
@@ -2013,7 +2019,7 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
                 if (xNumberFormatsSupplier.is())
                     xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
             }
-            try
+            if (xNumberFormats.is())
             {
                 uno::Reference < beans::XPropertySet> xNumberFormatProperties = xNumberFormats->getByKey(rNumberFormat);
                 if (xNumberFormatProperties.is())
@@ -2040,10 +2046,6 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
                         rProperties->setPropertyValue( sNumberFormat, aAny);
                     }
                 }
-            }
-            catch ( uno::Exception& )
-            {
-                DBG_ERROR("Numberformat not found");
             }
         }
         else

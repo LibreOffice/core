@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: sab $ $Date: 2001-10-08 08:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
 #endif
+#ifndef _XMLOFF_XMLERROR_HXX
+#include <xmloff/xmlerror.hxx>
+#endif
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
@@ -107,6 +110,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_XLOCATOR_HPP_
+#include <com/sun/star/xml/sax/XLocator.hpp>
 #endif
 
 #define SC_ENABLEUSERSORTLIST   "EnableUserSortList"
@@ -348,9 +354,17 @@ void ScXMLDatabaseRangeContext::EndElement()
                     {
                         xDatabaseRanges->addNewByName(sDatabaseRangeName, aCellRangeAddress);
                     }
-                    catch ( uno::RuntimeException& )
+                    catch ( uno::RuntimeException& rRuntimeException )
                     {
                         bInsert = sal_False;
+                        rtl::OUString sErrorMessage(RTL_CONSTASCII_USTRINGPARAM("DatabaseRange "));
+                        sErrorMessage += sDatabaseRangeName;
+                        sErrorMessage += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" could not be created with the range "));
+                        sErrorMessage += sRangeAddress;
+                        uno::Sequence<rtl::OUString> aSeq(1);
+                        aSeq[0] = sErrorMessage;
+                        uno::Reference<xml::sax::XLocator> xLocator;
+                        GetScImport().SetError(XMLERROR_API | XMLERROR_FLAG_ERROR, aSeq, rRuntimeException.Message, xLocator);
                     }
                     if (bInsert)
                     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: sab $ $Date: 2001-10-08 08:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #include <xmloff/nmspmap.hxx>
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
+#endif
+#ifndef _XMLOFF_XMLERROR_HXX
+#include <xmloff/xmlerror.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
@@ -265,7 +268,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                     {
                         xSheets->insertNewByName(sTableName, nCurrentSheet);
                     }
-                    catch ( uno::RuntimeException& )
+                    catch ( uno::RuntimeException& rRuntimeException )
                     {
                         ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
                         if (pDoc)
@@ -276,6 +279,14 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                             rtl::OUString sOUTabName(sTabName);
                             xSheets->insertNewByName(sOUTabName, nCurrentSheet);
                             rImport.UnlockSolarMutex();
+                            rtl::OUString sErrorMessage(RTL_CONSTASCII_USTRINGPARAM("Could not create a table with the name "));
+                            sErrorMessage += sTableName;
+                            sErrorMessage += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(". The new name is "));
+                            sErrorMessage += sOUTabName;
+                            uno::Sequence<rtl::OUString> aSeq(1);
+                            aSeq[0] = sErrorMessage;
+                            uno::Reference<xml::sax::XLocator> xLocator;
+                            rImport.SetError(XMLERROR_API | XMLERROR_FLAG_ERROR, aSeq, rRuntimeException.Message, xLocator);
                         }
                     }
                 }
@@ -294,7 +305,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                                 {
                                     xNamed->setName(sTableName);
                                 }
-                                catch ( uno::RuntimeException& )
+                                catch ( uno::RuntimeException& rRuntimeException )
                                 {
                                     ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
                                     if (pDoc)
@@ -305,6 +316,14 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                                         rtl::OUString sOUTabName(sTabName);
                                         xNamed->setName(sOUTabName);
                                         rImport.UnlockSolarMutex();
+                                        rtl::OUString sErrorMessage(RTL_CONSTASCII_USTRINGPARAM("Could not create a table with the name "));
+                                        sErrorMessage += sTableName;
+                                        sErrorMessage += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(". The new name is "));
+                                        sErrorMessage += sOUTabName;
+                                        uno::Sequence<rtl::OUString> aSeq(1);
+                                        aSeq[0] = sErrorMessage;
+                                        uno::Reference<xml::sax::XLocator> xLocator;
+                                        rImport.SetError(XMLERROR_API | XMLERROR_FLAG_ERROR, aSeq, rRuntimeException.Message, xLocator);
                                     }
                                 }
                         }
