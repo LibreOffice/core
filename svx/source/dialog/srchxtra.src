@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:41:26 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Identifier = RID_SVXPAGE_CHAR_NAME ;
                 Text = "Schrift" ;
                 Text [ english_us ] = "Font" ;
-                Text[ portuguese ] = "Font";
+                Text[ portuguese ] = "Tipo de letra";
                 Text[ russian ] = "Ψπθτς";
                 Text[ greek ] = "Γραμματοσειρά";
                 Text[ dutch ] = "Lettertype";
@@ -116,7 +116,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Identifier = RID_SVXPAGE_CHAR_EFFECTS ;
                 Text = "Schrifteffekt" ;
                 Text [ english_us ] = "Font Effects" ;
-                Text[ portuguese ] = "Font Effects";
+                Text[ portuguese ] = "Efeitos do tipo de letra";
                 Text[ russian ] = "έττεκςϋ ψπθτςΰ";
                 Text[ greek ] = "Εφέ γραμματοσειράς";
                 Text[ dutch ] = "Schrifteffecten";
@@ -139,7 +139,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Identifier = RID_SVXPAGE_CHAR_POSITION ;
                 Text = "Position" ;
                 Text [ english_us ] = "Position" ;
-                Text[ portuguese ] = "Position";
+                Text[ portuguese ] = "Posiηγo";
                 Text[ russian ] = "Οξηθφθÿ";
                 Text[ greek ] = "Θέση";
                 Text[ dutch ] = "Positie";
@@ -162,7 +162,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Identifier = RID_SVXPAGE_CHAR_TWOLINES ;
                 Text = "Asiatisches Layout" ;
                 Text [ english_us ] = "Asian Layout" ;
-                Text[ portuguese ] = "Asian Layout";
+                Text[ portuguese ] = "Configuraηγo asiαtica";
                 Text[ russian ] = "ΐηθΰςρκΰÿ πΰημεςκΰ";
                 Text[ greek ] = "Ασιατική διάταξη";
                 Text[ dutch ] = "Asiatisch lay-out";
@@ -269,7 +269,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text = "Asiatische Typographie" ;
                 Text [ ENGLISH ] = "Asian typography" ;
                 Text[ english_us ] = "Asian Typography";
-                Text[ portuguese ] = "Asian typography";
+                Text[ portuguese ] = "Tipografia asiαtica";
                 Text[ russian ] = "ΐηθΰςρκθε ψπθτςϋ";
                 Text[ greek ] = "Ασιατική τυπογραφία";
                 Text[ dutch ] = "Asiatische typografie";
