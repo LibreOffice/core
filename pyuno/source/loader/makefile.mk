@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 16:52:23 $
+#   last change: $Author: obo $ $Date: 2004-11-15 13:12:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,10 +87,8 @@ CFLAGS+=-I$(SOLARINCDIR)$/python
 
 .IF "$(GUI)" == "UNX"
 PYUNOLIB=-lpyuno
-PYTHONLIB=-lpython
 .ELSE
 PYUNOLIB=ipyuno.lib
-PYTHONLIB=python$(PYMAJOR)$(PYMINOR).lib
 .ENDIF
 .ENDIF
 
@@ -153,3 +151,4 @@ $(DLLDEST)$/pyuno_services.rdb : makefile.mk $(DLLDEST)$/$(DLLPRE)$(TARGET)$(DLL
     +cd $(DLLDEST) && regcomp -register -r pyuno_services.tmp $(foreach,i,$(COMPONENTS) -c $(i))
 .ENDIF    # $(OS)=="MACOSX"
     +cd $(DLLDEST) && mv pyuno_services.tmp pyuno_services.rdb
+
