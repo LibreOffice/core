@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:06:06 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,7 +399,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text[ chinese_traditional ] = "·s¼Ë¦¡±q¿ï¾Ü";
                 Text[ arabic ] = "äãØ ÌÏíÏ ãä ÇáÊÍÏíÏ";
                 Text[ greek ] = "Íİï ğñüôõğï áğü åğéëïãŞ";
-                Text[ korean ] = "¼±ÅÃ¿µ¿ªÀÇ »õ À¯Çü";
+                Text[ korean ] = "¼±ÅÃ¿¡ ÀÖ´Â »õ À¯Çü";
                 Text[ turkish ] = "Yeni biçim seçimi";
             };
             ToolBoxItem
