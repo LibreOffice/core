@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-18 15:02:24 $
+ *  last change: $Author: aw $ $Date: 2002-02-26 14:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,33 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
     switch (nCode)
     {
+        // #97016# II
+        case KEY_TAB:
+        {
+            if(rKEvt.GetKeyCode().IsMod1())
+            {
+                // #97016# II do something with a selected handle?
+                const SdrHdlList& rHdlList = pView->GetHdlList();
+                sal_Bool bForward(!rKEvt.GetKeyCode().IsShift());
+
+                ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
+
+                // guarantee visibility of focused handle
+                SdrHdl* pHdl = rHdlList.GetFocusHdl();
+
+                if(pHdl)
+                {
+                    Point aHdlPosition(pHdl->GetPos());
+                    Rectangle aVisRect(aHdlPosition - Point(100, 100), Size(200, 200));
+                    pView->MakeVisible(aVisRect, *pWindow);
+                }
+
+                // consumed
+                bReturn = TRUE;
+            }
+        }
+        break;
+
         case KEY_ESCAPE:
         {
             if ( !this->ISA(FuSelection) )
@@ -462,6 +489,65 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         }
         break;
 
+        // #97016# II change select state when focus is on poly point
+        case KEY_SPACE:
+        {
+            const SdrHdlList& rHdlList = pView->GetHdlList();
+            SdrHdl* pHdl = rHdlList.GetFocusHdl();
+
+            if(pHdl)
+            {
+                if(pHdl->GetKind() == HDL_POLY)
+                {
+                    // rescue ID of point with focus
+                    sal_uInt16 nPol(pHdl->GetPolyNum());
+                    sal_uInt16 nPnt(pHdl->GetPointNum());
+
+                    if(pView->IsPointMarked(*pHdl))
+                    {
+                        if(rKEvt.GetKeyCode().IsShift())
+                        {
+                            pView->UnmarkPoint(*pHdl);
+                        }
+                    }
+                    else
+                    {
+                        if(!rKEvt.GetKeyCode().IsShift())
+                        {
+                            pView->UnmarkAllPoints();
+                        }
+
+                        pView->MarkPoint(*pHdl);
+                    }
+
+                    if(0L == rHdlList.GetFocusHdl())
+                    {
+                        // restore point with focus
+                        SdrHdl* pNewOne = 0L;
+
+                        for(sal_uInt32 a(0); !pNewOne && a < rHdlList.GetHdlCount(); a++)
+                        {
+                            SdrHdl* pAct = rHdlList.GetHdl(a);
+
+                            if(pAct
+                                && pAct->GetKind() == HDL_POLY
+                                && pAct->GetPolyNum() == nPol
+                                && pAct->GetPointNum() == nPnt)
+                            {
+                                pNewOne = pAct;
+                            }
+                        }
+
+                        if(pNewOne)
+                        {
+                            ((SdrHdlList&)rHdlList).SetFocusHdl(pNewOne);
+                        }
+                    }
+                }
+            }
+        }
+        break;
+
         case KEY_UP:
         case KEY_DOWN:
         case KEY_LEFT:
@@ -514,7 +600,54 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                         nY *= 100;
                     }
 
-                    pView->MoveAllMarked(Size(nX, nY));
+                    // #97016# II
+                    const SdrHdlList& rHdlList = pView->GetHdlList();
+                    SdrHdl* pHdl = rHdlList.GetFocusHdl();
+
+                    if(0L == pHdl)
+                    {
+                        // no handle selected
+                        pView->MoveAllMarked(Size(nX, nY));
+                    }
+                    else
+                    {
+                        // move handle with index nHandleIndex
+                        if(pHdl && (nX || nY))
+                        {
+                            // now move the Handle (nX, nY)
+                            Point aStartPoint(pHdl->GetPos());
+                            Point aEndPoint(pHdl->GetPos() + Point(nX, nY));
+                            const SdrDragStat& rDragStat = pView->GetDragStat();
+
+                            // start dragging
+                            pView->BegDragObj(aStartPoint, 0, pHdl, 0);
+
+                            if(pView->IsDragObj())
+                            {
+                                FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
+                                BOOL bWasSnapEnabled = pView->IsSnapEnabled();
+
+                                // switch snapping off
+                                if(!bWasNoSnap)
+                                    ((SdrDragStat&)rDragStat).SetNoSnap(TRUE);
+                                if(bWasSnapEnabled)
+                                    pView->SetSnapEnabled(FALSE);
+
+                                pView->MovAction(aEndPoint);
+                                pView->EndDragObj();
+
+                                // restore snap
+                                if(!bWasNoSnap)
+                                    ((SdrDragStat&)rDragStat).SetNoSnap(bWasNoSnap);
+                                if(bWasSnapEnabled)
+                                    pView->SetSnapEnabled(bWasSnapEnabled);
+                            }
+
+                            // make moved handle visible
+                            Rectangle aVisRect(aEndPoint - Point(100, 100), Size(200, 200));
+                            pView->MakeVisible(aVisRect, *pWindow);
+                        }
+                    }
                 }
                 else
                 {
@@ -536,6 +669,13 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
     }
 
     return(bReturn);
+}
+
+// #97016# II
+void FuPoor::SelectionHasChanged()
+{
+    const SdrHdlList& rHdlList = pView->GetHdlList();
+    ((SdrHdlList&)rHdlList).ResetFocusHdl();
 }
 
 /*************************************************************************
