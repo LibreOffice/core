@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-07 09:20:42 $
+ *  last change: $Author: dbo $ $Date: 2001-11-29 15:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@ static void add_NS_Plugins( PluginLocationMap & rPlugins )
     TCHAR arCurrent[MAX_PATH];
     DWORD dwType, dwCurrentSize = sizeof(arCurrent);
 
+    // 4.7
     if (::RegOpenKeyEx( HKEY_LOCAL_MACHINE, _T("Software\\Netscape\\Netscape Navigator"),
                         0, KEY_READ, &hKey1 ) == ERROR_SUCCESS)
     {
@@ -234,6 +235,35 @@ static void add_NS_Plugins( PluginLocationMap & rPlugins )
                 (dwType == REG_SZ || dwType == REG_EXPAND_SZ))
             {
                 addPluginsFromPath( arCurrent, rPlugins );
+            }
+            ::RegCloseKey( hKey2 );
+        }
+        ::RegCloseKey( hKey1 );
+    }
+
+    // 6
+    dwCurrentSize = sizeof(arCurrent);
+    if (::RegOpenKeyEx( HKEY_LOCAL_MACHINE, _T("Software\\Netscape\\Netscape 6"),
+                        0, KEY_READ, &hKey1 ) == ERROR_SUCCESS)
+    {
+        if (::RegQueryValueEx( hKey1, _T("CurrentVersion"), NULL, &dwType,
+                               (LPBYTE)arCurrent, &dwCurrentSize ) == ERROR_SUCCESS &&
+            (dwType == REG_SZ || dwType == REG_EXPAND_SZ) &&
+            ::RegOpenKeyEx( hKey1, ::lstrcat( arCurrent, _T("\\Main") ),
+                            0, KEY_READ, &hKey2 ) == ERROR_SUCCESS)
+        {
+            dwCurrentSize = sizeof(arCurrent);
+            if (::RegQueryValueEx( hKey2, _T("Install Directory"), NULL, &dwType,
+                                   (LPBYTE)arCurrent, &dwCurrentSize ) == ERROR_SUCCESS &&
+                (dwType == REG_SZ || dwType == REG_EXPAND_SZ))
+            {
+                int n = dwCurrentSize / sizeof (TCHAR);
+                if ('\\' != arCurrent[ n -2 ])
+                {
+                    arCurrent[ n -1 ] = '\\';
+                    arCurrent[ n ] = 0;
+                }
+                addPluginsFromPath( ::lstrcat( arCurrent, _T("Plugins") ), rPlugins );
             }
             ::RegCloseKey( hKey2 );
         }
