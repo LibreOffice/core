@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optctl.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:27:37 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,271 +72,63 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
     Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Text = "Complex Text Layout" ;
-       Text[ english_us ] = "Complex Text Layout" ;
+    Text [ de ] = "Complex Text Layout" ;
+       Text [ en-US ] = "Complex Text Layout" ;
     FixedLine FL_SEQUENCECHECKING
     {
         Pos = MAP_APPFONT ( 6, 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Sequenz�berpr�fung" ;
-        Text[ english_us ] = "Sequence checking";
-        Text[ portuguese ] = "Sequence checking";
-        Text[ russian ] = "Sequence checking";
-        Text[ spanish ] = "Control de secuencia";
-        Text[ italian ] = "Controllo sequenza";
-        Text[ swedish ] = "Sekvenskontroll";
-        Text[ polish ] = "Sequence checking";
-        Text[ portuguese_brazilian ] = "Controle de seq��ncia";
-        Text[ japanese ] = "シーケンスチェック";
-        Text[ korean ] = "순서 검사";
-        Text[ turkish ] = "Ard�ll�k kontrol�";
-        Text[ thai ] = "Sequence checking";
-        Text[ greek ] = "Sequence checking";
-        Text[ dutch ] = "Sequence checking";
-        Text[ french ] = "Contr�le de s�quence";
-        Text[ finnish ] = "Sequence checking";
-        Text[ danish ] = "Sekvenskontrol";
-        Text[ chinese_simplified ] = "检查顺序";
-        Text[ chinese_traditional ] = "順序檢查";
-        Text[ arabic ] = "Sequence checking";
-        Text[ catalan ] = "Sequence checking";
-        Text[ czech ] = "Kontrola pořadí";
-        Text[ hebrew ] = "Sequence checking";
-        Text[ hindi ] = "Sequence checking";
-        Text[ slovak ] = "Preverenie sekvencie";
-        Text[ hungarian ] = "Sorrendellenőrzés";
-        Text[ slovenian ] = "Preverjanje niza";
+        Text [ de ] = "Sequenz�berpr�fung" ;
+        Text [ en-US ] = "Sequence checking";
     };
     CheckBox CB_SEQUENCECHECKING
     {
         Pos = MAP_APPFONT ( 12, 14 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text = "Se~quenz�berpr�fung anwenden" ;
-        Text[ english_us ] = "Use se~quence checking";
-        Text[ portuguese ] = "Use se~quence checking";
-        Text[ russian ] = "Use se~quence checking";
-        Text[ spanish ] = "Aplicar el ~control de secuencia";
-        Text[ italian ] = "Applica controllo se~quenza";
-        Text[ swedish ] = "Anv�nd sekvenskontroll";
-        Text[ polish ] = "Use se~quence checking";
-        Text[ portuguese_brazilian ] = "Usar o controle de seq��ncia";
-        Text[ japanese ] = "シーケンスチェックを使用(~Q)";
-        Text[ korean ] = "순서 검사 사용(~Q)";
-        Text[ turkish ] = "Ard�ll�k kontrol�n� kullan";
-        Text[ thai ] = "Use se~quence checking";
-        Text[ greek ] = "Use se~quence checking";
-        Text[ dutch ] = "Use se~quence checking";
-        Text[ french ] = "Appliquer le contr�le de s�quence";
-        Text[ finnish ] = "Use se~quence checking";
-        Text[ danish ] = "Brug sekvenskontrol";
-        Text[ chinese_simplified ] = "使用顺序检查(~Q)";
-        Text[ chinese_traditional ] = "使用順序檢查(~q)";
-        Text[ arabic ] = "Use se~quence checking";
-        Text[ catalan ] = "Use se~quence checking";
-        Text[ czech ] = "Povolit kontrolu pořadí";
-        Text[ hebrew ] = "Se~quenzüberprüfung anwenden";
-        Text[ hindi ] = "Use se~quence checking";
-        Text[ slovak ] = "Použiť preverenie se~kvencie";
-        Text[ hungarian ] = "~Jelsorrend ellenőrzése";
-        Text[ slovenian ] = "Uporabi pre~verjanje niza";
+        Text [ de ] = "Se~quenz�berpr�fung anwenden" ;
+        Text [ en-US ] = "Use se~quence checking";
     };
     FixedLine FL_CURSORCONTROL
     {
         Pos = MAP_APPFONT ( 6, 27 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Cursorkontrolle" ;
-        Text[ english_us ] = "Cursor control";
-        Text[ portuguese ] = "Cursor control";
-        Text[ russian ] = "Cursor control";
-        Text[ spanish ] = "Control del cursor";
-        Text[ italian ] = "Controllo cursore";
-        Text[ swedish ] = "Mark�rkontroll";
-        Text[ polish ] = "Cursor control";
-        Text[ portuguese_brazilian ] = "Controle do cursor";
-        Text[ japanese ] = "カーソル制御";
-        Text[ korean ] = "커서 제어";
-        Text[ turkish ] = "�mle� kontrol�";
-        Text[ thai ] = "Cursor control";
-        Text[ greek ] = "Cursor control";
-        Text[ dutch ] = "Cursorbesturing";
-        Text[ french ] = "Contr�le du curseur";
-        Text[ finnish ] = "Cursor control";
-        Text[ danish ] = "Mark�rkontrol";
-        Text[ chinese_simplified ] = "鼠标控制";
-        Text[ chinese_traditional ] = "游標控制";
-        Text[ arabic ] = "Cursor control";
-        Text[ catalan ] = "Cursor control";
-        Text[ czech ] = "Ovládání kurzoru";
-        Text[ hebrew ] = "Cursor control";
-        Text[ hindi ] = "Cursor control";
-        Text[ slovak ] = "Ovládací prvok kurzora";
-        Text[ hungarian ] = "Kurzor beállítása";
-        Text[ slovenian ] = "Nadzor kazalke";
+        Text [ de ] = "Cursorkontrolle" ;
+        Text [ en-US ] = "Cursor control";
     };
     FixedText FT_MOVEMENT
     {
         Pos = MAP_APPFONT ( 12, 38 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text = "Bewegung" ;
-        Text[ english_us ] = "Movement";
-        Text[ portuguese ] = "Movement";
-        Text[ russian ] = "Movement";
-        Text[ spanish ] = "Movimiento";
-        Text[ italian ] = "Movimento";
-        Text[ swedish ] = "R�relse";
-        Text[ polish ] = "Movement";
-        Text[ portuguese_brazilian ] = "Movimento";
-        Text[ japanese ] = "移動";
-        Text[ korean ] = "움직임";
-        Text[ turkish ] = "Hareket";
-        Text[ thai ] = "Movement";
-        Text[ greek ] = "Movement";
-        Text[ dutch ] = "Beweging";
-        Text[ french ] = "Mouvement";
-        Text[ finnish ] = "Movement";
-        Text[ danish ] = "Bev�gelse";
-        Text[ chinese_simplified ] = "移动";
-        Text[ chinese_traditional ] = "移動";
-        Text[ arabic ] = "Movement";
-        Text[ catalan ] = "Movement";
-        Text[ czech ] = "Pohyb";
-        Text[ hebrew ] = "Movement";
-        Text[ hindi ] = "Movement";
-        Text[ slovak ] = "Pohyb";
-        Text[ hungarian ] = "Mozgás";
-        Text[ slovenian ] = "Gibanje";
+        Text [ de ] = "Bewegung" ;
+        Text [ en-US ] = "Movement";
     };
     RadioButton RB_MOVEMENT_LOGICAL
     {
         Pos = MAP_APPFONT ( 105, 38 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
-        Text = "Lo~gisch" ;
-        Text[ english_us ] = "Lo~gical";
-        Text[ portuguese ] = "Lo~gical";
-        Text[ russian ] = "Lo~gical";
-        Text[ spanish ] = "L�~gico";
-        Text[ italian ] = "Lo~gico";
-        Text[ swedish ] = "Lo~gisk";
-        Text[ polish ] = "Lo~gical";
-        Text[ portuguese_brazilian ] = "L�gico";
-        Text[ japanese ] = "論理(~G)";
-        Text[ korean ] = "논리적(~G)";
-        Text[ turkish ] = "~Mant�ksal";
-        Text[ thai ] = "Lo~gical";
-        Text[ greek ] = "Lo~gical";
-        Text[ dutch ] = "Lo~gisch";
-        Text[ french ] = "Logique";
-        Text[ finnish ] = "Lo~gical";
-        Text[ danish ] = "Lo~gisk";
-        Text[ chinese_simplified ] = "逻辑的(~G)";
-        Text[ chinese_traditional ] = "邏輯(~G)";
-        Text[ arabic ] = "Lo~gical";
-        Text[ catalan ] = "Lo~gical";
-        Text[ czech ] = "Logický";
-        Text[ hebrew ] = "Lo~gical";
-        Text[ hindi ] = "Lo~gical";
-        Text[ slovak ] = "Lo~gické";
-        Text[ hungarian ] = "Lo~gikai";
-        Text[ slovenian ] = "Lo~gično";
+        Text [ de ] = "Lo~gisch" ;
+        Text [ en-US ] = "Lo~gical";
     };
     RadioButton RB_MOVEMENT_VISUAL
     {
         Pos = MAP_APPFONT ( 177, 38 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
-        Text = "~Visuell" ;
-        Text[ english_us ] = "~Visual";
-        Text[ portuguese ] = "~Visual";
-        Text[ russian ] = "~Visual";
-        Text[ spanish ] = "~Visual";
-        Text[ italian ] = "~Visivo";
-        Text[ swedish ] = "~Visuell";
-        Text[ polish ] = "~Visual";
-        Text[ portuguese_brazilian ] = "Visual";
-        Text[ japanese ] = "ビジュアル(~V)";
-        Text[ korean ] = "시각적(~V)";
-        Text[ turkish ] = "~G�rsel";
-        Text[ thai ] = "~Visual";
-        Text[ greek ] = "~Visual";
-        Text[ dutch ] = "~Visueel";
-        Text[ french ] = "Visuel";
-        Text[ finnish ] = "~Visual";
-        Text[ danish ] = "~Visuel";
-        Text[ chinese_simplified ] = "视觉的(~V)";
-        Text[ chinese_traditional ] = "視覺(~V)";
-        Text[ arabic ] = "~Visual";
-        Text[ catalan ] = "~Visual";
-        Text[ czech ] = "Vizuální";
-        Text[ hebrew ] = "~Visual";
-        Text[ hindi ] = "~Visual";
-        Text[ slovak ] = "~Vizuálne";
-        Text[ hungarian ] = "~Látható";
-        Text[ slovenian ] = "~Vidno";
+        Text [ de ] = "~Visuell" ;
+        Text [ en-US ] = "~Visual";
     };
     FixedLine FL_GENERAL
     {
         Pos = MAP_APPFONT ( 6, 51 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Allgemeine Optionen" ;
-        Text[ english_us ] = "General options";
-        Text[ portuguese ] = "Op��es gerais";
-        Text[ russian ] = "����� ���������";
-        Text[ spanish ] = "Opciones generales";
-        Text[ italian ] = "Opzioni generali";
-        Text[ swedish ] = "Allm�nna alternativ";
-        Text[ polish ] = "Opcje og�lne";
-        Text[ portuguese_brazilian ] = "Op��es gerais";
-        Text[ japanese ] = "一般オプション";
-        Text[ korean ] = "일반 옵션";
-        Text[ turkish ] = "Genel �zellikler";
-        Text[ thai ] = "ตัวเลือกทั่วไป";
-        Text[ greek ] = "������� ��������";
-        Text[ dutch ] = "Algemene opties";
-        Text[ french ] = "Options g�n�rales";
-        Text[ finnish ] = "Yleisasetukset";
-        Text[ danish ] = "Generelle indstillinger";
-        Text[ chinese_simplified ] = "常规选项";
-        Text[ chinese_traditional ] = "一般選項";
-        Text[ arabic ] = "������ ����";
-        Text[ catalan ] = "Opcions generals";
-        Text[ czech ] = "Obecné vlastnosti";
-        Text[ hebrew ] = "‮אפשריות כלליות‬";
-        Text[ hindi ] = "सामान्य विकल्प";
-        Text[ slovak ] = "Všeobecné voľby";
-        Text[ hungarian ] = "Általános beállítások";
-        Text[ slovenian ] = "Splošne možnosti";
+        Text [ de ] = "Allgemeine Optionen" ;
+        Text [ en-US ] = "General options";
     };
     FixedText FT_NUMERALS
     {
         Pos = MAP_APPFONT ( 12, 64 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text = "~Ziffern" ;
-        Text[ english_us ] = "~Numerals";
-        Text[ portuguese ] = "~Numerals (in text only)";
-        Text[ russian ] = "~Numerals (in text only)";
-        Text[ spanish ] = "~Numerales";
-        Text[ italian ] = "~Numerali (solo nel testo)";
-        Text[ swedish ] = "~Siffror";
-        Text[ polish ] = "~Numerals (in text only)";
-        Text[ portuguese_brazilian ] = "N�mera��o (somente no texto)";
-        Text[ japanese ] = "数値(テキストのみ) (~N)";
-        Text[ korean ] = "숫자(텍스트에서만)(~N)";
-        Text[ turkish ] = "~Say�lar";
-        Text[ thai ] = "~Numerals (in text only)";
-        Text[ greek ] = "~Numerals (in text only)";
-        Text[ dutch ] = "~Cijfers";
-        Text[ french ] = "Chiffres";
-        Text[ finnish ] = "~Numerals (in text only)";
-        Text[ danish ] = "~Tal";
-        Text[ chinese_simplified ] = "数字(~N)";
-        Text[ chinese_traditional ] = "數字(~N)";
-        Text[ arabic ] = "~Numerals (in text only)";
-        Text[ catalan ] = "~Numerals (in text only)";
-        Text[ czech ] = "Číslice";
-        Text[ hebrew ] = "~Numerals";
-        Text[ hindi ] = "~Numerals";
-        Text[ slovak ] = "~Numerické";
-        Text[ hungarian ] = "~Számok";
-        Text[ slovenian ] = "~Številski sistem";
+        Text [ de ] = "~Ziffern" ;
+        Text [ en-US ] = "~Numerals";
     };
     ListBox LB_NUMERALS
     {
@@ -344,207 +136,25 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Size = MAP_APPFONT ( 69 , 8 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "Arabisch" ; > ;
             < "Hindi" ; > ;
             < "System" ; > ;
         };
-        StringList [english_us]=
+        StringList [ en-US ]=
         {
             < "Arabic" ; > ;
             < "Hindi" ; > ;
             < "System" ; > ;
         };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
          < "; ; Arabisch" ; > ;
         < "; ; Hindi" ; > ;
         < "; ; System" ; > ;
     };
-    StringList [ portuguese ] =
-    {
-         < "�rabe" ; > ;
-        < "Hindi" ; > ;
-        < "Sistema" ; > ;
     };
-    StringList [ russian ] =
-    {
-         < "��������" ; > ;
-        < "�����" ; > ;
-        < "�� �������" ; > ;
-    };
-    StringList [ spanish ] =
-    {
-         < "�rabe" ; > ;
-        < "Hindi" ; > ;
-        < "Sistema" ; > ;
-    };
-    StringList [ italian ] =
-    {
-         < "Arabo" ; > ;
-        < "Hindi" ; > ;
-        < "Sistema" ; > ;
-    };
-    StringList [ swedish ] =
-    {
-         < "Arabiska" ; > ;
-        < "Hindi" ; > ;
-        < "System" ; > ;
-    };
-    StringList [ polish ] =
-    {
-         < "Arabski" ; > ;
-        < "Hindi" ; > ;
-        < "System" ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-         < "Ar�bicos" ; > ;
-        < "Hindi" ; > ;
-        < "Sistema" ; > ;
-    };
-    StringList [ japanese ] =
-    {
-         < "アラビア数字" ; > ;
-        < "ヒンディー語" ; > ;
-        < "システム" ; > ;
-    };
-    StringList [ korean ] =
-    {
-         < "아랍어" ; > ;
-        < "힌두어" ; > ;
-        < "시스템" ; > ;
-    };
-    StringList [ turkish ] =
-    {
-         < "Arap�a" ; > ;
-        < "Hint�e" ; > ;
-        < "Sistem" ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "ภาษาอารบิก" ; > ;
-        < "ฮินดี" ; > ;
-        < "ระบบ" ; > ;
-    };
-    StringList [ greek ] =
-    {
-         < "�������" ; > ;
-        < "Hindi" ; > ;
-        < "�������" ; > ;
-    };
-    StringList [ dutch ] =
-    {
-         < "Arabisch" ; > ;
-        < "Hindi" ; > ;
-        < "Systeem" ; > ;
-    };
-    StringList [ french ] =
-    {
-         < "Arabe" ; > ;
-        < "Hindi" ; > ;
-        < "Syst�me" ; > ;
-    };
-    StringList [ finnish ] =
-    {
-         < "arabia" ; > ;
-        < "unkari" ; > ;
-        < "J�rjestelm�" ; > ;
-    };
-    StringList [ danish ] =
-    {
-         < "Arabisk" ; > ;
-        < "Hindi" ; > ;
-        < "System" ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-         < "阿拉伯数字" ; > ;
-        < "北印度语" ; > ;
-        < "系统" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-         < "阿拉伯數字" ; > ;
-        < "北印度語" ; > ;
-        < "系統" ; > ;
-    };
-    StringList [ arabic ] =
-    {
-         < "����" ; > ;
-        < "Hindi" ; > ;
-        < "������" ; > ;
-    };
-    StringList [ catalan ] =
-    {
-         < "�rab" ; > ;
-        < "Hindi" ; > ;
-        < "Sistema" ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "Arabské" ; > ;
-        < "Hindi" ; > ;
-        < "System" ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "‮הינדיות‬" ; > ;
-        < "Hindi" ; > ;
-        < "System" ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "अरेबिक" ; > ;
-        < "हन्गेरियन" ; > ;
-        < "सिस्टम" ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "Arabské" ; > ;
-        < "Hindi" ; > ;
-        < "Systémové" ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "Arab" ; > ;
-        < "Hindi" ; > ;
-        < "Rendszer" ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "Arabski" ; > ;
-        < "Hindujski" ; > ;
-        < "Sistem" ; > ;
-    };
-    };
-    Text[ portuguese ] = "Complex Text Layout";
-    Text[ russian ] = "Complex Text Layout";
-    Text[ spanish ] = "Dise�o de texto complejo (CTL)";
-    Text[ italian ] = "Disposizione testo complesso";
-    Text[ swedish ] = "Komplex textlayout";
-    Text[ polish ] = "Complex Text Layout";
-    Text[ portuguese_brazilian ] = "Texto de layout complexo (TLC)";
-    Text[ japanese ] = "複合文字言語";
-    Text[ korean ] = "CTL(Complex Text Layout)";
-    Text[ turkish ] = "Karma��k Metin Yerle�imi";
-    Text[ thai ] = "Complex Text Layout";
-    Text[ greek ] = "Complex Text Layout";
-    Text[ dutch ] = "Complex Text Layout";
-    Text[ french ] = "Scripts complexes";
-    Text[ finnish ] = "Complex Text Layout";
-    Text[ danish ] = "Complex Text Layout (CTL)";
-    Text[ chinese_simplified ] = "复杂文字的版式";
-    Text[ chinese_traditional ] = "複雜文字版式";
-    Text[ arabic ] = "Complex Text Layout";
-    Text[ catalan ] = "Complex Text Layout";
-    Text[ czech ] = "Komplexní rozvržení textu";
-    Text[ hebrew ] = "Complex Text Layout";
-    Text[ hindi ] = "Complex Text Layout";
-    Text[ slovak ] = "Komplexné rozloženie textu";
-    Text[ hungarian ] = "Komplex szöveg megjelenítése";
-    Text[ slovenian ] = "Postavitev kompleksnega besedila (CTL)";
 };
 
 
