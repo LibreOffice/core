@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:53:55 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2063,7 +2063,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getNotesPage()
     if( pModel == 0 )
         throw lang::DisposedException();
 
-    if(pPage && mpModel && mpModel->GetDoc() )
+    if(pPage && mpModel && mpModel->GetDoc() && pPage->GetPageNum() )
     {
         SdPage* pNotesPage = mpModel->GetDoc()->GetSdPage( (pPage->GetPageNum()-1)>>1, PK_NOTES );
         if( pNotesPage )
