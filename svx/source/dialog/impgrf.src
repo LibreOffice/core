@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: rt $ $Date: 2000-11-24 17:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ finnish ] = "Hakemistoa '" ;
         Text [ danish ] = "Biblioteket '" ;
         Text [ french ] = "Le répertoire '" ;
-        Text [ swedish ] = "Mappen '" ;
+        Text [ swedish ] = "Katalogen '" ;
         Text [ dutch ] = "Map '" ;
         Text [ spanish ] = "El directorio '" ;
         Text [ english_us ] = "The directory '" ;
@@ -429,7 +429,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ finnish ] = "~Linkki" ;
         Text [ danish ] = "Kæd" ;
         Text [ french ] = "~Lien" ;
-        Text [ swedish ] = "~Länka" ;
+        Text [ swedish ] = "Lä~nka" ;
         Text [ dutch ] = "~Koppelen" ;
         Text [ spanish ] = "~Vincular" ;
         Text [ english_us ] = "~Link" ;
@@ -479,7 +479,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ spanish ] = "~Filtro..." ;
         Text [ french ] = "~Filtre..." ;
         Text [ dutch ] = "~Filter..." ;
-        Text [ swedish ] = "~Filter..." ;
+        Text [ swedish ] = "Fi~lter..." ;
         Text [ danish ] = "Filter..." ;
         Text [ portuguese_brazilian ] = "~Filter..." ;
         Text [ portuguese ] = "~Filtro..." ;
