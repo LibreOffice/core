@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:07:42 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,8 +381,11 @@ Sequence<Type> SAL_CALL ODatabaseForm::getTypes() throw(RuntimeException)
     if (query_aggregation(m_xAggregate, xAggregateTypes))
         aAggregateTypes = xAggregateTypes->getTypes();
 
-    Sequence<Type> aRet = concatSequences(aAggregateTypes, ODatabaseForm_BASE1::getTypes(), OFormComponents::getTypes());
-    return concatSequences(aRet,ODatabaseForm_BASE2::getTypes(), ODatabaseForm_BASE3::getTypes());
+    Sequence< Type > aRet = concatSequences(
+        aAggregateTypes, ODatabaseForm_BASE1::getTypes(), OFormComponents::getTypes()
+    );
+    aRet = concatSequences( aRet, ODatabaseForm_BASE2::getTypes(), ODatabaseForm_BASE3::getTypes() );
+    return concatSequences( aRet, OPropertySetAggregationHelper::getTypes() );
 }
 
 //------------------------------------------------------------------
@@ -1432,7 +1435,7 @@ void ODatabaseForm::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    BEGIN_DESCRIBE_AGGREGATION_PROPERTIES(18, m_xAggregateSet)
+    BEGIN_DESCRIBE_AGGREGATION_PROPERTIES(21, m_xAggregateSet)
         // we want to "override" the privileges, since we have additional "AllowInsert" etc. properties
         RemoveProperty( _rAggregateProps, PROPERTY_PRIVILEGES );
 
@@ -1470,6 +1473,9 @@ void ODatabaseForm::fillProperties(
         DECL_PROP1      ( TARGET_FRAME,     ::rtl::OUString,                BOUND                          );
         DECL_PROP1      ( SUBMIT_METHOD,    FormSubmitMethod,               BOUND                          );
         DECL_PROP1      ( SUBMIT_ENCODING,  FormSubmitEncoding,             BOUND                          );
+        DECL_BOOL_PROP3 ( DYNAMIC_CONTROL_BORDER,                           BOUND, MAYBEVOID, MAYBEDEFAULT );
+        DECL_PROP3      ( CONTROL_BORDER_COLOR_FOCUS, sal_Int32,            BOUND, MAYBEVOID, MAYBEDEFAULT );
+        DECL_PROP3      ( CONTROL_BORDER_COLOR_MOUSE, sal_Int32,            BOUND, MAYBEVOID, MAYBEDEFAULT );
     END_DESCRIBE_PROPERTIES();
 }
 
@@ -1598,6 +1604,15 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
         case PROPERTY_ID_PRIVILEGES:
             rValue <<= (sal_Int32)m_nPrivileges;
             break;
+        case PROPERTY_ID_DYNAMIC_CONTROL_BORDER:
+            rValue = m_aDynamicControlBorder;
+            break;
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS:
+            rValue = m_aControlBorderColorFocus;
+            break;
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE:
+            rValue = m_aControlBorderColorMouse;
+            break;
     }
 }
 
@@ -1669,6 +1684,15 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
             break;
         case PROPERTY_ID_ALLOWDELETIONS:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAllowDelete);
+            break;
+        case PROPERTY_ID_DYNAMIC_CONTROL_BORDER:
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aDynamicControlBorder, ::getBooleanCppuType() );
+            break;
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS:
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aControlBorderColorFocus, getCppuType( static_cast< sal_Int32* >( NULL ) ) );
+            break;
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE:
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aControlBorderColorMouse, getCppuType( static_cast< sal_Int32* >( NULL ) ) );
             break;
         default:
             DBG_ERROR("ODatabaseForm::convertFastPropertyValue : unknown property !");
@@ -1759,6 +1783,15 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
         case PROPERTY_ID_ALLOWDELETIONS:
             m_bAllowDelete = getBOOL(rValue);
             break;
+        case PROPERTY_ID_DYNAMIC_CONTROL_BORDER:
+            m_aDynamicControlBorder = rValue;
+            break;
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS:
+            m_aControlBorderColorFocus = rValue;
+            break;
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE:
+            m_aControlBorderColorMouse = rValue;
+            break;
         default:
             DBG_ERROR("ODatabaseForm::setFastPropertyValue_NoBroadcast : unknown property !");
     }
@@ -1803,6 +1836,18 @@ PropertyState ODatabaseForm::getPropertyStateByHandle(sal_Int32 nHandle)
                 eState = PropertyState_DIRECT_VALUE;
             break;
 
+        case PROPERTY_ID_DYNAMIC_CONTROL_BORDER:
+            eState = m_aDynamicControlBorder.hasValue() ? PropertyState_DIRECT_VALUE : PropertyState_DEFAULT_VALUE;
+            break;
+
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS:
+            eState = m_aControlBorderColorFocus.hasValue() ? PropertyState_DIRECT_VALUE : PropertyState_DEFAULT_VALUE;
+            break;
+
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE:
+            eState = m_aControlBorderColorMouse.hasValue() ? PropertyState_DIRECT_VALUE : PropertyState_DEFAULT_VALUE;
+            break;
+
         default:
             eState = OPropertySetAggregationHelper::getPropertyStateByHandle(nHandle);
     }
@@ -1819,6 +1864,9 @@ void ODatabaseForm::setPropertyToDefaultByHandle(sal_Int32 nHandle)
         case PROPERTY_ID_APPLYFILTER:
         case PROPERTY_ID_NAVIGATION:
         case PROPERTY_ID_CYCLE:
+        case PROPERTY_ID_DYNAMIC_CONTROL_BORDER:
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS:
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE:
             setFastPropertyValue( nHandle, getPropertyDefaultByHandle( nHandle ) );
             break;
 
@@ -1833,6 +1881,7 @@ Any ODatabaseForm::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     switch (nHandle)
     {
         case PROPERTY_ID_INSERTONLY:
+        case PROPERTY_ID_DYNAMIC_CONTROL_BORDER:
             return makeAny( (sal_Bool)(sal_False ) );
 
         case PROPERTY_ID_FILTER:
@@ -1845,6 +1894,8 @@ Any ODatabaseForm::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
             return makeAny(NavigationBarMode_CURRENT);
 
         case PROPERTY_ID_CYCLE:
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS:
+        case PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE:
             return Any();
 
         default:
