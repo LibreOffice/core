@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 09:09:13 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 10:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@
 #endif
 
 #include <tools/debug.hxx>
+#include <sm.hxx>
 
 #ifndef _SAL_I18N_INPUTMETHOD_HXX
 #include "i18n_im.hxx"
@@ -336,12 +337,9 @@ static int sal_XIOErrorHdl( Display *pDisplay )
     if( ImplGetSVData()->maAppData.mbAppQuit )
         _exit(1);
 
-    SalData    *pSalData    = GetSalData();
-    SalDisplay *pSalDisplay = pSalData->GetDisplay( pDisplay );
-    if ( pDisplay && pSalDisplay && pSalDisplay->IsDisplay() )
-        pSalData->GetLib()->Remove( ConnectionNumber( pDisplay ) );
-
-    oslSignalAction eToDo = osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
+    // really bad hack
+    if( ! SessionManagerClient::checkDocumentsSaved() )
+        oslSignalAction eToDo = osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
 
     fprintf( stderr, "X IO Error\n" );
     fflush( stdout );
