@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-16 18:01:24 $
+ *  last change: $Author: kr $ $Date: 2001-01-18 14:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.10 $ $ $Date: 2001-01-16 18:01:24 $
+ * @version     $Revision: 1.11 $ $ $Date: 2001-01-18 14:23:37 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -739,6 +739,15 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
                 // interrupt the dispatcher thread, if this thread is not the dispatcher
                 if(Thread.currentThread() != _messageDispatcher &&  _messageDispatcher.isAlive()) {
+
+                    // THIS IS A ***WORKAROUND*** FOR LINUX SUN JDK1.3 PROBLEM:
+                    // THE MESSAGEDISPATCHER STAYS IN THE SOCKET READ METHOD,
+                    // EVEN IF THE SOCKET HAS BEEN CLOSED.
+                    // SUSPENDING AND RESUMING THE MESSAGEDISPATCHER LET IT
+                    // NOTICE THE CLOSED SOCKET
+                    _messageDispatcher.suspend();
+                    _messageDispatcher.resume();
+
                     _messageDispatcher.join(1000); // wait for thread to die
 
                     if(_messageDispatcher.isAlive()) { // has not died yet, interrupt it
