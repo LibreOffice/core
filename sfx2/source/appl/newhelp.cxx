@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 14:04:48 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 17:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2986,8 +2986,11 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
 
     ::rtl::OUString sHelpURL;
 
-    INetURLObject aObj(aEntry);
-    BOOL bComplete = ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP );
+//  INetURLObject aObj(aEntry);
+//  BOOL bComplete = ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP );
+
+    BOOL bComplete = rtl::OUString(aEntry).toAsciiLowerCase().match(rtl::OUString::createFromAscii("vnd.sun.star.help"),0);
+
     if (bComplete)
         sHelpURL = ::rtl::OUString(aEntry);
     else
