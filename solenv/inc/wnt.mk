@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 18:30:57 $
+#   last change: $Author: rt $ $Date: 2003-12-01 16:18:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -173,13 +173,17 @@ CFLAGS+=-Zm500 -wd4290 -wd4786 -wd4800
 CDEFS+= -D_X86_=1 $(OLE2DEF)
 CFLAGS+=-c -nologo -Gs -Gy $(NOLOGO) $(MINUS_I)$(INCLUDE)
 .IF "$(bndchk)" == ""
+.IF "$(VC_STANDARD)"==""
 CFLAGS+= -Ob1
+.ENDIF	# "$(VC_STANDARD)"==""
 .ENDIF
 .ELSE	# ist keine product...
 CDEFS+= -D_X86_=1 $(OLE2DEF)
 CFLAGS+=-c -nologo -Gs $(NOLOGO) $(MINUS_I)$(INCLUDE)
 .IF "$(bndchk)" == ""
+.IF "$(VC_STANDARD)"==""
 CFLAGS+= -Ob1
+.ENDIF	# "$(VC_STANDARD)"==""
 .ENDIF
 .ENDIF
 
@@ -242,8 +246,13 @@ CFLAGSDEBUG=-Zi -Fd$(MISC)\$(PDBTARGET).PDB
 CFLAGSDEBUG=-Zi -Fd$(MISC)\_ooo_st_$(TARGET).PDB
 .ENDIF
 CFLAGSDBGUTIL=
+.IF "$(VC_STANDARD)"==""
 CFLAGSOPT=-Ox -Oy-
 CFLAGSNOOPT=-Od
+.ELSE			#  "$(VC_STANDARD)"==""
+CFLAGSOPT=
+CFLAGSNOOPT=
+.ENDIF			#  "$(VC_STANDARD)"==""
 CFLAGSOUTOBJ=-Fo
 .IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
 CFLAGSWALL=-Wall -wd4294 -wd4640
