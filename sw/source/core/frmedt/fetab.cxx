@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:31:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2220,6 +2220,35 @@ BOOL SwFEShell::IsNumLabel( const Point &rPt, int nMaxOffset )
     return bResult;
 }
 // <- #i23726#
+
+// --> OD 2005-02-21 #i42921#
+bool SwFEShell::IsVerticalModeAtNdAndPos( const SwTxtNode& _rTxtNode,
+                                          const Point& _rDocPos ) const
+{
+    bool bRet( false );
+
+    const short nTextDir =
+        _rTxtNode.GetTextDirection( SwPosition(_rTxtNode), &_rDocPos );
+    switch ( nTextDir )
+    {
+        case -1:
+        case FRMDIR_HORI_RIGHT_TOP:
+        case FRMDIR_HORI_LEFT_TOP:
+        {
+            bRet = false;
+        }
+        break;
+        case FRMDIR_VERT_TOP_LEFT:
+        case FRMDIR_VERT_TOP_RIGHT:
+        {
+            bRet = true;
+        }
+        break;
+    }
+
+    return bRet;
+}
+// <--
 
 /*************************************************************************
 |*
