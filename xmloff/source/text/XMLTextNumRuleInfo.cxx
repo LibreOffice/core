@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextNumRuleInfo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-16 14:44:54 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,12 @@ void XMLTextNumRuleInfo::Set(
         if( xPropSetInfo->hasPropertyByName( sNumberingIsNumber ) )
         {
             aAny = xPropSet->getPropertyValue( sNumberingIsNumber );
-            bIsNumbered = *(sal_Bool *)aAny.getValue();
+            OSL_ENSURE( aAny.hasValue(),
+                        "numbered paragraph without number info" );
+            if( !aAny.hasValue() )
+                bIsNumbered = sal_False;
+            else
+                bIsNumbered = *(sal_Bool *)aAny.getValue();
         }
 
         if( bIsNumbered )
