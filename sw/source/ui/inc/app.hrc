@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:02:59 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,9 +201,11 @@
 #define STR_WRITER_DOCUMENT_FULLTYPE_50 (RC_APP_BEGIN + 101)
 #define STR_WRITER_DOCUMENT_FULLTYPE    (RC_APP_BEGIN + 100)
 
-#define STR_ABSTRACT_TITLE          (RC_APP_BEGIN +99)
+#define STR_ABSTRACT_TITLE          (RC_APP_BEGIN +102)
+#define STR_DONT_ASK_AGAIN          (RC_APP_BEGIN +103)
 
-#define APP_ACT_END                 STR_WRITER_DOCUMENT_FULLTYPE_50
+
+#define APP_ACT_END                 STR_DONT_ASK_AGAIN
 
 #if APP_ACT_END > RC_APP_END
 #error Resource-Id Ueberlauf in #file, #line
