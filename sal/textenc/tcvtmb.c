@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtmb.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:29 $
+ *  last change: $Author: th $ $Date: 2000-12-07 10:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,30 +326,30 @@ sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
                 if ( nFlags & RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 )
                     cConv = (sal_Char)(sal_uChar)(c & 0xFF);
             }
+        }
 
-            if ( !cConv )
+        if ( !cConv )
+        {
+            if ( nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE )
             {
-                if ( nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE )
-                {
-                    /* !!! */
-                }
-
-                if ( nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR )
-                {
-                    /* !!! */
-                }
-
-                /* Handle undefined and surrogates characters */
-                /* (all surrogates characters are undefined) */
-                nAction = ImplHandleUndefinedUnicodeToTextChar( pData,
-                                                                &pSrcBuf, pEndSrcBuf,
-                                                                &pDestBuf, pEndDestBuf,
-                                                                nFlags, pInfo );
-                if ( nAction == IMPL_TEXTCVT_BREAK )
-                    break;
-                else
-                    continue;
+                /* !!! */
             }
+
+            if ( nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR )
+            {
+                /* !!! */
+            }
+
+            /* Handle undefined and surrogates characters */
+            /* (all surrogates characters are undefined) */
+            nAction = ImplHandleUndefinedUnicodeToTextChar( pData,
+                                                            &pSrcBuf, pEndSrcBuf,
+                                                            &pDestBuf, pEndDestBuf,
+                                                            nFlags, pInfo );
+            if ( nAction == IMPL_TEXTCVT_BREAK )
+                break;
+            else
+                continue;
         }
 
         /* SingleByte */
@@ -724,7 +724,7 @@ sal_Size ImplUnicodeToJISX0208( const ImplTextConverterData* pData,
         else
             cConv = 0;
 
-        if (cConv != 0)
+        if ( cConv != 0 )
         {
             if ( pDestBuf+1 >=  pEndDestBuf )
             {
