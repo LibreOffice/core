@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlistimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-27 14:28:12 $
+ *  last change: $Author: tl $ $Date: 2001-03-19 14:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,15 +121,12 @@ SV_IMPL_OBJARR(ActDicArray, ActDic);
 #define VERS2_NOLANGUAGE    1024
 
 static sal_Char         aBuf[ BUFSIZE ];
-static const sal_Char*  aDicExt     = "dic";
-static const sal_Char*  aVerStr2    = "WBSWG2";
-static const sal_Char*  aVerStr5    = "WBSWG5";
 
 
 // forward dedclarations
 
-static BOOL IsVers2( const String& rFileURL, USHORT& nLng, BOOL& bNeg,
-                     sal_Char* pWordBuf);
+static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg,
+                             sal_Char* pWordBuf);
 
 static void AddInternal( Reference< XDictionary > &rDic,
                          const OUString& rNew );
@@ -457,7 +454,7 @@ void DicList::searchForDictionaries( ActDicArray &rDicList,
         USHORT  nLang = LANGUAGE_NONE;
         BOOL    bNeg  = FALSE;
 
-        if(!::IsVers2( aName, nLang, bNeg, aBuf ))
+        if(!::IsVers2OrNewer( aName, nLang, bNeg, aBuf ))
         {
             // Wenn kein
             xub_StrLen nPos  = aName.Search('.');
@@ -933,13 +930,13 @@ static void AddUserData( const Reference< XDictionary > &rDic )
 
 #pragma optimize("ge",off)
 
-static BOOL IsVers2( const String& rFileURL, USHORT& nLng, BOOL& bNeg,
-                     sal_Char* pWordBuf)
+static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg,
+                             sal_Char* pWordBuf)
 {
     if (rFileURL.Len() == 0)
         return FALSE;
 
-    String aDIC( String::CreateFromAscii( aDicExt ) );
+    String aDIC( GetDicExtension() );
     String aExt;
     xub_StrLen nPos = rFileURL.SearchBackward( '.' );
     if (STRING_NOTFOUND != nPos)
@@ -966,7 +963,10 @@ static BOOL IsVers2( const String& rFileURL, USHORT& nLng, BOOL& bNeg,
     pStream->Read( pWordBuf, nLen);
     *( pWordBuf + nLen ) = 0;
     // Version 2.0 oder Version 5.0 ?
-    if( !strcmp( pWordBuf, aVerStr2 ) || !strcmp( pWordBuf, aVerStr5 ) )
+    int nDicVersion = GetDicVersion( pWordBuf );
+    if (2 == nDicVersion ||
+        5 == nDicVersion ||
+        6 == nDicVersion)
     {
         // Sprache des Dictionaries
         *pStream >> nLng;
