@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 13:06:42 $
+#   last change: $Author: rt $ $Date: 2003-12-01 17:58:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,7 @@ CLIMAKERFLAGS += --verbose
 .ENDIF
 
 $(OUT)$/bin$/cli_types.dll : $(OUT)$/bin$/climaker.exe $(SOLARBINDIR)$/types.rdb
-    +$(OUT)$/bin$/climaker.exe $(CLIMAKERFLAGS) \
+    +$(WRAPCMD) $(OUT)$/bin$/climaker.exe $(CLIMAKERFLAGS) \
         --out $@ \
         --assembly-version "1.0.0.0" \
         --assembly-description "This assembly contains metadata for the StarOffice/OpenOffice.org API." \
