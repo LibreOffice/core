@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-05 12:33:45 $
+ *  last change: $Author: jp $ $Date: 2001-10-15 13:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,77 +65,131 @@
 
 #pragma hdrstop
 
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
+
 #ifndef _PSTM_HXX
 #include <tools/pstm.hxx>
 #endif
-#ifndef _SFXITEMITER_HXX //autogen
-#include <svtools/itemiter.hxx>
-#endif
-#ifndef _OUTDEV_HXX //autogen
+#ifndef _OUTDEV_HXX
 #include <vcl/outdev.hxx>
 #endif
-#ifndef _FMTORNT_HXX //autogen
-#include <fmtornt.hxx>
+#ifndef _SFXITEMITER_HXX
+#include <svtools/itemiter.hxx>
 #endif
-
-#include "pagefrm.hxx"
-#include "section.hxx"      // SwSection
-#include "rootfrm.hxx"
-#include "cntfrm.hxx"
-#include "viewsh.hxx"
-#include "viewimp.hxx"
-#include "doc.hxx"
-#include "fesh.hxx"
-#include "docsh.hxx"
-#include "flyfrm.hxx"
-#include "frmtool.hxx"
-#include "frmfmt.hxx"
-#include "ftninfo.hxx"
-#include "dflyobj.hxx"
-#include "hints.hxx"
-#include "errhdl.hxx"
-#ifndef _SVX_BRSHITEM_HXX //autogen
+#ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
 #endif
+#ifndef _SVX_KEEPITEM_HXX
+#include <svx/keepitem.hxx>
+#endif
+#ifndef _SVX_BRKITEM_HXX
+#include <svx/brkitem.hxx>
+#endif
 
+#ifndef _FMTORNT_HXX
+#include <fmtornt.hxx>
+#endif
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
+#endif
+#ifndef _SECTION_HXX
+#include <section.hxx>
+#endif
+#ifndef _ROOTFRM_HXX
+#include <rootfrm.hxx>
+#endif
+#ifndef _CNTFRM_HXX
+#include <cntfrm.hxx>
+#endif
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
+#endif
+#ifndef _VIEWIMP_HXX
+#include <viewimp.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _FESH_HXX
+#include <fesh.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _FLYFRM_HXX
+#include <flyfrm.hxx>
+#endif
+#ifndef _FRMTOOL_HXX
+#include <frmtool.hxx>
+#endif
+#ifndef _FRMFMT_HXX
+#include <frmfmt.hxx>
+#endif
+#ifndef _FTNINFO_HXX
+#include <ftninfo.hxx>
+#endif
+#ifndef _DFLYOBJ_HXX
+#include <dflyobj.hxx>
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>
+#endif
+#ifndef _ERRHDL_HXX
+#include <errhdl.hxx>
+#endif
 #ifndef _FMTCLBL_HXX
 #include <fmtclbl.hxx>
 #endif
-#ifndef _FMTFORDR_HXX //autogen
+#ifndef _FMTFORDR_HXX
 #include <fmtfordr.hxx>
 #endif
-#ifndef _FMTFSIZE_HXX //autogen
+#ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
 #endif
-#ifndef _FMTPDSC_HXX //autogen
+#ifndef _FMTPDSC_HXX
 #include <fmtpdsc.hxx>
 #endif
-#ifndef _SVX_KEEPITEM_HXX //autogen
-#include <svx/keepitem.hxx>
-#endif
-#ifndef _SVX_BRKITEM_HXX //autogen
-#include <svx/brkitem.hxx>
-#endif
-#ifndef _TXTFTN_HXX //autogen
+#ifndef _TXTFTN_HXX
 #include <txtftn.hxx>
 #endif
-#ifndef _FMTFTN_HXX //autogen
+#ifndef _FMTFTN_HXX
 #include <fmtftn.hxx>
 #endif
-#ifndef _FMTSRND_HXX //autogen
+#ifndef _FMTSRND_HXX
 #include <fmtsrnd.hxx>
 #endif
-
-#include "ftnfrm.hxx"
-#include "tabfrm.hxx"
-#include "swtable.hxx"
-#include "htmltbl.hxx"
-#include "flyfrms.hxx"
-#include "frmsh.hxx"
-#include "sectfrm.hxx"
-#include "fmtclds.hxx"
-#include "txtfrm.hxx"
-#include "dbg_lay.hxx"
+#ifndef _FTNFRM_HXX
+#include <ftnfrm.hxx>
+#endif
+#ifndef _TABFRM_HXX
+#include <tabfrm.hxx>
+#endif
+#ifndef _SWTABLE_HXX
+#include <swtable.hxx>
+#endif
+#ifndef _HTMLTBL_HXX
+#include <htmltbl.hxx>
+#endif
+#ifndef _FLYFRMS_HXX
+#include <flyfrms.hxx>
+#endif
+#ifndef _FRMSH_HXX
+#include <frmsh.hxx>
+#endif
+#ifndef _SECTFRM_HXX
+#include <sectfrm.hxx>
+#endif
+#ifndef _FMTCLDS_HXX
+#include <fmtclds.hxx>
+#endif
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>
+#endif
+#ifndef _DBG_LAY_HXX
+#include <dbg_lay.hxx>
+#endif
 
 #ifdef DEBUG
 
@@ -2406,13 +2460,12 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, const SzPtr pDirection,
         if( IsCellFrm() )
             InvaPercentLowers( nReal );
 
+        SwCntntFrm *pCnt;
         if( IsFtnFrm() && !((SwFtnFrm*)this)->GetAttr()->GetFtn().IsEndNote() &&
             ( GetFmt()->GetDoc()->GetFtnInfo().ePos != FTNPOS_CHAPTER ||
-              ( IsInSct() && FindSctFrm()->IsFtnAtEnd() ) ) )
+              ( IsInSct() && FindSctFrm()->IsFtnAtEnd() ) ) &&
+              0 != (pCnt = ((SwFtnFrm*)this)->GetRefFromAttr() ) )
         {
-
-            SwCntntFrm *pCnt = ((SwFtnFrm*)this)->GetRef();
-            ASSERT( pCnt, "Ftn ohne Ref." );
             if ( pCnt->IsFollow() )
             {   // Wenn wir sowieso schon in einer anderen Spalte/Seite sitzen
                 // als der Frame mit der Referenz, dann brauchen wir nicht
@@ -2749,8 +2802,8 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
 
         //Sizes einstellen; die Groesse gibt der umgebende Frm vor, die
         //die Raender werden einfach abgezogen.
-        aPrt.Width ( aFrm.Width() - nLeft - nRight );
-        aPrt.Height( aFrm.Height()- nUpper - nBottom );
+        aPrt.Width ( aFrm.Width() - nLR );
+        aPrt.Height( aFrm.Height()- nUL );
     }
 
     if ( !bValidSize )
