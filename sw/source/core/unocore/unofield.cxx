@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:54:27 $
+ *  last change: $Author: os $ $Date: 2001-06-18 14:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,18 +1039,28 @@ OUString SwXFieldMaster::getImplementationName(void) throw( RuntimeException )
 BOOL SwXFieldMaster::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     sal_Bool bRet = sal_False;
-    if(!rServiceName.compareToAscii("com.sun.star.text.TextFieldMaster"))
+    if(rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextFieldMaster")))
         bRet = sal_True;
-    if(nResTypeId == RES_USERFLD)
-        bRet = !rServiceName.compareToAscii("com.sun.star.text.fieldmaster.User");
-    else if(nResTypeId == RES_DBFLD)
-        bRet = !rServiceName.compareToAscii("com.sun.star.text.fieldmaster.Database");
-    else if(nResTypeId == RES_SETEXPFLD)
-        bRet = !rServiceName.compareToAscii("com.sun.star.text.fieldmaster.SetExpression");
-    else if(nResTypeId == RES_DDEFLD)
-        bRet = !rServiceName.compareToAscii("com.sun.star.text.fieldmaster.DDE");
-    else if(nResTypeId == RES_AUTHORITY)
-        bRet = !rServiceName.compareToAscii("com.sun.star.text.fieldmaster.Bibliography");
+    else
+    {
+        switch(nResTypeId)
+        {
+            case RES_USERFLD:
+                bRet = rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.fieldmaster.User"));
+            break;
+            case RES_DBFLD:
+                bRet = rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.fieldmaster.Database"));
+            case RES_SETEXPFLD:
+                bRet = rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.fieldmaster.SetExpression"));
+            break;
+            case RES_DDEFLD:
+                bRet = rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.fieldmaster.DDE"));
+            break;
+            case RES_AUTHORITY:
+                bRet = rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.fieldmaster.Bibliography"));
+            break;
+        }
+    }
     return bRet;
 }
 /* -----------------------------06.04.00 13:22--------------------------------
@@ -2784,7 +2794,7 @@ sal_Bool SwXTextField::supportsService(const OUString& rServiceName) throw( uno:
 {
     OUString sServiceName = SwXServiceProvider::GetProviderName(m_nServiceId);
     return sServiceName == rServiceName ||
-        !rServiceName.compareToAscii("com.sun.star.text.TextContent");
+        rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextContent"));
 }
 /* -----------------19.03.99 14:11-------------------
  *
