@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-07 16:46:12 $
+ *  last change: $Author: dbo $ $Date: 2002-07-05 10:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,17 @@ using namespace osl;
 #define SERVICENAME "com.sun.star.script.Converter"
 #define IMPLNAME    "com.sun.star.comp.stoc.TypeConverter"
 
+
 namespace stoc_tcv
 {
+
+static const sal_uInt64 SAL_UINT64_MAX =
+    ((((sal_uInt64)0xffffffff) << 32) | (sal_uInt64)0xffffffff);
+static const sal_Int64 SAL_INT64_MAX =
+    (sal_Int64)((((sal_uInt64)0x7fffffff) << 32) | (sal_uInt64)0xffffffff);
+static const sal_Int64 SAL_INT64_MIN =
+    (sal_Int64)(((sal_uInt64)0x80000000) << 32);
+
 
 static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
@@ -127,11 +136,6 @@ static OUString tcv_getImplementationName()
     }
     return *pImplName;
 }
-
-const double MIN_DOUBLE     = -DBL_MAX;
-const double MAX_DOUBLE     = DBL_MAX;
-const double MIN_FLOAT      = -FLT_MAX;
-const double MAX_FLOAT      = FLT_MAX;
 
 //--------------------------------------------------------------------------------------------------
 static inline double round( double aVal )
@@ -280,8 +284,8 @@ static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
 
     double fVal;
     if (getNumericValue( fVal, rStr ) &&
-        fVal >= -(double)0x8000000000000000 &&
-        fVal <= (double)0xffffffffffffffff)
+        fVal >= (double)SAL_INT64_MIN &&
+        fVal <= (double)SAL_UINT64_MAX)
     {
         rnVal = (sal_Int64)round( fVal );
         return sal_True;
@@ -293,9 +297,10 @@ static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
 class TypeConverter_Impl : public WeakImplHelper2< XTypeConverter, XServiceInfo >
 {
     // ...misc helpers...
-    sal_Int64 toHyper( const Any& rAny, sal_Int64 min = 0x8000000000000000, sal_uInt64 max = 0xffffffffffffffff )
+    sal_Int64 toHyper(
+        const Any& rAny, sal_Int64 min = SAL_INT64_MIN, sal_uInt64 max = SAL_UINT64_MAX )
         throw( CannotConvertException );
-    double toDouble( const Any& rAny, double min = MIN_DOUBLE, double max = MAX_DOUBLE ) const
+    double toDouble( const Any& rAny, double min = -DBL_MAX, double max = DBL_MAX ) const
         throw( CannotConvertException );
 
 public:
@@ -412,10 +417,10 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
         double fVal = round( *(float *)rAny.getValue() );
         // implementationsabh. cast von unsigned nach signed!
 #ifdef SAL_W32 // conversion from unsigned __int64 to double not impl
-        nRet = (fVal > 0x7fffffffffffffff ? (__int64)fVal : (sal_Int64)fVal);
-        if (fVal >= min && fVal <= (__int64)(max & 0x7fffffffffffffff))
+        nRet = (fVal > SAL_INT64_MAX ? (__int64)fVal : (sal_Int64)fVal);
+        if (fVal >= min && fVal <= (__int64)(max & SAL_INT64_MAX))
 #else
-        nRet = (fVal > 0x7fffffffffffffff ? (sal_uInt64)fVal : (sal_Int64)fVal);
+        nRet = (fVal > SAL_INT64_MAX ? (sal_Int64)(sal_uInt64)fVal : (sal_Int64)fVal);
         if (fVal >= min && fVal <= max)
 #endif
         {
@@ -430,10 +435,10 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
         double fVal = round( *(double *)rAny.getValue() );
         // implementationsabh. cast von unsigned nach signed!
 #ifdef SAL_W32 // conversion from unsigned __int64 to double not impl
-        nRet = (fVal > 0x7fffffffffffffff ? (__int64)fVal : (sal_Int64)fVal);
-        if (fVal >= min && fVal <= (__int64)(max & 0x7fffffffffffffff))
+        nRet = (fVal > SAL_INT64_MAX ? (__int64)fVal : (sal_Int64)fVal);
+        if (fVal >= min && fVal <= (__int64)(max & SAL_INT64_MAX))
 #else
-        nRet = (fVal > 0x7fffffffffffffff ? (sal_uInt64)fVal : (sal_Int64)fVal);
+        nRet = (fVal > SAL_INT64_MAX ? (sal_Int64)(sal_uInt64)fVal : (sal_Int64)fVal);
         if (fVal >= min && fVal <= max)
 #endif
         {
@@ -457,9 +462,9 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
         else
         {
             // implementationsabh. cast von unsigned nach signed!
-            nRet = (fVal > 0x7fffffffffffffff ? (sal_uInt64)fVal : (sal_Int64)fVal);
+            nRet = (fVal > SAL_INT64_MAX ? (sal_Int64)(sal_uInt64)fVal : (sal_Int64)fVal);
 #ifdef SAL_W32 // conversion from unsigned __int64 to double not impl
-            if (fVal >= min && (fVal < 0 || fVal <= (__int64)(max & 0x7fffffffffffffff)))
+            if (fVal >= min && (fVal < 0 || fVal <= (__int64)(max & SAL_INT64_MAX)))
 #else
             if (fVal >= min && (fVal < 0 || ((sal_uInt64)fVal) <= max))
 #endif
@@ -853,18 +858,18 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
 
     // --- to HYPER, UNSIGNED HYPER--------------------------------------------
     case TypeClass_HYPER:
-        aRet <<= toHyper( rVal, -(sal_Int64)0x8000000000000000, 0x7fffffffffffffff );
+        aRet <<= toHyper( rVal, SAL_INT64_MIN, SAL_INT64_MAX );
         break;
     case TypeClass_UNSIGNED_HYPER:
-        aRet <<= (sal_uInt64)( toHyper( rVal, 0, 0xffffffffffffffff ) );
+        aRet <<= (sal_uInt64)( toHyper( rVal, 0, SAL_UINT64_MAX ) );
         break;
 
     // --- to FLOAT, DOUBLE ---------------------------------------------------------------------
     case TypeClass_FLOAT:
-        aRet <<= (float)( toDouble( rVal, MIN_FLOAT, MAX_FLOAT ) );
+        aRet <<= (float)( toDouble( rVal, -FLT_MAX, FLT_MAX ) );
         break;
     case TypeClass_DOUBLE:
-        aRet <<= (double)( toDouble( rVal, MIN_DOUBLE, MAX_DOUBLE ) );
+        aRet <<= (double)( toDouble( rVal, -DBL_MAX, DBL_MAX ) );
         break;
 
     // --- to STRING ----------------------------------------------------------------------------
