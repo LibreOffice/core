@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.33 $
+*  $Revision: 1.34 $
 *
-*  last change: $Author: rt $ $Date: 2004-08-12 08:16:04 $
+*  last change: $Author: obo $ $Date: 2004-08-12 10:36:53 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1850,7 +1850,6 @@ STD_UNO_LIB_FILE( gid_File_Lib_Xmlfd, xmlfd )
 
 UNO_JAR_FILE( gid_File_Jar_Xsltfilter, XSLTFilter )
 UNO_JAR_FILE( gid_File_Jar_Xsltvalidate, XSLTValidate )
- 
 
 #ifdef UNX
 
@@ -1894,3 +1893,18 @@ File gid_File_Lib_Sunjavaplugin
     Styles = (PACKED);
 End
 #endif  
+
+// AVMedia
+STD_LIB_FILE( gid_File_Lib_AVMedia, avmedia )
+
+#if defined UNX
+
+#ifdef SOLAR_JAVA
+UNO_JAR_FILE( gid_File_Jar_AVmedia, avmedia )
+#endif
+
+#elif defined WNT
+
+SPECIAL_UNO_LIB_FILE( gid_File_Lib_AVMediaWin, avmediawin )
+
+#endif
