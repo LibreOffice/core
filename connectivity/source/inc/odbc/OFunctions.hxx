@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFunctions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:15 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,7 +424,7 @@ namespace connectivity
 
     #define N3SQLGetDiagRec(a,b,c,d,e,f,g,h) (*(T3SQLGetDiagRec)getOdbcFunction(ODBC3SQLGetDiagRec))(a,b,c,d,e,f,g,h)
 
-    // Obtaining information about the data source’s system tables (catalog functions)
+    // Obtaining information about the data source's system tables (catalog functions)
     typedef SQLRETURN  (SQL_API  *T3SQLColumnPrivileges) (SQLHSTMT      StatementHandle,
                                                     SQLCHAR *           CatalogName,
                                                     SQLSMALLINT         NameLength1,
