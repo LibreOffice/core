@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsclex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2002-03-06 13:30:51 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,8 @@ BOOL bTargetDefined;
 
 
 /****************** C O D E **********************************************/
-ULONG GetNumber(){
-    ULONG   l = 0;
+UINT32 GetNumber(){
+    UINT32  l = 0;
     short   nLog = 10;
 
     if( '0' == c ){
@@ -140,8 +140,8 @@ ULONG GetNumber(){
     while( c=='U' || c=='u' || c=='l' || c=='L' ) //Wg. Unsigned Longs
         c = pFI->GetFastChar();
 
-    if( l > LONG_MAX ) //Oberstes bit gegebenenfalls abschneiden;
-        l &= LONG_MAX;
+    if( l > 0x7fffffff ) //Oberstes bit gegebenenfalls abschneiden;
+        l &= 0x7fffffff;
 
     return( l );
 }
