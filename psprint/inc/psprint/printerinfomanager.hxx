@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-31 17:14:44 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 
 namespace psp
 {
+
+class SystemQueueInfo;
+
 struct PrinterInfo : JobData
 {
     // basename of PPD
@@ -149,6 +152,8 @@ class PrinterInfoManager
     ::rtl::OUString                     m_aDefaultPrinter;
     ::rtl::OUString                     m_aSystemPrintCommand;
     ::std::list< ::rtl::OUString >      m_aSystemPrintQueues;
+
+    SystemQueueInfo*                    m_pQueueInfo;
 
     PrinterInfoManager();
     ~PrinterInfoManager();
