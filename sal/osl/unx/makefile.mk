@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: sb $ $Date: 2002-11-04 15:23:41 $
+#   last change: $Author: sb $ $Date: 2002-11-06 15:47:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,8 +100,7 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/pipe.obj   	 \
             $(SLO)$/system.obj	 \
             $(SLO)$/util.obj	 \
-            $(SLO)$/tempfile.obj \
-            $(SLO)$/mathconf.obj
+            $(SLO)$/tempfile.obj
 
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=   $(OBJ)$/conditn.obj  \
@@ -122,8 +121,7 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/pipe.obj   	 \
             $(OBJ)$/system.obj	 \
             $(OBJ)$/util.obj	 \
-            $(OBJ)$/tempfile.obj \
-            $(OBJ)$/mathconf.obj
+            $(OBJ)$/tempfile.obj
 #.ENDIF
 
 # --- Targets ------------------------------------------------------
