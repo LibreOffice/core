@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:24:26 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #include <svtools/brdcst.hxx>
 #include "gallery.hrc"
 
+#include <cstdio>
+
 // ---------------------
 // - GalleryThemeEntry -
 // ---------------------
@@ -110,7 +112,7 @@ public:
     BOOL                    IsReadOnly() const { return bReadOnly; }
     BOOL                    IsDefault() const { return( ( nId > 0 ) && ( nId != ( RID_GALLERYSTR_THEME_MYTHEME - RID_GALLERYSTR_THEME_START ) ) ); }
 
-    BOOL                    IsHidden() const { return aName.Search( String( RTL_CONSTASCII_USTRINGPARAM( "private://gallery/hidden/" ) ) ) == 0; }
+    BOOL                    IsHidden() const { return aName.SearchAscii( "private://gallery/hidden/" ) == 0; }
 
     BOOL                    IsModified() const { return bModified; }
     void                    SetModified( BOOL bSet ) { bModified = ( bSet && !IsImported() && !IsReadOnly() ); }
