@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2001-11-08 16:21:44 $
+#   last change: $Author: rt $ $Date: 2004-08-20 09:27:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,7 @@ APP1STDLIBS += $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB)
 APP1TARGET = pass1
 
 APP2OBJS = $(OBJ)$/pass2.obj
-#APP2STDLIBS += $(CPPUHELPERLIB) $(CPPULIB) $(SALLIB)
+APP2STDLIBS = $(SALLIB)
 APP2TARGET = pass2
 
 # --- Targets ------------------------------------------------------
