@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grid.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:25:29 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 20:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ ModalDialog GRID_DIALOG
         Text[ chinese_traditional ] = "«ü©w";
         Text[ arabic ] = "ÊÚííä";
         Text[ turkish ] = "Tanýmla";
+        Text[ catalan ] = "Definir";
     };
     Bitmap GRID_DIALOG_HANDLE_BMP
     {
@@ -138,6 +139,7 @@ ModalDialog GRID_DIALOG
         Text[ chinese_traditional ] = "½u©Ê¤Wª@";
         Text[ arabic ] = "ÎØí ÊÕÇÚÏí";
         Text[ turkish ] = "Doðrusal artýþ";
+        Text[ catalan ] = "Lineal ascendente";
     };
     String RESET_TYPE_LINEAR_DESCENDING
     {
@@ -161,6 +163,7 @@ ModalDialog GRID_DIALOG
         Text[ chinese_traditional ] = "½u©Ê¤U­°";
         Text[ arabic ] = "ÎØí ÊäÇÒáí";
         Text[ turkish ] = "Doðrusal düþüþ";
+        Text[ catalan ] = "Lineal descendente";
     };
     String RESET_TYPE_RESET
     {
@@ -184,6 +187,7 @@ ModalDialog GRID_DIALOG
         Text[ chinese_traditional ] = "­ì©l­È";
         Text[ arabic ] = "ÇáÞíã ÇáÃÕáíÉ";
         Text[ turkish ] = "Asýl deðerler";
+        Text[ catalan ] = "Valores originales";
     };
     String RESET_TYPE_EXPONENTIAL
     {
@@ -207,5 +211,6 @@ ModalDialog GRID_DIALOG
         Text[ chinese_traditional ] = "¾­¼Æ¦¡»¼¼W";
         Text[ arabic ] = "ÊÒÇíÏ ÃÓí";
         Text[ turkish ] = "Üstel artýþ";
+        Text[ catalan ] = "Exponencial aumentando";
     };
 };
