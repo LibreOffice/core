@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.70 $
- *  last change: $Author: hdu $ $Date: 2002-02-15 16:45:07 $
+ *  $Revision: 1.71 $
+ *  last change: $Author: hdu $ $Date: 2002-04-30 16:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,27 +228,12 @@ FtFontInfo::FtFontInfo( const ImplFontData& rFontData,
     mnFontId( nFontId ),
     mnSynthetic( nSynthetic )
 {
-    maFontData.mpSysData = (void*)this;
+    maFontData.mpSysData = (void*)nFontId;
     maFontData.mpNext    = NULL;
 
     // using unicode emulation for non-symbol fonts
     if( maFontData.meCharSet != RTL_TEXTENCODING_SYMBOL )
         maFontData.meCharSet = RTL_TEXTENCODING_UNICODE;
-}
-
-// -----------------------------------------------------------------------
-
-size_t std::hash<FtFontInfo*>::operator()( const FtFontInfo* pFI ) const
-{
-    size_t nHash = (size_t)pFI;
-    return nHash;
-}
-
-// -----------------------------------------------------------------------
-
-bool std::equal_to<FtFontInfo*>::operator()( const FtFontInfo* pA, const FtFontInfo* pB ) const
-{
-    return (pA == pB);
 }
 
 // -----------------------------------------------------------------------
@@ -297,6 +282,7 @@ const unsigned char* FtFontInfo::GetTable( const char* pTag, ULONG* pLength ) co
 // =======================================================================
 
 FreetypeManager::FreetypeManager()
+:   mnNextFontId( 0x10000 )
 {
     FT_Error rcFT = FT_Init_FreeType( &aLibFT );
 }
@@ -310,12 +296,9 @@ FreetypeManager::~FreetypeManager()
 
 // -----------------------------------------------------------------------
 
-void* FreetypeManager::GetFontHandle (int nFontId)
+void* FreetypeManager::GetFontHandle( int nFontId )
 {
-    for( FontList::const_iterator it = maFontList.begin(); it != maFontList.end(); ++it )
-        if( nFontId == (*it)->GetFontId() )
-            return (void*)*it;
-    return NULL;
+    return (void*)nFontId;
 }
 
 // -----------------------------------------------------------------------
@@ -326,7 +309,8 @@ void FreetypeManager::AddFontFile( const rtl::OString& rNormalizedName,
     if( !rNormalizedName.getLength() )
         return;
 
-    maFontList.insert( new FtFontInfo( *pData, rNormalizedName, nFaceNum, nFontId, 0 ) );
+    FtFontInfo* pFI = new FtFontInfo( *pData, rNormalizedName, nFaceNum, nFontId, 0 );
+    maFontList[ nFontId ] = pFI;
 }
 
 // -----------------------------------------------------------------------
@@ -404,7 +388,7 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
             aFontData.mbDevice      = false;
             aFontData.mnQuality     = 0;    // prefer client-side fonts if available
 
-            AddFontFile( aCFileName, nFaceNum, 0, &aFontData );
+            AddFontFile( aCFileName, nFaceNum, ++mnNextFontId, &aFontData );
             ++nCount;
         }
     }
@@ -443,10 +427,10 @@ long FreetypeManager::FetchFontList( ImplDevFontList* pToAdd ) const
     long nCount = 0;
     for( FontList::const_iterator it(maFontList.begin()); it != maFontList.end(); ++it, ++nCount )
     {
-        ImplFontData* pFontData = new ImplFontData( (*it)->GetFontData() );
+        ImplFontData* pFontData = new ImplFontData( it->second->GetFontData() );
 
         // boost UI font quality if UI language matches
-        const ::rtl::OString* pCFileName = (*it)->GetFontFileName();
+        const ::rtl::OString* pCFileName = it->second->GetFontFileName();
         int nPos = pCFileName->lastIndexOf( '_' );
         if( nPos == -1 || (*pCFileName)[nPos+1] == '.' )
             pFontData->mnQuality += 5;      // filenames without langinfo => good
@@ -466,8 +450,8 @@ long FreetypeManager::FetchFontList( ImplDevFontList* pToAdd ) const
 
 void FreetypeManager::ClearFontList( )
 {
-    for( FontList::iterator it(maFontList.begin()); it != maFontList.end(); )
-        delete *(it++);
+    for( FontList::iterator it = maFontList.begin(); it != maFontList.end(); ++it )
+        delete it->second;
     maFontList.clear();
 }
 
@@ -475,9 +459,11 @@ void FreetypeManager::ClearFontList( )
 
 FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD )
 {
-    FtFontInfo* pFI = (FtFontInfo*)rFSD.mpFontData->mpSysData;
-    if( maFontList.find( pFI ) != maFontList.end() )
+    int nFontId = (int)rFSD.mpFontData->mpSysData;
+    FontList::iterator it = maFontList.find( nFontId );
+    if( it != maFontList.end() )
     {
+        FtFontInfo* pFI = it->second;
         FreetypeServerFont* pFont = new FreetypeServerFont( rFSD, pFI );
         return pFont;
     }
@@ -690,6 +676,7 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGly
 {
     int nAngle = GetFontSelData().mnOrientation;
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
+
 
     FT_Vector aVector;
     FT_Matrix aMatrix;
@@ -1450,6 +1437,7 @@ void PolyArgs::ClosePolygon()
 // -----------------------------------------------------------------------
 
 // TODO: wait till all compilers accept that calling conventions
+
 // for functions are the same independent of implementation constness,
 // then uncomment the const-tokens in the function interfaces below
 static int FT_move_to( FT_Vector* /*const*/ p0, void* vpPolyArgs )
@@ -1533,8 +1521,6 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPol
     aPolyArg.ClosePolygon();    // close last polygon
     FT_Done_Glyph( pGlyphFT );
 
-    long nYOffset = maFaceFT->size->metrics.ascender;
-    rPolyPoly.Move( 0, -nYOffset );
     rPolyPoly.Scale( +1.0/(1<<6), -1.0/(1<<6) );
 
     return true;

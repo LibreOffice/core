@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hdu $ $Date: 2002-02-15 16:34:42 $
+ *  last change: $Author: hdu $ $Date: 2002-04-30 16:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,10 +145,10 @@ public:
     void*               GetFontHandle (int nFontId);
 
 private:
-    struct std::hash<FtFontInfo*> { size_t operator()( const FtFontInfo* ) const; };
-    struct std::equal_to<FtFontInfo*> { bool operator()( const FtFontInfo*, const FtFontInfo* ) const; };
-    typedef ::std::hash_multiset<FtFontInfo*> FontList;
+    typedef ::std::hash_map<int,FtFontInfo*> FontList;
     FontList            maFontList;
+
+    int                 mnNextFontId;
 };
 
 // -----------------------------------------------------------------------
