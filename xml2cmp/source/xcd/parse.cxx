@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $Date$
+ *  last change: $Author: rt $Date$
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,13 +268,14 @@ X2CParser::Parse_MultipleAttr( List<Simstr> &       o_rAttrValues,
     Simstr sAttrName;
     Simstr sAttrValue;
     unsigned nSize = i_rAttrNames.size();
+    unsigned i;
 
     for ( Pass_White(); *text != '/'; Pass_White() )
     {
 
         Get_Attribute(sAttrValue, sAttrName);
 
-        for ( unsigned i = 0; i < nSize; ++i )
+        for ( i = 0; i < nSize; ++i )
         {
             if ( i_rAttrNames[i] == sAttrName )
             {
@@ -365,8 +366,9 @@ X2CParser::GetTextTill( Simstr & o_rText,
                         bool     i_bReverseName )
 {
     char * pResult = &sWord[0];
+    char * pSet;
 
-    for ( char * pSet = pResult;
+    for ( pSet = pResult;
           *text != i_cEnd;
           ++text )
     {
@@ -383,7 +385,7 @@ X2CParser::GetTextTill( Simstr & o_rText,
 
     if (i_bReverseName)
     {
-        const nMaxLen = 1000;
+        const int nMaxLen = 1000;
         if (strlen(pResult) < nMaxLen)
         {
             char * sBreak = strrchr(pResult,'.');
