@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-22 05:59:53 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 22:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ FloatingWindow RID_BASICIDE_OBJCAT
                 Text[ chinese_traditional ] = "é¡¯ç¤º";
                 Text[ arabic ] = "ÚÑÖ";
                 Text[ greek ] = "ÅìöÜíéóç";
-                Text[ korean ] = "ë‚˜íƒ€ë‚´ê¸°";
+                Text[ korean ] = "í‘œì‹œ";
                 Text[ turkish ] = "Görüntüle";
                 Text[ catalan ] = "Mostra";
             };
@@ -263,6 +263,7 @@ FloatingWindow RID_BASICIDE_OBJCAT
     Text[ turkish ] = "Nesneler";
     Text[ catalan ] = "Objectes";
 };
+
 
 
 
