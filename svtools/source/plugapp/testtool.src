@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 14:41:09 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ class FlagToolBoxState
             Text[ italian ] = "Trasferisci nel testtool";
             Text[ danish ] = "Overf¯r til TestTool";
             Text[ swedish ] = "÷verfˆr till TestTool";
-            Text[ polish ] = "Przenie? do TestTool";
+            Text[ polish ] = "Przenieú do TestTool";
             Text[ portuguese_brazilian ] = "Zum TestTool ?bertragen";
             Text[ japanese ] = "TestTool Ç÷ì]ëó";
             Text[ korean ] = "TestTool∑Œ ø≈±‚±‚";
@@ -335,7 +335,7 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ DANISH ] = "Rediger";
             Text[ ENGLISH_US ] = "~Edit";
             Text[ SPANISH ] = "~Editar";
-            Text[ FRENCH ] = "~Edition";
+            Text[ FRENCH ] = "~…dition";
             Text[ ITALIAN ] = "Modifica";
             Text[ JAPANESE ] = "ï“èW(~E)";
             Text[ DUTCH ] = "~Editeren";
