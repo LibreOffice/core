@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:13:41 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2859,463 +2859,634 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
 
 // PptSlidePersistEntry& rPersistEntry, SdPage* pPage
 SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
-                                       const Rectangle* pRect,
-                                       int nCalledByGroup )
+    const Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup )
 {
     SdrObject* pRet = NULL;
-    ULONG nFPosMerk = rSt.Tell(); // FilePos merken fuer spaetere Restauration
     DffRecordHeader aObjHd;
     rSt >> aObjHd;
-    ULONG nFPosMerk1 = rSt.Tell();
-    ULONG nObjRecEnd = aObjHd.GetRecEndFilePos();
-    Rectangle aBoundRect;
-    if ( pRect )
-        aBoundRect = *pRect;
     if ( aObjHd.nRecType == DFF_msofbtSpgrContainer )
     {
+        pRet = ImportGroup( aObjHd, rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup );
+    }
+    else if ( aObjHd.nRecType == DFF_msofbtSpContainer )
+    {
+        pRet = ImportShape( aObjHd, rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup );
+    }
+    aObjHd.SeekToBegOfRecord( rSt );    // FilePos restaurieren
+    return pRet;
+}
+
+SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& rSt, void* pClientData,
+                                            const Rectangle& rClientRect, const Rectangle& rGlobalChildRect,
+                                                int nCalledByGroup )
+{
+    SdrObject* pRet = NULL;
+
+    rHd.SeekToContent( rSt );
+    DffRecordHeader aRecHd;     // the first atom has to be the SpContainer for the GroupObject
+    rSt >> aRecHd;
+    if ( aRecHd.nRecType == DFF_msofbtSpContainer )
+    {
+        INT32 nGroupRotateAngle = 0;
+        INT32 nSpFlags = 0;
         mnFix16Angle = 0;
-        FASTBOOL b1st = TRUE;
-        INT32   nGroupRotateAngle = 0;
-        INT32   nSpFlags = 0;
-        Rectangle aGroupBound( aBoundRect );
-        while ( rSt.GetError() == 0 && rSt.Tell() < nObjRecEnd )
+        aRecHd.SeekToBegOfRecord( rSt );
+        pRet = ImportObj( rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup + 1 );
+        if ( pRet )
         {
-            DffRecordHeader aRecHd;
-            rSt >> aRecHd;
-            if ( aObjHd.nRecType == DFF_msofbtSpContainer ||
-                 aObjHd.nRecType == DFF_msofbtSpgrContainer )
+            nSpFlags = nGroupShapeFlags;
+            nGroupRotateAngle = mnFix16Angle;
+
+            Rectangle aClientRect( rClientRect );
+            if ( rClientRect.IsEmpty() )
+                 aClientRect = pRet->GetSnapRect();
+
+            Rectangle aGlobalChildRect;
+            if ( !nCalledByGroup || rGlobalChildRect.IsEmpty() )
+                aGlobalChildRect = GetGlobalChildAnchor( rHd, rSt, aClientRect );
+            else
+                aGlobalChildRect = rGlobalChildRect;
+
+            if ( ( nGroupRotateAngle > 4500 && nGroupRotateAngle <= 13500 )
+                || ( nGroupRotateAngle > 22500 && nGroupRotateAngle <= 31500 ) )
             {
-                aRecHd.SeekToBegOfRecord( rSt );
-                SdrObject* pTmp = ImportObj( rSt, pClientData, &aGroupBound, nCalledByGroup+1);
-                if( b1st )
-                {   // Gruppenattribute, ...
-                    b1st = FALSE;
-                    if ( !pTmp )
-                        break;
-                    pRet = pTmp;
-                    aGroupBound = pRet->GetSnapRect();
-                    nGroupRotateAngle = mnFix16Angle;
-                    nSpFlags = nGroupShapeFlags;
-                }
-                else if ( pTmp )
-                    ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pTmp );
+                sal_Int32 nHalfWidth = ( aGlobalChildRect.GetWidth() + 1 ) >> 1;
+                sal_Int32 nHalfHeight = ( aGlobalChildRect.GetHeight() + 1 ) >> 1;
+                Point aTopLeft( aGlobalChildRect.Left() + nHalfWidth - nHalfHeight,
+                                aGlobalChildRect.Top() + nHalfHeight - nHalfWidth );
+                Size aNewSize( aGlobalChildRect.GetHeight(), aGlobalChildRect.GetWidth() );
+                Rectangle aNewRect( aTopLeft, aNewSize );
+                aGlobalChildRect = aNewRect;
             }
+
+            // now importing the inner objects of the group
             aRecHd.SeekToEndOfRecord( rSt );
-        }
-        if( !aGroupBound.IsEmpty() )
-        {
-            pRet->NbcSetSnapRect( aGroupBound );
+            while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < rHd.GetRecEndFilePos() ) )
+            {
+                DffRecordHeader aRecHd;
+                rSt >> aRecHd;
+                if ( aRecHd.nRecType == DFF_msofbtSpgrContainer )
+                {
+                    Rectangle aGroupClientAnchor, aGroupChildAnchor;
+                    GetGroupAnchors( aRecHd, rSt, aGroupClientAnchor, aGroupChildAnchor, aClientRect, aGlobalChildRect );
+                    aRecHd.SeekToBegOfRecord( rSt );
+                    SdrObject* pTmp = ImportGroup( aRecHd, rSt, pClientData, aGroupClientAnchor, aGroupChildAnchor, nCalledByGroup + 1 );
+                    if ( pTmp )
+                        ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pTmp );
+                }
+                else if ( aRecHd.nRecType == DFF_msofbtSpContainer )
+                {
+                    aRecHd.SeekToBegOfRecord( rSt );
+                    SdrObject* pTmp = ImportShape( aRecHd, rSt, pClientData, aClientRect, aGlobalChildRect, nCalledByGroup + 1 );
+                    if ( pTmp )
+                        ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pTmp );
+                }
+                aRecHd.SeekToEndOfRecord( rSt );
+            }
+
+    //      pRet->NbcSetSnapRect( aGroupBound );
             if ( nGroupRotateAngle )
             {
                 double a = nGroupRotateAngle * nPi180;
-                pRet->NbcRotate( aGroupBound.Center(), nGroupRotateAngle, sin( a ), cos( a ) );
+                pRet->NbcRotate( aClientRect.Center(), nGroupRotateAngle, sin( a ), cos( a ) );
             }
             if ( nSpFlags & SP_FFLIPV )     // Vertikal gespiegelt?
             {   // BoundRect in aBoundRect
-                Point aLeft( aGroupBound.Left(), ( aGroupBound.Top() + aGroupBound.Bottom() ) >> 1 );
+                Point aLeft( aClientRect.Left(), ( aClientRect.Top() + aClientRect.Bottom() ) >> 1 );
                 Point aRight( aLeft.X() + 1000, aLeft.Y() );
                 pRet->NbcMirror( aLeft, aRight );
             }
             if ( nSpFlags & SP_FFLIPH )     // Horizontal gespiegelt?
             {   // BoundRect in aBoundRect
-                Point aTop( ( aGroupBound.Left() + aGroupBound.Right() ) >> 1, aGroupBound.Top() );
+                Point aTop( ( aClientRect.Left() + aClientRect.Right() ) >> 1, aClientRect.Top() );
                 Point aBottom( aTop.X(), aTop.Y() + 1000 );
                 pRet->NbcMirror( aTop, aBottom );
             }
         }
     }
-    else if ( aObjHd.nRecType == DFF_msofbtSpContainer )
+    return pRet;
+}
+
+SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& rSt, void* pClientData,
+                                            const Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup )
+{
+    SdrObject* pRet = NULL;
+
+    rHd.SeekToBegOfRecord( rSt );
+    Rectangle aBoundRect( rClientRect );
+    DffObjData aObjData( rHd, aBoundRect, nCalledByGroup );
+    maShapeRecords.Consume( rSt, FALSE );
+    aObjData.bShapeType = maShapeRecords.SeekToContent( rSt, DFF_msofbtSp, SEEK_FROM_BEGINNING );
+    if ( aObjData.bShapeType )
     {
-        DffObjData aObjData( aObjHd, aBoundRect, nCalledByGroup, nFPosMerk );
-        aObjHd.SeekToBegOfRecord( rSt );
-        maShapeRecords.Consume( rSt, FALSE );
-        aObjData.bShapeType = maShapeRecords.SeekToContent( rSt, DFF_msofbtSp, SEEK_FROM_BEGINNING );
-        if ( aObjData.bShapeType )
-        {
-            rSt >> aObjData.nShapeId
-                >> aObjData.nSpFlags;
-            aObjData.eShapeType = (MSO_SPT)maShapeRecords.Current()->nRecInstance;
-        }
-        else
-        {
-            aObjData.nShapeId = 0;
-            aObjData.nSpFlags = 0;
-            aObjData.eShapeType = mso_sptNil;
-        }
-        if ( mbTracing )
-            mpTracer->AddAttribute( aObjData.nSpFlags & SP_FGROUP
-                                    ? rtl::OUString::createFromAscii( "GroupShape" )
-                                    : rtl::OUString::createFromAscii( "Shape" ),
-                                    rtl::OUString::valueOf( (sal_Int32)aObjData.nShapeId ) );
-        aObjData.bOpt = maShapeRecords.SeekToContent( rSt, DFF_msofbtOPT, SEEK_FROM_CURRENT_AND_RESTART );
-        if ( aObjData.bOpt )
-        {
-            maShapeRecords.Current()->SeekToBegOfRecord( rSt );
+        rSt >> aObjData.nShapeId
+            >> aObjData.nSpFlags;
+        aObjData.eShapeType = (MSO_SPT)maShapeRecords.Current()->nRecInstance;
+    }
+    else
+    {
+        aObjData.nShapeId = 0;
+        aObjData.nSpFlags = 0;
+        aObjData.eShapeType = mso_sptNil;
+    }
+    if ( mbTracing )
+        mpTracer->AddAttribute( aObjData.nSpFlags & SP_FGROUP
+                                ? rtl::OUString::createFromAscii( "GroupShape" )
+                                : rtl::OUString::createFromAscii( "Shape" ),
+                                rtl::OUString::valueOf( (sal_Int32)aObjData.nShapeId ) );
+    aObjData.bOpt = maShapeRecords.SeekToContent( rSt, DFF_msofbtOPT, SEEK_FROM_CURRENT_AND_RESTART );
+    if ( aObjData.bOpt )
+    {
+        maShapeRecords.Current()->SeekToBegOfRecord( rSt );
 #ifdef DBG_AUTOSHAPE
-            ReadPropSet( rSt, pClientData, (UINT32)aObjData.eShapeType );
+        ReadPropSet( rSt, pClientData, (UINT32)aObjData.eShapeType );
 #else
-            ReadPropSet( rSt, pClientData );
+        ReadPropSet( rSt, pClientData );
 #endif
-        }
-        else
+    }
+    else
+    {
+        InitializePropSet();    // get the default PropSet
+        ( (DffPropertyReader*) this )->mnFix16Angle = 0;
+    }
+
+    aObjData.bChildAnchor = maShapeRecords.SeekToContent( rSt, DFF_msofbtChildAnchor, SEEK_FROM_CURRENT_AND_RESTART );
+    if ( aObjData.bChildAnchor )
+    {
+        INT32 l, o, r, u;
+        rSt >> l >> o >> r >> u;
+        Scale( l );
+        Scale( o );
+        Scale( r );
+        Scale( u );
+        aObjData.aChildAnchor = Rectangle( l, o, r, u );
+        if ( !rGlobalChildRect.IsEmpty() && !rClientRect.IsEmpty() && rGlobalChildRect.GetWidth() && rGlobalChildRect.GetHeight() )
         {
-            InitializePropSet();    // get the default PropSet
-            ( (DffPropertyReader*) this )->mnFix16Angle = 0;
+            double fl = l;
+            double fo = o;
+            double fWidth = r - l;
+            double fHeight= u - o;
+            double fXScale = (double)rClientRect.GetWidth() / (double)rGlobalChildRect.GetWidth();
+            double fYScale = (double)rClientRect.GetHeight() / (double)rGlobalChildRect.GetHeight();
+            fl = ( ( l - rGlobalChildRect.Left() ) * fXScale ) + rClientRect.Left();
+            fo = ( ( o - rGlobalChildRect.Top()  ) * fYScale ) + rClientRect.Top();
+            fWidth *= fXScale;
+            fHeight *= fYScale;
+            aObjData.aChildAnchor = Rectangle( Point( (sal_Int32)fl, (sal_Int32)fo ), Size( (sal_Int32)( fWidth + 1 ), (sal_Int32)( fHeight + 1 ) ) );
         }
+    }
 
-        aObjData.bChildAnchor = maShapeRecords.SeekToContent( rSt, DFF_msofbtChildAnchor, SEEK_FROM_CURRENT_AND_RESTART );
-        if ( aObjData.bChildAnchor )
+    aObjData.bClientAnchor = maShapeRecords.SeekToContent( rSt, DFF_msofbtClientAnchor, SEEK_FROM_CURRENT_AND_RESTART );
+    if ( aObjData.bClientAnchor )
+        ProcessClientAnchor2( rSt, *maShapeRecords.Current(), pClientData, aObjData );
+
+    if ( aObjData.bChildAnchor )
+        aBoundRect = aObjData.aChildAnchor;
+
+    if ( aObjData.nSpFlags & SP_FBACKGROUND )
+        aBoundRect = Rectangle( Point(), Size( 1, 1 ) );
+
+    Rectangle aTextRect;
+    if ( !aBoundRect.IsEmpty() )
+    {   // Rotation auf BoundingBox anwenden, BEVOR ien Objekt generiert wurde
+        if( mnFix16Angle )
         {
-            INT32 l, o, r, u;
-            rSt >> l >> o >> r >> u;
-            Scale( l );
-            Scale( o );
-            Scale( r );
-            Scale( u );
-            aObjData.aChildAnchor = Rectangle( l, o, r, u );
-        }
-
-        aObjData.bClientAnchor = maShapeRecords.SeekToContent( rSt, DFF_msofbtClientAnchor, SEEK_FROM_CURRENT_AND_RESTART );
-        if ( aObjData.bClientAnchor )
-            ProcessClientAnchor2( rSt, *maShapeRecords.Current(), pClientData, aObjData );
-
-        if ( aObjData.bChildAnchor )
-            aBoundRect = aObjData.aChildAnchor;
-
-        if ( aObjData.nSpFlags & SP_FBACKGROUND )
-            aBoundRect = Rectangle( Point(), Size( 1, 1 ) );
-
-        Rectangle aTextRect;
-        if ( !aBoundRect.IsEmpty() )
-        {   // Rotation auf BoundingBox anwenden, BEVOR ien Objekt generiert wurde
-            rSt.Seek( nFPosMerk );
-            if( mnFix16Angle )
+            long nAngle = mnFix16Angle;
+            if ( ( nAngle > 4500 && nAngle <= 13500 ) || ( nAngle > 22500 && nAngle <= 31500 ) )
             {
-                long nAngle = mnFix16Angle;
-                if ( ( nAngle > 4500 && nAngle <= 13500 ) || ( nAngle > 22500 && nAngle <= 31500 ) )
+                INT32 nHalfWidth = ( aBoundRect.GetWidth() + 1 ) >> 1;
+                INT32 nHalfHeight = ( aBoundRect.GetHeight() + 1 ) >> 1;
+                Point aTopLeft( aBoundRect.Left() + nHalfWidth - nHalfHeight,
+                                aBoundRect.Top() + nHalfHeight - nHalfWidth );
+                Size aNewSize( aBoundRect.GetHeight(), aBoundRect.GetWidth() );
+                Rectangle aNewRect( aTopLeft, aNewSize );
+                aBoundRect = aNewRect;
+            }
+        }
+        aTextRect = aBoundRect;
+        FASTBOOL bGraphic = IsProperty( DFF_Prop_pib ) ||
+                            IsProperty( DFF_Prop_pibName ) ||
+                            IsProperty( DFF_Prop_pibFlags );
+
+        if ( aObjData.nSpFlags & SP_FGROUP )
+        {
+            pRet = new SdrObjGroup;
+            pRet->NbcSetLogicRect( aBoundRect );        // SJ: SnapRect is allowed to be set at the group only for the first time
+            nGroupShapeFlags = aObjData.nSpFlags;       // #73013#
+        }
+        else if ( ( aObjData.eShapeType != mso_sptNil ) || IsProperty( DFF_Prop_pVertices ) || bGraphic )
+        {
+            UINT32      nSpecialGroupSettings = 0;
+            SfxItemSet  aSet( pSdrModel->GetItemPool() );
+
+            sal_Bool    bIsConnector = ( ( aObjData.eShapeType >= mso_sptStraightConnector1 ) && ( aObjData.eShapeType <= mso_sptCurvedConnector5 ) );
+            sal_Bool    bIsAutoShape = FALSE;
+            sal_Int32   nObjectRotation = mnFix16Angle;
+            sal_uInt32  nSpFlags = aObjData.nSpFlags;
+
+            if ( bGraphic )
+            {
+                pRet = ImportGraphic( rSt, aSet, aBoundRect, aObjData );
+                if ( pRet )
                 {
-                    INT32 nHalfWidth = ( aBoundRect.GetWidth() + 1 ) >> 1;
-                    INT32 nHalfHeight = ( aBoundRect.GetHeight() + 1 ) >> 1;
-                    Point aTopLeft( aBoundRect.Left() + nHalfWidth - nHalfHeight,
-                                    aBoundRect.Top() + nHalfHeight - nHalfWidth );
-                    Size aNewSize( aBoundRect.GetHeight(), aBoundRect.GetWidth() );
-                    Rectangle aNewRect( aTopLeft, aNewSize );
-                    aBoundRect = aNewRect;
+                    if ( !IsHardAttribute( DFF_Prop_fFilled ) )     // the default for graphic objects is: not filled
+                    {
+                        UINT32 nOldProp = GetPropertyValue( DFF_Prop_fNoFillHitTest );
+                        if ( nOldProp & 0x10 )
+                            SetPropertyValue( DFF_Prop_fNoFillHitTest, nOldProp &~0x10 );
+                    }
+                    if ( !IsHardAttribute( DFF_Prop_fLine ) )       // the default for graphic objects is: no line
+                    {
+                        UINT32 nOldProp = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
+                        if ( nOldProp & 8 )
+                            SetPropertyValue( DFF_Prop_fNoLineDrawDash, nOldProp &~8 );
+                    }
+                    if ( GetSvxMSDffSettings() & ( SVXMSDFF_SETTINGS_IMPORT_PPT | SVXMSDFF_SETTINGS_IMPORT_EXCEL ) )
+                    {   // impress does not support line propertys on graphic objects
+                        BOOL bFilled = ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 16 ) != 0;
+                        BOOL bLine = ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 ) != 0;
+                        if ( bLine || bFilled )
+                        {
+                            SdrObject* pRect;
+                            SdrObject* pGroup = new SdrObjGroup;
+                            if ( pGroup )
+                            {
+                                if ( bFilled )
+                                {
+                                    pRect = new SdrRectObj( aBoundRect );
+                                    if ( pRect )
+                                    {
+                                        pGroup->GetSubList()->NbcInsertObject( pRect );
+                                        nSpecialGroupSettings = 2;
+                                    }
+                                }
+                                pGroup->GetSubList()->NbcInsertObject( pRet );
+                                if ( bLine )
+                                {
+                                    pRect = new SdrRectObj( aBoundRect );
+                                    if ( pRect )
+                                        pGroup->GetSubList()->NbcInsertObject( pRect );
+                                }
+                                pRet = pGroup;
+                            }
+                        }
+                    }
                 }
+                nSpFlags &=~ ( SP_FFLIPH | SP_FFLIPV );         // #68396#
             }
-            aTextRect = aBoundRect;
-            FASTBOOL bGraphic = IsProperty( DFF_Prop_pib ) ||
-                                IsProperty( DFF_Prop_pibName ) ||
-                                IsProperty( DFF_Prop_pibFlags );
-
-            if ( aObjData.nSpFlags & SP_FGROUP )
+            else  if ( ( aObjData.eShapeType == mso_sptCurvedLeftArrow )    // #97935# not taking the autoshapes from msashape,
+                    || ( aObjData.eShapeType == mso_sptCurvedRightArrow )   // instead we are using our precalculated ones
+                    || ( aObjData.eShapeType == mso_sptCurvedUpArrow )
+                    || ( aObjData.eShapeType == mso_sptCurvedDownArrow ) )
             {
-                pRet = new SdrObjGroup;
-                pRet->NbcSetLogicRect( aBoundRect );
-                nGroupShapeFlags = aObjData.nSpFlags;       // #73013#
+                    pRet = GetAutoForm( aObjData.eShapeType );
+                    if ( pRet )
+                        pRet->NbcSetSnapRect( aBoundRect ); // Groesse setzen
             }
-            else if ( ( aObjData.eShapeType != mso_sptNil ) || IsProperty( DFF_Prop_pVertices ) || bGraphic )
+            else
             {
-                UINT32      nSpecialGroupSettings = 0;
-                SfxItemSet  aSet( pSdrModel->GetItemPool() );
-
-                sal_Bool    bIsConnector = ( ( aObjData.eShapeType >= mso_sptStraightConnector1 ) && ( aObjData.eShapeType <= mso_sptCurvedConnector5 ) );
-                sal_Bool    bIsAutoShape = FALSE;
-                sal_Int32   nObjectRotation = mnFix16Angle;
-                sal_uInt32  nSpFlags = aObjData.nSpFlags;
-
-                if ( bGraphic )
+                SvxMSDffAutoShape aAutoShape( *this, rSt, aObjData, aBoundRect, nObjectRotation, mpTracer );
+                if ( !aAutoShape.IsEmpty() )
                 {
-                    pRet = ImportGraphic( rSt, aSet, aBoundRect, aObjData );
+                    ApplyAttributes( rSt, aSet, NULL );
+                    pRet = aAutoShape.GetObject( pSdrModel, aSet, TRUE );
+                    aTextRect = aAutoShape.GetTextRect();
+                    bIsAutoShape = TRUE;
+                }
+                else if ( aObjData.eShapeType == mso_sptTextBox )
+                {
+                    if ( ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 )
+                        || ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) )
+                    {
+                        pRet = new SdrRectObj( aBoundRect );  // SJ: changed the type from OBJ_TEXT to OBJ_RECT (#88277#)
+                    }
+                }
+                else if (
+                    mso_sptWedgeRectCallout == aObjData.eShapeType ||
+                    mso_sptWedgeRRectCallout == aObjData.eShapeType ||
+                    mso_sptWedgeEllipseCallout == aObjData.eShapeType ||
+                    mso_sptBalloon == aObjData.eShapeType ||
+                    mso_sptCloudCallout == aObjData.eShapeType )
+                {
+                    // Balloon mappen
+                    if( mso_sptBalloon == aObjData.eShapeType )
+                        aObjData.eShapeType = mso_sptWedgeRRectCallout;
+
+                    pRet = GetAutoForm( aObjData.eShapeType );
+                    if ( pRet )
+                        pRet->NbcSetSnapRect( aBoundRect ); // Groesse setzen
+                }
+                else if ( ( ( aObjData.eShapeType >= mso_sptCallout1 ) && ( aObjData.eShapeType <= mso_sptAccentBorderCallout3 ) )
+                            || ( aObjData.eShapeType == mso_sptCallout90 )
+                            || ( aObjData.eShapeType == mso_sptAccentCallout90 )
+                            || ( aObjData.eShapeType == mso_sptBorderCallout90 )
+                            || ( aObjData.eShapeType == mso_sptAccentBorderCallout90 ) )
+                {
+                    pRet = new SdrCaptionObj( aBoundRect );
+                    INT32 nAdjust0 = GetPropertyValue( DFF_Prop_adjustValue, 0 );
+                    INT32 nAdjust1 = GetPropertyValue( DFF_Prop_adjust2Value, 0 );
+                    if( nAdjust0 | nAdjust1 )
+                    {   // AdjustValues anwenden, nur welche ?!?
+                        nAdjust0 = ( nAdjust0 * 100 ) / 850;
+                        nAdjust1 = ( nAdjust1 * 100 ) / 1275;
+                        Point aTailPos( nAdjust0 + aBoundRect.Left(), nAdjust1 + aBoundRect.Top() );
+                        ((SdrCaptionObj*)pRet)->NbcSetTailPos( aTailPos );
+                    }
+                }
+                else if( ( aObjData.eShapeType >= mso_sptTextPlainText ) && ( aObjData.eShapeType <= mso_sptTextCanDown ) ) // WordArt
+                {
+                    aObjData.bIsAutoText = TRUE;
+                    if ( mbTracing )
+                        mpTracer->Trace( rtl::OUString::createFromAscii( "escher1000" ), rtl::OUString::valueOf( (sal_Int32)aObjData.eShapeType ) );
+                    pRet = ImportWordArt( rSt, aSet, aBoundRect );
+                }
+                else if ( aObjData.eShapeType == mso_sptLine )
+                {
+                    pRet = new SdrPathObj( aBoundRect.TopLeft(), aBoundRect.BottomRight() );
+                }
+                else if( bIsConnector )
+                {
+                    // Konnektoren
+                    MSO_ConnectorStyle eConnectorStyle = (MSO_ConnectorStyle)GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight );
+
+                    pRet = new SdrEdgeObj();
+                    if( pRet )
+                    {
+                        pRet->SetLogicRect(aBoundRect);
+
+                        ((SdrEdgeObj*)pRet)->ConnectToNode(TRUE, NULL);
+                        ((SdrEdgeObj*)pRet)->ConnectToNode(FALSE, NULL);
+
+                        Point aPoint1( aBoundRect.TopLeft() );
+                        Point aPoint2( aBoundRect.BottomRight() );
+
+                        // Rotationen beachten
+                        if ( nObjectRotation )
+                        {
+                            double a = nObjectRotation * nPi180;
+                            Point aCenter( aBoundRect.Center() );
+                            double ss = sin(a);
+                            double cc = cos(a);
+
+                            RotatePoint(aPoint1, aCenter, ss, cc);
+                            RotatePoint(aPoint2, aCenter, ss, cc);
+                        }
+
+                        // Linie innerhalb des Bereiches zurechtdrehen/spiegeln
+                        if ( nSpFlags & SP_FFLIPH )
+                        {
+                            INT32 n = aPoint1.X();
+                            aPoint1.X() = aPoint2.X();
+                            aPoint2.X() = n;
+                        }
+                        if ( nSpFlags & SP_FFLIPV )
+                        {
+                            INT32 n = aPoint1.Y();
+                            aPoint1.Y() = aPoint2.Y();
+                            aPoint2.Y() = n;
+                        }
+                        nSpFlags &= ~( SP_FFLIPV | SP_FFLIPH );
+
+                        pRet->NbcSetPoint(aPoint1, 0);  // Startpunkt
+                        pRet->NbcSetPoint(aPoint2, 1);  // Endpunkt
+
+                        switch( eConnectorStyle )
+                        {
+                            case mso_cxstyleBent:
+                                aSet.Put( SdrEdgeKindItem( SDREDGE_ORTHOLINES ) );
+                            break;
+                            case mso_cxstyleCurved:
+                                aSet.Put( SdrEdgeKindItem( SDREDGE_BEZIER ) );
+                            break;
+                            default: // mso_cxstyleStraight || mso_cxstyleNone
+                                aSet.Put( SdrEdgeKindItem( SDREDGE_ONELINE ) );
+                            break;
+                        }
+                        aSet.Put( SdrEdgeNode1HorzDistItem( 0 ) );
+                        aSet.Put( SdrEdgeNode1VertDistItem( 0 ) );
+                        aSet.Put( SdrEdgeNode2HorzDistItem( 0 ) );
+                        aSet.Put( SdrEdgeNode2VertDistItem( 0 ) );
+                    }
+                }
+                else if ( ( (int)aObjData.eShapeType > (int)mso_sptRectangle ) && ( (int)aObjData.eShapeType < (int)mso_sptTextBox ) )
+                {
+                    pRet = GetAutoForm( aObjData.eShapeType );
                     if ( pRet )
                     {
-                        if ( !IsHardAttribute( DFF_Prop_fFilled ) )     // the default for graphic objects is: not filled
-                        {
-                            UINT32 nOldProp = GetPropertyValue( DFF_Prop_fNoFillHitTest );
-                            if ( nOldProp & 0x10 )
-                                SetPropertyValue( DFF_Prop_fNoFillHitTest, nOldProp &~0x10 );
-                        }
-                        if ( !IsHardAttribute( DFF_Prop_fLine ) )       // the default for graphic objects is: no line
-                        {
-                            UINT32 nOldProp = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
-                            if ( nOldProp & 8 )
-                                SetPropertyValue( DFF_Prop_fNoLineDrawDash, nOldProp &~8 );
-                        }
-                        if ( GetSvxMSDffSettings() & ( SVXMSDFF_SETTINGS_IMPORT_PPT | SVXMSDFF_SETTINGS_IMPORT_EXCEL ) )
-                        {   // impress does not support line propertys on graphic objects
-                            BOOL bFilled = ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 16 ) != 0;
-                            BOOL bLine = ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 ) != 0;
-                            if ( bLine || bFilled )
-                            {
-                                SdrObject* pRect;
-                                SdrObject* pGroup = new SdrObjGroup;
-                                if ( pGroup )
-                                {
-                                    if ( bFilled )
-                                    {
-                                        pRect = new SdrRectObj( aBoundRect );
-                                        if ( pRect )
-                                        {
-                                            pGroup->GetSubList()->NbcInsertObject( pRect );
-                                            nSpecialGroupSettings = 2;
-                                        }
-                                    }
-                                    pGroup->GetSubList()->NbcInsertObject( pRet );
-                                    if ( bLine )
-                                    {
-                                        pRect = new SdrRectObj( aBoundRect );
-                                        if ( pRect )
-                                            pGroup->GetSubList()->NbcInsertObject( pRect );
-                                    }
-                                    pRet = pGroup;
-                                }
-                            }
-                        }
-                    }
-                    nSpFlags &=~ ( SP_FFLIPH | SP_FFLIPV );         // #68396#
-                }
-                else  if ( ( aObjData.eShapeType == mso_sptCurvedLeftArrow )    // #97935# not taking the autoshapes from msashape,
-                        || ( aObjData.eShapeType == mso_sptCurvedRightArrow )   // instead we are using our precalculated ones
-                        || ( aObjData.eShapeType == mso_sptCurvedUpArrow )
-                        || ( aObjData.eShapeType == mso_sptCurvedDownArrow ) )
-                {
-                        pRet = GetAutoForm( aObjData.eShapeType );
-                        if ( pRet )
-                            pRet->NbcSetSnapRect( aBoundRect ); // Groesse setzen
-                }
-                else
-                {
-                    SvxMSDffAutoShape aAutoShape( *this, rSt, aObjData, aBoundRect, nObjectRotation, mpTracer );
-                    if ( !aAutoShape.IsEmpty() )
-                    {
-                        ApplyAttributes( rSt, aSet, NULL );
-                        pRet = aAutoShape.GetObject( pSdrModel, aSet, TRUE );
-                        aTextRect = aAutoShape.GetTextRect();
-                        bIsAutoShape = TRUE;
-                    }
-                    else if ( aObjData.eShapeType == mso_sptTextBox )
-                    {
-                        if ( ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 )
-                            || ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) )
-                        {
-                            pRet = new SdrRectObj( aBoundRect );  // SJ: changed the type from OBJ_TEXT to OBJ_RECT (#88277#)
-                        }
-                    }
-                    else if (
-                        mso_sptWedgeRectCallout == aObjData.eShapeType ||
-                        mso_sptWedgeRRectCallout == aObjData.eShapeType ||
-                        mso_sptWedgeEllipseCallout == aObjData.eShapeType ||
-                        mso_sptBalloon == aObjData.eShapeType ||
-                        mso_sptCloudCallout == aObjData.eShapeType )
-                    {
-                        // Balloon mappen
-                        if( mso_sptBalloon == aObjData.eShapeType )
-                            aObjData.eShapeType = mso_sptWedgeRRectCallout;
-
-                        pRet = GetAutoForm( aObjData.eShapeType );
-                        if ( pRet )
-                            pRet->NbcSetSnapRect( aBoundRect ); // Groesse setzen
-                    }
-                    else if ( ( ( aObjData.eShapeType >= mso_sptCallout1 ) && ( aObjData.eShapeType <= mso_sptAccentBorderCallout3 ) )
-                                || ( aObjData.eShapeType == mso_sptCallout90 )
-                                || ( aObjData.eShapeType == mso_sptAccentCallout90 )
-                                || ( aObjData.eShapeType == mso_sptBorderCallout90 )
-                                || ( aObjData.eShapeType == mso_sptAccentBorderCallout90 ) )
-                    {
-                        pRet = new SdrCaptionObj( aBoundRect );
-                        INT32 nAdjust0 = GetPropertyValue( DFF_Prop_adjustValue, 0 );
-                        INT32 nAdjust1 = GetPropertyValue( DFF_Prop_adjust2Value, 0 );
-                        if( nAdjust0 | nAdjust1 )
-                        {   // AdjustValues anwenden, nur welche ?!?
-                            nAdjust0 = ( nAdjust0 * 100 ) / 850;
-                            nAdjust1 = ( nAdjust1 * 100 ) / 1275;
-                            Point aTailPos( nAdjust0 + aBoundRect.Left(), nAdjust1 + aBoundRect.Top() );
-                            ((SdrCaptionObj*)pRet)->NbcSetTailPos( aTailPos );
-                        }
-                    }
-                    else if( ( aObjData.eShapeType >= mso_sptTextPlainText ) && ( aObjData.eShapeType <= mso_sptTextCanDown ) ) // WordArt
-                    {
-                        aObjData.bIsAutoText = TRUE;
-                        if ( mbTracing )
-                            mpTracer->Trace( rtl::OUString::createFromAscii( "escher1000" ), rtl::OUString::valueOf( (sal_Int32)aObjData.eShapeType ) );
-                        pRet = ImportWordArt( rSt, aSet, aBoundRect );
-                    }
-                    else if ( aObjData.eShapeType == mso_sptLine )
-                    {
-                        pRet = new SdrPathObj( aBoundRect.TopLeft(), aBoundRect.BottomRight() );
-                    }
-                    else if( bIsConnector )
-                    {
-                        // Konnektoren
-                        MSO_ConnectorStyle eConnectorStyle = (MSO_ConnectorStyle)GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight );
-
-                        pRet = new SdrEdgeObj();
-                        if( pRet )
-                        {
-                            pRet->SetLogicRect(aBoundRect);
-
-                            ((SdrEdgeObj*)pRet)->ConnectToNode(TRUE, NULL);
-                            ((SdrEdgeObj*)pRet)->ConnectToNode(FALSE, NULL);
-
-                            Point aPoint1( aBoundRect.TopLeft() );
-                            Point aPoint2( aBoundRect.BottomRight() );
-
-                            // Rotationen beachten
-                            if ( nObjectRotation )
-                            {
-                                double a = nObjectRotation * nPi180;
-                                Point aCenter( aBoundRect.Center() );
-                                double ss = sin(a);
-                                double cc = cos(a);
-
-                                RotatePoint(aPoint1, aCenter, ss, cc);
-                                RotatePoint(aPoint2, aCenter, ss, cc);
-                            }
-
-                            // Linie innerhalb des Bereiches zurechtdrehen/spiegeln
-                            if ( nSpFlags & SP_FFLIPH )
-                            {
-                                INT32 n = aPoint1.X();
-                                aPoint1.X() = aPoint2.X();
-                                aPoint2.X() = n;
-                            }
-                            if ( nSpFlags & SP_FFLIPV )
-                            {
-                                INT32 n = aPoint1.Y();
-                                aPoint1.Y() = aPoint2.Y();
-                                aPoint2.Y() = n;
-                            }
-                            nSpFlags &= ~( SP_FFLIPV | SP_FFLIPH );
-
-                            pRet->NbcSetPoint(aPoint1, 0);  // Startpunkt
-                            pRet->NbcSetPoint(aPoint2, 1);  // Endpunkt
-
-                            switch( eConnectorStyle )
-                            {
-                                case mso_cxstyleBent:
-                                    aSet.Put( SdrEdgeKindItem( SDREDGE_ORTHOLINES ) );
-                                break;
-                                case mso_cxstyleCurved:
-                                    aSet.Put( SdrEdgeKindItem( SDREDGE_BEZIER ) );
-                                break;
-                                default: // mso_cxstyleStraight || mso_cxstyleNone
-                                    aSet.Put( SdrEdgeKindItem( SDREDGE_ONELINE ) );
-                                break;
-                            }
-                            aSet.Put( SdrEdgeNode1HorzDistItem( 0 ) );
-                            aSet.Put( SdrEdgeNode1VertDistItem( 0 ) );
-                            aSet.Put( SdrEdgeNode2HorzDistItem( 0 ) );
-                            aSet.Put( SdrEdgeNode2VertDistItem( 0 ) );
-                        }
-                    }
-                    else if ( ( (int)aObjData.eShapeType > (int)mso_sptRectangle ) && ( (int)aObjData.eShapeType < (int)mso_sptTextBox ) )
-                    {
-                        pRet = GetAutoForm( aObjData.eShapeType );
-                        if ( pRet )
-                        {
-                            mpTracer->Trace( rtl::OUString::createFromAscii( "escher1001" ), rtl::OUString::valueOf( (sal_Int32)aObjData.eShapeType ) );
-                            pRet->NbcSetSnapRect( aBoundRect ); // Groesse setzen
-                        }
-                    }
-                }
-                if ( pRet )
-                {
-                    if ( !bIsAutoShape )
-                    {
-                         ApplyAttributes( rSt, aSet, pRet );
-                        if ( !GetPropertyValue( DFF_Prop_gtextSize, 0 ) )
-                            aSet.Put( SvxFontHeightItem( ScalePt( 24 << 16 ) ) );
-                        if ( aObjData.eShapeType == mso_sptTextBox )
-                            aSet.Put( SdrTextMinFrameHeightItem( aBoundRect.GetHeight() ) );
-                        pRet->SetModel( pSdrModel );
-                        pRet->SetMergedItemSet(aSet);
-                        // Rotieren
-                        if ( pRet->ISA( SdrCaptionObj ) )       // sj: #96758# SetModel is changing
-                            pRet->SetSnapRect( aBoundRect );    // the original snaprect
-                    }
-                    // FillStyle != XFILL_NONE und nicht geschlossenes Polygon-Objekt?
-                    if( pRet->ISA( SdrPathObj ) )
-                    {
-                        XFillStyle eFillStyle = ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem );
-                        if( eFillStyle != XFILL_NONE )
-                        {
-                            // Das Polygon des Objektes muss geschlossen werden
-                            if(!((SdrPathObj*)pRet)->IsClosed())
-                                ((SdrPathObj*)pRet)->ToggleClosed(0);
-                        }
-                    }
-                    // Handelt es sich um 3D?
-                    if( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 8 )
-                    {
-                        // #81981# not all objects are effected by 3d effects
-                        if ( !bGraphic )
-                        {
-                            SdrObject* p3d = SvxMSDffAutoShape3D::Create3DObject( pRet, *this, aSet, aBoundRect, nSpFlags );
-                            if ( p3d )
-                            {
-                                nSpFlags &= ~( SP_FFLIPV | SP_FFLIPH );
-                                nObjectRotation = 0;
-                                delete pRet;
-                                pRet = p3d;
-                            }
-                        }
-                    }
-                }
-                if ( pRet )
-                {
-                    if( nObjectRotation && !bIsConnector )
-                    {
-                        double a = nObjectRotation * nPi180;
-                        pRet->NbcRotate( aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
-                    }
-                    if ( nSpecialGroupSettings )
-                    {
-                        SdrObjList* pObjectList = pObjectList = pRet->GetSubList();
-                        if ( pObjectList )
-                        {
-                            INT32   nCount = pObjectList->GetObjCount();
-                            if ( nSpecialGroupSettings == 2 )
-                            {
-                                // a graphic was imported into impress, the fill attribute has
-                                // to be set on the first object only
-                                aSet.Put( XFillStyleItem( XFILL_NONE ) );
-                                for ( INT32 i = nCount; --i > 0; )
-                                {
-                                    SdrObject*  pObj = pObjectList->GetObj( i );
-                                    if ( pObj )
-                                        pObj->SetMergedItemSet(aSet);
-                                }
-                            }
-                        }
-                    }
-                    // Horizontal gespiegelt?
-                    if ( nSpFlags & SP_FFLIPH )
-                    {
-                        Rectangle aBoundRect( pRet->GetSnapRect() );
-                        Point aTop( ( aBoundRect.Left() + aBoundRect.Right() ) >> 1, aBoundRect.Top() );
-                        Point aBottom( aTop.X(), aTop.Y() + 1000 );
-                        pRet->NbcMirror( aTop, aBottom );
-                    }
-                    // Vertikal gespiegelt?
-                    if ( nSpFlags & SP_FFLIPV )
-                    {
-                        Rectangle aBoundRect( pRet->GetSnapRect() );
-                        Point aLeft( aBoundRect.Left(), ( aBoundRect.Top() + aBoundRect.Bottom() ) >> 1 );
-                        Point aRight( aLeft.X() + 1000, aLeft.Y() );
-                        pRet->NbcMirror( aLeft, aRight );
+                        mpTracer->Trace( rtl::OUString::createFromAscii( "escher1001" ), rtl::OUString::valueOf( (sal_Int32)aObjData.eShapeType ) );
+                        pRet->NbcSetSnapRect( aBoundRect ); // Groesse setzen
                     }
                 }
             }
+            if ( pRet )
+            {
+                if ( !bIsAutoShape )
+                {
+                     ApplyAttributes( rSt, aSet, pRet );
+                    if ( !GetPropertyValue( DFF_Prop_gtextSize, 0 ) )
+                        aSet.Put( SvxFontHeightItem( ScalePt( 24 << 16 ) ) );
+                    if ( aObjData.eShapeType == mso_sptTextBox )
+                        aSet.Put( SdrTextMinFrameHeightItem( aBoundRect.GetHeight() ) );
+                    pRet->SetModel( pSdrModel );
+                    pRet->SetMergedItemSet(aSet);
+                    // Rotieren
+                    if ( pRet->ISA( SdrCaptionObj ) )       // sj: #96758# SetModel is changing
+                        pRet->SetSnapRect( aBoundRect );    // the original snaprect
+                }
+                // FillStyle != XFILL_NONE und nicht geschlossenes Polygon-Objekt?
+                if( pRet->ISA( SdrPathObj ) )
+                {
+                    XFillStyle eFillStyle = ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem );
+                    if( eFillStyle != XFILL_NONE )
+                    {
+                        // Das Polygon des Objektes muss geschlossen werden
+                        if(!((SdrPathObj*)pRet)->IsClosed())
+                            ((SdrPathObj*)pRet)->ToggleClosed(0);
+                    }
+                }
+                // Handelt es sich um 3D?
+                if( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 8 )
+                {
+                    // #81981# not all objects are effected by 3d effects
+                    if ( !bGraphic )
+                    {
+                        SdrObject* p3d = SvxMSDffAutoShape3D::Create3DObject( pRet, *this, aSet, aBoundRect, nSpFlags );
+                        if ( p3d )
+                        {
+                            nSpFlags &= ~( SP_FFLIPV | SP_FFLIPH );
+                            nObjectRotation = 0;
+                            delete pRet;
+                            pRet = p3d;
+                        }
+                    }
+                }
+            }
+            if ( pRet )
+            {
+                if( nObjectRotation && !bIsConnector )
+                {
+                    double a = nObjectRotation * nPi180;
+                    pRet->NbcRotate( aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
+                }
+                if ( nSpecialGroupSettings )
+                {
+                    SdrObjList* pObjectList = pObjectList = pRet->GetSubList();
+                    if ( pObjectList )
+                    {
+                        INT32   nCount = pObjectList->GetObjCount();
+                        if ( nSpecialGroupSettings == 2 )
+                        {
+                            // a graphic was imported into impress, the fill attribute has
+                            // to be set on the first object only
+                            aSet.Put( XFillStyleItem( XFILL_NONE ) );
+                            for ( INT32 i = nCount; --i > 0; )
+                            {
+                                SdrObject*  pObj = pObjectList->GetObj( i );
+                                if ( pObj )
+                                    pObj->SetMergedItemSet(aSet);
+                            }
+                        }
+                    }
+                }
+                // Horizontal gespiegelt?
+                if ( nSpFlags & SP_FFLIPH )
+                {
+                    Rectangle aBoundRect( pRet->GetSnapRect() );
+                    Point aTop( ( aBoundRect.Left() + aBoundRect.Right() ) >> 1, aBoundRect.Top() );
+                    Point aBottom( aTop.X(), aTop.Y() + 1000 );
+                    pRet->NbcMirror( aTop, aBottom );
+                }
+                // Vertikal gespiegelt?
+                if ( nSpFlags & SP_FFLIPV )
+                {
+                    Rectangle aBoundRect( pRet->GetSnapRect() );
+                    Point aLeft( aBoundRect.Left(), ( aBoundRect.Top() + aBoundRect.Bottom() ) >> 1 );
+                    Point aRight( aLeft.X() + 1000, aLeft.Y() );
+                    pRet->NbcMirror( aLeft, aRight );
+                }
+            }
         }
-        pRet =
-            ProcessObj( rSt, aObjData, pClientData, aTextRect, pRet);
-        if ( mbTracing )
-            mpTracer->RemoveAttribute( aObjData.nSpFlags & SP_FGROUP
-                                        ? rtl::OUString::createFromAscii( "GroupShape" )
-                                        : rtl::OUString::createFromAscii( "Shape" ) );
     }
-    rSt.Seek( nFPosMerk );  // FilePos restaurieren
+    pRet =
+        ProcessObj( rSt, aObjData, pClientData, aTextRect, pRet);
+    if ( mbTracing )
+        mpTracer->RemoveAttribute( aObjData.nSpFlags & SP_FGROUP
+                                    ? rtl::OUString::createFromAscii( "GroupShape" )
+                                    : rtl::OUString::createFromAscii( "Shape" ) );
     return pRet;
+}
+
+Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvStream& rSt, Rectangle& aClientRect )
+{
+    Rectangle aChildAnchor;
+    rHd.SeekToContent( rSt );
+    while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < rHd.GetRecEndFilePos() ) )
+    {
+        DffRecordHeader aShapeHd;
+        rSt >> aShapeHd;
+        if ( ( aShapeHd.nRecType == DFF_msofbtSpContainer ) ||
+                ( aShapeHd.nRecType == DFF_msofbtSpgrContainer ) )
+        {
+            DffRecordHeader aShapeHd2( aShapeHd );
+            if ( aShapeHd.nRecType == DFF_msofbtSpgrContainer )
+                rSt >> aShapeHd2;
+            while( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aShapeHd2.GetRecEndFilePos() ) )
+            {
+                DffRecordHeader aShapeAtom;
+                rSt >> aShapeAtom;
+
+                if ( aShapeAtom.nRecType == DFF_msofbtClientAnchor )
+                {
+                    if ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_PPT )
+                    {
+                        sal_Int16 ls, os, rs, us;
+                        rSt >> os >> ls >> rs >> us; // etwas seltsame Koordinatenreihenfolge ...
+                        long l = ls, o = os, r = rs, u = us;
+                        Scale( l );
+                        Scale( o );
+                        Scale( r );
+                        Scale( u );
+                        aClientRect = Rectangle( l, o, r, u );
+                    }
+                    break;
+                }
+                else if ( aShapeAtom.nRecType == DFF_msofbtChildAnchor )
+                {
+                    sal_Int32 l, o, r, u;
+                    rSt >> l >> o >> r >> u;
+                    Scale( l );
+                    Scale( o );
+                    Scale( r );
+                    Scale( u );
+                    Rectangle aChild( l, o, r, u );
+                    aChildAnchor.Union( aChild );
+                    break;
+                }
+                aShapeAtom.SeekToEndOfRecord( rSt );
+            }
+        }
+        aShapeHd.SeekToEndOfRecord( rSt );
+    }
+    return aChildAnchor;
+}
+
+void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt,
+                            Rectangle& rGroupClientAnchor, Rectangle& rGroupChildAnchor,
+                                const Rectangle& rClientRect, const Rectangle& rGlobalChildRect )
+{
+    sal_Bool bFirst = sal_True;
+    rHd.SeekToContent( rSt );
+    DffRecordHeader aShapeHd;
+    while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < rHd.GetRecEndFilePos() ) )
+    {
+        rSt >> aShapeHd;
+        if ( ( aShapeHd.nRecType == DFF_msofbtSpContainer ) ||
+                ( aShapeHd.nRecType == DFF_msofbtSpgrContainer ) )
+        {
+            DffRecordHeader aShapeHd2( aShapeHd );
+            if ( aShapeHd.nRecType == DFF_msofbtSpgrContainer )
+                rSt >> aShapeHd2;
+            while( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aShapeHd2.GetRecEndFilePos() ) )
+            {
+                DffRecordHeader aShapeAtom;
+                rSt >> aShapeAtom;
+                if ( aShapeAtom.nRecType == DFF_msofbtChildAnchor )
+                {
+                    sal_Int32 l, o, r, u;
+                    rSt >> l >> o >> r >> u;
+                    Scale( l );
+                    Scale( o );
+                    Scale( r );
+                    Scale( u );
+                    Rectangle aChild( l, o, r, u );
+
+                    if ( bFirst )
+                    {
+                        if ( !rGlobalChildRect.IsEmpty() && !rClientRect.IsEmpty() && rGlobalChildRect.GetWidth() && rGlobalChildRect.GetHeight() )
+                        {
+                            double fl = l;
+                            double fo = o;
+                            double fWidth = r - l;
+                            double fHeight= u - o;
+                            double fXScale = (double)rClientRect.GetWidth() / (double)rGlobalChildRect.GetWidth();
+                            double fYScale = (double)rClientRect.GetHeight() / (double)rGlobalChildRect.GetHeight();
+                            fl = ( ( l - rGlobalChildRect.Left() ) * fXScale ) + rClientRect.Left();
+                            fo = ( ( o - rGlobalChildRect.Top()  ) * fYScale ) + rClientRect.Top();
+                            fWidth *= fXScale;
+                            fHeight *= fYScale;
+                            rGroupClientAnchor = Rectangle( Point( (sal_Int32)fl, (sal_Int32)fo ), Size( (sal_Int32)( fWidth + 1 ), (sal_Int32)( fHeight + 1 ) ) );
+                        }
+                        bFirst = sal_False;
+                    }
+                    else
+                        rGroupChildAnchor.Union( aChild );
+                    break;
+                }
+                aShapeAtom.SeekToEndOfRecord( rSt );
+            }
+        }
+        aShapeHd.SeekToEndOfRecord( rSt );
+    }
 }
 
 SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
@@ -3409,7 +3580,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     (
                         (pImpRec->eShapeType == mso_sptRectangle)
                         && (eWrapMode == mso_wrapSquare)
-                        && ShapeHasText(pImpRec->nShapeId, rObjData.nOldFilePos)
+                        && ShapeHasText(pImpRec->nShapeId, rObjData.rSpHd.GetRecBegFilePos() )
                     )
                 );
             }
@@ -4615,8 +4786,7 @@ BOOL SvxMSDffManager::GetShape(ULONG nId, SdrObject*&         rpShape,
         if( rStCtrl.GetError() )
             rStCtrl.ResetError();
         else
-            //rpShape = ImportObjAtCurrentStreamPos( rStCtrl, rData );
-            rpShape = ImportObj( rStCtrl, &rData, &rData.aParentRect );
+            rpShape = ImportObj( rStCtrl, &rData, rData.aParentRect, rData.aParentRect );
 
         // alte FilePos des/der Stream(s) restaurieren
         rStCtrl.Seek( nOldPosCtrl );
