@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-09 13:55:52 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,14 +81,14 @@ PageItem \
     Text [ danish ] = "Ramme" ; \
     Text [ portuguese ] = "Contornos" ; \
     Text [ portuguese_brazilian ] = "Bordas" ; \
-    Text[ chinese_simplified ] = "çº¿æ¡"; \
+    Text[ chinese_simplified ] = "è¾¹æ¡†"; \
     Text[ russian ] = "Îáğàìëåíèå"; \
     Text[ polish ] = "Krawêdzie"; \
     Text[ japanese ] = "å¤–æ ç·š"; \
     Text[ chinese_traditional ] = "ç·šæ¢"; \
     Text[ arabic ] = "ÍÏæÏ"; \
     Text[ dutch ] = "Lijn"; \
-    Text[ chinese_simplified ] = "çº¿æ¡"; \
+    Text[ chinese_simplified ] = "è¾¹æ¡†"; \
     Text[ greek ] = "ÃñáììŞ"; \
     Text[ korean ] = "í…Œë‘ë¦¬"; \
     Text[ turkish ] = "Çizgi"; \
@@ -302,14 +302,14 @@ PageItem \
     Text [ danish ] = "Statistik" ; \
     Text [ portuguese_brazilian ] = "Estatísticas" ; \
     Text [ portuguese ] = "Estatística" ; \
-    Text[ chinese_simplified ] = "ç»Ÿè®¡"; \
+    Text[ chinese_simplified ] = "ç»Ÿè®¡å‡½æ•°"; \
     Text[ russian ] = "Ñòàòèñòèêà"; \
     Text[ polish ] = "Statystyka"; \
     Text[ japanese ] = "çµ±è¨ˆ"; \
     Text[ chinese_traditional ] = "çµ±è¨ˆ"; \
     Text[ arabic ] = "ÅÍÕÇÆíÇÊ"; \
     Text[ dutch ] = "Statistiek"; \
-    Text[ chinese_simplified ] = "ç»Ÿè®¡"; \
+    Text[ chinese_simplified ] = "ç»Ÿè®¡å‡½æ•°"; \
     Text[ greek ] = "ÓôáôéóôéêÜ"; \
     Text[ korean ] = "í†µê³„"; \
     Text[ turkish ] = "İstatistik"; \
