@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dbeziertools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 13:17:32 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,51 +528,62 @@ namespace basegfx
 
     sal_Int32 adaptiveSubdivideByDistance( B2DPolygon&              rPoly,
                                            const B2DCubicBezier&    rCurve,
-                                           double                   distanceBounds )
+                                           double                   distanceBounds,
+                                           bool                     bAddEndPoint )
     {
         const B2DPoint start( rCurve.getStartPoint() );
         const B2DPoint control1( rCurve.getControlPointA() );
         const B2DPoint control2( rCurve.getControlPointB() );
         const B2DPoint end( rCurve.getEndPoint() );
 
-        const sal_Int32 nPoints( ImplAdaptiveSubdivide( rPoly,
-                                                        DistanceErrorFunctor( distanceBounds ),
-                                                        start.getX(),   start.getY(),
-                                                        control1.getX(),    control1.getY(),
-                                                        control2.getX(),    control2.getY(),
-                                                        end.getX(),         end.getY(),
-                                                        0 ) );
+        sal_Int32 nPoints( ImplAdaptiveSubdivide( rPoly,
+                                                  DistanceErrorFunctor( distanceBounds ),
+                                                  start.getX(),     start.getY(),
+                                                  control1.getX(),  control1.getY(),
+                                                  control2.getX(),  control2.getY(),
+                                                  end.getX(),       end.getY(),
+                                                  0 ) );
         // finish polygon
-        rPoly.append( end );
+        if ( bAddEndPoint )
+        {
+            rPoly.append( end );
+            nPoints++;
+        }
 
         return nPoints;
     }
 
     sal_Int32 adaptiveSubdivideByAngle( B2DPolygon&             rPoly,
                                         const B2DCubicBezier&   rCurve,
-                                        double                  angleBounds )
+                                        double                  angleBounds,
+                                        bool                    bAddEndPoint )
     {
         const B2DPoint start( rCurve.getStartPoint() );
         const B2DPoint control1( rCurve.getControlPointA() );
         const B2DPoint control2( rCurve.getControlPointB() );
         const B2DPoint end( rCurve.getEndPoint() );
 
-        const sal_Int32 nPoints( ImplAdaptiveSubdivide( rPoly,
-                                                        AngleErrorFunctor( angleBounds ),
-                                                        start.getX(),   start.getY(),
-                                                        control1.getX(),    control1.getY(),
-                                                        control2.getX(),    control2.getY(),
-                                                        end.getX(),         end.getY(),
-                                                        0 ) );
+        sal_Int32 nPoints( ImplAdaptiveSubdivide( rPoly,
+                                                  AngleErrorFunctor( angleBounds ),
+                                                  start.getX(),     start.getY(),
+                                                  control1.getX(),  control1.getY(),
+                                                  control2.getX(),  control2.getY(),
+                                                  end.getX(),       end.getY(),
+                                                  0 ) );
         // finish polygon
-        rPoly.append( end );
+        if ( bAddEndPoint )
+        {
+            rPoly.append( end );
+            nPoints++;
+        }
 
         return nPoints;
     }
 
     sal_Int32 adaptiveSubdivideByDistance( B2DPolygon&                  rPoly,
                                            const B2DQuadraticBezier&    rCurve,
-                                           double                       distanceBounds )
+                                           double                       distanceBounds,
+                                           bool                         bAddEndPoint )
     {
         // TODO
         return 0;
