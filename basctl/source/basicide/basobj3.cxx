@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:39:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,13 +829,15 @@ void BasicIDE::BasicStopped( BOOL* pbAppWindowDisabled,
             *pnWaitCount = nWait;
     }
 
+    /*
     // Interactive = FALSE ?
     if ( SFX_APP()->IsDispatcherLocked() )
     {
         SFX_APP()->LockDispatcher( FALSE );
         if ( pbDispatcherLocked )
             *pbDispatcherLocked = TRUE;
-    }
+    } */
+
     Window* pDefParent = Application::GetDefDialogParent();
     if ( pDefParent && !pDefParent->IsEnabled() )
     {
