@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-12 11:52:03 $
+ *  last change: $Author: fs $ $Date: 2002-03-06 14:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1398,6 +1398,11 @@ void FmXGridPeer::CellModified()
 //------------------------------------------------------------------------------
 void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        // want to do a lot of VCL stuff here ...
+        // this should not be (deadlock) critical, as by definition, every component should release
+        // any own mutexes before notifying
+
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
     if (!pGrid)
         return;
