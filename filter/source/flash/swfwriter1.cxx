@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-29 09:59:33 $
+ *  last change: $Author: cl $ $Date: 2002-12-05 13:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,8 +565,27 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const long*
         Rectangle textBounds( 0, 0, static_cast<long>(mnDocWidth*mnDocXScale), static_cast<long>(mnDocHeight*mnDocYScale) );
 
         Matrix3D m;
+
+        double scale = 1.0;
+
+        // scale width if we have a stretched text
+        if( 0 != aFont.GetSize().Width() )
+        {
+            Font aTmpFont( aFont );
+            aTmpFont.SetWidth(0);
+            mpVDev->SetFont( aTmpFont );
+
+            const FontMetric aMetric( mpVDev->GetFontMetric() );
+            mpVDev->SetFont( aFont );
+
+            const long n1 = aFont.GetSize().Width();
+            const long n2 = aMetric.GetSize().Width();
+            scale =  (double)n1 / (double)n2;
+        }
+
         m.Rotate( static_cast<double>(nOrientation) * F_PI1800 );
-        m.Translate( double(aPt.X()), double(aPt.Y()) );
+        m.Translate( double(aPt.X() / scale), double(aPt.Y()) );
+        m.ScaleX( scale );
 
         sal_Int16 nHeight = _Int16( map( Size( 0, aFont.GetHeight() ) ).Height() );
 
@@ -613,7 +632,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const long*
             }
 
             aBits.writeUB( rFlashFont.getGlyph(rText.GetChar(_uInt16(i)),mpVDev), nGlyphBits );
-            aBits.writeSB( _Int16(map( Size( nAdvance, 0 ) ).Width() ), nAdvanceBits );
+            aBits.writeSB( _Int16(map( Size( nAdvance / scale, 0 ) ).Width() ), nAdvanceBits );
         }
 
         mpTag->addBits( aBits );
