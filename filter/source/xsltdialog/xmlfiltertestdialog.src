@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:56:43 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,11 +113,13 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ thai ] = "ส่งออก";
         Text[ slovak ] = "Exportovať";
         Text[ portuguese_brazilian ] = "Exportar";
-        Text[ dutch ] = "Export";
+        Text[ dutch ] = "Exporteren";
         Text[ czech ] = "Export";
         Text[ catalan ] = "Export";
         Text[ hindi ] = "निर्यात";
         Text[ portuguese ] = "Export";
+        Text[ hungarian ] = "Exportálás";
+        Text[ slovenian ] = "Izvoz";
     };
 
     FixedText FT_EXPORT_XSLT
@@ -137,10 +139,10 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ slovak ] = "XSLT pre export";
         Text[ portuguese_brazilian ] = "XSLT para exportar";
         Text[ greek ] = "XSLT for export";
-        Text[ dutch ] = "XSLT for export";
+        Text[ dutch ] = "XSLT voor exporteren";
         Text[ finnish ] = "XSLT for export";
         Text[ czech ] = "XSLT pro export";
-        Text[ danish ] = "XSLT for export";
+        Text[ danish ] = "XSLT til eksportering";
         Text[ arabic ] = "XSLT for export";
         Text[ hebrew ] = "XSLT for export";
         Text[ catalan ] = "XSLT for export";
@@ -150,6 +152,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ polish ] = "XSLT for export";
         Text[ turkish ] = "XSLT for export";
         Text[ thai ] = "XSLT for export";
+        Text[ hungarian ] = "Exportáló XSLT";
+        Text[ slovenian ] = "XSLT za izvoz";
     };
 
     FixedText FT_EXPORT_XSLT_FILE
@@ -176,10 +180,10 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ slovak ] = "Transformovať dokument";
         Text[ portuguese_brazilian ] = "Transformar o documento";
         Text[ greek ] = "Transform document";
-        Text[ dutch ] = "Transform document";
+        Text[ dutch ] = "Document Transformeren";
         Text[ finnish ] = "Transform document";
         Text[ czech ] = "Transformovat dokument";
-        Text[ danish ] = "Transform document";
+        Text[ danish ] = "Transform�r dokument";
         Text[ arabic ] = "Transform document";
         Text[ hebrew ] = "Transform document";
         Text[ catalan ] = "Transform document";
@@ -189,6 +193,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ polish ] = "Transform document";
         Text[ turkish ] = "Transform document";
         Text[ thai ] = "Transform document";
+        Text[ hungarian ] = "Dokumentum átalakítása";
+        Text[ slovenian ] = "Pretvori dokument";
     };
 
     PushButton PB_EXPORT_BROWSE
@@ -212,8 +218,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ greek ] = "���������";
         Text[ dutch ] = "~Doorzoeken...";
         Text[ finnish ] = "~Selaa";
-        Text[ czech ] = "Listovat...";
-        Text[ danish ] = "Gennemse...";
+        Text[ czech ] = "Procházet...";
+        Text[ danish ] = "~Gennemse...";
         Text[ polish ] = "Przegl�daj";
         Text[ portuguese_brazilian ] = "Navegar...";
         Text[ turkish ] = "Tara...";
@@ -223,6 +229,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ thai ] = "เ~รียกดู...";
         Text[ slovak ] = "~Prehliadať...";
         Text[ hindi ] = "~ब्रउज़...";
+        Text[ hungarian ] = "~Tallózás...";
+        Text[ slovenian ] = "Pre~brskaj...";
     };
 
     PushButton PB_CURRENT_DOCUMENT
@@ -244,10 +252,10 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ slovak ] = "~Súčasný dokument";
         Text[ portuguese_brazilian ] = "Documento atual";
         Text[ greek ] = "~Current Document";
-        Text[ dutch ] = "~Current Document";
+        Text[ dutch ] = "A~ctueel Document";
         Text[ finnish ] = "~Current Document";
         Text[ czech ] = "Stávající dokument";
-        Text[ danish ] = "~Current Document";
+        Text[ danish ] = "~Nuv�rende dokument";
         Text[ arabic ] = "~Current Document";
         Text[ hebrew ] = "~Current Document";
         Text[ catalan ] = "~Current Document";
@@ -257,6 +265,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ polish ] = "~Current Document";
         Text[ turkish ] = "~Current Document";
         Text[ thai ] = "~Current Document";
+        Text[ hungarian ] = "~Aktuális dokumentum";
+        Text[ slovenian ] = "~Trenutni dokument";
     };
 
     FixedText FT_NAME_OF_CURRENT_FILE
@@ -286,7 +296,7 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ portuguese ] = "~Importar";
         Text[ russian ] = "������";
         Text[ greek ] = "��������";
-        Text[ dutch ] = "~Import";
+        Text[ dutch ] = "~Importeren";
         Text[ finnish ] = "Tuo";
         Text[ turkish ] = "��e aktar";
         Text[ arabic ] = "�������";
@@ -295,10 +305,12 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ slovak ] = "Importovať";
         Text[ portuguese_brazilian ] = "Importar";
         Text[ czech ] = "Import";
-        Text[ danish ] = "Import";
+        Text[ danish ] = "Importer";
         Text[ catalan ] = "Import";
         Text[ hindi ] = "आयात";
         Text[ polish ] = "Import";
+        Text[ hungarian ] = "Importálás";
+        Text[ slovenian ] = "Uvoz";
     };
 
     FixedText FT_IMPORT_XSLT
@@ -318,10 +330,10 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ slovak ] = "XSLT pre import";
         Text[ portuguese_brazilian ] = "XSLT para importar";
         Text[ greek ] = "XSLT for import";
-        Text[ dutch ] = "XSLT for import";
+        Text[ dutch ] = "XSLT voor importeren";
         Text[ finnish ] = "XSLT for import";
         Text[ czech ] = "XSLT pro import";
-        Text[ danish ] = "XSLT for import";
+        Text[ danish ] = "XSLT til importering";
         Text[ arabic ] = "XSLT for import";
         Text[ hebrew ] = "XSLT for import";
         Text[ catalan ] = "XSLT for import";
@@ -331,6 +343,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ polish ] = "XSLT for import";
         Text[ turkish ] = "XSLT for import";
         Text[ thai ] = "XSLT for import";
+        Text[ hungarian ] = "Importáló XSLT";
+        Text[ slovenian ] = "XSLT za uvoz";
     };
 
     FixedText FT_IMPORT_XSLT_FILE
@@ -357,10 +371,10 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ slovak ] = "Šablóna pre import";
         Text[ portuguese_brazilian ] = "Modelo para importar";
         Text[ greek ] = "Template for import";
-        Text[ dutch ] = "Template for import";
+        Text[ dutch ] = "Sjabloon voor importeren";
         Text[ finnish ] = "Template for import";
         Text[ czech ] = "Šablona pro import";
-        Text[ danish ] = "Template for import";
+        Text[ danish ] = "Skabelon til import";
         Text[ arabic ] = "Template for import";
         Text[ hebrew ] = "Template for import";
         Text[ catalan ] = "Template for import";
@@ -370,6 +384,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ polish ] = "Template for import";
         Text[ turkish ] = "Template for import";
         Text[ thai ] = "Template for import";
+        Text[ hungarian ] = "Importáló sablon";
+        Text[ slovenian ] = "Predloga za uvoz";
     };
 
     FixedText FT_IMPORT_TEMPLATE_FILE
@@ -396,10 +412,10 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ slovak ] = "Transformovať súbor";
         Text[ portuguese_brazilian ] = "Transformar o arquivo";
         Text[ greek ] = "Transform file";
-        Text[ dutch ] = "Transform file";
+        Text[ dutch ] = "Bestand Transformeren";
         Text[ finnish ] = "Transform file";
         Text[ czech ] = "Transformuj soubor";
-        Text[ danish ] = "Transform file";
+        Text[ danish ] = "Transform�r fil";
         Text[ arabic ] = "Transform file";
         Text[ hebrew ] = "Transform file";
         Text[ catalan ] = "Transform file";
@@ -409,6 +425,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ polish ] = "Transform file";
         Text[ turkish ] = "Transform file";
         Text[ thai ] = "Transform file";
+        Text[ hungarian ] = "Fájl átalakítása";
+        Text[ slovenian ] = "Pretvori datoteko";
     };
 
     CheckBox CBX_DISPLAY_SOURCE
@@ -429,10 +447,10 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ slovak ] = "Zobraziť z~droj";
         Text[ portuguese_brazilian ] = "Exibir c�digo fonte";
         Text[ greek ] = "~Display source";
-        Text[ dutch ] = "~Display source";
+        Text[ dutch ] = "Bron Tonen";
         Text[ finnish ] = "~Display source";
         Text[ czech ] = "Zobrazit zdroj";
-        Text[ danish ] = "~Display source";
+        Text[ danish ] = "~Vis kilde";
         Text[ arabic ] = "~Display source";
         Text[ hebrew ] = "~Display source";
         Text[ catalan ] = "~Display source";
@@ -442,6 +460,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ polish ] = "~Display source";
         Text[ turkish ] = "~Display source";
         Text[ thai ] = "~Display source";
+        Text[ hungarian ] = "~Forrás megjelenítése";
+        Text[ slovenian ] = "~Prikaži izvorno kodo";
     };
 
     PushButton PB_IMPORT_BROWSE
@@ -465,8 +485,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ greek ] = "���~������...";
         Text[ dutch ] = "D~oorzoeken...";
         Text[ finnish ] = "S~elaa";
-        Text[ czech ] = "Listovat...";
-        Text[ danish ] = "Gennemse...";
+        Text[ czech ] = "Procházet...";
+        Text[ danish ] = "~Gennemse...";
         Text[ polish ] = "Przegl�daj...";
         Text[ portuguese_brazilian ] = "Navegar...";
         Text[ turkish ] = "Tara...";
@@ -476,6 +496,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ thai ] = "เรี~ยกดู...";
         Text[ slovak ] = "P~rehliadať...";
         Text[ hindi ] = "ब्रउ~ज़...";
+        Text[ hungarian ] = "~Tallózás...";
+        Text[ slovenian ] = "Preb~rskaj...";
     };
 
     PushButton PB_RECENT_DOCUMENT
@@ -497,10 +519,10 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ slovak ] = "Posledný súbo~r";
         Text[ portuguese_brazilian ] = "Arquivos recentes";
         Text[ greek ] = "~Recent File";
-        Text[ dutch ] = "~Recent File";
+        Text[ dutch ] = "~Recent Bestand";
         Text[ finnish ] = "~Recent File";
         Text[ czech ] = "Předchozí soubor";
-        Text[ danish ] = "~Recent File";
+        Text[ danish ] = "~Seneste fil";
         Text[ arabic ] = "~Recent File";
         Text[ hebrew ] = "~Recent File";
         Text[ catalan ] = "~Recent File";
@@ -510,6 +532,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ polish ] = "~Recent File";
         Text[ turkish ] = "~Recent File";
         Text[ thai ] = "~Recent File";
+        Text[ hungarian ] = "~Legutóbbi fájl";
+        Text[ slovenian ] = "~Nedavna datoteka";
     };
 
     FixedText FT_NAME_OF_RECENT_FILE
@@ -542,7 +566,7 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ dutch ] = "~Sluiten";
         Text[ finnish ] = "~Sulje";
         Text[ czech ] = "Zavřít";
-        Text[ danish ] = "Luk";
+        Text[ danish ] = "~Luk";
         Text[ polish ] = "Zamknij";
         Text[ portuguese_brazilian ] = "Fechar";
         Text[ turkish ] = "~Kapat";
@@ -552,6 +576,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ thai ] = "~ปิด";
         Text[ slovak ] = "~Zavrieť";
         Text[ hindi ] = "~बन्द करो";
+        Text[ hungarian ] = "~Bezárás";
+        Text[ slovenian ] = "~Zapri";
     };
 
     HelpButton PB_HELP
@@ -570,10 +596,10 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
     Text[ slovak ] = "Testovací XML filter: %s";
     Text[ portuguese_brazilian ] = "Testar filtro XML: %s";
     Text[ greek ] = "Test XML Filter: %s";
-    Text[ dutch ] = "Test XML Filter: %s";
+    Text[ dutch ] = "XML-filter Testen: %s";
     Text[ finnish ] = "Test XML Filter: %s";
     Text[ czech ] = "Test XML filtru: %s";
-    Text[ danish ] = "Test XML Filter: %s";
+    Text[ danish ] = "Test XML-filter: %s";
     Text[ arabic ] = "Test XML Filter: %s";
     Text[ hebrew ] = "Test XML Filter: %s";
     Text[ catalan ] = "Test XML Filter: %s";
@@ -583,7 +609,10 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
     Text[ polish ] = "Test XML Filter: %s";
     Text[ turkish ] = "Test XML Filter: %s";
     Text[ thai ] = "Test XML Filter: %s";
+    Text[ hungarian ] = "XML-szűrő ellenőrzése: %s";
+    Text[ slovenian ] = "Preizkusi XML filter: %s";
 };
+
 
 
 
