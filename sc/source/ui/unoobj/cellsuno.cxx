@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-12 18:08:57 $
+ *  last change: $Author: sab $ $Date: 2002-09-25 14:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1911,21 +1911,17 @@ void lcl_SetCellProperty( const SfxItemPropertyMap& rMap, const uno::Any& rValue
                     SvxCellOrientation eOrient = SVX_ORIENTATION_STANDARD;
                     BOOL bSetOrient = TRUE;
 
-                    if ( nRotVal == 9000 )
+                    SvxCellOrientation eOld = (SvxCellOrientation)
+                        ((const SvxOrientationItem&)rSet.Get(ATTR_ORIENTATION)).
+                            GetValue();
+
+                    // #103272#; don't overwrite stacked orientation
+                    if ( eOld == SVX_ORIENTATION_STACKED )
+                        bSetOrient = FALSE;
+                    else if ( nRotVal == 9000 )
                         eOrient = SVX_ORIENTATION_BOTTOMTOP;
                     else if ( nRotVal == 27000 )
                         eOrient = SVX_ORIENTATION_TOPBOTTOM;
-                    else if ( nRotVal == 0 )
-                    {
-                        // don't overwrite stacked orientation by setting
-                        // rotation to 0
-
-                        SvxCellOrientation eOld = (SvxCellOrientation)
-                            ((const SvxOrientationItem&)rSet.Get(ATTR_ORIENTATION)).
-                                GetValue();
-                        if ( eOld == SVX_ORIENTATION_STACKED )
-                            bSetOrient = FALSE;
-                    }
 
                     rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, nRotVal ) );
                     if (bSetOrient)
