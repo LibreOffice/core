@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:00:27 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1591,7 +1591,8 @@ static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSi
 {
     while ( nComp-- >= nSize )
     {
-        for ( ULONG i = 0; i < nSize; i++ )
+        ULONG i;
+        for ( i = 0; i < nSize; i++ )
         {
             if ( ( pSource[i]&~0x20 ) != ( pDest[i]&~0x20 ) )
                 break;
@@ -1616,7 +1617,8 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
         if ( nSizeLeft > 100 )
             nSizeLeft = 100;    // only 100 bytes following the bounding box will be checked
 
-        for ( int i = 0; ( i < 4 ) && nSizeLeft; i++ )
+        int i;
+        for ( i = 0; ( i < 4 ) && nSizeLeft; i++ )
         {
             int     nDivision = 1;
             BOOL    bDivision = FALSE;
