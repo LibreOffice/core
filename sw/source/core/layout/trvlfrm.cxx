@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:19:20 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #endif
 #ifndef _TABFRM_HXX //autogen
 #include <tabfrm.hxx>
+#endif
+#ifndef _ROWFRM_HXX
+#include <rowfrm.hxx>
 #endif
 #ifndef _CELLFRM_HXX //autogen
 #include <cellfrm.hxx>
@@ -384,7 +387,9 @@ BOOL SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 BOOL SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                             const SwCrsrMoveState* pCMS ) const
 {
-    ASSERT( Lower(), "Zelle ohne Inhalt." );
+    // cell frame does not necessarily have a lower (split table cell)
+    if ( !Lower() )
+        return FALSE;
 
     if ( !(pCMS?pCMS->bSetInReadOnly:FALSE) &&
          GetFmt()->GetProtect().IsCntntProtected() )
@@ -401,40 +406,45 @@ BOOL SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         }
     }
 
-    if ( Lower()->IsLayoutFrm() )
-        return SwLayoutFrm::GetCrsrOfst( pPos, rPoint, pCMS );
-    else
+    if ( Lower() )
     {
-        Calc();
-        BOOL bRet = FALSE;
+        if ( Lower()->IsLayoutFrm() )
+            return SwLayoutFrm::GetCrsrOfst( pPos, rPoint, pCMS );
+        else
+        {
+            Calc();
+            BOOL bRet = FALSE;
 
-        const SwFrm *pFrm = Lower();
-        while ( pFrm && !bRet )
-        {
-            pFrm->Calc();
-            if ( pFrm->Frm().IsInside( rPoint ) )
+            const SwFrm *pFrm = Lower();
+            while ( pFrm && !bRet )
             {
-                bRet = pFrm->GetCrsrOfst( pPos, rPoint, pCMS );
-                if ( pCMS && pCMS->bStop )
-                    return FALSE;
+                pFrm->Calc();
+                if ( pFrm->Frm().IsInside( rPoint ) )
+                {
+                    bRet = pFrm->GetCrsrOfst( pPos, rPoint, pCMS );
+                    if ( pCMS && pCMS->bStop )
+                        return FALSE;
+                }
+                pFrm = pFrm->GetNext();
             }
-            pFrm = pFrm->GetNext();
-        }
-        if ( !bRet )
-        {
-            Point *pPoint = pCMS && pCMS->pFill ? new Point( rPoint ) : NULL;
-            const SwCntntFrm *pCnt = GetCntntPos( rPoint, TRUE );
-            if( pPoint && pCnt->IsTxtFrm() )
+            if ( !bRet )
             {
-                pCnt->GetCrsrOfst( pPos, *pPoint, pCMS );
-                rPoint = *pPoint;
+                Point *pPoint = pCMS && pCMS->pFill ? new Point( rPoint ) : NULL;
+                const SwCntntFrm *pCnt = GetCntntPos( rPoint, TRUE );
+                if( pPoint && pCnt->IsTxtFrm() )
+                {
+                    pCnt->GetCrsrOfst( pPos, *pPoint, pCMS );
+                    rPoint = *pPoint;
+                }
+                else
+                    pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
+                delete pPoint;
             }
-            else
-                pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
-            delete pPoint;
+            return TRUE;
         }
-        return TRUE;
     }
+
+    return FALSE;
 }
 
 /*************************************************************************
@@ -586,10 +596,12 @@ FASTBOOL lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
 //Ueberspringen geschuetzter Tabellenzellen. Optional auch
 //Ueberspringen von wiederholten Headlines.
 //MA 26. Jan. 98: Chg auch andere Geschuetzte Bereiche ueberspringen.
+// FME: Skip follow flow cells
 const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
                                                        GetNxtPrvCnt fnNxtPrv,
                                                        FASTBOOL bMissHeadline,
-                                                       FASTBOOL bInReadOnly )
+                                                       FASTBOOL bInReadOnly,
+                                                       FASTBOOL bMissFollowFlowLine )
 {
     if ( pCnt && pCnt->IsInTab() )
     {
@@ -600,8 +612,9 @@ const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
             while ( pCell && !pCell->IsCellFrm() )
                 pCell = pCell->GetUpper();
             if ( !pCell ||
-                    ((bInReadOnly || !pCell->GetFmt()->GetProtect().IsCntntProtected()) &&
-                     (!bMissHeadline || !lcl_IsInRepeatedHeadline( pCell ) )))
+                    ( ( bInReadOnly || !pCell->GetFmt()->GetProtect().IsCntntProtected() ) &&
+                      ( !bMissHeadline || !lcl_IsInRepeatedHeadline( pCell ) ) &&
+                      ( !bMissFollowFlowLine || !pCell->IsInFollowFlowRow() ) ) )
                 bProtect = FALSE;
             else
                 pCnt = (*fnNxtPrv)( pCnt );
@@ -625,22 +638,43 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
     //Wenn gerade eine Tabellenselection laeuft muss ein bischen getricktst
     //werden: Beim hochlaufen an den Anfang der Zelle gehen, beim runterlaufen
     //an das Ende der Zelle gehen.
+    FASTBOOL bTblSel = false;
     if ( pStart->IsInTab() &&
         pPam->GetNode( TRUE )->StartOfSectionNode() !=
         pPam->GetNode( FALSE )->StartOfSectionNode() )
     {
+        bTblSel = true;
         const SwLayoutFrm  *pCell = pStart->GetUpper();
         while ( !pCell->IsCellFrm() )
             pCell = pCell->GetUpper();
-        const SwCntntFrm *pNxt = pCnt = pStart;
+
+        //
+        // Check, if cell has a Prev/Follow cell:
+        //
+        const bool bFwd = ( fnNxtPrv == lcl_GetNxtCnt );
+        const SwLayoutFrm* pTmpCell = bFwd ?
+            ((SwCellFrm*)pCell)->GetFollowCell() :
+            ((SwCellFrm*)pCell)->GetPreviousCell();
+
+        const SwCntntFrm* pTmpStart = pStart;
+        while ( pTmpCell && ( pTmpStart = pTmpCell->ContainsCntnt() ) )
+        {
+            pCell = pTmpCell;
+            pTmpCell = bFwd ?
+                ((SwCellFrm*)pCell)->GetFollowCell() :
+                ((SwCellFrm*)pCell)->GetPreviousCell();
+        }
+        const SwCntntFrm *pNxt = pCnt = pTmpStart;
+
         while ( pCell->IsAnLower( pNxt ) )
-        {   pCnt = pNxt;
+        {
+            pCnt = pNxt;
             pNxt = (*fnNxtPrv)( pNxt );
         }
     }
 
     pCnt = (*fnNxtPrv)( pCnt ? pCnt : pStart );
-    pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly );
+    pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
 
 
     const SwTabFrm *pStTab = pStart->FindTabFrm();
@@ -663,9 +697,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             pTab = pStTab;
         pTable = pTab;
 
-#ifdef BIDI
         const sal_Bool bRTL = pTable->IsRightToLeft();
-#endif
 
         if ( pStTab )
         {
@@ -682,34 +714,23 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                   (pStTab->Frm().*fnRect->fnGetLeft)();
         }
 
-        const SwCntntFrm *pTmp = pTab->ContainsCntnt();
-#ifdef BIDI
+        //
+        // Restrict nX to the left and right borders of pTab:
+        // (is this really necessary?)
+        //
         const long nPrtLeft = bRTL ?
-                              (pTmp->*fnRect->fnGetPrtRight)() :
-                              (pTmp->*fnRect->fnGetPrtLeft)();
+                              (pTab->*fnRect->fnGetPrtRight)() :
+                              (pTab->*fnRect->fnGetPrtLeft)();
         if ( bRTL != nX < nPrtLeft )
             nX = nPrtLeft;
         else
         {
-            pTmp = pTab->FindLastCntnt();
-            const long nPrtRight = bRTL ?
-                                   (pTmp->*fnRect->fnGetPrtLeft)() :
-                                   (pTmp->*fnRect->fnGetPrtRight)();
+               const long nPrtRight = bRTL ?
+                                   (pTab->*fnRect->fnGetPrtLeft)() :
+                                   (pTab->*fnRect->fnGetPrtRight)();
             if ( bRTL != nX > nPrtRight )
                 nX = nPrtRight;
         }
-#else
-        const long nPrtLeft = (pTmp->*fnRect->fnGetPrtLeft)();
-        if ( nX < nPrtLeft )
-            nX = nPrtLeft;
-        else
-        {
-            pTmp = pTab->FindLastCntnt();
-            const long nPrtRight = (pTmp->*fnRect->fnGetPrtRight)();
-            if ( nX > nPrtRight )
-                nX = nPrtRight;
-        }
-#endif
     }
     do
     {
@@ -719,7 +740,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                              (pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow())))
             {
                 pCnt = (*fnNxtPrv)( pCnt );
-                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly );
+                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
             }
 
         //Wenn ich im Fussnotenbereich bin, so versuche ich notfalls den naechsten
@@ -728,7 +749,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             while ( pCnt && !pCnt->IsInFtn() )
             {
                 pCnt = (*fnNxtPrv)( pCnt );
-                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly );
+                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
             }
 
         //In Flys kann es Blind weitergehen solange ein Cntnt
@@ -738,7 +759,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             if ( pCnt && pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow() )
             {
                 pCnt = (*fnNxtPrv)( pCnt );
-                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly );
+                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
             }
         }
 
@@ -830,7 +851,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             if ( !bEnd )
             {
                 pCnt = (*fnNxtPrv)( pCnt );
-                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly );
+                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
             }
         }
 
@@ -912,7 +933,8 @@ USHORT SwRootFrm::SetCurrPage( SwCursor* pToSet, USHORT nPageNum )
             //sind.
             const SwCntntFrm *pCntnt = pPage->ContainsCntnt();
             while ( pCntnt && pPage->IsAnLower( pCntnt ) )
-            {   pCntnt->Calc();
+            {
+                pCntnt->Calc();
                 pCntnt = pCntnt->GetNextCntntFrm();
             }
             //Jetzt ist entweder eine neue Seite da, oder die letzte Seite
@@ -1154,7 +1176,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
                 //liegt, wird der nachste Cntnt der nicht geschuetzt ist gesucht.
                 const SwCntntFrm *pComp = pCntnt;
                 pCntnt = ::lcl_MissProtectedFrames( pCntnt, lcl_GetNxtCnt, FALSE,
-                                        pCMS ? pCMS->bSetInReadOnly : FALSE );
+                                        pCMS ? pCMS->bSetInReadOnly : FALSE, FALSE );
                 if ( pComp != pCntnt )
                     continue;
 
@@ -1858,7 +1880,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
                         if ( pCell->GetNext() )
                         {
                             pCell = (const SwLayoutFrm*)pCell->GetNext();
-                            if ( pCell->Lower()->IsRowFrm() )
+                            if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                                 pCell = pCell->FirstCell();
                         }
                         else
@@ -2050,10 +2072,11 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                 {
                     const SwTabFrm* pTabFrm = (SwTabFrm*)pSttLFrm;
                     if( ( pTabFrm->GetFollow() ||
-                        ((SwTabFrm*)pEndLFrm)->GetFollow() ) &&
+                          ((SwTabFrm*)pEndLFrm)->GetFollow() ) &&
                         pTabFrm->GetTable()->IsHeadlineRepeat() &&
-                        pTabFrm->GetLower() !=
-                            ((SwTabFrm*)pEndLFrm)->GetLower() )
+                        pTabFrm->GetLower() != ((SwTabFrm*)pEndLFrm)->GetLower() &&
+                        ( lcl_IsInRepeatedHeadline( pStartFrm ) ||
+                          lcl_IsInRepeatedHeadline( pEndFrm ) ) )
                     {
                         // End- auf den Start-CntntFrame setzen
                         if( pStartPos == rCrsr.GetPoint() )
@@ -2432,6 +2455,8 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
 
             //Now the frames between, if there are any
             BOOL bBody = pStartFrm->IsInDocBody();
+            const SwTableBox* pCellBox = pStartFrm->GetUpper()->IsCellFrm() ?
+                                         ((SwCellFrm*)pStartFrm->GetUpper())->GetTabBox() : 0;
             const SwCntntFrm *pCntnt = pStartFrm->GetNextCntntFrm();
             SwRect aPrvRect;
 
@@ -2443,9 +2468,13 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                     aSortObjs.Insert( pObj );
                 }
 
-                //Wenn ich im DocumentBody war, so beachte ich nur Frm's
-                //die im Body liegen und umgekehrt.
-                if ( bBody == pCntnt->IsInDocBody() )
+                // Consider only frames which have the same IsInDocBody value like pStartFrm
+                // If pStartFrm is inside a SwCellFrm, consider only frames which are inside the
+                // same cell frame (or its follow cell)
+                const SwTableBox* pTmpCellBox = pCntnt->GetUpper()->IsCellFrm() ?
+                                                ((SwCellFrm*)pCntnt->GetUpper())->GetTabBox() : 0;
+                if ( bBody == pCntnt->IsInDocBody() &&
+                    ( !pCellBox && !pTmpCellBox || pCellBox == pTmpCellBox ) )
                 {
                     SwRect aCRect( pCntnt->UnionFrm( sal_True ) );
                     aCRect.Intersection( pCntnt->PaintArea() );
