@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:14:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ public:
     virtual void KeyInput (const KeyEvent& rEvent);
 
     virtual SdPage* GetActualPage (void);
+    virtual SdPage* getCurrentPage (void) const;
 
     void Execute (SfxRequest& rRequest);
     void GetState (SfxItemSet& rItemSet);
