@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-11 10:42:06 $
+ *  last change: $Author: pb $ $Date: 2001-09-05 12:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,19 +533,9 @@ OUString SfxDocTplService_Impl::getLongName( const OUString& rShortName )
 void SfxDocTplService_Impl::getDirList()
 {
     OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( PROPERTY_DIRLIST ) );
-    sal_Bool bHasProperty = sal_False;
     Any      aValue;
 
     // Get the template dir list
-    bHasProperty = getProperty( maRootContent, aPropName, aValue );
-
-    if ( bHasProperty )
-    {
-        aValue >>= maTemplateDirs;
-        if ( maTemplateDirs.getLength() )
-            return;
-    }
-
     INetURLObject   aURL;
     String          aDirs = SvtPathOptions().GetTemplatePath();
     USHORT          nCount = aDirs.GetTokenCount( C_DELIM );
