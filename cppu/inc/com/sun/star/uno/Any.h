@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-02 15:13:46 $
+ *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,16 +90,12 @@ namespace uno
 {
 
 /** C++ class representing an IDL any.
-    This class is used to transport any type defined in IDL.
-    The class inherits from the binary C representation
-    of <b>uno_Any</b>.<br>
-    You can insert a value by either using the <<= operators
-    or the template function makeAny(). No any can hold an any.<br>
-    You can extract values from an any by using the >>= operators
-    which return true if the any contains an assignable value
-    (no data loss), e.g. the any contains a short and you >>= it
-    into a long variable.
-    <br>
+    This class is used to transport any type defined in IDL. The class inherits from the
+    binary C representation of uno_Any.
+    You can insert a value by either using the <<= operators or the template function makeAny().
+    No any can hold an any. You can extract values from an any by using the >>= operators which
+    return true if the any contains an assignable value (no data loss), e.g. the any contains a
+    short and you >>= it into a long variable.
 */
 class Any : public uno_Any
 {
@@ -114,101 +110,91 @@ public:
     inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
 
-    /** Default constructor:
-        Any holds no value; its type is void.
-        <br>
+    /** Default constructor: Any holds no value; its type is void.
     */
     inline Any() SAL_THROW( () );
 
-    /** Copy constructor:
-        Sets value of the given any.
-        <br>
+    /** Copy constructor: Sets value of the given any.
+
         @param rAny another any
     */
     inline Any( const Any & rAny ) SAL_THROW( () );
 
-    /** Constructor:
-        Sets a copy of the given data.
-        <br>
+    /** Constructor: Sets a copy of the given data.
+
         @param pData_ value
         @param rType type of value
     */
     inline Any( const void * pData_, const Type & rType ) SAL_THROW( () );
 
-    /** Constructor:
-        Sets a copy of the given data.
-        <br>
+    /** Constructor: Sets a copy of the given data.
+
         @param pData_ value
         @param pTypeDescr type of value
     */
     inline Any( const void * pData_, typelib_TypeDescription * pTypeDescr ) SAL_THROW( () );
 
-    /** Constructor:
-        Sets a copy of the given data.
-        <br>
+    /** Constructor: Sets a copy of the given data.
+
         @param pData_ value
         @param pType type of value
     */
     inline Any( const void * pData_, typelib_TypeDescriptionReference * pType ) SAL_THROW( () );
 
-    /** Destructor:
-        Destructs any content and frees memory.
-        <br>
+    /** Destructor: Destructs any content and frees memory.
     */
     inline ~Any() SAL_THROW( () );
 
-    /** Assignment operator:
-        Sets the value of the given any.
-        <br>
+    /** Assignment operator: Sets the value of the given any.
+
         @param rAny another any (right side)
         @return this any
     */
     inline Any & SAL_CALL operator = ( const Any & rAny ) SAL_THROW( () );
 
     /** Gets the type of the set value.
-        <br>
+
         @return a Type object of the set value
      */
     inline const Type & SAL_CALL getValueType() const SAL_THROW( () )
         { return * reinterpret_cast< const Type * >( &pType ); }
     /** Gets the type of the set value.
-        <br>
-        @return the <b>un</b>acquired type description reference of the set value
+
+        @return the UNacquired type description reference of the set value
      */
     inline typelib_TypeDescriptionReference * SAL_CALL getValueTypeRef() const SAL_THROW( () )
         { return pType; }
 
-    /** Gets the type description of the set value.<br>
-        Provides <b>ownership</b> of the type description!
-        Call an explicit typelib_typedescription_release() to release.
-        <br>
+    /** Gets the type description of the set value. Provides ownership of the type description!
+        Call an explicit typelib_typedescription_release() to release afterwards.
+
         @param a pointer to type description pointer
     */
     inline void SAL_CALL getValueTypeDescription( typelib_TypeDescription ** ppTypeDescr ) const SAL_THROW( () )
         { ::typelib_typedescriptionreference_getDescription( ppTypeDescr, pType ); }
 
     /** Gets the type class of the set value.
-        <br>
+
         @return the type class of the set value
      */
     inline TypeClass SAL_CALL getValueTypeClass() const SAL_THROW( () )
         { return (TypeClass)pType->eTypeClass; }
 
     /** Gets the type name of the set value.
-        <br>
+
         @return the type name of the set value
     */
     inline ::rtl::OUString SAL_CALL getValueTypeName() const SAL_THROW( () );
 
     /** Tests if any contains a value.
-        <br>
+
         @return true if any has a value, false otherwise
     */
     inline sal_Bool SAL_CALL hasValue() const SAL_THROW( () )
         { return (typelib_TypeClass_VOID != pType->eTypeClass); }
 
     /** Gets a pointer to the set value.
-        <br>
+
         @return a pointer to the set value
     */
     inline const void * SAL_CALL getValue() const SAL_THROW( () )
@@ -216,21 +202,21 @@ public:
 
     /** Sets a value. If the any already contains a value, that value will be destructed
         and its memory freed.
-        <br>
+
         @param pData_ pointer to value
         @param rType type of value
     */
     inline void SAL_CALL setValue( const void * pData_, const Type & rType ) SAL_THROW( () );
     /** Sets a value. If the any already contains a value, that value will be destructed
         and its memory freed.
-        <br>
+
         @param pData_ pointer to value
         @param pType type of value
     */
     inline void SAL_CALL setValue( const void * pData_, typelib_TypeDescriptionReference * pType ) SAL_THROW( () );
     /** Sets a value. If the any already contains a value, that value will be destructed
         and its memory freed.
-        <br>
+
         @param pData_ pointer to value
         @param pTypeDescr type description of value
     */
@@ -238,22 +224,19 @@ public:
 
     /** Clears this any. If the any already contains a value, that value will be destructed
         and its memory freed. After this has been called, the any does not contain a value.
-        <br>
     */
     inline void SAL_CALL clear() SAL_THROW( () );
 
-    /** Equality operator: compares two anys.<br>
-        The values need not be of equal type, e.g. a short integer is compared to
-        a long integer.
-        <br>
+    /** Equality operator: compares two anys.
+        The values need not be of equal type, e.g. a short integer is compared to a long integer.
+
         @param rAny another any (right side)
         @return true if both any contains equal values
     */
     inline sal_Bool SAL_CALL operator == ( const Any & rAny ) const SAL_THROW( () );
-    /** Unequality operator: compares two anys.<br>
-        The values need not be of equal type, e.g. a short integer is compared to
-        a long integer.
-        <br>
+    /** Unequality operator: compares two anys.
+        The values need not be of equal type, e.g. a short integer is compared to a long integer.
+
         @param rAny another any (right side)
         @return true if both any contains unequal values
     */
@@ -261,7 +244,7 @@ public:
 };
 
 /** Template function to generically construct an any from a C++ value.
-    <br>
+
     @param value a value
     @return an any
 */
@@ -272,16 +255,16 @@ class BaseReference;
 class Type;
 
 /** Template binary <<= operator to set the value of an any.
-    <br>
+
     @param rAny destination any (left side)
     @param value source value (right side)
 */
 template< class C >
 inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW( () );
-/** Template binary >>= operator to assign a value from an any.<br>
-    If the any does not contain a value that can be assigned <b>without</b>
-    data loss, this operation will fail returning false.
-    <br>
+/** Template binary >>= operator to assign a value from an any.
+    If the any does not contain a value that can be assigned without data loss, then this
+    operation will fail returning false.
+
     @param rAny source any (left side)
     @param value destination value (right side)
     @return true if assignment was possible without data loss
@@ -289,24 +272,22 @@ inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW( () 
 template< class C >
 inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, C & value ) SAL_THROW( () );
 
-/** Template equality operator: compares set value of left side any to right side value.<br>
-    The values need not be of equal type, e.g. a short integer is compared to
-    a long integer.<br>
-    This operator can be implemented as template member function, if
-    all supported compilers can cope with template member functions.
-    <br>
+/** Template equality operator: compares set value of left side any to right side value.
+    The values need not be of equal type, e.g. a short integer is compared to a long integer.
+    This operator can be implemented as template member function, if all supported compilers
+    can cope with template member functions.
+
     @param rAny another any (left side)
     @param value a value (right side)
     @return true if values are equal, false otherwise
 */
 template< class C >
 inline sal_Bool SAL_CALL operator == ( const Any & rAny, const C & value ) SAL_THROW( () );
-/** Template unequality operator: compares set value of left side any to right side value.<br>
-    The values need not be of equal type, e.g. a short integer is compared to
-    a long integer.<br>
-    This operator can be implemented as template member function, if
-    all supported compilers can cope with template member functions.
-    <br>
+/** Template unequality operator: compares set value of left side any to right side value.
+    The values need not be of equal type, e.g. a short integer is compared to a long integer.
+    This operator can be implemented as template member function, if all supported compilers
+    can cope with template member functions.
+
     @param rAny another any (left side)
     @param value a value (right side)
     @return true if values are unequal, false otherwise
@@ -349,10 +330,10 @@ inline sal_Bool SAL_CALL operator == ( const Any & rAny, const BaseReference & v
 }
 }
 
-/** Gets the meta type of IDL type <b>any</b>.
-    <br>
+/** Gets the meta type of IDL type any.
+
     @param dummy typed pointer for function signature
-    @return type of IDL type <b>any</b>
+    @return type of IDL type any
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::com::sun::star::uno::Any * ) SAL_THROW( () )
 {

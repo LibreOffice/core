@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbnames.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-12 13:39:23 $
+ *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,28 +61,28 @@
 #ifndef _UNO_LBNAMES_H_
 #define _UNO_LBNAMES_H_
 
-/** A java 1.1 compatible virtual machine<br>
+/** A java 1.1 compatible virtual machine
 */
 #define UNO_LB_JAVA_NAMESPACE   java
 #define UNO_LB_JAVA             "java"
-/** ANSI C compilers<br>
+/** ANSI C compilers
 */
 #define UNO_LB_C_NAMESPACE      c_uno
 #define UNO_LB_C                "c"
-/** Miscrosoft VC++ 4.2 - 6.0 compiler; RTTI is not supported<br>
+/** Miscrosoft VC++ 4.2 - 6.0 compiler; RTTI is not supported
 */
 #define UNO_LB_MSCI_NAMESPACE   msci
 #define UNO_LB_MSCI             "msci"
-/** GCC 2 with RTTI or compatible; RTTI is not supported<br>
+/** GCC 2 with RTTI or compatible; RTTI is not supported
 */
 #define UNO_LB_GCC2_NAMESPACE   gcc2
 #define UNO_LB_GCC2             "gcc2"
-/** WorkShop Compiler 5.0 or compatible; RTTI is not supported<br>
+/** WorkShop Compiler 5.0 or compatible; RTTI is not supported
 */
 #define UNO_LB_SUNPRO5_NAMESPACE sunpro5
 #define UNO_LB_SUNPRO5           "sunpro5"
 
-/** Binary C UNO<br>
+/** Binary C UNO
 */
 #define UNO_LB_UNO_NAMESPACE    uno
 #define UNO_LB_UNO              "uno"

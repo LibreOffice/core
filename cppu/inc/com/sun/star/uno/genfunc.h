@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genfunc.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:55 $
+ *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,19 +79,19 @@ namespace uno
 extern "C"
 {
 /** C function to acquire a C++ interface.
-    <br>
+
     @param pCppI C++ interface pointer
 */
 inline void SAL_CALL cpp_acquire( void * pCppI )
     SAL_THROW( () );
 /** C function to release a C++ interface.
-    <br>
+
     @param pCppI C++ interface pointer
 */
 inline void SAL_CALL cpp_release( void * pCppI )
     SAL_THROW( () );
 /** C function to query for a C++ interface.
-    <br>
+
     @param pCppI C++ interface pointer
     @param pType demanded interface type
     @return acquired C++ interface pointer or null

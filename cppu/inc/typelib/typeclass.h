@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeclass.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:25 $
+ *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,67 +65,67 @@
 #include <sal/types.h>
 #endif
 
-/** This type class enum is binary compatible with the IDL enum
-    com.sun.star.uno.TypeClass.
+/** This type class enum is binary compatible with the IDL enum com.sun.star.uno.TypeClass.
 */
 typedef enum _typelib_TypeClass
 {
-    /** type class of void<br> */
+    /** type class of void */
     typelib_TypeClass_VOID = 0,
-    /** type class of char<br> */
+    /** type class of char */
     typelib_TypeClass_CHAR = 1,
-    /** type class of boolean<br> */
+    /** type class of boolean */
     typelib_TypeClass_BOOLEAN = 2,
-    /** type class of byte<br> */
+    /** type class of byte */
     typelib_TypeClass_BYTE = 3,
-    /** type class of short<br> */
+    /** type class of short */
     typelib_TypeClass_SHORT = 4,
-    /** type class of unsigned short<br> */
+    /** type class of unsigned short */
     typelib_TypeClass_UNSIGNED_SHORT = 5,
-    /** type class of long<br> */
+    /** type class of long */
     typelib_TypeClass_LONG = 6,
-    /** type class of unsigned long<br> */
+    /** type class of unsigned long */
     typelib_TypeClass_UNSIGNED_LONG = 7,
-    /** type class of hyper<br> */
+    /** type class of hyper */
     typelib_TypeClass_HYPER = 8,
-    /** type class of unsigned hyper<br> */
+    /** type class of unsigned hyper */
     typelib_TypeClass_UNSIGNED_HYPER = 9,
-    /** type class of float<br> */
+    /** type class of float */
     typelib_TypeClass_FLOAT = 10,
-    /** type class of double<br> */
+    /** type class of double */
     typelib_TypeClass_DOUBLE = 11,
-    /** type class of string<br> */
+    /** type class of string */
     typelib_TypeClass_STRING = 12,
-    /** type class of type<br> */
+    /** type class of type */
     typelib_TypeClass_TYPE = 13,
-    /** type class of any<br> */
+    /** type class of any */
     typelib_TypeClass_ANY = 14,
-    /** type class of enum<br> */
+    /** type class of enum */
     typelib_TypeClass_ENUM = 15,
-    /** type class of typedef<br> */
+    /** type class of typedef */
     typelib_TypeClass_TYPEDEF = 16,
-    /** type class of struct<br> */
+    /** type class of struct */
     typelib_TypeClass_STRUCT = 17,
-    /** type class of union<br> */
+    /** type class of union */
     typelib_TypeClass_UNION = 18,
-    /** type class of exception<br> */
+    /** type class of exception */
     typelib_TypeClass_EXCEPTION = 19,
-    /** type class of sequence<br> */
+    /** type class of sequence */
     typelib_TypeClass_SEQUENCE = 20,
-    /** type class of array (not impl)<br> */
+    /** type class of array */
     typelib_TypeClass_ARRAY = 21,
-    /** type class of interface<br> */
+    /** type class of interface */
     typelib_TypeClass_INTERFACE = 22,
-    /** type class of service (not impl)<br> */
+    /** type class of service (not implemented) */
     typelib_TypeClass_SERVICE = 23,
-    /** type class of module (not impl)<br> */
+    /** type class of module (not implemented) */
     typelib_TypeClass_MODULE = 24,
-    /** type class of interface method<br> */
+    /** type class of interface method */
     typelib_TypeClass_INTERFACE_METHOD = 25,
-    /** type class of interface attribute<br> */
+    /** type class of interface attribute */
     typelib_TypeClass_INTERFACE_ATTRIBUTE = 26,
-    /** type class of unknown<br> */
+    /** type class of unknown */
     typelib_TypeClass_UNKNOWN = 27,
+    /** fixing enum size */
     typelib_TypeClass_MAKE_FIXED_SIZE = SAL_MAX_ENUM
 } typelib_TypeClass;
 

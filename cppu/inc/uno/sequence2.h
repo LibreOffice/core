@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence2.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-17 13:29:25 $
+ *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,11 +78,12 @@ struct _typelib_TypeDescription;
 typedef sal_Sequence uno_Sequence;
 
 /** Assign a sequence.
-    <br>
+
     @param ppDest       destinstaion sequence
     @param pSource      source sequence
-    @param pTypeDescr   type description of the <B>sequence</B> and <b>not</b> of an element
-    @param release      function called each time an interface needs to be released; defaults (0) to uno
+    @param pTypeDescr   type description of the sequence and NOT of an element
+    @param release      function called each time an interface needs to be released;
+                        defaults (0) to uno
 */
 void SAL_CALL uno_sequence_assign(
     uno_Sequence ** ppDest,
@@ -91,11 +92,12 @@ void SAL_CALL uno_sequence_assign(
     uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 /** Assign a sequence.
-    <br>
+
     @param ppDest       destinstaion sequence
     @param pSource      source sequence
-    @param pType        type of the <B>sequence</B> and <b>not</b> of an element
-    @param release      function called each time an interface needs to be released; defaults (0) to uno
+    @param pType        type of the sequence and NOT of an element
+    @param release      function called each time an interface needs to be released;
+                        defaults (0) to uno
 */
 void SAL_CALL uno_type_sequence_assign(
     uno_Sequence ** ppDest,
@@ -105,12 +107,13 @@ void SAL_CALL uno_type_sequence_assign(
     SAL_THROW_EXTERN_C();
 
 /** Constructs a new sequence with given elements.
-    <br>
-    @param ppSequence         <b>out</b> parameter sequence
-    @param pTypeDescr         type description of the <B>sequence</B> and <b>not</b> of an element
+
+    @param ppSequence         out parameter sequence
+    @param pTypeDescr         type description of the sequence and NOT of an element
     @param pElements          if 0, then all elements are default constructed
     @param len                number of elements
-    @param acquire            function called each time an interface needs to be acquired; defaults (0) to uno
+    @param acquire            function called each time an interface needs to be acquired;
+                              defaults (0) to uno
 */
 void SAL_CALL uno_sequence_construct(
     uno_Sequence ** ppSequence,
@@ -119,12 +122,13 @@ void SAL_CALL uno_sequence_construct(
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
 /** Constructs a new sequence with given elements.
-    <br>
-    @param ppSequence         <b>out</b> parameter sequence
-    @param pType               type of the <B>sequence</B> and <b>not</b> of an element
+
+    @param ppSequence         out parameter sequence
+    @param pType              type of the sequence and NOT of an element
     @param pElements          if 0, then all elements are default constructed
     @param len                number of elements
-    @param acquire            function called each time an interface needs to be acquired; defaults (0) to uno
+    @param acquire            function called each time an interface needs to be acquired;
+                              defaults (0) to uno
 */
 void SAL_CALL uno_type_sequence_construct(
     uno_Sequence ** ppSequence,
@@ -133,13 +137,15 @@ void SAL_CALL uno_type_sequence_construct(
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
 
-/** Assures that the reference count of the given sequence is one.
-    Otherwise a new copy of the sequence is created with a reference count of one.
-    <br>
+/** Assures that the reference count of the given sequence is one. Otherwise a new copy of
+    the sequence is created with a reference count of one.
+
     @param ppSequence       sequence
     @param pTypeDescr       type description of sequence
-    @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
-    @param release          function called each time an interface needs to be released; defaults (0) to uno
+    @param acquire          function called each time an interface needs to be acquired;
+                            defaults (0) to uno
+    @param release          function called each time an interface needs to be released;
+                            defaults (0) to uno
 */
 void SAL_CALL uno_sequence_reference2One(
     uno_Sequence ** ppSequence,
@@ -147,13 +153,15 @@ void SAL_CALL uno_sequence_reference2One(
     uno_AcquireFunc acquire,
     uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
-/** Assures that the reference count of the given sequence is one.
-    Otherwise a new copy of the sequence is created with a reference count of one.
-    <br>
+/** Assures that the reference count of the given sequence is one. Otherwise a new copy of
+    the sequence is created with a reference count of one.
+
     @param ppSequence       sequence
     @param pType            type of sequence
-    @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
-    @param release          function called each time an interface needs to be released; defaults (0) to uno
+    @param acquire          function called each time an interface needs to be acquired;
+                            defaults (0) to uno
+    @param release          function called each time an interface needs to be released;
+                            defaults (0) to uno
 */
 void SAL_CALL uno_type_sequence_reference2One(
     uno_Sequence ** ppSequence,
@@ -162,14 +170,16 @@ void SAL_CALL uno_type_sequence_reference2One(
     uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 
-/** Reallocates length of a sequence. This truncates a sequence or enlarges it
-    default constructing appended elements.
-    <br>
+/** Reallocates length of a sequence. This truncates a sequence or enlarges it default
+    constructing appended elements.
+
     @param ppSequence       sequence
     @param pTypeDescr       type description of sequence
     @param nSize            new size of sequence
-    @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
-    @param release          function called each time an interface needs to be released; defaults (0) to uno
+    @param acquire          function called each time an interface needs to be acquired;
+                            defaults (0) to uno
+    @param release          function called each time an interface needs to be released;
+                            defaults (0) to uno
 */
 void SAL_CALL uno_sequence_realloc(
     uno_Sequence ** ppSequence,
@@ -178,14 +188,16 @@ void SAL_CALL uno_sequence_realloc(
     uno_AcquireFunc acquire,
     uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
-/** Reallocates length of a sequence. This truncates a sequence or enlarges it
-    default constructing appended elements.
-    <br>
+/** Reallocates length of a sequence. This truncates a sequence or enlarges it default
+    constructing appended elements.
+
     @param ppSequence       sequence
     @param pType            type of sequence
     @param nSize            new size of sequence
-    @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
-    @param release          function called each time an interface needs to be released; defaults (0) to uno
+    @param acquire          function called each time an interface needs to be acquired;
+                            defaults (0) to uno
+    @param release          function called each time an interface needs to be released;
+                            defaults (0) to uno
 */
 void SAL_CALL uno_type_sequence_realloc(
     uno_Sequence ** ppSequence,

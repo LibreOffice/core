@@ -2,9 +2,9 @@
  *
  *  $RCSfile: any2.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-06 11:05:13 $
+ *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@ struct _typelib_TypeDescription;
 struct _uno_Mapping;
 
 /** This is the binary specification of an UNO any.
-    <br>
 */
 typedef struct _uno_Any
 {
@@ -92,8 +91,8 @@ typedef struct _uno_Any
     */
     struct _typelib_TypeDescriptionReference * pType;
     /** pointer to value; this may point to pReserved and thus the uno_Any is not anytime
-        mem-copyable!  You may have to correct the pData pointer to pReserved.
-        Otherwise you need not, because the data is stored in heap space.
+        mem-copyable! You may have to correct the pData pointer to pReserved. Otherwise you need
+        not, because the data is stored in heap space.
     */
     void * pData;
     /** reserved space for storing value
@@ -107,28 +106,32 @@ typedef struct _uno_Any
 #pragma pack()
 #endif
 
-/** Assign an any with a given value.
-    Interfaces are acquired or released by the given callback functions.
+/** Assign an any with a given value. Interfaces are acquired or released by the given callback
+    functions.
 
     @param pDest            pointer memory of destination any
     @param pSource          pointer to source value; defaults (0) to default constructed value
     @param pTypeDescr       type description of value; defaults (0) to void
-    @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
-    @param release          function called each time an interface needs to be released; defaults (0) to uno
+    @param acquire          function called each time an interface needs to be acquired;
+                            defaults (0) to uno
+    @param release          function called each time an interface needs to be released;
+                            defaults (0) to uno
 */
 void SAL_CALL uno_any_assign(
     uno_Any * pDest, void * pSource,
     struct _typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
-/** Assign an any with a given value.
-    Interfaces are acquired or released by the given callback functions.
+/** Assign an any with a given value. Interfaces are acquired or released by the given callback
+    functions.
 
     @param pDest            pointer memory of destination any
     @param pSource          pointer to source value; defaults (0) to default constructed value
     @param pTypeDescr       type description of value; defaults (0) to void
-    @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
-    @param release          function called each time an interface needs to be released; defaults (0) to uno
+    @param acquire          function called each time an interface needs to be acquired;
+                            defaults (0) to uno
+    @param release          function called each time an interface needs to be released;
+                            defaults (0) to uno
 */
 void SAL_CALL uno_type_any_assign(
     uno_Any * pDest, void * pSource,
@@ -136,26 +139,26 @@ void SAL_CALL uno_type_any_assign(
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 
-/** Constructs an any with a given value.
-    Interfaces are acquired by the given callback function.
+/** Constructs an any with a given value. Interfaces are acquired by the given callback function.
 
     @param pDest            pointer memory of destination any
     @param pSource          pointer to source value; defaults (0) to default constructed value
     @param pTypeDescr       type description of value; defaults (0) to void
-    @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
+    @param acquire          function called each time an interface needs to be acquired;
+                            defaults (0) to uno
 */
 void SAL_CALL uno_any_construct(
     uno_Any * pDest, void * pSource,
     struct _typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
-/** Constructs an any with a given value.
-    Interfaces are acquired by the given callback function.
+/** Constructs an any with a given value. Interfaces are acquired by the given callback function.
 
     @param pDest            pointer memory of destination any
     @param pSource          pointer to source value; defaults (0) to default constructed value
     @param pType            type of value; defaults (0) to void
-    @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
+    @param acquire          function called each time an interface needs to be acquired;
+                            defaults (0) to uno
 */
 void SAL_CALL uno_type_any_construct(
     uno_Any * pDest, void * pSource,
@@ -191,7 +194,8 @@ void SAL_CALL uno_type_any_constructAndConvert(
 /** Destructs an any.
 
     @param pValue           pointer to any
-    @param release          function called each time an interface needs to be released. defaults (0) to uno
+    @param release          function called each time an interface needs to be released;
+                            defaults (0) to uno
 */
 void SAL_CALL uno_any_destruct(
     uno_Any * pValue, uno_ReleaseFunc release )

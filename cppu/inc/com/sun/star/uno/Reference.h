@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-16 16:34:33 $
+ *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,70 +84,65 @@ class XInterface;
 
 /** DEPRECATED: use SAL_NO_ACQUIRE
     Enum defining UNO_REF_NO_ACQUIRE for setting reference without acquiring a given interface.
-    <br>
 */
 enum __UnoReference_NoAcquire
 {
-    /** This enum value can be used for creating a reference granting a given
-        interface, i.e. transferring ownership to it.
-        <br>
+    /** This enum value can be used for creating a reference granting a given interface,
+        i.e. transferring ownership to it.
     */
     UNO_REF_NO_ACQUIRE
 };
 
 /** This base class serves as a base class for all template reference classes and
     has been introduced due to compiler problems with templated operators ==, =!.
-    <br>
 */
 class BaseReference
 {
 protected:
     /** the interface pointer
-        <br>
     */
     XInterface * _pInterface;
 
 public:
-    /** Gets interface pointer.
-        This call does <b>not</b> acquire the interface.
-        <br>
-        @return <b>un</b>acquired interface pointer
+    /** Gets interface pointer. This call does not acquire the interface.
+
+        @return UNacquired interface pointer
     */
     inline XInterface * SAL_CALL get() const SAL_THROW( () )
         { return _pInterface; }
 
     /** Checks if reference is null.
-        <br>
-        @return true if reference acquires an interface, i.e. is not null
+
+        @return true if reference acquires an interface, i.e. true if it is not null
     */
     inline sal_Bool SAL_CALL is() const SAL_THROW( () )
         { return (_pInterface != 0); }
 
-    /** Equality operator: compares two interfaces<br>
+    /** Equality operator: compares two interfaces
         Checks if both references are null or refer to the same object.
-        <br>
+
         @param rRef another interface
         @return true if both references are null or refer to the same object, false otherwise
     */
     inline sal_Bool SAL_CALL operator == ( XInterface * pInterface ) const SAL_THROW( () );
-    /** Unequality operator: compares two interfaces<br>
+    /** Unequality operator: compares two interfaces
         Checks if both references are null or refer to the same object.
-        <br>
+
         @param rRef another interface
         @return false if both references are null or refer to the same object, true otherwise
     */
     inline sal_Bool SAL_CALL operator != ( XInterface * pInterface ) const SAL_THROW( () );
 
-    /** Equality operator: compares two interfaces<br>
+    /** Equality operator: compares two interfaces
         Checks if both references are null or refer to the same object.
-        <br>
+
         @param rRef another reference
         @return true if both references are null or refer to the same object, false otherwise
     */
     inline sal_Bool SAL_CALL operator == ( const BaseReference & rRef ) const SAL_THROW( () );
-    /** Unequality operator: compares two interfaces<br>
+    /** Unequality operator: compares two interfaces
         Checks if both references are null or refer to the same object.
-        <br>
+
         @param rRef another reference
         @return false if both references are null or refer to the same object, true otherwise
     */
@@ -158,18 +153,15 @@ public:
         { return (_pInterface < rRef._pInterface); }
 };
 
-/** Enum defining UNO_QUERY and UNO_REF_QUERY for query interface constructor
-    of reference template.
-    <br>
+/** Enum defining UNO_QUERY and UNO_REF_QUERY for query interface constructor of reference template.
+
 */
 enum __UnoReference_Query
 {
     /** This enum value can be used for querying interface constructor of reference template.
-        <br>
     */
     UNO_QUERY,
     /** This enum value can be used for querying interface constructor of reference template.
-        <br>
     */
     UNO_REF_QUERY
 };
@@ -177,13 +169,12 @@ enum __UnoReference_Query
 /** Template reference class for interface type derived from BaseReference.
     A special constructor given the UNO_QUERY or UNO_REF_QUERY identifier queries interfaces
     for reference type.
-    <br>
 */
 template< class interface_type >
 class Reference : public BaseReference
 {
-    /** Queries given interface reference for type <b>interface_type</b>.
-        <br>
+    /** Queries given interface reference for type interface_type.
+
         @param pInterface interface pointer
         @return interface of demanded type (may be null)
     */
@@ -200,166 +191,142 @@ public:
     static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
 
-    /** Destructor:
-        Releases interface if set.
-        <br>
+    /** Destructor: Releases interface if set.
     */
     inline ~Reference() SAL_THROW( () );
 
-    /** Default Constructor:
-        Sets null reference.
-        <br>
+    /** Default Constructor: Sets null reference.
     */
     inline Reference() SAL_THROW( () );
 
-    /** Copy constructor:
-        Copies interface reference.
-        <br>
+    /** Copy constructor: Copies interface reference.
+
         @param rRef another reference
     */
     inline Reference( const Reference< interface_type > & rRef ) SAL_THROW( () );
-    /** Constructor:
-        Sets given interface pointer.
-        <br>
+    /** Constructor: Sets given interface pointer.
+
         @param pInterface an interface pointer
     */
     inline Reference( interface_type * pInterface ) SAL_THROW( () );
 
-    /** Constructor:
-        Sets given interface pointer without acquiring it.
-        <br>
+    /** Constructor: Sets given interface pointer without acquiring it.
+
         @param pInterface another reference
         @param dummy SAL_NO_ACQUIRE to force obvious distinction to other constructors
     */
     inline Reference( interface_type * pInterface, __sal_NoAcquire ) SAL_THROW( () );
     /** DEPRECATED: use SAL_NO_ACQUIRE version
-        Constructor:
-        Sets given interface pointer without acquiring it.
-        <br>
+        Constructor: Sets given interface pointer without acquiring it.
+
         @param pInterface another reference
         @param dummy UNO_REF_NO_ACQUIRE to force obvious distinction to other constructors
     */
     inline Reference( interface_type * pInterface, __UnoReference_NoAcquire ) SAL_THROW( () );
 
-    /** Constructor:
-        Queries given interface for reference interface type (<b>interface_type</b>).
-        <br>
+    /** Constructor: Queries given interface for reference interface type (interface_type).
+
         @param rRef another reference
         @param dummy UNO_QUERY or UNO_REF_QUERY to force obvious distinction to other constructors
     */
     inline Reference( const BaseReference & rRef, __UnoReference_Query ) SAL_THROW( (RuntimeException) );
-    /** Constructor:
-        Queries given interface for reference interface type (<b>interface_type</b>).
-        <br>
+    /** Constructor: Queries given interface for reference interface type (interface_type).
+
         @param pInterface an interface pointer
         @param dummy UNO_QUERY to force obvious distinction to other constructors
     */
     inline Reference( XInterface * pInterface, __UnoReference_Query ) SAL_THROW( (RuntimeException) );
 
-    /** Cast operator to Reference< XInterface >:
-        Reference objects are binary compatible and any interface must be derived
-        from com.sun.star.uno.XInterface.
+    /** Cast operator to Reference< XInterface >: Reference objects are binary compatible and
+        any interface must be derived from com.sun.star.uno.XInterface.
         This a useful direct cast possibility.
-        <br>
     */
     inline SAL_CALL operator const Reference< XInterface > & () const SAL_THROW( () )
         { return * reinterpret_cast< const Reference< XInterface > * >( this ); }
 
-    /** Dereference operator:
-        Used to call interface methods.
-        <br>
-        @return <b>un</b>acquired interface pointer
+    /** Dereference operator: Used to call interface methods.
+
+        @return UNacquired interface pointer
     */
     inline interface_type * SAL_CALL operator -> () const SAL_THROW( () )
         { return static_cast< interface_type * >( _pInterface ); }
 
-    /** Gets interface pointer.
-        This call does <b>not</b> acquire the interface.
-        <br>
-        @return <b>un</b>acquired interface pointer
+    /** Gets interface pointer. This call does not acquire the interface.
+
+        @return UNacquired interface pointer
     */
     inline interface_type * SAL_CALL get() const SAL_THROW( () )
         { return static_cast< interface_type * >( _pInterface ); }
 
-    /** Clears reference, i.e. releases interface.
-        Reference is null after clear() call.
-        <br>
+    /** Clears reference, i.e. releases interface. Reference is null after clear() call.
     */
     inline void SAL_CALL clear() SAL_THROW( () );
 
-    /** Sets the given interface.
-        An interface already set will be released.
-        <br>
+    /** Sets the given interface. An interface already set will be released.
+
         @param rRef another reference
         @return true, if non-null interface was set
     */
     inline sal_Bool SAL_CALL set( const Reference< interface_type > & rRef ) SAL_THROW( () );
-    /** Sets the given interface.
-        An interface already set will be released.
-        <br>
+    /** Sets the given interface. An interface already set will be released.
+
         @param pInterface another interface
         @return true, if non-null interface was set
     */
     inline sal_Bool SAL_CALL set( interface_type * pInterface ) SAL_THROW( () );
 
-    /** Sets interface pointer without acquiring it.
-        An interface already set will be released.
-        <br>
+    /** Sets interface pointer without acquiring it. An interface already set will be released.
+
         @param pInterface an interface pointer
         @return true, if non-null interface was set
     */
     inline sal_Bool SAL_CALL set( interface_type * pInterface, __sal_NoAcquire ) SAL_THROW( () );
     /** DEPRECATED: use SAL_NO_ACQUIRE version
-        Sets interface pointer without acquiring it.
-        An interface already set will be released.
-        <br>
+        Sets interface pointer without acquiring it. An interface already set will be released.
+
         @param pInterface an interface pointer
         @return true, if non-null interface was set
     */
     inline sal_Bool SAL_CALL set( interface_type * pInterface, __UnoReference_NoAcquire ) SAL_THROW( () );
 
-    /** Queries given interface for reference interface type (<b>interface_type</b>)
-        and sets it.
+    /** Queries given interface for reference interface type (interface_type) and sets it.
         An interface already set will be released.
-        <br>
+
         @param pInterface an interface pointer
         @return true, if non-null interface was set
     */
     inline sal_Bool SAL_CALL set( XInterface * pInterface, __UnoReference_Query ) SAL_THROW( (RuntimeException) );
-    /** Queries given interface for reference interface type (<b>interface_type</b>)
-        and sets it.
+    /** Queries given interface for reference interface type (interface_type) and sets it.
         An interface already set will be released.
-        <br>
+
         @param rRef another reference
         @return true, if non-null interface was set
     */
     inline sal_Bool SAL_CALL set( const BaseReference & rRef, __UnoReference_Query ) SAL_THROW( (RuntimeException) );
 
-    /** Assignment operator:
-        Acquires given interface pointer and sets reference.
+    /** Assignment operator: Acquires given interface pointer and sets reference.
         An interface already set will be released.
-        <br>
+
         @param pInterface an interface pointer
         @return this reference
     */
     inline Reference< interface_type > & SAL_CALL operator = ( interface_type * pInterface ) SAL_THROW( () );
-    /** Assignment operator:
-        Acquires given interface reference and sets reference.
+    /** Assignment operator: Acquires given interface reference and sets reference.
         An interface already set will be released.
-        <br>
+
         @param rRef an interface reference
         @return this reference
     */
     inline Reference< interface_type > & SAL_CALL operator = ( const Reference< interface_type > & rRef ) SAL_THROW( () );
 
-    /** Queries given interface reference for type <b>interface_type</b>.
-        <br>
+    /** Queries given interface reference for type interface_type.
+
         @param rRef interface reference
         @return interface reference of demanded type (may be null)
     */
     inline static Reference< interface_type > SAL_CALL query( const BaseReference & rRef ) SAL_THROW( (RuntimeException) );
-    /** Queries given interface for type <b>interface_type</b>.
-        <br>
+    /** Queries given interface for type interface_type.
+
         @param pInterface interface pointer
         @return interface reference of demanded type (may be null)
     */

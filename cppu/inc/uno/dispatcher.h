@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatcher.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-17 13:29:24 $
+ *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,13 +80,12 @@ extern "C"
 struct _typelib_TypeDescription;
 struct _uno_Interface;
 
-/** Function pointer declaration for the binary C uno dispatch function.<br>
-    Any pure out or return value will be constructed by the callee, iff
-    no exception is signalled.<br>
-    If an exception is signalled, the any *ppException is properly constructed
-    by the callee, otherwise the pointer *ppException is set to 0.<br>
-    An attribute <b>get</b> call is indicated by a non-null return pointer.
-    <br>
+/** Function pointer declaration for the binary C uno dispatch function. Any pure out or return
+    value will be constructed by the callee, iff no exception is signalled.
+    If an exception is signalled, the any *ppException is properly constructed by the callee,
+    otherwise the pointer *ppException is set to 0.
+    An attribute get call is indicated by a non-null return pointer.
+
     @param pUnoI        uno interface the call is performed on
     @param pMemberType  member type description of a method or attribute
     @param pReturn      pointer to return value memory;
@@ -94,7 +93,7 @@ struct _uno_Interface;
     @param pArgs        an array of pointers to arguments values.
                         (remark: the value of an interface reference stores a
                          uno_interface *, so you get it by *(uno_Interface **)pArgs[n])
-    @param ppException   pointer to pointer to unconstructed any to signal an exception.
+    @param ppException  pointer to pointer to unconstructed any to signal an exception.
 */
 typedef void (SAL_CALL * uno_DispatchMethod)(
     struct _uno_Interface * pUnoI,
@@ -110,17 +109,16 @@ typedef void (SAL_CALL * uno_DispatchMethod)(
 #endif
 
 /** The binary C uno interface description.
-    <br>
 */
 typedef struct _uno_Interface
 {
     /** Acquires uno interface.
-        <br>
+
         @param pInterface uno interface
     */
     void (SAL_CALL * acquire)( struct _uno_Interface * pInterface );
     /** Releases uno interface.
-        <br>
+
         @param pInterface uno interface
     */
     void (SAL_CALL * release)( struct _uno_Interface * pInterface );

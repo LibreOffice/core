@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:55 $
+ *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,77 +85,71 @@ namespace uno
 {
 
 /** C++ wrapper for typelib_TypeDescription.
-    Constructors by name, type, type description reference will get
-    the full type description.
-    <br>
+    Constructors by name, type, type description reference will get the full type description.
 */
 class TypeDescription
 {
-    /** C typelib type description<br>
+    /** C typelib type description
     */
     mutable typelib_TypeDescription * _pTypeDescr;
 
 public:
     /** Constructor:
-        <br>
+
         @param pTypeDescr a type description
     */
     inline TypeDescription( typelib_TypeDescription * pTypeDescr = 0 ) SAL_THROW( () );
     /** Constructor:
-        <br>
+
         @param pTypeDescrRef a type description reference
     */
     inline TypeDescription( typelib_TypeDescriptionReference * pTypeDescrRef ) SAL_THROW( () );
     /** Constructor:
-        <br>
+
         @param rType a type
     */
     inline TypeDescription( const ::com::sun::star::uno::Type & rType ) SAL_THROW( () );
     /** Copy constructor:
-        <br>
+
         @param rDescr another TypeDescription
     */
     inline TypeDescription( const TypeDescription & rDescr ) SAL_THROW( () );
     /** Constructor:
-        <br>
+
         @param pTypeName a type name
     */
     inline TypeDescription( rtl_uString * pTypeName ) SAL_THROW( () );
     /** Constructor:
-        <br>
+
         @param rTypeName a type name
     */
     inline TypeDescription( const ::rtl::OUString & rTypeName ) SAL_THROW( () );
-    /** Destructor:
-        <br>
-        releases type description
+    /** Destructor: releases type description
     */
     inline ~TypeDescription() SAL_THROW( () );
 
-    /** Assignment operator:
-        acquires given type description and releases a set one.
-        <br>
+    /** Assignment operator: acquires given type description and releases a set one.
+
         @param pTypeDescr another type description
         @return this TypeDescription
     */
     inline TypeDescription & SAL_CALL operator = ( typelib_TypeDescription * pTypeDescr ) SAL_THROW( () );
-    /** Assignment operator:
-        acquires given type description and releases a set one.
-        <br>
+    /** Assignment operator: acquires given type description and releases a set one.
+
         @param rTypeDescr another type description
         @return this TypeDescription
     */
     inline TypeDescription & SAL_CALL operator =( const TypeDescription & rTypeDescr ) SAL_THROW( () )
         { return this->operator =( rTypeDescr.get() ); }
 
-    /** Tests if two type descriptions are equal.
-        <br>
+    /** Tests whether two type descriptions are equal.
+
         @param pTypeDescr another type description
         @return true, if both type descriptions are equal, false otherwise
     */
     inline sal_Bool SAL_CALL equals( const typelib_TypeDescription * pTypeDescr ) const SAL_THROW( () );
-    /** Tests if two type descriptions are equal.
-        <br>
+    /** Tests whether two type descriptions are equal.
+
         @param rTypeDescr another type description
         @return true, if both type descriptions are equal, false otherwise
     */
@@ -163,18 +157,17 @@ public:
         { return equals( rTypeDescr._pTypeDescr ); }
 
     /** Makes stored type description complete.
-        <br>
     */
     inline void SAL_CALL makeComplete() const SAL_THROW( () );
 
-    /** Gets the <b>un</b>acquired type description pointer.
-        <br>
+    /** Gets the UNacquired type description pointer.
+
         @return stored pointer of type description
     */
     inline typelib_TypeDescription * SAL_CALL get() const SAL_THROW( () )
         { return _pTypeDescr; }
     /** Tests if a type description is set.
-        <br>
+
         @return true, if a type description is set, false otherwise
     */
     inline sal_Bool SAL_CALL is() const SAL_THROW( () )

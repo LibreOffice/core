@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-10 14:40:58 $
+ *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,18 +94,15 @@ namespace star
 namespace uno
 {
 
-/** Template C++ class representing an IDL sequence<>. Template argument is
-    sequence element type<br>
-    C++ Sequences are reference counted and shared, so the sequence keeps a handle
-    to its data.
+/** Template C++ class representing an IDL sequence. Template argument is the sequence element type.
+    C++ Sequences are reference counted and shared, so the sequence keeps a handle to its data.
     To keep value semantics, copies are only generated if the sequence is to be modified
     (new handle).
-    <br>
 */
 template< class E >
 class Sequence
 {
-    /** sequence handle<br>
+    /** sequence handle
     */
     uno_Sequence * _pSequence;
 
@@ -124,136 +121,126 @@ public:
     static typelib_TypeDescriptionReference * s_pType;
 
     /** typedefs the element type of the sequence
-        <br>
     */
     typedef E ElementType;
 
-    /** Default constructor:
-        Creates an empty sequence.
-        <br>
+    /** Default constructor: Creates an empty sequence.
     */
     inline Sequence< E >() SAL_THROW( () );
-    /** Copy constructor:
-        Creates a copy of given sequence.
-        <br>
+    /** Copy constructor: Creates a copy of given sequence.
+
         @param rSeq another sequence of same type
     */
     inline Sequence< E >( const Sequence< E > & rSeq ) SAL_THROW( () );
-    /** Constructor:
-        Takes over ownership of given sequence.
-        <br>
+    /** Constructor: Takes over ownership of given sequence.
+
         @param pSequence a sequence
         @param dummy SAL_NO_ACQUIRE to force obvious distinction to other constructors
     */
     inline Sequence< E >( uno_Sequence * pSequence, __sal_NoAcquire ) SAL_THROW( () );
-    /** Constructor:
-        Creates a copy of given elements.
-        <br>
+    /** Constructor: Creates a copy of given elements.
+
         @param pElement an array of elements
         @param len length of array
     */
     inline Sequence< E >( const E * pElements, sal_Int32 len ) SAL_THROW( () );
-    /** Constructor:
-        Creates a default constructed sequence of given length.
-        <br>
+    /** Constructor: Creates a default constructed sequence of given length.
+
         @param len initial sequence length
     */
     inline Sequence< E >( sal_Int32 len ) SAL_THROW( () );
-    /** Destructor:
-        Releases sequence handle. Last handle will destruct elements and free memory.
-        <br>
+    /** Destructor: Releases sequence handle. Last handle will destruct elements and free memory.
     */
     inline ~Sequence< E >() SAL_THROW( () );
 
-    /** Assignment operator:
-        Acquires given sequence handle and releases previously set handle.
-        <br>
+    /** Assignment operator: Acquires given sequence handle and releases previously set handle.
+
         @param rSeq another sequence of same type
         @return this sequence
     */
     inline Sequence< E > & SAL_CALL operator = ( const Sequence< E > & rSeq ) SAL_THROW( () );
 
-    /** Gets length of sequence.
-        <br>
+    /** Gets length of the sequence.
+
         @return length of sequence
     */
     inline sal_Int32 SAL_CALL getLength() const SAL_THROW( () )
         { return _pSequence->nElements; }
     /** Tests whether the sequence has elements, i.e. elements count is greater than zero.
-        <br>
+
         @return true, if elements count is greater than zero
     */
     inline sal_Bool SAL_CALL hasElements() const SAL_THROW( () )
         { return (_pSequence->nElements > 0); }
 
-    /** Gets a pointer to elements array for <b>reading</b>.
+    /** Gets a pointer to elements array for reading.
         If the sequence has a length of 0, then the returned pointer is undefined.
-        <br>
+
         @return pointer to elements array
     */
     inline const E * SAL_CALL getConstArray() const SAL_THROW( () )
         { return reinterpret_cast< const E * >( _pSequence->elements ); }
-    /** Gets a pointer to elements array for <b>reading and writing</b>.<br>
-        In general if the sequence has a handle acquired by other sequences
-        (reference count > 1), then a new sequence is created copy constructing
-        all elements to keep value semantics!<br>
+    /** Gets a pointer to elements array for reading and writing.
+        In general if the sequence has a handle acquired by other sequences (reference count > 1),
+        then a new sequence is created copy constructing all elements to keep value semantics!
         If the sequence has a length of 0, then the returned pointer is undefined.
-        <br>
+
         @return pointer to elements array
     */
     inline E * SAL_CALL getArray() SAL_THROW( () );
 
-    /** Non-const index operator:
-        Obtains a reference to element indexed at given position.<br>
-        The implementation does <b>not</b> check for array bounds!<br>
-        In general if the sequence has a handle acquired by other sequences
-        (reference count > 1), then a new sequence is created copy constructing
-        all elements to keep value semantics!
-        <br>
+    /** Non-const index operator: Obtains a reference to element indexed at given position.
+        The implementation does not check for array bounds!
+        In general if the sequence has a handle acquired by other sequences (reference count > 1),
+        then a new sequence is created copy constructing all elements to keep value semantics!
+
         @param nIndex index
         @return non-const C++ reference to element
     */
     inline E & SAL_CALL operator [] ( sal_Int32 nIndex ) SAL_THROW( () );
-    /** Const index operator:
-        Obtains a reference to element indexed at given position.<br>
-        The implementation does <b>not</b> check for array bounds!<br>
-        <br>
+    /** Const index operator: Obtains a reference to element indexed at given position.
+        The implementation does not check for array bounds!
+
         @param nIndex index
         @return const C++ reference to element
     */
     inline const E & SAL_CALL operator [] ( sal_Int32 nIndex ) const SAL_THROW( () );
 
-    /** Equality operator:
-        Compares two sequences.
-        <br>
+    /** Equality operator: Compares two sequences.
+
         @param rSeq another sequence of same type (right side)
         @return true if both sequences are equal, false otherwise
     */
     inline sal_Bool SAL_CALL operator == ( const Sequence< E > & rSeq ) const SAL_THROW( () );
-    /** Unequality operator:
-        Compares two sequences.
-        <br>
+    /** Unequality operator: Compares two sequences.
+
         @param rSeq another sequence of same type (right side)
         @return false if both sequences are equal, true otherwise
     */
     inline sal_Bool SAL_CALL operator != ( const Sequence< E > & rSeq ) const SAL_THROW( () );
 
     /** Reallocates sequence to new length.
-        If the new length is smaller than the former, then upper elements
-        will be destructed (and their memory freed).
-        If the new length is greater than the former, then upper (new) elements
-        are default constructed.<br>
-        If the sequence has a handle acquired by other sequences
-        (reference count > 1), then the remaining elements are copy constructed
-        to a new sequence handle to keep value semantics!
-        <br>
+        If the new length is smaller than the former, then upper elements will be destructed
+        (and their memory freed). If the new length is greater than the former, then
+        upper (new) elements are default constructed.
+        If the sequence has a handle acquired by other sequences (reference count > 1),
+        then the remaining elements are copy constructed to a new sequence handle to keep
+        value semantics!
+
         @param nSize new size of sequence
     */
     inline void SAL_CALL realloc( sal_Int32 nSize ) SAL_THROW( () );
+
+    /** Provides UNacquired sequence handle.
+
+        @return UNacquired sequence handle
+    */
+    inline uno_Sequence * SAL_CALL get() const SAL_THROW( () )
+        { return _pSequence; }
 };
 
 /** Creates a UNO byte sequence from a SAL byte sequence.
-    <br>
+
     @param rByteSequence a byte sequence
     @return a UNO byte sequence
 */
@@ -266,7 +253,7 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 }
 
 /** Gets the meta type of IDL sequence.
-    <br>
+
     @param dummy typed pointer for function signature
     @return type of IDL sequence
 */
@@ -278,7 +265,7 @@ SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< S > * ) SAL_THROW( 
     THE GIVEN ELEMENT TYPE MUST BE THE SAME AS THE CPP_UNO TYPE OF THE TEMPLATE ARGUMENT!
     This function has been introduced, because one cannot get the (templated) cppu type out
     of C++ array types.  Array types have special getCppuArrayTypeN<>() functions.
-    <br>
+
     @param rElementType element type of sequence
     @return type of IDL sequence
 */
@@ -286,11 +273,11 @@ template< class S >
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType ) SAL_THROW( () );
 
-/** Gets the meta type of IDL <b>sequence< char ></b>.
+/** Gets the meta type of IDL sequence< char >.
     This function has been introduced due to ambiguities with unsigned short.
-    <br>
+
     @param dummy typed pointer for function signature
-    @return type of IDL <b>sequence< char ></b>
+    @return type of IDL sequence< char >
 */
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCharSequenceCppuType() SAL_THROW( () );

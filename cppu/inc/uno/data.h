@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-17 13:29:24 $
+ *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ struct _typelib_InterfaceTypeDescription;
 struct _uno_Mapping;
 
 /** Generic function pointer declaration to query for an interface.
-    <br>
+
     @param pInterface interface
     @param pTypedemanded interface type
     @return interface pointer
@@ -84,20 +84,20 @@ struct _uno_Mapping;
 typedef void * (SAL_CALL * uno_QueryInterfaceFunc)(
     void * pInterface, struct _typelib_TypeDescriptionReference * pType );
 /** Generic function pointer declaration to acquire an interface.
-    <br>
+
     @param pInterface interface to be acquired
 */
 typedef void (SAL_CALL * uno_AcquireFunc)(
     void * pInterface );
 /** Generic function pointer declaration to release an interface.
-    <br>
+
     @param pInterface interface to be release
 */
 typedef void (SAL_CALL * uno_ReleaseFunc)(
     void * pInterface );
 
 /** Tests if two values are equal. May compare different types (e.g., short to long).
-    <br>
+
     @param pVal1            pointer to a value
     @param pVal1TypeDescr   type description of pVal1
     @param pVal2            pointer to another value
@@ -113,7 +113,7 @@ sal_Bool SAL_CALL uno_equalData(
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 /** Tests if two values are equal. May compare different types (e.g., short to long).
-    <br>
+
     @param pVal1            pointer to a value
     @param pVal1Type        type of pVal1
     @param pVal2            pointer to another value
@@ -129,35 +129,36 @@ sal_Bool SAL_CALL uno_type_equalData(
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 
-/** Copy construct memory with given value.
-    The size of the destination value must be larger or equal to the size of the source value.
-    <br>
+/** Copy construct memory with given value. The size of the destination value must be larger
+    or equal to the size of the source value.
+
     @param pDest            pointer to destination value memory
     @param pSource          pointer to source value
     @param pTypeDescr       type description of source
-    @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
+    @param acquire          function called each time an interface needs to be acquired;
+                            defaults (0) to uno
 */
 void SAL_CALL uno_copyData(
     void * pDest, void * pSource,
     struct _typelib_TypeDescription * pTypeDescr, uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
-/** Copy construct memory with given value.
-    The size of the destination value must be larger or equal to the size of the source value.
-    <br>
+/** Copy construct memory with given value. The size of the destination value must be larger
+    or equal to the size of the source value.
+
     @param pDest            pointer to destination value memory
     @param pSource          pointer to source value
     @param pType            type of source
-    @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
+    @param acquire          function called each time an interface needs to be acquired;
+                            defaults (0) to uno
 */
 void SAL_CALL uno_type_copyData(
     void * pDest, void * pSource,
     struct _typelib_TypeDescriptionReference * pType, uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
 
-/** Copy construct memory with given value.
-    The size of the destination value must be larger or equal to the size of the source value.<br>
-    Interfaces are converted/ mapped by mapping parameter.
-    <br>
+/** Copy construct memory with given value. The size of the destination value must be larger
+    or equal to the size of the source value. Interfaces are converted/ mapped by mapping parameter.
+
     @param pDest            pointer to destination value memory
     @param pSource          pointer to source value
     @param pTypeDescr       type description of source
@@ -167,10 +168,9 @@ void SAL_CALL uno_copyAndConvertData(
     void * pDest, void * pSource,
     struct _typelib_TypeDescription * pTypeDescr, struct _uno_Mapping * mapping )
     SAL_THROW_EXTERN_C();
-/** Copy construct memory with given value.
-    The size of the destination value must be larger or equal to the size of the source value.<br>
-    Interfaces are converted/ mapped by mapping parameter.
-    <br>
+/** Copy construct memory with given value. The size of the destination value must be larger
+    or equal to the size of the source value. Interfaces are converted/ mapped by mapping parameter.
+
     @param pDest            pointer to destination value memory
     @param pSource          pointer to source value
     @param pType            type of source
@@ -181,37 +181,37 @@ void SAL_CALL uno_type_copyAndConvertData(
     struct _typelib_TypeDescriptionReference * pType, struct _uno_Mapping * mapping )
     SAL_THROW_EXTERN_C();
 
-/** Destructs a given value; does <b>not</b> free its memory!
-    <br>
+/** Destructs a given value; does NOT free its memory!
+
     @param pValue           value to be destructed
     @param pTypeDescr       type description of value
-    @param release          function called each time an interface pointer needs to be released; defaults (0) to uno
+    @param release          function called each time an interface pointer needs to be released;
+                            defaults (0) to uno
 */
 void SAL_CALL uno_destructData(
     void * pValue, struct _typelib_TypeDescription * pTypeDescr, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
-/** Destructs a given value; does <b>not</b> free its memory!
-    <br>
+/** Destructs a given value; does NOT free its memory!
+
     @param pValue           value to be destructed
     @param pType            type of value
-    @param release          function called each time an interface pointer needs to be released; defaults (0) to uno
+    @param release          function called each time an interface pointer needs to be released;
+                            defaults (0) to uno
 */
 void SAL_CALL uno_type_destructData(
     void * pValue, struct _typelib_TypeDescriptionReference * pType, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 
-/** Default constructs a value. All simple types are set to 0, enums are set to their default
-    value.
-    <br>
+/** Default constructs a value. All simple types are set to 0, enums are set to their default value.
+
     @param pMem             pointer to memory of value to be constructed
     @param pTypeDescr       type description of value to be constructed
 */
 void SAL_CALL uno_constructData(
     void * pMem, struct _typelib_TypeDescription * pTypeDescr )
     SAL_THROW_EXTERN_C();
-/** Default constructs a value. All simple types are set to 0, enums are set to their default
-    value.
-    <br>
+/** Default constructs a value. All simple types are set to 0, enums are set to their default value.
+
     @param pMem             pointer to memory of value to be constructed
     @param pType            type of value to be constructed
 */
@@ -219,17 +219,21 @@ void SAL_CALL uno_type_constructData(
     void * pMem, struct _typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
 
-/** Assigns a destination value with a source value. Widening conversion
-    <b>without</b> data loss is allowed (e.g., assigning a long with a short).
-    Assignment from any value to a value of type Any and vice versa is allowed.
-    <br>
+/** Assigns a destination value with a source value. Widening conversion WITHOUT data loss is
+    allowed (e.g., assigning a long with a short). Assignment from any value to a value of type
+    Any and vice versa is allowed.
+
     @param pDest            pointer to destination value
     @param pDestTypeDescr   type description of destination value
-    @param pSource          pointer to source value; if 0, then destination value will be assigned to default value
+    @param pSource          pointer to source value; if 0, then destination value will be assigned
+                            to default value
     @param pSourceTypeDescr type destination of source value
-    @param queryInterface   function called each time an interface needs to be queried; defaults (0) to uno
-    @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
-    @param release          function called each time an interface needs to be released; defaults (0) to uno
+    @param queryInterface   function called each time an interface needs to be queried;
+                            defaults (0) to uno
+    @param acquire          function called each time an interface needs to be acquired;
+                            defaults (0) to uno
+    @param release          function called each time an interface needs to be released;
+                            defaults (0) to uno
     @return true if destination has been successfully assigned
 */
 sal_Bool SAL_CALL uno_assignData(
@@ -237,17 +241,21 @@ sal_Bool SAL_CALL uno_assignData(
     void * pSource, struct _typelib_TypeDescription * pSourceTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
-/** Assigns a destination value with a source value. Widening conversion
-    <b>without</b> data loss is allowed (e.g., assigning a long with a short).
-    Assignment from any value to a value of type Any and vice versa is allowed.
-    <br>
+/** Assigns a destination value with a source value. Widening conversion WITHOUT data loss is
+    allowed (e.g., assigning a long with a short). Assignment from any value to a value of type
+    Any and vice versa is allowed.
+
     @param pDest            pointer to destination value
     @param pDestType        type of destination value
-    @param pSource          pointer to source value; if 0, then destination value will be assigned to default value
+    @param pSource          pointer to source value; if 0, then destination value will be assigned
+                            to default value
     @param pSourceType      type of source value
-    @param queryInterface   function called each time an interface needs to be queried; defaults (0) to uno
-    @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
-    @param release          function called each time an interface needs to be released; defaults (0) to uno
+    @param queryInterface   function called each time an interface needs to be queried;
+                            defaults (0) to uno
+    @param acquire          function called each time an interface needs to be acquired;
+                            defaults (0) to uno
+    @param release          function called each time an interface needs to be released;
+                            defaults (0) to uno
     @return true if destination has been successfully assigned
 */
 sal_Bool SAL_CALL uno_type_assignData(

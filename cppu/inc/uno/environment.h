@@ -2,9 +2,9 @@
  *
  *  $RCSfile: environment.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-27 08:24:08 $
+ *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,56 +83,54 @@ struct _typelib_InterfaceTypeDescription;
 #endif
 
 /** The binary specification of an UNO environment.
-    <br>
 */
 typedef struct _uno_Environment
 {
-    /** reserved for future use (0 if not used)<br>
+    /** reserved for future use (0 if not used)
     */
     void *              pReserved;
 
-    /** type name of environment<br>
+    /** type name of environment
     */
     rtl_uString *       pTypeName;
 
-    /** free context pointer to be used for specific classes of environments
-        (e.g., a jvm pointer)<br>
+    /** free context pointer to be used for specific classes of environments (e.g., a jvm pointer)
     */
     void *              pContext;
 
-    /** pointer to extended environment (interface registration functionality), if supported<br>
+    /** pointer to extended environment (interface registration functionality), if supported
     */
     struct _uno_ExtEnvironment * pExtEnv;
 
     /** Acquires this environment.
-        <br>
+
         @param pEnv this environment
     */
     void (SAL_CALL * acquire)( struct _uno_Environment * pEnv );
 
-    /** Releases this environment;
-        last release of environment will revoke the environment from runtime.
-        <br>
+    /** Releases this environment; last release of environment will revoke the environment from
+        runtime.
+
         @param pEnv this environment
     */
     void (SAL_CALL * release)( struct _uno_Environment * pEnv );
 
-    /** Acquires this environment weakly.  You can only harden a weakly held environment
-        if it is still acquired hard (acquire()).
-        <br>
+    /** Acquires this environment weakly.  You can only harden a weakly held environment if it
+        is still acquired hard (acquire()).
+
         @param pEnv this environment
     */
     void (SAL_CALL * acquireWeak)( struct _uno_Environment * pEnv );
 
     /** Releases this environment weakly in correspondence to acquireWeak().
-        <br>
+
         @param pEnv this environment
     */
     void (SAL_CALL * releaseWeak)( struct _uno_Environment * pEnv );
 
-    /** Makes hard reference out of weak referenced environment.
-        You can only harden a weakly held environment if it is still acquired hard (acquire()).
-        <br>
+    /** Makes hard reference out of weak referenced environment. You can only harden a weakly
+        held environment if it is still acquired hard (acquire()).
+
         @param ppHardEnv inout hard referenced environment (has to be released via release())
         @param pEnv environment (may be weak referenced)
     */
@@ -140,10 +138,9 @@ typedef struct _uno_Environment
         struct _uno_Environment ** ppHardEnv,
         struct _uno_Environment * pEnv );
 
-    /** Call this function to <b>explicitly</b> dispose this environment
-        (e.g., release all interfaces).<br>
-        You might want to call this function before shutting down due to a runtime error.
-        <br>
+    /** Call this function to EXPLICITLY dispose this environment (e.g., release all
+        interfaces). You may want to call this function before shutting down due to a runtime error.
+
         @param pEnv this environment
     */
     void (SAL_CALL * dispose)( struct _uno_Environment * pEnv );
@@ -151,45 +148,42 @@ typedef struct _uno_Environment
     /* ===== the following part will be late initialized by a matching bridge ===== *
      * ===== and is NOT for public use.                                       ===== */
 
-    /** <b>CALLBACK</b><br>
-        Disposing callback function pointer that can be set to get signalled before the environment
-        is destroyed.
-        <br>
+    /** CALLBACK function pointer: Disposing callback function pointer that can be set to get
+                                   signalled before the environment is destroyed.
+
         @param pEnv environment that is being disposed
     */
     void (SAL_CALL * environmentDisposing)( struct _uno_Environment * pEnv );
 } uno_Environment;
 
-/** Generic function pointer declaration to free a proxy object if it is not needed
-    by the environment anymore.<br>
-    Any proxy object must register itself on first acquire() call and revoke
-    itself on last release() call.
-    This can happen several times because the environment caches proxy objects
-    until the environment <b>explicitly</b> frees the proxy object calling this function.
-    <br>
+/** Generic function pointer declaration to free a proxy object if it is not needed by the
+    environment anymore.
+    Any proxy object must register itself on first acquire() call and revoke itself on last
+    release() call. This can happen several times because the environment caches proxy objects
+    until the environment explicitly frees the proxy object calling this function.
+
     @param pEnv environment
     @param pProxy proxy pointer
 */
 typedef void (SAL_CALL * uno_freeProxyFunc)( struct _uno_ExtEnvironment * pEnv, void * pProxy );
 
 /** Generic function pointer declaration to allocate memory. Used with getRegisteredInterfaces().
-    <br>
+
     @param nBytes amount of memory in bytes
     @return pointer to allocated memory
 */
 typedef void * (SAL_CALL * uno_memAlloc)( sal_uInt32 nBytes );
 
 /** The binary specification of an UNO environment supporting interface registration.
-    <br>
 */
 typedef struct _uno_ExtEnvironment
 {
-    /** inherits all members of an uno_Environment<br>
+    /** inherits all members of an uno_Environment
     */
     uno_Environment aBase;
 
     /** Registers an interface of this environment.
-        <br>
+
         @param pEnv         this environment
         @param ppInterface  inout parameter of interface to be registered
         @param pOId         object id of interface
@@ -201,9 +195,9 @@ typedef struct _uno_ExtEnvironment
         rtl_uString * pOId,
         struct _typelib_InterfaceTypeDescription * pTypeDescr );
 
-    /** Registers a proxy interface of this environment that can be reanimated and is
-        freed <b>explicitly</b> by this environment.
-        <br>
+    /** Registers a proxy interface of this environment that can be reanimated and is freed
+        explicitly by this environment.
+
         @param pEnv         this environment
         @param ppInterface  inout parameter of interface to be registered
         @param freeProxy    function to free proxy object
@@ -217,9 +211,9 @@ typedef struct _uno_ExtEnvironment
         rtl_uString * pOId,
         struct _typelib_InterfaceTypeDescription * pTypeDescr );
 
-    /** Revokes an interface from this environment.<br>
-        You have to revoke <b>any</b> interface that has been registered via this method.
-        <br>
+    /** Revokes an interface from this environment. You have to revoke any interface that has
+        been registered via this method.
+
         @param pEnv         this environment
         @param pInterface   interface to be revoked
     */
@@ -228,7 +222,7 @@ typedef struct _uno_ExtEnvironment
         void * pInterface );
 
     /** Provides the object id of a given interface.
-        <br>
+
         @param ppOut        inout oid
         @param pInterface   interface of object
     */
@@ -239,7 +233,7 @@ typedef struct _uno_ExtEnvironment
 
     /** Retrieves an interface identified by its object id and type from this environment.
         Interfaces are retrieved in the same order as they are registered.
-        <br>
+
         @param pEnv         this environment
         @param ppInterface  inout parameter for the registered interface; (0) if none was found
         @param pOId         object id of interface to be retrieved
@@ -251,9 +245,9 @@ typedef struct _uno_ExtEnvironment
         rtl_uString * pOId,
         struct _typelib_InterfaceTypeDescription * pTypeDescr );
 
-    /** Returns all currently registered interfaces of this environment.
-        The memory block allocated might be slightly larger than (*pnLen * sizeof(void *)).
-        <br>
+    /** Returns all currently registered interfaces of this environment. The memory block
+        allocated might be slightly larger than (*pnLen * sizeof(void *)).
+
         @param pEnv         this environment
         @param pppInterfaces out param; pointer to array of interface pointers
         @param pnLen        out param; length of array
@@ -266,11 +260,9 @@ typedef struct _uno_ExtEnvironment
         uno_memAlloc memAlloc );
 
     /* ===== the following part will be late initialized by a matching bridge ===== *
-     * ===== and is NOT for public use.                                       ===== */
 
-    /** Computes an object id of the given interface; is called by the environment
-        implementation.
-        <br>
+    /** Computes an object id of the given interface; is called by the environment implementation.
+
         @param pEnv         corresponding environment
         @param ppOId        out param: computed id
         @param pInterface   an interface
@@ -280,7 +272,7 @@ typedef struct _uno_ExtEnvironment
         rtl_uString ** ppOId, void * pInterface );
 
     /** Function to acquire an interface.
-        <br>
+
         @param pEnv         corresponding environment
         @param pInterface   an interface
     */
@@ -289,7 +281,7 @@ typedef struct _uno_ExtEnvironment
         void * pInterface );
 
     /** Function to release an interface.
-        <br>
+
         @param pEnv         corresponding environment
         @param pInterface   an interface
     */
@@ -305,18 +297,17 @@ typedef struct _uno_ExtEnvironment
 #pragma pack()
 #endif
 
-/** Function exported by some bridge library providing
-    acquireInterface(), releaseInterface(); may set a disposing callback.
-    <br>
+/** Function exported by some bridge library providing acquireInterface(), releaseInterface();
+    may set a disposing callback.
+
     @param pEnv environment to be initialized
 */
 typedef void (SAL_CALL * uno_initEnvironmentFunc)( uno_Environment * pEnv );
 #define UNO_INIT_ENVIRONMENT "uno_initEnvironment"
 
-/** Gets a specific environment. If the specified environment does
-    not exist, then a default one is created and registered.
-    The environment revokes itself on last release() call.
-    <br>
+/** Gets a specific environment. If the specified environment does not exist, then a default one
+    is created and registered. The environment revokes itself on last release() call.
+
     @param ppEnv        inout parameter of environment; given environment will be released
     @param pEnvTypeName type name of environment
     @param pContext     some context pointer (e.g., to distinguish java vm; set 0 if not needed)
@@ -325,9 +316,9 @@ void SAL_CALL uno_getEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvTypeName, void * pContext )
     SAL_THROW_EXTERN_C();
 
-/** Gets all specified environments. Caller has to release returned environments and
-    free allocated memory.
-    <br>
+/** Gets all specified environments. Caller has to release returned environments and free allocated
+    memory.
+
     @param pppEnvs      out param; pointer to array of environments
     @param pnLen        out param; length of array
     @param memAlloc     function for allocating memory that is passed back
@@ -338,9 +329,8 @@ void SAL_CALL uno_getRegisteredEnvironments(
     rtl_uString * pEnvTypeName )
     SAL_THROW_EXTERN_C();
 
-/** Creates an environment. The new environment is anonymous
-    (<b>NOT</b> publicly registered/ accessible).
-    <br>
+/** Creates an environment. The new environment is anonymous (NOT publicly registered/ accessible).
+
     @param ppEnv        out parameter of environment; given environment will be released
     @param pEnvTypeName name of environment
     @param pContext     context pointer (e.g., to distinguish java vm); set 0 if not needed
@@ -350,7 +340,7 @@ void SAL_CALL uno_createEnvironment(
     SAL_THROW_EXTERN_C();
 
 /** Dumps out environment information, i.e. registered interfaces.
-    <br>
+
     @param stream       output stream (FILE *)
     @param pEnv         environment to be dumped
     @param pFilter      if not null, filters output
@@ -359,7 +349,7 @@ void SAL_CALL uno_dumpEnvironment(
     void * stream, uno_Environment * pEnv, const sal_Char * pFilter )
     SAL_THROW_EXTERN_C();
 /** Dumps out environment information, i.e. registered interfaces.
-    <br>
+
     @param stream       output stream (FILE *)
     @param pEnvTypeName type name of environment to be dumped
     @param pFilter      if not null, filters output
