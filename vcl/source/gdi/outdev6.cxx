@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:22:26 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_WALL_CXX
-
 #include <math.h>
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
@@ -97,6 +95,9 @@
 #endif
 #ifndef _SV_GRAPH_HXX
 #include <graph.hxx>
+#endif
+#ifndef _SV_WALL2_HXX
+#include <wall2.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
@@ -505,8 +506,8 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
         {
             VirtualDevice* pVDev = new VirtualDevice;
 
-            pVDev->mnDPIX = mnDPIX;
-            pVDev->mnDPIY = mnDPIY;
+            ((OutputDevice*)pVDev)->mnDPIX = mnDPIX;
+            ((OutputDevice*)pVDev)->mnDPIY = mnDPIY;
 
             if( pVDev->SetOutputSizePixel( aDstRect.GetSize() ) )
             {
