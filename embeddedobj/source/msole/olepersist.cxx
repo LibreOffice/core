@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-20 17:02:23 $
+ *  last change: $Author: mav $ $Date: 2003-11-24 09:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,16 +502,6 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
 
     m_pOleComponent->StoreObjectToStream( xOutStream, m_bStoreVisRepl );
 
-    try {
-        uno::Reference< lang::XComponent > xComp( xTargetStream, uno::UNO_QUERY );
-        OSL_ENSURE( xComp.is(), "Wrong storage implementation!" );
-        if ( xComp.is() )
-            xComp->dispose();
-    }
-    catch ( uno::Exception& )
-    {
-    }
-
     m_bWaitSaveCompleted = sal_True;
     m_xNewObjectStream = xTargetStream;
     m_xNewParentStorage = xStorage;
@@ -574,6 +564,19 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         m_xObjectStream = m_xNewObjectStream;
         m_xParentStorage = m_xNewParentStorage;
         m_aEntryName = m_aNewEntryName;
+    }
+    else
+    {
+        // close remembered stream
+        try {
+            uno::Reference< lang::XComponent > xComponent( m_xNewObjectStream, uno::UNO_QUERY );
+            OSL_ENSURE( xComponent.is(), "Wrong storage implementation!" );
+            if ( xComponent.is() )
+                xComponent->dispose();
+        }
+        catch ( uno::Exception& )
+        {
+        }
     }
 
     m_xNewObjectStream = uno::Reference< io::XStream >();
