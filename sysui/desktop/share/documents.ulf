@@ -39,45 +39,50 @@ en-US = "%PRODUCTNAME Spreadsheet Template"
 de = "%PRODUCTNAME Tabellenvorlage"
 
 [oasis-text]
-en-US = "Open Office Text"
-de = "Open Office Text"
+en-US = "OpenDocument Text"
+de = "OpenDocument Text"
 
 [oasis-text-template]
-en-US = "Open Office Text Template"
-de = "Open Office Textdokumentvorlage"
+en-US = "OpenDocument Text Template"
+de = "OpenDocument Textdokumentvorlage"
 
 [oasis-master-document]
-en-US = "Open Office Master Document"
-de = "Open Office Globaldokument"
+en-US = "OpenDocument Master Document"
+de = "OpenDocument Globaldokument"
 
 [oasis-formula]
-en-US = "Open Office Formula"
-de = "Open Office Formel"
+en-US = "OpenDocument Formula"
+de = "OpenDocument Formel"
 
 [oasis-presentation]
-en-US = "Open Office Presentation"
-de = "Open Office Präsentation"
+en-US = "OpenDocument Presentation"
+de = "OpenDocument Präsentation"
 
 [oasis-presentation-template]
-en-US = "Open Office Presentation Template"
-de = "Open Office Präsentationsdokumentvorlage"
+en-US = "OpenDocument Presentation Template"
+de = "OpenDocument Präsentationsdokumentvorlage"
 
 [oasis-drawing]
-en-US = "Open Office Drawing"
-de = "Open Office Zeichnung"
+en-US = "OpenDocument Drawing"
+de = "OpenDocument Zeichnung"
 
 [oasis-drawing-template]
-en-US = "Open Office Drawing Template"
-de = "Open Office Zeichnungsdokumentvorlage"
+en-US = "OpenDocument Drawing Template"
+de = "OpenDocument Zeichnungsdokumentvorlage"
 
 [oasis-spreadsheet]
-en-US = "Open Office Spreadsheet"
-de = "Open Office Tabellendokument"
+en-US = "OpenDocument Spreadsheet"
+de = "OpenDocument Tabellendokument"
 
 [oasis-spreadsheet-template]
-en-US = "Open Office Spreadsheet Template"
-de = "Open Office Tabellendoukumentvorlage"
+en-US = "OpenDocument Spreadsheet Template"
+de = "OpenDocument Tabellendoukumentvorlage"
 
 [oasis-database]
-en-US = "Open Office Database"
-de = "Open Office Datenbank"
+en-US = "OpenDocument Database"
+de = "OpenDocument Datenbank"
+
+[oasis-web-template]
+en-US = "HTML Document Template"
+de = "HTML-Dokumentvorlage"
+
