@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:32:25 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
@@ -411,7 +414,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     mnCharCompressType = 0;
 #endif
 
-#ifdef __LITTLEENDIAN
+#ifdef OSL_LITENDIAN
     nStreamNumberFormat=NUMBERFORMAT_INT_LITTLEENDIAN;
 #endif
     bExtColorTable=bUseExtColorTable;
