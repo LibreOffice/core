@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genfunc.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-05 11:47:59 $
+ *  last change: $Author: dbo $ $Date: 2001-02-27 12:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@ namespace star
 /** */ //for docpp
 namespace uno
 {
-class RuntimeException;
 
 extern "C"
 {
@@ -98,7 +97,7 @@ inline void SAL_CALL cpp_release( void * pCppI )
     @return acquired C++ interface pointer or null
 */
 inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescriptionReference * pType )
-    throw (RuntimeException);
+    throw ();
 }
 
 }
