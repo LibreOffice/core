@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:11:39 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,8 @@ ModalDialog DLG_UUI_LOGIN
         Text[ hebrew ] = "‮הודעה מהשרת‬";
         Text[ hindi ] = "सर्वर से संदेश";
         Text[ slovak ] = "Hlásenie serveru";
+        Text[ hungarian ] = "Üzenet a kiszolgálótól";
+        Text[ slovenian ] = "Sporočilo s strežnika";
     };
     FixedText INFO_LOGIN_REQUEST
     {
@@ -149,6 +151,8 @@ ModalDialog DLG_UUI_LOGIN
         Text[ hebrew ] = "‮נא להקליד את שם המשתמש והססמה עבור %1 כאן.‬";
         Text[ hindi ] = "%1 के लिए यहाँ पर उपभोक्ता का नाम और कूटशब्द प्रविष्ट करो ।";
         Text[ slovak ] = "Sem zadajte užívateľské meno a heslo pre %1.";
+        Text[ hungarian ] = "Írja be a felhasználói nevét és a jelszavát a következőhöz: %1";
+        Text[ slovenian ] = "Tu vnesite uporabniško ime in geslo za %1.";
     };
     FixedText FT_LOGIN_PATH
     {
@@ -181,6 +185,8 @@ ModalDialog DLG_UUI_LOGIN
         Text[ hebrew ] = "‮מסלול ספריות‬";
         Text[ hindi ] = "~मार्ग";
         Text[ slovak ] = "Ce~sta";
+        Text[ hungarian ] = "Ú~tvonal";
+        Text[ slovenian ] = "~Pot";
     };
     Edit ED_LOGIN_PATH
     {
@@ -231,6 +237,8 @@ ModalDialog DLG_UUI_LOGIN
         Text[ hebrew ] = "‮שם משתמש‬";
         Text[ hindi ] = "~उपभोक्ता का नाम";
         Text[ slovak ] = "~Užívateľské meno";
+        Text[ hungarian ] = "~Felhasználói név";
+        Text[ slovenian ] = "~Uporabniško ime";
     };
     Edit ED_LOGIN_USERNAME
     {
@@ -275,6 +283,8 @@ ModalDialog DLG_UUI_LOGIN
         Text[ hebrew ] = "‮סיסמה‬";
         Text[ hindi ] = "कूट~शब्द";
         Text[ slovak ] = "He~slo";
+        Text[ hungarian ] = "~Jelszó";
+        Text[ slovenian ] = "Ges~lo";
     };
     Edit ED_LOGIN_PASSWORD
     {
@@ -314,6 +324,8 @@ ModalDialog DLG_UUI_LOGIN
         Text[ hebrew ] = "‮חשבון‬";
         Text[ hindi ] = "हि~साब";
         Text[ slovak ] = "Úč~et";
+        Text[ hungarian ] = "~Fiók";
+        Text[ slovenian ] = "R~ačun";
     };
     Edit ED_LOGIN_ACCOUNT
     {
@@ -353,6 +365,8 @@ ModalDialog DLG_UUI_LOGIN
         Text[ hebrew ] = "‮שמירת סיסמה‬";
         Text[ hindi ] = "कूटशब्द ~संचित करो";
         Text[ slovak ] = "Uložiť he~slo";
+        Text[ hungarian ] = "Jelszó menté~se";
+        Text[ slovenian ] = "~Shrani geslo";
     };
     FixedLine GB_LOGIN_LOGIN
     {
@@ -363,7 +377,7 @@ ModalDialog DLG_UUI_LOGIN
         Text [ english_us ] = "Log in" ;
         Text [ portuguese_brazilian ] = "Login" ;
         Text [ swedish ] = "Logga in" ;
-        Text [ danish ] = "Login" ;
+        Text [ danish ] = "Log ind" ;
         Text [ italian ] = "Log in" ;
         Text [ spanish ] = "Registrarse" ;
         Text [ french ] = "Login" ;
@@ -385,6 +399,8 @@ ModalDialog DLG_UUI_LOGIN
         Text[ hebrew ] = "‮לוג און‬";
         Text[ hindi ] = "लॉग इन";
         Text[ slovak ] = "Prihlásiť sa";
+        Text[ hungarian ] = "Bejelentkezés";
+        Text[ slovenian ] = "Prijava";
     };
     OKButton BTN_LOGIN_OK
     {
@@ -431,11 +447,13 @@ ModalDialog DLG_UUI_LOGIN
         Text[ hebrew ] = "‮נא להקליד שם משתמש וססמה עבור \"%2\" על %1 כאן.‬";
         Text[ hindi ] = "कृपया \"%2\" केलिए  %1 में यहाँ पर उपभोक्ता का नाम और कूटशब्द प्रविष्ट कीजिए । ";
         Text[ slovak ] = "Prosím zadajte užívateľské meno a heslo pre \"%2\" na %1.";
+        Text[ hungarian ] = "Írja be ide a felhasználói nevet és a jelszót %1 helyen levő \"%2\" számára.";
+        Text[ slovenian ] = "Tu vnesite uporabniško ime in geslo za \"%2\" na %1.";
     };
     Text [ english_us ] = "User Name and Password Required" ;
     Text [ portuguese_brazilian ] = "S�o necess�rios o nome de usu�rio e a senha" ;
     Text [ swedish ] = "Anv�ndarnamn och l�senord kr�vs" ;
-    Text [ danish ] = "Brugernavn og adgangskode n�dvendig" ;
+    Text [ danish ] = "Brugernavn og adgangskode er n�dvendig" ;
     Text [ italian ] = "Nome utente e password sono necessari" ;
     Text [ spanish ] = "Se requieren el nombre de usuario y la contrase�a" ;
     Text [ french ] = "Nom d'utilisateur et mot de passe requis" ;
@@ -457,7 +475,10 @@ ModalDialog DLG_UUI_LOGIN
     Text[ hebrew ] = "‮שם משתמש וסיסמה נדרשים‬";
     Text[ hindi ] = "उपभोक्ता का नाम और कूटशब्द चाहिए ";
     Text[ slovak ] = "Je vyžadované užívateľské meno a heslo";
+    Text[ hungarian ] = "Felhasználói név és jelszó kötelező";
+    Text[ slovenian ] = "Potrebna sta uporabniško ime in geslo";
 };
+
 
 
 
