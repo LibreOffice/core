@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-03-13 15:07:40 $
+ *  last change: $Author: os $ $Date: 2001-04-19 12:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4145,9 +4145,9 @@ sal_uInt16 SwXCellRange::getRowCount(void)
 void SwXCellRange::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew );
-    if(!GetRegisteredIn() || aCursorDepend.GetRegisteredIn())
+    if(!GetRegisteredIn() || !aCursorDepend.GetRegisteredIn())
     {
-        if(aCursorDepend.GetRegisteredIn())
+        if(!aCursorDepend.GetRegisteredIn())
             delete pTblCrsr;
         pTblCrsr = 0;
         aChartLstnrCntnr.Disposing();
