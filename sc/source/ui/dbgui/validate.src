@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:30:52 $
+ *  last change: $Author: kz $ $Date: 2001-07-19 20:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,7 +865,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text [ french ] = "~Aide à la saisie lors de la sélection de cellules" ;
         Text [ portuguese_brazilian ] = "E~ingabehilfen bei Selektion einer Zelle anbieten" ;
         Text [ portuguese ] = "~Mostrar ajuda de entrada quando seleccionar célula" ;
-        Text[ chinese_simplified ] = "ÔÚÑ¡¶¨µ¥Ôª¸ñÊ±ÏÔÊ¾ÊäÈë°ïÖú(~S)";
+        Text[ chinese_simplified ] = "ÔÚÑ¡ÖĞµ¥Ôª¸ñÊ±ÏÔÊ¾ÊäÈë°ïÖú(~S)";
         Text[ russian ] = "Ïğåäëàãàòü ïîìîùü ââîäà ïğè âûäåëåíèè ÿ÷åéêè";
         Text[ polish ] = "Z~aproponuj pomoc przy wprowadzaniu w przypadku zaznaczonej komórki";
         Text[ japanese ] = "¾Ù‚Ì‘I‘ğ‚ÉÒ¯¾°¼Ş‚ğ•\\¦‚·‚é(~S)";
@@ -1355,6 +1355,7 @@ TabPage TP_VALIDATION_ERROR
     Text[ catalan ] = "Mensaje de error";
     Text[ finnish ] = "Virhehälytys";
 };
+
 
 
 
