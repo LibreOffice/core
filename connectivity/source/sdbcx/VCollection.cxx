@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:08:50 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,8 +324,8 @@ Sequence< Type > SAL_CALL OCollection::getTypes() throw (RuntimeException)
             if ( *pBegin != aType )
                 aOwnTypes.push_back(*pBegin);
         }
-
-        return Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
+        Type* pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
+        return Sequence< Type >(pTypes,aOwnTypes.size());
     }
     return OCollectionBase::getTypes( );
 }
