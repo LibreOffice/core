@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 18:47:46 $
+ *  last change: $Author: ama $ $Date: 2001-02-13 13:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,19 +509,38 @@ FASTBOOL SwVisCrsr::ChgTimerFlag( BOOL bFlag )
 
 void SwVisCrsr::_SetPosAndShow()
 {
-    SwRect aRect( pCrsrShell->aCharRect.Pos(),
-                    Size( pCrsrShell->aCharRect.Width(),
-                          pCrsrShell->aCrsrHeight.Y() ) );
-    aRect.Pos().Y() += pCrsrShell->aCrsrHeight.X();
-    if( aRect.Height() )
+    SwRect aRect;
+    if( 0 > pCrsrShell->aCrsrHeight.Y() )
     {
-        ::SwCalcPixStatics( pCrsrShell->GetOut() );
-        ::SwAlignRect( aRect, (ViewShell*)pCrsrShell );
+        aRect = SwRect( pCrsrShell->aCharRect.Pos(),
+           Size( -pCrsrShell->aCrsrHeight.Y(), pCrsrShell->aCharRect.Height() ) );
+        aRect.Pos().X() += pCrsrShell->aCrsrHeight.X();
+
+        if( aRect.Width() )
+        {
+            ::SwCalcPixStatics( pCrsrShell->GetOut() );
+            ::SwAlignRect( aRect, (ViewShell*)pCrsrShell );
+        }
+        if( !pCrsrShell->IsOverwriteCrsr() || bIsDragCrsr ||
+            pCrsrShell->IsSelection() )
+            aRect.Top( aRect.Bottom() - 10 );
+    }
+    else
+    {
+        aRect = SwRect( pCrsrShell->aCharRect.Pos(),
+           Size( pCrsrShell->aCharRect.Width(), pCrsrShell->aCrsrHeight.Y() ) );
+        aRect.Pos().Y() += pCrsrShell->aCrsrHeight.X();
+
+        if( aRect.Height() )
+        {
+            ::SwCalcPixStatics( pCrsrShell->GetOut() );
+            ::SwAlignRect( aRect, (ViewShell*)pCrsrShell );
+        }
+        if( !pCrsrShell->IsOverwriteCrsr() || bIsDragCrsr ||
+            pCrsrShell->IsSelection() )
+            aRect.Width( 0 );
     }
 
-    if( !pCrsrShell->IsOverwriteCrsr() || bIsDragCrsr ||
-        pCrsrShell->IsSelection() )
-        aRect.Width( 0 );
     aTxtCrsr.SetSize( aRect.SSize() );
 
     aTxtCrsr.SetPos( aRect.Pos() );
