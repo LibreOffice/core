@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-11 08:05:49 $
+ *  last change: $Author: cd $ $Date: 2002-04-22 07:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxStateCache, 0);
 
+
     if ( bSlotDirty )
     {
         if ( xProv.is() )
@@ -379,12 +380,17 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                 }
             }
         }
+        else
+        {
+            // Don't find a server for every case. We have a configuration file that
+            // can disable specified commands. See bug #98419#
+    //      if ( !rDispat._TryIntercept_Impl( nId, aSlotServ, sal_False ) )
+            rDispat._FindServer(nId, aSlotServ, sal_False);
+            //MI: wozu das? bItemDirty = sal_True;
+        }
 
-//      if ( !rDispat._TryIntercept_Impl( nId, aSlotServ, sal_False ) )
-        rDispat._FindServer(nId, aSlotServ, sal_False);
         bSlotDirty = sal_False;
         bCtrlDirty = sal_True;
-        //MI: wozu das? bItemDirty = sal_True;
     }
 
     return aSlotServ.GetSlot()? &aSlotServ: 0;

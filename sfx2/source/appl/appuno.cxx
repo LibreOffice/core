@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-17 12:40:54 $
+ *  last change: $Author: cd $ $Date: 2002-04-22 07:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1132,6 +1132,12 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch( const ::
          aURL.Protocol.compareToAscii( "commandId:" ) == COMPARE_EQUAL )
     {
         nId = (USHORT) aURL.Path.toInt32();
+    }
+
+    if ( aURL.Protocol.compareToAscii( ".uno:" ) == COMPARE_EQUAL )
+    {
+        // Support ".uno" commands. Map commands to slotid
+        nId = SFX_APP()->GetAppDispatcher_Impl()->GetSlotId( aURL.Main );
     }
 
     if ( nId && SFX_APP()->GetAppDispatcher_Impl()->HasSlot_Impl( nId ) )

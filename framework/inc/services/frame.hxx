@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: as $ $Date: 2001-11-02 07:54:07 $
+ *  last change: $Author: cd $ $Date: 2002-04-22 07:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,10 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
+
+#ifndef INCLUDED_SVTOOLS_CMDOPTIONS_HXX
+#include <svtools/cmdoptions.hxx>
+#endif
 
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
@@ -562,6 +566,7 @@ class Frame :   // interfaces
         sal_Bool                                                                m_bIsFrameTop                       ;   /// frame has no parent or the parent is a taskor the desktop
         sal_Bool                                                                m_bConnected                        ;   /// due to FrameActionEvent
         sal_Int16                                                               m_nExternalLockCount                ;
+        SvtCommandOptions                                                       m_aCommandOptions                   ;   /// ref counted class to support disabling commands defined by configuration file
 
     protected:
 

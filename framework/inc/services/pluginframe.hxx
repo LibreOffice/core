@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pluginframe.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 14:56:43 $
+ *  last change: $Author: cd $ $Date: 2002-04-22 07:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,11 @@
 #ifndef _VCL_ATOM_HXX
 #include <vcl/threadex.hxx>
 #endif
+
+#ifndef INCLUDED_SVTOOLS_CMDOPTIONS_HXX
+#include <svtools/cmdoptions.hxx>
+#endif
+
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -497,6 +502,7 @@ class PlugInFrame   :   public css::lang::XInitialization   ,
         sal_Bool                                                            m_bIHaveDocument        ;   /// We have a document loaded successful.
         css::uno::Reference< css::frame::XDispatchProvider >                m_xPlugInDispatcher     ;   /// Dispatcher to forward dispatches to browser
         static sal_Bool                                                     m_bRemoteFactoriesExist ;   /// indicates, if remote factories was already registered (neccessary one times only!)
+        SvtCommandOptions                                                   m_aCommandOptions       ;   /// ref counted class to support disabling commands defined by configuration file
 
 };      //  class PlugInFrame
 

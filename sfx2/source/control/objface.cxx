@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-27 07:56:03 $
+ *  last change: $Author: cd $ $Date: 2002-04-22 07:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,15 +473,20 @@ const SfxSlot* SfxInterface::GetSlot( USHORT nFuncId ) const
 
 const SfxSlot* SfxInterface::GetSlot( const String& rCommand ) const
 {
+    const char UNO_COMMAND[] = ".uno:";
+
+    String aCommand( rCommand );
+    if ( aCommand.SearchAscii( UNO_COMMAND ) == 0 )
+        aCommand.Erase( 0, sizeof( UNO_COMMAND )-1 );
+
     SfxSlotPool& rPool = SFX_SLOTPOOL();
     for ( USHORT n=0; n<nCount; n++ )
     {
-        USHORT nId = (pSlots+n)->GetSlotId();
-        if ( rCommand.CompareIgnoreCaseToAscii( rPool.GetSlotName_Impl( nId ) ) == COMPARE_EQUAL )
+        if ( aCommand.CompareIgnoreCaseToAscii( (pSlots+n)->GetUnoName() ) == COMPARE_EQUAL )
             return pSlots+n;
     }
 
-    return pGenoType ? pGenoType->GetSlot( rCommand ) : NULL;
+    return pGenoType ? pGenoType->GetSlot( aCommand ) : NULL;
 }
 
 //--------------------------------------------------------------------
