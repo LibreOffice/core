@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-16 11:16:22 $
+ *  last change: $Author: mt $ $Date: 2001-02-21 11:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1673,12 +1673,6 @@ void UnoRadioButtonControl::createPeer( const uno::Reference< awt::XToolkit > & 
 
     uno::Reference < awt::XRadioButton >  xRadioButton( mxPeer, uno::UNO_QUERY );
     xRadioButton->addItemListener( this );
-
-    // Toggle-Verhalten abklemmen, macht DG
-    uno::Reference< awt::XVclWindowPeer >  xVclWindowPeer( mxPeer, uno::UNO_QUERY );
-    uno::Any aAny;
-    aAny <<= (sal_Bool)sal_False;
-    xVclWindowPeer->setProperty( GetPropertyName( BASEPROPERTY_AUTOTOGGLE ), aAny );
 }
 
 void UnoRadioButtonControl::addItemListener(const uno::Reference < awt::XItemListener > & l) throw(uno::RuntimeException)
