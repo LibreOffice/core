@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ bool DtIntegrator::StartSystemLookProcess( const char* pCommand )
     mnSystemLookCommandProcess = fork();
     if( mnSystemLookCommandProcess == 0 )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "exec( \"%s --vcl-system-settings-window %s\" )\n", aCommand.GetBuffer(), aArgWindow.GetBuffer() );
 #endif
         int nRedirect = open( "/dev/null", O_WRONLY );
@@ -313,11 +313,11 @@ void DtIntegrator::GetSystemLook( const char* pCommand, AllSettings& rSettings )
             aCommand.Erase( aCommand.SearchBackward( '/' )+1 );
             aCommand.Append( pCommand );
         }
-#ifndef DEBUG
+#if OSL_DEBUG_LEVEL < 2
         aCommand.Append( " 2>/dev/null" );
 #endif
         pOutput = popen( aCommand.GetBuffer(), "r" );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "popen( \"%s\", \"r\" ) = %p\n", aCommand.GetBuffer(), pOutput );
 #endif
         while( fgets( pBuffer, sizeof( pBuffer ), pOutput ) )
@@ -362,7 +362,7 @@ void DtIntegrator::GetSystemLook( const char* pCommand, AllSettings& rSettings )
             // sanity check
             if( nFormat == 8 && nType == XA_STRING && nItems )
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "got %d data items:\n%.*s", nItems, nItems, pData );
 #endif
                 // fill in the lines
@@ -381,13 +381,13 @@ void DtIntegrator::GetSystemLook( const char* pCommand, AllSettings& rSettings )
                     pRun++;
                 }
             }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             else
                 fprintf( stderr, "query of data failed with nFormat = %d, nType = %d, nItems = %d\n", nFormat, nType, nItems );
 #endif
             XFree( pData );
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         else
             fprintf( stderr, "query of bytes failed\n" );
 #endif
@@ -589,7 +589,7 @@ void DtIntegrator::GetSystemLook( const char* pCommand, AllSettings& rSettings )
                 else
                     aStyleSettings.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_UNKNOWN );
                 break;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             default:
                 fprintf( stderr, "don't understand \"%d=%s\"\n", aToken, aLine.GetBuffer() );
                 break;
