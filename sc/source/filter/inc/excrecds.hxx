@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:06:18 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,6 @@
 class SvxBorderLine;
 
 class SvStream;
-class XclExpStream;
 class Font;
 class List;
 class ScPatternAttr;
@@ -420,221 +419,18 @@ private:
 };
 
 
-//---------------------------------------------------- class ExcNameListEntry -
-
-class ExcNameListEntry : public ExcRecord
-{
-protected:
-    XclExpTokenArrayRef     mxTokArr;
-    UINT16                  nTabNum;            // Excel index, 1-based, 0==none
-    UINT8                   nBuiltInKey;
-
-    BOOL                    bDummy;
-
-                            // default: save builtin key
-    virtual void            SaveCont( XclExpStream& rStrm );
-
-public:
-                            ExcNameListEntry();
-                            ExcNameListEntry( RootData& rRootData, SCTAB nScTab, UINT8 nKey );
-    virtual                 ~ExcNameListEntry();
-
-    inline UINT16           GetTabIndex() const     { return nTabNum; }
-    inline UINT8            GetBuiltInKey() const   { return nBuiltInKey; }
-    inline BOOL             IsDummy() const         { return bDummy; }
-
-    inline bool             IsVolatile() const { return mxTokArr->IsVolatile(); }
-
-    virtual UINT16          GetNum() const;
-    virtual ULONG           GetLen() const;
-    virtual const String&   GetName() const;
-};
-
-
-//------------------------------------------------------------- class ExcName -
-
-class ExcName : public ExcNameListEntry, public ExcRoot
-{
-private:
-    String                  aName;
-    BiffTyp                 eBiff;
-    BOOL                    bHidden;
-    BOOL                    bBuiltIn;
-    BOOL                    bMacro;
-
-    void                    Init( BOOL bHid = FALSE, BOOL bBIn = FALSE, BOOL bMacro = FALSE );
-    void                    BuildFormula( const ScRange& rRange );
-
-    void                    SetName( const String& rRangeName );
-    void                    SetUniqueName( const String& rRangeName );
-    BOOL                    SetBuiltInName( const String& rName, UINT8 nKey );
-    BOOL                    IsBuiltInAFName( const String& rName, UINT8 nKey );
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-
-public:
-                            ExcName( RootData& rRootData, ScRangeData* pRange );
-                            ExcName( RootData& rRootData, ScDBData* pArea );
-                            ExcName( RootData& rRootData, const ScRange& rRange,
-                                    const String& rName );
-                            ExcName( RootData& rRootData, const ScRange& rRange,
-                                    UINT8 nKey, BOOL bHid = FALSE );
-
-                /** Create a macro name. */
-                ExcName( RootData& rRootData, const String& rName );
-
-    inline virtual const String&    GetName() const     { return aName; }
-
-    virtual ULONG           GetLen() const;
-};
-
-
-// ---- class XclBuildInName -----------------------------------------
-
-class XclBuildInName : public ExcNameListEntry
-{
-private:
-    ScRangeList             aRL;
-
-protected:
-    inline void             Append( const ScRange& rNew )   { aRL.Append( rNew ); }
-    void                    CreateFormula( RootData& rRootData );
-
-public:
-                            XclBuildInName( RootData& rRootData, SCTAB nScTab, UINT8 nKey );
-};
-
-
-// ---- class XclPrintRange, class XclTitleRange ---------------------
-
-class XclPrintRange : public XclBuildInName
-{
-public:
-                            XclPrintRange( RootData& rRootData, SCTAB nScTab );
-};
-
-
-class XclPrintTitles : public XclBuildInName
-{
-public:
-                            XclPrintTitles( RootData& rRootData, SCTAB nScTab );
-};
-
-
-//--------------------------------------------------------- class ExcNameList -
-
-class ExcNameList : public ExcEmptyRec, private List
-{
-private:
-    ULONG                   nFirstPrintRangeIx;
-    ULONG                   nFirstPrintTitleIx;
-    ULONG                   nFirstOtherNameIx;
-    ::std::vector< sal_uInt32 > maNextInsVec; /// List positions for next insertion for each sheet.
-
-    inline ExcNameListEntry* _First()       { return (ExcNameListEntry*) List::First(); }
-    inline ExcNameListEntry* _Next()        { return (ExcNameListEntry*) List::Next(); }
-    inline ExcNameListEntry* _Get( ULONG nIndex ) const
-                                            { return (ExcNameListEntry*) List::GetObject( nIndex ); }
-    UINT16                  Append( ExcNameListEntry* pName );
-
-public:
-                            ExcNameList( RootData& rRootData );
-    virtual                 ~ExcNameList();
-
-    inline const ExcNameListEntry* GetDefinedName( sal_uInt16 nXclNameIdx ) const { return _Get( nXclNameIdx - 1 ); }
-
-    UINT16                  GetBuiltInIx( const ExcNameListEntry* pName );
-
-    /** Inserts a named range in table name sort order. */
-    void                    InsertSorted( RootData& rRootData, ExcNameListEntry* pName, SCTAB nScTab );
-
-    /** Returns the 1-based macro name index from the names list.
-        Creates a new entry if macro name does not already exist. */
-    UINT16          GetMacroIdx( RootData& rRootData, const String &rName );
-
-    virtual void            Save( XclExpStream& rStrm );
-};
-
-
-// ============================================================================
-
-class ExcExterncount : public ExcRecord, ExcRoot
-{
-private:
-    BOOL                    bTable;
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-public:
-                            ExcExterncount( RootData*, const BOOL bTable );
-    virtual UINT16          GetNum( void ) const;
-    virtual ULONG           GetLen( void ) const;
-};
-
-
-//------------------------------------------------------ class ExcExternsheet -
-
-class ExcExternsheet : public ExcRecord, public ExcRoot
-{
-private:
-    String                  aTabName;
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-public:
-                            ExcExternsheet( RootData* pRD, const SCTAB nTabNum );
-    virtual UINT16          GetNum( void ) const;
-    virtual ULONG           GetLen( void ) const;
-};
-
-
-//-------------------------------------------------- class ExcExternsheetList -
-
-class ExcExternsheetList : public ExcEmptyRec, protected List
-{
-private:
-    inline ExcExternsheet*  _First()    { return (ExcExternsheet*) List::First(); }
-    inline ExcExternsheet*  _Next()     { return (ExcExternsheet*) List::Next(); }
-
-protected:
-public:
-    virtual                 ~ExcExternsheetList();
-    inline void             Add( ExcExternsheet* pNew ) { List::Insert( pNew, LIST_APPEND ); }
-
-    virtual void            Save( XclExpStream& rStrm );
-};
-
-
-//-------------------------------------------------------- class ExcExternDup -
-
-class ExcExternDup : public ExcEmptyRec
-{
-private:
-    ExcExterncount&         rExtCnt;
-    ExcExternsheetList&     rExtSheetList;
-
-protected:
-public:
-                            ExcExternDup( ExcExterncount&, ExcExternsheetList& );
-                            ExcExternDup( const ExcExternDup& );
-
-    virtual void            Save( XclExpStream& rStrm );
-};
-
-
 //---------------------------------------------------------- class ExcWindow2 -
 
-class ExcWindow2 : public ExcRecord
+class XclExpWindow2 : public XclExpRecord
 {
-private:
-    UINT16                  nTable;
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-
 public:
-                            ExcWindow2( UINT16 nTable );
-    inline  UINT16          GetTable() const    { return nTable; }
+    explicit            XclExpWindow2( const XclExpRoot& rRoot, SCTAB nScTab );
 
-    virtual UINT16          GetNum( void ) const;
-    virtual ULONG           GetLen( void ) const;
+private:
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+private:
+    sal_uInt16          mnFlags;
 };
 
 
@@ -668,36 +464,28 @@ public:
 
 
 // ============================================================================
-//---------------------------------------------------------------- AutoFilter -
-// classes: ExcFilterMode, ExcAutoFilterInfo, ExcFilterCondition,
-//          ExcAutoFilter, ExcAutoFilterRecs
 
-class ExcFilterMode : public ExcRecord
+class XclExpFiltermode : public XclExpEmptyRecord
 {
 public:
-    virtual UINT16          GetNum() const;
-    virtual ULONG           GetLen() const;
+    explicit            XclExpFiltermode();
 };
 
+// ----------------------------------------------------------------------------
 
-
-class ExcAutoFilterInfo : public ExcRecord
+class XclExpAutofilterinfo : public XclExpUInt16Record
 {
+public:
+    explicit            XclExpAutofilterinfo( const ScAddress& rStartPos, SCCOL nScCol );
+
+    inline const ScAddress GetStartPos() const { return maStartPos; }
+    inline SCCOL        GetColCount() const { return static_cast< SCCOL >( GetValue() ); }
+
 private:
-    UINT16                  nCount;
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-
-protected:
-public:
-    inline                  ExcAutoFilterInfo( SCCOL nC )   { nCount = static_cast<sal_uInt16>(nC); }
-    virtual                 ~ExcAutoFilterInfo();
-
-    virtual UINT16          GetNum() const;
-    virtual ULONG           GetLen() const;
+    ScAddress           maStartPos;
 };
 
-
+// ----------------------------------------------------------------------------
 
 class ExcFilterCondition
 {
@@ -722,9 +510,9 @@ public:
     void                    SaveText( XclExpStream& rStrm );
 };
 
+// ----------------------------------------------------------------------------
 
-
-class ExcAutoFilter : public ExcRecord
+class XclExpAutofilter : public XclExpRecord, protected XclExpRoot
 {
 private:
     UINT16                  nCol;
@@ -735,46 +523,65 @@ private:
                                 UINT8 nOp, double fVal, String* pText,
                                 BOOL bSimple = FALSE );
 
-    virtual void            SaveCont( XclExpStream& rStrm );
+    virtual void            WriteBody( XclExpStream& rStrm );
 
 protected:
 public:
-                            ExcAutoFilter( UINT16 nC );
+                            XclExpAutofilter( const XclExpRoot& rRoot, UINT16 nC );
 
     inline UINT16           GetCol() const          { return nCol; }
     inline BOOL             HasCondition() const    { return !aCond[ 0 ].IsEmpty(); }
     inline BOOL             HasTop10() const        { return TRUEBOOL( nFlags & EXC_AFFLAG_TOP10 ); }
 
-    BOOL                    AddEntry( RootData& rRoot, const ScQueryEntry& rEntry );
-
-    virtual UINT16          GetNum() const;
-    virtual ULONG           GetLen() const;
+    BOOL                    AddEntry( const ScQueryEntry& rEntry );
 };
 
+// ----------------------------------------------------------------------------
 
-
-class ExcAutoFilterRecs : private List, public ExcEmptyRec
+class ExcAutoFilterRecs : public XclExpRecordBase, protected XclExpRoot
 {
-private:
-    ExcFilterMode*          pFilterMode;
-    ExcAutoFilterInfo*      pFilterInfo;
-
-    inline ExcAutoFilter*   _First()    { return (ExcAutoFilter*) List::First(); }
-    inline ExcAutoFilter*   _Next()     { return (ExcAutoFilter*) List::Next(); }
-    ExcAutoFilter*          GetByCol( SCCOL nCol ); // always 0-based
-
-    BOOL                    IsFiltered( SCCOL nCol );
-
-    void                    DeleteList();
-    inline void             Append( ExcAutoFilter* pFilter )
-                                { List::Insert( pFilter, LIST_APPEND ); }
-    void                    AddObjRecs( RootData& rRoot, const ScAddress& rPos, SCCOL nCols );
-protected:
 public:
-                            ExcAutoFilterRecs( RootData& rRoot, SCTAB nTab );
-    virtual                 ~ExcAutoFilterRecs();
+    explicit            ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab );
+    virtual             ~ExcAutoFilterRecs();
 
-    virtual void            Save( XclExpStream& rStrm );
+    void                AddObjRecs();
+
+    virtual void        Save( XclExpStream& rStrm );
+
+private:
+    XclExpAutofilter*   GetByCol( SCCOL nCol ); // always 0-based
+    BOOL                IsFiltered( SCCOL nCol );
+
+private:
+    typedef XclExpRecordList< XclExpAutofilter >    XclExpAutofilterList;
+    typedef XclExpAutofilterList::RecordRefType     XclExpAutofilterRef;
+
+    XclExpAutofilterList maFilterList;
+    XclExpFiltermode*   pFilterMode;
+    XclExpAutofilterinfo* pFilterInfo;
+};
+
+// ----------------------------------------------------------------------------
+
+/** Sheet filter manager. Contains auto filters or advanced filters from all sheets. */
+class XclExpFilterManager : protected XclExpRoot
+{
+public:
+    explicit            XclExpFilterManager( const XclExpRoot& rRoot );
+
+    /** Creates the filter records for the specified sheet.
+        @descr  Creates and inserts related built-in NAME records. Therefore this
+            function is called from the name buffer itself. */
+    void                InitTabFilter( SCTAB nScTab );
+
+    /** Returns a record object containing all filter records for the specified sheet. */
+    XclExpRecordRef     CreateRecord( SCTAB nScTab );
+
+private:
+    typedef ScfRef< ExcAutoFilterRecs >             XclExpTabFilterRef;
+    typedef ::std::map< SCTAB, XclExpTabFilterRef > XclExpTabFilterMap;
+
+    XclExpTabFilterMap  maFilterMap;
 };
 
 
