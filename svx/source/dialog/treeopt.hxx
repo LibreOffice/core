@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:26:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,8 @@
 #define NUMBER_OF_OPTION_PAGES  12
 class SfxModule;
 class SfxShell;
-
+class SfxItemSet;
+class XColorTable;
 class OfaOptionsTreeListBox : public SvTreeListBox
 {
 private:
@@ -175,6 +176,9 @@ public:
 
     USHORT                  GetColorChanged() const { return nChangeType; }
     XColorTable*            GetColorTable() { return pColorTab; }
+
+    // helper functions to call the language settings TabPage from the SpellDialog
+    static  void ApplyLanguageOptions(const SfxItemSet& rSet);
 };
 /* -----------------11.02.99 15:49-------------------
  *
