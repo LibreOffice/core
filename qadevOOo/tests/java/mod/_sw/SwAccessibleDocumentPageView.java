@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleDocumentPageView.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,35 +60,33 @@
  ************************************************************************/
 package mod._sw;
 
-import lib.TestCase;
-import com.sun.star.lang.XMultiServiceFactory;
-import lib.TestParameters;
 import java.io.PrintWriter;
-import lib.TestEnvironment;
-import com.sun.star.uno.XInterface;
-import util.SOfficeFactory;
-import lib.StatusException;
-import lib.Status;
-import com.sun.star.text.XTextDocument;
-import util.WriterTools;
-import com.sun.star.frame.XController;
-import util.AccessibilityTools;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.frame.XModel;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.awt.XWindow;
-import com.sun.star.accessibility.XAccessible;
-import util.utils;
-import com.sun.star.frame.XDispatchProvider;
-import com.sun.star.util.XURLTransformer;
-import com.sun.star.util.URL;
-import com.sun.star.frame.XDispatch;
 
+import lib.Status;
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.AccessibilityTools;
+import util.WriterTools;
+import util.utils;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XWindow;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
-import com.sun.star.text.ControlCharacter;
-import com.sun.star.accessibility.XAccessibleValue;
-import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.URL;
+import com.sun.star.util.XURLTransformer;
 
 public class SwAccessibleDocumentPageView extends TestCase {
 
@@ -147,7 +145,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
                 UnoRuntime.queryInterface(XDispatchProvider.class, xController);
             XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
                 UnoRuntime.queryInterface(XURLTransformer.class,
-            ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
+            ( (XMultiServiceFactory) Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
@@ -166,28 +164,23 @@ public class SwAccessibleDocumentPageView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT );
 
-        oObj = at.SearchedContext;
+        oObj = AccessibilityTools.SearchedContext;
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
-        at.printAccessibleTree(log, xRoot);
-        util.dbg.printInterfaces(xController);
-
         TestEnvironment tEnv = new TestEnvironment(oObj);
-        getAccessibleObjectForRole(xRoot, AccessibleRole.SCROLL_BAR);
-        final XAccessibleValue xAccVal = (XAccessibleValue) UnoRuntime.queryInterface
-                                (XAccessibleValue.class, SearchedContext) ;
+
+        final XText the_text = oText;
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {
-                    xAccVal.setCurrentValue(xAccVal.getMaximumValue());
-                    xAccVal.setCurrentValue(xAccVal.getMinimumValue());
+                    the_text.setString("EVENT FIRED");
                 }
             });
 
@@ -195,26 +188,6 @@ public class SwAccessibleDocumentPageView extends TestCase {
 
     }
 
-    public static boolean first = false;
-    public static XAccessibleContext SearchedContext = null;
-
-    public static void getAccessibleObjectForRole(XAccessible xacc,short role) {
-        XAccessibleContext ac = xacc.getAccessibleContext();
-        if (ac.getAccessibleRole()==role) {
-            if (first) SearchedContext = ac;
-                else first=true;
-        } else {
-            int k = ac.getAccessibleChildCount();
-            for (int i=0;i<k;i++) {
-                try {
-                    getAccessibleObjectForRole(ac.getAccessibleChild(i),role);
-                    if (SearchedContext != null) return ;
-                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                    System.out.println("Couldn't get Child");
-                }
-            }
-        }
-    }
 
     /**
     * Sleeps for 1 sec. to allow StarOffice to react on <code>
@@ -253,6 +226,6 @@ public class SwAccessibleDocumentPageView extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
+        xTextDoc = WriterTools.createTextDoc( (XMultiServiceFactory) Param.getMSF());
     }
 }
