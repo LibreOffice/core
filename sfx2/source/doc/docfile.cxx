@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-08 09:10:04 $
+ *  last change: $Author: dv $ $Date: 2001-03-08 10:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2443,7 +2443,7 @@ void SfxMedium::CreateTempFile()
     if ( pImp->pTempFile )
         DELETEZ( pImp->pTempFile );
 
-    ULONG nOpenMode = nStorOpenMode;
+    StreamMode nOpenMode = nStorOpenMode;
     GetInStream();
     BOOL bCopy = ( nStorOpenMode == nOpenMode );
     nStorOpenMode = nOpenMode;
@@ -2464,16 +2464,48 @@ void SfxMedium::CreateTempFile()
         GetOutStream();
         if ( pInStream && pOutStream )
         {
+            char        *pBuf = new char [8192];
+            sal_uInt32   nErr = ERRCODE_NONE;
+
             pInStream->Seek(0);
             pOutStream->Seek(0);
-            *pInStream >> *pOutStream;
+
+            while( !pInStream->IsEof() && nErr == ERRCODE_NONE )
+            {
+                sal_uInt32 nRead = pInStream->Read( pBuf, 8192 );
+                nErr = pInStream->GetError();
+                pOutStream->Write( pBuf, nRead );
+            }
+
+            delete pBuf;
             CloseInStream();
         }
-
         CloseOutStream_Impl();
     }
     else
         CloseInStream();
+
+    CloseStorage();
+}
+
+//----------------------------------------------------------------
+void SfxMedium::CreateTempFileNoCopy()
+{
+    if ( pImp->pTempFile )
+        delete pImp->pTempFile;
+
+    String          aParentName;
+    INetURLObject   aParent = GetURLObject();
+
+    if ( aParent.removeSegment() )
+        aParentName = aParent.GetMainURL();
+
+    pImp->pTempFile = new ::utl::TempFile( &aParentName );
+    pImp->pTempFile->EnableKillingFile( sal_True );
+
+    aName = pImp->pTempFile->GetFileName();
+
+    CloseOutStream_Impl();
     CloseStorage();
 }
 
