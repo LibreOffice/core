@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-21 09:05:32 $
+ *  last change: $Author: cl $ $Date: 2002-06-13 10:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,17 +311,17 @@ void ImplGrafMetricField::Update( const SfxPoolItem* pItem )
 // - ImplGrafControl  -
 // --------------------
 
-static USHORT ImplGetRID( USHORT nSID )
+static USHORT ImplGetRID( USHORT nSID, bool bHighContrast )
 {
-    static const USHORT aImplSlotToResMap[][2] =
+    static const USHORT aImplSlotToResMap[][3] =
     {
-        { SID_ATTR_GRAF_RED, RID_SVXIMG_GRAF_RED },
-        { SID_ATTR_GRAF_GREEN, RID_SVXIMG_GRAF_GREEN },
-        { SID_ATTR_GRAF_BLUE, RID_SVXIMG_GRAF_BLUE },
-        { SID_ATTR_GRAF_LUMINANCE, RID_SVXIMG_GRAF_LUMINANCE },
-        { SID_ATTR_GRAF_CONTRAST, RID_SVXIMG_GRAF_CONTRAST },
-        { SID_ATTR_GRAF_GAMMA, RID_SVXIMG_GRAF_GAMMA },
-        { SID_ATTR_GRAF_TRANSPARENCE, RID_SVXIMG_GRAF_TRANSPARENCE }
+        { SID_ATTR_GRAF_RED, RID_SVXIMG_GRAF_RED, RID_SVXIMG_GRAF_RED_H },
+        { SID_ATTR_GRAF_GREEN, RID_SVXIMG_GRAF_GREEN, RID_SVXIMG_GRAF_GREEN_H },
+        { SID_ATTR_GRAF_BLUE, RID_SVXIMG_GRAF_BLUE, RID_SVXIMG_GRAF_BLUE_H },
+        { SID_ATTR_GRAF_LUMINANCE, RID_SVXIMG_GRAF_LUMINANCE, RID_SVXIMG_GRAF_LUMINANCE_H },
+        { SID_ATTR_GRAF_CONTRAST, RID_SVXIMG_GRAF_CONTRAST, RID_SVXIMG_GRAF_CONTRAST_H },
+        { SID_ATTR_GRAF_GAMMA, RID_SVXIMG_GRAF_GAMMA, RID_SVXIMG_GRAF_GAMMA_H },
+        { SID_ATTR_GRAF_TRANSPARENCE, RID_SVXIMG_GRAF_TRANSPARENCE, RID_SVXIMG_GRAF_TRANSPARENCE_H }
     };
 
     USHORT nRID = 0;
@@ -331,7 +331,7 @@ static USHORT ImplGetRID( USHORT nSID )
             i < nCount; i++ )
         if( aImplSlotToResMap[ i ][ 0 ] == nSID )
         {
-            nRID = aImplSlotToResMap[ i ][ 1 ];
+            nRID = aImplSlotToResMap[ i ][ bHighContrast ? 2 : 1 ];
             break;
         }
 
@@ -369,13 +369,18 @@ ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSID, SfxBindings& rBi
     maField     ( this, nSID, rBindings )
 
 {
-    ResId   aResId( ImplGetRID( nSID ), DIALOG_MGR() ) ;
+    ResId   aResId( ImplGetRID( nSID, false ), DIALOG_MGR() ) ;
     Image   aImage( aResId );
+
+    ResId   aResIdHC( ImplGetRID( nSID, true ), DIALOG_MGR() ) ;
+    Image   aImageHC( aResIdHC );
+
     Size    aImgSize( aImage.GetSizePixel() );
     Size    aFldSize( maField.GetSizePixel() );
     long    nFldY, nImgY;
 
     maImage.SetImage( aImage );
+    maImage.SetModeImage( aImageHC, BMP_COLOR_HIGHCONTRAST );
     maImage.SetSizePixel( aImgSize );
 
     if( aImgSize.Height() > aFldSize.Height() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: gt $ $Date: 2002-06-11 08:19:59 $
+ *  last change: $Author: cl $ $Date: 2002-06-13 10:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,6 +348,41 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE
 {
     ImageBitmap = Bitmap { File = "sc10869.bmp" ; };
     MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+};
+Image RID_SVXIMG_GRAF_RED_H
+{
+    ImageBitmap = Bitmap { File = "sch10865.bmp" ; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+Image RID_SVXIMG_GRAF_GREEN_H
+{
+    ImageBitmap = Bitmap { File = "sch10866.bmp" ; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+Image RID_SVXIMG_GRAF_BLUE_H
+{
+    ImageBitmap = Bitmap { File = "sch10867.bmp" ; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+Image RID_SVXIMG_GRAF_LUMINANCE_H
+{
+    ImageBitmap = Bitmap { File = "sch10863.bmp" ; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+Image RID_SVXIMG_GRAF_CONTRAST_H
+{
+    ImageBitmap = Bitmap { File = "sch10864.bmp" ; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+Image RID_SVXIMG_GRAF_GAMMA_H
+{
+    ImageBitmap = Bitmap { File = "sch10868.bmp" ; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+Image RID_SVXIMG_GRAF_TRANSPARENCE_H
+{
+    ImageBitmap = Bitmap { File = "sch10869.bmp" ; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
 
 // ********************************************************************** EOF
