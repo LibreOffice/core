@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:46:59 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_simplified ] = "Α΄½Σ";
         Text[ russian ] = "Ξοεπΰςξπ";
         Text[ polish ] = "Operator";
-        Text[ japanese ] = "µΝίΪ°ΐ";
+        Text[ japanese ] = "ΦA•t‚―";
         Text[ chinese_traditional ] = "±¶®|";
         Text[ arabic ] = "ΗΡΚΘΗΨ";
         Text[ greek ] = "Τελεστής";
@@ -161,7 +161,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_simplified ] = "ΜυΌώ";
         Text[ russian ] = "Σρλξβθε";
         Text[ polish ] = "Warunek";
-        Text[ japanese ] = "π";
+        Text[ japanese ] = "ΦW";
         Text[ chinese_traditional ] = "±ψ¥σ";
         Text[ arabic ] = "ΗαΤΡΨ";
         Text[ greek ] = "Συνθήκη";
@@ -1539,7 +1539,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_simplified ] = "±£ΑτΙΈΡ΅ΜυΌώ(~K)";
         Text[ russian ] = "Ρξυπΰνθςό σρλξβθÿ τθλόςπΰ";
         Text[ polish ] = "Zachowaj kryteria";
-        Text[ japanese ] = "Μ¨Ωΐξ€‚Μ•Ϋ(~K)";
+        Text[ japanese ] = "Μ¨Ωΐπ‚π•Ϋ‚Β(~K)";
         Text[ chinese_traditional ] = "«O―dΏzΏο±ψ¥σ(~K)";
         Text[ arabic ] = "ΗΣΚγΡΗΡ γΪΗννΡ ΗαέαΚΡ";
         Text[ greek ] = "Διατήρηση ~κριτηρίων φίλτρου";
@@ -1590,6 +1590,7 @@ ModelessDialog RID_SCDLG_FILTER
         QuickHelpText[ korean ] = "Min/Max";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Verkleinern";
     };
     GroupBox GB_OPTIONS
     {
@@ -1760,7 +1761,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_simplified ] = "ΙΈΡ΅ΜυΌώΐ΄ΧΤ(~F)";
         Text[ russian ] = "Σρλξβθÿ τθλόςπΰ νΰυξδÿςρÿ β";
         Text[ polish ] = "Kryteria filtrowania znajdujΉ siκ w";
-        Text[ japanese ] = "Μ¨Ωΐξ€‚Μκ(~F)";
+        Text[ japanese ] = "Μ¨Ωΐπ‚Ι‚·‚ι”ΝΝ(~F)";
         Text[ chinese_traditional ] = "ΏzΏο±ψ¥σ¨Σ¦Ϋ(~F)";
         Text[ arabic ] = "γΪΗννΡ ΗαΚΥένΙ ΚζΜΟ έν";
         Text[ greek ] = "Τα κριτήρια αναζήτησης βρίσκονται στο";
@@ -1809,6 +1810,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText[ korean ] = "Min/Max";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Verkleinern";
     };
     CheckBox BTN_CASE
     {
@@ -1983,7 +1985,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_simplified ] = "±£ΑτΙΈΡ΅ΜυΌώ(~K)";
         Text[ russian ] = "Υπΰνθςό σρλξβθÿ τθλόςπΰ";
         Text[ polish ] = "Zachowaj kryteria";
-        Text[ japanese ] = "Μ¨Ωΐξ€‚Μ•Ϋ(~K)";
+        Text[ japanese ] = "Μ¨Ωΐπ‚π•Ϋ‚Β(~K)";
         Text[ chinese_traditional ] = "«O―dΏzΏο±ψ¥σ(~K)";
         Text[ arabic ] = "ΗΣΚγΡΗΡ γΪΗννΡ ΗαέαΚΡ";
         Text[ greek ] = "Διατήρηση ~κριτηρίων φίλτρου";
@@ -2034,6 +2036,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText[ korean ] = "Min/Max";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Verkleinern";
     };
     GroupBox GB_OPTIONS
     {
@@ -2205,7 +2208,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_simplified ] = "Α΄½Σ";
         Text[ russian ] = "Ξοεπΰςξπ";
         Text[ polish ] = "Operator";
-        Text[ japanese ] = "µΝίΪ°ΐ";
+        Text[ japanese ] = "ΦA•t‚―";
         Text[ chinese_traditional ] = "±¶®|";
         Text[ arabic ] = "ΗΡΚΘΗΨ";
         Text[ greek ] = "Τελεστής";
@@ -2263,7 +2266,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_simplified ] = "ΜυΌώ";
         Text[ russian ] = "Σρλξβθε";
         Text[ polish ] = "Warunek";
-        Text[ japanese ] = "π";
+        Text[ japanese ] = "ΦW";
         Text[ chinese_traditional ] = "±ψ¥σ";
         Text[ arabic ] = "ΗαΤΡΨ";
         Text[ greek ] = "Συνθήκη";
