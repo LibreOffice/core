@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2001-07-03 11:06:57 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,9 @@
 #ifndef SW_UNOMID_HXX
 #include <unomid.h>
 #endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -325,14 +328,14 @@ SwCharFmt* lcl_getCharFmt(SwDoc* pDoc, const uno::Any& aValue)
     String sStandard(SW_RES(STR_POOLCOLL_STANDARD));
     OUString uTmp;
     aValue >>= uTmp;
-    String sCharFmt(SwXStyleFamilies::GetUIName(uTmp, SFX_STYLE_FAMILY_CHAR));
+    String sCharFmt(SwStyleNameMapper::GetUIName(uTmp, GET_POOLID_CHRFMT));
     if(sStandard != sCharFmt)
     {
         pRet = pDoc->FindCharFmtByName( sCharFmt );
     }
     if(!pRet)
     {
-        sal_uInt16 nId = pDoc->GetPoolId(sCharFmt, GET_POOLID_CHRFMT);
+        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(sCharFmt, GET_POOLID_CHRFMT);
         if(USHRT_MAX != nId)
             pRet = pDoc->GetCharFmtFromPool( nId );
     }
@@ -345,11 +348,11 @@ SwTxtFmtColl* lcl_GetParaStyle(SwDoc* pDoc, const uno::Any& aValue)
 {
     OUString uTmp;
     aValue >>= uTmp;
-    String sParaStyle(SwXStyleFamilies::GetUIName(uTmp, SFX_STYLE_FAMILY_PARA));
+    String sParaStyle(SwStyleNameMapper::GetUIName(uTmp, GET_POOLID_TXTCOLL ) );
     SwTxtFmtColl* pRet = pDoc->FindTxtFmtCollByName( sParaStyle );
     if( !pRet  )
     {
-        sal_uInt16 nId = pDoc->GetPoolId( sParaStyle, GET_POOLID_TXTCOLL );
+        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sParaStyle, GET_POOLID_TXTCOLL );
         if( USHRT_MAX != nId  )
             pRet = pDoc->GetTxtCollFromPool( nId );
     }
@@ -364,7 +367,7 @@ SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
     sal_uInt16 nCount = pDoc->GetPageDescCnt();
     OUString uTmp;
     aValue >>= uTmp;
-    String sPageDesc(SwXStyleFamilies::GetUIName(uTmp, SFX_STYLE_FAMILY_PAGE));
+    String sPageDesc(SwStyleNameMapper::GetUIName(uTmp, GET_POOLID_PAGEDESC ) );
     for( sal_uInt16 i = 0; i < nCount; i++)
     {
         const SwPageDesc& rDesc = pDoc->GetPageDesc( i );
@@ -376,7 +379,7 @@ SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
     }
     if(!pRet)
     {
-        sal_uInt16 nId = pDoc->GetPoolId(sPageDesc, GET_POOLID_PAGEDESC);
+        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(sPageDesc, GET_POOLID_PAGEDESC);
         if(USHRT_MAX != nId)
             pRet = pDoc->GetPageDescFromPool( nId );
     }
@@ -640,7 +643,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                     OUString sRet;
                     if(pColl)
                         sRet = pColl->GetName();
-                    sRet = SwXStyleFamilies::GetProgrammaticName(sRet, SFX_STYLE_FAMILY_PARA);
+                    sRet = SwStyleNameMapper::GetProgName(sRet, GET_POOLID_TXTCOLL);
                     aRet <<= sRet;
                 }
                 break;
@@ -650,9 +653,9 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                     if( rFtnInfo.GetPageDescDep()->GetRegisteredIn() )
                     {
                         sRet = OUString(
-                            SwXStyleFamilies::GetProgrammaticName(
+                            SwStyleNameMapper::GetProgName(
                                 rFtnInfo.GetPageDesc( *pDoc )->GetName(),
-                                SFX_STYLE_FAMILY_PAGE));
+                                GET_POOLID_PAGEDESC));
                     }
                     aRet <<= sRet;
                 }
@@ -675,8 +678,8 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                     if( pCharFmt )
                     {
                         sRet = OUString(
-                            SwXStyleFamilies::GetProgrammaticName(
-                                pCharFmt->GetName(), SFX_STYLE_FAMILY_CHAR));
+                            SwStyleNameMapper::GetProgName(
+                                pCharFmt->GetName(), GET_POOLID_CHRFMT ));
                     }
                     aRet <<= sRet;
                 }
@@ -904,8 +907,8 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                     if(pColl)
                         sRet = pColl->GetName();
                     aRet <<= OUString(
-                        SwXStyleFamilies::GetProgrammaticName(sRet,
-                            SFX_STYLE_FAMILY_PARA));
+                        SwStyleNameMapper::GetProgName(sRet,
+                            GET_POOLID_TXTCOLL));
 
                 }
                 break;
@@ -915,9 +918,9 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                     if( rEndInfo.GetPageDescDep()->GetRegisteredIn() )
                     {
                         sRet = OUString(
-                            SwXStyleFamilies::GetProgrammaticName(
+                            SwStyleNameMapper::GetProgName(
                                 rEndInfo.GetPageDesc( *pDoc )->GetName(),
-                                SFX_STYLE_FAMILY_PAGE));
+                                GET_POOLID_PAGEDESC));
                     }
                     aRet <<= sRet;
                 }
@@ -940,8 +943,8 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                     if( pCharFmt )
                     {
                         sRet = OUString(
-                            SwXStyleFamilies::GetProgrammaticName(
-                                pCharFmt->GetName(), SFX_STYLE_FAMILY_CHAR));
+                            SwStyleNameMapper::GetProgName(
+                                pCharFmt->GetName(), GET_POOLID_CHRFMT));
                     }
                     aRet <<= sRet;
                 }
@@ -1182,9 +1185,9 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
                     // otherwise it would be created here
                     if(rInfo.GetRegisteredIn())
                     {
-                        sStyle = SwXStyleFamilies::GetProgrammaticName(
+                        sStyle = SwStyleNameMapper::GetProgName(
                                     rInfo.GetCharFmt(*pDoc)->GetName(),
-                                                      SFX_STYLE_FAMILY_CHAR );
+                                                      GET_POOLID_CHRFMT );
                     }
                     aRet <<= sStyle;
                 }
@@ -1594,8 +1597,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
         SwXNumberingRules::sInvalidStyle != sNewCharStyleNames[(sal_uInt16)nIndex])
         CharStyleName = sNewCharStyleNames[(sal_uInt16)nIndex];
 
-    aUString = SwXStyleFamilies::GetProgrammaticName( CharStyleName,
-                                                      SFX_STYLE_FAMILY_CHAR );
+    aUString = SwStyleNameMapper::GetProgName( CharStyleName, GET_POOLID_CHRFMT );
     pData = new PropValData((void*)&aUString, "CharStyleName", ::getCppuType((const OUString*)0));
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
@@ -1717,7 +1719,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
                 sValue = rTxtColl.GetName();
             }
         }
-        aUString = SwXStyleFamilies::GetProgrammaticName(sValue, SFX_STYLE_FAMILY_PARA);
+        aUString = SwStyleNameMapper::GetProgName(sValue, GET_POOLID_TXTCOLL);
         pData = new PropValData((void*)&aUString, SW_PROP_NAME_STR(UNO_NAME_HEADING_STYLE_NAME), ::getCppuType((const OUString*)0));
         aPropertyValues.Insert(pData, aPropertyValues.Count());
     }
@@ -1868,8 +1870,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                     OUString uTmp;
                     pData->aVal >>= uTmp;
                     String sCharFmtName(
-                        SwXStyleFamilies::GetUIName( uTmp,
-                                                    SFX_STYLE_FAMILY_CHAR ) );
+                        SwStyleNameMapper::GetUIName( uTmp, GET_POOLID_CHRFMT ) );
                     SwCharFmt* pCharFmt = 0;
                     if(sCharFmtName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_CHARACTER_FORMAT_NONE)))
                     {
@@ -2080,7 +2081,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                 {
                     OUString uTmp;
                     pData->aVal >>= uTmp;
-                    String sStyleName = SwXStyleFamilies::GetUIName(uTmp, SFX_STYLE_FAMILY_PARA);
+                    String sStyleName = SwStyleNameMapper::GetUIName(uTmp, GET_POOLID_TXTCOLL );
                     const SwTxtFmtColls* pColls = pDocShell->GetDoc()->GetTxtFmtColls();
                     const sal_uInt16 nCount = pColls->Count();
                     for(sal_uInt16 i = 0; i < nCount; ++i)
@@ -2289,8 +2290,8 @@ void SwXNumberingRules::removeVetoableChangeListener(
 OUString SwXNumberingRules::getName() throw( RuntimeException )
 {
     if(pNumRule)
-        return SwXStyleFamilies::GetProgrammaticName(pNumRule->GetName(),
-                                                     SFX_STYLE_FAMILY_PSEUDO );
+        return SwStyleNameMapper::GetProgName(pNumRule->GetName(),
+                                                     GET_POOLID_NUMRULE );
     else
         return sCreatedNumRuleName;
 }

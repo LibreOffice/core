@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 11:23:01 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,9 @@
 #ifndef _FMTUI_HRC
 #include <fmtui.hrc>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 extern SwWrtShell* GetActiveWrtShell();
 
@@ -466,8 +468,8 @@ const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
 void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     //Namen der Vorlagen und Metric setzen
-    String sNumCharFmt; GetDocPoolNm( RES_POOLCHR_NUM_LEVEL, sNumCharFmt);
-    String sBulletCharFmt; GetDocPoolNm( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt);
+    String sNumCharFmt; SwStyleNameMapper::GetUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt);
+    String sBulletCharFmt; SwStyleNameMapper::GetUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt);
 
     switch( nId )
     {
@@ -571,7 +573,7 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             {
                 List aList;
                 String* pNew = new String;
-                GetDocPoolNm( RES_POOLCOLL_TEXT, *pNew );
+                SwStyleNameMapper::GetUIName( RES_POOLCOLL_TEXT, *pNew );
                 aList.Insert( pNew, (ULONG)0 );
                 if( pWrtShell )
                 {

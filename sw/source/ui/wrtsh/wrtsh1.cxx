@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-07-12 13:10:27 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,9 @@
 #endif
 #ifndef _WRTSH_HRC
 #include <wrtsh.hrc>
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
 #endif
 
 #define COMMON_INI_LIST \
@@ -1255,7 +1258,7 @@ SwTxtFmtColl *SwWrtShell::GetParaStyle(const String &rCollName, GetStyle eCreate
     SwTxtFmtColl* pColl = FindTxtFmtCollByName( rCollName );
     if( !pColl && GETSTYLE_NOCREATE != eCreate )
     {
-        USHORT nId = GetPoolId( rCollName, GET_POOLID_TXTCOLL );
+        USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( rCollName, GET_POOLID_TXTCOLL );
         if( USHRT_MAX != nId || GETSTYLE_CREATEANY == eCreate )
             pColl = GetTxtCollFromPool( nId );
     }
@@ -1275,7 +1278,7 @@ SwCharFmt *SwWrtShell::GetCharStyle(const String &rFmtName, GetStyle eCreate )
     SwCharFmt* pFmt = FindCharFmtByName( rFmtName );
     if( !pFmt && GETSTYLE_NOCREATE != eCreate )
     {
-        USHORT nId = GetPoolId( rFmtName, GET_POOLID_CHRFMT );
+        USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( rFmtName, GET_POOLID_CHRFMT );
         if( USHRT_MAX != nId || GETSTYLE_CREATEANY == eCreate )
             pFmt = (SwCharFmt*)GetFmtFromPool( nId );
     }

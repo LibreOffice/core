@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: os $ $Date: 2001-07-17 10:32:54 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,10 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -1155,7 +1159,7 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
         sal_Bool bSetValue = sal_True;
         if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_SUB_TYPE)))
         {
-            const SvStringsDtor& rExtraArr = m_pDoc->GetExtraNmArray();
+            const SvStringsDtor& rExtraArr = SwStyleNameMapper::GetExtraUINameArray();
             String sTypeName = pType->GetName();
             static sal_uInt16 nIds[] =
             {
@@ -1185,7 +1189,7 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
         String sTypeName(uTmp);
         SwFieldType* pType = m_pDoc->GetFldType(nResTypeId, sTypeName);
         if(pType ||
-            (RES_SETEXPFLD == nResTypeId && sTypeName != String(SwXFieldMaster::GetSetExpProgrammaticName(sTypeName))))
+            (RES_SETEXPFLD == nResTypeId && sTypeName != String(SwStyleNameMapper::GetProgName(sTypeName, GET_POOLID_TXTCOLL ))))
         {
             throw IllegalArgumentException();
         }
@@ -1568,7 +1572,6 @@ void SwXFieldMaster::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 }
 /* -----------------------------06.11.00 09:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 const Programmatic2UIName_Impl* lcl_GetFieldNameTable()
 {
     static BOOL bInitialized = FALSE;
@@ -1588,6 +1591,7 @@ const Programmatic2UIName_Impl* lcl_GetFieldNameTable()
     }
     return &aFieldNames[0];
 }
+ ---------------------------------------------------------------------------*/
 /* -----------------------------06.11.00 10:26--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1601,55 +1605,10 @@ OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rD
         {
             if((*pTypes)[i] == &rType)
             {
-                const Programmatic2UIName_Impl* pTable = lcl_GetFieldNameTable();
-                while(pTable->sUIName.Len())
-                {
-                    if(sRet == OUString(pTable->sUIName))
-                    {
-                        sRet = pTable->sProgrammaticName;
-                        break;
-                    }
-                    ++pTable;
-                }
+                sRet = SwStyleNameMapper::GetProgName ( sRet, GET_POOLID_TXTCOLL );
                 break;
             }
         }
-    }
-    return sRet;
-}
-/* -----------------------------06.11.00 10:57--------------------------------
-
- ---------------------------------------------------------------------------*/
-OUString SwXFieldMaster::GetSetExpProgrammaticName(const OUString& rUIName)
-{
-    const Programmatic2UIName_Impl* pTable = lcl_GetFieldNameTable();
-    OUString sRet(rUIName);
-    while(pTable->sUIName.Len())
-    {
-        if(sRet == OUString(pTable->sUIName))
-        {
-            sRet = pTable->sProgrammaticName;
-            break;
-        }
-        ++pTable;
-    }
-    return sRet;
-}
-/* -----------------------------06.11.00 10:57--------------------------------
-
- ---------------------------------------------------------------------------*/
-OUString SwXFieldMaster::GetSetExpUIName(const rtl::OUString& rName)
-{
-    const Programmatic2UIName_Impl* pTable = lcl_GetFieldNameTable();
-    OUString sRet(rName);
-    while(pTable->sUIName.Len())
-    {
-        if(sRet == OUString(pTable->sProgrammaticName))
-        {
-            sRet = pTable->sUIName;
-            break;
-        }
-        ++pTable;
     }
     return sRet;
 }
@@ -1661,8 +1620,8 @@ OUString SwXFieldMaster::LocalizeFormula(
     const OUString& rFormula,
     sal_Bool bQuery)
 {
-    OUString sTypeName(rFld.GetTyp()->GetName());
-    OUString sProgName = SwXFieldMaster::GetSetExpProgrammaticName(sTypeName);
+    const OUString sTypeName(rFld.GetTyp()->GetName());
+    OUString sProgName = SwStyleNameMapper::GetProgName(sTypeName, GET_POOLID_TXTCOLL );
     if(sProgName != sTypeName)
     {
         OUString sSource = bQuery ? sTypeName : sProgName;
@@ -2939,8 +2898,8 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
     else if(COMPARE_EQUAL == sTypeName.CompareToAscii("SetExpression"))
     {
         nResId = RES_SETEXPFLD;
-        OUString sTypeName(sName.GetToken(1, '.'));
-        OUString sUIName = SwXFieldMaster::GetSetExpUIName(sTypeName);
+        const OUString sTypeName(sName.GetToken(1, '.'));
+        OUString sUIName = SwStyleNameMapper::GetUIName(sTypeName, GET_POOLID_TXTCOLL );
         if(sUIName != sTypeName)
             sName.SetToken(1, '.', sUIName);
     }
@@ -2994,7 +2953,7 @@ sal_Bool SwXTextFieldMasters::getInstanceName(
     {
         rName += C2S("com.sun.star.text.FieldMaster.");
         rName += C2S("SetExpression.");
-        rName += String(SwXFieldMaster::GetSetExpProgrammaticName(rFldType.GetName()));
+        rName += String(SwStyleNameMapper::GetProgName(rFldType.GetName(), GET_POOLID_TXTCOLL ));
     }
     else if(RES_DBFLD == nWhich)
     {
@@ -3076,8 +3035,8 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( RuntimeExc
     else if(COMPARE_EQUAL == sTypeName.CompareToAscii("SetExpression"))
     {
         nResId = RES_SETEXPFLD;
-        OUString sTypeName(sName.GetToken(1, '.'));
-        OUString sUIName = SwXFieldMaster::GetSetExpUIName(sTypeName);
+        const OUString sTypeName(sName.GetToken(1, '.'));
+        OUString sUIName = SwStyleNameMapper::GetUIName( sTypeName, GET_POOLID_TXTCOLL );
         if(sUIName != sTypeName)
             sName.SetToken(1, '.', sUIName);
     }

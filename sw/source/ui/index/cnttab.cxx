@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-07-16 10:37:57 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,9 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 
 using namespace ::com::sun::star;
@@ -1234,7 +1236,7 @@ sal_Bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const String& rName)
     if(pColl && pColl->GetOutlineLevel() == NO_NUMBERING)
         return sal_True;
 
-    sal_uInt16 nId = rSh.GetPoolId(rName, GET_POOLID_TXTCOLL);
+    sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, GET_POOLID_TXTCOLL);
     if(nId != USHRT_MAX &&
        rSh.GetTxtCollFromPool(nId)->GetOutlineLevel() == NO_NUMBERING)
         return sal_True;
@@ -2083,9 +2085,9 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
         aAddStylesPB.SetPosPixel(aPos);
     }
     else if( nType & TO_ILLUSTRATION )
-        aCaptionSequenceLB.SelectEntry( GetDocPoolNm( RES_POOLCOLL_LABEL_ABB, sStr ));
+        aCaptionSequenceLB.SelectEntry( SwStyleNameMapper::GetUIName( RES_POOLCOLL_LABEL_ABB, sStr ));
     else if( nType & TO_TABLE )
-        aCaptionSequenceLB.SelectEntry( GetDocPoolNm( RES_POOLCOLL_LABEL_TABLE, sStr ));
+        aCaptionSequenceLB.SelectEntry( SwStyleNameMapper::GetUIName( RES_POOLCOLL_LABEL_TABLE, sStr ));
     else if( nType & TO_USER )
     {
         aAddStylesCB.SetText(sAddStyleUser);
@@ -2262,9 +2264,9 @@ IMPL_LINK(SwTOXSelectTabPage, ChapterHdl,   PushButton*, pButton)
             {
                 //es gibt getrennte Resourcebereiche fuer die Inhaltsverzeichnisse
                 if(i < 5)
-                    GetDocPoolNm( RES_POOLCOLL_TOX_CNTNT1 + i, sStr );
+                    SwStyleNameMapper::GetUIName( RES_POOLCOLL_TOX_CNTNT1 + i, sStr );
                 else
-                    GetDocPoolNm( RES_POOLCOLL_TOX_CNTNT6 + i - 5, sStr );
+                    SwStyleNameMapper::GetUIName( RES_POOLCOLL_TOX_CNTNT6 + i - 5, sStr );
                 pForm->SetTemplate( i + 1, sStr );
             }
         }
@@ -3465,7 +3467,7 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
         aMainEntryStyleLB.InsertEntry( aCharStyleLB.GetEntry(i) );
         aMainEntryStyleLB.SetEntryData(i, aCharStyleLB.GetEntryData(i));
     }
-    String sTmp; GetDocPoolNm( RES_POOLCHR_IDX_MAIN_ENTRY, sTmp );
+    String sTmp; SwStyleNameMapper::GetUIName( RES_POOLCHR_IDX_MAIN_ENTRY, sTmp );
     aMainEntryStyleLB.SelectEntry(sTmp);
 }
 /* -----------------------------23.12.99 14:23--------------------------------
@@ -3477,7 +3479,7 @@ String  SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     if( TOX_INDEX == aCurType.eType )
-        GetDocPoolNm( 1 == nLevel ? RES_POOLCOLL_TOX_IDXBREAK
+        SwStyleNameMapper::GetUIName( 1 == nLevel ? RES_POOLCOLL_TOX_IDXBREAK
                                   : RES_POOLCOLL_TOX_IDX1 + nLevel-2, sRet );
 
     else if( TOX_AUTHORITIES == aCurType.eType )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 14:16:19 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,9 @@
 #endif
 #ifndef _CELLATR_HXX
 #include "cellatr.hxx"
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
 #endif
 
 
@@ -528,8 +531,8 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
     {
         const SwXMLConditionContext_Impl *pCond = (*pConditions)[i];
         const OUString& rName =
-                SwXStyleFamilies::GetUIName( pCond->GetApplyStyle(),
-                                             SFX_STYLE_FAMILY_PARA  );
+                SwStyleNameMapper::GetUIName( pCond->GetApplyStyle(),
+                                             GET_POOLID_TXTCOLL  );
         SwTxtFmtColl* pCondColl = pDoc->FindTxtFmtCollByName( rName );
         ASSERT( pCondColl,
             "SwXMLItemSetStyleContext_Impl::ConnectConditions: cond coll missing" );
@@ -734,14 +737,14 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
-    String sName( SwXStyleFamilies::GetUIName( GetMasterPageName(),
-                                               SFX_STYLE_FAMILY_PAGE ) );
+    String sName( SwStyleNameMapper::GetUIName( GetMasterPageName(),
+                                               GET_POOLID_PAGEDESC ) );
     SwPageDesc *pPageDesc = pDoc->FindPageDescByName( sName );
     if( !pPageDesc )
     {
         // If the page style is a pool style, then we maybe have to create it
         // first if it hasn't been used by now.
-        sal_uInt16 nPoolId = pDoc->GetPoolId( sName, GET_POOLID_PAGEDESC );
+        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sName, GET_POOLID_PAGEDESC );
         if( USHRT_MAX != nPoolId )
             pPageDesc = pDoc->GetPageDescFromPool( nPoolId );
     }

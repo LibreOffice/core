@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 14:16:19 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@
 #ifndef _XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star::beans;
@@ -179,9 +182,9 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
             const SwPageDesc *pPageDesc =
                 ((const SwFmtPageDesc *)pItem)->GetPageDesc();
             if( pPageDesc )
-                sName = SwXStyleFamilies::GetProgrammaticName(
+                sName = SwStyleNameMapper::GetProgName(
                                     pPageDesc->GetName(),
-                                    SFX_STYLE_FAMILY_PAGE );
+                                    GET_POOLID_PAGEDESC );
             AddAttribute( XML_NAMESPACE_STYLE, XML_MASTER_PAGE_NAME, sName );
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 11:23:00 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
 #endif
 
 using namespace com::sun::star::ui::dialogs;
@@ -343,11 +346,11 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
         aNameED.SetText(pINetFmt->GetName());
         String sEntry = pINetFmt->GetVisitedFmt();
         if( !sEntry.Len() )
-            GetDocPoolNm( RES_POOLCHR_INET_VISIT, sEntry );
+            SwStyleNameMapper::GetUIName( RES_POOLCHR_INET_VISIT, sEntry );
         aVisitedLB.SelectEntry(sEntry);
         sEntry = pINetFmt->GetINetFmt();
         if(!sEntry.Len())
-            GetDocPoolNm( RES_POOLCHR_INET_NORMAL, sEntry );
+            SwStyleNameMapper::GetUIName( RES_POOLCHR_INET_NORMAL, sEntry );
         aNotVisitedLB.SelectEntry(sEntry);
 
         aTargetFrmLB.SetText(pINetFmt->GetTargetFrame());
@@ -385,12 +388,12 @@ BOOL SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 
     //zuerst die gueltigen Einstellungen setzen
     String sEntry = aVisitedLB.GetSelectEntry();
-    USHORT nId = rSh.GetPoolId( sEntry, GET_POOLID_CHRFMT);
+    USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, GET_POOLID_CHRFMT);
     aINetFmt.SetVisitedFmtId(nId);
     aINetFmt.SetVisitedFmt(nId == RES_POOLCHR_INET_VISIT ? aEmptyStr : sEntry);
 
     sEntry = aNotVisitedLB.GetSelectEntry();
-    nId = rSh.GetPoolId( sEntry, GET_POOLID_CHRFMT);
+    nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, GET_POOLID_CHRFMT);
     aINetFmt.SetINetFmtId( nId );
     aINetFmt.SetINetFmt(nId == RES_POOLCHR_INET_NORMAL ? aEmptyStr : sEntry);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 08:51:03 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,9 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 using namespace com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
@@ -486,7 +489,7 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
         if( ( SFX_STYLE_FAMILY_PAGE == eOldFamily &&
               pDoc->GetPageDesc(0).GetName() == rOldName ) ||
               ( SFX_STYLE_FAMILY_CHAR == eOldFamily &&
-                rOldName == *pDoc->GetTextNmArray()[ RES_POOLCOLL_STANDARD -
+                rOldName == *SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
                                                 RES_POOLCOLL_TEXT_BEGIN ] ))
             return FALSE;
 
@@ -677,7 +680,7 @@ BOOL SwDocShell::Remove(USHORT nIdx1,       // siehe Insert
         if( ( SFX_STYLE_FAMILY_PAGE == eFamily &&
               pDoc->GetPageDesc(0).GetName() == aName ) ||
               ( SFX_STYLE_FAMILY_CHAR == eFamily &&
-                aName == *pDoc->GetTextNmArray()[ RES_POOLCOLL_STANDARD -
+                aName == *SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
                                                 RES_POOLCOLL_TEXT_BEGIN ] ))
             return FALSE;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-17 13:00:33 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,9 @@
 #endif
 #ifndef _SV_FONT_HXX //autogen
 #include <vcl/font.hxx>
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
 #endif
 
 
@@ -2780,7 +2783,7 @@ SwCharFmt* WW8RStyle::SearchCharFmt( const String& rName )
             return (*pIo->rDoc.GetCharFmts())[ n ];
 
                     // Collection noch nicht gefunden, vielleicht im Pool ?
-    n = pIo->rDoc.GetPoolId( rName , GET_POOLID_CHRFMT );
+    n = SwStyleNameMapper::GetPoolIdFromUIName( rName , GET_POOLID_CHRFMT );
     if ( n != USHRT_MAX )       // gefunden oder Standard
         return pIo->rDoc.GetCharFmtFromPool( n );
 
@@ -2870,7 +2873,7 @@ SwTxtFmtColl* WW8RStyle::SearchFmtColl( const String& rName )
     if( !pColl )
     {
                     // Collection noch nicht gefunden, vielleicht im Pool ?
-        USHORT n = pIo->rDoc.GetPoolId( rName , GET_POOLID_TXTCOLL );
+        USHORT n = SwStyleNameMapper::GetPoolIdFromUIName( rName , GET_POOLID_TXTCOLL );
         if ( n != USHRT_MAX )       // gefunden oder Standard
             pColl = pIo->rDoc.GetTxtCollFromPool( n );
     }
@@ -3236,11 +3239,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.16 2001-07-17 13:00:33 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.17 2001-07-20 10:11:34 mtg Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.16  2001/07/17 13:00:33  cmc
+      #89801# ##1140## Frame attributes in cells past the first cell in a table are to be ignored
+
       Revision 1.15  2001/07/16 09:28:11  cmc
       #89590# If an end of table row does not line up and theres space for a table cell to balance it then insert one. Duplicates words behaviour
 
