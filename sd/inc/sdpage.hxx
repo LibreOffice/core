@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:25:13 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,6 +450,8 @@ public:
     /** callback from the sd::View when a paragraph from one object on this page is removed */
     void onParagraphRemoving( ::Outliner* pOutliner, Paragraph* pPara, SdrObject* pObj );
 
+    /** callback from the sd::View when an object just left text edit mode */
+    void onEndTextEdit( SdrObject* pObj );
 };
 
 #endif     // _SDPAGE_HXX
