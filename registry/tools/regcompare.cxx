@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jsc $ $Date: 2001-12-10 14:53:31 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 11:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 #include <stdio.h>
+#include <string.h>
 
 #include <set>
 #include <vector>
