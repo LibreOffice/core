@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-17 15:04:25 $
+ *  last change: $Author: cmc $ $Date: 2001-10-18 10:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2606,6 +2606,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, /*const*/ WW8FlyPara* pFW,
     }
 
     SwFmtSurround aSur( pFS->eSurround );   // Umfluss
+    aSur.SetAnchorOnly( TRUE );
 
 //  GoldCut umfliesst inzwischen nur dann auf beiden Seiten, wenn der Fly
 //  schmaler als ca. 1.5cm ist. Also entspricht normales Parallel besser
