@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-17 10:08:51 $
+ *  last change: $Author: os $ $Date: 2000-10-19 13:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1667,6 +1667,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_SHOW_CHANGES),                  WID_DOC_CHANGES_SHOW,       &::getBooleanCppuType(),    PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_WORD_COUNT),                    WID_DOC_WORD_COUNT,         &::getCppuType((const sal_Int32*)0),    PropertyAttribute::READONLY,   0},
                     { SW_PROP_NAME(UNO_NAME_WORD_SEPARATOR),                WID_DOC_WORD_SEPARATOR,     &::getCppuType((const OUString*)0), PROPERTY_NONE,   0},
+                    { SW_PROP_NAME(UNO_NAME_HIDE_FIELD_TIPS),               WID_DOC_HIDE_TIPS,          &::getBooleanCppuType(),    PROPERTY_NONE,   0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aDocMap_Impl;
