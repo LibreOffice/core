@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-18 13:58:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #include <tabctrl.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
 #pragma hdrstop
@@ -194,9 +194,9 @@ void TabPage::DeactivatePage()
 
 // -----------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > TabPage::CreateAccessible()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > TabPage::CreateAccessible()
 {
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc;
 
     Window* pParent = GetAccessibleParentWindow();
     if ( pParent && pParent->GetType() == WINDOW_TABCONTROL )
@@ -209,10 +209,10 @@ void TabPage::DeactivatePage()
                 sal_uInt16 nPageId = pTabControl->GetPageId( i );
                 if ( pTabControl->GetTabPage( nPageId ) == this )
                 {
-                    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xParent = pTabControl->GetAccessible();
+                    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xParent = pTabControl->GetAccessible();
                     if ( xParent.is() )
                     {
-                        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
+                        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
                         if ( xParentContext.is() )
                             xAcc = xParentContext->getAccessibleChild( i );
                     }
