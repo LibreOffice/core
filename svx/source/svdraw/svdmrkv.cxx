@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 13:39:01 $
+ *  last change: $Author: aw $ $Date: 2002-11-28 14:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,11 @@
 #include "dialmgr.hxx"
 #include "svdstr.hrc"
 #include "svdundo.hxx"
+
+// #105722#
+#ifndef _SVDOPATH_HXX
+#include "svdopath.hxx"
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -808,6 +813,25 @@ BOOL SdrMarkView::ImpIsFrameHandles() const
 
 void SdrMarkView::SetMarkHandles()
 {
+    // #105722# remember old focus handle values to search for it again
+    const SdrHdl* pSaveOldFocusHdl = aHdl.GetFocusHdl();
+    sal_Bool bSaveOldFocus(sal_False);
+    sal_uInt16 nSavePolyNum, nSavePointNum;
+    SdrHdlKind eSaveKind;
+    SdrObject* pSaveObj;
+
+    if(pSaveOldFocusHdl
+        && pSaveOldFocusHdl->GetObj()
+        && pSaveOldFocusHdl->GetObj()->ISA(SdrPathObj)
+        && (pSaveOldFocusHdl->GetKind() == HDL_POLY || pSaveOldFocusHdl->GetKind() == HDL_BWGT))
+    {
+        bSaveOldFocus = sal_True;
+        nSavePolyNum = pSaveOldFocusHdl->GetPolyNum();
+        nSavePointNum = pSaveOldFocusHdl->GetPointNum();
+        pSaveObj = pSaveOldFocusHdl->GetObj();
+        eSaveKind = pSaveOldFocusHdl->GetKind();
+    }
+
     aHdl.Clear();
     aHdl.SetRotateShear(eDragMode==SDRDRAG_ROTATE);
     aHdl.SetDistortShear(eDragMode==SDRDRAG_SHEAR);
@@ -920,6 +944,25 @@ void SdrMarkView::SetMarkHandles()
 
     // sort handles
     aHdl.Sort();
+
+    // #105722# try to restore focus handle index from remembered values
+    if(bSaveOldFocus)
+    {
+        for(sal_uInt32 a(0); a < aHdl.GetHdlCount(); a++)
+        {
+            SdrHdl* pCandidate = aHdl.GetHdl(a);
+
+            if(pCandidate->GetObj()
+                && pCandidate->GetObj() == pSaveObj
+                && pCandidate->GetKind() == eSaveKind
+                && pCandidate->GetPolyNum() == nSavePolyNum
+                && pCandidate->GetPointNum() == nSavePointNum)
+            {
+                aHdl.SetFocusHdl(pCandidate);
+                break;
+            }
+        }
+    }
 }
 
 void SdrMarkView::AddCustomHdl()
