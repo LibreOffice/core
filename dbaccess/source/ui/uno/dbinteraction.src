@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:54:08 $
+ *  last change: $Author: rt $ $Date: 2002-09-05 10:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,21 +65,21 @@
 
 String STR_REMEMBERPASSWORD_SESSION
 {
-    Text = "Passwort bis Applikationsende ~merken";
+    Text = "Kennwort bis Applikationsende ~merken";
     Text[ english ] = "~Remember password until application ends";
     Text[ arabic ] = "ÊĞßøÑ ßáãÉ ÇáÓÑ ÍÊì äåÇíÉ ÌáÓÉ ÇáÚãá";
     Text[ chinese_simplified ] = "ç»“æŸç¨‹åºä¹‹å‰ä¸€ç›´è®°ä½å¯†ç (~R)";
     Text[ chinese_simplified ] = "ç»“æŸç¨‹åºä¹‹å‰ä¸€ç›´è®°ä½å¯†ç (~R)";
     Text[ chinese_traditional ] = "çµæŸç¨‹å¼ä¹‹å‰ä¸€ç›´è¨˜ä½å¯†ç¢¼(~R)";
-    Text[ danish ] = "Husk adgangskoden til applikationen afsluttes";
+    Text[ danish ] = "~Husk adgangskode til lukning af programmet";
     Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van het programma";
     Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van het programma";
     Text[ english_us ] = "~Remember password till end of session";
     Text[ french ] = "Se rappeler du ~mot de passe jusqu'à la fin de la session";
     Text[ greek ] = "Áğï~ìíçìüíåõóç êùäéêïı İùò ôï ôİëïò ôçò åöáñìïãŞò";
     Text[ italian ] = "An~nota password fino alla fine dell'applicazione";
-    Text[ japanese ] = "ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾ã¯ï½±ï¾Œï¾Ÿï¾˜ï½¹ï½°ï½¼ï½®ï¾çµ‚äº†ã¾ã§è¨˜æ†¶ã—ã¦ãŠã(~R)";
-    Text[ korean ] = "ì‘ìš©í”„ë¡œê·¸ë¨ì„ ì¢…ë£Œí•  ë•Œê¹Œì§€ íŒ¨ìŠ¤ì›Œë“œ ê¸°ì–µ(~R)";
+    Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¯ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†ã¾ã§è¨˜æ†¶ã—ã¦ãŠã(~R)";
+    Text[ korean ] = "ì‘ìš© í”„ë¡œê·¸ë¨ì„ ì¢…ë£Œí•  ë•Œê¹Œì§€ íŒ¨ìŠ¤ì›Œë“œ ê¸°ì–µ(~R)";
     Text[ polish ] = "Zapamiêtaj has³o do koñca aplikacji";
     Text[ portuguese ] = "~Lembrar senha até terminar a aplicação";
     Text[ portuguese_brazilian ] = "Passwort ~merken";
@@ -87,26 +87,27 @@ String STR_REMEMBERPASSWORD_SESSION
     Text[ spanish ] = "~Recordar contraseña hasta finalizar la aplicación";
     Text[ swedish ] = "Ko~m ihåg lösenordet tills tillämpningen avslutas";
     Text[ turkish ] = "~Remember password till end of session";
-    Text[ catalan ] = "~Recordar contraseña hasta finalizar la aplicación";
+    Text[ catalan ] = "~Recorda la contrasenya fins a la fi de la sessió";
     Text[ finnish ] = "~Muista salasana istunnon loppuun asti";
+    Text[ thai ] = "~à¸ˆà¸”à¸ˆà¸³à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¸ˆà¸™à¸à¸§à¹ˆà¸²à¸ªà¸´à¹ˆà¸‡à¸—à¸µà¹ˆà¸—à¸³à¸­à¸¢à¸¹à¹ˆà¸ˆà¸°à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”";
 };
 
 String STR_REMEMBERPASSWORD_PERSISTENT
 {
-    Text = "Passwort dauerhaft ~speichern";
+    Text = "Kennwort dauerhaft ~speichern";
     Text[ english ] = "~Save password permanently";
     Text[ arabic ] = "ÍİÙ ÏÇÆã áßáãÉ ÇáÓÑ";
     Text[ chinese_simplified ] = "ä¿å­˜å¯†ç (~R)";
     Text[ chinese_simplified ] = "ä¿å­˜å¯†ç (~R)";
     Text[ chinese_traditional ] = "å„²å­˜å¯†ç¢¼(~R)";
-    Text[ danish ] = "Gem adgangskoden permanent";
+    Text[ danish ] = "~Gem adgangskode permanent";
     Text[ dutch ] = "Wachtwoord ~opslaan";
     Text[ dutch ] = "Wachtwoord ~opslaan";
     Text[ english_us ] = "~Remember password";
     Text[ french ] = "~Enregistrer le mot de passe";
     Text[ greek ] = "Ìüíéìç áğïèŞêåõ~óç êùäéêïı ğñüóâáóçò";
     Text[ italian ] = "Salva pa~ssword ";
-    Text[ japanese ] = "ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾ã‚’ãšã£ã¨ä¿å­˜(~R)";
+    Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ãšã£ã¨ä¿å­˜(~R)";
     Text[ korean ] = "íŒ¨ìŠ¤ì›Œë“œ ì˜êµ¬ ì €ì¥(~R)";
     Text[ polish ] = "Zapisz has³o na sta³e";
     Text[ portuguese ] = "~Guardar senha";
@@ -115,14 +116,18 @@ String STR_REMEMBERPASSWORD_PERSISTENT
     Text[ spanish ] = "~Guardar contraseña";
     Text[ swedish ] = "~Spara lösenord permanent";
     Text[ turkish ] = "~Save password";
-    Text[ catalan ] = "~Guardar contraseña";
+    Text[ catalan ] = "~Recorda la contrasenya";
     Text[ finnish ] = "~Muista salasana";
+    Text[ thai ] = "~à¸ˆà¸”à¸ˆà¸³à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™";
 };
 
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2002/08/19 07:54:08  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.16  2001/11/16 22:33:27  vg
  *  Merge SRC638: 16.11.01 - 22:34:06
  *
