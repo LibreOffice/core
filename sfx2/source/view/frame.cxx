@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:19:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,6 @@
 #include "frmdescr.hxx"
 #include "appdata.hxx"
 #include "openflag.hxx"
-#include "urlframe.hxx"
 #include "viewsh.hxx"
 #include "viewfrm.hxx"
 #include "request.hxx"
@@ -597,9 +596,6 @@ void SfxFrame::CancelTransfers( sal_Bool bCancelLoadEnv )
         }
 
         // zuerst Nachladende Frames stoppen
-        SfxURLFrame* pURLFrame = PTR_CAST( SfxURLFrame, this );
-        if( pURLFrame )
-            pURLFrame->CancelActivate_Impl();
         sal_uInt16 nCount = GetChildFrameCount();
         for( sal_uInt16 n = 0; n<nCount; n++ )
             GetChildFrame( n )->CancelTransfers();
@@ -1230,9 +1226,6 @@ void SfxFrame::BeamerSet_Impl()
 
 void SfxFrame::LoadFinished_Impl()
 {
-    SfxURLFrame *pURL = PTR_CAST( SfxURLFrame, this );
-    if ( pURL )
-        pURL->LoadFinished_Impl();
 }
 
 SfxFrame* SfxFrame::findFrame(const ::rtl::OUString& aTargetframename, sal_Int32 nSearchFlags)
