@@ -2,9 +2,9 @@
  *
  *  $RCSfile: systemintegrationmanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:00:45 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 14:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,14 +222,22 @@ std::vector<XSingleLayerStratum> SystemIntegrationManager::getSupportingBackends
             if (xSingleServiceFactory.is())
             {
 
-                xBackend = XSingleLayerStratum::query(
-                    xSingleServiceFactory->createInstanceWithContext(mContext));
-                if (xBackend.is())
-                {
+                try{
+                    xBackend = XSingleLayerStratum::query(
+                        xSingleServiceFactory->createInstanceWithContext(mContext));
+                     if (xBackend.is())
+                     {
 
-                    cur->second.mBackend = xBackend;
-                    backends.push_back(xBackend);
+                         cur->second.mBackend = xBackend;
+                         backends.push_back(xBackend);
+                     }
                 }
+                catch(uno::Exception& e)
+                {
+                    OSL_TRACE("SystemIntegration::getSupportingBackend - could not create platform Backend");
+
+                }
+
             }
         }
     }
