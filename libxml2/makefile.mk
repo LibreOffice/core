@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-15 15:18:52 $
+#   last change: $Author: obo $ $Date: 2004-11-16 13:27:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,9 +82,7 @@ LIBXML2VERSION=2.5.11
 TARFILE_NAME=$(PRJNAME)-$(LIBXML2VERSION)
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
 
-ADDITIONAL_FILES= \
-    makefile.mk \
-    xml2.map
+# This is only for UNX environment now
 
 .IF "$(OS)"=="WNT"
 CONFIGURE_DIR=win32
