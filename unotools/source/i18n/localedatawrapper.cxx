@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2000-11-18 18:56:34 $
+ *  last change: $Author: er $ $Date: 2001-01-16 15:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <comphelper/componentfactory.hxx>
 #endif
 
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include <com/sun/star/uno/XInterface.hpp>
 #endif
@@ -102,6 +106,9 @@ static const USHORT nCurrFormatDefault = 0;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
+
+uno::Sequence< lang::Locale > LocaleDataWrapper::xInstalledLocales =
+    uno::Sequence< lang::Locale >(0);
 
 
 LocaleDataWrapper::LocaleDataWrapper(
@@ -367,7 +374,41 @@ void LocaleDataWrapper::invalidateData()
 }
 
 
+::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > LocaleDataWrapper::getAllInstalledLocaleNames() const
+{
+    if ( xInstalledLocales.getLength() )
+        return xInstalledLocales;
+
+    try
+    {
+        if ( xLD.is() )
+            xInstalledLocales = xLD->getAllInstalledLocaleNames();
+    }
+    catch ( Exception& e )
+    {
+#ifndef PRODUCT
+        ByteString aMsg( "getAllInstalledLocaleNames: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    }
+    return xInstalledLocales;
+}
+
+
 // --- Impl and helpers ----------------------------------------------------
+
+// static
+::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > LocaleDataWrapper::getInstalledLocaleNames()
+{
+    if ( !xInstalledLocales.getLength() )
+    {
+        LocaleDataWrapper aLDW( ::utl::getProcessServiceFactory(), lang::Locale() );
+        aLDW.getAllInstalledLocaleNames();
+    }
+    return xInstalledLocales;
+}
+
 
 const String& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
 {

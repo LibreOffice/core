@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2000-11-18 18:53:10 $
+ *  last change: $Author: er $ $Date: 2001-01-16 15:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,8 @@ namespace com { namespace sun { namespace star {
 
 class LocaleDataWrapper
 {
+    static ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xInstalledLocales;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData > xLD;
     ::com::sun::star::lang::Locale          aLocale;
@@ -164,6 +166,10 @@ public:
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getTransliterations() const;
     ::com::sun::star::i18n::ForbiddenCharacters getForbiddenCharacters() const;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getReservedWord() const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > getAllInstalledLocaleNames() const;
+
+    /// same as the wrapper implementation but static
+    static ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > getInstalledLocaleNames();
 
 
     /// maps the LocaleData string to the International enum
