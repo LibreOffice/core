@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTableColumnObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:12 $
+ *  last change:$Date: 2003-02-04 15:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
 * Test for object which is represented by service
 * <code>com.sun.star.table.TableColumn</code>. <p>
@@ -145,8 +148,7 @@ public class ScTableColumnObj extends TestCase {
     * @see com.sun.star.table.XColumnRowRange
     * @see com.sun.star.table.TableColumn
     */
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log ) throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oInterface = null;
         XInterface oObj = null;
@@ -163,12 +165,16 @@ public class ScTableColumnObj extends TestCase {
         XNameAccess oNames = (XNameAccess)
             UnoRuntime.queryInterface( XNameAccess.class, xSpreadsheets );
         try {
-            xSpreadsheet = (XSpreadsheet)
-                oNames.getByName(oNames.getElementNames()[0]);
+            xSpreadsheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),
+                    oNames.getByName(oNames.getElementNames()[0]));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get element by name", e);
         } catch (com.sun.star.container.NoSuchElementException e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get element by name", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get element by name", e);
         }
@@ -179,11 +185,15 @@ public class ScTableColumnObj extends TestCase {
         XIndexAccess oIndexAccess = (XIndexAccess)
             UnoRuntime.queryInterface(XIndexAccess.class, oColumns);
         try {
-            oObj = (XInterface) oIndexAccess.getByIndex(10);
+            oObj = (XInterface) AnyConverter.toObject(
+                    new Type(XInterface.class),oIndexAccess.getByIndex(10));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get by index", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get by index", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get by index", e);
         }
