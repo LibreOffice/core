@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.30 $
+*  $Revision: 1.31 $
 *
-*  last change: $Author: hr $ $Date: 2004-08-02 17:49:28 $
+*  last change: $Author: hr $ $Date: 2004-08-03 13:18:29 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -186,14 +186,13 @@ File gid_File_Lib_Behelper
   #endif
 End
 
+// BM: #117495# remove chart2 from setup.  I just comment this
+// out, because it will later be re-added
 
-STD_UNO_LIB_FILE(gid_File_Lib_Chartcontroller, chartcontroller)
-
-STD_UNO_LIB_FILE(gid_File_Lib_Chartmodel, chartmodel)
-
-STD_LIB_FILE(gid_File_Lib_Charttools, charttools)
-
-STD_UNO_LIB_FILE(gid_File_Lib_Chartview, chartview)
+// STD_UNO_LIB_FILE(gid_File_Lib_Chartcontroller, chartcontroller)
+// STD_UNO_LIB_FILE(gid_File_Lib_Chartmodel, chartmodel)
+// STD_LIB_FILE(gid_File_Lib_Charttools, charttools)
+// STD_UNO_LIB_FILE(gid_File_Lib_Chartview, chartview)
 
 
 #if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
