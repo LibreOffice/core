@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 11:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,11 @@ void OAdoColumn::fillPropertyValues()
             }
         }
     }
+}
+// -----------------------------------------------------------------------------
+WpADOColumn OAdoColumn::getColumnImpl() const
+{
+    return m_aColumn;
 }
 // -----------------------------------------------------------------------------
 

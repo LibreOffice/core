@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapadox.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 11:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ namespace connectivity
         {
         public:
             WpADOColumn(_ADOColumn* pInt=NULL)  :   WpOLEBase<_ADOColumn>(pInt){}
+            WpADOColumn(const WpADOColumn& rhs){operator=(rhs);}
 
             void Create();
 
@@ -227,6 +228,7 @@ namespace connectivity
         {
         public:
             WpADOKey(ADOKey* pInt=NULL) :   WpOLEBase<ADOKey>(pInt){}
+            WpADOKey(const WpADOKey& rhs){operator=(rhs);}
 
             inline WpADOKey& operator=(const WpADOKey& rhs)
                 {WpOLEBase<ADOKey>::operator=(rhs); return *this;}
@@ -309,6 +311,7 @@ namespace connectivity
         {
         public:
             WpADOIndex(_ADOIndex* pInt=NULL)    :   WpOLEBase<_ADOIndex>(pInt){}
+            WpADOIndex(const WpADOIndex& rhs){operator=(rhs);}
 
             inline WpADOIndex& operator=(const WpADOIndex& rhs)
                 {WpOLEBase<_ADOIndex>::operator=(rhs); return *this;}
@@ -377,6 +380,7 @@ namespace connectivity
         {
         public:
             WpADOCatalog(_ADOCatalog* pInt = NULL)  :   WpOLEBase<_ADOCatalog>(pInt){}
+            WpADOCatalog(const WpADOCatalog& rhs){operator=(rhs);}
 
             inline WpADOCatalog& operator=(const WpADOCatalog& rhs)
                 {WpOLEBase<_ADOCatalog>::operator=(rhs); return *this;}
@@ -430,6 +434,7 @@ namespace connectivity
         {
         public:
             WpADOTable(_ADOTable* pInt=NULL)    :   WpOLEBase<_ADOTable>(pInt){}
+            WpADOTable(const WpADOTable& rhs){operator=(rhs);}
 
             inline WpADOTable& operator=(const WpADOTable& rhs)
                 {WpOLEBase<_ADOTable>::operator=(rhs); return *this;}
@@ -497,6 +502,7 @@ namespace connectivity
         {
         public:
             WpADOView(ADOView* pInt=NULL)   :   WpOLEBase<ADOView>(pInt){}
+            WpADOView(const WpADOView& rhs){operator=(rhs);}
 
             inline WpADOView& operator=(const WpADOView& rhs)
                 {WpOLEBase<ADOView>::operator=(rhs); return *this;}
@@ -525,6 +531,7 @@ namespace connectivity
         {
         public:
             WpADOGroup(_ADOGroup* pInt=NULL)    :   WpOLEBase<_ADOGroup>(pInt){}
+            WpADOGroup(const WpADOGroup& rhs){operator=(rhs);}
 
             inline WpADOGroup& operator=(const WpADOGroup& rhs)
                 {WpOLEBase<_ADOGroup>::operator=(rhs); return *this;}
@@ -579,6 +586,7 @@ namespace connectivity
         {
         public:
             WpADOUser(_ADOUser* pInt=NULL)  :   WpOLEBase<_ADOUser>(pInt){}
+            WpADOUser(const WpADOUser& rhs){operator=(rhs);}
 
             inline WpADOUser& operator=(const WpADOUser& rhs)
                 {WpOLEBase<_ADOUser>::operator=(rhs); return *this;}

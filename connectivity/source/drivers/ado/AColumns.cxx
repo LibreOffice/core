@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 11:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,12 @@
 #ifndef _CONNECTIVITY_ADO_COLUMN_HXX_
 #include "ado/AColumn.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADO_ACONNECTION_HXX_
+#include "ado/AConnection.hxx"
+#endif
+#ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
+#include "ado/Awrapado.hxx"
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -123,7 +129,11 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
     {
         OAdoColumn* pColumn = (OAdoColumn*)xTunnel->getSomething(OAdoColumn::getUnoTunnelImplementationId());
         if(pColumn)
-            m_pCollection->Append(OLEVariant(pColumn->getColumnImpl()));
+        {
+            WpADOColumn aColumn = pColumn->getColumnImpl();
+            m_pCollection->Append(OLEVariant(aColumn));
+            ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+        }
         else
             throw SQLException(::rtl::OUString::createFromAscii("Could not append column!"),*this,SQLSTATE_GENERAL,1000,Any());
     }

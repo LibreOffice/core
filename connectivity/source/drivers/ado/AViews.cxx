@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AViews.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 11:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
+#include "ado/Awrapado.hxx"
+#endif
+
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -103,7 +107,7 @@ Reference< XNamed > OViews::createObject(const ::rtl::OUString& _rName)
     ADOView* pView = NULL;
     m_pCollection->get_Item(OLEVariant(_rName),&pView);
 
-        Reference< XNamed > xRet = new OAdoView(isCaseSensitive(),pView);
+    Reference< XNamed > xRet = new OAdoView(isCaseSensitive(),pView);
 
     return xRet;
 }
@@ -124,12 +128,15 @@ void SAL_CALL OViews::appendByDescriptor( const Reference< XPropertySet >& descr
 {
     ::osl::MutexGuard aGuard(m_rMutex);
 
-        Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
+    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
         OAdoView* pView = (OAdoView*)xTunnel->getSomething(OAdoView:: getUnoTunnelImplementationId());
         if(pView)
+        {
             m_pCollection->Append(OLEString(getString(descriptor->getPropertyValue(PROPERTY_NAME))),(IDispatch *)pView->getImpl());
+            ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+        }
         else
             throw SQLException(::rtl::OUString::createFromAscii("Could not append view!"),*this,SQLSTATE_GENERAL,1000,Any());
     }
@@ -143,6 +150,7 @@ void SAL_CALL OViews::dropByName( const ::rtl::OUString& elementName ) throw(SQL
     ::osl::MutexGuard aGuard(m_rMutex);
 
     m_pCollection->Delete(OLEVariant(elementName));
+    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
 
     OCollection_TYPE::dropByName(elementName);
 }
@@ -154,6 +162,7 @@ void SAL_CALL OViews::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOu
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
     m_pCollection->Delete(OLEVariant(index));
+    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
 
     OCollection_TYPE::dropByIndex(index);
 }

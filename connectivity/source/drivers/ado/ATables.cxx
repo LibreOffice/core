@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 11:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _CONNECTIVITY_ADO_BCONNECTION_HXX_
 #include "ado/AConnection.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
+#include "ado/Awrapado.hxx"
+#endif
 #define CONNECTIVITY_PROPERTY_NAME_SPACE ado
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
@@ -132,7 +135,10 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
     {
         OAdoTable* pTable = (OAdoTable*)xTunnel->getSomething(OAdoTable:: getUnoTunnelImplementationId());
         if(pTable)
+        {
             m_pCollection->Append(OLEVariant(pTable->getImpl()));
+            ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+        }
         else
             throw SQLException(::rtl::OUString::createFromAscii("Could not append table!"),*this,SQLSTATE_GENERAL,1000,Any());
     }
@@ -146,6 +152,7 @@ void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQ
     ::osl::MutexGuard aGuard(m_rMutex);
 
     m_pCollection->Delete(OLEVariant(elementName));
+    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
 
     OCollection_TYPE::dropByName(elementName);
 }
@@ -157,6 +164,7 @@ void SAL_CALL OTables::dropByIndex( sal_Int32 index ) throw(SQLException, IndexO
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
     m_pCollection->Delete(OLEVariant(index));
+    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
 
     OCollection_TYPE::dropByIndex(index);
 }

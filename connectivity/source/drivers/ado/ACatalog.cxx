@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACatalog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 11:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ void OCatalog::refreshViews()
 
     if(m_pViews)
         delete m_pViews;
-    m_pViews = new OViews(*this,m_aMutex,aVector,pViews,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    m_pViews = new OViews(this,m_aMutex,aVector,pViews,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 }
 // -------------------------------------------------------------------------
 void OCatalog::refreshGroups()
