@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XExecutableDialog.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:27:01 $
+ *  last change:$Date: 2003-12-11 11:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,12 +155,12 @@ public class _XExecutableDialog extends MultiMethodTest {
     }
 
     /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
+    * Sleeps for 5 sec. to allow StarOffice to react on <code>
     * reset</code> call.
     */
     private void shortWait() {
         try {
-            Thread.sleep(500) ;
+            Thread.sleep(5000) ;
         } catch (InterruptedException e) {
             log.println("While waiting :" + e) ;
         }
