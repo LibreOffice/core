@@ -4,20 +4,11 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
-#include <com/sun/star/io/XInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
-#include <com/sun/star/io/XStream.hpp>
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
-#include <com/sun/star/io/XSeekable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -40,6 +31,21 @@ namespace com
             namespace task
             {
                 class XInteractionHandler;
+            }
+            namespace io
+            {
+                class XStream;
+                class XInputStream;
+                class XOutputStream;
+                class XSeekable;
+            }
+            namespace ucb
+            {
+                class XContent;
+            }
+            namespace beans
+            {
+                struct PropertyValue;
             }
         }
     }
@@ -123,6 +129,7 @@ public:
                                             UcbLockBytesHandler* pHandler=0 );
 
     static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_IO::XInputStream >& xContent );
+    static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_IO::XStream >& xContent );
 
     // SvLockBytes
     virtual void            SetSynchronMode (BOOL bSynchron);
@@ -147,6 +154,7 @@ public:
 
     // calling this method delegates the responsibility to call closeinput to the caller!
     NS_UNO::Reference < NS_IO::XInputStream > getInputStream();
+    NS_UNO::Reference < NS_IO::XStream > getStream();
 
 #if _SOLAR__PRIVATE
     sal_Bool                setInputStream_Impl( const NS_UNO::Reference < NS_IO::XInputStream > &rxInputStream,
