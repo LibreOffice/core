@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pcrservices.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:30:30 $
+ *  last change: $Author: fs $ $Date: 2001-06-11 11:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,15 +73,18 @@ using namespace ::com::sun::star::registry;
 //---------------------------------------------------------------------------------------
 
 extern "C" void SAL_CALL createRegistryInfo_OPropertyBrowserController();
+extern "C" void SAL_CALL createRegistryInfo_OControlFontDialog();
 
 //---------------------------------------------------------------------------------------
 
-extern "C" void SAL_CALL pcr_createRegistryInfo()
+extern "C" void SAL_CALL dbi_initializeModule()
 {
     static sal_Bool s_bInit = sal_False;
     if (!s_bInit)
     {
         createRegistryInfo_OPropertyBrowserController();
+        createRegistryInfo_OControlFontDialog();
+        ::pcr::OModule::setResourceFilePrefix("pcr");
         s_bInit = sal_True;
     }
 }
@@ -93,7 +96,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
                 uno_Environment **ppEnv
             )
 {
-    pcr_createRegistryInfo();
+    dbi_initializeModule();
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
@@ -140,6 +143,9 @@ extern "C" void* SAL_CALL component_getFactory(
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:30:30  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 11.01.01 09:14:45  fs
  ************************************************************************/
