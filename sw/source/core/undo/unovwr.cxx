@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unovwr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-27 16:53:28 $
+ *  last change: $Author: jp $ $Date: 2001-06-08 13:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ void SwUndoOverwrite::Undo( SwUndoIter& rUndoIter )
     if( pHistory )
     {
         if( pTxtNd->GetpSwpHints() )
-            pTxtNd->ClearSwpHintsArr( FALSE );
+            pTxtNd->ClearSwpHintsArr( FALSE, FALSE );
         pHistory->TmpRollback( pDoc, 0, FALSE );
     }
 
@@ -553,7 +553,7 @@ void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
         if( pHistory )
         {
             if( pTNd->GetpSwpHints() )
-                pTNd->ClearSwpHintsArr( FALSE );
+                pTNd->ClearSwpHintsArr( FALSE, FALSE );
             pHistory->TmpRollback( &rDoc, 0, FALSE );
             pHistory->SetTmpEnd( pHistory->Count() );
         }
@@ -565,11 +565,14 @@ void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unovwr.cxx,v 1.7 2001-02-27 16:53:28 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unovwr.cxx,v 1.8 2001-06-08 13:27:50 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/02/27 16:53:28  jp
+      Transliterte: Offsets are inclusive the start position
+
       Revision 1.6  2001/02/23 14:17:56  jp
       change transliteration from 1-1 to 1-n mapping
 
