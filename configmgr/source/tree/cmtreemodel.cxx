@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-12 15:04:10 $
+ *  last change: $Author: jb $ $Date: 2001-03-20 17:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,20 @@
 //..........................................................................
 namespace configmgr
 {
+//==========================================================================
+//= TreeChangeList
+//==========================================================================
+OUString TreeChangeList::getModuleName() const
+{
+    OUString sRet;
+    if (this->pathToRoot.depth() == 0)
+        sRet = root.getNodeName();
+
+    else
+        sRet = pathToRoot.moduleName();
+    OSL_ENSURE(sRet.getLength(), "WARNING: TreeChangeList has no module name");
+    return sRet;
+}
 //..........................................................................
 //==========================================================================
 //= Change

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:16:59 $
+ *  last change: $Author: jb $ $Date: 2001-03-20 17:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ bool CommitHelper::prepareCommit(TreeChangeList& rChangeList)
     OSL_ENSURE(aRootName.toString() == pTreeChange->getNodeName(), "ERROR in Commit: Change Name Mismatch");
 
     // now fill the TreeChangeList
-    rChangeList.pathToRoot = aPath.toString();
+    rChangeList.pathToRoot = ConfigurationName(aPath.toString());
     rChangeList.root.swap( *pTreeChange );
 
     return true;
@@ -173,8 +173,8 @@ void CommitHelper::finishCommit(TreeChangeList& rChangeList)
     Name aRootName(m_pTree->name(m_pTree->root()));
     AbsolutePath aPath = m_pTree->getContextPath();
 
-    OSL_ENSURE(rChangeList.pathToRoot == aPath.toString(), "ERROR: FinishCommit cannot handle rebased changes trees");
-    if (rChangeList.pathToRoot != aPath.toString())
+    OSL_ENSURE(rChangeList.pathToRoot.fullName() == aPath.toString(), "ERROR: FinishCommit cannot handle rebased changes trees");
+    if (rChangeList.pathToRoot.fullName() != aPath.toString())
         throw configuration::Exception("INTERNAL ERROR: FinishCommit cannot handle rebased changes trees");
 
     m_pTree->legacyFinishCommit(rChangeList.root);
@@ -188,8 +188,8 @@ void CommitHelper::revertCommit(TreeChangeList& rChangeList)
     Name aRootName(m_pTree->name(m_pTree->root()));
     AbsolutePath aPath = m_pTree->getContextPath();
 
-    OSL_ENSURE(rChangeList.pathToRoot == aPath.toString(), "ERROR: cannot handle rebased changes trees");
-    if (rChangeList.pathToRoot != aPath.toString())
+    OSL_ENSURE(rChangeList.pathToRoot.fullName() == aPath.toString(), "ERROR: cannot handle rebased changes trees");
+    if (rChangeList.pathToRoot.fullName() != aPath.toString())
         throw configuration::Exception("INTERNAL ERROR: RevertCommit cannot handle rebased changes trees");
 
     m_pTree->legacyRevertCommit(rChangeList.root);
@@ -203,8 +203,8 @@ void CommitHelper::failedCommit(TreeChangeList& rChangeList)
     Name aRootName(m_pTree->name(m_pTree->root()));
     AbsolutePath aPath = m_pTree->getContextPath();
 
-    OSL_ENSURE(rChangeList.pathToRoot == aPath.toString(), "ERROR: cannot handle rebased changes trees");
-    if (rChangeList.pathToRoot != aPath.toString())
+    OSL_ENSURE(rChangeList.pathToRoot.fullName() == aPath.toString(), "ERROR: cannot handle rebased changes trees");
+    if (rChangeList.pathToRoot.fullName() != aPath.toString())
         throw configuration::Exception("INTERNAL ERROR: FailedCommit cannot handle rebased changes trees");
 
     m_pTree->legacyFailedCommit(rChangeList.root);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-12 15:04:07 $
+ *  last change: $Author: jb $ $Date: 2001-03-20 17:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,13 +125,13 @@ namespace configmgr
     struct TreeChangeList
     {
         vos::ORef < OOptions > m_xOptions;       // options for the tree that is concerned by these changes
-        rtl::OUString pathToRoot;                // path to the root of the whole to-be-updated subtree
+        ConfigurationName pathToRoot;            // absolute path to the root of the whole to-be-updated subtree
         SubtreeChange root;                      // changes made within this sub tree
         // TreeChangeList(): root(::rtl::OUString(), configuration::Attributes()){}
 
         TreeChangeList(const vos::ORef < OOptions >& _xOptions, const rtl::OUString& _rPathToRoot, const SubtreeChange& _aSubtree)
                 : m_xOptions(_xOptions),
-                  pathToRoot(_rPathToRoot),
+                  pathToRoot(_rPathToRoot, ConfigurationName::Absolute()),
                   root(_aSubtree)   /* EXPENSIVE!!! (deep copy) */
             {}
 
@@ -149,7 +149,7 @@ namespace configmgr
                         const rtl::OUString& _rLocalName,
                         const configuration::Attributes& _rAttr)
                 : m_xOptions(_xOptions)
-                , pathToRoot(_rPathToRoot)
+                , pathToRoot(_rPathToRoot, ConfigurationName::Absolute())
                 , root(_rLocalName, _rAttr)
         {}
 
@@ -164,7 +164,7 @@ namespace configmgr
                         const rtl::OUString& _rChildTemplateModule,
                         const configuration::Attributes& _rAttr)
                 : m_xOptions(_xOptions)
-                , pathToRoot(_rPathToRoot)
+                , pathToRoot(_rPathToRoot, ConfigurationName::Absolute())
                 , root(_rLocalName, _rChildTemplateName, _rChildTemplateModule, _rAttr)
         {}
 
@@ -176,7 +176,7 @@ namespace configmgr
                         const rtl::OUString& _rPathToRoot,
                         const ISubtree& _rTree)
                 : m_xOptions(_xOptions)
-                , pathToRoot(_rPathToRoot)
+                , pathToRoot(_rPathToRoot, ConfigurationName::Absolute())
                 , root(_rTree)
         {
             OSL_ENSHURE(false, "Test only, because deep copy of subtreechange is very expensive.");
@@ -191,6 +191,8 @@ namespace configmgr
             , root(_rTree.root, _rNoCopy)
         {}
 
+        /// get the module these changes belong to
+        OUString getModuleName() const;
     };
 
     //==========================================================================
