@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parawin.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:16:29 $
+ *  last change: $Author: kz $ $Date: 2001-08-14 14:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   parawin.src  $
  //   $Author: kz $
- //     $Date: 2001-08-07 15:16:29 $
- // $Revision: 1.11 $
+ //     $Date: 2001-08-14 14:55:41 $
+ // $Revision: 1.12 $
  //  $Logfile:   T:/sc/source/ui/formdlg/parawin.srv  $
  //----------------------------------------------------------------------------
 
@@ -245,6 +245,7 @@ TabPage RID_SCTAB_PARAMETER
         VScroll = TRUE ;
     };
 };
+
 
 
 
