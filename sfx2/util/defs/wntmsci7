@@ -4930,3 +4930,13 @@ _TI2?AVElementExistException@container@star@sun@com@@
 ?setValue@SfxStatusIndicator@@UAAXJ@Z
 ?start@SfxStatusIndicator@@UAAXABVOUString@rtl@@J@Z
 ??0SfxOfficeDispatch@@QAE@PAVSfxDispatcher@@GABUURL@util@star@sun@com@@E@Z
+??0SvStorageStreamRef@@QAE@PAVSvStorageStream@@@Z
+??1?$Reference@VXViewDataSupplier@document@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?__query@?$Reference@VXViewDataSupplier@document@star@sun@com@@@uno@star@sun@com@@CAPAVXViewDataSupplier@document@345@PAVXInterface@2345@@Z
+?set@?$Reference@VXIndexAccess@container@star@sun@com@@@uno@star@sun@com@@QAAEPAVXIndexAccess@container@345@@Z
+??1?$Reference@VXTypeDetection@document@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?__query@?$Reference@VXTypeDetection@document@star@sun@com@@@uno@star@sun@com@@CAPAVXTypeDetection@document@345@PAVXInterface@2345@@Z
+?s_pType_com_sun_star_document_XTypeDetection@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXTypeDetection@document@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+??1?$Reference@VXIndexContainer@container@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?__query@?$Reference@VXIndexAccess@container@star@sun@com@@@uno@star@sun@com@@CAPAVXIndexAccess@container@345@PAVXInterface@2345@@Z
+?s_pType_com_sun_star_container_XIndexContainer@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXIndexContainer@container@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
