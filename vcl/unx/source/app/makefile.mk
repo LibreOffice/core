@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-09 11:54:20 $
+#   last change: $Author: rt $ $Date: 2001-05-18 14:07:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,7 @@ SLOFILES=\
             $(SLO)$/i18n_im.obj			\
             $(SLO)$/i18n_xkb.obj		\
             $(SLO)$/i18n_wrp.obj		\
+            $(SLO)$/i18n_keysym.obj		\
             $(SLO)$/salmain.obj			\
             $(SLO)$/saldata.obj			\
             $(SLO)$/saltimer.obj		\
