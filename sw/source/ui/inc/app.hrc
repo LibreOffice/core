@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:03:45 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 13:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,7 @@
 #define MN_EXTRA_PORT               (RC_APP_BEGIN + 60)
 #define MN_WIN_PORT                 (RC_APP_BEGIN + 61)
 #define MN_HELP_PORT                (RC_APP_BEGIN + 62)
+#define MN_SUB_TRANSLITERATE        (RC_APP_BEGIN + 63)
 
 
 #define RC_INTRO_BEGIN              (RC_APP_BEGIN + 90)

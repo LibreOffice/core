@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-14 18:32:27 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 13:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@
 #endif
 #ifndef _OFAACCFG_HXX //autogen
 #include <offmgr/ofaaccfg.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HDL_
+#include <com/sun/star/i18n/transliterationmodules.hdl>
 #endif
 
 #ifndef _SWWDOCSH_HXX //autogen
@@ -881,6 +884,45 @@ void  SwTextShell::ExecDelete(SfxRequest &rReq)
     }
 }
 
+void SwTextShell::ExecTransliteration( SfxRequest & rReq )
+{
+    using namespace ::com::sun::star::i18n;
+    {
+        sal_uInt32 nMode = 0;
+
+        switch( rReq.GetSlot() )
+        {
+        case FN_TRANSLITERATE_UPPER:
+            nMode = TransliterationModules_LOWERCASE_UPPERCASE;
+            break;
+        case FN_TRANSLITERATE_LOWER:
+            nMode = TransliterationModules_UPPERCASE_LOWERCASE;
+            break;
+
+        case FN_TRANSLITERATE_HALFWIDTH:
+            nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
+            break;
+        case FN_TRANSLITERATE_FULLWIDTH:
+            nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
+            break;
+
+        case FN_TRANSLITERATE_HIRAGANA:
+            nMode = TransliterationModules_KATAKANA_HIRAGANA;
+            break;
+        case FN_TRANSLITERATE_KATAGANA:
+            nMode = TransliterationModules_HIRAGANA_KATAKANA;
+            break;
+
+        default:
+            ASSERT(!this, "falscher Dispatcher");
+        }
+
+        if( nMode )
+            GetShell().TransliterateText( nMode );
+    }
+}
+
+
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -986,6 +1028,9 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/14 18:32:27  jp
+    use moduleoptions
+
     Revision 1.2  2000/10/05 12:27:50  jp
     should change: remove image
 

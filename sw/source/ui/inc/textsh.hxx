@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 12:32:03 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 13:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ public:
     void    ExecParaAttrArgs(SfxRequest &);
     void    ExecAttr(SfxRequest &);
     void    ExecDB(SfxRequest &);
+    void    ExecTransliteration(SfxRequest &);
 
     void    GetAttrState(SfxItemSet &);
 
