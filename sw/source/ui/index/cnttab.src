@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:07:15 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3709,7 +3709,7 @@ TabPage TP_TOX_ENTRY
         Text[ portuguese_brazilian ] = "Todos os ~níveis";
         Text[ japanese ] = "ã™ã¹ã¦(~A)";
         Text[ korean ] = "ëª¨ë“  ìˆ˜ì¤€(~A)";
-        Text[ chinese_simplified ] = "å…¨éƒ¨(~A)";
+        Text[ chinese_simplified ] = "å…¨éƒ¨";
         Text[ chinese_traditional ] = "å…¨éƒ¨(~A)";
         Text[ turkish ] = "~Tüm düzeyler";
         Text[ arabic ] = "ßá ÇáãÓÊæíÇÊ";
@@ -4459,7 +4459,7 @@ TabPage TP_TOX_ENTRY
         Text[ portuguese_brazilian ] = "Estrutura";
         Text[ japanese ] = "æ§‹æˆã¨æ›¸å¼";
         Text[ korean ] = "êµ¬ì¡° ë° ì„œì‹";
-        Text[ chinese_simplified ] = "ç»“æ„å’Œæ ¼å¼";
+        Text[ chinese_simplified ] = "ç»“æ„å’Œæ ¼å¼åŒ–";
         Text[ chinese_traditional ] = "çµæ§‹å’Œæ ¼å¼";
         Text[ arabic ] = "ÇáÈäíÉ";
         Text[ turkish ] = "Yapı ve Biçimlendirme";
