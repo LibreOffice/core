@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:26:26 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 14:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,12 +248,16 @@ sal_Bool OQueryTableWindow::FillListBox()
         {
             Reference<XPropertySet> xProp;
             ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
-            sal_Int32 nKeyType = 0;
-            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-            if(KeyType::PRIMARY == nKeyType)
+            OSL_ENSURE(xProp.is(),"OQueryTableWindow::FillListBox Key isn't a XPropertySet!");
+            if(xProp.is())
             {
-                xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
-                break;
+                sal_Int32 nKeyType = 0;
+                xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+                if(KeyType::PRIMARY == nKeyType)
+                {
+                    xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                    break;
+                }
             }
         }
         if(xColumnsSupplier.is())
@@ -268,29 +272,33 @@ sal_Bool OQueryTableWindow::FillListBox()
         pEntry->SetUserData( new OTableFieldInfo() );
     }
 
-    Sequence< ::rtl::OUString> aColumns = GetOriginalColumns()->getElementNames();
-    const ::rtl::OUString* pBegin = aColumns.getConstArray();
-    const ::rtl::OUString* pEnd = pBegin + aColumns.getLength();
-
-    for (; pBegin != pEnd; ++pBegin)
+    if(GetOriginalColumns().is())
     {
-        OTableFieldInfo* pInfo = new OTableFieldInfo();
-        // is this column in the primary key
-        if (xPKeyColumns.is() && xPKeyColumns->hasByName(*pBegin))
+        Sequence< ::rtl::OUString> aColumns = GetOriginalColumns()->getElementNames();
+        const ::rtl::OUString* pBegin = aColumns.getConstArray();
+        const ::rtl::OUString* pEnd = pBegin + aColumns.getLength();
+
+        for (; pBegin != pEnd; ++pBegin)
         {
-            pEntry = m_pListBox->InsertEntry(*pBegin, aPrimKeyImage, aPrimKeyImage);
-            pInfo->SetKey(TAB_PRIMARY_FIELD);
+            OTableFieldInfo* pInfo = new OTableFieldInfo();
+            // is this column in the primary key
+            if (xPKeyColumns.is() && xPKeyColumns->hasByName(*pBegin))
+            {
+                pEntry = m_pListBox->InsertEntry(*pBegin, aPrimKeyImage, aPrimKeyImage);
+                pInfo->SetKey(TAB_PRIMARY_FIELD);
+            }
+            else
+            {
+                pEntry = m_pListBox->InsertEntry(*pBegin);
+                pInfo->SetKey(TAB_NORMAL_FIELD);
+            }
+            Reference<XPropertySet> xColumn;
+            ::cppu::extractInterface(xColumn,GetOriginalColumns()->getByName(*pBegin));
+            OSL_ENSURE(xColumn.is(),"No column!");
+            if(xColumn.is())
+                pInfo->SetDataType(::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE)));
+            pEntry->SetUserData( pInfo );
         }
-        else
-        {
-            pEntry = m_pListBox->InsertEntry(*pBegin);
-            pInfo->SetKey(TAB_NORMAL_FIELD);
-        }
-        Reference<XPropertySet> xColumn;
-        ::cppu::extractInterface(xColumn,GetOriginalColumns()->getByName(*pBegin));
-        OSL_ENSURE(xColumn.is(),"No column!");
-        pInfo->SetDataType(::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE)));
-        pEntry->SetUserData( pInfo );
     }
     return sal_True;
 }
@@ -345,31 +353,34 @@ sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTa
 {
     DBG_ASSERT(m_pListBox != NULL, "OQueryTableWindow::ExistsField : habe keine ::com::sun::star::form::ListBox !");
     Reference< XConnection> xConnection = getTableView()->getDesignView()->getController()->getConnection();
-    if(!xConnection.is())
-        return FALSE;
-    SvLBoxEntry* pEntry = m_pListBox->First();
-    ::comphelper::UStringMixEqual bCase(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
-
-    while (pEntry)
+    sal_Bool bExists = sal_False;
+    if(xConnection.is())
     {
-        if (bCase(strFieldName,::rtl::OUString(m_pListBox->GetEntryText(pEntry))))
-        {
-            OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
-            DBG_ASSERT(pInf != NULL, "OQueryTableWindow::ExistsField : Feld hat keine FieldInfo !");
+        SvLBoxEntry* pEntry = m_pListBox->First();
+        ::comphelper::UStringMixEqual bCase(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 
-            rInfo.SetTabWindow(this);
-            rInfo.SetField(strFieldName);
-            rInfo.SetTable(GetTableName());
-            rInfo.SetAlias(GetAliasName());
-            rInfo.SetDatabase(GetComposedName());
-            rInfo.SetFieldIndex(m_pListBox->GetModel()->GetAbsPos(pEntry));
-            rInfo.SetDataType(pInf->GetDataType());
-            return sal_True;
+        while (pEntry)
+        {
+            if (bCase(strFieldName,::rtl::OUString(m_pListBox->GetEntryText(pEntry))))
+            {
+                OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
+                DBG_ASSERT(pInf != NULL, "OQueryTableWindow::ExistsField : Feld hat keine FieldInfo !");
+
+                rInfo.SetTabWindow(this);
+                rInfo.SetField(strFieldName);
+                rInfo.SetTable(GetTableName());
+                rInfo.SetAlias(GetAliasName());
+                rInfo.SetDatabase(GetComposedName());
+                rInfo.SetFieldIndex(m_pListBox->GetModel()->GetAbsPos(pEntry));
+                rInfo.SetDataType(pInf->GetDataType());
+                bExists = sal_True;
+                break;
+            }
+            pEntry = m_pListBox->Next(pEntry);
         }
-        pEntry = m_pListBox->Next(pEntry);
     }
 
-    return sal_False;
+    return bExists;
 }
 
 //------------------------------------------------------------------------------

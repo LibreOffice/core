@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-30 13:06:46 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 14:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,9 +147,15 @@ SvLBoxEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
     SvLBoxEntry* pEntry = (SvLBoxEntry*)pTreeList->First();
     OJoinDesignView* pView = m_pTabWin->getDesignView();
     OJoinController* pController = pView->getController();
-    Reference<XDatabaseMetaData> xMeta = pController->getConnection()->getMetaData();
 
-    BOOL bCase = xMeta->storesMixedCaseQuotedIdentifiers();
+    BOOL bCase = FALSE;
+    Reference<XConnection> xConnection = pController->getConnection();
+    if(xConnection.is())
+    {
+        Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
+        if(xMeta.is())
+            bCase = xMeta->storesMixedCaseQuotedIdentifiers();
+    }
 
     while( pEntry )
     {
@@ -263,77 +269,76 @@ void OTableWindowListBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 //------------------------------------------------------------------------------
 sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
+    sal_Int8 nDND_Action = DND_ACTION_NONE;
     // check the format
-    if (!OJoinExchObj::isFormatAvailable(GetDataFlavorExVector()))
-        return DND_ACTION_NONE;
+    if (OJoinExchObj::isFormatAvailable(GetDataFlavorExVector()) && !m_bDragSource)
+    {   // don't drop into the window if it's the drag source itself
 
-    // don't drop into the window if it's the drag source itself
-    if (m_bDragSource)
-        return DND_ACTION_NONE;
 
-    // remove the selection if the dragging operation is leaving the window
-    if (_rEvt.mbLeaving)
-    {
-        SelectAll(FALSE);
-        return DND_ACTION_NONE;
-    }
-
-/*
-    // Wenn der erste Eintrag der Quelle (*) gedraggt wird, lehne ich grundsaetzlich ab
-    // TODO there isn't a exchange object yet
-
-    OJoinExchangeData jxdSource = ((OJoinExchObj*)&xDataObj)->GetSourceDescription();
-    if (jxdSource.pListBox->GetTabWin()->GetData()->IsShowAll() && (jxdSource.pListBox->First() == jxdSource.pEntry))
-        return FALSE;
-*/
-
-    // hit test
-    m_aMousePos = _rEvt.maPosPixel;
-    Size aOutputSize = GetOutputSizePixel();
-    SvLBoxEntry* pEntry = GetEntry( m_aMousePos );
-    if( !pEntry )
-        return DND_ACTION_NONE;
-
-    // Scrolling Areas
-    Rectangle aBottomScrollArea( Point(0, aOutputSize.Height()-LISTBOX_SCROLLING_AREA),
-                                 Size(aOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
-    Rectangle aTopScrollArea( Point(0,0), Size(aOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
-
-    // Wenn Zeiger auf der oberen ScrollingArea steht, nach oben scrollen
-    if( aBottomScrollArea.IsInside(m_aMousePos) )
-    {
-        if( !m_aScrollTimer.IsActive() )
+        // remove the selection if the dragging operation is leaving the window
+        if (_rEvt.mbLeaving)
+            SelectAll(FALSE);
+        else
         {
-            m_aScrollTimer.SetTimeoutHdl( LINK(this, OTableWindowListBox, ScrollUpHdl) );
-            ScrollUpHdl( this );
+
+    /*
+        // Wenn der erste Eintrag der Quelle (*) gedraggt wird, lehne ich grundsaetzlich ab
+        // TODO there isn't a exchange object yet
+
+        OJoinExchangeData jxdSource = ((OJoinExchObj*)&xDataObj)->GetSourceDescription();
+        if (jxdSource.pListBox->GetTabWin()->GetData()->IsShowAll() && (jxdSource.pListBox->First() == jxdSource.pEntry))
+            return FALSE;
+    */
+
+            // hit test
+            m_aMousePos = _rEvt.maPosPixel;
+            Size aOutputSize = GetOutputSizePixel();
+            SvLBoxEntry* pEntry = GetEntry( m_aMousePos );
+            if( !pEntry )
+                return DND_ACTION_NONE;
+
+            // Scrolling Areas
+            Rectangle aBottomScrollArea( Point(0, aOutputSize.Height()-LISTBOX_SCROLLING_AREA),
+                                         Size(aOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
+            Rectangle aTopScrollArea( Point(0,0), Size(aOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
+
+            // Wenn Zeiger auf der oberen ScrollingArea steht, nach oben scrollen
+            if( aBottomScrollArea.IsInside(m_aMousePos) )
+            {
+                if( !m_aScrollTimer.IsActive() )
+                {
+                    m_aScrollTimer.SetTimeoutHdl( LINK(this, OTableWindowListBox, ScrollUpHdl) );
+                    ScrollUpHdl( this );
+                }
+            }
+
+            // Wenn Zeiger auf der oberen ScrollingArea steht, nach unten scrollen
+            else if( aTopScrollArea.IsInside(m_aMousePos) )
+            {
+                if( !m_aScrollTimer.IsActive() )
+                {
+                    m_aScrollTimer.SetTimeoutHdl( LINK(this, OTableWindowListBox, ScrollDownHdl) );
+                    ScrollDownHdl( this );
+                }
+            }
+            else
+            {
+                if( m_aScrollTimer.IsActive() )
+                    m_aScrollTimer.Stop();
+            }
+
+            // Beim Drag automatisch den richtigen Eintrag selektieren
+            if ((FirstSelected() != pEntry) || (FirstSelected() && NextSelected(FirstSelected())))
+                SelectAll(FALSE);
+            Select(pEntry, TRUE);
+
+            // Auf den ersten Eintrag (*) kann nicht gedroppt werden
+            if(!( m_pTabWin->GetData()->IsShowAll() && (pEntry==First()) ))
+                nDND_Action = DND_ACTION_LINK;
         }
     }
 
-    // Wenn Zeiger auf der oberen ScrollingArea steht, nach unten scrollen
-    else if( aTopScrollArea.IsInside(m_aMousePos) )
-    {
-        if( !m_aScrollTimer.IsActive() )
-        {
-            m_aScrollTimer.SetTimeoutHdl( LINK(this, OTableWindowListBox, ScrollDownHdl) );
-            ScrollDownHdl( this );
-        }
-    }
-    else
-    {
-        if( m_aScrollTimer.IsActive() )
-            m_aScrollTimer.Stop();
-    }
-
-    // Beim Drag automatisch den richtigen Eintrag selektieren
-    if ((FirstSelected() != pEntry) || (FirstSelected() && NextSelected(FirstSelected())))
-        SelectAll(FALSE);
-    Select(pEntry, TRUE);
-
-    // Auf den ersten Eintrag (*) kann nicht gedroppt werden
-    if( m_pTabWin->GetData()->IsShowAll() && (pEntry==First()) )
-        return DND_ACTION_NONE;
-
-    return DND_ACTION_LINK;
+    return nDND_Action;
 }
 
 //------------------------------------------------------------------------------

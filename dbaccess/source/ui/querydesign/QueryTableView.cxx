@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 13:02:01 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 14:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,6 +567,9 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
     if(bNewTable && pTabWins->size() && strTableName.getLength())
     {
         Reference<XConnection> xCon = m_pView->getController()->getConnection();
+        OSL_ENSURE(xCon.is(),"OQueryTableView::AddTabWin connection is null!");
+        if(!xCon.is())
+            return;
         Reference<XTablesSupplier> xSup(xCon,UNO_QUERY);
         Reference<XNameAccess> xTables = xSup->getTables();
         Reference<XPropertySet> xTable;

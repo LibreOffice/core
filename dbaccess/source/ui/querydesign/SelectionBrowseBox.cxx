@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 06:32:25 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 14:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,12 +649,15 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 if (pWin)
                 {
                     Reference<XNameAccess> xColumns = pWin->GetOriginalColumns();
-                    if (aFieldName.GetTokenCount('.') == 2 && xColumns->hasByName(aFieldName.GetToken(1,'.')))  // falls alias.Feld angegeben
-                        ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName.GetToken(1,'.')));
-                    else if(xColumns->hasByName(aFieldName))
-                        ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName));
-                    else if(aFieldName.GetTokenCount('.') == 2 && aFieldName.GetToken(1,'.').GetChar(0) == '*')
-                        bAsterix = sal_True;
+                    if(xColumns.is())
+                    {
+                        if (aFieldName.GetTokenCount('.') == 2 && xColumns->hasByName(aFieldName.GetToken(1,'.')))  // falls alias.Feld angegeben
+                            ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName.GetToken(1,'.')));
+                        else if(xColumns->hasByName(aFieldName))
+                            ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName));
+                        else if(aFieldName.GetTokenCount('.') == 2 && aFieldName.GetToken(1,'.').GetChar(0) == '*')
+                            bAsterix = sal_True;
+                    }
                 }
 
                 if(!xColumn.is() && !bAsterix) // only when text not a column of the table
@@ -977,7 +980,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     if (pWin)
                     {
                         Reference<XNameAccess> xColumns = pWin->GetOriginalColumns();
-                        if (xColumns->hasByName(pEntry->GetField()))
+                        if (xColumns.is() && xColumns->hasByName(pEntry->GetField()))
                             ::cppu::extractInterface(xColumn,xColumns->getByName(pEntry->GetField()));
                     }
 

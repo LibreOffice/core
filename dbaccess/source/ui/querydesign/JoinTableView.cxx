@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 13:02:01 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 14:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,15 +233,7 @@ OJoinTableView::~OJoinTableView()
     DBG_DTOR(OJoinTableView,NULL);
     //////////////////////////////////////////////////////////////////////
     // Listen loeschen
-    OTableWindowMapIterator aIter = GetTabWinMap()->begin();
-    for(;aIter != GetTabWinMap()->end();++aIter)
-        delete aIter->second;
-
-    GetTabWinMap()->clear();
-
-    ::std::vector<OTableConnection*>::iterator aIter2 = GetTabConnList()->begin();
-    for(;aIter2 != GetTabConnList()->end();++aIter2)
-        delete *aIter2;
+    clearLayoutInformation();
 
     // den Undo-Manager des Dokuments leeren (da die UndoActions sich eventuell TabWins von mir halten, das gibt sonst eine
     // Assertion in Window::~Window)
@@ -1279,13 +1271,15 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
                 if( (*aIter)->CheckHit(rEvt.GetMousePosPixel()) )
                 {
                     SelectConn((*aIter));
-
-                    PopupMenu aContextMenu(ModuleRes(RID_QUERYCOLPOPUPMENU));
-                    switch (aContextMenu.Execute(this, rEvt.GetMousePosPixel()))
+                    if(!getDesignView()->getController()->isReadOnly() && getDesignView()->getController()->getConnection().is())
                     {
-                        case SID_DELETE:
-                            RemoveConnection((*aIter));
-                            break;
+                        PopupMenu aContextMenu(ModuleRes(RID_QUERYCOLPOPUPMENU));
+                        switch (aContextMenu.Execute(this, rEvt.GetMousePosPixel()))
+                        {
+                            case SID_DELETE:
+                                RemoveConnection((*aIter));
+                                break;
+                        }
                     }
                     break;
                 }
@@ -1574,7 +1568,23 @@ void OJoinTableView::HideTabWins()
 
 }
 // -----------------------------------------------------------------------------
+void OJoinTableView::clearLayoutInformation()
+{
+    //////////////////////////////////////////////////////////////////////
+    // Listen loeschen
+    OTableWindowMapIterator aIter = GetTabWinMap()->begin();
+    for(;aIter != GetTabWinMap()->end();++aIter)
+        delete aIter->second;
 
+    GetTabWinMap()->clear();
+
+    ::std::vector<OTableConnection*>::iterator aIter2 = GetTabConnList()->begin();
+    for(;aIter2 != GetTabConnList()->end();++aIter2)
+        delete *aIter2;
+
+    GetTabConnList()->clear();
+}
+// -----------------------------------------------------------------------------
 
 
 

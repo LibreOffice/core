@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 09:43:49 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 14:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,7 @@ void OJoinController::Load(const Reference< XObjectInputStream>& _rxIn)
 // -----------------------------------------------------------------------------
 void SAL_CALL OJoinController::disposing( const EventObject& Source ) throw(RuntimeException)
 {
-    if(Reference<XConnection>(Source.Source,UNO_QUERY) == m_xConnection)
+    if(m_xConnection.is() && Source.Source == m_xConnection)
     {
         // our connection was disposed so we need a new one
         createNewConnection(sal_True);
@@ -295,6 +295,8 @@ void OJoinController::createNewConnection(sal_Bool _bUI)
         m_xConnection = connect(m_sDataSourceName);
         m_bOwnConnection = m_xConnection.is();
     }
+    else
+        InvalidateAll();
 }
 // -----------------------------------------------------------------------------
 void OJoinController::SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY)

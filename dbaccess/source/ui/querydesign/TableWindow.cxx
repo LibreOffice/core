@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:26:26 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 14:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,11 +121,13 @@
 
 
 using namespace dbaui;
+using namespace ::utl;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
 
 const long TABWIN_SIZING_AREA = 4;
 const long LISTBOX_SCROLLING_AREA = 6;
@@ -169,6 +171,9 @@ OTableWindow::OTableWindow( Window* pParent, OTableWindowData* pTabWinData )
 //------------------------------------------------------------------------------
 OTableWindow::~OTableWindow()
 {
+    Reference<XComponent> xComponent(m_xTable,UNO_QUERY);
+    if(xComponent.is())
+        stopComponentListening(xComponent);
     if (m_pListBox)
     {
         EmptyListBox();
@@ -237,6 +242,7 @@ BOOL OTableWindow::FillListBox()
     if (GetData()->IsShowAll())
         m_pListBox->InsertEntry( ::rtl::OUString::createFromAscii("*") );
 
+    ::osl::MutexGuard aGuard( m_aMutex  );
     // first we need the keys from the table
     Reference<XKeysSupplier> xKeys(m_xTable,UNO_QUERY);
     Reference<XNameAccess> xPKeyColumns;
@@ -260,17 +266,20 @@ BOOL OTableWindow::FillListBox()
         if(xColumnsSupplier.is())
             xPKeyColumns = xColumnsSupplier->getColumns();
     }
-    Sequence< ::rtl::OUString> aColumns = m_xColumns->getElementNames();
-    const ::rtl::OUString* pBegin = aColumns.getConstArray();
-    const ::rtl::OUString* pEnd = pBegin + aColumns.getLength();
-
-    for (; pBegin != pEnd; ++pBegin)
+    if(m_xColumns.is())
     {
-        // is this column in the primary key
-        if (xPKeyColumns.is() && xPKeyColumns->hasByName(*pBegin))
-            m_pListBox->InsertEntry(*pBegin, aPrimKeyImage, aPrimKeyImage);
-        else
-            m_pListBox->InsertEntry(*pBegin);
+        Sequence< ::rtl::OUString> aColumns = m_xColumns->getElementNames();
+        const ::rtl::OUString* pBegin = aColumns.getConstArray();
+        const ::rtl::OUString* pEnd = pBegin + aColumns.getLength();
+
+        for (; pBegin != pEnd; ++pBegin)
+        {
+            // is this column in the primary key
+            if (xPKeyColumns.is() && xPKeyColumns->hasByName(*pBegin))
+                m_pListBox->InsertEntry(*pBegin, aPrimKeyImage, aPrimKeyImage);
+            else
+                m_pListBox->InsertEntry(*pBegin);
+        }
     }
 
     return TRUE;
@@ -298,49 +307,67 @@ BOOL OTableWindow::Init()
     Reference<XConnection > xConnection = pParent->getController()->getConnection();
     Reference<XTablesSupplier> xSups(xConnection,UNO_QUERY);
     OSL_ENSURE(xSups.is(),"The connection isn't a tablessupplier!");
-    Reference<XNameAccess> xTables = xSups->getTables();
-
-    ::rtl::OUString aName = GetComposedName();
-    if(!xTables->hasByName(aName))
-        return FALSE;
-
-    try
+    sal_Bool bInit = sal_False;
+    if(xSups.is())
     {
-        ::cppu::extractInterface(m_xTable,xTables->getByName(aName));
-        Reference<XColumnsSupplier> xColumnsSups(m_xTable,UNO_QUERY);
-        m_xColumns = xColumnsSups->getColumns();
+        Reference<XNameAccess> xTables = xSups->getTables();
+
+        ::rtl::OUString aName = GetComposedName();
+        if(xTables->hasByName(aName))
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+            try
+            {
+                ::cppu::extractInterface(m_xTable,xTables->getByName(aName));
+                if(m_xTable.is())
+                {
+                    Reference<XComponent> xComponent(m_xTable,UNO_QUERY);
+                    if(xComponent.is())
+                        startComponentListening(xComponent);
+                    Reference<XColumnsSupplier> xColumnsSups(m_xTable,UNO_QUERY);
+                    OSL_ENSURE(xColumnsSups.is(),"OTableWindow::Init Table isn't a XColumnsSupplier!");
+                    if(xColumnsSups.is())
+                    {
+                        m_xColumns = xColumnsSups->getColumns();
+                        bInit = sal_True;
+                    }
+                }
+            }
+            catch(SQLException& e)
+            {
+                ::dbaui::showError(::dbtools::SQLExceptionInfo(e),pParent,pParent->getController()->getORB());
+                bInit = FALSE;
+            }
+            catch(Exception&)
+            {
+                bInit = FALSE;
+            }
+
+            if(bInit)
+            {
+                // ListBox anlegen, wenn notwendig
+                if (!m_pListBox)
+                {
+                    m_pListBox = CreateListBox();
+                    DBG_ASSERT(m_pListBox != NULL, "OTableWindow::Init() : CreateListBox hat NULL geliefert !");
+                    m_pListBox->SetSelectionMode(MULTIPLE_SELECTION);
+                }
+
+                // Titel setzen
+                m_aTitle.SetText( m_pData->GetWinName() );
+                m_aTitle.Show();
+
+                m_pListBox->Show();
+
+                // die Felder in die ListBox eintragen
+                EmptyListBox();
+                if (bInit = FillListBox())
+                    m_pListBox->SelectAll(FALSE);
+            }
+        }
     }
-    catch(SQLException& e)
-    {
-        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),pParent,pParent->getController()->getORB());
-        return FALSE;
-    }
-    catch(Exception&)
-    {
-        return FALSE;
-    }
 
-
-    // ListBox anlegen, wenn notwendig
-    if (!m_pListBox)
-    {
-        m_pListBox = CreateListBox();
-        DBG_ASSERT(m_pListBox != NULL, "OTableWindow::Init() : CreateListBox hat NULL geliefert !");
-        m_pListBox->SetSelectionMode(MULTIPLE_SELECTION);
-    }
-
-    // Titel setzen
-    m_aTitle.SetText( m_pData->GetWinName() );
-    m_aTitle.Show();
-
-    m_pListBox->Show();
-
-    // die Felder in die ListBox eintragen
-    EmptyListBox();
-    if (!FillListBox())
-        return FALSE;
-    m_pListBox->SelectAll(FALSE);
-    return TRUE;
+    return bInit;
 }
 
 //------------------------------------------------------------------------------
@@ -603,6 +630,14 @@ void OTableWindow::StateChanged( StateChangedType nType )
     }
 }
 // -----------------------------------------------------------------------------
+void OTableWindow::_disposing( const ::com::sun::star::lang::EventObject& _rSource )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    m_xTable    = NULL;
+    m_xColumns  = NULL;
+}
+// -----------------------------------------------------------------------------
+
 
 
 
