@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:02:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,7 +595,7 @@ void SAL_CALL ORowSet::release() throw()
 sal_Int64 SAL_CALL ORowSet::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
+        return reinterpret_cast<sal_Int64>(this);
 
     return 0;
 }
@@ -1988,7 +1988,7 @@ void ORowSet::notifyClonesRowDelete(const Any& _rBookmark)
         Reference< XUnoTunnel > xTunnel(i->get(),UNO_QUERY);
         if(xTunnel.is())
         {
-            ORowSetClone* pClone = (ORowSetClone*)xTunnel->getSomething(ORowSetClone::getUnoTunnelImplementationId());
+            ORowSetClone* pClone = reinterpret_cast<ORowSetClone*>(xTunnel->getSomething(ORowSetClone::getUnoTunnelImplementationId()));
             if(pClone)
                 pClone->rowDelete(_rBookmark);
         }
@@ -2002,7 +2002,7 @@ void ORowSet::notifyClonesRowDeleted(const Any& _rBookmark)
         Reference< XUnoTunnel > xTunnel(i->get(),UNO_QUERY);
         if(xTunnel.is())
         {
-            ORowSetClone* pClone = (ORowSetClone*)xTunnel->getSomething(ORowSetClone::getUnoTunnelImplementationId());
+            ORowSetClone* pClone = reinterpret_cast<ORowSetClone*>(xTunnel->getSomething(ORowSetClone::getUnoTunnelImplementationId()));
             if(pClone)
                 pClone->rowDeleted(_rBookmark);
         }
@@ -2684,7 +2684,7 @@ Sequence< sal_Int8 > ORowSetClone::getUnoTunnelImplementationId()
 sal_Int64 SAL_CALL ORowSetClone::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
+        return reinterpret_cast<sal_Int64>(this);
 
     return 0;
 }
