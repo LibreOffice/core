@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-28 20:12:55 $
+ *  last change: $Author: os $ $Date: 2002-01-11 11:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1482,6 +1482,34 @@ void SwXTextField::attachToRange(
                 pFld->PutValue(aVal, FIELD_PROP_USHORT2 );
                 aVal <<=(sal_Int16)m_pProps->nSHORT1;
                 pFld->PutValue(aVal, FIELD_PROP_SHORT1 );
+                //convert the possibly programmatic name to a UIName
+                if(REF_SEQUENCEFLD == ((SwGetRefField*)pFld)->GetSubType())
+                {
+                    //don't convert when the name points to an existing field type
+                    const String& rPar1 = pFld->GetPar1();
+                    if(!pDoc->GetFldType(RES_SETEXPFLD, rPar1))
+                    {
+                        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, GET_POOLID_TXTCOLL );
+                        USHORT nResId = USHRT_MAX;
+                        switch( nPoolId )
+                        {
+                            case RES_POOLCOLL_LABEL_ABB:
+                                nResId = STR_POOLCOLL_LABEL_ABB;
+                            break;
+                            case RES_POOLCOLL_LABEL_TABLE:
+                                nResId = STR_POOLCOLL_LABEL_TABLE;
+                            break;
+                            case RES_POOLCOLL_LABEL_FRAME:
+                                nResId = STR_POOLCOLL_LABEL_FRAME;
+                            break;
+                            case RES_POOLCOLL_LABEL_DRAWING:
+                                nResId = STR_POOLCOLL_LABEL_DRAWING;
+                            break;
+                        }
+                        if( nResId != USHRT_MAX )
+                            pFld->SetPar1(SW_RESSTR( nResId ));
+                    }
+                }
             }
             break;
             case SW_SERVICE_FIELDTYPE_JUMP_EDIT:
