@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-08-10 18:02:39 $
+ *  last change: $Author: nn $ $Date: 2001-08-20 08:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include <svx/editobj.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/flditem.hxx>
+#include <svx/fontitem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/postitem.hxx>
 #include <svx/udlnitem.hxx>
@@ -86,12 +87,8 @@
 #include <svtools/itemset.hxx>
 #include <svtools/zforlist.hxx>
 #include <unotools/charclass.hxx>
-#ifndef _SVX_FONTITEM_HXX
-#include <svx/fontitem.hxx>
-#endif
-#ifndef _SV_FONTCVT_HXX
 #include <vcl/fontcvt.hxx>
-#endif
+#include <vcl/outdev.hxx>
 
 #include "sc.hrc"
 #include "attrib.hxx"
@@ -264,6 +261,21 @@ void ScStyleSheetPool::CopyStdStylesFrom( ScStyleSheetPool* pSrcPool )
 
 //------------------------------------------------------------------------
 
+void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, USHORT nFontType, USHORT nItemId )
+{
+    if ( eLang != LANGUAGE_NONE && eLang != LANGUAGE_DONTKNOW && eLang != LANGUAGE_SYSTEM )
+    {
+        Font aDefFont = OutputDevice::GetDefaultFont( nFontType, eLang, DEFAULTFONT_FLAGS_ONLYONE );
+        SvxFontItem aNewItem( aDefFont.GetFamily(), aDefFont.GetName(), aDefFont.GetStyleName(),
+                              aDefFont.GetPitch(), aDefFont.GetCharSet(), nItemId );
+        if ( aNewItem != rSet.Get( nItemId ) )
+        {
+            // put item into style's ItemSet only if different from (static) default
+            rSet.Put( aNewItem );
+        }
+    }
+}
+
 void ScStyleSheetPool::CreateStandardStyles()
 {
     //  neue Eintraege auch bei CopyStdStylesFrom eintragen
@@ -299,6 +311,18 @@ void ScStyleSheetPool::CreateStandardStyles()
     //------------
     pSheet = (ScStyleSheet*) &Make( aStrStandard, SFX_STYLE_FAMILY_PARA, SCSTYLEBIT_STANDARD );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_STD );
+
+    //  if default fonts for the document's languages are different from the pool default,
+    //  put them into the default style
+    //  (not as pool defaults, because pool defaults can't be changed by the user)
+    //  the document languages must be set before creating the default styles!
+
+    pSet = &pSheet->GetItemSet();
+    LanguageType eLatin, eCjk, eCtl;
+    pDoc->GetLanguage( eLatin, eCjk, eCtl );
+    lcl_CheckFont( *pSet, eLatin, DEFAULTFONT_LATIN_SPREADSHEET, ATTR_FONT );
+    lcl_CheckFont( *pSet, eCjk, DEFAULTFONT_CJK_SPREADSHEET, ATTR_CJK_FONT );
+    lcl_CheckFont( *pSet, eCtl, DEFAULTFONT_CTL_SPREADSHEET, ATTR_CTL_FONT );
 
     //------------
     // 2. Ergebnis
