@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:01:15 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ void ODbaseTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementNam
             pTable->DropImpl();
     }
     else
-        throw SQLException(::rtl::OUString::createFromAscii("Can't drop table ") + _sElementName,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Can't drop table ") + _sElementName,static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
 
 }
 // -------------------------------------------------------------------------
