@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-04 16:39:23 $
+ *  last change: $Author: ssa $ $Date: 2001-12-11 19:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1222,7 +1222,7 @@ BOOL SalPrinter::StartJob( const XubString* pFileName,
     strcpy( lpszDeviceName, aDevice.GetBuffer() );
     HDC hDC = CreateDCA( lpszDriverName,
                          lpszDeviceName,
-                         0,
+                         NULL,
                          (LPDEVMODE)pDevMode );
 
     delete [] lpszDriverName;
@@ -1251,7 +1251,7 @@ BOOL SalPrinter::StartJob( const XubString* pFileName,
     ByteString aJobName( ImplSalGetWinAnsiString( rJobName, TRUE ) );
     ByteString aFileName;
 
-    DOCINFO aInfo;
+    DOCINFOA aInfo;
     memset( &aInfo, 0, sizeof( DOCINFO ) );
     aInfo.cbSize = sizeof( aInfo );
     aInfo.lpszDocName = (LPCSTR)aJobName.GetBuffer();
@@ -1291,8 +1291,11 @@ BOOL SalPrinter::StartJob( const XubString* pFileName,
     while ( bWhile );
     ImplPostMessage( GetSalData()->mpFirstInstance->maInstData.mhComWnd, SAL_MSG_DUMMY, 0, 0 );
 
+    // make sure mhDC is set before the printer driver may call our abortproc
+    maPrinterData.mhDC = hDC;
+
     // Job starten
-    int nRet = ::StartDoc( hDC, &aInfo );
+    int nRet = ::StartDocA( hDC, &aInfo );
     if ( nRet <= 0 )
     {
         long nError = GetLastError();
@@ -1303,7 +1306,6 @@ BOOL SalPrinter::StartJob( const XubString* pFileName,
         return FALSE;
     }
 
-    maPrinterData.mhDC = hDC;
     return TRUE;
 }
 
@@ -1311,6 +1313,7 @@ BOOL SalPrinter::StartJob( const XubString* pFileName,
 
 BOOL SalPrinter::EndJob()
 {
+    DWORD err = 0;
     HDC hDC = maPrinterData.mhDC;
     if ( hDC )
     {
@@ -1321,7 +1324,8 @@ BOOL SalPrinter::EndJob()
             maPrinterData.mpGraphics = NULL;
         }
 
-        ::EndDoc( hDC );
+        if( ::EndDoc( hDC ) <= 0 )
+            err = GetLastError();
         DeleteDC( hDC );
     }
 
@@ -1399,6 +1403,7 @@ SalGraphics* SalPrinter::StartPage( ImplJobSetup* pSetupData, BOOL bNewJobData )
     int nRet = ::StartPage( hDC );
     if ( nRet <= 0 )
     {
+        DWORD err = GetLastError();
         maPrinterData.mnError = SAL_PRINTER_ERROR_GENERALERROR;
         return NULL;
     }
@@ -1438,6 +1443,7 @@ BOOL SalPrinter::EndPage()
         return TRUE;
     else
     {
+        DWORD err = GetLastError();
         maPrinterData.mnError = SAL_PRINTER_ERROR_GENERALERROR;
         return FALSE;
     }
