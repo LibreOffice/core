@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-27 22:02:09 $
+ *  last change: $Author: cl $ $Date: 2001-04-06 14:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2156,22 +2156,6 @@ void SdXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
     }
 }
 
-static struct
-{
-    const char* mpPropertyName;
-    sal_Int32 mnPropertyName;
-}
-    ConfigurationProperties[] =
-{
-    { RTL_CONSTASCII_STRINGPARAM( "ColorTableURL" ) },
-    { RTL_CONSTASCII_STRINGPARAM( "DashTableURL" ) },
-    { RTL_CONSTASCII_STRINGPARAM( "LineEndTableURL" ) },
-    { RTL_CONSTASCII_STRINGPARAM( "HatchTableURL" ) },
-    { RTL_CONSTASCII_STRINGPARAM( "GradientTableURL" ) },
-    { RTL_CONSTASCII_STRINGPARAM( "BitmapTableURL" ) },
-    { NULL, 0 }
-};
-
 void SdXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& rProps)
 {
     uno::Reference< lang::XMultiServiceFactory > xFac( GetModel(), uno::UNO_QUERY );
@@ -2179,32 +2163,7 @@ void SdXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
     {
         uno::Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), uno::UNO_QUERY );
         if( xProps.is() )
-        {
-            sal_Int32 nCount = 0;
-            while( ConfigurationProperties[nCount].mpPropertyName )
-                nCount++;
-
-            beans::PropertyValue* pProps = rProps.getArray();
-
-            rProps.realloc(nCount);
-            pProps = rProps.getArray();
-
-            for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
-            {
-                try
-                {
-                    pProps->Name = OUString( ConfigurationProperties[nIndex].mpPropertyName, ConfigurationProperties[nIndex].mnPropertyName, RTL_TEXTENCODING_ASCII_US );
-                    pProps->Value = xProps->getPropertyValue( pProps->Name );
-                    pProps->Handle = 0;
-                    pProps->State = beans::PropertyState_DIRECT_VALUE;
-                }
-                catch( uno::Exception& e )
-                {
-                    DBG_ERROR( "exception while exporting document settings!" );
-                }
-                pProps++;
-            }
-        }
+            SvXMLUnitConverter::convertPropertySet( rProps, xProps );
     }
 }
 
