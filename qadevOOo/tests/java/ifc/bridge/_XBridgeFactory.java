@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XBridgeFactory.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 10:16:31 $
+ *  last change:$Date: 2003-12-11 11:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ public class _XBridgeFactory extends MultiMethodTest {
 
         try {
             String protocol = (String) tParam.get("PROTOCOL") ;
-            if (protocol == null) protocol = "iiop" ;
+            if (protocol == null) protocol = "urp" ;
 
             String brName ;
             synchronized (synchFlag) {
