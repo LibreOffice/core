@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_impl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2003-05-24 23:28:33 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ namespace pyuno
 typedef ::std::hash_map
 <
     PyRef,
-    com::sun::star::uno::WeakReference< com::sun::star::uno::XInterface >,
+    com::sun::star::uno::WeakReference< com::sun::star::script::XInvocation >,
     PyRef::Hash,
     std::equal_to< PyRef >
 > PyRef2Adapter;
@@ -101,6 +101,13 @@ rtl::OUStringHash,
 std::equal_to<rtl::OUString>
 > ExceptionClassMap;
 
+typedef ::std::hash_map
+<
+    rtl::OUString,
+    com::sun::star::uno::Sequence< sal_Int16 >,
+    rtl::OUStringHash,
+    std::equal_to< rtl::OUString >
+> MethodOutIndexMap;
 
 typedef ::std::hash_set< PyRef , PyRef::Hash , std::equal_to<PyRef> > ClassSet;
 
@@ -223,19 +230,20 @@ class Adapter : public cppu::WeakImplHelper2<
 {
     PyRef mWrappedObject;
     PyInterpreterState *mInterpreter;  // interpreters don't seem to be refcounted !
-    com::sun::star::uno::WeakReference< com::sun::star::uno::XInterface > mWeakUnoAdapter;
-    com::sun::star::uno::Reference< com::sun::star::beans::XIntrospectionAccess > mIntrospectionAccess;
-public:
-    Adapter( const PyRef &obj, const Runtime & );
+    com::sun::star::uno::Sequence< com::sun::star::uno::Type > mTypes;
+    MethodOutIndexMap m_methodOutIndexMap;
 
-    // should be called directly after construction of the adapter
-    // implementation stores a weak reference to it until it has
-    // created a reflection. (Ensure, that there is already a refcount
-    // on the Adapter object !)
-    void setUnoAdapter( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &itr);
+private:
+    com::sun::star::uno::Sequence< sal_Int16 > getOutIndexes( const rtl::OUString & functionName );
+
+public:
+public:
+    Adapter( const PyRef &obj, const Runtime &,
+             const com::sun::star::uno::Sequence< com::sun::star::uno::Type > & types );
 
     static com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
     PyRef getWrappedObject() { return mWrappedObject; }
+    com::sun::star::uno::Sequence< com::sun::star::uno::Type > getWrappedTypes() { return mTypes; }
     virtual ~Adapter();
 
     // XInvocation
