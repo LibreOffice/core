@@ -181,7 +181,8 @@ Dim oSettings, oPathSettings as Object
 Dim sPath as String
 Dim PathList() as String
 Dim MaxIndex as Integer
-
+Dim oUcb as Object
+	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	oSettings = createUnoService(&quot;com.sun.star.frame.Settings&quot;)
 	oPathSettings = oSettings.getByName(&quot;PathSettings&quot;)
   	If Not IsMissing(bShowall) Then
@@ -198,7 +199,7 @@ Dim MaxIndex as Integer
 			If ListIndex &lt;= MaxIndex Then
 				sPath = PathList(ListIndex)
 			Else
-				Msgbox(&quot;Cannot analyze the String &quot; &amp; sPath , 16, GetProductName())
+				Msgbox(&quot;String Cannot be analyzed!&quot; &amp; sPath , 16, GetProductName())
 			End If
 		End If
 	End If
@@ -207,6 +208,7 @@ Dim MaxIndex as Integer
 	Else
 		GetPathSettings = sPath
 	End If
+	
 End Function
 
 
@@ -216,13 +218,13 @@ End Function
 &apos; The parameter must be passed over in Url-scription
 &apos; The return-Value is in Urlscription
 Function GetOfficeSubPath(sOfficePath as String, ByVal sSubDir as String)
-Dim oUcb as Object
 Dim sOfficeString as String
 Dim sOfficeList() as String
 Dim sOfficeDir as String
 Dim sBigDir as String
 Dim i as Integer
 Dim MaxIndex as Integer
+Dim oUcb as Object
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	sOfficeString = GetPathSettings(sOfficePath)
 	If Right(sSubDir,1) &lt;&gt; &quot;/&quot; Then
@@ -240,9 +242,32 @@ Dim MaxIndex as Integer
 			Exit Function
 		End If
 	Next i
+	ShowNoOfficePathError()
 	GetOfficeSubPath = &quot;&quot;
 End Function
 
+
+Sub ShowNoOfficePathError()
+Dim ProductName as String
+Dim sError as String
+Dim bResObjectexists as Boolean
+Dim oLocResSrv as Object
+	bResObjectexists = not IsNull(oResSrv)
+	If bResObjectexists Then
+		oLocResSrv = oResSrv
+	End If
+	If InitResources(&quot;Tools&quot;, &quot;com&quot;) Then
+		ProductName = GetProductName()
+		sError = GetResText(1006)
+		sError = ReplaceString(sError, ProductName, &quot;%PRODUCTNAME&quot;)
+		sError = ReplaceString(sError, chr(13), &quot;&lt;BR&gt;&quot;)
+		MsgBox(sError, 16, ProductName)
+	End If
+	If bResObjectexists Then
+		oResSrv = oLocResSrv
+	End If
+	
+End Sub
 
 
 Function InitResources(Description, ShortDescription as String) as boolean
