@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 10:27:38 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
+
 
 #pragma hdrstop
 
@@ -85,6 +89,12 @@
 #include "instable.hrc"
 
 #include "swabstdlg.hxx" //CHINA001
+
+namespace swui
+{
+    SwAbstractDialogFactory * GetFactory();
+}
+
 #define ROW_COL_PROD 16384
 
 void SwInsTableDlg::GetValues( String& rName, USHORT& rRow, USHORT& rCol,
@@ -245,7 +255,7 @@ IMPL_LINK( SwInsTableDlg, ModifyRowCol, NumericField *, pField )
 IMPL_LINK( SwInsTableDlg, AutoFmtHdl, PushButton*, pButton )
 {
     //CHINA001 SwAutoFormatDlg aDlg( pButton, pShell, FALSE, pTAutoFmt );
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+    SwAbstractDialogFactory* pFact = swui::GetFactory();//CHINA001
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
     AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton,pShell,ResId( DLG_AUTOFMT_TABLE ), FALSE, pTAutoFmt );
