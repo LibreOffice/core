@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:45 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,8 +181,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellSearchObj::getPropertySet
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
 }
 
@@ -193,7 +193,7 @@ void SAL_CALL ScCellSearchObj::setPropertyValue(
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aString = aPropertyName;
+    String aString(aPropertyName);
 
     if (aString.EqualsAscii( SC_UNO_SRCHBACK ))        pSearchItem->SetBackward( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if (aString.EqualsAscii( SC_UNO_SRCHBYROW ))  pSearchItem->SetRowDirection( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
@@ -214,7 +214,7 @@ uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const rtl::OUString& aPrope
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aString = aPropertyName;
+    String aString(aPropertyName);
     uno::Any aRet;
 
     if (aString.EqualsAscii( SC_UNO_SRCHBACK ))        ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetBackward() );
@@ -245,7 +245,7 @@ rtl::OUString SAL_CALL ScCellSearchObj::getImplementationName() throw(uno::Runti
 sal_Bool SAL_CALL ScCellSearchObj::supportsService( const rtl::OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    String aServiceStr = rServiceName;
+    String aServiceStr(rServiceName);
     return aServiceStr.EqualsAscii( SCSEARCHDESCRIPTOR_SERVICE ) ||
            aServiceStr.EqualsAscii( SCREPLACEDESCRIPTOR_SERVICE );
 }
