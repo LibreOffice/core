@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svditer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-13 17:20:52 $
+ *  last change: $Author: aw $ $Date: 2002-05-08 12:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,11 @@
 #include "svdobj.hxx"
 #endif
 
+// #99190#
+#ifndef _E3D_SCENE3D_HXX
+#include "scene3d.hxx"
+#endif
+
 SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, BOOL bReverse)
 :   maObjList(1024, 64, 64),
     mnIndex(0L),
@@ -94,7 +99,12 @@ void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMod
     for(sal_uInt32 a(0L); a < rObjList.GetObjCount(); a++)
     {
         SdrObject* pObj = rObjList.GetObj(a);
-        BOOL bIsGroup(pObj->IsGroupObject());
+        sal_Bool bIsGroup(pObj->IsGroupObject());
+
+        // #99190# 3D objects are no group objects, IsGroupObject()
+        // only tests if pSub is not null ptr :-(
+        if(bIsGroup && pObj->ISA(E3dObject) && !pObj->ISA(E3dScene))
+            bIsGroup = sal_False;
 
         if(eMode != IM_DEEPNOGROUPS || !bIsGroup)
             maObjList.Insert(pObj, LIST_APPEND);
