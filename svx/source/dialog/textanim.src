@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:20:03 $
+ *  last change: $Author: af $ $Date: 2001-02-06 15:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
 {
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Textanimation" ;
     Text [ ENGLISH ] = "Text animation" ;
     Text [ dutch ] = "Tekstanimatie" ;
@@ -429,7 +429,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     TriStateBox TSB_ENDLESS
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 132 , 15 ) ;
+        Pos = MAP_APPFONT ( 130 , 14  ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         Text = "~Endlos" ;
         Text [ ENGLISH ] = "~Endless" ;
@@ -456,7 +456,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     NumericField NUM_FLD_COUNT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 196 , 15 ) ;
+        Pos = MAP_APPFONT ( 196 , 14  ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -466,8 +466,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     };
     GroupBox GRP_EFFECT
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 112 , 126 ) ;
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 112 , 176 ) ;
         Text = "Effekt" ;
         Text [ ENGLISH ] = "Effect" ;
         Text [ english_us ] = "Effects" ;
@@ -519,7 +519,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     TriStateBox TSB_PIXEL
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 132 , 79 ) ;
+        Pos = MAP_APPFONT ( 130 , 80  ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         Text = "~Pixel" ;
         Text [ ENGLISH ] = "~Pixel" ;
@@ -545,7 +545,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     };
     GroupBox GRP_AMOUNT
     {
-        Pos = MAP_APPFONT ( 124 , 67 ) ;
+        Pos = MAP_APPFONT ( 124 , 69  ) ;
         Size = MAP_APPFONT ( 130 , 30 ) ;
         Text = "Schrittweite" ;
         Text [ ENGLISH ] = "Amount" ;
@@ -572,7 +572,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     MetricField MTR_FLD_AMOUNT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 196 , 78 ) ;
+        Pos = MAP_APPFONT ( 196 , 80  ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -587,7 +587,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     };
     TriStateBox TSB_AUTO
     {
-        Pos = MAP_APPFONT ( 132 , 48 ) ;
+        Pos = MAP_APPFONT ( 130 , 47  ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         Text = "~Automatisch" ;
         Text [ ENGLISH ] = "~Automatic" ;
@@ -629,7 +629,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     };
     GroupBox GRP_DELAY
     {
-        Pos = MAP_APPFONT ( 124 , 35 ) ;
+        Pos = MAP_APPFONT ( 124 , 36  ) ;
         Size = MAP_APPFONT ( 130 , 30 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Verzögerung : Verz÷gerung */
         /* ### ACHTUNG: Neuer Text in Resource? Verzögerung : Verz÷gerung */

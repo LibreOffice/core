@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *  last change: $Author: af $ $Date: 2001-02-06 15:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ TabPage TP_MANAGE_STYLES
 {
     HelpId = HID_MANAGE_STYLES ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
@@ -99,13 +99,13 @@ TabPage TP_MANAGE_STYLES
     Edit ED_NAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 70 , 6 ) ;
-        Size = MAP_APPFONT ( 182 , 12 ) ;
+        Pos = MAP_APPFONT ( 70 , 6  ) ;
+        Size = MAP_APPFONT ( 184 , 12 ) ;
     };
     CheckBox CB_AUTO
     {
         Pos = MAP_APPFONT ( 164 , 8 ) ;
-        Size = MAP_APPFONT ( 88 , 10 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         Hide = TRUE ;
         Text = "~Autom. aktualisieren" ;
         Text [ ENGLISH ] = "~Automatically update" ;
@@ -161,7 +161,7 @@ TabPage TP_MANAGE_STYLES
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 24 ) ;
-        Size = MAP_APPFONT ( 182 , 65 ) ;
+        Size = MAP_APPFONT ( 184 , 65 ) ;
         DropDown = TRUE ;
         Sort = TRUE ;
     };
@@ -199,7 +199,7 @@ TabPage TP_MANAGE_STYLES
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 42 ) ;
-        Size = MAP_APPFONT ( 182 , 65 ) ;
+        Size = MAP_APPFONT ( 184 , 65 ) ;
         DropDown = TRUE ;
         Sort = TRUE ;
     };
@@ -235,26 +235,26 @@ TabPage TP_MANAGE_STYLES
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 60 ) ;
-        Size = MAP_APPFONT ( 182 , 65 ) ;
+        Size = MAP_APPFONT ( 184 , 64 ) ;
         DropDown = TRUE ;
     };
     FixedText FT_DESC
     {
-        Pos = MAP_APPFONT ( 12 , 86 ) ;
-        Size = MAP_APPFONT ( 234 , 32 ) ;
+        Pos = MAP_APPFONT ( 12 , 88  ) ;
+        Size = MAP_APPFONT ( 236 , 85 ) ;
         WordBreak = TRUE ;
         Hide = TRUE ;
     };
     MultiLineEdit ED_DESC
     {
-        Pos = MAP_APPFONT ( 12 , 86 ) ;
-        Size = MAP_APPFONT ( 234 , 32 ) ;
+        Pos = MAP_APPFONT ( 12 , 88  ) ;
+        Size = MAP_APPFONT ( 236 , 85 ) ;
         ReadOnly = TRUE ;
     };
     GroupBox GB_DESC
     {
-        Pos = MAP_APPFONT ( 6 , 74 ) ;
-        Size = MAP_APPFONT ( 246 , 52 ) ;
+        Pos = MAP_APPFONT ( 6 , 77  ) ;
+        Size = MAP_APPFONT ( 248 , 102 ) ;
         Text = "Enthält" ;
         Text [ ENGLISH ] = "Contains" ;
         Text [ norwegian ] = "Inneholder" ;
