@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_javav.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-08 17:13:14 $
+#   last change: $Author: vg $ $Date: 2003-06-04 10:40:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,19 +67,12 @@ JAVAVERMK:=$(INCCOM)$/java_ver.mk
 .IF "$(JAVAVER)"==""
 .IF "$(L10N_framework)"==""
 
-#temporary hack to get the right AWK
-.IF "$(OS)"=="SOLARIS"
-AWK_HERE :=nawk
-.ELSE			# "$(OS)"=="SOLARIS"
-AWK_HERE:=awk
-.ENDIF			# "$(OS)"=="SOLARIS"
-
 JAVAVER:=
 JAVANUMVER:=
 
 JFLAGSVERSION=-version
-JFLAGSVERSION_CMD=-version |& $(AWK_HERE) -f $(SOLARENV)$/bin$/getcompver.awk
-JFLAGSNUMVERSION_CMD=-version |& $(AWK_HERE) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
+JFLAGSVERSION_CMD=-version |& $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
+JFLAGSNUMVERSION_CMD=-version |& $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
 
 # that's the version known by the specific
 # java version
