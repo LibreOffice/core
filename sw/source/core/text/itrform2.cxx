@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-16 15:26:16 $
+ *  last change: $Author: ama $ $Date: 2001-02-20 10:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,7 +786,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
                 // The distance between two different scripts is set
                 // to 20% of the fontheight.
-                if( nTmp == NextScriptChg( nTmp - 1 ) )
+                if( nTmp == pScriptInfo->NextScriptChg( nTmp - 1 ) )
                 {
                     USHORT nDist = rInf.GetFont()->GetHeight()/5;
                     if( nDist )
@@ -956,7 +956,7 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     if( GetMulti() && nNextChg > GetMulti()->GetLen() )
         nNextChg = GetMulti()->GetLen();
 
-    nNextAttr = NextScriptChg( rInf.GetIdx() );
+    nNextAttr = pScriptInfo->NextScriptChg( rInf.GetIdx() );
     if( nNextChg > nNextAttr )
         nNextChg = nNextAttr;
     if ( nNextChg > 1 + rInf.GetIdx() && ' ' == rInf.GetChar( nNextChg-1 ) )

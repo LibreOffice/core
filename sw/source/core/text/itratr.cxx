@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-11 11:03:35 $
+ *  last change: $Author: ama $ $Date: 2001-02-20 10:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,38 +266,6 @@ sal_Bool SwAttrIter::IsSymbol( const xub_StrLen nNewPos )
 }
 
 /*************************************************************************
- *                        SwAttrIter::NextScriptChg(..)
- * returns the position of the next character which belongs to another script
- * than the character of the actual (input) position.
- * If there's no script change until the end of the paragraph, it will return
- * STRING_LEN.
- * Scripts are Asian (Chinese, Japanese, Korean),
- *             Latin ( English etc.)
- *         and Complex ( Hebrew, Arabian )
- *************************************************************************/
-
-xub_StrLen SwAttrIter::NextScriptChg( const xub_StrLen nPos )
-{
-    for( USHORT nX = 0; nX < aScriptChg.Count(); ++nX )
-        if( nPos < aScriptChg[ nX ] )
-            return aScriptChg[ nX ];
-    return STRING_LEN;
-}
-/*************************************************************************
- *                        SwAttrIter::ScriptType(..)
- * returns the script of the character at the input position
- *************************************************************************/
-
-USHORT SwAttrIter::ScriptType( const xub_StrLen nPos )
-{
-    for( USHORT nX = 0; nX < aScriptChg.Count(); ++nX )
-        if( nPos < aScriptChg[ nX ] )
-            return aScriptType[ nX ];
-    return i18n::ScriptType::LATIN;
-}
-
-
-/*************************************************************************
  *                        SwAttrIter::SeekStartAndChg()
  *************************************************************************/
 
@@ -420,7 +388,7 @@ sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
         }
         SeekFwd( nNewPos );
     }
-    USHORT nScript = ScriptType( nNewPos );
+    USHORT nScript = pScriptInfo->ScriptType( nNewPos );
     BYTE nScr = SW_LATIN;
     if( nScript == i18n::ScriptType::ASIAN )
         nScr = SW_CJK;
@@ -526,7 +494,8 @@ sal_Bool SwTxtNode::IsSymbol( const xub_StrLen nBegin ) const
         pOut = GetpApp()->GetDefaultDevice();
     if( pOut )
     {
-        SwAttrIter aIter( *(SwTxtNode*)this );
+        SwScriptInfo aScriptInfo;
+        SwAttrIter aIter( *(SwTxtNode*)this, &aScriptInfo );
         aIter.SeekAndChg( nBegin, pOut );
         bRet = aIter.GetFnt()->IsSymbol( GetDoc()->GetRootFrm() ?
                 GetDoc()->GetRootFrm()->GetCurrShell() : 0 );
@@ -724,7 +693,8 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
     if( aNodeArgs.nRightRest < 0 )
         aNodeArgs.nMaxWidth -= aNodeArgs.nRightRest;
 
-    SwAttrIter aIter( *(SwTxtNode*)this );
+    SwScriptInfo aScriptInfo;
+    SwAttrIter aIter( *(SwTxtNode*)this, &aScriptInfo );
     xub_StrLen nIdx = 0;
     aIter.SeekAndChg( nIdx, pOut );
     xub_StrLen nLen = aText.Len();
@@ -734,7 +704,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
     while( nIdx < nLen )
     {
         xub_StrLen nNextChg = aIter.GetNextAttr();
-        xub_StrLen nStop = aIter.NextScriptChg( nIdx );
+        xub_StrLen nStop = aScriptInfo.NextScriptChg( nIdx );
         if( nNextChg > nStop )
             nNextChg = nStop;
         SwTxtAttr *pHint = NULL;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-01 14:02:55 $
+ *  last change: $Author: ama $ $Date: 2001-02-20 10:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,14 @@
 #ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
 #endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
 
+using namespace ::com::sun::star;
 
 /*************************************************************************
  *                 SwLineLayout::~SwLineLayout()
@@ -448,6 +455,109 @@ SwCharRange &SwCharRange::operator+=(const SwCharRange &rRange)
         }
     }
     return *this;
+}
+
+/*************************************************************************
+ *                      SwScriptInfo::InitScriptInfo()
+ *
+ * searches for script changes in rTxt and stores them
+ *************************************************************************/
+
+void SwScriptInfo::InitScriptInfo( const String& rTxt )
+{
+    if( !pBreakIt->xBreak.is() )
+        return;
+
+    xub_StrLen nChg = nInvalidityPos;
+    USHORT nCnt = 0;
+    USHORT nScript;
+
+    // delete invalid data from arrays
+    // if change position = 0 we do not use any data from the arrays
+    // because by deleting all characters of the first group at the beginning
+    // of a paragraph nScript is set to a wrong value
+    if( nChg )
+    {
+        ASSERT( CountScriptChg(), "Where're my changes of script?" );
+        while( nCnt < CountScriptChg() )
+        {
+            if ( nChg <= GetScriptChg( nCnt ) )
+            {
+                nScript = GetScriptType( nCnt );
+                break;
+            }
+            else
+                nCnt++;
+        }
+    }
+    else
+        nScript = pBreakIt->xBreak->getScriptType( rTxt, 0 );
+
+    aScriptChg.Remove( nCnt, aScriptChg.Count() - nCnt );
+    aScriptType.Remove( nCnt, aScriptType.Count() - nCnt );
+
+    // new data for arrays, we start from changed position - 1
+    if ( nChg )
+         nChg--;
+    // we know now that script at position nChg is nScript
+    // we have to start at position - 1 to make sure that appending a
+    // character cannot cause the occurence of two successing character
+    // groups of the same type in the array
+
+    // WEAK can only occur at the beginning of a paragraph
+    // the first character not in the weak group determines the type of the
+    // weak characters
+    if( i18n::ScriptType::WEAK == nScript )
+    {
+        nChg = pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+        if( nChg < rTxt.Len() )
+            nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+    }
+    do
+    {
+        nChg = pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+        InsertScriptChg( nChg, nCnt );
+        InsertScriptType( nScript, nCnt++ );
+        if( nChg < rTxt.Len() )
+            nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+        else
+            break;
+    } while( TRUE );
+
+    // STRING_LEN means the data structure is up to date
+    nInvalidityPos = STRING_LEN;
+}
+
+/*************************************************************************
+ *                        SwScriptInfo::NextScriptChg(..)
+ * returns the position of the next character which belongs to another script
+ * than the character of the actual (input) position.
+ * If there's no script change until the end of the paragraph, it will return
+ * STRING_LEN.
+ * Scripts are Asian (Chinese, Japanese, Korean),
+ *             Latin ( English etc.)
+ *         and Complex ( Hebrew, Arabian )
+ *************************************************************************/
+
+xub_StrLen SwScriptInfo::NextScriptChg( const xub_StrLen nPos )  const
+{
+    for( USHORT nX = 0; nX < CountScriptChg(); ++nX )
+        if( nPos < GetScriptChg( nX ) )
+            return GetScriptChg( nX );
+    return STRING_LEN;
+}
+
+/*************************************************************************
+ *                        SwScriptInfo::ScriptType(..)
+ * returns the script of the character at the input position
+ *************************************************************************/
+
+USHORT SwScriptInfo::ScriptType( const xub_StrLen nPos ) const
+{
+    for( USHORT nX = 0; nX < CountScriptChg(); ++nX )
+        if( nPos < GetScriptChg( nX ) )
+            return GetScriptType( nX );
+    return i18n::ScriptType::LATIN;
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-11 11:02:57 $
+ *  last change: $Author: ama $ $Date: 2001-02-20 10:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,12 +143,13 @@ using namespace ::com::sun::star;
  *                      SwAttrIter::CtorInit()
  *************************************************************************/
 
-void SwAttrIter::CtorInit( SwTxtNode& rTxtNode )
+void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo* pScrInf )
 {
     // Beim HTML-Import kann es vorkommen, dass kein Layout existiert.
     SwRootFrm *pRootFrm = rTxtNode.GetDoc()->GetRootFrm();
     pShell = pRootFrm ? pRootFrm->GetShell() : 0;
 
+    pScriptInfo = pScrInf;
     pAttrSet = &rTxtNode.GetSwAttrSet();
     pHints = rTxtNode.GetpSwpHints();
     delete pFnt;
@@ -168,29 +169,27 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode )
     }
 
     aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
-    if( aScriptChg.Count() )
-    {
-        aScriptChg.Remove( 0, USHRT_MAX );
-        aScriptType.Remove( 0, USHRT_MAX );
-    }
 
-    if( pBreakIt->xBreak.is() )
+    // determine script changes if not already done for current paragraph
+    ASSERT( pScriptInfo, "No script info available");
+    if ( pScriptInfo->GetInvalidity() != STRING_LEN )
+         pScriptInfo->InitScriptInfo( rTxtNode.GetTxt() );
+
+    if ( pBreakIt->xBreak.is() )
     {
-        const String& rTxt = rTxtNode.GetTxt();
-        USHORT nScript = pBreakIt->xBreak->getScriptType( rTxt, 0 );
+        USHORT nScript = pScriptInfo->GetScriptType( 0 );
         xub_StrLen nChg = 0;
         USHORT nCnt = 0;
         if( i18n::ScriptType::WEAK == nScript )
         {
-            nChg = pBreakIt->xBreak->endOfScript( rTxt, 0, nScript );
-            if( nChg < rTxt.Len() )
-                nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+            nChg = pScriptInfo->NextScriptChg( 0 );
+            if( nChg < rTxtNode.GetTxt().Len() )
+                nScript = pScriptInfo->GetScriptType( 0 );
         }
         do
         {
-            nChg = pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
-            aScriptChg.Insert( nChg, nCnt );
-            aScriptType.Insert( nScript, nCnt++ );
+            nChg = pScriptInfo->GetScriptChg( nCnt );
+            nScript = pScriptInfo->GetScriptType( nCnt++ );
             BYTE nTmp = 4;
             switch ( nScript ) {
                 case i18n::ScriptType::ASIAN :
@@ -205,11 +204,7 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode )
                 pFnt->ChkMagic( pShell, nTmp );
                 pFnt->GetMagic( aMagicNo[ nTmp ], aFntIdx[ nTmp ], nTmp );
             }
-            if( nChg < rTxt.Len() )
-                nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
-            else
-                break;
-        } while( TRUE );
+        } while( nChg < rTxtNode.GetTxt().Len() );
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2001-02-20 10:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,10 @@ void SwTxtIter::CtorInit( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
 #endif
 
     SwTxtNode *pNode = pNewFrm->GetTxtNode();
-    SwAttrIter::CtorInit( *pNode );
+
+    ASSERT( pNewFrm->GetPara(), "No paragraph" );
+    SwAttrIter::CtorInit( *pNode, pNewFrm->GetPara()->GetScriptInfo() );
+
     pFrm = pNewFrm;
     pInf = pNewInf;
     aLineInf.CtorInit( pNode->GetSwAttrSet() );

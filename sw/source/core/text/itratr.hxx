@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-11 16:07:25 $
+ *  last change: $Author: ama $ $Date: 2001-02-20 10:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #endif
 #include "txttypes.hxx"
 #include "swfont.hxx"
+#include "porlay.hxx"
 
 #define _SVSTDARR_XUB_STRLEN
 #define _SVSTDARR_USHORTS
@@ -93,35 +94,31 @@ protected:
     SwFont *pFnt;
     SwpHints  *pHints;
     const SwAttrSet* pAttrSet;       // das Char-Attribut-Set
+    SwScriptInfo* pScriptInfo;
 
 private:
-    SvXub_StrLens aScriptChg;
-    SvUShorts aScriptType;
-    const void* aMagicNo[ SW_SCRIPTS ];
-    MSHORT aFntIdx[ SW_SCRIPTS ];
     OutputDevice *pLastOut;
+    MSHORT nChgCnt;
     SwRedlineItr *pRedln;
     xub_StrLen nStartIndex, nEndIndex, nPos;
-    MSHORT nChgCnt;
     BYTE nPropFont;
     void SeekFwd( const xub_StrLen nPos );
     inline void SetFnt( SwFont* pNew ) { pFnt = pNew; }
+    const void* aMagicNo[ SW_SCRIPTS ];
+    MSHORT aFntIdx[ SW_SCRIPTS ];
 
 protected:
     void Chg( SwTxtAttr *pHt );
     void Rst( SwTxtAttr *pHt );
-    void CtorInit( SwTxtNode& rTxtNode );
-    inline SwAttrIter() : pFnt(0), pLastOut(0), nChgCnt(0), nPropFont(0),
-        pShell(0), pRedln(0) { aMagicNo[0] = aMagicNo[1] = aMagicNo[2] = 0;
-          aFntIdx[0] = aFntIdx[1] = aFntIdx[2] = 0; }
-    USHORT ScriptType( const xub_StrLen nPos );
+    void CtorInit( SwTxtNode& rTxtNode, SwScriptInfo* pScrInf );
+    inline SwAttrIter()
+        : pFnt(0), pLastOut(0), nChgCnt(0), nPropFont(0), pShell(0), pRedln(0){}
 
 public:
     // Konstruktor, Destruktor
-    inline SwAttrIter( SwTxtNode& rTxtNode )
+    inline SwAttrIter( SwTxtNode& rTxtNode, SwScriptInfo* pScrInf )
         : pFnt(0), pLastOut(0), nChgCnt(0), nPropFont(0), pShell(0), pRedln(0)
-        { aMagicNo[0] = aMagicNo[1] = aMagicNo[2] = 0;
-          aFntIdx[0] = aFntIdx[1] = aFntIdx[2] = 0; CtorInit( rTxtNode ); }
+        { CtorInit( rTxtNode, pScrInf ); }
 
     virtual ~SwAttrIter();
 
@@ -130,7 +127,6 @@ public:
     // der uebergebenen Characterposition zurueck. Liefert sal_False, wenn vor
     // oder an dieser Position kein Wechsel mehr erfolgt, sal_True sonst.
     xub_StrLen GetNextAttr( ) const;
-    xub_StrLen NextScriptChg( const xub_StrLen nPos );
     // Macht die an der Characterposition i gueltigen Attribute im
     // logischen Font wirksam.
     sal_Bool Seek( const xub_StrLen nPos );
@@ -150,7 +146,6 @@ public:
 
     inline const SwAttrSet* GetAttrSet() const { return pAttrSet; }
 
-//  inline SwpHints *GetHints() { return pHints; }
     inline const SwpHints *GetHints() const { return pHints; }
 
     inline SwFont *GetFnt() { return pFnt; }
