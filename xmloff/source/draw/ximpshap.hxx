@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:18 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,8 @@
 #ifndef _XEXPTRANSFORM_HXX
 #include "xexptran.hxx"
 #endif
+
+#include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
 // common shape context
@@ -608,4 +610,34 @@ public:
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
 };
+
+class SdXMLCustomShapeContext : public SdXMLShapeContext
+{
+
+protected :
+
+    rtl::OUString maCustomShapeEngine;
+    rtl::OUString maCustomShapeData;
+
+    std::vector< com::sun::star::beans::PropertyValue > maCustomShapeGeometry;
+
+public:
+
+    TYPEINFO();
+
+    SdXMLCustomShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+    virtual ~SdXMLCustomShapeContext();
+
+    virtual void StartElement( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+    virtual void EndElement();
+
+    virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+};
+
 #endif  //  _XIMPSHAPE_HXX
