@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 17:34:30 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,7 +653,6 @@ long IndexBox_Impl::Notify( NotifyEvent& rNEvt )
 
 void IndexBox_Impl::SelectExecutableEntry()
 {
-    sal_Bool bSelectNew = sal_False;
     USHORT nPos = GetEntryPos( GetText() );
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
@@ -903,7 +902,6 @@ void IndexTabPage_Impl::Resize()
     if ( aSize.Width() < nMinWidth )
         aSize.Width() = nMinWidth;
     Point aPnt = aExpressionFT.GetPosPixel();
-    long nDelta = ( aPnt.X() / 2 );
     Size aNewSize = aExpressionFT.GetSizePixel();
     aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
     aExpressionFT.SetSizePixel( aNewSize );
@@ -1528,7 +1526,6 @@ void BookmarksTabPage_Impl::Resize()
     if ( aSize.Width() < nMinWidth )
         aSize.Width() = nMinWidth;
     Point aPnt = aBookmarksFT.GetPosPixel();
-    long nDelta = ( aPnt.X() / 2 );
     Size aNewSize = aBookmarksFT.GetSizePixel();
     aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
     aBookmarksFT.SetSizePixel( aNewSize );
