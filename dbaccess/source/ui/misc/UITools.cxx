@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:51 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,13 +735,19 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
         {
             try
             {
-                Reference<XResultSet> xRes = _xMetaData->getCatalogs();
-                Reference<XRow> xRow(xRes,UNO_QUERY);
-                while(xRes.is() && xRes->next())
+                Reference< XConnection> xCon = _xMetaData->getConnection();
+                if ( xCon.is() )
+                    sCatalog = xCon->getCatalog();
+                if ( !sCatalog.getLength() )
                 {
-                    sCatalog = xRow->getString(1);
-                    if(!xRow->wasNull())
-                        break;
+                    Reference<XResultSet> xRes = _xMetaData->getCatalogs();
+                    Reference<XRow> xRow(xRes,UNO_QUERY);
+                    while(xRes.is() && xRes->next())
+                    {
+                        sCatalog = xRow->getString(1);
+                        if(!xRow->wasNull())
+                            break;
+                    }
                 }
             }
             catch(const SQLException&)
@@ -1184,7 +1190,17 @@ void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId
 // check if SQL92 name checking is enabled
 sal_Bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
 {
-    sal_Bool bCheckNames = sal_False;
+    return isDataSourcePropertyEnabled(_xConnection,PROPERTY_ENABLESQL92CHECK);
+}
+// -----------------------------------------------------------------------------
+sal_Bool isAppendTableAliasEnabled(const Reference<XConnection>& _xConnection)
+{
+    return isDataSourcePropertyEnabled(_xConnection,PROPERTY_ENABLETABLEALIAS,sal_True);
+}
+// -----------------------------------------------------------------------------
+sal_Bool isDataSourcePropertyEnabled(const Reference<XConnection>& _xConnection,const ::rtl::OUString& _sProperty,sal_Bool _bDefault)
+{
+    sal_Bool bEnabled = _bDefault;
     try
     {
         Reference< XChild> xChild(_xConnection, UNO_QUERY);
@@ -1197,17 +1213,17 @@ sal_Bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
                 xProp->getPropertyValue(PROPERTY_INFO) >>= aInfo;
                 const PropertyValue* pValue =::std::find_if(aInfo.getConstArray(),
                                                     aInfo.getConstArray() + aInfo.getLength(),
-                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),PROPERTY_ENABLESQL92CHECK));
+                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),_sProperty));
                 if ( pValue && pValue != (aInfo.getConstArray() + aInfo.getLength()) )
-                    pValue->Value >>= bCheckNames;
+                    pValue->Value >>= bEnabled;
             }
         }
     }
     catch(SQLException&)
     {
-        OSL_ASSERT(!"isSQL92CheckEnabled");
+        OSL_ASSERT(!"isDataSourcePropertyEnabled");
     }
-    return bCheckNames;
+    return bEnabled;
 }
 // -----------------------------------------------------------------------------
 void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
