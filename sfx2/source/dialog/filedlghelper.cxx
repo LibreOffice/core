@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-27 10:55:34 $
+ *  last change: $Author: thb $ $Date: 2001-08-01 15:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,9 @@ ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
     if ( utl::UCBContentHelper::IsFolder( rURL ) )
         return ERRCODE_IO_NOTAFILE;
 
+    if ( !mpGraphicFilter )
+        return ERRCODE_IO_NOTSUPPORTED;
+
     // select graphic filter from dialog filter selection
     OUString aCurFilter( getFilter() );
 
@@ -695,6 +698,9 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
         // aPreviewTimer
           maPreViewTimer.SetTimeout( 500 );
         maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+
+        // generate graphic filter only on demand
+        addGraphicFilter();
         break;
 
     case FILEOPEN_PLAY:
@@ -712,6 +718,9 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
         // aPreviewTimer
           maPreViewTimer.SetTimeout( 500 );
         maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+
+        // generate graphic filter only on demand
+        addGraphicFilter();
         break;
 
     default:
@@ -1393,9 +1402,6 @@ FileDialogHelper::FileDialogHelper( sal_uInt32 nFlags )
 
     mpImp = new FileDialogHelper_Impl( nDialogType, nFlags );
     mxImp = mpImp;
-
-    if ( nDialogType == FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE )
-        mpImp->addGraphicFilter();
 }
 
 // ------------------------------------------------------------------------
@@ -1416,9 +1422,6 @@ FileDialogHelper::FileDialogHelper( const short nDialogType,
 {
     mpImp = new FileDialogHelper_Impl( nDialogType, nFlags );
     mxImp = mpImp;
-
-    if ( nDialogType == FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE )
-        mpImp->addGraphicFilter();
 }
 
 // ------------------------------------------------------------------------
