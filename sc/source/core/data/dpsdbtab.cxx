@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsdbtab.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-12 15:10:00 $
+ *  last change: $Author: nn $ $Date: 2001-01-26 19:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/types.hxx>
 
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -138,6 +139,8 @@ ScDatabaseDPData::ScDatabaseDPData(
 
 ScDatabaseDPData::~ScDatabaseDPData()
 {
+    ::comphelper::disposeComponent( pImpl->xRowSet );
+
     delete[] pImpl->pTypes;
     if ( pImpl->ppStrings )
     {
@@ -274,7 +277,8 @@ BOOL ScDatabaseDPData::OpenDatabase()
 
 
     if (!bSuccess)
-        pImpl->xRowSet.clear();
+        ::comphelper::disposeComponent( pImpl->xRowSet );
+
     pImpl->bValid = bSuccess;
     return bSuccess;
 }
