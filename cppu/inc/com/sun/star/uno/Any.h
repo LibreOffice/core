@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-16 16:34:33 $
+ *  last change: $Author: dbo $ $Date: 2001-08-02 15:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,26 +130,26 @@ public:
     /** Constructor:
         Sets a copy of the given data.
         <br>
-        @param pData value
+        @param pData_ value
         @param rType type of value
     */
-    inline Any( const void * pData, const Type & rType ) SAL_THROW( () );
+    inline Any( const void * pData_, const Type & rType ) SAL_THROW( () );
 
     /** Constructor:
         Sets a copy of the given data.
         <br>
-        @param pData value
+        @param pData_ value
         @param pTypeDescr type of value
     */
-    inline Any( const void * pData, typelib_TypeDescription * pTypeDescr ) SAL_THROW( () );
+    inline Any( const void * pData_, typelib_TypeDescription * pTypeDescr ) SAL_THROW( () );
 
     /** Constructor:
         Sets a copy of the given data.
         <br>
-        @param pData value
+        @param pData_ value
         @param pType type of value
     */
-    inline Any( const void * pData, typelib_TypeDescriptionReference * pType ) SAL_THROW( () );
+    inline Any( const void * pData_, typelib_TypeDescriptionReference * pType ) SAL_THROW( () );
 
     /** Destructor:
         Destructs any content and frees memory.
@@ -217,24 +217,24 @@ public:
     /** Sets a value. If the any already contains a value, that value will be destructed
         and its memory freed.
         <br>
-        @param pData pointer to value
+        @param pData_ pointer to value
         @param rType type of value
     */
-    inline void SAL_CALL setValue( const void * pData, const Type & rType ) SAL_THROW( () );
+    inline void SAL_CALL setValue( const void * pData_, const Type & rType ) SAL_THROW( () );
     /** Sets a value. If the any already contains a value, that value will be destructed
         and its memory freed.
         <br>
-        @param pData pointer to value
+        @param pData_ pointer to value
         @param pType type of value
     */
-    inline void SAL_CALL setValue( const void * pData, typelib_TypeDescriptionReference * pType ) SAL_THROW( () );
+    inline void SAL_CALL setValue( const void * pData_, typelib_TypeDescriptionReference * pType ) SAL_THROW( () );
     /** Sets a value. If the any already contains a value, that value will be destructed
         and its memory freed.
         <br>
-        @param pData pointer to value
+        @param pData_ pointer to value
         @param pTypeDescr type description of value
     */
-    inline void SAL_CALL setValue( const void * pData, typelib_TypeDescription * pTypeDescr ) SAL_THROW( () );
+    inline void SAL_CALL setValue( const void * pData_, typelib_TypeDescription * pTypeDescr ) SAL_THROW( () );
 
     /** Clears this any. If the any already contains a value, that value will be destructed
         and its memory freed. After this has been called, the any does not contain a value.

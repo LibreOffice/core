@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:53 $
+ *  last change: $Author: dbo $ $Date: 2001-08-02 15:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,22 +102,22 @@ inline Any::Any( const Any & rAny ) SAL_THROW( () )
     ::uno_type_any_construct( this, rAny.pData, rAny.pType, cpp_acquire );
 }
 //__________________________________________________________________________________________________
-inline Any::Any( const void * pData, const Type & rType ) SAL_THROW( () )
+inline Any::Any( const void * pData_, const Type & rType ) SAL_THROW( () )
 {
     ::uno_type_any_construct(
-        this, const_cast< void * >( pData ), rType.getTypeLibType(), cpp_acquire );
+        this, const_cast< void * >( pData_ ), rType.getTypeLibType(), cpp_acquire );
 }
 //__________________________________________________________________________________________________
-inline Any::Any( const void * pData, typelib_TypeDescription * pTypeDescr ) SAL_THROW( () )
+inline Any::Any( const void * pData_, typelib_TypeDescription * pTypeDescr ) SAL_THROW( () )
 {
     ::uno_any_construct(
-        this, const_cast< void * >( pData ), pTypeDescr, cpp_acquire );
+        this, const_cast< void * >( pData_ ), pTypeDescr, cpp_acquire );
 }
 //__________________________________________________________________________________________________
-inline Any::Any( const void * pData, typelib_TypeDescriptionReference * pType ) SAL_THROW( () )
+inline Any::Any( const void * pData_, typelib_TypeDescriptionReference * pType ) SAL_THROW( () )
 {
     ::uno_type_any_construct(
-        this, const_cast< void * >( pData ), pType, cpp_acquire );
+        this, const_cast< void * >( pData_ ), pType, cpp_acquire );
 }
 //__________________________________________________________________________________________________
 inline Any::~Any() SAL_THROW( () )
@@ -141,22 +141,22 @@ inline ::rtl::OUString Any::getValueTypeName() const SAL_THROW( () )
     return ::rtl::OUString( pType->pTypeName );
 }
 //__________________________________________________________________________________________________
-inline void Any::setValue( const void * pData, const Type & rType ) SAL_THROW( () )
+inline void Any::setValue( const void * pData_, const Type & rType ) SAL_THROW( () )
 {
     ::uno_type_any_assign(
-        this, const_cast< void * >( pData ), rType.getTypeLibType(), cpp_acquire, cpp_release );
+        this, const_cast< void * >( pData_ ), rType.getTypeLibType(), cpp_acquire, cpp_release );
 }
 //__________________________________________________________________________________________________
-inline void Any::setValue( const void * pData, typelib_TypeDescriptionReference * pType ) SAL_THROW( () )
+inline void Any::setValue( const void * pData_, typelib_TypeDescriptionReference * pType ) SAL_THROW( () )
 {
     ::uno_type_any_assign(
-        this, const_cast< void * >( pData ), pType, cpp_acquire, cpp_release );
+        this, const_cast< void * >( pData_ ), pType, cpp_acquire, cpp_release );
 }
 //__________________________________________________________________________________________________
-inline void Any::setValue( const void * pData, typelib_TypeDescription * pTypeDescr ) SAL_THROW( () )
+inline void Any::setValue( const void * pData_, typelib_TypeDescription * pTypeDescr ) SAL_THROW( () )
 {
     ::uno_any_assign(
-        this, const_cast< void * >( pData ), pTypeDescr, cpp_acquire, cpp_release );
+        this, const_cast< void * >( pData_ ), pTypeDescr, cpp_acquire, cpp_release );
 }
 //__________________________________________________________________________________________________
 inline void Any::clear() SAL_THROW( () )
