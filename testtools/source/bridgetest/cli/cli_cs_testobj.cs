@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cli_cs_testobj.cs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:17:14 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 12:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,9 +419,24 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
     {
         throw new RuntimeException(rMsg, xContext);
     }
+
+    private void dothrow( System.Exception e )
+    {
+        throw e;
+    }
     public int RuntimeException
     {
-        get { throw new RuntimeException(_string, _xInterface); }
+        get {
+            try
+            {
+                dothrow( new RuntimeException(_string, _xInterface) );
+                return 0; // dummy
+            }
+            catch (System.Exception exc)
+            {
+                throw exc;
+            }
+        }
         set { throw new RuntimeException(_string, _xInterface); }
     }
     
