@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-07-29 15:14:15 $
+ *  last change: $Author: dr $ $Date: 2002-08-01 12:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ using namespace ::com::sun::star;
 
 SC_SIMPLE_SERVICE_INFO( ScFilterOptionsObj, SCFILTEROPTIONSOBJ_IMPLNAME, SCFILTEROPTIONSOBJ_SERVICE )
 
-#define SC_UNONAME_FILENAME         "FileName"
+#define SC_UNONAME_FILENAME         "URL"
 #define SC_UNONAME_FILTERNAME       "FilterName"
 #define SC_UNONAME_FILTEROPTIONS    "FilterOptions"
 #define SC_UNONAME_INPUTSTREAM      "InputStream"
