@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.7 2000-11-13 14:06:44 cl Exp $
+	$Id: drawing.mod,v 1.8 2000-11-16 16:33:58 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -90,7 +90,7 @@
 <!ATTLIST draw:polyline %draw-position; >
 <!ATTLIST draw:polyline %draw-size; >
 <!ATTLIST draw:polyline %draw-viewbox; >
-<!ATTLIST draw:polyline draw:points %points; #REQUIRED>
+<!ATTLIST draw:polyline svg:points %points; #REQUIRED>
 <!ATTLIST draw:polyline %draw-style-name; >
 <!ATTLIST draw:polyline %draw-transform; >
 
@@ -98,7 +98,7 @@
 <!ATTLIST draw:polygon %draw-position; >
 <!ATTLIST draw:polygon %draw-size; >
 <!ATTLIST draw:polygon %draw-viewbox; >
-<!ATTLIST draw:polygon draw:points %points; #REQUIRED >
+<!ATTLIST draw:polygon svg:points %points; #REQUIRED >
 <!ATTLIST draw:polygon %draw-style-name; >
 <!ATTLIST draw:polygon %draw-transform; >
 
