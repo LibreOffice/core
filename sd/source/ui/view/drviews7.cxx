@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:18:31 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,6 +863,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
     else
     {
+        rSet.Put(SfxBoolItem(SID_PAGEMODE, FALSE));
+        rSet.Put(SfxBoolItem(SID_MASTERPAGE, TRUE));
+
         /**********************************************************************
         * Hintergrundseiten-Modus
         **********************************************************************/
