@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 05:54:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ ModalDialog DLG_VERSIONS
         Text [ English ] = "~Always save a version on closing" ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Always save a version on closing" ;
-        Text [ portuguese_brazilian ] = "~Beim Schließen immer Version speichern" ;
+        Text [ portuguese_brazilian ] = "~Beim Schlie?en immer Version speichern" ;
         Text [ swedish ] = "~Spara alltid en version vid stängning" ;
         Text [ danish ] = "Gem version altid ved lukning" ;
         Text [ italian ] = "~Salva sempre la versione quando chiudi" ;
@@ -282,7 +282,7 @@ ModalDialog DLG_VERSIONS
         Text [ English ] = "Close" ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Close" ;
-        Text [ portuguese_brazilian ] = "Schließen" ;
+        Text [ portuguese_brazilian ] = "Schlie?en" ;
         Text [ swedish ] = "Stäng" ;
         Text [ danish ] = "Luk" ;
         Text [ italian ] = "Chiudi" ;
@@ -311,7 +311,7 @@ ModalDialog DLG_VERSIONS
         Text [ English ] = "Open" ;
         TabStop = TRUE ;
         Text [ english_us ] = "Open" ;
-        Text [ portuguese_brazilian ] = "Öffnen" ;
+        Text [ portuguese_brazilian ] = "?ffnen" ;
         Text [ swedish ] = "Öppna" ;
         Text [ danish ] = "Åbn" ;
         Text [ italian ] = "Apri" ;
@@ -370,7 +370,7 @@ ModalDialog DLG_VERSIONS
         Text [ English ] = "~Delete" ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Delete" ;
-        Text [ portuguese_brazilian ] = "~Löschen" ;
+        Text [ portuguese_brazilian ] = "~L?chen" ;
         Text [ swedish ] = "~Radera" ;
         Text [ danish ] = "Slet" ;
         Text [ italian ] = "~Elimina" ;
@@ -540,7 +540,7 @@ ModalDialog DLG_COMMENTS
         Text [ English ] = "~Close" ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Close" ;
-        Text [ portuguese_brazilian ] = "~Schließen" ;
+        Text [ portuguese_brazilian ] = "~Schlie?en" ;
         Text [ swedish ] = "~Stäng" ;
         Text [ danish ] = "Luk" ;
         Text [ italian ] = "~Chiudi" ;
@@ -578,7 +578,7 @@ ModalDialog DLG_COMMENTS
     Text [ portuguese ] = "Inserir comentário sobre versão" ;
     Text[ chinese_simplified ] = "¼üÈë°æ±¾×¢½â";
     Text[ russian ] = "Ââåñòè êîììåíòàðèé ê âåðñèè";
-    Text[ polish ] = "WprowadŸ komentarz do wersji";
+    Text[ polish ] = "Wprowad? komentarz do wersji";
     Text[ japanese ] = "ÊÞ°¼Þ®ÝºÒÝÄ‚Ì“ü—Í";
     Text[ chinese_traditional ] = "¿é¤Jª©¥»µù¸Ñ";
     Text[ arabic ] = "ÅÏÑÇÌ ÊÚáíÞ ÇáÅÕÏÇÑ";
