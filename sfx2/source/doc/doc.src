@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:22:28 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 06:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1355,7 +1355,7 @@ String RID_STR_FILTBASIC
     Text[ dutch ] = "%PRODUCTNAME Basic Bibliotheken";
     Text[ chinese_simplified ] = "%PRODUCTNAME Basic ø‚";
     Text[ greek ] = "%PRODUCTNAME Basic ¬È‚ÎÈÔËﬁÍÂÚ";
-    Text[ korean ] = "StarBasic ∂Û¿Ã∫Í∑Ø∏Æ";
+    Text[ korean ] = "%PRODUCTNAME Basic ∂Û¿Ã∫Í∑Ø∏Æ";
     Text[ turkish ] = "%PRODUCTNAME Basic kitapl˝klar˝";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Bibliotecas %PRODUCTNAME Basic";
