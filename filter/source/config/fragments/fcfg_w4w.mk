@@ -228,6 +228,10 @@ F4_W4W = \
 
 # -----------------------------------------------
 # count = 0
+F4_UI_W4W =
+    
+# -----------------------------------------------
+# count = 0
 L4_W4W =
 
 # -----------------------------------------------
@@ -235,15 +239,22 @@ L4_W4W =
 C4_W4W =
 
 # -----------------------------------------------
-TYPES_4fcfg_w4w           = $(foreach,i,$(T4_W4W) types$/$i.xcu          )
-FILTERS_4fcfg_w4w         = $(foreach,i,$(F4_W4W) filters$/$i.xcu        )
-FRAMELOADERS_4fcfg_w4w    = $(foreach,i,$(L4_W4W) frameloaders$/$i.xcu   )
-CONTENTHANDLERS_4fcfg_w4w = $(foreach,i,$(C4_W4W) contenthandlers$/$i.xcu)
+TYPES_4fcfg_w4w           = $(foreach,i,$(T4_W4W)    types$/$i.xcu                   )
+FILTERS_4fcfg_w4w         = $(foreach,i,$(F4_W4W)    filters$/$i.xcu                 )
+UI_FILTERS_4fcfg_w4w      = $(foreach,i,$(F4_UI_W4W) $(DIR_LOCFRAG)$/filters$/$i.xcu )
+FRAMELOADERS_4fcfg_w4w    = $(foreach,i,$(L4_W4W)    frameloaders$/$i.xcu            )
+CONTENTHANDLERS_4fcfg_w4w = $(foreach,i,$(C4_W4W)    contenthandlers$/$i.xcu         )
 
 # -----------------------------------------------
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_w4w = \
     $(TYPES_4fcfg_w4w) \
-    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
+    $(FILTERS_4fcfg_w4w) \
+    $(UI_FILTERS_4fcfg_w4w) \
     $(FRAMELOADERS_4fcfg_w4w) \
     $(CONTENTHANDLERS_4fcfg_w4w)
+    
+ALL_UI_FILTERS+=$(UI_FILTERS_4fcfg_w4w)    
+    
+ALL_PACKAGES+=w4w
+    
