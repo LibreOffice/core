@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-13 12:31:52 $
+ *  last change: $Author: tl $ $Date: 2001-06-21 09:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,9 @@ USHORT TypeToPos_Impl( LanguageType eType, const ListBox& rLb )
 //-----------------------------------------------------------------------
 SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nWinStyle, BOOL bCheck ) :
     ListBox( pParent, nWinStyle ),
+#if SUPD >= 637
+    m_pSpellUsedLang( NULL ),
+#endif
     m_bWithCheckmark( bCheck )
 {
     Init();
@@ -203,6 +206,9 @@ SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nWinStyle, BOOL bCheck 
 //------------------------------------------------------------------------
 SvxLanguageBox::SvxLanguageBox( Window* pParent, const ResId& rResId, BOOL bCheck ) :
     ListBox( pParent, rResId ),
+#if SUPD >= 637
+    m_pSpellUsedLang( NULL ),
+#endif
     m_bWithCheckmark( bCheck )
 {
     Init();
@@ -247,6 +253,9 @@ void SvxLanguageBox::Init()
 
 SvxLanguageBox::~SvxLanguageBox()
 {
+#if SUPD >= 637
+    delete m_pSpellUsedLang;
+#endif
     delete m_pLangTable;
 }
 
@@ -267,6 +276,9 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
         Sequence< INT16 > aSpellAvailLang;
         Sequence< INT16 > aHyphAvailLang;
         Sequence< INT16 > aThesAvailLang;
+        Sequence< INT16 > aSpellUsedLang;
+        Sequence< INT16 > aHyphUsedLang;
+        Sequence< INT16 > aThesUsedLang;
         Reference< XAvailableLocales > xAvail( LinguMgr::GetLngSvcMgr(), UNO_QUERY );
         if (xAvail.is())
         {
@@ -287,6 +299,24 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
                 aTmp = xAvail->getAvailableLocales( A2OU( SN_THESAURUS ) );
                 aThesAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
             }
+        }
+        if (LANG_LIST_SPELL_USED & nLangList)
+        {
+            Reference< XSpellChecker1 > xTmp1( SvxGetSpellChecker(), UNO_QUERY );
+            if (xTmp1.is())
+                aSpellUsedLang = xTmp1->getLanguages();
+        }
+        if (LANG_LIST_HYPH_USED  & nLangList)
+        {
+            Reference< XHyphenator > xTmp( SvxGetHyphenator() );
+            if (xTmp.is())
+                aHyphUsedLang = lcl_LocaleSeqToLangSeq( xTmp->getLocales() );
+        }
+        if (LANG_LIST_THES_USED  & nLangList)
+        {
+            Reference< XThesaurus > xTmp( SvxGetThesaurus() );
+            if (xTmp.is())
+                aThesUsedLang = lcl_LocaleSeqToLangSeq( xTmp->getLocales() );
         }
 
         SvxLanguageTable aLangTable;
@@ -334,6 +364,12 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
                     bInsert |= lcl_SeqHasLang( aHyphAvailLang, nLangType );
                 if (!bInsert && (nLangList & LANG_LIST_THES_AVAIL))
                     bInsert |= lcl_SeqHasLang( aThesAvailLang, nLangType );
+                if (!bInsert && (nLangList & LANG_LIST_SPELL_USED))
+                    bInsert |= lcl_SeqHasLang( aSpellUsedLang, nLangType );
+                if (!bInsert && (nLangList & LANG_LIST_HYPH_USED))
+                    bInsert |= lcl_SeqHasLang( aHyphUsedLang, nLangType );
+                if (!bInsert && (nLangList & LANG_LIST_THES_USED))
+                    bInsert |= lcl_SeqHasLang( aThesUsedLang, nLangType );
             }
 
             if (bInsert)
@@ -357,21 +393,22 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos
     if ( m_bWithCheckmark )
     {
         sal_Bool bFound = sal_False;
-        Reference< XSpellChecker1 > xSpell( SvxGetSpellChecker(), UNO_QUERY );
-        if (xSpell.is())
+
+#if SUPD >= 637
+        if (!m_pSpellUsedLang)
         {
-            Sequence< INT16 > aLang( xSpell->getLanguages() );
-            const USHORT nLanguageCount = aLang.getLength();
-            const Language* pLangList = aLang.getConstArray();
-            for ( USHORT i = 0; i < nLanguageCount; ++i )
-            {
-                if ( nLangType == pLangList[i] )
-                {
-                    bFound = sal_True;
-                    break;
-                }
-            }
+            Reference< XSpellChecker1 > xSpell( SvxGetSpellChecker(), UNO_QUERY );
+            if ( xSpell.is() )
+                m_pSpellUsedLang = new Sequence< INT16 >( xSpell->getLanguages() );
         }
+        bFound = m_pSpellUsedLang ?
+                    lcl_SeqHasLang( *m_pSpellUsedLang, nLangType ) : FALSE;
+#else
+        Reference< XSpellChecker1 > xSpell( SvxGetSpellChecker(), UNO_QUERY );
+        if ( xSpell.is() )
+            bFound = lcl_SeqHasLang( xSpell->getLanguages(), nLangType );
+#endif
+
         if ( !bFound )
             nAt = InsertEntry( aStrEntry, m_aNotCheckedImage, nPos );
         else
@@ -381,6 +418,25 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos
         nAt = InsertEntry( aStrEntry, nPos );
 
     SetEntryData( nAt, (void*)(ULONG)nLangType );
+    return nPos;
+}
+
+//------------------------------------------------------------------------
+
+USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
+        BOOL bCheckEntry, USHORT nPos )
+{
+    String aStrEntry = m_pLangTable->GetString( nLangType );
+    if (LANGUAGE_NONE == nLangType && m_bHasLangNone && m_bLangNoneIsLangAll)
+        aStrEntry = m_aAllString;
+
+    USHORT nAt = 0;
+    if ( !bCheckEntry )
+        nAt = InsertEntry( aStrEntry, m_aNotCheckedImage, nPos );
+    else
+        nAt = InsertEntry( aStrEntry, m_aCheckedImage, nPos );
+    SetEntryData( nAt, (void*)(ULONG)nLangType );
+
     return nPos;
 }
 
