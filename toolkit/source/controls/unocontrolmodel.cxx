@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-09 07:36:52 $
+ *  last change: $Author: fs $ $Date: 2002-05-16 05:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1328,7 +1328,12 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
 
     sal_Int32 nProps = rPropertyNames.getLength();
     sal_Int32* pHandles = new sal_Int32[nProps];
-    const ::com::sun::star::uno::Any* pValues = Values.getConstArray();
+
+    // may need to change the order in the sequence, for this we need a non-const value sequence
+    // 15.05.2002 - 99314 - fs@openoffice.org
+    uno::Sequence< uno::Any > aValues( Values );
+    uno::Any* pValues = aValues.getArray();
+
     sal_Int32 nValidHandles = getInfoHelper().fillHandles( pHandles, rPropertyNames );
 
     if ( nValidHandles )
@@ -1352,7 +1357,10 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
         }
 
         if ( nValidHandles )
-            setFastPropertyValues( nProps, pHandles, pValues, nValidHandles );
+        {
+            ImplNormalizePropertySequence( nProps, pHandles, pValues, &nValidHandles );
+             setFastPropertyValues( nProps, pHandles, pValues, nValidHandles );
+        }
 
         // FD-Propertie nicht in das Array mergen, weil sortiert...
         if ( pFD )
@@ -1370,3 +1378,8 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
 
 
 
+void UnoControlModel::ImplNormalizePropertySequence( const sal_Int32 _nCount, sal_Int32* _pHandles,
+    uno::Any* _pValues, sal_Int32* _pValidHandles ) const SAL_THROW(())
+{
+    // nothing to do here
+}
