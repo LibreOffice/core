@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: er $ $Date: 2001-08-13 14:53:42 $
+#   last change: $Author: kz $ $Date: 2001-08-15 09:19:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,11 +127,6 @@ SHL1STDLIBS+=\
             $(SHELLLIB)
 .ENDIF
 
-.IF "$(TF_UCB)" == ""
-SHL1STDLIBS+=\
-        $(CHAOSLIB)
-.ENDIF
-
 .IF "$(BIG_SVX)"==""
 .IF "$(GUI)"=="OS2"
 SHL1STDLIBS+=\
@@ -192,11 +187,6 @@ SHL2STDLIBS= \
             $(UNOTOOLSLIB) \
             $(UCBHELPERLIB) \
             $(COMPHELPERLIB)
-
-.IF "$(TF_UCB)" == ""
-SHL2STDLIBS+=\
-        $(CHAOSLIB)
-.ENDIF
 
 .IF "$(GUI)"=="WNT"
 SHL2STDLIBS+=\
