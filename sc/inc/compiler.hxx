@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2001-02-22 14:28:49 $
+ *  last change: $Author: er $ $Date: 2001-05-02 14:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@
 // wird nicht angezeigt, temporaer fuer TrackFormulas
 // Zelle haengt von einer ab, die errCircularReference ist
 #define errTrackFromCircRef     528
+// Interpreter internal: existing cell has no value but value queried
+#define errCellNoValue          529
 
 #define NOVALUE                 0x7fff
 
