@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 10:01:02 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 13:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2084,54 +2084,14 @@ void XMLTextParagraphExport::exportShape(
 void XMLTextParagraphExport::_collectTextEmbeddedAutoStyles(
         const Reference < XPropertySet > & rPropSet )
 {
-    Add( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet );
+    DBG_ASSERT( !this, "no API implementation avialable" );
 }
 
 void XMLTextParagraphExport::_exportTextEmbedded(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertySetInfo > & rPropSetInfo )
 {
-    OUString sStyle;
-    Any aAny;
-
-    if( rPropSetInfo->hasPropertyByName( sFrameStyleName ) )
-    {
-        aAny = rPropSet->getPropertyValue( sFrameStyleName );
-        aAny >>= sStyle;
-    }
-
-    OUString sAutoStyle( sStyle );
-    sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle );
-    if( sAutoStyle.getLength() )
-        GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_style_name,
-                                  sAutoStyle );
-    addTextFrameAttributes( rPropSet, sal_False );
-
-
-    // xlink:href
-    OUString sURL;
-    sal_Bool bExtern;
-    getTextEmbeddedObjectProperties( rPropSet, sURL, bExtern );
-
-    sURL = GetExport().AddEmbeddedObject( sURL );
-
-    GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sURL );
-    GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
-                                   sXML_simple );
-    GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show,
-                                   sXML_embed );
-    GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate,
-                                   sXML_onLoad );
-
-    const sal_Char *pElem = bExtern ? sXML_object_ole : sXML_object;
-    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
-                              pElem, sal_False, sal_True );
-
-    exportEvents( rPropSet );
-    exportAlternativeText( rPropSet, rPropSetInfo );
-    // draw:contour
-    exportContour( rPropSet, rPropSetInfo );
-
+    DBG_ASSERT( !this, "no API implementation avialable" );
 }
 
 void XMLTextParagraphExport::exportEvents( const Reference < XPropertySet > & rPropSet )
@@ -2184,12 +2144,6 @@ void XMLTextParagraphExport::exportTextEmbedded(
             _exportTextEmbedded( xPropSet, xPropSetInfo );
         }
     }
-}
-
-void XMLTextParagraphExport::getTextEmbeddedObjectProperties(
-    const Reference < XPropertySet >& rPropSet,
-    OUString& rStreamName, sal_Bool& r ) const
-{
 }
 
 void XMLTextParagraphExport::setTextEmbeddedGraphicURL(

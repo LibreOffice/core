@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 10:01:02 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 13:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1519,7 +1519,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         break;
 
     case XML_TOK_TEXT_FORMS:
-        pContext = rImport.GetFormImport()->createOfficeFormsContext(rImport, nPrefix, rLocalName);
+//      pContext = rImport.GetFormImport()->createOfficeFormsContext(rImport, nPrefix, rLocalName);
         bContent = sal_False;
         break;
 
@@ -1794,6 +1794,7 @@ sal_Bool XMLTextImportHelper::IsInHeaderFooter() const
 Reference< XPropertySet> XMLTextImportHelper::createAndInsertOLEObject(
                                         SvXMLImport& rImport,
                                         const OUString& rHRef,
+                                        const OUString& rStyleName,
                                         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     Reference< XPropertySet> xPropSet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 09:55:38 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 13:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,6 +587,7 @@ XML_CONSTASCII_ACTION( sXML_double_sided, "double-sided" );
 XML_CONSTASCII_ACTION( sXML_down, "down" );
 XML_CONSTASCII_ACTION( sXML_draft, "draft");
 XML_CONSTASCII_ACTION( sXML_draw, "draw" );
+XML_CONSTASCII_ACTION( sXML_draw_aspect, "draw-aspect" );
 XML_CONSTASCII_ACTION( sXML_drawing, "drawing" );
 XML_CONSTASCII_ACTION( sXML_drawings, "drawings" );
 XML_CONSTASCII_ACTION( sXML_drawpool , "drawpool" );
@@ -1751,6 +1752,10 @@ XML_CONSTASCII_ACTION( sXML_view_settings, "view-settings" );
 XML_CONSTASCII_ACTION( sXML_visibility, "visibility" );
 XML_CONSTASCII_ACTION( sXML_visible, "visible" );
 XML_CONSTASCII_ACTION( sXML_visible_area, "visible-area" );
+XML_CONSTASCII_ACTION( sXML_visible_area_top, "visible-area-top" );
+XML_CONSTASCII_ACTION( sXML_visible_area_left, "visible-area-left" );
+XML_CONSTASCII_ACTION( sXML_visible_area_width, "visible-area-width" );
+XML_CONSTASCII_ACTION( sXML_visible_area_height, "visible-area-height" );
 XML_CONSTASCII_ACTION( sXML_visited_style_name, "visited-style-name" );
 XML_CONSTASCII_ACTION( sXML_volatile, "volatile" );
 XML_CONSTASCII_ACTION( sXML_volume, "volume" );
