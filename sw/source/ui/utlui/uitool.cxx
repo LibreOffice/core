@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:49:52 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,7 +507,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         aHeaderSet.Put(aOn);
 
         const SwFmtFrmSize &rFrmSize = pHeaderFmt->GetFrmSize();
-        const SwFrmSize eSizeType = rFrmSize.GetSizeType();
+        const SwFrmSize eSizeType = rFrmSize.GetHeightSizeType();
         SfxBoolItem aDynamic(SID_ATTR_PAGE_DYNAMIC, eSizeType != ATT_FIX_SIZE);
         aHeaderSet.Put(aDynamic);
 
@@ -553,7 +553,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         aFooterSet.Put(aOn);
 
         const SwFmtFrmSize &rFrmSize = pFooterFmt->GetFrmSize();
-        const SwFrmSize eSizeType = rFrmSize.GetSizeType();
+        const SwFrmSize eSizeType = rFrmSize.GetHeightSizeType();
         SfxBoolItem aDynamic(SID_ATTR_PAGE_DYNAMIC, eSizeType != ATT_FIX_SIZE);
         aFooterSet.Put(aDynamic);
 
