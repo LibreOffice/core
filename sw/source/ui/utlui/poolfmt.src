@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:41:41 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ String STR_POOLCHR_ENDNOTE
     Text[ russian ] = "Ηνΰκ κξνφεβξι ρνξρκθ";
     Text[ polish ] = "Symbol przypisσw koρc.";
     Text[ japanese ] = "•¶––‹r’‹L†";
-    Text[ chinese_traditional ] = "§ΐΌΠ²Ε";
+    Text[ chinese_traditional ] = "§ΐµω²ΕΈΉ";
     Text[ arabic ] = "ΡγÒ ΗαΚΪανή ΗαΞΚΗγν";
     Text[ greek ] = "Σύμβολο σημείωσης τέλους";
     Text[ korean ] = "ΉΜΑΦ ±βΘ£";
@@ -421,7 +421,7 @@ String STR_POOLCHR_ENDNOTE_ANCHOR
     Text[ japanese ] = "•¶––‹r’±έ¶°";
     Text[ korean ] = "ΉΜΑΦ °νΑ¤ ±βΑΨ";
     Text[ chinese_simplified ] = "Ξ²ΧΆ±κΌΗ";
-    Text[ chinese_traditional ] = "§ΐª`ΌΠΈΉ";
+    Text[ chinese_traditional ] = "§ΐµωΌΠΈΉ";
     Text[ arabic ] = "γΡΣΗΙ ΗαΚΪανή ΗαΞΚΗγν";
     Text[ turkish ] = "Sonnot sabitleyicisi";
 };
@@ -1507,7 +1507,7 @@ String STR_POOLCOLL_NUM_LEVEL1S
     Text[ russian ] = "Νΰχΰλξ νσμεπΰφθθ 1";
     Text[ polish ] = "PoczΉtek numeracji 1";
     Text[ japanese ] = "”Τ†•t‚― 1 n‚ί";
-    Text[ chinese_traditional ] = "½sΈΉ 1 ¶}Ίέ";
+    Text[ chinese_traditional ] = "½sΈΉ 1 °_©l¦μΈm";
     Text[ arabic ] = "ΗαΚΡήνγ 1 ΘΟΗνΙ";
     Text[ greek ] = "Αρίθμηση 1 Αρχή";
     Text[ korean ] = "ΉψΘ£ 1 ½ΓΐΫ";
@@ -1603,7 +1603,7 @@ String STR_POOLCOLL_NUM_LEVEL2S
     Text[ russian ] = "Νΰχΰλξ νσμεπΰφθθ 2";
     Text[ polish ] = "PoczΉtek numeracji 2 ";
     Text[ japanese ] = "”Τ†•t‚― 2 n‚ί";
-    Text[ chinese_traditional ] = "½sΈΉ 2 ¶}Ίέ";
+    Text[ chinese_traditional ] = "½sΈΉ 2 °_©l¦μΈm";
     Text[ arabic ] = "ΗαΚΡήνγ 2 ΘΟΗνΙ";
     Text[ greek ] = "Αρίθμηση 2 Αρχή";
     Text[ korean ] = "ΉψΘ£ 2 ½ΓΐΫ";
@@ -1699,7 +1699,7 @@ String STR_POOLCOLL_NUM_LEVEL3S
     Text[ russian ] = "Νΰχΰλξ νσμεπΰφθθ 3";
     Text[ polish ] = "PoczΉtek numeracji 3 ";
     Text[ japanese ] = "”Τ†•t‚― 3 n‚ί";
-    Text[ chinese_traditional ] = "½sΈΉ 3 ¶}Ίέ";
+    Text[ chinese_traditional ] = "½sΈΉ 3 °_©l¦μΈm";
     Text[ arabic ] = "ΗαΚΡήνγ 3 ΘΟΗνΙ";
     Text[ greek ] = "Αρίθμηση 3 Αρχή";
     Text[ korean ] = "ΉψΘ£ 3 ½ΓΐΫ";
@@ -1795,7 +1795,7 @@ String STR_POOLCOLL_NUM_LEVEL4S
     Text[ russian ] = "Νΰχΰλξ νσμεπΰφθθ 4";
     Text[ polish ] = "PoczΉtek numeracji 4";
     Text[ japanese ] = "”Τ†•t‚― 4 n‚ί";
-    Text[ chinese_traditional ] = "½sΈΉ 4 ¶}Ίέ";
+    Text[ chinese_traditional ] = "½sΈΉ 4 °_©l¦μΈm";
     Text[ arabic ] = "ΗαΚΡήνγ 4 ΘΟΗνΙ";
     Text[ greek ] = "Αρίθμηση 4 Αρχή";
     Text[ korean ] = "ΉψΘ£ 4 ½ΓΐΫ";
@@ -1891,7 +1891,7 @@ String STR_POOLCOLL_NUM_LEVEL5S
     Text[ russian ] = "Νΰχΰλξ νσμεπΰφθθ 5";
     Text[ polish ] = "PoczΉtek numeracji 5";
     Text[ japanese ] = "”Τ†•t‚― 5 n‚ί";
-    Text[ chinese_traditional ] = "½sΈΉ 5 ¶}Ίέ";
+    Text[ chinese_traditional ] = "½sΈΉ 5 °_©l¦μΈm";
     Text[ arabic ] = "ΗαΚΡήνγ 5 ΘΟΗνΙ";
     Text[ greek ] = "Αρίθμηση 5 Αρχή";
     Text[ korean ] = "ΉψΘ£ 5 ½ΓΐΫ";
@@ -1988,7 +1988,7 @@ String STR_POOLCOLL_BUL_LEVEL1S
     Text[ russian ] = "Νΰχΰλξ ροθρκΰ 1";
     Text[ polish ] = "PoczΉtek listy 1";
     Text[ japanese ] = "‰Σπ‘‚« 1 n‚ί";
-    Text[ chinese_traditional ] = "¶µ¥Ψ²ΕΈΉ 1 ¶}Ίέ";
+    Text[ chinese_traditional ] = "¶µ¥Ψ²ΕΈΉ 1 °_©l¦μΈm";
     Text[ arabic ] = "ΚΪΟΗΟ 1 ΘΟΗνΙ";
     Text[ greek ] = "Κατάλογος 1 Αρχή";
     Text[ korean ] = "Έ®½ΊΖ® 1 ½ΓΐΫ";
@@ -2088,7 +2088,7 @@ String STR_POOLCOLL_BUL_LEVEL2S
     Text[ russian ] = "Νΰχΰλξ ροθρκΰ 2";
     Text[ polish ] = "PoczΉtek listy 2 ";
     Text[ japanese ] = "‰Σπ‘‚« 2 n‚ί";
-    Text[ chinese_traditional ] = "¶µ¥Ψ²ΕΈΉ 2 ¶}Ίέ";
+    Text[ chinese_traditional ] = "¶µ¥Ψ²ΕΈΉ 2 °_©l¦μΈm";
     Text[ arabic ] = "ΚΪΟΗΟ 2 ΘΟΗνΙ";
     Text[ greek ] = "Κατάλογος 2 Αρχή";
     Text[ korean ] = "Έ®½ΊΖ® 2 ½ΓΐΫ";
@@ -2188,7 +2188,7 @@ String STR_POOLCOLL_BUL_LEVEL3S
     Text[ russian ] = "Νΰχΰλξ ροθρκΰ 3";
     Text[ polish ] = "PoczΉtek listy 3";
     Text[ japanese ] = "‰Σπ‘‚« 3 n‚ί";
-    Text[ chinese_traditional ] = "¶µ¥Ψ²ΕΈΉ 3 ¶}Ίέ";
+    Text[ chinese_traditional ] = "¶µ¥Ψ²ΕΈΉ 3 °_©l¦μΈm";
     Text[ arabic ] = "ΚΪΟΗΟ 3 ΘΟΗνΙ";
     Text[ greek ] = "Κατάλογος 3 Αρχή";
     Text[ korean ] = "Έ®½ΊΖ® 3 ½ΓΐΫ";
@@ -2288,7 +2288,7 @@ String STR_POOLCOLL_BUL_LEVEL4S
     Text[ russian ] = "Νΰχΰλξ ροθρκΰ 4";
     Text[ polish ] = "PoczΉtek listy 4";
     Text[ japanese ] = "‰Σπ‘‚« 4 n‚ί";
-    Text[ chinese_traditional ] = "¶µ¥Ψ²ΕΈΉ 4 ¶}Ίέ";
+    Text[ chinese_traditional ] = "¶µ¥Ψ²ΕΈΉ 4 °_©l¦μΈm";
     Text[ arabic ] = "ΚΪΟΗΟ 4 ΘΟΗνΙ";
     Text[ greek ] = "Κατάλογος 4 Αρχή";
     Text[ korean ] = "Έ®½ΊΖ® 4 ½ΓΐΫ";
@@ -2388,7 +2388,7 @@ String STR_POOLCOLL_BUL_LEVEL5S
     Text[ russian ] = "Νΰχΰλξ ροθρκΰ 5";
     Text[ polish ] = "PoczΉtek listy 5";
     Text[ japanese ] = "‰Σπ‘‚« 5 n‚ί";
-    Text[ chinese_traditional ] = "¶µ¥Ψ²ΕΈΉ 5 ¶}Ίέ";
+    Text[ chinese_traditional ] = "¶µ¥Ψ²ΕΈΉ 5 °_©l¦μΈm";
     Text[ arabic ] = "ΚΪΟΗΟ 5 ΘΟΗνΙ";
     Text[ greek ] = "Κατάλογος 5 Αρχή";
     Text[ korean ] = "Έ®½ΊΖ® 5 ½ΓΐΫ";
@@ -2732,7 +2732,7 @@ String STR_POOLCOLL_ENDNOTE
     Text[ russian ] = "Κξνφεβΰÿ ρνξρκΰ";
     Text[ polish ] = "Przypis koρcowy";
     Text[ japanese ] = "•¶––‹r’";
-    Text[ chinese_traditional ] = "§ΐª`";
+    Text[ chinese_traditional ] = "§ΐµω";
     Text[ arabic ] = "ΚΪανή ΞΚΗγν";
     Text[ greek ] = "Σημείωση τέλους";
     Text[ korean ] = "ΉΜΑΦ";
@@ -4621,7 +4621,7 @@ String STR_POOLPAGE_ENDNOTE
     Text[ russian ] = "Κξνφεβΰÿ ρνξρκΰ";
     Text[ polish ] = "Przypis koρcowy";
     Text[ japanese ] = "•¶––‹r’";
-    Text[ chinese_traditional ] = "§ΐª`";
+    Text[ chinese_traditional ] = "§ΐµω";
     Text[ arabic ] = "ΚΪανή ΞΚΗγν";
     Text[ greek ] = "Σημείωση τέλους";
     Text[ korean ] = "ΉΜΑΦ";
