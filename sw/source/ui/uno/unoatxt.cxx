@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-08 17:32:07 $
+ *  last change: $Author: mtg $ $Date: 2001-06-06 09:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,14 +1009,19 @@ SwXAutoTextEntry::SwXAutoTextEntry(SwGlossaries* pGlss, const String& rGroupName
     sGroupName(rGroupName),
     sEntryName(rEntryName)
 {
-
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    xDocSh = pGlossaries->EditGroupDoc ( rGroupName, rEntryName, FALSE );
+    pBodyText = new SwXBodyText ( xDocSh->GetDoc() );
+    xBodyText = Reference < XServiceInfo > ( *pBodyText, UNO_QUERY);
 }
 /*-- 21.12.98 12:42:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SwXAutoTextEntry::~SwXAutoTextEntry()
 {
-
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if ( xDocSh->GetDoc()->IsModified () )
+        xDocSh->Save();
 }
 /*-- 21.12.98 12:42:33---------------------------------------------------
 
@@ -1027,8 +1032,7 @@ SwXAutoTextEntry::~SwXAutoTextEntry()
 Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursor(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
-    return Reference< text::XTextCursor > ();
+    return pBodyText->createTextCursor();
 }
 /*-- 21.12.98 12:42:34---------------------------------------------------
 
@@ -1036,8 +1040,8 @@ Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursor(void) throw( 
 Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursorByRange(
     const Reference< text::XTextRange > & aTextPosition) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
-    return Reference< text::XTextCursor > ();
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    return pBodyText->createTextCursorByRange ( aTextPosition );
 }
 /*-- 21.12.98 12:42:34---------------------------------------------------
 
@@ -1045,7 +1049,7 @@ Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursorByRange(
 void SwXAutoTextEntry::insertString(const Reference< text::XTextRange > & xRange, const OUString& aString, sal_Bool bAbsorb) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
+    pBodyText->insertString ( xRange, aString, bAbsorb );
 }
 /*-- 21.12.98 12:42:34---------------------------------------------------
 
@@ -1055,7 +1059,7 @@ void SwXAutoTextEntry::insertControlCharacter(const Reference< text::XTextRange 
         throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
+    pBodyText->insertControlCharacter ( xRange, nControlCharacter, bAbsorb );
 }
 /*-- 21.12.98 12:42:34---------------------------------------------------
 
@@ -1066,7 +1070,7 @@ void SwXAutoTextEntry::insertTextContent(
         throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
+    pBodyText->insertTextContent ( xRange, xContent, bAbsorb );
 }
 /*-- 21.12.98 12:42:34---------------------------------------------------
 
@@ -1076,7 +1080,7 @@ void SwXAutoTextEntry::removeTextContent(
         throw( container::NoSuchElementException, uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
+    pBodyText->removeTextContent ( xContent );
 }
 /*-- 21.12.98 12:42:35---------------------------------------------------
 
@@ -1093,8 +1097,7 @@ Reference< text::XText >  SwXAutoTextEntry::getText(void) throw( uno::RuntimeExc
 Reference< text::XTextRange >  SwXAutoTextEntry::getStart(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
-    return Reference< text::XTextRange > ();
+    return pBodyText->getStart();
 }
 /*-- 21.12.98 12:42:36---------------------------------------------------
 
@@ -1102,8 +1105,7 @@ Reference< text::XTextRange >  SwXAutoTextEntry::getStart(void) throw( uno::Runt
 Reference< text::XTextRange >  SwXAutoTextEntry::getEnd(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
-    return Reference< text::XTextRange > ();
+    return pBodyText->getEnd();
 }
 /*-- 21.12.98 12:42:36---------------------------------------------------
 
@@ -1111,15 +1113,15 @@ Reference< text::XTextRange >  SwXAutoTextEntry::getEnd(void) throw( uno::Runtim
 OUString SwXAutoTextEntry::getString(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
-    return OUString();
+    return pBodyText->getString();
 }
 /*-- 21.12.98 12:42:36---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXAutoTextEntry::setString(const OUString& aString) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    pBodyText->setString( aString );
 }
 /* -----------------15.07.99 10:11-------------------
 
