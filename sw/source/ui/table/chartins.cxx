@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 16:03:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:19:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,8 @@ SwInsertChartDlg::SwInsertChartDlg( SfxBindings* pBindings,
                                             CHATTR_START, CHATTR_END, 0 );
     pOutItemSet =  new SfxItemSet( pWrtShell->GetAttrPool(),
                                             CHATTR_START, CHATTR_END, 0 );
-    SFX_APP()->LockDispatcher(TRUE);
+    SfxViewFrame* pVFrame = pWrtShell->GetView().GetViewFrame();
+    pVFrame->GetDispatcher()->Lock(TRUE);
     pWrtShell->SelTblCells( LINK( this, SwInsertChartDlg,
                                             SelTblCellsNotify) );
 }
@@ -199,8 +200,9 @@ SwInsertChartDlg::SwInsertChartDlg( SfxBindings* pBindings,
 __EXPORT SwInsertChartDlg::~SwInsertChartDlg()
 {
     SfxApplication* pSfxApp = SFX_APP();
-    if(pSfxApp->IsDispatcherLocked())
-        pSfxApp->LockDispatcher(FALSE);
+    SfxViewFrame* pVFrame = pWrtShell->GetView().GetViewFrame();
+    if ( pVFrame->GetDispatcher()->IsLocked() )
+        pVFrame->GetDispatcher()->Lock(FALSE);
     pWrtShell->EndSelTblCells();
     pWrtShell->Pop(bChartInserted);
     delete pInItemSet;
@@ -216,7 +218,9 @@ __EXPORT SwInsertChartDlg::~SwInsertChartDlg()
 
 BOOL SwInsertChartDlg::Close()
 {
-    SFX_APP()->LockDispatcher(FALSE);
+    SfxViewFrame* pVFrame = pWrtShell->GetView().GetViewFrame();
+    if ( pVFrame->GetDispatcher()->IsLocked() )
+        pVFrame->GetDispatcher()->Lock(FALSE);
     return SfxModelessDialog::Close();
 }
 
