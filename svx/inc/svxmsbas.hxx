@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxmsbas.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 09:38:32 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <tools/solar.h>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 #include <sot/storage.hxx>
 
 class SfxObjectShell;
@@ -85,7 +89,7 @@ class SfxObjectShell;
  * probably what the user expects to see when viewing the code
  */
 
-class SvxImportMSVBasic
+class SVX_DLLPUBLIC SvxImportMSVBasic
 {
 public:
     SvxImportMSVBasic( SfxObjectShell &rDocS, SotStorage &rRoot,
@@ -117,12 +121,12 @@ private:
     BOOL bImport;
     BOOL bCopy;
 
-    BOOL ImportCode_Impl( const String& rStorageName,
+    SVX_DLLPRIVATE BOOL ImportCode_Impl( const String& rStorageName,
                           const String &rSubStorageName,
                           BOOL bAsComment, BOOL bStripped);
-    bool ImportForms_Impl(const String& rStorageName,
+    SVX_DLLPRIVATE bool ImportForms_Impl(const String& rStorageName,
         const String &rSubStorageName);
-    BOOL CopyStorage_Impl( const String& rStorageName,
+    SVX_DLLPRIVATE BOOL CopyStorage_Impl( const String& rStorageName,
                            const String &rSubStorageName);
 };
 
