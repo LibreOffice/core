@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:24:57 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,7 @@ TabPage TP_ENV_ENV
         Text [ portuguese ] = "Campo base de dados" ;
         Text [ finnish ] = "Tietokantakenttä" ;
         Text [ danish ] = "Databasefelt" ;
-        Text [ french ] = "~Champ de B.D." ;
+        Text [ french ] = "~Champ de BD" ;
         Text [ swedish ] = "Databas~fält" ;
         Text [ dutch ] = "Database~veld" ;
         Text [ spanish ] = "~Campo base de datos" ;
