@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-24 11:00:39 $
+ *  last change: $Author: cl $ $Date: 2000-11-08 12:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@
 #include <unotools/processfactory.hxx>
 #endif
 
-#include <xmloff/pkgurl.hxx>
+#include "pkgurl.hxx"
 
 using namespace com::sun::star;
 using namespace rtl;
@@ -314,10 +314,10 @@ BOOL SdXMLWrapper::Export()
 
     uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
     OUString sFileName = mrMedium.GetName();
-//  uno::Reference<xml::sax::XDocumentHandler> xPacker =
-//      new URLPacker(sFileName, xHandler, sal_False, sal_True);
-//  SdXMLExport aExp(mxLocalModel, sFileName, xPacker, mbShowProgress, IsDraw());
-    SdXMLExport aExp(mxLocalModel, sFileName, xHandler, mbShowProgress, IsDraw());
+    uno::Reference<xml::sax::XDocumentHandler> xPacker =
+      new URLPacker(sFileName, xHandler, sal_False, sal_True);
+    SdXMLExport aExp(mxLocalModel, sFileName, xPacker, mbShowProgress, IsDraw());
+//  SdXMLExport aExp(mxLocalModel, sFileName, xHandler, mbShowProgress, IsDraw());
 
     // give string descriptor as parameter for doc type
     BOOL bRet = (0 == aExp.exportDoc( IsDraw() ? sXML_drawing : sXML_impress ));
