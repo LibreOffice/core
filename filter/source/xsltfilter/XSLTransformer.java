@@ -70,6 +70,7 @@ import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.io.*;
 import com.sun.star.ucb.*;
+import com.sun.star.beans.*;
 
 //Uno to java Adaptor
 import com.sun.star.lib.uno.adapter.*;
@@ -105,6 +106,10 @@ public class XSLTransformer
     private static PrintStream statsp;
 
     private String stylesheeturl;
+    private String targeturl;
+    private String targetbaseurl;
+    private String sourceurl;
+    private String sourcebaseurl;
     private String pubtype = new String();
     private String systype = new String();
 
@@ -124,17 +129,34 @@ public class XSLTransformer
     }
 
     public void initialize(Object[] values) throws com.sun.star.uno.Exception {
-        // get stylesheet for transformation
-        if (values.length > 0) {
-            stylesheeturl = (String)AnyConverter.toObject(new Type(String.class), values[0]);
-        }
-        if (values.length > 1) {
-            systype = (String)AnyConverter.toObject(new Type(String.class), values[1]);
-        }
-        if (values.length > 2) {
-            pubtype = (String)AnyConverter.toObject(new Type(String.class), values[2]);
+        NamedValue nv = null;
+        for (int i=0; i<values.length; i++)
+        {
+            nv = (NamedValue)AnyConverter.toObject(new Type(NamedValue.class), values[i]);
+            if (nv.Name.equals("StylesheetURL"))
+                stylesheeturl = (String)AnyConverter.toObject(
+                    new Type(String.class), nv.Value);
+            else if (nv.Name.equals("SourceURL"))
+                sourceurl = (String)AnyConverter.toObject(
+                    new Type(String.class), nv.Value);
+            else if (nv.Name.equals("TargetURL"))
+                targeturl = (String)AnyConverter.toObject(
+                    new Type(String.class), nv.Value);
+            else if (nv.Name.equals("SourceBaseURL"))
+                sourcebaseurl = (String)AnyConverter.toObject(
+                    new Type(String.class), nv.Value);
+            else if (nv.Name.equals("TargetBaseURL"))
+                targetbaseurl = (String)AnyConverter.toObject(
+                    new Type(String.class), nv.Value);
+            else if (nv.Name.equals("SystemType"))
+                systype = (String)AnyConverter.toObject(
+                    new Type(String.class), nv.Value);
+            else if (nv.Name.equals("PublicType"))
+                pubtype = (String)AnyConverter.toObject(
+                    new Type(String.class), nv.Value);
         }
 
+        // some configurable debugging
         String statsfilepath = null;
         if ((statsfilepath = System.getProperty(STATSPROP)) != null) {
             try {
@@ -240,6 +262,12 @@ public class XSLTransformer
                     StreamResult xmlresult = new StreamResult(resultbuf);
                     TransformerFactory tfactory = TransformerFactory.newInstance();
                     Transformer transformer = tfactory.newTransformer(stylesource);
+
+                    transformer.setParameter("sourceURL", sourceurl);
+                    transformer.setParameter("targetURL", targeturl);
+                    transformer.setParameter("targetBaseURL", targetbaseurl);
+                    transformer.setParameter("publicType", pubtype);
+                    transformer.setParameter("systemType", systype);
 
                     long tstart = System.currentTimeMillis();
                     transformer.transform(xmlsource, xmlresult);
