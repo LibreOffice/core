@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-25 10:17:04 $
+ *  last change: $Author: nf $ $Date: 2001-05-11 08:58:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -836,8 +836,9 @@ int Export::Execute( int nToken, char * pToken )
                 ByteString sEntry( sToken.GetToken( 1, '\"' ));
                 sEntry = sEntry.Convert( aCharSet, RTL_TEXTENCODING_MS_1252 );
                 InsertListEntry( sEntry, sOrig );
-                if ( bMergeMode )
+                if ( bMergeMode ) {
                     PrepareTextToMerge( sOrig, nList, nListLang, pResData );
+                }
             }
         }
         break;
@@ -2263,16 +2264,18 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                 for ( USHORT i = 1; i < nLevel-1; i++ )
                     sSpace += "\t";
                 for ( USHORT nT = LIST_STRING; nT <= LIST_UIENTRIES; nT++ ) {
+                    ExportList *pList = NULL;
                     switch ( nT ) {
-                        case LIST_STRING : pResData->sResTyp = "stringlist"; break;
-                        case LIST_FILTER : pResData->sResTyp = "filterlist"; break;
-                        case LIST_UIENTRIES : pResData->sResTyp = "uientries"; break;
-                        case LIST_ITEM : pResData->sResTyp = "itemlist"; break;
+                        case LIST_STRING : pResData->sResTyp = "stringlist"; pList = pResData->pStringList; break;
+                        case LIST_FILTER : pResData->sResTyp = "filterlist"; pList = pResData->pFilterList; break;
+                        case LIST_UIENTRIES : pResData->sResTyp = "uientries"; pList = pResData->pUIEntries; break;
+                        case LIST_ITEM : pResData->sResTyp = "itemlist"; pList = pResData->pItemList; break;
                     }
                     for ( USHORT nLang = 0; nLang < LANGUAGES; nLang ++ ) {
                         USHORT nIdx = 1;
                         pResData->sId = ByteString::CreateFromInt32( nIdx );
                         PFormEntrys *pEntrys;
+                        ULONG nLIndex = 0;
                         while( pEntrys = pMergeDataFile->GetPFormEntrys( pResData )) {
                             ByteString sText;
                             BOOL bText = pEntrys->GetText( sText, STRING_TYP_TEXT, nLang, TRUE );
@@ -2302,7 +2305,11 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                                     }
                                     WriteToMerged( sHead );
                                 }
-                                ByteString sLine( sLastListLine );
+                                ByteString sLine;
+                                if ( pList && pList->GetObject( nLIndex ))
+                                    sLine = ( *pList->GetObject( nLIndex ))[ GERMAN_LIST_LINE_INDEX ];
+                                if ( !sLine.Len())
+                                    sLine = sLastListLine;
                                 if (( nT != LIST_UIENTRIES ) &&
                                     (( sLine.Search( "{" ) == STRING_NOTFOUND ) ||
                                     ( sLine.Search( "{" ) >= sLine.Search( "\"" ))) &&
@@ -2342,6 +2349,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                             }
                             else
                                 break;
+                            nLIndex ++;
                         }
                         if ( nIdx > 1 ) {
                             ByteString sFooter( sSpace.Copy( 1 ));
@@ -2361,8 +2369,20 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
         }
         break;
         case MERGE_MODE_LIST : {
+            ExportList *pList = NULL;
+            switch ( nList ) {
+                case LIST_STRING : pList = pResData->pStringList; break;
+                case LIST_FILTER : pList = pResData->pFilterList; break;
+                case LIST_UIENTRIES : pList = pResData->pUIEntries; break;
+                case LIST_ITEM : pList = pResData->pItemList; break;
+            }
+
             nListIndex++;
-            ByteString sLine( sLastListLine );
+            ByteString sLine;
+            if ( pList && pList->GetObject( nListIndex ))
+                sLine = ( *pList->GetObject( nListIndex ))[ GERMAN_LIST_LINE_INDEX ];
+            if ( !sLine.Len())
+                sLine = sLastListLine;
             if (( nList != LIST_UIENTRIES ) &&
                 (( sLine.Search( "{" ) == STRING_NOTFOUND ) ||
                 ( sLine.Search( "{" ) >= sLine.Search( "\"" ))) &&
@@ -2379,7 +2399,10 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                     sText += "\t";
                 WriteToMerged( sText );
                 nListIndex++;
-                sLine = sLastListLine;
+                if ( pList && pList->GetObject( nListIndex ))
+                    sLine = ( *pList->GetObject( nListIndex ))[ GERMAN_LIST_LINE_INDEX ];
+                if ( !sLine.Len())
+                    sLine = sLastListLine;
             }
         }
         break;
