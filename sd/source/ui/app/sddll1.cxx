@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:35:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #ifndef SD_OUTLINE_VIEW_SHELL_BASE_HXX
 #include "OutlineViewShellBase.hxx"
 #endif
+#ifndef SD_SLIDE_SORTER_VIEW_SHELL_BASE_HXX
+#include "SlideSorterViewShellBase.hxx"
+#endif
 #ifndef SD_PREVIEW_VIEW_SHELL_HXX
 #include "PreviewViewShell.hxx"
 #endif
@@ -138,9 +141,14 @@ void SdDLL::RegisterFactorys()
 {
     if (SvtModuleOptions().IsImpress())
     {
-        ::sd::ViewShellBase::RegisterFactory (::sd::IMPRESS_FACTORY_ID);
-        ::sd::OutlineViewShellBase::RegisterFactory (::sd::OUTLINE_FACTORY_ID);
-        ::sd::PresentationViewShellBase::RegisterFactory (::sd::PRESENTATION_FACTORY_ID);
+        ::sd::ViewShellBase::RegisterFactory (
+            ::sd::IMPRESS_FACTORY_ID);
+        ::sd::SlideSorterViewShellBase::RegisterFactory (
+            ::sd::SLIDE_SORTER_FACTORY_ID);
+        ::sd::OutlineViewShellBase::RegisterFactory (
+            ::sd::OUTLINE_FACTORY_ID);
+        ::sd::PresentationViewShellBase::RegisterFactory (
+            ::sd::PRESENTATION_FACTORY_ID);
     }
     if (SvtModuleOptions().IsDraw())
     {
