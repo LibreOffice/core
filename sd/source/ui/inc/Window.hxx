@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Window.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:06:01 $
+ *  last change: $Author: obo $ $Date: 2005-01-28 16:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,7 @@ protected:
     virtual void Command(const CommandEvent& rCEvt);
     virtual void RequestHelp( const HelpEvent& rEvt );
     virtual void LoseFocus();
+    virtual long Notify( NotifyEvent& rNEvt );
 
     /** Create an accessibility object that makes this window accessible.
 
