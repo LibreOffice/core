@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:34:15 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,336 +155,536 @@ using namespace ::com::sun::star;
 |*
 \************************************************************************/
 
-SdrItemPool::SdrItemPool(USHORT nAttrStart, USHORT nAttrEnd, FASTBOOL bLoadRefCounts):
-    XOutdevItemPool(nAttrStart,nAttrEnd,bLoadRefCounts)
+//BFS04SdrItemPool::SdrItemPool(FASTBOOL bLoadRefCounts)
+//BFS04//BFS01: XOutdevItemPool(SDRATTR_START, SDRATTR_END, bLoadRefCounts)
+//BFS04:    XOutdevItemPool(bLoadRefCounts)
+//BFS04{
+//BFS04 Ctor();
+//BFS04}
+
+SdrItemPool::SdrItemPool(
+    SfxItemPool* pMaster,
+    sal_Bool bLoadRefCounts)
+//BFS01:    XOutdevItemPool(pMaster, SDRATTR_START, SDRATTR_END, bLoadRefCounts)
+:   XOutdevItemPool(pMaster, SDRATTR_START, SDRATTR_END, bLoadRefCounts)
 {
-    Ctor(NULL,nAttrStart,nAttrEnd);
-}
+//BFS04 Ctor();
+    // preapare some constants
+    const Color aNullCol(RGB_Color(COL_BLACK));
+    const XubString aEmptyStr;
+    const sal_Int32 nDefEdgeDist(500L); // Erstmal hart defaulted fuer Draw (100TH_MM). hier muss noch der MapMode beruecksichtigt werden.
 
-SdrItemPool::SdrItemPool(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd, FASTBOOL bLoadRefCounts):
-    XOutdevItemPool(pMaster,nAttrStart,nAttrEnd,bLoadRefCounts)
-{
-    Ctor(pMaster,nAttrStart,nAttrEnd);
-}
-
-void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
-{
-    if (pMaster==NULL) {
-        pMaster=this;
-    }
-
-    Color aNullCol(RGB_Color(COL_BLACK));
-    XubString aEmptyStr;
-
-    USHORT i;
-    for (i=SDRATTR_NOTPERSIST_FIRST; i<=SDRATTR_NOTPERSIST_LAST; i++) {
-        pItemInfos[i-SDRATTR_START]._nFlags=0;
-    }
-    // Schatten
-    ppPoolDefaults[SDRATTR_SHADOW            -SDRATTR_START]=new SdrShadowItem;
-    ppPoolDefaults[SDRATTR_SHADOWCOLOR       -SDRATTR_START]=new SdrShadowColorItem(aEmptyStr,aNullCol);
-    ppPoolDefaults[SDRATTR_SHADOWXDIST       -SDRATTR_START]=new SdrShadowXDistItem;
-    ppPoolDefaults[SDRATTR_SHADOWYDIST       -SDRATTR_START]=new SdrShadowYDistItem;
-    ppPoolDefaults[SDRATTR_SHADOWTRANSPARENCE-SDRATTR_START]=new SdrShadowTransparenceItem;
-    ppPoolDefaults[SDRATTR_SHADOW3D          -SDRATTR_START]=new SfxVoidItem(SDRATTR_SHADOW3D    );
-    ppPoolDefaults[SDRATTR_SHADOWPERSP       -SDRATTR_START]=new SfxVoidItem(SDRATTR_SHADOWPERSP );
-    for (i=SDRATTR_SHADOWRESERVE1; i<=SDRATTR_SHADOWRESERVE5; i++) {
-        ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
-    }
-
-    ppPoolDefaults[SDRATTRSET_SHADOW-SDRATTR_START]=new SdrShadowSetItem(pMaster);
-
-    // SID_ATTR_FILL_SHADOW = SID_SVX_START+299 = SID_LIB_START+299 = 10299
-    pItemInfos[SDRATTR_SHADOW-SDRATTR_START]._nSID=SID_ATTR_FILL_SHADOW;
-
-    // Legendenobjekt
-    ppPoolDefaults[SDRATTR_CAPTIONTYPE      -SDRATTR_START]=new SdrCaptionTypeItem      ;
-    ppPoolDefaults[SDRATTR_CAPTIONFIXEDANGLE-SDRATTR_START]=new SdrCaptionFixedAngleItem;
-    ppPoolDefaults[SDRATTR_CAPTIONANGLE     -SDRATTR_START]=new SdrCaptionAngleItem     ;
-    ppPoolDefaults[SDRATTR_CAPTIONGAP       -SDRATTR_START]=new SdrCaptionGapItem       ;
-    ppPoolDefaults[SDRATTR_CAPTIONESCDIR    -SDRATTR_START]=new SdrCaptionEscDirItem    ;
-    ppPoolDefaults[SDRATTR_CAPTIONESCISREL  -SDRATTR_START]=new SdrCaptionEscIsRelItem  ;
-    ppPoolDefaults[SDRATTR_CAPTIONESCREL    -SDRATTR_START]=new SdrCaptionEscRelItem    ;
-    ppPoolDefaults[SDRATTR_CAPTIONESCABS    -SDRATTR_START]=new SdrCaptionEscAbsItem    ;
-    ppPoolDefaults[SDRATTR_CAPTIONLINELEN   -SDRATTR_START]=new SdrCaptionLineLenItem   ;
-    ppPoolDefaults[SDRATTR_CAPTIONFITLINELEN-SDRATTR_START]=new SdrCaptionFitLineLenItem;
-    for (i=SDRATTR_CAPTIONRESERVE1; i<=SDRATTR_CAPTIONRESERVE5; i++) {
-        ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
-    }
-    ppPoolDefaults[SDRATTRSET_CAPTION-SDRATTR_START]=new SdrCaptionSetItem(pMaster);
-
-    // Outliner-Attribute
-    ppPoolDefaults[SDRATTRSET_OUTLINER-SDRATTR_START]=new SdrOutlinerSetItem(pMaster);
-
-    // Misc-Attribute
-    ppPoolDefaults[SDRATTR_ECKENRADIUS          -SDRATTR_START]=new SdrEckenradiusItem;
-    ppPoolDefaults[SDRATTR_TEXT_MINFRAMEHEIGHT  -SDRATTR_START]=new SdrTextMinFrameHeightItem;
-    ppPoolDefaults[SDRATTR_TEXT_AUTOGROWHEIGHT  -SDRATTR_START]=new SdrTextAutoGrowHeightItem;
-    ppPoolDefaults[SDRATTR_TEXT_FITTOSIZE       -SDRATTR_START]=new SdrTextFitToSizeTypeItem;
-    ppPoolDefaults[SDRATTR_TEXT_LEFTDIST        -SDRATTR_START]=new SdrTextLeftDistItem;
-    ppPoolDefaults[SDRATTR_TEXT_RIGHTDIST       -SDRATTR_START]=new SdrTextRightDistItem;
-    ppPoolDefaults[SDRATTR_TEXT_UPPERDIST       -SDRATTR_START]=new SdrTextUpperDistItem;
-    ppPoolDefaults[SDRATTR_TEXT_LOWERDIST       -SDRATTR_START]=new SdrTextLowerDistItem;
-    ppPoolDefaults[SDRATTR_TEXT_VERTADJUST      -SDRATTR_START]=new SdrTextVertAdjustItem;
-    ppPoolDefaults[SDRATTR_TEXT_MAXFRAMEHEIGHT  -SDRATTR_START]=new SdrTextMaxFrameHeightItem;
-    ppPoolDefaults[SDRATTR_TEXT_MINFRAMEWIDTH   -SDRATTR_START]=new SdrTextMinFrameWidthItem;
-    ppPoolDefaults[SDRATTR_TEXT_MAXFRAMEWIDTH   -SDRATTR_START]=new SdrTextMaxFrameWidthItem;
-    ppPoolDefaults[SDRATTR_TEXT_AUTOGROWWIDTH   -SDRATTR_START]=new SdrTextAutoGrowWidthItem;
-    ppPoolDefaults[SDRATTR_TEXT_HORZADJUST      -SDRATTR_START]=new SdrTextHorzAdjustItem;
-    ppPoolDefaults[SDRATTR_TEXT_ANIKIND         -SDRATTR_START]=new SdrTextAniKindItem;
-    ppPoolDefaults[SDRATTR_TEXT_ANIDIRECTION    -SDRATTR_START]=new SdrTextAniDirectionItem;
-    ppPoolDefaults[SDRATTR_TEXT_ANISTARTINSIDE  -SDRATTR_START]=new SdrTextAniStartInsideItem;
-    ppPoolDefaults[SDRATTR_TEXT_ANISTOPINSIDE   -SDRATTR_START]=new SdrTextAniStopInsideItem;
-    ppPoolDefaults[SDRATTR_TEXT_ANICOUNT        -SDRATTR_START]=new SdrTextAniCountItem;
-    ppPoolDefaults[SDRATTR_TEXT_ANIDELAY        -SDRATTR_START]=new SdrTextAniDelayItem;
-    ppPoolDefaults[SDRATTR_TEXT_ANIAMOUNT       -SDRATTR_START]=new SdrTextAniAmountItem;
-    ppPoolDefaults[SDRATTR_TEXT_CONTOURFRAME    -SDRATTR_START]=new SdrTextContourFrameItem;
-    ppPoolDefaults[SDRATTR_CUSTOMSHAPE_ADJUSTMENT -SDRATTR_START]=new SdrCustomShapeAdjustmentItem;
-#ifndef SVX_LIGHT
-    ppPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SvXMLAttrContainerItem( SDRATTR_XMLATTRIBUTES );
-#else
-    // no need to have alien attributes persistent in the player
-    ppPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SfxVoidItem( SDRATTR_XMLATTRIBUTES );
-#endif // #ifndef SVX_LIGHT
-    ppPoolDefaults[SDRATTR_TEXT_USEFIXEDCELLHEIGHT -SDRATTR_START]=new SdrTextFixedCellHeightItem;
-    ppPoolDefaults[SDRATTR_TEXT_WORDWRAP           -SDRATTR_START]=new SdrTextWordWrapItem;
-    ppPoolDefaults[SDRATTR_TEXT_AUTOGROWSIZE       -SDRATTR_START]=new SdrTextAutoGrowSizeItem;
-    for (i=SDRATTR_RESERVE18; i<=SDRATTR_RESERVE19; i++) {
-        ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
-    }
-    ppPoolDefaults[SDRATTRSET_MISC-SDRATTR_START]=new SdrMiscSetItem(pMaster);
-
-    pItemInfos[SDRATTR_TEXT_FITTOSIZE-SDRATTR_START]._nSID=SID_ATTR_TEXT_FITTOSIZE;
-
-    // Objektverbinder
-    ppPoolDefaults[SDRATTR_EDGEKIND         -SDRATTR_START]=new SdrEdgeKindItem;
-    long nDefEdgeDist=500; // Erstmal hart defaulted fuer Draw (100TH_MM). hier muss noch der MapMode beruecksichtigt werden.
-    ppPoolDefaults[SDRATTR_EDGENODE1HORZDIST-SDRATTR_START]=new SdrEdgeNode1HorzDistItem(nDefEdgeDist);
-    ppPoolDefaults[SDRATTR_EDGENODE1VERTDIST-SDRATTR_START]=new SdrEdgeNode1VertDistItem(nDefEdgeDist);
-    ppPoolDefaults[SDRATTR_EDGENODE2HORZDIST-SDRATTR_START]=new SdrEdgeNode2HorzDistItem(nDefEdgeDist);
-    ppPoolDefaults[SDRATTR_EDGENODE2VERTDIST-SDRATTR_START]=new SdrEdgeNode2VertDistItem(nDefEdgeDist);
-    ppPoolDefaults[SDRATTR_EDGENODE1GLUEDIST-SDRATTR_START]=new SdrEdgeNode1GlueDistItem;
-    ppPoolDefaults[SDRATTR_EDGENODE2GLUEDIST-SDRATTR_START]=new SdrEdgeNode2GlueDistItem;
-    ppPoolDefaults[SDRATTR_EDGELINEDELTAANZ -SDRATTR_START]=new SdrEdgeLineDeltaAnzItem;
-    ppPoolDefaults[SDRATTR_EDGELINE1DELTA   -SDRATTR_START]=new SdrEdgeLine1DeltaItem;
-    ppPoolDefaults[SDRATTR_EDGELINE2DELTA   -SDRATTR_START]=new SdrEdgeLine2DeltaItem;
-    ppPoolDefaults[SDRATTR_EDGELINE3DELTA   -SDRATTR_START]=new SdrEdgeLine3DeltaItem;
-    for (i=SDRATTR_EDGERESERVE02; i<=SDRATTR_EDGERESERVE09; i++) {
-        ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
-    }
-    ppPoolDefaults[SDRATTRSET_EDGE-SDRATTR_START]=new SdrEdgeSetItem(pMaster);
-
-     // Bemassungsobjekt
-    ppPoolDefaults[SDRATTR_MEASUREKIND             -SDRATTR_START]=new SdrMeasureKindItem;
-    ppPoolDefaults[SDRATTR_MEASURETEXTHPOS         -SDRATTR_START]=new SdrMeasureTextHPosItem;
-    ppPoolDefaults[SDRATTR_MEASURETEXTVPOS         -SDRATTR_START]=new SdrMeasureTextVPosItem;
-    ppPoolDefaults[SDRATTR_MEASURELINEDIST         -SDRATTR_START]=new SdrMeasureLineDistItem(800);
-    ppPoolDefaults[SDRATTR_MEASUREHELPLINEOVERHANG -SDRATTR_START]=new SdrMeasureHelplineOverhangItem(200);
-    ppPoolDefaults[SDRATTR_MEASUREHELPLINEDIST     -SDRATTR_START]=new SdrMeasureHelplineDistItem(100);
-    ppPoolDefaults[SDRATTR_MEASUREHELPLINE1LEN     -SDRATTR_START]=new SdrMeasureHelpline1LenItem;
-    ppPoolDefaults[SDRATTR_MEASUREHELPLINE2LEN     -SDRATTR_START]=new SdrMeasureHelpline2LenItem;
-    ppPoolDefaults[SDRATTR_MEASUREBELOWREFEDGE     -SDRATTR_START]=new SdrMeasureBelowRefEdgeItem;
-    ppPoolDefaults[SDRATTR_MEASURETEXTROTA90       -SDRATTR_START]=new SdrMeasureTextRota90Item;
-    ppPoolDefaults[SDRATTR_MEASURETEXTUPSIDEDOWN   -SDRATTR_START]=new SdrMeasureTextUpsideDownItem;
-    ppPoolDefaults[SDRATTR_MEASUREOVERHANG         -SDRATTR_START]=new SdrMeasureOverhangItem(600);
-    ppPoolDefaults[SDRATTR_MEASUREUNIT             -SDRATTR_START]=new SdrMeasureUnitItem;
-    ppPoolDefaults[SDRATTR_MEASURESCALE            -SDRATTR_START]=new SdrMeasureScaleItem;
-    ppPoolDefaults[SDRATTR_MEASURESHOWUNIT         -SDRATTR_START]=new SdrMeasureShowUnitItem;
-    ppPoolDefaults[SDRATTR_MEASUREFORMATSTRING     -SDRATTR_START]=new SdrMeasureFormatStringItem();
-    ppPoolDefaults[SDRATTR_MEASURETEXTAUTOANGLE    -SDRATTR_START]=new SdrMeasureTextAutoAngleItem();
-    ppPoolDefaults[SDRATTR_MEASURETEXTAUTOANGLEVIEW-SDRATTR_START]=new SdrMeasureTextAutoAngleViewItem();
-    ppPoolDefaults[SDRATTR_MEASURETEXTISFIXEDANGLE -SDRATTR_START]=new SdrMeasureTextIsFixedAngleItem();
-    ppPoolDefaults[SDRATTR_MEASURETEXTFIXEDANGLE   -SDRATTR_START]=new SdrMeasureTextFixedAngleItem();
-    ppPoolDefaults[SDRATTR_MEASUREDECIMALPLACES    -SDRATTR_START]=new SdrMeasureDecimalPlacesItem();
-    for (i=SDRATTR_MEASURERESERVE05; i<=SDRATTR_MEASURERESERVE07; i++) {
-        ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
-    }
-    ppPoolDefaults[SDRATTRSET_MEASURE-SDRATTR_START]=new SdrMeasureSetItem(pMaster);
-
-     // Kreis
-    ppPoolDefaults[SDRATTR_CIRCKIND      -SDRATTR_START]=new SdrCircKindItem;
-    ppPoolDefaults[SDRATTR_CIRCSTARTANGLE-SDRATTR_START]=new SdrCircStartAngleItem;
-    ppPoolDefaults[SDRATTR_CIRCENDANGLE  -SDRATTR_START]=new SdrCircEndAngleItem;
-    for (i=SDRATTR_CIRCRESERVE0; i<=SDRATTR_CIRCRESERVE3; i++) {
-        ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
-    }
-    ppPoolDefaults[SDRATTRSET_CIRC-SDRATTR_START]=new SdrCircSetItem(pMaster);
-
-     // Nichtpersistente-Items
-    ppPoolDefaults[SDRATTR_OBJMOVEPROTECT -SDRATTR_START]=new SdrObjMoveProtectItem;
-    ppPoolDefaults[SDRATTR_OBJSIZEPROTECT -SDRATTR_START]=new SdrObjSizeProtectItem;
-    ppPoolDefaults[SDRATTR_OBJPRINTABLE   -SDRATTR_START]=new SdrObjPrintableItem;
-    ppPoolDefaults[SDRATTR_LAYERID        -SDRATTR_START]=new SdrLayerIdItem;
-    ppPoolDefaults[SDRATTR_LAYERNAME      -SDRATTR_START]=new SdrLayerNameItem;
-    ppPoolDefaults[SDRATTR_OBJECTNAME     -SDRATTR_START]=new SdrObjectNameItem;
-    ppPoolDefaults[SDRATTR_ALLPOSITIONX   -SDRATTR_START]=new SdrAllPositionXItem;
-    ppPoolDefaults[SDRATTR_ALLPOSITIONY   -SDRATTR_START]=new SdrAllPositionYItem;
-    ppPoolDefaults[SDRATTR_ALLSIZEWIDTH   -SDRATTR_START]=new SdrAllSizeWidthItem;
-    ppPoolDefaults[SDRATTR_ALLSIZEHEIGHT  -SDRATTR_START]=new SdrAllSizeHeightItem;
-    ppPoolDefaults[SDRATTR_ONEPOSITIONX   -SDRATTR_START]=new SdrOnePositionXItem;
-    ppPoolDefaults[SDRATTR_ONEPOSITIONY   -SDRATTR_START]=new SdrOnePositionYItem;
-    ppPoolDefaults[SDRATTR_ONESIZEWIDTH   -SDRATTR_START]=new SdrOneSizeWidthItem;
-    ppPoolDefaults[SDRATTR_ONESIZEHEIGHT  -SDRATTR_START]=new SdrOneSizeHeightItem;
-    ppPoolDefaults[SDRATTR_LOGICSIZEWIDTH -SDRATTR_START]=new SdrLogicSizeWidthItem;
-    ppPoolDefaults[SDRATTR_LOGICSIZEHEIGHT-SDRATTR_START]=new SdrLogicSizeHeightItem;
-    ppPoolDefaults[SDRATTR_ROTATEANGLE    -SDRATTR_START]=new SdrRotateAngleItem;
-    ppPoolDefaults[SDRATTR_SHEARANGLE     -SDRATTR_START]=new SdrShearAngleItem;
-    ppPoolDefaults[SDRATTR_MOVEX          -SDRATTR_START]=new SdrMoveXItem;
-    ppPoolDefaults[SDRATTR_MOVEY          -SDRATTR_START]=new SdrMoveYItem;
-    ppPoolDefaults[SDRATTR_RESIZEXONE     -SDRATTR_START]=new SdrResizeXOneItem;
-    ppPoolDefaults[SDRATTR_RESIZEYONE     -SDRATTR_START]=new SdrResizeYOneItem;
-    ppPoolDefaults[SDRATTR_ROTATEONE      -SDRATTR_START]=new SdrRotateOneItem;
-    ppPoolDefaults[SDRATTR_HORZSHEARONE   -SDRATTR_START]=new SdrHorzShearOneItem;
-    ppPoolDefaults[SDRATTR_VERTSHEARONE   -SDRATTR_START]=new SdrVertShearOneItem;
-    ppPoolDefaults[SDRATTR_RESIZEXALL     -SDRATTR_START]=new SdrResizeXAllItem;
-    ppPoolDefaults[SDRATTR_RESIZEYALL     -SDRATTR_START]=new SdrResizeYAllItem;
-    ppPoolDefaults[SDRATTR_ROTATEALL      -SDRATTR_START]=new SdrRotateAllItem;
-    ppPoolDefaults[SDRATTR_HORZSHEARALL   -SDRATTR_START]=new SdrHorzShearAllItem;
-    ppPoolDefaults[SDRATTR_VERTSHEARALL   -SDRATTR_START]=new SdrVertShearAllItem;
-    ppPoolDefaults[SDRATTR_TRANSFORMREF1X -SDRATTR_START]=new SdrTransformRef1XItem;
-    ppPoolDefaults[SDRATTR_TRANSFORMREF1Y -SDRATTR_START]=new SdrTransformRef1YItem;
-    ppPoolDefaults[SDRATTR_TRANSFORMREF2X -SDRATTR_START]=new SdrTransformRef2XItem;
-    ppPoolDefaults[SDRATTR_TRANSFORMREF2Y -SDRATTR_START]=new SdrTransformRef2YItem;
-    ppPoolDefaults[SDRATTR_TEXTDIRECTION  -SDRATTR_START]=new SvxWritingModeItem;
-
-    for (i=SDRATTR_NOTPERSISTRESERVE2; i<=SDRATTR_NOTPERSISTRESERVE15; i++) {
-        ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
-    }
-
-    // Grafik
-    ppPoolDefaults[ SDRATTR_GRAFRED             - SDRATTR_START] = new SdrGrafRedItem;
-    ppPoolDefaults[ SDRATTR_GRAFGREEN           - SDRATTR_START] = new SdrGrafGreenItem;
-    ppPoolDefaults[ SDRATTR_GRAFBLUE            - SDRATTR_START] = new SdrGrafBlueItem;
-    ppPoolDefaults[ SDRATTR_GRAFLUMINANCE       - SDRATTR_START] = new SdrGrafLuminanceItem;
-    ppPoolDefaults[ SDRATTR_GRAFCONTRAST        - SDRATTR_START] = new SdrGrafContrastItem;
-    ppPoolDefaults[ SDRATTR_GRAFGAMMA           - SDRATTR_START] = new SdrGrafGamma100Item;
-    ppPoolDefaults[ SDRATTR_GRAFTRANSPARENCE    - SDRATTR_START] = new SdrGrafTransparenceItem;
-    ppPoolDefaults[ SDRATTR_GRAFINVERT          - SDRATTR_START] = new SdrGrafInvertItem;
-    ppPoolDefaults[ SDRATTR_GRAFMODE            - SDRATTR_START] = new SdrGrafModeItem;
-    ppPoolDefaults[ SDRATTR_GRAFCROP            - SDRATTR_START] = new SdrGrafCropItem;
-    for( i = SDRATTR_GRAFRESERVE3; i <= SDRATTR_GRAFRESERVE6; i++ )
-        ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
-    ppPoolDefaults[ SDRATTRSET_GRAF - SDRATTR_START ] = new SdrGrafSetItem( pMaster );
-    pItemInfos[SDRATTR_GRAFCROP-SDRATTR_START]._nSID=SID_ATTR_GRAF_CROP;
-
-    // 3D Object Attr (28092000 AW)
-    ppPoolDefaults[ SDRATTR_3DOBJ_PERCENT_DIAGONAL - SDRATTR_START ] = new Svx3DPercentDiagonalItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_BACKSCALE - SDRATTR_START ] = new Svx3DBackscaleItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_DEPTH - SDRATTR_START ] = new Svx3DDepthItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_HORZ_SEGS - SDRATTR_START ] = new Svx3DHorizontalSegmentsItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_VERT_SEGS - SDRATTR_START ] = new Svx3DVerticalSegmentsItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_END_ANGLE - SDRATTR_START ] = new Svx3DEndAngleItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_DOUBLE_SIDED - SDRATTR_START ] = new Svx3DDoubleSidedItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_NORMALS_KIND - SDRATTR_START ] = new Svx3DNormalsKindItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_NORMALS_INVERT - SDRATTR_START ] = new Svx3DNormalsInvertItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_PROJ_X - SDRATTR_START ] = new Svx3DTextureProjectionXItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_PROJ_Y - SDRATTR_START ] = new Svx3DTextureProjectionYItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_SHADOW_3D - SDRATTR_START ] = new Svx3DShadow3DItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_MAT_COLOR - SDRATTR_START ] = new Svx3DMaterialColorItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_MAT_EMISSION - SDRATTR_START ] = new Svx3DMaterialEmissionItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_MAT_SPECULAR - SDRATTR_START ] = new Svx3DMaterialSpecularItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY - SDRATTR_START ] = new Svx3DMaterialSpecularIntensityItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_KIND - SDRATTR_START ] = new Svx3DTextureKindItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_MODE - SDRATTR_START ] = new Svx3DTextureModeItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_FILTER - SDRATTR_START ] = new Svx3DTextureFilterItem;
-
-    // #107245# Add new items for 3d objects
-    ppPoolDefaults[ SDRATTR_3DOBJ_SMOOTH_NORMALS - SDRATTR_START ] = new Svx3DSmoothNormalsItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_SMOOTH_LIDS - SDRATTR_START ] = new Svx3DSmoothLidsItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_CHARACTER_MODE - SDRATTR_START ] = new Svx3DCharacterModeItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_CLOSE_FRONT - SDRATTR_START ] = new Svx3DCloseFrontItem;
-    ppPoolDefaults[ SDRATTR_3DOBJ_CLOSE_BACK - SDRATTR_START ] = new Svx3DCloseBackItem;
-
-    // #i28528#
-    // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
-    ppPoolDefaults[ SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY - SDRATTR_START ] = new Svx3DReducedLineGeometryItem;
-
-    // #i28528# Start with SDRATTR_3DOBJ_RESERVED_07 now
-    for( i = SDRATTR_3DOBJ_RESERVED_07; i <= SDRATTR_3DOBJ_RESERVED_20; i++ )
-        ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
-
-    // 3D Scene Attr (28092000 AW)
-    ppPoolDefaults[ SDRATTR_3DSCENE_PERSPECTIVE - SDRATTR_START ] = new Svx3DPerspectiveItem;
-    ppPoolDefaults[ SDRATTR_3DSCENE_DISTANCE - SDRATTR_START ] = new Svx3DDistanceItem;
-    ppPoolDefaults[ SDRATTR_3DSCENE_FOCAL_LENGTH - SDRATTR_START ] = new Svx3DFocalLengthItem;
-    ppPoolDefaults[ SDRATTR_3DSCENE_TWO_SIDED_LIGHTING - SDRATTR_START ] = new Svx3DTwoSidedLightingItem;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_1 - SDRATTR_START ] = new Svx3DLightcolor1Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_2 - SDRATTR_START ] = new Svx3DLightcolor2Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_3 - SDRATTR_START ] = new Svx3DLightcolor3Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_4 - SDRATTR_START ] = new Svx3DLightcolor4Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_5 - SDRATTR_START ] = new Svx3DLightcolor5Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_6 - SDRATTR_START ] = new Svx3DLightcolor6Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_7 - SDRATTR_START ] = new Svx3DLightcolor7Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_8 - SDRATTR_START ] = new Svx3DLightcolor8Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_AMBIENTCOLOR - SDRATTR_START ] = new Svx3DAmbientcolorItem;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_1 - SDRATTR_START ] = new Svx3DLightOnOff1Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_2 - SDRATTR_START ] = new Svx3DLightOnOff2Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_3 - SDRATTR_START ] = new Svx3DLightOnOff3Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_4 - SDRATTR_START ] = new Svx3DLightOnOff4Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_5 - SDRATTR_START ] = new Svx3DLightOnOff5Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_6 - SDRATTR_START ] = new Svx3DLightOnOff6Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_7 - SDRATTR_START ] = new Svx3DLightOnOff7Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_8 - SDRATTR_START ] = new Svx3DLightOnOff8Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_1 - SDRATTR_START ] = new Svx3DLightDirection1Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_2 - SDRATTR_START ] = new Svx3DLightDirection2Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_3 - SDRATTR_START ] = new Svx3DLightDirection3Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_4 - SDRATTR_START ] = new Svx3DLightDirection4Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_5 - SDRATTR_START ] = new Svx3DLightDirection5Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_6 - SDRATTR_START ] = new Svx3DLightDirection6Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_7 - SDRATTR_START ] = new Svx3DLightDirection7Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_8 - SDRATTR_START ] = new Svx3DLightDirection8Item;
-    ppPoolDefaults[ SDRATTR_3DSCENE_SHADOW_SLANT - SDRATTR_START ] = new Svx3DShadowSlantItem;
-    ppPoolDefaults[ SDRATTR_3DSCENE_SHADE_MODE - SDRATTR_START ] = new Svx3DShadeModeItem;
-
-    for( i = SDRATTR_3DSCENE_RESERVED_01; i <= SDRATTR_3DSCENE_RESERVED_20; i++ )
-        ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
-
-    // CustomShape Attr
-    ppPoolDefaults[ SDRATTR_CUSTOMSHAPE_ENGINE - SDRATTR_START ] = new SdrCustomShapeEngineItem;
-    ppPoolDefaults[ SDRATTR_CUSTOMSHAPE_DATA - SDRATTR_START ] = new SdrCustomShapeDataItem;
-    ppPoolDefaults[ SDRATTR_CUSTOMSHAPE_GEOMETRY - SDRATTR_START ] = new SdrCustomShapeGeometryItem;
-    ppPoolDefaults[ SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL - SDRATTR_START ] = new SdrCustomShapeReplacementURLItem;
-    for ( i = SDRATTR_CUSTOMSHAPE_RESERVED_01; i <= SDRATTR_CUSTOMSHAPE_RESERVED_20; i++ )
-        ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
-
-    ////////////////////////////////
-#ifdef DBG_UTIL
-    UINT16 nAnz(SDRATTR_END-SDRATTR_START + 1);
-
-    for(UINT16 nNum = 0; nNum < nAnz; nNum++)
+    // init the non-persistent items
+    for(sal_uInt16 i(SDRATTR_NOTPERSIST_FIRST); i <= SDRATTR_NOTPERSIST_LAST; i++)
     {
-        const SfxPoolItem* pItem = ppPoolDefaults[nNum];
-
-        if(!pItem)
-        {
-            ByteString aStr("PoolDefaultItem not set: ");
-
-            aStr += "Num=";
-            aStr += ByteString::CreateFromInt32( nNum );
-            aStr += "Which=";
-            aStr += ByteString::CreateFromInt32( nNum + 1000 );
-
-            DBG_ERROR(aStr.GetBuffer());
-        }
-        else if(pItem->Which() != nNum + 1000)
-        {
-            ByteString aStr("PoolDefaultItem has wrong WhichId: ");
-
-            aStr += "Num=";
-            aStr += ByteString::CreateFromInt32( nNum );
-            aStr += " Which=";
-            aStr += ByteString::CreateFromInt32( pItem->Which() );
-
-            DBG_ERROR(aStr.GetBuffer());
-        }
+        mpLocalItemInfos[i - SDRATTR_START]._nFlags=0;
     }
-#endif
 
-    if (nAttrStart==SDRATTR_START && nAttrEnd==SDRATTR_END) {
-        SetDefaults(ppPoolDefaults);
-        SetItemInfos(pItemInfos);
-    }
+    // init own PoolDefaults
+    mppLocalPoolDefaults[SDRATTR_SHADOW            -SDRATTR_START]=new SdrShadowItem;
+    mppLocalPoolDefaults[SDRATTR_SHADOWCOLOR       -SDRATTR_START]=new SdrShadowColorItem(aEmptyStr,aNullCol);
+    mppLocalPoolDefaults[SDRATTR_SHADOWXDIST       -SDRATTR_START]=new SdrShadowXDistItem;
+    mppLocalPoolDefaults[SDRATTR_SHADOWYDIST       -SDRATTR_START]=new SdrShadowYDistItem;
+    mppLocalPoolDefaults[SDRATTR_SHADOWTRANSPARENCE-SDRATTR_START]=new SdrShadowTransparenceItem;
+    mppLocalPoolDefaults[SDRATTR_SHADOW3D          -SDRATTR_START]=new SfxVoidItem(SDRATTR_SHADOW3D    );
+    mppLocalPoolDefaults[SDRATTR_SHADOWPERSP       -SDRATTR_START]=new SfxVoidItem(SDRATTR_SHADOWPERSP );
+    mppLocalPoolDefaults[SDRATTR_CAPTIONTYPE      -SDRATTR_START]=new SdrCaptionTypeItem      ;
+    mppLocalPoolDefaults[SDRATTR_CAPTIONFIXEDANGLE-SDRATTR_START]=new SdrCaptionFixedAngleItem;
+    mppLocalPoolDefaults[SDRATTR_CAPTIONANGLE     -SDRATTR_START]=new SdrCaptionAngleItem     ;
+    mppLocalPoolDefaults[SDRATTR_CAPTIONGAP       -SDRATTR_START]=new SdrCaptionGapItem       ;
+    mppLocalPoolDefaults[SDRATTR_CAPTIONESCDIR    -SDRATTR_START]=new SdrCaptionEscDirItem    ;
+    mppLocalPoolDefaults[SDRATTR_CAPTIONESCISREL  -SDRATTR_START]=new SdrCaptionEscIsRelItem  ;
+    mppLocalPoolDefaults[SDRATTR_CAPTIONESCREL    -SDRATTR_START]=new SdrCaptionEscRelItem    ;
+    mppLocalPoolDefaults[SDRATTR_CAPTIONESCABS    -SDRATTR_START]=new SdrCaptionEscAbsItem    ;
+    mppLocalPoolDefaults[SDRATTR_CAPTIONLINELEN   -SDRATTR_START]=new SdrCaptionLineLenItem   ;
+    mppLocalPoolDefaults[SDRATTR_CAPTIONFITLINELEN-SDRATTR_START]=new SdrCaptionFitLineLenItem;
+    mppLocalPoolDefaults[SDRATTR_ECKENRADIUS            -SDRATTR_START]=new SdrEckenradiusItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_MINFRAMEHEIGHT    -SDRATTR_START]=new SdrTextMinFrameHeightItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_AUTOGROWHEIGHT    -SDRATTR_START]=new SdrTextAutoGrowHeightItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_FITTOSIZE     -SDRATTR_START]=new SdrTextFitToSizeTypeItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_LEFTDIST      -SDRATTR_START]=new SdrTextLeftDistItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_RIGHTDIST     -SDRATTR_START]=new SdrTextRightDistItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_UPPERDIST     -SDRATTR_START]=new SdrTextUpperDistItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_LOWERDIST     -SDRATTR_START]=new SdrTextLowerDistItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_VERTADJUST        -SDRATTR_START]=new SdrTextVertAdjustItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_MAXFRAMEHEIGHT    -SDRATTR_START]=new SdrTextMaxFrameHeightItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_MINFRAMEWIDTH -SDRATTR_START]=new SdrTextMinFrameWidthItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_MAXFRAMEWIDTH -SDRATTR_START]=new SdrTextMaxFrameWidthItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_AUTOGROWWIDTH -SDRATTR_START]=new SdrTextAutoGrowWidthItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_HORZADJUST        -SDRATTR_START]=new SdrTextHorzAdjustItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_ANIKIND           -SDRATTR_START]=new SdrTextAniKindItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_ANIDIRECTION  -SDRATTR_START]=new SdrTextAniDirectionItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_ANISTARTINSIDE    -SDRATTR_START]=new SdrTextAniStartInsideItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_ANISTOPINSIDE -SDRATTR_START]=new SdrTextAniStopInsideItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_ANICOUNT      -SDRATTR_START]=new SdrTextAniCountItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_ANIDELAY      -SDRATTR_START]=new SdrTextAniDelayItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_ANIAMOUNT     -SDRATTR_START]=new SdrTextAniAmountItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_CONTOURFRAME  -SDRATTR_START]=new SdrTextContourFrameItem;
+    mppLocalPoolDefaults[SDRATTR_CUSTOMSHAPE_ADJUSTMENT -SDRATTR_START]=new SdrCustomShapeAdjustmentItem;
+    mppLocalPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SvXMLAttrContainerItem( SDRATTR_XMLATTRIBUTES );
+    mppLocalPoolDefaults[SDRATTR_TEXT_USEFIXEDCELLHEIGHT -SDRATTR_START]=new SdrTextFixedCellHeightItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_WORDWRAP         -SDRATTR_START]=new SdrTextWordWrapItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_AUTOGROWSIZE     -SDRATTR_START]=new SdrTextAutoGrowSizeItem;
+    mppLocalPoolDefaults[SDRATTR_EDGEKIND         -SDRATTR_START]=new SdrEdgeKindItem;
+    mppLocalPoolDefaults[SDRATTR_EDGENODE1HORZDIST-SDRATTR_START]=new SdrEdgeNode1HorzDistItem(nDefEdgeDist);
+    mppLocalPoolDefaults[SDRATTR_EDGENODE1VERTDIST-SDRATTR_START]=new SdrEdgeNode1VertDistItem(nDefEdgeDist);
+    mppLocalPoolDefaults[SDRATTR_EDGENODE2HORZDIST-SDRATTR_START]=new SdrEdgeNode2HorzDistItem(nDefEdgeDist);
+    mppLocalPoolDefaults[SDRATTR_EDGENODE2VERTDIST-SDRATTR_START]=new SdrEdgeNode2VertDistItem(nDefEdgeDist);
+    mppLocalPoolDefaults[SDRATTR_EDGENODE1GLUEDIST-SDRATTR_START]=new SdrEdgeNode1GlueDistItem;
+    mppLocalPoolDefaults[SDRATTR_EDGENODE2GLUEDIST-SDRATTR_START]=new SdrEdgeNode2GlueDistItem;
+    mppLocalPoolDefaults[SDRATTR_EDGELINEDELTAANZ -SDRATTR_START]=new SdrEdgeLineDeltaAnzItem;
+    mppLocalPoolDefaults[SDRATTR_EDGELINE1DELTA   -SDRATTR_START]=new SdrEdgeLine1DeltaItem;
+    mppLocalPoolDefaults[SDRATTR_EDGELINE2DELTA   -SDRATTR_START]=new SdrEdgeLine2DeltaItem;
+    mppLocalPoolDefaults[SDRATTR_EDGELINE3DELTA   -SDRATTR_START]=new SdrEdgeLine3DeltaItem;
+    mppLocalPoolDefaults[SDRATTR_MEASUREKIND             -SDRATTR_START]=new SdrMeasureKindItem;
+    mppLocalPoolDefaults[SDRATTR_MEASURETEXTHPOS         -SDRATTR_START]=new SdrMeasureTextHPosItem;
+    mppLocalPoolDefaults[SDRATTR_MEASURETEXTVPOS         -SDRATTR_START]=new SdrMeasureTextVPosItem;
+    mppLocalPoolDefaults[SDRATTR_MEASURELINEDIST         -SDRATTR_START]=new SdrMeasureLineDistItem(800);
+    mppLocalPoolDefaults[SDRATTR_MEASUREHELPLINEOVERHANG -SDRATTR_START]=new SdrMeasureHelplineOverhangItem(200);
+    mppLocalPoolDefaults[SDRATTR_MEASUREHELPLINEDIST     -SDRATTR_START]=new SdrMeasureHelplineDistItem(100);
+    mppLocalPoolDefaults[SDRATTR_MEASUREHELPLINE1LEN     -SDRATTR_START]=new SdrMeasureHelpline1LenItem;
+    mppLocalPoolDefaults[SDRATTR_MEASUREHELPLINE2LEN     -SDRATTR_START]=new SdrMeasureHelpline2LenItem;
+    mppLocalPoolDefaults[SDRATTR_MEASUREBELOWREFEDGE     -SDRATTR_START]=new SdrMeasureBelowRefEdgeItem;
+    mppLocalPoolDefaults[SDRATTR_MEASURETEXTROTA90       -SDRATTR_START]=new SdrMeasureTextRota90Item;
+    mppLocalPoolDefaults[SDRATTR_MEASURETEXTUPSIDEDOWN   -SDRATTR_START]=new SdrMeasureTextUpsideDownItem;
+    mppLocalPoolDefaults[SDRATTR_MEASUREOVERHANG         -SDRATTR_START]=new SdrMeasureOverhangItem(600);
+    mppLocalPoolDefaults[SDRATTR_MEASUREUNIT             -SDRATTR_START]=new SdrMeasureUnitItem;
+    mppLocalPoolDefaults[SDRATTR_MEASURESCALE            -SDRATTR_START]=new SdrMeasureScaleItem;
+    mppLocalPoolDefaults[SDRATTR_MEASURESHOWUNIT         -SDRATTR_START]=new SdrMeasureShowUnitItem;
+    mppLocalPoolDefaults[SDRATTR_MEASUREFORMATSTRING     -SDRATTR_START]=new SdrMeasureFormatStringItem();
+    mppLocalPoolDefaults[SDRATTR_MEASURETEXTAUTOANGLE    -SDRATTR_START]=new SdrMeasureTextAutoAngleItem();
+    mppLocalPoolDefaults[SDRATTR_MEASURETEXTAUTOANGLEVIEW-SDRATTR_START]=new SdrMeasureTextAutoAngleViewItem();
+    mppLocalPoolDefaults[SDRATTR_MEASURETEXTISFIXEDANGLE -SDRATTR_START]=new SdrMeasureTextIsFixedAngleItem();
+    mppLocalPoolDefaults[SDRATTR_MEASURETEXTFIXEDANGLE   -SDRATTR_START]=new SdrMeasureTextFixedAngleItem();
+    mppLocalPoolDefaults[SDRATTR_MEASUREDECIMALPLACES    -SDRATTR_START]=new SdrMeasureDecimalPlacesItem();
+    mppLocalPoolDefaults[SDRATTR_CIRCKIND      -SDRATTR_START]=new SdrCircKindItem;
+    mppLocalPoolDefaults[SDRATTR_CIRCSTARTANGLE-SDRATTR_START]=new SdrCircStartAngleItem;
+    mppLocalPoolDefaults[SDRATTR_CIRCENDANGLE  -SDRATTR_START]=new SdrCircEndAngleItem;
+    mppLocalPoolDefaults[SDRATTR_OBJMOVEPROTECT -SDRATTR_START]=new SdrObjMoveProtectItem;
+    mppLocalPoolDefaults[SDRATTR_OBJSIZEPROTECT -SDRATTR_START]=new SdrObjSizeProtectItem;
+    mppLocalPoolDefaults[SDRATTR_OBJPRINTABLE   -SDRATTR_START]=new SdrObjPrintableItem;
+    mppLocalPoolDefaults[SDRATTR_LAYERID        -SDRATTR_START]=new SdrLayerIdItem;
+    mppLocalPoolDefaults[SDRATTR_LAYERNAME      -SDRATTR_START]=new SdrLayerNameItem;
+    mppLocalPoolDefaults[SDRATTR_OBJECTNAME     -SDRATTR_START]=new SdrObjectNameItem;
+    mppLocalPoolDefaults[SDRATTR_ALLPOSITIONX   -SDRATTR_START]=new SdrAllPositionXItem;
+    mppLocalPoolDefaults[SDRATTR_ALLPOSITIONY   -SDRATTR_START]=new SdrAllPositionYItem;
+    mppLocalPoolDefaults[SDRATTR_ALLSIZEWIDTH   -SDRATTR_START]=new SdrAllSizeWidthItem;
+    mppLocalPoolDefaults[SDRATTR_ALLSIZEHEIGHT  -SDRATTR_START]=new SdrAllSizeHeightItem;
+    mppLocalPoolDefaults[SDRATTR_ONEPOSITIONX   -SDRATTR_START]=new SdrOnePositionXItem;
+    mppLocalPoolDefaults[SDRATTR_ONEPOSITIONY   -SDRATTR_START]=new SdrOnePositionYItem;
+    mppLocalPoolDefaults[SDRATTR_ONESIZEWIDTH   -SDRATTR_START]=new SdrOneSizeWidthItem;
+    mppLocalPoolDefaults[SDRATTR_ONESIZEHEIGHT  -SDRATTR_START]=new SdrOneSizeHeightItem;
+    mppLocalPoolDefaults[SDRATTR_LOGICSIZEWIDTH -SDRATTR_START]=new SdrLogicSizeWidthItem;
+    mppLocalPoolDefaults[SDRATTR_LOGICSIZEHEIGHT-SDRATTR_START]=new SdrLogicSizeHeightItem;
+    mppLocalPoolDefaults[SDRATTR_ROTATEANGLE    -SDRATTR_START]=new SdrRotateAngleItem;
+    mppLocalPoolDefaults[SDRATTR_SHEARANGLE     -SDRATTR_START]=new SdrShearAngleItem;
+    mppLocalPoolDefaults[SDRATTR_MOVEX          -SDRATTR_START]=new SdrMoveXItem;
+    mppLocalPoolDefaults[SDRATTR_MOVEY          -SDRATTR_START]=new SdrMoveYItem;
+    mppLocalPoolDefaults[SDRATTR_RESIZEXONE     -SDRATTR_START]=new SdrResizeXOneItem;
+    mppLocalPoolDefaults[SDRATTR_RESIZEYONE     -SDRATTR_START]=new SdrResizeYOneItem;
+    mppLocalPoolDefaults[SDRATTR_ROTATEONE      -SDRATTR_START]=new SdrRotateOneItem;
+    mppLocalPoolDefaults[SDRATTR_HORZSHEARONE   -SDRATTR_START]=new SdrHorzShearOneItem;
+    mppLocalPoolDefaults[SDRATTR_VERTSHEARONE   -SDRATTR_START]=new SdrVertShearOneItem;
+    mppLocalPoolDefaults[SDRATTR_RESIZEXALL     -SDRATTR_START]=new SdrResizeXAllItem;
+    mppLocalPoolDefaults[SDRATTR_RESIZEYALL     -SDRATTR_START]=new SdrResizeYAllItem;
+    mppLocalPoolDefaults[SDRATTR_ROTATEALL      -SDRATTR_START]=new SdrRotateAllItem;
+    mppLocalPoolDefaults[SDRATTR_HORZSHEARALL   -SDRATTR_START]=new SdrHorzShearAllItem;
+    mppLocalPoolDefaults[SDRATTR_VERTSHEARALL   -SDRATTR_START]=new SdrVertShearAllItem;
+    mppLocalPoolDefaults[SDRATTR_TRANSFORMREF1X -SDRATTR_START]=new SdrTransformRef1XItem;
+    mppLocalPoolDefaults[SDRATTR_TRANSFORMREF1Y -SDRATTR_START]=new SdrTransformRef1YItem;
+    mppLocalPoolDefaults[SDRATTR_TRANSFORMREF2X -SDRATTR_START]=new SdrTransformRef2XItem;
+    mppLocalPoolDefaults[SDRATTR_TRANSFORMREF2Y -SDRATTR_START]=new SdrTransformRef2YItem;
+    mppLocalPoolDefaults[SDRATTR_TEXTDIRECTION  -SDRATTR_START]=new SvxWritingModeItem;
+    mppLocalPoolDefaults[ SDRATTR_GRAFRED               - SDRATTR_START] = new SdrGrafRedItem;
+    mppLocalPoolDefaults[ SDRATTR_GRAFGREEN         - SDRATTR_START] = new SdrGrafGreenItem;
+    mppLocalPoolDefaults[ SDRATTR_GRAFBLUE          - SDRATTR_START] = new SdrGrafBlueItem;
+    mppLocalPoolDefaults[ SDRATTR_GRAFLUMINANCE     - SDRATTR_START] = new SdrGrafLuminanceItem;
+    mppLocalPoolDefaults[ SDRATTR_GRAFCONTRAST      - SDRATTR_START] = new SdrGrafContrastItem;
+    mppLocalPoolDefaults[ SDRATTR_GRAFGAMMA         - SDRATTR_START] = new SdrGrafGamma100Item;
+    mppLocalPoolDefaults[ SDRATTR_GRAFTRANSPARENCE  - SDRATTR_START] = new SdrGrafTransparenceItem;
+    mppLocalPoolDefaults[ SDRATTR_GRAFINVERT            - SDRATTR_START] = new SdrGrafInvertItem;
+    mppLocalPoolDefaults[ SDRATTR_GRAFMODE          - SDRATTR_START] = new SdrGrafModeItem;
+    mppLocalPoolDefaults[ SDRATTR_GRAFCROP          - SDRATTR_START] = new SdrGrafCropItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_PERCENT_DIAGONAL - SDRATTR_START ] = new Svx3DPercentDiagonalItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_BACKSCALE - SDRATTR_START ] = new Svx3DBackscaleItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_DEPTH - SDRATTR_START ] = new Svx3DDepthItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_HORZ_SEGS - SDRATTR_START ] = new Svx3DHorizontalSegmentsItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_VERT_SEGS - SDRATTR_START ] = new Svx3DVerticalSegmentsItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_END_ANGLE - SDRATTR_START ] = new Svx3DEndAngleItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_DOUBLE_SIDED - SDRATTR_START ] = new Svx3DDoubleSidedItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_NORMALS_KIND - SDRATTR_START ] = new Svx3DNormalsKindItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_NORMALS_INVERT - SDRATTR_START ] = new Svx3DNormalsInvertItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_PROJ_X - SDRATTR_START ] = new Svx3DTextureProjectionXItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_PROJ_Y - SDRATTR_START ] = new Svx3DTextureProjectionYItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_SHADOW_3D - SDRATTR_START ] = new Svx3DShadow3DItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_MAT_COLOR - SDRATTR_START ] = new Svx3DMaterialColorItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_MAT_EMISSION - SDRATTR_START ] = new Svx3DMaterialEmissionItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_MAT_SPECULAR - SDRATTR_START ] = new Svx3DMaterialSpecularItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY - SDRATTR_START ] = new Svx3DMaterialSpecularIntensityItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_KIND - SDRATTR_START ] = new Svx3DTextureKindItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_MODE - SDRATTR_START ] = new Svx3DTextureModeItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_FILTER - SDRATTR_START ] = new Svx3DTextureFilterItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_SMOOTH_NORMALS - SDRATTR_START ] = new Svx3DSmoothNormalsItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_SMOOTH_LIDS - SDRATTR_START ] = new Svx3DSmoothLidsItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_CHARACTER_MODE - SDRATTR_START ] = new Svx3DCharacterModeItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_CLOSE_FRONT - SDRATTR_START ] = new Svx3DCloseFrontItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_CLOSE_BACK - SDRATTR_START ] = new Svx3DCloseBackItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY - SDRATTR_START ] = new Svx3DReducedLineGeometryItem;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_PERSPECTIVE - SDRATTR_START ] = new Svx3DPerspectiveItem;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_DISTANCE - SDRATTR_START ] = new Svx3DDistanceItem;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_FOCAL_LENGTH - SDRATTR_START ] = new Svx3DFocalLengthItem;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_TWO_SIDED_LIGHTING - SDRATTR_START ] = new Svx3DTwoSidedLightingItem;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_1 - SDRATTR_START ] = new Svx3DLightcolor1Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_2 - SDRATTR_START ] = new Svx3DLightcolor2Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_3 - SDRATTR_START ] = new Svx3DLightcolor3Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_4 - SDRATTR_START ] = new Svx3DLightcolor4Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_5 - SDRATTR_START ] = new Svx3DLightcolor5Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_6 - SDRATTR_START ] = new Svx3DLightcolor6Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_7 - SDRATTR_START ] = new Svx3DLightcolor7Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_8 - SDRATTR_START ] = new Svx3DLightcolor8Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_AMBIENTCOLOR - SDRATTR_START ] = new Svx3DAmbientcolorItem;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_1 - SDRATTR_START ] = new Svx3DLightOnOff1Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_2 - SDRATTR_START ] = new Svx3DLightOnOff2Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_3 - SDRATTR_START ] = new Svx3DLightOnOff3Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_4 - SDRATTR_START ] = new Svx3DLightOnOff4Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_5 - SDRATTR_START ] = new Svx3DLightOnOff5Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_6 - SDRATTR_START ] = new Svx3DLightOnOff6Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_7 - SDRATTR_START ] = new Svx3DLightOnOff7Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_8 - SDRATTR_START ] = new Svx3DLightOnOff8Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_1 - SDRATTR_START ] = new Svx3DLightDirection1Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_2 - SDRATTR_START ] = new Svx3DLightDirection2Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_3 - SDRATTR_START ] = new Svx3DLightDirection3Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_4 - SDRATTR_START ] = new Svx3DLightDirection4Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_5 - SDRATTR_START ] = new Svx3DLightDirection5Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_6 - SDRATTR_START ] = new Svx3DLightDirection6Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_7 - SDRATTR_START ] = new Svx3DLightDirection7Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_8 - SDRATTR_START ] = new Svx3DLightDirection8Item;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_SHADOW_SLANT - SDRATTR_START ] = new Svx3DShadowSlantItem;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_SHADE_MODE - SDRATTR_START ] = new Svx3DShadeModeItem;
+    mppLocalPoolDefaults[ SDRATTR_CUSTOMSHAPE_ENGINE - SDRATTR_START ] = new SdrCustomShapeEngineItem;
+    mppLocalPoolDefaults[ SDRATTR_CUSTOMSHAPE_DATA - SDRATTR_START ] = new SdrCustomShapeDataItem;
+    mppLocalPoolDefaults[ SDRATTR_CUSTOMSHAPE_GEOMETRY - SDRATTR_START ] = new SdrCustomShapeGeometryItem;
+    mppLocalPoolDefaults[ SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL - SDRATTR_START ] = new SdrCustomShapeReplacementURLItem;
+
+    // set own ItemInfos
+    mpLocalItemInfos[SDRATTR_SHADOW-SDRATTR_START]._nSID=SID_ATTR_FILL_SHADOW;
+    mpLocalItemInfos[SDRATTR_TEXT_FITTOSIZE-SDRATTR_START]._nSID=SID_ATTR_TEXT_FITTOSIZE;
+    mpLocalItemInfos[SDRATTR_GRAFCROP-SDRATTR_START]._nSID=SID_ATTR_GRAF_CROP;
+
+    // it's my own creation level, set Defaults and ItemInfos
+    SetDefaults(mppLocalPoolDefaults);
+    SetItemInfos(mpLocalItemInfos);
 }
+
+//BFS04void SdrItemPool::Ctor()
+//BFS04{
+//BFS04 const Color aNullCol(RGB_Color(COL_BLACK));
+//BFS04 const XubString aEmptyStr;
+//BFS04
+//BFS04 USHORT i;
+//BFS04 for (i=SDRATTR_NOTPERSIST_FIRST; i<=SDRATTR_NOTPERSIST_LAST; i++) {
+//BFS04     pItemInfos[i-SDRATTR_START]._nFlags=0;
+//BFS04 }
+//BFS04 // Schatten
+//BFS04 ppPoolDefaults[SDRATTR_SHADOW            -SDRATTR_START]=new SdrShadowItem;
+//BFS04 ppPoolDefaults[SDRATTR_SHADOWCOLOR       -SDRATTR_START]=new SdrShadowColorItem(aEmptyStr,aNullCol);
+//BFS04 ppPoolDefaults[SDRATTR_SHADOWXDIST       -SDRATTR_START]=new SdrShadowXDistItem;
+//BFS04 ppPoolDefaults[SDRATTR_SHADOWYDIST       -SDRATTR_START]=new SdrShadowYDistItem;
+//BFS04 ppPoolDefaults[SDRATTR_SHADOWTRANSPARENCE-SDRATTR_START]=new SdrShadowTransparenceItem;
+//BFS04 ppPoolDefaults[SDRATTR_SHADOW3D          -SDRATTR_START]=new SfxVoidItem(SDRATTR_SHADOW3D    );
+//BFS04 ppPoolDefaults[SDRATTR_SHADOWPERSP       -SDRATTR_START]=new SfxVoidItem(SDRATTR_SHADOWPERSP );
+//BFS04//BFS01  for (i=SDRATTR_SHADOWRESERVE1; i<=SDRATTR_SHADOWRESERVE5; i++) {
+//BFS04//BFS01      ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
+//BFS04//BFS01  }
+//BFS04
+//BFS04//BFS01  ppPoolDefaults[SDRATTRSET_SHADOW-SDRATTR_START]=new SdrShadowSetItem(pMaster);
+//BFS04
+//BFS04 // SID_ATTR_FILL_SHADOW = SID_SVX_START+299 = SID_LIB_START+299 = 10299
+//BFS04 pItemInfos[SDRATTR_SHADOW-SDRATTR_START]._nSID=SID_ATTR_FILL_SHADOW;
+//BFS04
+//BFS04 // Legendenobjekt
+//BFS04 ppPoolDefaults[SDRATTR_CAPTIONTYPE      -SDRATTR_START]=new SdrCaptionTypeItem      ;
+//BFS04 ppPoolDefaults[SDRATTR_CAPTIONFIXEDANGLE-SDRATTR_START]=new SdrCaptionFixedAngleItem;
+//BFS04 ppPoolDefaults[SDRATTR_CAPTIONANGLE     -SDRATTR_START]=new SdrCaptionAngleItem     ;
+//BFS04 ppPoolDefaults[SDRATTR_CAPTIONGAP       -SDRATTR_START]=new SdrCaptionGapItem       ;
+//BFS04 ppPoolDefaults[SDRATTR_CAPTIONESCDIR    -SDRATTR_START]=new SdrCaptionEscDirItem    ;
+//BFS04 ppPoolDefaults[SDRATTR_CAPTIONESCISREL  -SDRATTR_START]=new SdrCaptionEscIsRelItem  ;
+//BFS04 ppPoolDefaults[SDRATTR_CAPTIONESCREL    -SDRATTR_START]=new SdrCaptionEscRelItem    ;
+//BFS04 ppPoolDefaults[SDRATTR_CAPTIONESCABS    -SDRATTR_START]=new SdrCaptionEscAbsItem    ;
+//BFS04 ppPoolDefaults[SDRATTR_CAPTIONLINELEN   -SDRATTR_START]=new SdrCaptionLineLenItem   ;
+//BFS04 ppPoolDefaults[SDRATTR_CAPTIONFITLINELEN-SDRATTR_START]=new SdrCaptionFitLineLenItem;
+//BFS04//BFS01  for (i=SDRATTR_CAPTIONRESERVE1; i<=SDRATTR_CAPTIONRESERVE5; i++) {
+//BFS04//BFS01      ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
+//BFS04//BFS01  }
+//BFS04//BFS01  ppPoolDefaults[SDRATTRSET_CAPTION-SDRATTR_START]=new SdrCaptionSetItem(pMaster);
+//BFS04
+//BFS04 // Outliner-Attribute
+//BFS04//BFS01  ppPoolDefaults[SDRATTRSET_OUTLINER-SDRATTR_START]=new SdrOutlinerSetItem(pMaster);
+//BFS04
+//BFS04 // Misc-Attribute
+//BFS04 ppPoolDefaults[SDRATTR_ECKENRADIUS          -SDRATTR_START]=new SdrEckenradiusItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_MINFRAMEHEIGHT  -SDRATTR_START]=new SdrTextMinFrameHeightItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_AUTOGROWHEIGHT  -SDRATTR_START]=new SdrTextAutoGrowHeightItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_FITTOSIZE       -SDRATTR_START]=new SdrTextFitToSizeTypeItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_LEFTDIST        -SDRATTR_START]=new SdrTextLeftDistItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_RIGHTDIST       -SDRATTR_START]=new SdrTextRightDistItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_UPPERDIST       -SDRATTR_START]=new SdrTextUpperDistItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_LOWERDIST       -SDRATTR_START]=new SdrTextLowerDistItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_VERTADJUST      -SDRATTR_START]=new SdrTextVertAdjustItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_MAXFRAMEHEIGHT  -SDRATTR_START]=new SdrTextMaxFrameHeightItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_MINFRAMEWIDTH   -SDRATTR_START]=new SdrTextMinFrameWidthItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_MAXFRAMEWIDTH   -SDRATTR_START]=new SdrTextMaxFrameWidthItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_AUTOGROWWIDTH   -SDRATTR_START]=new SdrTextAutoGrowWidthItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_HORZADJUST      -SDRATTR_START]=new SdrTextHorzAdjustItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_ANIKIND         -SDRATTR_START]=new SdrTextAniKindItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_ANIDIRECTION    -SDRATTR_START]=new SdrTextAniDirectionItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_ANISTARTINSIDE  -SDRATTR_START]=new SdrTextAniStartInsideItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_ANISTOPINSIDE   -SDRATTR_START]=new SdrTextAniStopInsideItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_ANICOUNT        -SDRATTR_START]=new SdrTextAniCountItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_ANIDELAY        -SDRATTR_START]=new SdrTextAniDelayItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_ANIAMOUNT       -SDRATTR_START]=new SdrTextAniAmountItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_CONTOURFRAME    -SDRATTR_START]=new SdrTextContourFrameItem;
+//BFS04 ppPoolDefaults[SDRATTR_CUSTOMSHAPE_ADJUSTMENT -SDRATTR_START]=new SdrCustomShapeAdjustmentItem;
+//BFS04 ppPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SvXMLAttrContainerItem( SDRATTR_XMLATTRIBUTES );
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_USEFIXEDCELLHEIGHT -SDRATTR_START]=new SdrTextFixedCellHeightItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_WORDWRAP           -SDRATTR_START]=new SdrTextWordWrapItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXT_AUTOGROWSIZE       -SDRATTR_START]=new SdrTextAutoGrowSizeItem;
+//BFS04//BFS01  for (i=SDRATTR_RESERVE18; i<=SDRATTR_RESERVE19; i++) {
+//BFS04//BFS01      ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
+//BFS04//BFS01  }
+//BFS04//BFS01  ppPoolDefaults[SDRATTRSET_MISC-SDRATTR_START]=new SdrMiscSetItem(pMaster);
+//BFS04
+//BFS04 pItemInfos[SDRATTR_TEXT_FITTOSIZE-SDRATTR_START]._nSID=SID_ATTR_TEXT_FITTOSIZE;
+//BFS04
+//BFS04 // Objektverbinder
+//BFS04 ppPoolDefaults[SDRATTR_EDGEKIND         -SDRATTR_START]=new SdrEdgeKindItem;
+//BFS04 const sal_Int32 nDefEdgeDist(500L); // Erstmal hart defaulted fuer Draw (100TH_MM). hier muss noch der MapMode beruecksichtigt werden.
+//BFS04 ppPoolDefaults[SDRATTR_EDGENODE1HORZDIST-SDRATTR_START]=new SdrEdgeNode1HorzDistItem(nDefEdgeDist);
+//BFS04 ppPoolDefaults[SDRATTR_EDGENODE1VERTDIST-SDRATTR_START]=new SdrEdgeNode1VertDistItem(nDefEdgeDist);
+//BFS04 ppPoolDefaults[SDRATTR_EDGENODE2HORZDIST-SDRATTR_START]=new SdrEdgeNode2HorzDistItem(nDefEdgeDist);
+//BFS04 ppPoolDefaults[SDRATTR_EDGENODE2VERTDIST-SDRATTR_START]=new SdrEdgeNode2VertDistItem(nDefEdgeDist);
+//BFS04 ppPoolDefaults[SDRATTR_EDGENODE1GLUEDIST-SDRATTR_START]=new SdrEdgeNode1GlueDistItem;
+//BFS04 ppPoolDefaults[SDRATTR_EDGENODE2GLUEDIST-SDRATTR_START]=new SdrEdgeNode2GlueDistItem;
+//BFS04 ppPoolDefaults[SDRATTR_EDGELINEDELTAANZ -SDRATTR_START]=new SdrEdgeLineDeltaAnzItem;
+//BFS04 ppPoolDefaults[SDRATTR_EDGELINE1DELTA   -SDRATTR_START]=new SdrEdgeLine1DeltaItem;
+//BFS04 ppPoolDefaults[SDRATTR_EDGELINE2DELTA   -SDRATTR_START]=new SdrEdgeLine2DeltaItem;
+//BFS04 ppPoolDefaults[SDRATTR_EDGELINE3DELTA   -SDRATTR_START]=new SdrEdgeLine3DeltaItem;
+//BFS04//BFS01  for (i=SDRATTR_EDGERESERVE02; i<=SDRATTR_EDGERESERVE09; i++) {
+//BFS04//BFS01      ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
+//BFS04//BFS01  }
+//BFS04//BFS01  ppPoolDefaults[SDRATTRSET_EDGE-SDRATTR_START]=new SdrEdgeSetItem(pMaster);
+//BFS04
+//BFS04  // Bemassungsobjekt
+//BFS04 ppPoolDefaults[SDRATTR_MEASUREKIND             -SDRATTR_START]=new SdrMeasureKindItem;
+//BFS04 ppPoolDefaults[SDRATTR_MEASURETEXTHPOS         -SDRATTR_START]=new SdrMeasureTextHPosItem;
+//BFS04 ppPoolDefaults[SDRATTR_MEASURETEXTVPOS         -SDRATTR_START]=new SdrMeasureTextVPosItem;
+//BFS04 ppPoolDefaults[SDRATTR_MEASURELINEDIST         -SDRATTR_START]=new SdrMeasureLineDistItem(800);
+//BFS04 ppPoolDefaults[SDRATTR_MEASUREHELPLINEOVERHANG -SDRATTR_START]=new SdrMeasureHelplineOverhangItem(200);
+//BFS04 ppPoolDefaults[SDRATTR_MEASUREHELPLINEDIST     -SDRATTR_START]=new SdrMeasureHelplineDistItem(100);
+//BFS04 ppPoolDefaults[SDRATTR_MEASUREHELPLINE1LEN     -SDRATTR_START]=new SdrMeasureHelpline1LenItem;
+//BFS04 ppPoolDefaults[SDRATTR_MEASUREHELPLINE2LEN     -SDRATTR_START]=new SdrMeasureHelpline2LenItem;
+//BFS04 ppPoolDefaults[SDRATTR_MEASUREBELOWREFEDGE     -SDRATTR_START]=new SdrMeasureBelowRefEdgeItem;
+//BFS04 ppPoolDefaults[SDRATTR_MEASURETEXTROTA90       -SDRATTR_START]=new SdrMeasureTextRota90Item;
+//BFS04 ppPoolDefaults[SDRATTR_MEASURETEXTUPSIDEDOWN   -SDRATTR_START]=new SdrMeasureTextUpsideDownItem;
+//BFS04 ppPoolDefaults[SDRATTR_MEASUREOVERHANG         -SDRATTR_START]=new SdrMeasureOverhangItem(600);
+//BFS04 ppPoolDefaults[SDRATTR_MEASUREUNIT             -SDRATTR_START]=new SdrMeasureUnitItem;
+//BFS04 ppPoolDefaults[SDRATTR_MEASURESCALE            -SDRATTR_START]=new SdrMeasureScaleItem;
+//BFS04 ppPoolDefaults[SDRATTR_MEASURESHOWUNIT         -SDRATTR_START]=new SdrMeasureShowUnitItem;
+//BFS04 ppPoolDefaults[SDRATTR_MEASUREFORMATSTRING     -SDRATTR_START]=new SdrMeasureFormatStringItem();
+//BFS04 ppPoolDefaults[SDRATTR_MEASURETEXTAUTOANGLE    -SDRATTR_START]=new SdrMeasureTextAutoAngleItem();
+//BFS04 ppPoolDefaults[SDRATTR_MEASURETEXTAUTOANGLEVIEW-SDRATTR_START]=new SdrMeasureTextAutoAngleViewItem();
+//BFS04 ppPoolDefaults[SDRATTR_MEASURETEXTISFIXEDANGLE -SDRATTR_START]=new SdrMeasureTextIsFixedAngleItem();
+//BFS04 ppPoolDefaults[SDRATTR_MEASURETEXTFIXEDANGLE   -SDRATTR_START]=new SdrMeasureTextFixedAngleItem();
+//BFS04 ppPoolDefaults[SDRATTR_MEASUREDECIMALPLACES    -SDRATTR_START]=new SdrMeasureDecimalPlacesItem();
+//BFS04//BFS01  for (i=SDRATTR_MEASURERESERVE05; i<=SDRATTR_MEASURERESERVE07; i++) {
+//BFS04//BFS01      ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
+//BFS04//BFS01  }
+//BFS04//BFS01  ppPoolDefaults[SDRATTRSET_MEASURE-SDRATTR_START]=new SdrMeasureSetItem(pMaster);
+//BFS04
+//BFS04  // Kreis
+//BFS04 ppPoolDefaults[SDRATTR_CIRCKIND      -SDRATTR_START]=new SdrCircKindItem;
+//BFS04 ppPoolDefaults[SDRATTR_CIRCSTARTANGLE-SDRATTR_START]=new SdrCircStartAngleItem;
+//BFS04 ppPoolDefaults[SDRATTR_CIRCENDANGLE  -SDRATTR_START]=new SdrCircEndAngleItem;
+//BFS04//BFS01  for (i=SDRATTR_CIRCRESERVE0; i<=SDRATTR_CIRCRESERVE3; i++) {
+//BFS04//BFS01      ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
+//BFS04//BFS01  }
+//BFS04//BFS01  ppPoolDefaults[SDRATTRSET_CIRC-SDRATTR_START]=new SdrCircSetItem(pMaster);
+//BFS04
+//BFS04  // Nichtpersistente-Items
+//BFS04 ppPoolDefaults[SDRATTR_OBJMOVEPROTECT -SDRATTR_START]=new SdrObjMoveProtectItem;
+//BFS04 ppPoolDefaults[SDRATTR_OBJSIZEPROTECT -SDRATTR_START]=new SdrObjSizeProtectItem;
+//BFS04 ppPoolDefaults[SDRATTR_OBJPRINTABLE   -SDRATTR_START]=new SdrObjPrintableItem;
+//BFS04 ppPoolDefaults[SDRATTR_LAYERID        -SDRATTR_START]=new SdrLayerIdItem;
+//BFS04 ppPoolDefaults[SDRATTR_LAYERNAME      -SDRATTR_START]=new SdrLayerNameItem;
+//BFS04 ppPoolDefaults[SDRATTR_OBJECTNAME     -SDRATTR_START]=new SdrObjectNameItem;
+//BFS04 ppPoolDefaults[SDRATTR_ALLPOSITIONX   -SDRATTR_START]=new SdrAllPositionXItem;
+//BFS04 ppPoolDefaults[SDRATTR_ALLPOSITIONY   -SDRATTR_START]=new SdrAllPositionYItem;
+//BFS04 ppPoolDefaults[SDRATTR_ALLSIZEWIDTH   -SDRATTR_START]=new SdrAllSizeWidthItem;
+//BFS04 ppPoolDefaults[SDRATTR_ALLSIZEHEIGHT  -SDRATTR_START]=new SdrAllSizeHeightItem;
+//BFS04 ppPoolDefaults[SDRATTR_ONEPOSITIONX   -SDRATTR_START]=new SdrOnePositionXItem;
+//BFS04 ppPoolDefaults[SDRATTR_ONEPOSITIONY   -SDRATTR_START]=new SdrOnePositionYItem;
+//BFS04 ppPoolDefaults[SDRATTR_ONESIZEWIDTH   -SDRATTR_START]=new SdrOneSizeWidthItem;
+//BFS04 ppPoolDefaults[SDRATTR_ONESIZEHEIGHT  -SDRATTR_START]=new SdrOneSizeHeightItem;
+//BFS04 ppPoolDefaults[SDRATTR_LOGICSIZEWIDTH -SDRATTR_START]=new SdrLogicSizeWidthItem;
+//BFS04 ppPoolDefaults[SDRATTR_LOGICSIZEHEIGHT-SDRATTR_START]=new SdrLogicSizeHeightItem;
+//BFS04 ppPoolDefaults[SDRATTR_ROTATEANGLE    -SDRATTR_START]=new SdrRotateAngleItem;
+//BFS04 ppPoolDefaults[SDRATTR_SHEARANGLE     -SDRATTR_START]=new SdrShearAngleItem;
+//BFS04 ppPoolDefaults[SDRATTR_MOVEX          -SDRATTR_START]=new SdrMoveXItem;
+//BFS04 ppPoolDefaults[SDRATTR_MOVEY          -SDRATTR_START]=new SdrMoveYItem;
+//BFS04 ppPoolDefaults[SDRATTR_RESIZEXONE     -SDRATTR_START]=new SdrResizeXOneItem;
+//BFS04 ppPoolDefaults[SDRATTR_RESIZEYONE     -SDRATTR_START]=new SdrResizeYOneItem;
+//BFS04 ppPoolDefaults[SDRATTR_ROTATEONE      -SDRATTR_START]=new SdrRotateOneItem;
+//BFS04 ppPoolDefaults[SDRATTR_HORZSHEARONE   -SDRATTR_START]=new SdrHorzShearOneItem;
+//BFS04 ppPoolDefaults[SDRATTR_VERTSHEARONE   -SDRATTR_START]=new SdrVertShearOneItem;
+//BFS04 ppPoolDefaults[SDRATTR_RESIZEXALL     -SDRATTR_START]=new SdrResizeXAllItem;
+//BFS04 ppPoolDefaults[SDRATTR_RESIZEYALL     -SDRATTR_START]=new SdrResizeYAllItem;
+//BFS04 ppPoolDefaults[SDRATTR_ROTATEALL      -SDRATTR_START]=new SdrRotateAllItem;
+//BFS04 ppPoolDefaults[SDRATTR_HORZSHEARALL   -SDRATTR_START]=new SdrHorzShearAllItem;
+//BFS04 ppPoolDefaults[SDRATTR_VERTSHEARALL   -SDRATTR_START]=new SdrVertShearAllItem;
+//BFS04 ppPoolDefaults[SDRATTR_TRANSFORMREF1X -SDRATTR_START]=new SdrTransformRef1XItem;
+//BFS04 ppPoolDefaults[SDRATTR_TRANSFORMREF1Y -SDRATTR_START]=new SdrTransformRef1YItem;
+//BFS04 ppPoolDefaults[SDRATTR_TRANSFORMREF2X -SDRATTR_START]=new SdrTransformRef2XItem;
+//BFS04 ppPoolDefaults[SDRATTR_TRANSFORMREF2Y -SDRATTR_START]=new SdrTransformRef2YItem;
+//BFS04 ppPoolDefaults[SDRATTR_TEXTDIRECTION  -SDRATTR_START]=new SvxWritingModeItem;
+//BFS04
+//BFS04//BFS01  for (i=SDRATTR_NOTPERSISTRESERVE2; i<=SDRATTR_NOTPERSISTRESERVE15; i++) {
+//BFS04//BFS01      ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
+//BFS04//BFS01  }
+//BFS04
+//BFS04 // Grafik
+//BFS04 ppPoolDefaults[ SDRATTR_GRAFRED             - SDRATTR_START] = new SdrGrafRedItem;
+//BFS04 ppPoolDefaults[ SDRATTR_GRAFGREEN           - SDRATTR_START] = new SdrGrafGreenItem;
+//BFS04 ppPoolDefaults[ SDRATTR_GRAFBLUE            - SDRATTR_START] = new SdrGrafBlueItem;
+//BFS04 ppPoolDefaults[ SDRATTR_GRAFLUMINANCE       - SDRATTR_START] = new SdrGrafLuminanceItem;
+//BFS04 ppPoolDefaults[ SDRATTR_GRAFCONTRAST        - SDRATTR_START] = new SdrGrafContrastItem;
+//BFS04 ppPoolDefaults[ SDRATTR_GRAFGAMMA           - SDRATTR_START] = new SdrGrafGamma100Item;
+//BFS04 ppPoolDefaults[ SDRATTR_GRAFTRANSPARENCE    - SDRATTR_START] = new SdrGrafTransparenceItem;
+//BFS04 ppPoolDefaults[ SDRATTR_GRAFINVERT          - SDRATTR_START] = new SdrGrafInvertItem;
+//BFS04 ppPoolDefaults[ SDRATTR_GRAFMODE            - SDRATTR_START] = new SdrGrafModeItem;
+//BFS04 ppPoolDefaults[ SDRATTR_GRAFCROP            - SDRATTR_START] = new SdrGrafCropItem;
+//BFS04//BFS01  for( i = SDRATTR_GRAFRESERVE3; i <= SDRATTR_GRAFRESERVE6; i++ )
+//BFS04//BFS01      ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
+//BFS04//BFS01  ppPoolDefaults[ SDRATTRSET_GRAF - SDRATTR_START ] = new SdrGrafSetItem( pMaster );
+//BFS04 pItemInfos[SDRATTR_GRAFCROP-SDRATTR_START]._nSID=SID_ATTR_GRAF_CROP;
+//BFS04
+//BFS04 // 3D Object Attr (28092000 AW)
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_PERCENT_DIAGONAL - SDRATTR_START ] = new Svx3DPercentDiagonalItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_BACKSCALE - SDRATTR_START ] = new Svx3DBackscaleItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_DEPTH - SDRATTR_START ] = new Svx3DDepthItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_HORZ_SEGS - SDRATTR_START ] = new Svx3DHorizontalSegmentsItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_VERT_SEGS - SDRATTR_START ] = new Svx3DVerticalSegmentsItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_END_ANGLE - SDRATTR_START ] = new Svx3DEndAngleItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_DOUBLE_SIDED - SDRATTR_START ] = new Svx3DDoubleSidedItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_NORMALS_KIND - SDRATTR_START ] = new Svx3DNormalsKindItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_NORMALS_INVERT - SDRATTR_START ] = new Svx3DNormalsInvertItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_PROJ_X - SDRATTR_START ] = new Svx3DTextureProjectionXItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_PROJ_Y - SDRATTR_START ] = new Svx3DTextureProjectionYItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_SHADOW_3D - SDRATTR_START ] = new Svx3DShadow3DItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_MAT_COLOR - SDRATTR_START ] = new Svx3DMaterialColorItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_MAT_EMISSION - SDRATTR_START ] = new Svx3DMaterialEmissionItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_MAT_SPECULAR - SDRATTR_START ] = new Svx3DMaterialSpecularItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY - SDRATTR_START ] = new Svx3DMaterialSpecularIntensityItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_KIND - SDRATTR_START ] = new Svx3DTextureKindItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_MODE - SDRATTR_START ] = new Svx3DTextureModeItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_FILTER - SDRATTR_START ] = new Svx3DTextureFilterItem;
+//BFS04
+//BFS04 // #107245# Add new items for 3d objects
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_SMOOTH_NORMALS - SDRATTR_START ] = new Svx3DSmoothNormalsItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_SMOOTH_LIDS - SDRATTR_START ] = new Svx3DSmoothLidsItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_CHARACTER_MODE - SDRATTR_START ] = new Svx3DCharacterModeItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_CLOSE_FRONT - SDRATTR_START ] = new Svx3DCloseFrontItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_CLOSE_BACK - SDRATTR_START ] = new Svx3DCloseBackItem;
+//BFS04
+//BFS04 // #i28528#
+//BFS04 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
+//BFS04 ppPoolDefaults[ SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY - SDRATTR_START ] = new Svx3DReducedLineGeometryItem;
+//BFS04
+//BFS04 // #i28528# Start with SDRATTR_3DOBJ_RESERVED_07 now
+//BFS04//BFS01  for( i = SDRATTR_3DOBJ_RESERVED_07; i <= SDRATTR_3DOBJ_RESERVED_20; i++ )
+//BFS04//BFS01      ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
+//BFS04
+//BFS04 // 3D Scene Attr (28092000 AW)
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_PERSPECTIVE - SDRATTR_START ] = new Svx3DPerspectiveItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_DISTANCE - SDRATTR_START ] = new Svx3DDistanceItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_FOCAL_LENGTH - SDRATTR_START ] = new Svx3DFocalLengthItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_TWO_SIDED_LIGHTING - SDRATTR_START ] = new Svx3DTwoSidedLightingItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_1 - SDRATTR_START ] = new Svx3DLightcolor1Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_2 - SDRATTR_START ] = new Svx3DLightcolor2Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_3 - SDRATTR_START ] = new Svx3DLightcolor3Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_4 - SDRATTR_START ] = new Svx3DLightcolor4Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_5 - SDRATTR_START ] = new Svx3DLightcolor5Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_6 - SDRATTR_START ] = new Svx3DLightcolor6Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_7 - SDRATTR_START ] = new Svx3DLightcolor7Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_8 - SDRATTR_START ] = new Svx3DLightcolor8Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_AMBIENTCOLOR - SDRATTR_START ] = new Svx3DAmbientcolorItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_1 - SDRATTR_START ] = new Svx3DLightOnOff1Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_2 - SDRATTR_START ] = new Svx3DLightOnOff2Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_3 - SDRATTR_START ] = new Svx3DLightOnOff3Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_4 - SDRATTR_START ] = new Svx3DLightOnOff4Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_5 - SDRATTR_START ] = new Svx3DLightOnOff5Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_6 - SDRATTR_START ] = new Svx3DLightOnOff6Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_7 - SDRATTR_START ] = new Svx3DLightOnOff7Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_8 - SDRATTR_START ] = new Svx3DLightOnOff8Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_1 - SDRATTR_START ] = new Svx3DLightDirection1Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_2 - SDRATTR_START ] = new Svx3DLightDirection2Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_3 - SDRATTR_START ] = new Svx3DLightDirection3Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_4 - SDRATTR_START ] = new Svx3DLightDirection4Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_5 - SDRATTR_START ] = new Svx3DLightDirection5Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_6 - SDRATTR_START ] = new Svx3DLightDirection6Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_7 - SDRATTR_START ] = new Svx3DLightDirection7Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_8 - SDRATTR_START ] = new Svx3DLightDirection8Item;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_SHADOW_SLANT - SDRATTR_START ] = new Svx3DShadowSlantItem;
+//BFS04 ppPoolDefaults[ SDRATTR_3DSCENE_SHADE_MODE - SDRATTR_START ] = new Svx3DShadeModeItem;
+//BFS04
+//BFS04//BFS01  for( i = SDRATTR_3DSCENE_RESERVED_01; i <= SDRATTR_3DSCENE_RESERVED_20; i++ )
+//BFS04//BFS01      ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
+//BFS04
+//BFS04 // CustomShape Attr
+//BFS04 ppPoolDefaults[ SDRATTR_CUSTOMSHAPE_ENGINE - SDRATTR_START ] = new SdrCustomShapeEngineItem;
+//BFS04 ppPoolDefaults[ SDRATTR_CUSTOMSHAPE_DATA - SDRATTR_START ] = new SdrCustomShapeDataItem;
+//BFS04 ppPoolDefaults[ SDRATTR_CUSTOMSHAPE_GEOMETRY - SDRATTR_START ] = new SdrCustomShapeGeometryItem;
+//BFS04 ppPoolDefaults[ SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL - SDRATTR_START ] = new SdrCustomShapeReplacementURLItem;
+//BFS04//BFS01  for ( i = SDRATTR_CUSTOMSHAPE_RESERVED_01; i <= SDRATTR_CUSTOMSHAPE_RESERVED_20; i++ )
+//BFS04//BFS01      ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
+//BFS04
+//BFS04 ////////////////////////////////
+//BFS04#ifdef DBG_UTIL
+//BFS04 UINT16 nAnz(SDRATTR_END-SDRATTR_START + 1);
+//BFS04
+//BFS04 for(UINT16 nNum = 0; nNum < nAnz; nNum++)
+//BFS04 {
+//BFS04     const SfxPoolItem* pItem = ppPoolDefaults[nNum];
+//BFS04
+//BFS04     if(!pItem)
+//BFS04     {
+//BFS04         ByteString aStr("PoolDefaultItem not set: ");
+//BFS04
+//BFS04         aStr += "Num=";
+//BFS04         aStr += ByteString::CreateFromInt32( nNum );
+//BFS04         aStr += "Which=";
+//BFS04         aStr += ByteString::CreateFromInt32( nNum + 1000 );
+//BFS04
+//BFS04         DBG_ERROR(aStr.GetBuffer());
+//BFS04     }
+//BFS04     else if(pItem->Which() != nNum + 1000)
+//BFS04     {
+//BFS04         ByteString aStr("PoolDefaultItem has wrong WhichId: ");
+//BFS04
+//BFS04         aStr += "Num=";
+//BFS04         aStr += ByteString::CreateFromInt32( nNum );
+//BFS04         aStr += " Which=";
+//BFS04         aStr += ByteString::CreateFromInt32( pItem->Which() );
+//BFS04
+//BFS04         DBG_ERROR(aStr.GetBuffer());
+//BFS04     }
+//BFS04 }
+//BFS04#endif
+//BFS04
+//BFS04//BFS01  if (nAttrStart==SDRATTR_START && nAttrEnd==SDRATTR_END) {
+//BFS04     SetDefaults(ppPoolDefaults);
+//BFS04     SetItemInfos(pItemInfos);
+//BFS04//BFS01  }
+//BFS04}
 
 /*************************************************************************
 |*
@@ -493,8 +693,8 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
 |*
 \************************************************************************/
 
-SdrItemPool::SdrItemPool(const SdrItemPool& rPool):
-    XOutdevItemPool(rPool)
+SdrItemPool::SdrItemPool(const SdrItemPool& rPool)
+:   XOutdevItemPool(rPool)
 {
 }
 
@@ -517,18 +717,24 @@ SfxItemPool* __EXPORT SdrItemPool::Clone() const
 
 SdrItemPool::~SdrItemPool()
 {
-    Delete(); // erstmal den 'dtor' des SfxItemPools rufen
-    // und nun meine eigenen statischen Defaults abraeumen
-    if (ppPoolDefaults!=NULL) {
-        unsigned nBeg=SDRATTR_SHADOW-SDRATTR_START;
-        unsigned nEnd=SDRATTR_END-SDRATTR_START;
-        for (unsigned i=nBeg; i<=nEnd; i++) {
-            SetRefCount(*ppPoolDefaults[i],0);
-            delete ppPoolDefaults[i];
-            ppPoolDefaults[i]=NULL;
+    // dtor of SfxItemPool
+    Delete();
+
+    // clear own static Defaults
+    if(mppLocalPoolDefaults)
+    {
+        const sal_uInt16 nBeg(SDRATTR_SHADOW_FIRST - SDRATTR_START);
+        const sal_uInt16 nEnd(SDRATTR_END - SDRATTR_START);
+
+        for(sal_uInt16 i(nBeg); i <= nEnd; i++)
+        {
+            SetRefCount(*mppLocalPoolDefaults[i],0);
+            delete mppLocalPoolDefaults[i];
+            mppLocalPoolDefaults[i] = 0L;
         }
     }
-    // Vor dem zerstoeren die Pools ggf. voneinander trennen
+
+    // split pools before detroying
     SetSecondaryPool(NULL);
 }
 
@@ -555,7 +761,8 @@ SfxItemPresentation __EXPORT SdrItemPool::GetPresentation(
     return XOutdevItemPool::GetPresentation(rItem,ePresentation,ePresentationMetric,rText,pIntlWrapper);
 }
 
-FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
+//BFS04FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
+void SdrItemPool::TakeItemName(sal_uInt16 nWhich, String& rItemName)
 {
     ResMgr* pResMgr = ImpGetResMgr();
     USHORT  nResId = SIP_UNKNOWN_ATTR;
@@ -574,11 +781,11 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
         case XATTR_LINEENDCENTER    : nResId = SIP_XA_LINEENDCENTER;break;
         case XATTR_LINETRANSPARENCE : nResId = SIP_XA_LINETRANSPARENCE;break;
         case XATTR_LINEJOINT        : nResId = SIP_XA_LINEJOINT;break;
-        case XATTR_LINERESERVED2    : nResId = SIP_XA_LINERESERVED2;break;
-        case XATTR_LINERESERVED3    : nResId = SIP_XA_LINERESERVED3;break;
-        case XATTR_LINERESERVED4    : nResId = SIP_XA_LINERESERVED4;break;
-        case XATTR_LINERESERVED5    : nResId = SIP_XA_LINERESERVED5;break;
-        case XATTR_LINERESERVED_LAST: nResId = SIP_XA_LINERESERVED_LAST;break;
+//BFS01     case XATTR_LINERESERVED2    : nResId = SIP_XA_LINERESERVED2;break;
+//BFS01     case XATTR_LINERESERVED3    : nResId = SIP_XA_LINERESERVED3;break;
+//BFS01     case XATTR_LINERESERVED4    : nResId = SIP_XA_LINERESERVED4;break;
+//BFS01     case XATTR_LINERESERVED5    : nResId = SIP_XA_LINERESERVED5;break;
+//BFS01     case XATTR_LINERESERVED_LAST: nResId = SIP_XA_LINERESERVED_LAST;break;
         case XATTRSET_LINE          : nResId = SIP_XATTRSET_LINE;break;
 
         case XATTR_FILLSTYLE            : nResId = SIP_XA_FILLSTYLE;break;
@@ -598,18 +805,18 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
         case XATTR_FILLBMP_TILEOFFSETX  : nResId = SIP_XA_FILLBMP_TILEOFFSETX;break;
         case XATTR_FILLBMP_TILEOFFSETY  : nResId = SIP_XA_FILLBMP_TILEOFFSETY;break;
         case XATTR_FILLBMP_STRETCH      : nResId = SIP_XA_FILLBMP_STRETCH;break;
-        case XATTR_FILLRESERVED3        : nResId = SIP_XA_FILLRESERVED3;break;
-        case XATTR_FILLRESERVED4        : nResId = SIP_XA_FILLRESERVED4;break;
-        case XATTR_FILLRESERVED5        : nResId = SIP_XA_FILLRESERVED5;break;
-        case XATTR_FILLRESERVED6        : nResId = SIP_XA_FILLRESERVED6;break;
-        case XATTR_FILLRESERVED7        : nResId = SIP_XA_FILLRESERVED7;break;
-        case XATTR_FILLRESERVED8        : nResId = SIP_XA_FILLRESERVED8;break;
+//BFS01     case XATTR_FILLRESERVED3        : nResId = SIP_XA_FILLRESERVED3;break;
+//BFS01     case XATTR_FILLRESERVED4        : nResId = SIP_XA_FILLRESERVED4;break;
+//BFS01     case XATTR_FILLRESERVED5        : nResId = SIP_XA_FILLRESERVED5;break;
+//BFS01     case XATTR_FILLRESERVED6        : nResId = SIP_XA_FILLRESERVED6;break;
+//BFS01     case XATTR_FILLRESERVED7        : nResId = SIP_XA_FILLRESERVED7;break;
+//BFS01     case XATTR_FILLRESERVED8        : nResId = SIP_XA_FILLRESERVED8;break;
         case XATTR_FILLBMP_POSOFFSETX   : nResId = SIP_XA_FILLBMP_POSOFFSETX;break;
         case XATTR_FILLBMP_POSOFFSETY   : nResId = SIP_XA_FILLBMP_POSOFFSETY;break;
         case XATTR_FILLBACKGROUND       : nResId = SIP_XA_FILLBACKGROUND;break;
-        case XATTR_FILLRESERVED10       : nResId = SIP_XA_FILLRESERVED10;break;
-        case XATTR_FILLRESERVED11       : nResId = SIP_XA_FILLRESERVED11;break;
-        case XATTR_FILLRESERVED_LAST    : nResId = SIP_XA_FILLRESERVED_LAST;break;
+//BFS01     case XATTR_FILLRESERVED10       : nResId = SIP_XA_FILLRESERVED10;break;
+//BFS01     case XATTR_FILLRESERVED11       : nResId = SIP_XA_FILLRESERVED11;break;
+//BFS01     case XATTR_FILLRESERVED_LAST    : nResId = SIP_XA_FILLRESERVED_LAST;break;
 
         case XATTRSET_FILL             : nResId = SIP_XATTRSET_FILL;break;
 
@@ -626,12 +833,12 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
         case XATTR_FORMTXTSTDFORM   : nResId = SIP_XA_FORMTXTSTDFORM;break;
         case XATTR_FORMTXTHIDEFORM  : nResId = SIP_XA_FORMTXTHIDEFORM;break;
         case XATTR_FORMTXTSHDWTRANSP: nResId = SIP_XA_FORMTXTSHDWTRANSP;break;
-        case XATTR_FTRESERVED2      : nResId = SIP_XA_FTRESERVED2;break;
-        case XATTR_FTRESERVED3      : nResId = SIP_XA_FTRESERVED3;break;
-        case XATTR_FTRESERVED4      : nResId = SIP_XA_FTRESERVED4;break;
-        case XATTR_FTRESERVED5      : nResId = SIP_XA_FTRESERVED5;break;
-        case XATTR_FTRESERVED_LAST  : nResId = SIP_XA_FTRESERVED_LAST;break;
-        case XATTRSET_TEXT          : nResId = SIP_XATTRSET_TEXT;break;
+//BFS01     case XATTR_FTRESERVED2      : nResId = SIP_XA_FTRESERVED2;break;
+//BFS01     case XATTR_FTRESERVED3      : nResId = SIP_XA_FTRESERVED3;break;
+//BFS01     case XATTR_FTRESERVED4      : nResId = SIP_XA_FTRESERVED4;break;
+//BFS01     case XATTR_FTRESERVED5      : nResId = SIP_XA_FTRESERVED5;break;
+//BFS01     case XATTR_FTRESERVED_LAST  : nResId = SIP_XA_FTRESERVED_LAST;break;
+//BFS01     case XATTRSET_TEXT          : nResId = SIP_XATTRSET_TEXT;break;
 
         case SDRATTR_SHADOW            : nResId = SIP_SA_SHADOW;break;
         case SDRATTR_SHADOWCOLOR       : nResId = SIP_SA_SHADOWCOLOR;break;
@@ -640,12 +847,12 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
         case SDRATTR_SHADOWTRANSPARENCE: nResId = SIP_SA_SHADOWTRANSPARENCE;break;
         case SDRATTR_SHADOW3D          : nResId = SIP_SA_SHADOW3D;break;
         case SDRATTR_SHADOWPERSP       : nResId = SIP_SA_SHADOWPERSP;break;
-        case SDRATTR_SHADOWRESERVE1    : nResId = SIP_SA_SHADOWRESERVE1;break;
-        case SDRATTR_SHADOWRESERVE2    : nResId = SIP_SA_SHADOWRESERVE2;break;
-        case SDRATTR_SHADOWRESERVE3    : nResId = SIP_SA_SHADOWRESERVE3;break;
-        case SDRATTR_SHADOWRESERVE4    : nResId = SIP_SA_SHADOWRESERVE4;break;
-        case SDRATTR_SHADOWRESERVE5    : nResId = SIP_SA_SHADOWRESERVE5;break;
-        case SDRATTRSET_SHADOW         : nResId = SIP_SDRATTRSET_SHADOW;break;
+//BFS01     case SDRATTR_SHADOWRESERVE1    : nResId = SIP_SA_SHADOWRESERVE1;break;
+//BFS01     case SDRATTR_SHADOWRESERVE2    : nResId = SIP_SA_SHADOWRESERVE2;break;
+//BFS01     case SDRATTR_SHADOWRESERVE3    : nResId = SIP_SA_SHADOWRESERVE3;break;
+//BFS01     case SDRATTR_SHADOWRESERVE4    : nResId = SIP_SA_SHADOWRESERVE4;break;
+//BFS01     case SDRATTR_SHADOWRESERVE5    : nResId = SIP_SA_SHADOWRESERVE5;break;
+//BFS01     case SDRATTRSET_SHADOW         : nResId = SIP_SDRATTRSET_SHADOW;break;
 
         case SDRATTR_CAPTIONTYPE      : nResId = SIP_SA_CAPTIONTYPE;break;
         case SDRATTR_CAPTIONFIXEDANGLE: nResId = SIP_SA_CAPTIONFIXEDANGLE;break;
@@ -657,14 +864,14 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
         case SDRATTR_CAPTIONESCABS    : nResId = SIP_SA_CAPTIONESCABS;break;
         case SDRATTR_CAPTIONLINELEN   : nResId = SIP_SA_CAPTIONLINELEN;break;
         case SDRATTR_CAPTIONFITLINELEN: nResId = SIP_SA_CAPTIONFITLINELEN;break;
-        case SDRATTR_CAPTIONRESERVE1  : nResId = SIP_SA_CAPTIONRESERVE1;break;
-        case SDRATTR_CAPTIONRESERVE2  : nResId = SIP_SA_CAPTIONRESERVE2;break;
-        case SDRATTR_CAPTIONRESERVE3  : nResId = SIP_SA_CAPTIONRESERVE3;break;
-        case SDRATTR_CAPTIONRESERVE4  : nResId = SIP_SA_CAPTIONRESERVE4;break;
-        case SDRATTR_CAPTIONRESERVE5  : nResId = SIP_SA_CAPTIONRESERVE5;break;
-        case SDRATTRSET_CAPTION       : nResId = SIP_SDRATTRSET_CAPTION;break;
+//BFS01     case SDRATTR_CAPTIONRESERVE1  : nResId = SIP_SA_CAPTIONRESERVE1;break;
+//BFS01     case SDRATTR_CAPTIONRESERVE2  : nResId = SIP_SA_CAPTIONRESERVE2;break;
+//BFS01     case SDRATTR_CAPTIONRESERVE3  : nResId = SIP_SA_CAPTIONRESERVE3;break;
+//BFS01     case SDRATTR_CAPTIONRESERVE4  : nResId = SIP_SA_CAPTIONRESERVE4;break;
+//BFS01     case SDRATTR_CAPTIONRESERVE5  : nResId = SIP_SA_CAPTIONRESERVE5;break;
+//BFS01     case SDRATTRSET_CAPTION       : nResId = SIP_SDRATTRSET_CAPTION;break;
 
-        case SDRATTRSET_OUTLINER: nResId = SIP_SDRATTRSET_OUTLINER;break;
+//BFS01     case SDRATTRSET_OUTLINER: nResId = SIP_SDRATTRSET_OUTLINER;break;
 
         case SDRATTR_ECKENRADIUS            : nResId = SIP_SA_ECKENRADIUS;break;
         case SDRATTR_TEXT_MINFRAMEHEIGHT    : nResId = SIP_SA_TEXT_MINFRAMEHEIGHT;break;
@@ -693,9 +900,9 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
         case SDRATTR_TEXT_USEFIXEDCELLHEIGHT: nResId = SIP_SA_TEXT_USEFIXEDCELLHEIGHT;break;
         case SDRATTR_TEXT_WORDWRAP          : nResId = SIP_SA_WORDWRAP;break;
         case SDRATTR_TEXT_AUTOGROWSIZE      : nResId = SIP_SA_AUTOGROWSIZE;break;
-        case SDRATTR_RESERVE18              : nResId = SIP_SA_RESERVE18;break;
-        case SDRATTR_RESERVE19              : nResId = SIP_SA_RESERVE19;break;
-        case SDRATTRSET_MISC                : nResId = SIP_SDRATTRSET_MISC;break;
+//BFS01     case SDRATTR_RESERVE18              : nResId = SIP_SA_RESERVE18;break;
+//BFS01     case SDRATTR_RESERVE19              : nResId = SIP_SA_RESERVE19;break;
+//BFS01     case SDRATTRSET_MISC                : nResId = SIP_SDRATTRSET_MISC;break;
 
         case SDRATTR_EDGEKIND           : nResId = SIP_SA_EDGEKIND;break;
         case SDRATTR_EDGENODE1HORZDIST  : nResId = SIP_SA_EDGENODE1HORZDIST;break;
@@ -708,15 +915,15 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
         case SDRATTR_EDGELINE1DELTA     : nResId = SIP_SA_EDGELINE1DELTA;break;
         case SDRATTR_EDGELINE2DELTA     : nResId = SIP_SA_EDGELINE2DELTA;break;
         case SDRATTR_EDGELINE3DELTA     : nResId = SIP_SA_EDGELINE3DELTA;break;
-        case SDRATTR_EDGERESERVE02      : nResId = SIP_SA_EDGERESERVE02;break;
-        case SDRATTR_EDGERESERVE03      : nResId = SIP_SA_EDGERESERVE03;break;
-        case SDRATTR_EDGERESERVE04      : nResId = SIP_SA_EDGERESERVE04;break;
-        case SDRATTR_EDGERESERVE05      : nResId = SIP_SA_EDGERESERVE05;break;
-        case SDRATTR_EDGERESERVE06      : nResId = SIP_SA_EDGERESERVE06;break;
-        case SDRATTR_EDGERESERVE07      : nResId = SIP_SA_EDGERESERVE07;break;
-        case SDRATTR_EDGERESERVE08      : nResId = SIP_SA_EDGERESERVE08;break;
-        case SDRATTR_EDGERESERVE09      : nResId = SIP_SA_EDGERESERVE09;break;
-        case SDRATTRSET_EDGE            : nResId = SIP_SDRATTRSET_EDGE;break;
+//BFS01     case SDRATTR_EDGERESERVE02      : nResId = SIP_SA_EDGERESERVE02;break;
+//BFS01     case SDRATTR_EDGERESERVE03      : nResId = SIP_SA_EDGERESERVE03;break;
+//BFS01     case SDRATTR_EDGERESERVE04      : nResId = SIP_SA_EDGERESERVE04;break;
+//BFS01     case SDRATTR_EDGERESERVE05      : nResId = SIP_SA_EDGERESERVE05;break;
+//BFS01     case SDRATTR_EDGERESERVE06      : nResId = SIP_SA_EDGERESERVE06;break;
+//BFS01     case SDRATTR_EDGERESERVE07      : nResId = SIP_SA_EDGERESERVE07;break;
+//BFS01     case SDRATTR_EDGERESERVE08      : nResId = SIP_SA_EDGERESERVE08;break;
+//BFS01     case SDRATTR_EDGERESERVE09      : nResId = SIP_SA_EDGERESERVE09;break;
+//BFS01     case SDRATTRSET_EDGE            : nResId = SIP_SDRATTRSET_EDGE;break;
 
         case SDRATTR_MEASUREKIND             : nResId = SIP_SA_MEASUREKIND;break;
         case SDRATTR_MEASURETEXTHPOS         : nResId = SIP_SA_MEASURETEXTHPOS;break;
@@ -739,19 +946,19 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
         case SDRATTR_MEASURETEXTISFIXEDANGLE : nResId = SIP_SA_MEASURETEXTISFIXEDANGLE;break;
         case SDRATTR_MEASURETEXTFIXEDANGLE   : nResId = SIP_SA_MEASURETEXTFIXEDANGLE;break;
         case SDRATTR_MEASUREDECIMALPLACES    : nResId = SIP_SA_MEASUREDECIMALPLACES;break;
-        case SDRATTR_MEASURERESERVE05        : nResId = SIP_SA_MEASURERESERVE05;break;
-        case SDRATTR_MEASURERESERVE06        : nResId = SIP_SA_MEASURERESERVE06;break;
-        case SDRATTR_MEASURERESERVE07        : nResId = SIP_SA_MEASURERESERVE07;break;
-        case SDRATTRSET_MEASURE              : nResId = SIP_SDRATTRSET_MEASURE;break;
+//BFS01     case SDRATTR_MEASURERESERVE05        : nResId = SIP_SA_MEASURERESERVE05;break;
+//BFS01     case SDRATTR_MEASURERESERVE06        : nResId = SIP_SA_MEASURERESERVE06;break;
+//BFS01     case SDRATTR_MEASURERESERVE07        : nResId = SIP_SA_MEASURERESERVE07;break;
+//BFS01     case SDRATTRSET_MEASURE              : nResId = SIP_SDRATTRSET_MEASURE;break;
 
         case SDRATTR_CIRCKIND      : nResId = SIP_SA_CIRCKIND;break;
         case SDRATTR_CIRCSTARTANGLE: nResId = SIP_SA_CIRCSTARTANGLE;break;
         case SDRATTR_CIRCENDANGLE  : nResId = SIP_SA_CIRCENDANGLE;break;
-        case SDRATTR_CIRCRESERVE0  : nResId = SIP_SA_CIRCRESERVE0;break;
-        case SDRATTR_CIRCRESERVE1  : nResId = SIP_SA_CIRCRESERVE1;break;
-        case SDRATTR_CIRCRESERVE2  : nResId = SIP_SA_CIRCRESERVE2;break;
-        case SDRATTR_CIRCRESERVE3  : nResId = SIP_SA_CIRCRESERVE3;break;
-        case SDRATTRSET_CIRC       : nResId = SIP_SDRATTRSET_CIRC;break;
+//BFS01     case SDRATTR_CIRCRESERVE0  : nResId = SIP_SA_CIRCRESERVE0;break;
+//BFS01     case SDRATTR_CIRCRESERVE1  : nResId = SIP_SA_CIRCRESERVE1;break;
+//BFS01     case SDRATTR_CIRCRESERVE2  : nResId = SIP_SA_CIRCRESERVE2;break;
+//BFS01     case SDRATTR_CIRCRESERVE3  : nResId = SIP_SA_CIRCRESERVE3;break;
+//BFS01     case SDRATTRSET_CIRC       : nResId = SIP_SDRATTRSET_CIRC;break;
 
         case SDRATTR_OBJMOVEPROTECT : nResId = SIP_SA_OBJMOVEPROTECT;break;
         case SDRATTR_OBJSIZEPROTECT : nResId = SIP_SA_OBJSIZEPROTECT;break;
@@ -798,11 +1005,11 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
         case SDRATTR_GRAFINVERT         : nResId = SIP_SA_GRAFINVERT;break;
         case SDRATTR_GRAFMODE           : nResId = SIP_SA_GRAFMODE;break;
         case SDRATTR_GRAFCROP           : nResId = SIP_SA_GRAFCROP;break;
-        case SDRATTR_GRAFRESERVE3       : nResId = SIP_SA_GRAFRESERVE3;break;
-        case SDRATTR_GRAFRESERVE4       : nResId = SIP_SA_GRAFRESERVE4;break;
-        case SDRATTR_GRAFRESERVE5       : nResId = SIP_SA_GRAFRESERVE5;break;
-        case SDRATTR_GRAFRESERVE6       : nResId = SIP_SA_GRAFRESERVE6;break;
-        case SDRATTRSET_GRAF            : nResId = SIP_SDRATTRSET_GRAF;break;
+//BFS01     case SDRATTR_GRAFRESERVE3       : nResId = SIP_SA_GRAFRESERVE3;break;
+//BFS01     case SDRATTR_GRAFRESERVE4       : nResId = SIP_SA_GRAFRESERVE4;break;
+//BFS01     case SDRATTR_GRAFRESERVE5       : nResId = SIP_SA_GRAFRESERVE5;break;
+//BFS01     case SDRATTR_GRAFRESERVE6       : nResId = SIP_SA_GRAFRESERVE6;break;
+//BFS01     case SDRATTRSET_GRAF            : nResId = SIP_SDRATTRSET_GRAF;break;
 
         case EE_PARA_HYPHENATE  : nResId = SIP_EE_PARA_HYPHENATE;break;
         case EE_PARA_BULLETSTATE: nResId = SIP_EE_PARA_BULLETSTATE;break;
@@ -836,298 +1043,298 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
     } // switch
 
     rItemName = String( ResId( nResId, pResMgr ) );
-
-    return (BOOL)rItemName.Len();
+//BFS04
+//BFS04 return (BOOL)rItemName.Len();
 }
 
-BOOL SdrItemPool::TakeWhichName(USHORT nWhich, ByteString& rWhichName)
-{
-    ByteString aStr;
-
-#ifdef DBG_UTIL
-    switch(nWhich)
-    {
-        case XATTR_LINESTYLE                 : aStr="XATTR_LINESTYLE                 "; break;
-        case XATTR_LINEDASH                  : aStr="XATTR_LINEDASH                  "; break;
-        case XATTR_LINEWIDTH                 : aStr="XATTR_LINEWIDTH                 "; break;
-        case XATTR_LINECOLOR                 : aStr="XATTR_LINECOLOR                 "; break;
-        case XATTR_LINESTART                 : aStr="XATTR_LINESTART                 "; break;
-        case XATTR_LINEEND                   : aStr="XATTR_LINEEND                   "; break;
-        case XATTR_LINESTARTWIDTH            : aStr="XATTR_LINESTARTWIDTH            "; break;
-        case XATTR_LINEENDWIDTH              : aStr="XATTR_LINEENDWIDTH              "; break;
-        case XATTR_LINESTARTCENTER           : aStr="XATTR_LINESTARTCENTER           "; break;
-        case XATTR_LINEENDCENTER             : aStr="XATTR_LINEENDCENTER             "; break;
-        case XATTR_LINETRANSPARENCE          : aStr="XATTR_LINETRANSPARENCE          "; break;
-        case XATTR_LINEJOINT                 : aStr="XATTR_LINEJOINT                 "; break;
-        case XATTR_LINERESERVED2             : aStr="XATTR_LINERESERVED2             "; break;
-        case XATTR_LINERESERVED3             : aStr="XATTR_LINERESERVED3             "; break;
-        case XATTR_LINERESERVED4             : aStr="XATTR_LINERESERVED4             "; break;
-        case XATTR_LINERESERVED5             : aStr="XATTR_LINERESERVED5             "; break;
-        case XATTR_LINERESERVED_LAST         : aStr="XATTR_LINERESERVED_LAST         "; break;
-        case XATTRSET_LINE                   : aStr="XATTRSET_LINE                   "; break;
-
-        case XATTR_FILLSTYLE                 : aStr="XATTR_FILLSTYLE                 "; break;
-        case XATTR_FILLCOLOR                 : aStr="XATTR_FILLCOLOR                 "; break;
-        case XATTR_FILLGRADIENT              : aStr="XATTR_FILLGRADIENT              "; break;
-        case XATTR_FILLHATCH                 : aStr="XATTR_FILLHATCH                 "; break;
-        case XATTR_FILLBITMAP                : aStr="XATTR_FILLBITMAP                "; break;
-        case XATTR_FILLTRANSPARENCE          : aStr="XATTR_FILLTRANSPARENCE          "; break;
-        case XATTR_GRADIENTSTEPCOUNT         : aStr="XATTR_GRADIENTSTEPCOUNT         "; break;
-
-        case XATTR_FILLBMP_TILE              : aStr="XATTR_FILLBMP_TILE              "; break;
-        case XATTR_FILLBMP_POS               : aStr="XATTR_FILLBMP_POS               "; break;
-        case XATTR_FILLBMP_SIZEX             : aStr="XATTR_FILLBMP_SIZEX             "; break;
-        case XATTR_FILLBMP_SIZEY             : aStr="XATTR_FILLBMP_SIZEY             "; break;
-        case XATTR_FILLFLOATTRANSPARENCE     : aStr="XATTR_FILLFLOATTRANSPARENCE     "; break;
-        case XATTR_SECONDARYFILLCOLOR        : aStr="XATTR_SECONDARYFILLCOLOR        "; break;
-        case XATTR_FILLBMP_SIZELOG           : aStr="XATTR_FILLBMP_SIZELOG           "; break;
-        case XATTR_FILLBMP_TILEOFFSETX       : aStr="XATTR_FILLBMP_TILEOFFSETX       "; break;
-        case XATTR_FILLBMP_TILEOFFSETY       : aStr="XATTR_FILLBMP_TILEOFFSETY       "; break;
-
-        case XATTR_FILLBMP_STRETCH           : aStr="XATTR_FILLBMP_STRETCH           "; break;
-        case XATTR_FILLRESERVED3             : aStr="XATTR_FILLRESERVED3             "; break;
-        case XATTR_FILLRESERVED4             : aStr="XATTR_FILLRESERVED4             "; break;
-        case XATTR_FILLRESERVED5             : aStr="XATTR_FILLRESERVED5             "; break;
-        case XATTR_FILLRESERVED6             : aStr="XATTR_FILLRESERVED6             "; break;
-        case XATTR_FILLRESERVED7             : aStr="XATTR_FILLRESERVED7             "; break;
-        case XATTR_FILLRESERVED8             : aStr="XATTR_FILLRESERVED8             "; break;
-        case XATTR_FILLBMP_POSOFFSETX        : aStr="XATTR_FILLBMP_POSOFFSETX        "; break;
-        case XATTR_FILLBMP_POSOFFSETY        : aStr="XATTR_FILLBMP_POSOFFSETY        "; break;
-        case XATTR_FILLBACKGROUND            : aStr="XATTR_FILLBACKGROUND            "; break;
-        case XATTR_FILLRESERVED10            : aStr="XATTR_FILLRESERVED10            "; break;
-        case XATTR_FILLRESERVED11            : aStr="XATTR_FILLRESERVED11            "; break;
-        case XATTR_FILLRESERVED_LAST         : aStr="XATTR_FILLRESERVED_LAST         "; break;
-
-        case XATTRSET_FILL                   : aStr="XATTRSET_FILL                   "; break;
-
-        case XATTR_FORMTXTSTYLE              : aStr="XATTR_FORMTXTSTYLE              "; break;
-        case XATTR_FORMTXTADJUST             : aStr="XATTR_FORMTXTADJUST             "; break;
-        case XATTR_FORMTXTDISTANCE           : aStr="XATTR_FORMTXTDISTANCE           "; break;
-        case XATTR_FORMTXTSTART              : aStr="XATTR_FORMTXTSTART              "; break;
-        case XATTR_FORMTXTMIRROR             : aStr="XATTR_FORMTXTMIRROR             "; break;
-        case XATTR_FORMTXTOUTLINE            : aStr="XATTR_FORMTXTOUTLINE            "; break;
-        case XATTR_FORMTXTSHADOW             : aStr="XATTR_FORMTXTSHADOW             "; break;
-        case XATTR_FORMTXTSHDWCOLOR          : aStr="XATTR_FORMTXTSHDWCOLOR          "; break;
-        case XATTR_FORMTXTSHDWXVAL           : aStr="XATTR_FORMTXTSHDWXVAL           "; break;
-        case XATTR_FORMTXTSHDWYVAL           : aStr="XATTR_FORMTXTSHDWYVAL           "; break;
-        case XATTR_FORMTXTSTDFORM            : aStr="XATTR_FORMTXTSTDFORM            "; break;
-        case XATTR_FORMTXTHIDEFORM           : aStr="XATTR_FORMTXTHIDEFORM           "; break;
-        case XATTR_FORMTXTSHDWTRANSP         : aStr="XATTR_FORMTXTSHDWTRANSP         "; break;
-        case XATTR_FTRESERVED2               : aStr="XATTR_FTRESERVED2               "; break;
-        case XATTR_FTRESERVED3               : aStr="XATTR_FTRESERVED3               "; break;
-        case XATTR_FTRESERVED4               : aStr="XATTR_FTRESERVED4               "; break;
-        case XATTR_FTRESERVED5               : aStr="XATTR_FTRESERVED5               "; break;
-        case XATTR_FTRESERVED_LAST           : aStr="XATTR_FTRESERVED_LAST           "; break;
-        case XATTRSET_TEXT                   : aStr="XATTRSET_TEXT                   "; break;
-
-        case SDRATTR_SHADOW                  : aStr="SDRATTR_SHADOW                  "; break;
-        case SDRATTR_SHADOWCOLOR             : aStr="SDRATTR_SHADOWCOLOR             "; break;
-        case SDRATTR_SHADOWXDIST             : aStr="SDRATTR_SHADOWXDIST             "; break;
-        case SDRATTR_SHADOWYDIST             : aStr="SDRATTR_SHADOWYDIST             "; break;
-        case SDRATTR_SHADOWTRANSPARENCE      : aStr="SDRATTR_SHADOWTRANSPARENCE      "; break;
-        case SDRATTR_SHADOW3D                : aStr="SDRATTR_SHADOW3D                "; break;
-        case SDRATTR_SHADOWPERSP             : aStr="SDRATTR_SHADOWPERSP             "; break;
-        case SDRATTR_SHADOWRESERVE1          : aStr="SDRATTR_SHADOWRESERVE1          "; break;
-        case SDRATTR_SHADOWRESERVE2          : aStr="SDRATTR_SHADOWRESERVE2          "; break;
-        case SDRATTR_SHADOWRESERVE3          : aStr="SDRATTR_SHADOWRESERVE3          "; break;
-        case SDRATTR_SHADOWRESERVE4          : aStr="SDRATTR_SHADOWRESERVE4          "; break;
-        case SDRATTR_SHADOWRESERVE5          : aStr="SDRATTR_SHADOWRESERVE5          "; break;
-        case SDRATTRSET_SHADOW               : aStr="SDRATTRSET_SHADOW               "; break;
-
-        case SDRATTR_CAPTIONTYPE             : aStr="SDRATTR_CAPTIONTYPE             "; break;
-        case SDRATTR_CAPTIONFIXEDANGLE       : aStr="SDRATTR_CAPTIONFIXEDANGLE       "; break;
-        case SDRATTR_CAPTIONANGLE            : aStr="SDRATTR_CAPTIONANGLE            "; break;
-        case SDRATTR_CAPTIONGAP              : aStr="SDRATTR_CAPTIONGAP              "; break;
-        case SDRATTR_CAPTIONESCDIR           : aStr="SDRATTR_CAPTIONESCDIR           "; break;
-        case SDRATTR_CAPTIONESCISREL         : aStr="SDRATTR_CAPTIONESCISREL         "; break;
-        case SDRATTR_CAPTIONESCREL           : aStr="SDRATTR_CAPTIONESCREL           "; break;
-        case SDRATTR_CAPTIONESCABS           : aStr="SDRATTR_CAPTIONESCABS           "; break;
-        case SDRATTR_CAPTIONLINELEN          : aStr="SDRATTR_CAPTIONLINELEN          "; break;
-        case SDRATTR_CAPTIONFITLINELEN       : aStr="SDRATTR_CAPTIONFITLINELEN       "; break;
-        case SDRATTR_CAPTIONRESERVE1         : aStr="SDRATTR_CAPTIONRESERVE1         "; break;
-        case SDRATTR_CAPTIONRESERVE2         : aStr="SDRATTR_CAPTIONRESERVE2         "; break;
-        case SDRATTR_CAPTIONRESERVE3         : aStr="SDRATTR_CAPTIONRESERVE3         "; break;
-        case SDRATTR_CAPTIONRESERVE4         : aStr="SDRATTR_CAPTIONRESERVE4         "; break;
-        case SDRATTR_CAPTIONRESERVE5         : aStr="SDRATTR_CAPTIONRESERVE5         "; break;
-        case SDRATTRSET_CAPTION              : aStr="SDRATTRSET_CAPTION              "; break;
-
-        case SDRATTRSET_OUTLINER             : aStr="SDRATTRSET_OUTLINER             "; break;
-
-        case SDRATTR_ECKENRADIUS             : aStr="SDRATTR_ECKENRADIUS             "; break;
-        case SDRATTR_TEXT_MINFRAMEHEIGHT     : aStr="SDRATTR_TEXT_MINFRAMEHEIGHT     "; break;
-        case SDRATTR_TEXT_AUTOGROWHEIGHT     : aStr="SDRATTR_TEXT_AUTOGROWHEIGHT     "; break;
-        case SDRATTR_TEXT_FITTOSIZE          : aStr="SDRATTR_TEXT_FITTOSIZE          "; break;
-        case SDRATTR_TEXT_LEFTDIST           : aStr="SDRATTR_TEXT_LEFTDIST           "; break;
-        case SDRATTR_TEXT_RIGHTDIST          : aStr="SDRATTR_TEXT_RIGHTDIST          "; break;
-        case SDRATTR_TEXT_UPPERDIST          : aStr="SDRATTR_TEXT_UPPERDIST          "; break;
-        case SDRATTR_TEXT_LOWERDIST          : aStr="SDRATTR_TEXT_LOWERDIST          "; break;
-        case SDRATTR_TEXT_VERTADJUST         : aStr="SDRATTR_TEXT_VERTADJUST         "; break;
-        case SDRATTR_TEXT_MAXFRAMEHEIGHT     : aStr="SDRATTR_TEXT_MAXFRAMEHEIGHT     "; break;
-        case SDRATTR_TEXT_MINFRAMEWIDTH      : aStr="SDRATTR_TEXT_MINFRAMEWIDTH      "; break;
-        case SDRATTR_TEXT_MAXFRAMEWIDTH      : aStr="SDRATTR_TEXT_MAXFRAMEWIDTH      "; break;
-        case SDRATTR_TEXT_AUTOGROWWIDTH      : aStr="SDRATTR_TEXT_AUTOGROWWIDTH      "; break;
-        case SDRATTR_TEXT_HORZADJUST         : aStr="SDRATTR_TEXT_HORZADJUST         "; break;
-        case SDRATTR_TEXT_ANIKIND            : aStr="SDRATTR_TEXT_ANIKIND            "; break;
-        case SDRATTR_TEXT_ANIDIRECTION       : aStr="SDRATTR_TEXT_ANIDIRECTION       "; break;
-        case SDRATTR_TEXT_ANISTARTINSIDE     : aStr="SDRATTR_TEXT_ANISTARTINSIDE     "; break;
-        case SDRATTR_TEXT_ANISTOPINSIDE      : aStr="SDRATTR_TEXT_ANISTOPINSIDE      "; break;
-        case SDRATTR_TEXT_ANICOUNT           : aStr="SDRATTR_TEXT_ANICOUNT           "; break;
-        case SDRATTR_TEXT_ANIDELAY           : aStr="SDRATTR_TEXT_ANIDELAY           "; break;
-        case SDRATTR_TEXT_ANIAMOUNT          : aStr="SDRATTR_TEXT_ANIAMOUNT          "; break;
-        case SDRATTR_TEXT_CONTOURFRAME       : aStr="SDRATTR_TEXT_CONTOURFRAME       "; break;
-        case SDRATTR_CUSTOMSHAPE_ADJUSTMENT  : aStr="SDRATTR_CUSTOMSHAPE_ADJUSTMENT    "; break;
-        case SDRATTR_XMLATTRIBUTES           : aStr="SDRATTR_XMLATTRIBUTES           "; break;
-        case SDRATTR_TEXT_USEFIXEDCELLHEIGHT : aStr="SDRATTR_TEXT_USEFIXEDCELLHEIGHT "; break;
-        case SDRATTR_TEXT_WORDWRAP           : aStr="SDRATTR_TEXT_WORDWRAP           "; break;
-        case SDRATTR_TEXT_AUTOGROWSIZE       : aStr="SDRATTR_AUTOGROWSIZE            "; break;
-        case SDRATTR_RESERVE18               : aStr="SDRATTR_RESERVE18               "; break;
-        case SDRATTR_RESERVE19               : aStr="SDRATTR_RESERVE19               "; break;
-        case SDRATTRSET_MISC                 : aStr="SDRATTRSET_MISC                 "; break;
-
-        case SDRATTR_EDGEKIND                : aStr="SDRATTR_EDGEKIND                "; break;
-        case SDRATTR_EDGENODE1HORZDIST       : aStr="SDRATTR_EDGENODE1HORZDIST       "; break;
-        case SDRATTR_EDGENODE1VERTDIST       : aStr="SDRATTR_EDGENODE1VERTDIST       "; break;
-        case SDRATTR_EDGENODE2HORZDIST       : aStr="SDRATTR_EDGENODE2HORZDIST       "; break;
-        case SDRATTR_EDGENODE2VERTDIST       : aStr="SDRATTR_EDGENODE2VERTDIST       "; break;
-        case SDRATTR_EDGENODE1GLUEDIST       : aStr="SDRATTR_EDGENODE1GLUEDIST       "; break;
-        case SDRATTR_EDGENODE2GLUEDIST       : aStr="SDRATTR_EDGENODE2GLUEDIST       "; break;
-        case SDRATTR_EDGELINEDELTAANZ        : aStr="SDRATTR_EDGELINEDELTAANZ        "; break;
-        case SDRATTR_EDGELINE1DELTA          : aStr="SDRATTR_EDGELINE1DELTA          "; break;
-        case SDRATTR_EDGELINE2DELTA          : aStr="SDRATTR_EDGELINE2DELTA          "; break;
-        case SDRATTR_EDGELINE3DELTA          : aStr="SDRATTR_EDGELINE3DELTA          "; break;
-        case SDRATTR_EDGERESERVE02           : aStr="SDRATTR_EDGERESERVE02           "; break;
-        case SDRATTR_EDGERESERVE03           : aStr="SDRATTR_EDGERESERVE03           "; break;
-        case SDRATTR_EDGERESERVE04           : aStr="SDRATTR_EDGERESERVE04           "; break;
-        case SDRATTR_EDGERESERVE05           : aStr="SDRATTR_EDGERESERVE05           "; break;
-        case SDRATTR_EDGERESERVE06           : aStr="SDRATTR_EDGERESERVE06           "; break;
-        case SDRATTR_EDGERESERVE07           : aStr="SDRATTR_EDGERESERVE07           "; break;
-        case SDRATTR_EDGERESERVE08           : aStr="SDRATTR_EDGERESERVE08           "; break;
-        case SDRATTR_EDGERESERVE09           : aStr="SDRATTR_EDGERESERVE09           "; break;
-        case SDRATTRSET_EDGE                 : aStr="SDRATTRSET_EDGE                 "; break;
-
-        case SDRATTR_MEASUREKIND             : aStr="SDRATTR_MEASUREKIND             "; break;
-        case SDRATTR_MEASURETEXTHPOS         : aStr="SDRATTR_MEASURETEXTHPOS         "; break;
-        case SDRATTR_MEASURETEXTVPOS         : aStr="SDRATTR_MEASURETEXTVPOS         "; break;
-        case SDRATTR_MEASURELINEDIST         : aStr="SDRATTR_MEASURELINEDIST         "; break;
-        case SDRATTR_MEASUREHELPLINEOVERHANG : aStr="SDRATTR_MEASUREHELPLINEOVERHANG "; break;
-        case SDRATTR_MEASUREHELPLINEDIST     : aStr="SDRATTR_MEASUREHELPLINEDIST     "; break;
-        case SDRATTR_MEASUREHELPLINE1LEN     : aStr="SDRATTR_MEASUREHELPLINE1LEN     "; break;
-        case SDRATTR_MEASUREHELPLINE2LEN     : aStr="SDRATTR_MEASUREHELPLINE2LEN     "; break;
-        case SDRATTR_MEASUREBELOWREFEDGE     : aStr="SDRATTR_MEASUREBELOWREFEDGE     "; break;
-        case SDRATTR_MEASURETEXTROTA90       : aStr="SDRATTR_MEASURETEXTROTA90       "; break;
-        case SDRATTR_MEASURETEXTUPSIDEDOWN   : aStr="SDRATTR_MEASURETEXTUPSIDEDOWN   "; break;
-        case SDRATTR_MEASUREOVERHANG         : aStr="SDRATTR_MEASUREOVERHANG         "; break;
-        case SDRATTR_MEASUREUNIT             : aStr="SDRATTR_MEASUREUNIT             "; break;
-        case SDRATTR_MEASURESCALE            : aStr="SDRATTR_MEASURESCALE            "; break;
-        case SDRATTR_MEASURESHOWUNIT         : aStr="SDRATTR_MEASURESHOWUNIT         "; break;
-        case SDRATTR_MEASUREFORMATSTRING     : aStr="SDRATTR_MEASUREFORMATSTRING     "; break;
-        case SDRATTR_MEASURETEXTAUTOANGLE    : aStr="SDRATTR_MEASURETEXTAUTOANGLE    "; break;
-        case SDRATTR_MEASURETEXTAUTOANGLEVIEW: aStr="SDRATTR_MEASURETEXTAUTOANGLEVIEW"; break;
-        case SDRATTR_MEASURETEXTISFIXEDANGLE : aStr="SDRATTR_MEASURETEXTISFIXEDANGLE "; break;
-        case SDRATTR_MEASURETEXTFIXEDANGLE   : aStr="SDRATTR_MEASURETEXTFIXEDANGLE   "; break;
-        case SDRATTR_MEASUREDECIMALPLACES    : aStr="SDRATTR_MEASUREDECIMALPLACES    "; break;
-        case SDRATTR_MEASURERESERVE05        : aStr="SDRATTR_MEASURERESERVE05        "; break;
-        case SDRATTR_MEASURERESERVE06        : aStr="SDRATTR_MEASURERESERVE06        "; break;
-        case SDRATTR_MEASURERESERVE07        : aStr="SDRATTR_MEASURERESERVE07        "; break;
-        case SDRATTRSET_MEASURE              : aStr="SDRATTRSET_MEASURE              "; break;
-
-        case SDRATTR_CIRCKIND                : aStr="SDRATTR_CIRCKIND                "; break;
-        case SDRATTR_CIRCSTARTANGLE          : aStr="SDRATTR_CIRCSTARTANGLE          "; break;
-        case SDRATTR_CIRCENDANGLE            : aStr="SDRATTR_CIRCENDANGLE            "; break;
-        case SDRATTR_CIRCRESERVE0            : aStr="SDRATTR_CIRCRESERVE0            "; break;
-        case SDRATTR_CIRCRESERVE1            : aStr="SDRATTR_CIRCRESERVE1            "; break;
-        case SDRATTR_CIRCRESERVE2            : aStr="SDRATTR_CIRCRESERVE2            "; break;
-        case SDRATTR_CIRCRESERVE3            : aStr="SDRATTR_CIRCRESERVE3            "; break;
-        case SDRATTRSET_CIRC                 : aStr="SDRATTRSET_CIRC                 "; break;
-
-        case SDRATTR_OBJMOVEPROTECT          : aStr="SDRATTR_OBJMOVEPROTECT          "; break;
-        case SDRATTR_OBJSIZEPROTECT          : aStr="SDRATTR_OBJSIZEPROTECT          "; break;
-        case SDRATTR_OBJPRINTABLE            : aStr="SDRATTR_OBJPRINTABLE            "; break;
-        case SDRATTR_LAYERID                 : aStr="SDRATTR_LAYERID                 "; break;
-        case SDRATTR_LAYERNAME               : aStr="SDRATTR_LAYERNAME               "; break;
-        case SDRATTR_OBJECTNAME              : aStr="SDRATTR_OBJECTNAME              "; break;
-        case SDRATTR_ALLPOSITIONX            : aStr="SDRATTR_ALLPOSITIONX            "; break;
-        case SDRATTR_ALLPOSITIONY            : aStr="SDRATTR_ALLPOSITIONY            "; break;
-        case SDRATTR_ALLSIZEWIDTH            : aStr="SDRATTR_ALLSIZEWIDTH            "; break;
-        case SDRATTR_ALLSIZEHEIGHT           : aStr="SDRATTR_ALLSIZEHEIGHT           "; break;
-        case SDRATTR_ONEPOSITIONX            : aStr="SDRATTR_ONEPOSITIONX            "; break;
-        case SDRATTR_ONEPOSITIONY            : aStr="SDRATTR_ONEPOSITIONY            "; break;
-        case SDRATTR_ONESIZEWIDTH            : aStr="SDRATTR_ONESIZEWIDTH            "; break;
-        case SDRATTR_ONESIZEHEIGHT           : aStr="SDRATTR_ONESIZEHEIGHT           "; break;
-        case SDRATTR_LOGICSIZEWIDTH          : aStr="SDRATTR_LOGICSIZEWIDTH          "; break;
-        case SDRATTR_LOGICSIZEHEIGHT         : aStr="SDRATTR_LOGICSIZEHEIGHT         "; break;
-        case SDRATTR_ROTATEANGLE             : aStr="SDRATTR_ROTATEANGLE             "; break;
-        case SDRATTR_SHEARANGLE              : aStr="SDRATTR_SHEARANGLE              "; break;
-        case SDRATTR_MOVEX                   : aStr="SDRATTR_MOVEX                   "; break;
-        case SDRATTR_MOVEY                   : aStr="SDRATTR_MOVEY                   "; break;
-        case SDRATTR_RESIZEXONE              : aStr="SDRATTR_RESIZEXONE              "; break;
-        case SDRATTR_RESIZEYONE              : aStr="SDRATTR_RESIZEYONE              "; break;
-        case SDRATTR_ROTATEONE               : aStr="SDRATTR_ROTATEONE               "; break;
-        case SDRATTR_HORZSHEARONE            : aStr="SDRATTR_HORZSHEARONE            "; break;
-        case SDRATTR_VERTSHEARONE            : aStr="SDRATTR_VERTSHEARONE            "; break;
-        case SDRATTR_RESIZEXALL              : aStr="SDRATTR_RESIZEXALL              "; break;
-        case SDRATTR_RESIZEYALL              : aStr="SDRATTR_RESIZEYALL              "; break;
-        case SDRATTR_ROTATEALL               : aStr="SDRATTR_ROTATEALL               "; break;
-        case SDRATTR_HORZSHEARALL            : aStr="SDRATTR_HORZSHEARALL            "; break;
-        case SDRATTR_VERTSHEARALL            : aStr="SDRATTR_VERTSHEARALL            "; break;
-        case SDRATTR_TRANSFORMREF1X          : aStr="SDRATTR_TRANSFORMREF1X          "; break;
-        case SDRATTR_TRANSFORMREF1Y          : aStr="SDRATTR_TRANSFORMREF1Y          "; break;
-        case SDRATTR_TRANSFORMREF2X          : aStr="SDRATTR_TRANSFORMREF2X          "; break;
-        case SDRATTR_TRANSFORMREF2Y          : aStr="SDRATTR_TRANSFORMREF2Y          "; break;
-
-        case SDRATTR_GRAFRED                 : aStr="SDRATTR_GRAFRED                 "; break;
-        case SDRATTR_GRAFGREEN               : aStr="SDRATTR_GRAFGREEN               "; break;
-        case SDRATTR_GRAFBLUE                : aStr="SDRATTR_GRAFBLUE                "; break;
-        case SDRATTR_GRAFLUMINANCE           : aStr="SDRATTR_GRAFLUMINANCE           "; break;
-        case SDRATTR_GRAFCONTRAST            : aStr="SDRATTR_GRAFCONTRAST            "; break;
-        case SDRATTR_GRAFGAMMA               : aStr="SDRATTR_GRAFGAMMA               "; break;
-        case SDRATTR_GRAFTRANSPARENCE        : aStr="SDRATTR_GRAFTRANSPARENCE        "; break;
-        case SDRATTR_GRAFINVERT              : aStr="SDRATTR_GRAFINVERT              "; break;
-        case SDRATTR_GRAFMODE                : aStr="SDRATTR_GRAFMODE                "; break;
-        case SDRATTR_GRAFCROP                : aStr="SDRATTR_GRAFCROP                "; break;
-        case SDRATTR_GRAFRESERVE3            : aStr="SDRATTR_GRAFRESERVE3            "; break;
-        case SDRATTR_GRAFRESERVE4            : aStr="SDRATTR_GRAFRESERVE4            "; break;
-        case SDRATTR_GRAFRESERVE5            : aStr="SDRATTR_GRAFRESERVE5            "; break;
-        case SDRATTR_GRAFRESERVE6            : aStr="SDRATTR_GRAFRESERVE6            "; break;
-        case SDRATTRSET_GRAF                 : aStr="SDRATTRSET_GRAF                 "; break;
-
-        case EE_PARA_HYPHENATE               : aStr="EE_PARA_HYPHENATE               "; break;
-        case EE_PARA_BULLETSTATE             : aStr="EE_PARA_BULLETSTATE             "; break;
-        case EE_PARA_OUTLLRSPACE             : aStr="EE_PARA_OUTLLRSPACE             "; break;
-        case EE_PARA_OUTLLEVEL               : aStr="EE_PARA_OUTLLEVEL               "; break;
-        case EE_PARA_BULLET                  : aStr="EE_PARA_BULLET                  "; break;
-        case EE_PARA_LRSPACE                 : aStr="EE_PARA_LRSPACE                 "; break;
-        case EE_PARA_ULSPACE                 : aStr="EE_PARA_ULSPACE                 "; break;
-        case EE_PARA_SBL                     : aStr="EE_PARA_SBL                     "; break;
-        case EE_PARA_JUST                    : aStr="EE_PARA_JUST                    "; break;
-        case EE_PARA_TABS                    : aStr="EE_PARA_TABS                    "; break;
-
-        case EE_CHAR_COLOR                   : aStr="EE_CHAR_COLOR                   "; break;
-        case EE_CHAR_FONTINFO                : aStr="EE_CHAR_FONTINFO                "; break;
-        case EE_CHAR_FONTHEIGHT              : aStr="EE_CHAR_FONTHEIGHT              "; break;
-        case EE_CHAR_FONTWIDTH               : aStr="EE_CHAR_FONTWIDTH               "; break;
-        case EE_CHAR_WEIGHT                  : aStr="EE_CHAR_WEIGHT                  "; break;
-        case EE_CHAR_UNDERLINE               : aStr="EE_CHAR_UNDERLINE               "; break;
-        case EE_CHAR_STRIKEOUT               : aStr="EE_CHAR_STRIKEOUT               "; break;
-        case EE_CHAR_ITALIC                  : aStr="EE_CHAR_ITALIC                  "; break;
-        case EE_CHAR_OUTLINE                 : aStr="EE_CHAR_OUTLINE                 "; break;
-        case EE_CHAR_SHADOW                  : aStr="EE_CHAR_SHADOW                  "; break;
-        case EE_CHAR_ESCAPEMENT              : aStr="EE_CHAR_ESCAPEMENT              "; break;
-        case EE_CHAR_PAIRKERNING             : aStr="EE_CHAR_PAIRKERNING             "; break;
-        case EE_CHAR_KERNING                 : aStr="EE_CHAR_KERNING                 "; break;
-        case EE_CHAR_WLM                     : aStr="EE_CHAR_WLM                     "; break;
-        case EE_FEATURE_TAB                  : aStr="EE_FEATURE_TAB                  "; break;
-        case EE_FEATURE_LINEBR               : aStr="EE_FEATURE_LINEBR               "; break;
-        case EE_FEATURE_NOTCONV              : aStr="EE_FEATURE_NOTCONV              "; break;
-        case EE_FEATURE_FIELD                : aStr="EE_FEATURE_FIELD                "; break;
-    } // switch
-
-    aStr.EraseTrailingChars();
-#endif // if DBG_UTIL
-
-    rWhichName = aStr;
-    return (BOOL)aStr.Len();
-}
+//BFS01BOOL SdrItemPool::TakeWhichName(USHORT nWhich, ByteString& rWhichName)
+//BFS01{
+//BFS01 ByteString aStr;
+//BFS01
+//BFS01#ifdef DBG_UTIL
+//BFS01 switch(nWhich)
+//BFS01 {
+//BFS01     case XATTR_LINESTYLE                 : aStr="XATTR_LINESTYLE                 "; break;
+//BFS01     case XATTR_LINEDASH                  : aStr="XATTR_LINEDASH                  "; break;
+//BFS01     case XATTR_LINEWIDTH                 : aStr="XATTR_LINEWIDTH                 "; break;
+//BFS01     case XATTR_LINECOLOR                 : aStr="XATTR_LINECOLOR                 "; break;
+//BFS01     case XATTR_LINESTART                 : aStr="XATTR_LINESTART                 "; break;
+//BFS01     case XATTR_LINEEND                   : aStr="XATTR_LINEEND                   "; break;
+//BFS01     case XATTR_LINESTARTWIDTH            : aStr="XATTR_LINESTARTWIDTH            "; break;
+//BFS01     case XATTR_LINEENDWIDTH              : aStr="XATTR_LINEENDWIDTH              "; break;
+//BFS01     case XATTR_LINESTARTCENTER           : aStr="XATTR_LINESTARTCENTER           "; break;
+//BFS01     case XATTR_LINEENDCENTER             : aStr="XATTR_LINEENDCENTER             "; break;
+//BFS01     case XATTR_LINETRANSPARENCE          : aStr="XATTR_LINETRANSPARENCE          "; break;
+//BFS01     case XATTR_LINEJOINT                 : aStr="XATTR_LINEJOINT                 "; break;
+//BFS01     case XATTR_LINERESERVED2             : aStr="XATTR_LINERESERVED2             "; break;
+//BFS01     case XATTR_LINERESERVED3             : aStr="XATTR_LINERESERVED3             "; break;
+//BFS01     case XATTR_LINERESERVED4             : aStr="XATTR_LINERESERVED4             "; break;
+//BFS01     case XATTR_LINERESERVED5             : aStr="XATTR_LINERESERVED5             "; break;
+//BFS01     case XATTR_LINERESERVED_LAST         : aStr="XATTR_LINERESERVED_LAST         "; break;
+//BFS01     case XATTRSET_LINE                   : aStr="XATTRSET_LINE                   "; break;
+//BFS01
+//BFS01     case XATTR_FILLSTYLE                 : aStr="XATTR_FILLSTYLE                 "; break;
+//BFS01     case XATTR_FILLCOLOR                 : aStr="XATTR_FILLCOLOR                 "; break;
+//BFS01     case XATTR_FILLGRADIENT              : aStr="XATTR_FILLGRADIENT              "; break;
+//BFS01     case XATTR_FILLHATCH                 : aStr="XATTR_FILLHATCH                 "; break;
+//BFS01     case XATTR_FILLBITMAP                : aStr="XATTR_FILLBITMAP                "; break;
+//BFS01     case XATTR_FILLTRANSPARENCE          : aStr="XATTR_FILLTRANSPARENCE          "; break;
+//BFS01     case XATTR_GRADIENTSTEPCOUNT         : aStr="XATTR_GRADIENTSTEPCOUNT         "; break;
+//BFS01
+//BFS01     case XATTR_FILLBMP_TILE              : aStr="XATTR_FILLBMP_TILE              "; break;
+//BFS01     case XATTR_FILLBMP_POS               : aStr="XATTR_FILLBMP_POS               "; break;
+//BFS01     case XATTR_FILLBMP_SIZEX             : aStr="XATTR_FILLBMP_SIZEX             "; break;
+//BFS01     case XATTR_FILLBMP_SIZEY             : aStr="XATTR_FILLBMP_SIZEY             "; break;
+//BFS01     case XATTR_FILLFLOATTRANSPARENCE     : aStr="XATTR_FILLFLOATTRANSPARENCE     "; break;
+//BFS01     case XATTR_SECONDARYFILLCOLOR        : aStr="XATTR_SECONDARYFILLCOLOR        "; break;
+//BFS01     case XATTR_FILLBMP_SIZELOG           : aStr="XATTR_FILLBMP_SIZELOG           "; break;
+//BFS01     case XATTR_FILLBMP_TILEOFFSETX       : aStr="XATTR_FILLBMP_TILEOFFSETX       "; break;
+//BFS01     case XATTR_FILLBMP_TILEOFFSETY       : aStr="XATTR_FILLBMP_TILEOFFSETY       "; break;
+//BFS01
+//BFS01     case XATTR_FILLBMP_STRETCH           : aStr="XATTR_FILLBMP_STRETCH           "; break;
+//BFS01     case XATTR_FILLRESERVED3             : aStr="XATTR_FILLRESERVED3             "; break;
+//BFS01     case XATTR_FILLRESERVED4             : aStr="XATTR_FILLRESERVED4             "; break;
+//BFS01     case XATTR_FILLRESERVED5             : aStr="XATTR_FILLRESERVED5             "; break;
+//BFS01     case XATTR_FILLRESERVED6             : aStr="XATTR_FILLRESERVED6             "; break;
+//BFS01     case XATTR_FILLRESERVED7             : aStr="XATTR_FILLRESERVED7             "; break;
+//BFS01     case XATTR_FILLRESERVED8             : aStr="XATTR_FILLRESERVED8             "; break;
+//BFS01     case XATTR_FILLBMP_POSOFFSETX        : aStr="XATTR_FILLBMP_POSOFFSETX        "; break;
+//BFS01     case XATTR_FILLBMP_POSOFFSETY        : aStr="XATTR_FILLBMP_POSOFFSETY        "; break;
+//BFS01     case XATTR_FILLBACKGROUND            : aStr="XATTR_FILLBACKGROUND            "; break;
+//BFS01     case XATTR_FILLRESERVED10            : aStr="XATTR_FILLRESERVED10            "; break;
+//BFS01     case XATTR_FILLRESERVED11            : aStr="XATTR_FILLRESERVED11            "; break;
+//BFS01     case XATTR_FILLRESERVED_LAST         : aStr="XATTR_FILLRESERVED_LAST         "; break;
+//BFS01
+//BFS01     case XATTRSET_FILL                   : aStr="XATTRSET_FILL                   "; break;
+//BFS01
+//BFS01     case XATTR_FORMTXTSTYLE              : aStr="XATTR_FORMTXTSTYLE              "; break;
+//BFS01     case XATTR_FORMTXTADJUST             : aStr="XATTR_FORMTXTADJUST             "; break;
+//BFS01     case XATTR_FORMTXTDISTANCE           : aStr="XATTR_FORMTXTDISTANCE           "; break;
+//BFS01     case XATTR_FORMTXTSTART              : aStr="XATTR_FORMTXTSTART              "; break;
+//BFS01     case XATTR_FORMTXTMIRROR             : aStr="XATTR_FORMTXTMIRROR             "; break;
+//BFS01     case XATTR_FORMTXTOUTLINE            : aStr="XATTR_FORMTXTOUTLINE            "; break;
+//BFS01     case XATTR_FORMTXTSHADOW             : aStr="XATTR_FORMTXTSHADOW             "; break;
+//BFS01     case XATTR_FORMTXTSHDWCOLOR          : aStr="XATTR_FORMTXTSHDWCOLOR          "; break;
+//BFS01     case XATTR_FORMTXTSHDWXVAL           : aStr="XATTR_FORMTXTSHDWXVAL           "; break;
+//BFS01     case XATTR_FORMTXTSHDWYVAL           : aStr="XATTR_FORMTXTSHDWYVAL           "; break;
+//BFS01     case XATTR_FORMTXTSTDFORM            : aStr="XATTR_FORMTXTSTDFORM            "; break;
+//BFS01     case XATTR_FORMTXTHIDEFORM           : aStr="XATTR_FORMTXTHIDEFORM           "; break;
+//BFS01     case XATTR_FORMTXTSHDWTRANSP         : aStr="XATTR_FORMTXTSHDWTRANSP         "; break;
+//BFS01     case XATTR_FTRESERVED2               : aStr="XATTR_FTRESERVED2               "; break;
+//BFS01     case XATTR_FTRESERVED3               : aStr="XATTR_FTRESERVED3               "; break;
+//BFS01     case XATTR_FTRESERVED4               : aStr="XATTR_FTRESERVED4               "; break;
+//BFS01     case XATTR_FTRESERVED5               : aStr="XATTR_FTRESERVED5               "; break;
+//BFS01     case XATTR_FTRESERVED_LAST           : aStr="XATTR_FTRESERVED_LAST           "; break;
+//BFS01//BFS01      case XATTRSET_TEXT                   : aStr="XATTRSET_TEXT                   "; break;
+//BFS01
+//BFS01     case SDRATTR_SHADOW                  : aStr="SDRATTR_SHADOW                  "; break;
+//BFS01     case SDRATTR_SHADOWCOLOR             : aStr="SDRATTR_SHADOWCOLOR             "; break;
+//BFS01     case SDRATTR_SHADOWXDIST             : aStr="SDRATTR_SHADOWXDIST             "; break;
+//BFS01     case SDRATTR_SHADOWYDIST             : aStr="SDRATTR_SHADOWYDIST             "; break;
+//BFS01     case SDRATTR_SHADOWTRANSPARENCE      : aStr="SDRATTR_SHADOWTRANSPARENCE      "; break;
+//BFS01     case SDRATTR_SHADOW3D                : aStr="SDRATTR_SHADOW3D                "; break;
+//BFS01     case SDRATTR_SHADOWPERSP             : aStr="SDRATTR_SHADOWPERSP             "; break;
+//BFS01//BFS01      case SDRATTR_SHADOWRESERVE1          : aStr="SDRATTR_SHADOWRESERVE1          "; break;
+//BFS01//BFS01      case SDRATTR_SHADOWRESERVE2          : aStr="SDRATTR_SHADOWRESERVE2          "; break;
+//BFS01//BFS01      case SDRATTR_SHADOWRESERVE3          : aStr="SDRATTR_SHADOWRESERVE3          "; break;
+//BFS01//BFS01      case SDRATTR_SHADOWRESERVE4          : aStr="SDRATTR_SHADOWRESERVE4          "; break;
+//BFS01//BFS01      case SDRATTR_SHADOWRESERVE5          : aStr="SDRATTR_SHADOWRESERVE5          "; break;
+//BFS01//BFS01      case SDRATTRSET_SHADOW               : aStr="SDRATTRSET_SHADOW               "; break;
+//BFS01
+//BFS01     case SDRATTR_CAPTIONTYPE             : aStr="SDRATTR_CAPTIONTYPE             "; break;
+//BFS01     case SDRATTR_CAPTIONFIXEDANGLE       : aStr="SDRATTR_CAPTIONFIXEDANGLE       "; break;
+//BFS01     case SDRATTR_CAPTIONANGLE            : aStr="SDRATTR_CAPTIONANGLE            "; break;
+//BFS01     case SDRATTR_CAPTIONGAP              : aStr="SDRATTR_CAPTIONGAP              "; break;
+//BFS01     case SDRATTR_CAPTIONESCDIR           : aStr="SDRATTR_CAPTIONESCDIR           "; break;
+//BFS01     case SDRATTR_CAPTIONESCISREL         : aStr="SDRATTR_CAPTIONESCISREL         "; break;
+//BFS01     case SDRATTR_CAPTIONESCREL           : aStr="SDRATTR_CAPTIONESCREL           "; break;
+//BFS01     case SDRATTR_CAPTIONESCABS           : aStr="SDRATTR_CAPTIONESCABS           "; break;
+//BFS01     case SDRATTR_CAPTIONLINELEN          : aStr="SDRATTR_CAPTIONLINELEN          "; break;
+//BFS01     case SDRATTR_CAPTIONFITLINELEN       : aStr="SDRATTR_CAPTIONFITLINELEN       "; break;
+//BFS01//BFS01      case SDRATTR_CAPTIONRESERVE1         : aStr="SDRATTR_CAPTIONRESERVE1         "; break;
+//BFS01//BFS01      case SDRATTR_CAPTIONRESERVE2         : aStr="SDRATTR_CAPTIONRESERVE2         "; break;
+//BFS01//BFS01      case SDRATTR_CAPTIONRESERVE3         : aStr="SDRATTR_CAPTIONRESERVE3         "; break;
+//BFS01//BFS01      case SDRATTR_CAPTIONRESERVE4         : aStr="SDRATTR_CAPTIONRESERVE4         "; break;
+//BFS01//BFS01      case SDRATTR_CAPTIONRESERVE5         : aStr="SDRATTR_CAPTIONRESERVE5         "; break;
+//BFS01//BFS01      case SDRATTRSET_CAPTION              : aStr="SDRATTRSET_CAPTION              "; break;
+//BFS01
+//BFS01//BFS01      case SDRATTRSET_OUTLINER             : aStr="SDRATTRSET_OUTLINER             "; break;
+//BFS01
+//BFS01     case SDRATTR_ECKENRADIUS             : aStr="SDRATTR_ECKENRADIUS             "; break;
+//BFS01     case SDRATTR_TEXT_MINFRAMEHEIGHT     : aStr="SDRATTR_TEXT_MINFRAMEHEIGHT     "; break;
+//BFS01     case SDRATTR_TEXT_AUTOGROWHEIGHT     : aStr="SDRATTR_TEXT_AUTOGROWHEIGHT     "; break;
+//BFS01     case SDRATTR_TEXT_FITTOSIZE          : aStr="SDRATTR_TEXT_FITTOSIZE          "; break;
+//BFS01     case SDRATTR_TEXT_LEFTDIST           : aStr="SDRATTR_TEXT_LEFTDIST           "; break;
+//BFS01     case SDRATTR_TEXT_RIGHTDIST          : aStr="SDRATTR_TEXT_RIGHTDIST          "; break;
+//BFS01     case SDRATTR_TEXT_UPPERDIST          : aStr="SDRATTR_TEXT_UPPERDIST          "; break;
+//BFS01     case SDRATTR_TEXT_LOWERDIST          : aStr="SDRATTR_TEXT_LOWERDIST          "; break;
+//BFS01     case SDRATTR_TEXT_VERTADJUST         : aStr="SDRATTR_TEXT_VERTADJUST         "; break;
+//BFS01     case SDRATTR_TEXT_MAXFRAMEHEIGHT     : aStr="SDRATTR_TEXT_MAXFRAMEHEIGHT     "; break;
+//BFS01     case SDRATTR_TEXT_MINFRAMEWIDTH      : aStr="SDRATTR_TEXT_MINFRAMEWIDTH      "; break;
+//BFS01     case SDRATTR_TEXT_MAXFRAMEWIDTH      : aStr="SDRATTR_TEXT_MAXFRAMEWIDTH      "; break;
+//BFS01     case SDRATTR_TEXT_AUTOGROWWIDTH      : aStr="SDRATTR_TEXT_AUTOGROWWIDTH      "; break;
+//BFS01     case SDRATTR_TEXT_HORZADJUST         : aStr="SDRATTR_TEXT_HORZADJUST         "; break;
+//BFS01     case SDRATTR_TEXT_ANIKIND            : aStr="SDRATTR_TEXT_ANIKIND            "; break;
+//BFS01     case SDRATTR_TEXT_ANIDIRECTION       : aStr="SDRATTR_TEXT_ANIDIRECTION       "; break;
+//BFS01     case SDRATTR_TEXT_ANISTARTINSIDE     : aStr="SDRATTR_TEXT_ANISTARTINSIDE     "; break;
+//BFS01     case SDRATTR_TEXT_ANISTOPINSIDE      : aStr="SDRATTR_TEXT_ANISTOPINSIDE      "; break;
+//BFS01     case SDRATTR_TEXT_ANICOUNT           : aStr="SDRATTR_TEXT_ANICOUNT           "; break;
+//BFS01     case SDRATTR_TEXT_ANIDELAY           : aStr="SDRATTR_TEXT_ANIDELAY           "; break;
+//BFS01     case SDRATTR_TEXT_ANIAMOUNT          : aStr="SDRATTR_TEXT_ANIAMOUNT          "; break;
+//BFS01     case SDRATTR_TEXT_CONTOURFRAME       : aStr="SDRATTR_TEXT_CONTOURFRAME       "; break;
+//BFS01     case SDRATTR_CUSTOMSHAPE_ADJUSTMENT  : aStr="SDRATTR_CUSTOMSHAPE_ADJUSTMENT    "; break;
+//BFS01     case SDRATTR_XMLATTRIBUTES           : aStr="SDRATTR_XMLATTRIBUTES           "; break;
+//BFS01     case SDRATTR_TEXT_USEFIXEDCELLHEIGHT : aStr="SDRATTR_TEXT_USEFIXEDCELLHEIGHT "; break;
+//BFS01     case SDRATTR_TEXT_WORDWRAP           : aStr="SDRATTR_TEXT_WORDWRAP           "; break;
+//BFS01     case SDRATTR_TEXT_AUTOGROWSIZE       : aStr="SDRATTR_AUTOGROWSIZE            "; break;
+//BFS01//BFS01      case SDRATTR_RESERVE18               : aStr="SDRATTR_RESERVE18               "; break;
+//BFS01//BFS01      case SDRATTR_RESERVE19               : aStr="SDRATTR_RESERVE19               "; break;
+//BFS01//BFS01      case SDRATTRSET_MISC                 : aStr="SDRATTRSET_MISC                 "; break;
+//BFS01
+//BFS01     case SDRATTR_EDGEKIND                : aStr="SDRATTR_EDGEKIND                "; break;
+//BFS01     case SDRATTR_EDGENODE1HORZDIST       : aStr="SDRATTR_EDGENODE1HORZDIST       "; break;
+//BFS01     case SDRATTR_EDGENODE1VERTDIST       : aStr="SDRATTR_EDGENODE1VERTDIST       "; break;
+//BFS01     case SDRATTR_EDGENODE2HORZDIST       : aStr="SDRATTR_EDGENODE2HORZDIST       "; break;
+//BFS01     case SDRATTR_EDGENODE2VERTDIST       : aStr="SDRATTR_EDGENODE2VERTDIST       "; break;
+//BFS01     case SDRATTR_EDGENODE1GLUEDIST       : aStr="SDRATTR_EDGENODE1GLUEDIST       "; break;
+//BFS01     case SDRATTR_EDGENODE2GLUEDIST       : aStr="SDRATTR_EDGENODE2GLUEDIST       "; break;
+//BFS01     case SDRATTR_EDGELINEDELTAANZ        : aStr="SDRATTR_EDGELINEDELTAANZ        "; break;
+//BFS01     case SDRATTR_EDGELINE1DELTA          : aStr="SDRATTR_EDGELINE1DELTA          "; break;
+//BFS01     case SDRATTR_EDGELINE2DELTA          : aStr="SDRATTR_EDGELINE2DELTA          "; break;
+//BFS01     case SDRATTR_EDGELINE3DELTA          : aStr="SDRATTR_EDGELINE3DELTA          "; break;
+//BFS01//BFS01      case SDRATTR_EDGERESERVE02           : aStr="SDRATTR_EDGERESERVE02           "; break;
+//BFS01//BFS01      case SDRATTR_EDGERESERVE03           : aStr="SDRATTR_EDGERESERVE03           "; break;
+//BFS01//BFS01      case SDRATTR_EDGERESERVE04           : aStr="SDRATTR_EDGERESERVE04           "; break;
+//BFS01//BFS01      case SDRATTR_EDGERESERVE05           : aStr="SDRATTR_EDGERESERVE05           "; break;
+//BFS01//BFS01      case SDRATTR_EDGERESERVE06           : aStr="SDRATTR_EDGERESERVE06           "; break;
+//BFS01//BFS01      case SDRATTR_EDGERESERVE07           : aStr="SDRATTR_EDGERESERVE07           "; break;
+//BFS01//BFS01      case SDRATTR_EDGERESERVE08           : aStr="SDRATTR_EDGERESERVE08           "; break;
+//BFS01//BFS01      case SDRATTR_EDGERESERVE09           : aStr="SDRATTR_EDGERESERVE09           "; break;
+//BFS01//BFS01      case SDRATTRSET_EDGE                 : aStr="SDRATTRSET_EDGE                 "; break;
+//BFS01
+//BFS01     case SDRATTR_MEASUREKIND             : aStr="SDRATTR_MEASUREKIND             "; break;
+//BFS01     case SDRATTR_MEASURETEXTHPOS         : aStr="SDRATTR_MEASURETEXTHPOS         "; break;
+//BFS01     case SDRATTR_MEASURETEXTVPOS         : aStr="SDRATTR_MEASURETEXTVPOS         "; break;
+//BFS01     case SDRATTR_MEASURELINEDIST         : aStr="SDRATTR_MEASURELINEDIST         "; break;
+//BFS01     case SDRATTR_MEASUREHELPLINEOVERHANG : aStr="SDRATTR_MEASUREHELPLINEOVERHANG "; break;
+//BFS01     case SDRATTR_MEASUREHELPLINEDIST     : aStr="SDRATTR_MEASUREHELPLINEDIST     "; break;
+//BFS01     case SDRATTR_MEASUREHELPLINE1LEN     : aStr="SDRATTR_MEASUREHELPLINE1LEN     "; break;
+//BFS01     case SDRATTR_MEASUREHELPLINE2LEN     : aStr="SDRATTR_MEASUREHELPLINE2LEN     "; break;
+//BFS01     case SDRATTR_MEASUREBELOWREFEDGE     : aStr="SDRATTR_MEASUREBELOWREFEDGE     "; break;
+//BFS01     case SDRATTR_MEASURETEXTROTA90       : aStr="SDRATTR_MEASURETEXTROTA90       "; break;
+//BFS01     case SDRATTR_MEASURETEXTUPSIDEDOWN   : aStr="SDRATTR_MEASURETEXTUPSIDEDOWN   "; break;
+//BFS01     case SDRATTR_MEASUREOVERHANG         : aStr="SDRATTR_MEASUREOVERHANG         "; break;
+//BFS01     case SDRATTR_MEASUREUNIT             : aStr="SDRATTR_MEASUREUNIT             "; break;
+//BFS01     case SDRATTR_MEASURESCALE            : aStr="SDRATTR_MEASURESCALE            "; break;
+//BFS01     case SDRATTR_MEASURESHOWUNIT         : aStr="SDRATTR_MEASURESHOWUNIT         "; break;
+//BFS01     case SDRATTR_MEASUREFORMATSTRING     : aStr="SDRATTR_MEASUREFORMATSTRING     "; break;
+//BFS01     case SDRATTR_MEASURETEXTAUTOANGLE    : aStr="SDRATTR_MEASURETEXTAUTOANGLE    "; break;
+//BFS01     case SDRATTR_MEASURETEXTAUTOANGLEVIEW: aStr="SDRATTR_MEASURETEXTAUTOANGLEVIEW"; break;
+//BFS01     case SDRATTR_MEASURETEXTISFIXEDANGLE : aStr="SDRATTR_MEASURETEXTISFIXEDANGLE "; break;
+//BFS01     case SDRATTR_MEASURETEXTFIXEDANGLE   : aStr="SDRATTR_MEASURETEXTFIXEDANGLE   "; break;
+//BFS01     case SDRATTR_MEASUREDECIMALPLACES    : aStr="SDRATTR_MEASUREDECIMALPLACES    "; break;
+//BFS01//BFS01      case SDRATTR_MEASURERESERVE05        : aStr="SDRATTR_MEASURERESERVE05        "; break;
+//BFS01//BFS01      case SDRATTR_MEASURERESERVE06        : aStr="SDRATTR_MEASURERESERVE06        "; break;
+//BFS01//BFS01      case SDRATTR_MEASURERESERVE07        : aStr="SDRATTR_MEASURERESERVE07        "; break;
+//BFS01//BFS01      case SDRATTRSET_MEASURE              : aStr="SDRATTRSET_MEASURE              "; break;
+//BFS01
+//BFS01     case SDRATTR_CIRCKIND                : aStr="SDRATTR_CIRCKIND                "; break;
+//BFS01     case SDRATTR_CIRCSTARTANGLE          : aStr="SDRATTR_CIRCSTARTANGLE          "; break;
+//BFS01     case SDRATTR_CIRCENDANGLE            : aStr="SDRATTR_CIRCENDANGLE            "; break;
+//BFS01//BFS01      case SDRATTR_CIRCRESERVE0            : aStr="SDRATTR_CIRCRESERVE0            "; break;
+//BFS01//BFS01      case SDRATTR_CIRCRESERVE1            : aStr="SDRATTR_CIRCRESERVE1            "; break;
+//BFS01//BFS01      case SDRATTR_CIRCRESERVE2            : aStr="SDRATTR_CIRCRESERVE2            "; break;
+//BFS01//BFS01      case SDRATTR_CIRCRESERVE3            : aStr="SDRATTR_CIRCRESERVE3            "; break;
+//BFS01//BFS01      case SDRATTRSET_CIRC                 : aStr="SDRATTRSET_CIRC                 "; break;
+//BFS01
+//BFS01     case SDRATTR_OBJMOVEPROTECT          : aStr="SDRATTR_OBJMOVEPROTECT          "; break;
+//BFS01     case SDRATTR_OBJSIZEPROTECT          : aStr="SDRATTR_OBJSIZEPROTECT          "; break;
+//BFS01     case SDRATTR_OBJPRINTABLE            : aStr="SDRATTR_OBJPRINTABLE            "; break;
+//BFS01     case SDRATTR_LAYERID                 : aStr="SDRATTR_LAYERID                 "; break;
+//BFS01     case SDRATTR_LAYERNAME               : aStr="SDRATTR_LAYERNAME               "; break;
+//BFS01     case SDRATTR_OBJECTNAME              : aStr="SDRATTR_OBJECTNAME              "; break;
+//BFS01     case SDRATTR_ALLPOSITIONX            : aStr="SDRATTR_ALLPOSITIONX            "; break;
+//BFS01     case SDRATTR_ALLPOSITIONY            : aStr="SDRATTR_ALLPOSITIONY            "; break;
+//BFS01     case SDRATTR_ALLSIZEWIDTH            : aStr="SDRATTR_ALLSIZEWIDTH            "; break;
+//BFS01     case SDRATTR_ALLSIZEHEIGHT           : aStr="SDRATTR_ALLSIZEHEIGHT           "; break;
+//BFS01     case SDRATTR_ONEPOSITIONX            : aStr="SDRATTR_ONEPOSITIONX            "; break;
+//BFS01     case SDRATTR_ONEPOSITIONY            : aStr="SDRATTR_ONEPOSITIONY            "; break;
+//BFS01     case SDRATTR_ONESIZEWIDTH            : aStr="SDRATTR_ONESIZEWIDTH            "; break;
+//BFS01     case SDRATTR_ONESIZEHEIGHT           : aStr="SDRATTR_ONESIZEHEIGHT           "; break;
+//BFS01     case SDRATTR_LOGICSIZEWIDTH          : aStr="SDRATTR_LOGICSIZEWIDTH          "; break;
+//BFS01     case SDRATTR_LOGICSIZEHEIGHT         : aStr="SDRATTR_LOGICSIZEHEIGHT         "; break;
+//BFS01     case SDRATTR_ROTATEANGLE             : aStr="SDRATTR_ROTATEANGLE             "; break;
+//BFS01     case SDRATTR_SHEARANGLE              : aStr="SDRATTR_SHEARANGLE              "; break;
+//BFS01     case SDRATTR_MOVEX                   : aStr="SDRATTR_MOVEX                   "; break;
+//BFS01     case SDRATTR_MOVEY                   : aStr="SDRATTR_MOVEY                   "; break;
+//BFS01     case SDRATTR_RESIZEXONE              : aStr="SDRATTR_RESIZEXONE              "; break;
+//BFS01     case SDRATTR_RESIZEYONE              : aStr="SDRATTR_RESIZEYONE              "; break;
+//BFS01     case SDRATTR_ROTATEONE               : aStr="SDRATTR_ROTATEONE               "; break;
+//BFS01     case SDRATTR_HORZSHEARONE            : aStr="SDRATTR_HORZSHEARONE            "; break;
+//BFS01     case SDRATTR_VERTSHEARONE            : aStr="SDRATTR_VERTSHEARONE            "; break;
+//BFS01     case SDRATTR_RESIZEXALL              : aStr="SDRATTR_RESIZEXALL              "; break;
+//BFS01     case SDRATTR_RESIZEYALL              : aStr="SDRATTR_RESIZEYALL              "; break;
+//BFS01     case SDRATTR_ROTATEALL               : aStr="SDRATTR_ROTATEALL               "; break;
+//BFS01     case SDRATTR_HORZSHEARALL            : aStr="SDRATTR_HORZSHEARALL            "; break;
+//BFS01     case SDRATTR_VERTSHEARALL            : aStr="SDRATTR_VERTSHEARALL            "; break;
+//BFS01     case SDRATTR_TRANSFORMREF1X          : aStr="SDRATTR_TRANSFORMREF1X          "; break;
+//BFS01     case SDRATTR_TRANSFORMREF1Y          : aStr="SDRATTR_TRANSFORMREF1Y          "; break;
+//BFS01     case SDRATTR_TRANSFORMREF2X          : aStr="SDRATTR_TRANSFORMREF2X          "; break;
+//BFS01     case SDRATTR_TRANSFORMREF2Y          : aStr="SDRATTR_TRANSFORMREF2Y          "; break;
+//BFS01
+//BFS01     case SDRATTR_GRAFRED                 : aStr="SDRATTR_GRAFRED                 "; break;
+//BFS01     case SDRATTR_GRAFGREEN               : aStr="SDRATTR_GRAFGREEN               "; break;
+//BFS01     case SDRATTR_GRAFBLUE                : aStr="SDRATTR_GRAFBLUE                "; break;
+//BFS01     case SDRATTR_GRAFLUMINANCE           : aStr="SDRATTR_GRAFLUMINANCE           "; break;
+//BFS01     case SDRATTR_GRAFCONTRAST            : aStr="SDRATTR_GRAFCONTRAST            "; break;
+//BFS01     case SDRATTR_GRAFGAMMA               : aStr="SDRATTR_GRAFGAMMA               "; break;
+//BFS01     case SDRATTR_GRAFTRANSPARENCE        : aStr="SDRATTR_GRAFTRANSPARENCE        "; break;
+//BFS01     case SDRATTR_GRAFINVERT              : aStr="SDRATTR_GRAFINVERT              "; break;
+//BFS01     case SDRATTR_GRAFMODE                : aStr="SDRATTR_GRAFMODE                "; break;
+//BFS01     case SDRATTR_GRAFCROP                : aStr="SDRATTR_GRAFCROP                "; break;
+//BFS01//BFS01      case SDRATTR_GRAFRESERVE3            : aStr="SDRATTR_GRAFRESERVE3            "; break;
+//BFS01//BFS01      case SDRATTR_GRAFRESERVE4            : aStr="SDRATTR_GRAFRESERVE4            "; break;
+//BFS01//BFS01      case SDRATTR_GRAFRESERVE5            : aStr="SDRATTR_GRAFRESERVE5            "; break;
+//BFS01//BFS01      case SDRATTR_GRAFRESERVE6            : aStr="SDRATTR_GRAFRESERVE6            "; break;
+//BFS01//BFS01      case SDRATTRSET_GRAF                 : aStr="SDRATTRSET_GRAF                 "; break;
+//BFS01
+//BFS01     case EE_PARA_HYPHENATE               : aStr="EE_PARA_HYPHENATE               "; break;
+//BFS01     case EE_PARA_BULLETSTATE             : aStr="EE_PARA_BULLETSTATE             "; break;
+//BFS01     case EE_PARA_OUTLLRSPACE             : aStr="EE_PARA_OUTLLRSPACE             "; break;
+//BFS01     case EE_PARA_OUTLLEVEL               : aStr="EE_PARA_OUTLLEVEL               "; break;
+//BFS01     case EE_PARA_BULLET                  : aStr="EE_PARA_BULLET                  "; break;
+//BFS01     case EE_PARA_LRSPACE                 : aStr="EE_PARA_LRSPACE                 "; break;
+//BFS01     case EE_PARA_ULSPACE                 : aStr="EE_PARA_ULSPACE                 "; break;
+//BFS01     case EE_PARA_SBL                     : aStr="EE_PARA_SBL                     "; break;
+//BFS01     case EE_PARA_JUST                    : aStr="EE_PARA_JUST                    "; break;
+//BFS01     case EE_PARA_TABS                    : aStr="EE_PARA_TABS                    "; break;
+//BFS01
+//BFS01     case EE_CHAR_COLOR                   : aStr="EE_CHAR_COLOR                   "; break;
+//BFS01     case EE_CHAR_FONTINFO                : aStr="EE_CHAR_FONTINFO                "; break;
+//BFS01     case EE_CHAR_FONTHEIGHT              : aStr="EE_CHAR_FONTHEIGHT              "; break;
+//BFS01     case EE_CHAR_FONTWIDTH               : aStr="EE_CHAR_FONTWIDTH               "; break;
+//BFS01     case EE_CHAR_WEIGHT                  : aStr="EE_CHAR_WEIGHT                  "; break;
+//BFS01     case EE_CHAR_UNDERLINE               : aStr="EE_CHAR_UNDERLINE               "; break;
+//BFS01     case EE_CHAR_STRIKEOUT               : aStr="EE_CHAR_STRIKEOUT               "; break;
+//BFS01     case EE_CHAR_ITALIC                  : aStr="EE_CHAR_ITALIC                  "; break;
+//BFS01     case EE_CHAR_OUTLINE                 : aStr="EE_CHAR_OUTLINE                 "; break;
+//BFS01     case EE_CHAR_SHADOW                  : aStr="EE_CHAR_SHADOW                  "; break;
+//BFS01     case EE_CHAR_ESCAPEMENT              : aStr="EE_CHAR_ESCAPEMENT              "; break;
+//BFS01     case EE_CHAR_PAIRKERNING             : aStr="EE_CHAR_PAIRKERNING             "; break;
+//BFS01     case EE_CHAR_KERNING                 : aStr="EE_CHAR_KERNING                 "; break;
+//BFS01     case EE_CHAR_WLM                     : aStr="EE_CHAR_WLM                     "; break;
+//BFS01     case EE_FEATURE_TAB                  : aStr="EE_FEATURE_TAB                  "; break;
+//BFS01     case EE_FEATURE_LINEBR               : aStr="EE_FEATURE_LINEBR               "; break;
+//BFS01     case EE_FEATURE_NOTCONV              : aStr="EE_FEATURE_NOTCONV              "; break;
+//BFS01     case EE_FEATURE_FIELD                : aStr="EE_FEATURE_FIELD                "; break;
+//BFS01 } // switch
+//BFS01
+//BFS01 aStr.EraseTrailingChars();
+//BFS01#endif // if DBG_UTIL
+//BFS01
+//BFS01 rWhichName = aStr;
+//BFS01 return (BOOL)aStr.Len();
+//BFS01}
 
 ////////////////////////////////////////////////////////////////////////////////
 // FractionItem
@@ -1543,30 +1750,30 @@ int __EXPORT SdrMetricItem::IsPoolable() const
 // ShadowSetItem
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-TYPEINIT1(SdrShadowSetItem,SfxSetItem);
+//BFS01TYPEINIT1(SdrShadowSetItem,SfxSetItem);
 
-SdrShadowSetItem::SdrShadowSetItem(SfxItemSet* pItemSet):
-    SfxSetItem(SDRATTRSET_SHADOW,pItemSet)
-{
-}
+//BFS01SdrShadowSetItem::SdrShadowSetItem(SfxItemSet* pItemSet):
+//BFS01 SfxSetItem(SDRATTRSET_SHADOW,pItemSet)
+//BFS01{
+//BFS01}
 
-SdrShadowSetItem::SdrShadowSetItem(SfxItemPool* pItemPool):
-    SfxSetItem(SDRATTRSET_SHADOW,new SfxItemSet(*pItemPool,SDRATTR_SHADOW_FIRST,SDRATTR_SHADOW_LAST))
-{
-}
+//BFS01SdrShadowSetItem::SdrShadowSetItem(SfxItemPool* pItemPool):
+//BFS01 SfxSetItem(SDRATTRSET_SHADOW,new SfxItemSet(*pItemPool,SDRATTR_SHADOW_FIRST,SDRATTR_SHADOW_LAST))
+//BFS01{
+//BFS01}
 
-SfxPoolItem* __EXPORT SdrShadowSetItem::Clone(SfxItemPool* pToPool) const
-{
-    return new SdrShadowSetItem(*this,pToPool);
-}
+//BFS01SfxPoolItem* __EXPORT SdrShadowSetItem::Clone(SfxItemPool* pToPool) const
+//BFS01{
+//BFS01 return new SdrShadowSetItem(*this,pToPool);
+//BFS01}
 
-SfxPoolItem* __EXPORT SdrShadowSetItem::Create(SvStream& rStream, USHORT nVersion) const
-{
-    SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
-        SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST);
-    pSet->Load(rStream);
-    return new SdrShadowSetItem(pSet);
-}
+//BFS01SfxPoolItem* __EXPORT SdrShadowSetItem::Create(SvStream& rStream, USHORT nVersion) const
+//BFS01{
+//BFS01 SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
+//BFS01     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST);
+//BFS01 pSet->Load(rStream);
+//BFS01 return new SdrShadowSetItem(pSet);
+//BFS01}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Items des Legendenobjekts
@@ -1630,44 +1837,44 @@ SfxItemPresentation __EXPORT SdrCaptionEscDirItem::GetPresentation(SfxItemPresen
 // CaptionSetItem
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-TYPEINIT1(SdrCaptionSetItem,SfxSetItem);
+//BFS01TYPEINIT1(SdrCaptionSetItem,SfxSetItem);
 
-SfxPoolItem* __EXPORT SdrCaptionSetItem::Clone(SfxItemPool* pToPool) const
-{
-    return new SdrCaptionSetItem(*this,pToPool);
-}
+//BFS01SfxPoolItem* __EXPORT SdrCaptionSetItem::Clone(SfxItemPool* pToPool) const
+//BFS01{
+//BFS01 return new SdrCaptionSetItem(*this,pToPool);
+//BFS01}
 
-SfxPoolItem* __EXPORT SdrCaptionSetItem::Create(SvStream& rStream, USHORT nVersion) const
-{
-    SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
-        SDRATTR_CAPTION_FIRST, SDRATTR_CAPTION_LAST);
-    pSet->Load(rStream);
-    return new SdrCaptionSetItem(pSet);
-}
+//BFS01SfxPoolItem* __EXPORT SdrCaptionSetItem::Create(SvStream& rStream, USHORT nVersion) const
+//BFS01{
+//BFS01 SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
+//BFS01     SDRATTR_CAPTION_FIRST, SDRATTR_CAPTION_LAST);
+//BFS01 pSet->Load(rStream);
+//BFS01 return new SdrCaptionSetItem(pSet);
+//BFS01}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // OutlinerSetItem
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-TYPEINIT1(SdrOutlinerSetItem,SfxSetItem);
+//BFS01TYPEINIT1(SdrOutlinerSetItem,SfxSetItem);
 
-SdrOutlinerSetItem::SdrOutlinerSetItem(SfxItemPool* pItemPool):
-    SfxSetItem(SDRATTRSET_OUTLINER,new SfxItemSet(*pItemPool,EE_ITEMS_START,EE_ITEMS_END))
-{
-}
+//BFS01SdrOutlinerSetItem::SdrOutlinerSetItem(SfxItemPool* pItemPool):
+//BFS01 SfxSetItem(SDRATTRSET_OUTLINER,new SfxItemSet(*pItemPool,EE_ITEMS_START,EE_ITEMS_END))
+//BFS01{
+//BFS01}
 
-SfxPoolItem* __EXPORT SdrOutlinerSetItem::Clone(SfxItemPool* pToPool) const
-{
-    return new SdrOutlinerSetItem(*this,pToPool);
-}
+//BFS01SfxPoolItem* __EXPORT SdrOutlinerSetItem::Clone(SfxItemPool* pToPool) const
+//BFS01{
+//BFS01 return new SdrOutlinerSetItem(*this,pToPool);
+//BFS01}
 
-SfxPoolItem* __EXPORT SdrOutlinerSetItem::Create(SvStream& rStream, USHORT nVersion) const
-{
-    SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
-        EE_ITEMS_START, EE_ITEMS_END);
-    pSet->Load(rStream);
-    return new SdrOutlinerSetItem(pSet);
-}
+//BFS01SfxPoolItem* __EXPORT SdrOutlinerSetItem::Create(SvStream& rStream, USHORT nVersion) const
+//BFS01{
+//BFS01 SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
+//BFS01     EE_ITEMS_START, EE_ITEMS_END);
+//BFS01 pSet->Load(rStream);
+//BFS01 return new SdrOutlinerSetItem(pSet);
+//BFS01}
 
 ////////////////////////////////////////////////////////////////////////////////
 // MiscItems
@@ -2269,20 +2476,20 @@ sal_Bool SdrCustomShapeAdjustmentItem::PutValue( const uno::Any& rVal, BYTE nMem
 // SdrMiscSetItem
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-TYPEINIT1(SdrMiscSetItem,SfxSetItem);
+//BFS01TYPEINIT1(SdrMiscSetItem,SfxSetItem);
 
-SfxPoolItem* __EXPORT SdrMiscSetItem::Clone(SfxItemPool* pToPool) const
-{
-    return new SdrMiscSetItem(*this,pToPool);
-}
+//BFS01SfxPoolItem* __EXPORT SdrMiscSetItem::Clone(SfxItemPool* pToPool) const
+//BFS01{
+//BFS01 return new SdrMiscSetItem(*this,pToPool);
+//BFS01}
 
-SfxPoolItem* __EXPORT SdrMiscSetItem::Create(SvStream& rStream, USHORT nVersion) const
-{
-    SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
-        SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
-    pSet->Load(rStream);
-    return new SdrMiscSetItem(pSet);
-}
+//BFS01SfxPoolItem* __EXPORT SdrMiscSetItem::Create(SvStream& rStream, USHORT nVersion) const
+//BFS01{
+//BFS01 SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
+//BFS01     SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
+//BFS01 pSet->Load(rStream);
+//BFS01 return new SdrMiscSetItem(pSet);
+//BFS01}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Edge
@@ -2479,20 +2686,20 @@ BOOL SdrEdgeLine3DeltaItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 // SdrEdgeSetItem
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-TYPEINIT1(SdrEdgeSetItem,SfxSetItem);
+//BFS01TYPEINIT1(SdrEdgeSetItem,SfxSetItem);
 
-SfxPoolItem* __EXPORT SdrEdgeSetItem::Clone(SfxItemPool* pToPool) const
-{
-    return new SdrEdgeSetItem(*this,pToPool);
-}
+//BFS01SfxPoolItem* __EXPORT SdrEdgeSetItem::Clone(SfxItemPool* pToPool) const
+//BFS01{
+//BFS01 return new SdrEdgeSetItem(*this,pToPool);
+//BFS01}
 
-SfxPoolItem* __EXPORT SdrEdgeSetItem::Create(SvStream& rStream, USHORT nVersion) const
-{
-    SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
-        SDRATTR_EDGE_FIRST, SDRATTR_EDGE_LAST);
-    pSet->Load(rStream);
-    return new SdrEdgeSetItem(pSet);
-}
+//BFS01SfxPoolItem* __EXPORT SdrEdgeSetItem::Create(SvStream& rStream, USHORT nVersion) const
+//BFS01{
+//BFS01 SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
+//BFS01     SDRATTR_EDGE_FIRST, SDRATTR_EDGE_LAST);
+//BFS01 pSet->Load(rStream);
+//BFS01 return new SdrEdgeSetItem(pSet);
+//BFS01}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Measure
@@ -2705,20 +2912,20 @@ sal_Bool SdrMeasureUnitItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 // SdrMeasureSetItem
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-TYPEINIT1(SdrMeasureSetItem,SfxSetItem);
+//BFS01TYPEINIT1(SdrMeasureSetItem,SfxSetItem);
 
-SfxPoolItem* __EXPORT SdrMeasureSetItem::Clone(SfxItemPool* pToPool) const
-{
-    return new SdrMeasureSetItem(*this,pToPool);
-}
+//BFS01SfxPoolItem* __EXPORT SdrMeasureSetItem::Clone(SfxItemPool* pToPool) const
+//BFS01{
+//BFS01 return new SdrMeasureSetItem(*this,pToPool);
+//BFS01}
 
-SfxPoolItem* __EXPORT SdrMeasureSetItem::Create(SvStream& rStream, USHORT nVersion) const
-{
-    SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
-        SDRATTR_MEASURE_FIRST, SDRATTR_MEASURE_LAST);
-    pSet->Load(rStream);
-    return new SdrMeasureSetItem(pSet);
-}
+//BFS01SfxPoolItem* __EXPORT SdrMeasureSetItem::Create(SvStream& rStream, USHORT nVersion) const
+//BFS01{
+//BFS01 SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
+//BFS01     SDRATTR_MEASURE_FIRST, SDRATTR_MEASURE_LAST);
+//BFS01 pSet->Load(rStream);
+//BFS01 return new SdrMeasureSetItem(pSet);
+//BFS01}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Circ
@@ -2778,20 +2985,20 @@ sal_Bool SdrCircKindItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 // SdrCircSetItem
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-TYPEINIT1(SdrCircSetItem,SfxSetItem);
+//BFS01TYPEINIT1(SdrCircSetItem,SfxSetItem);
 
-SfxPoolItem* __EXPORT SdrCircSetItem::Clone(SfxItemPool* pToPool) const
-{
-    return new SdrCircSetItem(*this,pToPool);
-}
+//BFS01SfxPoolItem* __EXPORT SdrCircSetItem::Clone(SfxItemPool* pToPool) const
+//BFS01{
+//BFS01 return new SdrCircSetItem(*this,pToPool);
+//BFS01}
 
-SfxPoolItem* __EXPORT SdrCircSetItem::Create(SvStream& rStream, USHORT nVersion) const
-{
-    SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
-        SDRATTR_CIRC_FIRST, SDRATTR_CIRC_LAST);
-    pSet->Load(rStream);
-    return new SdrCircSetItem(pSet);
-}
+//BFS01SfxPoolItem* __EXPORT SdrCircSetItem::Create(SvStream& rStream, USHORT nVersion) const
+//BFS01{
+//BFS01 SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
+//BFS01     SDRATTR_CIRC_FIRST, SDRATTR_CIRC_LAST);
+//BFS01 pSet->Load(rStream);
+//BFS01 return new SdrCircSetItem(pSet);
+//BFS01}
 
 //------------------------------------------------------------
 // class SdrSignedPercentItem
@@ -2842,20 +3049,20 @@ int __EXPORT SdrSignedPercentItem::IsPoolable() const
 // SdrGrafSetItem
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-TYPEINIT1( SdrGrafSetItem,SfxSetItem );
+//BFS01TYPEINIT1( SdrGrafSetItem,SfxSetItem );
 
-SfxPoolItem* __EXPORT SdrGrafSetItem::Clone( SfxItemPool* pToPool ) const
-{
-    return new SdrGrafSetItem( *this, pToPool );
-}
+//BFS01SfxPoolItem* __EXPORT SdrGrafSetItem::Clone( SfxItemPool* pToPool ) const
+//BFS01{
+//BFS01 return new SdrGrafSetItem( *this, pToPool );
+//BFS01}
 
-SfxPoolItem* __EXPORT SdrGrafSetItem::Create( SvStream& rStream, USHORT nVersion ) const
-{
-    SfxItemSet* pSet = new SfxItemSet(*GetItemSet().GetPool(),
-        SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST );
-    pSet->Load( rStream );
-    return new SdrGrafSetItem( pSet );
-}
+//BFS01SfxPoolItem* __EXPORT SdrGrafSetItem::Create( SvStream& rStream, USHORT nVersion ) const
+//BFS01{
+//BFS01 SfxItemSet* pSet = new SfxItemSet(*GetItemSet().GetPool(),
+//BFS01     SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST );
+//BFS01 pSet->Load( rStream );
+//BFS01 return new SdrGrafSetItem( pSet );
+//BFS01}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // SdrGrafRedItem
@@ -3096,3 +3303,5 @@ USHORT SdrGrafCropItem::GetVersion( USHORT nFileVersion ) const
     // GRFCROP_VERSION_MOVETOSVX is 1
     return GRFCROP_VERSION_MOVETOSVX;
 }
+
+// eof
