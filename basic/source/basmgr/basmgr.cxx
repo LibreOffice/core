@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-28 15:10:34 $
+ *  last change: $Author: ab $ $Date: 2001-12-13 09:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,7 +828,6 @@ void BasicManager::SetLibraryContainerInfo( LibraryContainerInfo* pInfo )
         return;
     mpImpl->mpInfo = pInfo;
 
-
     Reference< XLibraryContainer > xScriptCont;
     StarBASIC* pStdLib = GetStdLib();
     String aLibName = pStdLib->GetName();
@@ -871,6 +870,12 @@ void BasicManager::SetLibraryContainerInfo( LibraryContainerInfo* pInfo )
             {
                 BasicLibInfo* pInfo = pLibs->GetObject( nL );
                 StarBASIC* pLib = pInfo->GetLib();
+                if( !pLib )
+                {
+                    BOOL bLoaded = ImpLoadLibary( pInfo, NULL, FALSE );
+                    if( bLoaded )
+                        pLib = pInfo->GetLib();
+                }
                 if( pLib )
                 {
                     copyToLibraryContainer( pLib, mpImpl->mpInfo );
