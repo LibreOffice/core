@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
+ *  last change: $Author: os $ $Date: 2002-11-07 14:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     void    Update();
 
     void    SetModified(){aPreviewWIN.Invalidate();}
-
+    void    CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 
 public:
     SwOutlineSettingsTabPage(Window* pParent, const SfxItemSet& rSet);

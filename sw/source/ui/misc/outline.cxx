@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-10-16 09:16:29 $
+ *  last change: $Author: os $ $Date: 2002-11-07 14:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,6 +597,7 @@ void    SwOutlineSettingsTabPage::Update()
                                     || pFirstFmt && pFmt && pFmt->GetName() == pFirstFmt->GetName();
             }
         }
+        CheckForStartValue_Impl(aNumFmtArr[0]->GetNumberingType());
         if(bSameType)
             aNumberBox.SelectNumberingType( aNumFmtArr[0]->GetNumberingType() );
         else
@@ -668,7 +669,7 @@ void    SwOutlineSettingsTabPage::Update()
             aAllLevelNF.Enable(FALSE);
             aAllLevelFT.Enable(FALSE);
         }
-
+        CheckForStartValue_Impl(rFmt.GetNumberingType());
         aStartEdit.SetValue( rFmt.GetStart() );
     }
     SetModified();
@@ -789,6 +790,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, SwNumberingTypeListBox *, pBo
             SwNumFmt aNumFmt(pNumRule->Get(i));
             aNumFmt.SetNumberingType(nNumberType);
             pNumRule->Set(i, aNumFmt);
+            CheckForStartValue_Impl(nNumberType);
         }
         nMask <<= 1;
     }
@@ -835,6 +837,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pFld )
         }
         nMask <<= 1;
     }
+    SetModified();
     return 0;
 }
 /* -----------------21.09.98 12:21-------------------
@@ -998,7 +1001,19 @@ SfxTabPage* SwOutlineSettingsTabPage::Create( Window* pParent,
 {
     return new SwOutlineSettingsTabPage(pParent, rAttrSet);
 }
-
+/* -----------------07.11.2002 15:13-----------------
+ *
+ * --------------------------------------------------*/
+void SwOutlineSettingsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType)
+{
+    BOOL bIsNull = aStartEdit.GetValue() == 0;
+    BOOL bNoZeroAllowed = nNumberingType < SVX_NUM_ARABIC ||
+                        SVX_NUM_CHARS_UPPER_LETTER_N == nNumberingType ||
+                        SVX_NUM_CHARS_LOWER_LETTER_N == nNumberingType;
+    aStartEdit.SetMin(bNoZeroAllowed ? 1 : 0);
+    if(bIsNull && bNoZeroAllowed)
+        aStartEdit.GetModifyHdl().Call(&aStartEdit);
+}
 /*-----------------09.12.97 11:54-------------------
 
 --------------------------------------------------*/
