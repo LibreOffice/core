@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 18:12:07 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ ModalDialog DLG_LOGIN
         Text [ dutch ] = "Vermeld hier de gebruiker en het wachtwoord voor %1." ;
         Text[ chinese_simplified ] = "ΗλΔϊΤΪ΄ΛΞª %1 ΚδΘλΣΓ»§ΓϋΊΝΏΪΑξ΅£";
         Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, θμÿ οξλόηξβΰςελÿ θ οΰπξλό δλÿ %1.";
-        Text[ polish ] = "Wpisz nazwisko uΏytkownika i has³o dla %1";
+        Text[ polish ] = "Wpisz nazwκ uΏytkownika i has³o dla %1";
         Text[ japanese ] = "‚±‚±‚Ι %1 ‚ΜΥ°»ή°–Ό‚ΖΚί½ά°Δή‚π“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         Text[ chinese_traditional ] = "½Π¬° %1 Ώι¤J¨Ο¥Ξ¦W©M±K½X΅C";
         Text[ greek ] = "Παρακαλώ εισάγετε εδώ το όνομα του χρήστη και τον κωδικό πρόσβασης για το %1.";
@@ -192,8 +192,8 @@ ModalDialog DLG_LOGIN
         Text [ dutch ] = "Naam ~gebruiker" ;
         Text [ portuguese ] = "~Nome do utilizador" ;
         Text[ chinese_simplified ] = "ΣΓ»§Γϋ(~U)";
-        Text[ russian ] = "Οξλόηξβΰςελό";
-        Text[ polish ] = "Nazwisko uΏytkownika";
+        Text[ russian ] = "Θμÿ οξλόηξβΰςελÿ";
+        Text[ polish ] = "Nazwa uΏytkownika";
         Text[ japanese ] = "Υ°»ή°–Ό(~U)";
         Text[ chinese_traditional ] = "¨Ο¥Ξ¦W(~U)";
         Text[ greek ] = "Όνομα χρήστη";
@@ -319,12 +319,12 @@ ModalDialog DLG_LOGIN
         Text [ portuguese ] = "Login" ;
         Text[ chinese_simplified ] = "Η©µ½";
         Text[ russian ] = "Βυξδ β ρθρςεμσ";
-        Text[ polish ] = "Zarejestruj";
+        Text[ polish ] = "Logowanie";
         Text[ japanese ] = "ΫΈή²έ";
         Text[ chinese_traditional ] = "µn¤J";
         Text[ greek ] = "Σύνδεση";
         Text[ korean ] = "·Ξ±ΧΐΞ";
-        Text[ arabic ] = "ΚΣΜνα";
+        Text[ arabic ] = "ΚΣΜνα ΗαΟΞζα";
         Text[ turkish ] = "Oturum aη";
     };
     OKButton BTN_LOGIN_OK
@@ -358,7 +358,7 @@ ModalDialog DLG_LOGIN
         Text [ dutch ] = "op   " ;
         Text[ chinese_simplified ] = "ΤΪ ";
         Text[ russian ] = "νΰ ";
-        Text[ polish ] = "na  ";
+        Text[ polish ] = "na ";
         Text[ japanese ] = "ΫΈή²έζ ";
         Text[ chinese_traditional ] = "¦b ";
         Text[ greek ] = "στο ";
@@ -377,7 +377,7 @@ ModalDialog DLG_LOGIN
     Text [ portuguese ] = "Requere-se nome de utilizador e senha" ;
     Text[ chinese_simplified ] = "ÒªΗσΚδΘλΣΓ»§ΓϋΊΝΏΪΑξ";
     Text[ russian ] = "Νεξαυξδθμϋ θμÿ οξλόηξβΰςελÿ θ οΰπξλό";
-    Text[ polish ] = "Wymagane nazwisko uΏytkownika i has³o";
+    Text[ polish ] = "Wymagana nazwa uΏytkownika i has³o";
     Text[ japanese ] = "Υ°»ή°–Ό‚ΖΚί½ά°Δή‚ª•K—v";
     Text[ chinese_traditional ] = "½ΠΏι¤J¨Ο¥Ξ¦W©M±K½X";
     Text[ greek ] = "Απαιτείται το όνομα του χρήστη και ο κωδικός πρόσβασης";
