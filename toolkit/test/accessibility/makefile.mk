@@ -34,6 +34,7 @@ JAVA_FILES = \
     AccessibilityTreeModel.java \
     AccessibilityWorkBench.java	\
     AccessibleActionHandler.java	\
+    AccessibleActionNode.java	\
     AccessibleCellHandler.java	\
     AccessibleComponentHandler.java	\
     AccessibleContextHandler.java	\

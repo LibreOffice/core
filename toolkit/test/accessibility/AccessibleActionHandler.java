@@ -34,7 +34,9 @@ class AccessibleActionHandler
             XAccessibleAction.class, aParent.getContext());
     }
 
-    public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
+    public AccessibleTreeNode createChild (
+        AccessibleTreeNode aParent,
+        int nIndex)
     {
         AccessibleTreeNode aChild = null;
 
@@ -51,9 +53,11 @@ class AccessibleActionHandler
                     nIndex -= 1;
                     try
                     {
-                        aChild = new StringNode ("Action " + nIndex + " : "
+                        aChild = new AccessibleActionNode (
+                            "Action " + nIndex + " : "
                             + xAction.getAccessibleActionDescription (nIndex),
-                            aParent);
+                            aParent,
+                            nIndex);
                     }
                     catch( IndexOutOfBoundsException e )
                     {

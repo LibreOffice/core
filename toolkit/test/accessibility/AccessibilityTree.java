@@ -298,6 +298,23 @@ public class AccessibilityTree
 
                         aMenu.show( AccessibilityTree.this, e.getX(), e.getY() );
                     }
+                    else if (aObject instanceof AccessibleTreeNode)
+                    {
+                        AccessibleTreeNode aNode = (AccessibleTreeNode)aObject;
+                        String[] aActionNames = aNode.getActions();
+                        int nCount=aActionNames.length;
+                        if (nCount > 0)
+                        {
+                            JPopupMenu aMenu = new JPopupMenu();
+                            for (int i=0; i<nCount; i++)
+                                aMenu.add( new NodeAction(
+                                    aActionNames[i],
+                                    aNode,
+                                    i));
+                            aMenu.show (AccessibilityTree.this,
+                                e.getX(), e.getY());
+                        }
+                    }
                 }
             }
 
@@ -308,9 +325,9 @@ public class AccessibilityTree
     class NodeAction extends AbstractAction
     {
         private int mnIndex;
-        private AccTreeNode maNode;
+        private AccessibleTreeNode maNode;
 
-        public NodeAction( String aName, AccTreeNode aNode, int nIndex )
+        public NodeAction( String aName, AccessibleTreeNode aNode, int nIndex )
         {
             super( aName );
             maNode = aNode;

@@ -81,4 +81,15 @@ class AccessibleTreeNode
     {
         return maDisplayObject.toString();
     }
+
+    /** get names of suported actions */
+    public String[] getActions ()
+    {
+        return new String[] {};
+    }
+
+    /** perform action */
+    public void performAction (int nIndex)
+    {
+    }
 }
