@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:25:11 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,7 +666,6 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
             aTempFile.EnableKillingFile();
 
             // write document storage
-            xWorkStore->SetVersion( SOFFICE_FILEFORMAT_60 );
             pEmbObj->SetupStorage( xWorkStore );
             bRet = pEmbObj->DoSaveAs( xWorkStore );
             pEmbObj->DoSaveCompleted();
