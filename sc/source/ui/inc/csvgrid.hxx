@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:14:57 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #include <vector>
 #include <memory>
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 #ifndef _SC_CSVCONTROL_HXX
 #include "csvcontrol.hxx"
 #endif
@@ -139,7 +142,7 @@ typedef ::std::vector< ScCsvColState > ScCsvColStateVec;
 
 /** A data grid control for the CSV import dialog. The design of this control
     simulates a Calc spreadsheet with row and column headers. */
-class ScCsvGrid : public ScCsvControl, public SfxListener
+class SC_DLLPUBLIC ScCsvGrid : public ScCsvControl, public SfxListener
 {
 private:
     typedef ::std::auto_ptr< ScEditEngineDefaulter > ScEditEnginePtr;
@@ -196,11 +199,11 @@ public:
 
 private:
     /** Reads colors from system settings. */
-    void                        InitColors();
+    SC_DLLPRIVATE void                        InitColors();
     /** Initializes all font settings. */
-    void                        InitFonts();
+    SC_DLLPRIVATE void                        InitFonts();
     /** Initializes all data dependent from the control's size. */
-    void                        InitSizeData();
+    SC_DLLPRIVATE void                        InitSizeData();
 
     // split handling ---------------------------------------------------------
 public:
@@ -217,11 +220,11 @@ public:
 
 private:
     /** Inserts a split and adjusts column data. */
-    bool                        ImplInsertSplit( sal_Int32 nPos );
+    SC_DLLPRIVATE bool                        ImplInsertSplit( sal_Int32 nPos );
     /** Removes a split and adjusts column data. */
-    bool                        ImplRemoveSplit( sal_Int32 nPos );
+    SC_DLLPRIVATE bool                        ImplRemoveSplit( sal_Int32 nPos );
     /** Clears the split array and re-inserts boundary splits. */
-    void                        ImplClearSplits();
+    SC_DLLPRIVATE void                        ImplClearSplits();
 
     // columns/column types ---------------------------------------------------
 public:
@@ -269,14 +272,14 @@ public:
 
 private:
     /** Returns the data type of the specified column. */
-    sal_Int32                   GetColumnType( sal_uInt32 nColIndex ) const;
+    SC_DLLPRIVATE sal_Int32                   GetColumnType( sal_uInt32 nColIndex ) const;
     /** Returns the data type of the specified column. */
-    void                        SetColumnType( sal_uInt32 nColIndex, sal_Int32 nColType );
+    SC_DLLPRIVATE void                        SetColumnType( sal_uInt32 nColIndex, sal_Int32 nColType );
 
     /** Scrolls data grid vertically. */
-    void                        ScrollVertRel( ScMoveMode eDir );
+    SC_DLLPRIVATE void                        ScrollVertRel( ScMoveMode eDir );
     /** Executes the data type popup menu. */
-    void                        ExecutePopup( const Point& rPos );
+    SC_DLLPRIVATE void                        ExecutePopup( const Point& rPos );
 
     // selection handling -----------------------------------------------------
 public:
@@ -303,15 +306,15 @@ public:
 
 private:
     /** Moves column cursor to a new position. */
-    void                        MoveCursor( sal_uInt32 nColIndex );
+    SC_DLLPRIVATE void                        MoveCursor( sal_uInt32 nColIndex );
     /** Moves column cursor to the given direction. */
-    void                        MoveCursorRel( ScMoveMode eDir );
+    SC_DLLPRIVATE void                        MoveCursorRel( ScMoveMode eDir );
 
     /** Clears the entire selection without notify. */
-    void                        ImplClearSelection();
+    SC_DLLPRIVATE void                        ImplClearSelection();
 
     /** Executes selection action for a specific column. */
-    void                        DoSelectAction( sal_uInt32 nColIndex, sal_uInt16 nModifier );
+    SC_DLLPRIVATE void                        DoSelectAction( sal_uInt32 nColIndex, sal_uInt16 nModifier );
 
     // cell contents ----------------------------------------------------------
 public:
@@ -356,37 +359,37 @@ private:
     inline sal_Int32            GetHeight() const { return maWinSize.Height(); }
 
     /** Sets a clip region in the specified output device for the specified column. */
-    void                        ImplSetColumnClipRegion( OutputDevice& rOutDev, sal_uInt32 nColIndex );
+    SC_DLLPRIVATE void                        ImplSetColumnClipRegion( OutputDevice& rOutDev, sal_uInt32 nColIndex );
     /** Draws the header of the specified column to the specified output device. */
-    void                        ImplDrawColumnHeader( OutputDevice& rOutDev, sal_uInt32 nColIndex, Color aFillColor );
+    SC_DLLPRIVATE void                        ImplDrawColumnHeader( OutputDevice& rOutDev, sal_uInt32 nColIndex, Color aFillColor );
 
     /** Draws the text at the specified position to maBackgrDev. */
-    void                        ImplDrawCellText( const Point& rPos, const String& rText );
+    SC_DLLPRIVATE void                        ImplDrawCellText( const Point& rPos, const String& rText );
     /** Draws the "first imported line" separator to maBackgrDev (or erases, if bSet is false). */
-    void                        ImplDrawFirstLineSep( bool bSet );
+    SC_DLLPRIVATE void                        ImplDrawFirstLineSep( bool bSet );
     /** Draws the column with index nColIndex to maBackgrDev. */
-    void                        ImplDrawColumnBackgr( sal_uInt32 nColIndex );
+    SC_DLLPRIVATE void                        ImplDrawColumnBackgr( sal_uInt32 nColIndex );
     /** Draws the row headers column to maBackgrDev. */
-    void                        ImplDrawRowHeaders();
+    SC_DLLPRIVATE void                        ImplDrawRowHeaders();
     /** Draws all columns and the row headers column to maBackgrDev. */
-    void                        ImplDrawBackgrDev();
+    SC_DLLPRIVATE void                        ImplDrawBackgrDev();
 
     /** Draws the column with index nColIndex with its selection state to maGridDev. */
-    void                        ImplDrawColumnSelection( sal_uInt32 nColIndex );
+    SC_DLLPRIVATE void                        ImplDrawColumnSelection( sal_uInt32 nColIndex );
     /** Draws all columns with selection and cursor to maGridDev. */
-    void                        ImplDrawGridDev();
+    SC_DLLPRIVATE void                        ImplDrawGridDev();
 
     /** Redraws the entire column (background and selection). */
-    void                        ImplDrawColumn( sal_uInt32 nColIndex );
+    SC_DLLPRIVATE void                        ImplDrawColumn( sal_uInt32 nColIndex );
 
     /** Optimized drawing: Scrolls horizontally and redraws only missing parts. */
-    void                        ImplDrawHorzScrolled( sal_Int32 nOldPos );
+    SC_DLLPRIVATE void                        ImplDrawHorzScrolled( sal_Int32 nOldPos );
 
     /** Inverts the cursor bar at the specified position in maGridDev. */
-    void                        ImplInvertCursor( sal_Int32 nPos );
+    SC_DLLPRIVATE void                        ImplInvertCursor( sal_Int32 nPos );
 
     /** Draws directly tracking rectangle to the column with the specified index. */
-    void                        ImplDrawTrackingRect( sal_uInt32 nColIndex );
+    SC_DLLPRIVATE void                        ImplDrawTrackingRect( sal_uInt32 nColIndex );
 
     // accessibility ----------------------------------------------------------
 protected:
