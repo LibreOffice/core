@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:15:27 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@
 #include <svx/numitem.hxx>
 #endif
 
+#include <SwBitArray.hxx> // #i27615#
+
 class Font;
 class SvxBrushItem;
 class SvxNumRule;
@@ -157,6 +159,11 @@ class SwNumRule
     static char* pDefOutlineName;
 
     SwNumFmt* aFmts[ MAXLEVEL ];
+
+    /**
+       marked levels
+     */
+    SwBitArray aMarkedLevels;
 
     String sName;
     SwNumRuleType eRuleType;
@@ -251,6 +258,34 @@ public:
 
     void        SetSvxRule(const SvxNumRule&, SwDoc* pDoc);
     SvxNumRule  MakeSvxNumRule() const;
+
+    // -> #i27615#
+    /**
+       Returns if a level is marked.
+
+       @param nLvl     level to check
+
+       @retval TRUE    level is marked
+       @retval FALSE   level is not marked
+    */
+    BOOL IsLevelMarked(BYTE nLvl) const { return aMarkedLevels.Get(nLvl); }
+
+    /**
+       Mark/unmark a level.
+
+       @param nLvl     level to mark/unmark
+       @param bVal     - TRUE    mark
+                       - FALSE   unmark
+
+       @return bit array in which the altered levels are marked.
+    */
+    SwBitArray SetLevelMarked(BYTE nLvl, BOOL bVal);
+
+    /**
+       Unmarks all levels.
+    */
+    void ResetMarkedLevels() { aMarkedLevels.Reset(); }
+    // <- #i27615#
     // #i23726#, #i23725#
     void        Indent(short aAmount, int nLevel = -1,
                        int nReferenceLevel = -1, BOOL bRelative = TRUE,
