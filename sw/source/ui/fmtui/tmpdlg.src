@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2001-08-29 21:23:34 $
+ *  last change: $Author: kz $ $Date: 2001-09-26 20:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,7 +566,7 @@ TabDialog DLG_TEMPLATE_2
                 Text [ english_us ] = "Drop Caps" ;
                 PageResID = TP_DROPCAPS ;
                 Text[ chinese_simplified ] = "å­—é¦–å¤§å†™";
-                Text[ russian ] = "Èíèöèàëû";
+                Text[ russian ] = "Áóêâèöà";
                 Text[ polish ] = "Inicja³y";
                 Text[ japanese ] = "ï¾„ï¾žï¾›ï½¯ï¾Œï¾Ÿï½·ï½¬ï½¯ï¾Œï¾Ÿ";
                 Text[ chinese_traditional ] = "å­—é¦–å¤§å¯«";
@@ -1468,6 +1468,7 @@ TabDialog DLG_TEMPLATE_5
     Text[ catalan ] = "Estilo de numeración";
     Text[ finnish ] = "Numerointityyli";
 };
+
 
 
 
