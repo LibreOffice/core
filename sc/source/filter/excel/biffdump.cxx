@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:39:21 $
+ *  last change: $Author: er $ $Date: 2002-12-06 17:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,9 +311,9 @@ inline static void __AddDec1616( ByteString& r, UINT32 n )
 
 static void __AddDouble( ByteString& r, const double f )
 {
-    sal_Char    p[ 256 ];
-    sprintf( p, "%.15G", f );
-    r += p;
+    String aStr;
+    SolarMath::DoubleToString( aStr, f, 'G', 15, '.', TRUE );
+    r += ByteString( aStr, RTL_TEXTENCODING_ASCII_US );
 }
 
 
