@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-06 11:41:56 $
+ *  last change: $Author: mib $ $Date: 2000-12-06 15:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
         xPropMapper = GetParaPropMapper();
-        bCache = sal_True;
+//      bCache = sal_True;
         break;
     case XML_STYLE_FAMILY_TEXT_TEXT:
         xPropMapper = GetTextPropMapper();
@@ -374,7 +374,7 @@ OUString XMLTextParagraphExport::Find(
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
         xPropMapper = GetParaPropMapper();
-        bCache = sal_True;
+//      bCache = sal_True;
         break;
     case XML_STYLE_FAMILY_TEXT_TEXT:
         xPropMapper = GetTextPropMapper();
