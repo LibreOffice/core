@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.3 2000-11-23 11:04:44 sab Exp $
+	$Id: chart.mod,v 1.4 2000-11-23 19:48:03 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -65,7 +65,10 @@
 		  chart:class %chart-class; #REQUIRED
 		  svg:width %length; #IMPLIED
 		  svg:height %length; #IMPLIED
-		  chart:style-name %styleName; #IMPLIED >
+		  chart:style-name %styleName; #IMPLIED>
+
+<!ATTLIST chart:chart %presentation-class; >
+<!ATTLIST chart:chart %zindex;>
 <!ATTLIST chart:chart %draw-end-position; >
 
 <!ATTLIST style:properties

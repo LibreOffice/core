@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.10 2000-11-23 11:04:44 sab Exp $
+	$Id: drawing.mod,v 1.11 2000-11-23 19:48:03 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -64,6 +64,7 @@
 <!ENTITY % draw-style-name "draw:style-name %styleName; #IMPLIED presentation:style-name %styleName; #IMPLIED">
 <!ENTITY % shapeId "CDATA" >
 <!ENTITY % draw-text "(text:p|text:unordered-list|text:ordered-list)*">
+<!ENTITY % zindex "draw:z-index %nonNegativeInteger; #IMPLIED">
 
 <!-- commont presentation shape attributes -->
 <!ENTITY % presentation-style-name "presentation:style-name %styleName; #IMPLIED">
@@ -79,6 +80,7 @@
 <!ATTLIST draw:rect %draw-style-name; >
 <!ATTLIST draw:rect %draw-transform; >
 <!ATTLIST draw:rect draw:corner-radius %nonNegativeLength; #IMPLIED>
+<!ATTLIST draw:rect %zindex;>
 
 <!ELEMENT draw:line %draw-text;>
 <!ATTLIST draw:line svg:x1 %length; #REQUIRED>
@@ -87,6 +89,7 @@
 <!ATTLIST draw:line svg:y2 %length; #REQUIRED>
 <!ATTLIST draw:line %draw-style-name; >
 <!ATTLIST draw:line %draw-transform; >
+<!ATTLIST draw:line %zindex;>
 <!ATTLIST draw:line %draw-end-position; >
 
 <!ELEMENT draw:polyline %draw-text; >
@@ -96,6 +99,7 @@
 <!ATTLIST draw:polyline svg:points %points; #REQUIRED>
 <!ATTLIST draw:polyline %draw-style-name; >
 <!ATTLIST draw:polyline %draw-transform; >
+<!ATTLIST draw:polyline %zindex;>
 <!ATTLIST draw:polyline %draw-end-position; >
 
 <!ELEMENT draw:polygon %draw-text; >
@@ -106,6 +110,7 @@
 <!ATTLIST draw:polygon svg:points %points; #REQUIRED >
 <!ATTLIST draw:polygon %draw-style-name; >
 <!ATTLIST draw:polygon %draw-transform; >
+<!ATTLIST draw:polygon %zindex;>
 
 <!ELEMENT draw:path %draw-text; >
 <!ATTLIST draw:path %draw-position;>
@@ -115,6 +120,7 @@
 <!ATTLIST draw:path svg:d %pathData; #REQUIRED >
 <!ATTLIST draw:path %draw-style-name; >
 <!ATTLIST draw:path %draw-transform; >
+<!ATTLIST draw:path %zindex;>
 
 <!ELEMENT draw:circle %draw-text; >
 <!ATTLIST draw:circle svg:cx %length; #REQUIRED >
@@ -122,6 +128,7 @@
 <!ATTLIST draw:circle svg:r %nonNegativeLength; #REQUIRED >
 <!ATTLIST draw:circle %draw-style-name; >
 <!ATTLIST draw:circle %draw-transform; >
+<!ATTLIST draw:circle %zindex;>
 <!ATTLIST draw:circle %draw-end-position; >
 
 <!ELEMENT draw:ellipse %draw-text; >
@@ -131,6 +138,7 @@
 <!ATTLIST draw:ellipse svg:ry %length; #REQUIRED >
 <!ATTLIST draw:ellipse %draw-style-name; >
 <!ATTLIST draw:ellipse %draw-transform; >
+<!ATTLIST draw:ellipse %zindex;>
 <!ATTLIST draw:ellipse %draw-end-position; >
 
 <!ELEMENT draw:connector %draw-text;>
@@ -144,10 +152,12 @@
 <!ATTLIST draw:connector draw:end-y %coordinate; #IMPLIED>
 <!ATTLIST draw:connector draw:end-shape %shapeId; #IMPLIED>
 <!ATTLIST draw:connector draw:end-glue-point %integer; #IMPLIED>
+<!ATTLIST draw:connector %zindex;>
 <!ATTLIST draw:connector %draw-end-position; >
 
 <!ELEMENT draw:g (%shapes;)* >
 <!ATTLIST draw:g %draw-transform; >
+<!ATTLIST draw:g %zindex;>
 <!ATTLIST draw:g %draw-end-position; >
 
 <!ELEMENT draw:page-thumbnail EMPTY>
@@ -155,15 +165,8 @@
 <!ATTLIST draw:page-thumbnail %draw-size; >
 <!ATTLIST draw:page-thumbnail %draw-style-name; >
 <!ATTLIST draw:page-thumbnail %presentation-class; >
+<!ATTLIST draw:page-thumbnail %zindex;>
 <!ATTLIST draw:page-thumbnail %draw-end-position; >
-
-<!ELEMENT text:text-box %draw-text;>
-<!ATTLIST text:text-box %draw-position; >
-<!ATTLIST text:text-box %draw-end-position; >
-<!ATTLIST text:text-box %draw-size; >
-<!ATTLIST text:text-box %draw-style-name; >
-<!ATTLIST text:text-box %presentation-class; >
-<!ATTLIST text:text-box %draw-transform; >
 
 <!ELEMENT draw:caption %draw-text;>
 <!ATTLIST draw:caption %draw-position; >
@@ -173,6 +176,7 @@
 <!ATTLIST draw:caption %draw-transform; >
 <!ATTLIST draw:caption draw:caption-point-x %coordinate; #IMPLIED>
 <!ATTLIST draw:caption draw:caption-point-y %coordinate; #IMPLIED>
+<!ATTLIST draw:caption %zindex;>
 
 <!ELEMENT draw:measure %draw-text;>
 <!ATTLIST draw:measure %draw-position; >
@@ -180,19 +184,7 @@
 <!ATTLIST draw:measure %draw-size; >
 <!ATTLIST draw:measure %draw-style-name; >
 <!ATTLIST draw:measure %draw-transform; >
-
-<!ELEMENT office:image EMPTY>
-<!ATTLIST office:image %draw-position; >
-<!ATTLIST office:image %draw-end-position; >
-<!ATTLIST office:image %draw-size; >
-<!ATTLIST office:image %draw-transform; >
-<!ATTLIST office:image %draw-style-name; >
-<!ATTLIST office:image xlink:href %uriReference; #REQUIRED>
-<!ATTLIST office:image xlink:type (simple) #FIXED "simple">
-<!ATTLIST office:image xlink:show (embed) "embed">
-<!ATTLIST office:image xlink:actuate (onLoad) "onLoad">
-
-
+<!ATTLIST draw:measure %zindex;>
 
 <!-- graphic style elements -->
 <!ELEMENT draw:gradient EMPTY >
@@ -323,7 +315,7 @@
 <!ELEMENT draw:text-box (text:h|text:p|text:ordered-list|
 		text:unordered-list|table:table|chart:chart|
 		draw:a|draw:text-box|draw:image)*>
-<!ATTLIST draw:text-box draw:style-name %styleName; #IMPLIED>
+<!ATTLIST draw:text-box %draw-style-name;>
 <!ATTLIST draw:text-box draw:name %string; #IMPLIED>
 <!ATTLIST draw:text-box draw:chain-next-name %string; #IMPLIED>
 
@@ -333,10 +325,13 @@
 <!ATTLIST draw:text-box svg:width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:text-box svg:height %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:text-box fo:min-height %lengthOrPercentage; #IMPLIED>
+<!ATTLIST draw:text-box %zindex;>
+<!ATTLIST draw:text-box %presentation-class; >
+<!ATTLIST draw:text-box %draw-transform; >
 
 <!-- image -->
 <!ELEMENT draw:image (svg:desc?)>
-<!ATTLIST draw:image draw:style-name %styleName; #IMPLIED>
+<!ATTLIST draw:image %draw-style-name;>
 <!ATTLIST draw:image draw:name %string; #IMPLIED>
 <!ATTLIST draw:image xlink:href %uriReference; #REQUIRED>
 <!ATTLIST draw:image xlink:type (simple) #FIXED "simple">
@@ -348,6 +343,8 @@
 <!ATTLIST draw:image %draw-position;>
 <!ATTLIST draw:image svg:width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:image svg:height %lengthOrPercentage; #IMPLIED>
+<!ATTLIST draw:image %presentation-class; >
+<!ATTLIST draw:image %zindex;>
 
 <!ELEMENT svg:desc (#PCDATA)>
 
