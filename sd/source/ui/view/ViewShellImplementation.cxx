@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-28 10:53:40 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,8 +220,8 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             SFX_REQUEST_ARG (rRequest, pBVisible, SfxBoolItem, ID_VAL_ISPAGEBACK, FALSE);
             SFX_REQUEST_ARG (rRequest, pBObjsVisible, SfxBoolItem, ID_VAL_ISPAGEOBJ, FALSE);
             AutoLayout aLayout ((AutoLayout)pNewAutoLayout->GetValue ());
-            if (aLayout >= AUTOLAYOUT_TITLE
-                && aLayout <= AUTOLAYOUT_HANDOUT6)
+            if (aLayout >= AUTOLAYOUT__START
+                && aLayout < AUTOLAYOUT__END)
             {
                 aNewName        = pNewName->GetValue ();
                 aNewAutoLayout = (AutoLayout) pNewAutoLayout->GetValue ();
