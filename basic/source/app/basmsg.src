@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmsg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: gh $ $Date: 2002-06-26 13:06:16 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 15:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 String S_PROG_START
 {
     Text = "Program start: ($Arg1); ($Arg2)";
+    Text[ language_user1 ] = "Programmstart: <Datum>; <Uhrzeit>";
+    Text[ dutch ] = "Programmastart: ($Arg1); ($Arg2)";
 };
 String S_ERROR_OUTSIDE_TESTCASE
 {
@@ -84,5 +86,6 @@ String S_ERROR_OUTSIDE_TESTCASE
 String S_WARNING_PREFIX
 {
     Text = "Warning: ";
+    Text[ dutch ] = "Waarschuwing:";
 };
 
