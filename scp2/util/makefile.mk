@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-06-16 09:57:43 $
+#   last change: $Author: obo $ $Date: 2004-07-05 13:21:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,23 +96,17 @@ SCP1FILES  = installation_ooo.par          \
              profile_ooo.par               \
              profileitem_ooo.par           \
              starregistryitem_ooo.par      \
-             configurationitem_ooo.par     \
              module_writer.par             \
              file_writer.par               \
-             configurationitem_writer.par  \
              module_calc.par               \
              file_calc.par                 \
-             configurationitem_calc.par    \
              module_draw.par               \
              file_draw.par                 \
-             configurationitem_draw.par    \
              module_impress.par            \
              file_impress.par              \
              canvascommons.par             \
-             configurationitem_impress.par \
              module_math.par               \
              file_math.par                 \
-             configurationitem_math.par    \
              module_graphicfilter.par      \
              file_graphicfilter.par        \
              module_testtool.par           \
@@ -125,7 +119,6 @@ SCP1FILES  = installation_ooo.par          \
              module_python.par             \
              file_python.par               \
              procedure_python.par          \
-             configurationitem_python.par  \
              starregistryitem_python.par   \
              profileitem_python.par
 
