@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: fs $ $Date: 2001-01-24 09:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef _CPPUHELPER_PROPTYPEHLP_HXX
 #include <cppuhelper/proptypehlp.hxx>
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
 #include <com/sun/star/beans/Property.hpp>
@@ -139,6 +142,35 @@ sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /
     sal_Bool bModified(sal_False);
     TYPE aNewValue;
     ::cppu::convertPropertyValue(aNewValue, _rValueToSet);
+    if (aNewValue != _rCurrentValue)
+    {
+        _rConvertedValue <<= aNewValue;
+        _rOldValue <<= _rCurrentValue;
+        bModified = sal_True;
+    }
+    return bModified;
+}
+
+/** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue for enum values
+    @param          _rConvertedValue    the conversion result (if successfull)
+    @param          _rOldValue          the old value of the property, calculated from _rCurrentValue
+    @param          _rValueToSet        the new value which is about to be set
+    @param          _rCurrentValue      the current value of the property
+    @return         sal_True, if the value could be converted and has changed
+                    sal_False, if the value could be converted and has not changed
+    @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
+*/
+template <class ENUMTYPE>
+sal_Bool tryPropertyValueEnum(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, const ENUMTYPE& _rCurrentValue)
+{
+    if (::getCppuType(&_rCurrentValue).getTypeClass() != staruno::TypeClass_ENUM)
+        return tryPropertyValue(_rConvertedValue, _rOldValue, _rValueToSet, _rCurrentValue);
+
+    sal_Bool bModified(sal_False);
+    ENUMTYPE aNewValue;
+    ::cppu::any2enum(aNewValue, _rValueToSet);
+        // will throw an exception if not convertible
+
     if (aNewValue != _rCurrentValue)
     {
         _rConvertedValue <<= aNewValue;
