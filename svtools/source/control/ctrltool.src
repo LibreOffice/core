@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 20:26:33 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 13:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,6 +448,7 @@ String STR_SVT_FONTMAP_NOTAVAILABLE
     TEXT[ catalan ] = "Esta fuente no est· instalada. Se usar· la fuente existente m·s adecuada.";
     TEXT[ finnish ] = "T‰t‰ fonttia ei ole asennettu. L‰hint‰ k‰ytett‰viss‰ olevaa fonttia k‰ytet‰‰n.";
 };
+
 
 
 
