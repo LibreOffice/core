@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:06:20 $
+ *  last change: $Author: rt $ $Date: 2001-08-08 09:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,10 @@ class FlagToolBoxState
             Text[ swedish ] = "Visa ID:n";
             Text[ polish ] = "Poka¿ IDs";
             Text[ portuguese_brazilian ] = "IDs anzeigen";
-            Text[ japanese ] = "ID •\\¦";
-            Text[ korean ] = "ID Ç¥½Ã";
-            Text[ chinese_simplified ] = "ÏÔÊ¾ IDs";
-            Text[ chinese_traditional ] = "Åã¥Ü ID";
+            Text[ japanese ] = "ID è¡¨ç¤º";
+            Text[ korean ] = "ID í‘œì‹œ";
+            Text[ chinese_simplified ] = "æ˜¾ç¤º IDs";
+            Text[ chinese_traditional ] = "é¡¯ç¤º ID";
             Text[ arabic ] = "ÅÙåÇÑ IDs";
             Text[ turkish ] = "ID'leri görüntüle";
             Text[ catalan ] = "Mostrar IDs";
@@ -128,10 +128,10 @@ class FlagToolBoxState
             Text[ swedish ] = "Det är inmatningsfönstret";
             Text[ polish ] = "To jest okno wprowadzania";
             Text[ portuguese_brazilian ] = "Das ist das Eingabefenster";
-            Text[ japanese ] = "‚±‚ê‚Í“ü—Í³¨İÄŞ³‚Å‚·B";
-            Text[ korean ] = "ÀÌ°ÍÀº ÀÔ·ÂÃ¢ÀÔ´Ï´Ù";
-            Text[ chinese_simplified ] = "ÕâÊÇÊäÈëÊÓ´°";
-            Text[ chinese_traditional ] = "³o¬O¤@­Ó¤å¦r¿é¤J¤è¶ô";
+            Text[ japanese ] = "ã“ã‚Œã¯å…¥åŠ›ï½³ï½¨ï¾ï¾„ï¾ï½³ã§ã™ã€‚";
+            Text[ korean ] = "ì´ê²ƒì€ ì…ë ¥ì°½ì…ë‹ˆë‹¤";
+            Text[ chinese_simplified ] = "è¿™æ˜¯è¾“å…¥è§†çª—";
+            Text[ chinese_traditional ] = "é€™æ˜¯ä¸€å€‹æ–‡å­—è¼¸å…¥æ–¹å¡Š";
             Text[ arabic ] = "åĞå åí äÇİĞÉ ÇáÅÏÎÇá";
             Text[ turkish ] = "Giriş penceresi";
             Text[ catalan ] = "Esta es la ventana de entradas";
@@ -158,10 +158,10 @@ class FlagToolBoxState
             Text[ swedish ] = "Överför till TestTool";
             Text[ polish ] = "Przenieœ do TestTool";
             Text[ portuguese_brazilian ] = "Zum TestTool ?bertragen";
-            Text[ japanese ] = "TestTool ‚Ö“]‘—";
-            Text[ korean ] = "TestTool·Î ¿Å±â±â";
-            Text[ chinese_simplified ] = "´«ËÍÖÁ TestTool";
-            Text[ chinese_traditional ] = "¶Ç»¼µ¹ TestTool";
+            Text[ japanese ] = "TestTool ã¸è»¢é€";
+            Text[ korean ] = "TestToolë¡œ ì˜®ê¸°ê¸°";
+            Text[ chinese_simplified ] = "ä¼ é€è‡³ TestTool";
+            Text[ chinese_traditional ] = "å‚³éçµ¦ TestTool";
             Text[ arabic ] = "äŞá Åáì TestTool";
             Text[ turkish ] = "TestTool'a aktar";
             Text[ catalan ] = "Transmitir al TestTool";
@@ -188,10 +188,10 @@ class FlagToolBoxState
             Text[ swedish ] = "Visa alla fönster";
             Text[ polish ] = "Poka¿ wszystkie okna";
             Text[ portuguese_brazilian ] = "Alle Fenster anzeigen";
-            Text[ japanese ] = "‚·‚×‚Ä‚Ì³¨İÄŞ³‚ğ•\\¦";
-            Text[ korean ] = "¸ğµç Ã¢ Ç¥½Ã";
-            Text[ chinese_simplified ] = "ÏÔÊ¾È«²¿ÊÓ´°";
-            Text[ chinese_traditional ] = "Åã¥Ü©Ò¦³ªºµøµ¡";
+            Text[ japanese ] = "ã™ã¹ã¦ã®ï½³ï½¨ï¾ï¾„ï¾ï½³ã‚’è¡¨ç¤º";
+            Text[ korean ] = "ëª¨ë“  ì°½ í‘œì‹œ";
+            Text[ chinese_simplified ] = "æ˜¾ç¤ºå…¨éƒ¨è§†çª—";
+            Text[ chinese_traditional ] = "é¡¯ç¤ºæ‰€æœ‰çš„è¦–çª—";
             Text[ arabic ] = "ÅÙåÇÑ ßÇİÉ ÇáäæÇİĞ";
             Text[ turkish ] = "Tüm pencereleri görüntüle";
             Text[ catalan ] = "Mostrar todas las ventanas";
@@ -215,10 +215,10 @@ class FlagToolBoxState
             Text[ swedish ] = "Visa kort namn(om det finns)";
             Text[ polish ] = "Poka¿ skrót (o ile istnieje)";
             Text[ portuguese_brazilian ] = "Kurzname Anzeigen(Falls Vorhanden)";
-            Text[ japanese ] = "¼®°ÄÈ°Ñ‚Ì•\\¦(‚ ‚éê‡‚Í)";
-            Text[ korean ] = "ÂªÀº ÀÌ¸§(ÀÖÀ» °æ¿ì) Ç¥½Ã";
-            Text[ chinese_simplified ] = "ÏÔÊ¾¶ÌÃû³Æ(Èô´æÔÚµÄ»°)";
-            Text[ chinese_traditional ] = "Åã¥Üµu¦WºÙ(¦pªG¦s¦b)";
+            Text[ japanese ] = "ï½¼ï½®ï½°ï¾„ï¾ˆï½°ï¾‘ã®è¡¨ç¤º(ã‚ã‚‹å ´åˆã¯)";
+            Text[ korean ] = "ì§§ì€ ì´ë¦„(ìˆì„ ê²½ìš°) í‘œì‹œ";
+            Text[ chinese_simplified ] = "æ˜¾ç¤ºçŸ­åç§°(è‹¥å­˜åœ¨çš„è¯)";
+            Text[ chinese_traditional ] = "é¡¯ç¤ºçŸ­åç¨±(å¦‚æœå­˜åœ¨)";
             Text[ arabic ] = "ÅÙåÇÑ ÇáÇÓã ÇáãÎÊÕÑ (ÅĞÇ ßÇä ãæÌæÏÇğ)";
             Text[ turkish ] = "(Varsa) kısaltmayı görüntüle";
             Text[ catalan ] = "Mostrar nombres abreviados (si existen)";
@@ -242,10 +242,10 @@ class FlagToolBoxState
             Text[ swedish ] = "Visa alltid långt namn";
             Text[ polish ] = "Pokazuj zawsze pe³n¹ nazwê";
             Text[ portuguese_brazilian ] = "Langname immer Anzeigen";
-            Text[ japanese ] = "í‚ÉÛİ¸ŞÈ°Ñ‚Ì•\\¦";
-            Text[ korean ] = "±ä ÀÌ¸§ Ç×»ó Ç¥½Ã";
-            Text[ chinese_simplified ] = "×Ô¶¯ÏÔÊ¾³¤Ãû³Æ";
-            Text[ chinese_traditional ] = "¦Û°ÊÅã¥Üªø¦WºÙ";
+            Text[ japanese ] = "å¸¸ã«ï¾›ï¾ï½¸ï¾ï¾ˆï½°ï¾‘ã®è¡¨ç¤º";
+            Text[ korean ] = "ê¸´ ì´ë¦„ í•­ìƒ í‘œì‹œ";
+            Text[ chinese_simplified ] = "è‡ªåŠ¨æ˜¾ç¤ºé•¿åç§°";
+            Text[ chinese_traditional ] = "è‡ªå‹•é¡¯ç¤ºé•·åç¨±";
             Text[ arabic ] = "ÅÙåÇÑ ÇáÇÓã ÇáØæíá ÏÇÆãÇğ";
             Text[ turkish ] = "Tam adı daima görüntüle";
             Text[ catalan ] = "Mostrar siempre los nombres largos";
@@ -287,13 +287,13 @@ WorkWindow TT_INLINE_TRANSLATION {
     Text[ SPANISH ] = "Translation In Place";
     Text[ FRENCH ] = "Relogement inline";
     Text[ ITALIAN ] = "Inplace Translation";
-    Text[ JAPANESE ] = "‚Í‚ß‚İ–|–ó";
+    Text[ JAPANESE ] = "ã¯ã‚è¾¼ã¿ç¿»è¨³";
     Text[ DUTCH ] = "Nieuwe vertaling";
     Text[ POLISH ] = "Nowe t³umaczenie";
     Text[ PORTUGUESE_BRAZILIAN ] = "Inplace Translation";
     Text[ RUSSIAN ] = "Inplace Translation";
     Text[ SWEDISH ] = "Ny översättning";
-    Text[ CHINESE_SIMPLIFIED ] = "·­Òë¹¤¾ß";
+    Text[ CHINESE_SIMPLIFIED ] = "ç¿»è¯‘å·¥å…·";
     Text[ PORTUGUESE ] = "Nova tradução";
     Moveable = TRUE;
     Sizeable = TRUE;
@@ -314,12 +314,12 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ swedish ] = "Översättning";
             Text[ polish ] = "T³umaczenie";
             Text[ portuguese_brazilian ] = "Translation";
-            Text[ japanese ] = "–|–ó";
-            Text[ chinese_simplified ] = "·­Òë";
-            Text[ chinese_traditional ] = "Â½Ä¶";
+            Text[ japanese ] = "ç¿»è¨³";
+            Text[ chinese_simplified ] = "ç¿»è¯‘";
+            Text[ chinese_traditional ] = "ç¿»è­¯";
             Text[ arabic ] = "ÊÑÌãÉ";
         Text[ greek ] = "ÌåôÜöñáóç";
-        Text[ korean ] = "¹ø¿ª";
+        Text[ korean ] = "ë²ˆì—­";
         Text[ turkish ] = "Çeviri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Traducción";
@@ -337,19 +337,19 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ SPANISH ] = "~Editar";
             Text[ FRENCH ] = "~Édition";
             Text[ ITALIAN ] = "Modifica";
-            Text[ JAPANESE ] = "•ÒW(~E)";
+            Text[ JAPANESE ] = "ç·¨é›†(~E)";
             Text[ DUTCH ] = "~Editeren";
             Text[ POLISH ] = "Edytuj";
             Text[ PORTUGUESE_BRAZILIAN ] = "Edit";
             Text[ RUSSIAN ] = "Ïğàâêà";
             Text[ SWEDISH ] = "~Redigera";
-            Text[ CHINESE_SIMPLIFIED ] = "±à¼­(~E)";
+            Text[ CHINESE_SIMPLIFIED ] = "ç¼–è¾‘(~E)";
             Text[ PORTUGUESE ] = "~Editar";
             TabStop = TRUE;
-            Text[ chinese_traditional ] = "½s¿è(~E)";
+            Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
             Text[ arabic ] = "ÊÍÑíÑ";
         Text[ greek ] = "Åğåîåñãáóßá";
-        Text[ korean ] = "ÆíÁı(~E)";
+        Text[ korean ] = "í¸ì§‘(~E)";
         Text[ turkish ] = "~Düzenle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Editar";
@@ -365,18 +365,18 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ SPANISH ] = "Texto original";
             Text[ FRENCH ] = "Texte d'origine";
             Text[ ITALIAN ] = "Testo originale";
-            Text[ JAPANESE ] = "µØ¼ŞÅÙ•¶‘";
+            Text[ JAPANESE ] = "ï½µï¾˜ï½¼ï¾ï¾…ï¾™æ–‡æ›¸";
             Text[ DUTCH ] = "Originele tekst";
             Text[ POLISH ] = "Tekst oryginalny";
             Text[ PORTUGUESE_BRAZILIAN ] = "Original Text";
             Text[ RUSSIAN ] = "Òåêñò îğèãèíàëà";
             Text[ SWEDISH ] = "Original text";
-            Text[ CHINESE_SIMPLIFIED ] = "Ô­À´µÄÎÄ×Ö";
+            Text[ CHINESE_SIMPLIFIED ] = "åŸæ¥çš„æ–‡å­—";
             Text[ PORTUGUESE ] = "Texto original";
-            Text[ chinese_traditional ] = "­ì¨Óªº¤å¦r";
+            Text[ chinese_traditional ] = "åŸä¾†çš„æ–‡å­—";
             Text[ arabic ] = "ÇáäÕ ÇáÃÕáí";
         Text[ greek ] = "Áñ÷éêü êåßìåíï";
-        Text[ korean ] = "¿ø·¡ ÅØ½ºÆ®";
+        Text[ korean ] = "ì›ë˜ í…ìŠ¤íŠ¸";
         Text[ turkish ] = "Asıl metin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Texto original";
@@ -397,12 +397,12 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ swedish ] = "Kommentar";
             Text[ polish ] = "Komentarz";
             Text[ portuguese_brazilian ] = "Comment";
-            Text[ japanese ] = "ºÒİÄ";
-            Text[ chinese_simplified ] = "±¸×¢";
-            Text[ chinese_traditional ] = "³Æµù";
+            Text[ japanese ] = "ï½ºï¾’ï¾ï¾„";
+            Text[ chinese_simplified ] = "å¤‡æ³¨";
+            Text[ chinese_traditional ] = "å‚™è¨»";
             Text[ arabic ] = "ÊÚáíŞ";
         Text[ greek ] = "Ó÷üëéï";
-        Text[ korean ] = "ÁÖ";
+        Text[ korean ] = "ì£¼";
         Text[ turkish ] = "Açıklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comentario";
@@ -426,12 +426,12 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ swedish ] = "~Kommentar";
             Text[ polish ] = "Komentarz";
             Text[ portuguese_brazilian ] = "Comment";
-            Text[ japanese ] = "ºÒİÄ(~C)";
-            Text[ chinese_simplified ] = "±¸×¢(~C)";
-            Text[ chinese_traditional ] = "³Æµù(~C)";
+            Text[ japanese ] = "ï½ºï¾’ï¾ï¾„(~C)";
+            Text[ chinese_simplified ] = "å¤‡æ³¨(~C)";
+            Text[ chinese_traditional ] = "å‚™è¨»(~C)";
             Text[ arabic ] = "ÊÚáíŞ";
         Text[ greek ] = "Ó÷üëéï";
-        Text[ korean ] = "ÁÖ(~C)";
+        Text[ korean ] = "ì£¼(~C)";
         Text[ turkish ] = "~Açıklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Comentario";
@@ -448,18 +448,18 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ SPANISH ] = "~Seleccionar";
             Text[ FRENCH ] = "~Sélectionner";
             Text[ ITALIAN ] = "Seleziona";
-            Text[ JAPANESE ] = "‘I‘ğ(~S)";
+            Text[ JAPANESE ] = "é¸æŠ(~S)";
             Text[ DUTCH ] = "~Selecteren";
             Text[ POLISH ] = "Zaznacz";
             Text[ PORTUGUESE_BRAZILIAN ] = "Select";
             Text[ RUSSIAN ] = "Îòáîğ";
             Text[ SWEDISH ] = "~Markera";
-            Text[ CHINESE_SIMPLIFIED ] = "Ñ¡Ôñ(~S)";
+            Text[ CHINESE_SIMPLIFIED ] = "é€‰æ‹©(~S)";
             Text[ PORTUGUESE ] = "~Seleccionar";
-            Text[ chinese_traditional ] = "¿ï¾Ü(~S)";
+            Text[ chinese_traditional ] = "é¸æ“‡(~S)";
             Text[ arabic ] = "ÊÍÏíÏ";
         Text[ greek ] = "ÅğéëïãŞ";
-        Text[ korean ] = "¼±ÅÃ(~S)";
+        Text[ korean ] = "ì„ íƒ(~S)";
         Text[ turkish ] = "~Seç";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Seleccionar";
@@ -484,10 +484,10 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ swedish ] = "Återställ";
         Text[ polish ] = "Przywróæ";
         Text[ portuguese_brazilian ] = "~Restore";
-        Text[ japanese ] = "Œ³‚Ìó‘Ô‚É–ß‚·(~R)";
-        Text[ korean ] = "º¹¿ø(~R)";
-        Text[ chinese_simplified ] = "ĞŞ¸´(~R)";
-        Text[ chinese_traditional ] = "ÁÙ­ì(~R)";
+        Text[ japanese ] = "å…ƒã®çŠ¶æ…‹ã«æˆ»ã™(~R)";
+        Text[ korean ] = "ë³µì›(~R)";
+        Text[ chinese_simplified ] = "ä¿®å¤(~R)";
+        Text[ chinese_traditional ] = "é‚„åŸ(~R)";
         Text[ arabic ] = "ÇÓÊÚÇÏÉ";
         Text[ turkish ] = "~Geri yükle";
         Text[ catalan ] = "~Restore";
@@ -505,18 +505,18 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ SPANISH ] = "~Aceptar";
             Text[ FRENCH ] = "~Accepter";
             Text[ ITALIAN ] = "Accetta";
-            Text[ JAPANESE ] = "³‘ø(~A)";
+            Text[ JAPANESE ] = "æ‰¿è«¾(~A)";
             Text[ DUTCH ] = "~Accepteren";
             Text[ POLISH ] = "Zaakceptuj";
             Text[ PORTUGUESE_BRAZILIAN ] = "Accept";
             Text[ RUSSIAN ] = "Ïğèíÿòü";
             Text[ SWEDISH ] = "~Acceptera";
-            Text[ CHINESE_SIMPLIFIED ] = "½ÓÊÜ(~A)";
+            Text[ CHINESE_SIMPLIFIED ] = "æ¥å—(~A)";
             Text[ PORTUGUESE ] = "~Aceitar";
-            Text[ chinese_traditional ] = "±µ¨ü(~A)";
+            Text[ chinese_traditional ] = "æ¥å—(~A)";
             Text[ arabic ] = "ŞÈæá";
         Text[ greek ] = "~Áğïäï÷Ş";
-        Text[ korean ] = "µ¿ÀÇ(~A)";
+        Text[ korean ] = "ë™ì˜(~A)";
         Text[ turkish ] = "~Kabul";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Aceptar";
@@ -533,27 +533,27 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ SPANISH ] = "~Siguiente";
             Text[ FRENCH ] = "~Suivant";
             Text[ ITALIAN ] = "Avanti";
-            Text[ JAPANESE ] = "Ÿ‚Ö(~N)";
+            Text[ JAPANESE ] = "æ¬¡ã¸(~N)";
             Text[ DUTCH ] = "~Volgende";
             Text[ POLISH ] = "Dalej";
             Text[ PORTUGUESE_BRAZILIAN ] = "Next";
             Text[ RUSSIAN ] = "Äàëåå";
             Text[ SWEDISH ] = "~Nästa";
-            Text[ CHINESE_SIMPLIFIED ] = "¼ÌĞø(~N)";
+            Text[ CHINESE_SIMPLIFIED ] = "ç»§ç»­(~N)";
             Text[ PORTUGUESE ] = "~Seguinte";
-            Text[ chinese_traditional ] = "Ä~Äò(~N)";
+            Text[ chinese_traditional ] = "ç¹¼çºŒ(~N)";
             Text[ arabic ] = "ÇáÊÇáí";
         Text[ greek ] = "Åğüìåíï";
-        Text[ korean ] = "´ÙÀ½(~N)";
+        Text[ korean ] = "ë‹¤ìŒ(~N)";
         Text[ turkish ] = "~İleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Siguiente";
         Text[ finnish ] = "~Seuraava";
     };
-    Text[ chinese_traditional ] = "Â½Ä¶¤u¨ã";
+    Text[ chinese_traditional ] = "ç¿»è­¯å·¥å…·";
     Text[ arabic ] = "ÊÑÌãÉ ÌÏíÏÉ";
     Text[ greek ] = "Íİá ìåôÜöñáóç";
-    Text[ korean ] = "Á¦À§Ä¡¿¡¼­ ¹ø¿ª";
+    Text[ korean ] = "ì œìœ„ì¹˜ì—ì„œ ë²ˆì—­";
     Text[ turkish ] = "Inplace Translation";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Translation In Place";
@@ -575,12 +575,12 @@ MessBox TT_DISCARD_CHANGED_DATA {
     Message[ swedish ] = "Översättningen kommer att gå förlorad. Fortsätta ändå?";
     Message[ polish ] = "T³umaczenie zaginie. Kontynuowaæ?";
     Message[ portuguese_brazilian ] = "The Translation will be lost. Proceed?";
-    Message[ japanese ] = "–|–ó‚Í¸‚í‚ê‚Ü‚·B‘±‚¯‚Ü‚·‚©B";
-    Message[ chinese_simplified ] = "·­ÒëÄÚÈİ½«»áÒÅÊ§¡£ÄúÒª¼ÌĞøÂğ£¿";
-    Message[ chinese_traditional ] = "Â½Ä¶¤º®e±N·|¬y¥¢¡C±z­nÄ~Äò¡H";
+    Message[ japanese ] = "ç¿»è¨³ã¯å¤±ã‚ã‚Œã¾ã™ã€‚ç¶šã‘ã¾ã™ã‹ã€‚";
+    Message[ chinese_simplified ] = "ç¿»è¯‘å†…å®¹å°†ä¼šé—å¤±ã€‚æ‚¨è¦ç»§ç»­å—ï¼Ÿ";
+    Message[ chinese_traditional ] = "ç¿»è­¯å…§å®¹å°‡æœƒæµå¤±ã€‚æ‚¨è¦ç¹¼çºŒï¼Ÿ";
     Message[ arabic ] = "åĞå ÇáÊÑÌãÉ Óæİ ÊÖíÚ. åá ÊÑíÏ ÇáãÊÇÈÚÉ Úáì ÇáÑÛã ãä Ğáß¿";
     Message[ greek ] = "Ç ìåôÜöñáóç èá ÷áèåß. Óõíİ÷åéá;";
-    Message[ korean ] = "¹ø¿ªÀ» ÀÒ°Ô µË´Ï´Ù. °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ korean ] = "ë²ˆì—­ì„ ìƒê²Œ ë©ë‹ˆë‹¤. ê³„ì†í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Message[ turkish ] = "Çevriri kaybolacak. Devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Se perderá la traducción. ¿Continuar?";
@@ -602,12 +602,12 @@ ErrorBox TT_NO_CONTROL {
     Message[ swedish ] = "Kontrollen är inte längre giltig. Översättningen kan inte sparas.";
     Message[ polish ] = "Polecenie nie jest wa¿ne. T³umaczenia nie mo¿na zapisaæ.";
     Message[ portuguese_brazilian ] = "The Control is no longer valid. The Translation cannot be saved.";
-    Message[ japanese ] = "ºİÄÛ°Ù‚Í‚à‚¤—LŒø‚Å‚Í‚ ‚è‚Ü‚¹‚ñB–|–ó‚ğ•Û‘¶‚Å‚«‚Ü‚¹‚ñB";
-    Message[ chinese_simplified ] = "Õâ¸ö¿Ø¼şÒÑ¾­ÎŞĞ§¡£ÎŞ·¨´æÅÌ·­ÒëÄÚÈİ¡£";
-    Message[ chinese_traditional ] = "³o­Ó±±»s¶µ¤w¸gµL®Ä¡CµLªkÀx¦sÂ½Ä¶¤º®e¡C";
+    Message[ japanese ] = "ï½ºï¾ï¾„ï¾›ï½°ï¾™ã¯ã‚‚ã†æœ‰åŠ¹ã§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚ç¿»è¨³ã‚’ä¿å­˜ã§ãã¾ã›ã‚“ã€‚";
+    Message[ chinese_simplified ] = "è¿™ä¸ªæ§ä»¶å·²ç»æ— æ•ˆã€‚æ— æ³•å­˜ç›˜ç¿»è¯‘å†…å®¹ã€‚";
+    Message[ chinese_traditional ] = "é€™å€‹æ§è£½é …å·²ç¶“ç„¡æ•ˆã€‚ç„¡æ³•å„²å­˜ç¿»è­¯å…§å®¹ã€‚";
     Message[ arabic ] = "ÚäÕÑ ÇáÊÍßã åĞÇ áã íÚÏ ÕÇáÍÇğ. áÇ íãßä ÍİÙ ÇáÊÑÌãÉ.";
     Message[ greek ] = "Ôï óôïé÷åßï åëİã÷ïõ äåí åßíáé ğëİïí İãêõñï. Äåí åßíáé äõíáôüí íá áğïèçêåõôåß ç ìåôÜöñáóç.";
-    Message[ korean ] = "ÄÁÆ®·ÑÀÌ ´õ ÀÌ»ó À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù. ¹ø¿ªÇÑ °ÍÀ» ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Message[ korean ] = "ì»¨íŠ¸ë¡¤ì´ ë” ì´ìƒ ìœ íš¨í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ë²ˆì—­í•œ ê²ƒì„ ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     Message[ turkish ] = "Denetim artık geçerli değil. Çeviri kaydedilemiyor.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "La validez del control no durará mucho. No se puede guardar la traducción.";
@@ -629,10 +629,10 @@ String TT_GPF
     Text[ swedish ] = "Fel uppstod";
     Text[ polish ] = "Wyst¹pi³ b³¹d";
     Text[ portuguese_brazilian ] = "GPF Aufgetreten";
-    Text[ japanese ] = "GPF ‚ª”­¶‚µ‚Ü‚µ‚½B";
-    Text[ korean ] = "GPF ¹ß»ı";
-    Text[ chinese_simplified ] = "·¢Éú·Ç³£ÑÏÖØµÄ´íÎó";
-    Text[ chinese_traditional ] = "µo¥Í«D±`ÄY­«ªº¿ù»~";
+    Text[ japanese ] = "GPF ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚";
+    Text[ korean ] = "GPF ë°œìƒ";
+    Text[ chinese_simplified ] = "å‘ç”Ÿéå¸¸ä¸¥é‡çš„é”™è¯¯";
+    Text[ chinese_traditional ] = "ç™¼ç”Ÿéå¸¸åš´é‡çš„éŒ¯èª¤";
     Text[ arabic ] = "ÍÏË ÎØÃ GPF";
     Text[ turkish ] = "GKH oluştu";
     Text[ catalan ] = "Ha ocurrido un error";
@@ -654,8 +654,8 @@ String TT_ALTERNATE_CAPTION
     Text[ swedish ] = "HelpID ej lika med UniqueID:  ";
     Text[ polish ] = "HelpID nie jest równy UniquellID: ";
     Text[ portuguese_brazilian ] = "GPF Aufgetreten";
-    Text[ japanese ] = "ÍÙÌß ID ‚ª ÕÆ°¸ ID ‚Éˆê’v‚µ‚Ü‚¹‚ñ: ";
-    Text[ korean ] = "µµ¿ò¸»ID¿Í °íÀ¯ID°¡ ÀÏÄ¡ÇÏÁö ¾ÊÀ½ ";
+    Text[ japanese ] = "ï¾ï¾™ï¾Œï¾Ÿ ID ãŒ ï¾•ï¾†ï½°ï½¸ ID ã«ä¸€è‡´ã—ã¾ã›ã‚“: ";
+    Text[ korean ] = "ë„ì›€ë§IDì™€ ê³ ìœ IDê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŒ ";
     Text[ chinese_simplified ] = "HelpID does not match UniqueID: ";
     Text[ chinese_traditional ] = "HelpID does not match UniqueID: ";
     Text[ arabic ] = "HelpID ÛíÑ ãØÇÈŞ áÜ UniqueID: ";
@@ -663,6 +663,7 @@ String TT_ALTERNATE_CAPTION
     Text[ catalan ] = "HelpID difiere de UniqueID:";
     Text[ finnish ] = "Ohjetunnus ei täsmää seuraavan yksilöllisen tunnuksen kanssa: ";
 };
+
 
 
 
