@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-21 12:21:14 $
+ *  last change: $Author: dv $ $Date: 2001-06-22 07:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,7 +388,8 @@ void FileDialogHelper_Impl::updateVersions()
 
         if ( aObj.GetProtocol() == INET_PROT_FILE )
         {
-            SfxMedium aMed( aObj.GetMainURL(), SFX_STREAM_READONLY_MAKECOPY, TRUE );
+            SfxMedium aMed( aObj.GetMainURL( INetURLObject::NO_DECODE ),
+                            SFX_STREAM_READONLY_MAKECOPY, TRUE );
             const SfxVersionTableDtor* pVerTable = aMed.GetVersionList();
 
             if ( pVerTable )
@@ -654,15 +655,12 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                                         SfxItemSet *&   rpSet,
                                         String&         rFilter )
 {
-    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
-
-    if ( ! mxFileDlg.is() || !xFltMgr.is() )
-        return ERRCODE_ABORT;
-
     rpSet = NULL;
     rpURLList = NULL;
 
-    if ( ! mxFileDlg.is() )
+    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+
+    if ( ! mxFileDlg.is() || !xFltMgr.is() )
         return ERRCODE_ABORT;
 
     if ( maCurFilter.getLength() )
@@ -1264,7 +1262,7 @@ void FileDialogHelper::SetDisplayDirectory( const String& rPath )
     INetURLObject aURL( rPath, INET_PROT_FILE );
 
     if ( INET_PROT_NOT_VALID != aURL.GetProtocol() )
-        mpImp->setPath( aURL.GetMainURL() );
+        mpImp->setPath( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 }
 
 // ------------------------------------------------------------------------
