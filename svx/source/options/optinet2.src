@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:45:32 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ConfiguraciÛn";
+        Text[ finnish ] = "Einstellungen";
     };
     FixedText FT_PROXYMODE
     {
@@ -143,6 +144,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Proxy sunucusu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Servidor Pro~xy";
+        Text[ finnish ] = "~V‰lityspalvelin";
     };
     ListBox LB_PROXYMODE
     {
@@ -282,6 +284,12 @@ TabPage RID_SVXPAGE_INET_PROXY
         < "Autom·tica" ; > ;
         < "Manual" ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Ei mit‰‰n" ; > ;
+        < "Automaattinen" ; > ;
+        < "Manuaalinen" ; > ;
+    };
     };
     FixedText FT_HTTP_PROXY
     {
@@ -309,6 +317,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "~Http Proxy";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Http Proxy";
+        Text[ finnish ] = "~Http-v‰lityspalvelin";
     };
     Edit ED_HTTP_PROXY
     {
@@ -342,6 +351,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "~Port";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Puerto";
+        Text[ finnish ] = "~Portti";
     };
     Edit ED_HTTP_PORT
     {
@@ -375,6 +385,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "~Ftp Proxy";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ftp Proxy";
+        Text[ finnish ] = "~FTP-v‰lityspalvelin";
     };
     Edit ED_FTP_PROXY
     {
@@ -408,6 +419,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Port";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "P~uerto";
+        Text[ finnish ] = "~Portti";
     };
     Edit ED_FTP_PORT
     {
@@ -441,6 +453,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Socks Proxy";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Socks Prox~y";
+        Text[ finnish ] = "~Socks-v‰lityspalvelin";
     };
     Edit ED_SOCKS_PROXY
     {
@@ -474,6 +487,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Port";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pu~erto";
+        Text[ finnish ] = "~Portti";
     };
     Edit ED_SOCKS_PORT
     {
@@ -507,6 +521,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Proxy yok:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Sin Proxy para";
+        Text[ finnish ] = "~Ei v‰lityst‰ kohteelle:";
     };
     Edit ED_NOPROXYFOR
     {
@@ -540,6 +555,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Ay˝rma i˛areti ;";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Separador ;";
+        Text[ finnish ] = "Erotin ;";
     };
     FixedLine GB_DNS
     {
@@ -567,6 +583,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "DNS sunucusu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Servidor DNS";
+        Text[ finnish ] = "DNS Server";
     };
     RadioButton RB_DNS_AUTO
     {
@@ -594,6 +611,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Autom·tico";
+        Text[ finnish ] = "~Automatisch";
     };
     RadioButton RB_DNS_MANUAL
     {
@@ -621,6 +639,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Man¸el";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Manual";
+        Text[ finnish ] = "~Manuell";
     };
     PatternField ED_DNS
     {
@@ -657,6 +676,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Mail server";
         Text[ arabic ] = "„“Êœ «·»—Ìœ";
         Text[ catalan ] = "Servidor de correo";
+        Text[ finnish ] = "Mail-Server";
     };
     FixedText FT_SEND
     {
@@ -684,6 +704,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Giden posta sunucusu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Correo s~aliente";
+        Text[ finnish ] = "~Nachrichtenversand";
     };
     Edit ED_SEND
     {
@@ -715,6 +736,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "bu alan iÁin geÁerli bir deer deil. 0 ile 255 aras˝nda bir deer girin.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "no es una entrada v·lida para este campo. Por favor escriba un valor entre 0 y 255.";
+        Text[ finnish ] = " ist kein g¸ltiger Eintrag f¸r dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an.";
     };
     String ST_MSG_255_1
     {
@@ -740,6 +762,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "bu alan iÁin geÁerli bir deer deil. 1 ile 255 aras˝nda bir deer girin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "no es una entrada v·lida para este campo. Por favor escriba un valor entre 1 y 255.";
+        Text[ finnish ] = " ist kein g¸ltiger Eintrag f¸r dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an.";
     };
     Text[ chinese_simplified ] = "¥˙¿Ì∑˛ŒÒ∆˜";
     Text[ russian ] = "œÓÍÒË";
@@ -752,6 +775,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     Text[ turkish ] = "Proxy";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Proxy";
+    Text[ finnish ] = "V‰lityspalvelin";
 };
 /************************************************************************/
 /*                                                                      */
@@ -813,6 +837,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ turkish ] = "ﬁurada ara:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Buscar en";
+        Text[ finnish ] = "Suchen in";
     };
     ListBox LB_SEARCH
     {
@@ -849,6 +874,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
+        Text[ finnish ] = "~Nimi";
     };
     Edit ED_SEARCH_NAME
     {
@@ -882,6 +908,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ turkish ] = "T¸r";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo";
+        Text[ finnish ] = "Tyyppi";
     };
     RadioButton RB_AND
     {
@@ -910,6 +937,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ turkish ] = "Ve";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Y";
+        Text[ finnish ] = "~Ja";
     };
     RadioButton RB_OR
     {
@@ -937,6 +965,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ turkish ] = "Veya";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~O";
+        Text[ finnish ] = "~Tai";
     };
     RadioButton RB_EXACT
     {
@@ -964,6 +993,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ turkish ] = "Ayn˝s˝";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~xacto";
+        Text[ finnish ] = "~Tarkka";
     };
     FixedText FT_URL
     {
@@ -991,6 +1021,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ turkish ] = "÷nek";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Prefijo";
+        Text[ finnish ] = "~Etuliite";
     };
     Edit ED_URL
     {
@@ -1024,6 +1055,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ turkish ] = "Sonek";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "S~ufijo";
+        Text[ finnish ] = "~J‰lkiliite";
     };
     Edit ED_POSTFIX
     {
@@ -1057,6 +1089,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ turkish ] = "Ay˝r˝c˝";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Separador";
+        Text[ finnish ] = "~Erotin";
     };
     Edit ED_SEPARATOR
     {
@@ -1090,6 +1123,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ turkish ] = "~B‹Y‹K/k¸Á¸k harf duyarl˝";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Es~tilo";
+        Text[ finnish ] = "~Kirjainkoon vastaavuus";
     };
     ListBox ED_CASE
     {
@@ -1229,6 +1263,12 @@ TabPage RID_SVXPAGE_INET_SEARCH
         < "May˙sculas" ; > ;
         < "Min˙sculas" ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Ei mit‰‰n" ; > ;
+        < "Ylempi" ; > ;
+        < "Alempi" ; > ;
+    };
     };
      // nicht ¸bersetzen !
     PushButton PB_NEW
@@ -1256,6 +1296,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ arabic ] = "ÃœÌœ";
         Text[ turkish ] = "Yeni";
         Text[ catalan ] = "Nuevo";
+        Text[ finnish ] = "Uu~si";
     };
     PushButton PB_ADD
     {
@@ -1283,6 +1324,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~AÒadir";
+        Text[ finnish ] = "~Lis‰‰";
     };
     PushButton PB_CHANGE
     {
@@ -1310,6 +1352,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ turkish ] = "Dei˛tir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modificar";
+        Text[ finnish ] = "~Muokkaa";
     };
     PushButton PB_DELETE
     {
@@ -1337,6 +1380,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
+        Text[ finnish ] = "~Poista";
     };
     String MSG_MODIFY
     {
@@ -1357,14 +1401,16 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ japanese ] = "åªç›ÇÃïœçXÇìKópÇµÇ‹Ç∑Ç©ÅB";
         Text[ korean ] = "Do you want to accept the current modification?";
         Text[ chinese_simplified ] = "Do you want to accept the current modification?";
-        Text[ chinese_traditional ] = "Do you want to accept the current modification?";
+        Text[ chinese_traditional ] = "±z≠n±ƒ•Œ∑Ì´e™∫≈‹ßÛ°H";
         Text[ turkish ] = "Do you want to accept the current modification?";
         Text[ arabic ] = "Do you want to accept the current modification?";
         Text[ catalan ] = "Do you want to accept the current modification?";
+        Text[ finnish ] = "Mˆchten Sie die aktuelle ƒnderung ¸bernehmen?";
     };
     Text[ turkish ] = "Ara";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "B˙squeda";
+    Text[ finnish ] = "Etsi";
 };
 
 
@@ -1418,6 +1464,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "%PRODUCTNAME Basic script'leri ˛uradan y¸r¸t:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ejecutar Scripts de %PRODUCTNAME Basic desde";
+        Text[ finnish ] = "%PRODUCTNAME Basic-Scripte ausf¸hren von";
     };
     Edit ED_SCRIPT_EXEC
     {
@@ -1458,6 +1505,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~AÒadir";
+        Text[ finnish ] = "~Lis‰‰";
     };
     PushButton PB_SCRIPT_DELETE
     {
@@ -1485,6 +1533,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
+        Text[ finnish ] = "~Poista";
     };
     PushButton PB_SCRIPT_DEFAULT
     {
@@ -1512,6 +1561,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
+        Text[ finnish ] = "~Oletusarvo";
     };
                                     #define GB_SCRIPTING_X 6
                                     #define GB_SCRIPTING_Y 90
@@ -1541,6 +1591,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "%PRODUCTNAME Basic Script";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Script %PRODUCTNAME Basic";
+        Text[ finnish ] = "%PRODUCTNAME Basic-Script";
     };
     RadioButton RBT_STARBASIC_ALWAYS
     {
@@ -1568,6 +1619,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "Her zaman y¸r¸t";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ejecutar s~iempre";
+        Text[ finnish ] = "~Suorita aina";
     };
     RadioButton RBT_STARBASIC_LIST
     {
@@ -1595,6 +1647,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "Listeye gˆre";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Seg˙n ~lista";
+        Text[ finnish ] = "~Luettelosta";
     };
     RadioButton RBT_STARBASIC_NEVER
     {
@@ -1622,6 +1675,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "HiÁ y¸r¸tme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~No ejecutar nunca";
+        Text[ finnish ] = "~ƒl‰ suorita koskaan";
     };
     FixedText FI_STARBASIC_DISCRIPTION_ALWAYS
     {
@@ -1651,6 +1705,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "Dikkat: ›nternetten al˝nan %PRODUCTNAME Basic script'leri kontrol edilmeden y¸r¸t¸lecek!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ADVERTENCIA: °Los scripts de %PRODUCTNAME Basic en Internet son ejecutados sin consultar!";
+        Text[ finnish ] = "NOTE: %PRODUCTNAME Basic scripts from the Internet will be executed without confirming!";
     };
     FixedText FI_STARBASIC_DISCRIPTION_LIST
     {
@@ -1680,6 +1735,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "%PRODUCTNAME Basic script'leri yaln˝zca listedeki dizinlerden y¸r¸t¸lecek.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Los scripts %PRODUCTNAME Basic se ejecutar·n sÛlo a partir de los directorios de la lista.";
+        Text[ finnish ] = "%PRODUCTNAME Basic scripts will be executed only from directories in the list.";
     };
     FixedText FI_STARBASIC_DISCRIPTION_NEVER
     {
@@ -1709,6 +1765,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "%PRODUCTNAME Basic script'leri y¸r¸t¸lmeyecek.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se ejecutan ning˙n script de %PRODUCTNAME Basic.";
+        Text[ finnish ] = "%PRODUCTNAME Basic scripts won't be executed.";
     };
     FixedLine GB_EXECUTE
     {
@@ -1736,6 +1793,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "Plug-In";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Plug-ins";
+        Text[ finnish ] = "PlugIns";
     };
     CheckBox CB_EXECUTE_PLUGINS
     {
@@ -1763,6 +1821,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "Etkinle˛tir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Va~lidar";
+        Text[ finnish ] = "F~reischalten";
     };
     Text[ chinese_simplified ] = "Ω≈±æ";
     Text[ russian ] = "—ÍËÔÚ";
@@ -1775,6 +1834,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     Text[ turkish ] = "Scripting";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Scripting";
+    Text[ finnish ] = "K‰sitell‰‰n komentosarjoja";
 };
 
 ErrorBox RID_SVXERR_OPT_PROXYPORTS
@@ -1802,6 +1862,7 @@ ErrorBox RID_SVXERR_OPT_PROXYPORTS
     Message[ turkish ] = "GeÁersiz deer!\n\nPort numaras˝ iÁin en y¸ksek deer 65535.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "°Valor no v·lido!\n\nEl valor m·ximo de un n˙mero de puerto es 65535.";
+    Message[ finnish ] = "Virheellinen arvo!\n\nPorttinumeron suurin mahdollinen arvo on 65535.";
 };
 
 // RID_SVXDLG_OPT_JAVASCRIPT_DISABLE -----------------------------------------
@@ -1844,6 +1905,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text[ turkish ] = "Java ile birlikte Javascript'in de\nkapat˝laca˝n˝ dikkate al˝n.\n\nYine de Java'y˝ kapatmak istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tenga en cuenta que junto con Java\ntambiÈn desactivar· Javascript.\n\nøDesea a˙n desactivar Java?";
+        Text[ finnish ] = "Jos poistat Java-tuen k‰ytˆst‰,\nmyˆs Javascript poistetaan k‰ytˆst‰.\n\nHaluatko poistaa Java-tuen?";
     };
     CheckBox CB_JSCPT_DISABLE
     {
@@ -1872,6 +1934,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text[ turkish ] = "Bu uyar˝y˝ art˝k gˆr¸nt¸leme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~No mostrar m·s esta advertencia.";
+        Text[ finnish ] = "~ƒl‰ n‰yt‰ varoitusta uudelleen";
     };
     OKButton BTN_JSCPT_YES
     {
