@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-16 12:14:28 $
+ *  last change: $Author: mba $ $Date: 2002-10-11 15:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,7 +554,7 @@ void SfxDocTplService_Impl::getDirList()
     {
         aURL.SetSmartProtocol( INET_PROT_FILE );
         aURL.SetURL( aDirs.GetToken( i, C_DELIM ) );
-        maTemplateDirs[i] = aURL.GetMainURL();
+        maTemplateDirs[i] = aURL.GetMainURL( INetURLObject::NO_DECODE );
     }
 
     aValue <<= maTemplateDirs;
@@ -632,7 +632,7 @@ sal_Bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
     aLinkObj.insertName( rTitle, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
-    OUString aLinkURL = aLinkObj.GetMainURL();
+    OUString aLinkURL = aLinkObj.GetMainURL( INetURLObject::NO_DECODE );
 
     Content aLink;
 
@@ -685,7 +685,7 @@ sal_Bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
     // if the parent exists, we can continue with the creation of the
     // new folder, we have to create the parent otherwise ( as long as
     // bCreateParent is set to true )
-    if ( Content::create( aParentURL.GetMainURL(), maCmdEnv, aParent ) )
+    if ( Content::create( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), maCmdEnv, aParent ) )
     {
         try
         {
@@ -723,7 +723,7 @@ sal_Bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
         // try to create the new folder again ( but this time, we set
         // bCreateParent to false to avoid endless recusions )
         if ( ( aParentURL.getSegmentCount() >= 1 ) &&
-               createFolder( aParentURL.GetMainURL(), bCreateParent, bFsysFolder, aParent ) )
+               createFolder( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), bCreateParent, bFsysFolder, aParent ) )
         {
             bCreatedFolder = createFolder( rNewFolderURL, sal_False, bFsysFolder, rNewFolder );
         }
@@ -978,7 +978,7 @@ sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
 
-    aNewGroupURL = aNewGroupObj.GetMainURL();
+    aNewGroupURL = aNewGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
     if ( Content::create( aNewGroupURL, maCmdEnv, aNewGroup ) ||
          ! createFolder( aNewGroupURL, sal_False, sal_False, aNewGroup ) )
@@ -1010,7 +1010,7 @@ sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
 
-    aNewFolderURL = aNewFolderObj.GetMainURL();
+    aNewFolderURL = aNewFolderObj.GetMainURL( INetURLObject::NO_DECODE );
 
     if ( ! createFolder( aNewFolderURL, sal_False, sal_True, aNewFolder ) )
     {
@@ -1047,7 +1047,7 @@ sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
 
     // Get the target url
     Content     aGroup;
-    OUString    aGroupURL = aGroupObj.GetMainURL();
+    OUString    aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
     OUString    aTargetURL;
 
     if ( Content::create( aGroupURL, maCmdEnv, aGroup ) )
@@ -1086,7 +1086,7 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
                     aGroupObj.insertName( rNewName, false,
                                           INetURLObject::LAST_SEGMENT, true,
                                           INetURLObject::ENCODE_ALL );
-    OUString        aGroupURL = aGroupObj.GetMainURL();
+    OUString        aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
     // Check, if there is a group with the new name, return false
     // if there is one.
@@ -1097,7 +1097,7 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
     aGroupObj.insertName( rOldName, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
-    aGroupURL = aGroupObj.GetMainURL();
+    aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
     // When there is no group with the old name, we can't rename it
     if ( ! Content::create( aGroupURL, maCmdEnv, aGroup ) )
@@ -1156,7 +1156,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rGroupName, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
-    aGroupURL = aGroupObj.GetMainURL();
+    aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
     if ( ! Content::create( aGroupURL, maCmdEnv, aGroup ) )
         return sal_False;
@@ -1166,7 +1166,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rTemplateName, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
-    aTemplateURL = aGroupObj.GetMainURL();
+    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
     if ( Content::create( aTemplateURL, maCmdEnv, aTemplate ) )
         return sal_False;
@@ -1292,7 +1292,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
     aTargetObj.setExtension( aExt );
-    OUString aTargetURL2 = aTargetObj.GetMainURL();
+    OUString aTargetURL2 = aTargetObj.GetMainURL( INetURLObject::NO_DECODE );
 
     // store template
     Sequence< PropertyValue > aArgs(1);
@@ -1328,7 +1328,7 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rGroupName, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
-    aGroupURL = aGroupObj.GetMainURL();
+    aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
     if ( ! Content::create( aGroupURL, maCmdEnv, aGroup ) )
         return sal_False;
@@ -1338,7 +1338,7 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rTemplateName, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
-    aTemplateURL = aGroupObj.GetMainURL();
+    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
     if ( Content::create( aTemplateURL, maCmdEnv, aTemplate ) )
         return sal_False;
@@ -1374,7 +1374,7 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
                       INetURLObject::ENCODE_ALL );
     aTargetObj.setExtension( aSourceObj.getExtension() );
 
-    aTargetURL2 = aTargetObj.GetMainURL();
+    aTargetURL2 = aTargetObj.GetMainURL( INetURLObject::NO_DECODE );
 
     if ( aTargetURL2 == rSourceURL )
         return addEntry( aGroup, rTemplateName, aTargetURL2, aType );
@@ -1426,7 +1426,7 @@ sal_Bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rGroupName, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
-    aGroupURL = aGroupObj.GetMainURL();
+    aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
     if ( ! Content::create( aGroupURL, maCmdEnv, aGroup ) )
         return sal_False;
@@ -1436,7 +1436,7 @@ sal_Bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rTemplateName, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
-    aTemplateURL = aGroupObj.GetMainURL();
+    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
     if ( !Content::create( aTemplateURL, maCmdEnv, aTemplate ) )
         return sal_False;
@@ -1475,7 +1475,7 @@ sal_Bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rGroupName, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
-    aGroupURL = aGroupObj.GetMainURL();
+    aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
     if ( ! Content::create( aGroupURL, maCmdEnv, aGroup ) )
         return sal_False;
@@ -1485,7 +1485,7 @@ sal_Bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rNewName, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
-    aTemplateURL = aGroupObj.GetMainURL();
+    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
     if ( Content::create( aTemplateURL, maCmdEnv, aTemplate ) )
         return sal_False;
@@ -1496,7 +1496,7 @@ sal_Bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rOldName, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
-    aTemplateURL = aGroupObj.GetMainURL();
+    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
     if ( !Content::create( aTemplateURL, maCmdEnv, aTemplate ) )
         return sal_False;
@@ -1961,7 +1961,7 @@ void SfxDocTplService_Impl::addToHierarchy( GroupData_Impl *pGroup,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
 
-    OUString aTemplateURL = aGroupObj.GetMainURL();
+    OUString aTemplateURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
     if ( Content::create( aTemplateURL, maCmdEnv, aTemplate ) )
         return;
@@ -2005,7 +2005,7 @@ void SfxDocTplService_Impl::addGroupToHierarchy( GroupData_Impl *pGroup )
           INetURLObject::LAST_SEGMENT, true,
           INetURLObject::ENCODE_ALL );
 
-    OUString aNewGroupURL = aNewGroupObj.GetMainURL();
+    OUString aNewGroupURL = aNewGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
     if ( createFolder( aNewGroupURL, sal_False, sal_False, aGroup ) )
     {
