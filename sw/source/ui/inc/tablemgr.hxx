@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablemgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:34:57 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,15 @@
 #ifndef _TABLEMGR_HXX
 #define _TABLEMGR_HXX
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+#ifndef _SWTYPES_HXX
 #include "swtypes.hxx"
+#endif
+#ifndef _TABCOL_HXX
 #include "tabcol.hxx"
+#endif
 
 class SwFrmFmt;
 class SwWrtShell;
@@ -73,14 +80,16 @@ class SfxItemSet;
 const SwTwips lAutoWidth = INVALID_TWIPS;
 const char cParaDelim = 0x0a;
 
-class SwTableFUNC
+class SW_DLLPUBLIC SwTableFUNC
 {
     SwFrmFmt    *pFmt;
     SwWrtShell  *pSh;
     BOOL        bCopy;
     SwTabCols   aCols;
+
 private:
-    int GetRightSeparator(int nNum) const;
+    SW_DLLPRIVATE int GetRightSeparator(int nNum) const;
+
 public:
     inline SwTableFUNC(SwFrmFmt &);
            SwTableFUNC(SwWrtShell *pShell, BOOL bCopyFmt = FALSE);
