@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:26 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-23 14:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,12 @@
 
 #include <cppuhelper/implementationentry.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include "ScriptNameResolverImpl.hxx"
 #include "ScriptRuntimeManager.hxx"
 #include <util/util.hxx>
+#include <util/scriptingconstants.hxx>
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -103,7 +106,7 @@ ScriptRuntimeManager::~ScriptRuntimeManager()
 //*************************************************************************
 // Get the proper XScriptInvocation
 Reference< XScriptInvocation > SAL_CALL ScriptRuntimeManager::getScriptRuntime(
-const Reference< scripturi::XScriptURI >& scriptURI )
+const Reference< XInterface >& scriptInfo )
 throw( RuntimeException )
 {
     OSL_TRACE( "** ==> ScriptRuntimeManager in getScriptRuntime\n" );
@@ -172,7 +175,7 @@ throw( RuntimeException )
 //*************************************************************************
 // XScriptInvocation implementation
 Any SAL_CALL ScriptRuntimeManager::invoke(
-    const Reference< scripturi::XScriptURI > & scriptURI,
+    const ::rtl::OUString & scriptURI,
     const Any& invocationCtx, const Sequence< Any >& aParams,
     Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
     throw ( lang::IllegalArgumentException, script::CannotConvertException,
@@ -187,17 +190,28 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
     Any resolvedCtx = invocationCtx;
     try
     {
-        Reference< scripturi::XScriptURI > resolvedURI = resolve( scriptURI,
+        Reference< XInterface > resolvedScript = resolve( scriptURI,
             resolvedCtx );
-        validateXRef( resolvedURI, "ScriptRuntimeManager::invoke: No resolvedURI" );
+        validateXRef( resolvedScript, "ScriptRuntimeManager::invoke: No resolvedURI" );
+        Reference< beans::XPropertySet > invocationProps;
+        resolvedCtx >>= invocationProps;
+        Any aResolvedScript;
+        aResolvedScript <<= resolvedScript;
+
+        validateXRef( invocationProps, "ScriptRuntimeManager::invoke: failed to get XPropertySet from invocationContext" );
+        scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
+                scripting_constants::ScriptingConstantsPool::instance();
+        invocationProps->setPropertyValue( scriptingConstantsPool.SCRIPT_INFO,
+                aResolvedScript );
 
         Reference< XScriptInvocation > xScriptInvocation =
-            getScriptRuntime( resolvedURI );
+            getScriptRuntime( resolvedScript );
         validateXRef( xScriptInvocation,
             "ScriptRuntimeManager::invoke: cannot get instance of language specific runtime." );
 
 
-        results = xScriptInvocation->invoke( resolvedURI, resolvedCtx, aParams,
+        //1st arg needs fixing?
+        results = xScriptInvocation->invoke( scriptURI, resolvedCtx, aParams,
                                              aOutParamIndex, aOutParam );
     }
     catch ( lang::IllegalArgumentException & iae )
@@ -234,18 +248,19 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
                                 Reference< XInterface > () );
     }
 #endif
+    OSL_TRACE( "** ==> ScriptRuntimeManager returned from invoke: %s\n", ::rtl::OUStringToOString( results.getValueTypeName(),  RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     return results;
 }
 
 //*************************************************************************
 // XScriptNameResolver implementation
-Reference< scripturi::XScriptURI > SAL_CALL
-ScriptRuntimeManager::resolve( const Reference< scripturi::XScriptURI >& scriptURI,
+Reference< XInterface > SAL_CALL
+ScriptRuntimeManager::resolve( const ::rtl::OUString& scriptURI,
     Any& invocationCtx )
 throw( lang::IllegalArgumentException, script::CannotConvertException, RuntimeException )
 {
     OSL_TRACE( "** ==> ScriptRuntimeManager in resolve\n" );
-    Reference< scripturi::XScriptURI > resolvedURI;
+    Reference< XInterface > resolvedURI;
 
     Reference< XScriptNameResolver > xScriptNameResolver = getScriptNameResolver();
     validateXRef( xScriptNameResolver,

@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptNameResolverImpl.hxx,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:01 $
+*  last change: $Author: dfoster $ $Date: 2002-10-23 14:11:23 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -71,7 +71,6 @@
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
 
 #include <drafts/com/sun/star/script/framework/XScriptNameResolver.hpp>
-#include <drafts/com/sun/star/script/framework/scripturi/XScriptURI.hpp>
 
 #include "StorageBridgeFactory.hxx"
 
@@ -114,15 +113,15 @@ public:
      @exception NullPointerException
      @return  the resolved XScriptURI
     */
-    css::uno::Reference < dcsssf::scripturi::XScriptURI > SAL_CALL resolve(
-        const css::uno::Reference < dcsssf::scripturi::XScriptURI > & scriptURI,
+    css::uno::Reference < XInterface > SAL_CALL resolve(
+        const ::rtl::OUString & scriptURI,
         css::uno::Any& invocationCtx )
         throw( css::script::CannotConvertException, css::lang::IllegalArgumentException,
            css::uno::RuntimeException );
 private:
-    css::uno::Reference < dcsssf::scripturi::XScriptURI >
-    resolveURIFromStorageID( sal_Int32 sid, const css::uno::Reference <
-        dcsssf::scripturi::XScriptURI > & nameToResolve )
+    css::uno::Reference < XInterface >
+    resolveURIFromStorageID( sal_Int32 sid, const ::rtl::OUString &
+        nameToResolve )
         SAL_THROW ( ( css::lang::IllegalArgumentException, css::uno::RuntimeException ) );
     /**********************************************
      Reference< XComponentContext > m_xContext

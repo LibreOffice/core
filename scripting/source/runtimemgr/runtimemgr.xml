@@ -30,10 +30,9 @@
         <type>  com.sun.star.container.XHierarchicalNameAccess  </type>
         <type>  com.sun.star.lang.XServiceInfo  </type>
         <type>  com.sun.star.io.XOutputStream   </type>
-        <type>  drafts.com.sun.star.script.framework.storage.XScriptImplAccess </type>
+        <type>  drafts.com.sun.star.script.framework.storage.XScriptInfoAccess </type>
         <type>  drafts.com.sun.star.script.framework.XScriptInvocation </type>
     <type>  drafts.com.sun.star.script.framework.XScriptNameResolver </type>
-    <type>  drafts.com.sun.star.script.framework.scripturi.XScriptURI </type>
     </component-description>
     <project-build-dependency>  cppuhelper  </project-build-dependency>
     <project-build-dependency>  cppu        </project-build-dependency>

@@ -19,7 +19,6 @@
         <type>  drafts.com.sun.star.script.framework.provider.XFunction </type>
         <type>  drafts.com.sun.star.script.framework.provider.XFunctionProvider </type>
         <type>  drafts.com.sun.star.script.framework.XScriptInvocation </type>
-        <type>  drafts.com.sun.star.script.framework.scripturi.XScriptURI </type>
 
     </component-description>
     <project-build-dependency>  cppuhelper  </project-build-dependency>

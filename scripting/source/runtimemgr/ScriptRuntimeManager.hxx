@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptRuntimeManager.hxx,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: npower $ $Date: 2002-10-01 10:45:11 $
+*  last change: $Author: dfoster $ $Date: 2002-10-23 14:11:24 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -75,7 +75,6 @@
 
 #include <drafts/com/sun/star/script/framework/XScriptInvocation.hpp>
 #include <drafts/com/sun/star/script/framework/XScriptNameResolver.hpp>
-#include <drafts/com/sun/star/script/framework/scripturi/XScriptURI.hpp>
 
 namespace scripting_runtimemgr
 {
@@ -139,7 +138,7 @@ public:
 
     */
     virtual css::uno::Any SAL_CALL invoke(
-        const css::uno::Reference< dcsssf::scripturi::XScriptURI > & scriptUri,
+        const ::rtl::OUString & scriptUri,
         const css::uno::Any& invocationCtx,
         const css::uno::Sequence< css::uno::Any >& aParams,
         css::uno::Sequence< sal_Int16 >& aOutParamIndex,
@@ -161,15 +160,15 @@ public:
      same as the documentStorageID.
      * @return the resolved URI
      */
-    virtual css::uno::Reference< dcsssf::scripturi::XScriptURI > SAL_CALL resolve(
-        const css::uno::Reference< dcsssf::scripturi::XScriptURI >& scriptUri,
+    virtual css::uno::Reference< XInterface > SAL_CALL resolve(
+        const ::rtl::OUString& scriptUri,
         css::uno::Any& invocationCtx )
         throw( css::lang::IllegalArgumentException, css::script::CannotConvertException,
            css::uno::RuntimeException );
 
 private:
     css::uno::Reference< dcsssf::XScriptInvocation > SAL_CALL getScriptRuntime(
-        const css::uno::Reference< dcsssf::scripturi::XScriptURI > & scriptUri )
+        const css::uno::Reference< css::uno::XInterface > & scriptInfo )
         throw( css::uno::RuntimeException );
     css::uno::Reference< dcsssf::XScriptNameResolver > SAL_CALL getScriptNameResolver()
         throw( css::uno::RuntimeException );

@@ -2,9 +2,9 @@
 *
 *  $RCSfile: StorageBridgeFactory.hxx,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:05 $
+*  last change: $Author: dfoster $ $Date: 2002-10-23 14:11:29 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <drafts/com/sun/star/script/framework/storage/XScriptImplAccess.hpp>
+#include <drafts/com/sun/star/script/framework/storage/XScriptInfoAccess.hpp>
 
 namespace scripting_runtimemgr
 {
@@ -82,7 +82,7 @@ class StorageBridgeFactory
 public:
     explicit StorageBridgeFactory(
         const css::uno::Reference < css::uno::XComponentContext > & xContext );
-    css::uno::Reference < dcsssf::storage::XScriptImplAccess >
+    css::uno::Reference < dcsssf::storage::XScriptInfoAccess >
         getStorageInstance( sal_Int32 sid );
 private:
     StorageBridgeFactory(); // No definition for default ctor

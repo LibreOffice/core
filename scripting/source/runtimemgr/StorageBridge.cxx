@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageBridge.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:02 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-23 14:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ StorageBridge::initStorage() throw ( ::com::sun::star::uno::RuntimeException )
             temp = xMultiComFac->createInstanceWithContext(
                        OUString::createFromAscii( SCRIPTIMPLACCESS_SERVICE ), m_xContext );
             validateXRef( temp, "StorageBridge::StorageBridge: cannot get Storage service" );
-            m_xScriptImplAccess = Reference< storage::XScriptImplAccess > ( temp,
+            m_xScriptInfoAccess = Reference< storage::XScriptInfoAccess > ( temp,
                                   UNO_QUERY_THROW );
         }
         else
@@ -133,8 +133,8 @@ StorageBridge::initStorage() throw ( ::com::sun::star::uno::RuntimeException )
                 xScriptStorageManager->getScriptStorage( m_sid );
             validateXRef( xScriptStorage,
                           "StorageBridge::StorageBridge: cannot get Script Storage service" );
-            m_xScriptImplAccess =
-                Reference< storage::XScriptImplAccess > ( xScriptStorage, UNO_QUERY_THROW );
+            m_xScriptInfoAccess =
+                Reference< storage::XScriptInfoAccess > ( xScriptStorage, UNO_QUERY_THROW );
         }
     }
     catch ( Exception e )
@@ -153,7 +153,7 @@ throw ( lang::IllegalArgumentException,
     Sequence < ::rtl::OUString  > results;
     try
     {
-        results = m_xScriptImplAccess->getScriptLogicalNames();
+        results = m_xScriptInfoAccess->getScriptLogicalNames();
     }
     catch ( Exception e )
     {
@@ -164,15 +164,15 @@ throw ( lang::IllegalArgumentException,
 }
 
 //*************************************************************************
-Sequence < Reference< scripturi::XScriptURI > >
-StorageBridge::getImplementations( const Reference< scripturi::XScriptURI >& queryURI )
+Sequence < Reference< storage::XScriptInfo > >
+StorageBridge::getImplementations( const ::rtl::OUString& queryURI )
 throw ( lang::IllegalArgumentException, RuntimeException )
 {
     OSL_TRACE( "In StorageBridge getImplementations...\n" );
-    Sequence < Reference< scripturi::XScriptURI > > results;
+    Sequence < Reference< storage::XScriptInfo > > results;
     try
     {
-        results = m_xScriptImplAccess->getImplementations( queryURI );
+        results = m_xScriptInfoAccess->getImplementations( queryURI );
     }
     catch ( Exception e )
     {

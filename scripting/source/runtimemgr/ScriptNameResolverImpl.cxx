@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:01 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-23 14:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include <vector>
 
 #include <cppuhelper/implementationentry.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <util/util.hxx>
 #include <util/scriptingconstants.hxx>
@@ -120,12 +121,12 @@ ScriptNameResolverImpl::~ScriptNameResolverImpl()
 }
 
 //*************************************************************************
-Reference< scripturi::XScriptURI > ScriptNameResolverImpl::resolve(
-const Reference< scripturi::XScriptURI > & scriptURI, Any& invocationCtx )
+Reference< XInterface > ScriptNameResolverImpl::resolve(
+const ::rtl::OUString & scriptURI, Any& invocationCtx )
 throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeException )
 {
 
-    Reference< scripturi::XScriptURI > resolvedName;
+    Reference< XInterface > resolvedName;
     Reference< beans::XPropertySet > xPropSetScriptingContext;
     OSL_TRACE( "ScriptNameResolverImpl::resolve: in resolve - start" );
 
@@ -253,29 +254,28 @@ throw( RuntimeException )
 
 //*************************************************************************
 
-Reference< scripturi::XScriptURI >
+Reference< XInterface >
 ScriptNameResolverImpl::resolveURIFromStorageID
-( sal_Int32 sid, const Reference< scripturi::XScriptURI >& scriptURI )
+( sal_Int32 sid, const ::rtl::OUString& scriptURI )
 SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
 {
-
-#ifdef _DEBUG
+#ifdef FOOOOO //_DEBUG
 
     ::rtl::OString locationO( ::rtl::OUStringToOString(
-        scriptURI->getLocation(), RTL_TEXTENCODING_ASCII_US ) );
+        scriptURI.getLocation(), RTL_TEXTENCODING_ASCII_US ) );
     ::rtl::OString languageO( ::rtl::OUStringToOString(
-        scriptURI->getLanguage(), RTL_TEXTENCODING_ASCII_US ) );
+        scriptURI.getLanguage(), RTL_TEXTENCODING_ASCII_US ) );
     ::rtl::OString functionName( ::rtl::OUStringToOString(
-        scriptURI->getFunctionName(), RTL_TEXTENCODING_ASCII_US ) );
+        scriptURI.getFunctionName(), RTL_TEXTENCODING_ASCII_US ) );
     ::rtl::OString logicalName( ::rtl::OUStringToOString(
-        scriptURI->getLogicalName(), RTL_TEXTENCODING_ASCII_US ) );
+        scriptURI.getLogicalName(), RTL_TEXTENCODING_ASCII_US ) );
     fprintf( stderr,
         "trying to resolve URI, {location = %s}, {language = %s}, {funtionName = %s}, {logicalName = %s}\n",
         locationO.pData->buffer, languageO.pData->buffer,
         functionName.pData->buffer, logicalName.pData->buffer );
 #endif
 
-    Reference< scripturi::XScriptURI > resolvedName;
+    Reference< XInterface > resolvedName;
     scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
         scripting_constants::ScriptingConstantsPool::instance();
     if ( sid == scriptingConstantsPool.DOC_STORAGE_ID_NOT_SET )
@@ -285,27 +285,27 @@ SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
     }
     try
     {
-        Reference< storage::XScriptImplAccess > storage =
+        Reference< storage::XScriptInfoAccess > storage =
             m_StorageFactory.getStorageInstance( sid );
         validateXRef( storage,
-        "ScriptNameResolverImpl::resolveURIFromStorageID: cannot get XScriptImplAccess" );
-        Sequence< Reference< scripturi::XScriptURI > > results =
+        "ScriptNameResolverImpl::resolveURIFromStorageID: cannot get XScriptInfoAccess" );
+        Sequence< Reference< storage::XScriptInfo > > results =
             storage->getImplementations( scriptURI );
 
-        const sal_Int32 lenght = results.getLength();
+        const sal_Int32 length = results.getLength();
 
-        if ( !lenght )
+        if ( !length )
         {
             return resolvedName;
         }
 
         OSL_TRACE( "ScriptNameResolverImpl::resolve Got some results..." );
-        for ( sal_Int32 index = 0;index < lenght;index++ )
+        for ( sal_Int32 index = 0;index < length;index++ )
         {
-            Reference< scripturi::XScriptURI > uri = results[ index ];
+            Reference< storage::XScriptInfo > uri = results[ index ];
 #ifdef _DEBUG
 
-            ::rtl::OString locationO( ::rtl::OUStringToOString( uri->getLocation(),
+            ::rtl::OString locationO( ::rtl::OUStringToOString( uri->getScriptLocation(),
                 RTL_TEXTENCODING_ASCII_US ) );
             ::rtl::OString languageO( ::rtl::OUStringToOString( uri->getLanguage(),
                 RTL_TEXTENCODING_ASCII_US ) );

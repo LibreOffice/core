@@ -2,9 +2,9 @@
 *
 *  $RCSfile: StorageBridgeFactory.cxx,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:04 $
+*  last change: $Author: dfoster $ $Date: 2002-10-23 14:11:27 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -81,7 +81,7 @@ StorageBridgeFactory::StorageBridgeFactory(
 
 //*************************************************************************
 // StorageBridge is a bridge between us an storage, the StorageBridge implements the
-// XScriptImplAccess
+// XScriptInfoAccess
 // interface, it allows both the "real" storage and a java test storage component to be
 // configured.
 // @param location contains a url for the document.
@@ -89,11 +89,11 @@ StorageBridgeFactory::StorageBridgeFactory(
 // @see StorageBridge.cxx  for flag "STORAGEPROXY", set to use java "test" component or
 // use "real" storage.
 
-Reference< storage::XScriptImplAccess >
+Reference< storage::XScriptInfoAccess >
 StorageBridgeFactory::getStorageInstance( sal_Int32 sid )
 {
 
-    Reference< storage::XScriptImplAccess > storage = new StorageBridge( m_xContext,
+    Reference< storage::XScriptInfoAccess > storage = new StorageBridge( m_xContext,
             sid ) ;
     return storage;
 }

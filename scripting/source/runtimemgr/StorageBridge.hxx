@@ -2,9 +2,9 @@
 *
 *  $RCSfile: StorageBridge.hxx,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:03 $
+*  last change: $Author: dfoster $ $Date: 2002-10-23 14:11:26 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <drafts/com/sun/star/script/framework/storage/XScriptImplAccess.hpp>
+#include <drafts/com/sun/star/script/framework/storage/XScriptInfoAccess.hpp>
 #include "StorageBridgeFactory.hxx"
 
 namespace scripting_runtimemgr
@@ -75,11 +75,11 @@ namespace scripting_runtimemgr
 #define css ::com::sun::star
 #define dcsssf ::drafts::com::sun::star::script::framework
 
-class StorageBridge : public ::cppu::WeakImplHelper1< dcsssf::storage::XScriptImplAccess >
+class StorageBridge : public ::cppu::WeakImplHelper1< dcsssf::storage::XScriptInfoAccess >
 {
     friend class StorageBridgeFactory;
 public:
-    //XScriptImplAccess
+    //XScriptInfoAccess
     //=========================================================================
     /**
      * Get the implementations for a given URI
@@ -90,9 +90,9 @@ public:
      * @return XScriptURI
      *      The URIs of the implementations
      */
-    virtual css::uno::Sequence< css::uno::Reference< dcsssf::scripturi::XScriptURI > >
+    virtual css::uno::Sequence< css::uno::Reference< dcsssf::storage::XScriptInfo > >
         SAL_CALL getImplementations(
-            const css::uno::Reference< dcsssf::scripturi::XScriptURI >& queryURI )
+            const ::rtl::OUString& queryURI )
         throw ( css::lang::IllegalArgumentException,
             css::uno::RuntimeException );
     //=========================================================================
@@ -111,7 +111,7 @@ private:
 
     void initStorage() throw ( css::uno::RuntimeException );
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    css::uno::Reference< dcsssf::storage::XScriptImplAccess > m_xScriptImplAccess;
+    css::uno::Reference< dcsssf::storage::XScriptInfoAccess > m_xScriptInfoAccess;
     sal_Int32 m_sid;
 };
 }

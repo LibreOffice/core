@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptingContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-10 16:09:45 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-23 14:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ ScriptingContext::ScriptingContext( const Reference< XComponentContext > & xCont
     m_propertyMap[ scriptingConstantsPool.DOC_STORAGE_ID ] = nullAny;
     m_propertyMap[ scriptingConstantsPool.DOC_URI ] = nullAny;
     m_propertyMap[ scriptingConstantsPool.RESOLVED_STORAGE_ID ] = nullAny;
+    m_propertyMap[ scriptingConstantsPool.SCRIPT_INFO ] = nullAny;
 }
 
 //*************************************************************************
