@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:36 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,19 +80,13 @@ enum { RB_NOCHECK, RB_CHECK, RB_DONTKNOW };
 // ORadioButtonModel
 //==================================================================
 class ORadioButtonModel     :public OBoundControlModel
-                            ,public OPropertyChangeListener
                             ,public ::comphelper::OAggregationArrayUsageHelper< ORadioButtonModel >
 {
-    ::rtl::OUString     m_sReferenceValue;  // Referenzwert zum Checken des Buttons
-    sal_Int16           m_nDefaultChecked;  // Soll beim Reset gecheckt werden ?
-
-    sal_Bool            m_bInReset : 1;
+    ::rtl::OUString     m_sReferenceValue;              // Referenzwert zum Checken des Buttons
+    sal_Int16           m_nDefaultChecked;              // Soll beim Reset gecheckt werden ?
 
 protected:
     sal_Int16   getState(const ::com::sun::star::uno::Any& rValue);
-
-    virtual void            _onValueChanged();
-    virtual ::com::sun::star::uno::Any  _getControlValue() const;
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( ORadioButtonModel );
@@ -123,9 +117,6 @@ public:
     // OPropertyChangeListener
     virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 
-    // XReset
-    virtual void SAL_CALL reset() throw(::com::sun::star::uno::RuntimeException);
-
     // OAggregationArrayUsageHelper
     virtual void fillProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
@@ -134,14 +125,31 @@ public:
     IMPLEMENT_INFO_SERVICE()
 
 protected:
-    virtual void        _reset();
-    virtual sal_Bool    _commit();
+    // OBoundControlModel overridables
+    virtual ::com::sun::star::uno::Any
+                            translateDbColumnToControlValue( );
+    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
+    virtual ::com::sun::star::uno::Any
+                            translateExternalValueToControlValue( );
+    virtual ::com::sun::star::uno::Any
+                            translateControlValueToExternalValue( );
+
+    virtual ::com::sun::star::uno::Any
+                            getDefaultForReset() const;
+
+    virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >& _rxBinding );
 
 protected:
     void SetSiblingPropsTo(const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rValue);
 
-    void implConstruct();
     DECLARE_XCLONEABLE( );
+
+private:
+    /** sets the given value as new State at the aggregate
+        @precond
+            our mutex is aquired exactly once
+    */
+    void    setNewAggregateState( const ::com::sun::star::uno::Any& _rValue );
 };
 
 //==================================================================
