@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-18 17:22:04 $
+ *  last change: $Author: sj $ $Date: 2001-10-01 15:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ private:
     sal_Bool            mbDummy3    : 1;
     sal_Bool            mbDummy4    : 1;
     sal_Bool            mbDummy5    : 1;
-    sal_Bool            mbDummy6    : 1;
+    sal_Bool            mbGrabFocus : 1;
     sal_Bool            mbReadOnly  : 1;
     sal_Bool            mbIsHTMLDoc : 1;
 
