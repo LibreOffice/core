@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:39:29 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   namedlg.src  $
  //   $Author: kz $
- //     $Date: 2001-02-09 20:39:29 $
- // $Revision: 1.4 $
+ //     $Date: 2001-03-01 21:07:35 $
+ // $Revision: 1.5 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -401,7 +401,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ russian ] = "Ïîâòîğ ñòğîêè";
         Text[ polish ] = "Powtarzaj wiersz";
         Text[ japanese ] = "ŒJ‚è•Ô‚·s(~R)";
-        Text[ chinese_traditional ] = "­«½Æªº¦C(~R)";
+        Text[ chinese_traditional ] = "­«½Æ¦C(~R)";
         Text[ arabic ] = "ÇáÕİ ÇáãßÑÑ";
         Text[ greek ] = "Åğáíáëáìâáíüìåí~ç ãñáììŞ";
         Text[ korean ] = "¹İº¹Çà(~R)";
