@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTypeDescriptionEnumerationAccess.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:20 $
+ *  last change:$Date: 2003-09-08 10:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,12 +60,13 @@
  ************************************************************************/
 package ifc.reflection;
 
-import com.sun.star.reflection.XTypeDescriptionEnumerationAccess;
-import com.sun.star.reflection.XTypeDescriptionEnumeration;
+import lib.MultiMethodTest;
+
 import com.sun.star.reflection.TypeDescriptionSearchDepth;
 import com.sun.star.reflection.XTypeDescription;
+import com.sun.star.reflection.XTypeDescriptionEnumeration;
+import com.sun.star.reflection.XTypeDescriptionEnumerationAccess;
 import com.sun.star.uno.TypeClass;
-import lib.MultiMethodTest;
 
 /**
  * Testing <code>com.sun.star.reflection.XTypeDescriptionEnumerationAccess
