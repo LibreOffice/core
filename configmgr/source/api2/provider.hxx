@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 16:23:38 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #ifndef _COM_SUN_STAR_LANG_XLOCALIZABLE_HPP_
 #include <com/sun/star/lang/XLocalizable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
+#include <com/sun/star/util/XRefreshable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
+#include <com/sun/star/util/XFlushable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
@@ -83,8 +89,8 @@
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
 #include <comphelper/propertycontainer.hxx>
@@ -96,6 +102,7 @@ namespace configmgr
     namespace uno  = css::uno;
     namespace lang = css::lang;
     namespace beans = css::beans;
+    namespace util = css::util;
     using ::rtl::OUString;
     using ::vos::ORef;
 
@@ -103,8 +110,10 @@ namespace configmgr
     class ContextReader;
     class OProviderImpl;
 
-    typedef ::cppu::ImplHelper2 <    lang::XMultiServiceFactory
+    typedef ::cppu::ImplHelper4 <    lang::XMultiServiceFactory
                                     ,lang::XLocalizable
+                                    ,util::XRefreshable
+                                    ,util::XFlushable
                                 >   OProvider_Base;
 
     //==========================================================================
