@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     Text [ norwegian ] = "Tallformat" ;
     Text [ italian ] = "Formato numero" ;
     Text [ portuguese_brazilian ] = "Numberformat" ;
-    Text [ portuguese ] = "Formato dos números" ;
+    Text [ portuguese ] = "Formato numérico" ;
     Text [ finnish ] = "Numberformat" ;
     Text [ danish ] = "Talformat" ;
     Text [ french ] = "Format numérique" ;
