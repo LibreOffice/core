@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:12:55 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3172,7 +3172,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                             const lang::Locale aLocale( GetLocale( EditPaM( pPortion->GetNode(), nIndex+1 ) ) );
 
                                             // #110496# Output character, word and sentence comments
-                                            ImplDrawWithComments( aTmpFont, aLocale, *pOutDev, *pMtf, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
+                                            ImplDrawWithComments( aTmpFont, aLocale, *pOutDev, *pMtf,
+                                                                  aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
                                         }
                                         else
                                         {
@@ -4301,36 +4302,55 @@ void ImpEditEngine::ImplDrawWithComments( SvxFont&              rFont,
                                           const USHORT          nLen,
                                           const long*           pDXArray ) const
 {
+    // #116716# output text normally (the obvious solution, to split
+    // the text up into single characters, does not work at all for
+    // BiDi text)
+    rFont.QuickDrawText( &rOutDev, rPos, rTxt, nIdx, nLen, pDXArray );
+
+    // determine relevant logical text elements for the just-rendered
+    // string of characters.
     Reference< i18n::XBreakIterator > xBI( ImplGetBreakIterator() );
 
-    sal_Int32 nDone;
-    sal_Int32 nNextCellBreak( xBI->nextCharacters(rTxt, nIdx, rLocale, i18n::CharacterIteratorMode::SKIPCELL, 0, nDone) );
-    i18n::Boundary nNextWordBoundary( xBI->getWordBoundary(rTxt, nIdx, rLocale, i18n::WordType::ANY_WORD, sal_True) );
-    sal_Int32 nNextSentenceBreak( xBI->endOfSentence(rTxt, nIdx, rLocale) );
-
-    const sal_Int32 nEndPos( nIdx + nLen );
-    sal_Int32 i, currOffset(0);
-    for( i=nIdx; i<nEndPos; ++i )
+    if( xBI.is() )
     {
-        // TODO: Check whether position update is valid for CTL/BiDi
-        rOutDev.DrawText( rPos + Point(currOffset,0), rTxt, i, 1 );
-        currOffset = *pDXArray++;
+        sal_Int32 nDone;
+        sal_Int32 nNextCellBreak( xBI->nextCharacters(rTxt,
+                                                      nIdx,
+                                                      rLocale,
+                                                      i18n::CharacterIteratorMode::SKIPCELL,
+                                                      0,
+                                                      nDone) );
+        i18n::Boundary nNextWordBoundary( xBI->getWordBoundary(rTxt,
+                                                               nIdx,
+                                                               rLocale,
+                                                               i18n::WordType::ANY_WORD,
+                                                               sal_True) );
+        sal_Int32 nNextSentenceBreak( xBI->endOfSentence(rTxt,
+                                                         nIdx,
+                                                         rLocale) );
 
-        // issue the comments at the respective break positions
-        if( i == nNextCellBreak )
+        const sal_Int32 nEndPos( nIdx + nLen );
+        sal_Int32 i;
+        for( i=nIdx; i<nEndPos; ++i )
         {
-            rMtf.AddAction( new MetaCommentAction( "XTEXT_EOC" ) );
-            nNextCellBreak = xBI->nextCharacters(rTxt, i, rLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
-        }
-        if( i == nNextWordBoundary.endPos )
-        {
-            rMtf.AddAction( new MetaCommentAction( "XTEXT_EOW" ) );
-            nNextWordBoundary = xBI->getWordBoundary(rTxt, i+1, rLocale, i18n::WordType::ANY_WORD, sal_True);
-        }
-        if( i == nNextSentenceBreak )
-        {
-            rMtf.AddAction( new MetaCommentAction( "XTEXT_EOS" ) );
-            nNextSentenceBreak = xBI->endOfSentence(rTxt, i+1, rLocale);
+            // issue the comments for the respective break positions
+            if( i == nNextCellBreak )
+            {
+                rMtf.AddAction( new MetaCommentAction( "XTEXT_EOC", i-nIdx ) );
+                nNextCellBreak = xBI->nextCharacters(rTxt, i, rLocale,
+                                                     i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+            }
+            if( i == nNextWordBoundary.endPos )
+            {
+                rMtf.AddAction( new MetaCommentAction( "XTEXT_EOW", i-nIdx ) );
+                nNextWordBoundary = xBI->getWordBoundary(rTxt, i+1, rLocale,
+                                                         i18n::WordType::ANY_WORD, sal_True);
+            }
+            if( i == nNextSentenceBreak )
+            {
+                rMtf.AddAction( new MetaCommentAction( "XTEXT_EOS", i-nIdx ) );
+                nNextSentenceBreak = xBI->endOfSentence(rTxt, i+1, rLocale);
+            }
         }
     }
 }
