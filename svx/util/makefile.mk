@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: fs $ $Date: 2001-07-25 13:58:53 $
+#   last change: $Author: er $ $Date: 2001-07-25 19:01:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -191,7 +191,8 @@ SHL2STDLIBS= \
             $(RTLLIB) \
             $(UNOTOOLSLIB) \
             $(UCBHELPERLIB) \
-            $(COMPHELPERLIB)
+            $(COMPHELPERLIB) \
+            $(DBTOOLSLIB)
 
 .IF "$(TF_UCB)" == ""
 SHL2STDLIBS+=\
@@ -297,8 +298,8 @@ SRSFILELIST=\
                 $(SRS)$/fmcomp.srs \
                 $(SRS)$/engine3d.srs \
                 $(SRS)$/unodraw.srs \
-                $(SRS)$/svxlink.srs 
-                
+                $(SRS)$/svxlink.srs
+
 .IF "$(GUI)" != "MAC"
 SRSFILELIST+=   $(SOLARVERSION)$/$(INPATH)$/res$(UPDMINOREXT)$/sfx.srs
 .ELSE
@@ -590,6 +591,7 @@ $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo ImpEdCtrl >> $@
     @echo ImpEdit >> $@
     @echo ImpF >> $@
+    @echo +ImpGetResStr >> $@
     @echo ImpGet >> $@
     @echo ImpH >> $@
     @echo ImpHide >> $@
