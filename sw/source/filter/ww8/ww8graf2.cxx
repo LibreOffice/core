@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 11:33:06 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 12:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,12 +422,8 @@ SwFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt( const WW8PicDesc& rPD,
                     pGraph,
                     &aFlySet,               // Attribute fuer den FlyFrm
                     &rGrfSet );             // Attribute fuer die Grafik
-    if( rGrName.Len() )
-    {
-        String aName;
-        if(MakeUniqueGraphName(aName, rGrName))
-            pFlyFmt->SetName( aName );
-    }
+
+    aGrfNameGenerator.SetUniqueGraphName(pFlyFmt,rGrName);
 
     // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden:
     if(     rDoc.GetRootFrm()
@@ -457,12 +453,7 @@ SwFrmFmt* SwWW8ImplReader::MakeGrafInCntnt( const WW8_PIC& rPic, const WW8PicDes
                     &aFlySet,               // Attribute fuer den FlyFrm
                     &rGrfSet );             // Attribute fuer die Grafik
 
-    if( rGrName.Len() )
-    {
-        String aName;
-        if( MakeUniqueGraphName( aName, rGrName ))
-            pFlyFmt->SetName( aName );
-    }
+    aGrfNameGenerator.SetUniqueGraphName(pFlyFmt, rGrName);
 
     // Grafik im Rahmen ? ok, Rahmen auf Bildgroesse vergroessern
     //  ( nur wenn Auto-Breite )
@@ -751,7 +742,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
             Rectangle aRect( 0,0, aPD.nWidth,  aPD.nHeight);
             SvxMSDffImportData aData( aRect );
             pObject = pMSDffManager->ImportObj(*pDataStream, &aData, &aRect);
-            if( pObject )
+            if (pObject)
             {
                 // fuer den Rahmen
                 SfxItemSet aAttrSet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
@@ -815,7 +806,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                     }
                 }
 
-                XubString aObjectName( pObject->GetName() );
+                String aObjectName(pObject->GetName());
                 if (UINT16(OBJ_OLE2) == pObject->GetObjIdentifier())
                     pNewFlyFmt = InsertOle(*((SdrOle2Obj*)pObject),aAttrSet);
                 else
@@ -880,12 +871,8 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                     if (pRecord)
                         SetAttributesAtGrfNode(pRecord,pRet,0);
                     // mehrfaches Auftreten gleicher Grafik-Namen vermeiden
-                    if( aObjectName.Len() )
-                    {
-                        String aName;
-                        if( MakeUniqueGraphName( aName, aObjectName ))
-                            pNewFlyFmt->SetName( aName );
-                    }
+                    aGrfNameGenerator.SetUniqueGraphName(pNewFlyFmt,aObjectName);
+
                     // Zeiger auf neues Objekt ermitteln und
                     // Z-Order-Liste entsprechend korrigieren
                     // (oder Eintrag loeschen)

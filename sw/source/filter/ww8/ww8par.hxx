@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 11:33:06 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 12:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,6 +560,22 @@ private:
         com::sun::star::drawing::XShape > xShape;
 };
 
+class wwFrameNamer
+{
+private:
+    String msSeed;
+    int mnImportedGraphicsCount;
+    bool mbIsDisabled;
+    //No copying
+    wwFrameNamer(const wwFrameNamer&);
+    wwFrameNamer& operator=(const wwFrameNamer&);
+public:
+    void SetUniqueGraphName(SwFrmFmt *pFrmFmt,const String &rFixedPart);
+    wwFrameNamer(bool bIsDisabled, String &rSeed)
+        : msSeed(rSeed), mnImportedGraphicsCount(0), mbIsDisabled(bIsDisabled)
+        { }
+};
+
 //-----------------------------------------
 //            Storage-Reader
 //-----------------------------------------
@@ -596,15 +612,27 @@ friend class WW8FormulaControl;
     SwWW8FltRefStack *pRefStck;
 
     /*
-     * For graphics anchors
-     */
+    For graphics anchors. Determines the graphics whose anchors are in the
+    current paragraph, and works around the difficulty in inserting a graphic
+    anchored to character before a character to be anchored to has been
+    inserted.
+    */
     SwWW8FltAnchorStack* pAnchorStck;
+
+    /*
+    Creates unique names to give to graphics
+    */
+    wwFrameNamer aGrfNameGenerator;
 
     SwMSConvertControls *pFormImpl; // Control-Implementierung
 
     SwFlyFrmFmt* pFlyFmtOfJustInsertedGraphic;
     SwFrmFmt* pFmtOfJustInsertedGraphicOrOLE;
-    //Keep track of generated Ruby character formats
+
+    /*
+    Keep track of generated Ruby character formats we we can minimize the
+    number of character formats created
+    */
     ::std::vector<const SwCharFmt*> aRubyCharFmts;
 
     WW8Fib* pWwFib;
@@ -671,15 +699,12 @@ friend class WW8FormulaControl;
                                 // Ini-Flags:
     ULONG nIniFlags;            // Flags aus der writer.ini
     ULONG nIniFlags1;           // dito ( zusaetzliche Flags )
-//  ULONG nIniHdSiz;            // dito fuer Header
     ULONG nIniFtSiz;            // dito fuer Default-Size Footer
     ULONG nFieldFlags;          // dito fuer Feldern
     ULONG nFieldTagAlways[3];   // dito fuers Taggen von Feldern
     ULONG nFieldTagBad[3];      // dito fuers Taggen von nicht importierbaren F.
 
     ULONG nLastFlyNode;         // Node number of last imported Fly
-
-    ULONG nImportedGraphicsCount;   // benoetigt fuer MakeUniqueGraphName()
 
     ULONG nHdTextHeight;        // Hoehe des eingelesenen Headers
     ULONG nFtTextHeight;        // Hoehe des eingelesenen Footers
@@ -947,7 +972,6 @@ friend class WW8FormulaControl;
     //This converts MS Asian Typography information into OOo's
     void ImportDopTypography(const WW8DopTypography &rTypo);
 
-    void SetImplicitTab();
     ULONG LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss);
 
     BOOL StartTable(WW8_CP nStartCp);
@@ -978,8 +1002,6 @@ friend class WW8FormulaControl;
     void StopAnl( BOOL bGoBack = TRUE );
 
 // GrafikLayer
-
-    BOOL MakeUniqueGraphName(String& rName, const String& rFixedPart);
 
     BOOL ReadGrafStart( void* pData, short nDataSiz, WW8_DPHEAD* pHd,
                         WW8_DO* pDo );

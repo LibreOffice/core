@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 12:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -938,10 +938,11 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
 
     *pRdr->pPaM->GetPoint() = aTmpPos;
 
-    delete pRdr->pPlcxMan;
-
-    // restauriere die Attributverwaltung
-    pRdr->pPlcxMan = pOldPlcxMan;
+    if (pOldPlcxMan != pRdr->pPlcxMan)
+    {
+        delete pRdr->pPlcxMan;
+        pRdr->pPlcxMan = pOldPlcxMan;
+    }
     pRdr->pPlcxMan->RestoreAllPLCFx( aPLCFxSave );
 }
 
@@ -2307,7 +2308,8 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     SvStream* pSt, SwDoc& rD, BOOL bNewDoc )
     : pStg( pStorage ), rDoc( rD ), pStrm( pSt ), bNew( 0 != bNewDoc ),
     pMSDffManager( 0 ), pAtnNames( 0 ), pAuthorInfos( 0 ), pOleMap(0),
-    pTabNode(0), pLastPgDeskIdx( 0 ), pDataStream( 0 ), pTableStream( 0 )
+    pTabNode(0), pLastPgDeskIdx( 0 ), pDataStream( 0 ), pTableStream( 0 ),
+    aGrfNameGenerator(bNewDoc,String('G'))
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
@@ -2370,7 +2372,6 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     nFldNum = 0;
 
     nLastFlyNode = ULONG_MAX;
-    nImportedGraphicsCount = 0;
 
     nLFOPosition = USHRT_MAX;
     nListLevel   = nWW8MaxListLevel;
@@ -3013,7 +3014,6 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
 
         nIniFlags = aVal[ 0 ];
         nIniFlags1= aVal[ 1 ];
-//      nIniHdSiz = ReadFilterFlags( "WWHD" );
         nIniFtSiz = aVal[ 2 ];
         // schiebt Flys um x twips nach rechts o. links
         nIniFlyDx = aVal[ 3 ];
@@ -3047,21 +3047,22 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
     UINT16 nMagic;
     *pStrm >> nMagic;
 
-    switch( nWantedVersion )    // beachte: 6 steht fuer "6 ODER 7",  7 steht fuer "NUR 7"
+    // beachte: 6 steht fuer "6 ODER 7",  7 steht fuer "NUR 7"
+    switch (nWantedVersion)
     {
-    case 6:
-    case 7:
+        case 6:
+        case 7:
             if ( (0xa5dc != nMagic) && (0xa699 != nMagic) )
             {
                 //JP 06.05.99: teste auf eigenen 97-Fake!
-                if( pStg && 0xa5ec == nMagic )
+                if (pStg && 0xa5ec == nMagic)
                 {
                     ULONG nCurPos = pStrm->Tell();
-                    UINT32 nfcMin;
-                    if( pStrm->Seek( nCurPos + 22 ) )
+                    if (pStrm->Seek(nCurPos + 22))
                     {
+                        UINT32 nfcMin;
                         *pStrm >> nfcMin;
-                        if( 0x300 != nfcMin )
+                        if (0x300 != nfcMin)
                             nErrRet = ERR_WW6_NO_WW6_FILE_ERR;
                     }
                     pStrm->Seek( nCurPos );
@@ -3070,19 +3071,20 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
                     nErrRet = ERR_WW6_NO_WW6_FILE_ERR;
             }
             break;
-    case 8: if( 0xa5ec != nMagic )
+        case 8:
+            if (0xa5ec != nMagic)
                 nErrRet = ERR_WW8_NO_WW8_FILE_ERR;
             break;
-
-    default:
-        nErrRet = ERR_WW8_NO_WW8_FILE_ERR;
-        ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+        default:
+            nErrRet = ERR_WW8_NO_WW8_FILE_ERR;
+            ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+            break;
     }
 
-    if( !nErrRet )
-        nErrRet = LoadDoc1( rPaM ,pGloss);
+    if (!nErrRet)
+        nErrRet = LoadDoc1(rPaM ,pGloss);
 
-    return nErrRet;                 // return Errorcode
+    return nErrRet;
 }
 
 

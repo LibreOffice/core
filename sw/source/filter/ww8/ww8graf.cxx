@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-11 15:30:12 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 12:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,25 +305,18 @@
                   (USHORT)nWC[2] << 8 );
 }
 
-
-
-// MakeUniqueGraphName erzeugt einen einzigartigen Namen fuer eine Grafik
-//                     ( nur falls nicht bNew gesetzt ist )
-
-BOOL SwWW8ImplReader::MakeUniqueGraphName( String& rName,
-                                            const String& rFixedPart )
+void wwFrameNamer::SetUniqueGraphName(SwFrmFmt *pFrmFmt,
+    const String &rFixedPart)
 {
-    if( !bNew )
-        return FALSE;
-    nImportedGraphicsCount++;
-    rName = 'G';
-    rName += String::CreateFromInt32( nImportedGraphicsCount );
-    rName.APPEND_CONST_ASC( ": " );
-    rName += rFixedPart;
-    return TRUE;
+    if (mbIsDisabled || !rFixedPart.Len())
+        return;
+    mnImportedGraphicsCount++;
+    String aName(msSeed);
+    aName += String::CreateFromInt32(mnImportedGraphicsCount);
+    aName.APPEND_CONST_ASC( ": " );
+    aName += rFixedPart;
+    pFrmFmt->SetName( aName );
 }
-
-
 
 // ReadGrafStart liest die ObjektDaten ein und erzeugt falls noetig einen Anker
 
@@ -1982,17 +1975,16 @@ void SwWW8ImplReader::SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord,
 {
     const SwNodeIndex* pIdx = pFlyFmt->GetCntnt( FALSE ).GetCntntIdx();
     SwGrfNode* pGrfNd;
-    if( pIdx && 0 != (pGrfNd = rDoc.GetNodes()[ pIdx->GetIndex()
-                                                    + 1 ]->GetGrfNode() ))
+    if( pIdx && (pGrfNd = rDoc.GetNodes()[pIdx->GetIndex() + 1]->GetGrfNode() ))
     {
-        Size aSz( pGrfNd->GetTwipSize() );
+        Size aSz(pGrfNd->GetTwipSize());
         ULONG rHeight = aSz.Height();
         ULONG rWidth  = aSz.Width();
         if( !rWidth && pF)
             rWidth  = pF->nXaRight  - pF->nXaLeft;
         else if( !rHeight && pF)
             rHeight = pF->nYaBottom - pF->nYaTop;
-#if SUPD>601
+
         if( pRecord->nCropFromTop || pRecord->nCropFromBottom ||
             pRecord->nCropFromLeft || pRecord->nCropFromRight )
         {
@@ -2055,29 +2047,27 @@ void SwWW8ImplReader::SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord,
                 pGrfNd->SetAttr( aDrawMode );
             }
         }
-#endif
     }
 }
 
-SdrObject* SwWW8ImplReader::CreateContactObject( SwFlyFrmFmt* pFlyFmt )
+SdrObject* SwWW8ImplReader::CreateContactObject(SwFlyFrmFmt* pFlyFmt)
 {
-    if( pFlyFmt )
+    if (pFlyFmt)
     {
         //JP 11.1.2002: task 96329
         SdrObject* pNewObject = bNew ? 0 : pFlyFmt->FindRealSdrObject();
-        if( !pNewObject )
+        if (!pNewObject)
             pNewObject = pFlyFmt->FindSdrObject();
-        if( !pNewObject )
+        if (!pNewObject)
         {
             SwFlyDrawContact* pContactObject
-                = new SwFlyDrawContact( pFlyFmt, pDrawModel);
+                = new SwFlyDrawContact(pFlyFmt, pDrawModel);
             pNewObject = pContactObject->GetMaster();
         }
         return pNewObject;
     }
     return 0;
 }
-
 
 void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
     WW8_FSPA *pFSPA, SfxItemSet &rFlySet, BOOL bOrgObjectWasReplace )
@@ -2792,7 +2782,7 @@ SwFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
             pRecord->eShapeType, aInnerDist );
     }
 
-    XubString aObjectName( rpObject->GetName() );
+    String aObjectName( rpObject->GetName() );
     if( OBJ_OLE2 == SdrObjKind(rpObject->GetObjIdentifier()) )
     {
         SvInPlaceObjectRef xIPRef(((SdrOle2Obj*)rpObject)->GetObjRef());
@@ -2839,12 +2829,7 @@ SwFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
                 SetAttributesAtGrfNode( pRecord, pRetFrmFmt, pF );
         }
         // mehrfaches Auftreten gleicher Grafik-Namen vermeiden
-        if( aObjectName.Len() )
-        {
-            String aName;
-            if( MakeUniqueGraphName( aName, aObjectName ))
-                pRetFrmFmt->SetName( aName );
-        }
+        aGrfNameGenerator.SetUniqueGraphName(pRetFrmFmt, aObjectName);
     }
     //falls alles Ok, Zeiger auf neues Objekt ermitteln und Z-Order-Liste
     //entsprechend korrigieren (oder Eintrag loeschen)

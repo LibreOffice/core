@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 10:41:36 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 12:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2052,9 +2052,8 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
                                                     0,          // Graphic*
                                                     &aFlySet,
                                                     0);         // SwFrmFmt*
-        String aName;
-        if(MakeUniqueGraphName(aName, INetURLObject( aGrfName ).GetBase()))
-            pFlyFmtOfJustInsertedGraphic->SetName( aName );
+        aGrfNameGenerator.SetUniqueGraphName(pFlyFmtOfJustInsertedGraphic,
+            INetURLObject(aGrfName).GetBase());
     }
     return FLD_READ_FSPA;
 }
