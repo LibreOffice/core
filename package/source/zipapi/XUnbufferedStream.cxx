@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnbufferedStream.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 12:27:47 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,13 @@
 #include <EncryptedDataHeader.hxx>
 #endif
 #include <algorithm>
+
+#if 0
+// for debugging purposes here
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <comphelper/processfactory.hxx>
+using namespace ::com::sun::star;
+#endif
 
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::io;
@@ -196,8 +203,8 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
 {
     sal_Int32 nRequestedBytes = nBytesToRead;
     OSL_ENSURE( !mnHeaderToRead || mbWrappedRaw, "Only encrypted raw stream can be provided with header!" );
-    if ( mnMyCurrent + nRequestedBytes > mnZipSize + mnHeaderToRead )
-        nRequestedBytes = static_cast < sal_Int32 > ( mnZipSize + mnHeaderToRead - mnMyCurrent );
+    if ( mnMyCurrent + nRequestedBytes > mnZipSize + maHeader.getLength() )
+        nRequestedBytes = static_cast < sal_Int32 > ( mnZipSize + maHeader.getLength() - mnMyCurrent );
 
     sal_Int32 nRead = 0, nLastRead = 0, nTotal = 0;
     aData.realloc ( nRequestedBytes );
@@ -213,8 +220,6 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                                                                     mnHeaderToRead : nRequestedBytes );
                 memcpy ( aData.getArray(), maHeader.getConstArray() + maHeader.getLength() - mnHeaderToRead, nHeadRead );
                 mnHeaderToRead -= nHeadRead;
-                if ( mnHeaderToRead == 0 )
-                    maHeader.realloc ( 0 );
 
                 if ( nHeadRead < nRequestedBytes )
                 {
@@ -250,6 +255,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
 
                 mnZipCurrent += nRead;
 
+                aData.realloc( nRead );
                 if ( mbWrappedRaw && mbCheckCRC )
                     maCRC.update( aData );
             }
@@ -318,7 +324,22 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
             if ( !maCipher && !mbWrappedRaw )
                 maCRC.update( aData );
 
-            if ( mnZipSize == mnMyCurrent && maCRC.getValue() != maEntry.nCrc )
+#if 0
+            // for debugging purposes here
+            if ( mbWrappedRaw )
+            {
+                if ( 0 )
+                {
+                    uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+                    uno::Reference< ucb::XSimpleFileAccess > xAccess( xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY );
+                    uno::Reference< io::XOutputStream > xOut = xAccess->openFileWrite( ::rtl::OUString::createFromAscii( "file:///d:/777/Encrypted/picture" ) );
+                    xOut->writeBytes( aData );
+                    xOut->closeOutput();
+                }
+            }
+#endif
+
+            if ( mnZipSize + maHeader.getLength() == mnMyCurrent && maCRC.getValue() != maEntry.nCrc )
                 throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "The stream seems to be broken!" ) ),
                                     Reference< XInterface >() );
         }
