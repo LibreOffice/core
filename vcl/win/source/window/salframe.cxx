@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 12:05:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,15 @@ const unsigned int WM_USER_SYSTEM_WINDOW_ACTIVATED = RegisterWindowMessageA("SYS
 #endif
 #ifndef IMN_CLOSECANDIDATE
 #define IMN_CLOSECANDIDATE              0x0004
+#endif
+
+// Macros for support of WM_UNICHAR & Keyman 6.0
+#define Uni_UTF32ToSurrogate1(ch)   (((unsigned long) (ch) - 0x10000) / 0x400 + 0xD800)
+#define Uni_UTF32ToSurrogate2(ch)   (((unsigned long) (ch) - 0x10000) % 0x400 + 0xDC00)
+#define Uni_SupplementaryPlanesStart    0x10000
+#ifndef WM_UNICHAR
+#define WM_UNICHAR          0x0109
+#define UNICODE_NOCHAR      0xFFFF
 #endif
 
 #ifdef DEBUG
@@ -453,6 +462,9 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
             nExSysStyle |= WS_EX_LAYERED;
 
     }
+    if( nSalFrameStyle & SAL_FRAME_STYLE_TOOLTIP )
+        nExSysStyle |= WS_EX_TOPMOST;
+
     // init frame data
     pFrame->maFrameData.mnStyle = nSalFrameStyle;
 
@@ -595,11 +607,17 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
 
 // helper that only creates the HWND
 // to allow for easy reparenting of system windows, (i.e. destroy and create new)
-HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd )
+HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, BOOL bAsChild )
 {
     HINSTANCE hInstance = GetSalData()->mhInst;
     ULONG nSysStyle     = GetWindowLong( oldhWnd, GWL_STYLE );
     ULONG nExSysStyle   = GetWindowLong( oldhWnd, GWL_EXSTYLE );
+
+    if( bAsChild )
+    {
+        nSysStyle = WS_CHILD;
+        nExSysStyle = 0;
+    }
 
     HWND hWnd = NULL;
     if ( aSalShlData.mbWNT )
@@ -1499,73 +1517,67 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 
 // -----------------------------------------------------------------------
 
-void SalFrame::SetParent( SalFrame* pNewParent )
+static void ImplSetParentFrame( SalFrame* pThis, HWND hNewParentWnd, BOOL bAsChild )
 {
-    mbInReparent = TRUE;
+    pThis->mbInReparent = TRUE;
 
     // save hwnd, will be overwritten in WM_CREATE during createwindow
-    HWND hWndOld = maFrameData.mhWnd;
-    BOOL bNeedGraphics = maFrameData.mbGraphics;
+    HWND hWndOld = pThis->maFrameData.mhWnd;
+    BOOL bNeedGraphics = pThis->maFrameData.mbGraphics;
     HFONT   hFont   = NULL;
     HPEN    hPen    = NULL;
     HBRUSH  hBrush  = NULL;
 
     // Release Cache DC
-    if ( maFrameData.mpGraphics2 &&
-         maFrameData.mpGraphics2->maGraphicsData.mhDC )
+    if ( pThis->maFrameData.mpGraphics2 &&
+         pThis->maFrameData.mpGraphics2->maGraphicsData.mhDC )
     {
         // save current gdi objects before hdc is gone
-        hFont   = (HFONT)   GetCurrentObject( maFrameData.mpGraphics2->maGraphicsData.mhDC, OBJ_FONT);
-        hPen    = (HPEN)    GetCurrentObject( maFrameData.mpGraphics2->maGraphicsData.mhDC, OBJ_PEN);
-        hBrush  = (HBRUSH)  GetCurrentObject( maFrameData.mpGraphics2->maGraphicsData.mhDC, OBJ_BRUSH);
-        ReleaseGraphics( maFrameData.mpGraphics2 );
+        hFont   = (HFONT)   GetCurrentObject( pThis->maFrameData.mpGraphics2->maGraphicsData.mhDC, OBJ_FONT);
+        hPen    = (HPEN)    GetCurrentObject( pThis->maFrameData.mpGraphics2->maGraphicsData.mhDC, OBJ_PEN);
+        hBrush  = (HBRUSH)  GetCurrentObject( pThis->maFrameData.mpGraphics2->maGraphicsData.mhDC, OBJ_BRUSH);
+        pThis->ReleaseGraphics( pThis->maFrameData.mpGraphics2 );
     }
 
     // destroy saved DC
-    if ( maFrameData.mpGraphics )
+    if ( pThis->maFrameData.mpGraphics )
     {
-        if ( maFrameData.mpGraphics->maGraphicsData.mhDefPal )
-            SelectPalette( maFrameData.mpGraphics->maGraphicsData.mhDC, maFrameData.mpGraphics->maGraphicsData.mhDefPal, TRUE );
-        ImplSalDeInitGraphics( &(maFrameData.mpGraphics->maGraphicsData) );
-        ReleaseDC( maFrameData.mhWnd, maFrameData.mpGraphics->maGraphicsData.mhDC );
+        if ( pThis->maFrameData.mpGraphics->maGraphicsData.mhDefPal )
+            SelectPalette( pThis->maFrameData.mpGraphics->maGraphicsData.mhDC, pThis->maFrameData.mpGraphics->maGraphicsData.mhDefPal, TRUE );
+        ImplSalDeInitGraphics( &(pThis->maFrameData.mpGraphics->maGraphicsData) );
+        ReleaseDC( pThis->maFrameData.mhWnd, pThis->maFrameData.mpGraphics->maGraphicsData.mhDC );
     }
 
     // create a new hwnd with the same styles
-    HWND hWndParent = pNewParent->maFrameData.mhWnd;
+    HWND hWndParent = hNewParentWnd;
     // forward to main thread
     HWND hWnd = (HWND) ImplSendMessage( GetSalData()->mpFirstInstance->maInstData.mhComWnd,
-                                        SAL_MSG_RECREATEHWND,
-                                        (WPARAM) hWndParent, (LPARAM)maFrameData.mhWnd );
+                                        bAsChild ? SAL_MSG_RECREATECHILDHWND : SAL_MSG_RECREATEHWND,
+                                        (WPARAM) hWndParent, (LPARAM)pThis->maFrameData.mhWnd );
 
     // succeeded ?
     hWndParent = ::GetParent( hWnd );
-    DBG_ASSERT( hWndParent == pNewParent->maFrameData.mhWnd, "SalFrame::SetParent not successful");
-
-
-    // make sure we're pointing to the right VCL parent
-    // FIXME: sclient requires the following statement !!!
-    //((Window*)maFrameData.mpInst)->mpRealParent = (Window*)pNewParent->maFrameData.mpInst;
-
+    DBG_ASSERT( hWndParent == hNewParentWnd, "SalFrame::SetParent not successful");
 
     // recreate DCs
     if( bNeedGraphics )
     {
-        if( maFrameData.mpGraphics2 )
+        if( pThis->maFrameData.mpGraphics2 )
         {
             // re-create cached DC
             HDC hDC = (HDC)ImplSendMessage( GetSalData()->mpFirstInstance->maInstData.mhComWnd,
                                             SAL_MSG_GETDC,
                                             (WPARAM) hWnd, 0 );
-            maFrameData.mpGraphics2->maGraphicsData.mhWnd = hWnd;
+            pThis->maFrameData.mpGraphics2->maGraphicsData.mhWnd = hWnd;
             if ( hDC )
             {
-                maFrameData.mpGraphics2->maGraphicsData.mhDC = hDC;
+                pThis->maFrameData.mpGraphics2->maGraphicsData.mhDC = hDC;
                 if ( GetSalData()->mhDitherPal )
                 {
-                    maFrameData.mpGraphics2->maGraphicsData.mhDefPal = SelectPalette( hDC, GetSalData()->mhDitherPal, TRUE );
+                    pThis->maFrameData.mpGraphics2->maGraphicsData.mhDefPal = SelectPalette( hDC, GetSalData()->mhDitherPal, TRUE );
                     RealizePalette( hDC );
                 }
-                ImplSalInitGraphics( &(maFrameData.mpGraphics2->maGraphicsData) );
+                ImplSalInitGraphics( &(pThis->maFrameData.mpGraphics2->maGraphicsData) );
 
                 // re-select saved gdi objects
                 if( hFont )
@@ -1575,31 +1587,45 @@ void SalFrame::SetParent( SalFrame* pNewParent )
                 if( hBrush )
                     SelectObject( hDC, hBrush );
 
-                maFrameData.mbGraphics = TRUE;
+                pThis->maFrameData.mbGraphics = TRUE;
                 GetSalData()->mnCacheDCInUse++;
             }
         }
 
-        if( maFrameData.mpGraphics )
+        if( pThis->maFrameData.mpGraphics )
         {
             // re-create DC
-            maFrameData.mpGraphics->maGraphicsData.mhWnd = hWnd;
-            maFrameData.mpGraphics->maGraphicsData.mhDC = GetDC( hWnd );
+            pThis->maFrameData.mpGraphics->maGraphicsData.mhWnd = hWnd;
+            pThis->maFrameData.mpGraphics->maGraphicsData.mhDC = GetDC( hWnd );
             if ( GetSalData()->mhDitherPal )
             {
-                maFrameData.mpGraphics->maGraphicsData.mhDefPal = SelectPalette( maFrameData.mpGraphics->maGraphicsData.mhDC, GetSalData()->mhDitherPal, TRUE );
-                RealizePalette( maFrameData.mpGraphics->maGraphicsData.mhDC );
+                pThis->maFrameData.mpGraphics->maGraphicsData.mhDefPal = SelectPalette( pThis->maFrameData.mpGraphics->maGraphicsData.mhDC, GetSalData()->mhDitherPal, TRUE );
+                RealizePalette( pThis->maFrameData.mpGraphics->maGraphicsData.mhDC );
             }
-            ImplSalInitGraphics( &(maFrameData.mpGraphics->maGraphicsData) );
-            maFrameData.mbGraphics = TRUE;
+            ImplSalInitGraphics( &(pThis->maFrameData.mpGraphics->maGraphicsData) );
+            pThis->maFrameData.mbGraphics = TRUE;
         }
     }
 
     // now destroy original hwnd
     DestroyWindow( hWndOld );
 
-    mbInReparent = FALSE;
+    pThis->mbInReparent = FALSE;
 }
+
+// -----------------------------------------------------------------------
+
+void SalFrame::SetParent( SalFrame* pNewParent )
+{
+    ImplSetParentFrame( this, pNewParent->maFrameData.mhWnd, FALSE );
+}
+
+bool SalFrame::SetPluginParent( SystemParentData* pNewParent )
+{
+    ImplSetParentFrame( this, pNewParent->hWnd, TRUE );
+    return true;
+}
+
 
 // -----------------------------------------------------------------------
 
@@ -2281,7 +2307,9 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
     if ( lParam )
     {
         nKeyLen = GetKeyNameTextW( lParam, aKeyBuf, sizeof( aKeyBuf ) / sizeof( sal_Unicode ) );
-        if ( nKeyLen > 0 )
+        // #i12401# the current unicows.dll has a bug in CharUpperBuffW, which corrupts the stack
+        // fall back to the ANSI version instead
+        if ( aSalShlData.mbWNT && nKeyLen > 0 )
         {
             // Convert name, so that the keyname start with an upper
             // char and the rest of the word are in lower chars
@@ -3327,7 +3355,7 @@ static sal_Unicode ImplGetCharCode( SalFrame* pFrame, WPARAM nCharCode )
 // -----------------------------------------------------------------------
 
 static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
-                              WPARAM wParam, LPARAM lParam )
+                              WPARAM wParam, LPARAM lParam, LRESULT& rResult )
 {
     static BOOL     bIgnoreCharMsg  = FALSE;
     static WPARAM   nDeadChar       = 0;
@@ -3423,6 +3451,46 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                                     SALEVENT_KEYUP, &aKeyEvt );
         return nRet;
     }
+     // #i11583#, MCD, 2003-01-13, Support for WM_UNICHAR & Keyman 6.0; addition begins
+    else if( nMsg == WM_UNICHAR )
+     {
+         // If Windows is asking if we accept WM_UNICHAR, return TRUE
+         if(wParam == UNICODE_NOCHAR)
+        {
+            rResult = TRUE; // ssa: this will actually return TRUE to windows
+            return 1;       // ...but this will only avoid calling the defwindowproc
+        }
+
+         SalKeyEvent aKeyEvt;
+         aKeyEvt.mnCode     = nModCode; // Or should it be 0? - as this is always a character returned
+         aKeyEvt.mnTime     = GetMessageTime();
+         aKeyEvt.mnRepeat   = 0;
+
+        if( wParam >= Uni_SupplementaryPlanesStart )
+        {
+            // character is supplementary char in UTF-32 format - must be converted to UTF-16 supplementary pair
+            sal_Unicode ch = (sal_Unicode) Uni_UTF32ToSurrogate1(wParam);
+             nLastChar = 0;
+             nLastVKChar = 0;
+             long nRet = pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                                    SALEVENT_KEYINPUT, &aKeyEvt );
+             pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                        SALEVENT_KEYUP, &aKeyEvt );
+            wParam = (sal_Unicode) Uni_UTF32ToSurrogate2( wParam );
+         }
+
+         aKeyEvt.mnCharCode = (sal_Unicode) wParam;
+
+         nLastChar = 0;
+         nLastVKChar = 0;
+         long nRet = pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                                SALEVENT_KEYINPUT, &aKeyEvt );
+         pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                    SALEVENT_KEYUP, &aKeyEvt );
+
+         return nRet;
+     }
+     // MCD, 2003-01-13, Support for WM_UNICHAR & Keyman 6.0; addition ends
     else
     {
         // Bei Shift, Control und Menu schicken wir einen KeyModChange-Event
@@ -4903,11 +4971,12 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         case WM_KEYUP:
         case WM_DEADCHAR:
         case WM_CHAR:
+        case WM_UNICHAR:    // MCD, 2003-01-13, Support for WM_UNICHAR & Keyman 6.0
         case WM_SYSKEYDOWN:
         case WM_SYSKEYUP:
         case WM_SYSCHAR:
             ImplSalYieldMutexAcquireWithWait();
-            rDef = !ImplHandleKeyMsg( hWnd, nMsg, wParam, lParam );
+            rDef = !ImplHandleKeyMsg( hWnd, nMsg, wParam, lParam, nRet );
             ImplSalYieldMutexRelease();
             break;
 
@@ -5114,7 +5183,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             //           may send WM_IME_CHAR instead of WM_IME_COMPOSITION
             // we just handle it like a WM_CHAR message - seems to work fine
             ImplSalYieldMutexAcquireWithWait();
-            rDef = !ImplHandleKeyMsg( hWnd, WM_CHAR, wParam, lParam );
+            rDef = !ImplHandleKeyMsg( hWnd, WM_CHAR, wParam, lParam, nRet );
             ImplSalYieldMutexRelease();
             break;
 
