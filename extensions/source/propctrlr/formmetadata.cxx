@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:06:47 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,7 @@ namespace pcr
         DEF_INFO_2( FONT_NAME,         FONT,               FONT,              FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_4( VISUALEFFECT,      VISUALEFFECT,       VISUALEFFECT,      FORM_VISIBLE, DIALOG_VISIBLE, ENUM_ONE, COMPOSEABLE ),
         DEF_INFO_4( ALIGN,             ALIGN,              ALIGN,             FORM_VISIBLE, DIALOG_VISIBLE, ENUM, COMPOSEABLE ),
+        DEF_INFO_5( VERTICAL_ALIGN,    VERTICAL_ALIGN,     VERTICAL_ALIGN,    FORM_VISIBLE, DIALOG_VISIBLE, ENUM, COMPOSEABLE, EXPERIMENTAL ),
         DEF_INFO_2( ROWHEIGHT,         ROWHEIGHT,          ROWHEIGHT,         FORM_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( BACKGROUNDCOLOR,   BACKGROUNDCOLOR,    BACKGROUNDCOLOR,   FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( SYMBOLCOLOR,       SYMBOLCOLOR,        SYMBOLCOLOR,       FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
@@ -436,6 +437,9 @@ namespace pcr
                 break;
             case PROPERTY_ID_ALIGN:
                 nCommaSeparatedListResId = RID_STR_ALIGNMENT;
+                break;
+            case PROPERTY_ID_VERTICAL_ALIGN:
+                nStringItemsResId = RID_RSC_ENUM_VERTICAL_ALIGN;
                 break;
             case PROPERTY_ID_BUTTONTYPE:
                 nCommaSeparatedListResId = RID_STR_ENUM_BUTTONTYPE;
