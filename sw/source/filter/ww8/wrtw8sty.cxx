@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:08:05 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1251,8 +1251,9 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
         //
     }
 
-    USHORT i;
-    for( i = 0; i < aSects.Count(); ++i )
+    unsigned int nOldIndex = rWrt.GetHdFtIndex();
+    unsigned int nHdFtGroup = 0;
+    for (USHORT i = 0; i < aSects.Count(); ++i)
     {
         WW8_PdAttrDesc* pA = pAttrs + i;
         WW8_SepInfo& rSepInfo = aSects[i];
@@ -1618,22 +1619,31 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
         rWrt.SetHdFtPageRoot(rSepInfo.pPDNd ? rSepInfo.pPDNd->GetTxtNode() : 0);
 
         ULONG nCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
+
+        rWrt.SetHdFtIndex(++nHdFtGroup);
         if( !(nHeadFootFlags & WW8_HEADER_EVEN) && rWrt.pDop->fFacingPages )
             OutHeader( rWrt, *pPdFmt, nCpPos, nHeadFootFlags, WW8_HEADER_ODD );
         else
             OutHeader( rWrt, *pPdLeftFmt, nCpPos, nHeadFootFlags, WW8_HEADER_EVEN );
+        rWrt.SetHdFtIndex(++nHdFtGroup);
         OutHeader( rWrt, *pPdFmt, nCpPos, nHeadFootFlags, WW8_HEADER_ODD );
 
+        rWrt.SetHdFtIndex(++nHdFtGroup);
         if( !(nHeadFootFlags & WW8_FOOTER_EVEN) && rWrt.pDop->fFacingPages )
             OutFooter( rWrt, *pPdFmt, nCpPos, nHeadFootFlags, WW8_FOOTER_ODD );
         else
             OutFooter( rWrt, *pPdLeftFmt, nCpPos, nHeadFootFlags, WW8_FOOTER_EVEN );
+        rWrt.SetHdFtIndex(++nHdFtGroup);
         OutFooter( rWrt, *pPdFmt, nCpPos, nHeadFootFlags, WW8_FOOTER_ODD );
 
+        //#i24344# Drawing objects cannot be directly shared between main hd/ft
+        //and title hd/ft so we need to differenciate them
+        rWrt.SetHdFtIndex(++nHdFtGroup);
         OutHeader( rWrt, *pPdFirstPgFmt, nCpPos, nHeadFootFlags, WW8_HEADER_FIRST );
         OutFooter( rWrt, *pPdFirstPgFmt, nCpPos, nHeadFootFlags, WW8_FOOTER_FIRST );
         rWrt.SetHdFtPageRoot(pOldPageRoot);
     }
+    rWrt.SetHdFtIndex(nOldIndex); //0
 
     if( pTxtPos->Count() )
     {
