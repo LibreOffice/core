@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-30 15:36:07 $
+ *  last change: $Author: cd $ $Date: 2001-04-02 14:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -861,6 +861,9 @@ void SAL_CALL Frame::activate() throw( RuntimeException )
 //      }
         m_eActiveState = FOCUS;
         impl_sendFrameActionEvent( FrameAction_FRAME_UI_ACTIVATED );
+        Window* pWindow = VCLUnoHelper::GetWindow( m_xComponentWindow );
+        if ( pWindow )
+            Application::SetDefModalDialogParent( pWindow );
     }
 }
 
@@ -1021,6 +1024,9 @@ sal_Bool SAL_CALL Frame::setComponent(  const   Reference< awt::XWindow >&      
         )
     {
         m_xComponentWindow->setFocus();
+        Window* pWindow = VCLUnoHelper::GetWindow( m_xComponentWindow );
+        if ( pWindow )
+            Application::SetDefModalDialogParent( pWindow );
     }
 
     return sal_True;
@@ -1122,6 +1128,10 @@ void SAL_CALL Frame::dispose() throw( RuntimeException )
         m_aListenerContainer.disposeAndClear( aEvent );
 
         LOCK_MUTEX( anotherGuard, m_aMutex, "Frame::dispose()" )
+
+        Reference< XEventListener > xDispatchHelperEventListener( m_xDispatchHelper, UNO_QUERY );
+        if ( xDispatchHelperEventListener.is() )
+             xDispatchHelperEventListener->disposing( aEvent );
 
         // Force parent container to forget this frame.
         // ( It's contained in m_xParent and so no XEventListener for m_xParent! )

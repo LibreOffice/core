@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: as $ $Date: 2001-03-29 13:17:12 $
+#   last change: $Author: cd $ $Date: 2001-04-02 14:10:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,13 +77,14 @@ BOOTSTRAP_SERVICE=	FALSE
 # --- Generate -----------------------------------------------------
 
 SLOFILES=			$(SLO)$/servicemanager.obj						\
-                    $(SLO)$/filtercache.obj							\
-                    $(SLO)$/wildcard.obj							\
-                    $(SLO)$/framecontainer.obj						\
-                    $(SLO)$/taskcreator.obj							\
-                    $(SLO)$/asyncquit.obj							\
-                    $(SLO)$/targetfinder.obj						\
-                    $(SLO)$/argumentanalyzer.obj
+                $(SLO)$/filtercache.obj							\
+                $(SLO)$/wildcard.obj							\
+                $(SLO)$/framecontainer.obj						\
+                $(SLO)$/taskcreator.obj							\
+                $(SLO)$/asyncquit.obj							\
+                $(SLO)$/targetfinder.obj						\
+                $(SLO)$/argumentanalyzer.obj						\
+                $(SLO)$/menumanager.obj
 
 # --- Targets ------------------------------------------------------
 

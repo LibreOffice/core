@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: as $ $Date: 2001-03-29 13:17:17 $
+#   last change: $Author: cd $ $Date: 2001-04-02 14:11:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,7 +113,9 @@ SHL1OBJS=		$(SLO)$/registerservices.obj		\
                 $(SLO)$/fairrwlock.obj				\
                 $(SLO)$/writeguard.obj				\
                 $(SLO)$/readguard.obj				\
-                $(SLO)$/resetableguard.obj
+                $(SLO)$/resetableguard.obj			\
+                $(SLO)$/omenudispatcher.obj			\
+                $(SLO)$/menumanager.obj
 
 SHL1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
