@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:03:11 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,7 +506,7 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
  *************************************************************************/
 
 xub_StrLen SwFlyCntPortion::GetFlyCrsrOfst( const KSHORT nOfst,
-    const Point &rPoint, SwPosition *pPos, const SwCrsrMoveState* pCMS ) const
+    const Point &rPoint, SwPosition *pPos, SwCrsrMoveState* pCMS ) const
 {
     // Da die FlyCnt nicht an der Seite haengen, wird ihr
     // GetCrsrOfst() nicht gerufen. Um die Layoutseite
