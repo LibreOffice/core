@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:04:56 $
+ *  last change: $Author: er $ $Date: 2004-01-08 15:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ Calendar_gregorian::setValue() throw(RuntimeException)
         if ( !(fieldSet & (1 << CalendarFieldIndex::ZONE_OFFSET)) )
         {
             UErrorCode status;
-            sal_Int32 value = body->get( icu::Calendar::ZONE_OFFSET, status = U_ZERO_ERROR);
+            sal_Int32 value = body->get( UCAL_ZONE_OFFSET, status = U_ZERO_ERROR);
             if ( U_SUCCESS(status) )
             {
                 fieldSet |= (1 << CalendarFieldIndex::ZONE_OFFSET);
@@ -315,7 +315,7 @@ Calendar_gregorian::setValue() throw(RuntimeException)
         if ( bNeedDST )
         {
             UErrorCode status;
-            nValDST = body->get( icu::Calendar::DST_OFFSET, status = U_ZERO_ERROR);
+            nValDST = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
             if ( !U_SUCCESS(status) )
                 nValDST = 0;
         }
@@ -332,7 +332,7 @@ Calendar_gregorian::setValue() throw(RuntimeException)
         if ( bNeedDST )
         {
             UErrorCode status;
-            sal_Int32 value = body->get( icu::Calendar::DST_OFFSET, status = U_ZERO_ERROR);
+            sal_Int32 value = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
             if ( !U_SUCCESS(status) )
                 value = nValDST;
             if ( value != nValDST )
@@ -374,7 +374,7 @@ void SAL_CALL Calendar_gregorian::getValue() throw(RuntimeException)
 
             // offset 1 since the value for week start day SunDay is different between Calendar and Weekdays.
             if ( fieldIndex == CalendarFieldIndex::DAY_OF_WEEK )
-                fieldValue[fieldIndex]--; // icu::Calendar::SUNDAY:/* == 1 */ ==> Weekdays::SUNDAY /* ==0 */
+                fieldValue[fieldIndex]--; // UCAL_SUNDAY:/* == 1 */ ==> Weekdays::SUNDAY /* ==0 */
         }
         mapFromGregorian();
         fieldSet = 0;
