@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 14:00:48 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ RscCount aRscCount;
 |*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
-void * RscMem :: Malloc( USHORT nSize ){
+void * RscMem :: Malloc( unsigned int nSize ){
     char * pMem;
 
 #ifdef MAC
@@ -354,9 +354,9 @@ void * RscMem :: Malloc( USHORT nSize ){
     aRscCount.nCount++;
 #endif
 #ifdef ONLY_NEW
-    pMem = new char[ nSize + sizeof( USHORT ) ];
-    *(USHORT *)pMem = nSize;
-    pMem += sizeof( USHORT );
+    pMem = new char[ nSize + sizeof( unsigned int ) ];
+    *(unsigned int *)pMem = nSize;
+    pMem += sizeof( unsigned int );
 #else
     if( NULL == (pMem = (char *)malloc( nSize )) )
         RscExit( 10 );
@@ -373,19 +373,19 @@ void * RscMem :: Malloc( USHORT nSize ){
 |*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
-void * RscMem :: Realloc( void * pMem, USHORT nSize ){
+void * RscMem :: Realloc( void * pMem, unsigned int nSize ){
 #ifdef MAC
     SpinCursor( 1 );
 #endif
 #ifdef ONLY_NEW
     char * pTmp = (char *)pMem;
-    USHORT  nMin, nOldSize;
+    unsigned int nMin, nOldSize;
 
     pMem = Malloc( nSize );
-    nOldSize = *(USHORT *)(pTmp - sizeof( USHORT ) );
+    nOldSize = *(unsigned inz *)(pTmp - sizeof( unsigned int ) );
     nMin = (nSize < nOldSize) ? nSize : nOldSize;
     memcpy( pMem, pTmp, nMin );
-    delete (pTmp - sizeof( USHORT ));
+    delete (pTmp - sizeof( unsigned int ));
 #else
 #ifdef UNX
     if( NULL == (pMem = realloc( (char*)pMem, nSize )) )
@@ -585,7 +585,7 @@ RscWriteRc :: ~RscWriteRc()
 |*    Letzte Aenderung  MM 15.04.91
 |*
 *************************************************************************/
-USHORT RscWriteRc :: IncSize( USHORT nSize )
+unsigned int RscWriteRc :: IncSize( unsigned int nSize )
 {
     nLen += nSize;
     if( pMem )
@@ -602,7 +602,7 @@ USHORT RscWriteRc :: IncSize( USHORT nSize )
 |*    Letzte Aenderung  MM 15.04.91
 |*
 *************************************************************************/
-char * RscWriteRc :: GetPointer( USHORT nSize )
+char * RscWriteRc :: GetPointer( unsigned int nSize )
 {
     if( !pMem )
         pMem = (char *)RscMem::Malloc( nLen );
@@ -621,7 +621,7 @@ char * RscWriteRc :: GetPointer( USHORT nSize )
 *************************************************************************/
 void RscWriteRc :: Put( USHORT nVal )
 {
-    USHORT  nOldLen;
+    unsigned int    nOldLen;
 
     nOldLen = IncSize( sizeof( nVal ) );
     PutAt( nOldLen, nVal );
@@ -629,16 +629,16 @@ void RscWriteRc :: Put( USHORT nVal )
 
 void RscWriteRc :: PutUTF8( char * pStr )
 {
-    USHORT nStrLen = 0;
+    unsigned int nStrLen = 0;
     if( pStr )
         nStrLen = strlen( pStr );
 
-    USHORT  n = nStrLen +1;
+    unsigned int    n = nStrLen +1;
     if( n % 2 )
         // align to 2
         n++;
 
-    USHORT  nOldLen = IncSize( n );
+    unsigned int    nOldLen = IncSize( n );
     memcpy( GetPointer( nOldLen ), pStr, nStrLen );
     // 0 terminated
     pMem[ nOldLen + nStrLen ] = '\0';
