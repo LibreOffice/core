@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-15 08:59:52 $
+ *  last change: $Author: tl $ $Date: 2001-06-19 11:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,11 +172,15 @@ SmEditWindow::~SmEditWindow()
     aCursorMoveTimer.Stop();
     aModifyTimer.Stop();
 
-    EditEngine *pEditEngine = GetEditEngine();
-    if (pEditEngine)
-        pEditEngine->SetStatusEventHdl( Link() );
-    if (pEditEngine && pEditView)
-        pEditEngine->RemoveView( pEditView );
+    if (pEditView)
+    {
+        EditEngine *pEditEngine = pEditView->GetEditEngine();
+        if (pEditEngine)
+        {
+            pEditEngine->SetStatusEventHdl( Link() );
+            pEditEngine->RemoveView( pEditView );
+        }
+    }
     delete pEditView;
     delete pHScrollBar;
     delete pVScrollBar;
@@ -193,8 +197,16 @@ SmDocShell * SmEditWindow::GetDoc()
 
 EditEngine * SmEditWindow::GetEditEngine()
 {
-    SmDocShell *pDoc = GetDoc();
-    return pDoc ? &pDoc->GetEditEngine() : 0;
+    EditEngine *pEditEng = 0;
+    if (pEditView)
+        pEditEng = pEditView->GetEditEngine();
+    else
+    {
+        SmDocShell *pDoc = GetDoc();
+        if (pDoc)
+            pEditEng = &pDoc->GetEditEngine();
+    }
+    return pEditEng;
 }
 
 
@@ -386,6 +398,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
         // möglichst nur einmal am Ende aufzurufen.
         aCursorMoveTimer.Start();
 
+        DBG_ASSERT( pEditView, "EditView missing (NULL pointer)" );
         if ( !pEditView->PostKeyEvent(rKEvt) )
         {
             if ( !SfxViewShell::Current()->KeyInput(rKEvt) )
@@ -417,7 +430,6 @@ void SmEditWindow::Paint(const Rectangle& rRect)
 {
     if (!pEditView)
         CreateEditView();
-
     pEditView->Paint(rRect);
 }
 
@@ -457,7 +469,7 @@ void SmEditWindow::CreateEditView()
 
 IMPL_LINK( SmEditWindow, EditStatusHdl, EditStatus *, pStat )
 {
-    if (! pEditView)
+    if (!pEditView)
         return 1;
     else
     {
@@ -468,10 +480,14 @@ IMPL_LINK( SmEditWindow, EditStatusHdl, EditStatus *, pStat )
 
 IMPL_LINK_INLINE_START( SmEditWindow, ScrollHdl, ScrollBar *, pScrollBar )
 {
-    pEditView->SetVisArea(Rectangle(Point(pHScrollBar->GetThumbPos(),
-                                          pVScrollBar->GetThumbPos()),
-                                    pEditView->GetVisArea().GetSize()));
-    pEditView->Invalidate();
+    DBG_ASSERT(pEditView, "EditView missing");
+    if (pEditView)
+    {
+        pEditView->SetVisArea(Rectangle(Point(pHScrollBar->GetThumbPos(),
+                                            pVScrollBar->GetThumbPos()),
+                                        pEditView->GetVisArea().GetSize()));
+        pEditView->Invalidate();
+    }
     return 0;
 }
 IMPL_LINK_INLINE_END( SmEditWindow, ScrollHdl, ScrollBar *, pScrollBar )
@@ -519,7 +535,7 @@ void SmEditWindow::SetScrollBarRanges()
 
 void SmEditWindow::InitScrollBars()
 {
-    if (pVScrollBar && pHScrollBar && pScrollBox)
+    if (pVScrollBar && pHScrollBar && pScrollBox && pEditView)
     {
         const Size aOut( pEditView->GetOutputArea().GetSize() );
         pVScrollBar->SetVisibleSize(aOut.Height());
@@ -633,38 +649,46 @@ void SmEditWindow::SelectAll()
 
 void SmEditWindow::InsertCommand(USHORT Command)
 {
-    //Anfang der Selektion merken und hinterher den Cursor daraufsetzen. Nur so
-    //macht das SelNextMark() Sinn.
-    ESelection aSelection = pEditView->GetSelection();
-    aSelection.nEndPos  = aSelection.nStartPos;
-    aSelection.nEndPara = aSelection.nStartPara;
+    DBG_ASSERT( pEditView, "EditView missing" );
+    if (pEditView)
+    {
+        //Anfang der Selektion merken und hinterher den Cursor daraufsetzen. Nur so
+        //macht das SelNextMark() Sinn.
+        ESelection aSelection = pEditView->GetSelection();
+        aSelection.nEndPos  = aSelection.nStartPos;
+        aSelection.nEndPara = aSelection.nStartPara;
 
-    DBG_ASSERT( pEditView, "NULL pointer" );
-    String  aText = String(SmResId(Command));
-    pEditView->InsertText(aText);
+        DBG_ASSERT( pEditView, "NULL pointer" );
+        String  aText = String(SmResId(Command));
+        pEditView->InsertText(aText);
 
-    if (HasMark(aText))
-    {   // set selection to next mark
-        pEditView->SetSelection(aSelection);
-        SelNextMark();
+        if (HasMark(aText))
+        {   // set selection to next mark
+            pEditView->SetSelection(aSelection);
+            SelNextMark();
+        }
+        else
+        {   // set selection after inserted text
+            aSelection.nStartPos  =
+            aSelection.nEndPos   += aText.Len();
+            pEditView->SetSelection(aSelection);
+        }
+
+        GrabFocus();
     }
-    else
-    {   // set selection after inserted text
-        aSelection.nStartPos  =
-        aSelection.nEndPos   += aText.Len();
-        pEditView->SetSelection(aSelection);
-    }
-
-    GrabFocus();
 }
 
 void SmEditWindow::MarkError(const Point &rPos)
 {
-    const int Col = rPos.X();
-    const int Row = rPos.Y() - 1;
+    DBG_ASSERT( pEditView, "EditView missing" );
+    if (pEditView)
+    {
+        const int Col = rPos.X();
+        const int Row = rPos.Y() - 1;
 
-    pEditView->SetSelection(ESelection (Row, Col - 1, Row, Col));
-    GrabFocus();
+        pEditView->SetSelection(ESelection (Row, Col - 1, Row, Col));
+        GrabFocus();
+    }
 }
 
 void SmEditWindow::SelNextMark()
@@ -772,7 +796,8 @@ ESelection SmEditWindow::GetSelection() const
 void SmEditWindow::SetSelection(const ESelection &rSel)
 {
     DBG_ASSERT( pEditView, "NULL pointer" );
-    pEditView->SetSelection(rSel);
+    if (pEditView)
+        pEditView->SetSelection(rSel);
 }
 
 BOOL SmEditWindow::IsEmpty() const
@@ -783,32 +808,42 @@ BOOL SmEditWindow::IsEmpty() const
 
 BOOL SmEditWindow::IsSelected() const
 {
-    return pEditView->HasSelection();
+    return pEditView ? pEditView->HasSelection() : FALSE;
 }
 
 void SmEditWindow::Cut()
 {
-    pEditView->Cut();
+    DBG_ASSERT( pEditView, "EditView missing" );
+    if (pEditView)
+        pEditView->Cut();
 }
 
 void SmEditWindow::Copy()
 {
-    pEditView->Copy();
+    DBG_ASSERT( pEditView, "EditView missing" );
+    if (pEditView)
+        pEditView->Copy();
 }
 
 void SmEditWindow::Paste()
 {
-    pEditView->Paste();
+    DBG_ASSERT( pEditView, "EditView missing" );
+    if (pEditView)
+        pEditView->Paste();
 }
 
 void SmEditWindow::Delete()
 {
-    pEditView->DeleteSelected();
+    DBG_ASSERT( pEditView, "EditView missing" );
+    if (pEditView)
+        pEditView->DeleteSelected();
 }
 
 void SmEditWindow::InsertText(const String& Text)
 {
-    pEditView->InsertText(Text);
+    DBG_ASSERT( pEditView, "EditView missing" );
+    if (pEditView)
+        pEditView->InsertText(Text);
 }
 
 void SmEditWindow::Flush()
@@ -835,15 +870,17 @@ void SmEditWindow::Flush()
 
 void SmEditWindow::DeleteEditView( SmViewShell &rView )
 {
-    SmDocShell *pDoc = rView.GetDoc();
-    EditEngine *pEditEngine = pDoc ? &pDoc->GetEditEngine() : 0;
-    if (pEditEngine)
+    if (pEditView)
     {
-        pEditEngine->SetStatusEventHdl( Link() );
-        pEditEngine->RemoveView( pEditView );
+        EditEngine *pEditEngine = pEditView->GetEditEngine();
+        if (pEditEngine)
+        {
+            pEditEngine->SetStatusEventHdl( Link() );
+            pEditEngine->RemoveView( pEditView );
+        }
+        delete pEditView;
+        pEditView = 0;
     }
-    delete pEditView;
-    pEditView = 0;
 }
 
 
