@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-06 14:44:59 $
+ *  last change: $Author: tbe $ $Date: 2001-03-07 18:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ VCDlgEditor::VCDlgEditor( StarBASIC* pBas ) :
 
     SdrLayerAdmin& rAdmin = pSdrModel->GetLayerAdmin();
     rAdmin.NewStandardLayer();
-    rAdmin.NewLayer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "VCHiddenLayer" ) ) );
+    rAdmin.NewLayer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ) );
 
     pSdrPage = new DlgEdPage( *pSdrModel, pBasic, this );
     pSdrModel->InsertPage( pSdrPage );
@@ -283,7 +283,7 @@ void VCDlgEditor::SetWindow( Window* pWindow )
 
     pSdrView = new DlgEdView( pSdrModel, pWindow );
     pSdrView->ShowPagePgNum( 0, Point() );
-    pSdrView->SetLayerVisible( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "VCHiddenLayer" ) ), FALSE );
+    pSdrView->SetLayerVisible( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ), FALSE );
     pSdrView->SetMoveSnapOnlyTopLeft( TRUE );
 
     //Size aGridSize( 60, 60 );  //Twips
@@ -441,16 +441,17 @@ void VCDlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoCon
     // set dialog model
     m_xUnoControlDialogModel = xUnoControlDialogModel;
 
-
+    // create dialog form
     pDlgEdForm = new DlgEdForm();
     uno::Reference< awt::XControlModel > xDlgMod( m_xUnoControlDialogModel, uno::UNO_QUERY );
     pDlgEdForm->SetUnoControlModel(xDlgMod);
     pDlgEdForm->StartPropertyListening();
     pDlgEdForm->SetDlgEditor( this );
     pDlgEdForm->SetRectFromProps();
-
     pSdrModel->GetPage(0)->InsertObject( pDlgEdForm );
+    pDlgEdForm->SendRepaintBroadcast(); //?
 
+    // create controls
     Reference< ::com::sun::star::container::XNameAccess > xNameAcc( m_xUnoControlDialogModel, UNO_QUERY );
     if ( xNameAcc.is() )
     {
@@ -467,21 +468,17 @@ void VCDlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoCon
             pCtrlObj->SetDlgEdForm(pDlgEdForm);
             pCtrlObj->SetUnoControlModel( xCtrlModel );
             pCtrlObj->StartPropertyListening();
-            pCtrlObj->SetChanged();
             pCtrlObj->SetRectFromProps();
+            pCtrlObj->SetChanged();
             pSdrModel->GetPage(0)->InsertObject( pCtrlObj );
+            pCtrlObj->UpdateStep();
+            pCtrlObj->SendRepaintBroadcast(); //?
         }
     }
-
-    //pSdrModel->SetChanged( TRUE );
-
-    //pNewObj->SendRepaintBroadcast();
 
     bFirstDraw = TRUE;
 
     pSdrModel->SetChanged( FALSE );
-
-    //DBG_ASSERT(pWindow,"Window not set");
 }
 
 //----------------------------------------------------------------------------
@@ -641,11 +638,11 @@ IMPL_LINK( VCDlgEditor, PaintTimeout, Timer *, EMPTYARG )
                 ULONG nObjCount;
                 if ( pSdrPage && ( ( nObjCount = pSdrPage->GetObjCount() ) > 0 ) )
                 {
-                    for ( ULONG i = 1 ; i < nObjCount ; i++ )
+                    for ( ULONG i = 0 ; i < nObjCount ; i++ )
                     {
                         SdrObject* pObj = pSdrPage->GetObj(i);
                         DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
-                        if (pDlgEdObj)
+                        if ( pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
                             pDlgEdObj->SetRectFromProps();
                     }
                 }

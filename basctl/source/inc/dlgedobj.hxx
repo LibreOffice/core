@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-02 14:02:51 $
+ *  last change: $Author: tbe $ $Date: 2001-03-07 18:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,10 @@ public:
     virtual void SetPropsFromRect();
     virtual void SAL_CALL SetNameFromProp( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
 
+    virtual sal_Int32   GetStep() const;
+    virtual void        SetStep( sal_Int32 nStep );
+    virtual void        UpdateStep();
+
     String  GetUniqueName();
 
     virtual sal_uInt32 GetObjInventor() const;
@@ -172,6 +176,8 @@ public:
     virtual ~DlgEdForm();
     virtual void SetDlgEditor( VCDlgEditor* pEditor ) { pDlgEditor = pEditor; }
     virtual VCDlgEditor* GetDlgEditor() const { return pDlgEditor; }
+
+    virtual void UpdateStep();
 
     virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
 

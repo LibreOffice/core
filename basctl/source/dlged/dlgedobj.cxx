@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-06 14:49:21 $
+ *  last change: $Author: tbe $ $Date: 2001-03-07 18:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,6 +550,60 @@ void SAL_CALL DlgEdObj::SetNameFromProp( const  ::com::sun::star::beans::Propert
 
 //----------------------------------------------------------------------------
 
+sal_Int32 DlgEdObj::GetStep() const
+{
+    // get step property
+    sal_Int32 nStep;
+    uno::Reference< beans::XPropertySet >  xPSet( GetUnoControlModel(), uno::UNO_QUERY );
+    if (xPSet.is())
+    {
+        xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Step" ) ) ) >>= nStep;
+    }
+    return nStep;
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdObj::SetStep( sal_Int32 nStep )
+{
+    // set step property
+    uno::Reference< beans::XPropertySet > xPSet( GetUnoControlModel(), uno::UNO_QUERY );
+    if (xPSet.is())
+    {
+        uno::Any aStep;
+        aStep <<= nStep;
+        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Step" ) ), aStep );
+    }
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdObj::UpdateStep()
+{
+    sal_Int32 nCurStep = GetDlgEdForm()->GetStep();
+    sal_Int32 nStep = GetStep();
+
+    if( nCurStep )
+    {
+        SdrLayerAdmin& rLayerAdmin = GetModel()->GetLayerAdmin();
+        SdrLayerID      nLayerId   = rLayerAdmin.GetLayerID( String( RTL_CONSTASCII_USTRINGPARAM( "HiddenLayer" ) ), FALSE );
+        if ( nStep && (nStep != nCurStep) )
+        {
+            SetLayer( nLayerId );
+        }
+        else
+        {
+            SetLayer( 0 );
+        }
+    }
+    else
+    {
+        SetLayer( 0 );
+    }
+}
+
+//----------------------------------------------------------------------------
+
 String DlgEdObj::GetDefaultName()
 {
     String aStr = GetUnoControlTypeName();
@@ -772,6 +826,11 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
         {
             SetNameFromProp(evt);
         }
+        // update step
+        else if ( evt.PropertyName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Step")) )
+        {
+            UpdateStep();
+        }
     }
 }
 
@@ -877,6 +936,25 @@ DlgEdForm::DlgEdForm()
 DlgEdForm::~DlgEdForm()
 {
     DBG_DTOR(DlgEdForm, NULL);
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdForm::UpdateStep()
+{
+    ULONG nObjCount;
+    SdrPage* pSdrPage = GetPage();
+
+    if ( pSdrPage && ( ( nObjCount = pSdrPage->GetObjCount() ) > 0 ) )
+    {
+        for ( ULONG i = 0 ; i < nObjCount ; i++ )
+        {
+            SdrObject* pObj = pSdrPage->GetObj(i);
+            DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
+            if ( pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
+                pDlgEdObj->UpdateStep();
+        }
+    }
 }
 
 //----------------------------------------------------------------------------

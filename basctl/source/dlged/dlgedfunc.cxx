@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 10:41:22 $
+ *  last change: $Author: tbe $ $Date: 2001-03-07 18:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,14 +305,13 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
             SdrMark* pMark = rMarkList.GetMark(0);
             SdrObject* pObj = pMark->GetObj();
 
-            //if( pObj->IsA( TYPE( VCSbxDrawObject ) ) )
-            //{
-            //  VCSbxDialog* pDlg = pParent->GetVCSbxForm();
-            //  long nCurStep = pDlg->GetCurStep();
-            //  ((VCSbxDrawObject*)pObj)->GetControl()->
-            //      SetStep( pDlg->GetCurStep() );
-            //}
-
+            DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
+            if ( pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
+            {
+                sal_Int32 nCurStep = pDlgEdObj->GetDlgEdForm()->GetStep();
+                pDlgEdObj->SetStep( nCurStep );
+                pDlgEdObj->UpdateStep();
+            }
         }
 
         if ( !pView->HasMarkedObj() )
