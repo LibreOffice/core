@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-20 09:35:52 $
+ *  last change: $Author: kso $ $Date: 2001-04-20 15:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,6 +822,14 @@ void Content::abortCommand()
     m_xImpl->abortCommand();
 }
 
+#if SUPD<615
+//=========================================================================
+Reference< XCommandEnvironment > Content::getCommandEnvironment()
+{
+    return m_xImpl->getEnvironment();
+}
+#endif
+
 //=========================================================================
 Reference< XResultSet > Content::createCursor(
                             const Sequence< OUString >& rPropertyNames,
@@ -1227,6 +1235,8 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
 //=========================================================================
 sal_Bool Content::insertNewContent( const Content& rSourceContent,
                                     InsertOperation eOperation,
+                                      const OUString & rTitle,
+                                      const sal_Int32 nNameClashAction,
                                     Content& rNewContent )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -1266,8 +1276,8 @@ sal_Bool Content::insertNewContent( const Content& rSourceContent,
                                         eTransOp,
                                         rSourceContent.getURL(), // SourceURL
                                         getURL(),   // TargetURL,
-                                        OUString(), // NewTitle
-                                        NameClash::ERROR );
+                                        rTitle,
+                                        nNameClashAction );
     Command aCommand;
     aCommand.Name     = OUString::createFromAscii( "globalTransfer" );
     aCommand.Handle   = -1; // n/a
@@ -1275,6 +1285,19 @@ sal_Bool Content::insertNewContent( const Content& rSourceContent,
 
     xCmdProc->execute( aCommand, 0, m_xImpl->getEnvironment() );
     return sal_True;
+}
+
+//=========================================================================
+sal_Bool Content::insertNewContent( const Content& rSourceContent,
+                                    InsertOperation eOperation,
+                                    Content& rNewContent )
+    throw( CommandAbortedException, RuntimeException, Exception )
+{
+    return insertNewContent( rSourceContent,
+                             eOperation,
+                             OUString(),
+                             NameClash::ERROR,
+                             rNewContent );
 }
 
 //=========================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-20 09:35:38 $
+ *  last change: $Author: kso $ $Date: 2001-04-20 15:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,6 +526,17 @@ public:
     void
     abortCommand();
 
+#if SUPD<615
+    /**
+      * This method returns the command environment of the content.
+      *
+      * @return the command environment.
+      */
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::ucb::XCommandEnvironment >
+    getCommandEnvironment();
+#endif
+
     //////////////////////////////////////////////////////////////////////
     // Special commands.
     //////////////////////////////////////////////////////////////////////
@@ -820,7 +831,41 @@ public:
       * object. Internally this method executes the command "globalTransfer"
       * at the UCB.
       *
-      * @param rSourceContent is the content that caontains the data for the
+      * @param rSourceContent is the content that contains the data for the
+      *        new UCB content.
+      * @param eOperation defines what shall be done with the source data
+      *        ( COPY, MOVE, LINK ).
+      * @param rTitle contains a title for the new content. If this is an empty
+      *        string, the new content will have the same title as the source
+      *        content.
+      * @param rNameClashAction describes how the implementation shall behave
+      *        in case a content with a clashing name exists in the target
+      *        folder.
+      *        NameClash::ERROR will abort the operation, NameClash::OVERWRITE
+      *        will overwrite the clashing content and all its data,
+      *        NameClash::RENAME will generate and supply a non-clashing title.
+      *        @see com/sun/star/ucb/NameClash.idl
+      * @param rNewContent will be filled by the implementation of this method
+      *        with the new content.
+      */
+    sal_Bool
+    insertNewContent( const Content& rSourceContent,
+                      InsertOperation eOperation,
+                      const ::rtl::OUString & rTitle,
+                      const sal_Int32 nNameClashAction,
+                      Content& rNewContent )
+        throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
+    /**
+      * This method creates, initializes and inserts ( commits ) a new content.
+      * The data for the new content will be taken from a given source content
+      * object. Internally this method executes the command "globalTransfer"
+      * at the UCB.
+      * The operartion will be aborted if a content with a clashing name exists
+      * in the target folder.
+      *
+      * @param rSourceContent is the content that contains the data for the
       *        new UCB content.
       * @param eOperation defines what shall be done with the source data
       *        ( COPY, MOVE, LINK ).
