@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_misc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:08:13 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,42 +73,125 @@
 #include "com/sun/star/ucb/CommandAbortedException.hpp"
 #include "com/sun/star/bridge/UnoUrlResolver.hpp"
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
+#include "boost/scoped_array.hpp"
+#include "boost/shared_ptr.hpp"
 
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using ::rtl::OUString;
 
 namespace dp_misc {
+namespace {
 
-static OUString s_platform, s_os = OUSTR("$_OS"), s_arch = OUSTR("$_ARCH");
+struct StrOperatingSystem
+    : public ::rtl::StaticData<OUString, StrOperatingSystem> {
+    OUString operator () () {
+        OUString os( RTL_CONSTASCII_USTRINGPARAM("$_OS") );
+        ::rtl::Bootstrap::expandMacros( os );
+        return os;
+    }
+};
+
+struct StrPlatform : public ::rtl::StaticData<OUString, StrPlatform> {
+    OUString operator () () {
+        ::rtl::OUStringBuffer buf;
+        buf.append( StrOperatingSystem::get() );
+        buf.append( static_cast<sal_Unicode>('_') );
+        OUString arch( RTL_CONSTASCII_USTRINGPARAM("$_ARCH") );
+        ::rtl::Bootstrap::expandMacros( arch );
+        buf.append( arch );
+        return buf.makeStringAndClear();
+    }
+};
+
+struct UnoRc : public ::rtl::StaticData<
+    ::boost::shared_ptr< ::rtl::Bootstrap >, UnoRc > {
+    ::boost::shared_ptr< ::rtl::Bootstrap > operator () () {
+        OUString unorc( RTL_CONSTASCII_USTRINGPARAM(
+                            "$ORIGIN/" SAL_CONFIGFILE("uno")) );
+        ::rtl::Bootstrap::expandMacros( unorc );
+        ::boost::shared_ptr< ::rtl::Bootstrap > ret(
+            new ::rtl::Bootstrap( unorc ) );
+        OSL_ASSERT( ret->getHandle() != 0 );
+        return ret;
+    }
+};
+
+struct OfficePipeId : public ::rtl::StaticData<OUString, OfficePipeId> {
+    OUString operator () ();
+};
+
+OUString OfficePipeId::operator () ()
+{
+    OUString userPath = OUSTR("${$SYSBINDIR/" SAL_CONFIGFILE("bootstrap")
+                              ":UserInstallation}");
+    ::rtl::Bootstrap::expandMacros( userPath );
+    OSL_ASSERT( userPath.getLength() > 0 );
+
+    // normalize path:
+    ::osl::FileStatus status( FileStatusMask_FileURL );
+    ::osl::DirectoryItem dirItem;
+    if (::osl::DirectoryItem::get( userPath, dirItem )
+        != ::osl::DirectoryItem::E_None ||
+        dirItem.getFileStatus( status )
+        != ::osl::DirectoryItem::E_None ||
+        !status.isValid( FileStatusMask_FileURL ) ||
+        ::osl::FileBase::getAbsoluteFileURL(
+            OUString(), status.getFileURL(), userPath )
+        != ::osl::FileBase::E_None)
+    {
+        return OUString();
+    }
+
+    rtlDigest digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
+    if (digest <= 0) {
+        throw RuntimeException(
+            OUSTR("cannot get digest rtl_Digest_AlgorithmMD5!"), 0 );
+    }
+
+    sal_uInt8 const * data =
+        reinterpret_cast<sal_uInt8 const *>(userPath.getStr());
+    sal_Size size = (userPath.getLength() * sizeof (sal_Unicode));
+    sal_uInt32 md5_key_len = rtl_digest_queryLength( digest );
+    ::boost::scoped_array<sal_uInt8> md5_buf( new sal_uInt8 [ md5_key_len ] );
+
+    rtl_digest_init( digest, data, static_cast<sal_uInt32>(size) );
+    rtl_digest_update( digest, data, static_cast<sal_uInt32>(size) );
+    rtl_digest_get( digest, md5_buf.get(), md5_key_len );
+    rtl_digest_destroy( digest );
+
+    // create hex-value string from the MD5 value to keep
+    // the string size minimal
+    ::rtl::OUStringBuffer buf;
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("SingleOfficeIPC_") );
+    for ( sal_uInt32 i = 0; i < md5_key_len; ++i ) {
+        buf.append( static_cast<sal_Int32>(md5_buf[ i ]), 0x10 );
+    }
+    return buf.makeStringAndClear();
+}
+
+} // anon namespace
 
 //==============================================================================
 OUString const & getPlatformString()
 {
-    if (s_platform.getLength() == 0) {
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        ::rtl::Bootstrap::expandMacros( s_os );
-        ::rtl::Bootstrap::expandMacros( s_arch );
-        ::rtl::OUStringBuffer buf;
-        buf.append( s_os );
-        buf.append( static_cast<sal_Unicode>('_') );
-        buf.append( s_arch );
-        s_platform = buf.makeStringAndClear();
-    }
-    return s_platform;
+    return StrPlatform::get();
 }
+
 //==============================================================================
 bool platform_fits( OUString const & platform_string )
 {
-    OUString const & thisPlatform = getPlatformString();
     sal_Int32 index = 0;
-    for (;;) {
-        OUString token( platform_string.getToken( 0, ',', index ).trim() );
+    for (;;)
+    {
+        const OUString token(
+            platform_string.getToken( 0, ',', index ).trim() );
         // check if this platform:
-        if (token.equalsIgnoreAsciiCase( thisPlatform ) ||
+        if (token.equalsIgnoreAsciiCase( StrPlatform::get() ) ||
             (token.indexOf( '_' ) < 0 && /* check OS part only */
-             token.equalsIgnoreAsciiCase( s_os ))) {
+             token.equalsIgnoreAsciiCase( StrOperatingSystem::get() )))
+        {
             return true;
         }
         if (index < 0)
@@ -117,46 +200,83 @@ bool platform_fits( OUString const & platform_string )
     return false;
 }
 
-//==============================================================================
-OUString make_url( OUString const & base_url, OUString const & url )
+namespace {
+inline OUString encodeForRcFile( OUString const & str )
 {
-    // xxx todo: wait for SB's api
+    // escape $\{} (=> rtl bootstrap files)
     ::rtl::OUStringBuffer buf;
-    buf.append( base_url );
-    if (base_url.getLength() > 0 &&
-        base_url[ base_url.getLength() - 1 ] != '/') {
-        buf.append( static_cast< sal_Unicode >('/') );
+    sal_Int32 pos = 0;
+    const sal_Int32 len = str.getLength();
+    for ( ; pos < len; ++pos ) {
+        sal_Unicode c = str[ pos ];
+        switch (c) {
+        case '$':
+        case '\\':
+        case '{':
+        case '}':
+            buf.append( static_cast<sal_Unicode>('\\') );
+            break;
+        }
+        buf.append( c );
     }
-    if (url.getLength() > 0 && url[ 0 ] == '/')
-        buf.append( url.copy( 1 ) );
+    return buf.makeStringAndClear();
+}
+}
+
+//==============================================================================
+OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
+{
+    ::rtl::OUStringBuffer buf;
+    if (baseURL.getLength() > 1 && baseURL[ baseURL.getLength() - 1 ] == '/')
+        buf.append( baseURL.copy( 0, baseURL.getLength() - 1 ) );
     else
-        buf.append( url );
+        buf.append( baseURL );
+    OUString relPath(relPath_);
+    if (relPath.getLength() > 0 && relPath[ 0 ] == '/')
+        relPath = relPath.copy( 1 );
+    if (relPath.getLength() > 0)
+    {
+        buf.append( static_cast<sal_Unicode>('/') );
+        if (baseURL.matchAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:") )) {
+            // encode for macro expansion: relPath is supposed to have no
+            // macros, so encode $, {} \ (bootstrap mimic)
+            relPath = encodeForRcFile(relPath);
+
+            // encode once more for vnd.sun.star.expand schema:
+            // vnd.sun.star.expand:$UNO_...
+            // will expand to file-url
+            relPath = ::rtl::Uri::encode( relPath, rtl_UriCharClassUric,
+                                          rtl_UriEncodeIgnoreEscapes,
+                                          RTL_TEXTENCODING_UTF8 );
+        }
+        buf.append( relPath );
+    }
     return buf.makeStringAndClear();
 }
 
 //==============================================================================
-OUString expand_url( OUString const & url )
+OUString expandUnoRcTerm( OUString const & term_ )
 {
-    if (url.matchIgnoreAsciiCaseAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:") )) {
-        static ::rtl::Bootstrap * s_punorc = 0;
-        if (s_punorc == 0) {
-            OUString unorc = OUSTR("$ORIGIN/" SAL_CONFIGFILE("uno"));
-            ::rtl::Bootstrap::expandMacros( unorc );
-            static ::rtl::Bootstrap s_unorc( unorc );
-            OSL_ASSERT( s_unorc.getHandle() != 0 );
-            s_punorc = &s_unorc;
-        }
+    OUString term(term_);
+    UnoRc::get()->expandMacrosFrom( term );
+    return term;
+}
 
+//==============================================================================
+OUString expandUnoRcUrl( OUString const & url )
+{
+    if (url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:") )) {
         // cut protocol:
-        OUString macro( url.copy( sizeof ("vnd.sun.star.expand:") - 1 ) );
+        OUString rcurl( url.copy( sizeof ("vnd.sun.star.expand:") - 1 ) );
         // decode uric class chars:
-        macro = ::rtl::Uri::decode(
-            macro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+        rcurl = ::rtl::Uri::decode(
+            rcurl, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
         // expand macro string:
-        s_punorc->expandMacrosFrom( macro );
-        return macro;
-    } else {
+        UnoRc::get()->expandMacrosFrom( rcurl );
+        return rcurl;
+    }
+    else {
         return url;
     }
 }
@@ -164,56 +284,11 @@ OUString expand_url( OUString const & url )
 //==============================================================================
 bool office_is_running()
 {
-    static OUString s_pipeId;
-    if (s_pipeId.getLength() == 0) {
-        OUString userPath = OUSTR("${$SYSBINDIR/" SAL_CONFIGFILE("bootstrap")
-                                  ":UserInstallation}");
-        ::rtl::Bootstrap::expandMacros( userPath );
-        OSL_ASSERT( userPath.getLength() > 0 );
-
-        // normalize path:
-        ::osl::FileStatus status( FileStatusMask_FileURL );
-        ::osl::DirectoryItem dirItem;
-        if (::osl::DirectoryItem::get( userPath, dirItem )
-            != ::osl::DirectoryItem::E_None ||
-            dirItem.getFileStatus( status )
-            != ::osl::DirectoryItem::E_None ||
-            !status.isValid( FileStatusMask_FileURL ) ||
-            ::osl::FileBase::getAbsoluteFileURL(
-                OUString(), status.getFileURL(), userPath )
-            != ::osl::FileBase::E_None) {
-            return false;
-        }
-
-        rtlDigest digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
-        if (digest <= 0)
-            throw RuntimeException(
-                OUSTR("cannot get digest rtl_Digest_AlgorithmMD5!"), 0 );
-
-        sal_uInt8 const * data =
-            reinterpret_cast< sal_uInt8 const * >(userPath.getStr());
-        sal_Size size = (userPath.getLength() * sizeof (sal_Unicode));
-        sal_uInt32 md5_key_len = rtl_digest_queryLength( digest );
-        sal_uInt8 * md5_buf = new sal_uInt8 [ md5_key_len ];
-
-        rtl_digest_init( digest, data, static_cast<sal_uInt32>(size) );
-        rtl_digest_update( digest, data, static_cast<sal_uInt32>(size) );
-        rtl_digest_get( digest, md5_buf, md5_key_len );
-        rtl_digest_destroy( digest );
-
-        // create hex-value string from the MD5 value to keep
-        // the string size minimal
-        ::rtl::OUStringBuffer buf;
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("SingleOfficeIPC_") );
-        for ( sal_uInt32 i = 0; i < md5_key_len; ++i )
-            buf.append( static_cast<sal_Int32>(md5_buf[ i ]), 0x10 );
-
-        delete [] md5_buf;
-        s_pipeId = buf.makeStringAndClear();
-    }
-
+    OUString const & pipeId = OfficePipeId::get();
+    if (pipeId.getLength() == 0)
+        return false;
     ::osl::Security sec;
-    ::osl::Pipe pipe( s_pipeId, osl_Pipe_OPEN, sec );
+    ::osl::Pipe pipe( pipeId, osl_Pipe_OPEN, sec );
     return pipe.is();
 }
 
@@ -222,21 +297,17 @@ oslProcess raiseProcess(
     OUString const & appURL, Sequence<OUString> const & args )
 {
     ::osl::Security sec;
-    sal_Int32 pos = args.getLength();
-    OUString const * pargs = args.getConstArray();
-    rtl_uString ** parArgs = new rtl_uString * [ pos ];
-    for ( ; pos--; )
-        parArgs[ pos ] = pargs[ pos ].pData;
-
     oslProcess hProcess = 0;
     oslProcessError rc = osl_executeProcess(
-        appURL.pData, parArgs, args.getLength(),
+        appURL.pData,
+        reinterpret_cast<rtl_uString **>(
+            const_cast<OUString *>(args.getConstArray()) ),
+        args.getLength(),
         osl_Process_DETACHED,
         sec.getHandle(),
         0, // => current working dir
         0, 0, // => no env vars
         &hProcess );
-    delete [] parArgs;
 
     switch (rc) {
     case osl_Process_E_None:
@@ -266,13 +337,13 @@ OUString generateRandomPipeId()
         throw RuntimeException( OUSTR("cannot create random pool!?"), 0 );
     sal_uInt8 bytes[ 32 ];
     if (rtl_random_getBytes(
-            s_hPool, bytes, ARLEN(bytes) ) != rtl_Random_E_None)
+            s_hPool, bytes, ARLEN(bytes) ) != rtl_Random_E_None) {
         throw RuntimeException( OUSTR("random pool error!?"), 0 );
-
+    }
     ::rtl::OUStringBuffer buf;
-    for ( sal_uInt32 i = 0; i < ARLEN(bytes); ++i )
+    for ( sal_uInt32 i = 0; i < ARLEN(bytes); ++i ) {
         buf.append( static_cast<sal_Int32>(bytes[ i ]), 0x10 );
-
+    }
     return buf.makeStringAndClear();
 }
 
@@ -285,11 +356,12 @@ Reference<XInterface> resolveUnoURL(
     Reference<bridge::XUnoUrlResolver> xUnoUrlResolver(
         bridge::UnoUrlResolver::create( xLocalContext ) );
 
-    for (;;) {
-        if (abortChannel != 0 && abortChannel->isAborted())
+    for (;;)
+    {
+        if (abortChannel != 0 && abortChannel->isAborted()) {
             throw ucb::CommandAbortedException(
                 OUSTR("abort!"), Reference<XInterface>() );
-
+        }
         try {
             return xUnoUrlResolver->resolve( connectString );
         }
