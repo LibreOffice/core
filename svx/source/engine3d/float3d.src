@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-03 15:42:43 $
+ *  last change: $Author: kz $ $Date: 2002-05-27 12:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,7 +630,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ russian ] = "Ãîğèçîíòàëüíî";
         Text[ polish ] = "Poziomo";
         Text[ japanese ] = "æ°´å¹³";
-        Text[ chinese_traditional ] = "æ°´å¹³æ–¹å‘";
+        Text[ chinese_traditional ] = "æ°´å¹³";
         Text[ arabic ] = "ÃİŞí";
         Text[ dutch ] = "Horizontaal";
         Text[ chinese_simplified ] = "æ°´å¹³æ–¹å‘";
@@ -672,7 +672,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ russian ] = "Âåğòèêàëüíî";
         Text[ polish ] = "Pionowo";
         Text[ japanese ] = "å‚ç›´";
-        Text[ chinese_traditional ] = "å‚ç›´æ–¹å‘";
+        Text[ chinese_traditional ] = "å‚ç›´";
         Text[ arabic ] = "ÑÃÓí";
         Text[ dutch ] = "Verticaal";
         Text[ chinese_simplified ] = "å‚ç›´æ–¹å‘";
@@ -829,7 +829,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ russian ] = "Êîíå÷íûé óãîë ïîâîğîòà";
         Text[ polish ] = "K¹t koñcowy";
         Text[ japanese ] = "å›è»¢è§’åº¦";
-        Text[ chinese_traditional ] = "æœ€çµ‚è§’åº¦";
+        Text[ chinese_traditional ] = "æ—‹è½‰è§’åº¦";
         Text[ arabic ] = "ÒÇæíÉ ÇáäåÇíÉ";
         Text[ dutch ] = "Eindhoek";
         Text[ chinese_simplified ] = "æœ€ç»ˆè§’åº¦";
