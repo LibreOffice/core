@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:07:15 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 09:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,15 @@
 #ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
 #endif
-
+#ifndef _SWFORMATCLIPBOARD_HXX
+#include "formatclipboard.hxx"
+#endif
 #ifndef _CMDID_H
 #include <cmdid.h>
+#endif
+// header for class SfxRequest
+#ifndef _SFXREQUEST_HXX
+#include <sfx2/request.hxx>
 #endif
 
 extern int bDocSzUpdated;
@@ -215,6 +221,50 @@ void SwView::MarginChanged()
     GetWrtShell().SetBrowseBorder( GetMargin() );
 }
 
+/*--------------------------------------------------------------------
+ --------------------------------------------------------------------*/
 
+void SwView::ExecFormatPaintbrush(SfxRequest& rReq)
+{
+    if(!pFormatClipboard)
+        return;
 
+    if( pFormatClipboard->HasContent() )
+    {
+        pFormatClipboard->Erase();
 
+        SwApplyTemplate aTemplate;
+        GetEditWin().SetApplyTemplate(aTemplate);
+    }
+    else
+    {
+        bool bPersistentCopy = false;
+        const SfxItemSet *pArgs = rReq.GetArgs();
+        if( pArgs && pArgs->Count() >= 1 )
+        {
+            bPersistentCopy = static_cast<bool>(((SfxBoolItem &)pArgs->Get(
+                                    SID_FORMATPAINTBRUSH)).GetValue());
+        }
+
+        pFormatClipboard->Copy( GetWrtShell(), GetPool(), bPersistentCopy );
+
+        SwApplyTemplate aTemplate;
+        aTemplate.pFormatClipboard = pFormatClipboard;
+        GetEditWin().SetApplyTemplate(aTemplate);
+    }
+    GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
+}
+
+void SwView::StateFormatPaintbrush(SfxItemSet &rSet)
+{
+    if(!pFormatClipboard)
+        return;
+
+    bool bHasContent = pFormatClipboard && pFormatClipboard->HasContent();
+    rSet.Put(SfxBoolItem(SID_FORMATPAINTBRUSH, bHasContent));
+    if(!bHasContent)
+    {
+        if( !pFormatClipboard->CanCopyThisType( GetWrtShell().GetSelectionType() ) )
+            rSet.DisableItem( SID_FORMATPAINTBRUSH );
+    }
+}
