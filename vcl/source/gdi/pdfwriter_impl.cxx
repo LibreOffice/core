@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-23 18:30:54 $
+ *  last change: $Author: pl $ $Date: 2002-10-25 15:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1514,7 +1514,7 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
         for( int i = 0; i < 256; i++ )
         {
             aLine.append( pWidths[i] );
-            aLine.append( (!i || (i&7)) ? " " : "\r\n     " );
+            aLine.append( ((i&7) == 7) ? "\r\n     " : " " );
         }
         aLine.append( " ]\r\n"
                       "   /FontDescriptor " );
@@ -1732,21 +1732,32 @@ sal_Int32 PDFWriterImpl::emitFonts()
             sal_Int32 pWidths[ 256 ];
             sal_uInt8 pEncoding[ 256 ];
             sal_Unicode pUnicodes[ 256 ];
-            int nGlyphs = 0;
+            int nGlyphs = 1;
             // fill arrays and prepare encoding index map
-            std::map< sal_uInt8, int > aEncodingIndexMap;
             sal_Int32 nToUnicodeStream = 0;
+
+            memset( pGlyphIDs, 0, sizeof( pGlyphIDs ) );
+            memset( pEncoding, 0, sizeof( pEncoding ) );
+            memset( pUnicodes, 0, sizeof( pUnicodes ) );
             for( FontEmitMapping::iterator fit = lit->m_aMapping.begin(); fit != lit->m_aMapping.end();++fit )
             {
-                pGlyphIDs[ nGlyphs ] = fit->first;
-                pEncoding[ nGlyphs ] = fit->second.m_nSubsetGlyphID;
-                pUnicodes[ nGlyphs ] = fit->second.m_aUnicode;
-                if( pUnicodes[ nGlyphs ] )
+                sal_uInt8 nEnc = fit->second.m_nSubsetGlyphID;
+
+                DBG_ASSERT( pGlyphIDs[nEnc] == 0 && pEncoding[nEnc] == 0, "duplicate glyph" );
+                DBG_ASSERT( nEnc > lit->m_aMapping.size(), "invalid glyph encoding" );
+
+                pGlyphIDs[ nEnc ] = fit->first;
+                pEncoding[ nEnc ] = nEnc;
+                pUnicodes[ nEnc ] = fit->second.m_aUnicode;
+                if( pUnicodes[ nEnc ] )
                     nToUnicodeStream = 1;
-                aEncodingIndexMap[ fit->second.m_nSubsetGlyphID ] = nGlyphs;
-                nGlyphs++;
+                if( nGlyphs < 256 )
+                    nGlyphs++;
+                else
+                {
+                    DBG_ERROR( "too many glyphs for subset" );
+                }
             }
-            // TODO: when is osl_getTempFile available ?
             FontSubsetInfo aSubsetInfo;
             if( m_pReferenceDevice->mpGraphics->CreateFontSubset( aTmpName, it->first, pGlyphIDs, pEncoding, pWidths, nGlyphs, aSubsetInfo ) )
             {
@@ -1826,15 +1837,15 @@ sal_Int32 PDFWriterImpl::emitFonts()
                               "   /BaseFont /" );
                 appendSubsetName( lit->m_nFontID, aSubsetInfo.m_aPSName, aLine );
                 aLine.append( "\r\n"
-                              "   /FirstChar 1\r\n"
+                              "   /FirstChar 0\r\n"
                               "   /LastChar " );
-                aLine.append( (sal_Int32)nGlyphs );
+                aLine.append( (sal_Int32)nGlyphs-1 );
                 aLine.append( "\r\n"
                               "   /Widths [ " );
                 for( int i = 0; i < nGlyphs; i++ )
                 {
-                    aLine.append( pWidths[ aEncodingIndexMap[(sal_uInt8)(i+1)] ] );
-                    aLine.append( (i == 0 || (i & 7 )) ? " " : "\r\n     " );
+                    aLine.append( pWidths[ i ] );
+                    aLine.append( ((i & 7) == 7) ? "\r\n     " : " " );
                 }
                 aLine.append( "]\r\n"
                               "   /FontDescriptor " );
@@ -2198,7 +2209,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs, long* pGlyphs, sal_Unicode* pUn
             {
                 // create new subset if necessary
                 if( rSubset.m_aSubsets.begin() == rSubset.m_aSubsets.end() ||
-                    rSubset.m_aSubsets.back().m_aMapping.size() > 253 )
+                    rSubset.m_aSubsets.back().m_aMapping.size() > 254 )
                 {
                     rSubset.m_aSubsets.push_back( FontEmit( m_nNextFID++ ) );
                 }
