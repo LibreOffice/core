@@ -18,7 +18,6 @@ End Sub
 
 
 Sub GetSelectedDBMetaData()
-Dim NullList()
 Dim OldsDBname as String
 Dim DBIndex as Integer
 	If Ubound(oDialogModel.lstDatabases.SelectedItems()) &gt; -1 Then
@@ -32,8 +31,7 @@ Dim DBIndex as Integer
 					.lblTables.Enabled = True
 					.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
 					iCommandTypes() = CreateCommandTypeList()
-					.lstFields.StringItemList() = NullList()
-					.lstSelFields.StringItemList() = NullList()
+					EmptyFieldsListboxes()
 				End With
 			End If
 		End If
@@ -130,13 +128,27 @@ Dim oField as Object
 	Next i
 	For n = 0 to MaxIndex
 		sFieldname = FieldNames(n)
-		oField = oColumns.GetByName(sFieldName) 
+		oField = oColumns.GetByName(sFieldName)
 		iType = oField.Type
-		FieldMetaValues(n,0) = iType
-		FieldMetaValues(n,1) = oField.Precision 		
-		FieldMetaValues(n,2) = GetValueoutofList(iType, WidthList(),1, WidthIndex)		
+&apos;		Msgbox IsEmpty(oField.HelpText)
+&apos;		Msgbox oField.HelpText
+&apos;		Msgbox oField.ControlDefault
+&apos;		Msgbox sFieldName &amp; &quot;:&quot; &amp; chr(13) &amp; oField.dbg_Properties
+		FieldMetaValues(n,0) = oField.Type
+		FieldMetaValues(n,1) = oField.Precision
+		FieldMetaValues(n,2) = GetValueoutofList(iType, WidthList(),1, WidthIndex)
 		FieldMetaValues(n,3) = WidthList(WidthIndex,3)
 		FieldMetaValues(n,4) = oField.FormatKey
+&apos; Todo: Check why the following lines do not work
+&apos;		Msgbox oField.ControlDefault
+		FieldMetaValues(n,5) = oField.DefaultValue
+		FieldMetaValues(n,6) = oField.IsCurrency
+		FieldMetaValues(n,7) = oField.Scale
+&apos;		If oField.Description &lt;&gt; &quot;&quot; Then
+&apos;&apos; Todo: What&apos;s wrong with this line?
+&apos;			Msgbox oField.Helptext
+&apos;		End If
+		FieldMetaValues(n,8) = oField.Description
 	Next
 	ReDim oDBShapeList(MaxIndex) as Object
 	ReDim oTCShapeList(MaxIndex) as Object
@@ -145,7 +157,7 @@ Dim oField as Object
 End Sub
 
 
-Sub GetSpecificFieldNames()
+Function GetSpecificFieldNames() as Integer
 Dim n as Integer
 Dim m as Integer
 Dim s as Integer
@@ -156,34 +168,39 @@ Dim EmptyList()
 	If Ubound(oDialogModel.lstTables.StringItemList()) &gt; -1 Then
 		FieldNames() = oColumns.GetElementNames()
 		MaxIndex = Ubound(FieldNames())
-		Dim ResultFieldNames(MaxIndex)
-		ReDim ImgFieldNames(MaxIndex)
-		m = 0
-		For n = 0 To MaxIndex
-			oField = oColumns.GetByName(FieldNames(n))
-			iType = oField.Type
-			If GetIndexInMultiArray(WidthList(), iType, 0) &lt;&gt; -1 Then
-				ResultFieldNames(m) = FieldNames(n)
-				m = m + 1
+		If MaxIndex &lt;&gt; -1 Then
+			Dim ResultFieldNames(MaxIndex)
+			ReDim ImgFieldNames(MaxIndex)
+			m = 0
+			For n = 0 To MaxIndex
+				oField = oColumns.GetByName(FieldNames(n))
+				iType = oField.Type
+				If GetIndexInMultiArray(WidthList(), iType, 0) &lt;&gt; -1 Then
+					ResultFieldNames(m) = FieldNames(n)
+					m = m + 1
+				End If
+				If GetIndexInMultiArray(ImgWidthList(), iType, 0) &lt;&gt; -1 Then
+					ImgFieldNames(s) = FieldNames(n)
+					s = s + 1
+				End If
+			Next n
+			If s &lt;&gt; 0 Then
+				Redim Preserve ImgFieldNames(s-1)
+				bEnableBinaryOptionGroup = True
+			Else
+				bEnableBinaryOptionGroup = False
 			End If
-			If GetIndexInMultiArray(ImgWidthList(), iType, 0) &lt;&gt; -1 Then
-				ImgFieldNames(s) = FieldNames(n)
-				s = s + 1
-			End If
-		Next n
-		If s &lt;&gt; 0 Then
-			Redim Preserve ImgFieldNames(s-1)
-			bEnableBinaryOptionGroup = True
-		Else
-			bEnableBinaryOptionGroup = False
+			Redim Preserve ResultFieldNames(m-1)
+			Redim Preserve FieldNames(m-1)
+			FieldNames() = ResultFieldNames()
+			oDialogModel.lstFields.StringItemList = FieldNames()
+			InitializeListboxProcedures(oDialogModel, oDialogModel.lstFields, oDialogModel.lstSelFields)
 		End If
-		Redim Preserve ResultFieldNames(m-1)
-		Redim Preserve FieldNames(m-1)
-		FieldNames() = ResultFieldNames()
-		oDialogModel.lstFields.StringItemList = FieldNames()
-		InitializeListboxProcedures(oDialogModel, oDialogModel.lstFields, oDialogModel.lstSelFields)
+		GetSpecificFieldNames = MaxIndex
+	Else
+		GetSpecificFieldNames = -1	
 	End If
-End Sub
+End Function
 
 
 Sub CreateDBForm()
@@ -228,6 +245,7 @@ Dim m as Integer
 		ReDim Preserve WidthList(15, 4)
 		RemoveListItems(oDialogModel.lstFields(), oDialogModel.lstSelFields(), ImgFieldNames())
 	End If
+	oDialogModel.lstSelFields.Tag = True
 WIZARDERROR:
 	If Err &lt;&gt; 0 Then	
 		Msgbox(sMsgErrMsg, 16, GetProductName())
@@ -266,5 +284,10 @@ Sub GetCurrentMetaValues(Index as Integer)
 	CurControlType = FieldMetaValues(Index,2)
 	CurControlName = FieldMetaValues(Index,3)
 	CurFormatKey = FieldMetaValues(Index,4)
+	CurDefaultValue = FieldMetaValues(Index,5)
+	CurIsCurrency = FieldMetaValues(Index,6)
+	CurScale = FieldMetaValues(Index,7)
+&apos; Todo: Is this really the HelpText?
+	CurHelpText = FieldMetaValues(Index,8)
     CurFieldName = FieldNames(Index)
 End Sub</script:module>

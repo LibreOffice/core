@@ -67,12 +67,29 @@ Public Const cGridControl	= 8
 Public Const cImageControl	= 9
 
 Public Styles(8, 50) as String
-Public FieldMetaValues(MaxFieldIndex, 4)
+
+Public CurControlType as Integer
+Public CurFieldlength as Double
+Public CurFieldType as Integer
+Public CurFieldName as String
+Public CurControlName as String
+Public CurFormatKey as Long
+Public CurDefaultValue
+Public CurIsCurrency as Boolean
+Public CurScale as Integer
+Public CurHelpText as String
+
+Public FieldMetaValues(MaxFieldIndex, 8)
 &apos; Description of this List:
-&apos; FieldMetaValues(0-MaxFieldIndex,0) (Datafieldtype)
-&apos; FieldMetaValues(0-MaxFieldIndex,1) (Datafieldlength)
-&apos; FieldMetaValues(0-MaxFieldIndex,2) (ControlType eg. cLabel, cTextbox usw.)
-&apos; FieldMetaValues(0-MaxFieldIndex,4) (CurFormatKey)
+&apos;	CurFieldType = FieldMetaValues(Index,0)
+&apos;	CurFieldLength = FieldMetaValues(Index,1)
+&apos;	CurControlType = FieldMetaValues(Index,2)	(ControlType eg. cLabel, cTextbox usw.)
+&apos;	CurControlName = FieldMetaValues(Index,3)
+&apos;	CurFormatKey = FieldMetaValues(Index,4)
+&apos;	CurDefaultValue = FieldMetaValues(Index,5)
+&apos;	CurIsCurrency = FieldMetaValues(Index,6)
+&apos;	CurScale = FieldMetaValues(Index,7)
+&apos;	CurHelpText = FieldMetaValues(Index,8)
 
 Public FieldNames(MaxFieldIndex) as string
 Public oModelService(cControlCollectionCount) as String

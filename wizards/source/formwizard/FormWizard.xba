@@ -31,7 +31,6 @@ Public Const SBSIZETEXT = &quot;The quick brown fox jumps over the lazy dog. The
 Public bDisposeDoc as Boolean
 Public bDebug as Boolean
 
-
 &apos; The macro can be called in 4 possible scenarios:
 &apos; Scenario 1. No parameters at given
 &apos; Scenario 2: Only Datasourcename is given, but no connection and no Content
@@ -204,8 +203,13 @@ Dim QueryIndex as Integer
 			Tablename = Tablenames(SelIndex)
 			oColumns = oDBConnection.Tables.GetByName(Tablename).Columns
 		End If
-		GetSpecificFieldNames()
-		ToggleListboxControls(oDialogModel, True)
+		If GetSpecificFieldNames() &lt;&gt; -1 Then
+			ToggleListboxControls(oDialogModel, True)			
+		Else
+			EmptyFieldsListboxes()
+		End If
+	Else
+		EmptyFieldsListboxes()
 	End If
 NOFIELDS:
 	If Err &lt;&gt; 0 Then
@@ -226,6 +230,7 @@ Sub PreviousStep()
 		.cmdGoOn.Label = sGoOn
 		.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_1.bmp&quot;
 	End With
+	FormSetMoveRights()
 WIZARDERROR:
 	If Err &lt;&gt; 0 Then	
 		Msgbox(sMsgErrMsg, 16, GetProductName())
@@ -241,7 +246,7 @@ Sub NextStep()
 	End If
 	Select Case oDialogModel.Step
 		Case 1
-			bControlsAreCreated = Not (CBool(oDialogModel.lstSelFields.Tag))
+			bControlsAreCreated = Not (cBool(oDialogModel.lstSelFields.Tag))
 			If Not bControlsAreCreated Then
 				GetTableMetaData()
 				CreateDBForm()
@@ -325,8 +330,19 @@ Dim sBaseBookmarkName as String
 		Loop Until Not bLinkExists
 		bDisposeDoc = False
 		GroupShapesTogether()
-		DlgFormDB.EndExecute()
 		ToggleDesignMode(oDocument)
 		oDBForm.Reload()
+		oDocument.Store()
+		DlgFormDB.EndExecute()
 	End If
-End Sub</script:module>
+End Sub
+
+
+Sub EmptyFieldsListboxes()
+Dim NullList() as String
+	ToggleListboxControls(oDialogModel, False)
+	oDialogModel.lstFields.StringItemList() = NullList()
+	oDialogModel.lstSelFields.StringItemList() = NullList()
+	bEnableBinaryOptionGroup = False
+End Sub
+</script:module>

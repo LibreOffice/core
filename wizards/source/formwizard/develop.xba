@@ -16,12 +16,7 @@ Public bIsVeryFirstRun as Boolean
 Public bControlsareCreated as Boolean
 Public nDBRefHeight as Long
 Public nXTCPos&amp;, nYTCPos&amp;, nXDBPos&amp;, nYDBPos&amp;, nTCHeight&amp;, nTCWidth&amp;, nDBHeight&amp;, nDBWidth&amp;
-Public CurControlType as Integer
-Public CurFieldlength as Double
-Public CurFieldType as Integer
-Public CurFieldName as String
-Public CurControlName as String
-Public CurFormatKey as Long
+
 Dim iReduceWidth as Integer
 
 Function PositionControls(Maxindex as Integer)
@@ -50,8 +45,6 @@ Dim i as Integer
 		End If
 		GetLabelDiffHeight(i+1)
 		ResetPosSizes(i)
-&apos;		oGroupShapeList(i).Position = GetPoint(nXTCPos, nYTCPos)
-&apos;		oGroupShapeList(i).Size = GetSize(nTCWidth + nDBWidth, nDBHeight)
 		oProgressbar.Value = i
 	Next i
 	ControlCaptionstoStandardLayout()
@@ -183,7 +176,7 @@ Dim aSize As New com.sun.star.awt.Size
 				nYDBPos = nYTCPos + nTCHeight
 			End If
 		End If
-		nTCWidth = GetPreferredWidth(oModel, True, CurFieldname)
+		nTCWidth = GetPreferredWidth(oModel, True, CurFieldName)
 	End If
 	If CurArrangement = cColumnarLeft Then
 		&apos; Note This If Sequence must be called before retrieving the outer Points
@@ -207,6 +200,9 @@ Dim aSize As New com.sun.star.awt.Size
 			End If 
 	End Select	
 	oShape.SetSize(GetSize(nTCWidth,nTCHeight))
+	If CurHelpText &lt;&gt; &quot;&quot; Then
+		oModel.HelpText = CurHelptext
+	End If
 	InsertTextControl = oModel
 End Function
 
@@ -524,8 +520,10 @@ Dim i as Integer
 		For i = 0 To MaxIndex
 			oGroupShapeList(i) = CreateUnoService(&quot;com.sun.star.drawing.ShapeCollection&quot;)
 			oGroupShapeList(i).Add(oTCShapeList(i))
+&apos;			Msgbox &quot;Position: &quot; &amp; oDBShapeList(i).Position.X &amp; &quot;;&quot; &amp; oDBShapeList(i).Position.Y
 			oGroupShapeList(i).Add(oDBShapeList(i))
 			oDrawPage.Group(oGroupShapeList(i))
+&apos;			Msgbox &quot;Position: &quot; &amp; oDBShapeList(i).Position.X &amp; &quot;;&quot; &amp; oDBShapeList(i).Position.Y
 		Next i
 	End If
 End Sub</script:module>
