@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-15 09:40:43 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 14:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,8 +147,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-double toDouble(const ByteString& rString,rtl_TextEncoding _nrTextEncoding);
-
 // -------------------------------------------------------------------------
 void OFlatTable::fillColumns()
 {
@@ -160,20 +158,20 @@ void OFlatTable::fillColumns()
     {
         while(bRead && !aHeaderLine.Len())
         {
-            bRead = m_pFileStream->ReadLine(aHeaderLine);
+            bRead = m_pFileStream->ReadByteStringLine(aHeaderLine,pConnection->getTextEncoding());
         }
     }
 
     // read first row
     OFlatString aFirstLine;
 
-    bRead = m_pFileStream->ReadLine(aFirstLine);
+    bRead = m_pFileStream->ReadByteStringLine(aFirstLine,pConnection->getTextEncoding());
 
     if (!pConnection->isHeaderLine() || !aHeaderLine.Len())
     {
         while(bRead && !aFirstLine.Len())
         {
-            bRead = m_pFileStream->ReadLine(aFirstLine);
+            bRead = m_pFileStream->ReadByteStringLine(aFirstLine,pConnection->getTextEncoding());
         }
         // use first row as headerline because we need the number of columns
         aHeaderLine = aFirstLine;
@@ -197,9 +195,9 @@ void OFlatTable::fillColumns()
 
     sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
     // read description
-    char cDecimalDelimiter  = pConnection->getDecimalDelimiter();
-    char cThousandDelimiter = pConnection->getThousandDelimiter();
-    ByteString aColumnName;
+    sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
+    sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
+    String aColumnName;
     ::rtl::OUString aTypeName;
     ::comphelper::UStringMixEqual aCase(bCase);
     xub_StrLen nStartPosHeaderLine = 0; // use for eficient way to get the tokens
@@ -210,13 +208,12 @@ void OFlatTable::fillColumns()
         if (pConnection->isHeaderLine())
         {
             aHeaderLine.GetTokenSpecial(aColumnName,nStartPosHeaderLine,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
-            aColumnName.Convert(pConnection->getTextEncoding(),pConnection->getTextEncoding());
         }
         else
         {
             // no column name so ...
             aColumnName = 'C';
-            aColumnName += ByteString::CreateFromInt32(i+1);
+            aColumnName += String::CreateFromInt32(i+1);
         }
         sal_Int32 eType;
         UINT16 nPrecision = 0;
@@ -227,7 +224,7 @@ void OFlatTable::fillColumns()
         ULONG  nIndex = 0;
 
         // first without fielddelimiter
-        ByteString aField;
+        String aField;
         aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine,pConnection->getFieldDelimiter(),'\0');
         if (aField.Len() == 0 ||
             (pConnection->getStringDelimiter() && pConnection->getStringDelimiter() == aField.GetChar(0)))
@@ -236,8 +233,8 @@ void OFlatTable::fillColumns()
         }
         else
         {
-            ByteString aField2;
-            if(pConnection->getStringDelimiter() != '\0')
+            String aField2;
+            if ( pConnection->getStringDelimiter() != '\0' )
                 aFirstLine.GetTokenSpecial(aField2,nStartPosFirstLine2,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
             else
                 aField2 = aField;
@@ -252,7 +249,7 @@ void OFlatTable::fillColumns()
                 xub_StrLen nDot = 0;
                 for (xub_StrLen j = 0; j < aField2.Len(); j++)
                 {
-                    char c = aField2.GetChar(j);
+                    sal_Unicode c = aField2.GetChar(j);
                     // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
                     if ((!cDecimalDelimiter || c != cDecimalDelimiter) &&
                         (!cThousandDelimiter || c != cThousandDelimiter) &&
@@ -274,10 +271,10 @@ void OFlatTable::fillColumns()
                 if (bNumeric && cThousandDelimiter)
                 {
                     // Ist der Trenner richtig angegeben?
-                    ByteString aValue = aField2.GetToken(0,cDecimalDelimiter);
+                    String aValue = aField2.GetToken(0,cDecimalDelimiter);
                     for (sal_Int32 j = aValue.Len() - 4; j >= 0; j -= 4)
                     {
-                        char c = aValue.GetChar(j);
+                        sal_Unicode c = aValue.GetChar(j);
                         // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
                         if (c == cThousandDelimiter && j)
                             continue;
@@ -294,7 +291,7 @@ void OFlatTable::fillColumns()
                 {
                     try
                     {
-                        nIndex = m_xNumberFormatter->detectNumberFormat(::com::sun::star::util::NumberFormat::ALL,String(aField2,pConnection->getTextEncoding()));
+                        nIndex = m_xNumberFormatter->detectNumberFormat(::com::sun::star::util::NumberFormat::ALL,aField2);
                     }
                     catch(Exception&)
                     {
@@ -350,12 +347,12 @@ void OFlatTable::fillColumns()
         }
 
         // check if the columname already exists
-        String aAlias(aColumnName,pConnection->getTextEncoding());
+        String aAlias(aColumnName);
         OSQLColumns::const_iterator aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
         sal_Int32 nExprCnt = 0;
         while(aFind != m_aColumns->end())
         {
-            (aAlias = String(aColumnName,pConnection->getTextEncoding())) += String::CreateFromInt32(++nExprCnt);
+            (aAlias = aColumnName) += String::CreateFromInt32(++nExprCnt);
             aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
         }
 
@@ -575,7 +572,7 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
     sal_Int32 nByteOffset = 1;
     // Felder:
     xub_StrLen nStartPos = 0;
-    ByteString aStr;
+    String aStr;
     OSQLColumns::const_iterator aIter = _rCols.begin();
     for (sal_Int32 i = 0; aIter != _rCols.end();++aIter, ++i)
     {
@@ -608,7 +605,7 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
                     double nRes = 0.0;
                     try
                     {
-                        nRes = m_xNumberFormatter->convertStringToNumber(::com::sun::star::util::NumberFormat::ALL,String(aStr, pConnection->getTextEncoding()));
+                        nRes = m_xNumberFormatter->convertStringToNumber(::com::sun::star::util::NumberFormat::ALL,aStr);
                         Reference<XPropertySet> xProp(m_xNumberFormatter->getNumberFormatsSupplier()->getNumberFormatSettings(),UNO_QUERY);
                         com::sun::star::util::Date aDate;
                         xProp->getPropertyValue(::rtl::OUString::createFromAscii("NullDate")) >>= aDate;
@@ -635,9 +632,9 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
                 case DataType::DECIMAL:             // #99178# OJ
                 case DataType::NUMERIC:
                 {
-                    char cDecimalDelimiter = pConnection->getDecimalDelimiter();
-                    char cThousandDelimiter = pConnection->getThousandDelimiter();
-                    ByteString aStrConverted;
+                    sal_Unicode cDecimalDelimiter = pConnection->getDecimalDelimiter();
+                    sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
+                    String aStrConverted;
 
                     OSL_ENSURE(cDecimalDelimiter && nType != DataType::INTEGER ||
                                !cDecimalDelimiter && nType == DataType::INTEGER,
@@ -657,7 +654,8 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
                         else
                             aStrConverted += aStr.GetChar(j) ;
                     }
-                    double nVal = toDouble(aStrConverted,pConnection->getTextEncoding());
+                    int nErrno;
+                    double nVal = SolarMath::StringToDouble(aStrConverted.GetBuffer(),',','.',nErrno);
 
                     // #99178# OJ
                     if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )
@@ -669,7 +667,7 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
                 default:
                 {
                     // Wert als String in Variable der Row uebernehmen
-                    (*_rRow)[i+1] = String(aStr, pConnection->getTextEncoding());
+                    (*_rRow)[i+1] = aStr;
                 }
                 break;
             }
@@ -709,12 +707,6 @@ BOOL OFlatTable::DeleteRow(const OSQLColumns& _rCols)
 //------------------------------------------------------------------
 void OFlatTable::AllocBuffer()
 {
-}
-//------------------------------------------------------------------
-double toDouble(const ByteString& rString,rtl_TextEncoding _nTextEncoding)
-{
-    int nErrno;
-    return SolarMath::StringToDouble(UniString(rString,_nTextEncoding).GetBuffer(),',','.',nErrno);
 }
 
 //------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-08 08:26:17 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 14:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,13 +84,13 @@ namespace connectivity
         // Ableitung von String mit ueberladenen GetToken/GetTokenCount-Methoden
         // Speziell fuer FLAT FILE-Format: Strings koennen gequotet sein
         //==================================================================
-        class OFlatString : public ByteString
+        class OFlatString : public String
         {
         public:
             OFlatString(){}
 
-            xub_StrLen  GetTokenCount( sal_uInt8 cTok = ';', sal_uInt8 cStrDel = '\0' ) const;
-            void        GetTokenSpecial( ByteString& _rStr,xub_StrLen& nStartPos, sal_uInt8 cTok = ';', sal_uInt8 cStrDel = '\0' ) const;
+            xub_StrLen  GetTokenCount( sal_Unicode cTok = ';', sal_Unicode cStrDel = '\0' ) const;
+            void        GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Unicode cTok = ';', sal_Unicode cStrDel = '\0' ) const;
         };
 
 

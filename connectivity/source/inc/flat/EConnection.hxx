@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EConnection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:00:39 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 14:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,10 @@ namespace connectivity
         private:
             sal_Bool    m_bFixedLength;         // row of fixed length
             sal_Bool    m_bHeaderLine;          // column names in first row
-            sal_uInt8   m_cFieldDelimiter;      // look at the name
-            sal_uInt8   m_cStringDelimiter;     // delimiter for strings m_cStringDelimiter blabla m_cStringDelimiter
-            sal_uInt8   m_cDecimalDelimiter;    // Dezimal-delimiter (Dezimalpoint)
-            sal_uInt8   m_cThousandDelimiter;   //
+            sal_Unicode m_cFieldDelimiter;      // look at the name
+            sal_Unicode m_cStringDelimiter;     // delimiter for strings m_cStringDelimiter blabla m_cStringDelimiter
+            sal_Unicode m_cDecimalDelimiter;    // Dezimal-delimiter (Dezimalpoint)
+            sal_Unicode m_cThousandDelimiter;   //
         public:
             OFlatConnection(ODriver*    _pDriver);
             virtual ~OFlatConnection();
@@ -89,10 +89,10 @@ namespace connectivity
             // own methods
             inline sal_Bool     isFixedLength()         const { return m_bFixedLength;      }
             inline sal_Bool     isHeaderLine()          const { return m_bHeaderLine;       }
-            inline sal_uInt8    getFieldDelimiter()     const { return m_cFieldDelimiter;   }
-            inline sal_uInt8    getStringDelimiter()    const { return m_cStringDelimiter;  }
-            inline sal_uInt8    getDecimalDelimiter()   const { return m_cDecimalDelimiter; }
-            inline sal_uInt8    getThousandDelimiter()  const { return m_cThousandDelimiter;}
+            inline sal_Unicode  getFieldDelimiter()     const { return m_cFieldDelimiter;   }
+            inline sal_Unicode  getStringDelimiter()    const { return m_cStringDelimiter;  }
+            inline sal_Unicode  getDecimalDelimiter()   const { return m_cDecimalDelimiter; }
+            inline sal_Unicode  getThousandDelimiter()  const { return m_cThousandDelimiter;}
             // XServiceInfo
             DECLARE_SERVICE_INFO();
 
