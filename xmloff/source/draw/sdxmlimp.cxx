@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 17:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,9 +560,10 @@ SdXMLImport::SdXMLImport( sal_Bool bIsDraw, sal_uInt16 nImportFlags )
     msPageLayouts( RTL_CONSTASCII_USTRINGPARAM( "PageLayouts" ) )
 {
     // add namespaces
-    GetNamespaceMap().AddAtIndex(
-        XML_NAMESPACE_PRESENTATION, GetXMLToken(XML_NP_PRESENTATION),
-        GetXMLToken(XML_N_PRESENTATION), XML_NAMESPACE_PRESENTATION);
+    GetNamespaceMap().Add(
+        GetXMLToken(XML_NP_PRESENTATION),
+        GetXMLToken(XML_N_PRESENTATION),
+        XML_NAMESPACE_PRESENTATION);
 }
 
 // XImporter

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 17:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,9 +692,10 @@ void SAL_CALL SdXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
     }
 
     // add namespaces
-    _GetNamespaceMap().AddAtIndex(
-        XML_NAMESPACE_PRESENTATION, GetXMLToken(XML_NP_PRESENTATION),
-        GetXMLToken(XML_N_PRESENTATION), XML_NAMESPACE_PRESENTATION);
+    _GetNamespaceMap().Add(
+        GetXMLToken(XML_NP_PRESENTATION),
+        GetXMLToken(XML_N_PRESENTATION),
+        XML_NAMESPACE_PRESENTATION);
 
     GetShapeExport()->enableLayerExport();
 }

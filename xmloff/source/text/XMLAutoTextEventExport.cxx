@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventExport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 17:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,14 +247,14 @@ void XMLAutoTextEventExport::addNamespaces()
 {
     // namespaces for office:, text: and script:
     GetAttrList().AddAttribute(
-        GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_TEXT ),
-        sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_TEXT ) );
+        GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_TEXT ),
+        sCDATA, GetNamespaceMap().GetNameByKey( XML_NAMESPACE_TEXT ) );
     GetAttrList().AddAttribute(
-        GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_SCRIPT ),
-        sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_SCRIPT ) );
+        GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_SCRIPT ),
+        sCDATA, GetNamespaceMap().GetNameByKey( XML_NAMESPACE_SCRIPT ) );
     GetAttrList().AddAttribute(
-        GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_OFFICE ),
-        sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_OFFICE ) );
+        GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_OFFICE ),
+        sCDATA, GetNamespaceMap().GetNameByKey( XML_NAMESPACE_OFFICE ) );
 }
 
 void XMLAutoTextEventExport::exportEvents()

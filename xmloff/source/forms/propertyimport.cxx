@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 09:44:19 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 17:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,9 +481,9 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OSinglePropertyContext::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
     {
-        ::rtl::OUString sNameAttribute = GetImport().GetNamespaceMap().GetQNameByIndex(
+        ::rtl::OUString sNameAttribute = GetImport().GetNamespaceMap().GetQNameByKey(
             GetPrefix(), ::rtl::OUString::createFromAscii("property-name"));
-        ::rtl::OUString sTypeAttribute = GetImport().GetNamespaceMap().GetQNameByIndex(
+        ::rtl::OUString sTypeAttribute = GetImport().GetNamespaceMap().GetQNameByKey(
             GetPrefix(), ::rtl::OUString::createFromAscii("property-type"));
 
         // the name of the property
@@ -558,6 +558,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/03/29 09:44:19  fs
+ *  enableTrackAttributes to prevent the (expensive) attribute tracking
+ *
  *  Revision 1.11  2001/03/28 13:59:54  fs
  *  #85371# +simulateDefaultedAttribute / +encounteredAttribute
  *

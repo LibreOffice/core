@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 13:52:07 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 17:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,8 +1019,8 @@ void SvXMLExportPropertyMapper::_exportXML(
 
                     // if the prefix isn't defined yet or has another meaning,
                     // we have to redefine it now.
-                    sal_uInt16 nIdx = pNamespaceMap->GetIndexByPrefix( sPrefix );
-                    if( USHRT_MAX == nIdx || pNamespaceMap->GetNameByIndex( nIdx ) != sNamespace )
+                    sal_uInt16 nKey = pNamespaceMap->GetKeyByPrefix( sPrefix );
+                    if( USHRT_MAX == nKey || pNamespaceMap->GetNameByKey( nKey ) != sNamespace )
                     {
                         if( !pNewNamespaceMap )
                         {

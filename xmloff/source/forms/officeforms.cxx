@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeforms.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:14 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 17:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ namespace xmloff
             const ::rtl::OUString& _rPropName, sal_Bool _bDefault)
     {
         // the complete attribute name to look for
-        ::rtl::OUString sCompleteAttributeName = GetImport().GetNamespaceMap().GetQNameByIndex(
+        ::rtl::OUString sCompleteAttributeName = GetImport().GetNamespaceMap().GetQNameByKey(
             getOfficeFormsAttributeNamespace(_eAttribute),
             ::rtl::OUString::createFromAscii(getOfficeFormsAttributeName(_eAttribute)));
 
@@ -228,6 +228,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/06/29 21:07:14  dvo
+ *  #86004# changes sXML_* strings to XML_* tokens
+ *
  *  Revision 1.1  2001/03/20 13:41:05  fs
  *  initial checkin - importing/exporting the office:forms element
  *

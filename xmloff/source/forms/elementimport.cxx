@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-25 13:32:38 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 17:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -932,9 +932,9 @@ namespace xmloff
     void OListOptionImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
     {
         // the label and the value
-        const ::rtl::OUString sLabelAttribute = GetImport().GetNamespaceMap().GetQNameByIndex(
+        const ::rtl::OUString sLabelAttribute = GetImport().GetNamespaceMap().GetQNameByKey(
             GetPrefix(), ::rtl::OUString::createFromAscii("label"));
-        const ::rtl::OUString sValueAttribute = GetImport().GetNamespaceMap().GetQNameByIndex(
+        const ::rtl::OUString sValueAttribute = GetImport().GetNamespaceMap().GetQNameByKey(
             GetPrefix(), ::rtl::OUString::createFromAscii("value"));
 
         // -------------------
@@ -966,9 +966,9 @@ namespace xmloff
             m_xListBoxImport->implPushBackValue( sValue );
 
         // the current-selected and selected
-        const ::rtl::OUString sSelectedAttribute = GetImport().GetNamespaceMap().GetQNameByIndex(
+        const ::rtl::OUString sSelectedAttribute = GetImport().GetNamespaceMap().GetQNameByKey(
             GetPrefix(), ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_CURRENT_SELECTED)));
-        const ::rtl::OUString sDefaultSelectedAttribute = GetImport().GetNamespaceMap().GetQNameByIndex(
+        const ::rtl::OUString sDefaultSelectedAttribute = GetImport().GetNamespaceMap().GetQNameByKey(
             GetPrefix(), ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_SELECTED)));
 
         // propagate the selected flag
@@ -1000,7 +1000,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OComboItemImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
     {
-        const ::rtl::OUString sLabelAttributeName = GetImport().GetNamespaceMap().GetQNameByIndex(
+        const ::rtl::OUString sLabelAttributeName = GetImport().GetNamespaceMap().GetQNameByKey(
             GetPrefix(), ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_LABEL)));
         m_xListBoxImport->implPushBackLabel(_rxAttrList->getValueByName(sLabelAttributeName));
 
@@ -1278,6 +1278,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2001/06/25 13:32:38  fs
+ *  #88691# TargetURL property value must be saved relative to own document
+ *
  *  Revision 1.22  2001/05/21 13:33:04  fs
  *  #85388# when exporting the ListSource as attribs, store form:option elements as long as there are valid 'selected' or 'default-selected' entries
  *
