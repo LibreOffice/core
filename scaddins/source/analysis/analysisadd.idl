@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysisadd.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-28 10:17:19 $
+ *  last change: $Author: gt $ $Date: 2001-06-18 13:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/sheet/LocalizedName.idl>
 
 module com
 {
@@ -73,6 +74,12 @@ module sheet
 {
 module addin
 {
+    interface XCompatibilityNames  : com::sun::star::uno::XInterface
+    {
+        /// getCompatibilityNames.
+        sequence< com::sun::star::sheet::LocalizedName > getCompatibilityNames ( [in] string aProgrammaticName );
+    };
+
     /**
      * Interface with analysis functions.
      */
@@ -82,7 +89,6 @@ module addin
 //      double get_Test(
 //                  [in] com::sun::star::beans::XPropertySet xOptions,
 //                  [in] long Mode, [in] double f1, [in] double f2, [in] double f3 );
-
 
         /// workday.
         long getWorkday(
@@ -157,40 +163,40 @@ module addin
         double getBessely( [in] double Num, [in] long Order );
 
         /// bin2oct.
-        string getBin2oct( [in] string BinaryNum, [in] any Places );
+        string getBin2Oct( [in] string BinaryNum, [in] any Places );
 
         /// bin2dec.
-        double getBin2dec( [in] string BinaryNum );
+        double getBin2Dec( [in] string BinaryNum );
 
         /// bin2hex.
-        string getBin2hex( [in] string BinaryNum, [in] any Places );
+        string getBin2Hex( [in] string BinaryNum, [in] any Places );
 
         /// oct2bin.
-        string getOct2bin( [in] string OctalNum, [in] any Places );
+        string getOct2Bin( [in] string OctalNum, [in] any Places );
 
         /// oct2dec.
-        double getOct2dec( [in] string OctalNum );
+        double getOct2Dec( [in] string OctalNum );
 
         /// oct2hex.
-        string getOct2hex( [in] string OctalNum, [in] any Places );
+        string getOct2Hex( [in] string OctalNum, [in] any Places );
 
         /// dec2bin.
-        string getDec2bin( [in] long Value, [in] any Places );
+        string getDec2Bin( [in] long Value, [in] any Places );
 
         /// dec2oct.
-        string getDec2oct( [in] long Value, [in] any Places );
+        string getDec2Oct( [in] long Value, [in] any Places );
 
         /// dec2hex.
-        string getDec2hex( [in] double Value, [in] any Places );
+        string getDec2Hex( [in] double Value, [in] any Places );
 
         /// hex2bin.
-        string getHex2bin( [in] string HexadecimalValue, [in] any Places );
+        string getHex2Bin( [in] string HexadecimalValue, [in] any Places );
 
         /// hex2dec.
-        double getHex2dec( [in] string HexadecimalValue );
+        double getHex2Dec( [in] string HexadecimalValue );
 
         /// hex2oct.
-        string getHex2oct( [in] string HexadecimalValue, [in] any Places );
+        string getHex2Oct( [in] string HexadecimalValue, [in] any Places );
 
         /// delta.
         long getDelta( [in] double Num1, [in] any Num2 );
@@ -474,6 +480,7 @@ module addin
     service Analysis
     {
         // exported interfaces:
+        interface XCompatibilityNames;
         interface XAnalysis;
     };
 };

@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.3 2001-05-07 06:56:53 gt Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.4 2001-06-18 13:00:32 gt Exp $
 #
-#     $Date: 2001-05-07 06:56:53 $
+#     $Date: 2001-06-18 13:00:32 $
 #     $Author: gt $
-#     $Revision: 1.3 $
+#     $Revision: 1.4 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -117,6 +117,11 @@ SLOFILES+=$(SLO)$/staticmb.obj
 ALLIDLFILES=\
     analysisadd.idl
 
+SRCFILES =  \
+        analysis.src		\
+        analysis_funcnames.src	\
+        analysis_deffuncnames.src
+
 # --- Library -----------------------------------
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
@@ -126,12 +131,23 @@ SHL1STDLIBS= \
         $(CPPULIB)			\
         $(VOSLIB)			\
         $(TOOLSLIB)			\
-        $(SALLIB)
+        $(SALLIB)			\
+        $(SVLIB)
+        
 
 SHL1DEPN=makefile.mk
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
+
+# --- Resourcen ----------------------------------------------------
+
+RESLIB1LIST=\
+    $(SRS)$/analysis.srs
+
+RESLIB1NAME=analysis
+RESLIB1SRSFILES=\
+    $(RESLIB1LIST)
 
 # --- Targets ----------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-22 11:49:14 $
+ *  last change: $Author: gt $ $Date: 2001-06-18 13:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 //#include <tools/list.hxx>
 //#include <tools/solmath.hxx>
 
+#include <tools/resid.hxx>
+#include <tools/rc.hxx>
+
 #include "analysisdefs.hxx"
 //#include "analysis_solmath.hxx"
 
@@ -81,6 +84,7 @@ using namespace com::sun::star;
 using namespace rtl;
 
 
+class ResMgr;
 class SortedIndividualInt32List;
 
 
@@ -183,7 +187,7 @@ double              GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int3
 
 
 
-class List
+class MyList
 {
 private:
     static const sal_uInt32 nStartSize;
@@ -198,8 +202,8 @@ private:
     inline void             Grow( void );
 protected:
 public:
-                            List( void );
-    virtual                 ~List();
+                            MyList( void );
+    virtual                 ~MyList();
 
     inline const void*      GetObject( sal_uInt32 nIndex ) const;
     inline const void*      First( void );
@@ -214,66 +218,141 @@ public:
 
 
 
-class FuncData
+class StringList : protected MyList
 {
 public:
-    static const sal_Char*  pInternParam;
-    const sal_Char*         pIntName;
-    const sal_Char*         pGerman;
-    const sal_Char*         pEnglish;
-    const sal_Char*         pDescr;
-    const sal_Char*         pOptParam;
-    const sal_Char*         pOptParamDescr;
-    sal_Bool                bWithOpt;
-private:
-    const sal_Char**        ppParam;        // list with naming of the parameters
-    sal_uInt32              nParam;         // len of ~
-    const sal_Char**        ppParamDescr;   // list with description the parameters
-    sal_uInt32              nParamDescr;    // len of ~
+    virtual                 ~StringList();
 
-public:
-                            FuncData( void );
-    virtual                 ~FuncData();
-    static FuncData*        CloneFromList( const sal_Char**& rppStringList );
-                                        // returns the first ** to first string after actual readed
+    inline const STRING*    First( void );
+    inline const STRING*    Next( void );
+    inline const STRING*    Get( sal_uInt32 nIndex ) const;
 
-    const sal_Char*         GetParam( sal_uInt32 nInd ) const;
-    const sal_Char*         GetParamDescr( sal_uInt32 nInd ) const;
+    sal_Bool                Contains( const STRING& rSearchString ) const;
+
+    inline void             Append( STRING* pNew );
+    inline void             Append( const STRING& rNew );
+
+    MyList::Count;
 };
 
 
 
 
-class CStrList : private List
+enum FDCategory
+{
+    FDCat_AddIn,
+    FDCat_DateTime,
+    FDCat_Finance,
+    FDCat_Inf,
+    FDCat_Math,
+    FDCat_Tech
+};
+
+
+struct FuncDataBase
+{
+    const sal_Char*         pIntName;
+    sal_uInt16              nUINameID;          // resource ID to UI name
+    sal_uInt16              nDescrID;           // resource ID to description, parameter names and ~ description
+    sal_Bool                bDouble;            // name already exist in Calc
+    sal_Bool                bWithOpt;           // first parameter is internal
+    sal_uInt16              nCompListID;        // resource ID to list of valid names
+    sal_uInt16              nNumOfParams;       // number of named / described parameters
+    FDCategory              eCat;               // function category
+};
+
+
+
+
+class FuncData
+{
+private:
+    OUString                aIntName;
+    sal_uInt16              nUINameID;
+    sal_uInt16              nDescrID;           // leads also to parameter descriptions!
+    sal_Bool                bDouble;            // flag for names, wich already exist in Calc
+    sal_Bool                bWithOpt;           // has internal parameter on first position
+
+    sal_uInt16              nParam;             // num of parameters
+    sal_uInt16              nCompID;
+    StringList              aCompList;          // list of all valid names
+    FDCategory              eCat;               // function category
+public:
+                            FuncData( const FuncDataBase& rBaseData, ResMgr& );
+    virtual                 ~FuncData();
+
+    inline sal_uInt16       GetUINameID( void ) const;
+    inline sal_uInt16       GetDescrID( void ) const;
+    inline sal_Bool         IsDouble( void ) const;
+    inline sal_Bool         HasIntParam( void ) const;
+
+    sal_uInt16              GetStrIndex( sal_uInt16 nParamNum ) const;
+    inline sal_Bool         Is( const OUString& rCompareTo ) const;
+
+    inline const StringList&    GetCompNameList( void ) const;
+
+    inline FDCategory       GetCategory( void ) const;
+};
+
+
+
+
+class CStrList : private MyList
 {
 public:
     inline void             Append( const sal_Char* pNew );
     inline const sal_Char*  Get( sal_uInt32 nIndex ) const;
-    List::Count;
+    MyList::Count;
 };
 
 
 
 
-class FuncDataList : private List
+class FuncDataList : private MyList
 {
     OUString                aLastName;
     sal_uInt32              nLast;
 public:
-                            FuncDataList( const sal_Char** pFuncDatas );
+                            FuncDataList( ResMgr& );
     virtual                 ~FuncDataList();
     inline void             Append( FuncData* pNew );
     inline const FuncData*  Get( sal_uInt32 nIndex ) const;
-    List::Count;
+    MyList::Count;
 
-//  AnalysisFunc            GetFunc( const OUString& aProgrammaticName ) const;
     const FuncData*         Get(  const OUString& aProgrammaticName ) const;
 };
 
 
 
+class AnalysisResId : public ResId
+{
+ public:
+                    AnalysisResId( sal_uInt16 nId, ResMgr& rResMgr );
+};
 
-class SortedIndividualInt32List : private List
+
+
+
+class AnalysisRscStrLoader : public Resource
+{
+private:
+    String          aStr;
+public:
+    AnalysisRscStrLoader( sal_uInt16 nRsc, sal_uInt16 nStrId, ResMgr& rResMgr ) :
+        Resource( AnalysisResId( nRsc, rResMgr ) ),
+        aStr( AnalysisResId( nStrId, rResMgr ) )
+    {
+        FreeResource();
+    }
+
+    const String&   GetString() const { return aStr; }
+
+};
+
+
+
+
+class SortedIndividualInt32List : private MyList
 {
     // sorted list were values are unique
 private:
@@ -284,7 +363,7 @@ public:
 
     void                Insert( sal_Int32 nNewVal );
 
-    List::Count;
+    MyList::Count;
 
     inline sal_Int32    Get( sal_uInt32 nIndex ) const; // reterns a value in every situation,
                                                         //  even if nIndex is invalid,
@@ -309,7 +388,7 @@ public:
 
 
 
-class DoubleList : protected List
+class DoubleList : protected MyList
 {
 protected:
     inline void             _Append( double fVal );
@@ -326,7 +405,7 @@ public:
     inline const double*    First( void );
     inline const double*    Next( void );
 
-    List::Count;
+    MyList::Count;
 
     sal_Bool                Append( double fVal );
     void                    Append( const SEQSEQ( double )& aValList ) THROWDEF_RTE_IAE;
@@ -408,7 +487,7 @@ public:
 
 
 
-class ComplexList : protected List
+class ComplexList : protected MyList
 {
 public:
     virtual                 ~ComplexList();
@@ -417,7 +496,7 @@ public:
     inline const Complex*   First( void );
     inline const Complex*   Next( void );
 
-    List::Count;
+    MyList::Count;
 
     inline void             Append( Complex* pNew );
     void                    Append( const SEQSEQ( STRING )& rComplexNumList,
@@ -499,7 +578,7 @@ public:
 
 
 
-class ConvertDataList : protected List
+class ConvertDataList : protected MyList
 {
 private:
 protected:
@@ -556,14 +635,14 @@ inline sal_Int32 GetOptBase( const ANY& r )
 
 
 
-inline void List::Grow( void )
+inline void MyList::Grow( void )
 {
     if( nNew >= nSize )
         _Grow();
 }
 
 
-inline const void* List::GetObject( sal_uInt32 n ) const
+inline const void* MyList::GetObject( sal_uInt32 n ) const
 {
     if( n < nNew )
         return pData[ n ];
@@ -572,7 +651,7 @@ inline const void* List::GetObject( sal_uInt32 n ) const
 }
 
 
-inline const void* List::First( void )
+inline const void* MyList::First( void )
 {
     nAct = 0;
     if( nNew )
@@ -582,7 +661,7 @@ inline const void* List::First( void )
 }
 
 
-inline const void* List::Next( void )
+inline const void* MyList::Next( void )
 {
     nAct++;
     if( nAct < nNew )
@@ -595,7 +674,7 @@ inline const void* List::Next( void )
 }
 
 
-inline void List::Append( void* p )
+inline void MyList::Append( void* p )
 {
     Grow();
     pData[ nNew ] = p;
@@ -603,7 +682,7 @@ inline void List::Append( void* p )
 }
 
 
-inline sal_uInt32 List::Count( void ) const
+inline sal_uInt32 MyList::Count( void ) const
 {
     return nNew;
 }
@@ -611,15 +690,95 @@ inline sal_uInt32 List::Count( void ) const
 
 
 
+inline const STRING* StringList::First( void )
+{
+    return ( const STRING* ) MyList::First();
+}
+
+
+inline const STRING* StringList::Next( void )
+{
+    return ( const STRING* ) MyList::Next();
+}
+
+
+inline const STRING* StringList::Get( sal_uInt32 n ) const
+{
+    return ( const STRING* ) MyList::GetObject( n );
+}
+
+
+inline void StringList::Append( STRING* p )
+{
+    if( Contains( *p ) )
+        delete p;
+    else
+        MyList::Append( p );
+}
+
+
+inline void StringList::Append( const STRING& r )
+{
+    if( !Contains( r ) )
+        MyList::Append( new STRING( r ) );
+}
+
+
+
+
+inline sal_uInt16 FuncData::GetUINameID( void ) const
+{
+    return nUINameID;
+}
+
+
+inline sal_uInt16 FuncData::GetDescrID( void ) const
+{
+    return nDescrID;
+}
+
+
+inline sal_Bool FuncData::IsDouble( void ) const
+{
+    return bDouble;
+}
+
+
+inline sal_Bool FuncData::HasIntParam( void ) const
+{
+    return bWithOpt;
+}
+
+
+inline sal_Bool FuncData::Is( const OUString& r ) const
+{
+    return aIntName == r;
+}
+
+
+inline const StringList& FuncData::GetCompNameList( void ) const
+{
+    return aCompList;
+}
+
+
+inline FDCategory FuncData::GetCategory( void ) const
+{
+    return eCat;
+}
+
+
+
+
 inline void CStrList::Append( const sal_Char* p )
 {
-    List::Append( ( void* ) p );
+    MyList::Append( ( void* ) p );
 }
 
 
 inline const sal_Char* CStrList::Get( sal_uInt32 n ) const
 {
-    return ( const sal_Char* ) List::GetObject( n );
+    return ( const sal_Char* ) MyList::GetObject( n );
 }
 
 
@@ -627,13 +786,13 @@ inline const sal_Char* CStrList::Get( sal_uInt32 n ) const
 
 inline void FuncDataList::Append( FuncData* p )
 {
-    List::Append( p );
+    MyList::Append( p );
 }
 
 
 inline const FuncData* FuncDataList::Get( sal_uInt32 n ) const
 {
-    return ( const FuncData* ) List::GetObject( n );
+    return ( const FuncData* ) MyList::GetObject( n );
 }
 
 
@@ -641,7 +800,7 @@ inline const FuncData* FuncDataList::Get( sal_uInt32 n ) const
 
 inline sal_Int32 SortedIndividualInt32List::Get( sal_uInt32 n ) const
 {
-    return ( sal_Int32 ) List::GetObject( n );
+    return ( sal_Int32 ) MyList::GetObject( n );
 }
 
 
@@ -649,25 +808,25 @@ inline sal_Int32 SortedIndividualInt32List::Get( sal_uInt32 n ) const
 
 inline void DoubleList::_Append( double f )
 {
-    List::Append( new double( f ) );
+    MyList::Append( new double( f ) );
 }
 
 
 inline const double* DoubleList::Get( sal_uInt32 n ) const
 {
-    return ( const double* ) List::GetObject( n );
+    return ( const double* ) MyList::GetObject( n );
 }
 
 
 inline const double* DoubleList::First( void )
 {
-    return ( const double* ) List::First();
+    return ( const double* ) MyList::First();
 }
 
 
 inline const double* DoubleList::Next( void )
 {
-    return ( const double* ) List::Next();
+    return ( const double* ) MyList::Next();
 }
 
 
@@ -761,26 +920,25 @@ inline void Complex::Add( const Complex& rAdd )
 
 inline const Complex* ComplexList::Get( sal_uInt32 n ) const
 {
-    return ( const Complex* ) List::GetObject( n );
+    return ( const Complex* ) MyList::GetObject( n );
 }
 
 
 inline const Complex* ComplexList::First( void )
 {
-    return ( const Complex* ) List::First();
+    return ( const Complex* ) MyList::First();
 }
 
 
 inline const Complex* ComplexList::Next( void )
 {
-    return ( const Complex* ) List::Next();
+    return ( const Complex* ) MyList::Next();
 }
 
 
 inline void ComplexList::Append( Complex* p )
 {
-//  List::Insert( p, LIST_APPEND );
-    List::Append( p );
+    MyList::Append( p );
 }
 
 
@@ -805,13 +963,13 @@ inline ConvertDataLinear::ConvertDataLinear( const sal_Char* p, double fC, doubl
 
 inline ConvertData* ConvertDataList::First( void )
 {
-    return ( ConvertData* ) List::First();
+    return ( ConvertData* ) MyList::First();
 }
 
 
 inline ConvertData* ConvertDataList::Next( void )
 {
-    return ( ConvertData* ) List::Next();
+    return ( ConvertData* ) MyList::Next();
 }
 
 

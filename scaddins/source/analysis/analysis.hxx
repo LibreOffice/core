@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-28 10:17:19 $
+ *  last change: $Author: gt $ $Date: 2001-06-18 13:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,21 +67,26 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sheet/addin/XAnalysis.hpp>
+#include <com/sun/star/sheet/LocalizedName.hpp>
+#include <com/sun/star/sheet/XCompatibilityNames.hpp>
 
-#include <cppuhelper/implbase4.hxx> // helper for implementations
+#include <cppuhelper/implbase5.hxx> // helper for implementations
 
 #include "analysisdefs.hxx"
 
 
+class FuncData;
 class FuncDataList;
 class ConvertDataList;
+class ResMgr;
 
 
 REF( CSS::uno::XInterface ) SAL_CALL AnalysisAddIn_CreateInstance( const REF( CSS::lang::XMultiServiceFactory )& );
 
 
-class AnalysisAddIn : public cppu::WeakImplHelper4<
+class AnalysisAddIn : public cppu::WeakImplHelper5<
                             CSS::sheet::XAddIn,
+                            CSS::sheet::XCompatibilityNames,
                             CSS::sheet::addin::XAnalysis,
                             CSS::lang::XServiceName,
                             CSS::lang::XServiceInfo >
@@ -91,6 +96,11 @@ private:
     FuncDataList*               pFD;
     double*                     pFactDoubles;
     ConvertDataList*            pCDL;
+    ResMgr*                     pResMgr;
+
+    ResMgr&                     GetResMgr( void ) THROWDEF_RTE;
+    STRING                      GetDisplFuncStr( sal_uInt16 nFuncNum ) THROWDEF_RTE;
+    STRING                      GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) THROWDEF_RTE;
 public:
                                 AnalysisAddIn();
     virtual                     ~AnalysisAddIn();
@@ -108,7 +118,8 @@ public:
     virtual STRING SAL_CALL     getArgumentDescription( const STRING& aProgrammaticFunctionName, sal_Int32 nArgument ) THROWDEF_RTE;
     virtual STRING SAL_CALL     getProgrammaticCategoryName( const STRING& aProgrammaticFunctionName ) THROWDEF_RTE;
     virtual STRING SAL_CALL     getDisplayCategoryName( const STRING& aProgrammaticFunctionName ) THROWDEF_RTE;
-
+    //sequence< com::sun::star::sheet::LocalizedName > getCompatibilityNames( string aProgrammaticName );
+    virtual SEQofLocName SAL_CALL   getCompatibilityNames( const STRING& aProgrammaticName ) THROWDEF_RTE;
                                 // XLocalizable
     virtual void SAL_CALL       setLocale( const CSS::lang::Locale& eLocale ) THROWDEF_RTE;
     virtual CSS::lang::Locale SAL_CALL getLocale(  ) THROWDEF_RTE;
@@ -119,7 +130,7 @@ public:
                                 // XServiceInfo
     virtual STRING SAL_CALL     getImplementationName(  ) THROWDEF_RTE;
     virtual sal_Bool SAL_CALL   supportsService( const STRING& ServiceName ) THROWDEF_RTE;
-    virtual CSS::uno::Sequence< STRING > SAL_CALL getSupportedServiceNames(  ) THROWDEF_RTE;
+    virtual SEQ( STRING ) SAL_CALL  getSupportedServiceNames(  ) THROWDEF_RTE;
 
     //  methods from own interfaces start here
 
@@ -153,21 +164,21 @@ public:
     virtual double SAL_CALL     getBesselk( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getBessely( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getBin2oct( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getBin2dec( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getBin2hex( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getBin2Oct( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getBin2Dec( const STRING& aNum ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getBin2Hex( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getOct2bin( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getOct2dec( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getOct2hex( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getOct2Bin( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getOct2Dec( const STRING& aNum ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getOct2Hex( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getDec2bin( sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getDec2oct( sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getDec2hex( double fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getDec2Bin( sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getDec2Oct( sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getDec2Hex( double fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getHex2bin( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getHex2dec( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getHex2oct( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getHex2Bin( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getHex2Dec( const STRING& aNum ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getHex2Oct( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
     virtual sal_Int32 SAL_CALL  getDelta( double fNum1, const ANY& rNum2 ) THROWDEF_RTE;
 

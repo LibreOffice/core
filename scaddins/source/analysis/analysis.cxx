@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-30 11:27:47 $
+ *  last change: $Author: gt $ $Date: 2001-06-18 13:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,15 @@
 #include <tools/solmath.hxx>
 #include <string.h>
 
+#include <tools/resmgr.hxx>
+#include <tools/rcid.h>
+#include <tools/isolang.hxx>
+#include "analysis.hrc"
 
-#define ADDIN_SERVICE       "com.sun.star.sheet.AddIn"
-#define MY_SERVICE          "com.sun.star.sheet.addin.Analysis"
-#define MY_IMPLNAME         "com.sun.star.sheet.addin.AnalysisImpl"
+
+#define ADDIN_SERVICE               "com.sun.star.sheet.AddIn"
+#define MY_SERVICE                  "com.sun.star.sheet.addin.Analysis"
+#define MY_IMPLNAME                 "com.sun.star.sheet.addin.AnalysisImpl"
 
 
 //------------------------------------------------------------------
@@ -153,488 +158,72 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceMa
 //
 //------------------------------------------------------------------------
 
-#define INTERNPARAM     FuncData::pInternParam
 
-const sal_Char* pFuncDatas[] =
+ResMgr& AnalysisAddIn::GetResMgr( void ) THROWDEF_RTE
 {
-//  "iget_Test", "1_test", "2_test",
-//      "d4 testing only",
-//      "pMode", "pparameter 1", "pparameter 2", "pparameter 3",
-//      "PMode", "Pparameter 1", "Pparameter 2", "Pparameter 3",
-//      EOE,
-    "igetWorkday", "1Arbeitstag", "2Workday",
-        "dReturns the serial number of the date before or after a specified number of workdays",
-        INTERNPARAM, "pstart date", "pdays", "pholidays",
-        INTERNPARAM, "PThe start date for calculating the work day", "PThe number of working days for calculating the work day", "PList of days work off",
-        EOE,
-    "igetYearfrac", "1Brteiljahre", "2Yearfrac",
-        "dReturns the year fraction representing the number of whole days between start_date and end_date",
-        INTERNPARAM, "pstart date", "pend date", "pbasis",
-        INTERNPARAM, "PThe start date for calculating the fraction of year", "PThe end date for calculating the fraction of year", "PBase for counting days: 0=USA (NASD) 30/360, 1=exact/exact, 2=exact/360, 3=exact/365, 4=Europe 30/360",
-        EOE,
-    "igetEdate", "1Edatum", "2Edate",
-        "dReturns the serial number of the date that is the indicated number of months before or after the start date",
-        INTERNPARAM, "pstart date", "pmonths",
-        INTERNPARAM, "PThe start date for calculating the edate", "PThe number of months to be added or subtracted",
-        EOE,
-    "igetWeeknum", "1Kalenderwoche_add", "2Weeknum_add",
-        "dReturns the week number in year",
-        INTERNPARAM, "pdate", "preturn type",
-        INTERNPARAM, "PDate as calculation base for weeknum", "PType of the return value: 1=week starts on sunday, 2=week starts on monday",
-        EOE,
-    "igetEomonth", "1Monatsende", "2EoMonth",
-        "dReturns the serial number of the last day of the month before or after a specified number of months",
-        INTERNPARAM, "pstart date", "pmonths",
-        INTERNPARAM, "PThe start date for calculating the end of month", "PThe number of months before or after",
-        EOE,
-    "igetNetworkdays", "1Nettoarbeitstage", "2Networkdays",
-        "dReturns the number of whole workdays between to dates",
-        INTERNPARAM, "pstart date", "pend date", "pholidays",
-        INTERNPARAM, "Pstart date", "Pend date", "Pholidays",
-        EOE,
-    "igetIseven", "1Istgerade_add", "2Iseven_add",
-        "dReturns true if the number is even",
-        "pnumber",
-        "Pnumber",
-        EOE,
-    "igetIsodd", "1Istungerade_add", "2Isodd_add",
-        "dReturns true if the number is odd",
-        "pnumber",
-        "Pnumber",
-        EOE,
-    "igetMultinomial", "1Polynomial", "2Multinomial",
-        "dReturns the multinomial of a set of numbers",
-        "pnumbers",
-        "Pnumbers",
-        EOE,
-    "igetSeriessum", "1Potenzreihe", "2Seriessum",
-        "dReturns the sum of a power series based on the formula",
-        "pX", "pN", "pM", "pCoefficients",
-        "PX is the value of the independent variable of the serie", "PN is the starting power of X", "PM is the increment from N from one element to the next", "PIs a group of coefficients",
-        EOE,
-    "igetQuotient", "1Quotient", "2Quotient",
-        "dReturns the integer portion of a division",
-        "pnumerator", "pdenominator",
-        "Pnumerator", "Pdenominator",
-        EOE,
-    "igetMround", "1Vrunden", "2Mround",
-        "dReturns a number rounded to the desire multiple",
-        "pnumber", "pmultiple",
-        "Pnumber", "Pmultiple",
-        EOE,
-    "igetSqrtpi", "1Wurzelpi", "2SqrtPI",
-        "dReturns the square root of ( number * pi )",
-        "pnumber",
-        "Pnumber",
-        EOE,
-    "igetRandbetween", "1Zufallsbereich", "2Randbetween",
-        "dReturns a random integer number between the numbers you specify",
-        "pbottom", "ptop",
-        "Pbottom", "Ptop",
-        EOE,
-    "igetGcd", "1Ggt_add", "2Gcd_add",
-        "dReturns the greatest common divisor",
-        "pnumbers", "onumbers",
-        "PList of numbers", "OList of numbers",
-        EOE,
-    "igetLcm", "1Kgv_add", "2Lcm_add",
-        "dReturns the least common multiple",
-        "pnumbers", "onumbers",
-        "PList of numbers", "OList of numbers",
-        EOE,
-    "igetBesseli", "1Besseli", "2BesselI",
-        "dReturns the modified Bessel function In(x)",
-        "px", "pn",
-        "Px", "Porder",
-        EOE,
-    "igetBesselj", "1Besselj", "2BesselJ",
-        "dReturns the Bessel function Jn(x)",
-        "px", "pn",
-        "Px", "Porder",
-        EOE,
-    "igetBesselk", "1Besselk", "2BesselK",
-        "dReturns the Bessel function Kn(x)",
-        "px", "pn",
-        "Px", "Porder",
-        EOE,
-    "igetBessely", "1Bessely", "2BesselY",
-        "dReturns the Bessel function Yn(x)",
-        "px", "pn",
-        "Px", "Porder",
-        EOE,
-    "igetBin2oct", "1Bininokt", "2Bin2Oct",
-        "dConverts a binary number to octal",
-        "pnumber", "pplaces",
-        "Pnumber", "Pplaces",
-        EOE,
-    "igetBin2dec", "1Binindez", "2Bin2Dec",
-        "dConverts a binary number to decimal",
-        "pnumber",
-        "Pnumber",
-        EOE,
-    "igetBin2hex", "1Bininhex", "2Bin2Hex",
-        "dConverts a binary number to hexadecimal",
-        "pnumber", "pplaces",
-        "Pnumber", "Pplaces",
-        EOE,
-    "igetOct2bin", "1Oktinbin", "2Oct2Bin",
-        "dConverts a octal number to binary",
-        "pnumber", "pplaces",
-        "Pnumber", "Pplaces",
-        EOE,
-    "igetOct2dec", "1Oktindez", "2Oct2Dec",
-        "dConverts a octal number to decimal",
-        "pnumber",
-        "Pnumber",
-        EOE,
-    "igetOct2hex", "1Oktinhex", "2Oct2Hex",
-        "dConverts a octal number to hexadecimal",
-        "pnumber", "pplaces",
-        "Pnumber", "Pplaces",
-        EOE,
-    "igetDec2bin", "1Dezinbin", "2Dec2Bin",
-        "dConverts a decimal number to binary",
-        "pnumber", "pplaces",
-        "Pnumber", "Pplaces",
-        EOE,
-    "igetDec2oct", "1Dezinokt", "2Dec2Oct",
-        "dConverts a decimal number to octal",
-        "pnumber", "pplaces",
-        "Pnumber", "Pplaces",
-        EOE,
-    "igetDec2hex", "1Dezinhex", "2Dec2Hex",
-        "dConverts a decimal number to hexadecimal",
-        "pnumber", "pplaces",
-        "Pnumber", "Pplaces",
-        EOE,
-    "igetHex2bin", "1Hexinbin", "2Hex2Bin",
-        "dConverts a hexadecimal number to binary",
-        "pnumber", "pplaces",
-        "Pnumber", "Pplaces",
-        EOE,
-    "igetHex2dec", "1Hexindez", "2Hex2Dec",
-        "dConverts a hexadecimal number to decimal",
-        "pnumber",
-        "Pnumber",
-        EOE,
-    "igetHex2oct", "1Hexinokt", "2Hex2Oct",
-        "dConverts a hexadecimal number to octal",
-        "pnumber", "pplaces",
-        "Pnumber", "Pplaces",
-        EOE,
-    "igetDelta", "1Delta", "2Delta",
-        "dTests wether two numbers are equal",
-        "pnumber 1", "pnumber 2",
-        "Pnumber 1", "Pnumber 2",
-        EOE,
-    "igetErf", "1Gaussfehler", "2Erf",
-        "dReturns the error function",
-        "plower limit", "pupper limit",
-        "Plower limit", "Pupper limit",
-        EOE,
-    "igetErfc", "1Gaussfkompl", "2Erfc",
-        "dReturns the complementary error function",
-        "plower limit",
-        "Plower limit",
-        EOE,
-    "igetGestep", "1Gganzzahl", "2GeStep",
-        "dTests wether a number is greater than a threshold value",
-        "pnumber", "pstep",
-        "Pnumber", "Pstep",
-        EOE,
-    "igetFactdouble", "1Zweifakultät", "2Factdouble",
-        "dReturns the double factorial of a number",
-        "pnumber",
-        "Pnumber",
-        EOE,
-    "igetImabs", "1Imabs", "2Imabs",
-        "dReturns the absolute value (modulus) of a complex number",
-        "pinumber",
-        "Pinumber",
-        EOE,
-    "igetImaginary", "1Imaginärteil", "2Imaginary",
-        "dReturns the imaginary coefficient of a complex number",
-        "pinumber",
-        "Pinumber",
-        EOE,
-    "igetImpower", "1Imapotenz", "2Impower",
-        "dReturns a complex number raised by a real number",
-        "pinumber", "pnumber",
-        "Pinumber", "Pnumber",
-        EOE,
-    "igetImargument", "1Imargument", "2Imargument",
-        "dReturns the argument q, an angle expressed in radians",
-        "pinumber",
-        "Pinumber",
-        EOE,
-    "igetImcos", "1Imcos", "2Imcos",
-        "dReturns the cosine of a complex number",
-        "pinumber",
-        "Pinumber",
-        EOE,
-    "igetImdiv", "1Imdiv", "2Imdiv",
-        "dReturns the quotient of two complex numbers",
-        "pinumber 1", "pinumber 2",
-        "Pinumber 1", "Pinumber 2",
-        EOE,
-    "igetImexp", "1Imexp", "2Imexp",
-        "dReturns the exponential of a complex number",
-        "pinumber",
-        "Pinumber",
-        EOE,
-    "igetImconjugate", "1Imkonjugierte", "2Imconjugate",
-        "dReturns the comlex conjugate of a complex number",
-        "pinumber",
-        "Pinumber",
-        EOE,
-    "igetImln", "1Imln", "2Imln",
-        "dReturns the natural logarithm of a complex number",
-        "pinumber",
-        "Pinumber",
-        EOE,
-    "igetImlog10", "1Imlog10", "2Imlog10",
-        "dReturns the base-10 logarithm of a complex number",
-        "pinumber",
-        "Pinumber",
-        EOE,
-    "igetImlog2", "1Imlog2", "2Imlog2",
-        "dReturns the base-2 logarithm of a complex number",
-        "pinumber",
-        "Pinumber",
-        EOE,
-    "igetImproduct", "1Improdukt", "2Improduct",
-        "dReturns the product of complex numbers",
-        "pinumber 1", "oinumber",
-        "Pinumber 1", "Pinumber",
-        EOE,
-    "igetImreal", "1Imrealteil", "2Imreal",
-        "dReturns the real coefficient of a complex number",
-        "pinumber",
-        "Pinumber",
-        EOE,
-    "igetImsin", "1Imsin", "2Imsin",
-        "dReturns the sine of a complex number",
-        "pinumber",
-        "Pinumber",
-        EOE,
-    "igetImsub", "1Imsub", "2Imsub",
-        "dReturns the difference of two complex numbers",
-        "pinumber 1", "pinumber 2",
-        "Pinumber 1", "Pinumber 2",
-        EOE,
-    "igetImsqrt", "1Imwurzel", "2Imsqrt",
-        "dReturns the square root of a complex number",
-        "pinumber",
-        "Pinumber",
-        EOE,
-    "igetImsum", "1Imsumme", "2Imsum",
-        "dReturns the sum of complex numbers",
-        "pinumber 1", "oinumber",
-        "Pinumber 1", "Pinumber",
-        EOE,
-    "igetComplex", "1Komplexe", "2Complex",
-        "dConverts real and imaginary coefficients into a complex number",
-        "preal_num", "pi_num", "psuffix",
-        "Preal_num", "Pi_num", "Psuffix",
-        EOE,
-    "igetConvert", "1Umwandeln_add", "2Convert_add",
-        "dConverts a number from one measurement system to another",
-        "pnumber", "pfrom_unit", "pto_unit",
-        "Pnumber", "Pfrom_unit", "Pto_unit",
-        EOE,
-// ----------------------------------------------------------------------------
-    "igetAmordegrc", "1Amordegrk", "2Amordegrc",
-        "dReturns the prorated linear depreciation of an asset for each accounting period",
-        INTERNPARAM, "pCost", "pDate purchased", "pFirst period", "pSalvage", "pPeriod", "pRate", "pYear base",
-        INTERNPARAM, "PCost", "PDate purchased", "PFirst period", "PSalvage", "PPeriod", "PRate", "PYear base",
-        EOE,
-    "igetAmorlinc", "1Amorlineark", "2Amorlinc",
-        "dReturns the prorated linear depreciation of an asset for each accounting period",
-        INTERNPARAM, "pCost", "pDate purchased", "pFirst period", "pSalvage", "pPeriod", "pRate", "pYear base",
-        INTERNPARAM, "PCost", "PDate purchased", "PFirst period", "PSalvage", "PPeriod", "PRate", "PYear base",
-        EOE,
-    "igetAccrint", "1Aufgeldzins", "2Accrint",
-        "dReturn the accrued interest for a security that pays periodic interest",
-        INTERNPARAM, "pIssue", "pFirst interest", "pSettlement", "pRate", "pPar", "pFrequency", "pBase",
-        INTERNPARAM, "PIssue", "PFirst interest", "PSettlement", "PRate", "PPar", "PFrequency", "PBase",
-        EOE,
-    "igetAccrintm", "1Aufgeldzinsf", "2Accrintm",
-        "dReturn the accrued interest for a security that pays interest at maturity",
-        INTERNPARAM, "pIssue", "pSettlement", "pRate", "pPar", "pBase",
-        INTERNPARAM, "PIssue", "PSettlement", "PRate", "PPar", "PBase",
-        EOE,
-    "igetReceived", "1Auszahlung", "2Received",
-        "dReturns the amount received at maturity for a fully invested security",
-        INTERNPARAM, "pSettlement", "pMaturity", "pInvestment", "pDiscount", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PInvestment", "PDiscount", "PBase",
-        EOE,
-    "igetDisc", "1Disagio", "2Disc",
-        "dReturns the discount rate for a security",
-        INTERNPARAM, "pSettlement", "pMaturity", "pPrice", "pRedemption", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PPrice", "PRedemption", "PBase",
-        EOE,
-    "igetDuration", "1Duration_add", "2Duration_add",
-        "dReturns the annual duration of a security with periodic interest payments",
-        INTERNPARAM, "pSettlement", "pMaturity", "pCoupon", "pYield", "pFrequency", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PCoupon", "PYield", "PFrequency", "PBase",
-        EOE,
-    "igetEffect", "1Effektiv_add", "2Effect_add",
-        "dReturns the effectiv annual interest rate",
-        "pNominal rate", "pNum periods",
-        "PNominal rate", "PNum periods",
-        EOE,
-    "igetCumprinc", "1Kumkapital_add", "2Cumprinc_add",
-        "dReturns the cumulative principal paid a loan between two periods",
-        "pRate", "pNum periods", "pValue", "pStart period", "pEnd period", "pType payment",
-        "PRate", "PNum periods", "PValue", "PStart period", "PEnd period", "PType payment",
-        EOE,
-    "igetCumipmt", "1Kumzins_add", "2Cumipmt_add",
-        "dReturns the cumulative interest paid between two periods",
-        "pRate", "pNum periods", "pValue", "pStart period", "pEnd period", "pType payment",
-        "PRate", "PNum periods", "PValue", "PStart period", "PEnd period", "PType payment",
-        EOE,
-    "igetPrice", "1Kurs", "2Price",
-        "dReturns the price per $100 face value of a security that pays periodic interest",
-        INTERNPARAM, "pSettlement", "pMaturity", "pRate", "pYield", "pRedemption", "pFrequency", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PRate", "PYield", "PRedemption", "PFrequency", "PBase",
-        EOE,
-    "igetPricedisc", "1Kursdisagio", "2Pricedisc",
-        "dReturns the price per $100 face value of a discounted security",
-        INTERNPARAM, "pSettlement", "pMaturity", "pDiscount", "pRedemption", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PDiscount", "PRedemption", "PBase",
-        EOE,
-    "igetPricemat", "1Kursfällig", "2Pricemat",
-        "dReturns the price per $100 face value of a security that pays interest at maturity",
-        INTERNPARAM, "pSettlement", "pMaturity", "pIssue", "pRate", "pYield", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PIssue", "PRate", "PYield", "PBase",
-        EOE,
-    "igetMduration", "1Mduration", "2Mduration",
-        "dReturns the Macauley modified duration for a security with an assumed par ",
-        INTERNPARAM, "pSettlement", "pMaturity", "pCoupon", "pYield", "pFrequency", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PCoupon", "PYield", "PFrequency", "PBase",
-        EOE,
-    "igetNominal", "1Nominal_add", "2Nominal_add",
-        "dReturns the annual nominal interest rate",
-        "pEffective rate", "pNum periods",
-        "PEffective rate", "PNum periods",
-        EOE,
-    "igetDollarfr", "1Notierungbru", "2Dollarfr",
-        "dConverts a dollar price, expressed as a decimal number, into a dollar price, expressed as a fraction",
-        "pDecimal dollar", "pFraction",
-        "PDecimal dollar", "PFraction",
-        EOE,
-    "igetDollarde", "1Notierungdez", "2Dollarde",
-        "dConverts a dollar price, expressed as a fraction, into a dollar price, expressed as a decimal number",
-        "pFractional dollar", "pFraction",
-        "PFractional dollar", "PFraction",
-        EOE,
-    "igetYield", "1Rendite", "2Yield",
-        "dReturns the yield on a security that pays periodic interest",
-        INTERNPARAM, "pSettlement", "pMaturity", "pRate", "pPar", "pRedemption", "pFrequency", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PRate", "PPar", "PRedemption", "PFrequency", "PBase",
-        EOE,
-    "igetYielddisc", "1Renditedis", "2Yielddisc",
-        "dReturns the annual yield for a discounted security (e.g. treasury bill)",
-        INTERNPARAM, "pSettlement", "pMaturity", "pPrice", "pRedemption", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PPrice", "PRedemption", "PBase",
-        EOE,
-    "igetYieldmat", "1Renditefäll", "2Yieldmat",
-        "dReturns the annual yield of a security that pays interest at maturity",
-        INTERNPARAM, "pSettlement", "pMaturity", "pIssue", "pRate", "pPrice", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PIssue", "PRate", "PPrice", "PBase",
-        EOE,
-    "igetTbilleq", "1Tbilläquiv", "2Tbilleq",
-        "dReturns the bond-equivalent yield for a treasury bill",
-        INTERNPARAM, "pSettlement", "pMaturity", "pDiscount",
-        INTERNPARAM, "PSettlement", "PMaturity", "PDiscount",
-        EOE,
-    "igetTbillprice", "1Tbillkurs", "2Tbillprice",
-        "dReturns the price of $100 face value for a treasury bill",
-        INTERNPARAM, "pSettlement", "pMaturity", "pDiscount",
-        INTERNPARAM, "PSettlement", "PMaturity", "PDiscount",
-        EOE,
-    "igetTbillyield", "1Tbillrendite", "2Tbillyield",
-        "dReturns the yield for a treasury bill",
-        INTERNPARAM, "pSettlement", "pMaturity", "pPrice",
-        INTERNPARAM, "PSettlement", "PMaturity", "PPrice",
-        EOE,
-    "igetOddfprice", "1Unreger_kurs", "2Oddfprice",
-        "dReturns the price of $100 face value of a security with an odd first period",
-        INTERNPARAM, "pSettlement", "pMaturity", "pIssue", "pFirst coupon", "pRate", "pYield", "pRedemption", "pFrequency", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PIssue", "PFirst coupon", "PRate", "PYield", "PRedemption", "PFrequency", "PBase",
-        EOE,
-    "igetOddfyield", "1Unreger_rend", "2Oddfyield",
-        "dReturns the yield of a security with an odd first period",
-        INTERNPARAM, "pSettlement", "pMaturity", "pIssue", "pFirst coupon", "pRate", "pPrice", "pRedemption", "pFrequency", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PIssue", "PFirst coupon", "PRate", "PPrice", "PRedemption", "PFrequency", "PBase",
-        EOE,
-    "igetOddlprice", "1Unregle_kurs", "2Oddlprice",
-        "dReturns the price of $100 face value of a security with an odd last period",
-        INTERNPARAM, "pSettlement", "pMaturity", "pLast interst", "pRate", "pYield", "pRedemption", "pFrequency", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PLast interst", "PRate", "PYield", "PRedemption", "PFrequency", "PBase",
-        EOE,
-    "igetOddlyield", "1Unregle_rend", "2Oddlyield",
-        "dReturns the yield of a security with an odd last period",
-        INTERNPARAM, "pSettlement", "pMaturity", "pLast interest", "pRate", "pPrice", "pRedemption", "pFrequency", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PLast interest", "PRate", "PPrice", "PRedemption", "PFrequency", "PBase",
-        EOE,
-    "igetXirr", "1Xintzinsfuss", "2Xirr",
-        "dReturns the internal rate of return for a schedule of cash flows",
-        "pValues", "pDates", "pGuess",
-        "PValues", "PDates", "PGuess",
-        EOE,
-    "igetXnpv", "1Xkapitalwert", "2Xnpv",
-        "dReturns the net present value for a schedule of cash flows",
-        "pRate", "pValues", "pDates",
-        "PRate", "PValues", "PDates",
-        EOE,
-    "igetIntrate", "1Zinssatz", "2Intrate",
-        "dReturns the interest rate for a fully invested security",
-        INTERNPARAM, "pSettlement", "pMaturity", "pInvestment", "pRedemption", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PInvestment", "PRedemption", "PBase",
-        EOE,
-    "igetCoupncd", "1Zinstermnz", "2Coupncd",
-        "dReturns the next coupon date after the settlement date",
-        INTERNPARAM, "pSettlement", "pMaturity", "pFrequency", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PFrequency", "PBase",
-        EOE,
-    "igetCoupdays", "1Zinstermtage", "2Coupdays",
-        "dReturns the number of days in the coupon period that contains the settlement date",
-        INTERNPARAM, "pSettlement", "pMaturity", "pFrequency", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PFrequency", "PBase",
-        EOE,
-    "igetCoupdaysnc", "1Zinstermtagnz", "2Coupdaysnc",
-        "dReturns the number of days from the settlement date to the next coupon date",
-        INTERNPARAM, "pSettlement", "pMaturity", "pFrequency", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PFrequency", "PBase",
-        EOE,
-    "igetCoupdaybs", "1Zinstermtagva", "2Coupdaybs",
-        "dReturns the number of days from the beginning of the coupon period to the settlement date",
-        INTERNPARAM, "pSettlement", "pMaturity", "pFrequency", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PFrequency", "PBase",
-        EOE,
-    "igetCouppcd", "1Zinstermvz", "2Couppcd",
-        "dReturns the previous coupon date before the settlement date",
-        INTERNPARAM, "pSettlement", "pMaturity", "pFrequency", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PFrequency", "PBase",
-        EOE,
-    "igetCoupnum", "1Zinstermzahl", "2Coupnum",
-        "dReturns the number of coupons payable between the settlement date and maturity date",
-        INTERNPARAM, "pSettlement", "pMaturity", "pFrequency", "pBase",
-        INTERNPARAM, "PSettlement", "PMaturity", "PFrequency", "PBase",
-        EOE,
-    "igetFvschedule", "1Zw2", "2Fvschedule",
-        "dReturns the future value of an initial principal after applying a series of compound interest rates",
-        "pPrincipal", "pSchedule",
-        "PPrincipal", "PSchedule",
-        EOE,
-    EOL
+    if( !pResMgr )
+        THROW_RTE;
+
+    return *pResMgr;
+}
+
+
+STRING AnalysisAddIn::GetDisplFuncStr( sal_uInt16 nFuncNum ) THROWDEF_RTE
+{
+    return String( AnalysisRscStrLoader( RID_ANALYSIS_FUNCTION_NAMES, nFuncNum, GetResMgr() ).GetString() );
+}
+
+
+class AnalysisResourcePublisher : public Resource
+{
+public:
+                    AnalysisResourcePublisher( const AnalysisResId& rId ) : Resource( rId ) {}
+    BOOL            IsAvailableRes( const ResId& rId ) const { return Resource::IsAvailableRes( rId ); }
+    void            FreeResource() { Resource::FreeResource(); }
 };
+
+
+class AnalysisFuncRes : public Resource
+{
+public:
+    AnalysisFuncRes( ResId& rRes, ResMgr& rResMgr, sal_uInt16 nInd, STRING& rRet );
+};
+
+
+AnalysisFuncRes::AnalysisFuncRes( ResId& rRes, ResMgr& rResMgr, sal_uInt16 nInd, STRING& rRet ) : Resource( rRes )
+{
+    rRet = String( AnalysisResId( nInd, rResMgr ) );
+
+    FreeResource();
+}
+
+
+STRING AnalysisAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) THROWDEF_RTE
+{
+    STRING                      aRet;
+    AnalysisResourcePublisher   aResPubl( AnalysisResId( RID_ANALYSIS_FUNCTION_DESCRIPTIONS, GetResMgr() ) );
+    AnalysisResId               aRes( nResId, GetResMgr() );
+    aRes.SetRT( RSC_RESOURCE );
+    if( aResPubl.IsAvailableRes( aRes ) )
+    {
+        AnalysisFuncRes         aSubRes( aRes, GetResMgr(), nStrIndex, aRet );
+    }
+
+    aResPubl.FreeResource();
+
+    return aRet;
+}
 
 
 AnalysisAddIn::AnalysisAddIn()
 {
-    pFD = new FuncDataList( pFuncDatas );
+    pResMgr = ResMgr::CreateResMgr( "analysis633", ConvertIsoNamesToLanguage( aFuncLoc.Language, aFuncLoc.Country ) );
+
+    if( pResMgr )
+        pFD = new FuncDataList( *pResMgr );
+    else
+        pFD = NULL;
+
     pFactDoubles = NULL;
     pCDL = NULL;
 }
@@ -642,13 +231,17 @@ AnalysisAddIn::AnalysisAddIn()
 
 AnalysisAddIn::~AnalysisAddIn()
 {
-    delete pFD;
+    if( pFD )
+        delete pFD;
 
     if( pFactDoubles )
         delete pFactDoubles;
 
     if( pCDL )
         delete pCDL;
+
+    if( pResMgr )
+        delete pResMgr;
 }
 
 
@@ -773,14 +366,20 @@ STRING SAL_CALL AnalysisAddIn::getProgrammaticFuntionName( const STRING& aDispla
 
 STRING SAL_CALL AnalysisAddIn::getDisplayFunctionName( const STRING& aProgrammaticName ) THROWDEF_RTE
 {
-    //! allow different languages
-    sal_Bool        bGerman = ( aFuncLoc.Language.equalsIgnoreAsciiCase( STRFROMASCII( "DE" ) ) );
-
     STRING          aRet;
 
     const FuncData* p = pFD->Get( aProgrammaticName );
     if( p )
-        aRet = STRFROMANSI( bGerman ? p->pGerman : p->pEnglish );
+    {
+        aRet = GetDisplFuncStr( p->GetUINameID() );
+        if( p->IsDouble() )
+            aRet += STRFROMANSI( "_ADD" );
+    }
+    else
+    {
+        aRet = STRFROMANSI( "UNKNOWNFUNC_" );
+        aRet += aProgrammaticName;
+    }
 
     return aRet;
 }
@@ -788,13 +387,11 @@ STRING SAL_CALL AnalysisAddIn::getDisplayFunctionName( const STRING& aProgrammat
 
 STRING SAL_CALL AnalysisAddIn::getFunctionDescription( const STRING& aProgrammaticName ) THROWDEF_RTE
 {
-    //! return translated strings
-
     STRING          aRet;
 
     const FuncData* p = pFD->Get( aProgrammaticName );
     if( p )
-        aRet = STRFROMANSI( p->pDescr );
+        aRet = GetFuncDescrStr( p->GetDescrID(), 1 );
 
     return aRet;
 }
@@ -802,12 +399,17 @@ STRING SAL_CALL AnalysisAddIn::getFunctionDescription( const STRING& aProgrammat
 
 STRING SAL_CALL AnalysisAddIn::getDisplayArgumentName( const STRING& aName, sal_Int32 nArg ) THROWDEF_RTE
 {
-    //! return translated strings
     STRING          aRet;
 
     const FuncData* p = pFD->Get( aName );
-    if( p )
-        aRet = STRFROMANSI( p->GetParam( nArg ) );
+    if( p && nArg <= 0xFFFF )
+    {
+        sal_uInt16  nStr = p->GetStrIndex( sal_uInt16( nArg ) );
+        if( nStr /*&& nStr < 4*/ )
+            aRet = GetFuncDescrStr( p->GetDescrID(), nStr );
+        else
+            aRet = STRFROMANSI( "internal" );
+    }
 
     return aRet;
 }
@@ -815,27 +417,108 @@ STRING SAL_CALL AnalysisAddIn::getDisplayArgumentName( const STRING& aName, sal_
 
 STRING SAL_CALL AnalysisAddIn::getArgumentDescription( const STRING& aName, sal_Int32 nArg ) THROWDEF_RTE
 {
-    //! return translated strings
     STRING          aRet;
+
     const FuncData* p = pFD->Get( aName );
-    if( p )
-        aRet = STRFROMANSI( p->GetParamDescr( nArg ) );
+    if( p && nArg <= 0xFFFF )
+    {
+        sal_uInt16  nStr = p->GetStrIndex( sal_uInt16( nArg ) );
+        if( nStr /*&& nStr < 4*/ )
+            aRet = GetFuncDescrStr( p->GetDescrID(), nStr + 1 );
+        else
+            aRet = STRFROMANSI( "for internal use only" );
+    }
 
     return aRet;
 }
 
 
+static const char*  pDefCatName = "Add-In";
+
+
 STRING SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const STRING& aName ) THROWDEF_RTE
 {
     //  return non-translated strings
-    return STRFROMASCII( "Add-In" );
+//  return STRFROMASCII( "Add-In" );
+    const FuncData*     p = pFD->Get( aName );
+    STRING              aRet;
+    if( p )
+    {
+        const sal_Char* pStr;
+
+        switch( p->GetCategory() )
+        {
+            case FDCat_DateTime:    pStr = "Date&Time";         break;
+            case FDCat_Finance:     pStr = "Financial";         break;
+            case FDCat_Inf:         pStr = "Information";       break;
+            case FDCat_Math:        pStr = "Mathematical";      break;
+            case FDCat_Tech:        pStr = "Technical";         break;
+            default:
+                                    pStr = pDefCatName;         break;
+        }
+
+        aRet = STRFROMASCII( pStr );
+    }
+    else
+        aRet = STRFROMASCII( pDefCatName );
+
+    return aRet;
 }
 
 
 STRING SAL_CALL AnalysisAddIn::getDisplayCategoryName( const STRING& aProgrammaticFunctionName ) THROWDEF_RTE
 {
     //  return translated strings, not used for predefined categories
-    return STRFROMASCII( "Add-In" );
+//  return STRFROMASCII( "Add-In" );
+    const FuncData*     p = pFD->Get( aProgrammaticFunctionName );
+    STRING              aRet;
+    if( p )
+    {
+        const sal_Char* pStr;
+
+        switch( p->GetCategory() )
+        {
+            case FDCat_DateTime:    pStr = "Date&Time";         break;
+            case FDCat_Finance:     pStr = "Financial";         break;
+            case FDCat_Inf:         pStr = "Information";       break;
+            case FDCat_Math:        pStr = "Mathematical";      break;
+            case FDCat_Tech:        pStr = "Technical";         break;
+            default:
+                                    pStr = pDefCatName;         break;
+        }
+
+        aRet = STRFROMASCII( pStr );
+    }
+    else
+        aRet = STRFROMASCII( pDefCatName );
+
+    return aRet;
+}
+
+
+SEQofLocName SAL_CALL AnalysisAddIn::getCompatibilityNames( const STRING& aProgrammaticName ) THROWDEF_RTE
+{
+    const FuncData*             p = pFD->Get( aProgrammaticName );
+
+    if( !p )
+        return SEQofLocName( 0 );
+
+    const StringList&           r = p->GetCompNameList();
+    sal_uInt32                  nCount = r.Count();
+
+    SEQofLocName                aRet( nCount );
+
+    CSS::sheet::LocalizedName*  pArray = aRet.getArray();
+    CSS::sheet::LocalizedName   aLocName;
+    aLocName.Locale = aFuncLoc;
+
+    for( sal_uInt32 n = 0 ; n < nCount ; n++ )
+    {
+        aLocName.Name = *r.Get( n );
+        pArray[ n ] = aLocName;
+    }
+
+    return aRet;
 }
 
 
@@ -1225,73 +908,73 @@ double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROW
 #define DOUBLECONV(from,to)         ConvertFromDec(sal_Int64(ConvertToDec(aNum,from,_P)),_MIN##to,_MAX##to,to,GETPLACES(),_P)
 
 
-STRING SAL_CALL AnalysisAddIn::getBin2oct( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getBin2Oct( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
     return DOUBLECONV( 2, 8 );
 }
 
 
-double SAL_CALL AnalysisAddIn::getBin2dec( const STRING& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getBin2Dec( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     return ConvertToDec( aNum, 2, _P );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getBin2hex( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getBin2Hex( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
     return DOUBLECONV( 2, 16 );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getOct2bin( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getOct2Bin( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
     return DOUBLECONV( 8, 2 );
 }
 
 
-double SAL_CALL AnalysisAddIn::getOct2dec( const STRING& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getOct2Dec( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     return ConvertToDec( aNum, 8, _P );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getOct2hex( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getOct2Hex( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
     return DOUBLECONV( 8, 16 );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getDec2bin( sal_Int32 nNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getDec2Bin( sal_Int32 nNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
     return ConvertFromDec( nNum, _MIN2, _MAX2, 2, GETPLACES(), _P );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getDec2oct( sal_Int32 nNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getDec2Oct( sal_Int32 nNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
     return ConvertFromDec( nNum, _MIN8, _MAX8, 8, GETPLACES(), _P );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getDec2hex( double fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getDec2Hex( double fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
     return ConvertFromDec( sal_Int64( fNum ), _MIN16, _MAX16, 16, GETPLACES(), _P );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getHex2bin( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getHex2Bin( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
     return DOUBLECONV( 16, 2 );
 }
 
 
-double SAL_CALL AnalysisAddIn::getHex2dec( const STRING& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getHex2Dec( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     return ConvertToDec( aNum, 16, _P );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getHex2oct( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getHex2Oct( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
     return DOUBLECONV( 16, 8 );
 }

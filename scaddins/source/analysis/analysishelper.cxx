@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-28 10:19:06 $
+ *  last change: $Author: gt $ $Date: 2001-06-18 13:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,116 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <vcl/resary.hxx>
 #include "analysishelper.hxx"
+#include "analysis.hrc"
 
+
+
+#define unique              sal_False
+#define DOUBLE              sal_True
+#define STDPAR              sal_False
+#define INTPAR              sal_True
+
+#define FD( FNCNM, FNCDESC, DBL, OPT, NUMOFPAR, CAT )       { "get" #FNCNM, ANALYSIS_FUNCNAME_##FNCNM, ANALYSIS_##FNCDESC, DBL, OPT, ANALYSIS_DEFFUNCNAME_##FNCNM, NUMOFPAR, CAT }
+
+
+const FuncDataBase pFuncDatas[] =
+{
+    FD( Workday,        Workday,        unique, INTPAR, 3, FDCat_DateTime ),
+    FD( Yearfrac,       Yearfrac,       unique, INTPAR, 3, FDCat_DateTime ),
+    FD( Edate,          Edate,          unique, INTPAR, 2, FDCat_DateTime ),
+    FD( Weeknum,        Weeknum_add,    DOUBLE, INTPAR, 2, FDCat_DateTime ),
+    FD( Eomonth,        EoMonth,        unique, INTPAR, 2, FDCat_DateTime ),
+    FD( Networkdays,    Networkdays,    unique, INTPAR, 3, FDCat_DateTime ),
+    FD( Iseven,         Iseven_add,     DOUBLE, STDPAR, 1, FDCat_Inf ),
+    FD( Isodd,          Isodd_add,      DOUBLE, STDPAR, 1, FDCat_Inf ),
+    FD( Multinomial,    Multinomial,    unique, STDPAR, 1, FDCat_Math ),
+    FD( Seriessum,      Seriessum,      unique, STDPAR, 4, FDCat_Math ),
+    FD( Quotient,       Quotient,       unique, STDPAR, 2, FDCat_Math ),
+    FD( Mround,         Mround,         unique, STDPAR, 2, FDCat_Math ),
+    FD( Sqrtpi,         SqrtPI,         unique, STDPAR, 1, FDCat_Math ),
+    FD( Randbetween,    Randbetween,    unique, STDPAR, 2, FDCat_Math ),
+    FD( Gcd,            Gcd_add,        DOUBLE, STDPAR, 1, FDCat_Math ),
+    FD( Lcm,            Lcm_add,        DOUBLE, STDPAR, 1, FDCat_Math ),
+    FD( Besseli,        BesselI,        unique, STDPAR, 2, FDCat_Tech ),
+    FD( Besselj,        BesselJ,        unique, STDPAR, 2, FDCat_Tech ),
+    FD( Besselk,        BesselK,        unique, STDPAR, 2, FDCat_Tech ),
+    FD( Bessely,        BesselY,        unique, STDPAR, 2, FDCat_Tech ),
+    FD( Bin2Oct,        Bin2Oct,        unique, STDPAR, 2, FDCat_Tech ),
+    FD( Bin2Dec,        Bin2Dec,        unique, STDPAR, 1, FDCat_Tech ),
+    FD( Bin2Hex,        Bin2Hex,        unique, STDPAR, 2, FDCat_Tech ),
+    FD( Oct2Bin,        Oct2Bin,        unique, STDPAR, 2, FDCat_Tech ),
+    FD( Oct2Dec,        Oct2Dec,        unique, STDPAR, 1, FDCat_Tech ),
+    FD( Oct2Hex,        Oct2Hex,        unique, STDPAR, 2, FDCat_Tech ),
+    FD( Dec2Bin,        Dec2Bin,        unique, STDPAR, 2, FDCat_Tech ),
+    FD( Dec2Hex,        Dec2Hex,        unique, STDPAR, 2, FDCat_Tech ),
+    FD( Dec2Oct,        Dec2Oct,        unique, STDPAR, 2, FDCat_Tech ),
+    FD( Hex2Bin,        Hex2Bin,        unique, STDPAR, 2, FDCat_Tech ),
+    FD( Hex2Dec,        Hex2Dec,        unique, STDPAR, 1, FDCat_Tech ),
+    FD( Hex2Oct,        Hex2Oct,        unique, STDPAR, 2, FDCat_Tech ),
+    FD( Delta,          Delta,          unique, STDPAR, 2, FDCat_Tech ),
+    FD( Erf,            Erf,            unique, STDPAR, 2, FDCat_Tech ),
+    FD( Erfc,           Erfc,           unique, STDPAR, 1, FDCat_Tech ),
+    FD( Gestep,         GeStep,         unique, STDPAR, 2, FDCat_Tech ),
+    FD( Factdouble,     Factdouble,     unique, STDPAR, 1, FDCat_Tech ),
+    FD( Imabs,          Imabs,          unique, STDPAR, 1, FDCat_Tech ),
+    FD( Imaginary,      Imaginary,      unique, STDPAR, 1, FDCat_Tech ),
+    FD( Impower,        Impower,        unique, STDPAR, 2, FDCat_Tech ),
+    FD( Imargument,     Imargument,     unique, STDPAR, 1, FDCat_Tech ),
+    FD( Imcos,          Imcos,          unique, STDPAR, 1, FDCat_Tech ),
+    FD( Imdiv,          Imdiv,          unique, STDPAR, 2, FDCat_Tech ),
+    FD( Imexp,          Imexp,          unique, STDPAR, 1, FDCat_Tech ),
+    FD( Imconjugate,    Imconjugate,    unique, STDPAR, 1, FDCat_Tech ),
+    FD( Imln,           Imln,           unique, STDPAR, 1, FDCat_Tech ),
+    FD( Imlog10,        Imlog10,        unique, STDPAR, 1, FDCat_Tech ),
+    FD( Imlog2,         Imlog2,         unique, STDPAR, 1, FDCat_Tech ),
+    FD( Improduct,      Improduct,      unique, STDPAR, 2, FDCat_Tech ),
+    FD( Imreal,         Imreal,         unique, STDPAR, 1, FDCat_Tech ),
+    FD( Imsin,          Imsin,          unique, STDPAR, 1, FDCat_Tech ),
+    FD( Imsub,          Imsub,          unique, STDPAR, 2, FDCat_Tech ),
+    FD( Imsqrt,         Imsqrt,         unique, STDPAR, 1, FDCat_Tech ),
+    FD( Imsum,          Imsum,          unique, STDPAR, 2, FDCat_Tech ),
+    FD( Complex,        Complex,        unique, STDPAR, 3, FDCat_Tech ),
+    FD( Convert,        Convert_add,    DOUBLE, STDPAR, 3, FDCat_Tech ),
+    FD( Amordegrc,      Amordegrc,      unique, INTPAR, 7, FDCat_Finance ),
+    FD( Amorlinc,       Amorlinc,       unique, INTPAR, 7, FDCat_Finance ),
+    FD( Accrint,        Accrint,        unique, INTPAR, 7, FDCat_Finance ),
+    FD( Accrintm,       Accrintm,       unique, INTPAR, 5, FDCat_Finance ),
+    FD( Received,       Received,       unique, INTPAR, 5, FDCat_Finance ),
+    FD( Disc,           Disc,           unique, INTPAR, 5, FDCat_Finance ),
+    FD( Duration,       Duration,       DOUBLE, INTPAR, 6, FDCat_Finance ),
+    FD( Effect,         Effect_add,     DOUBLE, STDPAR, 2, FDCat_Finance ),
+    FD( Cumprinc,       Cumprinc_add,   DOUBLE, STDPAR, 6, FDCat_Finance ),
+    FD( Cumipmt,        Cumipmt_add,    DOUBLE, STDPAR, 6, FDCat_Finance ),
+    FD( Price,          Price,          unique, INTPAR, 7, FDCat_Finance ),
+    FD( Pricedisc,      Pricedisc,      unique, INTPAR, 5, FDCat_Finance ),
+    FD( Pricemat,       Pricemat,       unique, INTPAR, 6, FDCat_Finance ),
+    FD( Mduration,      Mduration,      unique, INTPAR, 6, FDCat_Finance ),
+    FD( Nominal,        Nomial_add,     DOUBLE, STDPAR, 2, FDCat_Finance ),
+    FD( Dollarfr,       Dollarfr,       unique, STDPAR, 2, FDCat_Finance ),
+    FD( Dollarde,       Dollarde,       unique, STDPAR, 2, FDCat_Finance ),
+    FD( Yield,          Yield,          unique, INTPAR, 7, FDCat_Finance ),
+    FD( Yielddisc,      Yielddisc,      unique, INTPAR, 5, FDCat_Finance ),
+    FD( Yieldmat,       Yieldmat,       unique, INTPAR, 6, FDCat_Finance ),
+    FD( Tbilleq,        Tbilleq,        unique, INTPAR, 3, FDCat_Finance ),
+    FD( Tbillprice,     Tbillprice,     unique, INTPAR, 3, FDCat_Finance ),
+    FD( Tbillyield,     Tbillyield,     unique, INTPAR, 3, FDCat_Finance ),
+    FD( Oddfprice,      Oddfprice,      unique, INTPAR, 9, FDCat_Finance ),
+    FD( Oddfyield,      Oddfyield,      unique, INTPAR, 9, FDCat_Finance ),
+    FD( Oddlprice,      Oddlprice,      unique, INTPAR, 8, FDCat_Finance ),
+    FD( Oddlyield,      Oddlyield,      unique, INTPAR, 8, FDCat_Finance ),
+    FD( Xirr,           Xirr,           unique, STDPAR, 3, FDCat_Finance ),
+    FD( Xnpv,           Xnpv,           unique, STDPAR, 3, FDCat_Finance ),
+    FD( Intrate,        Intrate,        unique, INTPAR, 5, FDCat_Finance ),
+    FD( Coupncd,        Coupncd,        unique, INTPAR, 4, FDCat_Finance ),
+    FD( Coupdays,       Coupdays,       unique, INTPAR, 4, FDCat_Finance ),
+    FD( Coupdaysnc,     Coupdaysnc,     unique, INTPAR, 4, FDCat_Finance ),
+    FD( Coupdaybs,      Coupdaybs,      unique, INTPAR, 4, FDCat_Finance ),
+    FD( Couppcd,        Couppcd,        unique, INTPAR, 4, FDCat_Finance ),
+    FD( Coupnum,        Coupnum,        unique, INTPAR, 4, FDCat_Finance ),
+    FD( Fvschedule,     Fvschedule,     unique, STDPAR, 2, FDCat_Finance )
+};
 
 
 static const double nKorrVal[] = {
@@ -1336,11 +1444,11 @@ double GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
 
 
 
-const sal_uInt32 List::nStartSize = 16;
-const sal_uInt32 List::nIncrSize = 16;
+const sal_uInt32 MyList::nStartSize = 16;
+const sal_uInt32 MyList::nIncrSize = 16;
 
 
-void List::_Grow( void )
+void MyList::_Grow( void )
 {
     nSize += nIncrSize;
 
@@ -1352,7 +1460,7 @@ void List::_Grow( void )
 }
 
 
-List::List( void )
+MyList::MyList( void )
 {
     nSize = nStartSize;
     pData = new void*[ nSize ];
@@ -1360,13 +1468,13 @@ List::List( void )
 }
 
 
-List::~List()
+MyList::~MyList()
 {
     delete pData;
 }
 
 
-void List::Insert( void* p, sal_uInt32 n )
+void MyList::Insert( void* p, sal_uInt32 n )
 {
     if( n >= nNew )
         Append( p );
@@ -1386,152 +1494,98 @@ void List::Insert( void* p, sal_uInt32 n )
 
 
 
-const sal_Char* FuncData::pInternParam = "x(internal)";
-
-
-FuncData::FuncData( void )
+StringList::~StringList()
 {
-    pIntName = "<no internal name assigned>";
-    pGerman = "KEIN_NAME_ZUGEWIESEN";
-    pEnglish = "NO_NAME_ASSIGNED";
-    pDescr = "<no description available>";
-    ppParam = ppParamDescr = NULL;
-    pOptParam = pOptParamDescr = "optional";
-    nParam = nParamDescr = 0;
-    bWithOpt = sal_False;
+    for( STRING* p = ( STRING* ) First() ; p ; p = ( STRING* ) Next() )
+        delete p;
+}
+
+
+sal_Bool StringList::Contains( const STRING& r ) const
+{
+    sal_uInt32      n = 0;
+    const STRING*   p = Get( n );
+
+    while( p )
+    {
+        if( *p == r )
+            return sal_True;
+
+        n++;
+        p = Get( n );
+    }
+
+    return sal_False;
+}
+
+
+
+
+class AnalysisRscStrArrLoader : public Resource
+{
+private:
+    ResStringArray          aStrArray;
+public:
+                            AnalysisRscStrArrLoader( sal_uInt16 nRsc, sal_uInt16 nArrayId, ResMgr& rResMgr ) :
+                                Resource( AnalysisResId( nRsc, rResMgr ) ),
+                                aStrArray( AnalysisResId( nArrayId, rResMgr ) )
+                            {
+                                FreeResource();
+                            }
+
+    const ResStringArray&   GetStringArray() const { return aStrArray; }
+};
+
+
+
+
+FuncData::FuncData( const FuncDataBase& r, ResMgr& rResMgr ) :
+    aIntName( OUString::createFromAscii( r.pIntName ) ),
+    nUINameID( r.nUINameID ),
+    nDescrID( r.nDescrID ),
+    bDouble( r.bDouble ),
+    bWithOpt( r.bWithOpt ),
+    nParam( r.nNumOfParams ),
+    nCompID( r.nCompListID ),
+    eCat( r.eCat )
+{
+    AnalysisRscStrArrLoader aArrLoader( RID_ANALYSIS_DEFFUNCTION_NAMES, nCompID, rResMgr );
+//  ResStringArray      aDefFuncNameArray( AnalysisResId( nCompID, rResMgr ) );
+    const ResStringArray&   rArr = aArrLoader.GetStringArray();
+
+    sal_uInt16              nCount = rArr.Count();
+    sal_uInt16              n;
+
+    for( n = 0 ; n < nCount ; n++ )
+        aCompList.Append( rArr.GetString( n ) );
 }
 
 
 FuncData::~FuncData()
 {
-    if( ppParam )
-        delete[] ppParam;
-    if( ppParamDescr )
-        delete[] ppParamDescr;
 }
 
 
-const sal_Char* FuncData::GetParam( sal_uInt32 nInd ) const
+sal_uInt16 FuncData::GetStrIndex( sal_uInt16 nParamNum ) const
 {
-    if( bWithOpt )
-    {
-        if( nInd )
-            nInd--;
-        else
-            return FuncData::pInternParam + 1;
-    }
+    if( !bWithOpt )
+        nParamNum++;
 
-    if( nInd < nParam )
-        return ppParam[ nInd ];
+    if( nParamNum > nParam )
+        return nParam;
     else
-        return pOptParam;
-}
-
-
-const sal_Char* FuncData::GetParamDescr( sal_uInt32 nInd ) const
-{
-    if( bWithOpt )
-    {
-        if( nInd )
-            nInd--;
-        else
-            return FuncData::pInternParam + 1;
-    }
-
-    if( nInd < nParamDescr )
-        return ppParamDescr[ nInd ];
-    else
-        return pOptParamDescr;
-}
-
-
-FuncData* FuncData::CloneFromList( const sal_Char**& rpp )
-{
-    const sal_Char**    pp = rpp;
-    const sal_Char*     pAct = *pp;
-
-    if( pAct == EOL )
-        return NULL;
-
-    FuncData*           p = new FuncData;
-    sal_Bool            bRead = sal_True;
-    CStrList            aPNList;
-    CStrList            aPDList;
-
-    while( bRead )
-    {
-        if( pAct == EOE )
-            bRead = sal_False;
-        else
-        {
-            switch( *pAct )
-            {
-                case 'i':   p->pIntName = pAct + 1;         break;
-                case '1':   p->pGerman = pAct + 1;          break;
-                case '2':   p->pEnglish = pAct + 1;         break;
-                case 'd':   p->pDescr = pAct + 1;           break;
-                case 'p':   aPNList.Append( pAct + 1 );     break;
-                case 'P':   aPDList.Append( pAct + 1 );     break;
-                case 'o':   p->pOptParam = pAct + 1;        break;
-                case 'O':   p->pOptParamDescr = pAct + 1;   break;
-                case 'x':   p->bWithOpt = sal_True;         break;
-            }
-        }
-
-        pp++;
-        pAct = *pp;
-    }
-
-    sal_uInt32      nE = aPNList.Count();
-    sal_uInt32      n;
-    if( nE )
-    {
-        if( nE > 255 )
-            nE = 255;
-
-        p->nParam = nE;
-        const sal_Char**    pArray = new const sal_Char*[ nE ];
-        p->ppParam = pArray;
-
-        for( n = 0 ; n < nE ; n++ )
-            pArray[ n ] = aPNList.Get( n );
-    }
-
-    nE = aPDList.Count();
-    if( nE )
-    {
-        if( nE > 255 )
-            nE = 255;
-
-        p->nParamDescr = nE;
-        const sal_Char**    pArray = new const sal_Char*[ nE ];
-        p->ppParamDescr = pArray;
-
-        for( n = 0 ; n < nE ; n++ )
-            pArray[ n ] = aPDList.Get( n );
-    }
-
-    rpp = pp;
-
-    return p;
+        return nParamNum * 2;
 }
 
 
 
 
-FuncDataList::FuncDataList( const sal_Char** pFD )
+FuncDataList::FuncDataList( ResMgr& rResMgr )
 {
-    nLast = 0xFFFFFFFF;
+    const sal_uInt32    nNum = sizeof( pFuncDatas ) / sizeof( FuncDataBase );
 
-    const sal_Char**    pp = pFD;
-    FuncData*           p = FuncData::CloneFromList( pp );
-
-    while( p )
-    {
-        Append( p );
-        p = FuncData::CloneFromList( pp );
-    }
-
+    for( sal_uInt16 n = 0 ; n < nNum ; n++ )
+        Append( new FuncData( pFuncDatas[ n ], rResMgr ) );
 }
 
 
@@ -1553,7 +1607,7 @@ const FuncData* FuncDataList::Get(  const OUString& aProgrammaticName ) const
     for( sal_uInt32 n = 0 ; n < nE ; n++ )
     {
         const FuncData* p = Get( n );
-        if( aProgrammaticName.compareToAscii( p->pIntName ) == 0 )
+        if( p->Is( aProgrammaticName ) )
         {
             ( ( FuncDataList* ) this )->nLast = n;
             return p;
@@ -1562,6 +1616,11 @@ const FuncData* FuncDataList::Get(  const OUString& aProgrammaticName ) const
 
     ( ( FuncDataList* ) this )->nLast = 0xFFFFFFFF;
     return NULL;
+}
+
+
+AnalysisResId::AnalysisResId( sal_uInt16 nId, ResMgr& rResMgr ) : ResId( nId, &rResMgr )
+{
 }
 
 
@@ -1589,13 +1648,13 @@ void SortedIndividualInt32List::Insert( sal_Int32 nVal )
             return;
         else if( nVal > nRef )
         {
-            List::Insert( ( void* ) nVal, n + 1 );
+            MyList::Insert( ( void* ) nVal, n + 1 );
             return;
         }
     }
 
     // smalest (or first) element
-    List::Insert( ( void* ) nVal, sal_uInt32( 0 ) );
+    MyList::Insert( ( void* ) nVal, sal_uInt32( 0 ) );
 }
 
 
@@ -1800,7 +1859,7 @@ inline void DoubleList::AppendAnyArray2( const ANY& r ) THROWDEF_RTE_IAE
 
 DoubleList::~DoubleList()
 {
-    for( double* p = ( double* ) List::First(); p ; p = ( double* ) List::Next() )
+    for( double* p = ( double* ) MyList::First(); p ; p = ( double* ) MyList::Next() )
         delete p;
 }
 
