@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:10:46 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:54:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,6 +283,26 @@
 #include <globals.hrc>
 #endif
 #include <sot/stg.hxx>
+
+// #108584#
+#ifndef _SVDITER_HXX
+#include <svx/svditer.hxx>
+#endif
+
+// #108584#
+#ifndef _EEITEM_HXX
+#include <svx/eeitem.hxx>
+#endif
+
+// #108584#
+#ifndef _SVX_FHGTITEM_HXX
+#include <svx/fhgtitem.hxx>
+#endif
+
+// #108584#
+#ifndef _SVDPAGE_HXX
+#include <svx/svdpage.hxx>
+#endif
 
 extern BOOL bFrmDrag;
 extern BOOL bDDINetAttr;
@@ -737,6 +757,32 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
             SdrModel *pModel = (SdrModel*)pObject;
             pModel->SetStreamingSdrModel( TRUE );
             xStream->SetBufferSize( 16348 );
+
+            // #108584#
+            // for the changed pool defaults from drawing layer pool set those
+            // attributes as hard attributes to preserve them for saving
+            const SfxItemPool& rItemPool = pModel->GetItemPool();
+            const SvxFontHeightItem& rDefaultFontHeight = (const SvxFontHeightItem&)rItemPool.GetDefaultItem(EE_CHAR_FONTHEIGHT);
+
+            // SW should have no MasterPages
+            DBG_ASSERT(0L == pModel->GetMasterPageCount(), "SW with MasterPages (!)");
+
+            for(sal_uInt16 a(0); a < pModel->GetPageCount(); a++)
+            {
+                const SdrPage* pPage = pModel->GetPage(a);
+                SdrObjListIter aIter(*pPage, IM_DEEPNOGROUPS);
+
+                while(aIter.IsMore())
+                {
+                    SdrObject* pObj = aIter.Next();
+                    const SvxFontHeightItem& rItem = (const SvxFontHeightItem&)pObj->GetItem(EE_CHAR_FONTHEIGHT);
+
+                    if(rItem.GetHeight() == rDefaultFontHeight.GetHeight())
+                    {
+                        pObj->SetItem(rDefaultFontHeight);
+                    }
+                }
+            }
 
             {
                 com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *xStream ) );
