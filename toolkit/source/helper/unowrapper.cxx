@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-04 08:42:01 $
+ *  last change: $Author: tbe $ $Date: 2002-12-02 12:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@
         case WINDOW_DIALOG:
         case WINDOW_MODALDIALOG:
         case WINDOW_TABDIALOG:
+        case WINDOW_BUTTONDIALOG:
         case WINDOW_MODELESSDIALOG: return new VCLXDialog;
         case WINDOW_PATTERNFIELD:   return new VCLXPatternField;
         case WINDOW_RADIOBUTTON:    return new VCLXRadioButton;
