@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-11 16:37:13 $
+ *  last change: $Author: mba $ $Date: 2002-01-18 17:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,6 +338,9 @@ SfxProgress::~SfxProgress()
 
 {
     Stop();
+    if ( pImp->xStatusInd.is() )
+        pImp->xStatusInd->end();
+
     if( pImp->bIsStatusText == TRUE )
         GetpApp()->HideStatusText( );
     SfxObjectShell* pDoc = pImp->xObjSh;
@@ -556,12 +559,11 @@ BOOL SfxProgress::SetState
                     // recycling frame
                     pImp->pView = pFrame->GetCurrentViewFrame();
                 }
-                else
+                else if ( pFrame )
                 {
-                    SfxItemSet* pSet = pObjSh->GetMedium()->GetItemSet();
-                    SFX_ITEMSET_ARG( pSet, pItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, sal_False );
-                    if ( pItem )
-                        pImp->xStatusInd = Reference < XStatusIndicator >( pItem->GetValue(), UNO_QUERY );
+                    Reference < XStatusIndicatorFactory > xFact( pFrame->GetFrameInterface(), UNO_QUERY );
+                    if ( xFact.is() )
+                        pImp->xStatusInd = xFact->createStatusIndicator();
                 }
             }
         }
@@ -571,7 +573,7 @@ BOOL SfxProgress::SetState
             pImp->xStatusInd->start( pImp->aText, pImp->nMax );
             pImp->pView = NULL;
         }
-        else
+        else if ( pImp->pView )
         {
             ULONG nTime = Get10ThSec();
             ULONG nTimeDiff = nTime - pImp->nCreate;
