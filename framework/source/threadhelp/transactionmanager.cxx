@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transactionmanager.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 13:00:51 $
+ *  last change: $Author: mba $ $Date: 2001-05-07 08:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ void TransactionManager::impl_throwExceptions( EExceptionMode eMode, ERejectReas
                                         {
                                             // Help programmer to find out, why this exception is thrown!
                                             LOG_ERROR( "TransactionManager...", "Owner instance not right initialized yet. Call was rejected! Normaly it's an algorithm error ... wrong usin of class!" )
-                                            throw css::uno::RuntimeException( DECLARE_ASCII("TransactionManager...\nOwner instance not right initialized yet. Call was rejected! Normaly it's an algorithm error ... wrong usin of class!\n" ), css::uno::Reference< css::uno::XInterface >() );
+//                                            throw css::uno::RuntimeException( DECLARE_ASCII("TransactionManager...\nOwner instance not right initialized yet. Call was rejected! Normaly it's an algorithm error ... wrong usin of class!\n" ), css::uno::Reference< css::uno::XInterface >() );
                                         }
                                         break;
             case E_INCLOSE         :    if( eMode == E_HARDEXCEPTIONS )
