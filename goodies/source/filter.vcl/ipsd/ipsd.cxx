@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipsd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 15:49:32 $
+ *  last change: $Author: sj $ $Date: 2001-10-09 10:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,12 @@ private:
     SvStream*           mpPSD;          // Die einzulesende PSD-Datei
     PSDFileHeader*      mpFileHeader;
 
-    BOOL                mbStatus;
-    BOOL                mbTransparent;
+    sal_uInt32          mnXResFixed;
+    sal_uInt32          mnYResFixed;
+
+    sal_Bool            mbStatus;
+    sal_Bool            mbTransparent;
+
     Bitmap              maBmp;
     Bitmap              maMaskBmp;
     BitmapReadAccess*   mpReadAcc;
@@ -127,8 +131,10 @@ PSDReader::PSDReader() :
     mpReadAcc       ( NULL ),
     mpFileHeader    ( NULL ),
     mpPalette       ( NULL ),
-    mbStatus        ( TRUE ),
-    mbTransparent   ( FALSE )
+    mbStatus        ( sal_True ),
+    mbTransparent   ( sal_False ),
+    mnXResFixed     ( 0 ),
+    mnYResFixed     ( 0 )
 {
 }
 
@@ -171,14 +177,15 @@ BOOL PSDReader::ReadPSD( SvStream & rPSD, Graphic & rGraphic, PFilterCallback pc
     if ( ImplReadHeader() == FALSE )
         return FALSE;
 
-    maBmp = Bitmap( Size( mpFileHeader->nColumns, mpFileHeader->nRows ), mnDestBitDepth );
+    Size aBitmapSize( mpFileHeader->nColumns, mpFileHeader->nRows );
+    maBmp = Bitmap( aBitmapSize, mnDestBitDepth );
     if ( ( mpWriteAcc = maBmp.AcquireWriteAccess() ) == NULL )
         mbStatus = FALSE;
     if ( ( mpReadAcc = maBmp.AcquireReadAccess() ) == NULL )
         mbStatus = FALSE;
     if ( mbTransparent && mbStatus )
     {
-        maMaskBmp = Bitmap( Size( mpFileHeader->nColumns, mpFileHeader->nRows ), 1 );
+        maMaskBmp = Bitmap( aBitmapSize, 1 );
         if ( ( mpMaskWriteAcc = maMaskBmp.AcquireWriteAccess() ) == NULL )
             mbStatus = FALSE;
     }
@@ -197,6 +204,17 @@ BOOL PSDReader::ReadPSD( SvStream & rPSD, Graphic & rGraphic, PFilterCallback pc
             rGraphic = Graphic( BitmapEx( maBmp, maMaskBmp ) );
         else
             rGraphic = maBmp;
+
+        if ( mnXResFixed && mnYResFixed )
+        {
+            Point       aEmptyPoint;
+            Fraction    aFractX( 1, mnXResFixed >> 16 );
+            Fraction    aFractY( 1, mnYResFixed >> 16 );
+            MapMode     aMapMode( MAP_INCH, aEmptyPoint, aFractX, aFractY );
+            Size        aPrefSize = OutputDevice::LogicToLogic( aBitmapSize, aMapMode, MAP_100TH_MM );
+            rGraphic.SetPrefSize( aPrefSize );
+            rGraphic.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
+        }
     }
     else
         mbStatus = FALSE;
@@ -322,10 +340,43 @@ BOOL PSDReader::ImplReadHeader()
         }
         break;
     }
-
     *mpPSD >> nResourceLength;
-    mpPSD->SeekRel( nResourceLength );
+    sal_uInt32 nLayerPos = mpPSD->Tell() + nResourceLength;
 
+    // this is a loop over the resource entries to get the resolution info
+    while( mpPSD->Tell() < nLayerPos )
+    {
+        sal_uInt8 n8;
+        sal_uInt32 nType, nPStringLen, nResEntryLen;
+        sal_uInt16 nUniqueID;
+
+        *mpPSD >> nType >> nUniqueID >> n8;
+        nPStringLen = n8;
+        if ( nType != 0x3842494d )
+            break;
+        if ( ! ( nPStringLen & 1 ) )
+            nPStringLen++;
+        mpPSD->SeekRel( nPStringLen );  // skipping the pstring
+        *mpPSD >> nResEntryLen;
+        if ( nResEntryLen & 1 )
+            nResEntryLen++;             // the resource entries are padded
+        sal_uInt32 nCurrentPos = mpPSD->Tell();
+        if ( ( nResEntryLen + nCurrentPos ) > nLayerPos )   // check if size
+            break;                                          // is possible
+        switch( nUniqueID )
+        {
+            case 0x3ed :    // UID for the resolution info
+            {
+                sal_Int16   nUnit;
+
+                *mpPSD >> mnXResFixed >> nUnit >> nUnit
+                       >> mnYResFixed >> nUnit >> nUnit;
+            }
+            break;
+        }
+        mpPSD->Seek( nCurrentPos + nResEntryLen );          // set the stream to the next
+    }                                                       // resource entry
+    mpPSD->Seek( nLayerPos );
     *mpPSD >> nLayerMaskLength;
     mpPSD->SeekRel( nLayerMaskLength );
 
