@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 23:01:46 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 10:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #include "svmedit2.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
+#include <com/sun/star/frame/XDispatch.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
@@ -260,6 +263,14 @@ private:
     void                    ViewTextWin();
     void                    ViewEmptyWin();
     void                    ViewNonEmptyWin();  // views depending on bDocInfo
+
+    struct SvtExecuteInfo
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
+        ::com::sun::star::util::URL                                                aTargetURL;
+    };
+
+    DECL_STATIC_LINK(       SvtFrameWindow_Impl, ExecuteHdl_Impl, SvtExecuteInfo* );
 
 public:
     SvtFrameWindow_Impl( Window* pParent );
