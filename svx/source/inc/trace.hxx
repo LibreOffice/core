@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trace.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:20 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 07:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
-#ifndef _SVX_FMSTL_HXX
-#include "fmstl.hxx"
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
 
 
@@ -81,8 +81,8 @@ class Tracer
 {
     ByteString m_sBlockDescription;
 
-    static map< ::vos::OThread::TThreadIdentifier, INT32, ::std::less< ::vos::OThread::TThreadIdentifier > >
-        s_aThreadIndents;
+    DECLARE_STL_STDKEY_MAP( ::vos::OThread::TThreadIdentifier, sal_Int32, MapThreadId2Int );
+    static MapThreadId2Int s_aThreadIndents;
 
     static ::vos::OMutex    s_aMapSafety;
 
