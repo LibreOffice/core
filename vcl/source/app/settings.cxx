@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:18:09 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,6 +534,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maWindowColor( rData.maWindowColor ),
     maWindowTextColor( rData.maWindowTextColor ),
     maWorkspaceColor( rData.maWorkspaceColor ),
+    maMonoColor( rData.maMonoColor ),
     maAppFont( rData.maAppFont ),
     maHelpFont( rData.maAppFont ),
     maTitleFont( rData.maTitleFont ),
@@ -622,6 +623,7 @@ void ImplStyleData::SetStandardStyles()
     maDialogColor               = Color( COL_LIGHTGRAY );
     maDialogTextColor           = Color( COL_BLACK );
     maWorkspaceColor            = Color( COL_GRAY );
+    maMonoColor                 = Color( COL_BLACK );
     maFieldColor                = Color( COL_WHITE );
     maFieldTextColor            = Color( COL_BLACK );
     maActiveColor               = Color( COL_BLUE );
@@ -896,6 +898,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maDialogColor             == rSet.mpData->maDialogColor)              &&
          (mpData->maDialogTextColor         == rSet.mpData->maDialogTextColor)          &&
          (mpData->maWorkspaceColor          == rSet.mpData->maWorkspaceColor)           &&
+         (mpData->maMonoColor               == rSet.mpData->maMonoColor)                &&
          (mpData->maFieldColor              == rSet.mpData->maFieldColor)               &&
          (mpData->maFieldTextColor          == rSet.mpData->maFieldTextColor)           &&
          (mpData->maActiveColor             == rSet.mpData->maActiveColor)              &&
