@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dv $ $Date: 2001-10-31 11:27:38 $
+ *  last change: $Author: mt $ $Date: 2001-11-19 17:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,6 +1039,14 @@ void MultiLineEdit::SetReadOnly( BOOL bReadOnly )
 {
     pImpSvMEdit->SetReadOnly( bReadOnly );
     Edit::SetReadOnly( bReadOnly );
+
+    // #94921# ReadOnly can be overwritten in InitFromStyle() when WB not set.
+    WinBits nStyle = GetStyle();
+    if ( bReadOnly )
+        nStyle |= WB_READONLY;
+    else
+        nStyle &= ~WB_READONLY;
+    SetStyle( nStyle );
 }
 
 BOOL MultiLineEdit::IsReadOnly() const
