@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:39:24 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,8 @@
 #ifndef FORMS_ENTRYLISTHELPER_HXX
 #include "entrylisthelper.hxx"
 #endif
-#ifndef FORMS_SOURCE_INC_ASYNCNOTIFICATION_HXX
-#include "asyncnotification.hxx"
+#ifndef COMPHELPER_ASYNCNOTIFICATION_HXX
+#include <comphelper/asyncnotification.hxx>
 #endif
 
 #include <memory>
@@ -282,7 +282,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox >
                                             m_xAggregateListBox;
 
-    AsyncEventNotifier*                     m_pItemBroadcaster;
+    ::comphelper::AsyncEventNotifier*       m_pItemBroadcaster;
 
 protected:
     // UNO Anbindung
@@ -343,8 +343,8 @@ public:
 
 protected:
     // IEventProcessor
-    virtual void processEvent( const EventReference& _rEvent );
-    virtual XComponentRef getComponent();
+    virtual void processEvent( const ::comphelper::EventDescription& _rEvent );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > getComponent();
 
 private:
     DECL_LINK( OnTimeout, void* );
