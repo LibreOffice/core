@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.sdi,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:14:57 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,6 +436,7 @@ item INT16                  SdrTextFitToSizeTypeItem;  // enum
 item String                 SfxStringListItem;  // serialized into one concatenated string
 item String                 OfaPtrItem;  // serialized into one concatenated string
 item String SfxLockBytesItem;
+item String SvxFontListItem;
 
 item BYTE           SfxGlobalNameItem;
 
