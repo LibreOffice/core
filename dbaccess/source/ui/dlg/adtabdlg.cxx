@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-02 06:55:29 $
+ *  last change: $Author: oj $ $Date: 2002-05-07 05:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ DBG_NAME(OAddTableDlg)
 OAddTableDlg::OAddTableDlg( Window* pParent)
              :ModelessDialog( pParent, ModuleRes(DLG_JOIN_TABADD) )
              ,aFTTable( this, ResId( FT_TABLE ) )
-             ,aTableList( this, ResId( LB_TABLE ),sal_False )
+             ,aTableList( this, ResId( LB_TABLE ),sal_False,sal_False )
              ,aAddButton( this, ResId( PB_ADDTABLE ) )
              ,aCloseButton( this, ResId( PB_CLOSE ) )
              ,aHelpButton( this, ResId( PB_HELP ) )
@@ -146,6 +146,7 @@ OAddTableDlg::OAddTableDlg( Window* pParent)
     aTableList.SetWindowBits(WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
     aTableList.EnableCheckButton( NULL ); // do not show any buttons
     aTableList.SetSelectionMode( SINGLE_SELECTION );
+    aTableList.notifyHiContrastChanged();
 
     FreeResource();
 }
