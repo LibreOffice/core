@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mtg $ $Date: 2001-02-16 09:29:15 $
+#   last change: $Author: jp $ $Date: 2001-10-19 08:20:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,10 +103,9 @@ SLOFILES =  \
         $(SLO)$/SwXMLSectionList.obj	\
         $(SLO)$/SwXMLBlockExport.obj	\
         $(SLO)$/SwXMLBlockListContext.obj	\
-        $(SLO)$/SwXMLTextBlocks.obj	
+        $(SLO)$/SwXMLTextBlocks.obj
 
 EXCEPTIONSFILES = \
-        $(SLO)$/swblocks.obj	\
         $(SLO)$/SwXMLBlockImport.obj	\
         $(SLO)$/SwXMLSectionList.obj	\
         $(SLO)$/SwXMLBlockExport.obj	\
