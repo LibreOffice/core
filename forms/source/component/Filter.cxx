@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Filter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:09:00 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,7 +564,9 @@ namespace frm
                     }
 
                     aStatement.appendAscii( " FROM " );
-                    aStatement.append( ::dbtools::quoteTableName( xMeta, sTableName, ::dbtools::eInDataManipulation ) );
+                    sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
+                    sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
+                    aStatement.append( ::dbtools::quoteTableName( xMeta, sTableName, ::dbtools::eInDataManipulation ,bUseCatalogInSelect,bUseSchemaInSelect) );
                     ::rtl::OUString sStatement( aStatement.makeStringAndClear( ) );
 
                     xStatement = xConnection->createStatement();
