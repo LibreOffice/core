@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockbyte.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-28 14:56:04 $
+ *  last change: $Author: mhu $ $Date: 2002-08-17 16:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _STORE_LOCKBYTE_HXX_
-#define _STORE_LOCKBYTE_HXX_ "$Revision: 1.3 $"
+#define _STORE_LOCKBYTE_HXX_ "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -147,11 +147,6 @@ public:
     virtual storeError unlockRange (
         sal_uInt32 nOffset,
         sal_uInt32 nBytes) = 0;
-
-protected:
-    /** Destruction.
-     */
-    virtual ~ILockBytes (void) {}
 };
 
 /*========================================================================
