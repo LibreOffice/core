@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPropertySetContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:38:40 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,14 +183,10 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
     break;
 #ifndef SVX_LIGHT
     case CTF_SECTION_FOOTNOTE_END:
-        pContext = new XMLSectionFootnoteConfigImport(
-            GetImport(), nPrefix, rLocalName, rProperties,
-            xMapper->getPropertySetMapper(), rProp.mnIndex);
-        break;
     case CTF_SECTION_ENDNOTE_END:
         pContext = new XMLSectionFootnoteConfigImport(
             GetImport(), nPrefix, rLocalName, rProperties,
-            xMapper->getPropertySetMapper(), rProp.mnIndex);
+            xMapper->getPropertySetMapper());
         break;
 #endif // #ifndef SVX_LIGHT
     }
