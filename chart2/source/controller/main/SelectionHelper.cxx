@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionHelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: iha $ $Date: 2003-10-28 18:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,11 @@ bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
 //static
 SdrObject* SelectionHelper::getObjectToSelect( const Point& rMPos
                     , rtl::OUString& rNameOfLastSelectedObject
-                    , const DrawViewWrapper& rDrawViewWrapper )
+                    , const DrawViewWrapper& rDrawViewWrapper
+                    , bool bAllowMultiClickSelectionChange )
 {
+    //bAllowMultiClickSelectionChange==true -> a second click on the same object can lead to a changed selection (e.g. series -> single data point)
+
     //the search for the object to select starts with the hit object deepest in the grouping hierarchy (a leaf in the tree)
     //further we travel along the grouping hierarchy from child to parent
     SdrObject*    pNewObj = rDrawViewWrapper.getHitObject(rMPos);
@@ -173,7 +176,8 @@ SdrObject* SelectionHelper::getObjectToSelect( const Point& rMPos
     //if the so far found object is a multi click object further steps are necessary
     while( ObjectIdentifier::isMultiClickObject( aNewName ) )
     {
-        if( rNameOfLastSelectedObject.getLength() && aNewName.match( rNameOfLastSelectedObject ) )
+        if( rNameOfLastSelectedObject.getLength() && aNewName.match( rNameOfLastSelectedObject )
+            && bAllowMultiClickSelectionChange /*e.g. a right mouse click on a selected object should not lead to a different selection*/ )
         {
             //if the same child is clicked again don't go up further
             break;
@@ -190,11 +194,15 @@ SdrObject* SelectionHelper::getObjectToSelect( const Point& rMPos
             //take the one found so far
             break;
         }
-        //if the last selected object is found don't go up further but take the last child
+        //if the last selected object is found don't go up further
+        //but take the last child if selection change is allowed
         if( rNameOfLastSelectedObject.getLength() && aNewName.match( rNameOfLastSelectedObject ) )
         {
-            pNewObj  = pLastChild;
-            aNewName = aLastChildName;
+            if( bAllowMultiClickSelectionChange )
+            {
+                pNewObj  = pLastChild;
+                aNewName = aLastChildName;
+            }
             break;
         }
     }

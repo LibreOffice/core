@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-28 16:04:41 $
+ *  last change: $Author: iha $ $Date: 2003-10-28 18:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,12 +351,13 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     //selection
-    if( !isDoubleClick(rMEvt) && !rMEvt.IsRight() ) //do not change selection if double click or right click
+    if( !isDoubleClick(rMEvt) ) //do not change selection if double click
     {
         pDrawViewWrapper->UnmarkAll();
         SdrObject* pNewObj = SelectionHelper::getObjectToSelect(
                                     aMPos, m_aSelectedObjectCID
-                                    , *pDrawViewWrapper );
+                                    , *pDrawViewWrapper
+                                    , !rMEvt.IsRight() ); //do not change selection if right clicked on the selected object
         if(!pNewObj)
             return;
         SelectionHelper aSelectionHelper( pNewObj, m_aSelectedObjectCID );
