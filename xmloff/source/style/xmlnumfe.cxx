@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:36:14 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,7 +476,7 @@ void SvXMLNumFmtExport::WriteColorElement_Impl( const Color& rColor )
     rExport.AddAttribute( XML_NAMESPACE_FO, XML_COLOR,
                           aColStr.makeStringAndClear() );
 
-    SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_PROPERTIES,
+    SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_TEXT_PROPERTIES,
                               sal_True, sal_False );
 }
 
@@ -816,8 +816,8 @@ void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
                               aCondStr.makeStringAndClear() );
 
         rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME,
-                              lcl_CreateStyleName( nKey, nPart, sal_False,
-                                                   sPrefix ) );
+                              rExport.EncodeStyleName( lcl_CreateStyleName( nKey, nPart, sal_False,
+                                                   sPrefix ) ) );
 
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_MAP,
                                   sal_True, sal_False );
@@ -1092,9 +1092,6 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     //  format name (generated from key) - style namespace
     rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
                         lcl_CreateStyleName( nKey, nPart, bDefPart, sPrefix ) );
-    rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY,
-                          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                              XML_STYLE_FAMILY_DATA_STYLE_NAME)) );
 
     //  "volatile" attribute for styles used only in maps
     if ( !bDefPart )
