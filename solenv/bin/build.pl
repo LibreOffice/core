@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.116 $
+#   $Revision: 1.117 $
 #
-#   last change: $Author: vg $ $Date: 2004-09-15 12:40:25 $
+#   last change: $Author: vg $ $Date: 2004-10-01 14:07:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@
     my $log = undef;
     if (defined $ENV{CWS_WORK_STAMP}) {
         require Cws; import Cws;
+        require CwsConfig; import CwsConfig;
         require CvsModule; import CvsModule;
         require GenInfoParser; import GenInfoParser;
         require IO::Handle; import IO::Handle;
@@ -92,7 +93,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.116 $ ';
+    $id_str = ' $Revision: 1.117 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -105,11 +106,7 @@
 #########################
 
     if (defined $ENV{CWS_WORK_STAMP}) {
-        if (defined $ENV{VCSID}) {
-            $vcsid = $ENV{VCSID};
-        } else {
-            print_error("Can't determine VCSID. Please use setsolar.", 5);
-        };
+        $vcsid = CwsConfig->new()->vcsid();
     };
     $modules_number++;
     $perl = "";
