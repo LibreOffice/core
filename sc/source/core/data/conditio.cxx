@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:12:12 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ ScConditionEntry::ScConditionEntry( const ScConditionEntry& r ) :
     pFCell2(NULL),
     pDoc(r.pDoc),
     aSrcPos(r.aSrcPos),
+    aSrcString(r.aSrcString),
     bFirstRun(TRUE)
 {
     //  ScTokenArray copy ctor erzeugt flache Kopie
@@ -194,6 +195,7 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
     pFCell2(NULL),
     pDoc(pDocument),
     aSrcPos(r.aSrcPos),
+    aSrcString(r.aSrcString),
     bFirstRun(TRUE)
 {
     // echte Kopie der Formeln (fuer Ref-Undo)
@@ -556,12 +558,31 @@ void ScConditionEntry::CompileAll()
 
 void ScConditionEntry::CompileXML()
 {
+    //  #b4974740# First parse the formula source position if it was stored as text
+
+    if ( aSrcString.Len() )
+    {
+        ScAddress aNew;
+        if ( aNew.Parse( aSrcString, pDoc ) & SCA_VALID )
+            aSrcPos = aNew;
+        // if the position is invalid, there isn't much we can do at this time
+        aSrcString.Erase();
+    }
+
     //  Convert the text tokens that were created during XML import into real tokens:
     //  The stored string tokens contain english function names, but no XML-style references
 
     Compile( GetExpression(aSrcPos, 0, 0, TRUE, FALSE, TRUE),
              GetExpression(aSrcPos, 1, 0, TRUE, FALSE, TRUE),
              TRUE, FALSE, TRUE );
+}
+
+void ScConditionEntry::SetSrcString( const String& rNew )
+{
+    // aSrcString is only evaluated in CompileXML
+    DBG_ASSERT( pDoc->IsImportingXML(), "SetSrcString is only valid for XML import" );
+
+    aSrcString = rNew;
 }
 
 void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab, BOOL& rChanged )
@@ -687,8 +708,9 @@ int ScConditionEntry::operator== ( const ScConditionEntry& r ) const
                 lcl_IsEqual( pFormula2, r.pFormula2 ));
     if (bEq)
     {
-        //  bei Formeln auch die Referenz-Tabelle vergleichen
-        if ( ( pFormula1 || pFormula2 ) && aSrcPos != r.aSrcPos )
+        // for formulas, the reference positions must be compared, too
+        // (including aSrcString, for inserting the entries during XML import)
+        if ( ( pFormula1 || pFormula2 ) && ( aSrcPos != r.aSrcPos || aSrcString != r.aSrcString ) )
             bEq = FALSE;
 
         //  wenn keine Formeln, Werte vergleichen
@@ -1151,6 +1173,56 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
             }
         }
     }
+}
+
+ScAddress ScConditionEntry::GetValidSrcPos() const
+{
+    // return a position that's adjusted to allow textual representation of expressions if possible
+
+    SCTAB nMinTab = aSrcPos.Tab();
+    SCTAB nMaxTab = nMinTab;
+
+    for (USHORT nPass = 0; nPass < 2; nPass++)
+    {
+        ScTokenArray* pFormula = nPass ? pFormula2 : pFormula1;
+        if (pFormula)
+        {
+            pFormula->Reset();
+            ScToken* t;
+            while ( t = pFormula->GetNextReference() )
+            {
+                SingleRefData& rRef1 = t->GetSingleRef();
+                if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
+                {
+                    if ( rRef1.nTab < nMinTab )
+                        nMinTab = rRef1.nTab;
+                    if ( rRef1.nTab > nMaxTab )
+                        nMaxTab = rRef1.nTab;
+                }
+                if ( t->GetType() == svDoubleRef )
+                {
+                    SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                    if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
+                    {
+                        if ( rRef2.nTab < nMinTab )
+                            nMinTab = rRef2.nTab;
+                        if ( rRef2.nTab > nMaxTab )
+                            nMaxTab = rRef2.nTab;
+                    }
+                }
+            }
+        }
+    }
+
+    ScAddress aValidPos = aSrcPos;
+    SCTAB nTabCount = pDoc->GetTableCount();
+    if ( nMaxTab >= nTabCount && nMinTab > 0 )
+        aValidPos.SetTab( aSrcPos.Tab() - nMinTab );    // so the lowest tab ref will be on 0
+
+    if ( aValidPos.Tab() >= nTabCount )
+        aValidPos.SetTab( nTabCount - 1 );  // ensure a valid position even if some references will be invalid
+
+    return aValidPos;
 }
 
 void ScConditionEntry::DataChanged( const ScRange* pModified ) const
