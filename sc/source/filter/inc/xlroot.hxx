@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:50:32 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef SC_XLROOT_HXX
 #define SC_XLROOT_HXX
 
+#ifndef _SOT_STORAGE_HXX
+#include <sot/storage.hxx>
+#endif
 #ifndef SC_XLCONST_HXX
 #include "xlconst.hxx"
 #endif
@@ -72,7 +75,6 @@
 // Global data ================================================================
 
 class SfxMedium;
-class SvStorage;
 class ScEditEngineDefaulter;
 class ScHeaderEditEngine;
 class EditEngine;
@@ -93,6 +95,7 @@ struct XclRootData
     XclBiff             meBiff;         /// Current BIFF version.
     SfxMedium&          mrMedium;       /// The medium to import from.
     ScDocument&         mrDoc;          /// The source or destination document.
+    SotStorageRef       mrStorage;      /// The root OLE storage of imported/exported file.
     String              maDocUrl;       /// Document URL of imported/exported file.
     String              maBasePath;     /// Base path of imported/exported file (path of maDocUrl).
     String              maPassw;        /// Entered password for stream encryption/decryption.
@@ -144,7 +147,6 @@ class SdrPage;
 class ScDocumentPool;
 class ScStyleSheetPool;
 class ScRangeName;
-class SvStorage;
 struct XclFontData;
 
 /** Access to global data for a filter object (imported or exported document) from other classes. */
@@ -192,15 +194,15 @@ public:
 
     /** Returns the OLE2 root storage of the imported/exported file.
         @return  Pointer to root storage or 0, if the file is a simple stream. */
-    SvStorage*          GetRootStorage() const;
+    SotStorage*          GetRootStorage() const;
     /** Tries to open a storage as child of the specified storage for writing. */
-    SvStorageRef        OpenStorage( SvStorage* pStrg, const String& rStrgName ) const;
+    SotStorageRef        OpenStorage( SotStorage* pStrg, const String& rStrgName ) const;
     /** Tries to open a storage as child of the root storage for writing. */
-    SvStorageRef        OpenStorage( const String& rStrgName ) const;
+    SotStorageRef        OpenStorage( const String& rStrgName ) const;
     /** Tries to open a new stream in the specified storage for writing. */
-    SvStorageStreamRef  OpenStream( SvStorage* pStrg, const String& rStrmName ) const;
+    SotStorageStreamRef  OpenStream( SotStorage* pStrg, const String& rStrmName ) const;
     /** Tries to open a new stream in the root storage for writing. */
-    SvStorageStreamRef  OpenStream( const String& rStrmName ) const;
+    SotStorageStreamRef  OpenStream( const String& rStrmName ) const;
 
     /** Returns the destination document (import) or source document (export). */
     inline ScDocument&  GetDoc() const { return mrData.mrDoc; }
