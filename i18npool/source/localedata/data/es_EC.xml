@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Locale SYSTEM 'locale.dtd'>
-<Locale version="1.2">
+<Locale versionDTD="2.0" allowUpdateFromCLDR="no" version="1.2">
 <LC_INFO>
 <Language>
 <LangID>es</LangID>
@@ -228,7 +228,14 @@
 <LC_INDEX ref="es_ES"/>
 <LC_CALENDAR ref="es_AR"/>
 <LC_CURRENCY>
-<Currency default="true" usedInCompatibleFormatCodes="true">
+<Currency default="true" usedInCompatibleFormatCodes="false">
+<CurrencyID>dollar</CurrencyID>
+<CurrencySymbol>$</CurrencySymbol>
+<BankSymbol>USD</BankSymbol>
+<CurrencyName>US Dollar</CurrencyName>
+<DecimalPlaces>2</DecimalPlaces>
+</Currency>
+<Currency default="false" usedInCompatibleFormatCodes="true">
 <CurrencyID>S/</CurrencyID>
 <CurrencySymbol>S/</CurrencySymbol>
 <BankSymbol>ECS</BankSymbol>
