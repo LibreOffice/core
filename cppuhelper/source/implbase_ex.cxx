@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase_ex.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-04 09:03:09 $
+ *  last change: $Author: dbo $ $Date: 2001-09-05 08:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ static inline type_entry * __getTypeEntries( class_data * cd )
                 type_entry * pEntry = &pEntries[ n ];
                 Type const & rType = (*pEntry->m_type.getCppuType)( 0 );
                 OSL_ENSURE( rType.getTypeClass() == TypeClass_INTERFACE, "### wrong helper init: expected interface!" );
+                OSL_ENSURE( ! isXInterface( rType.getTypeLibType()->pTypeName ), "### want to implement XInterface: template argument is XInterface?!?!?!" );
                 if (rType.getTypeClass() != TypeClass_INTERFACE)
                 {
                     OUStringBuffer buf( 48 );
@@ -173,46 +174,50 @@ static inline void * __queryDeepNoXInterface(
 {
     type_entry * pEntries = __getTypeEntries( cd );
     sal_Int32 nTypes = cd->m_nTypes;
-    for ( sal_Int32 n = 0; n < nTypes; ++n )
+    sal_Int32 n;
+
+    // try top interfaces without getting td
+    for ( n = 0; n < nTypes; ++n )
     {
-        typelib_TypeDescriptionReference * pTDR = pEntries[ n ].m_type.typeRef;
-        if (__td_equals( pTDR, pDemandedTDR )) // try top interface without getting td
+        if (__td_equals( pEntries[ n ].m_type.typeRef, pDemandedTDR ))
         {
             return makeInterface( pEntries[ n ].m_offset, that );
         }
+    }
+    // query deep getting td
+    for ( n = 0; n < nTypes; ++n )
+    {
+        typelib_TypeDescription * pTD = 0;
+        TYPELIB_DANGER_GET( &pTD, pEntries[ n ].m_type.typeRef );
+        if (pTD)
+        {
+            // exclude top (already tested) and bottom (XInterface) interface
+            typelib_InterfaceTypeDescription * pITD =
+                ((typelib_InterfaceTypeDescription *)pTD)->pBaseTypeDescription;
+            OSL_ENSURE( pITD, "### want to implement XInterface: template argument is XInterface?!?!?!" );
+            while (pITD->pBaseTypeDescription)
+            {
+                if (__td_equals( (typelib_TypeDescriptionReference *)pITD, pDemandedTDR ))
+                {
+                    TYPELIB_DANGER_RELEASE( pTD );
+                    return makeInterface( pEntries[ n ].m_offset, that );
+                }
+                pITD = pITD->pBaseTypeDescription;
+            }
+            TYPELIB_DANGER_RELEASE( pTD );
+        }
         else
         {
-            typelib_TypeDescription * pTD = 0;
-            TYPELIB_DANGER_GET( &pTD, pTDR );
-            if (pTD)
-            {
-                // exclude top (already tested) and bottom (XInterface) interface
-                typelib_InterfaceTypeDescription * pITD =
-                    ((typelib_InterfaceTypeDescription *)pTD)->pBaseTypeDescription;
-                while (pITD && pITD->pBaseTypeDescription)
-                {
-                    if (__td_equals( (typelib_TypeDescriptionReference *)pITD, pDemandedTDR ))
-                    {
-                        return makeInterface( pEntries[ n ].m_offset, that );
-                    }
-                    pITD = pITD->pBaseTypeDescription;
-                }
-
-                TYPELIB_DANGER_RELEASE( pTD );
-            }
-            else
-            {
-                OUStringBuffer buf( 64 );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("cannot get type description for type \"") );
-                buf.append( pTDR->pTypeName );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
-                OUString msg( buf.makeStringAndClear() );
+            OUStringBuffer buf( 64 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("cannot get type description for type \"") );
+            buf.append( pEntries[ n ].m_type.typeRef->pTypeName );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
+            OUString msg( buf.makeStringAndClear() );
 #ifdef _DEBUG
-                OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
-                OSL_ENSURE( 0, str.getStr() );
+            OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_ENSURE( 0, str.getStr() );
 #endif
-                throw RuntimeException( msg, Reference< XInterface >() );
-            }
+            throw RuntimeException( msg, Reference< XInterface >() );
         }
     }
     return 0;
