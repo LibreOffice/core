@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:40 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,80 +62,46 @@
 #define _ZIP_PACKAGE_HXX
 
 #ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx> // helper for implementations
+#include <cppuhelper/weak.hxx>
 #endif
-
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
 #include <com/sun/star/util/XChangesBatch.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_PACKAGES_XZIPFILE_HPP_
+#include <com/sun/star/packages/XZipFile.hpp>
+#endif
+#ifndef _ZIP_PACKAGE_BUFFER_HXX
+#include <ZipPackageBuffer.hxx>
+#endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
-#endif
-
-#ifndef _ZIP_FILE_HXX
-#include "ZipFile.hxx"
-#endif
-
-#ifndef _ZIP_OUTPUT_STREAM_HXX
-#include "ZipOutputStream.hxx"
-#endif
-
-#ifndef _ZIP_PACKAGE_FOLDER_HXX
-#include "ZipPackageFolder.hxx"
-#endif
-
-#ifndef _ZIP_PACKAGE_STREAM_HXX
-#include "ZipPackageStream.hxx"
-#endif
-
-#ifndef _ZIP_PACKAGE_SINK_HXX
-#include "ZipPackageSink.hxx"
-#endif
-
-#ifndef _ZIP_PACKAGE_BUFFER_HXX
-#include "ZipPackageBuffer.hxx"
-#endif
-
-#ifndef _MANIFEST_ENTRY_HXX
-#include "ManifestEntry.hxx"
-#endif
-
-#ifndef _MANIFEST_WRITER_HXX
-#include "ManifestWriter.hxx"
-#endif
-
-#ifndef _MANIFEST_READER_HXX
-#include "ManifestReader.hxx"
+#ifndef _HASHMAPS_HXX
+#include <HashMaps.hxx>
 #endif
 
 #include <vector>
 
 class ZipPackageFolder;
+class ZipFile;
 
 class ZipPackage :
                    public ::cppu::OWeakObject,
@@ -149,27 +115,16 @@ private:
     ZipPackageFolder *pRootFolder;
     ZipFile          *pZipFile;
     ::ucb::Content   *pContent;
-    sal_Bool         bContained;
     ::com::sun::star::uno::Reference < com::sun::star::packages::XZipFile > xZipFile;
     ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xRootFolder;
     ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xContentStream;
     ::com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xContentSeek;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xFactory;
-    sal_Bool isZipFile(com::sun::star::packages::ZipEntry &rEntry);
     void getZipFileContents();
-    void destroyFolderTree( ::com::sun::star::uno::Reference < ::com::sun::star::lang::XUnoTunnel > xFolder );
     NameHash         aRecent;
 
 public:
-    ZipPackage (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
-                const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
     ZipPackage (const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
-    ZipPackageFolder * getRootFolder()
-    {
-        return pRootFolder;
-    }
-    ZipPackageBuffer & SAL_CALL ZipPackage::writeToBuffer()
-        throw(::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ~ZipPackage( void );
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
@@ -200,12 +155,16 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::util::ElementChange > SAL_CALL getPendingChanges(  )
         throw(::com::sun::star::uno::RuntimeException);
-    // Uno componentiseralation
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > ZipFile_create(
-            const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & xMgr );
+    // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
         throw(::com::sun::star::uno::RuntimeException);
     com::sun::star::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId( void )
         throw(::com::sun::star::uno::RuntimeException);
+    // Uno componentiseralation
+    static ::rtl::OUString getImplementationName();
+    static ::com::sun::star::uno::Sequence < ::rtl::OUString > getSupportedServiceNames();
+    static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > createServiceFactory( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory );
+    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & rServiceName)
+        throw (com::sun::star::uno::RuntimeException);
 };
 #endif

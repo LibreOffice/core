@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: CRC32.hxx,v $
+ *  $RCSfile: HashMaps.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: mtg $ $Date: 2001-04-19 14:11:06 $
  *
@@ -58,33 +58,40 @@
  *
  *
  ************************************************************************/
-#ifndef _CRC32_HXX
-#define _CRC32_HXX
+#ifndef _HASHMAPS_HXX
+#define _HASHMAPS_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGE_XCHECKSUM_HPP_
-#include <com/sun/star/packages/XChecksum.hpp>
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEl_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+#include <hash_map>
 
-class CRC32 : public cppu::WeakImplHelper1<com::sun::star::packages::XChecksum>
+struct eqFunc
 {
-private:
-    sal_uInt32 nCRC;
-public:
-    CRC32();
-    virtual ~CRC32();
-    virtual void SAL_CALL updateByte (sal_Int8 nByte)
-        throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL updateSegment(const ::com::sun::star::uno::Sequence< sal_Int8 > &b, sal_Int32 off, sal_Int32 len)
-        throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL update(const ::com::sun::star::uno::Sequence< sal_Int8 > &b)
-        throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getValue()
-        throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL reset()
-        throw(::com::sun::star::uno::RuntimeException);
+    sal_Bool operator()( const rtl::OUString &r1,
+                         const rtl::OUString &r2) const
+    {
+        return r1 == r2;
+    }
 };
 
+struct hashFunc
+{
+    sal_Int32 operator()(const rtl::OUString &r1) const
+    {
+        return r1.hashCode();
+    }
+};
+typedef std::hash_map < rtl::OUString,
+                        com::sun::star::uno::Reference < com::sun::star::lang::XUnoTunnel >,
+                        hashFunc,
+                        eqFunc > TunnelHash;
+
+typedef std::hash_map < rtl::OUString,
+                        com::sun::star::uno::Reference < com::sun::star::container::XNameContainer >,
+                        hashFunc,
+                        eqFunc > NameHash;
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:40 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,39 +62,22 @@
 #define _ZIP_OUTPUT_STREAM_HXX
 
 #ifndef _BYTE_CHUCKER_HXX_
-#include "ByteChucker.hxx"
+#include <ByteChucker.hxx>
 #endif
-
-#ifndef _ZIP_ENTRY_IMPL_HXX
-#include "ZipEntryImpl.hxx"
-#endif
-
-#ifndef _ZIP_FILE_HXX
-#include "ZipFile.hxx"
-#endif
-
 #ifndef _DEFLATER_HXX
-#include "Deflater.hxx"
+#include <Deflater.hxx>
 #endif
-
 #ifndef _CRC32_HXX
-#include "CRC32.hxx"
+#include <CRC32.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_PACKAGE_XZIPOUTPUTSTREAM_HPP_
 #include <com/sun/star/packages/XZipOutputStream.hpp>
 #endif
-
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #endif
-
 #ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
-
-#ifndef _VOS_DIAGNOSE_H_
-#include <vos/diagnose.hxx>
 #endif
 
 
@@ -111,7 +94,7 @@ private:
     CRC32               aCRC;
     sal_Bool            bFinished;
     ByteChucker         aChucker;
-    ::std::vector < ::com::sun::star::packages::ZipEntry* >         aZipList;
+    ::std::vector < ::com::sun::star::packages::ZipEntry *>         aZipList;
 
 public:
     ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream, sal_Int32 nNewBufferSize);

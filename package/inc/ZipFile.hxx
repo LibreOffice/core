@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:40 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,42 +61,20 @@
 #ifndef _ZIP_FILE_HXX
 #define _ZIP_FILE_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx> // helper for implementations
-#endif
-
 #ifndef _COM_SUN_STAR_PACKAGE_XZIPFILE_HPP_
 #include <com/sun/star/packages/XZipFile.hpp>
 #endif
-
-#ifndef _ENTRY_INPUT_STREAM_HXX
-#include "EntryInputStream.hxx"
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx> // helper for implementations
 #endif
-
-#ifndef _ZIP_ENUMERATION_HXX
-#include "ZipEnumeration.hxx"
-#endif
-
-#ifndef _ZIP_ENTRY_IMPL_HXX
-#include "ZipEntryImpl.hxx"
-#endif
-
 #ifndef _BYTE_GRABBER_HXX_
-#include "ByteGrabber.hxx"
+#include <ByteGrabber.hxx>
 #endif
-
-#ifndef _MANIFEST_ENTRY_HXX_
-#include "ManifestEntry.hxx"
+#ifndef _ENTRY_HASH_HXX
+#include <EntryHash.hxx>
 #endif
-
-#include <vector>
-
-#ifndef _VOS_DIAGNOSE_H_
-#include <vos/diagnose.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_PACKAGE_ZIPCONSTANTS_HPP_
-#include <com/sun/star/packages/ZipConstants.hpp>
+#ifndef _INFLATER_HXX
+#include <Inflater.hxx>
 #endif
 
 /*
@@ -119,7 +97,6 @@ private:
 public:
     ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput, sal_Bool bInitialise)
         throw(::com::sun::star::io::IOException, com::sun::star::packages::ZipException, com::sun::star::uno::RuntimeException);
-    void updateFromManList(std::vector < ManifestEntry * > &rManList);
     void setInputStream ( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewStream );
     sal_uInt32 SAL_CALL getHeader(const ::com::sun::star::packages::ZipEntry& rEntry)
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::ZipException, ::com::sun::star::uno::RuntimeException);
@@ -163,84 +140,4 @@ private:
         throw(::com::sun::star::io::IOException, com::sun::star::packages::ZipException, com::sun::star::uno::RuntimeException);
 };
 
-#if 0
-/**
- * Function to create a new component instance; is needed by factory helper implementation.
-  * @param xMgr service manager to if the components needs other component instances
-   */
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > ZipFile_create
- ( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & xMgr )
-{
-    return com::sun::star::uno::Reference< com::sun::star::uno::XInterface >( *new ZipFile( xMgr ) );
-}
-
-/**
- * This function returns the name of the used environment.
- * @param ppEnvTypeName name of the environment
- * @param ppEnv could be point to a special environment, this parameter is normally set to null
- */
-extern "C" void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-/**
- * This function creates an implementation section in the registry and another subkey
- * for each supported service.
- * @param pServiceManager generic uno interface providing a service manager
- * @param pRegistryKey generic uno interface providing registry key to write
- */
-extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
-{
-    if (pRegistryKey)
-    {
-        try
-        {
-           com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey > xNewKey(
-              reinterpret_cast< com::sun::star::registry::XRegistryKey * >( pRegistryKey )->createKey(
-                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/package.ZipFile/UNO/SERVICES") ) ) );
-           xNewKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("package.XZipFile") ) );
-           return sal_True;
-        }
-        catch ( com::sun::star::registry::InvalidRegistryException& )
-        {
-            DBG_ERROR( "InvalidRegistryException detected\n");
-            return sal_False;
-        }
-    }
-    return sal_False;
-}
-
-/**
- * This function is called to get service factories for an implementation.
- * @param pImplName name of implementation
- * @param pServiceManager generic uno interface providing a service manager to instantiate components
- * @param pRegistryKey registry data key to read and write component persistent data
- * @return a component factory (generic uno interface)
- */
-extern "C" void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    void * pRet = 0;
-    // which implementation is demanded?
-    if (pServiceManager && rtl_str_compare( pImplName, "package.ZipFile" ))
-    {
-        rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("package.XZipFile") );
-        com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > xFactory(
-           cppu::createSingleFactory( // helper function from cppuhelper lib
-           reinterpret_cast< com::sun::star::lang::XMultiServiceFactory * >( pServiceManager ),
-           ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("package.ZipFile") ),
-           ZipFile_create,
-           com::sun::star::uno::Sequence< rtl::OUString >( &aServiceName, 1 ) ) );
-        if (xFactory.is())
-        {
-           xFactory->acquire();
-           pRet = xFactory.get();
-        }
-    }
-    return pRet;
-}
-
-#endif
 #endif

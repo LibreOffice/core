@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Deflater.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:40 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,22 +64,14 @@
 #ifndef _COM_SUN_STAR_PACKAGE_XDEFLATER_HDL_
 #include <com/sun/star/packages/XDeflater.hpp>
 #endif
-
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#ifndef _ZLIB_H
-#include <external/zlib/zlib.h>
-#endif
-
-#ifndef _VOS_DIAGNOSE_H_
-#include <vos/diagnose.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_PACKAGE_ZIPCONSTANTS_HPP_
-#include <com/sun/star/packages/ZipConstants.hpp>
-#endif
+extern "C"
+{
+    typedef struct z_stream_s z_stream;;
+};
 
 class Deflater : public cppu::WeakImplHelper1 < com::sun::star::packages::XDeflater>
 {
