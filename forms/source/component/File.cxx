@@ -2,9 +2,9 @@
  *
  *  $RCSfile: File.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:30 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _COMPHELPER_CONTAINER_HXX_
 #include <comphelper/container.hxx>
+#endif
+#ifndef _COMPHELPER_BASIC_IO_HXX_
+#include <comphelper/basicio.hxx>
 #endif
 
 //.........................................................................
@@ -240,16 +243,10 @@ void OFileControlModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(5)
-        DECL_PROP2(CLASSID,         sal_Int16,          READONLY, TRANSIENT);
+    BEGIN_DESCRIBE_PROPERTIES( 2, OControlModel )
         DECL_PROP1(DEFAULT_TEXT,    ::rtl::OUString,    BOUND);
-        DECL_PROP1(NAME,            ::rtl::OUString,    BOUND);
-        DECL_PROP1(TAG,             ::rtl::OUString,    BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
-
-        // in den agregierten Properties muss ich noch PROPERTY_ID_TEXT auf transient setzen ...
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, PropertyAttribute::TRANSIENT, 0);
-    FRM_END_PROP_HELPER();
+    END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
