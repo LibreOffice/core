@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.sdi,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:33:58 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,8 @@ interface TableDrawText : Selection
     SID_TEXTDIRECTION_TOP_TO_BOTTOM     [ ExecMethod = Execute; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_PARA_LEFT_TO_RIGHT         [ ExecMethod = ExecuteExtra; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_PARA_RIGHT_TO_LEFT         [ ExecMethod = ExecuteExtra; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_VERTICALTEXT_STATE              [ StateMethod = GetAttrState ; Export = FALSE; ]
+    SID_CTLFONT_STATE                   [ StateMethod = GetAttrState ; Export = FALSE; ]
 
     SID_TRANSLITERATE_UPPER     [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_LOWER     [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
