@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extinput.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-03 15:50:28 $
+ *  last change: $Author: jp $ $Date: 2001-10-25 14:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,10 +303,6 @@ void SwDoc::DeleteExtTextInput( SwExtTextInput* pDel )
         else
             pExtInputRing = 0;
     }
-    // das Layout benachrichtigen
-    if( pDel->HasMark() )
-    {
-    }
     delete pDel;
 }
 
@@ -342,6 +338,11 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
     return pRet;
 }
 
-
+SwExtTextInput* SwDoc::GetExtTextInput() const
+{
+    ASSERT( !pExtInputRing || pExtInputRing == pExtInputRing->GetNext(),
+            "more then one InputEngine available" );
+    return (SwExtTextInput*)pExtInputRing;
+}
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-14 13:58:05 $
+ *  last change: $Author: jp $ $Date: 2001-10-25 14:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1722,6 +1722,7 @@ public:
     void DeleteExtTextInput( SwExtTextInput* pDel );
     SwExtTextInput* GetExtTextInput( const SwNode& rNd,
                                 xub_StrLen nCntntPos = STRING_NOTFOUND) const;
+    SwExtTextInput* GetExtTextInput() const;
 
     // Schnistelle fuer den Zugriff auf die AutoComplete-Liste
     static SwAutoCompleteWord& GetAutoCompleteWords() { return *pACmpltWords; }
