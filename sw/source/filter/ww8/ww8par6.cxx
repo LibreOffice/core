@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:39 $
+ *  last change: $Author: cmc $ $Date: 2002-08-19 15:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,8 +287,8 @@
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
 #define MM_125 709              // WW-Default fuer vert. K/F-Pos: 1.25 cm
 
-BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
-    const WW8RStyle* pSty = 0, const WW8PLCFx_SEPX* pSep = 0 );
+BYTE lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
+    const WW8RStyle* pSty = 0, const WW8PLCFx_SEPX* pSep = 0);
 
 
 ColorData SwWW8ImplReader::GetCol(BYTE nIco)
@@ -341,16 +341,18 @@ static BYTE ReadBSprm( const WW8PLCFx_SEPX* pSep, USHORT nId, BYTE nDefaultVal )
 }
 
 // dito, aber mit Return, ob vorhanden
-static BOOL ReadBSprmRet( BYTE& rnRet, const WW8PLCFx_SEPX* pSep, USHORT nId,
-                       BYTE nDefaultVal )
+static bool ReadBSprmRet(BYTE& rnRet, const WW8PLCFx_SEPX* pSep, USHORT nId,
+    BYTE nDefaultVal)
 {
-    const BYTE* pS = pSep->HasSprm( nId );          // sprm da ?
-    if( pS ){
+    if (const BYTE* pS = pSep->HasSprm(nId))            // sprm da ?
+    {
         rnRet = SVBT8ToByte( pS );
-        return TRUE;
-    }else{
+        return true;
+    }
+    else
+    {
         rnRet = nDefaultVal;
-        return FALSE;
+        return false;
     }
 }
 
@@ -457,9 +459,9 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
     rFmt.SetAttr(SvxFrameDirectionItem(eDir));
 
     if (eDir == FRMDIR_VERT_TOP_RIGHT || eDir == FRMDIR_VERT_TOP_LEFT)
-        bVerticalEnviron=TRUE;
+        bVerticalEnviron = true;
     else
-        bVerticalEnviron=FALSE;
+        bVerticalEnviron = false;
 
     SwTwips nTextareaHeight = rFmt.GetFrmSize().GetHeight();
     const SvxULSpaceItem &rUL = (const SvxULSpaceItem&)
@@ -481,8 +483,8 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
     }
 
     SwTextGridItem aGrid;
-    aGrid.SetDisplayGrid(FALSE);
-    aGrid.SetPrintGrid(FALSE);
+    aGrid.SetDisplayGrid(false);
+    aGrid.SetPrintGrid(false);
     SwTextGrid eType=GRID_NONE;
     if (short nGridType = ReadULSprm( pSep, 0x5032, 0 ))
     {
@@ -570,26 +572,26 @@ void SwWW8ImplReader::Read_ParaBiDi(USHORT, const BYTE* pData, short nLen)
     }
 }
 
-BOOL SwWW8ImplReader::SetCols( SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
-    USHORT nNettoWidth, BOOL bTestOnly )
+bool SwWW8ImplReader::SetCols(SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
+    USHORT nNettoWidth, bool bTestOnly)
 {
     if( nIniFlags & WW8FL_NO_COLS )         // ausgeschaltet
-        return FALSE;
+        return false;
 
     //sprmSCcolumns - Anzahl der Spalten - 1
     USHORT nCols = ReadSprm( pSep, (bVer67 ? 144 : 0x500B), 0 );
 
     nCols ++;                           // Zahl der SW-Spalten
     if( nCols < 2 )
-        return FALSE;                   // keine oder bloedsinnige Spalten
+        return false;                   // keine oder bloedsinnige Spalten
 
     if( bTestOnly )
-        return TRUE;
+        return true;
 
     if( !pFmt )
     {
         ASSERT( !this, "code error:  pFmt hat Zero value!" );
-        return FALSE;
+        return false;
     }
 
     SwFmtCol aCol;                      // Erzeuge SwFmtCol
@@ -607,7 +609,7 @@ BOOL SwWW8ImplReader::SetCols( SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
     }
 
     // sprmSFEvenlySpaced
-    BOOL bEven = ReadBSprm( pSep, (bVer67 ? 138 : 0x3005), 1 );
+    bool bEven = ReadBSprm(pSep, (bVer67 ? 138 : 0x3005), 1) ? true : false;
 
     if( bEven )                         // alle Spalten sind gleich
         aCol.Init( nCols, nColSpace, nNettoWidth );
@@ -658,7 +660,7 @@ BOOL SwWW8ImplReader::SetCols( SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
 
 #ifdef niemalsdef
         // beim RTF-Import:
-        aCol._SetOrtho( FALSE );
+        aCol._SetOrtho(false);
         USHORT nWishWidth = 0, nHalfPrev = 0;
         for( USHORT n = 0, i = 0; n < aColumns.Count(); n += 2, ++i )
         {
@@ -675,12 +677,12 @@ BOOL SwWW8ImplReader::SetCols( SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
 #endif
     }
     pFmt->SetAttr( aCol );
-    return TRUE;
+    return true;
 }
 
 // SetPage1() setzt Orientierung, Papiergroesse, LRRaender, Spalten
-void SwWW8ImplReader::SetPage1( SwPageDesc* pInPageDesc, SwFrmFmt &rFmt,
-    const WW8PLCFx_SEPX* pSep, USHORT nLIdx, BOOL bIgnoreCols )
+void SwWW8ImplReader::SetPage1(SwPageDesc* pInPageDesc, SwFrmFmt &rFmt,
+    const WW8PLCFx_SEPX* pSep, USHORT nLIdx, bool bIgnoreCols)
 {
     if( nIniFlags & WW8FL_NO_LRUL )             // Abgeschaltet
         return;
@@ -777,15 +779,15 @@ void SwWW8ImplReader::SetPage1( SwPageDesc* pInPageDesc, SwFrmFmt &rFmt,
 
 struct WW8ULSpaceData
 {
-    BOOL  bHasHeader, bHasFooter;
+    bool bHasHeader, bHasFooter;
     short nSwHLo, nHdUL,
           nSwFUp, nFtUL,
           nSwUp,  nSwLo;
-    WW8ULSpaceData() : bHasHeader( FALSE ), bHasFooter( FALSE ) {}
+    WW8ULSpaceData() : bHasHeader(false), bHasFooter(false) {}
 };
 
 void SwWW8ImplReader::GetPageULData( const WW8PLCFx_SEPX* pSep, USHORT nLIdx,
-    BOOL bFirst, WW8ULSpaceData& rData )
+    bool bFirst, WW8ULSpaceData& rData )
 {
     if( nIniFlags & WW8FL_NO_LRUL )         // abgeschaltet
         return;
@@ -925,7 +927,7 @@ void SwWW8ImplReader::SetPageBorder(SwPageDesc *pPageDesc0,
             if( pPageDeskPaM )
             {
                 SwFrmFmt &rFmt = pPageDesc0->GetMaster();
-                SetPage1( pPageDesc0, rFmt, pSep, nLIdx, FALSE );
+                SetPage1(pPageDesc0, rFmt, pSep, nLIdx, false);
                 const SwFmtCol& rCol = rFmt.GetCol();
                 // if PageDesc has been inserted and has cols
                 // insert a *section* with cols instead
@@ -939,7 +941,7 @@ void SwWW8ImplReader::SetPageBorder(SwPageDesc *pPageDesc0,
                 delete pPageDeskPaM;
             }
 
-            rDoc.CopyPageDesc( *pPageDesc1, *pPageDesc0, FALSE );
+            rDoc.CopyPageDesc(*pPageDesc1, *pPageDesc0, false);
             pPageDesc0->SetFollow( pPageDesc1 );
             pPageDesc1->SetFollow( pPageDesc1 );
         }
@@ -1076,7 +1078,7 @@ void SwWW8ImplReader::SetPageBorder(SwPageDesc *pPageDesc0,
 void SwWW8ImplReader::SetUseOn( SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1,
     BYTE nIhdt )
 {
-    BOOL bEven = nIhdt & ( WW8_HEADER_EVEN | WW8_FOOTER_EVEN );
+    bool bEven = (nIhdt & ( WW8_HEADER_EVEN | WW8_FOOTER_EVEN )) ? true : false;
 
     UseOnPage eUseBase = pWDop->fMirrorMargins ? PD_MIRROR : PD_ALL;
     UseOnPage eUse = eUseBase;
@@ -1147,10 +1149,10 @@ void SwWW8ImplReader::InsertSectionWithWithoutCols(SwPaM& rMyPaM,
     rMyPaM.GetPoint()->nContent.Assign(rMyPaM.GetCntntNode(), 0);
 }
 
-BOOL SwWW8ImplReader::MustCloseSection(long nTxtPos)
+bool SwWW8ImplReader::MustCloseSection(long nTxtPos)
 {
     // Might we have to close a section first?
-    BOOL bSectionWasJustClosed = pAfterSection && nTxtPos;
+    bool bSectionWasJustClosed = pAfterSection && nTxtPos;
     if( bSectionWasJustClosed )
     {
         /*
@@ -1187,7 +1189,7 @@ BOOL SwWW8ImplReader::MustCloseSection(long nTxtPos)
 // mit Attributen un KF-Texten fuellt.
 // Dieses Vorgehen ist noetig geworden, da die UEbersetzung der verschiedenen
 // Seiten-Attribute zu stark verflochten ist.
-void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
+void SwWW8ImplReader::CreateSep(const long nTxtPos, bool bMustHaveBreak)
 {
     /*
     #i1909# #100688# section/page breaks should not occur in tables, word
@@ -1201,9 +1203,9 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
         return;
 
     BYTE nLastSectionCorrIhdt      = nCorrIhdt;
-    BOOL bLastSectionHadATitlePage = bSectionHasATitlePage;
+    bool bLastSectionHadATitlePage = bSectionHasATitlePage;
 
-    BOOL bSectionWasJustClosed = MustCloseSection(nTxtPos);
+    bool bSectionWasJustClosed = MustCloseSection(nTxtPos);
 
     SwPageDesc* pOldPageDesc = pPageDesc;
     SwPageDesc* pPageDesc1   = 0;
@@ -1223,7 +1225,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
         {
             SwLineNumberInfo aInfo( rDoc.GetLineNumberInfo() );
 
-            aInfo.SetPaintLineNumbers( TRUE );
+            aInfo.SetPaintLineNumbers(true);
 
             aInfo.SetRestartEachPage( !pSprmSLnc || 0 == *pSprmSLnc );
 
@@ -1238,14 +1240,14 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
 
 
             // to be defaulted features ( HARDCODED in MS Word 6,7,8,9 )
-            aInfo.SetCountBlankLines(  TRUE );
-            aInfo.SetCountInFlys(      FALSE );
+            aInfo.SetCountBlankLines(true);
+            aInfo.SetCountInFlys(false);
             aInfo.SetPos( LINENUMBER_POS_LEFT );
             SvxNumberType aNumType; // this sets SVX_NUM_ARABIC per default
             aInfo.SetNumType( aNumType );
 
             rDoc.SetLineNumberInfo( aInfo );
-            bNoLnNumYet = FALSE;
+            bNoLnNumYet = false;
         }
 
         const BYTE* pSprmSLnnMin = pSep->HasSprm( bVer67 ? 160:0x501B );
@@ -1263,7 +1265,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
             NewAttr( aLN );
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_LINENUMBER );
         }
-        bNoLnNumYet = FALSE;
+        bNoLnNumYet = false;
     }
 
 
@@ -1271,7 +1273,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
                                                             //  1 New column
     const BYTE* pSprmBkc = pSep->HasSprm( bVer67 ? 142 : 0x3009 );//    2 New page
     BYTE nBreakCode = pSprmBkc ? *pSprmBkc : 2; //              3 Even page
-    BOOL bContinuousBreak=(0 == nBreakCode); //                 4 Odd page
+    bool bContinuousBreak=(0 == nBreakCode); //                 4 Odd page
 
     // im wievielten Abschnitt stehen wir denn eigentlich?
     nActSectionNo = (short)( pSep->GetIdx() & 0x00007fff );
@@ -1296,7 +1298,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
     if( bVer67 )
     {
         // sprmSGprfIhdt
-        BOOL bSameHdFt = ( !ReadBSprmRet( nIPara, pSep, 153, 0 ) );
+        bool bSameHdFt = ( !ReadBSprmRet( nIPara, pSep, 153, 0 ) );
 
         // Leere Hd/Ft will ich nicht
         nCorrIhdt = pHdFt ? HdFtCorrectPara( nIPara ) : 0;
@@ -1398,7 +1400,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
     // sprmSFBiDi
     bool bLastRTLPgn = mbRTLPgn;
     if (!bVer67)
-        mbRTLPgn = ReadBSprm(pSep, 0x3228, 0);
+        mbRTLPgn = ReadBSprm(pSep, 0x3228, 0) ? true : false;
 
     /*
         Pruefen, ob wir uns den neuen Abschnitt schenken koennen, da kein
@@ -1533,7 +1535,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
             SwPaM* pPageDeskPaM = 0;
             pPageDesc = CreatePageDesc( 0, &pPageDeskPaM );
             SwFrmFmt &rFmt = pPageDesc->GetMaster();
-            SetPage1( pPageDesc, rFmt, pSep, nLIdx, FALSE );
+            SetPage1(pPageDesc, rFmt, pSep, nLIdx, false);
             // if PageDesc has been inserted and has cols
             // insert a *section* with cols instead
             if( pPageDeskPaM )
@@ -1577,7 +1579,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
         const SfxItemSet* pSet;
         if(     ( 0 != (pSet = pPaM->GetCntntNode()->GetpSwAttrSet()) )
              && ( SFX_ITEM_SET ==
-                  pSet->GetItemState(RES_PAGEDESC, FALSE, &pItem) ) )
+                  pSet->GetItemState(RES_PAGEDESC, false, &pItem) ) )
         {
             // read Pagination Start attribute - sprmSPgnStart
             BYTE nPgnStart = ReadBSprm( pSep, (bVer67 ? 161 : 0x501C), 0 );
@@ -1597,7 +1599,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
         const BYTE* p = pSep->HasSprm( bVer67 ? 132 : 0x3001 );
         if( p && *p )
         {
-            bPgChpLevel = TRUE;
+            bPgChpLevel = true;
             nPgChpLevel = *p - 1;
             if( MAXLEVEL <= nPgChpLevel )
                 nPgChpLevel = MAXLEVEL - 1;
@@ -1608,7 +1610,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
                 nPgChpDelim = 0;
         }
         else
-            bPgChpLevel = FALSE;
+            bPgChpLevel = false;
     }
 
     // Vorsicht: gibt es ueberhaupt einen vorigen Page Descriptor?
@@ -1637,11 +1639,11 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
         }
 
         WW8ULSpaceData aULData;
-        GetPageULData( pSep, nLIdx, FALSE, aULData );
+        GetPageULData(pSep, nLIdx, false, aULData);
 
         // und uebrige Einstellungen updaten
         // Orientierung, Hoehe, Breite, Vertikale Formatierung
-        SetPage1( pPageDesc, rFmt0, pSep, nLIdx, TRUE );
+        SetPage1(pPageDesc, rFmt0, pSep, nLIdx, true);
 
         // dann Header / Footer lesen, falls noch noetig
         if( nIPara )
@@ -1664,7 +1666,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
         // erst folgende PageDesc-Werte einstellen:
         //
         // Orientierung, Hoehe, Breite, Vertikale Formatierung
-        SetPage1( pPageDesc, rFmt0, pSep, nLIdx, TRUE );
+        SetPage1(pPageDesc, rFmt0, pSep, nLIdx, true);
 
         // dann den PageDesc1 anlegen fuer Folge-Seiten
         //
@@ -1732,9 +1734,9 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
 
         WW8ULSpaceData aULData0, aULData1;
         // Vertikale Formatierung
-        GetPageULData( pSep, nLIdx, TRUE,  aULData0 );
+        GetPageULData(pSep, nLIdx, true,  aULData0);
         // einzeln, da KF evtl. verschieden
-        GetPageULData( pSep, nLIdx, FALSE, aULData1 );
+        GetPageULData(pSep, nLIdx, false, aULData1);
 
         // dann Header / Footer lesen, falls noch noetig
         if( nIPara )
@@ -1831,7 +1833,7 @@ void SwWW8ImplReader::CopyPageDescHdFt( const SwPageDesc* pOrgPageDesc,
 //   Hilfsroutinen fuer Grafiken und Apos und Tabellen
 //------------------------------------------------------
 
-static BOOL _SetWW8_BRC( BOOL bVer67, WW8_BRC& rVar, const BYTE* pS )
+static bool _SetWW8_BRC(bool bVer67, WW8_BRC& rVar, const BYTE* pS)
 {
     if( pS )
     {
@@ -1844,8 +1846,8 @@ static BOOL _SetWW8_BRC( BOOL bVer67, WW8_BRC& rVar, const BYTE* pS )
     return 0 != pS;
 }
 
-BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
-    const WW8RStyle* pSty, const WW8PLCFx_SEPX* pSep )
+BYTE lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
+    const WW8RStyle* pSty, const WW8PLCFx_SEPX* pSep)
 {
 // Ausgegend von diesen defines:
 //      #define WW8_TOP 0
@@ -1857,7 +1859,7 @@ BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
 //returns a BYTE filled with a bit for each position that had a sprm
 //setting that border
 
-    BYTE nBorder = FALSE;
+    BYTE nBorder = false;
     if( pSep )
     {
         if( !bVer67 )
@@ -1901,8 +1903,8 @@ BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
     return nBorder;
 }
 
-void Set1Border( BOOL bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
-    USHORT nOOIndex, USHORT nWWIndex, short *pSize=0 )
+void Set1Border(bool bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
+    USHORT nOOIndex, USHORT nWWIndex, short *pSize=0)
 {
     BYTE nCol;
     short nSpace, nIdx;
@@ -2084,7 +2086,7 @@ void Set1Border( BOOL bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
     rBox.SetDistance(nSpace, nOOIndex);
 }
 
-BOOL lcl_IsBorder( BOOL bVer67, const WW8_BRC* pbrc, BOOL bChkBtwn=FALSE )
+bool lcl_IsBorder(bool bVer67, const WW8_BRC* pbrc, bool bChkBtwn = false)
 {
     if( bVer67  )
         return ( pbrc[WW8_TOP  ].aBits1[0] & 0x18 ) ||  // brcType  != 0
@@ -2109,15 +2111,15 @@ BOOL lcl_IsBorder( BOOL bVer67, const WW8_BRC* pbrc, BOOL bChkBtwn=FALSE )
                (bChkBtwn && pbrc[WW8_BETW ].aBits1[1]);
 }
 
-BOOL SwWW8ImplReader::IsBorder( const WW8_BRC* pbrc, BOOL bChkBtwn )
+bool SwWW8ImplReader::IsBorder(const WW8_BRC* pbrc, bool bChkBtwn)
 {
     return lcl_IsBorder( bVer67, pbrc, bChkBtwn );
 }
 
-BOOL SwWW8ImplReader::SetBorder( SvxBoxItem& rBox, const WW8_BRC* pbrc,
-    short *pSizeArray, BYTE nSetBorders, BOOL bChkBtwn )
+bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
+    short *pSizeArray, BYTE nSetBorders, bool bChkBtwn)
 {
-    BOOL bChange = FALSE;
+    bool bChange = false;
     static const USHORT aIdArr[ 10 ] =
     {
         WW8_TOP,    BOX_LINE_TOP,
@@ -2137,7 +2139,7 @@ BOOL SwWW8ImplReader::SetBorder( SvxBoxItem& rBox, const WW8_BRC* pbrc,
                         : rB.aBits1[1] ) ))             // Version 8
         {
             Set1Border(bVer67, rBox, rB, aIdArr[i+1], aIdArr[i], pSizeArray);
-            bChange = TRUE;
+            bChange = true;
         }
         else if ( nSetBorders & (1 << aIdArr[i]) )
         {
@@ -2161,10 +2163,10 @@ BOOL SwWW8ImplReader::SetBorder( SvxBoxItem& rBox, const WW8_BRC* pbrc,
 }
 
 
-BOOL SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const SvxBoxItem& rBox,
+bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const SvxBoxItem& rBox,
     const WW8_BRC pbrc[4] )
 {
-    BOOL bRet = ( bVer67 ? (pbrc[WW8_RIGHT].aBits1[ 1 ] & 0x20 )
+    bool bRet = ( bVer67 ? (pbrc[WW8_RIGHT].aBits1[ 1 ] & 0x20 )
                          : (pbrc[WW8_RIGHT].aBits2[ 1 ] & 0x20 ) ) &&
                 rBox.GetRight();
     if( bRet )
@@ -2178,7 +2180,7 @@ BOOL SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const SvxBoxItem& rBox,
                         rLine.GetDistance() ) );
 
         rShadow.SetLocation( SVX_SHADOW_BOTTOMRIGHT );
-        bRet = TRUE;
+        bRet = true;
     }
     return bRet;
 }
@@ -2199,10 +2201,10 @@ void SwWW8ImplReader::GetBorderDistance( WW8_BRC* pbrc, Rectangle& rInnerDist )
 }
 
 
-BOOL SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
+bool SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
     const WW8_BRC pbrc[4], short *pSizeArray )
 {
-    BOOL bShadowed=FALSE;
+    bool bShadowed = false;
     if( IsBorder( pbrc ) )
     {
         SvxBoxItem aBox;
@@ -2214,7 +2216,7 @@ BOOL SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
         SvxShadowItem aShadow;
         if( SetShadow( aShadow, aBox, pbrc ))
         {
-            bShadowed=TRUE;
+            bShadowed = true;
             rFlySet.Put( aShadow );
         }
     }
@@ -2228,7 +2230,7 @@ BOOL SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
 #define MAX_BORDER_SIZE 210         // so breit ist max. der Border
 #define MAX_EMPTY_BORDER 10         // fuer +-1-Fehler, mindestens 1
 
-static void FlySecur1( short& rSize, const BOOL bBorder )
+static void FlySecur1(short& rSize, const bool bBorder)
 {
     register short nMin = MINFLY +
         bBorder ? MAX_BORDER_SIZE : MAX_EMPTY_BORDER;
@@ -2237,7 +2239,7 @@ static void FlySecur1( short& rSize, const BOOL bBorder )
         rSize = nMin;
 }
 
-inline BOOL SetValSprm( INT16* pVar, WW8PLCFx_Cp_FKP* pPap, USHORT nId )
+inline bool SetValSprm( INT16* pVar, WW8PLCFx_Cp_FKP* pPap, USHORT nId )
 {
     register const BYTE* pS = pPap->HasSprm( nId );
     if( pS )
@@ -2245,7 +2247,7 @@ inline BOOL SetValSprm( INT16* pVar, WW8PLCFx_Cp_FKP* pPap, USHORT nId )
     return ( pS != 0 );
 }
 
-inline BOOL SetValSprm( INT16* pVar, const WW8RStyle* pStyle, USHORT nId )
+inline bool SetValSprm( INT16* pVar, const WW8RStyle* pStyle, USHORT nId )
 {
     register const BYTE* pS = pStyle->HasParaSprm( nId );
     if( pS )
@@ -2272,7 +2274,7 @@ void WW8FlyPara::ApplyTabPos(WW8_TablePos *pTabPos, const BYTE *pSprm29)
     }
 }
 
-WW8FlyPara::WW8FlyPara( BOOL bIsVer67, const WW8FlyPara* pSrc /* = 0 */ )
+WW8FlyPara::WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc /* = 0 */)
 {
     if ( pSrc )
         memcpy( this, pSrc, sizeof( WW8FlyPara ) ); // Copy-Ctor
@@ -2288,11 +2290,11 @@ WW8FlyPara::WW8FlyPara( BOOL bIsVer67, const WW8FlyPara* pSrc /* = 0 */ )
 // WW8FlyPara::operator == vergleicht alles, was in der Definition vor
 // den Borders steht!
 // dieses wird u.a. fuer TestSameApo benoetigt.
-int WW8FlyPara::operator == ( const WW8FlyPara& rSrc ) const
+bool WW8FlyPara::operator==(const WW8FlyPara& rSrc) const
 {
     ASSERT( ( (BYTE*)rSrc.brc - (BYTE*)&rSrc < sizeof( WW8FlyPara ) ),
             "WW8FlyPara::operator == geht schief" );
-    return !memcmp( this, &rSrc, (BYTE*)rSrc.brc - (BYTE*)&rSrc );
+    return memcmp(this, &rSrc, (BYTE*)rSrc.brc - (BYTE*)&rSrc) ? false : true;
             // memcmp ist moeglich, da die gesamte Struktur beim Initialisieren
             // incl. Luecken mit 0 gefuellt wird und sich damit durch die
             // Luecken keine falschen Unterschiede ergeben koennen.
@@ -2303,7 +2305,7 @@ int WW8FlyPara::operator == ( const WW8FlyPara& rSrc ) const
 
 // Read fuer normalen Text
 
-BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap )
+bool WW8FlyPara::Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap)
 {
     if( pSprm29 )
         nSp29 = *pSprm29;                           // PPC ( Bindung )
@@ -2345,17 +2347,17 @@ BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap )
         bBorderLines = ::lcl_IsBorder( bVer67, brc );
 
     if( !nSp29 && !nSp27 && !nLeMgn && !nRiMgn && !nSp37 )  // alles 0 heisst
-        return FALSE;                               // Apo ist nicht vorhanden
+        return false;                               // Apo ist nicht vorhanden
 
-    return TRUE;
+    return true;
 }
 
-BOOL WW8FlyPara::ReadFull( const BYTE* pSprm29, SwWW8ImplReader* pIo )
+bool WW8FlyPara::ReadFull(const BYTE* pSprm29, SwWW8ImplReader* pIo)
 {
     WW8PLCFMan* pPlcxMan = pIo->pPlcxMan;
     WW8PLCFx_Cp_FKP* pPap = pPlcxMan->GetPapPLCF();
 
-    BOOL bOk = Read( pSprm29, pPap );   // Lies Apo-Parameter
+    bool bOk = Read(pSprm29, pPap); // Lies Apo-Parameter
 
     do{             // Block zum rausspringen
         if( !bOk )                      // schiefgegangen
@@ -2369,7 +2371,7 @@ BOOL WW8FlyPara::ReadFull( const BYTE* pSprm29, SwWW8ImplReader* pIo )
         ULONG nPos = pIoStrm->Tell();
         WW8PLCFxSave1 aSave;
         pPlcxMan->GetPap()->Save( aSave );
-        bGrafApo = FALSE;
+        bGrafApo = false;
 
         do{             // Block zum rausspringen
 
@@ -2387,7 +2389,7 @@ BOOL WW8FlyPara::ReadFull( const BYTE* pSprm29, SwWW8ImplReader* pIo )
 
             // Nein -> Grafik-Apo
             if( !pS ){
-                bGrafApo = TRUE;
+                bGrafApo = true;
                 break;                              // Ende des APO
             }
             USHORT nColl = pPap->GetIstd();
@@ -2402,7 +2404,7 @@ BOOL WW8FlyPara::ReadFull( const BYTE* pSprm29, SwWW8ImplReader* pIo )
                                                 // Neuer FlaPara zum Vergleich
             aF.Read( pS, pPap );                // WWPara fuer neuen Para
             if( !( aF == *this ) )              // selber APO ? ( oder neuer ? )
-                bGrafApo = TRUE;                // nein -> 1-zeiliger APO
+                bGrafApo = true;                // nein -> 1-zeiliger APO
                                                 //      -> Grafik-APO
         }
         while( 0 );                             // Block zum rausspringen
@@ -2415,7 +2417,7 @@ BOOL WW8FlyPara::ReadFull( const BYTE* pSprm29, SwWW8ImplReader* pIo )
 
 
 // Read fuer Apo-Defs in Styledefs
-BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8RStyle* pStyle )
+bool WW8FlyPara::Read(const BYTE* pSprm29, WW8RStyle* pStyle)
 {
     if( pSprm29 )
         nSp29 = *pSprm29;                           // PPC ( Bindung )
@@ -2453,12 +2455,12 @@ BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8RStyle* pStyle )
     }
 
     if( !nSp29 && !nSp27 && !nLeMgn && !nRiMgn && !nSp37 )  // alles 0 heisst
-        return FALSE;                               // Apo ist nicht vorhanden
+        return false;                               // Apo ist nicht vorhanden
 
     if( ::lcl_ReadBorders( bVer67, brc, 0, pStyle ) )       // Umrandung
         bBorderLines = ::lcl_IsBorder( bVer67, brc );
 
-    return TRUE;
+    return true;
 }
 
 WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
@@ -2505,7 +2507,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     nWidth = nNettoWidth = rWW.nSp28;
     if( nWidth <= 10 )                              // Auto-Breite
     {
-        bAutoWidth = TRUE;
+        bAutoWidth = true;
         nWidth = nNettoWidth = (nPgWidth ? nPgWidth : 2268); // 4 cm
     }
     if( nWidth <= MINFLY )
@@ -2581,11 +2583,11 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
             break;  // rechts
         case -12:
             eHAlign = HORI_LEFT;
-            bToggelPos = TRUE;
+            bToggelPos = true;
             break;  // innen
         case -16:
             eHAlign = HORI_RIGHT;
-            bToggelPos = TRUE;
+            bToggelPos = true;
             break;  // aussen
         default:
             nXPos = rWW.nSp26 + (short)nIniFlyDx;
@@ -2675,8 +2677,8 @@ void WW8SwFlyPara::BoxUpWidth( long nInWidth )
 // im Prizip nicht mehr zur Verfuegung, ist aber fuer mich besser
 // zu handeln
 // WW8FlySet-ctor fuer Apos und Graf-Apos
-WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
-    const WW8SwFlyPara* pFS, BOOL bGraf )
+WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
+    const WW8SwFlyPara* pFS, bool bGraf)
     : SfxItemSet(rReader.rDoc.GetAttrPool(),RES_FRMATR_BEGIN,RES_FRMATR_END-1)
 {
     if (!rReader.mbNewDoc)
@@ -2696,7 +2698,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     SwFmtSurround aSur( pFS->eSurround );   // Umfluss
 #if 0
     //Why did we want this again, there was a good reason :-(
-    aSur.SetAnchorOnly( TRUE );
+    aSur.SetAnchorOnly( true);
 #endif
 
 //  GoldCut umfliesst inzwischen nur dann auf beiden Seiten, wenn der Fly
@@ -2826,7 +2828,7 @@ void SwWW8ImplReader::MoveInsideFly(const SwFrmFmt *pFlyFmt)
 {
     WW8DupProperties aDup(rDoc,pCtrlStck);
 
-    pCtrlStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
+    pCtrlStck->SetAttr(*pPaM->GetPoint(), 0, false);
 
     // Setze Pam in den FlyFrame
     const SwFmtCntnt& rCntnt = pFlyFmt->GetCntnt();
@@ -2838,12 +2840,12 @@ void SwWW8ImplReader::MoveInsideFly(const SwFrmFmt *pFlyFmt)
 }
 
 void SwWW8ImplReader::MoveOutsideFly(const SwFrmFmt *pFlyFmt,
-    const SwPosition &rPos, BOOL bTableJoin)
+    const SwPosition &rPos, bool bTableJoin)
 {
     // Alle Attribute schliessen, da sonst Attribute entstehen koennen,
     // die aus Flys rausragen
     WW8DupProperties aDup(rDoc,pCtrlStck);
-    pCtrlStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
+    pCtrlStck->SetAttr(*pPaM->GetPoint(), 0, false);
 
     /*
     #i1291
@@ -2883,7 +2885,7 @@ void SwWW8ImplReader::MoveOutsideFly(const SwFrmFmt *pFlyFmt,
     aDup.Insert(*pPaM->GetPoint());
 }
 
-BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29,
+bool SwWW8ImplReader::StartApo(const BYTE* pSprm29,
     const WW8FlyPara *pNowStyleApo, WW8_TablePos *pTabPos)
 {
     ASSERT(pSprm29 || pTabPos || pNowStyleApo,
@@ -2894,11 +2896,11 @@ BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29,
     // APO-Parameter ermitteln und Test auf bGrafApo
     if (pSprm29 || pNowStyleApo)
     {
-        BOOL bOk = pWFlyPara->ReadFull( pSprm29, this );
+        bool bOk = pWFlyPara->ReadFull( pSprm29, this );
         if (!bOk && !pNowStyleApo)
         {
             DELETEZ( pWFlyPara );
-            return FALSE;
+            return false;
         }
     }
 
@@ -2918,7 +2920,7 @@ BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29,
         // daraus resultierenden Attribute beim Einfuegen der Grafik auf die
         // Grafik angewendet.
 
-        WW8FlySet aFlySet( *this, pWFlyPara, pSFlyPara, FALSE );
+        WW8FlySet aFlySet(*this, pWFlyPara, pSFlyPara, false);
 
         pSFlyPara->pFlyFmt = rDoc.MakeFlySection( pSFlyPara->eAnchor,
             pPaM->GetPoint(), &aFlySet );
@@ -2956,12 +2958,12 @@ BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29,
         //    sein, d.h. es duerften am Absatzende keine Paraattribute
         //    auf dem Stack liegen
     }
-    return TRUE;
+    return true;
 }
 
-BOOL SwWW8ImplReader::JoinNode( SwPaM* pPam, BOOL bStealAttr )
+bool SwWW8ImplReader::JoinNode(SwPaM* pPam, bool bStealAttr)
 {
-    BOOL bRet = FALSE;
+    bool bRet = false;
     pPam->GetPoint()->nContent = 0;         // an den Anfang der Zeile gehen
 
     SwNodeIndex aPref( pPam->GetPoint()->nNode, -1 );
@@ -2976,7 +2978,7 @@ BOOL SwWW8ImplReader::JoinNode( SwPaM* pPam, BOOL bStealAttr )
             pCtrlStck->StealAttr( pPam->GetPoint() );
         pNode->JoinNext();
 
-        bRet = TRUE;
+        bRet = true;
     }
     return bRet;
 }
@@ -2987,14 +2989,14 @@ void SwWW8ImplReader::StopApo()
     {
         // Grafik-Rahmen, der *nicht* eingefuegt wurde leeren Absatz incl.
         // Attributen entfernen
-        JoinNode( pPaM, TRUE );
+        JoinNode(pPaM, true);
 
     }
     else
     {
         // Der Rahmen wurde nur eingefuegt, wenn er *nicht* nur zum
         // Positionieren einer einzelnen Grafik dient.
-        JoinNode( pPaM, FALSE );// UEberfluessigen Absatz entfernen
+        JoinNode(pPaM, false);// UEberfluessigen Absatz entfernen
 
         if( !pSFlyPara->pMainTextPos || !pWFlyPara )
         {
@@ -3055,13 +3057,13 @@ void SwWW8ImplReader::StopApo()
 }
 
 // TestSameApo() beantwortet die Frage, ob es dasselbe APO oder ein neues ist
-BOOL SwWW8ImplReader::TestSameApo( const BYTE* pSprm29,
+bool SwWW8ImplReader::TestSameApo( const BYTE* pSprm29,
    const WW8FlyPara *pNowStyleApo, WW8_TablePos *pTabPos)
 {
     if( !pWFlyPara )
     {
         ASSERT( pWFlyPara, " Wo ist mein pWFlyPara ? " );
-        return TRUE;
+        return true;
     }
 
     // Es muss ein kompletter Vergleich ( ausser Borders ) stattfinden, um
@@ -3130,7 +3132,7 @@ void SwWW8ImplReader::Read_Special(USHORT, const BYTE* pData, short nLen)
 {
     if( nLen < 0 )
     {
-        bSpec = FALSE;
+        bSpec = false;
         return;
     }
     bSpec = ( *pData != 0 );
@@ -3140,7 +3142,7 @@ void SwWW8ImplReader::Read_Special(USHORT, const BYTE* pData, short nLen)
 void SwWW8ImplReader::Read_Obj(USHORT , const BYTE* pData, short nLen)
 {
     if( nLen < 0 )
-        bObj = FALSE;
+        bObj = false;
     else
     {
         bObj = 0 != *pData;
@@ -3155,12 +3157,12 @@ void SwWW8ImplReader::Read_PicLoc(USHORT , const BYTE* pData, short nLen )
     if( nLen < 0 )
     {
         nPicLocFc = 0;
-        bSpec = FALSE;  // Stimmt das immer ?
+        bSpec = false;  // Stimmt das immer ?
     }
     else
     {
         nPicLocFc = SVBT32ToLong( pData );
-        bSpec = TRUE;
+        bSpec = true;
 
         if( bObj && nPicLocFc && bEmbeddObj )
             nObjLocFc = nPicLocFc;
@@ -3190,7 +3192,7 @@ void SwWW8ImplReader::Read_Symbol(USHORT, const BYTE* pData, short nLen )
             //otherwise disable after we print the char
             if (pPlcxMan && pPlcxMan->GetDoingDrawTextBox())
                 pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_FONT );
-            bSymbol = FALSE;
+            bSymbol = false;
         }
         else
         {
@@ -3200,9 +3202,9 @@ void SwWW8ImplReader::Read_Symbol(USHORT, const BYTE* pData, short nLen )
             //Will not be added to the charencoding stack, for styles the real
             //font setting will be put in as the styles charset, and for plain
             //text encoding for symbols is moot.
-            BOOL bCharEncode=FALSE;
+            bool bCharEncode = false;
             if (pPlcxMan && pPlcxMan->GetDoingDrawTextBox())
-                bCharEncode=TRUE;
+                bCharEncode = true;
             if (SetNewFontAttr(SVBT16ToShort( pData ), bCharEncode, RES_CHRATR_FONT))
             {
                 if( bVer67 )
@@ -3212,7 +3214,7 @@ void SwWW8ImplReader::Read_Symbol(USHORT, const BYTE* pData, short nLen )
                 }
                 else
                     cSymbol = SVBT16ToShort( pData+2 );
-                bSymbol = TRUE;
+                bSymbol = true;
             }
         }
     }
@@ -3251,11 +3253,11 @@ void SwWW8ImplReader::Read_BoldUsw( USHORT nId, const BYTE* pData, short nLen )
         // reset the CJK Weight and Posture
         if( nI < 2 )
             pCtrlStck->SetAttr( *pPaM->GetPoint(), nEndIds[ 8 + nI ] );
-        pCtrlStck->SetToggleAttr( nI, FALSE );
+        pCtrlStck->SetToggleAttr(nI, false);
         return;
     }
     // Wert: 0 = Aus, 1 = An, 128 = Wie Style, 129 entgegen Style
-    BOOL bOn = *pData & 1;
+    bool bOn = *pData & 1;
     SwWW8StyInf* pSI = &pCollA[nAktColl];
     if (pPlcxMan)
     {
@@ -3286,7 +3288,7 @@ void SwWW8ImplReader::Read_BoldUsw( USHORT nId, const BYTE* pData, short nLen )
             if( pSI->n81Flags & nMask )     // und in StyleDef an ?
                 bOn = !bOn;                 // dann invertieren
             // am Stack vermerken, das dieses ein Toggle-Attribut ist
-            pCtrlStck->SetToggleAttr( nI, TRUE );
+            pCtrlStck->SetToggleAttr(nI, true);
         }
     }
 
@@ -3315,10 +3317,10 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(USHORT nId, const BYTE* pData,
     if( nLen < 0 )
     {
         pCtrlStck->SetAttr(*pPaM->GetPoint(),nEndIds[nI]);
-        pCtrlStck->SetToggleBiDiAttr(nI, FALSE);
+        pCtrlStck->SetToggleBiDiAttr(nI, false);
         return;
     }
-    BOOL bOn = *pData & 1;
+    bool bOn = *pData & 1;
     SwWW8StyInf* pSI = &pCollA[nAktColl];
     if (pPlcxMan)
     {
@@ -3349,14 +3351,14 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(USHORT nId, const BYTE* pData,
             if( pSI->n81BiDiFlags & nMask )     // und in StyleDef an ?
                 bOn = !bOn;                 // dann invertieren
             // am Stack vermerken, das dieses ein Toggle-Attribut ist
-            pCtrlStck->SetToggleBiDiAttr(nI, TRUE);
+            pCtrlStck->SetToggleBiDiAttr(nI, true);
         }
     }
 
     SetToggleBiDiAttr(nI, bOn);
 }
 
-void SwWW8ImplReader::SetToggleBiDiAttr( BYTE nAttrId, BOOL bOn )
+void SwWW8ImplReader::SetToggleBiDiAttr(BYTE nAttrId, bool bOn)
 {
     switch(nAttrId)
     {
@@ -3377,7 +3379,7 @@ void SwWW8ImplReader::SetToggleBiDiAttr( BYTE nAttrId, BOOL bOn )
     }
 }
 
-void SwWW8ImplReader::SetToggleAttr( BYTE nAttrId, BOOL bOn )
+void SwWW8ImplReader::SetToggleAttr(BYTE nAttrId, bool bOn)
 {
     switch( nAttrId )
     {
@@ -3509,7 +3511,7 @@ SwFrmFmt *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion)
     return pRet;
 }
 
-BOOL SwWW8ImplReader::ConvertSubToGraphicPlacement()
+bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
 {
     /*
     #92489# & #92946#
@@ -3519,7 +3521,7 @@ BOOL SwWW8ImplReader::ConvertSubToGraphicPlacement()
     contains only a single graphic, and if that graphic is anchored as
     FLY_IN_CNTNT and then we can change its anchoring to centered in the line.
     */
-    BOOL bIsGraphicPlacementHack=FALSE;
+    bool bIsGraphicPlacementHack = false;
     USHORT nPos;
     if (pCtrlStck->GetFmtStackAttr(RES_CHRATR_ESCAPEMENT, &nPos))
     {
@@ -3530,13 +3532,13 @@ BOOL SwWW8ImplReader::ConvertSubToGraphicPlacement()
 
         SwFrmFmt *pFlyFmt = 0;
         if (
-             aEntry.MakeRegion(&rDoc,aRegion,FALSE) &&
+             aEntry.MakeRegion(&rDoc,aRegion,false) &&
              (pFlyFmt = ContainsSingleInlineGraphic(aRegion))
            )
         {
             pCtrlStck->DeleteAndDestroy(nPos);
-            pFlyFmt->SetAttr( SwFmtVertOrient(0, VERT_CHAR_CENTER,REL_CHAR));
-            bIsGraphicPlacementHack=TRUE;
+            pFlyFmt->SetAttr(SwFmtVertOrient(0, VERT_CHAR_CENTER, REL_CHAR));
+            bIsGraphicPlacementHack = true;
         }
     }
     return bIsGraphicPlacementHack;
@@ -3567,7 +3569,7 @@ void SwWW8ImplReader::Read_SubSuperProp( USHORT, const BYTE* pData, short nLen )
 void SwWW8ImplReader::Read_Underline( USHORT, const BYTE* pData, short nLen )
 {
     FontUnderline eUnderline = UNDERLINE_NONE;
-    BOOL bWordLine = FALSE;
+    bool bWordLine = false;
     if( pData )
     {
         // Parameter:  0 = none,    1 = single,  2 = by Word,
@@ -3577,7 +3579,7 @@ void SwWW8ImplReader::Read_Underline( USHORT, const BYTE* pData, short nLen )
 
 
         // pruefe auf Sonderfall "fett+unterstrichen"
-        BOOL bAlsoBold = /*( 6 == b )*/FALSE;
+        bool bAlsoBold = /*( 6 == b )*/ false;
         // erst mal ggfs. *bold* einschalten!
         if( bAlsoBold )
         {
@@ -3589,7 +3591,7 @@ void SwWW8ImplReader::Read_Underline( USHORT, const BYTE* pData, short nLen )
         {
             switch( *pData )
             {
-            case 2: bWordLine = TRUE;       // no break;
+            case 2: bWordLine = true;       // no break;
             case 1: eUnderline = (FontUnderline)UNDERLINE_SINGLE;       break;
             case 3: eUnderline = (FontUnderline)UNDERLINE_DOUBLE;       break;
             case 4: eUnderline = (FontUnderline)UNDERLINE_DOTTED;       break;
@@ -3620,7 +3622,7 @@ void SwWW8ImplReader::Read_Underline( USHORT, const BYTE* pData, short nLen )
     {
         NewAttr( SvxUnderlineItem( eUnderline ));
         if( bWordLine )
-            NewAttr( SvxWordLineModeItem( TRUE ));
+            NewAttr(SvxWordLineModeItem(true));
     }
 }
 
@@ -3660,7 +3662,7 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( USHORT, const BYTE* pData,
 
         case 1:                         // rotated characters
             {
-                BOOL bFitToLine = 0 != *(pData+1);
+                bool bFitToLine = 0 != *(pData+1);
                 NewAttr( SvxCharRotateItem( 900, bFitToLine ));
             }
             break;
@@ -3685,7 +3687,7 @@ void SwWW8ImplReader::Read_TxtColor( USHORT, const BYTE* pData, short nLen )
 
         NewAttr( SvxColorItem(Color(GetCol(b))));
         if (pAktColl && pStyles)
-            pStyles->bTxtColChanged = TRUE;
+            pStyles->bTxtColChanged = true;
     }
 }
 
@@ -3709,11 +3711,11 @@ void SwWW8ImplReader::Read_TxtForeColor(USHORT, const BYTE* pData, short nLen)
         Color aColor(wwUtility::BGRToRGB(SVBT32ToLong(pData)));
         NewAttr(SvxColorItem(aColor));
         if (pAktColl && pStyles)
-            pStyles->bTxtColChanged = TRUE;
+            pStyles->bTxtColChanged = true;
     }
 }
 
-BOOL SwWW8ImplReader::GetFontParams( USHORT nFCode, FontFamily& reFamily,
+bool SwWW8ImplReader::GetFontParams( USHORT nFCode, FontFamily& reFamily,
     String& rName, FontPitch& rePitch, CharSet& reCharSet )
 {
     // Die Defines, aus denen diese Tabellen erzeugt werden, stehen in windows.h
@@ -3730,7 +3732,7 @@ BOOL SwWW8ImplReader::GetFontParams( USHORT nFCode, FontFamily& reFamily,
 
     const WW8_FFN* pF = pFonts->GetFont( nFCode );  // Info dazu
     if( !pF )                                   // FontNummer unbekannt ?
-        return FALSE;                           // dann ignorieren
+        return false;                           // dann ignorieren
 
     rName = String( pF->sFontname );
 
@@ -3823,11 +3825,11 @@ BOOL SwWW8ImplReader::GetFontParams( USHORT nFCode, FontFamily& reFamily,
     else
         reFamily = FAMILY_DONTKNOW;
 
-    return TRUE;
+    return true;
 }
 
-BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums,
-                                        USHORT nWhich )
+bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
+    USHORT nWhich)
 {
     FontFamily eFamily;
     String aName;
@@ -3847,7 +3849,7 @@ BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums,
                 eSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
             maFontSrcCharSets.push(eSrcCharSet);
         }
-        return FALSE;
+        return false;
     }
 
     CharSet eDstCharSet = eSrcCharSet;
@@ -3870,7 +3872,7 @@ BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums,
 
     NewAttr( aFont );                       // ...und 'reinsetzen
 
-    return TRUE;
+    return true;
 }
 
 void SwWW8ImplReader::ResetCharSetVars()
@@ -3912,16 +3914,16 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
         else
         {
             USHORT nFCode = SVBT16ToShort( pData );     // Font-Nummer
-            if( SetNewFontAttr( nFCode, TRUE, nId )     // Lies Inhalt
+            if (SetNewFontAttr(nFCode, true, nId)   // Lies Inhalt
                 && pAktColl && pStyles )                // Style-Def ?
             {
                 // merken zur Simulation Default-Font
                 if (RES_CHRATR_CJK_FONT == nId)
-                    pStyles->bCJKFontChanged = TRUE;
+                    pStyles->bCJKFontChanged = true;
                 else if (RES_CHRATR_CTL_FONT == nId)
-                    pStyles->bCTLFontChanged = TRUE;
+                    pStyles->bCTLFontChanged = true;
                 else
-                    pStyles->bFontChanged = TRUE;
+                    pStyles->bFontChanged = true;
             }
         }
     }
@@ -3964,9 +3966,9 @@ void SwWW8ImplReader::Read_FontSize( USHORT nId, const BYTE* pData, short nLen )
         {
             // merken zur Simulation Default-FontSize
             if (nId == RES_CHRATR_CTL_FONTSIZE)
-                pStyles->bFCTLSizeChanged = TRUE;
+                pStyles->bFCTLSizeChanged = true;
             else
-                pStyles->bFSizeChanged = TRUE;
+                pStyles->bFSizeChanged = true;
         }
     }
 }
@@ -4055,7 +4057,7 @@ void SwWW8ImplReader::Read_FontKern( USHORT, const BYTE* , short nLen )
     if( nLen < 0 ) // Ende des Attributes
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_AUTOKERN );
     else
-        NewAttr( SvxAutoKernItem( TRUE ) );
+        NewAttr(SvxAutoKernItem(true));
 }
 
 void SwWW8ImplReader::Read_CharShadow(  USHORT, const BYTE* pData, short nLen )
@@ -4071,7 +4073,7 @@ void SwWW8ImplReader::Read_CharShadow(  USHORT, const BYTE* pData, short nLen )
         {
             // Zeichenfarbe auch
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
-            bCharShdTxtCol = FALSE;
+            bCharShdTxtCol = false;
         }
     }
     else
@@ -4093,7 +4095,7 @@ void SwWW8ImplReader::Read_TxtBackColor(USHORT, const BYTE* pData, short nLen )
         {
             // Zeichenfarbe auch
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
-            bCharShdTxtCol = FALSE;
+            bCharShdTxtCol = false;
         }
     }
     else
@@ -4114,7 +4116,7 @@ void SwWW8ImplReader::Read_CharHighlight(USHORT, const BYTE* pData, short nLen)
         if( bCharShdTxtCol )
         {
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );  // Zeichenfarbe auch
-            bCharShdTxtCol = FALSE;
+            bCharShdTxtCol = false;
         }
     }
     else
@@ -4146,16 +4148,16 @@ void SwWW8ImplReader::Read_NoLineNumb(USHORT , const BYTE* pData, short nLen)
     NewAttr( aLN );
 }
 
-static BOOL lcl_AdjustTabs(short nLeft, short nFirstLineOfst,
-    long nOldLeft,SvxTabStopItem &rTStop)
+static bool lcl_AdjustTabs(short nLeft, short nFirstLineOfst,
+    long nOldLeft, SvxTabStopItem &rTStop)
 {
-    BOOL bChanged=FALSE;
-    for( USHORT nCnt = 0; nCnt < rTStop.Count(); ++nCnt )
+    bool bChanged = false;
+    for (USHORT nCnt = 0; nCnt < rTStop.Count(); ++nCnt)
     {
         SvxTabStop& rTab = (SvxTabStop&)(rTStop[ nCnt ]);
         if(SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment())
         {
-            bChanged=TRUE;
+            bChanged = true;
 
             rTab.GetTabPos() += nOldLeft;
 
@@ -4216,11 +4218,11 @@ void SwWW8ImplReader::NeedAdjustStyleTabStops(short nLeft, short nFirstLineOfst,
         nFirstLineOfst = 0;
 
     const SfxPoolItem* pTabs=0;
-    BOOL bOnMarginStyle;
+    bool bOnMarginStyle;
     if (pWWSty->pFmt)
     {
         bOnMarginStyle = pWWSty->pFmt->GetAttrSet().GetItemState(
-                RES_PARATR_TABSTOP, FALSE, &pTabs ) == SFX_ITEM_SET;
+                RES_PARATR_TABSTOP, false, &pTabs ) == SFX_ITEM_SET;
     }
 
     if (pTabs)
@@ -4236,7 +4238,7 @@ void SwWW8ImplReader::NeedAdjustStyleTabStops(short nLeft, short nFirstLineOfst,
         while( pSty && !bOnMarginStyle)
         {
             bOnMarginStyle = pSty->GetAttrSet().GetItemState(RES_PARATR_TABSTOP,
-                FALSE, &pTabs ) == SFX_ITEM_SET;
+                false, &pTabs ) == SFX_ITEM_SET;
             if (bOnMarginStyle)
             {
                 const SfxPoolItem &rAttr = pSty->GetAttr(RES_LR_SPACE);
@@ -4656,7 +4658,7 @@ void SwWW8ImplReader::Read_Relief( USHORT nId, const BYTE* pData, short nLen )
     }
 }
 
-SwWW8Shade::SwWW8Shade( BOOL bVer67, const WW8_SHD& rSHD )
+SwWW8Shade::SwWW8Shade(bool bVer67, const WW8_SHD& rSHD)
 {
     BYTE b = rSHD.GetFore();
     ASSERT(b < 17, "ww8: colour out of range");
@@ -4677,7 +4679,7 @@ SwWW8Shade::SwWW8Shade( BOOL bVer67, const WW8_SHD& rSHD )
     SetShade(bVer67, nFore, nBack, b);
 }
 
-void SwWW8Shade::SetShade( BOOL bVer67, ColorData nFore, ColorData nBack,
+void SwWW8Shade::SetShade(bool bVer67, ColorData nFore, ColorData nBack,
     sal_uInt16 nIndex)
 {
     static const ULONG eMSGrayScale[] =
@@ -4812,7 +4814,7 @@ void SwWW8ImplReader::Read_Shade( USHORT, const BYTE* pData, short nLen )
         {
             // Zeichenfarbe auch
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
-            bShdTxtCol = FALSE;
+            bShdTxtCol = false;
         }
     }
     else
@@ -4835,7 +4837,7 @@ void SwWW8ImplReader::Read_ParaBackColor(USHORT, const BYTE* pData, short nLen)
         {
             // Zeichenfarbe auch
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
-            bShdTxtCol = FALSE;
+            bShdTxtCol = false;
         }
     }
     else
@@ -4847,9 +4849,9 @@ void SwWW8ImplReader::Read_ParaBackColor(USHORT, const BYTE* pData, short nLen)
     }
 }
 
-sal_uInt32 SwWW8ImplReader::ExtractColour(const BYTE* &rpData, BYTE bVer67)
+sal_uInt32 SwWW8ImplReader::ExtractColour(const BYTE* &rpData, bool bVer67)
 {
-    ASSERT(bVer67 == FALSE, "Impossible");
+    ASSERT(bVer67 == false, "Impossible");
     //ASSERT(SVBT32ToLong(rpData) == 0xFF000000, "Unknown 1 not 0xff000000");
     sal_uInt32 nFore = wwUtility::BGRToRGB(SVBT32ToLong(rpData));
     rpData+=4;
@@ -4875,7 +4877,7 @@ void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)
         {
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_BOX );
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_SHADOW );
-            bHasBorder = FALSE;
+            bHasBorder = false;
         }
     }
     else if( !bHasBorder )
@@ -4883,7 +4885,7 @@ void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)
         // die Borders auf allen 4 Seiten werden gebuendelt.  dieses
         // vereinfacht die Verwaltung, d.h. die Box muss nicht 4 mal auf den
         // CtrlStack und wieder runter
-        bHasBorder = TRUE;
+        bHasBorder = true;
 
         WW8_BRC5 aBrcs={0}; // Top, Left, Bottom, Right, Between
         BYTE nBorder;
@@ -4895,7 +4897,7 @@ void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)
 
         if( nBorder )                                   // Border
         {
-            BOOL bIsB = IsBorder( aBrcs, TRUE );
+            bool bIsB = IsBorder(aBrcs, true);
             if( !bApo || !bIsB || ( pWFlyPara && !pWFlyPara->bBorderLines ))
             {
                 // in Apo keine Umrandungen *ein*-schalten, da ich
@@ -4910,9 +4912,9 @@ void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)
                 const SvxBoxItem* pBox
                     = (const SvxBoxItem*)GetFmtAttr( RES_BOX );
                 SvxBoxItem aBox;
-                if( pBox )
+                if (pBox)
                     aBox = *pBox;
-                SetBorder( aBox, aBrcs, 0, nBorder, TRUE );
+                SetBorder(aBox, aBrcs, 0, nBorder, true);
 
                 Rectangle aInnerDist;
                 GetBorderDistance( aBrcs, aInnerDist );
@@ -4970,7 +4972,7 @@ void SwWW8ImplReader::Read_WidowControl( USHORT, const BYTE* pData, short nLen )
         NewAttr( SvxOrphansItem( nL ) );
 
         if( pAktColl && pStyles )           // Style-Def ?
-            pStyles->bWidowsChanged = TRUE; // merken zur Simulation
+            pStyles->bWidowsChanged = true; // merken zur Simulation
                                             // Default-Widows
     }
 }
@@ -5057,9 +5059,9 @@ void SwWW8ImplReader::Read_ApoPPC( USHORT, const BYTE* pData, short )
     }
 }
 
-BOOL SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
+bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
 {
-    BOOL bRet=FALSE;
+    bool bRet = false;
     const BYTE *pRes=0;
     memset(pTabPos, 0, sizeof(WW8_TablePos));
     if (pRes = pPap->HasSprm(0x360D))
@@ -5078,7 +5080,7 @@ BOOL SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
             pTabPos->nUpMgn = SVBT16ToShort(pRes);
         if (pRes = pPap->HasSprm(0x941F))
             pTabPos->nLoMgn = SVBT16ToShort(pRes);
-        bRet=TRUE;
+        bRet = true;
     }
     return bRet;
 }
@@ -5696,12 +5698,12 @@ extern "C"
 SprmReadInfo& WW8GetSprmReadInfo( USHORT nId )
 {
     // ggfs. Tab sortieren
-    static BOOL bInit = FALSE;
+    static bool bInit = false;
     if (!bInit)
     {
         qsort( (void*)aSprmReadTab, sizeof(aSprmReadTab) /
             sizeof(aSprmReadTab[0]), sizeof(aSprmReadTab[0]), CompSprmReadId );
-        bInit = TRUE;
+        bInit = true;
     }
     // Sprm heraussuchen
     void* pFound;

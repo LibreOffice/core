@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:36 $
+ *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ public:
                     ULONG nLnNumRestartNo );
     void Finish( WW8_CP nEndCp ) { aCps.Insert( nEndCp, aCps.Count() ); }
     void SetNum( const SwTxtNode* pNumNd );
-    BOOL WriteKFTxt( SwWW8Writer& rWrt );
+    bool WriteKFTxt( SwWW8Writer& rWrt );
     void WriteSepx( SvStream& rStrm ) const;
     void WritePlcSed( SwWW8Writer& rWrt ) const;
     void WritePlcHdd( SwWW8Writer& rWrt ) const;
@@ -271,14 +271,14 @@ class WW8_WrPct
 {
     WW8_WrPcPtrs* pPcts;
     WW8_FC nOldFc;
-    BOOL bIsUni : 1;
+    bool bIsUni;
 public:
-    WW8_WrPct( WW8_FC nStartFc, BOOL bSaveUniCode );
+    WW8_WrPct(WW8_FC nStartFc, bool bSaveUniCode);
     ~WW8_WrPct();
-    void AppendPc( WW8_FC nStartFc, BOOL bIsUnicode );
-    void WritePc( SwWW8Writer& rWrt );
+    void AppendPc(WW8_FC nStartFc, bool bIsUnicode);
+    void WritePc(SwWW8Writer& rWrt);
     void SetParaBreak();
-    BOOL IsUnicode() const  { return bIsUni; }
+    bool IsUnicode() const  { return bIsUni; }
     ULONG Fc2Cp( ULONG nFc ) const;
 };
 
@@ -375,7 +375,7 @@ private:
 // der WW8-Writer
 class SwWW8Writer: public StgWriter
 {
-friend BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt ); // pO
+friend bool WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt ); // pO
 friend void WW8_WrPlcSepx::WriteOlst( SwWW8Writer& rWrt, USHORT i );
 friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
 
@@ -420,8 +420,8 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     static void BuildAnlvBase( WW8_ANLV& rAnlv, BYTE*& rpCh, USHORT& rCharLen,
                    const SwNumRule& rRul, const SwNumFmt& rFmt, BYTE nSwLevel );
 
-    void Out_BorderLine( WW8Bytes& rO, const SvxBorderLine* pLine,
-                            USHORT nDist, USHORT nSprmNo, BOOL bShadow );
+    void Out_BorderLine(WW8Bytes& rO, const SvxBorderLine* pLine,
+        USHORT nDist, USHORT nSprmNo, bool bShadow);
 
     void OutListTab();
     void OutOverrideListTab();
@@ -474,23 +474,23 @@ public:
 
     BYTE nTxtTyp;
 
-    BOOL bStyDef : 1;           // wird Style geschrieben ?
-    BOOL bBreakBefore : 1;      // Breaks werden 2mal ausgegeben
-    BOOL bOutKF : 1;            // Kopf/Fusstexte werden ausgegeben
-    BOOL bOutFlyFrmAttrs : 1;   // Rahmen-Attr von Flys werden ausgegeben
-    BOOL bOutPageDescs : 1;     // PageDescs werden ausgegeben ( am Doc-Ende )
-    BOOL bOutFirstPage : 1;     // write Attrset of FirstPageDesc
-    BOOL bOutTable : 1;         // Tabelle wird ausgegeben
+    BYTE bStyDef : 1;           // wird Style geschrieben ?
+    BYTE bBreakBefore : 1;      // Breaks werden 2mal ausgegeben
+    BYTE bOutKF : 1;            // Kopf/Fusstexte werden ausgegeben
+    BYTE bOutFlyFrmAttrs : 1;   // Rahmen-Attr von Flys werden ausgegeben
+    BYTE bOutPageDescs : 1;     // PageDescs werden ausgegeben ( am Doc-Ende )
+    BYTE bOutFirstPage : 1;     // write Attrset of FirstPageDesc
+    BYTE bOutTable : 1;         // Tabelle wird ausgegeben
                                 //    ( wird zB bei Flys in Tabelle zurueckgesetzt )
-    BOOL bIsInTable : 1;        // wird sind innerhalb der Ausgabe einer Tabelle
+    BYTE bIsInTable : 1;        // wird sind innerhalb der Ausgabe einer Tabelle
                                 //    ( wird erst nach der Tabelle zurueckgesetzt )
-    BOOL bOutGrf : 1;           // Grafik wird ausgegeben
-    BOOL bWrtWW8 : 1;           // Schreibe WW95 oder WW97 FileFormat
-    BOOL bInWriteEscher : 1;    // in write textboxes
-    BOOL bStartTOX : 1;         // TRUE: a TOX is startet
-    BOOL bInWriteTOX : 1;       // TRUE: all content are in a TOX
-    BOOL bFtnAtTxtEnd : 1;      // TRUE: all FTN at Textend
-    BOOL bEndAtTxtEnd : 1;      // TRUE: all END at Textend
+    BYTE bOutGrf : 1;           // Grafik wird ausgegeben
+    BYTE bWrtWW8 : 1;           // Schreibe WW95 oder WW97 FileFormat
+    BYTE bInWriteEscher : 1;    // in write textboxes
+    BYTE bStartTOX : 1;         // true: a TOX is startet
+    BYTE bInWriteTOX : 1;       // true: all content are in a TOX
+    BYTE bFtnAtTxtEnd : 1;      // true: all FTN at Textend
+    BYTE bEndAtTxtEnd : 1;      // true: all END at Textend
 
 
 
@@ -535,23 +535,23 @@ public:
     void CreateEscher();
     void WriteEscher();
 
-    BOOL Out_SwNum( const SwTxtNode* pNd );
-    void Out_SwFmt( const SwFmt& rFmt, BOOL bPapFmt, BOOL bChpFmt,
-                    BOOL bFlyFmt = FALSE );
-    BOOL GetNumberFmt( const SwField& rFld, String& rStr );
+    bool Out_SwNum(const SwTxtNode* pNd);
+    void Out_SwFmt(const SwFmt& rFmt, bool bPapFmt, bool bChpFmt,
+        bool bFlyFmt = false);
+    bool GetNumberFmt(const SwField& rFld, String& rStr);
     void OutField( const SwField* pFld, BYTE nFldType, const String& rFldCmd,
         BYTE nMode = WRITEFIELD_ALL );
     void StartCommentOutput( const String& rName );
     void EndCommentOutput(   const String& rName );
     void OutGrf( const SwNoTxtNode* pNd );
-    BOOL TestOleNeedsGraphic(const SwAttrSet& rSet, SvStorageRef xOleStg,
+    bool TestOleNeedsGraphic(const SwAttrSet& rSet, SvStorageRef xOleStg,
         SvStorageRef xObjStg, String &rStorageName, SwOLENode *pOLENd);
     void AppendBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos,
         xub_StrLen nLen );
     void AppendBookmark( const String& rName, USHORT nOffset = 0 );
     String GetBookmarkName( USHORT nTyp, const String* pNm, USHORT nSeqNo );
     void MoveFieldBookmarks(ULONG nFrom, ULONG nTo);
-    BOOL HasRefToObject( USHORT nTyp, const String* pNm, USHORT nSeqNo );
+    bool HasRefToObject(USHORT nTyp, const String* pNm, USHORT nSeqNo);
 
     void WriteAsStringTable(const ::std::vector<String>&, INT32& rfcSttbf,
         INT32& rlcbSttbf, USHORT nExtraLen = 0);
@@ -563,8 +563,8 @@ public:
     USHORT StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
         SwTwips &rPageSize);
 
-    void OutSwString( const String&, xub_StrLen nStt, xub_StrLen nLen,
-                        BOOL bUnicode, rtl_TextEncoding eChrSet );
+    void OutSwString(const String&, xub_StrLen nStt, xub_StrLen nLen,
+        bool bUnicode, rtl_TextEncoding eChrSet);
 
     ULONG ReplaceCr( BYTE nChar );
 
@@ -576,21 +576,21 @@ public:
                                 { pO->Insert( pBytes, nSiz, pO->Count() ); }
 
     ULONG GetIniFlags() const               { return nIniFlags; }
-    inline BOOL IsUnicode() const           { return pPiece->IsUnicode(); }
+    inline bool IsUnicode() const           { return pPiece->IsUnicode(); }
 
     const SfxItemSet* GetCurItemSet() const         { return pISet; }
     void SetCurItemSet( const SfxItemSet* pS )      { pISet = pS; }
 
-    void Out_SfxItemSet( const SfxItemSet& rSet, BOOL bPapFmt, BOOL bChpFmt,
+    void Out_SfxItemSet(const SfxItemSet& rSet, bool bPapFmt, bool bChpFmt,
         USHORT nScript);
     void Out_SfxBreakItems( const SfxItemSet& rSet, const SwNode& rNd );
 
-    void Out_SwFmtBox( const SvxBoxItem& rBox, BOOL bShadow );
+    void Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow);
     void Out_SwFmtTableBox( WW8Bytes& rO, const SvxBoxItem& rBox );
     BYTE TransCol( const Color& rCol );
-    BOOL TransBrush( const Color& rCol, WW8_SHD& rShd );
-    WW8_BRC TranslateBorderLine( const SvxBorderLine& pLine,
-                                       USHORT nDist, BOOL bShadow );
+    bool TransBrush(const Color& rCol, WW8_SHD& rShd);
+    WW8_BRC TranslateBorderLine(const SvxBorderLine& pLine,
+        USHORT nDist, bool bShadow);
 
     static long GetDTTM( const DateTime& rDT );
 
@@ -606,17 +606,17 @@ public:
     static void WriteLong( SvStream& rStrm, INT32 nVal ) { rStrm << nVal; }
     static void WriteLong( SvStream& rStrm, ULONG nPos, INT32 nVal );
 
-    static void WriteString16( SvStream& rStrm, const String& rStr,
-                                BOOL bAddZero );
-    static void WriteString8( SvStream& rStrm, const String& rStr,
-                                BOOL bAddZero, rtl_TextEncoding eCodeSet );
+    static void WriteString16(SvStream& rStrm, const String& rStr,
+        bool bAddZero);
+    static void WriteString8(SvStream& rStrm, const String& rStr,
+        bool bAddZero, rtl_TextEncoding eCodeSet);
 
     static void InsUInt16( WW8Bytes& rO, UINT16 );
     static void InsUInt32( WW8Bytes& rO, UINT32 );
     static void InsAsString16( WW8Bytes& rO, const String& );
     static void InsAsString8( WW8Bytes& rO, const String& rStr,
                                 rtl_TextEncoding eCodeSet );
-    BOOL CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich);
+    bool CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich);
     USHORT DupNumRuleWithLvlStart(const SwNumRule *pRule,BYTE nLvl,USHORT nVal);
 
     void InsUInt16( UINT16 n )      { SwWW8Writer::InsUInt16( *pO, n ); }
@@ -636,7 +636,7 @@ public:
     SwPaM* GetEndPaM()              { return pOrigPam; }
     void SetEndPaM( SwPaM* pPam )   { pOrigPam = pPam; }
 
-    static BOOL NoPageBreakSection(const SfxItemSet *pSet);
+    static bool NoPageBreakSection(const SfxItemSet *pSet);
 };
 
 class WW8_WrPlcSubDoc   // Doppel-Plc fuer Foot-/Endnotes und Postits
@@ -653,7 +653,7 @@ protected:
     WW8_WrPlcSubDoc();
     ~WW8_WrPlcSubDoc();
 
-    BOOL WriteGenericTxt( SwWW8Writer& rWrt, BYTE nTTyp, long& rCount );
+    bool WriteGenericTxt(SwWW8Writer& rWrt, BYTE nTTyp, long& rCount);
     void WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp, long& rTxtStt,
         long& rTxtCnt, long& rRefStt, long& rRefCnt ) const;
 
@@ -672,7 +672,7 @@ private:
 public:
     WW8_WrPlcFtnEdn( BYTE nTTyp ) : nTyp( nTTyp ) {}
 
-    BOOL WriteTxt( SwWW8Writer& rWrt );
+    bool WriteTxt(SwWW8Writer& rWrt);
     void WritePlc( SwWW8Writer& rWrt ) const;
 
     void Append( WW8_CP nCp, const SwFmtFtn& rFtn );
@@ -688,7 +688,7 @@ public:
     WW8_WrPlcPostIt() {}
 
     void Append( WW8_CP nCp, const SwPostItField& rPostIt );
-    BOOL WriteTxt( SwWW8Writer& rWrt );
+    bool WriteTxt(SwWW8Writer& rWrt);
     void WritePlc( SwWW8Writer& rWrt ) const;
 };
 
@@ -706,7 +706,7 @@ private:
 public:
     WW8_WrPlcTxtBoxes( BYTE nTTyp ) : nTyp( nTTyp ) {}
 
-    BOOL WriteTxt( SwWW8Writer& rWrt );
+    bool WriteTxt(SwWW8Writer& rWrt);
     void WritePlc( SwWW8Writer& rWrt ) const;
     void Append( const SdrObject& rObj, UINT32 nShapeId );
     USHORT Count() const { return aCntnt.Count(); }
@@ -723,7 +723,7 @@ private:
     WW8_WrFkpPtrs aFkps;            // PTRARR
     USHORT nFkpStartPage;
     ePLCFT ePlc;
-    BOOL bWrtWW8;                   // Fuer Writererkennung
+    bool bWrtWW8;                   // Fuer Writererkennung
     USHORT nMark;
 
     //No copying
@@ -774,7 +774,7 @@ public:
     WW8_WrPlcFld( USHORT nStructSz, BYTE nTTyp )
         : WW8_WrPlc1( nStructSz ), nTxtTyp( nTTyp )
     {}
-    BOOL Write( SwWW8Writer& rWrt );
+    bool Write( SwWW8Writer& rWrt );
 };
 
 class WW8_WrMagicTable : public WW8_WrPlc1
@@ -786,7 +786,7 @@ private:
 public:
     WW8_WrMagicTable() : WW8_WrPlc1( 4 ) {Append(0,0);}
     void Append( WW8_CP nCp, ULONG nData );
-    BOOL Write( SwWW8Writer& rWrt );
+    bool Write(SwWW8Writer& rWrt);
 };
 
 // class SwWW8WrGrf sammelt Grafiken und gibt sie aus
@@ -850,17 +850,17 @@ class WW8WrtStyle
     USHORT nUsedSlots;
 
     void BuildStyleTab();
-    void BuildUpx( const SwFmt* pFmt, BOOL bPap, USHORT nPos,
-        BOOL bInsDefCharSiz );
+    void BuildUpx(const SwFmt* pFmt, bool bPap, USHORT nPos,
+        bool bInsDefCharSiz);
     USHORT Build_GetWWSlot( const SwFmt& rFmt );
     USHORT GetWWId( const SwFmt& rFmt ) const;
-    void Set1StyleDefaults( const SwFmt& rFmt, BOOL bPap );
+    void Set1StyleDefaults(const SwFmt& rFmt, bool bPap);
     void Out1Style( SwFmt* pFmt, USHORT nPos );
 
     void WriteStyle( SvStream& rStrm );
     void SkipOdd();
-    void BuildStd( const String& rName, BOOL bPapFmt, short nWwBase,
-        short nWwNext, USHORT nWwId );
+    void BuildStd(const String& rName, bool bPapFmt, short nWwBase,
+        short nWwNext, USHORT nWwId);
     //No copying
     WW8WrtStyle(const WW8WrtStyle&);
     WW8WrtStyle& operator=(const WW8WrtStyle&);
@@ -887,12 +887,12 @@ public:
     SwFlyFrmFmt* pOldFlyFmt;
     const SwPageDesc* pOldPageDesc;
 
-    BOOL bOldWriteAll : 1;
-    BOOL bOldOutTable : 1;
-    BOOL bOldIsInTable: 1;
-    BOOL bOldFlyFrmAttrs : 1;
-    BOOL bOldStartTOX : 1;
-    BOOL bOldInWriteTOX : 1;
+    BYTE bOldWriteAll : 1;
+    BYTE bOldOutTable : 1;
+    BYTE bOldIsInTable: 1;
+    BYTE bOldFlyFrmAttrs : 1;
+    BYTE bOldStartTOX : 1;
+    BYTE bOldInWriteTOX : 1;
     // bOutPageDesc muss nicht gesichert werden, da es nur nicht waehrend der
     // Ausgabe von Spezial-Texten veraendert wird.
 

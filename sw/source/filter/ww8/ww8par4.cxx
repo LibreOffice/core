@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:39 $
+ *  last change: $Author: cmc $ $Date: 2002-08-19 15:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ using namespace ::com::sun::star;
 SV_IMPL_OP_PTRARR_SORT(WW8AuthorInfos, WW8AuthorInfo_Ptr)
 SV_IMPL_OP_PTRARR_SORT(WW8OleMaps, WW8OleMap_Ptr)
 
-static BOOL SwWw8ReadScaling( long& rX, long& rY, SvStorageRef& rSrc1 )
+static bool SwWw8ReadScaling(long& rX, long& rY, SvStorageRef& rSrc1)
 {
     // Skalierungsfaktoren holen:
     //      Informationen in PIC-Stream ( durch ausprobieren )
@@ -217,17 +217,17 @@ static BOOL SwWw8ReadScaling( long& rX, long& rY, SvStorageRef& rSrc1 )
     if (10 > nScaleX || 65536 < nScaleX || 10 > nScaleY || 65536 < nScaleY)
     {
         ASSERT( !pS, "+OLE-Scalinginformation in PIC-Stream wrong" );
-        return FALSE;
+        return false;
     }
     else
     {
         rX = (rX * nScaleX) / 1000;
         rY = (rY * nScaleY) / 1000;
     }
-    return TRUE;
+    return true;
 }
 
-static BOOL SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
+static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     SvStorageRef& rSrc1)
 {
     SvStorageStreamRef xSrc2 = rSrc1->OpenStream( CREATE_CONST_ASC("\3META"),
@@ -236,8 +236,8 @@ static BOOL SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     pSt->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     ULONG nRead = pSt->Read( pMfp, sizeof(*pMfp ) );
                                 // Mini-Placable-Header lesen
-    if( nRead != sizeof( *pMfp ) )
-        return FALSE;
+    if (nRead != sizeof(*pMfp))
+        return false;
 
 #if defined  __BIGENDIAN
     pMfp->mm = SWAPSHORT( pMfp->mm );
@@ -248,7 +248,7 @@ static BOOL SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     if( pMfp->mm == 94 || pMfp->mm == 99 )
     {
         ASSERT( !pSt, "+OLE: Falscher Metafile-Typ" );
-        return FALSE;
+        return false;
     }
     if( pMfp->mm != 8 )
     {
@@ -257,13 +257,14 @@ static BOOL SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     if( !pMfp->xExt || !pMfp->yExt )
     {
         ASSERT( !pSt, "+OLE: Groesse von 0 ???" );
-        return FALSE;
+        return false;
     }
-    BOOL bOk = ReadWindowMetafile( *pSt, rWMF );    // WMF lesen
+    bool bOk = ReadWindowMetafile(*pSt, rWMF) ? true : false;   // WMF lesen
                     // *pSt >> aWMF  geht nicht ohne placable Header
-    if( !bOk || pSt->GetError() || rWMF.GetActionCount() == 0 ){
+    if (!bOk || pSt->GetError() || rWMF.GetActionCount() == 0)
+    {
         ASSERT( !pSt, "+OLE: Konnte Metafile nicht lesen" );
-        return FALSE;
+        return false;
     }
 
     rWMF.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
@@ -279,10 +280,10 @@ static BOOL SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     rWMF.Scale( aFracX, aFracY );
     rWMF.SetPrefSize( aNewSiz );
 
-    return TRUE;
+    return true;
 }
 
-static BOOL SwWw6ReadMacPICTStream( Graphic& rGraph, SvStorageRef& rSrc1 )
+static bool SwWw6ReadMacPICTStream(Graphic& rGraph, SvStorageRef& rSrc1)
 {
         // 03-META-Stream nicht da. Vielleicht ein 03-PICT ?
     SvStorageStreamRef xSrc4 = rSrc1->OpenStream( CREATE_CONST_ASC( "\3PICT" ));
@@ -290,8 +291,8 @@ static BOOL SwWw6ReadMacPICTStream( Graphic& rGraph, SvStorageRef& rSrc1 )
     pStp->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     BYTE aTestA[10];        // Ist der 01Ole-Stream ueberhaupt vorhanden
     ULONG nReadTst = pStp->Read( aTestA, sizeof( aTestA ) );
-    if(nReadTst != sizeof(aTestA))
-        return FALSE;
+    if (nReadTst != sizeof(aTestA))
+        return false;
 
     pStp->Seek( STREAM_SEEK_TO_BEGIN );
 
@@ -394,10 +395,10 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     return pFmt;
 }
 
-BOOL SwWW8ImplReader::ImportOleWMF(SvStorageRef xSrc1,GDIMetaFile &rWMF,
+bool SwWW8ImplReader::ImportOleWMF(SvStorageRef xSrc1,GDIMetaFile &rWMF,
     long &rX,long &rY)
 {
-    BOOL bOk=FALSE;
+    bool bOk = false;
     OLE_MFP aMfp;
     if( SwWw6ReadMetaStream( rWMF, &aMfp, xSrc1 ) )
     {
@@ -414,7 +415,7 @@ BOOL SwWW8ImplReader::ImportOleWMF(SvStorageRef xSrc1,GDIMetaFile &rWMF,
         Fraction aScaleX(aFinalSize.Width(),aOrigSize.Width());
         Fraction aScaleY(aFinalSize.Height(),aOrigSize.Height());
         rWMF.Scale( aScaleX, aScaleY );
-        bOk=TRUE;
+        bOk = true;
     }
     return bOk;
 }
@@ -430,7 +431,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
         ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
 
         long nX=0, nY=0;                // nX, nY is graphic size
-        BOOL bOleOk = TRUE;
+        bool bOleOk = true;
 
         String aSrcStgName = '_';
         // ergibt Name "_4711"
@@ -464,7 +465,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
                 nX = aSizeTwip.Width();
                 nY = aSizeTwip.Height();
                 // PICT: kein WMF da -> Grafik statt OLE
-                bOleOk = FALSE;
+                bOleOk = false;
             }
         }       // StorageStreams wieder zu
 
@@ -474,7 +475,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
         if (pFlySet)
         {
             if (const SwFmtFrmSize* pSize =
-                (const SwFmtFrmSize*)pFlySet->GetItem(RES_FRM_SIZE, FALSE))
+                (const SwFmtFrmSize*)pFlySet->GetItem(RES_FRM_SIZE, false))
             {
                 aRect.SetSize(pSize->GetSize());
             }
@@ -489,7 +490,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
             if(!pFormImpl)
                 pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
             uno::Reference< drawing::XShape > xRef;
-            if (pFormImpl->ReadOCXStream(xSrc1,&xRef,FALSE))
+            if (pFormImpl->ReadOCXStream(xSrc1, &xRef, false))
             {
                 pRet = GetSdrObjectFromXShape(xRef);
                 pRet->SetLogicRect(aRect);
@@ -586,7 +587,7 @@ public:
 void SetInDocAndDelete::operator()(SwFltStackEntry *pEntry)
 {
     SwPaM aRegion(pEntry->nMkNode);
-    if (pEntry->MakeRegion(&mrDoc, aRegion, TRUE))
+    if (pEntry->MakeRegion(&mrDoc, aRegion, true))
     {
         mrDoc.SetRedlineMode(REDLINE_ON | REDLINE_SHOW_INSERT |
             REDLINE_SHOW_DELETE);

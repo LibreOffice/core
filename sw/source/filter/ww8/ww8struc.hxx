@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:40 $
+ *  last change: $Author: cmc $ $Date: 2002-08-19 15:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,8 +201,8 @@ struct WW8_BRC      // Border Code
 //  UINT16 ico : 5;         // 07C0 color code (see chp.ico)
 //  UINT16 dxpSpace : 5;    // F800 width of space to maintain between border and text within border.
                             //      Must be 0 when BRC is a substructure of the TC.  Stored in points for Windows.
-    short DetermineBorderProperties ( BOOL bVer67, short *pSpace=0,
-        BYTE *pCol=0, short *pIdx=0 ) const;
+    short DetermineBorderProperties (bool bVer67, short *pSpace=0,
+        BYTE *pCol=0, short *pIdx=0) const;
 };
 
 typedef WW8_BRC WW8_BRC5[5];        // 5 * Border Code
@@ -387,13 +387,13 @@ struct WW8_TBD
 
 struct WW8_TCell    // hiermit wird weitergearbeitet (entspricht weitestgehend dem Ver8-Format)
 {
-    BOOL bFirstMerged   : 1;// 0001 set to 1 when cell is first cell of a range of cells that have been merged.
-    BOOL bMerged        : 1;// 0002 set to 1 when cell has been merged with preceding cell.
-    BOOL bVertical      : 1;// set to 1 when cell has vertical text flow
-    BOOL bBackward      : 1;// for a vertical table cell, text flow is bottom to top when 1 and is bottom to top when 0.
-    BOOL bRotateFont    : 1;// set to 1 when cell has rotated characters (i.e. uses @font)
-    BOOL bVertMerge     : 1;// set to 1 when cell is vertically merged with the cell(s) above and/or below. When cells are vertically merged, the display area of the merged cells are consolidated. The consolidated area is used to display the contents of the first vertically merged cell (the cell with fVertRestart set to 1), and all other vertically merged cells (those with fVertRestart set to 0) must be empty. Cells can only be merged vertically if their left and right boundaries are (nearly) identical (i.e. if corresponding entries in rgdxaCenter of the table rows differ by at most 3).
-    BOOL bVertRestart   : 1;// set to 1 when the cell is the first of a set of vertically merged cells. The contents of a cell with fVertStart set to 1 are displayed in the consolidated area belonging to the entire set of vertically merged cells. Vertically merged cells with fVertRestart set to 0 must be empty.
+    BYTE bFirstMerged   : 1;// 0001 set to 1 when cell is first cell of a range of cells that have been merged.
+    BYTE bMerged        : 1;// 0002 set to 1 when cell has been merged with preceding cell.
+    BYTE bVertical      : 1;// set to 1 when cell has vertical text flow
+    BYTE bBackward      : 1;// for a vertical table cell, text flow is bottom to top when 1 and is bottom to top when 0.
+    BYTE bRotateFont    : 1;// set to 1 when cell has rotated characters (i.e. uses @font)
+    BYTE bVertMerge     : 1;// set to 1 when cell is vertically merged with the cell(s) above and/or below. When cells are vertically merged, the display area of the merged cells are consolidated. The consolidated area is used to display the contents of the first vertically merged cell (the cell with fVertRestart set to 1), and all other vertically merged cells (those with fVertRestart set to 0) must be empty. Cells can only be merged vertically if their left and right boundaries are (nearly) identical (i.e. if corresponding entries in rgdxaCenter of the table rows differ by at most 3).
+    BYTE bVertRestart   : 1;// set to 1 when the cell is the first of a set of vertically merged cells. The contents of a cell with fVertStart set to 1 are displayed in the consolidated area belonging to the entire set of vertically merged cells. Vertically merged cells with fVertRestart set to 0 must be empty.
     BYTE nVertAlign     : 2;// specifies the alignment of the cell contents relative to text flow (e.g. in a cell with bottom to top text flow and bottom vertical alignment, the text is shifted horizontally to match the cell's right boundary):
                                                     //          0 top
                                                     //          1 center
@@ -449,7 +449,7 @@ public:
 
     BYTE GetFore() const                { return (BYTE)( aBits & 0x1f); }
     BYTE GetBack() const                { return (BYTE)((aBits >> 5 ) & 0x1f); }
-    BYTE GetStyle(BOOL bVer67)  const
+    BYTE GetStyle(bool bVer67)  const
         { return (BYTE)((aBits >> 10) & ( bVer67?0x1f:0x3f ) ); }
 
     UINT16 GetValue() const { return aBits; }
@@ -459,7 +459,7 @@ public:
 
     void SetFore( BYTE nVal ){ aBits = (aBits & 0xffe0) | (nVal & 0x1f); }
     void SetBack( BYTE nVal ){ aBits = (aBits & 0xfc1f) | ((nVal & 0x1f)<<5); }
-    void SetStyle( BOOL bVer67, BYTE nVal )
+    void SetStyle(bool bVer67, BYTE nVal)
     {
         aBits = (aBits & ( bVer67?0x83ff:0x03ff ) )
             | ((nVal & ( bVer67?0x1f:0x2f ))<<10);

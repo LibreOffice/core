@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-12 10:53:11 $
+ *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,20 +221,20 @@ class WW8_WrFkp
     BYTE nIMax;         // Anzahl der Eintrags-Paare
     BYTE nOldVarLen;
     BYTE nMark;
-    BOOL bCombined;     // TRUE : Einfuegen verboten
+    bool bCombined;     // true : Einfuegen verboten
 
     BYTE SearchSameSprm( USHORT nVarLen, const BYTE* pSprms );
 public:
-    WW8_WrFkp( ePLCFT ePl, WW8_FC nStartFc, BOOL bWrtWW8 );
+    WW8_WrFkp(ePLCFT ePl, WW8_FC nStartFc, bool bWrtWW8);
     ~WW8_WrFkp();
-    BOOL Append( WW8_FC nEndFc, USHORT nVarLen = 0, const BYTE* pSprms = 0 );
-    BOOL Combine();
+    bool Append( WW8_FC nEndFc, USHORT nVarLen = 0, const BYTE* pSprms = 0 );
+    bool Combine();
     void Write( SvStream& rStrm, SwWW8WrGrf& rGrf );
 
-    BOOL IsEqualPos( WW8_FC nEndFc ) const
+    bool IsEqualPos(WW8_FC nEndFc) const
     {   return !bCombined && nIMax && nEndFc == ((INT32*)pFkp)[nIMax]; }
     void MergeToNew( short& rVarLen, BYTE *& pNewSprms );
-    BOOL IsEmptySprm() const
+    bool IsEmptySprm() const
     {   return !bCombined && nIMax && !nOldVarLen;  }
     void SetNewEnd( WW8_FC nEnd )
     {   ((INT32*)pFkp)[nIMax] = nEnd; }
@@ -247,7 +247,7 @@ public:
     WW8_FC GetEndFc() const { return ((INT32*)pFkp)[nIMax]; };
 #endif // defined __WW8_NEEDS_COPY
 
-    BYTE *CopyLastSprms(BYTE &rLen,BOOL bVer8);
+    BYTE *CopyLastSprms(BYTE &rLen, bool bVer8);
 };
 
 
@@ -338,7 +338,7 @@ static void WriteDop( SwWW8Writer& rWrt )
 
     // Werte aus der DocStatistik (werden aufjedenfall fuer die
     // DocStat-Felder benoetigt!)
-    rDop.fWCFtnEdn = TRUE; // because they are included in StarWriter
+    rDop.fWCFtnEdn = true; // because they are included in StarWriter
 
     const SwDocStat& rDStat = rWrt.pDoc->GetDocStat();
     rDop.cWords = rDStat.nWord;
@@ -511,7 +511,7 @@ void SwWW8Writer::ExportDopTypography(WW8DopTypography &rTypo)
     for (rTypo.reserved1=8;rTypo.reserved1>0;rTypo.reserved1-=2)
     {
         if (pForbidden = pDoc->GetForbiddenCharacters(rTypo.GetConvertedLang(),
-            FALSE))
+            false))
         {
             int nIdx = (rTypo.reserved1-2)/2;
             if( lcl_CmpBeginEndChars( pForbidden->endLine,
@@ -601,8 +601,8 @@ const SfxPoolItem* SwWW8Writer::HasItem( USHORT nWhich ) const
                 nWhich != nSlotId )
                 nWhich = 0;
         }
-        if( nWhich &&
-            SFX_ITEM_SET != pISet->GetItemState( nWhich, TRUE, &pItem ) )
+        if (nWhich &&
+            SFX_ITEM_SET != pISet->GetItemState(nWhich, true, &pItem))
             pItem = 0;
     }
     else if( pChpIter )
@@ -631,7 +631,7 @@ const SfxPoolItem& SwWW8Writer::GetItem( USHORT nWhich ) const
                 nWhich != nSlotId )
                 nWhich = 0;
         }
-        pItem = &pISet->Get( nWhich, TRUE );
+        pItem = &pISet->Get(nWhich, true);
     }
     else if( pChpIter )
         pItem = &pChpIter->GetItem( nWhich );
@@ -705,46 +705,46 @@ void WW8_WrPlc1::Write( SvStream& rStrm )
 //------------------------------------------------------------------------------
 
 
-BOOL WW8_WrPlcFld::Write( SwWW8Writer& rWrt )
+bool WW8_WrPlcFld::Write(SwWW8Writer& rWrt)
 {
     if( WW8_WrPlc1::Count() <= 1 )
-        return FALSE;
+        return false;
 
     long *pfc, *plc;
-    switch( nTxtTyp )
+    switch (nTxtTyp)
     {
-    case TXT_MAINTEXT:
-        pfc = &rWrt.pFib->fcPlcffldMom;
-        plc = &rWrt.pFib->lcbPlcffldMom;
-        break;
-    case TXT_HDFT:
-        pfc = &rWrt.pFib->fcPlcffldHdr;
-        plc = &rWrt.pFib->lcbPlcffldHdr;
-        break;
+        case TXT_MAINTEXT:
+            pfc = &rWrt.pFib->fcPlcffldMom;
+            plc = &rWrt.pFib->lcbPlcffldMom;
+            break;
+        case TXT_HDFT:
+            pfc = &rWrt.pFib->fcPlcffldHdr;
+            plc = &rWrt.pFib->lcbPlcffldHdr;
+            break;
 
-    case TXT_FTN:
-        pfc = &rWrt.pFib->fcPlcffldFtn;
-        plc = &rWrt.pFib->lcbPlcffldFtn;
-        break;
+        case TXT_FTN:
+            pfc = &rWrt.pFib->fcPlcffldFtn;
+            plc = &rWrt.pFib->lcbPlcffldFtn;
+            break;
 
-    case TXT_EDN:
-        pfc = &rWrt.pFib->fcPlcffldEdn;
-        plc = &rWrt.pFib->lcbPlcffldEdn;
-        break;
+        case TXT_EDN:
+            pfc = &rWrt.pFib->fcPlcffldEdn;
+            plc = &rWrt.pFib->lcbPlcffldEdn;
+            break;
 
-    case TXT_TXTBOX:
-        pfc = &rWrt.pFib->fcPlcffldTxbx;
-        plc = &rWrt.pFib->lcbPlcffldTxbx;
-        break;
+        case TXT_TXTBOX:
+            pfc = &rWrt.pFib->fcPlcffldTxbx;
+            plc = &rWrt.pFib->lcbPlcffldTxbx;
+            break;
 
-    case TXT_HFTXTBOX:
-        pfc = &rWrt.pFib->fcPlcffldHdrTxbx;
-        plc = &rWrt.pFib->lcbPlcffldHdrTxbx;
-        break;
+        case TXT_HFTXTBOX:
+            pfc = &rWrt.pFib->fcPlcffldHdrTxbx;
+            plc = &rWrt.pFib->lcbPlcffldHdrTxbx;
+            break;
 
-    default:
-        pfc = plc = 0;
-        break;
+        default:
+            pfc = plc = 0;
+            break;
     }
 
     if( pfc && plc )
@@ -754,18 +754,18 @@ BOOL WW8_WrPlcFld::Write( SwWW8Writer& rWrt )
         *pfc = nFcStart;
         *plc = rWrt.pTableStrm->Tell() - nFcStart;
     }
-    return TRUE;
+    return true;
 }
 
-BOOL WW8_WrMagicTable::Write( SwWW8Writer& rWrt )
+bool WW8_WrMagicTable::Write(SwWW8Writer& rWrt)
 {
     if( WW8_WrPlc1::Count() <= 1 )
-        return FALSE;
+        return false;
     ULONG nFcStart = rWrt.pTableStrm->Tell();
     WW8_WrPlc1::Write( *rWrt.pTableStrm );
     rWrt.pFib->fcMagicTable = nFcStart;
     rWrt.pFib->lcbMagicTable = rWrt.pTableStrm->Tell() - nFcStart;
-    return TRUE;
+    return true;
 }
 
 void WW8_WrMagicTable::Append( WW8_CP nCp, ULONG nData)
@@ -873,7 +873,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const BYTE* pSprms)
         return ;
     }
 
-    BOOL bOk = pF->Append( nEndFc, nVarLen, pNewSprms );
+    bool bOk = pF->Append(nEndFc, nVarLen, pNewSprms);
     if( !bOk )
     {
         pF->Combine();
@@ -943,9 +943,9 @@ void WW8_WrPlcPn::WritePlc()
 //--------------------------------------------------------------------------
 /*  */
 
-WW8_WrFkp::WW8_WrFkp( ePLCFT ePl, WW8_FC nStartFc, BOOL bWrtWW8 )
+WW8_WrFkp::WW8_WrFkp(ePLCFT ePl, WW8_FC nStartFc, bool bWrtWW8)
     : nItemSize( ( CHP == ePl ) ? 1 : ( bWrtWW8 ? 13 : 7 )),
-         nIMax( 0 ), ePlc( ePl ), bCombined( FALSE ), nStartGrp( 511 ),
+         nIMax( 0 ), ePlc( ePl ), bCombined(false), nStartGrp( 511 ),
     nOldStartGrp( 511 ), nOldVarLen( 0 ), nMark(0)
 {
     pFkp = (BYTE*)new INT32[128];           // 512 Byte
@@ -990,7 +990,7 @@ BYTE WW8_WrFkp::SearchSameSprm( USHORT nVarLen, const BYTE* pSprms )
     return 0;           // nicht gefunden
 }
 
-BYTE *WW8_WrFkp::CopyLastSprms(BYTE &rLen,BOOL bVer8)
+BYTE *WW8_WrFkp::CopyLastSprms(BYTE &rLen, bool bVer8)
 {
     rLen=0;
     BYTE *pStart=0,*pRet=0;
@@ -1016,7 +1016,7 @@ BYTE *WW8_WrFkp::CopyLastSprms(BYTE &rLen,BOOL bVer8)
     return pRet;
 }
 
-BOOL WW8_WrFkp::Append( WW8_FC nEndFc, USHORT nVarLen, const BYTE* pSprms )
+bool WW8_WrFkp::Append( WW8_FC nEndFc, USHORT nVarLen, const BYTE* pSprms )
 {
     ASSERT( !nVarLen || pSprms, "Item-Pointer fehlt" );
     ASSERT( nVarLen < ( ( ePlc == PAP ) ? 497U : 502U ), "Sprms zu lang !" );
@@ -1024,7 +1024,7 @@ BOOL WW8_WrFkp::Append( WW8_FC nEndFc, USHORT nVarLen, const BYTE* pSprms )
     if( bCombined )
     {
         ASSERT( !this, "Fkp::Append: Fkp is already combined" );
-        return FALSE;
+        return false;
     }
     INT32 n = ((INT32*)pFkp)[nIMax];        // letzter Eintrag
     if( nEndFc <= n )
@@ -1034,7 +1034,7 @@ BOOL WW8_WrFkp::Append( WW8_FC nEndFc, USHORT nVarLen, const BYTE* pSprms )
                                     "+Fkp: selber FC mehrfach benutzt" );
                         // selber FC ohne Sprm wird ohne zu mosern ignoriert.
 
-        return TRUE;    // ignorieren, keinen neuen Fkp anlegen
+        return true;    // ignorieren, keinen neuen Fkp anlegen
     }
 
     BYTE nOldP = ( nVarLen ) ? SearchSameSprm( nVarLen, pSprms ) : 0;
@@ -1048,14 +1048,14 @@ BOOL WW8_WrFkp::Append( WW8_FC nEndFc, USHORT nVarLen, const BYTE* pSprms )
                      : (nStartGrp - (((nVarLen + 1) & 0xFFFE)+1)) & 0xFFFE )
                 : ((nStartGrp - nVarLen - 1) & 0xFFFE);
         if( nPos < 0 )
-            return FALSE;           // Passt absolut nicht
+            return false;           // Passt absolut nicht
         nOffset = nPos;             // Offset merken (kann auch ungerade sein!)
         nPos &= 0xFFFE;             // Pos fuer Sprms ( gerade Pos )
     }
 
     if( (USHORT)nPos <= ( nIMax + 2U ) * 4U + ( nIMax + 1U ) * nItemSize )
                                             // Passt hinter CPs und Offsets ?
-        return FALSE;                       // Nein
+        return false;                       // Nein
 
     ((INT32*)pFkp)[nIMax + 1] = nEndFc;     // FC eintragen
 
@@ -1081,18 +1081,18 @@ BOOL WW8_WrFkp::Append( WW8_FC nEndFc, USHORT nVarLen, const BYTE* pSprms )
         pOfs[nIMax * nItemSize] = nOldP;
     }
     nIMax++;
-    return TRUE;
+    return true;
 }
 
-BOOL WW8_WrFkp::Combine()
+bool WW8_WrFkp::Combine()
 {
     if( bCombined )
-        return FALSE;
+        return false;
     if( nIMax )
         memcpy( pFkp + ( nIMax + 1 ) * 4, pOfs, nIMax * nItemSize );
     DELETEZ( pOfs );
     ((BYTE*)pFkp)[511] = nIMax;
-    bCombined = TRUE;
+    bCombined = true;
 
 #if defined __BIGENDIAN         // Hier werden nur die FCs gedreht, die
     register USHORT i;          // Sprms muessen an anderer Stelle gedreht
@@ -1102,7 +1102,7 @@ BOOL WW8_WrFkp::Combine()
         *p = SWAPLONG( *p );
 #endif // ifdef __BIGENDIAN
 
-    return TRUE;
+    return true;
 }
 
 void WW8_WrFkp::Write( SvStream& rStrm, SwWW8WrGrf& rGrf )
@@ -1152,14 +1152,16 @@ void WW8_WrFkp::MergeToNew( short& rVarLen, BYTE *& rpNewSprms )
         }
         --nIMax;
         // if this sprms dont used from others, remove it
-        FASTBOOL bFnd = FALSE;
-        for( USHORT n = 0; n < nIMax; ++n )
-            if( nStart == pOfs[ n * nItemSize ] )
+        bool bFnd = false;
+        for (USHORT n = 0; n < nIMax; ++n)
+        {
+            if (nStart == pOfs[n * nItemSize])
             {
-                bFnd = TRUE;
+                bFnd = true;
                 break;
             }
-        if( !bFnd )
+        }
+        if (!bFnd)
         {
             nStartGrp = nOldStartGrp;
             memset( p, 0, nOldVarLen+1 );
@@ -1194,7 +1196,7 @@ WW8_FC WW8_WrFkp::GetEndFc() const
 // Methoden fuer Piece-Table-Verwaltung
 //--------------------------------------------------------------------------
 
-WW8_WrPct::WW8_WrPct( WW8_FC nfcMin, BOOL bSaveUniCode )
+WW8_WrPct::WW8_WrPct(WW8_FC nfcMin, bool bSaveUniCode)
     : nOldFc( nfcMin ), bIsUni( bSaveUniCode ), pPcts( new WW8_WrPcPtrs )
 {
     AppendPc( nOldFc, bIsUni );
@@ -1206,7 +1208,7 @@ WW8_WrPct::~WW8_WrPct()
 }
 
 // Piece fuellen und neues Piece erzeugen
-void WW8_WrPct::AppendPc( WW8_FC nStartFc, BOOL bIsUnicode )
+void WW8_WrPct::AppendPc(WW8_FC nStartFc, bool bIsUnicode)
 {
     WW8_CP nStartCp = nStartFc - nOldFc;    // Textbeginn abziehen
     if ( !nStartCp )
@@ -1324,9 +1326,9 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm )
         while( nPos && aSttCps[ nPos - 1 ] > ULONG( nStartCp ))
             --nPos;
 
-        aSttCps.Insert( nStartCp, nPos );
-        aEndCps.Insert( nStartCp, nPos );
-        aFieldBookmarks.Insert( BOOL(FALSE), nPos );
+        aSttCps.Insert(nStartCp, nPos);
+        aEndCps.Insert(nStartCp, nPos);
+        aFieldBookmarks.Insert(BOOL(false), nPos);
         maSwBkmkNms.push_back(rNm);
     }
     else
@@ -1419,7 +1421,7 @@ void WW8_WrtBookmarks::MoveFieldBookmarks(ULONG nFrom, ULONG nTo)
             aSttCps[nI] = nTo;
             if (aEndCps[nI] == nFrom)
             {
-                aFieldBookmarks[nI] = TRUE;
+                aFieldBookmarks[nI] = true;
                 aEndCps[nI] = nTo;
             }
         }
@@ -1532,9 +1534,9 @@ void SwWW8Writer::WriteAsStringTable(const ::std::vector<String>& rStrings,
             {
                 const String& rNm = rStrings[n];
                 SwWW8Writer::WriteShort( rStrm, rNm.Len() );
-                SwWW8Writer::WriteString16( rStrm, rNm, FALSE );
+                SwWW8Writer::WriteString16(rStrm, rNm, false);
                 if( nExtraLen )
-                    SwWW8Writer::FillCount( rStrm, nExtraLen );
+                    SwWW8Writer::FillCount(rStrm, nExtraLen);
             }
         }
         else
@@ -1544,10 +1546,10 @@ void SwWW8Writer::WriteAsStringTable(const ::std::vector<String>& rStrings,
             {
                 const String aNm(rStrings[n].Copy(0, 255));
                 rStrm << (BYTE)aNm.Len();
-                SwWW8Writer::WriteString8( rStrm, aNm, FALSE,
-                                                RTL_TEXTENCODING_MS_1252 );
-                if( nExtraLen )
-                    SwWW8Writer::FillCount( rStrm, nExtraLen );
+                SwWW8Writer::WriteString8(rStrm, aNm, false,
+                    RTL_TEXTENCODING_MS_1252);
+                if (nExtraLen)
+                    SwWW8Writer::FillCount(rStrm, nExtraLen);
             }
         }
         rlcbSttbf = rStrm.Tell() - rfcSttbf;
@@ -1616,8 +1618,8 @@ void SwWW8Writer::InsAsString8( WW8Bytes& rO, const String& rStr,
     rO.Insert( (BYTE*)sTmp.GetBuffer(), sTmp.Len(), rO.Count() );
 }
 
-void SwWW8Writer::WriteString16( SvStream& rStrm, const String& rStr,
-                                    BOOL bAddZero )
+void SwWW8Writer::WriteString16(SvStream& rStrm, const String& rStr,
+    bool bAddZero)
 {
     WW8Bytes aBytes;
     SwWW8Writer::InsAsString16( aBytes, rStr );
@@ -1626,8 +1628,8 @@ void SwWW8Writer::WriteString16( SvStream& rStrm, const String& rStr,
     rStrm.Write( aBytes.GetData(), aBytes.Count() );
 }
 
-void SwWW8Writer::WriteString8( SvStream& rStrm, const String& rStr,
-                                BOOL bAddZero, rtl_TextEncoding eCodeSet )
+void SwWW8Writer::WriteString8(SvStream& rStrm, const String& rStr,
+    bool bAddZero, rtl_TextEncoding eCodeSet)
 {
     WW8Bytes aBytes;
     SwWW8Writer::InsAsString8( aBytes, rStr, eCodeSet );
@@ -1665,8 +1667,8 @@ void SwWW8Writer::WriteSpecialText( ULONG nStart, ULONG nEnd, BYTE nTTyp )
     nTxtTyp = nTTyp;
     SwPaM* pOldPam = pCurPam;       //!! Einfaches Umsetzen des PaM ohne
     SwPaM* pOldEnd = pOrigPam;          // Wiederherstellen muesste es auch tun
-    BOOL bOldPageDescs = bOutPageDescs;
-    bOutPageDescs = FALSE;
+    bool bOldPageDescs = bOutPageDescs;
+    bOutPageDescs = false;
                                     // bOutKF wird in WriteKF1 gemerkt / gesetzt
     pCurPam = NewSwPaM( *pDoc, nStart, nEnd );
 
@@ -1687,9 +1689,8 @@ void SwWW8Writer::WriteSpecialText( ULONG nStart, ULONG nEnd, BYTE nTTyp )
     nTxtTyp = nOldTyp;
 }
 
-void SwWW8Writer::OutSwString( const String& rStr, xub_StrLen nStt,
-                                xub_StrLen nLen, BOOL bUnicode,
-                                rtl_TextEncoding eChrSet )
+void SwWW8Writer::OutSwString(const String& rStr, xub_StrLen nStt,
+    xub_StrLen nLen, bool bUnicode, rtl_TextEncoding eChrSet)
 
 {
     if( nLen )
@@ -1700,15 +1701,15 @@ void SwWW8Writer::OutSwString( const String& rStr, xub_StrLen nStt,
         if( nStt || nLen != rStr.Len() )
         {
             String sOut( rStr.Copy( nStt, nLen ) );
-            if( bUnicode )
-                SwWW8Writer::WriteString16( Strm(), sOut, FALSE );
+            if (bUnicode)
+                SwWW8Writer::WriteString16(Strm(), sOut, false);
             else
-                SwWW8Writer::WriteString8( Strm(), sOut, FALSE, eChrSet );
+                SwWW8Writer::WriteString8(Strm(), sOut, false, eChrSet);
         }
-        else if( bUnicode )
-            SwWW8Writer::WriteString16( Strm(), rStr, FALSE );
+        else if (bUnicode)
+            SwWW8Writer::WriteString16(Strm(), rStr, false);
         else
-            SwWW8Writer::WriteString8( Strm(), rStr, FALSE, eChrSet );
+            SwWW8Writer::WriteString8(Strm(), rStr, false, eChrSet);
     }
 }
 
@@ -1794,13 +1795,13 @@ WW8SaveData::WW8SaveData( SwWW8Writer& rWriter, ULONG nStt, ULONG nEnd )
 
     rWrt.SetEndPaM( rWrt.pCurPam );
     rWrt.pCurPam->Exchange( );
-    rWrt.bWriteAll = TRUE;
-    rWrt.bOutTable = FALSE;
+    rWrt.bWriteAll = true;
+    rWrt.bOutTable = false;
     // Vorsicht:  rWrt.bIsInTable  darf hier NICHT veraendert werden!
-    rWrt.bOutFlyFrmAttrs = FALSE;
+    rWrt.bOutFlyFrmAttrs = false;
 //  rWrt.pAttrSet = 0;
-    rWrt.bStartTOX = FALSE;
-    rWrt.bInWriteTOX = FALSE;
+    rWrt.bStartTOX = false;
+    rWrt.bInWriteTOX = false;
 }
 
 
@@ -1870,7 +1871,7 @@ void SwWW8Writer::WriteText()
             const SwSection& rSect = pNd->FindStartNode()->GetSectionNode()
                                         ->GetSection();
             if( bStartTOX && TOX_CONTENT_SECTION == rSect.GetType() )
-                bStartTOX = FALSE;
+                bStartTOX = false;
 
             SwNodeIndex aIdx( *pNd, 1 );
             if(    aIdx.GetNode().IsEndNode()
@@ -1910,10 +1911,7 @@ void SwWW8Writer::WriteMainText()
 {
     pFib->fcMin = Strm().Tell();
 
-    do {
-        WriteText();
-    } while( FALSE );       //!! Temporaer nur 1 Bereich
-//  } while( CopyNextPam( &pCurPam ) );     // bis alle Pam bearbeitet
+    WriteText();
 
     if( 0 == Strm().Tell() - pFib->fcMin )  // kein Text ?
         WriteCR();                  // dann CR ans Ende ( sonst mault WW )
@@ -2031,7 +2029,7 @@ void SwWW8Writer::WriteFkpPlcUsw()
 
 void SwWW8Writer::StoreDoc1()
 {
-    BOOL bNeedsFinalPara=FALSE;
+    bool bNeedsFinalPara = false;
     // Start of Text ( Mangel ueber )
     SwWW8Writer::FillUntil( Strm(), pFib->fcMin );
 
@@ -2080,9 +2078,9 @@ ULONG SwWW8Writer::StoreDoc()
     bStyDef = bBreakBefore = bOutKF =
         bOutFlyFrmAttrs = bOutPageDescs = bOutTable = bOutFirstPage =
         bIsInTable = bOutGrf = bInWriteEscher = bStartTOX =
-        bInWriteTOX = FALSE;
+        bInWriteTOX = false;
 
-    bFtnAtTxtEnd = bEndAtTxtEnd = TRUE;
+    bFtnAtTxtEnd = bEndAtTxtEnd = true;
 
     pFlyFmt = 0;
     pFlyOffset = 0;
@@ -2208,7 +2206,7 @@ ULONG SwWW8Writer::StoreDoc()
         }
 
         // Hole evtl. Pagedesc des 1. Nodes
-        if( pSet && SFX_ITEM_ON == pSet->GetItemState(RES_PAGEDESC,TRUE,&pI)
+        if( pSet && SFX_ITEM_ON == pSet->GetItemState(RES_PAGEDESC, true, &pI)
             && ((SwFmtPageDesc*)pI)->GetPageDesc() )
             pSepx->AppendSep( 0, *(SwFmtPageDesc*)pI, *pNd, pFmt, nRstLnNum );
         else
@@ -2262,7 +2260,7 @@ ULONG SwWW8Writer::StoreDoc()
     SwTxtFmtColl* pStdTxtFmtColl =
         pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
     if (pStdTxtFmtColl && SFX_ITEM_SET == pStdTxtFmtColl->GetItemState(
-        RES_PARATR_HYPHENZONE, FALSE, &pItem))
+        RES_PARATR_HYPHENZONE, false, &pItem))
     {
         pDop->fAutoHyphen = ((const SvxHyphenZoneItem*)pItem)->IsHyphen();
     }
@@ -2419,7 +2417,7 @@ ULONG SwWW8Writer::WriteStorage()
     ULONG nRet = StoreDoc();
 
     ::EndProgress( pDoc->GetDocShell() );
-    bWrtWW8 = FALSE;        // sicherheitshalber: Default fuer's naechste Mal
+    bWrtWW8 = false;        // sicherheitshalber: Default fuer's naechste Mal
     return nRet;
 }
 
@@ -2446,10 +2444,10 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
     xRet = new SwWW8Writer( rFltName );
 }
 
-BOOL WW8_WrPlcFtnEdn::WriteTxt( SwWW8Writer& rWrt )
+bool WW8_WrPlcFtnEdn::WriteTxt( SwWW8Writer& rWrt )
 {
-    BOOL bRet=FALSE;
-    if( TXT_FTN == nTyp )
+    bool bRet = false;
+    if (TXT_FTN == nTyp)
     {
         bRet = WriteGenericTxt( rWrt, TXT_FTN, rWrt.pFib->ccpFtn );
         rWrt.pFldFtn->Finish( rWrt.Fc2Cp( rWrt.Strm().Tell() ),
@@ -2482,7 +2480,7 @@ void WW8_WrPlcFtnEdn::WritePlc( SwWW8Writer& rWrt ) const
 }
 
 
-BOOL WW8_WrPlcPostIt::WriteTxt( SwWW8Writer& rWrt )
+bool WW8_WrPlcPostIt::WriteTxt(SwWW8Writer& rWrt)
 {
     return WriteGenericTxt( rWrt, TXT_ATN, rWrt.pFib->ccpAtn );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:36 $
+ *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ void SwWW8Writer::OutListTab()
             // Build the NumString for this Level
             String sNumStr;
             String sFontName;
-            BOOL bWriteBullet = FALSE;
+            bool bWriteBullet = false;
             const Font* pBulletFont=0;
             rtl_TextEncoding eChrSet=0;
             FontFamily eFamily=FAMILY_DECORATIVE;
@@ -250,7 +250,7 @@ void SwWW8Writer::OutListTab()
                 SVX_NUM_BITMAP == rFmt.GetNumberingType() )
             {
                 sNumStr = rFmt.GetBulletChar();
-                bWriteBullet = TRUE;
+                bWriteBullet = true;
 
                 pBulletFont = rFmt.GetBulletFont();
                 if( !pBulletFont )
@@ -321,7 +321,7 @@ void SwWW8Writer::OutListTab()
                 {
                     BYTE* pLvlPos = aNumLvlPos;
                     aNdNum.SetLevel( nLvl );
-                    sNumStr = rRule.MakeNumString( aNdNum, FALSE, TRUE );
+                    sNumStr = rRule.MakeNumString(aNdNum, false, true);
 
                     // now search the nums in the string
                     for( BYTE i = 0; i <= nLvl; ++i )
@@ -396,7 +396,7 @@ void SwWW8Writer::OutListTab()
                 else
                     pOutSet = &rFmt.GetCharFmt()->GetAttrSet();
 
-                Out_SfxItemSet( *pOutSet, FALSE, TRUE, ScriptType::LATIN );
+                Out_SfxItemSet(*pOutSet, false, true, ScriptType::LATIN);
 
                 pO = pOldpO;
             }
@@ -422,8 +422,8 @@ void SwWW8Writer::OutListTab()
                 pTableStrm->Write( aCharAtrs.GetData(), aCharAtrs.Count() );
 
             // write the num string
-            SwWW8Writer::WriteShort( *pTableStrm, sNumStr.Len() );
-            SwWW8Writer::WriteString16( *pTableStrm, sNumStr, FALSE );
+            SwWW8Writer::WriteShort(*pTableStrm, sNumStr.Len());
+            SwWW8Writer::WriteString16(*pTableStrm, sNumStr, false);
         }
     }
     delete pConvert;
@@ -472,8 +472,8 @@ void SwWW8Writer::OutListNamesTab()
             sNm = rRule.GetName();
 
         SwWW8Writer::WriteShort( *pTableStrm, sNm.Len() );
-        if( sNm.Len() )
-            SwWW8Writer::WriteString16( *pTableStrm, sNm, FALSE );
+        if (sNm.Len())
+            SwWW8Writer::WriteString16(*pTableStrm, sNm, false);
     }
 
     SwWW8Writer::WriteLong( *pTableStrm, pFib->fcSttbListNames + 2, nNms );
@@ -594,7 +594,7 @@ void SwWW8Writer::BuildAnlvBase( WW8_ANLV& rAnlv, BYTE*& rpCh,
     case SVX_ADJUST_BLOCKLINE: nb = 3; break;
     }
 
-    BOOL bInclUpper = rFmt.GetIncludeUpperLevels() > 0;
+    bool bInclUpper = rFmt.GetIncludeUpperLevels() > 0;
     if( bInclUpper )
         nb |= 0x4;          // include previous levels
 
@@ -661,23 +661,23 @@ void SwWW8Writer::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,
 
 
 // Return: ist es eine Gliederung ?
-BOOL SwWW8Writer::Out_SwNum( const SwTxtNode* pNd )
+bool SwWW8Writer::Out_SwNum(const SwTxtNode* pNd)
 {
     BYTE nSwLevel = pNd->GetNum()->GetLevel();
     const SwNumRule* pRul = pNd->GetNumRule();
     if( !pRul || nSwLevel == WW8ListManager::nMaxLevel )
-        return FALSE;
+        return false;
 
-    BOOL bNoNum = FALSE;
+    bool bNoNum = false;
     if( nSwLevel == NO_NUM )
         nSwLevel = NO_NUMLEVEL | 0 ;    // alte Codierung...
     if( ( nSwLevel & NO_NUMLEVEL ) != 0 )
     {
         nSwLevel &= ~NO_NUMLEVEL;       // 0..WW8ListManager::nMaxLevel
-        bNoNum = TRUE;
+        bNoNum = true;
     }
 
-    BOOL bRet = TRUE;
+    bool bRet = true;
     const SwNumFmt* pFmt = &pRul->Get( nSwLevel );// interessierendes Format
 
 #ifdef NUM_RELSPACE
@@ -695,7 +695,7 @@ BOOL SwWW8Writer::Out_SwNum( const SwTxtNode* pNd )
                             // Aufzaehlung
         Out_WwNumLvl( (bNoNum) ? 12 : 11 );
         Out_NumRuleAnld( *pRul, *pFmt, 11 );
-        bRet = FALSE;
+        bRet = false;
     }
     else if( pRul->IsContinusNum()
               || ( pRul->Get(1).GetIncludeUpperLevels() <= 1 ) )
@@ -703,7 +703,7 @@ BOOL SwWW8Writer::Out_SwNum( const SwTxtNode* pNd )
                             // Nummerierung
         Out_WwNumLvl( (bNoNum) ? 12 : 10 );
         Out_NumRuleAnld( *pRul, *pFmt, 10 );
-        bRet = FALSE;
+        bRet = false;
     }
     else
     {

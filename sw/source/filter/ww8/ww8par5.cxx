@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-12 10:53:12 $
+ *  last change: $Author: cmc $ $Date: 2002-08-19 15:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ public:
     void SetNextPtr( xub_StrLen _nNext ) { nNext = _nNext; }
 
     xub_StrLen FindNextStringPiece( xub_StrLen _nStart = STRING_NOTFOUND );
-    BOOL GetTokenSttFromTo(xub_StrLen* _pFrom, xub_StrLen* _pTo,
+    bool GetTokenSttFromTo(xub_StrLen* _pFrom, xub_StrLen* _pTo,
         xub_StrLen _nMax);
 
     String GetResult() const;
@@ -369,7 +369,7 @@ xub_StrLen _ReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
 
 
 // read parameters "1-3" or 1-3 with both values between 1 and nMax
-BOOL _ReadFieldParams::GetTokenSttFromTo(USHORT* pFrom, USHORT* pTo, USHORT nMax)
+bool _ReadFieldParams::GetTokenSttFromTo(USHORT* pFrom, USHORT* pTo, USHORT nMax)
 {
     USHORT nStart = 0;
     USHORT nEnd   = 0;
@@ -413,8 +413,8 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
 
     if (pB->GetIsEnd())
     {
-        pRefStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_BOOKMARK, TRUE,
-            pB->GetHandle() );
+        pRefStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, true,
+            pB->GetHandle());
         return 0;
     }
 
@@ -447,9 +447,9 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
         //              this the exception!
 
         String sHex(CREATE_CONST_ASC( "\\x" ));
-        BOOL bSetAsHex;
-        BOOL bAllowCr = SwFltGetFlag( nFieldFlags,
-            SwFltControlStack::ALLOW_FLD_CR );
+        bool bSetAsHex;
+        bool bAllowCr = SwFltGetFlag(nFieldFlags,
+            SwFltControlStack::ALLOW_FLD_CR) ? true : false;
 
         sal_Unicode cChar;
 
@@ -462,14 +462,14 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
             case 0x0c:
             case 0x0d:
                 if( bAllowCr )
-                    aVal.SetChar( nI, '\n' ), bSetAsHex = FALSE;
+                    aVal.SetChar( nI, '\n' ), bSetAsHex = false;
                 else
-                    bSetAsHex = TRUE;
+                    bSetAsHex = true;
                 break;
 
             case 0xFE:
             case 0xFF:
-                bSetAsHex = TRUE;
+                bSetAsHex = true;
                 break;
 
             default:
@@ -536,7 +536,7 @@ void lcl_ConvertSequenceName( SwWW8ImplReader& rReader, String& rSequenceName )
 // and returns start of this parameter or STRING_NOT_FOUND.
 xub_StrLen FindParaStart( const String& rStr, sal_Unicode cToken, sal_Unicode cToken2 )
 {
-    BOOL bStr = FALSE;          // innerhalb String ignorieren
+    bool bStr = false;          // innerhalb String ignorieren
 
     for( xub_StrLen nBuf=0; nBuf+1 < rStr.Len(); nBuf++ )
     {
@@ -591,7 +591,8 @@ String FindPara( const String& rStr, sal_Unicode cToken, sal_Unicode cToken2 )
 }
 
 
-static SvxExtNumType GetNumTypeFromName( const String& rStr, BOOL bAllowPageDesc = FALSE )
+static SvxExtNumType GetNumTypeFromName(const String& rStr,
+    bool bAllowPageDesc = false)
 {
     SvxExtNumType eTyp = bAllowPageDesc ? SVX_NUM_PAGEDESC : SVX_NUM_ARABIC;
     if( rStr.EqualsIgnoreCaseAscii( "Arabi", 0, 5 ) )  // Arabisch, Arabic
@@ -611,7 +612,7 @@ static SvxExtNumType GetNumTypeFromName( const String& rStr, BOOL bAllowPageDesc
     return eTyp;
 }
 
-static SvxExtNumType GetNumberPara( String& rStr, BOOL bAllowPageDesc = FALSE )
+static SvxExtNumType GetNumberPara(String& rStr, bool bAllowPageDesc = false)
 {
     String s( FindPara( rStr, '*', '*' ) );     // Ziffernart
     SvxExtNumType aType = GetNumTypeFromName( s, bAllowPageDesc );
@@ -691,7 +692,7 @@ void SwWW8ImplReader::UpdateFields()
 //  rDoc.UpdateFlds();              // alles ???
 //  rDoc.UpdateExpFlds();                               // SetExp-Fields
     rDoc.SetUpdateExpFldStat();                 // JP: neu fuer alles wichtige
-    rDoc.SetInitDBFields( TRUE );               // Datenbank-Felder auch
+    rDoc.SetInitDBFields(true);             // Datenbank-Felder auch
 }
 
 // Read_Field liest ein Feld ein oder, wenn es nicht gelesen werden kann,
@@ -813,7 +814,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     if( !pF )
         return 0;
 
-    BOOL bOk = pF->GetPara( pRes->nCp2OrIdx, aF );
+    bool bOk = pF->GetPara( pRes->nCp2OrIdx, aF );
 
     ASSERT(bOk, "WW8: Bad Field!\n");
 
@@ -896,7 +897,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 void SwWW8ImplReader::MakeTagString( String& rStr, const String& rOrg )
 {
     String sHex( CREATE_CONST_ASC( "\\x" ));
-    BOOL bAllowCr = SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_IN_TEXT )
+    bool bAllowCr = SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_IN_TEXT )
                 || SwFltGetFlag( nFieldFlags, SwFltControlStack::ALLOW_FLD_CR );
     sal_Unicode cChar;
     rStr = rOrg;
@@ -904,7 +905,7 @@ void SwWW8ImplReader::MakeTagString( String& rStr, const String& rOrg )
     for( xub_StrLen nI = 0;
             nI < rStr.Len() && rStr.Len() < (MAX_FIELDLEN - 4); ++nI )
     {
-        BOOL bSetAsHex = FALSE;
+        bool bSetAsHex = false;
         switch( cChar = rStr.GetChar( nI ) )
         {
             case 132:                       // Typographische Anfuehrungszeichen
@@ -934,11 +935,11 @@ void SwWW8ImplReader::MakeTagString( String& rStr, const String& rOrg )
                 if( bAllowCr )
                     rStr.SetChar( nI, '\n' );
                 else
-                    bSetAsHex = TRUE;
+                    bSetAsHex = true;
                 break;
             case 0xFE:
             case 0xFF:
-                bSetAsHex = TRUE;
+                bSetAsHex = true;
                 break;
             default:
                 bSetAsHex = 0x20 > cChar;
@@ -969,8 +970,8 @@ void SwWW8ImplReader::InsertTagField( const USHORT nId, const String& rTagText )
 
     if( SwFltGetFlag(nFieldFlags, SwFltControlStack::TAGS_IN_TEXT))
     {
-        aName += rTagText;                                          // als Txt taggen
-        rDoc.Insert( *pPaM, aName, FALSE );
+        aName += rTagText;      // als Txt taggen
+        rDoc.Insert(*pPaM, aName, false);
     }
     else
     {                                                   // normal tagggen
@@ -1233,12 +1234,12 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
         SwSetExpFieldType(&rDoc, sOrigName, GSE_STRING));
     SwSetExpField aFld( pFT, aDef );
     aFld.SetSubType(SUB_INVISIBLE|GSE_STRING);
-    aFld.SetInputFlag( TRUE );
+    aFld.SetInputFlag(true);
     aFld.SetPromptText( aQ );
 
     rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
 
-    pRefStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, TRUE, nNo);
+    pRefStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, true, nNo);
     return FLD_OK;
 }
 
@@ -1261,10 +1262,10 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
 {
     String aSequenceName;
     String aBook;
-    BOOL bHidden    = FALSE;
-    BOOL bFormat    = FALSE;
-    BOOL bShowLast  = FALSE;
-    BOOL bCountOn   = TRUE;
+    bool bHidden    = false;
+    bool bFormat    = false;
+    bool bShowLast  = false;
+    bool bCountOn   = true;
     String sStart, sLevel;
     SvxExtNumType eNumFormat = SVX_NUM_ARABIC;
     long nRet;
@@ -1282,33 +1283,33 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
 
         case 'h':
             if( !bFormat )
-                bHidden = TRUE;             // Hidden-Flag aktivieren
+                bHidden = true;             // Hidden-Flag aktivieren
             break;
 
         case '*':
-            bFormat = TRUE;                 // Format-Flag aktivieren
-            bHidden = FALSE;                // Hidden-Flag deaktivieren
+            bFormat = true;                 // Format-Flag aktivieren
+            bHidden = false;                // Hidden-Flag deaktivieren
             nRet = aReadParam.SkipToNextToken();
             if( -2 == nRet )
                 eNumFormat = GetNumTypeFromName( aReadParam.GetResult() );
             break;
 
         case 'r':
-            bShowLast = FALSE;              // Zaehler neu setzen
-            bCountOn  = FALSE;
+            bShowLast = false;              // Zaehler neu setzen
+            bCountOn  = false;
             nRet = aReadParam.SkipToNextToken();
             if( -2 == nRet )
                 sStart = aReadParam.GetResult();
             break;
 
         case 'c':
-            bShowLast = TRUE;               // zuletzt verwendete Nummer anzeigen
-            bCountOn  = FALSE;
+            bShowLast = true;           // zuletzt verwendete Nummer anzeigen
+            bCountOn  = false;
             break;
 
         case 'n':
-            bCountOn  = TRUE;               // Nummer um eins erhoehen (default)
-            bShowLast = FALSE;
+            bCountOn  = true;               // Nummer um eins erhoehen (default)
+            bShowLast = false;
             break;
 
         case 's':                       // Outline Level
@@ -1348,7 +1349,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
     USHORT nSub=0;
     // RegInfoFormat, DefaultFormat fuer DocInfoFelder
     USHORT nReg = DI_SUB_AUTHOR;
-    BOOL   bDateTime = FALSE;
+    bool bDateTime = false;
 
     if( 85 == pF->nId )
     {
@@ -1425,7 +1426,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
                     {aName40, aName41, aName42, aName43, aName44},
                     {aName50, aName51, aName52, aName53, aName54}
                 };
-                BOOL bFldFound= FALSE;
+                bool bFldFound= false;
                 USHORT nFIdx;
                 for(USHORT nLIdx=1; !bFldFound && (nLangCnt > nLIdx); ++nLIdx)
                 {
@@ -1434,7 +1435,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
                         if( aStr.Equals( String( aNameSet_26[nFIdx][nLIdx],
                             RTL_TEXTENCODING_MS_1252 ) ) )
                         {
-                            bFldFound = TRUE;
+                            bFldFound = true;
                             pF->nId   = aNameSet_26[nFIdx][0][0];
                         }
                     }
@@ -1470,12 +1471,12 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
         case 21:
             nSub = DI_CREATE;
             nReg = DI_SUB_DATE;
-            bDateTime = TRUE;
+            bDateTime = true;
             break;
         case 23:
             nSub = DI_PRINT;
             nReg = DI_SUB_DATE;
-            bDateTime = TRUE;
+            bDateTime = true;
             break;
         case 24:
             nSub = DI_DOCNO;
@@ -1483,12 +1484,12 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
         case 22:
             nSub = DI_CHANGE;
             nReg = DI_SUB_DATE;
-            bDateTime = TRUE;
+            bDateTime = true;
             break;
         case 25:
             nSub = DI_CHANGE;
             nReg = DI_SUB_TIME;
-            bDateTime = TRUE;
+            bDateTime = true;
             break;
     }
 
@@ -1628,7 +1629,7 @@ eF_ResT SwWW8ImplReader::Read_F_CurPage( WW8FieldDesc*, String& rStr )
     // Seitennummer
     SwPageNumberField aFld( (SwPageNumberFieldType*)
         rDoc.GetSysFldType( RES_PAGENUMBERFLD ), PG_RANDOM,
-        GetNumberPara( rStr, TRUE ) );
+        GetNumberPara(rStr, true));
 
     rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
     return FLD_OK;
@@ -1740,7 +1741,7 @@ eF_ResT SwWW8ImplReader::Read_F_Embedd( WW8FieldDesc*, String& rStr )
 
     if( bObj && nPicLocFc )
         nObjLocFc = nPicLocFc;
-    bEmbeddObj = TRUE;
+    bEmbeddObj = true;
     return FLD_TEXT;
 }
 
@@ -1774,7 +1775,7 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, String& rStr )
 
     rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
 
-    pRefStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, TRUE, nNo);
+    pRefStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, true, nNo);
 
     return FLD_OK;
 }
@@ -1783,8 +1784,8 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, String& rStr )
 eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
 {                                                       // Reference - Field
     String sOrigBkmName;
-    BOOL bChapterNr = FALSE;
-    BOOL bAboveBelow = FALSE;
+    bool bChapterNr = false;
+    bool bAboveBelow = false;
 
     long nRet;
     _ReadFieldParams aReadParam( rStr );
@@ -1799,11 +1800,11 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
         case 'n':
         case 'r':
         case 'w':
-            bChapterNr = TRUE; // activate flag 'Chapter Number'
+            bChapterNr = true; // activate flag 'Chapter Number'
             break;
 
         case 'p':
-            bAboveBelow = TRUE;
+            bAboveBelow = true;
             break;
         case 'h':
             break;
@@ -1819,7 +1820,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
             rDoc.GetSysFldType( RES_GETEXPFLD ),sOrigBkmName, GSE_STRING,
             VVF_SYS );
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
-        pRefStck->SetBookRef( sOrigBkmName, FALSE );
+        pRefStck->SetBookRef(sOrigBkmName, false);
     }
     else
     {
@@ -1865,8 +1866,8 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
 eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, String& rStr )
 {
     String aBkmName;
-    BOOL bChapterNr = FALSE;
-    BOOL bAboveBelow = FALSE;
+    bool bChapterNr = false;
+    bool bAboveBelow = false;
 
     long nRet;
     _ReadFieldParams aReadParam( rStr );
@@ -1879,10 +1880,10 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, String& rStr )
                 aBkmName = aReadParam.GetResult();
             break;
         case 'r':
-            bChapterNr = TRUE; // activate flag 'Chapter Number'
+            bChapterNr = true; // activate flag 'Chapter Number'
             break;
         case 'p':
-            bAboveBelow = TRUE;
+            bAboveBelow = true;
             break;
         case 'h':
             break;
@@ -1897,7 +1898,7 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, String& rStr )
         SwGetExpField aFld( (SwGetExpFieldType*)
             rDoc.GetSysFldType( RES_GETEXPFLD ), aBkmName, GSE_STRING, VVF_SYS);
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
-        pRefStck->SetBookRef( aBkmName, FALSE );
+        pRefStck->SetBookRef(aBkmName, false);
     }
     else
     {   // set Sequence No of corresponding Foot-/Endnote to Zero
@@ -1939,7 +1940,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
                         rDoc.GetSysFldType( RES_GETREFFLD ), sOrigName, 0, 0,
                         REF_PAGE );
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
-        pRefStck->SetBookRef( sOrigName, TRUE );
+        pRefStck->SetBookRef(sOrigName, true);
     }
     else
     {
@@ -1960,8 +1961,8 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr )
     String aName;
     String aVText;
     long nRet;
-    BOOL bNewVText = TRUE;
-    BOOL bBracket  = FALSE;
+    bool bNewVText = true;
+    bool bBracket  = false;
     _ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {
@@ -1975,13 +1976,14 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr )
                 if( bBracket )
                     aVText += ' ';
                 aVText += aReadParam.GetResult();
-                if( bNewVText )
+                if (bNewVText)
                 {
-                    bBracket  = aVText.EqualsIgnoreCaseAscii('[', 1, 0);
-                    bNewVText = FALSE;
+                    bBracket = aVText.EqualsIgnoreCaseAscii('[', 1, 0)
+                        ? true : false;
+                    bNewVText = false;
                 }
                 else if( aVText.GetChar( aVText.Len()-1 ) == ']' )
-                    bBracket  = FALSE;
+                    bBracket  = false;
             }
             break;
         }
@@ -2001,7 +2003,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr )
 eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
 {
     String aGrfName;
-    BOOL bEmbedded = TRUE;
+    bool bEmbedded = true;
 
     long nRet;
     _ReadFieldParams aReadParam( rStr );
@@ -2015,7 +2017,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
             break;
 
         case 'd':
-            bEmbedded = FALSE;          // Embedded-Flag deaktivieren
+            bEmbedded = false;          // Embedded-Flag deaktivieren
             break;
 
         case 'c':// den Converter-Namen ueberlesen
@@ -2097,9 +2099,9 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
 
     SwSection aSection( FILE_LINK_SECTION, rDoc.GetUniqueSectionName( &aStr ) );
     aSection.SetLinkFileName( aPara );
-    aSection.SetProtect( TRUE );
+    aSection.SetProtect(true);
 
-    pNewSection = rDoc.Insert( *pPaM, aSection, 0 ,FALSE);
+    pNewSection = rDoc.Insert(*pPaM, aSection, 0 ,false);
 
     const SwSectionNode* pSectionNode = pNewSection->GetFmt()->GetSectionNode();
     ASSERT(!pAfterSection, "recursive sections!");
@@ -2108,7 +2110,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
     pPaM->GetPoint()->nNode = pSectionNode->GetIndex()+1;
     pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0 );
 
-    bTxbxFlySection=TRUE;
+    bTxbxFlySection = true;
     ReadText(pF->nSRes, pF->nLRes, pPlcxMan->GetManType());
 
     aSave.Restore( this );
@@ -2619,7 +2621,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                 case 'r':
                     {
                         SwForm aForm( pBase->GetTOXForm() );
-                        aForm.SetCommaSeparated( TRUE );
+                        aForm.SetCommaSeparated(true);
                         pBase->SetTOXForm( aForm );
                     }
                     break;
@@ -2889,7 +2891,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     } // ToxBase fertig
 
     // Update fuer TOX anstossen
-    rDoc.SetUpdateTOX( TRUE );
+    rDoc.SetUpdateTOX(true);
 
     const SwPosition* pPos = pPaM->GetPoint();
 
@@ -2902,19 +2904,19 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
         const SfxItemSet* pSet = pNd->GetpSwAttrSet();
         if( pSet )
         {
-            if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, FALSE ) )
-                aFltTOX.SetHadBreakItem( TRUE );
-            if( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, FALSE ) )
-                aFltTOX.SetHadPageDescItem( TRUE );
+            if (SFX_ITEM_SET == pSet->GetItemState(RES_BREAK, false))
+                aFltTOX.SetHadBreakItem(true);
+            if (SFX_ITEM_SET == pSet->GetItemState(RES_PAGEDESC, false))
+                aFltTOX.SetHadPageDescItem(true);
         }
     }
 
     // Setze Anfang in Stack
     pRefStck->NewAttr( *pPos, aFltTOX );
     if( 1 < nIndexCols )
-        bDontCreateSep = TRUE;
+        bDontCreateSep = true;
 
-    rDoc.InsertTableOf(*pPaM->GetPoint(), *aFltTOX.GetBase(), FALSE);
+    rDoc.InsertTableOf(*pPaM->GetPoint(), *aFltTOX.GetBase(), false);
 
     // Setze Ende in Stack
     pRefStck->SetAttr( *pPos, RES_FLTR_TOX );
@@ -2926,7 +2928,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
 {
     eF_ResT eRet = FLD_OK;
     String sURL, sTarget, sMark;
-    BOOL bDataImport=FALSE;
+    bool bDataImport = false;
 
     rStr.EraseTrailingChars( 1 );
 
@@ -2986,7 +2988,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
 
 void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
 {
-    BOOL bIdx = ( nFldId != 9 );
+    bool bIdx = ( nFldId != 9 );
     TOXTypes eTox = ( !bIdx ) ? TOX_CONTENT : TOX_INDEX;    // Default
 
     USHORT nLevel = 1;
@@ -3084,7 +3086,7 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
 
     if( nLen < 0 )
     {
-        bIgnoreText = FALSE;
+        bIgnoreText = false;
         return;
     }
 
@@ -3093,7 +3095,7 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
     if( bIgnoreText )
         return;
 
-    bIgnoreText = TRUE;
+    bIgnoreText = true;
     long nOldPos = pStrm->Tell();
 
     WW8_CP nStartCp = pSBase->WW8Fc2Cp( nOldPos );
@@ -3109,7 +3111,7 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
     {
         // If Field End Mark found
         if( nFieldLen && (0x15 == sFieldName.GetChar( nC )))
-            bIgnoreText = FALSE;
+            bIgnoreText = false;
         pStrm->Seek( nOldPos );
         return;                 // kein Feld zu finden
     }
@@ -3151,7 +3153,7 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
             break;                  // keine Mehrfachnennungen moeglich
         }
     }
-    bIgnoreText = TRUE;
+    bIgnoreText = true;
     pStrm->Seek( nOldPos );
 }
 

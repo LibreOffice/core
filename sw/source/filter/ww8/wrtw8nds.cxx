@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:36 $
+ *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,13 +268,13 @@ private:
     bool mbParaIsRTL;
 
     xub_StrLen SearchNext( xub_StrLen nStartPos );
-    void SetCharSet( const SwTxtAttr& rTxtAttr, BOOL bStart );
+    void SetCharSet(const SwTxtAttr& rTxtAttr, bool bStart);
     void FieldVanish( const String& rTxt );
 
-    void OutSwFmtINetFmt( const SwFmtINetFmt& rAttr, BOOL bStart );
-    void OutSwFmtRefMark( const SwFmtRefMark& rAttr, BOOL bStart );
-    void OutSwTOXMark( const SwTOXMark& rAttr, BOOL bStart );
-    void OutSwFmtRuby( const SwFmtRuby& rRuby, BOOL bStart);
+    void OutSwFmtINetFmt(const SwFmtINetFmt& rAttr, bool bStart);
+    void OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool bStart);
+    void OutSwTOXMark(const SwTOXMark& rAttr, bool bStart);
+    void OutSwFmtRuby(const SwFmtRuby& rRuby, bool bStart);
 
     //No copying
     WW8_SwAttrIter(const WW8_SwAttrIter&);
@@ -282,8 +282,8 @@ private:
 public:
     WW8_SwAttrIter( SwWW8Writer& rWr, const SwTxtNode& rNd );
 
-    BOOL IsTxtAttr( xub_StrLen nSwPos );
-    BOOL IsRedlineAtEnd( xub_StrLen nPos ) const;
+    bool IsTxtAttr( xub_StrLen nSwPos );
+    bool IsRedlineAtEnd( xub_StrLen nPos ) const;
 
     void NextPos() { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
@@ -291,7 +291,7 @@ public:
     virtual const SfxPoolItem* HasTextItem( USHORT nWhich ) const;
     virtual const SfxPoolItem& GetItem( USHORT nWhich ) const;
     virtual void GetItems( WW8Bytes& rItems ) const;
-    BOOL OutAttrWithRange( xub_StrLen nPos );
+    bool OutAttrWithRange( xub_StrLen nPos );
     void OutRedlines( xub_StrLen nPos );
 
     xub_StrLen WhereNext() const                    { return nAktSwPos; }
@@ -438,7 +438,7 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
             if( nPos >= nStartPos && nPos <= nMinPos )
             {
                 nMinPos = nPos;
-                SetCharSet( *pHt, TRUE );
+                SetCharSet(*pHt, true);
             }
 
             if( pHt->GetEnd() )         // Attr mit Ende
@@ -447,7 +447,7 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
                 if( nPos >= nStartPos && nPos <= nMinPos )
                 {
                     nMinPos = nPos;
-                    SetCharSet( *pHt, FALSE );
+                    SetCharSet(*pHt, false);
                 }
             }
             else
@@ -456,7 +456,7 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
                 if( nPos >= nStartPos && nPos <= nMinPos )
                 {
                     nMinPos = nPos;
-                    SetCharSet( *pHt, FALSE );
+                    SetCharSet(*pHt, false);
                 }
             }
         }
@@ -475,7 +475,7 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
     return nMinPos;
 }
 
-void WW8_SwAttrIter::SetCharSet( const SwTxtAttr& rAttr, BOOL bStart )
+void WW8_SwAttrIter::SetCharSet(const SwTxtAttr& rAttr, bool bStart)
 {
     void* p = 0;
     rtl_TextEncoding eChrSet;
@@ -491,7 +491,7 @@ void WW8_SwAttrIter::SetCharSet( const SwTxtAttr& rAttr, BOOL bStart )
             const SfxPoolItem* pItem;
             if( ((SwFmtCharFmt&)rItem).GetCharFmt() && SFX_ITEM_SET ==
                 ((SwFmtCharFmt&)rItem).GetCharFmt()->GetItemState(
-                    RES_CHRATR_FONT, TRUE, &pItem ))
+                    RES_CHRATR_FONT, true, &pItem ))
             {
                 eChrSet = ((SvxFontItem*)pItem)->GetCharSet();
                 p = (void*)&rAttr;
@@ -521,7 +521,7 @@ void WW8_SwAttrIter::SetCharSet( const SwTxtAttr& rAttr, BOOL bStart )
 void WW8_SwAttrIter::OutAttr( xub_StrLen nSwPos )
 {
     if (rNd.GetpSwAttrSet())
-        rWrt.Out_SfxItemSet(*rNd.GetpSwAttrSet(), FALSE, TRUE, nScript);
+        rWrt.Out_SfxItemSet(*rNd.GetpSwAttrSet(), false, true, nScript);
 
     if (IsCharRTL())
     {
@@ -563,7 +563,7 @@ void WW8_SwAttrIter::OutAttr( xub_StrLen nSwPos )
     OutRedlines( nSwPos );
 }
 
-BOOL WW8_SwAttrIter::IsTxtAttr( xub_StrLen nSwPos )
+bool WW8_SwAttrIter::IsTxtAttr( xub_StrLen nSwPos )
 {
     // search for attrs without end position
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
@@ -574,10 +574,10 @@ BOOL WW8_SwAttrIter::IsTxtAttr( xub_StrLen nSwPos )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             if( !pHt->GetEnd() && *pHt->GetStart() == nSwPos )
-                return TRUE;
+                return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 // HasItem ist fuer die Zusammenfassung des Doppel-Attributes Underline
@@ -621,8 +621,8 @@ void WW8_SwAttrIter::GetItems( WW8Bytes& rItems ) const
     WW8Bytes* pO_Sav = rWrt.pO;
     rWrt.pO = &rItems;
 
-    if( rNd.GetpSwAttrSet() )
-        rWrt.Out_SfxItemSet( *rNd.GetpSwAttrSet(), FALSE, TRUE, nScript );
+    if (rNd.GetpSwAttrSet())
+        rWrt.Out_SfxItemSet(*rNd.GetpSwAttrSet(), false, true, nScript);
 
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
@@ -657,7 +657,7 @@ const SfxPoolItem& WW8_SwAttrIter::GetItem( USHORT nWhich ) const
     return *pRet;
 }
 
-void WW8_SwAttrIter::OutSwFmtRuby( const SwFmtRuby& rRuby, BOOL bStart)
+void WW8_SwAttrIter::OutSwFmtRuby(const SwFmtRuby& rRuby, bool bStart)
 {
     if( bStart )
     {
@@ -767,7 +767,7 @@ void WW8_SwAttrIter::OutSwFmtRuby( const SwFmtRuby& rRuby, BOOL bStart)
     }
 }
 
-void WW8_SwAttrIter::OutSwFmtINetFmt( const SwFmtINetFmt& rINet, BOOL bStart )
+void WW8_SwAttrIter::OutSwFmtINetFmt(const SwFmtINetFmt& rINet, bool bStart)
 {
     if( bStart )
     {
@@ -822,7 +822,7 @@ void WW8_SwAttrIter::OutSwFmtINetFmt( const SwFmtINetFmt& rINet, BOOL bStart )
         // now write the picture structur
         sURL = aURL.GetURLNoMark();
 
-        BOOL bAbsolute = TRUE;  //all links end up in the data stream as
+        bool bAbsolute = true;  //all links end up in the data stream as
                                 //absolute references.
         INetProtocol aProto = aURL.GetProtocol();
 
@@ -873,14 +873,14 @@ void WW8_SwAttrIter::OutSwFmtINetFmt( const SwFmtINetFmt& rINet, BOOL bStart )
 
             rWrt.pDataStrm->Write( MAGIC_C, sizeof(MAGIC_C) );
             SwWW8Writer::WriteLong( *rWrt.pDataStrm, sURL.Len()+1 );
-            SwWW8Writer::WriteString8( *rWrt.pDataStrm, sURL, TRUE,
+            SwWW8Writer::WriteString8( *rWrt.pDataStrm, sURL, true,
                                         RTL_TEXTENCODING_MS_1252 );
             rWrt.pDataStrm->Write( MAGIC_D, sizeof( MAGIC_D) );
 
             SwWW8Writer::WriteLong( *rWrt.pDataStrm, 2*sURL.Len()+6);
             SwWW8Writer::WriteLong( *rWrt.pDataStrm, 2*sURL.Len());
             SwWW8Writer::WriteShort( *rWrt.pDataStrm, 3 );
-            SwWW8Writer::WriteString16( *rWrt.pDataStrm, sURL, FALSE );
+            SwWW8Writer::WriteString16(*rWrt.pDataStrm, sURL, false);
         }
         else
         {
@@ -896,13 +896,13 @@ void WW8_SwAttrIter::OutSwFmtINetFmt( const SwFmtINetFmt& rINet, BOOL bStart )
 
             rWrt.pDataStrm->Write( MAGIC_B, sizeof(MAGIC_B) );
             SwWW8Writer::WriteLong( *rWrt.pDataStrm, 2 * (sURL.Len()+1) );
-            SwWW8Writer::WriteString16( *rWrt.pDataStrm, sURL, TRUE );
+            SwWW8Writer::WriteString16( *rWrt.pDataStrm, sURL, true);
         }
 
         if( sMark.Len() )
         {
             SwWW8Writer::WriteLong( *rWrt.pDataStrm, sMark.Len()+1 );
-            SwWW8Writer::WriteString16( *rWrt.pDataStrm, sMark, TRUE );
+            SwWW8Writer::WriteString16( *rWrt.pDataStrm, sMark, true);
         }
         SwWW8Writer::WriteLong( *rWrt.pDataStrm, nDataStt,
             rWrt.pDataStrm->Tell() - nDataStt );
@@ -914,7 +914,7 @@ void WW8_SwAttrIter::OutSwFmtINetFmt( const SwFmtINetFmt& rINet, BOOL bStart )
 }
 
 
-void WW8_SwAttrIter::OutSwFmtRefMark( const SwFmtRefMark& rAttr, BOOL )
+void WW8_SwAttrIter::OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool)
 {
     if( rWrt.HasRefToObject( REF_SETREFATTR, &rAttr.GetRefName(), 0 ))
         rWrt.AppendBookmark( rWrt.GetBookmarkName( REF_SETREFATTR,
@@ -935,7 +935,7 @@ void WW8_SwAttrIter::FieldVanish( const String& rTxt )
 
     USHORT nStt_sprmCFSpec = aItems.Count();
 
-    // sprmCFSpec --  fSpec-Attribut TRUE
+    // sprmCFSpec --  fSpec-Attribut true
     if( rWrt.bWrtWW8 )
         SwWW8Writer::InsUInt16( aItems, 0x855 );
     else
@@ -954,7 +954,7 @@ void WW8_SwAttrIter::FieldVanish( const String& rTxt )
                                     aItems.GetData() );
 }
 
-void WW8_SwAttrIter::OutSwTOXMark( const SwTOXMark& rAttr, BOOL bStart )
+void WW8_SwAttrIter::OutSwTOXMark(const SwTOXMark& rAttr, bool bStart)
 {
     // its a field; so get the Text form the Node and build the field
     ASSERT( !bStart, "calls only with the endposition!" );
@@ -1001,9 +1001,9 @@ void WW8_SwAttrIter::OutSwTOXMark( const SwTOXMark& rAttr, BOOL bStart )
         FieldVanish( sTxt );
 }
 
-BOOL WW8_SwAttrIter::OutAttrWithRange( xub_StrLen nPos )
+bool WW8_SwAttrIter::OutAttrWithRange( xub_StrLen nPos )
 {
-    BOOL bRet = FALSE;
+    bool bRet = false;
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
     {
@@ -1021,36 +1021,36 @@ BOOL WW8_SwAttrIter::OutAttrWithRange( xub_StrLen nPos )
                 {
                     if( nPos == *pHt->GetStart() )
                     {
-                        OutSwFmtINetFmt( (SwFmtINetFmt&)*pItem, TRUE );
-                        bRet = TRUE;
+                        OutSwFmtINetFmt((SwFmtINetFmt&)*pItem, true);
+                        bRet = true;
                     }
-                    else if( nPos == *pHt->GetEnd() )
-                        OutSwFmtINetFmt( (SwFmtINetFmt&)*pItem, FALSE );
+                    else if (nPos == *pHt->GetEnd())
+                        OutSwFmtINetFmt((SwFmtINetFmt&)*pItem, false);
                 }
                 break;
             case RES_TXTATR_REFMARK:
                 if( nPos == *pHt->GetStart() )
                 {
-                    OutSwFmtRefMark( (SwFmtRefMark&)*pItem, TRUE );
-                    bRet = TRUE;
+                    OutSwFmtRefMark((SwFmtRefMark&)*pItem, true);
+                    bRet = true;
                 }
                 if( 0 != ( pEnd = pHt->GetEnd() ) && nPos == *pEnd )
-                    OutSwFmtRefMark( (SwFmtRefMark&)*pItem, FALSE );
+                    OutSwFmtRefMark((SwFmtRefMark&)*pItem, false);
                 break;
             case RES_TXTATR_TOXMARK:
                 if( nPos == *pHt->GetStart() )
-                    bRet = TRUE;
+                    bRet = true;
                 if( 0 != ( pEnd = pHt->GetEnd() ) && nPos == *pEnd )
-                    OutSwTOXMark( (SwTOXMark&)*pItem, FALSE );
+                    OutSwTOXMark((SwTOXMark&)*pItem, false);
                 break;
             case RES_TXTATR_CJK_RUBY:
                 if( nPos == *pHt->GetStart() )
                 {
-                    OutSwFmtRuby( (SwFmtRuby&)*pItem, TRUE );
-                    bRet = TRUE;
+                    OutSwFmtRuby((SwFmtRuby&)*pItem, true);
+                    bRet = true;
                 }
                 if( 0 != ( pEnd = pHt->GetEnd() ) && nPos == *pEnd )
-                    OutSwFmtRuby( (SwFmtRuby&)*pItem, FALSE );
+                    OutSwFmtRuby((SwFmtRuby&)*pItem, false);
                 break;
             }
         }
@@ -1059,9 +1059,9 @@ BOOL WW8_SwAttrIter::OutAttrWithRange( xub_StrLen nPos )
     return bRet;
 }
 
-BOOL WW8_SwAttrIter::IsRedlineAtEnd( xub_StrLen nEnd ) const
+bool WW8_SwAttrIter::IsRedlineAtEnd( xub_StrLen nEnd ) const
 {
-    BOOL bRet = FALSE;
+    bool bRet = false;
     // search next Redline
     for( USHORT nPos = nCurRedlinePos;
         nPos < rWrt.pDoc->GetRedlineTbl().Count(); ++nPos )
@@ -1071,7 +1071,7 @@ BOOL WW8_SwAttrIter::IsRedlineAtEnd( xub_StrLen nEnd ) const
         {
             if( pEnd->nContent.GetIndex() == nEnd )
             {
-                bRet = TRUE;
+                bRet = true;
                 break;
             }
         }
@@ -1192,7 +1192,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
     SwTxtNode* pNd = &((SwTxtNode&)rNode);
 
-    BOOL bFlyInTable = rWW8Wrt.pFlyFmt && rWW8Wrt.bIsInTable;
+    bool bFlyInTable = rWW8Wrt.pFlyFmt && rWW8Wrt.bIsInTable;
 
     // akt. Style
     if( !bFlyInTable )
@@ -1248,7 +1248,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     }
     xub_StrLen nAktPos = 0;
     xub_StrLen nEnd = aStr.Len();
-    BOOL bUnicode = rWW8Wrt.bWrtWW8, bRedlineAtEnd = FALSE;
+    bool bUnicode = rWW8Wrt.bWrtWW8, bRedlineAtEnd = false;
 
     do {
         xub_StrLen nNextAttr = aAttrIter.WhereNext();
@@ -1260,8 +1260,8 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         //Append bookmarks in this range, exclusive of final position
         //of this range
         rWW8Wrt.AppendBookmarks( *pNd, nAktPos, nNextAttr - nAktPos );
-        BOOL bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
-        BOOL bAttrWithRange = aAttrIter.OutAttrWithRange( nAktPos );
+        bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
+        bool bAttrWithRange = aAttrIter.OutAttrWithRange( nAktPos );
 
         if( !bTxtAtr )
             rWW8Wrt.OutSwString( aStr, nAktPos, nNextAttr - nAktPos,
@@ -1274,7 +1274,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             if( !bTxtAtr && !bAttrWithRange )
             {
                 if( aAttrIter.IsRedlineAtEnd( nEnd ))
-                    bRedlineAtEnd = TRUE;
+                    bRedlineAtEnd = true;
                 else
                 {
                     //insert final bookmarks if any before CR
@@ -1337,7 +1337,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         pO->Insert( (BYTE*)&nSty, 2, pO->Count() );     // Style #
 
         if( rWW8Wrt.pFlyFmt && !rWW8Wrt.bIsInTable )    // Fly-Attrs
-            rWW8Wrt.Out_SwFmt( *rWW8Wrt.pFlyFmt, FALSE, FALSE, TRUE );
+            rWW8Wrt.Out_SwFmt(*rWW8Wrt.pFlyFmt, false, false, true);
 
         if( rWW8Wrt.bOutTable )
         {                                               // Tab-Attr
@@ -1361,7 +1361,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             {
                 const SfxPoolItem* pItem;
                 if( SFX_ITEM_SET == pNd->GetSwAttrSet().GetItemState(
-                        RES_UL_SPACE, TRUE, &pItem ) &&
+                        RES_UL_SPACE, true, &pItem ) &&
                     ( ( !( ND_HAS_PREV_LAYNODE & nPrvNxtNd ) &&
                        ((SvxULSpaceItem*)pItem)->GetUpper()) ||
                       ( !( ND_HAS_NEXT_LAYNODE & nPrvNxtNd ) &&
@@ -1403,7 +1403,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 {
                     aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
                     if( pNum == pNd->GetNum() && SFX_ITEM_SET !=
-                       pTmpSet->GetItemState(RES_PARATR_NUMRULE,FALSE) )
+                       pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
                     {
                        // NumRule from a template - then put it into the itemset
                        pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
@@ -1442,7 +1442,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 rWW8Wrt.pOutFmtNode = pNd;
 
                 // Pap-Attrs, so script is not necessary
-                rWW8Wrt.Out_SfxItemSet( *pTmpSet, TRUE, FALSE,
+                rWW8Wrt.Out_SfxItemSet( *pTmpSet, true, false,
                     com::sun::star::i18n::ScriptType::LATIN);
 
                 rWW8Wrt.pStyAttr = 0;
@@ -1557,14 +1557,14 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
 
     {
         Point aPt;
-        SwRect aRect(pFmt->FindLayoutRect(FALSE, &aPt));
+        SwRect aRect(pFmt->FindLayoutRect(false, &aPt));
         if (aRect.IsEmpty())
         {
             // dann besorge mal die Seitenbreite ohne Raender !!
             const SwFrmFmt* pFmt = rWW8Wrt.pFlyFmt ? rWW8Wrt.pFlyFmt :
-                rWrt.pDoc->GetPageDesc(0).GetPageFmtOfNode( rNode, FALSE );
+                rWrt.pDoc->GetPageDesc(0).GetPageFmtOfNode(rNode, false);
 
-            aRect = pFmt->FindLayoutRect( TRUE );
+            aRect = pFmt->FindLayoutRect(true);
             if( 0 == ( nPageSize = aRect.Width() ))
             {
                 const SvxLRSpaceItem& rLR = pFmt->GetLRSpace();
@@ -1577,7 +1577,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     }
 
     /*ALWAYS relativ (nPageSize + ( nPageSize / 10 )) < nTblSz*/;
-    BOOL bRelBoxSize = TRUE;
+    bool bRelBoxSize = true;
     SwTwips nTblSz = pFmt->GetFrmSize().GetWidth();
     WW8Bytes aAt( 128, 128 );   // Attribute fuer's Tabellen-Zeilenende
     USHORT nStdAtLen = rWW8Wrt.StartTableFromFrmFmt(aAt, pFmt, nTblOffset);
@@ -1590,7 +1590,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     else
     {
         pTableWrt = new SwWriteTable( rTbl.GetTabLines(), nPageSize,
-            (USHORT)nTblSz, FALSE );
+            (USHORT)nTblSz, false);
     }
 
     const SwFrmFmt *pDefaultFmt = 0;
@@ -1611,7 +1611,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
         const SwWriteTableRow *pRow = rRows[ nLine ];
         const SwWriteTableCells& rCells = pRow->GetCells();
 
-        BOOL bFixRowHeight = FALSE;
+        bool bFixRowHeight = false;
         USHORT nRealColCnt = 0;
         USHORT nTotal = rCells.Count();
         ASSERT(nTotal <= rCols.Count(),
@@ -1638,14 +1638,14 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                 ++nRealColCnt;
 
             if( 1 != pRowSpans[ nColCnt ] )
-                bFixRowHeight = TRUE;
+                bFixRowHeight = true;
         }
 
         for( ; nColCnt < rCols.Count() && pRowSpans[ nColCnt ]; ++nColCnt )
         {
             if( !nColCnt || pBoxArr[ nColCnt-1 ] != pBoxArr[ nColCnt ] )
                 ++nRealColCnt;
-            bFixRowHeight = TRUE;
+            bFixRowHeight = true;
         }
 
         //Winword column export limited to 31/64 cells
@@ -1721,15 +1721,15 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                 const SwStartNode* pSttNd = pBoxArr[nBox]->GetBox()->GetSttNd();
                 WW8SaveData aSaveData( rWW8Wrt, pSttNd->GetIndex()+1,
                                         pSttNd->EndOfSectionIndex() );
-                rWW8Wrt.bOutTable = TRUE;
-                rWW8Wrt.bIsInTable= TRUE;
+                rWW8Wrt.bOutTable = true;
+                rWW8Wrt.bIsInTable= true;
                 rWW8Wrt.WriteText();
             }
             else
             {
-                rWW8Wrt.bOutTable = TRUE;
+                rWW8Wrt.bOutTable = true;
                 rWW8Wrt.WriteStringAsPara( aEmptyStr );
-                rWW8Wrt.bOutTable = FALSE;
+                rWW8Wrt.bOutTable = false;
             }
 
             if( nWWColMax < nRealColCnt )
@@ -1892,7 +1892,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                 SwWriteTableCell* pCell = pBoxArr[ nBox ];
                 if( pCell->GetBackground() ||
                     SFX_ITEM_ON == pCell->GetBox()->GetFrmFmt()->
-                    GetItemState( RES_BACKGROUND, FALSE ) )
+                    GetItemState( RES_BACKGROUND, false) )
                     nBackg = nRealBox + 1;
                 ++nRealBox;
             }
@@ -1918,7 +1918,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
 
                 SwWriteTableCell* pCell = pBoxArr[ nBox ];
                 if( SFX_ITEM_ON == pCell->GetBox()->GetFrmFmt()->
-                    GetAttrSet().GetItemState( RES_BACKGROUND, FALSE, &pI )
+                    GetAttrSet().GetItemState( RES_BACKGROUND, false, &pI )
                     || 0 != ( pI = pCell->GetBackground() )
                     || 0 != ( pI = pRow->GetBackground() ) )
                 {
@@ -1971,16 +1971,16 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     return rWrt;
 }
 
-BOOL SwWW8Writer::NoPageBreakSection(const SfxItemSet* pSet)
+bool SwWW8Writer::NoPageBreakSection(const SfxItemSet* pSet)
 {
-    BOOL bRet=FALSE;
+    bool bRet = false;
     const SfxPoolItem* pI;
     if( pSet && (
-        ( SFX_ITEM_ON != pSet->GetItemState( RES_PAGEDESC, TRUE, &pI )
+        ( SFX_ITEM_ON != pSet->GetItemState(RES_PAGEDESC, true, &pI)
             || 0 == ((SwFmtPageDesc*)pI)->GetPageDesc() ) &&
-        ( SFX_ITEM_ON != pSet->GetItemState( RES_BREAK, TRUE, &pI )
+        ( SFX_ITEM_ON != pSet->GetItemState(RES_BREAK, true, &pI)
             || SVX_BREAK_NONE == ((SvxFmtBreakItem*)pI)->GetBreak() )))
-        bRet = TRUE;
+        bRet = true;
     return bRet;
 }
 
@@ -2027,7 +2027,7 @@ Writer& OutWW8_SwSectionNode( Writer& rWrt, SwSectionNode& rSectionNode )
         }
     }
     if( TOX_CONTENT_SECTION == rSection.GetType() )
-        rWW8Wrt.bStartTOX = TRUE;
+        rWW8Wrt.bStartTOX = true;
     return rWrt;
 }
 
@@ -2061,8 +2061,8 @@ void SwWW8Writer::OutWW8FlyFrmsInCntnt( const SwTxtNode& rNd )
                     {
                         Point aOffset;
                         // Rechtecke des Flys und des Absatzes besorgen
-                        SwRect aParentRect( rNd.FindLayoutRect( FALSE, &aOffset ) ),
-                               aFlyRect( rFlyFrmFmt.FindLayoutRect( FALSE, &aOffset ) );
+                        SwRect aParentRect(rNd.FindLayoutRect(false, &aOffset)),
+                               aFlyRect(rFlyFrmFmt.FindLayoutRect(false, &aOffset ) );
 
                         aOffset = aFlyRect.Pos() - aParentRect.Pos();
 
@@ -2083,8 +2083,7 @@ void SwWW8Writer::OutWW8FlyFrmsInCntnt( const SwTxtNode& rNd )
 }
 
 
-void SwWW8Writer::OutWW8FlyFrm( const SwFrmFmt& rFrmFmt,
-                                const Point& rNdTopLeft )
+void SwWW8Writer::OutWW8FlyFrm(const SwFrmFmt& rFrmFmt, const Point& rNdTopLeft)
 {
     const SwFmtAnchor& rAnch = rFrmFmt.GetAnchor();
 
@@ -2101,7 +2100,7 @@ void SwWW8Writer::OutWW8FlyFrm( const SwFrmFmt& rFrmFmt,
             return ;
         }
 
-        BOOL bDone = FALSE;
+        bool bDone = false;
 
         // Hole vom Node und vom letzten Node die Position in der Section
         /*
@@ -2124,7 +2123,7 @@ void SwWW8Writer::OutWW8FlyFrm( const SwFrmFmt& rFrmFmt,
             SwTxtNode* pParTxtNode = rAnch.GetCntntAnchor()->nNode.GetNode().GetTxtNode();
 
             if( pParTxtNode && !pDoc->GetNodes()[ nStt ]->IsNoTxtNode() )
-                bDone = TRUE;
+                bDone = true;
         }
         if( !bDone )
         {
@@ -2162,7 +2161,7 @@ void SwWW8Writer::OutWW8FlyFrm( const SwFrmFmt& rFrmFmt,
                         //           denn wir geben ja ganz normalen Content der
                         //           Tabelenzelle aus und keinen Rahmen
                         //           (Flag wurde oben in  aSaveData()  geloescht)
-                        bOutTable = TRUE;
+                        bOutTable = true;
                         const String& rName = pFlyFmt->GetName();
                         StartCommentOutput( rName );
                         WriteText();
@@ -2199,7 +2198,7 @@ void SwWW8Writer::OutFlyFrms( const SwCntntNode& rNode )
 
     Point aNdPos, aPgPos;
     Point* pLayPos;
-    BOOL bValidNdPos = FALSE, bValidPgPos = FALSE;
+    bool bValidNdPos = false, bValidPgPos = false;
 
     if (n < maFlyPos.Count())
     {
@@ -2214,8 +2213,8 @@ void SwWW8Writer::OutFlyFrms( const SwCntntNode& rNode )
                 // get the Layout Node-Position.
                 if( !bValidPgPos )
                 {
-                    aPgPos = rNode.FindPageFrmRect( FALSE, &aPgPos ).Pos();
-                    bValidPgPos = TRUE;
+                    aPgPos = rNode.FindPageFrmRect(false, &aPgPos).Pos();
+                    bValidPgPos = true;
                 }
                 pLayPos = &aPgPos;
             }
@@ -2224,8 +2223,8 @@ void SwWW8Writer::OutFlyFrms( const SwCntntNode& rNode )
                 // get the Layout Node-Position.
                 if( !bValidNdPos )
                 {
-                    aNdPos = rNode.FindLayoutRect( FALSE, &aNdPos ).Pos();
-                    bValidNdPos = TRUE;
+                    aNdPos = rNode.FindLayoutRect(false, &aNdPos).Pos();
+                    bValidNdPos = true;
                 }
                 pLayPos = &aNdPos;
             }

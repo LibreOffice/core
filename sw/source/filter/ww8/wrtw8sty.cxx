@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:36 $
+ *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,8 +388,8 @@ void WW8WrtStyle::WriteStyle( SvStream& rStrm )
 }
 
 
-void WW8WrtStyle::BuildStd( const String& rName, BOOL bPapFmt, short nWwBase,
-                             short nWwNext, USHORT nWwId )
+void WW8WrtStyle::BuildStd(const String& rName, bool bPapFmt, short nWwBase,
+    short nWwNext, USHORT nWwId)
 {
     BYTE aWW8_STD[ sizeof( WW8_STD ) ];
     BYTE* pData = aWW8_STD;
@@ -452,11 +452,11 @@ void WW8WrtStyle::SkipOdd()     // Ruecke zu gerader Adresse vor
         pO->Insert( (BYTE)0, pO->Count() );         // Adresse
 }
 
-void WW8WrtStyle::Set1StyleDefaults( const SwFmt& rFmt, BOOL bPap )
+void WW8WrtStyle::Set1StyleDefaults(const SwFmt& rFmt, bool bPap)
 {
     const SwModify* pOldMod = rWrt.pOutFmtNode;
     rWrt.pOutFmtNode = &rFmt;
-    BOOL aFlags[ RES_FRMATR_END - RES_CHRATR_BEGIN ];
+    bool aFlags[ RES_FRMATR_END - RES_CHRATR_BEGIN ];
     USHORT nStt, nEnd, n;
     if( bPap )
        nStt = RES_PARATR_BEGIN, nEnd = RES_FRMATR_END;
@@ -483,10 +483,10 @@ void WW8WrtStyle::Set1StyleDefaults( const SwFmt& rFmt, BOOL bPap )
     const SfxItemSet* pOldI = rWrt.GetCurItemSet();
     rWrt.SetCurItemSet( &rFmt.GetAttrSet() );
 
-    const BOOL* pFlags = aFlags + ( nStt - RES_CHRATR_BEGIN );
+    const bool* pFlags = aFlags + ( nStt - RES_CHRATR_BEGIN );
     for( n = nStt; n < nEnd; ++n, ++pFlags )
     {
-        if( *pFlags && SFX_ITEM_SET != rFmt.GetItemState( n, FALSE ))
+        if( *pFlags && SFX_ITEM_SET != rFmt.GetItemState(n, false))
         {
             //If we are a character property then see if it is one of the
             //western/asian ones that must be collapsed together for export to
@@ -494,7 +494,7 @@ void WW8WrtStyle::Set1StyleDefaults( const SwFmt& rFmt, BOOL bPap )
             if ( bPap || rWrt.CollapseScriptsforWordOk(
                 ::com::sun::star::i18n::ScriptType::LATIN, n) )
             {
-                Out(aWW8AttrFnTab, rFmt.GetAttr(n, TRUE), rWrt);
+                Out(aWW8AttrFnTab, rFmt.GetAttr(n, true), rWrt);
             }
         }
     }
@@ -503,8 +503,8 @@ void WW8WrtStyle::Set1StyleDefaults( const SwFmt& rFmt, BOOL bPap )
     rWrt.pOutFmtNode = pOldMod;
 }
 
-void WW8WrtStyle::BuildUpx( const SwFmt* pFmt, BOOL bPap, USHORT nPos,
-                            BOOL bInsDefCharSiz )
+void WW8WrtStyle::BuildUpx(const SwFmt* pFmt, bool bPap, USHORT nPos,
+    bool bInsDefCharSiz)
 {
     WW8Bytes* pO = rWrt.pO;
 
@@ -536,7 +536,7 @@ void WW8WrtStyle::Out1Style( SwFmt* pFmt, USHORT nPos )
 {
     if( pFmt )
     {
-        BOOL bFmtColl = pFmt->Which() == RES_TXTFMTCOLL ||
+        bool bFmtColl = pFmt->Which() == RES_TXTFMTCOLL ||
                         pFmt->Which() == RES_CONDTXTFMTCOLL;
         short nWwBase = 0xfff;                  // Default: none
 
@@ -554,8 +554,8 @@ void WW8WrtStyle::Out1Style( SwFmt* pFmt, USHORT nPos )
         BuildStd( pFmt->GetName(), bFmtColl, nWwBase, nWwNext,
                     GetWWId( *pFmt ) );
         if( bFmtColl )
-            BuildUpx( pFmt, TRUE, nPos, nWwBase==0xfff );           // UPX.papx
-        BuildUpx( pFmt, FALSE, nPos, bFmtColl && nWwBase==0xfff );  // UPX.chpx
+            BuildUpx( pFmt, true, nPos, nWwBase==0xfff );           // UPX.papx
+        BuildUpx( pFmt, false, nPos, bFmtColl && nWwBase==0xfff );  // UPX.chpx
 
         SkipOdd();
         WriteStyle( *rWrt.pTableStrm );
@@ -606,7 +606,7 @@ void WW8WrtStyle::OutStyleTab()
         *rWrt.pTableStrm << (char)0;        // Adresse
         ++nCurPos;
     }
-    rWrt.bStyDef = TRUE;
+    rWrt.bStyDef = true;
     rFib.fcStshfOrig = rFib.fcStshf = nCurPos;
     ULONG nStyAnzPos = nCurPos + 2;     // Anzahl wird nachgetragen
 
@@ -635,7 +635,7 @@ void WW8WrtStyle::OutStyleTab()
 
     rFib.lcbStshfOrig = rFib.lcbStshf = rWrt.pTableStrm->Tell() - rFib.fcStshf;
     SwWW8Writer::WriteShort( *rWrt.pTableStrm, nStyAnzPos, nUsedSlots );
-    rWrt.bStyDef = FALSE;
+    rWrt.bStyDef = false;
 }
 
 
@@ -672,7 +672,7 @@ wwFont::wwFont(const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
         (msFamilyNm.Len() + msAltNm.Len() + 2 <= 65) )
     {
         //max size of szFfn in 65 chars
-        mbAlt=TRUE;
+        mbAlt = true;
     }
 
     memset(maWW8_FFN, 0, sizeof(maWW8_FFN));
@@ -747,17 +747,17 @@ bool wwFont::Write(SvStream *pTableStrm) const
         //char  panose[ 10 ];       //  0x6   PANOSE
         //char  fs[ 24     ];       //  0x10  FONTSIGNATURE
         SwWW8Writer::FillCount(*pTableStrm, 0x22);
-        SwWW8Writer::WriteString16(*pTableStrm, msFamilyNm, TRUE);
+        SwWW8Writer::WriteString16(*pTableStrm, msFamilyNm, true);
         if (mbAlt)
-            SwWW8Writer::WriteString16(*pTableStrm, msAltNm, TRUE);
+            SwWW8Writer::WriteString16(*pTableStrm, msAltNm, true);
     }
     else
     {
-        SwWW8Writer::WriteString8(*pTableStrm, msFamilyNm, TRUE,
+        SwWW8Writer::WriteString8(*pTableStrm, msFamilyNm, true,
             RTL_TEXTENCODING_MS_1252);
         if (mbAlt)
         {
-            SwWW8Writer::WriteString8( *pTableStrm, msAltNm, TRUE,
+            SwWW8Writer::WriteString8( *pTableStrm, msAltNm, true,
                 RTL_TEXTENCODING_MS_1252);
         }
     }
@@ -1030,7 +1030,7 @@ void WW8_WrPlcSepx::SetHeaderFlag( BYTE& rHeadFootFlags, const SwFmt& rFmt,
     BYTE nFlag )
 {
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rFmt.GetItemState( RES_HEADER, TRUE, &pItem )
+    if( SFX_ITEM_SET == rFmt.GetItemState(RES_HEADER, true, &pItem)
         && ((SwFmtHeader*)pItem)->IsActive() &&
         ((SwFmtHeader*)pItem)->GetHeaderFmt() )
         rHeadFootFlags |= nFlag;
@@ -1040,7 +1040,7 @@ void WW8_WrPlcSepx::SetFooterFlag( BYTE& rHeadFootFlags, const SwFmt& rFmt,
     BYTE nFlag )
 {
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rFmt.GetItemState( RES_FOOTER, TRUE, &pItem )
+    if( SFX_ITEM_SET == rFmt.GetItemState(RES_FOOTER, true, &pItem)
         && ((SwFmtFooter*)pItem)->IsActive() &&
         ((SwFmtFooter*)pItem)->GetFooterFmt() )
         rHeadFootFlags |= nFlag;
@@ -1107,21 +1107,21 @@ void WW8_WrPlcSepx::CheckForFacinPg( SwWW8Writer& rWrt ) const
                  ( PD_RIGHT == ( PD_ALL & pPd->ReadUseOn() ) &&
                    PD_LEFT == ( PD_ALL & pPd->GetFollow()->ReadUseOn() )) ))
             {
-                rWrt.pDop->fFacingPages = rWrt.pDop->fMirrorMargins = TRUE;
+                rWrt.pDop->fFacingPages = rWrt.pDop->fMirrorMargins = true;
                 nEnde |= 1;
             }
 
             if( !( 1 & nEnde ) &&
                 ( !pPd->IsHeaderShared() || !pPd->IsFooterShared() ))
             {
-                rWrt.pDop->fFacingPages = TRUE;
+                rWrt.pDop->fFacingPages = true;
                 nEnde |= 1;
             }
             if( !( 2 & nEnde ) &&
                 PD_MIRROR == ( PD_MIRROR & pPd->ReadUseOn() ))
             {
                 rWrt.pDop->fSwapBordersFacingPgs =
-                    rWrt.pDop->fMirrorMargins = TRUE;
+                    rWrt.pDop->fMirrorMargins = true;
                 nEnde |= 2;
             }
 
@@ -1134,21 +1134,21 @@ void WW8_WrPlcSepx::CheckForFacinPg( SwWW8Writer& rWrt ) const
 int WW8_WrPlcSepx::HasBorderItem( const SwFmt& rFmt )
 {
     const SfxPoolItem* pItem;
-    return SFX_ITEM_SET == rFmt.GetItemState( RES_BOX,TRUE, &pItem ) &&
+    return SFX_ITEM_SET == rFmt.GetItemState(RES_BOX, true, &pItem) &&
             (   ((SvxBoxItem*)pItem)->GetTop() ||
                 ((SvxBoxItem*)pItem)->GetBottom()  ||
                 ((SvxBoxItem*)pItem)->GetLeft()  ||
                 ((SvxBoxItem*)pItem)->GetRight() );
 }
 
-BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
+bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
 {
-    BOOL bRet=FALSE;
+    bool bRet = false;
     pAttrs = new WW8_PdAttrDesc[ aSects.Count() ];
     WW8Bytes* pO = rWrt.pO;
     ULONG nCpStart = rWrt.Fc2Cp( rWrt.Strm().Tell() );
-    BOOL bOldPg = rWrt.bOutPageDescs;
-    rWrt.bOutPageDescs = TRUE;
+    bool bOldPg = rWrt.bOutPageDescs;
+    rWrt.bOutPageDescs = true;
 
     ASSERT( !pTxtPos, "wer hat den Pointer gesetzt?" );
     pTxtPos = new WW8_WrPlc0( nCpStart );
@@ -1198,7 +1198,7 @@ BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
         }
 
         pO->Remove( 0, pO->Count() );       // leeren
-        rWrt.bOutPageDescs = TRUE;
+        rWrt.bOutPageDescs = true;
 
 
         if( aLineNum.Count() )
@@ -1231,7 +1231,7 @@ BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
                                     2 New page, 3 Even page, 4 Odd page
         */
         BYTE nBreakCode = 2;            // default neue Seite beginnen
-        BOOL bOutPgDscSet = TRUE, bLeftRightPgChain = FALSE;
+        bool bOutPgDscSet = true, bLeftRightPgChain = false;
         const SwFrmFmt* pPdFmt = &pPd->GetMaster();
         const SwFrmFmt* pPdFirstPgFmt = pPdFmt;
         if( rSepInfo.pSectionFmt )
@@ -1266,7 +1266,7 @@ BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
                 // und raus damit ins WW-File
                 const SfxItemSet* pOldI = rWrt.pISet;
                 rWrt.pISet = &aSet;
-                Out_SfxItemSet( aWW8AttrFnTab, rWrt, aSet, TRUE );
+                Out_SfxItemSet(aWW8AttrFnTab, rWrt, aSet, true);
 
                 //Cannot export as normal page framedir, as continous sections
                 //cannot contain any grid settings like proper sections
@@ -1286,7 +1286,7 @@ BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
 
                 rWrt.pISet = pOldI;
 
-                bOutPgDscSet = FALSE;
+                bOutPgDscSet = false;
             }
         }
 
@@ -1357,12 +1357,12 @@ BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
 
             const SfxPoolItem* pItem;
             if( pPdFmt != pPdFirstPgFmt && SFX_ITEM_SET ==
-                pPdFirstPgFmt->GetItemState( RES_PAPER_BIN, TRUE, &pItem ))
+                pPdFirstPgFmt->GetItemState(RES_PAPER_BIN, true, &pItem))
             {
                 rWrt.pISet = &pPdFirstPgFmt->GetAttrSet();
-                rWrt.bOutFirstPage = TRUE;
+                rWrt.bOutFirstPage = true;
                 Out( aWW8AttrFnTab, *pItem, rWrt );
-                rWrt.bOutFirstPage = FALSE;
+                rWrt.bOutFirstPage = false;
             }
 
 
@@ -1374,7 +1374,7 @@ BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
                  ( PD_RIGHT == ( PD_ALL & pPd->ReadUseOn() ) &&
                    PD_LEFT == ( PD_ALL & pPd->GetFollow()->ReadUseOn() )) ))
             {
-                bLeftRightPgChain = TRUE;
+                bLeftRightPgChain = true;
 
                 // welches ist der Bezugspunkt ????? (links oder rechts?)
                 // annahme die rechte Seite!
@@ -1389,8 +1389,8 @@ BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
             }
 
             rWrt.pISet = &pPdFmt->GetAttrSet();
-            Out_SfxItemSet( aWW8AttrFnTab, rWrt, pPdFmt->GetAttrSet(),
-                                TRUE, FALSE );
+            Out_SfxItemSet(aWW8AttrFnTab, rWrt, pPdFmt->GetAttrSet(),
+                true, false);
             rWrt.pISet = pOldI;
 
             // dann noch die restlichen Einstellungen aus dem PageDesc
@@ -1501,8 +1501,8 @@ BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
             // Dabei muss etwas wie pOut eingebaut werden,
             // das bei jeder Spezialtext-Zeile wiederholt wird.
             const SwFrmFmt* pFFmt = rFt.GetFooterFmt();
-            const SvxBoxItem& rBox = pFFmt->GetBox(FALSE);
-            OutWW8_SwFmtBox1( rWrt.pOut, rBox, FALSE );
+            const SvxBoxItem& rBox = pFFmt->GetBox(false);
+            OutWW8_SwFmtBox1( rWrt.pOut, rBox, false);
 !!!!!!!!!!!
         Man koennt daraus Absatzattribute machen, die dann bei jedem Absatz
         beachtet werden. Gilt fuer Hintergrund/Umrandung
@@ -1620,8 +1620,8 @@ void SwWW8Writer::WriteKFTxt1( const SwFmtCntnt& rCntnt )
         // Bereich also gueltiger Node
         if (nStart < nEnd)
         {
-            BOOL bOldKF = bOutKF;
-            bOutKF = TRUE;
+            bool bOldKF = bOutKF;
+            bOutKF = true;
             WriteSpecialText( nStart, nEnd, TXT_HDFT );
             bOutKF = bOldKF;
         }
@@ -1667,10 +1667,10 @@ void WW8_WrPlcPostIt::Append( WW8_CP nCp, const SwPostItField& rPostIt )
     aCntnt.Insert( p, aCntnt.Count() );
 }
 
-BOOL WW8_WrPlcSubDoc::WriteGenericTxt( SwWW8Writer& rWrt, BYTE nTTyp,
-    long& rCount )
+bool WW8_WrPlcSubDoc::WriteGenericTxt(SwWW8Writer& rWrt, BYTE nTTyp,
+    long& rCount)
 {
-    BOOL bRet=FALSE;
+    bool bRet = false;
     USHORT nLen = aCntnt.Count();
     if( nLen )
     {
@@ -1759,7 +1759,7 @@ BOOL WW8_WrPlcSubDoc::WriteGenericTxt( SwWW8Writer& rWrt, BYTE nTTyp,
         pTxtPos->Append( nCpEnd );
         rCount = nCpEnd - nCpStart;
         if (rCount)
-            bRet=TRUE;
+            bRet = true;
     }
     return bRet;
 }
@@ -1778,7 +1778,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp,
         ::std::vector<String> aStrArr;
         WW8Fib& rFib = *rWrt.pFib;              // n+1-te CP-Pos nach Handbuch
         USHORT i;
-        BOOL bWriteCP = TRUE;
+        bool bWriteCP = true;
 
         switch( nTTyp )
         {
@@ -1803,7 +1803,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp,
                         const String& rStr = aStrArr[i];
                         SwWW8Writer::WriteShort(*rWrt.pTableStrm, rStr.Len());
                         SwWW8Writer::WriteString16(*rWrt.pTableStrm, rStr,
-                            FALSE);
+                            false);
                     }
                 }
                 else
@@ -1812,7 +1812,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp,
                     {
                         const String& rStr = aStrArr[i];
                         *rWrt.pTableStrm << (BYTE)rStr.Len();
-                        SwWW8Writer::WriteString8(*rWrt.pTableStrm, rStr, FALSE,
+                        SwWW8Writer::WriteString8(*rWrt.pTableStrm, rStr, false,
                             RTL_TEXTENCODING_MS_1252);
                     }
                 }
@@ -1865,7 +1865,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp,
                     SwWW8Writer::WriteLong( *rWrt.pTableStrm, 0 );
                 }
                 SwWW8Writer::FillCount( *rWrt.pTableStrm, 22 );
-                bWriteCP = FALSE;
+                bWriteCP = false;
             }
             break;
         }
@@ -1906,9 +1906,9 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp,
                     // of annotation author
                     if( rWrt.bWrtWW8 )
                     {
-                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, nNameLen );
-                        SwWW8Writer::WriteString16( *rWrt.pTableStrm, sAuthor,
-                            FALSE );
+                        SwWW8Writer::WriteShort(*rWrt.pTableStrm, nNameLen);
+                        SwWW8Writer::WriteString16(*rWrt.pTableStrm, sAuthor,
+                            false);
                         SwWW8Writer::FillCount( *rWrt.pTableStrm,
                             (9 - nNameLen) * 2 );
 
@@ -1916,8 +1916,8 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp,
                     else
                     {
                         *rWrt.pTableStrm << nNameLen;
-                        SwWW8Writer::WriteString8( *rWrt.pTableStrm, sAuthor,
-                                        FALSE, RTL_TEXTENCODING_MS_1252 );
+                        SwWW8Writer::WriteString8(*rWrt.pTableStrm, sAuthor,
+                                        false, RTL_TEXTENCODING_MS_1252);
                         SwWW8Writer::FillCount(*rWrt.pTableStrm, 9 - nNameLen);
                     }
 

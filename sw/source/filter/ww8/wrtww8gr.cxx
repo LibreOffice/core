@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-09 16:31:26 $
+ *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,14 +173,14 @@ Writer& OutWW8_SwGrfNode( Writer& rWrt, SwCntntNode& rNode )
     return rWrt;
 }
 
-BOOL SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
+bool SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
     SvStorageRef xOleStg, SvStorageRef xObjStg, String &rStorageName,
     SwOLENode *pOLENd)
 {
 #ifdef NO_OLE_SIZE_OPTIMIZE
-    return TRUE;
+    return true;
 #else
-    BOOL bGraphicNeeded = FALSE;
+    bool bGraphicNeeded = false;
     SfxItemIter aIter( rSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
 
@@ -202,7 +202,7 @@ BOOL SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
             case RES_ANCHOR:
                 break;
             default:
-                bGraphicNeeded=TRUE;
+                bGraphicNeeded = true;
         }
     } while( !bGraphicNeeded && !aIter.IsAtEnd() &&
         0 != ( pItem = aIter.NextItem() ) );
@@ -216,7 +216,7 @@ BOOL SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
     long nX=0,nY=0;
     if (!bGraphicNeeded && SwWW8ImplReader::ImportOleWMF(xOleStg,aWMF,nX,nY))
     {
-        bGraphicNeeded=FALSE;
+        bGraphicNeeded = false;
         Point aTmpPoint;
         Rectangle aRect( aTmpPoint, Size( nX, nY ) );
         Graphic aGraph(aWMF);
@@ -242,12 +242,12 @@ BOOL SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
 #else
             if (aMtf.GetChecksum() == aNewMtf.GetChecksum())
 #endif
-                bGraphicNeeded=FALSE;
+                bGraphicNeeded = false;
             delete pRet;
         }
     }
     else
-        bGraphicNeeded=TRUE;
+        bGraphicNeeded = true;
     return bGraphicNeeded;
 #endif
 }
@@ -298,12 +298,12 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                 Set_UInt32( pDataAdr, nPictureId );
 
                 WW8OleMap *pMap = new WW8OleMap(nPictureId, pObj);
-                BOOL bDuplicate = FALSE;
+                bool bDuplicate = false;
                 WW8OleMaps &rOleMap = rWW8Wrt.GetOLEMap();
                 USHORT nPos;
                 if ( rOleMap.Seek_Entry(pMap, &nPos) )
                 {
-                    bDuplicate = TRUE;
+                    bDuplicate = true;
                     delete pMap;
                 }
                 else if( 0 == rOleMap.Insert( pMap) )
@@ -335,7 +335,7 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                     rWW8Wrt.OutField( 0, 58, sServer, WRITEFIELD_START |
                         WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
 
-                    BOOL bEndCR = TRUE;
+                    bool bEndCR = true;
                     /*
                     In the word filter we only need a preview image for
                     floating images, and then only (the usual case) if the
@@ -345,16 +345,16 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                     We don't need a graphic for inline objects, so we don't
                     even need the overhead of a graphic in that case.
                     */
-                    BOOL bGraphicNeeded = FALSE;
+                    bool bGraphicNeeded = false;
 
                     if (rWW8Wrt.pFlyFmt)
                     {
-                        bGraphicNeeded = TRUE;
+                        bGraphicNeeded = true;
 
                         const SwAttrSet& rSet = rWW8Wrt.pFlyFmt->GetAttrSet();
-                        if (rSet.GetAnchor(FALSE).GetAnchorId() == FLY_IN_CNTNT)
+                        if (rSet.GetAnchor(false).GetAnchorId() == FLY_IN_CNTNT)
                         {
-                            bEndCR = FALSE;
+                            bEndCR = false;
                             bGraphicNeeded = rWW8Wrt.TestOleNeedsGraphic(rSet,
                                 xOleStg, xObjStg, sStorageName, pOLENd);
                         }
@@ -417,20 +417,20 @@ void SwWW8Writer::OutGrf( const SwNoTxtNode* pNd )
     BYTE aArr[ 18 ];
     BYTE* pArr = aArr;
 
-    RndStdIds eAn = pFlyFmt->GetAttrSet().GetAnchor( FALSE ).GetAnchorId();
+    RndStdIds eAn = pFlyFmt->GetAttrSet().GetAnchor(false).GetAnchorId();
     if( eAn == FLY_IN_CNTNT )
     {
         SwVertOrient eVert = pFlyFmt->GetVertOrient().GetVertOrient();
         if ((eVert == VERT_CHAR_CENTER) || (eVert == VERT_LINE_CENTER))
         {
-            BOOL bVert=FALSE;
+            bool bVert = false;
             //The default for word in vertical text mode is to center,
             //otherwise a sub/super script hack is employed
             if (pOutFmtNode && pOutFmtNode->ISA(SwCntntNode) )
             {
                 const SwTxtNode* pTxtNd = (const SwTxtNode*)pOutFmtNode;
                 SwPosition aPos(*pTxtNd);
-                bVert = pDoc->IsInVerticalText(aPos);
+                bVert = pDoc->IsInVerticalText(aPos) ? true : false;
             }
             if (!bVert)
             {
@@ -478,10 +478,10 @@ void SwWW8Writer::OutGrf( const SwNoTxtNode* pNd )
 
         static BYTE __READONLY_DATA nSty[2] = { 0, 0 };
         pO->Insert( nSty, 2, pO->Count() );     // Style #0
-        BOOL bOldGrf = bOutGrf;
-        bOutGrf = TRUE;
+        bool bOldGrf = bOutGrf;
+        bOutGrf = true;
 
-        Out_SwFmt( *pFlyFmt, FALSE, FALSE, TRUE );          // Fly-Attrs
+        Out_SwFmt(*pFlyFmt, false, false, true);            // Fly-Attrs
 
         bOutGrf = bOldGrf;
         pPapPlc->AppendFkpEntry( pStrm->Tell(), pO->Count(), pO->GetData() );
@@ -527,8 +527,8 @@ void SwWW8WrGrf::Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
             // Crop-AttributInhalt in Header schreiben ( falls vorhanden )
     const SwAttrSet* pAttrSet = pNd->GetpSwAttrSet();
     const SfxPoolItem* pItem;
-    if( pAttrSet && ( SFX_ITEM_ON
-        == pAttrSet->GetItemState( RES_GRFATR_CROPGRF, FALSE, &pItem ) ) )
+    if (pAttrSet && (SFX_ITEM_ON
+        == pAttrSet->GetItemState(RES_GRFATR_CROPGRF, false, &pItem)))
     {
         const SwCropGrf& rCr = *(SwCropGrf*)pItem;
         nCropL = (INT16)rCr.GetLeft();
@@ -556,7 +556,7 @@ void SwWW8WrGrf::Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
     nWidth += (INT16)(rLR.GetLeft() + rLR.GetRight());
     nHeight += rUL.GetUpper() + rUL.GetLower();
 
-    BOOL bWrtWW8 = rWrt.bWrtWW8;
+    bool bWrtWW8 = rWrt.bWrtWW8;
     UINT16 nHdrLen = bWrtWW8 ? 0x44 : 0x3A;
 
     BYTE aArr[ 0x44 ] = { 0 };
@@ -565,15 +565,15 @@ void SwWW8WrGrf::Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
     if( pFly )
     {
         const SwAttrSet& rAttrSet = pFly->GetAttrSet();
-        if( SFX_ITEM_ON == rAttrSet.GetItemState( RES_BOX, FALSE, &pItem ) )
+        if (SFX_ITEM_ON == rAttrSet.GetItemState(RES_BOX, false, &pItem))
         {
             const SvxBoxItem* pBox = (const SvxBoxItem*)pItem;
             if( pBox )
             {
-                BOOL bShadow = FALSE;               // Shadow ?
+                bool bShadow = false;               // Shadow ?
                 const SfxPoolItem* pShadItem;
-                if( SFX_ITEM_ON
-                    == rAttrSet.GetItemState( RES_SHADOW, TRUE, &pShadItem ) )
+                if (SFX_ITEM_ON
+                    == rAttrSet.GetItemState(RES_SHADOW, true, &pShadItem))
                 {
                     const SvxShadowItem* pSI = (const SvxShadowItem*)pShadItem;
                     bShadow = ( pSI->GetLocation() != SVX_SHADOW_NONE )
@@ -698,12 +698,13 @@ void SwWW8WrGrf::Write1Grf1( SvStream& rStrm, const SwGrfNode* pGrfNd,
 
         Write1GrfHdr( rStrm, pGrfNd, pFly, mm, nWidth, nHeight );   // Header
         rStrm << (BYTE)aFileN.Len();    // Pascal-String schreiben
-        SwWW8Writer::WriteString8( rStrm, aFileN, FALSE, RTL_TEXTENCODING_MS_1252 );
+        SwWW8Writer::WriteString8(rStrm, aFileN, false,
+            RTL_TEXTENCODING_MS_1252);
     }
     else                                // Embedded File oder DDE oder so was
     {
         Graphic& rGrf = (Graphic&)(pGrfNd->GetGrf());
-        BOOL bSwapped = rGrf.IsSwapOut();
+        bool bSwapped = rGrf.IsSwapOut() ? true : false;
         ((SwGrfNode*)pGrfNd)->SwapIn(); // immer ueber den Node einswappen !!!
 
         GDIMetaFile aMeta;
@@ -731,8 +732,8 @@ void SwWW8WrGrf::Write1Grf1( SvStream& rStrm, const SwGrfNode* pGrfNd,
 //              "MapMode der Grafik ist nicht 1/100mm!" );
 
 #ifdef DEBUG
-        BOOL bSchreibsRaus  = FALSE;
-        BOOL bSchreibsRein  = FALSE;
+        bool bSchreibsRaus  = false;
+        bool bSchreibsRein  = false;
         long nSchreibsRausA = rStrm.Tell();
         long nSchreibsReinA = nSchreibsRausA;
 #endif
@@ -867,14 +868,14 @@ void SwWW8WrGrf::Write()
         if( nPos & 0x3 )
             SwWW8Writer::FillCount( rStrm, 4 - ( nPos & 0x3 ) );
 
-        BOOL bDuplicated=FALSE;
+        bool bDuplicated = false;
         for( USHORT nI = 0; nI < i; nI++ )
         {
             if ( (pNd == (const SwNoTxtNode*)aNds[nI]) && aWid[i] == aWid[nI]
                 && aHei[i] == aHei[nI] )
             {
                 aPos.Insert( aPos[nI], aPos.Count() );  // Pos merken
-                bDuplicated=TRUE;
+                bDuplicated = true;
                 break;
             }
         }

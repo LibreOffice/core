@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:38 $
+ *  last change: $Author: cmc $ $Date: 2002-08-19 15:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,23 +102,23 @@ struct WW8FlyPara
 {                       // WinWord-Attribute
                         // Achtung: *Nicht* umsortieren, da Teile mit
                         // memcmp verglichen werden
-    BOOL bVer67;
+    bool bVer67;
     INT16 nSp26, nSp27;         // rohe Position
     INT16 nSp45, nSp28;         // Breite / Hoehe
     INT16 nLeMgn, nRiMgn, nUpMgn, nLoMgn;           // Raender
     BYTE nSp29;                 // rohe Bindung + Alignment
     BYTE nSp37;                 // Wrap-Mode ( 1 / 2; 0 = no Apo ? )
     WW8_BRC5 brc;               // Umrandung Top, Left, Bottom, Right, Between
-    BOOL bBorderLines;          // Umrandungslinien
-    BOOL bGrafApo;              // TRUE: Dieser Rahmen dient allein dazu, die
+    bool bBorderLines;          // Umrandungslinien
+    bool bGrafApo;              // true: Dieser Rahmen dient allein dazu, die
                                 // enthaltene Grafik anders als zeichengebunden
                                 // zu positionieren
 
-    WW8FlyPara( BOOL bIsVer67, const WW8FlyPara* pSrc = 0 );
-    int operator == ( const WW8FlyPara& rSrc ) const;
-    BOOL Read( const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap );
-    BOOL ReadFull( const BYTE* pSprm29, SwWW8ImplReader* pIo );
-    BOOL Read( const BYTE* pSprm29, WW8RStyle* pStyle );
+    WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc = 0);
+    bool operator==(const WW8FlyPara& rSrc) const;
+    bool Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap);
+    bool ReadFull(const BYTE* pSprm29, SwWW8ImplReader* pIo);
+    bool Read(const BYTE* pSprm29, WW8RStyle* pStyle);
     void ApplyTabPos(WW8_TablePos *pTabPos, const BYTE *pSprm29);
 };
 
@@ -148,8 +148,8 @@ struct WW8SwFlyPara
     long nNewNettoWidth;
     SwPosition* pMainTextPos;   // um nach Apo in Haupttext zurueckzukehren
     USHORT nLineSpace;          // LineSpace in tw fuer Graf-Apos
-    BOOL bAutoWidth;
-    BOOL bToggelPos;
+    bool bAutoWidth;
+    bool bToggelPos;
 
     WW8SwFlyPara(SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
         short nPgLeft, short nPgWidth, INT32 nIniFlyDx, INT32 nIniFlyDy);
@@ -179,12 +179,12 @@ public:
     BYTE        nOutlineLevel;      // falls Gliederungs-Style
     BYTE        n81Flags;           // Fuer Bold, Italic, ...
     BYTE        n81BiDiFlags;       // Fuer Bold, Italic, ...
-    BOOL        bValid          :1; // leer oder Valid
-    BOOL        bImported       :1; // fuers rekursive Importieren
-    BOOL        bColl           :1; // TRUE -> pFmt ist SwTxtFmtColl
-    BOOL        bImportSkipped  :1; // nur TRUE bei !bNewDoc && vorh. Style
-    BOOL        bHasStyNumRule  :1; // TRUE -> Benannter NumRule in Style
-    BOOL        bHasBrokenWW6List :1;   //TRUE -> WW8+ style has a WW7- list
+    BYTE bValid         :1; // leer oder Valid
+    BYTE bImported      :1; // fuers rekursive Importieren
+    BYTE bColl          :1; // true-> pFmt ist SwTxtFmtColl
+    BYTE bImportSkipped :1; // nur true bei !bNewDoc && vorh. Style
+    BYTE bHasStyNumRule     :1; // true-> Benannter NumRule in Style
+    BYTE bHasBrokenWW6List :1;   //true-> WW8+ style has a WW7- list
 
     SwWW8StyInf() :
         sWWStyleName( aEmptyStr ),
@@ -203,12 +203,12 @@ public:
         nOutlineLevel( MAXLEVEL ),
         n81Flags( 0 ),
         n81BiDiFlags(0),
-        bValid( FALSE ),
-        bImported( FALSE ),
-        bColl( FALSE ),
-        bImportSkipped( FALSE ),
-        bHasStyNumRule( FALSE ),
-        bHasBrokenWW6List( FALSE )
+        bValid(false),
+        bImported(false),
+        bColl(false),
+        bImportSkipped(false),
+        bHasStyNumRule(false),
+        bHasBrokenWW6List(false)
     {}
 
     ~SwWW8StyInf()
@@ -243,28 +243,27 @@ friend class SwWW8ImplReader;
 
     BYTE nWwNumLevel;           // fuer Bullets und Aufzaehlungen in Styles
 
-    BOOL bTxtColChanged : 1;
-    BOOL bFontChanged   : 1;    // For Simulating Default-Font
-    BOOL bCJKFontChanged: 1;    // For Simulating Default-CJK Font
-    BOOL bCTLFontChanged: 1;    // For Simulating Default-CTL Font
-    BOOL bFSizeChanged  : 1;    // For Simulating Default-FontSize
-    BOOL bFCTLSizeChanged  : 1; // For Simulating Default-CTL FontSize
-    BOOL bWidowsChanged : 1;    // For Simulating Default-Widows / Orphans
+    BYTE bTxtColChanged : 1;
+    BYTE bFontChanged   : 1;    // For Simulating Default-Font
+    BYTE bCJKFontChanged: 1;    // For Simulating Default-CJK Font
+    BYTE bCTLFontChanged: 1;    // For Simulating Default-CTL Font
+    BYTE bFSizeChanged  : 1;    // For Simulating Default-FontSize
+    BYTE bFCTLSizeChanged  : 1; // For Simulating Default-CTL FontSize
+    BYTE bWidowsChanged : 1;    // For Simulating Default-Widows / Orphans
 
-    void ImportSprms( long nPosFc, short nLen, BOOL bPap );
-    void ImportGrupx( short nLen, BOOL bPara, BOOL bOdd );
-    short ImportUPX( short nLen, BOOL bPAP, BOOL bOdd );
-
+    void ImportSprms(long nPosFc, short nLen, bool bPap);
+    void ImportGrupx(short nLen, bool bPara, bool bOdd);
+    short ImportUPX(short nLen, bool bPAP, bool bOdd);
 
     SwCharFmt* SearchCharFmt( const String& rName );
     SwCharFmt* MakeNewCharFmt( WW8_STD* pStd, const String& rName );
-    SwCharFmt* MakeOrGetCharFmt( BOOL* pbStyExist, WW8_STD* pStd,
-        const String& rName );
+    SwCharFmt* MakeOrGetCharFmt(bool* pbStyExist, WW8_STD* pStd,
+        const String& rName);
 
     SwTxtFmtColl* SearchFmtColl( const String& rName );
     SwTxtFmtColl* MakeNewFmtColl( WW8_STD* pStd, const String& rName );
-    SwTxtFmtColl* MakeOrGetFmtColl( BOOL* pbStyExist, WW8_STD* pStd,
-        const String& rName );
+    SwTxtFmtColl* MakeOrGetFmtColl(bool* pbStyExist, WW8_STD* pStd,
+        const String& rName);
 
     void Set1StyleDefaults();
     void Import1Style(USHORT nNr);
@@ -287,8 +286,8 @@ private:
     //No copying
     const WW8FlySet& operator=(const WW8FlySet&);
 public:
-    WW8FlySet( SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
-        const WW8SwFlyPara* pFS, BOOL bGraf );
+    WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
+        const WW8SwFlyPara* pFS, bool bGraf);
     WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM, const WW8_PIC& rPic,
         long nWidth, long nHeight );
 };

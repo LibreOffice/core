@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-15 12:50:52 $
+ *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,8 +325,8 @@ static void WriteWmfPreHd( long nWidth, long nHeight, SvStream& rOStream )
 
 #define WWBUFSIZ 4096           //  512 <= WWBUFSIZE <= UINT16_MAX !!!
 
-BOOL SwWW8ImplReader::GetPictGrafFromStream( Graphic& rGraphic,
-                                         SvStream& rSrc, ULONG nLen )
+bool SwWW8ImplReader::GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc,
+    ULONG nLen)
 {
     String sExt(CREATE_CONST_ASC(".pct"));
     utl::TempFile aTempFile( aEmptyStr, &sExt );
@@ -358,10 +358,10 @@ BOOL SwWW8ImplReader::GetPictGrafFromStream( Graphic& rGraphic,
 }
 
 
-BOOL SwWW8ImplReader::ReadGrafFile( String& rFileName, Graphic*& rpGraphic,
-    const WW8_PIC& rPic,    SvStream* pSt, ULONG nFilePos, BOOL* pbInDoc )
+bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
+    const WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos, bool* pbInDoc)
 {                                                  // Grafik in File schreiben
-    *pbInDoc = TRUE;                               // default
+    *pbInDoc = true;                               // default
 
     ULONG nPosFc = nFilePos + rPic.cbHeader;
 
@@ -372,16 +372,16 @@ BOOL SwWW8ImplReader::ReadGrafFile( String& rFileName, Graphic*& rpGraphic,
             pSt->Seek( nPosFc );
             // Name als P-String einlesen
             rFileName = WW8ReadPString( *pSt, eStructCharSet, 0 );
-            *pbInDoc = FALSE;       // Datei anschliessend nicht loeschen
+            *pbInDoc = false;       // Datei anschliessend nicht loeschen
             return rFileName.Len() != 0;        // Einlesen OK
     }
 
     GDIMetaFile aWMF;
     pSt->Seek( nPosFc );
-    BOOL bOk = ReadWindowMetafile( *pSt, aWMF );
+    bool bOk = ReadWindowMetafile(*pSt, aWMF) ? true : false;
 
     if (!bOk || pSt->GetError() || !aWMF.GetActionCount())
-        return FALSE;
+        return false;
 
     if (pWwFib->envr != 1) // !MAC als Creator
     {
@@ -397,7 +397,7 @@ BOOL SwWW8ImplReader::ReadGrafFile( String& rFileName, Graphic*& rpGraphic,
         aWMF.SetPrefSize( aNewSiz );
 
         rpGraphic = new Graphic( aWMF );
-        return TRUE;
+        return true;
     }
 
     // MAC - Word als Creator
@@ -406,7 +406,7 @@ BOOL SwWW8ImplReader::ReadGrafFile( String& rFileName, Graphic*& rpGraphic,
     // allerdings ohne die ersten 512 Bytes,
     // bei einem MAC-PICT egal sind ( werden nicht ausgewertet )
 
-    bOk = FALSE;
+    bOk = false;
     long nCopy = rPic.lcb - ( pSt->Tell() - nPosFc );
     if( 0 < nCopy  )
     {
@@ -488,7 +488,7 @@ void SwWW8ImplReader::ReplaceObjWithGraphicLink(const SdrObject &rReplaceObj,
 }
 
 // MakeGrafNotInCntnt setzt eine nicht-Zeichengebundene Grafik
-// ( bGrafApo == TRUE )
+// ( bGrafApo == true)
 SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
     const Graphic* pGraph, const String& rFileName, const SfxItemSet& rGrfSet)
 {
@@ -502,7 +502,7 @@ SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
         pSFlyPara->nYPos =
             (USHORT)( pSFlyPara->nYPos + pSFlyPara->nLineSpace - nNetHeight );
 
-    WW8FlySet aFlySet( *this, pWFlyPara, pSFlyPara, TRUE );
+    WW8FlySet aFlySet(*this, pWFlyPara, pSFlyPara, true);
 
     SwFmtAnchor aAnchor(pSFlyPara->eAnchor);
     aAnchor.SetAnchor(pPaM->GetPoint());
@@ -557,9 +557,9 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf1(WW8_PIC& rPic, SvStream* pSt,
         return 0;
 
     String aFileName;
-    BOOL bInDoc;
+    bool bInDoc;
     Graphic* pGraph = 0;
-    BOOL bOk = ReadGrafFile(aFileName, pGraph, rPic, pSt, nFilePos, &bInDoc);
+    bool bOk = ReadGrafFile(aFileName, pGraph, rPic, pSt, nFilePos, &bInDoc);
 
     if (!bOk)
     {
@@ -584,8 +584,8 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf1(WW8_PIC& rPic, SvStream* pSt,
     return pRet;
 }
 
-void SwWW8ImplReader::PicRead( SvStream *pDataStream, WW8_PIC *pPic,
-    BOOL bVer67)
+void SwWW8ImplReader::PicRead(SvStream *pDataStream, WW8_PIC *pPic,
+    bool bVer67)
 {
     //Only the first 0x2e bytes are the same between version 6/7 and 8+
 #ifdef __WW8_NEEDS_COPY
@@ -601,9 +601,9 @@ void SwWW8ImplReader::PicRead( SvStream *pDataStream, WW8_PIC *pPic,
     *pDataStream >> pPic->dyaOrigin;
 }
 
-BOOL SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
+bool SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
 {
-    BOOL bRet=FALSE;
+    bool bRet = false;
     /*
      * Save the reader state and process the sprms for this anchor cp.
      * Doing so will set the nPicLocFc to the offset to find the hypertext
@@ -696,12 +696,12 @@ BOOL SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
         {
             case 1:
                 *pDataStream >> nLen;
-                sURL = WW8Read_xstz( *pDataStream, (USHORT)nLen/2, FALSE );
+                sURL = WW8Read_xstz(*pDataStream, (USHORT)nLen/2, false);
                 if (nFlags & 0x08)
                 {
                     *pDataStream >> nLen;
-                    sMark = WW8Read_xstz( *pDataStream, (USHORT)nLen, FALSE );
-                    bRet = TRUE;
+                    sMark = WW8Read_xstz(*pDataStream, (USHORT)nLen, false);
+                    bRet = true;
                 }
                 break;
             case 2:
@@ -713,12 +713,12 @@ BOOL SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
                 *pDataStream >> nLen;   //full len
                 *pDataStream >> nLen;   //real str len
                 pDataStream->SeekRel(2); // skip over the value 00 03
-                sURL = WW8Read_xstz( *pDataStream, (USHORT)nLen/2, FALSE );
+                sURL = WW8Read_xstz(*pDataStream, (USHORT)nLen/2, false);
                 if (nFlags & 0x08)
                 {
                     *pDataStream >> nLen;
-                    sMark = WW8Read_xstz( *pDataStream, (USHORT)nLen, FALSE );
-                    bRet = TRUE;
+                    sMark = WW8Read_xstz(*pDataStream, (USHORT)nLen, false);
+                    bRet = true;
                 }
                 break;
         }
@@ -727,8 +727,8 @@ BOOL SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
     return( bRet );
 }
 
-SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
-    SwFrmFmt* pOldFlyFmt, BOOL bSetToBackground )
+SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
+    SwFrmFmt* pOldFlyFmt, bool bSetToBackground)
 {
     SwFrmFmt* pRet = 0;
     if (
@@ -836,7 +836,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                         aAttrSet.Put(aFlySet);
                     }
                     else
-                        ProcessEscherAlign(pRecord,0,aAttrSet,TRUE);
+                        ProcessEscherAlign(pRecord, 0, aAttrSet, true);
 
                     Rectangle aInnerDist(   pRecord->nDxTextLeft,
                         pRecord->nDyTextTop, pRecord->nDxTextRight,
@@ -862,7 +862,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                     aGrSet.Put( aCrop );
                 }
 
-                BOOL bTextObjWasGrouped = FALSE;
+                bool bTextObjWasGrouped = false;
 
                 // ggfs. altes AttrSet uebernehmen und
                 // horiz. Positionierungs-Relation korrigieren
@@ -888,7 +888,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                     {
                         // Nun den Link bzw. die Grafik ins Doc stopfen
                         const Graphic& rGraph = pGraphObject->GetGraphic();
-                        BOOL bDone = FALSE;
+                        bool bDone = false;
 
                         if( pGraphObject->IsLinkedGraphic() )
                         {
@@ -900,7 +900,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                                 if( pOldFlyFmt && pTextObj &&
                                     pTextObj->GetUpGroup() )
                                 {
-                                    bTextObjWasGrouped = TRUE;
+                                    bTextObjWasGrouped = true;
                                     /*
                                         Hier *nichts* ins Doc inserten!  (
                                         lediglich in der DrawPage statt dem
@@ -915,7 +915,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                                     pRet = rDoc.Insert(*pPaM, aGrName,
                                         aEmptyStr, 0, &aAttrSet, &aGrSet);
                                 }
-                                bDone = TRUE;
+                                bDone = true;
                             }
                         }
 

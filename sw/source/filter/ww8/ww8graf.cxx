@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:37 $
+ *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,14 +314,14 @@ void wwFrameNamer::SetUniqueGraphName(SwFrmFmt *pFrmFmt, const String &rFixed)
 }
 
 // ReadGrafStart liest die ObjektDaten ein und erzeugt falls noetig einen Anker
-BOOL SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
-    WW8_DPHEAD* pHd, const WW8_DO* pDo, SfxAllItemSet &rSet )
+bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
+    WW8_DPHEAD* pHd, const WW8_DO* pDo, SfxAllItemSet &rSet)
 {
     if (SVBT16ToShort(pHd->cb) < sizeof(WW8_DPHEAD) + nDataSiz)
     {
         ASSERT( !this, "+Grafik-Element: Size ?" );
         pStrm->SeekRel(SVBT16ToShort(pHd->cb) - sizeof(WW8_DPHEAD));
-        return FALSE;
+        return false;
     }
     pStrm->Read(pData, nDataSiz);
 
@@ -353,7 +353,7 @@ BOOL SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
             nDrawYOfs2 += nPgTop;
     }
 
-    return TRUE;
+    return true;
 }
 
 // SetStdAttr() setzt die Attribute, die jedes Objekt hat
@@ -388,7 +388,7 @@ static void SetStdAttr( SfxItemSet& rSet, WW8_DP_LINETYPE& rL,
         }
     }
     if( SVBT16ToShort( rSh.shdwpi ) ){                  // Schatten
-        rSet.Put( SdrShadowItem( TRUE ) );
+        rSet.Put(SdrShadowItem(true));
         rSet.Put( SdrShadowXDistItem( SVBT16ToShort( rSh.xaOffset ) ) );
         rSet.Put( SdrShadowYDistItem( SVBT16ToShort( rSh.yaOffset ) ) );
     }
@@ -440,8 +440,8 @@ static void SetLineEndAttr( SfxItemSet& rSet, WW8_DP_LINEEND& rLe,
         USHORT nSiz = SVBT16ToShort( rLt.lnpw )
                         * ( ( aSB >> 2 & 0x3 ) + ( aSB >> 4 & 0x3 ) );
         if( nSiz < 220 ) nSiz = 220;
-        rSet.Put( XLineEndWidthItem( nSiz ) );
-        rSet.Put( XLineEndCenterItem( FALSE ) );
+        rSet.Put(XLineEndWidthItem(nSiz));
+        rSet.Put(XLineEndCenterItem(false));
     }
 
     UINT16 aEB = SVBT16ToShort( rLe.aEndBits );
@@ -454,8 +454,8 @@ static void SetLineEndAttr( SfxItemSet& rSet, WW8_DP_LINEEND& rLe,
         USHORT nSiz = SVBT16ToShort( rLt.lnpw )
                         * ( ( aEB >> 2 & 0x3 ) + ( aEB >> 4 & 0x3 ) );
         if( nSiz < 220 ) nSiz = 220;
-        rSet.Put( XLineStartWidthItem( nSiz ) );
-        rSet.Put( XLineStartCenterItem( FALSE ) );
+        rSet.Put(XLineStartWidthItem(nSiz));
+        rSet.Put(XLineStartCenterItem(false));
     }
 }
 
@@ -644,7 +644,7 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl )
             //If we are set in the source and not set in the destination
             //then add it in.
             if ( SFX_ITEM_SET == pCollA[nColl].pFmt->GetItemState(
-                i, TRUE, &pItem ) )
+                i, true, &pItem ) )
             {
                 SfxItemPool *pEditPool = rS.GetPool();
                 USHORT nWhich = i;
@@ -653,7 +653,7 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl )
                     nSlotId && nWhich != nSlotId &&
                     0 != (nWhich = pEditPool->GetWhich(nSlotId)) &&
                     nWhich != nSlotId &&
-                    ( SFX_ITEM_SET != rS.GetItemState(nWhich, FALSE ) )
+                    ( SFX_ITEM_SET != rS.GetItemState(nWhich, false) )
                    )
                 {
                     SfxPoolItem* pCopy = pItem->Clone();
@@ -670,8 +670,8 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl )
 // InsertTxbxAttrs() setzt zwischen StartCp und EndCp die Attribute.
 // Dabei werden Style-Attribute als harte Attribute, Absatz- und Zeichen-
 // attribute gesetzt.
-void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
-    BOOL bONLYnPicLocFc )
+void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
+    bool bONLYnPicLocFc)
 {
     nStartCp += nDrawCpO;
     nEndCp   += nDrawCpO;
@@ -697,12 +697,12 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
     }
     WW8ReaderSave aSave(this,nStartCp);
 
-    BOOL bOldAdjust = pPlcxMan->GetDoingDrawTextBox();
-    pPlcxMan->SetDoingDrawTextBox(TRUE);
+    bool bOldAdjust = pPlcxMan->GetDoingDrawTextBox();
+    pPlcxMan->SetDoingDrawTextBox(true);
     WW8_CP nStart = pPlcxMan->Where();
     WW8_CP nNext,nEnd,nStartReplace;
 
-    BOOL bDoingSymbol = FALSE;
+    bool bDoingSymbol = false;
     sal_Unicode cReplaceSymbol = cSymbol;
 
     SfxItemSet *pS = new SfxItemSet(pDrawEditEngine->GetEmptyItemSet());
@@ -718,7 +718,7 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
         if (nTxtStart < nStartCp)
             nTxtStart = nStartCp;
         // get position of next SPRM
-        BOOL bStartAttr = pPlcxMan->Get( &aRes );
+        bool bStartAttr = pPlcxMan->Get(&aRes);
         nAktColl = pPlcxMan->GetColl();
         if (aRes.nSprmId)
         {
@@ -741,9 +741,9 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
                 if (bStartAttr)
                 {
                     ImportSprm(aRes.pMemPos, aRes.nSprmId);
-                    if (!bDoingSymbol && bSymbol == TRUE)
+                    if (!bDoingSymbol && bSymbol == true)
                     {
-                        bDoingSymbol = TRUE;
+                        bDoingSymbol = true;
                         nStartReplace = nTxtStart;
                         cReplaceSymbol = cSymbol;
                     }
@@ -751,9 +751,9 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
                 else
                 {
                     EndSprm( aRes.nSprmId );
-                    if (bSymbol == FALSE && bDoingSymbol)
+                    if (bSymbol == false && bDoingSymbol)
                     {
-                        bDoingSymbol = FALSE;
+                        bDoingSymbol = false;
                         String sTemp;
                         sTemp.Fill(nTxtStart-nStartReplace,cReplaceSymbol);
                         pDrawEditEngine->QuickInsertText(sTemp,
@@ -822,19 +822,19 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
     aSave.Restore(this);
 }
 
-BOOL SwWW8ImplReader::GetTxbxTextSttEndCp( long& rStartCp, long& rEndCp,
-                                            USHORT nTxBxS, USHORT nSequence )
+bool SwWW8ImplReader::GetTxbxTextSttEndCp(long& rStartCp, long& rEndCp,
+    USHORT nTxBxS, USHORT nSequence)
 {
     // rasch den TextBox-PLCF greifen
     WW8PLCFspecial* pT = pPlcxMan->GetTxbx();
     if( !pT )
     {
         ASSERT( !this, "+Wo ist der Grafik-Text (1) ?" );
-        return FALSE;
+        return false;
     }
 
     // ggfs. zuerst die richtige TextBox-Story finden
-    BOOL bCheckTextBoxStory = ( nTxBxS && pT->GetIMax() >= nTxBxS );
+    bool bCheckTextBoxStory = ( nTxBxS && pT->GetIMax() >= nTxBxS );
     if(  bCheckTextBoxStory )
         pT->SetIdx( nTxBxS-1 );
 
@@ -843,19 +843,19 @@ BOOL SwWW8ImplReader::GetTxbxTextSttEndCp( long& rStartCp, long& rEndCp,
     if( !pT->Get( rStartCp, pT0 ) )
     {
         ASSERT( !this, "+Wo ist der Grafik-Text (2) ?" );
-        return FALSE;
+        return false;
     }
 
     if( bCheckTextBoxStory )
     {
-        BOOL bReusable = (0 != SVBT16ToShort( ((WW8_TXBXS*)pT0)->fReusable ));
+        bool bReusable = (0 != SVBT16ToShort( ((WW8_TXBXS*)pT0)->fReusable ));
         while( bReusable )
         {
             (*pT)++;
             if( !pT->Get( rStartCp, pT0 ) )
             {
                 ASSERT( !this, "+Wo ist der Grafik-Text (2-a) ?" );
-                return FALSE;
+                return false;
             }
             bReusable = (0 != SVBT16ToShort( ((WW8_TXBXS*)pT0)->fReusable ));
         }
@@ -864,7 +864,7 @@ BOOL SwWW8ImplReader::GetTxbxTextSttEndCp( long& rStartCp, long& rEndCp,
     if( !pT->Get( rEndCp, pT0 ) )
     {
         ASSERT( !this, "+Wo ist der Grafik-Text (3) ?" );
-        return FALSE;
+        return false;
     }
 
     // jetzt ggfs. die passende Page in der Break-Table finden
@@ -879,13 +879,13 @@ BOOL SwWW8ImplReader::GetTxbxTextSttEndCp( long& rStartCp, long& rEndCp,
             // rasch den TextBox-Break-Deskriptor-PLCF greifen
             pT = pPlcxMan->GetTxbxBkd();
             if (!pT) //It can occur on occasion, Caolan
-                return FALSE;
+                return false;
 
             // den ersten Eintrag fuer diese TextBox-Story finden
             if( !pT->SeekPos( rStartCp ) )
             {
                 ASSERT( !this, "+Wo ist der Grafik-Text (4) ?" );
-                return FALSE;
+                return false;
             }
             // ggfs. entsprechende Anzahl Eintraege weitergehen
             for(USHORT iSequence = 0; iSequence < nSequence; iSequence++) (*pT)++;
@@ -894,7 +894,7 @@ BOOL SwWW8ImplReader::GetTxbxTextSttEndCp( long& rStartCp, long& rEndCp,
                 || ( nMinStartCp > rStartCp  ) )
             {
                 ASSERT( !this, "+Wo ist der Grafik-Text (5) ?" );
-                return FALSE;
+                return false;
             }
             if( rStartCp >= nMaxEndCp )
                 rEndCp = rStartCp;  // kein Error: leerer String!
@@ -905,7 +905,7 @@ BOOL SwWW8ImplReader::GetTxbxTextSttEndCp( long& rStartCp, long& rEndCp,
                     || ( nMaxEndCp < rEndCp-1  ) )
                 {
                     ASSERT( !this, "+Wo ist der Grafik-Text (6) ?" );
-                    return FALSE;
+                    return false;
                 }
                 rEndCp -= 1;
             }
@@ -915,39 +915,29 @@ BOOL SwWW8ImplReader::GetTxbxTextSttEndCp( long& rStartCp, long& rEndCp,
     }
     else
         rEndCp -= 1;
-    return TRUE;
+    return true;
 }
 
 // TxbxText() holt aus WW-File den Text und gibt diesen und den Anfangs- und
 // den um -2 (bzw. -1 bei Ver8) korrigierten End-Cp zurueck
-
-
-BOOL SwWW8ImplReader::GetTxbxText( String& rString,
-                                   long nStartCp, long nEndCp )
+bool SwWW8ImplReader::GetTxbxText(String& rString, long nStartCp, long nEndCp)
 {
     nDrawTxbx++;
-    BOOL bOk = FALSE;
-    if( nStartCp > nEndCp )
-    {
-        ASSERT( !this, "+Wo ist der Grafik-Text (7) ?" );
-    }
-    else
-    if( nStartCp == nEndCp )
+    bool bOk = false;
+    ASSERT(nStartCp <= nEndCp, "+Wo ist der Grafik-Text (7) ?");
+    if (nStartCp == nEndCp)
         rString.Erase();      // leerer String: durchaus denkbar!
-    else
+    else if (nStartCp < nEndCp)
     {
         // den Text einlesen: kann sich ueber mehrere Pieces erstrecken!!!
         USHORT nLen = pSBase->WW8ReadString( *pStrm, rString,
                                             nStartCp + nDrawCpO,
                                             nEndCp   - nStartCp,
                                             eTextCharSet );
-        if( !nLen )
+        ASSERT(nLen, "+Wo ist der Grafik-Text (8) ?");
+        if (nLen)
         {
-            ASSERT( !this, "+Wo ist der Grafik-Text (8) ?" );
-        }
-        else
-        {
-            bOk = TRUE;
+            bOk = true;
             if( 0x0d == rString.GetChar(nLen - 1) )
                 rString.Erase(nLen - 1);
         }
@@ -959,28 +949,20 @@ BOOL SwWW8ImplReader::GetTxbxText( String& rString,
 // InsertTxbxText() fuegt fuer TextBoxen und CaptionBoxen den Text
 // und die Attribute ein
 SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
-                                     Size*       pObjSiz,
-                                     USHORT      nTxBxS,
-                                     USHORT      nSequence,
-                                     long        nPosCp,
-                                     SwFrmFmt*   pOldFlyFmt,
-                                     BOOL        bMakeSdrGrafObj,
-                                     BOOL&       rbEraseTextObj,
-                                     BOOL*       pbTestTxbxContainsText,
-                                     long*       pnStartCp,
-                                     long*       pnEndCp,
-                                     BOOL*       pbContainsGraphics,
-                                     SvxMSDffImportRec* pRecord)
+    Size* pObjSiz, USHORT nTxBxS, USHORT nSequence, long nPosCp,
+    SwFrmFmt* pOldFlyFmt, bool bMakeSdrGrafObj, bool& rbEraseTextObj,
+    bool* pbTestTxbxContainsText, long* pnStartCp, long* pnEndCp,
+    bool* pbContainsGraphics, SvxMSDffImportRec* pRecord)
 {
     SwFrmFmt* pFlyFmt = 0;
     ULONG nOld = pStrm->Tell();
 
-    rbEraseTextObj = FALSE;
+    rbEraseTextObj = false;
 
     String aString;
     long nStartCp, nEndCp, nNewStartCp;
-    BOOL bContainsGraphics=FALSE;
-    BOOL bTextWasRead = GetTxbxTextSttEndCp( nStartCp, nEndCp, nTxBxS,
+    bool bContainsGraphics = false;
+    bool bTextWasRead = GetTxbxTextSttEndCp( nStartCp, nEndCp, nTxBxS,
         nSequence ) && GetTxbxText( aString, nStartCp, nEndCp );
 
     nNewStartCp = nStartCp;
@@ -1038,21 +1020,23 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         {
             if ( (STRING_NOTFOUND != aString.Search(0x1)) ||
                 (STRING_NOTFOUND != aString.Search(0x8)) )
-                bContainsGraphics=TRUE;
+            {
+                bContainsGraphics = true;
+            }
         }
         else        // May be a single graphic or object
         {
-            BOOL bDone = TRUE;
+            bool bDone = true;
             switch( aString.GetChar(0) )
             {
                 case 0x1:
-                    if( !pbTestTxbxContainsText )
+                    if (!pbTestTxbxContainsText)
                     {
                         WW8ReaderSave aSave(this,nNewStartCp + nDrawCpO -1);
-                        BOOL bOldEmbeddObj = bEmbeddObj;
+                        bool bOldEmbeddObj = bEmbeddObj;
                         //bEmbedd Ordinarily would have been set by field
                         //parse, but this is impossible here so...
-                        bEmbeddObj = TRUE;
+                        bEmbeddObj = true;
 
                         // 1st look for OLE- or Graph-Indicator Sprms
                         WW8PLCFx_Cp_FKP* pChp = pPlcxMan->GetChpPLCF();
@@ -1127,15 +1111,15 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                             }
                             else
                                 pFlyFmt = ImportOle();
-                            bObj = FALSE;
+                            bObj = false;
                         }
                         else
                         {
-                            InsertTxbxAttrs(nNewStartCp,nNewStartCp+1,TRUE);
+                            InsertTxbxAttrs(nNewStartCp,nNewStartCp+1,true);
                             pFlyFmt = ImportGraf(bMakeSdrGrafObj ? pTextObj : 0,
                                 pOldFlyFmt,
                                 pTextObj ?  (nDrawHell == pTextObj->GetLayer())
-                                : FALSE );
+                                : false);
                         }
                     }
                     break;
@@ -1144,7 +1128,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         pFlyFmt = Read_GrafLayer( nPosCp );
                     break;
                 default:
-                    bDone = FALSE;
+                    bDone = false;
                     break;
             }
 
@@ -1189,11 +1173,11 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     {
         if( bTextWasRead )
         {
-            pDrawEditEngine->SetText( aString );
-            InsertTxbxAttrs( nStartCp, nEndCp, FALSE );
+            pDrawEditEngine->SetText(aString);
+            InsertTxbxAttrs(nStartCp, nEndCp, false);
         }
 
-        BOOL bVertical = pTextObj->IsVerticalWriting();
+        bool bVertical = pTextObj->IsVerticalWriting() ? true : false;
         OutlinerParaObject* pOp = new OutlinerParaObject(
             *pDrawEditEngine->CreateTextObject());
         pOp->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
@@ -1217,11 +1201,10 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     return pFlyFmt;
 }
 
-BOOL SwWW8ImplReader::TxbxChainContainsRealText( USHORT nTxBxS,
-                                                 long&  rStartCp,
-                                                 long&  rEndCp )
+bool SwWW8ImplReader::TxbxChainContainsRealText(USHORT nTxBxS, long& rStartCp,
+    long&  rEndCp)
 {
-    BOOL bErase, bContainsText;
+    bool bErase, bContainsText;
     InsertTxbxText( 0,0,nTxBxS,USHRT_MAX,0,0,0, bErase, &bContainsText,
         &rStartCp, &rEndCp );
     return bContainsText;
@@ -1232,7 +1215,7 @@ BOOL SwWW8ImplReader::TxbxChainContainsRealText( USHORT nTxBxS,
 SdrObject* SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     SfxAllItemSet &rSet)
 {
-    BOOL bDummy;
+    bool bDummy;
     WW8_DP_TXTBOX aTxtB;
 
     if( !ReadGrafStart( (void*)&aTxtB, sizeof( aTxtB ), pHd, pDo, rSet ) )
@@ -1250,16 +1233,16 @@ SdrObject* SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
         (INT16)SVBT16ToShort( pHd->dya ) );
 
     long nStartCpFly,nEndCpFly;
-    BOOL bContainsGraphics;
-    InsertTxbxText(PTR_CAST(SdrTextObj,pObj), &aSize, 0, 0, 0, 0, FALSE,
+    bool bContainsGraphics;
+    InsertTxbxText(PTR_CAST(SdrTextObj,pObj), &aSize, 0, 0, 0, 0, false,
         bDummy,0,&nStartCpFly,&nEndCpFly,&bContainsGraphics);
 
     SetStdAttr( rSet, aTxtB.aLnt, aTxtB.aShd );
     SetFill( rSet, aTxtB.aFill );
 
     rSet.Put( SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ) );
-    rSet.Put( SdrTextAutoGrowWidthItem(  FALSE ) );
-    rSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
+    rSet.Put( SdrTextAutoGrowWidthItem(false));
+    rSet.Put( SdrTextAutoGrowHeightItem(false));
     rSet.Put( SdrTextLeftDistItem(  MIN_BORDER_DIST*2 ) );
     rSet.Put( SdrTextRightDistItem( MIN_BORDER_DIST*2 ) );
     rSet.Put( SdrTextUpperDistItem( MIN_BORDER_DIST ) );
@@ -1279,7 +1262,7 @@ SdrObject* SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
         aFlySet.Put(SwFmtFrmSize(ATT_MIN_SIZE, aSize.Width(), aSize.Height()));
         aFlySet.Put(SwFmtSurround(SURROUND_THROUGHT));
         if (SVBT16ToShort( pDo->dhgt ) & 0x2000)
-            aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,FALSE));
+            aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
 
         //InnerDist is all 0 as word 6 doesn't store distance from borders and
         //neither does it store the border style so its always simple
@@ -1362,9 +1345,9 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     SdrCaptionObj* pObj = new SdrCaptionObj( Rectangle( aP0, aP1 ), aP2 );
     Size aSize( (INT16)SVBT16ToShort( aCallB.dpheadTxbx.dxa ),
                            (INT16)SVBT16ToShort(  aCallB.dpheadTxbx.dya ) );
-    BOOL bEraseThisObject;
+    bool bEraseThisObject;
 
-    InsertTxbxText(pObj, &aSize, 0, 0, 0, 0, FALSE, bEraseThisObject );
+    InsertTxbxText(pObj, &aSize, 0, 0, 0, 0, false, bEraseThisObject );
 
     if( SVBT16ToShort( aCallB.dptxbx.aLnt.lnps ) != 5 ) // Umrandung sichtbar ?
         SetStdAttr( rSet, aCallB.dptxbx.aLnt, aCallB.dptxbx.aShd );
@@ -1787,7 +1770,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     };
     const SfxPoolItem* pPoolItem;
     for(USHORT nItem = 0; nItem < nDirectMatch; ++nItem)
-        if( SFX_ITEM_SET == rOldSet.GetItemState( aDirectMatch[ nItem ], FALSE,
+        if( SFX_ITEM_SET == rOldSet.GetItemState( aDirectMatch[ nItem ], false,
             &pPoolItem) )
         {
             rFlySet.Put( *pPoolItem );
@@ -1803,7 +1786,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     // check if LineStyle is *really* set!
     const SfxPoolItem* pItem;
 
-    SfxItemState eState = rOldSet.GetItemState(XATTR_LINESTYLE,TRUE,&pItem);
+    SfxItemState eState = rOldSet.GetItemState(XATTR_LINESTYLE,true,&pItem);
     if( eState == SFX_ITEM_SET )
     {
         // Now, that we know there is a line style we will make use the
@@ -1859,11 +1842,11 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     if( 0 < rInnerDist.Bottom() )
         aBox.SetDistance( (USHORT)rInnerDist.Bottom(), BOX_LINE_BOTTOM );
 
-    BOOL bFixSize = !(WW8ITEMVALUE(rOldSet, SDRATTR_TEXT_AUTOGROWHEIGHT,
+    bool bFixSize = !(WW8ITEMVALUE(rOldSet, SDRATTR_TEXT_AUTOGROWHEIGHT,
         SdrTextAutoGrowHeightItem));
 
     // Size: SwFmtFrmSize
-    if( SFX_ITEM_SET != rFlySet.GetItemState(RES_FRM_SIZE, FALSE) )
+    if( SFX_ITEM_SET != rFlySet.GetItemState(RES_FRM_SIZE, false) )
     {
         const Rectangle& rSnapRect = pSdrObj->GetSnapRect();
         // if necessary adapt width and position of the framework: The
@@ -1943,7 +1926,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     }
 
     // Hintergrund: SvxBrushItem
-    eState = rOldSet.GetItemState(XATTR_FILLSTYLE,TRUE,&pItem);
+    eState = rOldSet.GetItemState(XATTR_FILLSTYLE,true,&pItem);
     if( eState == SFX_ITEM_SET )
     {
         const XFillStyle eFill = ((const XFillStyleItem*)pItem)->GetValue();
@@ -1951,14 +1934,14 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         if(eFill != XFILL_NONE)
         {
             SvxBrushItem aBrushItem;
-            BOOL bBrushItemOk = FALSE;
+            bool bBrushItemOk = false;
 
             switch( eFill )
             {
                 case XFILL_NONE:
                     {
                         aBrushItem.SetColor( Color( COL_TRANSPARENT ) );
-                        bBrushItemOk = TRUE;
+                        bBrushItemOk = true;
                     }
                 break;
                 case XFILL_SOLID:
@@ -1967,7 +1950,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
                             WW8ITEMVALUE(rOldSet, XATTR_FILLCOLOR,
                             XFillColorItem);
                         aBrushItem.SetColor( aColor );
-                        bBrushItemOk = TRUE;
+                        bBrushItemOk = true;
                     }
                 break;
                 case XFILL_GRADIENT:
@@ -1978,12 +1961,12 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
                     {
                         const Graphic aGraphic(WW8ITEMVALUE(rOldSet,
                             XATTR_FILLBITMAP, XFillBitmapItem).GetBitmap());
-                        BOOL bTile = WW8ITEMVALUE(rOldSet, XATTR_FILLBMP_TILE,
-                            SfxBoolItem);
+                        bool bTile = WW8ITEMVALUE(rOldSet, XATTR_FILLBMP_TILE,
+                            SfxBoolItem) ? true: false;
                         aBrushItem.SetGraphic( aGraphic );
                         aBrushItem.SetGraphicPos( bTile ? GPOS_TILED
                             : GPOS_AREA );
-                        bBrushItemOk = TRUE;
+                        bBrushItemOk = true;
                     }
                 break;
             }
@@ -2085,7 +2068,7 @@ void SwWW8ImplReader::MatchWrapDistancesIntoFlyFmt(SvxMSDffImportRec* pRecord,
 void SwWW8ImplReader::SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord,
     SwFrmFmt *pFlyFmt, WW8_FSPA *pF )
 {
-    const SwNodeIndex* pIdx = pFlyFmt->GetCntnt( FALSE ).GetCntntIdx();
+    const SwNodeIndex* pIdx = pFlyFmt->GetCntnt(false).GetCntntIdx();
     SwGrfNode* pGrfNd;
     if( pIdx && (pGrfNd = rDoc.GetNodes()[pIdx->GetIndex() + 1]->GetGrfNode() ))
     {
@@ -2182,8 +2165,8 @@ SdrObject* SwWW8ImplReader::CreateContactObject(SwFrmFmt* pFlyFmt)
     return 0;
 }
 
-void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
-    WW8_FSPA *pFSPA, SfxItemSet &rFlySet, BOOL bOrgObjectWasReplace )
+void SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
+    WW8_FSPA *pFSPA, SfxItemSet &rFlySet, bool bOrgObjectWasReplace)
 {
     if( pRecord )
     {
@@ -2359,7 +2342,7 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
 
             SwFmtHoriOrient aHoriOri( pFSPA->nXaLeft, eHoriOri, eHoriRel );
             if( 4 <= nXAlign )
-                aHoriOri.SetPosToggle( TRUE );
+                aHoriOri.SetPosToggle(true);
             rFlySet.Put( aHoriOri );
 
             //Writer honours this wrap distance when aligned as "left" or "right",
@@ -2465,18 +2448,18 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     const SdrObject* pOrgShapeObject = pObject;
     SvxMSDffImportRec* pRecord;
-    BOOL bDone = FALSE;
+    bool bDone = false;
     SdrObject* pOurNewObject = 0;
-    BOOL bReplaceable = FALSE;
+    bool bReplaceable = false;
 
     switch (SdrObjKind(pObject->GetObjIdentifier()))
     {
         case OBJ_GRAF:
-            bReplaceable = TRUE;
-            bDone = TRUE;
+            bReplaceable = true;
+            bDone = true;
             break;
         case OBJ_OLE2:
-            bReplaceable = TRUE;
+            bReplaceable = true;
             break;
         default:
             break;
@@ -2486,7 +2469,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     // Umfluss-Modus ermitteln
     SfxItemSet aFlySet(rDoc.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
     SwSurround eSurround = SURROUND_PARALLEL;
-    BOOL bContour = FALSE;
+    bool bContour = false;
     switch( pF->nwr )
     {
         case 0: //0 like 2, but doesn't require absolute object
@@ -2505,7 +2488,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             // ensure the object will be conterted into a Writer structure!
             // the Writer doesn't support Contour on Sdr objects
             if( bReplaceable )
-                bContour = TRUE;
+                bContour = true;
             break;
     }
 
@@ -2527,7 +2510,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     SwFmtSurround aSur( eSurround );
     aSur.SetContour( bContour );
-    aSur.SetOutside( TRUE ); // Winword kann nur Aussen-Konturen
+    aSur.SetOutside(true); // Winword kann nur Aussen-Konturen
     aFlySet.Put( aSur );
 
     // eingelesenes Objekt (kann eine ganze Gruppe sein) jetzt korrekt
@@ -2539,7 +2522,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     //If we are to be "below text" then we are not to be opaque
     if( pF->bBelowText || ( pRecord ? pRecord->bDrawHell : 0 ) )
-        aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,FALSE));
+        aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
 
 
     if( bReplaceable )
@@ -2575,7 +2558,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             pRetFrmFmt = ConvertDrawTextToFly(pObject, pOurNewObject, pRecord,
                 eAnchor, pF, aFlySet);
             if (pRetFrmFmt)
-                bDone = TRUE;
+                bDone = true;
         }
 
         if( !bDone )
@@ -2675,8 +2658,8 @@ void SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         aSet.Put(XFillStyleItem(XFILL_NONE));
         aSet.Put(XLineStyleItem(XLINE_NONE));
         aSet.Put(SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ));
-        aSet.Put(SdrTextAutoGrowHeightItem( FALSE ));
-        aSet.Put(SdrTextAutoGrowWidthItem( FALSE ));
+        aSet.Put(SdrTextAutoGrowHeightItem(false));
+        aSet.Put(SdrTextAutoGrowWidthItem(false));
         pSdrTextObj->SetItemSet(aSet);
 
         long nAngle = pRecord->nTextRotationAngle;
@@ -2694,7 +2677,7 @@ void SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
     {
         pSdrTextObj = PTR_CAST(SdrTextObj, pRecord->pObj);
         /*
-            Die Frage: was tun, wenn hier FALSE hereuskommt, z.B. bei
+            Die Frage: was tun, wenn hier false hereuskommt, z.B. bei
             3D-Objekten (nicht von SdrTextObj abgeleitet)
 
             Wunsch: neues SdrTextObj hinzufuegen, das mit dem alten in einer
@@ -2718,11 +2701,11 @@ void SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         SdrObject* pGroupObject = pSdrTextObj->GetUpGroup();
 
         UINT32 nOrdNum = pSdrTextObj->GetOrdNum();
-        BOOL bEraseThisObject;
+        bool bEraseThisObject;
         InsertTxbxText( pSdrTextObj, &aObjSize, pRecord->aTextId.nTxBxS,
             pRecord->aTextId.nSequence, nGrafAnchorCp, pRetFrmFmt,
             (pSdrTextObj != pTrueObject) || (0 != pGroupObject),
-            bEraseThisObject, FALSE, 0, 0, 0, pRecord);
+            bEraseThisObject, false, 0, 0, 0, pRecord);
 
         // wurde dieses Objekt ersetzt ??
         if( bEraseThisObject )
@@ -2866,10 +2849,10 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             SwNodeIndex aStart(pPaM->GetPoint()->nNode);
 
             // lies den Text ein
-            bTxbxFlySection = TRUE;
-            BOOL bJoined = ReadText( nStartCp, (nEndCp-nStartCp),
+            bTxbxFlySection = true;
+            bool bJoined = ReadText(nStartCp, (nEndCp-nStartCp),
                 MAN_MAINTEXT == pPlcxMan->GetManType() ?
-                MAN_TXBX : MAN_TXBX_HDFT );
+                MAN_TXBX : MAN_TXBX_HDFT);
 
             MoveOutsideFly(pRetFrmFmt, aSave.GetStartPos(),!bJoined);
 
@@ -2891,7 +2874,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
     if (0 > nHeightTw)
         nHeightTw = 0;
 
-    ProcessEscherAlign( pRecord, pF, rFlySet, TRUE );
+    ProcessEscherAlign(pRecord, pF, rFlySet, true);
 
     rFlySet.Put(SwFmtFrmSize( ATT_FIX_SIZE, nWidthTw, nHeightTw));
 
@@ -2921,7 +2904,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
     else
     {
         const Graphic& rGraph = ((SdrGrafObj*)rpObject)->GetGraphic();
-        BOOL bDone = FALSE;
+        bool bDone = false;
 
         if( ((SdrGrafObj*)rpObject)->IsLinkedGraphic() )
         {
@@ -2933,7 +2916,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
             {
                 pRetFrmFmt = rDoc.Insert( *pPaM, aGrfName, aEmptyStr,
                     0 /*Graphic*/, &rFlySet, 0 /*SwFrmFmt*/);
-                bDone = TRUE;
+                bDone = true;
             }
         }
         if( !bDone )
