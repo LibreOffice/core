@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:59:44 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 09:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -911,12 +911,16 @@ USHORT SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
 
     USHORT nStart = 0;
     BYTE nDigitLvl = 0, nDigitCnt = 0;
+    //count number of parenthesis to assure a sensible order is found
+    USHORT nOpeningParentheses = 0;
+    USHORT nClosingParentheses = 0;
 
     CharClass& rCC = GetCharClass( rNd.GetSwAttrSet().GetLanguage().GetLanguage() );
 
     while( nPos < rTxt.Len() && nDigitLvl < MAXLEVEL - 1)
     {
-        if( '0' <= rTxt.GetChar( nPos ) &&  '9' >= rTxt.GetChar( nPos ))
+        const sal_Unicode cCurrentChar = rTxt.GetChar( nPos );
+        if( '0' <= cCurrentChar &&  '9' >= cCurrentChar)
         {
             if( eScan & DELIM )
             {
@@ -1104,9 +1108,13 @@ CHECK_ROMAN_5:
             eScan |= eTmpScan;          // Digit rein
             ++nDigitCnt;
         }
-        else if( 256 > rTxt.GetChar( nPos ) &&
-                 strchr( /*".,)([]{}"*/ ".,)(<>", rTxt.GetChar( nPos ) ) )
+        else if( 256 > cCurrentChar &&
+                 strchr( ".)(", cCurrentChar ) )
         {
+            if(cCurrentChar == '(')
+                nOpeningParentheses++;
+            else if(cCurrentChar == ')')
+                nClosingParentheses++;
             // nur wenn noch keine Zahlen gelesen wurden!
             if( pPreFix && !( eScan & ( NO_DELIM | CHG )) )
                 *pPreFix += rTxt.GetChar( nPos );
@@ -1130,7 +1138,8 @@ CHECK_ROMAN_5:
         ++nPos;
     }
     if( !( CHG & eScan ) || rPos == nPos ||
-        nPos == rTxt.Len() || !IsSpace( rTxt.GetChar( nPos ) ))
+        nPos == rTxt.Len() || !IsSpace( rTxt.GetChar( nPos ) ) ||
+        (nOpeningParentheses > nClosingParentheses))
         return USHRT_MAX;
 
     if( (NO_DELIM & eScan) && pPreFix )     // den letzen nicht vergessen
