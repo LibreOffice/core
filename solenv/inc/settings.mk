@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.120 $
+#   $Revision: 1.121 $
 #
-#   last change: $Author: kz $ $Date: 2002-07-24 15:27:31 $
+#   last change: $Author: hjs $ $Date: 2002-08-06 12:39:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1431,11 +1431,15 @@ CDEFS+=-D$(WORK_STAMP)
 
 .INCLUDE .IGNORE: $(UPD)$(LAST_MINOR).mk
 
+.IF "$(ENVWARNFLAGS)"==""
 .IF "$(COMPILER_WARN_ALL)"!=""
 CFLAGSAPPEND+=$(CFLAGSWALL)
 .ELSE           # "$(WARN_ALL)"!=""
 CFLAGSAPPEND+=$(CFLAGSDFLTWARN)
 .ENDIF          # "$(WARN_ALL)"!=""
+.ELSE			# "$(ENVWARNFLAGS)"==""
+CFLAGSAPPEND+=$(ENVWARNFLAGS)
+.ENDIF			# "$(ENVWARNFLAGS)"==""
 
 CDEFS+= $(ENVCDEFS)
 CFLAGS+= $(CFLAGSCALL) $(ENVCFLAGS)
@@ -1449,7 +1453,6 @@ RSCDEFS+= $(ENVRSCDEFS)
 # RSCLINKFLAGS+= $(ENVRSCLINKFLAGS)
 RCFLAGS+= $(ENVRCFLAGS)
 RCLINKFLAGS+= $(ENVRCLINKFLAGS)
-CFLAGSAPPEND+=$(ENVWARNFLAGS)
 
 
 #to be removed soon!!!
