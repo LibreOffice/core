@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-12 16:38:23 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1245,6 +1245,13 @@ void SdDrawViewShell::AssignFrom3DWindow()
                     XFillStyle eFillStyle = ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem );
                     if(eFillStyle == XFILL_NONE)
                         aSet.Put(XFillStyleItem (XFILL_SOLID));
+
+                    // remove some 3DSCENE attributes since these were
+                    // created by convert to 3D and may not be changed
+                    // to the defaults again.
+                    aSet.ClearItem(SDRATTR_3DSCENE_DISTANCE);
+                    aSet.ClearItem(SDRATTR_3DSCENE_FOCAL_LENGTH);
+                    aSet.ClearItem(SDRATTR_3DOBJ_DEPTH);
                 }
 
                 // Attribute zuweisen
