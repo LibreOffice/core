@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: os $ $Date: 2002-08-14 09:44:15 $
+ *  last change: $Author: cl $ $Date: 2002-09-04 14:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ UNO3_GETIMPLEMENTATION2_IMPL( SdGenericDrawPage, SvxFmDrawPage );
 SdGenericDrawPage::SdGenericDrawPage( SdXImpressDocument* _pModel, SdPage* pInPage, const SfxItemPropertyMap* pMap ) throw()
 :       SvxFmDrawPage( (SdrPage*) pInPage ),
         mpModel     ( _pModel ),
-        maPropSet   ( (pInPage&& (pInPage->GetPageKind() != PK_STANDARD))?&pMap[1]:pMap ),
+        maPropSet   ( (pInPage&& (pInPage->GetPageKind() != PK_STANDARD) && (pInPage->GetPageKind() != PK_HANDOUT) )?&pMap[1]:pMap ),
         SdUnoSearchReplaceShape(this),
         mbHasBackgroundObject(sal_False),
         mrBHelper( maMutex )
