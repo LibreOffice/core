@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualdbtools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 14:47:53 $
+ *  last change: $Author: fs $ $Date: 2001-08-13 14:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_SQLEXCEPTION_HPP_
 #include <com/sun/star/sdbc/SQLException.hpp>
+#endif
+#ifndef _VECTOR_
+#include <vector>
 #endif
 
 //========================================================================
@@ -205,6 +208,23 @@ namespace connectivity
         };
 
         //================================================================
+        //= IDataAccessCharSet
+        //================================================================
+        /** simple wrapper for the <type>OCharsetMap</type>
+        */
+        class IDataAccessCharSet : public ::rtl::IReference
+        {
+            // to be extended if necessary ....
+        public:
+            /** enumerates all supported char sets
+            @return the number of charsets supported
+            */
+            virtual sal_Int32   getSupportedTextEncodings(
+                ::std::vector< rtl_TextEncoding >& /* [out] */ _rEncs
+            ) const = 0;
+        };
+
+        //================================================================
         //= IDataAccessTypeConversion
         //================================================================
         class IDataAccessTypeConversion : public ::rtl::IReference
@@ -284,6 +304,9 @@ namespace connectivity
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceFactory
                 ) const = 0;
 
+            /// creates a helper for charset related functionality (<type>OCharsetMap</type>)
+            virtual ::rtl::Reference< IDataAccessCharSet > createCharsetHelper( ) const = 0;
+
             /// creates a simple version of the DBTypeConversion helper
             virtual ::rtl::Reference< IDataAccessTypeConversion > getTypeConversionHelper() = 0;
 
@@ -304,6 +327,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/08/06 14:47:53  fs
+ *  #87690# +connectRowset / some other methods needed later on (to make writer link-time independent og dbtools)
+ *
  *  Revision 1.1  2001/07/25 13:24:59  fs
  *  initial checkin - helper for accessing methods/classes in dbtools with loading the library on demand (and not linking against it)
  *
