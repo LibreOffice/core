@@ -1,0 +1,2100 @@
+ /*************************************************************************
+ *
+ *  $RCSfile: pubdlg.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: ka $ $Date: 2002-04-18 15:04:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "helpids.h"
+#include "pubdlg.hrc"
+
+ModalDialog DLG_PUBLISHING
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 272 , 190 ) ;
+    Text = "HTML-Export" ;
+    Text [ ENGLISH ] = "HTML-Export" ;
+    Text [ english_us ] = "HTML Export" ;
+    Text [ italian ] = "Esportazione HTML" ;
+    Text [ spanish ] = "Exportación HTML" ;
+    Text [ french ] = "Export HTML" ;
+    Text [ dutch ] = "HTLM-export" ;
+    Text [ swedish ] = "HTML-export" ;
+    Text [ portuguese ] = "Exportação HTML" ;
+    Moveable = TRUE ;
+
+    /////////////////////////////
+    // Page 1, choose a design //
+    /////////////////////////////
+
+    FixedBitmap PAGE1_BMP
+    {
+        OutputSize = TRUE ;
+        Scale = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Fixed = Bitmap { File = "pubdlg1.bmp" ; };
+    };
+
+    FixedLine PAGE1_TITEL
+    {
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Text = "Design zuweisen" ;
+        Text [ ENGLISH ] = "Assign design:" ;
+        Text[ english_us ] = "Assign design";
+        Text[ portuguese ] = "Atribuir design:";
+        Text[ russian ] = "Ïğèñâîèòü äèçàéí";
+        Text[ greek ] = "Áíôéóôïß÷éóç ó÷åäßïõ";
+        Text[ dutch ] = "Design toewijzen";
+        Text[ french ] = "Assignation d'un design";
+        Text[ spanish ] = "Asignar diseño:";
+        Text[ finnish ] = "Liitä rakenne";
+        Text[ italian ] = "Assegna disegno";
+        Text[ danish ] = "Assign design:";
+        Text[ swedish ] = "Tilldela design:";
+        Text[ polish ] = "Przypisz projekt";
+        Text[ portuguese_brazilian ] = "Assign design:";
+        Text[ japanese ] = "ãƒ‡ã‚¶ã‚¤ãƒ³ã®å‰²ã‚Šå½“ã¦";
+        Text[ korean ] = "ë””ìì¸ ì§€ì •:";
+        Text[ chinese_simplified ] = "æŒ‡å®šè®¾è®¡";
+        Text[ chinese_traditional ] = "æŒ‡å®šè¨­è¨ˆ";
+        Text[ turkish ] = "Assign design:";
+        Text[ arabic ] = "Assign design:";
+        Text[ catalan ] = "Assigna el disseny:";
+    };
+
+    RadioButton PAGE1_NEW_DESIGN
+    {
+        Pos = MAP_APPFONT( 12, 50 );
+        Size = MAP_APPFONT( 153, 10 );
+        Text = "~Neues Design";
+        Text [ ENGLISH ] = "~New design";
+        Text[ italian ] = "~Nuovo design";
+        Text[ portuguese_brazilian ] = "~New design";
+        Text[ portuguese ] = "~Nova configuração";
+        Text[ danish ] = "Nyt design";
+        Text[ french ] = "~Nouveau design";
+        Text[ swedish ] = "~Ny design";
+        Text[ dutch ] = "~Nieuw design";
+        Text[ spanish ] = "~Nuevo diseño";
+        Text[ english_us ] = "New design";
+        Text[ chinese_simplified ] = "æ–°è®¾è®¡æ¨¡æ¿";
+        Text[ russian ] = "~Íîâûé äèçàéí";
+        Text[ polish ] = "Nowy projekt";
+        Text[ japanese ] = "æ–°ã—ã„ãƒ‡ã‚¶ã‚¤ãƒ³";
+        Text[ greek ] = "~Íİï ó÷İäéï";
+        Text[ korean ] = "ìƒˆ ë””ìì¸";
+        Text[ chinese_traditional ] = "é–‹å•Ÿæ–°çš„è¨­è¨ˆæ¨¡æ¿";
+        Text[ arabic ] = "ÊÕãíã ÌÏíÏ";
+        Text[ turkish ] = "Yeni tasarım";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nou disseny";
+        Text[ finnish ] = "Uusi suunnitelma";
+    };
+
+    RadioButton PAGE1_OLD_DESIGN
+    {
+        Pos = MAP_APPFONT( 12, 63 );
+        Size = MAP_APPFONT( 153, 10 );
+        Text = "~Existierendes Design";
+        Text [ ENGLISH ] = "~Existing design";
+        Text[ italian ] = "Design esistente";
+        Text[ portuguese_brazilian ] = "~Existing design";
+        Text[ portuguese ] = "~Configuração existente";
+        Text[ danish ] = "Eksisterende design";
+        Text[ french ] = "~Design existant";
+        Text[ swedish ] = "~Existerande design";
+        Text[ dutch ] = "~Bestaand design";
+        Text[ spanish ] = "~Diseño existente";
+        Text[ english_us ] = "Existing Design";
+        Text[ chinese_simplified ] = "ç°å­˜çš„è®¾è®¡æ¨¡æ¿";
+        Text[ russian ] = "~Èìåşùèéñÿ äèçàéí";
+        Text[ polish ] = "Istniej¹cy projekt";
+        Text[ japanese ] = "æ—¢å­˜ã®ãƒ‡ã‚¶ã‚¤ãƒ³";
+        Text[ greek ] = "ÕğÜñ÷ùí ó÷İäéï";
+        Text[ korean ] = "ê¸°ì¡´ ë””ìì¸";
+        Text[ chinese_traditional ] = "ç¾å­˜çš„è¨­è¨ˆæ¨¡æ¿";
+        Text[ arabic ] = "ÊÕãíã ãæÌæÏ ãÓÈŞÇğ";
+        Text[ turkish ] = "Mevcut tasarım";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Disseny existent";
+        Text[ finnish ] = "Nykyinen suunnitelma";
+    };
+
+    ListBox PAGE1_DESIGNS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 21 , 75 ) ;
+        Size = MAP_APPFONT ( 144 , 63 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+    };
+
+    PushButton PAGE1_DEL_DESIGN
+    {
+        Pos = MAP_APPFONT ( 168 , 75 ) ;
+        Size = MAP_APPFONT ( 92 , 14 ) ;
+        Text = "Markiertes Design ~löschen" ;
+        Text [ ENGLISH ] = "~Delete selected design" ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text[ italian ] = "Elimina design selezionato";
+        Text[ portuguese_brazilian ] = "~Delete selected design";
+        Text[ portuguese ] = "~Eliminar configuração existente";
+        Text[ danish ] = "Slet markeret design";
+        Text[ french ] = "~Supprimer le design sélectionné";
+        Text[ swedish ] = "~Radera markerad design";
+        Text[ dutch ] = "~Gemarkeerd design wissen";
+        Text[ spanish ] = "~Eliminar diseño seleccionado";
+        Text[ english_us ] = "Delete Selected Design";
+        Text[ chinese_simplified ] = "åˆ é™¤é€‰æ‹©çš„è®¾è®¡æ¨¡æ¿";
+        Text[ russian ] = "Óäàëèòü âûäåëåííûé äèçàéí";
+        Text[ polish ] = "Usuñ zaznaczony projekt";
+        Text[ japanese ] = "ãƒãƒ¼ã‚¯ã—ãŸãƒ‡ã‚¶ã‚¤ãƒ³ã®å‰Šé™¤";
+        Text[ greek ] = "ÄéáãñáöŞ åğé~ëåãìİíïõ ó÷åäßïõ";
+        Text[ korean ] = "ì„ íƒí‘œì‹œëœ ë””ìì¸ ì‚­ì œ";
+        Text[ chinese_traditional ] = "åˆªé™¤é¸å–çš„è¨­è¨ˆæ¨¡æ¿";
+        Text[ arabic ] = "ÍĞİ ÇáÊÕãíã ÇáãÍÏÏ";
+        Text[ turkish ] = "Seçili tasarımı sil";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Suprimeix el disseny seleccionat";
+        Text[ finnish ] = "Poista valittu suunnitelma";
+    };
+
+    FixedText PAGE1_DESC
+    {
+        Pos = MAP_APPFONT ( 12 , 142 ) ;
+        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Text = "Wählen Sie ein existierendes Design, oder erstellen Sie ein neues" ;
+        Text [ ENGLISH ] = "Please Select an existing design or create a new one:" ;
+        Text[ italian ] = "Scegliete un design esistente, oppure createne uno nuovo";
+        Text[ portuguese_brazilian ] = "Please Select an existing design or create a new one:";
+        Text[ portuguese ] = "Seleccione um design existente ou crie um novo:";
+        Text[ danish ] = "Vælg venligst et eksisterende design eller opret et nyt";
+        Text[ french ] = "Sélectionnez un design existant ou créez-en un nouveau";
+        Text[ swedish ] = "Välj en existerande design eller skapa en ny";
+        Text[ dutch ] = "Kies een bestaand design of maak een nieuw";
+        Text[ spanish ] = "Elija un diseño existente o cree uno nuevo";
+        Text[ english_us ] = "Select an existing design or create a new one";
+        Text[ chinese_simplified ] = "è¯·æ‚¨é€‰æ‹©ä¸€ä¸ªç°å­˜çš„è®¾è®¡æ¨¡æ¿æˆ–è€…æ‚¨å»ºç«‹ä¸€ä¸ªæ–°çš„";
+        Text[ russian ] = "Âûáåğèòå ñóùåñòâóşùèé äèçàéí èëè ñîçäàéòå íîâûé";
+        Text[ polish ] = "Wybierz gotowy projekt lub utwórz nowy";
+        Text[ japanese ] = "æ—¢å­˜ã®ãƒ‡ã‚¶ã‚¤ãƒ³ã€ã¾ãŸã¯æ–°ã—ã„ãƒ‡ã‚¶ã‚¤ãƒ³ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚";
+        Text[ greek ] = "Ğáñáêáëş åğéëİîôå İíá õğÜñ÷ïí ó÷İäéï Ş äçìéïõñãŞóôå êÜğïéï íİï ó÷İäéï";
+        Text[ korean ] = "ê¸°ì¡´ì˜ ë””ìì¸ì„ ì„ íƒí•˜ê±°ë‚˜ ìƒˆ ë””ìì¸ì„ ì‘ì„±í•˜ì‹­ì‹œì˜¤";
+        Text[ chinese_traditional ] = "è«‹æ‚¨é¸æ“‡ä¸€å€‹ç¾å­˜çš„è¨­è¨ˆæ¨¡æ¿æˆ–è€…æ‚¨å»ºç«‹ä¸€å€‹æ–°çš„";
+        Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ÊÕãíã ãæÌæÏ ãÓÈŞÇğ¡ Ãæ ÅäÔÇÁ ÊÕãíã ÌÏíÏ";
+        Text[ turkish ] = "Mevcut bir tasarım seçin ya da yeni bir tasarım oluşturun";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Si us plau, seleccioneu un disseny existent o creeu-ne un de nou";
+        Text[ finnish ] = "Valitse aiemmin luotu rakenne tai luo uusi rakenne";
+    };
+
+
+    ////////////////////////////////
+    // Page 2, type of publishing //
+    ////////////////////////////////
+
+    FixedBitmap PAGE2_BMP
+    {
+        OutputSize = TRUE ;
+        Scale = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Fixed = Bitmap { File = "pubdlg1.bmp" ; };
+    };
+
+    FixedLine PAGE2_TITEL
+    {
+        Pos = MAP_APPFONT ( 6, 38 ) ;
+        Size = MAP_APPFONT ( 124, 8 ) ;
+        Text = "Art der Veröffentlichung" ;
+        Text [ ENGLISH ] = "Choose your type of publishing";
+        Text [ ENGLISH_US ] = "Publication type";
+        Text[ portuguese ] = "Tipo de publicação";
+        Text[ russian ] = "Òèï ïóáëèêàöèè";
+        Text[ greek ] = "Ôığïò İêäïóçò";
+        Text[ dutch ] = "Publicatievorm";
+        Text[ french ] = "Type de publication";
+        Text[ spanish ] = "Tipo de publicación";
+        Text[ italian ] = "Scegli il tipo di pubblicazione";
+        Text[ danish ] = "Publiceringstype";
+        Text[ swedish ] = "Typ av publicering";
+        Text[ polish ] = "Rodzaj publikacji";
+        Text[ portuguese_brazilian ] = "Please select the base design";
+        Text[ japanese ] = "ç™ºè¡¨æ–¹æ³•ã‚’é¸æŠã—ã¾ã™";
+        Text[ korean ] = "ê³µí‘œ í˜•ì‹";
+        Text[ chinese_simplified ] = "å‘è¡Œçš„æ–¹å¼";
+        Text[ chinese_traditional ] = "å‡ºç‰ˆçš„æ–¹å¼";
+        Text[ arabic ] = "ØÑíŞÉ ÇáäÔÑ";
+        Text[ turkish ] = "Yayımlama türünü seçin";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipus de publicació";
+        Text[ finnish ] = "Julkaisutyyppi";
+    };
+
+    RadioButton PAGE2_STANDARD
+    {
+        Pos = MAP_APPFONT( 12, 50 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text = "Standard ~HTML Format";
+        Text [ ENGLISH ] = "Standard ~HTML format";
+        Text [ ENGLISH_US ] = "Standard H~TML format";
+        Text[ portuguese ] = "Formato ~HTML padrão";
+        Text[ russian ] = "~Ñòàíäàğòíûé ôîğìàò HTML";
+        Text[ greek ] = "Ğñïåğéëåãìİíç ìïñöŞ HTML";
+        Text[ dutch ] = "Standaard ~HTLM-formaat";
+        Text[ french ] = "Format ~HTML standard";
+        Text[ spanish ] = "Formato HTML ~predeterminado";
+        Text[ italian ] = "Formato standard ~HTML";
+        Text[ danish ] = "Standard HTML-format";
+        Text[ swedish ] = "Standard-HTML-format";
+        Text[ polish ] = "Standardowy format HTML";
+        Text[ portuguese_brazilian ] = "~Standard";
+        Text[ japanese ] = "æ¨™æº–H~TMLæ›¸å¼";
+        Text[ korean ] = "í‘œì¤€ H~TML ì„œì‹";
+        Text[ chinese_simplified ] = "æ ‡å‡† H~TML æ ¼å¼";
+        Text[ chinese_traditional ] = "æ¨™æº– H~TML æ ¼å¼";
+        Text[ arabic ] = "ÊäÓíŞ HTML ÇİÊÑÇÖí";
+        Text[ turkish ] = "Standart HTML formatı";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Format HTML ~estàndard";
+        Text[ finnish ] = "~HTML-vakiomuoto";
+    };
+
+    RadioButton PAGE2_FRAMES
+    {
+        Pos = MAP_APPFONT( 12, 63 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text = "Standard HTML mit ~Frames";
+        Text [ ENGLISH ] = "Standard HTML with ~frames";
+        Text [ ENGLISH_US ] = "Standard HTML with ~frames";
+        Text[ portuguese ] = "HTML padrão com ~frames";
+        Text[ russian ] = "~Ñòàíäàğòíûé HTML ñ êàäğàìè";
+        Text[ greek ] = "ÂáóéêÜ HTML ìå ğëáßóéá";
+        Text[ dutch ] = "Standaard HTLM met ~frames";
+        Text[ french ] = "Format HTML standard avec ~Frames";
+        Text[ spanish ] = "HTML predeterminado con ~frames";
+        Text[ italian ] = "HTML standard con ~frame";
+        Text[ danish ] = "Standard HTML med frames";
+        Text[ swedish ] = "Standard-HTML med ~ramar";
+        Text[ polish ] = "HTML standardowy z ramkami";
+        Text[ portuguese_brazilian ] = "Browser-~frames";
+        Text[ japanese ] = "ãƒ•ãƒ¬ãƒ¼ãƒ ä»˜ãæ¨™æº–HTML(~F)";
+        Text[ korean ] = "í”„ë ˆì„ì´ ìˆëŠ” í‘œì¤€ HTML(~F)";
+        Text[ chinese_simplified ] = "å¸¦æ¡†å¯¹è±¡çš„æ ‡å‡† HTML(~F)";
+        Text[ chinese_traditional ] = "å¸¶ç€è¦½å™¨è¨Šæ¡†çš„æ¨™æº– HTML(~F)";
+        Text[ arabic ] = "HTML ŞíÇÓíÉ ÈÅØÇÑÇÊ";
+        Text[ turkish ] = "Standart HTML (frame)";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "HTML estàndard amb ~marcs";
+        Text[ finnish ] = "~HTML-vakiomuoto ja kehykset";
+    };
+
+    RadioButton PAGE2_KIOSK
+    {
+        Pos = MAP_APPFONT( 12, 76 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text = "~Automatisch";
+        Text [ ENGLISH ] = "~Automatic";
+        Text[ english_us ] = "~Automatic";
+        Text[ portuguese ] = "~Automático";
+        Text[ russian ] = "~Àâòîìàòè÷åñêè";
+        Text[ greek ] = "ÁõôïìÜôùò";
+        Text[ dutch ] = "~Automatisch";
+        Text[ french ] = "~Automatique";
+        Text[ spanish ] = "~Automático";
+        Text[ italian ] = "~Automatico";
+        Text[ danish ] = "Automatisk";
+        Text[ swedish ] = "Aut~omatisk";
+        Text[ polish ] = "~Automatycznie";
+        Text[ portuguese_brazilian ] = "~Automatic";
+        Text[ japanese ] = "è‡ªå‹•(~A)";
+        Text[ korean ] = "ìë™(~A)";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨(~A)";
+        Text[ chinese_traditional ] = "è‡ªå‹•(~A)";
+        Text[ arabic ] = "ÊáŞÇÆí";
+        Text[ turkish ] = "Otomatik";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Automàtic";
+        Text[ finnish ] = "~Automaattinen";
+    };
+
+    RadioButton PAGE2_WEBCAST
+    {
+        Pos = MAP_APPFONT( 12, 89 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text = "~WebCast";
+        Text [ ENGLISH ] = "~WebCast";
+        Text [ ENGLISH_US ] = "~WebCast";
+        Text[ portuguese ] = "~WebCast";
+        Text[ russian ] = "~WebCast";
+        Text[ greek ] = "~WebCast";
+        Text[ dutch ] = "~WebCast";
+        Text[ french ] = "~WebCast";
+        Text[ spanish ] = "~WebCast";
+        Text[ italian ] = "~WebCast";
+        Text[ danish ] = "WebCast";
+        Text[ swedish ] = "~WebCast";
+        Text[ polish ] = "~WebCast";
+        Text[ portuguese_brazilian ] = "~WebCast";
+        Text[ japanese ] = "~WebCast";
+        Text[ korean ] = "~WebCast";
+        Text[ chinese_simplified ] = "~WebCast";
+        Text[ chinese_traditional ] = "~WebCast";
+        Text[ arabic ] = "~WebCast";
+        Text[ turkish ] = "~WebCast";
+        Text[ catalan ] = "~WebCast";
+        Text[ finnish ] = "~WebCast";
+    };
+
+    FixedBitmap PAGE2_NOFRAMES_FB
+    {
+        Pos = MAP_APPFONT( 21, 102 );
+        Scale = TRUE;
+        Size = MAP_APPFONT( 60, 50 );
+        Fixed = Bitmap { File = "pubdes.bmp"; };
+        OutputSize = TRUE ;
+        Border = TRUE;
+    };
+
+    FixedBitmap PAGE2_FRAMES_FB
+    {
+        Pos = MAP_APPFONT( 21, 102 );
+        Scale = TRUE;
+        Size = MAP_APPFONT( 60, 50 );
+        Fixed = Bitmap { File = "pubdes2.bmp"; };
+        OutputSize = TRUE ;
+        Border = TRUE;
+    };
+
+    FixedBitmap PAGE2_KIOSK_FB
+    {
+        Pos = MAP_APPFONT( 21, 102 );
+        Scale = TRUE;
+        Size = MAP_APPFONT( 60, 50 );
+        Fixed = Bitmap { File = "pubdes3.bmp"; };
+        OutputSize = TRUE ;
+        Border = TRUE;
+    };
+
+    FixedBitmap PAGE2_WEBCAST_FB
+    {
+        Pos = MAP_APPFONT( 21, 102 );
+        Scale = TRUE;
+        Size = MAP_APPFONT( 60, 50 );
+        Fixed = Bitmap { File = "pubdes4.bmp"; };
+        OutputSize = TRUE ;
+        Border = TRUE;
+    };
+
+    //////////////////////////////
+    // Special options for html //
+    //////////////////////////////
+
+    FixedLine PAGE2_TITEL_HTML
+    {
+        Pos = MAP_APPFONT( 138, 38 );
+        Size = MAP_APPFONT( 128, 8 );
+        Text = "Zusätze" ;
+        Text [ ENGLISH ] = "Additions" ;
+        Text[ english_us ] = "Options";
+        Text[ portuguese ] = "Opções";
+        Text[ russian ] = "Äîïîëíèòåëüíî";
+        Text[ greek ] = "Ğñüóèåôá";
+        Text[ dutch ] = "Overige";
+        Text[ french ] = "Options";
+        Text[ spanish ] = "Opciones";
+        Text[ finnish ] = "Lisäykset";
+        Text[ italian ] = "Extra";
+        Text[ danish ] = "Additions";
+        Text[ swedish ] = "Alternativ";
+        Text[ polish ] = "Dodatki";
+        Text[ portuguese_brazilian ] = "Additions";
+        Text[ japanese ] = "è©³ç´°";
+        Text[ korean ] = "ì¶”ê°€";
+        Text[ chinese_simplified ] = "å…¶å®ƒ";
+        Text[ chinese_traditional ] = "å…¶å®ƒ";
+        Text[ turkish ] = "Additions";
+        Text[ arabic ] = "Additions";
+        Text[ catalan ] = "Opcions";
+    };
+
+    CheckBox PAGE2_CONTENT
+    {
+        Pos = MAP_APPFONT( 144, 49 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text = "~Titelseite erzeugen";
+        Text [ ENGLISH] = "Create content ~page";
+        Text[ italian ] = "Crea pagina sommario";
+        Text[ portuguese_brazilian ] = "Create content ~page";
+        Text[ portuguese ] = "~Criar página sumário";
+        Text[ danish ] = "Opret titelblad";
+        Text[ french ] = "Page de ~garde";
+        Text[ swedish ] = "Skapa ~titelsida";
+        Text[ dutch ] = "Titel~pagina maken";
+        Text[ spanish ] = "Crear ~portada";
+        Text[ english_us ] = "Create title page";
+        Text[ chinese_simplified ] = "å»ºç«‹æ ‡é¢˜é¡µé¢";
+        Text[ russian ] = "~Ñîçäàòü òèòóëüíóş ñòğàíèöó";
+        Text[ polish ] = "Utwórz stronê tytu³ow¹";
+        Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«ãƒšãƒ¼ã‚¸ã®ä½œæˆ";
+        Text[ greek ] = "Äçìéïõñãßá åîşöõëëïõ";
+        Text[ korean ] = "ì œëª© í˜ì´ì§€ ì‘ì„±";
+        Text[ chinese_traditional ] = "ç”¢ç”Ÿæ¨™é¡Œé ";
+        Text[ arabic ] = "ÅäÔÇÁ ÕİÍÉ ÇáÚäæÇä";
+        Text[ turkish ] = "Başlık sayfası oluştur";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Crea ~portada";
+        Text[ finnish ] = "Luo otsikkosivu";
+    };
+
+    FixedLine PAGE2_VERT
+    {
+        Pos = MAP_APPFONT ( 132 , 49  ) ;
+        Size = MAP_APPFONT ( 4, 109 ) ;
+        Vert = TRUE;
+    };
+
+    CheckBox PAGE2_NOTES
+    {
+        Pos = MAP_APPFONT( 144, 63 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text = "~Notizen anzeigen";
+        Text [ ENGLISH ] = "Show n~otes";
+        Text[ italian ] = "Mostra ~note";
+        Text[ portuguese_brazilian ] = "Show n~otes";
+        Text[ portuguese ] = "~Mostrar anotações";
+        Text[ danish ] = "Vis noter";
+        Text[ french ] = "Afficher les notes";
+        Text[ swedish ] = "Visa a~nteckningar";
+        Text[ dutch ] = "~Aantekeningen weergeven";
+        Text[ spanish ] = "Mostrar ~notas";
+        Text[ english_us ] = "Show notes";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºå¤‡æ³¨";
+        Text[ russian ] = "~Ïîêàçàòü ïğèìå÷àíèÿ";
+        Text[ polish ] = "Poka¿ notatki";
+        Text[ japanese ] = "ãƒãƒ¼ãƒˆã®è¡¨ç¤º";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºå‚™è¨»";
+        Text[ arabic ] = "ÅÙåÇÑ ÇáãáÇÍÙÇÊ";
+        Text[ greek ] = "ÅìöÜ~íéóç óçìåéşóåùí";
+        Text[ korean ] = "ë©”ëª¨ í‘œì‹œ";
+        Text[ turkish ] = "Not oluştur";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mostra les notes";
+        Text[ finnish ] = "Näytä huomautukset";
+    };
+
+    ///////////////////////////////
+    // Special options for kiosk //
+    ///////////////////////////////
+
+    FixedLine PAGE2_TITEL_KIOSK
+    {
+        Pos = MAP_APPFONT( 138, 38 );
+        Size = MAP_APPFONT( 128, 8 );
+        Text = "Seitenwechsel" ;
+        Text [ ENGLISH ] = "Advance slides" ;
+        Text [ english_us ] = "Advance slides" ;
+        Text[ portuguese ] = "Mudar de página";
+        Text[ russian ] = "Ñìåíà ñëàéäîâ";
+        Text[ greek ] = "ÁëëáãŞ óåëßäáò";
+        Text[ dutch ] = "Paginawisseling";
+        Text[ french ] = "Changement de page";
+        Text[ spanish ] = "Cambio de páginas";
+        Text[ italian ] = "Cambio pagina";
+        Text[ danish ] = "Sideovergang";
+        Text[ swedish ] = "Sidväxling";
+        Text[ polish ] = "Zmiana slajdu";
+        Text[ portuguese_brazilian ] = "Advance slides";
+        Text[ japanese ] = "ç”»é¢åˆ‡ã‚Šæ›¿ãˆ";
+        Text[ korean ] = "í˜ì´ì§€ êµ¬ë¶„";
+        Text[ chinese_simplified ] = "è½¬æ¢é¡µé¢";
+        Text[ chinese_traditional ] = "æ›é ";
+        Text[ arabic ] = "ÊÛííÑ ÇáÕİÍÇÊ";
+        Text[ turkish ] = "Slayt geçişi";
+        Text[ catalan ] = "Canvi de pàgines";
+        Text[ finnish ] = "Esitä dioja";
+    };
+
+    RadioButton PAGE2_CHG_DEFAULT
+    {
+        Pos = MAP_APPFONT ( 144 , 49 ) ;
+        Size = MAP_APPFONT ( 116 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "~Wie im Dokument angegeben" ;
+        Text [ ENGLISH ] = "~Document timings, if present" ;
+        Text [ english_us ] = "~As stated in document" ;
+        Text[ portuguese ] = "Como ~indicado no documento";
+        Text[ russian ] = "Êàê çàäàíî â äîêóìåíòå";
+        Text[ greek ] = "¼ğùò ïñßóôçêå óôï İããñáöï";
+        Text[ dutch ] = "~Zoals aangegeven in document";
+        Text[ french ] = "~Comme indiqué dans le document";
+        Text[ spanish ] = "Como indicado en documen~to";
+        Text[ italian ] = "Come specificato nel documento";
+        Text[ danish ] = "Som angivet i dokumentet";
+        Text[ swedish ] = "Som angivet i dokumentet";
+        Text[ polish ] = "Jak podano w dokumencie";
+        Text[ portuguese_brazilian ] = "~Document timings, if present";
+        Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã§æŒ‡å®šã—ãŸã‚¿ã‚¤ãƒŸãƒ³ã‚°(~A)";
+        Text[ korean ] = "ë¬¸ì„œì— ì…ë ¥í–ˆì„ ë•Œì²˜ëŸ¼(~A)";
+        Text[ chinese_simplified ] = "å¦‚åŒæ–‡æ¡£å†…å®šä¹‰çš„(~A)";
+        Text[ chinese_traditional ] = "å¦‚åŒåœ¨æ–‡ä»¶å…§çš„è¨­å®š(~A)";
+        Text[ arabic ] = "ßãÇ åæ ãæÖÍ İí ÇáãÓÊäÏ";
+        Text[ turkish ] = "Belgede belirtildiği gibi";
+        Text[ catalan ] = "Com s'indica al document";
+        Text[ finnish ] = "~Asiakirjan mukaan";
+    };
+
+    RadioButton PAGE2_CHG_AUTO
+    {
+        Pos = MAP_APPFONT ( 144 , 63 ) ;
+        Size = MAP_APPFONT ( 116 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "~Automatisch" ;
+        Text [ ENGLISH ] = "~Automatic" ;
+        Text [ english_us ] = "~Automatic" ;
+        Text[ portuguese ] = "~Automático";
+        Text[ russian ] = "~Àâòîìàòè÷åñêè";
+        Text[ greek ] = "ÁõôïìÜôùò";
+        Text[ dutch ] = "~Automatisch";
+        Text[ french ] = "~Automatique";
+        Text[ spanish ] = "~Automático";
+        Text[ italian ] = "~Automatico";
+        Text[ danish ] = "Automatisk";
+        Text[ swedish ] = "Automatisk";
+        Text[ polish ] = "~Automatycznie";
+        Text[ portuguese_brazilian ] = "~Automatic";
+        Text[ japanese ] = "è‡ªå‹•(~A)";
+        Text[ korean ] = "ìë™(~A)";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨(~A)";
+        Text[ chinese_traditional ] = "è‡ªå‹•(~A)";
+        Text[ arabic ] = "ÊáŞÇÆí";
+        Text[ turkish ] = "Otomatik";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Automàtic";
+        Text[ finnish ] = "~Automaattinen";
+    };
+
+    FixedText PAGE2_DURATION_TXT
+    {
+        Pos = MAP_APPFONT ( 154, 77 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
+        Text = "~Standdauer:" ;
+        Text [ ENGLISH ] = "~Duration:" ;
+        Text [ english_us ] = "~Slide view time:" ;
+        Text[ portuguese ] = "~Duração:";
+        Text[ russian ] = "~Ïîêàç ñëàéäà:";
+        Text[ greek ] = "ÄéÜñêåéá óôÜóçò:";
+        Text[ dutch ] = "~Duur per pagina:";
+        Text[ french ] = "~Durée d'affichage :";
+        Text[ spanish ] = "~Duración:";
+        Text[ italian ] = "~Durata:";
+        Text[ danish ] = "Sidevisningstid:";
+        Text[ swedish ] = "Tid per ~sida:";
+        Text[ polish ] = "~Czas projekcji:";
+        Text[ portuguese_brazilian ] = "~Duration:";
+        Text[ japanese ] = "ã‚¹ãƒ©ã‚¤ãƒ‰è¡¨ç¤ºæ™‚é–“(~S):";
+        Text[ korean ] = "ì§€ì†ì‹œê°„(~S):";
+        Text[ chinese_simplified ] = "æŒç»­æ—¶é—´(~S)ï¼š";
+        Text[ chinese_traditional ] = "æŒçºŒæ™‚é–“(~S)ï¼š";
+        Text[ arabic ] = "ãÏÉ ÈŞÇÁ ÇáÔÑíÍÉ:";
+        Text[ turkish ] = "Durma süresi:";
+        Text[ catalan ] = "~Durada:";
+        Text[ finnish ] = "~Diakuvan näyttöaika:";
+    };
+
+    TimeField PAGE2_DURATION_TMF
+    {
+        Pos = MAP_APPFONT ( 196, 76 ) ;
+        Size = MAP_APPFONT ( 48, 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Duration = TRUE ;
+        StrictFormat = TRUE ;
+        Maximum = Time
+        {
+            Hour = 23 ;
+            Minute = 59 ;
+            Second = 59 ;
+        };
+        Last = Time
+        {
+            Hour = 23 ;
+            Minute = 59 ;
+            Second = 59 ;
+        };
+        QuickHelpText = "Stand~dauer" ;
+        QuickHelpText [ ENGLISH ] = "~Duration of page";
+        QuickHelpText [ english_us ] = "~Duration of page";
+        QuickHelpText[ portuguese ] = "~Duration of page";
+        QuickHelpText[ russian ] = "~Äëèòåëüíîñòü";
+        QuickHelpText[ greek ] = "ÄéÜñêåéá óôÜóçò";
+        QuickHelpText[ dutch ] = "~Duur per pagina";
+        QuickHelpText[ french ] = "~Durée d'affichage";
+        QuickHelpText[ spanish ] = "~Duración de página";
+        QuickHelpText[ italian ] = "~Durata";
+        QuickHelpText[ danish ] = "Sidevisningstid";
+        QuickHelpText[ swedish ] = "~Tid per sida";
+        QuickHelpText[ polish ] = "~Duration of page";
+        QuickHelpText[ portuguese_brazilian ] = "~Duration of page";
+        QuickHelpText[ japanese ] = "ç¶™ç¶šæ™‚é–“";
+        QuickHelpText[ korean ] = "ì§€ì† ê¸°ê°„";
+        QuickHelpText[ chinese_simplified ] = "æŒç»­æ—¶é—´";
+        QuickHelpText[ chinese_traditional ] = "æŒçºŒæ™‚é–“";
+        QuickHelpText[ arabic ] = "Òãä ÇáÈŞÇÁ";
+        QuickHelpText[ turkish ] = "Stand~dauer";
+        QuickHelpText[ catalan ] = "~Duración de página";
+        QuickHelpText[ finnish ] = "~Sivun kesto";
+    };
+
+    CheckBox PAGE2_ENDLESS
+    {
+        Pos = MAP_APPFONT ( 154, 91 );
+        Size = MAP_APPFONT ( 108, 10 );
+        Text = "~Endlos" ;
+        Text [ ENGLISH ] = "~Endless" ;
+        Text [ ENGLISH_US ] = "~Endless" ;
+        Text[ portuguese ] = "~Contínuo";
+        Text[ russian ] = "~Áåñêîíå÷íî";
+        Text[ greek ] = "Óõí~å÷üìåíá";
+        Text[ dutch ] = "~Eindeloos";
+        Text[ french ] = "~Continu";
+        Text[ spanish ] = "~Continuo";
+        Text[ italian ] = "Continuo";
+        Text[ danish ] = "Endeløs";
+        Text[ swedish ] = "Kontinu~erlig";
+        Text[ polish ] = "~Bez koñca";
+        Text[ portuguese_brazilian ] = "~Endless";
+        Text[ japanese ] = "ã‚¨ãƒ³ãƒ‰ãƒ¬ã‚¹ã«ç¶šã‘ã‚‹(~E)";
+        Text[ korean ] = "ë¬´í•œ(~E)";
+        Text[ chinese_simplified ] = "ä¸é—´æ–­(~E)";
+        Text[ chinese_traditional ] = "ä¸ä¸­æ–·(~E)";
+        Text[ arabic ] = "ÈáÇ äåÇíÉ";
+        Text[ turkish ] = "Sürekli";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "S~ense fi";
+        Text[ finnish ] = "~Päättymätön";
+    };
+
+    /////////////////////////////////
+    // Special options for WebCast //
+    /////////////////////////////////
+
+    FixedLine PAGE2_TITEL_WEBCAST
+    {
+        Pos = MAP_APPFONT( 138, 38 );
+        Size = MAP_APPFONT( 128, 8 );
+        Text = "WebCast" ;
+        Text [ ENGLISH ] = "WebCast" ;
+        Text [ english_us ] = "WebCast" ;
+        Text[ portuguese ] = "WebCast";
+        Text[ russian ] = "WebCast";
+        Text[ greek ] = "WebCast";
+        Text[ dutch ] = "WebCast";
+        Text[ french ] = "WebCast";
+        Text[ spanish ] = "WebCast";
+        Text[ italian ] = "WebCast";
+        Text[ danish ] = "WebCast";
+        Text[ swedish ] = "WebCast";
+        Text[ polish ] = "WebCast";
+        Text[ portuguese_brazilian ] = "WebCast";
+        Text[ japanese ] = "WebCast";
+        Text[ korean ] = "WebCast";
+        Text[ chinese_simplified ] = "WebCast";
+        Text[ chinese_traditional ] = "WebCast";
+        Text[ arabic ] = "WebCast";
+        Text[ turkish ] = "WebCast";
+        Text[ catalan ] = "WebCast";
+        Text[ finnish ] = "~WebCast";
+    };
+
+    RadioButton PAGE2_ASP
+    {
+        Pos = MAP_APPFONT( 144, 49 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text = "~Active Server Pages (ASP)";
+        Text [ ENGLISH ] = "~Active Server Pages (ASP)";
+        Text [ english_us ] = "~Active Server Pages (ASP)";
+        Text[ portuguese ] = "~Active Server Pages (ASP)";
+        Text[ russian ] = "~Active Server Pages (ASP)";
+        Text[ greek ] = "~Active Server Pages (ASP)";
+        Text[ dutch ] = "~Active Server Pages (ASP)";
+        Text[ french ] = "~Active Server Pages (ASP)";
+        Text[ spanish ] = "~Active Server Pages (ASP)";
+        Text[ italian ] = "~Active Server Pages (ASP)";
+        Text[ danish ] = "Active Server Pages (ASP)";
+        Text[ swedish ] = "~Active Server Pages (ASP)";
+        Text[ polish ] = "~Active Server Pages (ASP)";
+        Text[ portuguese_brazilian ] = "~Active Server Pages (ASP)";
+        Text[ japanese ] = "~Active Server Pages (ASP)";
+        Text[ korean ] = "í™œì„± ì„œë²„ í˜ì´ì§€(~ASP)";
+        Text[ chinese_simplified ] = "~Active Server Pages (ASP)";
+        Text[ chinese_traditional ] = "~Active Server Pages (ASP)";
+        Text[ arabic ] = "~Active Server Pages (ASP)";
+        Text[ turkish ] = "Active Server Pages (ASP)";
+        Text[ catalan ] = "~Active Server Pages (ASP)";
+        Text[ finnish ] = "~Aktiivisen palvelimen sivut (ASP)";
+    };
+
+    RadioButton PAGE2_PERL
+    {
+        Pos = MAP_APPFONT( 144, 63 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text = "~Perl";
+        Text [ ENGLISH ] = "Perl" ;
+        Text [ english_us ] = "Perl" ;
+        Text[ portuguese ] = "~Perl";
+        Text[ russian ] = "Perl";
+        Text[ greek ] = "~Perl";
+        Text[ dutch ] = "~Perl";
+        Text[ french ] = "Perl";
+        Text[ spanish ] = "~Perl";
+        Text[ italian ] = "~Perl";
+        Text[ danish ] = "Perl";
+        Text[ swedish ] = "Per~l";
+        Text[ polish ] = "Perl";
+        Text[ portuguese_brazilian ] = "Perl";
+        Text[ japanese ] = "Perl";
+        Text[ korean ] = "Perl";
+        Text[ chinese_simplified ] = "Perl";
+        Text[ chinese_traditional ] = "Perl";
+        Text[ arabic ] = "~Perl";
+        Text[ turkish ] = "~Perl";
+        Text[ catalan ] = "Perl";
+        Text[ finnish ] = "Perl";
+    };
+
+    FixedText PAGE2_INDEX_TXT
+    {
+        Pos = MAP_APPFONT( 154, 76 );
+        Size = MAP_APPFONT( 105, 10 );
+        Text = "~URL für Zuhörer";
+        Text [ ENGLISH ] = "~URL for listeners";
+        Text [ english_us ] = "~URL for listeners";
+        Text[ portuguese ] = "~URL para ouvintes";
+        Text[ russian ] = "~URL äëÿ ñëóøàòåëåé";
+        Text[ greek ] = "URL ãéá áêñïáôİò";
+        Text[ dutch ] = "~URL voor toehoorders";
+        Text[ french ] = "~URL pour les auditeurs";
+        Text[ spanish ] = "~URL para oyentes";
+        Text[ italian ] = "~URL per ascoltatori";
+        Text[ danish ] = "URL for tilhørere";
+        Text[ swedish ] = "~URL för åhörare";
+        Text[ polish ] = "~URL dla s³uchacza";
+        Text[ portuguese_brazilian ] = "~URL for beamer";
+        Text[ japanese ] = "å‚åŠ è€…ç”¨~URL";
+        Text[ korean ] = "ì²­ì·¨ììš© ~URL";
+        Text[ chinese_simplified ] = "å¬ä¼—çš„ ~URL";
+        Text[ chinese_traditional ] = "é¡¯ç¤º ~URL";
+        Text[ arabic ] = "~URLááÜãÓÊãÚíä";
+        Text[ turkish ] = "Dinleyiciler için URL";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~URL per a oients";
+        Text[ finnish ] = "~URL kuuntelijoille";
+    };
+
+    Edit PAGE2_INDEX
+    {
+        BORDER = TRUE;
+        Pos = MAP_APPFONT( 154, 88 );
+        Size  = MAP_APPFONT( 105, 12 );
+        Left = TRUE;
+    };
+
+    FixedText PAGE2_URL_TXT
+    {
+        Pos  = MAP_APPFONT( 154, 104 );
+        Size = MAP_APPFONT( 105, 10 );
+        Text = "URL für ~Präsentation:";
+        Text [ ENGLISH] = "URL for ~presentation";
+        Text [ english_us] = "URL for ~presentation:";
+        Text[ portuguese ] = "~URL para apresentação:";
+        Text[ russian ] = "URL äëÿ ~ïğåçåíòàöèè";
+        Text[ greek ] = "URL ãéá ğáñïõóßáóç:";
+        Text[ dutch ] = "URL voor ~presentatie";
+        Text[ french ] = "URL pour la ~présentation :";
+        Text[ spanish ] = "URL para ~presentación:";
+        Text[ italian ] = "URL per ~presentazione:";
+        Text[ danish ] = "URL for præsentation";
+        Text[ swedish ] = "URL för ~presentation:";
+        Text[ polish ] = "URL dla prezentacji";
+        Text[ portuguese_brazilian ] = "URL for ~presentation";
+        Text[ japanese ] = "ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã® URL(~P):";
+        Text[ korean ] = "í”„ë¦¬ì  í…Œì´ì…˜ URL";
+        Text[ chinese_simplified ] = "ç”¨äºæ¼”ç¤ºæ–‡ç¨¿çš„ URL(~P)ï¼š";
+        Text[ chinese_traditional ] = "ç”¨æ–¼ç°¡å ±çš„ URL(~P)";
+        Text[ arabic ] = "URL ááÚÑÖ ÇáÊŞÏíãí:";
+        Text[ turkish ] = "Sunu için URL:";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "URL per a ~presentació:";
+        Text[ finnish ] = "Esityksen ~URL ";
+    };
+
+    Edit PAGE2_URL
+    {
+        BORDER = TRUE;
+        Pos = MAP_APPFONT( 154, 116 );
+        Size = MAP_APPFONT( 105, 12 );
+        LEFT = TRUE;
+    };
+
+    FixedText PAGE2_CGI_TXT
+    {
+        Pos  = MAP_APPFONT( 154, 132 );
+        Size = MAP_APPFONT( 105, 10 );
+        Text = "URL für ~Perl Skripte:";
+        Text [ ENGLISH] = "URL for ~perl scripts";
+        Text [ english_us] = "URL for ~perl scripts";
+        Text[ portuguese ] = "URL para ~scripts Perl:";
+        Text[ russian ] = "URL äëÿ ñêğèïòîâ ~Perl";
+        Text[ greek ] = "URL ãéá ~perl scripts";
+        Text[ dutch ] = "URL voor ~perl scripts";
+        Text[ french ] = "URL pour les scripts ~Perl :";
+        Text[ spanish ] = "URL para ~guiones (scripts) perl:";
+        Text[ italian ] = "URL per ~perl scripts:";
+        Text[ danish ] = "URL for perl scripts";
+        Text[ swedish ] = "URL för p~erl-skript:";
+        Text[ polish ] = "URL dla skryptów perl";
+        Text[ portuguese_brazilian ] = "URL for ~perl scripts";
+        Text[ japanese ] = "~Perlã‚¹ã‚¯ãƒªãƒ—ãƒˆç”¨URL:";
+        Text[ korean ] = "~Perl ìŠ¤í¬ë¦½íŠ¸ë¥¼ ìœ„í•œ URL";
+        Text[ chinese_simplified ] = "~perl è„šæœ¬çš„ URLï¼š";
+        Text[ chinese_traditional ] = "~perl ç¨‹å¼çš„ URL";
+        Text[ arabic ] = "URLÇáÎÇÕÉ ÈÜ perl scripts:";
+        Text[ turkish ] = "Perl Skript'leri için URL:";
+        Text[ catalan ] = "URL per a ~scripts de perl:";
+        Text[ finnish ] = "Perl-komentosarjojen ~URL";
+    };
+
+    Edit PAGE2_CGI
+    {
+        BORDER = TRUE;
+        Pos = MAP_APPFONT( 154, 144 );
+        Size = MAP_APPFONT( 105, 12 );
+        LEFT = TRUE;
+    };
+
+
+    /////////////////////////////////////////////////////////
+    // Page 3, Misc Options, Picture Format and Resolution //
+    /////////////////////////////////////////////////////////
+
+    FixedBitmap PAGE3_BMP
+    {
+        OutputSize = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Scale = TRUE;
+        Fixed = Bitmap { File = "pubdlg2.bmp" ; };
+    };
+
+    ////////////////////
+    // Picture Format //
+    ////////////////////
+
+    FixedLine PAGE3_TITEL_1
+    {
+        Pos = MAP_APPFONT ( 6, 38 ) ;
+        Size = MAP_APPFONT ( 124, 8 ) ;
+        Text = "Grafiken speichern als" ;
+        Text [ ENGLISH ] = "Save graphics as" ;
+        Text[ english_us ] = "Save graphics as";
+        Text[ portuguese ] = "Guardar imagens";
+        Text[ russian ] = "Ñîõğàíèòü ãğàôèêè";
+        Text[ greek ] = "ÁğïèŞêåõóç ãñáöéêşí";
+        Text[ dutch ] = "Save graphics";
+        Text[ french ] = "Enregistrement des images comme";
+        Text[ spanish ] = "Guardar imágenes como";
+        Text[ finnish ] = "Tallenna grafiikat";
+        Text[ italian ] = "Salva le immagini come";
+        Text[ danish ] = "Save graphics";
+        Text[ swedish ] = "Spara grafik som";
+        Text[ polish ] = "Zapisz grafiki";
+        Text[ portuguese_brazilian ] = "Save graphics";
+        Text[ japanese ] = "å›³ã«åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜";
+        Text[ korean ] = "ë‹¤ë¥¸ ì´ë¦„ìœ¼ë¡œ ê·¸ë˜í”½ ì €ì¥";
+        Text[ chinese_simplified ] = "å›¾å½¢å¦å­˜ä¸º";
+        Text[ chinese_traditional ] = "å¦å­˜åœ–å½¢";
+        Text[ turkish ] = "Save graphics";
+        Text[ arabic ] = "Save graphics";
+        Text[ catalan ] = "Desa els gràfics";
+    };
+
+    RadioButton PAGE3_GIF
+    {
+        Pos = MAP_APPFONT( 12, 49 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text = "~GIF";
+        Text [ ENGLISH ] = "~GIF";
+        Text[ italian ] = "~GIF";
+        Text[ portuguese_brazilian ] = "~GIF";
+        Text[ portuguese ] = "~GIF - Graphics Interchange Format";
+        Text[ danish ] = "GIF - Graphics Interchange Format";
+        Text[ french ] = "~GIF";
+        Text[ swedish ] = "~GIF";
+        Text[ dutch ] = "~GIF - Graphics Interchange-Format";
+        Text[ spanish ] = "~GIF ";
+        Text[ english_us ] = "~GIF";
+        Text[ chinese_simplified ] = "~GIF";
+        Text[ russian ] = "~GIF - Graphics Interchange Format";
+        Text[ polish ] = "GIF - Graphics Interchange Format";
+        Text[ japanese ] = "~GIF";
+        Text[ greek ] = "~GIF - Graphics Interchange Format";
+        Text[ korean ] = "~GIF";
+        Text[ chinese_traditional ] = "~GIF";
+        Text[ arabic ] = "GIF - Graphics Interchange-Format";
+        Text[ turkish ] = "GIF - Graphics Interchange-Format";
+        Text[ catalan ] = "Format ~GIF";
+        Text[ finnish ] = "~GIF";
+    };
+
+    RadioButton PAGE3_JPG
+    {
+        Pos = MAP_APPFONT( 12, 63 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text = "~JPG";
+        Text [ ENGLISH ] = "~JPG";
+        Text[ italian ] = "~JPG";
+        Text[ portuguese_brazilian ] = "~JPG - Compressed format";
+        Text[ portuguese ] = "~JPG - Formato de ficheiro comprimido";
+        Text[ danish ] = "JPG - komprimeret format";
+        Text[ french ] = "~JPG";
+        Text[ swedish ] = "~JPG";
+        Text[ dutch ] = "~JPG - gecomprimeerd formaat";
+        Text[ spanish ] = "~JPG";
+        Text[ english_us ] = "~JPG";
+        Text[ chinese_simplified ] = "~JPG";
+        Text[ russian ] = "~JPG - Óïëîòíåííûé ôîğìàò ôàéëà";
+        Text[ polish ] = "JPG - Skompresowany format pliku";
+        Text[ japanese ] = "~JPG";
+        Text[ greek ] = "~JPG - Óõìğéåóìİíç ìïñöŞ áñ÷åßïõ";
+        Text[ korean ] = "~JPG";
+        Text[ chinese_traditional ] = "~JPG";
+        Text[ arabic ] = "ÊäÓíŞ JPG ãÖÛæØ";
+        Text[ turkish ] = "JPG - Sıkıştırılmış dosya formatı";
+        Text[ catalan ] = "~JPG - Format de fitxer comprimit";
+        Text[ finnish ] = "~JPG (tiivistetty muoto)";
+    };
+
+    ComboBox PAGE3_QUALITY
+    {
+        Pos = MAP_APPFONT( 18, 77 );
+        Size = MAP_APPFONT( 28, 70 );
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    FixedText PAGE3_QUALITY_TXT
+    {
+        Pos = MAP_APPFONT( 49, 79 );
+        Size = MAP_APPFONT( 79, 10 );
+        Text = "Komprimierung";
+        Text [ENGLISH] = "Compression";
+        Text[ english_us ] = "Compression";
+        Text[ portuguese ] = "Compressão";
+        Text[ russian ] = "Óïëîòíåíèå";
+        Text[ greek ] = "Óõìğßåóçò";
+        Text[ dutch ] = "Compressie";
+        Text[ french ] = "Compression";
+        Text[ spanish ] = "Compresión";
+        Text[ finnish ] = "Tiivistys";
+        Text[ italian ] = "Compressione";
+        Text[ danish ] = "Komprimeringsværdi:";
+        Text[ swedish ] = "Komprimering";
+        Text[ polish ] = "Kompresja:";
+        Text[ portuguese_brazilian ] = "Compression:";
+        Text[ japanese ] = "åœ§ç¸®";
+        Text[ korean ] = "ì••ì¶•:";
+        Text[ chinese_simplified ] = "å‹ç¼©";
+        Text[ chinese_traditional ] = "å£“ç¸®";
+        Text[ turkish ] = "Sıkıştırma değeri:";
+        Text[ arabic ] = "ŞíãÉ ÇáÖÛØ:";
+        Text[ catalan ] = "Compressió:";
+    };
+
+    FixedLine PAGE3_VERT
+    {
+        Pos = MAP_APPFONT ( 132 , 49  ) ;
+        Size = MAP_APPFONT ( 4, 51 ) ;
+        Vert = TRUE;
+    };
+
+    ////////////////
+    // Resolution //
+    ////////////////
+
+    FixedLine PAGE3_TITEL_2
+    {
+        Pos = MAP_APPFONT( 138, 38 );
+        Size = MAP_APPFONT( 128, 8 );
+        Text = "Monitorauflösung";
+        Text [ ENGLISH ] = "Display resolution";
+        Text[ english_us ] = "Monitor resolution";
+        Text[ portuguese ] = "Resolução do ecrã";
+        Text[ russian ] = "Ğàçğåøåíèå ıêğàíà";
+        Text[ greek ] = "ÁíÜëõóç ïèüíçò";
+        Text[ dutch ] = "Schermresolutie";
+        Text[ french ] = "Résolution d'écran";
+        Text[ spanish ] = "Resolución del monitor";
+        Text[ finnish ] = "Näytön erottelutarkkuus";
+        Text[ italian ] = "Risoluzione monitor";
+        Text[ danish ] = "Display resolution";
+        Text[ swedish ] = "Bildskärmsupplösning";
+        Text[ polish ] = "Rozdzieloczoœæ ekranu";
+        Text[ portuguese_brazilian ] = "Display resolution";
+        Text[ japanese ] = "ãƒ¢ãƒ‹ã‚¿ãƒ¼ã®è§£åƒåº¦";
+        Text[ korean ] = "ë””ìŠ¤í”Œë ˆì´ í•´ìƒë„";
+        Text[ chinese_simplified ] = "å±å¹•åˆ†è¾¨ç‡";
+        Text[ chinese_traditional ] = "å±å¹•è§£æåº¦";
+        Text[ turkish ] = "Display resolution";
+        Text[ arabic ] = "Display resolution";
+        Text[ catalan ] = "Resolució del monitor";
+    };
+
+    RadioButton PAGE3_RESOLUTION_1
+    {
+        Pos = MAP_APPFONT( 144, 49 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text = "Niedrige Auflösung (~640x480 Pixel)";
+        Text [ ENGLISH ] = "Low resolution (~640x480 pixel)";
+        Text[ italian ] = "Risoluzione bassa (~640x480 pixel)";
+        Text[ portuguese_brazilian ] = "Low resolution (~640x480 pixel)";
+        Text[ portuguese ] = "Baixa resolução (~640x480 pixéis)";
+        Text[ danish ] = "Lav opløsning (640x480 pixel)";
+        Text[ french ] = "Faible résolution (~640x480 pixels)";
+        Text[ swedish ] = "Låg upplösning (~640x480 pixel)";
+        Text[ dutch ] = "Lage resolutie (~640x480 pixels)";
+        Text[ spanish ] = "Resolución baja (~640x480 píxeles)";
+        Text[ english_us ] = "Low resolution (~640x480 pixel)";
+        Text[ chinese_simplified ] = "ä½åˆ†è¾¨ç‡(640x480 åƒç´ )";
+        Text[ russian ] = "Íèçêîå ğàçğåøåíèå (~640x480 ïèêñåëü)";
+        Text[ polish ] = "Niska rozdzielczoœæ (640x480 pikseli)";
+        Text[ japanese ] = "ä½è§£åƒåº¦ (640x480 ãƒ”ã‚¯ã‚»ãƒ«)";
+        Text[ greek ] = "×áìçëŞ áíÜëõóç (640x480 pixel)";
+        Text[ korean ] = "ì €í•´ìƒë„ (640x480 í”½ì…€)";
+        Text[ chinese_traditional ] = "ä½è§£æåº¦(640x480 åƒç´ )";
+        Text[ arabic ] = "ÏŞÉ ãäÎİÖÉ  480x640)ÈßÓá)";
+        Text[ turkish ] = "Düşük çözünürlük (~640x480 piksel)";
+        Text[ catalan ] = "Resolució baixa (~640x480 píxels)";
+        Text[ finnish ] = "Matala tarkkuus (~640x480 kuvapistettä)";
+    };
+
+    RadioButton PAGE3_RESOLUTION_2
+    {
+        Pos = MAP_APPFONT( 144, 63 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text = "Mittlere Auflösung (~800x600 Pixel)";
+        Text [ ENGLISH ] = "Medium resolution (~800x600 pixel)";
+        Text[ italian ] = "Risoluzione media (~800x600 pixel)";
+        Text[ portuguese_brazilian ] = "Medium resolution (~800x600 pixel)";
+        Text[ portuguese ] = "Média resolução (~800x600 pixéis)";
+        Text[ danish ] = "Medium opløsning (800x600 pixel)";
+        Text[ french ] = "Résolution moyenne (~800x600 pixels)";
+        Text[ swedish ] = "Mediumupplösning (~800x600 pixel)";
+        Text[ dutch ] = "Medium resolutie (~800x600 pixels)";
+        Text[ spanish ] = "Resolución media (~800x600 píxeles)";
+        Text[ english_us ] = "Medium resolution (~800x600 pixel)";
+        Text[ chinese_simplified ] = "ä¸­åˆ†è¾¨ç‡(800x600 åƒç´ )";
+        Text[ russian ] = "Ñğåäíåå ğàçğåøåíèå (~800x600 ïèêñåëü)";
+        Text[ polish ] = "Œrednia rozdzielczoœæ (800x600 pikseli)";
+        Text[ japanese ] = "ä¸­è§£åƒåº¦ (800x600 ãƒ”ã‚¯ã‚»ãƒ«)";
+        Text[ greek ] = "Ìåóáßá áíÜëõóç (800x600 pixel)";
+        Text[ korean ] = "ì¤‘ê°„ í•´ìƒë„ (800x600 í”½ì…€)";
+        Text[ chinese_traditional ] = "ä¸­è§£æåº¦(800x600 åƒç´ )";
+        Text[ arabic ] = "ÏŞÉ ãÊæÓØÉ (800x600 ÈßÓá)";
+        Text[ turkish ] = "Normal çözünürlük (~800x600 piksel)";
+        Text[ catalan ] = "Resolució mitjana (~800x600 píxels)";
+        Text[ finnish ] = "Keskitason tarkkuus (~800x600 kuvapistettä)";
+    };
+
+    RadioButton PAGE3_RESOLUTION_3
+    {
+        Pos = MAP_APPFONT ( 144, 77 ) ;
+        Size = MAP_APPFONT ( 116 , 10 ) ;
+        Text = "Hohe Auflösung (~1024x768 Pixel)";
+        Text [ ENGLISH ] = "High resolution (~1024x768 pixel)";
+        Text[ italian ] = "Alta risoluzione (~1024x768 pixel)";
+        Text[ portuguese_brazilian ] = "High resolution (~1024x768 pixel)";
+        Text[ portuguese ] = "Alta resolução (~1024x768 pixéis)";
+        Text[ danish ] = "Høj opløsning (1024x768 pixel)";
+        Text[ french ] = "Haute résolution (~1024x768 pixels)";
+        Text[ swedish ] = "Hög upplösning (~1024x768 pixel)";
+        Text[ dutch ] = "Hoge resolutie (~1024x768 pixels)";
+        Text[ spanish ] = "Resolución alta (~1024x768 píxeles)";
+        Text[ english_us ] = "High resolution (~1024x768 pixel)";
+        Text[ chinese_simplified ] = "é«˜åˆ†è¾¨ç‡(1024x768 åƒç´ )";
+        Text[ russian ] = "Âûñîêîå ğàçğåøåíèå (~1024x768 ïèêñåëü)";
+        Text[ polish ] = "Wysoka rozdzielczoœæ (1024x768 pikseli)";
+        Text[ japanese ] = "é«˜è§£åƒåº¦ (1024x768 ãƒ”ã‚¯ã‚»ãƒ«)";
+        Text[ greek ] = "ÕøçëŞ áíÜëõóç (1024x768 pixel)";
+        Text[ korean ] = "ê³ í•´ìƒë„ (1024x768 í”½ì…€)";
+        Text[ chinese_traditional ] = "é«˜è§£æåº¦(1024x768 åƒç´ )";
+        Text[ arabic ] = "ÏŞÉ ÚÇáíÉ (1024×768 ÈßÓá)";
+        Text[ turkish ] = "Yüksek çözünürlük (~1024x768 piksel)";
+        Text[ catalan ] = "Resolució alta (~1024x768 píxels)";
+        Text[ finnish ] = "Suuri tarkkuus (~1024x768 kuvapistettä)";
+    };
+
+    ////////////////
+    // Resolution //
+    ////////////////
+
+    FixedLine PAGE3_TITEL_3
+    {
+        Pos = MAP_APPFONT( 6, 100 );
+        Size = MAP_APPFONT( 258, 8 );
+        Text = "Effekte";
+        Text [ ENGLISH ] = "Effects";
+        Text[ english_us ] = "Effects";
+        Text[ portuguese ] = "Efeitos";
+        Text[ russian ] = "İôôåêòû";
+        Text[ greek ] = "Åöİ";
+        Text[ dutch ] = "Effecten";
+        Text[ french ] = "Effets";
+        Text[ spanish ] = "Efectos";
+        Text[ italian ] = "Effetti";
+        Text[ danish ] = "Effekter";
+        Text[ swedish ] = "Effekter";
+        Text[ polish ] = "Efekty";
+        Text[ portuguese_brazilian ] = "Effects";
+        Text[ japanese ] = "åŠ¹æœ";
+        Text[ korean ] = "íš¨ê³¼";
+        Text[ chinese_simplified ] = "æ•ˆæœ";
+        Text[ chinese_traditional ] = "æ•ˆæœ";
+        Text[ arabic ] = "ÊÃËíÑÇÊ";
+        Text[ turkish ] = "Efektler";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Efectes";
+        Text[ finnish ] = "Tehosteet";
+    };
+
+    CheckBox PAGE3_SLD_SOUND
+    {
+        Pos = MAP_APPFONT ( 12, 111 );
+        Size = MAP_APPFONT ( 252, 10 );
+        Text = "~Klänge beim Seitenwechsel exportieren" ;
+        Text [ ENGLISH ] = "~Export advance slide sounds" ;
+        Text [ ENGLISH_US ] = "~Export sounds when slide advances" ;
+
+        Text[ portuguese ] = "~Exportar sons ao mudar de página";
+        Text[ russian ] = "~İêñïîğò çâóêîâ ïğè ñìåíå ñëàéäîâ";
+        Text[ greek ] = "ÅîáãùãŞ Ş÷ïõ ~êáôÜ ôçí áëëáãŞ óåëßäáò";
+        Text[ dutch ] = "~Klank bij paginawisseling exporteren";
+        Text[ french ] = "~Exporter les sons de changement de page";
+        Text[ spanish ] = "~Exportar sonidos al cambiar páginas";
+        Text[ italian ] = "Esporta suoni al cambio di pagina";
+        Text[ danish ] = "Eksporter lyde ved sideovergang";
+        Text[ swedish ] = "Exportera ljud vid sidväxling";
+        Text[ polish ] = "~Eksportuj dŸwiêki przy zmianie strony";
+        Text[ portuguese_brazilian ] = "~Export advance slide sounds";
+        Text[ japanese ] = "ç”»é¢åˆ‡ã‚Šæ›¿ãˆæ™‚ã«ã‚µã‚¦ãƒ³ãƒ‰ã®ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ(~E)";
+        Text[ korean ] = "ìŠ¬ë¼ì´ë“œ ì „í™˜ì‹œì— ì‚¬ìš´ë“œ ë‚´ë³´ë‚´ê¸°(~E)";
+        Text[ chinese_simplified ] = "è½¬æ¢é¡µé¢æ—¶æ’­æ”¾å£°éŸ³(~E)";
+        Text[ chinese_traditional ] = "åœ¨è½‰æ›é é¢æ™‚æ’­æ”¾è²éŸ³(~E)";
+        Text[ arabic ] = "ÊÕÏíÑ äÛãÇÊ ÚäÏ ÊÛííÑ ÇáÕİÍÇÊ";
+        Text[ turkish ] = "Slayt geçişlerinde sesi dışa aktar";
+        Text[ catalan ] = "~Exporta els sons quan la diapositiva avanci";
+        Text[ finnish ] = "~Vie äänet diakuvan vaihtuessa";
+    };
+
+    ////////////////////////////////////////
+    // Page 4, information for titel page //
+    ////////////////////////////////////////
+
+    FixedBitmap PAGE4_BMP
+    {
+        OutputSize = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Fixed = Bitmap { File = "pubdlg3.bmp" ; };
+    };
+
+    FixedLine PAGE4_TITEL_1
+    {
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Text = "Informationen für die Titelseite" ;
+        Text [ ENGLISH ] = "Information for the content page" ;
+        Text[ italian ] = "Informazioni per la pagina sommario";
+        Text[ portuguese_brazilian ] = "Please select the image format";
+        Text[ portuguese ] = "Informações para a capa";
+        Text[ danish ] = "Informationer til titelbladet";
+        Text[ french ] = "Informations pour la page de garde";
+        Text[ swedish ] = "Information för titelsidan";
+        Text[ dutch ] = "Gegevens voor de titelpagina";
+        Text[ spanish ] = "Informaciones para la portada";
+        Text[ english_us ] = "Information for the title page";
+        Text[ chinese_simplified ] = "æœ‰å…³é¦–é¡µçš„ä¿¡æ¯";
+        Text[ russian ] = "Èíôîğìàöèÿ äëÿ òèòóëüíîé ñòğàíèöû";
+        Text[ polish ] = "Informacje dotycz¹ce strony tytu³owej";
+        Text[ japanese ] = "è¡¨ç´™ã®æƒ…å ±";
+        Text[ greek ] = "Ğëçñïöïñßåò ãéá ôçí óåëßäá ôßôëïõ";
+        Text[ korean ] = "ì œëª© í˜ì´ì§€ì˜ ì •ë³´";
+        Text[ chinese_traditional ] = "é—œæ–¼é¦–é çš„è³‡è¨Š";
+        Text[ arabic ] = "ãÚáæãÇÊ áÕİÍÉ ÇáÚäæÇä";
+        Text[ turkish ] = "Başlık sayfası için bilgiler";
+        Text[ catalan ] = "Informacions per a la portada";
+        Text[ finnish ] = "Otsikkosivun tiedot";
+    };
+
+    FixedText PAGE4_AUTHOR_TXT
+    {
+        Pos = MAP_APPFONT ( 12, 51 );
+        Size = MAP_APPFONT ( 121, 8 );
+        Text  ="~Autor";
+        Text [ ENGLISH ] = "~Author";
+        Text[ english_us ] = "~Author";
+        Text[ portuguese ] = "~Autor:";
+        Text[ russian ] = "~Àâòîğ";
+        Text[ greek ] = "Ó~õíôÜêôçò";
+        Text[ dutch ] = "~Auteur";
+        Text[ french ] = "Auteur";
+        Text[ spanish ] = "~Autor:";
+        Text[ finnish ] = "~Laatija";
+        Text[ italian ] = "~Autore";
+        Text[ danish ] = "Forfatter:";
+        Text[ swedish ] = "Sk~apad av";
+        Text[ polish ] = "Autor:";
+        Text[ portuguese_brazilian ] = "~Author:";
+        Text[ japanese ] = "ä½œæˆè€…(~A)";
+        Text[ korean ] = "~ì‘ì„±ì:";
+        Text[ chinese_simplified ] = "ä½œè€…(~A)";
+        Text[ chinese_traditional ] = "ä½œè€…(~A)";
+        Text[ turkish ] = "Yazan:";
+        Text[ arabic ] = "ÇáãÄáİ:";
+        Text[ catalan ] = "~Autor";
+    };
+
+    Edit PAGE4_AUTHOR
+    {
+        BORDER = TRUE ;
+        Pos = MAP_APPFONT ( 136, 49 );
+        Size = MAP_APPFONT ( 128, 12 );
+        LEFT = TRUE;
+    };
+
+    FixedText PAGE4_EMAIL_TXT
+    {
+        Pos = MAP_APPFONT ( 12, 67 );
+        Size = MAP_APPFONT ( 121, 8 );
+        Text = "E-~Mail-Adresse";
+        Text [ ENGLISH ] = "~E-~mail address";
+        Text[ language_user1 ] = " ";
+        Text[ english_us ] = "E-~mail address";
+        Text[ portuguese ] = "~Endereço electr.:";
+        Text[ russian ] = "Àäğåñ ıë.ïî÷òû";
+        Text[ greek ] = "Äéåıèõíóç E-~Mail";
+        Text[ dutch ] = "~E-mail adres";
+        Text[ french ] = "Adresse e-~mail :";
+        Text[ spanish ] = "Dirección ~electrónica:";
+        Text[ finnish ] = "Sähkö~postiosoite";
+        Text[ italian ] = "Indirizzo e~Mail";
+        Text[ danish ] = "E-mail-adresse:";
+        Text[ swedish ] = "E-~postadress:";
+        Text[ polish ] = "Adres e-mail:";
+        Text[ portuguese_brazilian ] = "~email:";
+        Text[ japanese ] = "E-~mail ã‚¢ãƒ‰ãƒ¬ã‚¹";
+        Text[ korean ] = "E-~mail ì£¼ì†Œ";
+        Text[ chinese_simplified ] = "ç”µå­é‚®ä»¶åœ°å€ï¼š(~M)";
+        Text[ chinese_traditional ] = "é›»å­éƒµä»¶(~M)";
+        Text[ turkish ] = "E-posta adresi:";
+        Text[ arabic ] = "ÚäæÇä ÇáÈÑíÏ ÇáÅáßÊÑæäí:";
+        Text[ catalan ] = "Direcció ~electrònica:";
+    };
+
+    Edit PAGE4_EMAIL_EDIT
+    {
+        BORDER = TRUE ;
+        Pos = MAP_APPFONT ( 136 , 65 ) ;
+        Size = MAP_APPFONT ( 128 , 12 ) ;
+        LEFT = TRUE ;
+    };
+
+    FixedText PAGE4_WWW_TXT
+    {
+        Pos = MAP_APPFONT ( 12, 83 );
+        Size = MAP_APPFONT ( 121, 8 );
+        Text = "Ihre ~Homepage";
+        Text [ ENGLISH ] = "Your ~homepage";
+        Text[ language_user1 ] = " ";
+        Text[ english_us ] = "Your hom~epage";
+        Text[ portuguese ] = "A sua ~homepage:";
+        Text[ russian ] = "Âàøà íà÷àëüíàÿ ñòğàíèöà";
+        Text[ greek ] = "~Ç äéêŞ óáò áñ÷éêŞ óåëßäá:";
+        Text[ dutch ] = "Uw ~homepage";
+        Text[ french ] = "~Homepage :";
+        Text[ spanish ] = "Su página ~principal:";
+        Text[ finnish ] = "~Kotisivusi";
+        Text[ italian ] = "La vostra ~homepage";
+        Text[ danish ] = "Din hjemmeside:";
+        Text[ swedish ] = "Din ~hemsida:";
+        Text[ polish ] = "Twoja strona macierzysta:";
+        Text[ portuguese_brazilian ] = "Your ~homepage:";
+        Text[ japanese ] = "ã‚ãªãŸã®ãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸(~E)";
+        Text[ korean ] = "ì‚¬ìš©ì í™ˆí˜ì´ì§€(~E):";
+        Text[ chinese_simplified ] = "æ‚¨çš„ä¸»é¡µï¼š(~E)";
+        Text[ chinese_traditional ] = "æ‚¨çš„é¦–é (~E)";
+        Text[ turkish ] = "Web sayfanız:";
+        Text[ arabic ] = "ÕİÍÉ ÇáÅäÊÑäÊ ÇáÎÇÕÉ Èß:";
+        Text[ catalan ] = "La seva pàgina ~principal:";
+    };
+
+    Edit PAGE4_WWW_EDIT
+    {
+        BORDER = TRUE ;
+        Pos = MAP_APPFONT ( 136, 81 ) ;
+        Size = MAP_APPFONT ( 128, 12 ) ;
+        LEFT = TRUE ;
+    };
+
+    FixedText PAGE4_TITEL_2
+    {
+        Pos = MAP_APPFONT ( 12 , 99 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text = "Weitere ~Informationen" ;
+        Text [ ENGLISH ] = "Additional ~informations" ;
+        Text[ english_us ] = "Additional ~information";
+        Text[ portuguese ] = "Outras ~informações:";
+        Text[ russian ] = "Äîïîëíèòåëüíûå ~ñâåäåíèÿ";
+        Text[ greek ] = "Åğ~éğñüóèåôåò ğëçñïöïñßåò:";
+        Text[ dutch ] = "Verdere ~informatie";
+        Text[ french ] = "~Complément\nd'information :";
+        Text[ spanish ] = "~Otras informaciones";
+        Text[ finnish ] = "~Lisätietoja";
+        Text[ italian ] = "Ulteriori\n~informazioni";
+        Text[ danish ] = "Flere\ninformationer:";
+        Text[ swedish ] = "Mer ~information";
+        Text[ polish ] = "Dodatkowe informacje:";
+        Text[ portuguese_brazilian ] = "Additional\n~informations:";
+        Text[ japanese ] = "è©³ç´°æƒ…å ±(~I):";
+        Text[ korean ] = "ê¸°íƒ€ ì •ë³´(~I):";
+        Text[ chinese_simplified ] = "é™„åŠ ä¿¡æ¯ï¼š(~I)";
+        Text[ chinese_traditional ] = "å…¶ä»–è³‡è¨Š(~I)";
+        Text[ turkish ] = "Diğer\n bilgiler:";
+        Text[ arabic ] = "ãÚáæãÇÊ\nÅÖÇİíÉ:";
+        Text[ catalan ] = "~Altres\ninformacions:";
+    };
+
+    MultiLineEdit PAGE4_MISC
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 136, 97 ) ;
+        Size = MAP_APPFONT ( 128 , 45 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+        IgnoreTab = TRUE ;
+    };
+
+    CheckBox PAGE4_DOWNLOAD
+    {
+        Pos = MAP_APPFONT ( 12 , 149 ) ;
+        Size = MAP_APPFONT ( 252 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "Link auf Kopie der ~Originalpräsentation" ;
+        Text [ ENGLISH ] = "~Include a link to a copy of the original presentation" ;
+        Text[ italian ] = "Collegamento alla copia della presentazione ~originale";
+        Text[ portuguese_brazilian ] = "~Download the original presentation";
+        Text[ portuguese ] = "~Ligar a cópia da apresentação original";
+        Text[ danish ] = "Kæde til kopi af originalpræsentationen";
+        Text[ french ] = "Lien vers la copie de la présentation d'origine";
+        Text[ swedish ] = "Länk till kopia av ~originalpresentationen";
+        Text[ dutch ] = "Koppeling naar de kopie van de ~originele presentatie";
+        Text[ spanish ] = "Enlace a copia de la presentación ~original";
+        Text[ english_us ] = "Link to a copy of the ~original presentation";
+        Text[ chinese_simplified ] = "ä¸æ¼”ç¤ºæ–‡ç¨¿æºæ–‡æœ¬çš„å¤åˆ¶ä»¶é“¾æ¥(~O)";
+        Text[ russian ] = "Ññûëêà íà êîïèş èñõîäíîé ïğåçåíòàöèè";
+        Text[ polish ] = "£¹cze do kopii prezentacji oryginalnej";
+        Text[ japanese ] = "ã‚ªãƒªã‚¸ãƒŠãƒ«ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®ã‚³ãƒ”ãƒ¼ã¸ãƒªãƒ³ã‚¯(~O)";
+        Text[ greek ] = "Óıíäåóç óå áíôßãñáöï ôçò áñ÷éêŞò ğáñïõóßáóçò";
+        Text[ korean ] = "ì›ë³¸ í”„ë¦¬ì  í…Œì´ì…˜ì˜ ì‚¬ë³¸ì— ë§í¬(~O)";
+        Text[ chinese_traditional ] = "åŸç°¡å ±è¤‡è£½ä»¶çš„æ·å¾‘(~O)";
+        Text[ arabic ] = "ÇÑÊÈÇØ Åáì äÓÎÉ ãä ÇáÚÑÖ ÇáÊŞÏíãí ÇáÃÕáí";
+        Text[ turkish ] = "Asıl sununun kopyasına bağlantı";
+        Text[ catalan ] = "Enllaç a la còpia de la presentació ~original";
+        Text[ finnish ] = "Linkitä ~alkuperäisen esityksen kopioon";
+    };
+
+    CheckBox PAGE4_CREATED
+    {
+        Pos = MAP_APPFONT ( 12 , 152 ) ;
+        Size = MAP_APPFONT ( 252 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "Hinweis: 'Erzeugt mit %PRODUCTNAME'" ;
+        Text [ ENGLISH ] = "Note: 'Created with ~StarOffice'" ;
+        Text[ italian ] = "Nota: 'Creato con %PRODUCTNAME'";
+        Text[ portuguese_brazilian ] = "Created with %PRODUCTNAME";
+        Text[ portuguese ] = "Observação: 'Criado com %PRODUCTNAME'";
+        Text[ danish ] = "Henvisning: 'Oprettet med %PRODUCTNAME'";
+        Text[ french ] = "Remarque : 'Créé avec %PRODUCTNAME'";
+        Text[ swedish ] = "Skapat med %PRODUCTNAME";
+        Text[ dutch ] = "N.B.: Gemaakt met %PRODUCTNAME";
+        Text[ spanish ] = "Nota: 'Creado con %PRODUCTNAME'";
+        Text[ english_us ] = "Note: 'Created with %PRODUCTNAME'";
+        Text[ chinese_simplified ] = "æç¤ºï¼šç”¨ %PRODUCTNAME å»ºç«‹";
+        Text[ russian ] = "Ïğèìå÷àíèå: 'ñîçäàíî â %PRODUCTNAME'";
+        Text[ polish ] = "Wskazówka:\"Utworzony przez %PRODUCTNAME\"";
+        Text[ japanese ] = "æŒ‡ç¤º:ã€Œ%PRODUCTNAME ã§ä½œæˆã•ã‚Œã¦ã„ã¾ã™ã€";
+        Text[ greek ] = "Óçìåßùóç: 'ÄçìéïõñãŞèçêå ìå %PRODUCTNAME'";
+        Text[ korean ] = "ì°¸ê³ : '%PRODUCTNAMEë¡œ ì‘ì„±ë¨'";
+        Text[ chinese_traditional ] = "æç¤ºï¼šä½¿ç”¨ %PRODUCTNAME è£½ä½œ";
+        Text[ arabic ] = "ãáÍæÙÉ: 'Êã ÅäÔÇÄå ÈæÇÓØÉ %PRODUCTNAME'";
+        Text[ turkish ] = "Not: '%PRODUCTNAME ile oluşturulmuştur'";
+        Text[ catalan ] = "Nota: 'Creat amb %PRODUCTNAME'";
+        Text[ finnish ] = "Huomautus: Luotu ohjelmalla %PRODUCTNAME";
+    };
+
+    /////////////////////
+    // Page 5, Buttons //
+    /////////////////////
+
+    FixedBitmap PAGE5_BMP
+    {
+        OutputSize = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Fixed = Bitmap { File = "pubdlg4.bmp" ; };
+    };
+
+    FixedLine PAGE5_TITEL
+    {
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Text = "Schaltflächenstil auswählen" ;
+        Text [ ENGLISH ] = "Please select button style" ;
+        Text[ italian ] = "Seleziona stile pulsanti";
+        Text[ portuguese_brazilian ] = "Please select button style";
+        Text[ portuguese ] = "Seleccionar estilo dos botões";
+        Text[ danish ] = "Vælg knaptype";
+        Text[ french ] = "Sélection du style de bouton";
+        Text[ swedish ] = "Välj ut stil för kommandoknappar";
+        Text[ dutch ] = "Stijl voor knoppen selecteren";
+        Text[ spanish ] = "Elegir estilo para el botón";
+        Text[ english_us ] = "Select button style";
+        Text[ chinese_simplified ] = "é€‰æ‹©æŒ‰é’®å¼æ ·";
+        Text[ russian ] = "Âûáğàòü ñòèëü êíîïîê";
+        Text[ polish ] = "Wybierz rodzaj przycisku";
+        Text[ japanese ] = "ãƒœã‚¿ãƒ³ã‚¹ã‚¿ã‚¤ãƒ«ã®é¸æŠ";
+        Text[ greek ] = "ÅğéëïãŞ ôïõ óôõë ôùí ğåäßùí åğéëïãŞò";
+        Text[ korean ] = "ë²„íŠ¼ ìœ í˜• ì„ íƒ";
+        Text[ chinese_traditional ] = "é¸æ“‡æŒ‰éˆ•æ¨£å¼";
+        Text[ arabic ] = "ÇÎÊíÇÑ äãØ ÇáãİÇÊíÍ";
+        Text[ turkish ] = "Düğme biçimi seç";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Escull estil pel botó";
+        Text[ finnish ] = "Valitse painiketyyli";
+    };
+
+    CheckBox PAGE5_TEXTONLY
+    {
+        Pos = MAP_APPFONT ( 12, 50 );
+        Size = MAP_APPFONT ( 243, 10 );
+        Text = "Nur ~Text";
+        Text [ ENGLISH ] = "~Text only";
+        Text[ italian ] = "Solo ~testo";
+        Text[ portuguese_brazilian ] = "~Text only";
+        Text[ portuguese ] = "~Só texto";
+        Text[ danish ] = "Kun tekst";
+        Text[ french ] = "~Uniquement du texte";
+        Text[ swedish ] = "Bara ~text";
+        Text[ dutch ] = "~Alleen tekst";
+        Text[ spanish ] = "Solo ~texto";
+        Text[ english_us ] = "~Text only";
+        Text[ chinese_simplified ] = "åªæ˜¯æ–‡å­—(~T)";
+        Text[ russian ] = "Òîëüêî òåêñò";
+        Text[ polish ] = "Tylko tekst";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã®ã¿(~T)";
+        Text[ greek ] = "Ìüíï êåßìåíï";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ë§Œ(~T)";
+        Text[ chinese_traditional ] = "åªæ˜¯ç´”æ–‡å­—(~T)";
+        Text[ arabic ] = "äÕ İŞØ";
+        Text[ turkish ] = "Yalnızca metin";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Només ~text";
+        Text[ finnish ] = "~Vain teksti";
+    };
+
+    Control PAGE5_BUTTONS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12, 63 ) ;
+        Size = MAP_APPFONT ( 243, 95 ) ;
+    };
+
+    /////////////////////////
+    // Page 6, colorscheme //
+    /////////////////////////
+
+    FixedBitmap PAGE6_BMP
+    {
+        OutputSize = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Fixed = Bitmap { File = "pubdlg5.bmp" ; };
+    };
+
+    FixedLine PAGE6_TITEL
+    {
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Text = "Farbschema auswählen" ;
+        Text [ ENGLISH ] = "Please select a colorscheme" ;
+        Text[ italian ] = "Seleziona schema colori";
+        Text[ portuguese_brazilian ] = "Please select button style";
+        Text[ portuguese ] = "Seleccionar esquema de cores";
+        Text[ danish ] = "Vælg farveskema";
+        Text[ french ] = "Sélection du schéma de couleurs";
+        Text[ swedish ] = "Välj ut färgschema";
+        Text[ dutch ] = "Kleurenschema kiezen";
+        Text[ spanish ] = "Elegir combinación de colores";
+        Text[ english_us ] = "Select color scheme";
+        Text[ chinese_simplified ] = "é€‰æ‹©å½©è‰²å›¾æ¡ˆ";
+        Text[ russian ] = "Âûáğàòü öâåòîâóş ñõåìó";
+        Text[ polish ] = "Wybierz schemat kolorów";
+        Text[ japanese ] = "é…è‰²ã®é¸æŠ";
+        Text[ greek ] = "ÅğéëïãŞ óõíäõáóìïı ÷ñùìÜôùí";
+        Text[ korean ] = "ìƒ‰ ë„í‘œ ì„ íƒ";
+        Text[ chinese_traditional ] = "é¸æ“‡å½©è‰²åœ–æ¡ˆ";
+        Text[ arabic ] = "ÇÎÊíÇÑ äÙÇã ÇáÃáæÇä";
+        Text[ turkish ] = "Renk seç";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Seleccioneu l'esquema de color";
+        Text[ finnish ] = "Valitse väriskeema";
+    };
+
+    RadioButton PAGE6_DOCCOLORS
+    {
+        Pos = MAP_APPFONT( 12, 50 );
+        Size = MAP_APPFONT( 246, 10 );
+        Text = "Farbschema aus Dokument ü~bernehmen";
+        Text [ENGLISH] = "Use documents c~olorscheme";
+        Text[ italian ] = "Applica schema colori del documento";
+        Text[ portuguese_brazilian ] = "Convert text c~olor";
+        Text[ portuguese ] = "A~plicar esquema de cores do documento";
+        Text[ danish ] = "Overtag farveskema fra dokument";
+        Text[ french ] = "~Appliquer le schéma de couleurs du document";
+        Text[ swedish ] = "Överta färgschema från dokument";
+        Text[ dutch ] = "K~leurenschema uit het document overnemen";
+        Text[ spanish ] = "Aceptar combinación de ~colores del documento";
+        Text[ english_us ] = "~Apply color scheme from document";
+        Text[ chinese_simplified ] = "é‡‡ç”¨æ–‡æ¡£çš„é¢œè‰²ç¤ºå›¾(~A)";
+        Text[ russian ] = "Ïğèíÿòü öâåòîâóş ñõåìó èç äîêóìåíòà";
+        Text[ polish ] = "Zastosuj schemat koloru z dokumentu";
+        Text[ japanese ] = "é…è‰²ã‚’ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‹ã‚‰é©ç”¨(~A)";
+        Text[ greek ] = "ÅöáñìïãŞ óõíäõáóìü ÷ñùìÜôùí áğü İããñáöï";
+        Text[ korean ] = "ë¬¸ì„œì˜ ìƒ‰ ë„í‘œ ì ìš©(~A)";
+        Text[ chinese_traditional ] = "å¾æ–‡ä»¶ä¸­æ¡ç”¨å½©è‰²åœ–æ¡ˆ(~A)";
+        Text[ arabic ] = "ÊØÈíŞ äÙÇã ÇáÃáæÇä ÇáãÓÊÎÏã İí ÇáãÓÊäÏ";
+        Text[ turkish ] = "Belgedeki renkleri kullan";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Aplica l'esquema de color des del document";
+        Text[ finnish ] = "~Käytä asiakirjan väriskeemaa";
+    };
+
+    RadioButton PAGE6_DEFAULT
+    {
+        Pos = MAP_APPFONT( 12, 63 );
+        Size = MAP_APPFONT( 246, 10 );
+        Text = "~Browser Farben verwenden";
+        Text [ ENGLISH ] = "Use ~browser colors";
+        Text[ italian ] = "Usa colori ~browser";
+        Text[ portuguese_brazilian ] = "Use ~standard colors";
+        Text[ portuguese ] = "Usar ~cores do browser";
+        Text[ danish ] = "Brug browserfarver";
+        Text[ french ] = "Utiliser les couleurs du ~Browser";
+        Text[ swedish ] = "Använd browserfärger";
+        Text[ dutch ] = "~Browserkleuren gebruiken";
+        Text[ spanish ] = "Usar colores de ~navegador web";
+        Text[ english_us ] = "Use ~browser colors";
+        Text[ chinese_simplified ] = "ä½¿ç”¨æµè§ˆå™¨é¢„è®¾çš„é¢œè‰²(~B)";
+        Text[ russian ] = "Èñïîëüçîâàòü öâåòà áğàóçåğà";
+        Text[ polish ] = "U¿yj kolorów przegl¹darki";
+        Text[ japanese ] = "ãƒ–ãƒ©ã‚¦ã‚¶ã®è‰²ã‚’ä½¿ç”¨(~B)";
+        Text[ greek ] = "×ñŞóç ÷ñùìÜôùí ğñïãñÜììáôïò áíÜãíùóçò éóôïóåëßäùí";
+        Text[ korean ] = "ë¸Œë¼ìš°ì € ìƒ‰ìƒ ì‚¬ìš©(~B)";
+        Text[ chinese_traditional ] = "ä½¿ç”¨ç€è¦½å™¨é è¨­çš„é¡è‰²(~B)";
+        Text[ arabic ] = "ÇÓÊÎÏÇã ÃáæÇä ÇáãÊÕİÍ";
+        Text[ turkish ] = "Web tarayıcısı renklerini kullan";
+        Text[ catalan ] = "Utilitza els colors del navegador";
+        Text[ finnish ] = "Käytä ~selaimen värejä";
+    };
+
+    RadioButton PAGE6_USER
+    {
+        Pos = MAP_APPFONT( 12, 76 );
+        Size = MAP_APPFONT( 246, 10 );
+        Text = "~Eigenes Farbschema verwenden";
+        Text [ ENGLISH ] = "~User colorscheme";
+        Text[ italian ] = "Usa schema colori p~ersonale";
+        Text[ portuguese_brazilian ] = "~User colors:";
+        Text[ portuguese ] = "Usar ~esquema de cores personalizado";
+        Text[ danish ] = "Brug brugerdefineret farveskema";
+        Text[ french ] = "Utiliser un schéma de couleurs ~personnalisé";
+        Text[ swedish ] = "Använd ~eget färgschema";
+        Text[ dutch ] = "~Eigen kleurenschema gebruiken";
+        Text[ spanish ] = "Usar ~esquema propio de colores:";
+        Text[ english_us ] = "~Use custom color scheme:";
+        Text[ chinese_simplified ] = "é‡‡ç”¨è‡ªå®šçš„å½©è‰²å›¾(~U)";
+        Text[ russian ] = "~Èñïîëüçîâàòü öâåòîâóş ñõåìó ïîëüçîâàòåëÿ:";
+        Text[ polish ] = "~Zastosuj w³asny schemat kolorów:";
+        Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®é…è‰²ã‚’ä½¿ç”¨(~U):";
+        Text[ greek ] = "×ñŞó~ç ğñïóùğéêïı óõíäõáóìïı ÷ñùìÜôùí:";
+        Text[ korean ] = "ì‚¬ìš©ì ì •ì˜ ìƒ‰ ë„í‘œ ì‚¬ìš©(~U):";
+        Text[ chinese_traditional ] = "ä½¿ç”¨è‡ªè¨‚é¡è‰²(~U)ï¼š";
+        Text[ arabic ] = "ÇÓÊÎÏÇã äÙÇã ÃáæÇä ãÎÕÕ";
+        Text[ turkish ] = "Kullanıcı tanımlı renkleri kullan:";
+        Text[ catalan ] = "~Utilitza un esquema de color personalitzat:";
+        Text[ finnish ] = "~Käytä mukautettua väriskeemaa:";
+    };
+
+    PushButton PAGE6_TEXT
+    {
+        Pos = MAP_APPFONT( 21, 89 );
+        Size = MAP_APPFONT( 72, 14 );
+        Text = "~Text";
+        Text [ENGLISH] = "~Text";
+        Text[ italian ] = "~Testo";
+        Text[ portuguese_brazilian ] = "~Text";
+        Text[ portuguese ] = "~Texto";
+        Text[ danish ] = "Tekst";
+        Text[ french ] = "~Texte";
+        Text[ swedish ] = "~Text";
+        Text[ dutch ] = "~Tekst";
+        Text[ spanish ] = "~Texto";
+        Text[ english_us ] = "~Text";
+        Text[ chinese_simplified ] = "æ–‡å­—(~T)";
+        Text[ russian ] = "~Òåêñò";
+        Text[ polish ] = "Tekst";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ(~T)";
+        Text[ greek ] = "Êåßìåíï";
+        Text[ korean ] = "í…ìŠ¤íŠ¸(~T)";
+        Text[ chinese_traditional ] = "æ–‡å­—(~T)";
+        Text[ arabic ] = "ÇáäÕ";
+        Text[ turkish ] = "Metin";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Text";
+        Text[ finnish ] = "~Teksti";
+    };
+
+    PushButton PAGE6_LINK
+    {
+        Pos = MAP_APPFONT( 21, 106 );
+        Size = MAP_APPFONT( 72, 14 );
+        Text = "Hyper~link";
+        Text [ENGLISH] = "Hyper~link";
+        Text[ italian ] = "Hyper~link";
+        Text[ portuguese_brazilian ] = "Hyper~link";
+        Text[ portuguese ] = "Hiper~ligação";
+        Text[ danish ] = "Hyperlink";
+        Text[ french ] = "~Hyperlien";
+        Text[ swedish ] = "Hyper~länk";
+        Text[ dutch ] = "Hyper~link";
+        Text[ spanish ] = "~Hiperenlace";
+        Text[ english_us ] = "Hyper~link";
+        Text[ chinese_simplified ] = "è¶…é“¾æ¥(~L)";
+        Text[ russian ] = "Ãèïåğññûëêà";
+        Text[ polish ] = "Hiper³¹cze";
+        Text[ japanese ] = "ãƒã‚¤ãƒ‘ãƒ¼ãƒªãƒ³ã‚¯(~L)";
+        Text[ greek ] = "Õğåñ-óıíäåóç";
+        Text[ korean ] = "í•˜ì´í¼ë§í¬(~L)";
+        Text[ chinese_traditional ] = "è¶…é€£çµ(~L)";
+        Text[ arabic ] = "ÇáÇÑÊÈÇØ ÇáÊÔÚÈí";
+        Text[ turkish ] = "Hyperlink";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Hiperenllaç";
+        Text[ finnish ] = "Hyper~linkki";
+    };
+
+    PushButton PAGE6_ALINK
+    {
+        Pos = MAP_APPFONT( 21, 123 );
+        Size = MAP_APPFONT( 72, 14 );
+        Text = "~Aktiver Link";
+        Text [ENGLISH] = "~Active link";
+        Text[ italian ] = "Link ~attivo";
+        Text[ portuguese_brazilian ] = "~Active link";
+        Text[ portuguese ] = "~Ligação activa";
+        Text[ danish ] = "Aktiv hyperlink";
+        Text[ french ] = "Lien ~actif";
+        Text[ swedish ] = "~Aktiv länk";
+        Text[ dutch ] = "~Actieve link";
+        Text[ spanish ] = "~Enlace activo";
+        Text[ english_us ] = "Active Li~nk";
+        Text[ chinese_simplified ] = "ä½¿ç”¨ä¸­çš„é“¾æ¥(~N)";
+        Text[ russian ] = "~Àêòèâíàÿ ññûëêà";
+        Text[ polish ] = "Aktywne ³¹cze";
+        Text[ japanese ] = "ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªãƒªãƒ³ã‚¯(~N)";
+        Text[ greek ] = "Åíåñãüò óıíäåóìïò";
+        Text[ korean ] = "í™œì„± ë§í¬(~N)";
+        Text[ chinese_traditional ] = "ä½¿ç”¨ä¸­çš„æ·å¾‘(~N)";
+        Text[ arabic ] = "ÇáÇÑÊÈÇØ ÇáäÔØ";
+        Text[ turkish ] = "Etkin bağlantı";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Enllaç actiu";
+        Text[ finnish ] = "Aktiivinen link~ki";
+    };
+
+    PushButton PAGE6_VLINK
+    {
+        Pos = MAP_APPFONT( 21, 140 );
+        Size = MAP_APPFONT( 72, 14 );
+        Text = "~Gesichteter Link";
+        Text [ENGLISH] = "~Visited link";
+        Text[ italian ] = "Link visitato";
+        Text[ portuguese_brazilian ] = "~Visited link";
+        Text[ portuguese ] = "Link ~visitado";
+        Text[ danish ] = "Besøgt hyperlink";
+        Text[ french ] = "Lien ~visité";
+        Text[ swedish ] = "An~vänd länk";
+        Text[ dutch ] = "~Bezochte link";
+        Text[ spanish ] = "~Enlace visitado";
+        Text[ english_us ] = "~Visited Link";
+        Text[ chinese_simplified ] = "å·²ç»è®¿é—®è¿‡çš„é“¾æ¥(~V)";
+        Text[ russian ] = "~Ïîñåùåííàÿ ññûëêà";
+        Text[ polish ] = "Odwiedzone ³¹cze";
+        Text[ japanese ] = "è¨ªã‚ŒãŸãƒªãƒ³ã‚¯(~V)";
+        Text[ greek ] = "Óıíäåóç ğïõ åğéóêİöèçêå";
+        Text[ korean ] = "ë°©ë¬¸í•œ ë§í¬(~V)";
+        Text[ chinese_traditional ] = "å·²ç¶“è¨ªå•çš„æ·å¾‘(~V)";
+        Text[ arabic ] = "ÇáÇÑÊÈÇØ ÇáĞí ÓÈŞ ÒíÇÑÊå";
+        Text[ turkish ] = "Kullanılmış bağlantı";
+        Text[ catalan ] = "~Enllaç visitat";
+        Text[ finnish ] = "~Käyty linkki";
+    };
+
+    Control PAGE6_PREVIEW
+    {
+        Pos = MAP_APPFONT( 96, 89 );
+        Size = MAP_APPFONT( 100, 64 );
+        Border = TRUE;
+    };
+
+    PushButton PAGE6_BACK
+    {
+        Pos = MAP_APPFONT( 199, 89 );
+        Size = MAP_APPFONT( 60, 14 );
+        Text = "~Hintergrund";
+        Text [ENGLISH] = "~Background";
+        Text[ italian ] = "Sfondo";
+        Text[ portuguese_brazilian ] = "~Background";
+        Text[ portuguese ] = "~Plano de fundo";
+        Text[ danish ] = "Baggrund";
+        Text[ french ] = "~Arrière-plan";
+        Text[ swedish ] = "Ba~kgrund";
+        Text[ dutch ] = "~Achtergrond";
+        Text[ spanish ] = "~Fondo";
+        Text[ english_us ] = "Bac~kground";
+        Text[ chinese_simplified ] = "èƒŒæ™¯(~K)";
+        Text[ russian ] = "~Ôîí";
+        Text[ polish ] = "T³o";
+        Text[ japanese ] = "èƒŒæ™¯(~K)";
+        Text[ greek ] = "Öüíôï";
+        Text[ korean ] = "ë°°ê²½(~K)";
+        Text[ chinese_traditional ] = "èƒŒæ™¯(~K)";
+        Text[ arabic ] = "ÇáÎáİíÉ";
+        Text[ turkish ] = "Artalan";
+        Text[ catalan ] = "~Fons";
+        Text[ finnish ] = "Taus~ta";
+    };
+
+    // generell
+
+    FixedLine BOTTOM_LINE
+    {
+        Pos = MAP_APPFONT ( 1 , 162 ) ;
+        Size = MAP_APPFONT ( 272, 4) ;
+    };
+
+    PushButton BUT_LAST
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 112 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "<< ~Zurück" ;
+        Text [ ENGLISH ] = "<< ~Prev." ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "<< Back" ;
+        Text [ italian ] = "<<~Indietro" ;
+        Text [ spanish ] = "<< ~Regresar" ;
+        Text [ french ] = "<< ~Précédent" ;
+        Text [ dutch ] = "<< Vor~ige" ;
+        Text [ swedish ] = "<< T~illbaka" ;
+        Text [ danish ] = "<< Tilbage" ;
+        Text [ portuguese_brazilian ] = "<< ~Zur?k" ;
+        Text [ portuguese ] = "<< ~Anterior" ;
+        Text[ chinese_simplified ] = "<< è¿”å›";
+        Text[ russian ] = "<< ~Íàçàä";
+        Text[ polish ] = "<< Wstecz";
+        Text[ japanese ] = "<< æˆ»ã‚‹";
+        Text[ greek ] = "<< ~Ğßóù";
+        Text[ korean ] = "<< ë’¤ë¡œ";
+        Text[ chinese_traditional ] = "<< è¿”å›";
+        Text[ arabic ] = ">> ÇáÓÇÈŞ";
+        Text[ turkish ] = "<< Geri";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "<< Enrere";
+        Text[ finnish ] = "<< Edellinen";
+    };
+
+    PushButton BUT_NEXT
+    {
+        DefButton = TRUE ;
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 165 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Weiter >>" ;
+        Text [ ENGLISH ] = "~Next >>" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Next >>" ;
+        Text [ italian ] = "Avanti >>" ;
+        Text [ spanish ] = "~Siguiente >>" ;
+        Text [ french ] = "~Suivant >>" ;
+        Text [ dutch ] = "~Volgende >>" ;
+        Text [ swedish ] = "~Nästa >>" ;
+        Text [ danish ] = "Næste >>" ;
+        Text [ portuguese_brazilian ] = "~Weiter >>" ;
+        Text [ portuguese ] = "~Seguinte >>" ;
+        Text[ chinese_simplified ] = "ç»§ç»­ >>";
+        Text[ russian ] = "~Äàëåå >>";
+        Text[ polish ] = "Dalej >>";
+        Text[ japanese ] = "æ¬¡ã¸ >>";
+        Text[ greek ] = "Åğüìåíï >>";
+        Text[ korean ] = "ë‹¤ìŒ >>";
+        Text[ chinese_traditional ] = "ç¹¼çºŒ >>";
+        Text[ arabic ] = "ÇáÊÇáí <<";
+        Text[ turkish ] = "İleri>>";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Següent >>";
+        Text[ finnish ] = "Seuraava >>";
+    };
+
+    OKButton BUT_FINISH
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 218 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Fertig stellen" ;
+        Text [ ENGLISH ] = "~Create" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "~Voltooien" ;
+        Text [ english_us ] = "~Create" ;
+        Text [ italian ] = "~Crea" ;
+        Text [ spanish ] = "~Crear" ;
+        Text [ french ] = "~Créer" ;
+        Text [ swedish ] = "~Färdigställ" ;
+        Text [ danish ] = "Udfør" ;
+        Text [ portuguese ] = "~Criar" ;
+        Text [ portuguese_brazilian ] = "~Fertigstellen" ;
+        Text[ chinese_simplified ] = "å®Œæˆ(~C)";
+        Text[ russian ] = "~Ãîòîâî";
+        Text[ polish ] = "Utwórz";
+        Text[ japanese ] = "å®Œäº†(~C)";
+        Text[ greek ] = "Äçìéïõñãßá";
+        Text[ korean ] = "ë§Œë“¤ê¸°(~C)";
+        Text[ chinese_traditional ] = "å®Œæˆ(~C)";
+        Text[ arabic ] = "ÅäÔÇÁ";
+        Text[ turkish ] = "Oluştur";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Crea";
+        Text[ finnish ] = "~Luo";
+    };
+
+    CancelButton BUT_CANCEL
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 59 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BUT_HELP
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text[ portuguese_brazilian ] = "Aufl?ung";
+    Text[ danish ] = "HTML-eksport";
+    Text[ chinese_simplified ] = "è¾“å‡ºæˆ HTML";
+    Text[ russian ] = "İêñïîğò HTML";
+    Text[ polish ] = "Eksport HTML";
+    Text[ japanese ] = "HTMLã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ";
+    Text[ greek ] = "ÅîáãùãŞ HTML";
+    Text[ korean ] = "HTML ë‚´ë³´ë‚´ê¸°";
+    Text[ chinese_traditional ] = "åŒ¯å‡º HTML";
+    Text[ arabic ] = "ÊÕÏíÑ HTML";
+    Text[ turkish ] = "HTML dışa aktarma";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Exportació HTML";
+    Text[ finnish ] = "HTML-vienti";
+};
+
+ModalDialog DLG_DESIGNNAME
+{
+    HelpID = HID_SD_HTMLEXPORT_DLG_DNAME;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 160 , 40 ) ;
+    Text = "Name fuer HTML-Design" ;
+    Text [ ENGLISH ] = "Name for HTML-design" ;
+    Moveable = TRUE ;
+
+    Edit EDT_NAME
+    {
+        BORDER = TRUE ;
+        Pos = MAP_APPFONT ( 4, 4 );
+        Size = MAP_APPFONT ( 152, 14 );
+        LEFT = TRUE;
+    };
+
+    OKButton BTN_SAVE
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 25 , 22 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+        TabStop = TRUE ;
+        Text = "~Speichern" ;
+        Text [ ENGLISH ] = "~Save" ;
+        Text[ italian ] = "~Salva";
+        Text[ portuguese_brazilian ] = "~Save";
+        Text[ portuguese ] = "~Guardar";
+        Text[ danish ] = "Gem";
+        Text[ french ] = "Enregistrer";
+        Text[ swedish ] = "~Spara";
+        Text[ dutch ] = "~Opslaan";
+        Text[ spanish ] = "~Guardar";
+        Text[ english_us ] = "~Save";
+        Text[ chinese_simplified ] = "å­˜ç›˜(~S)";
+        Text[ russian ] = "~Ñîõğàíèòü";
+        Text[ polish ] = "Zapisz";
+        Text[ japanese ] = "ä¿å­˜(~S)";
+        Text[ greek ] = "ÁğïèŞêåõóç";
+        Text[ korean ] = "ì €ì¥(~S)";
+        Text[ chinese_traditional ] = "å„²å­˜(~S)";
+        Text[ arabic ] = "ÍİÙ";
+        Text[ turkish ] = "Kaydet";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "De~sa";
+        Text[ finnish ] = "~Tallenna";
+    };
+
+    CancelButton BTN_NOSAVE
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 22 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "~Nicht speichern";
+        Text [ ENGLISH ] = "~Don't save";
+        Text[ italian ] = "Non salvare";
+        Text[ portuguese_brazilian ] = "~Don't save";
+        Text[ portuguese ] = "~Não guardar";
+        Text[ danish ] = "Gem ikke";
+        Text[ french ] = "~Ne pas enregistrer";
+        Text[ swedish ] = "Spara i~nte";
+        Text[ dutch ] = "~Niet opslaan";
+        Text[ spanish ] = "~No guardar";
+        Text[ english_us ] = "Do Not Save";
+        Text[ chinese_simplified ] = "ä¸å­˜ç›˜";
+        Text[ russian ] = "~Íå ñîõğàíÿòü";
+        Text[ polish ] = "Nie zapisuj";
+        Text[ japanese ] = "ä¿å­˜ã—ãªã„";
+        Text[ greek ] = "Íá ìçí áğïèçêåõôåß";
+        Text[ korean ] = "ì €ì¥í•˜ì§€ ì•ŠìŒ";
+        Text[ chinese_traditional ] = "ä¸è¦å„²å­˜";
+        Text[ arabic ] = "ÚÏã ÇáÍİÙ";
+        Text[ turkish ] = "Kaydetme";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No desis";
+        Text[ finnish ] = "Älä tallenna";
+    };
+    Text[ italian ] = "Nome per il design HTML";
+    Text[ portuguese_brazilian ] = "Name for HTML-design";
+    Text[ portuguese ] = "Nome para configuração HTML";
+    Text[ danish ] = "Navn til HTML-design";
+    Text[ french ] = "Nom pour la conception HTML";
+    Text[ swedish ] = "Namn på HTML-designen";
+    Text[ dutch ] = "Naam voor HTML-design";
+    Text[ spanish ] = "Nombre para diseño HTML";
+    Text[ english_us ] = "Name HTML design";
+    Text[ chinese_simplified ] = "HTMLè®¾è®¡çš„åç§°";
+    Text[ russian ] = "Èìÿ äëÿ äèçàéíà â HTML";
+    Text[ polish ] = "Nazwa dla projektu HTML";
+    Text[ japanese ] = "HTMLãƒ‡ã‚¶ã‚¤ãƒ³å";
+    Text[ greek ] = "¼íïìá ãéá ó÷åäéáóìü HTML";
+    Text[ korean ] = "HTML ë””ìì¸ ì´ë¦„";
+    Text[ chinese_traditional ] = "HTMLè¨­è¨ˆçš„åç¨±";
+    Text[ arabic ] = "ÇÓã ÊÕãíã HTML";
+    Text[ turkish ] = "HTML tasarımı için ad";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Anomena el disseny HTML";
+    Text[ finnish ] = "Nimeä HTML-suunnitelma";
+};
+
+
+
