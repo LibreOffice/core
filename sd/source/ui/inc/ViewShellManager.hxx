@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellManager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:05:02 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,16 @@ public:
     typedef ShellFactory<ViewShell> ViewShellFactory;
 
     ViewShellManager (ViewShellBase& rBase);
+
+    /** Before the destructor is called the method Shutdown() has to have
+        been called.
+    */
     ~ViewShellManager (void);
+
+    /** Tell a ViewShellManager object to prepare to be deleted, i.e. to
+        destroy all of its resources.
+    */
+    void Shutdown (void);
 
     /** Register the default factory that is called to create a new instance
         of a shell for a given id when there is no factory that has been
@@ -143,6 +152,14 @@ public:
             The shell to deactivate.
     */
     void DeactivateViewShell (const ViewShell* pShell);
+
+    /** Call this method when a 'secondary' shell is moved to or from the
+        stack, e.g. an object bar.  As a result a pending
+        TakeShellsFromStack() is executed and at the next UnlockUpdate() to
+        lock level 0 the shells are asked about their secondary shells to
+        push on the shell stack.
+    */
+    void InvalidateShellStack (void);
 
     /** Move the specified view shell to the top most position on the stack
         of view shells in relation to the other view shells.  After this the
@@ -185,6 +202,9 @@ public:
         */
     void UnlockUpdate (void);
 
+    /** Return the ViewShellBase for which objects of this class manage the
+        stacked view shells.
+    */
     ViewShellBase& GetViewShellBase (void) const;
 
     /** Deactivate the view shell manager so that it pretty much ignores all
@@ -207,12 +227,12 @@ public:
         ::Window* pParentWindow,
         FrameView* pFrameView);
 
-    /** Use this class to safly lock updates of the view shell stack.
+    /** Use this class to safely lock updates of the view shell stack.
     */
     class UpdateLocker
     {
     public:
-        UpdateLocker (ViewShellManager& rManager);
+        explicit UpdateLocker (ViewShellManager& rManager);
         ~UpdateLocker (void);
     private:
         ViewShellManager&mrManager;
@@ -241,6 +261,14 @@ private:
     */
     bool mbIsValid;
 
+    /** When this flag is set to <TRUE/> then before the next activation or
+        deactivation of a shell the shell stack is cleared.  It is set to
+        <TRUE/> in LockUpdate().  This avoids unnecessary modifications of
+        the shell stack when no (de-)activation takes place in Lock/Unlock
+        blocks.
+    */
+    bool mbTakeShellsFromStackPending;
+
     void GatherActiveShells (::std::vector<SfxShell*>& aShellsList);
 
     void TakeShellsFromStack (void);
@@ -249,6 +277,12 @@ private:
         view shell base.
     */
     void PushShellsOnStack (void);
+
+    /** Called from ActivateViewShell() and DeactivateViewShell() this
+        method calls TakeShellsFromStack() if necessary.  It is necessary
+        when mbTakeShellsFromStackPending is <TRUE/>.
+    */
+    void PrepareStackModification (void);
 
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
 };
