@@ -2,9 +2,9 @@
  *
  *  $RCSfile: requestoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:50:25 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,12 @@ namespace configmgr
         {
             m_nCacheID = 0;
         }
+    }
+// ---------------------------------------------------------------------------
+
+    bool RequestOptions::isForAllLocales() const
+    {
+        return localehelper::designatesAllLocales( localehelper::makeLocale(m_sLocale) );
     }
 // ---------------------------------------------------------------------------
 
