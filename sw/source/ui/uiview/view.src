@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 20:15:10 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1230,4 +1230,5 @@ Menu MN_SRCVIEW_POPUPMENU
         };
     };
 };
+
 
