@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:36:16 $
+ *  last change: $Author: nn $ $Date: 2001-05-04 16:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2001-04-11 18:36:16 $ $Revision: 1.14 $
+ // $Author: nn $ $Date: 2001-05-04 16:43:57 $ $Revision: 1.15 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -912,6 +912,33 @@ ToolBox RID_OBJECTBAR_FORMAT
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
         };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = FID_INS_ROW;
+            HelpId = FID_INS_ROW;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FID_INS_COLUMN;
+            HelpId = FID_INS_COLUMN;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DEL_ROWS;
+            HelpId = SID_DEL_ROWS;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DEL_COLS;
+            HelpId = SID_DEL_COLS;
+            Hide=TRUE;
+        };
     };
     Scroll = TRUE ;
 };
@@ -1601,6 +1628,8 @@ FloatingWindow RID_TBXCTL_INSOBJ
         FID_INS_CELLSRIGHT;             /* 26279    */  \
         FID_INS_ROW;                    /* 26267    */  \
         FID_INS_COLUMN;                 /* 26268    */  \
+        SID_DEL_ROWS;                   /* 26236    */  \
+        SID_DEL_COLS;                   /* 26237    */  \
         SID_CHARMAP;                    /* 10503 (20328 vom Writer) */  \
         SID_INSERT_SMATH;               /* 26063    */  \
         SID_INSERT_FLOATINGFRAME;       /* 5563     */  \
@@ -1636,7 +1665,7 @@ FloatingWindow RID_TBXCTL_INSOBJ
         SID_ATTR_GRAF_CROP;\
     };                                                  \
     IdCount = {                                         \
-        181;                                            \
+        170;                                            \
     };
 
 ImageList RID_DEFAULTIMAGELIST_SC
