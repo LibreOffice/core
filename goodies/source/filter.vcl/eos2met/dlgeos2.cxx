@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeos2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-16 09:37:35 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:26:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
@@ -133,6 +134,8 @@ DlgExportEMET::DlgExportEMET( FltCallDialogParameter& rPara ) :
             aMtfSizeY.SetUnit( rPara.eFieldUnit );
         }
         break;
+        default:
+            break;  // multiple other value not handled -Wall
     }
     if ( nMode == 1 )
     {
