@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:28:39 $
+#   last change: $Author: vg $ $Date: 2003-04-24 12:58:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..
 
-PRJNAME=SVX
+PRJNAME=svx
 TARGET=svx
 #svx.hid generieren
 GEN_HID=TRUE
