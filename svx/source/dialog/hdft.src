@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:55:10 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,17 +833,17 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
     Message [ finnish ] = "Jos poistat ylä/alatekstin, sen sisältö katoaa.\nHaluatko varmasti poistaa tämän tekstin?" ;
     Message [ danish ] = "Hvis sidehoved eller sidefod deaktiveres, slettes indholdet.\nVil du slette indholdet?" ;
     Message [ french ] = "Désactivez l'en-tête ou le pied de page pour supprimer son contenu.\nÊtes-vous sûr de vouloir supprimer ce texte ?" ;
-    Message [ swedish ] = "Deaktivering av sidhuvud eller sidfot raderar innehållet. \nVill Du radera innehållet?" ;
+    Message [ swedish ] = "Om du stänger av sidhuvud eller sidfot raderas innehållet. \nVill du radera innehållet?" ;
     Message [ dutch ] = "Als u de kop- of voettekst uitschakelt, wordt de inhoud ervan verwijderd.\nWeet u zeker dat u deze tekst wilt verwijderen?" ;
     Message [ spanish ] = "Al desactivar el encabezamiento o pie de página se eliminará su contenido.\n¿Desea eliminarlo?" ;
     Message [ english_us ] = "Removing headers or footers deletes the contents.\nDo you want to delete this text?" ;
-    Message[ chinese_simplified ] = "²»Ê¹ÓÃÒ³Ã¼»òÒ³½Å¾Í»áÉ¾³ıµ±Ç°ÏÖ´æµÄÎÄ×Ö¡£\nÄúÒªÉ¾³ıÕâĞ©ÎÄ×ÖÂğ£¿";
+    Message[ chinese_simplified ] = "²»ÓÃÒ³Ã¼ºÍÒ³½Å¹¦ÄÜ¾Í»áÉ¾³ıÏÖ´æµÄÎÄ×Ö¡£\nÒªÉ¾³ıÕâĞ©ÎÄ×Ö£¿";
     Message[ russian ] = "Îòêëş÷åíèå êîëîíòèòóëîâ âûçîâåò óäàëåíèå èìåşùåãîñÿ òåêñòà.\nÂû õîòèòå óäàëèòü ñîäåğæèìîå?";
-    Message[ polish ] = "Wy³¹czenie stopki i nag³ówka spowoduje usuniêcie istniej¹cego tekstu. \nChcesz skasowaæ ten tekst?";
-    Message[ japanese ] = "Í¯ÀŞ‚Ü‚½‚ÍÌ¯À‚ğŠO‚·‚ÆŠY“–•”•ª‚Ì“à—e‚àíœ‚³‚ê‚Ü‚·B\níœ‚µ‚Ä‚à‚æ‚ë‚µ‚¢‚Å‚·‚©?";
+    Message[ polish ] = "Wy³¹czenie stopki i nag³ówka spowoduje usuniêcie zawartoœci. \nUsun¹æ zawartoœæ?";
+    Message[ japanese ] = "Í¯ÀŞ‚Ü‚½‚ÍÌ¯À‚Ì‹@”\\‚ğµÌ‚É‚·‚é‚ÆA‚»‚±‚É‚ ‚é“à—e‚àíœ‚³‚ê‚Ü‚·B\níœ‚µ‚Ä‚à‚¢‚¢‚Å‚·‚©B";
     Message[ chinese_traditional ] = "¤£±Ä¥Î­¶­º©Î­¶§À´N·|§R°£·í«eªº¤å¦r¡C\n­n§R°£³o¨Ç¤å¦r¡H";
-    Message[ arabic ] = "ÅÎİÇÁ ÑÃÓ/ ÊĞííá ÇáÕİÍÉ Óæİ íÄÏí Åáì ÍĞİ ÇáäÕ ÇáãæÌæÏ İíå.\nåá ÊÑíÏ ÈÇáİÚá ÍĞİ åĞÇ ÇáäÕ¿";
-    Message[ greek ] = "Ìå ôçí áğåíåñãïğïßçóç ôçò êåöáëßäáò Ş ôçò õğïêåöáëßäáò äéáãñÜöåôáé ôï õğÜñ÷ïí êåßìåíï. Èİëåôå íá \näéáãñáöåß ôï ğåñéå÷üìåíï;";
+    Message[ arabic ] = "ÅÎİÇÁ ÑÃÓ/ ÊĞííá ÇáÕİÍÉ Óæİ íÄÏí Åáì ÍĞİ ãÍÊæíÇÊå.\nåá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáãÍÊæíÇÊ¿";
+    Message[ greek ] = "Ìå ôçí áğåíåñãïğïßçóç ôçò êåöáëßäáò Ş ôçò õğïêåöáëßäáò äéáãñÜöåôáé ôï õğÜñ÷ïí ğåñéå÷üìåíï.\nÈİëåôå íá äéáãñáöåß ôï ğåñéå÷üìåíï;";
     Message[ korean ] = "¸Ó¸®±ÛÀÌ³ª ¹Ù´Ú±ÛÀ» ¾ø¾Ö¸é ±âÁ¸ÀÇ ÅØ½ºÆ®°¡ »èÁ¦µË´Ï´Ù. \n³»¿ëÀ» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Üstbilgi ve altbilginin kaldırılması ile mevcut metin silinecek.\nİçeriği silmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
