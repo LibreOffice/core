@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: nf $ $Date: 2002-01-22 14:30:17 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 18:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ Resource RID_LOCALIZED_NAMES
     ItemList [ danish ] =
     {
              < "Græsk" ; > ;
-        < "Specialized" ; > ;
+        < "Special" ; > ;
     };
     ItemList [ swedish ] =
     {
@@ -1177,8 +1177,8 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ danish ] =
     {
-            < "Procent" ; > ;
-        < "Alfa" ; > ;
+            < "alpha" ; > ;
+        < "ALPHA" ; > ;
         < "Beta" ; > ;
         < "Beta" ; > ;
         < "Gamma" ; > ;
@@ -1204,7 +1204,7 @@ Resource RID_LOCALIZED_NAMES
         < "ny" ; > ;
         < "NY" ; > ;
         < "xi" ; > ;
-        < "XI" ; > ;
+        < "XI " ; > ;
         < "omikron" ; > ;
         < "OMIKRON" ; > ;
         < "PI" ; > ;
@@ -1232,12 +1232,12 @@ Resource RID_LOCALIZED_NAMES
         < "varsigma" ; > ;
         < "varphi" ; > ;
         < "element" ; > ;
-        < "keinelement" ; > ;
+        < "intetelement" ; > ;
         < "kleingegen" ; > ;
         < "großgegen" ; > ;
         < "forskellig fra" ; > ;
         < "EKSAKT" ; > ;
-        < "strebt" ; > ;
+        < "gående mod" ; > ;
         < "uendelig" ; > ;
         < "Vinkel" ; > ;
         < "promille" ; > ;
@@ -1940,8 +1940,8 @@ Resource RID_LOCALIZED_NAMES
         < "alfa" ; > ;
         < "beeta" ; > ;
         < "beeta" ; > ;
-        < "gamma" ; > ;
-        < "GAMMA" ; > ;
+        < "Gamma" ; > ;
+        < "Gamma" ; > ;
         < "delta" ; > ;
         < "DELTA" ; > ;
         < "epsilon" ; > ;
@@ -1966,7 +1966,7 @@ Resource RID_LOCALIZED_NAMES
         < "XI" ; > ;
         < "omikron" ; > ;
         < "OMIKRON" ; > ;
-        < "pi" ; > ;
+        < "PI" ; > ;
         < "PI" ; > ;
         < "rho" ; > ;
         < "RHO" ; > ;
