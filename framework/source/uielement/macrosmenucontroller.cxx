@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosmenucontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:12:42 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 13:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,9 +367,9 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startIt
     const String aCmdBase = String::CreateFromAscii( ".uno:ScriptOrganizer?ScriptOrganizer.Language:string=" );
     const String ellipsis = String::CreateFromAscii( "..." );
     const ::rtl::OUString providerKey =
-    ::rtl::OUString::createFromAscii("drafts.com.sun.star.script.provider.ScriptProviderFor" );
+    ::rtl::OUString::createFromAscii("com.sun.star.script.provider.ScriptProviderFor" );
     const ::rtl::OUString languageProviderName =
-        ::rtl::OUString::createFromAscii("drafts.com.sun.star.script.provider.LanguageScriptProvider" );
+        ::rtl::OUString::createFromAscii("com.sun.star.script.provider.LanguageScriptProvider" );
     USHORT itemId = startItemId;
     Reference< XContentEnumerationAccess > xEnumAccess = Reference< XContentEnumerationAccess >( m_xServiceManager, UNO_QUERY_THROW );
     Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
