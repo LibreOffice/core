@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-12 09:20:21 $
+ *  last change: $Author: pb $ $Date: 2001-09-13 11:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,26 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
-#include <com/sun/star/lang/XComponent.hpp>
+#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
+#include <com/sun/star/awt/PosSize.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
-#include <com/sun/star/frame/XFrame.hpp>
+#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
+#include <com/sun/star/awt/XWindow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
+#include <com/sun/star/beans/Property.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+#include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
+#include <com/sun/star/frame/XController.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -91,33 +106,34 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
-#include <com/sun/star/util/URL.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
-#include <com/sun/star/awt/XWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
-#include <com/sun/star/awt/PosSize.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
-#include <com/sun/star/beans/Property.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
+#include <com/sun/star/util/URL.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XSEARCHABLE_HPP_
+#include <com/sun/star/util/XSearchable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XSEARCHDESCRIPTOR_HPP_
+#include <com/sun/star/util/XSearchDescriptor.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#endif
+
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
 #endif
@@ -139,17 +155,21 @@
 #ifndef _SVTOOLS_IMAGEMGR_HXX
 #include <svtools/imagemgr.hxx>
 #endif
+
 #include <ucbhelper/content.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/ucbhelper.hxx>
 
 using namespace ::ucb;
+using namespace com::sun::star::ucb;
+
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
-using namespace com::sun::star::ucb;
+using namespace ::com::sun::star::view;
 
 extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // sfxhelp.cxx
 
@@ -1587,6 +1607,16 @@ sal_Bool SfxHelpIndexWindow_Impl::HasFocusOnEdit() const
     return bRet;
 }
 
+// -----------------------------------------------------------------------
+
+String SfxHelpIndexWindow_Impl::GetSearchText() const
+{
+    String sRet;
+    if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_SEARCH && pSPage )
+        sRet = pSPage->GetSearchText();
+    return sRet;
+}
+
 // class SfxHelpTextWindow_Impl ------------------------------------------
 
 SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
@@ -1608,7 +1638,6 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
         DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), UNO_QUERY );
     xFrame->initialize( VCLUnoHelper::GetInterface ( pTextWin ) );
     xFrame->setName( DEFINE_CONST_UNICODE("OFFICE_HELP") );
-
 
     aToolBox.SetHelpId( HID_HELP_TOOLBOX );
 
@@ -1645,6 +1674,9 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aToolBox.SetOutStyle( TOOLBOX_STYLE_FLAT );
     aToolBox.Show();
 
+    aSelectTimer.SetTimeoutHdl( LINK( this, SfxHelpTextWindow_Impl, SelectHdl ) );
+    aSelectTimer.SetTimeout( 1000 );
+
     char* pEnv = getenv( "help_debug" );
     if ( pEnv )
         bIsDebug = sal_True;
@@ -1656,6 +1688,36 @@ SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
 {
     bIsInClose = sal_True;
     xFrame->dispose();
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SfxHelpTextWindow_Impl, SelectHdl, Timer*, EMPTYARG )
+{
+    // select the words, which are equal to the search text of the search page
+    Reference < XController > xController = xFrame->getController();
+    if ( xController.is() )
+    {
+        // get document
+        Reference < XSearchable > xSearchable( xController->getModel(), UNO_QUERY );
+        if ( xSearchable.is() )
+        {
+            // create descriptor, set string and find all words
+            Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
+            xSrchDesc->setSearchString( aSearchText );
+            Reference< XIndexAccess > xSelection = xSearchable->findAll( xSrchDesc );
+            // then select all found words
+            Reference < XSelectionSupplier > xSelectionSup( xController, UNO_QUERY );
+            if ( xSelectionSup.is() )
+            {
+                Any aAny;
+                aAny <<= xSelection;
+                xSelectionSup->select( aAny );
+            }
+        }
+    }
+
+    return 1;
 }
 
 // -----------------------------------------------------------------------
@@ -1743,6 +1805,16 @@ void SfxHelpTextWindow_Impl::ToggleIndex( sal_Bool bOn )
         aToolBox.SetQuickHelpText( TBI_INDEX, aIndexOnText );
     }
 }
+
+// -----------------------------------------------------------------------
+
+void SfxHelpTextWindow_Impl::SelectSearchText( const String& rSearchText )
+{
+    aSearchText = rSearchText;
+    aSelectTimer.Start();
+}
+
+// -----------------------------------------------------------------------
 
 void SfxHelpTextWindow_Impl::GetFocus()
 {
@@ -2015,6 +2087,14 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener 
     if ( IsWait() )
         LeaveWait();
     pIndexWin->GrabFocusBack();
+    if ( pListener->IsSuccessful() )
+    {
+        // When the SearchPage opens the help doc, then select all words, which are equal to its text
+        String sSearchText = pIndexWin->GetSearchText();
+        if ( sSearchText.Len() > 0 )
+            pTextWin->SelectSearchText( sSearchText );
+    }
+
     return 0;
 }
 

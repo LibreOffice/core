@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-12 09:20:21 $
+ *  last change: $Author: pb $ $Date: 2001-09-13 11:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,20 +102,18 @@ private:
                 m_xDispatch;
 
 public:
-    OpenStatusListener_Impl() : m_bFinished( FALSE ),   m_bSuccess( FALSE ) {}
+    OpenStatusListener_Impl() : m_bFinished( FALSE ), m_bSuccess( FALSE ) {}
 
-    virtual void SAL_CALL
-                statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL
-                disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
-    void        AddListener( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& xDispatch,
-                             const ::com::sun::star::util::URL& aURL );
+    void                    AddListener( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& xDispatch,
+                                         const ::com::sun::star::util::URL& aURL );
 
-    sal_Bool    IsFinished() const { return m_bFinished; }
-    sal_Bool    IsSuccessful() const { return m_bSuccess; }
-    const String& GetURL() const { return m_aURL; }
-    void        SetOpenHdl( const Link& rLink ) { m_aOpenLink = rLink; }
+    inline sal_Bool         IsFinished() const { return m_bFinished; }
+    inline sal_Bool         IsSuccessful() const { return m_bSuccess; }
+    inline const String&    GetURL() const { return m_aURL; }
+    inline void             SetOpenHdl( const Link& rLink ) { m_aOpenLink = rLink; }
 };
 
 // ContentListBox_Impl ---------------------------------------------------
@@ -267,6 +265,7 @@ public:
     void                SetFocusOnBox() { aResultsLB.GrabFocus(); }
     sal_Bool            HasFocusOnEdit() const { return aSearchED.HasChildPathFocus(); }
     virtual void        ActivatePage();
+    String              GetSearchText() const { return aSearchED.GetText(); }
 };
 
 // class BookmarksTabPage_Impl -------------------------------------------
@@ -350,6 +349,7 @@ public:
     void                ClearSearchPage();
     void                GrabFocusBack();
     sal_Bool            HasFocusOnEdit() const;
+    String              GetSearchText() const;
 };
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
@@ -359,6 +359,8 @@ class SfxHelpTextWindow_Impl : public Window
 {
 private:
     ToolBox                 aToolBox;
+    Timer                   aSelectTimer;
+
     SfxHelpWindow_Impl*     pHelpWin;
     Window*                 pTextWin;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
@@ -369,8 +371,11 @@ private:
 
     String                  aIndexOnText;
     String                  aIndexOffText;
+    String                  aSearchText;
     Image                   aIndexOnImage;
     Image                   aIndexOffImage;
+
+    DECL_LINK(              SelectHdl, Timer* );
 
 public:
     SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent );
@@ -384,6 +389,7 @@ public:
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                             getFrame() const { return xFrame; }
     void                    ToggleIndex( sal_Bool bOn );
+    void                    SelectSearchText( const String& rSearchText );
 
     virtual void            GetFocus();
 
