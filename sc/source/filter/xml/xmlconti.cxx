@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlconti.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,10 @@ SvXMLImportContext *ScXMLContentContext::CreateChildContext( USHORT nPrefix,
     {
         sal_Int32 nRepeat(0);
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for( sal_Int16 i=0; i < nAttrCount; i++ )
+        for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
-            rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-            rtl::OUString sValue = xAttrList->getValueByIndex( i );
+            const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
+            const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
             rtl::OUString aLocalName;
             USHORT nPrfx = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                                 sAttrName, &aLocalName );
@@ -123,7 +123,7 @@ SvXMLImportContext *ScXMLContentContext::CreateChildContext( USHORT nPrefix,
                 nRepeat = sValue.toInt32();
         }
         if (nRepeat)
-            for (sal_Int32 j = 0; j < nRepeat; j++)
+            for (sal_Int32 j = 0; j < nRepeat; ++j)
                 sOUText.append(static_cast<sal_Unicode>(' '));
         else
             sOUText.append(static_cast<sal_Unicode>(' '));
