@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-02 08:19:02 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,8 @@ namespace dbaui
     // ODatabaseImportExport Basisklasse f"ur Import/Export
     // =========================================================================
     class ODatabaseExport;
-    class ODatabaseImportExport : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener>
+    typedef ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener> ODatabaseImportExport_BASE;
+    class ODatabaseImportExport : public ODatabaseImportExport_BASE
     {
         void disposing();
     protected:
@@ -136,8 +137,7 @@ namespace dbaui
         sal_Bool            m_bCheckOnly;
 
         // export data
-        ODatabaseImportExport(  const ::svx::ODataAccessDescriptor& _aDataDescriptor,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+        ODatabaseImportExport(  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                 const String& rExchange = String());
 
@@ -147,13 +147,16 @@ namespace dbaui
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
         virtual ~ODatabaseImportExport();
+
+        virtual void initialize();
     public:
         void setStream(SvStream* _pStream){  m_pStream = _pStream; }
 
         virtual BOOL Write()    = 0; // Export
         virtual BOOL Read()     = 0; // Import
 
-        virtual void initialize();
+        void initialize(const ::svx::ODataAccessDescriptor& _aDataDescriptor);
+
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
         void enableCheckOnly() { m_bCheckOnly = sal_True; }
@@ -169,11 +172,10 @@ namespace dbaui
 
     public:
         // export data
-        ORTFImportExport(   const ::svx::ODataAccessDescriptor& _aDataDescriptor,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+        ORTFImportExport(   const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                             const String& rExchange = String())
-                            : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange) {};
+                            : ODatabaseImportExport(_rM,_rxNumberF,rExchange) {};
 
         // import data
         ORTFImportExport(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
@@ -215,8 +217,7 @@ namespace dbaui
 
     public:
         // export data
-        OHTMLImportExport(  const ::svx::ODataAccessDescriptor& _aDataDescriptor,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+        OHTMLImportExport(  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                             const String& rExchange = String());
         // import data
@@ -246,11 +247,13 @@ namespace dbaui
         sal_Bool                    m_bAlreadyAsked;
 
         sal_Bool insertNewRow();
+    protected:
+        virtual void initialize();
+
     public:
         // export data
         ORowSetImportExport(Window* _pParent,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >& _xResultSetUpdate,
-                            const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                             const String& rExchange = String());
 
@@ -261,7 +264,7 @@ namespace dbaui
                         : ODatabaseImportExport(_rxConnection,NULL,_rM)
         {}
 
-        virtual void initialize();
+
         virtual BOOL Write();
         virtual BOOL Read();
     };
