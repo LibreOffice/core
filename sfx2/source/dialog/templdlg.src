@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:12:52 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ ModalDialog RID_STYLECATALOG
         Text[ greek ] = "Διαχείριση...";
         Text[ korean ] = "°όΈ®(~O)...";
         Text[ turkish ] = "~Yφnet...";
+        Text[ catalan ] = "~Administrar...";
     };
     PushButton BT_DEL
     {
@@ -169,6 +170,7 @@ ModalDialog RID_STYLECATALOG
         Text[ greek ] = "Διαγραφή...";
         Text[ korean ] = "»θΑ¦(~D)...";
         Text[ turkish ] = "~Sil...";
+        Text[ catalan ] = "~Eliminar...";
     };
     PushButton BT_EDIT
     {
@@ -199,6 +201,7 @@ ModalDialog RID_STYLECATALOG
         Text[ greek ] = "Τροποποίηση...";
         Text[ korean ] = "Ί―°ζ(~M)...";
         Text[ turkish ] = "~Deπiώtir...";
+        Text[ catalan ] = "~Modificar...";
     };
     PushButton BT_NEW
     {
@@ -227,6 +230,7 @@ ModalDialog RID_STYLECATALOG
         Text[ greek ] = "Δημιουργία...";
         Text[ korean ] = "»υ·Ξ(~N)...";
         Text[ turkish ] = "~Yeni...";
+        Text[ catalan ] = "~Nuevo...";
     };
     HelpButton BT_HELP
     {
@@ -268,6 +272,7 @@ ModalDialog RID_STYLECATALOG
     Text[ greek ] = "Κατάλογος προτύπων";
     Text[ korean ] = "Ό­½ΔΖΔΐΟ Δ«Ε»·Ξ±Χ";
     Text[ turkish ] = "Biηim kataloπu";
+    Text[ catalan ] = "Catαlogo de estilos";
 };
  // Strings ---------------------------------------------------------------
 String DLG_STYLE_DESIGNER
@@ -292,6 +297,7 @@ String DLG_STYLE_DESIGNER
     Text[ greek ] = "Stylist";
     Text[ korean ] = "½ΊΕΈΐΟ";
     Text[ turkish ] = "Stylist";
+    Text[ catalan ] = "Estilista";
 };
 String STR_STYLE_FILTER_HIERARCHICAL
 {
@@ -317,6 +323,7 @@ String STR_STYLE_FILTER_HIERARCHICAL
     TEXT[ greek ] = "Ιεραρχικά";
     TEXT[ korean ] = "°θΓώ";
     TEXT[ turkish ] = "Hiyerarώik";
+    TEXT[ catalan ] = "Jerαrquico";
 };
  // DLG_STYLE_DESIGNER ----------------------------------------------------
 DockingWindow DLG_STYLE_DESIGNER
@@ -374,6 +381,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text[ greek ] = "Κατάσταση γεμίσματος";
                 Text[ korean ] = "Γ¤Ώμ±βΈπµε";
                 Text[ turkish ] = "Doldur kipi";
+                Text[ catalan ] = "Modo regadera";
             };
             ToolBoxItem
             {
@@ -401,6 +409,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text[ greek ] = "Νέο πρότυπο από επιλογή";
                 Text[ korean ] = "Ό±ΕΓΏ΅ ΐΦ΄Β »υ ΐ―Ηό";
                 Text[ turkish ] = "Yeni biηim seηimi";
+                Text[ catalan ] = "Nuevo estilo a partir de selecciσn";
             };
             ToolBoxItem
             {
@@ -428,6 +437,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text[ greek ] = "Ενημέρωση προτύπου";
                 Text[ korean ] = "ΐ―Ηό Ύχµ¥ΐΜΖ®";
                 Text[ turkish ] = "Biηimi gόncelle";
+                Text[ catalan ] = "Actualizar estilo";
             };
         };
     };
