@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,8 @@ void ScXMLTableContext::EndElement()
             if (GetScImport().GetTables().HasXShapes())
             {
                 GetScImport().GetShapeImport()->popGroupAndSort();
-                GetScImport().GetShapeImport()->endPage(GetScImport().GetTables().GetCurrentXShapes());
+                uno::Reference<drawing::XShapes> xXShapes(GetScImport().GetTables().GetCurrentXShapes());
+                GetScImport().GetShapeImport()->endPage(xXShapes);
             }
             if (bStartFormPage)
                 GetScImport().GetFormImport()->endPage();

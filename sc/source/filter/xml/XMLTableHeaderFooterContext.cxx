@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,9 @@ SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(
                 if (xText.is())
                 {
                     xText->setString(sEmpty);
-                    pContext = new XMLHeaderFooterRegionContext( GetImport(), nPrefix, rLocalName, xAttrList, xText->createTextCursor() );
+                    SvXMLImport aSvXMLImport( GetImport() );
+                    uno::Reference<text::XTextCursor> xTextCursor( xText->createTextCursor() );
+                    pContext = new XMLHeaderFooterRegionContext( aSvXMLImport, nPrefix, rLocalName, xAttrList, xTextCursor);
                 }
             }
         }
