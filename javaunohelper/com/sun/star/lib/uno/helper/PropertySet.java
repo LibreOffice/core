@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySet.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-25 11:31:36 $
+ *  last change: $Author: jl $ $Date: 2002-04-25 12:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ XMultiPropertySet
         registerProperty(p, id);
     }
 
-    /** Registers a property with this helper class and associates the argument id with it.
+    /** Registers a property with this  class and associates the argument id with it.
      *  It does the same as {@link #registerProperty(Property, Object)}. The first three
      *  arguments are used to construct a Property object. The value for the Property.Handle
      *  is generated and does not have to be specified here. Use this method for registering
@@ -188,6 +188,41 @@ XMultiPropertySet
     {
         Property p= new Property(name, lastHandle++, type, attributes);
         registerProperty(p, id);
+    }
+
+    /** Registers a property with this class. This method expects that property values
+     *  are stored in member variables as is the case if the methods convertPropertyValue,
+     *  setPropertyValueNoBroadcast and getPropertyValue(Property) are not overridden.
+     *  It is presumed that the name of property is equal to the name of the member variable
+     *  that holds the property value. It is further presumed that the type of the member variable
+     *  corresponds Property.Type. For example, if the TypeClass of Property.Type is to be
+     *  a TypeClass.SHORT then the member must be a short or java.lang.Short.
+     *  The handle for the property is generated.<br>
+     *  If there is no member with the specified name or if the member has an incompatible type
+     *  then a com.sun.star.uno.RuntimeException is thrown.
+     *  @param name The name of the property and the member variable that holds the property's value.
+     *  @param attributes The property attributes.
+     */
+    protected void registerProperty(String name, short attributes)
+    {
+        Field propField= null;
+        try
+        {
+            propField= getClass().getDeclaredField(name);
+        }
+        catch (NoSuchFieldException e)
+        {
+            throw new com.sun.star.uno.RuntimeException("there is no member variable: " + name);
+        }
+        Class cl= propField.getType();
+        Type t= new Type(cl);
+        if (t.getTypeClass() != TypeClass.UNKNOWN)
+        {
+            Property p= new Property(name, lastHandle++,  t, attributes);
+            registerProperty(p,name);
+        }
+        else
+            throw new com.sun.star.uno.RuntimeException("the member has an unknown type: " + name);
     }
 
     /** Returns the Property object for a given property name or null if that property does

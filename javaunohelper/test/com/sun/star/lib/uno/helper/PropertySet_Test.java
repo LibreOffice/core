@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySet_Test.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-25 11:36:26 $
+ *  last change: $Author: jl $ $Date: 2002-04-25 12:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1071,6 +1071,13 @@ public class PropertySet_Test
         TestClass2 cl= new TestClass2();
         return cl.test_registerProperty1();
     }
+
+    public boolean registerProperty2()
+    {
+        TestClass2 cl= new TestClass2();
+        return cl.test_registerProperty2();
+    }
+
     public static boolean test()
     {
         PropertySet_Test test= new PropertySet_Test();
@@ -1088,6 +1095,7 @@ public class PropertySet_Test
         r[i++]= test.addPropertiesChangeListener();
         r[i++]= test.firePropertiesChangeEvent();
         r[i++]= test.registerProperty1();
+        r[i++]= test.registerProperty2();
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
@@ -1480,9 +1488,14 @@ class TestClass extends PropertySet
 
 class TestClass2 extends PropertySet
 {
-    public TestClass2()
-    {
-    }
+
+    public char charA;
+    protected char charB;
+    char charC;
+
+    public Character charClassA;
+    protected Character charClassB;
+    Character charClassC;
 
     boolean test_registerProperty1()
     {
@@ -1521,6 +1534,62 @@ class TestClass2 extends PropertySet
             System.out.println("Ok");
         return bOk;
     }
+
+    boolean test_registerProperty2()
+    {
+        System.out.println("registerProperty Test 2");
+        boolean r[]= new boolean[50];
+        int i= 0;
+
+        registerProperty("charA", (short) 0);
+        registerProperty("charB", (short) 0);
+        registerProperty("charC", (short) 0);
+        registerProperty("charClassB", PropertyAttribute.MAYBEVOID);
+
+        XPropertySetInfo info= getPropertySetInfo();
+        Property[] props= info.getProperties();
+        for (int j= 0; j < props.length; j++)
+        {
+           Property aProp= props[j];
+           if (aProp.Name.equals("charA") && aProp.Type.equals(new Type(char.class)) &&
+                aProp.Attributes == 0)
+               r[i++]= true;
+           else if (aProp.Name.equals("charB") && aProp.Type.equals(new Type(char.class)) &&
+                aProp.Attributes == 0)
+               r[i++]= true;
+           else if (aProp.Name.equals("charC") && aProp.Type.equals(new Type(char.class)) &&
+                aProp.Attributes == 0)
+               r[i++]= true;
+           else if (aProp.Name.equals("charClassB") && aProp.Type.equals(new Type(char.class)) &&
+                aProp.Attributes == PropertyAttribute.MAYBEVOID)
+               r[i++]= true;
+           else
+               r[i++]= false;
+        }
+        Object ret;
+        Object val= new Character('A');
+        try{
+            setPropertyValue("charA", val);
+            ret= getPropertyValue("charA");
+            r[i++]= val.equals(ret);
+            setPropertyValue("charClassB",val);
+            ret= getPropertyValue("charClassB");
+            r[i++]= val.equals(ret);
+        }
+        catch(Exception e)
+        {
+            r[i++]=false;
+        }
+        boolean bOk= true;
+        for (int c= 0; c < i; c++)
+            bOk= bOk && r[c];
+        if (bOk == false)
+            System.out.println("Failed");
+        else
+            System.out.println("Ok");
+        return bOk;
+    }
+
 }
 
 class util
