@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Style.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:51:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 /** specifies the style of a window.
  */
-constants Style
+published constants Style
 {
     //-------------------------------------------------------------------------
 
