@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 13:42:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,7 +693,10 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
         {
             pNewContainerFrame->DoActivate( bTaskActivate );
             if ( bTaskActivate && pNewContainerFrame->GetObjectShell() )
+            {
                 pNewContainerFrame->GetObjectShell()->PostActivateEvent_Impl( pNewContainerFrame );
+                NotifyEvent(SfxEventHint(SFX_EVENT_ACTIVATEDOC, pNewContainerFrame->GetObjectShell() ) );
+            }
 
             SfxProgress *pProgress = pNewContainerFrame->GetProgress();
             if ( pProgress )
