@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fumeasur.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,22 +59,31 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUMEASUR_HXX
-#define _SD_FUMEASUR_HXX
+#ifndef SD_FU_MEASURE_DLG_HXX
+#define SD_FU_MEASURE_DLG_HXX
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class FuMeasureDlg : public FuPoor
+namespace sd {
+
+class FuMeasureDlg
+    : public FuPoor
 {
  public:
     TYPEINFO();
 
-    FuMeasureDlg( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                    SdDrawDocument* pDoc, SfxRequest& rReq);
-    ~FuMeasureDlg() {}
+    FuMeasureDlg (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuMeasureDlg (void) {}
 };
 
-#endif // _SD_FUMEASUR_HXX
+} // end of namespace sd
+
+#endif
 
