@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:42:22 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ PushButton RID_PREVIEW_BUTTON
     Text[ turkish ] = "Çalýþtýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Reproducir";
+    Text[ finnish ] = "Toista";
 };
 Bitmap BMP_TAB_PAGEMODE
 {
