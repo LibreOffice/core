@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:49:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,7 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
     ((DlgEdPage*)pDlgEdModel->GetPage(0))->SetDlgEdForm( pDlgEdForm );
     pDlgEdModel->GetPage(0)->InsertObject( pDlgEdForm );
     pDlgEdForm->SetRectFromProps();
-    pDlgEdForm->SortByTabIndex();       // for backward compatibility
+    pDlgEdForm->UpdateTabIndices();     // for backward compatibility
     pDlgEdForm->StartListening();
 
     // create controls
@@ -922,8 +922,8 @@ void DlgEditor::Delete()
         }
     }
 
-    // update tabindex
-    pDlgEdForm->SortByTabIndex();
+    // update tab indices
+    pDlgEdForm->UpdateTabIndices();
 
     pDlgEdView->BrkAction();
 
