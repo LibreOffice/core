@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-06 19:19:26 $
+ *  last change: $Author: os $ $Date: 2000-11-22 11:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,7 +831,7 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
             if(aFmt.GetNumType() == SVX_NUM_CHAR_SPECIAL)
             {
                 aFmt.SetBulletFont(&rActBulletFont);
-                aFmt.SetBulletChar((char)nUpperLevelOrChar);
+                aFmt.SetBulletChar(nUpperLevelOrChar);
                 aFmt.SetCharFmt(sBulletCharFmtName);
             }
             else
@@ -2482,7 +2482,7 @@ IMPL_LINK( SvxNumOptionsTabPage, BulletHdl_Impl, Button *, pBtn )
     USHORT nMask = 1;
     const Font* pFmtFont = 0;
     BOOL bSameBullet = TRUE;
-    unsigned char cBullet;
+    sal_Unicode cBullet;
     BOOL bFirst = TRUE;
     for(USHORT i = 0; i < pActNum->GetLevelCount(); i++)
     {
