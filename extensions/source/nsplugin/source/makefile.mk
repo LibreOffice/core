@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-10 18:01:52 $
+#   last change: $Author: hjs $ $Date: 2004-12-17 14:13:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,6 @@ INC+= -DNP_LINUX
 .ENDIF
 PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE: pkg_config.mk
-CFLAGS+=$(PKGCONFIG_CFLAGS)
 .ENDIF
 .IF "$(GUI)"=="WNT"
 INC+= -DENGLISH
@@ -110,6 +109,9 @@ SHL1STDLIBS+= shell32.lib
 
 
 # --- Plugin executable -------------------------
+.IF "$(OS)"=="SOLARIS"
+LINKFLAGSAPP!:=$(LINKFLAGSAPP:s/-z defs/-z nodefs/)
+.ENDIF          # "$(OS)"=="SOLARIS"
 APP1TARGET=nsplugin$(EXEPOSTFIX)
 APP1OBJS=\
         $(SLO)$/so_instance.obj\
