@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:39:16 $
+ *  last change: $Author: mba $ $Date: 2005-01-20 09:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -920,7 +920,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 //REMOVE                SetTemplateConfig( FALSE );
             BOOL bOK = FALSE;
 
-            aMedium.CreateTempFileNoCopy();
+            //aMedium.CreateTempFileNoCopy();
 
             // Because we can't save into a storage directly ( only using tempfile ), we must save the DocInfo first, then
             // we can call SaveTo_Impl and Commit
