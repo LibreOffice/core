@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NestedRegistry.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:50 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 14:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
     </dd>
     <dt>    <b>isValid</b>
     </dt>
-    <dd> checks if registry1 is valid. If the interface is not <null></null>
+    <dd> checks if registry1 is valid. If the interface is not <NULL/>
     then registry1 should always be valid.
 
     </dd>
@@ -201,6 +201,9 @@ service NestedRegistry
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:50  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:32  hjs
     initial import
 
