@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-18 11:26:25 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 15:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,9 +161,7 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
                 ImpCreateLibSubEntries( pEntry, pShell, aLibName );
 
                 // exchange image
-                Image aImage( aImages.GetImage( IMGID_LIB ) );
-                SetExpandedEntryBmp( pEntry, aImage );
-                SetCollapsedEntryBmp( pEntry, aImage );
+                setEntryBitmap(pEntry, IMGID_LIB);
             }
             else
             {

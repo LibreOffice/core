@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-02 13:36:21 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 15:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1327,6 +1327,8 @@ WatchWindow::WatchWindow( Window* pParent ) :
     aXEdit.GetAccelerator().InsertItem( 2, KeyCode( KEY_ESCAPE ) );
     aXEdit.Show();
 
+    aRemoveWatchButton.SetModeImage(Image(IDEResId(RID_IMG_REMOVEWATCH_HC)),
+                                    BMP_COLOR_HIGHCONTRAST);
     aRemoveWatchButton.SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
     aRemoveWatchButton.SetPosPixel( Point( nTextLen + aXEdit.GetSizePixel().Width() + 4, 2 ) );
     Size aSz( aRemoveWatchButton.GetImage().GetSizePixel() );

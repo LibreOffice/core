@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-18 11:26:25 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 15:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,9 +927,11 @@ void ObjectPage::NewModule()
                     }
                     SvLBoxEntry* pLibEntry = aBasicBox.FindLibEntry( pLib );
                     DBG_ASSERT( pLibEntry, "Libeintrag nicht gefunden!" );
-                    SvLBoxEntry* pEntry = aBasicBox.InsertEntry( aModName, aBasicBox.GetImage( IMGID_MODULE ), aBasicBox.GetImage( IMGID_MODULE ), pLibEntry, FALSE, LIST_APPEND );
+                    SvLBoxEntry * pEntry = aBasicBox.insertEntry(
+                        aModName, IMGID_MODULE, pLibEntry, false,
+                        std::auto_ptr< BasicEntry >(new BasicEntry(
+                                                        OBJTYPE_MODULE)));
                     DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
-                    pEntry->SetUserData( new BasicEntry( OBJTYPE_MODULE ) );
                     aBasicBox.SetCurEntry( pEntry );
                     aBasicBox.Select( aBasicBox.GetCurEntry() );        // OV-Bug?!
                 }
@@ -981,9 +983,11 @@ void ObjectPage::NewDialog()
                     }
                     SvLBoxEntry* pLibEntry = aBasicBox.FindLibEntry( pLib );
                     DBG_ASSERT( pLibEntry, "Libeintrag nicht gefunden!" );
-                    SvLBoxEntry* pEntry = aBasicBox.InsertEntry( aDlgName, aBasicBox.GetImage( IMGID_OBJECT ), aBasicBox.GetImage( IMGID_OBJECT ), pLibEntry, FALSE, LIST_APPEND );
+                    SvLBoxEntry * pEntry = aBasicBox.insertEntry(
+                        aDlgName, IMGID_OBJECT, pLibEntry, false,
+                        std::auto_ptr< BasicEntry >(new BasicEntry(
+                                                        OBJTYPE_OBJECT)));
                     DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
-                    pEntry->SetUserData( new BasicEntry( OBJTYPE_OBJECT ) );
                     aBasicBox.SetCurEntry( pEntry );
                     aBasicBox.Select( aBasicBox.GetCurEntry() );        // OV-Bug?!
                 }

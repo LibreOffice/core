@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-11 17:32:03 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 15:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,29 +180,6 @@ public:
     void            SetMode( USHORT n );
     USHORT          GetMode() const         { return nMode; }
 };
-
-
-class BasicCheckBoxBitmaps : public Resource
-{
-private:
-    const Bitmap    aUncheckedBmp;
-    const Bitmap    aCheckedBmp;
-    const Bitmap    aHiCheckedBmp;
-    const Bitmap    aHiUncheckedBmp;
-    const Bitmap    aTriStateBmp;
-    const Bitmap    aHiTriStateBmp;
-
-public:
-                    BasicCheckBoxBitmaps();
-
-    const Bitmap&   GetUncheckedBmp   () const { return aUncheckedBmp; }
-    const Bitmap&   GetCheckedBmp     () const { return aCheckedBmp; }
-    const Bitmap&   GetHiCheckedBmp   () const { return aHiCheckedBmp; }
-    const Bitmap&   GetHiUncheckedBmp () const { return aHiUncheckedBmp; }
-    const Bitmap&   GetTriStateBmp    () const { return aTriStateBmp; }
-    const Bitmap&   GetHiTriStateBmp  () const { return aHiTriStateBmp; }
-};
-
 
 class LibDialog: public ModalDialog
 {

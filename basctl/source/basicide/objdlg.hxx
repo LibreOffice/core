@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-25 09:32:57 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 15:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <vcl/fixed.hxx>
 #endif
 
+#ifndef _SV_IMAGE_HXX
+#include "vcl/image.hxx"
+#endif
+
 #include <bastype2.hxx>
 
 class StarBASIC;
@@ -94,11 +98,27 @@ public:
             ~ObjectTreeListBox();
 };
 
+class ObjectCatalogToolBox_Impl: public ToolBox
+{
+public:
+    ObjectCatalogToolBox_Impl(Window * pParent, ResId const & rResId,
+                              ResId const & rImagesHighContrastId);
+
+private:
+    virtual void DataChanged(DataChangedEvent const & rDCEvt);
+
+    void setImages();
+
+    ImageList m_aImagesNormal;
+    ImageList m_aImagesHighContrast;
+    bool m_bHighContrast;
+};
+
 class ObjectCatalog : public FloatingWindow
 {
 private:
     ObjectTreeListBox   aMacroTreeList;
-    ToolBox             aToolBox;
+    ObjectCatalogToolBox_Impl aToolBox;
     FixedText           aMacroDescr;
     Link                aCancelHdl;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-25 09:34:09 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 15:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
 //      aShowButton( this, IDEResId( RID_PB_SHOW ) ),
 //      aOptionButton( this, IDEResId( RID_PB_OPTIONS ) ),
 //      aLittleHelp( this, IDEResId( RID_PB_LITTLEHELP ) ),
-        aToolBox( this, IDEResId( RID_TB_TOOLBOX ) ),
+      aToolBox(this, IDEResId(RID_TB_TOOLBOX), IDEResId(RID_IMGLST_TB_HC)),
         aMacroDescr( this, IDEResId( RID_FT_MACRODESCR ) )
 {
     FreeResource();
@@ -424,3 +424,33 @@ void ObjectCatalog::UpdateEntries()
     aMacroTreeList.UpdateEntries();
 }
 
+ObjectCatalogToolBox_Impl::ObjectCatalogToolBox_Impl(
+    Window * pParent, ResId const & rResId,
+    ResId const & rImagesHighContrastId):
+    ToolBox(pParent, rResId),
+    m_aImagesNormal(GetImageList()),
+    m_aImagesHighContrast(rImagesHighContrastId),
+    m_bHighContrast(false)
+{
+    setImages();
+}
+
+// virtual
+void ObjectCatalogToolBox_Impl::DataChanged(DataChangedEvent const & rDCEvt)
+{
+    ToolBox::DataChanged(rDCEvt);
+    if (rDCEvt.GetType() == DATACHANGED_SETTINGS
+        || (rDCEvt.GetType() == DATACHANGED_DISPLAY
+            && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0))
+        setImages();
+}
+
+void ObjectCatalogToolBox_Impl::setImages()
+{
+    bool bHC = GetDisplayBackground().GetColor().IsDark();
+    if (bHC != m_bHighContrast)
+    {
+        SetImageList(bHC ? m_aImagesHighContrast : m_aImagesNormal);
+        m_bHighContrast = bHC;
+    }
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 15:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 #define RID_BASICIDE_OBJCAT     ( RID_BASICIDE_START + 70 )
 #define RID_FT_MACRODESCR   8
+#define RID_IMGLST_TB_HC 9
 #define RID_TLB_MACROS     10
 #define RID_TB_TOOLBOX     11
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-03 11:49:48 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 15:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,12 @@
 #ifndef _BASTYPE2_HXX
 #define _BASTYPE2_HXX
 
+#include <memory>
+
+#ifndef _SOLAR_H
+#include "tools/solar.h"
+#endif
+
 #define _SVICNVW_HXX
 #ifndef _SVTREEBOX_HXX //autogen
 #include <svtools/svtreebx.hxx>
@@ -87,21 +93,25 @@
 #define BROWSEMODE_PROPS        0x08
 #define BROWSEMODE_SUBOBJS      0x10
 
+class BasicEntry;
 class BasicManager;
 class SbMethod;
 class SbxObject;
 class SbModule;
 class SvLBoxEntry;
 class SbxVariable;
-
+class String;
 
 class BasicTreeListBox : public SvTreeListBox
 {
 private:
     USHORT          nMode;
-    ImageList       aImages;
+    ImageList m_aImagesNormal;
+    ImageList m_aImagesHighContrast;
 
     void            ScanSbxObject( SbxObject* pObj, SvLBoxEntry* pObjEntry );
+
+    void setEntryBitmap(SvLBoxEntry * pEntry, USHORT nBitmap);
 
 protected:
     void                    ExpandTree( SvLBoxEntry* pRootEntry );
@@ -132,8 +142,6 @@ public:
     void            SetMode( USHORT nM ) { nMode = nM; }
     USHORT          GetMode() const { return nMode; }
 
-    Image           GetImage( USHORT nId ) { return aImages.GetImage( nId ); }
-
     SbMethod*       FindMethod( SvLBoxEntry* pEntry );
     SbxObject*      FindObject( SvLBoxEntry* pEntry );
     SbModule*       FindModule( SvLBoxEntry* pEntry );
@@ -142,6 +150,11 @@ public:
 
     // new dialogs
     SbxItem         GetSbxItem( SvLBoxEntry* pEntry );
+
+    SvLBoxEntry * insertEntry(String const & rText, USHORT nBitmap,
+                              SvLBoxEntry * pParent,
+                              bool bChildrenOnDemand,
+                              std::auto_ptr< BasicEntry > aUserData);
 };
 
 /****************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-18 11:26:25 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 15:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#include <memory>
+
+#include "vcl/bitmap.hxx"
 
 #include <ide_pch.hxx>
 
@@ -88,7 +91,8 @@ using namespace ::com::sun::star;
 
 BasicTreeListBox::BasicTreeListBox( Window* pParent, const ResId& rRes ) :
     SvTreeListBox( pParent, IDEResId( rRes.GetId() ) ),
-    aImages( IDEResId( RID_IMGLST_OBJECTS ) )
+    m_aImagesNormal(IDEResId(RID_IMGLST_OBJECTS)),
+    m_aImagesHighContrast(IDEResId(RID_IMGLST_OBJECTS_HC))
 {
     SetSelectionMode( SINGLE_SELECTION );
     nMode = 0xFF;   // Alles
@@ -122,11 +126,12 @@ void BasicTreeListBox::ScanBasic( BasicManager* pBasMgr, const String& rName )
     // create tree list box entry
     SvLBoxEntry* pBasicManagerRootEntry = FindEntry( 0, rName, OBJTYPE_BASICMANAGER );
     if ( !pBasicManagerRootEntry )
-    {
-        Image aImage( aImages.GetImage( ( pBasMgr == SFX_APP()->GetBasicManager() ) ? IMGID_APPICON : IMGID_DOCUMENT ) );
-        pBasicManagerRootEntry = InsertEntry( rName, aImage, aImage, 0, FALSE, LIST_APPEND );
-        pBasicManagerRootEntry->SetUserData( new BasicManagerEntry( pBasMgr ) );
-    }
+        pBasicManagerRootEntry = insertEntry(
+            rName,
+            pBasMgr == SFX_APP()->GetBasicManager()
+            ? IMGID_APPICON : IMGID_DOCUMENT,
+            0, false,
+            std::auto_ptr< BasicEntry >(new BasicManagerEntry(pBasMgr)));
 
     // level 2: libraries (Standard, ...)
 
@@ -167,12 +172,10 @@ void BasicTreeListBox::ScanBasic( BasicManager* pBasMgr, const String& rName )
         // create a tree list box entry
         SvLBoxEntry* pLibRootEntry = FindEntry( pBasicManagerRootEntry, aLibName, OBJTYPE_LIB );
         if ( !pLibRootEntry )
-        {
-            Image aImage( aImages.GetImage( bLoaded ? IMGID_LIB : IMGID_LIBNOTLOADED ) );
-            pLibRootEntry = InsertEntry( aLibName, aImage, aImage,
-                pBasicManagerRootEntry, bLoaded ? FALSE : TRUE , LIST_APPEND );
-            pLibRootEntry->SetUserData( new BasicEntry( OBJTYPE_LIB ) );
-        }
+            pLibRootEntry = insertEntry(
+                aLibName, bLoaded ? IMGID_LIB : IMGID_LIBNOTLOADED,
+                pBasicManagerRootEntry, !bLoaded,
+                std::auto_ptr< BasicEntry >(new BasicEntry(OBJTYPE_LIB)));
 
         // create the sub entries
         if ( bLoaded )
@@ -195,8 +198,6 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, SfxOb
         {
             try
             {
-                Image aModImage( aImages.GetImage( IMGID_MODULE ) );
-
                 // get a sorted list of module names
                 Sequence< ::rtl::OUString > aModNames = BasicIDE::GetModuleNames( pShell, rLibName );
                 sal_Int32 nModCount = aModNames.getLength();
@@ -207,10 +208,10 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, SfxOb
                     String aModName = pModNames[ i ];
                     SvLBoxEntry* pModuleEntry = FindEntry( pLibRootEntry, aModName, OBJTYPE_MODULE );
                     if ( !pModuleEntry )
-                    {
-                        pModuleEntry = InsertEntry( aModName, aModImage, aModImage, pLibRootEntry, FALSE, LIST_APPEND );
-                        pModuleEntry->SetUserData( new BasicEntry( OBJTYPE_MODULE ) );
-                    }
+                        pModuleEntry = insertEntry(
+                            aModName, IMGID_MODULE, pLibRootEntry, false,
+                            std::auto_ptr< BasicEntry >(
+                                new BasicEntry(OBJTYPE_MODULE)));
 
                     // methods
                     if ( nMode & BROWSEMODE_SUBS )
@@ -219,16 +220,16 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, SfxOb
                         sal_Int32 nCount = aNames.getLength();
                         const ::rtl::OUString* pNames = aNames.getConstArray();
 
-                        Image aImage( aImages.GetImage( IMGID_MACRO ) );
                         for ( sal_Int32 j = 0 ; j < nCount ; j++ )
                         {
                             String aName = pNames[ j ];
                             SvLBoxEntry* pEntry = FindEntry( pModuleEntry, aName, OBJTYPE_METHOD );
                             if ( !pEntry )
-                            {
-                                pEntry = InsertEntry( aName, aImage, aImage, pModuleEntry, FALSE, LIST_APPEND );
-                                pEntry->SetUserData( new BasicEntry( OBJTYPE_METHOD ) );
-                            }
+                                pEntry = insertEntry(
+                                    aName, IMGID_MACRO, pModuleEntry,
+                                    false,
+                                    std::auto_ptr< BasicEntry >(
+                                        new BasicEntry(OBJTYPE_METHOD)));
                         }
                     }
                 }
@@ -250,8 +251,6 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, SfxOb
          {
             try
             {
-                Image aDlgImage( aImages.GetImage( IMGID_OBJECT ) );
-
                 // get a sorted list of dialog names
                 Sequence< ::rtl::OUString > aDlgNames = BasicIDE::GetDialogNames( pShell, rLibName );
                 sal_Int32 nDlgCount = aDlgNames.getLength();
@@ -262,10 +261,10 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, SfxOb
                     String aDlgName = pDlgNames[ i ];
                     SvLBoxEntry* pDialogEntry = FindEntry( pLibRootEntry, aDlgName, OBJTYPE_OBJECT );
                     if ( !pDialogEntry )
-                    {
-                        pDialogEntry = InsertEntry( aDlgName, aDlgImage, aDlgImage, pLibRootEntry, TRUE, LIST_APPEND );
-                        pDialogEntry->SetUserData( new BasicEntry( OBJTYPE_OBJECT ) );
-                    }
+                        pDialogEntry = insertEntry(
+                            aDlgName, IMGID_OBJECT, pLibRootEntry, true,
+                            std::auto_ptr< BasicEntry >(
+                                new BasicEntry(OBJTYPE_OBJECT)));
                 }
             }
             catch ( container::NoSuchElementException& e )
@@ -330,8 +329,9 @@ void BasicTreeListBox::ScanSbxObject( SbxObject* pObj, SvLBoxEntry* pObjEntry ) 
         {
             SbMethod* pMethod= (SbMethod*) pObj->GetMethods()->Get( nMethod );
             DBG_ASSERT( pMethod , "Methode nicht gefunden! (NULL)" );
-            SvLBoxEntry* pEntry = InsertEntry( pMethod->GetName(), aImages.GetImage( IMGID_MACRO ), aImages.GetImage( IMGID_MACRO ), pObjEntry, FALSE, LIST_APPEND );
-            pEntry->SetUserData( new BasicEntry( OBJTYPE_METHODINOBJ ) );
+            insertEntry(pMethod->GetName(), IMGID_MACRO, pObjEntry, false,
+                        std::auto_ptr< BasicEntry >(
+                            new BasicEntry(OBJTYPE_METHODINOBJ)));
         }
     }
 
@@ -343,8 +343,9 @@ void BasicTreeListBox::ScanSbxObject( SbxObject* pObj, SvLBoxEntry* pObjEntry ) 
         {
             SbxVariable* pVar = pObj->GetProperties()->Get( nProp );
             DBG_ASSERT( pVar, "Property nicht gefunden! (NULL)" );
-            SvLBoxEntry* pEntry = InsertEntry( pVar->GetName(), aImages.GetImage( IMGID_PROP ), aImages.GetImage( IMGID_PROP ), pObjEntry, FALSE, LIST_APPEND );
-            pEntry->SetUserData( new BasicEntry( OBJTYPE_PROPERTY ) );
+            insertEntry(pVar->GetName(), IMGID_PROP, pObjEntry, false,
+                        std::auto_ptr< BasicEntry >(
+                            new BasicEntry(OBJTYPE_PROPERTY)));
         }
     }
 
@@ -356,12 +357,11 @@ void BasicTreeListBox::ScanSbxObject( SbxObject* pObj, SvLBoxEntry* pObjEntry ) 
         {
             SbxVariable* pVar = pObj->GetObjects()->Get( nObject );
             if ( pVar->GetClass() == SbxCLASS_OBJECT )
-            {
                 // SubObjecte erhalten ChildsOnDemand und koennen
                 // jederzeit weiter aufgeklappt werden...
-                SvLBoxEntry* pEntry = InsertEntry( pVar->GetName(), aImages.GetImage( IMGID_SUBOBJ ), aImages.GetImage( IMGID_SUBOBJ ), pObjEntry, TRUE, LIST_APPEND );
-                pEntry->SetUserData( new BasicEntry( OBJTYPE_SUBOBJ ) );
-            }
+                insertEntry(pVar->GetName(), IMGID_SUBOBJ, pObjEntry, true,
+                            std::auto_ptr< BasicEntry >(
+                                new BasicEntry(OBJTYPE_SUBOBJ)));
         }
     }
 }
@@ -447,3 +447,26 @@ BOOL BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
     return bProtected;
 }
 
+SvLBoxEntry * BasicTreeListBox::insertEntry(
+    String const & rText, USHORT nBitmap, SvLBoxEntry * pParent,
+    bool bChildrenOnDemand, std::auto_ptr< BasicEntry > aUserData)
+{
+    Image aImage(m_aImagesNormal.GetImage(nBitmap));
+    SvLBoxEntry * p = InsertEntry(
+        rText, aImage, aImage, pParent, bChildrenOnDemand, LIST_APPEND,
+        aUserData.release()); // XXX possible leak
+    aImage = m_aImagesHighContrast.GetImage(nBitmap);
+    SetExpandedEntryBmp(p, aImage, BMP_COLOR_HIGHCONTRAST);
+    SetCollapsedEntryBmp(p, aImage, BMP_COLOR_HIGHCONTRAST);
+    return p;
+}
+
+void BasicTreeListBox::setEntryBitmap(SvLBoxEntry * pEntry, USHORT nBitmap)
+{
+    Image aImage(m_aImagesNormal.GetImage(nBitmap));
+    SetExpandedEntryBmp(pEntry, aImage, BMP_COLOR_NORMAL);
+    SetCollapsedEntryBmp(pEntry, aImage, BMP_COLOR_NORMAL);
+    aImage = m_aImagesHighContrast.GetImage(nBitmap);
+    SetExpandedEntryBmp(pEntry, aImage, BMP_COLOR_HIGHCONTRAST);
+    SetCollapsedEntryBmp(pEntry, aImage, BMP_COLOR_HIGHCONTRAST);
+}

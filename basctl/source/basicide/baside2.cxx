@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-12 22:33:30 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 15:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1388,7 +1388,8 @@ ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
     aStackWindow( this ),
     aVSplitter( this, WinBits( WB_VSCROLL ) ),
     aHSplitter( this, WinBits( WB_HSCROLL ) ),
-    aImages( IDEResId( RID_IMGLST_LAYOUT ) )
+    m_aImagesNormal(IDEResId(RID_IMGLST_LAYOUT)),
+    m_aImagesHighContrast(IDEResId(RID_IMGLST_LAYOUT_HC))
 {
     pModulWindow = 0;
     bVSplitted = FALSE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-17 08:46:46 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 15:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,7 +480,8 @@ private:
 //  BOOL            bDoSyntaxHighlight;
     Color           aSyntaxColors[10];
 
-    ImageList       aImages;
+    ImageList m_aImagesNormal;
+    ImageList m_aImagesHighContrast;
 
 protected:
     virtual void    Resize();
@@ -501,7 +502,7 @@ public:
 
     Color*          GetSyntaxColors()   { return aSyntaxColors; }
 
-    Image           GetImage( USHORT nId ) { return aImages.GetImage( nId ); }
+    Image GetImage(USHORT nId) { return m_aImagesNormal.GetImage(nId); }
 
 //  BOOL            DoHighlight() const { return bDoSyntaxHighlight; }
 //  void            SetHighlightMode( BOOL bHighlight )

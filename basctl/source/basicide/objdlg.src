@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-29 20:26:55 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 15:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,15 @@ FloatingWindow RID_BASICIDE_OBJCAT
             */
         };
     };
+    ImageList RID_IMGLST_TB_HC
+    {
+        ImageBitmap = Bitmap { FILE = "imh_ges3.bmp" ; };
+        MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+        IdList =
+        {
+            TBITEM_SHOW ;
+        };
+    };
     FixedText RID_FT_MACRODESCR
     {
         WordBreak = TRUE ;
@@ -265,11 +274,3 @@ FloatingWindow RID_BASICIDE_OBJCAT
     Text[ catalan ] = "Objectes";
     Text[ thai ] = "วัตถุ";
 };
-
-
-
-
-
-
-
-
