@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ node::Attributes SchemaBuilder::makePropertyAttributes(sal_Int16 aSchemaAttribut
     node::Attributes aAttributes = m_aContext.getCurrentAttributes();
 
     if (aSchemaAttributes & SchemaAttribute::REQUIRED)
-        aAttributes.bNullable = false;
+        aAttributes.setNullable (false);
 
     return aAttributes;
 }
