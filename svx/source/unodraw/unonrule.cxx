@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-09-28 12:43:21 $
+ *  last change: $Author: cl $ $Date: 2000-11-02 15:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,6 @@ SvxUnoNumberingRules::SvxUnoNumberingRules( SdrModel* pModel ) throw() :
     {
         SvxNumRule* pDefaultRule = ((SvxNumBulletItem*) pModel->GetItemPool().GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET))->GetNumRule();
         DBG_ASSERT( pDefaultRule, "No default SvxNumRule!" );
-        DBG_ASSERT( pDefaultRule, "No default SvxNumRule!" );
         if( pDefaultRule )
         {
             mpBulletItem = new SvxNumBulletItem( *pDefaultRule );
@@ -277,9 +276,19 @@ uno::Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByInde
         pArray[nIdx++] = aSuffixProp;
     }
 
+/*
     {
         aVal <<= (sal_Int16)rFmt.GetBulletChar();
         beans::PropertyValue aBulletProp( OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_NRULE_BULLETID)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+        pArray[nIdx++] = aBulletProp;
+    }
+*/
+
+    {
+        sal_Unicode nCode = rFmt.GetBulletChar();
+        OUString aStr( &nCode, 1 );
+        aVal <<= aStr;
+        beans::PropertyValue aBulletProp( OUString(RTL_CONSTASCII_USTRINGPARAM("BulletChar")), -1, aVal, beans::PropertyState_DIRECT_VALUE);
         pArray[nIdx++] = aBulletProp;
     }
 
@@ -412,6 +421,18 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 }
             }
         }
+        else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("BulletChar")) == 0)
+        {
+            OUString aStr;
+            if( aVal >>= aStr )
+            {
+                if(aStr.getLength())
+                {
+                    aFmt.SetBulletChar(aStr[0]);
+                    continue;
+                }
+            }
+        }
         else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_ADJUST)) == 0)
         {
             sal_Int16 nAdjust;
@@ -507,6 +528,10 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 aFmt.SetBulletRelSize( (short)nSize );
                 continue;
             }
+        }
+        else
+        {
+            continue;
         }
 
         throw lang::IllegalArgumentException();
