@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-22 07:35:46 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ TabDialog DLG_FRM_STD
                 Text[ chinese_simplified ] = "À¸";
                 Text[ russian ] = "Êîëîíêè";
                 Text[ polish ] = "Kolumny";
-                Text[ japanese ] = "—ñ";
+                Text[ japanese ] = "’i‘g‚İ";
                 Text[ chinese_traditional ] = "Äæ";
                 Text[ arabic ] = "ÃÚãÏÉ";
                 Text[ greek ] = "ÓôŞëåò";
@@ -912,11 +912,11 @@ TabPage TP_FRM_STD
         Text = "R~elativ" ;
         Text [ ENGLISH ] = "~Relative" ;
         Text [ dutch ] = "~Relatief" ;
-        Text [ english_us ] = "~Relative" ;
+        Text [ english_us ] = "Relat~ive" ;
         Text [ italian ] = "~Relativo" ;
         Text [ spanish ] = "R~elativo" ;
         Text [ french ] = "~Relatif" ;
-        Text [ swedish ] = "~Relativ" ;
+        Text [ swedish ] = "R~elativ" ;
         Text [ danish ] = "Relativ" ;
         Text [ portuguese_brazilian ] = "~Relativ" ;
         Text [ portuguese ] = "~Relativo" ;
@@ -1013,6 +1013,26 @@ TabPage TP_FRM_STD
         TabStop = TRUE ;
         Text = "~Proportionen abgleichen" ;
         Text [ ENGLISH ] = "Fi~xed ratio" ;
+        Text[ english_us ] = "~Keep proportional";
+        Text[ portuguese ] = "Pr~oporcional";
+        Text[ russian ] = "Ñèíõğîíèçàöèÿ ïğîïîğöèé";
+        Text[ greek ] = "ĞñïóáñìïãŞ áíáëïãéêÜ";
+        Text[ dutch ] = "~Synchroniseren";
+        Text[ french ] = "Proportionnel";
+        Text[ spanish ] = "Igualar proporciones";
+        Text[ finnish ] = "~Keep ratio";
+        Text[ italian ] = "Proporzionale";
+        Text[ danish ] = "Proport.";
+        Text[ swedish ] = "Anpassa ~proportioner";
+        Text[ polish ] = "Synchronizacja proporcji";
+        Text[ portuguese_brazilian ] = "Abgle~ich";
+        Text[ japanese ] = "”ä—¦‚ğ•Û‚Â(~K)";
+        Text[ korean ] = "ºñÀ² À¯Áö(~K)";
+        Text[ chinese_simplified ] = "±£³Ö±ÈÀı(~K)";
+        Text[ chinese_traditional ] = "«O«ù¤ñ¦C(~K)";
+        Text[ turkish ] = "Orant~ı";
+        Text[ arabic ] = "ÊÒÇãä";
+        Text[ catalan ] = "Prop~orcional";
     };
     CheckBox CB_AUTOHEIGHT
     {
@@ -1021,6 +1041,26 @@ TabPage TP_FRM_STD
         TabStop = TRUE ;
         Text = "Au~tomatische Höhe" ;
         Text [ ENGLISH ] = "Automatic hei~ght" ;
+        Text[ english_us ] = "AutoHei~ght";
+        Text[ portuguese ] = "Altura automática";
+        Text[ russian ] = "Àâòîì. âûñîòà";
+        Text[ greek ] = "Áõôüìáôï ıøïò";
+        Text[ dutch ] = "Autom. h~oogte";
+        Text[ french ] = "Hauteur automatique";
+        Text[ spanish ] = "Altura automática";
+        Text[ finnish ] = "~Automaattinen korkeus";
+        Text[ italian ] = "Altezza. ~auto";
+        Text[ danish ] = "Auto. højde";
+        Text[ swedish ] = "Au~tomatisk höjd";
+        Text[ polish ] = "~Autom. wysokoœæ";
+        Text[ portuguese_brazilian ] = "Altura autom?tica";
+        Text[ japanese ] = "‚‚³©“®’²®(~G)";
+        Text[ korean ] = "ÀÚµ¿ ³ôÀÌ(~G)";
+        Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¸ß¶È(~G)";
+        Text[ chinese_traditional ] = "¦Û°Ê½Õ¾ã°ª«×(~G)";
+        Text[ turkish ] = "otom. ~yüksekl.";
+        Text[ arabic ] = "ÇÑÊİÇÚ ÊáŞÇÆí";
+        Text[ catalan ] = "Altura auto~m.";
     };
     PushButton BT_REALSIZE
     {
@@ -1037,10 +1077,10 @@ TabPage TP_FRM_STD
         Text [ finnish ] = "Alkuperäinen koko" ;
         Text [ danish ] = "Oprindelig størrelse" ;
         Text [ french ] = "Taille d'~origine" ;
-        Text [ swedish ] = "Originalst~orlek" ;
+        Text [ swedish ] = "~Originalstorlek" ;
         Text [ dutch ] = "~Originele grootte" ;
         Text [ spanish ] = "Ta~maño original" ;
-        Text [ english_us ] = "Or~iginal Size" ;
+        Text [ english_us ] = "~Original Size" ;
         Text[ chinese_simplified ] = "Ô­¼ş´óĞ¡";
         Text[ russian ] = "Èñõîäíûé ğàçìåğ";
         Text[ polish ] = "Rozmiar oryginalny";
@@ -1101,7 +1141,7 @@ TabPage TP_FRM_STD
         Text[ spanish ] = "A la pá~gina";
         Text[ italian ] = "Alla pagina";
         Text[ danish ] = "At page";
-        Text[ swedish ] = "Vid si~dan";
+        Text[ swedish ] = "Vid ~sidan";
         Text[ polish ] = "Przy stronie";
         Text[ portuguese_brazilian ] = "At page";
         Text[ japanese ] = "Íß°¼Ş‚É";
@@ -1119,7 +1159,7 @@ TabPage TP_FRM_STD
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Am ~Absatz" ;
         Text [ ENGLISH ] = "At p~aragraph" ;
-        Text[ english_us ] = "To p~aragraph";
+        Text[ english_us ] = "To paragrap~h";
         Text[ portuguese ] = "No pa~rágrafo";
         Text[ russian ] = "Ê àáçàöó";
         Text[ greek ] = "~Óôç ğáñÜãñáöï";
@@ -1128,7 +1168,7 @@ TabPage TP_FRM_STD
         Text[ spanish ] = "Al ~párrafo";
         Text[ italian ] = "Al paragrafo";
         Text[ danish ] = "At paragraph";
-        Text[ swedish ] = "Vid ~stycke";
+        Text[ swedish ] = "Vid st~ycke";
         Text[ polish ] = "Przy akapicie";
         Text[ portuguese_brazilian ] = "At paragraph";
         Text[ japanese ] = "’i—‚É";
@@ -1146,7 +1186,7 @@ TabPage TP_FRM_STD
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Am Ze~ichen" ;
         Text [ ENGLISH ] = "At ~character" ;
-        Text[ english_us ] = "To ~character";
+        Text[ english_us ] = "To cha~racter";
         Text[ portuguese ] = "No ~carácter";
         Text[ russian ] = "Ê çíàêó";
         Text[ greek ] = "Óôï~í ÷áñáêôŞñá";
@@ -1155,7 +1195,7 @@ TabPage TP_FRM_STD
         Text[ spanish ] = "Al cará~cter";
         Text[ italian ] = "Al carattere";
         Text[ danish ] = "At character";
-        Text[ swedish ] = "Vid tecke~n";
+        Text[ swedish ] = "Vid tec~ken";
         Text[ polish ] = "Przy znaku";
         Text[ portuguese_brazilian ] = "At character";
         Text[ japanese ] = "•¶š‚É";
@@ -1173,11 +1213,11 @@ TabPage TP_FRM_STD
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Als Zei~chen" ;
         Text [ ENGLISH ] = "A~s character" ;
-        Text [ english_us ] = "A~s character" ;
+        Text [ english_us ] = "~As character" ;
         Text [ portuguese_brazilian ] = "als Zei~chen" ;
-        Text [ swedish ] = "Som te~cken" ;
+        Text [ swedish ] = "Som tec~ken" ;
         Text [ danish ] = "som tegn" ;
-        Text [ italian ] = "quale ~carattere" ;
+        Text [ italian ] = "Quale carattere" ;
         Text [ spanish ] = "Como ~carácter" ;
         Text [ french ] = "Comme c~aractère" ;
         Text [ dutch ] = "Als te~ken" ;
@@ -1210,7 +1250,7 @@ TabPage TP_FRM_STD
         Text[ spanish ] = "~Al marco";
         Text[ italian ] = "Alla cornice";
         Text[ danish ] = "At frame";
-        Text[ swedish ] = "Vid r~am";
+        Text[ swedish ] = "Vid ~ram";
         Text[ polish ] = "Przy ramce";
         Text[ portuguese_brazilian ] = "At frame";
         Text[ japanese ] = "˜g‚É";
@@ -1269,7 +1309,7 @@ TabPage TP_FRM_STD
         Text [ finnish ] = "~Vaakataso" ;
         Text [ danish ] = "Vandret" ;
         Text [ french ] = "Hori~zontale" ;
-        Text [ swedish ] = "H~orisontellt" ;
+        Text [ swedish ] = "Horiso~ntellt" ;
         Text [ dutch ] = "Horizon~taal" ;
         Text [ spanish ] = "Hori~zontal" ;
         Text [ english_us ] = "Hori~zontal" ;
@@ -1308,7 +1348,7 @@ TabPage TP_FRM_STD
         Text [ swedish ] = "~med" ;
         Text [ dutch ] = "~om" ;
         Text [ spanish ] = "a" ;
-        Text [ english_us ] = "~by" ;
+        Text [ english_us ] = "b~y" ;
         Text[ chinese_simplified ] = "¼ä¸ô";
         Text[ russian ] = "íà";
         Text[ polish ] = "o";
@@ -1346,7 +1386,7 @@ TabPage TP_FRM_STD
         Text [ ENGLISH ] = "~to" ;
         Text [ english_us ] = "~to" ;
         Text [ portuguese_brazilian ] = "zu" ;
-        Text [ swedish ] = "till" ;
+        Text [ swedish ] = "t~ill" ;
         Text [ danish ] = "fra" ;
         Text [ italian ] = "a" ;
         Text [ spanish ] = "a" ;
@@ -1382,7 +1422,7 @@ TabPage TP_FRM_STD
         Text [ ENGLISH ] = "~Mirror on even pages" ;
         Text [ english_us ] = "~Mirror on even pages" ;
         Text [ portuguese_brazilian ] = "Auf geraden Seiten ~spiegeln" ;
-        Text [ swedish ] = "s~pegelvänt på jämna sidor" ;
+        Text [ swedish ] = "spe~gelvänt på jämna sidor" ;
         Text [ danish ] = "Spejlvend på lige sider" ;
         Text [ italian ] = "Rispecchia su pagine ~pari" ;
         Text [ spanish ] = "Reflejar en ~páginas pares" ;
@@ -1391,7 +1431,7 @@ TabPage TP_FRM_STD
         Text [ portuguese ] = "Inverter em páginas ~pares" ;
         Text[ chinese_simplified ] = "·­×ªµ½Å¼ÊıÒ³Ãæ(~M)";
         Text[ russian ] = "Îòğàçèòü íà ÷åòíûõ ñòğàíèöàõ";
-        Text[ polish ] = "Przerzu~æ na parzystych stronach";
+        Text[ polish ] = "Odbij na parzystych stronach";
         Text[ japanese ] = "‹ô”Íß°¼Ş‚É”½“](~M)";
         Text[ chinese_traditional ] = "Â½Âà¨ì°¸¼Æ­¶­±(~M)";
         Text[ arabic ] = "ÇäÚßÇÓ Úáì ÇáÕİÍÇÊ ÇáÒæÌíÉ";
@@ -1454,7 +1494,7 @@ TabPage TP_FRM_STD
         Text [ swedish ] = "m~ed" ;
         Text [ dutch ] = "~om" ;
         Text [ spanish ] = "a" ;
-        Text [ english_us ] = "b~y" ;
+        Text [ english_us ] = "by" ;
         Text[ chinese_simplified ] = "¼ä¸ô";
         Text[ russian ] = "íà";
         Text[ polish ] = "o";
@@ -1492,7 +1532,7 @@ TabPage TP_FRM_STD
         Text [ ENGLISH ] = "t~o" ;
         Text [ english_us ] = "t~o" ;
         Text [ portuguese_brazilian ] = "zu" ;
-        Text [ swedish ] = "till" ;
+        Text [ swedish ] = "ti~ll" ;
         Text [ danish ] = "fra" ;
         Text [ italian ] = "a" ;
         Text [ spanish ] = "a" ;
@@ -1841,7 +1881,7 @@ TabPage TP_GRF_EXT
         Text [ english_us ] = "Flip" ;
         Text[ chinese_simplified ] = "·­×ª";
         Text[ russian ] = "Îòğàçèòü";
-        Text[ polish ] = "Przerzuæ";
+        Text[ polish ] = "Odbij";
         Text[ japanese ] = "”½“]";
         Text[ chinese_traditional ] = "Â½Âà";
         Text[ arabic ] = "ÇäÚßÇÓ";
@@ -1896,7 +1936,7 @@ TabPage TP_FRM_URL
         Text [ italian ] = "~URL" ;
         Text [ spanish ] = "~URL" ;
         Text [ french ] = "~URL" ;
-        Text [ swedish ] = "U~RL" ;
+        Text [ swedish ] = "~URL" ;
         Text [ danish ] = "URL" ;
         Text [ portuguese_brazilian ] = "U~RL" ;
         Text [ portuguese ] = "U~RL" ;
@@ -1962,7 +2002,7 @@ TabPage TP_FRM_URL
         Text = "~Frame" ;
         Text [ English ] = "~Frame" ;
         Text [ dutch ] = "~Frame" ;
-        Text [ english_us ] = "~Frame" ;
+        Text [ english_us ] = "Frame" ;
         Text [ italian ] = "~Frame" ;
         Text [ spanish ] = "Frame" ;
         Text [ french ] = "~Frame" ;
@@ -1999,7 +2039,7 @@ TabPage TP_FRM_URL
         Text [ English ] = "~Browse..." ;
         Text [ english_us ] = "~Browse..." ;
         Text [ portuguese_brazilian ] = "Durchs~uchen..." ;
-        Text [ swedish ] = "Välj ~ut..." ;
+        Text [ swedish ] = "~Välj ut..." ;
         Text [ danish ] = "Gennemse..." ;
         Text [ italian ] = "~Sfoglia..." ;
         Text [ spanish ] = "Selecc~ionar..." ;
@@ -2008,7 +2048,7 @@ TabPage TP_FRM_URL
         Text [ portuguese ] = "~Pesquisar..." ;
         Text[ chinese_simplified ] = "Ñ¡Ôñ(~B)...";
         Text[ russian ] = "Âûáğàòü...";
-        Text[ polish ] = "Wybierz...";
+        Text[ polish ] = "Przegl¹daj...";
         Text[ japanese ] = "‘I‘ğ(~B)...";
         Text[ chinese_traditional ] = "¿ï¾Ü(~B)...";
         Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
@@ -2024,6 +2064,26 @@ TabPage TP_FRM_URL
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Link zu" ;
         Text [ ENGLISH ] = "Hyperlink" ;
+        Text[ english_us ] = "Link to";
+        Text[ portuguese ] = "Hyperlink";
+        Text[ russian ] = "Ññûëêà íà";
+        Text[ greek ] = "Óıíäåóç ìå";
+        Text[ dutch ] = "Hyperlink";
+        Text[ french ] = "Lien vers";
+        Text[ spanish ] = "Vínculo a";
+        Text[ finnish ] = "Hyperlink";
+        Text[ italian ] = "Hyperlink";
+        Text[ danish ] = "Hyperlink";
+        Text[ swedish ] = "Länk till";
+        Text[ polish ] = "£¹cze do";
+        Text[ portuguese_brazilian ] = "Hyperlink";
+        Text[ japanese ] = "Øİ¸æ";
+        Text[ korean ] = "Hyperlink";
+        Text[ chinese_simplified ] = "Á´½Óµ½";
+        Text[ chinese_traditional ] = "±¶®|";
+        Text[ turkish ] = "Hyperlink";
+        Text[ arabic ] = "Hyperlink";
+        Text[ catalan ] = "Hyperlink";
     };
     CheckBox CB_SERVER
     {
@@ -2031,6 +2091,26 @@ TabPage TP_FRM_URL
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "~Server Site Image Map" ;
         Text[ ENGLISH ] = "~Server Site Image Map" ;
+        Text[ english_us ] = "~Server site image map";
+        Text[ portuguese ] = "~Servidor";
+        Text[ russian ] = "Ñåğâåğ Site Image Map";
+        Text[ greek ] = "ÄéáêïìéóôŞò";
+        Text[ dutch ] = "~Server";
+        Text[ french ] = "~Server Site Image Map";
+        Text[ spanish ] = "~Servidor site image map";
+        Text[ finnish ] = "~Palvelin";
+        Text[ italian ] = "~Server Site Image Map";
+        Text[ danish ] = "Server";
+        Text[ swedish ] = "~Server site image map";
+        Text[ polish ] = "~Server Site Image Map";
+        Text[ portuguese_brazilian ] = "~Server";
+        Text[ japanese ] = "»°ÊŞ°»²Ä ²Ò°¼ŞÏ¯Ìß(~S)";
+        Text[ korean ] = "¼­¹ö(~S)";
+        Text[ chinese_simplified ] = "·şÎñÆ÷Í¼ÏñÓ³Éä(~S)";
+        Text[ chinese_traditional ] = "¦øªA¾¹­¶­±¼v¹³¬M®g(~S)";
+        Text[ turkish ] = "~Sunucu";
+        Text[ arabic ] = "ÇáãÒæøÏ";
+        Text[ catalan ] = "~Servidor";
     };
     CheckBox CB_CLIENT
     {
@@ -2038,6 +2118,26 @@ TabPage TP_FRM_URL
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "~Client Site Image Map" ;
         Text [ ENGLISH ] = "~Client Site Image Map" ;
+        Text[ english_us ] = "~Client site image map";
+        Text[ portuguese ] = "~Cliente";
+        Text[ russian ] = "Êëèåíò Site Image Map";
+        Text[ greek ] = "ĞåëÜôçò Site Image Map";
+        Text[ dutch ] = "~Cliënt";
+        Text[ french ] = "Client Site Image Map";
+        Text[ spanish ] = "~Cliente Site Image Map";
+        Text[ finnish ] = "~Työasema";
+        Text[ italian ] = "~Client Site Image Map";
+        Text[ danish ] = "Klient";
+        Text[ swedish ] = "~Client site image map";
+        Text[ polish ] = "Klient Site Image Map";
+        Text[ portuguese_brazilian ] = "~Client";
+        Text[ japanese ] = "¸×²±İÄ»²Ä ²Ò°¼ŞÏ¯Ìß(~C)";
+        Text[ korean ] = "Å¬¶óÀÌ¾ğÆ®(~C)";
+        Text[ chinese_simplified ] = "¿Í»§¶ËÍ¼ÏñÓ³Éä(~C)";
+        Text[ chinese_traditional ] = "¥Î¤áºİ­¶­±¼v¹³¬M®g(~C)";
+        Text[ turkish ] = "~İstemci";
+        Text[ arabic ] = "ÇáÚãíá";
+        Text[ catalan ] = "~Cliente";
     };
     FixedLine FL_IMAGE
     {
@@ -2050,7 +2150,7 @@ TabPage TP_FRM_URL
         Text [ italian ] = "Image Map" ;
         Text [ spanish ] = "Image Map" ;
         Text [ french ] = "Image Map" ;
-        Text [ swedish ] = "Image Map" ;
+        Text [ swedish ] = "Image map" ;
         Text [ danish ] = "Image Map" ;
         Text [ portuguese_brazilian ] = "Image Map" ;
         Text [ portuguese ] = "Mapa de imagens" ;
@@ -2125,7 +2225,7 @@ TabPage TP_FRM_ADD
         Text [ portuguese ] = "Texto ~alternativo" ;
         Text[ chinese_simplified ] = "¸½¼ÓÎÄ×Ö(~A)";
         Text[ russian ] = "Àëüòåğíàòèâíûé òåêñò";
-        Text[ polish ] = "Tekst alternatywny";
+        Text[ polish ] = "Tekst opcjonalny";
         Text[ japanese ] = "ŸŒó•â‚Ì–¼‘O(~A)";
         Text[ chinese_traditional ] = "´À¥N¤å¦r(~A)";
         Text[ arabic ] = "äÕ ÈÏíá";
@@ -2183,7 +2283,7 @@ TabPage TP_FRM_ADD
         Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "Nach~folger" ;
         Text [ ENGLISH ] = "Ne~xt link" ;
-        Text [ english_us ] = "Ne~xt link" ;
+        Text [ english_us ] = "~Next link" ;
         Text [ portuguese_brazilian ] = "Nach~folger" ;
         Text [ swedish ] = "~Följande" ;
         Text [ danish ] = "Underordnet" ;
@@ -2257,7 +2357,7 @@ TabPage TP_FRM_ADD
         Text [ portuguese ] = "~Conteúdo" ;
         Text[ chinese_simplified ] = "ÄÚÈİ(~C)";
         Text[ russian ] = "Ñîäåğæèìîå";
-        Text[ polish ] = "Zawarto~?æ";
+        Text[ polish ] = "Zawarto~œæ";
         Text[ japanese ] = "“à—e(~C)";
         Text[ chinese_traditional ] = "¤º®e(~C)";
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -2413,5 +2513,26 @@ TabPage TP_FRM_ADD
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Eigenschaften" ;
         Text [ ENGLISH ] = "Additional settings" ;
+        Text[ english_us ] = "Properties";
+        Text[ portuguese ] = "Additional Setting";
+        Text[ russian ] = "Ñâîéñòâà";
+        Text[ greek ] = "Éäéüôçôåò";
+        Text[ dutch ] = "Additional Setting";
+        Text[ french ] = "Propriétés";
+        Text[ spanish ] = "Propiedades";
+        Text[ finnish ] = "Additional Setting";
+        Text[ italian ] = "Proprietà";
+        Text[ danish ] = "Additional Setting";
+        Text[ swedish ] = "Egenskaper";
+        Text[ polish ] = "W³aœciwoœci";
+        Text[ portuguese_brazilian ] = "Additional Setting";
+        Text[ japanese ] = "‘®«";
+        Text[ korean ] = "Additional Setting";
+        Text[ chinese_simplified ] = "ÊôĞÔ";
+        Text[ chinese_traditional ] = "Äİ©Ê";
+        Text[ turkish ] = "Additional Setting";
+        Text[ arabic ] = "Additional Setting";
+        Text[ catalan ] = "Additional Setting";
     };
 };
+
