@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:40:01 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,8 +126,9 @@ struct BreakPoint
     BOOL    bTemp;
     ULONG   nLine;
     ULONG   nStopAfter;
+    ULONG   nHitCount;
 
-    BreakPoint( ULONG nL )  { nLine = nL; nStopAfter = 0; bEnabled = TRUE; bTemp = FALSE; }
+    BreakPoint( ULONG nL )  { nLine = nL; nStopAfter = 0; nHitCount = 0; bEnabled = TRUE; bTemp = FALSE; }
 
 };
 
@@ -177,6 +178,7 @@ public:
     BreakPoint* FindBreakPoint( ULONG nLine );
     void        AdjustBreakPoints( ULONG nLine, BOOL bInserted );
     void        SetBreakPointsInBasic( SbModule* pModule );
+    void        ResetHitCount();
 };
 
 // helper class for sorting TabBar
