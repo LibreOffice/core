@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sj $ $Date: 2002-01-14 11:05:59 $
+ *  last change: $Author: sj $ $Date: 2002-02-26 15:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2184,16 +2184,19 @@ void SdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationInfoA
 
     if( pAnim->nSoundRef && ( pAnim->nFlags & 0x0010 ) )            // Sound
     {
-        pInfo->bSoundOn = TRUE;                                     // Sound ist an
+        pInfo->bSoundOn = sal_True;                                 // Sound ist an
+        pInfo->bPlayFull = sal_False;
         pInfo->aSoundFile = ReadSound( pAnim->nSoundRef );          // Pfad zum Soundfile in MSDOS-Notation
     }
     else
         pInfo->bSoundOn = FALSE;                                    // Sound ist aus
 
-    if( pAnim->nFlags & 0x0040 )
-        pInfo->bPlayFull = FALSE;                                   // Sound des vorherigen Objektes abbrechen
-    else
-        pInfo->bPlayFull = TRUE;
+//  if( pAnim->nFlags & 0x0040 )
+//      pInfo->bPlayFull = FALSE;                                   // Sound des vorherigen Objektes abbrechen
+//  else
+//      pInfo->bPlayFull = TRUE;
+
+
 
 //  if ( nFlags & 4 )   // mouse over effect after nDelayTime ( not supported )
     if ( pInfo->eEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
