@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:21:30 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_11                    (   LayoutManager                                                                    ,
+DEFINE_XINTERFACE_12                    (   LayoutManager                                                                    ,
                                             OWeakObject                                                                     ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider                                      ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo                                       ),
@@ -202,13 +202,14 @@ DEFINE_XINTERFACE_11                    (   LayoutManager                       
                                             DIRECT_INTERFACE( css::frame::XFrameActionListener                              ),
                                             DIRECT_INTERFACE( drafts::com::sun::star::ui::XUIConfigurationListener          ),
                                             DIRECT_INTERFACE( drafts::com::sun::star::frame::XInplaceLayout                 ),
+                                            DIRECT_INTERFACE( drafts::com::sun::star::frame::XMenuBarMergingAcceptor        ),
                                             DERIVED_INTERFACE( css::lang::XEventListener, css::frame::XFrameActionListener  ),
                                             DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet                    ),
                                             DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet                     ),
                                             DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet                         )
                                         )
 
-DEFINE_XTYPEPROVIDER_11                 (   LayoutManager                                           ,
+DEFINE_XTYPEPROVIDER_12                 (   LayoutManager                                           ,
                                             css::lang::XTypeProvider                                ,
                                             css::lang::XServiceInfo                                 ,
                                             drafts::com::sun::star::frame::XLayoutManager           ,
@@ -217,6 +218,7 @@ DEFINE_XTYPEPROVIDER_11                 (   LayoutManager                       
                                             css::lang::XEventListener                               ,
                                             drafts::com::sun::star::ui::XUIConfigurationListener    ,
                                             drafts::com::sun::star::frame::XInplaceLayout           ,
+                                            drafts::com::sun::star::frame::XMenuBarMergingAcceptor  ,
                                             ::com::sun::star::beans::XMultiPropertySet              ,
                                             ::com::sun::star::beans::XFastPropertySet               ,
                                             ::com::sun::star::beans::XPropertySet
@@ -242,6 +244,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
                                                              UNO_QUERY ))
         ,   m_nLockCount( 0 )
         ,   m_bActive( sal_False )
+        ,   m_bVisible( sal_True )
         ,   m_bInplaceMenuSet( sal_False )
         ,   m_bMenuVisible( sal_True )
         ,   m_xModuleManager( Reference< XModuleManager >(
@@ -367,6 +370,8 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
             {
                 Reference< ::drafts::com::sun::star::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(
                     m_xSMGR->createInstance( SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ), UNO_QUERY );
+
+                WriteGuard aWriteLock( m_aLock );
                 if ( m_xModuleCfgMgr.is() )
                 {
                     // Remove listener to old ui configuration manager
@@ -400,6 +405,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                 Reference< XUIConfigurationManagerSupplier > xUIConfigurationManagerSupplier( xModel, UNO_QUERY );
                 if ( xUIConfigurationManagerSupplier.is() )
                 {
+                    WriteGuard aWriteLock( m_aLock );
                     if ( m_xDocCfgMgr.is() )
                     {
                         // Remove listener to old ui configuration manager
@@ -434,6 +440,36 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
         aWriteLock.unlock();
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     }
+}
+
+void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisivble )
+{
+     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    std::vector< Reference< XUIElement > > aUIElementVector;
+
+    WriteGuard aWriteLock( m_aLock );
+    UIElementVector::iterator pIter;
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    {
+        pIter->bMasterHide = bSetVisivble;
+        aUIElementVector.push_back( pIter->xUIElement );
+    }
+    aWriteLock.unlock();
+
+    try
+    {
+        for ( sal_uInt32 i = 0; i < aUIElementVector.size(); i++ )
+        {
+            Reference< XWindow > xWindow( aUIElementVector[i]->getRealInterface(), UNO_QUERY );
+            if ( xWindow.is() )
+                xWindow->setVisible( bSetVisivble );
+        }
+    }
+    catch ( DisposedException& )
+    {
+    }
+
+    doLayout();
 }
 
 void SAL_CALL LayoutManager::attachFrame( const Reference< XFrame >& xFrame )
@@ -526,12 +562,38 @@ throw (::com::sun::star::uno::RuntimeException)
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 }
 
-::com::sun::star::awt::Rectangle SAL_CALL LayoutManager::getCurrentDockingArea() throw
-( RuntimeException )
+//---------------------------------------------------------------------------------------------------------
+// XMenuBarMergingAcceptor
+//---------------------------------------------------------------------------------------------------------
+sal_Bool SAL_CALL LayoutManager::setMergeMenuBar(
+    const Reference< XIndexAccess >& ContainerMenuBar,
+    const Reference< XDispatchProvider >& ContainerDispatchProvider,
+    const Reference< XIndexAccess >& EmbedObjectMenuBar,
+    const Reference< XDispatchProvider >& EmbedObjectDispatchProvider )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    return sal_False;
+}
+
+void SAL_CALL LayoutManager::removeMergedMenuBar()
+throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+::com::sun::star::awt::Rectangle SAL_CALL LayoutManager::getCurrentDockingArea()
+throw ( RuntimeException )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
     return m_aDockingArea;
+}
+
+Reference< XDockingAreaAcceptor > SAL_CALL LayoutManager::getDockingAreaAcceptor()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+    return m_xDockingAreaAcceptor;
 }
 
 void SAL_CALL LayoutManager::setDockingAreaAcceptor( const Reference< ::drafts::com::sun::star::ui::XDockingAreaAcceptor >& xDockingAreaAcceptor )
@@ -877,7 +939,7 @@ throw (RuntimeException)
                 if ( pIter->aName == aName )
                 {
                     Reference< css::awt::XWindow > xWindow( pIter->xUIElement->getRealInterface(), UNO_QUERY );
-                    if ( xWindow.is() )
+                    if ( xWindow.is() && !pIter->bMasterHide )
                     {
                         xWindow->setVisible( sal_True );
                         doLayout();
@@ -1152,6 +1214,27 @@ throw (RuntimeException)
 
     aReadLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+}
+
+void SAL_CALL LayoutManager::setVisible( sal_Bool bVisible )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    sal_Bool bWasVisible( sal_True );
+
+    WriteGuard aWriteLock( m_aLock );
+    bWasVisible = m_bVisible;
+    m_bVisible = bVisible;
+    aWriteLock.unlock();
+
+    if ( bWasVisible != bVisible )
+        implts_updateUIElementsVisibleState( bVisible );
+}
+
+sal_Bool SAL_CALL LayoutManager::isVisible()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ReadGuard aReadLock( m_aLock );
+    return m_bVisible;
 }
 
 //---------------------------------------------------------------------------------------------------------
