@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:08:49 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _SV_BUTTON_HXX
 #include <button.hxx>
+#endif
+#ifndef _SV_WINDOW_H
+#include <window.h>
 #endif
 
 #include <unohelp.hxx>
@@ -461,7 +464,7 @@ void Window::ImplControlFocus( USHORT nFlags )
             {
                 if ( GetType() == WINDOW_CHECKBOX )
                     ((CheckBox*)this)->ImplCheck();
-                else if ( mbPushButton )
+                else if ( mpWindowImpl->mbPushButton )
                 {
                     ((PushButton*)this)->SetPressed( TRUE );
                     ((PushButton*)this)->SetPressed( FALSE );
@@ -535,7 +538,7 @@ BOOL Window::ImplDlgCtrl( const KeyEvent& rKEvt, BOOL bKeyInput )
         while ( pButtonWindow )
         {
             if ( (pButtonWindow->GetStyle() & WB_DEFBUTTON) &&
-                 pButtonWindow->mbPushButton )
+                 pButtonWindow->mpWindowImpl->mbPushButton )
                 break;
 
             pButtonWindow = ImplGetNextWindow( this, iButton, iButton, TRUE );
@@ -563,7 +566,7 @@ BOOL Window::ImplDlgCtrl( const KeyEvent& rKEvt, BOOL bKeyInput )
             pTempWindow = ImplGetDlgWindow( i, nType, nFormStart, nFormEnd, &nNewIndex );
             while ( pTempWindow && (pTempWindow != pSWindow) )
             {
-                if ( !pTempWindow->mbPushButton )
+                if ( !pTempWindow->mpWindowImpl->mbPushButton )
                 {
                     // Around-Flag ermitteln
                     if ( nType == DLGWINDOW_PREV )
@@ -594,11 +597,11 @@ BOOL Window::ImplDlgCtrl( const KeyEvent& rKEvt, BOOL bKeyInput )
                 NotifyEvent aNEvt1( EVENT_LOSEFOCUS, pSWindow );
                 if ( !ImplCallPreNotify( aNEvt1 ) )
                     pSWindow->LoseFocus();
-                pSWindow->mnGetFocusFlags = nGetFocusFlags | GETFOCUS_AROUND;
+                pSWindow->mpWindowImpl->mnGetFocusFlags = nGetFocusFlags | GETFOCUS_AROUND;
                 NotifyEvent aNEvt2( EVENT_GETFOCUS, pSWindow );
                 if ( !ImplCallPreNotify( aNEvt2 ) )
                     pSWindow->GetFocus();
-                pSWindow->mnGetFocusFlags = 0;
+                pSWindow->mpWindowImpl->mnGetFocusFlags = 0;
                 return TRUE;
             }
         }
@@ -618,12 +621,12 @@ BOOL Window::ImplDlgCtrl( const KeyEvent& rKEvt, BOOL bKeyInput )
                 pButtonWindow = NULL;
         }
 
-        if ( bKeyInput && mpDlgCtrlDownWindow )
+        if ( bKeyInput && mpWindowImpl->mpDlgCtrlDownWindow )
         {
-            if ( mpDlgCtrlDownWindow != pButtonWindow )
+            if ( mpWindowImpl->mpDlgCtrlDownWindow != pButtonWindow )
             {
-                ((PushButton*)mpDlgCtrlDownWindow)->SetPressed( FALSE );
-                mpDlgCtrlDownWindow = NULL;
+                ((PushButton*)mpWindowImpl->mpDlgCtrlDownWindow)->SetPressed( FALSE );
+                mpWindowImpl->mpDlgCtrlDownWindow = NULL;
                 return TRUE;
             }
         }
@@ -727,11 +730,11 @@ BOOL Window::ImplDlgCtrl( const KeyEvent& rKEvt, BOOL bKeyInput )
                             NotifyEvent aNEvt1( EVENT_LOSEFOCUS, pSWindow );
                             if ( !ImplCallPreNotify( aNEvt1 ) )
                                 pSWindow->LoseFocus();
-                            pSWindow->mnGetFocusFlags = nGetFocusFlags | GETFOCUS_AROUND;
+                            pSWindow->mpWindowImpl->mnGetFocusFlags = nGetFocusFlags | GETFOCUS_AROUND;
                             NotifyEvent aNEvt2( EVENT_GETFOCUS, pSWindow );
                             if ( !ImplCallPreNotify( aNEvt2 ) )
                                 pSWindow->GetFocus();
-                            pSWindow->mnGetFocusFlags = 0;
+                            pSWindow->mpWindowImpl->mnGetFocusFlags = 0;
                             return TRUE;
                         }
                         else if ( pWindow )
@@ -826,18 +829,18 @@ BOOL Window::ImplDlgCtrl( const KeyEvent& rKEvt, BOOL bKeyInput )
     {
         if ( bKeyInput )
         {
-            if ( mpDlgCtrlDownWindow && (mpDlgCtrlDownWindow != pButtonWindow) )
+            if ( mpWindowImpl->mpDlgCtrlDownWindow && (mpWindowImpl->mpDlgCtrlDownWindow != pButtonWindow) )
             {
-                ((PushButton*)mpDlgCtrlDownWindow)->SetPressed( FALSE );
-                mpDlgCtrlDownWindow = NULL;
+                ((PushButton*)mpWindowImpl->mpDlgCtrlDownWindow)->SetPressed( FALSE );
+                mpWindowImpl->mpDlgCtrlDownWindow = NULL;
             }
 
             ((PushButton*)pButtonWindow)->SetPressed( TRUE );
-            mpDlgCtrlDownWindow = pButtonWindow;
+            mpWindowImpl->mpDlgCtrlDownWindow = pButtonWindow;
         }
-        else if ( mpDlgCtrlDownWindow == pButtonWindow )
+        else if ( mpWindowImpl->mpDlgCtrlDownWindow == pButtonWindow )
         {
-            mpDlgCtrlDownWindow = NULL;
+            mpWindowImpl->mpDlgCtrlDownWindow = NULL;
             ((PushButton*)pButtonWindow)->SetPressed( FALSE );
             ((PushButton*)pButtonWindow)->Click();
         }
@@ -964,10 +967,10 @@ static void ImplDlgCtrlUpdateDefButton( Window* pParent, Window* pFocusWindow,
 
 void Window::ImplDlgCtrlFocusChanged( Window* pWindow, BOOL bGetFocus )
 {
-    if ( mpDlgCtrlDownWindow && !bGetFocus )
+    if ( mpWindowImpl->mpDlgCtrlDownWindow && !bGetFocus )
     {
-        ((PushButton*)mpDlgCtrlDownWindow)->SetPressed( FALSE );
-        mpDlgCtrlDownWindow = NULL;
+        ((PushButton*)mpWindowImpl->mpDlgCtrlDownWindow)->SetPressed( FALSE );
+        mpWindowImpl->mpDlgCtrlDownWindow = NULL;
     }
 
     ImplDlgCtrlUpdateDefButton( this, pWindow, bGetFocus );
@@ -1028,8 +1031,8 @@ Window* Window::GetLabelFor() const
         )
         return NULL;
 
-    if ( mpRealParent )
-        pWindow = mpRealParent->GetParentLabelFor( this );
+    if ( mpWindowImpl->mpRealParent )
+        pWindow = mpWindowImpl->mpRealParent->GetParentLabelFor( this );
 
     if( pWindow )
         return pWindow;
@@ -1099,8 +1102,8 @@ Window* Window::GetLabeledBy() const
         )
         return NULL;
 */
-    if ( mpRealParent )
-        pWindow = mpRealParent->GetParentLabeledBy( this );
+    if ( mpWindowImpl->mpRealParent )
+        pWindow = mpWindowImpl->mpRealParent->GetParentLabeledBy( this );
 
     if( pWindow )
         return pWindow;
