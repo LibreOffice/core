@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-02 12:38:36 $
+ *  last change: $Author: tbe $ $Date: 2001-05-04 11:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,6 +480,10 @@ void PropBrw::implSetNewObject(const Reference< XPropertySet >& _rxObject)
         else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlScrollBarModel") ))
         {
             nResId = RID_STR_CLASS_SCROLLBAR;
+        }
+        else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel") ))
+        {
+            nResId = RID_STR_CLASS_FIXEDLINE;
         }
 
         if (nResId)

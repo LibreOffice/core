@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfac.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-02 12:37:36 $
+ *  last change: $Author: tbe $ $Date: 2001-05-04 11:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,17 +180,20 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlProgressBarModel"), xDialogSFact);
                  break;
             case OBJ_DLG_HSCROLLBAR:
+                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlScrollBarModel"), xDialogSFact);
+                 break;
+            case OBJ_DLG_VSCROLLBAR:
             {
                  DlgEdObj* pNew = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlScrollBarModel"), xDialogSFact);
                  pObjFactory->pNewObj = pNew;
-                 // set horizontal orientation
+                 // set vertical orientation
                  try
                  {
                     uno::Reference< beans::XPropertySet >  xPSet(pNew->GetUnoControlModel(), uno::UNO_QUERY);
                     if (xPSet.is())
                     {
                         uno::Any aValue;
-                        aValue <<= (sal_Int32) ::com::sun::star::awt::ScrollBarOrientation::HORIZONTAL;
+                        aValue <<= (sal_Int32) ::com::sun::star::awt::ScrollBarOrientation::VERTICAL;
                         xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Orientation" ) ), aValue );
                     }
                  }
@@ -198,10 +201,8 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  {
                  }
             }    break;
-            case OBJ_DLG_VSCROLLBAR:
-                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlScrollBarModel"), xDialogSFact);
-                 break;
             case OBJ_DLG_URLBUTTON:
+                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFixedLineModel"), xDialogSFact);
                  break;
         }
 
