@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:16:40 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,7 +501,7 @@ ModalDialog DLG_VERSIONS
     Text[ japanese ] = "ãƒãƒ¼ã‚¸ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "ç‰ˆæœ¬åœ¨";
     Text[ arabic ] = "ÅÕÏÇÑÇÊ İí";
-    Text[ language_user1 ] = "LS 16.07.99: Erkl?ung laut Help Agent: In der Titelleiste des Dialogs sehen Sie hinter \"Versionen in\" den Dateinamen ohne Pfad oder (wenn gesetzt) den Titel des Dokuments. (z.B. \"Versionen in brief.sdw\". (Warum nicht eher Versionen VON?)";
+    Text[ language_user1 ] = "; LS 16.07.99: Erkl?ung laut Help Agent: In der Titelleiste des Dialogs sehen Sie hinter \"Versionen in\" den Dateinamen ohne Pfad oder (wenn gesetzt) den Titel des Dokuments. (z.B. \"Versionen in brief.sdw\". (Warum nicht eher Versionen VON?)";
     Text[ greek ] = "Åêäüóåéò óå";
     Text[ korean ] = "ë²„ì „";
     Text[ turkish ] = "Mevcut sürümler:";
@@ -705,6 +705,7 @@ String DLG_COMMENTS
     Text[ hindi ] = "à¤†à¤µà¤°à¥à¤¤à¤¨ à¤…à¤ªà¤µà¤¾à¤¦";
     Text[ slovak ] = "PoznÃ¡mka k verzii";
 };
+
 
 
 
