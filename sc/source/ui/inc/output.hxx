@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:37:05 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ class SvxMarginItem;
 class SdrObject;
 class SdrOle2Obj;
 struct RowInfo;
+struct ScTableInfo;
 class ScTabViewShell;
 class SvInPlaceObjectRef;
 class ScPageBreakData;
@@ -97,9 +98,6 @@ class FmFormView;
 
 #define SC_SCENARIO_HSPACE      60
 #define SC_SCENARIO_VSPACE      50
-
-//  Twips (Hoehe wird passend in Pixeln berechnet)
-#define SC_CLIPMARK_SIZE    64
 
 // ---------------------------------------------------------------------------
 
@@ -118,6 +116,7 @@ private:
     OutputDevice* pDev;         // Device
     OutputDevice* pRefDevice;   // printer if used for preview
     OutputDevice* pFmtDevice;   // reference for text formatting
+    ScTableInfo& mrTabInfo;
     RowInfo* pRowInfo;          // Info-Block
     SCSIZE nArrCount;           // belegte Zeilen im Info-Block
     ScDocument* pDoc;           // Dokument
@@ -210,8 +209,7 @@ private:
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
-                                    RowInfo* pNewRowInfo, SCSIZE nNewCount,
-                                    ScDocument* pNewDoc,
+                                    ScTableInfo& rTabInfo, ScDocument* pNewDoc,
                                     SCTAB nNewTab, long nNewScrX, long nNewScrY,
                                     SCCOL nNewX1, SCROW nNewY1, SCCOL nNewX2, SCROW nNewY2,
                                     double nPixelPerTwipsX, double nPixelPerTwipsY,
