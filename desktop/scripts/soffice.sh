@@ -144,25 +144,27 @@ case $sd_platform in
 esac
 
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
-java_ld_library_path=`"$sd_prog/javaldx"`
-if [ "$java_ld_library_path" != "" ] ; then
-    case $sd_platform in
-        AIX)
-            LIBPATH=${java_ld_library_path}:${LIBPATH}
-            ;;
-        Darwin)
-            DYLD_LIBRARY_PATH=${java_ld_library_path}:${DYLD_LIBRARY_PATH}
-            ;;
-        HP-UX)
-            SHLIB_PATH=${java_ld_library_path}:${SHLIB_PATH}
-            ;;
-        IRIX*)
-            LD_LIBRARYN32_PATH=${java_ld_library_path}:${LD_LIBRARYN32_PATH}
-            ;;
-        *)
-            LD_LIBRARY_PATH=${java_ld_library_path}:${LD_LIBRARY_PATH}
-            ;;
-    esac
+if [ -x "$sd_prog/javaldx" ] ; then
+    java_ld_library_path=`"$sd_prog/javaldx"`
+    if [ "$java_ld_library_path" != "" ] ; then
+        case $sd_platform in
+            AIX)
+                LIBPATH=${java_ld_library_path}:${LIBPATH}
+                ;;
+            Darwin)
+                DYLD_LIBRARY_PATH=${java_ld_library_path}:${DYLD_LIBRARY_PATH}
+                ;;
+            HP-UX)
+                SHLIB_PATH=${java_ld_library_path}:${SHLIB_PATH}
+                ;;
+            IRIX*)
+                LD_LIBRARYN32_PATH=${java_ld_library_path}:${LD_LIBRARYN32_PATH}
+                ;;
+            *)
+                LD_LIBRARY_PATH=${java_ld_library_path}:${LD_LIBRARY_PATH}
+                ;;
+        esac
+    fi
 fi
 
 # set java environment variables
@@ -227,7 +229,7 @@ for sd_arg in ${1+"$@"} ; do
 done
 
 sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-common"
-${sd_prog}/pagein -L${sd_prog} ${sd_pagein_args}
+"${sd_prog}"/pagein -L"${sd_prog}" ${sd_pagein_args}
 
 # set path so that other apps can be started from soffice just by name
 PATH="$sd_prog":$PATH
