@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:00:47 $
+ *  last change: $Author: rt $ $Date: 2005-02-07 14:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,7 +842,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                     ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
 
                 // write document storage
-                pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT );
+                pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, sal_False );
                 // mba: no BaseURL for clipboard
                 SfxMedium aMedium( xWorkStore, String() );
                 bRet = pEmbObj->DoSaveObjectAs( aMedium, FALSE );
