@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:28:26 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 12:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
+#endif
 #ifndef _INETIMG_HXX
 #include <svtools/inetimg.hxx>
 #endif
@@ -107,7 +110,35 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
+// -----------------------------------------------------------------------
+
+class SearchDefaultConfigItem_Impl : public ::utl::ConfigItem
+{
+    OUString    sDefaultEngine;
+public:
+    SearchDefaultConfigItem_Impl();
+    ~SearchDefaultConfigItem_Impl();
+
+    const OUString&    GetDefaultSearchEngine(){ return sDefaultEngine;}
+};
+
+/*-- 11.11.2003 14:20:59---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SearchDefaultConfigItem_Impl::SearchDefaultConfigItem_Impl() :
+        ConfigItem(OUString::createFromAscii("Inet/DefaultSearchEngine"))
+{
+    uno::Sequence<OUString> aNames(1);
+    aNames.getArray()[0] = OUString::createFromAscii("Name");
+    uno::Sequence< uno::Any > aValues = GetProperties(aNames);
+    aValues.getConstArray()[0] >>= sDefaultEngine;
+}
+/*-- 11.11.2003 14:21:00---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SearchDefaultConfigItem_Impl::~SearchDefaultConfigItem_Impl()
+{
+}
 
 /*************************************************************************
 |*
@@ -422,15 +453,32 @@ IMPL_LINK( SvxHyperlinkDlg, DropdownClick, ToolBox *, pBox )
             // Search-Engines per Popup auswaehlen
             PopupMenu *pMenu = new PopupMenu;
             pMenu->SetSelectHdl(LINK(this, SvxHyperlinkDlg, SearchPopupSelectHdl));
+            SearchDefaultConfigItem_Impl aDefaultEngine;
+            String sDefault(aDefaultEngine.GetDefaultSearchEngine());
+            sDefault.ToLowerAscii();
+            const bool bHasDefault = sDefault.Len() > 0;
 
             sal_uInt16         nCount = aSearchConfig.Count();
             String sFound;
             for (USHORT i = 0; i < nCount; i++)
             {
-                if (i)
-                    pMenu->InsertSeparator();
-                const SvxSearchEngineData&  rData = aSearchConfig.GetData(i);
-                pMenu->InsertItem( i + 1, rData.sEngineName);
+                const SvxSearchEngineData& rData = aSearchConfig.GetData(i);
+                //check if it's the configured default search engine
+                String sTest(rData.sEngineName);
+                sTest.ToLowerAscii();
+                bool bIsDefaultEngine = bHasDefault && STRING_NOTFOUND != sTest.Search( sDefault );
+                //then put it at the top
+                if(i && bIsDefaultEngine)
+                {
+                    pMenu->InsertItem( i + 1, rData.sEngineName, 0, 0);
+                    pMenu->InsertSeparator(1);
+                }
+                else
+                {
+                    if (i)
+                        pMenu->InsertSeparator();
+                    pMenu->InsertItem( i + 1, rData.sEngineName);
+                }
             }
             pBox->SetItemDown(BTN_INET_SEARCH, TRUE, TRUE);
             pMenu->Execute( this, GetItemRect( BTN_INET_SEARCH ), FLOATWIN_POPUPMODE_DOWN );
