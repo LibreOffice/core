@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strhelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:48:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 16:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,15 @@
 #include <cstdlib>
 #include <cmath> // for isnan
 #include <cstring>
+
+// isnan needs special support on MACOSX
+#if defined(MACOSX)
+#define      isnan( x )         ( ( sizeof ( x ) == sizeof(double) ) ?    \
+                              __isnand ( x ) :                            \
+                                ( sizeof ( x ) == sizeof( float) ) ?      \
+                              __isnanf ( x ) :                            \
+                              __isnan  ( x ) )
+#endif
 
 namespace psp {
 
