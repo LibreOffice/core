@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:34:32 $
+ *  last change: $Author: mav $ $Date: 2002-10-24 07:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,14 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
 #include <com/sun/star/document/XTypeDetection.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#endif
 
-#ifndef  _COM_SUN_STAR_FRAME_XDOCUMENTTEMPLATES_HPP_
+#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDOCUMENTTEMPLATES_HPP_
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #endif
 
@@ -195,6 +201,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::document;
 using namespace rtl;
 using namespace ucb;
 
@@ -237,6 +244,7 @@ using namespace ucb;
 //#define PARAMETER_OLD_TYPEDETECTION     "DeepDetection"
 #define SERVICENAME_DOCINFO             "com.sun.star.document.DocumentProperties"
 #define SERVICENAME_DOCTEMPLATES        "com.sun.star.frame.DocumentTemplates"
+#define SERVICENAME_DESKTOP             "com.sun.star.frame.Desktop"
 
 //========================================================================
 
@@ -371,7 +379,7 @@ public:
     long                GetRegionPos( const OUString& rTitle,
                                       sal_Bool& rFound ) const;
 
-    void                GetTitleFromURL( const OUString& rURL, OUString& aTitle );
+    sal_Bool            GetTitleFromURL( const OUString& rURL, OUString& aTitle );
     sal_Bool            InsertRegion( RegionData_Impl *pData, ULONG nPos = LIST_APPEND );
     OUString            GetRootURL() const { return maRootURL; }
 
@@ -1203,14 +1211,84 @@ BOOL SfxDocumentTemplates::CopyFrom
     if ( !pTargetRgn )
         return FALSE;
 
-    OUString aTitle;
-
-    pImp->GetTitleFromURL( rName, aTitle );
-
     Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
+    if ( !xTemplates.is() )
+        return FALSE;
 
-    if ( xTemplates->addTemplate( pTargetRgn->GetTitle(),
-                                  aTitle, rName ) )
+    OUString aTitle;
+    sal_Bool bTemplateAdded = sal_False;
+
+    if( pImp->GetTitleFromURL( rName, aTitle ) )
+    {
+        bTemplateAdded = xTemplates->addTemplate( pTargetRgn->GetTitle(), aTitle, rName );
+    }
+    else
+    {
+        OUString aService( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_DESKTOP ) );
+        Reference< XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( aService ),
+                                                UNO_QUERY );
+
+        Sequence< PropertyValue > aArgs( 1 );
+        aArgs[0].Name = ::rtl::OUString::createFromAscii("Hidden");
+        aArgs[0].Value <<= sal_True;
+
+        INetURLObject   aTemplURL( rName );
+        Reference< XDocumentInfoSupplier > xDocInfoSupplier;
+        Reference< XStorable > xStorable;
+        try
+        {
+            xStorable = Reference< XStorable >(
+                xDesktop->loadComponentFromURL( aTemplURL.GetMainURL(INetURLObject::NO_DECODE),
+                                                OUString::createFromAscii( "_blank" ),
+                                                0,
+                                                aArgs ),
+                UNO_QUERY );
+
+            xDocInfoSupplier = Reference< XDocumentInfoSupplier >( xStorable, UNO_QUERY );
+        }
+        catch( Exception& )
+        {
+        }
+
+        if( xStorable.is() )
+        {
+            // get a Titel from XDocumentInfoSupplier
+            if( xDocInfoSupplier.is() )
+            {
+                Reference< XDocumentInfo > xDocInfo = xDocInfoSupplier->getDocumentInfo();
+                if( xDocInfo.is() )
+                {
+                    try
+                    {
+                        sal_Int16 nCount = xDocInfo->getUserFieldCount();
+                        for( sal_Int16 ind = 0; aTitle.getLength() == 0  && ind < nCount; ind++ )
+                        {
+                            OUString aFieldName = xDocInfo->getUserFieldName( ind );
+                            if( aFieldName.equals( OUString::createFromAscii( "Title" ) ) )
+                                aTitle = xDocInfo->getUserFieldValue( ind );
+                        }
+                    }
+                    catch( ArrayIndexOutOfBoundsException& )
+                    {
+                    }
+                }
+            }
+
+            if( ! aTitle.getLength() )
+            {
+                INetURLObject aURL( aTemplURL );
+                aURL.CutExtension();
+                aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true,
+                                        INetURLObject::DECODE_WITH_CHARSET );
+            }
+
+            // write a template using XStorable interface
+            bTemplateAdded = xTemplates->storeTemplate( pTargetRgn->GetTitle(), aTitle, xStorable );
+        }
+    }
+
+
+    if( bTemplateAdded )
     {
         if ( nIdx == USHRT_MAX )
             nIdx = 0;
@@ -2357,7 +2435,11 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
                 if ( ! pEntry )
                 {
                     OUString aFullTitle;
-                    GetTitleFromURL( aId, aFullTitle );
+                    if( !GetTitleFromURL( aId, aFullTitle ) )
+                    {
+                        DBG_ERRORFILE( "GetTemplates(): template of alien format" );
+                        continue;
+                    }
 
                     if ( aFullTitle.getLength() )
                         aTitle = aFullTitle;
@@ -2459,7 +2541,7 @@ void SfxDocTemplate_Impl::Rescan()
 }
 
 // -----------------------------------------------------------------------
-void SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
+sal_Bool SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
                                            OUString& aTitle )
 {
     if ( mxInfo.is() )
@@ -2467,7 +2549,16 @@ void SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
         try
         {
             mxInfo->read( rURL );
+        }
+        catch ( Exception& )
+        {
+            // the document is not a StarOffice document
+            return sal_False;
+        }
 
+
+        try
+        {
             Reference< XPropertySet > aPropSet( mxInfo, UNO_QUERY );
             if ( aPropSet.is() )
             {
@@ -2488,6 +2579,8 @@ void SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
         aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true,
                                INetURLObject::DECODE_WITH_CHARSET );
     }
+
+    return sal_True;
 }
 
 

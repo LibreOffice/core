@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-11 15:57:19 $
+ *  last change: $Author: mav $ $Date: 2002-10-24 07:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ class SfxDocTplService_Impl
     void                        readFolderList();
     sal_Bool                    needsUpdate();
     OUString                    getLongName( const OUString& rShortName );
-    void                        getTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType );
+    sal_Bool                    getTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType );
 
     sal_Bool                    addEntry( Content& rParentFolder,
                                           const OUString& rTitle,
@@ -581,14 +581,22 @@ sal_Bool SfxDocTplService_Impl::needsUpdate()
 }
 
 // -----------------------------------------------------------------------
-void SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType )
+sal_Bool SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType )
 {
     if ( mxInfo.is() )
     {
         try
         {
             mxInfo->read( rURL );
+        }
+        catch ( Exception& )
+        {
+            // the document is not a StarOffice document
+            return sal_False;
+        }
 
+        try
+        {
             Reference< XPropertySet > aPropSet( mxInfo, UNO_QUERY );
             if ( aPropSet.is() )
             {
@@ -601,7 +609,6 @@ void SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTi
                 aValue >>= aType;
             }
         }
-        catch ( IOException& ) {}
         catch ( UnknownPropertyException& ) {}
         catch ( Exception& ) {}
     }
@@ -618,6 +625,8 @@ void SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTi
         aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true,
                                INetURLObject::DECODE_WITH_CHARSET );
     }
+
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -1360,7 +1369,9 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     // Get the content type
     OUString aTitle, aType, aTargetURL2, aFullName;
 
-    getTitleFromURL( rSourceURL, aTitle, aType );
+    // only StarOffice documents are acceptable
+    if( !getTitleFromURL( rSourceURL, aTitle, aType ) )
+        return sal_False;
 
     // addTemplate will sometimes be called just to add an entry in the
     // hierarchy; the target URL and the source URL will be the same in
@@ -1808,7 +1819,13 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
                 if ( !aType.getLength() )
                 {
                     OUString aTmpTitle;
-                    getTitleFromURL( aTargetDir, aTmpTitle, aType );
+
+                    if( !getTitleFromURL( aTargetDir, aTmpTitle, aType ) )
+                    {
+                        DBG_ERRORFILE( "addHierGroup(): template of alien format" );
+                        continue;
+                    }
+
                     if ( aType.getLength() )
                         bUpdateType = sal_True;
                 }
@@ -1878,7 +1895,9 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
                 if ( aTitle.compareToAscii( "sfx.tlx" ) == 0 )
                     continue;
 
-                getTitleFromURL( aTargetURL, aTitle, aType );
+                // only StarOffice templates are accepted
+                if( !getTitleFromURL( aTargetURL, aTitle, aType ) )
+                    continue;
 
                 pGroup->addEntry( aTitle, aTargetURL, aType, aHierURL );
             }
