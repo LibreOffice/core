@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:11:45 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,7 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
 
     FASTBOOL SelectTableRow();
     FASTBOOL SelectTableCol();
+    FASTBOOL SelectTableCell();
     FASTBOOL SelectTxtAttr( USHORT nWhich, const SwTxtAttr* pAttr = 0 );
 
     // Spaltenweise Spruenge
