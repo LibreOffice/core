@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 11:11:45 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 14:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,7 @@ TabDialog DLG_ATTR
     Text[ turkish ] = "Alan formatý";
     Text[ catalan ] = "Formato de campo";
 };
+
 
 
 
