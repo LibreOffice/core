@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vector3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-10 08:17:17 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #ifndef _INC_MATH
 #include <math.h>
 #endif
+
+#include <vector>
 
 class Point;
 class SvStream;
@@ -144,5 +146,8 @@ class Vector3D
     friend SvStream& operator>>(SvStream& rIStream, Vector3D&);
     friend SvStream& operator<<(SvStream& rOStream, const Vector3D&);
 };
+
+// #110988# typedefs for a vector of Vector3Ds
+typedef ::std::vector< Vector3D > Vector3DVector;
 
 #endif // _SVX_VECTOR3D_HXX
