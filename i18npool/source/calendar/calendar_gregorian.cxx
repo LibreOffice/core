@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 16:33:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 12:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,20 @@ Calendar_gregorian::setValue() throw(RuntimeException)
         // stuff to work right), and correct DST glitch.
         // See also localtime/gmtime conversion pitfalls at
         // http://www.erack.de/download/timetest.c
+        //
+        // #i24082# in order to make the DST correction work in all
+        // circumstances, the time values have to be always resubmitted,
+        // regardless whether specified by the caller or not. It is not
+        // sufficient to rely on the ICU internal values previously set, as the
+        // following may happen:
+        // - Let 2004-03-28T02:00 be the onsetRule.
+        // - On 2004-03-29 (calendar initialized with 2004-03-29T00:00 DST) set
+        //   a date of 2004-03-28 => calendar results in 2004-03-27T23:00 no DST.
+        // - Correcting this with simply "2004-03-28 no DST" and no time
+        //   specified results in 2004-03-29T00:00, the ICU internal 23:00 time
+        //   being adjusted to 24:00 in this case, switching one day further.
+        // => submit 2004-03-28T00:00 no DST.
+
         if ( !(fieldSet & (1 << CalendarFieldIndex::ZONE_OFFSET)) )
         {
             UErrorCode status;
@@ -311,13 +325,57 @@ Calendar_gregorian::setValue() throw(RuntimeException)
             }
         }
         bool bNeedDST = !(fieldSet & (1 << CalendarFieldIndex::DST_OFFSET));
-        sal_Int32 nValDST = 0;
+        sal_Int32 nValDST, nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond;
+        nValDST = 0;
+        nYear = nMonth = nDay = nHour = nMinute = nSecond = nMilliSecond = -1;
         if ( bNeedDST )
         {
             UErrorCode status;
             nValDST = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
             if ( !U_SUCCESS(status) )
                 nValDST = 0;
+            if ( !(fieldSet & (1 << CalendarFieldIndex::YEAR)) )
+            {
+                nYear = body->get( UCAL_YEAR, status = U_ZERO_ERROR);
+                if ( !U_SUCCESS(status) )
+                    nYear = -1;
+            }
+            if ( !(fieldSet & (1 << CalendarFieldIndex::MONTH)) )
+            {
+                nMonth = body->get( UCAL_MONTH, status = U_ZERO_ERROR);
+                if ( !U_SUCCESS(status) )
+                    nMonth = -1;
+            }
+            if ( !(fieldSet & (1 << CalendarFieldIndex::DAY_OF_MONTH)) )
+            {
+                nDay = body->get( UCAL_DATE, status = U_ZERO_ERROR);
+                if ( !U_SUCCESS(status) )
+                    nDay = -1;
+            }
+            if ( !(fieldSet & (1 << CalendarFieldIndex::HOUR)) )
+            {
+                nHour = body->get( UCAL_HOUR_OF_DAY, status = U_ZERO_ERROR);
+                if ( !U_SUCCESS(status) )
+                    nHour = -1;
+            }
+            if ( !(fieldSet & (1 << CalendarFieldIndex::MINUTE)) )
+            {
+                nMinute = body->get( UCAL_MINUTE, status = U_ZERO_ERROR);
+                if ( !U_SUCCESS(status) )
+                    nMinute = -1;
+            }
+            if ( !(fieldSet & (1 << CalendarFieldIndex::SECOND)) )
+            {
+                nSecond = body->get( UCAL_SECOND, status = U_ZERO_ERROR);
+                if ( !U_SUCCESS(status) )
+                    nSecond = -1;
+            }
+            if ( !(fieldSet & (1 << CalendarFieldIndex::MILLISECOND)) )
+            {
+                nMilliSecond = body->get( UCAL_MILLISECOND, status = U_ZERO_ERROR);
+                if ( !U_SUCCESS(status) )
+                    nMilliSecond = -1;
+            }
         }
         memcpy(fieldSetValue, fieldValue, sizeof(fieldValue));
         mapToGregorian();
@@ -355,6 +413,20 @@ Calendar_gregorian::setValue() throw(RuntimeException)
                             body->set(fieldNameConverter(fieldIndex), fieldSetValue[fieldIndex]);
                     }
                 }
+                if (nYear >= 0)
+                    body->set( UCAL_YEAR, nYear);
+                if (nMonth >= 0)
+                    body->set( UCAL_MONTH, nMonth);
+                if (nDay >= 0)
+                    body->set( UCAL_DATE, nDay);
+                if (nHour >= 0)
+                    body->set( UCAL_HOUR_OF_DAY, nHour);
+                if (nMinute >= 0)
+                    body->set( UCAL_MINUTE, nMinute);
+                if (nSecond >= 0)
+                    body->set( UCAL_SECOND, nSecond);
+                if (nMilliSecond >= 0)
+                    body->set( UCAL_MILLISECOND, nMilliSecond);
             }
         }
 }
