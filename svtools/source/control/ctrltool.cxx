@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:22:38 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 15:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,7 +614,8 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
         return maMapPrinterOnly;
     }
     // Only Screen-Font?
-    else if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_SCREEN )
+    else if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_SCREEN
+            && rInfo.GetType() == TYPE_RASTER )
     {
         if ( !maMapScreenOnly.Len() )
             ((FontList*)this)->maMapScreenOnly = XubString( SvtResId( STR_SVT_FONTMAP_SCREENONLY ) );
