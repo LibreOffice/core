@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mh $ $Date: 2002-02-15 11:17:42 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 12:28:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,9 +100,9 @@ ALL : \
 
 .INCLUDE :	target.mk
 
-$(BIN)$/applicat.rdb : makefile.mk $(SOLARBINDIR)$/applicat.rdb
+$(BIN)$/applicat.rdb : makefile.mk $(UNOUCRRDB)
     rm -f $@
-    $(GNUCOPY) $(SOLARBINDIR)$/applicat.rdb $@
+    $(GNUCOPY) $(UNOUCRRDB) $@
      +cd $(BIN) && \
          regcomp -register -r applicat.rdb \
              -c $(DLLPRE)i18n$(UPD)$(DLLPOSTFIX)$(DLLPOST) \
