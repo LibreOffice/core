@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: vg $ $Date: 2003-10-06 12:58:59 $
-#*    $Revision: 1.4 $
+#*    last change   $Author: obo $ $Date: 2004-06-03 15:00:42 $
+#*    $Revision: 1.5 $
 #*
 #*    $Logfile: $
 #*
@@ -24,8 +24,15 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/Sequence.hxx"
 
-#include <com/sun/star/test/bridge/XBridgeTest2.hpp>
+#include "test/testtools/bridgetest/TestPolyStruct.hpp"
+#include "test/testtools/bridgetest/XBridgeTest2.hpp"
+#include "test/testtools/bridgetest/XMulti.hpp"
+
+#include "multi.hxx"
 
 using namespace rtl;
 using namespace osl;
@@ -33,7 +40,7 @@ using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
-using namespace com::sun::star::test::bridge;
+using namespace test::testtools::bridgetest;
 
 #define SERVICENAME     "com.sun.star.test.bridge.CppTestObject"
 #define IMPLNAME        "com.sun.star.comp.bridge.CppTestObject"
@@ -252,6 +259,64 @@ public:
     virtual void SAL_CALL setStruct( const TestData& _struct ) throw(::com::sun::star::uno::RuntimeException)
         { _aStructData = _struct; }
 
+    virtual sal_Int32 SAL_CALL getRaiseAttr1() throw (RuntimeException)
+    { throw RuntimeException(); }
+
+    virtual void SAL_CALL setRaiseAttr1(sal_Int32)
+        throw (IllegalArgumentException, RuntimeException)
+    { throw IllegalArgumentException(); }
+
+    virtual sal_Int32 SAL_CALL getRaiseAttr2()
+        throw (IllegalArgumentException, RuntimeException)
+    { throw IllegalArgumentException(); }
+
+    virtual TestPolyStruct< sal_Bool > SAL_CALL transportPolyBoolean(
+        TestPolyStruct< sal_Bool > const & arg) throw (RuntimeException)
+    { return arg; }
+
+    virtual void SAL_CALL transportPolyUnsignedHyper(
+        TestPolyStruct< sal_uInt64 > & arg) throw (RuntimeException)
+    {}
+
+    virtual void SAL_CALL transportPolySequence(
+        TestPolyStruct< Sequence< Any > > const & arg1,
+        TestPolyStruct< Sequence< Any > > & arg2) throw (RuntimeException)
+    { arg2 = arg1; }
+
+    virtual TestPolyStruct< sal_Int32 > SAL_CALL getNullPolyLong()
+        throw (RuntimeException)
+    { return TestPolyStruct< sal_Int32 >(0); /* work around MS compiler bug */ }
+
+    virtual TestPolyStruct< rtl::OUString > SAL_CALL getNullPolyString()
+        throw (RuntimeException)
+    { return TestPolyStruct< rtl::OUString >(); }
+
+    virtual TestPolyStruct< Type > SAL_CALL getNullPolyType()
+        throw (RuntimeException)
+    { return TestPolyStruct< Type >(); }
+
+    virtual TestPolyStruct< Any > SAL_CALL getNullPolyAny()
+        throw (RuntimeException)
+    { return TestPolyStruct< Any >(); }
+
+    virtual TestPolyStruct< Sequence< sal_Bool > > SAL_CALL
+    getNullPolySequence() throw (RuntimeException)
+    { return TestPolyStruct< Sequence< sal_Bool > >(); }
+
+    virtual TestPolyStruct< TestEnum > SAL_CALL getNullPolyEnum()
+        throw (RuntimeException)
+    { return TestPolyStruct< TestEnum >(
+        test::testtools::bridgetest::TestEnum_TEST);
+          /* work around MS compiler bug */ }
+
+    virtual TestPolyStruct< TestStruct > SAL_CALL getNullPolyStruct()
+        throw (RuntimeException)
+    { return TestPolyStruct< TestStruct >(); }
+
+    virtual TestPolyStruct< Reference< XBridgeTestBase > > SAL_CALL
+    getNullPolyInterface() throw (RuntimeException)
+    { return TestPolyStruct< Reference< XBridgeTestBase > >(); }
+
     virtual ::com::sun::star::uno::Any SAL_CALL transportAny(
         const ::com::sun::star::uno::Any& value )
         throw(::com::sun::star::uno::RuntimeException);
@@ -263,8 +328,19 @@ public:
     virtual sal_Bool SAL_CALL sequenceOfCallTestPassed(  )
         throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL startRecursiveCall(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::test::bridge::XRecursiveCall >& xCall, sal_Int32 nToCall )
+        const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall )
         throw(::com::sun::star::uno::RuntimeException);
+
+    virtual Reference< XMulti > SAL_CALL getMulti() throw (RuntimeException);
+    virtual sal_Int32 SAL_CALL testMultiF1(Reference< XMulti > const & multi)
+        throw (RuntimeException);
+    virtual sal_Int32 SAL_CALL testMultiF2(Reference< XMulti > const & multi)
+        throw (RuntimeException);
+    virtual sal_Int32 SAL_CALL testMultiF3(Reference< XMulti > const & multi)
+        throw (RuntimeException);
+    virtual sal_Int32 SAL_CALL testMultiA(
+        Reference< XMulti > const & multi, sal_Int32 value)
+        throw (RuntimeException);
 
 public: // XBridgeTest
     virtual TestData SAL_CALL raiseException( sal_Int16 nArgumentPos, const OUString & rMsg, const Reference< XInterface > & xCOntext )
@@ -354,7 +430,7 @@ public: // XBridgeTest
         throw (RuntimeException);
 
 public:
-    virtual void SAL_CALL callRecursivly( const ::com::sun::star::uno::Reference< ::com::sun::star::test::bridge::XRecursiveCall >& xCall, sal_Int32 nToCall ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL callRecursivly( const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 //__________________________________________________________________________________________________
@@ -396,7 +472,7 @@ sal_Bool Test_Impl::sequenceOfCallTestPassed() throw (::com::sun::star::uno::Run
 
 //__________________________________________________________________________________________________
 void SAL_CALL Test_Impl::startRecursiveCall(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::test::bridge::XRecursiveCall >& xCall, sal_Int32 nToCall )
+    const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall )
     throw(::com::sun::star::uno::RuntimeException)
 {
     MutexGuard guard( m_mutex );
@@ -409,7 +485,7 @@ void SAL_CALL Test_Impl::startRecursiveCall(
 
 
 void SAL_CALL Test_Impl::callRecursivly(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::test::bridge::XRecursiveCall >& xCall,
+    const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall,
     sal_Int32 nToCall )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -419,6 +495,35 @@ void SAL_CALL Test_Impl::callRecursivly(
         nToCall --;
         xCall->callRecursivly( this , nToCall );
     }
+}
+
+Reference< XMulti > Test_Impl::getMulti() throw (RuntimeException) {
+    return new testtools::bridgetest::Multi;
+}
+
+sal_Int32 Test_Impl::testMultiF1(Reference< XMulti > const & multi)
+    throw (RuntimeException)
+{
+    return multi->f1();
+}
+
+sal_Int32 Test_Impl::testMultiF2(Reference< XMulti > const & multi)
+    throw (RuntimeException)
+{
+    return multi->f2();
+}
+
+sal_Int32 Test_Impl::testMultiF3(Reference< XMulti > const & multi)
+    throw (RuntimeException)
+{
+    return multi->f3();
+}
+
+sal_Int32 Test_Impl::testMultiA(
+    Reference< XMulti > const & multi, sal_Int32 value) throw (RuntimeException)
+{
+    multi->seta(value);
+    return multi->geta();
 }
 
 //__________________________________________________________________________________________________
