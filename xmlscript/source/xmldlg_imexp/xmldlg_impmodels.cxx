@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-19 09:42:27 $
+ *  last change: $Author: dbo $ $Date: 2001-09-19 13:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #include "imp_share.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 
 
 using namespace ::rtl;
@@ -394,16 +394,18 @@ void FormattedFieldElement::endElement()
     }
 
     // format spec
+    ctx.getControlModel()->setPropertyValue(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("FormatsSupplier") ),
+        makeAny( _pImport->getNumberFormatsSupplier() ) );
+
     OUString sFormat( _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID,
-        OUString( RTL_CONSTASCII_USTRINGPARAM("format-code") ) ) );
+        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("format-code") ) ) );
     if (sFormat.getLength())
     {
         lang::Locale locale;
 
         OUString sLocale( _xAttributes->getValueByUidName(
-            XMLNS_DIALOGS_UID,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("format-locale") ) ) );
+            XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("format-locale") ) ) );
         if (sLocale.getLength())
         {
             // split locale
@@ -429,15 +431,13 @@ void FormattedFieldElement::endElement()
             }
         }
 
-        Reference< XComponentContext > xContext( _pImport->getComponentContext() );
-        Reference< util::XNumberFormatsSupplier > xSupplier( xContext->getServiceManager()->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier") ), xContext ), UNO_QUERY );
-        Reference< util::XNumberFormats > xFormats( xSupplier->getNumberFormats() );
-
-        sal_Int32 nKey;
         try
         {
-            nKey = xFormats->addNew( sFormat, locale );
+            Reference< util::XNumberFormats > xFormats(
+                _pImport->getNumberFormatsSupplier()->getNumberFormats() );
+            sal_Int32 nKey = xFormats->addNew( sFormat, locale );
+            ctx.getControlModel()->setPropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("FormatKey") ), makeAny( nKey ) );
         }
         catch (util::MalformedNumberFormatException & exc)
         {
@@ -445,13 +445,6 @@ void FormattedFieldElement::endElement()
             // rethrow
             throw xml::sax::SAXException( exc.Message, Reference< XInterface >(), Any() );
         }
-
-        ctx.getControlModel()->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("FormatsSupplier") ),
-            makeAny( xSupplier ) );
-        ctx.getControlModel()->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("FormatKey") ),
-            makeAny( nKey ) );
     }
 
     ctx.importEvents( _events );

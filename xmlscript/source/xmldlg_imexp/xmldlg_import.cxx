@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:33 $
+ *  last change: $Author: dbo $ $Date: 2001-09-19 13:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #include "imp_share.hxx"
 
 #include <osl/diagnose.h>
+#include <osl/mutex.hxx>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -1271,6 +1272,24 @@ DialogImport::~DialogImport()
 #ifdef DEBUG
     OSL_TRACE( "DialogImport::~DialogImport().\n" );
 #endif
+}
+//__________________________________________________________________________________________________
+Reference< util::XNumberFormatsSupplier > const & DialogImport::getNumberFormatsSupplier()
+    SAL_THROW( () )
+{
+    if (! _xSupplier.is())
+    {
+        Reference< XComponentContext > xContext( getComponentContext() );
+        Reference< util::XNumberFormatsSupplier > xSupplier( xContext->getServiceManager()->createInstanceWithContext(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier") ), xContext ), UNO_QUERY );
+
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! _xSupplier.is())
+        {
+            _xSupplier = xSupplier;
+        }
+    }
+    return _xSupplier;
 }
 
 //__________________________________________________________________________________________________

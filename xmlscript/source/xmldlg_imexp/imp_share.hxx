@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:33 $
+ *  last change: $Author: dbo $ $Date: 2001-09-19 13:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -160,6 +162,7 @@ struct DialogImport
     friend class ImportContext;
 
     Reference< XComponentContext > _xContext;
+    Reference< util::XNumberFormatsSupplier > _xSupplier;
 
     vector< OUString > _styleNames;
     vector< Reference< xml::XImportContext > > _styles;
@@ -177,8 +180,9 @@ public:
         OUString const & rStyleId ) const
         SAL_THROW( () );
 
-    inline Reference< XComponentContext > getComponentContext() SAL_THROW( () )
+    inline Reference< XComponentContext > const & getComponentContext() SAL_THROW( () )
         { return _xContext; }
+    Reference< util::XNumberFormatsSupplier > const & getNumberFormatsSupplier() SAL_THROW( () );
 
     inline DialogImport(
         Reference< XComponentContext > const & xContext,
