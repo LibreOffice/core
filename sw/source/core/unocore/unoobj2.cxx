@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dvo $ $Date: 2002-09-13 08:56:21 $
+ *  last change: $Author: tl $ $Date: 2002-09-23 13:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,7 +693,29 @@ void SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescripto
             if(!SwXTextCursor::convertSortProperties(rDescriptor, aSortOpt))
                     throw uno::RuntimeException();
             UnoActionContext aContext( pUnoCrsr->GetDoc() );
+
+            SwPosition* pStart = pUnoCrsr->Start();
+            SwPosition* pEnd   = pUnoCrsr->End();
+
+            SwNodeIndex aPrevIdx( pStart->nNode, -1 );
+            ULONG nOffset = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
+            xub_StrLen nCntStt  = pStart->nContent.GetIndex();
+
             pUnoCrsr->GetDoc()->SortText(*pUnoCrsr, aSortOpt);
+
+            // Selektion wieder setzen
+            pUnoCrsr->DeleteMark();
+            pUnoCrsr->GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
+            SwCntntNode* pCNd = pUnoCrsr->GetCntntNode();
+            xub_StrLen nLen = pCNd->Len();
+            if( nLen > nCntStt )
+                nLen = nCntStt;
+            pUnoCrsr->GetPoint()->nContent.Assign(pCNd, nLen );
+            pUnoCrsr->SetMark();
+
+            pUnoCrsr->GetPoint()->nNode += nOffset;
+            pCNd = pUnoCrsr->GetCntntNode();
+            pUnoCrsr->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
         }
     }
     else
