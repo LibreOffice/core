@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:38:27 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,12 +81,12 @@ SwTabCols::SwTabCols( USHORT nSize ) :
 }
 
 SwTabCols::SwTabCols( const SwTabCols& rCpy ) :
-    aData( rCpy.GetData() ),
     nLeftMin( rCpy.GetLeftMin() ),
     nLeft( rCpy.GetLeft() ),
     nRight( rCpy.GetRight() ),
     nRightMax( rCpy.GetRightMax() ),
-    bLastRowAllowedToChange( rCpy.IsLastRowAllowedToChange() )
+    bLastRowAllowedToChange( rCpy.IsLastRowAllowedToChange() ),
+    aData( rCpy.GetData() )
 {
 #if OSL_DEBUG_LEVEL > 1
     for ( USHORT i = 0; i < Count(); ++i )
