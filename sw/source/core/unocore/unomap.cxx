@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: os $ $Date: 2001-02-19 08:05:53 $
+ *  last change: $Author: os $ $Date: 2001-02-19 10:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,9 +792,6 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION               ),  RES_CHRATR_ROTATE,      &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,    MID_ROTATE      },
                     { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE),  RES_CHRATR_ROTATE,      &::getBooleanCppuType(),    PROPERTY_NONE,        MID_FITTOLINE  },
                     { SW_PROP_NAME(UNO_NAME_CHAR_SCALE_WIDTH            ),  RES_CHRATR_SCALEW,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE,         0 },
-                    { SW_PROP_NAME(UNO_NAME_RUBY_TEXT           ),          RES_TXTATR_CJK_RUBY,    &::getCppuType((OUString*)0),   PROPERTY_NONE,         MID_RUBY_TEXT },
-                    { SW_PROP_NAME(UNO_NAME_RUBY_ADJUST         ),          RES_TXTATR_CJK_RUBY,    &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,         MID_RUBY_ADJUST },
-                    { SW_PROP_NAME(UNO_NAME_RUBY_CHAR_STYLE_NAME),          RES_TXTATR_CJK_RUBY,    &::getCppuType((OUString*)0),   PROPERTY_NONE,         MID_RUBY_CHARSTYLE },
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aCharStyleMap;
@@ -899,9 +896,6 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION               ),  RES_CHRATR_ROTATE,      &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,    MID_ROTATE      },
                     { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE),  RES_CHRATR_ROTATE,      &::getBooleanCppuType(),    PROPERTY_NONE,        MID_FITTOLINE  },
                     { SW_PROP_NAME(UNO_NAME_CHAR_SCALE_WIDTH            ),  RES_CHRATR_SCALEW,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE,         0 },
-                    { SW_PROP_NAME(UNO_NAME_RUBY_TEXT           ),          RES_TXTATR_CJK_RUBY,    &::getCppuType((OUString*)0),   PROPERTY_NONE,         MID_RUBY_TEXT },
-                    { SW_PROP_NAME(UNO_NAME_RUBY_ADJUST         ),          RES_TXTATR_CJK_RUBY,    &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,         MID_RUBY_ADJUST },
-                    { SW_PROP_NAME(UNO_NAME_RUBY_CHAR_STYLE_NAME),          RES_TXTATR_CJK_RUBY,    &::getCppuType((OUString*)0),   PROPERTY_NONE,         MID_RUBY_CHARSTYLE },
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aParaStyleMap;
