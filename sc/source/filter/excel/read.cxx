@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:53:47 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,7 @@ FltError ImportExcel::Read( void )
                     case 0x07:  RecString(); break;     // STRING       [ 2345]
                     case 0x08:  Row25(); break;         // ROW          [ 2  5]
                     case 0x0A:                          // EOF          [ 2345]
+                        GetNumFmtBuffer().CreateScFormats();
                         EndSheet();
                         eAkt = Z_Ende;
                         break;
@@ -291,6 +292,7 @@ FltError ImportExcel::Read( void )
                 {
                     case 0x00:  Dimensions(); break;    // DIMENSIONS   [ 2345]
                     case 0x0A:                          // EOF          [ 2345]
+                        GetNumFmtBuffer().CreateScFormats();
                         EndSheet();
                         eAkt = Z_Ende;
                         break;
@@ -349,6 +351,7 @@ FltError ImportExcel::Read( void )
                 {
                     case 0x00:  Dimensions(); break;    // DIMENSIONS   [ 2345]
                     case 0x0A:                          // EOF          [ 2345]
+                        GetNumFmtBuffer().CreateScFormats();
                         EndSheet();
                         eAkt = Z_Ende;
                         break;
@@ -606,6 +609,7 @@ FltError ImportExcel::Read( void )
                 switch( nOpcode )
                 {
                     case 0x0A:                          // EOF          [ 2345]
+                        GetNumFmtBuffer().CreateScFormats();
                         eAkt = Z_Biff5E;
                         break;
                     case 0x18:  GetNameBuffer().ReadName( maStrm );             break;
@@ -1131,6 +1135,7 @@ FltError ImportExcel8::Read( void )
                 switch( nOpcode )
                 {
                     case 0x0A:                          // EOF          [ 2345   ]
+                        GetNumFmtBuffer().CreateScFormats();
                         eAkt = Z_Biff8E;
                         break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345   ]
@@ -1141,7 +1146,7 @@ FltError ImportExcel8::Read( void )
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34    ]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345   ]
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45   ]
-                    case 0xD3:  bHasBasic = TRUE; break;
+                    case 0xD3:  ReadBasic(); break;
                     case 0xDE:  Olesize(); break;
                     case 0xE0:  GetXFBuffer().ReadXF( maStrm );                 break;
                     case 0xEB:  Msodrawinggroup(); break;
@@ -1581,6 +1586,7 @@ FltError ImportExcel8::ReadChart8( ScfSimpleProgressBar& rProgress, const BOOL b
             case 0x103D:    pChart->ReadDropbar( aIn );                         break;  // DROPBAR
             case 0x103E:    pChart = GetObjectManager().ReplaceChartData( aIn, ctNet );    break;  // RADAR
             case 0x103F:    pChart = GetObjectManager().ReplaceChartData( aIn, ctSurface );break;  // SURFACE
+            case 0x1040:    pChart = GetObjectManager().ReplaceChartData( aIn, ctNetArea );break;  // RADARAREA
             case 0x1041:    pChart->ReadAxisparent( aIn );                      break;  // AXISPARENT
             case 0x1045:    pChart->ReadSertocrt( aIn );                        break;  // SERTOCRT
             case 0x1046:    pChart->ReadAxesused( aIn );                        break;  // AXESUSED
