@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dependency.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-13 12:45:13 $
+ *  last change: $Author: jsc $ $Date: 2001-11-26 12:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #define TYPEUSE_INOUTPARAM  0x0020
 #define TYPEUSE_RETURN      0x0040
 #define TYPEUSE_EXCEPTION   0x0080
+#define TYPEUSE_SCOPE       0x0100
 
 /**
  * Flag shows the state of the code generation. If the Flag is set
@@ -210,6 +211,6 @@ protected:
     TypeDependencyImpl* m_pImpl;
 };
 
-sal_Bool checkTypeDependencies(TypeManager& typeMgr, TypeDependency& dependencies, const ::rtl::OString& type);
+sal_Bool checkTypeDependencies(TypeManager& typeMgr, TypeDependency& dependencies, const ::rtl::OString& type, sal_Bool bDepend = sal_False);
 
 #endif // _CODEMAKER_DEPENDENCY_HXX_
