@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-16 15:39:14 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 12:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   tabopdlg.src  $
- //   $Author: rt $
- //     $Date: 2000-11-16 15:39:14 $
- // $Revision: 1.2 $
+ //   $Author: kz $
+ //     $Date: 2000-11-29 12:58:09 $
+ // $Revision: 1.3 $
  //  $Logfile:   T:/sc/source/ui/src/tabopdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -299,7 +299,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ chinese_simplified ] = "Τ¤ΦΓ";
         Text[ russian ] = "Νΰρςπξικθ";
         Text[ polish ] = "Ustawienia domylne";
-        Text[ japanese ] = "ξ€’l";
+        Text[ japanese ] = "ω’θ’l";
         Text[ chinese_traditional ] = "ΉwΈm";
         Text[ arabic ] = "ΕΪΟΗΟΗΚ ΗέΚΡΗΦνΙ";
         Text[ greek ] = "Προεπιλογή";
@@ -341,7 +341,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ chinese_simplified ] = "Γ»ΣΠΚδΘλΉ«Κ½£΅";
         Text[ russian ] = "Νε βνερενΰ τξπμσλΰ!";
         Text[ polish ] = "Nie wpisano formu³y!";
-        Text[ japanese ] = "”®‚Ν‹L“ό‚µ‚Θ‚Ά‚Ε‰Ί‚³‚Ά!";
+        Text[ japanese ] = "”®‚Ν‹L“ό‚µ‚Δ‚Ν‚Ά‚―‚ά‚Ή‚ρB";
         Text[ chinese_traditional ] = "¨S¦³«ό©w¤½¦΅΅I";
         Text[ arabic ] = "αγ νΚγ ΚΝΟνΟ ΓνΙ ΗαΥνΫΙ!";
         Text[ greek ] = "Δεν ορίστηκαν τύποι!";
@@ -367,7 +367,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ chinese_simplified ] = "Γ»ΣΠΦΈ¶¨ΠΠΊΝΑΠ£΅";
         Text[ russian ] = "Νθ ρςπξκθ, νθ ρςξλαφϋ νε ηΰδΰνϋ!";
         Text[ polish ] = "Nie wpisano ani wiersza ani kolumny!";
-        Text[ japanese ] = "s‚ΰ—ρ‚ΰ‹L“ό‚µ‚Θ‚Ά‚Ε‰Ί‚³‚Ά!";
+        Text[ japanese ] = "s‚Ζ—ρ‚Ζ‚ΰ‚Ι‹L“ό‚µ‚Δ‚Ν‚Ά‚―‚ά‚Ή‚ρB";
         Text[ chinese_traditional ] = "¨S¦³«ό©wΔζ©M¦C΅I";
         Text[ arabic ] = "αγ νΚγ ΚΝΟνΟ ΗαΥέ ζαΗ ΗαΪγζΟ!";
         Text[ greek ] = "Δεν ορίστηκε ούτε γραμμή, ούτε στήλη!";
@@ -393,11 +393,11 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ chinese_simplified ] = "Γ»ΣΠ¶¨ÒεΓϋ³Ζ»ςΗψΣς£΅";
         Text[ russian ] = "Θμÿ θλθ ξαλΰρςό νε ξοπεδελενϋ!";
         Text[ polish ] = "Nie zdefiniowana nazwa lub obszar!";
-        Text[ japanese ] = "’θ‹`‚Θ‚µ‚Μ–Ό‘O‚ά‚½‚Ν”ΝΝ!";
+        Text[ japanese ] = "–Ό‘O‚ά‚½‚Ν”ΝΝ‚ªw’θ‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB";
         Text[ chinese_traditional ] = "¨S¦³©wΈq¦WΊΩ©Ξ°Ο°μ΅I";
         Text[ arabic ] = "ΗΣγ Γζ δΨΗή ΫνΡ γυΪΡψέ!";
         Text[ greek ] = "Μη ορισμένο όνομα ή μη ορισμένη περιοχή!";
-        Text[ korean ] = "ΑφΑ¤µΗΑφ ΎΚΐΊ ΐΜΈ§¶Η΄Β ΏµΏª";
+        Text[ korean ] = "Α¤ΐΗµΗΑφ ΎΚΐΊ ΐΜΈ§ ¶Η΄Β Ήόΐ§!";
         Text[ turkish ] = "Tanύmlanmamύώ ad ya da alan!";
         Text[ language_user1 ] = " ";
     };
@@ -419,7 +419,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ chinese_simplified ] = "Γ»ΣΠ¶¨ÒεΓϋ³Ζ»ς΄νΞσµΔµ¥ΤªΈρÒύΣΓ£΅";
         Text[ russian ] = "Νεξοπεδελενξ θμÿ θλθ νεοπΰβθλόνΰÿ ρρϋλκΰ ÿχεικθ!";
         Text[ polish ] = "Nie zdefiniowana nazwa lub z³y adres komσrki!";
-        Text[ japanese ] = "’θ‹`‚Θ‚µ‚Μ–Ό‘O‚ά‚½‚Ν³‚µ‚­‚Θ‚ΆΎΩQΖ!";
+        Text[ japanese ] = "–Ό‘O‚ªw’θ‚³‚κ‚Δ‚Ά‚Θ‚Ά‚©A‚ά‚½‚ΝΎΩQΖ‚ª³‚µ‚­‚ ‚θ‚ά‚Ή‚ρB";
         Text[ chinese_traditional ] = "¨S¦³©wΈq¦WΊΩ©ΞΏω»~ªΊΐx¦s®ζ°Ρ·Σ΅I";
         Text[ arabic ] = "ΗΣγ ΫνΡ γυΪΡψέ Γζ γΡΜΪ ΞανΙ ΞΗΨΖ!";
         Text[ greek ] = "Μη ορισμένο όνομα ή λάθος αναφορά κελιού!.";
@@ -445,7 +445,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ chinese_simplified ] = "Ή«Κ½²Ά²»ΉΉ³ΙΑΠ£΅";
         Text[ russian ] = "Τξπμσλϋ νε ξαπΰησώς ρςξλαεφ!";
         Text[ polish ] = "Formu³y nie tworzΉ kolumny!";
-        Text[ japanese ] = "”®‚Ν—ρ‚π`¬‚µ‚ά‚Ή‚ρ!";
+        Text[ japanese ] = "”®‚Ν—ρ‚π`¬‚µ‚ά‚Ή‚ρB";
         Text[ chinese_traditional ] = "¤½¦΅¨Γ¤£Ίc¦¨Δζ΅I";
         Text[ arabic ] = "ΗαΥνΫ αΗ ΚυΤία ΪγζΟΗπ!";
         Text[ greek ] = "Οι τύποι δεν αποτελούν μια στήλη!";
@@ -471,7 +471,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ chinese_simplified ] = "Ή«Κ½²»ΉΉ³ΙΠΠ£΅";
         Text[ russian ] = "Τξπμσλϋ νε ξαπΰησώς ρςπξκσ!";
         Text[ polish ] = "Formu³y nie tworzΉ wiersza!";
-        Text[ japanese ] = "”®‚Νs‚π`¬‚µ‚ά‚Ή‚ρ!";
+        Text[ japanese ] = "”®‚Νs‚π`¬‚µ‚ά‚Ή‚ρB";
         Text[ chinese_traditional ] = "¤½¦΅¤£Ίc¦¨¦C΅I";
         Text[ arabic ] = "ΗαΥνΫ αΗ ΚυΤία ΥέΗπ!";
         Text[ greek ] = "Οι τύποι δεν αποτελούν μια γραμμή!";
