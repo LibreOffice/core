@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-23 12:18:47 $
+ *  last change: $Author: dg $ $Date: 2000-11-23 13:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,11 @@
 #ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
 #endif
+
+#ifndef CONFIGMGR_APITYPES_HXX_
+#include "confapitypes.hxx"
+#endif
+
 
 //..........................................................................
 namespace configmgr
