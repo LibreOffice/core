@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:32 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,23 +104,6 @@
 
 // - ALLGEMEINE ----------------------------------------------------------
 
-String RootData::GetCondFormStyleName( const UINT16 n )
-{
-    if( n <= nLastCond )
-        nCondRangeCnt++;
-
-    String  t( RTL_CONSTASCII_USTRINGPARAM( "CndFrmStyl_" ) );
-
-    t += UniString::CreateFromInt32( nCondRangeCnt );
-    t.AppendAscii( "_" );
-    t += UniString::CreateFromInt32( n );
-
-    nLastCond = n;
-
-    return t;
-}
-
-
 RootData::RootData( void )
 {
     fRowScale = 1.0;
@@ -142,9 +125,6 @@ RootData::RootData( void )
 
     pRootStorage = pPivotCacheStorage = /*pCtrlStorage = */NULL;
     pImpPivotCacheList = NULL;
-
-    nCondRangeCnt = 0;
-    nLastCond = 0;
 
     pRootStorage = NULL;
     pTabId = NULL;
