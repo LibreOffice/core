@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:42 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 15:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,11 +385,23 @@ namespace configmgr
     void ValueNode::setValue(Any aValue)
     {
         m_aValue = aValue;
+        // flip the type if necessary
+        if  (   (m_aType.getTypeClass() == TypeClass_ANY)
+            &&  (aValue.getValueType().getTypeClass() != TypeClass_ANY)
+            &&  (aValue.getValueType().getTypeClass() != TypeClass_VOID)
+            )
+            m_aType = aValue.getValueType();
     }
 
     void ValueNode::changeDefault(Any aValue)
     {
         m_aDefaultValue = aValue;
+        // flip the type if necessary
+        if  (   (m_aType.getTypeClass() == TypeClass_ANY)
+            &&  (aValue.getValueType().getTypeClass() != TypeClass_ANY)
+            &&  (aValue.getValueType().getTypeClass() != TypeClass_VOID)
+            )
+            m_aType = aValue.getValueType();
     }
 
     void ValueNode::setDefault()
