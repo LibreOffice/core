@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-10 10:51:23 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 14:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2060,6 +2060,8 @@ namespace xmloff { namespace token {
         TOKEN( "uncover-to-lowerleft" ),       // XML_UNCOVER_TO_LOWERLEFT,
         TOKEN( "vertical-checkerboard" ),      // XML_VERTICAL_CHECKERBOARD,
         TOKEN( "horizontal-checkerboard" ),    // XML_HORIZONTAL_CHECKERBOARD,
+
+        TOKEN( "notify-on-update-of-ranges" ),  // XML_NOTIFY_ON_UPDATE_OF_RANGES
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
