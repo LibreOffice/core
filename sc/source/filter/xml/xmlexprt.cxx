@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.185 $
+ *  $Revision: 1.186 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-03 14:32:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -839,6 +839,7 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
                     // and export the properties, we need to recreate the drawing object and
                     // pass this to XclObjComment() for processing.
                     SdrCaptionObj* pCaption = new SdrCaptionObj( pScNote->GetRectangle() );
+                    pCaption->SetMergedItemSet(rSet);
 
                     if(const EditTextObject* pEditText = pScNote->GetEditTextObject())
                     {
@@ -848,7 +849,6 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
                     }
 
                     pScNote->InsertObject(pCaption, *pDoc, aCellIter.GetTab());
-                    pCaption->SetMergedItemSet(rSet);
 
                     uno::Reference<drawing::XShape> xShape(pCaption->getUnoShape(), uno::UNO_QUERY);
                     if (xShape.is())
