@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:56:14 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 14:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,13 @@
  ************************************************************************/
 #include <string.h>
 #include <unistd.h>
+
+// [ed] 6/15/02 Use the poll replacement on OS X
+#ifdef MACOSX
+#include <poll.h>
+#else
 #include <sys/poll.h>
+#endif
 #include <stdio.h>
 
 #include <vos/process.hxx>
