@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:52:09 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,142 +62,30 @@
 #include "chrdlg.hrc"
 String STR_TEXTCOLL_HEADER
 {
-    TEXT = " (Absatzvorlage: " ;
-    TEXT [ English ] = " (Paragraph Style: " ;
-    TEXT [ norwegian ] = " (Avsnittsmal: " ;
-    TEXT [ italian ] = "(Modello di paragrafo: " ;
-    TEXT [ portuguese_brazilian ] = "(Estilo de Parágrafo: " ;
-    TEXT [ portuguese ] = "(Estilo de parágrafo: " ;
-    TEXT [ finnish ] = "(Kappaleen tyyli: " ;
-    TEXT [ danish ] = "(Afsnitstypografi: " ;
-    TEXT [ french ] = " (Style de paragraphe : " ;
-    TEXT [ swedish ] = "(Styckeformatmall:  " ;
-    TEXT [ dutch ] = "(Alinea-opmaakprofiel:" ;
-    TEXT [ spanish ] = "(Estilo de párrafo:  " ;
-    TEXT [ english_us ] = "(Paragraph Style: " ;
-    TEXT[ chinese_simplified ] = "(æ®µè½æ ·å¼ï¼š ";
-    TEXT[ russian ] = "(Ñòèëü àáçàöà:  ";
-    TEXT[ polish ] = "(Styl akapitu: ";
-    TEXT[ japanese ] = " (æ®µè½ã‚¹ã‚¿ã‚¤ãƒ«ï¼š ";
-    TEXT[ chinese_traditional ] = "(æ®µè½æ¨£å¼ï¼š ";
-    TEXT[ arabic ] = "(äãØ İŞÑÉ: ";
-    TEXT[ greek ] = "(Ğñüôõğï ğáñáãñÜöïõ: ";
-    TEXT[ korean ] = " (ë‹¨ë½ ìŠ¤íƒ€ì¼: ";
-    TEXT[ turkish ] = "(Paragraf biçimi: ";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "(Estil de paràgraf:  ";
-    TEXT[ thai ] = "(à¸¥à¸±à¸à¸©à¸“à¸°à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²: ";
-    TEXT[ czech ] = "Styl odstavce:";
-    TEXT[ hebrew ] = " (Absatzvorlage:";
-    TEXT[ hindi ] = "(à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡à¤¦ à¤¶à¥ˆà¤²à¥€: ";
-    TEXT[ slovak ] = "Å tÃ½l odstavca:";
-    TEXT[ hungarian ] = "(BekezdÃ©sstÃ­lus:";
-    TEXT[ slovenian ] = "(Slog odstavka:";
+    Text [ de ] = " (Absatzvorlage: " ;
+    Text [ en-US ] = "(Paragraph Style: " ;
+    Text [ x-comment ] = " ";
 };
 String STR_PAGEFMT_HEADER
 {
-    TEXT = " (Seitenvorlage: " ;
-    TEXT [ English ] = " (Page Style: " ;
-    TEXT [ norwegian ] = " (Sidemal: " ;
-    TEXT [ italian ] = "(Modello di pagina: " ;
-    TEXT [ portuguese_brazilian ] = "(Estilo de Página: " ;
-    TEXT [ portuguese ] = "(Estilo de página: " ;
-    TEXT [ finnish ] = "(Sivun tyyli: " ;
-    TEXT [ danish ] = "(Sidetypografi: " ;
-    TEXT [ french ] = "(Style de page : " ;
-    TEXT [ swedish ] = "(Sidformatmall:  " ;
-    TEXT [ dutch ] = "(Pagina-opmaakprofiel:" ;
-    TEXT [ spanish ] = "(Estilo de página:  " ;
-    TEXT [ english_us ] = "(Page Style: " ;
-    TEXT[ chinese_simplified ] = "(é¡µé¢æ ·å¼ï¼š ";
-    TEXT[ russian ] = "(Ñòèëü ñòğàíèöû:  ";
-    TEXT[ polish ] = "(Styl strony: ";
-    TEXT[ japanese ] = " (ãƒšãƒ¼ã‚¸ã‚¹ã‚¿ã‚¤ãƒ«ï¼š ";
-    TEXT[ chinese_traditional ] = "(é é¢æ¨£å¼ï¼š ";
-    TEXT[ arabic ] = "(ŞÇáÈ ÇáÕİÍÉ: ";
-    TEXT[ greek ] = "(Ğñüôõğï óåëßäáò: ";
-    TEXT[ korean ] = " (í˜ì´ì§€ ìŠ¤íƒ€ì¼: ";
-    TEXT[ turkish ] = "(Sayfa biçimi: ";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "(Estil de pàgina:  ";
-    TEXT[ thai ] = "(à¸¥à¸±à¸à¸©à¸“à¸°à¸«à¸™à¹‰à¸²: ";
-    TEXT[ czech ] = "Styl strÃ¡nky:";
-    TEXT[ hebrew ] = " â€®(×¡×’× ×•×Ÿ:â€¬";
-    TEXT[ hindi ] = "(à¤ªà¥ƒà¤·à¥à¤  à¤¶à¥ˆà¤²à¥€: ";
-    TEXT[ slovak ] = "Å tÃ½l strÃ¡nky:";
-    TEXT[ hungarian ] = "(OldalstÃ­lus:";
-    TEXT[ slovenian ] = "(Slog strani:";
+    Text [ de ] = " (Seitenvorlage: " ;
+    Text [ en-US ] = "(Page Style: " ;
+    Text [ x-comment ] = " ";
 };
 String SW_STR_NONE
 {
-    Text = "[Keine]" ;
-    Text [ English ] = "[None]" ;
-    Text [ norwegian ] = "[Ingen]" ;
-    Text [ italian ] = "[Nessuno]" ;
-    Text [ portuguese_brazilian ] = "[Nenhum]" ;
-    Text [ portuguese ] = "[Nenhum]" ;
-    Text [ finnish ] = "[Ei mitään]" ;
-    Text [ danish ] = "[Ingen]" ;
-    Text [ french ] = "[Aucun(e)]" ;
-    Text [ swedish ] = "[Ingen]" ;
-    Text [ dutch ] = "[Geen]" ;
-    Text [ spanish ] = "[Ninguno]" ;
-    Text [ english_us ] = "[None]" ;
-    Text[ chinese_simplified ] = "[æ— ]";
-    Text[ russian ] = "[Íåò]";
-    Text[ polish ] = "[brak]";
-    Text[ japanese ] = "[ãªã—]";
-    Text[ language_user1 ] = "; èë? áå";
-    Text[ chinese_traditional ] = "[ç„¡]";
-    Text[ arabic ] = "[ÈÏæä]";
-    Text[ greek ] = "[Êáíİíá]";
-    Text[ korean ] = "[ì—†ìŒ]";
-    Text[ turkish ] = "[yok]";
-    Text[ catalan ] = "[Cap]";
-    Text[ thai ] = "[à¹„à¸¡à¹ˆà¸¡à¸µ]";
-    Text[ czech ] = "[Nic]";
-    Text[ hebrew ] = "â€®[×œ×œ×]â€¬";
-    Text[ hindi ] = "[à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚]";
-    Text[ slovak ] = "[NiÄ]";
-    Text[ hungarian ] = "[Nincs]";
-    Text[ slovenian ] = "[brez]";
+    Text [ de ] = "[Keine]" ;
+    Text [ en-US ] = "[None]" ;
+    Text [ x-comment ] = "; èë? áå";
 };
 InfoBox MSG_ILLEGAL_PAGENUM
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
     /* ### ACHTUNG: Neuer Text in Resource? Seitennummer kann nicht gesetzt werden. Auf linken Seiten dürfen nur gerade Seitenzahlen, auf rechten Seiten nur ungerade Seitenzahlen verwendet werden. : Seitennummer kann nicht gesetzt werden. Auf linken Seiten d³rfen nur gerade Seitenzahlen, auf rechten Seiten nur ungerade Seitenzahlen verwendet werden. */
-    MESSAGE = "Seitennummer kann nicht gesetzt werden. Auf linken Seiten dürfen nur gerade Seitenzahlen, auf rechten Seiten nur ungerade Seitenzahlen verwendet werden." ;
-    MESSAGE [ English ] = "Page number can't be applied to the actual page.  Even numbers can be used on left pages, odd numbers on right pages." ;
-    MESSAGE [ norwegian ] = "Sidenummer kan ikke brukes på den aktuelle siden. Partall kan brukes på venstre sider, oddetall på høyre sider." ;
-    MESSAGE [ italian ] = "Impossibile applicare il numero pagina alla pagina attiva. Potete applicare i numeri pari alle pagine sinistre e i numeri dispari alle pagine destre." ;
-    MESSAGE [ portuguese_brazilian ] = "A numeração de página não pode ser aplicada à página atual.  Números pares podem ser utilizados em páginas da esquerda, números ímpares em páginas da direita." ;
-    MESSAGE [ portuguese ] = "Número de página não pode ser atribuído à página actual. Nas páginas da esquerda podem apenas ser usados números pares e nas páginas da direita números ímpares." ;
-    MESSAGE [ finnish ] = "Käsiteltävälle sivulle ei voi lisätä sivunumeroa. Parillisia numeroita voi käyttää vasemmanpuoleisilla sivuilla, parittomia numeroita oikeanpuoleisilla." ;
-    MESSAGE [ danish ] = "Sidetallet kan ikke indsættes. Der må kun bruges lige sidetal på venstre side og ulige sidetal på højre sider." ;
-    MESSAGE [ french ] = "Le numéro de page ne peut être assigné à cette page. Les nombres pairs ne peuvent être utilisés que sur des pages de gauche, les nombres impairs que sur celles de droite." ;
-    MESSAGE [ swedish ] = "Sidnumret kan inte sättas in på den här sidan. På vänstersidor får bara jämna nummer användas, på högersidor bara udda nummer." ;
-    MESSAGE [ dutch ] = "Dit paginanummer kan niet aan de huidige pagina worden toegewezen. Linkerpagina's krijgen even nummers, rechterpagina's oneven nummers." ;
-    MESSAGE [ spanish ] = "El número de la página no se puede colocar. En páginas izquierdas se pueden utilizar solo números pares, en las derechas solo impares." ;
-    MESSAGE [ english_us ] = "Page numbers cannot be applied to the current page.  Even numbers can be used on left pages, odd numbers on right pages." ;
-    MESSAGE[ chinese_simplified ] = "æ— æ³•è®¾å®šé¡µç ã€‚åœ¨å·¦é¡µä¸Šåªå…è®¸é‡‡ç”¨å¶æ•°é¡µç ï¼Œåœ¨å³é¡µä¸Šåªå…è®¸é‡‡ç”¨å¥‡æ•°é¡µç ã€‚";
-    MESSAGE[ russian ] = "Íåâîçìîæíî ïîñòàâèòü íîìåğ äàííîé ñòğàíèöû. Íà ëåâûõ ñòğàíèöàõ ìîãóò áûòü ïğîñòàâëåíû òîëüêî ÷åòíûå, íà ïğàâûõ - òîëüêî íå÷åòíûå öèôğû.";
-    MESSAGE[ polish ] = "Na bie¿¹cej stronie nie mo¿na u¿yæ polecenia \"Numer strony\". Na lewych stronach mo¿na nanieœæ tylko parzyste numery stron, na prawych - tylko nieparzyste.";
-    MESSAGE[ japanese ] = "ãƒšãƒ¼ã‚¸ç•ªå·ã¯é©ç”¨ã§ãã¾ã›ã‚“ã€‚å·¦ãƒšãƒ¼ã‚¸ã«ã¯å¶æ•°ã€å³ãƒšãƒ¼ã‚¸ã«ã¯å¥‡æ•°ã‚’ä½¿ç”¨ã—ã¾ã™ã€‚";
-    MESSAGE[ chinese_traditional ] = "ç„¡æ³•è¨­å®šé ç¢¼ã€‚åœ¨å·¦é åªèƒ½å¤ è¨­å®šå¶æ•¸ï¼Œåœ¨å³é åªèƒ½è¨­å®šå¥‡æ•¸ã€‚";
-    MESSAGE[ arabic ] = "áÇ íãßä ÅÏÑÇÌ ÃÑŞÇã ÇáÕİÍÇÊ İí ÇáÕİÍÉ ÇáÍÇáíÉ. Úáì ÇáÕİÍÇÊ ÇáíÓÑì¡ íÓãÍ ÈÇÓÊÎÏÇã ÃÑŞÇã ÒæÌíÉ İŞØ¡ æÚáì ÇáÕİÍÇÊ Çáíãäì¡ ÃÑŞÇã İÑÏíÉ İŞØ.";
-    MESSAGE[ greek ] = "Äåí åßíáé äõíáôŞ ç åöáñìïãŞ ôùí áñéèìşí óåëßäáò óôçí ôñİ÷ïõóá óåëßäá.  Ïé Üñôéïé áñéèìïß ìğïñïıí íá ÷ñçóéìïğïéçèïıí óôéò áñéóôåñİò óåëßäåò êáé ïé ğåñéôôïß óôéò äåîéİò.";
-    MESSAGE[ korean ] = "í˜ì´ì§€ ë²ˆí˜¸ëŠ” ì„¤ì •í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ì§ìˆ˜ í˜ì´ì§€ ë²ˆí˜¸ëŠ” ì™¼ìª½ í˜ì´ì§€ì—ë§Œ ì‚¬ìš©ë˜ê³ , í™€ìˆ˜ í˜ì´ì§€ ë²ˆí˜¸ëŠ” ì˜¤ë¥¸ìª½ í˜ì´ì§€ì—ë§Œ ì‚¬ìš©ë©ë‹ˆë‹¤.";
-    MESSAGE[ turkish ] = "Sayfa numarası verilemiyor. Sol sayfalarda yalnızca çift sayfa numaraları, sağ sayfalarda ise yalnızca tek sayfa numaraları kullanılabilir.";
-    MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ catalan ] = "El número de la pàgina no es pot colocar. A les pàgines esquerres només es poden utilitzar números parells, a la dreta imparells.";
-    MESSAGE[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹ƒà¸Šà¹‰à¹€à¸¥à¸‚à¸«à¸™à¹‰à¸²à¹„à¸›à¸¢à¸±à¸‡à¸«à¸™à¹‰à¸²à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™à¹„à¸”à¹‰  à¸ªà¸²à¸¡à¸²à¸£à¸–à¹ƒà¸Šà¹‰à¹€à¸¥à¸‚à¸„à¸¹à¹ˆà¹ƒà¸™à¸«à¸™à¹‰à¸²à¸‹à¹‰à¸²à¸¢à¹„à¸”à¹‰, à¹€à¸¥à¸‚à¸„à¸µà¹ˆà¹ƒà¸™à¸«à¸™à¹‰à¸²à¸‚à¸§à¸²";
-    MESSAGE[ czech ] = "Na aktuÃ¡lnÃ­ strÃ¡nce nelze pouÅ¾Ã­t ÄÃ­slovÃ¡nÃ­ strÃ¡nek. SudÃ¡ ÄÃ­sla lze pouÅ¾Ã­t jen na levÃ½ch strÃ¡nkÃ¡ch, lichÃ¡ ÄÃ­sla na pravÃ½ch strÃ¡nkÃ¡ch.";
-    MESSAGE[ hebrew ] = "Seitennummer kann nicht gesetzt werden. Auf linken Seiten dÃ¼rfen nur gerade Seitenzahlen, auf rechten Seiten nur ungerade Seitenzahlen verwendet werden.";
-    MESSAGE[ hindi ] = "à¤µà¤°à¥à¤¤à¤®à¤¾à¤¨ à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡à¤²à¤¿à¤ à¤ªà¥ƒà¤·à¥à¤  à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤•à¥‹ à¤²à¤¾à¤—à¥‚ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤  à¤¸à¤® à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤•à¥‹ à¤¬à¤¾à¤¯à¤¾à¤ à¤“à¤° à¤•à¥‡ à¤ªà¥ƒà¤·à¥à¤  à¤®à¥‡à¤‚ , à¤µà¤¿à¤·à¤® à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤•à¥‹ à¤¦à¤¾à¤¹à¤¿à¤¨à¥€ à¤“à¤° à¤•à¥‡ à¤ªà¥ƒà¤·à¥à¤  à¤®à¥‡à¤‚ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤°à¤¤à¤¾ à¤¹à¥ˆ à¥¤";
-    MESSAGE[ slovak ] = "Na aktuÃ¡lnej strane nemoÅ¾no pouÅ¾iÅ¥ ÄÃ­slovanie strÃ¡n. PÃ¡rne ÄÃ­sla moÅ¾no pouÅ¾iÅ¥ len na Ä¾avÃ½ch strÃ¡nkach, nepÃ¡rne ÄÃ­sla na pravÃ½ch strÃ¡nkach.";
-    MESSAGE[ hungarian ] = "Az aktuÃ¡lis oldalra nem kerÃ¼lhet oldalszÃ¡m. Bal oldalon pÃ¡ros, jobb oldalon pÃ¡ratlan szÃ¡mok Ã¡llhatnak.";
-    MESSAGE[ slovenian ] = "Na trenutni strani ni mogoÄe uporabiti Å¡tevilk strani. Sode Å¡tevilke lahko uporabljate na levih straneh, lihe pa na desnih.";
+    Message [ de ] = "Seitennummer kann nicht gesetzt werden. Auf linken Seiten dürfen nur gerade Seitenzahlen, auf rechten Seiten nur ungerade Seitenzahlen verwendet werden." ;
+    Message [ en-US ] = "Page numbers cannot be applied to the current page.  Even numbers can be used on left pages, odd numbers on right pages." ;
+    Message [ x-comment ] = " ";
 };
 
 
