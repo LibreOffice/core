@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obr $ $Date: 2001-09-24 08:45:08 $
+ *  last change: $Author: obr $ $Date: 2001-10-09 15:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ sal_Int32 DNDEventDispatcher::fireDragEnterEvent( Window *pWindow,
 {
     sal_Int32 n = 0;
 
-    if( pWindow )
+    if( pWindow && pWindow->IsInputEnabled() )
     {
         OClearableGuard aGuard( Application::GetSolarMutex() );
 
@@ -371,7 +371,7 @@ sal_Int32 DNDEventDispatcher::fireDragOverEvent( Window *pWindow,
 {
     sal_Int32 n = 0;
 
-    if( pWindow )
+    if( pWindow && pWindow->IsInputEnabled() )
     {
         OClearableGuard aGuard( Application::GetSolarMutex() );
 
@@ -400,7 +400,7 @@ sal_Int32 DNDEventDispatcher::fireDragExitEvent( Window *pWindow ) throw(Runtime
 {
     sal_Int32 n = 0;
 
-    if( pWindow )
+    if( pWindow && pWindow->IsInputEnabled() )
     {
         OClearableGuard aGuard( Application::GetSolarMutex() );
 
@@ -431,7 +431,7 @@ sal_Int32 DNDEventDispatcher::fireDropActionChangedEvent( Window *pWindow,
 {
     sal_Int32 n = 0;
 
-    if( pWindow )
+    if( pWindow && pWindow->IsInputEnabled() )
     {
         OClearableGuard aGuard( Application::GetSolarMutex() );
 
@@ -464,7 +464,7 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
 {
     sal_Int32 n = 0;
 
-    if( pWindow )
+    if( pWindow && pWindow->IsInputEnabled() )
     {
         OClearableGuard aGuard( Application::GetSolarMutex() );
 
