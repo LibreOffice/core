@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CIndexes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-31 10:54:36 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 13:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
     Reference< XNamed > xRet = NULL;
     if(m_xIndexes.is() && m_xIndexes->hasByName(_rName))
     {
-        m_xIndexes->getByName(_rName) >>= xRet;
+        ::cppu::extractInterface(xRet,m_xIndexes->getByName(_rName));
     }
     else
     {
@@ -196,6 +196,11 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
             ::rtl::OUString aCatalog,aSchema,aTable;
             dbtools::qualifiedNameComponents(m_pTable->getMetaData(),m_pTable->getName(),aCatalog,aSchema,aTable);
             ::rtl::OUString aComposedName;
+            if(!m_pTable->getMetaData()->supportsCatalogsInIndexDefinitions())
+                aCatalog = ::rtl::OUString();
+            if(!m_pTable->getMetaData()->supportsSchemasInIndexDefinitions())
+                aSchema = ::rtl::OUString();
+
             dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
             if(aName.getLength())
             {
@@ -209,7 +214,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
                 Reference< XPropertySet > xColProp;
                 for(sal_Int32 i=0;i<xColumns->getCount();++i)
                 {
-                    xColumns->getByIndex(i) >>= xColProp;
+                    ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
                     aSql = aSql + ::dbtools::quoteName( aQuote,comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)));
                     aSql = aSql +   (any2bool(xColProp->getPropertyValue(PROPERTY_ISASCENDING))
                                                 ?
@@ -272,6 +277,10 @@ void SAL_CALL OIndexes::dropByName( const ::rtl::OUString& elementName ) throw(S
             ::rtl::OUString aCatalog,aSchema2,aTable;
             dbtools::qualifiedNameComponents(m_pTable->getMetaData(),m_pTable->getName(),aCatalog,aSchema2,aTable);
             ::rtl::OUString aComposedName;
+            if(!m_pTable->getMetaData()->supportsCatalogsInIndexDefinitions())
+                aCatalog = ::rtl::OUString();
+            if(!m_pTable->getMetaData()->supportsSchemasInIndexDefinitions())
+                aSchema2 = ::rtl::OUString();
             dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema2,aTable,aComposedName,sal_True);
 
             aSql = aSql + ::dbtools::quoteName( aQuote,aSchema)

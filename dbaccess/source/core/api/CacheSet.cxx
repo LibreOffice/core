@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-31 12:27:18 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 13:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
 #include <com/sun/star/sdbcx/KeyType.hpp>
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
 #endif
 
 using namespace dbaccess;
@@ -238,7 +241,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
         // search the one and only primary key
         for(sal_Int32 i=0;i< xKeys->getCount();++i)
         {
-            xKeys->getByIndex(i) >>= xProp;
+            ::cppu::extractInterface(xProp,xKeys->getByIndex(i));
             sal_Int32 nKeyType = 0;
             xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
             if(KeyType::PRIMARY == nKeyType)
@@ -262,7 +265,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     ::std::vector< Reference<XNameAccess> > aAllIndexColumns;
     for(sal_Int32 j=0;j<xIndexes->getCount();++j)
     {
-        xIndexes->getByIndex(j) >>= xIndexColsSup;
+        ::cppu::extractInterface(xIndexColsSup,xIndexes->getByIndex(j));
         if( xIndexColsSup.is()
             && connectivity::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
             && !connectivity::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
@@ -369,7 +372,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
         // search the one and only primary key
         for(sal_Int32 i=0;i< xKeys->getCount();++i)
         {
-            xKeys->getByIndex(i) >>= xProp;
+            ::cppu::extractInterface(xProp,xKeys->getByIndex(i));
             sal_Int32 nKeyType = 0;
             xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
             if(KeyType::PRIMARY == nKeyType)
@@ -395,7 +398,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     {
         for(sal_Int32 j=0;j<xIndexes->getCount();++j)
         {
-            xIndexes->getByIndex(j) >>= xIndexColsSup;
+            ::cppu::extractInterface(xIndexColsSup,xIndexes->getByIndex(j));
             if( xIndexColsSup.is()
                 && connectivity::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
                 && !connectivity::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
@@ -566,6 +569,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.16  2001/01/31 12:27:18  oj
+    use of qouteName
+
     Revision 1.15  2001/01/24 09:50:49  oj
     #82628# rowset modifications
 

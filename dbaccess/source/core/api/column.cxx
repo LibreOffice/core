@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 08:57:46 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 13:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ sal_Bool OColumnSettings::convertFastPropertyValue(
     {
         case PROPERTY_ID_ALIGN:
             bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aAlignment,
-                ::getCppuType(static_cast< sal_Int16* >(NULL)));
+                ::getCppuType(static_cast< sal_Int32* >(NULL)));
             break;
         case PROPERTY_ID_WIDTH:
             bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aWidth,
@@ -388,7 +388,7 @@ void OColumnSettings::setFastPropertyValue_NoBroadcast(
     switch (nHandle)
     {
         case PROPERTY_ID_ALIGN:
-            OSL_ENSHURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int16* >(NULL))),
+            OSL_ENSHURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
                 "OColumnSettings::setFastPropertyValue_NoBroadcast(ALIGN) : invalid value !");
             m_aAlignment = rValue;
             break;
@@ -566,7 +566,7 @@ void OColumns::loadSettings(const OConfigurationNode& _rLocation, const IColumnF
         else
         {
             Reference<XNamed> xColumn;
-            getByName(*pColumNames) >>= xColumn;
+            ::cppu::extractInterface(xColumn,getByName(*pColumNames));
             Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xColumn,UNO_QUERY);
             if(xTunnel.is())
                 pExistent = (OColumn*)xTunnel->getSomething(OColumn::getUnoTunnelImplementationId());
@@ -687,7 +687,7 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
     if(m_xDrvColumns.is() && m_xDrvColumns->hasByName(_rName))
     {
         Reference<XPropertySet> xProp;
-        m_xDrvColumns->getByName(_rName) >>= xProp;
+        ::cppu::extractInterface(xProp,m_xDrvColumns->getByName(_rName));
         Reference<XColumnLocate> xColumnLocate(m_xDrvColumns,UNO_QUERY);
         sal_Int32 nPos = -1;
         if(xColumnLocate.is())
@@ -804,7 +804,13 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
         throw SQLException();
 
     ::osl::MutexGuard aGuard(m_rMutex);
-    if(m_pTable && !m_pTable->isNew())
+
+    Reference<XAppend> xAppend(m_xDrvColumns,UNO_QUERY);
+    if(xAppend.is())
+    {
+        xAppend->appendByDescriptor(descriptor);
+    }
+    else if(m_pTable && !m_pTable->isNew())
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
         ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
@@ -909,7 +915,8 @@ void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(S
         aSql += ::dbtools::quoteName( aQuote,elementName);
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-        xStmt->execute(aSql);
+        if(xStmt.is())
+            xStmt->execute(aSql);
     }
 
     OColumns_BASE::dropByName(elementName);

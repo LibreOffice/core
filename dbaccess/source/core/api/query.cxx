@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-04 14:26:47 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 13:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ Reference< XNameAccess > SAL_CALL OQuery_LINUX::getColumns(  ) throw(RuntimeExce
                             ODescriptorColumn* pColumn = new ODescriptorColumn(*pBegin);
                             Reference<XPropertySet> xSet = pColumn;
                             Reference<XPropertySet> xSource;
-                            xColumns->getByName(*pBegin) >>= xSource;
+                            ::cppu::extractInterface(xSource,xColumns->getByName(*pBegin));
                             ::comphelper::copyProperties(xSource,xSet);
                             m_aColumns.append(*pBegin,pColumn);
                         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-01 14:23:57 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 13:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
                 {
                     Reference<XPropertySet> xProp;
-                    xKeyIndex->getByIndex(i) >>= xProp;
+                    ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
                     sal_Int32 nKeyType = 0;
                     xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
                     if(KeyType::PRIMARY == nKeyType)
@@ -272,7 +272,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             for(;pBegin != pEnd;++pBegin)
             {
                 Reference<XPropertySet> xColumn;
-                xColumns->getByName(*pBegin) >>= xColumn;
+                ::cppu::extractInterface(xColumn,xColumns->getByName(*pBegin));
                 OSL_ENSURE(xColumn.is(),"Column in table is null!");
                 if(xColumn.is())
                 {
@@ -719,8 +719,7 @@ sal_Bool SAL_CALL ORowSetCache::hasOrderedBookmarks(  ) throw(SQLException, Runt
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ORowSetCache::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
-    ORowSetValueCompare aCmp(bookmark);
-    return ::std::count_if(m_pMatrix->begin(),m_pMatrix->end(),aCmp);
+    return m_pCacheSet->hashBookmark(bookmark);
 }
 // -------------------------------------------------------------------------
 
@@ -1763,6 +1762,9 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.24  2001/02/01 14:23:57  oj
+    change for insert , delete and update rows
+
     Revision 1.23  2001/01/26 15:18:17  oj
     #83216# check if we stands after the last row after a next
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:38:24 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 13:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,8 +193,6 @@ namespace dbaccess
         {OSL_ASSERT("fireRowcount() not allowed for clone!");}      // notify all that rowset changed
         // check if the insert must be canceled
         virtual void checkInsert() = 0;
-        // determine the formatkey for a special type
-        sal_Int32 assginFormatByType(sal_Bool _bCurrency,sal_Int32 _nType,const ::com::sun::star::lang::Locale& _rLocale);
 
     // OPropertyContainer
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;

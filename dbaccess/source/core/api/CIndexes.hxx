@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CIndexes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 16:07:40 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 13:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,12 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
     public:
         OIndexes(ODBTable* _pTable,
-                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes,
                  ::osl::Mutex& _rMutex,
-                 const ::std::vector< ::rtl::OUString> &_rVector
+                 const ::std::vector< ::rtl::OUString> &_rVector,
+                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes
                  ) : connectivity::sdbcx::OCollection(*_pTable,sal_True,_rMutex,_rVector)
             ,m_pTable(_pTable)
+            ,m_xIndexes(_rxIndexes)
         {}
 
         virtual void SAL_CALL disposing(void);

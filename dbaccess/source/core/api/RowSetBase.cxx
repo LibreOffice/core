@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-24 11:02:14 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 13:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1189,7 +1189,7 @@ void ORowSetBase::firePropertyChange(const ORowSetMatrix::iterator& _rOldRow)
     {
         for(;i<m_pColumns->getCount();++i)
         {
-            if((m_pColumns->getByIndex(i) >>= xTunnel) && xTunnel.is())
+            if(::cppu::extractInterface(xTunnel,m_pColumns->getByIndex(i)) && xTunnel.is())
             {
                 OColumn* pColumn = (OColumn*)xTunnel->getSomething(OColumn::getUnoTunnelImplementationId());
                 if(pColumn)
@@ -1201,49 +1201,6 @@ void ORowSetBase::firePropertyChange(const ORowSetMatrix::iterator& _rOldRow)
     {
         OSL_ENSURE(0,"firePropertyChange: Exception");
     }
-}
-// -----------------------------------------------------------------------------
-sal_Int32 ORowSetBase::assginFormatByType(sal_Bool _bCurrency,sal_Int32 _nType,const Locale& _rLocale)
-{
-    if(!m_xNumberFormatTypes.is())
-        return 0;
-    sal_Int32 nNumberType   = _bCurrency ? NumberFormat::CURRENCY : NumberFormat::NUMBER;
-    sal_Int32 nTextType     = NumberFormat::TEXT;
-    sal_Int32 nFormatkey    = 0;
-    switch (_nType)
-    {
-        case DataType::BIT:             nFormatkey = m_xNumberFormatTypes->getStandardFormat(NumberFormat::LOGICAL, _rLocale); break;
-        case DataType::TINYINT:         nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
-        case DataType::SMALLINT:        nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
-        case DataType::INTEGER:         nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
-        case DataType::BIGINT:          nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
-        case DataType::FLOAT:           nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
-        case DataType::REAL:            nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
-        case DataType::DOUBLE:          nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
-        case DataType::NUMERIC:         nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
-        case DataType::DECIMAL:         nFormatkey = m_xNumberFormatTypes->getStandardFormat(nNumberType, _rLocale); break;
-        case DataType::CHAR:            nFormatkey = m_xNumberFormatTypes->getStandardFormat(nTextType, _rLocale); break;
-        case DataType::VARCHAR:         nFormatkey = m_xNumberFormatTypes->getStandardFormat(nTextType, _rLocale); break;
-        case DataType::LONGVARCHAR:     nFormatkey = m_xNumberFormatTypes->getStandardFormat(nTextType, _rLocale); break;
-        case DataType::DATE:            nFormatkey = m_xNumberFormatTypes->getStandardFormat(NumberFormat::DATE, _rLocale); break;
-        case DataType::TIME:            nFormatkey = m_xNumberFormatTypes->getStandardFormat(NumberFormat::TIME, _rLocale); break;
-        case DataType::TIMESTAMP:       nFormatkey = m_xNumberFormatTypes->getStandardFormat(NumberFormat::DATETIME, _rLocale); break;
-        case DataType::BINARY:          break;
-        case DataType::VARBINARY:       break;
-        case DataType::LONGVARBINARY:   break;
-        case DataType::SQLNULL:         break;
-        case DataType::OTHER:           break;
-        case DataType::OBJECT:          break;
-        case DataType::DISTINCT:        break;
-        case DataType::STRUCT:          break;
-        case DataType::ARRAY:           break;
-        case DataType::BLOB:            break;
-        case DataType::CLOB:            break;
-        case DataType::REF:             break;
-        default:
-            OSL_ENSURE(0,"ORowSetBase::assginFormatByType: Unknown Type!");
-    }
-    return nFormatkey;
 }
 // -----------------------------------------------------------------------------
 

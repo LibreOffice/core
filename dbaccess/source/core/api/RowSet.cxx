@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 07:59:01 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 13:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             {
             }
 
-            m_aActiveConnection >>= m_xActiveConnection;
+            ::cppu::extractInterface(m_xActiveConnection,m_aActiveConnection);
             {
                 Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
                 if (xComponent.is())
@@ -455,7 +455,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             m_bCreateStatement = sal_True;
             break;
         case PROPERTY_ID_TYPEMAP:
-            m_aTypeMap >>= m_xTypeMap;
+            ::cppu::extractInterface(m_xTypeMap,m_aTypeMap);
             break;
         default:
             ;
@@ -671,7 +671,7 @@ void ORowSet::freeResources()
 
         if(m_pTables)
         {
-            m_pTables->dispose(); // clear all references
+            m_pTables->disposing(); // clear all references
             DELETEZ(m_pTables);
         }
 
@@ -1859,7 +1859,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                         if(xProp.is())
                         {
                             Reference< XNumberFormatsSupplier> xNumberFormat;
-                            xProp->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER) >>= xNumberFormat;
+                            ::cppu::extractInterface(xNumberFormat,xProp->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER));
                             if(xNumberFormat.is())
                                 m_xNumberFormatTypes = Reference< XNumberFormatTypes>(xNumberFormat->getNumberFormats(),UNO_QUERY);
                         }
@@ -1896,9 +1896,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
 
                                 try
                                 {
-                                    nFormatKey = assginFormatByType(xMetaData->isCurrency(i+1),
-                                                                    xMetaData->getColumnType(i+1),
-                                                                    aLocale);
+                                    nFormatKey = ::dbtools::getDefaultNumberFormat(pColumn,m_xNumberFormatTypes,aLocale);
 
                                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
                                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,makeAny(sal_Int32(i+1)));
@@ -1924,7 +1922,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                         for(sal_Int32 i=1;pBegin != pEnd ;++pBegin,++i)
                         {
                             Reference<XPropertySet> xColumn;
-                            m_xColumns->getByName(*pBegin) >>= xColumn;
+                            ::cppu::extractInterface(xColumn,m_xColumns->getByName(*pBegin));
                             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
                                 aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
 
@@ -1944,9 +1942,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                                 pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
                                 nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
                                 if(!nFormatKey)
-                                    nFormatKey = assginFormatByType(::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISCURRENCY)),
-                                                                    ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE)),
-                                                                    aLocale);
+                                    nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
 
                                 pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
                                 pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
@@ -2190,7 +2186,7 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
                 if (_rxRetTables.is() && _rxRetTables->hasByName(m_aCommand))
                 {
                     Reference< XPropertySet > xTable;
-                    _rxRetTables->getByName(m_aCommand) >>= xTable;
+                    ::cppu::extractInterface(xTable,_rxRetTables->getByName(m_aCommand));
 
                     Reference<XColumnsSupplier> xSup(xTable,UNO_QUERY);
                     if(xSup.is())
@@ -2209,14 +2205,14 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
                     if (xQueries->hasByName(m_aCommand))
                     {
                         Reference< XPropertySet > xQuery;
-                        xQueries->getByName(m_aCommand) >>= xQuery;
+                        ::cppu::extractInterface(xQuery,xQueries->getByName(m_aCommand));
                         xQuery->getPropertyValue(PROPERTY_COMMAND) >>= aQuery;
                         bEscapeProcessing = any2bool(xQuery->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING));
 
                         ::rtl::OUString aCatalog,aSchema,aTable;
-                        xQuery->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME) >>= aCatalog;
+                        xQuery->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME)   >>= aCatalog;
                         xQuery->getPropertyValue(PROPERTY_UPDATE_SCHEMANAME)    >>= aSchema;
-                        xQuery->getPropertyValue(PROPERTY_UPDATE_TABLENAME) >>= aTable;
+                        xQuery->getPropertyValue(PROPERTY_UPDATE_TABLENAME)     >>= aTable;
                         if(aTable.getLength())
                             composeTableName(m_xActiveConnection->getMetaData(),aCatalog,aSchema,aTable,m_aUpdateTableName,sal_False);
 
@@ -2640,7 +2636,7 @@ void SAL_CALL ORowSet::clearParameters(  ) throw(SQLException, RuntimeException)
 void ORowSet::firePropertyChange(sal_Int32 _nPos,const Any& _rOldValue)
 {
     Reference< XUnoTunnel> xTunnel;
-    if((m_pColumns->getByIndex(_nPos) >>= xTunnel) && xTunnel.is())
+    if(::cppu::extractInterface(xTunnel,m_pColumns->getByIndex(_nPos)) && xTunnel.is())
     {
         OColumn* pColumn = (OColumn*)xTunnel->getSomething(OColumn::getUnoTunnelImplementationId());
         if(pColumn)
@@ -2709,7 +2705,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex& _rMutex)
     for(sal_Int32 i=1;pBegin != pEnd ;++pBegin,++i)
     {
         Reference<XPropertySet> xColumn;
-        rParent.m_pColumns->getByName(*pBegin) >>= xColumn;
+        ::cppu::extractInterface(xColumn,rParent.m_pColumns->getByName(*pBegin));
         if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
             aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
 
@@ -2726,9 +2722,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex& _rMutex)
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
         sal_Int32 nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
         if(!nFormatKey)
-            nFormatKey = assginFormatByType(::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISCURRENCY)),
-                                            comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE)),
-                                            aLocale);
+            nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:19:01 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 13:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,12 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 
 using namespace dbaccess;
 using namespace ::com::sun::star::uno;
@@ -169,6 +175,17 @@ ODBTable::ODBTable(const OConfigurationNode& _rTableConfig,
     // we do this at the moment, the statement needed can be supplied by the connection (for example the SQL-Server
     // ODBC driver does not allow more than one statement per connection, and in getFastPropertyValue it's more
     // likely that it's already used up than it's here.)
+}
+// -----------------------------------------------------------------------------
+ODBTable::ODBTable( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxNewTable)
+                throw(::com::sun::star::sdbc::SQLException) : connectivity::sdbcx::OTable(_rxMetaData->storesMixedCaseQuotedIdentifiers())
+        ,OConfigurationFlushable(m_aMutex)
+        ,m_nPrivileges(-1)
+        ,m_xMetaData(_rxMetaData)
+        ,m_xTable(_rxNewTable)
+{
+    construct();
 }
 // -------------------------------------------------------------------------
 ODBTable::~ODBTable()
@@ -378,34 +395,103 @@ void ODBTable::flush_NoBroadcast_NoCommit()
         }
     }
 }
-// XDataDescriptorFactory
-//------------------------------------------------------------------------------
 // XRename,
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTable::rename( const ::rtl::OUString& _rNewName ) throw(SQLException, ElementExistException, RuntimeException)
 {
-    // not supported
-    throw SQLException();
+    Reference<XRename> xRename(m_xTable,UNO_QUERY);
+    if(xRename.is())
+    {
+        xRename->rename(_rNewName);
+    }
+    else // not supported
+        throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
 }
 
 // XAlterTable,
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxDescriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
-    // not supported
-    throw SQLException();
+    Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
+    if(xAlter.is())
+    {
+        xAlter->alterColumnByName(_rName,_rxDescriptor);
+    }
+    else if(m_pColumns->hasByName(_rName))
+    {
+        ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+        ::rtl::OUString aQuote  = m_xMetaData->getIdentifierQuoteString(  );
+        ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
+
+        if(m_xMetaData->supportsCatalogsInTableDefinitions())
+            sCatalog = m_CatalogName;
+        if(m_xMetaData->supportsSchemasInTableDefinitions())
+            sSchema = m_SchemaName;
+
+        ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,m_Name,sComposedName,sal_True);
+        if(!sComposedName.getLength())
+            throw ::dbtools::FunctionSequenceException(*this);
+
+        sSql += sComposedName;
+        sSql += ::rtl::OUString::createFromAscii(" ALTER ");
+        sSql += ::dbtools::quoteName(aQuote,_rName);
+
+        ::rtl::OUString sNewDefaultValue,sDefaultValue;
+
+        Reference<XPropertySet> xColumn;
+        m_pColumns->getByName(_rName) >>= xColumn;
+        if(_rxDescriptor->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
+            _rxDescriptor->getPropertyValue(PROPERTY_DEFAULTVALUE) >>= sNewDefaultValue;
+        if(xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
+            xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE) >>= sDefaultValue;
+
+        if(sNewDefaultValue != sDefaultValue)
+        {
+            if(sNewDefaultValue.getLength())
+            {
+                sSql += ::rtl::OUString::createFromAscii(" SET DEFAULT ");
+                sSql += sNewDefaultValue;
+            }
+            else
+                sSql += ::rtl::OUString::createFromAscii(" DROP DEFAULT");
+            OSL_ENSURE(m_xMetaData->getConnection().is(),"Connection is null!");
+            Reference< XStatement > xStmt = m_xMetaData->getConnection()->createStatement(  );
+            if(xStmt.is())
+                xStmt->execute(sSql);
+        }
+        else
+            // not supported
+            throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
+    }
+    else
+        // not supported
+        throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
+    m_pColumns->refresh();
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTable::alterColumnByIndex( sal_Int32 _nIndex, const Reference< XPropertySet >& _rxDescriptor ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
 {
-    // not supported
-    throw SQLException();
+    Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
+    if(xAlter.is())
+    {
+        xAlter->alterColumnByIndex(_nIndex,_rxDescriptor);
+        m_pColumns->refresh();
+    }
+    else if(_nIndex < m_pColumns->getCount())
+    {
+        Reference<XPropertySet> xColumn;
+        m_pColumns->getByIndex(_nIndex) >>= xColumn;
+        alterColumnByName(::comphelper::getString(xColumn->getPropertyValue(PROPERTY_NAME)),_rxDescriptor);
+    }
+    else // not supported
+        throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
 }
 // -------------------------------------------------------------------------
 void ODBTable::refreshColumns()
 {
     ::std::vector< ::rtl::OUString> aVector;
+
     Reference<XNameAccess> xNames;
     if(m_xTable.is())
     {
@@ -419,7 +505,7 @@ void ODBTable::refreshColumns()
                 aVector.push_back(*pBegin);
         }
     }
-    else
+    else if(!isNew())
     {
         Any aVal;
         if(m_CatalogName.getLength())
@@ -436,7 +522,6 @@ void ODBTable::refreshColumns()
 
 
     }
-
     OColumns* pCol = new OColumns(*this,m_aMutex,xNames,isCaseSensitive(),aVector,
                                 m_xMetaData->supportsAlterTableWithAddColumn(),
                                 m_xMetaData->supportsAlterTableWithDropColumn());
@@ -486,56 +571,78 @@ void ODBTable::refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys)
 void ODBTable::refreshKeys()
 {
     ::std::vector< ::rtl::OUString> aVector;
-
-    refreshPrimaryKeys(aVector);
-    refreshForgeinKeys(aVector);
+    Reference<XIndexAccess> xKeys;
+    Reference<XKeysSupplier> xKeysSup(m_xTable,UNO_QUERY);
+    if(xKeysSup.is())
+    {
+        xKeys = xKeysSup->getKeys();
+        if(xKeys.is())
+        {
+            sal_Int32 nCount = xKeys->getCount();
+            for(sal_Int32 i=0;i<nCount;++i)
+            {
+                Reference<XPropertySet> xKey;
+                ::cppu::extractInterface(xKey,xKeys->getByIndex(i));
+                if(xKey.is())
+                    aVector.push_back(::comphelper::getString(xKey->getPropertyValue(PROPERTY_NAME)));
+            }
+        }
+    }
+    else if(!isNew())
+    {
+        refreshPrimaryKeys(aVector);
+        refreshForgeinKeys(aVector);
+    }
     if(m_pKeys)
         delete m_pKeys;
-    m_pKeys     = new OKeys(this,m_aMutex,aVector);
+    m_pKeys     = new OKeys(this,m_aMutex,aVector,xKeys);
 }
 // -------------------------------------------------------------------------
 void ODBTable::refreshIndexes()
 {
-    ::std::vector< ::rtl::OUString> aVector;
-    Reference<XNameAccess> xNames;
-    Reference<XIndexesSupplier> xIndexSup(m_xTable,UNO_QUERY);
-    if(m_xTable.is() && xIndexSup.is())
+    if(!isNew())
     {
-        xNames = xIndexSup->getIndexes();
-        Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
-        const ::rtl::OUString* pBegin   = aNames.getConstArray();
-        const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-        for(;pBegin != pEnd;++pBegin)
-            aVector.push_back(*pBegin);
-    }
-    else
-    {
-        Any aVal;
-        if(m_CatalogName.getLength())
-            aVal <<= m_CatalogName;
-
-        // fill indexes
-        Reference< XResultSet > xResult = m_xMetaData->getIndexInfo(aVal,m_SchemaName,m_Name,sal_False,sal_False);
-
-        if(xResult.is())
+        ::std::vector< ::rtl::OUString> aVector;
+        Reference<XNameAccess> xNames;
+        Reference<XIndexesSupplier> xIndexSup(m_xTable,UNO_QUERY);
+        if(m_xTable.is() && xIndexSup.is())
         {
-            Reference< XRow > xRow(xResult,UNO_QUERY);
-            ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
-            while(xResult->next())
+            xNames = xIndexSup->getIndexes();
+            Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
+            const ::rtl::OUString* pBegin   = aNames.getConstArray();
+            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+            for(;pBegin != pEnd;++pBegin)
+                aVector.push_back(*pBegin);
+        }
+        else
+        {
+            Any aVal;
+            if(m_CatalogName.getLength())
+                aVal <<= m_CatalogName;
+
+            // fill indexes
+            Reference< XResultSet > xResult = m_xMetaData->getIndexInfo(aVal,m_SchemaName,m_Name,sal_False,sal_False);
+
+            if(xResult.is())
             {
-                aName = xRow->getString(5);
-                if(aName.getLength())
-                    aName += aDot;
-                aName += xRow->getString(6);
-                if(aName.getLength())
-                    aVector.push_back(aName);
+                Reference< XRow > xRow(xResult,UNO_QUERY);
+                ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
+                while(xResult->next())
+                {
+                    aName = xRow->getString(5);
+                    if(aName.getLength())
+                        aName += aDot;
+                    aName += xRow->getString(6);
+                    if(aName.getLength())
+                        aVector.push_back(aName);
+                }
             }
         }
-    }
 
-    if(m_pIndexes)
-        delete m_pIndexes;
-    m_pIndexes  = new OIndexes(this,xNames,m_aMutex,aVector);
+        if(m_pIndexes)
+            delete m_pIndexes;
+        m_pIndexes  = new OIndexes(this,m_aMutex,aVector,xNames);
+    }
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODBTable::getName() throw(RuntimeException)
