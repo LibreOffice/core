@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMenuListener.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:50 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:02:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,36 +76,31 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XMenuListener
-/** the listener interface for receiving menu events on a window.
+/** makes it possible to receive menu events on a window.
  */
 interface XMenuListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XMenuListener::highlight
-    /** gets invoked when a menu item is highlighted.
+    /** is invoked when a menu item is highlighted.
      */
     [oneway] void highlight( [in] com::sun::star::awt::MenuEvent rEvent );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XMenuListener::select
-    /** gets invoked when a menu item is seleted.
+    /** is invoked when a menu item is selected.
      */
     [oneway] void select( [in] com::sun::star::awt::MenuEvent rEvent );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XMenuListener::activate
-    /** gets invoked when a menu is activated.
+    /** is invoked when a menu is activated.
      */
     [oneway] void activate( [in] com::sun::star::awt::MenuEvent rEvent );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XMenuListener::deactivate
-    /** gets invoked when a menu is deactivated.
+    /** is invoked when a menu is deactivated.
      */
     [oneway] void deactivate( [in] com::sun::star::awt::MenuEvent rEvent );
 
