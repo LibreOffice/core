@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2002-05-29 13:40:25 $
+ *  last change: $Author: pl $ $Date: 2002-08-29 07:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,9 @@ DefaultFontConfigItem::~DefaultFontConfigItem()
 
 void DefaultFontConfigItem::Commit()
 {
+    if( ! IsValidConfigMgr() )
+        return;
+
     int i, nKeys = sizeof(aKeyMap)/sizeof(aKeyMap[0]);
 
     ::std::map< int, ::std::map< int, OUString > >::const_iterator lang;
@@ -286,6 +289,8 @@ static double fTimeCorrection = 0.0;
 
 void DefaultFontConfigItem::getValues()
 {
+    if( ! IsValidConfigMgr() )
+        return;
 
 #ifdef DEBUG_TIMING
     static bool bOnce = false;
@@ -954,6 +959,9 @@ static const enum_convert pWidthNames[] =
 
 void FontSubstConfigItem::getValues()
 {
+    if( ! IsValidConfigMgr() )
+        return;
+
 #ifdef DEBUG_TIMING
     TimeValue aStart;
     TimeValue aStop;
@@ -1195,6 +1203,9 @@ SettingsConfigItem::~SettingsConfigItem()
 
 void SettingsConfigItem::Commit()
 {
+    if( ! IsValidConfigMgr() )
+        return;
+
     int i;
 
     ::std::hash_map< OUString, ::std::hash_map< OUString, OUString, OUStringHash >, OUStringHash >::const_iterator group;
@@ -1236,6 +1247,9 @@ void SettingsConfigItem::Notify( const Sequence< OUString >& rPropertyNames )
  */
 void SettingsConfigItem::getValues()
 {
+    if( ! IsValidConfigMgr() )
+        return;
+
     m_aSettings.clear();
 
     int i, j;
