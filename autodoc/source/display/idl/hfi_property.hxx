@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_property.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@ class HF_IdlDataMember : public HtmlFactory_Idl
                         HF_IdlDataMember(
                             Environment &       io_rEnv,
                             HF_SubTitleTable &  o_table );
+    virtual             ~HF_IdlDataMember() {}
+
   private:
     /// @descr Must enclose writing a horizontal line.
     virtual void        write_Declaration(
@@ -113,6 +115,7 @@ class HF_IdlAttribute : public HF_IdlDataMember
                             HF_SubTitleTable &  o_table )
                             :   HF_IdlDataMember(io_rEnv, o_table) {}
     virtual             ~HF_IdlAttribute();
+
   private:
     virtual void        write_Declaration(
                             const client &      i_ce ) const;
@@ -127,6 +130,7 @@ class HF_IdlEnumValue : public HF_IdlDataMember
                             HF_SubTitleTable &  o_table )
                             :   HF_IdlDataMember(io_rEnv, o_table) {}
     virtual             ~HF_IdlEnumValue();
+
   private:
     virtual void        write_Declaration(
                             const client &      i_ce ) const;
@@ -140,6 +144,7 @@ class HF_IdlConstant : public HF_IdlDataMember
                             HF_SubTitleTable &  o_table )
                             :   HF_IdlDataMember(io_rEnv, o_table) {}
     virtual             ~HF_IdlConstant();
+
   private:
     virtual void        write_Declaration(
                             const client &      i_ce ) const;
@@ -154,6 +159,7 @@ class HF_IdlStructElement : public HF_IdlDataMember
                             HF_SubTitleTable &  o_table )
                             :   HF_IdlDataMember(io_rEnv, o_table) {}
     virtual             ~HF_IdlStructElement();
+
   private:
     virtual void        write_Declaration(
                             const client &      i_ce ) const;
