@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 16:25:54 $
+#   last change: $Author: rt $ $Date: 2004-08-23 08:54:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,10 +113,11 @@ EXCEPTIONSFILES =  \
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
 LIB1OBJFILES =	\
-        $(SLO)$/DropDownFieldDialog.obj \
         $(SLO)$/fldmgr.obj \
         $(SLO)$/fldwrap.obj \
         $(SLO)$/xfldui.obj
+
+#		$(SLO)$/DropDownFieldDialog.obj \
 
 # --- Tagets -------------------------------------------------------
 
