@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Compatibility.xcs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:36:44 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,11 +81,11 @@
             </prop>
             <prop oor:name="AddSpacing" oor:type="xs:boolean">
                 <info><desc>Add spacing between paragraphs and tables</desc></info>
-                <value>false</value>
+                <value>true</value>
             </prop>
             <prop oor:name="AddSpacingAtPages" oor:type="xs:boolean">
                 <info><desc>Add paragraph and table spacing at tops of pages</desc></info>
-                <value>false</value>
+                <value>true</value>
             </prop>
             <prop oor:name="UseOurTabStopFormat" oor:type="xs:boolean">
                 <info><desc>Use OpenOffice.org 1.1 tabstop formatting</desc></info>
@@ -101,7 +101,7 @@
             </prop>
             <prop oor:name="AddTableSpacing" oor:type="xs:boolean">
                 <info><desc>???</desc></info>
-                <value>false</value>
+                <value>true</value>
             </prop>
             <prop oor:name="UseObjectPositioning" oor:type="xs:boolean">
                 <info><desc>Use OpenOffice.org 1.1 object positioning</desc></info>
@@ -111,6 +111,9 @@
                 <info><desc>Use OpenOffice.org 1.1 text wrapping</desc></info>
                 <value>false</value>
             </prop>
+            <prop oor:name="ConsiderWrappingStyle" oor:type="xs:boolean"><info><desc xml:lang="en-US">Consider wrapping style when positioning objects</desc></info>
+                <value>false</value>
+            </prop>
         </group>
     </templates>
 
@@ -118,5 +121,22 @@
         <set oor:name="AllFileFormats" oor:node-type="FormattingOptions">
             <info><desc>The List of the applications.</desc></info>
         </set>
+		<group oor:name="WriterCompatibilityVersion">
+			<info>
+				<author>PB</author>
+				<desc xml:lang="en-US">Used by the writer compatibility flag as the last OOo version.</desc>
+			</info>
+			<!--The default must be written by the setup.-->
+			<prop oor:name="OOo11" oor:type="xs:string">
+				<!-- UIHints: Tools - Options - OOo Writer - Compatibility -->
+				<!--The value should only be written by the setup.-->
+				<info>
+					<author>PB</author>
+					<desc xml:lang="en-US">OOo version 1.1.</desc>
+                    <label xml:lang="en-US">OOo version 1.1.</label>
+				</info>
+                <value/>
+			</prop>
+        </group>
     </component>
 </oor:component-schema>
