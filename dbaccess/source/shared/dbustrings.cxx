@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbustrings.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 07:22:40 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ namespace dbaui
     //= other
     //============================================================
     IMPLEMENT_CONSTASCII_USTRING(FRAME_NAME_QUERY_PREVIEW,  "QueryPreview");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLESQL92CHECK, "EnableSQL92Check");
 
     //============================================================
     //= properties

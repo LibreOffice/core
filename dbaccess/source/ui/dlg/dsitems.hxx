@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsitems.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-25 08:27:36 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,18 +100,22 @@
 #define DSID_CONN_LDAP_BASEDN       33
 #define DSID_CONN_LDAP_PORTNUMBER   34
 #define DSID_CONN_LDAP_ROWCOUNT     35
+#define DSID_SQL92CHECK             36
 
 //========================================================================
 //= item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
-#define DSID_LAST_ITEM_ID   DSID_CONN_LDAP_ROWCOUNT
+#define DSID_LAST_ITEM_ID   DSID_SQL92CHECK
 
 #endif // _DBAUI_DATASOURCEITEMS_HXX_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/06/25 08:27:36  oj
+ *  #88699# new control for ldap rowcount
+ *
  *  Revision 1.9  2001/05/29 13:11:52  oj
  *  #87149# addressbook ui impl
  *

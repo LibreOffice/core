@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-02 14:17:06 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,7 +463,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
                 aDefaultName = ::dbaui::createDefaultName(getConnection()->getMetaData(),xTables,aName);
             }
 
-            OSaveAsDlg aDlg(getView(),CommandType::TABLE,xTables,getConnection()->getMetaData(),aDefaultName);
+            OSaveAsDlg aDlg(getView(),CommandType::TABLE,xTables,getConnection()->getMetaData(),getConnection(),aDefaultName);
             if(aDlg.Execute() == RET_OK)
             {
                 m_sName = aDlg.getName();

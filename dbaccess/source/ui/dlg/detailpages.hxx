@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-30 15:55:26 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ namespace dbaui
     #define     CBTP_USE_UIDPWD     0x0001
     #define     CBTP_USE_CHARSET    0x0002
     #define     CBTP_USE_OPTIONS    0x0004
+    #define     CBTP_USE_SQL92CHECK 0x0010
 
     /** eases the implementation of tab pages handling user/password and/or character
         set and/or generic options input
@@ -102,6 +103,8 @@ namespace dbaui
 
         FixedText*          m_pCharsetLabel;
         ListBox*            m_pCharset;
+
+        CheckBox*           m_pIsSQL92Check;
 
         OCharsetDisplay     m_aCharsets;
 
@@ -170,6 +173,7 @@ namespace dbaui
         Edit                m_aDriver;
         FixedText           m_aJdbcUrlLabel;
         OConnectionURLEdit  m_aJdbcUrl;
+        FixedLine           m_aSeparator1;
 
         OJdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
         ~OJdbcDetailsPage();
@@ -193,6 +197,7 @@ namespace dbaui
         FixedText           m_aAdoUrlLabel;
         OConnectionURLEdit  m_aAdoUrl;
         FixedLine           m_aSeparator1;
+        FixedLine           m_aSeparator2;
 
         OAdoDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
         ~OAdoDetailsPage();
@@ -292,6 +297,7 @@ namespace dbaui
         FixedLine   m_aSeparator1;
         FixedText   m_aExtensionLabel;
         ComboBox    m_aExtension;
+        FixedLine   m_aSeparator3;
 
         String      m_aFieldSeparatorList;
         String      m_aTextSeparatorList;
@@ -316,6 +322,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2002/04/30 15:55:26  fs
+ *  #97118# remove user/password - not used at the moment
+ *
  *  Revision 1.9  2002/03/22 09:05:42  oj
  *  #98142# remove charset for jdbc drivers
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-08 09:47:23 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,13 @@ namespace dbaui
 
                 // here we have everything needed to create a new query object ...
                 // ... ehm, except a new name
-                OSaveAsDlg aAskForName(getView(), CommandType::QUERY, xDestQueries.get(), Reference< XDatabaseMetaData>(), sTargetName, SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS);
+                OSaveAsDlg aAskForName( getView(),
+                                        CommandType::QUERY,
+                                        xDestQueries.get(),
+                                        Reference< XDatabaseMetaData>(),
+                                        Reference< XConnection>(),
+                                        sTargetName,
+                                        SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS);
                 if (RET_OK != aAskForName.Execute())
                     // cancelled by the user
                     return;
@@ -1362,6 +1368,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.50  2002/07/08 09:47:23  oj
+ *  #98087# check d&d entries
+ *
  *  Revision 1.49  2002/07/08 08:11:22  oj
  *  #97156# saveData and d&d source corrected
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-24 12:28:12 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,14 @@ namespace dbaui
     sal_Bool isHiContrast(Window* _pWindow);
 
     void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId );
+
+    /** check if SQL92 name checking is enabled
+        @param  _xConnection
+            Used to get the datasource as parent from the conenction.
+        @return
+            <TRUE/> if so otherwise <FALSE/>
+    */
+    sal_Bool isSQL92CheckEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
 // .........................................................................
 }

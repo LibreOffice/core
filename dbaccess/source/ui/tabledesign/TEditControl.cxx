@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-02 07:58:53 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,9 +333,10 @@ void OTableEditorCtrl::InitCellController()
     // Zelle Feldname
     xub_StrLen nMaxTextLen = EDIT_NOLIMIT;
     ::rtl::OUString sExtraNameChars;
+    Reference<XConnection> xCon;
     try
     {
-        Reference<XConnection> xCon = GetView()->getController()->getConnection();
+        xCon = GetView()->getController()->getConnection();
         Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
         nMaxTextLen = ((xub_StrLen)xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0);
@@ -343,6 +344,7 @@ void OTableEditorCtrl::InitCellController()
         if( nMaxTextLen == 0 )
             nMaxTextLen = EDIT_NOLIMIT;
         sExtraNameChars = xMetaData.is() ? xMetaData->getExtraNameCharacters() : ::rtl::OUString();
+
     }
     catch(SQLException&)
     {
@@ -351,6 +353,8 @@ void OTableEditorCtrl::InitCellController()
 
     pNameCell = new OSQLNameEdit( &GetDataWindow(), sExtraNameChars,WB_LEFT );
     pNameCell->SetMaxTextLen( nMaxTextLen );
+    pNameCell->setCheck( isSQL92CheckEnabled(xCon) );
+
 
     //////////////////////////////////////////////////////////////////////
     // Zelle Typ

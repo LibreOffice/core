@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-25 08:24:31 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,10 +117,12 @@
 #define CB_HEADER               4
 #define CB_SUPPRESVERSIONCL     5
 #define CB_USECATALOG           6
+#define CB_SQL92CHECK           7
 
 #define FL_SEPARATOR1           1
 #define FL_SEPARATOR2           2
 #define FL_COLLECTION           3
+#define FL_SEPARATOR3           4
 
 #define CM_FIELDSEPARATOR       1
 #define CM_TEXTSEPARATOR        2
@@ -179,6 +181,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2001/06/25 08:24:31  oj
+ *  #88699# new ids for controls
+ *
  *  Revision 1.19  2001/06/20 07:08:34  oj
  *  #88434# new page for user admin
  *

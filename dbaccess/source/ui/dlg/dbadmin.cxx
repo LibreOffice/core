@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-30 14:15:30 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_SHOWDELETEDROWS, ::rtl::OUString::createFromAscii("ShowDeleted")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ALLOWLONGTABLENAMES, ::rtl::OUString::createFromAscii("NoNameLengthLimit")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ADDITIONALOPTIONS, ::rtl::OUString::createFromAscii("SystemDriverSettings")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_SQL92CHECK, PROPERTY_ENABLESQL92CHECK));
 
     // special settings for adabas
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SHUTSERVICE, ::rtl::OUString::createFromAscii("ShutdownDatabase")));
@@ -718,12 +719,14 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxStringItem(DSID_CONN_LDAP_BASEDN, String());
     *pCounter++ = new SfxInt32Item(DSID_CONN_LDAP_PORTNUMBER, 389);
     *pCounter++ = new SfxInt32Item(DSID_CONN_LDAP_ROWCOUNT, 100);
+    *pCounter++ = new SfxBoolItem(DSID_SQL92CHECK, sal_False);
 
 
 
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
+        {0,0},
         {0,0},
         {0,0},
         {0,0},
@@ -2139,6 +2142,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.78  2002/01/30 14:15:30  fs
+ *  #97122# when selecting a data source, make sure it is no no-op causing unnecessary things
+ *
  *  Revision 1.77  2001/10/26 16:36:25  hr
  *  #92924#: includes
  *

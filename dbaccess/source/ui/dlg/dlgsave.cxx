@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:46:59 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
 
 
 using namespace dbaui;
@@ -100,6 +103,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                         const sal_Int32& _rType,
                         const Reference<XNameAccess>& _rxNames,
                         const Reference< XDatabaseMetaData>& _rxMetaData,
+                        const Reference< XConnection>& _xConnection,
                         const String& rDefault,
                         sal_Int32 _nFlags)
              :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
@@ -109,7 +113,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
              ,m_aSchemaLbl(this, ResId (FT_SCHEMA))
              ,m_aSchema(this, ResId (ET_SCHEMA),_rxMetaData.is() ? _rxMetaData->getExtraNameCharacters() : ::rtl::OUString())
              ,m_aLabel(this, ResId (FT_TITLE))
-             ,m_aTitle(this, ResId (ET_TITLE),_rxMetaData.is() ? _rxMetaData->getExtraNameCharacters() : ::rtl::OUString())
+             ,m_aTitle(this, ResId (ET_TITLE), _rxMetaData.is() ? _rxMetaData->getExtraNameCharacters() : ::rtl::OUString())
              ,m_aPB_OK(this, ResId( PB_OK ) )
              ,m_aPB_CANCEL(this, ResId( PB_CANCEL ))
              ,m_aPB_HELP(this, ResId( PB_HELP))
@@ -147,7 +151,6 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 SetSizePixel(Size(GetSizePixel().Width(), nNewHeight));
 
                 m_aTitle.SetText(m_aName);
-                m_aTitle.setCheck(); // enable non valid sql chars as well
             }
             break;
         case CommandType::TABLE:
@@ -248,6 +251,13 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 m_aTitle.SetMaxTextLen(nLength);
                 m_aSchema.SetMaxTextLen(nLength);
                 m_aCatalog.SetMaxTextLen(nLength);
+
+                if ( _xConnection.is() && isSQL92CheckEnabled(_xConnection) )
+                {
+                    m_aTitle.setCheck(sal_True); // enable non valid sql chars as well
+                    m_aSchema.setCheck(sal_True); // enable non valid sql chars as well
+                    m_aCatalog.setCheck(sal_True); // enable non valid sql chars as well
+                }
 
 
                 Size aSize = GetSizePixel();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-30 15:47:28 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ namespace dbaui
         ,m_pOptions(NULL)
         ,m_pCharsetLabel(NULL)
         ,m_pCharset(NULL)
+        ,m_pIsSQL92Check(NULL)
         ,m_nControlFlags(nControlFlags)
     {
         if ((m_nControlFlags & CBTP_USE_UIDPWD) == CBTP_USE_UIDPWD)
@@ -153,6 +154,12 @@ namespace dbaui
             m_pOptionsLabel = new FixedText(this, ResId(FT_OPTIONS));
             m_pOptions = new Edit(this, ResId(ET_OPTIONS));
             m_pOptions->SetModifyHdl(getControlModifiedLink());
+        }
+
+        if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
+        {
+            m_pIsSQL92Check = new CheckBox(this, ResId(CB_SQL92CHECK));
+            m_pIsSQL92Check->SetClickHdl(getControlModifiedLink());
         }
 
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
@@ -188,6 +195,8 @@ namespace dbaui
 
         DELETEZ(m_pCharsetLabel);
         DELETEZ(m_pCharset);
+
+        DELETEZ(m_pIsSQL92Check);
     }
 
     // -----------------------------------------------------------------------
@@ -252,6 +261,7 @@ namespace dbaui
         SFX_ITEMSET_GET(_rSet, pOptionsItem, SfxStringItem, DSID_ADDITIONALOPTIONS, sal_True);
         SFX_ITEMSET_GET(_rSet, pCharsetItem, SfxStringItem, DSID_CHARSET, sal_True);
         SFX_ITEMSET_GET(_rSet, pAllowEmptyPwd, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
+        SFX_ITEMSET_GET(_rSet, pSQL92Check, SfxBoolItem, DSID_SQL92CHECK, sal_True);
 
         // forward the values to the controls
         if (bValid)
@@ -276,6 +286,13 @@ namespace dbaui
                 m_pOptions->ClearModifyFlag();
                 if (_bSaveValue)
                     m_pOptions->SaveValue();
+            }
+
+            if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
+            {
+                m_pIsSQL92Check->Check(pSQL92Check->GetValue());
+                if (_bSaveValue)
+                    m_pIsSQL92Check->SaveValue();
             }
 
             if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
@@ -327,6 +344,11 @@ namespace dbaui
                 m_pOptions->Disable();
             }
 
+            if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
+            {
+                m_pIsSQL92Check->Disable();
+            }
+
             if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
             {
                 m_pCharsetLabel->Disable();
@@ -364,6 +386,15 @@ namespace dbaui
             }
         }
 
+        if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
+        {
+            if( m_pIsSQL92Check->IsChecked() != m_pIsSQL92Check->GetSavedValue() )
+            {
+                _rSet.Put(SfxBoolItem(DSID_SQL92CHECK, m_pIsSQL92Check->IsChecked()));
+                bChangedSomething = sal_True;
+            }
+        }
+
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
         {
             if (m_pCharset->GetSelectEntryPos() != m_pCharset->GetSavedValue())
@@ -384,7 +415,7 @@ namespace dbaui
     //========================================================================
     //------------------------------------------------------------------------
     ODbaseDetailsPage::ODbaseDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_DBASE, _rCoreAttrs, CBTP_USE_CHARSET)
+        :OCommonBehaviourTabPage(pParent, PAGE_DBASE, _rCoreAttrs, CBTP_USE_CHARSET | CBTP_USE_SQL92CHECK)
         ,m_aLine1           (this, ResId(FL_SEPARATOR1))
         ,m_aLine2           (this, ResId(FL_SEPARATOR2))
         ,m_aShowDeleted     (this, ResId(CB_SHOWDELETEDROWS))
@@ -414,6 +445,7 @@ namespace dbaui
             {
                 DSID_SHOWDELETEDROWS,
                 DSID_CHARSET,
+                DSID_SQL92CHECK,
                 0
             };
             pRelevantIds = nRelevantIds;
@@ -491,12 +523,13 @@ namespace dbaui
     //= OJdbcDetailsPage
     //========================================================================
     OJdbcDetailsPage::OJdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_JDBC, _rCoreAttrs, CBTP_USE_UIDPWD)
+        :OCommonBehaviourTabPage(pParent, PAGE_JDBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_SQL92CHECK)
 
         ,m_aDriverLabel     (this, ResId(FT_JDBCDRIVERCLASS))
         ,m_aDriver          (this, ResId(ET_JDBCDRIVERCLASS))
         ,m_aJdbcUrlLabel    (this, ResId(FT_CONNECTURL))
         ,m_aJdbcUrl         (this, ResId(ET_CONNECTURL))
+        ,m_aSeparator1      (this, ResId(FL_SEPARATOR1))
     {
         m_aDriver.SetModifyHdl(getControlModifiedLink());
         m_aJdbcUrl.SetModifyHdl(getControlModifiedLink());
@@ -521,6 +554,7 @@ namespace dbaui
             static sal_Int32 nRelevantIds[] =
             {
                 DSID_JDBCDRIVERCLASS,
+                DSID_SQL92CHECK,
                 0
             };
             pRelevantIds = nRelevantIds;
@@ -588,11 +622,12 @@ namespace dbaui
     //= OAdoDetailsPage
     //========================================================================
     OAdoDetailsPage::OAdoDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_ADO, _rCoreAttrs, CBTP_USE_UIDPWD)
+        :OCommonBehaviourTabPage(pParent, PAGE_ADO, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_SQL92CHECK)
 
         ,m_aAdoUrlLabel     (this, ResId(FT_CONNECTURL))
         ,m_aAdoUrl          (this, ResId(ET_CONNECTURL))
         ,m_aSeparator1      (this, ResId(FL_SEPARATOR1))
+        ,m_aSeparator2      (this, ResId(FL_SEPARATOR2))
     {
         m_aAdoUrl.SetModifyHdl(getControlModifiedLink());
 
@@ -615,6 +650,7 @@ namespace dbaui
         {
             static sal_Int32 nRelevantIds[] =
             {
+                DSID_SQL92CHECK,
                 0
             };
             pRelevantIds = nRelevantIds;
@@ -670,7 +706,7 @@ namespace dbaui
     //= OOdbcDetailsPage
     //========================================================================
     OOdbcDetailsPage::OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET | CBTP_USE_OPTIONS)
+        :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET | CBTP_USE_OPTIONS | CBTP_USE_SQL92CHECK)
         ,m_aSeparator1  (this, ResId(FL_SEPARATOR1))
         ,m_aUseCatalog  (this, ResId(CB_USECATALOG))
     {
@@ -695,6 +731,7 @@ namespace dbaui
                 DSID_ADDITIONALOPTIONS,
                 DSID_CHARSET,
                 DSID_USECATALOG,
+                DSID_SQL92CHECK,
                 0
             };
             pRelevantIds = nRelevantIds;
@@ -732,7 +769,7 @@ namespace dbaui
     //= OAdabasDetailsPage
     //========================================================================
     OAdabasDetailsPage::OAdabasDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET)
+        :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET | CBTP_USE_SQL92CHECK)
             // Yes, we're using the resource for the ODBC page here. It contains two controls which we don't use
             // and except that it's excatly what we need here.
         ,m_aSeparator1  (this, ResId(FL_SEPARATOR1))
@@ -767,6 +804,7 @@ namespace dbaui
         {
             static sal_Int32 nRelevantIds[] =
             {
+                DSID_SQL92CHECK,
                 DSID_CHARSET,
                 0
             };
@@ -884,7 +922,7 @@ namespace dbaui
     //========================================================================
     //------------------------------------------------------------------------
     OTextDetailsPage::OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_TEXT, _rCoreAttrs, CBTP_USE_CHARSET)
+        :OCommonBehaviourTabPage(pParent, PAGE_TEXT, _rCoreAttrs, CBTP_USE_CHARSET | CBTP_USE_SQL92CHECK)
         ,m_aLineFormat              (this, ResId(FL_SEPARATOR2))
         ,m_aHeader                  (this, ResId(CB_HEADER))
         ,m_aFieldSeparatorLabel     (this, ResId(FT_FIELDSEPARATOR))
@@ -898,6 +936,7 @@ namespace dbaui
         ,m_aSeparator1              (this, ResId(FL_SEPARATOR1))
         ,m_aExtensionLabel          (this, ResId(FT_EXTENSION))
         ,m_aExtension               (this, ResId(CM_EXTENSION))
+        ,m_aSeparator3              (this, ResId(FL_SEPARATOR3))
 
         ,m_aFieldSeparatorList  (ResId(STR_FIELDSEPARATORLIST))
         ,m_aTextSeparatorList   (ResId(STR_TEXTSEPARATORLIST))
@@ -951,6 +990,7 @@ namespace dbaui
                 DSID_TEXTFILEEXTENSION,
                 DSID_TEXTFILEHEADER,
                 DSID_CHARSET,
+                DSID_SQL92CHECK,
                 0
             };
             pRelevantIds = nRelevantIds;
@@ -1187,6 +1227,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2002/04/30 15:47:28  fs
+ *  #97118# remove user/password - not used at the moment
+ *
  *  Revision 1.12  2002/03/22 09:05:42  oj
  *  #98142# remove charset for jdbc drivers
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:50:32 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ namespace dbaui
         OSaveAsDlg( Window * pParent,const sal_Int32& _rType,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>&  _rxNames,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMetaData,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                     const String& rDefault,
                     sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-13 12:47:08 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1215,6 +1215,8 @@ TabPage PAGE_DBASE
     {
         Pos = MAP_APPFONT ( 4 , 51 ) ;
         Size = MAP_APPFONT ( 252 , 8 ) ;
+        Text = "Allgemein";
+        Text [ english ] = "General";
     };
     CheckBox CB_SHOWDELETEDROWS
     {
@@ -1247,6 +1249,15 @@ TabPage PAGE_DBASE
         Text [ language_user1 ] = " ";
         Text[ catalan ] = "Visualitza els registres i~nactius";
         Text[ thai ] = "‡πÅ‡∏™‡∏î‡∏á‡∏£‡∏∞‡πÄ‡∏ö‡∏µ‡∏¢‡∏ô‡∏ó‡∏µ‡πà‡πÑ~‡∏°‡πà‡πÑ‡∏î‡πâ‡πÉ‡∏ä‡πâ‡∏á‡∏≤‡∏ô‡∏≠‡∏¢‡∏π‡πà";
+    };
+    CheckBox CB_SQL92CHECK
+    {
+        Pos     = MAP_APPFONT ( 7 , 76 ) ;
+        Size    = MAP_APPFONT ( 200 , 10 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_SQL92CHECK;
+        Text = "SQL92 Names¸berpr¸fung verwenden";
+        Text [ english ] = "Use SQL92 naming convention";
     };
     PushButton PB_INDICIES
     {
@@ -1400,6 +1411,24 @@ TabPage PAGE_ADO
         Text[ finnish ] = "Salasana pakollinen";
         Text[ catalan ] = "Es necessita una contrasenya";
         Text[ thai ] = "‡∏ï‡πâ‡∏≠‡∏á‡∏Å‡∏≤‡∏£‡∏£‡∏´‡∏±‡∏™‡∏ú‡πà‡∏≤‡∏ô";
+    };
+
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( 4 , 64 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Text = "Allgemein";
+        Text [ english ] = "General";
+    };
+
+    CheckBox CB_SQL92CHECK
+    {
+        Pos     = MAP_APPFONT ( 6 , 75 ) ;
+        Size    = MAP_APPFONT ( 200 , 10 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_SQL92CHECK;
+        Text = "SQL92 Names¸berpr¸fung verwenden";
+        Text [ english ] = "Use SQL92 naming convention";
     };
 };
 
@@ -1558,47 +1587,18 @@ TabPage PAGE_JDBC
     FixedLine FL_SEPARATOR1
     {
         Pos = MAP_APPFONT ( 4 , 64 ) ;
-        Size = MAP_APPFONT ( 252 , 1 ) ;
+        Size = MAP_APPFONT ( 252 , 8) ;
+        Text = "Allgemein";
+        Text [ english ] = "General";
     };
-    FixedText FT_CHARSET
+    CheckBox CB_SQL92CHECK
     {
-        Pos = MAP_APPFONT ( 6 , 70 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
-        Text = "~Zeichensatz:" ;
-        Text [ english ] = "~Character set:" ;
-        Text [ NORWEGIAN ] = "~Character set:" ;
-        Text [ DANISH ] = "TegnsÊt" ;
-        Text [ english_US ] = "~Character set:" ;
-        Text [ SPANISH ] = "J~uego de caracteres:" ;
-        Text [ FINNISH ] = "~Merkistˆ:" ;
-        Text [ FRENCH ] = "~Jeu de caractËres :" ;
-        Text [ ITALIAN ] = "Ti~po di carattere:" ;
-        Text [ DUTCH ] = "~Tekenset:" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Conjunto de caracteres" ;
-        Text [ SWEDISH ] = "Te~ckenupps‰ttning" ;
-        Text [ PORTUGUESE ] = "~Conjunto de caracteres" ;
-        Text [ chinese_simplified ] = "Â≠óÁ¨¶ÈõÜ(~C)Ôºö" ;
-        Text [ russian ] = "Õ‡·Ó ÁÌ‡ÍÓ‚:" ;
-        Text [ polish ] = "ZbiÛr znakÛw:" ;
-        Text [ japanese ] = "ÊñáÂ≠óÂàó(~C)" ;
-        Text [ chinese_traditional ] = "Â≠óÂûã(~C)Ôºö" ;
-        Text [ arabic ] = "„Ã„Ê⁄… «·√Õ—›:" ;
-        Text [ greek ] = "”ÂÙ ˜·Ò·ÍÙﬁÒ˘Ì:" ;
-        Text [ korean ] = "Î¨∏ÏûêÏßëÌï©(~C)" ;
-        Text [ turkish ] = "Karakter k¸mesi" ;
-        Text [ language_user1 ] = " :" ;
-        Text[ catalan ] = "Joc de ~car?cters:";
-        Text[ thai ] = "‡∏ä‡∏∏‡∏î‡∏ï‡∏±‡∏ß~‡∏≠‡∏±‡∏Å‡∏Ç‡∏£‡∏∞:";
-    };
-    ListBox LB_CHARSET
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 70 ) ;
-        Size = MAP_APPFONT ( 105 , 60 ) ;
+        Pos     = MAP_APPFONT ( 6 , 75 ) ;
+        Size    = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
-        DropDown = TRUE ;
-        CurPos = 0 ;
-        HelpId = HID_DSADMIN_CHARSET_JDBC;
+        HelpId = HID_DSADMIN_SQL92CHECK;
+        Text = "SQL92 Names¸berpr¸fung verwenden";
+        Text [ english ] = "Use SQL92 naming convention";
     };
 };
 
@@ -1761,10 +1761,26 @@ TabPage PAGE_ODBC
         CurPos = 0 ;
         HelpId = HID_DSADMIN_CHARSET_ODBC;
     };
+    FixedLine FL_SEPARATOR1
+    {
+        Pos = MAP_APPFONT ( 4 , 68 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Text = "Allgemein";
+        Text [ english ] = "General";
+    };
+    CheckBox CB_SQL92CHECK
+    {
+        Pos     = MAP_APPFONT ( 6 , 79 ) ;
+        Size    = MAP_APPFONT ( 200 , 10 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_SQL92CHECK;
+        Text = "SQL92 Names¸berpr¸fung verwenden";
+        Text [ english ] = "Use SQL92 naming convention";
+    };
     CheckBox CB_USECATALOG
     {
-        Pos     = MAP_APPFONT ( 6 , 120 ) ;
-        Size    = MAP_APPFONT ( 200 , 12 ) ;
+        Pos     = MAP_APPFONT ( 6 , 92 ) ;
+        Size    = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_USECATALOG;
         Text = "Catalog verwenden bei dateibasierten Datenbanken";
@@ -2422,6 +2438,24 @@ TabPage PAGE_TEXT
         Text[ catalan ] = "Els comodins com ara ? o * no s'admeten a #1.";
         Text[ thai ] = "‡πÄ‡∏ä‡πà‡∏ô ‡∏ï‡∏±‡∏ß‡πÅ‡∏ó‡∏ô ?,* ‡πÑ‡∏°‡πà‡∏≠‡∏ô‡∏∏‡∏ç‡∏≤‡∏ï‡πÉ‡∏´‡πâ‡∏≠‡∏¢‡∏π‡πà‡πÉ‡∏ô #1";
     };
+
+    FixedLine FL_SEPARATOR3
+    {
+        Pos = MAP_APPFONT ( 4 , 149 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Text = "Allgemein";
+        Text [ english ] = "General";
+    };
+
+    CheckBox CB_SQL92CHECK
+    {
+        Pos     = MAP_APPFONT ( 6 , 160 ) ;
+        Size    = MAP_APPFONT ( 200 , 10 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_SQL92CHECK;
+        Text = "SQL92 Names¸berpr¸fung verwenden";
+        Text [ english ] = "Use SQL92 naming convention";
+    };
 };
 //.........................................................................
 TabPage PAGE_TABLESUBSCRIPTION
@@ -2555,7 +2589,7 @@ TabPage PAGE_TABLESUBSCRIPTION
     CheckBox CB_SUPPRESVERSIONCL
     {
         Pos     = MAP_APPFONT ( 7 , 156 ) ;
-        Size    = MAP_APPFONT ( 246 , 12 ) ;
+        Size    = MAP_APPFONT ( 246 , 10 ) ;
         Group   = TRUE ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_SUPPRESS_VERSIONCL;
@@ -3621,6 +3655,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.100  2002/06/13 12:47:08  kz
+ *  Merge SRX642: 13.06.02 - 14:46:36
+ *
  *  Revision 1.99  2002/05/28 13:30:01  oj
  *  #99603# set maskcolor to magenta
  *

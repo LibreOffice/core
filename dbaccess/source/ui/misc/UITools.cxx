@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-24 12:46:46 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1096,7 +1096,37 @@ void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId
         _pBox->SetColumnWidth( _nColId, nValue );
     }
 }
-
+// -----------------------------------------------------------------------------
+// check if SQL92 name checking is enabled
+sal_Bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
+{
+    sal_Bool bCheckNames = sal_False;
+    try
+    {
+        Reference< XChild> xChild(_xConnection, UNO_QUERY);
+        if ( xChild.is() )
+        {
+            Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
+            if ( xProp.is() )
+            {
+                Sequence< PropertyValue > aSeq;
+                xProp->getPropertyValue(PROPERTY_INFO) >>= aSeq;
+                const PropertyValue* pBegin = aSeq.getConstArray();
+                const PropertyValue* pEnd     = pBegin + aSeq.getLength();
+                for(;pBegin != pEnd;++pBegin)
+                {
+                    if ( pBegin->Name == PROPERTY_ENABLESQL92CHECK )
+                        pBegin->Value >>= bCheckNames;
+                }
+            }
+        }
+    }
+    catch(SQLException&)
+    {
+        OSL_ASSERT(!"isSQL92CheckEnabled");
+    }
+    return bCheckNames;
+}
 // .........................................................................
 }
 // .........................................................................

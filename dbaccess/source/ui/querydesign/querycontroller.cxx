@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: as $ $Date: 2002-06-24 10:28:54 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1036,8 +1036,12 @@ sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElement
 
 
         OSaveAsDlg aDlg(
-            getView(), m_bCreateView ? CommandType::TABLE : CommandType::QUERY, _xElements,
-                xMetaData, aDefaultName,
+                getView(),
+                m_bCreateView ? CommandType::TABLE : CommandType::QUERY,
+                _xElements,
+                xMetaData,
+                getConnection(),
+                aDefaultName,
                 _bSaveAs ? SAD_OVERWRITE : SAD_DEFAULT);
 
         if(bRet = (aDlg.Execute() == RET_OK))

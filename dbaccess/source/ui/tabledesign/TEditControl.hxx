@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:26:21 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ class SfxUndoManager;
 namespace dbaui
 {
     class OTableDescWin;
+    class OSQLNameEdit;
 
     class OTableEditorCtrl : public OTableRowView
     {
@@ -98,7 +99,7 @@ namespace dbaui
 
         EEditMode                   eEditMode;
 
-        Edit*                       pNameCell;
+        OSQLNameEdit*               pNameCell;
         ::svt::ListBoxControl*      pTypeCell;
         Edit*                       pDescrCell;
         OTableFieldDescWin*         pDescrWin;          // properties of one column
