@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-08 18:59:12 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 22:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_PARENT_NUMBERING[] = "ParentN
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_CHAR_STYLE_NAME[] = "CharStyleName";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_CHAR[] = "BulletChar";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_RELSIZE[] = "BulletRelSize";
+static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_COLOR[] = "BulletColor";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_GRAPHIC_BITMAP[] = "GraphicBitmap";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_GRAPHIC_SIZE[] = "GraphicSize";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_VERT_ORIENT[] = "VertOrient";
@@ -192,6 +193,8 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
     sal_Int16 eAdjust = HoriOrientation::LEFT;
     OUString sPrefix, sSuffix;
     OUString sTextStyleName;
+    sal_Bool bHasColor = sal_False;
+    sal_Int32 nColor = 0;
     sal_Int32 nSpaceBefore = 0, nMinLabelWidth = 0, nMinLabelDist = 0;
 
     sal_Int16 nStartValue = 1, nDisplayLevels = 1, nBullRelSize = 0;
@@ -273,6 +276,11 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
         {
             rProp.Value >>= xBitmap;
         }
+        else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_BULLET_COLOR, sizeof(XML_UNO_NAME_NRULE_BULLET_COLOR) ) )
+        {
+            rProp.Value >>= nColor;
+            bHasColor = sal_True;
+        }
         else  if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_START_WITH, sizeof(XML_UNO_NAME_NRULE_START_WITH) ) )
         {
             rProp.Value >>= nStartValue;
@@ -347,14 +355,6 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
         sTmp.append( cBullet );
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_bullet_char,
                       sTmp.makeStringAndClear() );
-
-        // text:bullet-relative-size="...%"
-        if( nBullRelSize )
-        {
-            GetExport().GetMM100UnitConverter().convertPercent( sTmp, nBullRelSize );
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_bullet_relative_size,
-                          sTmp.makeStringAndClear() );
-        }
 
     }
     else if( NumberingType::BITMAP == eType )
@@ -565,6 +565,26 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                 GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nImageHeight );
                 GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_height,
                               sBuffer.makeStringAndClear() );
+            }
+        }
+
+        if( NumberingType::BITMAP != eType )
+        {
+            // fo:color = "#..."
+            if( bHasColor )
+            {
+                const Color aColor( nColor );
+                SvXMLUnitConverter::convertColor( sBuffer, aColor );
+                GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_color,
+                              sBuffer.makeStringAndClear() );
+            }
+
+            // fo:height="...%"
+            if( nBullRelSize )
+            {
+                GetExport().GetMM100UnitConverter().convertPercent( sTmp, nBullRelSize );
+                GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_height,
+                              sTmp.makeStringAndClear() );
             }
         }
 
