@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:11:33 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ chinese_traditional ] = "¦Ϋ°Κ(~A)";
         Text[ arabic ] = "ΚαήΗΖν";
         Text[ greek ] = "Αυτόματα";
-        Text[ korean ] = "ΐΪµΏ";
+        Text[ korean ] = "ΐΪµΏ(~A)";
         Text[ turkish ] = "~Otomatik";
         Text[ language_user1 ] = " ";
     };
@@ -186,7 +186,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ chinese_traditional ] = "¦r¤Έ(~C)";
         Text[ arabic ] = "ΓΝΡέ";
         Text[ greek ] = "Χαρακτήρες";
-        Text[ korean ] = "Ή®ΐΪ";
+        Text[ korean ] = "Ή®ΐΪ(~C)";
         Text[ turkish ] = "~Karakter";
         Text[ language_user1 ] = " ";
     };
@@ -245,11 +245,11 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ chinese_simplified ] = "ΧΆ½Ε(~F)";
         Text[ russian ] = "Ξαϋχνΰÿ";
         Text[ polish ] = "Przypis ~dolny";
-        Text[ japanese ] = "‹r’(~‚e)";
+        Text[ japanese ] = "‹r’(~F)";
         Text[ chinese_traditional ] = "µωΈ}(~F)";
         Text[ arabic ] = "ΝΗΤνΙ ΣέανΙ";
         Text[ greek ] = "Υποσημείωση";
-        Text[ korean ] = "°ΆΑΦ";
+        Text[ korean ] = "°ΆΑΦ(~F)";
         Text[ turkish ] = "~Dipnot";
         Text[ language_user1 ] = " ";
     };
@@ -275,7 +275,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ chinese_traditional ] = "§ΐµω(~E)";
         Text[ arabic ] = "ΚΪανή ΞΚΗγν";
         Text[ greek ] = "Σημείωση τέλους";
-        Text[ korean ] = "ΉΜΑΦ";
+        Text[ korean ] = "ΉΜΑΦ(~E)";
         Text[ turkish ] = "~Sonnot";
         Text[ language_user1 ] = " ";
     };
