@@ -2,9 +2,9 @@
 *
 *  $RCSfile: UCBStreamHandler.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: hr $ $Date: 2004-07-23 14:00:14 $
+*  last change: $Author: rt $ $Date: 2005-01-27 15:28:07 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -147,6 +147,12 @@ public class UCBStreamHandler extends URLStreamHandler {
                     String path = sUrl.substring(0, sUrl.lastIndexOf(separator));
                     String file = sUrl.substring(
                         sUrl.lastIndexOf(separator) + separator.length());
+
+                    if ( m_xSimpleFileAccess.isReadOnly( path ) )
+                    {
+                        throw new java.io.IOException("File is read only");
+                    }
+
                     LogUtils.DEBUG("getOutputStream, create o/p  stream  for file eg. " + path  );
 
                     // we will only deal with simple file write
