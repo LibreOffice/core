@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbtdp_tdenumeration.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-13 16:01:19 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
+#endif
+#ifndef _REGISTRY_REFLTYPE_HXX_
+#include <registry/refltype.hxx>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -153,6 +156,8 @@ private:
         ::com::sun::star::reflection::TypeDescriptionSearchDepth eDepth,
         const RegistryTypeReaderLoader & rLoader );
 
+    static bool match( ::RTTypeClass eType1,
+                       ::com::sun::star::uno::TypeClass eType2 );
     bool queryMore();
     ::com::sun::star::uno::Reference<
         ::com::sun::star::reflection::XTypeDescription > queryNext();
