@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallWizard.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:11:14 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 14:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  */
 package com.sun.star.wizards.web;
-
 import com.sun.star.beans.XPropertyAccess;
 import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.lang.XInitialization;
@@ -79,7 +78,7 @@ import com.sun.star.wizards.common.Resource;
  * information into the given registry key (<CODE>__writeRegistryServiceInfo</CODE>).
  *
  * @author rpiterman
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class CallWizard {
 
@@ -152,39 +151,33 @@ public class CallWizard {
         public void trigger(String str) {
             if (str.equalsIgnoreCase("start")) {
                 if (webWizard == null) {
-                    Thread t = new Thread() {
-                        public void run() {
-                            WebWizard ww = null;
-                            try {
-                                webWizard = new WebWizard(xmultiservicefactory);
-                                ww = webWizard;
-                                webWizard.show();
-                                webWizard = null;
-                            }
-                            catch (StoppedByUserException ex1) {
-                                webWizard = null;
-                                //do nothing;
-                            }
-                            catch (Exception ex) {
-                                webWizard = null;
-                                ex.printStackTrace();
-                                Resource.showCommonResourceError(xmultiservicefactory);
-                            }
-                            finally {
-                                webWizard = null;
-                                try {
-                                    if (ww != null)
-                                        ww.cleanup();
-                                }
-                                catch (Exception ex) {
-                                    ex.printStackTrace();
-                                }
-
-                            }
+                    WebWizard ww = null;
+                    try {
+                        webWizard = new WebWizard(xmultiservicefactory);
+                        ww = webWizard;
+                        webWizard.show();
+                        webWizard = null;
+                    }
+                    catch (StoppedByUserException ex1) {
+                        webWizard = null;
+                        //do nothing;
+                    }
+                    catch (Exception ex) {
+                        webWizard = null;
+                        ex.printStackTrace();
+                        Resource.showCommonResourceError(xmultiservicefactory);
+                    }
+                    finally {
+                        webWizard = null;
+                        try {
+                            if (ww != null)
+                                ww.cleanup();
                         }
-                    };
+                        catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
 
-                    t.start();
+                    }
                 }
                 else {
                     webWizard.activate();
