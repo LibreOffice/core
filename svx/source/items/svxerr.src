@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:42:57 $
+ *  last change: $Author: rt $ $Date: 2001-03-01 20:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ Resource RID_SVXERRCODE
         Text[ polish ] = "$(ARG1) jest dla sprawdzania pisowni niedostκpny.\nProszκ sprawdziζ instalacjκ i zainstalowaζ potrzebny jκzyk.";
         Text[ japanese ] = "$(ARG1)‚Ν½ΝίΩΑª―Έ‚Ιg—p‚Ε‚«‚ά‚Ή‚ρB\n‚²g—p‚ΜΜίΫΈήΧΡ‚Μ²έ½Δ°Ω‚πΔΑª―Έ‚µ‚ΔAκ‡‚Ι‚ζ‚Α‚Δ‚ΝA‚²σ–]‚ΜΎκ‚π²έ½Δ-Ω‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         Text[ chinese_traditional ] = "$(ARG1)¤£¦s¦b΅C\n½Π±zΐΛ¬d¦wΈΛ΅M­Y¦³¥²­n½Π±z¦wΈΛ©Ò»έªΊ»y¨¥ª©¥»΅C";
-        Text[ arabic ] = "$(ARG1) ΫνΡ γΚζέΡ ααΚΟήνή ΗαΕγαΗΖν.\nΗαΡΜΗΑ έΝΥ ΗαΚΛΘνΚ ΗαΞΗΥ Θί΅ ζΚΛΘνΚ ΗααΫΙ ΗαγΨαζΘΙ΅ ΕΠΗ αÒγ ΗαΓγΡ.";
+        Text[ arabic ] = "$(ARG1) ΫνΡ γΚζέΡΙ ααΚΟήνή ΗαΕγαΗΖν.\nΗαΡΜΗΑ έΝΥ ΗαΚΛΘνΚ ΗαΞΗΥ Θί΅ ζήγ ΘΚΛΘνΚ ΗααΫΙ ΗαγΨαζΘΙ΅ ΕΠΗ αÒγ ΗαΓγΡ.";
         Text[ dutch ] = "$(ARG1) voor de controle is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal";
         Text[ chinese_simplified ] = "$(ARG1)²»΄ζΤΪ΅£\nΗλΔϊΌμ²ι°²Χ°£¬ΘηΣΠ±ΨÒªΗλ°²Χ°ΛωΠθµΔΣοΡΤ°ζ±Ύ΅£";
         Text[ greek ] = "$(ARG1) δεν είναι διαθέσιμο για τον ορθογραφικό έλεγχο.\nΠαρακαλώ ελέγξτε την εγκατάσταση και εγκαταστήστε αν χρειαστεί την γλώσσα που επιθυμείται.";
