@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: nf $ $Date: 2001-11-05 15:35:07 $
+#   last change: $Author: nf $ $Date: 2001-11-13 18:01:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -143,13 +143,13 @@ APP3STDLIBS=$(STATIC_LIBS)
 APP3LIBS=   $(LB)$/bootstrp.lib
 APP3DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
-APP4TARGET=     setsolar
+APP4TARGET=	setsolar
 APP4OBJS=   $(OBJ)$/setsolar.obj $(OBJ)$/envset.obj $(OBJ)$/vermap.obj
 APP4STDLIBS=$(STATIC_LIBS)
-APP4LIBS=       $(LB)$/bootstrp.lib
+APP4LIBS=	$(LB)$/bootstrp.lib
 APP4DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
-#APP5TARGET= zipdep
+#APP5TARGET=	zipdep
 APP5OBJS=	$(OBJ)$/zipdep.obj
 APP5LIBS=	$(LB)$/bootstrp.lib
 APP5STDLIBS=$(STATIC_LIBS) 
@@ -167,7 +167,13 @@ APP7LIBS=	$(LB)$/bootstrp.lib
 APP7STDLIBS=$(STATIC_LIBS) 
 APP7DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib $(OBJ)$/rscdep.obj
 
-DEPOBJFILES		=	$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) 
+APP8TARGET=	getsolar
+APP8OBJS=   $(OBJ)$/getsolar.obj 
+APP8STDLIBS=$(STATIC_LIBS)
+APP8LIBS=	$(LB)$/bootstrp.lib
+APP8DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
+
+DEPOBJFILES		=	$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS)
 
 .ENDIF	# "$(OS)"=="MACOS"
 
