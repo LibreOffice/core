@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: os $ $Date: 2001-05-21 13:01:57 $
+ *  last change: $Author: os $ $Date: 2001-05-28 13:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,15 +416,15 @@ public:
     virtual sal_Bool        GetProperty(const String& rName, uno::Any*& pAny )  = 0;
 
     const SfxItemPropertyMap*   GetMap() const {return _pMap;}
-    sal_Bool                        FillBaseProperties(SfxItemSet& rSet);
+    sal_Bool                        FillBaseProperties(SfxItemSet& rSet, sal_Bool& rSizeFound);
 
-    virtual sal_Bool                AnyToItemSet(SfxItemSet& rFrmSet, SfxItemSet& rSet) = 0;
+    virtual sal_Bool                AnyToItemSet(SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound) = 0;
 
 };
 /* -----------------29.06.98 09:55-------------------
  *
  * --------------------------------------------------*/
-sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet)
+sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool& rSizeFound)
 {
     sal_Bool bRet = sal_True;
     //Anker kommt auf jeden Fall in den Set
@@ -677,6 +677,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet)
         if( pWidth || pHeight ||pRelH || pRelW || pSize ||pSizeType ||
             pSyncWidth || pSyncHeight )
         {
+            rSizeFound = sal_True;
             SwFmtFrmSize aFrmSz;
             if(pWidth)
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pWidth, MID_FRMSIZE_WIDTH|CONVERT_TWIPS);
@@ -702,10 +703,11 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet)
         }
         else
         {
+            rSizeFound = sal_False;
             SwFmtFrmSize aFrmSz;
             awt::Size aSize;
-            aSize.Width = MINFLY;
-            aSize.Height = MINFLY;
+            aSize.Width = 2 * MM50;
+            aSize.Height = 2 * MM50;
             uno::Any aSizeVal;
             aSizeVal <<= aSize;
             ((SfxPoolItem&)aFrmSz).PutValue(aSizeVal, MID_FRMSIZE_SIZE|CONVERT_TWIPS);
@@ -729,7 +731,7 @@ public:
     virtual sal_Bool        SetProperty(const String& rName, uno::Any aVal);
     virtual sal_Bool        GetProperty(const String& rName, uno::Any*& pAny );
 
-    virtual sal_Bool        AnyToItemSet(SfxItemSet& rFrmSet, SfxItemSet& rSet);
+    virtual sal_Bool        AnyToItemSet(SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
 };
 /* -----------------22.06.98 09:17-------------------
  *
@@ -792,10 +794,10 @@ sal_Bool SwFrameProperties_Impl::GetProperty(const String& rName, uno::Any*& pAn
 /* -----------------22.06.98 11:27-------------------
  *
  * --------------------------------------------------*/
-sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SfxItemSet& rSet, SfxItemSet&)
+sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SfxItemSet& rSet, SfxItemSet&, sal_Bool& rSizeFound)
 {
     //Properties fuer alle Frames
-    sal_Bool bRet = FillBaseProperties(rSet);
+    sal_Bool bRet = FillBaseProperties(rSet, rSizeFound);
 
     uno::Any* pEdit;
     if(GetProperty(C2S(UNO_NAME_EDIT_IN_READONLY), pEdit))
@@ -829,7 +831,7 @@ public:
     virtual sal_Bool        GetProperty(const String& rName, uno::Any*& pAny );
     sal_Bool                GetSingleProperty(const USHORT nWhich, uno::Any*& pAny);
 
-    virtual sal_Bool                AnyToItemSet(SfxItemSet& rFrmSet, SfxItemSet& rSet);
+    virtual sal_Bool                AnyToItemSet(SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
 };
 /* -----------------27.06.98 14:53-------------------
  *
@@ -912,10 +914,11 @@ sal_Bool SwGraphicProperties_Impl::GetSingleProperty(const USHORT nWhich, uno::A
  * --------------------------------------------------*/
 sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
             SfxItemSet& rFrmSet,
-            SfxItemSet& rGrSet)
+            SfxItemSet& rGrSet,
+            sal_Bool& rSizeFound)
 {
     //Properties fuer alle Frames
-    sal_Bool bRet = FillBaseProperties(rFrmSet);
+    sal_Bool bRet = FillBaseProperties(rFrmSet, rSizeFound);
 
     uno::Any* pHEvenMirror = 0;
     uno::Any* pHOddMirror = 0;
@@ -1979,7 +1982,8 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
 
         SfxItemSet aFrmSet(pDoc->GetAttrPool(), aFrmAttrRange );
         //jetzt muessen die passenden Items in den Set
-        if(!pProps->AnyToItemSet(aFrmSet, aGrSet))
+        sal_Bool bSizeFound;
+        if(!pProps->AnyToItemSet(aFrmSet, aGrSet, bSizeFound))
             throw IllegalArgumentException();
         //der TextRange wird einzeln behandelt
         *aPam.GetPoint() = *aIntPam.GetPoint();
@@ -2074,6 +2078,9 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             delete pGrfObj;
             if(pFmt)
             {
+                SwGrfNode *pGrfNd = pDoc->GetNodes()[ pFmt->GetCntnt().GetCntntIdx()
+                                            ->GetIndex()+1 ]->GetGrfNode();
+                pGrfNd->SetChgTwipSize( !bSizeFound );
                 pFmt->Add(this);
                 if(sName.Len())
                     pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt, sName);
