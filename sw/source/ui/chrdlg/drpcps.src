@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:36:40 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ TabPage TP_DROPCAPS
         Text[ turkish ] = "Baþ harfleri vurgula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mostrar iniciales";
+        Text[ finnish ] = "Näytä anfangit";
     };
     CheckBox CB_WORD
     {
@@ -190,6 +191,7 @@ TabPage TP_DROPCAPS
         Text[ turkish ] = "Tam sözcük";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Toda la pala~bra";
+        Text[ finnish ] = "~Koko sana";
     };
     FixedText FT_DROPCAPS
     {
@@ -217,6 +219,7 @@ TabPage TP_DROPCAPS
         Text[ turkish ] = "Karakter sayýsý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Número de caracteres";
+        Text[ finnish ] = "~Merkkien määrä";
     };
     NumericField FLD_DROPCAPS
     {
@@ -287,7 +290,7 @@ TabPage TP_DROPCAPS
         Text [ italian ] = "D~istanza dal testo" ;
         Text [ portuguese_brazilian ] = "D~istância" ;
         Text [ portuguese ] = "~Distância do texto" ;
-        Text [ finnish ] = "~Etäisyys" ;
+        Text [ finnish ] = "Etäisyys tekstiin" ;
         Text [ danish ] = "Afstand til tekst" ;
         Text [ french ] = "~Écart du texte" ;
         Text [ swedish ] = "A~vstånd till text" ;
@@ -333,7 +336,7 @@ TabPage TP_DROPCAPS
         Text [ italian ] = "Impostazioni" ;
         Text [ portuguese_brazilian ] = "Opções" ;
         Text [ portuguese ] = "Definições" ;
-        Text [ finnish ] = "Määritykset" ;
+        Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
         Text [ french ] = "Paramètres" ;
         Text [ swedish ] = "Inställningar" ;
@@ -384,6 +387,7 @@ TabPage TP_DROPCAPS
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ejemplo";
+        Text[ finnish ] = "Esikatselu";
     };
     FixedText TXT_TEXT
     {
@@ -435,7 +439,7 @@ TabPage TP_DROPCAPS
         Text [ italian ] = "Modello di carattere" ;
         Text [ portuguese_brazilian ] = "Es~tilo" ;
         Text [ portuguese ] = "Es~tilo de caracteres" ;
-        Text [ finnish ] = "~Tyyli" ;
+        Text [ finnish ] = "~Merkistön tyyli" ;
         Text [ danish ] = "Tegntypografi" ;
         Text [ french ] = "~Style de caractères" ;
         Text [ swedish ] = "Tecken~formatmall" ;
@@ -488,6 +492,7 @@ TabPage TP_DROPCAPS
         Text[ turkish ] = "Ýçerik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Contenido";
+        Text[ finnish ] = "Sisältö";
     };
 };
  // ********************************************************************** EOF
