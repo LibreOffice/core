@@ -2,8 +2,8 @@
  *
  *  $RCSfile: addonsoptions.cxx,v $
  *
- *  $Revision: 1.7 $
- *  last change: $Author: obo $ $Date: 2004-07-06 16:56:18 $
+ *  $Revision: 1.8 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 12:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,8 @@ class AddonsOptions_Impl : public ConfigItem
         const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const ;
         Image                                           GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast ) const;
 
+        void                                            ReadConfigurationData();
+
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
@@ -304,6 +306,7 @@ class AddonsOptions_Impl : public ConfigItem
         };
 
         typedef std::hash_map< OUString, ImageEntry, OUStringHashCode, ::std::equal_to< OUString > > ImageManager;
+        typedef std::hash_map< OUString, sal_uInt32, OUStringHashCode, ::std::equal_to< OUString > > StringToIndexMap;
         typedef std::vector< Sequence< Sequence< PropertyValue > > > AddonToolBars;
 
         enum ImageSize
@@ -334,6 +337,7 @@ class AddonsOptions_Impl : public ConfigItem
 
         sal_Bool             ReadMenuItem( const OUString& aMenuItemNodeName, Sequence< PropertyValue >& aMenuItem, sal_Bool bIgnoreSubMenu = sal_False );
         sal_Bool             ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu );
+        sal_Bool             AppendPopupMenu( Sequence< PropertyValue >& aTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu );
         sal_Bool             ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem );
         sal_Bool             ReadImagesItem( const OUString& aImagesItemNodeName, Sequence< PropertyValue >& aImagesItem );
         ImageEntry*          ReadImageData( const OUString& aImagesNodeName );
@@ -420,17 +424,13 @@ AddonsOptions_Impl::AddonsOptions_Impl()
                                 UNO_QUERY );
     }
 
-    ReadAddonMenuSet( m_aCachedMenuProperties );
-    ReadOfficeMenuBarSet( m_aCachedMenuBarPartProperties );
-    ReadOfficeToolBarSet( m_aCachedToolBarPartProperties );
-    ReadOfficeHelpSet( m_aCachedHelpMenuProperties );
-    ReadImages( m_aImageManager );
+    ReadConfigurationData();
 
-/*TODO: Not used in the moment! see Notify() ...
     // Enable notification mechanism of ouer baseclass.
     // We need it to get information about changes outside these class on ouer used configuration keys!
-    EnableNotification( lNames );
-*/
+    Sequence< rtl::OUString > aNotifySeq( 1 );
+    aNotifySeq[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AddonUI" ));
+    EnableNotification( aNotifySeq );
 }
 
 //*****************************************************************************************************************
@@ -445,12 +445,28 @@ AddonsOptions_Impl::~AddonsOptions_Impl()
     }
 }
 
+void AddonsOptions_Impl::ReadConfigurationData()
+{
+    // reset members to be read again from configuration
+    m_aCachedMenuProperties = Sequence< Sequence< PropertyValue > >();
+    m_aCachedMenuBarPartProperties = Sequence< Sequence< PropertyValue > >();
+    m_aCachedToolBarPartProperties = AddonToolBars();
+    m_aCachedHelpMenuProperties = Sequence< Sequence< PropertyValue > >();
+    m_aImageManager = ImageManager();
+
+    ReadAddonMenuSet( m_aCachedMenuProperties );
+    ReadOfficeMenuBarSet( m_aCachedMenuBarPartProperties );
+    ReadOfficeToolBarSet( m_aCachedToolBarPartProperties );
+    ReadOfficeHelpSet( m_aCachedHelpMenuProperties );
+    ReadImages( m_aImageManager );
+}
+
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
 void AddonsOptions_Impl::Notify( const Sequence< OUString >& lPropertyNames )
 {
-    DBG_ASSERT( sal_False, "AddonsOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
+    Application::PostUserEvent( STATIC_LINK( 0, AddonsOptions, Notify ) );
 }
 
 //*****************************************************************************************************************
@@ -523,7 +539,6 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsHelpMe
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-
 Image AddonsOptions_Impl::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast ) const
 {
     Image aImage;
@@ -638,6 +653,8 @@ sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyV
     aPopupMenu[ OFFSET_POPUPMENU_SUBMENU    ].Name = m_aPropNames[ OFFSET_MENUITEM_SUBMENU  ];
     aPopupMenu[ OFFSET_POPUPMENU_URL        ].Name = m_aPropNames[ OFFSET_MENUITEM_URL      ];
 
+    StringToIndexMap aTitleToIndexMap;
+
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
         OUString aPopupMenuNode( aAddonMenuBarNode + aAddonMenuBarNodeSeq[n] );
@@ -646,9 +663,26 @@ sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyV
         if ( ReadPopupMenu( aPopupMenuNode, aPopupMenu ) )
         {
             // Successfully read a popup menu, append to our list
-            sal_uInt32 nMenuItemCount = rAddonOfficeMenuBarSeq.getLength() + 1;
-            rAddonOfficeMenuBarSeq.realloc( nMenuItemCount );
-            rAddonOfficeMenuBarSeq[nIndex++] = aPopupMenu;
+            OUString aPopupTitle;
+            if ( aPopupMenu[OFFSET_POPUPMENU_TITLE].Value >>= aPopupTitle )
+            {
+                StringToIndexMap::const_iterator pIter = aTitleToIndexMap.find( aPopupTitle );
+                if ( pIter != aTitleToIndexMap.end() )
+                {
+                    // title already there => concat both popup menus
+                    Sequence< PropertyValue >& rOldPopupMenu = rAddonOfficeMenuBarSeq[pIter->second];
+                    AppendPopupMenu( rOldPopupMenu, aPopupMenu );
+                }
+                else
+                {
+                    // not found
+                    sal_uInt32 nMenuItemCount = rAddonOfficeMenuBarSeq.getLength() + 1;
+                    rAddonOfficeMenuBarSeq.realloc( nMenuItemCount );
+                    rAddonOfficeMenuBarSeq[nIndex] = aPopupMenu;
+                    aTitleToIndexMap.insert( StringToIndexMap::value_type( aPopupTitle, nIndex ));
+                    ++nIndex;
+                }
+            }
         }
     }
 
@@ -931,6 +965,24 @@ sal_Bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, 
     return bResult;
 }
 
+sal_Bool AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu )
+{
+    Sequence< Sequence< PropertyValue > > aTargetSubMenuSeq;
+    Sequence< Sequence< PropertyValue > > aSourceSubMenuSeq;
+
+    if (( rTargetPopupMenu[ OFFSET_POPUPMENU_SUBMENU ].Value >>= aTargetSubMenuSeq ) &&
+        ( rSourcePopupMenu[ OFFSET_POPUPMENU_SUBMENU ].Value >>= aSourceSubMenuSeq ))
+    {
+        sal_uInt32 nIndex = aTargetSubMenuSeq.getLength();
+        aTargetSubMenuSeq.realloc( nIndex + aSourceSubMenuSeq.getLength() );
+        for ( sal_uInt32 i = 0; i < sal_uInt32( aSourceSubMenuSeq.getLength() ); i++ )
+            aTargetSubMenuSeq[nIndex++] = aSourceSubMenuSeq[i];
+        rTargetPopupMenu[ OFFSET_POPUPMENU_SUBMENU ].Value <<= aTargetSubMenuSeq;
+    }
+
+    return sal_True;
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
@@ -1057,8 +1109,8 @@ Image AddonsOptions_Impl::ReadImageFromURL( ImageSize nImageSize, const OUString
 
         if( !aBitmapEx.IsTransparent() )
         {
-            DBG_ERROR( "AddonsOptions_Impl::CreateImageFromSequence: Image is not transparent" );
-            // aBitmapEx = BitmapEx( aBitmapEx.GetBitmap(), COL_LIGHTMAGENTA );
+            // Support non-transparent bitmaps to be downward compatible with OOo 1.1.x addons
+            aBitmapEx = BitmapEx( aBitmapEx.GetBitmap(), COL_LIGHTMAGENTA );
         }
 
         aImage = Image( aBitmapEx );
@@ -1214,8 +1266,8 @@ sal_Bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, sal_Bool bB
 
         if( !aBitmapEx.IsTransparent() )
         {
-            DBG_ERROR( "AddonsOptions_Impl::CreateImageFromSequence: Image is not transparent" );
-            // aBitmapEx = BitmapEx( aBitmapEx.GetBitmap(), COL_LIGHTMAGENTA );
+            // Support non-transparent bitmaps to be downward compatible with OOo 1.1.x addons
+            aBitmapEx = BitmapEx( aBitmapEx.GetBitmap(), COL_LIGHTMAGENTA );
         }
 
         rImage = Image( aBitmapEx );
@@ -1435,6 +1487,16 @@ Mutex& AddonsOptions::GetOwnStaticMutex()
     }
     // Return new created or already existing mutex object.
     return *pMutex;
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
+IMPL_STATIC_LINK( AddonsOptions, Notify, void*, pvoid )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->ReadConfigurationData();
+    return 0;
 }
 
 }
