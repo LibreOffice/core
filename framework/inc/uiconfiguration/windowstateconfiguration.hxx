@@ -2,9 +2,9 @@
  *
  *  $RCSfile: windowstateconfiguration.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:27:54 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,9 @@ namespace framework
 #define WINDOWSTATE_PROPERTY_STYLE          "Style"
 #define WINDOWSTATE_PROPERTY_CONTEXT        "ContextSensitive"
 #define WINDOWSTATE_PROPERTY_HIDEFROMENU    "HideFromToolbarMenu"
+#define WINDOWSTATE_PROPERTY_NOCLOSE        "NoClose"
+#define WINDOWSTATE_PROPERTY_SOFTCLOSE      "SoftClose"
+#define WINDOWSTATE_PROPERTY_CONTEXTACTIVE  "ContextActive"
 
 class ConfigurationAccess_Windows;
 class WindowStateConfiguration :  public com::sun::star::lang::XTypeProvider    ,
