@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:05:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_UNO_TYPE_HXX_
 #include <com/sun/star/uno/Type.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //.........................................................................
 namespace comphelper
@@ -88,7 +91,7 @@ typedef ::cppu::OPropertySetHelper OPropertyContainer_Base;
     the base class supports this with the convertFastPropertyValue method, the OPropertyContainer accepts only
     values which already have the correct type, it's unable to convert, for instance, a long to a short.
 */
-class OPropertyContainer
+class COMPHELPER_DLLPUBLIC OPropertyContainer
             :public OPropertyContainer_Base
             ,public OPropertyContainerHelper
 {
