@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:02:45 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,9 +161,13 @@ static __FAR_DATA SvXMLEnumMapEntry aXMLChartClassMap[] =
 
 static __FAR_DATA SvXMLEnumMapEntry aXMLLegendAlignmentMap[] =
 {
-    { XML_LEFT,         chart::ChartLegendPosition_LEFT     },
+//  { XML_LEFT,         chart::ChartLegendPosition_LEFT     },
+    // #i35421#
+    { XML_START,        chart::ChartLegendPosition_LEFT     },
     { XML_TOP,          chart::ChartLegendPosition_TOP      },
-    { XML_RIGHT,        chart::ChartLegendPosition_RIGHT    },
+//  { XML_RIGHT,        chart::ChartLegendPosition_RIGHT    },
+    // #i35421#
+    { XML_END,          chart::ChartLegendPosition_RIGHT    },
     { XML_BOTTOM,       chart::ChartLegendPosition_BOTTOM   },
     { XML_TOKEN_INVALID, 0 }
 };
