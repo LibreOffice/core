@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: th $ $Date: 2001-07-02 20:39:35 $
+ *  last change: $Author: th $ $Date: 2001-07-02 21:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,7 +626,6 @@ static const char* const aImplKillTrailingList[] =
     "ms",
     "mt",
     // Scripts, for compatibility with older versions
-    "ce",
     "we",
     "cyr",
     "tur",
@@ -659,7 +658,6 @@ static const char* const aImplKillTrailingList[] =
     "18cpi",
     "24cpi",
     "scale",
-    "ps",
     "pc",
     NULL
 };
