@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-18 09:13:14 $
+ *  last change: $Author: fme $ $Date: 2002-08-07 11:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1626,7 +1626,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         if ( nEnvDir != nThisDir )
         {
             // different directions, we have to adjust the x coordinate
-            const SwTwips nMultiWidth = rMulti.Width() +
+            SwTwips nMultiWidth = rMulti.Width() +
                     rMulti.CalcSpacing( GetInfo().GetSpaceAdd(), GetInfo() );
 
             if ( nFrmDir == nThisDir )
@@ -1910,11 +1910,14 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         // current Y value
         const SwPageFrm* pPage = pFrm->FindPageFrm();
         ASSERT( pPage, "No page in frame!");
+        const SwLayoutFrm* pUpperFrm = pPage;
 
-        const SwLayoutFrm* pBody = pPage->FindBodyCont();
-        nMaxWidth = pBody ? ( rInf.GetTxtFrm()->IsVertical() ?
-                              pBody->Prt().Width() :
-                              pBody->Prt().Height() ) :
+        if ( ! pFrm->IsInFtn() )
+            pUpperFrm = pPage->FindBodyCont();
+
+        nMaxWidth = pUpperFrm ? ( rInf.GetTxtFrm()->IsVertical() ?
+                                pUpperFrm->Prt().Width() :
+                                pUpperFrm->Prt().Height() ) :
                     USHRT_MAX;
     }
     else
@@ -1997,6 +2000,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         aInf.RealWidth( KSHORT(nActWidth) );
         aInf.SetFirstMulti( bFirstMulti );
         aInf.SetNumDone( rInf.IsNumDone() );
+        aInf.SetFtnDone( rInf.IsFtnDone() );
 
         if( pFirstRest )
         {
@@ -2291,6 +2295,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     rInf.SetPaintOfst( nOldPaintOfst );
     rInf.SetStop( aInf.IsStop() );
     rInf.SetNumDone( sal_True );
+    rInf.SetFtnDone( sal_True );
     SeekAndChg( rInf );
     delete pFirstRest;
     delete pSecondRest;

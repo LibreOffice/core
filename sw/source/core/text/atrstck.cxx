@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-15 16:31:36 $
+ *  last change: $Author: fme $ $Date: 2002-08-07 11:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,7 +494,9 @@ sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem, 
             RES_UNKNOWNATR_CONTAINER == rItem.Which() ,
             "I do not want this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
 
-    if ( RES_UNKNOWNATR_CONTAINER == rItem.Which() )
+    // robust
+    if ( RES_TXTATR_WITHEND_END <= rItem.Which() ||
+         RES_UNKNOWNATR_CONTAINER == rItem.Which() )
         return sal_False;
 
     USHORT nStack = StackPos[ rItem.Which() ];
@@ -572,7 +574,8 @@ void SwAttrHandler::Pop( const SwTxtAttr& rAttr )
             RES_UNKNOWNATR_CONTAINER == rAttr.Which() ,
             "I do not have this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
 
-    if ( RES_UNKNOWNATR_CONTAINER != rAttr.Which() )
+    if ( RES_UNKNOWNATR_CONTAINER != rAttr.Which() &&
+         rAttr.Which() < RES_TXTATR_WITHEND_END )
         aAttrStack[ StackPos[ rAttr.Which() ] ].Remove( rAttr );
 }
 

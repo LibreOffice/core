@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: fme $ $Date: 2002-07-31 08:20:27 $
+ *  last change: $Author: fme $ $Date: 2002-08-07 11:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,21 @@
 #include <svx/lspcitem.hxx>
 #endif
 
+#ifndef _TXTFTN_HXX //autogen
+#include <txtftn.hxx>
+#endif
+#ifndef _FMTFTN_HXX //autogen
+#include <fmtftn.hxx>
+#endif
+#ifndef _FTNINFO_HXX //autogen
+#include <ftninfo.hxx>
+#endif
+#ifndef _CHARFMT_HXX //autogen
+#include <charfmt.hxx>
+#endif
+#ifndef _SVX_CHARROTATEITEM_HXX
+#include <svx/charrotateitem.hxx>
+#endif
 #ifndef _TXATBASE_HXX //autogen
 #include <txatbase.hxx>
 #endif
@@ -900,6 +915,13 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
                     else
                         bChg = SeekAndChgBefore( rInf );
                 }
+                else if ( pMulti )
+                    // do not open attributes starting at 0 in empty multi
+                    // portions (rotated numbering followed by a footnote
+                    // can cause trouble, because the footnote attribute
+                    // starts at 0, but if we open it, the attribute handler
+                    // cannot handle it.
+                    bChg = sal_False;
                 else
                     bChg = SeekStartAndChg( rInf );
             }
@@ -1134,8 +1156,11 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
     else
     {
         // 1) Die Fussnotenzahlen
-        if( !rInf.IsFtnDone() && ! rInf.IsMulti() )
+        if( !rInf.IsFtnDone() )
         {
+            ASSERT( ( ! rInf.IsMulti() && ! pMulti ) || pMulti->HasRotation(),
+                     "Rotated number portion trouble" )
+
             sal_Bool bFtnNum = pFrm->IsFtnNumFrm();
             rInf.GetParaPortion()->SetFtnNum( bFtnNum );
             if( bFtnNum )
@@ -1162,7 +1187,6 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
             if( GetTxtFrm()->GetTxtNode()->GetNum() ||
                 GetTxtFrm()->GetTxtNode()->GetOutlineNum() )
                 pPor = (SwLinePortion*)NewNumberPortion( rInf );
-
             rInf.SetNumDone( sal_True );
         }
         // 4) Die DropCaps
@@ -1278,28 +1302,6 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
     }
 
     SwLinePortion *pPor = WhichFirstPortion( rInf );
-
-    // The number portion inside a vertical frame has to be contained in an
-    // SwRotatedPortion.
-    if ( pPor && pPor->InNumberGrp() && ! pMulti )
-    {
-        const SwFont* pNumFnt = ((SwFldPortion*)pPor)->GetFont();
-
-        if ( pNumFnt )
-        {
-            USHORT nDir = UnMapDirection( pNumFnt->GetOrientation(),
-                                          rInf.GetTxtFrm()->IsVertical() );
-            if ( 0 != nDir )
-            {
-                delete pPor;
-                pPor = new SwRotatedPortion( 0, 900 == nDir ?
-                                                DIR_BOTTOM2TOP :
-                                                DIR_TOP2BOTTOM );
-
-                rInf.SetNumDone( sal_False );
-            }
-        }
-    }
 
     if( !pPor )
     {
@@ -1446,6 +1448,63 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
         {
             delete pPor;
             return 0;
+        }
+    }
+
+    // Special portions containing numbers (footnote anchor, footnote number,
+    // numbering) can be contained in a rotated portion, if the user
+    // choose a rotated character attribute.
+    if ( pPor && ! pMulti )
+    {
+        if ( pPor->IsFtnPortion() )
+        {
+            const SwTxtFtn* pTxtFtn = ((SwFtnPortion*)pPor)->GetTxtFtn();
+
+            if ( pTxtFtn )
+            {
+                SwFmtFtn& rFtn = (SwFmtFtn&)pTxtFtn->GetFtn();
+                const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
+                const SwEndNoteInfo* pInfo;
+                if( rFtn.IsEndNote() )
+                    pInfo = &pDoc->GetEndNoteInfo();
+                else
+                    pInfo = &pDoc->GetFtnInfo();
+                const SwAttrSet& rSet = pInfo->GetAnchorCharFmt((SwDoc&)*pDoc)->GetAttrSet();
+
+                const SfxPoolItem* pItem;
+                USHORT nDir = 0;
+                if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_ROTATE,
+                    sal_True, &pItem ))
+                    nDir = ((SvxCharRotateItem*)pItem)->GetValue();
+
+                if ( 0 != nDir )
+                {
+                    delete pPor;
+                    pPor = new SwRotatedPortion( rInf.GetIdx() + 1, 900 == nDir ?
+                                                    DIR_BOTTOM2TOP :
+                                                    DIR_TOP2BOTTOM );
+                }
+            }
+        }
+        else if ( pPor->InNumberGrp() )
+        {
+            const SwFont* pNumFnt = ((SwFldPortion*)pPor)->GetFont();
+
+            if ( pNumFnt )
+            {
+                USHORT nDir = UnMapDirection( pNumFnt->GetOrientation(),
+                                            rInf.GetTxtFrm()->IsVertical() );
+                if ( 0 != nDir )
+                {
+                    delete pPor;
+                    pPor = new SwRotatedPortion( 0, 900 == nDir ?
+                                                    DIR_BOTTOM2TOP :
+                                                    DIR_TOP2BOTTOM );
+
+                    rInf.SetNumDone( sal_False );
+                    rInf.SetFtnDone( sal_False );
+                }
+            }
         }
     }
 

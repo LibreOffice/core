@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porftn.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
+ *  last change: $Author: fme $ $Date: 2002-08-07 11:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@ public:
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+
+    const SwTxtFtn* GetTxtFtn() const { return pFtn; };
     OUTPUT_OPERATOR
 };
 

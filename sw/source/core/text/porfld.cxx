@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2002-07-29 09:33:11 $
+ *  last change: $Author: fme $ $Date: 2002-08-07 11:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,8 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
     SetHide( sal_False );
     const sal_Bool bFull = SwFldPortion::Format( rInf );
     SetLen( 0 );
-    nFixWidth = Width();
+    // a numbering portion can be contained in a rotated portion!!!
+    nFixWidth = rInf.IsMulti() ? Height() : Width();
     rInf.SetNumDone( !rInf.GetRest() );
     if( rInf.IsNumDone() )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-19 15:07:28 $
+ *  last change: $Author: fme $ $Date: 2002-08-07 11:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
+#endif
+#ifndef _SVX_CHARROTATEITEM_HXX
+#include <svx/charrotateitem.hxx>
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
@@ -1181,7 +1184,7 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     }
 
 #ifdef VERTICAL_LAYOUT
-    pFnt->SetVertical( 0, pFrm->IsVertical() );
+    pFnt->SetVertical( pFnt->GetOrientation(), pFrm->IsVertical() );
 #endif
     return new SwFtnNumPortion( aFtnTxt, pFnt );
 }
@@ -1490,9 +1493,15 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf, const SwTxtFtn* pTxtFtn )
                            pFnt->GetActual() );
         }
 
+        // set the correct rotation at the footnote font
+        const SfxPoolItem* pItem;
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_ROTATE,
+            sal_True, &pItem ))
+            pFnt->SetVertical( ((SvxCharRotateItem*)pItem)->GetValue(),
+                                rInf.GetTxtFrm()->IsVertical() );
+
         pFnt->ChgPhysFnt( pInf->GetVsh(), pInf->GetOut() );
 
-        const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BACKGROUND,
             sal_True, &pItem ))
             pFnt->SetBackColor( new Color( ((SvxBrushItem*)pItem)->GetColor() ) );
