@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: obo $ $Date: 2002-10-29 10:01:30 $
+#   last change: $Author: hjs $ $Date: 2002-11-04 18:52:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -198,6 +198,16 @@ CAPLIB=$(LIBPRE) cap.lib
 .ENDIF
 .ENDIF
 
+# --- Set Wrapper command ---
+.IF "$(GUI)"=="WNT"
+.IF "$(USE_SHELL)"!= "4nt"
+.IF "$(COM)" == "MSC" || "$(COM)" == "GCC"
+#Fallback, normaly set by winenv.*
+WRAPCMD*=guw.pl
+.ENDIF
+.ENDIF
+.ENDIF
+
 # --- IBM Visual Age 3.5 Compiler ---
 .IF "$(COM)" == "ICC"
 .IF "$(CPU)" == "I"
@@ -238,7 +248,7 @@ CC=$(SOLARROOT)\gcc\h-i386-cygwin32\bin\i386-cygwin32-gcc
 .IF "$(USE_SHELL)"=="4nt"
 CC=cl
 .ELSE			# "$(USE_SHELL)"=="4nt"
-CC=guw.pl cl
+CC=$(WRAPCMD) cl
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF
 .ENDIF
@@ -402,7 +412,7 @@ COMMENTFLAG=/COMMENT:"$(PRJNAME)_$(UPD)_$(DESTINATION_MINOR)_$(FUNCORD)_$(__DATE
 .IF "$(USE_SHELL)"=="4nt"
 LINK=link $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
 .ELSE			# "$(USE_SHELL)"=="4nt"
-LINK=guw.pl link $(NOLOGO) /MACHINE:IX86 
+LINK=$(WRAPCMD) link $(NOLOGO) /MACHINE:IX86 
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 
 .IF "$(PRODUCT)"!="full"
@@ -512,8 +522,8 @@ LIBSTLPORTST=stlport_vc7_static.lib
 LIBMGR=lib $(NOLOGO)
 IMPLIB=lib
 .ELSE			# "$(USE_SHELL)"=="4nt"
-LIBMGR=guw.pl lib $(NOLOGO)
-IMPLIB=guw.pl lib
+LIBMGR=$(WRAPCMD) lib $(NOLOGO)
+IMPLIB=$(WRAPCMD) lib
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 LIBFLAGS=
 
@@ -525,7 +535,7 @@ MAPSYMFLAGS=
 .IF "$(USE_SHELL)"=="4nt"
 RC=rc
 .ELSE			# "$(USE_SHELL)"=="4nt"
-RC=guw.pl rc
+RC=$(WRAPCMD) rc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 RCFLAGS=-r -DWIN32 -fo$@ $(RCFILES)
 RCLINK=rc
@@ -536,21 +546,20 @@ RCSETVERSION=
 DLLPOSTFIX=mi
 
 .IF "$(USE_SHELL)"!="4nt"
-IDLC=guw.pl idlc
-REGMERGE=guw.pl regmerge
-REGCOMPARE=guw.pl regcompare
-REGCOMP=guw.pl regcomp
-CPPUMAKER=guw.pl cppumaker
-JAVAMAKER=guw.pl javamaker
-RDBMAKER=guw.pl rdbmaker
-STARDEP=guw.pl javadep
-JAVAC=guw.pl javac
-JAVA=guw.pl java
-SCPCOMP=guw.pl scpcomp
-SCPLINK=guw.pl scplink
-LZIP=guw.pl -env lzip
-CPPLCC=guw.pl cpplcc
-MAKEDEPEND*=guw.pl makedepend
+IDLC=$(WRAPCMD) idlc
+REGMERGE=$(WRAPCMD) regmerge
+REGCOMPARE=$(WRAPCMD) regcompare
+REGCOMP=$(WRAPCMD) regcomp
+CPPUMAKER=$(WRAPCMD) cppumaker
+JAVAMAKER=$(WRAPCMD) javamaker
+RDBMAKER=$(WRAPCMD) rdbmaker
+STARDEP=$(WRAPCMD) javadep
+JAVAC=$(WRAPCMD) javac
+JAVA=$(WRAPCMD) java
+SCPCOMP=$(WRAPCMD) scpcomp
+SCPLINK=$(WRAPCMD) scplink
+LZIP=$(WRAPCMD) -env lzip
+CPPLCC=$(WRAPCMD) cpplcc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF
 .ENDIF              # "$(COM)"=="MSC"
