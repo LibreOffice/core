@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.68 $
+*  $Revision: 1.69 $
 *
-*  last change: $Author: obo $ $Date: 2004-11-18 09:14:01 $
+*  last change: $Author: obo $ $Date: 2004-11-23 09:59:40 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -381,7 +381,7 @@ File gid_File_Lib_Cppuhelper
   #endif
 End
 
-#ifdef UNX
+#ifdef LINUX
 #ifdef ENABLE_GNOMEVFS
 File gid_File_Lib_Gnomevfs
     TXT_FILE_BODY;
