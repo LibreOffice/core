@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-01 11:03:00 $
+ *  last change: $Author: cmc $ $Date: 2002-05-08 10:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -889,10 +889,10 @@ static void _OutFont( SwRTFWriter& rWrt, const SvxFontItem& rFont, USHORT nNo )
         //              as alternative name. Because WinWord can't match each
         //              font to a UniCode font. So the CJK texts are shown as
         //              empty rectangles ;-(.
-        RTFOutFuncs::Out_String( rWrt.Strm(), sAltNm, DEF_ENCODING,
+        RTFOutFuncs::Out_String( rWrt.Strm(), sFntNm, DEF_ENCODING,
                                  rWrt.bWriteHelpFmt );
         OutComment( rWrt, sRTF_FALT) << ' ';
-        RTFOutFuncs::Out_String( rWrt.Strm(), sFntNm, DEF_ENCODING,
+        RTFOutFuncs::Out_String( rWrt.Strm(), sAltNm, DEF_ENCODING,
                                     rWrt.bWriteHelpFmt ) << '}';
     }
     else
