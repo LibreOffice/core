@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: os $ $Date: 2002-11-01 15:02:17 $
+ *  last change: $Author: os $ $Date: 2002-11-01 15:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,8 @@ SwDocIdxProperties_Impl::SwDocIdxProperties_Impl(const SwTOXType* pType)
     SwForm aForm(pType->GetType());
     pTOXBase = new SwTOXBase(pType, aForm,
                                 TOX_MARK, pType->GetTypeName());
+    if(pType->GetType() == TOX_CONTENT || pType->GetType() == TOX_USER)
+        pTOXBase->SetLevel(MAXLEVEL);
     sUserTOXTypeName = pType->GetTypeName();
 }
 /* -----------------------------10.03.00 18:02--------------------------------
