@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-02 12:42:11 $
+ *  last change: $Author: fs $ $Date: 2001-06-06 10:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,7 @@ namespace pcr
     #define PROPERTY_ID_BLOCKINCREMENT       109
     #define PROPERTY_ID_VISIBLESIZE          110
     #define PROPERTY_ID_ORIENTATION          111
+    #define PROPERTY_ID_IMAGEALIGN           112
 
 //............................................................................
 } // namespace pcr
@@ -252,6 +253,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/05/02 12:42:11  tbe
+ *  added scrollbar properties
+ *
  *  Revision 1.7  2001/04/26 09:15:54  tbe
  *  added progressbar properties
  *

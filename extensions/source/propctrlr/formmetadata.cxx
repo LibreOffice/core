@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-06 08:51:37 $
+ *  last change: $Author: fs $ $Date: 2001-06-06 10:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,7 @@ namespace pcr
                 OPropertyInfoImpl(PROPERTY_DEFAULTCHECKED,      PROPERTY_ID_DEFAULT_CHECKED,    sal_True,  String(ModuleRes(RID_STR_DEFAULT_CHECKED)),  nPos++, HID_PROP_DEFAULT_CHECKED ),
                 OPropertyInfoImpl(PROPERTY_DEFAULTBUTTON,       PROPERTY_ID_DEFAULT_BUTTON,     sal_True,  String(ModuleRes(RID_STR_DEFAULT_BUTTON)),   nPos++, HID_PROP_DEFAULT_BUTTON ),
                 OPropertyInfoImpl(PROPERTY_IMAGE_URL,           PROPERTY_ID_IMAGE_URL,          sal_True,  String(ModuleRes(RID_STR_IMAGE_URL)),        nPos++, HID_PROP_IMAGE_URL ),
+                OPropertyInfoImpl(PROPERTY_IMAGEALIGN,          PROPERTY_ID_IMAGEALIGN,         sal_True,  String(ModuleRes(RID_STR_ALIGN)),            nPos++, HID_PROP_IMAGE_ALIGN ),
                 OPropertyInfoImpl(PROPERTY_DEFAULT_SELECT_SEQ,  PROPERTY_ID_DEFAULT_SELECT_SEQ, sal_True,  String(ModuleRes(RID_STR_DEFAULT_SELECT_SEQ)),nPos++, HID_PROP_DEFAULT_SELECT_SEQ ),
                 OPropertyInfoImpl(PROPERTY_ECHO_CHAR,           PROPERTY_ID_ECHO_CHAR,          sal_True,  String(ModuleRes(RID_STR_ECHO_CHAR)),        nPos++, HID_PROP_ECHO_CHAR ),
                 OPropertyInfoImpl(PROPERTY_EMPTY_IS_NULL,       PROPERTY_ID_EMPTY_IS_NULL,      sal_True,  String(ModuleRes(RID_STR_EMPTY_IS_NULL)),    nPos++, HID_PROP_EMPTY_IS_NULL ),
@@ -316,6 +317,9 @@ namespace pcr
         String sSeparatedList;
         switch (_nId)
         {
+            case PROPERTY_ID_IMAGEALIGN:
+                sSeparatedList = String(ModuleRes(RID_STR_ENUM_SIDE_ALIGN));
+                break;
             case PROPERTY_ID_BORDER:
                 sSeparatedList = String(ModuleRes(RID_STR_BORDER_TYPE));
                 break;
@@ -489,6 +493,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/06/06 08:51:37  fs
+ *  changes in the ConstAsciiString for better runtime performance
+ *
  *  Revision 1.10  2001/05/02 12:42:03  tbe
  *  added scrollbar properties
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-06 08:14:59 $
+ *  last change: $Author: fs $ $Date: 2001-06-06 10:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_BLOCKINCREMENT,         "BlockIncrement");
     PCR_CONSTASCII_STRING( PROPERTY_VISIBLESIZE,            "VisibleSize");
     PCR_CONSTASCII_STRING( PROPERTY_ORIENTATION,            "Orientation");
+    PCR_CONSTASCII_STRING( PROPERTY_IMAGEALIGN,             "ImageAlign");
 
     // services
     PCR_CONSTASCII_STRING( SERVICE_COMPONENT_GROUPBOX,      "com.sun.star.form.component.GroupBox");
@@ -270,6 +271,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/06/06 08:14:59  fs
+ *  #86096# +FontRelief/FontEmphasisMark/TextLineColor
+ *
  *  Revision 1.8  2001/05/02 12:43:12  tbe
  *  added scrollbar properties
  *

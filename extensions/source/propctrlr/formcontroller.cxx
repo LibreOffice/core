@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-06 08:16:55 $
+ *  last change: $Author: fs $ $Date: 2001-06-06 10:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,6 +550,7 @@ namespace pcr
                 case PROPERTY_ID_SUBMIT_METHOD:
                 case PROPERTY_ID_SUBMIT_ENCODING:
                 case PROPERTY_ID_ORIENTATION:
+                case PROPERTY_ID_IMAGEALIGN:
                 {
                     if (m_pPropertyInfo)
                     {
@@ -740,6 +741,7 @@ namespace pcr
                 case PROPERTY_ID_SUBMIT_METHOD:
                 case PROPERTY_ID_SUBMIT_ENCODING:
                 case PROPERTY_ID_ORIENTATION:
+                case PROPERTY_ID_IMAGEALIGN:
                     if (m_pPropertyInfo)
                     {
                         Sequence< ::rtl::OUString > aEnumStrings = m_pPropertyInfo->getPropertyEnumRepresentations(_nPropId);
@@ -2375,6 +2377,7 @@ namespace pcr
                     case PROPERTY_ID_DEFAULT_CHECKED:
                     case PROPERTY_ID_LISTSOURCETYPE:
                     case PROPERTY_ID_ORIENTATION:
+                    case PROPERTY_ID_IMAGEALIGN:
                     {
                         Sequence< ::rtl::OUString > aEnumValues = m_pPropertyInfo->getPropertyEnumRepresentations(nPropId);
                         const ::rtl::OUString* pStart = aEnumValues.getConstArray();
@@ -2907,6 +2910,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28  2001/06/06 08:16:55  fs
+ *  #86096# ChangeFontProperty: added support for Relief, EmphasisMark, TextLineColor
+ *
  *  Revision 1.27  2001/05/30 13:44:20  fs
  *  #86838# UpdateUI: let the property box grab the focus
  *
