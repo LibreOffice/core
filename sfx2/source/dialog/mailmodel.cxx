@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 11:04:28 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 14:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,15 @@
 #ifndef _COM_SUN_STAR_SYSTEM_SIMPLEMAILCLIENTFLAGS_HPP_
 #include <com/sun/star/system/SimpleMailClientFlags.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
 
 #ifndef _RTL_TEXTENC_H
 #include <rtl/textench.h>
@@ -144,10 +153,12 @@
 #include <comphelper/extract.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
+#include <comphelper/storagehelper.hxx>
 
 extern sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, String& rPasswd );
 
 // --------------------------------------------------------------
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::io;
@@ -262,9 +273,7 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName
     {
         // save old settings
         BOOL bModified = xDocShell->IsModified();
-        // prepare for mail export
-        SfxDispatcher* pDisp = pTopViewFrm->GetDispatcher();
-        pDisp->Execute( SID_MAIL_PREPAREEXPORT, SFX_CALLMODE_SYNCHRON );
+
         // detect filter
         const SfxFilter* pFilter = xDocShell->GetMedium()->GetFilter();
         sal_Bool bHasFilter = pFilter ? sal_True : sal_False;
@@ -350,6 +359,104 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName
             xDocShell->SetModified( FALSE );
         eRet = bRet ? SAVE_SUCCESSFULL : SAVE_ERROR;
     }
+=======
+        if ( bModified || !xDocShell->HasName() )
+        {
+            // prepare for mail export
+            SfxDispatcher* pDisp = pTopViewFrm->GetDispatcher();
+            pDisp->Execute( SID_MAIL_PREPAREEXPORT, SFX_CALLMODE_SYNCHRON );
+
+            // save document to temp file
+            SfxStringItem aFileName( SID_FILE_NAME, rFileName );
+            SfxBoolItem aPicklist( SID_PICKLIST, FALSE );
+            SfxBoolItem aSaveTo( SID_SAVETO, TRUE );
+
+            SfxStringItem* pFilterName = NULL;
+            if ( pFilter && bHasFilter )
+                pFilterName = new SfxStringItem( SID_FILTER_NAME, pFilter->GetFilterName() );
+
+            SfxStringItem* pPassItem = NULL;
+            String aPasswd;
+            if ( GetPasswd_Impl( xDocShell->GetMedium()->GetItemSet(), aPasswd ) )
+                pPassItem = new SfxStringItem( SID_PASSWORD, aPasswd );
+
+            const SfxBoolItem *pRet = (const SfxBoolItem*)pDisp->Execute( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, &aFileName, &aPicklist, &aSaveTo,
+                                                                            pFilterName ? pFilterName : pPassItem,
+                                                                            pFilterName ? pPassItem : 0L, 0L );
+
+            // #i30432# notify that export is finished - the Writer may want to restore removed content
+            pDisp->Execute( SID_MAIL_EXPORT_FINISHED, SFX_CALLMODE_SYNCHRON );
+
+            BOOL bRet = pRet ? pRet->GetValue() : FALSE;
+
+            delete pFilterName;
+            if ( pFilter )
+            {
+                // detect content type and expand with the file name
+                rType = pFilter->GetMimeType();
+                rType += DEFINE_CONST_UNICODE("; name =\"");
+                INetURLObject aFileObj = xDocShell->GetMedium()->GetURLObject();
+                rType += String(aFileObj.getName( INetURLObject::LAST_SEGMENT,
+                    true, INetURLObject::DECODE_WITH_CHARSET ));
+                rType += '\"';
+            }
+            // restore old settings
+            if ( !bModified && xDocShell->IsEnableSetModified() )
+                xDocShell->SetModified( FALSE );
+            eRet = bRet ? SAVE_SUCCESSFULL : SAVE_ERROR;
+        }
+        else
+        {
+            // make temporary copy to preserve signature
+            sal_Int16      nState = xDocShell->GetDocumentSignatureState();
+            SfxDispatcher* pDisp  = pTopViewFrm->GetDispatcher();
+
+            if ( nState != SIGNATURESTATE_SIGNATURES_OK )
+            {
+                // prepare for mail export
+                pDisp->Execute( SID_MAIL_PREPAREEXPORT, SFX_CALLMODE_SYNCHRON );
+            }
+
+            SfxMedium* pMedium = xDocShell->GetMedium();
+            if ( pMedium )
+            {
+                uno::Reference< embed::XStorage > xDocStorage = pMedium->GetStorage();
+                if ( xDocStorage.is() )
+                {
+                    try
+                    {
+                        uno::Reference< embed::XStorage > xTempStorage = ::comphelper::OStorageHelper::GetStorageFromURL( rFileName, embed::ElementModes::READWRITE );
+                        if( xTempStorage.is() )
+                        {
+                               xDocStorage->copyToStorage( xTempStorage );
+                            uno::Reference< embed::XTransactedObject > xTransactedObject( xTempStorage, UNO_QUERY );
+                            if ( xTransactedObject.is() )
+                            {
+                                xTransactedObject->commit();
+                                eRet = SAVE_SUCCESSFULL;
+                            }
+                        }
+                    }
+                    catch ( RuntimeException& e )
+                    {
+                        throw e;
+                    }
+                    catch ( Exception )
+                    {
+                    }
+                }
+            }
+
+            if ( nState != SIGNATURESTATE_SIGNATURES_OK )
+            {
+                // #i30432# notify that export is finished - the Writer may want to restore removed content
+                pDisp->Execute( SID_MAIL_EXPORT_FINISHED, SFX_CALLMODE_SYNCHRON );
+                if ( xDocShell->IsEnableSetModified() )
+                    xDocShell->SetModified( FALSE );
+            }
+        }
+    }
+>>>>>>> 1.29.2.2
 
     return eRet;
 }
