@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-05-11 10:37:19 $
+ *  last change: $Author: os $ $Date: 2001-05-17 08:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,26 +175,26 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
 {
     BOOL bSame;
 #if defined(UNX)
-    const String rStd(C2S("times"));
+    const sal_Char* cStd = "times";
 #else
-    const String rStd(C2S("Times New Roman"));
+    const sal_Char* cStd = "Times New Roman";
 #endif
     switch( nFontType )
     {
         case FONT_STANDARD:
         case FONT_STANDARD_CJK:
-            bSame = sDefaultFonts[nFontType] == rStd;
+            bSame = sDefaultFonts[nFontType].EqualsAscii(cStd);
         break;
         case FONT_OUTLINE :
         case FONT_OUTLINE_CJK :
 #if defined(UNX)
-            bSame = sDefaultFonts[nFontType] == C2S("helvetica");
+            bSame = sDefaultFonts[nFontType].EqualsAscii("helvetica");
 #elif defined(WNT) || defined(WIN)
-            bSame = sDefaultFonts[nFontType] == C2S("Arial");
+            bSame = sDefaultFonts[nFontType].EqualsAscii("Arial");
 #elif defined(MAC)
-            bSame = sDefaultFonts[nFontType] == C2S("Helvetica");
+            bSame = sDefaultFonts[nFontType].EqualsAscii("Helvetica");
 #elif defined(PM20)
-            bSame = sDefaultFonts[nFontType] == C2S("Helvetica");
+            bSame = sDefaultFonts[nFontType].EqualsAscii("Helvetica");
 #else
 #error Defaultfont fuer diese Plattform?
 #endif
@@ -202,12 +202,14 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
         case FONT_LIST    :
         case FONT_CAPTION :
         case FONT_INDEX   :
-            bSame = (sDefaultFonts[nFontType] == rStd) && (sDefaultFonts[FONT_STANDARD] == rStd);
+            bSame = sDefaultFonts[nFontType].EqualsAscii(cStd) &&
+                    sDefaultFonts[FONT_STANDARD].EqualsAscii(cStd);
         break;
         case FONT_LIST_CJK    :
         case FONT_CAPTION_CJK :
         case FONT_INDEX_CJK   :
-            bSame = (sDefaultFonts[nFontType] == rStd) && (sDefaultFonts[FONT_STANDARD_CJK] == rStd);
+            bSame = sDefaultFonts[nFontType].EqualsAscii(cStd) &&
+                    sDefaultFonts[FONT_STANDARD_CJK].EqualsAscii(cStd);
         break;
     }
     return bSame;
