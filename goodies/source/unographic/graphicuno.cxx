@@ -60,7 +60,8 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* p
 
             aServices = GraphicProvider::getSupportedServiceNames_Static();
 
-            for( int i = 0; i < aServices.getLength(); i++ )
+            int i;
+            for( i = 0; i < aServices.getLength(); i++ )
                 xNewKey->createKey( aServices.getConstArray()[ i ] );
 
             // GraphicRendererVCL
@@ -71,7 +72,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* p
 
             aServices = ( GraphicRendererVCL::getSupportedServiceNames_Static() );
 
-            for( int i = 0; i < aServices.getLength(); i++ )
+            for( i = 0; i < aServices.getLength(); i++ )
                 xNewKey->createKey( aServices.getConstArray()[ i ] );
 
             bRet = true;
