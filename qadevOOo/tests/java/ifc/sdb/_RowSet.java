@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _RowSet.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 10:44:59 $
+ *  last change:$Date: 2003-09-08 10:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,12 @@
 
 package ifc.sdb;
 
-import com.sun.star.sdbc.XConnection;
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
-import com.sun.star.uno.Any;
+import lib.StatusException;
+
+import com.sun.star.sdbc.XConnection;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
-import lib.StatusException;
 
 /**
  * Testing <code>com.sun.star.sdb.RowSet</code>
