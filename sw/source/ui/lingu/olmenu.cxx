@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2002-03-19 09:12:55 $
+ *  last change: $Author: os $ $Date: 2002-08-07 07:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,7 @@ SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const Reference< XSpellAlternati
     sal_Int16 nStringCount = aStrings.getLength();
 
     PopupMenu *pMenu = GetPopupMenu(MN_AUTOCORR);
+    pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
     sal_Bool bEnable = sal_False;
     if( nStringCount )
     {
@@ -305,6 +306,7 @@ SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const Reference< XSpellAlternati
 ---------------------------------------------------------------------------*/
 sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Point& rWordPos )
 {
+    SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
     sal_uInt16 nRet = PopupMenu::Execute(pWin, pWin->LogicToPixel(rWordPos));
     sal_Bool bAutoCorr = sal_False;
     if( nRet > MN_AUTOCORR_START && nRet != USHRT_MAX )
