@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusumry.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:15:32 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #pragma hdrstop
 
+#include "fusumry.hxx"
 
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
@@ -81,17 +82,28 @@
 #include "strings.hrc"
 
 #include "pres.hxx"
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "sdpage.hxx"
-#include "sdoutl.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "viewshel.hxx"
-#include "docshell.hxx"
-#include "fusumry.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#include "DrawDocShell.hxx"
 #include "sdresid.hxx"
 #include "optsitem.hxx"
-#include "drviewsh.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+
+namespace sd {
 
 TYPEINIT1( FuSummaryPage, FuPoor );
 
@@ -100,11 +112,15 @@ TYPEINIT1( FuSummaryPage, FuPoor );
 |* Konstruktor
 |*
 \************************************************************************/
-FuSummaryPage::FuSummaryPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                 SdDrawDocument* pDoc, SfxRequest& rReq)
- : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuSummaryPage::FuSummaryPage (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    SdOutliner* pOutl = NULL;
+    ::sd::Outliner* pOutl = NULL;
     SdPage* pSummaryPage = NULL;
     USHORT i = 0;
     USHORT nFirstPage = SDRPAGE_NOTFOUND;
@@ -193,7 +209,7 @@ FuSummaryPage::FuSummaryPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView
                     pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), TRUE);
                     pNotesPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
 
-                    pOutl = new SdOutliner( pDoc, OUTLINERMODE_OUTLINEOBJECT );
+                    pOutl = new ::sd::Outliner( pDoc, OUTLINERMODE_OUTLINEOBJECT );
                     pOutl->SetUpdateMode(FALSE);
                     pOutl->EnableUndo(FALSE);
 
@@ -245,11 +261,13 @@ FuSummaryPage::FuSummaryPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView
         pView->EndUndo();
         delete pOutl;
 
-        if (pViewSh->ISA(SdDrawViewShell))
+        if (pViewSh->ISA(DrawViewShell))
         {
-            ((SdDrawViewShell*) pViewSh)->SwitchPage((pSummaryPage->GetPageNum() - 1) / 2);
+            static_cast<DrawViewShell*>(pViewSh)->SwitchPage(
+                (pSummaryPage->GetPageNum() - 1) / 2);
         }
     }
 }
 
 
+} // end of namespace sd
