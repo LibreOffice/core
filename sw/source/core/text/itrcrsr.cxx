@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
     bOneBlock = rAdjust.GetOneWord() == SVX_ADJUST_BLOCK;
     bLastBlock = rAdjust.GetLastBlock() == SVX_ADJUST_BLOCK;
     bLastCenter = rAdjust.GetLastBlock() == SVX_ADJUST_CENTER;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     static sal_Bool bOne = sal_False;
     static sal_Bool bLast = sal_False;
     static sal_Bool bCenter = sal_False;
