@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-19 15:58:10 $
+ *  last change: $Author: mt $ $Date: 2001-02-23 14:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1797,6 +1797,13 @@ USHORT OutlinerView::StartSearchAndReplace( const SvxSearchItem& rSearchItem )
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->StartSearchAndReplace( rSearchItem );
 }
+
+void OutlinerView::TransliterateText( sal_Int32 nTransliterationMode )
+{
+    DBG_CHKTHIS(OutlinerView,0);
+    pEditView->TransliterateText( nTransliterationMode );
+}
+
 
 
 ESelection OutlinerView::GetSelection()
