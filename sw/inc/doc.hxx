@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 16:58:47 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 13:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,6 +479,7 @@ class SwDoc
     sal_Bool    bPurgeOLE : 1;          // TRUE: Purge OLE-Objects
     sal_Bool    bKernAsianPunctuation : 1;  // TRUE: kerning also for ASIAN punctuation
     sal_Bool    bReadlineChecked    : 1;  // TRUE: if the query was already shown
+    sal_Bool    bOldNumbering : 1;       // #111955# TRUE: use old numbering
 #ifndef PRODUCT
     sal_Bool    bXMLExport : 1;         // TRUE: during XML export
 #endif
@@ -1491,6 +1492,11 @@ public:
     String GetUniqueNumRuleName( const String* pChkStr = 0, sal_Bool bAutoNum = sal_True ) const;
     void UpdateNumRule( const String& rName, sal_uInt32 nUpdPos );
     void UpdateNumRule();   // alle invaliden Updaten
+    /* -> #111955# */
+    void UpdateNumRule( const SwNumRule & rRule, ULONG nUpdatePos,
+                        BOOL bOutline = FALSE);
+    void UpdateNumRuleOld( const SwNumRule & rRule, ULONG nUpdatePos);
+    /* <- #111955# */
     void ChgNumRuleFmts( const SwNumRule& rRule );
     sal_Bool ReplaceNumRule( const SwPosition& rPos, const String& rOldRule,
                         const String& rNewRule );
@@ -2025,6 +2031,11 @@ public:
         has to trigger a reformatting only if some of the text is hidden.
     */
     bool ContainsHiddenChars() const;
+
+    // -> #111955#
+    sal_Bool IsOldNumbering() const { return bOldNumbering; }
+    void SetOldNumbering(sal_Bool _bOldNumbering);
+    // <- #111955#
 
     // call back for API wrapper
     SwModify*   GetUnoCallBack() const;
