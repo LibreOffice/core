@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:58:59 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,21 +748,13 @@ void SbiRuntime::StepSTMNT( USHORT nOp1, USHORT nOp2 )
     {
         // (Bei Sprüngen aus Schleifen tritt hier eine Differenz auf)
         USHORT nExspectedForLevel = nOp2 / 0x100;
-        USHORT nRealForLevel = 0;
-        SbiForStack* pFor = pForStk;
-        while( pFor )
-        {
-            nRealForLevel++;
-            pFor = pFor->pNext;
-        }
+        if( pGosubStk )
+            nExspectedForLevel += pGosubStk->nStartForLvl;
 
         // Wenn der tatsaechliche For-Level zu klein ist, wurde aus
         // einer Schleife heraus gesprungen -> korrigieren
-        while( nRealForLevel > nExspectedForLevel )
-        {
+        while( nForLvl > nExspectedForLevel )
             PopFor();
-            nRealForLevel--;
-        }
     }
 
     // 16.10.96: #31460 Neues Konzept fuer StepInto/Over/Out
