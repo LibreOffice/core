@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-18 08:43:16 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:50:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -295,6 +295,59 @@ sub check_moduleid_at_items
             {
                 die "\nERROR: ModuleID assigned to $gid! No module assignment to $oneitem!\n\n";
             }
+        }
+    }
+
+    print "Done\n";
+}
+
+########################################################
+# File, Shortcut, Directory, Procedure must not
+# contain a ModuleID
+########################################################
+
+sub check_semicolon
+{
+    my ($script) = @_;
+
+    print "Checking syntax ... ";
+
+    for ( my $i = 0; $i <= $#par2script::globals::allitems; $i++ )
+    {
+        my $oneitem = $par2script::globals::allitems[$i];
+
+        if ( $oneitem eq "Procedure" ) { next; }    # no syntax check for Procedure
+        if ( $oneitem eq "Custom" ) { next; }       # no syntax check for Custom
+        if ( $oneitem eq "Module" ) { next; }       # no syntax check for Module
+
+        my $isinsideitem = 0;
+        my $gid = "";
+        my $isstartline = 0;
+
+        for ( my $j = 0; $j <= $#{$script}; $j++ )
+        {
+            my $scriptline = ${$script}[$j];
+
+            if ( $isstartline )
+            {
+                $isstartline = 0;
+                $isinsideitem = 1;
+            }
+
+            if ( $scriptline =~ /^\s*$oneitem\s+(\w+)\s*$/ )
+            {
+                $gid = $1;
+                $isstartline = 1;
+            }
+
+            if (( $isinsideitem ) && ( $scriptline =~ /^\s*End\s*$/i ))
+            {
+                $isinsideitem = 0;
+            }
+
+            # checking semicolon
+            if ( ($isinsideitem) && (!($scriptline =~ /\;\s*$/)) ) { die "\nERROR: Syntax error (missing semicolon) in $gid:\n$scriptline\n\n"; }
+            if ( ($isinsideitem) && ($scriptline =~ /\;\;\s*$/) ) { die "\nERROR: Syntax error (double semicolon) in $gid:\n$scriptline\n\n"; }
         }
     }
 
