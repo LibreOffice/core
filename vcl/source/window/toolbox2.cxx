@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:58:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1510,6 +1510,8 @@ void ToolBox::EnableItem( USHORT nItemId, BOOL bEnable )
             ImplUpdateItem( nPos );
 
             ImplUpdateInputEnable();
+
+            ImplCallEventListeners( bEnable ? VCLEVENT_TOOLBOX_ITEMENABLED : VCLEVENT_TOOLBOX_ITEMDISABLED, (void*)nPos );
         }
     }
 }
