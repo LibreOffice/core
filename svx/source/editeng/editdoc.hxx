@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2002-10-10 12:16:43 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,6 +747,7 @@ private:
     SvxFont         aDefFont;           //schneller, als jedesmal vom Pool!
     USHORT          nDefTab;
     BOOL            bIsVertical;
+    BOOL            bIsFixedCellHeight;
 
     BOOL            bOwnerOfPool;
     BOOL            bModified;
@@ -772,6 +773,9 @@ public:
 
     void            SetVertical( BOOL bVertical )   { bIsVertical = bVertical; }
     BOOL            IsVertical() const              { return bIsVertical; }
+
+    void            SetFixedCellHeight( BOOL bUseFixedCellHeight )  { bIsFixedCellHeight = bUseFixedCellHeight; }
+    BOOL            IsFixedCellHeight() const               { return bIsFixedCellHeight; }
 
     EditPaM         Clear();
     EditPaM         RemoveText();
