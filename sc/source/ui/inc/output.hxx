@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:12 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,14 +242,20 @@ public:
 
     void    DrawClear();
     void    DrawPageBorder( USHORT nStartX, USHORT nStartY, USHORT nEndX, USHORT nEndY );
-    void    DrawingLayer( USHORT nLayer, USHORT nObjectFlags, long nLogStX, long nLogStY );
+
+    // #109985#
+    //void  DrawingLayer( USHORT nLayer, USHORT nObjectFlags, long nLogStX, long nLogStY );
+    void    DrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode, long nLogStX, long nLogStY );
 
                                                     // nur Bildschirm:
 
-    void    DrawingSingle( USHORT nLayer, USHORT nObjectFlags, USHORT nDummyFlags );
+    // #109985#
+    //void  DrawingSingle( USHORT nLayer, USHORT nObjectFlags, USHORT nDummyFlags );
+    void    DrawingSingle(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode);
 
-    void    DrawSelectiveObjects( USHORT nLayer, const Rectangle& rRect,
-                                    USHORT nObjectFlags, USHORT nDummyFlags = 0 );
+    // #109985#
+    //void  DrawSelectiveObjects( USHORT nLayer, const Rectangle& rRect, USHORT nObjectFlags, USHORT nDummyFlags = 0 );
+    void    DrawSelectiveObjects(const sal_uInt16 nLayer, const Rectangle& rRect, const sal_uInt16 nPaintMode);
 
     BOOL    SetChangedClip();       // FALSE = nix
 
