@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emfwr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+ *  last change: $Author: sj $ $Date: 2001-01-31 13:47:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,12 +292,16 @@ void EMFWriter::ImplEndRecord()
 
     if( mbRecordOpen )
     {
-        const ULONG nActPos = mpStm->Tell();
-
+        sal_Int32 nFillBytes, nActPos = mpStm->Tell();
         mpStm->Seek( mnRecordPos + 4 );
-        ( *mpStm ) << ( nActPos - mnRecordPos );
+        nFillBytes = nActPos - mnRecordPos;
+        nFillBytes += 3;    // each record has to be dword aligned
+        nFillBytes ^= 3;
+        nFillBytes &= 3;
+        *mpStm << (sal_uInt32)( ( nActPos - mnRecordPos ) + nFillBytes );
         mpStm->Seek( nActPos );
-
+        while( nFillBytes-- )
+            *mpStm << (sal_uInt8)0;
         mnRecordCount++;
         mbRecordOpen = FALSE;
     }
