@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
     Text[ chinese_simplified ] = "´æÅÌ";    \
     Text[ russian ] = "Ñîõğàíèòü";  \
     Text[ polish ] = "Zapisz";  \
-    Text[ japanese ] = "•Û‘¶‚·‚é";  \
+    Text[ japanese ] = "•Û‘¶";  \
     Text[ chinese_traditional ] = "Àx¦s";   \
     Text[ arabic ] = "ÍİÙ"; \
     Text[ greek ] = "ÁğïèŞêåõóç";   \
@@ -347,7 +347,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_traditional ] = "¶}±Òªºµøµ¡(~W)";
         Text[ arabic ] = "ÇáäæÇİĞ ÇáãİÊæÍÉ";
         Text[ greek ] = "ĞáñÜèõñá áíïé÷ôÜ";
-        Text[ korean ] = "¿­¸° Ã¢(~W)";
+        Text[ korean ] = "¿­¸° Ã¢";
         Text[ turkish ] = "Açık pencereler";
     };
     CheckBox BTN_OPENDOC
@@ -389,7 +389,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ swedish ] = "Ångra" ;
         Text [ danish ] = "Fortryd" ;
         Text [ portuguese_brazilian ] = "Rückgängig" ;
-        Text [ portuguese ] = "Desfazer" ;
+        Text [ portuguese ] = "Anular" ;
         Text[ chinese_simplified ] = "³·ÏûÃüÁî";
         Text[ russian ] = "Îòìåíèòü";
         Text[ polish ] = "Cofnij";
