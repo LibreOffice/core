@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-30 10:59:15 $
+ *  last change: $Author: jb $ $Date: 2001-06-25 13:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,13 +60,23 @@
  ************************************************************************/
 
 #include <stdio.h>
+
 #include "disposetimer.hxx"
+
+#ifndef _CONFIGMGR_TREECACHE_HXX_
 #include "treecache.hxx"
+#endif
+#ifndef CONFIGMGR_TREEDATA_HXX
 #include "treedata.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
+#include "configexcept.hxx"
+#endif
 
 #ifndef _CONFIGMGR_TRACER_HXX_
 #include "tracer.hxx"
 #endif
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
