@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 13:01:58 $
+ *  last change: $Author: sab $ $Date: 2002-10-01 10:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ ScAccessiblePreviewHeaderCell::ScAccessiblePreviewHeaderCell( const ::com::sun::
                             ScPreviewShell* pViewShell,
                             const ScAddress& rCellPos, sal_Bool bIsColHdr, sal_Bool bIsRowHdr,
                             sal_Int32 nIndex, const Rectangle& rPosition ) :
-    ScAccessibleContextBase( rxParent, AccessibleRole::TABLE ),
+    ScAccessibleContextBase( rxParent, AccessibleRole::TABLE_CELL ),
     mpViewShell( pViewShell ),
     maCellPos( rCellPos ),
     mbColumnHeader( bIsColHdr ),
