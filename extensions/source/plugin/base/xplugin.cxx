@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 10:22:05 $
+ *  last change: $Author: pl $ $Date: 2001-06-12 09:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,16 +805,16 @@ void PluginInputStream::load()
                 strlen( getStream()->url ),
                 RTL_TEXTENCODING_MS_1252
             ) );
-    m_pContent =
-        new ::ucb::Content(
-            aUrl.GetMainURL(),
-            Reference< ::com::sun::star::ucb::XCommandEnvironment >()
-            );
     try
     {
+        m_pContent =
+            new ::ucb::Content(
+                               aUrl.GetMainURL(),
+                               Reference< ::com::sun::star::ucb::XCommandEnvironment >()
+                               );
         m_pContent->openStream( static_cast< XOutputStream* >( this ) );
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException )
+    catch( ::com::sun::star::uno::Exception )
     {
     }
 }
