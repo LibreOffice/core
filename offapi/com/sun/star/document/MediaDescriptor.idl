@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MediaDescriptor.idl,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 18:44:20 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,7 +464,7 @@ published service MediaDescriptor
         be opened in repair mode, so as much as possible information will be retrieved.
         </p>
 
-     @since #107627#
+     @since OOo 1.1.2
      */
     [optional,property] boolean RepairPackage;
 
@@ -562,7 +562,7 @@ published service MediaDescriptor
         the value should be one from <type scope="com::sun::star::document">MacroExecMode</type>
         constant list.
 
-        @since #107627#
+        @since OOo 1.1.2
      */
     [optional,property] short MacroExecutionMode;
 
@@ -571,7 +571,7 @@ published service MediaDescriptor
         the value should be one from <type scope="com::sun::star::document">UpdateDocMode</type>
         constant list.
 
-        @since #107627#
+        @since OOo 1.1.2
      */
     [optional,property] short UpdateDocMode;
 };
