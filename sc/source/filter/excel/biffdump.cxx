@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:12:25 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 14:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,41 +499,38 @@ static void AddRef( ByteString& t, UINT16 nRow, UINT16 nC, BOOL bName, UINT16 nT
     if( bName )
     {
         // dump relative: [Column|Row]
-        // C(-1), R(-1) = one column left/row up
-        // C(+1), R(+1) = one column right/row down
-        // C(0),  R(0)  = same column/row
-        // C(=B), R(=2) = absolute column B/row 2
-        t += "C";
+        // [C-1,R-1] = one column left, one row up
+        // [C+1,R+1] = one column right, one row down
+        // [C,R]     = same column/row
+        // [C=B,R=2] = absolute column B/row 2
+        t += "[C";
         if( bColRel )
         {
-            t += '(';
             if( nRelCol > 0 )
                 t += '+';
-            __AddDec( t, (INT16)nRelCol );
-            t += ')';
+            if( nRelCol != 0 )
+                __AddDec( t, (INT16)nRelCol );
         }
         else
         {
-            t += "(=";
+            t += '=';
             t += GETSTR( ::ColToAlpha( nCol ) );
-            t += ')';
         }
 
-        t += 'R';
+        t += ",R";
         if( bRowRel )
         {
-            t += '(';
             if( nRelRow > 0 )
                 t += "+";
-            __AddDec( t, nRelRow );
-            t += ')';
+            if( nRelRow != 0 )
+                __AddDec( t, nRelRow );
         }
         else
         {
-            t += "(=";
+            t += '=';
             __AddDec( t, (INT32)nRow + 1 );
-            t += ')';
         }
+        t += ']';
     }
     else
     {
@@ -5860,7 +5857,7 @@ static const XclDumpFunc pFuncData[] =
         { "ATAN2",                  2 },
         { "ASIN",                   1 },
         { "ACOS",                   1 },
-/*100*/ { "CHOSE",                  0 },
+/*100*/ { "CHOOSE",                 0 },
         { "HLOOKUP",                0 },
         { "VLOOKUP",                0 },
         { "LINKS" },                        // macro/internal
@@ -6260,7 +6257,7 @@ void XclDumpFormulaStack::PushFunction( const ByteString& rFuncName, sal_uInt16 
 
 ByteString XclDumpFormulaStack::GetTokenClass( sal_uInt8 nToken )
 {
-    sal_Char cClass = '-';
+    sal_Char cClass = 'B';
     switch( nToken & 0xE0 )
     {
         case 0x20:  cClass = 'R';   break;
@@ -6289,19 +6286,21 @@ const sal_Char* lcl_GetErrorString( sal_uInt8 nErr )
 
 
 
-void lcl_StartToken( ByteString& rString, sal_uInt8 nToken, const sal_Char* pTokenName )
+void lcl_StartToken( ByteString& rString, sal_uInt16 nPos, sal_uInt8 nToken, const sal_Char* pTokenName )
 {
     rString.Erase();
     rString.Append( "    " );
+    __AddHex( rString, nPos );
+    rString.Append( "   " );
     __AddHex( rString, nToken );
-    rString.Append( " t" ).Append( pTokenName ).Expand( 24, ' ' );
+    rString.Append( " t" ).Append( pTokenName ).Expand( 33, ' ' );
 }
 
-void lcl_StartTokenClass( ByteString& rString, sal_uInt8 nToken, const sal_Char* pTokenName )
+void lcl_StartTokenClass( ByteString& rString, sal_uInt16 nPos, sal_uInt8 nToken, const sal_Char* pTokenName )
 {
     ByteString aToken( pTokenName );
     aToken.Append( XclDumpFormulaStack::GetTokenClass( nToken ) );
-    lcl_StartToken( rString, nToken, aToken.GetBuffer() );
+    lcl_StartToken( rString, nPos, nToken, aToken.GetBuffer() );
 }
 
 void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
@@ -6309,7 +6308,8 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
     if( !nL )
         return;
 
-    const ULONG             nAfterPos = pIn->GetRecPos() + nL;
+    sal_uInt32              nStartPos = pIn->GetRecPos();
+    const sal_uInt32        nAfterPos = nStartPos + nL;
     const sal_Char*         pPre = "    ";
     const sal_Char*         pInfix = "  ";
 
@@ -6324,8 +6324,8 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
     sal_Bool                    bPrinted = sal_True;
 
 #define PRINTTOKEN()            { if( !bPrinted ) Print( t ); bPrinted = sal_True; }
-#define STARTTOKEN( name )      lcl_StartToken( t, nOp, name )
-#define STARTTOKENCLASS( name ) lcl_StartTokenClass( t, nOp, name )
+#define STARTTOKEN( name )      lcl_StartToken( t, static_cast< sal_uInt16 >( pIn->GetRecPos() - nStartPos - 1 ), nOp, name )
+#define STARTTOKENCLASS( name ) lcl_StartTokenClass( t, static_cast< sal_uInt16 >( pIn->GetRecPos() - nStartPos - 1 ), nOp, name )
 
     while( pIn->IsValid() && ( pIn->GetRecPos() < nAfterPos ) && !bError )
     {
@@ -6557,19 +6557,52 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
 
                 t += "flags=";              __AddHex( t, nOpt );
 
-                if( nOpt & 0x04 )
+                if( nOpt & 0x01 )                           // AttrSemi
+                {
+                    t += " volatile";
+                }
+                else if( nOpt & 0x02 )                      // AttrIf
+                {
+                    t += " if   skip-to-false=";
+                    __AddHex( t, nData );
+                }
+                else if( nOpt & 0x04 )
                 {// nFakt -> Bytes oder Words ueberlesen    AttrChoose
-                    t += " AttrChoose";
-                    nData++;
-                    pIn->Ignore( nData * nFakt );
+                    t += " choose   count=";
+                    __AddDec( t, nData );
+                    t += "   skip=";
+                    for( sal_uInt16 nIdx = 0; nIdx <= nData; ++nIdx )
+                    {
+                        if( nIdx ) t += ',';
+                        __AddDec( t, pIn->ReaduInt16() );
+                    }
+                }
+                else if( nOpt & 0x08 )                      // AttrGoto
+                {
+                    t += " goto   skip=";
+                    __AddHex( t, nData );
+                    t += " (";
+                    __AddDec( t, sal_uInt8( nData + 1 ) );
+                    t += " bytes)";
                 }
                 else if( nOpt & 0x10 )                      // AttrSum
                 {
-                    t += " AttrSum";
+                    t += " sum";
                     aStack.PushFunction( "ATTRSUM", 1, nOp );
                 }
+                else if( nOpt & 0x20 )                      // AttrBaxcel
+                {
+                    t += " assignment";
+                }
+                else if( nOpt & 0x40 )                      // AttrSpace
+                {
+                    t += " space   type=";
+                    __AddDec( t, static_cast< sal_uInt8 >( nData ) );
+                    t += "   count=";
+                    __AddDec( t, static_cast< sal_uInt8 >( nData >> 8 ) );
+                }
                 else
-                    t += " AttrMISC";
+                    t += " unknown";
             }
             break;
             case 0x1C: // Error Value                           [314 266]
@@ -6703,27 +6736,48 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             case 0x26: // Constant Reference Subexpression      [321 271]
             case 0x46:
             case 0x66:
+            {
                 STARTTOKENCLASS( "MemArea" );
-                pIn->Ignore( 6 );
-                aStack.PushOperand( "MemArea", nOp );
+                sal_uInt32 nRes;
+                sal_uInt16 nSize;
+                *pIn >> nRes >> nSize;
+                t += "reserved=";               __AddHex( t, nRes );
+                t += "   size=";                __AddDec( t, nSize );
+            }
             break;
             case 0x27: // Erroneous Constant Reference Subexpr. [322 272]
             case 0x47:
             case 0x67:
+            {
                 STARTTOKENCLASS( "MemErr" );
-                pIn->Ignore( 6 );
+                sal_uInt32 nRes;
+                sal_uInt16 nSize;
+                *pIn >> nRes >> nSize;
+                t += "reserved=";               __AddHex( t, nRes );
+                t += "   size=";                __AddDec( t, nSize );
+            }
             break;
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
             case 0x48:
             case 0x68:
+            {
                 STARTTOKENCLASS( "MemNoMem" );
-                pIn->Ignore( 6 );
+                sal_uInt32 nRes;
+                sal_uInt16 nSize;
+                *pIn >> nRes >> nSize;
+                t += "reserved=";               __AddHex( t, nRes );
+                t += "   size=";                __AddDec( t, nSize );
+            }
             break;
             case 0x29: // Variable Reference Subexpression      [331 281]
             case 0x49:
             case 0x69:
+            {
                 STARTTOKENCLASS( "MemFunc" );
-                pIn->Ignore( 2 );
+                sal_uInt16 nSize;
+                *pIn >> nSize;
+                t += "size=";                   __AddDec( t, nSize );
+            }
             break;
             case 0x2C: // Cell Reference Within a Name/ShrdFmla [323 273]
             case 0x4C:
@@ -6758,14 +6812,22 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             case 0x2E: // Reference Subexpression Within a Name [332 282]
             case 0x4E:
             case 0x6E:
+            {
                 STARTTOKENCLASS( "MemAreaN" );
-                pIn->Ignore( 2 );
+                sal_uInt16 nSize;
+                *pIn >> nSize;
+                t += "size=";                   __AddDec( t, nSize );
+            }
             break;
             case 0x2F: // Incomplete Reference Subexpression... [332 282]
             case 0x4F:
             case 0x6F:
+            {
                 STARTTOKENCLASS( "MemNoMemN" );
-                pIn->Ignore( 2 );
+                sal_uInt16 nSize;
+                *pIn >> nSize;
+                t += "size=";                   __AddDec( t, nSize );
+            }
             break;
             case 0x39: // Name or External Name                 [    275]
             case 0x59:
