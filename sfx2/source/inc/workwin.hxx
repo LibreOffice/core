@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 09:54:16 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 20:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUILEMENT_HPP_
-#include <drafts/com/sun/star/ui/XUIElement.hpp>
+#ifndef _COM_SUN_STAR_UI_XUILEMENT_HPP_
+#include <com/sun/star/ui/XUIElement.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
 #include <com/sun/star/task/XStatusIndicator.hpp>
