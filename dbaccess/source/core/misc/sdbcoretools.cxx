@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdbcoretools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:04:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,17 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #endif
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
@@ -87,6 +93,7 @@ namespace dbaccess
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::sdbc;
+    using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
@@ -94,7 +101,11 @@ namespace dbaccess
     // -------------------------------------------------------------------------
     void notifyDataSourceModified(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject,sal_Bool _bModified)
     {
-        Reference< XModifiable > xModi( getDataSource( _rxObject ), UNO_QUERY );
+        Reference< XInterface > xDs = getDataSource( _rxObject );
+        Reference<XDocumentDataSource> xDocumentDataSource(xDs,UNO_QUERY);
+        if ( xDocumentDataSource.is() )
+            xDs = xDocumentDataSource->getDatabaseDocument();
+        Reference< XModifiable > xModi( xDs, UNO_QUERY );
         if ( xModi.is() )
             xModi->setModified(_bModified);
     }
@@ -111,6 +122,39 @@ namespace dbaccess
             xParent.set(xChild.is() ? xChild->getParent() : Reference< XInterface >(),UNO_QUERY);
         }
         return xReturn;
+    }
+
+    // -------------------------------------------------------------------------
+    bool getDataSourceSetting( const Reference< XInterface >& _rxDataSource, const sal_Char* _pAsciiSettingsName,
+        Any& /* [out] */ _rSettingsValue )
+    {
+        bool bIsPresent = false;
+        try
+        {
+            Reference< XPropertySet > xDataSource( _rxDataSource, UNO_QUERY );
+            OSL_ENSURE( xDataSource.is(), "getDataSourceSetting: invalid data source object!" );
+            if ( !xDataSource.is() )
+                return false;
+
+            Sequence< PropertyValue > aSettings;
+            OSL_VERIFY( xDataSource->getPropertyValue( PROPERTY_INFO ) >>= aSettings );
+            const PropertyValue* pSetting = aSettings.getConstArray();
+            const PropertyValue* pSettingEnd = aSettings.getConstArray() + aSettings.getLength();
+            for ( ; pSetting != pSettingEnd; ++pSetting )
+            {
+                if ( pSetting->Name.equalsAscii( _pAsciiSettingsName ) )
+                {
+                    _rSettingsValue = pSetting->Value;
+                    bIsPresent = true;
+                    break;
+                }
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "getDataSourceSetting: caught an exception!" );
+        }
+        return bIsPresent;
     }
 
 // -----------------------------------------------------------------------------
