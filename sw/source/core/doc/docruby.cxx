@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docruby.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-23 20:26:33 $
+ *  last change: $Author: jp $ $Date: 2001-06-01 10:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,8 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry,
     const String* pTxt = &pTNd->GetTxt();
     xub_StrLen nStart = pPos->nContent.GetIndex(), nEnd = pTxt->Len();
 
-    if( rPam.HasMark() )
+    BOOL bHasMark = rPam.HasMark();
+    if( bHasMark )
     {
         // in the same node?
         if( rPam.GetMark()->nNode == pPos->nNode )
@@ -256,9 +257,31 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry,
                 *pHt->GetAnyEnd() > nStart )
             {
                 if( *pHt->GetStart() < nEnd )
+                {
                     pAttr = pHt;
+                    if( !bHasMark && nStart > *pAttr->GetStart() )
+                    {
+                        nStart = *pAttr->GetStart();
+                        pPos->nContent = nStart;
+                    }
+                }
                 break;
             }
+    }
+
+    if( !bHasMark && nStart && ( !pAttr || nStart != *pAttr->GetStart()) )
+    {
+        // skip to the word begin!
+        long nWordStt = pBreakIt->xBreak->getWordBoundary(
+                            *pTxt, nStart,
+                            pBreakIt->GetLocale( pTNd->GetLang( nStart )),
+                            WordType::ANYWORD_IGNOREWHITESPACES,
+                            TRUE ).startPos;
+        if( nWordStt < nStart && -1 != nWordStt )
+        {
+            nStart = (xub_StrLen)nWordStt;
+            pPos->nContent = nStart;
+        }
     }
 
     BOOL bAlphaNum = FALSE;
