@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:39:45 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _SVX_HYZNITEM_HXX
 #include <svx/hyznitem.hxx>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
@@ -370,7 +373,7 @@ void SwRTFParser::Continue( int nToken )
         {
             pDoc->SetParaSpaceMax(true, true);
             pDoc->SetTabCompat(true);
-            pDoc->_SetUseVirtualDevice(true);
+            pDoc->_SetUseVirtualDevice(com::sun::star::document::PrinterIndependentLayout::HIGH_RESOLUTION);
         }
 
         // einen temporaeren Index anlegen, auf Pos 0 so wird er nicht bewegt!
@@ -1419,7 +1422,7 @@ SETCHDATEFIELD:
         break;
     case RTF_LYTPRTMET:
         if (IsNewDoc())
-            pDoc->_SetUseVirtualDevice(false);
+            pDoc->_SetUseVirtualDevice(com::sun::star::document::PrinterIndependentLayout::DISABLED);
         break;
     case RTF_U:
         {
