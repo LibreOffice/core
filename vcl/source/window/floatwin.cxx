@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-19 16:46:19 $
+ *  last change: $Author: ssa $ $Date: 2002-10-24 10:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,6 +459,12 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Poin
     FloatingWindow* pWin = this;
     Point aAbsolute( pReference->OutputToAbsoluteScreenPixel(
         pReference->ScreenToOutputPixel(rPos) ) );
+
+    if( pReference->ImplHasMirroredGraphics() && !pReference->IsRTLEnabled() )
+    {
+        // --- RTL --- re-mirror back to get device coordiantes
+        pReference->ImplReMirror( aAbsolute );
+    }
 
     do
     {
