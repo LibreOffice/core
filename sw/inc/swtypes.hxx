@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:23:43 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,9 +223,7 @@ extern ResMgr* pSwResMgr;           // steht in swapp0.cxx
 #define SW_RES(i)       ResId(i,pSwResMgr)
 #define SW_RESSTR(i)    UniString(ResId(i,pSwResMgr))
 
-#if defined( WIN ) || defined( WNT ) || defined( PM2 )
 #define DDE_AVAILABLE
-#endif
 
 
 com::sun::star::lang::Locale    CreateLocale( LanguageType eLanguage );
