@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2001-10-09 11:35:07 $
+#   last change: $Author: oj $ $Date: 2002-02-06 08:55:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,10 @@ TARGET=querydesign
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES =\
+            $(SLO)$/AccessibleBase.obj			\
+            $(SLO)$/ConnectionLineAccess.obj	\
+            $(SLO)$/TableWindowAccess.obj		\
+            $(SLO)$/JAccess.obj					\
             $(SLO)$/JoinDesignView.obj			\
             $(SLO)$/JoinController.obj			\
             $(SLO)$/QueryDesignView.obj			\
