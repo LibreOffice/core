@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:43:10 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ portuguese ] = "Configuração asiática";
                 Text[ russian ] = "Àçèàòñêàÿ ğàçìåòêà";
                 Text[ greek ] = "ÁóéáôéêŞ äéÜôáîç";
-                Text[ dutch ] = "Asiatisch lay-out";
+                Text[ dutch ] = "Aziatisch lay-out";
                 Text[ french ] = "Mise en page asiatique";
                 Text[ spanish ] = "Diseño asiático";
                 Text[ italian ] = "Layout asiatico";
@@ -351,7 +351,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ portuguese ] = "Tipografia asiática";
                 Text[ russian ] = "Àçèàòñêèå øğèôòû";
                 Text[ greek ] = "ÁóéÜôéêç ôõğïãñáößá";
-                Text[ dutch ] = "Asiatische typografie";
+                Text[ dutch ] = "Aziatische typografie";
                 Text[ french ] = "Typographie asiatique";
                 Text[ spanish ] = "Tipografía asiática";
                 Text[ italian ] = "Tipografia asiatica";
@@ -457,7 +457,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ portuguese ] = "Configuração asiática";
                 Text[ russian ] = "Àçèàòñêàÿ ğàçìåòêà";
                 Text[ greek ] = "ÁóéáôéêŞ äéÜôáîç";
-                Text[ dutch ] = "Asiatisch lay-out";
+                Text[ dutch ] = "Aziatisch lay-out";
                 Text[ french ] = "Mise en page asiatique";
                 Text[ spanish ] = "Diseño asiático";
                 Text[ italian ] = "Layout asiatico";
