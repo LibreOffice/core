@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:45:06 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ void DrawViewShell::ArrangeGUIElements ()
     if ( pIPClient && pIPClient->IsInPlaceActive() )
         bClientActive = TRUE;
 
-    BOOL bInPlaceActive = GetDocSh()->GetProtocol().IsInPlaceActive();
+    BOOL bInPlaceActive = GetDocSh()->IsInPlaceActive();
 
 //        if ( bZoomOnPage && GetDocSh()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
     if ( bZoomOnPage && !bInPlaceActive && !bClientActive )
