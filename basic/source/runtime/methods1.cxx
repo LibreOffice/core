@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:42:55 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,8 +166,35 @@ RTLFUNC(CByte) // JSM
 
 RTLFUNC(CCur)  // JSM
 {
+    SbxINT64 nCur;
+    if ( rPar.Count() == 2 )
+    {
+        SbxVariable *pSbxVariable = rPar.Get(1);
+        nCur = pSbxVariable->GetCurrency();
+    }
+    else
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+
+    rPar.Get(0)->PutCurrency( nCur );
+}
+
+RTLFUNC(CDec)  // JSM
+{
+#ifdef WNT
+    SbxDecimal* pDec;
+    if ( rPar.Count() == 2 )
+    {
+        SbxVariable *pSbxVariable = rPar.Get(1);
+        pDec = pSbxVariable->GetDecimal();
+    }
+    else
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+
+    rPar.Get(0)->PutDecimal( pDec );
+#else
     rPar.Get(0)->PutEmpty();
     StarBASIC::Error(SbERR_NOT_IMPLEMENTED);
+#endif
 }
 
 RTLFUNC(CDate) // JSM
@@ -307,8 +334,16 @@ RTLFUNC(CStr)  // JSM
 
 RTLFUNC(CVar)  // JSM
 {
-    rPar.Get(0)->PutEmpty();
-    StarBASIC::Error(SbERR_NOT_IMPLEMENTED);
+    SbxValues aVals( SbxVARIANT );
+    if ( rPar.Count() == 2 )
+    {
+        SbxVariable *pSbxVariable = rPar.Get(1);
+        pSbxVariable->Get( aVals );
+    }
+    else
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+
+    rPar.Get(0)->Put( aVals );
 }
 
 RTLFUNC(CVErr) // JSM
@@ -1434,5 +1469,14 @@ RTLFUNC(Split)
     refVar->PutObject( pArray );
     refVar->SetFlags( nFlags );
     refVar->SetParameters( NULL );
+}
+
+RTLFUNC(CompatibilityMode)
+{
+    rPar.Get(0)->PutEmpty();
+    if ( rPar.Count() != 2 )
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    if( pINST )
+        pINST->EnableCompatibility( rPar.Get(1)->GetBool() );
 }
 
