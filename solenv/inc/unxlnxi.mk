@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlnxi.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mh $ $Date: 2000-10-30 06:00:05 $
+#   last change: $Author: hjs $ $Date: 2001-05-09 10:51:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,6 +123,8 @@ LINKFLAGSTACK=
 LINKFLAGSPROF=
 LINKFLAGSDEBUG=-g
 LINKFLAGSOPT=
+
+SONAME_SWITCH=-Wl,-h
 
 # reihenfolge der libs NICHT egal!
 

@@ -65,6 +65,8 @@ LINKFLAGSSHLCUI+=-Bsymbolic
 .ENDIF
 .ENDIF				# "$(NO_BSYMBOLIC)"==""
 
+SONAME_SWITCH=-Wl,-h
+
 # reihenfolge der libs NICHT egal!
 
 # standard C++ Library

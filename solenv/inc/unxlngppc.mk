@@ -105,6 +105,8 @@ LINKFLAGSSHLCUI+=-Wl,-Bsymbolic
 
 LINKVERSIONMAPFLAG=-Wl,--version-script 
 
+SONAME_SWITCH=-Wl,-h
+
 # Sequence of libs does matter !
 
 STDLIBCPP=-lstdc++ 
