@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Oasis2OOo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 18:30:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -908,6 +908,8 @@ static XMLTransformerActionInit aTableValueTypeActionTable[] =
     ENTRY1( TABLE, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
                 XML_FAMILY_TYPE_TABLE_CELL ),
     ENTRY0( TABLE, FORMULA, XML_ATACTION_REMOVE_ANY_NAMESPACE_PREFIX ),
+    ENTRY1Q( TABLE, CONTENT_VALIDATION_NAME, XML_ATACTION_RENAME,
+           XML_NAMESPACE_TABLE, XML_VALIDATION_NAME ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
