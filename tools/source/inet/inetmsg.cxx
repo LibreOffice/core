@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetmsg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:20:34 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _TOOLS_INETSTRM_HXX
 #include <inetstrm.hxx>
+#endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
 #endif
 
 #include <stdio.h>
@@ -267,29 +270,42 @@ INetMessageHeaderIterator::~INetMessageHeaderIterator (void)
  *
  *=====================================================================*/
 /*
- * _ImplINetRFC822MessageHeaderData.
+ * ImplINetRFC822MessageHeaderData.
  */
-static const ByteString _ImplINetRFC822MessageHeaderData[] =
+namespace
 {
-    ByteString ("BCC"),
-    ByteString ("CC"),
-    ByteString ("Comments"),
-    ByteString ("Date"),
-    ByteString ("From"),
-    ByteString ("In-Reply-To"),
-    ByteString ("Keywords"),
-    ByteString ("Message-ID"),
-    ByteString ("References"),
-    ByteString ("Reply-To"),
-    ByteString ("Return-Path"),
-    ByteString ("Subject"),
-    ByteString ("Sender"),
-    ByteString ("To"),
-    ByteString ("X-Mailer"),
-    ByteString ("Return-Receipt-To")
-};
+    struct ImplINetRFC822MessageHeaderDataImpl
+    {
+        const ByteString* operator()()
+        {
+            static const ByteString _ImplINetRFC822MessageHeaderData[] =
+            {
+                ByteString ("BCC"),
+                ByteString ("CC"),
+                ByteString ("Comments"),
+                ByteString ("Date"),
+                ByteString ("From"),
+                ByteString ("In-Reply-To"),
+                ByteString ("Keywords"),
+                ByteString ("Message-ID"),
+                ByteString ("References"),
+                ByteString ("Reply-To"),
+                ByteString ("Return-Path"),
+                ByteString ("Subject"),
+                ByteString ("Sender"),
+                ByteString ("To"),
+                ByteString ("X-Mailer"),
+                ByteString ("Return-Receipt-To")
+            };
+            return &_ImplINetRFC822MessageHeaderData[0];
+        }
+    };
 
-#define HDR(n) _ImplINetRFC822MessageHeaderData[(n)]
+    struct ImplINetRFC822MessageHeaderData
+        : public rtl::StaticAggregate< const ByteString, ImplINetRFC822MessageHeaderDataImpl > {};
+}
+
+#define HDR(n) ImplINetRFC822MessageHeaderData::get()[(n)]
 
 /*
  * _ImplINetRFC822MessageHeaderState.
@@ -971,17 +987,30 @@ SvStream& INetRFC822Message::operator>> (SvStream& rStrm)
 /*
  * _ImplINetMIMEMessageHeaderData.
  */
-static const ByteString _ImplINetMIMEMessageHeaderData[] =
+namespace
 {
-    ByteString ("MIME-Version"),
-    ByteString ("Content-Description"),
-    ByteString ("Content-Disposition"),
-    ByteString ("Content-ID"),
-    ByteString ("Content-Type"),
-    ByteString ("Content-Transfer-Encoding")
-};
+    struct ImplINetMIMEMessageHeaderDataImpl
+    {
+        const ByteString* operator()()
+        {
+            static const ByteString _ImplINetMIMEMessageHeaderData[] =
+            {
+                ByteString ("MIME-Version"),
+                ByteString ("Content-Description"),
+                ByteString ("Content-Disposition"),
+                ByteString ("Content-ID"),
+                ByteString ("Content-Type"),
+                ByteString ("Content-Transfer-Encoding")
+            };
+            return &_ImplINetMIMEMessageHeaderData[0];
+        }
+    };
 
-#define MIMEHDR(n) _ImplINetMIMEMessageHeaderData[(n)]
+    struct ImplINetMIMEMessageHeaderData
+        : public rtl::StaticAggregate< const ByteString, ImplINetMIMEMessageHeaderDataImpl > {};
+}
+
+#define MIMEHDR(n) ImplINetMIMEMessageHeaderData::get()[(n)]
 
 /*
  * _ImplINetMIMEMessageHeaderState.
