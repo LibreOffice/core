@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:47:22 $
+#   last change: $Author: vg $ $Date: 2003-06-12 10:02:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,8 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
-CFLAGSCXX= -fsigned-char -pipe -fno-for-scope -fpermissive -frtti 
+# CFLAGSCXX= -fsigned-char -pipe -fno-for-scope -fpermissive -frtti 
+CFLAGSCXX= -fsigned-char -pipe -fno-for-scope -fpermissive -fno-rtti
 
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
@@ -131,7 +132,7 @@ CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
 
 # Compiler flags for enabling optimazations
-CFLAGSOPT=-O2 -fno-schedule-insns -fno-strict-aliasing -fno-schedule-insns2
+CFLAGSOPT=-O2 -fno-strict-aliasing
 
 # Compiler flags for disabling optimazations
 # don't change - required to work around optimization bugs
