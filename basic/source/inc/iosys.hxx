@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:47:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ public:
    ~SbiStream();
     SbError Open( short, const ByteString&, short, short, short );
     SbError Close();
-    SbError Read( ByteString&, USHORT = 0 );
+    SbError Read( ByteString&, USHORT = 0, bool bForceReadingPerByte=false );
     SbError Read( char& );
     SbError Write( const ByteString&, USHORT = 0 );
 
