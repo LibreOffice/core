@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetforquery.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-17 15:46:30 $
+ *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,11 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                                       sal_Int32 nOpenMode,
                                       const uno::Sequence< beans::Property >& seq,
                                       const uno::Sequence< NumberedSortingInfo >& seqSort,
-                                      URLParameter& aURLParameter )
+                                      URLParameter& aURLParameter,
+                                      Databases* pDatabases )
     : ResultSetBase( xMSF,xProvider,nOpenMode,seq,seqSort ),
-      m_aURLParameter( aURLParameter )
+      m_aURLParameter( aURLParameter ),
+      m_pDatabases( pDatabases )
 {
     std::vector< rtl::OUString > queryList;
 
@@ -112,8 +114,8 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
 
     rtl::OUString scope = m_aURLParameter.get_scope();
     StaticModuleInformation* inf =
-        Databases::getStaticInformationForModule( m_aURLParameter.get_module(),
-                                                  m_aURLParameter.get_language() );
+        m_pDatabases->getStaticInformationForModule( m_aURLParameter.get_module(),
+                                                     m_aURLParameter.get_language() );
 
     if( scope.compareToAscii( "Heading" ) == 0 )
         scope = inf->get_heading();
@@ -123,10 +125,10 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
     sal_Int32 hitCount = m_aURLParameter.get_hitCount();
 
     QueryStatement queryStatement( hitCount,queryList,scope );
-    QueryProcessor queryProcessor( Databases::getInstallPath()              +
-                                   m_aURLParameter.get_language()           +
-                                   rtl::OUString::createFromAscii( "/" ) +
-                                   m_aURLParameter.get_module()             +
+    QueryProcessor queryProcessor( m_pDatabases->getInstallPathAsURL()                    +
+                                   m_pDatabases->lang( m_aURLParameter.get_language() )   +
+                                   rtl::OUString::createFromAscii( "/" )                  +
+                                   m_aURLParameter.get_module()                           +
                                    rtl::OUString::createFromAscii( ".idx/" ) );
 
     QueryResults *queryResults = queryProcessor.processQuery( queryStatement );
@@ -140,7 +142,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
         QueryHitData* qhd = it->getHit( 0 );
         m_aPath.push_back( replWith + ( qhd->getDocument()).copy( replIdx ) );
     }
-    delete it;
+    delete it;  // deletes also queryResults
 
     m_aItems.resize( m_aPath.size() );
     m_aIdents.resize( m_aPath.size() );

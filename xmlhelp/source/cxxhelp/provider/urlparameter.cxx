@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-29 15:14:49 $
+ *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,7 @@
  *
  ************************************************************************/
 
-#ifndef SablotHIncl
-#include <sablot.h>
-#endif
-#ifndef ShandlerHIncl
-#include <shandler.h>
-#endif
+#include <string.h>
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
 #endif
@@ -82,6 +77,14 @@
 #endif
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
+#endif
+#ifndef SablotHIncl
+#include <sablot.h>
+//#include <sablot/sablot.h>
+#endif
+#ifndef ShandlerHIncl
+#include <shandler.h>
+//#include <sablot/shandler.h>
 #endif
 #ifndef _DB_CXX_H_
 #include <berkeleydb/db_cxx.h>
@@ -122,6 +125,9 @@
 #ifndef _COM_SUN_STAR_UCB_XCONTENTIDENTIFIERFACTORY_HPP_
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#endif
 
 namespace chelp {
 
@@ -148,11 +154,15 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
+using namespace com::sun::star::container;
 using namespace chelp;
 
 
-URLParameter::URLParameter( const rtl::OUString& aURL ) throw( com::sun::star::ucb::IllegalIdentifierException )
-    : m_aURL( aURL )
+URLParameter::URLParameter( const rtl::OUString& aURL,
+                            Databases* pDatabases )
+    throw( com::sun::star::ucb::IllegalIdentifierException )
+    : m_aURL( aURL ),
+      m_pDatabases( pDatabases )
 {
     init( false );
     parse();
@@ -160,9 +170,12 @@ URLParameter::URLParameter( const rtl::OUString& aURL ) throw( com::sun::star::u
 
 
 URLParameter::URLParameter( const rtl::OUString&  aURL,
-                            const rtl::OUString& aDefaultLanguage ) throw( com::sun::star::ucb::IllegalIdentifierException )
+                            const rtl::OUString& aDefaultLanguage,
+                            Databases* pDatabases )
+    throw( com::sun::star::ucb::IllegalIdentifierException )
     : m_aURL( aURL ),
-      m_aDefaultLanguage( aDefaultLanguage )
+      m_aDefaultLanguage( aDefaultLanguage ),
+      m_pDatabases( pDatabases )
 {
     init( true );
     parse();
@@ -171,11 +184,11 @@ URLParameter::URLParameter( const rtl::OUString&  aURL,
 
 rtl::OUString URLParameter::get_id()
 {
-    if( m_aId.compareToAscii("start") == 0 )
+    if( m_aId.compareToAscii( "52821" ) == 0 || m_aId.compareToAscii("start") == 0 )
     {   // module is set
         StaticModuleInformation* inf =
-            Databases::getStaticInformationForModule( get_module(),
-                                                          get_language() );
+            m_pDatabases->getStaticInformationForModule( get_module(),
+                                                         get_language() );
         if( inf )
             m_aId = inf->get_id();
 
@@ -201,8 +214,8 @@ rtl::OUString URLParameter::get_title()
     else if( m_aModule.compareToAscii("") != 0 )
     {
         StaticModuleInformation* inf =
-            Databases::getStaticInformationForModule( get_module(),
-                                                      get_language() );
+            m_pDatabases->getStaticInformationForModule( get_module(),
+                                                         get_language() );
         if( inf )
             m_aTitle = inf->get_title();
     }
@@ -227,8 +240,8 @@ rtl::OUString URLParameter::get_program()
     if( m_aProgram.compareToAscii( "" ) != 0 )
     {
         StaticModuleInformation* inf =
-            Databases::getStaticInformationForModule( get_module(),
-                                                          get_language() );
+            m_pDatabases->getStaticInformationForModule( get_module(),
+                                                         get_language() );
         if( inf )
             m_aProgram = inf->get_program();
     }
@@ -293,8 +306,8 @@ void URLParameter::readBerkeley()
 {
     if( get_id().compareToAscii("") != 0 )
     {
-        Db* db = Databases::getBerkeley( get_module(),
-                                         get_language() );
+        Db* db = m_pDatabases->getBerkeley( get_module(),
+                                            get_language() );
 
         rtl::OString keyStr( m_aId.getStr(),m_aId.getLength(),RTL_TEXTENCODING_UTF8 );
         Dbt key( static_cast< void* >( const_cast< sal_Char* >( keyStr.getStr() ) ),
@@ -325,8 +338,8 @@ class InputStreamTransformer
 public:
 
     InputStreamTransformer( const Reference< XMultiServiceFactory >& rxSMgr,
-                            URLParameter* urlParam );
-//  const rtl::OUString& aUri );
+                            URLParameter* urlParam,
+                            Databases*    pDatatabases );
 
     ~InputStreamTransformer();
 
@@ -372,14 +385,14 @@ public:
 
 private:
 
+    osl::Mutex m_aMutex;
+
     int len,pos;
     char *buffer;
-
-      Reference< XInputStream > m_xInputStream;
-      Reference< XSeekable >    m_xSeekable;
 };
 
 
+//  void doSomething();
 
 
 void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
@@ -395,40 +408,49 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
         rtl::OUString url;
 
         if( IsRoot )
-            url =
-                Databases::getInstallPathAsURL()         +
-                rtl::OUString::createFromAscii( "custom.css" );
-        else
         {
-            url = rtl::OUString::createFromAscii( "vnd.sun.star.pkg://" );
+            url =
+                m_pDatabases->getInstallPathAsURL()         +
+                rtl::OUString::createFromAscii( "custom.css" );
 
-            rtl::OUString jar =
-                Databases::getInstallPathAsURL()         +
-                get_language()                           +
-                rtl::OUString::createFromAscii( "/picture.jar" );
+            rtl::OUString service = rtl::OUString::createFromAscii( "com.sun.star.ucb.UniversalContentBroker" );
+            Reference< XContentProvider > provider( rxSMgr->createInstance( service ),UNO_QUERY );
+            Reference< XContentIdentifierFactory > factory( provider,UNO_QUERY );
+            Reference< XContentIdentifier > xIdentifier = factory->createContentIdentifier( url );
+            Reference< XContent > xContent = provider->queryContent( xIdentifier );
+            Reference< XCommandProcessor > processor( xContent,UNO_QUERY );
 
-            url+= rtl::Uri::encode( jar,
-                                    rtl_UriCharClassUricNoSlash,
-                                    rtl_UriEncodeIgnoreEscapes,
-                                    RTL_TEXTENCODING_UTF8 );
-
-            url += ( rtl::OUString::createFromAscii( "/" ) + get_path() );
+            processor->execute( aCommand,
+                                CommandId,
+                                Environment );
         }
+        else
+        {   // a picture
+            Reference< XInputStream > xStream;
+            Reference< XHierarchicalNameAccess > xNA =
+                m_pDatabases->jarFile( rtl::OUString::createFromAscii( "picture.jar" ),
+                                       get_language() );
 
-        rtl::OUString service = rtl::OUString::createFromAscii( "com.sun.star.ucb.UniversalContentBroker" );
-        Reference< XContentProvider > provider( rxSMgr->createInstance( service ),UNO_QUERY );
-        Reference< XContentIdentifierFactory > factory( provider,UNO_QUERY );
-        Reference< XContentIdentifier > xIdentifier = factory->createContentIdentifier( url );
-        Reference< XContent > xContent = provider->queryContent( xIdentifier );
-        Reference< XCommandProcessor > processor( xContent,UNO_QUERY );
-
-        processor->execute( aCommand,
-                            CommandId,
-                            Environment );
+            rtl::OUString path = get_path();
+            if( xNA.is() )
+            {
+                try
+                {
+                    Any aEntry = xNA->getByHierarchicalName( path );
+                    Reference< XActiveDataSink > xSink;
+                    if( ( aEntry >>= xSink ) && xSink.is() )
+                        xStream = xSink->getInputStream();
+                }
+                catch ( NoSuchElementException & )
+                {
+                }
+            }
+            xDataSink->setInputStream( xStream );
+        }
     }
     else
     {   // a standard document, plug in the new input stream
-        xDataSink->setInputStream( new InputStreamTransformer( rxSMgr,this ) );
+        xDataSink->setInputStream( new InputStreamTransformer( rxSMgr,this,m_pDatabases ) );
     }
 }
 
@@ -442,7 +464,7 @@ void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierExceptio
     if( lstIdx != -1 )
         m_aExpr = m_aExpr.copy( 0,lstIdx );
 
-    if( ! scheme() || ! name( module() ) || ! query() )
+    if( ! scheme() || ! name( module() ) || ! query() || ! m_aLanguage.getLength() || ! m_aSystem.getLength() )
         throw com::sun::star::ucb::IllegalIdentifierException();
 }
 
@@ -501,7 +523,6 @@ bool URLParameter::name( bool modulePresent )
     // if modulepresent, a name may be present, but must not
 
     sal_Int32 length = m_aExpr.getLength();
-
 
     if( length != 0 && (m_aExpr.getStr())[0] == sal_Unicode( '/' ) )
     {
@@ -629,66 +650,53 @@ int schemehandlerclose( void *userData,
 
 struct UserData {
 
-    InputStreamTransformer*             m_pTransformer;
+    UserData( const Reference< XMultiServiceFactory >& rxSMgr,
+              InputStreamTransformer* pTransformer,
+              URLParameter*           pInitial,
+              Databases*              pDatabases )
+        : m_xSMgr( rxSMgr ),
+          m_pTransformer( pTransformer ),
+          m_pInitial( pInitial ),
+          m_pDatabases( pDatabases )
+    {
+    }
+
     Reference< XMultiServiceFactory >   m_xSMgr;
+    InputStreamTransformer*             m_pTransformer;
+    Databases*                          m_pDatabases;
+    URLParameter*                       m_pInitial;
 };
 
 
-const char* parameterFunc( const char* par,URLParameter* urlParam )
+rtl::OString URLParameter::getByName( const char* par )
 {
-    rtl::OString aString;
-    if( strcmp( par,"Program" ) == 0 )
-        aString = rtl::OString( urlParam->get_program(),
-                                urlParam->get_program().getLength(),
-                                RTL_TEXTENCODING_UTF8 );
-    else if( strcmp( par,"Database" ) == 0 )
-        aString = rtl::OString( urlParam->get_module(),
-                                urlParam->get_module().getLength(),
-                                RTL_TEXTENCODING_UTF8 );
-    else if( strcmp( par,"Id" ) == 0 )
-        aString = rtl::OString( urlParam->get_id(),
-                                urlParam->get_id().getLength(),
-                                RTL_TEXTENCODING_UTF8 );
-    else if( strcmp( par,"Path" ) == 0 )
-        aString = rtl::OString( urlParam->get_path(),
-                                urlParam->get_path().getLength(),
-                                RTL_TEXTENCODING_UTF8 );
-    else if( strcmp( par,"Language" ) == 0 )
-        aString = rtl::OString( urlParam->get_language(),
-                                urlParam->get_language().getLength(),
-                                RTL_TEXTENCODING_UTF8 );
-    else if( strcmp( par,"System" ) == 0 )
-        aString = rtl::OString( urlParam->get_system(),
-                                urlParam->get_system().getLength(),
-                                RTL_TEXTENCODING_UTF8 );
+    rtl::OUString val;
 
-    char* ret = new char[ 1+aString.getLength() ];
-    ret[ aString.getLength() ] = 0;
-    rtl_copyMemory( (void*)(ret),(void*)(aString.getStr()),sal_uInt32( aString.getLength() ) );
-    return ret;
+    if( strcmp( par,"Program" ) == 0 )
+        val = get_program();
+    else if( strcmp( par,"Database" ) == 0 )
+        val = get_module();
+    else if( strcmp( par,"Id" ) == 0 )
+        val = get_id();
+    else if( strcmp( par,"Path" ) == 0 )
+        val = get_path();
+    else if( strcmp( par,"Language" ) == 0 )
+        val = get_language();
+    else if( strcmp( par,"System" ) == 0 )
+        val = get_system();
+
+    return rtl::OString( val.getStr(),val.getLength(),RTL_TEXTENCODING_UTF8 );
 }
 
 
+
 InputStreamTransformer::InputStreamTransformer( const Reference< XMultiServiceFactory >& rxSMgr,
-                                                URLParameter* urlParam )
+                                                URLParameter* urlParam,
+                                                Databases*    pDatabases )
     : len( 0 ),
       pos( 0 ),
       buffer( new char[0] )
 {
-    rtl::OUString url = rtl::OUString::createFromAscii( "vnd.sun.star.pkg://" );
-    rtl::OUString jar =
-        Databases::getInstallPathAsURL()         +
-        urlParam->get_language()                 +
-        rtl::OUString::createFromAscii( "/" )    +
-        urlParam->get_jar();
-
-    url+= rtl::Uri::encode( jar,
-                            rtl_UriCharClassUricNoSlash,
-                            rtl_UriEncodeIgnoreEscapes,
-                            RTL_TEXTENCODING_UTF8 );
-
-    url += ( rtl::OUString::createFromAscii( "/" ) + urlParam->get_path() );
-
     SchemeHandler schemeHandler;
     schemeHandler.getAll = schemehandlergetall;
     schemeHandler.freeMemory = schemehandlerfreememory;
@@ -697,50 +705,48 @@ InputStreamTransformer::InputStreamTransformer( const Reference< XMultiServiceFa
     schemeHandler.put = schemehandlerput;
     schemeHandler.close = schemehandlerclose;
 
-    UserData userData;
-    userData.m_xSMgr = rxSMgr;
-    userData.m_pTransformer = this;
+    UserData userData( rxSMgr,this,urlParam,pDatabases );
+
+    // Uses the implementation detail, that rtl::OString::getStr returns a zero terminated character-array
+
+    const char* parameter[13];
+    rtl::OString parString[12];
+
+    parString[ 0] = "Program";
+    parString[ 1] = urlParam->getByName( "Program" );
+    parString[ 2] = "Database";
+    parString[ 3] = urlParam->getByName( "Database" );
+    parString[ 4] = "Id";
+    parString[ 5] = urlParam->getByName( "Id" );
+    parString[ 6] = "Path";
+    parString[ 7] = urlParam->getByName( "Path" );
+    parString[ 8] = "Language";
+    parString[ 9] = urlParam->getByName( "Language" );
+    parString[10] = "System";
+    parString[11] = urlParam->getByName( "System" );
+
+    for( int i = 0; i < 12; ++i )
+        parameter[i] = parString[i].getStr();
+    parameter[12] = 0;
+
 
     SablotHandle p;
     SablotCreateProcessor(&p);
     SablotRegHandler( p,HLR_SCHEME,&schemeHandler,(void*)(&userData) );
 
-    rtl::OString aString = rtl::OString( url.getStr(),url.getLength(),RTL_TEXTENCODING_UTF8 );
-    char* inputStr = new char[ 1+aString.getLength() ];
-    inputStr[ aString.getLength() ] = 0;
-    rtl_copyMemory( (void*)(inputStr),(void*)(aString.getStr()),sal_uInt32( aString.getLength() ) );
-
-    const sal_Int32 parCount = 6;
-    const char* parameter[ 1+2*parCount ];
-
-    parameter[ 0] = "Program";
-    parameter[ 1] = parameterFunc( parameter[ 0],urlParam );
-    parameter[ 2] = "Database";
-    parameter[ 3] = parameterFunc( parameter[ 2],urlParam );
-    parameter[ 4] = "Id";
-    parameter[ 5] = parameterFunc( parameter[ 4],urlParam );
-    parameter[ 6] = "Path";
-    parameter[ 7] = parameterFunc( parameter[ 6],urlParam );
-    parameter[ 8] = "Language";
-    parameter[ 9] = parameterFunc( parameter[ 8],urlParam );
-    parameter[10] = "System";
-    parameter[11] = "WIN";// parameterFunc( parameter[10],urlParam );
-    parameter[12] = 0;
+    rtl::OUString xslURL = pDatabases->getInstallPathAsURL();
+    rtl::OString xslURLascii = "file:";
+    xslURLascii += rtl::OString( xslURL.getStr()+6,xslURL.getLength()-6,RTL_TEXTENCODING_UTF8 );
+    xslURLascii += "main_transform.xsl";
 
     SablotRunProcessor( p,
-                        "file://e:/src632b/help/main_transform.xsl",
-                        inputStr,
-                        "vnd.sun.star.resultat://resultbuff",
+                        const_cast<char*>(xslURLascii.getStr()),
+                        "vnd.sun.star.pkg:/",
+                        "vnd.sun.star.resultat:/",
                         const_cast<char**>(parameter),
                         0 );
 
-    char* my_buf;
-    SablotGetResultArg( p,"arg:/somename",&my_buf );
     SablotDestroyProcessor( p );
-    delete[] inputStr;
-    for( int i = 1; i < 1+2*parCount; i+=2 )
-        if( i != 11 )
-            delete[] const_cast<char*>(parameter[i]);
 }
 
 
@@ -775,11 +781,14 @@ void SAL_CALL InputStreamTransformer::release( void ) throw( RuntimeException )
 
 
 
-sal_Int32 SAL_CALL InputStreamTransformer::readBytes( Sequence< sal_Int8 >& aData,sal_Int32 nBytesToRead ) throw( NotConnectedException,
-                                                                                                                  BufferSizeExceededException,
-                                                                                                                  IOException,
-                                                                                                                  RuntimeException)
+sal_Int32 SAL_CALL InputStreamTransformer::readBytes( Sequence< sal_Int8 >& aData,sal_Int32 nBytesToRead )
+    throw( NotConnectedException,
+           BufferSizeExceededException,
+           IOException,
+           RuntimeException)
 {
+    osl::MutexGuard aGuard( m_aMutex );
+
     int curr,available = len-pos;
     if( nBytesToRead <= available )
         curr = nBytesToRead;
@@ -812,6 +821,7 @@ void SAL_CALL InputStreamTransformer::skipBytes( sal_Int32 nBytesToSkip ) throw(
                                                                                  IOException,
                                                                                  RuntimeException )
 {
+    osl::MutexGuard aGuard( m_aMutex );
     while( nBytesToSkip-- ) ++pos;
 }
 
@@ -821,6 +831,7 @@ sal_Int32 SAL_CALL InputStreamTransformer::available( void ) throw( NotConnected
                                                                     IOException,
                                                                     RuntimeException )
 {
+    osl::MutexGuard aGuard( m_aMutex );
     return len-pos > 0 ? len - pos : 0 ;
 }
 
@@ -838,6 +849,7 @@ void SAL_CALL InputStreamTransformer::seek( sal_Int64 location ) throw( IllegalA
                                                                         IOException,
                                                                         RuntimeException )
 {
+    osl::MutexGuard aGuard( m_aMutex );
     if( location < 0 )
         throw IllegalArgumentException();
     else
@@ -852,6 +864,7 @@ void SAL_CALL InputStreamTransformer::seek( sal_Int64 location ) throw( IllegalA
 sal_Int64 SAL_CALL InputStreamTransformer::getPosition( void ) throw( IOException,
                                                                       RuntimeException )
 {
+    osl::MutexGuard aGuard( m_aMutex );
     return sal_Int64( pos );
 }
 
@@ -859,12 +872,16 @@ sal_Int64 SAL_CALL InputStreamTransformer::getPosition( void ) throw( IOExceptio
 
 sal_Int64 SAL_CALL InputStreamTransformer::getLength( void ) throw( IOException,RuntimeException )
 {
+    osl::MutexGuard aGuard( m_aMutex );
+
     return len;
 }
 
 
 void InputStreamTransformer::addToBuffer( const char* buffer_,int len_ )
 {
+    osl::MutexGuard aGuard( m_aMutex );
+
     char* tmp = buffer;
     buffer = new char[ len+len_ ];
     rtl_copyMemory( (void*)(buffer),(void*)(tmp),sal_uInt32( len ) );
@@ -907,23 +924,24 @@ class XActiveDataSinkImpl
         return m_xInputStream;
     }
 
+
 private:
 
     Reference< XInputStream > m_xInputStream;
 };
 
 
-#include <string.h>
 
 
-/*  getAll: open the URI and return the whole string
-        scheme = URI scheme (e.g. "http")
-        rest = the rest of the URI (without colon)
-        the document is returned in a handler-allocated buffer
-        byteCount holds the byte count on return
-        return *buffer = NULL if not processed
+
+/**
+ *    getAll: open the URI and return the whole string
+ *    scheme = URI scheme (e.g. "http")
+ *    rest = the rest of the URI (without colon)
+ *    the document is returned in a handler-allocated buffer
+ *    byteCount holds the byte count on return
+ *    return *buffer = NULL if not processed
 */
-
 
 int schemehandlergetall( void *userData,
                          SablotHandle processor_,
@@ -932,31 +950,34 @@ int schemehandlergetall( void *userData,
                          char **buffer,
                          int *byteCount )
 {
-    rtl::OUString url( rtl::OUString::createFromAscii( "vnd.sun.star.pkg:" ) );
+    rtl::OUString language,jar,path;
+    UserData *uData = reinterpret_cast< UserData* >( userData );
 
     if( strcmp( scheme,"vnd.sun.star.help" ) == 0 )
     {
-        url += rtl::OUString::createFromAscii( "//" );
-
         URLParameter urlpar( rtl::OUString::createFromAscii( scheme ) +
                              rtl::OUString::createFromAscii( ":" )    +
-                             rtl::OUString::createFromAscii( rest ) );
+                             rtl::OUString::createFromAscii( rest ),
+                             uData->m_pDatabases );
 
-        rtl::OUString jar =
-            Databases::getInstallPathAsURL()         +
-            urlpar.get_language()                    +
-            rtl::OUString::createFromAscii( "/" )    +
-            urlpar.get_jar();
-
-        url+= rtl::Uri::encode( jar,
-                                rtl_UriCharClassUricNoSlash,
-                                rtl_UriEncodeIgnoreEscapes,
-                                RTL_TEXTENCODING_UTF8 );
-
-        url += ( rtl::OUString::createFromAscii( "/" ) + urlpar.get_path() );
+        jar = urlpar.get_jar();
+        language = urlpar.get_language();
+        path = urlpar.get_path();
     }
     else if( strcmp( scheme,"vnd.sun.star.pkg" ) == 0 )
-        url += rtl::OUString::createFromAscii( rest );
+    {
+        if( uData->m_pInitial->get_eid().getLength() )
+        {
+            uData->m_pDatabases->popupDocument( uData->m_pInitial,buffer,byteCount );
+            return 0;
+        }
+        else
+        {
+            jar = uData->m_pInitial->get_jar();
+            language = uData->m_pInitial->get_language();
+            path = uData->m_pInitial->get_path();
+        }
+    }
     else
     {
         *buffer = 0;
@@ -964,40 +985,23 @@ int schemehandlergetall( void *userData,
         return 0;
     }
 
-    UserData *uData = reinterpret_cast< UserData* >( userData );
+    Reference< XInputStream > xInputStream;
+    Reference< XHierarchicalNameAccess > xNA = uData->m_pDatabases->jarFile( jar,language );
 
-    rtl::OUString service = rtl::OUString::createFromAscii( "com.sun.star.ucb.UniversalContentBroker" );
-    Reference< XContentProvider > provider( uData->m_xSMgr->createInstance( service ),UNO_QUERY );
-    Reference< XContentIdentifierFactory > factory( provider,UNO_QUERY );
-    Reference< XContentIdentifier > xIdentifier = factory->createContentIdentifier( url );
-    Reference< XContent > xContent = provider->queryContent( xIdentifier );
-    Reference< XCommandProcessor > processor( xContent,UNO_QUERY );
-
-    OpenCommandArgument2 argument;
-    argument.Mode = OpenMode::ALL;
-    Reference< XActiveDataSink > xActiveDataSink( new XActiveDataSinkImpl() );
-    argument.Sink = xActiveDataSink;
-    argument.Priority = 0;
-
-    Command command;
-    command.Name = rtl::OUString::createFromAscii( "open" );
-    command.Handle = -1;
-    command.Argument <<= argument;
-
-    sal_Int32 commandId = processor->createCommandIdentifier();
-
-    try
+    if( xNA.is() )
     {
-        processor->execute( command,
-                            commandId,
-                            Reference< XCommandEnvironment >( 0 ) );
-    }
-    catch( const CommandAbortedException& e )
-    {
-        printf( "catched exception" );
+        try
+        {
+            Any aEntry = xNA->getByHierarchicalName( path );
+            Reference< XActiveDataSink > xSink;
+            if( ( aEntry >>= xSink ) && xSink.is() )
+                xInputStream = xSink->getInputStream();
+        }
+        catch ( NoSuchElementException & )
+        {
+        }
     }
 
-    Reference< XInputStream > xInputStream = xActiveDataSink->getInputStream();
     if( xInputStream.is() )
     {
         Reference< XSeekable > xSeekable( xInputStream,UNO_QUERY );

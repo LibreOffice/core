@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocGenerator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-10 15:25:32 $
+ *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,6 @@ RoleFiller::RoleFiller( sal_Int32 nColumns,
       fixedRole_( sal_uInt8( role & 0xF ) ),                    // primary/constitutive concept/role
       fillers_( nColumns )
 {
-    // cout << "RoleFiller constructed" << nColumns << ' ' << role << ' ' << pos << endl;
     filled_ = sal_Int16( 1 << fixedRole_ );
     begin_ = pos;       // offset in file
     //    _end = _begin + first.getConceptLength();
@@ -397,7 +396,6 @@ bool ConceptGroupGenerator::next() throw( excep::XmlSearchException )
     while( bits_->readNext( k1_,this ) )
     {
         sal_Int32 bla = bits_->read( k2_ );
-//      cout << bla << endl;
         if( cData_ = table_[ bla ] )
             return true;
     }
@@ -441,7 +439,8 @@ void GeneratorHeap::reset()
 {
     for( sal_Int32 i = 0; i < heapSize_; ++i )
     {
-        delete heap_[i]; heap_[i] = 0;
+        delete heap_[i];
+        heap_[i] = 0;
     }
     free_ = 0;
 }
@@ -452,10 +451,6 @@ void GeneratorHeap::addGenerator( ConceptGroupGenerator* cd )
     if( sal_uInt32( free_ ) == heap_.size() )
     {
         heap_.push_back( 0 );
-    }
-    else
-    {
-//      delete heap_[free_];
     }
 
     heap_[free_++] = cd;

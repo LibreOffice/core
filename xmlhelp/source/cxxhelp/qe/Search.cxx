@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Search.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-11 12:39:12 $
+ *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,6 @@ void Search::startSearch()
         }
         catch( ... )
         {
-            printf( "Search::startSearch -> catched exception \n" );
         }
     }
 
@@ -534,11 +533,6 @@ sal_Int32 Search::nextDocument( std::vector< RoleFiller* >& start ) throw( xmlse
         // and, with more care, creation of some GroupGenerators can be avoided
         // saturating queries with lots of good hits will lead to best results
 
-
-//          printf( "docNo = %d",document_);
-//          print_rtl_OUString( ( rtl::OUString::createFromAscii( "   docName = ") +
-//                                env_->documentName( document_) ) );
-
         sal_Int32 voteMask = 0;
         Query* query;
         for( i = 0; i < queries_.size(); ++i )
@@ -623,7 +617,6 @@ bool Search::openDocumentIndex( sal_Int32 docNo ) throw( excep::XmlSearchExcepti
             firstGenerator_.init( dataL_,data_,base_ += 2,k2 );
             // decode concept table
             nConcepts_ = firstGenerator_.decodeConcepts( kk & 0x3F,0,concepts_ );
-//        cout << "false" << endl;
             return false;
 
         case 2:         // multi group, no extents
@@ -644,15 +637,12 @@ bool Search::openDocumentIndex( sal_Int32 docNo ) throw( excep::XmlSearchExcepti
             base_ += 1 + compr.bytesRead();
             limit_ = maxConcepts_.size();
         }
-//        cout << "true" << endl;
         return true;
 
         case 1:         // single group, extents
         case 3:         // multi group, extents
             throw excep::XmlSearchException( rtl::OUString::createFromAscii( "extents not yet implemented\n" ) );
     }
-
-//    cout << "false1" << endl;
     return false;
 }
 

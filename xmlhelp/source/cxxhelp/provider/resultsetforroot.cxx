@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetforroot.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-17 09:58:55 $
+ *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,13 @@ ResultSetForRoot::ResultSetForRoot( const uno::Reference< lang::XMultiServiceFac
                                     sal_Int32 nOpenMode,
                                     const uno::Sequence< beans::Property >& seq,
                                     const uno::Sequence< NumberedSortingInfo >& seqSort,
-                                    URLParameter& aURLParameter )
+                                    URLParameter& aURLParameter,
+                                    Databases* pDatabases )
     : ResultSetBase( xMSF,xProvider,nOpenMode,seq,seqSort ),
-      m_aURLParameter( aURLParameter )
+      m_aURLParameter( aURLParameter ),
+      m_pDatabases( pDatabases )
 {
-    m_aPath = Databases::getModuleList( m_aURLParameter.get_language() );
+    m_aPath = m_pDatabases->getModuleList( m_aURLParameter.get_language() );
     m_aItems.resize( m_aPath.size() );
     m_aIdents.resize( m_aPath.size() );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryProcessor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-22 14:57:12 $
+ *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,11 +98,6 @@ QueryResults* QueryProcessor::processQuery( const QueryStatement& ment )
 }
 
 
-#ifdef ABIDEBUG
-extern ostream& operator<<( ostream& out,const rtl::OUString& bla );
-#endif
-
-
 Query* QueryProcessor::processQuery( Search& search,const QueryStatement& ment )
 {
     sal_Int32 nValidTerms = 0, nMissingTerms = 0, nContentTerms = 0;
@@ -139,18 +134,13 @@ Query* QueryProcessor::processQuery( Search& search,const QueryStatement& ment )
             }
             else if( str[lgt-1] == sal_Unicode( '*' ) )
             {
-//            cout << term.copy( 0,lgt - 1 ) << endl;
                 ids = env_->withPrefix( term.copy( 0,lgt - 1 ) );     // goes to BtreeDict::withPrefix
                 variantPenalty = 0.0;
-//            for( int i = 0; i < ids.size(); ++i )
-//          cout << ids[i] << endl;
             }
             else
             {
                 sal_Int32 formID;
                 id = env_->fetch( term );
-
-                // cout << id << endl;
 
                 // std::vector< rtl::OUString > variants( morph_->getVariants( term ) );
                 std::vector< rtl::OUString > variants;
@@ -179,30 +169,6 @@ Query* QueryProcessor::processQuery( Search& search,const QueryStatement& ment )
         }
     }
 
-//    try
-//      {
-//        cout << env_->documentName( 1 ) << endl;
-//      }
-//    catch( const excep::XmlSearchException& e )
-//      {
-//        cout << e.getMessage() << endl;
-//      }
-
-#ifdef ABIDEBUG
-//    cout << scope <<endl;
-//    cout << nValidTerms << endl;
-//    cout << nMissingTerms << endl;
-//    cout << nHits << endl;
-//    for( int a = 0; a < primary.size(); ++a )
-//        {
-//  //        cout << primary[a] << endl;
-//        for( int b = 0; b < columns[a].size(); ++b )
-//            cout << columns[a][b] << endl;
-//        }
-//    exit( 1 );
-#endif
-
-
     return search.addQuery( scope,
                             nValidTerms,nMissingTerms,nHits,
                             variantPenalty,
@@ -218,6 +184,12 @@ QueryResults::QueryResults( Query* query, sal_Int32 nHits )
         query->getHits( queryHits_,nHits );
 }
 
+
+QueryResults::~QueryResults()
+{
+    for( sal_Int32 i = 0; i < queryHits_.size(); ++i )
+        delete queryHits_[i];
+}
 
 
 QueryResults* QueryProcessor::makeQueryResults( Query* query,sal_Int32 nHits )

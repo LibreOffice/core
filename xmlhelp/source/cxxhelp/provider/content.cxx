@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-22 14:57:11 $
+ *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,14 +146,12 @@ using namespace chelp;
 
 Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
                   ::ucb::ContentProviderImplHelper* pProvider,
-                  const Reference< XContentIdentifier >& Identifier )
+                  const Reference< XContentIdentifier >& Identifier,
+                  Databases* pDatabases )
     : ContentImplHelper( rxSMgr, pProvider, Identifier ),
-      m_aURLParameter( Identifier->getContentIdentifier() )
+      m_aURLParameter( Identifier->getContentIdentifier(),pDatabases ),
+      m_pDatabases( pDatabases ) // not owner
 {
-    // m_aProps.aTitle       =
-    // m_aprops.aContentType =
-    // m_aProps.bIsDocument  =
-    // m_aProps.bIsFolder    =
 }
 
 //=========================================================================
@@ -292,6 +290,7 @@ private:
     Sequence< Property >                            m_seq;
     Sequence< NumberedSortingInfo >                 m_seqSort;
     URLParameter                                    m_aURLParameter;
+    Databases*                                      m_pDatabases;
 
 
 public:
@@ -301,13 +300,15 @@ public:
                              sal_Int32 nOpenMode,
                              const Sequence< Property >& seq,
                              const Sequence< NumberedSortingInfo >& seqSort,
-                             URLParameter aURLParameter )
+                             URLParameter aURLParameter,
+                             Databases* pDatabases )
         : m_xSMgr( xSMgr ),
           m_xProvider( xProvider ),
           m_nOpenMode( nOpenMode ),
           m_seq( seq ),
           m_seqSort( seqSort ),
-          m_aURLParameter( aURLParameter )
+          m_aURLParameter( aURLParameter ),
+          m_pDatabases( pDatabases )
     {
     }
 
@@ -318,7 +319,8 @@ public:
                                      m_nOpenMode,
                                      m_seq,
                                      m_seqSort,
-                                     m_aURLParameter );
+                                     m_aURLParameter,
+                                     m_pDatabases );
     }
 };
 
@@ -335,6 +337,7 @@ private:
     Sequence< Property >                            m_seq;
     Sequence< NumberedSortingInfo >                 m_seqSort;
     URLParameter                                    m_aURLParameter;
+    Databases*                                      m_pDatabases;
 
 
 public:
@@ -344,13 +347,15 @@ public:
                               sal_Int32 nOpenMode,
                               const Sequence< Property >& seq,
                               const Sequence< NumberedSortingInfo >& seqSort,
-                              URLParameter aURLParameter )
+                              URLParameter aURLParameter,
+                              Databases* pDatabases )
         : m_xSMgr( xSMgr ),
           m_xProvider( xProvider ),
           m_nOpenMode( nOpenMode ),
           m_seq( seq ),
           m_seqSort( seqSort ),
-          m_aURLParameter( aURLParameter )
+          m_aURLParameter( aURLParameter ),
+          m_pDatabases( pDatabases )
     {
     }
 
@@ -361,7 +366,8 @@ public:
                                       m_nOpenMode,
                                       m_seq,
                                       m_seqSort,
-                                      m_aURLParameter );
+                                      m_aURLParameter,
+                                      m_pDatabases );
     }
 };
 
@@ -415,13 +421,20 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         Reference< XActiveDataSink > xActiveDataSink( aOpenCommand.Sink,UNO_QUERY );
         if( xActiveDataSink.is() )
         {
-            m_aURLParameter.open( m_xSMgr,aCommand,CommandId,Environment,xActiveDataSink );
-//              Reference< XInputStream > xUntransformed = xActiveDataSink->getInputStream();
-//              Reference< XInputStream > xTransformed( new Transformer( m_xProvider.getBodyPtr(),
-//                                                                       xUntransformed,
-//                                                                       m_aURLParameter ) );
+            Reference< XInputStream > xInputStream;
 
-//              xActiveDataSink->setInputStream( xTransformed );
+            // Necessary to avoid closing the fileinputstream
+            if( ! m_aURLParameter.isRoot() )
+                xInputStream = m_pDatabases->getFromURL( m_aURLParameter.get_url() );
+
+            if( ! xInputStream.is() )
+            {
+                m_aURLParameter.open( m_xSMgr,aCommand,CommandId,Environment,xActiveDataSink );
+                m_pDatabases->setFromURL( m_aURLParameter.get_url(),
+                                          xActiveDataSink->getInputStream() );
+            }
+            else
+                xActiveDataSink->setInputStream( xInputStream );
         }
 
         if( m_aURLParameter.isRoot() )
@@ -436,7 +449,8 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                                                                      aOpenCommand.Mode,
                                                                      aOpenCommand.Properties,
                                                                      aOpenCommand.SortingInfo,
-                                                                     m_aURLParameter ) );
+                                                                     m_aURLParameter,
+                                                                     m_pDatabases ) );
             aRet <<= xSet;
         }
         else if( m_aURLParameter.isQuery() )
@@ -451,7 +465,8 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                                                                       aOpenCommand.Mode,
                                                                       aOpenCommand.Properties,
                                                                       aOpenCommand.SortingInfo,
-                                                                      m_aURLParameter ) );
+                                                                      m_aURLParameter,
+                                                                      m_pDatabases ) );
             aRet <<= xSet;
         }
     }
@@ -502,8 +517,8 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
         else if( m_aURLParameter.isModule() )
             if( rProp.Name.compareToAscii( "KeywordList" ) == 0 )
             {
-                KeywordInfo *inf = Databases::getKeyword( m_aURLParameter.get_module(),
-                                                          m_aURLParameter.get_language() );
+                KeywordInfo *inf = m_pDatabases->getKeyword( m_aURLParameter.get_module(),
+                                                             m_aURLParameter.get_language() );
 
                 Any aAny;
                 aAny <<= inf->getKeywordList();
@@ -511,8 +526,8 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
             }
             else if( rProp.Name.compareToAscii( "KeywordRef" ) == 0 )
             {
-                KeywordInfo *inf = Databases::getKeyword( m_aURLParameter.get_module(),
-                                                          m_aURLParameter.get_language() );
+                KeywordInfo *inf = m_pDatabases->getKeyword( m_aURLParameter.get_module(),
+                                                             m_aURLParameter.get_language() );
 
                 Any aAny;
                 aAny <<= inf->getIdList();
@@ -520,8 +535,8 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
             }
             else if( rProp.Name.compareToAscii( "KeywordAnchorForRef" ) == 0 )
             {
-                KeywordInfo *inf = Databases::getKeyword( m_aURLParameter.get_module(),
-                                                          m_aURLParameter.get_language() );
+                KeywordInfo *inf = m_pDatabases->getKeyword( m_aURLParameter.get_module(),
+                                                             m_aURLParameter.get_language() );
 
                 Any aAny;
                 aAny <<= inf->getAnchorList();
@@ -529,8 +544,8 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
             }
             else if( rProp.Name.compareToAscii( "KeywordTitleForRef" ) == 0 )
             {
-                KeywordInfo *inf = Databases::getKeyword( m_aURLParameter.get_module(),
-                                                          m_aURLParameter.get_language() );
+                KeywordInfo *inf = m_pDatabases->getKeyword( m_aURLParameter.get_module(),
+                                                             m_aURLParameter.get_language() );
 
                 Any aAny;
                 aAny <<= inf->getTitleList();

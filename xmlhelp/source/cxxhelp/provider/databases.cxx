@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-29 15:14:49 $
+ *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
+#ifndef _RTL_MEMORY_H_
+#include <rtl/memory.h>
+#endif
 #ifndef _URLPARAMETER_HXX_
 #include <provider/urlparameter.hxx>
 #endif
@@ -75,6 +78,8 @@
 
 using namespace chelp;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::io;
+using namespace com::sun::star::container;
 
 // The same for the jar files
 //  private static final Hashtable _jarHash = new Hashtable();
@@ -83,37 +88,65 @@ using namespace com::sun::star::uno;
 //  public static final Hashtable _modInfo = new Hashtable();
 
 
-osl::Mutex                  Databases::m_aMutex;
-rtl::OUString               Databases::m_aInstallDirectory;              // Installation directory
-rtl::OUString               Databases::m_aInstallDirectoryAsSystemPath;  // Installation directory
-rtl::OUString               Databases::m_aInstallDirectoryAsURL;         // Installation directory
-Databases::DatabasesTable   Databases::m_aDatabases;                     // Language and module dependent databases
-Databases::LangSetTable     Databases::m_aLangSet;                       // Mapping to of lang-country to lang
-Databases::ModInfoTable     Databases::m_aModInfo;                       // Module information
-Databases::KeywordInfoTable Databases::m_aKeywordInfo;
+//  osl::Mutex                  Databases::m_aMutex;
+//  rtl::OUString               Databases::m_aInstallDirectory;              // Installation directory
+//  rtl::OUString               Databases::m_aInstallDirectoryAsSystemPath;  // Installation directory
+//  rtl::OUString               Databases::m_aInstallDirectoryAsURL;         // Installation directory
+//  Databases::DatabasesTable   Databases::m_aDatabases;                     // Language and module dependent databases
+//  Databases::LangSetTable     Databases::m_aLangSet;                       // Mapping to of lang-country to lang
+//  Databases::ModInfoTable     Databases::m_aModInfo;                       // Module information
+//  Databases::KeywordInfoTable Databases::m_aKeywordInfo;
+//  Databases::JarFileTable     Databases::m_aJarFileTable;                  // open jar files
 
 
-void Databases::setInstallPath( const rtl::OUString& aInstDir )
+Databases::Databases( const rtl::OUString& instPath,
+                      com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xSMgr )
+    : m_xSMgr( xSMgr )
 {
-    osl::MutexGuard aGuard( m_aMutex );
-
-//      if( osl::FileBase::E_None != osl::FileBase::getFileURLFromSystemPath( aInstDir,m_aInstallDirectory ) )
-//          ;
-
-    if( osl::FileBase::E_None != osl::FileBase::normalizePath( aInstDir,m_aInstallDirectory ) )
-        ;
-
-    if( m_aInstallDirectory.lastIndexOf( sal_Unicode( "/" ) ) != m_aInstallDirectory.getLength() - 1 )
-        m_aInstallDirectory += rtl::OUString::createFromAscii( "/" );
+    setInstallPath( instPath );
 }
 
 
-rtl::OUString Databases::getInstallPath()
+Databases::~Databases()
 {
-    osl::MutexGuard aGuard( m_aMutex );
 
-    return m_aInstallDirectory;
+    // unload the databases
+
+    {
+        // DatabasesTable
+        DatabasesTable::iterator it = m_aDatabases.begin();
+        while( it != m_aDatabases.end() )
+        {
+            it->second->close( 0 );
+            delete it->second;
+            ++it;
+        }
+    }
+
+    {
+        //  ModInfoTable
+
+        ModInfoTable::iterator it = m_aModInfo.begin();
+        while( it != m_aModInfo.end() )
+        {
+            delete it->second;
+            ++it;
+        }
+    }
+
+    {
+        // KeywordInfoTable
+
+        KeywordInfoTable::iterator it = m_aKeywordInfo.begin();
+        while( it != m_aKeywordInfo.end() )
+        {
+            delete it->second;
+            ++it;
+        }
+    }
+
 }
+
 
 
 rtl::OUString Databases::getInstallPathAsSystemPath()
@@ -122,12 +155,9 @@ rtl::OUString Databases::getInstallPathAsSystemPath()
 
     if( ! m_aInstallDirectoryAsSystemPath.getLength() )
     {
-//          bool bla =
-//              osl::FileBase::E_None ==
-//              osl::FileBase::getSystemPathFromFileURL( m_aInstallDirectory,m_aInstallDirectoryAsSystemPath );
         bool bla =
             osl::FileBase::E_None ==
-            osl::FileBase::getSystemPathFromNormalizedPath( m_aInstallDirectory,m_aInstallDirectoryAsSystemPath );
+            osl::FileBase::getSystemPathFromFileURL( m_aInstallDirectory,m_aInstallDirectoryAsSystemPath );
         VOS_ENSURE( bla,
                     "HelpProvider, no installpath" );
     }
@@ -136,21 +166,13 @@ rtl::OUString Databases::getInstallPathAsSystemPath()
 }
 
 
+
+
 rtl::OUString Databases::getInstallPathAsURL()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    if( ! m_aInstallDirectoryAsURL.getLength() )
-    {
-        bool bla =
-            osl::FileBase::E_None ==
-            osl::FileBase::getFileURLFromNormalizedPath( m_aInstallDirectory,m_aInstallDirectoryAsURL );
-        VOS_ENSURE( bla,
-                    "HelpProvider, no installpath" );
-    }
-
-    return m_aInstallDirectoryAsURL;
-//      return m_aInstallDirectory;
+      return m_aInstallDirectory;
 }
 
 
@@ -162,7 +184,7 @@ rtl::OUString Databases::getURLMode()
 
 std::vector< rtl::OUString > Databases::getModuleList( const rtl::OUString& Language )
 {
-    rtl::OUString  fileName,dirName = getInstallPath() + lang( Language );
+    rtl::OUString  fileName,dirName = getInstallPathAsURL() + lang( Language );
     osl::Directory dirFile( dirName );
 
     osl::DirectoryItem aDirItem;
@@ -214,7 +236,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
 
     if( ! it->second )
     {
-        osl::File cfgFile( getInstallPath() +
+        osl::File cfgFile( getInstallPathAsURL() +
                            key +
                            rtl::OUString::createFromAscii( ".cfg" ) );
 
@@ -299,7 +321,7 @@ rtl::OUString Databases::lang( const rtl::OUString& Language )
             ret = Language;
 
         osl::DirectoryItem aDirItem;
-        if( osl::FileBase::E_None == osl::DirectoryItem::get( getInstallPath() + ret,aDirItem ) )
+        if( osl::FileBase::E_None == osl::DirectoryItem::get( getInstallPathAsURL() + ret,aDirItem ) )
             m_aLangSet[ Language ] = ret;
     }
     else
@@ -339,99 +361,6 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
 
     return it->second;
 }
-
-
-
-
-//  public static synchronized JarFile getJarFileForLanguage( String Database,String Language )
-//  {
-//      if( Language == null || Database == null )
-//          return null;
-
-//      String key = lang(Language) + File.separator + Database;
-//      JarFile jarFile = ( JarFile ) _jarHash.get( key );
-//      if( jarFile == null )
-//      {
-//          try
-//          {
-//              File file = new File( _installDirectory + key );
-//              if( file.exists() )
-//              {
-//                  jarFile = new JarFile( file );
-//                  _jarHash.put( key,jarFile );
-//              }
-//              else
-//                  throw new java.io.IOException();
-//          }
-//          catch( IOException e )
-//          {
-//              System.err.println( "Jarfile not found: " + Database + " " + Language );
-//          }
-//      }
-
-//      return jarFile;
-//  }
-
-
-//  public static InputStream getCssSheet()
-//  {
-//      try
-//      {
-//          return new FileInputStream( _installDirectory + "custom.css" );
-//      }
-//      catch( FileNotFoundException e )
-//      {
-//          return null;
-//      }
-//  }
-
-
-//  public static InputStream errorFile( String Language )
-//  {
-//      try
-//      {
-//          return new FileInputStream( _installDirectory + lang(Language) + File.separator + "err.html" );
-//      }
-//      catch( IOException e )
-//      {
-//          String errorFile =
-//              " <html><body>         "+
-//              "     The requested document does not exist in the database !!            "+
-//              " </body></html> ";
-
-//          return new ByteArrayInputStream( errorFile.getBytes() );
-//      }
-//  }
-
-
-
-//  public static InputStream popupDocument( HelpURLParameter xPar )
-//  {
-//  //          String popupFile =
-//  //              " <help:document xmlns:help=\"http://openoffice.org/2000/help\">         "+
-//  //              " <help:body>" +
-//  //              "  <help:popup-cut Id=\""+xPar.get_id()+"\" Eid=\""+xPar.get_eid()+"\"></help:popup-cut> " +
-//  //          1   " </help:body></help:document> ";
-
-//      String popupFile =
-//          " <html>                                                                                 "+
-//          " <head>                                                                                 "+
-//          " <help:css-file-link xmlns:help=\"http://openoffice.org/2000/help\"/>                   "+
-//          " </head>                                                                                "+
-//          " <body>                                                                                 "+
-//          " <help:popup-cut Id=\""+xPar.get_id()+"\" Eid=\""+xPar.get_eid()+"\" xmlns:help=\"http://openoffice.org/2000/help\"></help:popup-cut>  "+
-//          " </body>                                                                                "+
-//          " </html>                                                                                ";
-
-//      System.out.println( popupFile );
-
-//      return new ByteArrayInputStream( popupFile.getBytes() );
-//  }
-
-
-//  private static final Hashtable _keyword = new Hashtable();
-
-
 
 
 
@@ -587,4 +516,126 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
     }
 
     return it->second;
+}
+
+
+
+Reference< XInputStream > Databases::getFromURL( const rtl::OUString& url )
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    Reference< XInputStream > xStream = m_aInputStreamTable[ url ];
+    if( xStream.is() )
+        m_aInputStreamTable[ url ] = Reference< XInputStream >( 0 );
+
+    return xStream;
+}
+
+
+void Databases::setFromURL( const rtl::OUString& url,const Reference< XInputStream >& xStream  )
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    m_aInputStreamTable[ url ] = xStream;
+}
+
+
+
+Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& jar,
+                                                         const rtl::OUString& Language )
+{
+    rtl::OUString key = lang(Language) + rtl::OUString::createFromAscii( "/" ) + jar;
+
+    osl::MutexGuard aGuard( m_aMutex );
+
+    ZipFileTable::iterator it =
+        m_aZipFileTable.insert( ZipFileTable::value_type( key,Reference< XHierarchicalNameAccess >(0) ) ).first;
+
+    if( ! it->second.is() )
+    {
+        try
+        {
+            rtl::OUString zipFile = getInstallPathAsURL() + key;
+            Sequence< Any > aArguments( 1 );
+            aArguments[ 0 ] <<= zipFile;
+
+            Reference< XInterface > xIfc
+                = m_xSMgr->createInstanceWithArguments(
+                    rtl::OUString::createFromAscii(
+                        "com.sun.star.packages.comp.ZipPackage" ),
+                    aArguments );
+
+            if ( xIfc.is() )
+            {
+                it->second = Reference< XHierarchicalNameAccess >( xIfc, UNO_QUERY );
+
+                VOS_ENSURE( it->second.is(),
+                            "ContentProvider::createPackage - "
+                            "Got no hierarchical name access!" );
+
+            }
+        }
+        catch ( RuntimeException & )
+        {
+        }
+        catch ( Exception & )
+        {
+        }
+    }
+
+    return it->second;
+}
+
+
+void Databases::popupDocument( URLParameter* urlPar,char **buffer,int *byteCount )
+{
+    const char* pop1 =
+        " <html>                                                                "
+        " <head>                                                                "
+        " <help:css-file-link xmlns:help=\"http://openoffice.org/2000/help\"/>  "
+        " </head>                                                               "
+        " <body>                                                                "
+        " <help:popup-cut Id=\"";
+    const sal_Int32 l1 = strlen( pop1 );
+
+    const char* pop3 = "\" Eid=\"";
+    const sal_Int32 l3 = strlen( pop3 );
+
+    const char* pop5 =
+        "\" xmlns:help=\"http://openoffice.org/2000/help\"></help:popup-cut>  "
+        " </body>                                                             "
+        " </html>";
+    const sal_Int32 l5 = strlen( pop5 );
+    sal_Int32 l2,l4;
+
+    rtl::OUString val = urlPar->get_id();
+    rtl::OString pop2O( val.getStr(),l2 = val.getLength(),RTL_TEXTENCODING_UTF8 );
+    const char* pop2 = pop2O.getStr();
+
+    val = urlPar->get_eid();
+    rtl::OString pop4O( val.getStr(),l4 = val.getLength(),RTL_TEXTENCODING_UTF8 );
+    const char* pop4 = pop4O.getStr();
+
+    (*byteCount) = l1 + l2 + l3 + l4 + l5;
+
+    *buffer = new char[ 1+*byteCount ];
+
+    rtl_copyMemory( *buffer,pop1,l1 );
+    rtl_copyMemory( *buffer+l1,pop2,l2 );
+    rtl_copyMemory( *buffer+(l1+l2),pop3,l3 );
+    rtl_copyMemory( *buffer+(l1+l2+l3),pop4,l4 );
+    rtl_copyMemory( *buffer+(l1+l2+l3+l4),pop5,l5 );
+    (*buffer)[*byteCount] = 0;
+}
+
+
+void Databases::setInstallPath( const rtl::OUString& aInstDir )
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    if( osl::FileBase::E_None != osl::FileBase::getFileURLFromSystemPath( aInstDir,m_aInstallDirectory ) )
+        ;
+
+    if( m_aInstallDirectory.lastIndexOf( sal_Unicode( "/" ) ) != m_aInstallDirectory.getLength() - 1 )
+        m_aInstallDirectory += rtl::OUString::createFromAscii( "/" );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlIndex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-22 14:57:12 $
+ *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,21 +227,7 @@ sal_Int32 binarySearch( const std::vector<sal_Int32>& arr,sal_Int32 value )
 
 NonnegativeIntegerGenerator* XmlIndex::getDocumentIterator( sal_Int32 concept )
 {
-//  #ifdef ABIDEBUG
-//    cout << concept << endl;
-//  #endif
-
     sal_Int32 index = binarySearch( concepts_,concept );
-
-#ifdef ABIDEBUG
-//    cout << index << " " << allListsL_ << " " << allLists_ << endl;
-
-//    for( int i = 0; i < allListsL_; ++i )
-//      cout << "_allList[" << i << "] = " << sal_Int32( allLists_[i] ) << endl;
-
-//    for( int i = 0; i < offsets_.size(); ++i )
-//      cout << "offsets[" << i << "] = " << offsets_[i] << endl;
-#endif
 
     if( index >= 0 )
         return new util::ConceptList( allLists_,allListsL_,offsets_[index] );
@@ -342,7 +328,6 @@ QueryHitData* XmlIndex::hitToData( QueryHit* hit )
                                           termsL,terms );
     contextTables_->setMicroindex( document );
     contextTables_->resetContextSearch();
-//  contextTables_->hitLocation(terms, matches, result);
     return res;
 }
 

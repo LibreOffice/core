@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BtreeDict.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-22 14:57:10 $
+ *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifdef ABIDEBUG
-#include <abidebug.hxx>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 #ifndef __SGI_STL_VECTOR
 #include <stl/vector>
@@ -351,13 +351,31 @@ void BlockProcessorImpl::process( Block* block ) const
 }
 
 
+#include <stdlib.h>
+
 
 BtreeDict::BtreeDict( const util::IndexAccessor& indexAccessor )
-    : // parameter_( parameter ),
-    blockManager_( new DBEnvImpl( indexAccessor ) ),
-    root_( 2 ),    // SCHEMA( rt )
-    blocks_( new sal_Int32[ 12736 ] )  // SCHEMA( id1 )
+    : blockManager_( new DBEnvImpl( indexAccessor ) )
 {
+
+    RandomAccessStream* SCHEMA = indexAccessor.getStream( rtl::OUString::createFromAscii( "SCHEMA" ),
+                                                          rtl::OUString::createFromAscii( "r" ) );
+    sal_Int32 len = SCHEMA->length();
+    char* bff = new char[ 1 + len ];
+    bff[ 1 + len ] = 0;
+    SCHEMA->readBytes( reinterpret_cast<sal_Int8*>( bff ),len );
+    delete SCHEMA;
+
+    rtl::OString aStr( bff );
+
+    sal_Int32 idx = 3 + aStr.lastIndexOf( "rt=" );
+    root_ = atoi( bff + idx );
+
+    idx = 4 + aStr.lastIndexOf( "id1=" );
+    sal_Int32 count = atoi( bff + idx );
+    blocks_ = new sal_Int32[ count ];
+
+    delete[] bff;
     BlockProcessorImpl blProc( this );
     blockManager_.mapBlocks( blProc );
 }
@@ -410,11 +428,11 @@ rtl::OUString BtreeDict::fetch( sal_Int32 conceptID ) const throw( excep::XmlSea
 
 
 std::vector< sal_Int32 > BtreeDict::withPrefix( const rtl::OUString& prefix ) const
-  throw( excep::XmlSearchException )
+    throw( excep::XmlSearchException )
 {
-  std::vector< sal_Int32 > result;
-  accessBlock( root_ )->withPrefix( this,prefix,prefix.getLength(),result );
-  return result;
+    std::vector< sal_Int32 > result;
+    accessBlock( root_ )->withPrefix( this,prefix,prefix.getLength(),result );
+    return result;
 }
 
 

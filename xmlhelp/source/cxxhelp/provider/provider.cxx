@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-22 14:57:11 $
+ *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,9 @@
 #ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
 #endif
-
+#ifndef _DATABASES_HXX_
+#include <provider/databases.hxx>
+#endif
 #ifndef _PROVIDER_HXX
 #include <provider/provider.hxx>
 #endif
@@ -118,7 +120,8 @@ using namespace chelp;
 ContentProvider::ContentProvider( const Reference< XMultiServiceFactory >& rSMgr )
     : ::ucb::ContentProviderImplHelper( rSMgr ),
              isInitialized( false ),
-             m_aScheme( OUString::createFromAscii( MYUCP_URL_SCHEME ) )
+             m_aScheme( OUString::createFromAscii( MYUCP_URL_SCHEME ) ),
+             m_pDatabases( 0 )
 {
 }
 
@@ -126,6 +129,7 @@ ContentProvider::ContentProvider( const Reference< XMultiServiceFactory >& rSMgr
 // virtual
 ContentProvider::~ContentProvider()
 {
+    delete m_pDatabases;
 }
 
 //=========================================================================
@@ -185,8 +189,14 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent( const Reference< X
         throw IllegalIdentifierException();
     }
 
-    if( ! isInitialized )
-        init();
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+        if( ! isInitialized )
+            init();
+    }
+
+    if( ! m_pDatabases )
+        throw RuntimeException();
 
     // Check, if a content with given id already exists...
     Reference< XContent > xContent
@@ -194,7 +204,7 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent( const Reference< X
     if ( xContent.is() )
         return xContent;
 
-    xContent = new Content( m_xSMgr,this,xCanonicId );
+    xContent = new Content( m_xSMgr,this,xCanonicId,m_pDatabases );
 
     // Further checks
 
@@ -249,12 +259,12 @@ void ContentProvider::init()
         UNO_QUERY );
 
     VOS_ENSURE( xCfgMgr.is(),
-                "FileProvider::FileProvider - No Config Manager!" );
+                "HelpProvider::init - No Config Manager!" );
 
     if( xCfgMgr.is() )
         instPath = xCfgMgr->substituteVariables( instPath );
 
-    Databases::setInstallPath( instPath );
 
+    m_pDatabases = new Databases( instPath,m_xSMgr );
     isInitialized = true;
 }

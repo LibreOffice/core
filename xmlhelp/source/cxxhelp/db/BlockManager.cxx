@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BlockManager.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-08 11:54:54 $
+ *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ BlockManager::BlockManager( DBEnv* dbenv )
 
 BlockManager::~BlockManager()
 {
+    delete dbenv_;
 }
 
 
