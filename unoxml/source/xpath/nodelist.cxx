@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodelist.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,9 @@ namespace XPath
         if (xpathObj != NULL && xpathObj->type == XPATH_NODESET)
         {
             m_pNodeSet = xpathObj->nodesetval;
-        }            
+        }
     }
-    
+
     /**
     The number of nodes in the list.
     */
@@ -83,7 +83,7 @@ namespace XPath
             value = xmlXPathNodeSetGetLength(m_pNodeSet);
         return value;
     }
-   
+
     /**
     Returns the indexth item in the collection.
     */
