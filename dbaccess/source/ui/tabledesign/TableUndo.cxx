@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableUndo.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:09:19 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,7 @@ OTableEditorDelUndoAct::OTableEditorDelUndoAct( OTableEditorCtrl* pOwner) :
 //-------------------------------------------------------------------------
 OTableEditorDelUndoAct::~OTableEditorDelUndoAct()
 {
+    DBG_DTOR(OTableEditorDelUndoAct,NULL);
     //////////////////////////////////////////////////////////////////////
     // DeletedRowList loeschen
     ::std::vector<OTableRow*>::iterator aIter = m_aDeletedRows.begin();
@@ -303,8 +304,6 @@ OTableEditorDelUndoAct::~OTableEditorDelUndoAct()
         delete *aIter;
 
     m_aDeletedRows.clear();
-
-    DBG_DTOR(OTableEditorDelUndoAct,NULL);
 }
 
 //-------------------------------------------------------------------------
@@ -367,6 +366,7 @@ OTableEditorInsUndoAct::OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
 //-------------------------------------------------------------------------
 OTableEditorInsUndoAct::~OTableEditorInsUndoAct()
 {
+    DBG_DTOR(OTableEditorInsUndoAct,NULL);
     //////////////////////////////////////////////////////////////////////
     // InsertedRowList loeschen
     ::std::vector<OTableRow*>::iterator aIter = m_vInsertedRows.begin();
@@ -374,7 +374,6 @@ OTableEditorInsUndoAct::~OTableEditorInsUndoAct()
         delete *aIter;
 
     m_vInsertedRows.clear();
-    DBG_DTOR(OTableEditorInsUndoAct,NULL);
 }
 
 //-------------------------------------------------------------------------
@@ -502,7 +501,7 @@ void OPrimKeyUndoAct::Undo()
     // Die eingefuegten Keys loeschen
     for( nIndex = m_aInsKeys.FirstSelected(); nIndex != SFX_ENDOFSELECTION; nIndex=m_aInsKeys.NextSelected() )
     {
-        OSL_ENSURE(nIndex <= pRowList->size(),"Index for undo isn't valid!");
+        OSL_ENSURE(nIndex <= static_cast<long>(pRowList->size()),"Index for undo isn't valid!");
         pRow = (*pRowList)[nIndex];
         pRow->SetPrimaryKey( FALSE );
     }
@@ -511,7 +510,7 @@ void OPrimKeyUndoAct::Undo()
     // Die geloeschten Keys herstellen
     for( nIndex = m_aDelKeys.FirstSelected(); nIndex != SFX_ENDOFSELECTION; nIndex=m_aDelKeys.NextSelected() )
     {
-        OSL_ENSURE(nIndex <= pRowList->size(),"Index for undo isn't valid!");
+        OSL_ENSURE(nIndex <= static_cast<long>(pRowList->size()),"Index for undo isn't valid!");
         pRow = (*pRowList)[nIndex];
         pRow->SetPrimaryKey( TRUE );
     }
