@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTabStopEntryContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-02 10:18:42 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@
 #include <tools/debug.hxx>
 #endif
 
-
 using namespace ::xmloff::token;
 
 using ::rtl::OUString;
@@ -128,7 +127,8 @@ XMLIndexTabStopEntryContext::XMLIndexTabStopEntryContext(
         nTabPosition(0),
         bTabPositionOK(sal_False),
         bTabRightAligned(sal_False),
-        bLeaderCharOK(sal_False)
+        bLeaderCharOK(sal_False),
+        bWithTab(sal_True) // #i21237#
 {
 }
 
@@ -173,13 +173,20 @@ void XMLIndexTabStopEntryContext::StartElement(
                 // valid only, if we have a char!
                 bLeaderCharOK = (sAttr.getLength() > 0);
             }
+            // #i21237#
+            else if ( IsXMLToken( sLocalName, XML_WITH_TAB ) )
+            {
+                sal_Bool bTmp;
+                if (SvXMLUnitConverter::convertBool(bTmp, sAttr))
+                    bWithTab = bTmp;
+            }
             // else: unknown style: attribute -> ignore
         }
         // else: no style attribute -> ignore
     }
 
-    // how many entries?
-    nValues += 1 + (bTabPositionOK ? 1 : 0) + (bLeaderCharOK ? 1 : 0);
+    // how many entries? #i21237#
+    nValues += 2 + (bTabPositionOK ? 1 : 0) + (bLeaderCharOK ? 1 : 0);
 
     // now try parent class (for character style)
     XMLIndexSimpleEntryContext::StartElement( xAttrList );
@@ -216,6 +223,13 @@ void XMLIndexTabStopEntryContext::FillPropertyValues(
         pValues[nNextEntry].Value <<= sLeaderChar;
         nNextEntry++;
     }
+
+    // tab character #i21237#
+     pValues[nNextEntry].Name =
+        OUString( RTL_CONSTASCII_USTRINGPARAM("WithTab") );
+    pValues[nNextEntry].Value.setValue( &bWithTab,
+                                        ::getBooleanCppuType());
+    nNextEntry++;
 
     // check whether we really filled all elements of the sequence
     DBG_ASSERT( nNextEntry == rValues.getLength(),
