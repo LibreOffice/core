@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-09 14:45:01 $
+ *  last change: $Author: thb $ $Date: 2001-07-11 16:38:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,9 +385,7 @@ sal_Bool SvxOpenGraphicDialog::IsAsLink() const
 
 int SvxOpenGraphicDialog::GetGraphic(Graphic& rGraphic) const
 {
-    rGraphic = mpImpl->aFileDlg.GetGraphic();
-
-    return rGraphic.IsSupportedGraphic() ? 0 : 1;
+    return mpImpl->aFileDlg.GetGraphic(rGraphic);
 }
 
 
