@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: af $ $Date: 2002-05-30 17:05:56 $
+ *  last change: $Author: af $ $Date: 2002-06-03 15:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,8 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
     OSL_TRACE ("ChildrenManagerImpl::update called with VisibleArea = %d %d %d %d",
         aVisibleArea.getX(), aVisibleArea.getY(),
         aVisibleArea.getWidth(), aVisibleArea.getHeight());
-        OSL_TRACE ("   shape list contains %d children", mxShapeList->getCount());
+        OSL_TRACE ("   shape list contains %d children",
+            mxShapeList.is()?mxShapeList->getCount():0);
     }
 
     // 1. Create a local list of visible shapes.
@@ -734,9 +735,11 @@ void ChildrenManagerImpl::UpdateSelection (void)
             if (xSelectedShape.is())
             {
                 OSL_TRACE ("  comparing to single selected shape.");
-                bShapeIsSelected = (I->mxShape == xSelectedShape);
-                if (bShapeIsSelected)
+                if  (I->mxShape == xSelectedShape)
+                {
+                    bShapeIsSelected = true;
                     pNewFocusedShape = pAccessibleShape;
+                }
             }
             else if (xSelectedShapeAccess.is())
             {
@@ -817,10 +820,10 @@ bool ChildDescriptor::operator == (const ChildDescriptor& aDescriptor)
     if (mxShape == aDescriptor.mxShape)
         if (mxShape.is())
             return true;
-        else
-            return mxAccessibleShape == aDescriptor.mxAccessibleShape;
-    else
-        return false;
+        else if (mxAccessibleShape == aDescriptor.mxAccessibleShape)
+            return true;
+
+    return false;
 }
 
 
