@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-19 17:09:49 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,8 @@
  *
  ************************************************************************/
 
-#include "unotools/ucblockbytes.hxx"
+#include <unotools/ucblockbytes.hxx>
+#include <comphelper/processfactory.hxx>
 
 #ifndef _COM_SUN_STAR_UCB_DOCUMENTHEADERFIELD_HPP_
 #include <com/sun/star/ucb/DocumentHeaderField.hpp>
@@ -108,9 +109,6 @@
 #endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef  _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
 #endif
 #ifndef _TOOLS_INETMSG_HXX
 #include <tools/inetmsg.hxx>
@@ -737,7 +735,7 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference < XContent >
         xProps->addPropertiesChangeListener ( Sequence< OUString >(), this );
     }
 */
-    Reference< XMultiServiceFactory > xFactory = ::utl::getProcessServiceFactory();
+    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
     Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
                 xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
 
