@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 12:57:31 $
+ *  last change: $Author: tra $ $Date: 2001-03-16 16:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include <osl/diagnose.h>
 #endif
 
-#ifndef _TWRAPPERDATAOBJECT_HXX_
+#ifndef _TXDATAOBJECT_HXX_
 #include "XTDataObject.hxx"
 #endif
 
@@ -507,25 +507,6 @@ STDMETHODIMP CXTDataObject::EnumDAdvise( LPENUMSTATDATA * )
 CXTDataObject::operator IDataObject*( )
 {
     return static_cast< IDataObject* >( this );
-}
-
-//------------------------------------------------------------------------
-// aks for the total size of all available and renderable clipboard
-// formats
-//------------------------------------------------------------------------
-
-sal_Int64 SAL_CALL CXTDataObject::QueryDataSize( )
-{
-    return 0;
-}
-
-//------------------------------------------------------------------------
-// in preparation of clipboard flushing transfer all data from remote
-// to here
-//------------------------------------------------------------------------
-
-void SAL_CALL CXTDataObject::GetAllDataFromSource( )
-{
 }
 
 //------------------------------------------------------------------------

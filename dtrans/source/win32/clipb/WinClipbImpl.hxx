@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-14 14:43:14 $
+ *  last change: $Author: tra $ $Date: 2001-03-16 16:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 #include <comdef.h>
 
 class CWinClipboard;
+class CXNotifyingDataObject;
 
 //---------------------------------------------------
 // impl class to avoid deadlocks between XTDataObject
@@ -112,10 +113,10 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents(  )
         throw( ::com::sun::star::uno::RuntimeException );
 
-    void SAL_CALL setContents( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
-                               const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner,
-                               osl::ClearableMutexGuard& aGuard )
-                               throw( ::com::sun::star::uno::RuntimeException );
+    void SAL_CALL setContents(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
+        throw( ::com::sun::star::uno::RuntimeException );
 
     ::rtl::OUString SAL_CALL getName(  ) throw( ::com::sun::star::uno::RuntimeException );
 
@@ -146,25 +147,23 @@ protected:
 
     static void WINAPI onClipboardContentChanged( void );
 
-    sal_Bool SAL_CALL isInDispose( ) const;
+private:
+    void SAL_CALL onReleaseDataObject( CXNotifyingDataObject* theCaller );
 
-    ::rtl::OUString                                                                             m_itsName;
-    CMtaOleClipboard                                                                            m_MtaOleClipboard;
-    static CWinClipbImpl*                                                                       s_pCWinClipbImpl;
-    CWinClipboard*                                                                              m_pWinClipboard;
-    sal_Bool                                                                                    m_bInDispose;
-    com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >               m_rCurrentClipbContent;
-    com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >               m_rOldClipbContent;
-    com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboardOwner >  m_rCurrentClipbOwner;
-    com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboardOwner >  m_rOldClipbOwner;
-    sal_Bool                                                                                    m_bSelfTriggered;
-    osl::Mutex                                                                                  m_aMutex;
-
-    friend class CWinClipboard;
+private:
+    ::rtl::OUString         m_itsName;
+    CMtaOleClipboard        m_MtaOleClipboard;
+    CWinClipboard*          m_pWinClipboard;
+    CXNotifyingDataObject*  m_pCurrentClipContent;
+    osl::Mutex              m_aMutex;
+    static CWinClipbImpl*   s_pCWinClipbImpl;
 
 private:
     CWinClipbImpl( const CWinClipbImpl& );
     CWinClipbImpl& operator=( const CWinClipbImpl& );
+
+    friend class CWinClipboard;
+    friend class CXNotifyingDataObject;
 };
 
 #endif

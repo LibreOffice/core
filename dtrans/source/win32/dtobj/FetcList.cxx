@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-16 09:00:32 $
+ *  last change: $Author: tra $ $Date: 2001-03-16 16:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,7 +494,7 @@ sal_Bool CFormatRegistrar::isEqualCurrentSystemCodePage( sal_uInt32 aCodePage ) 
 void SAL_CALL CFormatRegistrar::FindLocaleForTextCodePage( )
 {
     EnumSystemLocalesA( CFormatRegistrar::EnumLocalesProc, LCID_SUPPORTED );
-    WaitForSingleObject( CFormatRegistrar::m_hEvtEnumLocaleReady, INFINITE );
+    WaitForSingleObject( CFormatRegistrar::m_hEvtEnumLocaleReady, 60000 );
 }
 
 //------------------------------------------------------------------------

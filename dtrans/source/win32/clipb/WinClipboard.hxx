@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipboard.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-07 11:23:10 $
+ *  last change: $Author: tra $ $Date: 2001-03-16 16:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,6 @@ class CWinClipboardDummy
 protected:
     osl::Mutex      m_aMutex;
     osl::Mutex      m_aCbListenerMutex;
-    osl::Condition  m_aCondition;
 };
 
 class CWinClipboard :

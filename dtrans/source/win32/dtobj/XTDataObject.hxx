@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-05 12:26:17 $
+ *  last change: $Author: tra $ $Date: 2001-03-16 16:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,13 +137,6 @@ public:
     STDMETHODIMP EnumDAdvise( LPENUMSTATDATA* ppenumAdvise );
 
     operator IDataObject*( );
-
-    sal_Int64 SAL_CALL QueryDataSize( );
-
-    // retrieve the data from the source
-    // necessary so that we have all data
-    // when we flush the clipboard
-    void SAL_CALL GetAllDataFromSource( );
 
 private:
     void validateFormatEtc( LPFORMATETC lpFormatEtc ) const;

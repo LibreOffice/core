@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-15 10:11:35 $
+ *  last change: $Author: tra $ $Date: 2001-03-16 16:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,21 +128,17 @@ private:
     static unsigned int WINAPI oleThreadProc( LPVOID pParam );
 
     sal_Bool WaitForThreadReady( ) const;
-    sal_Bool WaitOpComplete( ) const;
 
 private:
     HANDLE                      m_hOleThread;
     unsigned                    m_uOleThreadId;
     HANDLE                      m_hEvtThrdReady;
-    HANDLE                      m_hEvtOpComplete;
-    //HANDLE                        m_hEvtWmDrawClipboardReady;
     HWND                        m_hwndMtaOleReqWnd;
     HWND                        m_hwndNextClipViewer;
     LPFNC_CLIPVIEWER_CALLBACK_t m_pfncClipViewerCallback;
     sal_Bool                    m_bInRegisterClipViewer;
-    sal_Bool                    m_bInCallbackTriggerOperation;
 
-    static CMtaOleClipboard* s_theMtaOleClipboardInst;
+    static CMtaOleClipboard*    s_theMtaOleClipboardInst;
 
 // not allowed
 private:
