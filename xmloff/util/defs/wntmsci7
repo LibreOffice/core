@@ -10157,3 +10157,12 @@ _real@8@4003a000000000000000
 ??1?$Reference@VXActionLockable@document@star@sun@com@@@uno@star@sun@com@@QAE@XZ
 ?query@?$Reference@VXActionLockable@document@star@sun@com@@@uno@star@sun@com@@SA?AV12345@ABVBaseReference@2345@@Z
 ?s_pType_com_sun_star_document_XActionLockable@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXActionLockable@document@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?ExportEvent@XMLEventExport@@AAEXAAV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@ABVOUString@rtl@@EAAE@Z
+?ExportSingleEvent@XMLEventExport@@QAEXAAV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@ABVOUString@rtl@@E@Z
+?end@?$_Rb_tree@VOUString@rtl@@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@U?$_S1st@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@@4@U?$less@VOUString@rtl@@@4@V?$allocator@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@@4@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@U?$_N_Tr@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@@2@@2@XZ
+?GetEventSequence@XMLEventsImportContext@@QAEEABVOUString@rtl@@AAV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@Z
+?ExportMacro@XMLTextFieldExport@@IAEXABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@ABVOUString@rtl@@@Z
+?CreateChildContext@XMLMacroFieldImportContext@@MAEPAVSvXMLImportContext@@GABVOUString@rtl@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@@Z
+??0?$_rbT__B@U?$pair@$$CBJV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@@_STL@@V?$allocator@U?$pair@$$CBJV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@@_STL@@@2@@_STL@@QAE@ABV?$allocator@U?$pair@$$CBJV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@@_STL@@@1@@Z
+?IsHandleProgressBarEnabled@XMLShapeImportHelper@@QBEEXZ
+?enableHandleProgressBar@XMLShapeImportHelper@@QAEXE@Z
