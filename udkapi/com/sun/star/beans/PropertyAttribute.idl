@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyAttribute.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 09:28:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #ifndef __com_sun_star_beans_PropertyAttribute_idl__
 #define __com_sun_star_beans_PropertyAttribute_idl__
 
-
 //=============================================================================
 
  module com {  module sun {  module star {  module beans {
@@ -70,7 +69,7 @@
 
 /** These values are used to specify the behavior of a <type>Property</type>.
  */
-constants PropertyAttribute
+published constants PropertyAttribute
 {
     //-------------------------------------------------------------------------
 
