@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSignatureVerifyResultListener.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 11:58:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/uno/Exception.idl>
+#include <com/sun/star/xml/crypto/SecurityOperationStatus.idl>
 
 module com { module sun { module star { module xml { module crypto { module sax {
 
@@ -80,6 +81,7 @@ module com { module sun { module star { module xml { module crypto { module sax 
  * VERIFYFAIL represents a failure.
  * UNKNOWN represents the verify result is still unknow.
  */
+/*
 enum SignatureVerifyResult
 {
     UNKNOWN,
@@ -87,6 +89,7 @@ enum SignatureVerifyResult
     VERIFYSUCCEED,
     VERIFYFAIL
 };
+*/
 
 /**
  * Interface of Signature Verify Result Listener.
@@ -104,7 +107,7 @@ interface XSignatureVerifyResultListener : com::sun::star::uno::XInterface
      */
     void signatureVerified(
         [in] long securityId,
-        [in] SignatureVerifyResult verifyResult);
+        [in] com::sun::star::xml::crypto::SecurityOperationStatus verifyResult);
 };
 
 } ; } ; } ; } ; } ; } ;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-31 09:55:42 $
+#   last change: $Author: rt $ $Date: 2004-11-26 14:45:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ PACKAGE=com$/sun$/star$/xml$/crypto
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    XXMLSecurityTemplate.idl     \
     XXMLSignature.idl     \
     XXMLSignatureTemplate.idl     \
     XXMLEncryption.idl     \
@@ -91,7 +92,8 @@ IDLFILES=\
     SEInitializer.idl     \
     XMLSignatureException.idl     \
     XMLEncryptionException.idl     \
-    XUriBinding.idl
+    XUriBinding.idl    \
+    SecurityOperationStatus.idl
 
 # ------------------------------------------------------------------
 
