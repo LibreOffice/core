@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 10:18:39 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XDOCKABLEWINDOW_HPP_
+#include <com/sun/star/awt/XDockableWindow.hpp>
+#endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -123,6 +126,7 @@ class VCLXWindow :  public ::com::sun::star::awt::XWindow,
                     public ::com::sun::star::awt::XVclWindowPeer,
                     public ::com::sun::star::awt::XLayoutConstrains,
                     public ::com::sun::star::awt::XView,
+                    public ::com::sun::star::awt::XDockableWindow,
                     public ::com::sun::star::accessibility::XAccessible,
                     public ::com::sun::star::lang::XEventListener,
                     public VCLXDevice
@@ -142,6 +146,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> mxViewGraphics;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > mxAccessibleContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindowListener> mxDockableWindowListener;
 
     ULONG                           mnListenerLockLevel;
     ULONG                           nDummy2;
@@ -261,6 +266,18 @@ public:
 
     // ::com::sun::star::accessibility::XAccessible
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XDockableWindow
+    void SAL_CALL addDockableWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removeDockableWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL enableDocking( sal_Bool bEnable ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL isFloating(  ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setFloatingMode( sal_Bool bFloating ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL lock(  ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL unlock(  ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL isLocked(  ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL startPopupMode( const ::com::sun::star::awt::Rectangle& WindowRect ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL isInPopupMode(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif // _TOOLKIT_AWT_VCLXWINDOW_HXX_
